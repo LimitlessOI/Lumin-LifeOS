@@ -232,6 +232,12 @@ app.get('/dashboard', (req, res) => {
 
 app.listen(port, async () => {
   console.log('Server listening on port ' + port);
-  await bootstrap();
-  console.log('LifeOS ready');
+  try {
+    await bootstrap();
+    console.log('LifeOS ready');
+  } catch (error) {
+    console.error('Bootstrap failed but server staying up:', error);
+    // Removed process.exit(1) - let server run even if bootstrap fails
+  }
+});
 });
