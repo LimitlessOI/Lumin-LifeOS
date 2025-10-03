@@ -240,4 +240,3 @@ app.listen(port, async () => {
     // Removed process.exit(1) - let server run even if bootstrap fails
   }
 });
-});
