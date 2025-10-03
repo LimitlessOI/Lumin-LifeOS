@@ -6,7 +6,9 @@ process.on('uncaughtException', (err) => {
 process.on('unhandledRejection', (err) => {
   console.error('FATAL unhandledRejection:', err);
   process.exit(1);
-});const express = require('express');
+});
+
+const express = require('express');
 const { Pool } = require('pg');
 const app = express();
 const port = process.env.PORT || 8080;
@@ -47,6 +49,8 @@ async function query(sql, params = []) {
 async function bootstrap() {
   await query('CREATE TABLE IF NOT EXISTS self_tasks (id SERIAL PRIMARY KEY, kind TEXT, payload JSONB DEFAULT \'{}\', status TEXT DEFAULT \'queued\', created_at TIMESTAMP DEFAULT NOW(), run_after TIMESTAMP DEFAULT NOW(), result JSONB)');
   await query('CREATE TABLE IF NOT EXISTS execution_log (id SERIAL PRIMARY KEY, timestamp TIMESTAMP DEFAULT NOW(), endpoint TEXT, status TEXT, details TEXT)');
+  await query('CREATE TABLE IF NOT EXISTS build_requests (id SERIAL PRIMARY KEY, title TEXT NOT NULL, description TEXT, category TEXT DEFAULT \'feature\', priority INTEGER DEFAULT 5, status TEXT DEFAULT \'pending\', created_at TIMESTAMP DEFAULT NOW(), approved_at TIMESTAMP)');
+  await query('CREATE TABLE IF NOT EXISTS build_steps (id SERIAL PRIMARY KEY, build_request_id INTEGER REFERENCES build_requests(id), step_number INTEGER, description TEXT, status TEXT DEFAULT \'pending\', result JSONB, created_at TIMESTAMP DEFAULT NOW())');
   console.log('Database tables ready');
 }
 
@@ -108,34 +112,41 @@ app.post('/api/v1/vapi/call', async (req, res) => {
   }
 });
 
-// BUILD BUILDER ENDPOINTS
 app.post('/api/v1/builder/request', async (req, res) => {
   const key = req.header('X-Command-Key');
   if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
   
   const { title, description, category, priority } = req.body;
   
-  const result = await query(
-    `INSERT INTO build_requests (title, description, category, priority, status)
-     VALUES ($1, $2, $3, $4, 'pending') RETURNING id`,
-    [title, description, category || 'feature', priority || 5]
-  );
-  
-  res.json({ ok: true, build_request_id: result[0].id });
+  try {
+    const result = await query(
+      `INSERT INTO build_requests (title, description, category, priority, status)
+       VALUES ($1, $2, $3, $4, 'pending') RETURNING id`,
+      [title, description, category || 'feature', priority || 5]
+    );
+    
+    res.json({ ok: true, build_request_id: result[0].id });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.get('/api/v1/builder/pending', async (req, res) => {
   const key = req.query.key;
   if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
   
-  const pending = await query(`
-    SELECT id, title, description, category, priority, created_at
-    FROM build_requests
-    WHERE status = 'pending'
-    ORDER BY priority ASC, created_at ASC
-  `);
-  
-  res.json({ pending_requests: pending });
+  try {
+    const pending = await query(`
+      SELECT id, title, description, category, priority, created_at
+      FROM build_requests
+      WHERE status = 'pending'
+      ORDER BY priority ASC, created_at ASC
+    `);
+    
+    res.json({ pending_requests: pending });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.post('/api/v1/builder/approve/:id', async (req, res) => {
@@ -144,12 +155,16 @@ app.post('/api/v1/builder/approve/:id', async (req, res) => {
   
   const { id } = req.params;
   
-  await query(
-    `UPDATE build_requests SET status = 'approved', approved_at = NOW() WHERE id = $1`,
-    [id]
-  );
-  
-  res.json({ ok: true, message: 'Build request approved. Builder starting...' });
+  try {
+    await query(
+      `UPDATE build_requests SET status = 'approved', approved_at = NOW() WHERE id = $1`,
+      [id]
+    );
+    
+    res.json({ ok: true, message: 'Build request approved. Builder starting...' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.get('/api/v1/builder/status/:id', async (req, res) => {
@@ -158,17 +173,21 @@ app.get('/api/v1/builder/status/:id', async (req, res) => {
   
   const { id } = req.params;
   
-  const request = await query('SELECT * FROM build_requests WHERE id = $1', [id]);
-  const steps = await query(
-    'SELECT * FROM build_steps WHERE build_request_id = $1 ORDER BY step_number',
-    [id]
-  );
-  
-  res.json({ 
-    request: request[0] || null,
-    steps: steps,
-    progress: steps.length > 0 ? steps.filter(s => s.status === 'completed').length / steps.length : 0
-  });
+  try {
+    const request = await query('SELECT * FROM build_requests WHERE id = $1', [id]);
+    const steps = await query(
+      'SELECT * FROM build_steps WHERE build_request_id = $1 ORDER BY step_number',
+      [id]
+    );
+    
+    res.json({ 
+      request: request[0] || null,
+      steps: steps,
+      progress: steps.length > 0 ? steps.filter(s => s.status === 'completed').length / steps.length : 0
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.get('/dashboard', (req, res) => {
@@ -237,6 +256,5 @@ app.listen(port, async () => {
     console.log('LifeOS ready');
   } catch (error) {
     console.error('Bootstrap failed but server staying up:', error);
-    // Removed process.exit(1) - let server run even if bootstrap fails
   }
 });
