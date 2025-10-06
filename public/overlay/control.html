@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Overlay Controller</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, system-ui, sans-serif;
+      padding: 30px;
+      max-width: 700px;
+      margin: 0 auto;
+      background: #f5f5f5;
+    }
+    .section {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 { margin: 0 0 25px; color: #1d1d1f; }
+    h3 { margin: 0 0 15px; color: #333; font-size: 18px; }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      font-family: inherit;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #007aff;
+    }
+    button {
+      padding: 12px 24px;
+      margin: 5px 5px 5px 0;
+      cursor: pointer;
+      background: #007aff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    button:hover { background: #0051d5; }
+    button.secondary { background: #8e8e93; }
+    button.secondary:hover { background: #636366; }
+    .presets { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+    .presets button { background: #34c759; }
+    .presets button:hover { background: #248a3d; }
+  </style>
+</head>
+<body>
+  <h1>Overlay Controller</h1>
 
+  <div class="section">
+    <h3>Lower Third</h3>
+    <input type="text" id="lowerThird" placeholder="Your Name - Title">
+    <div>
+      <button onclick="updateLowerThird()">Update</button>
+      <button class="secondary" onclick="clearLowerThird()">Clear</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Bullet Points</h3>
+    <textarea id="bullets" rows="5" placeholder="One bullet per line&#10;Second point here&#10;Third point here"></textarea>
+    <div>
+      <button onclick="updateBullets()">Update</button>
+      <button class="secondary" onclick="clearBullets()">Clear</button>
+    </div>
+
+    <div class="presets">
+      <button onclick="loadPreset('realestate')">Real Estate</button>
+      <button onclick="loadPreset('podcast')">Podcast</button>
+      <button onclick="loadPreset('presentation')">Presentation</button>
+    </div>
+  </div>
+
+  <script>
+    const sid = window.location.pathname.split('/')[2];
+
+    const presets = {
+      realestate: {
+        bullets: [
+          'Why now is the right time',
+          'Current market conditions',
+          'Investment opportunity',
+          'Next steps'
+        ]
+      },
+      podcast: {
+        bullets: [
+          'Guest introduction',
+          'Key discussion points',
+          'Call to action',
+          'Where to follow'
+        ]
+      },
+      presentation: {
+        bullets: [
+          'Problem statement',
+          'Our solution',
+          'Benefits',
+          'Implementation'
+        ]
+      }
+    };
+
+    async function updateLowerThird() {
+      const text = document.getElementById('lowerThird').value;
+      const currentBullets = (await (await fetch(`/api/overlay/${sid}/state`)).json()).bullets || [];
+      await fetch(`/api/overlay/${sid}/state`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lowerThird: text, bullets: currentBullets })
+      });
+    }
+
+    async function clearLowerThird() {
+      const currentBullets = (await (await fetch(`/api/overlay/${sid}/state`)).json()).bullets || [];
+      await fetch(`/api/overlay/${sid}/state`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lowerThird: null, bullets: currentBullets })
+      });
+      document.getElementById('lowerThird').value = '';
+    }
+
+    async function updateBullets() {
+      const text = document.getElementById('bullets').value;
+      const bullets = text.split('\n').filter(b => b.trim());
+      const currentLowerThird = (await (await fetch(`/api/overlay/${sid}/state`)).json()).lowerThird;
+      await fetch(`/api/overlay/${sid}/state`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bullets, lowerThird: currentLowerThird })
+      });
+    }
+
+    async function clearBullets() {
+      const currentLowerThird = (await (await fetch(`/api/overlay/${sid}/state`)).json()).lowerThird;
+      await fetch(`/api/overlay/${sid}/state`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bullets: [], lowerThird: currentLowerThird })
+      });
+      document.getElementById('bullets').value = '';
+    }
+
+    function loadPreset(type) {
+      const preset = presets[type];
+      if (preset) {
+        document.getElementById('bullets').value = preset.bullets.join('\n');
+      }
+    }
+  </script>
+</body>
+</html>
