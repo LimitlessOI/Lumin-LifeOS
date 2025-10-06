@@ -1,1 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Receptionist Setup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, system-ui, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background: #f9f9f9; }
+    .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { margin: 0 0 10px; color: #1d1d1f; }
+    p { color: #666; margin: 0 0 30px; }
+    label { font-weight: 600; display: block; margin-top: 20px; margin-bottom: 5px; color: #333; }
+    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; font-family: inherit; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #007aff; }
+    button { background: #007aff; color: white; padding: 15px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 600; width: 100%; margin-top: 20px; }
+    button:hover { background: #0051d5; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    .success { display: none; text-align: center; padding: 40px 20px; }
+    .success h2 { color: #34c759; margin: 0 0 15px; }
+    .checkmark { font-size: 60px; color: #34c759; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="setupForm">
+      <h1>AI Receptionist Setup</h1>
+      <p>Thanks for signing up! We'll activate your account within 24 hours.</p>
 
+      <label>Business Name *</label>
+      <input type="text" name="business_name" required placeholder="ABC Realty">
+
+      <label>Your Name *</label>
+      <input type="text" name="contact_name" required placeholder="John Smith">
+
+      <label>Phone Number *</label>
+      <input type="tel" name="phone" required placeholder="+12125551234">
+
+      <label>Email *</label>
+      <input type="email" name="email" required placeholder="john@abcrealty.com">
+
+      <label>BoldTrail CRM API Key (optional)</label>
+      <input type="text" name="boldtrail_key" placeholder="Leave blank if you don't have one">
+
+      <label>Business Hours *</label>
+      <select name="hours" required>
+        <option value="">Select hours...</option>
+        <option value="24/7">24/7 - Always Available</option>
+        <option value="9-5">9 AM - 5 PM</option>
+        <option value="8-6">8 AM - 6 PM</option>
+        <option value="8-8">8 AM - 8 PM</option>
+        <option value="custom">Custom (we'll contact you)</option>
+      </select>
+
+      <label>Greeting Message *</label>
+      <textarea name="greeting" rows="3" required placeholder="Hi! Thanks for calling [Your Business]. Are you looking to buy or sell a property?"></textarea>
+
+      <button type="submit">Submit Setup Request</button>
+    </form>
+
+    <div id="success" class="success">
+      <div class="checkmark">✓</div>
+      <h2>Setup Request Received!</h2>
+      <p>We'll activate your account within 24 hours and send you test call instructions via SMS.</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('setupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const button = e.target.querySelector('button');
+      button.disabled = true;
+      button.textContent = 'Submitting...';
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+
+      try {
+        const response = await fetch('/public/onboarding', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          document.querySelector('form').style.display = 'none';
+          document.getElementById('success').style.display = 'block';
+        } else {
+          alert('Error submitting form. Please try again or contact support.');
+          button.disabled = false;
+          button.textContent = 'Submit Setup Request';
+        }
+      } catch (error) {
+        alert('Network error. Please check your connection and try again.');
+        button.disabled = false;
+        button.textContent = 'Submit Setup Request';
+      }
+    });
+  </script>
+</body>
+</html>
