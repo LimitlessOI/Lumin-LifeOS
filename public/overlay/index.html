@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LifeOS Overlay</title>
+  <link rel="manifest" href="/manifest.json">
+  <style>
+    body {
+      margin: 0;
+      background: transparent;
+      font-family: 'Helvetica Neue', -apple-system, sans-serif;
+      overflow: hidden;
+    }
+    #lower-third {
+      position: fixed;
+      bottom: 60px;
+      left: 60px;
+      background: rgba(0,0,0,0.85);
+      color: white;
+      padding: 20px 35px;
+      border-radius: 8px;
+      display: none;
+      font-size: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+    }
+    #bullets {
+      position: fixed;
+      top: 100px;
+      right: 60px;
+      background: rgba(255,255,255,0.95);
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 400px;
+      display: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    #bullets ul {
+      margin: 0;
+      padding: 0 0 0 20px;
+      list-style-position: outside;
+    }
+    #bullets li {
+      margin: 12px 0;
+      font-size: 18px;
+      line-height: 1.4;
+      color: #333;
+    }
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="lower-third"></div>
+  <div id="bullets"><ul id="bulletList"></ul></div>
+
+  <script>
+    const sid = window.location.pathname.split('/')[2];
+    let currentState = {};
+
+    async function refresh() {
+      try {
+        const res = await fetch(`/api/overlay/${sid}/state`);
+        const state = await res.json();
+
+        if (JSON.stringify(state) === JSON.stringify(currentState)) return;
+        currentState = state;
+
+        const lowerThird = document.getElementById('lower-third');
+        if (state.lowerThird) {
+          lowerThird.textContent = state.lowerThird; // XSS-safe
+          lowerThird.style.display = 'block';
+          lowerThird.classList.add('fade-in');
+        } else {
+          lowerThird.style.display = 'none';
+        }
+
+        const bulletsWrap = document.getElementById('bullets');
+        const list = document.getElementById('bulletList');
+        if (state.bullets && state.bullets.length > 0) {
+          list.innerHTML = '';
+          (state.bullets || []).forEach(b => {
+            const li = document.createElement('li');
+            li.textContent = b; // XSS-safe
+            list.appendChild(li);
+          });
+          bulletsWrap.style.display = 'block';
+          bulletsWrap.classList.add('fade-in');
+        } else {
+          bulletsWrap.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Refresh error:', error);
+      }
+    }
+
+    setInterval(refresh, 1000);
+    refresh();
+  </script>
+</body>
+</html>
