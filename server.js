@@ -185,6 +185,10 @@ function verifyWebhook(req) {
 
 app.use(express.json());
 app.use('/static', express.static('public'));
+// Serve onboarding.html when visiting /onboarding
+app.get('/onboarding', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'onboarding.html'));
+});
 
 const overlayStates = new Map();
 const CALL_EVENTS = [];
