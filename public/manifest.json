@@ -1,1 +1,9 @@
-
+{
+  "name": "LifeOS Overlay",
+  "short_name": "Overlay",
+  "start_url": "/overlay/demo",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#007aff",
+  "icons": []
+}
