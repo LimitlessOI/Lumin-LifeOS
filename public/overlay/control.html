@@ -1,121 +1,114 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Overlay Controller</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LifeOS Overlay — Viewer</title>
   <style>
-    :root { --bg:#f5f5f7; --card:#fff; --fg:#1d1d1f; --muted:#6b7280; --blue:#2563eb; --gray:#6b7280; --green:#22c55e; }
-    *{box-sizing:border-box}
-    body { margin:0; background:var(--bg); color:var(--fg); font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
-    .wrap { max-width:900px; margin: 32px auto; padding: 0 16px; }
-    h1 { font-size: 34px; margin: 0 0 20px; }
-    .card { background: var(--card); border-radius: 14px; padding: 24px; box-shadow: 0 8px 30px rgba(0,0,0,.06); margin: 18px 0; }
-    label { display:block; margin-bottom: 10px; font-weight: 600; }
-    input, textarea { width:100%; font-size:16px; padding:12px 14px; border-radius:10px; border:1px solid #e5e7eb; outline:none; }
-    textarea { min-height: 140px; resize: vertical; }
-    .row { display:flex; gap:10px; margin-top:12px; }
-    button { border:0; border-radius:10px; padding:10px 16px; font-weight:600; cursor:pointer; }
-    .primary { background: var(--blue); color:#fff; }
-    .muted   { background: #9ca3af; color:#fff; }
-    .chip { background: var(--green); color:#fff; padding:10px 14px; border-radius:10px; margin-right:10px; border:0; cursor:pointer; }
-    .note { color: var(--muted); margin-top:10px; font-size: 13px; }
-    .toast { position: fixed; right: 18px; bottom: 18px; background:#111; color:#fff; padding:10px 14px; border-radius:10px; display:none; }
+    :root { --card: #fff; --shadow: 0 10px 30px rgba(0,0,0,.12); }
+    html, body { height:100%; }
+    body {
+      margin:0;
+      background: transparent;          /* keeps it “overlay-able” */
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif;
+    }
+    /* Lower-third (bottom-left) */
+    .lt-wrap {
+      position: fixed;
+      left: 32px; bottom: 32px;
+      display: none;                    /* hidden until we have text */
+      transform: translateZ(0);
+    }
+    .lt-badge {
+      background: rgba(0,0,0,.75);
+      color:#fff;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 18px;
+      letter-spacing:.2px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+
+    /* Bullets (top-right) */
+    .notes {
+      position: fixed;
+      right: 32px; top: 32px;
+      min-width: 280px;
+      max-width: 420px;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      display: none;                    /* hidden until we have bullets */
+    }
+    .notes h4 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      color: #666;
+      font-weight: 600;
+    }
+    .notes ul {
+      margin: 0; padding-left: 18px;
+      color:#222; line-height: 1.5;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Overlay Controller</h1>
-
-    <div class="card">
-      <label for="lt">Lower Third</label>
-      <input id="lt" placeholder="Your Name — Title" />
-      <div class="row">
-        <button class="primary" id="btn-lt">Update</button>
-        <button class="muted"   id="btn-clear-lt">Clear</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <label for="bp">Bullet Points</label>
-      <textarea id="bp" placeholder="One bullet per line"></textarea>
-      <div class="row">
-        <button class="primary" id="btn-bp">Update</button>
-        <button class="muted"   id="btn-clear-bp">Clear</button>
-      </div>
-
-      <div style="margin-top:14px">
-        <button class="chip" data-preset="realestate">Real Estate</button>
-        <button class="chip" data-preset="podcast">Podcast</button>
-        <button class="chip" data-preset="presentation">Presentation</button>
-      </div>
-      <div class="note">Presets fill the text box; click “Update” to push to the viewer.</div>
-    </div>
+  <div class="lt-wrap" id="lt">
+    <div class="lt-badge" id="ltText"></div>
   </div>
 
-  <div id="toast" class="toast">Saved</div>
+  <div class="notes" id="notes">
+    <h4>Notes</h4>
+    <ul id="bullets"></ul>
+  </div>
 
   <script>
-    const ROOM = 'demo';
-    const toast = document.getElementById('toast');
+    const ROOM = 'demo';             // change to any room if you need
+    const STATE_URL = `/api/overlay/${ROOM}/state`;
 
-    function showToast(msg='Saved') {
-      toast.textContent = msg;
-      toast.style.display = 'block';
-      setTimeout(() => toast.style.display = 'none', 1200);
+    const ltWrap = document.getElementById('lt');
+    const ltText = document.getElementById('ltText');
+    const notes = document.getElementById('notes');
+    const bulletsEl = document.getElementById('bullets');
+
+    async function refresh() {
+      try {
+        const r = await fetch(STATE_URL, { cache: 'no-store' });
+        const { ok, state } = await r.json();
+        if (!ok || !state) return;
+
+        // LOWER THIRD
+        const name = (state.lowerThird || '').trim();
+        if (name) {
+          ltText.textContent = name;
+          ltWrap.style.display = 'block';
+        } else {
+          ltWrap.style.display = 'none';
+        }
+
+        // BULLETS
+        const bullets = Array.isArray(state.bullets) ? state.bullets : [];
+        bulletsEl.innerHTML = '';
+        if (bullets.length) {
+          for (const item of bullets) {
+            const li = document.createElement('li');
+            li.textContent = String(item || '');
+            bulletsEl.appendChild(li);
+          }
+          notes.style.display = 'block';
+        } else {
+          notes.style.display = 'none';
+        }
+      } catch (e) {
+        // fail silently; next tick will try again
+      }
     }
 
-    async function post(payload) {
-      await fetch(`/api/overlay/${ROOM}/update`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }, // <-- REQUIRED
-        body: JSON.stringify(payload)
-      });
-      showToast();
-    }
-
-    // Lower third handlers
-    document.getElementById('btn-lt').addEventListener('click', () => {
-      const lowerThird = document.getElementById('lt').value.trim();
-      post({ lowerThird });
-    });
-    document.getElementById('btn-clear-lt').addEventListener('click', () => post({ action:'clear', lowerThird:'' }));
-
-    // Bullets handlers
-    document.getElementById('btn-bp').addEventListener('click', () => {
-      const raw = document.getElementById('bp').value;
-      const bullets = raw.split('\n')
-        .map(s => s.trim())
-        .filter(Boolean)
-        .slice(0, 10);
-      post({ bullets });
-    });
-    document.getElementById('btn-clear-bp').addEventListener('click', () => post({ action:'clear', bullets:[] }));
-
-    // Presets
-    const presets = {
-      realestate: [
-        'Buyer preapproved?',
-        'Target area & budget',
-        'Next step: tour setup'
-      ],
-      podcast: [
-        'Topic: AI + Real Estate',
-        'Guest: Top producer',
-        'CTA: Subscribe & share'
-      ],
-      presentation: [
-        'Problem → Solution',
-        'Proof → CTA',
-        'Next steps & Q/A'
-      ]
-    };
-    document.querySelectorAll('.chip').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const key = btn.dataset.preset;
-        document.getElementById('bp').value = (presets[key] || []).join('\n');
-      });
-    });
+    // poll gently
+    refresh();
+    setInterval(refresh, 1000);
   </script>
 </body>
 </html>
