@@ -1,28 +1,28 @@
-// Crash visibility
+// ===== Crash visibility =====
 process.on('uncaughtException', (err) => {
-  console.error('FATAL uncaughtException:', err);
-  process.exit(1);
+  console.error('FATAL uncaughtException:', err); process.exit(1);
 });
 process.on('unhandledRejection', (err) => {
-  console.error('FATAL unhandledRejection:', err);
-  process.exit(1);
+  console.error('FATAL unhandledRejection:', err); process.exit(1);
 });
 
+// ===== Imports =====
 const express = require('express');
 const { Pool } = require('pg');
 const path = require('path');
 
+// ===== App =====
 const app = express();
 const port = process.env.PORT || 8080;
 
-// ------- Env -------
-const COMMAND_KEY = process.env.COMMAND_CENTER_KEY || 'temp';
-const VAPI_API_KEY = process.env.VAPI_API_KEY || '';
-const VAPI_ASSISTANT_ID = process.env.VAPI_ASSISTANT_ID || '';
+// ===== Env =====
+const COMMAND_KEY          = process.env.COMMAND_CENTER_KEY || 'temp';
+const VAPI_API_KEY         = process.env.VAPI_API_KEY || '';
+const VAPI_ASSISTANT_ID    = process.env.VAPI_ASSISTANT_ID || '';
 const VAPI_PHONE_NUMBER_ID = process.env.VAPI_PHONE_NUMBER_ID || '';
-const DATABASE_URL = process.env.DATABASE_URL;
+const DATABASE_URL         = process.env.DATABASE_URL;
 
-// ------- DB -------
+// ===== DB =====
 let dbConfig;
 try {
   const url = new URL(DATABASE_URL);
@@ -75,7 +75,7 @@ async function bootstrap() {
   console.log('Database tables ready');
 }
 
-// ------- Helpers -------
+// ===== Helpers =====
 async function boldtrailRequest(endpoint, method = 'GET', data = null) {
   const BOLDTRAIL_API_KEY = process.env.BOLDTRAIL_API_KEY;
   if (!BOLDTRAIL_API_KEY) return { error: 'No BoldTrail API key' };
@@ -92,7 +92,7 @@ async function boldtrailRequest(endpoint, method = 'GET', data = null) {
 
 async function sendSMS(to, message) {
   const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const authToken  = process.env.TWILIO_AUTH_TOKEN;
   const fromNumber = process.env.TWILIO_PHONE_NUMBER;
   if (!accountSid || !authToken || !fromNumber) {
     console.log('SMS not configured, would send:', to, message);
@@ -112,19 +112,16 @@ async function sendSMS(to, message) {
   return response.json();
 }
 
-// Verify webhook requests
 function verifyWebhook(req) {
   const secret = req.header('X-Webhook-Secret');
   return secret && secret === process.env.WEBHOOK_SECRET;
 }
 
-// ------- App setup -------
-app.use(express.json());
+// ===== App setup =====
+app.use(express.json());           // <-- IMPORTANT for overlay POST
+app.use(express.static('public')); // serves /public/*
 
-// serve all static assets from /public (e.g., /onboarding.html, /overlay/*)
-app.use(express.static('public'));
-
-// pretty routes for user-friendly URLs
+// Pretty routes
 app.get('/onboarding', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'onboarding.html'));
 });
@@ -148,8 +145,9 @@ app.get('/healthz', async (req, res) => {
   }
 });
 
-// ------- Overlay state (viewer/controller) -------
-const overlayStates = new Map(); // room -> {lowerThird, bullets, updatedAt}
+// ===== Overlay API =====
+/** In-memory state: room -> { lowerThird: string, bullets: string[], updatedAt: number } */
+const overlayStates = new Map();
 
 app.get('/api/overlay/:room/state', (req, res) => {
   const room = req.params.room || 'demo';
@@ -163,17 +161,19 @@ app.post('/api/overlay/:room/update', (req, res) => {
 
   if (action === 'clear') {
     overlayStates.set(room, { lowerThird: '', bullets: [], updatedAt: Date.now() });
-  } else {
-    overlayStates.set(room, {
-      lowerThird: typeof lowerThird === 'string' ? lowerThird : (overlayStates.get(room)?.lowerThird || ''),
-      bullets: Array.isArray(bullets) ? bullets : (overlayStates.get(room)?.bullets || []),
-      updatedAt: Date.now()
-    });
+    return res.json({ ok: true });
   }
+
+  const prev = overlayStates.get(room) || { lowerThird: '', bullets: [] };
+  overlayStates.set(room, {
+    lowerThird: typeof lowerThird === 'string' ? lowerThird : prev.lowerThird,
+    bullets: Array.isArray(bullets) ? bullets : prev.bullets,
+    updatedAt: Date.now()
+  });
   res.json({ ok: true });
 });
 
-// ------- Vapi webhooks + actions -------
+// ===== Vapi webhooks + actions (unchanged) =====
 const CALL_EVENTS = [];
 
 app.post('/api/v1/vapi/webhook', async (req, res) => {
@@ -267,7 +267,7 @@ app.post('/api/v1/vapi/call-ended', async (req, res) => {
   }
 });
 
-// ------- Public onboarding -------
+// ===== Public onboarding (unchanged) =====
 async function createVapiAssistant(options) {
   if (!VAPI_API_KEY) return null;
   try {
@@ -319,7 +319,7 @@ app.post('/api/v1/admin/setup-client', async (req, res) => {
   }
 });
 
-// ------- Analytics + Builder (unchanged) -------
+// ===== Dashboard + Builder (unchanged) =====
 app.get('/analytics', async (req, res) => {
   const key = req.query.key;
   if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
@@ -417,7 +417,7 @@ app.get('/dashboard', (req, res) => {
   </script></body></html>`);
 });
 
-// ------- Start -------
+// ===== Start =====
 app.listen(port, async () => {
   console.log('Server listening on port ' + port);
   try { await bootstrap(); console.log('LifeOS ready'); }
