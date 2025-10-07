@@ -1,77 +1,114 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>LifeOS Overlay Viewer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LifeOS Overlay — Viewer</title>
   <style>
-    html, body { height: 100%; margin: 0; background: transparent; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
-    .lower-third {
-      position: fixed; left: 40px; bottom: 40px;
-      background: rgba(0,0,0,0.75); color: #fff;
-      padding: 12px 18px; border-radius: 10px; font-size: 20px;
-      min-width: 280px; display: none;
+    :root { --card: #fff; --shadow: 0 10px 30px rgba(0,0,0,.12); }
+    html, body { height:100%; }
+    body {
+      margin:0;
+      background: transparent;          /* keeps it “overlay-able” */
+      font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif;
     }
-    .bullets {
-      position: fixed; right: 40px; top: 40px;
-      background: rgba(255,255,255,0.9);
-      color: #1b1b1b; padding: 16px 18px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,.12);
-      min-width: 300px; display: none;
+    /* Lower-third (bottom-left) */
+    .lt-wrap {
+      position: fixed;
+      left: 32px; bottom: 32px;
+      display: none;                    /* hidden until we have text */
+      transform: translateZ(0);
     }
-    .bullets ul { margin: 8px 0 0; padding-left: 20px; }
-    .badge {
-      position: fixed; left: 24px; bottom: 24px; transform: translateY(56px);
-      background: #1f1f1f; color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 14px; opacity: .75;
+    .lt-badge {
+      background: rgba(0,0,0,.75);
+      color:#fff;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 18px;
+      letter-spacing:.2px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+
+    /* Bullets (top-right) */
+    .notes {
+      position: fixed;
+      right: 32px; top: 32px;
+      min-width: 280px;
+      max-width: 420px;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      display: none;                    /* hidden until we have bullets */
+    }
+    .notes h4 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      color: #666;
+      font-weight: 600;
+    }
+    .notes ul {
+      margin: 0; padding-left: 18px;
+      color:#222; line-height: 1.5;
     }
   </style>
 </head>
 <body>
-  <div id="lt" class="lower-third"></div>
-  <div id="bp" class="bullets">
-    <strong>Notes</strong>
-    <ul id="bp-list"></ul>
+  <div class="lt-wrap" id="lt">
+    <div class="lt-badge" id="ltText"></div>
   </div>
-  <div class="badge">Lumin</div>
+
+  <div class="notes" id="notes">
+    <h4>Notes</h4>
+    <ul id="bullets"></ul>
+  </div>
 
   <script>
-    const ROOM = 'demo';
-    const lt   = document.getElementById('lt');
-    const bp   = document.getElementById('bp');
-    const list = document.getElementById('bp-list');
+    const ROOM = 'demo';             // change to any room if you need
+    const STATE_URL = `/api/overlay/${ROOM}/state`;
 
-    async function poll() {
+    const ltWrap = document.getElementById('lt');
+    const ltText = document.getElementById('ltText');
+    const notes = document.getElementById('notes');
+    const bulletsEl = document.getElementById('bullets');
+
+    async function refresh() {
       try {
-        const res  = await fetch(`/api/overlay/${ROOM}/state`, { cache: 'no-store' });
-        const data = await res.json();
-        const state = data && data.state ? data.state : { lowerThird:'', bullets:[] };
+        const r = await fetch(STATE_URL, { cache: 'no-store' });
+        const { ok, state } = await r.json();
+        if (!ok || !state) return;
 
-        // Lower third
-        if (state.lowerThird && state.lowerThird.trim() !== '') {
-          lt.textContent = state.lowerThird;
-          lt.style.display = 'block';
+        // LOWER THIRD
+        const name = (state.lowerThird || '').trim();
+        if (name) {
+          ltText.textContent = name;
+          ltWrap.style.display = 'block';
         } else {
-          lt.style.display = 'none';
+          ltWrap.style.display = 'none';
         }
 
-        // Bullets
-        list.innerHTML = '';
-        if (Array.isArray(state.bullets) && state.bullets.length > 0) {
-          state.bullets.forEach(t => {
+        // BULLETS
+        const bullets = Array.isArray(state.bullets) ? state.bullets : [];
+        bulletsEl.innerHTML = '';
+        if (bullets.length) {
+          for (const item of bullets) {
             const li = document.createElement('li');
-            li.textContent = String(t);
-            list.appendChild(li);
-          });
-          bp.style.display = 'block';
+            li.textContent = String(item || '');
+            bulletsEl.appendChild(li);
+          }
+          notes.style.display = 'block';
         } else {
-          bp.style.display = 'none';
+          notes.style.display = 'none';
         }
       } catch (e) {
-        // ignore transient errors
-      } finally {
-        setTimeout(poll, 1000);
+        // fail silently; next tick will try again
       }
     }
-    poll();
+
+    // poll gently
+    refresh();
+    setInterval(refresh, 1000);
   </script>
 </body>
 </html>
