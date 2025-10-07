@@ -1,144 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Overlay Controller</title>
   <style>
-    :root { --card:#fff; --shadow:0 10px 30px rgba(0,0,0,.1); --border:#ececec; }
-    body {
-      margin:0; background:#f6f7fb;
-      font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif;
-      color:#111;
-    }
-    .wrap { max-width: 980px; margin: 32px auto; padding: 0 20px; }
-    h1 { font-size: 36px; margin: 0 0 18px 0; }
-    .card {
-      background: var(--card); border-radius: 14px; box-shadow: var(--shadow);
-      padding: 22px; margin-bottom: 24px; border: 1px solid var(--border);
-    }
-    label { display:block; font-weight:700; margin:0 0 10px; }
-    input, textarea {
-      width:100%; border:1px solid #ddd; border-radius:10px; padding:12px 14px;
-      font-size:16px; outline:none;
-    }
-    textarea { min-height: 180px; resize: vertical; }
-    .row { display:flex; gap:10px; margin-top:10px; }
-    button {
-      border:0; border-radius:10px; padding:10px 16px; cursor:pointer; font-weight:700;
-    }
-    .primary { background:#2b62ff; color:#fff; }
-    .muted { background:#8e93a0; color:#fff; }
-    .preset { background:#2bbf5a; color:#fff; }
-    .hint { font-size: 13px; color:#666; margin-top:8px; }
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, system-ui, sans-serif; padding:30px; max-width:700px; margin:0 auto; background:#f5f5f5;}
+    .section { background:#fff; padding:25px; border-radius:10px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,.08);}
+    input, textarea { width:100%; padding:12px; margin:10px 0; border:1px solid #ddd; border-radius:8px; font-size:16px;}
+    button { padding:12px 18px; border:0; border-radius:8px; background:#007aff; color:#fff; font-weight:600; margin-right:8px;}
+    button.secondary { background:#8e8e93; }
+    .presets { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+    .presets button { background:#34c759; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Overlay Controller</h1>
-
-    <div class="card">
-      <label>Lower Third</label>
-      <input id="lt" placeholder="Your Name — Title"/>
-      <div class="row">
-        <button class="primary" id="ltUpdate">Update</button>
-        <button class="muted" id="ltClear">Clear</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <label>Bullet Points</label>
-      <textarea id="bullets" placeholder="One bullet per line"></textarea>
-      <div class="row">
-        <button class="primary" id="bpUpdate">Update</button>
-        <button class="muted" id="bpClear">Clear</button>
-      </div>
-      <div class="row" style="margin-top:14px;">
-        <button class="preset" data-preset="Real Estate">Real Estate</button>
-        <button class="preset" data-preset="Podcast">Podcast</button>
-        <button class="preset" data-preset="Presentation">Presentation</button>
-      </div>
-      <div class="hint">Presets fill the text box; click “Update” to push to the viewer.</div>
+  <h1>Overlay Controller</h1>
+  <div class="section">
+    <h3>Lower Third</h3>
+    <input id="lowerThird" placeholder="Your Name — Title" />
+    <div>
+      <button onclick="updateLowerThird()">Update</button>
+      <button class="secondary" onclick="clearLowerThird()">Clear</button>
     </div>
   </div>
-
+  <div class="section">
+    <h3>Bullet Points</h3>
+    <textarea id="bullets" rows="6" placeholder="One per line"></textarea>
+    <div>
+      <button onclick="updateBullets()">Update</button>
+      <button class="secondary" onclick="clearBullets()">Clear</button>
+    </div>
+    <div class="presets">
+      <button onclick="loadPreset('realestate')">Real Estate</button>
+      <button onclick="loadPreset('podcast')">Podcast</button>
+      <button onclick="loadPreset('presentation')">Presentation</button>
+    </div>
+  </div>
   <script>
-    const ROOM = 'demo';
-    const UPDATE_URL = `/api/overlay/${ROOM}/update`;
-    const STATE_URL  = `/api/overlay/${ROOM}/state`;
-
-    const $ = (q) => document.querySelector(q);
-    const ltInput = $('#lt');
-    const bulletsInput = $('#bullets');
-
-    // Pull current state so fields mirror the viewer
-    async function loadState() {
-      try {
-        const r = await fetch(STATE_URL, { cache:'no-store' });
-        const { ok, state } = await r.json();
-        if (!ok) return;
-        ltInput.value = state.lowerThird || '';
-        bulletsInput.value = (Array.isArray(state.bullets) ? state.bullets : []).join('\n');
-      } catch {}
-    }
-    loadState();
-
-    // Update helpers
-    function parseBullets() {
-      return bulletsInput.value
-        .split('\n')
-        .map(x => x.trim())
-        .filter(Boolean)
-        .slice(0, 12); // keep it sane
-    }
-
-    async function postState(body) {
-      await fetch(UPDATE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-    }
-
-    // Lower-third actions
-    $('#ltUpdate').onclick = () => postState({
-      lowerThird: ltInput.value.trim(),
-      bullets: undefined
-    });
-    $('#ltClear').onclick  = () => { ltInput.value=''; postState({ action:'clear' }); };
-
-    // Bullets actions
-    $('#bpUpdate').onclick = () => postState({
-      lowerThird: undefined,
-      bullets: parseBullets()
-    });
-    $('#bpClear').onclick  = () => { bulletsInput.value=''; postState({ action:'clear' }); };
-
-    // Presets (fill textarea; you still click Update)
-    const PRESETS = {
-      'Real Estate': [
-        'New listing: 1234 Lakeview',
-        'Buyers waiting — preapproved',
-        'Open house Sat 1–4'
-      ],
-      'Podcast': [
-        'Intro guest + topic',
-        'Key takeaway 1–2',
-        'CTA: subscribe + review'
-      ],
-      'Presentation': [
-        'Agenda',
-        'Problem → Solution',
-        'Q&A at end'
-      ]
+    const sid = window.location.pathname.split('/')[2] || 'demo';
+    const presets = {
+      realestate: { bullets: ['Why now is the right time','Market conditions','Investment angle','Next steps']},
+      podcast: { bullets: ['Guest intro','Key points','CTA','Where to follow']},
+      presentation: { bullets: ['Problem','Solution','Benefits','Implementation']}
     };
-    document.querySelectorAll('.preset').forEach(btn=>{
-      btn.onclick = () => {
-        const arr = PRESETS[btn.dataset.preset] || [];
-        bulletsInput.value = arr.join('\n');
-        bulletsInput.focus();
-      };
-    });
+    async function fetchState(){ const r=await fetch(`/api/overlay/${sid}/state`); return r.json();}
+    async function postState(state){ await fetch(`/api/overlay/${sid}/state`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)}); }
+    async function updateLowerThird(){
+      const text=document.getElementById('lowerThird').value;
+      const s=await fetchState(); s.lowerThird=text; await postState(s);
+    }
+    async function clearLowerThird(){ const s=await fetchState(); s.lowerThird=null; await postState(s); document.getElementById('lowerThird').value=''; }
+    async function updateBullets(){ const s=await fetchState(); s.bullets=document.getElementById('bullets').value.split('\n').filter(Boolean); await postState(s); }
+    async function clearBullets(){ const s=await fetchState(); s.bullets=[]; await postState(s); document.getElementById('bullets').value=''; }
+    function loadPreset(k){ const p=presets[k]; if(p){ document.getElementById('bullets').value=p.bullets.join('\n'); } }
   </script>
 </body>
 </html>
