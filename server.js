@@ -1,425 +1,280 @@
-// ===== Crash visibility =====
-process.on('uncaughtException', (err) => {
-  console.error('FATAL uncaughtException:', err); process.exit(1);
-});
-process.on('unhandledRejection', (err) => {
-  console.error('FATAL unhandledRejection:', err); process.exit(1);
-});
+import express from "express";
+import axios from "axios";
+import dayjs from "dayjs";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { Pool } from "pg";
+import { createLead, appendTranscript, tagLead } from "./src/integrations/boldtrail.js";
 
-// ===== Imports =====
-const express = require('express');
-const { Pool } = require('pg');
-const path = require('path');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// ===== App =====
 const app = express();
-const port = process.env.PORT || 8080;
+app.use(express.json({ limit: "2mb" }));
+app.use(express.urlencoded({ extended: true }));
 
-// ===== Env =====
-const COMMAND_KEY          = process.env.COMMAND_CENTER_KEY || 'temp';
-const VAPI_API_KEY         = process.env.VAPI_API_KEY || '';
-const VAPI_ASSISTANT_ID    = process.env.VAPI_ASSISTANT_ID || '';
-const VAPI_PHONE_NUMBER_ID = process.env.VAPI_PHONE_NUMBER_ID || '';
-const DATABASE_URL         = process.env.DATABASE_URL;
+// Serve static assets (overlay, onboarding, etc.)
+app.use(express.static(path.join(__dirname, "public")));
 
-// ===== DB =====
-let dbConfig;
-try {
-  const url = new URL(DATABASE_URL);
-  dbConfig = {
-    host: url.hostname,
-    port: url.port || 5432,
-    database: url.pathname.split('/')[1],
-    user: url.username,
-    password: url.password,
-    ssl: { rejectUnauthorized: false }
-  };
-} catch (error) {
-  console.error('DB parse failed:', error);
-  process.exit(1);
+const {
+  DATABASE_URL,
+  COMMAND_CENTER_KEY,
+  WEBHOOK_SECRET,
+  PORT = 8080,
+  TWILIO_ACCOUNT_SID,
+  TWILIO_AUTH_TOKEN
+} = process.env;
+
+// ===== Postgres =====
+const pool = new Pool({
+  connectionString: DATABASE_URL,
+  ssl: DATABASE_URL?.includes("neon.tech")
+    ? { rejectUnauthorized: false }
+    : undefined,
+});
+
+async function initDb() {
+  await pool.query(`
+    create table if not exists calls (
+      id serial primary key,
+      created_at timestamptz default now(),
+      phone text,
+      intent text,
+      area text,
+      timeline text,
+      duration int,
+      transcript text,
+      score text,
+      boldtrail_lead_id text
+    );
+  `);
+  await pool.query(`
+    create table if not exists missed_calls (
+      id serial primary key,
+      created_at timestamptz default now(),
+      from_number text,
+      to_number text,
+      status text default 'new'
+    );
+  `);
+  await pool.query(`
+    create table if not exists overlay_states (
+      id serial primary key,
+      sid text not null,
+      updated_at timestamptz default now(),
+      data jsonb not null
+    );
+  `);
 }
-
-const pool = new Pool(dbConfig);
-async function query(sql, params = []) {
-  const client = await pool.connect();
-  try { return (await client.query(sql, params)).rows; }
-  finally { client.release(); }
-}
-
-async function bootstrap() {
-  await query(`CREATE TABLE IF NOT EXISTS self_tasks (
-    id SERIAL PRIMARY KEY, kind TEXT, payload JSONB DEFAULT '{}'::jsonb,
-    status TEXT DEFAULT 'queued', created_at TIMESTAMP DEFAULT NOW(),
-    run_after TIMESTAMP DEFAULT NOW(), result JSONB
-  )`);
-  await query(`CREATE TABLE IF NOT EXISTS execution_log (
-    id SERIAL PRIMARY KEY, timestamp TIMESTAMP DEFAULT NOW(),
-    endpoint TEXT, status TEXT, details TEXT
-  )`);
-  await query(`CREATE TABLE IF NOT EXISTS build_requests (
-    id SERIAL PRIMARY KEY, title TEXT NOT NULL, description TEXT,
-    category TEXT DEFAULT 'feature', priority INTEGER DEFAULT 5,
-    status TEXT DEFAULT 'pending', created_at TIMESTAMP DEFAULT NOW(),
-    approved_at TIMESTAMP
-  )`);
-  await query(`CREATE TABLE IF NOT EXISTS build_steps (
-    id SERIAL PRIMARY KEY, build_request_id INTEGER REFERENCES build_requests(id),
-    step_number INTEGER, description TEXT, status TEXT DEFAULT 'pending',
-    result JSONB, created_at TIMESTAMP DEFAULT NOW()
-  )`);
-  await query(`CREATE TABLE IF NOT EXISTS clients (
-    id SERIAL PRIMARY KEY, business_name TEXT, contact_name TEXT, phone TEXT, email TEXT,
-    boldtrail_key TEXT, hours TEXT, greeting TEXT, vapi_assistant_id TEXT,
-    status TEXT DEFAULT 'pending', created_at TIMESTAMP DEFAULT NOW()
-  )`);
-  console.log('Database tables ready');
-}
+initDb().then(() => console.log("Database tables ready")).catch(console.error);
 
 // ===== Helpers =====
-async function boldtrailRequest(endpoint, method = 'GET', data = null) {
-  const BOLDTRAIL_API_KEY = process.env.BOLDTRAIL_API_KEY;
-  if (!BOLDTRAIL_API_KEY) return { error: 'No BoldTrail API key' };
-  const response = await fetch('https://api.boldtrail.com/v1' + endpoint, {
-    method,
-    headers: {
-      'Authorization': 'Bearer ' + BOLDTRAIL_API_KEY,
-      'Content-Type': 'application/json'
-    },
-    body: data ? JSON.stringify(data) : null
-  });
-  return response.json();
+function requireCommandKey(req, res, next) {
+  const key = req.header("X-Command-Key") || req.query.key;
+  if (!COMMAND_CENTER_KEY || key !== COMMAND_CENTER_KEY) {
+    return res.status(401).json({ error: "unauthorized" });
+  }
+  next();
 }
 
-async function sendSMS(to, message) {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken  = process.env.TWILIO_AUTH_TOKEN;
-  const fromNumber = process.env.TWILIO_PHONE_NUMBER;
-  if (!accountSid || !authToken || !fromNumber) {
-    console.log('SMS not configured, would send:', to, message);
-    return { error: 'Twilio not configured' };
+function requireWebhookSecret(req, res, next) {
+  const key = req.header("X-Webhook-Secret");
+  if (!WEBHOOK_SECRET || key !== WEBHOOK_SECRET) {
+    return res.status(401).json({ error: "unauthorized" });
   }
-  const response = await fetch(
-    `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Basic ' + Buffer.from(accountSid + ':' + authToken).toString('base64'),
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: new URLSearchParams({ To: to, From: fromNumber, Body: message })
-    }
+  next();
+}
+
+// ===== Health =====
+app.get("/healthz", async (req, res) => {
+  try {
+    const r = await pool.query("select now()");
+    res.json({
+      status: "healthy",
+      database: "connected",
+      timestamp: r.rows[0].now,
+      version: "v1",
+    });
+  } catch {
+    res.status(500).json({ status: "unhealthy" });
+  }
+});
+
+// ===== Stats (secured) =====
+app.get("/api/v1/calls/stats", requireCommandKey, async (req, res) => {
+  const r = await pool.query(
+    "select count(*)::int as count from calls where created_at > now() - interval '30 days'"
   );
-  return response.json();
-}
-
-function verifyWebhook(req) {
-  const secret = req.header('X-Webhook-Secret');
-  return secret && secret === process.env.WEBHOOK_SECRET;
-}
-
-// ===== App setup =====
-app.use(express.json());           // <-- IMPORTANT for overlay POST
-app.use(express.static('public')); // serves /public/*
-
-// Pretty routes
-app.get('/onboarding', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'onboarding.html'));
-});
-app.get('/overlay/demo', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'overlay', 'index.html'));
-});
-app.get('/overlay/demo/control', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'overlay', 'control.html'));
+  const last10 = await pool.query(
+    "select id, created_at, phone, intent, score, duration from calls order by id desc limit 10"
+  );
+  res.json({ count: r.rows[0].count, last_10: last10.rows });
 });
 
-// Root + health
-app.get('/', (req, res) => {
-  res.json({ service: 'LifeOS', status: 'ok', version: '1.0' });
-});
-app.get('/healthz', async (req, res) => {
-  try {
-    await query('SELECT NOW()');
-    res.json({ status: 'healthy', database: 'connected', timestamp: new Date().toISOString() });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// ===== Overlay API =====
-/** In-memory state: room -> { lowerThird: string, bullets: string[], updatedAt: number } */
-const overlayStates = new Map();
-
-app.get('/api/overlay/:room/state', (req, res) => {
-  const room = req.params.room || 'demo';
-  const state = overlayStates.get(room) || { lowerThird: '', bullets: [] };
-  res.json({ ok: true, state });
-});
-
-app.post('/api/overlay/:room/update', (req, res) => {
-  const room = req.params.room || 'demo';
-  const { lowerThird, bullets, action } = req.body || {};
-
-  if (action === 'clear') {
-    overlayStates.set(room, { lowerThird: '', bullets: [], updatedAt: Date.now() });
-    return res.json({ ok: true });
-  }
-
-  const prev = overlayStates.get(room) || { lowerThird: '', bullets: [] };
-  overlayStates.set(room, {
-    lowerThird: typeof lowerThird === 'string' ? lowerThird : prev.lowerThird,
-    bullets: Array.isArray(bullets) ? bullets : prev.bullets,
-    updatedAt: Date.now()
-  });
-  res.json({ ok: true });
-});
-
-// ===== Vapi webhooks + actions (unchanged) =====
-const CALL_EVENTS = [];
-
-app.post('/api/v1/vapi/webhook', async (req, res) => {
-  if (!verifyWebhook(req)) return res.status(401).json({ error: 'unauthorized' });
-  CALL_EVENTS.unshift({ ts: new Date().toISOString(), data: req.body });
-  if (CALL_EVENTS.length > 100) CALL_EVENTS.pop();
-  try {
-    await query(
-      'INSERT INTO execution_log (endpoint, status, details) VALUES ($1,$2,$3)',
-      ['vapi_webhook', 'received', JSON.stringify(req.body).slice(0, 4000)]
-    );
-  } catch {}
-  res.json({ ok: true });
-});
-
-app.get('/api/v1/calls/stats', (req, res) => {
-  const key = req.header('X-Command-Key') || req.query.key;
-  if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  res.json({ count: CALL_EVENTS.length, last_10: CALL_EVENTS.slice(0, 10) });
-});
-
-app.post('/api/v1/vapi/call', async (req, res) => {
-  const key = req.header('X-Command-Key');
-  if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  if (!VAPI_API_KEY) return res.status(400).json({ error: 'VAPI_API_KEY not set' });
-
-  const { phone_number, customer_name } = req.body;
-  if (!phone_number) return res.status(400).json({ error: 'phone_number required' });
-
-  try {
-    const resp = await fetch('https://api.vapi.ai/call', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + VAPI_API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        assistantId: VAPI_ASSISTANT_ID,
-        phoneNumberId: VAPI_PHONE_NUMBER_ID,
-        customer: { number: phone_number, name: customer_name }
-      })
-    });
-    const data = await resp.json();
-    res.json({ ok: resp.ok, status: resp.status, data });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/v1/vapi/qualification-complete', async (req, res) => {
-  if (!verifyWebhook(req)) return res.status(401).json({ error: 'unauthorized' });
-  const { phoneNumber, buyOrSell, area, timeline, duration, transcript } = req.body;
-  const score = timeline === '30_days' ? 'hot' : timeline === '90_days' ? 'warm' : 'cold';
-  try {
-    await boldtrailRequest('/activities', 'POST', {
-      type: 'phone_call',
-      contact_phone: phoneNumber,
-      duration_seconds: duration,
-      outcome: 'qualified',
-      notes: `${buyOrSell} in ${area}, timeline: ${timeline}, score: ${score}\n\nTranscript: ${transcript}`
-    });
-    await query(
-      'INSERT INTO execution_log (endpoint, status, details) VALUES ($1,$2,$3)',
-      ['qualification', score, JSON.stringify(req.body)]
-    );
-    if (score === 'hot') {
-      await sendSMS(process.env.AGENT_PHONE, `HOT LEAD: ${phoneNumber} wants to ${buyOrSell} in ${area} within 30 days!`);
-    }
-    res.json({ ok: true, score });
-  } catch (error) {
-    console.error('Qualification error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/v1/vapi/call-ended', async (req, res) => {
-  if (!verifyWebhook(req)) return res.status(401).json({ error: 'unauthorized' });
-  const { phoneNumber, duration, answered } = req.body;
-  try {
-    if (!answered || duration < 5) {
-      await sendSMS(
+// ===== Vapi Qualification Webhook (secured by X-Webhook-Secret) =====
+// Expected body example (from your Workflow):
+// {
+//   "phoneNumber":"+12125551234",
+//   "buyOrSell":"buy",
+//   "area":"Seattle",
+//   "timeline":"30_days",
+//   "duration":42,
+//   "transcript":"..."
+// }
+app.post(
+  "/api/v1/vapi/qualification-complete",
+  requireWebhookSecret,
+  async (req, res) => {
+    try {
+      const {
         phoneNumber,
-        "Hi! I missed your call. I'm with a client right now. What can I help you with? Text me here and I'll respond ASAP."
-      );
-      await query(
-        'INSERT INTO execution_log (endpoint, status, details) VALUES ($1,$2,$3)',
-        ['missed_call', 'texted', phoneNumber]
-      );
-    }
-    res.json({ ok: true });
-  } catch (error) {
-    console.error('Missed call error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
+        buyOrSell,
+        area,
+        timeline,
+        duration,
+        transcript,
+      } = req.body || {};
 
-// ===== Public onboarding (unchanged) =====
-async function createVapiAssistant(options) {
-  if (!VAPI_API_KEY) return null;
-  try {
-    const response = await fetch('https://api.vapi.ai/assistant', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + VAPI_API_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: `${options.business_name} Receptionist`,
-        voice: 'jennifer',
-        model: { provider: 'openai', model: 'gpt-3.5-turbo' },
-        firstMessage: options.greeting || 'Hi! How can I help you today?'
-      })
-    });
-    const data = await response.json();
-    return data.id || null;
-  } catch (error) {
-    console.error('Vapi assistant create error:', error);
-    return null;
+      // Simple scoring heuristic
+      const score =
+        (timeline || "").includes("30") || (duration || 0) > 60 ? "hot" :
+        (duration || 0) > 20 ? "warm" : "cold";
+
+      // 1) Create BoldTrail lead
+      let boldtrailLeadId = null;
+      try {
+        const lead = await createLead({
+          phone: phoneNumber,
+          intent: buyOrSell,
+          area,
+          timeline,
+          duration,
+          source: "Vapi Inbound",
+        });
+        boldtrailLeadId = lead?.id || null;
+
+        // 2) Attach transcript
+        if (transcript) {
+          await appendTranscript(boldtrailLeadId, transcript);
+        }
+        // 3) Tag if hot
+        if (score === "hot") {
+          await tagLead(boldtrailLeadId, "hot");
+        }
+      } catch (e) {
+        console.error("BoldTrail error:", e?.response?.data || e.message);
+      }
+
+      // 4) Persist
+      await pool.query(
+        `insert into calls (phone, intent, area, timeline, duration, transcript, score, boldtrail_lead_id)
+         values ($1,$2,$3,$4,$5,$6,$7,$8)`,
+        [phoneNumber, buyOrSell, area, timeline, duration, transcript || "", score, boldtrailLeadId]
+      );
+
+      res.json({ ok: true, score });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ error: "server_error" });
+    }
   }
+);
+
+// ===== Overlay state APIs =====
+async function getOverlayState(sid) {
+  const r = await pool.query(
+    "select data from overlay_states where sid=$1 order by updated_at desc limit 1",
+    [sid]
+  );
+  return r.rows[0]?.data || {};
 }
 
-app.post('/api/v1/admin/setup-client', async (req, res) => {
-  const { business_name, contact_name, phone, email, boldtrail_key, hours, greeting } = req.body;
-  if (!business_name || !phone || !email) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
-  try {
-    const assistantId = await createVapiAssistant({ business_name, greeting });
-    if (!assistantId) return res.status(500).json({ error: 'Failed to create AI assistant' });
-
-    const result = await query(
-      `INSERT INTO clients (business_name, contact_name, phone, email, boldtrail_key, hours, greeting, vapi_assistant_id, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'active') RETURNING id`,
-      [business_name, contact_name, phone, email, boldtrail_key, hours, greeting, assistantId]
-    );
-
-    await sendSMS(
-      phone,
-      `Welcome to LifeOS AI Receptionist! Your system is active. Test it by calling ${process.env.VAPI_PHONE_NUMBER || 'your assigned number'}.`
-    );
-
-    res.json({ ok: true, client_id: result[0].id, assistant_id: assistantId, test_number: process.env.VAPI_PHONE_NUMBER });
-  } catch (error) {
-    console.error('Onboarding error:', error);
-    res.status(500).json({ error: 'Setup failed. Please contact support.' });
-  }
+app.get("/api/overlay/:sid/state", async (req, res) => {
+  const state = await getOverlayState(req.params.sid);
+  res.json(state);
 });
 
-// ===== Dashboard + Builder (unchanged) =====
-app.get('/analytics', async (req, res) => {
-  const key = req.query.key;
-  if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  const stats = await query(
-    `SELECT
-       COUNT(*) FILTER (WHERE endpoint = 'vapi_webhook') as total_calls,
-       COUNT(*) FILTER (WHERE details LIKE '%qualified%') as qualified_leads,
-       COUNT(*) FILTER (WHERE details LIKE '%hot%') as hot_leads,
-       COUNT(*) FILTER (WHERE endpoint = 'missed_call') as missed_calls
-     FROM execution_log
-     WHERE timestamp > NOW() - INTERVAL '30 days'`
+app.post("/api/overlay/:sid/state", async (req, res) => {
+  const state = req.body || {};
+  await pool.query(
+    `insert into overlay_states (sid, data) values ($1, $2)`,
+    [req.params.sid, state]
   );
-  res.send(`<!DOCTYPE html><html><head><title>Call Analytics</title><meta charset="utf-8">
-  <style>body{font-family:system-ui;padding:40px;background:#f5f5f5}
-  h1{color:#1d1d1f}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
-  .card{background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-  .card h2{margin:0;font-size:48px;color:#007aff}.card p{margin:10px 0 0;color:#666}</style></head>
-  <body><h1>Last 30 Days</h1><div class="grid">
-  <div class="card"><h2>${stats[0].total_calls}</h2><p>Total Calls</p></div>
-  <div class="card"><h2>${stats[0].qualified_leads}</h2><p>Qualified Leads</p></div>
-  <div class="card"><h2>${stats[0].hot_leads}</h2><p>Hot Leads</p></div>
-  <div class="card"><h2>${stats[0].missed_calls}</h2><p>Missed Calls</p></div>
-  </div></body></html>`);
+  res.json({ ok: true });
 });
 
-app.post('/api/v1/builder/request', async (req, res) => {
-  const key = req.header('X-Command-Key');
-  if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  const { title, description, category, priority } = req.body;
+// ===== Twilio missed-call hook (future SMS loop) =====
+// Configure later in Twilio to hit this when a call is missed/voicemail.
+app.post("/api/v1/twilio/missed-call", async (req, res) => {
+  // Twilio can send form-encoded; Express handles urlencoded above
+  const from = req.body.From || req.body.from || req.query.from;
+  const to = req.body.To || req.body.to || req.query.to;
+
+  await pool.query(
+    "insert into missed_calls (from_number, to_number, status) values ($1,$2,'new')",
+    [from || "", to || ""]
+  );
+
+  // (Optional) You can send an SMS here using axios to Twilio API
+  // when you’re ready and have A2P set up.
+
+  res.json({ ok: true });
+});
+
+// ===== Autopilot tick (Cron) =====
+app.post("/api/v1/autopilot/tick", requireCommandKey, async (req, res) => {
+  // Simple nightly chores: read backlog.md (if present), write a report.
   try {
-    const result = await query(
-      'INSERT INTO build_requests (title, description, category, priority, status) VALUES ($1,$2,$3,$4,\'pending\') RETURNING id',
-      [title, description, category || 'feature', priority || 5]
-    );
-    res.json({ ok: true, build_request_id: result[0].id });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.get('/api/v1/builder/pending', async (req, res) => {
-  const key = req.query.key;
-  if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  try {
-    const pending = await query('SELECT id, title, description, category, priority, created_at FROM build_requests WHERE status = \'pending\' ORDER BY priority ASC, created_at ASC');
-    res.json({ pending_requests: pending });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/v1/builder/approve/:id', async (req, res) => {
-  const key = req.header('X-Command-Key');
-  if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  const { id } = req.params;
-  try {
-    await query('UPDATE build_requests SET status = \'approved\', approved_at = NOW() WHERE id = $1', [id]);
-    res.json({ ok: true, message: 'Build request approved' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.get('/dashboard', (req, res) => {
-  res.send(`<!DOCTYPE html><html><head><title>Builder Dashboard</title><meta charset="utf-8">
-  <style>body{font-family:system-ui;max-width:1200px;margin:40px auto;padding:0 20px;background:#f5f5f5}
-  h1{color:#1d1d1f}.request{background:#fff;border-radius:8px;padding:20px;margin:20px 0;box-shadow:0 2px 4px rgba(0,0,0,.1)}
-  .request h3{margin-top:0}.meta{color:#666;font-size:14px;margin:10px 0}
-  button{background:#007aff;color:#fff;border:none;padding:10px 20px;border-radius:6px;cursor:pointer}
-  button:hover{background:#0051d5}.empty{text-align:center;padding:60px;color:#999}</style></head>
-  <body><h1>Build Dashboard</h1><div id="requests" class="empty">Loading...</div>
-  <script>
-  const KEY="${COMMAND_KEY}";
-  async function load(){
-    const res=await fetch("/api/v1/builder/pending?key="+KEY);
-    const data=await res.json();
-    if(data.pending_requests&&data.pending_requests.length>0){
-      document.getElementById("requests").innerHTML=data.pending_requests.map(r=>\`
-        <div class="request">
-          <h3>\${r.title}</h3>
-          <p>\${r.description||""}</p>
-          <div class="meta">Priority: \${r.priority} | Category: \${r.category}</div>
-          <button onclick="approve(\${r.id})">Approve</button>
-        </div>\`).join("");
+    const root = __dirname;
+    const backlogPath = path.join(root, "backlog.md");
+    let backlog = "";
+    if (fs.existsSync(backlogPath)) {
+      backlog = fs.readFileSync(backlogPath, "utf8");
+      console.log("[autopilot] backlog.md found, length:", backlog.length);
     } else {
-      document.getElementById("requests").innerHTML='<div class="empty">No pending requests</div>';
+      console.log("[autopilot] no backlog.md");
     }
+
+    // Generate daily report
+    const today = dayjs().format("YYYY-MM-DD");
+    const rp = path.join(root, "reports");
+    if (!fs.existsSync(rp)) fs.mkdirSync(rp, { recursive: true });
+
+    const countRes = await pool.query(
+      "select score, count(*)::int as c from calls where created_at::date = current_date group by score"
+    );
+    const totalRes = await pool.query(
+      "select count(*)::int as c from calls where created_at::date = current_date"
+    );
+
+    const lines = [
+      `# Daily Report - ${today}`,
+      "",
+      `Total calls today: ${totalRes.rows[0]?.c || 0}`,
+      "",
+      "By score:",
+      ...countRes.rows.map(r => `- ${r.score || "unknown"}: ${r.c}`),
+      "",
+      "---",
+      "Backlog snapshot:",
+      "```",
+      backlog.trim(),
+      "```",
+    ].join("\n");
+
+    const outFile = path.join(rp, `${today}.md`);
+    fs.writeFileSync(outFile, lines, "utf8");
+    console.log("[autopilot] wrote report:", outFile);
+
+    res.json({ ok: true, report: `/reports/${today}.md` });
+  } catch (e) {
+    console.error("[autopilot] error", e);
+    res.status(500).json({ error: "autopilot_failed" });
   }
-  async function approve(id){
-    if(!confirm("Approve?"))return;
-    await fetch("/api/v1/builder/approve/"+id,{method:"POST",headers:{"X-Command-Key":KEY}});
-    alert("Approved"); load();
-  }
-  load(); setInterval(load,30000);
-  </script></body></html>`);
 });
 
-// ===== Start =====
-app.listen(port, async () => {
-  console.log('Server listening on port ' + port);
-  try { await bootstrap(); console.log('LifeOS ready'); }
-  catch (error) { console.error('Bootstrap failed but server staying up:', error); }
+// ===== Start server =====
+app.listen(PORT, () => {
+  console.log(`LifeOS ready on :${PORT}`);
 });
