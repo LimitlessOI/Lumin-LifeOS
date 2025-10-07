@@ -1,114 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LifeOS Overlay — Viewer</title>
+  <title>Overlay Controller</title>
   <style>
-    :root { --card: #fff; --shadow: 0 10px 30px rgba(0,0,0,.12); }
-    html, body { height:100%; }
+    :root { --card:#fff; --shadow:0 10px 30px rgba(0,0,0,.1); --border:#ececec; }
     body {
-      margin:0;
-      background: transparent;          /* keeps it “overlay-able” */
+      margin:0; background:#f6f7fb;
       font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif;
+      color:#111;
     }
-    /* Lower-third (bottom-left) */
-    .lt-wrap {
-      position: fixed;
-      left: 32px; bottom: 32px;
-      display: none;                    /* hidden until we have text */
-      transform: translateZ(0);
+    .wrap { max-width: 980px; margin: 32px auto; padding: 0 20px; }
+    h1 { font-size: 36px; margin: 0 0 18px 0; }
+    .card {
+      background: var(--card); border-radius: 14px; box-shadow: var(--shadow);
+      padding: 22px; margin-bottom: 24px; border: 1px solid var(--border);
     }
-    .lt-badge {
-      background: rgba(0,0,0,.75);
-      color:#fff;
-      padding: 10px 16px;
-      border-radius: 12px;
-      font-size: 18px;
-      letter-spacing:.2px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(6px);
+    label { display:block; font-weight:700; margin:0 0 10px; }
+    input, textarea {
+      width:100%; border:1px solid #ddd; border-radius:10px; padding:12px 14px;
+      font-size:16px; outline:none;
     }
-
-    /* Bullets (top-right) */
-    .notes {
-      position: fixed;
-      right: 32px; top: 32px;
-      min-width: 280px;
-      max-width: 420px;
-      background: var(--card);
-      border-radius: 12px;
-      padding: 14px 16px;
-      box-shadow: var(--shadow);
-      display: none;                    /* hidden until we have bullets */
+    textarea { min-height: 180px; resize: vertical; }
+    .row { display:flex; gap:10px; margin-top:10px; }
+    button {
+      border:0; border-radius:10px; padding:10px 16px; cursor:pointer; font-weight:700;
     }
-    .notes h4 {
-      margin: 0 0 8px 0;
-      font-size: 14px;
-      color: #666;
-      font-weight: 600;
-    }
-    .notes ul {
-      margin: 0; padding-left: 18px;
-      color:#222; line-height: 1.5;
-    }
+    .primary { background:#2b62ff; color:#fff; }
+    .muted { background:#8e93a0; color:#fff; }
+    .preset { background:#2bbf5a; color:#fff; }
+    .hint { font-size: 13px; color:#666; margin-top:8px; }
   </style>
 </head>
 <body>
-  <div class="lt-wrap" id="lt">
-    <div class="lt-badge" id="ltText"></div>
-  </div>
+  <div class="wrap">
+    <h1>Overlay Controller</h1>
 
-  <div class="notes" id="notes">
-    <h4>Notes</h4>
-    <ul id="bullets"></ul>
+    <div class="card">
+      <label>Lower Third</label>
+      <input id="lt" placeholder="Your Name — Title"/>
+      <div class="row">
+        <button class="primary" id="ltUpdate">Update</button>
+        <button class="muted" id="ltClear">Clear</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Bullet Points</label>
+      <textarea id="bullets" placeholder="One bullet per line"></textarea>
+      <div class="row">
+        <button class="primary" id="bpUpdate">Update</button>
+        <button class="muted" id="bpClear">Clear</button>
+      </div>
+      <div class="row" style="margin-top:14px;">
+        <button class="preset" data-preset="Real Estate">Real Estate</button>
+        <button class="preset" data-preset="Podcast">Podcast</button>
+        <button class="preset" data-preset="Presentation">Presentation</button>
+      </div>
+      <div class="hint">Presets fill the text box; click “Update” to push to the viewer.</div>
+    </div>
   </div>
 
   <script>
-    const ROOM = 'demo';             // change to any room if you need
-    const STATE_URL = `/api/overlay/${ROOM}/state`;
+    const ROOM = 'demo';
+    const UPDATE_URL = `/api/overlay/${ROOM}/update`;
+    const STATE_URL  = `/api/overlay/${ROOM}/state`;
 
-    const ltWrap = document.getElementById('lt');
-    const ltText = document.getElementById('ltText');
-    const notes = document.getElementById('notes');
-    const bulletsEl = document.getElementById('bullets');
+    const $ = (q) => document.querySelector(q);
+    const ltInput = $('#lt');
+    const bulletsInput = $('#bullets');
 
-    async function refresh() {
+    // Pull current state so fields mirror the viewer
+    async function loadState() {
       try {
-        const r = await fetch(STATE_URL, { cache: 'no-store' });
+        const r = await fetch(STATE_URL, { cache:'no-store' });
         const { ok, state } = await r.json();
-        if (!ok || !state) return;
+        if (!ok) return;
+        ltInput.value = state.lowerThird || '';
+        bulletsInput.value = (Array.isArray(state.bullets) ? state.bullets : []).join('\n');
+      } catch {}
+    }
+    loadState();
 
-        // LOWER THIRD
-        const name = (state.lowerThird || '').trim();
-        if (name) {
-          ltText.textContent = name;
-          ltWrap.style.display = 'block';
-        } else {
-          ltWrap.style.display = 'none';
-        }
-
-        // BULLETS
-        const bullets = Array.isArray(state.bullets) ? state.bullets : [];
-        bulletsEl.innerHTML = '';
-        if (bullets.length) {
-          for (const item of bullets) {
-            const li = document.createElement('li');
-            li.textContent = String(item || '');
-            bulletsEl.appendChild(li);
-          }
-          notes.style.display = 'block';
-        } else {
-          notes.style.display = 'none';
-        }
-      } catch (e) {
-        // fail silently; next tick will try again
-      }
+    // Update helpers
+    function parseBullets() {
+      return bulletsInput.value
+        .split('\n')
+        .map(x => x.trim())
+        .filter(Boolean)
+        .slice(0, 12); // keep it sane
     }
 
-    // poll gently
-    refresh();
-    setInterval(refresh, 1000);
+    async function postState(body) {
+      await fetch(UPDATE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+    }
+
+    // Lower-third actions
+    $('#ltUpdate').onclick = () => postState({
+      lowerThird: ltInput.value.trim(),
+      bullets: undefined
+    });
+    $('#ltClear').onclick  = () => { ltInput.value=''; postState({ action:'clear' }); };
+
+    // Bullets actions
+    $('#bpUpdate').onclick = () => postState({
+      lowerThird: undefined,
+      bullets: parseBullets()
+    });
+    $('#bpClear').onclick  = () => { bulletsInput.value=''; postState({ action:'clear' }); };
+
+    // Presets (fill textarea; you still click Update)
+    const PRESETS = {
+      'Real Estate': [
+        'New listing: 1234 Lakeview',
+        'Buyers waiting — preapproved',
+        'Open house Sat 1–4'
+      ],
+      'Podcast': [
+        'Intro guest + topic',
+        'Key takeaway 1–2',
+        'CTA: subscribe + review'
+      ],
+      'Presentation': [
+        'Agenda',
+        'Problem → Solution',
+        'Q&A at end'
+      ]
+    };
+    document.querySelectorAll('.preset').forEach(btn=>{
+      btn.onclick = () => {
+        const arr = PRESETS[btn.dataset.preset] || [];
+        bulletsInput.value = arr.join('\n');
+        bulletsInput.focus();
+      };
+    });
   </script>
 </body>
 </html>
