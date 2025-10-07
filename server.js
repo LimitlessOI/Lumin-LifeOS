@@ -11,15 +11,18 @@ process.on('unhandledRejection', (err) => {
 const express = require('express');
 const { Pool } = require('pg');
 const path = require('path');
+
 const app = express();
 const port = process.env.PORT || 8080;
 
+// ------- Env -------
 const COMMAND_KEY = process.env.COMMAND_CENTER_KEY || 'temp';
 const VAPI_API_KEY = process.env.VAPI_API_KEY || '';
 const VAPI_ASSISTANT_ID = process.env.VAPI_ASSISTANT_ID || '';
 const VAPI_PHONE_NUMBER_ID = process.env.VAPI_PHONE_NUMBER_ID || '';
 const DATABASE_URL = process.env.DATABASE_URL;
 
+// ------- DB -------
 let dbConfig;
 try {
   const url = new URL(DATABASE_URL);
@@ -37,29 +40,45 @@ try {
 }
 
 const pool = new Pool(dbConfig);
-
 async function query(sql, params = []) {
   const client = await pool.connect();
-  try {
-    return (await client.query(sql, params)).rows;
-  } finally {
-    client.release();
-  }
+  try { return (await client.query(sql, params)).rows; }
+  finally { client.release(); }
 }
 
 async function bootstrap() {
-  await query('CREATE TABLE IF NOT EXISTS self_tasks (id SERIAL PRIMARY KEY, kind TEXT, payload JSONB DEFAULT \'{}\', status TEXT DEFAULT \'queued\', created_at TIMESTAMP DEFAULT NOW(), run_after TIMESTAMP DEFAULT NOW(), result JSONB)');
-  await query('CREATE TABLE IF NOT EXISTS execution_log (id SERIAL PRIMARY KEY, timestamp TIMESTAMP DEFAULT NOW(), endpoint TEXT, status TEXT, details TEXT)');
-  await query('CREATE TABLE IF NOT EXISTS build_requests (id SERIAL PRIMARY KEY, title TEXT NOT NULL, description TEXT, category TEXT DEFAULT \'feature\', priority INTEGER DEFAULT 5, status TEXT DEFAULT \'pending\', created_at TIMESTAMP DEFAULT NOW(), approved_at TIMESTAMP)');
-  await query('CREATE TABLE IF NOT EXISTS build_steps (id SERIAL PRIMARY KEY, build_request_id INTEGER REFERENCES build_requests(id), step_number INTEGER, description TEXT, status TEXT DEFAULT \'pending\', result JSONB, created_at TIMESTAMP DEFAULT NOW())');
-  await query('CREATE TABLE IF NOT EXISTS clients (id SERIAL PRIMARY KEY, business_name TEXT, contact_name TEXT, phone TEXT, email TEXT, boldtrail_key TEXT, hours TEXT, greeting TEXT, vapi_assistant_id TEXT, status TEXT DEFAULT \'pending\', created_at TIMESTAMP DEFAULT NOW())');
+  await query(`CREATE TABLE IF NOT EXISTS self_tasks (
+    id SERIAL PRIMARY KEY, kind TEXT, payload JSONB DEFAULT '{}'::jsonb,
+    status TEXT DEFAULT 'queued', created_at TIMESTAMP DEFAULT NOW(),
+    run_after TIMESTAMP DEFAULT NOW(), result JSONB
+  )`);
+  await query(`CREATE TABLE IF NOT EXISTS execution_log (
+    id SERIAL PRIMARY KEY, timestamp TIMESTAMP DEFAULT NOW(),
+    endpoint TEXT, status TEXT, details TEXT
+  )`);
+  await query(`CREATE TABLE IF NOT EXISTS build_requests (
+    id SERIAL PRIMARY KEY, title TEXT NOT NULL, description TEXT,
+    category TEXT DEFAULT 'feature', priority INTEGER DEFAULT 5,
+    status TEXT DEFAULT 'pending', created_at TIMESTAMP DEFAULT NOW(),
+    approved_at TIMESTAMP
+  )`);
+  await query(`CREATE TABLE IF NOT EXISTS build_steps (
+    id SERIAL PRIMARY KEY, build_request_id INTEGER REFERENCES build_requests(id),
+    step_number INTEGER, description TEXT, status TEXT DEFAULT 'pending',
+    result JSONB, created_at TIMESTAMP DEFAULT NOW()
+  )`);
+  await query(`CREATE TABLE IF NOT EXISTS clients (
+    id SERIAL PRIMARY KEY, business_name TEXT, contact_name TEXT, phone TEXT, email TEXT,
+    boldtrail_key TEXT, hours TEXT, greeting TEXT, vapi_assistant_id TEXT,
+    status TEXT DEFAULT 'pending', created_at TIMESTAMP DEFAULT NOW()
+  )`);
   console.log('Database tables ready');
 }
 
+// ------- Helpers -------
 async function boldtrailRequest(endpoint, method = 'GET', data = null) {
   const BOLDTRAIL_API_KEY = process.env.BOLDTRAIL_API_KEY;
   if (!BOLDTRAIL_API_KEY) return { error: 'No BoldTrail API key' };
-  
   const response = await fetch('https://api.boldtrail.com/v1' + endpoint, {
     method,
     headers: {
@@ -75,42 +94,51 @@ async function sendSMS(to, message) {
   const accountSid = process.env.TWILIO_ACCOUNT_SID;
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   const fromNumber = process.env.TWILIO_PHONE_NUMBER;
-  
   if (!accountSid || !authToken || !fromNumber) {
     console.log('SMS not configured, would send:', to, message);
     return { error: 'Twilio not configured' };
   }
-  
   const response = await fetch(
-    'https://api.twilio.com/2010-04-01/Accounts/' + accountSid + '/Messages.json',
+    `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
     {
       method: 'POST',
       headers: {
         'Authorization': 'Basic ' + Buffer.from(accountSid + ':' + authToken).toString('base64'),
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: new URLSearchParams({
-        To: to,
-        From: fromNumber,
-        Body: message
-      })
+      body: new URLSearchParams({ To: to, From: fromNumber, Body: message })
     }
   );
   return response.json();
 }
 
+// Verify webhook requests
 function verifyWebhook(req) {
   const secret = req.header('X-Webhook-Secret');
   return secret && secret === process.env.WEBHOOK_SECRET;
 }
 
+// ------- App setup -------
 app.use(express.json());
+
+// serve all static assets from /public (e.g., /onboarding.html, /overlay/*)
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-  res.json({ service: 'LifeOS', status: 'ok' });
+// pretty routes for user-friendly URLs
+app.get('/onboarding', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'onboarding.html'));
+});
+app.get('/overlay/demo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'overlay', 'index.html'));
+});
+app.get('/overlay/demo/control', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'overlay', 'control.html'));
 });
 
+// Root + health
+app.get('/', (req, res) => {
+  res.json({ service: 'LifeOS', status: 'ok', version: '1.0' });
+});
 app.get('/healthz', async (req, res) => {
   try {
     await query('SELECT NOW()');
@@ -120,18 +148,44 @@ app.get('/healthz', async (req, res) => {
   }
 });
 
+// ------- Overlay state (viewer/controller) -------
+const overlayStates = new Map(); // room -> {lowerThird, bullets, updatedAt}
+
+app.get('/api/overlay/:room/state', (req, res) => {
+  const room = req.params.room || 'demo';
+  const state = overlayStates.get(room) || { lowerThird: '', bullets: [] };
+  res.json({ ok: true, state });
+});
+
+app.post('/api/overlay/:room/update', (req, res) => {
+  const room = req.params.room || 'demo';
+  const { lowerThird, bullets, action } = req.body || {};
+
+  if (action === 'clear') {
+    overlayStates.set(room, { lowerThird: '', bullets: [], updatedAt: Date.now() });
+  } else {
+    overlayStates.set(room, {
+      lowerThird: typeof lowerThird === 'string' ? lowerThird : (overlayStates.get(room)?.lowerThird || ''),
+      bullets: Array.isArray(bullets) ? bullets : (overlayStates.get(room)?.bullets || []),
+      updatedAt: Date.now()
+    });
+  }
+  res.json({ ok: true });
+});
+
+// ------- Vapi webhooks + actions -------
 const CALL_EVENTS = [];
 
 app.post('/api/v1/vapi/webhook', async (req, res) => {
-  if (!verifyWebhook(req)) {
-    return res.status(401).json({ error: 'unauthorized' });
-  }
+  if (!verifyWebhook(req)) return res.status(401).json({ error: 'unauthorized' });
   CALL_EVENTS.unshift({ ts: new Date().toISOString(), data: req.body });
   if (CALL_EVENTS.length > 100) CALL_EVENTS.pop();
   try {
-    await query('INSERT INTO execution_log (endpoint, status, details) VALUES ($1, $2, $3)',
-      ['vapi_webhook', 'received', JSON.stringify(req.body).slice(0, 4000)]);
-  } catch (e) {}
+    await query(
+      'INSERT INTO execution_log (endpoint, status, details) VALUES ($1,$2,$3)',
+      ['vapi_webhook', 'received', JSON.stringify(req.body).slice(0, 4000)]
+    );
+  } catch {}
   res.json({ ok: true });
 });
 
@@ -145,10 +199,10 @@ app.post('/api/v1/vapi/call', async (req, res) => {
   const key = req.header('X-Command-Key');
   if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
   if (!VAPI_API_KEY) return res.status(400).json({ error: 'VAPI_API_KEY not set' });
-  
+
   const { phone_number, customer_name } = req.body;
   if (!phone_number) return res.status(400).json({ error: 'phone_number required' });
-  
+
   try {
     const resp = await fetch('https://api.vapi.ai/call', {
       method: 'POST',
@@ -167,35 +221,24 @@ app.post('/api/v1/vapi/call', async (req, res) => {
 });
 
 app.post('/api/v1/vapi/qualification-complete', async (req, res) => {
-  if (!verifyWebhook(req)) {
-    return res.status(401).json({ error: 'unauthorized' });
-  }
+  if (!verifyWebhook(req)) return res.status(401).json({ error: 'unauthorized' });
   const { phoneNumber, buyOrSell, area, timeline, duration, transcript } = req.body;
-  
-  const score = timeline === '30_days' ? 'hot' : 
-                timeline === '90_days' ? 'warm' : 'cold';
-  
+  const score = timeline === '30_days' ? 'hot' : timeline === '90_days' ? 'warm' : 'cold';
   try {
     await boldtrailRequest('/activities', 'POST', {
       type: 'phone_call',
       contact_phone: phoneNumber,
       duration_seconds: duration,
       outcome: 'qualified',
-      notes: buyOrSell + ' in ' + area + ', timeline: ' + timeline + ', score: ' + score + '\n\nTranscript: ' + transcript
+      notes: `${buyOrSell} in ${area}, timeline: ${timeline}, score: ${score}\n\nTranscript: ${transcript}`
     });
-    
     await query(
-      'INSERT INTO execution_log (endpoint, status, details) VALUES ($1, $2, $3)',
+      'INSERT INTO execution_log (endpoint, status, details) VALUES ($1,$2,$3)',
       ['qualification', score, JSON.stringify(req.body)]
     );
-    
     if (score === 'hot') {
-      await sendSMS(
-        process.env.AGENT_PHONE,
-        'HOT LEAD: ' + phoneNumber + ' wants to ' + buyOrSell + ' in ' + area + ' within 30 days!'
-      );
+      await sendSMS(process.env.AGENT_PHONE, `HOT LEAD: ${phoneNumber} wants to ${buyOrSell} in ${area} within 30 days!`);
     }
-    
     res.json({ ok: true, score });
   } catch (error) {
     console.error('Qualification error:', error);
@@ -204,24 +247,19 @@ app.post('/api/v1/vapi/qualification-complete', async (req, res) => {
 });
 
 app.post('/api/v1/vapi/call-ended', async (req, res) => {
-  if (!verifyWebhook(req)) {
-    return res.status(401).json({ error: 'unauthorized' });
-  }
+  if (!verifyWebhook(req)) return res.status(401).json({ error: 'unauthorized' });
   const { phoneNumber, duration, answered } = req.body;
-  
   try {
     if (!answered || duration < 5) {
       await sendSMS(
         phoneNumber,
-        'Hi! I missed your call. I\'m with a client right now. What can I help you with? Text me here and I\'ll respond ASAP.'
+        "Hi! I missed your call. I'm with a client right now. What can I help you with? Text me here and I'll respond ASAP."
       );
-      
       await query(
-        'INSERT INTO execution_log (endpoint, status, details) VALUES ($1, $2, $3)',
+        'INSERT INTO execution_log (endpoint, status, details) VALUES ($1,$2,$3)',
         ['missed_call', 'texted', phoneNumber]
       );
     }
-    
     res.json({ ok: true });
   } catch (error) {
     console.error('Missed call error:', error);
@@ -229,9 +267,9 @@ app.post('/api/v1/vapi/call-ended', async (req, res) => {
   }
 });
 
+// ------- Public onboarding -------
 async function createVapiAssistant(options) {
   if (!VAPI_API_KEY) return null;
-  
   try {
     const response = await fetch('https://api.vapi.ai/assistant', {
       method: 'POST',
@@ -240,13 +278,12 @@ async function createVapiAssistant(options) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: options.business_name + ' Receptionist',
+        name: `${options.business_name} Receptionist`,
         voice: 'jennifer',
         model: { provider: 'openai', model: 'gpt-3.5-turbo' },
         firstMessage: options.greeting || 'Hi! How can I help you today?'
       })
     });
-    
     const data = await response.json();
     return data.id || null;
   } catch (error) {
@@ -257,58 +294,66 @@ async function createVapiAssistant(options) {
 
 app.post('/api/v1/admin/setup-client', async (req, res) => {
   const { business_name, contact_name, phone, email, boldtrail_key, hours, greeting } = req.body;
-  
   if (!business_name || !phone || !email) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  
   try {
     const assistantId = await createVapiAssistant({ business_name, greeting });
-    
-    if (!assistantId) {
-      return res.status(500).json({ error: 'Failed to create AI assistant' });
-    }
-    
+    if (!assistantId) return res.status(500).json({ error: 'Failed to create AI assistant' });
+
     const result = await query(
-      'INSERT INTO clients (business_name, contact_name, phone, email, boldtrail_key, hours, greeting, vapi_assistant_id, status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,\'active\') RETURNING id',
+      `INSERT INTO clients (business_name, contact_name, phone, email, boldtrail_key, hours, greeting, vapi_assistant_id, status)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'active') RETURNING id`,
       [business_name, contact_name, phone, email, boldtrail_key, hours, greeting, assistantId]
     );
-    
-    await sendSMS(phone, 'Welcome to LifeOS AI Receptionist! Your system is active. Test it by calling ' + (process.env.VAPI_PHONE_NUMBER || 'your assigned number'));
-    
-    res.json({ 
-      ok: true, 
-      client_id: result[0].id, 
-      assistant_id: assistantId,
-      test_number: process.env.VAPI_PHONE_NUMBER 
-    });
+
+    await sendSMS(
+      phone,
+      `Welcome to LifeOS AI Receptionist! Your system is active. Test it by calling ${process.env.VAPI_PHONE_NUMBER || 'your assigned number'}.`
+    );
+
+    res.json({ ok: true, client_id: result[0].id, assistant_id: assistantId, test_number: process.env.VAPI_PHONE_NUMBER });
   } catch (error) {
     console.error('Onboarding error:', error);
     res.status(500).json({ error: 'Setup failed. Please contact support.' });
   }
 });
 
+// ------- Analytics + Builder (unchanged) -------
 app.get('/analytics', async (req, res) => {
   const key = req.query.key;
   if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  
-  const stats = await query('SELECT COUNT(*) FILTER (WHERE endpoint = \'vapi_webhook\') as total_calls, COUNT(*) FILTER (WHERE details LIKE \'%qualified%\') as qualified_leads, COUNT(*) FILTER (WHERE details LIKE \'%hot%\') as hot_leads, COUNT(*) FILTER (WHERE endpoint = \'missed_call\') as missed_calls FROM execution_log WHERE timestamp > NOW() - INTERVAL \'30 days\'');
-  
-  res.send('<!DOCTYPE html><html><head><title>Call Analytics</title><meta charset="utf-8"><style>body { font-family: system-ui; padding: 40px; background: #f5f5f5; } h1 { color: #1d1d1f; } .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; } .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); } .card h2 { margin: 0; font-size: 48px; color: #007aff; } .card p { margin: 10px 0 0; color: #666; }</style></head><body><h1>Last 30 Days</h1><div class="grid"><div class="card"><h2>' + stats[0].total_calls + '</h2><p>Total Calls</p></div><div class="card"><h2>' + stats[0].qualified_leads + '</h2><p>Qualified Leads</p></div><div class="card"><h2>' + stats[0].hot_leads + '</h2><p>Hot Leads</p></div><div class="card"><h2>' + stats[0].missed_calls + '</h2><p>Missed Calls</p></div></div></body></html>');
+  const stats = await query(
+    `SELECT
+       COUNT(*) FILTER (WHERE endpoint = 'vapi_webhook') as total_calls,
+       COUNT(*) FILTER (WHERE details LIKE '%qualified%') as qualified_leads,
+       COUNT(*) FILTER (WHERE details LIKE '%hot%') as hot_leads,
+       COUNT(*) FILTER (WHERE endpoint = 'missed_call') as missed_calls
+     FROM execution_log
+     WHERE timestamp > NOW() - INTERVAL '30 days'`
+  );
+  res.send(`<!DOCTYPE html><html><head><title>Call Analytics</title><meta charset="utf-8">
+  <style>body{font-family:system-ui;padding:40px;background:#f5f5f5}
+  h1{color:#1d1d1f}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+  .card{background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+  .card h2{margin:0;font-size:48px;color:#007aff}.card p{margin:10px 0 0;color:#666}</style></head>
+  <body><h1>Last 30 Days</h1><div class="grid">
+  <div class="card"><h2>${stats[0].total_calls}</h2><p>Total Calls</p></div>
+  <div class="card"><h2>${stats[0].qualified_leads}</h2><p>Qualified Leads</p></div>
+  <div class="card"><h2>${stats[0].hot_leads}</h2><p>Hot Leads</p></div>
+  <div class="card"><h2>${stats[0].missed_calls}</h2><p>Missed Calls</p></div>
+  </div></body></html>`);
 });
 
 app.post('/api/v1/builder/request', async (req, res) => {
   const key = req.header('X-Command-Key');
   if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  
   const { title, description, category, priority } = req.body;
-  
   try {
     const result = await query(
-      'INSERT INTO build_requests (title, description, category, priority, status) VALUES ($1, $2, $3, $4, \'pending\') RETURNING id',
+      'INSERT INTO build_requests (title, description, category, priority, status) VALUES ($1,$2,$3,$4,\'pending\') RETURNING id',
       [title, description, category || 'feature', priority || 5]
     );
-    
     res.json({ ok: true, build_request_id: result[0].id });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -318,10 +363,8 @@ app.post('/api/v1/builder/request', async (req, res) => {
 app.get('/api/v1/builder/pending', async (req, res) => {
   const key = req.query.key;
   if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  
   try {
     const pending = await query('SELECT id, title, description, category, priority, created_at FROM build_requests WHERE status = \'pending\' ORDER BY priority ASC, created_at ASC');
-    
     res.json({ pending_requests: pending });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -331,12 +374,9 @@ app.get('/api/v1/builder/pending', async (req, res) => {
 app.post('/api/v1/builder/approve/:id', async (req, res) => {
   const key = req.header('X-Command-Key');
   if (key !== COMMAND_KEY) return res.status(401).json({ error: 'unauthorized' });
-  
   const { id } = req.params;
-  
   try {
     await query('UPDATE build_requests SET status = \'approved\', approved_at = NOW() WHERE id = $1', [id]);
-    
     res.json({ ok: true, message: 'Build request approved' });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -344,15 +384,42 @@ app.post('/api/v1/builder/approve/:id', async (req, res) => {
 });
 
 app.get('/dashboard', (req, res) => {
-  res.send('<!DOCTYPE html><html><head><title>Builder Dashboard</title><meta charset="utf-8"><style>body { font-family: system-ui; max-width: 1200px; margin: 40px auto; padding: 0 20px; background: #f5f5f5; } h1 { color: #1d1d1f; } .request { background: white; border-radius: 8px; padding: 20px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); } .request h3 { margin-top: 0; } .meta { color: #666; font-size: 14px; margin: 10px 0; } button { background: #007aff; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; } button:hover { background: #0051d5; } .empty { text-align: center; padding: 60px; color: #999; }</style></head><body><h1>Build Dashboard</h1><div id="requests" class="empty">Loading...</div><script>const KEY = "' + COMMAND_KEY + '";async function load() {const res = await fetch("/api/v1/builder/pending?key=" + KEY);const data = await res.json();if (data.pending_requests && data.pending_requests.length > 0) {document.getElementById("requests").innerHTML = data.pending_requests.map(r => `<div class="request"><h3>${r.title}</h3><p>${r.description || ""}</p><div class="meta">Priority: ${r.priority} | Category: ${r.category}</div><button onclick="approve(${r.id})">Approve</button></div>`).join("");} else {document.getElementById("requests").innerHTML = "<div class=\\"empty\\">No pending requests</div>";}}async function approve(id) {if (!confirm("Approve?")) return;await fetch("/api/v1/builder/approve/" + id, {method: "POST",headers: { "X-Command-Key": KEY }});alert("Approved");load();}load();setInterval(load, 30000);</script></body></html>');
+  res.send(`<!DOCTYPE html><html><head><title>Builder Dashboard</title><meta charset="utf-8">
+  <style>body{font-family:system-ui;max-width:1200px;margin:40px auto;padding:0 20px;background:#f5f5f5}
+  h1{color:#1d1d1f}.request{background:#fff;border-radius:8px;padding:20px;margin:20px 0;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+  .request h3{margin-top:0}.meta{color:#666;font-size:14px;margin:10px 0}
+  button{background:#007aff;color:#fff;border:none;padding:10px 20px;border-radius:6px;cursor:pointer}
+  button:hover{background:#0051d5}.empty{text-align:center;padding:60px;color:#999}</style></head>
+  <body><h1>Build Dashboard</h1><div id="requests" class="empty">Loading...</div>
+  <script>
+  const KEY="${COMMAND_KEY}";
+  async function load(){
+    const res=await fetch("/api/v1/builder/pending?key="+KEY);
+    const data=await res.json();
+    if(data.pending_requests&&data.pending_requests.length>0){
+      document.getElementById("requests").innerHTML=data.pending_requests.map(r=>\`
+        <div class="request">
+          <h3>\${r.title}</h3>
+          <p>\${r.description||""}</p>
+          <div class="meta">Priority: \${r.priority} | Category: \${r.category}</div>
+          <button onclick="approve(\${r.id})">Approve</button>
+        </div>\`).join("");
+    } else {
+      document.getElementById("requests").innerHTML='<div class="empty">No pending requests</div>';
+    }
+  }
+  async function approve(id){
+    if(!confirm("Approve?"))return;
+    await fetch("/api/v1/builder/approve/"+id,{method:"POST",headers:{"X-Command-Key":KEY}});
+    alert("Approved"); load();
+  }
+  load(); setInterval(load,30000);
+  </script></body></html>`);
 });
 
+// ------- Start -------
 app.listen(port, async () => {
   console.log('Server listening on port ' + port);
-  try {
-    await bootstrap();
-    console.log('LifeOS ready');
-  } catch (error) {
-    console.error('Bootstrap failed but server staying up:', error);
-  }
+  try { await bootstrap(); console.log('LifeOS ready'); }
+  catch (error) { console.error('Bootstrap failed but server staying up:', error); }
 });
