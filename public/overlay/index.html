@@ -1,113 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LifeOS Overlay</title>
-  <link rel="manifest" href="/manifest.json">
   <style>
-    body {
-      margin: 0;
+    :root { --card-bg: rgba(0,0,0,0.85); --card-fg:#fff; }
+    html,body{height:100%;margin:0}
+    body{
       background: transparent;
-      font-family: 'Helvetica Neue', -apple-system, sans-serif;
-      overflow: hidden;
+      font-family: -apple-system, system-ui, sans-serif;
+      overflow:hidden;
     }
-    #lower-third {
-      position: fixed;
-      bottom: 60px;
-      left: 60px;
-      background: rgba(0,0,0,0.85);
-      color: white;
-      padding: 20px 35px;
-      border-radius: 8px;
-      display: none;
-      font-size: 24px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      backdrop-filter: blur(10px);
+    #lower-third{
+      position:fixed; bottom:60px; left:60px;
+      background: var(--card-bg); color: var(--card-fg);
+      padding: 20px 35px; border-radius: 8px;
+      font-size: 24px; box-shadow: 0 4px 20px rgba(0,0,0,.3);
+      backdrop-filter: blur(10px); display:none
     }
-    #bullets {
-      position: fixed;
-      top: 100px;
-      right: 60px;
-      background: rgba(255,255,255,0.95);
-      padding: 25px;
-      border-radius: 10px;
-      max-width: 400px;
-      display: none;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    #bullets{
+      position:fixed; top:100px; right:60px;
+      background: var(--card-bg); color: var(--card-fg);
+      padding: 16px 20px; border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.3); display:none
     }
-    #bullets ul {
-      margin: 0;
-      padding: 0 0 0 20px;
-      list-style-position: outside;
-    }
-    #bullets li {
-      margin: 12px 0;
-      font-size: 18px;
-      line-height: 1.4;
-      color: #333;
-    }
-    .fade-in {
-      animation: fadeIn 0.4s ease-out;
-    }
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    #bullets ul{margin:0; padding-left:20px; font-size:18px; line-height:1.6}
+    .badge{
+      position:fixed; left:54px; bottom:20px;
+      background:#1f1f1f; color:#fff; padding:8px 14px;
+      border-radius:10px; font-size:14px; opacity:.9
     }
   </style>
 </head>
 <body>
   <div id="lower-third"></div>
-  <div id="bullets"><ul id="bulletList"></ul></div>
+  <div id="bullets"><ul></ul></div>
+  <div class="badge">Lumin</div>
 
   <script>
-    const sid = window.location.pathname.split('/')[2];
-    let currentState = {};
+    const ROOM = 'demo';
+    const lower = document.getElementById('lower-third');
+    const bulletsBox = document.getElementById('bullets');
+    const list = bulletsBox.querySelector('ul');
 
-    async function refresh() {
-      try {
-        const res = await fetch(`/api/overlay/${sid}/state`);
-        const state = await res.json();
+    function safeText(el, txt){ el.textContent = (txt||'').slice(0,200); }
 
-        if (JSON.stringify(state) === JSON.stringify(currentState)) return;
-        currentState = state;
+    async function pull(){
+      try{
+        const r = await fetch(`/api/overlay/${ROOM}/state`, {cache:'no-store'});
+        const { ok, state } = await r.json();
 
-        const lowerThird = document.getElementById('lower-third');
-        if (state.lowerThird) {
-          lowerThird.textContent = state.lowerThird; // XSS-safe
-          lowerThird.style.display = 'block';
-          lowerThird.classList.add('fade-in');
+        if(!ok) return;
+
+        // lower-third
+        if(state.lowerThird && state.lowerThird.trim()){
+          safeText(lower, state.lowerThird);
+          lower.style.display = 'block';
         } else {
-          lowerThird.style.display = 'none';
+          lower.style.display = 'none';
         }
 
-        const bulletsWrap = document.getElementById('bullets');
-        const list = document.getElementById('bulletList');
-        if (state.bullets && state.bullets.length > 0) {
-          list.innerHTML = '';
-          (state.bullets || []).forEach(b => {
+        // bullets
+        list.innerHTML = '';
+        const items = Array.isArray(state.bullets) ? state.bullets.slice(0,5) : [];
+        if(items.length){
+          for(const raw of items){
             const li = document.createElement('li');
-            li.textContent = b; // XSS-safe
+            safeText(li, String(raw));
             list.appendChild(li);
-          });
-          bulletsWrap.style.display = 'block';
-          bulletsWrap.classList.add('fade-in');
-        } else {
-          bulletsWrap.style.display = 'none';
+          }
+          bulletsBox.style.display = 'block';
+        }else{
+          bulletsBox.style.display = 'none';
         }
-      } catch (error) {
-        console.error('Refresh error:', error);
+      }catch(e){
+        // ignore brief network hiccups
       }
     }
 
-    setInterval(refresh, 1000);
-    refresh();
+    pull();
+    setInterval(pull, 1200);
   </script>
 </body>
 </html>
