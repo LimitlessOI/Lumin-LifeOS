@@ -1,86 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
   <meta charset="utf-8" />
+  <title>LifeOS Overlay Viewer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LifeOS Overlay</title>
   <style>
-    :root { --card-bg: rgba(0,0,0,0.85); --card-fg:#fff; }
-    html,body{height:100%;margin:0}
-    body{
-      background: transparent;
-      font-family: -apple-system, system-ui, sans-serif;
-      overflow:hidden;
+    html, body { height: 100%; margin: 0; background: transparent; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .lower-third {
+      position: fixed; left: 40px; bottom: 40px;
+      background: rgba(0,0,0,0.75); color: #fff;
+      padding: 12px 18px; border-radius: 10px; font-size: 20px;
+      min-width: 280px; display: none;
     }
-    #lower-third{
-      position:fixed; bottom:60px; left:60px;
-      background: var(--card-bg); color: var(--card-fg);
-      padding: 20px 35px; border-radius: 8px;
-      font-size: 24px; box-shadow: 0 4px 20px rgba(0,0,0,.3);
-      backdrop-filter: blur(10px); display:none
+    .bullets {
+      position: fixed; right: 40px; top: 40px;
+      background: rgba(255,255,255,0.9);
+      color: #1b1b1b; padding: 16px 18px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,.12);
+      min-width: 300px; display: none;
     }
-    #bullets{
-      position:fixed; top:100px; right:60px;
-      background: var(--card-bg); color: var(--card-fg);
-      padding: 16px 20px; border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0,0,0,.3); display:none
-    }
-    #bullets ul{margin:0; padding-left:20px; font-size:18px; line-height:1.6}
-    .badge{
-      position:fixed; left:54px; bottom:20px;
-      background:#1f1f1f; color:#fff; padding:8px 14px;
-      border-radius:10px; font-size:14px; opacity:.9
+    .bullets ul { margin: 8px 0 0; padding-left: 20px; }
+    .badge {
+      position: fixed; left: 24px; bottom: 24px; transform: translateY(56px);
+      background: #1f1f1f; color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 14px; opacity: .75;
     }
   </style>
 </head>
 <body>
-  <div id="lower-third"></div>
-  <div id="bullets"><ul></ul></div>
+  <div id="lt" class="lower-third"></div>
+  <div id="bp" class="bullets">
+    <strong>Notes</strong>
+    <ul id="bp-list"></ul>
+  </div>
   <div class="badge">Lumin</div>
 
   <script>
     const ROOM = 'demo';
-    const lower = document.getElementById('lower-third');
-    const bulletsBox = document.getElementById('bullets');
-    const list = bulletsBox.querySelector('ul');
+    const lt   = document.getElementById('lt');
+    const bp   = document.getElementById('bp');
+    const list = document.getElementById('bp-list');
 
-    function safeText(el, txt){ el.textContent = (txt||'').slice(0,200); }
+    async function poll() {
+      try {
+        const res  = await fetch(`/api/overlay/${ROOM}/state`, { cache: 'no-store' });
+        const data = await res.json();
+        const state = data && data.state ? data.state : { lowerThird:'', bullets:[] };
 
-    async function pull(){
-      try{
-        const r = await fetch(`/api/overlay/${ROOM}/state`, {cache:'no-store'});
-        const { ok, state } = await r.json();
-
-        if(!ok) return;
-
-        // lower-third
-        if(state.lowerThird && state.lowerThird.trim()){
-          safeText(lower, state.lowerThird);
-          lower.style.display = 'block';
+        // Lower third
+        if (state.lowerThird && state.lowerThird.trim() !== '') {
+          lt.textContent = state.lowerThird;
+          lt.style.display = 'block';
         } else {
-          lower.style.display = 'none';
+          lt.style.display = 'none';
         }
 
-        // bullets
+        // Bullets
         list.innerHTML = '';
-        const items = Array.isArray(state.bullets) ? state.bullets.slice(0,5) : [];
-        if(items.length){
-          for(const raw of items){
+        if (Array.isArray(state.bullets) && state.bullets.length > 0) {
+          state.bullets.forEach(t => {
             const li = document.createElement('li');
-            safeText(li, String(raw));
+            li.textContent = String(t);
             list.appendChild(li);
-          }
-          bulletsBox.style.display = 'block';
-        }else{
-          bulletsBox.style.display = 'none';
+          });
+          bp.style.display = 'block';
+        } else {
+          bp.style.display = 'none';
         }
-      }catch(e){
-        // ignore brief network hiccups
+      } catch (e) {
+        // ignore transient errors
+      } finally {
+        setTimeout(poll, 1000);
       }
     }
-
-    pull();
-    setInterval(pull, 1200);
+    poll();
   </script>
 </body>
 </html>
