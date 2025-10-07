@@ -1,57 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Overlay Controller</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
+    *{box-sizing:border-box}
+    body{
       font-family: -apple-system, system-ui, sans-serif;
-      padding: 30px;
-      max-width: 700px;
-      margin: 0 auto;
-      background: #f5f5f5;
+      margin:0; padding:30px; background:#f5f5f5; max-width:700px
     }
-    .section {
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    h1 { margin: 0 0 25px; color: #1d1d1f; }
-    h3 { margin: 0 0 15px; color: #333; font-size: 18px; }
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 16px;
-      font-family: inherit;
-    }
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #007aff;
-    }
-    button {
-      padding: 12px 24px;
-      margin: 5px 5px 5px 0;
-      cursor: pointer;
-      background: #007aff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-    button:hover { background: #0051d5; }
-    button.secondary { background: #8e8e93; }
-    button.secondary:hover { background: #636366; }
-    .presets { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
-    .presets button { background: #34c759; }
-    .presets button:hover { background: #248a3d; }
+    .section{background:#fff; padding:25px; border-radius:12px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    h1{margin:0 0 25px; color:#1d1d1f}
+    h3{margin:0 0 10px; color:#333}
+    input,textarea{width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; font-size:16px}
+    textarea{min-height:140px}
+    .row{display:flex; gap:10px; margin-top:12px}
+    button{padding:10px 16px; border:none; border-radius:8px; font-weight:600; cursor:pointer}
+    .primary{background:#1e66ff; color:#fff}
+    .muted{background:#aaa; color:#fff}
+    .preset{background:#22c55e; color:#fff; margin-right:10px}
+    .ok{color:#059669; font-size:14px; margin-left:8px}
   </style>
 </head>
 <body>
@@ -59,104 +28,72 @@
 
   <div class="section">
     <h3>Lower Third</h3>
-    <input type="text" id="lowerThird" placeholder="Your Name - Title">
-    <div>
-      <button onclick="updateLowerThird()">Update</button>
-      <button class="secondary" onclick="clearLowerThird()">Clear</button>
+    <input id="lt" placeholder="Your Name — Title" />
+    <div class="row">
+      <button class="primary" id="ltUpdate">Update</button>
+      <button class="muted" id="ltClear">Clear</button>
+      <span id="ltOk" class="ok" style="display:none;">Updated</span>
     </div>
   </div>
 
   <div class="section">
     <h3>Bullet Points</h3>
-    <textarea id="bullets" rows="5" placeholder="One bullet per line&#10;Second point here&#10;Third point here"></textarea>
-    <div>
-      <button onclick="updateBullets()">Update</button>
-      <button class="secondary" onclick="clearBullets()">Clear</button>
+    <textarea id="bullets" placeholder="One bullet per line"></textarea>
+    <div class="row">
+      <button class="primary" id="bUpdate">Update</button>
+      <button class="muted" id="bClear">Clear</button>
+      <span id="bOk" class="ok" style="display:none;">Updated</span>
     </div>
-
-    <div class="presets">
-      <button onclick="loadPreset('realestate')">Real Estate</button>
-      <button onclick="loadPreset('podcast')">Podcast</button>
-      <button onclick="loadPreset('presentation')">Presentation</button>
+    <div style="margin-top:14px">
+      <button class="preset" data-preset="re">Real Estate</button>
+      <button class="preset" data-preset="pod">Podcast</button>
+      <button class="preset" data-preset="pres">Presentation</button>
     </div>
   </div>
 
   <script>
-    const sid = window.location.pathname.split('/')[2];
+    const ROOM = 'demo';
+    const lt = document.getElementById('lt');
+    const bullets = document.getElementById('bullets');
+    const ltOk = document.getElementById('ltOk');
+    const bOk = document.getElementById('bOk');
 
-    const presets = {
-      realestate: {
-        bullets: [
-          'Why now is the right time',
-          'Current market conditions',
-          'Investment opportunity',
-          'Next steps'
-        ]
-      },
-      podcast: {
-        bullets: [
-          'Guest introduction',
-          'Key discussion points',
-          'Call to action',
-          'Where to follow'
-        ]
-      },
-      presentation: {
-        bullets: [
-          'Problem statement',
-          'Our solution',
-          'Benefits',
-          'Implementation'
-        ]
-      }
+    async function update(payload){
+      await fetch(`/api/overlay/${ROOM}/update`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+    }
+
+    document.getElementById('ltUpdate').onclick = async ()=>{
+      await update({ lowerThird: lt.value });
+      ltOk.style.display='inline'; setTimeout(()=>ltOk.style.display='none', 1000);
+    };
+    document.getElementById('ltClear').onclick = async ()=>{
+      await update({ lowerThird: '' });
     };
 
-    async function updateLowerThird() {
-      const text = document.getElementById('lowerThird').value;
-      const currentBullets = (await (await fetch(`/api/overlay/${sid}/state`)).json()).bullets || [];
-      await fetch(`/api/overlay/${sid}/state`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lowerThird: text, bullets: currentBullets })
-      });
-    }
+    document.getElementById('bUpdate').onclick = async ()=>{
+      const lines = bullets.value.split('\n').map(s=>s.trim()).filter(Boolean);
+      await update({ bullets: lines });
+      bOk.style.display='inline'; setTimeout(()=>bOk.style.display='none', 1000);
+    };
+    document.getElementById('bClear').onclick = async ()=>{
+      await update({ bullets: [] });
+    };
 
-    async function clearLowerThird() {
-      const currentBullets = (await (await fetch(`/api/overlay/${sid}/state`)).json()).bullets || [];
-      await fetch(`/api/overlay/${sid}/state`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lowerThird: null, bullets: currentBullets })
-      });
-      document.getElementById('lowerThird').value = '';
-    }
-
-    async function updateBullets() {
-      const text = document.getElementById('bullets').value;
-      const bullets = text.split('\n').filter(b => b.trim());
-      const currentLowerThird = (await (await fetch(`/api/overlay/${sid}/state`)).json()).lowerThird;
-      await fetch(`/api/overlay/${sid}/state`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bullets, lowerThird: currentLowerThird })
-      });
-    }
-
-    async function clearBullets() {
-      const currentLowerThird = (await (await fetch(`/api/overlay/${sid}/state`)).json()).lowerThird;
-      await fetch(`/api/overlay/${sid}/state`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bullets: [], lowerThird: currentLowerThird })
-      });
-      document.getElementById('bullets').value = '';
-    }
-
-    function loadPreset(type) {
-      const preset = presets[type];
-      if (preset) {
-        document.getElementById('bullets').value = preset.bullets.join('\n');
-      }
+    // presets
+    for(const btn of document.querySelectorAll('.preset')){
+      btn.onclick = async ()=>{
+        if(btn.dataset.preset==='re'){
+          bullets.value = ['New listings this week','Open house Sat 1–4','Free home valuation'].join('\n');
+        }else if(btn.dataset.preset==='pod'){
+          bullets.value = ['Today’s guest: Alex','Topic: Scaling to $1M','Live Q&A at end'].join('\n');
+        }else{
+          bullets.value = ['Agenda','Milestones','Next steps'].join('\n');
+        }
+      };
     }
   </script>
 </body>
