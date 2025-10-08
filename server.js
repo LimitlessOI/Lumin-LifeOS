@@ -5,7 +5,10 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { Pool } from "pg";
+
+// NEW: safe BoldTrail wrapper + admin routes
 import { createLead, appendTranscript, tagLead } from "./src/integrations/boldtrail.js";
+import { adminRouter } from "./src/routes/admin.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static assets (overlay, onboarding, etc.)
 app.use(express.static(path.join(__dirname, "public")));
+// Make Autopilot reports web-accessible
+app.use("/reports", express.static(path.join(__dirname, "reports")));
 
 const {
   DATABASE_URL,
@@ -86,6 +91,9 @@ function requireWebhookSecret(req, res, next) {
   next();
 }
 
+// Mount admin API (used by public/onboarding.html)
+app.use("/api/v1/admin", requireCommandKey, adminRouter);
+
 // ===== Health =====
 app.get("/healthz", async (req, res) => {
   try {
@@ -113,15 +121,6 @@ app.get("/api/v1/calls/stats", requireCommandKey, async (req, res) => {
 });
 
 // ===== Vapi Qualification Webhook (secured by X-Webhook-Secret) =====
-// Expected body example (from your Workflow):
-// {
-//   "phoneNumber":"+12125551234",
-//   "buyOrSell":"buy",
-//   "area":"Seattle",
-//   "timeline":"30_days",
-//   "duration":42,
-//   "transcript":"..."
-// }
 app.post(
   "/api/v1/vapi/qualification-complete",
   requireWebhookSecret,
@@ -205,9 +204,7 @@ app.post("/api/overlay/:sid/state", async (req, res) => {
 });
 
 // ===== Twilio missed-call hook (future SMS loop) =====
-// Configure later in Twilio to hit this when a call is missed/voicemail.
 app.post("/api/v1/twilio/missed-call", async (req, res) => {
-  // Twilio can send form-encoded; Express handles urlencoded above
   const from = req.body.From || req.body.from || req.query.from;
   const to = req.body.To || req.body.to || req.query.to;
 
@@ -216,15 +213,11 @@ app.post("/api/v1/twilio/missed-call", async (req, res) => {
     [from || "", to || ""]
   );
 
-  // (Optional) You can send an SMS here using axios to Twilio API
-  // when you’re ready and have A2P set up.
-
   res.json({ ok: true });
 });
 
 // ===== Autopilot tick (Cron) =====
 app.post("/api/v1/autopilot/tick", requireCommandKey, async (req, res) => {
-  // Simple nightly chores: read backlog.md (if present), write a report.
   try {
     const root = __dirname;
     const backlogPath = path.join(root, "backlog.md");
