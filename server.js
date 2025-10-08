@@ -271,3 +271,140 @@ app.post("/api/v1/autopilot/tick", requireCommandKey, async (req, res) => {
 app.listen(PORT, () => {
   console.log(`LifeOS ready on :${PORT}`);
 });
+// ----- SELF-BUILD CORE (ESM-safe, uses global fetch on Node 18) -----
+function assertKey(req, res) {
+  const k = process.env.COMMAND_CENTER_KEY;
+  const got = req.query.key || req.headers["x-command-key"];
+  if (!k || got !== k) { res.status(401).json({error:"unauthorized"}); return false; }
+  return true;
+}
+
+// 1) Heartbeat (cron or manual)
+app.get("/internal/cron/autopilot", (req, res) => {
+  if (!assertKey(req, res)) return;
+  const p = "/mnt/data/autopilot.log";
+  const line = `[${new Date().toISOString()}] autopilot:tick\n`;
+  try { fs.appendFileSync(p, line); res.json({ok:true,wrote:line}); }
+  catch(e){ res.status(500).json({ok:false,error:String(e)}); }
+});
+
+// 2) Planner: read /mnt logs -> propose next actions
+app.post("/api/v1/repair-self", async (req, res) => {
+  if (!assertKey(req, res)) return;
+  try {
+    const p = "/mnt/data/autopilot.log";
+    const logs = fs.existsSync(p) ? fs.readFileSync(p,"utf8") : "";
+    const system = `You are a senior release engineer. From logs, propose 1-3 precise NEXT ACTIONS.
+Return strict JSON:
+{
+  "summary": "one line",
+  "actions": [
+    {"title":"...", "rationale":"...", "risk":"low|med|high",
+     "files":[{"path":"docs/auto/TODO.md","type":"create|modify","hint":"what to implement"}]
+    }
+  ]
+}`;
+    const user = `Logs (latest first):\n${logs.slice(-12000)}`;
+
+    const r = await fetch("https://api.openai.com/v1/chat/completions", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":`Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model:"gpt-4o-mini",
+        temperature:0.2,
+        messages:[{role:"system",content:system},{role:"user",content:user}],
+        response_format:{type:"json_object"}
+      })
+    });
+    if(!r.ok) throw new Error(`planner http ${r.status}`);
+    const j = await r.json();
+    const text = j.choices?.[0]?.message?.content || "{}";
+    const plan = JSON.parse(text);
+    res.json({ok:true, plan});
+  } catch(e){ res.status(500).json({ok:false,error:String(e)}); }
+});
+
+// 3) Apply plan -> branch, files, PR
+app.post("/api/v1/build/apply-plan", async (req, res) => {
+  if (!assertKey(req, res)) return;
+  try {
+    const plan = req.body?.plan;
+    if (!plan?.actions?.length) return res.status(400).json({ok:false,error:"no_actions"});
+
+    const [owner,repo] = (process.env.GITHUB_REPO||"owner/repo").split("/");
+    const main = process.env.GITHUB_DEFAULT_BRANCH || "main";
+
+    const gh = async (apiPath, init={})=>{
+      const r = await fetch(`https://api.github.com${apiPath}`,{
+        ...init,
+        headers:{
+          "Authorization":`Bearer ${process.env.GITHUB_TOKEN}`,
+          "User-Agent":"robust-magic-builder",
+          "Accept":"application/vnd.github+json",
+          ...(init.headers||{})
+        }
+      });
+      if (!r.ok) throw new Error(`GitHub ${r.status} ${apiPath}: ${await r.text()}`);
+      return r.json();
+    };
+
+    // get main sha & create branch
+    const ref = await gh(`/repos/${owner}/${repo}/git/refs/heads/${main}`);
+    const sha = ref.object.sha;
+    const branch = `auto/${Date.now()}`;
+    await gh(`/repos/${owner}/${repo}/git/refs`, {
+      method:"POST",
+      body: JSON.stringify({ref:`refs/heads/${branch}`, sha})
+    });
+
+    // tiny helper to put/update file
+    const putFile = async (filepath, content) => {
+      const get = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(filepath)}?ref=${branch}`,{
+        headers:{"Authorization":`Bearer ${process.env.GITHUB_TOKEN}`,"Accept":"application/vnd.github+json"}
+      });
+      const exists = get.status===200 ? await get.json() : null;
+      const body = {
+        message:`chore(auto): update ${filepath}`,
+        content: Buffer.from(content).toString("base64"),
+        branch,
+        ...(exists? {sha:exists.sha} : {})
+      };
+      const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(filepath)}`,{
+        method:"PUT",
+        headers:{"Authorization":`Bearer ${process.env.GITHUB_TOKEN}`,"Accept":"application/vnd.github+json"},
+        body: JSON.stringify(body)
+      });
+      if(!r.ok) throw new Error(`putFile ${filepath}: ${await r.text()}`);
+      return r.json();
+    };
+
+    // seed plan doc
+    const doc = `# Auto Plan\n\n${plan.summary}\n\n## Actions\n` +
+      plan.actions.map((a,i)=>`- ${i+1}. ${a.title}\n  - rationale: ${a.rationale}\n  - risk: ${a.risk}\n  - files: ${(a.files||[]).map(f=>f.path).join(", ")||"-"}`).join("\n");
+    await putFile("docs/auto/plan.md", doc);
+
+    // scaffold files from actions
+    for (const a of plan.actions) {
+      for (const f of (a.files||[])) {
+        const scaffold = `// TODO(auto): ${a.title}\n// hint: ${f.hint||"implement here"}\n`;
+        await putFile(f.path, scaffold);
+      }
+    }
+
+    // open PR
+    const pr = await gh(`/repos/${owner}/${repo}/pulls`,{
+      method:"POST",
+      body: JSON.stringify({
+        title:`auto: ${plan.summary}`,
+        head: branch,
+        base: main,
+        body: "Automated plan:\n```json\n"+JSON.stringify(plan,null,2)+"\n```"
+      })
+    });
+
+    res.json({ok:true, pr});
+  } catch(e){ res.status(500).json({ok:false,error:String(e)}); }
+});
