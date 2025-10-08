@@ -591,4 +591,30 @@ app.post("/api/v1/tasks/run-next", requireCommandKey, async (_req, res) => {
 // ===== Start server =====
 app.listen(PORT, () => {
   console.log(`LifeOS ready on :${PORT}`);
+  // ----- INTERNAL CRON (optional, enabled via env) -----
+const ENABLE_INTERNAL_CRON = (process.env.ENABLE_INTERNAL_CRON || "true").toLowerCase() === "true";
+
+/**
+ * callAutopilotTick() hits our own endpoint so auth & code paths are identical.
+ */
+async function callAutopilotTick() {
+  try {
+    const url = `http://127.0.0.1:${PORT}/api/v1/autopilot/tick`;
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "X-Command-Key": process.env.COMMAND_CENTER_KEY || "" }
+    });
+    const j = await r.json().catch(()=>({}));
+    console.log("[internal-cron] tick ->", r.status, j.report || j.error || "");
+  } catch (e) {
+    console.error("[internal-cron] error", e.message);
+  }
+}
+
+if (ENABLE_INTERNAL_CRON) {
+  // Run once on boot (after 10s), then every 15 min.
+  setTimeout(callAutopilotTick, 10_000);
+  setInterval(callAutopilotTick, 15 * 60 * 1000);
+  console.log("[internal-cron] enabled: every 15 minutes");
+}
 });
