@@ -1,0 +1,22 @@
+name: Self Build Hourly
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # every hour
+  workflow_dispatch:
+
+jobs:
+  build_now:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call robust-magic build-now
+        env:
+          APP_URL: https://robust-magic-production.up.railway.app
+          KEY: ${{ secrets.COMMAND_CENTER_KEY }}
+        run: |
+          set -e
+          echo "Triggering build-now..."
+          curl -fsS -X POST "$APP_URL/internal/autopilot/build-now?key=$KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}' | tee /tmp/resp.json
+          echo "done"
