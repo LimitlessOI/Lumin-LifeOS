@@ -1,60 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Overlay Controller</title>
+  <meta charset="utf-8" />
+  <title>Overlay Control</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: -apple-system, system-ui, sans-serif; padding:30px; max-width:700px; margin:0 auto; background:#f5f5f5;}
-    .section { background:#fff; padding:25px; border-radius:10px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,.08);}
-    input, textarea { width:100%; padding:12px; margin:10px 0; border:1px solid #ddd; border-radius:8px; font-size:16px;}
-    button { padding:12px 18px; border:0; border-radius:8px; background:#007aff; color:#fff; font-weight:600; margin-right:8px;}
-    button.secondary { background:#8e8e93; }
-    .presets { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
-    .presets button { background:#34c759; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 20px; max-width: 900px; margin: 0 auto; }
+    input, textarea { width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:8px; font-size:16px; }
+    button { padding:10px 16px; border:0; border-radius:8px; background:#0ea5e9; color:#fff; font-weight:600; cursor:pointer; }
+    .row { display:flex; gap:10px; align-items:center; }
+    .row > * { flex:1; }
+    .muted { color:#666; font-size:12px; }
+    .card { border:1px solid #eee; border-radius:12px; padding:16px; margin:12px 0; }
+    pre { background:#fafafa; padding:10px; border-radius:8px; overflow:auto; }
   </style>
 </head>
 <body>
   <h1>Overlay Controller</h1>
-  <div class="section">
-    <h3>Lower Third</h3>
-    <input id="lowerThird" placeholder="Your Name — Title" />
-    <div>
-      <button onclick="updateLowerThird()">Update</button>
-      <button class="secondary" onclick="clearLowerThird()">Clear</button>
+  <div class="card">
+    <div class="row">
+      <input id="sid" placeholder="Session ID (e.g. demo)" />
+      <button id="save">Save State</button>
     </div>
+    <textarea id="state" rows="6" placeholder='{"headline":"Live","bullets":["item1","item2"]}'></textarea>
+    <div class="muted">Sends to /api/overlay/:sid/state</div>
   </div>
-  <div class="section">
-    <h3>Bullet Points</h3>
-    <textarea id="bullets" rows="6" placeholder="One per line"></textarea>
-    <div>
-      <button onclick="updateBullets()">Update</button>
-      <button class="secondary" onclick="clearBullets()">Clear</button>
+
+  <div class="card">
+    <h3>Autopilot</h3>
+    <div class="row">
+      <button id="heartbeat">Heartbeat</button>
+      <button id="build">🚀 Build Now</button>
+      <button id="status">Show Status</button>
     </div>
-    <div class="presets">
-      <button onclick="loadPreset('realestate')">Real Estate</button>
-      <button onclick="loadPreset('podcast')">Podcast</button>
-      <button onclick="loadPreset('presentation')">Presentation</button>
-    </div>
+    <pre id="out"></pre>
   </div>
+
   <script>
-    const sid = window.location.pathname.split('/')[2] || 'demo';
-    const presets = {
-      realestate: { bullets: ['Why now is the right time','Market conditions','Investment angle','Next steps']},
-      podcast: { bullets: ['Guest intro','Key points','CTA','Where to follow']},
-      presentation: { bullets: ['Problem','Solution','Benefits','Implementation']}
+    const out = (x) => document.getElementById('out').textContent = typeof x === 'string' ? x : JSON.stringify(x,null,2);
+    document.getElementById('save').onclick = async () => {
+      const sid = document.getElementById('sid').value || 'demo';
+      try {
+        const payload = JSON.parse(document.getElementById('state').value || "{}");
+        const r = await fetch(`/api/overlay/${encodeURIComponent(sid)}/state`, {
+          method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+        });
+        out(await r.json());
+      } catch (e) { out(String(e)); }
     };
-    async function fetchState(){ const r=await fetch(`/api/overlay/${sid}/state`); return r.json();}
-    async function postState(state){ await fetch(`/api/overlay/${sid}/state`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)}); }
-    async function updateLowerThird(){
-      const text=document.getElementById('lowerThird').value;
-      const s=await fetchState(); s.lowerThird=text; await postState(s);
-    }
-    async function clearLowerThird(){ const s=await fetchState(); s.lowerThird=null; await postState(s); document.getElementById('lowerThird').value=''; }
-    async function updateBullets(){ const s=await fetchState(); s.bullets=document.getElementById('bullets').value.split('\n').filter(Boolean); await postState(s); }
-    async function clearBullets(){ const s=await fetchState(); s.bullets=[]; await postState(s); document.getElementById('bullets').value=''; }
-    function loadPreset(k){ const p=presets[k]; if(p){ document.getElementById('bullets').value=p.bullets.join('\n'); } }
+    document.getElementById('heartbeat').onclick = async () => {
+      const r = await fetch(`/internal/cron/autopilot?key=${encodeURIComponent('MySecretKey2025LifeOS')}`);
+      out(await r.json());
+    };
+    document.getElementById('build').onclick = async () => {
+      const r = await fetch(`/internal/autopilot/build-now?key=${encodeURIComponent('MySecretKey2025LifeOS')}`, {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: '{}'
+      });
+      out(await r.json());
+    };
+    document.getElementById('status').onclick = async () => {
+      const r = await fetch('/api/overlay/status'); out(await r.json());
+    };
   </script>
 </body>
 </html>
