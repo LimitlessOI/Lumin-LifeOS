@@ -1,9 +1,9 @@
-name: Self Build Hourly
+name: Self Build Every 15 Minutes
 
 on:
   schedule:
-    - cron: "0 * * * *"   # every hour
-  workflow_dispatch:
+    - cron: "*/15 * * * *"   # every 15 minutes
+  workflow_dispatch:          # allows manual "Run workflow" trigger
 
 jobs:
   build_now:
@@ -19,4 +19,4 @@ jobs:
           curl -fsS -X POST "$APP_URL/internal/autopilot/build-now?key=$KEY" \
             -H "Content-Type: application/json" \
             -d '{}' | tee /tmp/resp.json
-          echo "done"
+          echo "Done."
