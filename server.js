@@ -337,34 +337,7 @@ app.post("/api/v1/build/apply-plan", async (req, res) => {
   } catch(e){ res.status(500).json({ ok:false, error:String(e) }); }
 });
 
-// ---- AUTOPILOT: One-click build (chains repair-self -> apply-plan) ----
-app.post("/internal/autopilot/build-now", async (req, res) => {
-  const got = req.query.key || req.headers["x-command-key"];
-  if (!process.env.COMMAND_CENTER_KEY || got !== process.env.COMMAND_CENTER_KEY) {
-    return res.status(401).json({ ok: false, error: "unauthorized" });
-  }
-  try {
-    const line = `[${new Date().toISOString()}] autopilot:build-now\n`;
-    fs.appendFileSync(LOG_FILE, line);
-
-    const planRes = await fetch(`${req.protocol}://${req.get("host")}/api/v1/repair-self?key=${encodeURIComponent(process.env.COMMAND_CENTER_KEY)}`, {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({})
-    });
-    if (!planRes.ok) return res.status(500).json({ ok: false, step: "repair-self", status: planRes.status });
-    const planJson = await planRes.json();
-    const plan = planJson.plan;
-
-    const prRes = await fetch(`${req.protocol}://${req.get("host")}/api/v1/build/apply-plan?key=${encodeURIComponent(process.env.COMMAND_CENTER_KEY)}`, {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan })
-    });
-    if (!prRes.ok) return res.status(500).json({ ok: false, step: "apply-plan", status: prRes.status, detail: await prRes.text() });
-    const pr = await prRes.json();
-    res.json({ ok: true, plan_summary: plan?.summary, pr });
-  } catch (e) {
-    console.error("[build-now]", e);
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
+build-now
 
 // ---- Overlay status JSON (last 2 log lines) ----
 app.get("/api/overlay/status", (_req, res) => {
