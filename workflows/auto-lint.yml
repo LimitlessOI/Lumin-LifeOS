@@ -1,0 +1,19 @@
+name: Auto Lint
+on:
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Basic quality checks
+        run: |
+          set -e
+          CHANGED=$(git diff --name-only HEAD~1 || true)
+          echo "$CHANGED" | grep -qE '\.md$' || exit 0
+          if grep -R --line-number -E "As an AI|TODO" docs/ || true; then
+            echo "Quality flags found (As an AI/TODO)."
+            exit 1
+          fi
+          echo "OK"
