@@ -105,7 +105,7 @@ app.use("/api/v1/admin", requireCommandKey, adminRouter);
 app.get("/healthz", async (_req, res) => {
   try {
     const r = await pool.query("select now()");
-    res.json({ status: "healthy", database: "connected", timestamp: r.rows[0].now, version: "v1" });
+    res.json({ status: "healthy", database: "connected", timestamp: r.rows[0].now, version: "v2" });
   } catch {
     res.status(500).json({ status: "unhealthy" });
   }
