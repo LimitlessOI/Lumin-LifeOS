@@ -1,2 +1,2 @@
-// TODO(auto): Investigate build triggers
-// hint: Add a section to investigate the conditions under which builds are triggered.
+// TODO(auto): Optimize build frequency
+// hint: Include recommendations for optimizing build frequency.
