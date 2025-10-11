@@ -31,6 +31,7 @@ const {
   DATABASE_URL,
   COMMAND_CENTER_KEY,
   WEBHOOK_SECRET,
+  PUBLIC_BASE_URL,
   PORT = 8080,
 } = process.env;
 
@@ -90,7 +91,7 @@ function requireWebhookSecret(req, res, next) {
   }
   next();
 }
-// Self-build helper (for the three endpoints below)
+// Self-build helper (for the endpoints below)
 function assertKey(req, res) {
   const k = process.env.COMMAND_CENTER_KEY;
   const got = req.query.key || req.headers["x-command-key"];
@@ -337,7 +338,48 @@ app.post("/api/v1/build/apply-plan", async (req, res) => {
   } catch(e){ res.status(500).json({ ok:false, error:String(e) }); }
 });
 
-build-now
+// 4) One-click chain: plan -> PR (uses PUBLIC_BASE_URL)
+app.post("/internal/autopilot/build-now", async (req, res) => {
+  const got = req.query.key || req.headers["x-command-key"];
+  if (!process.env.COMMAND_CENTER_KEY || got !== process.env.COMMAND_CENTER_KEY) {
+    return res.status(401).json({ ok: false, error: "unauthorized" });
+  }
+
+  const BASE = (PUBLIC_BASE_URL || "").replace(/\/+$/, "");
+  if (!BASE) return res.status(500).json({ ok:false, error:"PUBLIC_BASE_URL not set" });
+
+  try {
+    // log a heartbeat for context
+    const line = `[${new Date().toISOString()}] autopilot:build-now\n`;
+    fs.appendFileSync(LOG_FILE, line);
+
+    // 1) planner
+    const planRes = await fetch(`${BASE}/api/v1/repair-self?key=${encodeURIComponent(process.env.COMMAND_CENTER_KEY)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({})
+    });
+    if (!planRes.ok) {
+      return res.status(500).json({ ok: false, step: "repair-self", status: planRes.status, detail: await planRes.text() });
+    }
+    const plan = (await planRes.json()).plan;
+
+    // 2) builder
+    const prRes = await fetch(`${BASE}/api/v1/build/apply-plan?key=${encodeURIComponent(process.env.COMMAND_CENTER_KEY)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plan })
+    });
+    if (!prRes.ok) {
+      return res.status(500).json({ ok: false, step: "apply-plan", status: prRes.status, detail: await prRes.text() });
+    }
+    const pr = await prRes.json();
+    res.json({ ok: true, plan_summary: plan?.summary, pr });
+  } catch (e) {
+    console.error("[build-now]", e);
+    res.status(500).json({ ok:false, error:String(e) });
+  }
+});
 
 // ---- Overlay status JSON (last 2 log lines) ----
 app.get("/api/overlay/status", (_req, res) => {
