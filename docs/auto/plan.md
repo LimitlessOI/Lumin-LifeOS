@@ -1,17 +1,17 @@
 # Auto Plan
 
-Initiate a build process for the autopilot feature.
+Autopilot build process is being triggered repeatedly without clear outcomes.
 
 ## Actions
-- 1. Verify build configuration
-  - rationale: Ensure that the build configuration is correct before proceeding to avoid potential build failures.
-  - risk: low
-  - files: configs/build-config.yml
-- 2. Run automated tests
-  - rationale: To confirm that the autopilot feature works as expected after the build.
+- 1. Investigate build triggers
+  - rationale: To understand why the build process is being initiated multiple times in a short period, which may indicate an issue with the autopilot configuration or a potential bug.
   - risk: med
-  - files: tests/autopilot_tests.py
-- 3. Monitor build logs
-  - rationale: To track the build process and identify any issues early.
+  - files: docs/auto/TODO.md
+- 2. Review build logs for errors
+  - rationale: To identify any errors or warnings in the build logs that could explain the repeated build requests.
   - risk: low
   - files: logs/build.log
+- 3. Optimize build scheduling
+  - rationale: To prevent unnecessary builds and improve resource utilization by adjusting the scheduling of the autopilot.
+  - risk: low
+  - files: configs/autopilot.yaml
