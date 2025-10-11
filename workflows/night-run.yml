@@ -1,0 +1,42 @@
+---
+
+# BLOCK B — `.github/workflows/night-run.yml` (paste all of this)
+
+```yaml
+name: Night Runner (15h Autopilot)
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_url:
+        description: "Railway app URL (https://<your-app>.up.railway.app)"
+        required: true
+      key:
+        description: "COMMAND_CENTER_KEY"
+        required: true
+
+jobs:
+  run_15h:
+    runs-on: ubuntu-latest
+    timeout-minutes: 900   # 15 hours
+    steps:
+      - name: Start 15h loop
+        env:
+          APP_URL: ${{ inputs.app_url }}
+          KEY: ${{ inputs.key }}
+        run: |
+          set -e
+          end=$(( $(date +%s) + 15*60*60 ))
+          i=0
+          while [ $(date +%s) -lt $end ]; do
+            i=$((i+1))
+            echo "== Loop $i =="
+            curl -fsS "$APP_URL/internal/cron/autopilot?key=$KEY" || true
+            curl -fsS -X POST "$APP_URL/internal/autopilot/build-now?key=$KEY" \
+              -H "Content-Type: application/json" -d '{}' || true
+            curl -fsS -X POST "$APP_URL/api/v1/autopilot/tick" \
+              -H "X-Command-Key: $KEY" -H "Content-Type: application/json" -d '{}' || true
+            curl -fsS "$APP_URL/api/overlay/status" || true
+            sleep 300
+          done
+          echo "Night Runner finished."
