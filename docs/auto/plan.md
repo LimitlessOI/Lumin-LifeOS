@@ -1,17 +1,17 @@
 # Auto Plan
 
-Initiate a build process for the autopilot feature.
+Autopilot triggered a build process.
 
 ## Actions
-- 1. Verify build configuration
-  - rationale: Ensure that the build configuration is correct before proceeding to avoid potential build failures.
-  - risk: low
-  - files: configs/build-config.yml
-- 2. Run automated tests
-  - rationale: To confirm that the autopilot feature works as expected after the build.
-  - risk: med
-  - files: tests/autopilot_tests.py
-- 3. Monitor build logs
-  - rationale: To track the build process and identify any issues early.
+- 1. Verify Build Success
+  - rationale: To ensure that the build process completed successfully and there are no errors.
   - risk: low
   - files: logs/build.log
+- 2. Run Automated Tests
+  - rationale: To validate that the new build does not introduce any regressions.
+  - risk: med
+  - files: tests/auto/test_suite.py
+- 3. Update Documentation
+  - rationale: To reflect any changes made during the build process or new features added.
+  - risk: low
+  - files: docs/auto/CHANGELOG.md

@@ -1,2 +1,2 @@
-// TODO(auto): Monitor build logs
-// hint: Set up log monitoring for real-time feedback during the build.
+// TODO(auto): Verify Build Success
+// hint: Check for any errors or warnings in the build log.
