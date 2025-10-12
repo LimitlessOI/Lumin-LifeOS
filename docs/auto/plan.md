@@ -1,17 +1,17 @@
 # Auto Plan
 
-Initiate a build process for the autopilot feature.
+Frequent forced build requests indicate potential issues with the build process.
 
 ## Actions
-- 1. Verify build configuration
-  - rationale: Ensure that the build configuration is correct before proceeding to avoid potential build failures.
-  - risk: low
-  - files: configs/build-config.yml
-- 2. Run automated tests
-  - rationale: To confirm that the autopilot feature works as expected after the build.
+- 1. Investigate Build Failures
+  - rationale: The logs show multiple forced build requests, suggesting that the builds may be failing or not completing as expected.
+  - risk: high
+  - files: docs/auto/TODO.md
+- 2. Review Debounce Logic
+  - rationale: The debounce messages indicate that the system is limiting build requests, which may be causing delays in processing.
   - risk: med
-  - files: tests/autopilot_tests.py
-- 3. Monitor build logs
-  - rationale: To track the build process and identify any issues early.
+  - files: src/autopilot/debounce.js
+- 3. Enhance Logging for Build Process
+  - rationale: Improved logging can help identify the root cause of the issues leading to forced builds.
   - risk: low
-  - files: logs/build.log
+  - files: src/autopilot/build.js
