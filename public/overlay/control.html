@@ -5,30 +5,60 @@
   <title>Overlay Control</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 20px; max-width: 900px; margin: 0 auto; }
+    :root { --blue:#0ea5e9; --border:#eee; --muted:#666; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 20px; max-width: 980px; margin: 0 auto; }
     input, textarea { width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:8px; font-size:16px; }
-    button { padding:10px 16px; border:0; border-radius:8px; background:#0ea5e9; color:#fff; font-weight:600; cursor:pointer; }
+    button { padding:10px 16px; border:0; border-radius:8px; background:var(--blue); color:#fff; font-weight:600; cursor:pointer; }
     .row { display:flex; gap:10px; align-items:center; }
     .row > * { flex:1; }
-    .muted { color:#666; font-size:12px; }
-    .card { border:1px solid #eee; border-radius:12px; padding:16px; margin:12px 0; }
-    pre { background:#fafafa; padding:10px; border-radius:8px; overflow:auto; }
+    .muted { color:var(--muted); font-size:12px; }
+    .card { border:1px solid var(--border); border-radius:12px; padding:16px; margin:12px 0; }
+    .pill { display:inline-block; padding:6px 10px; background:#f5f7fb; border:1px solid var(--border); border-radius:999px; font-size:12px; }
+    pre { background:#fafafa; padding:12px; border-radius:8px; overflow:auto; max-height:380px; }
+    .section-title { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+    label.cb { display:flex; align-items:center; gap:8px; user-select:none; font-size:14px; }
+    a.link { color:#2563eb; text-decoration:none; }
+    a.link:hover { text-decoration:underline; }
   </style>
 </head>
 <body>
   <h1>Overlay Controller</h1>
 
+  <!-- Config row: Base URL + Key (prefilled from ?base= & ?key=) -->
   <div class="card">
+    <div class="row">
+      <div>
+        <div class="muted">Base URL (auto from server in most cases)</div>
+        <input id="base" placeholder="https://robust-magic-production.up.railway.app" />
+      </div>
+      <div>
+        <div class="muted">Command Key (never hardcode; use URL ?key=...)</div>
+        <input id="key" placeholder="COMMAND_CENTER_KEY" />
+      </div>
+    </div>
+    <div class="muted">Tip: open this page with <span class="pill">?key=YOUR_KEY&base=YOUR_BASE</span> so the fields auto-fill.</div>
+  </div>
+
+  <!-- Overlay state -->
+  <div class="card">
+    <div class="section-title">
+      <strong>Overlay State</strong>
+      <a id="viewerLink" class="link" target="_blank" rel="noopener">Open viewer</a>
+    </div>
     <div class="row">
       <input id="sid" placeholder="Session ID (e.g. demo)" />
       <button id="save">Save State</button>
     </div>
     <textarea id="state" rows="6" placeholder='{"lowerThird":"Live demo","bullets":["Step 1","Step 2"]}'></textarea>
-    <div class="muted">POST → /api/overlay/:sid/state</div>
+    <div class="muted">POST → <span class="pill">/api/overlay/:sid/state</span></div>
   </div>
 
+  <!-- Autopilot -->
   <div class="card">
-    <h3>Autopilot</h3>
+    <div class="section-title">
+      <strong>Autopilot</strong>
+      <label class="cb"><input type="checkbox" id="force" /> Force build (override debounce)</label>
+    </div>
     <div class="row">
       <button id="heartbeat">Heartbeat</button>
       <button id="build">🚀 Build Now</button>
@@ -38,36 +68,82 @@
   </div>
 
   <script>
-    // key comes from URL param so secrets aren’t hardcoded
-    const KEY = new URLSearchParams(location.search).get('key') || '';
-    const out = (x) => document.getElementById('out').textContent =
-      typeof x === 'string' ? x : JSON.stringify(x, null, 2);
+    // ----- helpers -----
+    const qs = new URLSearchParams(location.search);
+    const $ = (id)=>document.getElementById(id);
+    const out = (x)=> $('out').textContent = typeof x === 'string' ? x : JSON.stringify(x, null, 2);
 
-    document.getElementById('save').onclick = async () => {
-      const sid = document.getElementById('sid').value || 'demo';
+    // prefill base/key/sid from URL
+    $('base').value = qs.get('base') || location.origin;
+    $('key').value  = qs.get('key')  || '';
+    $('sid').value  = qs.get('sid')  || 'demo';
+
+    const refreshViewerHref = ()=>{
+      const sid = $('sid').value || 'demo';
+      $('viewerLink').href = `/overlay/${encodeURIComponent(sid)}`;
+      $('viewerLink').textContent = `View /overlay/${sid}`;
+    };
+    refreshViewerHref();
+
+    $('sid').addEventListener('input', refreshViewerHref);
+
+    const need = (v, name)=>{
+      if (!v) throw new Error(`${name} is required`);
+      return v;
+    };
+
+    // central fetch using provided base
+    async function jfetch(path, init={}) {
+      const base = need($('base').value.trim(), 'Base URL');
+      const url = base.replace(/\/+$/,'') + path;
+      const r = await fetch(url, init);
+      const text = await r.text();
       try {
-        const payload = JSON.parse(document.getElementById('state').value || "{}");
-        const r = await fetch(`/api/overlay/${encodeURIComponent(sid)}/state`, {
-          method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+        const json = JSON.parse(text);
+        if (!r.ok) throw Object.assign(new Error(`HTTP ${r.status}`), {json});
+        return json;
+      } catch {
+        if (!r.ok) throw new Error(`HTTP ${r.status}: ${text.slice(0,200)}`);
+        return { raw: text };
+      }
+    }
+
+    // ----- actions -----
+    $('save').onclick = async () => {
+      try {
+        const sid = $('sid').value || 'demo';
+        const payload = JSON.parse($('state').value || "{}");
+        const j = await jfetch(`/api/overlay/${encodeURIComponent(sid)}/state`, {
+          method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
         });
-        out(await r.json());
+        out(j);
       } catch (e) { out(String(e)); }
     };
 
-    document.getElementById('heartbeat').onclick = async () => {
-      const r = await fetch(`/internal/cron/autopilot?key=${encodeURIComponent(KEY)}`);
-      out(await r.json());
+    $('heartbeat').onclick = async () => {
+      try {
+        const key = need($('key').value, 'Command key');
+        const j = await jfetch(`/internal/cron/autopilot?key=${encodeURIComponent(key)}`);
+        out(j);
+      } catch (e) { out(String(e)); }
     };
 
-    document.getElementById('build').onclick = async () => {
-      const r = await fetch(`/internal/autopilot/build-now?key=${encodeURIComponent(KEY)}`, {
-        method: 'POST', headers: {'Content-Type':'application/json'}, body: '{}'
-      });
-      out(await r.json());
+    $('build').onclick = async () => {
+      try {
+        const key = need($('key').value, 'Command key');
+        const force = $('force').checked ? '&force=1' : '';
+        const j = await jfetch(`/internal/autopilot/build-now?key=${encodeURIComponent(key)}${force}`, {
+          method:'POST', headers:{'Content-Type':'application/json'}, body: '{}'
+        });
+        out(j);
+      } catch (e) { out(String(e)); }
     };
 
-    document.getElementById('status').onclick = async () => {
-      const r = await fetch('/api/overlay/status'); out(await r.json());
+    $('status').onclick = async () => {
+      try {
+        const j = await jfetch('/api/overlay/status');
+        out(j);
+      } catch (e) { out(String(e)); }
     };
   </script>
 </body>
