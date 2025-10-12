@@ -1,2 +1,2 @@
-// TODO(auto-modify): Enhance Logging for Build Processes
-// hint: Add detailed logging around build initiation and completion to capture more context.
+// TODO(auto-modify): Enhance Logging for Build Failures
+// hint: Add detailed logging for build failures and reasons for forced builds.
