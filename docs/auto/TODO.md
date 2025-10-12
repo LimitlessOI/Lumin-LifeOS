@@ -1,2 +1,2 @@
-// TODO(auto-modify): Monitor build performance
-// hint: Include a checklist for monitoring build performance metrics.
+// TODO(auto-modify): Review autopilot configuration
+// hint: Document the current autopilot configuration and suggest potential improvements.
