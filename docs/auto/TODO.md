@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate build failures
-// hint: Add a section for troubleshooting build failures and document common issues.
+// TODO(auto-create): Implement build monitoring
+// hint: Outline steps for setting up build monitoring and alerting.
