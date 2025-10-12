@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate build failures
-// hint: Add a section to document the investigation steps for build failures.
+// TODO(auto-modify): Review autopilot configuration
+// hint: Include a checklist for reviewing autopilot configuration settings.
