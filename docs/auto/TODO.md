@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review debounce settings
-// hint: Evaluate and adjust debounce timing settings based on build frequency.
+// TODO(auto-modify): Enhance logging for build failures
+// hint: Implement additional logging for build processes to capture failure details.
