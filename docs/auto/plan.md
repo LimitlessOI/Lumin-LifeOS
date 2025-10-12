@@ -3,15 +3,15 @@
 Frequent forced build requests indicate potential issues with the build process.
 
 ## Actions
-- 1. Investigate Build Failures
-  - rationale: The repeated forced build requests suggest that the builds are failing or not completing as expected, which needs immediate attention.
+- 1. Investigate Build Process
+  - rationale: The logs show multiple forced build requests, suggesting there may be underlying issues causing the builds to fail or be delayed.
   - risk: high
   - files: docs/auto/TODO.md
-- 2. Review Autopilot Configuration
-  - rationale: The debounce messages indicate that the autopilot is struggling to manage build requests effectively, which may require configuration adjustments.
+- 2. Review Debounce Logic
+  - rationale: The debounce messages indicate that the system is limiting build requests, which may not be functioning as intended.
   - risk: med
-  - files: configs/autopilot/config.yaml
-- 3. Monitor Build Logs
-  - rationale: Continuous monitoring of build logs will help identify patterns or specific errors that lead to forced builds.
+  - files: src/autopilot/debounce.js
+- 3. Enhance Logging for Build Failures
+  - rationale: Improved logging can help identify the reasons for frequent forced builds and assist in troubleshooting.
   - risk: low
-  - files: logs/builds/latest.log
+  - files: src/autopilot/logger.js
