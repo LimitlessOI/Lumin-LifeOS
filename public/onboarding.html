@@ -9,6 +9,7 @@
     input, textarea { width:100%; padding:12px; margin:10px 0; border:1px solid #ddd; border-radius:8px; font-size:16px; }
     button { padding:12px 20px; border:0; border-radius:8px; background:#0ea5e9; color:#fff; font-weight:600; }
     .card { background:#fff; border:1px solid #eee; padding:24px; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,.04) }
+    .muted { color:#666; font-size:12px; }
   </style>
 </head>
 <body>
@@ -22,30 +23,44 @@
     <input id="hours" placeholder="Hours (e.g., 9–5)" />
     <textarea id="greeting" rows="4" placeholder="Greeting script..."></textarea>
     <button id="btn">Submit Setup Request</button>
-    <div id="msg"></div>
+    <div id="msg" class="muted"></div>
   </div>
   <script>
+    const qs = new URLSearchParams(location.search);
+    const KEY = qs.get('key') || '';
+
     const btn = document.getElementById('btn');
+    const msg = document.getElementById('msg');
+
+    function validPhone(p){ return /^\+?\d[\d\s\-\(\)]{7,}$/.test((p||'').trim()); }
+    function validEmail(e){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test((e||'').trim()); }
+
     btn.addEventListener('click', async () => {
-      btn.disabled = true; btn.textContent = 'Submitting...';
+      btn.disabled = true; btn.textContent = 'Submitting...'; msg.textContent = '';
       const payload = {
-        business_name: document.getElementById('biz').value,
-        contact_name: document.getElementById('name').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
-        hours: document.getElementById('hours').value,
-        greeting: document.getElementById('greeting').value
+        business_name: document.getElementById('biz').value.trim(),
+        contact_name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        hours: document.getElementById('hours').value.trim(),
+        greeting: document.getElementById('greeting').value.trim()
       };
+
+      if (!KEY) { msg.textContent = 'Missing admin key (?key=...)'; btn.disabled=false; btn.textContent='Submit Setup Request'; return; }
+      if (!payload.business_name || !payload.contact_name) { msg.textContent = 'Business and contact name are required.'; btn.disabled=false; btn.textContent='Submit Setup Request'; return; }
+      if (!validPhone(payload.phone)) { msg.textContent = 'Please enter a valid phone number.'; btn.disabled=false; btn.textContent='Submit Setup Request'; return; }
+      if (!validEmail(payload.email)) { msg.textContent = 'Please enter a valid email.'; btn.disabled=false; btn.textContent='Submit Setup Request'; return; }
+
       try {
         const r = await fetch('/api/v1/admin/setup-client', {
           method: 'POST',
-          headers: {'Content-Type':'application/json','X-Command-Key': new URLSearchParams(location.search).get('key') || ''},
+          headers: {'Content-Type':'application/json','X-Command-Key': KEY},
           body: JSON.stringify(payload)
         });
         const j = await r.json();
-        document.getElementById('msg').textContent = JSON.stringify(j,null,2);
+        msg.textContent = JSON.stringify(j,null,2);
       } catch (e) {
-        document.getElementById('msg').textContent = 'Error: ' + e.message;
+        msg.textContent = 'Error: ' + e.message;
       } finally {
         btn.disabled = false; btn.textContent = 'Submit Setup Request';
       }
