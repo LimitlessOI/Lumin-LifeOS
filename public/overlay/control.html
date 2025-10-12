@@ -13,17 +13,36 @@
     .muted { color:#666; font-size:12px; }
     .card { border:1px solid #eee; border-radius:12px; padding:16px; margin:12px 0; }
     pre { background:#fafafa; padding:10px; border-radius:8px; overflow:auto; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .grid > div { display:flex; flex-direction:column; }
+    label { font-size:12px; color:#555; margin-top:6px; }
   </style>
 </head>
 <body>
   <h1>Overlay Controller</h1>
+
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label>Public Base URL</label>
+        <input id="base" placeholder="https://your-app.up.railway.app" />
+      </div>
+      <div>
+        <label>Command Center Key</label>
+        <input id="key" placeholder="COMMAND_CENTER_KEY" />
+      </div>
+    </div>
+    <button id="saveCfg">Save Config</button>
+    <div class="muted">Config is stored locally in your browser (localStorage). No secrets are baked into this page.</div>
+  </div>
+
   <div class="card">
     <div class="row">
       <input id="sid" placeholder="Session ID (e.g. demo)" />
       <button id="save">Save State</button>
     </div>
-    <textarea id="state" rows="6" placeholder='{"headline":"Live","bullets":["item1","item2"]}'></textarea>
-    <div class="muted">Sends to /api/overlay/:sid/state</div>
+    <textarea id="state" rows="6" placeholder='{"lowerThird":"Live with Adam","bullets":["item1","item2"]}'></textarea>
+    <div class="muted">Sends to <code>POST /api/overlay/:sid/state</code></div>
   </div>
 
   <div class="card">
@@ -37,29 +56,68 @@
   </div>
 
   <script>
-    const out = (x) => document.getElementById('out').textContent = typeof x === 'string' ? x : JSON.stringify(x,null,2);
-    document.getElementById('save').onclick = async () => {
-      const sid = document.getElementById('sid').value || 'demo';
+    const $ = (id) => document.getElementById(id);
+    const out = (x) => $('out').textContent = typeof x === 'string' ? x : JSON.stringify(x,null,2);
+
+    // load/save config
+    function loadCfg() {
+      $('base').value = localStorage.getItem('lifeos.base') || '';
+      $('key').value  = localStorage.getItem('lifeos.key')  || '';
+      $('sid').value  = localStorage.getItem('lifeos.sid')  || 'demo';
+    }
+    function saveCfg() {
+      localStorage.setItem('lifeos.base', $('base').value.trim().replace(/\/+$/,''));
+      localStorage.setItem('lifeos.key', $('key').value.trim());
+      localStorage.setItem('lifeos.sid', $('sid').value.trim() || 'demo');
+    }
+    loadCfg();
+    $('saveCfg').onclick = saveCfg;
+
+    // helper
+    function cfg() {
+      const base = ($('base').value || '').trim().replace(/\/+$/,'');
+      const key = ($('key').value || '').trim();
+      if (!base || !key) throw new Error('Please set Base URL and COMMAND_CENTER_KEY above and click "Save Config".');
+      return { base, key };
+    }
+
+    $('save').onclick = async () => {
+      saveCfg();
+      const { base } = cfg();
+      const sid = $('sid').value || 'demo';
       try {
-        const payload = JSON.parse(document.getElementById('state').value || "{}");
-        const r = await fetch(`/api/overlay/${encodeURIComponent(sid)}/state`, {
+        const payload = JSON.parse($('state').value || "{}");
+        const r = await fetch(`${base}/api/overlay/${encodeURIComponent(sid)}/state`, {
           method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
         });
         out(await r.json());
       } catch (e) { out(String(e)); }
     };
-    document.getElementById('heartbeat').onclick = async () => {
-      const r = await fetch(`/internal/cron/autopilot?key=${encodeURIComponent('MySecretKey2025LifeOS')}`);
-      out(await r.json());
+
+    $('heartbeat').onclick = async () => {
+      try {
+        const { base, key } = cfg();
+        const r = await fetch(`${base}/internal/cron/autopilot?key=${encodeURIComponent(key)}`);
+        out(await r.json());
+      } catch (e) { out(String(e)); }
     };
-    document.getElementById('build').onclick = async () => {
-      const r = await fetch(`/internal/autopilot/build-now?key=${encodeURIComponent('MySecretKey2025LifeOS')}`, {
-        method:'POST', headers:{'Content-Type':'application/json'}, body: '{}'
-      });
-      out(await r.json());
+
+    $('build').onclick = async () => {
+      try {
+        const { base, key } = cfg();
+        const r = await fetch(`${base}/internal/autopilot/build-now?key=${encodeURIComponent(key)}`, {
+          method:'POST', headers:{'Content-Type':'application/json'}, body: '{}'
+        });
+        out(await r.json());
+      } catch (e) { out(String(e)); }
     };
-    document.getElementById('status').onclick = async () => {
-      const r = await fetch('/api/overlay/status'); out(await r.json());
+
+    $('status').onclick = async () => {
+      try {
+        const { base } = cfg();
+        const r = await fetch(`${base}/api/overlay/status`);
+        out(await r.json());
+      } catch (e) { out(String(e)); }
     };
   </script>
 </body>
