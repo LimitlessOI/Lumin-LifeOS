@@ -34,7 +34,7 @@ jobs:
         run: |
           node scripts/cards/parse-seed.mjs > /tmp/plan.json
           echo "Plan generated:"
-          cat /tmp/plan.json | head -c 4000 || true
+          head -c 4000 /tmp/plan.json || true
 
       - name: Resolve APP_URL/KEY
         id: cfg
@@ -52,12 +52,12 @@ jobs:
             exit 1
           fi
           echo "APP_URL=$APP_URL" >> $GITHUB_OUTPUT
-          echo "KEY=$KEY" >> $GITHUB_OUTPUT
+          echo "KEY=$KEY"       >> $GITHUB_OUTPUT
 
-      - name: Apply plan -> open PR
+      - name: Apply plan -> open/update PR
         env:
           APP_URL: ${{ steps.cfg.outputs.APP_URL }}
-          KEY: ${{ steps.cfg.outputs.KEY }}
+          KEY:     ${{ steps.cfg.outputs.KEY }}
         run: |
           set -e
           echo "Submitting plan to builder..."
