@@ -1,4 +1,4 @@
-// server.js (FULL FILE – with ROI gates, metrics, budget control)
+// server.js (FULL FILE – with all sprint improvements)
 import express from "express";
 import dayjs from "dayjs";
 import fs from "fs";
@@ -9,6 +9,8 @@ import { Pool } from "pg";
 // integrations & routes
 import { createLead, appendTranscript, tagLead } from "./src/integrations/boldtrail.js";
 import { adminRouter } from "./src/routes/admin.js";
+import { buildSmartContext } from "./src/utils/context.js";
+import { pruneLogContext } from "./src/utils/prune-context.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,6 +28,7 @@ const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 const LOG_FILE = path.join(DATA_DIR, "autopilot.log");
 const STAMP_FILE = path.join(DATA_DIR, "last-build.txt");
+const SPEND_FILE = path.join(DATA_DIR, "spend.json");
 
 // ===== Env =====
 const {
@@ -84,27 +87,43 @@ async function initDb() {
   await pool.query(`
     create table if not exists build_metrics (
       id serial primary key,
-      timestamp timestamptz default now(),
-      model text not null,
+      created_at timestamptz default now(),
+      pr_number int,
+      pr_url text,
+      model text,
       tokens_in int default 0,
       tokens_out int default 0,
       cost numeric(10,4) default 0,
-      pr_number int,
-      pr_url text,
-      summary text,
       outcome text default 'pending',
-      context_size int default 0
+      summary text,
+      tokens_saved int default 0
     );
   `);
 }
-initDb().then(() => console.log("Database tables ready (with metrics)")).catch(console.error);
+initDb().then(() => console.log("Database tables ready (with build_metrics)")).catch(console.error);
 
 // ===== Budget helpers =====
+function readSpend() {
+  try {
+    return JSON.parse(fs.readFileSync(SPEND_FILE, "utf8"));
+  } catch {
+    return { day: dayjs().format("YYYY-MM-DD"), usd: 0 };
+  }
+}
+
+function writeSpend(s) {
+  try {
+    fs.writeFileSync(SPEND_FILE, JSON.stringify(s));
+  } catch (e) {
+    console.error("Failed to write spend:", e);
+  }
+}
+
 async function getTodaySpend() {
   const r = await pool.query(`
     select coalesce(sum(cost), 0) as total
     from build_metrics
-    where timestamp::date = current_date
+    where created_at::date = current_date
   `);
   return Number(r.rows[0].total);
 }
@@ -117,6 +136,25 @@ async function checkBudget() {
     remaining: MAX_DAILY_SPEND - spend,
     exceeded: spend >= MAX_DAILY_SPEND
   };
+}
+
+function trackCost(usage, model = "gpt-4o-mini") {
+  const prices = {
+    "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
+    "gpt-4o": { input: 0.0025, output: 0.01 }
+  };
+  const price = prices[model] || prices["gpt-4o-mini"];
+  const cost = ((usage?.prompt_tokens || 0) * price.input / 1000) +
+               ((usage?.completion_tokens || 0) * price.output / 1000);
+  
+  // Update spend file
+  let spend = readSpend();
+  const today = dayjs().format("YYYY-MM-DD");
+  if (spend.day !== today) spend = { day: today, usd: 0 };
+  spend.usd += cost;
+  writeSpend(spend);
+  
+  return cost;
 }
 
 // ===== Helpers =====
@@ -187,7 +225,7 @@ app.use("/api/v1/admin", requireCommandKey, adminRouter);
 app.get("/healthz", async (_req, res) => {
   try {
     const r = await pool.query("select now()");
-    res.json({ status: "healthy", database: "connected", timestamp: r.rows[0].now, version: "v4-roi" });
+    res.json({ status: "healthy", database: "connected", timestamp: r.rows[0].now, version: "v4-sprint" });
   } catch {
     res.status(500).json({ status: "unhealthy" });
   }
@@ -207,23 +245,24 @@ app.get("/api/v1/metrics/summary", requireCommandKey, async (_req, res) => {
         coalesce(sum(cost), 0) as total_cost,
         coalesce(avg(cost), 0) as avg_cost,
         count(*)::int as build_count,
-        count(*) filter (where outcome = 'merged')::int as merged_count
+        count(*) filter (where outcome = 'merged')::int as merged_count,
+        coalesce(sum(tokens_saved), 0) as total_tokens_saved
       from build_metrics
-      where timestamp > now() - interval '7 days'
+      where created_at > now() - interval '7 days'
     `);
 
     const highCostRes = await pool.query(`
-      select timestamp, model, tokens_in, tokens_out, cost, pr_url, outcome
+      select created_at as timestamp, model, tokens_in, tokens_out, cost, pr_url, outcome
       from build_metrics
-      where timestamp > now() - interval '7 days'
+      where created_at > now() - interval '7 days'
       order by cost desc
       limit 10
     `);
 
     const lowRoiRes = await pool.query(`
-      select timestamp, summary, cost, outcome as status
+      select created_at as timestamp, summary, cost, outcome as status
       from build_metrics
-      where timestamp > now() - interval '7 days'
+      where created_at > now() - interval '7 days'
         and cost > 0.50
         and outcome not in ('merged', 'roi_check')
       order by cost desc
@@ -346,17 +385,27 @@ app.get("/internal/cron/autopilot", (req, res) => {
   catch(e){ res.status(500).json({ ok:false, error: String(e) }); }
 });
 
-// 2) Planner -> OpenAI WITH ROI PRE-FLIGHT
+// 2) Planner -> OpenAI WITH ROI PRE-FLIGHT + SMART CONTEXT
 app.post("/api/v1/repair-self", async (req, res) => {
   if (!assertKey(req, res)) return;
   if (!OPENAI_API_KEY) return res.status(500).json({ ok:false, error:"OPENAI_API_KEY missing" });
 
   try {
-    const logs = fs.existsSync(LOG_FILE) ? fs.readFileSync(LOG_FILE, "utf8") : "";
+    // Build smart context
+    let logs = fs.existsSync(LOG_FILE) ? fs.readFileSync(LOG_FILE, "utf8") : "";
+    if (logs.length > 8000) logs = await pruneLogContext(logs, 2000);
+
+    const smartCtx = await buildSmartContext(__dirname, 2000);
+    const combinedContext = `${smartCtx.context}\n\n--- Recent Logs ---\n${logs.slice(-4000)}`;
+    console.log(`[context] Saved ~${smartCtx.tokens_saved} tokens via differential loading`);
     
-    // STEP 1: Quick ROI estimation with mini model
+    // STEP 1: Quick ROI estimation
+    const hour = new Date().getHours();
+    const isDayTime = hour >= 9 && hour <= 18;
+    const threshold = isDayTime ? 0.30 : 0.50;
+
     const estimatorPrompt = `Analyze these recent logs and estimate ROI for next build:
-${logs.slice(-4000)}
+${combinedContext.slice(0, 4000)}
 
 Return JSON:
 {
@@ -385,37 +434,36 @@ Return JSON:
     const estimatorJson = await estimatorRes.json();
     const estimate = JSON.parse(estimatorJson.choices?.[0]?.message?.content || "{}");
     
-    // Log the estimate
-    const estimatorCost = ((estimatorJson.usage?.prompt_tokens || 0) * 0.00015 / 1000) + 
-                          ((estimatorJson.usage?.completion_tokens || 0) * 0.0006 / 1000);
+    const estimatorCost = trackCost(estimatorJson.usage, "gpt-4o-mini");
     
     await pool.query(`
-      insert into build_metrics (model, tokens_in, tokens_out, cost, summary, outcome)
-      values ($1, $2, $3, $4, $5, 'roi_check')
+      insert into build_metrics (model, tokens_in, tokens_out, cost, summary, outcome, tokens_saved)
+      values ($1, $2, $3, $4, $5, 'roi_check', $6)
     `, [
       'gpt-4o-mini',
       estimatorJson.usage?.prompt_tokens || 0,
       estimatorJson.usage?.completion_tokens || 0,
       estimatorCost,
-      `ROI Check: ${estimate.reasoning || 'n/a'}`
+      `ROI Check: ${estimate.reasoning || 'n/a'}`,
+      smartCtx.tokens_saved
     ]);
 
-    console.log('[ROI] Estimate:', estimate);
+    console.log('[ROI] Estimate:', estimate, `threshold: $${threshold}`);
 
     // GATE: Abort if low ROI
-    if (!estimate.should_build || (estimate.estimated_value_usd || 0) < 0.50) {
+    if (!estimate.should_build || (estimate.estimated_value_usd || 0) < threshold) {
       return res.json({
         ok: true,
         skip: true,
-        reason: "Low ROI detected - not worth building",
+        reason: `Low ROI detected (threshold: $${threshold})`,
         estimate
       });
     }
 
-    // STEP 2: Full planning with tiered model selection
-    let useModel = "gpt-4o-mini"; // default
+    // STEP 2: Full planning with tiered model
+    let useModel = "gpt-4o-mini";
     if ((estimate.estimated_lines || 0) > 100 || estimate.risk === 'high') {
-      useModel = "gpt-4o"; // upgrade for complex/risky
+      useModel = "gpt-4o";
     }
     
     const system = `You are a senior release engineer. From logs, propose 1-3 precise NEXT ACTIONS.
@@ -428,7 +476,7 @@ Return strict JSON:
     }
   ]
 }`;
-    const user = `Logs (latest first):\n${logs.slice(-12000)}`;
+    const user = `Context:\n${combinedContext}`;
 
     const planRes = await safeFetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -448,14 +496,10 @@ Return strict JSON:
     const planText = planJson.choices?.[0]?.message?.content || "{}";
     const plan = JSON.parse(planText);
 
-    // Log full plan cost
-    const inputPrice = useModel === 'gpt-4o' ? 0.0025 : 0.00015;
-    const outputPrice = useModel === 'gpt-4o' ? 0.01 : 0.0006;
-    const planCost = ((planJson.usage?.prompt_tokens || 0) * inputPrice / 1000) +
-                     ((planJson.usage?.completion_tokens || 0) * outputPrice / 1000);
+    const planCost = trackCost(planJson.usage, useModel);
 
     await pool.query(`
-      insert into build_metrics (model, tokens_in, tokens_out, cost, summary, outcome, context_size)
+      insert into build_metrics (model, tokens_in, tokens_out, cost, summary, outcome, tokens_saved)
       values ($1, $2, $3, $4, $5, 'planned', $6)
     `, [
       useModel,
@@ -463,25 +507,86 @@ Return strict JSON:
       planJson.usage?.completion_tokens || 0,
       planCost,
       plan.summary || 'n/a',
-      logs.length
+      smartCtx.tokens_saved
     ]);
 
     console.log(`[PLAN] Using ${useModel}, cost: $${planCost.toFixed(4)}`);
 
-    res.json({ ok: true, plan, estimate, model_used: useModel });
+    res.json({ ok: true, plan, estimate, model_used: useModel, tokens_saved: smartCtx.tokens_saved });
   } catch (e) {
     console.error('[repair-self]', e);
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
 
-// 3) Apply plan -> branch/files/PR (with PR de-dup + retries + critique)
+// 3) Critique endpoint
+app.post("/api/v1/build/critique-pr", requireCommandKey, async (req, res) => {
+  if (!OPENAI_API_KEY) return res.status(500).json({ ok: false, error: "OPENAI_API_KEY missing" });
+
+  try {
+    const { pr_number, diff, summary } = req.body;
+    if (!diff) return res.status(400).json({ ok: false, error: "diff required" });
+
+    const critiquePrompt = `Grade this PR on scale 1-5:
+
+Summary: ${summary || 'n/a'}
+Diff: ${diff.slice(0, 3000)}
+
+Criteria: Does it solve the goal? Bugs? Style match? Quality?
+
+Return JSON:
+{
+  "score": 1-5,
+  "reasoning": "2-3 sentences",
+  "recommendation": "auto_merge|review_required|reject"
+}`;
+
+    const r = await safeFetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        temperature: 0.1,
+        messages: [{ role: "user", content: critiquePrompt }],
+        response_format: { type: "json_object" }
+      })
+    });
+
+    const json = await r.json();
+    const critique = JSON.parse(json.choices?.[0]?.message?.content || "{}");
+
+    const cost = trackCost(json.usage, "gpt-4o-mini");
+
+    await pool.query(`
+      update build_metrics 
+      set outcome = $1, cost = cost + $2
+      where pr_number = $3 and created_at > now() - interval '1 hour'
+    `, [`critique_score_${critique.score}`, cost, pr_number]);
+
+    console.log(`[critique] PR #${pr_number} scored ${critique.score}/5`);
+
+    res.json({ ok: true, critique });
+  } catch (e) {
+    console.error('[critique]', e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+// 4) Apply plan -> branch/files/PR (with critique integration)
 app.post("/api/v1/build/apply-plan", async (req, res) => {
   if (!assertKey(req, res)) return;
   if (!GITHUB_TOKEN) return res.status(500).json({ ok:false, error:"GITHUB_TOKEN missing" });
 
   try {
     const plan = req.body?.plan;
+    const tokens_saved = req.body?.tokens_saved || 0;
+    const roiCost = req.body?.roi_cost || 0;
+    const planCost = req.body?.plan_cost || 0;
+    const modelUsed = req.body?.model_used || "gpt-4o-mini";
+    
     if (!plan?.actions?.length) return res.status(400).json({ ok:false, error:"no_actions" });
 
     const [owner, repo] = (GITHUB_REPO).split("/");
@@ -500,16 +605,13 @@ app.post("/api/v1/build/apply-plan", async (req, res) => {
       return r.json();
     };
 
-    // get main sha
     const ref = await gh(`/repos/${owner}/${repo}/git/refs/heads/${main}`);
     const sha = ref.object.sha;
 
-    // Try to re-use an open PR with the same summary
     const prTitle = `auto: ${plan.summary}`;
     const openPRs = await gh(`/repos/${owner}/${repo}/pulls?state=open&per_page=50`);
     const sameTitlePR = (openPRs || []).find(p => p.title === prTitle);
 
-    // Determine branch name: reuse existing PR's head or create a new branch
     let branch;
     if (sameTitlePR?.head?.ref) {
       branch = sameTitlePR.head.ref;
@@ -521,169 +623,6 @@ app.post("/api/v1/build/apply-plan", async (req, res) => {
       });
     }
 
-    // helper to create/update file
     const putFile = async (filepath, content) => {
       const encPath = encodeURIComponent(filepath);
-      const get = await safeFetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encPath}?ref=${branch}`,{
-        headers:{ "Authorization":`Bearer ${GITHUB_TOKEN}`, "Accept":"application/vnd.github+json" }
-      }).catch(() => null);
-
-      const exists = get && get.ok ? await get.json() : null;
-
-      const body = {
-        message:`chore(auto): update ${filepath}`,
-        content: Buffer.from(content).toString("base64"),
-        branch,
-        ...(exists? { sha:exists.sha } : {})
-      };
-      const r = await safeFetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encPath}`,{
-        method:"PUT",
-        headers:{ "Authorization":`Bearer ${GITHUB_TOKEN}`, "Accept":"application/vnd.github+json" },
-        body: JSON.stringify(body)
-      });
-      return r.json();
-    };
-
-    // seed/refresh plan doc
-    const doc = `# Auto Plan\n\n${plan.summary}\n\n## Actions\n` +
-      plan.actions.map((a,i)=>`- ${i+1}. ${a.title}\n  - rationale: ${a.rationale}\n  - risk: ${a.risk}\n  - files: ${(a.files||[]).map(f=>f.path).join(", ")||"-"}`).join("\n");
-    await putFile("docs/auto/plan.md", doc);
-
-    // scaffold files from actions
-    for (const a of plan.actions) {
-      for (const f of (a.files||[])) {
-        const header = (f.type === "create")
-          ? `// TODO(auto-create): ${a.title}\n// hint: ${f.hint || "implement here"}\n`
-          : `// TODO(auto-modify): ${a.title}\n// hint: ${f.hint || "implement here"}\n`;
-        await putFile(f.path, header);
-      }
-    }
-
-    // open or update PR
-    let pr = sameTitlePR;
-    if (!pr) {
-      pr = await gh(`/repos/${owner}/${repo}/pulls`,{
-        method:"POST",
-        body: JSON.stringify({
-          title: prTitle,
-          head: branch,
-          base: main,
-          body: "Automated plan:\n```json\n"+JSON.stringify(plan,null,2)+"\n```"
-        })
-      });
-    } else {
-      // update PR body to reflect newest plan
-      await gh(`/repos/${owner}/${repo}/pulls/${pr.number}`,{
-        method:"PATCH",
-        body: JSON.stringify({
-          body: "Automated plan (updated):\n```json\n"+JSON.stringify(plan,null,2)+"\n```"
-        })
-      });
-    }
-
-    // Update metrics with PR info
-    await pool.query(`
-      update build_metrics 
-      set pr_number = $1, pr_url = $2, outcome = 'pr_opened'
-      where outcome = 'planned' and timestamp > now() - interval '5 minutes'
-    `, [pr.number, pr.html_url]);
-
-    res.json({ ok:true, pr, reused_existing_pr: Boolean(sameTitlePR) });
-  } catch(e){ 
-    console.error('[apply-plan]', e);
-    res.status(500).json({ ok:false, error:String(e) }); 
-  }
-});
-
-// 4) One-click chain: plan -> PR with BUDGET CHECK + debounce
-app.post("/internal/autopilot/build-now", async (req, res) => {
-  const got = req.query.key || req.headers["x-command-key"];
-  if (!COMMAND_CENTER_KEY || got !== COMMAND_CENTER_KEY) {
-    return res.status(401).json({ ok: false, error: "unauthorized" });
-  }
-
-  const BASE = (PUBLIC_BASE_URL || "").replace(/\/+$/, "");
-  if (!BASE) return res.status(500).json({ ok:false, error:"PUBLIC_BASE_URL not set" });
-
-  // CHECK BUDGET FIRST
-  const budget = await checkBudget();
-  if (budget.exceeded) {
-    const msg = `Budget exhausted: $${budget.spent.toFixed(2)} / $${budget.limit} today`;
-    fs.appendFileSync(LOG_FILE, `[${new Date().toISOString()}] autopilot:budget_exceeded\n`);
-    return res.status(402).json({
-      ok: false,
-      budget_exceeded: true,
-      message: msg,
-      spent: budget.spent,
-      limit: budget.limit
-    });
-  }
-
-  // Debounce (unless force=1)
-  const force = String(req.query.force || "0") === "1";
-  if (!force) {
-    const gate = shouldBuild(MIN_BUILD_INTERVAL_MINUTES);
-    if (!gate.allowed) {
-      const msg = `debounced: please wait ~${gate.waitMinutes} min`;
-      const line = `[${new Date().toISOString()}] autopilot:debounce ${msg}\n`;
-      fs.appendFileSync(LOG_FILE, line);
-      return res.status(202).json({ ok:false, debounced:true, message: msg, min_interval: MIN_BUILD_INTERVAL_MINUTES });
-    }
-  }
-
-  try {
-    // log a heartbeat for context
-    const line = `[${new Date().toISOString()}] autopilot:build-now${force ? " (force)" : ""}\n`;
-    fs.appendFileSync(LOG_FILE, line);
-
-    // 1) planner (with ROI gate)
-    const planRes = await safeFetch(`${BASE}/api/v1/repair-self?key=${encodeURIComponent(COMMAND_CENTER_KEY)}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({})
-    });
-    const planPayload = await planRes.json();
-    
-    // Check if ROI gate rejected
-    if (planPayload.skip) {
-      const skipLine = `[${new Date().toISOString()}] autopilot:skipped - ${planPayload.reason}\n`;
-      fs.appendFileSync(LOG_FILE, skipLine);
-      return res.json({ 
-        ok: true, 
-        skipped: true, 
-        reason: planPayload.reason,
-        estimate: planPayload.estimate 
-      });
-    }
-
-    const plan = planPayload.plan;
-
-    // 2) builder
-    const prRes = await safeFetch(`${BASE}/api/v1/build/apply-plan?key=${encodeURIComponent(COMMAND_CENTER_KEY)}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan })
-    });
-    const pr = await prRes.json();
-
-    writeStampNow(); // success -> update debounce stamp
-    res.json({ ok: true, plan_summary: plan?.summary, pr, model: planPayload.model_used });
-  } catch (e) {
-    console.error("[build-now]", e);
-    res.status(500).json({ ok:false, error:String(e) });
-  }
-});
-
-// ---- Overlay status JSON (last 2 log lines) ----
-app.get("/api/overlay/status", (_req, res) => {
-  try {
-    const text = fs.existsSync(LOG_FILE) ? fs.readFileSync(LOG_FILE, "utf8") : "";
-    const lines = text.trim().split("\n").slice(-2);
-    res.json({ ok: true, last: lines });
-  } catch (e) { res.status(500).json({ ok:false, error:String(e) }); }
-});
-
-// ===== Start server =====
-app.listen(PORT, () => {
-  console.log(`LifeOS ready on :${PORT} with ROI gates & budget control`);
-});
+      const get = await safeF
