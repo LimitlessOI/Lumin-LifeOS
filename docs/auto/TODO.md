@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review build performance
-// hint: Include performance metrics and analysis in the documentation.
+// TODO(auto-create): Implement build notification system
+// hint: Outline the requirements and implementation plan for a build notification system.
