@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate build process stability
-// hint: Add a section to investigate recent build failures and implement monitoring.
+// TODO(auto-modify): Review autopilot debounce settings
+// hint: Document current debounce settings and propose changes if necessary.
