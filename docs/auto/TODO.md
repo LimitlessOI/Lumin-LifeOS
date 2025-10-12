@@ -1,2 +1,2 @@
-// TODO(auto-modify): Verify build completion and success
-// hint: Add a checklist item to verify the completion and success of the autopilot build.
+// TODO(auto-modify): Review build logs for errors or warnings
+// hint: Add a task to review the latest build logs for any errors or warnings.
