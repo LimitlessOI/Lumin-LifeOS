@@ -1,2 +1,2 @@
-// TODO(auto-modify): Verify autopilot build trigger
-// hint: Add a checklist to verify autopilot build triggers.
+// TODO(auto-modify): Monitor build process
+// hint: Include steps for monitoring ongoing builds.
