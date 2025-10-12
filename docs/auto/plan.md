@@ -4,14 +4,14 @@ Frequent forced build requests indicate potential issues with the build process.
 
 ## Actions
 - 1. Investigate build failures
-  - rationale: The repeated forced build requests suggest that the builds are failing or not completing as expected, necessitating an investigation.
+  - rationale: The high frequency of forced build requests suggests that there may be underlying issues causing builds to fail or take too long, which need to be addressed.
   - risk: high
   - files: docs/auto/TODO.md
 - 2. Review debounce settings
-  - rationale: The debounce messages indicate that builds are being throttled, which may be contributing to the frustration of users trying to trigger builds.
+  - rationale: The debounce messages indicate that the system is limiting build requests. Adjusting these settings may improve responsiveness.
   - risk: med
-  - files: docs/auto/TODO.md
+  - files: config/autopilot/config.yaml
 - 3. Enhance logging for build processes
-  - rationale: Improved logging can help identify the root cause of build failures and provide better insights into the build process.
+  - rationale: Improved logging can provide better insights into build failures and performance issues.
   - risk: low
-  - files: docs/auto/TODO.md
+  - files: src/logging/build_logger.py
