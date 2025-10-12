@@ -11,6 +11,10 @@ on:
       key:
         description: "COMMAND_CENTER_KEY (optional; uses secret if blank)"
         required: false
+      force:
+        description: "Force build (skip debounce)"
+        required: false
+        default: "0"
 
 concurrency:
   group: autopilot-build
@@ -19,7 +23,7 @@ concurrency:
 jobs:
   build_now:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - name: Resolve inputs
         id: cfg
@@ -36,23 +40,61 @@ jobs:
             echo "COMMAND_CENTER_KEY is required (provide input or set secrets.COMMAND_CENTER_KEY)."
             exit 1
           fi
+          FORCE="${{ github.event.inputs.force }}"
+          if [ -z "$FORCE" ]; then FORCE="0"; fi
           echo "APP_URL=$APP_URL" >> $GITHUB_OUTPUT
           echo "KEY=$KEY_IN"      >> $GITHUB_OUTPUT
+          echo "FORCE=$FORCE"     >> $GITHUB_OUTPUT
 
-      - name: Heartbeat + build-now (with retries)
+      - name: Check budget status
+        id: budget
         env:
           APP_URL: ${{ steps.cfg.outputs.APP_URL }}
           KEY:     ${{ steps.cfg.outputs.KEY }}
         run: |
+          echo "Checking budget..."
+          BUDGET_JSON=$(curl --retry 2 --retry-delay 2 --max-time 10 -fsSL \
+            "$APP_URL/api/v1/budget/status?key=$KEY" || echo '{"exceeded":false}')
+          echo "Budget response: $BUDGET_JSON"
+          
+          EXCEEDED=$(echo "$BUDGET_JSON" | jq -r '.exceeded // false')
+          if [ "$EXCEEDED" = "true" ]; then
+            echo "⚠️ Budget exceeded. Skipping build."
+            echo "exceeded=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "exceeded=false" >> $GITHUB_OUTPUT
+
+      - name: Heartbeat + build-now (with retries)
+        if: steps.budget.outputs.exceeded != 'true'
+        env:
+          APP_URL: ${{ steps.cfg.outputs.APP_URL }}
+          KEY:     ${{ steps.cfg.outputs.KEY }}
+          FORCE:   ${{ steps.cfg.outputs.FORCE }}
+        run: |
           set -e
           echo "Heartbeat..."
-          curl --retry 3 --retry-delay 2 --max-time 15 -fsS "$APP_URL/internal/cron/autopilot?key=$KEY" || true
+          curl --retry 3 --retry-delay 2 --max-time 15 -fsS \
+            "$APP_URL/internal/cron/autopilot?key=$KEY" || true
+
+          FORCE_PARAM=""
+          if [ "$FORCE" = "1" ]; then FORCE_PARAM="&force=1"; fi
 
           echo "Trigger build-now..."
-          curl --retry 3 --retry-delay 2 --max-time 30 -fsS \
-            -X POST "$APP_URL/internal/autopilot/build-now?key=$KEY" \
+          BUILD_RESP=$(curl --retry 3 --retry-delay 2 --max-time 45 -fsSL \
+            -X POST "$APP_URL/internal/autopilot/build-now?key=$KEY$FORCE_PARAM" \
             -H "Content-Type: application/json" \
-            -d '{}' | tee /tmp/resp.json || true
+            -d '{}')
+          
+          echo "$BUILD_RESP" | jq '.' || echo "$BUILD_RESP"
+          
+          # Check if skipped due to ROI
+          SKIPPED=$(echo "$BUILD_RESP" | jq -r '.skipped // false')
+          if [ "$SKIPPED" = "true" ]; then
+            echo "ℹ️ Build skipped due to low ROI"
+            REASON=$(echo "$BUILD_RESP" | jq -r '.reason // "unknown"')
+            echo "Reason: $REASON"
+          fi
 
           echo "Daily report tick..."
           curl --retry 3 --retry-delay 2 --max-time 20 -fsS \
@@ -60,8 +102,5 @@ jobs:
             -H "X-Command-Key: $KEY" \
             -H "Content-Type: application/json" \
             -d '{}' || true
-
-          echo "Overlay status..."
-          curl --retry 3 --retry-delay 2 --max-time 10 -fsS "$APP_URL/api/overlay/status" || true
 
           echo "Done."
