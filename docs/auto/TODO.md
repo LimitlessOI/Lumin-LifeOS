@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate Build Process
-// hint: Add a section to document the investigation steps for build failures.
+// TODO(auto-modify): Investigate build failures
+// hint: Add a section to investigate the reasons for frequent forced builds and outline steps to diagnose build failures.
