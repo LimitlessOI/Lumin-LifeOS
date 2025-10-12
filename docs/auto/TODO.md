@@ -1,2 +1,2 @@
 // TODO(auto-modify): Investigate Build Failures
-// hint: Add a section to investigate the reasons for frequent forced builds and potential solutions.
+// hint: Add a section to document troubleshooting steps for build failures.
