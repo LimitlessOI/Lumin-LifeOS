@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate build failures
-// hint: Add a section to investigate the reasons for repeated forced builds and document findings.
+// TODO(auto-modify): Review debounce settings
+// hint: Document current debounce settings and propose adjustments if necessary.
