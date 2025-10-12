@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review autopilot configuration
-// hint: Include a checklist for reviewing autopilot configuration settings.
+// TODO(auto-create): Implement build monitoring
+// hint: Draft a plan for build monitoring implementation.
