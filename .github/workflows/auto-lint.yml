@@ -26,7 +26,6 @@ jobs:
       - name: Basic quality checks (docs only)
         run: |
           set -e
-          # we only scan markdown & docs, not source code (so TODO scaffolds in code won't fail CI)
           CHANGED=$(git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.sha }}" | tr -d '\r' | grep -E '\.md$|^docs/' || true)
           if [ -z "$CHANGED" ]; then
             echo "No docs/markdown changes. Skipping."
@@ -39,10 +38,9 @@ jobs:
               echo "::error file=$f::Found 'As an AI' phrasing."
               exit 1
             fi
-            # keep TODOs allowed in code; in docs they’re disallowed
             if echo "$f" | grep -qE '\.md$|^docs/'; then
-              if grep -nE "(^|\s)TODO(\s|:|$)" "$f"; then
-                echo "::error file=$f::Found TODO in docs/markdown; please resolve or move to issue tracker."
+              if grep -nE "(^|[[:space:]])TODO([[:space:]]|:|$)" "$f"; then
+                echo "::error file=$f::Found TODO in docs/markdown; please resolve or move to issues."
                 exit 1
               fi
             fi
