@@ -1,2 +1,2 @@
-// TODO(auto-modify): Enhance logging for build processes
-// hint: Document the need for enhanced logging around build initiation and completion.
+// TODO(auto-modify): Investigate build failures
+// hint: Add a section to investigate and document the reasons for frequent forced builds.
