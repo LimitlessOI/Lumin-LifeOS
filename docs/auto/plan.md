@@ -1,17 +1,17 @@
 # Auto Plan
 
-Initiate a build process for the autopilot feature.
+Multiple forced build requests detected in a short time frame.
 
 ## Actions
-- 1. Verify build configuration
-  - rationale: Ensure that the build configuration is correct before proceeding to avoid potential build failures.
-  - risk: low
-  - files: configs/build-config.yml
-- 2. Run automated tests
-  - rationale: To confirm that the autopilot feature works as expected after the build.
+- 1. Investigate build request frequency
+  - rationale: High frequency of forced build requests may indicate an underlying issue or misconfiguration in the build system.
   - risk: med
-  - files: tests/autopilot_tests.py
-- 3. Monitor build logs
-  - rationale: To track the build process and identify any issues early.
+  - files: docs/auto/TODO.md
+- 2. Implement rate limiting for build requests
+  - rationale: To prevent potential overload on the build system, implementing rate limiting can help manage the frequency of build requests.
   - risk: low
-  - files: logs/build.log
+  - files: src/autopilot/build_manager.py
+- 3. Review autopilot configuration settings
+  - rationale: Ensure that the autopilot settings are correctly configured to avoid unnecessary forced builds.
+  - risk: low
+  - files: config/autopilot/config.yaml
