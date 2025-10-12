@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate build triggers
-// hint: Add a section to document the build trigger conditions and any recent changes.
+// TODO(auto-modify): Monitor build performance
+// hint: Include a checklist for monitoring build performance metrics.
