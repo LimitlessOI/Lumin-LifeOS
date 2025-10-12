@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate inconsistent debounce intervals
-// hint: Review and standardize debounce logic to ensure consistent intervals.
+// TODO(auto-modify): Optimize build frequency
+// hint: Evaluate and adjust build trigger criteria to reduce unnecessary builds.
