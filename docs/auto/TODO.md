@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review debounce settings
-// hint: Evaluate the current debounce settings and consider adjusting them to improve responsiveness.
+// TODO(auto-modify): Enhance logging for build processes
+// hint: Document the need for enhanced logging around build initiation and completion.
