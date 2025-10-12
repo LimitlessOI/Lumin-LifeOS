@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate and optimize autopilot build frequency
-// hint: Add a task to review and adjust the autopilot build trigger logic to reduce unnecessary builds.
+// TODO(auto-modify): Review debounce logic effectiveness
+// hint: Add a task to evaluate and improve the debounce logic to ensure it effectively limits build frequency.
