@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate frequent autopilot builds
-// hint: Review autopilot build trigger configuration to ensure builds are not triggered unnecessarily.
+// TODO(auto-modify): Implement build rate limiting
+// hint: Add a rate limiting feature to the autopilot build system to prevent excessive builds.
