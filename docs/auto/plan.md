@@ -3,15 +3,15 @@
 Autopilot triggered a build process.
 
 ## Actions
-- 1. Verify Build Success
-  - rationale: To ensure that the build process completed successfully and there are no errors.
+- 1. Verify build success
+  - rationale: To ensure that the build process completed without errors and that the latest changes are integrated correctly.
   - risk: low
   - files: logs/build.log
-- 2. Run Automated Tests
-  - rationale: To validate that the new build does not introduce any regressions.
+- 2. Run automated tests
+  - rationale: To validate that the new build does not introduce any regressions or issues.
   - risk: med
   - files: tests/auto/test_suite.py
-- 3. Update Documentation
-  - rationale: To reflect any changes made during the build process or new features added.
+- 3. Update deployment documentation
+  - rationale: To reflect any changes made during the build process and ensure that deployment steps are current.
   - risk: low
-  - files: docs/auto/CHANGELOG.md
+  - files: docs/deployment_guide.md
