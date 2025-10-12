@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate frequent 'build-now' triggers
-// hint: Add a section to investigate the cause of frequent 'build-now' triggers and propose optimizations.
+// TODO(auto-modify): Implement debounce mechanism for 'build-now'
+// hint: Document the need for a debounce mechanism for 'build-now' commands to improve efficiency.
