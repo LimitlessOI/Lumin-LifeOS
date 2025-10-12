@@ -1,2 +1,2 @@
-// TODO(auto): Optimize build frequency
-// hint: Include guidelines for setting thresholds for build triggers.
+// TODO(auto): Review autopilot configuration
+// hint: Document current autopilot settings and suggest any necessary adjustments.
