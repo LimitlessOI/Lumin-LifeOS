@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review autopilot debounce settings
-// hint: Document current debounce settings and propose changes if necessary.
+// TODO(auto-create): Communicate with the team about build issues
+// hint: Create a communication plan to update the team on build status and issues.
