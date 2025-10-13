@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review debounce logic
-// hint: Evaluate and potentially adjust the debounce timing and conditions to ensure it effectively reduces redundant builds.
+// TODO(auto-modify): Investigate frequent 'build-now' triggers
+// hint: Add a section to investigate the cause of frequent 'build-now' commands and propose optimizations.
