@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate Autopilot Build Frequency
-// hint: Add a section to review and adjust the autopilot build trigger configuration to ensure it aligns with expected build frequency.
+// TODO(auto-modify): Review Debounce Configuration
+// hint: Include a task to evaluate and potentially adjust the debounce timing settings in the autopilot configuration.
