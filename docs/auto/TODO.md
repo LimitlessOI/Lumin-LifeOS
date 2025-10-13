@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate and optimize build triggers
-// hint: Add a section to investigate the conditions under which 'build-now' is triggered and optimize them to reduce unnecessary builds.
+// TODO(auto-modify): Review debounce logic
+// hint: Evaluate the debounce logic to ensure it effectively limits build frequency without impacting necessary builds.
