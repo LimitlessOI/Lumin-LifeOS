@@ -4,10 +4,10 @@ Frequent 'build-now' commands indicate potential inefficiency in build triggerin
 
 ## Actions
 - 1. Investigate and optimize build trigger logic
-  - rationale: The logs show frequent 'build-now' commands, suggesting that the build system may be triggering builds more often than necessary, which could lead to resource wastage and increased costs.
-  - risk: med
+  - rationale: The frequent 'build-now' commands suggest that the build system may be triggering builds more often than necessary, which can lead to resource wastage and longer build queues.
+  - risk: medium
   - files: docs/auto/TODO.md
-- 2. Implement logging for build trigger reasons
-  - rationale: Adding detailed logging for why each 'build-now' is triggered will help in diagnosing and optimizing the build process.
+- 2. Review debounce timing configuration
+  - rationale: The debounce messages indicate varying wait times, which may not be optimal for the current build frequency and could be contributing to inefficiencies.
   - risk: low
   - files: docs/auto/TODO.md
