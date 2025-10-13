@@ -1,2 +1,2 @@
-// TODO(auto-modify): Analyze build frequency and necessity
-// hint: Add a task to analyze the necessity of frequent builds and propose optimizations.
+// TODO(auto-modify): Investigate and standardize debounce timing in autopilot
+// hint: Add a task to review and standardize debounce timing in the autopilot system.
