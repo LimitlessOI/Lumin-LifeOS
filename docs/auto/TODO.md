@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate frequent 'build-now' triggers
-// hint: Add a task to investigate the cause of frequent 'build-now' commands and adjust the triggering mechanism if necessary.
+// TODO(auto-modify): Review debounce settings
+// hint: Add a task to review and potentially adjust debounce settings to ensure they align with the desired build frequency.
