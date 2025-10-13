@@ -1,17 +1,13 @@
 # Auto Plan
 
-Initiate a build process for the autopilot feature.
+Frequent 'build-now' commands indicate potential misconfiguration or inefficiency in the build trigger logic.
 
 ## Actions
-- 1. Verify build configuration
-  - rationale: Ensure that the build configuration is correct before proceeding to avoid potential build failures.
-  - risk: low
-  - files: configs/build-config.yml
-- 2. Run automated tests
-  - rationale: To confirm that the autopilot feature works as expected after the build.
+- 1. Investigate frequent 'build-now' triggers
+  - rationale: The logs show a high frequency of 'build-now' commands, which may indicate a misconfiguration or inefficiency in the build trigger logic, potentially leading to unnecessary resource usage.
   - risk: med
-  - files: tests/autopilot_tests.py
-- 3. Monitor build logs
-  - rationale: To track the build process and identify any issues early.
+  - files: docs/auto/TODO.md
+- 2. Review debounce logic
+  - rationale: The debounce messages suggest that the system is attempting to limit build frequency, but the frequent 'build-now' commands indicate it may not be effective. Adjusting debounce settings could improve efficiency.
   - risk: low
-  - files: logs/build.log
+  - files: docs/auto/TODO.md
