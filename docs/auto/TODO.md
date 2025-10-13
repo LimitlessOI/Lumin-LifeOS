@@ -1,2 +1,2 @@
-// TODO(auto-modify): Analyze build trigger conditions
-// hint: Examine and refine the conditions that trigger builds to prevent unnecessary executions.
+// TODO(auto-modify): Investigate frequent 'build-now' triggers
+// hint: Add a task to investigate the cause of frequent 'build-now' commands and adjust the triggering mechanism if necessary.
