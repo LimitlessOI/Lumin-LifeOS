@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate and optimize build frequency
-// hint: Add a task to review and optimize the build frequency and conditions triggering 'build-now'.
+// TODO(auto-modify): Review debounce settings
+// hint: Add a task to review and potentially standardize debounce settings to ensure they effectively reduce unnecessary builds.
