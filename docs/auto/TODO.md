@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate and optimize debounce logic
-// hint: Review and optimize debounce logic to ensure consistent and efficient build triggering.
+// TODO(auto-modify): Implement logging improvements
+// hint: Add detailed logging for build triggers and debounce decisions.
