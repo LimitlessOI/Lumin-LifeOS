@@ -1,2 +1,2 @@
-// TODO(auto-modify): Implement logging for build triggers
-// hint: Add a task to implement detailed logging for each 'build-now' trigger to capture the context and reason for the build.
+// TODO(auto-modify): Investigate and standardize debounce timing in autopilot
+// hint: Add a task to review and standardize debounce timing logic in autopilot.
