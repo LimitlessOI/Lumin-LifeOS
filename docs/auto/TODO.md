@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review and adjust debounce configuration
-// hint: Investigate debounce settings and adjust to ensure consistent and optimal build scheduling.
+// TODO(auto-modify): Implement logging for build triggers
+// hint: Add logging to capture the source or reason for each 'build-now' command.
