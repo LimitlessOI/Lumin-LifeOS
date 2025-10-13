@@ -3,11 +3,11 @@
 Frequent 'build-now' commands indicate potential misconfiguration or excessive triggering.
 
 ## Actions
-- 1. Investigate frequent 'build-now' triggers
-  - rationale: The logs show 'build-now' commands being triggered frequently, which may indicate a misconfiguration or an issue with the triggering mechanism that could lead to unnecessary resource usage.
-  - risk: med
-  - files: docs/auto/TODO.md
-- 2. Review debounce settings
-  - rationale: The log entry 'debounce debounced: please wait ~5 min' suggests that the debounce mechanism is in place but might not be effectively preventing frequent builds.
+- 1. Investigate and adjust debounce settings
+  - rationale: The logs show frequent 'build-now' commands with minimal debounce intervals, suggesting that the debounce mechanism may not be effectively preventing redundant builds.
   - risk: low
+  - files: docs/auto/TODO.md
+- 2. Analyze build trigger conditions
+  - rationale: The high frequency of 'build-now' commands could be due to overly sensitive or incorrect trigger conditions, leading to unnecessary builds.
+  - risk: medium
   - files: docs/auto/TODO.md
