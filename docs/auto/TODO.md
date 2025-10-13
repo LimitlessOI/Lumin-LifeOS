@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review debounce settings
-// hint: Add a task to review and potentially standardize debounce settings to ensure they effectively reduce unnecessary builds.
+// TODO(auto-modify): Investigate frequent 'build-now' triggers
+// hint: Add a section to investigate and optimize the frequency of 'build-now' commands.
