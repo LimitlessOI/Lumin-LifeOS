@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate and optimize build trigger conditions
-// hint: Review and adjust build trigger conditions to prevent excessive builds.
+// TODO(auto-modify): Implement enhanced logging for build triggers
+// hint: Add detailed logging for build triggers to capture conditions leading to 'build-now' commands.
