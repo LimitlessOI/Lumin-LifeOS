@@ -1,2 +1,2 @@
-// TODO(auto-modify): Analyze build frequency and necessity
-// hint: Assess the criteria for triggering 'build-now' to ensure builds are necessary and not redundant.
+// TODO(auto-modify): Investigate and standardize debounce timing for autopilot builds
+// hint: Add a task to review and standardize debounce timing in the autopilot configuration.
