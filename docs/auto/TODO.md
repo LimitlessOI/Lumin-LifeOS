@@ -1,2 +1,2 @@
-// TODO(auto-modify): Analyze build triggers
-// hint: Add a task to analyze and refine the conditions that trigger 'build-now' commands.
+// TODO(auto-modify): Investigate and standardize debounce timing in autopilot
+// hint: Add a task to review and standardize debounce timing logic in autopilot.
