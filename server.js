@@ -1,4 +1,4 @@
-// server.js (FULL FILE – with all sprint improvements)
+// server.js (FULL FILE – with pods, council, tiered debug, and all sprint improvements)
 import express from "express";
 import dayjs from "dayjs";
 import fs from "fs";
@@ -11,6 +11,7 @@ import { createLead, appendTranscript, tagLead } from "./src/integrations/boldtr
 import { adminRouter } from "./src/routes/admin.js";
 import { buildSmartContext } from "./src/utils/context.js";
 import { pruneLogContext } from "./src/utils/prune-context.js";
+import { debugWithEscalation, shouldEscalate } from "./src/utils/tiered-debug.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,14 +46,16 @@ const {
 
 const MIN_BUILD_INTERVAL_MINUTES = Number(process.env.MIN_BUILD_INTERVAL_MINUTES || 30);
 const MAX_DAILY_SPEND = Number(process.env.MAX_DAILY_SPEND || 5.0);
+const PHASE1_BUDGET_CAP = Number(process.env.PHASE1_BUDGET_CAP || 50.0);
 
 // ===== Postgres =====
-const pool = new Pool({
+export const pool = new Pool({
   connectionString: DATABASE_URL,
   ssl: DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined,
 });
 
 async function initDb() {
+  // Existing tables
   await pool.query(`
     create table if not exists calls (
       id serial primary key,
@@ -96,11 +99,116 @@ async function initDb() {
       cost numeric(10,4) default 0,
       outcome text default 'pending',
       summary text,
-      tokens_saved int default 0
+      tokens_saved int default 0,
+      pod_id int
     );
   `);
+  
+  // NEW: Pod system tables
+  await pool.query(`
+    create table if not exists pods (
+      id serial primary key,
+      name text not null unique,
+      llm_provider text not null,
+      credits_balance numeric default 100,
+      weekly_budget numeric default 100,
+      total_revenue numeric default 0,
+      total_costs numeric default 0,
+      ethics_score numeric default 10.0,
+      last_nudge text default null,
+      status text default 'active',
+      context_memory jsonb default '{}',
+      created_at timestamptz default now()
+    );
+  `);
+  
+  await pool.query(`
+    create table if not exists pod_metrics (
+      id serial primary key,
+      pod_id int references pods(id),
+      sprint_week int not null,
+      revenue numeric default 0,
+      costs numeric default 0,
+      roi numeric default 0,
+      dignity_score numeric default 0,
+      rank int,
+      spam_flags int default 0,
+      created_at timestamptz default now()
+    );
+  `);
+  
+  await pool.query(`
+    create table if not exists capsule_ideas (
+      id serial primary key,
+      pod_id int references pods(id),
+      title text not null,
+      content jsonb not null,
+      code text,
+      metrics jsonb,
+      ethics_score numeric,
+      exclusive_until timestamptz,
+      adoption_count int default 0,
+      created_at timestamptz default now()
+    );
+  `);
+  
+  await pool.query(`
+    create table if not exists debug_metrics (
+      id serial primary key,
+      tier text not null,
+      time_ms int not null,
+      fixed boolean default false,
+      error_type text,
+      context jsonb,
+      created_at timestamptz default now()
+    );
+  `);
+  
+  await pool.query(`
+    create index if not exists idx_debug_tier on debug_metrics(tier);
+  `);
+  await pool.query(`
+    create index if not exists idx_debug_created on debug_metrics(created_at);
+  `);
+  await pool.query(`
+    create index if not exists idx_build_pod on build_metrics(pod_id);
+  `);
+  
+  // Seed default pods if none exist
+  const podCount = await pool.query('select count(*) from pods');
+  if (Number(podCount.rows[0].count) === 0) {
+    console.log('[init] Seeding default pods...');
+    await pool.query(`
+      insert into pods (name, llm_provider, credits_balance, weekly_budget)
+      values 
+        ('Alpha', 'claude', 100, 100),
+        ('Bravo', 'gemini', 100, 100)
+    `);
+  }
 }
-initDb().then(() => console.log("Database tables ready (with build_metrics)")).catch(console.error);
+
+initDb()
+  .then(() => console.log("✅ Database tables ready (with pods, capsule, debug_metrics)"))
+  .catch(console.error);
+
+// ===== Pod Personas =====
+export const POD_PERSONAS = {
+  alpha: {
+    style: "aggressive_growth",
+    risk_tolerance: "high",
+    focus: "revenue_velocity"
+  },
+  bravo: {
+    style: "sustainable",
+    risk_tolerance: "medium",
+    focus: "customer_lifetime_value"
+  },
+  charlie: {
+    style: "innovative",
+    risk_tolerance: "high",
+    focus: "breakthrough_features"
+  }
+};
 
 // ===== Budget helpers =====
 function readSpend() {
@@ -128,20 +236,37 @@ async function getTodaySpend() {
   return Number(r.rows[0].total);
 }
 
+async function getTotalPhase1Spend() {
+  const r = await pool.query(`
+    select coalesce(sum(total_costs), 0) as total
+    from pods
+  `);
+  return Number(r.rows[0].total);
+}
+
 async function checkBudget() {
-  const spend = await getTodaySpend();
+  const dailySpend = await getTodaySpend();
+  const phase1Spend = await getTotalPhase1Spend();
+  
   return {
-    spent: spend,
-    limit: MAX_DAILY_SPEND,
-    remaining: MAX_DAILY_SPEND - spend,
-    exceeded: spend >= MAX_DAILY_SPEND
+    daily_spent: dailySpend,
+    daily_limit: MAX_DAILY_SPEND,
+    daily_remaining: MAX_DAILY_SPEND - dailySpend,
+    daily_exceeded: dailySpend >= MAX_DAILY_SPEND,
+    phase1_spent: phase1Spend,
+    phase1_limit: PHASE1_BUDGET_CAP,
+    phase1_remaining: PHASE1_BUDGET_CAP - phase1Spend,
+    phase1_exceeded: phase1Spend >= PHASE1_BUDGET_CAP
   };
 }
 
-function trackCost(usage, model = "gpt-4o-mini") {
+function trackCost(usage, model = "gpt-4o-mini", podId = null) {
   const prices = {
     "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
-    "gpt-4o": { input: 0.0025, output: 0.01 }
+    "gpt-4o": { input: 0.0025, output: 0.01 },
+    "claude-sonnet-4": { input: 0.003, output: 0.015 },
+    "claude-3-sonnet-20240229": { input: 0.003, output: 0.015 },
+    "gemini-pro": { input: 0.0005, output: 0.0015 }
   };
   const price = prices[model] || prices["gpt-4o-mini"];
   const cost = ((usage?.prompt_tokens || 0) * price.input / 1000) +
@@ -154,6 +279,12 @@ function trackCost(usage, model = "gpt-4o-mini") {
   spend.usd += cost;
   writeSpend(spend);
   
+  // Update pod costs if provided
+  if (podId) {
+    pool.query('update pods set total_costs = total_costs + $1 where id = $2', [cost, podId])
+      .catch(e => console.error('[track-cost] Failed to update pod:', e));
+  }
+  
   return cost;
 }
 
@@ -165,6 +296,7 @@ function requireCommandKey(req, res, next) {
   }
   next();
 }
+
 function requireWebhookSecret(req, res, next) {
   const key = req.header("X-Webhook-Secret");
   if (!WEBHOOK_SECRET || key !== WEBHOOK_SECRET) {
@@ -172,17 +304,20 @@ function requireWebhookSecret(req, res, next) {
   }
   next();
 }
+
 function assertKey(req, res) {
   const k = process.env.COMMAND_CENTER_KEY;
   const got = req.query.key || req.headers["x-command-key"];
-  if (!k || got !== k) { res.status(401).json({ error: "unauthorized" }); return false; }
+  if (!k || got !== k) { 
+    res.status(401).json({ error: "unauthorized" }); 
+    return false; 
+  }
   return true;
 }
 
-// small sleep
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-// fetch with retries (network/DNS safe guard)
+// fetch with retries (network/DNS safe guard) + error escalation
 async function safeFetch(url, init = {}, retries = 3, baseDelayMs = 300) {
   let lastErr;
   for (let i = 0; i <= retries; i++) {
@@ -193,11 +328,69 @@ async function safeFetch(url, init = {}, retries = 3, baseDelayMs = 300) {
       throw new Error(`HTTP ${r.status} ${url} ${body.slice(0, 200)}`);
     } catch (e) {
       lastErr = e;
-      if (i === retries) break;
+      if (i === retries) {
+        // On final failure, escalate to debug system if critical
+        if (shouldEscalate(e, { action: 'fetch', url, critical: true })) {
+          console.log('[safeFetch] Escalating to debug system...');
+          const debugResult = await debugWithEscalation(e, {
+            action: 'fetch',
+            url,
+            attempt: i + 1
+          });
+          
+          if (debugResult.fixed && debugResult.retry) {
+            console.log('[safeFetch] Debug system suggests retry');
+            continue;
+          }
+        }
+        break;
+      }
       await sleep(baseDelayMs * Math.pow(2, i));
     }
   }
   throw lastErr;
+}
+
+// Wrapper for critical build operations
+async function safeBuildOperation(operation, context, maxRetries = 3) {
+  let lastError;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+      console.log(`[safe-op] Attempt ${attempt}/${maxRetries} failed: ${error.message}`);
+      
+      if (attempt === maxRetries || shouldEscalate(error, context)) {
+        console.log('[safe-op] Escalating to tiered debug...');
+        
+        const debugResult = await debugWithEscalation(error, {
+          ...context,
+          attempt,
+          during_build: true
+        });
+        
+        if (debugResult.fixed && debugResult.retry) {
+          console.log('[safe-op] Auto-healed, retrying...');
+          continue;
+        }
+        
+        if (debugResult.needs_human) {
+          console.log('[safe-op] ⚠️ Human review needed');
+          // All fixes failed - throw to caller
+          break;
+        }
+      }
+      
+      if (attempt < maxRetries) {
+        const delay = Math.min(1000 * Math.pow(2, attempt - 1), 10000);
+        await sleep(delay);
+      }
+    }
+  }
+  
+  throw lastError;
 }
 
 // debounce stamp helpers
@@ -214,9 +407,263 @@ function shouldBuild(minWindow = MIN_BUILD_INTERVAL_MINUTES) {
   const last = readStampMs();
   if (!last) return { allowed: true };
   const elapsed = minsSince(last);
-  if (elapsed < minWindow) return { allowed: false, waitMinutes: Math.max(0, Math.ceil(minWindow - elapsed)) };
+  if (elapsed < minWindow) return { 
+    allowed: false, 
+    waitMinutes: Math.max(0, Math.ceil(minWindow - elapsed)) 
+  };
   return { allowed: true };
 }
+
+// ===== POD API ROUTES =====
+
+// List all pods
+app.get("/api/v1/pods", requireCommandKey, async (_req, res) => {
+  try {
+    const pods = await pool.query(`
+      select * from pods 
+      order by total_revenue desc
+    `);
+    res.json({ ok: true, pods: pods.rows });
+  } catch (e) {
+    console.error('[pods] Error:', e);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// Get pod details
+app.get("/api/v1/pods/:id", requireCommandKey, async (req, res) => {
+  try {
+    const [pod, metrics] = await Promise.all([
+      pool.query('select * from pods where id = $1', [req.params.id]),
+      pool.query(`
+        select * from pod_metrics 
+        where pod_id = $1 
+        order by sprint_week desc 
+        limit 10
+      `, [req.params.id])
+    ]);
+    
+    if (!pod.rows[0]) {
+      return res.status(404).json({ ok: false, error: 'Pod not found' });
+    }
+    
+    res.json({ ok: true, pod: pod.rows[0], metrics: metrics.rows });
+  } catch (e) {
+    console.error('[pods] Error:', e);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// Update pod credits
+app.post("/api/v1/pods/:id/credits", requireCommandKey, async (req, res) => {
+  try {
+    const { amount = 0, reason } = req.body;
+    await pool.query(
+      'update pods set credits_balance = credits_balance + $1 where id = $2',
+      [amount, req.params.id]
+    );
+    console.log(`[pods] Updated credits for pod ${req.params.id}: ${amount > 0 ? '+' : ''}${amount} (${reason || 'no reason'})`);
+    res.json({ ok: true, updated: Number(amount) });
+  } catch (e) {
+    console.error('[pods] Error:', e);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// Nudge pod (human directive)
+app.post("/api/v1/pods/:id/nudge", requireCommandKey, async (req, res) => {
+  try {
+    const { directive } = req.body;
+    if (!directive) {
+      return res.status(400).json({ ok: false, error: 'Directive is required' });
+    }
+    await pool.query(
+      'update pods set last_nudge = $1 where id = $2',
+      [directive, req.params.id]
+    );
+    console.log(`[pods] Nudge set for pod ${req.params.id}: ${directive.slice(0, 60)}...`);
+    res.json({ ok: true, directive_set: directive });
+  } catch (e) {
+    console.error('[pods] Error:', e);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// ===== CAPSULE API ROUTES =====
+
+// Upload idea to Capsule
+app.post("/api/v1/capsule/ideas", requireCommandKey, async (req, res) => {
+  try {
+    const { pod_id, title, content, code, ethics_score = 10 } = req.body;
+    
+    if (!pod_id || !title || !content) {
+      return res.status(400).json({ 
+        ok: false, 
+        error: 'pod_id, title, and content are required' 
+      });
+    }
+    
+    // Ethics gate
+    if (ethics_score < 7.0) {
+      return res.status(403).json({ 
+        ok: false, 
+        error: 'Ethics score too low (<7.0) for Capsule upload' 
+      });
+    }
+    
+    // PII sanitization (basic)
+    const sanitized = typeof content === 'string' 
+      ? content.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g, '[REDACTED_EMAIL]')
+      : content;
+    
+    const exclusive_until = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
+    
+    await pool.query(`
+      insert into capsule_ideas (pod_id, title, content, code, ethics_score, exclusive_until)
+      values ($1, $2, $3, $4, $5, $6)
+    `, [pod_id, title, sanitized, code || null, ethics_score, exclusive_until]);
+    
+    console.log(`[capsule] Idea uploaded by pod ${pod_id}: ${title}`);
+    res.json({ ok: true, exclusive_until });
+  } catch (e) {
+    console.error('[capsule] Upload error:', e);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// Search available ideas (after exclusivity expires)
+app.get("/api/v1/capsule/ideas", requireCommandKey, async (req, res) => {
+  try {
+    const { search } = req.query;
+    const now = new Date();
+    
+    let query = `
+      select * from capsule_ideas 
+      where exclusive_until < $1
+    `;
+    const params = [now];
+    
+    if (search) {
+      query += ` and (title ilike $2 or content::text ilike $2)`;
+      params.push(`%${search}%`);
+    }
+    
+    query += ` order by created_at desc limit 50`;
+    
+    const ideas = await pool.query(query, params);
+    res.json({ ok: true, ideas: ideas.rows });
+  } catch (e) {
+    console.error('[capsule] Search error:', e);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// Adopt idea (Marketplace)
+app.post("/api/v1/capsule/ideas/:id/adopt", requireCommandKey, async (req, res) => {
+  try {
+    const { pod_id } = req.body;
+    if (!pod_id) {
+      return res.status(400).json({ ok: false, error: 'pod_id required' });
+    }
+    
+    const idea = await pool.query(
+      'select * from capsule_ideas where id = $1',
+      [req.params.id]
+    );
+    
+    if (!idea.rows[0]) {
+      return res.status(404).json({ ok: false, error: 'Idea not found' });
+    }
+    
+    // Charge adopter 5 credits
+    await pool.query(
+      'update pods set credits_balance = credits_balance - 5 where id = $1',
+      [pod_id]
+    );
+    
+    // Credit original pod 5 credits (passive income!)
+    await pool.query(
+      'update pods set credits_balance = credits_balance + 5 where id = $1',
+      [idea.rows[0].pod_id]
+    );
+    
+    // Track adoption
+    await pool.query(
+      'update capsule_ideas set adoption_count = adoption_count + 1 where id = $1',
+      [req.params.id]
+    );
+    
+    console.log(`[capsule] Pod ${pod_id} adopted idea from pod ${idea.rows[0].pod_id}`);
+    res.json({ ok: true, adoption_count: idea.rows[0].adoption_count + 1 });
+  } catch (e) {
+    console.error('[capsule] Adopt error:', e);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+// ===== DEBUG STATS API =====
+app.get("/api/v1/debug/stats", requireCommandKey, async (_req, res) => {
+  try {
+    const stats = await pool.query(`
+      with tier_stats as (
+        select 
+          tier,
+          count(*) as total,
+          count(*) filter (where fixed = true) as fixed_count,
+          avg(time_ms) as avg_time
+        from debug_metrics
+        where created_at > now() - interval '24 hours'
+        group by tier
+      )
+      select * from tier_stats
+    `);
+    
+    const result = {
+      tier0_count: 0,
+      tier0_success_rate: 0,
+      tier1_count: 0,
+      tier1_success_rate: 0,
+      tier2_count: 0,
+      tier2_success_rate: 0,
+      tier3_count: 0,
+      tier3_success_rate: 0,
+      total_resolved: 0,
+      avg_fix_time: 0
+    };
+    
+    stats.rows.forEach(row => {
+      const successRate = row.total > 0 
+        ? Math.round((row.fixed_count / row.total) * 100)
+        : 0;
+      
+      if (row.tier === 'auto_heal') {
+        result.tier0_count = row.total;
+        result.tier0_success_rate = successRate;
+      } else if (row.tier === 'quick_debug') {
+        result.tier1_count = row.total;
+        result.tier1_success_rate = successRate;
+      } else if (row.tier === 'smart_debug') {
+        result.tier2_count = row.total;
+        result.tier2_success_rate = successRate;
+      } else if (row.tier === 'council_debug') {
+        result.tier3_count = row.total;
+        result.tier3_success_rate = successRate;
+      }
+      
+      result.total_resolved += row.fixed_count;
+    });
+    
+    const avgCount = stats.rows.length || 1;
+    result.avg_fix_time = Math.round(
+      stats.rows.reduce((sum, row) => sum + (row.avg_time || 0), 0) / avgCount / 1000
+    );
+    
+    res.json(result);
+  } catch (e) {
+    console.error('[debug-stats] Error:', e);
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
 
 // ===== Admin API (used by public/onboarding.html) =====
 app.use("/api/v1/admin", requireCommandKey, adminRouter);
@@ -225,7 +672,12 @@ app.use("/api/v1/admin", requireCommandKey, adminRouter);
 app.get("/healthz", async (_req, res) => {
   try {
     const r = await pool.query("select now()");
-    res.json({ status: "healthy", database: "connected", timestamp: r.rows[0].now, version: "v4-sprint" });
+    res.json({ 
+      status: "healthy", 
+      database: "connected", 
+      timestamp: r.rows[0].now, 
+      version: "v5-pods-council" 
+    });
   } catch {
     res.status(500).json({ status: "unhealthy" });
   }
@@ -338,291 +790,4 @@ app.get("/overlay/:sid/control", (_req, res) => {
 });
 
 // ===== Twilio missed-call hook (future) =====
-app.post("/api/v1/twilio/missed-call", async (req, res) => {
-  const from = req.body.From || req.body.from || req.query.from;
-  const to = req.body.To || req.body.to || req.query.to;
-  await pool.query("insert into missed_calls (from_number, to_number, status) values ($1,$2,'new')", [from || "", to || ""]);
-  res.json({ ok: true });
-});
-
-// ===== Autopilot: daily report writer =====
-app.post("/api/v1/autopilot/tick", requireCommandKey, async (_req, res) => {
-  try {
-    const root = __dirname;
-    const backlogPath = path.join(root, "backlog.md");
-    let backlog = fs.existsSync(backlogPath) ? fs.readFileSync(backlogPath, "utf8") : "";
-    const today = dayjs().format("YYYY-MM-DD");
-    const rp = path.join(root, "reports");
-    if (!fs.existsSync(rp)) fs.mkdirSync(rp, { recursive: true });
-
-    const countRes = await pool.query("select score, count(*)::int as c from calls where created_at::date = current_date group by score");
-    const totalRes = await pool.query("select count(*)::int as c from calls where created_at::date = current_date");
-
-    const lines = [
-      `# Daily Report - ${today}`, "",
-      `Total calls today: ${totalRes.rows[0]?.c || 0}`, "",
-      "By score:", ...countRes.rows.map(r => `- ${r.score || "unknown"}: ${r.c}`),
-      "", "---", "Backlog snapshot:", "```", (backlog || "").trim(), "```",
-    ].join("\n");
-
-    const outFile = path.join(rp, `${today}.md`);
-    fs.writeFileSync(outFile, lines, "utf8");
-    console.log("[autopilot] wrote report:", outFile);
-    res.json({ ok: true, report: `/reports/${today}.md` });
-  } catch (e) {
-    console.error("[autopilot] error", e);
-    res.status(500).json({ error: "autopilot_failed" });
-  }
-});
-
-// ===== SELF-BUILD CORE WITH ROI GATES =====
-
-// 1) Heartbeat
-app.get("/internal/cron/autopilot", (req, res) => {
-  if (!assertKey(req, res)) return;
-  const line = `[${new Date().toISOString()}] autopilot:tick\n`;
-  try { fs.appendFileSync(LOG_FILE, line); res.json({ ok:true, wrote: line }); }
-  catch(e){ res.status(500).json({ ok:false, error: String(e) }); }
-});
-
-// 2) Planner -> OpenAI WITH ROI PRE-FLIGHT + SMART CONTEXT
-app.post("/api/v1/repair-self", async (req, res) => {
-  if (!assertKey(req, res)) return;
-  if (!OPENAI_API_KEY) return res.status(500).json({ ok:false, error:"OPENAI_API_KEY missing" });
-
-  try {
-    // Build smart context
-    let logs = fs.existsSync(LOG_FILE) ? fs.readFileSync(LOG_FILE, "utf8") : "";
-    if (logs.length > 8000) logs = await pruneLogContext(logs, 2000);
-
-    const smartCtx = await buildSmartContext(__dirname, 2000);
-    const combinedContext = `${smartCtx.context}\n\n--- Recent Logs ---\n${logs.slice(-4000)}`;
-    console.log(`[context] Saved ~${smartCtx.tokens_saved} tokens via differential loading`);
-    
-    // STEP 1: Quick ROI estimation
-    const hour = new Date().getHours();
-    const isDayTime = hour >= 9 && hour <= 18;
-    const threshold = isDayTime ? 0.30 : 0.50;
-
-    const estimatorPrompt = `Analyze these recent logs and estimate ROI for next build:
-${combinedContext.slice(0, 4000)}
-
-Return JSON:
-{
-  "should_build": true/false,
-  "estimated_lines": 0-500,
-  "merge_probability": 0-100,
-  "estimated_value_usd": 0-10,
-  "risk": "low|med|high",
-  "reasoning": "1-2 sentences"
-}`;
-
-    const estimatorRes = await safeFetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        temperature: 0.1,
-        messages: [{ role: "user", content: estimatorPrompt }],
-        response_format: { type: "json_object" }
-      })
-    });
-
-    const estimatorJson = await estimatorRes.json();
-    const estimate = JSON.parse(estimatorJson.choices?.[0]?.message?.content || "{}");
-    
-    const estimatorCost = trackCost(estimatorJson.usage, "gpt-4o-mini");
-    
-    await pool.query(`
-      insert into build_metrics (model, tokens_in, tokens_out, cost, summary, outcome, tokens_saved)
-      values ($1, $2, $3, $4, $5, 'roi_check', $6)
-    `, [
-      'gpt-4o-mini',
-      estimatorJson.usage?.prompt_tokens || 0,
-      estimatorJson.usage?.completion_tokens || 0,
-      estimatorCost,
-      `ROI Check: ${estimate.reasoning || 'n/a'}`,
-      smartCtx.tokens_saved
-    ]);
-
-    console.log('[ROI] Estimate:', estimate, `threshold: $${threshold}`);
-
-    // GATE: Abort if low ROI
-    if (!estimate.should_build || (estimate.estimated_value_usd || 0) < threshold) {
-      return res.json({
-        ok: true,
-        skip: true,
-        reason: `Low ROI detected (threshold: $${threshold})`,
-        estimate
-      });
-    }
-
-    // STEP 2: Full planning with tiered model
-    let useModel = "gpt-4o-mini";
-    if ((estimate.estimated_lines || 0) > 100 || estimate.risk === 'high') {
-      useModel = "gpt-4o";
-    }
-    
-    const system = `You are a senior release engineer. From logs, propose 1-3 precise NEXT ACTIONS.
-Return strict JSON:
-{
-  "summary": "one line",
-  "actions": [
-    {"title":"...", "rationale":"...", "risk":"low|med|high",
-     "files":[{"path":"docs/auto/TODO.md","type":"create|modify","hint":"what to implement"}]
-    }
-  ]
-}`;
-    const user = `Context:\n${combinedContext}`;
-
-    const planRes = await safeFetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: useModel,
-        temperature: 0.2,
-        messages: [{ role: "system", content: system }, { role: "user", content: user }],
-        response_format: { type: "json_object" }
-      })
-    });
-
-    const planJson = await planRes.json();
-    const planText = planJson.choices?.[0]?.message?.content || "{}";
-    const plan = JSON.parse(planText);
-
-    const planCost = trackCost(planJson.usage, useModel);
-
-    await pool.query(`
-      insert into build_metrics (model, tokens_in, tokens_out, cost, summary, outcome, tokens_saved)
-      values ($1, $2, $3, $4, $5, 'planned', $6)
-    `, [
-      useModel,
-      planJson.usage?.prompt_tokens || 0,
-      planJson.usage?.completion_tokens || 0,
-      planCost,
-      plan.summary || 'n/a',
-      smartCtx.tokens_saved
-    ]);
-
-    console.log(`[PLAN] Using ${useModel}, cost: $${planCost.toFixed(4)}`);
-
-    res.json({ ok: true, plan, estimate, model_used: useModel, tokens_saved: smartCtx.tokens_saved });
-  } catch (e) {
-    console.error('[repair-self]', e);
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
-
-// 3) Critique endpoint
-app.post("/api/v1/build/critique-pr", requireCommandKey, async (req, res) => {
-  if (!OPENAI_API_KEY) return res.status(500).json({ ok: false, error: "OPENAI_API_KEY missing" });
-
-  try {
-    const { pr_number, diff, summary } = req.body;
-    if (!diff) return res.status(400).json({ ok: false, error: "diff required" });
-
-    const critiquePrompt = `Grade this PR on scale 1-5:
-
-Summary: ${summary || 'n/a'}
-Diff: ${diff.slice(0, 3000)}
-
-Criteria: Does it solve the goal? Bugs? Style match? Quality?
-
-Return JSON:
-{
-  "score": 1-5,
-  "reasoning": "2-3 sentences",
-  "recommendation": "auto_merge|review_required|reject"
-}`;
-
-    const r = await safeFetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        temperature: 0.1,
-        messages: [{ role: "user", content: critiquePrompt }],
-        response_format: { type: "json_object" }
-      })
-    });
-
-    const json = await r.json();
-    const critique = JSON.parse(json.choices?.[0]?.message?.content || "{}");
-
-    const cost = trackCost(json.usage, "gpt-4o-mini");
-
-    await pool.query(`
-      update build_metrics 
-      set outcome = $1, cost = cost + $2
-      where pr_number = $3 and created_at > now() - interval '1 hour'
-    `, [`critique_score_${critique.score}`, cost, pr_number]);
-
-    console.log(`[critique] PR #${pr_number} scored ${critique.score}/5`);
-
-    res.json({ ok: true, critique });
-  } catch (e) {
-    console.error('[critique]', e);
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
-
-// 4) Apply plan -> branch/files/PR (with critique integration)
-app.post("/api/v1/build/apply-plan", async (req, res) => {
-  if (!assertKey(req, res)) return;
-  if (!GITHUB_TOKEN) return res.status(500).json({ ok:false, error:"GITHUB_TOKEN missing" });
-
-  try {
-    const plan = req.body?.plan;
-    const tokens_saved = req.body?.tokens_saved || 0;
-    const roiCost = req.body?.roi_cost || 0;
-    const planCost = req.body?.plan_cost || 0;
-    const modelUsed = req.body?.model_used || "gpt-4o-mini";
-    
-    if (!plan?.actions?.length) return res.status(400).json({ ok:false, error:"no_actions" });
-
-    const [owner, repo] = (GITHUB_REPO).split("/");
-    const main = GITHUB_DEFAULT_BRANCH;
-
-    const gh = async (apiPath, init = {}, retries = 3) => {
-      const r = await safeFetch(`https://api.github.com${apiPath}`, {
-        ...init,
-        headers:{
-          "Authorization":`Bearer ${GITHUB_TOKEN}`,
-          "User-Agent":"robust-magic-builder",
-          "Accept":"application/vnd.github+json",
-          ...(init.headers||{})
-        }
-      }, retries);
-      return r.json();
-    };
-
-    const ref = await gh(`/repos/${owner}/${repo}/git/refs/heads/${main}`);
-    const sha = ref.object.sha;
-
-    const prTitle = `auto: ${plan.summary}`;
-    const openPRs = await gh(`/repos/${owner}/${repo}/pulls?state=open&per_page=50`);
-    const sameTitlePR = (openPRs || []).find(p => p.title === prTitle);
-
-    let branch;
-    if (sameTitlePR?.head?.ref) {
-      branch = sameTitlePR.head.ref;
-    } else {
-      branch = `auto/${Date.now()}`;
-      await gh(`/repos/${owner}/${repo}/git/refs`, {
-        method:"POST",
-        body: JSON.stringify({ ref:`refs/heads/${branch}`, sha })
-      });
-    }
-
-    const putFile = async (filepath, content) => {
-      const encPath = encodeURIComponent(filepath);
-      const get = await safeF
+app.post("/api/v1/twilio/
