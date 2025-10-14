@@ -13,6 +13,7 @@
     "pg": "^8.11.5",
     "serve-index": "^1.9.1",
     "stripe": "^16.6.0"
+    "@octokit/rest": "^20.0.0",
   },
   "engines": {
     "node": "18.x"
