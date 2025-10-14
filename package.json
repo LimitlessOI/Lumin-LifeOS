@@ -11,8 +11,10 @@
     "dayjs": "^1.11.11",
     "express": "^4.19.2",
     "pg": "^8.11.5",
-    "serve-index": "^1.9.1"
-    "stripe": "^16.6.0",
+    "serve-index": "^1.9.1",
+    "stripe": "^16.6.0"
   },
-  "engines": { "node": "18.x" }
+  "engines": {
+    "node": "18.x"
+  }
 }
