@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review and adjust debounce configuration
-// hint: Investigate debounce logic in autopilot configuration and ensure consistent timing.
+// TODO(auto-modify): Implement logging for debounce logic
+// hint: Add logging to track debounce calculations and decisions.
