@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate and standardize debounce intervals
-// hint: Document the need to review and standardize debounce intervals in the autopilot configuration.
+// TODO(auto-modify): Analyze build triggers for potential optimizations
+// hint: Add a task to analyze the conditions triggering 'build-now' to identify potential optimizations.
