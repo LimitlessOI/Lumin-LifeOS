@@ -1,1 +1,110 @@
+# URGENT: AI Receptionist Landing Page + Stripe Checkout
 
+## Goal
+Ship landing page with Stripe checkout to collect $99/month TODAY.
+
+## Files to Create
+
+### 1. `public/ai-receptionist.html`
+- Hero section: "Never Miss a Lead Again"
+- Benefits list (24/7 answering, lead qualification, CRM integration)
+- Pricing: $99/month
+- CTA button: "Start 7-Day Free Trial"
+- Button calls `/api/v1/billing/create-checkout`
+
+### 2. `src/routes/billing.js`
+```javascript
+import express from 'express';
+import Stripe from 'stripe';
+import { pool } from '../server.js';
+
+const router = express.Router();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Create checkout session
+router.post('/create-checkout', async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: [{
+        price: process.env.STRIPE_PRICE_ID_MONTHLY,
+        quantity: 1,
+      }],
+      success_url: `${process.env.PUBLIC_BASE_URL}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.PUBLIC_BASE_URL}/ai-receptionist`,
+      trial_period_days: 7,
+      metadata: {
+        pod_id: req.body.pod_id || '2',
+        feature: 'ai_receptionist'
+      }
+    });
+
+    res.json({ sessionId: session.id });
+  } catch (error) {
+    console.error('[billing]', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Stripe webhook
+router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+
+  try {
+    const event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object;
+
+      // Create customer
+      await pool.query(`
+        INSERT INTO customers (
+          stripe_customer_id,
+          stripe_subscription_id,
+          email,
+          plan,
+          status
+        ) VALUES ($1, $2, $3, $4, $5)
+        ON CONFLICT (stripe_customer_id) DO UPDATE
+        SET stripe_subscription_id = $2, status = $5
+      `, [
+        session.customer,
+        session.subscription,
+        session.customer_email,
+        'ai_receptionist_monthly',
+        'trialing'
+      ]);
+
+      // Credit revenue to pod
+      const podId = session.metadata.pod_id;
+      await pool.query(`
+        UPDATE pods 
+        SET total_revenue = total_revenue + 99
+        WHERE id = $1
+      `, [podId]);
+
+      console.log('[billing] New customer:', session.customer_email);
+    }
+
+    if (event.type === 'customer.subscription.updated') {
+      const subscription = event.data.object;
+      await pool.query(`
+        UPDATE customers 
+        SET status = $1 
+        WHERE stripe_subscription_id = $2
+      `, [subscription.status, subscription.id]);
+    }
+
+    res.json({ received: true });
+  } catch (error) {
+    console.error('[billing] Webhook error:', error);
+    res.status(400).send(`Webhook Error: ${error.message}`);
+  }
+});
+
+export default router;
