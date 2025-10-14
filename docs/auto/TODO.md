@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review debounce timing
-// hint: Add a task to review and potentially adjust debounce timing for consistency and efficiency.
+// TODO(auto-modify): Investigate and optimize build frequency
+// hint: Add a section to analyze the triggers for 'build-now' commands and propose optimizations.
