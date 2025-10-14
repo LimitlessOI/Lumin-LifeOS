@@ -3,11 +3,11 @@
 Frequent builds triggered by autopilot with inconsistent debounce intervals.
 
 ## Actions
-- 1. Investigate and standardize debounce intervals
-  - rationale: The logs show inconsistent debounce intervals ranging from 1 to 6 minutes, which may lead to inefficient build processes and resource usage. Standardizing these intervals could improve system performance and predictability.
-  - risk: low
+- 1. Investigate and adjust debounce logic
+  - rationale: The logs show frequent 'build-now' triggers with varying debounce intervals, which may indicate an issue with the debounce logic not effectively reducing build frequency.
+  - risk: med
   - files: docs/auto/TODO.md
-- 2. Analyze build frequency and necessity
-  - rationale: The high frequency of 'build-now' commands suggests potential overuse of resources. Analyzing whether all these builds are necessary could optimize resource allocation and reduce costs.
-  - risk: medium
+- 2. Implement logging for debounce decisions
+  - rationale: Adding detailed logging for debounce decisions will help in understanding why certain debounce intervals are chosen, aiding in debugging and optimization.
+  - risk: low
   - files: docs/auto/TODO.md
