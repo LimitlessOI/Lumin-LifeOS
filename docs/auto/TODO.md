@@ -1,2 +1,2 @@
-// TODO(auto-modify): Implement logging for debounce decisions
-// hint: Add detailed logging for debounce decision-making process.
+// TODO(auto-modify): Investigate and standardize debounce intervals
+// hint: Document the need to review and standardize debounce intervals in the autopilot configuration.
