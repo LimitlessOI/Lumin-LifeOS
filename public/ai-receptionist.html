@@ -1,110 +1,257 @@
-# URGENT: AI Receptionist Landing Page + Stripe Checkout
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Pay Zero Until We Grow Your Sales - Complete Sales Transformation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 48px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 16px;
+      color: #1a1a1a;
+    }
+    .highlight {
+      color: #667eea;
+      font-weight: 700;
+    }
+    p { margin-bottom: 16px; font-size: 1.1em; }
+    .cta-box {
+      background: #f7fafc;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      padding: 32px;
+      margin: 32px 0;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #2d3748;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    button {
+      width: 100%;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .features {
+      margin: 32px 0;
+    }
+    .feature-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .feature-item:last-child {
+      border-bottom: none;
+    }
+    .checkmark {
+      color: #48bb78;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .pricing {
+      background: #edf2f7;
+      padding: 24px;
+      border-radius: 8px;
+      margin: 24px 0;
+    }
+    .pricing-item {
+      padding: 8px 0;
+      font-size: 1.1em;
+    }
+    .pricing-item strong {
+      color: #667eea;
+    }
+    .testimonial {
+      font-style: italic;
+      border-left: 4px solid #667eea;
+      padding-left: 20px;
+      margin: 24px 0;
+      color: #4a5568;
+    }
+    .small-text {
+      font-size: 0.9em;
+      color: #718096;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>We Make You <span class="highlight">Unstoppable</span>.<br>You Pay Nothing Until You Win.</h1>
+    
+    <p style="font-size: 1.3em; margin-bottom: 32px;">
+      <strong>Complete Sales Transformation System:</strong> Build unshakeable conviction. Get AI coaching in real-time. Master voice/tone. Grow your income. Pay only 15% of growth.
+    </p>
+    
+    <div class="features">
+      <h2 style="margin-bottom: 20px;">Here's How It Works:</h2>
+      
+      <div class="feature-item">
+        <span class="checkmark">✓</span>
+        <strong>Instant Baseline</strong> - We use your Q1, last year, or whatever data you have. No 90-day wait.
+      </div>
+      
+      <div class="feature-item">
+        <span class="checkmark">✓</span>
+        <strong>See Value in 24 Hours</strong> - We analyze your first call, coach you live, automate a follow-up.
+      </div>
+      
+      <div class="feature-item">
+        <span class="checkmark">✓</span>
+        <strong>Build Conviction</strong> - We prove your product works. We make YOU believe. Sales = transfer of belief.
+      </div>
+      
+      <div class="feature-item">
+        <span class="checkmark">✓</span>
+        <strong>Voice Coaching</strong> - We teach tone, energy, sincerity. (90% of communication is non-verbal)
+      </div>
+      
+      <div class="feature-item">
+        <span class="checkmark">✓</span>
+        <strong>Whisper in Your Ear</strong> - During real calls, we coach you (AR glasses/earpiece). Never miss a buying signal.
+      </div>
+      
+      <div class="feature-item">
+        <span class="checkmark">✓</span>
+        <strong>Track Results</strong> - We measure your growth automatically. When you grow, you pay us 15% of the GROWTH. Bad month? You pay $0.
+      </div>
+    </div>
+    
+    <div class="pricing">
+      <h2 style="margin-bottom: 16px;">Pricing: Zero Risk</h2>
+      <div class="pricing-item">
+        <strong>Instant Baseline:</strong> We measure your current performance (no waiting)
+      </div>
+      <div class="pricing-item">
+        <strong>During Growth:</strong> You pay 15% of ADDITIONAL growth only
+      </div>
+      <div class="pricing-item">
+        <strong>Bad Months:</strong> You pay $0
+      </div>
+      <div class="pricing-item">
+        <strong>Guarantee:</strong> If we don't grow your sales, you pay nothing
+      </div>
+    </div>
+    
+    <div style="background: #fff5f5; padding: 20px; border-radius: 8px; border-left: 4px solid #f56565; margin: 24px 0;">
+      <strong>Example:</strong> Your baseline: $5,000/mo → With us: $7,000/mo → Growth: $2,000 → You pay: $300 (15%) → <strong>You keep: $1,700 extra</strong>
+    </div>
+    
+    <div class="testimonial">
+      "The most convinced person wins. When you KNOW your product saves them $20K and makes them $20K, NO objection can stop you. That's conviction. That's what we build. That's when you become unstoppable."
+    </div>
+    
+    <div class="cta-box">
+      <h2 style="margin-bottom: 20px;">Ready to Transform?</h2>
+      
+      <label for="email">Email (for baseline setup)</label>
+      <input id="email" type="email" placeholder="you@example.com" required />
+      
+      <label for="baseline">Current monthly commission (estimate)</label>
+      <input id="baseline" type="number" placeholder="5000" min="0" step="100" required />
+      
+      <button id="start-btn">Start Transformation (Zero Cost)</button>
+      
+      <p class="small-text">
+        No credit card required. We'll analyze your situation and show you the plan in 24 hours.
+      </p>
+    </div>
+    
+    <div style="margin-top: 32px; padding-top: 32px; border-top: 2px solid #e2e8f0;">
+      <h3 style="margin-bottom: 16px;">What You Get (ALL Included):</h3>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> Personality detection + lead routing</li>
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> Conviction building (5-level system)</li>
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> Mental mastery training</li>
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> Vision board + VR experience</li>
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> Real-time call coaching</li>
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> Voice optimization (tone > words)</li>
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> AI Receptionist (24/7)</li>
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> Transaction Coordinator</li>
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> Lead Reactivation</li>
+        <li style="padding: 8px 0;"><span class="checkmark">✓</span> CRM + Dashboard</li>
+      </ul>
+    </div>
+  </div>
 
-## Goal
-Ship landing page with Stripe checkout to collect $99/month TODAY.
-
-## Files to Create
-
-### 1. `public/ai-receptionist.html`
-- Hero section: "Never Miss a Lead Again"
-- Benefits list (24/7 answering, lead qualification, CRM integration)
-- Pricing: $99/month
-- CTA button: "Start 7-Day Free Trial"
-- Button calls `/api/v1/billing/create-checkout`
-
-### 2. `src/routes/billing.js`
-```javascript
-import express from 'express';
-import Stripe from 'stripe';
-import { pool } from '../server.js';
-
-const router = express.Router();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-// Create checkout session
-router.post('/create-checkout', async (req, res) => {
-  try {
-    const session = await stripe.checkout.sessions.create({
-      mode: 'subscription',
-      payment_method_types: ['card'],
-      line_items: [{
-        price: process.env.STRIPE_PRICE_ID_MONTHLY,
-        quantity: 1,
-      }],
-      success_url: `${process.env.PUBLIC_BASE_URL}/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.PUBLIC_BASE_URL}/ai-receptionist`,
-      trial_period_days: 7,
-      metadata: {
-        pod_id: req.body.pod_id || '2',
-        feature: 'ai_receptionist'
+  <script>
+    document.getElementById('start-btn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value.trim();
+      const baseline = parseInt(document.getElementById('baseline').value) || 0;
+      
+      if (!email) {
+        alert('Please enter your email');
+        return;
+      }
+      
+      if (baseline < 0) {
+        alert('Please enter a valid commission amount');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/api/v1/billing/start-baseline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, baseline_commission: baseline })
+        });
+        
+        const data = await res.json();
+        
+        if (data.ok) {
+          window.location.href = '/welcome.html?email=' + encodeURIComponent(email);
+        } else {
+          alert('Error: ' + (data.error || 'Something went wrong'));
+        }
+      } catch (e) {
+        alert('Network error. Please try again.');
+        console.error(e);
       }
     });
-
-    res.json({ sessionId: session.id });
-  } catch (error) {
-    console.error('[billing]', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Stripe webhook
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-
-  try {
-    const event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
-
-    if (event.type === 'checkout.session.completed') {
-      const session = event.data.object;
-
-      // Create customer
-      await pool.query(`
-        INSERT INTO customers (
-          stripe_customer_id,
-          stripe_subscription_id,
-          email,
-          plan,
-          status
-        ) VALUES ($1, $2, $3, $4, $5)
-        ON CONFLICT (stripe_customer_id) DO UPDATE
-        SET stripe_subscription_id = $2, status = $5
-      `, [
-        session.customer,
-        session.subscription,
-        session.customer_email,
-        'ai_receptionist_monthly',
-        'trialing'
-      ]);
-
-      // Credit revenue to pod
-      const podId = session.metadata.pod_id;
-      await pool.query(`
-        UPDATE pods 
-        SET total_revenue = total_revenue + 99
-        WHERE id = $1
-      `, [podId]);
-
-      console.log('[billing] New customer:', session.customer_email);
-    }
-
-    if (event.type === 'customer.subscription.updated') {
-      const subscription = event.data.object;
-      await pool.query(`
-        UPDATE customers 
-        SET status = $1 
-        WHERE stripe_subscription_id = $2
-      `, [subscription.status, subscription.id]);
-    }
-
-    res.json({ received: true });
-  } catch (error) {
-    console.error('[billing] Webhook error:', error);
-    res.status(400).send(`Webhook Error: ${error.message}`);
-  }
-});
-
-export default router;
+  </script>
+</body>
+</html>
