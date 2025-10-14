@@ -1,2 +1,2 @@
-// TODO(auto-modify): Analyze build frequency and resource usage
-// hint: Evaluate the necessity of current build frequency and adjust as needed.
+// TODO(auto-modify): Investigate and standardize debounce intervals
+// hint: Add a task to review and standardize debounce intervals in the autopilot configuration.
