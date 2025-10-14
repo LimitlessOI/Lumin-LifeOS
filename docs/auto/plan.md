@@ -4,10 +4,10 @@ Frequent builds triggered by autopilot with debouncing delays.
 
 ## Actions
 - 1. Investigate frequent build triggers
-  - rationale: The logs show a high frequency of 'build-now' commands, which could indicate unnecessary builds being triggered. This might lead to resource wastage and increased build times.
-  - risk: med
+  - rationale: The logs show frequent 'build-now' commands, often followed by debouncing messages. This suggests that the autopilot system might be triggering builds too frequently, potentially due to misconfiguration or unnecessary changes being detected.
+  - risk: medium
   - files: docs/auto/TODO.md
-- 2. Review debounce timing logic
-  - rationale: The debounce times vary significantly, suggesting potential inconsistencies in the logic or configuration. Ensuring consistent debounce behavior can optimize build scheduling.
+- 2. Optimize debouncing logic
+  - rationale: The debouncing messages indicate that the system is attempting to manage the frequency of builds, but the intervals vary widely. Optimizing this logic could improve system efficiency and reduce resource usage.
   - risk: low
   - files: docs/auto/TODO.md
