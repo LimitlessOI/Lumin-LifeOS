@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate and standardize debounce logic
-// hint: Add a task to review and standardize debounce logic in the autopilot system.
+// TODO(auto-modify): Analyze build frequency and necessity
+// hint: Add a task to analyze the necessity of frequent builds and optimize the triggering conditions.
