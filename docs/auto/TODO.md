@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate and optimize debounce logic in autopilot
-// hint: Add a task to review and optimize debounce logic in autopilot to ensure consistent and efficient build triggering.
+// TODO(auto-modify): Implement logging for build triggers
+// hint: Add a task to implement detailed logging for build triggers in autopilot.
