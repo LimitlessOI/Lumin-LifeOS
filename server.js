@@ -1,4 +1,4 @@
-// server.js - Complete Production System with 2-Pod Competition
+// server.js - Complete Production System with Billing
 import express from "express";
 import dayjs from "dayjs";
 import fs from "fs";
@@ -9,6 +9,7 @@ import { Pool } from "pg";
 // Import integrations
 import { createLead, appendTranscript, tagLead } from "./src/integrations/boldtrail.js";
 import { adminRouter } from "./src/routes/admin.js";
+import { billingRouter } from "./src/routes/billing.js";
 import { buildSmartContext } from "./src/utils/context.js";
 import { pruneLogContext } from "./src/utils/prune-context.js";
 import { debugWithEscalation, shouldEscalate } from "./src/utils/tiered-debug.js";
@@ -18,6 +19,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// CRITICAL: Raw body for Stripe webhook BEFORE json parser
+app.use('/api/v1/billing/webhook', express.raw({ type: 'application/json' }));
+
+// Then normal parsers for everything else
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -51,7 +57,7 @@ const MAX_DAILY_SPEND = Number(process.env.MAX_DAILY_SPEND || 5.0);
 // PostgreSQL Pool
 export const pool = new Pool({
   connectionString: DATABASE_URL,
-  max: 30, // Increased for multi-pod
+  max: 30,
   ssl: DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined,
 });
 
@@ -150,10 +156,52 @@ async function initDb() {
     );
   `);
   
+  // Revenue tables
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS customers (
+      id SERIAL PRIMARY KEY,
+      stripe_customer_id TEXT UNIQUE,
+      stripe_subscription_id TEXT,
+      email TEXT NOT NULL,
+      plan TEXT NOT NULL,
+      status TEXT DEFAULT 'trialing',
+      phone_number TEXT,
+      baseline_commission NUMERIC DEFAULT 0,
+      current_commission NUMERIC DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+  
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS agents (
+      id SERIAL PRIMARY KEY,
+      customer_id INT REFERENCES customers(id),
+      name TEXT,
+      personality_type TEXT,
+      conviction_score NUMERIC DEFAULT 5.0,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+  
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS performance_baselines (
+      id SERIAL PRIMARY KEY,
+      customer_id INT REFERENCES customers(id),
+      baseline_commission NUMERIC NOT NULL,
+      source TEXT NOT NULL,
+      confidence NUMERIC DEFAULT 0.8,
+      growth_adjusted BOOLEAN DEFAULT FALSE,
+      status TEXT DEFAULT 'active',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+  
   // Indexes
   await pool.query(`CREATE INDEX IF NOT EXISTS idx_build_pod ON build_metrics(pod_id);`);
   await pool.query(`CREATE INDEX IF NOT EXISTS idx_debug_tier ON debug_metrics(tier);`);
   await pool.query(`CREATE INDEX IF NOT EXISTS idx_capsule_exclusive ON capsule_ideas(exclusive_until);`);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_customers_email ON customers(email);`);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_customers_stripe ON customers(stripe_customer_id);`);
   
   // Seed 2 pods if none exist
   const podCount = await pool.query('SELECT COUNT(*) FROM pods');
@@ -436,6 +484,10 @@ app.get("/api/v1/debug/stats", requireCommandKey, async (_req, res) => {
     res.status(500).json({ ok: false, error: e.message });
   }
 });
+
+// ===== BILLING ROUTES (INTEGRATED) =====
+
+app.use("/api/v1/billing", billingRouter(pool));
 
 // ===== CORE AUTOPILOT ROUTES =====
 
@@ -788,7 +840,7 @@ app.get("/healthz", async (_req, res) => {
       status: "healthy", 
       database: "connected", 
       timestamp: r.rows[0].now,
-      version: "v6-2pod-production"
+      version: "v7-billing-integrated"
     });
   } catch {
     res.status(500).json({ status: "unhealthy" });
@@ -836,13 +888,14 @@ app.get("/pods-dashboard", (_req, res) => {
 const server = app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════════════════════════╗
-║  🚀 LIFEOS - 2-POD AUTONOMOUS SYSTEM                      ║
+║  🚀 LIFEOS - 2-POD AUTONOMOUS SYSTEM + REVENUE           ║
 ╠════════════════════════════════════════════════════════════╣
 ║  Port: ${PORT}                                               ║
-║  Version: v6-2pod-production                              ║
+║  Version: v7-billing-integrated                           ║
 ║  Pods: 2 (Alpha: System, Bravo: Revenue)                 ║
 ║  Budget: ${MAX_DAILY_SPEND}/day                                        ║
 ║  Dashboard: /pods-dashboard?key=YOUR_KEY                  ║
+║  Revenue: /sales-coaching.html (LIVE!)                    ║
 ╚════════════════════════════════════════════════════════════╝
   `);
 });
