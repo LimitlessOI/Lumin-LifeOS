@@ -1,2 +1,2 @@
-// TODO(auto-modify): Investigate and optimize build frequency
-// hint: Review the conditions triggering 'build-now' and consider implementing a more efficient build schedule or conditions.
+// TODO(auto-modify): Review debounce logic
+// hint: Evaluate the current debounce logic and adjust to ensure it effectively reduces redundant builds while maintaining responsiveness.
