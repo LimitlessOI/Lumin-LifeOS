@@ -1,2 +1,2 @@
-// TODO(auto-modify): Enhance debounce logic
-// hint: Improve debounce logic to better manage build frequency and system load.
+// TODO(auto-modify): Investigate frequent 'build-now' commands
+// hint: Add a section to investigate the cause of frequent 'build-now' commands and propose optimizations.
