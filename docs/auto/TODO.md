@@ -1,2 +1,2 @@
-// TODO(auto-modify): Review debounce settings
-// hint: Evaluate current debounce settings and adjust to ensure optimal build scheduling.
+// TODO(auto-modify): Investigate and optimize build triggers
+// hint: Add a section to investigate the frequency and conditions of 'build-now' triggers to optimize build efficiency.
