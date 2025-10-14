@@ -1,17 +1,13 @@
 # Auto Plan
 
-Initiate a build process for the autopilot feature.
+Frequent 'build-now' commands with inconsistent debounce times.
 
 ## Actions
-- 1. Verify build configuration
-  - rationale: Ensure that the build configuration is correct before proceeding to avoid potential build failures.
-  - risk: low
-  - files: configs/build-config.yml
-- 2. Run automated tests
-  - rationale: To confirm that the autopilot feature works as expected after the build.
+- 1. Investigate and standardize debounce timing
+  - rationale: The logs show inconsistent debounce times ranging from 1 to 6 minutes, which may indicate a misconfiguration or bug in the debounce logic. Standardizing this can prevent unnecessary builds and optimize resource usage.
   - risk: med
-  - files: tests/autopilot_tests.py
-- 3. Monitor build logs
-  - rationale: To track the build process and identify any issues early.
+  - files: docs/auto/TODO.md
+- 2. Implement logging for build triggers
+  - rationale: The frequent 'build-now' commands suggest that the system might be reacting to frequent changes or misinterpreting triggers. Enhanced logging can help identify the root cause of these frequent builds.
   - risk: low
-  - files: logs/build.log
+  - files: docs/auto/TODO.md
