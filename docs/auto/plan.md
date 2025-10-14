@@ -3,11 +3,11 @@
 Frequent builds triggered by autopilot with inconsistent debounce times.
 
 ## Actions
-- 1. Investigate and optimize debounce logic in autopilot
-  - rationale: The logs show frequent builds with varying debounce times, suggesting potential inefficiencies or misconfigurations in the debounce logic. Optimizing this could reduce unnecessary builds and improve system performance.
-  - risk: medium
-  - files: docs/auto/TODO.md
-- 2. Implement logging for build triggers
-  - rationale: Adding detailed logging for why builds are triggered can help diagnose if the frequent builds are necessary or if there are underlying issues causing them.
+- 1. Investigate and standardize debounce timing
+  - rationale: The logs show inconsistent debounce times ranging from 1 to 6 minutes, which may lead to unnecessary builds and resource usage. Standardizing debounce timing can optimize build frequency and resource allocation.
   - risk: low
+  - files: docs/auto/TODO.md
+- 2. Analyze build triggers for optimization
+  - rationale: Frequent 'build-now' commands suggest that the triggers for builds may need optimization to prevent redundant builds and improve efficiency.
+  - risk: medium
   - files: docs/auto/TODO.md
