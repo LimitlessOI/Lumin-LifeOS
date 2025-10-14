@@ -1,5 +1,6 @@
-// server.js - COMPLETE PRODUCTION CODE
+// server.js - COMPLETE WITH AUTONOMOUS PROGRAMMING
 import express from "express";
+import { Octokit } from "@octokit/rest";
 import dayjs from "dayjs";
 import fs from "fs";
 import path from "path";
@@ -14,7 +15,7 @@ const app = express();
 // CRITICAL: Raw body for Stripe webhook BEFORE json parser
 app.use('/api/v1/billing/webhook', express.raw({ type: 'application/json' }));
 
-// Then normal parsers for everything else
+// Then normal parsers
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,9 +26,6 @@ app.use("/reports", express.static(path.join(__dirname, "reports")));
 // Data directory
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-const LOG_FILE = path.join(DATA_DIR, "autopilot.log");
-const STAMP_FILE = path.join(DATA_DIR, "last-build.txt");
-const SPEND_FILE = path.join(DATA_DIR, "spend.json");
 
 // Environment
 const {
@@ -36,7 +34,11 @@ const {
   PUBLIC_BASE_URL = "http://localhost:8080",
   PORT = 8080,
   STRIPE_SECRET_KEY,
-  STRIPE_WEBHOOK_SECRET
+  STRIPE_WEBHOOK_SECRET,
+  OPENAI_API_KEY,
+  GITHUB_TOKEN,
+  GITHUB_REPO = "LimitlessOI/Lumin-LifeOS",
+  GITHUB_DEFAULT_BRANCH = "main"
 } = process.env;
 
 const MAX_DAILY_SPEND = Number(process.env.MAX_DAILY_SPEND || 5.0);
@@ -49,6 +51,9 @@ export const pool = new Pool({
     ? { rejectUnauthorized: false } 
     : undefined,
 });
+
+// GitHub Client
+const octokit = GITHUB_TOKEN ? new Octokit({ auth: GITHUB_TOKEN }) : null;
 
 // ===== DATABASE INITIALIZATION =====
 async function initDb() {
@@ -152,6 +157,279 @@ function requireCommandKey(req, res, next) {
   next();
 }
 
+// ===== AI HELPER - CALL OPENAI =====
+async function callOpenAI(prompt, maxTokens = 2000) {
+  if (!OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY not configured");
+  }
+
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${OPENAI_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: "You are a skilled software engineer. Generate clean, working code. When asked to fix something, provide the complete fixed code."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      max_tokens: maxTokens,
+      temperature: 0.7
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`OpenAI API error: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  const tokensIn = data.usage?.prompt_tokens || 0;
+  const tokensOut = data.usage?.completion_tokens || 0;
+  const cost = (tokensIn * 0.00015 + tokensOut * 0.0006) / 1000;
+
+  return {
+    text: data.choices[0].message.content,
+    tokensIn,
+    tokensOut,
+    cost
+  };
+}
+
+// ===== GITHUB HELPERS =====
+async function getFileContent(path) {
+  if (!octokit) throw new Error("GitHub not configured");
+  
+  const [owner, repo] = GITHUB_REPO.split('/');
+  try {
+    const { data } = await octokit.repos.getContent({
+      owner,
+      repo,
+      path,
+      ref: GITHUB_DEFAULT_BRANCH
+    });
+    
+    if (data.type !== 'file') {
+      throw new Error(`${path} is not a file`);
+    }
+    
+    return Buffer.from(data.content, 'base64').toString('utf8');
+  } catch (e) {
+    if (e.status === 404) {
+      return null; // File doesn't exist
+    }
+    throw e;
+  }
+}
+
+async function listTodoFiles() {
+  if (!octokit) throw new Error("GitHub not configured");
+  
+  const [owner, repo] = GITHUB_REPO.split('/');
+  try {
+    const { data } = await octokit.repos.getContent({
+      owner,
+      repo,
+      path: 'todos',
+      ref: GITHUB_DEFAULT_BRANCH
+    });
+    
+    return data.filter(item => item.type === 'file' && item.name.endsWith('.md'));
+  } catch (e) {
+    if (e.status === 404) {
+      return []; // todos directory doesn't exist
+    }
+    throw e;
+  }
+}
+
+async function createPullRequest(title, body, files) {
+  if (!octokit) throw new Error("GitHub not configured");
+  
+  const [owner, repo] = GITHUB_REPO.split('/');
+  const branchName = `autopilot/${Date.now()}`;
+  
+  // Get the base branch SHA
+  const { data: refData } = await octokit.git.getRef({
+    owner,
+    repo,
+    ref: `heads/${GITHUB_DEFAULT_BRANCH}`
+  });
+  
+  const baseSha = refData.object.sha;
+  
+  // Create a new branch
+  await octokit.git.createRef({
+    owner,
+    repo,
+    ref: `refs/heads/${branchName}`,
+    sha: baseSha
+  });
+  
+  // Create commits for each file
+  for (const file of files) {
+    const { data: blobData } = await octokit.git.createBlob({
+      owner,
+      repo,
+      content: Buffer.from(file.content).toString('base64'),
+      encoding: 'base64'
+    });
+    
+    const { data: baseTree } = await octokit.git.getTree({
+      owner,
+      repo,
+      tree_sha: baseSha
+    });
+    
+    const { data: newTree } = await octokit.git.createTree({
+      owner,
+      repo,
+      base_tree: baseTree.sha,
+      tree: [{
+        path: file.path,
+        mode: '100644',
+        type: 'blob',
+        sha: blobData.sha
+      }]
+    });
+    
+    const { data: commit } = await octokit.git.createCommit({
+      owner,
+      repo,
+      message: `chore: ${file.path}`,
+      tree: newTree.sha,
+      parents: [baseSha]
+    });
+    
+    await octokit.git.updateRef({
+      owner,
+      repo,
+      ref: `heads/${branchName}`,
+      sha: commit.sha
+    });
+  }
+  
+  // Create pull request
+  const { data: pr } = await octokit.pulls.create({
+    owner,
+    repo,
+    title,
+    body,
+    head: branchName,
+    base: GITHUB_DEFAULT_BRANCH
+  });
+  
+  return pr;
+}
+
+// ===== AUTONOMOUS BUILD LOGIC =====
+async function executeAutonomousBuild() {
+  console.log('[autonomous-build] Starting...');
+  
+  // Check budget first
+  const budget = await checkBudget();
+  if (budget.exceeded) {
+    console.log('[autonomous-build] Budget exceeded, skipping');
+    return { skipped: true, reason: 'Budget exceeded' };
+  }
+  
+  // Get TODO files
+  const todoFiles = await listTodoFiles();
+  if (todoFiles.length === 0) {
+    console.log('[autonomous-build] No TODO files found');
+    return { skipped: true, reason: 'No TODO files' };
+  }
+  
+  console.log(`[autonomous-build] Found ${todoFiles.length} TODO files`);
+  
+  // Read the first TODO file
+  const firstTodo = todoFiles[0];
+  const todoContent = await getFileContent(`todos/${firstTodo.name}`);
+  
+  console.log(`[autonomous-build] Processing: ${firstTodo.name}`);
+  
+  // Ask AI to analyze the TODO and generate code
+  const prompt = `
+You are an autonomous coding assistant. Read this TODO file and generate the necessary code changes.
+
+TODO FILE:
+${todoContent}
+
+INSTRUCTIONS:
+1. Analyze what needs to be done
+2. Generate the complete code for any files that need to be created or modified
+3. Format your response as JSON with this structure:
+{
+  "summary": "Brief description of what you're doing",
+  "files": [
+    {
+      "path": "path/to/file.js",
+      "content": "complete file content here"
+    }
+  ],
+  "report": "Detailed report of what was done and test results"
+}
+
+Be specific and thorough. Generate working, production-ready code.
+`;
+
+  const aiResponse = await callOpenAI(prompt, 4000);
+  
+  // Log cost
+  await pool.query(
+    `INSERT INTO build_metrics (model, tokens_in, tokens_out, cost, summary, outcome)
+     VALUES ($1, $2, $3, $4, $5, $6)`,
+    ['gpt-4o-mini', aiResponse.tokensIn, aiResponse.tokensOut, aiResponse.cost, firstTodo.name, 'generated']
+  );
+  
+  // Parse AI response
+  let buildPlan;
+  try {
+    const jsonMatch = aiResponse.text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      throw new Error('No JSON found in AI response');
+    }
+    buildPlan = JSON.parse(jsonMatch[0]);
+  } catch (e) {
+    console.error('[autonomous-build] Failed to parse AI response:', e);
+    return { error: 'Failed to parse AI response', raw: aiResponse.text };
+  }
+  
+  console.log(`[autonomous-build] AI plan: ${buildPlan.summary}`);
+  
+  // Create PR with the changes
+  const pr = await createPullRequest(
+    `[Autopilot] ${buildPlan.summary}`,
+    `## Autonomous Build\n\n${buildPlan.report}\n\n---\nGenerated by autopilot system.\nTODO: ${firstTodo.name}`,
+    buildPlan.files
+  );
+  
+  console.log(`[autonomous-build] Created PR #${pr.number}: ${pr.html_url}`);
+  
+  // Update metrics with PR info
+  await pool.query(
+    `UPDATE build_metrics 
+     SET pr_number = $1, pr_url = $2, outcome = $3
+     WHERE id = (SELECT id FROM build_metrics ORDER BY timestamp DESC LIMIT 1)`,
+    [pr.number, pr.html_url, 'pr_created']
+  );
+  
+  return {
+    success: true,
+    pr_number: pr.number,
+    pr_url: pr.html_url,
+    summary: buildPlan.summary,
+    cost: aiResponse.cost
+  };
+}
+
 // ===== ROUTES =====
 
 app.get("/healthz", async (_req, res) => {
@@ -159,8 +437,9 @@ app.get("/healthz", async (_req, res) => {
     await pool.query('SELECT 1');
     res.json({ 
       status: "healthy",
-      version: "v7-billing-integrated",
-      timestamp: new Date().toISOString()
+      version: "v8-autonomous-programming",
+      timestamp: new Date().toISOString(),
+      autonomous: !!OPENAI_API_KEY && !!GITHUB_TOKEN
     });
   } catch (e) {
     res.status(500).json({ status: "unhealthy", error: e.message });
@@ -174,33 +453,21 @@ app.get("/api/v1/metrics/summary", requireCommandKey, async (_req, res) => {
         COALESCE(SUM(cost), 0) as total_cost,
         COALESCE(AVG(cost), 0) as avg_cost,
         COUNT(*)::int as build_count,
-        COUNT(*) FILTER (WHERE outcome = 'merged')::int as merged_count
+        COUNT(*) FILTER (WHERE outcome = 'pr_created')::int as prs_created
       FROM build_metrics
       WHERE timestamp > NOW() - INTERVAL '7 days'
     `);
     
-    const highCostRes = await pool.query(`
-      SELECT timestamp, model, tokens_in, tokens_out, cost, pr_url, outcome
+    const recentRes = await pool.query(`
+      SELECT timestamp, model, cost, summary, outcome, pr_url
       FROM build_metrics
-      WHERE timestamp > NOW() - INTERVAL '7 days'
-      ORDER BY cost DESC
-      LIMIT 10
-    `);
-    
-    const lowRoiRes = await pool.query(`
-      SELECT timestamp, summary, cost, outcome as status
-      FROM build_metrics
-      WHERE timestamp > NOW() - INTERVAL '7 days'
-        AND cost > 0.50
-        AND outcome != 'merged'
-      ORDER BY cost DESC
+      ORDER BY timestamp DESC
       LIMIT 20
     `);
     
     res.json({
       ...totalRes.rows[0],
-      high_cost: highCostRes.rows,
-      low_roi: lowRoiRes.rows
+      recent_builds: recentRes.rows
     });
   } catch (e) {
     console.error(e);
@@ -347,26 +614,37 @@ app.post('/api/v1/billing/webhook', async (req, res) => {
   }
 });
 
-// ===== AUTOPILOT/BUILD ROUTES =====
-
+// ===== AUTONOMOUS BUILD ENDPOINT =====
 app.post("/internal/autopilot/build-now", requireCommandKey, async (req, res) => {
   try {
-    const budget = await checkBudget();
-    if (budget.exceeded) {
+    console.log('[build-now] Triggered');
+    
+    if (!OPENAI_API_KEY) {
       return res.json({ 
         ok: false, 
-        skipped: true, 
-        reason: 'Daily budget exceeded' 
+        error: 'OpenAI API key not configured' 
       });
     }
     
-    // Log the build trigger
-    console.log('[build-now] Triggered');
+    if (!GITHUB_TOKEN) {
+      return res.json({ 
+        ok: false, 
+        error: 'GitHub token not configured' 
+      });
+    }
+    
+    // Run autonomous build in background
+    executeAutonomousBuild()
+      .then(result => {
+        console.log('[build-now] Completed:', result);
+      })
+      .catch(error => {
+        console.error('[build-now] Error:', error);
+      });
     
     res.json({ 
       ok: true, 
-      message: 'Build triggered - check GitHub Actions for progress',
-      budget: budget
+      message: 'Autonomous build started - check logs and GitHub PRs in a few minutes'
     });
     
   } catch (e) {
@@ -425,12 +703,12 @@ app.get("/api/overlay/:sid/state", async (req, res) => {
 const server = app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════════════════════════╗
-║  🚀 LIFEOS - COMPLETE PRODUCTION SYSTEM                  ║
+║  🚀 LIFEOS - AUTONOMOUS PROGRAMMING SYSTEM               ║
 ╠════════════════════════════════════════════════════════════╣
 ║  Port: ${PORT}                                               ║
-║  Version: v7-billing-integrated                           ║
+║  Version: v8-autonomous-programming                       ║
 ║  Revenue: /sales-coaching.html                            ║
-║  Metrics: /api/v1/metrics/summary?key=YOUR_KEY            ║
+║  Autonomous: ${!!OPENAI_API_KEY && !!GITHUB_TOKEN ? 'ENABLED ✓' : 'DISABLED ✗'}                              ║
 ║  Budget: $${MAX_DAILY_SPEND}/day                                        ║
 ╚════════════════════════════════════════════════════════════╝
   `);
