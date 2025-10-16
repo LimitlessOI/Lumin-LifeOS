@@ -357,7 +357,35 @@ async function executeOrchBuild() {
     
     // ===== STAGE 1: PLAN =====
     console.log('[orch-build] 📊 STAGE 1: Planning...');
+app.get("/api/v1/orch/queue", requireCommandKey, async (req, res) => {
+  try {
+    const summary = await pool.query(`
+      SELECT 
+        status,
+        COUNT(*) as count
+      FROM orch_tasks
+      GROUP BY status
+    `);
     
+    const recentTasks = await pool.query(`
+      SELECT id, title, status, created_at
+      FROM orch_tasks
+      ORDER BY created_at DESC
+      LIMIT 10
+    `);
+    
+    res.json({
+      ok: true,
+      summary: summary.rows.reduce((acc, row) => {
+        acc[row.status] = parseInt(row.count);
+        return acc;
+      }, {}),
+      recent: recentTasks.rows
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});    
     const planPrompt = `You are planning a development task.
 
 TASK: ${task.title}
