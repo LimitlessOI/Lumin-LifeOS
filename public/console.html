@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Console</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="settings">
+        <h2>Settings</h2>
+        <input type="text" id="apiKey" placeholder="Enter API Key" />
+        <button id="saveKey">Save API Key</button>
+    </div>
+    <div class="tabs">
+        <button class="tab" data-model="openai">OpenAI</button>
+        <button class="tab" data-model="anthropic">Anthropic</button>
+        <button class="tab" data-model="gemini">Gemini</button>
+        <button class="tab" data-model="ollama">Ollama</button>
+    </div>
+    <div id="conversation">
+        <textarea id="input"></textarea>
+        <button id="send">Send</button>
+        <button id="pushToTalk">Push to Talk</button>
+        <div id="output"></div>
+    </div>
+    <script src="console.js"></script>
+</body>
+</html>
