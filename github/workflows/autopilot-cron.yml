@@ -1,0 +1,19 @@
+name: Autopilot Continuous Build
+
+on:
+  schedule:
+    # Run every 1 minute
+    - cron: '* * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  trigger-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger autopilot build
+        run: |
+          curl -X POST "https://robust-magic-production.up.railway.app/internal/autopilot/build-now?key=${{ secrets.COMMAND_CENTER_KEY }}" \
+            -H "Content-Type: application/json" \
+            --max-time 10 \
+            --retry 2
+        continue-on-error: true
