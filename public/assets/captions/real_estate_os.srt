@@ -1,11 +1,11 @@
 1
-00:00:00,000 --> 00:00:30,000
-Unlock the potential of real estate with Real-Estate OS.
+00:00:00,000 --> 00:00:05,000
+Welcome to Real-Estate OS, your property management solution.
 
 2
-00:00:30,000 --> 00:01:00,000
-Real-Estate OS revolutionizes how you buy, sell, and manage properties.
+00:00:05,000 --> 00:00:15,000
+Real-Estate OS simplifies property management for landlords and tenants.
 
 3
-00:01:00,000 --> 00:03:00,000
-Experience the future of real estate management with Real-Estate OS. Simplify your processes and enhance client interactions.
+00:00:15,000 --> 00:00:25,000
+With Real-Estate OS, managing your properties has never been easier.

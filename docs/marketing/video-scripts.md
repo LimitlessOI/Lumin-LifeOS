@@ -1,151 +1,82 @@
-# Video Scripts
+# Video Scripts for LifeOS Demo, TC Pitch, and Real-Estate OS
 
 ## LifeOS Demo
 
 ### 30s Script
-**Teleprompter Lines:**
-Welcome to LifeOS! Your all-in-one solution for seamless living.
-
-**Shotlist:**
-1. Close-up of the LifeOS interface
-2. User interacting with the app
-3. Happy family using LifeOS features
-
-**B-roll Prompts:**
-- Footage of families enjoying time together
-- Shots of the app in use at home
-
-**Lower-Thirds:**
-"LifeOS: Simplifying Your Life"
+- **Teleprompter Line:** "Welcome to LifeOS, where your life gets organized effortlessly."
+- **Shotlist:**
+  - Scene 1: Close-up of a person using LifeOS on a smartphone (Camera Angle: Over-the-shoulder)
+  - Scene 2: Transition to a desktop view of the app (Camera Angle: Screen capture)
+- **B-roll Prompts:** Footage of daily life activities being organized.
+- **Lower-thirds:** "LifeOS: Organize Your Life"
 
 ### 90s Script
-**Teleprompter Lines:**
-LifeOS helps you manage your daily tasks while enhancing your family time.
-
-**Shotlist:**
-1. User setting reminders on LifeOS
-2. Family cooking together using LifeOS for recipes
-3. Parents scheduling activities for children
-
-**B-roll Prompts:**
-- Kids doing homework with LifeOS assistance
-- Parents relaxing with LifeOS tracking their schedules
-
-**Lower-Thirds:**
-"Manage Your Life with LifeOS"
+- **Teleprompter Line:** "Discover LifeOS, your ultimate organization tool."
+- **Shotlist:**
+  - Scene 1: Person struggling with clutter (Camera Angle: Wide shot)
+  - Scene 2: Using LifeOS to declutter (Camera Angle: Medium shot)
+  - Scene 3: Happy user sharing their experience (Camera Angle: Interview style)
+- **B-roll Prompts:** Clips of before and after organization.
+- **Lower-thirds:** "Join the LifeOS Revolution"
 
 ### 3m Script
-**Teleprompter Lines:**
-With LifeOS, you can streamline your day-to-day activities and enjoy more quality time.
-
-**Shotlist:**
-1. Overview of features: reminders, scheduling, and family interactions
-2. Testimonials from users
-3. Engaging scenes of everyday life enhanced by LifeOS
-
-**B-roll Prompts:**
-- Users sharing their positive experiences with LifeOS
-- Family engaged in leisure activities
-
-**Lower-Thirds:**
-"LifeOS: Your Partner in Everyday Living"
+- **Teleprompter Line:** "LifeOS is designed to simplify your day-to-day activities in a seamless manner."
+- **Shotlist:**
+  - Scene 1: Introduction with a busy city background (Camera Angle: Drone shot)
+  - Scene 2: In-depth app features overview (Camera Angle: Screen capture)
+  - Scene 3: Testimonials from users (Camera Angle: Interview style)
+- **B-roll Prompts:** People interacting with the app in various settings.
+- **Lower-thirds:** "LifeOS: Simplifying Your Life"
 
 ## TC Pitch
 
 ### 30s Script
-**Teleprompter Lines:**
-Introducing TC, the ultimate tool for your tech needs.
-
-**Shotlist:**
-1. Quick demo of TC application
-2. User testimonials
-3. Engaging infographic of TC benefits
-
-**B-roll Prompts:**
-- Team collaborating using TC
-- Users showcasing features
-
-**Lower-Thirds:**
-"TC: Technology Simplified"
+- **Teleprompter Line:** "Introducing TC, the future of trading."
+- **Shotlist:**
+  - Scene 1: Professional trading environment (Camera Angle: Wide shot)
+  - Scene 2: User navigating the TC app (Camera Angle: Over-the-shoulder)
+- **B-roll Prompts:** Trading floor activities, stock charts.
+- **Lower-thirds:** "TC: Trade Smarter"
 
 ### 90s Script
-**Teleprompter Lines:**
-TC makes tech easy, efficient, and accessible for everyone.
-
-**Shotlist:**
-1. User navigating through TC
-2. Team brainstorming solutions
-3. Case studies showing TC in action
-
-**B-roll Prompts:**
-- Office setting with teams engaged
-- Users enjoying the simplicity of TC
-
-**Lower-Thirds:**
-"Innovate with TC"
+- **Teleprompter Line:** "TC revolutionizes trading with AI-powered insights."
+- **Shotlist:**
+  - Scene 1: Close-up of the app interface (Camera Angle: Screen capture)
+  - Scene 2: Users discussing trades (Camera Angle: Medium shot)
+- **B-roll Prompts:** Market analysis, trading tools in action.
+- **Lower-thirds:** "Unlock Your Trading Potential"
 
 ### 3m Script
-**Teleprompter Lines:**
-In a world full of tech, TC stands out by providing clarity and efficiency.
-
-**Shotlist:**
-1. Detailed feature overview
-2. User stories and experiences
-3. Future vision for TC
-
-**B-roll Prompts:**
-- Happy users sharing their journeys
-- Tech-savvy professionals using TC to innovate
-
-**Lower-Thirds:**
-"TC: The Future of Technology"
+- **Teleprompter Line:** "With TC, you'll gain unparalleled insights into your trades."
+- **Shotlist:**
+  - Scene 1: Overview of market trends (Camera Angle: Wide shot)
+  - Scene 2: Detailed walkthrough of the app (Camera Angle: Screen capture)
+  - Scene 3: User testimonials (Camera Angle: Interview style)
+- **B-roll Prompts:** Footage of dynamic stock market environments.
+- **Lower-thirds:** "TC: Your Trading Partner"
 
 ## Real-Estate OS
 
 ### 30s Script
-**Teleprompter Lines:**
-Unlock the potential of real estate with Real-Estate OS.
-
-**Shotlist:**
-1. Quick overview of the platform
-2. Users managing properties
-3. Happy clients with their new homes
-
-**B-roll Prompts:**
-- Beautiful real estate properties
-- Agents showing homes
-
-**Lower-Thirds:**
-"Real-Estate OS: Your Key to Success"
+- **Teleprompter Line:** "Welcome to Real-Estate OS, your property management solution."
+- **Shotlist:**
+  - Scene 1: Showing properties on the app (Camera Angle: Close-up)
+  - Scene 2: Happy landlords using the app (Camera Angle: Medium shot)
+- **B-roll Prompts:** Beautiful properties, happy tenants.
+- **Lower-thirds:** "Real-Estate OS: Manage with Ease"
 
 ### 90s Script
-**Teleprompter Lines:**
-Real-Estate OS revolutionizes how you buy, sell, and manage properties.
-
-**Shotlist:**
-1. Home tours
-2. Agents using Real-Estate OS features
-3. Happy families moving in
-
-**B-roll Prompts:**
-- Scenes of neighborhood interactions
-- Families exploring their new homes
-
-**Lower-Thirds:**
-"Transforming Real Estate Management"
+- **Teleprompter Line:** "Real-Estate OS simplifies property management for landlords and tenants."
+- **Shotlist:**
+  - Scene 1: User exploring the app features (Camera Angle: Screen capture)
+  - Scene 2: Testimonials from landlords (Camera Angle: Interview style)
+- **B-roll Prompts:** Busy landlord activities, tenant interactions.
+- **Lower-thirds:** "Streamline Your Real Estate Business"
 
 ### 3m Script
-**Teleprompter Lines:**
-Experience the future of real estate management with Real-Estate OS. Simplify your processes and enhance client interactions.
-
-**Shotlist:**
-1. Comprehensive feature breakdown
-2. Client testimonials
-3. Visionary future of real estate using technology
-
-**B-roll Prompts:**
-- Agents interacting with clients
-- Families enjoying their new neighborhoods
-
-**Lower-Thirds:**
-"Real-Estate OS: The Future of Property Management"
+- **Teleprompter Line:** "With Real-Estate OS, managing your properties has never been easier."
+- **Shotlist:**
+  - Scene 1: In-depth overview of app features (Camera Angle: Screen capture)
+  - Scene 2: Landlords discussing their success (Camera Angle: Interview style)
+- **B-roll Prompts:** Footage of properties and tenant interactions.
+- **Lower-thirds:** "Real-Estate OS: Your Property Management Partner"

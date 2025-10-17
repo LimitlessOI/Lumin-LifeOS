@@ -1,11 +1,11 @@
 1
-00:00:00,000 --> 00:00:30,000
-Introducing TC, the ultimate tool for your tech needs.
+00:00:00,000 --> 00:00:05,000
+Introducing TC, the future of trading.
 
 2
-00:00:30,000 --> 00:01:00,000
-TC makes tech easy, efficient, and accessible for everyone.
+00:00:05,000 --> 00:00:15,000
+TC revolutionizes trading with AI-powered insights.
 
 3
-00:01:00,000 --> 00:03:00,000
-In a world full of tech, TC stands out by providing clarity and efficiency.
+00:00:15,000 --> 00:00:25,000
+With TC, you'll gain unparalleled insights into your trades.
