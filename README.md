@@ -1,3 +1,5 @@
 # Project Title
 
-This is the README for the project.
+This project is under active development.
+
+CI Status: ✅ Continuous Integration is working!
