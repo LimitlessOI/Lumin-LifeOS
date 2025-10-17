@@ -1,1 +1,3 @@
-![CI Status](https://img.shields.io/badge/CI-Passing-brightgreen)
+# Project Title
+
+This is the README for the project.
