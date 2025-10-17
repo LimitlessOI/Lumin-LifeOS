@@ -568,23 +568,8 @@ Pod: Alpha | Orchestrator Build`;
 }
 
 // ===== ORCHESTRATOR ROUTES =====
-app.post("/api/v1/orch/enqueue", requireCommandKey, async (req, res) => {
-  try {
-    const { title, card, roi_guess = 0, complexity = 'medium', revenue_critical = false } = req.body;
-    
-    const result = await pool.query(
-      `INSERT INTO orch_tasks (title, card, roi_guess, complexity, revenue_critical)
-       VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-      [title, card, roi_guess, complexity, revenue_critical]
-    );
-    
-    res.json({ ok: true, task_id: result.rows[0].id });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
 
-// ✅ FIXED: Moved outside executeOrchBuild()
+// 🆕 QUEUE STATUS ENDPOINT (FIXED - now at top level)
 app.get("/api/v1/orch/queue", requireCommandKey, async (req, res) => {
   try {
     const summary = await pool.query(`
@@ -610,6 +595,22 @@ app.get("/api/v1/orch/queue", requireCommandKey, async (req, res) => {
       }, {}),
       recent: recentTasks.rows
     });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.post("/api/v1/orch/enqueue", requireCommandKey, async (req, res) => {
+  try {
+    const { title, card, roi_guess = 0, complexity = 'medium', revenue_critical = false } = req.body;
+    
+    const result = await pool.query(
+      `INSERT INTO orch_tasks (title, card, roi_guess, complexity, revenue_critical)
+       VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+      [title, card, roi_guess, complexity, revenue_critical]
+    );
+    
+    res.json({ ok: true, task_id: result.rows[0].id });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
