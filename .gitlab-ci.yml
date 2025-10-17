@@ -1,0 +1,9 @@
+stages:
+  - update_readme
+
+update_readme_job:
+  stage: update_readme
+  script:
+    - node append_timestamp.js
+  only:
+    - main
