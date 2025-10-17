@@ -1,0 +1,11 @@
+1
+00:00:00,000 --> 00:00:30,000
+Welcome to LifeOS! Your all-in-one solution for seamless living.
+
+2
+00:00:30,000 --> 00:01:00,000
+LifeOS helps you manage your daily tasks while enhancing your family time.
+
+3
+00:01:00,000 --> 00:03:00,000
+With LifeOS, you can streamline your day-to-day activities and enjoy more quality time.
