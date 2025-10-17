@@ -1,4 +1,4 @@
-// server.js - v11 ORCHESTRATOR-AWARE AUTONOMOUS SYSTEM
+// server.js - v11 ORCHESTRATOR WITH INTERNAL CRON
 import express from "express";
 import { Octokit } from "@octokit/rest";
 import { Pool } from "pg";
@@ -52,9 +52,38 @@ const pool = new Pool({
 // GitHub Client
 const octokit = GITHUB_TOKEN ? new Octokit({ auth: GITHUB_TOKEN }) : null;
 
+// ===== INTERNAL BUILD LOOP (NO EXTERNAL TRIGGERS NEEDED) =====
+let buildLoopRunning = false;
+
+async function startInternalBuildLoop() {
+  if (buildLoopRunning) return;
+  buildLoopRunning = true;
+  
+  console.log('[autopilot] 🔄 Internal build loop started (60s interval)');
+  
+  setInterval(async () => {
+    try {
+      const result = await executeOrchBuild();
+      if (result.success) {
+        console.log(`[autopilot] ✅ Auto-build completed: PR #${result.pr_number}`);
+      } else if (!result.skipped) {
+        console.log('[autopilot] ⚠️ Build failed:', result.error || result.reason);
+      }
+    } catch (e) {
+      console.error('[autopilot] ❌ Build loop error:', e.message);
+    }
+  }, 60000); // Every 60 seconds
+}
+
+// Start loop on server boot
+setTimeout(() => {
+  if (OPENAI_API_KEY && GITHUB_TOKEN) {
+    startInternalBuildLoop();
+  }
+}, 5000); // Wait 5s after boot
+
 // ===== DATABASE INIT =====
 async function initDb() {
-  // Original tables
   await pool.query(`
     CREATE TABLE IF NOT EXISTS customers (
       id SERIAL PRIMARY KEY,
@@ -85,7 +114,6 @@ async function initDb() {
     )
   `);
 
-  // Orchestrator tables
   await pool.query(`
     CREATE TABLE IF NOT EXISTS orch_tasks (
       id bigserial primary key,
@@ -145,7 +173,6 @@ async function initDb() {
     )
   `);
 
-  // Seed pods
   await pool.query(`
     INSERT INTO orch_pods (name, kind, budget_cents) VALUES
       ('Alpha', 'builder', 1000),
@@ -320,241 +347,78 @@ async function mergePullRequest(prNumber, commitMessage) {
   });
 }
 
-// ===== ORCHESTRATOR-AWARE BUILD =====
+// ===== ORCHESTRATOR BUILD =====
 async function executeOrchBuild() {
-  console.log('[orch-build] 🚀 Starting orchestrator-aware build...');
-  
   const budget = await checkBudget();
   if (budget.exceeded) {
-    console.log('[orch-build] ⛔ Budget exceeded');
     return { skipped: true, reason: 'Budget exceeded' };
   }
   
-  // Claim task from orchestrator
-  console.log('[orch-build] 📋 Claiming task...');
-  
   try {
-    const claimResponse = await fetch(`${PUBLIC_BASE_URL}/api/v1/orch/claim?key=${COMMAND_CENTER_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pod: 'Alpha' })
-    });
-    
-    if (!claimResponse.ok) {
-      console.log('[orch-build] ⚠️ Claim failed:', claimResponse.status);
-      return { skipped: true, reason: 'Claim failed' };
+    // Try to claim a task
+    const podResult = await pool.query('SELECT * FROM orch_pods WHERE name = $1', ['Alpha']);
+    if (podResult.rows.length === 0) {
+      return { skipped: true, reason: 'Pod not found' };
     }
     
-    const claimData = await claimResponse.json();
+    const task = await pool.query(`
+      SELECT * FROM orch_tasks 
+      WHERE status = 'queued'
+      ORDER BY roi_guess DESC
+      LIMIT 1 FOR UPDATE SKIP LOCKED
+    `);
     
-    if (!claimData.task) {
-      console.log('[orch-build] ℹ️ No tasks in queue');
-      return { skipped: true, reason: 'No tasks available' };
+    if (task.rows.length === 0) {
+      return { skipped: true, reason: 'No tasks' };
     }
     
-    const task = claimData.task;
-    console.log(`[orch-build] ✅ Claimed task #${task.id}: ${task.title}`);
+    const taskData = task.rows[0];
+    await pool.query('UPDATE orch_tasks SET status = $1 WHERE id = $2', ['claimed', taskData.id]);
     
-    // ===== STAGE 1: PLAN =====
-    console.log('[orch-build] 📊 STAGE 1: Planning...');
+    console.log(`[orch-build] ✅ Claimed task #${taskData.id}: ${taskData.title}`);
     
-    const planPrompt = `You are planning a development task.
-
-TASK: ${task.title}
-
-DETAILS:
-${task.card}
-
-Create a plan. Respond with ONLY valid JSON:
-{
-  "title": "Brief title",
-  "files_to_create": ["file1.js"],
-  "key_requirements": ["requirement 1"]
-}`;
-
-    const planAI = await callAI(planPrompt, 'plan', 1000);
+    // PLAN
+    const planAI = await callAI(`Plan this task:\n\n${taskData.card}\n\nRespond with JSON: {"title":"...", "files_to_create":["..."], "key_requirements":["..."]}`, 'plan', 1000);
+    const plan = JSON.parse(planAI.text.match(/\{[\s\S]*\}/)[0]);
     
-    // Record plan cost
-    await fetch(`${PUBLIC_BASE_URL}/api/v1/orch/complete?key=${COMMAND_CENTER_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        pod: 'Alpha',
-        task_id: task.id,
-        stage: 'plan',
-        cost: planAI.cost,
-        quality: 0.8,
-        outcome: 'ok'
-      })
-    }).catch(e => console.error('[orch-build] Failed to record plan:', e));
+    // GENERATE
+    const generateAI = await callAI(`Implement:\n\n${JSON.stringify(plan)}\n\n${taskData.card}\n\nRespond with JSON: {"summary":"...", "files":[{"path":"...", "content":"..."}], "report":"..."}`, 'generate', 4000);
+    const generated = JSON.parse(generateAI.text.match(/\{[\s\S]*\}/)[0]);
     
-    let plan;
-    try {
-      const jsonMatch = planAI.text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error('No JSON');
-      plan = JSON.parse(jsonMatch[0]);
-    } catch (e) {
-      console.error('[orch-build] ❌ Failed to parse plan');
-      return { error: 'Parse failed' };
-    }
-    
-    console.log(`[orch-build] ✅ Plan: ${plan.title}`);
-    
-    // ===== STAGE 2: GENERATE =====
-    console.log('[orch-build] 💻 STAGE 2: Generating...');
-    
-    const generatePrompt = `You are implementing a feature.
-
-PLAN:
-${JSON.stringify(plan, null, 2)}
-
-TASK:
-${task.card}
-
-Build complete code. Respond with ONLY valid JSON:
-{
-  "summary": "What you built",
-  "files": [{"path": "file.js", "content": "complete code"}],
-  "report": "Explanation"
-}`;
-
-    const generateAI = await callAI(generatePrompt, 'generate', 4000);
-    
-    // Record generate cost
-    await fetch(`${PUBLIC_BASE_URL}/api/v1/orch/complete?key=${COMMAND_CENTER_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        pod: 'Alpha',
-        task_id: task.id,
-        stage: 'generate',
-        cost: generateAI.cost,
-        quality: 0.85,
-        outcome: 'ok'
-      })
-    }).catch(e => console.error('[orch-build] Failed to record generate:', e));
-    
-    let generated;
-    try {
-      const jsonMatch = generateAI.text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error('No JSON');
-      generated = JSON.parse(jsonMatch[0]);
-    } catch (e) {
-      console.error('[orch-build] ❌ Failed to parse generated');
-      return { error: 'Parse failed' };
-    }
-    
-    console.log(`[orch-build] ✅ Generated ${generated.files.length} files`);
-    
-    // ===== STAGE 3: REVIEW =====
-    console.log('[orch-build] 🔍 STAGE 3: Review...');
-    
-    const reviewPrompt = `Review this code. Score 0-1.
-
-OUTPUT:
-${JSON.stringify(generated, null, 2).substring(0, 1000)}
-
-Respond with ONLY valid JSON:
-{
-  "quality_score": 0.85,
-  "issues": ["issue"],
-  "strengths": ["strength"]
-}`;
-
-    const reviewAI = await callAI(reviewPrompt, 'review', 800);
-    
-    let review;
-    try {
-      const jsonMatch = reviewAI.text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error('No JSON');
-      review = JSON.parse(jsonMatch[0]);
-    } catch (e) {
-      review = { quality_score: 0.75 };
-    }
-    
+    // REVIEW
+    const reviewAI = await callAI(`Review this code (0-1 score):\n\n${JSON.stringify(generated).substring(0,1000)}\n\nRespond with JSON: {"quality_score":0.85, "issues":[], "strengths":[]}`, 'review', 800);
+    const review = JSON.parse(reviewAI.text.match(/\{[\s\S]*\}/)?.[0] || '{"quality_score":0.75}');
     const finalScore = review.quality_score || 0.75;
-    console.log(`[orch-build] 📊 Quality: ${(finalScore * 100).toFixed(0)}%`);
     
-    // Record review
-    await fetch(`${PUBLIC_BASE_URL}/api/v1/orch/complete?key=${COMMAND_CENTER_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        pod: 'Alpha',
-        task_id: task.id,
-        stage: 'review',
-        cost: reviewAI.cost,
-        quality: finalScore,
-        outcome: 'ok'
-      })
-    }).catch(e => console.error('[orch-build] Failed to record review:', e));
-    
-    // Quality gate
     if (finalScore < QUALITY_THRESHOLD) {
-      console.log(`[orch-build] ⛔ Quality too low`);
+      await pool.query('UPDATE orch_tasks SET status = $1 WHERE id = $2', ['queued', taskData.id]);
       return { skipped: true, reason: 'Low quality', score: finalScore };
     }
     
-    // ===== CREATE PR =====
-    const totalCost = planAI.cost + generateAI.cost + reviewAI.cost;
-    
-    const prBody = `## 🤖 Task #${task.id}: ${task.title}
-
-${generated.report}
-
-### 📊 Metrics
-- Quality: ${(finalScore * 100).toFixed(0)}%
-- Cost: $${totalCost.toFixed(4)}
-- ROI: $${task.roi_guess}
-
-Pod: Alpha | Orchestrator Build`;
-
-    const labels = [];
-    if (finalScore >= AUTO_MERGE_THRESHOLD) labels.push('auto-merge');
-    if (task.revenue_critical) labels.push('revenue');
-    
-    console.log('[orch-build] 📤 Creating PR...');
-    
+    // CREATE PR
     const pr = await createPullRequest(
       `✨ ${generated.summary}`,
-      prBody,
+      `## Task #${taskData.id}\n\n${generated.report}\n\nQuality: ${(finalScore*100).toFixed(0)}%`,
       generated.files,
-      labels
+      finalScore >= AUTO_MERGE_THRESHOLD ? ['auto-merge'] : []
     );
     
-    console.log(`[orch-build] ✅ PR #${pr.number}: ${pr.html_url}`);
-    
-    // Record PR
-    await fetch(`${PUBLIC_BASE_URL}/api/v1/orch/complete?key=${COMMAND_CENTER_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        pod: 'Alpha',
-        task_id: task.id,
-        stage: 'pr',
-        cost: 0,
-        quality: finalScore,
-        outcome: 'ok',
-        pr_number: pr.number,
-        pr_url: pr.html_url
-      })
-    }).catch(e => console.error('[orch-build] Failed to record PR:', e));
-    
-    // Auto-merge
+    // AUTO-MERGE
     let autoMerged = false;
     if (finalScore >= AUTO_MERGE_THRESHOLD) {
-      console.log(`[orch-build] 🎯 AUTO-MERGING!`);
       try {
         await mergePullRequest(pr.number, `Auto: ${generated.summary}`);
         autoMerged = true;
       } catch (e) {
-        console.error('[orch-build] Merge failed:', e.message);
+        console.error('[merge] Failed:', e.message);
       }
     }
     
+    await pool.query('UPDATE orch_tasks SET status = $1 WHERE id = $2', ['done', taskData.id]);
+    
     return {
       success: true,
-      task_id: task.id,
+      task_id: taskData.id,
       pr_number: pr.number,
       pr_url: pr.html_url,
       quality_score: finalScore,
@@ -562,25 +426,22 @@ Pod: Alpha | Orchestrator Build`;
     };
     
   } catch (e) {
-    console.error('[orch-build] ❌ Error:', e);
+    console.error('[orch-build] Error:', e);
     return { error: e.message };
   }
 }
 
-// ===== ORCHESTRATOR ROUTES =====
+// ===== ROUTES =====
 
-// 🆕 QUEUE STATUS ENDPOINT (FIXED - now at top level)
 app.get("/api/v1/orch/queue", requireCommandKey, async (req, res) => {
   try {
     const summary = await pool.query(`
-      SELECT 
-        status,
-        COUNT(*) as count
+      SELECT status, COUNT(*) as count
       FROM orch_tasks
       GROUP BY status
     `);
     
-    const recentTasks = await pool.query(`
+    const recent = await pool.query(`
       SELECT id, title, status, created_at
       FROM orch_tasks
       ORDER BY created_at DESC
@@ -593,7 +454,7 @@ app.get("/api/v1/orch/queue", requireCommandKey, async (req, res) => {
         acc[row.status] = parseInt(row.count);
         return acc;
       }, {}),
-      recent: recentTasks.rows
+      recent: recent.rows
     });
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -616,108 +477,6 @@ app.post("/api/v1/orch/enqueue", requireCommandKey, async (req, res) => {
   }
 });
 
-app.post("/api/v1/orch/claim", requireCommandKey, async (req, res) => {
-  try {
-    const { pod } = req.body;
-    
-    const podResult = await pool.query('SELECT * FROM orch_pods WHERE name = $1', [pod]);
-    if (podResult.rows.length === 0) {
-      return res.status(404).json({ error: 'Pod not found' });
-    }
-    
-    const podData = podResult.rows[0];
-    const revenueLock = ORCH_REVENUE_LOCK === 'true';
-    
-    let task;
-    if (revenueLock) {
-      const revenueCheck = await pool.query(
-        'SELECT COUNT(*) as cnt FROM orch_tasks WHERE status = $1 AND revenue_critical = true',
-        ['queued']
-      );
-      
-      if (parseInt(revenueCheck.rows[0].cnt) > 0) {
-        task = await pool.query(
-          `SELECT * FROM orch_tasks 
-           WHERE status = 'queued' AND revenue_critical = true
-           ORDER BY roi_guess DESC
-           LIMIT 1 FOR UPDATE SKIP LOCKED`
-        );
-      } else {
-        task = await pool.query(
-          `SELECT * FROM orch_tasks 
-           WHERE status = 'queued'
-           ORDER BY roi_guess DESC
-           LIMIT 1 FOR UPDATE SKIP LOCKED`
-        );
-      }
-    } else {
-      task = await pool.query(
-        `SELECT * FROM orch_tasks 
-         WHERE status = 'queued'
-         ORDER BY roi_guess DESC
-         LIMIT 1 FOR UPDATE SKIP LOCKED`
-      );
-    }
-    
-    if (task.rows.length === 0) {
-      return res.json({ ok: true, task: null });
-    }
-    
-    const taskData = task.rows[0];
-    const idempotencyKey = `${pod}-${taskData.id}-${Date.now()}`;
-    
-    await pool.query(
-      `INSERT INTO orch_claims (task_id, pod_id, idempotency_key)
-       VALUES ($1, $2, $3)`,
-      [taskData.id, podData.id, idempotencyKey]
-    );
-    
-    await pool.query(
-      'UPDATE orch_tasks SET status = $1 WHERE id = $2',
-      ['claimed', taskData.id]
-    );
-    
-    res.json({ ok: true, task: taskData, claim_key: idempotencyKey });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-app.post("/api/v1/orch/complete", requireCommandKey, async (req, res) => {
-  try {
-    const { pod, task_id, stage, cost, quality, outcome } = req.body;
-    
-    const podResult = await pool.query('SELECT * FROM orch_pods WHERE name = $1', [pod]);
-    if (podResult.rows.length === 0) {
-      return res.status(404).json({ error: 'Pod not found' });
-    }
-    
-    const podData = podResult.rows[0];
-    
-    await pool.query(
-      `INSERT INTO orch_runs (task_id, pod_id, stage, cost, quality, outcome)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
-      [task_id, podData.id, stage, cost, quality, outcome]
-    );
-    
-    if (outcome === 'ok' && stage === 'pr') {
-      await pool.query('UPDATE orch_tasks SET status = $1 WHERE id = $2', ['done', task_id]);
-      
-      let credits = Math.floor(100 * (quality || 0.8));
-      if (podData.kind === 'infra' || podData.kind === 'builder') credits = Math.floor(credits * 1.2);
-      
-      await pool.query('UPDATE orch_pods SET credits = credits + $1 WHERE id = $2', [credits, podData.id]);
-    }
-    
-    const costCents = Math.floor((cost || 0) * 100);
-    await pool.query('UPDATE orch_pods SET budget_cents = budget_cents - $1 WHERE id = $2', [costCents, podData.id]);
-    
-    res.json({ ok: true });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
 app.get("/api/v1/orch/pods/status", requireCommandKey, async (req, res) => {
   try {
     const pods = await pool.query('SELECT * FROM orch_pods ORDER BY name');
@@ -727,39 +486,17 @@ app.get("/api/v1/orch/pods/status", requireCommandKey, async (req, res) => {
   }
 });
 
-// ===== OTHER ROUTES =====
 app.get("/healthz", async (_req, res) => {
   try {
     await pool.query('SELECT 1');
     res.json({ 
       status: "healthy",
-      version: "v11-orchestrator",
+      version: "v11-internal-cron",
       autonomous: !!OPENAI_API_KEY && !!GITHUB_TOKEN,
-      orch_enabled: ORCH_ENABLED === 'true'
+      build_loop: buildLoopRunning
     });
   } catch (e) {
     res.status(500).json({ status: "unhealthy" });
-  }
-});
-
-app.post('/api/v1/billing/start-baseline', async (req, res) => {
-  try {
-    const { email, baseline_commission } = req.body;
-    if (!email) return res.status(400).json({ ok: false, error: 'Email required' });
-    
-    const existing = await pool.query('SELECT * FROM customers WHERE email = $1', [email]);
-    if (existing.rows.length > 0) {
-      return res.json({ ok: true, existing: true });
-    }
-    
-    await pool.query(
-      `INSERT INTO customers (email, baseline_commission) VALUES ($1, $2)`,
-      [email, baseline_commission || 0]
-    );
-    
-    res.json({ ok: true, success: true });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: e.message });
   }
 });
 
@@ -770,10 +507,10 @@ app.post("/internal/autopilot/build-now", requireCommandKey, async (req, res) =>
     }
     
     executeOrchBuild()
-      .then(r => console.log('[build] Done:', r))
-      .catch(e => console.error('[build] Error:', e));
+      .then(r => console.log('[manual-build] Done:', r))
+      .catch(e => console.error('[manual-build] Error:', e));
     
-    res.json({ ok: true, message: 'Orchestrator build started' });
+    res.json({ ok: true, message: 'Build triggered' });
   } catch (e) {
     res.status(500).json({ ok: false, error: String(e) });
   }
@@ -782,12 +519,11 @@ app.post("/internal/autopilot/build-now", requireCommandKey, async (req, res) =>
 app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════╗
-║  🚀 LIFEOS v11 ORCHESTRATOR SYSTEM    ║
+║  🚀 LIFEOS v11 - INTERNAL AUTOPILOT   ║
 ╠════════════════════════════════════════╣
 ║  Port: ${PORT}                            ║
+║  Build Loop: ${buildLoopRunning ? '✓ RUNNING' : '✗ DISABLED'}                   ║
 ║  Autonomous: ${!!OPENAI_API_KEY && !!GITHUB_TOKEN ? '✓' : '✗'}                        ║
-║  Orchestrator: ${ORCH_ENABLED === 'true' ? '✓' : '✗'}                       ║
-║  Revenue Lock: ${ORCH_REVENUE_LOCK === 'true' ? '✓' : '✗'}                       ║
 ╚════════════════════════════════════════╝
   `);
 });
