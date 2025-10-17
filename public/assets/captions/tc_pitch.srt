@@ -1,0 +1,11 @@
+1
+00:00:00,000 --> 00:00:30,000
+Introducing TC, the ultimate tool for your tech needs.
+
+2
+00:00:30,000 --> 00:01:00,000
+TC makes tech easy, efficient, and accessible for everyone.
+
+3
+00:01:00,000 --> 00:03:00,000
+In a world full of tech, TC stands out by providing clarity and efficiency.
