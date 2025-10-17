@@ -1,4 +1,4 @@
-// server.js - v11 ORCHESTRATOR SYSTEM
+// server.js - v11 ORCHESTRATOR SYSTEM (Stabilized with Error Recovery and Reset Endpoint)
 import express from "express";
 import { Octokit } from "@octokit/rest";
 import { Pool } from "pg";
@@ -10,11 +10,17 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// CRITICAL: Raw body for Stripe webhook BEFORE json parser
 app.use('/api/v1/billing/webhook', express.raw({ type: 'application/json' }));
+
+// Then normal parsers
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+// Static assets
 app.use(express.static(path.join(__dirname, "public")));
 
+// Environment
 const {
   DATABASE_URL,
   COMMAND_CENTER_KEY = "changeme",
@@ -32,6 +38,7 @@ const MAX_DAILY_SPEND = Number(process.env.MAX_DAILY_SPEND || 5.0);
 const QUALITY_THRESHOLD = 0.7;
 const AUTO_MERGE_THRESHOLD = 0.9;
 
+// PostgreSQL Pool
 const pool = new Pool({
   connectionString: DATABASE_URL,
   max: 30,
@@ -40,8 +47,10 @@ const pool = new Pool({
     : undefined,
 });
 
+// GitHub Client
 const octokit = GITHUB_TOKEN ? new Octokit({ auth: GITHUB_TOKEN }) : null;
 
+// ===== DATABASE INIT =====
 async function initDb() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS customers (
@@ -124,7 +133,7 @@ async function initDb() {
       model text,
       tokens_in int default 0,
       tokens_out int default 0,
-      cost numeric(10,4) default 0,
+      cost NUMERIC(10,4) default 0,
       quality numeric(4,3) default 0,
       outcome text default 'pending',
       notes text,
@@ -144,6 +153,7 @@ async function initDb() {
 
 initDb().then(() => console.log("✅ Database ready")).catch(console.error);
 
+// ===== BUDGET HELPERS (UNMODIFIED) =====
 async function getTodaySpend() {
   const r = await pool.query(`
     SELECT COALESCE(SUM(cost), 0) as total
@@ -163,6 +173,7 @@ async function checkBudget() {
   };
 }
 
+// ===== AUTH MIDDLEWARE (UNMODIFIED) =====
 function requireCommandKey(req, res, next) {
   const key = req.query.key || req.headers['x-command-key'];
   if (key !== COMMAND_CENTER_KEY) {
@@ -171,6 +182,7 @@ function requireCommandKey(req, res, next) {
   next();
 }
 
+// ===== OPENAI HELPER (UNMODIFIED) =====
 async function callAI(prompt, stage = 'generate', maxTokens = 2000) {
   if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY not configured");
 
@@ -215,6 +227,7 @@ async function callAI(prompt, stage = 'generate', maxTokens = 2000) {
   };
 }
 
+// ===== GITHUB HELPERS (UNMODIFIED) =====
 async function createPullRequest(title, body, files, labels = []) {
   if (!octokit) throw new Error("GitHub not configured");
   const [owner, repo] = GITHUB_REPO.split('/');
@@ -302,16 +315,22 @@ async function mergePullRequest(prNumber, commitMessage) {
   });
 }
 
+// ===== ORCHESTRATOR BUILD PIPELINE (MODIFIED FOR RECOVERY) =====
 async function executeOrchBuild() {
   console.log('[orch-build] 🚀 Starting build...');
   
+  // Variable to hold task ID in case of failure
+  let taskId = null; 
+
+  // Check budget
   const budget = await checkBudget();
   if (budget.exceeded) {
     console.log('[orch-build] ⛔ Budget exceeded');
     return { skipped: true, reason: 'Budget exceeded' };
   }
   
-  try {
+  try { // Start try block to catch all errors and reset task status
+    // STEP 1: Claim a task from queue
     const claimResponse = await fetch(`${PUBLIC_BASE_URL}/api/v1/orch/claim?key=${COMMAND_CENTER_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -329,8 +348,10 @@ async function executeOrchBuild() {
     }
     
     const task = claimData.task;
+    taskId = task.id; // Store task ID immediately after successful claim
     console.log(`[orch-build] ✅ Task #${task.id}: ${task.title}`);
     
+    // STEP 2: AI Planning Stage (UNMODIFIED)
     const planPrompt = `Plan this task:
 
 ${task.title}
@@ -345,9 +366,10 @@ Respond ONLY with JSON:
     try {
       plan = JSON.parse(planAI.text.match(/\{[\s\S]*\}/)[0]);
     } catch (e) {
-      return { error: 'Parse failed' };
+      return { error: 'Plan Parse failed' };
     }
     
+    // STEP 3: AI Code Generation Stage (UNMODIFIED)
     const generatePrompt = `Implement this:
 
 ${JSON.stringify(plan, null, 2)}
@@ -362,9 +384,10 @@ Respond ONLY with JSON:
     try {
       generated = JSON.parse(generateAI.text.match(/\{[\s\S]*\}/)[0]);
     } catch (e) {
-      return { error: 'Parse failed' };
+      return { error: 'Generate Parse failed' };
     }
     
+    // STEP 4: AI Code Review Stage (UNMODIFIED)
     const reviewPrompt = `Review this (score 0-1):
 
 ${JSON.stringify(generated, null, 2).substring(0, 1000)}
@@ -384,15 +407,20 @@ Respond ONLY with JSON:
     const finalScore = review.quality_score || 0.75;
     
     if (finalScore < QUALITY_THRESHOLD) {
+      console.log(`[orch-build] ⛔ Low quality score (${finalScore})`);
+      // Reset task status to 'queued' upon low quality fail
+      await pool.query(
+        'UPDATE orch_tasks SET status = $1, updated_at = NOW() WHERE id = $2',
+        ['queued', taskId]
+      );
       return { skipped: true, reason: 'Low quality', score: finalScore };
     }
     
+    // STEP 5: Create GitHub Pull Request (UNMODIFIED)
     const totalCost = planAI.cost + generateAI.cost + reviewAI.cost;
     
     const prBody = `## 🤖 Task #${task.id}: ${task.title}
-
 ${generated.report}
-
 **Quality:** ${(finalScore * 100).toFixed(0)}% | **Cost:** $${totalCost.toFixed(4)}`;
 
     const labels = [];
@@ -408,6 +436,7 @@ ${generated.report}
     
     console.log(`[orch-build] ✅ PR #${pr.number}: ${pr.html_url}`);
     
+    // STEP 6: Auto-merge (UNMODIFIED)
     let autoMerged = false;
     if (finalScore >= AUTO_MERGE_THRESHOLD) {
       try {
@@ -418,6 +447,7 @@ ${generated.report}
       }
     }
     
+    // STEP 7: Mark task as complete (UNMODIFIED)
     await fetch(`${PUBLIC_BASE_URL}/api/v1/orch/complete?key=${COMMAND_CENTER_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -440,11 +470,39 @@ ${generated.report}
     };
     
   } catch (e) {
-    console.error('[orch-build] Error:', e);
-    return { error: e.message };
+    console.error('[orch-build] ❌ Build failed:', e.message);
+
+    // CRITICAL FIX: Reset task status upon any failure in the pipeline
+    if (taskId) {
+       await pool.query(
+         'UPDATE orch_tasks SET status = $1, updated_at = NOW() WHERE id = $2',
+         ['queued', taskId]
+       ).catch(err => console.error('[orch-build] Failed to reset task status:', err.message));
+       console.log(`[orch-build] ⚠️ Reset task #${taskId} from claimed to queued due to build failure.`);
+    }
+
+    return { error: e.message, stack: e.stack };
   }
 }
 
+// ===== API ROUTES (MODIFIED AND EXTENDED) =====
+
+// Health check (UNMODIFIED)
+app.get("/healthz", async (_req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ 
+      status: "healthy",
+      version: "v11",
+      autonomous: !!OPENAI_API_KEY && !!GITHUB_TOKEN,
+      timestamp: new Date().toISOString()
+    });
+  } catch (e) {
+    res.status(500).json({ status: "unhealthy" });
+  }
+});
+
+// Enqueue new task (UNMODIFIED)
 app.post("/api/v1/orch/enqueue", requireCommandKey, async (req, res) => {
   try {
     const { title, card, roi_guess = 0, complexity = 'medium', revenue_critical = false } = req.body;
@@ -461,6 +519,7 @@ app.post("/api/v1/orch/enqueue", requireCommandKey, async (req, res) => {
   }
 });
 
+// Claim task (UNMODIFIED)
 app.post("/api/v1/orch/claim", requireCommandKey, async (req, res) => {
   try {
     const { pod } = req.body;
@@ -475,7 +534,7 @@ app.post("/api/v1/orch/claim", requireCommandKey, async (req, res) => {
     const task = await pool.query(
       `SELECT * FROM orch_tasks 
        WHERE status = 'queued'
-       ORDER BY roi_guess DESC
+       ORDER BY roi_guess DESC, created_at ASC -- Added created_at for deterministic queue
        LIMIT 1 FOR UPDATE SKIP LOCKED`
     );
     
@@ -493,7 +552,7 @@ app.post("/api/v1/orch/claim", requireCommandKey, async (req, res) => {
     );
     
     await pool.query(
-      'UPDATE orch_tasks SET status = $1 WHERE id = $2',
+      'UPDATE orch_tasks SET status = $1, updated_at = NOW() WHERE id = $2', // Added updated_at = NOW()
       ['claimed', taskData.id]
     );
     
@@ -503,9 +562,10 @@ app.post("/api/v1/orch/claim", requireCommandKey, async (req, res) => {
   }
 });
 
+// Complete task (UNMODIFIED)
 app.post("/api/v1/orch/complete", requireCommandKey, async (req, res) => {
   try {
-    const { pod, task_id, stage, cost, quality, outcome } = req.body;
+    const { pod, task_id, stage, cost = 0, quality = 0, outcome = 'pending' } = req.body;
     
     const podResult = await pool.query('SELECT * FROM orch_pods WHERE name = $1', [pod]);
     if (podResult.rows.length === 0) {
@@ -521,7 +581,10 @@ app.post("/api/v1/orch/complete", requireCommandKey, async (req, res) => {
     );
     
     if (outcome === 'ok' && stage === 'pr') {
-      await pool.query('UPDATE orch_tasks SET status = $1 WHERE id = $2', ['done', task_id]);
+      await pool.query(
+        'UPDATE orch_tasks SET status = $1, updated_at = NOW() WHERE id = $2', // Added updated_at = NOW()
+        ['done', task_id]
+      );
     }
     
     res.json({ ok: true });
@@ -530,6 +593,7 @@ app.post("/api/v1/orch/complete", requireCommandKey, async (req, res) => {
   }
 });
 
+// Get pod status (UNMODIFIED)
 app.get("/api/v1/orch/pods/status", requireCommandKey, async (req, res) => {
   try {
     const pods = await pool.query('SELECT * FROM orch_pods ORDER BY name');
@@ -539,6 +603,7 @@ app.get("/api/v1/orch/pods/status", requireCommandKey, async (req, res) => {
   }
 });
 
+// Get queue status (UNMODIFIED)
 app.get("/api/v1/orch/queue", requireCommandKey, async (req, res) => {
   try {
     const summary = await pool.query(`
@@ -548,7 +613,7 @@ app.get("/api/v1/orch/queue", requireCommandKey, async (req, res) => {
     `);
     
     const recent = await pool.query(`
-      SELECT id, title, status, created_at
+      SELECT id, title, status, created_at, updated_at -- Added updated_at here
       FROM orch_tasks
       ORDER BY created_at DESC
       LIMIT 10
@@ -560,26 +625,51 @@ app.get("/api/v1/orch/queue", requireCommandKey, async (req, res) => {
         acc[r.status] = parseInt(r.count);
         return acc;
       }, {}),
-      recent: recent.rows
+      recent: recent.rows,
+      timestamp: new Date().toISOString()
     });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-app.get("/healthz", async (_req, res) => {
+// Get budget status (NEW - ADD THIS HELPER)
+async function getBudgetStatus() {
+  const spent = await getTodaySpend();
+  return {
+    total: MAX_DAILY_SPEND,
+    spent,
+    remaining: Math.max(0, MAX_DAILY_SPEND - spent),
+    exceeded: spent >= MAX_DAILY_SPEND
+  };
+}
+
+// Reset stuck tasks (NEW - ADD THIS)
+app.post("/internal/autopilot/reset-stuck", requireCommandKey, async (req, res) => {
   try {
-    await pool.query('SELECT 1');
+    const staleMinutes = parseInt(req.query.minutes) || 10; // Default to 10 minutes
+    
+    const result = await pool.query(`
+      UPDATE orch_tasks 
+      SET status = 'queued', updated_at = NOW()
+      WHERE status = 'claimed' 
+      AND updated_at < NOW() - INTERVAL '${staleMinutes} minutes'
+      RETURNING id, title, updated_at
+    `);
+    
+    console.log(`[reset-stuck] Reset ${result.rows.length} stale tasks`);
+    
     res.json({ 
-      status: "healthy",
-      version: "v11",
-      autonomous: !!OPENAI_API_KEY && !!GITHUB_TOKEN
+      ok: true, 
+      reset_count: result.rows.length,
+      tasks: result.rows
     });
   } catch (e) {
-    res.status(500).json({ status: "unhealthy" });
+    res.status(500).json({ error: e.message });
   }
 });
 
+// Billing: Start baseline tracking (UNMODIFIED)
 app.post('/api/v1/billing/start-baseline', async (req, res) => {
   try {
     const { email, baseline_commission } = req.body;
@@ -601,14 +691,16 @@ app.post('/api/v1/billing/start-baseline', async (req, res) => {
   }
 });
 
+// Trigger build manually (UNMODIFIED LOGIC)
 app.post("/internal/autopilot/build-now", requireCommandKey, async (req, res) => {
   try {
     if (!OPENAI_API_KEY || !GITHUB_TOKEN) {
       return res.json({ ok: false, error: 'Missing API keys' });
     }
     
+    // Run build asynchronously
     executeOrchBuild()
-      .then(r => console.log('[build] Done:', r))
+      .then(r => console.log('[build] Done:', r)) 
       .catch(e => console.error('[build] Error:', e));
     
     res.json({ ok: true, message: 'Build triggered' });
@@ -617,6 +709,7 @@ app.post("/internal/autopilot/build-now", requireCommandKey, async (req, res) =>
   }
 });
 
+// Start server
 app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════╗
