@@ -1,22 +1,12 @@
 {
-  "name": "lifeos-backend",
+  "name": "crm-quality-checks",
   "version": "1.0.0",
-  "main": "server.js",
-  "type": "module",
+  "main": "cron_job.js",
   "scripts": {
-    "start": "node server.js",
-    "worker": "node worker-loop.js"
+    "start": "node cron_job.js"
   },
   "dependencies": {
-    "@octokit/rest": "^20.0.0",
-    "axios": "^1.7.4",
-    "dayjs": "^1.11.11",
-    "express": "^4.19.2",
-    "pg": "^8.11.5",
-    "serve-index": "^1.9.1",
-    "stripe": "^16.6.0"
-  },
-  "engines": {
-    "node": "18.x"
+    "axios": "^0.21.1",
+    "node-cron": "^2.0.3"
   }
 }

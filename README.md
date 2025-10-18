@@ -1,18 +1,12 @@
-# AI Sales Coach for Live Calls
+# Automated Quality Checks for CRM Integrations
 
-## Description
-This project implements an AI Sales Coach that analyzes call transcripts in real-time using GPT-4, providing coaching tips via WebSocket.
+This project implements automated quality checks for CRM integrations, including checks for the BoldTrail API, lead sync timestamps, and Vapi call logs. Notifications are sent to Slack in case of check failures.
 
 ## Setup
-1. Install dependencies: `npm install express body-parser mongoose ws openai`
-2. Configure your database connection in `database.js`
-3. Start the server: `node server.js`
+1. Clone the repository.
+2. Install dependencies: `npm install`
+3. Set your Slack webhook URL in `slack_notifier.js`.
+4. Run the cron job: `npm start`
 
-## API Endpoints
-- `POST /api/v1/sales/coach`: Receives call transcripts and provides coaching tips.
-
-## WebSocket
-The server establishes a WebSocket connection to send real-time coaching tips.
-
-## Test Cases
-See `sampleCalls.js` for sample call scenarios.
+## Endpoints
+- GET `/api/v1/health/integrations`: Returns the status of all checks.
