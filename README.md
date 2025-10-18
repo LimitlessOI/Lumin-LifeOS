@@ -1,12 +1,22 @@
-# Automated Quality Checks for CRM Integrations
+# Task Management Application
 
-This project implements automated quality checks for CRM integrations, including checks for the BoldTrail API, lead sync timestamps, and Vapi call logs. Notifications are sent to Slack in case of check failures.
+## Overview
+This application allows users to manage tasks with functionalities to create, read, update, and delete tasks.
 
-## Setup
+## Key Features
+- Create, read, update, and delete tasks.
+- Tasks include a title, description, and status (pending/completed).
+- Responsive design for mobile and desktop.
+- Error handling for invalid inputs.
+
+## Getting Started
 1. Clone the repository.
-2. Install dependencies: `npm install`
-3. Set your Slack webhook URL in `slack_notifier.js`.
-4. Run the cron job: `npm start`
+2. Run `npm install` to install dependencies.
+3. Start the application.
 
-## Endpoints
-- GET `/api/v1/health/integrations`: Returns the status of all checks.
+## File Structure
+- `index.html`: Main HTML file.
+- `styles.css`: Stylesheet for the application.
+- `app.js`: JavaScript file with app logic.
+- `tasks.json`: JSON file to store tasks.
+- `README.md`: Documentation for the application.
