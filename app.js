@@ -1,18 +1,19 @@
+// Import necessary modules
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('./config/db');
 const outreachRoutes = require('./routes/outreach');
+const config = require('./config/config');
 
 const app = express();
-app.use(bodyParser.json());
 
-// Database connection
-db.connect();
+// Middleware
+app.use(bodyParser.json());
 
 // Routes
 app.use('/api/v1/outreach', outreachRoutes);
 
-const PORT = process.env.PORT || 3000;
+// Start the server
+const PORT = config.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

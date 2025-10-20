@@ -6,4 +6,11 @@ const outreachLeadSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('OutreachLead', outreachLeadSchema);
+const OutreachLead = mongoose.model('OutreachLead', outreachLeadSchema);
+
+async function createTable() {
+  await OutreachLead.init();
+  console.log('Outreach leads table created.');
+}
+
+createTable();
