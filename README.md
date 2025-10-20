@@ -1,20 +1,16 @@
 # Las Vegas Business Lead Collector
 
-## Overview
-This project is a Flask application that collects business leads from the Google Places API for specified cities and categories.
+## Description
+This application collects business leads for Las Vegas. It can generate mock data for testing if the GOOGLE_PLACES_API_KEY is not provided.
 
 ## Setup
 1. Clone the repository.
-2. Create a `.env` file and add your Google Places API key:
-   `GOOGLE_PLACES_API_KEY=your_api_key`
-3. Set up your database by configuring `DATABASE_URL` in the `.env` file.
-4. Install the required packages using `pip install -r requirements.txt`.
-5. Run the application with `python app.py`.
+2. Run `npm install` to install dependencies.
+3. Set your environment variable `GOOGLE_PLACES_API_KEY` in a `.env` file.
+4. Run the application with `node app.js`.
 
 ## API Endpoint
-### POST /api/v1/outreach/collect-leads
-- **Parameters:**
-  - `city`: City name (Las Vegas or Henderson)
-  - `category`: Business category to search for
-  - `limit`: Number of leads to collect (default is 10)
-- **Response:** Returns the count of leads collected.
+- `POST /api/v1/outreach/collect-leads`
+
+## Note
+If you see a message indicating that mock data is being used, please set the `GOOGLE_PLACES_API_KEY` in your environment variables for real leads.
