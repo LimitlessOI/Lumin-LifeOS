@@ -1,34 +1,47 @@
 from flask import Flask, request, jsonify
-import psycopg2
+from models import db, OutreachLead
+from config import Config
+import requests
 import os
 
 app = Flask(__name__)
+app.config.from_object(Config)
+db.init_app(app)
 
-# Database connection
-DATABASE_URL = os.getenv('DATABASE_URL')
-
-def get_db_connection():
-    conn = psycopg2.connect(DATABASE_URL)
-    return conn
-
-@app.route('/api/v1/vault/ingest', methods=['POST'])
-def ingest_conversation():
+@app.route('/api/v1/outreach/collect-leads', methods=['POST'])
+def collect_leads():
     data = request.json
-    model = data.get('model')
-    content = data.get('content')
-    context = data.get('context')
+    city = data.get('city')
+    category = data.get('category')
+    limit = data.get('limit', 10)
 
-    if not model or not content:
-        return jsonify({'error': 'Model and content are required.'}), 400
+    if city not in ['Las Vegas', 'Henderson']:
+        return jsonify({'error': 'Invalid city. Must be Las Vegas or Henderson.'}), 400
 
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('INSERT INTO ai_vault_conversations (model_name, content, context) VALUES (%s, %s, %s)', (model, content, context))
-    conn.commit()
-    cur.close()
-    conn.close()
+    # Call Google Places API
+    api_key = os.getenv('GOOGLE_PLACES_API_KEY')
+    url = f'https://maps.googleapis.com/maps/api/place/textsearch/json?query={category}+in+{city}&key={api_key}&limit={limit}'
+    response = requests.get(url)
+    results = response.json().get('results', [])
 
-    return jsonify({'message': 'Conversation ingested successfully.'}), 201
+    count = 0
+    for result in results:
+        lead = OutreachLead(
+            name=result.get('name'),
+            phone=result.get('formatted_phone_number', 'N/A'),
+            email='N/A',  # Placeholder as Google Places API does not provide email
+            address=result.get('formatted_address', 'N/A'),
+            category=category,
+            url=result.get('url', 'N/A'),
+            status='new'
+        )
+        db.session.add(lead)
+        count += 1
+
+    db.session.commit()
+    return jsonify({'count': count}), 200
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
