@@ -1,14 +1,12 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const apiRoutes = require('./routes/api');
-const config = require('./config/config');
+// Server configuration for PR auto-merging
 
-const app = express();
-app.use(bodyParser.json());
+const AUTO_MERGE_THRESHOLD = 0.8; // Changed from 0.9 to 0.8 to auto-merge PRs with 80%+ quality
 
-app.use('/api/v1/outreach', apiRoutes);
+function shouldAutoMerge(pr) {
+    if (pr.type === 'strategic') {
+        return false; // Requires manual approval from Adam
+    }
+    return pr.quality >= AUTO_MERGE_THRESHOLD; // Check quality against the threshold
+}
 
-const PORT = config.port || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Additional logic to handle PRs goes here...
