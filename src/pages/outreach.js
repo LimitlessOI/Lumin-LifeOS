@@ -2,27 +2,27 @@ import React, { useState, useEffect } from 'react';
 import LeadTable from '../components/LeadTable';
 import Filters from '../components/Filters';
 import DailyStats from '../components/DailyStats';
-import '../../styles/tailwind.css';
+import '../styles/tailwind.css';
 
 const Outreach = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [statusFilter, setStatusFilter] = useState('');
-  const [dailyStats, setDailyStats] = useState({ totalLeads: 0, callsMade: 0, joinRate: 0 });
+  const [stats, setStats] = useState({ totalLeads: 0, callsMade: 0, joinRate: 0 });
 
   useEffect(() => {
-    // Fetch leads and daily stats from API
-    const fetchData = async () => {
-      const leadsResponse = await fetch('/api/outreach_leads');
-      const leadsData = await leadsResponse.json();
-      setLeads(leadsData);
-      setFilteredLeads(leadsData);
-
-      const statsResponse = await fetch('/api/daily_stats');
-      const statsData = await statsResponse.json();
-      setDailyStats(statsData);
-    };
-    fetchData();
+    // Fetch leads from the outreach_leads table
+    fetch('/api/outreach_leads')
+      .then(response => response.json())
+      .then(data => {
+        setLeads(data);
+        setFilteredLeads(data);
+        setStats({
+          totalLeads: data.length,
+          callsMade: data.filter(lead => lead.status === 'contacted').length,
+          joinRate: (data.filter(lead => lead.status === 'joined').length / data.length) * 100
+        });
+      });
   }, []);
 
   useEffect(() => {
@@ -33,12 +33,17 @@ const Outreach = () => {
     }
   }, [statusFilter, leads]);
 
+  const handleCall = (leadId) => {
+    // Logic to trigger call
+    console.log('Calling lead with ID:', leadId);
+  };
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Outreach CRM Dashboard</h1>
-      <DailyStats stats={dailyStats} />
-      <Filters statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
-      <LeadTable leads={filteredLeads} />
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Outreach Dashboard</h1>
+      <Filters setStatusFilter={setStatusFilter} />
+      <LeadTable leads={filteredLeads} onCall={handleCall} />
+      <DailyStats stats={stats} />
     </div>
   );
 };
