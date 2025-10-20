@@ -1,54 +1,22 @@
-const fs = require('fs');
-const path = require('path');
-const tasksFilePath = path.join(__dirname, 'tasks.json');
+const express = require('express');
+const bodyParser = require('body-parser');
+const outreachRoutes = require('./routes/outreach');
+const { connectToDatabase } = require('./database');
 
-function loadTasks() {
-    if (!fs.existsSync(tasksFilePath)) return [];
-    const data = fs.readFileSync(tasksFilePath);
-    return JSON.parse(data);
-}
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-function saveTasks(tasks) {
-    fs.writeFileSync(tasksFilePath, JSON.stringify(tasks, null, 2));
-}
+// Middleware
+app.use(bodyParser.json());
 
-const tasks = loadTasks();
-const taskForm = document.getElementById('task-form');
-const taskList = document.getElementById('task-list');
+// Routes
+app.use('/api/v1/outreach', outreachRoutes);
 
-taskForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const title = document.getElementById('task-title').value;
-    const description = document.getElementById('task-description').value;
-    const status = document.getElementById('task-status').value;
-
-    if (!title) {
-        alert('Title is required.');
-        return;
-    }
-
-    const newTask = { title, description, status };
-    tasks.push(newTask);
-    saveTasks(tasks);
-    renderTasks();
-    taskForm.reset();
+// Connect to Database
+connectToDatabase().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}).catch(err => {
+  console.error('Database connection failed:', err);
 });
-
-function renderTasks() {
-    taskList.innerHTML = '';
-    tasks.forEach((task, index) => {
-        const li = document.createElement('li');
-        li.className = 'task-item';
-        li.innerHTML = `<span>${task.title} - ${task.status}</span>
-                        <button onclick="deleteTask(${index})">Delete</button>`;
-        taskList.appendChild(li);
-    });
-}
-
-function deleteTask(index) {
-    tasks.splice(index, 1);
-    saveTasks(tasks);
-    renderTasks();
-}
-
-renderTasks();

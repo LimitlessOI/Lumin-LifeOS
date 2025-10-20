@@ -1,19 +1,15 @@
-// database.js
-const mongoose = require('mongoose');
+const { Sequelize } = require('sequelize');
+const config = require('./config/config');
 
-mongoose.connect('mongodb://localhost:27017/salesCoach', { useNewUrlParser: true, useUnifiedTopology: true });
+const sequelize = new Sequelize(config.database);
 
-const callSummarySchema = new mongoose.Schema({
-    callId: String,
-    analysis: Object,
-    createdAt: { type: Date, default: Date.now }
-});
-
-const CallSummary = mongoose.model('CallSummary', callSummarySchema);
-
-const saveCallSummary = async (callId, analysis) => {
-    const summary = new CallSummary({ callId, analysis });
-    await summary.save();
+const connectToDatabase = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection to the database has been established successfully.');
+  } catch (error) {
+    throw new Error('Unable to connect to the database:', error);
+  }
 };
 
-module.exports = { saveCallSummary };
+module.exports = { sequelize, connectToDatabase };
