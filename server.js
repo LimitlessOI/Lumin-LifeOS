@@ -1,13 +1,12 @@
-// server.js
+// Server configuration for PR auto-merging
 
-const express = require('express');
-const app = express();
+const AUTO_MERGE_THRESHOLD = 0.8; // Changed from 0.9 to 0.8 to auto-merge PRs with 80%+ quality
 
-// Lower AUTO_MERGE_THRESHOLD to 0.75
-const AUTO_MERGE_THRESHOLD = 0.75;
+function shouldAutoMerge(pr) {
+    if (pr.type === 'strategic') {
+        return false; // Requires manual approval from Adam
+    }
+    return pr.quality >= AUTO_MERGE_THRESHOLD; // Check quality against the threshold
+}
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
-
-module.exports = { AUTO_MERGE_THRESHOLD };
+// Additional logic to handle PRs goes here...
