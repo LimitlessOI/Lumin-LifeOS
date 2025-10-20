@@ -1,4 +1,4 @@
 module.exports = {
-  database: process.env.DATABASE_URL,
-  dialect: 'postgres',
+  openaiApiKey: process.env.OPENAI_API_KEY,
+  port: process.env.PORT || 3000,
 };
