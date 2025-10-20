@@ -1,27 +1,15 @@
-// worker-loop.js - Persistent Pod Worker Loop
-const APP = process.env.PUBLIC_BASE_URL || "https://robust-magic-production.up.railway.app";
-const KEY = process.env.COMMAND_CENTER_KEY || "MySecretKey2025LifeOS";
+// worker-loop.js
+const APP = 'http://example.com'; // Replace with your actual API endpoint
+const KEY = 'your_api_key'; // Replace with your actual API key
 
-console.log('[worker-loop] Starting persistent worker...');
-console.log(`[worker-loop] Target: ${APP}`);
+const resetStuckTasks = () => {
+  fetch(`${APP}/internal/autopilot/reset-stuck?key=${KEY}&minutes=15}`)
+    .then(response => response.json())
+    .then(data => console.log('Reset tasks response:', data))
+    .catch(error => console.error('Error resetting tasks:', error));
+};
 
-async function keepWorkersAlive() {
-  while (true) {
-    try {
-      const res = await fetch(`${APP}/internal/autopilot/build-now?key=${KEY}`, {
-        method: 'POST'
-      });
-      
-      const data = await res.json();
-      console.log(`[worker-loop] Trigger sent: ${res.status} - ${data.message || 'no message'}`);
-    } catch (e) {
-      console.error('[worker-loop] Error:', e.message);
-    }
-    
-    // Wait 60 seconds before next trigger
-    await new Promise(r => setTimeout(r, 60000));
-  }
-}
+// Run the reset function every 5 minutes
+setInterval(resetStuckTasks, 300000);
 
-// Start the loop
-keepWorkersAlive();
+// ... Other worker loop code
