@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Health Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        .card { border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 15px; }
+        .card h2 { margin: 0; font-size: 1.5em; }
+        .status { font-size: 1.2em; }
+        .green { color: green; }
+        .yellow { color: orange; }
+        .red { color: red; }
+        @media (max-width: 600px) { .container { padding: 10px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Real-Time Health Dashboard</h1>
+        <div id="current-builds" class="card">
+            <h2>Current Builds</h2>
+            <div id="builds-list"></div>
+        </div>
+        <div id="queue-status" class="card">
+            <h2>Queue Status</h2>
+            <div id="queue-count"></div>
+        </div>
+        <div id="budget-spend" class="card">
+            <h2>Budget Spend</h2>
+            <div id="spend-amount"></div>
+        </div>
+        <div id="recent-completions" class="card">
+            <h2>Recent Completions</h2>
+            <ul id="pr-list"></ul>
+        </div>
+        <div id="system-health" class="card">
+            <h2>System Health Status</h2>
+            <div id="health-status" class="status"></div>
+        </div>
+        <div id="strategic-decisions" class="card">
+            <h2>Strategic Decisions Needed</h2>
+            <div id="decisions-list"></div>
+        </div>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>
