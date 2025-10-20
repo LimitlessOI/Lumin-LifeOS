@@ -1,33 +1,15 @@
-async function fetchHealthData() {
-    const response = await fetch('/api/health');
-    const data = await response.json();
-    updateDashboard(data);
-}
-
-function updateDashboard(data) {
-    document.getElementById('builds-list').innerHTML = data.currentBuilds.join('<br>');
-    document.getElementById('queue-count').innerText = `${data.queueStatus} tasks waiting`;
-    document.getElementById('spend-amount').innerText = `$${data.budgetSpend}/day`;
-    const prList = document.getElementById('pr-list');
-    prList.innerHTML = '';
-    data.recentCompletions.forEach(pr => {
-        const li = document.createElement('li');
-        li.innerText = pr;
-        prList.appendChild(li);
-    });
-    const healthStatus = document.getElementById('health-status');
-    healthStatus.className = data.systemHealth;
-    healthStatus.innerText = data.systemHealth.charAt(0).toUpperCase() + data.systemHealth.slice(1);
-    const decisionsList = document.getElementById('decisions-list');
-    decisionsList.innerHTML = '';
-    data.strategicDecisions.forEach(decision => {
-        const link = document.createElement('a');
-        link.href = decision.link;
-        link.innerText = decision.title;
-        decisionsList.appendChild(link);
-        decisionsList.appendChild(document.createElement('br'));
+function fetchDashboardData() {
+    $.get('/api/health', function(data) {
+        $('#current-builds').html(`<h2>Current Builds</h2><pre>${JSON.stringify(data.currentBuilds, null, 2)}</pre>`);
+        $('#queue-status').html(`<h2>Queue Status</h2><p>${data.queueStatus.waiting} tasks waiting</p>`);
+        $('#budget-spend').html(`<h2>Budget Spend</h2><p>$${data.budgetSpend.toFixed(2)}/day</p>`);
+        $('#recent-completions').html(`<h2>Recent Completions</h2><pre>${JSON.stringify(data.recentPRs, null, 2)}</pre>`);
+        $('#system-health').html(`<h2>System Health</h2><p style='color:${data.systemHealth.color};'>${data.systemHealth.status}</p>`);
+        $('#strategic-decisions').html(`<h2>Strategic Decisions Needed</h2>${data.strategicDecisions.map(decision => `<a href='${decision.link}'>${decision.description}</a>`).join('<br>')}`);
     });
 }
 
-setInterval(fetchHealthData, 30000);
-fetchHealthData();
+$(document).ready(function() {
+    fetchDashboardData();
+    setInterval(fetchDashboardData, 30000);
+});

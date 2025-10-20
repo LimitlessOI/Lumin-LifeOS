@@ -1,21 +1,31 @@
 const express = require('express');
 const router = express.Router();
 
-// Mock data for the dashboard
-const healthData = {
-    currentBuilds: ['Pod1', 'Pod2', 'Pod3'],
-    queueStatus: 5,
-    budgetSpend: 1200,
-    recentCompletions: ['PR1 (Merged)', 'PR2 (Merged)', 'PR3 (Merged)', 'PR4 (Merged)', 'PR5 (Merged)', 'PR6 (Merged)', 'PR7 (Merged)', 'PR8 (Merged)', 'PR9 (Merged)', 'PR10 (Merged)'],
-    systemHealth: 'green', // options: green, yellow, red
-    strategicDecisions: [
-        { title: 'Decision 1', link: 'http://example.com/decision1' },
-        { title: 'Decision 2', link: 'http://example.com/decision2' }
-    ]
-};
-
 router.get('/health', (req, res) => {
-    res.json(healthData);
+    // Mock Data - Replace with real data fetching logic
+    const data = {
+        currentBuilds: ['pod1', 'pod2'],
+        queueStatus: { waiting: 5 },
+        budgetSpend: 1500.00,
+        recentPRs: [
+            { pr: 'PR #1', status: 'merged' },
+            { pr: 'PR #2', status: 'merged' },
+            { pr: 'PR #3', status: 'merged' },
+            { pr: 'PR #4', status: 'merged' },
+            { pr: 'PR #5', status: 'merged' },
+            { pr: 'PR #6', status: 'merged' },
+            { pr: 'PR #7', status: 'merged' },
+            { pr: 'PR #8', status: 'merged' },
+            { pr: 'PR #9', status: 'merged' },
+            { pr: 'PR #10', status: 'merged' }
+        ],
+        systemHealth: { status: 'Healthy', color: 'green' },
+        strategicDecisions: [
+            { description: 'Decision 1', link: 'http://example.com/decision1' },
+            { description: 'Decision 2', link: 'http://example.com/decision2' }
+        ]
+    };
+    res.json(data);
 });
 
 module.exports = router;
