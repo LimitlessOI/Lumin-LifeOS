@@ -1,12 +1,14 @@
 {
-  "name": "crm-quality-checks",
+  "name": "ai-call-analyzer",
   "version": "1.0.0",
-  "main": "cron_job.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node cron_job.js"
+    "start": "node server.js"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "axios": "^0.21.1",
-    "node-cron": "^2.0.3"
+    "openai": "^3.0.0",
+    "body-parser": "^1.19.0"
   }
 }
