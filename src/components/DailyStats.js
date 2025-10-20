@@ -2,11 +2,13 @@ import React from 'react';
 
 const DailyStats = ({ stats }) => {
   return (
-    <div className="mb-4 p-4 border rounded bg-gray-100">
-      <h2 className="text-xl font-semibold">Daily Stats</h2>
-      <p>Total Leads: {stats.totalLeads}</p>
-      <p>Calls Made: {stats.callsMade}</p>
-      <p>Join Rate: {stats.joinRate.toFixed(2)}%</p>
+    <div className="bg-gray-100 p-4 rounded-lg mb-4">
+      <h2 className="text-lg font-semibold">Daily Stats</h2>
+      <ul>
+        <li>Total Leads: {stats.totalLeads}</li>
+        <li>Calls Made: {stats.callsMade}</li>
+        <li>Join Rate: {stats.joinRate.toFixed(2)}%</li>
+      </ul>
     </div>
   );
 };

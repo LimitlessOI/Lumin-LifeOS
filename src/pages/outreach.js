@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import LeadTable from '../components/LeadTable';
 import Filters from '../components/Filters';
 import DailyStats from '../components/DailyStats';
@@ -7,42 +7,48 @@ import '../styles/tailwind.css';
 const Outreach = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
-  const [statusFilter, setStatusFilter] = useState('');
+  const [filter, setFilter] = useState('');
   const [stats, setStats] = useState({ totalLeads: 0, callsMade: 0, joinRate: 0 });
 
   useEffect(() => {
-    // Fetch leads from the outreach_leads table
-    fetch('/api/outreach_leads')
-      .then(response => response.json())
-      .then(data => {
-        setLeads(data);
-        setFilteredLeads(data);
-        setStats({
-          totalLeads: data.length,
-          callsMade: data.filter(lead => lead.status === 'contacted').length,
-          joinRate: (data.filter(lead => lead.status === 'joined').length / data.length) * 100
-        });
-      });
+    // Fetch leads data from an API or database
+    const fetchLeads = async () => {
+      const response = await fetch('/api/outreach_leads');
+      const data = await response.json();
+      setLeads(data);
+      setFilteredLeads(data);
+      calculateStats(data);
+    };
+    fetchLeads();
   }, []);
 
-  useEffect(() => {
-    if (statusFilter) {
-      setFilteredLeads(leads.filter(lead => lead.status === statusFilter));
+  const calculateStats = (data) => {
+    const totalLeads = data.length;
+    const callsMade = data.filter(lead => lead.status === 'contacted').length;
+    const joinRate = (data.filter(lead => lead.status === 'joined').length / totalLeads) * 100 || 0;
+
+    setStats({ totalLeads, callsMade, joinRate });
+  };
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    if (newFilter) {
+      setFilteredLeads(leads.filter(lead => lead.status === newFilter));
     } else {
       setFilteredLeads(leads);
     }
-  }, [statusFilter, leads]);
+  };
 
-  const handleCall = (leadId) => {
-    // Logic to trigger call
-    console.log('Calling lead with ID:', leadId);
+  const triggerCall = (lead) => {
+    // Implement call logic here
+    console.log(`Calling ${lead.name}...`);
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Outreach Dashboard</h1>
-      <Filters setStatusFilter={setStatusFilter} />
-      <LeadTable leads={filteredLeads} onCall={handleCall} />
+      <h1 className="text-2xl font-bold mb-4">Outreach CRM Dashboard</h1>
+      <Filters filter={filter} onFilterChange={handleFilterChange} />
+      <LeadTable leads={filteredLeads} onCallTrigger={triggerCall} />
       <DailyStats stats={stats} />
     </div>
   );

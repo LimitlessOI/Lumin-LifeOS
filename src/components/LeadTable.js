@@ -1,28 +1,28 @@
 import React from 'react';
 
-const LeadTable = ({ leads, onCall }) => {
+const LeadTable = ({ leads, onCallTrigger }) => {
   return (
-    <table className="min-w-full border-collapse border border-gray-200">
-      <thead>
+    <table className="min-w-full divide-y divide-gray-200">
+      <thead className="bg-gray-50">
         <tr>
-          <th className="border border-gray-300 p-2">Name</th>
-          <th className="border border-gray-300 p-2">Phone</th>
-          <th className="border border-gray-300 p-2">Status</th>
-          <th className="border border-gray-300 p-2">Last Contact</th>
-          <th className="border border-gray-300 p-2">Next Action</th>
-          <th className="border border-gray-300 p-2">Actions</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Contact</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Action</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
-      <tbody>
-        {leads.map(lead => (
+      <tbody className="bg-white divide-y divide-gray-200">
+        {leads.map((lead) => (
           <tr key={lead.id}>
-            <td className="border border-gray-300 p-2">{lead.name}</td>
-            <td className="border border-gray-300 p-2">{lead.phone}</td>
-            <td className="border border-gray-300 p-2">{lead.status}</td>
-            <td className="border border-gray-300 p-2">{lead.last_contact}</td>
-            <td className="border border-gray-300 p-2">{lead.next_action}</td>
-            <td className="border border-gray-300 p-2">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={() => onCall(lead.id)}>Call</button>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.name}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.phone}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.status}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.last_contact}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.next_action}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <button onClick={() => onCallTrigger(lead)} className="text-blue-600 hover:text-blue-900">Call</button>
             </td>
           </tr>
         ))}
