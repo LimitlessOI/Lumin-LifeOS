@@ -1,15 +1,21 @@
+// Import necessary modules
 const express = require('express');
+const chatRoutes = require('./src/routes/chat');
 const app = express();
 
-const AUTO_MERGE_THRESHOLD = 0.60;
-
+// Middleware to parse JSON
 app.use(express.json());
 
-// Endpoint to revert last merge
-app.post('/api/v1/emergency/revert-last', (req, res) => {
-    // Implementation will be in auto-revert.js
+// Healthcheck Endpoint
+app.get('/healthz', (req, res) => {
+    res.status(200).send('OK');
 });
 
-app.listen(3000, () => {
-    console.log('Server running on port 3000');
+// Chat Routes
+app.use('/chat', chatRoutes);
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
