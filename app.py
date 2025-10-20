@@ -1,47 +1,16 @@
 from flask import Flask, request, jsonify
-from models import db, OutreachLead
-from config import Config
-import requests
-import os
+from transcription_service import analyze_call
 
 app = Flask(__name__)
-app.config.from_object(Config)
-db.init_app(app)
 
-@app.route('/api/v1/outreach/collect-leads', methods=['POST'])
-def collect_leads():
+@app.route('/api/v1/outreach/analyze-call', methods=['POST'])
+def analyze_call_endpoint():
     data = request.json
-    city = data.get('city')
-    category = data.get('category')
-    limit = data.get('limit', 10)
-
-    if city not in ['Las Vegas', 'Henderson']:
-        return jsonify({'error': 'Invalid city. Must be Las Vegas or Henderson.'}), 400
-
-    # Call Google Places API
-    api_key = os.getenv('GOOGLE_PLACES_API_KEY')
-    url = f'https://maps.googleapis.com/maps/api/place/textsearch/json?query={category}+in+{city}&key={api_key}&limit={limit}'
-    response = requests.get(url)
-    results = response.json().get('results', [])
-
-    count = 0
-    for result in results:
-        lead = OutreachLead(
-            name=result.get('name'),
-            phone=result.get('formatted_phone_number', 'N/A'),
-            email='N/A',  # Placeholder as Google Places API does not provide email
-            address=result.get('formatted_address', 'N/A'),
-            category=category,
-            url=result.get('url', 'N/A'),
-            status='new'
-        )
-        db.session.add(lead)
-        count += 1
-
-    db.session.commit()
-    return jsonify({'count': count}), 200
+    audio_url = data.get('audio_url')
+    if not audio_url:
+        return jsonify({'error': 'audio_url is required'}), 400
+    analysis_summary = analyze_call(audio_url)
+    return jsonify(analysis_summary)
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
