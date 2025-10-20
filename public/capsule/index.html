@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Capsule Knowledge Base</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Knowledge Capsules</h1>
+    <div id="capsule-list"></div>
+    <script>
+        async function fetchCapsules() {
+            const response = await fetch('/api/v1/capsule');
+            const capsules = await response.json();
+            const list = document.getElementById('capsule-list');
+            capsules.forEach(capsule => {
+                const item = document.createElement('div');
+                item.innerHTML = `<h2>${capsule.title}</h2><p>${capsule.content}</p><p>Category: ${capsule.category}</p>`;
+                list.appendChild(item);
+            });
+        }
+        fetchCapsules();
+    </script>
+</body>
+</html>
