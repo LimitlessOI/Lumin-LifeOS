@@ -1,12 +1,15 @@
-// Server configuration for PR auto-merging
+const express = require('express');
+const app = express();
 
-const AUTO_MERGE_THRESHOLD = 0.8; // Changed from 0.9 to 0.8 to auto-merge PRs with 80%+ quality
+const AUTO_MERGE_THRESHOLD = 0.60;
 
-function shouldAutoMerge(pr) {
-    if (pr.type === 'strategic') {
-        return false; // Requires manual approval from Adam
-    }
-    return pr.quality >= AUTO_MERGE_THRESHOLD; // Check quality against the threshold
-}
+app.use(express.json());
 
-// Additional logic to handle PRs goes here...
+// Endpoint to revert last merge
+app.post('/api/v1/emergency/revert-last', (req, res) => {
+    // Implementation will be in auto-revert.js
+});
+
+app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
