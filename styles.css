@@ -1,8 +1,2 @@
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-.container { width: 90%; max-width: 600px; margin: 20px auto; padding: 20px; background: white; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-h1 { text-align: center; }
-form { display: flex; flex-direction: column; }
-input, textarea, select, button { margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 3px; }
-#task-list { list-style: none; padding: 0; }
-.task-item { display: flex; justify-content: space-between; align-items: center; }
-.task-item button { margin-left: 10px; }
+body { font-family: 'Arial', sans-serif; }
+.container { max-width: 600px; }

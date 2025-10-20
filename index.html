@@ -3,23 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Command Overlay Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <title>Task Management Application</title>
 </head>
-<body>
-    <div class="container">
-        <h1>Task Management</h1>
-        <form id="task-form">
-            <input type="text" id="task-title" placeholder="Task Title" required>
-            <textarea id="task-description" placeholder="Task Description"></textarea>
-            <select id="task-status">
-                <option value="pending">Pending</option>
-                <option value="completed">Completed</option>
-            </select>
-            <button type="submit">Add Task</button>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Command Overlay Dashboard</h1>
+        <div id="task-queue" class="mb-4"></div>
+        <div id="pod-status" class="mb-4"></div>
+        <div id="revenue-metrics" class="mb-4">
+            <h2 class="text-xl font-semibold">Revenue Metrics</h2>
+            <p>Total Revenue: $100,000</p>
+            <p>Monthly Revenue: $10,000</p>
+        </div>
+        <form id="enqueue-form" class="mb-4">
+            <h2 class="text-xl font-semibold">Enqueue New Task</h2>
+            <input type="text" id="task-name" class="border rounded p-2 mr-2" placeholder="Task Name" required>
+            <button type="submit" class="bg-blue-500 text-white rounded p-2">Enqueue Task</button>
         </form>
-        <ul id="task-list"></ul>
     </div>
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
