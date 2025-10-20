@@ -1,9 +1,24 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../database');
 
-const outreachLeadSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  phone: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+const OutreachLead = sequelize.define('OutreachLead', {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  website: {
+    type: DataTypes.STRING,
+  },
+}, {
+  tableName: 'outreach_leads',
 });
 
-module.exports = mongoose.model('OutreachLead', outreachLeadSchema);
+module.exports = OutreachLead;

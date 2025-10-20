@@ -1,6 +1,7 @@
 const express = require('express');
-const router = express.Router();
 const { collectLeads } = require('../controllers/outreachController');
+
+const router = express.Router();
 
 router.post('/collect-leads', collectLeads);
 
