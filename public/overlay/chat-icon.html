@@ -1,0 +1,26 @@
+<div id='chatIcon' style='position:fixed; bottom:20px; right:20px; cursor:pointer; z-index:1000;'>
+    <span style='font-size: 24px;'>💬</span>
+</div>
+<div id='chatPanel' style='position:fixed; bottom:0; right:0; width:400px; height:100%; background:white; box-shadow:-2px 0 5px rgba(0,0,0,0.5); transform:translateX(100%); overflow:auto;'>
+    <div id='chatContent'>
+        <h2>Current Conversation</h2>
+        <div id='recentChats'>
+            <h3>Recent Chats</h3>
+            <ul>
+                <li>Chat 1</li>
+                <li>Chat 2</li>
+            </ul>
+        </div>
+        <div id='quickActions'>
+            <button>Create Task</button>
+            <button>Check Status</button>
+        </div>
+        <div id='modelSelector'>
+            <select>
+                <option>Claude</option>
+                <option>GPT-4</option>
+                <option>Gemini</option>
+            </select>
+        </div>
+    </div>
+</div>
