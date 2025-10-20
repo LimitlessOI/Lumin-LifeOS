@@ -1,54 +1,20 @@
-const fs = require('fs');
-const path = require('path');
-const tasksFilePath = path.join(__dirname, 'tasks.json');
+const express = require('express');
+const mongoose = require('mongoose');
+const outreachRoutes = require('./routes/outreach');
+const config = require('dotenv').config();
 
-function loadTasks() {
-    if (!fs.existsSync(tasksFilePath)) return [];
-    const data = fs.readFileSync(tasksFilePath);
-    return JSON.parse(data);
-}
+const app = express();
+app.use(express.json());
 
-function saveTasks(tasks) {
-    fs.writeFileSync(tasksFilePath, JSON.stringify(tasks, null, 2));
-}
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/outreach', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error(err));
 
-const tasks = loadTasks();
-const taskForm = document.getElementById('task-form');
-const taskList = document.getElementById('task-list');
+// Routes
+app.use('/api/v1/outreach', outreachRoutes);
 
-taskForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const title = document.getElementById('task-title').value;
-    const description = document.getElementById('task-description').value;
-    const status = document.getElementById('task-status').value;
-
-    if (!title) {
-        alert('Title is required.');
-        return;
-    }
-
-    const newTask = { title, description, status };
-    tasks.push(newTask);
-    saveTasks(tasks);
-    renderTasks();
-    taskForm.reset();
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-function renderTasks() {
-    taskList.innerHTML = '';
-    tasks.forEach((task, index) => {
-        const li = document.createElement('li');
-        li.className = 'task-item';
-        li.innerHTML = `<span>${task.title} - ${task.status}</span>
-                        <button onclick="deleteTask(${index})">Delete</button>`;
-        taskList.appendChild(li);
-    });
-}
-
-function deleteTask(index) {
-    tasks.splice(index, 1);
-    saveTasks(tasks);
-    renderTasks();
-}
-
-renderTasks();
