@@ -1,8 +1,15 @@
 const express = require('express');
-const { collectLeads } = require('../controllers/outreachController');
-
 const router = express.Router();
+const outreachController = require('../controllers/outreachController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.post('/collect-leads', collectLeads);
+// Call endpoint
+router.post('/call', authMiddleware, outreachController.initiateCall);
+
+// SMS endpoint
+router.post('/sms', authMiddleware, outreachController.sendSms);
+
+// Twilio webhook
+router.post('/webhook/twilio', outreachController.twilioWebhook);
 
 module.exports = router;
