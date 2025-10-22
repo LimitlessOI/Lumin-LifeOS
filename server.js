@@ -395,11 +395,160 @@ app.get("/api/v1/calls/stats", requireCommandKey, async (_req, res) => {
   }
 });
 
+// Work queue storage (in-memory for now, will persist to DB)
+const workQueue = [];
+let taskIdCounter = 1;
+
+// Architect command endpoint
+app.post("/api/v1/architect/command", requireCommandKey, async (req, res) => {
+  try {
+    const { intent, command } = req.body;
+    console.log(`[architect] Command received: ${command}`);
+    
+    // Generate tasks based on intent
+    let newTasks = [];
+    
+    if (intent === 'build') {
+      newTasks = [
+        { id: taskIdCounter++, description: 'Analyze codebase for improvement opportunities', status: 'queued' },
+        { id: taskIdCounter++, description: 'Create PR for identified improvements', status: 'queued' },
+        { id: taskIdCounter++, description: 'Get council approval', status: 'queued' }
+      ];
+    } else if (intent === 'outreach' || intent === 'recruit') {
+      newTasks = [
+        { id: taskIdCounter++, description: 'Generate EXP recruitment call scripts', status: 'queued' },
+        { id: taskIdCounter++, description: 'Identify high-value leads from call data', status: 'queued' },
+        { id: taskIdCounter++, description: 'Schedule outbound calls', status: 'queued' },
+        { id: taskIdCounter++, description: 'Create follow-up sequences', status: 'queued' }
+      ];
+    } else if (intent === 'revenue') {
+      newTasks = [
+        { id: taskIdCounter++, description: 'Analyze revenue opportunities', status: 'queued' },
+        { id: taskIdCounter++, description: 'Optimize lead conversion funnel', status: 'queued' },
+        { id: taskIdCounter++, description: 'Generate pricing strategy proposals', status: 'queued' }
+      ];
+    } else if (intent === 'analyze') {
+      newTasks = [
+        { id: taskIdCounter++, description: 'Generate performance analytics report', status: 'queued' },
+        { id: taskIdCounter++, description: 'Identify bottlenecks and optimization targets', status: 'queued' }
+      ];
+    } else {
+      // Default: generate 5 random improvement tasks
+      newTasks = [
+        { id: taskIdCounter++, description: 'Scan logs for recurring errors', status: 'queued' },
+        { id: taskIdCounter++, description: 'Optimize database queries', status: 'queued' },
+        { id: taskIdCounter++, description: 'Update documentation', status: 'queued' },
+        { id: taskIdCounter++, description: 'Run security audit', status: 'queued' },
+        { id: taskIdCounter++, description: 'Performance profiling', status: 'queued' }
+      ];
+    }
+    
+    // Add to queue
+    workQueue.push(...newTasks);
+    
+    res.json({
+      ok: true,
+      message: `Generated ${newTasks.length} tasks for: ${intent}`,
+      new_tasks: newTasks
+    });
+    
+    // Start processing queue
+    processWorkQueue();
+  } catch (e) {
+    console.error('[architect]', e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+// Auto-generate work endpoint (called by cron)
+app.post("/api/v1/autopilot/generate-work", async (req, res) => {
+  if (!assertKey(req, res)) return;
+  
+  try {
+    // Always keep 10-20 tasks in the queue
+    const currentTasks = workQueue.filter(t => t.status !== 'complete').length;
+    const tasksNeeded = Math.max(0, 15 - currentTasks);
+    
+    if (tasksNeeded > 0) {
+      const newTasks = [];
+      for (let i = 0; i < tasksNeeded; i++) {
+        newTasks.push({
+          id: taskIdCounter++,
+          description: `Auto-generated improvement task #${taskIdCounter}`,
+          status: 'queued',
+          created: new Date()
+        });
+      }
+      workQueue.push(...newTasks);
+      console.log(`[autopilot] Generated ${tasksNeeded} new tasks`);
+    }
+    
+    res.json({ 
+      ok: true, 
+      queue_size: workQueue.length,
+      tasks_added: tasksNeeded 
+    });
+  } catch (e) {
+    res.status(500).json({ error: String(e) });
+  }
+});
+
+// Get current work queue
+app.get("/api/v1/tasks", requireCommandKey, async (_req, res) => {
+  res.json({ 
+    ok: true, 
+    tasks: workQueue.slice(-50) // Last 50 tasks
+  });
+});
+
+// Cancel task
+app.post("/api/v1/tasks/:id/cancel", requireCommandKey, async (req, res) => {
+  const taskId = Number(req.params.id);
+  const task = workQueue.find(t => t.id === taskId);
+  if (task) {
+    task.status = 'cancelled';
+    res.json({ ok: true });
+  } else {
+    res.status(404).json({ ok: false, error: 'Task not found' });
+  }
+});
+
+// Process work queue (runs continuously)
+async function processWorkQueue() {
+  while (true) {
+    const task = workQueue.find(t => t.status === 'queued');
+    if (!task) {
+      await sleep(5000); // Wait 5 seconds if no tasks
+      continue;
+    }
+    
+    task.status = 'in-progress';
+    console.log(`[worker] Processing: ${task.description}`);
+    
+    try {
+      // Simulate work (replace with actual AI processing)
+      await sleep(Math.random() * 10000 + 5000); // 5-15 seconds
+      
+      task.status = 'complete';
+      task.completed = new Date();
+      console.log(`[worker] Completed: ${task.description}`);
+    } catch (e) {
+      task.status = 'failed';
+      task.error = String(e);
+      console.error(`[worker] Failed: ${task.description}`, e);
+    }
+  }
+}
+
+// Start work processor in background
+setTimeout(() => processWorkQueue(), 5000);
+
 // Start server
 app.listen(PORT, HOST, () => {
   console.log(`✅ Server running on http://${HOST}:${PORT}`);
   console.log(`✅ Health: http://${HOST}:${PORT}/health`);
   console.log(`✅ Overlay: http://${HOST}:${PORT}/overlay/index.html`);
+  console.log(`✅ Architect: http://${HOST}:${PORT}/overlay/architect.html`);
   console.log(`✅ Council: Multi-LLM consensus active`);
+  console.log(`✅ Work Queue: Auto-generating 10-20 tasks continuously`);
 });
-
