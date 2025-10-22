@@ -1,4 +1,4 @@
-// server.js - COMPLETE v9 with AI-to-AI JSON Protocol + ROI Tracking
+// server.js - COMPLETE v9 FIXED - AI-to-AI JSON Protocol + ROI Tracking
 import express from "express";
 import dayjs from "dayjs";
 import fs from "fs";
@@ -180,6 +180,10 @@ async function safeFetch(url, init = {}, retries = 3) {
 
 async function callCouncilMember(member, prompt) {
   const config = COUNCIL_MEMBERS[member];
+  if (!config) {
+    throw new Error(`Unknown council member: ${member}. Available: ${Object.keys(COUNCIL_MEMBERS).join(', ')}`);
+  }
+  
   if (member === 'claude' && ANTHROPIC_API_KEY) {
     const res = await safeFetch("https://api.anthropic.com/v1/messages", {
       method: "POST", headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
@@ -284,7 +288,7 @@ app.post("/api/v1/architect/chat", requireCommandKey, async (req, res) => {
   try {
     const { query_json, original_message } = req.body;
     const prompt = `AI-to-AI: ${JSON.stringify(query_json)}\nUser: "${original_message?.slice(0, 100)}"\n\nCompact JSON:\n{"r":"response","s":{"c":completed,"a":active,"m":"detail"},"t":["tasks if needed"]}`;
-    const result = await callCouncilMember('gpt-4o-mini', prompt);
+    const result = await callCouncilMember('jayn', prompt);
     const parsed = JSON.parse(result.response);
     let tasksCreated = 0;
     if (parsed.t?.length > 0) {
@@ -392,7 +396,7 @@ app.get("/healthz", async (_req, res) => {
   try {
     const r = await pool.query("select now()");
     const spend = readSpend();
-    res.json({ status: "healthy", database: "connected", timestamp: r.rows[0].now, version: "v9-ai-to-ai-json-roi", daily_spend: spend.usd, max_daily_spend: MAX_DAILY_SPEND, spend_percentage: ((spend.usd / MAX_DAILY_SPEND) * 100).toFixed(1) + "%", active_tasks: workQueue.filter(t => t.status === 'in-progress').length, queued_tasks: workQueue.filter(t => t.status === 'queued').length, ai_to_ai_json: "ENABLED", roi: { ratio: roiTracker.roi_ratio.toFixed(2) + "x", revenue: "$" + roiTracker.daily_revenue.toFixed(2), cost: "$" + roiTracker.daily_ai_cost.toFixed(2), tokens_saved: roiTracker.total_tokens_saved, health: roiTracker.roi_ratio > 2 ? "HEALTHY" : "MARGINAL" } });
+    res.json({ status: "healthy", database: "connected", timestamp: r.rows[0].now, version: "v9-ai-to-ai-json-roi-fixed", daily_spend: spend.usd, max_daily_spend: MAX_DAILY_SPEND, spend_percentage: ((spend.usd / MAX_DAILY_SPEND) * 100).toFixed(1) + "%", active_tasks: workQueue.filter(t => t.status === 'in-progress').length, queued_tasks: workQueue.filter(t => t.status === 'queued').length, ai_to_ai_json: "ENABLED", roi: { ratio: roiTracker.roi_ratio.toFixed(2) + "x", revenue: "$" + roiTracker.daily_revenue.toFixed(2), cost: "$" + roiTracker.daily_ai_cost.toFixed(2), tokens_saved: roiTracker.total_tokens_saved, health: roiTracker.roi_ratio > 2 ? "HEALTHY" : "MARGINAL" } });
   } catch { res.status(500).json({ status: "unhealthy" }); }
 });
 
