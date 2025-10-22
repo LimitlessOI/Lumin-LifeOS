@@ -1,4 +1,4 @@
-// server.js - COMPLETE v9 FIXED - AI-to-AI JSON Protocol + ROI Tracking
+// server.js - v9 FIXED with Auto-Generation on Startup
 import express from "express";
 import dayjs from "dayjs";
 import fs from "fs";
@@ -296,7 +296,7 @@ app.post("/api/v1/architect/chat", requireCommandKey, async (req, res) => {
       workQueue.push(...newTasks);
       tasksCreated = newTasks.length;
     }
-    const tokensSaved = Math.floor(original_message.length * 2);
+    const tokensSaved = Math.floor(original_message?.length || 0 * 2);
     trackCost(result.usage, 'gpt-4o-mini');
     updateROI(0, 0, 0, tokensSaved);
     console.log(`[chat] Response - Saved ~${tokensSaved} tokens`);
@@ -396,7 +396,7 @@ app.get("/healthz", async (_req, res) => {
   try {
     const r = await pool.query("select now()");
     const spend = readSpend();
-    res.json({ status: "healthy", database: "connected", timestamp: r.rows[0].now, version: "v9-ai-to-ai-json-roi-fixed", daily_spend: spend.usd, max_daily_spend: MAX_DAILY_SPEND, spend_percentage: ((spend.usd / MAX_DAILY_SPEND) * 100).toFixed(1) + "%", active_tasks: workQueue.filter(t => t.status === 'in-progress').length, queued_tasks: workQueue.filter(t => t.status === 'queued').length, ai_to_ai_json: "ENABLED", roi: { ratio: roiTracker.roi_ratio.toFixed(2) + "x", revenue: "$" + roiTracker.daily_revenue.toFixed(2), cost: "$" + roiTracker.daily_ai_cost.toFixed(2), tokens_saved: roiTracker.total_tokens_saved, health: roiTracker.roi_ratio > 2 ? "HEALTHY" : "MARGINAL" } });
+    res.json({ status: "healthy", database: "connected", timestamp: r.rows[0].now, version: "v9-auto-start", daily_spend: spend.usd, max_daily_spend: MAX_DAILY_SPEND, spend_percentage: ((spend.usd / MAX_DAILY_SPEND) * 100).toFixed(1) + "%", active_tasks: workQueue.filter(t => t.status === 'in-progress').length, queued_tasks: workQueue.filter(t => t.status === 'queued').length, completed_today: workQueue.filter(t => t.status === 'complete').length, ai_to_ai_json: "ENABLED", roi: { ratio: roiTracker.roi_ratio.toFixed(2) + "x", revenue: "$" + roiTracker.daily_revenue.toFixed(2), cost: "$" + roiTracker.daily_ai_cost.toFixed(2), tokens_saved: roiTracker.total_tokens_saved, health: roiTracker.roi_ratio > 2 ? "HEALTHY" : "MARGINAL" } });
   } catch { res.status(500).json({ status: "unhealthy" }); }
 });
 
@@ -444,12 +444,30 @@ app.get("/api/v1/calls/stats", requireCommandKey, async (_req, res) => {
 
 setTimeout(() => { processWorkQueue().catch(e => { console.error('[worker] Fatal:', e); process.exit(1); }); }, 5000);
 
+// AUTO-GENERATE TASKS ON STARTUP
+setTimeout(async () => {
+  console.log('[startup] Auto-generating initial 200 tasks...');
+  try {
+    const currentTasks = workQueue.filter(t => t.status !== 'complete' && t.status !== 'failed').length;
+    const tasksNeeded = Math.max(0, 200 - currentTasks);
+    if (tasksNeeded > 0) {
+      const taskTypes = ['Generate EXP recruitment script', 'Analyze lead conversion data', 'Optimize database performance', 'Create automated follow-up', 'Generate revenue report', 'Build feature improvement', 'Review system logs', 'Update documentation', 'Create pricing strategy', 'Generate call list'];
+      for (let i = 0; i < tasksNeeded; i++) {
+        workQueue.push({ id: taskIdCounter++, description: `${taskTypes[i % taskTypes.length]} #${Math.floor(i / taskTypes.length) + 1}`, status: 'queued', created: new Date() });
+      }
+      console.log(`[startup] ✅ Generated ${tasksNeeded} tasks - Work queue ready`);
+    }
+  } catch (e) {
+    console.error('[startup] Failed to auto-generate:', e.message);
+  }
+}, 10000);
+
 app.listen(PORT, HOST, () => {
   console.log(`✅ Server on http://${HOST}:${PORT}`);
-  console.log(`✅ Health: http://${HOST}:${PORT}/health`);
-  console.log(`✅ Architect: http://${HOST}:${PORT}/overlay/architect.html`);
+  console.log(`✅ Architect: http://${HOST}:${PORT}/overlay/architect.html?key=${COMMAND_CENTER_KEY}`);
   console.log(`✅ Council: Multi-LLM consensus active`);
   console.log(`✅ AI-to-AI JSON Protocol: ENABLED (82% cost savings)`);
   console.log(`✅ ROI Tracking: ENABLED`);
   console.log(`✅ Max Daily Spend: $${MAX_DAILY_SPEND}`);
+  console.log(`✅ Auto-generation: Will create 200 tasks in 10 seconds`);
 });
