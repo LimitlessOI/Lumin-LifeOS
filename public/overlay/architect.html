@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Architect Overlay - System Control</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #00ff00;
+      padding: 20px;
+    }
+    .container { max-width: 1400px; margin: 0 auto; }
+    .header {
+      border-bottom: 2px solid #00ff00;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .header h1 { font-size: 28px; margin-bottom: 5px; }
+    .header p { color: #666; font-size: 14px; }
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .status-card {
+      background: #111;
+      border: 1px solid #00ff00;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .status-card h3 { 
+      color: #00ff00; 
+      margin-bottom: 10px; 
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .status-card .value { 
+      font-size: 24px; 
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+    }
+    .status-card .value.healthy { color: #00ff00; }
+    .status-card .value.warning { color: #ffff00; }
+    .status-card .value.error { color: #ff0000; }
+    
+    .chat-container {
+      background: #111;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      height: 450px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+    }
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+    }
+    .message {
+      margin-bottom: 15px;
+      padding: 12px;
+      background: #1a1a1a;
+      border-left: 3px solid #00ff00;
+      border-radius: 3px;
+    }
+    .message.system { border-left-color: #ff00ff; }
+    .message.user { border-left-color: #00ffff; }
+    .message .meta {
+      font-size: 10px;
+      color: #666;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .message .content {
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    
+    .input-area {
+      border-top: 1px solid #00ff00;
+      padding: 15px;
+      display: flex;
+      gap: 10px;
+    }
+    .input-area input {
+      flex: 1;
+      background: #1a1a1a;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    .input-area input:focus {
+      outline: none;
+      border-color: #00ffff;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    }
+    .input-area button {
+      background: #00ff00;
+      color: #000;
+      border: none;
+      padding: 12px 30px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .input-area button:hover {
+      background: #00ffff;
+      transform: scale(1.05);
+    }
+    
+    .work-queue {
+      background: #111;
+      border: 1px solid #00ff00;
+      padding: 15px;
+      max-height: 400px;
+      overflow-y: auto;
+      border-radius: 5px;
+    }
+    .work-queue h3 {
+      margin-bottom: 15px;
+      font-size: 16px;
+      color: #00ff00;
+    }
+    .work-item {
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #1a1a1a;
+      border-left: 3px solid #ffff00;
+      border-radius: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .work-item.in-progress { border-left-color: #00ffff; }
+    .work-item.complete { border-left-color: #00ff00; opacity: 0.6; }
+    .work-item.cancelled { border-left-color: #666; opacity: 0.4; }
+    .work-item strong { color: #00ff00; margin-right: 10px; }
+    
+    .btn-danger {
+      background: #ff0000;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+    .btn-danger:hover {
+      background: #ff3333;
+      transform: scale(1.05);
+    }
+    
+    .quick-commands {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .quick-btn {
+      background: #1a1a1a;
+      border: 1px solid #00ff00;
+      color: #00ff00;
+      padding: 12px;
+      cursor: pointer;
+      font-size: 13px;
+      text-align: center;
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+    .quick-btn:hover {
+      background: #00ff00;
+      color: #000;
+      transform: translateY(-2px);
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .pulse { animation: pulse 2s infinite; }
+    
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #1a1a1a; }
+    ::-webkit-scrollbar-thumb { background: #00ff00; border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00ffff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🏗️ ARCHITECT OVERLAY</h1>
+      <p>System Control Center - Direct Line to AI Architect • Auto-refresh every 30s</p>
+    </div>
+
+    <div class="status-grid">
+      <div class="status-card">
+        <h3>System Status</h3>
+        <div class="value healthy pulse" id="status">LOADING...</div>
+      </div>
+      <div class="status-card">
+        <h3>Active Tasks</h3>
+        <div class="value" id="active-tasks">0</div>
+      </div>
+      <div class="status-card">
+        <h3>Completed Today</h3>
+        <div class="value" id="completed-tasks">0</div>
+      </div>
+      <div class="status-card">
+        <h3>Total Calls</h3>
+        <div class="value" id="calls">0</div>
+      </div>
+      <div class="status-card">
+        <h3>Council Reviews</h3>
+        <div class="value" id="decisions">0</div>
+      </div>
+      <div class="status-card">
+        <h3>Last Activity</h3>
+        <div class="value" id="last-build" style="font-size: 12px;">Just now</div>
+      </div>
+    </div>
+
+    <div class="quick-commands">
+      <button class="quick-btn" onclick="quickCommand('Generate 20 revenue-producing tasks')">💰 GENERATE REVENUE TASKS</button>
+      <button class="quick-btn" onclick="quickCommand('Create EXP recruitment call scripts')">📞 EXP RECRUITMENT</button>
+      <button class="quick-btn" onclick="quickCommand('Analyze all leads and prioritize hot ones')">🔥 ANALYZE LEADS</button>
+      <button class="quick-btn" onclick="quickCommand('Build automated follow-up system')">🤖 AUTO FOLLOW-UPS</button>
+      <button class="quick-btn" onclick="quickCommand('Optimize database performance')">⚡ OPTIMIZE SYSTEM</button>
+      <button class="quick-btn" onclick="quickCommand('Generate daily revenue report')">📊 DAILY REPORT</button>
+    </div>
+
+    <div class="chat-container">
+      <div class="messages" id="messages">
+        <div class="message system">
+          <div class="meta">ARCHITECT AI • ONLINE</div>
+          <div class="content">System operational. Multi-LLM council active. Work queue processing. Ready for commands.</div>
+        </div>
+      </div>
+      <div class="input-area">
+        <input type="text" id="input" placeholder="Command the system in plain English..." autocomplete="off" />
+        <button onclick="send()">EXECUTE</button>
+      </div>
+    </div>
+
+    <div class="work-queue">
+      <h3>🎯 ACTIVE WORK QUEUE (Auto-generating continuously)</h3>
+      <div id="queue">
+        <div class="work-item in-progress">
+          <div><strong>Task #1:</strong> Initializing work queue system...</div>
+          <button class="btn-danger" onclick="cancelTask(1)">CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_KEY = 'MySecretKey2025LifeOS';
+    const BASE_URL = window.location.origin;
+
+    // Auto-refresh every 30 seconds
+    setInterval(loadStatus, 30000);
+    setInterval(loadQueue, 30000);
+    loadStatus();
+    loadQueue();
+
+    async function loadStatus() {
+      try {
+        const health = await fetch(`${BASE_URL}/healthz`).then(r => r.json());
+        const statusEl = document.getElementById('status');
+        statusEl.textContent = health.status.toUpperCase();
+        statusEl.className = 'value ' + (health.status === 'healthy' ? 'healthy pulse' : 'error pulse');
+        
+        const stats = await fetch(`${BASE_URL}/api/v1/calls/stats?key=${API_KEY}`).then(r => r.json());
+        document.getElementById('calls').textContent = stats.count || 0;
+        
+        document.getElementById('last-build').textContent = new Date().toLocaleTimeString();
+      } catch (e) {
+        document.getElementById('status').textContent = 'ERROR';
+        document.getElementById('status').className = 'value error pulse';
+        console.error('Status load failed:', e);
+      }
+    }
+
+    async function loadQueue() {
+      try {
+        const tasks = await fetch(`${BASE_URL}/api/v1/tasks?key=${API_KEY}`).then(r => r.json());
+        
+        if (tasks.ok && tasks.tasks) {
+          const active = tasks.tasks.filter(t => t.status === 'in-progress' || t.status === 'queued').length;
+          const completed = tasks.tasks.filter(t => t.status === 'complete').length;
+          
+          document.getElementById('active-tasks').textContent = active;
+          document.getElementById('completed-tasks').textContent = completed;
+          
+          const queueEl = document.getElementById('queue');
+          queueEl.innerHTML = tasks.tasks.slice(-20).reverse().map(t => `
+            <div class="work-item ${t.status}">
+              <div><strong>Task #${t.id}:</strong> ${t.description}</div>
+              ${t.status === 'queued' || t.status === 'in-progress' ? 
+                `<button class="btn-danger" onclick="cancelTask(${t.id})">CANCEL</button>` : 
+                ''}
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        console.error('Queue load failed:', e);
+      }
+    }
+
+    function quickCommand(cmd) {
+      document.getElementById('input').value = cmd;
+      send();
+    }
+
+    async function send() {
+      const input = document.getElementById('input');
+      const message = input.value.trim();
+      if (!message) return;
+
+      addMessage('user', message);
+      input.value = '';
+
+      const payload = {
+        intent: extractIntent(message),
+        command: message,
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        const response = await fetch(`${BASE_URL}/api/v1/architect/command?key=${API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(r => r.json());
+
+        addMessage('system', response.message || 'Command received. Processing...');
+        
+        if (response.new_tasks) {
+          setTimeout(loadQueue, 1000);
+        }
+      } catch (e) {
+        addMessage('system', `ERROR: ${e.message}`);
+      }
+    }
+
+    function addMessage(type, text) {
+      const messages = document.getElementById('messages');
+      const msg = document.createElement('div');
+      msg.className = `message ${type}`;
+      msg.innerHTML = `
+        <div class="meta">${type.toUpperCase()} • ${new Date().toLocaleTimeString()}</div>
+        <div class="content">${text}</div>
+      `;
+      messages.appendChild(msg);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function extractIntent(message) {
+      const lower = message.toLowerCase();
+      if (lower.match(/build|create|develop|implement/)) return 'build';
+      if (lower.match(/call|phone|dial|contact/)) return 'outreach';
+      if (lower.match(/revenue|money|income|profit|sell/)) return 'revenue';
+      if (lower.match(/recruit|exp|team|hire|join/)) return 'recruit';
+      if (lower.match(/analyze|report|stats|data/)) return 'analyze';
+      if (lower.match(/optimize|improve|speed|performance/)) return 'optimize';
+      return 'general';
+    }
+
+    async function cancelTask(id) {
+      if (confirm(`Cancel task #${id}?`)) {
+        try {
+          await fetch(`${BASE_URL}/api/v1/tasks/${id}/cancel?key=${API_KEY}`, { method: 'POST' });
+          addMessage('system', `Task #${id} cancelled`);
+          setTimeout(loadQueue, 1000);
+        } catch (e) {
+          addMessage('system', `Failed to cancel: ${e.message}`);
+        }
+      }
+    }
+
+    document.getElementById('input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') send();
+    });
+  </script>
+</body>
+</html>
