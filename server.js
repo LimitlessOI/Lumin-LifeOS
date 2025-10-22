@@ -470,12 +470,26 @@ app.post("/api/v1/autopilot/generate-work", async (req, res) => {
     const currentTasks = workQueue.filter(t => t.status !== 'complete').length;
     const tasksNeeded = Math.max(0, 200 - currentTasks);
     
-    if (tasksNeeded > 0) {
+  if (tasksNeeded > 0) {
       const newTasks = [];
+      const taskTypes = [
+        'Generate EXP recruitment call script',
+        'Analyze lead conversion data',
+        'Optimize database query performance',
+        'Create automated follow-up sequence',
+        'Generate revenue opportunity report',
+        'Build feature improvement proposal',
+        'Review system logs for errors',
+        'Update documentation',
+        'Create pricing strategy analysis',
+        'Generate outbound call list'
+      ];
+      
       for (let i = 0; i < tasksNeeded; i++) {
+        const taskType = taskTypes[i % taskTypes.length];
         newTasks.push({
           id: taskIdCounter++,
-          description: `Auto-generated improvement task #${taskIdCounter}`,
+          description: `${taskType} #${Math.floor(i / taskTypes.length) + 1}`,
           status: 'queued',
           created: new Date()
         });
