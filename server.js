@@ -461,13 +461,14 @@ app.post("/api/v1/architect/command", requireCommandKey, async (req, res) => {
 });
 
 // Auto-generate work endpoint (called by cron)
+// Auto-generate work endpoint (called by cron)
 app.post("/api/v1/autopilot/generate-work", async (req, res) => {
   if (!assertKey(req, res)) return;
   
   try {
-    // Always keep 10-20 tasks in the queue
+    // Always keep 150-200 tasks in the queue
     const currentTasks = workQueue.filter(t => t.status !== 'complete').length;
-    const tasksNeeded = Math.max(0, 15 - currentTasks);
+    const tasksNeeded = Math.max(0, 200 - currentTasks);
     
     if (tasksNeeded > 0) {
       const newTasks = [];
