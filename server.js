@@ -535,25 +535,20 @@ async function processWorkQueue() {
     if (!task) {
       await sleep(5000); // Wait 5 seconds if no tasks
       continue;
-    }
-    
-    task.status = 'in-progress';
-    console.log(`[worker] Processing: ${task.description}`);
-    
-    try {
-      // Simulate work (replace with actual AI processing)
-      await sleep(Math.random() * 10000 + 5000); // 5-15 seconds
-      
-      task.status = 'complete';
-      task.completed = new Date();
-      console.log(`[worker] Completed: ${task.description}`);
-    } catch (e) {
-      task.status = 'failed';
-      task.error = String(e);
-      console.error(`[worker] Failed: ${task.description}`, e);
-    }
-  }
+    // Actually call AI
+const result = await callCouncilMember('claude', task.description);
+
+// Actually create PR if it's a build task
+if (task.description.includes('build') || task.description.includes('create')) {
+  await createGitHubPR(result.response);
 }
+
+// Actually analyze if it's an analysis task
+if (task.description.includes('analyze')) {
+  await analyzeAndReport(result.response);
+}
+
+task.status = 'complete';
 
 // Start work processor in background
 setTimeout(() => processWorkQueue(), 5000);
