@@ -1,36 +1,48 @@
-// server.js — v11 ORCHESTRATOR (WITH AUTONOMOUS LOOPS)
+// server.js — v11 ORCHESTRATOR (fixed overlay + health + repo)
 
+// ===== Core Deps =====
 const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
-const https = require('https');
 
-// ---- ENV ----
+// ===== ENV =====
 const {
   DATABASE_URL,
   COMMAND_CENTER_KEY = 'changeme',
   PORT = 3000,
+  HOST = '0.0.0.0',
+
+  // Costs / flags
   MAX_DAILY_SPEND = '5.0',
+
+  // External keys
   OPENAI_API_KEY,
   GITHUB_TOKEN,
-  PUBLIC_BASE_URL,
+
+  // Repo & base URL
+  GITHUB_REPO, // expected: LimitlessOI/Lumin-LifeOS
+  PUBLIC_BASE_URL
 } = process.env;
 
 const MAX_DAILY_SPEND_NUM = Number(MAX_DAILY_SPEND || 5);
+const REPO = (GITHUB_REPO && GITHUB_REPO.trim()) || 'LimitlessOI/Lumin-LifeOS';
 
-// ---- DB ----
+// ===== DB =====
 const pool = new Pool({
   connectionString: DATABASE_URL,
   max: 30,
 });
 
-// ---- APP ----
+// ===== App =====
 const app = express();
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
 
-// ---- HELPERS ----
+// Serve entire /public and explicitly /overlay
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/overlay', express.static(path.join(__dirname, 'public/overlay')));
+
+// ===== Helpers =====
 function requireCommandKey(req, res, next) {
   const key = req.query.key || req.headers['x-command-key'];
   if (key !== COMMAND_CENTER_KEY) {
@@ -40,12 +52,18 @@ function requireCommandKey(req, res, next) {
 }
 
 async function getTodaySpend() {
-  const r = await pool.query('SELECT COALESCE(SUM(cost), 0) AS total FROM orch_costs WHERE created_at::date = CURRENT_DATE')
-    .catch(() => ({ rows: [{ total: 0 }] }));
-  return Number(r.rows?.[0]?.total || 0);
+  try {
+    const r = await pool.query(
+      'SELECT COALESCE(SUM(cost), 0) AS total FROM orch_costs WHERE created_at::date = CURRENT_DATE'
+    );
+    return Number(r.rows?.[0]?.total || 0);
+  } catch {
+    return 0;
+  }
 }
 
-// ---- HEALTH ----
+// ===== Health =====
+// JSON health (DB touch)
 app.get('/healthz', async (_req, res) => {
   try {
     await pool.query('SELECT 1');
@@ -60,8 +78,10 @@ app.get('/healthz', async (_req, res) => {
   }
 });
 
-// ===== ORCHESTRATOR CORE =====
+// Simple HTML health (no DB)
+app.get('/health', (_req, res) => res.send('<h1>OK</h1>'));
 
+// ===== Orchestrator Core =====
 app.post('/api/v1/orch/enqueue', requireCommandKey, async (req, res) => {
   try {
     const { title, card, roi_guess = 0, complexity = 'medium', revenue_critical = false } = req.body || {};
@@ -79,7 +99,7 @@ app.post('/api/v1/orch/enqueue', requireCommandKey, async (req, res) => {
   }
 });
 
-app.post('/api/v1/orch/claim', requireCommandKey, async (req, res) => {
+app.post('/api/v1/orch/claim', requireCommandKey, async (_req, res) => {
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
@@ -99,15 +119,12 @@ app.post('/api/v1/orch/claim', requireCommandKey, async (req, res) => {
     }
 
     const task = pick.rows[0];
-    await client.query(
-      `UPDATE orch_tasks SET status = 'claimed', updated_at = NOW() WHERE id = $1`,
-      [task.id]
-    );
-
+    await client.query(`UPDATE orch_tasks SET status = 'claimed', updated_at = NOW() WHERE id = $1`, [task.id]);
     await client.query('COMMIT');
+
     return res.json({ ok: true, task });
   } catch (e) {
-    try { await client.query('ROLLBACK'); } catch(_) {}
+    try { await client.query('ROLLBACK'); } catch {}
     return res.status(500).json({ error: e.message });
   } finally {
     client.release();
@@ -138,8 +155,7 @@ app.post('/api/v1/orch/complete', requireCommandKey, async (req, res) => {
 
 app.get('/api/v1/orch/pods/status', requireCommandKey, async (_req, res) => {
   try {
-    const pods = await pool.query('SELECT * FROM orch_pods ORDER BY name')
-      .catch(() => ({ rows: [] }));
+    const pods = await pool.query('SELECT * FROM orch_pods ORDER BY name').catch(() => ({ rows: [] }));
     return res.json({ pods: pods.rows || [] });
   } catch (e) {
     return res.status(500).json({ error: e.message });
@@ -166,11 +182,7 @@ app.get('/api/v1/orch/queue', requireCommandKey, async (_req, res) => {
       return acc;
     }, {});
 
-    return res.json({
-      summary,
-      recent: recent.rows,
-      timestamp: new Date().toISOString(),
-    });
+    return res.json({ summary, recent: recent.rows, timestamp: new Date().toISOString() });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
@@ -187,11 +199,7 @@ app.post('/internal/autopilot/reset-stuck', requireCommandKey, async (req, res) 
       RETURNING id, title, updated_at
     `);
 
-    return res.json({
-      ok: true,
-      reset_count: result.rows.length,
-      tasks: result.rows,
-    });
+    return res.json({ ok: true, reset_count: result.rows.length, tasks: result.rows });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
@@ -201,16 +209,14 @@ app.post('/internal/autopilot/build-now', requireCommandKey, async (_req, res) =
   if (!OPENAI_API_KEY || !GITHUB_TOKEN) {
     return res.json({ ok: false, error: 'Missing API keys' });
   }
-  setTimeout(() => {
-    console.log('[build] Manual trigger received');
-  }, 10);
+  setTimeout(() => console.log('[build] Manual trigger received'), 10);
   return res.json({ ok: true, message: 'Build triggered' });
 });
 
-// ===== AUTONOMOUS BUILD FUNCTION =====
+// ===== Autonomous Build Function =====
 async function executeOrchBuild(podName) {
   try {
-    // 1. Claim a task
+    // 1) Claim a task
     const claimRes = await fetch(`http://localhost:${PORT}/api/v1/orch/claim?key=${COMMAND_CENTER_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' }
@@ -223,7 +229,7 @@ async function executeOrchBuild(podName) {
     const task = claimRes.task;
     console.log(`[${podName}] Claimed task #${task.id}: ${task.title}`);
 
-    // 2. Call OpenAI to generate code
+    // 2) Generate code via OpenAI
     const prompt = `You are a senior software engineer. Generate code for this task:
 Title: ${task.title}
 Details: ${task.card || 'No details provided'}
@@ -241,15 +247,16 @@ Respond with ONLY the code changes needed. Be specific and complete.`;
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 2000
       })
-    }).then(r => r.json());
+    }).then(r => r.json()).catch(e => ({ error: e.message }));
 
-    const code = aiResponse.choices?.[0]?.message?.content || 'No code generated';
+    const code = aiResponse?.choices?.[0]?.message?.content || 'No code generated';
     console.log(`[${podName}] Generated code (${code.length} chars)`);
 
-    // 3. Create GitHub PR (simplified - just create an issue as placeholder)
+    // 3) Create GitHub issue (placeholder for PR)
     const prBody = `**Task #${task.id}: ${task.title}**\n\n${task.card}\n\n---\n\nGenerated Code:\n\`\`\`\n${code}\n\`\`\``;
-    
-    const ghResponse = await fetch('https://api.github.com/repos/limitlessoi/lumin/issues', {
+
+    const ghUrl = `https://api.github.com/repos/${REPO}/issues`;
+    const ghResponse = await fetch(ghUrl, {
       method: 'POST',
       headers: {
         'Authorization': `token ${GITHUB_TOKEN}`,
@@ -260,11 +267,11 @@ Respond with ONLY the code changes needed. Be specific and complete.`;
         title: `[${podName}] ${task.title}`,
         body: prBody
       })
-    }).then(r => r.json());
+    }).then(r => r.json()).catch(e => ({ error: e.message }));
 
-    console.log(`[${podName}] Created GitHub issue #${ghResponse.number || 'unknown'}`);
+    console.log(`[${podName}] Created GitHub issue #${ghResponse?.number || 'unknown'}`);
 
-    // 4. Mark task complete
+    // 4) Mark task complete
     await fetch(`http://localhost:${PORT}/api/v1/orch/complete?key=${COMMAND_CENTER_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -287,8 +294,8 @@ Respond with ONLY the code changes needed. Be specific and complete.`;
   }
 }
 
-// ---- START SERVER & LOOPS ----
-app.listen(PORT, () => {
+// ===== Start Server & Loops =====
+app.listen(PORT, HOST, () => {
   console.log(`
 ┌──────────────────────────────────────────────┐
 │ 🚀 LIFEOS v11 ORCHESTRATOR                   │
@@ -298,25 +305,25 @@ app.listen(PORT, () => {
 └──────────────────────────────────────────────┘
 `);
 
-  // Start autonomous pod loops
+  // Start autonomous pod loops (only if keys present)
   if (OPENAI_API_KEY && GITHUB_TOKEN) {
     const PODS = ['Alpha', 'Bravo', 'Charlie', 'Delta'];
-    
     PODS.forEach((podName, index) => {
-      // Stagger start times by 15 seconds each
       setTimeout(() => {
         console.log(`[${podName}] Starting autonomous loop...`);
-        
         setInterval(async () => {
           console.log(`[${podName}] Checking for work...`);
           try {
+            // optional cost guard (if you wire getTodaySpend somewhere)
+            // const spent = await getTodaySpend();
+            // if (spent < MAX_DAILY_SPEND_NUM) {
             await executeOrchBuild(podName);
+            // }
           } catch (err) {
             console.error(`[${podName}] Loop error:`, err.message);
           }
-        }, 60000); // Every 60 seconds
-        
-      }, index * 15000); // Stagger by 15s
+        }, 60_000); // every 60s
+      }, index * 15_000); // stagger by 15s
     });
   } else {
     console.log('⚠️  Autonomous mode disabled (missing API keys)');
