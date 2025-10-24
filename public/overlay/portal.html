@@ -1,354 +1,322 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>LifeOS Architect • MICRO v1.2</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LifeOS Architect • MICRO v1.3</title>
 <style>
-  :root{
-    --bg:#0b0f14; --panel:#0f151c; --panel2:#111923; --fg:#e6edf3; --muted:#8aa1b2;
-    --accent:#22c55e; --accent2:#38bdf8; --danger:#ef4444; --border:#1f2a37;
-  }
-  html,body{height:100%; margin:0; background:transparent; font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Roboto; color:var(--fg);}
-  /* container */
-  #portal{
-    position:fixed; right:24px; bottom:24px; width:720px; height:560px; display:flex; flex-direction:column;
-    background:linear-gradient(180deg, rgba(17,25,35,.96), rgba(12,17,24,.96)); border:1px solid var(--border);
-    border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,.45); overflow:hidden; backdrop-filter:saturate(1.2) blur(8px);
-    resize:both; /* resizable corner - drag lower-right */
-  }
-  #hdr{display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--panel); border-bottom:1px solid var(--border);}
-  #title{font-weight:700;}
- .tag{font-size:12px; color:#cfe7ff; background:#0b2738; border:1px solid #183144; padding:4px 8px; border-radius:999px;}
- .sp{flex:1}
- .btn{background:#15202b; border:1px solid var(--border); color:var(--fg); padding:8px 12px; border-radius:10px; cursor:pointer}
- .btn:hover{background:#192634}
- .btn.acc{background:#16301f; border-color:#1d3f2a}
- .btn.acc:hover{background:#173723}
- .btn.red{background:#2a1414; border-color:#452020}
- .row{display:flex; gap:8px; align-items:center}
-  input, textarea{background:#0e1620; color:var(--fg); border:1px solid var(--border); border-radius:10px; padding:10px 12px}
-  input[type=range]{height:6px; background:#162433; border-radius:3px}
-  input::placeholder, textarea::placeholder{color:var(--muted)}
-  #conf{display:flex; gap:8px; padding:10px; border-bottom:1px solid var(--border); background:var(--panel2)}
-  #conf input{height:36px}
-  #teamToggle{display:flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; cursor:pointer;}
-  #teamToggle input{width:16px; height:16px}
-  /* layout: messages + side panel */
-  #main{display:grid; grid-template-columns:1fr 320px; gap:0; height:100%}
-  #left{display:flex; flex-direction:column; height:100%}
-  #io{padding:10px; display:flex; flex-direction:column; gap:8px; overflow:auto}
- .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12px; background:#0a121a; border:1px dashed #1d2b39; border-radius:8px; padding:10px; color:#bde0ff}
-  #chat{display:flex; flex-direction:column; gap:10px; padding:10px; overflow:auto}
- .bubble{background:#0e1620; border:1px solid var(--border); border-radius:12px; padding:12px}
- .bubble h5{margin:0 0 6px 0; font-size:12px; color:var(--muted)}
-  /* input area */
-  #inpWrap{padding:10px; border-top:1px solid var(--border); background:var(--panel2); display:flex; gap:8px; align-items:flex-end}
-  #msg{flex:1; min-height:56px; max-height:200px; overflow:auto; resize:vertical}
-  #inpCtrls{display:flex; flex-direction:column; gap:6px}
- .switch{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted)}
-  /* side panel */
-  #right{border-left:1px solid var(--border); background:#0b1118; display:flex; flex-direction:column}
-  #kpi{display:flex; gap:6px; flex-wrap:wrap; padding:10px; border-bottom:1px solid var(--border); background:#0f161f}
- .pill{font-size:12px; padding:6px 8px; border-radius:999px; border:1px solid var(--border); background:#0e1620}
-  #tasks{padding:10px; overflow:auto; display:flex; flex-direction:column; gap:8px}
- .task{border:1px solid var(--border); border-radius:10px; background:#0e1620; padding:10px}
- .task.trow{display:flex; justify-content:space-between; gap:8px}
- .prio-badge{padding:2px 6px; border-radius:4px; font-size:10px; font-weight:600}
- .prio-high{background:#ef4444; color:white}
- .prio-med{background:#f59e0b; color:white}
- .prio-low{background:#10b981; color:white}
- .bar{height:8px; border-radius:999px; background:#162433; overflow:hidden; margin-top:8px}
- .bar>span{display:block; height:100%; background:linear-gradient(90deg, #22c55e, #38bdf8)}
-  /* floating bubble */
-  #bubble{position:fixed; right:20px; bottom:20px; width:56px; height:56px; background:#22c55e; color:#001b0b; border:none; border-radius:50%;
-    box-shadow:0 18px 50px rgba(0,0,0,.45); cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:800}
-  /* maximize */
-  #max{font-size:18px; width:36px; height:36px; display:grid; place-items:center; border-radius:10px}
+  :root{
+    --bg:#0b0f14; --panel:#121821; --card:#1a2130; --muted:#8ea0b5; --text:#e9eef6;
+    --accent:#6ee7b7; --accent-2:#60a5fa; --danger:#f87171; --border:#233042;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+
+  .panel{position:fixed;right:24px;bottom:24px;width:860px;height:680px;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(0,0,0,.02)),var(--panel);
+    border:1px solid var(--border);border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden;resize:both}
+  .titlebar{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border);cursor:move;user-select:none}
+  .titlebar h1{margin:0;font-size:15px;letter-spacing:.2px}
+  .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;background:#111827;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:12px}
+  .grow{flex:1}
+  .btn{background:#1f2937;color:var(--text);border:1px solid var(--border);border-radius:10px;padding:8px 12px;cursor:pointer}
+  .btn:hover{filter:brightness(1.05)}
+  .btn.primary{background:linear-gradient(90deg,var(--accent-2),#34d399);border-color:transparent;color:#06121e;font-weight:700}
+  .btn.ghost{background:transparent}
+  .btn.danger{background:#2a1212;border-color:#3f1a1a;color:#ffb4b4}
+
+  .content{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;padding:14px;height:100%}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;min-height:0}
+  .card h2{margin:0 0 8px 0;font-size:13px;color:var(--muted);letter-spacing:.3px;text-transform:uppercase}
+
+  .log{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0c121a;border:1px solid var(--border);border-radius:8px;color:#bfe2ff;
+       padding:10px;min-height:64px;max-height:140px;overflow:auto;line-height:1.35}
+  .ai{background:#0e131b;border:1px solid var(--border);border-radius:10px;padding:12px;min-height:160px;max-height:275px;overflow:auto;white-space:pre-wrap}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .input{width:100%;min-height:120px;max-height:260px;overflow:auto;resize:vertical;background:#0e131b;color:var(--text);
+         border:1px solid var(--border);border-radius:10px;padding:12px;font:14px/1.5 ui-sans-serif,system-ui}
+  .switch{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;margin-right:10px}
+
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;background:#0e1620;border:1px solid var(--border);border-radius:8px;color:#bfe2ff;font-size:12px}
+  .progress{height:8px;border-radius:6px;background:#0e1620;overflow:hidden}
+  .progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent-2),#34d399)}
+  a.link{color:#90cdf4;text-decoration:none}
+  a.link:hover{text-decoration:underline}
+
+  /* modal */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);z-index:9999}
+  .modal>.box{width:560px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 16px 50px rgba(0,0,0,.55)}
 </style>
 </head>
 <body>
 
-<button id="bubble" style="display:none">L</button>
+<div class="panel" id="panel" aria-label="LifeOS Portal v1.3">
+  <div class="titlebar" id="drag">
+    <h1>LifeOS Architect • MICRO v1.3</h1>
+    <span class="pill">Real-time STT</span><span class="pill">TTS Natural</span><span class="pill">Team Mode</span>
+    <div class="grow"></div>
+    <button class="btn ghost" id="minBtn" title="Minimize">↘</button>
+    <button class="btn ghost" id="closeBtn" title="Close">✕</button>
+  </div>
 
-<div id="portal" aria-label="LifeOS Portal v1.2">
-  <div id="hdr">
-    <div id="title">LifeOS Architect • <span class="tag">MICRO v1.2</span></div>
-    <span class="tag" id="realtimeTag">Real-time STT</span>
-    <span class="tag" id="ttsTag">TTS Natural</span>
-    <span class="tag" id="teamTag">Team Mode</span>
-    <div class="sp"></div>
-    <button id="max" class="btn" title="Maximize/Restore (or drag corner)">⤢</button>
-    <button id="close" class="btn red" title="Close">✕</button>
-  </div>
+  <div class="content" id="content">
+    <!-- Left -->
+    <div class="card">
+      <h2>Conversation</h2>
+      <div class="row" style="gap:8px;margin-bottom:8px">
+        <input id="base" class="chip" style="flex:1" placeholder="https://robust-magic-production.up.railway.app" />
+        <input id="key"  class="chip" style="width:260px" placeholder="COMMAND_CENTER_KEY" />
+        <label class="switch"><input type="checkbox" id="team" /> Team</label>
+        <button class="btn" id="pingBtn">Ping</button>
+        <button class="btn" id="commitBtn">Commit to GitHub</button>
+      </div>
 
-    <div id="conf" class="row">
-    <input id="base" placeholder="https://robust-magic-production.up.railway.app" />
-    <input id="key" placeholder="COMMAND_CENTER_KEY" />
-    <label id="teamToggle"><input type="checkbox" id="team"/> Team</label>
-    <button id="ping" class="btn">Ping</button>
-    <button id="commit" class="btn acc">Commit to GitHub</button>
-  </div>
+      <div class="log" id="microLog">• Ready. v1.3 loaded.</div>
+      <div class="ai" id="aiOut" style="margin-top:10px">Type naturally; I’ll compress to MICRO for you.</div>
 
-  <div id="main">
-    <div id="left">
-            <div id="io">
-        <div id="ok" class="pill" style="background:#0f1d12;border-color:#1c3320;color:#b2e3c4">✅ v1.2 Loaded: Conversational + Hands-free (120s timeout) + Task Progress. Drag corner to resize.</div>
-        <div class="mono" id="outMicro">• MICRO log: Ready for commands.</div>
-        <div class="bubble">
-          <h5>AI Response</h5>
-          <div id="out">Ready – Type commands like "build revenue script with details" for step-by-step.</div>
-        </div>
-      </div>
+      <textarea id="input" class="input" placeholder="Type or paste long commands. Hold mic to talk."></textarea>
 
-            <div id="inpWrap">
-        <textarea id="msg" rows="3" placeholder="Type commands conversationally (e.g., 'Give me detailed steps to build X'). Shift+Enter for newlines; Enter sends if toggled. Hold mic or hands-free for voice."></textarea>
-        <div id="inpCtrls">
-          <div class="row" style="gap:6px">
-            <button id="send" class="btn acc">Send</button>
-            <button id="ptt" class="btn">🎤 Hold to talk</button>
-          </div>
-          <div class="switch"><input type="checkbox" id="enterSends" checked /> <label for="enterSends">Enter sends (Shift+Enter = newline)</label></div>
-          <div class="switch"><input type="checkbox" id="handsfree" /> <label for="handsfree">Hands-free mic <input type="range" id="hfTimeout" min="30" max="300" value="120" title="Timeout (s)"/>s</label></div>
-          <div class="switch"><input type="checkbox" id="tts" checked /> <label for="tts">Speak replies naturally</label> <button id="stopTts" class="btn red" style="padding:4px 8px">Stop</button></div>
-        </div>
-      </div>
-    </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn primary" id="sendBtn">Send</button>
+        <button class="btn" id="pttBtn">🎙️ Hold to talk</button>
 
-        <div id="right">
-      <div id="kpi">
-        <div class="pill" id="roiPill">ROI: —</div>
-        <div class="pill" id="spendPill">Spend: —</div>
-        <div class="pill" id="queuePill">Queue: —</div>
-      </div>
-      <div id="tasks">
-        <div class="task" style="text-align:center;color:var(--muted);padding:20px">
-          <div>Tasks Panel</div>
-          <div style="font-size:10px">Priority • Progress Bar (%) • Summary</div>
-        </div>
-      </div>
-    </div>
-  </div>
+        <label class="switch"><input type="checkbox" id="enterSends" checked /> Enter sends (Shift+Enter = newline)</label>
+        <label class="switch"><input type="checkbox" id="handsfree" /> Hands-free mic</label>
+        <input id="hfSecs" type="range" min="10" max="180" step="10" value="120" style="width:140px"><span class="chip" id="hfLabel">120s</span>
+
+        <label class="switch"><input type="checkbox" id="speak" checked /> Speak replies</label>
+        <button class="btn danger" id="stopSpeakBtn">Stop</button>
+      </div>
+    </div>
+
+    <!-- Right -->
+    <div class="card">
+      <h2>Tasks & Progress</h2>
+      <div class="row" style="gap:8px;margin-bottom:8px">
+        <div class="chip" id="roiPill">ROI: —</div>
+        <div class="chip" id="spendPill">Spend: —</div>
+        <div class="chip" id="queuePill">Queue: —</div>
+        <div class="grow"></div>
+        <button class="btn" id="refreshTasks">Refresh</button>
+      </div>
+      <div id="tasksList" style="display:flex;flex-direction:column;gap:10px;overflow:auto"></div>
+      <div class="row" style="margin-top:auto"><a class="link" href="/overlay/architect.html" target="_blank">Open classic overlay</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- Commit modal -->
+<div class="modal" id="commitModal" aria-hidden="true">
+  <div class="box">
+    <div class="row"><h2 style="margin:0;font-size:16px">Commit to GitHub</h2><div class="grow"></div><button class="btn ghost" id="cmClose">✕</button></div>
+    <div class="row" style="margin-top:8px"><input class="chip" id="cmPath" placeholder="public/overlay/portal.html" style="flex:1"></div>
+    <div class="row" style="margin-top:8px"><input class="chip" id="cmMsg" placeholder="feat: update portal with hands-free + tasks"></div>
+    <div class="row" style="margin-top:8px"><textarea class="input" id="cmContent" style="height:220px" placeholder="Paste full file content here"></textarea></div>
+    <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn primary" id="cmDo">Commit</button></div>
+    <div class="log" id="cmLog" style="margin-top:8px"></div>
+  </div>
 </div>
 
 <script>
 (() => {
-  const qs = new URLSearchParams(location.search);
-  const $ = (id)=>document.getElementById(id);
-  const base = $('base'); const key = $('key'); const team = $('team');
-  const out = $('out');   const outMicro = $('outMicro');
-  const msg = $('msg');   const ptt = $('ptt');
-  const enterSends = $('enterSends'); const handsfree = $('handsfree'); const hfTimeout = $('hfTimeout');
-  const speakToggle = $('tts'); const stopTtsBtn = $('stopTts');
+  const $ = (id) => document.getElementById(id);
+  const qs = new URLSearchParams(location.search);
 
-  // Prefill config
-  base.value = qs.get('base') |
+  // Prefill config
+  $('base').value = qs.get('base') || location.origin;
+  $('key').value  = qs.get('key')  || '';
+  $('team').checked = qs.get('team') === '1';
+  $('hfLabel').textContent = $('hfSecs').value + 's';
 
-| location.origin;
-  key.value  = qs.get('key')  |
+  // Draggable header
+  (function makeDraggable(){
+    const panel = $('panel'), drag = $('drag');
+    let sx=0, sy=0, px=0, py=0, dragging=false;
+    drag.addEventListener('mousedown', (e)=>{ dragging=true; sx=e.clientX; sy=e.clientY; const r=panel.getBoundingClientRect(); px=r.left; py=r.top; document.body.style.userSelect='none'; });
+    window.addEventListener('mousemove', (e)=>{ if(!dragging) return; const dx=e.clientX-sx, dy=e.clientY-sy; panel.style.left=(px+dx)+'px'; panel.style.top=(py+dy)+'px'; panel.style.right='auto'; panel.style.bottom='auto'; });
+    window.addEventListener('mouseup', ()=>{ dragging=false; document.body.style.userSelect=''; });
+  })();
 
-| '';
-  team.checked = qs.get('team') === '1';
+  // Minimize/close
+  $('closeBtn').onclick = () => { $('panel').style.display='none'; };
+  $('minBtn').onclick   = () => { $('panel').style.height='52px'; $('content')?.scrollTo?.(0,0); };
+  $('drag').ondblclick  = () => { $('panel').style.height='680px'; };
 
-  // Maximize / restore (or drag corner resizes)
-  let maximized = false;
-  $('max').onclick = () => {
-    maximized =!maximized;
-    if (maximized) {
-      Object.assign($('portal').style, { right:'0', bottom:'0', width:'100vw', height:'100vh', borderRadius:'0' });
-    } else {
-      Object.assign($('portal').style, { right:'24px', bottom:'24px', width:'720px', height:'560px', borderRadius:'16px' });
-    }
-  };
-  $('close').onclick = () => { $('portal').style.display = 'none'; $('bubble').style.display='grid'; };
-  $('bubble').onclick = () => { $('portal').style.display = 'block'; $('bubble').style.display='none'; };
+  // Logging
+  function logMicro(prefix, text){
+    const el = $('microLog');
+    const ts = new Date().toLocaleTimeString();
+    el.textContent = (el.textContent + `\n${prefix} ${ts}: ${text}`).slice(-8000);
+    el.scrollTop = el.scrollHeight;
+  }
+  function setAI(text){ $('aiOut').textContent = text; }
 
-  // Helpers
-  const logMicro = (label, text) => {
-    const ts = new Date().toLocaleTimeString();
-    outMicro.textContent = `${outMicro.textContent}\n${label} ${ts}: ${text}`.slice(-8000);
-    outMicro.scrollTop = outMicro.scrollHeight;
-  };
-  const microEncode = (plain) => {
-    // Conversational injection for natural, detailed responses like Grok
-    const convPlain = plain + ' Respond conversationally like Grok: detailed steps, natural tone, no fluff.';
-    return `V:2.0|OP:G|D:${convPlain.trim().replace(/\s+/g,'~').slice(0,1600)}|T:G|R:~CT~KP`;
-  };
-  const microExtractCT = (micro) => {
-    const m = micro.split('|').find(p => p.startsWith('CT:'));
-    return m? m.slice(3).replace(/~/g,' ') : micro;
-  };
+  // MICRO helpers
+  function toMicro(english){
+    const t = english.toLowerCase();
+    const op = /generate|create|build/.test(t) ? 'G' : /analyz|report|explain|plan/.test(t) ? 'A' : 'G';
+    const type = /script/.test(t) ? 'S' : /report|plan|doc/.test(t) ? 'R' : 'G';
+    const d = english
+      .replace(/generate/gi,'GEN').replace(/analyz/gi,'ANL').replace(/create/gi,'CRT').replace(/build/gi,'BLD')
+      .trim().replace(/\s+/g,'~').slice(0,240);
+    return `V:2.0|OP:${op}|D:${d}|T:${type}|R:~CT~KP`;
+  }
+  function fromMicro(resp){
+    const part = resp.split('|').find(p=>p.startsWith('CT:'));
+    return part ? part.slice(3).replace(/~/g,' ') : resp;
+  }
 
-  async function jfetch(path, init={}){
-    const b = base.value.replace(/\/+$/,'');
-    const url = `${b}${path}`;
-    const r = await fetch(url, init);
-    const t = await r.text();
-    if (!r.ok) throw new Error(`${r.status} ${t.slice(0,200)}`);
-    return t;
-  }
+  // Send
+  async function send(){
+    const text = $('input').value.trim();
+    if(!text) return;
+    $('input').value='';
+    const micro = toMicro(text);
+    logMicro('→ MICRO OUT', micro);
+    try{
+      const base = $('base').value.replace(/\/+$/,'');
+      const key = $('key').value;
+      const team = $('team').checked ? '&team=1' : '';
+      const t0 = performance.now();
+      const r = await fetch(`${base}/api/v1/architect/micro?key=${encodeURIComponent(key)}${team}`,{
+        method:'POST', headers:{'Content-Type':'text/plain'}, body: micro
+      });
+      const body = await r.text();
+      logMicro('← MICRO IN', body);
+      const english = fromMicro(body);
+      const dt = Math.round(performance.now()-t0);
+      setAI(english + `\n\n(${dt} ms)`);
+      speak(english);
+    }catch(e){ setAI('Error: '+e.message); }
+  }
+  $('sendBtn').onclick = send;
+  $('input').addEventListener('keydown',(e)=>{
+    if ($('enterSends').checked && e.key==='Enter' && !e.shiftKey){ e.preventDefault(); $('sendBtn').click(); }
+  });
 
-  // Send logic (MICRO - conversational)
-  async function send(text){
-    const microOut = microEncode(text);
-    logMicro('→ MICRO OUT', microOut);
-    const t0 = performance.now();
-    const resp = await jfetch(`/api/v1/architect/micro?key=${encodeURIComponent(key.value)}${team.checked? '&team=1':''}`, {
-      method:'POST',
-      headers:{'Content-Type':'text/plain'},
-      body: microOut
-    });
-    const dt = Math.round(performance.now()-t0);
-    logMicro('← MICRO IN', resp);
-    const ct = microExtractCT(resp);
-    out.textContent = ct + `\n\n(${dt} ms)`;
-    if (speakToggle.checked) ttsSpeak(ct);
-  }
+  // Ping
+  $('pingBtn').onclick = async ()=>{
+    try{
+      const base=$('base').value.replace(/\/+$/,''); const key=$('key').value;
+      const t0=performance.now(); const r=await fetch(`${base}/healthz?key=${encodeURIComponent(key)}`);
+      const dt=Math.round(performance.now()-t0); const j=await r.json();
+      setAI(`Server OK (${dt} ms)\nTasks: queued ${j.queued_tasks}, in-progress ${j.active_tasks}\nSpend: ${j.spend_percentage}`);
+    }catch(e){ setAI('Ping failed: '+e.message); }
+  };
 
-  // Enter sends / shift+enter newline (no auto-send on space)
-  msg.addEventListener('keydown', (e)=>{
-    if (enterSends.checked && e.key === 'Enter' &&!e.shiftKey){
-      e.preventDefault(); $('send').click();
-    }
-  });
-  $('send').onclick = async () => {
-    const text = msg.value.trim();
-    if (!text) return;
-    msg.value = '';
-    await send(text);
-  };
+  // Commit modal
+  $('commitBtn').onclick = ()=>{ $('commitModal').style.display='flex'; $('cmPath').value='public/overlay/portal.html'; $('cmMsg').value='feat: update portal v1.3'; $('cmContent').value=''; $('cmLog').textContent=''; };
+  $('cmClose').onclick = ()=>{ $('commitModal').style.display='none'; };
+  $('cmDo').onclick = async ()=>{
+    const base=$('base').value.replace(/\/+$/,''); const key=$('key').value;
+    const path=$('cmPath').value.trim(); const message=$('cmMsg').value.trim(); const content=$('cmContent').value;
+    if(!path || !content){ $('cmLog').textContent='Path and content required.'; return; }
+    try{
+      const r = await fetch(`${base}/api/v1/dev/commit?key=${encodeURIComponent(key)}`,{
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ path, content, message })
+      });
+      const j = await r.json();
+      $('cmLog').textContent = j.ok ? `✅ Committed ${j.committed} (${j.sha||'sha'})` : `❌ ${j.error||'Commit failed'}`;
+    }catch(e){ $('cmLog').textContent = '❌ '+e.message; }
+  };
 
-  // Ping
-  $('ping').onclick = async ()=>{
-    try{
-      const t0 = performance.now();
-      const r = await jfetch(`/healthz?key=${encodeURIComponent(key.value)}`);
-      const dt = Math.round(performance.now()-t0);
-      out.textContent = `Server OK in ${dt} ms`;
-    }catch(e){ out.textContent = 'Ping failed: '+e.message; }
-  };
+  // STT (push-to-talk + hands-free)
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let rec = null, hfTimer=null;
+  function startRec(){
+    if(!SR){ alert('Web Speech API not supported'); return; }
+    if(rec){ try{rec.stop();}catch{} rec=null; }
+    rec = new SR(); rec.interimResults=true; rec.continuous=true; rec.lang='en-US';
+    let final=''; rec.onresult=(e)=>{ let interim=''; for(let i=e.resultIndex;i<e.results.length;i++){ const tr=e.results[i][0].transcript; if(e.results[i].isFinal) final+=tr+' '; else interim+=tr; } $('input').value=(final+interim).trim(); };
+    rec.onend=()=>{ if($('handsfree').checked){ rec.start(); } else { $('pttBtn').textContent='🎙️ Hold to talk'; $('pttBtn').classList.remove('primary'); } };
+    rec.start(); $('pttBtn').textContent='🎙️ Listening…'; $('pttBtn').classList.add('primary');
+  }
+  function stopRec(){ if(rec){ try{rec.stop();}catch{} rec=null; $('pttBtn').textContent='🎙️ Hold to talk'; $('pttBtn').classList.remove('primary'); } }
+  $('pttBtn').addEventListener('mousedown', startRec);
+  $('pttBtn').addEventListener('touchstart', startRec, {passive:true});
+  ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev=>$('pttBtn').addEventListener(ev, stopRec));
 
-  // Commit button
-  $('commit').onclick = ()=>{
-    const path = prompt('Path to commit (e.g. public/overlay/README.md):');
-    if (!path) return;
-    const content = prompt('Paste file content. (OK to continue)');
-    if (content==null) return;
-    fetch(`${base.value.replace(/\/+$/,'')}/api/v1/dev/commit?key=${encodeURIComponent(key.value)}`,{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ path, content, message:`portal commit: ${path}` })
-    }).then(r=>r.json()).then(j=>{
-      out.textContent = j.ok? `Committed ${path} (${j.sha||'sha'})` : `Commit error: ${j.error||'unknown'}`;
-    }).catch(e=> out.textContent = 'Commit failed: '+e.message);
-  };
+  $('handsfree').addEventListener('change', ()=>{
+    clearTimeout(hfTimer);
+    if($('handsfree').checked){ startRec(); hfTimer=setTimeout(()=>{ $('handsfree').checked=false; stopRec(); }, Number($('hfSecs').value)*1000); }
+    else{ stopRec(); }
+  });
+  $('hfSecs').oninput = ()=>{ $('hfLabel').textContent = $('hfSecs').value + 's'; if($('handsfree').checked){ $('handsfree').dispatchEvent(new Event('change')); } };
 
-  // --------- Speech (Web Speech API) ----------
-  let recog, speaking=false, speechUtterance=null, handsfreeTimer=null;
-  function setupRecog(){
-    const SR = window.SpeechRecognition |
+  // TTS
+  let cachedVoice=null;
+  function chooseVoice(){
+    const voices = speechSynthesis.getVoices();
+    return voices.find(v=>/(Natural|Neural|Google US English|UK English Female)/i.test(v.name)) || voices.find(v=>/en/i.test(v.lang)) || null;
+  }
+  if('speechSynthesis' in window){
+    cachedVoice = chooseVoice();
+    window.speechSynthesis.onvoiceschanged = ()=>{ cachedVoice = chooseVoice(); };
+  }
+  function speak(text){
+    if(!$('speak').checked) return;
+    if(!('speechSynthesis' in window)) return;
+    try{
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      if(cachedVoice) u.voice = cachedVoice;
+      u.rate = 0.95; u.pitch = 1.0;
+      speechSynthesis.speak(u);
+    }catch{}
+  }
+  $('stopSpeakBtn').onclick = ()=>{ try{speechSynthesis.cancel();}catch{} };
 
-| window.webkitSpeechRecognition;
-    if (!SR) { ptt.disabled = true; $('realtimeTag').textContent='No STT'; return; }
-    recog = new SR(); recog.lang='en-US'; recog.interimResults=true; recog.continuous=true;
-    let buf = '';
-    recog.onresult = (ev)=>{
-      let final = '';
-      for (let i=ev.resultIndex; i<ev.results.length; i++){
-        const r = ev.results[i];
-        if (r.isFinal) final += r.transcript;
-        else buf = r.transcript;
-      }
-      $('msg').value = (final |
+  // Tasks & ROI (live)
+  async function refreshRight(){
+    try{
+      const base=$('base').value.replace(/\/+$/,''); const key=$('key').value;
+      const [tRes, roiRes] = await Promise.all([
+        fetch(`${base}/api/v1/tasks?key=${encodeURIComponent(key)}`),
+        fetch(`${base}/api/v1/roi/status?key=${encodeURIComponent(key)}`)
+      ]);
+      const t = await tRes.json(); const roi = await roiRes.json();
 
-| buf);
-    };
-    recog.onend = ()=>{
-      if (handsfree.checked){
-        if (!handsfreeTimer) recog.start();
-      } else {
-        ptt.classList.remove('acc'); ptt.textContent='🎤 Hold to talk';
-      }
-    };
-  }
-  setupRecog();
+      const list = (t.tasks || []).slice().reverse();
+      $('queuePill').textContent = `Queue: ${list.length}`;
+      if (roi.ok){
+        const r = roi.roi || {};
+        const ratio = (typeof r.roi_ratio === 'number') ? r.roi_ratio.toFixed(2)+'x' : (r.ratio || '—');
+        $('roiPill').textContent = `ROI: ${ratio}`;
+        const spend = r.daily_spend ?? 0;
+        $('spendPill').textContent = `Spend: $${Number(spend).toFixed(2)}`;
+      }
 
-  // push-to-talk (hold)
-  ptt.onmousedown = ()=>{ if (!recog) return; recog.start(); ptt.classList.add('acc'); ptt.textContent='🎤 Listening…'; };
-  ptt.onmouseup   = ()=>{ if (!recog) return; try{recog.stop();}catch{} ptt.classList.remove('acc'); ptt.textContent='🎤 Hold to talk'; };
+      $('tasksList').innerHTML = list.map(task=>{
+        const pct = task.status==='complete'? 100 : task.status==='in-progress'? 50 : 0;
+        const prio = (task.priority || 'low').toLowerCase();
+        const prioClr = prio==='high' ? '#ef4444' : prio==='med' ? '#f59e0b' : '#10b981';
+        const saved = (task.result && typeof task.result.compression_pct!=='undefined') ? `${task.result.compression_pct}%` : '—';
+        const summary = (task.result && task.result.summary) ? task.result.summary : '';
+        return `
+          <div class="card" style="padding:10px">
+            <div class="row" style="justify-content:space-between">
+              <div><strong>#${task.id}</strong> • ${task.description}</div>
+              <div style="color:${pct===100?'#22c55e':pct===50?'#60a5fa':'#8ea0b5'}">${task.status} (${pct}%)</div>
+            </div>
+            <div class="row" style="gap:8px;margin-top:6px">
+              <span class="chip" style="border-color:${prioClr};color:${prioClr}">prio: ${prio}</span>
+              <span class="chip">Saved: ${saved}</span>
+              ${task.estimated_revenue ? `<span class="chip">Rev: $${Number(task.estimated_revenue).toFixed(0)}</span>`:''}
+            </div>
+            <div class="progress" style="margin-top:8px"><span style="width:${pct}%"></span></div>
+            ${summary ? `<div style="margin-top:6px;color:#a6c5d6;font-size:12px">${summary}</div>`:''}
+          </div>`;
+      }).join('');
+    }catch(e){
+      // silent
+    }
+  }
+  $('refreshTasks').onclick = refreshRight;
+  setInterval(refreshRight, 2500);
+  refreshRight();
 
-  // hands-free (toggle on/off, timeout slider)
-  handsfree.addEventListener('change', ()=>{
-    if (!recog){ handsfree.checked = false; return; }
-    if (handsfree.checked){
-      recog.start();
-      ptt.textContent='🎤 Hands-free (timeout: '+hfTimeout.value+'s)';
-      ptt.classList.add('acc');
-      if (handsfreeTimer) clearTimeout(handsfreeTimer);
-      handsfreeTimer = setTimeout(()=>{ try{recog.stop();}catch{} handsfree.checked=false; handsfreeTimer=null; ptt.classList.remove('acc'); ptt.textContent='🎤 Hold to talk'; }, hfTimeout.value * 1000);
-    } else {
-      if (handsfreeTimer) { clearTimeout(handsfreeTimer); handsfreeTimer=null; }
-      try{recog.stop();}catch{}
-      ptt.classList.remove('acc'); ptt.textContent='🎤 Hold to talk';
-    }
-  });
-  hfTimeout.oninput = ()=>{ if (handsfree.checked) handsfree.dispatchEvent(new Event('change')); }; // Restart timer on slide
-
-  // TTS (natural: slower rate, varied pitch)
-  function ttsSpeak(text){
-    if (!('speechSynthesis' in window)) return;
-    try { window.speechSynthesis.cancel(); } catch {}
-    const u = new SpeechSynthesisUtterance(text);
-    const voices = speechSynthesis.getVoices();
-    const pref = voices.find(v => /(Natural|Neural|Google US English|UK English Female)/i.test(v.name)) |
-
-| voices.find(v=>/en/i.test(v.lang));
-    if (pref) u.voice = pref;
-    u.rate = 0.95; u.pitch = 0.9 + Math.random()*0.2; // Natural variation
-    speechSynthesis.speak(u);
-    speechUtterance = u;
-  }
-  stopTtsBtn.onclick = ()=>{ try{speechSynthesis.cancel();}catch{} };
-
-  // Tasks panel & KPI (priority badge, % bar)
-  async function refreshRight(){
-    try{
-      const [t, roi] = await Promise.all();
-      const list = (t.tasks||).slice().reverse();
-      $('queuePill').textContent = `Queue: ${list.length}`;
-      if (roi.ok){
-        $('roiPill').textContent = `ROI: ${(roi.roi.roi_ratio||0).toFixed? (roi.roi.roi_ratio||0).toFixed(2)+'x' : roi.roi.ratio||'—'}`;
-        $('spendPill').textContent = `Spend: $${(roi.roi.daily_spend||0).toFixed? (roi.roi.daily_spend||0).toFixed(2) : roi.roi.daily_spend}`;
-      }
-      $('tasks').innerHTML = list.map(task=>{
-        const pct = task.status==='complete'? 100 : task.status==='in-progress'? 50 : 0;
-        const prioClass = task.priority === 'high'? 'prio-high' : task.priority === 'med'? 'prio-med' : 'prio-low';
-        const summary = task.result?.summary |
-
-| '';
-        return `
-          <div class="task">
-            <div class="trow">
-              <div><strong>#${task.id}</strong> • ${task.description}</div>
-              <div style="color:${pct===100?'#22c55e':pct===50?'#38bdf8':'#8aa1b2'}">${task.status} (${pct}%)</div>
-            </div>
-            <div class="trow" style="margin-top:4px">
-              <div class="prio-badge ${prioClass}">${task.priority |
-
-| '—'}</div>
-              <div class="pill">Saved: ${task.result?.compression_pct??'—'}%</div>
-            </div>
-            <div class="bar"><span style="width:${pct}%"></span></div>
-            ${summary? `<div style="margin-top:6px;color:#a6c5d6;font-size:12px">${summary}</div>` : ''}
-          </div>`;
-      }).join('');
-    }catch(e){
-      // silent
-    }
-  }
-  setInterval(refreshRight, 2500); refreshRight();
-
-  // auto-send if?q= param
-  if (qs.get('q')) { msg.value = qs.get('q'); $('send').click(); }
+  // Auto-send via ?q=
+  if (qs.get('q')) { $('input').value = qs.get('q'); $('sendBtn').click(); }
 })();
 </script>
 </body>
