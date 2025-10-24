@@ -6,18 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg:#0a0a0a; --panel:#111; --fg:#e5ffe5; --accent:#00ff6a; --dim:#6b7280;
+      --bg:#0a0a0a; --panel:#111; --fg:#e5ffe5; --accent:#00ff6a; --dim:#9aa0a6;
       --shadow: 0 20px 60px rgba(0,0,0,.45);
     }
     html, body { height:100%; }
-    body { margin:0; background:transparent; font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif; color:var(--fg); }
-    /* floating bubble */
+    body { margin:0; background:#000; font-family: -apple-system, system-ui, Segoe UI, Roboto, sans-serif; color:var(--fg); }
+
+    /* Always-visible safety banner so we know HTML rendered */
+    #render-check {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: #111827; color:#cbd5e1; padding: 8px 12px;
+      font-size: 12px; border-bottom:1px solid #1f2937; z-index: 2147483647;
+    }
+
+    /* floating bubble (visible even if JS fails) */
     #lifeos-bubble {
       position: fixed; z-index: 2147483647; right: 20px; bottom: 20px;
       width: 56px; height: 56px; border-radius: 50%;
       background: var(--accent); color:#000; display:flex; align-items:center; justify-content:center;
-      box-shadow: var(--shadow); cursor:pointer; user-select:none; font-weight:800;
+      box-shadow: var(--shadow); cursor:pointer; user-select:none; font-weight:800; font-size: 20px;
     }
+
     /* panel */
     #lifeos-panel {
       position: fixed; z-index: 2147483647; right: 20px; bottom: 84px;
@@ -48,11 +57,15 @@
     .pill { font-size:11px; color:#a3a3a3; }
     .kv { color:#a3e6ff; }
     .user { color:#a7f3d0; }
-    .sys { color:#fef3c7; }
-    .err { color:#fecaca; }
+    .sys  { color:#fef3c7; }
+    .err  { color:#fecaca; }
   </style>
 </head>
 <body>
+  <!-- Safety banner -->
+  <div id="render-check">✅ Overlay HTML rendered. If the bubble doesn’t show or nothing opens, JS failed — errors will print here.</div>
+
+  <!-- Bubble is visible even with JS off -->
   <div id="lifeos-bubble" title="Open LifeOS Overlay">L</div>
 
   <div id="lifeos-panel" role="dialog" aria-label="LifeOS Overlay">
@@ -84,23 +97,33 @@
   </div>
 
   <script>
+    // Catch any top-level errors and display on the banner
+    window.addEventListener('error', (e)=>{
+      const rc = document.getElementById('render-check');
+      rc.textContent = '❌ JS error: ' + (e.message || String(e.error || e));
+      rc.style.background = '#3f1d1d';
+    });
+
     // ---------- UTIL / STATE ----------
     const qs = new URLSearchParams(location.search);
     const BASE = (qs.get('base') || location.origin).replace(/\/+$/, '');
     const KEY  = qs.get('key') || '';
-    const dom  = (id) => document.getElementById(id);
+    const $    = (id) => document.getElementById(id);
 
-    dom('baseShow').textContent = BASE;
-    dom('keyShow').textContent  = KEY ? (KEY.length > 6 ? KEY.slice(0,3)+'…'+KEY.slice(-3) : 'set') : 'MISSING';
-    const logEl = dom('log');
+    $('baseShow').textContent = BASE;
+    $('keyShow').textContent  = KEY ? (KEY.length > 6 ? KEY.slice(0,3)+'…'+KEY.slice(-3) : 'set') : 'MISSING';
 
     function log(line, cls) {
       const div = document.createElement('div');
       div.className = cls || '';
       div.textContent = line;
-      logEl.appendChild(div);
-      logEl.scrollTop = logEl.scrollHeight;
+      $('log').appendChild(div);
+      $('log').scrollTop = $('log').scrollHeight;
     }
+
+    // open/close panel
+    $('lifeos-bubble').onclick = ()=> { $('lifeos-panel').style.display='block'; };
+    $('closeBtn').onclick = ()=> { $('lifeos-panel').style.display='none'; };
 
     // ---------- MICRO helpers ----------
     function encodeMicro({ operation, description, type, returnFields }) {
@@ -117,7 +140,6 @@
       if (returnFields && returnFields.length) parts.push('R:~'+returnFields.join('~'));
       return parts.join('|');
     }
-
     function decodeMicro(micro) {
       const out = {};
       String(micro).split('|').forEach(seg=>{
@@ -127,7 +149,6 @@
       });
       return out;
     }
-
     async function sendMicro(microText) {
       if (!KEY) throw new Error('Missing ?key= in URL');
       const url = `${BASE}/api/v1/architect/micro?key=${encodeURIComponent(KEY)}`;
@@ -140,10 +161,10 @@
     // ---------- TTS ----------
     function speak(text) {
       try {
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.rate = 1.0; utter.pitch = 1.0;
-        speechSynthesis.speak(utter);
-      } catch (e) { /* non-fatal */ }
+        const u = new SpeechSynthesisUtterance(text);
+        u.rate = 1; u.pitch = 1;
+        speechSynthesis.speak(u);
+      } catch (e) { log('TTS error: '+e.message, 'err'); }
     }
 
     // ---------- STT (real-time, push-to-talk) ----------
@@ -166,19 +187,16 @@
           if (r.isFinal) finalSoFar += r[0].transcript + ' ';
           else interim += r[0].transcript;
         }
-        dom('text').value = (finalSoFar + interim).trim();
-        dom('hdr-sub').textContent = 'Listening… (releasing mic will send)';
+        $('text').value = (finalSoFar + interim).trim();
+        $('hdr-sub').textContent = 'Listening… (release mic to send)';
       };
       rec.onerror = (e)=> { log('STT error: '+e.error, 'err'); };
-      rec.onend = ()=> { listening = false; dom('hdr-sub').textContent = 'Ready'; };
+      rec.onend = ()=> { listening = false; $('hdr-sub').textContent = 'Ready'; };
     }
 
-    // ---------- UI handlers ----------
-    dom('lifeos-bubble').onclick = ()=> { dom('lifeos-panel').style.display='block'; };
-    dom('closeBtn').onclick = ()=> { dom('lifeos-panel').style.display='none'; };
-
-    dom('sendBtn').onclick = async ()=>{
-      const text = dom('text').value.trim();
+    // send button
+    $('sendBtn').onclick = async ()=>{
+      const text = $('text').value.trim();
       if (!text) return;
 
       // naive intent/type guess
@@ -194,12 +212,11 @@
                 : 'general';
 
       const micro = encodeMicro({ operation: op, description: text, type, returnFields: ['CT','KP'] });
-      log('→ MICRO OUT: '+micro, 'kv');
+      log('→ MICRO OUT: '+micro, 'user');
 
       try {
         const reply = await sendMicro(micro);
         log('← MICRO IN:  '+reply, 'kv');
-
         const parsed = decodeMicro(reply);
         if (parsed.content) {
           log('AI: '+parsed.content, 'sys');
@@ -209,30 +226,32 @@
         }
       } catch (e) {
         log('ERROR: '+e.message, 'err');
+        const rc = document.getElementById('render-check');
+        rc.textContent = '❌ Request error: ' + e.message;
+        rc.style.background = '#3f1d1d';
       }
     };
 
-    // press & hold mic
-    dom('micBtn').addEventListener('mousedown', ()=> {
+    // mic press & hold
+    $('micBtn').addEventListener('mousedown', ()=> {
       if (!rec) initSR();
-      if (rec && !listening) { try { rec.start(); listening = true; dom('micBtn').textContent='🎤 Listening…'; } catch{} }
+      if (rec && !listening) { try { rec.start(); listening = true; $('micBtn').textContent='🎤 Listening…'; } catch(e){ log('STT start error: '+e.message, 'err'); } }
     });
-    dom('micBtn').addEventListener('mouseup', async ()=> {
-      if (rec && listening) { try { rec.stop(); } catch{} }
-      dom('micBtn').textContent='🎤 Hold';
-      // auto-send whatever is in the box
-      dom('sendBtn').click();
+    $('micBtn').addEventListener('mouseup', ()=> {
+      if (rec && listening) { try { rec.stop(); } catch(e){ /* ignore */ } }
+      $('micBtn').textContent='🎤 Hold';
+      $('sendBtn').click();
     });
-    dom('micBtn').addEventListener('mouseleave', ()=> {
-      if (rec && listening) { try { rec.stop(); } catch{} }
-      dom('micBtn').textContent='🎤 Hold';
+    $('micBtn').addEventListener('mouseleave', ()=> {
+      if (rec && listening) { try { rec.stop(); } catch(e){ } }
+      $('micBtn').textContent='🎤 Hold';
     });
 
     // enter to send
-    dom('text').addEventListener('keydown', (e)=> { if (e.key==='Enter') dom('sendBtn').click(); });
+    $('text').addEventListener('keydown', (e)=> { if (e.key==='Enter') $('sendBtn').click(); });
 
-    // initial status
-    log('Overlay ready. Talk or type, everything goes over MICRO.', 'user');
+    // boot log
+    log('Overlay loaded. If you can read this, the HTML & JS are running.', 'kv');
     if (!KEY) log('Missing ?key= in URL. Append ?key=MySecretKey2025LifeOS', 'err');
   </script>
 </body>
