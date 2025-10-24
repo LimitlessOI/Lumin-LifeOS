@@ -1,199 +1,335 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>LifeOS Architect • MICRO</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    :root { --bg:#0b0c10; --card:#111318; --ink:#eaf2ff; --muted:#9aa4b2; --acc:#22d3ee; --line:#222733; }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:transparent;font-family:-apple-system,system-ui,Segoe UI,Roboto,Inter,sans-serif;color:var(--ink)}
-    .wrap{position:fixed;inset:auto 20px 20px auto;width:min(720px,calc(100vw - 40px));height:min(72vh,calc(100vh - 40px));display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 80px rgba(0,0,0,.45);overflow:hidden}
-    header{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
-    header h1{font-size:16px;margin:0;color:#b6c3ff}
-    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
-    .grow{flex:1}
-    .row{display:flex;gap:8px;align-items:center}
-    .col{display:flex;flex-direction:column;gap:6px}
-    .btn{background:var(--acc);color:#001017;border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#202635;color:#c9d3ea;border:1px solid var(--line)}
-    .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}
-    .input, textarea{width:100%;background:#0c0f14;border:1px solid var(--line);color:var(--ink);padding:10px 12px;border-radius:10px}
-    textarea{min-height:90px;max-height:30vh;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace}
-    .log{flex:1;overflow:auto;padding:12px}
-    .msg{padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#0b1016}
-    .msg.user{border-color:#2a7; background:#0f1a14}
-    .msg.ai{border-color:#37a; background:#0e1524}
-    .meta{font-size:11px;color:var(--muted);margin-bottom:4px}
-    .cfg{padding:10px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center}
-    small{color:var(--muted)}
-  </style>
+<meta charset="utf-8" />
+<title>LifeOS Architect • MICRO</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  :root{
+    --bg:#0b0f14; --panel:#0f151c; --panel2:#111923; --fg:#e6edf3; --muted:#8aa1b2;
+    --accent:#22c55e; --accent2:#38bdf8; --danger:#ef4444; --border:#1f2a37;
+  }
+  html,body{height:100%; margin:0; background:transparent; font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Roboto; color:var(--fg);}
+  /* container */
+  #portal{
+    position:fixed; right:24px; bottom:24px; width:720px; height:560px; display:flex; flex-direction:column;
+    background:linear-gradient(180deg, rgba(17,25,35,.96), rgba(12,17,24,.96)); border:1px solid var(--border);
+    border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,.45); overflow:hidden; backdrop-filter:saturate(1.2) blur(8px);
+    resize:both; /* resizable corner */
+  }
+  #hdr{display:flex; align-items:center; gap:10px; padding:12px 14px; background:var(--panel); border-bottom:1px solid var(--border);}
+  #title{font-weight:700;}
+  .tag{font-size:12px; color:#cfe7ff; background:#0b2738; border:1px solid #183144; padding:4px 8px; border-radius:999px;}
+  .sp{flex:1}
+  .btn{background:#15202b; border:1px solid var(--border); color:var(--fg); padding:8px 12px; border-radius:10px; cursor:pointer}
+  .btn:hover{background:#192634}
+  .btn.acc{background:#16301f; border-color:#1d3f2a}
+  .btn.acc:hover{background:#173723}
+  .btn.red{background:#2a1414; border-color:#452020}
+  .row{display:flex; gap:8px; align-items:center}
+  input, textarea{background:#0e1620; color:var(--fg); border:1px solid var(--border); border-radius:10px; padding:10px 12px}
+  input::placeholder, textarea::placeholder{color:var(--muted)}
+  #conf{display:flex; gap:8px; padding:10px; border-bottom:1px solid var(--border); background:var(--panel2)}
+  #conf input{height:36px}
+  #teamToggle{display:flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; cursor:pointer;}
+  #teamToggle input{width:16px; height:16px}
+  /* layout: messages + side panel */
+  #main{display:grid; grid-template-columns:1fr 320px; gap:0; height:100%}
+  #left{display:flex; flex-direction:column; height:100%}
+  #io{padding:10px; display:flex; flex-direction:column; gap:8px; overflow:auto}
+  .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12px; background:#0a121a; border:1px dashed #1d2b39; border-radius:8px; padding:10px; color:#bde0ff}
+  #chat{display:flex; flex-direction:column; gap:10px; padding:10px; overflow:auto}
+  .bubble{background:#0e1620; border:1px solid var(--border); border-radius:12px; padding:12px}
+  .bubble h5{margin:0 0 6px 0; font-size:12px; color:var(--muted)}
+  /* input area */
+  #inpWrap{padding:10px; border-top:1px solid var(--border); background:var(--panel2); display:flex; gap:8px; align-items:flex-end}
+  #msg{flex:1; min-height:56px; max-height:200px; overflow:auto}
+  #inpCtrls{display:flex; flex-direction:column; gap:6px}
+  .switch{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted)}
+  /* side panel */
+  #right{border-left:1px solid var(--border); background:#0b1118; display:flex; flex-direction:column}
+  #kpi{display:flex; gap:6px; flex-wrap:wrap; padding:10px; border-bottom:1px solid var(--border); background:#0f161f}
+  .pill{font-size:12px; padding:6px 8px; border-radius:999px; border:1px solid var(--border); background:#0e1620}
+  #tasks{padding:10px; overflow:auto; display:flex; flex-direction:column; gap:8px}
+  .task{border:1px solid var(--border); border-radius:10px; background:#0e1620; padding:10px}
+  .task .trow{display:flex; justify-content:space-between; gap:8px}
+  .bar{height:8px; border-radius:999px; background:#162433; overflow:hidden; margin-top:8px}
+  .bar>span{display:block; height:100%; background:linear-gradient(90deg, #22c55e, #38bdf8)}
+  /* floating bubble (open/close) */
+  #bubble{position:fixed; right:20px; bottom:20px; width:56px; height:56px; background:#22c55e; color:#001b0b; border:none; border-radius:50%;
+    box-shadow:0 18px 50px rgba(0,0,0,.45); cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:800}
+  /* maximize */
+  #max{font-size:18px; width:36px; height:36px; display:grid; place-items:center; border-radius:10px}
+</style>
 </head>
 <body>
-  <div class="wrap" id="app">
-    <header>
-      <h1>LifeOS Architect • MICRO</h1>
-      <span class="pill">Real-time STT</span>
-      <span class="pill">TTS</span>
-      <span class="pill">Team Mode</span>
-      <div class="grow"></div>
-      <button class="btn ghost" id="closeBtn">✕</button>
-    </header>
 
-    <div class="cfg">
-      <div class="row" style="gap:12px;flex-wrap:wrap;width:100%">
-        <input id="base" class="input" placeholder="Base (auto)" style="flex:1;min-width:240px;">
-        <input id="key" class="input" placeholder="COMMAND_CENTER_KEY" style="width:260px;">
-        <label class="row pill" style="gap:6px;cursor:pointer"><input id="team" type="checkbox"> Team</label>
-        <button class="btn secondary" id="testBtn">Ping</button>
-        <button class="btn secondary" id="commitBtn">Commit to GitHub</button>
-      </div>
-    </div>
+<!-- Fallback bubble shown if portal is closed (you can embed as iframe/bookmarklet too) -->
+<button id="bubble" style="display:none">L</button>
 
-    <div class="log" id="log"></div>
-
-    <div class="col" style="padding:10px">
-      <textarea id="input" placeholder="Type or paste long text here. Hold mic while talking for live transcription."></textarea>
-      <div class="row">
-        <button class="btn" id="sendBtn">Send</button>
-        <button class="btn secondary" id="micBtn">🎙️ Hold to talk</button>
-        <div class="grow"></div>
-        <small id="hint">Ready</small>
-      </div>
-    </div>
+<div id="portal" aria-label="LifeOS Portal">
+  <div id="hdr">
+    <div id="title">LifeOS Architect • <span class="tag">MICRO</span></div>
+    <span class="tag" id="realtimeTag">Real-time STT</span>
+    <span class="tag" id="ttsTag">TTS</span>
+    <span class="tag" id="teamTag">Team Mode</span>
+    <div class="sp"></div>
+    <button id="max" class="btn" title="Maximize/Restore">⤢</button>
+    <button id="close" class="btn red" title="Close">✕</button>
   </div>
 
-  <script>
-    const qs = new URLSearchParams(location.search);
-    const $  = (id)=>document.getElementById(id);
-    const logBox = $("log");
+  <!-- config row -->
+  <div id="conf" class="row">
+    <input id="base" placeholder="https://robust-magic-production.up.railway.app" />
+    <input id="key" placeholder="COMMAND_CENTER_KEY" />
+    <label id="teamToggle"><input type="checkbox" id="team"/> Team</label>
+    <button id="ping" class="btn">Ping</button>
+    <button id="commit" class="btn acc">Commit to GitHub</button>
+  </div>
 
-    $("base").value = qs.get("base") || location.origin;
-    $("key").value  = qs.get("key")  || "";
-    $("team").checked = qs.get("team")==="1";
+  <div id="main">
+    <div id="left">
+      <!-- micro debug  -->
+      <div id="io">
+        <div id="ok" class="pill" style="background:#0f1d12;border-color:#1c3320;color:#b2e3c4">✅ Overlay HTML rendered. If the bubble doesn’t show or nothing opens, JS failed — errors will print here.</div>
+        <div class="mono" id="outMicro">• MICRO log will appear here.</div>
+        <div class="bubble">
+          <h5>AI</h5>
+          <div id="out">Ready</div>
+        </div>
+      </div>
 
-    function add(kind, html){
-      const div = document.createElement("div");
-      div.className = "msg " + kind;
-      div.innerHTML = html;
-      logBox.appendChild(div);
-      logBox.scrollTop = logBox.scrollHeight;
-    }
-    function meta(t){ return `<div class="meta">${t}</div>` }
+      <!-- input area -->
+      <div id="inpWrap">
+        <textarea id="msg" rows="3" placeholder="Type or paste long text here. Hold mic while talking for live transcription."></textarea>
+        <div id="inpCtrls">
+          <div class="row" style="gap:6px">
+            <button id="send" class="btn acc">Send</button>
+            <button id="ptt" class="btn">🎤 Hold to talk</button>
+          </div>
+          <div class="switch"><input type="checkbox" id="enterSends" checked /> <label for="enterSends">Enter sends (Shift+Enter = newline)</label></div>
+          <div class="switch"><input type="checkbox" id="handsfree" /> <label for="handsfree">Hands-free mic (auto-timeout)</label></div>
+          <div class="switch"><input type="checkbox" id="tts" checked /> <label for="tts">Speak replies</label> <button id="stopTts" class="btn red" style="padding:4px 8px">Stop</button></div>
+        </div>
+      </div>
+    </div>
 
-    // ----- Speech-to-text (live) -----
-    let rec=null;
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SR){
-      rec = new SR();
-      rec.continuous = true;
-      rec.interimResults = true;
-      rec.lang = "en-US";
-      rec.onresult = (e)=>{
-        let final = "", interim = "";
-        for (let i= e.resultIndex; i<e.results.length; i++){
-          const t = e.results[i][0].transcript;
-          if (e.results[i].isFinal) final += t; else interim += t;
-        }
-        if (interim) $("hint").textContent = "Listening… " + interim;
-        if (final)  { $("input").value += ( $("input").value ? " " : "" ) + final.trim(); $("hint").textContent = "Captured"; }
-      };
-      $("micBtn").onmousedown = ()=>{ $("hint").textContent="Listening…"; rec.start(); };
-      $("micBtn").onmouseup   = ()=>{ try{ rec.stop(); }catch{} $("hint").textContent="Stopped"; };
-      $("micBtn").onmouseleave= ()=>{ try{ rec.stop(); }catch{} $("hint").textContent="Stopped"; };
-      $("micBtn").ontouchstart= (e)=>{ e.preventDefault(); $("hint").textContent="Listening…"; rec.start(); };
-      $("micBtn").ontouchend  = (e)=>{ e.preventDefault(); try{ rec.stop(); }catch{} $("hint").textContent="Stopped"; };
+    <!-- right: tasks + KPI -->
+    <div id="right">
+      <div id="kpi">
+        <div class="pill" id="roiPill">ROI: —</div>
+        <div class="pill" id="spendPill">Spend: —</div>
+        <div class="pill" id="queuePill">Queue: —</div>
+      </div>
+      <div id="tasks"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const qs = new URLSearchParams(location.search);
+  const $ = (id)=>document.getElementById(id);
+  const base = $('base'); const key = $('key'); const team = $('team');
+  const out = $('out');   const outMicro = $('outMicro');
+  const msg = $('msg');   const ptt = $('ptt');
+  const enterSends = $('enterSends'); const handsfree = $('handsfree');
+  const speakToggle = $('tts'); const stopTtsBtn = $('stopTts');
+
+  // Prefill config
+  base.value = qs.get('base') || location.origin;
+  key.value  = qs.get('key')  || '';
+  team.checked = qs.get('team') === '1';
+
+  // Maximize / restore
+  let maximized = false;
+  $('max').onclick = () => {
+    maximized = !maximized;
+    if (maximized) {
+      Object.assign($('portal').style, { right:'0', bottom:'0', width:'100vw', height:'100vh', borderRadius:'0' });
     } else {
-      $("micBtn").disabled = true; $("micBtn").textContent = "No mic API";
+      Object.assign($('portal').style, { right:'24px', bottom:'24px', width:'720px', height:'560px', borderRadius:'16px' });
     }
+  };
+  $('close').onclick = () => { $('portal').style.display = 'none'; $('bubble').style.display='grid'; };
+  $('bubble').onclick = () => { $('portal').style.display = 'block'; $('bubble').style.display='none'; };
 
-    // ----- TTS -----
-    function speak(text){
-      try{
-        const u = new SpeechSynthesisUtterance(text);
-        u.rate = 1.0; u.pitch = 1.0; u.volume = 1.0;
-        speechSynthesis.cancel(); speechSynthesis.speak(u);
-      }catch{}
+  // Helpers
+  const logMicro = (label, text) => {
+    const ts = new Date().toLocaleTimeString();
+    outMicro.textContent = `${outMicro.textContent}\n${label} ${ts}: ${text}`.slice(-8000);
+    outMicro.scrollTop = outMicro.scrollHeight;
+  };
+  const microEncode = (plain) => {
+    return `V:2.0|OP:G|D:${plain.trim().replace(/\s+/g,'~').slice(0,1600)}|T:G|R:~CT~KP`;
+  };
+  const microExtractCT = (micro) => {
+    const m = micro.split('|').find(p => p.startsWith('CT:'));
+    return m ? m.slice(3).replace(/~/g,' ') : micro;
+  };
+
+  async function jfetch(path, init={}){
+    const b = base.value.replace(/\/+$/,'');
+    const url = `${b}${path}`;
+    const r = await fetch(url, init);
+    const t = await r.text();
+    if (!r.ok) throw new Error(`${r.status} ${t.slice(0,200)}`);
+    return t;
+  }
+
+  // Send logic (MICRO)
+  async function send(text){
+    const microOut = microEncode(text);
+    logMicro('→ MICRO OUT', microOut);
+    const t0 = performance.now();
+    const resp = await jfetch(`/api/v1/architect/micro?key=${encodeURIComponent(key.value)}${team.checked ? '&team=1':''}`, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body: microOut
+    });
+    const dt = Math.round(performance.now()-t0);
+    logMicro('← MICRO IN', resp);
+    const ct = microExtractCT(resp);
+    out.textContent = ct + `\n\n(${dt} ms)`;
+    if (speakToggle.checked) ttsSpeak(ct);
+  }
+
+  // Enter sends / shift+enter newline
+  msg.addEventListener('keydown', (e)=>{
+    if (enterSends.checked && e.key === 'Enter' && !e.shiftKey){
+      e.preventDefault(); $('send').click();
     }
+  });
+  $('send').onclick = async () => {
+    const text = msg.value.trim();
+    if (!text) return;
+    msg.value = '';
+    await send(text);
+  };
 
-    function buildMicro(text){
-      // very light MICRO encoder for chat
-      const t = String(text || "").trim();
-      return `V:2.0|OP:G|D:${t.replace(/\s+/g,"~").slice(0,80)}|T:G|R:~CT~KP`;
-    }
+  // Ping
+  $('ping').onclick = async ()=>{
+    try{
+      const t0 = performance.now();
+      const r = await jfetch(`/healthz?key=${encodeURIComponent(key.value)}`);
+      const dt = Math.round(performance.now()-t0);
+      out.textContent = `Server OK in ${dt} ms`;
+    }catch(e){ out.textContent = 'Ping failed: '+e.message; }
+  };
 
-    async function postMicro(micro){
-      const base = $("base").value.trim().replace(/\/+$/,'');
-      const key  = $("key").value.trim();
-      const team = $("team").checked ? "&team=1" : "";
-      const url  = `${base}/api/v1/architect/micro?key=${encodeURIComponent(key)}${team}`;
-      const r = await fetch(url, { method:"POST", headers:{ "Content-Type":"text/plain" }, body: micro });
-      const text = await r.text();
-      if (!r.ok) throw new Error(text || `HTTP ${r.status}`);
-      return text;
-    }
+  // Commit button — opens a minimal composer dialog
+  $('commit').onclick = ()=>{
+    const path = prompt('Path to commit (e.g. public/overlay/README.md):');
+    if (!path) return;
+    const content = prompt('Paste file content. (OK to continue)');
+    if (content==null) return;
+    fetch(`${base.value.replace(/\/+$/,'')}/api/v1/dev/commit?key=${encodeURIComponent(key.value)}`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ path, content, message:`portal commit: ${path}` })
+    }).then(r=>r.json()).then(j=>{
+      out.textContent = j.ok ? `Committed ${path} (${j.sha||'sha'})` : `Commit error: ${j.error||'unknown'}`;
+    }).catch(e=> out.textContent = 'Commit failed: '+e.message);
+  };
 
-    function parseCT(micro){
-      const m = /CT:([^|]+)/.exec(micro);
-      return m ? m[1].replace(/~/g," ") : micro;
-    }
-
-    $("sendBtn").onclick = async ()=>{
-      const msg = $("input").value.trim();
-      if (!msg) return;
-      add("user", meta("YOU") + msg);
-      $("input").value = "";
-      const microOut = buildMicro(msg);
-      add("ai", meta("→ MICRO OUT") + `<code>${microOut}</code>`);
-      try{
-        const microIn = await postMicro(microOut);
-        add("ai", meta("← MICRO IN") + `<code>${microIn}</code>`);
-        const text = parseCT(microIn);
-        add("ai", meta("AI") + text);
-        speak(text);
-      }catch(e){
-        add("ai", meta("ERROR") + String(e));
+  // --------- Speech (Web Speech API) ----------
+  let recog, speaking=false, speechUtterance=null, handsfreeTimer=null;
+  function setupRecog(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { ptt.disabled = true; $('realtimeTag').textContent='No STT'; return; }
+    recog = new SR(); recog.lang='en-US'; recog.interimResults=true; recog.continuous=true;
+    let buf = '';
+    recog.onresult = (ev)=>{
+      let final = '';
+      for (let i=ev.resultIndex; i<ev.results.length; i++){
+        const r = ev.results[i];
+        if (r.isFinal) final += r[0].transcript;
+        else buf = r[0].transcript;
+      }
+      $('msg').value = (final || buf);
+    };
+    recog.onend = ()=>{
+      if (handsfree.checked){
+        // auto restart unless timed out
+        if (!handsfreeTimer) recog.start();
+      } else {
+        ptt.classList.remove('acc'); ptt.textContent='🎤 Hold to talk';
       }
     };
-    $("input").addEventListener("keydown", (e)=>{ if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) $("sendBtn").click(); });
+  }
+  setupRecog();
 
-    // ---- Test button ----
-    $("testBtn").onclick = async ()=>{
-      try{
-        const res = await fetch(($("base").value||location.origin).replace(/\/+$/,'') + "/health");
-        add("ai", meta("Ping") + (res.ok ? "Server OK" : "Server error"));
-      }catch(e){ add("ai", meta("Ping") + String(e)); }
-    };
+  // push-to-talk
+  ptt.onmousedown = ()=>{ if (!recog) return; recog.start(); ptt.classList.add('acc'); ptt.textContent='Listening…'; };
+  ptt.onmouseup   = ()=>{ if (!recog) return; try{recog.stop();}catch{} ptt.classList.remove('acc'); ptt.textContent='🎤 Hold to talk'; };
 
-    // ---- Commit to GitHub (from overlay) ----
-    $("commitBtn").onclick = async ()=>{
-      const content = prompt("Paste FULL file content to commit (it will be base64'd on server).");
-      if (content == null) return;
-      const filePath = prompt("Repo path (e.g. server.js or public/overlay/portal.html):", "server.js");
-      if (!filePath) return;
-      const base = $("base").value.trim().replace(/\/+$/,'');
-      const key  = $("key").value.trim();
-      try{
-        const r = await fetch(`${base}/api/v1/dev/commit?key=${encodeURIComponent(key)}`, {
-          method:"POST", headers:{ "Content-Type":"application/json" },
-          body: JSON.stringify({ path:filePath, content, message:`feat: update ${filePath} (via overlay)` })
-        });
-        const j = await r.json();
-        if (!j.ok) throw new Error(j.error || "Commit failed");
-        add("ai", meta("Commit") + `Committed ${filePath} • sha ${j.sha || "(unknown)"}`);
-      }catch(e){
-        add("ai", meta("Commit ERROR") + String(e));
+  // hands-free
+  handsfree.addEventListener('change', ()=>{
+    if (!recog){ handsfree.checked = false; return; }
+    if (handsfree.checked){
+      recog.start();
+      ptt.textContent='🎤 Listening (hands-free)';
+      ptt.classList.add('acc');
+      // auto-timeout after 2 minutes
+      handsfreeTimer = setTimeout(()=>{ try{recog.stop();}catch{} handsfree.checked=false; handsfreeTimer=null; }, 120000);
+    } else {
+      if (handsfreeTimer) { clearTimeout(handsfreeTimer); handsfreeTimer=null; }
+      try{recog.stop();}catch{}
+      ptt.classList.remove('acc'); ptt.textContent='🎤 Hold to talk';
+    }
+  });
+
+  // TTS
+  function ttsSpeak(text){
+    if (!('speechSynthesis' in window)) return;
+    try { window.speechSynthesis.cancel(); } catch {}
+    const u = new SpeechSynthesisUtterance(text);
+    // choose a more natural voice if present
+    const voices = speechSynthesis.getVoices();
+    const pref = voices.find(v => /(Natural|Neural|Siri|Google US English|UK English Female)/i.test(v.name)) || voices.find(v=>/en/i.test(v.lang));
+    if (pref) u.voice = pref;
+    u.rate = 1.03; u.pitch = 1.0;
+    speechSynthesis.speak(u);
+    speechUtterance = u;
+  }
+  stopTtsBtn.onclick = ()=>{ try{speechSynthesis.cancel();}catch{} };
+
+  // Tasks panel & KPI
+  async function refreshRight(){
+    try{
+      const [t, roi] = await Promise.all([
+        fetch(`${base.value.replace(/\/+$/,'')}/api/v1/tasks?key=${encodeURIComponent(key.value)}`).then(r=>r.json()),
+        fetch(`${base.value.replace(/\/+$/,'')}/api/v1/roi/status?key=${encodeURIComponent(key.value)}`).then(r=>r.json())
+      ]);
+      const list = (t.tasks||[]).slice().reverse();
+      $('queuePill').textContent = `Queue: ${list.length}`;
+      if (roi.ok){
+        $('roiPill').textContent = `ROI: ${(roi.roi.roi_ratio||0).toFixed ? (roi.roi.roi_ratio||0).toFixed(2)+'x' : roi.roi.ratio||'—'}`;
+        $('spendPill').textContent = `Spend: $${(roi.roi.daily_spend||0).toFixed ? (roi.roi.daily_spend||0).toFixed(2) : roi.roi.daily_spend}`;
       }
-    };
+      $('tasks').innerHTML = list.map(task=>{
+        const pct = task.status==='complete' ? 100 : task.status==='in-progress' ? 50 : 0;
+        const summary = task.result?.summary || '';
+        const prio = task.priority || '—';
+        return `
+          <div class="task">
+            <div class="trow">
+              <div><strong>#${task.id}</strong> • ${task.description}</div>
+              <div style="color:${pct===100?'#22c55e':pct===50?'#38bdf8':'#8aa1b2'}">${task.status}</div>
+            </div>
+            <div class="trow" style="margin-top:4px"><div class="pill">Priority: ${prio}</div><div class="pill">Saved: ${task.result?.compression_pct??'—'}%</div></div>
+            <div class="bar"><span style="width:${pct}%"></span></div>
+            ${summary ? `<div style="margin-top:6px;color:#a6c5d6;font-size:12px">${summary}</div>` : ''}
+          </div>`;
+      }).join('');
+    }catch(e){
+      // silent
+    }
+  }
+  setInterval(refreshRight, 2500); refreshRight();
 
-    // Show a ready line
-    add("ai", meta("Overlay") + "Overlay loaded. Paste or talk, then Send. Team=Claude+GPT+Judge.");
-    // Prefill base/key from URL
-    if (!qs.get("base")) $("base").value = location.origin;
-    if (qs.get("key")) add("ai", meta("Key") + "Loaded key from URL.");
-    // Close button
-    $("closeBtn").onclick = ()=>{ try{ speechSynthesis.cancel(); }catch{} document.getElementById("app").remove(); };
-  </script>
+  // auto-send when page opened with ?q= param (for testing)
+  if (qs.get('q')) { msg.value = qs.get('q'); $('send').click(); }
+})();
+</script>
 </body>
 </html>
