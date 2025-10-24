@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>LifeOS Architect • MICRO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0b0f14; --panel:#111827; --muted:#9ca3af; --accent:#22c55e;
+      --accent2:#38bdf8; --border:#1f2937; --white:#e5e7eb; --danger:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:transparent;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,sans-serif}
+
+    /* Floating bubble (minimized) */
+    #bubble{
+      position:fixed; right:20px; bottom:20px; width:56px; height:56px; border-radius:50%;
+      background:linear-gradient(135deg,var(--accent2),var(--accent));
+      box-shadow:0 12px 40px rgba(0,0,0,.35); border:none; cursor:pointer; z-index:2147483647;
+      display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:20px;
+    }
+
+    /* Panel */
+    #panel{
+      position:fixed; right:20px; bottom:20px; width:420px; height:560px; border-radius:16px;
+      background:rgba(11,15,20,.98); border:1px solid var(--border); z-index:2147483647;
+      box-shadow:0 20px 70px rgba(0,0,0,.55); display:none; overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+    #titlebar{
+      display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border);
+      color:var(--white); background:linear-gradient(180deg,rgba(56,189,248,.08),transparent);
+      cursor:move; user-select:none;
+    }
+    #statusDot{width:8px;height:8px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 2px rgba(22,163,74,.25)}
+    #grow{flex:1}
+    #closeBtn,#minBtn{
+      background:transparent;border:1px solid var(--border); color:var(--muted);
+      width:28px;height:28px;border-radius:8px; cursor:pointer;
+    }
+    #closeBtn:hover,#minBtn:hover{border-color:#334155;color:#e2e8f0}
+
+    /* Chat area */
+    #msgs{height:360px; overflow:auto; padding:14px}
+    .msg{border:1px solid var(--border); background:#0f172a; color:var(--white); padding:10px 12px; border-radius:10px; margin-bottom:10px; line-height:1.45}
+    .me{background:#0b1220}
+    .meta{font-size:11px;color:var(--muted); margin-bottom:4px}
+    pre{white-space:pre-wrap; word-wrap:break-word; margin:0}
+
+    /* Composer */
+    #composer{border-top:1px solid var(--border); padding:12px; display:grid; grid-template-columns:1fr 38px 38px; gap:8px; background:#0b0f14}
+    #input{
+      width:100%; background:#0f172a; color:var(--white); border:1px solid var(--border);
+      border-radius:10px; padding:10px 12px; outline:none;
+    }
+    button.icon{
+      border:1px solid var(--border); background:#0f172a; color:var(--white); border-radius:10px; cursor:pointer;
+    }
+    button.icon:hover{border-color:#334155}
+
+    /* Row under composer */
+    #row2{display:flex; gap:8px; align-items:center; padding:0 12px 12px; color:var(--muted); font-size:12px}
+    #row2 input{border:1px solid var(--border); background:#0f172a; color:#cbd5e1; border-radius:8px; padding:6px 8px; width:100%}
+    .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);padding:4px 8px;border-radius:999px}
+    #saveBtn{border:1px solid var(--border); background:#0f172a; color:#cbd5e1; border-radius:8px; padding:6px 10px; cursor:pointer}
+    #saveBtn:hover{border-color:#334155;color:#e5e7eb}
+
+    /* Snackbar */
+    #toast{position:fixed; right:20px; bottom:90px; background:#111827; color:#e5e7eb;
+      border:1px solid var(--border); padding:8px 12px; border-radius:8px; display:none}
+
+    /* Drag handle hover */
+    #titlebar:hover #statusDot{box-shadow:0 0 0 3px rgba(56,189,248,.35)}
+  </style>
+</head>
+<body>
+
+<button id="bubble">L</button>
+
+<div id="panel" role="dialog" aria-label="LifeOS Architect">
+  <div id="titlebar">
+    <div id="statusDot"></div>
+    <strong>LifeOS Architect • MICRO</strong>
+    <span id="grow"></span>
+    <button id="minBtn" title="Minimize">–</button>
+    <button id="closeBtn" title="Close overlay">×</button>
+  </div>
+
+  <div id="msgs" aria-live="polite"></div>
+
+  <div id="composer">
+    <input id="input" placeholder="Talk or type… hold mic for live transcription" autocomplete="off" />
+    <button id="micBtn" class="icon" title="Hold to talk (real-time)">
+      🎤
+    </button>
+    <button id="sendBtn" class="icon" title="Send">
+      ➤
+    </button>
+  </div>
+
+  <div id="row2">
+    <span class="pill">🔐 <span id="keyState">key?</span></span>
+    <input id="base" placeholder="Base (auto)" />
+    <input id="key" placeholder="Command key (?key=…)" />
+    <button id="saveBtn">Save</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(() => {
+  // ----- State -----
+  const qs = new URLSearchParams(location.search);
+  const els = (id)=>document.getElementById(id);
+  const msgs = els('msgs');
+  const input = els('input');
+  const base = els('base');
+  const key = els('key');
+  const keyState = els('keyState');
+  const toast = els('toast');
+
+  // Prefill from query or localStorage
+  base.value = qs.get('base') || localStorage.getItem('lifeos_base') || location.origin;
+  key.value  = qs.get('key')  || localStorage.getItem('lifeos_key')  || '';
+  keyState.textContent = key.value ? 'key✓' : 'key?';
+
+  els('saveBtn').onclick = () => {
+    localStorage.setItem('lifeos_base', base.value.trim());
+    localStorage.setItem('lifeos_key',  key.value.trim());
+    keyState.textContent = key.value ? 'key✓' : 'key?';
+    ping('Saved');
+  };
+
+  // ----- UI open/close/min -----
+  const bubble = els('bubble');
+  const panel  = els('panel');
+  bubble.onclick = () => { panel.style.display='block'; bubble.style.display='none'; input.focus(); };
+  els('minBtn').onclick = () => { panel.style.display='none'; bubble.style.display='inline-flex'; };
+  els('closeBtn').onclick = () => { panel.remove(); bubble.remove(); };
+
+  // Dragging the panel by titlebar
+  (function enableDrag(){
+    const bar = els('titlebar');
+    let dx=0, dy=0, dragging=false, startX=0, startY=0, startRight=0, startBottom=0;
+    bar.addEventListener('mousedown',(e)=>{ dragging=true; startX=e.clientX; startY=e.clientY;
+      const rect = panel.getBoundingClientRect(); startRight=window.innerWidth-rect.right; startBottom=window.innerHeight-rect.bottom; });
+    window.addEventListener('mousemove',(e)=>{ if(!dragging) return;
+      dx=e.clientX-startX; dy=e.clientY-startY;
+      panel.style.right = Math.max(10, startRight - dx) + 'px';
+      panel.style.bottom = Math.max(10, startBottom - dy) + 'px';
+    });
+    window.addEventListener('mouseup',()=> dragging=false);
+  })();
+
+  // ----- Messaging helpers -----
+  function addMsg(who, text){
+    const wrap = document.createElement('div');
+    wrap.className = 'msg ' + (who==='me' ? 'me' : 'ai');
+    const meta = document.createElement('div'); meta.className='meta';
+    meta.textContent = (who==='me'?'YOU':'ARCHITECT') + ' • ' + new Date().toLocaleTimeString();
+    const pre = document.createElement('pre'); pre.textContent = text;
+    wrap.appendChild(meta); wrap.appendChild(pre); msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+  function ping(text){
+    toast.textContent = text; toast.style.display='block';
+    setTimeout(()=> toast.style.display='none', 1600);
+  }
+
+  // ----- MICRO helpers -----
+  function toMicro(utterance){
+    // Simple encoder using your v2.0 MICRO
+    const lower = utterance.toLowerCase();
+    const op = /analy[z|s]e|analyze/.test(lower) ? 'A'
+            : /generate|write|create|build/.test(lower) ? 'G'
+            : /review|critique/.test(lower) ? 'R'
+            : /optimi[sz]e|improve/.test(lower) ? 'O' : 'C';
+    let type='G';
+    if (/script/.test(lower)) type='S';
+    else if (/report/.test(lower)) type='R';
+    const desc = utterance
+      .replace(/generate/gi,'GEN')
+      .replace(/analyze/gi,'ANL')
+      .replace(/create/gi,'CRT')
+      .replace(/build/gi,'BLD')
+      .replace(/optimi[sz]e/gi,'OPT')
+      .replace(/review/gi,'REV')
+      .replace(/\s+/g,'~')
+      .slice(0,80);
+    return `V:2.0|OP:${op}|D:${desc}|T:${type}|R:~CT~KP`;
+  }
+  function parseMicro(micro){
+    const parts = String(micro||'').split('|');
+    const out = { CT:'', KP:[] };
+    for (const p of parts){
+      const [k,v] = p.split(':');
+      if (k==='CT') out.CT = (v||'').replace(/~/g,' ');
+      if (k==='KP') out.KP = (v||'').split('~').filter(Boolean);
+    }
+    return out;
+  }
+
+  // ----- Send (MICRO, text/plain) -----
+  async function sendMicro(microStr){
+    const baseUrl = (base.value||location.origin).replace(/\/+$/,'');
+    const k = key.value.trim();
+    if (!k){ ping('Missing key'); return { error:'missing key' }; }
+    const url = `${baseUrl}/api/v1/architect/micro?key=${encodeURIComponent(k)}`;
+    const res = await fetch(url,{ method:'POST', headers:{'Content-Type':'text/plain'}, body: microStr });
+    const text = await res.text();
+    if (!res.ok) throw new Error(text || ('HTTP '+res.status));
+    return text;
+  }
+
+  // ----- TTS -----
+  function speak(text){
+    try{
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 1; u.pitch=1;
+      window.speechSynthesis.cancel(); // stop any previous
+      window.speechSynthesis.speak(u);
+    }catch{}
+  }
+
+  // ----- STT (real-time interim) -----
+  let rec=null, listening=false;
+  function canSTT(){
+    return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+  }
+  function startSTT(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { ping('Voice unavailable'); return; }
+    rec = new SR(); rec.interimResults = true; rec.continuous = true; rec.lang='en-US';
+    let finalText='';
+    rec.onresult = (e)=>{
+      let interim='';
+      for (let i=e.resultIndex;i<e.results.length;i++){
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal){ finalText += t; }
+        else { interim += t; }
+      }
+      input.value = (finalText + ' ' + interim).trim();
+    };
+    rec.onend = ()=> { listening=false; els('micBtn').textContent='🎤'; };
+    rec.onerror = ()=> { listening=false; els('micBtn').textContent='🎤'; };
+    rec.start(); listening=true; els('micBtn').textContent='⏺';
+  }
+  function stopSTT(){
+    if (rec){ rec.stop(); rec=null; }
+    listening=false; els('micBtn').textContent='🎤';
+  }
+
+  // ----- Wire buttons -----
+  async function doSendFromInput(){
+    const text = input.value.trim();
+    if (!text) return;
+    const micro = toMicro(text);
+    addMsg('me', text + `\n\n→ ${micro}`);
+    input.value = '';
+    try{
+      const raw = await sendMicro(micro);
+      const parsed = parseMicro(raw);
+      addMsg('ai', parsed.CT + (parsed.KP?.length?`\n\n• ${parsed.KP.join('\n• ')}`:''));
+      speak(parsed.CT);
+    }catch(e){
+      addMsg('ai', 'ERROR: ' + (e.message||e));
+    }
+  }
+
+  els('sendBtn').onclick = doSendFromInput;
+  input.addEventListener('keydown', (e)=>{ if (e.key==='Enter' && !e.shiftKey) doSendFromInput(); });
+
+  els('micBtn').onmousedown = ()=>{
+    if (listening){ stopSTT(); return; }
+    if (!canSTT()){ ping('No mic support'); return; }
+    startSTT();
+  };
+  els('micBtn').onmouseup = ()=>{ if (listening){ stopSTT(); doSendFromInput(); } };
+  els('micBtn').onmouseleave = ()=>{ if (listening){ stopSTT(); } };
+
+  // Welcome note
+  addMsg('ai', 'MICRO overlay ready. Hold 🎤 to dictate (live), release to send. Replies are spoken.\nTip: add ?key=YOUR_KEY to the URL so the key pre-fills here.');
+})();
+</script>
+</body>
+</html>
