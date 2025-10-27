@@ -1,4 +1,4 @@
-// server.js - v13 COMPLETE WITH 6 AI MODELS (Claude + GPT + Gemini + Grok)
+// server.js - v14 COMPLETE: v13 + Memory System + Protection System
 import express from "express";
 import dayjs from "dayjs";
 import fs from "fs";
@@ -44,18 +44,50 @@ export const pool = new Pool({
   ssl: DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined,
 });
 
+const PROTECTED_FILES = [
+  'server.js',
+  'package.json',
+  'package-lock.json',
+  '.env',
+  '.gitignore'
+];
+
 async function initDb() {
   await pool.query(`create table if not exists calls (id serial primary key, created_at timestamptz default now(), phone text, intent text, area text, timeline text, duration int, transcript text, score text, boldtrail_lead_id text);`);
   await pool.query(`create table if not exists build_metrics (id serial primary key, created_at timestamptz default now(), pr_number int, model text, tokens_in int default 0, tokens_out int default 0, cost numeric(10,4) default 0, outcome text default 'pending', summary text);`);
   await pool.query(`create table if not exists council_reviews (id serial primary key, pr_number int not null, reviewer text not null, vote text not null, reasoning text, concerns jsonb, created_at timestamptz default now());`);
   await pool.query(`create table if not exists task_outputs (id serial primary key, task_id int not null, output_type text, content text, metadata jsonb, created_at timestamptz default now());`);
   await pool.query(`create table if not exists compression_stats (id serial primary key, task_id int, original_tokens int, compressed_tokens int, savings_pct numeric, cost_saved numeric, created_at timestamptz default now());`);
+  
+  await pool.query(`create table if not exists shared_memory (
+    id serial primary key,
+    key text unique not null,
+    value jsonb not null,
+    category text,
+    created_at timestamptz default now(),
+    updated_at timestamptz default now()
+  );`);
+  
+  await pool.query(`create table if not exists approval_queue (
+    id serial primary key,
+    action_type text not null,
+    file_path text,
+    content text,
+    message text,
+    status text default 'pending',
+    requested_at timestamptz default now(),
+    approved_at timestamptz,
+    approved_by text
+  );`);
+  
   await pool.query(`create index if not exists idx_council_pr on council_reviews(pr_number);`);
   await pool.query(`create index if not exists idx_task_outputs on task_outputs(task_id);`);
   await pool.query(`create index if not exists idx_compression_stats on compression_stats(created_at);`);
+  await pool.query(`create index if not exists idx_memory_category on shared_memory(category);`);
+  await pool.query(`create index if not exists idx_approval_status on approval_queue(status);`);
 }
 
-initDb().then(() => console.log("✅ Database ready")).catch(console.error);
+initDb().then(() => console.log("✅ Database ready (with memory + protection)")).catch(console.error);
 
 const COUNCIL_MEMBERS = {
   claude: { name: "Claude", role: "Strategic Oversight", model: "claude-sonnet-4", focus: "long-term implications", provider: "anthropic" },
@@ -227,6 +259,10 @@ function assertKey(req, res) {
   const got = req.query.key || req.headers["x-command-key"];
   if (!k || got !== k) { res.status(401).json({ error: "unauthorized" }); return false; }
   return true;
+}
+
+function isProtected(filePath) {
+  return PROTECTED_FILES.some(pf => filePath.includes(pf));
 }
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
@@ -469,7 +505,7 @@ async function executeTask(task) {
   
   console.log(`[executor] ${description.slice(0, 50)}...`);
   console.log(`[REAL SAVINGS] Customer: ${customerTokens}t → MICRO: ${compressedTokens}t`);
-  console.log(`[REAL SAVINGS] Savings: ${savingsPct}% ($${costSaved.toFixed(4)})`);
+  console.log(`[REAL SAVINGS] Savings: ${savingsPct}% (${costSaved.toFixed(4)})`);
   
   try {
     const result = await callCouncilMember('brock', microPrompt, true);
@@ -517,6 +553,64 @@ async function processWorkQueue() {
   }
 }
 
+app.post("/api/v1/memory/store", requireCommandKey, async (req, res) => {
+  try {
+    const { key, value, category } = req.body;
+    if (!key) return res.status(400).json({ ok: false, error: "key required" });
+    
+    await pool.query(
+      `insert into shared_memory (key, value, category, updated_at) 
+       values ($1, $2, $3, now()) 
+       on conflict (key) do update set value = $2, category = $3, updated_at = now()`,
+      [key, JSON.stringify(value), category || 'general']
+    );
+    
+    console.log(`[memory] Stored: ${key} (${category || 'general'})`);
+    res.json({ ok: true, key, stored: true });
+  } catch (e) {
+    console.error('[memory.store]', e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+app.get("/api/v1/memory/get/:key", requireCommandKey, async (req, res) => {
+  try {
+    const result = await pool.query('select * from shared_memory where key = $1', [req.params.key]);
+    if (result.rows.length === 0) {
+      return res.json({ ok: true, found: false, data: null });
+    }
+    res.json({ ok: true, found: true, data: result.rows[0] });
+  } catch (e) {
+    console.error('[memory.get]', e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+app.get("/api/v1/memory/list", requireCommandKey, async (req, res) => {
+  try {
+    const category = req.query.category;
+    const query = category 
+      ? 'select * from shared_memory where category = $1 order by updated_at desc'
+      : 'select * from shared_memory order by updated_at desc';
+    const params = category ? [category] : [];
+    const result = await pool.query(query, params);
+    res.json({ ok: true, count: result.rows.length, memories: result.rows });
+  } catch (e) {
+    console.error('[memory.list]', e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+app.delete("/api/v1/memory/delete/:key", requireCommandKey, async (req, res) => {
+  try {
+    await pool.query('delete from shared_memory where key = $1', [req.params.key]);
+    res.json({ ok: true, deleted: true });
+  } catch (e) {
+    console.error('[memory.delete]', e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
 app.post("/api/v1/architect/micro", requireCommandKey, async (req, res) => {
   try {
     const rawBody = typeof req.body === "string" ? req.body : (req.body?.micro || req.body?.text || "");
@@ -547,12 +641,79 @@ app.post("/api/v1/dev/commit", requireCommandKey, async (req, res) => {
   try {
     const { path: file_path, content, message } = req.body || {};
     if (!file_path || typeof content !== 'string') return res.status(400).json({ ok:false, error: "path and content required" });
+    
+    if (isProtected(file_path)) {
+      console.log(`[protection] Blocked commit to protected file: ${file_path}`);
+      
+      await pool.query(
+        `insert into approval_queue (action_type, file_path, content, message, status) 
+         values ($1, $2, $3, $4, $5)`,
+        ['commit', file_path, content, message, 'pending']
+      );
+      
+      return res.status(403).json({ 
+        ok: false, 
+        error: "protected_file",
+        message: `${file_path} is protected and requires manual approval`,
+        file: file_path,
+        approval_required: true
+      });
+    }
+    
     const repo = GITHUB_REPO || "LimitlessOI/Lumin-LifeOS";
     const info = await ghPutFile(repo, file_path.replace(/^\/+/, ''), content, message || `feat: update ${file_path}`);
+    console.log(`[commit] ✅ ${file_path} (${info.content?.sha?.slice(0,7)})`);
     res.json({ ok:true, committed: file_path, sha: info.content?.sha || info.commit?.sha });
   } catch (e) {
     console.error('[dev.commit]', e);
     res.status(500).json({ ok:false, error: String(e) });
+  }
+});
+
+app.get("/api/v1/protection/queue", requireCommandKey, async (req, res) => {
+  try {
+    const result = await pool.query('select * from approval_queue where status = $1 order by requested_at desc', ['pending']);
+    res.json({ ok: true, count: result.rows.length, queue: result.rows });
+  } catch (e) {
+    console.error('[protection.queue]', e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+app.post("/api/v1/protection/approve/:id", requireCommandKey, async (req, res) => {
+  try {
+    const approvalId = req.params.id;
+    const result = await pool.query('select * from approval_queue where id = $1', [approvalId]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: 'Approval request not found' });
+    }
+    
+    const approval = result.rows[0];
+    
+    const repo = GITHUB_REPO || "LimitlessOI/Lumin-LifeOS";
+    const info = await ghPutFile(repo, approval.file_path.replace(/^\/+/, ''), approval.content, approval.message);
+    
+    await pool.query(
+      'update approval_queue set status = $1, approved_at = now(), approved_by = $2 where id = $3',
+      ['approved', 'manual', approvalId]
+    );
+    
+    console.log(`[protection] ✅ Approved and committed: ${approval.file_path}`);
+    res.json({ ok: true, committed: approval.file_path, sha: info.content?.sha || info.commit?.sha });
+  } catch (e) {
+    console.error('[protection.approve]', e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+app.post("/api/v1/protection/reject/:id", requireCommandKey, async (req, res) => {
+  try {
+    await pool.query('update approval_queue set status = $1 where id = $2', ['rejected', req.params.id]);
+    res.json({ ok: true, rejected: true });
+  } catch (e) {
+    console.error('[protection.reject]', e);
+    res.status(500).json({ ok: false, error: String(e) });
   }
 });
 
@@ -678,11 +839,14 @@ app.get("/healthz", async (_req, res) => {
     const spend = readSpend();
     const compressionStats = await pool.query(`SELECT COUNT(*) as count, AVG(savings_pct) as avg_pct FROM compression_stats WHERE created_at > NOW() - INTERVAL '24 hours'`);
     const compStats = compressionStats.rows[0];
+    const memoryCount = await pool.query('select count(*) as count from shared_memory');
+    const approvalCount = await pool.query('select count(*) as count from approval_queue where status = $1', ['pending']);
+    
     res.json({ 
       status: "healthy", 
       database: "connected", 
       timestamp: r.rows[0].now, 
-      version: "v13-six-ai-models", 
+      version: "v14-memory-protection", 
       daily_spend: spend.usd, 
       max_daily_spend: MAX_DAILY_SPEND, 
       spend_percentage: ((spend.usd / MAX_DAILY_SPEND) * 100).toFixed(1) + "%", 
@@ -702,6 +866,15 @@ app.get("/healthz", async (_req, res) => {
         compressions_today: compStats.count || 0, 
         avg_savings_pct: Math.round(compStats.avg_pct || 0) 
       }, 
+      memory_system: {
+        enabled: true,
+        stored_memories: memoryCount.rows[0].count
+      },
+      protection_system: {
+        enabled: true,
+        protected_files: PROTECTED_FILES,
+        pending_approvals: approvalCount.rows[0].count
+      },
       roi: { 
         ratio: roiTracker.roi_ratio.toFixed(2) + "x", 
         revenue: "$" + roiTracker.daily_revenue.toFixed(2), 
@@ -784,5 +957,7 @@ app.listen(PORT, HOST, () => {
   console.log(`✅ Team Mode: All 6 AI models debate → judge picks best`);
   console.log(`✅ GitHub Commit: ENABLED`);
   console.log(`✅ ROI Tracking: ENABLED`);
+  console.log(`✅ Memory System: ENABLED (shared_memory table)`);
+  console.log(`✅ Protection System: ENABLED (${PROTECTED_FILES.length} protected files)`);
   console.log(`✅ Max Daily Spend: ${MAX_DAILY_SPEND}`);
 });
