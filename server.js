@@ -1,4 +1,4 @@
-// server.js - v14 COMPLETE WITH 5 BREAKTHROUGH IDEAS
+// server.js - v13 COMPLETE WITH 6 AI MODELS (Claude + GPT + Gemini + Grok)
 import express from "express";
 import dayjs from "dayjs";
 import fs from "fs";
@@ -273,30 +273,14 @@ async function ghPutFile(repo, path, contentText, message) {
   return await r.json();
 }
 
-// IDEA #1: AUTO-COMPRESS ALL API CALLS
 async function callCouncilMember(member, prompt, useMicro = true) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown council member: ${member}`);
-  
-  // AUTO-COMPRESS: Force MICRO for prompts >100 chars
-  const shouldCompress = prompt.length > 100 && !prompt.startsWith('V:2.0');
-  if (shouldCompress && !useMicro) {
-    console.log(`[auto-compress] Converting ${prompt.length} char prompt to MICRO (saving ~${Math.floor(prompt.length * 0.7)} chars)`);
-    const microData = {
-      operation: prompt.toLowerCase().includes('generate') ? 'generate' : 'analyze',
-      description: prompt.slice(0, 200),
-      type: 'general',
-      returnFields: ['CT', 'KP']
-    };
-    prompt = MICRO_PROTOCOL.encode(microData);
-    useMicro = true;
-  }
   
   const systemPrompt = useMicro
     ? 'You are the LifeOS Architect AI controlling the Lumin autonomous system at robust-magic-production.up.railway.app. You communicate using v2.0-Micro protocol. Format: V:2.0|CT:<complete detailed answer>|KP:~key~points. Be specific and concrete. When asked to generate scripts or code, produce FULL complete examples with all sections. Never produce generic IVR phone menus. Never say "I cannot access" - you ARE the system running on Railway with GitHub repo LimitlessOI/Lumin-LifeOS. Show what you DID or CAN DO with specific details.'
     : '';
   
-  // ANTHROPIC (Claude)
   if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
     const res = await safeFetch("https://api.anthropic.com/v1/messages", {
       method: "POST", 
@@ -307,7 +291,6 @@ async function callCouncilMember(member, prompt, useMicro = true) {
     return { response: json.content[0].text, usage: { prompt_tokens: json.usage.input_tokens, completion_tokens: json.usage.output_tokens } };
   }
   
-  // OPENAI (GPT-4o, GPT-4o-mini)
   if (config.provider === 'openai' && OPENAI_API_KEY) {
     const messages = systemPrompt ? [{ role: 'system', content: systemPrompt }, { role: 'user', content: prompt }] : [{ role: 'user', content: prompt }];
     const res = await safeFetch("https://api.openai.com/v1/chat/completions", {
@@ -319,7 +302,6 @@ async function callCouncilMember(member, prompt, useMicro = true) {
     return { response: json.choices[0].message.content, usage: json.usage };
   }
   
-  // GOOGLE GEMINI
   if (config.provider === 'google' && GEMINI_API_KEY) {
     const res = await safeFetch(`https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`, {
       method: "POST",
@@ -337,7 +319,6 @@ async function callCouncilMember(member, prompt, useMicro = true) {
     return { response: text, usage };
   }
   
-  // XAI GROK
   if (config.provider === 'xai' && GROK_API_KEY) {
     const messages = systemPrompt ? [{ role: 'system', content: systemPrompt }, { role: 'user', content: prompt }] : [{ role: 'user', content: prompt }];
     const res = await safeFetch("https://api.x.ai/v1/chat/completions", {
@@ -352,7 +333,6 @@ async function callCouncilMember(member, prompt, useMicro = true) {
   throw new Error(`No API key for ${member} (${config.provider})`);
 }
 
-// IDEA #16: PARALLEL COUNCIL VOTING
 async function teamMicroResponse(microIn) {
   const systemContext = `You are the LifeOS Architect AI controlling the Lumin autonomous system.
 
@@ -383,29 +363,36 @@ RESPONSE FORMAT:
 
   const fullPrompt = `${systemContext}\n\nUser request: ${microIn}\n\nRespond in MICRO format with complete, actionable details:`;
 
-  // PARALLEL EXECUTION - Call all AIs simultaneously
-  const t0 = performance.now();
-  const calls = [
-    callCouncilMember('claude', fullPrompt, true).then(r => ({ name: 'Claude', text: String(r.response || '').trim(), usage: r.usage, model: 'claude-sonnet-4' })).catch(e => ({ name: 'Claude', text: '', error: e.message })),
-    callCouncilMember('brock', fullPrompt, true).then(r => ({ name: 'Brock', text: String(r.response || '').trim(), usage: r.usage, model: 'gpt-4o' })).catch(e => ({ name: 'Brock', text: '', error: e.message })),
-    callCouncilMember('gemini', fullPrompt, true).then(r => ({ name: 'Gemini', text: String(r.response || '').trim(), usage: r.usage, model: 'gemini-2.0-flash-exp' })).catch(e => ({ name: 'Gemini', text: '', error: e.message })),
-    callCouncilMember('grok', fullPrompt, true).then(r => ({ name: 'Grok', text: String(r.response || '').trim(), usage: r.usage, model: 'grok-beta' })).catch(e => ({ name: 'Grok', text: '', error: e.message }))
-  ];
-
-  const results = await Promise.all(calls);
-  const responses = results.filter(r => r.text && !r.error);
+  const responses = [];
   
-  // Track costs
-  results.forEach(r => { if (r.usage) trackCost(r.usage, r.model); });
-
-  const parallelTime = Math.round(performance.now() - t0);
-  console.log(`[team] ⚡ Parallel execution: ${responses.length}/4 AIs responded in ${parallelTime}ms`);
+  try {
+    const claude = await callCouncilMember('claude', fullPrompt, true);
+    trackCost(claude.usage, 'claude-sonnet-4');
+    responses.push({ name: 'Claude', text: String(claude.response || '').trim() });
+  } catch (e) { console.error('[team] Claude failed:', e.message); }
+  
+  try {
+    const brock = await callCouncilMember('brock', fullPrompt, true);
+    trackCost(brock.usage, 'gpt-4o');
+    responses.push({ name: 'Brock', text: String(brock.response || '').trim() });
+  } catch (e) { console.error('[team] Brock failed:', e.message); }
+  
+  try {
+    const gemini = await callCouncilMember('gemini', fullPrompt, true);
+    trackCost(gemini.usage, 'gemini-2.0-flash-exp');
+    responses.push({ name: 'Gemini', text: String(gemini.response || '').trim() });
+  } catch (e) { console.error('[team] Gemini failed:', e.message); }
+  
+  try {
+    const grok = await callCouncilMember('grok', fullPrompt, true);
+    trackCost(grok.usage, 'grok-beta');
+    responses.push({ name: 'Grok', text: String(grok.response || '').trim() });
+  } catch (e) { console.error('[team] Grok failed:', e.message); }
 
   if (responses.length === 0) {
     return 'V:2.0|CT:All~team~members~unavailable|KP:~retry';
   }
 
-  // Judge synthesizes
   const responseList = responses.map((r, i) => `${String.fromCharCode(65 + i)} (${r.name}): ${r.text}`).join('\n\n');
   
   const judgePrompt = `You are the quality judge. Review ${responses.length} MICRO responses and synthesize the best answer.
@@ -424,126 +411,7 @@ Return ONE final synthesized MICRO answer:`;
 
   const judged = await callCouncilMember('r8', judgePrompt, true);
   trackCost(judged.usage, 'gpt-4o-mini');
-  
-  const totalTime = Math.round(performance.now() - t0);
-  console.log(`[team] ✅ Total time: ${totalTime}ms (vs ~${responses.length * 5000}ms sequential)`);
-  
   return String(judged.response || responses[0].text).trim();
-}
-
-// IDEA #7: HALLUCINATION DETECTOR
-async function factCheckResponse(text, context = '') {
-  const claims = [];
-  const dateMatches = text.match(/\b(20\d{2}|19\d{2})\b/g);
-  if (dateMatches) claims.push(...dateMatches.map(d => `year ${d}`));
-  const versionMatches = text.match(/v?\d+\.\d+(\.\d+)?/g);
-  if (versionMatches) claims.push(...versionMatches.map(v => `version ${v}`));
-  const nameMatches = text.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\b/g);
-  if (nameMatches) claims.push(...nameMatches.slice(0, 3).map(n => `product ${n}`));
-  
-  if (claims.length === 0) {
-    return { verified: true, confidence: 0.9, note: 'No factual claims to verify' };
-  }
-  
-  try {
-    const verifyPrompt = `Fact-check these claims from an AI response. Context: ${context.slice(0, 100)}
-
-Claims to verify:
-${claims.slice(0, 5).join('\n')}
-
-Original text:
-${text.slice(0, 500)}
-
-Return JSON:
-{
-  "verified": true/false,
-  "confidence": 0.0-1.0,
-  "issues": ["claim X is wrong because Y"],
-  "corrections": ["actual fact is Z"]
-}`;
-
-    const result = await callCouncilMember('gemini', verifyPrompt, false);
-    const check = JSON.parse(result.response);
-    
-    if (!check.verified) {
-      console.log(`[hallucination] ⚠️ Detected false claims: ${check.issues?.join(', ')}`);
-    }
-    
-    return check;
-  } catch (e) {
-    console.error('[hallucination] Check failed:', e.message);
-    return { verified: true, confidence: 0.5, note: 'Verification failed' };
-  }
-}
-
-// IDEA #18: SMART MODEL SELECTION
-async function smartRoute(prompt, context = {}) {
-  const complexity = assessComplexity(prompt);
-  
-  if (complexity.score < 7) {
-    console.log(`[routing] Low complexity (${complexity.score}/10) → Gemini`);
-    try {
-      const t0 = performance.now();
-      const result = await callCouncilMember('gemini', prompt, true);
-      const quality = assessQuality(result.response);
-      const time = Math.round(performance.now() - t0);
-      
-      trackCost(result.usage, 'gemini-2.0-flash-exp');
-      
-      if (quality.score >= 8) {
-        console.log(`[routing] ✅ Gemini succeeded (quality: ${quality.score}/10, ${time}ms)`);
-        return { response: result.response, model: 'gemini', escalated: false, quality: quality.score };
-      }
-      
-      console.log(`[routing] ⚠️ Gemini quality low (${quality.score}/10) → escalating to Claude`);
-    } catch (e) {
-      console.log(`[routing] Gemini failed: ${e.message} → escalating`);
-    }
-  }
-  
-  const smartModel = complexity.requiresCode ? 'brock' : 'claude';
-  console.log(`[routing] High complexity or failed fast → ${smartModel}`);
-  
-  const result = await callCouncilMember(smartModel, prompt, true);
-  trackCost(result.usage, smartModel === 'brock' ? 'gpt-4o' : 'claude-sonnet-4');
-  
-  return { response: result
-    # 🚨 SERVER.JS CONTINUATION (Part 2)
-
-**WHERE TO ADD:** Right after where the code cut off (after the `smartRoute` function)
-
-**Copy this and paste it DIRECTLY after line ~400 where server.js v14 ended:**
-
-```javascript
-.response, model: smartModel, escalated: true };
-}
-
-function assessComplexity(prompt) {
-  const lower = prompt.toLowerCase();
-  let score = 5;
-  if (lower.match(/\b(build|create|generate|design)\b/)) score += 2;
-  if (lower.match(/\b(analyze|explain|why|how)\b/)) score += 1;
-  if (lower.match(/\b(code|function|algorithm|database)\b/)) score += 2;
-  if (lower.length > 500) score += 1;
-  if (lower.includes('step by step') || lower.includes('detailed')) score += 1;
-  if (lower.match(/\b(status|health|list|show|get)\b/)) score -= 2;
-  if (lower.length < 50) score -= 1;
-  return {
-    score: Math.max(1, Math.min(10, score)),
-    requiresCode: lower.includes('code') || lower.includes('function') || lower.includes('implement')
-  };
-}
-
-function assessQuality(response) {
-  let score = 5;
-  if (response.length > 200) score += 2;
-  if (response.includes('V:2.0')) score += 1;
-  if (response.match(/\d+/g)?.length > 3) score += 1;
-  if (response.includes('CT:') && response.includes('KP:')) score += 2;
-  if (response.includes('I cannot') || response.includes('I am unable')) score -= 3;
-  if (response.includes('generic') || response.includes('placeholder')) score -= 2;
-  if (response.length < 50) score -= 2;
-  return { score: Math.max(1, Math.min(10, score)) };
 }
 
 async function getCouncilConsensus(prNumber, diff, summary) {
@@ -581,32 +449,42 @@ let taskIdCounter = 1;
 
 async function executeTask(task) {
   const description = task.description;
+  
   const customerPrompt = `Please ${description}. Provide comprehensive output with detailed analysis, key insights, actionable recommendations, and supporting context.`;
   const customerTokens = Math.ceil(customerPrompt.length / 3.5);
+  
   const microData = {
     operation: description.includes('generate') ? 'generate' : description.includes('analyze') ? 'analyze' : 'create',
     description: description,
     type: description.includes('script') ? 'script' : description.includes('report') ? 'report' : 'general',
     returnFields: ['CT', 'KP']
   };
+  
   const microPrompt = MICRO_PROTOCOL.encode(microData);
   const compressedTokens = Math.ceil(microPrompt.length / 4);
+  
   const tokensSaved = Math.max(0, customerTokens - compressedTokens);
   const savingsPct = customerTokens ? Math.round((tokensSaved / customerTokens) * 100) : 0;
   const costSaved = (tokensSaved * 0.0025) / 1000;
+  
   console.log(`[executor] ${description.slice(0, 50)}...`);
   console.log(`[REAL SAVINGS] Customer: ${customerTokens}t → MICRO: ${compressedTokens}t`);
   console.log(`[REAL SAVINGS] Savings: ${savingsPct}% ($${costSaved.toFixed(4)})`);
+  
   try {
     const result = await callCouncilMember('brock', microPrompt, true);
     const microResponse = result.response.trim();
     const output = MICRO_PROTOCOL.decode(microResponse);
+    
     await pool.query(`insert into compression_stats (task_id, original_tokens, compressed_tokens, savings_pct, cost_saved) values ($1, $2, $3, $4, $5)`, 
       [task.id, customerTokens, compressedTokens, savingsPct, costSaved]);
+    
     await pool.query(`insert into task_outputs (task_id, output_type, content, metadata) values ($1, $2, $3, $4)`, 
       [task.id, output.type || 'generic', output.content || output.description || 'Complete', JSON.stringify({ key_points: output.keyPoints, tokens_saved: tokensSaved, compression_pct: savingsPct })]);
+    
     trackCost(result.usage, 'gpt-4o');
     roiTracker.micro_compression_saves += costSaved;
+    
     return { success: true, output: output.content || output.description, type: output.type, summary: `Generated: ${output.keyPoints?.[0] || 'Complete'}`, tokens_saved: tokensSaved, compression_pct: savingsPct, cost_saved: costSaved };
   } catch (e) {
     console.error(`[executor] Failed:`, e.message);
@@ -629,7 +507,7 @@ async function processWorkQueue() {
       const revenue = trackRevenue(result);
       task.estimated_revenue = revenue;
       console.log(`[worker] ✅ ${task.description.slice(0, 40)}...`);
-      console.log(`[worker] Revenue: $${revenue} | Saved: ${result.compression_pct}% ($${result.cost_saved.toFixed(4)}) | ${result.summary}`);
+      console.log(`[worker] Revenue: ${revenue} | Saved: ${result.compression_pct}% (${result.cost_saved.toFixed(4)}) | ${result.summary}`);
     } catch (e) {
       task.status = 'failed';
       task.error = String(e);
@@ -639,95 +517,29 @@ async function processWorkQueue() {
   }
 }
 
-// IDEA #9: COMMIT DIFF PREVIEW
-function generateDiff(oldText, newText, filename) {
-  const oldLines = oldText.split('\n');
-  const newLines = newText.split('\n');
-  const maxLines = Math.max(oldLines.length, newLines.length);
-  let diff = `--- a/${filename}\n+++ b/${filename}\n@@ -1,${oldLines.length} +1,${newLines.length} @@\n`;
-  for (let i = 0; i < maxLines; i++) {
-    const oldLine = oldLines[i];
-    const newLine = newLines[i];
-    if (oldLine === newLine) {
-      diff += ` ${oldLine || ''}\n`;
-    } else if (oldLine && !newLine) {
-      diff += `-${oldLine}\n`;
-    } else if (!oldLine && newLine) {
-      diff += `+${newLine}\n`;
-    } else {
-      diff += `-${oldLine}\n`;
-      diff += `+${newLine}\n`;
-    }
-  }
-  return diff;
-}
-
 app.post("/api/v1/architect/micro", requireCommandKey, async (req, res) => {
   try {
     const rawBody = typeof req.body === "string" ? req.body : (req.body?.micro || req.body?.text || "");
+    
     if (!rawBody || !String(rawBody).startsWith("V:2.0")) {
       return res.status(400).type("text/plain").send("V:2.0|CT:missing~micro~input|KP:~format");
     }
+
     const useTeam = String(req.query.team || '').trim() === '1';
-    const useSmartRouting = String(req.query.smart || '').trim() === '1';
     let microOut;
+
     if (useTeam) {
       microOut = await teamMicroResponse(rawBody);
-    } else if (useSmartRouting) {
-      const routed = await smartRoute(rawBody);
-      microOut = routed.response;
-      console.log(`[smart-route] Used ${routed.model}, escalated: ${routed.escalated}`);
     } else {
       const r = await callCouncilMember("brock", rawBody, true);
       trackCost(r.usage, "gpt-4o");
       microOut = String(r.response || "").trim();
     }
-    // IDEA #7: Auto fact-check before sending
-    const decoded = MICRO_PROTOCOL.decode(microOut);
-    const factCheck = await factCheckResponse(decoded.content || decoded.description || '', rawBody);
-    if (!factCheck.verified && factCheck.confidence < 0.7) {
-      console.log(`[hallucination] Blocking response, confidence: ${factCheck.confidence}`);
-      return res.type("text/plain").send(`V:2.0|CT:Response~flagged~for~verification|KP:~${factCheck.issues?.join('~') || 'uncertain'}`);
-    }
+
     return res.type("text/plain").send(microOut || "V:2.0|CT:empty~response|KP:~retry");
   } catch (e) {
     console.error("[architect.micro]", e);
     return res.status(500).type("text/plain").send(`V:2.0|CT:system~error|KP:~retry~${String(e).slice(0,100)}`);
-  }
-});
-
-app.post("/api/v1/dev/commit-preview", requireCommandKey, async (req, res) => {
-  try {
-    const { path: file_path, content } = req.body || {};
-    if (!file_path || typeof content !== 'string') {
-      return res.status(400).json({ ok: false, error: "path and content required" });
-    }
-    const repo = GITHUB_REPO || "LimitlessOI/Lumin-LifeOS";
-    let currentContent = '';
-    let currentSha = null;
-    try {
-      const current = await ghGetFile(repo, file_path.replace(/^\/+/, ''));
-      currentContent = Buffer.from(current.content, 'base64').toString('utf8');
-      currentSha = current.sha;
-    } catch (e) {
-      currentContent = '';
-    }
-    const diff = generateDiff(currentContent, content, file_path);
-    res.json({
-      ok: true,
-      file: file_path,
-      current_sha: currentSha,
-      exists: !!currentSha,
-      diff: diff,
-      changes: {
-        additions: (diff.match(/^\+/gm) || []).length,
-        deletions: (diff.match(/^\-/gm) || []).length,
-        total_lines: content.split('\n').length
-      }
-    });
-  } catch (e) {
-    console.error('[commit-preview]', e);
-    res.status(500).json({ ok: false, error: String(e) });
   }
 });
 
@@ -870,7 +682,7 @@ app.get("/healthz", async (_req, res) => {
       status: "healthy", 
       database: "connected", 
       timestamp: r.rows[0].now, 
-      version: "v14-breakthrough-ideas", 
+      version: "v13-six-ai-models", 
       daily_spend: spend.usd, 
       max_daily_spend: MAX_DAILY_SPEND, 
       spend_percentage: ((spend.usd / MAX_DAILY_SPEND) * 100).toFixed(1) + "%", 
@@ -969,9 +781,8 @@ app.listen(PORT, HOST, () => {
   console.log(`✅ Portal: http://${HOST}:${PORT}/overlay/portal.html?key=${COMMAND_CENTER_KEY}`);
   console.log(`✅ AI Council: 6 models (Claude + GPT + Gemini + Grok)`);
   console.log(`✅ v2.0-MICRO Protocol: ENABLED (240 char, 70-80% target)`);
-  console.log(`✅ Team Mode: All AI models debate → judge picks best`);
+  console.log(`✅ Team Mode: All 6 AI models debate → judge picks best`);
   console.log(`✅ GitHub Commit: ENABLED`);
   console.log(`✅ ROI Tracking: ENABLED`);
-  console.log(`✅ Max Daily Spend: $${MAX_DAILY_SPEND}`);
-  console.log(`✅ Breakthrough Ideas: Auto-compress, Parallel voting, Hallucination detector, Smart routing, Diff preview`);
+  console.log(`✅ Max Daily Spend: ${MAX_DAILY_SPEND}`);
 });
