@@ -969,4 +969,9 @@ app.listen(PORT, HOST, () => {
   console.log(`✅ Portal: http://${HOST}:${PORT}/overlay/portal.html?key=${COMMAND_CENTER_KEY}`);
   console.log(`✅ AI Council: 6 models (Claude + GPT + Gemini + Grok)`);
   console.log(`✅ v2.0-MICRO Protocol: ENABLED (240 char, 70-80% target)`);
-  console.log(`
+  console.log(`✅ Team Mode: All AI models debate → judge picks best`);
+  console.log(`✅ GitHub Commit: ENABLED`);
+  console.log(`✅ ROI Tracking: ENABLED`);
+  console.log(`✅ Max Daily Spend: $${MAX_DAILY_SPEND}`);
+  console.log(`✅ Breakthrough Ideas: Auto-compress, Parallel voting, Hallucination detector, Smart routing, Diff preview`);
+});
