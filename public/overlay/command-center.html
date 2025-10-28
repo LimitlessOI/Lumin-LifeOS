@@ -3,73 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Command Center</title>
+    <title>LifeOS Universal Overlay</title>
     <link rel="stylesheet" href="command-center.css">
 </head>
 <body>
+    <!-- Universal Overlay Container -->
     <div id="lifeos-overlay" class="overlay-container">
-        <!-- Header with Controls -->
+        <!-- Header with App Switcher -->
         <div class="overlay-header">
-            <h3>🚀 LifeOS Command Center</h3>
+            <div class="app-switcher">
+                <select id="app-selector">
+                    <option value="command-center">🚀 Command Center</option>
+                    <option value="architect">🏗️ Architect</option>
+                    <option value="grammarly">✍️ Writing Assistant</option>
+                    <option value="social">📱 Social Media</option>
+                    <option value="games">🎮 Games</option>
+                    <option value="custom">⚙️ Custom App</option>
+                </select>
+            </div>
             <div class="controls">
-                <button id="toggle-voice" class="control-btn">🎤 Voice: OFF</button>
-                <button id="toggle-pin" class="control-btn">📌 Pin: OFF</button>
-                <button id="council-meeting" class="control-btn">👥 Quick Meeting</button>
+                <button id="toggle-voice" class="control-btn">🎤 Voice</button>
+                <button id="toggle-pin" class="control-btn">📌 Pin</button>
+                <button id="council-meeting" class="control-btn">👥 Council</button>
                 <button id="minimize" class="control-btn">−</button>
             </div>
         </div>
 
-        <!-- Project Tracker -->
-        <div class="project-tracker">
-            <h4>📊 Active Projects</h4>
-            <div id="project-list">
-                <div class="project-item">
-                    <div class="project-header">
-                        <span class="project-title">LifeOS Overlay System</span>
-                        <span class="project-progress">45%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 45%"></div>
-                    </div>
-                    <div class="project-details" style="display: none;">
-                        <div class="detail-item">✅ Basic UI Framework</div>
-                        <div class="detail-item">✅ Drag & Drop Functionality</div>
-                        <div class="detail-item">🔄 Backend Integration</div>
-                        <div class="detail-item">⏳ AI Council Connection</div>
+        <!-- Main Content Area - Dynamic based on selected app -->
+        <div class="main-content" id="main-content">
+            <!-- Command Center App (Default) -->
+            <div class="app-content" id="app-command-center">
+                <!-- Project Tracker -->
+                <div class="project-tracker">
+                    <h4>📊 Active Projects</h4>
+                    <div id="project-list">
+                        <div class="project-item">
+                            <div class="project-header">
+                                <span class="project-title">Universal Overlay System</span>
+                                <span class="project-progress">75%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%"></div>
+                            </div>
+                            <div class="project-details" style="display: none;">
+                                <div class="detail-item">✅ Multi-app Foundation</div>
+                                <div class="detail-item">✅ Draggable & Resizable</div>
+                                <div class="detail-item">✅ White Theme</div>
+                                <div class="detail-item">🔄 App Switching System</div>
+                                <div class="detail-item">⏳ Voice Integration</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Council Chat -->
-        <div class="council-chat">
-            <div class="chat-messages" id="chat-messages">
-                <div class="message ai-message">
-                    <div class="message-header">
-                        <span class="ai-name claude">Claude</span>
-                        <span class="message-time">Just now</span>
+                <!-- Council Chat -->
+                <div class="council-chat">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message ai-message">
+                            <div class="message-header">
+                                <span class="ai-name claude">Claude</span>
+                                <span class="message-time">Just now</span>
+                            </div>
+                            <div class="message-content">
+                                Welcome to the Universal LifeOS Overlay! This is your foundation for all apps - Command Center, Architect, writing tools, games, and more. Everything runs in this single overlay system.
+                            </div>
+                        </div>
                     </div>
-                    <div class="message-content">
-                        Welcome to LifeOS Command Center! I can see your system is running at robust-magic-production.up.railway.app. Ready to connect to your AI council?
+                    
+                    <div class="input-area">
+                        <textarea id="text-input" placeholder="Ask your AI council or give commands..."></textarea>
+                        <div class="input-buttons">
+                            <button id="voice-input" class="voice-btn">🎤</button>
+                            <button id="send-message" class="send-btn">Send</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="input-area">
-                <textarea id="text-input" placeholder="Type your command or question..."></textarea>
-                <div class="input-buttons">
-                    <button id="voice-input" class="voice-btn">🎤</button>
-                    <button id="send-message" class="send-btn">Send</button>
-                </div>
-            </div>
-        </div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <button class="action-btn" data-action="upload-file">📁 Upload File</button>
-            <button class="action-btn" data-action="request-ideas">💡 Get Improvement Ideas</button>
-            <button class="action-btn" data-action="analyze-decision">⚖️ Analyze Decision</button>
-            <button class="action-btn" data-action="performance-review">📊 Performance Review</button>
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="action-btn" data-action="upload-file">📁 Upload File</button>
+                    <button class="action-btn" data-action="request-ideas">💡 Get 25 Ideas</button>
+                    <button class="action-btn" data-action="analyze-decision">⚖️ Dual Analysis</button>
+                    <button class="action-btn" data-action="performance-review">📊 Performance</button>
+                </div>
+            </div>
+
+            <!-- Architect App -->
+            <div class="app-content" id="app-architect" style="display: none;">
+                <div class="architect-panel">
+                    <h4>🏗️ Architect Mode</h4>
+                    <div class="micro-controls">
+                        <div class="mode-toggle">
+                            <button class="mode-btn active" data-mode="chat">💬 Chat</button>
+                            <button class="mode-btn" data-mode="command">⚡ Command</button>
+                            <button class="mode-btn" data-mode="team">👥 Team</button>
+                        </div>
+                        <div class="micro-stats">
+                            <span class="stat">MICRO: 73% savings</span>
+                            <span class="stat">STT: Ready</span>
+                            <span class="stat">TTS: Ready</span>
+                        </div>
+                    </div>
+                    <div class="architect-output" id="architect-output">
+                        <p>Architect mode loaded. Ready for MICRO protocol conversations.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Writing Assistant App -->
+            <div class="app-content" id="app-grammarly" style="display: none;">
+                <div class="writing-panel">
+                    <h4>✍️ Writing Assistant</h4>
+                    <textarea class="writing-input" placeholder="Paste your text here for AI analysis..."></textarea>
+                    <div class="writing-controls">
+                        <button class="writing-btn" data-action="grammar-check">Grammar Check</button>
+                        <button class="writing-btn" data-action="improve-style">Improve Style</button>
+                        <button class="writing-btn" data-action="summarize">Summarize</button>
+                    </div>
+                    <div class="writing-output" id="writing-output"></div>
+                </div>
+            </div>
         </div>
 
         <!-- Hidden File Input -->
