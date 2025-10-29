@@ -1,11 +1,13 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: transparent; overflow: hidden; }
 
-/* Universal Overlay Container */
+/* Universal Overlay Container - WHITE BACKGROUND as requested */
 .overlay-container {
     position: fixed; top: 20px; right: 20px; width: 600px; height: 700px;
-    background: rgba(255, 255, 255, 0.98); border: 2px solid #2563eb; border-radius: 12px;
-    backdrop-filter: blur(10px); color: #1f2937; display: flex; flex-direction: column;
+    background: rgba(255, 255, 255, 0.98); /* WHITE BACKGROUND */
+    border: 2px solid #2563eb; border-radius: 12px;
+    backdrop-filter: blur(10px); color: #1f2937; /* DARK TEXT for contrast */
+    display: flex; flex-direction: column;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); z-index: 10000; transition: all 0.3s ease;
     resize: both; overflow: hidden; min-width: 500px; min-height: 400px;
 }
@@ -48,13 +50,13 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .project-details { margin-top: 8px; font-size: 11px; color: #6b7280; display: none; }
 .detail-item { margin: 3px 0; padding-left: 10px; border-left: 2px solid #d1d5db; }
 
-/* Council Chat */
+/* Council Chat - WHITE BACKGROUND for readability */
 .council-chat { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: white; }
-.chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: white; }
+.chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: white; color: #1f2937; }
 
 .message { margin-bottom: 15px; padding: 12px; border-radius: 8px; max-width: 90%; }
-.ai-message { background: #f8fafc; border-left: 4px solid #2563eb; margin-right: auto; border: 1px solid #e5e7eb; }
-.user-message { background: #dbeafe; border-left: 4px solid #60a5fa; margin-left: auto; margin-right: 0; border: 1px solid #bfdbfe; }
+.ai-message { background: #f8fafc; border-left: 4px solid #2563eb; margin-right: auto; border: 1px solid #e5e7eb; color: #1f2937; }
+.user-message { background: #dbeafe; border-left: 4px solid #60a5fa; margin-left: auto; margin-right: 0; border: 1px solid #bfdbfe; color: #1f2937; }
 .message-header { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 11px; }
 .ai-name { font-weight: 600; }
 .ai-name.claude { color: #d97706; }.ai-name.brock { color: #059669; }.ai-name.jayn { color: #7c3aed; }
@@ -90,18 +92,18 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .mode-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
 .micro-stats { display: flex; gap: 10px; font-size: 11px; color: #6b7280; }
 .architect-output { flex: 1; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; 
-    padding: 15px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+    padding: 15px; overflow-y: auto; font-family: monospace; font-size: 12px; color: #1f2937; }
 
 /* Writing Assistant Styles */
 .writing-panel { padding: 15px; flex: 1; display: flex; flex-direction: column; }
 .writing-input { flex: 1; background: white; border: 1px solid #d1d5db; border-radius: 8px; 
-    padding: 12px; font-size: 13px; resize: none; margin-bottom: 10px; font-family: inherit; }
+    padding: 12px; font-size: 13px; resize: none; margin-bottom: 10px; font-family: inherit; color: #1f2937; }
 .writing-controls { display: flex; gap: 8px; margin-bottom: 10px; }
 .writing-btn { padding: 8px 12px; background: white; border: 1px solid #d1d5db; border-radius: 6px; 
     color: #374151; cursor: pointer; font-size: 11px; transition: all 0.2s; }
 .writing-btn:hover { background: #2563eb; color: white; border-color: #2563eb; }
 .writing-output { flex: 1; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; 
-    padding: 15px; overflow-y: auto; }
+    padding: 15px; overflow-y: auto; color: #1f2937; }
 
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
@@ -119,7 +121,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .architect-output::-webkit-scrollbar-thumb:hover,
 .writing-output::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-/* Resize handle */
+/* Resize handle - FIXED: Now properly visible */
 .overlay-container::after {
     content: '';
     position: absolute;
@@ -129,4 +131,5 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     height: 12px;
     background: linear-gradient(135deg, transparent 50%, #cbd5e1 50%);
     cursor: nwse-resize;
+    z-index: 1000;
 }
