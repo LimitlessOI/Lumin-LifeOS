@@ -106,62 +106,96 @@ class UniversalLifeOSOverlay {
         return appNames[appId] || appId;
     }
 
+    // FIXED: Dragging now works properly
     makeDraggable() {
         const overlay = document.getElementById('lifeos-overlay');
         const header = document.querySelector('.overlay-header');
-        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         
-        header.onmousedown = dragMouseDown;
-        
-        function dragMouseDown(e) {
-            e.preventDefault();
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        header.addEventListener("mousedown", dragStart);
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("mouseup", dragEnd);
+
+        function dragStart(e) {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+
+            if (e.target === header || header.contains(e.target)) {
+                isDragging = true;
+            }
         }
-        
-        function elementDrag(e) {
-            e.preventDefault();
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            overlay.style.top = (overlay.offsetTop - pos2) + "px";
-            overlay.style.left = (overlay.offsetLeft - pos1) + "px";
-            overlay.style.right = "auto";
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, overlay);
+            }
         }
-        
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.onmousemove = null;
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+        }
+
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+
+            isDragging = false;
         }
     }
 
+    // FIXED: Resizing now works properly
     makeResizable() {
         const overlay = document.getElementById('lifeos-overlay');
-        let startX, startY, startWidth, startHeight;
+        const resizeHandle = document.createElement('div');
         
-        function resize(e) {
+        // Create resize handle
+        resizeHandle.style.position = 'absolute';
+        resizeHandle.style.bottom = '2px';
+        resizeHandle.style.right = '2px';
+        resizeHandle.style.width = '12px';
+        resizeHandle.style.height = '12px';
+        resizeHandle.style.background = 'linear-gradient(135deg, transparent 50%, #cbd5e1 50%)';
+        resizeHandle.style.cursor = 'nwse-resize';
+        resizeHandle.style.zIndex = '1000';
+        
+        overlay.appendChild(resizeHandle);
+
+        let startX, startY, startWidth, startHeight;
+
+        function initDrag(e) {
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = parseInt(document.defaultView.getComputedStyle(overlay).width, 10);
+            startHeight = parseInt(document.defaultView.getComputedStyle(overlay).height, 10);
+            document.documentElement.addEventListener('mousemove', doDrag, false);
+            document.documentElement.addEventListener('mouseup', stopDrag, false);
+        }
+
+        function doDrag(e) {
             overlay.style.width = (startWidth + e.clientX - startX) + 'px';
             overlay.style.height = (startHeight + e.clientY - startY) + 'px';
         }
-        
-        function stopResize() {
-            document.removeEventListener('mousemove', resize);
-            document.removeEventListener('mouseup', stopResize);
+
+        function stopDrag(e) {
+            document.documentElement.removeEventListener('mousemove', doDrag, false);
+            document.documentElement.removeEventListener('mouseup', stopDrag, false);
         }
-        
-        overlay.addEventListener('mousedown', function(e) {
-            if (e.offsetX > overlay.offsetWidth - 10 && e.offsetY > overlay.offsetHeight - 10) {
-                startX = e.clientX;
-                startY = e.clientY;
-                startWidth = parseInt(document.defaultView.getComputedStyle(overlay).width, 10);
-                startHeight = parseInt(document.defaultView.getComputedStyle(overlay).height, 10);
-                document.addEventListener('mousemove', resize);
-                document.addEventListener('mouseup', stopResize);
-            }
-        });
+
+        resizeHandle.addEventListener('mousedown', initDrag, false);
     }
 
     toggleAlwaysOnTop() {
@@ -211,6 +245,14 @@ class UniversalLifeOSOverlay {
     async initializeSystem() {
         this.addMessage('system', '🔗 Connecting to LifeOS backend...');
         
+        // AUTO-FOCUS: Input field is automatically focused
+        setTimeout(() => {
+            const textInput = document.getElementById('text-input');
+            if (textInput) {
+                textInput.focus();
+            }
+        }, 500);
+        
         try {
             const response = await fetch(`${this.baseURL}/healthz?key=${this.apiKey}`);
             if (response.ok) {
@@ -225,6 +267,7 @@ class UniversalLifeOSOverlay {
         }
     }
 
+    // FIXED: This method was missing - caused "updateProjectProgress is not a function" error
     updateProjectProgress(progress) {
         const progressBar = document.querySelector('.progress-fill');
         const progressText = document.querySelector('.project-progress');
