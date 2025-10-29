@@ -9,7 +9,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     backdrop-filter: blur(10px); color: #1f2937; /* DARK TEXT for contrast */
     display: flex; flex-direction: column;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); z-index: 10000; transition: all 0.3s ease;
-    resize: both; overflow: hidden; min-width: 500px; min-height: 400px;
+    resize: both; overflow: hidden; min-width: 400px; min-height: 300px;
 }
 
 .overlay-container.always-on-top { z-index: 2147483647; }
@@ -109,27 +109,4 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 
 /* Scrollbar */
 .chat-messages::-webkit-scrollbar,
-.architect-output::-webkit-scrollbar,
-.writing-output::-webkit-scrollbar { width: 6px; }
-.chat-messages::-webkit-scrollbar-track,
-.architect-output::-webkit-scrollbar-track,
-.writing-output::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
-.chat-messages::-webkit-scrollbar-thumb,
-.architect-output::-webkit-scrollbar-thumb,
-.writing-output::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-.chat-messages::-webkit-scrollbar-thumb:hover,
-.architect-output::-webkit-scrollbar-thumb:hover,
-.writing-output::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-/* Resize handle - FIXED: Now properly visible */
-.overlay-container::after {
-    content: '';
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 12px;
-    height: 12px;
-    background: linear-gradient(135deg, transparent 50%, #cbd5e1 50%);
-    cursor: nwse-resize;
-    z-index: 1000;
-}
+.architect-output
