@@ -1,7 +1,7 @@
-// server.js - v15 MONEY + TIERED CONSENSUS + LOCAL AI + MEMORY/PROTECTION (Consolidated)
+// server.js - v15 CLEAN (No Stripe import error, memory-aware AI, command overlay)
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Core imports
+// Core imports (Stripe import removed—will lazy-load if env var exists)
 // ─────────────────────────────────────────────────────────────────────────────
 import express from "express";
 import dayjs from "dayjs";
@@ -9,7 +9,6 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { Pool } from "pg";
-import Stripe from "stripe"; // <-- NEW
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Paths & app
@@ -17,9 +16,6 @@ import Stripe from "stripe"; // <-- NEW
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
-
-// NOTE: Stripe webhook MUST come before json parser. We define it later, but
-// mount the route here with express.raw(). Global JSON parser is added AFTER.
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Env
@@ -42,9 +38,20 @@ const {
 } = process.env;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Stripe init
+// Stripe init (lazy-load only if env var exists)
 // ─────────────────────────────────────────────────────────────────────────────
-const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
+let stripe = null;
+let stripeReady = false;
+if (STRIPE_SECRET_KEY) {
+  try {
+    const StripeModule = await import("stripe");
+    stripe = new StripeModule.default(STRIPE_SECRET_KEY);
+    stripeReady = true;
+    console.log("✅ Stripe module loaded");
+  } catch (e) {
+    console.warn("⚠️  Stripe module not available (can add later):", e.message);
+  }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Static, data paths
@@ -76,35 +83,8 @@ const PROTECTED_FILES = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Middleware: Stripe webhook FIRST (raw), then JSON/urlencoded/text parsers
+// Middleware: JSON/urlencoded/text parsers
 // ─────────────────────────────────────────────────────────────────────────────
-if (stripe && STRIPE_WEBHOOK_SECRET) {
-  app.post(
-    "/api/v1/stripe/webhook",
-    express.raw({ type: "application/json" }),
-    async (req, res) => {
-      const sig = req.headers["stripe-signature"];
-      try {
-        const event = stripe.webhooks.constructEvent(
-          req.body,
-          sig,
-          STRIPE_WEBHOOK_SECRET
-        );
-        if (event.type === "payment_intent.succeeded") {
-          const pi = event.data.object;
-          console.log(`💰 [Stripe] payment_intent.succeeded: ${pi.id}`);
-          // We purposely do not auto-fulfill here; confirm endpoint finalizes delivery.
-        }
-        return res.json({ ok: true });
-      } catch (err) {
-        console.error("[Stripe Webhook] verify failed:", err?.message || err);
-        return res.status(400).send(`Webhook Error: ${String(err.message)}`);
-      }
-    }
-  );
-}
-
-// Now global parsers for everything else
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.text({ type: "text/plain", limit: "1mb" }));
@@ -211,6 +191,74 @@ async function ghPutFile(repo, p, contentText, message) {
     }
   );
   return await r.json();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Memory Helpers (CRITICAL: All AI calls read + write continuous memory)
+// ─────────────────────────────────────────────────────────────────────────────
+const MEMORY_CATEGORIES_DEFAULT = ['global_rules','ai_council','context','vault','policy','customer','product','ops','learned'];
+
+async function recallMemory({ q = '', categories = MEMORY_CATEGORIES_DEFAULT, limit = 20 }) {
+  try {
+    const like = q ? `%${q.slice(0, 160)}%` : null;
+    const rows = await pool.query(
+      `
+      SELECT key, value, category, updated_at
+      FROM shared_memory
+      WHERE ($1::text[] IS NULL OR category = ANY($1))
+        OR ($2 IS NOT NULL AND value::text ILIKE $2)
+      ORDER BY updated_at DESC
+      LIMIT $3
+      `,
+      [categories, like, limit]
+    );
+    return rows.rows || [];
+  } catch (e) {
+    console.error('[recallMemory] Error:', e.message);
+    return [];
+  }
+}
+
+function formatMemoryForSystem(rows) {
+  if (!rows || rows.length === 0) return 'None.';
+  return rows
+    .map(r => {
+      const val = typeof r.value === 'object' ? JSON.stringify(r.value) : String(r.value);
+      return `• [${r.category}] ${r.key}: ${val.slice(0, 240)}`;
+    })
+    .join('\n');
+}
+
+async function writeMemory(key, value, category = 'ai_learned') {
+  try {
+    await pool.query(
+      `
+      INSERT INTO shared_memory (key, value, category, updated_at)
+      VALUES ($1, $2, $3, now())
+      ON CONFLICT (key)
+      DO UPDATE SET value = EXCLUDED.value, category = EXCLUDED.category, updated_at = now()
+      `,
+      [key, typeof value === 'string' ? { text: value } : value, category]
+    );
+  } catch (e) {
+    console.error('[writeMemory] Error:', e.message);
+  }
+}
+
+function extractMemWritesFromText(text = '') {
+  // Expect lines like: MEM: key:: value
+  const lines = (text.match(/(^|\n)MEM:\s*.+?$/gmi) || []).map(s => s.trim());
+  const out = [];
+  for (const line of lines) {
+    const body = line.replace(/^MEM:\s*/i, '');
+    const idx = body.indexOf('::');
+    if (idx > -1) {
+      const k = body.slice(0, idx).trim();
+      const v = body.slice(idx + 2).trim();
+      if (k && v) out.push({ key: k, value: v });
+    }
+  }
+  return out;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -331,34 +379,6 @@ function hashString(str) {
   }
   return hash.toString(36);
 }
-function compressAIPrompt(operation, data) {
-  const compressed = {
-    op: AI_PROTOCOL.ops[operation] || operation.charAt(0),
-    ...data
-  };
-  if (compressed.summary && compressed.summary.length > 100) {
-    compressed.s = compressed.summary.slice(0, 100);
-    delete compressed.summary;
-  }
-  if (compressed.diff && compressed.diff.length > 500) {
-    compressed.dh = hashString(compressed.diff.slice(0, 100));
-    compressed.dl = compressed.diff.length;
-    delete compressed.diff;
-  }
-  return compressed;
-}
-function expandAIResponse(compressedResponse) {
-  const expanded = {};
-  for (const [short, long] of Object.entries(AI_PROTOCOL.fields)) {
-    if (compressedResponse[short] !== undefined)
-      expanded[long] = compressedResponse[short];
-  }
-  if (compressedResponse.v) {
-    const voteMap = { a: "approve", c: "concerns", r: "reject" };
-    expanded.vote = voteMap[compressedResponse.v] || compressedResponse.v;
-  }
-  return expanded;
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ROI & cost tracking
@@ -373,6 +393,7 @@ const roiTracker = {
   total_tokens_saved: 0,
   micro_compression_saves: 0
 };
+
 function updateROI(revenue = 0, cost = 0, tasksCompleted = 0, tokensSaved = 0) {
   const today = dayjs().format("YYYY-MM-DD");
   if (roiTracker.last_reset !== today) {
@@ -392,24 +413,8 @@ function updateROI(revenue = 0, cost = 0, tasksCompleted = 0, tokensSaved = 0) {
       roiTracker.daily_revenue / roiTracker.daily_tasks_completed;
   if (roiTracker.daily_ai_cost > 0)
     roiTracker.roi_ratio = roiTracker.daily_revenue / roiTracker.daily_ai_cost;
-  if (roiTracker.daily_tasks_completed % 10 === 0 && roiTracker.daily_tasks_completed > 0) {
-    console.log(
-      `[ROI] Revenue: $${roiTracker.daily_revenue.toFixed(
-        2
-      )} | Cost: $${roiTracker.daily_ai_cost.toFixed(2)} | Ratio: ${roiTracker.roi_ratio.toFixed(
-        2
-      )}x | Tokens: ${roiTracker.total_tokens_saved}`
-    );
-    console.log(
-      `[MICRO] Extra savings from v2.0-Micro: $${roiTracker.micro_compression_saves.toFixed(
-        2
-      )}`
-    );
-    if (roiTracker.roi_ratio > 5)
-      console.log(`[ROI] 🚀 HEALTHY - ${roiTracker.roi_ratio.toFixed(1)}x - MAX SPEED`);
-  }
-  return roiTracker;
 }
+
 function trackCost(usage, model = "gpt-4o-mini") {
   const prices = {
     "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
@@ -480,433 +485,132 @@ const COUNCIL_MEMBERS = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Local AI bridge (Ollama)
-// ─────────────────────────────────────────────────────────────────────────────
-class LocalAIBridge {
-  static isAvailable = false;
-  static models = [];
-
-  static async initialize() {
-    try {
-      const r = await fetch("http://localhost:11434/api/tags", { timeout: 3000 });
-      if (r.ok) {
-        const data = await r.json();
-        this.models = data?.models?.map((m) => m.name) || [];
-        this.isAvailable = this.models.length > 0;
-        // Dynamically add deepseek/llama if present
-        if (this.models.some((m) => m.includes("deepseek"))) {
-          COUNCIL_MEMBERS.deepseek = {
-            name: "DeepSeek",
-            role: "Code Implementation",
-            model: "deepseek-coder",
-            focus: "technical_excellence",
-            provider: "local",
-            isActive: true
-          };
-          console.log("✅ LocalAI: DeepSeek activated");
-        }
-        if (this.models.some((m) => m.includes("llama"))) {
-          COUNCIL_MEMBERS.llama = {
-            name: "Llama",
-            role: "Research & Analysis",
-            model: "llama3:70b",
-            focus: "alternative_perspectives",
-            provider: "local",
-            isActive: true
-          };
-          console.log("✅ LocalAI: Llama activated");
-        }
-        console.log(`[LocalAI] Available: ${this.models.join(", ")}`);
-      } else {
-        this.isAvailable = false;
-        console.log("[LocalAI] Not available (HTTP)");
-      }
-    } catch {
-      this.isAvailable = false;
-      console.log("[LocalAI] Not available - cloud-only mode");
-    }
-  }
-
-  static async queryLocal(model, prompt) {
-    const res = await fetch("http://localhost:11434/api/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model, prompt, stream: false })
-    });
-    if (!res.ok) throw new Error(`Local AI HTTP ${res.status}`);
-    const data = await res.json();
-    return {
-      response: data.response,
-      usage: {
-        prompt_tokens: data.prompt_eval_count || 0,
-        completion_tokens: data.eval_count || 0
-      }
-    };
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Council caller (adds 'local' provider support)
+// MEMORY-AWARE COUNCIL CALLER (CORE)
 // ─────────────────────────────────────────────────────────────────────────────
 async function callCouncilMember(member, prompt, useMicro = true) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown council member: ${member}`);
 
-  const systemPrompt = useMicro
-    ? "You are the LifeOS Architect AI controlling the Lumin autonomous system at robust-magic-production.up.railway.app. You communicate using v2.0-Micro protocol. Format: V:2.0|CT:<complete detailed answer>|KP:~key~points. Be specific and concrete. When asked to generate scripts or code, produce FULL complete examples with all sections. Never produce generic IVR phone menus. Never say \"I cannot access\" - you ARE the system running on Railway with GitHub repo LimitlessOI/Lumin-LifeOS. Show what you DID or CAN DO with specific details."
-    : "";
+  // 1) Pull relevant memory and build memory-aware system prompt
+  const memRows = await recallMemory({ q: prompt });
+  const memoryContext = formatMemoryForSystem(memRows);
 
-  // Local provider first (free)
-  if (config.provider === "local" && LocalAIBridge.isAvailable) {
+  const baseSystem = useMicro
+    ? [
+        'You are the LifeOS Architect AI controlling the Lumin autonomous system at robust-magic-production.up.railway.app.',
+        'You communicate using v2.0-Micro protocol:',
+        'Format strictly like:',
+        'V:2.0|CT:<complete detailed answer>|KP:~key~points',
+        '',
+        'PERSISTENT_MEMORY (non-negotiable facts to use & not contradict):',
+        memoryContext,
+        '',
+        'When you discover new durable facts/policies, append lines like:',
+        'MEM: <short_key> :: <concise_value>',
+      ].join('\n')
+    : '';
+
+  // local helper for finalize
+  async function finalize(response, usage, modelIdForCost) {
     try {
-      const result = await LocalAIBridge.queryLocal(config.model, systemPrompt ? `${systemPrompt}\n\n${prompt}` : prompt);
-      return result;
+      // 2) Extract MEM: writes and persist
+      const memWrites = extractMemWritesFromText(response);
+      for (const m of memWrites) {
+        const key = m.key.toLowerCase().replace(/\s+/g, '_').slice(0, 64);
+        await writeMemory(key, { text: m.value, source: member }, 'ai_learned');
+      }
     } catch (e) {
-      console.warn(`[LocalAI] ${config.name} failed; falling back if possible:`, e.message);
+      console.error('[memory.write] failed:', e.message);
     }
+    // 3) track cost and return
+    if (modelIdForCost) trackCost(usage, modelIdForCost);
+    return { response, usage };
   }
 
-  // Anthropic
-  if (config.provider === "anthropic" && ANTHROPIC_API_KEY) {
-    const res = await safeFetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
+  // 4) Route by provider
+  if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
+    const res = await safeFetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "x-api-key": ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01"
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
         model: config.model,
         max_tokens: 2000,
-        system: systemPrompt,
-        messages: [{ role: "user", content: prompt }]
-      })
+        system: baseSystem,
+        messages: [{ role: 'user', content: prompt }],
+      }),
     });
     const json = await res.json();
-    return {
-      response: json.content?.[0]?.text || "",
-      usage: {
-        prompt_tokens: json.usage?.input_tokens || 0,
-        completion_tokens: json.usage?.output_tokens || 0
-      }
-    };
+    const text = json.content?.[0]?.text || '';
+    return finalize(text, { prompt_tokens: json.usage?.input_tokens, completion_tokens: json.usage?.output_tokens }, 'claude-sonnet-4');
   }
 
-  // OpenAI
-  if (config.provider === "openai" && OPENAI_API_KEY) {
-    const messages = systemPrompt
-      ? [{ role: "system", content: systemPrompt }, { role: "user", content: prompt }]
-      : [{ role: "user", content: prompt }];
-    const res = await safeFetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${OPENAI_API_KEY}` },
+  if (config.provider === 'openai' && OPENAI_API_KEY) {
+    const messages = baseSystem
+      ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
+      : [{ role: 'user', content: prompt }];
+    const res = await safeFetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${OPENAI_API_KEY}` },
       body: JSON.stringify({
         model: config.model,
         temperature: 0.1,
         max_tokens: 2000,
         messages,
-        response_format: useMicro ? undefined : { type: "json_object" }
-      })
+      }),
     });
     const json = await res.json();
-    return { response: json.choices?.[0]?.message?.content || "", usage: json.usage || {} };
+    const text = json.choices?.[0]?.message?.content || '';
+    return finalize(text, json.usage, config.model);
   }
 
-  // Google
-  if (config.provider === "google" && GEMINI_API_KEY) {
+  if (config.provider === 'google' && GEMINI_API_KEY) {
     const res = await safeFetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`,
       {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: systemPrompt ? `${systemPrompt}\n\n${prompt}` : prompt }] }],
-          generationConfig: { temperature: 0.1, maxOutputTokens: 2000 }
-        })
+          contents: [{ parts: [{ text: baseSystem ? `${baseSystem}\n\n${prompt}` : prompt }] }],
+          generationConfig: { temperature: 0.1, maxOutputTokens: 2000 },
+        }),
       }
     );
     const json = await res.json();
-    const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
     const usage = {
       prompt_tokens: json.usageMetadata?.promptTokenCount || 0,
-      completion_tokens: json.usageMetadata?.candidatesTokenCount || 0
+      completion_tokens: json.usageMetadata?.candidatesTokenCount || 0,
     };
-    return { response: text, usage };
+    return finalize(text, usage, 'gemini-2.0-flash-exp');
   }
 
-  // xAI
-  if (config.provider === "xai" && GROK_API_KEY) {
-    const messages = systemPrompt
-      ? [{ role: "system", content: systemPrompt }, { role: "user", content: prompt }]
-      : [{ role: "user", content: prompt }];
-    const res = await safeFetch("https://api.x.ai/v1/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${GROK_API_KEY}` },
-      body: JSON.stringify({ model: config.model, temperature: 0.1, max_tokens: 2000, messages })
+  if (config.provider === 'xai' && GROK_API_KEY) {
+    const messages = baseSystem
+      ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
+      : [{ role: 'user', content: prompt }];
+    const res = await safeFetch('https://api.x.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${GROK_API_KEY}` },
+      body: JSON.stringify({ model: config.model, temperature: 0.1, max_tokens: 2000, messages }),
     });
     const json = await res.json();
-    return { response: json.choices?.[0]?.message?.content || "", usage: json.usage || {} };
+    const text = json.choices?.[0]?.message?.content || '';
+    return finalize(text, json.usage, 'grok-beta');
   }
 
-  throw new Error(`No API key/provider available for ${member} (${config.provider})`);
+  throw new Error(`No API key for ${member} (${config.provider})`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Team (full council) MICRO responder + Tiered Consensus
-// ─────────────────────────────────────────────────────────────────────────────
-async function teamMicroResponse(microIn) {
-  const systemContext = `You are the LifeOS Architect AI controlling the Lumin autonomous system.
-
-SYSTEM STATUS:
-- URL: robust-magic-production.up.railway.app
-- GitHub: LimitlessOI/Lumin-LifeOS
-- Database: Neon PostgreSQL (connected)
-- v2.0-MICRO compression: ACTIVE (240 char)
-- Current savings: 70-80% target
-- ROI: HEALTHY
-- Task queue: active
-- AI Council: 6+ models (Claude + GPT-4o + Gemini + Grok + local when available)
-
-YOUR CAPABILITIES:
-- You ARE the system (not separate from it)
-- Can access and modify any file in GitHub repo via endpoints
-- Monitor system health, performance, costs
-- Generate complete production-ready code and scripts
-
-RESPONSE FORMAT:
-- Use v2.0-MICRO: V:2.0|CT:<complete detailed answer>|KP:~key~bullet~points
-- Be specific: include concrete steps, examples
-- Produce COMPLETE outputs
-- Never produce IVR menus unless explicitly requested`;
-
-  const fullPrompt = `${systemContext}\n\nUser request: ${microIn}\n\nRespond in MICRO format with complete, actionable details:`;
-
-  const responses = [];
-  try {
-    const claude = await callCouncilMember("claude", fullPrompt, true);
-    trackCost(claude.usage, "claude-sonnet-4");
-    responses.push({ name: "Claude", text: String(claude.response || "").trim() });
-  } catch (e) {
-    console.error("[team] Claude failed:", e.message);
-  }
-  try {
-    const brock = await callCouncilMember("brock", fullPrompt, true);
-    trackCost(brock.usage, "gpt-4o");
-    responses.push({ name: "Brock", text: String(brock.response || "").trim() });
-  } catch (e) {
-    console.error("[team] Brock failed:", e.message);
-  }
-  try {
-    const gemini = await callCouncilMember("gemini", fullPrompt, true);
-    trackCost(gemini.usage, "gemini-2.0-flash-exp");
-    responses.push({ name: "Gemini", text: String(gemini.response || "").trim() });
-  } catch (e) {
-    console.error("[team] Gemini failed:", e.message);
-  }
-  try {
-    const grok = await callCouncilMember("grok", fullPrompt, true);
-    trackCost(grok.usage, "grok-beta");
-    responses.push({ name: "Grok", text: String(grok.response || "").trim() });
-  } catch (e) {
-    console.error("[team] Grok failed:", e.message);
-  }
-  if (responses.length === 0) {
-    return "V:2.0|CT:All~team~members~unavailable|KP:~retry";
-  }
-
-  const responseList = responses
-    .map((r, i) => `${String.fromCharCode(65 + i)} (${r.name}): ${r.text}`)
-    .join("\n\n");
-
-  const judgePrompt = `You are the quality judge. Review ${responses.length} MICRO responses and synthesize the best answer.
-
-Rules:
-- Combine strongest insights and specific details from all responses
-- Keep ALL actionable content and complete information
-- Remove filler and redundancy
-- Prefer concrete steps and specifics
-- Format: V:2.0|CT:<synthesized complete answer>|KP:~combined~key~points
-
-Responses:
-${responseList}
-
-Return ONE final synthesized MICRO answer:`;
-
-  const judged = await callCouncilMember("r8", judgePrompt, true);
-  trackCost(judged.usage, "gpt-4o-mini");
-  return String(judged.response || responses[0].text).trim();
-}
-
-// Fast Tier1 consensus (Claude + Brock + Gemini)
-async function fastConsensusMICRO(microIn) {
-  const cohort = ["brock", "claude", "gemini"];
-  const norm = (s) => (s || "").replace(/\s+/g, " ").toLowerCase().slice(0, 300);
-  const out = [];
-  for (const id of cohort) {
-    try {
-      const r = await callCouncilMember(id, microIn, true);
-      const text = (r?.response || "").trim();
-      const core = text
-        .split("|")
-        .find((p) => p.trim().toUpperCase().startsWith("CT:"));
-      out.push({ id, text, ct: norm(core || text) });
-    } catch (e) {
-      out.push({ id, error: String(e) });
-    }
-  }
-  const [a, b, c] = out;
-  const agree = a?.ct && b?.ct && c?.ct && a.ct === b.ct && b.ct === c.ct;
-  return { agree, results: out, final: agree ? a.text : null };
-}
-async function decideWithTiers(microIn) {
-  const lower = (microIn || "").toLowerCase();
-  const isHighRisk = ["commit", "deploy", "delete"].some((kw) => lower.includes(kw));
-  const fast = await fastConsensusMICRO(microIn);
-  if (fast.agree && !isHighRisk) {
-    console.log("✅ Fast Consensus (3/3) - Low Risk. Bypassing Full Council.");
-    return { mode: "tier1", text: fast.final };
-    }
-  console.log("↗️ Escalating to Full Council (High Risk or Disagreement).");
-  const full = await teamMicroResponse(microIn);
-  return { mode: "tier2", text: full };
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Work queue + executor (unchanged logic; uses MICRO to compress prompts)
-// ─────────────────────────────────────────────────────────────────────────────
-const workQueue = [];
-let taskIdCounter = 1;
-
-async function executeTask(task) {
-  const description = task.description;
-  const customerPrompt = `Please ${description}. Provide comprehensive output with detailed analysis, key insights, actionable recommendations, and supporting context.`;
-  const customerTokens = Math.ceil(customerPrompt.length / 3.5);
-  const microData = {
-    operation: description.includes("generate")
-      ? "generate"
-      : description.includes("analyze")
-      ? "analyze"
-      : "create",
-    description,
-    type: description.includes("script")
-      ? "script"
-      : description.includes("report")
-      ? "report"
-      : "general",
-    returnFields: ["CT", "KP"]
-  };
-  const microPrompt = MICRO_PROTOCOL.encode(microData);
-  const compressedTokens = Math.ceil(microPrompt.length / 4);
-  const tokensSaved = Math.max(0, customerTokens - compressedTokens);
-  const savingsPct = customerTokens
-    ? Math.round((tokensSaved / customerTokens) * 100)
-    : 0;
-  const costSaved = (tokensSaved * 0.0025) / 1000;
-
-  console.log(`[executor] ${description.slice(0, 50)}...`);
-  console.log(`[REAL SAVINGS] Customer: ${customerTokens}t → MICRO: ${compressedTokens}t`);
-  console.log(`[REAL SAVINGS] Savings: ${savingsPct}% ($${costSaved.toFixed(4)})`);
-
-  try {
-    const result = await callCouncilMember("brock", microPrompt, true);
-    const microResponse = result.response.trim();
-    const output = MICRO_PROTOCOL.decode(microResponse);
-
-    await pool.query(
-      `insert into compression_stats (task_id, original_tokens, compressed_tokens, savings_pct, cost_saved) values ($1, $2, $3, $4, $5)`,
-      [task.id, customerTokens, compressedTokens, savingsPct, costSaved]
-    );
-    await pool.query(
-      `insert into task_outputs (task_id, output_type, content, metadata) values ($1, $2, $3, $4)`,
-      [
-        task.id,
-        output.type || "generic",
-        output.content || output.description || "Complete",
-        JSON.stringify({
-          key_points: output.keyPoints,
-          tokens_saved: tokensSaved,
-          compression_pct: savingsPct
-        })
-      ]
-    );
-
-    trackCost(result.usage, "gpt-4o");
-    roiTracker.micro_compression_saves += costSaved;
-
-    return {
-      success: true,
-      output: output.content || output.description,
-      type: output.type,
-      summary: `Generated: ${output.keyPoints?.[0] || "Complete"}`,
-      tokens_saved: tokensSaved,
-      compression_pct: savingsPct,
-      cost_saved: costSaved
-    };
-  } catch (e) {
-    console.error(`[executor] Failed:`, e.message);
-    throw new Error(`Execution failed: ${e.message}`);
-  }
-}
-
-async function processWorkQueue() {
-  console.log(
-    "[worker] Starting with v2.0-MICRO protocol (70-80% compression target)..."
-  );
-  while (true) {
-    const task = workQueue.find((t) => t.status === "queued");
-    if (!task) {
-      await sleep(5000);
-      continue;
-    }
-    task.status = "in-progress";
-    console.log(`[worker] Processing: ${task.description}`);
-    try {
-      const result = await executeTask(task);
-      task.status = "complete";
-      task.completed = new Date();
-      task.result = result;
-      // keep "estimated" (non-booked) revenue metric internal only
-      const type = (result.type || "").toLowerCase();
-      let est = 0;
-      if (type.includes("lead") || type.includes("generation") || type.includes("recruitment")) est = 50;
-      else if (type.includes("revenue") || type.includes("analysis")) est = 100;
-      else if (type.includes("call") || type.includes("script")) est = 25;
-      else if (type.includes("optimization") || type.includes("improve")) est = 75;
-      else est = 10;
-      updateROI(est, 0, 1, result.tokens_saved || 0);
-      task.estimated_revenue = est;
-      console.log(
-        `[worker] ✅ ${task.description.slice(0, 40)}... | Saved: ${result.compression_pct}% ($${result.cost_saved.toFixed(
-          4
-        )}) | ${result.summary}`
-      );
-    } catch (e) {
-      task.status = "failed";
-      task.error = String(e);
-      console.error(`[worker] ❌ Failed: ${task.description}`, e.message);
-    }
-    await sleep(2000);
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// DB init (adds money tables)
+// DB init
 // ─────────────────────────────────────────────────────────────────────────────
 async function initDb() {
   await pool.query(
     `create table if not exists calls (id serial primary key, created_at timestamptz default now(), phone text, intent text, area text, timeline text, duration int, transcript text, score text, boldtrail_lead_id text);`
-  );
-  await pool.query(
-    `create table if not exists build_metrics (id serial primary key, created_at timestamptz default now(), pr_number int, model text, tokens_in int default 0, tokens_out int default 0, cost numeric(10,4) default 0, outcome text default 'pending', summary text);`
-  );
-  await pool.query(
-    `create table if not exists council_reviews (id serial primary key, pr_number int not null, reviewer text not null, vote text not null, reasoning text, concerns jsonb, created_at timestamptz default now());`
-  );
-  await pool.query(
-    `create table if not exists task_outputs (id serial primary key, task_id int not null, output_type text, content text, metadata jsonb, created_at timestamptz default now());`
-  );
-  await pool.query(
-    `create table if not exists compression_stats (id serial primary key, task_id int, original_tokens int, compressed_tokens int, savings_pct numeric, cost_saved numeric, created_at timestamptz default now());`
   );
   await pool.query(`create table if not exists shared_memory (
     id serial primary key,
@@ -927,223 +631,16 @@ async function initDb() {
     approved_at timestamptz,
     approved_by text
   );`);
-
-  // NEW: Money system
-  await pool.query(`create table if not exists money_orders (
-    id serial primary key,
-    payment_intent_id text unique not null,
-    service_type text not null,
-    customer_email text not null,
-    requirements text not null,
-    amount integer not null,
-    status text default 'processing',
-    created_at timestamptz default now(),
-    completed_at timestamptz,
-    error_message text
-  );`);
-  await pool.query(`create table if not exists deliverables (
-    id serial primary key,
-    order_id integer references money_orders(id),
-    content text not null,
-    delivery_type text not null,
-    status text default 'delivered',
-    created_at timestamptz default now()
-  );`);
-
-  await pool.query(`create index if not exists idx_council_pr on council_reviews(pr_number);`);
-  await pool.query(`create index if not exists idx_task_outputs on task_outputs(task_id);`);
-  await pool.query(`create index if not exists idx_compression_stats on compression_stats(created_at);`);
   await pool.query(`create index if not exists idx_memory_category on shared_memory(category);`);
   await pool.query(`create index if not exists idx_approval_status on approval_queue(status);`);
-  await pool.query(`create index if not exists idx_money_orders_status on money_orders(status);`);
-  await pool.query(`create index if not exists idx_money_orders_created on money_orders(created_at);`);
 }
+
 initDb()
-  .then(() => console.log("✅ Database ready (memory + protection + money)"))
+  .then(() => console.log("✅ Database ready (memory + protection)"))
   .catch(console.error);
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MoneyMakingEngine (real—no fake revenue)
-// ─────────────────────────────────────────────────────────────────────────────
-class MoneyMakingEngine {
-  static SERVICE_PRICES = {
-    web_development: {
-      price_cents: 49700,
-      ai_team: ["deepseek", "claude", "grok"],
-      delivery_time: "24 hours",
-      description: "Professional website development"
-    },
-    api_development: {
-      price_cents: 29700,
-      ai_team: ["deepseek", "claude", "gemini"],
-      delivery_time: "12 hours",
-      description: "REST API development"
-    },
-    content_creation: {
-      price_cents: 19700,
-      ai_team: ["claude", "gemini", "grok"],
-      delivery_time: "6 hours",
-      description: "SEO-optimized content creation"
-    },
-    lead_generation: {
-      price_cents: 14700,
-      ai_team: ["grok", "gemini", "claude"],
-      delivery_time: "4 hours",
-      description: "Qualified lead generation"
-    },
-    code_review: {
-      price_cents: 9700,
-      ai_team: ["deepseek", "claude", "grok"],
-      delivery_time: "2 hours",
-      description: "Professional code review"
-    }
-  };
-
-  static listServices() {
-    return Object.entries(this.SERVICE_PRICES).map(([key, cfg]) => ({
-      id: key,
-      name: cfg.description,
-      price: cfg.price_cents / 100,
-      delivery_time: cfg.delivery_time,
-      ai_team: cfg.ai_team
-    }));
-  }
-
-  static async createPaymentIntent(serviceType, customerEmail, requirements) {
-    if (!stripe) throw new Error("Stripe not configured");
-    const svc = this.SERVICE_PRICES[serviceType];
-    if (!svc) throw new Error("Invalid service type");
-    const pi = await stripe.paymentIntents.create({
-      amount: svc.price_cents,
-      currency: "usd",
-      receipt_email: customerEmail,
-      metadata: {
-        service_type: serviceType,
-        customer_email: customerEmail,
-        requirements: String(requirements || "").slice(0, 500)
-      }
-    });
-    return pi;
-  }
-
-  static buildExecutionPrompt(reqs) {
-    return `CLIENT REQUIREMENTS: ${reqs}
-
-Create a professional, client-ready deliverable. This is for a paying customer who expects production-quality output.
-
-Include:
-1) Complete, working solution
-2) Professional formatting
-3) Clear documentation
-4) Ready-to-use code/content
-5) Next steps recommendations
-
-Respond with the complete deliverable.`;
-  }
-
-  static async executeWithAITeam(aiTeam, requirements) {
-    const prompt = this.buildExecutionPrompt(requirements);
-    const results = [];
-    for (const ai of aiTeam) {
-      try {
-        if (ai === "deepseek" && LocalAIBridge.isAvailable && COUNCIL_MEMBERS.deepseek) {
-          const local = await LocalAIBridge.queryLocal(COUNCIL_MEMBERS.deepseek.model, prompt);
-          results.push({ ai, content: local.response, usage: local.usage, source: "local" });
-        } else {
-          const r = await callCouncilMember(ai, prompt, true);
-          results.push({ ai, content: r.response, usage: r.usage, source: "cloud" });
-        }
-      } catch (e) {
-        console.error(`[MoneyEngine] ${ai} failed:`, e.message);
-        results.push({ ai, error: e.message, content: null });
-      }
-    }
-    return results;
-  }
-
-  static formatDeliverable(results, reqs, serviceType) {
-    const ok = results.filter((r) => r.content && !r.error);
-    const best = ok.find((r) => r.ai === "claude") || ok[0];
-    let out = `# Lumin AI Deliverable
-
-**Service:** ${serviceType}
-**Requirements:** ${reqs}
-**Generated:** ${new Date().toISOString()}
-**AI Team Used:** ${ok.map((r) => r.ai).join(", ") || "none"}
-
----
-
-`;
-    out += best ? best.content : `## Delivery Note\nAll AI systems encountered errors. Please contact support for manual completion.`;
-    out += `
-
----
-
-*Delivered by Lumin AI System*`;
-    return out;
-  }
-
-  static async processPaidOrder(paymentIntentId) {
-    if (!stripe) throw new Error("Stripe not configured");
-    const pi = await stripe.paymentIntents.retrieve(paymentIntentId);
-    if (pi.status !== "succeeded") throw new Error("Payment not completed");
-
-    const serviceType = pi.metadata?.service_type;
-    const customerEmail = pi.metadata?.customer_email;
-    const requirements = pi.metadata?.requirements || "";
-    const svc = this.SERVICE_PRICES[serviceType];
-    if (!svc) throw new Error("Unknown service type");
-
-    const ins = await pool.query(
-      `insert into money_orders (payment_intent_id, service_type, customer_email, requirements, amount, status) values ($1,$2,$3,$4,$5,$6) returning id`,
-      [paymentIntentId, serviceType, customerEmail, requirements, svc.price_cents, "processing"]
-    );
-    const orderId = ins.rows[0].id;
-
-    try {
-      const results = await this.executeWithAITeam(svc.ai_team, requirements);
-      const content = this.formatDeliverable(results, requirements, serviceType);
-
-      await pool.query(
-        `insert into deliverables (order_id, content, delivery_type, status) values ($1,$2,$3,$4)`,
-        [orderId, content, serviceType, "delivered"]
-      );
-      await pool.query(
-        `update money_orders set status = $1, completed_at = now() where id = $2`,
-        ["completed", orderId]
-      );
-
-      // Update ROI with *real* revenue (booked)
-      updateROI(svc.price_cents / 100, 0, 1, 0);
-
-      console.log(`✅ ORDER COMPLETED: ${orderId} - $${(svc.price_cents / 100).toFixed(2)}`);
-      return { order_id: orderId, revenue: svc.price_cents / 100 };
-    } catch (e) {
-      await pool.query(
-        `update money_orders set status = $1, error_message = $2 where id = $3`,
-        ["failed", String(e.message), orderId]
-      );
-      throw e;
-    }
-  }
-
-  static async getRevenueStats() {
-    const r = await pool.query(`
-      select
-        count(*)::int as total_orders,
-        coalesce(sum(amount),0)::int as total_revenue,
-        coalesce(avg(amount),0)::int as avg_order_value,
-        count(*) filter (where status='completed')::int as completed_orders,
-        count(*) filter (where status='processing')::int as processing_orders
-      from money_orders
-      where created_at > now() - interval '24 hours'
-    `);
-    return r.rows[0];
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Routes: memory & protection (v14 intact)
+// Routes: Memory (CRITICAL)
 // ─────────────────────────────────────────────────────────────────────────────
 app.post("/api/v1/memory/store", requireCommandKey, async (req, res) => {
   try {
@@ -1161,6 +658,7 @@ app.post("/api/v1/memory/store", requireCommandKey, async (req, res) => {
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
+
 app.get("/api/v1/memory/get/:key", requireCommandKey, async (req, res) => {
   try {
     const r = await pool.query("select * from shared_memory where key=$1", [
@@ -1173,12 +671,13 @@ app.get("/api/v1/memory/get/:key", requireCommandKey, async (req, res) => {
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
+
 app.get("/api/v1/memory/list", requireCommandKey, async (req, res) => {
   try {
     const category = req.query.category;
     const q = category
-      ? "select * from shared_memory where category=$1 order by updated_at desc"
-      : "select * from shared_memory order by updated_at desc";
+      ? "select * from shared_memory where category=$1 order by updated_at desc limit 100"
+      : "select * from shared_memory order by updated_at desc limit 100";
     const params = category ? [category] : [];
     const r = await pool.query(q, params);
     res.json({ ok: true, count: r.rows.length, memories: r.rows });
@@ -1187,6 +686,22 @@ app.get("/api/v1/memory/list", requireCommandKey, async (req, res) => {
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
+
+app.get("/api/v1/memory/search", requireCommandKey, async (req, res) => {
+  try {
+    const q = String(req.query.q || '');
+    const category = String(req.query.category || '');
+    const rows = await recallMemory({
+      q,
+      categories: category ? [category] : MEMORY_CATEGORIES_DEFAULT,
+      limit: Number(req.query.limit || 50),
+    });
+    res.json({ ok: true, count: rows.length, rows });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
 app.delete("/api/v1/memory/delete/:key", requireCommandKey, async (req, res) => {
   try {
     await pool.query("delete from shared_memory where key=$1", [req.params.key]);
@@ -1197,7 +712,9 @@ app.delete("/api/v1/memory/delete/:key", requireCommandKey, async (req, res) => 
   }
 });
 
-// Architect MICRO (now with Tiered router on ?team=1)
+// ─────────────────────────────────────────────────────────────────────────────
+// Routes: Architect MICRO (now memory-aware)
+// ─────────────────────────────────────────────────────────────────────────────
 app.post("/api/v1/architect/micro", requireCommandKey, async (req, res) => {
   try {
     const rawBody =
@@ -1205,16 +722,9 @@ app.post("/api/v1/architect/micro", requireCommandKey, async (req, res) => {
     if (!rawBody || !String(rawBody).startsWith("V:2.0")) {
       return res.status(400).type("text/plain").send("V:2.0|CT:missing~micro~input|KP:~format");
     }
-    const useTeam = String(req.query.team || "").trim() === "1";
-    let out;
-    if (useTeam) {
-      const routed = await decideWithTiers(rawBody);
-      out = routed.text;
-    } else {
-      const r = await callCouncilMember("brock", rawBody, true);
-      trackCost(r.usage, "gpt-4o");
-      out = String(r.response || "").trim();
-    }
+    
+    const r = await callCouncilMember("brock", rawBody, true);
+    const out = String(r.response || "").trim();
     return res.type("text/plain").send(out || "V:2.0|CT:empty~response|KP:~retry");
   } catch (e) {
     console.error("[architect.micro]", e);
@@ -1225,7 +735,9 @@ app.post("/api/v1/architect/micro", requireCommandKey, async (req, res) => {
   }
 });
 
-// Dev commit (protection)
+// ─────────────────────────────────────────────────────────────────────────────
+// Routes: Dev commit (protection)
+// ─────────────────────────────────────────────────────────────────────────────
 app.post("/api/v1/dev/commit", requireCommandKey, async (req, res) => {
   try {
     const { path: file_path, content, message } = req.body || {};
@@ -1259,7 +771,6 @@ app.post("/api/v1/dev/commit", requireCommandKey, async (req, res) => {
   }
 });
 
-// Protection queue
 app.get("/api/v1/protection/queue", requireCommandKey, async (_req, res) => {
   try {
     const r = await pool.query(
@@ -1272,6 +783,7 @@ app.get("/api/v1/protection/queue", requireCommandKey, async (_req, res) => {
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
+
 app.post("/api/v1/protection/approve/:id", requireCommandKey, async (req, res) => {
   try {
     const id = req.params.id;
@@ -1296,305 +808,23 @@ app.post("/api/v1/protection/approve/:id", requireCommandKey, async (req, res) =
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
-app.post("/api/v1/protection/reject/:id", requireCommandKey, async (req, res) => {
-  try {
-    await pool.query("update approval_queue set status=$1 where id=$2", [
-      "rejected",
-      req.params.id
-    ]);
-    res.json({ ok: true, rejected: true });
-  } catch (e) {
-    console.error("[protection.reject]", e);
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
 
-// Critique PR & council reviews (unchanged)
-async function getCouncilConsensus(prNumber, diff, summary) {
-  console.log(`[council] Reviewing PR #${prNumber}`);
-  const reviews = [];
-  const compressedRequest = compressAIPrompt("review", {
-    pr: prNumber,
-    s: (summary || "").slice(0, 100),
-    dh: hashString((diff || "").slice(0, 500)),
-    dl: (diff || "").length
-  });
-  const basePromptJSON = `AI-to-AI Protocol. Input: ${JSON.stringify(
-    compressedRequest
-  )}\nFocus: {{focus}}\n\nRespond compact JSON:\n{"v":"a|c|r","cf":1-10,"r":"reason","cn":["concerns"],"bs":["blindspots"]}`;
-  let totalTokensSaved = 0;
-  for (const [memberId, config] of Object.entries(COUNCIL_MEMBERS)) {
-    try {
-      const memberPrompt = basePromptJSON.replace("{{focus}}", config.focus.slice(0, 50));
-      const estimatedTokensSaved = Math.floor(memberPrompt.length * 2.5);
-      const result = await callCouncilMember(memberId, memberPrompt, false);
-      const compressedReview = JSON.parse(result.response || "{}");
-      const review = expandAIResponse(compressedReview);
-      totalTokensSaved += estimatedTokensSaved;
-      trackCost(result.usage, config.model);
-      await pool.query(
-        `insert into council_reviews (pr_number, reviewer, vote, reasoning, concerns) values ($1,$2,$3,$4,$5)`,
-        [
-          prNumber,
-          config.name,
-          review.vote || "concerns",
-          review.reasoning || "",
-          JSON.stringify(review.concerns || [])
-        ]
-      );
-      reviews.push({
-        member: config.name,
-        vote: review.vote || "concerns",
-        confidence: review.confidence || 5,
-        reasoning: review.reasoning || "",
-        concerns: review.concerns || [],
-        blindspots: review.blindspots || []
-      });
-    } catch (e) {
-      console.error(`[council] ${config.name} failed:`, e.message);
-      reviews.push({ member: config.name, vote: "error" });
-    }
-  }
-  updateROI(0, 0, 0, totalTokensSaved);
-  const votes = reviews.filter((r) => r.vote !== "error");
-  const approvals = votes.filter((r) => r.vote === "approve").length;
-  const rejections = votes.filter((r) => r.vote === "reject").length;
-  const consensus = {
-    approved: approvals >= 4 || (approvals >= 3 && rejections === 0),
-    auto_merge: approvals >= 5,
-    votes: { approve: approvals, reject: rejections },
-    reviews,
-    all_concerns: reviews.flatMap((r) => r.concerns || []),
-    tokens_saved: totalTokensSaved
-  };
-  return consensus;
-}
-app.post("/api/v1/build/critique-pr", requireCommandKey, async (req, res) => {
-  try {
-    const { pr_number, diff, summary } = req.body || {};
-    if (!diff) return res.status(400).json({ ok: false, error: "diff required" });
-    const consensus = await getCouncilConsensus(pr_number, diff, summary || "");
-    const recommendation = consensus.auto_merge
-      ? "auto_merge"
-      : consensus.approved
-      ? "review_required"
-      : "reject";
-    const score =
-      consensus.votes.approve >= 4 ? 5 : consensus.votes.approve === 3 ? 4 : 3;
-    res.json({
-      ok: true,
-      critique: {
-        score,
-        recommendation,
-        reasoning: `Council: ${consensus.votes.approve}/6 approve`,
-        council_reviews: consensus.reviews,
-        all_concerns: consensus.all_concerns,
-        tokens_saved: consensus.tokens_saved
-      }
-    });
-  } catch (e) {
-    console.error("[critique]", e);
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
-app.get("/api/v1/council/reviews/:pr_number", requireCommandKey, async (req, res) => {
-  try {
-    const r = await pool.query(
-      "select * from council_reviews where pr_number=$1 order by created_at desc",
-      [req.params.pr_number]
-    );
-    res.json({ ok: true, reviews: r.rows });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: e.message });
-  }
-});
-
-// Calls stats (unchanged)
-app.get("/api/v1/calls/stats", requireCommandKey, async (_req, res) => {
-  try {
-    const r = await pool.query(
-      "select count(*)::int as count from calls where created_at > now() - interval '30 days'"
-    );
-    const last10 = await pool.query(
-      "select id, created_at, phone, intent, score from calls order by id desc limit 10"
-    );
-    res.json({ count: r.rows[0].count, last_10: last10.rows });
-  } catch (e) {
-    res.status(500).json({ error: String(e) });
-  }
-});
-
-// Legacy/corrupted endpoint (kept)
-app.get("/api/x/1/nkconectom/r", requireCommandKey, async (_req, res) => {
-  try {
-    const r = await pool.query(
-      "SELECT * FROM subconscious ORDER BY updateLast DESC LIMIT 1"
-    );
-    res.json({ doctrine: "v4.8", data: r.rows[0] || null });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-// Autopilot tasks gen
-app.post("/api/v1/autopilot/generate-work", async (req, res) => {
-  if (!assertKey(req, res)) return;
-  try {
-    const current = workQueue.filter((t) => t.status !== "complete" && t.status !== "failed").length;
-    const needed = Math.max(0, 200 - current);
-    if (needed > 0) {
-      const types = [
-        "Generate EXP recruitment script",
-        "Analyze lead conversion data",
-        "Optimize database performance",
-        "Create automated follow-up",
-        "Generate revenue report",
-        "Build feature improvement",
-        "Review system logs",
-        "Update documentation",
-        "Create pricing strategy",
-        "Generate call list"
-      ];
-      const added = [];
-      for (let i = 0; i < needed; i++) {
-        added.push({
-          id: taskIdCounter++,
-          description: `${types[i % types.length]} #${Math.floor(i / types.length) + 1}`,
-          status: "queued",
-          created: new Date()
-        });
-      }
-      workQueue.push(...added);
-      console.log(`[autopilot] Generated ${needed} tasks`);
-    }
-    res.json({ ok: true, queue_size: workQueue.length, tasks_added: needed });
-  } catch (e) {
-    res.status(500).json({ error: String(e) });
-  }
-});
-app.get("/api/v1/tasks", requireCommandKey, async (_req, res) => {
-  res.json({ ok: true, tasks: workQueue.slice(-50) });
-});
-app.get("/api/v1/tasks/:id/outputs", requireCommandKey, async (req, res) => {
-  try {
-    const r = await pool.query(
-      "select * from task_outputs where task_id=$1 order by created_at desc",
-      [req.params.id]
-    );
-    res.json({ ok: true, outputs: r.rows });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: e.message });
-  }
-});
-app.post("/api/v1/tasks/:id/cancel", requireCommandKey, async (req, res) => {
-  const id = Number(req.params.id);
-  const t = workQueue.find((x) => x.id === id);
-  if (t) {
-    t.status = "cancelled";
-    res.json({ ok: true });
-  } else res.status(404).json({ ok: false, error: "Task not found" });
-});
-
-// Money endpoints
-app.get("/api/v1/shop/services", async (_req, res) => {
-  try {
-    res.json({
-      ok: true,
-      services: MoneyMakingEngine.listServices(),
-      local_ai_available: LocalAIBridge.isAvailable
-    });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: e.message });
-  }
-});
-app.post("/api/v1/shop/create-payment", async (req, res) => {
-  try {
-    const { serviceType, customerEmail, requirements } = req.body || {};
-    if (!serviceType || !customerEmail || !requirements)
-      return res
-        .status(400)
-        .json({ ok: false, error: "serviceType, customerEmail, requirements required" });
-    if (!stripe) return res.status(400).json({ ok: false, error: "Stripe not configured" });
-
-    const pi = await MoneyMakingEngine.createPaymentIntent(
-      serviceType,
-      customerEmail,
-      requirements
-    );
-    res.json({ ok: true, client_secret: pi.client_secret, payment_intent_id: pi.id, amount: pi.amount });
-  } catch (e) {
-    console.error("[shop.create-payment]", e);
-    res.status(500).json({ ok: false, error: e.message });
-  }
-});
-app.post("/api/v1/shop/confirm-payment", async (req, res) => {
-  try {
-    const { paymentIntentId } = req.body || {};
-    if (!paymentIntentId) return res.status(400).json({ ok: false, error: "paymentIntentId required" });
-
-    const result = await MoneyMakingEngine.processPaidOrder(paymentIntentId);
-    res.json({ ok: true, order_id: result.order_id, status: "delivered", revenue: result.revenue });
-  } catch (e) {
-    console.error("[shop.confirm-payment]", e);
-    res.status(500).json({ ok: false, error: e.message });
-  }
-});
-app.get("/api/v1/shop/order/:orderId", async (req, res) => {
-  try {
-    const r = await pool.query("select * from money_orders where id=$1", [
-      req.params.orderId
-    ]);
-    if (r.rows.length === 0) return res.status(404).json({ ok: false, error: "Order not found" });
-    const d = await pool.query("select * from deliverables where order_id=$1", [
-      req.params.orderId
-    ]);
-    res.json({ ok: true, order: { ...r.rows[0], deliverable: d.rows[0] || null } });
-  } catch (e) {
-    console.error("[shop.order]", e);
-    res.status(500).json({ ok: false, error: e.message });
-  }
-});
-app.get("/api/v1/admin/revenue/stats", requireCommandKey, async (_req, res) => {
-  try {
-    const s = await MoneyMakingEngine.getRevenueStats();
-    res.json({
-      ok: true,
-      revenue: {
-        total_orders: s.total_orders || 0,
-        total_revenue: (s.total_revenue || 0) / 100,
-        avg_order_value: (s.avg_order_value || 0) / 100,
-        completed_orders: s.completed_orders || 0,
-        processing_orders: s.processing_orders || 0
-      }
-    });
-  } catch (e) {
-    console.error("[admin.revenue.stats]", e);
-    res.status(500).json({ ok: false, error: e.message });
-  }
-});
-
-// Health
+// ─────────────────────────────────────────────────────────────────────────────
+// Routes: Health
+// ─────────────────────────────────────────────────────────────────────────────
 app.get("/health", (_req, res) => res.send("OK"));
+
 app.get("/healthz", async (_req, res) => {
   try {
-    const r = await pool.query("select now()");
+    const dbCheck = await pool.query("select now()");
     const spend = readSpend();
-    const comp = await pool.query(
-      `SELECT COUNT(*) as count, AVG(savings_pct) as avg_pct FROM compression_stats WHERE created_at > NOW() - INTERVAL '24 hours'`
-    );
-    const compStats = comp.rows[0];
     const mem = await pool.query("select count(*) as count from shared_memory");
-    const approvals = await pool.query(
-      "select count(*) as count from approval_queue where status=$1",
-      ["pending"]
-    );
-    const rev = await MoneyMakingEngine.getRevenueStats();
 
     res.json({
       status: "healthy",
       database: "connected",
-      timestamp: r.rows[0].now,
-      version: "v15-money-tiered-local",
+      timestamp: dbCheck.rows[0].now,
+      version: "v15-CLEAN-memory-aware",
       daily_spend: spend.usd,
       max_daily_spend: Number(MAX_DAILY_SPEND),
       spend_percentage: ((spend.usd / Number(MAX_DAILY_SPEND)) * 100).toFixed(1) + "%",
@@ -1604,102 +834,180 @@ app.get("/healthz", async (_req, res) => {
         models: Object.values(COUNCIL_MEMBERS).map((m) => m.model),
         providers: [...new Set(Object.values(COUNCIL_MEMBERS).map((m) => m.provider))]
       },
-      micro_compression: {
+      memory_system: {
         enabled: true,
-        version: "2.0",
-        char_limit: 240,
-        compressions_today: Number(compStats.count || 0),
-        avg_savings_pct: Math.round(Number(compStats.avg_pct || 0))
+        stored_memories: Number(mem.rows[0].count || 0),
+        categories: MEMORY_CATEGORIES_DEFAULT
       },
-      memory_system: { enabled: true, stored_memories: Number(mem.rows[0].count || 0) },
       protection_system: {
         enabled: true,
-        protected_files: PROTECTED_FILES,
-        pending_approvals: Number(approvals.rows[0].count || 0)
+        protected_files: PROTECTED_FILES
       },
-      money_system: {
-        enabled: true,
-        local_ai_available: LocalAIBridge.isAvailable,
-        services_available: Object.keys(MoneyMakingEngine.SERVICE_PRICES).length,
-        orders_today: rev.total_orders || 0,
-        revenue_today: (rev.total_revenue || 0) / 100,
-        ready_for_payments: !!STRIPE_SECRET_KEY
-      },
-      roi: {
-        ratio: roiTracker.roi_ratio.toFixed(2) + "x",
-        revenue: "$" + roiTracker.daily_revenue.toFixed(2),
-        cost: "$" + roiTracker.daily_ai_cost.toFixed(2),
-        tokens_saved: roiTracker.total_tokens_saved,
-        micro_saves: "$" + roiTracker.micro_compression_saves.toFixed(2),
-        health: roiTracker.roi_ratio > 2 ? "HEALTHY" : roiTracker.roi_ratio > 1 ? "MARGINAL" : "NEGATIVE"
-      }
+      stripe_status: stripeReady ? "READY" : "NOT_CONFIGURED"
     });
-  } catch {
-    res.status(500).json({ status: "unhealthy" });
-  }
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Backgrounds & startup
-// ─────────────────────────────────────────────────────────────────────────────
-setTimeout(() => {
-  processWorkQueue().catch((e) => {
-    console.error("[worker] Fatal:", e);
-    process.exit(1);
-  });
-}, 5000);
-
-setTimeout(async () => {
-  console.log("[startup] Auto-generating initial 200 tasks...");
-  try {
-    const current = workQueue.filter((t) => t.status !== "complete" && t.status !== "failed").length;
-    const needed = Math.max(0, 200 - current);
-    if (needed > 0) {
-      const types = [
-        "Generate EXP recruitment script",
-        "Analyze lead conversion data",
-        "Optimize database performance",
-        "Create automated follow-up",
-        "Generate revenue report",
-        "Build feature improvement",
-        "Review system logs",
-        "Update documentation",
-        "Create pricing strategy",
-        "Generate call list"
-      ];
-      for (let i = 0; i < needed; i++) {
-        workQueue.push({
-          id: taskIdCounter++,
-          description: `${types[i % types.length]} #${Math.floor(i / types.length) + 1}`,
-          status: "queued",
-          created: new Date()
-        });
-      }
-      console.log(`[startup] ✅ Generated ${needed} tasks - Work queue ready`);
-    }
   } catch (e) {
-    console.error("[startup] Failed to auto-generate:", e.message);
+    res.status(500).json({ status: "unhealthy", error: String(e) });
   }
-}, 10000);
-
-// Start app
-app.listen(PORT, HOST, () => {
-  console.log(`✅ Server on http://${HOST}:${PORT}`);
-  console.log(
-    `✅ Architect: http://${HOST}:${PORT}/overlay/architect.html?key=${COMMAND_CENTER_KEY}`
-  );
-  console.log(`✅ Portal: http://${HOST}:${PORT}/overlay/portal.html?key=${COMMAND_CENTER_KEY}`);
-  console.log(`✅ AI Council: ${Object.keys(COUNCIL_MEMBERS).length} models (Claude + GPT + Gemini + Grok + local when available)`);
-  console.log("✅ v2.0-MICRO Protocol: ENABLED (240 char, 70-80% target)");
-  console.log("✅ Team Mode: Tiered fast-consensus → Full council");
-  console.log("✅ GitHub Commit: ENABLED");
-  console.log("✅ ROI Tracking: ENABLED");
-  console.log("✅ Memory System: ENABLED (shared_memory table)");
-  console.log(`✅ Protection System: ENABLED (${PROTECTED_FILES.length} protected files)`);
-  console.log(`✅ Money System: ENABLED (${Object.keys(MoneyMakingEngine.SERVICE_PRICES).length} services)`);
-  console.log(`✅ Local AI: ${LocalAIBridge.isAvailable ? "CONNECTED" : "SCANNING"}`);
-  console.log(`✅ Stripe Payments: ${STRIPE_SECRET_KEY ? "READY" : "NEED_KEYS"}`);
 });
 
-// Initialize local AI scan (non-blocking)
-LocalAIBridge.initialize();
+// ─────────────────────────────────────────────────────────────────────────────
+// Routes: Command & Control Overlay Portal (serve HTML)
+// ─────────────────────────────────────────────────────────────────────────────
+app.get("/overlay/command-center.html", (_req, res) => {
+  res.type("text/html").send(`<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>LifeOS Command & Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: #0a0e27; color: #e0e6ed; padding: 24px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { margin-bottom: 12px; font-size: 32px; color: #00ff88; }
+    .subtitle { color: #888; margin-bottom: 24px; font-size: 14px; }
+    .card { border: 1px solid #1e2749; border-radius: 10px; padding: 20px; margin: 16px 0; background: #111625; }
+    .card h3 { color: #00ff88; margin-bottom: 12px; font-size: 18px; }
+    textarea, input { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #1e2749; border-radius: 6px; background: #0a0e27; color: #e0e6ed; font-family: monospace; font-size: 12px; margin: 8px 0; }
+    button { padding: 10px 16px; border-radius: 6px; border: 1px solid #00ff88; background: transparent; color: #00ff88; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+    button:hover { background: #00ff88; color: #0a0e27; }
+    .row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+    pre { background: #0a0e27; padding: 12px; overflow: auto; border-radius: 6px; border: 1px solid #1e2749; max-height: 300px; font-size: 11px; color: #00ff88; }
+    .small { font-size: 12px; color: #666; }
+    .section-break { margin: 32px 0; border-bottom: 1px solid #1e2749; padding-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 LifeOS Command & Control</h1>
+    <div class="subtitle">AI Council Memory-Aware System | v15-CLEAN</div>
+
+    <div class="card">
+      <h3>🔑 Authentication</h3>
+      <div class="row">
+        <label>Command Key</label>
+        <input id="key" type="password" placeholder="Paste your x-command-key" />
+      </div>
+    </div>
+
+    <div class="section-break"></div>
+
+    <div class="card">
+      <h3>💬 Ask Council (MICRO)</h3>
+      <div style="color: #666; font-size: 12px; margin-bottom: 8px;">Format: V:2.0|OP:G|D:Your~request|T:A|R:~CT~KP</div>
+      <textarea id="micro" rows="4" placeholder="V:2.0|OP:G|D:Create~a~status~update|T:A|R:~CT~KP"></textarea>
+      <button onclick="askCouncil()">🤖 Ask Brock (Council Member)</button>
+      <pre id="microOut" style="margin-top: 12px;"></pre>
+    </div>
+
+    <div class="card">
+      <h3>🧠 Memory Search</h3>
+      <div class="row">
+        <input id="memQ" placeholder="Search across persistent memory..." />
+        <button onclick="searchMem()" style="width: auto;">Search</button>
+      </div>
+      <pre id="memOut" style="margin-top: 12px;"></pre>
+    </div>
+
+    <div class="card">
+      <h3>💾 Store Memory</h3>
+      <input id="memKey" placeholder="Memory key (e.g., global_rule__tone)" />
+      <textarea id="memValue" rows="3" placeholder="Memory value (e.g., Be concrete and complete)"></textarea>
+      <input id="memCategory" placeholder="Category (e.g., global_rules)" value="ai_learned" />
+      <button onclick="storeMemory()">💾 Save to Memory</button>
+      <pre id="memStoreOut" style="margin-top: 12px;"></pre>
+    </div>
+
+    <div class="card">
+      <h3>📊 System Status</h3>
+      <button onclick="checkHealth()">🔍 Check Health</button>
+      <pre id="healthOut" style="margin-top: 12px;"></pre>
+    </div>
+  </div>
+
+  <script>
+    async function askCouncil() {
+      const key = document.getElementById('key').value.trim();
+      const micro = document.getElementById('micro').value;
+      if (!key || !micro) { alert('Key and MICRO input required'); return; }
+      
+      document.getElementById('microOut').textContent = 'Asking council...';
+      try {
+        const r = await fetch(\`/api/v1/architect/micro\`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain', 'x-command-key': key },
+          body: micro
+        });
+        const text = await r.text();
+        document.getElementById('microOut').textContent = text;
+      } catch (e) {
+        document.getElementById('microOut').textContent = 'Error: ' + String(e);
+      }
+    }
+
+    async function searchMem() {
+      const key = document.getElementById('key').value.trim();
+      const q = encodeURIComponent(document.getElementById('memQ').value);
+      if (!key) { alert('Key required'); return; }
+      
+      document.getElementById('memOut').textContent = 'Searching...';
+      try {
+        const r = await fetch(\`/api/v1/memory/search?q=\${q}\`, {
+          headers: { 'x-command-key': key }
+        });
+        const data = await r.json();
+        document.getElementById('memOut').textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('memOut').textContent = 'Error: ' + String(e);
+      }
+    }
+
+    async function storeMemory() {
+      const key = document.getElementById('key').value.trim();
+      const memKey = document.getElementById('memKey').value.trim();
+      const memValue = document.getElementById('memValue').value.trim();
+      const memCategory = document.getElementById('memCategory').value.trim();
+      if (!key || !memKey || !memValue) { alert('All fields required'); return; }
+      
+      document.getElementById('memStoreOut').textContent = 'Storing...';
+      try {
+        const r = await fetch(\`/api/v1/memory/store\`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-command-key': key },
+          body: JSON.stringify({ key: memKey, value: memValue, category: memCategory })
+        });
+        const data = await r.json();
+        document.getElementById('memStoreOut').textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('memStoreOut').textContent = 'Error: ' + String(e);
+      }
+    }
+
+    async function checkHealth() {
+      document.getElementById('healthOut').textContent = 'Checking...';
+      try {
+        const r = await fetch(\`/healthz\`);
+        const data = await r.json();
+        document.getElementById('healthOut').textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('healthOut').textContent = 'Error: ' + String(e);
+      }
+    }
+  </script>
+</body>
+</html>`);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Start server
+// ─────────────────────────────────────────────────────────────────────────────
+app.listen(PORT, HOST, () => {
+  console.log(`\n✅ LifeOS v15-CLEAN started on http://${HOST}:${PORT}`);
+  console.log(`✅ Command Center: http://${HOST}:${PORT}/overlay/command-center.html?key=YOUR_KEY`);
+  console.log(`✅ Health: http://${HOST}:${PORT}/healthz`);
+  console.log(`✅ AI Council: ${Object.keys(COUNCIL_MEMBERS).length} models (memory-aware)`);
+  console.log(`✅ Memory System: ACTIVE (continuous read/write)`);
+  console.log(`✅ Protection: ${PROTECTED_FILES.length} protected files`);
+  console.log(`✅ Stripe: ${stripeReady ? 'READY' : 'standby'}`);
+  console.log(`\n🎯 Next: Seed memory and use command center to drive the system\n`);
+});
