@@ -153,7 +153,49 @@ const MICRO_PROTOCOL = {
     return result;
   },
 };
+// ENHANCED COUNCIL WITH LOCAL AI & ENGINEERING TEAMS
+const ENGINEERING_TEAM = {
+  primary: ['claude', 'deepseek', 'brock'],  // Claude + DeepSeek + Brock
+  reviewers: ['jayn', 'r8', 'gemini', 'grok'] // Everyone else reviews
+};
 
+// Local AI detection and activation
+async function activateLocalAIs() {
+  try {
+    const response = await fetch('http://localhost:11434/api/tags', { timeout: 3000 });
+    if (response.ok) {
+      const models = await response.json();
+      
+      // Add DeepSeek to council if available
+      if (models.models?.some(m => m.name.includes('deepseek'))) {
+        COUNCIL_MEMBERS.deepseek = {
+          name: "DeepSeek",
+          role: "Code Implementation", 
+          model: "deepseek-coder",
+          focus: "technical_excellence",
+          provider: "local",
+          isActive: true
+        };
+        console.log('✅ DeepSeek activated in engineering team');
+      }
+      
+      // Add Llama if available
+      if (models.models?.some(m => m.name.includes('llama'))) {
+        COUNCIL_MEMBERS.llama = {
+          name: "Llama",
+          role: "Research & Analysis",
+          model: "llama3:70b", 
+          focus: "alternative_perspectives",
+          provider: "local",
+          isActive: true
+        };
+        console.log('✅ Llama activated for research');
+      }
+    }
+  } catch (e) {
+    console.log('⚠️ Local AI not available - using cloud council');
+  }
+}
 const AI_PROTOCOL = {
   ops: { review: "r", generate: "g", analyze: "a", optimize: "o", consensus: "c", query: "q" },
   fields: { vote: "v", confidence: "cf", reasoning: "r", concerns: "cn", blindspots: "bs", recommendation: "rc", findings: "f", metrics: "m", content: "ct", summary: "s", tasks: "t", type: "tp", key_points: "kp" },
