@@ -984,4 +984,237 @@ app.listen(PORT, HOST, () => {
   console.log(`✅ Memory System: ENABLED (shared_memory table)`);
   console.log(`✅ Protection System: ENABLED (${PROTECTED_FILES.length} protected files)`);
   console.log(`✅ Max Daily Spend: ${MAX_DAILY_SPEND}`);
+  // ADD TO YOUR EXISTING server.js - LOCAL AI INTEGRATION
+class LocalAIBridge {
+  static isAvailable = false;
+  
+  static async initialize() {
+    try {
+      const response = await fetch('http://localhost:11434/api/tags', { 
+        timeout: 3000 
+      });
+      this.isAvailable = response.ok;
+      console.log(`[LocalAI] ${this.isAvailable ? 'CONNECTED' : 'UNAVAILABLE'}`);
+    } catch (e) {
+      this.isAvailable = false;
+      console.log('[LocalAI] Not available - running in cloud-only mode');
+    }
+  }
+
+  static async queryLocalAI(prompt, model = 'deepseek-coder') {
+    if (!this.isAvailable) {
+      throw new Error('Local AI not available');
+    }
+
+    try {
+      const response = await fetch('http://localhost:11434/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: model,
+          prompt: prompt,
+          stream: false
+        })
+      });
+
+      if (!response.ok) throw new Error(`Local AI: ${response.status}`);
+      const data = await response.json();
+      
+      return {
+        content: data.response,
+        model: model,
+        tokens: (data.prompt_eval_count || 0) + (data.eval_count || 0),
+        cost: 0.0001, // Local cost estimation
+        source: 'local'
+      };
+    } catch (error) {
+      console.error('[LocalAI] Query failed:', error);
+      throw error;
+    }
+  }
+}
+
+// Initialize on server start
+LocalAIBridge.initialize();
+  // ADD TO YOUR EXISTING server.js - MONEY ENGINE
+class MoneyMakingEngine {
+  static SERVICE_PRICES = {
+    'web_development': { price: 497, ai_team: ['deepseek', 'claude', 'grok'] },
+    'api_development': { price: 297, ai_team: ['deepseek', 'claude', 'gemini'] },
+    'content_creation': { price: 197, ai_team: ['claude', 'gemini', 'grok'] },
+    'lead_generation': { price: 147, ai_team: ['grok', 'gemini', 'claude'] },
+    'code_review': { price: 97, ai_team: ['deepseek', 'claude', 'grok'] }
+  };
+
+  static async processMoneyTask(userCommand, budget = 500) {
+    // Use your existing AI analysis
+    const analysis = await this.analyzeForRevenue(userCommand);
+    const service = this.SERVICE_PRICES[analysis.service] || this.SERVICE_PRICES.code_review;
+    
+    // Create task in your existing queue
+    const taskId = await PersistentTaskQueue.saveTask({
+      type: analysis.service,
+      description: userCommand,
+      status: 'in-progress',
+      priority: 1,
+      estimated_revenue: Math.min(service.price, budget)
+    });
+
+    // Execute with AI team
+    const results = await this.executeWithAITeam(service.ai_team, userCommand);
+    
+    // Track revenue in your existing system
+    await systemMemory.remember(
+      `revenue_${taskId}`,
+      {
+        task_id: taskId,
+        revenue: service.price,
+        service: analysis.service,
+        completed_at: new Date().toISOString()
+      },
+      'revenue_tracking'
+    );
+
+    return {
+      task_id: taskId,
+      revenue: service.price,
+      deliverables: results,
+      client_ready: true
+    };
+  }
+
+  static async analyzeForRevenue(command) {
+    // Use your existing Claude integration
+    const analysis = await queryAI('claude', `
+      Analyze this command for money-making potential:
+      "${command}"
+      
+      Respond with JSON: {service: "web_development|api_development|content_creation|lead_generation|code_review", confidence: 0.8}
+    `);
+    
+    return JSON.parse(analysis);
+  }
+
+  static async executeWithAITeam(aiTeam, command) {
+    const tasks = aiTeam.map(async (ai) => {
+      try {
+        // Use local AI when available and appropriate
+        if (ai === 'deepseek' && LocalAIBridge.isAvailable) {
+          return await LocalAIBridge.queryLocalAI(command, 'deepseek-coder');
+        } else {
+          // Use your existing cloud AI integration
+          return await queryAI(ai, command);
+        }
+      } catch (error) {
+        return { ai, error: error.message, content: 'Fallback response' };
+      }
+    });
+
+    return await Promise.all(tasks);
+  }
+}
+  // ENHANCE YOUR EXISTING /api/v1/overlay/command ENDPOINT
+app.post("/api/v1/overlay/command", requireCommandKey, async (req, res) => {
+  try {
+    const { command, app = 'command-center' } = req.body;
+    
+    // Store in your existing memory system
+    await systemMemory.remember(
+      `overlay_${Date.now()}`,
+      { command, app, timestamp: new Date().toISOString() },
+      'overlay_interactions'
+    );
+
+    // Check for money-making commands
+    const moneyKeywords = ['build', 'create', 'make', 'develop', 'earn', 'revenue', 'service', 'product', '$'];
+    const isMoneyCommand = moneyKeywords.some(keyword => 
+      command.toLowerCase().includes(keyword)
+    );
+
+    if (isMoneyCommand) {
+      // Route to money-making engine
+      const result = await MoneyMakingEngine.processMoneyTask(command, 500);
+      
+      return res.json({
+        ok: true,
+        type: 'money_task',
+        response: `💰 Executing money-making task! Estimated revenue: $${result.revenue}`,
+        task_id: result.task_id,
+        revenue: result.revenue,
+        action: 'revenue_generated'
+      });
+    }
+
+    // Use your existing AI routing for normal commands
+    const context = await systemMemory.recallContext(command.split(' ').slice(0, 2), 3);
+    const result = await smartAIQuery(command, { 
+      app: app,
+      priority: 'high',
+      context: context
+    });
+
+    res.json({
+      ok: true,
+      response: result.response,
+      usage: result.usage,
+      memory_context: context
+    });
+  } catch (e) {
+    console.error('[overlay.command]', e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+// ADD THESE NEW ENDPOINTS TO YOUR EXISTING server.js
+app.get("/api/v1/services/available", requireCommandKey, async (req, res) => {
+  res.json({
+    available_services: MoneyMakingEngine.SERVICE_PRICES,
+    local_ai_available: LocalAIBridge.isAvailable,
+    action: 'POST to /api/v1/execute/money-task with {command, budget}'
+  });
+});
+
+app.post("/api/v1/execute/money-task", requireCommandKey, async (req, res) => {
+  const { command, budget = 500 } = req.body;
+  
+  try {
+    const result = await MoneyMakingEngine.processMoneyTask(command, budget);
+    
+    res.json({
+      success: true,
+      message: `💰 Money task executed! Revenue: $${result.revenue}`,
+      ...result
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+// ENHANCE YOUR EXISTING /healthz ENDPOINT
+app.get("/healthz", async (_req, res) => {
+  try {
+    const r = await pool.query("select now()");
+    const spend = readSpend();
+    
+    // Add money-making status to your existing health check
+    const moneyStatus = {
+      local_ai_available: LocalAIBridge.isAvailable,
+      services_ready: Object.keys(MoneyMakingEngine.SERVICE_PRICES).length,
+      immediate_revenue: Object.values(MoneyMakingEngine.SERVICE_PRICES)
+        .reduce((sum, s) => sum + s.price, 0)
+    };
+
+    // Your existing health response PLUS money status
+    res.json({ 
+      status: "healthy", 
+      database: "connected", 
+      timestamp: r.rows[0].now,
+      // ... ALL YOUR EXISTING FIELDS ...
+      money_making: moneyStatus,
+      action: "Use /api/v1/execute/money-task to start earning"
+    });
+  } catch { 
+    res.status(500).json({ status: "unhealthy" }); 
+  }
+  
+});
 });
