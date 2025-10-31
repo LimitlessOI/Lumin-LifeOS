@@ -1,4 +1,4 @@
-// server.js - v15 CLEAN (No Stripe import error, memory-aware AI, command overlay)
+// server.js - v15 PRODUCTION (Memory-persistent, Consensus debates, Error handling, Optimized)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Core imports (Stripe import removed—will lazy-load if env var exists)
@@ -34,7 +34,8 @@ const {
   STRIPE_WEBHOOK_SECRET,
   HOST = "0.0.0.0",
   PORT = 3000,
-  MAX_DAILY_SPEND = 50.0
+  MAX_DAILY_SPEND = 50.0,
+  AI_CALL_TIMEOUT = 30000
 } = process.env;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -105,6 +106,7 @@ function requireCommandKey(req, res, next) {
     return res.status(401).json({ error: "unauthorized" });
   next();
 }
+
 function assertKey(req, res) {
   const k = process.env.COMMAND_CENTER_KEY;
   const got = req.query.key || req.headers["x-command-key"];
@@ -114,9 +116,11 @@ function assertKey(req, res) {
   }
   return true;
 }
+
 function isProtected(filePath) {
   return PROTECTED_FILES.some((pf) => filePath.includes(pf));
 }
+
 function readSpend() {
   try {
     return JSON.parse(fs.readFileSync(SPEND_FILE, "utf8"));
@@ -124,6 +128,7 @@ function readSpend() {
     return { day: dayjs().format("YYYY-MM-DD"), usd: 0 };
   }
 }
+
 function writeSpend(s) {
   try {
     fs.writeFileSync(SPEND_FILE, JSON.stringify(s));
@@ -139,7 +144,12 @@ async function safeFetch(url, init = {}, retries = 3) {
   let lastErr;
   for (let i = 0; i <= retries; i++) {
     try {
-      const r = await fetch(url, init);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), AI_CALL_TIMEOUT);
+      
+      const r = await fetch(url, { ...init, signal: controller.signal });
+      clearTimeout(timeout);
+      
       const body = await r.text();
       if (!r.ok) throw new Error(`HTTP ${r.status}: ${body.slice(0, 200)}`);
       return { ...r, json: async () => JSON.parse(body), text: async () => body };
@@ -151,6 +161,7 @@ async function safeFetch(url, init = {}, retries = 3) {
   }
   throw lastErr;
 }
+
 async function ghGetFile(repo, p) {
   if (!GITHUB_TOKEN) throw new Error("GITHUB_TOKEN missing");
   const r = await safeFetch(
@@ -165,6 +176,7 @@ async function ghGetFile(repo, p) {
   );
   return await r.json();
 }
+
 async function ghPutFile(repo, p, contentText, message) {
   if (!GITHUB_TOKEN) throw new Error("GITHUB_TOKEN missing");
   let sha = undefined;
@@ -245,19 +257,41 @@ async function writeMemory(key, value, category = 'ai_learned') {
   }
 }
 
-function extractMemWritesFromText(text = '') {
-  // Expect lines like: MEM: key:: value
-  const lines = (text.match(/(^|\n)MEM:\s*.+?$/gmi) || []).map(s => s.trim());
+function extractMemoryFromMicroResponse(text = '') {
+  // Extract MEM: key :: value lines from response
+  // Format: MEM: key_name :: value_content
+  const lines = (text.match(/(^|\n)MEM:\s*[^:]+::[^\n]+/gmi) || []).map(s => s.trim());
   const out = [];
   for (const line of lines) {
     const body = line.replace(/^MEM:\s*/i, '');
     const idx = body.indexOf('::');
     if (idx > -1) {
-      const k = body.slice(0, idx).trim();
+      const k = body.slice(0, idx).trim().toLowerCase().replace(/[^a-z0-9_]/g, '_').slice(0, 64);
       const v = body.slice(idx + 2).trim();
       if (k && v) out.push({ key: k, value: v });
     }
   }
+  return out;
+}
+
+function extractMemoryFromMicroProtocol(micro = '') {
+  // Extract MEM: encoded data from MICRO format
+  // Format: V:2.0|CT:...|MEM:key1::val1~key2::val2
+  const memPart = micro.match(/\|MEM:([^\|]+)/i);
+  if (!memPart) return [];
+  
+  const encoded = memPart[1];
+  const pairs = encoded.split('~');
+  const out = [];
+  
+  for (const pair of pairs) {
+    const [k, v] = pair.split('::');
+    if (k && v) {
+      const cleanKey = k.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_').slice(0, 64);
+      out.push({ key: cleanKey, value: v.trim() });
+    }
+  }
+  
   return out;
 }
 
@@ -283,6 +317,7 @@ const MICRO_PROTOCOL = {
     }
     if (data.type) parts.push(`T:${data.type.charAt(0).toUpperCase()}`);
     if (data.returnFields) parts.push(`R:~${data.returnFields.join("~")}`);
+    if (data.memory) parts.push(`MEM:${data.memory}`);
     return parts.join("|");
   },
   decode: (micro) => {
@@ -336,6 +371,9 @@ const MICRO_PROTOCOL = {
           break;
         case "KP":
           result.keyPoints = value.split("~").filter((p) => p);
+          break;
+        case "MEM":
+          result.memory = value;
           break;
       }
     });
@@ -485,18 +523,19 @@ const COUNCIL_MEMBERS = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MEMORY-AWARE COUNCIL CALLER (CORE)
+// MEMORY-AWARE COUNCIL CALLER (PRODUCTION VERSION - With Error Handling & Timeout)
 // ─────────────────────────────────────────────────────────────────────────────
-// TEMPORARY DEBUG VERSION - Add detailed logging
-async function callCouncilMember(member, prompt, useMicro = true) {
-  console.log(`🔍 [DEBUG] Calling ${member}...`);
-  console.log(`🔍 [DEBUG] ${member.toUpperCase()}_API_KEY:`, process.env[`${member.toUpperCase()}_API_KEY`] ? 'PRESENT' : 'MISSING');
+async function callCouncilMember(member, prompt, useMicro = true, cachedMemory = null) {
+  console.log(`🔍 [${member.toUpperCase()}] Calling with timeout ${AI_CALL_TIMEOUT}ms...`);
   
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown council member: ${member}`);
 
-  // 1) Pull relevant memory and build memory-aware system prompt
-  const memRows = await recallMemory({ q: prompt });
+  // 1) Pull relevant memory (use cache if provided to avoid N+1 queries)
+  let memRows = cachedMemory;
+  if (!cachedMemory) {
+    memRows = await recallMemory({ q: prompt, limit: 15 });
+  }
   const memoryContext = formatMemoryForSystem(memRows);
 
   const baseSystem = useMicro
@@ -504,29 +543,36 @@ async function callCouncilMember(member, prompt, useMicro = true) {
         'You are the LifeOS Architect AI controlling the Lumin autonomous system at robust-magic-production.up.railway.app.',
         'You communicate using v2.0-Micro protocol:',
         'Format strictly like:',
-        'V:2.0|CT:<complete detailed answer>|KP:~key~points',
+        'V:2.0|CT:<complete detailed answer>|KP:~key~points~here',
+        '',
+        'WHEN YOU DISCOVER NEW DURABLE FACTS/POLICIES, APPEND:',
+        'MEM: key_name :: value_description',
         '',
         'PERSISTENT_MEMORY (non-negotiable facts to use & not contradict):',
         memoryContext,
-        '',
-        'When you discover new durable facts/policies, append lines like:',
-        'MEM: <short_key> :: <concise_value>',
       ].join('\n')
     : '';
 
-  // local helper for finalize
+  // Local helper for finalize
   async function finalize(response, usage, modelIdForCost) {
     try {
-      // 2) Extract MEM: writes and persist
-      const memWrites = extractMemWritesFromText(response);
-      for (const m of memWrites) {
-        const key = m.key.toLowerCase().replace(/\s+/g, '_').slice(0, 64);
-        await writeMemory(key, { text: m.value, source: member }, 'ai_learned');
+      // 2) Extract MEM: writes and persist BOTH formats
+      const memWrites1 = extractMemoryFromMicroResponse(response);
+      const memWrites2 = extractMemoryFromMicroProtocol(response);
+      const allMemWrites = [...memWrites1, ...memWrites2];
+      
+      for (const m of allMemWrites) {
+        await writeMemory(m.key, { text: m.value, source: member, timestamp: new Date().toISOString() }, 'ai_learned');
+      }
+      
+      if (allMemWrites.length > 0) {
+        console.log(`💾 [${member}] Persisted ${allMemWrites.length} memory items`);
       }
     } catch (e) {
-      console.error('[memory.write] failed:', e.message);
+      console.error(`[${member}.memory.write] failed:`, e.message);
     }
-    // 3) track cost and return
+    
+    // 3) Track cost
     if (modelIdForCost) trackCost(usage, modelIdForCost);
     return { response, usage };
   }
@@ -534,7 +580,7 @@ async function callCouncilMember(member, prompt, useMicro = true) {
   try {
     // 4) Route by provider
     if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
-      console.log(`🔍 [DEBUG] ${member}: Using Anthropic API`);
+      console.log(`  → Using Anthropic API (claude-sonnet-4)`);
       const res = await safeFetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -550,13 +596,18 @@ async function callCouncilMember(member, prompt, useMicro = true) {
         }),
       });
       const json = await res.json();
-      console.log(`🔍 [DEBUG] ${member}: Anthropic response status:`, json.content ? 'SUCCESS' : 'FAILED');
-      const text = json.content?.[0]?.text || '';
+      
+      if (!json.content || !json.content[0]) {
+        throw new Error(`No response from Anthropic: ${JSON.stringify(json).slice(0, 200)}`);
+      }
+      
+      const text = json.content[0]?.text || '';
+      console.log(`  ✅ Success (${json.usage?.input_tokens || 0} in, ${json.usage?.output_tokens || 0} out)`);
       return finalize(text, { prompt_tokens: json.usage?.input_tokens, completion_tokens: json.usage?.output_tokens }, 'claude-sonnet-4');
     }
 
     if (config.provider === 'openai' && OPENAI_API_KEY) {
-      console.log(`🔍 [DEBUG] ${member}: Using OpenAI API`);
+      console.log(`  → Using OpenAI API (${config.model})`);
       const messages = baseSystem
         ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
         : [{ role: 'user', content: prompt }];
@@ -571,13 +622,18 @@ async function callCouncilMember(member, prompt, useMicro = true) {
         }),
       });
       const json = await res.json();
-      console.log(`🔍 [DEBUG] ${member}: OpenAI response status:`, json.choices ? 'SUCCESS' : 'FAILED');
-      const text = json.choices?.[0]?.message?.content || '';
+      
+      if (!json.choices || !json.choices[0]) {
+        throw new Error(`No response from OpenAI: ${JSON.stringify(json).slice(0, 200)}`);
+      }
+      
+      const text = json.choices[0]?.message?.content || '';
+      console.log(`  ✅ Success (${json.usage?.prompt_tokens || 0} in, ${json.usage?.completion_tokens || 0} out)`);
       return finalize(text, json.usage, config.model);
     }
 
     if (config.provider === 'google' && GEMINI_API_KEY) {
-      console.log(`🔍 [DEBUG] ${member}: Using Gemini API`);
+      console.log(`  → Using Gemini API (${config.model})`);
       const res = await safeFetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`,
         {
@@ -590,17 +646,22 @@ async function callCouncilMember(member, prompt, useMicro = true) {
         }
       );
       const json = await res.json();
-      console.log(`🔍 [DEBUG] ${member}: Gemini response status:`, json.candidates ? 'SUCCESS' : 'FAILED');
-      const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      if (!json.candidates || !json.candidates[0]) {
+        throw new Error(`No response from Gemini: ${JSON.stringify(json).slice(0, 200)}`);
+      }
+      
+      const text = json.candidates[0]?.content?.parts?.[0]?.text || '';
       const usage = {
         prompt_tokens: json.usageMetadata?.promptTokenCount || 0,
         completion_tokens: json.usageMetadata?.candidatesTokenCount || 0,
       };
+      console.log(`  ✅ Success (${usage.prompt_tokens} in, ${usage.completion_tokens} out)`);
       return finalize(text, usage, 'gemini-2.0-flash-exp');
     }
 
     if (config.provider === 'xai' && GROK_API_KEY) {
-      console.log(`🔍 [DEBUG] ${member}: Using Grok API`);
+      console.log(`  → Using Grok API (${config.model})`);
       const messages = baseSystem
         ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
         : [{ role: 'user', content: prompt }];
@@ -610,133 +671,21 @@ async function callCouncilMember(member, prompt, useMicro = true) {
         body: JSON.stringify({ model: config.model, temperature: 0.1, max_tokens: 2000, messages }),
       });
       const json = await res.json();
-      console.log(`🔍 [DEBUG] ${member}: Grok response status:`, json.choices ? 'SUCCESS' : 'FAILED');
-      const text = json.choices?.[0]?.message?.content || '';
+      
+      if (!json.choices || !json.choices[0]) {
+        throw new Error(`No response from Grok: ${JSON.stringify(json).slice(0, 200)}`);
+      }
+      
+      const text = json.choices[0]?.message?.content || '';
+      console.log(`  ✅ Success (${json.usage?.prompt_tokens || 0} in, ${json.usage?.completion_tokens || 0} out)`);
       return finalize(text, json.usage, 'grok-beta');
     }
 
-    throw new Error(`No API key for ${member} (${config.provider})`);
+    throw new Error(`No API key for ${member} (${config.provider}) or provider not recognized`);
   } catch (e) {
-    console.error(`❌ [DEBUG] ${member} failed:`, e.message);
+    console.error(`❌ [${member}] Error: ${e.message}`);
     throw e;
   }
-}
-async function callCouncilMember(member, prompt, useMicro = true) {
-  const config = COUNCIL_MEMBERS[member];
-  if (!config) throw new Error(`Unknown council member: ${member}`);
-
-  // 1) Pull relevant memory and build memory-aware system prompt
-  const memRows = await recallMemory({ q: prompt });
-  const memoryContext = formatMemoryForSystem(memRows);
-
-  const baseSystem = useMicro
-    ? [
-        'You are the LifeOS Architect AI controlling the Lumin autonomous system at robust-magic-production.up.railway.app.',
-        'You communicate using v2.0-Micro protocol:',
-        'Format strictly like:',
-        'V:2.0|CT:<complete detailed answer>|KP:~key~points',
-        '',
-        'PERSISTENT_MEMORY (non-negotiable facts to use & not contradict):',
-        memoryContext,
-        '',
-        'When you discover new durable facts/policies, append lines like:',
-        'MEM: <short_key> :: <concise_value>',
-      ].join('\n')
-    : '';
-
-  // local helper for finalize
-  async function finalize(response, usage, modelIdForCost) {
-    try {
-      // 2) Extract MEM: writes and persist
-      const memWrites = extractMemWritesFromText(response);
-      for (const m of memWrites) {
-        const key = m.key.toLowerCase().replace(/\s+/g, '_').slice(0, 64);
-        await writeMemory(key, { text: m.value, source: member }, 'ai_learned');
-      }
-    } catch (e) {
-      console.error('[memory.write] failed:', e.message);
-    }
-    // 3) track cost and return
-    if (modelIdForCost) trackCost(usage, modelIdForCost);
-    return { response, usage };
-  }
-
-  // 4) Route by provider
-  if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
-    const res = await safeFetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: config.model,
-        max_tokens: 2000,
-        system: baseSystem,
-        messages: [{ role: 'user', content: prompt }],
-      }),
-    });
-    const json = await res.json();
-    const text = json.content?.[0]?.text || '';
-    return finalize(text, { prompt_tokens: json.usage?.input_tokens, completion_tokens: json.usage?.output_tokens }, 'claude-sonnet-4');
-  }
-
-  if (config.provider === 'openai' && OPENAI_API_KEY) {
-    const messages = baseSystem
-      ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
-      : [{ role: 'user', content: prompt }];
-    const res = await safeFetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${OPENAI_API_KEY}` },
-      body: JSON.stringify({
-        model: config.model,
-        temperature: 0.1,
-        max_tokens: 2000,
-        messages,
-      }),
-    });
-    const json = await res.json();
-    const text = json.choices?.[0]?.message?.content || '';
-    return finalize(text, json.usage, config.model);
-  }
-
-  if (config.provider === 'google' && GEMINI_API_KEY) {
-    const res = await safeFetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: baseSystem ? `${baseSystem}\n\n${prompt}` : prompt }] }],
-          generationConfig: { temperature: 0.1, maxOutputTokens: 2000 },
-        }),
-      }
-    );
-    const json = await res.json();
-    const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    const usage = {
-      prompt_tokens: json.usageMetadata?.promptTokenCount || 0,
-      completion_tokens: json.usageMetadata?.candidatesTokenCount || 0,
-    };
-    return finalize(text, usage, 'gemini-2.0-flash-exp');
-  }
-
-  if (config.provider === 'xai' && GROK_API_KEY) {
-    const messages = baseSystem
-      ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
-      : [{ role: 'user', content: prompt }];
-    const res = await safeFetch('https://api.x.ai/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${GROK_API_KEY}` },
-      body: JSON.stringify({ model: config.model, temperature: 0.1, max_tokens: 2000, messages }),
-    });
-    const json = await res.json();
-    const text = json.choices?.[0]?.message?.content || '';
-    return finalize(text, json.usage, 'grok-beta');
-  }
-
-  throw new Error(`No API key for ${member} (${config.provider})`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -766,6 +715,7 @@ async function initDb() {
     approved_by text
   );`);
   await pool.query(`create index if not exists idx_memory_category on shared_memory(category);`);
+  await pool.query(`create index if not exists idx_memory_updated on shared_memory(updated_at);`);
   await pool.query(`create index if not exists idx_approval_status on approval_queue(status);`);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS debate_log (
@@ -777,11 +727,12 @@ async function initDb() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
     CREATE INDEX IF NOT EXISTS idx_debate_log_id ON debate_log(debate_id);
+    CREATE INDEX IF NOT EXISTS idx_debate_log_created ON debate_log(created_at);
   `);
 }
 
 initDb()
-  .then(() => console.log("✅ Database ready (memory + protection)"))
+  .then(() => console.log("✅ Database ready (memory + protection + debate logs)"))
   .catch(console.error);
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -858,25 +809,30 @@ app.delete("/api/v1/memory/delete/:key", requireCommandKey, async (req, res) => 
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Routes: Architect MICRO (now memory-aware)
+// Routes: Architect MICRO (memory-aware, error-handled)
 // ─────────────────────────────────────────────────────────────────────────────
 app.post("/api/v1/architect/micro", requireCommandKey, async (req, res) => {
   try {
     const rawBody =
       typeof req.body === "string" ? req.body : req.body?.micro || req.body?.text || "";
+    
     if (!rawBody || !String(rawBody).startsWith("V:2.0")) {
       return res.status(400).type("text/plain").send("V:2.0|CT:missing~micro~input|KP:~format");
     }
     
-    const r = await callCouncilMember("brock", rawBody, true);
+    // Pre-cache memory to avoid multiple queries
+    const cachedMemory = await recallMemory({ q: rawBody.slice(0, 200), limit: 20 });
+    
+    const r = await callCouncilMember("brock", rawBody, true, cachedMemory);
     const out = String(r.response || "").trim();
+    
     return res.type("text/plain").send(out || "V:2.0|CT:empty~response|KP:~retry");
   } catch (e) {
     console.error("[architect.micro]", e);
     return res
       .status(500)
       .type("text/plain")
-      .send(`V:2.0|CT:system~error|KP:~retry~${String(e).slice(0, 100)}`);
+      .send(`V:2.0|CT:system~error~${String(e).slice(0, 60).replace(/[|~]/g, '-')}|KP:~retry`);
   }
 });
 
@@ -888,6 +844,7 @@ app.post("/api/v1/dev/commit", requireCommandKey, async (req, res) => {
     const { path: file_path, content, message } = req.body || {};
     if (!file_path || typeof content !== "string")
       return res.status(400).json({ ok: false, error: "path and content required" });
+    
     if (isProtected(file_path)) {
       await pool.query(
         `insert into approval_queue (action_type, file_path, content, message, status)
@@ -902,6 +859,7 @@ app.post("/api/v1/dev/commit", requireCommandKey, async (req, res) => {
         approval_required: true
       });
     }
+    
     const repo = GITHUB_REPO || "LimitlessOI/Lumin-LifeOS";
     const info = await ghPutFile(
       repo,
@@ -958,124 +916,6 @@ app.post("/api/v1/protection/approve/:id", requireCommandKey, async (req, res) =
 // COUNCIL CONSENSUS WITH PRO/CON DEBATE & BLIND SPOT DETECTION
 // ─────────────────────────────────────────────────────────────────────────────
 
-async function councilConsensusWithDebate(prompt, escalationLevel = "normal") {
-  console.log(`\n🎯 [COUNCIL] Starting debate: "${prompt.slice(0, 80)}..."`);
-
-  // Store debate in memory
-  const debateId = `debate_${Date.now()}`;
-  
-  // PHASE 1: Initial positions (fast tier - Claude, Brock, Gemini)
-  const fastTier = ["claude", "brock", "gemini"];
-  const initialVotes = {};
-
-  for (const member of fastTier) {
-    const response = await callCouncilMember(
-      member,
-      `Quick assessment: ${prompt}\n\nProvide your initial stance: APPROVE / CONCERNS / REJECT and 1-2 reasons.`,
-      false
-    );
-    initialVotes[member] = response.response;
-  }
-
-  await writeMemory(`${debateId}_initial_votes`, initialVotes, "debate_log");
-
-  // Check if unanimous - if yes, skip full debate
-  const unanimity = checkUnanimity(initialVotes);
-  if (unanimity.unanimous) {
-    console.log(`✅ [CONSENSUS] Unanimous ${unanimity.position}. Skipping full debate.`);
-    return {
-      debate_id: debateId,
-      unanimous: true,
-      position: unanimity.position,
-      confidence: 95,
-      votes: initialVotes,
-      risk_flags: []
-    };
-  }
-
-  console.log(`🟡 [DEBATE] Not unanimous. Escalating to full council...`);
-
-  // PHASE 2: Full debate - each member argues PRO and CON
-  const fullDebate = {};
-  const council = ["claude", "brock", "jayn", "r8", "gemini", "grok"];
-
-  for (const member of council) {
-    // Argument FOR
-    const proResponse = await callCouncilMember(
-      member,
-      `You are arguing IN FAVOR of: "${prompt}"\n\nWhat are the strongest 3 arguments FOR this? Consider benefits, opportunities, and why it's worth the risk.`,
-      false
-    );
-
-    // Argument AGAINST
-    const conResponse = await callCouncilMember(
-      member,
-      `You are arguing AGAINST: "${prompt}"\n\nWhat are the strongest 3 arguments AGAINST this? Consider risks, blind spots, unintended consequences, and what could go wrong.`,
-      false
-    );
-
-    // Blind spots this member might miss
-    const blindSpotResponse = await callCouncilMember(
-      member,
-      `What are the blind spots YOU personally might have about: "${prompt}"? What don't you see that others might?`,
-      false
-    );
-
-    fullDebate[member] = {
-      pro: proResponse.response,
-      con: conResponse.response,
-      blind_spots: blindSpotResponse.response
-    };
-  }
-
-  await writeMemory(`${debateId}_full_debate`, fullDebate, "debate_log");
-
-  // PHASE 3: Synthesis - have R8 (quality) judge the debate
-  const debateSummary = JSON.stringify(fullDebate, null, 2);
-  const synthesisResponse = await callCouncilMember(
-    "r8",
-    `You are the judge. Here's the full debate:\n\n${debateSummary}\n\nNow judge: Based on all arguments, what's the BEST DECISION and why? Rate confidence 0-100. List any unmitigated risks.`,
-    false
-  );
-
-  // PHASE 4: Final vote with updated context
-  const finalVotes = {};
-  for (const member of council) {
-    const finalResponse = await callCouncilMember(
-      member,
-      `After hearing all perspectives, cast your final vote on: "${prompt}"\n\nVote: APPROVE / CONCERNS / REJECT\nConfidence: 0-100\nReason: [1 sentence]`,
-      false
-    );
-    finalVotes[member] = finalResponse.response;
-  }
-
-  await writeMemory(`${debateId}_final_votes`, finalVotes, "debate_log");
-
-  // Calculate consensus
-  const consensus = calculateConsensus(finalVotes);
-
-  // Extract risk flags from debate
-  const riskFlags = extractRisks(fullDebate);
-
-  const result = {
-    debate_id: debateId,
-    unanimous: consensus.unanimous,
-    position: consensus.position,
-    confidence: consensus.confidence,
-    full_debate: fullDebate,
-    synthesis: synthesisResponse.response,
-    final_votes: finalVotes,
-    risk_flags: riskFlags,
-    blind_spots: extractBlindSpots(fullDebate),
-    recommendation: consensus.recommendation,
-    escalate_to_human: consensus.confidence < 70 || escalationLevel === "high"
-  };
-
-  await writeMemory(debateId, result, "consensus_decisions");
-  
-  return result;
-}
-
 function checkUnanimity(votes) {
   const positions = Object.values(votes).map(v => 
     v.includes("APPROVE") ? "approve" : v.includes("REJECT") ? "reject" : "concerns"
@@ -1085,8 +925,13 @@ function checkUnanimity(votes) {
   
   return {
     unanimous: allSame,
-    position: positions[0]
+    position: positions[0] || "concerns"
   };
+}
+
+function extractNumber(text, regex) {
+  const match = text.match(regex);
+  return match ? parseInt(match[1]) : null;
 }
 
 function calculateConsensus(votes) {
@@ -1115,6 +960,7 @@ function calculateConsensus(votes) {
     concerns: concernsCount,
     reject: rejectCount,
     confidence: avgConfidence,
+    votes: positions,
     recommendation: position === "approve" ? "EXECUTE" : position === "reject" ? "BLOCK" : "ESCALATE_TO_HUMAN"
   };
 }
@@ -1122,11 +968,11 @@ function calculateConsensus(votes) {
 function extractRisks(debate) {
   const risks = [];
   for (const [member, positions] of Object.entries(debate)) {
-    const conText = positions.con.toLowerCase();
+    const conText = (positions.con || "").toLowerCase();
     if (conText.includes("risk") || conText.includes("danger") || conText.includes("could fail")) {
       risks.push({
         member,
-        risk: positions.con.slice(0, 200)
+        risk: (positions.con || "").slice(0, 200)
       });
     }
   }
@@ -1136,17 +982,217 @@ function extractRisks(debate) {
 function extractBlindSpots(debate) {
   const blindSpots = [];
   for (const [member, positions] of Object.entries(debate)) {
-    blindSpots.push({
-      member,
-      blind_spot: positions.blind_spots.slice(0, 150)
-    });
+    if (positions.blind_spots) {
+      blindSpots.push({
+        member,
+        blind_spot: positions.blind_spots.slice(0, 150)
+      });
+    }
   }
   return blindSpots;
 }
 
-function extractNumber(text, regex) {
-  const match = text.match(regex);
-  return match ? parseInt(match[1]) : null;
+async function councilConsensusWithDebate(prompt, escalationLevel = "normal") {
+  console.log(`\n🎯 [CONSENSUS] Starting: "${prompt.slice(0, 60)}..."`);
+  const debateId = `debate_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  
+  try {
+    // Pre-cache memory ONE TIME
+    console.log(`🧠 [CONSENSUS] Pre-caching memory...`);
+    const cachedMemory = await recallMemory({ q: prompt, limit: 20 });
+
+    // PHASE 1: Fast tier (Claude, Brock, Gemini)
+    console.log(`\n⚡ PHASE 1: Fast Tier Vote (3 AIs)`);
+    const fastTier = ["claude", "brock", "gemini"];
+    const initialVotes = {};
+
+    for (const member of fastTier) {
+      try {
+        const response = await callCouncilMember(
+          member,
+          `Quick assessment: ${prompt}\n\nProvide your initial stance: APPROVE / CONCERNS / REJECT and 1-2 reasons.`,
+          false,
+          cachedMemory
+        );
+        initialVotes[member] = response.response;
+      } catch (e) {
+        console.error(`⚠️  [${member}] Fast tier failed: ${e.message}`);
+        initialVotes[member] = "CONCERNS (error)";
+      }
+    }
+
+    await writeMemory(`${debateId}_initial_votes`, initialVotes, "debate_log");
+
+    // Check unanimity
+    const unanimity = checkUnanimity(initialVotes);
+    if (unanimity.unanimous) {
+      console.log(`\n✅ [CONSENSUS] UNANIMOUS: ${unanimity.position.toUpperCase()}`);
+      const result = {
+        debate_id: debateId,
+        phase: "fast_unanimous",
+        unanimous: true,
+        position: unanimity.position,
+        confidence: 95,
+        initial_votes: initialVotes,
+        risk_flags: [],
+        blind_spots: [],
+        escalate_to_human: false
+      };
+      await pool.query(
+        `INSERT INTO debate_log (debate_id, prompt, consensus_result) VALUES ($1, $2, $3)`,
+        [debateId, prompt, JSON.stringify(result)]
+      );
+      return result;
+    }
+
+    console.log(`\n🟡 [CONSENSUS] Not unanimous. Escalating to FULL COUNCIL DEBATE`);
+
+    // PHASE 2: Full debate
+    console.log(`\n🎤 PHASE 2: Full Debate (6 AIs × 3 questions each)`);
+    const fullDebate = {};
+    const council = ["claude", "brock", "jayn", "r8", "gemini", "grok"];
+
+    for (const member of council) {
+      try {
+        console.log(`\n  → ${member.toUpperCase()}: Pro/Con/Blindspot`);
+        
+        // Argument FOR
+        let proResponse = { response: "" };
+        try {
+          proResponse = await callCouncilMember(
+            member,
+            `You are arguing IN FAVOR of: "${prompt}"\n\nWhat are the strongest 3 arguments FOR this? Consider benefits, opportunities, why it's worth doing.`,
+            false,
+            cachedMemory
+          );
+        } catch (e) {
+          console.error(`    ⚠️  PRO failed: ${e.message}`);
+          proResponse = { response: `[Error] ${e.message}` };
+        }
+
+        // Argument AGAINST
+        let conResponse = { response: "" };
+        try {
+          conResponse = await callCouncilMember(
+            member,
+            `You are arguing AGAINST: "${prompt}"\n\nWhat are the strongest 3 arguments AGAINST? Consider risks, unintended consequences, what could go wrong.`,
+            false,
+            cachedMemory
+          );
+        } catch (e) {
+          console.error(`    ⚠️  CON failed: ${e.message}`);
+          conResponse = { response: `[Error] ${e.message}` };
+        }
+
+        // Blind spots
+        let blindSpotResponse = { response: "" };
+        try {
+          blindSpotResponse = await callCouncilMember(
+            member,
+            `What are blind spots YOU might have about: "${prompt}"? What don't you see that others might?`,
+            false,
+            cachedMemory
+          );
+        } catch (e) {
+          console.error(`    ⚠️  BLINDSPOT failed: ${e.message}`);
+          blindSpotResponse = { response: `[Error] ${e.message}` };
+        }
+
+        fullDebate[member] = {
+          pro: proResponse.response.slice(0, 500),
+          con: conResponse.response.slice(0, 500),
+          blind_spots: blindSpotResponse.response.slice(0, 300)
+        };
+      } catch (e) {
+        console.error(`❌ [${member}] Full debate failed: ${e.message}`);
+        fullDebate[member] = {
+          pro: `Error: ${e.message}`,
+          con: `Error: ${e.message}`,
+          blind_spots: `Error: ${e.message}`
+        };
+      }
+    }
+
+    await writeMemory(`${debateId}_full_debate`, fullDebate, "debate_log");
+
+    // PHASE 3: Synthesis
+    console.log(`\n📋 PHASE 3: Synthesis by R8 (Quality Judge)`);
+    const debateSummary = JSON.stringify(fullDebate, null, 2).slice(0, 3000);
+    let synthesisResponse = { response: "[Synthesis skipped due to error]" };
+    try {
+      synthesisResponse = await callCouncilMember(
+        "r8",
+        `Judge this debate:\n\n${debateSummary}\n\nBest decision? Confidence 0-100? Unmitigated risks?`,
+        false,
+        cachedMemory
+      );
+    } catch (e) {
+      console.error(`⚠️  Synthesis failed: ${e.message}`);
+    }
+
+    // PHASE 4: Final vote
+    console.log(`\n🗳️  PHASE 4: Final Council Vote`);
+    const finalVotes = {};
+    for (const member of council) {
+      try {
+        const finalResponse = await callCouncilMember(
+          member,
+          `Final vote on: "${prompt}"\n\nVote: APPROVE / CONCERNS / REJECT\nConfidence: 0-100\nReason: [1 sentence]`,
+          false,
+          cachedMemory
+        );
+        finalVotes[member] = finalResponse.response;
+      } catch (e) {
+        console.error(`⚠️  [${member}] Final vote failed: ${e.message}`);
+        finalVotes[member] = "CONCERNS (error)";
+      }
+    }
+
+    await writeMemory(`${debateId}_final_votes`, finalVotes, "debate_log");
+
+    // Calculate consensus
+    const consensus = calculateConsensus(finalVotes);
+    const riskFlags = extractRisks(fullDebate);
+    const blindSpots = extractBlindSpots(fullDebate);
+
+    const result = {
+      debate_id: debateId,
+      phase: "full_debate",
+      unanimous: consensus.unanimous,
+      position: consensus.position,
+      confidence: consensus.confidence,
+      vote_breakdown: {
+        approve: consensus.approve,
+        concerns: consensus.concerns,
+        reject: consensus.reject
+      },
+      initial_votes: initialVotes,
+      full_debate: fullDebate,
+      synthesis: synthesisResponse.response.slice(0, 300),
+      final_votes: finalVotes,
+      risk_flags: riskFlags,
+      blind_spots: blindSpots,
+      recommendation: consensus.recommendation,
+      escalate_to_human: consensus.confidence < 70 || escalationLevel === "high"
+    };
+
+    // Store in debate log
+    await pool.query(
+      `INSERT INTO debate_log (debate_id, prompt, full_debate, consensus_result) 
+       VALUES ($1, $2, $3, $4)`,
+      [debateId, prompt, JSON.stringify(fullDebate), JSON.stringify(result)]
+    );
+
+    // Save result to memory
+    await writeMemory(debateId, result, "consensus_decisions");
+    
+    console.log(`\n✅ [CONSENSUS] Complete: ${result.position.toUpperCase()} (${result.confidence}% confidence)`);
+    
+    return result;
+  } catch (e) {
+    console.error(`❌ [CONSENSUS] Fatal error: ${e.message}`);
+    throw e;
+  }
 }
 
 // NEW ENDPOINT: Call consensus
@@ -1168,30 +1214,40 @@ app.post("/api/v1/council/consensus", requireCommandKey, async (req, res) => {
     });
   } catch (e) {
     console.error("[consensus]", e);
-    res.status(500).json({ ok: false, error: String(e) });
+    res.status(500).json({ ok: false, error: String(e), message: "Consensus debate failed" });
   }
 });
-app.post("/api/v1/council/consensus", requireCommandKey, async (req, res) => {
-  try {
-    const { action, prompt, escalation_level } = req.body;
-    
-    if (!prompt) {
-      return res.status(400).json({ ok: false, error: "prompt required" });
-    }
 
-    const result = await councilConsensusWithDebate(prompt, escalation_level || "normal");
-    
-    res.json({
-      ok: true,
-      consensus: result,
-      human_review_required: result.escalate_to_human,
-      next_step: result.escalate_to_human ? "AWAITING_HUMAN_APPROVAL" : result.position === "approve" ? "EXECUTE" : "BLOCKED"
-    });
+// Get debate history
+app.get("/api/v1/council/debates", requireCommandKey, async (req, res) => {
+  try {
+    const limit = Number(req.query.limit || 10);
+    const rows = await pool.query(
+      `SELECT debate_id, prompt, created_at FROM debate_log ORDER BY created_at DESC LIMIT $1`,
+      [limit]
+    );
+    res.json({ ok: true, count: rows.rows.length, debates: rows.rows });
   } catch (e) {
-    console.error("[consensus]", e);
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
+
+// Get single debate
+app.get("/api/v1/council/debate/:debate_id", requireCommandKey, async (req, res) => {
+  try {
+    const row = await pool.query(
+      `SELECT * FROM debate_log WHERE debate_id = $1`,
+      [req.params.debate_id]
+    );
+    if (row.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Debate not found" });
+    }
+    res.json({ ok: true, debate: row.rows[0] });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // DEBUG: Environment Variable Diagnostic
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1215,32 +1271,107 @@ async function testAPI(provider) {
       const r = await safeFetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: 'claude-3-5-sonnet-20241022', max_tokens: 10, messages: [{ role: 'user', content: testPrompt }] })
+        body: JSON.stringify({ model: 'claude-sonnet-4', max_tokens: 10, messages: [{ role: 'user', content: testPrompt }] })
       });
       result = await r.json();
       return result.content ? '✅ Working' : `❌ ${result.error?.message || 'Failed'}`;
     }
     
-    return '⚠️ Not tested';
+    if (provider === 'gemini' && process.env.GEMINI_API_KEY) {
+      const r = await safeFetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: testPrompt }] }], generationConfig: { maxOutputTokens: 10 } })
+      });
+      result = await r.json();
+      return result.candidates ? '✅ Working' : `❌ ${result.error?.message || 'Failed'}`;
+    }
+    
+    if (provider === 'grok' && process.env.GROK_API_KEY) {
+      const r = await safeFetch('https://api.x.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.GROK_API_KEY}` },
+        body: JSON.stringify({ model: 'grok-beta', messages: [{ role: 'user', content: testPrompt }], max_tokens: 10 })
+      });
+      result = await r.json();
+      return result.choices ? '✅ Working' : `❌ ${result.error?.message || 'Failed'}`;
+    }
+    
+    return '⚠️ Not configured';
   } catch (e) {
-    return `❌ ${e.message}`;
+    return `❌ ${e.message.slice(0, 30)}`;
   }
 }
 
 app.get("/api/v1/debug/env", requireCommandKey, async (req, res) => {
   const envStatus = {
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY ? `✅ Set (${process.env.OPENAI_API_KEY.slice(0, 10)}...)` : '❌ Missing',
-    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY ? `✅ Set (${process.env.ANTHROPIC_API_KEY.slice(0, 10)}...)` : '❌ Missing', 
-    GEMINI_API_KEY: process.env.GEMINI_API_KEY ? `✅ Set (${process.env.GEMINI_API_KEY.slice(0, 10)}...)` : '❌ Missing',
-    GROK_API_KEY: process.env.GROK_API_KEY ? `✅ Set (${process.env.GROK_API_KEY.slice(0, 10)}...)` : '❌ Missing',
-    // Test if keys are valid by making test calls
-    openai_test: await testAPI('openai'),
-    anthropic_test: await testAPI('anthropic'),
-    gemini_test: '⚠️ Test not implemented', // Gemini test would go here
-    grok_test: '⚠️ Test not implemented'   // Grok test would go here
+    database: DATABASE_URL ? '✅ Configured' : '❌ Missing',
+    command_key: COMMAND_CENTER_KEY ? '✅ Set' : '❌ Missing',
+    OPENAI_API_KEY: OPENAI_API_KEY ? `✅ Set (${OPENAI_API_KEY.slice(0, 10)}...)` : '❌ Missing', 
+    ANTHROPIC_API_KEY: ANTHROPIC_API_KEY ? `✅ Set (${ANTHROPIC_API_KEY.slice(0, 10)}...)` : '❌ Missing', 
+    GEMINI_API_KEY: GEMINI_API_KEY ? `✅ Set (${GEMINI_API_KEY.slice(0, 10)}...)` : '❌ Missing',
+    GROK_API_KEY: GROK_API_KEY ? `✅ Set (${GROK_API_KEY.slice(0, 10)}...)` : '❌ Missing',
+    GITHUB_TOKEN: GITHUB_TOKEN ? `✅ Set (${GITHUB_TOKEN.slice(0, 10)}...)` : '❌ Missing',
   };
   
+  // Only test if requested (adds latency)
+  if (req.query.test === 'true') {
+    envStatus.api_tests = {
+      openai: await testAPI('openai'),
+      anthropic: await testAPI('anthropic'),
+      gemini: await testAPI('gemini'),
+      grok: await testAPI('grok')
+    };
+  }
+  
   res.json({ env: envStatus });
+});
+// ─────────────────────────────────────────────────────────────────────────────
+// TEST: Memory Cycling Verification
+// ─────────────────────────────────────────────────────────────────────────────
+app.post("/api/v1/test/memory-cycle", requireCommandKey, async (req, res) => {
+  try {
+    console.log(`🧪 [TEST] Starting memory cycle test...`);
+    const { test_fact } = req.body;
+    const factToStore = test_fact || "Memory persistence verification works";
+    
+    // 1. Store test memory
+    console.log(`💾 [TEST] Storing: ${factToStore}`);
+    await writeMemory('test_memory_cycle', { text: factToStore, test: true }, 'test');
+    
+    // 2. Recall and verify
+    console.log(`🔍 [TEST] Recalling memory...`);
+    const recalled = await recallMemory({ q: 'test_memory_cycle', limit: 10 });
+    
+    // 3. Call AI with memory context
+    console.log(`🤖 [TEST] Calling Brock with memory context...`);
+    const aiResponse = await callCouncilMember('brock', 
+      'I stored a test fact. Can you recall it from memory? Then add a new MEM: line with what you learned.', 
+      false);
+    
+    // 4. Extract memory writes from AI response
+    const memWrites1 = extractMemoryFromMicroResponse(aiResponse.response);
+    const memWrites2 = extractMemoryFromMicroProtocol(aiResponse.response);
+    const allMemWrites = [...memWrites1, ...memWrites2];
+    
+    console.log(`📊 [TEST] Found ${allMemWrites.length} memory writes from AI`);
+    
+    res.json({
+      ok: true,
+      test_passed: recalled.length > 0 && allMemWrites.length > 0,
+      step_1_stored: { key: 'test_memory_cycle', value: factToStore },
+      step_2_recalled: recalled.length,
+      step_3_ai_response: aiResponse.response.slice(0, 200),
+      step_4_memory_writes_found: allMemWrites.length,
+      details: {
+        recalled_items: recalled.map(r => ({ key: r.key, category: r.category })),
+        extracted_writes: allMemWrites
+      }
+    });
+  } catch (e) {
+    console.error("[test.memory-cycle]", e);
+    res.status(500).json({ ok: false, error: String(e), message: e.message });
+  }
 });
 // ─────────────────────────────────────────────────────────────────────────────
 // Routes: Health
@@ -1252,13 +1383,14 @@ app.get("/healthz", async (_req, res) => {
     const dbCheck = await pool.query("select now()");
     const spend = readSpend();
     const mem = await pool.query("select count(*) as count from shared_memory");
+    const debates = await pool.query("select count(*) as count from debate_log");
 
     res.json({
       status: "healthy",
       database: "connected",
       timestamp: dbCheck.rows[0].now,
-      version: "v15-CLEAN-memory-aware",
-      daily_spend: spend.usd,
+      version: "v15-PRODUCTION",
+      daily_spend: spend.usd.toFixed(2),
       max_daily_spend: Number(MAX_DAILY_SPEND),
       spend_percentage: ((spend.usd / Number(MAX_DAILY_SPEND)) * 100).toFixed(1) + "%",
       ai_council: {
@@ -1272,11 +1404,16 @@ app.get("/healthz", async (_req, res) => {
         stored_memories: Number(mem.rows[0].count || 0),
         categories: MEMORY_CATEGORIES_DEFAULT
       },
+      debate_system: {
+        enabled: true,
+        total_debates: Number(debates.rows[0].count || 0)
+      },
       protection_system: {
         enabled: true,
         protected_files: PROTECTED_FILES
       },
-      stripe_status: stripeReady ? "READY" : "NOT_CONFIGURED"
+      stripe_status: stripeReady ? "READY" : "NOT_CONFIGURED",
+      ai_call_timeout: `${AI_CALL_TIMEOUT}ms`
     });
   } catch (e) {
     res.status(500).json({ status: "unhealthy", error: String(e) });
@@ -1305,15 +1442,17 @@ app.get("/overlay/command-center.html", (_req, res) => {
     button { padding: 10px 16px; border-radius: 6px; border: 1px solid #00ff88; background: transparent; color: #00ff88; cursor: pointer; font-weight: bold; transition: all 0.2s; }
     button:hover { background: #00ff88; color: #0a0e27; }
     .row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
-    pre { background: #0a0e27; padding: 12px; overflow: auto; border-radius: 6px; border: 1px solid #1e2749; max-height: 300px; font-size: 11px; color: #00ff88; }
+    pre { background: #0a0e27; padding: 12px; overflow: auto; border-radius: 6px; border: 1px solid #1e2749; max-height: 400px; font-size: 11px; color: #00ff88; }
     .small { font-size: 12px; color: #666; }
     .section-break { margin: 32px 0; border-bottom: 1px solid #1e2749; padding-bottom: 16px; }
+    .status-ok { color: #00ff88; }
+    .status-warn { color: #ffaa00; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🚀 LifeOS Command & Control</h1>
-    <div class="subtitle">AI Council Memory-Aware System | v15-CLEAN</div>
+    <div class="subtitle">AI Council Memory-Aware System | v15-PRODUCTION</div>
 
     <div class="card">
       <h3>🔑 Authentication</h3>
@@ -1326,17 +1465,26 @@ app.get("/overlay/command-center.html", (_req, res) => {
     <div class="section-break"></div>
 
     <div class="card">
-      <h3>💬 Ask Council (MICRO)</h3>
+      <h3>🎯 Council Consensus (Full Debate)</h3>
+      <div style="color: #666; font-size: 12px; margin-bottom: 8px;">Pro/Con/Blind-spot debate with full council vote</div>
+      <textarea id="consensusPrompt" rows="3" placeholder="Should we implement Stripe integration?"></textarea>
+      <input id="escalationLevel" placeholder="Escalation level: normal or high" value="normal" />
+      <button onclick="callConsensus()">🎤 Start Council Debate</button>
+      <pre id="consensusOut" style="margin-top: 12px;"></pre>
+    </div>
+
+    <div class="card">
+      <h3>💬 Quick MICRO Query (Brock)</h3>
       <div style="color: #666; font-size: 12px; margin-bottom: 8px;">Format: V:2.0|OP:G|D:Your~request|T:A|R:~CT~KP</div>
-      <textarea id="micro" rows="4" placeholder="V:2.0|OP:G|D:Create~a~status~update|T:A|R:~CT~KP"></textarea>
-      <button onclick="askCouncil()">🤖 Ask Brock (Council Member)</button>
+      <textarea id="micro" rows="4" placeholder="V:2.0|OP:G|D:Create~status~report|T:A|R:~CT~KP"></textarea>
+      <button onclick="askCouncil()">🤖 Ask Brock</button>
       <pre id="microOut" style="margin-top: 12px;"></pre>
     </div>
 
     <div class="card">
       <h3>🧠 Memory Search</h3>
       <div class="row">
-        <input id="memQ" placeholder="Search across persistent memory..." />
+        <input id="memQ" placeholder="Search persistent memory..." />
         <button onclick="searchMem()" style="width: auto;">Search</button>
       </div>
       <pre id="memOut" style="margin-top: 12px;"></pre>
@@ -1344,11 +1492,17 @@ app.get("/overlay/command-center.html", (_req, res) => {
 
     <div class="card">
       <h3>💾 Store Memory</h3>
-      <input id="memKey" placeholder="Memory key (e.g., global_rule__tone)" />
-      <textarea id="memValue" rows="3" placeholder="Memory value (e.g., Be concrete and complete)"></textarea>
-      <input id="memCategory" placeholder="Category (e.g., global_rules)" value="ai_learned" />
+      <input id="memKey" placeholder="Memory key (e.g., rule__tone)" />
+      <textarea id="memValue" rows="3" placeholder="Memory value"></textarea>
+      <input id="memCategory" placeholder="Category" value="learned" />
       <button onclick="storeMemory()">💾 Save to Memory</button>
       <pre id="memStoreOut" style="margin-top: 12px;"></pre>
+    </div>
+
+    <div class="card">
+      <h3>📋 Debate History</h3>
+      <button onclick="listDebates()">📊 Load Recent Debates</button>
+      <pre id="debatesOut" style="margin-top: 12px;"></pre>
     </div>
 
     <div class="card">
@@ -1359,6 +1513,26 @@ app.get("/overlay/command-center.html", (_req, res) => {
   </div>
 
   <script>
+    async function callConsensus() {
+      const key = document.getElementById('key').value.trim();
+      const prompt = document.getElementById('consensusPrompt').value;
+      const escalation_level = document.getElementById('escalationLevel').value || 'normal';
+      if (!key || !prompt) { alert('Key and prompt required'); return; }
+      
+      document.getElementById('consensusOut').textContent = '⏳ Starting council debate... (this may take 2-3 minutes)';
+      try {
+        const r = await fetch(\`/api/v1/council/consensus\`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-command-key': key },
+          body: JSON.stringify({ prompt, escalation_level })
+        });
+        const data = await r.json();
+        document.getElementById('consensusOut').textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('consensusOut').textContent = 'Error: ' + String(e);
+      }
+    }
+
     async function askCouncil() {
       const key = document.getElementById('key').value.trim();
       const micro = document.getElementById('micro').value;
@@ -1416,6 +1590,22 @@ app.get("/overlay/command-center.html", (_req, res) => {
       }
     }
 
+    async function listDebates() {
+      const key = document.getElementById('key').value.trim();
+      if (!key) { alert('Key required'); return; }
+      
+      document.getElementById('debatesOut').textContent = 'Loading...';
+      try {
+        const r = await fetch(\`/api/v1/council/debates\`, {
+          headers: { 'x-command-key': key }
+        });
+        const data = await r.json();
+        document.getElementById('debatesOut').textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('debatesOut').textContent = 'Error: ' + String(e);
+      }
+    }
+
     async function checkHealth() {
       document.getElementById('healthOut').textContent = 'Checking...';
       try {
@@ -1435,12 +1625,16 @@ app.get("/overlay/command-center.html", (_req, res) => {
 // Start server
 // ─────────────────────────────────────────────────────────────────────────────
 app.listen(PORT, HOST, () => {
-  console.log(`\n✅ LifeOS v15-CLEAN started on http://${HOST}:${PORT}`);
+  console.log(`\n✅ LifeOS v15-PRODUCTION started on http://${HOST}:${PORT}`);
   console.log(`✅ Command Center: http://${HOST}:${PORT}/overlay/command-center.html?key=YOUR_KEY`);
   console.log(`✅ Health: http://${HOST}:${PORT}/healthz`);
-  console.log(`✅ AI Council: ${Object.keys(COUNCIL_MEMBERS).length} models (memory-aware)`);
-  console.log(`✅ Memory System: ACTIVE (continuous read/write)`);
+  console.log(`✅ AI Council: ${Object.keys(COUNCIL_MEMBERS).length} models (memory-aware + persistent)`);
+  console.log(`✅ Memory System: ACTIVE (auto-extraction from AI responses)`);
+  console.log(`✅ Debate System: ACTIVE (Pro/Con/Blind-spots with full council consensus)`);
   console.log(`✅ Protection: ${PROTECTED_FILES.length} protected files`);
   console.log(`✅ Stripe: ${stripeReady ? 'READY' : 'standby'}`);
-  console.log(`\n🎯 Next: Seed memory and use command center to drive the system\n`);
+  console.log(`✅ Timeouts: ${AI_CALL_TIMEOUT}ms per AI call`);
+  console.log(`\n🎯 Consensus: /api/v1/council/consensus (POST)`);
+  console.log(`🎯 Debates: /api/v1/council/debates (GET)`);
+  console.log(`\n✨ All features operational. Ready to execute.\n`);
 });
