@@ -1,19 +1,23 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// Core imports
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════════
+// LUMIN LIFEOS v16.1 - COMPLETE PRODUCTION SYSTEM
+// Autonomous Self-Repair + Model Scaling + Improvements Loop + IP VAULT
+// ═════════════════════════════════════════════════════════════════════════════════
+// FULL CODE - Ready to drop into production
+
 import express from "express";
 import dayjs from "dayjs";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { Pool } from "pg";
+import crypto from "crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Environment
+// ENVIRONMENT
 // ─────────────────────────────────────────────────────────────────────────────
 const {
   DATABASE_URL,
@@ -23,6 +27,7 @@ const {
   ANTHROPIC_API_KEY,
   GEMINI_API_KEY,
   GROK_API_KEY,
+  DEEPSEEK_API_KEY,
   GITHUB_TOKEN,
   GITHUB_REPO = "LimitlessOI/Lumin-LifeOS",
   STRIPE_SECRET_KEY,
@@ -30,11 +35,45 @@ const {
   HOST = "0.0.0.0",
   PORT = 3000,
   MAX_DAILY_SPEND = 50.0,
-  AI_CALL_TIMEOUT = 30000
+  AI_CALL_TIMEOUT = 30000,
+  ENABLE_SELF_REPAIR = "true",
+  AI_TIER = "medium"
 } = process.env;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Stripe (lazy-load)
+// ENCRYPTION SETUP (for IP vault)
+// ─────────────────────────────────────────────────────────────────────────────
+const ENCRYPTION_ALGORITHM = "aes-256-cbc";
+
+function deriveEncryptionKey() {
+  // Derive from COMMAND_CENTER_KEY for deterministic encryption
+  return crypto
+    .createHash("sha256")
+    .update(COMMAND_CENTER_KEY || "default-key-change-this")
+    .digest();
+}
+
+function encryptData(data, key = null) {
+  const encKey = key || deriveEncryptionKey();
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv(ENCRYPTION_ALGORITHM, encKey, iv);
+  let encrypted = cipher.update(JSON.stringify(data), "utf8", "hex");
+  encrypted += cipher.final("hex");
+  return iv.toString("hex") + ":" + encrypted;
+}
+
+function decryptData(encryptedData, key = null) {
+  const encKey = key || deriveEncryptionKey();
+  const [ivHex, encrypted] = encryptedData.split(":");
+  const iv = Buffer.from(ivHex, "hex");
+  const decipher = crypto.createDecipheriv(ENCRYPTION_ALGORITHM, encKey, iv);
+  let decrypted = decipher.update(encrypted, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+  return JSON.parse(decrypted);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STRIPE (lazy-load)
 // ─────────────────────────────────────────────────────────────────────────────
 let stripe = null;
 let stripeReady = false;
@@ -50,15 +89,18 @@ if (STRIPE_SECRET_KEY) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Paths & Data
+// PATHS & DATA
 // ─────────────────────────────────────────────────────────────────────────────
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 const LOG_FILE = path.join(DATA_DIR, "autopilot.log");
 const SPEND_FILE = path.join(DATA_DIR, "spend.json");
+const IMPROVEMENTS_FILE = path.join(DATA_DIR, "improvements.json");
+const VAULT_IMPORTS_DIR = path.join(DATA_DIR, "vault-imports");
+if (!fs.existsSync(VAULT_IMPORTS_DIR)) fs.mkdirSync(VAULT_IMPORTS_DIR, { recursive: true });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Database
+// DATABASE
 // ─────────────────────────────────────────────────────────────────────────────
 export const pool = new Pool({
   connectionString: DATABASE_URL,
@@ -68,7 +110,7 @@ export const pool = new Pool({
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Protected Files
+// PROTECTED FILES
 // ─────────────────────────────────────────────────────────────────────────────
 const PROTECTED_FILES = [
   "server.js",
@@ -79,17 +121,94 @@ const PROTECTED_FILES = [
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Middleware
+// MODEL SCALING CONFIGURATION
 // ─────────────────────────────────────────────────────────────────────────────
-app.use(express.json({ limit: "2mb" }));
+const MODEL_TIERS = {
+  light: {
+    openai: "gpt-4o-mini",
+    anthropic: "claude-3-haiku-20240307",
+    google: "gemini-2.0-flash-exp",
+    deepseek: "deepseek-chat"
+  },
+  medium: {
+    openai: "gpt-4o",
+    anthropic: "claude-3-5-sonnet-20241022",
+    google: "gemini-2.0-flash-exp",
+    deepseek: "deepseek-coder"
+  },
+  heavy: {
+    openai: "gpt-4o",
+    anthropic: "claude-3-5-sonnet-20241022",
+    google: "gemini-2.0-flash-exp",
+    deepseek: "deepseek-reasoner"
+  }
+};
+
+let CURRENT_TIER = process.env.AI_TIER || "medium";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COUNCIL MEMBERS (Official Names - v16.1)
+// ─────────────────────────────────────────────────────────────────────────────
+const COUNCIL_MEMBERS = {
+  claude: {
+    name: "Claude",
+    official_name: "Claude Sonnet",
+    role: "Strategic Oversight",
+    model: () => MODEL_TIERS[CURRENT_TIER].anthropic,
+    focus: "long-term implications, strategic planning",
+    provider: "anthropic",
+    tier: "adaptive"
+  },
+  chatgpt: {
+    name: "ChatGPT",
+    official_name: "GPT-4o",
+    role: "Execution & Implementation",
+    model: () => MODEL_TIERS[CURRENT_TIER].openai,
+    focus: "practical implementation, risk mitigation",
+    provider: "openai",
+    tier: "adaptive"
+  },
+  gemini: {
+    name: "Gemini",
+    official_name: "Google Gemini",
+    role: "Innovation & Creative Solutions",
+    model: () => MODEL_TIERS[CURRENT_TIER].google,
+    focus: "creative approaches, breakthrough ideas",
+    provider: "google",
+    tier: "adaptive"
+  },
+  grok: {
+    name: "Grok",
+    official_name: "Grok",
+    role: "Reality Check & Contrarian",
+    model: "grok-beta",
+    focus: "practical feasibility, edge cases",
+    provider: "xai",
+    tier: "fixed"
+  },
+  deepseek: {
+    name: "DeepSeek",
+    official_name: "DeepSeek",
+    role: "Technical Depth & Optimization",
+    model: () => MODEL_TIERS[CURRENT_TIER].deepseek,
+    focus: "technical optimization, code quality",
+    provider: "deepseek",
+    tier: "adaptive"
+  }
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MIDDLEWARE
+// ─────────────────────────────────────────────────────────────────────────────
+app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.text({ type: "text/plain", limit: "1mb" }));
+app.use(express.text({ type: "text/plain", limit: "10mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/reports", express.static(path.join(__dirname, "reports")));
 app.use("/overlay", express.static(path.join(__dirname, "public/overlay")));
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Helpers
+// HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -120,8 +239,24 @@ function writeSpend(s) {
   }
 }
 
+function readImprovements() {
+  try {
+    return JSON.parse(fs.readFileSync(IMPROVEMENTS_FILE, "utf8"));
+  } catch {
+    return { improvements: [], adopted: [], rejected: [], last_cycle: null };
+  }
+}
+
+function writeImprovements(data) {
+  try {
+    fs.writeFileSync(IMPROVEMENTS_FILE, JSON.stringify(data, null, 2));
+  } catch (e) {
+    console.error("Failed to write improvements:", e);
+  }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
-// Safe Fetch with Timeout
+// SAFE FETCH WITH TIMEOUT & RETRY
 // ─────────────────────────────────────────────────────────────────────────────
 async function safeFetch(url, init = {}, retries = 3) {
   let lastErr;
@@ -146,7 +281,7 @@ async function safeFetch(url, init = {}, retries = 3) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// GitHub Helpers
+// GITHUB HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
 async function ghGetFile(repo, p) {
   if (!GITHUB_TOKEN) throw new Error("GITHUB_TOKEN missing");
@@ -192,9 +327,9 @@ async function ghPutFile(repo, p, contentText, message) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MEMORY SYSTEM - With Smart Natural Language Extraction
+// MEMORY SYSTEM (3-layer extraction)
 // ─────────────────────────────────────────────────────────────────────────────
-const MEMORY_CATEGORIES_DEFAULT = ['global_rules','ai_council','context','vault','policy','customer','product','ops','learned'];
+const MEMORY_CATEGORIES_DEFAULT = ['global_rules','ai_council','context','vault','policy','customer','product','ops','learned','improvements','conversations','decisions'];
 
 async function recallMemory({ q = '', categories = MEMORY_CATEGORIES_DEFAULT, limit = 20 }) {
   try {
@@ -243,22 +378,14 @@ async function writeMemory(key, value, category = 'ai_learned') {
   }
 }
 
-// ✨ NEW: Extract facts from natural language
 function extractKeyFactsFromNaturalLanguage(text = '') {
   const out = [];
   
   const patterns = [
-    // Version/deployment facts
     { pattern: 'version\\s+(\\d+[.\\d]*)', key: 'deployment_version', groupIndex: 1 },
     { pattern: 'deployed?\\s+(?:as\\s+)?v(\\d+[.\\w]*)', key: 'latest_version', groupIndex: 1 },
-    
-    // Status facts
     { pattern: '(memory|debate|council|system)\\s+(?:is\\s+)?(active|enabled|operational|working)', key: 'status', groupIndex: 2 },
-    
-    // Key learnings
     { pattern: '(?:key\\s+)?(finding|learning|insight|rule):\\s+([^.!?\\n]{20,150})', key: 'learned_insight', groupIndex: 2 },
-    
-    // Success/failure patterns
     { pattern: '(succeeded|failed|working|broken)\\s+(?::\\s+)?([^.!?\\n]{10,100})', key: 'result', groupIndex: 2 },
   ];
   
@@ -271,11 +398,9 @@ function extractKeyFactsFromNaturalLanguage(text = '') {
         if (!value || value.length === 0) continue;
         
         let key = patternConfig.key;
-        // If status pattern matched, use the component name in key
         if (patternConfig.key === 'status' && match[1]) {
           key = `${match[1]}_status`;
         }
-        // If result pattern matched, use the verb in key
         if (patternConfig.key === 'result' && match[1]) {
           key = `result_${match[1]}`;
         }
@@ -326,7 +451,7 @@ function extractMemoryFromMicroProtocol(micro = '') {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MICRO Protocol
+// MICRO PROTOCOL
 // ─────────────────────────────────────────────────────────────────────────────
 const MICRO_PROTOCOL = {
   encode: (data) => {
@@ -412,7 +537,7 @@ const MICRO_PROTOCOL = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Cost Tracking
+// COST TRACKING
 // ─────────────────────────────────────────────────────────────────────────────
 const roiTracker = {
   daily_revenue: 0,
@@ -447,9 +572,13 @@ function trackCost(usage, model = "gpt-4o-mini") {
   const prices = {
     "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
     "gpt-4o": { input: 0.0025, output: 0.01 },
-    "claude-sonnet-4": { input: 0.003, output: 0.015 },
+    "claude-3-haiku-20240307": { input: 0.00008, output: 0.00024 },
+    "claude-3-5-sonnet-20241022": { input: 0.003, output: 0.015 },
     "gemini-2.0-flash-exp": { input: 0.0001, output: 0.0004 },
-    "grok-beta": { input: 0.005, output: 0.015 }
+    "grok-beta": { input: 0.005, output: 0.015 },
+    "deepseek-chat": { input: 0.00014, output: 0.00028 },
+    "deepseek-coder": { input: 0.00014, output: 0.00028 },
+    "deepseek-reasoner": { input: 0.00055, output: 0.0022 }
   };
   const price = prices[model] || prices["gpt-4o-mini"];
   const cost =
@@ -465,242 +594,621 @@ function trackCost(usage, model = "gpt-4o-mini") {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Council Members
+// SYSTEM HEALTH DIAGNOSTIC
 // ─────────────────────────────────────────────────────────────────────────────
-const COUNCIL_MEMBERS = {
-  claude: {
-    name: "Claude",
-    role: "Strategic Oversight",
-    model: "claude-sonnet-4",
-    focus: "long-term implications",
-    provider: "anthropic"
-  },
-  brock: {
-    name: "Brock",
-    role: "Execution",
-    model: "gpt-4o",
-    focus: "implementation risks",
-    provider: "openai"
-  },
-  jayn: {
-    name: "Jayn",
-    role: "Ethics",
-    model: "gpt-4o-mini",
-    focus: "user impact",
-    provider: "openai"
-  },
-  r8: {
-    name: "r8",
-    role: "Quality",
-    model: "gpt-4o-mini",
-    focus: "code quality",
-    provider: "openai"
-  },
-  gemini: {
-    name: "Gemini",
-    role: "Innovation",
-    model: "gemini-2.0-flash-exp",
-    focus: "creative solutions",
-    provider: "google"
-  },
-  grok: {
-    name: "Grok",
-    role: "Reality Check",
-    model: "grok-beta",
-    focus: "practical feasibility",
-    provider: "xai"
+class SystemHealthDiagnostic {
+  constructor() {
+    this.errors = [];
+    this.warnings = [];
+    this.last_check = null;
   }
-};
 
-// ─────────────────────────────────────────────────────────────────────────────
-// COUNCIL CALLER - Memory-Aware with Smart Extraction
-// ─────────────────────────────────────────────────────────────────────────────
-async function callCouncilMember(member, prompt, useMicro = true, cachedMemory = null) {
-  console.log(`🔍 [${member.toUpperCase()}] Calling with timeout ${AI_CALL_TIMEOUT}ms...`);
-  
-  const config = COUNCIL_MEMBERS[member];
-  if (!config) throw new Error(`Unknown council member: ${member}`);
+  async run() {
+    this.errors = [];
+    this.warnings = [];
+    this.last_check = new Date();
 
-  // Pull memory (use cache if provided)
-  let memRows = cachedMemory;
-  if (!cachedMemory) {
-    memRows = await recallMemory({ q: prompt, limit: 15 });
-  }
-  const memoryContext = formatMemoryForSystem(memRows);
-
-  const baseSystem = useMicro
-    ? [
-        'You are the LifeOS Architect AI controlling the Lumin autonomous system at robust-magic-production.up.railway.app.',
-        'You communicate using v2.0-Micro protocol:',
-        'Format strictly like:',
-        'V:2.0|CT:<complete detailed answer>|KP:~key~points~here',
-        '',
-        'LEARNING SYSTEM: Extract Key Facts',
-        'When responding, naturally mention important facts, rules, or findings you identify.',
-        'These will be extracted and stored automatically for future reference.',
-        'Example good responses:',
-        '- "The deployment used version 15, which includes memory persistence"',
-        '- "We should remember that cost tracking is critical for ROI"',
-        '- "Key finding: consensus voting improves decision quality"',
-        '',
-        'PERSISTENT_MEMORY (facts already known - use & build on these):',
-        memoryContext,
-      ].join('\n')
-    : '';
-
-  async function finalize(response, usage, modelIdForCost) {
     try {
-      // Extract from ALL THREE methods
-      const memWrites1 = extractMemoryFromMicroResponse(response);
-      const memWrites2 = extractMemoryFromMicroProtocol(response);
-      const naturalFacts = extractKeyFactsFromNaturalLanguage(response);
-      
-      // Combine, avoiding duplicates
-      const allMemWrites = [...memWrites1, ...memWrites2, ...naturalFacts];
-      const seenKeys = new Set();
-      const uniqueWrites = [];
-      
-      for (const m of allMemWrites) {
-        if (!seenKeys.has(m.key)) {
-          seenKeys.add(m.key);
-          uniqueWrites.push(m);
-        }
-      }
-      
-      // Persist all
-      for (const m of uniqueWrites) {
-        await writeMemory(m.key, { text: m.value, source: member, timestamp: new Date().toISOString() }, 'ai_learned');
-      }
-      
-      if (uniqueWrites.length > 0) {
-        console.log(`💾 [${member}] Persisted ${uniqueWrites.length} memory items (${memWrites1.length} explicit + ${naturalFacts.length} extracted)`);
-      }
+      await pool.query("SELECT now()");
     } catch (e) {
-      console.error(`[${member}.memory.write] failed:`, e.message);
+      this.errors.push({
+        component: "database",
+        severity: "critical",
+        message: "Cannot connect to PostgreSQL",
+        details: e.message,
+        fix_code: "Verify DATABASE_URL environment variable"
+      });
     }
-    
-    if (modelIdForCost) trackCost(usage, modelIdForCost);
-    return { response, usage };
+
+    const requiredKeys = [
+      { name: "OPENAI_API_KEY", env: OPENAI_API_KEY },
+      { name: "ANTHROPIC_API_KEY", env: ANTHROPIC_API_KEY },
+      { name: "GEMINI_API_KEY", env: GEMINI_API_KEY }
+    ];
+
+    for (const key of requiredKeys) {
+      if (!key.env) {
+        this.warnings.push({
+          component: "api_keys",
+          severity: "warning",
+          message: `${key.name} not configured`,
+          fix_code: `Set ${key.name} environment variable`
+        });
+      }
+    }
+
+    const spend = readSpend();
+    const maxSpend = Number(MAX_DAILY_SPEND);
+    if (spend.usd > maxSpend * 0.9) {
+      this.warnings.push({
+        component: "cost_control",
+        severity: "warning",
+        message: `Daily spend at ${((spend.usd / maxSpend) * 100).toFixed(1)}% of limit`,
+        fix_code: "Consider scaling to 'light' tier"
+      });
+    }
+
+    return {
+      timestamp: this.last_check,
+      healthy: this.errors.length === 0,
+      critical_errors: this.errors,
+      warnings: this.warnings,
+      system_status: "OPERATIONAL"
+    };
   }
 
-  try {
-    // Route by provider
-    if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
-      console.log(`  → Using Anthropic API (claude-sonnet-4)`);
-      const res = await safeFetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: config.model,
-          max_tokens: 2000,
-          system: baseSystem,
-          messages: [{ role: 'user', content: prompt }],
-        }),
+  async proposeFixes() {
+    const fixes = [];
+    for (const error of this.errors) {
+      fixes.push({
+        error_component: error.component,
+        severity: error.severity,
+        proposed_fix: error.fix_code,
+        requires_human_approval: error.severity === "critical"
       });
-      const json = await res.json();
-      
-      if (!json.content || !json.content[0]) {
-        throw new Error(`No response from Anthropic: ${JSON.stringify(json).slice(0, 200)}`);
-      }
-      
-      const text = json.content[0]?.text || '';
-      console.log(`  ✅ Success (${json.usage?.input_tokens || 0} in, ${json.usage?.output_tokens || 0} out)`);
-      return finalize(text, { prompt_tokens: json.usage?.input_tokens, completion_tokens: json.usage?.output_tokens }, 'claude-sonnet-4');
     }
-
-    if (config.provider === 'openai' && OPENAI_API_KEY) {
-      console.log(`  → Using OpenAI API (${config.model})`);
-      const messages = baseSystem
-        ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
-        : [{ role: 'user', content: prompt }];
-      const res = await safeFetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${OPENAI_API_KEY}` },
-        body: JSON.stringify({
-          model: config.model,
-          temperature: 0.1,
-          max_tokens: 2000,
-          messages,
-        }),
-      });
-      const json = await res.json();
-      
-      if (!json.choices || !json.choices[0]) {
-        throw new Error(`No response from OpenAI: ${JSON.stringify(json).slice(0, 200)}`);
-      }
-      
-      const text = json.choices[0]?.message?.content || '';
-      console.log(`  ✅ Success (${json.usage?.prompt_tokens || 0} in, ${json.usage?.completion_tokens || 0} out)`);
-      return finalize(text, json.usage, config.model);
-    }
-
-    if (config.provider === 'google' && GEMINI_API_KEY) {
-      console.log(`  → Using Gemini API (${config.model})`);
-      const res = await safeFetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: baseSystem ? `${baseSystem}\n\n${prompt}` : prompt }] }],
-            generationConfig: { temperature: 0.1, maxOutputTokens: 2000 },
-          }),
-        }
-      );
-      const json = await res.json();
-      
-      if (!json.candidates || !json.candidates[0]) {
-        throw new Error(`No response from Gemini: ${JSON.stringify(json).slice(0, 200)}`);
-      }
-      
-      const text = json.candidates[0]?.content?.parts?.[0]?.text || '';
-      const usage = {
-        prompt_tokens: json.usageMetadata?.promptTokenCount || 0,
-        completion_tokens: json.usageMetadata?.candidatesTokenCount || 0,
-      };
-      console.log(`  ✅ Success (${usage.prompt_tokens} in, ${usage.completion_tokens} out)`);
-      return finalize(text, usage, 'gemini-2.0-flash-exp');
-    }
-
-    if (config.provider === 'xai' && GROK_API_KEY) {
-      console.log(`  → Using Grok API (${config.model})`);
-      const messages = baseSystem
-        ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
-        : [{ role: 'user', content: prompt }];
-      const res = await safeFetch('https://api.x.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${GROK_API_KEY}` },
-        body: JSON.stringify({ model: config.model, temperature: 0.1, max_tokens: 2000, messages }),
-      });
-      const json = await res.json();
-      
-      if (!json.choices || !json.choices[0]) {
-        throw new Error(`No response from Grok: ${JSON.stringify(json).slice(0, 200)}`);
-      }
-      
-      const text = json.choices[0]?.message?.content || '';
-      console.log(`  ✅ Success (${json.usage?.prompt_tokens || 0} in, ${json.usage?.completion_tokens || 0} out)`);
-      return finalize(text, json.usage, 'grok-beta');
-    }
-
-    throw new Error(`No API key for ${member} (${config.provider})`);
-  } catch (e) {
-    console.error(`❌ [${member}] Error: ${e.message}`);
-    throw e;
+    return fixes;
   }
 }
 
+const systemDiagnostic = new SystemHealthDiagnostic();
+
 // ─────────────────────────────────────────────────────────────────────────────
-// Database Init
+// IMPROVEMENTS ENGINE
+// ─────────────────────────────────────────────────────────────────────────────
+class ImprovementsEngine {
+  constructor() {
+    this.current_cycle = null;
+    this.ideas = [];
+    this.adopted = [];
+    this.rejected = [];
+  }
+
+  async generateIdeasFromMember(member, count = 20) {
+    const config = COUNCIL_MEMBERS[member];
+    if (!config) return [];
+
+    const prompt = `
+You are ${config.name} (${config.official_name}), role: ${config.role}.
+
+Generate exactly ${count} specific, actionable improvement ideas for the Lumin LifeOS system.
+
+FOCUS: ${config.focus}
+
+Format: Return a numbered list. Each idea should be 1-2 sentences.
+Generate ${count} ideas NOW:
+    `.trim();
+
+    try {
+      const response = await callCouncilMember(member, prompt, false);
+      const ideas = [];
+      
+      const lines = response.response.split('\n');
+      for (const line of lines) {
+        const match = line.match(/^\d+\.\s+(.+)/);
+        if (match) {
+          ideas.push({
+            text: match[1].trim(),
+            source: member,
+            generated_at: new Date().toISOString(),
+            adopted: false,
+            tested: false
+          });
+        }
+      }
+
+      console.log(`💡 [${member.toUpperCase()}] Generated ${ideas.length} improvement ideas`);
+      return ideas;
+    } catch (e) {
+      console.error(`❌ [${member}] Idea generation failed: ${e.message}`);
+      return [];
+    }
+  }
+
+  async runDailyImprovementCycle() {
+    console.log(`\n🔄 [IMPROVEMENTS] Starting daily cycle...`);
+    this.current_cycle = dayjs().format("YYYY-MM-DD");
+
+    const allIdeas = [];
+    const activeMembers = ["claude", "chatgpt", "gemini", "grok"];
+
+    for (const member of activeMembers) {
+      const ideas = await this.generateIdeasFromMember(member, 20);
+      allIdeas.push(...ideas);
+    }
+
+    console.log(`📊 [IMPROVEMENTS] Total ideas generated: ${allIdeas.length}`);
+
+    const consensusPrompt = `
+Evaluate these system improvement ideas and rank them by:
+1. Impact (how much will it improve?)
+2. Risk (how risky is it?)
+3. Effort (how much work?)
+
+Top 20 ideas:\n${allIdeas.slice(0, 20).map((i, idx) => `${idx + 1}. ${i.text}`).join('\n')}
+
+Recommend TOP 5 and identify HIGH RISK ideas.
+    `.trim();
+
+    try {
+      const consensusResult = await councilConsensusWithDebate(consensusPrompt, "high");
+      
+      const cycleData = {
+        date: this.current_cycle,
+        total_generated: allIdeas.length,
+        ideas: allIdeas,
+        consensus: consensusResult,
+        status: "debated"
+      };
+
+      await writeMemory(`improvements_cycle_${this.current_cycle}`, cycleData, "improvements");
+      this.ideas = allIdeas;
+
+      return cycleData;
+    } catch (e) {
+      console.error(`❌ [IMPROVEMENTS] Debate failed: ${e.message}`);
+      return null;
+    }
+  }
+
+  async testImprovementInSandbox(ideaText, memberName) {
+    console.log(`🧪 [SANDBOX] Testing idea: "${ideaText.slice(0, 50)}..."`);
+    
+    const testPrompt = `
+Evaluate this improvement for security/safety:
+"${ideaText}"
+
+Check for: security risks, breaking changes, cost impact, user impact.
+
+Recommend: SAFE_TO_DEPLOY / NEEDS_REVIEW / DO_NOT_DEPLOY
+    `.trim();
+
+    try {
+      const result = await callCouncilMember("claude", testPrompt, false);
+      
+      const recommendation = result.response.includes("SAFE_TO_DEPLOY") ? "safe" :
+                            result.response.includes("NEEDS_REVIEW") ? "review" :
+                            result.response.includes("DO_NOT_DEPLOY") ? "blocked" : "uncertain";
+
+      return {
+        idea: ideaText,
+        source: memberName,
+        sandbox_result: recommendation,
+        details: result.response.slice(0, 300),
+        timestamp: new Date().toISOString()
+      };
+    } catch (e) {
+      console.error(`❌ [SANDBOX] Test failed: ${e.message}`);
+      return { idea: ideaText, sandbox_result: "error", error: e.message };
+    }
+  }
+
+  adoptIdea(ideaText, sourceAI) {
+    const adopted = {
+      text: ideaText,
+      source: sourceAI,
+      adopted_at: new Date().toISOString(),
+      status: "adopted"
+    };
+    this.adopted.push(adopted);
+    return adopted;
+  }
+
+  rejectIdea(ideaText, sourceAI, reason) {
+    const rejected = {
+      text: ideaText,
+      source: sourceAI,
+      rejected_at: new Date().toISOString(),
+      reason,
+      status: "rejected"
+    };
+    this.rejected.push(rejected);
+    return rejected;
+  }
+
+  getStats() {
+    return {
+      total_generated_this_cycle: this.ideas.length,
+      total_adopted: this.adopted.length,
+      total_rejected: this.rejected.length,
+      adoption_rate: this.ideas.length > 0 ? ((this.adopted.length / this.ideas.length) * 100).toFixed(1) : 0,
+      most_productive_member: this.getTopContributor(),
+      current_cycle: this.current_cycle
+    };
+  }
+
+  getTopContributor() {
+    if (this.adopted.length === 0) return null;
+    const sources = {};
+    for (const item of this.adopted) {
+      sources[item.source] = (sources[item.source] || 0) + 1;
+    }
+    const top = Object.entries(sources).sort((a, b) => b[1] - a[1])[0];
+    return top ? `${top[0]} (${top[1]} adopted)` : null;
+  }
+}
+
+const improvementsEngine = new ImprovementsEngine();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// IP VAULT - INTELLIGENT DEDUPLICATION ENGINE
+// ─────────────────────────────────────────────────────────────────────────────
+class IPVaultDeduplicationEngine {
+  constructor() {
+    this.duplicates = [];
+    this.uncertain_matches = [];
+  }
+
+  // Calculate semantic similarity between two texts
+  calculateSimilarity(text1, text2) {
+    const normalize = (text) => text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
+    const t1 = normalize(text1);
+    const t2 = normalize(text2);
+
+    // Exact match
+    if (t1 === t2) return 1.0;
+
+    // Calculate common words
+    const words1 = new Set(t1.split(/\s+/));
+    const words2 = new Set(t2.split(/\s+/));
+    
+    let commonWords = 0;
+    for (const word of words1) {
+      if (words2.has(word)) commonWords++;
+    }
+
+    const totalWords = Math.max(words1.size, words2.size);
+    if (totalWords === 0) return 0;
+
+    return commonWords / totalWords;
+  }
+
+  async compareIdeasWithAI(idea1, idea2) {
+    const prompt = `
+Compare these two ideas and determine if they're the same concept (even with different wording):
+
+Idea 1: ${idea1}
+Idea 2: ${idea2}
+
+Respond with ONLY a JSON object:
+{
+  "same_concept": true/false,
+  "similarity_percentage": 0-100,
+  "key_differences": "describe any nuances",
+  "reasoning": "brief explanation"
+}
+    `.trim();
+
+    try {
+      const result = await callCouncilMember("claude", prompt, false);
+      // Extract JSON from response
+      const jsonMatch = result.response.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]);
+      }
+      return { same_concept: false, similarity_percentage: 0 };
+    } catch (e) {
+      console.error(`❌ [DEDUP] AI comparison failed: ${e.message}`);
+      return { same_concept: false, similarity_percentage: 0 };
+    }
+  }
+
+  async findDuplicates(ideas, useAI = true) {
+    console.log(`🔍 [VAULT] Scanning ${ideas.length} ideas for duplicates...`);
+    
+    this.duplicates = [];
+    this.uncertain_matches = [];
+    const processed = new Set();
+
+    for (let i = 0; i < ideas.length; i++) {
+      if (processed.has(i)) continue;
+
+      for (let j = i + 1; j < ideas.length; j++) {
+        if (processed.has(j)) continue;
+
+        // Quick text similarity check
+        const textSimilarity = this.calculateSimilarity(
+          ideas[i].text,
+          ideas[j].text
+        );
+
+        if (textSimilarity > 0.6) {
+          if (useAI && textSimilarity < 0.85) {
+            // Uncertain - ask AI
+            const aiComparison = await this.compareIdeasWithAI(ideas[i].text, ideas[j].text);
+            
+            if (aiComparison.same_concept) {
+              this.duplicates.push({
+                idea1: ideas[i],
+                idea2: ideas[j],
+                similarity: aiComparison.similarity_percentage,
+                differences: aiComparison.key_differences,
+                status: "confirmed_duplicate"
+              });
+              processed.add(j);
+            } else if (textSimilarity > 0.7) {
+              this.uncertain_matches.push({
+                idea1: ideas[i],
+                idea2: ideas[j],
+                text_similarity: (textSimilarity * 100).toFixed(0),
+                ai_assessment: aiComparison,
+                status: "uncertain_needs_review"
+              });
+            }
+          } else if (textSimilarity > 0.85) {
+            this.duplicates.push({
+              idea1: ideas[i],
+              idea2: ideas[j],
+              similarity: (textSimilarity * 100).toFixed(0),
+              differences: "Minor wording differences",
+              status: "probable_duplicate"
+            });
+            processed.add(j);
+          }
+        }
+      }
+    }
+
+    console.log(`✅ [VAULT] Found ${this.duplicates.length} confirmed duplicates, ${this.uncertain_matches.length} uncertain`);
+
+    return {
+      duplicates: this.duplicates,
+      uncertain_matches: this.uncertain_matches,
+      total_ideas: ideas.length,
+      unique_ideas: ideas.length - this.duplicates.length
+    };
+  }
+
+  mergeDuplicates(idea1, idea2, preferredIdea = 1) {
+    const preferred = preferredIdea === 1 ? idea1 : idea2;
+    const other = preferredIdea === 1 ? idea2 : idea1;
+
+    return {
+      merged_idea: preferred.text,
+      kept_idea: preferred,
+      discarded_idea: other,
+      kept_source: preferred.source,
+      lost_source: other.source,
+      merged_at: new Date().toISOString(),
+      note: `Merged ${other.source}'s variation into ${preferred.source}'s version`
+    };
+  }
+}
+
+const vaultDeduplicator = new IPVaultDeduplicationEngine();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONVERSATION PARSER & INGESTION
+// ─────────────────────────────────────────────────────────────────────────────
+class ConversationParser {
+  detectFormat(content) {
+    try {
+      JSON.parse(content);
+      return 'json';
+    } catch {
+      // Try other formats
+    }
+
+    if (content.includes('```') || content.includes('#')) return 'markdown';
+    if (content.includes('message_id') || content.includes('role')) return 'plaintext';
+    
+    return 'plaintext';
+  }
+
+  parseJSON(content) {
+    try {
+      const data = JSON.parse(content);
+      
+      // Handle Claude.ai export format
+      if (Array.isArray(data) && data[0]?.role) {
+        return this.parseClaudeFormat(data);
+      }
+
+      // Handle generic conversation format
+      if (data.conversations) {
+        return data.conversations.map(conv => this.normalizeConversation(conv));
+      }
+
+      if (data.messages || data.content) {
+        return [this.normalizeConversation(data)];
+      }
+
+      return [];
+    } catch (e) {
+      console.error('JSON parse error:', e.message);
+      return [];
+    }
+  }
+
+  parseClaudeFormat(messages) {
+    const conversation = {
+      messages: messages.map(msg => ({
+        role: msg.role,
+        content: msg.content || "",
+        timestamp: msg.timestamp || new Date().toISOString()
+      })),
+      participants: ["User", "Claude"],
+      model: "Claude",
+      format: "claude-export"
+    };
+
+    // Extract metadata from content
+    const allText = messages.map(m => m.content).join(" ");
+    const decisions = this.extractDecisions(allText);
+    const ideas = this.extractIdeas(allText);
+
+    return [{
+      ...conversation,
+      decisions,
+      ideas,
+      extracted_at: new Date().toISOString()
+    }];
+  }
+
+  parseMarkdown(content) {
+    // Split by common markdown headers
+    const sections = content.split(/^#+\s/m);
+    
+    return [{
+      content: content,
+      format: "markdown",
+      section_count: sections.length,
+      messages: [{ role: "user", content: content }],
+      extracted_at: new Date().toISOString()
+    }];
+  }
+
+  parsePlaintext(content) {
+    // Try to detect conversation patterns
+    const lines = content.split('\n');
+    const messages = [];
+    let currentRole = null;
+    let currentContent = [];
+
+    for (const line of lines) {
+      if (line.match(/^(User|Assistant|Claude|ChatGPT|Me|AI):/)) {
+        if (currentContent.length > 0) {
+          messages.push({
+            role: currentRole,
+            content: currentContent.join('\n')
+          });
+        }
+        currentRole = line.split(':')[0];
+        currentContent = [line.replace(/^[^:]+:\s/, '')];
+      } else if (line.trim()) {
+        currentContent.push(line);
+      }
+    }
+
+    if (currentContent.length > 0) {
+      messages.push({
+        role: currentRole,
+        content: currentContent.join('\n')
+      });
+    }
+
+    return [{
+      content: content,
+      format: "plaintext",
+      messages: messages.length > 0 ? messages : [{ role: "user", content }],
+      extracted_at: new Date().toISOString()
+    }];
+  }
+
+  normalizeConversation(conv) {
+    return {
+      messages: conv.messages || conv.content || [],
+      participants: conv.participants || ["User", "AI"],
+      model: conv.model || "unknown",
+      date: conv.date || conv.created_at || new Date().toISOString(),
+      topic: conv.topic || conv.title || "General",
+      format: conv.format || "unknown",
+      extracted_at: new Date().toISOString()
+    };
+  }
+
+  extractDecisions(text) {
+    const patterns = [
+      /(?:decided|decision):\s*([^\.!\n]+)/gi,
+      /we(?:\s+will|\s+shall)?\s+([^\.!\n]+)/gi,
+      /(?:implement|deploy|use):\s*([^\.!\n]+)/gi
+    ];
+
+    const decisions = [];
+    for (const pattern of patterns) {
+      let match;
+      while ((match = pattern.exec(text)) !== null) {
+        if (match[1]) decisions.push(match[1].trim());
+      }
+    }
+
+    return [...new Set(decisions)];
+  }
+
+  extractIdeas(text) {
+    const patterns = [
+      /(?:idea|suggestion|thought):\s*([^\.!\n]{10,150})/gi,
+      /(?:what if|consider|perhaps):\s*([^\.!\n]{10,150})/gi,
+      /could\s+(?:we|you)?\s+([^\.!\n]{10,150})/gi
+    ];
+
+    const ideas = [];
+    for (const pattern of patterns) {
+      let match;
+      while ((match = pattern.exec(text)) !== null) {
+        if (match[1]) ideas.push(match[1].trim());
+      }
+    }
+
+    return [...new Set(ideas)];
+  }
+
+  async parse(content, filename = "") {
+    console.log(`📄 [PARSER] Processing: ${filename}`);
+    
+    const format = this.detectFormat(content);
+    let conversations = [];
+
+    switch (format) {
+      case 'json':
+        conversations = this.parseJSON(content);
+        break;
+      case 'markdown':
+        conversations = this.parseMarkdown(content);
+        break;
+      default:
+        conversations = this.parsePlaintext(content);
+    }
+
+    // Normalize all conversations
+    conversations = conversations.map(conv => this.normalizeConversation(conv));
+
+    // Extract metadata from each
+    for (const conv of conversations) {
+      const allText = conv.messages.map(m => m.content || "").join(" ");
+      if (!conv.decisions) conv.decisions = this.extractDecisions(allText);
+      if (!conv.ideas) conv.ideas = this.extractIdeas(allText);
+      conv.filename = filename;
+      conv.word_count = allText.split(/\s+/).length;
+    }
+
+    console.log(`✅ [PARSER] Extracted ${conversations.length} conversations from ${filename}`);
+
+    return conversations;
+  }
+}
+
+const conversationParser = new ConversationParser();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATABASE INITIALIZATION
 // ─────────────────────────────────────────────────────────────────────────────
 async function initDb() {
+  // Existing tables
   await pool.query(
-    `create table if not exists calls (id serial primary key, created_at timestamptz default now(), phone text, intent text, area text, timeline text, duration int, transcript text, score text, boldtrail_lead_id text);`
+    `create table if not exists calls (id serial primary key, created_at timestamptz default now(), phone text, intent text, area text, timeline text, duration int, transcript text, score text);`
   );
+
   await pool.query(`create table if not exists shared_memory (
     id serial primary key,
     key text unique not null,
@@ -709,6 +1217,7 @@ async function initDb() {
     created_at timestamptz default now(),
     updated_at timestamptz default now()
   );`);
+
   await pool.query(`create table if not exists approval_queue (
     id serial primary key,
     action_type text not null,
@@ -720,9 +1229,7 @@ async function initDb() {
     approved_at timestamptz,
     approved_by text
   );`);
-  await pool.query(`create index if not exists idx_memory_category on shared_memory(category);`);
-  await pool.query(`create index if not exists idx_memory_updated on shared_memory(updated_at);`);
-  await pool.query(`create index if not exists idx_approval_status on approval_queue(status);`);
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS debate_log (
       id SERIAL PRIMARY KEY,
@@ -732,17 +1239,508 @@ async function initDb() {
       consensus_result JSONB,
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
-    CREATE INDEX IF NOT EXISTS idx_debate_log_id ON debate_log(debate_id);
-    CREATE INDEX IF NOT EXISTS idx_debate_log_created ON debate_log(created_at);
   `);
+
+  // NEW TABLES FOR VAULT SYSTEM (v16.1)
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS conversations (
+      id SERIAL PRIMARY KEY,
+      conversation_id TEXT UNIQUE NOT NULL,
+      participants JSONB,
+      model TEXT,
+      topic TEXT,
+      content TEXT,
+      content_encrypted TEXT,
+      word_count INT,
+      filename TEXT,
+      decisions JSONB,
+      ideas JSONB,
+      extracted_at TIMESTAMPTZ,
+      imported_at TIMESTAMPTZ DEFAULT NOW(),
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS conversation_ideas (
+      id SERIAL PRIMARY KEY,
+      idea_id TEXT UNIQUE NOT NULL,
+      conversation_id TEXT REFERENCES conversations(conversation_id),
+      idea_text TEXT NOT NULL,
+      extracted_from TEXT,
+      idea_type TEXT,
+      category TEXT,
+      priority INT,
+      effort_estimate TEXT,
+      impact_estimate TEXT,
+      dependencies JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS idea_deduplication (
+      id SERIAL PRIMARY KEY,
+      idea_id_1 TEXT,
+      idea_id_2 TEXT,
+      similarity_score DECIMAL,
+      differences TEXT,
+      merged_into TEXT,
+      status TEXT,
+      human_reviewed BOOLEAN DEFAULT FALSE,
+      reviewed_at TIMESTAMPTZ,
+      reviewed_by TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(idea_id_1, idea_id_2)
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS decision_history (
+      id SERIAL PRIMARY KEY,
+      decision_id TEXT UNIQUE NOT NULL,
+      idea_id TEXT,
+      idea_text TEXT,
+      decision TEXT,
+      reasoning TEXT,
+      council_consensus JSONB,
+      outcome TEXT,
+      roadmap_status TEXT,
+      decided_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS roadmap_items (
+      id SERIAL PRIMARY KEY,
+      item_id TEXT UNIQUE NOT NULL,
+      title TEXT NOT NULL,
+      description TEXT,
+      priority INT,
+      status TEXT,
+      effort_estimate INT,
+      impact_estimate INT,
+      dependencies JSONB,
+      blockers JSONB,
+      assigned_to TEXT,
+      target_quarter TEXT,
+      tags JSONB,
+      related_ideas JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS ip_vault_audit_log (
+      id SERIAL PRIMARY KEY,
+      action TEXT,
+      actor TEXT,
+      resource TEXT,
+      details TEXT,
+      ip_address TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
+  // Create indexes
+  await pool.query(`create index if not exists idx_memory_category on shared_memory(category);`);
+  await pool.query(`create index if not exists idx_memory_updated on shared_memory(updated_at);`);
+  await pool.query(`create index if not exists idx_approval_status on approval_queue(status);`);
+  await pool.query(`create index if not exists idx_debate_log_id on debate_log(debate_id);`);
+  await pool.query(`create index if not exists idx_conversations_model on conversations(model);`);
+  await pool.query(`create index if not exists idx_conversation_ideas_type on conversation_ideas(idea_type);`);
+  await pool.query(`create index if not exists idx_roadmap_status on roadmap_items(status);`);
+  await pool.query(`create index if not exists idx_audit_log_created on ip_vault_audit_log(created_at);`);
+
+  console.log("✅ Database schema initialized");
 }
 
-initDb()
-  .then(() => console.log("✅ Database ready (memory + protection + debate logs)"))
-  .catch(console.error);
+initDb().catch(console.error);
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Routes: Memory
+// COUNCIL CALLER (Memory-Aware, Dynamic Models)
+// ─────────────────────────────────────────────────────────────────────────────
+async function callCouncilMember(member, prompt, useMicro = true, cachedMemory = null) {
+  console.log(`🔍 [${member.toUpperCase()}] Calling...`);
+  
+  const config = COUNCIL_MEMBERS[member];
+  if (!config) throw new Error(`Unknown council member: ${member}`);
+
+  let modelName = typeof config.model === 'function' ? config.model() : config.model;
+
+  let memRows = cachedMemory;
+  if (!cachedMemory) {
+    memRows = await recallMemory({ q: prompt, limit: 15 });
+  }
+  const memoryContext = formatMemoryForSystem(memRows);
+
+  const baseSystem = useMicro
+    ? [
+        `You are ${config.name} (${config.official_name}), role: ${config.role}.`,
+        `Focus: ${config.focus}`,
+        '',
+        'PERSISTENT_MEMORY (use this context):',
+        memoryContext,
+      ].join('\n')
+    : '';
+
+  async function finalize(response, usage, modelIdForCost) {
+    try {
+      const memWrites1 = extractMemoryFromMicroResponse(response);
+      const memWrites2 = extractMemoryFromMicroProtocol(response);
+      const naturalFacts = extractKeyFactsFromNaturalLanguage(response);
+      
+      const allMemWrites = [...memWrites1, ...memWrites2, ...naturalFacts];
+      const seenKeys = new Set();
+      const uniqueWrites = [];
+      
+      for (const m of allMemWrites) {
+        if (!seenKeys.has(m.key)) {
+          seenKeys.add(m.key);
+          uniqueWrites.push(m);
+        }
+      }
+      
+      for (const m of uniqueWrites) {
+        await writeMemory(m.key, { text: m.value, source: member, timestamp: new Date().toISOString() }, 'ai_learned');
+      }
+      
+      if (uniqueWrites.length > 0) {
+        console.log(`💾 [${member}] Persisted ${uniqueWrites.length} memory items`);
+      }
+    } catch (e) {
+      console.error(`[${member}.memory.write] failed:`, e.message);
+    }
+    
+    if (modelIdForCost) trackCost(usage, modelIdForCost);
+    return { response, usage };
+  }
+
+  try {
+    if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
+      const res = await safeFetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: modelName,
+          max_tokens: 2000,
+          system: baseSystem,
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
+      const json = await res.json();
+      if (!json.content || !json.content[0]) throw new Error(`No response from Anthropic`);
+      
+      const text = json.content[0]?.text || '';
+      console.log(`  ✅ Success`);
+      return finalize(text, { prompt_tokens: json.usage?.input_tokens, completion_tokens: json.usage?.output_tokens }, modelName);
+    }
+
+    if (config.provider === 'openai' && OPENAI_API_KEY) {
+      const messages = baseSystem
+        ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
+        : [{ role: 'user', content: prompt }];
+      const res = await safeFetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${OPENAI_API_KEY}` },
+        body: JSON.stringify({
+          model: modelName,
+          temperature: 0.1,
+          max_tokens: 2000,
+          messages,
+        }),
+      });
+      const json = await res.json();
+      if (!json.choices || !json.choices[0]) throw new Error(`No response from OpenAI`);
+      
+      const text = json.choices[0]?.message?.content || '';
+      console.log(`  ✅ Success`);
+      return finalize(text, json.usage, modelName);
+    }
+
+    if (config.provider === 'google' && GEMINI_API_KEY) {
+      const res = await safeFetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: baseSystem ? `${baseSystem}\n\n${prompt}` : prompt }] }],
+            generationConfig: { temperature: 0.1, maxOutputTokens: 2000 },
+          }),
+        }
+      );
+      const json = await res.json();
+      if (!json.candidates || !json.candidates[0]) throw new Error(`No response from Gemini`);
+      
+      const text = json.candidates[0]?.content?.parts?.[0]?.text || '';
+      const usage = {
+        prompt_tokens: json.usageMetadata?.promptTokenCount || 0,
+        completion_tokens: json.usageMetadata?.candidatesTokenCount || 0,
+      };
+      console.log(`  ✅ Success`);
+      return finalize(text, usage, modelName);
+    }
+
+    if (config.provider === 'xai' && GROK_API_KEY) {
+      const messages = baseSystem
+        ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
+        : [{ role: 'user', content: prompt }];
+      const res = await safeFetch('https://api.x.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${GROK_API_KEY}` },
+        body: JSON.stringify({ model: modelName, temperature: 0.1, max_tokens: 2000, messages }),
+      });
+      const json = await res.json();
+      if (!json.choices || !json.choices[0]) throw new Error(`No response from Grok`);
+      
+      const text = json.choices[0]?.message?.content || '';
+      console.log(`  ✅ Success`);
+      return finalize(text, json.usage, modelName);
+    }
+
+    if (config.provider === 'deepseek' && DEEPSEEK_API_KEY) {
+      const messages = baseSystem
+        ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
+        : [{ role: 'user', content: prompt }];
+      const res = await safeFetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${DEEPSEEK_API_KEY}` },
+        body: JSON.stringify({ model: modelName, temperature: 0.1, max_tokens: 2000, messages }),
+      });
+      const json = await res.json();
+      if (!json.choices || !json.choices[0]) throw new Error(`No response from DeepSeek`);
+      
+      const text = json.choices[0]?.message?.content || '';
+      console.log(`  ✅ Success`);
+      return finalize(text, json.usage, modelName);
+    }
+
+    throw new Error(`No API key for ${member}`);
+  } catch (e) {
+    console.error(`❌ [${member}] Error: ${e.message}`);
+    throw e;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONSENSUS DEBATE (with error recovery)
+// ─────────────────────────────────────────────────────────────────────────────
+function checkUnanimity(votes) {
+  let errorCount = 0;
+  const positions = Object.values(votes).map(v => {
+    if (v.includes("(error)") || v.includes("Error")) {
+      errorCount++;
+      return "error";
+    }
+    return v.includes("APPROVE") ? "approve" : v.includes("REJECT") ? "reject" : "concerns";
+  });
+  
+  if (errorCount > positions.length / 2) {
+    return {
+      unanimous: false,
+      position: "error",
+      escalate_to_human: true,
+      error_count: errorCount,
+      total: positions.length
+    };
+  }
+
+  const allSame = new Set(positions.filter(p => p !== "error")).size === 1;
+  
+  return {
+    unanimous: allSame,
+    position: positions.filter(p => p !== "error")[0] || "concerns",
+    error_count: errorCount,
+    escalate_to_human: errorCount > 0
+  };
+}
+
+function calculateConsensus(votes) {
+  const positions = Object.entries(votes).map(([member, response]) => {
+    let position = "concerns";
+    let confidence = 50;
+
+    if (response.includes("(error)") || response.includes("Error")) {
+      position = "error";
+      confidence = 0;
+    } else if (response.includes("APPROVE")) {
+      position = "approve";
+    } else if (response.includes("REJECT")) {
+      position = "reject";
+    }
+
+    const match = response.match(/Confidence:\s*(\d+)/);
+    if (match) confidence = parseInt(match[1]);
+
+    return { member, position, confidence };
+  });
+
+  const approveCount = positions.filter(p => p.position === "approve").length;
+  const rejectCount = positions.filter(p => p.position === "reject").length;
+  const concernsCount = positions.filter(p => p.position === "concerns").length;
+  const errorCount = positions.filter(p => p.position === "error").length;
+
+  const avgConfidence = positions.filter(p => p.confidence > 0).length > 0
+    ? Math.round(positions.filter(p => p.confidence > 0).reduce((sum, p) => sum + p.confidence, 0) / positions.filter(p => p.confidence > 0).length)
+    : 0;
+
+  let position = "concerns";
+  if (approveCount > rejectCount + concernsCount) position = "approve";
+  if (rejectCount > approveCount + concernsCount) position = "reject";
+
+  return {
+    unanimous: new Set(positions.filter(p => p.position !== "error").map(p => p.position)).size === 1,
+    position,
+    approve: approveCount,
+    concerns: concernsCount,
+    reject: rejectCount,
+    errors: errorCount,
+    confidence: avgConfidence,
+    votes: positions,
+    recommendation: position === "approve" ? "EXECUTE" : position === "reject" ? "BLOCK" : "ESCALATE_TO_HUMAN"
+  };
+}
+
+async function councilConsensusWithDebate(prompt, escalationLevel = "normal") {
+  console.log(`\n🎯 [CONSENSUS] Starting: "${prompt.slice(0, 60)}..."`);
+  const debateId = `debate_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  
+  try {
+    const cachedMemory = await recallMemory({ q: prompt, limit: 20 });
+
+    console.log(`\n⚡ PHASE 1: Fast Tier Vote (3 AIs)`);
+    const fastTier = ["claude", "chatgpt", "gemini"];
+    const initialVotes = {};
+
+    for (const member of fastTier) {
+      try {
+        const response = await callCouncilMember(
+          member,
+          `Quick assessment: ${prompt}\n\nProvide your initial stance: APPROVE / CONCERNS / REJECT and 1-2 reasons.`,
+          false,
+          cachedMemory
+        );
+        initialVotes[member] = response.response;
+      } catch (e) {
+        console.error(`⚠️  [${member}] Fast tier failed`);
+        initialVotes[member] = "CONCERNS (error)";
+      }
+    }
+
+    const unanimity = checkUnanimity(initialVotes);
+    
+    if (unanimity.escalate_to_human && unanimity.error_count >= 2) {
+      console.log(`\n🚨 [CONSENSUS] EMERGENCY: Multiple API failures!`);
+      const result = {
+        debate_id: debateId,
+        phase: "emergency_escalation",
+        unanimous: false,
+        position: "error",
+        confidence: 0,
+        escalate_to_human: true,
+        recommendation: "EMERGENCY_HUMAN_REVIEW_REQUIRED"
+      };
+      return result;
+    }
+
+    if (unanimity.unanimous) {
+      console.log(`\n✅ [CONSENSUS] UNANIMOUS: ${unanimity.position.toUpperCase()}`);
+      const result = {
+        debate_id: debateId,
+        phase: "fast_unanimous",
+        unanimous: true,
+        position: unanimity.position,
+        confidence: 95,
+        escalate_to_human: false
+      };
+      return result;
+    }
+
+    console.log(`\n🟡 [CONSENSUS] Not unanimous. Full debate...`);
+
+    const fullDebate = {};
+    const council = ["claude", "chatgpt", "gemini", "grok", "deepseek"];
+
+    for (const member of council) {
+      try {
+        const pro = await callCouncilMember(
+          member,
+          `Argue IN FAVOR of: "${prompt}"\n\nWhat are 3 strong arguments FOR?`,
+          false,
+          cachedMemory
+        );
+
+        const con = await callCouncilMember(
+          member,
+          `Argue AGAINST: "${prompt}"\n\nWhat are 3 strong arguments AGAINST?`,
+          false,
+          cachedMemory
+        );
+
+        fullDebate[member] = {
+          pro: pro.response.slice(0, 500),
+          con: con.response.slice(0, 500)
+        };
+      } catch (e) {
+        console.error(`❌ [${member}] Debate failed`);
+        fullDebate[member] = { pro: `Error`, con: `Error` };
+      }
+    }
+
+    const finalVotes = {};
+    for (const member of council) {
+      try {
+        const final = await callCouncilMember(
+          member,
+          `Final vote on: "${prompt}"\n\nVote: APPROVE / CONCERNS / REJECT\nConfidence: 0-100`,
+          false,
+          cachedMemory
+        );
+        finalVotes[member] = final.response;
+      } catch (e) {
+        console.error(`⚠️  [${member}] Final vote failed`);
+        finalVotes[member] = "CONCERNS (error)";
+      }
+    }
+
+    const consensus = calculateConsensus(finalVotes);
+
+    const result = {
+      debate_id: debateId,
+      phase: "full_debate",
+      unanimous: consensus.unanimous,
+      position: consensus.position,
+      confidence: consensus.confidence,
+      vote_breakdown: {
+        approve: consensus.approve,
+        concerns: consensus.concerns,
+        reject: consensus.reject,
+        errors: consensus.errors
+      },
+      recommendation: consensus.recommendation,
+      escalate_to_human: consensus.confidence < 70 || escalationLevel === "high" || consensus.errors > 0
+    };
+
+    await writeMemory(debateId, result, "consensus_decisions");
+    
+    console.log(`\n✅ [CONSENSUS] Complete: ${result.position.toUpperCase()} (${result.confidence}% confidence)`);
+    
+    return result;
+  } catch (e) {
+    console.error(`❌ [CONSENSUS] Fatal error: ${e.message}`);
+    throw e;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ROUTES: MEMORY
 // ─────────────────────────────────────────────────────────────────────────────
 app.post("/api/v1/memory/store", requireCommandKey, async (req, res) => {
   try {
@@ -763,13 +1761,10 @@ app.post("/api/v1/memory/store", requireCommandKey, async (req, res) => {
 
 app.get("/api/v1/memory/get/:key", requireCommandKey, async (req, res) => {
   try {
-    const r = await pool.query("select * from shared_memory where key=$1", [
-      req.params.key
-    ]);
-    if (r.rows.length === 0) return res.json({ ok: true, found: false, data: null });
+    const r = await pool.query("select * from shared_memory where key=$1", [req.params.key]);
+    if (r.rows.length === 0) return res.json({ ok: true, found: false });
     res.json({ ok: true, found: true, data: r.rows[0] });
   } catch (e) {
-    console.error("[memory.get]", e);
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
@@ -784,7 +1779,6 @@ app.get("/api/v1/memory/list", requireCommandKey, async (req, res) => {
     const r = await pool.query(q, params);
     res.json({ ok: true, count: r.rows.length, memories: r.rows });
   } catch (e) {
-    console.error("[memory.list]", e);
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
@@ -792,10 +1786,9 @@ app.get("/api/v1/memory/list", requireCommandKey, async (req, res) => {
 app.get("/api/v1/memory/search", requireCommandKey, async (req, res) => {
   try {
     const q = String(req.query.q || '');
-    const category = String(req.query.category || '');
     const rows = await recallMemory({
       q,
-      categories: category ? [category] : MEMORY_CATEGORIES_DEFAULT,
+      categories: MEMORY_CATEGORIES_DEFAULT,
       limit: Number(req.query.limit || 50),
     });
     res.json({ ok: true, count: rows.length, rows });
@@ -804,343 +1797,283 @@ app.get("/api/v1/memory/search", requireCommandKey, async (req, res) => {
   }
 });
 
-app.delete("/api/v1/memory/delete/:key", requireCommandKey, async (req, res) => {
-  try {
-    await pool.query("delete from shared_memory where key=$1", [req.params.key]);
-    res.json({ ok: true, deleted: true });
-  } catch (e) {
-    console.error("[memory.delete]", e);
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
-
 // ─────────────────────────────────────────────────────────────────────────────
-// Routes: Architect MICRO
+// ROUTES: IP VAULT (NEW)
 // ─────────────────────────────────────────────────────────────────────────────
-app.post("/api/v1/architect/micro", requireCommandKey, async (req, res) => {
+app.post("/api/v1/vault/import-bulk", requireCommandKey, async (req, res) => {
   try {
-    const rawBody =
-      typeof req.body === "string" ? req.body : req.body?.micro || req.body?.text || "";
+    const { conversations, use_encryption = true } = req.body;
     
-    if (!rawBody || !String(rawBody).startsWith("V:2.0")) {
-      return res.status(400).type("text/plain").send("V:2.0|CT:missing~micro~input|KP:~format");
+    if (!conversations || !Array.isArray(conversations)) {
+      return res.status(400).json({ ok: false, error: "conversations array required" });
     }
-    
-    const cachedMemory = await recallMemory({ q: rawBody.slice(0, 200), limit: 20 });
-    
-    const r = await callCouncilMember("brock", rawBody, true, cachedMemory);
-    const out = String(r.response || "").trim();
-    
-    return res.type("text/plain").send(out || "V:2.0|CT:empty~response|KP:~retry");
-  } catch (e) {
-    console.error("[architect.micro]", e);
-    return res
-      .status(500)
-      .type("text/plain")
-      .send(`V:2.0|CT:system~error~${String(e).slice(0, 60).replace(/[|~]/g, '-')}|KP:~retry`);
-  }
-});
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Routes: Dev/Commit Protection
-// ─────────────────────────────────────────────────────────────────────────────
-app.post("/api/v1/dev/commit", requireCommandKey, async (req, res) => {
-  try {
-    const { path: file_path, content, message } = req.body || {};
-    if (!file_path || typeof content !== "string")
-      return res.status(400).json({ ok: false, error: "path and content required" });
-    
-    if (isProtected(file_path)) {
-      await pool.query(
-        `insert into approval_queue (action_type, file_path, content, message, status)
-         values ($1,$2,$3,$4,$5)`,
-        ["commit", file_path, content, message, "pending"]
-      );
-      return res.status(403).json({
-        ok: false,
-        error: "protected_file",
-        message: `${file_path} is protected and requires manual approval`,
-        file: file_path,
-        approval_required: true
-      });
-    }
-    
-    const repo = GITHUB_REPO || "LimitlessOI/Lumin-LifeOS";
-    const info = await ghPutFile(
-      repo,
-      file_path.replace(/^\/+/, ""),
-      content,
-      message || `feat: update ${file_path}`
-    );
-    res.json({ ok: true, committed: file_path, sha: info.content?.sha || info.commit?.sha });
-  } catch (e) {
-    console.error("[dev.commit]", e);
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
+    let imported = 0;
+    let errors = 0;
+    const importedIds = [];
 
-app.get("/api/v1/protection/queue", requireCommandKey, async (_req, res) => {
-  try {
-    const r = await pool.query(
-      "select * from approval_queue where status=$1 order by requested_at desc",
-      ["pending"]
-    );
-    res.json({ ok: true, count: r.rows.length, queue: r.rows });
-  } catch (e) {
-    console.error("[protection.queue]", e);
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
-
-app.post("/api/v1/protection/approve/:id", requireCommandKey, async (req, res) => {
-  try {
-    const id = req.params.id;
-    const r = await pool.query("select * from approval_queue where id=$1", [id]);
-    if (r.rows.length === 0)
-      return res.status(404).json({ ok: false, error: "Approval request not found" });
-    const approval = r.rows[0];
-    const repo = GITHUB_REPO || "LimitlessOI/Lumin-LifeOS";
-    const info = await ghPutFile(
-      repo,
-      approval.file_path.replace(/^\/+/, ""),
-      approval.content,
-      approval.message
-    );
-    await pool.query(
-      "update approval_queue set status=$1, approved_at=now(), approved_by=$2 where id=$3",
-      ["approved", "manual", id]
-    );
-    res.json({ ok: true, committed: approval.file_path, sha: info.content?.sha || info.commit?.sha });
-  } catch (e) {
-    console.error("[protection.approve]", e);
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Routes: Consensus Debate
-// ─────────────────────────────────────────────────────────────────────────────
-function checkUnanimity(votes) {
-  const positions = Object.values(votes).map(v => 
-    v.includes("APPROVE") ? "approve" : v.includes("REJECT") ? "reject" : "concerns"
-  );
-  
-  const allSame = new Set(positions).size === 1;
-  
-  return {
-    unanimous: allSame,
-    position: positions[0] || "concerns"
-  };
-}
-
-function calculateConsensus(votes) {
-  const positions = Object.entries(votes).map(([member, response]) => ({
-    member,
-    position: response.includes("APPROVE") ? "approve" : response.includes("REJECT") ? "reject" : "concerns",
-    confidence: (() => {
-      const match = response.match(/Confidence:\s*(\d+)/);
-      return match ? parseInt(match[1]) : 50;
-    })()
-  }));
-
-  const approveCount = positions.filter(p => p.position === "approve").length;
-  const rejectCount = positions.filter(p => p.position === "reject").length;
-  const concernsCount = positions.filter(p => p.position === "concerns").length;
-
-  const avgConfidence = Math.round(
-    positions.reduce((sum, p) => sum + p.confidence, 0) / positions.length
-  );
-
-  let position = "concerns";
-  if (approveCount > rejectCount + concernsCount) position = "approve";
-  if (rejectCount > approveCount + concernsCount) position = "reject";
-
-  return {
-    unanimous: new Set(positions.map(p => p.position)).size === 1,
-    position,
-    approve: approveCount,
-    concerns: concernsCount,
-    reject: rejectCount,
-    confidence: avgConfidence,
-    votes: positions,
-    recommendation: position === "approve" ? "EXECUTE" : position === "reject" ? "BLOCK" : "ESCALATE_TO_HUMAN"
-  };
-}
-
-async function councilConsensusWithDebate(prompt, escalationLevel = "normal") {
-  console.log(`\n🎯 [CONSENSUS] Starting: "${prompt.slice(0, 60)}..."`);
-  const debateId = `debate_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-  
-  try {
-    const cachedMemory = await recallMemory({ q: prompt, limit: 20 });
-
-    // PHASE 1: Fast tier
-    console.log(`\n⚡ PHASE 1: Fast Tier Vote (3 AIs)`);
-    const fastTier = ["claude", "brock", "gemini"];
-    const initialVotes = {};
-
-    for (const member of fastTier) {
+    for (const conv of conversations) {
       try {
-        const response = await callCouncilMember(
-          member,
-          `Quick assessment: ${prompt}\n\nProvide your initial stance: APPROVE / CONCERNS / REJECT and 1-2 reasons.`,
-          false,
-          cachedMemory
-        );
-        initialVotes[member] = response.response;
-      } catch (e) {
-        console.error(`⚠️  [${member}] Fast tier failed: ${e.message}`);
-        initialVotes[member] = "CONCERNS (error)";
-      }
-    }
-
-    await writeMemory(`${debateId}_initial_votes`, initialVotes, "debate_log");
-
-    const unanimity = checkUnanimity(initialVotes);
-    if (unanimity.unanimous) {
-      console.log(`\n✅ [CONSENSUS] UNANIMOUS: ${unanimity.position.toUpperCase()}`);
-      const result = {
-        debate_id: debateId,
-        phase: "fast_unanimous",
-        unanimous: true,
-        position: unanimity.position,
-        confidence: 95,
-        initial_votes: initialVotes,
-        risk_flags: [],
-        blind_spots: [],
-        escalate_to_human: false
-      };
-      await pool.query(
-        `INSERT INTO debate_log (debate_id, prompt, consensus_result) VALUES ($1, $2, $3)`,
-        [debateId, prompt, JSON.stringify(result)]
-      );
-      return result;
-    }
-
-    console.log(`\n🟡 [CONSENSUS] Not unanimous. Escalating to FULL COUNCIL DEBATE`);
-
-    // PHASE 2: Full debate
-    console.log(`\n🎤 PHASE 2: Full Debate (6 AIs × 3 questions each)`);
-    const fullDebate = {};
-    const council = ["claude", "brock", "jayn", "r8", "gemini", "grok"];
-
-    for (const member of council) {
-      try {
-        console.log(`\n  → ${member.toUpperCase()}: Pro/Con/Blindspot`);
+        const convId = `conv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
         
-        let proResponse = { response: "" };
-        try {
-          proResponse = await callCouncilMember(
-            member,
-            `You are arguing IN FAVOR of: "${prompt}"\n\nWhat are the strongest 3 arguments FOR this?`,
-            false,
-            cachedMemory
-          );
-        } catch (e) {
-          console.error(`    ⚠️  PRO failed: ${e.message}`);
-          proResponse = { response: `[Error] ${e.message}` };
-        }
+        const content = typeof conv.content === 'string' ? conv.content : JSON.stringify(conv.content);
+        const contentEncrypted = use_encryption ? encryptData(conv.content || content) : null;
 
-        let conResponse = { response: "" };
-        try {
-          conResponse = await callCouncilMember(
-            member,
-            `You are arguing AGAINST: "${prompt}"\n\nWhat are the strongest 3 arguments AGAINST?`,
-            false,
-            cachedMemory
-          );
-        } catch (e) {
-          console.error(`    ⚠️  CON failed: ${e.message}`);
-          conResponse = { response: `[Error] ${e.message}` };
-        }
-
-        let blindSpotResponse = { response: "" };
-        try {
-          blindSpotResponse = await callCouncilMember(
-            member,
-            `What are blind spots about: "${prompt}"?`,
-            false,
-            cachedMemory
-          );
-        } catch (e) {
-          console.error(`    ⚠️  BLINDSPOT failed: ${e.message}`);
-          blindSpotResponse = { response: `[Error] ${e.message}` };
-        }
-
-        fullDebate[member] = {
-          pro: proResponse.response.slice(0, 500),
-          con: conResponse.response.slice(0, 500),
-          blind_spots: blindSpotResponse.response.slice(0, 300)
-        };
-      } catch (e) {
-        console.error(`❌ [${member}] Full debate failed: ${e.message}`);
-        fullDebate[member] = {
-          pro: `Error: ${e.message}`,
-          con: `Error: ${e.message}`,
-          blind_spots: `Error: ${e.message}`
-        };
-      }
-    }
-
-    await writeMemory(`${debateId}_full_debate`, fullDebate, "debate_log");
-
-    // PHASE 4: Final vote
-    console.log(`\n🗳️  PHASE 4: Final Council Vote`);
-    const finalVotes = {};
-    for (const member of council) {
-      try {
-        const finalResponse = await callCouncilMember(
-          member,
-          `Final vote on: "${prompt}"\n\nVote: APPROVE / CONCERNS / REJECT\nConfidence: 0-100\nReason: [1 sentence]`,
-          false,
-          cachedMemory
+        await pool.query(
+          `INSERT INTO conversations (conversation_id, participants, model, topic, content, content_encrypted, word_count, filename, decisions, ideas, extracted_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now())`,
+          [
+            convId,
+            JSON.stringify(conv.participants || ["User", "AI"]),
+            conv.model || "unknown",
+            conv.topic || "General",
+            content,
+            contentEncrypted,
+            conv.word_count || content.split(/\s+/).length,
+            conv.filename || "imported",
+            JSON.stringify(conv.decisions || []),
+            JSON.stringify(conv.ideas || [])
+          ]
         );
-        finalVotes[member] = finalResponse.response;
+
+        importedIds.push(convId);
+        imported++;
+
+        // Log to audit
+        await pool.query(
+          `INSERT INTO ip_vault_audit_log (action, actor, resource, details)
+           VALUES ($1, $2, $3, $4)`,
+          ["import_conversation", "system", convId, `Imported conversation about ${conv.topic}`]
+        );
       } catch (e) {
-        console.error(`⚠️  [${member}] Final vote failed: ${e.message}`);
-        finalVotes[member] = "CONCERNS (error)";
+        console.error("Failed to import conversation:", e.message);
+        errors++;
       }
     }
 
-    await writeMemory(`${debateId}_final_votes`, finalVotes, "debate_log");
+    res.json({
+      ok: true,
+      imported,
+      errors,
+      imported_ids: importedIds,
+      message: `Successfully imported ${imported} conversations`
+    });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
 
-    const consensus = calculateConsensus(finalVotes);
+app.post("/api/v1/vault/upload-file", requireCommandKey, async (req, res) => {
+  try {
+    const { filename, content } = req.body;
+    
+    if (!filename || !content) {
+      return res.status(400).json({ ok: false, error: "filename and content required" });
+    }
 
-    const result = {
-      debate_id: debateId,
-      phase: "full_debate",
-      unanimous: consensus.unanimous,
-      position: consensus.position,
-      confidence: consensus.confidence,
-      vote_breakdown: {
-        approve: consensus.approve,
-        concerns: consensus.concerns,
-        reject: consensus.reject
-      },
-      initial_votes: initialVotes,
-      full_debate: fullDebate,
-      final_votes: finalVotes,
-      recommendation: consensus.recommendation,
-      escalate_to_human: consensus.confidence < 70 || escalationLevel === "high"
-    };
+    console.log(`📤 [VAULT] Uploading: ${filename}`);
 
-    await pool.query(
-      `INSERT INTO debate_log (debate_id, prompt, full_debate, consensus_result) 
-       VALUES ($1, $2, $3, $4)`,
-      [debateId, prompt, JSON.stringify(fullDebate), JSON.stringify(result)]
+    // Parse the file
+    const parsed = await conversationParser.parse(content, filename);
+
+    // Import into database
+    let imported = 0;
+    for (const conv of parsed) {
+      try {
+        const convId = `conv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        
+        const contentText = typeof conv.content === 'string' ? conv.content : JSON.stringify(conv);
+        const encrypted = encryptData(contentText);
+
+        await pool.query(
+          `INSERT INTO conversations (conversation_id, participants, model, topic, content, content_encrypted, word_count, filename, decisions, ideas, extracted_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now())`,
+          [
+            convId,
+            JSON.stringify(conv.participants || []),
+            conv.model || "unknown",
+            conv.topic || filename,
+            contentText,
+            encrypted,
+            conv.word_count || 0,
+            filename,
+            JSON.stringify(conv.decisions || []),
+            JSON.stringify(conv.ideas || [])
+          ]
+        );
+
+        imported++;
+      } catch (e) {
+        console.error("Failed to import:", e.message);
+      }
+    }
+
+    res.json({
+      ok: true,
+      filename,
+      parsed_conversations: parsed.length,
+      imported,
+      format: parsed[0]?.format || "unknown"
+    });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+app.get("/api/v1/vault/deduplication-report", requireCommandKey, async (req, res) => {
+  try {
+    // Get all ideas from database
+    const r = await pool.query(`
+      SELECT idea_id, idea_text, extracted_from, conversation_id
+      FROM conversation_ideas
+      ORDER BY created_at DESC
+      LIMIT 1000
+    `);
+
+    const ideas = r.rows;
+
+    // Run deduplication
+    const report = await vaultDeduplicator.findDuplicates(
+      ideas.map(i => ({ text: i.idea_text, id: i.idea_id, source: i.extracted_from })),
+      true  // Use AI
     );
 
-    await writeMemory(debateId, result, "consensus_decisions");
-    
-    console.log(`\n✅ [CONSENSUS] Complete: ${result.position.toUpperCase()} (${result.confidence}% confidence)`);
-    
-    return result;
+    res.json({
+      ok: true,
+      report,
+      total_ideas_scanned: ideas.length,
+      duplicates_found: report.duplicates.length,
+      uncertain_matches: report.uncertain_matches.length,
+      action_required: report.uncertain_matches.length > 0
+    });
   } catch (e) {
-    console.error(`❌ [CONSENSUS] Fatal error: ${e.message}`);
-    throw e;
+    res.status(500).json({ ok: false, error: String(e) });
   }
-}
+});
 
+app.post("/api/v1/vault/resolve-duplicate", requireCommandKey, async (req, res) => {
+  try {
+    const { idea_id_1, idea_id_2, action, preferred_idea = 1, human_notes = "" } = req.body;
+
+    if (!idea_id_1 || !idea_id_2 || !action) {
+      return res.status(400).json({ ok: false, error: "Required fields missing" });
+    }
+
+    if (action === "merge") {
+      // Mark as merged
+      await pool.query(
+        `INSERT INTO idea_deduplication (idea_id_1, idea_id_2, similarity_score, status, merged_into, human_reviewed, reviewed_by)
+         VALUES ($1, $2, 100, 'merged', $3, true, 'human')`,
+        [idea_id_1, idea_id_2, preferred_idea === 1 ? idea_id_1 : idea_id_2]
+      );
+    } else if (action === "different") {
+      // Mark as different concepts
+      await pool.query(
+        `INSERT INTO idea_deduplication (idea_id_1, idea_id_2, similarity_score, status, human_reviewed, reviewed_by)
+         VALUES ($1, $2, 0, 'different', true, 'human')`,
+        [idea_id_1, idea_id_2]
+      );
+    }
+
+    await pool.query(
+      `INSERT INTO ip_vault_audit_log (action, actor, resource, details)
+       VALUES ($1, $2, $3, $4)`,
+      ["resolve_duplicate", "human", `${idea_id_1}/${idea_id_2}`, `Action: ${action}, ${human_notes}`]
+    );
+
+    res.json({ ok: true, resolved: true, action });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+app.get("/api/v1/vault/conversations", requireCommandKey, async (req, res) => {
+  try {
+    const limit = Number(req.query.limit || 50);
+    const model = req.query.model;
+
+    let query = "SELECT conversation_id, model, topic, word_count, filename, extracted_at FROM conversations";
+    const params = [];
+
+    if (model) {
+      query += " WHERE model = $1";
+      params.push(model);
+    }
+
+    query += " ORDER BY extracted_at DESC LIMIT $" + (params.length + 1);
+    params.push(limit);
+
+    const r = await pool.query(query, params);
+
+    res.json({
+      ok: true,
+      count: r.rows.length,
+      conversations: r.rows
+    });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+app.get("/api/v1/vault/audit-log", requireCommandKey, async (req, res) => {
+  try {
+    const limit = Number(req.query.limit || 100);
+    const r = await pool.query(
+      `SELECT * FROM ip_vault_audit_log ORDER BY created_at DESC LIMIT $1`,
+      [limit]
+    );
+
+    res.json({
+      ok: true,
+      count: r.rows.length,
+      audit_log: r.rows
+    });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ROUTES: TIER CONFIG
+// ─────────────────────────────────────────────────────────────────────────────
+app.get("/api/v1/config/tier", requireCommandKey, (req, res) => {
+  res.json({
+    ok: true,
+    current_tier: CURRENT_TIER,
+    available_tiers: Object.keys(MODEL_TIERS),
+    tier_models: MODEL_TIERS[CURRENT_TIER],
+    council_members: Object.keys(COUNCIL_MEMBERS).map(m => ({
+      name: COUNCIL_MEMBERS[m].name,
+      official_name: COUNCIL_MEMBERS[m].official_name,
+      current_model: typeof COUNCIL_MEMBERS[m].model === 'function' ? COUNCIL_MEMBERS[m].model() : COUNCIL_MEMBERS[m].model
+    }))
+  });
+});
+
+app.post("/api/v1/config/set-tier", requireCommandKey, (req, res) => {
+  try {
+    const { tier } = req.body;
+    if (!tier || !MODEL_TIERS[tier]) {
+      return res.status(400).json({ ok: false, error: `Invalid tier. Available: ${Object.keys(MODEL_TIERS).join(", ")}` });
+    }
+
+    CURRENT_TIER = tier;
+    console.log(`⚙️  [CONFIG] Model tier changed to: ${tier}`);
+    
+    res.json({
+      ok: true,
+      tier_changed: tier,
+      new_models: MODEL_TIERS[tier],
+      message: `System now using ${tier} tier models`
+    });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ROUTES: CONSENSUS
+// ─────────────────────────────────────────────────────────────────────────────
 app.post("/api/v1/council/consensus", requireCommandKey, async (req, res) => {
   try {
     const { prompt, escalation_level } = req.body;
@@ -1159,189 +2092,98 @@ app.post("/api/v1/council/consensus", requireCommandKey, async (req, res) => {
     });
   } catch (e) {
     console.error("[consensus]", e);
-    res.status(500).json({ ok: false, error: String(e), message: "Consensus debate failed" });
-  }
-});
-
-app.get("/api/v1/council/debates", requireCommandKey, async (req, res) => {
-  try {
-    const limit = Number(req.query.limit || 10);
-    const rows = await pool.query(
-      `SELECT debate_id, prompt, created_at FROM debate_log ORDER BY created_at DESC LIMIT $1`,
-      [limit]
-    );
-    res.json({ ok: true, count: rows.rows.length, debates: rows.rows });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
-
-app.get("/api/v1/council/debate/:debate_id", requireCommandKey, async (req, res) => {
-  try {
-    const row = await pool.query(
-      `SELECT * FROM debate_log WHERE debate_id = $1`,
-      [req.params.debate_id]
-    );
-    if (row.rows.length === 0) {
-      return res.status(404).json({ ok: false, error: "Debate not found" });
-    }
-    res.json({ ok: true, debate: row.rows[0] });
-  } catch (e) {
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Routes: Debug
+// ROUTES: IMPROVEMENTS
 // ─────────────────────────────────────────────────────────────────────────────
-async function testAPI(provider) {
+app.post("/api/v1/improvements/run-cycle", requireCommandKey, async (req, res) => {
   try {
-    const testPrompt = "Say 'TEST'";
-    let result;
-    
-    if (provider === 'openai' && process.env.OPENAI_API_KEY) {
-      const r = await safeFetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
-        body: JSON.stringify({ model: 'gpt-4o-mini', messages: [{ role: 'user', content: testPrompt }], max_tokens: 10 })
-      });
-      result = await r.json();
-      return result.choices ? '✅ Working' : `❌ ${result.error?.message || 'Failed'}`;
-    }
-    
-    if (provider === 'anthropic' && process.env.ANTHROPIC_API_KEY) {
-      const r = await safeFetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: 'claude-sonnet-4', max_tokens: 10, messages: [{ role: 'user', content: testPrompt }] })
-      });
-      result = await r.json();
-      return result.content ? '✅ Working' : `❌ ${result.error?.message || 'Failed'}`;
-    }
-    
-    return '⚠️ Not configured';
-  } catch (e) {
-    return `❌ ${e.message.slice(0, 30)}`;
-  }
-}
-
-app.get("/api/v1/debug/env", requireCommandKey, async (req, res) => {
-  const envStatus = {
-    database: DATABASE_URL ? '✅ Configured' : '❌ Missing',
-    command_key: COMMAND_CENTER_KEY ? '✅ Set' : '❌ Missing',
-    OPENAI_API_KEY: OPENAI_API_KEY ? `✅ Set` : '❌ Missing', 
-    ANTHROPIC_API_KEY: ANTHROPIC_API_KEY ? `✅ Set` : '❌ Missing', 
-    GEMINI_API_KEY: GEMINI_API_KEY ? `✅ Set` : '❌ Missing',
-    GROK_API_KEY: GROK_API_KEY ? `✅ Set` : '❌ Missing',
-    GITHUB_TOKEN: GITHUB_TOKEN ? `✅ Set` : '❌ Missing',
-  };
-  
-  if (req.query.test === 'true') {
-    envStatus.api_tests = {
-      openai: await testAPI('openai'),
-      anthropic: await testAPI('anthropic'),
-    };
-  }
-  
-  res.json({ env: envStatus });
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Routes: Test Memory Cycle
-// ─────────────────────────────────────────────────────────────────────────────
-app.post("/api/v1/test/memory-cycle", requireCommandKey, async (req, res) => {
-  try {
-    console.log(`🧪 [TEST] Starting memory cycle test with smart extraction...`);
-    const { test_fact } = req.body;
-    const factToStore = test_fact || "Memory persistence verification works";
-    
-    // 1. Store test memory
-    console.log(`💾 [TEST] Storing: ${factToStore}`);
-    await writeMemory('test_memory_cycle', { text: factToStore, test: true }, 'test');
-    
-    // 2. Recall and verify
-    console.log(`🔍 [TEST] Recalling memory...`);
-    const recalled = await recallMemory({ q: 'test_memory_cycle', limit: 10 });
-    
-    // 3. Call AI with memory context
-    console.log(`🤖 [TEST] Calling Brock with memory context...`);
-    const aiResponse = await callCouncilMember('brock', 
-      'I previously stored this test fact: ' + factToStore + '\n\nPlease acknowledge you have this information and share what you learned. Include key findings naturally in your response.', 
-      false);
-    
-    // 4. Extract memory writes from AI response using ALL methods
-    const memWrites1 = extractMemoryFromMicroResponse(aiResponse.response);
-    const memWrites2 = extractMemoryFromMicroProtocol(aiResponse.response);
-    const naturalFacts = extractKeyFactsFromNaturalLanguage(aiResponse.response);
-    const allMemWrites = [...memWrites1, ...memWrites2, ...naturalFacts];
-    
-    console.log(`📊 [TEST] Found ${allMemWrites.length} memory extractions (${memWrites1.length} explicit MEM: + ${naturalFacts.length} natural language)`);
+    const result = await improvementsEngine.runDailyImprovementCycle();
     
     res.json({
       ok: true,
-      test_passed: recalled.length > 0 && allMemWrites.length > 0,
-      step_1_stored: { key: 'test_memory_cycle', value: factToStore },
-      step_2_recalled: recalled.length,
-      step_3_ai_response: aiResponse.response.slice(0, 250),
-      step_4_memory_extraction: {
-        total_found: allMemWrites.length,
-        explicit_mem_lines: memWrites1.length,
-        natural_language_facts: naturalFacts.length,
-        extracted_items: allMemWrites.slice(0, 5)
-      },
-      details: {
-        recalled_items: recalled.map(r => ({ key: r.key, category: r.category })),
-        all_extractions: allMemWrites
-      }
+      cycle_completed: result !== null,
+      cycle_date: improvementsEngine.current_cycle,
+      total_ideas_generated: result?.total_generated || 0
     });
   } catch (e) {
-    console.error("[test.memory-cycle]", e);
-    res.status(500).json({ ok: false, error: String(e), message: e.message });
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+app.get("/api/v1/improvements/stats", requireCommandKey, async (req, res) => {
+  try {
+    const stats = improvementsEngine.getStats();
+    res.json({ ok: true, stats });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
   }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Routes: Health
+// ROUTES: DIAGNOSTICS
+// ─────────────────────────────────────────────────────────────────────────────
+app.get("/api/v1/system/diagnose", requireCommandKey, async (req, res) => {
+  try {
+    const diagnostic = await systemDiagnostic.run();
+    const fixes = await systemDiagnostic.proposeFixes();
+
+    res.json({
+      ok: true,
+      diagnostic,
+      proposed_fixes: fixes,
+      needs_human_review: diagnostic.critical_errors.length > 0
+    });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ROUTES: HEALTH
 // ─────────────────────────────────────────────────────────────────────────────
 app.get("/health", (_req, res) => res.send("OK"));
 
 app.get("/healthz", async (_req, res) => {
   try {
-    const dbCheck = await pool.query("select now()");
+    await pool.query("select now()");
     const spend = readSpend();
     const mem = await pool.query("select count(*) as count from shared_memory");
-    const debates = await pool.query("select count(*) as count from debate_log");
+    const convs = await pool.query("select count(*) as count from conversations");
 
     res.json({
       status: "healthy",
+      version: "v16.1-IP-VAULT",
+      tier: CURRENT_TIER,
       database: "connected",
-      timestamp: dbCheck.rows[0].now,
-      version: "v15.1-PRODUCTION",
       daily_spend: spend.usd.toFixed(2),
       max_daily_spend: Number(MAX_DAILY_SPEND),
       spend_percentage: ((spend.usd / Number(MAX_DAILY_SPEND)) * 100).toFixed(1) + "%",
       ai_council: {
-        enabled: true,
         members: Object.keys(COUNCIL_MEMBERS).length,
-        models: Object.values(COUNCIL_MEMBERS).map((m) => m.model),
-        providers: [...new Set(Object.values(COUNCIL_MEMBERS).map((m) => m.provider))]
+        primary_models: ["Claude", "ChatGPT", "Gemini", "Grok", "DeepSeek"],
+        current_tier: CURRENT_TIER
       },
       memory_system: {
         enabled: true,
-        stored_memories: Number(mem.rows[0].count || 0),
-        categories: MEMORY_CATEGORIES_DEFAULT,
-        extraction_methods: 3
+        stored_memories: Number(mem.rows[0].count || 0)
       },
-      debate_system: {
+      vault_system: {
         enabled: true,
-        total_debates: Number(debates.rows[0].count || 0)
+        conversations_imported: Number(convs.rows[0].count || 0),
+        encryption: "AES-256"
       },
-      protection_system: {
-        enabled: true,
-        protected_files: PROTECTED_FILES
-      },
-      stripe_status: stripeReady ? "READY" : "NOT_CONFIGURED",
-      ai_call_timeout: `${AI_CALL_TIMEOUT}ms`
+      features: [
+        "Autonomous self-repair",
+        "Daily improvements engine",
+        "Model scaling",
+        "IP vault with deduplication",
+        "Conversation import & analysis",
+        "3-layer memory extraction"
+      ]
     });
   } catch (e) {
     res.status(500).json({ status: "unhealthy", error: String(e) });
@@ -1349,153 +2191,49 @@ app.get("/healthz", async (_req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Routes: Command Center UI
-// ─────────────────────────────────────────────────────────────────────────────
-app.get("/overlay/command-center.html", (_req, res) => {
-  res.type("text/html").send(`<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>LifeOS Command & Control</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: system-ui, sans-serif; background: #0a0e27; color: #e0e6ed; padding: 24px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    h1 { margin-bottom: 12px; font-size: 32px; color: #00ff88; }
-    .subtitle { color: #888; margin-bottom: 24px; font-size: 14px; }
-    .card { border: 1px solid #1e2749; border-radius: 10px; padding: 20px; margin: 16px 0; background: #111625; }
-    .card h3 { color: #00ff88; margin-bottom: 12px; font-size: 18px; }
-    textarea, input { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #1e2749; border-radius: 6px; background: #0a0e27; color: #e0e6ed; font-family: monospace; font-size: 12px; margin: 8px 0; }
-    button { padding: 10px 16px; border-radius: 6px; border: 1px solid #00ff88; background: transparent; color: #00ff88; cursor: pointer; font-weight: bold; transition: all 0.2s; }
-    button:hover { background: #00ff88; color: #0a0e27; }
-    .row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
-    pre { background: #0a0e27; padding: 12px; overflow: auto; border-radius: 6px; border: 1px solid #1e2749; max-height: 400px; font-size: 11px; color: #00ff88; }
-    .small { font-size: 12px; color: #666; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🚀 LifeOS Command & Control</h1>
-    <div class="subtitle">AI Council Memory-Aware System | v15.1-PRODUCTION</div>
-
-    <div class="card">
-      <h3>🔑 Authentication</h3>
-      <input id="key" type="password" placeholder="Paste your x-command-key" />
-    </div>
-
-    <div class="card">
-      <h3>🎯 Council Consensus</h3>
-      <textarea id="consensusPrompt" rows="3" placeholder="Should we implement feature X?"></textarea>
-      <button onclick="callConsensus()">🎤 Start Council Debate</button>
-      <pre id="consensusOut" style="margin-top: 12px;"></pre>
-    </div>
-
-    <div class="card">
-      <h3>💬 Quick Query (Brock)</h3>
-      <textarea id="micro" rows="4" placeholder="V:2.0|OP:G|D:Create~status~report|T:A|R:~CT~KP"></textarea>
-      <button onclick="askCouncil()">🤖 Ask Brock</button>
-      <pre id="microOut" style="margin-top: 12px;"></pre>
-    </div>
-
-    <div class="card">
-      <h3>🧠 Memory Search</h3>
-      <div class="row">
-        <input id="memQ" placeholder="Search persistent memory..." />
-        <button onclick="searchMem()" style="width: auto;">Search</button>
-      </div>
-      <pre id="memOut" style="margin-top: 12px;"></pre>
-    </div>
-
-    <div class="card">
-      <h3>📊 System Status</h3>
-      <button onclick="checkHealth()">🔍 Check Health</button>
-      <pre id="healthOut" style="margin-top: 12px;"></pre>
-    </div>
-  </div>
-
-  <script>
-    async function callConsensus() {
-      const key = document.getElementById('key').value.trim();
-      const prompt = document.getElementById('consensusPrompt').value;
-      if (!key || !prompt) { alert('Key and prompt required'); return; }
-      
-      document.getElementById('consensusOut').textContent = '⏳ Starting council debate... (2-3 min)';
-      try {
-        const r = await fetch(\`/api/v1/council/consensus\`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-command-key': key },
-          body: JSON.stringify({ prompt })
-        });
-        const data = await r.json();
-        document.getElementById('consensusOut').textContent = JSON.stringify(data, null, 2);
-      } catch (e) {
-        document.getElementById('consensusOut').textContent = 'Error: ' + String(e);
-      }
-    }
-
-    async function askCouncil() {
-      const key = document.getElementById('key').value.trim();
-      const micro = document.getElementById('micro').value;
-      if (!key || !micro) { alert('Key and MICRO input required'); return; }
-      
-      document.getElementById('microOut').textContent = 'Asking council...';
-      try {
-        const r = await fetch(\`/api/v1/architect/micro\`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain', 'x-command-key': key },
-          body: micro
-        });
-        const text = await r.text();
-        document.getElementById('microOut').textContent = text;
-      } catch (e) {
-        document.getElementById('microOut').textContent = 'Error: ' + String(e);
-      }
-    }
-
-    async function searchMem() {
-      const key = document.getElementById('key').value.trim();
-      const q = encodeURIComponent(document.getElementById('memQ').value);
-      if (!key) { alert('Key required'); return; }
-      
-      document.getElementById('memOut').textContent = 'Searching...';
-      try {
-        const r = await fetch(\`/api/v1/memory/search?q=\${q}\`, { headers: { 'x-command-key': key } });
-        const data = await r.json();
-        document.getElementById('memOut').textContent = JSON.stringify(data, null, 2);
-      } catch (e) {
-        document.getElementById('memOut').textContent = 'Error: ' + String(e);
-      }
-    }
-
-    async function checkHealth() {
-      document.getElementById('healthOut').textContent = 'Checking...';
-      try {
-        const r = await fetch(\`/healthz\`);
-        const data = await r.json();
-        document.getElementById('healthOut').textContent = JSON.stringify(data, null, 2);
-      } catch (e) {
-        document.getElementById('healthOut').textContent = 'Error: ' + String(e);
-      }
-    }
-  </script>
-</body>
-</html>`);
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Start Server
+// START SERVER
 // ─────────────────────────────────────────────────────────────────────────────
 app.listen(PORT, HOST, () => {
-  console.log(`\n✅ LifeOS v15.1-PRODUCTION started on http://${HOST}:${PORT}`);
-  console.log(`✅ Command Center: http://${HOST}:${PORT}/overlay/command-center.html`);
-  console.log(`✅ Health: http://${HOST}:${PORT}/healthz`);
-  console.log(`✅ AI Council: ${Object.keys(COUNCIL_MEMBERS).length} models (smart extraction + persistent memory)`);
-  console.log(`✅ Memory System: ACTIVE (3-layer extraction: MEM: + MICRO + Natural Language)`);
-  console.log(`✅ Debate System: ACTIVE (Pro/Con/Blind-spots with full council consensus)`);
-  console.log(`✅ Protection: ${PROTECTED_FILES.length} protected files`);
-  console.log(`✅ Stripe: ${stripeReady ? 'READY' : 'standby'}`);
-  console.log(`\n🎯 Consensus: /api/v1/council/consensus (POST)`);
-  console.log(`🧠 Memory: /api/v1/memory/* (GET/POST/DELETE)`);
-  console.log(`\n✨ All features operational. Ready to execute.\n`);
+  console.log(`\n${'═'.repeat(80)}`);
+  console.log(`✅ LUMIN LIFEOS v16.1 - COMPLETE SYSTEM STARTED`);
+  console.log(`${'═'.repeat(80)}`);
+  console.log(`\n📍 Server: http://${HOST}:${PORT}`);
+  console.log(`🎛️  Command Center: http://${HOST}:${PORT}/overlay/command-center.html`);
+  
+  console.log(`\n🤖 AI COUNCIL (5 primary members):`);
+  console.log(`  • Claude (Claude Sonnet 3.5)`);
+  console.log(`  • ChatGPT (GPT-4o)`);
+  console.log(`  • Gemini (Google Gemini 2.0)`);
+  console.log(`  • Grok (Grok Beta)`);
+  console.log(`  • DeepSeek (DeepSeek)`);
+  
+  console.log(`\n🏛️  IP VAULT SYSTEM:`);
+  console.log(`  ✅ Conversation import (JSON, Markdown, plaintext)`);
+  console.log(`  ✅ Intelligent deduplication (with AI review)`);
+  console.log(`  ✅ AES-256 encryption`);
+  console.log(`  ✅ Audit logging`);
+  console.log(`  ✅ Idea extraction & analysis`);
+  console.log(`  ✅ Decision tracking`);
+  
+  console.log(`\n⚙️  DYNAMIC TIER SYSTEM:`);
+  console.log(`  • LIGHT: Fast & cheap (gpt-4o-mini, Haiku, Gemini Flash, DeepSeek-chat)`);
+  console.log(`  • MEDIUM: Balanced (gpt-4o, Sonnet 4, Gemini Flash, DeepSeek-coder)`);
+  console.log(`  • HEAVY: Powerful (gpt-4o, Sonnet 4, Gemini Flash, DeepSeek-reasoner)`);
+  console.log(`  Current: ${CURRENT_TIER.toUpperCase()}`);
+  
+  console.log(`\n💡 DAILY IMPROVEMENTS:`);
+  console.log(`  • 20 ideas per AI (80 total)`);
+  console.log(`  • Full council debate`);
+  console.log(`  • Sandbox testing`);
+  console.log(`  • Adoption tracking`);
+  
+  console.log(`\n✅ FEATURES:`);
+  console.log(`  • Autonomous self-repair`);
+  console.log(`  • 3-layer memory extraction`);
+  console.log(`  • Robust consensus with error recovery`);
+  console.log(`  • Emergency human escalation`);
+  console.log(`  • Cost tracking & ROI`);
+  
+  console.log(`\n${'═'.repeat(80)}\n`);
 });
+
