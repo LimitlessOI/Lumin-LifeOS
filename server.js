@@ -487,6 +487,140 @@ const COUNCIL_MEMBERS = {
 // ─────────────────────────────────────────────────────────────────────────────
 // MEMORY-AWARE COUNCIL CALLER (CORE)
 // ─────────────────────────────────────────────────────────────────────────────
+// TEMPORARY DEBUG VERSION - Add detailed logging
+async function callCouncilMember(member, prompt, useMicro = true) {
+  console.log(`🔍 [DEBUG] Calling ${member}...`);
+  console.log(`🔍 [DEBUG] ${member.toUpperCase()}_API_KEY:`, process.env[`${member.toUpperCase()}_API_KEY`] ? 'PRESENT' : 'MISSING');
+  
+  const config = COUNCIL_MEMBERS[member];
+  if (!config) throw new Error(`Unknown council member: ${member}`);
+
+  // 1) Pull relevant memory and build memory-aware system prompt
+  const memRows = await recallMemory({ q: prompt });
+  const memoryContext = formatMemoryForSystem(memRows);
+
+  const baseSystem = useMicro
+    ? [
+        'You are the LifeOS Architect AI controlling the Lumin autonomous system at robust-magic-production.up.railway.app.',
+        'You communicate using v2.0-Micro protocol:',
+        'Format strictly like:',
+        'V:2.0|CT:<complete detailed answer>|KP:~key~points',
+        '',
+        'PERSISTENT_MEMORY (non-negotiable facts to use & not contradict):',
+        memoryContext,
+        '',
+        'When you discover new durable facts/policies, append lines like:',
+        'MEM: <short_key> :: <concise_value>',
+      ].join('\n')
+    : '';
+
+  // local helper for finalize
+  async function finalize(response, usage, modelIdForCost) {
+    try {
+      // 2) Extract MEM: writes and persist
+      const memWrites = extractMemWritesFromText(response);
+      for (const m of memWrites) {
+        const key = m.key.toLowerCase().replace(/\s+/g, '_').slice(0, 64);
+        await writeMemory(key, { text: m.value, source: member }, 'ai_learned');
+      }
+    } catch (e) {
+      console.error('[memory.write] failed:', e.message);
+    }
+    // 3) track cost and return
+    if (modelIdForCost) trackCost(usage, modelIdForCost);
+    return { response, usage };
+  }
+
+  try {
+    // 4) Route by provider
+    if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
+      console.log(`🔍 [DEBUG] ${member}: Using Anthropic API`);
+      const res = await safeFetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: config.model,
+          max_tokens: 2000,
+          system: baseSystem,
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
+      const json = await res.json();
+      console.log(`🔍 [DEBUG] ${member}: Anthropic response status:`, json.content ? 'SUCCESS' : 'FAILED');
+      const text = json.content?.[0]?.text || '';
+      return finalize(text, { prompt_tokens: json.usage?.input_tokens, completion_tokens: json.usage?.output_tokens }, 'claude-sonnet-4');
+    }
+
+    if (config.provider === 'openai' && OPENAI_API_KEY) {
+      console.log(`🔍 [DEBUG] ${member}: Using OpenAI API`);
+      const messages = baseSystem
+        ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
+        : [{ role: 'user', content: prompt }];
+      const res = await safeFetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${OPENAI_API_KEY}` },
+        body: JSON.stringify({
+          model: config.model,
+          temperature: 0.1,
+          max_tokens: 2000,
+          messages,
+        }),
+      });
+      const json = await res.json();
+      console.log(`🔍 [DEBUG] ${member}: OpenAI response status:`, json.choices ? 'SUCCESS' : 'FAILED');
+      const text = json.choices?.[0]?.message?.content || '';
+      return finalize(text, json.usage, config.model);
+    }
+
+    if (config.provider === 'google' && GEMINI_API_KEY) {
+      console.log(`🔍 [DEBUG] ${member}: Using Gemini API`);
+      const res = await safeFetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: baseSystem ? `${baseSystem}\n\n${prompt}` : prompt }] }],
+            generationConfig: { temperature: 0.1, maxOutputTokens: 2000 },
+          }),
+        }
+      );
+      const json = await res.json();
+      console.log(`🔍 [DEBUG] ${member}: Gemini response status:`, json.candidates ? 'SUCCESS' : 'FAILED');
+      const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      const usage = {
+        prompt_tokens: json.usageMetadata?.promptTokenCount || 0,
+        completion_tokens: json.usageMetadata?.candidatesTokenCount || 0,
+      };
+      return finalize(text, usage, 'gemini-2.0-flash-exp');
+    }
+
+    if (config.provider === 'xai' && GROK_API_KEY) {
+      console.log(`🔍 [DEBUG] ${member}: Using Grok API`);
+      const messages = baseSystem
+        ? [{ role: 'system', content: baseSystem }, { role: 'user', content: prompt }]
+        : [{ role: 'user', content: prompt }];
+      const res = await safeFetch('https://api.x.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${GROK_API_KEY}` },
+        body: JSON.stringify({ model: config.model, temperature: 0.1, max_tokens: 2000, messages }),
+      });
+      const json = await res.json();
+      console.log(`🔍 [DEBUG] ${member}: Grok response status:`, json.choices ? 'SUCCESS' : 'FAILED');
+      const text = json.choices?.[0]?.message?.content || '';
+      return finalize(text, json.usage, 'grok-beta');
+    }
+
+    throw new Error(`No API key for ${member} (${config.provider})`);
+  } catch (e) {
+    console.error(`❌ [DEBUG] ${member} failed:`, e.message);
+    throw e;
+  }
+}
 async function callCouncilMember(member, prompt, useMicro = true) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown council member: ${member}`);
@@ -1058,7 +1192,56 @@ app.post("/api/v1/council/consensus", requireCommandKey, async (req, res) => {
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
+// ─────────────────────────────────────────────────────────────────────────────
+// DEBUG: Environment Variable Diagnostic
+// ─────────────────────────────────────────────────────────────────────────────
 
+async function testAPI(provider) {
+  try {
+    const testPrompt = "Say 'TEST'";
+    let result;
+    
+    if (provider === 'openai' && process.env.OPENAI_API_KEY) {
+      const r = await safeFetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+        body: JSON.stringify({ model: 'gpt-4o-mini', messages: [{ role: 'user', content: testPrompt }], max_tokens: 10 })
+      });
+      result = await r.json();
+      return result.choices ? '✅ Working' : `❌ ${result.error?.message || 'Failed'}`;
+    }
+    
+    if (provider === 'anthropic' && process.env.ANTHROPIC_API_KEY) {
+      const r = await safeFetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+        body: JSON.stringify({ model: 'claude-3-5-sonnet-20241022', max_tokens: 10, messages: [{ role: 'user', content: testPrompt }] })
+      });
+      result = await r.json();
+      return result.content ? '✅ Working' : `❌ ${result.error?.message || 'Failed'}`;
+    }
+    
+    return '⚠️ Not tested';
+  } catch (e) {
+    return `❌ ${e.message}`;
+  }
+}
+
+app.get("/api/v1/debug/env", requireCommandKey, async (req, res) => {
+  const envStatus = {
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY ? `✅ Set (${process.env.OPENAI_API_KEY.slice(0, 10)}...)` : '❌ Missing',
+    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY ? `✅ Set (${process.env.ANTHROPIC_API_KEY.slice(0, 10)}...)` : '❌ Missing', 
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY ? `✅ Set (${process.env.GEMINI_API_KEY.slice(0, 10)}...)` : '❌ Missing',
+    GROK_API_KEY: process.env.GROK_API_KEY ? `✅ Set (${process.env.GROK_API_KEY.slice(0, 10)}...)` : '❌ Missing',
+    // Test if keys are valid by making test calls
+    openai_test: await testAPI('openai'),
+    anthropic_test: await testAPI('anthropic'),
+    gemini_test: '⚠️ Test not implemented', // Gemini test would go here
+    grok_test: '⚠️ Test not implemented'   // Grok test would go here
+  };
+  
+  res.json({ env: envStatus });
+});
 // ─────────────────────────────────────────────────────────────────────────────
 // Routes: Health
 // ─────────────────────────────────────────────────────────────────────────────
