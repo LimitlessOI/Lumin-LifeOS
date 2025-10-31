@@ -633,6 +633,17 @@ async function initDb() {
   );`);
   await pool.query(`create index if not exists idx_memory_category on shared_memory(category);`);
   await pool.query(`create index if not exists idx_approval_status on approval_queue(status);`);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS debate_log (
+      id SERIAL PRIMARY KEY,
+      debate_id TEXT UNIQUE NOT NULL,
+      prompt TEXT NOT NULL,
+      full_debate JSONB,
+      consensus_result JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    CREATE INDEX IF NOT EXISTS idx_debate_log_id ON debate_log(debate_id);
+  `);
 }
 
 initDb()
@@ -805,6 +816,245 @@ app.post("/api/v1/protection/approve/:id", requireCommandKey, async (req, res) =
     res.json({ ok: true, committed: approval.file_path, sha: info.content?.sha || info.commit?.sha });
   } catch (e) {
     console.error("[protection.approve]", e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COUNCIL CONSENSUS WITH PRO/CON DEBATE & BLIND SPOT DETECTION
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function councilConsensusWithDebate(prompt, escalationLevel = "normal") {
+  console.log(`\n🎯 [COUNCIL] Starting debate: "${prompt.slice(0, 80)}..."`);
+
+  // Store debate in memory
+  const debateId = `debate_${Date.now()}`;
+  
+  // PHASE 1: Initial positions (fast tier - Claude, Brock, Gemini)
+  const fastTier = ["claude", "brock", "gemini"];
+  const initialVotes = {};
+
+  for (const member of fastTier) {
+    const response = await callCouncilMember(
+      member,
+      `Quick assessment: ${prompt}\n\nProvide your initial stance: APPROVE / CONCERNS / REJECT and 1-2 reasons.`,
+      false
+    );
+    initialVotes[member] = response.response;
+  }
+
+  await writeMemory(`${debateId}_initial_votes`, initialVotes, "debate_log");
+
+  // Check if unanimous - if yes, skip full debate
+  const unanimity = checkUnanimity(initialVotes);
+  if (unanimity.unanimous) {
+    console.log(`✅ [CONSENSUS] Unanimous ${unanimity.position}. Skipping full debate.`);
+    return {
+      debate_id: debateId,
+      unanimous: true,
+      position: unanimity.position,
+      confidence: 95,
+      votes: initialVotes,
+      risk_flags: []
+    };
+  }
+
+  console.log(`🟡 [DEBATE] Not unanimous. Escalating to full council...`);
+
+  // PHASE 2: Full debate - each member argues PRO and CON
+  const fullDebate = {};
+  const council = ["claude", "brock", "jayn", "r8", "gemini", "grok"];
+
+  for (const member of council) {
+    // Argument FOR
+    const proResponse = await callCouncilMember(
+      member,
+      `You are arguing IN FAVOR of: "${prompt}"\n\nWhat are the strongest 3 arguments FOR this? Consider benefits, opportunities, and why it's worth the risk.`,
+      false
+    );
+
+    // Argument AGAINST
+    const conResponse = await callCouncilMember(
+      member,
+      `You are arguing AGAINST: "${prompt}"\n\nWhat are the strongest 3 arguments AGAINST this? Consider risks, blind spots, unintended consequences, and what could go wrong.`,
+      false
+    );
+
+    // Blind spots this member might miss
+    const blindSpotResponse = await callCouncilMember(
+      member,
+      `What are the blind spots YOU personally might have about: "${prompt}"? What don't you see that others might?`,
+      false
+    );
+
+    fullDebate[member] = {
+      pro: proResponse.response,
+      con: conResponse.response,
+      blind_spots: blindSpotResponse.response
+    };
+  }
+
+  await writeMemory(`${debateId}_full_debate`, fullDebate, "debate_log");
+
+  // PHASE 3: Synthesis - have R8 (quality) judge the debate
+  const debateSummary = JSON.stringify(fullDebate, null, 2);
+  const synthesisResponse = await callCouncilMember(
+    "r8",
+    `You are the judge. Here's the full debate:\n\n${debateSummary}\n\nNow judge: Based on all arguments, what's the BEST DECISION and why? Rate confidence 0-100. List any unmitigated risks.`,
+    false
+  );
+
+  // PHASE 4: Final vote with updated context
+  const finalVotes = {};
+  for (const member of council) {
+    const finalResponse = await callCouncilMember(
+      member,
+      `After hearing all perspectives, cast your final vote on: "${prompt}"\n\nVote: APPROVE / CONCERNS / REJECT\nConfidence: 0-100\nReason: [1 sentence]`,
+      false
+    );
+    finalVotes[member] = finalResponse.response;
+  }
+
+  await writeMemory(`${debateId}_final_votes`, finalVotes, "debate_log");
+
+  // Calculate consensus
+  const consensus = calculateConsensus(finalVotes);
+
+  // Extract risk flags from debate
+  const riskFlags = extractRisks(fullDebate);
+
+  const result = {
+    debate_id: debateId,
+    unanimous: consensus.unanimous,
+    position: consensus.position,
+    confidence: consensus.confidence,
+    full_debate: fullDebate,
+    synthesis: synthesisResponse.response,
+    final_votes: finalVotes,
+    risk_flags: riskFlags,
+    blind_spots: extractBlindSpots(fullDebate),
+    recommendation: consensus.recommendation,
+    escalate_to_human: consensus.confidence < 70 || escalationLevel === "high"
+  };
+
+  await writeMemory(debateId, result, "consensus_decisions");
+  
+  return result;
+}
+
+function checkUnanimity(votes) {
+  const positions = Object.values(votes).map(v => 
+    v.includes("APPROVE") ? "approve" : v.includes("REJECT") ? "reject" : "concerns"
+  );
+  
+  const allSame = new Set(positions).size === 1;
+  
+  return {
+    unanimous: allSame,
+    position: positions[0]
+  };
+}
+
+function calculateConsensus(votes) {
+  const positions = Object.entries(votes).map(([member, response]) => ({
+    member,
+    position: response.includes("APPROVE") ? "approve" : response.includes("REJECT") ? "reject" : "concerns",
+    confidence: extractNumber(response, /Confidence:\s*(\d+)/) || 50
+  }));
+
+  const approveCount = positions.filter(p => p.position === "approve").length;
+  const rejectCount = positions.filter(p => p.position === "reject").length;
+  const concernsCount = positions.filter(p => p.position === "concerns").length;
+
+  const avgConfidence = Math.round(
+    positions.reduce((sum, p) => sum + p.confidence, 0) / positions.length
+  );
+
+  let position = "concerns";
+  if (approveCount > rejectCount + concernsCount) position = "approve";
+  if (rejectCount > approveCount + concernsCount) position = "reject";
+
+  return {
+    unanimous: new Set(positions.map(p => p.position)).size === 1,
+    position,
+    approve: approveCount,
+    concerns: concernsCount,
+    reject: rejectCount,
+    confidence: avgConfidence,
+    recommendation: position === "approve" ? "EXECUTE" : position === "reject" ? "BLOCK" : "ESCALATE_TO_HUMAN"
+  };
+}
+
+function extractRisks(debate) {
+  const risks = [];
+  for (const [member, positions] of Object.entries(debate)) {
+    const conText = positions.con.toLowerCase();
+    if (conText.includes("risk") || conText.includes("danger") || conText.includes("could fail")) {
+      risks.push({
+        member,
+        risk: positions.con.slice(0, 200)
+      });
+    }
+  }
+  return risks;
+}
+
+function extractBlindSpots(debate) {
+  const blindSpots = [];
+  for (const [member, positions] of Object.entries(debate)) {
+    blindSpots.push({
+      member,
+      blind_spot: positions.blind_spots.slice(0, 150)
+    });
+  }
+  return blindSpots;
+}
+
+function extractNumber(text, regex) {
+  const match = text.match(regex);
+  return match ? parseInt(match[1]) : null;
+}
+
+// NEW ENDPOINT: Call consensus
+app.post("/api/v1/council/consensus", requireCommandKey, async (req, res) => {
+  try {
+    const { action, prompt, escalation_level } = req.body;
+    
+    if (!prompt) {
+      return res.status(400).json({ ok: false, error: "prompt required" });
+    }
+
+    const result = await councilConsensusWithDebate(prompt, escalation_level || "normal");
+    
+    res.json({
+      ok: true,
+      consensus: result,
+      human_review_required: result.escalate_to_human,
+      next_step: result.escalate_to_human ? "AWAITING_HUMAN_APPROVAL" : result.position === "approve" ? "EXECUTE" : "BLOCKED"
+    });
+  } catch (e) {
+    console.error("[consensus]", e);
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+app.post("/api/v1/council/consensus", requireCommandKey, async (req, res) => {
+  try {
+    const { action, prompt, escalation_level } = req.body;
+    
+    if (!prompt) {
+      return res.status(400).json({ ok: false, error: "prompt required" });
+    }
+
+    const result = await councilConsensusWithDebate(prompt, escalation_level || "normal");
+    
+    res.json({
+      ok: true,
+      consensus: result,
+      human_review_required: result.escalate_to_human,
+      next_step: result.escalate_to_human ? "AWAITING_HUMAN_APPROVAL" : result.position === "approve" ? "EXECUTE" : "BLOCKED"
+    });
+  } catch (e) {
+    console.error("[consensus]", e);
     res.status(500).json({ ok: false, error: String(e) });
   }
 });
