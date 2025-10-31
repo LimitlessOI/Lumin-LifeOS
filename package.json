@@ -1,18 +1,39 @@
+
 {
-  "name": "ai-call-analyzer",
-  "version": "1.0.0",
+  "name": "lumin-lifeos",
+  "version": "16.1.0",
+  "description": "Autonomous AI Council System with IP Vault",
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node test.js"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "axios": "^0.21.1",
-    "openai": "^3.0.0",
-    "body-parser": "^1.19.0",
+    "dayjs": "^1.11.10",
     "pg": "^8.11.3",
-    "@octokit/rest": "^20.0.2",
-    "dayjs": "^1.11.10"
-  }
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "crypto": "^1.0.1"
+  },
+  "optionalDependencies": {
+    "stripe": "^13.0.0",
+    "@octokit/rest": "^20.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "ai",
+    "autonomous",
+    "self-repair",
+    "consensus",
+    "council",
+    "vault",
+    "ip-protection"
+  ],
+  "author": "Adam Hopkins @ LimitlessOI",
+  "license": "Proprietary"
 }
