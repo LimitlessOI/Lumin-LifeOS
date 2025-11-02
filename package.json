@@ -1,7 +1,7 @@
 {
   "name": "lumin-lifeos",
-  "version": "16.1.0",
-  "description": "Autonomous AI Council System with IP Vault",
+  "version": "20.0.0",
+  "description": "Unified Command Center - Complete AI Orchestration System",
   "type": "module",
   "main": "server.js",
   "scripts": {
@@ -11,28 +11,28 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "dayjs": "^1.11.10",
+    "ws": "^8.14.2",
     "pg": "^8.11.3",
-    "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
+    "dayjs": "^1.11.10",
+    "axios": "^1.6.2",
+    "body-parser": "^1.20.2",
     "crypto": "^1.0.1"
-  },
-  "optionalDependencies": {
-    "stripe": "^13.0.0",
-    "@octokit/rest": "^20.0.2"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "keywords": [
     "ai",
-    "autonomous",
-    "self-repair",
-    "consensus",
+    "orchestration",
+    "websocket",
+    "postgresql",
+    "automation",
+    "memory",
     "council",
-    "vault",
-    "ip-protection"
+    "financial",
+    "realestate",
+    "revenue"
   ],
   "author": "Adam Hopkins @ LimitlessOI",
-  "license": "Proprietary"
+  "license": "MIT"
 }
