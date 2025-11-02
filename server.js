@@ -2231,7 +2231,239 @@ async function tryCloudDeepSeek(prompt, config) {
       temperature: 0.7
     })
   });
+// INCOME DRONE SYSTEM - Add to your server.js
+class IncomeDroneSystem {
+  constructor() {
+    this.activeDrones = new Map();
+    this.incomeStreams = [];
+    this.revenueTargets = {
+      immediate: 100,    // $100 today
+      daily: 500,        // $500/day within 3 days  
+      weekly: 3000       // $3k/week within 7 days
+    };
+  }
 
+  async deployIncomeDrones() {
+    console.log('🚀 DEPLOYING INCOME DRONES...');
+    
+    const droneConfigs = [
+      {
+        id: 'affiliate-drone',
+        type: 'affiliate_marketing',
+        target: 'AI tools and SaaS',
+        expectedRevenue: 200,
+        effort: 'low',
+        deploymentTime: 'immediate'
+      },
+      {
+        id: 'micro-saas-drone', 
+        type: 'micro_saas',
+        target: 'AI-powered browser extensions',
+        expectedRevenue: 500,
+        effort: 'medium',
+        deploymentTime: '24h'
+      },
+      {
+        id: 'content-drone',
+        type: 'content_creation',
+        target: 'YouTube automation + affiliate',
+        expectedRevenue: 300,
+        effort: 'low',
+        deploymentTime: 'immediate'
+      },
+      {
+        id: 'consultation-drone',
+        type: 'ai_consultation',
+        target: 'Small businesses',
+        expectedRevenue: 1000,
+        effort: 'high',
+        deploymentTime: '48h'
+      }
+    ];
+
+    for (const config of droneConfigs) {
+      await this.deployDrone(config);
+    }
+  }
+
+  async deployDrone(config) {
+    console.log(`🛸 DEPLOYING: ${config.id} - Target: $${config.expectedRevenue}`);
+    
+    const drone = {
+      ...config,
+      deployedAt: new Date().toISOString(),
+      status: 'active',
+      revenueGenerated: 0,
+      tasks: []
+    };
+
+    this.activeDrones.set(config.id, drone);
+    
+    // Generate immediate income tasks
+    const tasks = await this.generateIncomeTasks(config);
+    drone.tasks = tasks;
+    
+    // Queue tasks for execution
+    for (const task of tasks) {
+      executionQueue.addTask({
+        type: 'income_generation',
+        description: task.description,
+        droneId: config.id,
+        priority: 'critical',
+        expectedRevenue: task.expectedRevenue,
+        deadline: task.deadline
+      });
+      DEEPSEEK_BRIDGE_ENABLED=true
+# Even without local DeepSeek, the system will use fallbacks
+    }
+
+    console.log(`✅ DRONE DEPLOYED: ${config.id} - ${tasks.length} tasks queued`);
+  }
+
+  async generateIncomeTasks(droneConfig) {
+    const prompt = `
+INCOME GENERATION URGENCY: CRITICAL
+We need immediate revenue generation. No theoretical plans - only actionable, executable tasks.
+
+DRONE TYPE: ${droneConfig.type}
+TARGET: ${droneConfig.target}
+EXPECTED REVENUE: $${droneConfig.expectedRevenue}
+TIMEFRAME: ${droneConfig.deploymentTime}
+
+Generate 3-5 SPECIFIC, ACTIONABLE tasks that can be executed RIGHT NOW to generate income.
+Focus on:
+1. Immediate implementation (hours, not days)
+2. Low hanging fruit
+3. Direct revenue generation
+4. Automated execution where possible
+
+Return as JSON array of tasks with: description, expectedRevenue, deadline, and exact steps.
+`;
+
+    try {
+      const response = await callCouncilMember('claude', prompt);
+      
+      // Parse the AI response for executable tasks
+      const tasks = this.parseIncomeTasks(response, droneConfig);
+      return tasks.slice(0, 5); // Take top 5 immediately executable tasks
+      
+    } catch (error) {
+      // Fallback to predefined income tasks
+      return this.getFallbackIncomeTasks(droneConfig);
+    }
+  }
+
+  parseIncomeTasks(aiResponse, droneConfig) {
+    // Extract JSON tasks from AI response
+    const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      try {
+        return JSON.parse(jsonMatch[0]);
+      } catch (e) {
+        console.error('Failed to parse AI tasks:', e);
+      }
+    }
+    
+    return this.getFallbackIncomeTasks(droneConfig);
+  }
+
+  getFallbackIncomeTasks(droneConfig) {
+    // Immediate income-generating tasks as fallback
+    const taskTemplates = {
+      affiliate_marketing: [
+        {
+          description: "Create and deploy AI tool affiliate landing page with ClickBank products",
+          expectedRevenue: 50,
+          deadline: "6h",
+          steps: [
+            "Research top 5 AI tool affiliate programs",
+            "Generate landing page copy",
+            "Deploy to GitHub Pages with tracking",
+            "Submit to AI tool directories"
+          ]
+        },
+        {
+          description: "Automated AI tool review tweets with affiliate links",
+          expectedRevenue: 30,
+          deadline: "3h", 
+          steps: [
+            "Generate 20 AI tool review tweets",
+            "Schedule with Twitter API",
+            "Include affiliate links",
+            "Engage with AI tool communities"
+          ]
+        }
+      ],
+      micro_saas: [
+        {
+          description: "Deploy AI-powered browser extension for content summarization",
+          expectedRevenue: 100,
+          deadline: "24h",
+          steps: [
+            "Generate extension code with Claude",
+            "Submit to Chrome Web Store", 
+            "Set up basic monetization",
+            "Promote on Product Hunt"
+          ]
+        }
+      ],
+      content_creation: [
+        {
+          description: "Create and monetize AI tools YouTube shorts",
+          expectedRevenue: 40,
+          deadline: "8h",
+          steps: [
+            "Generate 10 AI tool demo scripts",
+            "Create shorts with AI voiceover",
+            "Upload to YouTube with affiliate links",
+            "Cross-promote on TikTok"
+          ]
+        }
+      ]
+    };
+
+    return taskTemplates[droneConfig.type] || [];
+  }
+
+  async trackRevenue() {
+    let totalRevenue = 0;
+    let todayRevenue = 0;
+    
+    for (const [droneId, drone] of this.activeDrones) {
+      totalRevenue += drone.revenueGenerated;
+      
+      const today = new Date().toDateString();
+      const deployedToday = new Date(drone.deployedAt).toDateString() === today;
+      if (deployedToday) {
+        todayRevenue += drone.revenueGenerated;
+      }
+    }
+
+    return {
+      totalRevenue,
+      todayRevenue,
+      activeDrones: this.activeDrones.size,
+      targetToday: this.revenueTargets.immediate,
+      onTrack: todayRevenue >= this.revenueTargets.immediate * 0.3 // 30% of daily target
+    };
+  }
+}
+
+const incomeDroneSystem = new IncomeDroneSystem();
+
+// Add to server startup - DEPLOY DRONES IMMEDIATELY
+async function startServer() {
+  // ... existing code ...
+  
+  console.log("🚀 Starting execution queue...");
+  executionQueue.executeNext();
+
+  // 🚨 DEPLOY INCOME DRONES IMMEDIATELY
+  console.log("🛸 DEPLOYING INCOME-GENERATING DRONES...");
+  incomeDroneSystem.deployIncomeDrones().catch(console.error);
+
+  // ... rest of startup code ...
+}
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   
   const data = await response.json();
