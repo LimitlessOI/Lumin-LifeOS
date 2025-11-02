@@ -2140,7 +2140,118 @@ async function startServer() {
     process.exit(1);
   }, 10000);
 }
+// ENHANCED DEEPSEEK BRIDGE - Add to your server.js
+async function callDeepSeekBridge(prompt, config) {
+  // Try multiple connection methods in sequence
+  const connectionMethods = [
+    {
+      name: 'local_bridge',
+      endpoint: DEEPSEEK_LOCAL_ENDPOINT,
+      enabled: DEEPSEEK_BRIDGE_ENABLED === "true"
+    },
+    {
+      name: 'cloud_api', 
+      endpoint: 'https://api.deepseek.com/v1/chat/completions',
+      enabled: !!DEEPSEEK_API_KEY
+    },
+    {
+      name: 'fallback_claude',
+      endpoint: null,
+      enabled: true // Always available as final fallback
+    }
+  ];
 
+  for (const method of connectionMethods) {
+    if (!method.enabled) continue;
+
+    try {
+      console.log(`🔄 [DEEPSEEK] Trying ${method.name}...`);
+      
+      let response;
+      if (method.name === 'local_bridge') {
+        response = await tryLocalDeepSeek(prompt, config, method.endpoint);
+      } else if (method.name === 'cloud_api') {
+        response = await tryCloudDeepSeek(prompt, config);
+      } else {
+        response = await tryFallbackClaude(prompt, config);
+      }
+
+      if (response.success) {
+        console.log(`✅ [DEEPSEEK ${method.name.toUpperCase()}] Success`);
+        return response.text;
+      }
+    } catch (error) {
+      console.log(`❌ [DEEPSEEK ${method.name}] Failed: ${error.message}`);
+      continue;
+    }
+  }
+
+  // Ultimate fallback - use any available AI
+  return await callCouncilMember('claude', prompt);
+}
+
+async function tryLocalDeepSeek(prompt, config, endpoint) {
+  const response = await fetch(`${endpoint}/api/v1/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: config.model,
+      messages: [
+        { role: "system", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: config.maxTokens,
+      temperature: 0.7
+    }),
+    timeout: 8000
+  });
+
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  
+  const data = await response.json();
+  const text = data.choices?.[0]?.message?.content || data.response || 'No response';
+  
+  return { success: true, text };
+}
+
+async function tryCloudDeepSeek(prompt, config) {
+  const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: config.model,
+      messages: [
+        { role: "system", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: config.maxTokens,
+      temperature: 0.7
+    })
+  });
+
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  
+  const data = await response.json();
+  const text = data.choices?.[0]?.message?.content || 'No response';
+  
+  return { success: true, text };
+}
+
+async function tryFallbackClaude(prompt, config) {
+  const enhancedPrompt = `[DEEPSEEK FALLBACK - Acting as ${config.name}]
+Role: ${config.role}
+Focus: ${config.focus}
+
+${prompt}
+
+Please respond with the technical depth and optimization focus that DeepSeek would provide.`;
+  
+  const text = await callCouncilMember('claude', enhancedPrompt);
+  return { success: true, text };
+}
 process.on('SIGINT', handleGracefulShutdown);
 process.on('SIGTERM', handleGracefulShutdown);
 
