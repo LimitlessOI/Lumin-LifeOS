@@ -15,7 +15,13 @@
     "pg": "^8.11.3",
     "dayjs": "^1.11.10",
     "axios": "^1.6.2",
-    "body-parser": "^1.20.2"
+    "body-parser": "^1.20.2",
+    "crypto": "^1.0.1",
+    "node-cron": "^3.0.2"
+  },
+  "optionalDependencies": {
+    "stripe": "^13.0.0",
+    "@octokit/rest": "^20.0.2"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -27,7 +33,10 @@
     "postgresql",
     "automation",
     "memory",
-    "council"
+    "council",
+    "financial",
+    "realestate",
+    "revenue"
   ],
   "author": "Adam Hopkins @ LimitlessOI",
   "license": "MIT"
