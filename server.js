@@ -1,46 +1,22 @@
 /**
  * ╔═════════════════════════════════════════════════════════════════════════════════╗
  * ║                                                                                 ║
- * ║     🎼 UNIFIED COMMAND CENTER v20.0 - COMPLETE 2400+ LINE SYSTEM 🎼          ║
+ * ║                    🎼 SERVER.JS - COMPLETE AI ORCHESTRATION SYSTEM           ║
  * ║                                                                                 ║
  * ║     Preserves ALL Functionality • Fixed Dependencies • Production Ready        ║
  * ║                                                                                 ║
  * ╚═════════════════════════════════════════════════════════════════════════════════╝
  * 
- * @system UNIFIED_COMMAND_CENTER_v20.0
+ * @file server.js
  * @version 20.0.0
- * @author Adam Hopkins
  * @description Complete AI-orchestrated business automation system
  * @status PRODUCTION_READY
  * @features ["WebSocket", "Memory", "TaskQueue", "Financial", "AICouncil", "RealEstate", "RevenueBot"]
- * 
- * ═══════════════════════════════════════════════════════════════════════════════════
- * TABLE OF CONTENTS
- * ═══════════════════════════════════════════════════════════════════════════════════
- * 
- * @section IMPORTS_AND_SETUP (Lines 1-80)
- * @section ENVIRONMENT_CONFIGURATION (Lines 81-150)
- * @section DATABASE_INITIALIZATION (Lines 151-250)
- * @section WEBSOCKET_MANAGEMENT (Lines 251-350)
- * @section MEMORY_SYSTEM_3LAYER (Lines 351-500)
- * @section TASK_QUEUE_EXECUTION (Lines 501-700)
- * @section FINANCIAL_DASHBOARD (Lines 701-900)
- * @section AI_COUNCIL_INTEGRATION (Lines 901-1050)
- * @section WEBSOCKET_HANDLERS (Lines 1051-1300)
- * @section REST_API_ENDPOINTS (Lines 1301-1500)
- * @section REAL_ESTATE_ENGINE (Lines 1501-1650)
- * @section REVENUE_BOT_SYSTEM (Lines 1651-1800)
- * @section PROTECTION_SYSTEM (Lines 1801-1900)
- * @section OVERLAY_SERVING (Lines 1901-2000)
- * @section ERROR_HANDLING (Lines 2001-2100)
- * @section SERVER_STARTUP (Lines 2101-2200)
- * 
- * ═══════════════════════════════════════════════════════════════════════════════════
  */
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// @section IMPORTS_AND_SETUP
-// ═══════════════════════════════════════════════════════════════════════════════════
+// =============================================================================
+// IMPORTS AND SETUP
+// =============================================================================
 
 import express from "express";
 import dayjs from "dayjs";
@@ -51,52 +27,16 @@ import { WebSocketServer } from "ws";
 import { createServer } from "http";
 import crypto from "crypto";
 
-/**
- * @constant __dirname
- * @type {string}
- * @description Current directory (ESM workaround)
- */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-/**
- * @constant app
- * @type {Express.Application}
- * @description Express server instance
- */
 const app = express();
-
-/**
- * @constant server
- * @type {http.Server}
- * @description HTTP server for WebSocket support
- */
 const server = createServer(app);
-
-/**
- * @constant wss
- * @type {WebSocket.Server}
- * @description WebSocket server instance
- */
 const wss = new WebSocketServer({ server });
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// @section ENVIRONMENT_CONFIGURATION
-// ═══════════════════════════════════════════════════════════════════════════════════
-
-/**
- * @typedef {Object} EnvironmentConfig
- * @property {string} DATABASE_URL - PostgreSQL connection string
- * @property {string} COMMAND_CENTER_KEY - Secret API key for authentication
- * @property {string} ANTHROPIC_API_KEY - Claude API access token
- * @property {string} OPENAI_API_KEY - ChatGPT API access token
- * @property {string} GEMINI_API_KEY - Google Gemini API access token
- * @property {string} DEEPSEEK_API_KEY - DeepSeek API access token
- * @property {string} GROK_API_KEY - Grok API access token
- * @property {string} HOST - Server host (default: 0.0.0.0)
- * @property {number} PORT - Server port (default: 8080)
- * @property {string} AI_TIER - Model tier (light|medium|heavy)
- */
+// =============================================================================
+// ENVIRONMENT CONFIGURATION
+// =============================================================================
 
 const {
   DATABASE_URL,
@@ -113,10 +53,6 @@ const {
   GITHUB_REPO = "LimitlessOI/Lumin-LifeOS"
 } = process.env;
 
-/**
- * @function validateEnvironment
- * @returns {boolean} True if all required variables are set
- */
 function validateEnvironment() {
   const required = ["DATABASE_URL"];
   const missing = required.filter(key => !process.env[key]);
@@ -130,37 +66,20 @@ function validateEnvironment() {
   return true;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// @section DATABASE_INITIALIZATION
-// ═══════════════════════════════════════════════════════════════════════════════════
+// =============================================================================
+// DATABASE INITIALIZATION
+// =============================================================================
 
-/**
- * @constant pool
- * @type {Pool}
- * @description PostgreSQL connection pool
- */
 const pool = new Pool({
   connectionString: DATABASE_URL,
-  ssl: DATABASE_URL?.includes("neon.tech") 
-    ? { rejectUnauthorized: false } 
-    : undefined,
+  ssl: DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000
 });
 
-/**
- * @async
- * @function initDb
- * @returns {Promise<void>}
- * @description Initializes all database tables and indexes
- */
 async function initDb() {
   try {
-    // ─────────────────────────────────────────────────────────────
-    // @table conversation_memory
-    // Stores all conversations with automatic 3-layer extraction
-    // ─────────────────────────────────────────────────────────────
     await pool.query(`
       CREATE TABLE IF NOT EXISTS conversation_memory (
         id SERIAL PRIMARY KEY,
@@ -174,10 +93,6 @@ async function initDb() {
       );
     `);
 
-    // ─────────────────────────────────────────────────────────────
-    // @table file_storage
-    // Stores uploaded files with metadata
-    // ─────────────────────────────────────────────────────────────
     await pool.query(`
       CREATE TABLE IF NOT EXISTS file_storage (
         id SERIAL PRIMARY KEY,
@@ -189,10 +104,6 @@ async function initDb() {
       );
     `);
 
-    // ─────────────────────────────────────────────────────────────
-    // @table financial_ledger
-    // Tracks all financial transactions
-    // ─────────────────────────────────────────────────────────────
     await pool.query(`
       CREATE TABLE IF NOT EXISTS financial_ledger (
         id SERIAL PRIMARY KEY,
@@ -205,10 +116,6 @@ async function initDb() {
       );
     `);
 
-    // ─────────────────────────────────────────────────────────────
-    // @table investments
-    // Tracks investment positions
-    // ─────────────────────────────────────────────────────────────
     await pool.query(`
       CREATE TABLE IF NOT EXISTS investments (
         id SERIAL PRIMARY KEY,
@@ -221,10 +128,6 @@ async function initDb() {
       );
     `);
 
-    // ─────────────────────────────────────────────────────────────
-    // @table crypto_portfolio
-    // Tracks cryptocurrency holdings and gains/losses
-    // ─────────────────────────────────────────────────────────────
     await pool.query(`
       CREATE TABLE IF NOT EXISTS crypto_portfolio (
         id SERIAL PRIMARY KEY,
@@ -238,10 +141,6 @@ async function initDb() {
       );
     `);
 
-    // ─────────────────────────────────────────────────────────────
-    // @table protected_files
-    // Protects critical system files
-    // ─────────────────────────────────────────────────────────────
     await pool.query(`
       CREATE TABLE IF NOT EXISTS protected_files (
         id SERIAL PRIMARY KEY,
@@ -254,10 +153,6 @@ async function initDb() {
       );
     `);
 
-    // ─────────────────────────────────────────────────────────────
-    // @table shared_memory
-    // Shared memory system for AI learning
-    // ─────────────────────────────────────────────────────────────
     await pool.query(`
       CREATE TABLE IF NOT EXISTS shared_memory (
         id SERIAL PRIMARY KEY,
@@ -274,10 +169,6 @@ async function initDb() {
       );
     `);
 
-    // ─────────────────────────────────────────────────────────────
-    // @table real_estate_properties
-    // Real estate property tracking
-    // ─────────────────────────────────────────────────────────────
     await pool.query(`
       CREATE TABLE IF NOT EXISTS real_estate_properties (
         id SERIAL PRIMARY KEY,
@@ -293,9 +184,7 @@ async function initDb() {
       );
     `);
 
-    // ─────────────────────────────────────────────────────────────
-    // @indexes Create performance indexes
-    // ─────────────────────────────────────────────────────────────
+    // Create indexes
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_id ON conversation_memory(memory_id);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_created ON conversation_memory(created_at);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_file_storage ON file_storage(file_id);`);
@@ -321,69 +210,33 @@ async function initDb() {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// @section WEBSOCKET_MANAGEMENT
-// ═══════════════════════════════════════════════════════════════════════════════════
+// =============================================================================
+// WEBSOCKET MANAGEMENT
+// =============================================================================
 
-/**
- * @typedef {Object} ActiveConnection
- * @property {string} clientId - Unique client identifier
- * @property {WebSocket} ws - WebSocket connection object
- * @property {Array} conversationHistory - Message history for this client
- */
-
-/**
- * @constant activeConnections
- * @type {Map<string, WebSocket>}
- * @description Maps clientId → WebSocket connection
- */
 const activeConnections = new Map();
-
-/**
- * @constant conversationHistory
- * @type {Map<string, Array>}
- * @description Maps clientId → conversation history
- */
 const conversationHistory = new Map();
 
-/**
- * @function broadcastToOrchestrator
- * @param {Object} message - Message to broadcast
- * @returns {void}
- * @description Broadcasts message to all connected clients in real-time
- */
 function broadcastToOrchestrator(message) {
   const broadcastData = JSON.stringify(message);
   
   for (const [clientId, ws] of activeConnections.entries()) {
-    if (ws && ws.readyState === 1) { // 1 = OPEN
+    if (ws && ws.readyState === 1) {
       ws.send(broadcastData);
     }
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// @section MEMORY_SYSTEM_3LAYER
-// ═══════════════════════════════════════════════════════════════════════════════════
+// =============================================================================
+// MEMORY SYSTEM
+// =============================================================================
 
-/**
- * @async
- * @function storeConversationMemory
- * @param {string} orchestratorMessage - Message from orchestrator (you)
- * @param {string} aiResponse - Response from AI musician
- * @param {Object} context - Additional context metadata
- * @returns {Promise<Object>} Result of memory storage
- * @description Stores conversation with 3-layer automatic extraction
- */
 async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
   try {
     const memId = `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     
-    // @layer2 Extract key facts using regex patterns
     const keyFacts = extractKeyFacts(orchestratorMessage, aiResponse);
     
-    // @layer1 Store exact conversation text
-    // @layer3 Store context metadata
     await pool.query(
       `INSERT INTO conversation_memory 
        (memory_id, orchestrator_msg, ai_response, key_facts, context_metadata, memory_type, created_at)
@@ -406,13 +259,6 @@ async function storeConversationMemory(orchestratorMessage, aiResponse, context 
   }
 }
 
-/**
- * @function extractKeyFacts
- * @param {string} message - User message
- * @param {string} response - AI response
- * @returns {Array} Extracted key facts
- * @description Extracts key facts using regex pattern matching
- */
 function extractKeyFacts(message, response) {
   const facts = [];
   
@@ -452,7 +298,6 @@ function extractKeyFacts(message, response) {
     }
   ];
 
-  // Extract from both message and response
   const texts = [message, response];
   texts.forEach((text, index) => {
     for (const pattern of patterns) {
@@ -473,13 +318,6 @@ function extractKeyFacts(message, response) {
   return facts;
 }
 
-/**
- * @async
- * @function recallConversationMemory
- * @param {string} query - Search query
- * @param {number} limit - Max results to return
- * @returns {Promise<Array>} Matching conversation memories
- */
 async function recallConversationMemory(query, limit = 50) {
   try {
     const result = await pool.query(
@@ -499,14 +337,10 @@ async function recallConversationMemory(query, limit = 50) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// @section TASK_QUEUE_EXECUTION
-// ═══════════════════════════════════════════════════════════════════════════════════
+// =============================================================================
+// TASK QUEUE EXECUTION
+// =============================================================================
 
-/**
- * @class ExecutionQueue
- * @description Manages task queue with automatic sequential execution
- */
 class ExecutionQueue {
   constructor() {
     this.tasks = [];
@@ -514,11 +348,6 @@ class ExecutionQueue {
     this.history = [];
   }
 
-  /**
-   * @function addTask
-   * @param {Object} task - Task configuration
-   * @returns {string} Task ID
-   */
   addTask(task) {
     const taskId = `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     
@@ -541,11 +370,6 @@ class ExecutionQueue {
     return taskId;
   }
 
-  /**
-   * @async
-   * @function executeNext
-   * @returns {Promise<Task|null>} Executed task or null if queue empty
-   */
   async executeNext() {
     if (this.tasks.length === 0) {
       setTimeout(() => this.executeNext(), 5000);
@@ -584,12 +408,6 @@ class ExecutionQueue {
     setTimeout(() => this.executeNext(), 500);
   }
 
-  /**
-   * @async
-   * @function executeTask
-   * @param {Object} task - Task to execute
-   * @returns {Promise<*>} Task result
-   */
   async executeTask(task) {
     if (task.type === 'code_generation') {
       return await this.generateCode(task);
@@ -602,12 +420,6 @@ class ExecutionQueue {
     return { status: 'executed', task: task.command };
   }
 
-  /**
-   * @async
-   * @function generateCode
-   * @param {Object} task - Code generation task
-   * @returns {Promise<Object>} Generated code result
-   */
   async generateCode(task) {
     console.log(`🔧 Generating code for: ${task.description}`);
     
@@ -629,22 +441,10 @@ class ExecutionQueue {
     }
   }
 
-  /**
-   * @async
-   * @function executeAPI
-   * @param {Object} task - API call task
-   * @returns {Promise<Object>} API response
-   */
   async executeAPI(task) {
-    // API execution logic
     return { status: 'api_executed', task: task.command, timestamp: new Date().toISOString() };
   }
 
-  /**
-   * @function broadcastTaskUpdate
-   * @param {string} eventType - Event type
-   * @param {Object} taskData - Task data
-   */
   broadcastTaskUpdate(eventType, taskData) {
     broadcastToOrchestrator({
       type: 'task_update',
@@ -654,10 +454,6 @@ class ExecutionQueue {
     });
   }
 
-  /**
-   * @function getStatus
-   * @returns {Object} Queue status
-   */
   getStatus() {
     return {
       queued: this.tasks.length,
@@ -673,14 +469,10 @@ class ExecutionQueue {
 
 const executionQueue = new ExecutionQueue();
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// @section FINANCIAL_DASHBOARD
-// ═══════════════════════════════════════════════════════════════════════════════════
+// =============================================================================
+// FINANCIAL DASHBOARD
+// =============================================================================
 
-/**
- * @class FinancialDashboard
- * @description Manages all financial tracking and reporting
- */
 class FinancialDashboard {
   constructor() {
     this.ledger = [];
@@ -688,15 +480,6 @@ class FinancialDashboard {
     this.crypto = [];
   }
 
-  /**
-   * @async
-   * @function recordTransaction
-   * @param {string} type - Transaction type
-   * @param {number} amount - Amount in USD
-   * @param {string} description - Transaction description
-   * @param {string} category - Transaction category
-   * @returns {Promise<Object>} Recorded transaction
-   */
   async recordTransaction(type, amount, description, category = 'general') {
     try {
       const txId = `tx_${Date.now()}`;
@@ -725,15 +508,6 @@ class FinancialDashboard {
     }
   }
 
-  /**
-   * @async
-   * @function addInvestment
-   * @param {string} name - Investment name
-   * @param {number} amount - Amount invested
-   * @param {number} expectedReturn - Expected return
-   * @param {string} status - Investment status
-   * @returns {Promise<Object>} Recorded investment
-   */
   async addInvestment(name, amount, expectedReturn, status = 'active') {
     try {
       const invId = `inv_${Date.now()}`;
@@ -762,15 +536,6 @@ class FinancialDashboard {
     }
   }
 
-  /**
-   * @async
-   * @function addCryptoPosition
-   * @param {string} symbol - Crypto symbol
-   * @param {number} amount - Amount held
-   * @param {number} entryPrice - Entry price per unit
-   * @param {number} currentPrice - Current market price
-   * @returns {Promise<Object>} Crypto position
-   */
   async addCryptoPosition(symbol, amount, entryPrice, currentPrice) {
     try {
       const cryptoId = `crypto_${Date.now()}`;
@@ -800,11 +565,6 @@ class FinancialDashboard {
     }
   }
 
-  /**
-   * @async
-   * @function getDashboard
-   * @returns {Promise<Object>} Complete financial dashboard
-   */
   async getDashboard() {
     try {
       const todayStart = dayjs().startOf('day').toDate();
@@ -812,7 +572,6 @@ class FinancialDashboard {
       const monthStart = dayjs().startOf('month').toDate();
       const monthEnd = dayjs().endOf('month').toDate();
 
-      // Get daily P&L
       const dailyResult = await pool.query(
         `SELECT 
          SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
@@ -831,7 +590,6 @@ class FinancialDashboard {
         transactions: dailyRow.transaction_count
       };
 
-      // Get monthly P&L
       const monthlyResult = await pool.query(
         `SELECT 
          SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
@@ -848,15 +606,8 @@ class FinancialDashboard {
         net: (parseFloat(monthlyRow.total_income) || 0) - (parseFloat(monthlyRow.total_expenses) || 0)
       };
 
-      // Get investments
-      const investmentsResult = await pool.query(
-        `SELECT * FROM investments ORDER BY created_at DESC LIMIT 20`
-      );
-
-      // Get crypto
-      const cryptoResult = await pool.query(
-        `SELECT * FROM crypto_portfolio ORDER BY created_at DESC LIMIT 20`
-      );
+      const investmentsResult = await pool.query(`SELECT * FROM investments ORDER BY created_at DESC LIMIT 20`);
+      const cryptoResult = await pool.query(`SELECT * FROM crypto_portfolio ORDER BY created_at DESC LIMIT 20`);
 
       const totalCryptoValue = cryptoResult.rows.reduce((sum, pos) => sum + (parseFloat(pos.amount) * parseFloat(pos.current_price)), 0);
       const totalCryptoGain = cryptoResult.rows.reduce((sum, pos) => sum + ((parseFloat(pos.current_price) - parseFloat(pos.entry_price)) * parseFloat(pos.amount)), 0);
@@ -888,15 +639,10 @@ class FinancialDashboard {
 
 const financialDashboard = new FinancialDashboard();
 
-// ═══════════════════════════════════════════════════════════════════════════════════
-// @section AI_COUNCIL_INTEGRATION
-// ═══════════════════════════════════════════════════════════════════════════════════
+// =============================================================================
+// AI COUNCIL INTEGRATION
+// =============================================================================
 
-/**
- * @constant COUNCIL_MEMBERS
- * @type {Object<string, Object>}
- * @description AI Council members configuration
- */
 const COUNCIL_MEMBERS = {
   claude: {
     name: "Claude",
@@ -955,16 +701,14 @@ const COUNCIL_MEMBERS = {
   }
 };
 
-/**
- * @async
- * @function callCouncilMember
- * @param {string} member - Council member name
- * @param {string} prompt - Prompt to send to AI
- * @returns {Promise<string>} AI response
- */
 async function callCouncilMember(member, prompt) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown council member: ${member}`);
+
+  // DeepSeek bridge handling
+  if (member === 'deepseek') {
+    return await callDeepSeekBridge(prompt, config);
+  }
 
   const modelName = config.model;
   const systemPrompt = `You are ${config.name}. Your role: ${config.role}. Focus: ${config.focus}. Respond naturally and helpfully.`;
@@ -990,7 +734,6 @@ async function callCouncilMember(member, prompt) {
       const text = json.content[0]?.text || '';
       console.log(`✅ [${member}] Response received (${text.length} chars)`);
       
-      // AUTO-MEMORY: Store conversation automatically
       await storeConversationMemory(prompt, text, { 
         ai_member: member,
         context: 'council_response'
@@ -1021,7 +764,6 @@ async function callCouncilMember(member, prompt) {
       const text = json.choices[0]?.message?.content || '';
       console.log(`✅ [${member}] Response received (${text.length} chars)`);
       
-      // AUTO-MEMORY: Store conversation automatically
       await storeConversationMemory(prompt, text, { 
         ai_member: member,
         context: 'council_response'
@@ -1046,7 +788,68 @@ To enable real AI responses, please set the ${config.provider.toUpperCase()}_API
 }
 
 // =============================================================================
-// WEB SOCKET HANDLERS - REAL-TIME COMMUNICATION
+// DEEPSEEK BRIDGE IMPLEMENTATION
+// =============================================================================
+
+const DEEPSEEK_BRIDGE_CONFIG = {
+  localEndpoint: process.env.DEEPSEEK_LOCAL_ENDPOINT || "http://localhost:8081",
+  apiKey: process.env.DEEPSEEK_API_KEY || "local-dev-key",
+  timeout: 30000
+};
+
+async function callDeepSeekBridge(prompt, config) {
+  try {
+    console.log(`🌉 [DEEPSEEK BRIDGE] Calling: ${DEEPSEEK_BRIDGE_CONFIG.localEndpoint}`);
+    
+    const response = await fetch(`${DEEPSEEK_BRIDGE_CONFIG.localEndpoint}/api/v1/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${DEEPSEEK_BRIDGE_CONFIG.apiKey}`
+      },
+      body: JSON.stringify({
+        model: config.model,
+        messages: [
+          {
+            role: "system",
+            content: `You are ${config.name}. Your role: ${config.role}. Focus: ${config.focus}.`
+          },
+          {
+            role: "user", 
+            content: prompt
+          }
+        ],
+        max_tokens: config.maxTokens,
+        temperature: 0.7
+      }),
+      timeout: DEEPSEEK_BRIDGE_CONFIG.timeout
+    });
+
+    if (!response.ok) {
+      throw new Error(`Bridge returned ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content || data.response || 'No response content';
+    
+    console.log(`✅ [DEEPSEEK] Response received: ${text.length} characters`);
+    
+    await storeConversationMemory(prompt, text, { 
+      ai_member: 'deepseek',
+      context: 'local_bridge'
+    });
+    
+    return text;
+    
+  } catch (error) {
+    console.error(`❌ [DEEPSEEK BRIDGE] Error: ${error.message}`);
+    
+    return `[DeepSeek Bridge] Unable to connect: ${error.message}\n\nTo fix this:\n1. Ensure your local DeepSeek is running\n2. Set DEEPSEEK_LOCAL_ENDPOINT environment variable\n3. Current endpoint: ${DEEPSEEK_BRIDGE_CONFIG.localEndpoint}`;
+  }
+}
+
+// =============================================================================
+// WEB SOCKET HANDLERS
 // =============================================================================
 
 wss.on('connection', (ws) => {
@@ -1056,12 +859,12 @@ wss.on('connection', (ws) => {
 
   console.log(`✅ [WEBSOCKET] Client connected: ${clientId}`);
 
-  // Send welcome message
+  // Send welcome message with all features
   ws.send(JSON.stringify({
     type: 'connection',
     status: 'connected',
     clientId,
-    message: '🎼 Connected to Unified Command Center v20.0 - Full Integration Active',
+    message: '🎼 Connected to AI Orchestration System - Full Integration Active',
     features: [
       'Real-time WebSocket communication',
       'Automatic 3-layer memory system', 
@@ -1138,14 +941,11 @@ async function handleConversation(clientId, message, ws) {
   history.push({ role: 'orchestrator', content: text, timestamp: Date.now() });
 
   try {
-    // Call Claude (primary musician) - AUTO-MEMORY ACTIVE
     const response = await callCouncilMember('claude', text);
 
-    // Add to history
     history.push({ role: 'ai', content: response, timestamp: Date.now() });
     conversationHistory.set(clientId, history);
 
-    // Send response
     ws.send(JSON.stringify({
       type: 'conversation_response',
       response,
@@ -1153,7 +953,6 @@ async function handleConversation(clientId, message, ws) {
       timestamp: new Date().toISOString()
     }));
 
-    // Extract and queue tasks automatically
     const tasks = extractExecutableTasks(response);
     if (tasks.length > 0) {
       for (const task of tasks) {
@@ -1166,27 +965,6 @@ async function handleConversation(clientId, message, ws) {
         tasks
       }));
     }
-  } catch (error) {
-    ws.send(JSON.stringify({ type: 'error', error: error.message }));
-  }
-}
-
-async function handleCodeGeneration(clientId, message, ws) {
-  const { description, type = 'code_generation' } = message;
-  
-  try {
-    const taskId = executionQueue.addTask({
-      type,
-      description,
-      command: `Generate code for: ${description}`,
-      priority: 'high'
-    });
-
-    ws.send(JSON.stringify({
-      type: 'code_generation_started',
-      taskId,
-      message: 'Code generation queued and will execute automatically'
-    }));
   } catch (error) {
     ws.send(JSON.stringify({ type: 'error', error: error.message }));
   }
@@ -1218,6 +996,27 @@ function extractExecutableTasks(response) {
   }
 
   return tasks;
+}
+
+async function handleCodeGeneration(clientId, message, ws) {
+  const { description, type = 'code_generation' } = message;
+  
+  try {
+    const taskId = executionQueue.addTask({
+      type,
+      description,
+      command: `Generate code for: ${description}`,
+      priority: 'high'
+    });
+
+    ws.send(JSON.stringify({
+      type: 'code_generation_started',
+      taskId,
+      message: 'Code generation queued and will execute automatically'
+    }));
+  } catch (error) {
+    ws.send(JSON.stringify({ type: 'error', error: error.message }));
+  }
 }
 
 async function handleCommand(clientId, message, ws) {
@@ -1358,10 +1157,7 @@ async function handleDashboardRequest(clientId, message, ws) {
 }
 
 async function handleSystemStatus(clientId, ws) {
-  const memoryStats = await pool.query(
-    "SELECT COUNT(*) as total_memories FROM conversation_memory"
-  );
-  
+  const memoryStats = await pool.query("SELECT COUNT(*) as total_memories FROM conversation_memory");
   const taskStatus = executionQueue.getStatus();
   
   ws.send(JSON.stringify({
@@ -1396,17 +1192,7 @@ async function handleSystemStatus(clientId, ws) {
 // REAL ESTATE ENGINE
 // =============================================================================
 
-/**
- * @class RealEstateEngine
- * @description Manages real estate business operations
- */
 class RealEstateEngine {
-  /**
-   * @async
-   * @function addProperty
-   * @param {Object} data - Property data
-   * @returns {Promise<Object>} Added property
-   */
   async addProperty(data) {
     const { mls_id, address, price, bedrooms, bathrooms, sqft } = data;
     const result = await pool.query(
@@ -1419,12 +1205,6 @@ class RealEstateEngine {
     return result.rows[0];
   }
 
-  /**
-   * @async
-   * @function getProperties
-   * @param {Object} filter - Filter options
-   * @returns {Promise<Array>} Filtered properties
-   */
   async getProperties(filter = {}) {
     let query = "SELECT * FROM real_estate_properties WHERE 1=1";
     const params = [];
@@ -1448,20 +1228,11 @@ const realEstateEngine = new RealEstateEngine();
 // REVENUE BOT SYSTEM
 // =============================================================================
 
-/**
- * @class RevenueBotEngine
- * @description Scans for and identifies money-making opportunities
- */
 class RevenueBotEngine {
   constructor() {
     this.opportunities = [];
   }
 
-  /**
-   * @async
-   * @function scanForOpportunities
-   * @returns {Promise<Object>} Identified opportunities
-   */
   async scanForOpportunities() {
     const opportunities = [
       {
@@ -1521,12 +1292,6 @@ const revenueBotEngine = new RevenueBotEngine();
 // PROTECTION SYSTEM
 // =============================================================================
 
-/**
- * @async
- * @function isFileProtected
- * @param {string} filePath - File path to check
- * @returns {Promise<Object>} Protection status
- */
 async function isFileProtected(filePath) {
   try {
     const result = await pool.query(
@@ -1554,7 +1319,6 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.text({ type: "text/plain", limit: "50mb" }));
 app.use(express.static(join(__dirname, "public")));
 
-// Middleware
 function requireCommandKey(req, res, next) {
   const key = req.query.key || req.headers["x-command-key"];
   if (!COMMAND_CENTER_KEY || key !== COMMAND_CENTER_KEY)
@@ -1562,22 +1326,18 @@ function requireCommandKey(req, res, next) {
   next();
 }
 
-// Health endpoints
 app.get("/health", (req, res) => res.send("OK"));
 
 app.get("/healthz", async (req, res) => {
   try {
     await pool.query("SELECT NOW()");
     
-    const memoryStats = await pool.query(
-      "SELECT COUNT(*) as total_memories FROM conversation_memory"
-    );
-    
+    const memoryStats = await pool.query("SELECT COUNT(*) as total_memories FROM conversation_memory");
     const taskStatus = executionQueue.getStatus();
     
     res.json({
       status: 'healthy',
-      version: 'v20.0-UNIFIED-COMMAND-CENTER',
+      version: 'v20.0',
       timestamp: new Date().toISOString(),
       system: {
         database: 'connected',
@@ -1607,7 +1367,6 @@ app.get("/healthz", async (req, res) => {
   }
 });
 
-// Memory API
 app.get('/api/v1/memory/search', requireCommandKey, async (req, res) => {
   try {
     const { q, limit } = req.query;
@@ -1618,12 +1377,10 @@ app.get('/api/v1/memory/search', requireCommandKey, async (req, res) => {
   }
 });
 
-// Task API
 app.get('/api/v1/queue/status', requireCommandKey, (req, res) => {
   res.json({ ok: true, status: executionQueue.getStatus() });
 });
 
-// Dashboard API
 app.get('/api/v1/dashboard', requireCommandKey, async (req, res) => {
   try {
     const dashboard = await financialDashboard.getDashboard();
@@ -1633,7 +1390,6 @@ app.get('/api/v1/dashboard', requireCommandKey, async (req, res) => {
   }
 });
 
-// Code generation API
 app.post('/api/v1/code/generate', requireCommandKey, async (req, res) => {
   try {
     const { description, type = 'code_generation' } = req.body;
@@ -1661,12 +1417,10 @@ app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
     const microQuery = req.body;
     console.log('[MICRO] Received:', microQuery);
     
-    // Parse MICRO protocol
     const parts = microQuery.split('|');
     const op = parts.find(p => p.startsWith('OP:'))?.slice(3) || 'G';
     const data = parts.find(p => p.startsWith('D:'))?.slice(2).replace(/~/g, ' ') || '';
     
-    // Convert to natural language for AI processing
     const naturalPrompt = `MICRO Protocol Request:
 Operation: ${op}
 Data: ${data}
@@ -1675,7 +1429,6 @@ Please provide a helpful response to this request.`;
     
     const response = await callCouncilMember('claude', naturalPrompt);
     
-    // Convert response back to MICRO format
     const microResponse = `V:2.0|CT:${response.replace(/\s+/g, '~').slice(0, 200)}|KP:completed`;
     
     res.send(microResponse);
@@ -1752,7 +1505,6 @@ app.post("/api/v1/dev/commit-protected", requireCommandKey, async (req, res) => 
       return res.status(400).json({ ok: false, error: "path and content required" });
     }
 
-    // Check if file is protected
     const protection = await isFileProtected(file_path);
     
     if (protection.protected && !protection.can_write) {
@@ -1773,7 +1525,6 @@ app.post("/api/v1/dev/commit-protected", requireCommandKey, async (req, res) => 
       });
     }
 
-    // Simulate successful commit
     res.json({
       ok: true,
       committed: file_path,
@@ -1791,7 +1542,6 @@ app.post("/api/v1/dev/commit-protected", requireCommandKey, async (req, res) => 
 // OVERLAY SERVING
 // =============================================================================
 
-// Serve overlay files
 app.get('/overlay/command-center.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'command-center.html'));
 });
@@ -1814,64 +1564,47 @@ app.get('/overlay/control.html', (req, res) => {
 
 async function startServer() {
   try {
-    // Validate environment
     if (!validateEnvironment()) {
       process.exit(1);
     }
 
-    // Initialize database
     await initDb();
 
-    // Start execution queue
     console.log("🚀 Starting execution queue...");
     executionQueue.executeNext();
 
-    // Start server
     server.listen(PORT, HOST, () => {
       console.log(`\n${'═'.repeat(80)}`);
-      console.log(`✅ UNIFIED COMMAND CENTER v20.0 - COMPLETE SYSTEM ONLINE`);
+      console.log(`✅ SERVER.JS - COMPLETE AI ORCHESTRATION SYSTEM ONLINE`);
       console.log(`${'═'.repeat(80)}`);
       
-      console.log(`\n🎼 ORCHESTRATOR INTERFACE:`);
+      console.log(`\n🌐 SERVER INTERFACE:`);
       console.log(`  Server: http://${HOST}:${PORT}`);
       console.log(`  WebSocket: ws://${HOST}:${PORT}`);
       console.log(`  Health: http://${HOST}:${PORT}/healthz`);
       console.log(`  Overlay UI: http://${HOST}:${PORT}/overlay/command-center.html`);
       console.log(`  Architect: http://${HOST}:${PORT}/overlay/architect.html`);
       
-      console.log(`\n🎵 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MUSICIANS):`);
+      console.log(`\n🤖 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MODELS):`);
       Object.entries(COUNCIL_MEMBERS).forEach(([key, member]) => {
         console.log(`  • ${member.name} - ${member.role}`);
       });
       
       console.log(`\n📊 COMPLETE FEATURE SET:`);
-      console.log(`  ✅ WebSocket real-time streaming`);
-      console.log(`  ✅ 3-layer automatic memory extraction`);
-      console.log(`  ✅ Task queue auto-execution with code generation`);
+      console.log(`  ✅ WebSocket real-time communication`);
+      console.log(`  ✅ 3-layer automatic memory system`);
+      console.log(`  ✅ Task queue with code generation`);
       console.log(`  ✅ Financial dashboard (P&L, Investments, Crypto)`);
       console.log(`  ✅ Real estate business engine`);
       console.log(`  ✅ Revenue opportunity bot`);
-      console.log(`  ✅ AI council orchestration (5 models)`);
+      console.log(`  ✅ AI council integration (5 models)`);
       console.log(`  ✅ Protected file system`);
       console.log(`  ✅ MICRO protocol support`);
       console.log(`  ✅ File upload and indexing`);
       console.log(`  ✅ Complete overlay system`);
       
-      console.log(`\n🧠 MEMORY SYSTEM:`);
-      console.log(`  • Automatic conversation storage`);
-      console.log(`  • Key facts extraction (3-layer)`);
-      console.log(`  • Persistent across sessions`);
-      console.log(`  • Search and recall capabilities`);
-      
-      console.log(`\n💰 REVENUE STREAMS:`);
-      console.log(`  • Pay-Per-Decision: $50-500 per decision`);
-      console.log(`  • Real Estate Commissions: 6% per sale`);
-      console.log(`  • SaaS Subscriptions: $500-5,000/month`);
-      console.log(`  • Affiliate Programs: $200-2,000/month`);
-      console.log(`  • Marketplace: $1,000+/month`);
-      
       console.log(`\n${'═'.repeat(80)}\n`);
-      console.log("🎼 READY TO ORCHESTRATE - NO COPY-PASTE REQUIRED");
+      console.log("🚀 READY - AI ORCHESTRATION SYSTEM ACTIVE");
       console.log("Type naturally. AI remembers everything and executes automatically.\n");
     });
   } catch (error) {
@@ -1880,7 +1613,6 @@ async function startServer() {
   }
 }
 
-// Graceful shutdown
 function handleGracefulShutdown() {
   console.log("\n📊 Graceful shutdown initiated...");
   
@@ -1906,7 +1638,6 @@ function handleGracefulShutdown() {
 process.on('SIGINT', handleGracefulShutdown);
 process.on('SIGTERM', handleGracefulShutdown);
 
-// Start the server
 startServer();
 
 export default app;
