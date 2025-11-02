@@ -720,9 +720,6 @@ const COUNCIL_MEMBERS = {
 /**
  * Smart DeepSeek bridge that handles both local and cloud fallback
  */
-async function callDeepSeekBridge(prompt, config) {
-  const bridgeEnabled = DEEPSEEK_BRIDGE_ENABLED === "true";
-  const hasLocalEndpoint = DEEPSEEK_LOCAL_ENDPOINT && DEEPSEEK_LOCAL_ENDPOINT !== "http://localhost:8081";
   
   // Try local bridge first if enabled and endpoint is configured
   if (bridgeEnabled && hasLocalEndpoint) {
