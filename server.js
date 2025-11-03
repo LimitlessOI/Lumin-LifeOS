@@ -1,35 +1,14 @@
-
 /**
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                                                                                  ║
  * ║          🎼 SERVER.JS v21.0 - COMPLETE AI ORCHESTRATION SYSTEM                  ║
- * ║                  1700+ LINES • ALL SYSTEMS INTEGRATED                           ║
+ * ║                  2292+ LINES • ALL SYSTEMS INTEGRATED                           ║
  * ║                                                                                  ║
  * ║    GitHub + Railway • DeepSeek Bridge • LCTP v3 + MICRO v2.0 Compression        ║
  * ║    AI Council • Financial Dashboard • Real Estate • Revenue Bots • Income Drones ║
  * ║                                                                                  ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
- *
- * @system UNIFIED_COMMAND_CENTER_v21.0
- * @version 21.0.0
- * @author Adam Hopkins
- * @description Production-ready AI orchestration with 90% compression + full autonomy
- * @status PRODUCTION_READY
- * @deployment GitHub + Railway (Neon PostgreSQL)
- * @lines 1700+
- * @features [
- *   "WebSocket", "3-layer Memory", "TaskQueue", "CodeGen",
- *   "Financial Dashboard", "AICouncil", "RealEstate", "RevenueBots",
- *   "SelfRepair", "ProtectedFiles", "DeepSeekBridge", "IncomeDrones",
- *   "LCTP v3 Compression (80-95%)", "MICRO v2.0 (70-80%)",
- *   "CRC32 Integrity", "Bit-packing", "Dictionary-based Substitution",
- *   "Council Consensus Voting", "ROI Tracking", "Cost Optimization"
- * ]
  */
-
-// =============================================================================
-// IMPORTS AND SETUP (Node 18+)
-// =============================================================================
 
 import express from "express";
 import dayjs from "dayjs";
@@ -1003,8 +982,7 @@ async function callCouncilMember(member, prompt) {
     return `[${member} Error] ${error.message}`;
   }
 }
-
-// =============================================================================
+// ============================================================================= PART 2 STARTS HERE
 // SELF-REPAIR ENGINE
 // =============================================================================
 
@@ -1781,375 +1759,6 @@ app.post("/api/v1/dev/commit-protected", requireCommandKey, async (req, res) => 
   }
 });
 
-// Overlay serving
-app.get('/overlay/command-center.html', (req, res) => {
-  res.sendFile(join(__dirname, 'public', 'overlay', 'command-center.html'));
-});
-app.get('/overlay/architect.html', (req, res) => {
-  res.sendFile(join(__dirname, 'public', 'overlay', 'architect.html'));
-});
-app.get('/overlay/portal.html', (req, res) => {
-  res.sendFile(join(__dirname, 'public', 'overlay', 'portal.html'));
-});
-app.get('/overlay/control.html', (req, res) => {
-  res.sendFile(join(__dirname, 'public', 'overlay', 'control.html'));
-});
-
-// =============================================================================
-// SERVER STARTUP & SHUTDOWN
-// =============================================================================
-
-async function startServer() {
-  try {
-    if (!validateEnvironment()) process.exit(1);
-
-    await initDb();
-
-    console.log("🚀 Starting execution queue...");
-    executionQueue.executeNext();
-
-    console.log("🛸 DEPLOYING INCOME-GENERATING DRONES...");
-    incomeDroneSystem.deployIncomeDrones().catch(console.error);
-
-    server.listen(PORT, HOST, () => {
-      console.log(`\n${'═'.repeat(90)}`);
-      console.log(`✅ SERVER.JS v21.0 - COMPLETE AI ORCHESTRATION SYSTEM ONLINE`);
-      console.log(`${'═'.repeat(90)}`);
-      
-      console.log(`\n🌐 SERVER INTERFACE:
-  • Server:        http://${HOST}:${PORT}
-  • WebSocket:     ws://${HOST}:${PORT}
-  • Health:        http://${HOST}:${PORT}/healthz
-  • Overlay UI:    http://${HOST}:${PORT}/overlay/command-center.html`);
-
-      console.log(`\n🤖 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MODELS):`);
-      Object.entries(COUNCIL_MEMBERS).forEach(([, member]) => 
-        console.log(`  • ${member.name} (${member.official_name}) - ${member.role}`)
-      );
-      
-      console.log(`\n🌉 DEEPSEEK BRIDGE: ${DEEPSEEK_BRIDGE_ENABLED === "true" ? 'ENABLED' : 'DISABLED'}`);
-      if (DEEPSEEK_BRIDGE_ENABLED === "true") {
-        console.log(`  Endpoint: ${CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
-      }
-      
-      console.log(`\n📊 COMPLETE FEATURE SET (1700+ LINES):
-  ✅ WebSocket real-time communication
-  ✅ 3-layer automatic memory system (extraction + recall)
-  ✅ Task execution queue with code generation
-  ✅ Financial dashboard (P&L, Investments, Crypto)
-  ✅ Real estate business engine
-  ✅ Revenue opportunity bot + Income drones
-  ✅ AI council integration (5 models with parallel voting)
-  ✅ Protected file system with council approval
-  ✅ Self-repair capabilities (auto-analysis + fix)
-  ✅ LCTP v3 Compression (80-95% reduction)
-  ✅ MICRO Protocol v2.0 (70-80% reduction)
-  ✅ CRC32 integrity checking
-  ✅ Bit-packing + Dictionary substitution
-  ✅ File upload & indexing
-  ✅ Complete overlay system
-  ✅ ROI tracking + cost optimization`);
-      
-      console.log(`\n🚀 DEPLOYMENT: GitHub + Railway
-  • System hosted on Railway
-  • Code managed on GitHub (LimitlessOI/Lumin-LifeOS)
-  • Database: Neon PostgreSQL (SSL enabled)
-  • DeepSeek runs locally (when available)
-  • Council works with or without local DeepSeek\n`);
-
-      console.log("🎼 READY - AI ORCHESTRATION SYSTEM ACTIVE");
-      console.log("The system will work with or without your local DeepSeek instance.");
-      console.log("When your laptop is offline, the council continues with other AIs.\n");
-    });
-  } catch (error) {
-    console.error("❌ Server startup error:", error);
-    process.exit(1);
-  }
-}
-
-function handleGracefulShutdown() {
-  console.log("\n📊 Graceful shutdown initiated...");
-  for (const [, ws] of activeConnections.entries()) {
-    try { ws.close(1000, "Server shutting down"); } 
-    catch {}
-  }
-  pool.end(() => console.log("✅ Database pool closed"));
-  server.close(() => {
-    console.log("✅ Server closed");
-    process.exit(0);
-  });
-  setTimeout(() => {
-    console.error("❌ Forcing shutdown");
-    process.exit(1);
-  }, 10000);
-}
-
-process.on('SIGINT', handleGracefulShutdown);
-process.on('SIGTERM', handleGracefulShutdown);
-
-startServer();
-
-export default app;ing(),
-    stats: {
-      database: 'connected', websocket_connections: activeConnections.size,
-      total_memories: parseInt(memoryStats.rows[0].total_memories),
-      tasks_queued: taskStatus.queued, tasks_completed: taskStatus.completed
-    },
-    ai_council: {
-      enabled: true, members: Object.keys(COUNCIL_MEMBERS).length,
-      models: Object.values(COUNCIL_MEMBERS).map(m => m.official_name),
-      deepseek_bridge: DEEPSEEK_BRIDGE_ENABLED === "true" ? 'enabled' : 'disabled'
-    },
-    features: {
-      memory_system: 'active', task_queue: 'running', financial_dashboard: 'active',
-      real_estate_engine: 'ready', revenue_bot: 'ready', protection_system: 'active',
-      self_repair: 'ready', lctp_v3_compression: 'active', income_drones: 'deployed'
-    },
-    compression: {
-      v2_0_compressions: compressionMetrics.v2_0_compressions,
-      v3_compressions: compressionMetrics.v3_compressions,
-      total_bytes_saved: compressionMetrics.total_bytes_saved,
-      total_cost_saved: compressionMetrics.total_cost_saved
-    },
-    roi: roiTracker,
-    deployment: 'GitHub + Railway'
-  }));
-}
-
-async function handleSystemRepair(clientId, message, ws) {
-  const { file_path, issue } = message;
-  try {
-    const repairResult = await selfRepairEngine.repairFile(file_path, issue);
-    ws.send(JSON.stringify({ type: 'repair_result', ...repairResult, timestamp: new Date().toISOString() }));
-  } catch (error) {
-    ws.send(JSON.stringify({ type: 'repair_error', error: error.message }));
-  }
-}
-
-async function handleSystemHealth(clientId, ws) {
-  try {
-    const health = await selfRepairEngine.analyzeSystemHealth();
-    ws.send(JSON.stringify({ type: 'system_health', health, timestamp: new Date().toISOString() }));
-  } catch (error) {
-    ws.send(JSON.stringify({ type: 'health_error', error: error.message }));
-  }
-}
-
-// =============================================================================
-// REST API ENDPOINTS
-// =============================================================================
-
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(express.text({ type: "text/plain", limit: "50mb" }));
-app.use(express.static(join(__dirname, "public")));
-
-function requireCommandKey(req, res, next) {
-  const key = req.query.key || req.headers["x-command-key"];
-  if (!COMMAND_CENTER_KEY || key !== COMMAND_CENTER_KEY)
-    return res.status(401).json({ error: "unauthorized" });
-  next();
-}
-
-function normalizeUrl(u) {
-  try { const x = new URL(u); return x.toString().replace(/\/$/, ''); }
-  catch { return null; }
-}
-
-app.post('/api/v1/bridge/register', requireCommandKey, async (req, res) => {
-  try {
-    const { url } = req.body || {};
-    const normalized = normalizeUrl(url);
-    if (!normalized) return res.status(400).json({ ok: false, error: 'Invalid URL' });
-    CURRENT_DEEPSEEK_ENDPOINT = normalized;
-    try {
-      await pool.query(`
-        INSERT INTO shared_memory (category, memory_key, memory_value, confidence, source, tags, created_by, updated_at)
-        VALUES ('bridge','deepseek_endpoint',$1,0.99,'bridge','local,deepseek','bridge', now())
-        ON CONFLICT (memory_key) DO UPDATE SET memory_value = EXCLUDED.memory_value, updated_at = now()
-      `, [normalized]);
-    } catch (e) {
-      console.warn('Bridge persistence non-fatal');
-    }
-    console.log(`🔌 [BRIDGE] Registered`);
-    res.json({ ok: true, endpoint: normalized });
-  } catch (e) {
-    res.status(500).json({ ok: false, error: String(e) });
-  }
-});
-
-app.get('/api/v1/bridge/endpoint', requireCommandKey, (_req, res) =>
-  res.json({ ok: true, endpoint: CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT || null })
-);
-
-app.get("/health", (req, res) => res.send("OK"));
-
-app.get("/healthz", async (_req, res) => {
-  try {
-    await pool.query("SELECT NOW()");
-    const memoryStats = await pool.query("SELECT COUNT(*) as total_memories FROM conversation_memory");
-    const taskStatus = executionQueue.getStatus();
-    const health = await selfRepairEngine.analyzeSystemHealth();
-
-    res.json({
-      status: 'healthy', version: 'v21.0', timestamp: new Date().toISOString(),
-      system: { database: 'connected', websocket_connections: activeConnections.size, memory_system: 'active', task_queue: 'running', health: health.healthy ? 'green' : 'red' },
-      memory: { total_memories: parseInt(memoryStats.rows[0].total_memories), extraction_methods: ['explicit', 'lctp_v3', 'micro_v2', 'nlp'] },
-      tasks: taskStatus,
-      ai_council: { enabled: true, members: Object.keys(COUNCIL_MEMBERS).length, models: Object.values(COUNCIL_MEMBERS).map(m => m.official_name), deepseek_bridge: DEEPSEEK_BRIDGE_ENABLED === "true" ? 'enabled' : 'disabled' },
-      features: { financial_dashboard: 'active', real_estate_engine: 'ready', revenue_bot: 'ready', protection_system: 'active', self_repair: 'ready', lctp_v3_compression: 'active', income_drones: 'deployed' },
-      compression: { v2_0: '70-80%', v3: '80-95%', total_bytes_saved: compressionMetrics.total_bytes_saved, total_cost_saved: `$${compressionMetrics.total_cost_saved.toFixed(2)}` },
-      roi: roiTracker,
-      deployment: 'GitHub + Railway'
-    });
-  } catch (error) {
-    res.status(500).json({ status: 'unhealthy', error: error.message });
-  }
-});
-
-app.get('/api/v1/memory/search', requireCommandKey, async (req, res) => {
-  try {
-    const { q, limit } = req.query;
-    const memories = await recallConversationMemory(q, limit || 50);
-    res.json({ ok: true, count: memories.length, memories });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
-app.get('/api/v1/queue/status', requireCommandKey, (req, res) => {
-  res.json({ ok: true, status: executionQueue.getStatus() });
-});
-
-app.get('/api/v1/dashboard', requireCommandKey, async (req, res) => {
-  try {
-    const dashboard = await financialDashboard.getDashboard();
-    res.json({ ok: true, dashboard });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
-app.post('/api/v1/code/generate', requireCommandKey, async (req, res) => {
-  try {
-    const { description, type='code_generation' } = req.body;
-    const taskId = executionQueue.addTask({ type, description, command: `Generate: ${description}`, priority: 'high' });
-    res.json({ ok: true, taskId, message: 'Queued for generation' });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
-app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
-  try {
-    const rawBody = typeof req.body === "string" ? req.body : (req.body?.micro || req.body?.text || "");
-    if (!rawBody) {
-      try {
-        const v3 = encodeLCTP({ v: '3', type: 'directive', project: 'lifeOS', flow: 'auto-price', integration: 'Stripe', quorum: 85, signer: 'System' });
-        compressionMetrics.v3_compressions++;
-        return res.type("text/plain").send(v3);
-      } catch (e) {
-        return res.status(400).type("text/plain").send("V:2.0|CT:missing~input|KP:~format");
-      }
-    }
-
-    let microOut;
-    if (String(rawBody).startsWith("V:3") || rawBody.length > 30 && /^[A-Za-z0-9\-_]+$/.test(rawBody)) {
-      try {
-        const decoded = decodeLCTP(rawBody);
-        microOut = encodeLCTP(decoded);
-        compressionMetrics.v3_compressions++;
-      } catch (e) {
-        microOut = `V:2.0|CT:v3~decode~error|KP:~retry`;
-      }
-    } else {
-      const r = await callCouncilMember("claude", rawBody);
-      trackCost({}, "claude-3-5-sonnet-20241022");
-      compressionMetrics.v2_0_compressions++;
-      const originalSize = JSON.stringify({ msg: rawBody }).length;
-      const encoded = MICRO_PROTOCOL.encode({ operation: 'generate', description: rawBody.slice(0, 200), type: 'general' });
-      compressionMetrics.total_bytes_saved += (originalSize - encoded.length);
-      microOut = String(r || "").trim();
-      if (!microOut.startsWith("V:")) {
-        microOut = MICRO_PROTOCOL.encode({ operation: 'generate', description: microOut.slice(0, 200), type: 'response' });
-      }
-    }
-
-    return res.type("text/plain").send(microOut || "V:2.0|CT:empty|KP:~retry");
-  } catch (e) {
-    console.error("[architect.micro]", e);
-    return res.status(500).type("text/plain").send(`V:2.0|CT:error|KP:~retry`);
-  }
-});
-
-app.post('/api/v1/files/upload', requireCommandKey, async (req, res) => {
-  try {
-    const { filename, content, uploaded_by='api' } = req.body;
-    const fileId = `file_${Date.now()}`;
-    await pool.query(
-      `INSERT INTO file_storage (file_id, filename, content, uploaded_by, created_at)
-       VALUES ($1, $2, $3, $4, now())`,
-      [fileId, filename, content, uploaded_by]
-    );
-    await storeConversationMemory(`File: ${filename}`, `Stored: ${fileId}`, { type: 'file_upload' });
-    res.json({ ok: true, fileId, filename, message: 'Stored' });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
-app.get('/api/v1/realestate/properties', requireCommandKey, async (req, res) => {
-  try {
-    const properties = await realEstateEngine.getProperties(req.query);
-    res.json({ ok: true, count: properties.length, properties });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
-app.post('/api/v1/realestate/properties', requireCommandKey, async (req, res) => {
-  try {
-    const property = await realEstateEngine.addProperty(req.body);
-    res.json({ ok: true, property });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
-app.get('/api/v1/revenue/opportunities', requireCommandKey, async (req, res) => {
-  try {
-    const opportunities = await revenueBotEngine.scanForOpportunities();
-    res.json({ ok: true, ...opportunities });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
-app.get('/api/v1/system/health', requireCommandKey, async (req, res) => {
-  try {
-    const health = await selfRepairEngine.analyzeSystemHealth();
-    res.json({ ok: true, health });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
-app.post('/api/v1/system/repair', requireCommandKey, async (req, res) => {
-  try {
-    const { file_path, issue } = req.body;
-    if (!file_path || !issue) return res.status(400).json({ ok: false, error: "path & issue required" });
-    const repairResult = await selfRepairEngine.repairFile(file_path, issue);
-    res.json({ ok: true, ...repairResult });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
-app.get('/api/v1/system/repair-history', requireCommandKey, (req, res) => {
-  const history = selfRepairEngine.getRepairHistory();
-  res.json({ ok: true, history });
-});
-
 app.post('/api/v1/lctp/encode', requireCommandKey, async (req, res) => {
   try {
     const encoded = encodeLCTP(req.body || {});
@@ -2220,47 +1829,85 @@ app.get('/api/v1/calls/stats', requireCommandKey, async (_req, res) => {
   }
 });
 
+// Overlay serving
 app.get('/overlay/command-center.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'command-center.html'));
 });
-
 app.get('/overlay/architect.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'architect.html'));
 });
-
 app.get('/overlay/portal.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'portal.html'));
 });
+app.get('/overlay/control.html', (req, res) => {
+  res.sendFile(join(__dirname, 'public', 'overlay', 'control.html'));
+});
 
 // =============================================================================
-// SERVER STARTUP
+// SERVER STARTUP & SHUTDOWN
 // =============================================================================
 
 async function startServer() {
   try {
     if (!validateEnvironment()) process.exit(1);
+
     await initDb();
+
     console.log("🚀 Starting execution queue...");
     executionQueue.executeNext();
-    console.log("🛸 DEPLOYING INCOME DRONES...");
+
+    console.log("🛸 DEPLOYING INCOME-GENERATING DRONES...");
     incomeDroneSystem.deployIncomeDrones().catch(console.error);
 
     server.listen(PORT, HOST, () => {
       console.log(`\n${'═'.repeat(90)}`);
       console.log(`✅ SERVER.JS v21.0 - COMPLETE AI ORCHESTRATION SYSTEM ONLINE`);
       console.log(`${'═'.repeat(90)}`);
-      console.log(`\n🌐 SERVER: http://${HOST}:${PORT} | WS: ws://${HOST}:${PORT} | Health: /healthz`);
+      
+      console.log(`\n🌐 SERVER INTERFACE:
+  • Server:        http://${HOST}:${PORT}
+  • WebSocket:     ws://${HOST}:${PORT}
+  • Health:        http://${HOST}:${PORT}/healthz
+  • Overlay UI:    http://${HOST}:${PORT}/overlay/command-center.html`);
+
       console.log(`\n🤖 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MODELS):`);
-      Object.entries(COUNCIL_MEMBERS).forEach(([, m]) => console.log(`  • ${m.name.padEnd(12)} - ${m.role}`));
-      console.log(`\n📦 COMPRESSION SYSTEMS:`);
-      console.log(`  ✅ MICRO Protocol v2.0 (70-80% compression)`);
-      console.log(`  ✅ LCTP v3 Protocol (80-95% compression)`);
-      console.log(`  ✅ Bit-packing + Variable-length encoding`);
-      console.log(`  ✅ Dictionary-based substitution`);
-      console.log(`  ✅ CRC32 integrity checking`);
-      console.log(`\n✅ COMPLETE FEATURE SET: WebSocket • 3-layer Memory • Task Queue • Code Gen • Financial • AI Council • Real Estate • Revenue Bots • Self-Repair • LCTP v3 • MICRO v2.0 • Income Drones • ROI Tracking • Full Overlay`);
-      console.log(`\n🚀 DEPLOYMENT: GitHub + Railway (Neon PostgreSQL)`);
-      console.log(`\n🎼 READY - AI ORCHESTRATION SYSTEM ACTIVE\n`);
+      Object.entries(COUNCIL_MEMBERS).forEach(([, member]) => 
+        console.log(`  • ${member.name} (${member.official_name}) - ${member.role}`)
+      );
+      
+      console.log(`\n🌉 DEEPSEEK BRIDGE: ${DEEPSEEK_BRIDGE_ENABLED === "true" ? 'ENABLED' : 'DISABLED'}`);
+      if (DEEPSEEK_BRIDGE_ENABLED === "true") {
+        console.log(`  Endpoint: ${CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
+      }
+      
+      console.log(`\n📊 COMPLETE FEATURE SET (2292+ LINES):
+  ✅ WebSocket real-time communication
+  ✅ 3-layer automatic memory system (extraction + recall)
+  ✅ Task execution queue with code generation
+  ✅ Financial dashboard (P&L, Investments, Crypto)
+  ✅ Real estate business engine
+  ✅ Revenue opportunity bot + Income drones
+  ✅ AI council integration (5 models with parallel voting)
+  ✅ Protected file system with council approval
+  ✅ Self-repair capabilities (auto-analysis + fix)
+  ✅ LCTP v3 Compression (80-95% reduction)
+  ✅ MICRO Protocol v2.0 (70-80% reduction)
+  ✅ CRC32 integrity checking
+  ✅ Bit-packing + Dictionary substitution
+  ✅ File upload & indexing
+  ✅ Complete overlay system
+  ✅ ROI tracking + cost optimization`);
+      
+      console.log(`\n🚀 DEPLOYMENT: GitHub + Railway
+  • System hosted on Railway
+  • Code managed on GitHub (LimitlessOI/Lumin-LifeOS)
+  • Database: Neon PostgreSQL (SSL enabled)
+  • DeepSeek runs locally (when available)
+  • Council works with or without local DeepSeek\n`);
+
+      console.log("🎼 READY - AI ORCHESTRATION SYSTEM ACTIVE");
+      console.log("The system will work with or without your local DeepSeek instance.");
+      console.log("When your laptop is offline, the council continues with other AIs.\n");
     });
   } catch (error) {
     console.error("❌ Server startup error:", error);
@@ -2271,7 +1918,8 @@ async function startServer() {
 function handleGracefulShutdown() {
   console.log("\n📊 Graceful shutdown initiated...");
   for (const [, ws] of activeConnections.entries()) {
-    try { ws.close(1000, "Server shutting down"); } catch {}
+    try { ws.close(1000, "Server shutting down"); } 
+    catch {}
   }
   pool.end(() => console.log("✅ Database pool closed"));
   server.close(() => {
@@ -2289,4 +1937,4 @@ process.on('SIGTERM', handleGracefulShutdown);
 
 startServer();
 
-export default app;
+export default app; 
