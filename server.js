@@ -621,6 +621,26 @@ class ExecutionQueue {
 }
 
 const selfRepairEngine = new SelfRepairEngine();
+// =============================================================================
+// PROTECTION SYSTEM
+// =============================================================================
+async function isFileProtected(filePath) {
+  try {
+    const result = await pool.query(
+      'SELECT can_write, requires_full_council FROM protected_files WHERE file_path = $1',
+      [filePath]
+    );
+    if (result.rows.length === 0) return { protected: false };
+    return {
+      protected: true,
+      can_write: result.rows[0].can_write,
+      needs_council: result.rows[0].requires_full_council
+    };
+  } catch (e) {
+    console.error('[protection] Check failed', e);
+    return { protected: false };
+  }
+}
     }
 
     this.history.push(this.activeTask);
