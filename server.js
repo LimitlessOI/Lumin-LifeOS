@@ -57,6 +57,10 @@ const {
   DEEPSEEK_BRIDGE_ENABLED = "false"
 } = process.env;
 
+// 🆕 Live, in-memory endpoint that the local bridge can register at runtime
+let CURRENT_DEEPSEEK_ENDPOINT =
+  (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim() || null;
+
 function validateEnvironment() {
   const required = ["DATABASE_URL"];
   const missing = required.filter(key => !process.env[key]);
@@ -635,7 +639,7 @@ const COUNCIL_MEMBERS = {
 
 async function callDeepSeekBridge(prompt, config) {
   const connectionMethods = [
-    { name: 'local_bridge', endpoint: DEEPSEEK_LOCAL_ENDPOINT, enabled: DEEPSEEK_BRIDGE_ENABLED === "true" && !!DEEPSEEK_LOCAL_ENDPOINT },
+    { name: 'local_bridge', endpoint: CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT, enabled: DEEPSEEK_BRIDGE_ENABLED === "true" && (!!CURRENT_DEEPSEEK_ENDPOINT || !!DEEPSEEK_LOCAL_ENDPOINT) },
     { name: 'cloud_api',    endpoint: 'https://api.deepseek.com/v1/chat/completions', enabled: !!DEEPSEEK_API_KEY },
     { name: 'fallback_claude', endpoint: null, enabled: true }
   ];
@@ -664,7 +668,11 @@ async function callDeepSeekBridge(prompt, config) {
   return await callCouncilMember('claude', prompt);
 }
 
-async function tryLocalDeepSeek(prompt, config, endpoint) {
+async function tryLocalDeepSeek(prompt, config, envEndpoint) {
+  // 🆕 prefer the runtime-registered endpoint; fall back to env
+  const endpoint = (CURRENT_DEEPSEEK_ENDPOINT || envEndpoint || '').replace(/\/$/, '');
+  if (!endpoint) throw new Error('Local bridge endpoint not configured');
+
   const response = await fetch(`${endpoint}/api/v1/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1390,6 +1398,45 @@ function requireCommandKey(req, res, next) {
   next();
 }
 
+// 🆕 helpers + routes for bridge self-registration
+function normalizeUrl(u) {
+  try { const x = new URL(u); return x.toString().replace(/\/$/, ''); }
+  catch { return null; }
+}
+
+// POST /api/v1/bridge/register  (protected) — set live endpoint at runtime
+app.post('/api/v1/bridge/register', requireCommandKey, async (req, res) => {
+  try {
+    const { url } = req.body || {};
+    const normalized = normalizeUrl(url);
+    if (!normalized) return res.status(400).json({ ok: false, error: 'Invalid URL' });
+
+    CURRENT_DEEPSEEK_ENDPOINT = normalized;
+
+    // Best-effort: persist to shared_memory so restarts can recall it
+    try {
+      await pool.query(`
+        INSERT INTO shared_memory (category, memory_key, memory_value, confidence, source, tags, created_by, updated_at)
+        VALUES ('bridge','deepseek_endpoint',$1,0.99,'bridge','local,deepseek','bridge', now())
+        ON CONFLICT (memory_key)
+        DO UPDATE SET memory_value = EXCLUDED.memory_value, updated_at = now();
+      `, [normalized]);
+    } catch (e) {
+      console.warn('ℹ️ Bridge endpoint persistence failed (non-fatal):', e.message);
+    }
+
+    console.log(`🔌 [BRIDGE] Registered endpoint: ${normalized}`);
+    res.json({ ok: true, endpoint: normalized });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
+
+// GET /api/v1/bridge/endpoint  (protected) — read the currently active endpoint
+app.get('/api/v1/bridge/endpoint', requireCommandKey, (_req, res) =>
+  res.json({ ok: true, endpoint: CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT || null })
+);
+
 app.get("/health", (req, res) => res.send("OK"));
 
 app.get("/healthz", async (req, res) => {
@@ -1620,7 +1667,7 @@ async function startServer() {
       
       console.log(`\n🌉 DEEPSEEK BRIDGE: ${DEEPSEEK_BRIDGE_ENABLED === "true" ? 'ENABLED' : 'DISABLED'}`);
       if (DEEPSEEK_BRIDGE_ENABLED === "true") {
-        console.log(`  Endpoint: ${DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
+        console.log(`  Endpoint: ${CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
       }
       
       console.log(`\n📊 COMPLETE FEATURE SET:
