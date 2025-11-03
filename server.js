@@ -607,14 +607,20 @@ class ExecutionQueue {
       this.activeTask.completedAt = new Date().toISOString();
       this.activeTask.result = result;
       this.activeTask.progress = 100;
-      console.log(`✅ Task completed`);
-      this.broadcastTaskUpdate('task_completed', this.activeTask);
+           console.log(`✅ [REPAIR] Generated`);
+      return { success: true, repair: repairResult };
     } catch (error) {
-      this.activeTask.status = 'failed';
-      this.activeTask.error = error.message;
-      this.activeTask.completedAt = new Date().toISOString();
-      console.error(`❌ Task failed`);
-      this.broadcastTaskUpdate('task_failed', this.activeTask);
+      console.error(`❌ [REPAIR] Failed`, error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  getRepairHistory() {
+    return this.repairHistory.slice(-10);
+  }
+}
+
+const selfRepairEngine = new SelfRepairEngine();
     }
 
     this.history.push(this.activeTask);
