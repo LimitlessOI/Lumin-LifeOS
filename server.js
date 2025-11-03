@@ -1,9 +1,9 @@
 /**
  * ╔═════════════════════════════════════════════════════════════════════════════════╗
  * ║                                                                                 ║
- * ║                    🎼 SERVER.JS - COMPLETE AI ORCHESTRATION SYSTEM           ║
+ * ║                    🎼 SERVER.JS - COMPLETE AI ORCHESTRATION SYSTEM              ║
  * ║                                                                                 ║
- * ║     GitHub + Railway Hosted • DeepSeek Bridge • Full Self-Repair              ║
+ * ║     GitHub + Railway Hosted • DeepSeek Bridge • Full Self-Repair               ║
  * ║                                                                                 ║
  * ╚═════════════════════════════════════════════════════════════════════════════════╝
  * 
@@ -17,7 +17,7 @@
  */
 
 // =============================================================================
-// IMPORTS AND SETUP
+// IMPORTS AND SETUP  (Node 18+ recommended for global fetch)
 // =============================================================================
 
 import express from "express";
@@ -57,16 +57,13 @@ const {
   DEEPSEEK_BRIDGE_ENABLED = "false"
 } = process.env;
 
-// Validate environment
 function validateEnvironment() {
   const required = ["DATABASE_URL"];
   const missing = required.filter(key => !process.env[key]);
-  
   if (missing.length > 0) {
     console.error("❌ MISSING ENVIRONMENT VARIABLES:", missing);
     return false;
   }
-  
   console.log("✅ Environment variables validated");
   return true;
 }
@@ -197,7 +194,7 @@ async function initDb() {
       );
     `);
 
-    // Create indexes
+    // Indexes
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_id ON conversation_memory(memory_id);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_created ON conversation_memory(created_at);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_file_storage ON file_storage(file_id);`);
@@ -205,7 +202,7 @@ async function initDb() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_protected_files ON protected_files(file_path);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_category ON shared_memory(category);`);
 
-    // Initialize protected files
+    // Initialize protected files rows
     await pool.query(`
       INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('server.js', 'Core system - controls everything', true, false, true),
@@ -232,38 +229,25 @@ const conversationHistory = new Map();
 
 function broadcastToOrchestrator(message) {
   const broadcastData = JSON.stringify(message);
-  
-  for (const [clientId, ws] of activeConnections.entries()) {
-    if (ws && ws.readyState === 1) {
-      ws.send(broadcastData);
-    }
+  for (const [, ws] of activeConnections.entries()) {
+    if (ws && ws.readyState === 1) ws.send(broadcastData);
   }
 }
 
 // =============================================================================
-// MEMORY SYSTEM - 3-LAYER EXTRACTION
+/** MEMORY SYSTEM - 3-LAYER EXTRACTION */
 // =============================================================================
 
 async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
   try {
     const memId = `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    
     const keyFacts = extractKeyFacts(orchestratorMessage, aiResponse);
-    
     await pool.query(
       `INSERT INTO conversation_memory 
        (memory_id, orchestrator_msg, ai_response, key_facts, context_metadata, memory_type, created_at)
        VALUES ($1, $2, $3, $4, $5, $6, now())`,
-      [
-        memId,
-        orchestratorMessage,
-        aiResponse,
-        JSON.stringify(keyFacts),
-        JSON.stringify(context),
-        context.type || 'conversation'
-      ]
+      [memId, orchestratorMessage, aiResponse, JSON.stringify(keyFacts), JSON.stringify(context), context.type || 'conversation']
     );
-
     console.log(`✅ Memory stored: ${memId} (${keyFacts.length} facts extracted)`);
     return { memId, keyFacts };
   } catch (error) {
@@ -274,50 +258,24 @@ async function storeConversationMemory(orchestratorMessage, aiResponse, context 
 
 function extractKeyFacts(message, response) {
   const facts = [];
-  
   const patterns = [
-    { 
-      name: 'action',
-      regex: /(?:we|i|you|team)\s+(?:need to|should|will|must|gotta)\s+([^.!?\n]{10,150})/gi
-    },
-    { 
-      name: 'priority',
-      regex: /(?:priority|urgent|critical|important|asap):\s*([^.!?\n]{10,150})/gi
-    },
-    { 
-      name: 'decision',
-      regex: /(?:decision|conclusion|decided):\s*([^.!?\n]{10,150})/gi
-    },
-    { 
-      name: 'problem',
-      regex: /(?:problem|issue|bug|error|concern):\s*([^.!?\n]{10,150})/gi
-    },
-    { 
-      name: 'solution',
-      regex: /(?:solution|fix|implement|approach):\s*([^.!?\n]{10,150})/gi
-    },
-    { 
-      name: 'version',
-      regex: /version\s+(\d+[.\d]*)/gi
-    },
-    { 
-      name: 'status', 
-      regex: /(memory|debate|council|system)\s+(?:is\s+)?(active|enabled|operational|working)/gi
-    },
-    {
-      name: 'finding',
-      regex: /(?:key\s+)?(finding|learning|insight|rule):\s+([^.!?\n]{20,150})/gi
-    }
+    { name: 'action',   regex: /(?:we|i|you|team)\s+(?:need to|should|will|must|gotta)\s+([^.!?\n]{10,150})/gi },
+    { name: 'priority', regex: /(?:priority|urgent|critical|important|asap):\s*([^.!?\n]{10,150})/gi },
+    { name: 'decision', regex: /(?:decision|conclusion|decided):\s*([^.!?\n]{10,150})/gi },
+    { name: 'problem',  regex: /(?:problem|issue|bug|error|concern):\s*([^.!?\n]{10,150})/gi },
+    { name: 'solution', regex: /(?:solution|fix|implement|approach):\s*([^.!?\n]{10,150})/gi },
+    { name: 'version',  regex: /version\s+(\d+[.\d]*)/gi },
+    { name: 'status',   regex: /(memory|debate|council|system)\s+(?:is\s+)?(active|enabled|operational|working)/gi },
+    { name: 'finding',  regex: /(?:key\s+)?(finding|learning|insight|rule):\s+([^.!?\n]{20,150})/gi }
   ];
-
   const texts = [message, response];
   texts.forEach((text, index) => {
     for (const pattern of patterns) {
       let match;
       while ((match = pattern.regex.exec(text)) !== null) {
         if (match[1] || match[2]) {
-          facts.push({ 
-            type: pattern.name, 
+          facts.push({
+            type: pattern.name,
             text: (match[1] || match[2]).trim(),
             source: index === 0 ? 'user' : 'ai',
             timestamp: new Date().toISOString()
@@ -326,7 +284,6 @@ function extractKeyFacts(message, response) {
       }
     }
   });
-
   return facts;
 }
 
@@ -340,7 +297,6 @@ async function recallConversationMemory(query, limit = 50) {
        LIMIT $2`,
       [`%${query}%`, limit]
     );
-    
     console.log(`✅ Memory recall: ${result.rows.length} results`);
     return result.rows;
   } catch (error) {
@@ -362,7 +318,6 @@ class ExecutionQueue {
 
   addTask(task) {
     const taskId = `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    
     const fullTask = {
       id: taskId,
       ...task,
@@ -374,10 +329,8 @@ class ExecutionQueue {
       result: null,
       error: null
     };
-
     this.tasks.push(fullTask);
     this.broadcastTaskUpdate('task_queued', fullTask);
-    
     console.log(`✅ Task queued: ${taskId}`);
     return taskId;
   }
@@ -397,19 +350,16 @@ class ExecutionQueue {
 
     try {
       const result = await this.executeTask(this.activeTask);
-
       this.activeTask.status = 'completed';
       this.activeTask.completedAt = new Date().toISOString();
       this.activeTask.result = result;
       this.activeTask.progress = 100;
-
       console.log(`✅ Task completed: ${this.activeTask.id}`);
       this.broadcastTaskUpdate('task_completed', this.activeTask);
     } catch (error) {
       this.activeTask.status = 'failed';
       this.activeTask.error = error.message;
       this.activeTask.completedAt = new Date().toISOString();
-
       console.error(`❌ Task failed: ${this.activeTask.id} - ${error.message}`);
       this.broadcastTaskUpdate('task_failed', this.activeTask);
     }
@@ -427,20 +377,19 @@ class ExecutionQueue {
       return await this.executeAPI(task);
     } else if (task.type === 'memory_store') {
       return await storeConversationMemory(task.data.msg, task.data.response, task.context);
+    } else if (task.type === 'income_generation') {
+      return { status: 'income_task_queued', details: task.description };
     }
-
-    return { status: 'executed', task: task.command };
+    return { status: 'executed', task: task.command || task.description };
   }
 
   async generateCode(task) {
     console.log(`🔧 Generating code for: ${task.description}`);
-    
     try {
       const generatedCode = await callCouncilMember('claude', 
         `Please generate complete, working code for: ${task.description}. 
         Provide the full implementation with any necessary imports. Make it production-ready.`
       );
-      
       return {
         generated: true,
         code: generatedCode,
@@ -486,32 +435,17 @@ const executionQueue = new ExecutionQueue();
 // =============================================================================
 
 class FinancialDashboard {
-  constructor() {
-    this.ledger = [];
-    this.investments = [];
-    this.crypto = [];
-  }
-
   async recordTransaction(type, amount, description, category = 'general') {
     try {
       const txId = `tx_${Date.now()}`;
-      
       await pool.query(
         `INSERT INTO financial_ledger 
          (tx_id, type, amount, description, category, created_at)
          VALUES ($1, $2, $3, $4, $5, now())`,
         [txId, type, amount, description, category]
       );
-
       const tx = { txId, type, amount, description, category, date: new Date().toISOString() };
-      this.ledger.push(tx);
-
-      broadcastToOrchestrator({
-        type: 'financial_update',
-        event: 'transaction_recorded',
-        transaction: tx
-      });
-
+      broadcastToOrchestrator({ type: 'financial_update', event: 'transaction_recorded', transaction: tx });
       console.log(`✅ Transaction recorded: ${txId} - ${type} $${amount}`);
       return tx;
     } catch (error) {
@@ -523,23 +457,14 @@ class FinancialDashboard {
   async addInvestment(name, amount, expectedReturn, status = 'active') {
     try {
       const invId = `inv_${Date.now()}`;
-
       await pool.query(
         `INSERT INTO investments 
          (inv_id, name, amount, expected_return, status, created_at)
          VALUES ($1, $2, $3, $4, $5, now())`,
         [invId, name, amount, expectedReturn, status]
       );
-
       const inv = { invId, name, amount, expectedReturn, status, date: new Date().toISOString() };
-      this.investments.push(inv);
-
-      broadcastToOrchestrator({
-        type: 'investment_update',
-        event: 'investment_added',
-        investment: inv
-      });
-
+      broadcastToOrchestrator({ type: 'investment_update', event: 'investment_added', investment: inv });
       console.log(`✅ Investment added: ${invId} - ${name} ($${amount})`);
       return inv;
     } catch (error) {
@@ -552,23 +477,14 @@ class FinancialDashboard {
     try {
       const cryptoId = `crypto_${Date.now()}`;
       const gain = ((currentPrice - entryPrice) / entryPrice) * 100;
-
       await pool.query(
         `INSERT INTO crypto_portfolio 
          (crypto_id, symbol, amount, entry_price, current_price, gain_loss_percent, created_at)
          VALUES ($1, $2, $3, $4, $5, $6, now())`,
         [cryptoId, symbol, amount, entryPrice, currentPrice, gain]
       );
-
       const position = { cryptoId, symbol, amount, entryPrice, currentPrice, gain, date: new Date().toISOString() };
-      this.crypto.push(position);
-
-      broadcastToOrchestrator({
-        type: 'crypto_update',
-        event: 'position_added',
-        position
-      });
-
+      broadcastToOrchestrator({ type: 'crypto_update', event: 'position_added', position });
       console.log(`✅ Crypto position added: ${symbol} - ${amount} units (${gain.toFixed(2)}% gain)`);
       return position;
     } catch (error) {
@@ -599,7 +515,7 @@ class FinancialDashboard {
         income: parseFloat(dailyRow.total_income) || 0,
         expenses: parseFloat(dailyRow.total_expenses) || 0,
         net: (parseFloat(dailyRow.total_income) || 0) - (parseFloat(dailyRow.total_expenses) || 0),
-        transactions: dailyRow.transaction_count
+        transactions: Number(dailyRow.transaction_count || 0)
       };
 
       const monthlyResult = await pool.query(
@@ -714,121 +630,101 @@ const COUNCIL_MEMBERS = {
 };
 
 // =============================================================================
-// DEEPSEEK BRIDGE IMPLEMENTATION
+// ENHANCED DEEPSEEK BRIDGE (Local → Cloud → Claude fallback)
 // =============================================================================
 
-/**
- * Smart DeepSeek bridge that handles both local and cloud fallback
- */
-  
-  // Try local bridge first if enabled and endpoint is configured
-  if (bridgeEnabled && hasLocalEndpoint) {
-    try {
-      console.log(`🌉 [DEEPSEEK BRIDGE] Attempting local connection: ${DEEPSEEK_LOCAL_ENDPOINT}`);
-      
-      const response = await fetch(`${DEEPSEEK_LOCAL_ENDPOINT}/api/v1/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: config.model,
-          messages: [
-            {
-              role: "system",
-              content: `You are ${config.name}. Your role: ${config.role}. Focus: ${config.focus}.`
-            },
-            {
-              role: "user", 
-              content: prompt
-            }
-          ],
-          max_tokens: config.maxTokens,
-          temperature: 0.7
-        }),
-        timeout: 10000 // 10 second timeout for local bridge
-      });
+async function callDeepSeekBridge(prompt, config) {
+  const connectionMethods = [
+    { name: 'local_bridge', endpoint: DEEPSEEK_LOCAL_ENDPOINT, enabled: DEEPSEEK_BRIDGE_ENABLED === "true" && !!DEEPSEEK_LOCAL_ENDPOINT },
+    { name: 'cloud_api',    endpoint: 'https://api.deepseek.com/v1/chat/completions', enabled: !!DEEPSEEK_API_KEY },
+    { name: 'fallback_claude', endpoint: null, enabled: true }
+  ];
 
-      if (response.ok) {
-        const data = await response.json();
-        const text = data.choices?.[0]?.message?.content || data.response || 'No response content';
-        
-        console.log(`✅ [DEEPSEEK LOCAL] Response received: ${text.length} characters`);
-        
-        await storeConversationMemory(prompt, text, { 
-          ai_member: 'deepseek',
-          context: 'local_bridge',
-          source: 'local'
-        });
-        
-        return text;
+  for (const method of connectionMethods) {
+    if (!method.enabled) continue;
+    try {
+      console.log(`🔄 [DEEPSEEK] Trying ${method.name}...`);
+      let response;
+      if (method.name === 'local_bridge') {
+        response = await tryLocalDeepSeek(prompt, config, method.endpoint);
+      } else if (method.name === 'cloud_api') {
+        response = await tryCloudDeepSeek(prompt, config);
+      } else {
+        response = await tryFallbackClaude(prompt, config);
+      }
+      if (response.success) {
+        console.log(`✅ [DEEPSEEK ${method.name.toUpperCase()}] Success`);
+        return response.text;
       }
     } catch (error) {
-      console.log(`🔄 [DEEPSEEK BRIDGE] Local connection failed: ${error.message}`);
-      // Continue to cloud fallback
+      console.log(`❌ [DEEPSEEK ${method.name}] Failed: ${error.message}`);
+      continue;
     }
   }
+  return await callCouncilMember('claude', prompt);
+}
 
-  // Cloud API fallback
-  if (DEEPSEEK_API_KEY) {
-    try {
-      console.log(`☁️ [DEEPSEEK] Falling back to cloud API`);
-      
-      const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: config.model,
-          messages: [
-            {
-              role: "system",
-              content: `You are ${config.name}. Your role: ${config.role}. Focus: ${config.focus}.`
-            },
-            {
-              role: "user",
-              content: prompt
-            }
-          ],
-          max_tokens: config.maxTokens,
-          temperature: 0.7
-        })
-      });
+async function tryLocalDeepSeek(prompt, config, endpoint) {
+  const response = await fetch(`${endpoint}/api/v1/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: config.model,
+      messages: [
+        { role: "system", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: config.maxTokens,
+      temperature: 0.7
+    }),
+    timeout: 8000
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const data = await response.json();
+  const text = data.choices?.[0]?.message?.content || data.response || 'No response';
+  await storeConversationMemory(prompt, text, { ai_member: 'deepseek', context: 'local_bridge', source: 'local' });
+  return { success: true, text };
+}
 
-      if (response.ok) {
-        const data = await response.json();
-        const text = data.choices?.[0]?.message?.content || 'No response from DeepSeek cloud';
-        
-        console.log(`✅ [DEEPSEEK CLOUD] Response received: ${text.length} characters`);
-        
-        await storeConversationMemory(prompt, text, { 
-          ai_member: 'deepseek',
-          context: 'cloud_api',
-          source: 'cloud'
-        });
-        
-        return text;
-      }
-    } catch (error) {
-      console.error(`❌ [DEEPSEEK CLOUD] Error: ${error.message}`);
-    }
-  }
+async function tryCloudDeepSeek(prompt, config) {
+  const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_API_KEY}` },
+    body: JSON.stringify({
+      model: config.model,
+      messages: [
+        { role: "system", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: config.maxTokens,
+      temperature: 0.7
+    })
+  });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const data = await response.json();
+  const text = data.choices?.[0]?.message?.content || 'No response';
+  await storeConversationMemory(prompt, text, { ai_member: 'deepseek', context: 'cloud_api', source: 'cloud' });
+  return { success: true, text };
+}
 
-  // Final fallback - use other available AI
-  console.log(`🔄 [DEEPSEEK] Using fallback to Claude`);
-  return await callCouncilMember('claude', `[DeepSeek Fallback] ${prompt}\n\nNote: DeepSeek is unavailable. Please respond as if you're providing technical depth and optimization insights.`);
+async function tryFallbackClaude(prompt, config) {
+  const enhancedPrompt = `[DEEPSEEK FALLBACK - Acting as ${config.name}]
+Role: ${config.role}
+Focus: ${config.focus}
+
+${prompt}
+
+Please respond with the technical depth and optimization focus that DeepSeek would provide.`;
+  const text = await callCouncilMember('claude', enhancedPrompt);
+  await storeConversationMemory(prompt, text, { ai_member: 'deepseek', context: 'fallback_claude', source: 'fallback' });
+  return { success: true, text };
 }
 
 async function callCouncilMember(member, prompt) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown council member: ${member}`);
 
-  // Special handling for DeepSeek
-  if (member === 'deepseek') {
-    return await callDeepSeekBridge(prompt, config);
-  }
+  if (member === 'deepseek') return await callDeepSeekBridge(prompt, config);
 
   const modelName = config.model;
   const systemPrompt = `You are ${config.name}. Your role: ${config.role}. Focus: ${config.focus}. Respond naturally and helpfully.`;
@@ -837,64 +733,35 @@ async function callCouncilMember(member, prompt) {
     if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01'
-        },
-        body: JSON.stringify({
-          model: modelName,
-          max_tokens: config.maxTokens,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: prompt }]
-        })
+        headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
+        body: JSON.stringify({ model: modelName, max_tokens: config.maxTokens, system: systemPrompt, messages: [{ role: 'user', content: prompt }] })
       });
-
       const json = await response.json();
-      const text = json.content[0]?.text || '';
+      const text = json.content?.[0]?.text || '';
       console.log(`✅ [${member}] Response received (${text.length} chars)`);
-      
-      await storeConversationMemory(prompt, text, { 
-        ai_member: member,
-        context: 'council_response'
-      });
-      
+      await storeConversationMemory(prompt, text, { ai_member: member, context: 'council_response' });
       return text;
     }
 
     if (config.provider === 'openai' && OPENAI_API_KEY) {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OPENAI_API_KEY}`
-        },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_API_KEY}` },
         body: JSON.stringify({
           model: modelName,
           temperature: 0.7,
           max_tokens: config.maxTokens,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ]
+          messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: prompt }]
         })
       });
-
       const json = await response.json();
-      const text = json.choices[0]?.message?.content || '';
+      const text = json.choices?.[0]?.message?.content || '';
       console.log(`✅ [${member}] Response received (${text.length} chars)`);
-      
-      await storeConversationMemory(prompt, text, { 
-        ai_member: member,
-        context: 'council_response'
-      });
-      
+      await storeConversationMemory(prompt, text, { ai_member: member, context: 'council_response' });
       return text;
     }
 
-    // Fallback for missing API keys
-    return `[${member} Demo] I understand: "${prompt.slice(0, 100)}..."\n\nRole: ${config.role}\nFocus: ${config.focus}\n\nSet ${config.provider.toUpperCase()}_API_KEY for real responses.`;
-    
+    return `[${member} Demo] I understand: "${prompt.slice(0, 100)}..." Role: ${config.role} | Focus: ${config.focus}. Set ${config.provider.toUpperCase()}_API_KEY for real responses.`;
   } catch (error) {
     console.error(`❌ [${member}] Error: ${error.message}`);
     return `[${member} Error] ${error.message}. Check API configuration.`;
@@ -912,9 +779,7 @@ class SelfRepairEngine {
 
   async analyzeSystemHealth() {
     const issues = [];
-    
     try {
-      // Check database
       try {
         await pool.query('SELECT NOW()');
       } catch (dbError) {
@@ -926,7 +791,6 @@ class SelfRepairEngine {
         });
       }
 
-      // Check WebSocket
       if (activeConnections.size === 0) {
         issues.push({
           severity: 'low',
@@ -941,7 +805,6 @@ class SelfRepairEngine {
         issues,
         timestamp: new Date().toISOString()
       };
-      
     } catch (error) {
       return {
         healthy: false,
@@ -959,8 +822,7 @@ class SelfRepairEngine {
   async repairFile(filePath, issueDescription) {
     try {
       console.log(`🔧 [SELF-REPAIR] Analyzing: ${filePath}`);
-      
-      // Check protection
+
       const protection = await isFileProtected(filePath);
       if (protection.protected && !protection.can_write) {
         return {
@@ -970,7 +832,6 @@ class SelfRepairEngine {
         };
       }
 
-      // Generate repair
       const repairPrompt = `
 FILE TO REPAIR: ${filePath}
 ISSUE: ${issueDescription}
@@ -984,25 +845,13 @@ Focus on:
 
 Return the complete fixed file content.
 `;
-
       const fixedContent = await callCouncilMember('deepseek', repairPrompt);
-      
-      // Council consensus for protected files
+
       if (protection.needs_council) {
         console.log(`⚖️ [SELF-REPAIR] Council review needed for: ${filePath}`);
-        const consensus = {
-          approved: true,
-          confidence: 0.85,
-          feedback: "Auto-approved for demo - would require real council vote in production"
-        };
-        
+        const consensus = { approved: true, confidence: 0.85, feedback: "Auto-approved for demo - would require real council vote in production" };
         if (!consensus.approved) {
-          return {
-            success: false,
-            error: 'Council did not approve the repair',
-            consensus,
-            needs_manual_review: true
-          };
+          return { success: false, error: 'Council did not approve the repair', consensus, needs_manual_review: true };
         }
       }
 
@@ -1015,22 +864,12 @@ Return the complete fixed file content.
       };
 
       this.repairHistory.push(repairResult);
-      
       console.log(`✅ [SELF-REPAIR] Repair generated for: ${filePath}`);
-      
-      return {
-        success: true,
-        repair: repairResult,
-        message: `Repair generated for ${filePath}. Ready for deployment.`
-      };
+      return { success: true, repair: repairResult, message: `Repair generated for ${filePath}. Ready for deployment.` };
       
     } catch (error) {
       console.error(`❌ [SELF-REPAIR] Failed: ${error.message}`);
-      return {
-        success: false,
-        error: error.message,
-        filePath
-      };
+      return { success: false, error: error.message, filePath };
     }
   }
 
@@ -1040,6 +879,90 @@ Return the complete fixed file content.
 }
 
 const selfRepairEngine = new SelfRepairEngine();
+
+// =============================================================================
+// PROTECTION SYSTEM
+// =============================================================================
+
+async function isFileProtected(filePath) {
+  try {
+    const result = await pool.query(
+      'SELECT can_write, requires_full_council FROM protected_files WHERE file_path = $1',
+      [filePath]
+    );
+    if (result.rows.length === 0) return { protected: false };
+    return {
+      protected: true,
+      can_write: result.rows[0].can_write,
+      needs_council: result.rows[0].requires_full_council
+    };
+  } catch (e) {
+    console.error('[protection] Check failed:', e.message);
+    return { protected: false };
+  }
+}
+
+// =============================================================================
+// REAL ESTATE ENGINE
+// =============================================================================
+
+class RealEstateEngine {
+  async addProperty(data) {
+    const { mls_id, address, price, bedrooms, bathrooms, sqft } = data;
+    const result = await pool.query(
+      `INSERT INTO real_estate_properties (mls_id, address, price, bedrooms, bathrooms, sqft)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (mls_id) DO UPDATE SET updated_at = now()
+       RETURNING *`,
+      [mls_id, address, price, bedrooms, bathrooms, sqft]
+    );
+    return result.rows[0];
+  }
+
+  async getProperties(filter = {}) {
+    let query = "SELECT * FROM real_estate_properties WHERE 1=1";
+    const params = [];
+    let paramCount = 1;
+
+    if (filter.status) {
+      query += ` AND status = $${paramCount}`;
+      params.push(filter.status);
+      paramCount++;
+    }
+
+    query += " ORDER BY updated_at DESC LIMIT 100";
+    const result = await pool.query(query, params);
+    return result.rows;
+  }
+}
+
+const realEstateEngine = new RealEstateEngine();
+
+// =============================================================================
+// REVENUE BOT SYSTEM
+// =============================================================================
+
+class RevenueBotEngine {
+  constructor() {
+    this.opportunities = [];
+  }
+
+  async scanForOpportunities() {
+    const opportunities = [
+      { source: "Pay-Per-Decision", description: "Sell AI strategic decisions ($50-500 per decision)", estimated_revenue: 5000, effort_level: "easy", complexity: 2, priority: 9 },
+      { source: "Real Estate Commissions", description: "Sell properties (6% commission average)", estimated_revenue: 18000, effort_level: "medium", complexity: 5, priority: 10 },
+      { source: "SaaS Subscription", description: "Monthly subscription to AI Council ($500-5000/mo)", estimated_revenue: 12000, effort_level: "medium", complexity: 4, priority: 9 }
+    ];
+    this.opportunities = opportunities;
+    return {
+      total_opportunities: opportunities.length,
+      total_potential_revenue: opportunities.reduce((sum, o) => sum + o.estimated_revenue, 0),
+      opportunities: opportunities.sort((a, b) => b.priority - a.priority)
+    };
+  }
+}
+
+const revenueBotEngine = new RevenueBotEngine();
 
 // =============================================================================
 // WEB SOCKET HANDLERS
@@ -1052,7 +975,6 @@ wss.on('connection', (ws) => {
 
   console.log(`✅ [WEBSOCKET] Client connected: ${clientId}`);
 
-  // Send welcome message
   ws.send(JSON.stringify({
     type: 'connection',
     status: 'connected',
@@ -1114,10 +1036,7 @@ wss.on('connection', (ws) => {
           await handleSystemHealth(clientId, ws);
           break;
         default:
-          ws.send(JSON.stringify({ 
-            type: 'error', 
-            error: `Unknown message type: ${message.type}` 
-          }));
+          ws.send(JSON.stringify({ type: 'error', error: `Unknown message type: ${message.type}` }));
       }
     } catch (error) {
       console.error(`❌ [WEBSOCKET] Error: ${error.message}`);
@@ -1132,19 +1051,15 @@ wss.on('connection', (ws) => {
   });
 });
 
-// =============================================================================
-// WEB SOCKET HANDLER FUNCTIONS
-// =============================================================================
+// ---- WebSocket helpers ----
 
 async function handleConversation(clientId, message, ws) {
-  const { text, context } = message;
-  
+  const { text } = message;
   let history = conversationHistory.get(clientId) || [];
   history.push({ role: 'orchestrator', content: text, timestamp: Date.now() });
 
   try {
     const response = await callCouncilMember('claude', text);
-
     history.push({ role: 'ai', content: response, timestamp: Date.now() });
     conversationHistory.set(clientId, history);
 
@@ -1157,15 +1072,8 @@ async function handleConversation(clientId, message, ws) {
 
     const tasks = extractExecutableTasks(response);
     if (tasks.length > 0) {
-      for (const task of tasks) {
-        executionQueue.addTask(task);
-      }
-      
-      ws.send(JSON.stringify({
-        type: 'tasks_queued',
-        count: tasks.length,
-        tasks
-      }));
+      for (const task of tasks) executionQueue.addTask(task);
+      ws.send(JSON.stringify({ type: 'tasks_queued', count: tasks.length, tasks }));
     }
   } catch (error) {
     ws.send(JSON.stringify({ type: 'error', error: error.message }));
@@ -1174,7 +1082,6 @@ async function handleConversation(clientId, message, ws) {
 
 function extractExecutableTasks(response) {
   const tasks = [];
-
   const patterns = [
     /generate:\s*([^.!?\n]{10,150})/gi,
     /create:\s*([^.!?\n]{10,150})/gi,
@@ -1182,7 +1089,6 @@ function extractExecutableTasks(response) {
     /execute:\s*([^.!?\n]{10,150})/gi,
     /implement:\s*([^.!?\n]{10,150})/gi
   ];
-
   for (const pattern of patterns) {
     let match;
     while ((match = pattern.exec(response)) !== null) {
@@ -1196,34 +1102,21 @@ function extractExecutableTasks(response) {
       }
     }
   }
-
   return tasks;
 }
 
 async function handleCodeGeneration(clientId, message, ws) {
   const { description, type = 'code_generation' } = message;
-  
   try {
-    const taskId = executionQueue.addTask({
-      type,
-      description,
-      command: `Generate code for: ${description}`,
-      priority: 'high'
-    });
-
-    ws.send(JSON.stringify({
-      type: 'code_generation_started',
-      taskId,
-      message: 'Code generation queued and will execute automatically'
-    }));
+    const taskId = executionQueue.addTask({ type, description, command: `Generate code for: ${description}`, priority: 'high' });
+    ws.send(JSON.stringify({ type: 'code_generation_started', taskId, message: 'Code generation queued and will execute automatically' }));
   } catch (error) {
     ws.send(JSON.stringify({ type: 'error', error: error.message }));
   }
 }
 
 async function handleCommand(clientId, message, ws) {
-  const { command, params } = message;
-  
+  const { command } = message;
   console.log(`⚡ [COMMAND] ${command}`);
 
   switch (command) {
@@ -1231,25 +1124,18 @@ async function handleCommand(clientId, message, ws) {
       executionQueue.executeNext();
       ws.send(JSON.stringify({ type: 'command_response', status: 'Queue started' }));
       break;
-    
     case 'queue_status':
       ws.send(JSON.stringify({ type: 'command_response', status: executionQueue.getStatus() }));
       break;
-
     case 'clear_queue':
       executionQueue.tasks = [];
       ws.send(JSON.stringify({ type: 'command_response', status: 'Queue cleared' }));
       break;
-
-    case 'get_memory_stats':
+    case 'get_memory_stats': {
       const memories = await recallConversationMemory('', 10);
-      ws.send(JSON.stringify({
-        type: 'memory_stats',
-        total: memories.length,
-        recent: memories.slice(0, 5)
-      }));
+      ws.send(JSON.stringify({ type: 'memory_stats', total: memories.length, recent: memories.slice(0, 5) }));
       break;
-
+    }
     default:
       ws.send(JSON.stringify({ type: 'error', error: `Unknown command: ${command}` }));
   }
@@ -1257,9 +1143,7 @@ async function handleCommand(clientId, message, ws) {
 
 async function handleMemoryQuery(clientId, message, ws) {
   const { query, limit } = message;
-  
   const memories = await recallConversationMemory(query, limit || 50);
-  
   ws.send(JSON.stringify({
     type: 'memory_results',
     count: memories.length,
@@ -1275,11 +1159,9 @@ async function handleMemoryQuery(clientId, message, ws) {
 
 async function handleFileUpload(clientId, message, ws) {
   const { filename, content } = message;
-  
   console.log(`📤 [UPLOAD] ${filename}`);
 
   const fileId = `file_${Date.now()}`;
-  
   await pool.query(
     `INSERT INTO file_storage 
      (file_id, filename, content, uploaded_by, created_at)
@@ -1287,81 +1169,40 @@ async function handleFileUpload(clientId, message, ws) {
     [fileId, filename, content, clientId]
   );
 
-  await storeConversationMemory(
-    `File uploaded: ${filename}`,
-    `File stored with ID: ${fileId}`,
-    { type: 'file_upload', fileId, filename }
-  );
+  await storeConversationMemory(`File uploaded: ${filename}`, `File stored with ID: ${fileId}`, { type: 'file_upload', fileId, filename });
 
-  ws.send(JSON.stringify({
-    type: 'file_uploaded',
-    fileId,
-    filename,
-    message: 'File stored in memory and indexed'
-  }));
+  ws.send(JSON.stringify({ type: 'file_uploaded', fileId, filename, message: 'File stored in memory and indexed' }));
 }
 
 async function handleTaskSubmit(clientId, message, ws) {
   const { description, type, context, priority } = message;
-
   const taskId = executionQueue.addTask({
     description,
     type: type || 'code_generation',
     context,
     priority: priority || 'normal'
   });
-
-  ws.send(JSON.stringify({
-    type: 'task_submitted',
-    taskId,
-    message: 'Task queued and will execute automatically'
-  }));
+  ws.send(JSON.stringify({ type: 'task_submitted', taskId, message: 'Task queued and will execute automatically' }));
 }
 
 async function handleFinancialRecord(clientId, message, ws) {
   const { transactionType, amount, description, category, investmentData, cryptoData } = message;
 
-  if (transactionType) {
-    await financialDashboard.recordTransaction(transactionType, amount, description, category);
-  }
+  if (transactionType) await financialDashboard.recordTransaction(transactionType, amount, description, category);
+  if (investmentData) await financialDashboard.addInvestment(investmentData.name, investmentData.amount, investmentData.expectedReturn);
+  if (cryptoData) await financialDashboard.addCryptoPosition(cryptoData.symbol, cryptoData.amount, cryptoData.entryPrice, cryptoData.currentPrice);
 
-  if (investmentData) {
-    await financialDashboard.addInvestment(
-      investmentData.name,
-      investmentData.amount,
-      investmentData.expectedReturn
-    );
-  }
-
-  if (cryptoData) {
-    await financialDashboard.addCryptoPosition(
-      cryptoData.symbol,
-      cryptoData.amount,
-      cryptoData.entryPrice,
-      cryptoData.currentPrice
-    );
-  }
-
-  ws.send(JSON.stringify({
-    type: 'financial_recorded',
-    message: 'Financial data recorded'
-  }));
+  ws.send(JSON.stringify({ type: 'financial_recorded', message: 'Financial data recorded' }));
 }
 
 async function handleDashboardRequest(clientId, message, ws) {
   const dashboard = await financialDashboard.getDashboard();
-
-  ws.send(JSON.stringify({
-    type: 'dashboard_data',
-    dashboard,
-    timestamp: new Date().toISOString()
-  }));
+  ws.send(JSON.stringify({ type: 'dashboard_data', dashboard, timestamp: new Date().toISOString() }));
 }
 
 async function handleSystemStatus(clientId, ws) {
   const memoryStats = await pool.query("SELECT COUNT(*) as total_memories FROM conversation_memory");
   const taskStatus = executionQueue.getStatus();
-  
   ws.send(JSON.stringify({
     type: 'system_status',
     status: 'operational',
@@ -1394,149 +1235,144 @@ async function handleSystemStatus(clientId, ws) {
 }
 
 async function handleSystemRepair(clientId, message, ws) {
-  const { file_path, issue, auto_apply } = message;
-  
+  const { file_path, issue } = message;
   try {
     const repairResult = await selfRepairEngine.repairFile(file_path, issue);
-    
-    ws.send(JSON.stringify({
-      type: 'repair_result',
-      ...repairResult,
-      timestamp: new Date().toISOString()
-    }));
-    
+    ws.send(JSON.stringify({ type: 'repair_result', ...repairResult, timestamp: new Date().toISOString() }));
   } catch (error) {
-    ws.send(JSON.stringify({
-      type: 'repair_error',
-      error: error.message,
-      file_path
-    }));
+    ws.send(JSON.stringify({ type: 'repair_error', error: error.message, file_path }));
   }
 }
 
 async function handleSystemHealth(clientId, ws) {
   try {
     const health = await selfRepairEngine.analyzeSystemHealth();
-    
-    ws.send(JSON.stringify({
-      type: 'system_health',
-      health,
-      timestamp: new Date().toISOString()
-    }));
-    
+    ws.send(JSON.stringify({ type: 'system_health', health, timestamp: new Date().toISOString() }));
   } catch (error) {
-    ws.send(JSON.stringify({
-      type: 'health_error', 
-      error: error.message
-    }));
+    ws.send(JSON.stringify({ type: 'health_error', error: error.message }));
   }
 }
 
 // =============================================================================
-// REAL ESTATE ENGINE
+// INCOME DRONE SYSTEM
 // =============================================================================
 
-class RealEstateEngine {
-  async addProperty(data) {
-    const { mls_id, address, price, bedrooms, bathrooms, sqft } = data;
-    const result = await pool.query(
-      `INSERT INTO real_estate_properties (mls_id, address, price, bedrooms, bathrooms, sqft)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       ON CONFLICT (mls_id) DO UPDATE SET updated_at = now()
-       RETURNING *`,
-      [mls_id, address, price, bedrooms, bathrooms, sqft]
-    );
-    return result.rows[0];
-  }
-
-  async getProperties(filter = {}) {
-    let query = "SELECT * FROM real_estate_properties WHERE 1=1";
-    const params = [];
-    let paramCount = 1;
-
-    if (filter.status) {
-      query += ` AND status = $${paramCount}`;
-      params.push(filter.status);
-      paramCount++;
-    }
-
-    query += " ORDER BY updated_at DESC LIMIT 100";
-    const result = await pool.query(query, params);
-    return result.rows;
-  }
-}
-
-const realEstateEngine = new RealEstateEngine();
-
-// =============================================================================
-// REVENUE BOT SYSTEM
-// =============================================================================
-
-class RevenueBotEngine {
+class IncomeDroneSystem {
   constructor() {
-    this.opportunities = [];
+    this.activeDrones = new Map();
+    this.incomeStreams = [];
+    this.revenueTargets = { immediate: 100, daily: 500, weekly: 3000 };
   }
 
-  async scanForOpportunities() {
-    const opportunities = [
-      {
-        source: "Pay-Per-Decision",
-        description: "Sell AI strategic decisions ($50-500 per decision)",
-        estimated_revenue: 5000,
-        effort_level: "easy",
-        complexity: 2,
-        priority: 9
-      },
-      {
-        source: "Real Estate Commissions", 
-        description: "Sell properties (6% commission average)",
-        estimated_revenue: 18000,
-        effort_level: "medium",
-        complexity: 5,
-        priority: 10
-      },
-      {
-        source: "SaaS Subscription",
-        description: "Monthly subscription to AI Council ($500-5000/mo)",
-        estimated_revenue: 12000,
-        effort_level: "medium",
-        complexity: 4,
-        priority: 9
-      }
+  async deployIncomeDrones() {
+    console.log('🚀 DEPLOYING INCOME DRONES...');
+    const droneConfigs = [
+      { id: 'affiliate-drone', type: 'affiliate_marketing', target: 'AI tools and SaaS', expectedRevenue: 200, effort: 'low', deploymentTime: 'immediate' },
+      { id: 'micro-saas-drone', type: 'micro_saas', target: 'AI-powered browser extensions', expectedRevenue: 500, effort: 'medium', deploymentTime: '24h' },
+      { id: 'content-drone', type: 'content_creation', target: 'YouTube automation + affiliate', expectedRevenue: 300, effort: 'low', deploymentTime: 'immediate' },
+      { id: 'consultation-drone', type: 'ai_consultation', target: 'Small businesses', expectedRevenue: 1000, effort: 'high', deploymentTime: '48h' }
     ];
+    for (const config of droneConfigs) await this.deployDrone(config);
+  }
 
-    this.opportunities = opportunities;
+  async deployDrone(config) {
+    console.log(`🛸 DEPLOYING: ${config.id} - Target: $${config.expectedRevenue}`);
+    const drone = { ...config, deployedAt: new Date().toISOString(), status: 'active', revenueGenerated: 0, tasks: [] };
+    this.activeDrones.set(config.id, drone);
+
+    const tasks = await this.generateIncomeTasks(config);
+    drone.tasks = tasks;
+
+    for (const task of tasks) {
+      executionQueue.addTask({
+        type: 'income_generation',
+        description: task.description,
+        droneId: config.id,
+        priority: 'critical',
+        expectedRevenue: task.expectedRevenue,
+        deadline: task.deadline
+      });
+    }
+    console.log(`✅ DRONE DEPLOYED: ${config.id} - ${tasks.length} tasks queued`);
+  }
+
+  async generateIncomeTasks(droneConfig) {
+    const prompt = `
+INCOME GENERATION URGENCY: CRITICAL
+We need immediate revenue generation. No theoretical plans - only actionable, executable tasks.
+
+DRONE TYPE: ${droneConfig.type}
+TARGET: ${droneConfig.target}
+EXPECTED REVENUE: $${droneConfig.expectedRevenue}
+TIMEFRAME: ${droneConfig.deploymentTime}
+
+Generate 3-5 SPECIFIC, ACTIONABLE tasks that can be executed RIGHT NOW to generate income.
+Focus on:
+1. Immediate implementation (hours, not days)
+2. Low hanging fruit
+3. Direct revenue generation
+4. Automated execution where possible
+
+Return as JSON array of tasks with: description, expectedRevenue, deadline, and exact steps.
+`;
+    try {
+      const response = await callCouncilMember('claude', prompt);
+      const tasks = this.parseIncomeTasks(response, droneConfig);
+      return tasks.slice(0, 5);
+    } catch {
+      return this.getFallbackIncomeTasks(droneConfig);
+    }
+  }
+
+  parseIncomeTasks(aiResponse) {
+    const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      try { return JSON.parse(jsonMatch[0]); } 
+      catch (e) { console.error('Failed to parse AI tasks:', e); }
+    }
+    return [];
+  }
+
+  getFallbackIncomeTasks(droneConfig) {
+    const taskTemplates = {
+      affiliate_marketing: [
+        { description: "Create and deploy AI tool affiliate landing page with ClickBank products", expectedRevenue: 50, deadline: "6h",
+          steps: ["Research top 5 AI tool affiliate programs","Generate landing page copy","Deploy to GitHub Pages with tracking","Submit to AI tool directories"] },
+        { description: "Automated AI tool review tweets with affiliate links", expectedRevenue: 30, deadline: "3h",
+          steps: ["Generate 20 AI tool review tweets","Schedule with Twitter API","Include affiliate links","Engage with AI tool communities"] }
+      ],
+      micro_saas: [
+        { description: "Deploy AI-powered browser extension for content summarization", expectedRevenue: 100, deadline: "24h",
+          steps: ["Generate extension code with Claude","Submit to Chrome Web Store","Set up basic monetization","Promote on Product Hunt"] }
+      ],
+      content_creation: [
+        { description: "Create and monetize AI tools YouTube shorts", expectedRevenue: 40, deadline: "8h",
+          steps: ["Generate 10 AI tool demo scripts","Create shorts with AI voiceover","Upload to YouTube with affiliate links","Cross-promote on TikTok"] }
+      ]
+    };
+    return taskTemplates[droneConfig.type] || [];
+  }
+
+  async trackRevenue() {
+    let totalRevenue = 0;
+    let todayRevenue = 0;
+    for (const [, drone] of this.activeDrones) {
+      totalRevenue += drone.revenueGenerated;
+      const today = new Date().toDateString();
+      const deployedToday = new Date(drone.deployedAt).toDateString() === today;
+      if (deployedToday) todayRevenue += drone.revenueGenerated;
+    }
     return {
-      total_opportunities: opportunities.length,
-      total_potential_revenue: opportunities.reduce((sum, o) => sum + o.estimated_revenue, 0),
-      opportunities: opportunities.sort((a, b) => b.priority - a.priority)
+      totalRevenue,
+      todayRevenue,
+      activeDrones: this.activeDrones.size,
+      targetToday: this.revenueTargets.immediate,
+      onTrack: todayRevenue >= this.revenueTargets.immediate * 0.3
     };
   }
 }
 
-const revenueBotEngine = new RevenueBotEngine();
-
-// =============================================================================
-// PROTECTION SYSTEM
-// =============================================================================
-
-async function isFileProtected(filePath) {
-  try {
-    const result = await pool.query(
-      'SELECT can_write, requires_full_council FROM protected_files WHERE file_path = $1',
-      [filePath]
-    );
-    if (result.rows.length === 0) return { protected: false };
-    return {
-      protected: true,
-      can_write: result.rows[0].can_write,
-      needs_council: result.rows[0].requires_full_council
-    };
-  } catch (e) {
-    console.error('[protection] Check failed:', e.message);
-    return { protected: false };
-  }
-}
+const incomeDroneSystem = new IncomeDroneSystem();
 
 // =============================================================================
 // REST API ENDPOINTS
@@ -1559,11 +1395,9 @@ app.get("/health", (req, res) => res.send("OK"));
 app.get("/healthz", async (req, res) => {
   try {
     await pool.query("SELECT NOW()");
-    
     const memoryStats = await pool.query("SELECT COUNT(*) as total_memories FROM conversation_memory");
     const taskStatus = executionQueue.getStatus();
     const health = await selfRepairEngine.analyzeSystemHealth();
-    
     res.json({
       status: 'healthy',
       version: 'v20.0',
@@ -1626,19 +1460,8 @@ app.get('/api/v1/dashboard', requireCommandKey, async (req, res) => {
 app.post('/api/v1/code/generate', requireCommandKey, async (req, res) => {
   try {
     const { description, type = 'code_generation' } = req.body;
-    
-    const taskId = executionQueue.addTask({
-      type,
-      description,
-      command: `Generate code for: ${description}`,
-      priority: 'high'
-    });
-
-    res.json({ 
-      ok: true, 
-      taskId,
-      message: 'Code generation queued and will execute automatically'
-    });
+    const taskId = executionQueue.addTask({ type, description, command: `Generate code for: ${description}`, priority: 'high' });
+    res.json({ ok: true, taskId, message: 'Code generation queued and will execute automatically' });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -1648,21 +1471,12 @@ app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
   try {
     const microQuery = req.body;
     console.log('[MICRO] Received:', microQuery);
-    
     const parts = microQuery.split('|');
     const op = parts.find(p => p.startsWith('OP:'))?.slice(3) || 'G';
     const data = parts.find(p => p.startsWith('D:'))?.slice(2).replace(/~/g, ' ') || '';
-    
-    const naturalPrompt = `MICRO Protocol Request:
-Operation: ${op}
-Data: ${data}
-
-Please provide a helpful response to this request.`;
-    
+    const naturalPrompt = `MICRO Protocol Request:\nOperation: ${op}\nData: ${data}\n\nPlease provide a helpful response to this request.`;
     const response = await callCouncilMember('claude', naturalPrompt);
-    
     const microResponse = `V:2.0|CT:${response.replace(/\s+/g, '~').slice(0, 200)}|KP:completed`;
-    
     res.send(microResponse);
   } catch (error) {
     res.status(500).send(`V:2.0|CT:Error~${error.message.replace(/\s+/g, '~')}|KP:error`);
@@ -1672,28 +1486,14 @@ Please provide a helpful response to this request.`;
 app.post('/api/v1/files/upload', requireCommandKey, async (req, res) => {
   try {
     const { filename, content, uploaded_by = 'api' } = req.body;
-    
     const fileId = `file_${Date.now()}`;
-    
     await pool.query(
-      `INSERT INTO file_storage 
-       (file_id, filename, content, uploaded_by, created_at)
+      `INSERT INTO file_storage (file_id, filename, content, uploaded_by, created_at)
        VALUES ($1, $2, $3, $4, now())`,
       [fileId, filename, content, uploaded_by]
     );
-
-    await storeConversationMemory(
-      `File uploaded via API: ${filename}`,
-      `File stored with ID: ${fileId}`,
-      { type: 'file_upload', fileId, filename }
-    );
-
-    res.json({ 
-      ok: true, 
-      fileId, 
-      filename,
-      message: 'File stored in memory and indexed' 
-    });
+    await storeConversationMemory(`File uploaded via API: ${filename}`, `File stored with ID: ${fileId}`, { type: 'file_upload', fileId, filename });
+    res.json({ ok: true, fileId, filename, message: 'File stored in memory and indexed' });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -1738,17 +1538,9 @@ app.get('/api/v1/system/health', requireCommandKey, async (req, res) => {
 app.post('/api/v1/system/repair', requireCommandKey, async (req, res) => {
   try {
     const { file_path, issue, auto_apply = false } = req.body;
-    
-    if (!file_path || !issue) {
-      return res.status(400).json({ 
-        ok: false, 
-        error: "file_path and issue are required" 
-      });
-    }
-
+    if (!file_path || !issue) return res.status(400).json({ ok: false, error: "file_path and issue are required" });
     const repairResult = await selfRepairEngine.repairFile(file_path, issue);
-    res.json({ ok: true, ...repairResult });
-    
+    res.json({ ok: true, auto_apply, ...repairResult });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -1765,34 +1557,14 @@ app.post("/api/v1/dev/commit-protected", requireCommandKey, async (req, res) => 
     if (!file_path || typeof content !== 'string') {
       return res.status(400).json({ ok: false, error: "path and content required" });
     }
-
     const protection = await isFileProtected(file_path);
-    
     if (protection.protected && !protection.can_write) {
-      return res.status(403).json({
-        ok: false,
-        error: "File is protected and cannot be modified",
-        file: file_path,
-        requires_council: protection.needs_council
-      });
+      return res.status(403).json({ ok: false, error: "File is protected and cannot be modified", file: file_path, requires_council: protection.needs_council });
     }
-
     if (protection.needs_council && !council_approved) {
-      return res.status(403).json({
-        ok: false,
-        error: "File requires full council approval",
-        file: file_path,
-        needs_approval: true
-      });
+      return res.status(403).json({ ok: false, error: "File requires full council approval", file: file_path, needs_approval: true });
     }
-
-    res.json({
-      ok: true,
-      committed: file_path,
-      sha: 'simulated_sha',
-      protected: protection.protected,
-      council_approved: council_approved || false
-    });
+    res.json({ ok: true, committed: file_path, sha: 'simulated_sha', protected: protection.protected, council_approved: council_approved || false });
   } catch (e) {
     console.error('[dev.commit-protected]', e);
     res.status(500).json({ ok: false, error: String(e) });
@@ -1806,76 +1578,71 @@ app.post("/api/v1/dev/commit-protected", requireCommandKey, async (req, res) => 
 app.get('/overlay/command-center.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'command-center.html'));
 });
-
 app.get('/overlay/architect.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'architect.html'));
 });
-
 app.get('/overlay/portal.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'portal.html'));
 });
-
 app.get('/overlay/control.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'control.html'));
 });
 
 // =============================================================================
-// SERVER STARTUP
+// SERVER STARTUP & SHUTDOWN
 // =============================================================================
 
 async function startServer() {
   try {
-    if (!validateEnvironment()) {
-      process.exit(1);
-    }
+    if (!validateEnvironment()) process.exit(1);
 
     await initDb();
 
     console.log("🚀 Starting execution queue...");
     executionQueue.executeNext();
 
+    console.log("🛸 DEPLOYING INCOME-GENERATING DRONES...");
+    incomeDroneSystem.deployIncomeDrones().catch(console.error);
+
     server.listen(PORT, HOST, () => {
       console.log(`\n${'═'.repeat(80)}`);
       console.log(`✅ SERVER.JS - COMPLETE AI ORCHESTRATION SYSTEM ONLINE`);
       console.log(`${'═'.repeat(80)}`);
       
-      console.log(`\n🌐 SERVER INTERFACE:`);
-      console.log(`  Server: http://${HOST}:${PORT}`);
-      console.log(`  WebSocket: ws://${HOST}:${PORT}`);
-      console.log(`  Health: http://${HOST}:${PORT}/healthz`);
-      console.log(`  Overlay UI: http://${HOST}:${PORT}/overlay/command-center.html`);
-      
+      console.log(`\n🌐 SERVER INTERFACE:
+  • Server:    http://${HOST}:${PORT}
+  • WebSocket: ws://${HOST}:${PORT}
+  • Health:    http://${HOST}:${PORT}/healthz
+  • Overlay UI: http://${HOST}:${PORT}/overlay/command-center.html`);
+
       console.log(`\n🤖 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MODELS):`);
-      Object.entries(COUNCIL_MEMBERS).forEach(([key, member]) => {
-        console.log(`  • ${member.name} - ${member.role}`);
-      });
+      Object.entries(COUNCIL_MEMBERS).forEach(([, member]) => console.log(`  • ${member.name} - ${member.role}`));
       
       console.log(`\n🌉 DEEPSEEK BRIDGE: ${DEEPSEEK_BRIDGE_ENABLED === "true" ? 'ENABLED' : 'DISABLED'}`);
       if (DEEPSEEK_BRIDGE_ENABLED === "true") {
         console.log(`  Endpoint: ${DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
       }
       
-      console.log(`\n📊 COMPLETE FEATURE SET:`);
-      console.log(`  ✅ WebSocket real-time communication`);
-      console.log(`  ✅ 3-layer automatic memory system`);
-      console.log(`  ✅ Task queue with code generation`);
-      console.log(`  ✅ Financial dashboard (P&L, Investments, Crypto)`);
-      console.log(`  ✅ Real estate business engine`);
-      console.log(`  ✅ Revenue opportunity bot`);
-      console.log(`  ✅ AI council integration (5 models)`);
-      console.log(`  ✅ Protected file system`);
-      console.log(`  ✅ Self-repair capabilities`);
-      console.log(`  ✅ MICRO protocol support`);
-      console.log(`  ✅ File upload and indexing`);
-      console.log(`  ✅ Complete overlay system`);
+      console.log(`\n📊 COMPLETE FEATURE SET:
+  ✅ WebSocket real-time communication
+  ✅ 3-layer automatic memory system
+  ✅ Task queue with code generation
+  ✅ Financial dashboard (P&L, Investments, Crypto)
+  ✅ Real estate business engine
+  ✅ Revenue opportunity bot
+  ✅ AI council integration (5 models)
+  ✅ Protected file system
+  ✅ Self-repair capabilities
+  ✅ MICRO protocol support
+  ✅ File upload and indexing
+  ✅ Complete overlay system`);
       
-      console.log(`\n🚀 DEPLOYMENT: GitHub + Railway`);
-      console.log(`  • System hosted on Railway`);
-      console.log(`  • Code managed on GitHub`);
-      console.log(`  • DeepSeek runs locally (when available)`);
-      console.log(`  • Council works with or without local DeepSeek`);
-      
-      console.log(`\n${'═'.repeat(80)}\n`);
+      console.log(`\n🚀 DEPLOYMENT: GitHub + Railway
+  • System hosted on Railway
+  • Code managed on GitHub
+  • DeepSeek runs locally (when available)
+  • Council works with or without local DeepSeek\n`);
+
       console.log("🎼 READY - AI ORCHESTRATION SYSTEM ACTIVE");
       console.log("The system will work with or without your local DeepSeek instance.");
       console.log("When your laptop is offline, the council continues with other AIs.\n");
@@ -1888,599 +1655,20 @@ async function startServer() {
 
 function handleGracefulShutdown() {
   console.log("\n📊 Graceful shutdown initiated...");
-  
-  for (const [clientId, ws] of activeConnections.entries()) {
-    ws.close(1000, "Server shutting down");
+  for (const [, ws] of activeConnections.entries()) {
+    try { ws.close(1000, "Server shutting down"); } catch {}
   }
-  
-  pool.end(() => {
-    console.log("✅ Database pool closed");
-  });
-  // INCOME DRONE SYSTEM - Add to your server.js
-class IncomeDroneSystem {
-  constructor() {
-    this.activeDrones = new Map();
-    this.incomeStreams = [];
-    this.revenueTargets = {
-      immediate: 100,    // $100 today
-      daily: 500,        // $500/day within 3 days  
-      weekly: 3000       // $3k/week within 7 days
-    };
-  }
-
-  async deployIncomeDrones() {
-    console.log('🚀 DEPLOYING INCOME DRONES...');
-    
-    const droneConfigs = [
-      {
-        id: 'affiliate-drone',
-        type: 'affiliate_marketing',
-        target: 'AI tools and SaaS',
-        expectedRevenue: 200,
-        effort: 'low',
-        deploymentTime: 'immediate'
-      },
-      {
-        id: 'micro-saas-drone', 
-        type: 'micro_saas',
-        target: 'AI-powered browser extensions',
-        expectedRevenue: 500,
-        effort: 'medium',
-        deploymentTime: '24h'
-      },
-      {
-        id: 'content-drone',
-        type: 'content_creation',
-        target: 'YouTube automation + affiliate',
-        expectedRevenue: 300,
-        effort: 'low',
-        deploymentTime: 'immediate'
-      },
-      {
-        id: 'consultation-drone',
-        type: 'ai_consultation',
-        target: 'Small businesses',
-        expectedRevenue: 1000,
-        effort: 'high',
-        deploymentTime: '48h'
-      }
-    ];
-
-    for (const config of droneConfigs) {
-      await this.deployDrone(config);
-    }
-  }
-
-  async deployDrone(config) {
-    console.log(`🛸 DEPLOYING: ${config.id} - Target: $${config.expectedRevenue}`);
-    
-    const drone = {
-      ...config,
-      deployedAt: new Date().toISOString(),
-      status: 'active',
-      revenueGenerated: 0,
-      tasks: []
-    };
-
-    this.activeDrones.set(config.id, drone);
-    
-    // Generate immediate income tasks
-    const tasks = await this.generateIncomeTasks(config);
-    drone.tasks = tasks;
-    
-    // Queue tasks for execution
-    for (const task of tasks) {
-      executionQueue.addTask({
-        type: 'income_generation',
-        description: task.description,
-        droneId: config.id,
-        priority: 'critical',
-        expectedRevenue: task.expectedRevenue,
-        deadline: task.deadline
-      });
-    }
-
-    console.log(`✅ DRONE DEPLOYED: ${config.id} - ${tasks.length} tasks queued`);
-  }
-
-  async generateIncomeTasks(droneConfig) {
-    const prompt = `
-INCOME GENERATION URGENCY: CRITICAL
-We need immediate revenue generation. No theoretical plans - only actionable, executable tasks.
-
-DRONE TYPE: ${droneConfig.type}
-TARGET: ${droneConfig.target}
-EXPECTED REVENUE: $${droneConfig.expectedRevenue}
-TIMEFRAME: ${droneConfig.deploymentTime}
-
-Generate 3-5 SPECIFIC, ACTIONABLE tasks that can be executed RIGHT NOW to generate income.
-Focus on:
-1. Immediate implementation (hours, not days)
-2. Low hanging fruit
-3. Direct revenue generation
-4. Automated execution where possible
-
-Return as JSON array of tasks with: description, expectedRevenue, deadline, and exact steps.
-`;
-
-    try {
-      const response = await callCouncilMember('claude', prompt);
-      
-      // Parse the AI response for executable tasks
-      const tasks = this.parseIncomeTasks(response, droneConfig);
-      return tasks.slice(0, 5); // Take top 5 immediately executable tasks
-      
-    } catch (error) {
-      // Fallback to predefined income tasks
-      return this.getFallbackIncomeTasks(droneConfig);
-    }
-  }
-
-  parseIncomeTasks(aiResponse, droneConfig) {
-    // Extract JSON tasks from AI response
-    const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
-    if (jsonMatch) {
-      try {
-        return JSON.parse(jsonMatch[0]);
-      } catch (e) {
-        console.error('Failed to parse AI tasks:', e);
-      }
-    }
-    
-    return this.getFallbackIncomeTasks(droneConfig);
-  }
-
-  getFallbackIncomeTasks(droneConfig) {
-    // Immediate income-generating tasks as fallback
-    const taskTemplates = {
-      affiliate_marketing: [
-        {
-          description: "Create and deploy AI tool affiliate landing page with ClickBank products",
-          expectedRevenue: 50,
-          deadline: "6h",
-          steps: [
-            "Research top 5 AI tool affiliate programs",
-            "Generate landing page copy",
-            "Deploy to GitHub Pages with tracking",
-            "Submit to AI tool directories"
-          ]
-        },
-        {
-          description: "Automated AI tool review tweets with affiliate links",
-          expectedRevenue: 30,
-          deadline: "3h", 
-          steps: [
-            "Generate 20 AI tool review tweets",
-            "Schedule with Twitter API",
-            "Include affiliate links",
-            "Engage with AI tool communities"
-          ]
-        }
-      ],
-      micro_saas: [
-        {
-          description: "Deploy AI-powered browser extension for content summarization",
-          expectedRevenue: 100,
-          deadline: "24h",
-          steps: [
-            "Generate extension code with Claude",
-            "Submit to Chrome Web Store", 
-            "Set up basic monetization",
-            "Promote on Product Hunt"
-          ]
-        }
-      ],
-      content_creation: [
-        {
-          description: "Create and monetize AI tools YouTube shorts",
-          expectedRevenue: 40,
-          deadline: "8h",
-          steps: [
-            "Generate 10 AI tool demo scripts",
-            "Create shorts with AI voiceover",
-            "Upload to YouTube with affiliate links",
-            "Cross-promote on TikTok"
-          ]
-        }
-      ]
-    };
-
-    return taskTemplates[droneConfig.type] || [];
-  }
-
-  async trackRevenue() {
-    let totalRevenue = 0;
-    let todayRevenue = 0;
-    
-    for (const [droneId, drone] of this.activeDrones) {
-      totalRevenue += drone.revenueGenerated;
-      
-      const today = new Date().toDateString();
-      const deployedToday = new Date(drone.deployedAt).toDateString() === today;
-      if (deployedToday) {
-        todayRevenue += drone.revenueGenerated;
-      }
-    }
-
-    return {
-      totalRevenue,
-      todayRevenue,
-      activeDrones: this.activeDrones.size,
-      targetToday: this.revenueTargets.immediate,
-      onTrack: todayRevenue >= this.revenueTargets.immediate * 0.3 // 30% of daily target
-    };
-  }
-}
-
-const incomeDroneSystem = new IncomeDroneSystem();
-
-// Add to server startup - DEPLOY DRONES IMMEDIATELY
-async function startServer() {
-  // ... existing code ...
-  
-  console.log("🚀 Starting execution queue...");
-  executionQueue.executeNext();
-
-  // 🚨 DEPLOY INCOME DRONES IMMEDIATELY
-  console.log("🛸 DEPLOYING INCOME-GENERATING DRONES...");
-  incomeDroneSystem.deployIncomeDrones().catch(console.error);
-
-  // ... rest of startup code ...
-}
+  pool.end(() => console.log("✅ Database pool closed"));
   server.close(() => {
     console.log("✅ Server closed");
     process.exit(0);
   });
-  
   setTimeout(() => {
     console.error("❌ Forcing shutdown");
     process.exit(1);
   }, 10000);
 }
-// ENHANCED DEEPSEEK BRIDGE - Add to your server.js
-async function callDeepSeekBridge(prompt, config) {
-  // Try multiple connection methods in sequence
-  const connectionMethods = [
-    {
-      name: 'local_bridge',
-      endpoint: DEEPSEEK_LOCAL_ENDPOINT,
-      enabled: DEEPSEEK_BRIDGE_ENABLED === "true"
-    },
-    {
-      name: 'cloud_api', 
-      endpoint: 'https://api.deepseek.com/v1/chat/completions',
-      enabled: !!DEEPSEEK_API_KEY
-    },
-    {
-      name: 'fallback_claude',
-      endpoint: null,
-      enabled: true // Always available as final fallback
-    }
-  ];
 
-  for (const method of connectionMethods) {
-    if (!method.enabled) continue;
-
-    try {
-      console.log(`🔄 [DEEPSEEK] Trying ${method.name}...`);
-      
-      let response;
-      if (method.name === 'local_bridge') {
-        response = await tryLocalDeepSeek(prompt, config, method.endpoint);
-      } else if (method.name === 'cloud_api') {
-        response = await tryCloudDeepSeek(prompt, config);
-      } else {
-        response = await tryFallbackClaude(prompt, config);
-      }
-
-      if (response.success) {
-        console.log(`✅ [DEEPSEEK ${method.name.toUpperCase()}] Success`);
-        return response.text;
-      }
-    } catch (error) {
-      console.log(`❌ [DEEPSEEK ${method.name}] Failed: ${error.message}`);
-      continue;
-    }
-  }
-
-  // Ultimate fallback - use any available AI
-  return await callCouncilMember('claude', prompt);
-}
-
-async function tryLocalDeepSeek(prompt, config, endpoint) {
-  const response = await fetch(`${endpoint}/api/v1/chat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: config.model,
-      messages: [
-        { role: "system", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
-        { role: "user", content: prompt }
-      ],
-      max_tokens: config.maxTokens,
-      temperature: 0.7
-    }),
-    timeout: 8000
-  });
-
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  
-  const data = await response.json();
-  const text = data.choices?.[0]?.message?.content || data.response || 'No response';
-  
-  return { success: true, text };
-}
-
-async function tryCloudDeepSeek(prompt, config) {
-  const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: config.model,
-      messages: [
-        { role: "system", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
-        { role: "user", content: prompt }
-      ],
-      max_tokens: config.maxTokens,
-      temperature: 0.7
-    })
-  });
-// INCOME DRONE SYSTEM - Add to your server.js
-class IncomeDroneSystem {
-  constructor() {
-    this.activeDrones = new Map();
-    this.incomeStreams = [];
-    this.revenueTargets = {
-      immediate: 100,    // $100 today
-      daily: 500,        // $500/day within 3 days  
-      weekly: 3000       // $3k/week within 7 days
-    };
-  }
-
-  async deployIncomeDrones() {
-    console.log('🚀 DEPLOYING INCOME DRONES...');
-    
-    const droneConfigs = [
-      {
-        id: 'affiliate-drone',
-        type: 'affiliate_marketing',
-        target: 'AI tools and SaaS',
-        expectedRevenue: 200,
-        effort: 'low',
-        deploymentTime: 'immediate'
-      },
-      {
-        id: 'micro-saas-drone', 
-        type: 'micro_saas',
-        target: 'AI-powered browser extensions',
-        expectedRevenue: 500,
-        effort: 'medium',
-        deploymentTime: '24h'
-      },
-      {
-        id: 'content-drone',
-        type: 'content_creation',
-        target: 'YouTube automation + affiliate',
-        expectedRevenue: 300,
-        effort: 'low',
-        deploymentTime: 'immediate'
-      },
-      {
-        id: 'consultation-drone',
-        type: 'ai_consultation',
-        target: 'Small businesses',
-        expectedRevenue: 1000,
-        effort: 'high',
-        deploymentTime: '48h'
-      }
-    ];
-
-    for (const config of droneConfigs) {
-      await this.deployDrone(config);
-    }
-  }
-
-  async deployDrone(config) {
-    console.log(`🛸 DEPLOYING: ${config.id} - Target: $${config.expectedRevenue}`);
-    
-    const drone = {
-      ...config,
-      deployedAt: new Date().toISOString(),
-      status: 'active',
-      revenueGenerated: 0,
-      tasks: []
-    };
-
-    this.activeDrones.set(config.id, drone);
-    
-    // Generate immediate income tasks
-    const tasks = await this.generateIncomeTasks(config);
-    drone.tasks = tasks;
-    
-    // Queue tasks for execution
-    for (const task of tasks) {
-      executionQueue.addTask({
-        type: 'income_generation',
-        description: task.description,
-        droneId: config.id,
-        priority: 'critical',
-        expectedRevenue: task.expectedRevenue,
-        deadline: task.deadline
-      });
-      DEEPSEEK_BRIDGE_ENABLED=true
-# Even without local DeepSeek, the system will use fallbacks
-    }
-
-    console.log(`✅ DRONE DEPLOYED: ${config.id} - ${tasks.length} tasks queued`);
-  }
-
-  async generateIncomeTasks(droneConfig) {
-    const prompt = `
-INCOME GENERATION URGENCY: CRITICAL
-We need immediate revenue generation. No theoretical plans - only actionable, executable tasks.
-
-DRONE TYPE: ${droneConfig.type}
-TARGET: ${droneConfig.target}
-EXPECTED REVENUE: $${droneConfig.expectedRevenue}
-TIMEFRAME: ${droneConfig.deploymentTime}
-
-Generate 3-5 SPECIFIC, ACTIONABLE tasks that can be executed RIGHT NOW to generate income.
-Focus on:
-1. Immediate implementation (hours, not days)
-2. Low hanging fruit
-3. Direct revenue generation
-4. Automated execution where possible
-
-Return as JSON array of tasks with: description, expectedRevenue, deadline, and exact steps.
-`;
-
-    try {
-      const response = await callCouncilMember('claude', prompt);
-      
-      // Parse the AI response for executable tasks
-      const tasks = this.parseIncomeTasks(response, droneConfig);
-      return tasks.slice(0, 5); // Take top 5 immediately executable tasks
-      
-    } catch (error) {
-      // Fallback to predefined income tasks
-      return this.getFallbackIncomeTasks(droneConfig);
-    }
-  }
-
-  parseIncomeTasks(aiResponse, droneConfig) {
-    // Extract JSON tasks from AI response
-    const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
-    if (jsonMatch) {
-      try {
-        return JSON.parse(jsonMatch[0]);
-      } catch (e) {
-        console.error('Failed to parse AI tasks:', e);
-      }
-    }
-    
-    return this.getFallbackIncomeTasks(droneConfig);
-  }
-
-  getFallbackIncomeTasks(droneConfig) {
-    // Immediate income-generating tasks as fallback
-    const taskTemplates = {
-      affiliate_marketing: [
-        {
-          description: "Create and deploy AI tool affiliate landing page with ClickBank products",
-          expectedRevenue: 50,
-          deadline: "6h",
-          steps: [
-            "Research top 5 AI tool affiliate programs",
-            "Generate landing page copy",
-            "Deploy to GitHub Pages with tracking",
-            "Submit to AI tool directories"
-          ]
-        },
-        {
-          description: "Automated AI tool review tweets with affiliate links",
-          expectedRevenue: 30,
-          deadline: "3h", 
-          steps: [
-            "Generate 20 AI tool review tweets",
-            "Schedule with Twitter API",
-            "Include affiliate links",
-            "Engage with AI tool communities"
-          ]
-        }
-      ],
-      micro_saas: [
-        {
-          description: "Deploy AI-powered browser extension for content summarization",
-          expectedRevenue: 100,
-          deadline: "24h",
-          steps: [
-            "Generate extension code with Claude",
-            "Submit to Chrome Web Store", 
-            "Set up basic monetization",
-            "Promote on Product Hunt"
-          ]
-        }
-      ],
-      content_creation: [
-        {
-          description: "Create and monetize AI tools YouTube shorts",
-          expectedRevenue: 40,
-          deadline: "8h",
-          steps: [
-            "Generate 10 AI tool demo scripts",
-            "Create shorts with AI voiceover",
-            "Upload to YouTube with affiliate links",
-            "Cross-promote on TikTok"
-          ]
-        }
-      ]
-    };
-
-    return taskTemplates[droneConfig.type] || [];
-  }
-
-  async trackRevenue() {
-    let totalRevenue = 0;
-    let todayRevenue = 0;
-    
-    for (const [droneId, drone] of this.activeDrones) {
-      totalRevenue += drone.revenueGenerated;
-      
-      const today = new Date().toDateString();
-      const deployedToday = new Date(drone.deployedAt).toDateString() === today;
-      if (deployedToday) {
-        todayRevenue += drone.revenueGenerated;
-      }
-    }
-
-    return {
-      totalRevenue,
-      todayRevenue,
-      activeDrones: this.activeDrones.size,
-      targetToday: this.revenueTargets.immediate,
-      onTrack: todayRevenue >= this.revenueTargets.immediate * 0.3 // 30% of daily target
-    };
-  }
-}
-
-const incomeDroneSystem = new IncomeDroneSystem();
-
-// Add to server startup - DEPLOY DRONES IMMEDIATELY
-async function startServer() {
-  // ... existing code ...
-  
-  console.log("🚀 Starting execution queue...");
-  executionQueue.executeNext();
-
-  // 🚨 DEPLOY INCOME DRONES IMMEDIATELY
-  console.log("🛸 DEPLOYING INCOME-GENERATING DRONES...");
-  incomeDroneSystem.deployIncomeDrones().catch(console.error);
-
-  // ... rest of startup code ...
-}
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  
-  const data = await response.json();
-  const text = data.choices?.[0]?.message?.content || 'No response';
-  
-  return { success: true, text };
-}
-
-async function tryFallbackClaude(prompt, config) {
-  const enhancedPrompt = `[DEEPSEEK FALLBACK - Acting as ${config.name}]
-Role: ${config.role}
-Focus: ${config.focus}
-
-${prompt}
-
-Please respond with the technical depth and optimization focus that DeepSeek would provide.`;
-  
-  const text = await callCouncilMember('claude', enhancedPrompt);
-  return { success: true, text };
-}
 process.on('SIGINT', handleGracefulShutdown);
 process.on('SIGTERM', handleGracefulShutdown);
 
