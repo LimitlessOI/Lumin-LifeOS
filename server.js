@@ -1,4 +1,3 @@
-```javascript
 /**
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                                                                                  ║
@@ -29,10 +28,6 @@ const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
-// =============================================================================
-// ENVIRONMENT & CONFIG
-// =============================================================================
-
 const {
   DATABASE_URL,
   COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
@@ -54,14 +49,20 @@ const {
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim() || null;
 
 const roiTracker = {
-  daily_revenue: 0, daily_ai_cost: 0, daily_tasks_completed: 0,
-  total_tokens_saved: 0, micro_compression_saves: 0, roi_ratio: 0,
+  daily_revenue: 0,
+  daily_ai_cost: 0,
+  daily_tasks_completed: 0,
+  total_tokens_saved: 0,
+  micro_compression_saves: 0,
+  roi_ratio: 0,
   last_reset: dayjs().format("YYYY-MM-DD")
 };
 
 const compressionMetrics = {
-  v2_0_compressions: 0, v3_compressions: 0,
-  total_bytes_saved: 0, total_cost_saved: 0
+  v2_0_compressions: 0,
+  v3_compressions: 0,
+  total_bytes_saved: 0,
+  total_cost_saved: 0
 };
 
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
@@ -80,128 +81,178 @@ function validateEnvironment() {
   return true;
 }
 
-// =============================================================================
-// DATABASE
-// =============================================================================
-
 export const pool = new Pool({
   connectionString: DATABASE_URL,
   ssl: DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined,
-  max: 20, idleTimeoutMillis: 30000, connectionTimeoutMillis: 10000
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000
 });
 
 async function initDb() {
   try {
     await pool.query(`CREATE TABLE IF NOT EXISTS conversation_memory (
-      id SERIAL PRIMARY KEY, memory_id TEXT UNIQUE NOT NULL,
-      orchestrator_msg TEXT NOT NULL, ai_response TEXT NOT NULL,
-      key_facts JSONB, context_metadata JSONB,
+      id SERIAL PRIMARY KEY,
+      memory_id TEXT UNIQUE NOT NULL,
+      orchestrator_msg TEXT NOT NULL,
+      ai_response TEXT NOT NULL,
+      key_facts JSONB,
+      context_metadata JSONB,
       memory_type TEXT DEFAULT 'conversation',
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS financial_ledger (
-      id SERIAL PRIMARY KEY, tx_id TEXT UNIQUE NOT NULL,
-      type TEXT NOT NULL, amount DECIMAL(15,2) NOT NULL,
-      description TEXT, category TEXT,
+      id SERIAL PRIMARY KEY,
+      tx_id TEXT UNIQUE NOT NULL,
+      type TEXT NOT NULL,
+      amount DECIMAL(15,2) NOT NULL,
+      description TEXT,
+      category TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS investments (
-      id SERIAL PRIMARY KEY, inv_id TEXT UNIQUE NOT NULL,
-      name TEXT NOT NULL, amount DECIMAL(15,2) NOT NULL,
-      expected_return DECIMAL(10,2), status TEXT DEFAULT 'active',
+      id SERIAL PRIMARY KEY,
+      inv_id TEXT UNIQUE NOT NULL,
+      name TEXT NOT NULL,
+      amount DECIMAL(15,2) NOT NULL,
+      expected_return DECIMAL(10,2),
+      status TEXT DEFAULT 'active',
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS crypto_portfolio (
-      id SERIAL PRIMARY KEY, crypto_id TEXT UNIQUE NOT NULL,
-      symbol TEXT NOT NULL, amount DECIMAL(20,8) NOT NULL,
-      entry_price DECIMAL(15,2) NOT NULL, current_price DECIMAL(15,2) NOT NULL,
+      id SERIAL PRIMARY KEY,
+      crypto_id TEXT UNIQUE NOT NULL,
+      symbol TEXT NOT NULL,
+      amount DECIMAL(20,8) NOT NULL,
+      entry_price DECIMAL(15,2) NOT NULL,
+      current_price DECIMAL(15,2) NOT NULL,
       gain_loss_percent DECIMAL(10,2),
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS file_storage (
-      id SERIAL PRIMARY KEY, file_id TEXT UNIQUE NOT NULL,
-      filename TEXT NOT NULL, content TEXT, uploaded_by TEXT,
+      id SERIAL PRIMARY KEY,
+      file_id TEXT UNIQUE NOT NULL,
+      filename TEXT NOT NULL,
+      content TEXT,
+      uploaded_by TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS protected_files (
-      id SERIAL PRIMARY KEY, file_path TEXT UNIQUE NOT NULL,
-      reason TEXT NOT NULL, can_read BOOLEAN DEFAULT true,
-      can_write BOOLEAN DEFAULT false, requires_full_council BOOLEAN DEFAULT true,
+      id SERIAL PRIMARY KEY,
+      file_path TEXT UNIQUE NOT NULL,
+      reason TEXT NOT NULL,
+      can_read BOOLEAN DEFAULT true,
+      can_write BOOLEAN DEFAULT false,
+      requires_full_council BOOLEAN DEFAULT true,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS shared_memory (
-      id SERIAL PRIMARY KEY, category TEXT NOT NULL,
-      memory_key TEXT UNIQUE NOT NULL, memory_value TEXT NOT NULL,
-      confidence DECIMAL(3,2) DEFAULT 0.8, source TEXT NOT NULL,
-      tags TEXT, created_by TEXT NOT NULL, expires_at TIMESTAMPTZ,
+      id SERIAL PRIMARY KEY,
+      category TEXT NOT NULL,
+      memory_key TEXT UNIQUE NOT NULL,
+      memory_value TEXT NOT NULL,
+      confidence DECIMAL(3,2) DEFAULT 0.8,
+      source TEXT NOT NULL,
+      tags TEXT,
+      created_by TEXT NOT NULL,
+      expires_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS real_estate_properties (
-      id SERIAL PRIMARY KEY, mls_id TEXT UNIQUE NOT NULL,
-      address TEXT NOT NULL, price DECIMAL(15,2),
-      bedrooms INTEGER, bathrooms INTEGER, sqft INTEGER,
+      id SERIAL PRIMARY KEY,
+      mls_id TEXT UNIQUE NOT NULL,
+      address TEXT NOT NULL,
+      price DECIMAL(15,2),
+      bedrooms INTEGER,
+      bathrooms INTEGER,
+      sqft INTEGER,
       status TEXT DEFAULT 'active',
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS calls (
-      id SERIAL PRIMARY KEY, created_at TIMESTAMPTZ DEFAULT NOW(),
-      phone TEXT, intent TEXT, area TEXT, timeline TEXT,
-      duration INT, transcript TEXT, score TEXT, boldtrail_lead_id TEXT
+      id SERIAL PRIMARY KEY,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      phone TEXT,
+      intent TEXT,
+      area TEXT,
+      timeline TEXT,
+      duration INT,
+      transcript TEXT,
+      score TEXT,
+      boldtrail_lead_id TEXT
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS build_metrics (
-      id SERIAL PRIMARY KEY, created_at TIMESTAMPTZ DEFAULT NOW(),
-      pr_number INT, model TEXT, tokens_in INT DEFAULT 0,
-      tokens_out INT DEFAULT 0, cost NUMERIC(10,4) DEFAULT 0,
-      outcome TEXT DEFAULT 'pending', summary TEXT
+      id SERIAL PRIMARY KEY,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      pr_number INT,
+      model TEXT,
+      tokens_in INT DEFAULT 0,
+      tokens_out INT DEFAULT 0,
+      cost NUMERIC(10,4) DEFAULT 0,
+      outcome TEXT DEFAULT 'pending',
+      summary TEXT
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS council_reviews (
-      id SERIAL PRIMARY KEY, pr_number INT NOT NULL,
-      reviewer TEXT NOT NULL, vote TEXT NOT NULL,
-      reasoning TEXT, concerns JSONB,
+      id SERIAL PRIMARY KEY,
+      pr_number INT NOT NULL,
+      reviewer TEXT NOT NULL,
+      vote TEXT NOT NULL,
+      reasoning TEXT,
+      concerns JSONB,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS task_outputs (
-      id SERIAL PRIMARY KEY, task_id INT NOT NULL,
-      output_type TEXT, content TEXT, metadata JSONB,
+      id SERIAL PRIMARY KEY,
+      task_id INT NOT NULL,
+      output_type TEXT,
+      content TEXT,
+      metadata JSONB,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS compression_stats (
-      id SERIAL PRIMARY KEY, task_id INT,
-      original_tokens INT, compressed_tokens INT,
-      compression_ratio INT, cost_saved NUMERIC(10,4),
+      id SERIAL PRIMARY KEY,
+      task_id INT,
+      original_tokens INT,
+      compressed_tokens INT,
+      compression_ratio INT,
+      cost_saved NUMERIC(10,4),
       compression_type TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS approval_queue (
-      id SERIAL PRIMARY KEY, file_path TEXT NOT NULL,
-      proposed_content TEXT, reason TEXT,
-      status TEXT DEFAULT 'pending', approvals JSONB,
+      id SERIAL PRIMARY KEY,
+      file_path TEXT NOT NULL,
+      proposed_content TEXT,
+      reason TEXT,
+      status TEXT DEFAULT 'pending',
+      approvals JSONB,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS session_dicts (
-      id SERIAL PRIMARY KEY, category VARCHAR(50),
-      custom_key VARCHAR(255), dict_id SMALLINT,
+      id SERIAL PRIMARY KEY,
+      category VARCHAR(50),
+      custom_key VARCHAR(255),
+      dict_id SMALLINT,
       created_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(category, custom_key)
     )`);
 
-    // Indexes
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_id ON conversation_memory(memory_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_created ON conversation_memory(created_at)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_file_storage ON file_storage(file_id)`);
@@ -211,15 +262,12 @@ async function initDb() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_council_pr ON council_reviews(pr_number)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_compression ON compression_stats(created_at)`);
 
-    // Protect core files
-    await pool.query(`
-      INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
+    await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('server.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
       ('.github/workflows/autopilot-build.yml', 'Autopilot', true, false, true),
       ('public/overlay/command-center.html', 'Control panel', true, true, true)
-      ON CONFLICT (file_path) DO NOTHING
-    `);
+      ON CONFLICT (file_path) DO NOTHING`);
 
     console.log("✅ Database schema initialized");
   } catch (error) {
@@ -227,10 +275,6 @@ async function initDb() {
     throw error;
   }
 }
-
-// =============================================================================
-// WEBSOCKET
-// =============================================================================
 
 const activeConnections = new Map();
 const conversationHistory = new Map();
@@ -241,10 +285,6 @@ function broadcastToOrchestrator(message) {
     if (ws && ws.readyState === 1) ws.send(broadcastData);
   }
 }
-
-// =============================================================================
-// 3-LAYER MEMORY SYSTEM
-// =============================================================================
 
 async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
   try {
@@ -278,7 +318,8 @@ function extractKeyFacts(message, response) {
       let match;
       while ((match = pattern.regex.exec(text)) !== null) {
         if (match[1]) facts.push({
-          type: pattern.name, text: match[1].trim(),
+          type: pattern.name,
+          text: match[1].trim(),
           source: idx === 0 ? 'user' : 'ai',
           timestamp: new Date().toISOString()
         });
@@ -304,10 +345,6 @@ async function recallConversationMemory(query, limit = 50) {
     return [];
   }
 }
-
-// =============================================================================
-// LCTP v3 COMPRESSION CODEC
-// =============================================================================
 
 const b64u = {
   enc: (u8) => Buffer.from(u8).toString('base64').replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),
@@ -364,7 +401,11 @@ function packBits(values) {
       used += fit;
       v >>>= fit;
       b -= fit;
-      if (used === 8) { out.push(cur); cur = 0; used = 0; }
+      if (used === 8) {
+        out.push(cur);
+        cur = 0;
+        used = 0;
+      }
     }
   }
   if (used) out.push(cur);
@@ -377,11 +418,17 @@ function unpackBits(u8, spec) {
   for (const {bits, name} of spec) {
     let got = 0, val = 0, shift = 0;
     while (got < bits) {
-      if (bitPos === 8) { idx++; cur = u8[idx] || 0; bitPos = 0; }
+      if (bitPos === 8) {
+        idx++;
+        cur = u8[idx] || 0;
+        bitPos = 0;
+      }
       const avail = Math.min(8 - bitPos, bits - got);
       const mask = (1 << avail) - 1;
       val |= ((cur >> bitPos) & mask) << shift;
-      bitPos += avail; shift += avail; got += avail;
+      bitPos += avail;
+      shift += avail;
+      got += avail;
     }
     out[name] = val >>> 0;
   }
@@ -446,10 +493,6 @@ function decodeLCTP(b64, dict=DICT) {
   };
 }
 
-// =============================================================================
-// MICRO PROTOCOL v2.0
-// =============================================================================
-
 const MICRO_PROTOCOL = {
   encode: (data) => {
     const parts = ["V:2.0"];
@@ -474,7 +517,9 @@ const MICRO_PROTOCOL = {
       const [key, value] = part.split(":");
       if (!value) return;
       switch (key) {
-        case "V": result.version = value; break;
+        case "V":
+          result.version = value;
+          break;
         case "OP":
           const ops = { G: "generate", A: "analyze", C: "create", B: "build", O: "optimize", R: "review" };
           result.operation = ops[value] || value;
@@ -488,26 +533,33 @@ const MICRO_PROTOCOL = {
           const types = { S: "script", R: "report", L: "list", C: "code", A: "analysis" };
           result.type = types[value] || value;
           break;
-        case "R": result.returnFields = value.split("~").filter(f => f); break;
-        case "CT": result.content = value.replace(/~/g, " "); break;
-        case "KP": result.keyPoints = value.split("~").filter(p => p); break;
-        case "MEM": result.memory = value; break;
+        case "R":
+          result.returnFields = value.split("~").filter(f => f);
+          break;
+        case "CT":
+          result.content = value.replace(/~/g, " ");
+          break;
+        case "KP":
+          result.keyPoints = value.split("~").filter(p => p);
+          break;
+        case "MEM":
+          result.memory = value;
+          break;
       }
     });
     return result;
   }
 };
 
-// =============================================================================
-// ROI & COST TRACKING
-// =============================================================================
-
 function updateROI(revenue=0, cost=0, tasksCompleted=0, tokensSaved=0) {
   const today = dayjs().format("YYYY-MM-DD");
   if (roiTracker.last_reset !== today) {
-    roiTracker.daily_revenue = 0; roiTracker.daily_ai_cost = 0;
-    roiTracker.daily_tasks_completed = 0; roiTracker.total_tokens_saved = 0;
-    roiTracker.micro_compression_saves = 0; roiTracker.last_reset = today;
+    roiTracker.daily_revenue = 0;
+    roiTracker.daily_ai_cost = 0;
+    roiTracker.daily_tasks_completed = 0;
+    roiTracker.total_tokens_saved = 0;
+    roiTracker.micro_compression_saves = 0;
+    roiTracker.last_reset = today;
   }
   roiTracker.daily_revenue += revenue;
   roiTracker.daily_ai_cost += cost;
@@ -535,13 +587,19 @@ function trackRevenue(taskResult) {
 }
 
 function readSpend() {
-  try { return JSON.parse(fs.readFileSync(SPEND_FILE, "utf8")); }
-  catch { return { day: dayjs().format("YYYY-MM-DD"), usd: 0 }; }
+  try {
+    return JSON.parse(fs.readFileSync(SPEND_FILE, "utf8"));
+  } catch {
+    return { day: dayjs().format("YYYY-MM-DD"), usd: 0 };
+  }
 }
 
 function writeSpend(s) {
-  try { fs.writeFileSync(SPEND_FILE, JSON.stringify(s)); }
-  catch (e) { console.error("Failed to write spend:", e); }
+  try {
+    fs.writeFileSync(SPEND_FILE, JSON.stringify(s));
+  } catch (e) {
+    console.error("Failed to write spend:", e);
+  }
 }
 
 function trackCost(usage, model="gpt-4o-mini") {
@@ -565,10 +623,6 @@ function trackCost(usage, model="gpt-4o-mini") {
   return cost;
 }
 
-// =============================================================================
-// TASK QUEUE
-// =============================================================================
-
 class ExecutionQueue {
   constructor() {
     this.tasks = [];
@@ -579,10 +633,15 @@ class ExecutionQueue {
   addTask(task) {
     const taskId = `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const fullTask = {
-      id: taskId, ...task, status: 'queued',
+      id: taskId,
+      ...task,
+      status: 'queued',
       createdAt: new Date().toISOString(),
-      startedAt: null, completedAt: null, progress: 0,
-      result: null, error: null
+      startedAt: null,
+      completedAt: null,
+      progress: 0,
+      result: null,
+      error: null
     };
     this.tasks.push(fullTask);
     this.broadcastTaskUpdate('task_queued', fullTask);
@@ -634,12 +693,13 @@ class ExecutionQueue {
   async generateCode(task) {
     console.log(`🔧 Generating code: ${task.description}`);
     try {
-      const generatedCode = await callCouncilMember('claude',
-        `Generate complete, production-ready code for: ${task.description}`
-      );
+      const generatedCode = await callCouncilMember('claude', `Generate complete, production-ready code for: ${task.description}`);
       return {
-        generated: true, code: generatedCode, language: 'javascript',
-        task: task.description, timestamp: new Date().toISOString()
+        generated: true,
+        code: generatedCode,
+        language: 'javascript',
+        task: task.description,
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       throw new Error(`Code generation failed: ${error.message}`);
@@ -648,7 +708,9 @@ class ExecutionQueue {
 
   broadcastTaskUpdate(eventType, taskData) {
     broadcastToOrchestrator({
-      type: 'task_update', event: eventType, task: taskData,
+      type: 'task_update',
+      event: eventType,
+      task: taskData,
       timestamp: new Date().toISOString()
     });
   }
@@ -667,10 +729,6 @@ class ExecutionQueue {
 }
 
 const executionQueue = new ExecutionQueue();
-
-// =============================================================================
-// FINANCIAL DASHBOARD
-// =============================================================================
 
 class FinancialDashboard {
   async recordTransaction(type, amount, description, category='general') {
@@ -800,46 +858,63 @@ class FinancialDashboard {
 
 const financialDashboard = new FinancialDashboard();
 
-// =============================================================================
-// AI COUNCIL
-// =============================================================================
-
 const COUNCIL_MEMBERS = {
   claude: {
-    name: "Claude", official_name: "Claude Sonnet 3.5",
-    role: "Strategic Oversight", model: "claude-3-5-sonnet-20241022",
-    provider: "anthropic", focus: "long-term, code quality",
-    tier: "heavy", maxTokens: 4096, costPer1kTokens: 0.003
+    name: "Claude",
+    official_name: "Claude Sonnet 3.5",
+    role: "Strategic Oversight",
+    model: "claude-3-5-sonnet-20241022",
+    provider: "anthropic",
+    focus: "long-term, code quality",
+    tier: "heavy",
+    maxTokens: 4096,
+    costPer1kTokens: 0.003
   },
   chatgpt: {
-    name: "ChatGPT", official_name: "GPT-4o",
-    role: "Execution", model: "gpt-4o",
-    provider: "openai", focus: "implementation, speed",
-    tier: "heavy", maxTokens: 4096, costPer1kTokens: 0.015
+    name: "ChatGPT",
+    official_name: "GPT-4o",
+    role: "Execution",
+    model: "gpt-4o",
+    provider: "openai",
+    focus: "implementation, speed",
+    tier: "heavy",
+    maxTokens: 4096,
+    costPer1kTokens: 0.015
   },
   gemini: {
-    name: "Gemini", official_name: "Gemini 2.0 Flash",
-    role: "Innovation", model: "gemini-2.0-flash-exp",
-    provider: "google", focus: "creative solutions",
-    tier: "medium", maxTokens: 8192, costPer1kTokens: 0.00075
+    name: "Gemini",
+    official_name: "Gemini 2.0 Flash",
+    role: "Innovation",
+    model: "gemini-2.0-flash-exp",
+    provider: "google",
+    focus: "creative solutions",
+    tier: "medium",
+    maxTokens: 8192,
+    costPer1kTokens: 0.00075
   },
   deepseek: {
-    name: "DeepSeek", official_name: "DeepSeek-coder",
-    role: "Technical Depth", model: "deepseek-coder",
-    provider: "deepseek", focus: "optimization, performance",
-    tier: "medium", maxTokens: 4096, costPer1kTokens: 0.0001
+    name: "DeepSeek",
+    official_name: "DeepSeek-coder",
+    role: "Technical Depth",
+    model: "deepseek-coder",
+    provider: "deepseek",
+    focus: "optimization, performance",
+    tier: "medium",
+    maxTokens: 4096,
+    costPer1kTokens: 0.0001
   },
   grok: {
-    name: "Grok", official_name: "Grok (XAI)",
-    role: "Reality Checks", model: "grok-beta",
-    provider: "xai", focus: "feasibility, risks",
-    tier: "light", maxTokens: 4096, costPer1kTokens: 0.00015
+    name: "Grok",
+    official_name: "Grok (XAI)",
+    role: "Reality Checks",
+    model: "grok-beta",
+    provider: "xai",
+    focus: "feasibility, risks",
+    tier: "light",
+    maxTokens: 4096,
+    costPer1kTokens: 0.00015
   }
 };
-
-// =============================================================================
-// DEEPSEEK BRIDGE
-// =============================================================================
 
 async function callDeepSeekBridge(prompt, config) {
   const methods = [
@@ -949,7 +1024,9 @@ async function callCouncilMember(member, prompt) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_API_KEY}` },
         body: JSON.stringify({
-          model: modelName, temperature: 0.7, max_tokens: config.maxTokens,
+          model: modelName,
+          temperature: 0.7,
+          max_tokens: config.maxTokens,
           messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: prompt }]
         })
       });
@@ -982,13 +1059,7 @@ async function callCouncilMember(member, prompt) {
     console.error(`❌ [${member}] Error: ${error.message}`);
     return `[${member} Error] ${error.message}`;
   }
-}
-
-// =============================================================================
-// SELF-REPAIR ENGINE
-// =============================================================================
-
-class SelfRepairEngine {
+}class SelfRepairEngine {
   constructor() {
     this.repairHistory = [];
   }
@@ -1000,7 +1071,8 @@ class SelfRepairEngine {
         await pool.query('SELECT NOW()');
       } catch (dbError) {
         issues.push({
-          severity: 'critical', component: 'database',
+          severity: 'critical',
+          component: 'database',
           description: `DB connection failed`,
           suggestion: 'Verify DATABASE_URL'
         });
@@ -1008,7 +1080,8 @@ class SelfRepairEngine {
 
       if (activeConnections.size === 0) {
         issues.push({
-          severity: 'low', component: 'websocket',
+          severity: 'low',
+          component: 'websocket',
           description: 'No WebSocket connections',
           suggestion: 'Normal when no clients'
         });
@@ -1016,13 +1089,15 @@ class SelfRepairEngine {
 
       return {
         healthy: issues.filter(i => i.severity === 'critical').length === 0,
-        issues, timestamp: new Date().toISOString()
+        issues,
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       return {
         healthy: false,
         issues: [{
-          severity: 'critical', component: 'system',
+          severity: 'critical',
+          component: 'system',
           description: `Health analysis failed`,
           suggestion: 'Immediate review'
         }],
@@ -1049,7 +1124,9 @@ class SelfRepairEngine {
       }
 
       const repairResult = {
-        filePath, fixedContent, issue: issueDescription,
+        filePath,
+        fixedContent,
+        issue: issueDescription,
         repairedAt: new Date().toISOString(),
         repairedBy: 'self_repair_system'
       };
@@ -1069,10 +1146,6 @@ class SelfRepairEngine {
 
 const selfRepairEngine = new SelfRepairEngine();
 
-// =============================================================================
-// PROTECTION SYSTEM
-// =============================================================================
-
 async function isFileProtected(filePath) {
   try {
     const result = await pool.query(
@@ -1090,10 +1163,6 @@ async function isFileProtected(filePath) {
     return { protected: false };
   }
 }
-
-// =============================================================================
-// REAL ESTATE ENGINE
-// =============================================================================
 
 class RealEstateEngine {
   async addProperty(data) {
@@ -1125,10 +1194,6 @@ class RealEstateEngine {
 
 const realEstateEngine = new RealEstateEngine();
 
-// =============================================================================
-// REVENUE BOT
-// =============================================================================
-
 class RevenueBotEngine {
   constructor() {
     this.opportunities = [];
@@ -1150,10 +1215,6 @@ class RevenueBotEngine {
 }
 
 const revenueBotEngine = new RevenueBotEngine();
-
-// =============================================================================
-// INCOME DRONE SYSTEM
-// =============================================================================
 
 class IncomeDroneSystem {
   constructor() {
@@ -1183,9 +1244,12 @@ class IncomeDroneSystem {
 
     for (const task of tasks) {
       executionQueue.addTask({
-        type: 'income_generation', description: task.description,
-        droneId: config.id, priority: 'critical',
-        expectedRevenue: task.expectedRevenue, deadline: task.deadline
+        type: 'income_generation',
+        description: task.description,
+        droneId: config.id,
+        priority: 'critical',
+        expectedRevenue: task.expectedRevenue,
+        deadline: task.deadline
       });
     }
     console.log(`✅ DRONE: ${tasks.length} tasks`);
@@ -1205,8 +1269,11 @@ class IncomeDroneSystem {
   parseIncomeTasks(aiResponse) {
     const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
     if (jsonMatch) {
-      try { return JSON.parse(jsonMatch[0]); }
-      catch (e) { console.error('Parse failed'); }
+      try {
+        return JSON.parse(jsonMatch[0]);
+      } catch (e) {
+        console.error('Parse failed');
+      }
     }
     return [];
   }
@@ -1235,7 +1302,9 @@ class IncomeDroneSystem {
       if (new Date(drone.deployedAt).toDateString() === today) todayRevenue += drone.revenueGenerated;
     }
     return {
-      totalRevenue, todayRevenue, activeDrones: this.activeDrones.size,
+      totalRevenue,
+      todayRevenue,
+      activeDrones: this.activeDrones.size,
       targetToday: this.revenueTargets.immediate,
       onTrack: todayRevenue >= this.revenueTargets.immediate * 0.3
     };
@@ -1243,10 +1312,6 @@ class IncomeDroneSystem {
 }
 
 const incomeDroneSystem = new IncomeDroneSystem();
-
-// =============================================================================
-// WEBSOCKET HANDLERS
-// =============================================================================
 
 wss.on('connection', (ws) => {
   const clientId = `client_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -1256,7 +1321,9 @@ wss.on('connection', (ws) => {
   console.log(`✅ [WS] Connected`);
 
   ws.send(JSON.stringify({
-    type: 'connection', status: 'connected', clientId,
+    type: 'connection',
+    status: 'connected',
+    clientId,
     message: '🎼 AI Orchestration v21.0 - FULL INTEGRATION',
     features: [
       'WebSocket', '3-layer memory', 'AI council (5)', 'Task queue',
@@ -1274,18 +1341,41 @@ wss.on('connection', (ws) => {
       console.log(`📨 [WS] ${message.type}`);
 
       switch (message.type) {
-        case 'conversation': await handleConversation(clientId, message, ws); break;
-        case 'command': await handleCommand(clientId, message, ws); break;
-        case 'memory_query': await handleMemoryQuery(clientId, message, ws); break;
-        case 'upload_file': await handleFileUpload(clientId, message, ws); break;
-        case 'task_submit': await handleTaskSubmit(clientId, message, ws); break;
-        case 'financial_record': await handleFinancialRecord(clientId, message, ws); break;
-        case 'get_dashboard': await handleDashboardRequest(clientId, message, ws); break;
-        case 'code_generation': await handleCodeGeneration(clientId, message, ws); break;
-        case 'get_system_status': await handleSystemStatus(clientId, ws); break;
-        case 'system_repair': await handleSystemRepair(clientId, message, ws); break;
-        case 'system_health': await handleSystemHealth(clientId, ws); break;
-        default: ws.send(JSON.stringify({ type: 'error', error: `Unknown: ${message.type}` }));
+        case 'conversation':
+          await handleConversation(clientId, message, ws);
+          break;
+        case 'command':
+          await handleCommand(clientId, message, ws);
+          break;
+        case 'memory_query':
+          await handleMemoryQuery(clientId, message, ws);
+          break;
+        case 'upload_file':
+          await handleFileUpload(clientId, message, ws);
+          break;
+        case 'task_submit':
+          await handleTaskSubmit(clientId, message, ws);
+          break;
+        case 'financial_record':
+          await handleFinancialRecord(clientId, message, ws);
+          break;
+        case 'get_dashboard':
+          await handleDashboardRequest(clientId, message, ws);
+          break;
+        case 'code_generation':
+          await handleCodeGeneration(clientId, message, ws);
+          break;
+        case 'get_system_status':
+          await handleSystemStatus(clientId, ws);
+          break;
+        case 'system_repair':
+          await handleSystemRepair(clientId, message, ws);
+          break;
+        case 'system_health':
+          await handleSystemHealth(clientId, ws);
+          break;
+        default:
+          ws.send(JSON.stringify({ type: 'error', error: `Unknown: ${message.type}` }));
       }
     } catch (error) {
       console.error(`❌ [WS] Error`);
@@ -1300,7 +1390,6 @@ wss.on('connection', (ws) => {
   });
 });
 
-// Handler functions
 async function handleConversation(clientId, message, ws) {
   const { text } = message;
   let history = conversationHistory.get(clientId) || [];
@@ -1312,7 +1401,9 @@ async function handleConversation(clientId, message, ws) {
     conversationHistory.set(clientId, history);
 
     ws.send(JSON.stringify({
-      type: 'conversation_response', response, memoryStored: true,
+      type: 'conversation_response',
+      response,
+      memoryStored: true,
       timestamp: new Date().toISOString()
     }));
 
@@ -1329,8 +1420,10 @@ async function handleConversation(clientId, message, ws) {
 function extractExecutableTasks(response) {
   const tasks = [];
   const patterns = [
-    /generate:\s*([^.!?\n]{10,150})/gi, /create:\s*([^.!?\n]{10,150})/gi,
-    /build:\s*([^.!?\n]{10,150})/gi, /execute:\s*([^.!?\n]{10,150})/gi,
+    /generate:\s*([^.!?\n]{10,150})/gi,
+    /create:\s*([^.!?\n]{10,150})/gi,
+    /build:\s*([^.!?\n]{10,150})/gi,
+    /execute:\s*([^.!?\n]{10,150})/gi,
     /implement:\s*([^.!?\n]{10,150})/gi
   ];
   for (const pattern of patterns) {
@@ -1338,8 +1431,10 @@ function extractExecutableTasks(response) {
     while ((match = pattern.exec(response)) !== null) {
       if (match[1]) {
         tasks.push({
-          type: 'code_generation', command: match[1].trim(),
-          description: match[1].trim(), priority: 'high'
+          type: 'code_generation',
+          command: match[1].trim(),
+          description: match[1].trim(),
+          priority: 'high'
         });
       }
     }
@@ -1352,15 +1447,23 @@ async function handleCommand(clientId, message, ws) {
   console.log(`⚡ [COMMAND] ${command}`);
 
   switch (command) {
-    case 'start_queue': executionQueue.executeNext(); ws.send(JSON.stringify({ type: 'command_response', status: 'Queue started' })); break;
-    case 'queue_status': ws.send(JSON.stringify({ type: 'command_response', status: executionQueue.getStatus() })); break;
-    case 'clear_queue': executionQueue.tasks = []; ws.send(JSON.stringify({ type: 'command_response', status: 'Queue cleared' })); break;
-    case 'get_memory_stats': {
+    case 'start_queue':
+      executionQueue.executeNext();
+      ws.send(JSON.stringify({ type: 'command_response', status: 'Queue started' }));
+      break;
+    case 'queue_status':
+      ws.send(JSON.stringify({ type: 'command_response', status: executionQueue.getStatus() }));
+      break;
+    case 'clear_queue':
+      executionQueue.tasks = [];
+      ws.send(JSON.stringify({ type: 'command_response', status: 'Queue cleared' }));
+      break;
+    case 'get_memory_stats':
       const memories = await recallConversationMemory('', 10);
       ws.send(JSON.stringify({ type: 'memory_stats', total: memories.length, recent: memories.slice(0, 5) }));
       break;
-    }
-    default: ws.send(JSON.stringify({ type: 'error', error: `Unknown: ${command}` }));
+    default:
+      ws.send(JSON.stringify({ type: 'error', error: `Unknown: ${command}` }));
   }
 }
 
@@ -1368,10 +1471,14 @@ async function handleMemoryQuery(clientId, message, ws) {
   const { query, limit } = message;
   const memories = await recallConversationMemory(query, limit || 50);
   ws.send(JSON.stringify({
-    type: 'memory_results', count: memories.length,
+    type: 'memory_results',
+    count: memories.length,
     memories: memories.map(m => ({
-      id: m.memory_id, orchestrator: m.orchestrator_msg.slice(0, 200),
-      ai: m.ai_response.slice(0, 200), keyFacts: m.key_facts, date: m.created_at
+      id: m.memory_id,
+      orchestrator: m.orchestrator_msg.slice(0, 200),
+      ai: m.ai_response.slice(0, 200),
+      keyFacts: m.key_facts,
+      date: m.created_at
     }))
   }));
 }
@@ -1391,7 +1498,10 @@ async function handleFileUpload(clientId, message, ws) {
 async function handleTaskSubmit(clientId, message, ws) {
   const { description, type, context, priority } = message;
   const taskId = executionQueue.addTask({
-    description, type: type || 'code_generation', context, priority: priority || 'normal'
+    description,
+    type: type || 'code_generation',
+    context,
+    priority: priority || 'normal'
   });
   ws.send(JSON.stringify({ type: 'task_submitted', taskId, message: 'Queued' }));
 }
@@ -1423,7 +1533,9 @@ async function handleSystemStatus(clientId, ws) {
   const memoryStats = await pool.query("SELECT COUNT(*) as total_memories FROM conversation_memory");
   const taskStatus = executionQueue.getStatus();
   ws.send(JSON.stringify({
-    type: 'system_status', status: 'operational', version: 'v21.0',
+    type: 'system_status',
+    status: 'operational',
+    version: 'v21.0',
     timestamp: new Date().toISOString(),
     stats: {
       database: 'connected',
@@ -1479,10 +1591,6 @@ async function handleSystemHealth(clientId, ws) {
   }
 }
 
-// =============================================================================
-// REST API ENDPOINTS
-// =============================================================================
-
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.text({ type: "text/plain", limit: "50mb" }));
@@ -1504,7 +1612,6 @@ function normalizeUrl(u) {
   }
 }
 
-// Bridge registration (LCTP v3 + DeepSeek)
 app.post('/api/v1/bridge/register', requireCommandKey, async (req, res) => {
   try {
     const { url } = req.body || {};
@@ -1514,11 +1621,9 @@ app.post('/api/v1/bridge/register', requireCommandKey, async (req, res) => {
     CURRENT_DEEPSEEK_ENDPOINT = normalized;
 
     try {
-      await pool.query(`
-        INSERT INTO shared_memory (category, memory_key, memory_value, confidence, source, tags, created_by, updated_at)
+      await pool.query(`INSERT INTO shared_memory (category, memory_key, memory_value, confidence, source, tags, created_by, updated_at)
         VALUES ('bridge','deepseek_endpoint',$1,0.99,'bridge','local,deepseek','bridge', now())
-        ON CONFLICT (memory_key) DO UPDATE SET memory_value = EXCLUDED.memory_value, updated_at = now()
-      `, [normalized]);
+        ON CONFLICT (memory_key) DO UPDATE SET memory_value = EXCLUDED.memory_value, updated_at = now()`, [normalized]);
     } catch (e) {
       console.warn('Bridge persistence non-fatal:', e.message);
     }
@@ -1615,7 +1720,10 @@ app.post('/api/v1/code/generate', requireCommandKey, async (req, res) => {
   try {
     const { description, type='code_generation' } = req.body;
     const taskId = executionQueue.addTask({
-      type, description, command: `Generate: ${description}`, priority: 'high'
+      type,
+      description,
+      command: `Generate: ${description}`,
+      priority: 'high'
     });
     res.json({ ok: true, taskId, message: 'Queued for generation' });
   } catch (error) {
@@ -1629,9 +1737,14 @@ app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
     if (!rawBody) {
       try {
         const v3 = encodeLCTP({
-          v: '3', type: 'directive', project: 'lifeOS',
-          flow: 'auto-price', integration: 'Stripe', quorum: 85,
-          signer: 'System', ethics: []
+          v: '3',
+          type: 'directive',
+          project: 'lifeOS',
+          flow: 'auto-price',
+          integration: 'Stripe',
+          quorum: 85,
+          signer: 'System',
+          ethics: []
         });
         compressionMetrics.v3_compressions++;
         return res.type("text/plain").send(v3);
@@ -1655,13 +1768,17 @@ app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
       compressionMetrics.v2_0_compressions++;
       const originalSize = JSON.stringify({ msg: rawBody }).length;
       const encoded = MICRO_PROTOCOL.encode({
-        operation: 'generate', description: rawBody.slice(0, 200), type: 'general'
+        operation: 'generate',
+        description: rawBody.slice(0, 200),
+        type: 'general'
       });
       compressionMetrics.total_bytes_saved += (originalSize - encoded.length);
       microOut = String(r || "").trim();
       if (!microOut.startsWith("V:")) {
         microOut = MICRO_PROTOCOL.encode({
-          operation: 'generate', description: microOut.slice(0, 200), type: 'response'
+          operation: 'generate',
+          description: microOut.slice(0, 200),
+          type: 'response'
         });
       }
     }
@@ -1786,7 +1903,9 @@ app.get('/api/v1/roi/status', requireCommandKey, async (req, res) => {
   res.json({
     ok: true,
     roi: {
-      ...roiTracker, daily_spend: spend.usd, max_daily_spend: MAX_DAILY_SPEND,
+      ...roiTracker,
+      daily_spend: spend.usd,
+      max_daily_spend: MAX_DAILY_SPEND,
       spend_percentage: ((spend.usd / MAX_DAILY_SPEND) * 100).toFixed(1) + "%",
       health: roiTracker.roi_ratio > 2 ? "HEALTHY" : roiTracker.roi_ratio > 1 ? "MARGINAL" : "NEGATIVE",
       recommendation: roiTracker.roi_ratio > 5 ? "FULL SPEED" : roiTracker.roi_ratio > 2 ? "CONTINUE" : "FOCUS"
@@ -1804,7 +1923,8 @@ app.get('/api/v1/compression/stats', requireCommandKey, async (req, res) => {
     res.json({
       ok: true,
       micro_protocol: {
-        version: '2.0 + 3.0', enabled: true,
+        version: '2.0 + 3.0',
+        enabled: true,
         last_24_hours: {
           compressions: result.total || 0,
           avg_ratio: Math.round(result.avg_ratio || 0) + '%',
@@ -1831,7 +1951,6 @@ app.get('/api/v1/calls/stats', requireCommandKey, async (_req, res) => {
   }
 });
 
-// Overlay serving
 app.get('/overlay/command-center.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'command-center.html'));
 });
@@ -1844,10 +1963,6 @@ app.get('/overlay/portal.html', (req, res) => {
 app.get('/overlay/control.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'control.html'));
 });
-
-// =============================================================================
-// SERVER STARTUP & SHUTDOWN
-// =============================================================================
 
 async function startServer() {
   try {
@@ -1866,11 +1981,11 @@ async function startServer() {
       console.log(`✅ SERVER.JS v21.0 - COMPLETE AI ORCHESTRATION SYSTEM ONLINE`);
       console.log(`${'═'.repeat(90)}`);
       
-      console.log(`\n🌐 SERVER INTERFACE:
-  • Server:        http://${HOST}:${PORT}
-  • WebSocket:     ws://${HOST}:${PORT}
-  • Health:        http://${HOST}:${PORT}/healthz
-  • Overlay UI:    http://${HOST}:${PORT}/overlay/command-center.html`);
+      console.log(`\n🌐 SERVER INTERFACE:`);
+      console.log(`  • Server:        http://${HOST}:${PORT}`);
+      console.log(`  • WebSocket:     ws://${HOST}:${PORT}`);
+      console.log(`  • Health:        http://${HOST}:${PORT}/healthz`);
+      console.log(`  • Overlay UI:    http://${HOST}:${PORT}/overlay/command-center.html`);
 
       console.log(`\n🤖 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MODELS):`);
       Object.entries(COUNCIL_MEMBERS).forEach(([, member]) => 
@@ -1882,30 +1997,30 @@ async function startServer() {
         console.log(`  Endpoint: ${CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
       }
       
-      console.log(`\n📊 COMPLETE FEATURE SET (2292+ LINES):
-  ✅ WebSocket real-time communication
-  ✅ 3-layer automatic memory system (extraction + recall)
-  ✅ Task execution queue with code generation
-  ✅ Financial dashboard (P&L, Investments, Crypto)
-  ✅ Real estate business engine
-  ✅ Revenue opportunity bot + Income drones
-  ✅ AI council integration (5 models with parallel voting)
-  ✅ Protected file system with council approval
-  ✅ Self-repair capabilities (auto-analysis + fix)
-  ✅ LCTP v3 Compression (80-95% reduction)
-  ✅ MICRO Protocol v2.0 (70-80% reduction)
-  ✅ CRC32 integrity checking
-  ✅ Bit-packing + Dictionary substitution
-  ✅ File upload & indexing
-  ✅ Complete overlay system
-  ✅ ROI tracking + cost optimization`);
+      console.log(`\n📊 COMPLETE FEATURE SET (2292+ LINES):`);
+      console.log(`  ✅ WebSocket real-time communication`);
+      console.log(`  ✅ 3-layer automatic memory system (extraction + recall)`);
+      console.log(`  ✅ Task execution queue with code generation`);
+      console.log(`  ✅ Financial dashboard (P&L, Investments, Crypto)`);
+      console.log(`  ✅ Real estate business engine`);
+      console.log(`  ✅ Revenue opportunity bot + Income drones`);
+      console.log(`  ✅ AI council integration (5 models with parallel voting)`);
+      console.log(`  ✅ Protected file system with council approval`);
+      console.log(`  ✅ Self-repair capabilities (auto-analysis + fix)`);
+      console.log(`  ✅ LCTP v3 Compression (80-95% reduction)`);
+      console.log(`  ✅ MICRO Protocol v2.0 (70-80% reduction)`);
+      console.log(`  ✅ CRC32 integrity checking`);
+      console.log(`  ✅ Bit-packing + Dictionary substitution`);
+      console.log(`  ✅ File upload & indexing`);
+      console.log(`  ✅ Complete overlay system`);
+      console.log(`  ✅ ROI tracking + cost optimization`);
       
-      console.log(`\n🚀 DEPLOYMENT: GitHub + Railway
-  • System hosted on Railway
-  • Code managed on GitHub (LimitlessOI/Lumin-LifeOS)
-  • Database: Neon PostgreSQL (SSL enabled)
-  • DeepSeek runs locally (when available)
-  • Council works with or without local DeepSeek\n`);
+      console.log(`\n🚀 DEPLOYMENT: GitHub + Railway`);
+      console.log(`  • System hosted on Railway`);
+      console.log(`  • Code managed on GitHub (LimitlessOI/Lumin-LifeOS)`);
+      console.log(`  • Database: Neon PostgreSQL (SSL enabled)`);
+      console.log(`  • DeepSeek runs locally (when available)`);
+      console.log(`  • Council works with or without local DeepSeek\n`);
 
       console.log("🎼 READY - AI ORCHESTRATION SYSTEM ACTIVE");
       console.log("The system will work with or without your local DeepSeek instance.");
@@ -1920,8 +2035,9 @@ async function startServer() {
 function handleGracefulShutdown() {
   console.log("\n📊 Graceful shutdown initiated...");
   for (const [, ws] of activeConnections.entries()) {
-    try { ws.close(1000, "Server shutting down"); } 
-    catch {}
+    try {
+      ws.close(1000, "Server shutting down");
+    } catch {}
   }
   pool.end(() => console.log("✅ Database pool closed"));
   server.close(() => {
