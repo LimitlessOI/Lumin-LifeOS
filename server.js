@@ -967,6 +967,7 @@ async function tryLocalDeepSeek(prompt, config, envEndpoint) {
   return { success: true, text };
 }
 
+
 async function tryCloudDeepSeek(prompt, config) {
   const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
     method: 'POST',
@@ -994,31 +995,65 @@ async function tryFallbackClaude(prompt, config) {
   await storeConversationMemory(prompt, text, { ai_member: 'deepseek', context: 'fallback' });
   return { success: true, text };
 }
-
 async function callCouncilMember(member, prompt) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown: ${member}`);
-  
   if (member === 'deepseek') return await callDeepSeekBridge(prompt, config);
 
   const modelName = config.model;
   const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Respond naturally.`;
 
+  const ensureText = (json) => {
+    const t =
+      json?.content?.[0]?.text ??
+      json?.choices?.[0]?.message?.content ??
+      json?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    return (typeof t === "string" ? t : "").trim();
+  };
+
+  const throwIfBad = async (resp) => {
+    if (!resp.ok) {
+      const body = await resp.text().catch(() => "");
+      throw new Error(`HTTP ${resp.status} ${body.slice(0, 400)}`);
+    }
+  };
+
+  const throwIfErrorShape = (json) => {
+    if (json?.error) {
+      const m = json.error?.message || json.error?.type || "provider error";
+      throw new Error(m);
+    }
+  };
+
   try {
+    // Anthropic (Claude)
     if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: modelName, max_tokens: config.maxTokens, system: systemPrompt, messages: [{ role: 'user', content: prompt }] })
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: modelName,
+          max_tokens: config.maxTokens,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: prompt }]
+        })
       });
+      await throwIfBad(response);
       const json = await response.json();
-      const text = json.content?.[0]?.text || '';
-      console.log(`✅ [${member}] Response`);
+      throwIfErrorShape(json);
+      const text = ensureText(json);
+      if (!text) throw new Error('Anthropic returned empty text');
+      console.log(`✅ [${member}] Response (${text.length} chars)`);
       await storeConversationMemory(prompt, text, { ai_member: member });
       trackCost(json.usage, modelName);
       return text;
     }
 
+    // OpenAI (ChatGPT)
     if (config.provider === 'openai' && OPENAI_API_KEY) {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -1027,38 +1062,73 @@ async function callCouncilMember(member, prompt) {
           model: modelName,
           temperature: 0.7,
           max_tokens: config.maxTokens,
-          messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: prompt }]
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: prompt }
+          ]
         })
       });
+      await throwIfBad(response);
       const json = await response.json();
-      const text = json.choices?.[0]?.message?.content || '';
-      console.log(`✅ [${member}] Response`);
+      throwIfErrorShape(json);
+      const text = ensureText(json);
+      if (!text) throw new Error('OpenAI returned empty text');
+      console.log(`✅ [${member}] Response (${text.length} chars)`);
       await storeConversationMemory(prompt, text, { ai_member: member });
       trackCost(json.usage, modelName);
       return text;
     }
 
+    // Google (Gemini)
     if (config.provider === 'google' && GEMINI_API_KEY) {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: systemPrompt ? `${systemPrompt}\n\n${prompt}` : prompt }] }],
-          generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
-        })
-      });
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: systemPrompt ? `${systemPrompt}\n\n${prompt}` : prompt }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
+          })
+        }
+      );
+      await throwIfBad(response);
       const json = await response.json();
-      const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      console.log(`✅ [${member}] Response`);
+      throwIfErrorShape(json);
+      const text = ensureText(json);
+      if (!text) throw new Error('Gemini returned empty text');
+      console.log(`✅ [${member}] Response (${text.length} chars)`);
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
     }
 
-    return `[${member} Demo] Understood: "${prompt.slice(0, 100)}..." Set ${config.provider.toUpperCase()}_API_KEY for real responses.`;
+    // Demo mode (no API key)
+    const demo = `[${member} demo] No ${config.provider.toUpperCase()}_API_KEY set. Would process: ${prompt.slice(0, 200)}...`;
+    console.log(`⚠️ [${member}] Demo mode - no API key`);
+    await storeConversationMemory(prompt, demo, { ai_member: member, demo: true });
+    return demo;
+
   } catch (error) {
     console.error(`❌ [${member}] Error: ${error.message}`);
-    return `[${member} Error] ${error.message}`;
+
+    // Fallback chain
+    if (member === 'claude') {
+      if (OPENAI_API_KEY) return await callCouncilMember('chatgpt', `[Fallback for Claude]\n\n${prompt}`);
+      if (GEMINI_API_KEY) return await callCouncilMember('gemini', `[Fallback for Claude]\n\n${prompt}`);
+    } else if (member === 'chatgpt') {
+      if (ANTHROPIC_API_KEY) return await callCouncilMember('claude', `[Fallback for ChatGPT]\n\n${prompt}`);
+      if (GEMINI_API_KEY) return await callCouncilMember('gemini', `[Fallback for ChatGPT]\n\n${prompt}`);
+    } else if (member === 'gemini') {
+      if (ANTHROPIC_API_KEY) return await callCouncilMember('claude', `[Fallback for Gemini]\n\n${prompt}`);
+      if (OPENAI_API_KEY) return await callCouncilMember('chatgpt', `[Fallback for Gemini]\n\n${prompt}`);
+    }
+
+    const msg = `[${member} Error] ${error.message}`;
+    await storeConversationMemory(prompt, msg, { ai_member: member, error: true });
+    return msg;
   }
+}
+
 }class SelfRepairEngine {
   constructor() {
     this.repairHistory = [];
