@@ -1184,6 +1184,7 @@ async function callCouncilMember(member, prompt) {
       };
     }
   }
+}
 
   async repairFile(filePath, issueDescription) {
     try {
