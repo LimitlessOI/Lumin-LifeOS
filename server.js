@@ -1078,36 +1078,6 @@ async function callCouncilMember(member, prompt) {
       trackCost(json.usage, modelName);
       return text;
     }
-
-    // Google (Gemini)
-    if (config.provider === 'google' && GEMINI_API_KEY) {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: systemPrompt ? `${systemPrompt}\n\n${prompt}` : prompt }] }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
-          })
-        }
-      );
-      await throwIfBad(response);
-      const json = await response.json();
-      throwIfErrorShape(json);
-      const text = ensureText(json);
-      if (!text) throw new Error('Gemini returned empty text');
-      console.log(`✅ [${member}] Response (${text.length} chars)`);
-      await storeConversationMemory(prompt, text, { ai_member: member });
-      return text;
-    }
-
-    // Demo mode (no API key)
-    const demo = `[${member} demo] No ${config.provider.toUpperCase()}_API_KEY set. Would process: ${prompt.slice(0, 200)}...`;
-    console.log(`⚠️ [${member}] Demo mode - no API key`);
-    await storeConversationMemory(prompt, demo, { ai_member: member, demo: true });
-    return demo;
-
       // Google (Gemini) - FIXED VERSION
     if (config.provider === 'google') {
       if (!GEMINI_API_KEY) {
