@@ -1108,61 +1108,100 @@ async function callCouncilMember(member, prompt) {
     await storeConversationMemory(prompt, demo, { ai_member: member, demo: true });
     return demo;
 
-  } catch (error) {
-    console.error(`❌ [${member}] Error: ${error.message}`);
-
-    // Fallback chain
-    if (member === 'claude') {
-      if (OPENAI_API_KEY) return await callCouncilMember('chatgpt', `[Fallback for Claude]\n\n${prompt}`);
-      if (GEMINI_API_KEY) return await callCouncilMember('gemini', `[Fallback for Claude]\n\n${prompt}`);
-    } else if (member === 'chatgpt') {
-      if (ANTHROPIC_API_KEY) return await callCouncilMember('claude', `[Fallback for ChatGPT]\n\n${prompt}`);
-      if (GEMINI_API_KEY) return await callCouncilMember('gemini', `[Fallback for ChatGPT]\n\n${prompt}`);
-    } else if (member === 'gemini') {
-      if (ANTHROPIC_API_KEY) return await callCouncilMember('claude', `[Fallback for Gemini]\n\n${prompt}`);
-      if (OPENAI_API_KEY) return await callCouncilMember('chatgpt', `[Fallback for Gemini]\n\n${prompt}`);
+      // Google (Gemini) - FIXED VERSION
+    if (config.provider === 'google') {
+      if (!GEMINI_API_KEY) {
+        console.log(`❌ [${member}] GEMINI_API_KEY not set`);
+        throw new Error('GEMINI_API_KEY not configured');
+      }
+      
+      try {
+        console.log(`🔄 [${member}] Calling Gemini API...`);
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: systemPrompt ? `${systemPrompt}\n\n${prompt}` : prompt }] }],
+              generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
+            })
+          }
+        );
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`❌ [${member}] API Error: HTTP ${response.status} - ${errorText}`);
+          throw new Error(`Gemini API error: ${response.status}`);
+        }
+        
+        const json = await response.json();
+        throwIfErrorShape(json);
+        const text = ensureText(json);
+        
+        if (!text) throw new Error('Gemini returned empty text');
+        console.log(`✅ [${member}] Response (${text.length} chars)`);
+        await storeConversationMemory(prompt, text, { ai_member: member });
+        return text;
+      } catch (error) {
+        console.error(`❌ [${member}] Gemini call failed:`, error.message);
+        throw error;
+      }
     }
 
-    const msg = `[${member} Error] ${error.message}`;
-    await storeConversationMemory(prompt, msg, { ai_member: member, error: true });
-    return msg;
-  }
-}
-
-class SelfRepairEngine {
-  constructor() {
-    this.repairHistory = [];
-  }
-
-  async analyzeSystemHealth() {
-    const issues = [];
-    try {
+    // Grok (XAI) - FIXED VERSION  
+    if (config.provider === 'xai') {
+      if (!GROK_API_KEY) {
+        console.log(`❌ [${member}] GROK_API_KEY not set`);
+        throw new Error('GROK_API_KEY not configured');
+      }
+      
       try {
-        await pool.query('SELECT NOW()');
-      } catch (dbError) {
-        issues.push({
-          severity: 'critical',
-          component: 'database',
-          description: `DB connection failed`,
-          suggestion: 'Verify DATABASE_URL'
+        console.log(`🔄 [${member}] Calling Grok API...`);
+        const response = await fetch('https://api.x.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${GROK_API_KEY}` 
+          },
+          body: JSON.stringify({
+            model: modelName,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: prompt }
+            ],
+            max_tokens: config.maxTokens,
+            temperature: 0.7
+          })
         });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`❌ [${member}] API Error: HTTP ${response.status} - ${errorText}`);
+          throw new Error(`Grok API error: ${response.status}`);
+        }
+        
+        const json = await response.json();
+        throwIfErrorShape(json);
+        const text = ensureText(json);
+        
+        if (!text) throw new Error('Grok returned empty text');
+        console.log(`✅ [${member}] Response (${text.length} chars)`);
+        await storeConversationMemory(prompt, text, { ai_member: member });
+        trackCost(json.usage, modelName);
+        return text;
+      } catch (error) {
+        console.error(`❌ [${member}] Grok call failed:`, error.message);
+        throw error;
       }
+    }
 
-      if (activeConnections.size === 0) {
-        issues.push({
-          severity: 'low',
-          component: 'websocket',
-          description: 'No WebSocket connections',
-          suggestion: 'Normal when no clients'
-        });
-      }
+    // If we get here, no API key was available
+    console.log(`❌ [${member}] No API key configured for ${config.provider}`);
+    throw new Error(`No ${config.provider.toUpperCase()}_API_KEY configured`);
 
-      return {
-        healthy: issues.filter(i => i.severity === 'critical').length === 0,
-        issues,
-        timestamp: new Date().toISOString()
-      };
-    } catch (error) {
+  } catch (error) {
+    console.error(`❌ [${member}] Error: ${error.message}`);
       return {
         healthy: false,
         issues: [{
