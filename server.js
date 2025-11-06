@@ -1129,7 +1129,7 @@ async function callCouncilMember(member, prompt) {
   }
 }
 
-}class SelfRepairEngine {
+class SelfRepairEngine {
   constructor() {
     this.repairHistory = [];
   }
