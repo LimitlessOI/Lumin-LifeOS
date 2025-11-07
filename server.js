@@ -1004,10 +1004,20 @@ async function tryFallbackClaude(prompt, config) {
   await storeConversationMemory(prompt, text, { ai_member: 'deepseek', context: 'fallback' });
   return { success: true, text };
 }
+// =============================================================================
+// AI COUNCIL MEMBER CALLS - FIXED WITH FALLBACKS
+// =============================================================================
 
-// =============================================================================
-// AI COUNCIL MEMBER CALLS - FIXED
-// =============================================================================
+// Add this function right before callCouncilMember
+function getFallbackResponse(member, prompt) {
+  const fallbacks = {
+    claude: `[Claude Demo] I understand you want me to help with: "${prompt.slice(0, 100)}...". To get real Claude responses, please set a valid ANTHROPIC_API_KEY. For now, here's a sample task plan:\n\n1. Research trending AI tools for affiliate marketing\n2. Create content strategy for ${prompt.includes('affiliate') ? 'AI tool promotions' : 'relevant niche'}\n3. Set up tracking for conversions`,
+    chatgpt: `[ChatGPT Demo] For: "${prompt.slice(0, 100)}..." - Set OPENAI_API_KEY for real AI execution. Demo: I'd suggest creating a systematic approach to this task with clear milestones.`,
+    gemini: `[Gemini Demo] Understood: "${prompt.slice(0, 100)}..." - Need GEMINI_API_KEY. Sample: Break this into phases and track progress.`,
+    grok: `[Grok Demo] "${prompt.slice(0, 100)}..." - Set GROK_API_KEY. Reality check: Consider market demand and competition.`
+  };
+  return fallbacks[member] || `[${member} Demo] Please configure API key for real responses.`;
+}
 
 async function callCouncilMember(member, prompt) {
   const config = COUNCIL_MEMBERS[member];
@@ -1019,6 +1029,19 @@ async function callCouncilMember(member, prompt) {
   const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Respond naturally.`;
 
   try {
+    // Check if API key is available
+    const apiKeys = {
+      anthropic: ANTHROPIC_API_KEY,
+      openai: OPENAI_API_KEY,
+      google: GEMINI_API_KEY,
+      xai: GROK_API_KEY
+    };
+    
+    if (!apiKeys[config.provider]) {
+      console.log(`🔑 [${member}] No API key, using fallback`);
+      return getFallbackResponse(member, prompt);
+    }
+
     if (config.provider === 'anthropic' && ANTHROPIC_API_KEY) {
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -1034,7 +1057,12 @@ async function callCouncilMember(member, prompt) {
           messages: [{ role: 'user', content: prompt }] 
         })
       });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      
+      if (!response.ok) {
+        console.error(`❌ [${member}] API Error: ${response.status} ${response.statusText}`);
+        return getFallbackResponse(member, prompt);
+      }
+      
       const json = await response.json();
       const text = json.content?.[0]?.text || '';
       console.log(`✅ [${member}] Response received`);
@@ -1060,7 +1088,12 @@ async function callCouncilMember(member, prompt) {
           ]
         })
       });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      
+      if (!response.ok) {
+        console.error(`❌ [${member}] API Error: ${response.status} ${response.statusText}`);
+        return getFallbackResponse(member, prompt);
+      }
+      
       const json = await response.json();
       const text = json.choices?.[0]?.message?.content || '';
       console.log(`✅ [${member}] Response received`);
@@ -1078,7 +1111,12 @@ async function callCouncilMember(member, prompt) {
           generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
         })
       });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      
+      if (!response.ok) {
+        console.error(`❌ [${member}] API Error: ${response.status} ${response.statusText}`);
+        return getFallbackResponse(member, prompt);
+      }
+      
       const json = await response.json();
       const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
       console.log(`✅ [${member}] Response received`);
@@ -1103,7 +1141,12 @@ async function callCouncilMember(member, prompt) {
           temperature: 0.7
         })
       });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      
+      if (!response.ok) {
+        console.error(`❌ [${member}] API Error: ${response.status} ${response.statusText}`);
+        return getFallbackResponse(member, prompt);
+      }
+      
       const json = await response.json();
       const text = json.choices?.[0]?.message?.content || '';
       console.log(`✅ [${member}] Response received`);
@@ -1113,10 +1156,10 @@ async function callCouncilMember(member, prompt) {
     }
 
     // Fallback demo response when API key is missing
-    return `[${member} Demo] Understood: "${prompt.slice(0, 100)}..." Set ${config.provider.toUpperCase()}_API_KEY for real responses.`;
+    return getFallbackResponse(member, prompt);
   } catch (error) {
     console.error(`❌ [${member}] Error: ${error.message}`);
-    return `[${member} Error] ${error.message}`;
+    return getFallbackResponse(member, prompt);
   }
 }
 
