@@ -753,6 +753,358 @@ class ExecutionQueue {
 const executionQueue = new ExecutionQueue();
 
 // =============================================================================
+// API HEALTH MONITORING & FAILOVER SYSTEM
+// =============================================================================
+
+class APIHealthMonitor {
+  constructor() {
+    this.apiStatus = {
+      anthropic: { healthy: true, lastCheck: null, failCount: 0, provider: 'anthropic' },
+      openai: { healthy: true, lastCheck: null, failCount: 0, provider: 'openai' },
+      google: { healthy: true, lastCheck: null, failCount: 0, provider: 'google' },
+      xai: { healthy: true, lastCheck: null, failCount: 0, provider: 'xai' },
+      deepseek: { healthy: true, lastCheck: null, failCount: 0, provider: 'deepseek' }
+    };
+    this.systemStatus = {
+      aiCount: 5,
+      canDoProgramming: true,
+      canUpgrade: true,
+      maintenanceMode: false
+    };
+    this.recoveryTasks = [];
+  }
+
+  async healthCheck() {
+    const results = {};
+    const providers = [
+      { name: 'anthropic', getter: getAnthropicKey, member: 'claude' },
+      { name: 'openai', getter: getOpenAIKey, member: 'chatgpt' },
+      { name: 'google', getter: getGeminiKey, member: 'gemini' },
+      { name: 'xai', getter: getGrokKey, member: 'grok' },
+      { name: 'deepseek', getter: getDeepSeekKey, member: 'deepseek' }
+    ];
+
+    for (const provider of providers) {
+      try {
+        if (!provider.getter()) {
+          this.apiStatus[provider.name].healthy = false;
+          this.apiStatus[provider.name].failCount++;
+          results[provider.name] = false;
+          continue;
+        }
+
+        const isHealthy = await this.testAPI(provider.name, provider.member);
+        this.apiStatus[provider.name].healthy = isHealthy;
+        this.apiStatus[provider.name].lastCheck = new Date();
+        
+        if (!isHealthy) {
+          this.apiStatus[provider.name].failCount++;
+        } else {
+          this.apiStatus[provider.name].failCount = 0;
+        }
+        results[provider.name] = isHealthy;
+      } catch (error) {
+        this.apiStatus[provider.name].healthy = false;
+        this.apiStatus[provider.name].failCount++;
+        results[provider.name] = false;
+      }
+    }
+    
+    this.updateSystemStatus();
+    return results;
+  }
+
+  async testAPI(providerName, member) {
+    const config = COUNCIL_MEMBERS[member];
+    const testPrompt = "Respond with: OK";
+    const timeout = 5000;
+    
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      
+      let response;
+      
+      if (providerName === 'anthropic' && getAnthropicKey()) {
+        response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-api-key': getAnthropicKey(),
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            system: "Respond only with OK",
+            messages: [{ role: 'user', content: testPrompt }]
+          })
+        });
+      } else if (providerName === 'openai' && getOpenAIKey()) {
+        response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getOpenAIKey()}`
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            messages: [
+              { role: 'system', content: "Respond only with OK" },
+              { role: 'user', content: testPrompt }
+            ]
+          })
+        });
+      } else if (providerName === 'google' && getGeminiKey()) {
+        response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${getGeminiKey()}`,
+          {
+            method: 'POST',
+            signal: controller.signal,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: testPrompt }] }],
+              generationConfig: { maxOutputTokens: 10 }
+            })
+          }
+        );
+      } else if (providerName === 'xai' && getGrokKey()) {
+        response = await fetch('https://api.x.ai/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getGrokKey()}`
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            messages: [
+              { role: 'system', content: "Respond only with OK" },
+              { role: 'user', content: testPrompt }
+            ]
+          })
+        });
+      } else if (providerName === 'deepseek' && getDeepSeekKey()) {
+        response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getDeepSeekKey()}`
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            messages: [
+              { role: 'system', content: "Respond only with OK" },
+              { role: 'user', content: testPrompt }
+            ]
+          })
+        });
+      }
+      
+      clearTimeout(timeoutId);
+      const isOk = response?.ok === true;
+      if (!isOk) {
+        console.log(`⚠️ [HEALTH] ${providerName} returned status ${response?.status}`);
+      }
+      return isOk;
+    } catch (error) {
+      console.error(`❌ [HEALTH] ${providerName} test failed:`, error.message);
+      return false;
+    }
+  }
+
+  updateSystemStatus() {
+    const healthyAPIs = Object.values(this.apiStatus)
+      .filter(s => s.healthy).length;
+    
+    this.systemStatus.aiCount = healthyAPIs;
+    this.systemStatus.canDoProgramming = healthyAPIs >= 2;
+    this.systemStatus.canUpgrade = healthyAPIs >= 3;
+    this.systemStatus.maintenanceMode = healthyAPIs < 2;
+    
+    console.log(`\n📊 [HEALTH] Status: ${healthyAPIs}/5 APIs healthy`);
+    console.log(`  • Programming: ${this.systemStatus.canDoProgramming ? '✅ YES' : '❌ NO'}`);
+    console.log(`  • Upgrades: ${this.systemStatus.canUpgrade ? '✅ ALLOWED' : '❌ BLOCKED'}`);
+    console.log(`  • Mode: ${this.systemStatus.maintenanceMode ? 'MAINTENANCE' : 'NORMAL'}`);
+  }
+
+  getHealthyProviders() {
+    return Object.entries(this.apiStatus)
+      .filter(([_, status]) => status.healthy)
+      .map(([provider, _]) => provider);
+  }
+
+  async attemptRecovery(provider) {
+    console.log(`🔧 [RECOVERY] Attempting to restore ${provider}...`);
+    
+    const recoveryTask = {
+      provider,
+      startedAt: new Date().toISOString(),
+      attempts: 0,
+      maxAttempts: 5,
+      status: 'in_progress'
+    };
+    
+    this.recoveryTasks.push(recoveryTask);
+    
+    while (recoveryTask.attempts < recoveryTask.maxAttempts) {
+      recoveryTask.attempts++;
+      console.log(`  Attempt ${recoveryTask.attempts}/${recoveryTask.maxAttempts}...`);
+      
+      const healthResults = await this.healthCheck();
+      if (healthResults[provider]) {
+        recoveryTask.status = 'recovered';
+        console.log(`✅ [RECOVERY] ${provider} restored!`);
+        return true;
+      }
+      
+      await new Promise(r => setTimeout(r, 2000 * recoveryTask.attempts));
+    }
+    
+    recoveryTask.status = 'failed';
+    console.log(`❌ [RECOVERY] ${provider} recovery failed after ${recoveryTask.maxAttempts} attempts`);
+    return false;
+  }
+
+  getRecoveryStatus() {
+    return {
+      activeRecoveries: this.recoveryTasks.filter(t => t.status === 'in_progress'),
+      recoveredAPIs: this.recoveryTasks.filter(t => t.status === 'recovered'),
+      failedRecoveries: this.recoveryTasks.filter(t => t.status === 'failed')
+    };
+  }
+}
+
+const apiHealthMonitor = new APIHealthMonitor();
+
+// =============================================================================
+// SYSTEM MODE CONTROLLER
+// =============================================================================
+
+class SystemModeController {
+  constructor() {
+    this.mode = 'NORMAL'; // NORMAL | PROGRAMMING | MAINTENANCE | CRITICAL
+  }
+
+  async updateMode() {
+    const aiCount = apiHealthMonitor.systemStatus.aiCount;
+    
+    let newMode;
+    if (aiCount === 0) {
+      newMode = 'CRITICAL_FAILURE';
+    } else if (aiCount === 1) {
+      newMode = 'DEGRADED';
+    } else if (aiCount === 2) {
+      newMode = 'PROGRAMMING';
+    } else {
+      newMode = 'NORMAL';
+    }
+    
+    if (this.mode !== newMode) {
+      console.log(`\n📋 [MODE] ${this.mode} → ${newMode}`);
+      this.mode = newMode;
+      
+      if (newMode === 'CRITICAL_FAILURE') {
+        broadcastToOrchestrator({
+          type: 'critical_alert',
+          severity: 'CRITICAL',
+          message: '🚨 ALL AI APIS OFFLINE - Manual intervention required',
+          action: 'Check API keys, billing, network connectivity',
+          timestamp: new Date().toISOString()
+        });
+      } else if (newMode === 'DEGRADED') {
+        broadcastToOrchestrator({
+          type: 'system_alert',
+          severity: 'WARNING',
+          message: '⚠️ Only 1 AI available - System in MINIMAL mode',
+          action: 'No upgrades/system changes allowed - Recovery in progress',
+          timestamp: new Date().toISOString()
+        });
+      } else if (newMode === 'PROGRAMMING') {
+        broadcastToOrchestrator({
+          type: 'system_status',
+          severity: 'CAUTION',
+          message: '🔧 2 AIs online - PROGRAMMING MODE ACTIVE',
+          capabilities: ['code_generation', 'project_building', 'bug_fixes'],
+          restrictions: ['NO system upgrades', 'NO core file changes'],
+          timestamp: new Date().toISOString()
+        });
+      } else if (newMode === 'NORMAL') {
+        broadcastToOrchestrator({
+          type: 'system_status',
+          severity: 'INFO',
+          message: `✅ ${aiCount} AIs online - FULL CAPABILITY`,
+          capabilities: ['code_generation', 'upgrades', 'maintenance', 'all_features'],
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+  }
+
+  canUpgradeSystem() {
+    return apiHealthMonitor.systemStatus.canUpgrade;
+  }
+
+  canDoProgramming() {
+    return apiHealthMonitor.systemStatus.canDoProgramming;
+  }
+
+  getCapabilities() {
+    switch (this.mode) {
+      case 'NORMAL':
+        return {
+          programming: true,
+          upgrades: true,
+          maintenance: true,
+          builds: true
+        };
+      case 'PROGRAMMING':
+        return {
+          programming: true,
+          upgrades: false,
+          maintenance: false,
+          builds: true
+        };
+      case 'DEGRADED':
+        return {
+          programming: false,
+          upgrades: false,
+          maintenance: true,
+          builds: false
+        };
+      case 'CRITICAL_FAILURE':
+        return {
+          programming: false,
+          upgrades: false,
+          maintenance: false,
+          builds: false
+        };
+      default:
+        return {};
+    }
+  }
+}
+
+const systemModeController = new SystemModeController();
+```
+
+---
+
+## **SECTION 2: Update callCouncilMember Function**
+
+**Find this header in your server.js:**
+```
+// =============================================================================
+// AI COUNCIL MEMBER CALLS - FIXED WITH DYNAMIC GETTERS
+// =============================================================================
+
+// =============================================================================
 // AI COUNCIL - FIXED IMPLEMENTATION
 // =============================================================================
 
@@ -897,162 +1249,363 @@ async function tryFallbackClaude(prompt, config) {
 }
 
 // =============================================================================
-// AI COUNCIL MEMBER CALLS - FIXED WITH DYNAMIC GETTERS
+// API HEALTH MONITORING & FAILOVER SYSTEM
 // =============================================================================
 
-function getFallbackResponse(member, prompt) {
-  const fallbacks = {
-    claude: `[Claude Demo] I understand you want me to help with: "${prompt.slice(0, 100)}...". To get real Claude responses, please set a valid ANTHROPIC_API_KEY. For now, here's a sample task plan:\n\n1. Research trending AI tools for affiliate marketing\n2. Create content strategy for ${prompt.includes('affiliate') ? 'AI tool promotions' : 'relevant niche'}\n3. Set up tracking for conversions`,
-    chatgpt: `[ChatGPT Demo] For: "${prompt.slice(0, 100)}..." - Set OPENAI_API_KEY for real AI execution. Demo: I'd suggest creating a systematic approach to this task with clear milestones.`,
-    gemini: `[Gemini Demo] Understood: "${prompt.slice(0, 100)}..." - Need GEMINI_API_KEY. Sample: Break this into phases and track progress.`,
-    grok: `[Grok Demo] "${prompt.slice(0, 100)}..." - Set GROK_API_KEY. Reality check: Consider market demand and competition.`
-  };
-  return fallbacks[member] || `[${member} Demo] Please configure API key for real responses.`;
-}
+class APIHealthMonitor {
+  constructor() {
+    this.apiStatus = {
+      anthropic: { healthy: true, lastCheck: null, failCount: 0, provider: 'anthropic' },
+      openai: { healthy: true, lastCheck: null, failCount: 0, provider: 'openai' },
+      google: { healthy: true, lastCheck: null, failCount: 0, provider: 'google' },
+      xai: { healthy: true, lastCheck: null, failCount: 0, provider: 'xai' },
+      deepseek: { healthy: true, lastCheck: null, failCount: 0, provider: 'deepseek' }
+    };
+    this.systemStatus = {
+      aiCount: 5,
+      canDoProgramming: true,
+      canUpgrade: true,
+      maintenanceMode: false
+    };
+    this.recoveryTasks = [];
+  }
 
-async function callCouncilMember(member, prompt) {
-  const config = COUNCIL_MEMBERS[member];
-  if (!config) throw new Error(`Unknown: ${member}`);
-  
-  if (member === 'deepseek') return await callDeepSeekBridge(prompt, config);
+  async healthCheck() {
+    const results = {};
+    const providers = [
+      { name: 'anthropic', getter: getAnthropicKey, member: 'claude' },
+      { name: 'openai', getter: getOpenAIKey, member: 'chatgpt' },
+      { name: 'google', getter: getGeminiKey, member: 'gemini' },
+      { name: 'xai', getter: getGrokKey, member: 'grok' },
+      { name: 'deepseek', getter: getDeepSeekKey, member: 'deepseek' }
+    ];
 
-  const modelName = config.model;
-  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Respond naturally.`;
+    for (const provider of providers) {
+      try {
+        if (!provider.getter()) {
+          this.apiStatus[provider.name].healthy = false;
+          this.apiStatus[provider.name].failCount++;
+          results[provider.name] = false;
+          continue;
+        }
 
-  try {
-    // USE DYNAMIC GETTERS INSTEAD OF STATIC CONSTANTS
-    const apiKeys = {
-      anthropic: getAnthropicKey(),    // ✅ ALWAYS FRESH
-      openai: getOpenAIKey(),          // ✅ ALWAYS FRESH  
-      google: getGeminiKey(),          // ✅ ALWAYS FRESH
-      xai: getGrokKey()                // ✅ ALWAYS FRESH
+        const isHealthy = await this.testAPI(provider.name, provider.member);
+        this.apiStatus[provider.name].healthy = isHealthy;
+        this.apiStatus[provider.name].lastCheck = new Date();
+        
+        if (!isHealthy) {
+          this.apiStatus[provider.name].failCount++;
+        } else {
+          this.apiStatus[provider.name].failCount = 0;
+        }
+        results[provider.name] = isHealthy;
+      } catch (error) {
+        this.apiStatus[provider.name].healthy = false;
+        this.apiStatus[provider.name].failCount++;
+        results[provider.name] = false;
+      }
+    }
+    
+    this.updateSystemStatus();
+    return results;
+  }
+
+  async testAPI(providerName, member) {
+    const config = COUNCIL_MEMBERS[member];
+    const testPrompt = "Respond with: OK";
+    const timeout = 5000;
+    
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      
+      let response;
+      
+      if (providerName === 'anthropic' && getAnthropicKey()) {
+        response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-api-key': getAnthropicKey(),
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            system: "Respond only with OK",
+            messages: [{ role: 'user', content: testPrompt }]
+          })
+        });
+      } else if (providerName === 'openai' && getOpenAIKey()) {
+        response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getOpenAIKey()}`
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            messages: [
+              { role: 'system', content: "Respond only with OK" },
+              { role: 'user', content: testPrompt }
+            ]
+          })
+        });
+      } else if (providerName === 'google' && getGeminiKey()) {
+        response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${getGeminiKey()}`,
+          {
+            method: 'POST',
+            signal: controller.signal,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: testPrompt }] }],
+              generationConfig: { maxOutputTokens: 10 }
+            })
+          }
+        );
+      } else if (providerName === 'xai' && getGrokKey()) {
+        response = await fetch('https://api.x.ai/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getGrokKey()}`
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            messages: [
+              { role: 'system', content: "Respond only with OK" },
+              { role: 'user', content: testPrompt }
+            ]
+          })
+        });
+      } else if (providerName === 'deepseek' && getDeepSeekKey()) {
+        response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getDeepSeekKey()}`
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            messages: [
+              { role: 'system', content: "Respond only with OK" },
+              { role: 'user', content: testPrompt }
+            ]
+          })
+        });
+      }
+      
+      clearTimeout(timeoutId);
+      const isOk = response?.ok === true;
+      if (!isOk) {
+        console.log(`⚠️ [HEALTH] ${providerName} returned status ${response?.status}`);
+      }
+      return isOk;
+    } catch (error) {
+      console.error(`❌ [HEALTH] ${providerName} test failed:`, error.message);
+      return false;
+    }
+  }
+
+  updateSystemStatus() {
+    const healthyAPIs = Object.values(this.apiStatus)
+      .filter(s => s.healthy).length;
+    
+    this.systemStatus.aiCount = healthyAPIs;
+    this.systemStatus.canDoProgramming = healthyAPIs >= 2;
+    this.systemStatus.canUpgrade = healthyAPIs >= 3;
+    this.systemStatus.maintenanceMode = healthyAPIs < 2;
+    
+    console.log(`\n📊 [HEALTH] Status: ${healthyAPIs}/5 APIs healthy`);
+    console.log(`  • Programming: ${this.systemStatus.canDoProgramming ? '✅ YES' : '❌ NO'}`);
+    console.log(`  • Upgrades: ${this.systemStatus.canUpgrade ? '✅ ALLOWED' : '❌ BLOCKED'}`);
+    console.log(`  • Mode: ${this.systemStatus.maintenanceMode ? 'MAINTENANCE' : 'NORMAL'}`);
+  }
+
+  getHealthyProviders() {
+    return Object.entries(this.apiStatus)
+      .filter(([_, status]) => status.healthy)
+      .map(([provider, _]) => provider);
+  }
+
+  async attemptRecovery(provider) {
+    console.log(`🔧 [RECOVERY] Attempting to restore ${provider}...`);
+    
+    const recoveryTask = {
+      provider,
+      startedAt: new Date().toISOString(),
+      attempts: 0,
+      maxAttempts: 5,
+      status: 'in_progress'
     };
     
-    if (!apiKeys[config.provider]) {
-      console.log(`🔑 [${member}] No API key, using fallback`);
-      return getFallbackResponse(member, prompt);
-    }
-
-    if (config.provider === 'anthropic' && getAnthropicKey()) {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'x-api-key': getAnthropicKey(),  // ✅ DYNAMIC
-          'anthropic-version': '2023-06-01' 
-        },
-        body: JSON.stringify({ 
-          model: modelName, 
-          max_tokens: config.maxTokens, 
-          system: systemPrompt, 
-          messages: [{ role: 'user', content: prompt }] 
-        })
-      });
+    this.recoveryTasks.push(recoveryTask);
+    
+    while (recoveryTask.attempts < recoveryTask.maxAttempts) {
+      recoveryTask.attempts++;
+      console.log(`  Attempt ${recoveryTask.attempts}/${recoveryTask.maxAttempts}...`);
       
-      if (!response.ok) {
-        console.error(`❌ [${member}] API Error: ${response.status} ${response.statusText}`);
-        return getFallbackResponse(member, prompt);
+      const healthResults = await this.healthCheck();
+      if (healthResults[provider]) {
+        recoveryTask.status = 'recovered';
+        console.log(`✅ [RECOVERY] ${provider} restored!`);
+        return true;
       }
       
-      const json = await response.json();
-      const text = json.content?.[0]?.text || '';
-      console.log(`✅ [${member}] Response received`);
-      await storeConversationMemory(prompt, text, { ai_member: member });
-      trackCost(json.usage, modelName);
-      return text;
+      await new Promise(r => setTimeout(r, 2000 * recoveryTask.attempts));
     }
+    
+    recoveryTask.status = 'failed';
+    console.log(`❌ [RECOVERY] ${provider} recovery failed after ${recoveryTask.maxAttempts} attempts`);
+    return false;
+  }
 
-    if (config.provider === 'openai' && getOpenAIKey()) {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${getOpenAIKey()}`  // ✅ DYNAMIC
-        },
-        body: JSON.stringify({
-          model: modelName, 
-          temperature: 0.7, 
-          max_tokens: config.maxTokens,
-          messages: [
-            { role: 'system', content: systemPrompt }, 
-            { role: 'user', content: prompt }
-          ]
-        })
-      });
-      
-      if (!response.ok) {
-        console.error(`❌ [${member}] API Error: ${response.status} ${response.statusText}`);
-        return getFallbackResponse(member, prompt);
-      }
-      
-      const json = await response.json();
-      const text = json.choices?.[0]?.message?.content || '';
-      console.log(`✅ [${member}] Response received`);
-      await storeConversationMemory(prompt, text, { ai_member: member });
-      trackCost(json.usage, modelName);
-      return text;
-    }
-
-    if (config.provider === 'google' && getGeminiKey()) {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${getGeminiKey()}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: systemPrompt ? `${systemPrompt}\n\n${prompt}` : prompt }] }],
-          generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
-        })
-      });
-      
-      if (!response.ok) {
-        console.error(`❌ [${member}] API Error: ${response.status} ${response.statusText}`);
-        return getFallbackResponse(member, prompt);
-      }
-      
-      const json = await response.json();
-      const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      console.log(`✅ [${member}] Response received`);
-      await storeConversationMemory(prompt, text, { ai_member: member });
-      return text;
-    }
-
-    if (config.provider === 'xai' && getGrokKey()) {
-      const response = await fetch('https://api.x.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${getGrokKey()}` 
-        },
-        body: JSON.stringify({
-          model: modelName,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ],
-          max_tokens: config.maxTokens,
-          temperature: 0.7
-        })
-      });
-      
-      if (!response.ok) {
-        console.error(`❌ [${member}] API Error: ${response.status} ${response.statusText}`);
-        return getFallbackResponse(member, prompt);
-      }
-      
-      const json = await response.json();
-      const text = json.choices?.[0]?.message?.content || '';
-      console.log(`✅ [${member}] Response received`);
-      await storeConversationMemory(prompt, text, { ai_member: member });
-      trackCost(json.usage, modelName);
-      return text;
-    }
-
-    // Fallback demo response when API key is missing
-    return getFallbackResponse(member, prompt);
-  } catch (error) {
-    console.error(`❌ [${member}] Error: ${error.message}`);
-    return getFallbackResponse(member, prompt);
+  getRecoveryStatus() {
+    return {
+      activeRecoveries: this.recoveryTasks.filter(t => t.status === 'in_progress'),
+      recoveredAPIs: this.recoveryTasks.filter(t => t.status === 'recovered'),
+      failedRecoveries: this.recoveryTasks.filter(t => t.status === 'failed')
+    };
   }
 }
+
+const apiHealthMonitor = new APIHealthMonitor();
+
+// =============================================================================
+// SYSTEM MODE CONTROLLER
+// =============================================================================
+
+class SystemModeController {
+  constructor() {
+    this.mode = 'NORMAL'; // NORMAL | PROGRAMMING | MAINTENANCE | CRITICAL
+  }
+
+  async updateMode() {
+    const aiCount = apiHealthMonitor.systemStatus.aiCount;
+    
+    let newMode;
+    if (aiCount === 0) {
+      newMode = 'CRITICAL_FAILURE';
+    } else if (aiCount === 1) {
+      newMode = 'DEGRADED';
+    } else if (aiCount === 2) {
+      newMode = 'PROGRAMMING';
+    } else {
+      newMode = 'NORMAL';
+    }
+    
+    if (this.mode !== newMode) {
+      console.log(`\n📋 [MODE] ${this.mode} → ${newMode}`);
+      this.mode = newMode;
+      
+      if (newMode === 'CRITICAL_FAILURE') {
+        broadcastToOrchestrator({
+          type: 'critical_alert',
+          severity: 'CRITICAL',
+          message: '🚨 ALL AI APIS OFFLINE - Manual intervention required',
+          action: 'Check API keys, billing, network connectivity',
+          timestamp: new Date().toISOString()
+        });
+      } else if (newMode === 'DEGRADED') {
+        broadcastToOrchestrator({
+          type: 'system_alert',
+          severity: 'WARNING',
+          message: '⚠️ Only 1 AI available - System in MINIMAL mode',
+          action: 'No upgrades/system changes allowed - Recovery in progress',
+          timestamp: new Date().toISOString()
+        });
+      } else if (newMode === 'PROGRAMMING') {
+        broadcastToOrchestrator({
+          type: 'system_status',
+          severity: 'CAUTION',
+          message: '🔧 2 AIs online - PROGRAMMING MODE ACTIVE',
+          capabilities: ['code_generation', 'project_building', 'bug_fixes'],
+          restrictions: ['NO system upgrades', 'NO core file changes'],
+          timestamp: new Date().toISOString()
+        });
+      } else if (newMode === 'NORMAL') {
+        broadcastToOrchestrator({
+          type: 'system_status',
+          severity: 'INFO',
+          message: `✅ ${aiCount} AIs online - FULL CAPABILITY`,
+          capabilities: ['code_generation', 'upgrades', 'maintenance', 'all_features'],
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+  }
+
+  canUpgradeSystem() {
+    return apiHealthMonitor.systemStatus.canUpgrade;
+  }
+
+  canDoProgramming() {
+    return apiHealthMonitor.systemStatus.canDoProgramming;
+  }
+
+  getCapabilities() {
+    switch (this.mode) {
+      case 'NORMAL':
+        return {
+          programming: true,
+          upgrades: true,
+          maintenance: true,
+          builds: true
+        };
+      case 'PROGRAMMING':
+        return {
+          programming: true,
+          upgrades: false,
+          maintenance: false,
+          builds: true
+        };
+      case 'DEGRADED':
+        return {
+          programming: false,
+          upgrades: false,
+          maintenance: true,
+          builds: false
+        };
+      case 'CRITICAL_FAILURE':
+        return {
+          programming: false,
+          upgrades: false,
+          maintenance: false,
+          builds: false
+        };
+      default:
+        return {};
+    }
+  }
+}
+
+const systemModeController = new SystemModeController();
+```
+
+---
+
+## **SECTION 2: Complete Replacement - Replace Entire AI COUNCIL MEMBER CALLS Section**
+
+**Search for this EXACT header:**
+```
+// =============================================================================
+// AI COUNCIL MEMBER CALLS - FIXED WITH DYNAMIC GETTERS
+// =============================================================================
+```
+
+**DELETE everything from that header until (but NOT including) the next section header that says:**
+```
+// =============================================================================
+// SELF-REPAIR ENGINE
+// =============================================================================
 
 // =============================================================================
 // SELF-REPAIR ENGINE
