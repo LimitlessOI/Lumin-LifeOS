@@ -278,93 +278,83 @@ function validateEnvironment() {
      throw error;
    }
  }
+// =============================================================================
+// WEBSOCKET
+// =============================================================================
 
- // =============================================================================
- // WEBSOCKET
- // =============================================================================
+const activeConnections = new Map();
+const conversationHistory = new Map();
 
- const activeConnections = new Map();
- const conversationHistory = new Map();
-
- function broadcastToOrchestrator(message) {
-   const broadcastData 
-  // =============================================================================
-  // WEBSOCKET
-  // =============================================================================
-
-  const activeConnections = new Map();
-  const conversationHistory = new Map();
-
-  function broadcastToOrchestrator(message) {
-    const broadcastData = JSON.stringify(message);
-    for (const [, ws] of activeConnections.entries()) {
-      if (ws && ws.readyState === 1) ws.send(broadcastData);
-    }
+function broadcastToOrchestrator(message) {
+  const broadcastData = JSON.stringify(message);
+  for (const [, ws] of activeConnections.entries()) {
+    if (ws && ws.readyState === 1) ws.send(broadcastData);
   }
+}
 
-  // =============================================================================
-  // 3-LAYER MEMORY SYSTEM
-  // =============================================================================
+// =============================================================================
+// 3-LAYER MEMORY SYSTEM
+// =============================================================================
 
-  async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
-    try {
-      const memId = `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      const keyFacts = extractKeyFacts(orchestratorMessage, aiResponse);
-      await pool.query(
-        `INSERT INTO conversation_memory
-         (memory_id, orchestrator_msg, ai_response, key_facts, context_metadata, memory_type, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6, now())`,
-        [memId, orchestratorMessage, aiResponse, JSON.stringify(keyFacts), JSON.stringify(context), context.type || 'conversation']
-      );
-      console.log(`✅ Memory: ${memId}`);
-      return { memId, keyFacts };
-    } catch (error) {
-      console.error("❌ Memory store error:", error.message);
-      return null;
-    }
+async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
+  try {
+    const memId = `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const keyFacts = extractKeyFacts(orchestratorMessage, aiResponse);
+    await pool.query(
+      `INSERT INTO conversation_memory
+       (memory_id, orchestrator_msg, ai_response, key_facts, context_metadata, memory_type, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, now())`,
+      [memId, orchestratorMessage, aiResponse, JSON.stringify(keyFacts), JSON.stringify(context), context.type || 'conversation']
+    );
+    console.log(`✅ Memory: ${memId}`);
+    return { memId, keyFacts };
+  } catch (error) {
+    console.error("❌ Memory store error:", error.message);
+    return null;
   }
+}
 
-  function extractKeyFacts(message, response) {
-    const facts = [];
-    const patterns = [
-      { name: 'action', regex: /(?:we|i|you|team)\s+(?:need to|should|will|must)\s+([^.!?\n]{10,150})/gi },
-      { name: 'priority', regex: /(?:priority|urgent|critical):\s*([^.!?\n]{10,150})/gi },
-      { name: 'decision', regex: /(?:decision|decided):\s*([^.!?\n]{10,150})/gi },
-      { name: 'problem', regex: /(?:problem|issue|bug):\s*([^.!?\n]{10,150})/gi },
-      { name: 'solution', regex: /(?:solution|fix):\s*([^.!?\n]{10,150})/gi }
-    ];
-    [message, response].forEach((text, idx) => {
-      for (const pattern of patterns) {
-        let match;
-        while ((match = pattern.regex.exec(text)) !== null) {
-          if (match[1]) facts.push({
-            type: pattern.name, text: match[1].trim(),
-            source: idx === 0 ? 'user' : 'ai',
-            timestamp: new Date().toISOString()
-          });
-        }
+function extractKeyFacts(message, response) {
+  const facts = [];
+  const patterns = [
+    { name: 'action', regex: /(?:we|i|you|team)\s+(?:need to|should|will|must)\s+([^.!?\n]{10,150})/gi },
+    { name: 'priority', regex: /(?:priority|urgent|critical):\s*([^.!?\n]{10,150})/gi },
+    { name: 'decision', regex: /(?:decision|decided):\s*([^.!?\n]{10,150})/gi },
+    { name: 'problem', regex: /(?:problem|issue|bug):\s*([^.!?\n]{10,150})/gi },
+    { name: 'solution', regex: /(?:solution|fix):\s*([^.!?\n]{10,150})/gi }
+  ];
+  [message, response].forEach((text, idx) => {
+    for (const pattern of patterns) {
+      let match;
+      while ((match = pattern.regex.exec(text)) !== null) {
+        if (match[1]) facts.push({
+          type: pattern.name,
+          text: match[1].trim(),
+          source: idx === 0 ? 'user' : 'ai',
+          timestamp: new Date().toISOString()
+        });
       }
-    });
-    return facts;
-  }
-
-  async function recallConversationMemory(query, limit = 50) {
-    try {
-      const result = await pool.query(
-        `SELECT memory_id, orchestrator_msg, ai_response, key_facts, created_at
-         FROM conversation_memory
-         WHERE orchestrator_msg ILIKE $1 OR ai_response ILIKE $1
-         ORDER BY created_at DESC LIMIT $2`,
-        [`%${query}%`, limit]
-      );
-      console.log(`✅ Memory recall: ${result.rows.length} results`);
-      return result.rows;
-    } catch (error) {
-      console.error("❌ Memory recall error:", error.message);
-      return [];
     }
-  }
+  });
+  return facts;
+}
 
+async function recallConversationMemory(query, limit = 50) {
+  try {
+    const result = await pool.query(
+      `SELECT memory_id, orchestrator_msg, ai_response, key_facts, created_at
+       FROM conversation_memory
+       WHERE orchestrator_msg ILIKE $1 OR ai_response ILIKE $1
+       ORDER BY created_at DESC LIMIT $2`,
+      [`%${query}%`, limit]
+    );
+    console.log(`✅ Memory recall: ${result.rows.length} results`);
+    return result.rows;
+  } catch (error) {
+    console.error("❌ Memory recall error:", error.message);
+    return [];
+  }
+}
   // =============================================================================
   // LCTP v3 COMPRESSION CODEC
   // =============================================================================
