@@ -1,12 +1,7 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
- * ║                                                                                  ║
- * ║          🎼 SERVER.JS v21.0 - COMPLETE AI ORCHESTRATION SYSTEM                  ║
- * ║                  2292+ LINES • ALL SYSTEMS INTEGRATED                           ║
- * ║                                                                                  ║
- * ║    GitHub + Railway • DeepSeek Bridge • LCTP v3 + MICRO v2.0 Compression        ║
- * ║    AI Council • Financial Dashboard • Real Estate • Revenue Bots • Income Drones ║
- * ║                                                                                  ║
+ * ║                     🎼 SERVER.JS v21.0 - COMPLETE SYSTEM                       ║
+ * ║              2400+ LINES • ALL SYSTEMS • NO DUPLICATES • FRESH ENV READS         ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
@@ -28,10 +23,6 @@ const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
-// =============================================================================
-// ENVIRONMENT & CONFIG - DYNAMIC FIXED VERSION
-// =============================================================================
-// STATIC CONFIG (doesn't change - loaded once at startup)
 const {
   DATABASE_URL,
   COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
@@ -45,7 +36,6 @@ const {
   AI_TIER = "medium"
 } = process.env;
 
-// DYNAMIC API KEY GETTERS - ALWAYS READ FRESH FROM RAILWAY ENVIRONMENT
 function getOpenAIKey() {
   return process.env.OPENAI_API_KEY;
 }
@@ -66,7 +56,6 @@ function getDeepSeekKey() {
   return process.env.DEEPSEEK_API_KEY;
 }
 
-// DEEPSEEK ENDPOINT (can be updated dynamically via bridge registration)
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim() || null;
 
 const roiTracker = {
@@ -109,10 +98,6 @@ function validateEnvironment() {
   console.log("✅ Environment validated");
   return true;
 }
-
-// =============================================================================
-// DATABASE
-// =============================================================================
 
 export const pool = new Pool({
   connectionString: DATABASE_URL,
@@ -286,7 +271,6 @@ async function initDb() {
       UNIQUE(category, custom_key)
     )`);
 
-    // Indexes
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_id ON conversation_memory(memory_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_created ON conversation_memory(created_at)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_file_storage ON file_storage(file_id)`);
@@ -296,7 +280,6 @@ async function initDb() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_council_pr ON council_reviews(pr_number)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_compression ON compression_stats(created_at)`);
 
-    // Protect core files
     await pool.query(`
       INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('server.js', 'Core system', true, false, true),
@@ -313,10 +296,6 @@ async function initDb() {
   }
 }
 
-// =============================================================================
-// WEBSOCKET
-// =============================================================================
-
 const activeConnections = new Map();
 const conversationHistory = new Map();
 
@@ -326,10 +305,6 @@ function broadcastToOrchestrator(message) {
     if (ws && ws.readyState === 1) ws.send(broadcastData);
   }
 }
-
-// =============================================================================
-// 3-LAYER MEMORY SYSTEM
-// =============================================================================
 
 async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
   try {
@@ -390,9 +365,6 @@ async function recallConversationMemory(query, limit = 50) {
     return [];
   }
 }
-// =============================================================================
-// LCTP v3 COMPRESSION CODEC
-// =============================================================================
 
 const b64u = {
   enc: (u8) => Buffer.from(u8).toString('base64').replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),
@@ -531,10 +503,6 @@ function decodeLCTP(b64, dict=DICT) {
   };
 }
 
-// =============================================================================
-// MICRO PROTOCOL v2.0
-// =============================================================================
-
 const MICRO_PROTOCOL = {
   encode: (data) => {
     const parts = ["V:2.0"];
@@ -582,10 +550,6 @@ const MICRO_PROTOCOL = {
     return result;
   }
 };
-
-// =============================================================================
-// ROI & COST TRACKING
-// =============================================================================
 
 function updateROI(revenue=0, cost=0, tasksCompleted=0, tokensSaved=0) {
   const today = dayjs().format("YYYY-MM-DD");
@@ -648,10 +612,6 @@ function trackCost(usage, model="gpt-4o-mini") {
   updateROI(0, cost, 0, 0);
   return cost;
 }
-
-// =============================================================================
-// TASK QUEUE
-// =============================================================================
 
 class ExecutionQueue {
   constructor() {
@@ -752,10 +712,6 @@ class ExecutionQueue {
 
 const executionQueue = new ExecutionQueue();
 
-// =============================================================================
-// API HEALTH MONITORING & FAILOVER SYSTEM
-// =============================================================================
-
 class APIHealthMonitor {
   constructor() {
     this.apiStatus = {
@@ -983,13 +939,9 @@ class APIHealthMonitor {
 
 const apiHealthMonitor = new APIHealthMonitor();
 
-// =============================================================================
-// SYSTEM MODE CONTROLLER
-// =============================================================================
-
 class SystemModeController {
   constructor() {
-    this.mode = 'NORMAL'; // NORMAL | PROGRAMMING | MAINTENANCE | CRITICAL
+    this.mode = 'NORMAL';
   }
 
   async updateMode() {
@@ -1092,21 +1044,6 @@ class SystemModeController {
 }
 
 const systemModeController = new SystemModeController();
-```
-
----
-
-## **SECTION 2: Update callCouncilMember Function**
-
-**Find this header in your server.js:**
-```
-// =============================================================================
-// AI COUNCIL MEMBER CALLS - FIXED WITH DYNAMIC GETTERS
-// =============================================================================
-
-// =============================================================================
-// AI COUNCIL - FIXED IMPLEMENTATION
-// =============================================================================
 
 const COUNCIL_MEMBERS = {
   claude: {
@@ -1165,9 +1102,6 @@ const COUNCIL_MEMBERS = {
     costPer1kTokens: 0.00015
   }
 };
-// =============================================================================
-// DEEPSEEK BRIDGE - FIXED
-// =============================================================================
 
 async function callDeepSeekBridge(prompt, config) {
   const methods = [
@@ -1248,368 +1182,223 @@ async function tryFallbackClaude(prompt, config) {
   return { success: true, text };
 }
 
-// =============================================================================
-// API HEALTH MONITORING & FAILOVER SYSTEM
-// =============================================================================
-
-class APIHealthMonitor {
-  constructor() {
-    this.apiStatus = {
-      anthropic: { healthy: true, lastCheck: null, failCount: 0, provider: 'anthropic' },
-      openai: { healthy: true, lastCheck: null, failCount: 0, provider: 'openai' },
-      google: { healthy: true, lastCheck: null, failCount: 0, provider: 'google' },
-      xai: { healthy: true, lastCheck: null, failCount: 0, provider: 'xai' },
-      deepseek: { healthy: true, lastCheck: null, failCount: 0, provider: 'deepseek' }
-    };
-    this.systemStatus = {
-      aiCount: 5,
-      canDoProgramming: true,
-      canUpgrade: true,
-      maintenanceMode: false
-    };
-    this.recoveryTasks = [];
-  }
-
-  async healthCheck() {
-    const results = {};
-    const providers = [
-      { name: 'anthropic', getter: getAnthropicKey, member: 'claude' },
-      { name: 'openai', getter: getOpenAIKey, member: 'chatgpt' },
-      { name: 'google', getter: getGeminiKey, member: 'gemini' },
-      { name: 'xai', getter: getGrokKey, member: 'grok' },
-      { name: 'deepseek', getter: getDeepSeekKey, member: 'deepseek' }
-    ];
-
-    for (const provider of providers) {
-      try {
-        if (!provider.getter()) {
-          this.apiStatus[provider.name].healthy = false;
-          this.apiStatus[provider.name].failCount++;
-          results[provider.name] = false;
-          continue;
+async function attemptAICall(member, config, prompt) {
+  const modelName = config.model;
+  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Respond naturally and concisely.`;
+  
+  const timeoutMs = 8000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  
+  try {
+    let response, json, text;
+    
+    if (config.provider === 'anthropic' && getAnthropicKey()) {
+      response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': getAnthropicKey(),
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: modelName,
+          max_tokens: config.maxTokens,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      json = await response.json();
+      if (json.error) {
+        const errMsg = json.error.message || JSON.stringify(json.error);
+        if (errMsg.includes('401') || errMsg.includes('authentication')) {
+          throw new Error(`AUTH_ERROR: Invalid ANTHROPIC_API_KEY`);
         }
-
-        const isHealthy = await this.testAPI(provider.name, provider.member);
-        this.apiStatus[provider.name].healthy = isHealthy;
-        this.apiStatus[provider.name].lastCheck = new Date();
-        
-        if (!isHealthy) {
-          this.apiStatus[provider.name].failCount++;
-        } else {
-          this.apiStatus[provider.name].failCount = 0;
+        if (errMsg.includes('billing') || errMsg.includes('credit')) {
+          throw new Error(`BILLING_ERROR: Check Anthropic account billing`);
         }
-        results[provider.name] = isHealthy;
-      } catch (error) {
-        this.apiStatus[provider.name].healthy = false;
-        this.apiStatus[provider.name].failCount++;
-        results[provider.name] = false;
+        throw new Error(`API_ERROR: ${errMsg}`);
       }
+      text = json.content?.[0]?.text || '';
+    } else if (config.provider === 'openai' && getOpenAIKey()) {
+      response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getOpenAIKey()}`
+        },
+        body: JSON.stringify({
+          model: modelName,
+          temperature: 0.7,
+          max_tokens: config.maxTokens,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: prompt }
+          ]
+        })
+      });
+      json = await response.json();
+      if (json.error) throw new Error(`API_ERROR`);
+      text = json.choices?.[0]?.message?.content || '';
+    } else if (config.provider === 'google' && getGeminiKey()) {
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${getGeminiKey()}`,
+        {
+          method: 'POST',
+          signal: controller.signal,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
+          })
+        }
+      );
+      json = await response.json();
+      if (json.error) throw new Error(`API_ERROR`);
+      text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    } else if (config.provider === 'xai' && getGrokKey()) {
+      response = await fetch('https://api.x.ai/v1/chat/completions', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getGrokKey()}`
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: prompt }
+          ],
+          max_tokens: config.maxTokens,
+          temperature: 0.7
+        })
+      });
+      json = await response.json();
+      if (json.error) throw new Error(`API_ERROR`);
+      text = json.choices?.[0]?.message?.content || '';
+    } else if (config.provider === 'deepseek' && getDeepSeekKey()) {
+      response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getDeepSeekKey()}`
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: prompt }
+          ],
+          max_tokens: config.maxTokens,
+          temperature: 0.7
+        })
+      });
+      json = await response.json();
+      if (json.error) throw new Error(`API_ERROR`);
+      text = json.choices?.[0]?.message?.content || '';
     }
     
-    this.updateSystemStatus();
-    return results;
+    clearTimeout(timeoutId);
+    
+    if (!text) {
+      return { success: false, error: 'Empty response from API' };
+    }
+    
+    trackCost(json?.usage || {}, modelName);
+    return { success: true, text };
+  } catch (error) {
+    clearTimeout(timeoutId);
+    console.error(`  Error: ${error.message}`);
+    throw error;
+  }
+}
+
+async function callCouncilMember(member, prompt) {
+  const config = COUNCIL_MEMBERS[member];
+  if (!config) throw new Error(`Unknown: ${member}`);
+  
+  if (systemModeController.mode === 'CRITICAL_FAILURE') {
+    throw new Error('🚨 CRITICAL: System offline - all AI APIs unavailable. Check API keys and billing.');
   }
 
-  async testAPI(providerName, member) {
-    const config = COUNCIL_MEMBERS[member];
-    const testPrompt = "Respond with: OK";
-    const timeout = 5000;
+  try {
+    if (member === 'deepseek') {
+      return await callDeepSeekBridge(prompt, config);
+    }
+    
+    const result = await attemptAICall(member, config, prompt);
+    
+    if (result.success) {
+      await storeConversationMemory(prompt, result.text, { 
+        ai_member: member, 
+        attempt: 1,
+        timestamp: new Date().toISOString()
+      });
+      return result.text;
+    }
+  } catch (error) {
+    console.error(`❌ [${member}] Primary call failed:`, error.message);
+    apiHealthMonitor.apiStatus[config.provider].failCount++;
+    
+    if (error.message.includes('BILLING_ERROR') || error.message.includes('AUTH_ERROR')) {
+      broadcastToOrchestrator({
+        type: 'critical_alert',
+        provider: config.provider,
+        message: `⚠️ CRITICAL: ${member} - ${error.message}`,
+        action: 'REQUIRES_MANUAL_INTERVENTION',
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+
+  console.log(`🔄 [FAILOVER] Primary ${member} failed, scanning for alternatives...`);
+  const healthyProviders = apiHealthMonitor.getHealthyProviders();
+  
+  for (const altProvider of healthyProviders) {
+    if (altProvider === config.provider) continue;
+    
+    const altMember = Object.entries(COUNCIL_MEMBERS)
+      .find(([, m]) => m.provider === altProvider)?.[0];
+    
+    if (!altMember) continue;
     
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      console.log(`  → Trying ${altMember}...`);
+      const altConfig = COUNCIL_MEMBERS[altMember];
+      const result = await attemptAICall(altMember, altConfig, prompt);
       
-      let response;
-      
-      if (providerName === 'anthropic' && getAnthropicKey()) {
-        response = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: { 
-            'Content-Type': 'application/json',
-            'x-api-key': getAnthropicKey(),
-            'anthropic-version': '2023-06-01'
-          },
-          body: JSON.stringify({
-            model: config.model,
-            max_tokens: 10,
-            system: "Respond only with OK",
-            messages: [{ role: 'user', content: testPrompt }]
-          })
-        });
-      } else if (providerName === 'openai' && getOpenAIKey()) {
-        response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getOpenAIKey()}`
-          },
-          body: JSON.stringify({
-            model: config.model,
-            max_tokens: 10,
-            messages: [
-              { role: 'system', content: "Respond only with OK" },
-              { role: 'user', content: testPrompt }
-            ]
-          })
-        });
-      } else if (providerName === 'google' && getGeminiKey()) {
-        response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${getGeminiKey()}`,
-          {
-            method: 'POST',
-            signal: controller.signal,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: testPrompt }] }],
-              generationConfig: { maxOutputTokens: 10 }
-            })
+      if (result.success) {
+        await storeConversationMemory(
+          prompt, 
+          result.text, 
+          { 
+            ai_member: altMember, 
+            fallback_from: member,
+            attempt: 2,
+            timestamp: new Date().toISOString()
           }
         );
-      } else if (providerName === 'xai' && getGrokKey()) {
-        response = await fetch('https://api.x.ai/v1/chat/completions', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getGrokKey()}`
-          },
-          body: JSON.stringify({
-            model: config.model,
-            max_tokens: 10,
-            messages: [
-              { role: 'system', content: "Respond only with OK" },
-              { role: 'user', content: testPrompt }
-            ]
-          })
-        });
-      } else if (providerName === 'deepseek' && getDeepSeekKey()) {
-        response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getDeepSeekKey()}`
-          },
-          body: JSON.stringify({
-            model: config.model,
-            max_tokens: 10,
-            messages: [
-              { role: 'system', content: "Respond only with OK" },
-              { role: 'user', content: testPrompt }
-            ]
-          })
-        });
+        console.log(`✅ [FAILOVER] Success with ${altMember}`);
+        return result.text;
       }
-      
-      clearTimeout(timeoutId);
-      const isOk = response?.ok === true;
-      if (!isOk) {
-        console.log(`⚠️ [HEALTH] ${providerName} returned status ${response?.status}`);
-      }
-      return isOk;
     } catch (error) {
-      console.error(`❌ [HEALTH] ${providerName} test failed:`, error.message);
-      return false;
+      console.log(`  ✗ ${altMember} also failed`);
+      continue;
     }
   }
 
-  updateSystemStatus() {
-    const healthyAPIs = Object.values(this.apiStatus)
-      .filter(s => s.healthy).length;
-    
-    this.systemStatus.aiCount = healthyAPIs;
-    this.systemStatus.canDoProgramming = healthyAPIs >= 2;
-    this.systemStatus.canUpgrade = healthyAPIs >= 3;
-    this.systemStatus.maintenanceMode = healthyAPIs < 2;
-    
-    console.log(`\n📊 [HEALTH] Status: ${healthyAPIs}/5 APIs healthy`);
-    console.log(`  • Programming: ${this.systemStatus.canDoProgramming ? '✅ YES' : '❌ NO'}`);
-    console.log(`  • Upgrades: ${this.systemStatus.canUpgrade ? '✅ ALLOWED' : '❌ BLOCKED'}`);
-    console.log(`  • Mode: ${this.systemStatus.maintenanceMode ? 'MAINTENANCE' : 'NORMAL'}`);
-  }
+  setImmediate(() => {
+    apiHealthMonitor.attemptRecovery(config.provider);
+  });
 
-  getHealthyProviders() {
-    return Object.entries(this.apiStatus)
-      .filter(([_, status]) => status.healthy)
-      .map(([provider, _]) => provider);
-  }
-
-  async attemptRecovery(provider) {
-    console.log(`🔧 [RECOVERY] Attempting to restore ${provider}...`);
-    
-    const recoveryTask = {
-      provider,
-      startedAt: new Date().toISOString(),
-      attempts: 0,
-      maxAttempts: 5,
-      status: 'in_progress'
-    };
-    
-    this.recoveryTasks.push(recoveryTask);
-    
-    while (recoveryTask.attempts < recoveryTask.maxAttempts) {
-      recoveryTask.attempts++;
-      console.log(`  Attempt ${recoveryTask.attempts}/${recoveryTask.maxAttempts}...`);
-      
-      const healthResults = await this.healthCheck();
-      if (healthResults[provider]) {
-        recoveryTask.status = 'recovered';
-        console.log(`✅ [RECOVERY] ${provider} restored!`);
-        return true;
-      }
-      
-      await new Promise(r => setTimeout(r, 2000 * recoveryTask.attempts));
-    }
-    
-    recoveryTask.status = 'failed';
-    console.log(`❌ [RECOVERY] ${provider} recovery failed after ${recoveryTask.maxAttempts} attempts`);
-    return false;
-  }
-
-  getRecoveryStatus() {
-    return {
-      activeRecoveries: this.recoveryTasks.filter(t => t.status === 'in_progress'),
-      recoveredAPIs: this.recoveryTasks.filter(t => t.status === 'recovered'),
-      failedRecoveries: this.recoveryTasks.filter(t => t.status === 'failed')
-    };
-  }
+  const fallbackMsg = `[SYSTEM NOTICE - ${member} temporarily unavailable]\n\nAll primary and fallback AIs are currently unavailable for: ${prompt.slice(0, 50)}...\n\nRecovery in progress. This typically happens when:\n1. API keys are invalid or expired\n2. Account billing is overdue\n3. API rate limits exceeded\n4. Network connectivity issues\n5. API service temporarily down\n\nSystem will retry automatically. Check /api/v1/system/health-detailed for status.`;
+  
+  return fallbackMsg;
 }
-
-const apiHealthMonitor = new APIHealthMonitor();
-
-// =============================================================================
-// SYSTEM MODE CONTROLLER
-// =============================================================================
-
-class SystemModeController {
-  constructor() {
-    this.mode = 'NORMAL'; // NORMAL | PROGRAMMING | MAINTENANCE | CRITICAL
-  }
-
-  async updateMode() {
-    const aiCount = apiHealthMonitor.systemStatus.aiCount;
-    
-    let newMode;
-    if (aiCount === 0) {
-      newMode = 'CRITICAL_FAILURE';
-    } else if (aiCount === 1) {
-      newMode = 'DEGRADED';
-    } else if (aiCount === 2) {
-      newMode = 'PROGRAMMING';
-    } else {
-      newMode = 'NORMAL';
-    }
-    
-    if (this.mode !== newMode) {
-      console.log(`\n📋 [MODE] ${this.mode} → ${newMode}`);
-      this.mode = newMode;
-      
-      if (newMode === 'CRITICAL_FAILURE') {
-        broadcastToOrchestrator({
-          type: 'critical_alert',
-          severity: 'CRITICAL',
-          message: '🚨 ALL AI APIS OFFLINE - Manual intervention required',
-          action: 'Check API keys, billing, network connectivity',
-          timestamp: new Date().toISOString()
-        });
-      } else if (newMode === 'DEGRADED') {
-        broadcastToOrchestrator({
-          type: 'system_alert',
-          severity: 'WARNING',
-          message: '⚠️ Only 1 AI available - System in MINIMAL mode',
-          action: 'No upgrades/system changes allowed - Recovery in progress',
-          timestamp: new Date().toISOString()
-        });
-      } else if (newMode === 'PROGRAMMING') {
-        broadcastToOrchestrator({
-          type: 'system_status',
-          severity: 'CAUTION',
-          message: '🔧 2 AIs online - PROGRAMMING MODE ACTIVE',
-          capabilities: ['code_generation', 'project_building', 'bug_fixes'],
-          restrictions: ['NO system upgrades', 'NO core file changes'],
-          timestamp: new Date().toISOString()
-        });
-      } else if (newMode === 'NORMAL') {
-        broadcastToOrchestrator({
-          type: 'system_status',
-          severity: 'INFO',
-          message: `✅ ${aiCount} AIs online - FULL CAPABILITY`,
-          capabilities: ['code_generation', 'upgrades', 'maintenance', 'all_features'],
-          timestamp: new Date().toISOString()
-        });
-      }
-    }
-  }
-
-  canUpgradeSystem() {
-    return apiHealthMonitor.systemStatus.canUpgrade;
-  }
-
-  canDoProgramming() {
-    return apiHealthMonitor.systemStatus.canDoProgramming;
-  }
-
-  getCapabilities() {
-    switch (this.mode) {
-      case 'NORMAL':
-        return {
-          programming: true,
-          upgrades: true,
-          maintenance: true,
-          builds: true
-        };
-      case 'PROGRAMMING':
-        return {
-          programming: true,
-          upgrades: false,
-          maintenance: false,
-          builds: true
-        };
-      case 'DEGRADED':
-        return {
-          programming: false,
-          upgrades: false,
-          maintenance: true,
-          builds: false
-        };
-      case 'CRITICAL_FAILURE':
-        return {
-          programming: false,
-          upgrades: false,
-          maintenance: false,
-          builds: false
-        };
-      default:
-        return {};
-    }
-  }
-}
-
-const systemModeController = new SystemModeController();
-```
-
----
-
-## **SECTION 2: Complete Replacement - Replace Entire AI COUNCIL MEMBER CALLS Section**
-
-**Search for this EXACT header:**
-```
-// =============================================================================
-// AI COUNCIL MEMBER CALLS - FIXED WITH DYNAMIC GETTERS
-// =============================================================================
-```
-
-**DELETE everything from that header until (but NOT including) the next section header that says:**
-```
-// =============================================================================
-// SELF-REPAIR ENGINE
-// =============================================================================
-
-// =============================================================================
-// SELF-REPAIR ENGINE
-// =============================================================================
 
 class SelfRepairEngine {
   constructor() {
@@ -1692,10 +1481,6 @@ class SelfRepairEngine {
 
 const selfRepairEngine = new SelfRepairEngine();
 
-// =============================================================================
-// PROTECTION SYSTEM
-// =============================================================================
-
 async function isFileProtected(filePath) {
   try {
     const result = await pool.query(
@@ -1713,10 +1498,6 @@ async function isFileProtected(filePath) {
     return { protected: false };
   }
 }
-
-// =============================================================================
-// FINANCIAL DASHBOARD
-// =============================================================================
 
 class FinancialDashboard {
   async recordTransaction(type, amount, description, category='general') {
@@ -1846,10 +1627,6 @@ class FinancialDashboard {
 
 const financialDashboard = new FinancialDashboard();
 
-// =============================================================================
-// REAL ESTATE ENGINE
-// =============================================================================
-
 class RealEstateEngine {
   async addProperty(data) {
     const { mls_id, address, price, bedrooms, bathrooms, sqft } = data;
@@ -1880,10 +1657,6 @@ class RealEstateEngine {
 
 const realEstateEngine = new RealEstateEngine();
 
-// =============================================================================
-// REVENUE BOT
-// =============================================================================
-
 class RevenueBotEngine {
   constructor() {
     this.opportunities = [];
@@ -1905,10 +1678,6 @@ class RevenueBotEngine {
 }
 
 const revenueBotEngine = new RevenueBotEngine();
-
-// =============================================================================
-// INCOME DRONE SYSTEM - FIXED WITH FALLBACKS
-// =============================================================================
 
 class IncomeDroneSystem {
   constructor() {
@@ -1952,7 +1721,6 @@ class IncomeDroneSystem {
     try {
       const response = await callCouncilMember('claude', prompt);
       
-      // Check if we got a fallback response
       if (response.includes('Demo]') || response.includes('API key')) {
         console.log(`🔄 [DRONE] Using fallback tasks for ${droneConfig.id}`);
         return this.getFallbackIncomeTasks(droneConfig);
@@ -1967,7 +1735,6 @@ class IncomeDroneSystem {
   }
 
   parseIncomeTasks(aiResponse) {
-    // First try to parse as JSON
     try {
       const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
@@ -1980,7 +1747,6 @@ class IncomeDroneSystem {
       console.error('JSON parse failed, trying alternative parsing');
     }
     
-    // Alternative parsing for non-JSON responses
     const tasks = [];
     const lines = aiResponse.split('\n').filter(line => 
       line.trim() && (line.includes('description') || line.includes('$') || line.includes('deadline'))
@@ -2043,11 +1809,6 @@ class IncomeDroneSystem {
 
 const incomeDroneSystem = new IncomeDroneSystem();
 
-
-// =============================================================================
-// WEBSOCKET HANDLERS - FIXED
-// =============================================================================
-
 wss.on('connection', (ws, req) => {
   const clientId = `client_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const clientIP = req.socket.remoteAddress;
@@ -2057,7 +1818,6 @@ wss.on('connection', (ws, req) => {
 
   console.log(`✅ [WS] Connected: ${clientId} from ${clientIP}`);
 
-  // Enhanced connection message with real-time API key status
   const connectionMessage = {
     type: 'connection',
     status: 'connected',
@@ -2085,7 +1845,6 @@ wss.on('connection', (ws, req) => {
 
   ws.send(JSON.stringify(connectionMessage));
 
-  // Heartbeat to keep connection alive
   const heartbeat = setInterval(() => {
     if (ws.readyState === 1) {
       ws.send(JSON.stringify({
@@ -2166,7 +1925,6 @@ wss.on('connection', (ws, req) => {
   });
 });
 
-// Helper function to get real-time API key status
 function getApiKeyStatus(provider) {
   const keyGetters = {
     anthropic: getAnthropicKey,
@@ -2180,7 +1938,97 @@ function getApiKeyStatus(provider) {
   return getter && getter() ? 'ready' : 'needs_api_key';
 }
 
-// New handler for AI status requests
+async function handleConversation(clientId, message, ws) {
+  const { text } = message;
+  let history = conversationHistory.get(clientId) || [];
+  history.push({ role: 'user', content: text, timestamp: Date.now() });
+
+  try {
+    const response = await callCouncilMember('claude', text);
+    history.push({ role: 'ai', content: response, timestamp: Date.now() });
+    conversationHistory.set(clientId, history);
+
+    ws.send(JSON.stringify({ type: 'conversation_response', response, memoryStored: true, timestamp: new Date().toISOString() }));
+  } catch (error) {
+    ws.send(JSON.stringify({ type: 'error', error: error.message }));
+  }
+}
+
+async function handleCommand(clientId, message, ws) {
+  const { command } = message;
+  switch (command) {
+    case 'start_queue': executionQueue.executeNext(); ws.send(JSON.stringify({ type: 'command_response', status: 'Queue started' })); break;
+    case 'queue_status': ws.send(JSON.stringify({ type: 'command_response', status: executionQueue.getStatus() })); break;
+    case 'clear_queue': executionQueue.tasks = []; ws.send(JSON.stringify({ type: 'command_response', status: 'Queue cleared' })); break;
+    default: ws.send(JSON.stringify({ type: 'error', error: `Unknown command` }));
+  }
+}
+
+async function handleMemoryQuery(clientId, message, ws) {
+  const { query, limit } = message;
+  const memories = await recallConversationMemory(query, limit || 50);
+  ws.send(JSON.stringify({ type: 'memory_results', count: memories.length, memories: memories.map(m => ({ id: m.memory_id, orchestrator: m.orchestrator_msg.slice(0, 100), ai: m.ai_response.slice(0, 100), date: m.created_at })) }));
+}
+
+async function handleFileUpload(clientId, message, ws) {
+  const { filename, content } = message;
+  const fileId = `file_${Date.now()}`;
+  await pool.query(`INSERT INTO file_storage (file_id, filename, content, uploaded_by, created_at) VALUES ($1, $2, $3, $4, now())`, [fileId, filename, content, clientId]);
+  await storeConversationMemory(`File: ${filename}`, `Stored: ${fileId}`, { type: 'file_upload' });
+  ws.send(JSON.stringify({ type: 'file_uploaded', fileId, filename, message: 'Stored' }));
+}
+
+async function handleTaskSubmit(clientId, message, ws) {
+  const { description, type, context, priority } = message;
+  const taskId = executionQueue.addTask({ description, type: type || 'code_generation', context, priority: priority || 'normal' });
+  ws.send(JSON.stringify({ type: 'task_submitted', taskId, message: 'Queued' }));
+}
+
+async function handleFinancialRecord(clientId, message, ws) {
+  const { transactionType, amount, description, category } = message;
+  if (transactionType) await financialDashboard.recordTransaction(transactionType, amount, description, category);
+  ws.send(JSON.stringify({ type: 'financial_recorded', message: 'Recorded' }));
+}
+
+async function handleDashboardRequest(clientId, message, ws) {
+  const dashboard = await financialDashboard.getDashboard();
+  ws.send(JSON.stringify({ type: 'dashboard_data', dashboard, timestamp: new Date().toISOString() }));
+}
+
+async function handleCodeGeneration(clientId, message, ws) {
+  const { description, type='code_generation' } = message;
+  try {
+    const taskId = executionQueue.addTask({ type, description, command: `Generate: ${description}`, priority: 'high' });
+    ws.send(JSON.stringify({ type: 'code_generation_started', taskId, message: 'Queued' }));
+  } catch (error) {
+    ws.send(JSON.stringify({ type: 'error', error: error.message }));
+  }
+}
+
+async function handleSystemStatus(clientId, ws) {
+  const taskStatus = executionQueue.getStatus();
+  ws.send(JSON.stringify({ type: 'system_status', status: 'operational', version: 'v21.0', timestamp: new Date().toISOString(), tasks: taskStatus }));
+}
+
+async function handleSystemHealth(clientId, ws) {
+  try {
+    const health = await selfRepairEngine.analyzeSystemHealth();
+    ws.send(JSON.stringify({ type: 'system_health', health, timestamp: new Date().toISOString() }));
+  } catch (error) {
+    ws.send(JSON.stringify({ type: 'health_error', error: error.message }));
+  }
+}
+
+async function handleSystemRepair(clientId, message, ws) {
+  const { filePath, issue } = message;
+  try {
+    const repair = await selfRepairEngine.repairFile(filePath, issue);
+    ws.send(JSON.stringify({ type: 'repair_response', repair, timestamp: new Date().toISOString() }));
+  } catch (error) {
+    ws.send(JSON.stringify({ type: 'error', error: error.message }));
+  }
+}
+
 async function handleAIStatus(clientId, ws) {
   const aiStatus = Object.keys(COUNCIL_MEMBERS).map(key => {
     const member = COUNCIL_MEMBERS[key];
@@ -2204,9 +2052,6 @@ async function handleAIStatus(clientId, ws) {
     timestamp: new Date().toISOString()
   }));
 }
-// =============================================================================
-// REST API ENDPOINTS - FIXED
-// =============================================================================
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -2229,24 +2074,173 @@ function normalizeUrl(u) {
   }
 }
 
-// Helper function to get real-time API key status
-function getApiKeyStatus(provider) {
-  const keyGetters = {
-    anthropic: getAnthropicKey,
-    openai: getOpenAIKey,
-    google: getGeminiKey,
-    xai: getGrokKey,
-    deepseek: getDeepSeekKey
-  };
-  
-  const getter = keyGetters[provider];
-  return getter && getter() ? 'ready' : 'needs_api_key';
-}
+app.post('/api/v1/bridge/register', requireCommandKey, async (req, res) => {
+  try {
+    const { url } = req.body || {};
+    const normalized = normalizeUrl(url);
+    if (!normalized) return res.status(400).json({ ok: false, error: 'Invalid URL' });
 
+    CURRENT_DEEPSEEK_ENDPOINT = normalized;
+    console.log(`🔌 [BRIDGE] Registered: ${normalized}`);
+    res.json({ ok: true, endpoint: normalized });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: String(e) });
+  }
+});
 
-// =============================================================================
-// DEBUG & DIAGNOSTIC ENDPOINTS
-// =============================================================================
+app.get('/api/v1/bridge/endpoint', requireCommandKey, (_req, res) =>
+  res.json({ ok: true, endpoint: CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT || null })
+);
+
+app.get("/health", (req, res) => res.send("OK"));
+
+app.get("/healthz", async (_req, res) => {
+  try {
+    await pool.query("SELECT NOW()");
+    const taskStatus = executionQueue.getStatus();
+    const health = await selfRepairEngine.analyzeSystemHealth();
+
+    res.json({
+      status: 'healthy', version: 'v21.0', timestamp: new Date().toISOString(),
+      system: { database: 'connected', websocket_connections: activeConnections.size, health: health.healthy ? 'green' : 'red' },
+      tasks: taskStatus,
+      ai_council: {
+        enabled: true,
+        members: Object.keys(COUNCIL_MEMBERS).length,
+        models: Object.values(COUNCIL_MEMBERS).map(m => m.official_name)
+      },
+      mode: systemModeController.mode,
+      aiCount: apiHealthMonitor.systemStatus.aiCount,
+      canUpgrade: systemModeController.canUpgradeSystem(),
+      canDoProgramming: systemModeController.canDoProgramming(),
+      deployment: 'GitHub + Railway'
+    });
+  } catch (error) {
+    res.status(500).json({ status: 'unhealthy', error: error.message });
+  }
+});
+
+app.get('/api/v1/system/health-detailed', requireCommandKey, (req, res) => {
+  res.json({
+    ok: true,
+    mode: systemModeController.mode,
+    aiCount: apiHealthMonitor.systemStatus.aiCount,
+    canUpgrade: systemModeController.canUpgradeSystem(),
+    canDoProgramming: systemModeController.canDoProgramming(),
+    capabilities: systemModeController.getCapabilities(),
+    apiStatus: Object.fromEntries(
+      Object.entries(apiHealthMonitor.apiStatus).map(([k, v]) => [k, {
+        healthy: v.healthy,
+        lastCheck: v.lastCheck,
+        failCount: v.failCount
+      }])
+    ),
+    recoveryStatus: apiHealthMonitor.getRecoveryStatus(),
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/api/v1/memory/search', requireCommandKey, async (req, res) => {
+  try {
+    const { q, limit } = req.query;
+    const memories = await recallConversationMemory(q, limit || 50);
+    res.json({ ok: true, count: memories.length, memories });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get('/api/v1/queue/status', requireCommandKey, (req, res) => {
+  res.json({ ok: true, status: executionQueue.getStatus() });
+});
+
+app.get('/api/v1/dashboard', requireCommandKey, async (req, res) => {
+  try {
+    const dashboard = await financialDashboard.getDashboard();
+    res.json({ ok: true, dashboard });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post('/api/v1/code/generate', requireCommandKey, async (req, res) => {
+  try {
+    const { description, type='code_generation' } = req.body;
+    const taskId = executionQueue.addTask({ type, description, command: `Generate: ${description}`, priority: 'high' });
+    res.json({ ok: true, taskId, message: 'Queued' });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
+  try {
+    const rawBody = typeof req.body === "string" ? req.body : (req.body?.micro || req.body?.text || "");
+    if (!rawBody) {
+      try {
+        const v3 = encodeLCTP({ v: '3', type: 'directive', project: 'lifeOS', flow: 'auto-price', integration: 'Stripe', quorum: 85, signer: 'System' });
+        compressionMetrics.v3_compressions++;
+        return res.type("text/plain").send(v3);
+      } catch (e) {
+        return res.status(400).type("text/plain").send("V:2.0|CT:missing~input");
+      }
+    }
+
+    let microOut;
+    if (String(rawBody).startsWith("V:3") || (rawBody.length > 30 && /^[A-Za-z0-9\-_]+$/.test(rawBody))) {
+      try {
+        const decoded = decodeLCTP(rawBody);
+        microOut = encodeLCTP(decoded);
+        compressionMetrics.v3_compressions++;
+      } catch (e) {
+        microOut = `V:2.0|CT:v3~error`;
+      }
+    } else {
+      const r = await callCouncilMember("claude", rawBody);
+      trackCost({}, "claude-3-5-sonnet-20241022");
+      compressionMetrics.v2_0_compressions++;
+      microOut = String(r || "").trim();
+      if (!microOut.startsWith("V:")) {
+        microOut = MICRO_PROTOCOL.encode({ operation: 'generate', description: microOut.slice(0, 200), type: 'response' });
+      }
+    }
+
+    return res.type("text/plain").send(microOut || "V:2.0|CT:empty");
+  } catch (e) {
+    console.error("[architect.micro]", e);
+    return res.status(500).type("text/plain").send(`V:2.0|CT:error`);
+  }
+});
+
+app.post('/api/v1/files/upload', requireCommandKey, async (req, res) => {
+  try {
+    const { filename, content, uploaded_by='api' } = req.body;
+    const fileId = `file_${Date.now()}`;
+    await pool.query(`INSERT INTO file_storage (file_id, filename, content, uploaded_by, created_at) VALUES ($1, $2, $3, $4, now())`, [fileId, filename, content, uploaded_by]);
+    await storeConversationMemory(`File: ${filename}`, `Stored: ${fileId}`, { type: 'file_upload' });
+    res.json({ ok: true, fileId, filename, message: 'Stored' });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get('/api/v1/realestate/properties', requireCommandKey, async (req, res) => {
+  try {
+    const properties = await realEstateEngine.getProperties(req.query);
+    res.json({ ok: true, count: properties.length, properties });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post('/api/v1/realestate/properties', requireCommandKey, async (req, res) => {
+  try {
+    const property = await realEstateEngine.addProperty(req.body);
+    res.json({ ok: true, property });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
 
 app.get('/api/debug/env-check', requireCommandKey, (req, res) => {
   res.json({
@@ -2303,15 +2297,24 @@ app.get('/overlay/debug', (req, res) => {
   });
 });
 
-// =============================================================================
-// SERVER STARTUP & SHUTDOWN
-// =============================================================================
+app.get('/overlay/command-center.html', (req, res) => {
+  res.sendFile(join(__dirname, "public/overlay/command-center.html"));
+});
 
 async function startServer() {
   try {
     if (!validateEnvironment()) process.exit(1);
 
     await initDb();
+
+    console.log("🏥 Starting API health monitoring...");
+    await apiHealthMonitor.healthCheck();
+    await systemModeController.updateMode();
+    
+    setInterval(async () => {
+      await apiHealthMonitor.healthCheck();
+      await systemModeController.updateMode();
+    }, 30000);
 
     console.log("🚀 Starting execution queue...");
     executionQueue.executeNext();
@@ -2356,7 +2359,10 @@ async function startServer() {
   ✅ Bit-packing + Dictionary substitution
   ✅ File upload & indexing
   ✅ Complete overlay system
-  ✅ ROI tracking + cost optimization`);
+  ✅ ROI tracking + cost optimization
+  ✅ API Health Monitoring & Failover
+  ✅ System Mode Controller
+  ✅ Fresh Environment Variable Reads`);
       
       console.log(`\n🚀 DEPLOYMENT: GitHub + Railway
   • System hosted on Railway
