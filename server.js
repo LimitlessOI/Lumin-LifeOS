@@ -109,6 +109,7 @@ function validateEnvironment() {
   console.log("✅ Environment validated");
   return true;
 }
+ 
 // =============================================================================
 // DATABASE
 // =============================================================================
@@ -1489,29 +1490,57 @@ class IncomeDroneSystem {
 
 const incomeDroneSystem = new IncomeDroneSystem();
 
+
 // =============================================================================
 // WEBSOCKET HANDLERS - FIXED
 // =============================================================================
 
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, req) => {
   const clientId = `client_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const clientIP = req.socket.remoteAddress;
+  
   activeConnections.set(clientId, ws);
   conversationHistory.set(clientId, []);
 
-  console.log(`✅ [WS] Connected: ${clientId}`);
+  console.log(`✅ [WS] Connected: ${clientId} from ${clientIP}`);
 
-  ws.send(JSON.stringify({
-    type: 'connection', status: 'connected', clientId,
-    message: '🎼 AI Orchestration v21.0 - FULL INTEGRATION',
-    features: [
-      'WebSocket', '3-layer memory', 'AI council (5)', 'Task queue',
-      'Financial P&L', 'Real estate', 'Revenue bot', 'Protected files',
-      'Self-repair', 'LCTP v3', 'MICRO v2.0', 'Income drones'
-    ],
-    deployment: 'GitHub + Railway',
-    compression: 'LCTP v3 (80-95%) + MICRO v2.0 (70-80%)',
-    deepseek_bridge: DEEPSEEK_BRIDGE_ENABLED === "true" ? 'enabled' : 'disabled'
-  }));
+  // Enhanced connection message with real-time API key status
+  const connectionMessage = {
+    type: 'connection',
+    status: 'connected',
+    clientId,
+    message: '🎼 AI Orchestration v21.0 - FULL SYSTEM INTEGRATION',
+    system_status: {
+      ai_council: {
+        members: Object.keys(COUNCIL_MEMBERS).map(key => ({
+          name: COUNCIL_MEMBERS[key].name,
+          status: getApiKeyStatus(COUNCIL_MEMBERS[key].provider),
+          provider: COUNCIL_MEMBERS[key].provider,
+          role: COUNCIL_MEMBERS[key].role
+        }))
+      },
+      features: {
+        websocket: 'active',
+        memory: 'active',
+        task_queue: 'running',
+        income_drones: 'deployed',
+        real_time_keys: 'enabled'
+      },
+      timestamp: new Date().toISOString()
+    }
+  };
+
+  ws.send(JSON.stringify(connectionMessage));
+
+  // Heartbeat to keep connection alive
+  const heartbeat = setInterval(() => {
+    if (ws.readyState === 1) {
+      ws.send(JSON.stringify({
+        type: 'heartbeat',
+        timestamp: new Date().toISOString()
+      }));
+    }
+  }, 30000);
 
   ws.on('message', async (data) => {
     try {
@@ -1519,228 +1548,109 @@ wss.on('connection', (ws) => {
       console.log(`📨 [WS] ${message.type} from ${clientId}`);
 
       switch (message.type) {
-        case 'conversation': await handleConversation(clientId, message, ws); break;
-        case 'command': await handleCommand(clientId, message, ws); break;
-        case 'memory_query': await handleMemoryQuery(clientId, message, ws); break;
-        case 'upload_file': await handleFileUpload(clientId, message, ws); break;
-        case 'task_submit': await handleTaskSubmit(clientId, message, ws); break;
-        case 'financial_record': await handleFinancialRecord(clientId, message, ws); break;
-        case 'get_dashboard': await handleDashboardRequest(clientId, message, ws); break;
-        case 'code_generation': await handleCodeGeneration(clientId, message, ws); break;
-        case 'get_system_status': await handleSystemStatus(clientId, ws); break;
-        case 'system_repair': await handleSystemRepair(clientId, message, ws); break;
-        case 'system_health': await handleSystemHealth(clientId, ws); break;
-        default: ws.send(JSON.stringify({ type: 'error', error: `Unknown: ${message.type}` }));
+        case 'conversation': 
+          await handleConversation(clientId, message, ws); 
+          break;
+        case 'command': 
+          await handleCommand(clientId, message, ws); 
+          break;
+        case 'memory_query': 
+          await handleMemoryQuery(clientId, message, ws); 
+          break;
+        case 'upload_file': 
+          await handleFileUpload(clientId, message, ws); 
+          break;
+        case 'task_submit': 
+          await handleTaskSubmit(clientId, message, ws); 
+          break;
+        case 'financial_record': 
+          await handleFinancialRecord(clientId, message, ws); 
+          break;
+        case 'get_dashboard': 
+          await handleDashboardRequest(clientId, message, ws); 
+          break;
+        case 'code_generation': 
+          await handleCodeGeneration(clientId, message, ws); 
+          break;
+        case 'get_system_status': 
+          await handleSystemStatus(clientId, ws); 
+          break;
+        case 'system_repair': 
+          await handleSystemRepair(clientId, message, ws); 
+          break;
+        case 'system_health': 
+          await handleSystemHealth(clientId, ws); 
+          break;
+        case 'get_ai_status':
+          await handleAIStatus(clientId, ws);
+          break;
+        case 'ping':
+          ws.send(JSON.stringify({ type: 'pong', timestamp: new Date().toISOString() }));
+          break;
+        default: 
+          ws.send(JSON.stringify({ type: 'error', error: `Unknown message type: ${message.type}` }));
       }
     } catch (error) {
       console.error(`❌ [WS] Error from ${clientId}:`, error.message);
-      ws.send(JSON.stringify({ type: 'error', error: error.message }));
+      ws.send(JSON.stringify({ 
+        type: 'error', 
+        error: error.message,
+        timestamp: new Date().toISOString()
+      }));
     }
   });
 
   ws.on('close', () => {
+    clearInterval(heartbeat);
     activeConnections.delete(clientId);
     conversationHistory.delete(clientId);
     console.log(`👋 [WS] Disconnected: ${clientId}`);
   });
+
+  ws.on('error', (error) => {
+    console.error(`❌ [WS] Error for ${clientId}:`, error.message);
+    clearInterval(heartbeat);
+  });
 });
 
-// Handler functions - FIXED
-async function handleConversation(clientId, message, ws) {
-  const { text } = message;
-  let history = conversationHistory.get(clientId) || [];
-  history.push({ role: 'orchestrator', content: text, timestamp: Date.now() });
-
-  try {
-    const response = await callCouncilMember('claude', text);
-    history.push({ role: 'ai', content: response, timestamp: Date.now() });
-    conversationHistory.set(clientId, history);
-
-    ws.send(JSON.stringify({
-      type: 'conversation_response', 
-      response, 
-      memoryStored: true,
-      timestamp: new Date().toISOString()
-    }));
-
-    const tasks = extractExecutableTasks(response);
-    if (tasks.length > 0) {
-      for (const task of tasks) executionQueue.addTask(task);
-      ws.send(JSON.stringify({ type: 'tasks_queued', count: tasks.length, tasks }));
-    }
-  } catch (error) {
-    console.error(`❌ [Conversation] Error:`, error);
-    ws.send(JSON.stringify({ type: 'error', error: error.message }));
-  }
+// Helper function to get real-time API key status
+function getApiKeyStatus(provider) {
+  const keyGetters = {
+    anthropic: getAnthropicKey,
+    openai: getOpenAIKey,
+    google: getGeminiKey,
+    xai: getGrokKey,
+    deepseek: getDeepSeekKey
+  };
+  
+  const getter = keyGetters[provider];
+  return getter && getter() ? 'ready' : 'needs_api_key';
 }
 
-function extractExecutableTasks(response) {
-  const tasks = [];
-  const patterns = [
-    /generate:\s*([^.!?\n]{10,150})/gi, /create:\s*([^.!?\n]{10,150})/gi,
-    /build:\s*([^.!?\n]{10,150})/gi, /execute:\s*([^.!?\n]{10,150})/gi,
-    /implement:\s*([^.!?\n]{10,150})/gi
-  ];
-  for (const pattern of patterns) {
-    let match;
-    while ((match = pattern.exec(response)) !== null) {
-      if (match[1]) {
-        tasks.push({
-          type: 'code_generation', command: match[1].trim(),
-          description: match[1].trim(), priority: 'high'
-        });
-      }
-    }
-  }
-  return tasks;
-}
-
-async function handleCommand(clientId, message, ws) {
-  const { command } = message;
-  console.log(`⚡ [COMMAND] ${command} from ${clientId}`);
-
-  switch (command) {
-    case 'start_queue': 
-      executionQueue.executeNext(); 
-      ws.send(JSON.stringify({ type: 'command_response', status: 'Queue started' })); 
-      break;
-    case 'queue_status': 
-      ws.send(JSON.stringify({ type: 'command_response', status: executionQueue.getStatus() })); 
-      break;
-    case 'clear_queue': 
-      executionQueue.tasks = []; 
-      ws.send(JSON.stringify({ type: 'command_response', status: 'Queue cleared' })); 
-      break;
-    case 'get_memory_stats': {
-      const memories = await recallConversationMemory('', 10);
-      ws.send(JSON.stringify({ type: 'memory_stats', total: memories.length, recent: memories.slice(0, 5) }));
-           break;
-    }
-    case 'get_memory_stats': {
-      const memories = await recallConversationMemory('', 10);
-      ws.send(JSON.stringify({ type: 'memory_stats', total: memories.length, recent: memories.slice(0, 5) }));
-      break;
-    }
-    default: 
-      ws.send(JSON.stringify({ type: 'error', error: `Unknown: ${command}` }));
-  }
-}
-
-async function handleMemoryQuery(clientId, message, ws) {
-  const { query, limit } = message;
-  const memories = await recallConversationMemory(query, limit || 50);
-  ws.send(JSON.stringify({
-    type: 'memory_results', count: memories.length,
-    memories: memories.map(m => ({
-      id: m.memory_id, orchestrator: m.orchestrator_msg.slice(0, 200),
-      ai: m.ai_response.slice(0, 200), keyFacts: m.key_facts, date: m.created_at
-    }))
-  }));
-}
-
-async function handleFileUpload(clientId, message, ws) {
-  const { filename, content } = message;
-  const fileId = `file_${Date.now()}`;
-  await pool.query(
-    `INSERT INTO file_storage (file_id, filename, content, uploaded_by, created_at)
-     VALUES ($1, $2, $3, $4, now())`,
-    [fileId, filename, content, clientId]
-  );
-  await storeConversationMemory(`File: ${filename}`, `Stored: ${fileId}`, { type: 'file_upload' });
-  ws.send(JSON.stringify({ type: 'file_uploaded', fileId, filename, message: 'Stored' }));
-}
-
-async function handleTaskSubmit(clientId, message, ws) {
-  const { description, type, context, priority } = message;
-  const taskId = executionQueue.addTask({
-    description, type: type || 'code_generation', context, priority: priority || 'normal'
+// New handler for AI status requests
+async function handleAIStatus(clientId, ws) {
+  const aiStatus = Object.keys(COUNCIL_MEMBERS).map(key => {
+    const member = COUNCIL_MEMBERS[key];
+    
+    return {
+      name: member.name,
+      official_name: member.official_name,
+      provider: member.provider,
+      status: getApiKeyStatus(member.provider),
+      has_key: !!getApiKeyStatus(member.provider),
+      role: member.role,
+      focus: member.focus
+    };
   });
-  ws.send(JSON.stringify({ type: 'task_submitted', taskId, message: 'Queued' }));
-}
 
-async function handleFinancialRecord(clientId, message, ws) {
-  const { transactionType, amount, description, category, investmentData, cryptoData } = message;
-  if (transactionType) await financialDashboard.recordTransaction(transactionType, amount, description, category);
-  if (investmentData) await financialDashboard.addInvestment(investmentData.name, investmentData.amount, investmentData.expectedReturn);
-  if (cryptoData) await financialDashboard.addCryptoPosition(cryptoData.symbol, cryptoData.amount, cryptoData.entryPrice, cryptoData.currentPrice);
-  ws.send(JSON.stringify({ type: 'financial_recorded', message: 'Recorded' }));
-}
-
-async function handleDashboardRequest(clientId, message, ws) {
-  const dashboard = await financialDashboard.getDashboard();
-  ws.send(JSON.stringify({ type: 'dashboard_data', dashboard, timestamp: new Date().toISOString() }));
-}
-
-async function handleCodeGeneration(clientId, message, ws) {
-  const { description, type='code_generation' } = message;
-  try {
-    const taskId = executionQueue.addTask({ type, description, command: `Generate: ${description}`, priority: 'high' });
-    ws.send(JSON.stringify({ type: 'code_generation_started', taskId, message: 'Queued' }));
-  } catch (error) {
-    ws.send(JSON.stringify({ type: 'error', error: error.message }));
-  }
-}
-
-async function handleSystemStatus(clientId, ws) {
-  const memoryStats = await pool.query("SELECT COUNT(*) as total_memories FROM conversation_memory");
-  const taskStatus = executionQueue.getStatus();
   ws.send(JSON.stringify({
-    type: 'system_status', status: 'operational', version: 'v21.0',
-    timestamp: new Date().toISOString(),
-    stats: {
-      database: 'connected',
-      websocket_connections: activeConnections.size,
-      total_memories: parseInt(memoryStats.rows[0].total_memories),
-      tasks_queued: taskStatus.queued,
-      tasks_completed: taskStatus.completed
-    },
-    ai_council: {
-      enabled: true,
-      members: Object.keys(COUNCIL_MEMBERS).length,
-      models: Object.values(COUNCIL_MEMBERS).map(m => m.official_name),
-      deepseek_bridge: DEEPSEEK_BRIDGE_ENABLED === "true" ? 'enabled' : 'disabled'
-    },
-    features: {
-      memory_system: 'active',
-      task_queue: 'running',
-      financial_dashboard: 'active',
-      real_estate_engine: 'ready',
-      revenue_bot: 'ready',
-      protection_system: 'active',
-      self_repair: 'ready',
-      lctp_v3_compression: 'active',
-      income_drones: 'deployed'
-    },
-    compression: {
-      v2_0_compressions: compressionMetrics.v2_0_compressions,
-      v3_compressions: compressionMetrics.v3_compressions,
-      total_bytes_saved: compressionMetrics.total_bytes_saved,
-      total_cost_saved: compressionMetrics.total_cost_saved
-    },
-    roi: roiTracker,
-    deployment: 'GitHub + Railway'
+    type: 'ai_status',
+    members: aiStatus,
+    total_ready: aiStatus.filter(m => m.status === 'ready').length,
+    total_members: aiStatus.length,
+    timestamp: new Date().toISOString()
   }));
 }
-
-async function handleSystemRepair(clientId, message, ws) {
-  const { file_path, issue } = message;
-  try {
-    const repairResult = await selfRepairEngine.repairFile(file_path, issue);
-    ws.send(JSON.stringify({ type: 'repair_result', ...repairResult, timestamp: new Date().toISOString() }));
-  } catch (error) {
-    ws.send(JSON.stringify({ type: 'repair_error', error: error.message }));
-  }
-}
-
-async function handleSystemHealth(clientId, ws) {
-  try {
-    const health = await selfRepairEngine.analyzeSystemHealth();
-    ws.send(JSON.stringify({ type: 'system_health', health, timestamp: new Date().toISOString() }));
-  } catch (error) {
-    ws.send(JSON.stringify({ type: 'health_error', error: error.message }));
-  }
-}
-
 // =============================================================================
 // REST API ENDPOINTS - FIXED
 // =============================================================================
@@ -1765,6 +1675,80 @@ function normalizeUrl(u) {
     return null;
   }
 }
+
+// Helper function to get real-time API key status
+function getApiKeyStatus(provider) {
+  const keyGetters = {
+    anthropic: getAnthropicKey,
+    openai: getOpenAIKey,
+    google: getGeminiKey,
+    xai: getGrokKey,
+    deepseek: getDeepSeekKey
+  };
+  
+  const getter = keyGetters[provider];
+  return getter && getter() ? 'ready' : 'needs_api_key';
+}
+
+// =============================================================================
+// DEBUG & DIAGNOSTIC ENDPOINTS
+// =============================================================================
+
+app.get('/api/debug/env-check', requireCommandKey, (req, res) => {
+  res.json({
+    openai: {
+      has_key: !!getOpenAIKey(),
+      length: getOpenAIKey() ? getOpenAIKey().length : 0,
+      preview: getOpenAIKey() ? getOpenAIKey().slice(0, 8) + '...' : 'none'
+    },
+    anthropic: {
+      has_key: !!getAnthropicKey(), 
+      length: getAnthropicKey() ? getAnthropicKey().length : 0,
+      preview: getAnthropicKey() ? getAnthropicKey().slice(0, 8) + '...' : 'none'
+    },
+    gemini: {
+      has_key: !!getGeminiKey(),
+      length: getGeminiKey() ? getGeminiKey().length : 0, 
+      preview: getGeminiKey() ? getGeminiKey().slice(0, 8) + '...' : 'none'
+    },
+    grok: {
+      has_key: !!getGrokKey(),
+      length: getGrokKey() ? getGrokKey().length : 0,
+      preview: getGrokKey() ? getGrokKey().slice(0, 8) + '...' : 'none'
+    },
+    deepseek: {
+      has_key: !!getDeepSeekKey(),
+      length: getDeepSeekKey() ? getDeepSeekKey().length : 0,
+      preview: getDeepSeekKey() ? getDeepSeekKey().slice(0, 8) + '...' : 'none'
+    },
+    timestamp: new Date().toISOString(),
+    server_uptime: process.uptime()
+  });
+});
+
+// Overlay diagnostic endpoint
+app.get('/overlay/debug', (req, res) => {
+  res.json({
+    websocket_connections: activeConnections.size,
+    overlay_endpoints: {
+      command_center: '/overlay/command-center.html',
+      architect: '/overlay/architect.html', 
+      portal: '/overlay/portal.html',
+      control: '/overlay/control.html'
+    },
+    system_status: {
+      ai_council: Object.keys(COUNCIL_MEMBERS).map(key => ({
+        name: COUNCIL_MEMBERS[key].name,
+        provider: COUNCIL_MEMBERS[key].provider,
+        status: getApiKeyStatus(COUNCIL_MEMBERS[key].provider),
+        has_key: !!getApiKeyStatus(COUNCIL_MEMBERS[key].provider)
+      })),
+      websocket_enabled: true,
+      memory_system: 'active',
+      real_time_keys: 'enabled'
+    }
+  });
+});
 
 // Bridge registration (LCTP v3 + DeepSeek)
 app.post('/api/v1/bridge/register', requireCommandKey, async (req, res) => {
@@ -2105,34 +2089,6 @@ app.get('/overlay/portal.html', (req, res) => {
 });
 app.get('/overlay/control.html', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'overlay', 'control.html'));
-});
-
-// Debug endpoint for environment checking
-app.get('/api/debug/env-check', requireCommandKey, (req, res) => {
-  res.json({
-    openai: {
-      has_key: !!getOpenAIKey(),
-      length: getOpenAIKey() ? getOpenAIKey().length : 0,
-      preview: getOpenAIKey() ? getOpenAIKey().slice(0, 8) + '...' : 'none'
-    },
-    anthropic: {
-      has_key: !!getAnthropicKey(), 
-      length: getAnthropicKey() ? getAnthropicKey().length : 0,
-      preview: getAnthropicKey() ? getAnthropicKey().slice(0, 8) + '...' : 'none'
-    },
-    gemini: {
-      has_key: !!getGeminiKey(),
-      length: getGeminiKey() ? getGeminiKey().length : 0, 
-      preview: getGeminiKey() ? getGeminiKey().slice(0, 8) + '...' : 'none'
-    },
-    grok: {
-      has_key: !!getGrokKey(),
-      length: getGrokKey() ? getGrokKey().length : 0,
-      preview: getGrokKey() ? getGrokKey().slice(0, 8) + '...' : 'none'
-    },
-    timestamp: new Date().toISOString(),
-    server_uptime: process.uptime()
-  });
 });
 
 // =============================================================================
