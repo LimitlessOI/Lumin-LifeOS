@@ -31,8 +31,7 @@ const wss = new WebSocketServer({ server });
 // =============================================================================
 // ENVIRONMENT & CONFIG - DYNAMIC FIXED VERSION
 // =============================================================================
-
-// Static environment variables (non-API keys)
+// STATIC CONFIG (doesn't change - loaded once at startup)
 const {
   DATABASE_URL,
   COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
@@ -46,7 +45,7 @@ const {
   AI_TIER = "medium"
 } = process.env;
 
-// DYNAMIC API KEY GETTERS - ALWAYS FRESH FROM ENVIRONMENT
+// DYNAMIC API KEY GETTERS - ALWAYS READ FRESH FROM RAILWAY ENVIRONMENT
 function getOpenAIKey() {
   return process.env.OPENAI_API_KEY;
 }
@@ -67,6 +66,7 @@ function getDeepSeekKey() {
   return process.env.DEEPSEEK_API_KEY;
 }
 
+// DEEPSEEK ENDPOINT (can be updated dynamically via bridge registration)
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim() || null;
 
 const roiTracker = {
@@ -99,17 +99,17 @@ function validateEnvironment() {
     return false;
   }
   
-  console.log("🔑 API Key Status:");
-  console.log(`  • OpenAI: ${getOpenAIKey() ? '✅' : '❌'}`);
-  console.log(`  • Anthropic: ${getAnthropicKey() ? '✅' : '❌'}`);
-  console.log(`  • Gemini: ${getGeminiKey() ? '✅' : '❌'}`);
-  console.log(`  • Grok: ${getGrokKey() ? '✅' : '❌'}`);
-  console.log(`  • DeepSeek: ${getDeepSeekKey() ? '✅' : '❌'}`);
+  console.log("🔑 API Key Status at Startup:");
+  console.log(`  • OpenAI: ${getOpenAIKey() ? '✅ Present' : '❌ Missing'}`);
+  console.log(`  • Anthropic: ${getAnthropicKey() ? '✅ Present' : '❌ Missing'}`);
+  console.log(`  • Gemini: ${getGeminiKey() ? '✅ Present' : '❌ Missing'}`);
+  console.log(`  • Grok: ${getGrokKey() ? '✅ Present' : '❌ Missing'}`);
+  console.log(`  • DeepSeek: ${getDeepSeekKey() ? '✅ Present' : '❌ Missing'}`);
   
   console.log("✅ Environment validated");
   return true;
 }
- 
+
 // =============================================================================
 // DATABASE
 // =============================================================================
