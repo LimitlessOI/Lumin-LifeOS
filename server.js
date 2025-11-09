@@ -22,6 +22,7 @@ const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
+
 // ==================================================================================
 // SECTION: ENVIRONMENT & FRESH RAILWAY VARIABLE READERS
 // ==================================================================================
@@ -40,11 +41,11 @@ const getEnvConfig = () => ({
 });
 
 const getApiKeys = () => ({
-  openai: process.env.OPENAI_API_KEY,
-  anthropic: process.env.ANTHROPIC_API_KEY,
-  gemini: process.env.GEMINI_API_KEY,
-  grok: process.env.GROK_API_KEY,
-  deepseek: process.env.DEEPSEEK_API_KEY
+  openai: (process.env.OPENAI_API_KEY || '').trim(),
+  anthropic: (process.env.ANTHROPIC_API_KEY || '').trim(),
+  gemini: (process.env.GEMINI_API_KEY || '').trim(),
+  grok: (process.env.GROK_API_KEY || '').trim(),
+  deepseek: (process.env.DEEPSEEK_API_KEY || '').trim()
 });
 
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim() || null;
@@ -73,11 +74,11 @@ function validateEnvironment() {
   
   const keys = getApiKeys();
   console.log("🔑 API Key Status:");
-  console.log(`  • OpenAI: ${keys.openai ? '✅' : '❌'}`);
-  console.log(`  • Anthropic: ${keys.anthropic ? '✅' : '❌'}`);
-  console.log(`  • Gemini: ${keys.gemini ? '✅' : '❌'}`);
-  console.log(`  • Grok: ${keys.grok ? '✅' : '❌'}`);
-  console.log(`  • DeepSeek: ${keys.deepseek ? '✅' : '❌'}`);
+  console.log(`  • OpenAI: ${keys.openai ? '✅ (' + keys.openai.length + ' chars)' : '❌'}`);
+  console.log(`  • Anthropic: ${keys.anthropic ? '✅ (' + keys.anthropic.length + ' chars)' : '❌'}`);
+  console.log(`  • Gemini: ${keys.gemini ? '✅ (' + keys.gemini.length + ' chars)' : '❌'}`);
+  console.log(`  • Grok: ${keys.grok ? '✅ (' + keys.grok.length + ' chars)' : '❌'}`);
+  console.log(`  • DeepSeek: ${keys.deepseek ? '✅ (' + keys.deepseek.length + ' chars)' : '❌'}`);
   return true;
 }
 
@@ -675,7 +676,6 @@ class ExecutionQueue {
 }
 
 const executionQueue = new ExecutionQueue();
-
 // ==================================================================================
 // SECTION: API HEALTH MONITOR & FAILOVER
 // ==================================================================================
@@ -749,15 +749,17 @@ class APIHealthMonitor {
       const timeoutId = setTimeout(() => controller.abort(), timeout);
       const apiKeys = getApiKeys();
       
+      console.log(`  [DEBUG] Testing ${providerName} - Key length: ${providerName === 'anthropic' ? apiKeys.anthropic.length : providerName === 'openai' ? apiKeys.openai.length : providerName === 'google' ? apiKeys.gemini.length : providerName === 'xai' ? apiKeys.grok.length : apiKeys.deepseek.length}`);
+      
       let response;
       
       if (providerName === 'anthropic' && apiKeys.anthropic) {
         response = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
           signal: controller.signal,
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
-            'x-api-key': apiKeys.anthropic,
+            'x-api-key': apiKeys.anthropic.trim(),
             'anthropic-version': '2023-06-01'
           },
           body: JSON.stringify({
@@ -773,7 +775,7 @@ class APIHealthMonitor {
           signal: controller.signal,
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKeys.openai}`
+            'Authorization': `Bearer ${apiKeys.openai.trim()}`
           },
           body: JSON.stringify({
             model: config.model,
@@ -786,7 +788,7 @@ class APIHealthMonitor {
         });
       } else if (providerName === 'google' && apiKeys.gemini) {
         response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini}`,
+          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini.trim()}`,
           {
             method: 'POST',
             signal: controller.signal,
@@ -803,7 +805,7 @@ class APIHealthMonitor {
           signal: controller.signal,
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKeys.grok}`
+            'Authorization': `Bearer ${apiKeys.grok.trim()}`
           },
           body: JSON.stringify({
             model: config.model,
@@ -820,7 +822,7 @@ class APIHealthMonitor {
           signal: controller.signal,
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKeys.deepseek}`
+            'Authorization': `Bearer ${apiKeys.deepseek.trim()}`
           },
           body: JSON.stringify({
             model: config.model,
@@ -837,6 +839,8 @@ class APIHealthMonitor {
       const isOk = response?.ok === true;
       if (!isOk) {
         console.log(`⚠️ [HEALTH] ${providerName} returned status ${response?.status}`);
+      } else {
+        console.log(`✅ [HEALTH] ${providerName} OK`);
       }
       return isOk;
     } catch (error) {
@@ -907,6 +911,10 @@ class APIHealthMonitor {
 }
 
 const apiHealthMonitor = new APIHealthMonitor();
+
+// ==================================================================================
+// SECTION: SYSTEM MODE CONTROLLER
+// ==================================================================================
 
 // ==================================================================================
 // SECTION: SYSTEM MODE CONTROLLER
