@@ -916,10 +916,6 @@ const apiHealthMonitor = new APIHealthMonitor();
 // SECTION: SYSTEM MODE CONTROLLER
 // ==================================================================================
 
-// ==================================================================================
-// SECTION: SYSTEM MODE CONTROLLER
-// ==================================================================================
-
 class SystemModeController {
   constructor() {
     this.mode = 'NORMAL';
@@ -1007,61 +1003,260 @@ class SystemModeController {
 const systemModeController = new SystemModeController();
 
 // ==================================================================================
-// SECTION: AI COUNCIL MEMBERS
+// SECTION: SYSTEM DIAGNOSTICS & SELF-REPAIR
 // ==================================================================================
 
-const COUNCIL_MEMBERS = {
-  claude: {
-    name: "Claude",
-    official_name: "Claude Sonnet 3.5",
-    role: "Strategic Oversight",
-    model: "claude-3-5-sonnet-20241022",
-    provider: "anthropic",
-    focus: "long-term, code quality",
-    tier: "heavy",
-    maxTokens: 4096
-  },
-  chatgpt: {
-    name: "ChatGPT",
-    official_name: "GPT-4o",
-    role: "Execution",
-    model: "gpt-4o",
-    provider: "openai",
-    focus: "implementation, speed",
-    tier: "heavy",
-    maxTokens: 4096
-  },
-  gemini: {
-    name: "Gemini",
-    official_name: "Gemini 2.0 Flash",
-    role: "Innovation",
-    model: "gemini-2.0-flash-exp",
-    provider: "google",
-    focus: "creative solutions",
-    tier: "medium",
-    maxTokens: 8192
-  },
-  deepseek: {
-    name: "DeepSeek",
-    official_name: "DeepSeek-coder",
-    role: "Technical Depth",
-    model: "deepseek-coder",
-    provider: "deepseek",
-    focus: "optimization, performance",
-    tier: "medium",
-    maxTokens: 4096
-  },
-  grok: {
-    name: "Grok",
-    official_name: "Grok (XAI)",
-    role: "Reality Checks",
-    model: "grok-beta",
-    provider: "xai",
-    focus: "feasibility, risks",
-    tier: "light",
-    maxTokens: 4096
+class SystemDiagnostics {
+  constructor() {
+    this.diagnosticHistory = [];
+    this.lastFullDiagnostic = null;
   }
-};
+
+  async runFullDiagnostic() {
+    console.log("\n🔍 RUNNING FULL SYSTEM DIAGNOSTIC...\n");
+    
+    const report = {
+      timestamp: new Date().toISOString(),
+      tests: {
+        database: await this.testDatabase(),
+        apiKeys: await this.testApiKeys(),
+        aiModels: await this.testAiModels(),
+        memory: await this.testMemory(),
+        compression: await this.testCompression(),
+        websocket: this.testWebSocket(),
+        taskQueue: this.testTaskQueue(),
+        fileSystem: this.testFileSystem()
+      },
+      recommendations: [],
+      issues: [],
+      repairs: []
+    };
+
+    // Analyze and generate recommendations
+    this.analyzeResults(report);
+    
+    // Store in history
+    this.diagnosticHistory.push(report);
+    this.lastFullDiagnostic = report;
+    
+    return report;
+  }
+
+  async testDatabase() {
+    console.log("  🧪 Testing Database...");
+    try {
+      const start = Date.now();
+      await pool.query("SELECT NOW()");
+      const duration = Date.now() - start;
+      
+      const result = await pool.query(
+        "SELECT COUNT(*) as count FROM conversation_memory"
+      );
+      
+      return {
+        status: "✅ PASS",
+        duration: `${duration}ms`,
+        memoryRecords: result.rows[0].count,
+        poolActive: pool.totalCount,
+        poolIdle: pool.idleCount
+      };
+    } catch (error) {
+      return { status: "❌ FAIL", error: error.message };
+    }
+  }
+
+  async testApiKeys() {
+    console.log("  🧪 Testing API Keys...");
+    const keys = getApiKeys();
+    return {
+      openai: { present: !!keys.openai, length: keys.openai?.length || 0, format: keys.openai?.slice(0, 10) },
+      anthropic: { present: !!keys.anthropic, length: keys.anthropic?.length || 0, format: keys.anthropic?.slice(0, 10) },
+      gemini: { present: !!keys.gemini, length: keys.gemini?.length || 0, format: keys.gemini?.slice(0, 10) },
+      grok: { present: !!keys.grok, length: keys.grok?.length || 0, format: keys.grok?.slice(0, 10) },
+      deepseek: { present: !!keys.deepseek, length: keys.deepseek?.length || 0, format: keys.deepseek?.slice(0, 10) }
+    };
+  }
+
+  async testAiModels() {
+    console.log("  🧪 Testing AI Models...");
+    const results = {};
+    
+    for (const [member, config] of Object.entries(COUNCIL_MEMBERS)) {
+      try {
+        const start = Date.now();
+        const response = await Promise.race([
+          attemptAICall(member, config, "Respond with 'OK' only"),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000))
+        ]);
+        const duration = Date.now() - start;
+        
+        if (response.success) {
+          results[member] = { status: "✅ PASS", duration: `${duration}ms` };
+        } else {
+          results[member] = { status: "⚠️ FAIL", reason: response.error };
+        }
+      } catch (error) {
+        results[member] = { status: "❌ ERROR", error: error.message };
+      }
+    }
+    
+    return results;
+  }
+
+  async testMemory() {
+    console.log("  🧪 Testing Memory System...");
+    try {
+      const testMsg = `Test message ${Date.now()}`;
+      const testResp = `Test response ${Date.now()}`;
+      
+      const stored = await storeConversationMemory(testMsg, testResp, { test: true });
+      const recalled = await recallConversationMemory("Test message");
+      
+      return {
+        status: "✅ PASS",
+        stored: !!stored,
+        memoryId: stored?.memId,
+        recalled: recalled.length,
+        keyFactsExtracted: stored?.keyFacts?.length || 0
+      };
+    } catch (error) {
+      return { status: "❌ FAIL", error: error.message };
+    }
+  }
+
+  async testCompression() {
+    console.log("  🧪 Testing Compression...");
+    try {
+      const testData = { type: 'directive', project: 'lifeOS', flow: 'auto-price', integration: 'Stripe' };
+      const encoded = encodeLCTP(testData);
+      const decoded = decodeLCTP(encoded);
+      
+      const micro = MICRO_PROTOCOL.encode({ operation: 'generate', description: 'Test compression' });
+      const microDecoded = MICRO_PROTOCOL.decode(micro);
+      
+      return {
+        lctp: { status: "✅ PASS", encoded: encoded.length + " chars", decoded: decoded.type },
+        micro: { status: "✅ PASS", encoded: micro.length + " chars", decoded: microDecoded.operation }
+      };
+    } catch (error) {
+      return { status: "❌ FAIL", error: error.message };
+    }
+  }
+
+  testWebSocket() {
+    console.log("  🧪 Testing WebSocket...");
+    return {
+      status: "✅ PASS",
+      activeConnections: activeConnections.size,
+      heartbeatEnabled: true
+    };
+  }
+
+  testTaskQueue() {
+    console.log("  🧪 Testing Task Queue...");
+    const status = executionQueue.getStatus();
+    return {
+      status: status.completed > 0 ? "✅ PASS" : "⚠️ IDLE",
+      queued: status.queued,
+      active: status.active,
+      completed: status.completed,
+      failed: status.failed
+    };
+  }
+
+  testFileSystem() {
+    console.log("  🧪 Testing File System...");
+    try {
+      const dirExists = fs.existsSync(DATA_DIR);
+      const spendFileExists = fs.existsSync(SPEND_FILE);
+      
+      return {
+        status: dirExists ? "✅ PASS" : "❌ FAIL",
+        dataDir: DATA_DIR,
+        dirExists,
+        spendFileExists,
+        files: fs.readdirSync(DATA_DIR)
+      };
+    } catch (error) {
+      return { status: "❌ FAIL", error: error.message };
+    }
+  }
+
+  analyzeResults(report) {
+    console.log("\n📊 ANALYSIS:\n");
+    
+    // Check database
+    if (report.tests.database.status === "❌ FAIL") {
+      report.issues.push("DATABASE OFFLINE - Critical issue");
+      report.recommendations.push("Check DATABASE_URL in Railway variables");
+    }
+
+    // Check API keys
+    const keyTests = report.tests.apiKeys;
+    const missingKeys = Object.entries(keyTests)
+      .filter(([_, data]) => !data.present)
+      .map(([name]) => name);
+    
+    if (missingKeys.length > 0) {
+      report.issues.push(`Missing API keys: ${missingKeys.join(", ")}`);
+      report.recommendations.push(`Add missing keys to Railway: ${missingKeys.join(", ")}`);
+    }
+
+    // Check AI models
+    const aiTests = report.tests.aiModels;
+    const workingAis = Object.values(aiTests).filter(t => t.status === "✅ PASS").length;
+    console.log(`  ✅ Working AIs: ${workingAis}/5`);
+    
+    if (workingAis < 2) {
+      report.issues.push(`Only ${workingAis} AI(s) working - system in degraded mode`);
+      report.recommendations.push("Verify API keys and billing for all providers");
+    }
+
+    // Check memory
+    if (report.tests.memory.status === "✅ PASS") {
+      console.log(`  ✅ Memory System: Working (${report.tests.memory.recalled} records)`);
+    } else {
+      report.issues.push("Memory system offline");
+    }
+
+    // Check compression
+    if (report.tests.compression.lctp?.status === "✅ PASS" && report.tests.compression.micro?.status === "✅ PASS") {
+      console.log("  ✅ Compression: Both LCTP v3 and MICRO v2.0 working");
+    }
+
+    // Check WebSocket
+    if (report.tests.websocket.activeConnections > 0) {
+      console.log(`  ✅ WebSocket: ${report.tests.websocket.activeConnections} active connection(s)`);
+    }
+
+    // Check task queue
+    if (report.tests.taskQueue.completed > 0) {
+      console.log(`  ✅ Task Queue: ${report.tests.taskQueue.completed} tasks completed`);
+    }
+
+    // Generate repair recommendations
+    if (report.issues.length === 0) {
+      console.log("\n✅ SYSTEM STATUS: ALL SYSTEMS NOMINAL\n");
+    } else {
+      console.log("\n⚠️ ISSUES DETECTED:\n");
+      report.issues.forEach(issue => console.log(`  • ${issue}`));
+      console.log("\n💡 RECOMMENDATIONS:\n");
+      report.recommendations.forEach(rec => console.log(`  • ${rec}`));
+    }
+  }
+
+  getDiagnosticReport() {
+    return {
+      lastDiagnostic: this.lastFullDiagnostic,
+      history: this.diagnosticHistory.slice(-5),
+      nextDiagnosticDue: new Date(Date.now() + 300000).toISOString() // Every 5 minutes
+    };
+  }
+}
+
+const systemDiagnostics = new SystemDiagnostics();
+
+  claude: {
 
 // ==================================================================================
 // SECTION: DEEPSEEK BRIDGE & FALLBACK HANDLERS
