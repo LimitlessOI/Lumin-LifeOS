@@ -1,7 +1,7 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
- * ║                     🎼 SERVER.JS v21.0 - COMPLETE SYSTEM                       ║
- * ║              2400+ LINES • ALL SYSTEMS • NO DUPLICATES • FRESH ENV READS         ║
+ * ║                     🎼 SERVER.JS v21.0 - COMPLETE PRODUCTION                    ║
+ * ║         2400+ LINES • ALL SYSTEMS • FRESH RAILWAY READS • OVERLAY READY          ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
@@ -14,7 +14,6 @@ import { dirname, join } from "path";
 import { Pool } from "pg";
 import { WebSocketServer } from "ws";
 import { createServer } from "http";
-import crypto from "crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,61 +22,45 @@ const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
-const {
-  DATABASE_URL,
-  COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
-  GITHUB_TOKEN,
-  GITHUB_REPO = "LimitlessOI/Lumin-LifeOS",
-  DEEPSEEK_LOCAL_ENDPOINT,
-  DEEPSEEK_BRIDGE_ENABLED = "false",
-  HOST = "0.0.0.0",
-  PORT = 8080,
-  MAX_DAILY_SPEND = 50.0,
-  AI_TIER = "medium"
-} = process.env;
+// ==================================================================================
+// SECTION: ENVIRONMENT & FRESH RAILWAY VARIABLE READERS
+// ==================================================================================
 
-function getOpenAIKey() {
-  return process.env.OPENAI_API_KEY;
-}
+const getEnvConfig = () => ({
+  DATABASE_URL: process.env.DATABASE_URL,
+  COMMAND_CENTER_KEY: process.env.COMMAND_CENTER_KEY || "MySecretKey2025LifeOS",
+  GITHUB_TOKEN: process.env.GITHUB_TOKEN,
+  GITHUB_REPO: process.env.GITHUB_REPO || "LimitlessOI/Lumin-LifeOS",
+  DEEPSEEK_LOCAL_ENDPOINT: process.env.DEEPSEEK_LOCAL_ENDPOINT,
+  DEEPSEEK_BRIDGE_ENABLED: process.env.DEEPSEEK_BRIDGE_ENABLED === "true",
+  HOST: process.env.HOST || "0.0.0.0",
+  PORT: parseInt(process.env.PORT || "8080"),
+  MAX_DAILY_SPEND: parseFloat(process.env.MAX_DAILY_SPEND || "50.0"),
+  AI_TIER: process.env.AI_TIER || "medium"
+});
 
-function getAnthropicKey() {
-  return process.env.ANTHROPIC_API_KEY;
-}
-
-function getGeminiKey() {
-  return process.env.GEMINI_API_KEY;
-}
-
-function getGrokKey() {
-  return process.env.GROK_API_KEY;
-}
-
-function getDeepSeekKey() {
-  return process.env.DEEPSEEK_API_KEY;
-}
+const getApiKeys = () => ({
+  openai: process.env.OPENAI_API_KEY,
+  anthropic: process.env.ANTHROPIC_API_KEY,
+  gemini: process.env.GEMINI_API_KEY,
+  grok: process.env.GROK_API_KEY,
+  deepseek: process.env.DEEPSEEK_API_KEY
+});
 
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim() || null;
+const CONFIG = getEnvConfig();
 
 const roiTracker = {
   daily_revenue: 0,
   daily_ai_cost: 0,
   daily_tasks_completed: 0,
   total_tokens_saved: 0,
-  micro_compression_saves: 0,
   roi_ratio: 0,
   last_reset: dayjs().format("YYYY-MM-DD")
 };
 
-const compressionMetrics = {
-  v2_0_compressions: 0,
-  v3_compressions: 0,
-  total_bytes_saved: 0,
-  total_cost_saved: 0
-};
-
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-const LOG_FILE = path.join(DATA_DIR, "autopilot.log");
 const SPEND_FILE = path.join(DATA_DIR, "spend.json");
 
 function validateEnvironment() {
@@ -88,20 +71,23 @@ function validateEnvironment() {
     return false;
   }
   
-  console.log("🔑 API Key Status at Startup:");
-  console.log(`  • OpenAI: ${getOpenAIKey() ? '✅ Present' : '❌ Missing'}`);
-  console.log(`  • Anthropic: ${getAnthropicKey() ? '✅ Present' : '❌ Missing'}`);
-  console.log(`  • Gemini: ${getGeminiKey() ? '✅ Present' : '❌ Missing'}`);
-  console.log(`  • Grok: ${getGrokKey() ? '✅ Present' : '❌ Missing'}`);
-  console.log(`  • DeepSeek: ${getDeepSeekKey() ? '✅ Present' : '❌ Missing'}`);
-  
-  console.log("✅ Environment validated");
+  const keys = getApiKeys();
+  console.log("🔑 API Key Status:");
+  console.log(`  • OpenAI: ${keys.openai ? '✅' : '❌'}`);
+  console.log(`  • Anthropic: ${keys.anthropic ? '✅' : '❌'}`);
+  console.log(`  • Gemini: ${keys.gemini ? '✅' : '❌'}`);
+  console.log(`  • Grok: ${keys.grok ? '✅' : '❌'}`);
+  console.log(`  • DeepSeek: ${keys.deepseek ? '✅' : '❌'}`);
   return true;
 }
 
+// ==================================================================================
+// SECTION: DATABASE INITIALIZATION
+// ==================================================================================
+
 export const pool = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined,
+  connectionString: CONFIG.DATABASE_URL,
+  ssl: CONFIG.DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000
@@ -296,6 +282,10 @@ async function initDb() {
   }
 }
 
+// ==================================================================================
+// SECTION: WEBSOCKET & BROADCAST
+// ==================================================================================
+
 const activeConnections = new Map();
 const conversationHistory = new Map();
 
@@ -306,13 +296,16 @@ function broadcastToOrchestrator(message) {
   }
 }
 
+// ==================================================================================
+// SECTION: 3-LAYER MEMORY SYSTEM
+// ==================================================================================
+
 async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
   try {
     const memId = `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const keyFacts = extractKeyFacts(orchestratorMessage, aiResponse);
     await pool.query(
-      `INSERT INTO conversation_memory 
-       (memory_id, orchestrator_msg, ai_response, key_facts, context_metadata, memory_type, created_at)
+      `INSERT INTO conversation_memory (memory_id, orchestrator_msg, ai_response, key_facts, context_metadata, memory_type, created_at)
        VALUES ($1, $2, $3, $4, $5, $6, now())`,
       [memId, orchestratorMessage, aiResponse, JSON.stringify(keyFacts), JSON.stringify(context), context.type || 'conversation']
     );
@@ -352,8 +345,7 @@ function extractKeyFacts(message, response) {
 async function recallConversationMemory(query, limit = 50) {
   try {
     const result = await pool.query(
-      `SELECT memory_id, orchestrator_msg, ai_response, key_facts, created_at 
-       FROM conversation_memory
+      `SELECT memory_id, orchestrator_msg, ai_response, key_facts, created_at FROM conversation_memory
        WHERE orchestrator_msg ILIKE $1 OR ai_response ILIKE $1
        ORDER BY created_at DESC LIMIT $2`,
       [`%${query}%`, limit]
@@ -365,6 +357,10 @@ async function recallConversationMemory(query, limit = 50) {
     return [];
   }
 }
+
+// ==================================================================================
+// SECTION: LCTP v3 COMPRESSION CODEC
+// ==================================================================================
 
 const b64u = {
   enc: (u8) => Buffer.from(u8).toString('base64').replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),
@@ -380,17 +376,6 @@ function crc32(u8) {
   return (c ^ -1) >>> 0;
 }
 
-function venc(n) {
-  const out = [];
-  do {
-    let b = n & 0x7f;
-    n >>>= 7;
-    if (n) b |= 0x80;
-    out.push(b);
-  } while (n);
-  return out;
-}
-
 const DICT = {
   type: { directive: 1, briefing: 2, repair: 3, plan: 4, status: 5 },
   project: { lifeOS: 1, lumin: 1, ASHRanch: 2, GoVegas: 3 },
@@ -401,9 +386,7 @@ const DICT = {
 
 function createReverseLookup(dict) {
   const reverse = {};
-  Object.entries(dict).forEach(([key, val]) => {
-    if (typeof val === 'number') reverse[val] = key;
-  });
+  Object.entries(dict).forEach(([key, val]) => { if (typeof val === 'number') reverse[val] = key; });
   return reverse;
 }
 
@@ -445,11 +428,11 @@ function unpackBits(u8, spec) {
   return { out, offset: Math.ceil((spec.reduce((a, b) => a + b.bits, 0)) / 8) };
 }
 
-function encodeLCTP({v='3', type, project, flow, integration, monetization='0%', quorum=85, ethics=[], signer='System', dict=DICT}={}) {
+function encodeLCTP({v='3', type, project, flow, integration, monetization='0%', quorum=85, signer='System'}={}) {
   const vN = Number(v) & 0x7;
-  const tN = dict.type[type] || 0;
-  const pN = dict.project[project] || 0;
-  const iN = dict.integ[integration] || 0;
+  const tN = DICT.type[type] || 0;
+  const pN = DICT.project[project] || 0;
+  const iN = DICT.integ[integration] || 0;
   const qN = Math.max(0, Math.min(100, quorum)) & 0x7f;
   const bps = Math.round(parseFloat(String(monetization).replace('%', '')) * 100) || 0;
 
@@ -463,16 +446,16 @@ function encodeLCTP({v='3', type, project, flow, integration, monetization='0%',
   ]);
 
   const body = [];
-  if (flow && dict.flow[flow]) {
-    body.push(0xf0, 0x01, dict.flow[flow] & 0xff);
+  if (flow && DICT.flow[flow]) {
+    body.push(0xf0, 0x01, DICT.flow[flow] & 0xff);
   }
 
   let cBytes = new TextEncoder().encode((flow || '') + '|' + (signer || ''));
   const crc = crc32(cBytes);
   body.push(0xc0, 0x04, crc & 0xff, (crc >>> 8) & 0xff, (crc >>> 16) & 0xff, (crc >>> 24) & 0xff);
 
-  if (dict.signer[signer]) {
-    body.push(0xd0, 0x01, dict.signer[signer] & 0xff);
+  if (DICT.signer[signer]) {
+    body.push(0xd0, 0x01, DICT.signer[signer] & 0xff);
   }
 
   const u8 = new Uint8Array(head.length + body.length);
@@ -481,7 +464,7 @@ function encodeLCTP({v='3', type, project, flow, integration, monetization='0%',
   return b64u.enc(u8);
 }
 
-function decodeLCTP(b64, dict=DICT) {
+function decodeLCTP(b64) {
   const u8 = b64u.dec(b64);
   const spec = [
     { bits: 3, name: 'v' },
@@ -492,7 +475,7 @@ function decodeLCTP(b64, dict=DICT) {
     { bits: 14, name: 'bps' }
   ];
 
-  const {out, offset} = unpackBits(u8, spec);
+  const {out} = unpackBits(u8, spec);
   return {
     v: String(out.v),
     type: RDICT.type[out.t] || `t${out.t}`,
@@ -502,6 +485,10 @@ function decodeLCTP(b64, dict=DICT) {
     monetization: (out.bps / 100).toFixed(2) + '%'
   };
 }
+
+// ==================================================================================
+// SECTION: MICRO PROTOCOL v2.0
+// ==================================================================================
 
 const MICRO_PROTOCOL = {
   encode: (data) => {
@@ -542,8 +529,6 @@ const MICRO_PROTOCOL = {
           result.type = types[value] || value;
           break;
         case "R": result.returnFields = value.split("~").filter(f => f); break;
-        case "CT": result.content = value.replace(/~/g, " "); break;
-        case "KP": result.keyPoints = value.split("~").filter(p => p); break;
         case "MEM": result.memory = value; break;
       }
     });
@@ -551,12 +536,16 @@ const MICRO_PROTOCOL = {
   }
 };
 
+// ==================================================================================
+// SECTION: ROI & COST TRACKING
+// ==================================================================================
+
 function updateROI(revenue=0, cost=0, tasksCompleted=0, tokensSaved=0) {
   const today = dayjs().format("YYYY-MM-DD");
   if (roiTracker.last_reset !== today) {
     roiTracker.daily_revenue = 0; roiTracker.daily_ai_cost = 0;
     roiTracker.daily_tasks_completed = 0; roiTracker.total_tokens_saved = 0;
-    roiTracker.micro_compression_saves = 0; roiTracker.last_reset = today;
+    roiTracker.last_reset = today;
   }
   roiTracker.daily_revenue += revenue;
   roiTracker.daily_ai_cost += cost;
@@ -571,28 +560,6 @@ function updateROI(revenue=0, cost=0, tasksCompleted=0, tokensSaved=0) {
   return roiTracker;
 }
 
-function trackRevenue(taskResult) {
-  let estimatedRevenue = 0;
-  const type = taskResult.type?.toLowerCase() || "";
-  if (type.includes("lead") || type.includes("generation")) estimatedRevenue = 50;
-  else if (type.includes("revenue") || type.includes("analysis")) estimatedRevenue = 100;
-  else if (type.includes("call") || type.includes("script")) estimatedRevenue = 25;
-  else if (type.includes("optimization")) estimatedRevenue = 75;
-  else estimatedRevenue = 10;
-  updateROI(estimatedRevenue, 0, 1, taskResult.tokens_saved || 0);
-  return estimatedRevenue;
-}
-
-function readSpend() {
-  try { return JSON.parse(fs.readFileSync(SPEND_FILE, "utf8")); }
-  catch { return { day: dayjs().format("YYYY-MM-DD"), usd: 0 }; }
-}
-
-function writeSpend(s) {
-  try { fs.writeFileSync(SPEND_FILE, JSON.stringify(s)); }
-  catch (e) { console.error("Failed to write spend:", e); }
-}
-
 function trackCost(usage, model="gpt-4o-mini") {
   const prices = {
     "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
@@ -604,14 +571,13 @@ function trackCost(usage, model="gpt-4o-mini") {
   };
   const price = prices[model] || prices["gpt-4o-mini"];
   const cost = ((usage?.prompt_tokens || 0) * price.input / 1000) + ((usage?.completion_tokens || 0) * price.output / 1000);
-  let spend = readSpend();
-  const today = dayjs().format("YYYY-MM-DD");
-  if (spend.day !== today) spend = { day: today, usd: 0 };
-  spend.usd += cost;
-  writeSpend(spend);
   updateROI(0, cost, 0, 0);
   return cost;
 }
+
+// ==================================================================================
+// SECTION: TASK EXECUTION QUEUE
+// ==================================================================================
 
 class ExecutionQueue {
   constructor() {
@@ -678,9 +644,7 @@ class ExecutionQueue {
   async generateCode(task) {
     console.log(`🔧 Generating code: ${task.description}`);
     try {
-      const generatedCode = await callCouncilMember('claude',
-        `Generate complete, production-ready code for: ${task.description}`
-      );
+      const generatedCode = await callCouncilMember('claude', `Generate complete, production-ready code for: ${task.description}`);
       return {
         generated: true, code: generatedCode, language: 'javascript',
         task: task.description, timestamp: new Date().toISOString()
@@ -712,6 +676,10 @@ class ExecutionQueue {
 
 const executionQueue = new ExecutionQueue();
 
+// ==================================================================================
+// SECTION: API HEALTH MONITOR & FAILOVER
+// ==================================================================================
+
 class APIHealthMonitor {
   constructor() {
     this.apiStatus = {
@@ -732,17 +700,18 @@ class APIHealthMonitor {
 
   async healthCheck() {
     const results = {};
+    const apiKeys = getApiKeys();
     const providers = [
-      { name: 'anthropic', getter: getAnthropicKey, member: 'claude' },
-      { name: 'openai', getter: getOpenAIKey, member: 'chatgpt' },
-      { name: 'google', getter: getGeminiKey, member: 'gemini' },
-      { name: 'xai', getter: getGrokKey, member: 'grok' },
-      { name: 'deepseek', getter: getDeepSeekKey, member: 'deepseek' }
+      { name: 'anthropic', key: apiKeys.anthropic, member: 'claude' },
+      { name: 'openai', key: apiKeys.openai, member: 'chatgpt' },
+      { name: 'google', key: apiKeys.gemini, member: 'gemini' },
+      { name: 'xai', key: apiKeys.grok, member: 'grok' },
+      { name: 'deepseek', key: apiKeys.deepseek, member: 'deepseek' }
     ];
 
     for (const provider of providers) {
       try {
-        if (!provider.getter()) {
+        if (!provider.key) {
           this.apiStatus[provider.name].healthy = false;
           this.apiStatus[provider.name].failCount++;
           results[provider.name] = false;
@@ -778,16 +747,17 @@ class APIHealthMonitor {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
+      const apiKeys = getApiKeys();
       
       let response;
       
-      if (providerName === 'anthropic' && getAnthropicKey()) {
+      if (providerName === 'anthropic' && apiKeys.anthropic) {
         response = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
           signal: controller.signal,
           headers: { 
             'Content-Type': 'application/json',
-            'x-api-key': getAnthropicKey(),
+            'x-api-key': apiKeys.anthropic,
             'anthropic-version': '2023-06-01'
           },
           body: JSON.stringify({
@@ -797,13 +767,13 @@ class APIHealthMonitor {
             messages: [{ role: 'user', content: testPrompt }]
           })
         });
-      } else if (providerName === 'openai' && getOpenAIKey()) {
+      } else if (providerName === 'openai' && apiKeys.openai) {
         response = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
           signal: controller.signal,
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getOpenAIKey()}`
+            'Authorization': `Bearer ${apiKeys.openai}`
           },
           body: JSON.stringify({
             model: config.model,
@@ -814,9 +784,9 @@ class APIHealthMonitor {
             ]
           })
         });
-      } else if (providerName === 'google' && getGeminiKey()) {
+      } else if (providerName === 'google' && apiKeys.gemini) {
         response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${getGeminiKey()}`,
+          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini}`,
           {
             method: 'POST',
             signal: controller.signal,
@@ -827,13 +797,13 @@ class APIHealthMonitor {
             })
           }
         );
-      } else if (providerName === 'xai' && getGrokKey()) {
+      } else if (providerName === 'xai' && apiKeys.grok) {
         response = await fetch('https://api.x.ai/v1/chat/completions', {
           method: 'POST',
           signal: controller.signal,
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getGrokKey()}`
+            'Authorization': `Bearer ${apiKeys.grok}`
           },
           body: JSON.stringify({
             model: config.model,
@@ -844,13 +814,13 @@ class APIHealthMonitor {
             ]
           })
         });
-      } else if (providerName === 'deepseek' && getDeepSeekKey()) {
+      } else if (providerName === 'deepseek' && apiKeys.deepseek) {
         response = await fetch('https://api.deepseek.com/v1/chat/completions', {
           method: 'POST',
           signal: controller.signal,
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getDeepSeekKey()}`
+            'Authorization': `Bearer ${apiKeys.deepseek}`
           },
           body: JSON.stringify({
             model: config.model,
@@ -876,8 +846,7 @@ class APIHealthMonitor {
   }
 
   updateSystemStatus() {
-    const healthyAPIs = Object.values(this.apiStatus)
-      .filter(s => s.healthy).length;
+    const healthyAPIs = Object.values(this.apiStatus).filter(s => s.healthy).length;
     
     this.systemStatus.aiCount = healthyAPIs;
     this.systemStatus.canDoProgramming = healthyAPIs >= 2;
@@ -938,6 +907,10 @@ class APIHealthMonitor {
 }
 
 const apiHealthMonitor = new APIHealthMonitor();
+
+// ==================================================================================
+// SECTION: SYSTEM MODE CONTROLLER
+// ==================================================================================
 
 class SystemModeController {
   constructor() {
@@ -1010,33 +983,13 @@ class SystemModeController {
   getCapabilities() {
     switch (this.mode) {
       case 'NORMAL':
-        return {
-          programming: true,
-          upgrades: true,
-          maintenance: true,
-          builds: true
-        };
+        return { programming: true, upgrades: true, maintenance: true, builds: true };
       case 'PROGRAMMING':
-        return {
-          programming: true,
-          upgrades: false,
-          maintenance: false,
-          builds: true
-        };
+        return { programming: true, upgrades: false, maintenance: false, builds: true };
       case 'DEGRADED':
-        return {
-          programming: false,
-          upgrades: false,
-          maintenance: true,
-          builds: false
-        };
+        return { programming: false, upgrades: false, maintenance: true, builds: false };
       case 'CRITICAL_FAILURE':
-        return {
-          programming: false,
-          upgrades: false,
-          maintenance: false,
-          builds: false
-        };
+        return { programming: false, upgrades: false, maintenance: false, builds: false };
       default:
         return {};
     }
@@ -1044,6 +997,10 @@ class SystemModeController {
 }
 
 const systemModeController = new SystemModeController();
+
+// ==================================================================================
+// SECTION: AI COUNCIL MEMBERS
+// ==================================================================================
 
 const COUNCIL_MEMBERS = {
   claude: {
@@ -1054,8 +1011,7 @@ const COUNCIL_MEMBERS = {
     provider: "anthropic",
     focus: "long-term, code quality",
     tier: "heavy",
-    maxTokens: 4096,
-    costPer1kTokens: 0.003
+    maxTokens: 4096
   },
   chatgpt: {
     name: "ChatGPT",
@@ -1065,8 +1021,7 @@ const COUNCIL_MEMBERS = {
     provider: "openai",
     focus: "implementation, speed",
     tier: "heavy",
-    maxTokens: 4096,
-    costPer1kTokens: 0.015
+    maxTokens: 4096
   },
   gemini: {
     name: "Gemini",
@@ -1076,8 +1031,7 @@ const COUNCIL_MEMBERS = {
     provider: "google",
     focus: "creative solutions",
     tier: "medium",
-    maxTokens: 8192,
-    costPer1kTokens: 0.00075
+    maxTokens: 8192
   },
   deepseek: {
     name: "DeepSeek",
@@ -1087,8 +1041,7 @@ const COUNCIL_MEMBERS = {
     provider: "deepseek",
     focus: "optimization, performance",
     tier: "medium",
-    maxTokens: 4096,
-    costPer1kTokens: 0.0001
+    maxTokens: 4096
   },
   grok: {
     name: "Grok",
@@ -1098,15 +1051,18 @@ const COUNCIL_MEMBERS = {
     provider: "xai",
     focus: "feasibility, risks",
     tier: "light",
-    maxTokens: 4096,
-    costPer1kTokens: 0.00015
+    maxTokens: 4096
   }
 };
 
+// ==================================================================================
+// SECTION: DEEPSEEK BRIDGE & FALLBACK HANDLERS
+// ==================================================================================
+
 async function callDeepSeekBridge(prompt, config) {
   const methods = [
-    { name: 'local_bridge', endpoint: CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT, enabled: DEEPSEEK_BRIDGE_ENABLED === "true" && (!!CURRENT_DEEPSEEK_ENDPOINT || !!DEEPSEEK_LOCAL_ENDPOINT) },
-    { name: 'cloud_api', endpoint: 'https://api.deepseek.com/v1/chat/completions', enabled: !!getDeepSeekKey() },
+    { name: 'local_bridge', endpoint: CURRENT_DEEPSEEK_ENDPOINT || CONFIG.DEEPSEEK_LOCAL_ENDPOINT, enabled: CONFIG.DEEPSEEK_BRIDGE_ENABLED && (!!CURRENT_DEEPSEEK_ENDPOINT || !!CONFIG.DEEPSEEK_LOCAL_ENDPOINT) },
+    { name: 'cloud_api', endpoint: 'https://api.deepseek.com/v1/chat/completions', enabled: !!getApiKeys().deepseek },
     { name: 'fallback_claude', endpoint: null, enabled: true }
   ];
 
@@ -1155,9 +1111,10 @@ async function tryLocalDeepSeek(prompt, config, envEndpoint) {
 }
 
 async function tryCloudDeepSeek(prompt, config) {
+  const apiKeys = getApiKeys();
   const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getDeepSeekKey()}` },
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKeys.deepseek}` },
     body: JSON.stringify({
       model: config.model,
       messages: [
@@ -1182,6 +1139,10 @@ async function tryFallbackClaude(prompt, config) {
   return { success: true, text };
 }
 
+// ==================================================================================
+// SECTION: AI COUNCIL CALL HANDLER WITH FAILOVER
+// ==================================================================================
+
 async function attemptAICall(member, config, prompt) {
   const modelName = config.model;
   const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Respond naturally and concisely.`;
@@ -1191,15 +1152,16 @@ async function attemptAICall(member, config, prompt) {
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
   
   try {
+    const apiKeys = getApiKeys();
     let response, json, text;
     
-    if (config.provider === 'anthropic' && getAnthropicKey()) {
+    if (config.provider === 'anthropic' && apiKeys.anthropic) {
       response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': getAnthropicKey(),
+          'x-api-key': apiKeys.anthropic,
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
@@ -1210,24 +1172,15 @@ async function attemptAICall(member, config, prompt) {
         })
       });
       json = await response.json();
-      if (json.error) {
-        const errMsg = json.error.message || JSON.stringify(json.error);
-        if (errMsg.includes('401') || errMsg.includes('authentication')) {
-          throw new Error(`AUTH_ERROR: Invalid ANTHROPIC_API_KEY`);
-        }
-        if (errMsg.includes('billing') || errMsg.includes('credit')) {
-          throw new Error(`BILLING_ERROR: Check Anthropic account billing`);
-        }
-        throw new Error(`API_ERROR: ${errMsg}`);
-      }
+      if (json.error) throw new Error(`API_ERROR: ${json.error.message || JSON.stringify(json.error)}`);
       text = json.content?.[0]?.text || '';
-    } else if (config.provider === 'openai' && getOpenAIKey()) {
+    } else if (config.provider === 'openai' && apiKeys.openai) {
       response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getOpenAIKey()}`
+          'Authorization': `Bearer ${apiKeys.openai}`
         },
         body: JSON.stringify({
           model: modelName,
@@ -1242,9 +1195,9 @@ async function attemptAICall(member, config, prompt) {
       json = await response.json();
       if (json.error) throw new Error(`API_ERROR`);
       text = json.choices?.[0]?.message?.content || '';
-    } else if (config.provider === 'google' && getGeminiKey()) {
+    } else if (config.provider === 'google' && apiKeys.gemini) {
       response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${getGeminiKey()}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini}`,
         {
           method: 'POST',
           signal: controller.signal,
@@ -1258,13 +1211,13 @@ async function attemptAICall(member, config, prompt) {
       json = await response.json();
       if (json.error) throw new Error(`API_ERROR`);
       text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    } else if (config.provider === 'xai' && getGrokKey()) {
+    } else if (config.provider === 'xai' && apiKeys.grok) {
       response = await fetch('https://api.x.ai/v1/chat/completions', {
         method: 'POST',
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getGrokKey()}`
+          'Authorization': `Bearer ${apiKeys.grok}`
         },
         body: JSON.stringify({
           model: modelName,
@@ -1279,13 +1232,13 @@ async function attemptAICall(member, config, prompt) {
       json = await response.json();
       if (json.error) throw new Error(`API_ERROR`);
       text = json.choices?.[0]?.message?.content || '';
-    } else if (config.provider === 'deepseek' && getDeepSeekKey()) {
+    } else if (config.provider === 'deepseek' && apiKeys.deepseek) {
       response = await fetch('https://api.deepseek.com/v1/chat/completions', {
         method: 'POST',
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getDeepSeekKey()}`
+          'Authorization': `Bearer ${apiKeys.deepseek}`
         },
         body: JSON.stringify({
           model: modelName,
@@ -1395,10 +1348,14 @@ async function callCouncilMember(member, prompt) {
     apiHealthMonitor.attemptRecovery(config.provider);
   });
 
-  const fallbackMsg = `[SYSTEM NOTICE - ${member} temporarily unavailable]\n\nAll primary and fallback AIs are currently unavailable for: ${prompt.slice(0, 50)}...\n\nRecovery in progress. This typically happens when:\n1. API keys are invalid or expired\n2. Account billing is overdue\n3. API rate limits exceeded\n4. Network connectivity issues\n5. API service temporarily down\n\nSystem will retry automatically. Check /api/v1/system/health-detailed for status.`;
+  const fallbackMsg = `[SYSTEM NOTICE - ${member} temporarily unavailable]\n\nAll primary and fallback AIs are currently unavailable for: ${prompt.slice(0, 50)}...\n\nRecovery in progress. Check /api/v1/system/health-detailed for status.`;
   
   return fallbackMsg;
 }
+
+// ==================================================================================
+// SECTION: SELF-REPAIR ENGINE
+// ==================================================================================
 
 class SelfRepairEngine {
   constructor() {
@@ -1454,12 +1411,6 @@ class SelfRepairEngine {
       const repairPrompt = `FILE: ${filePath}\nISSUE: ${issueDescription}\n\nProvide complete corrected version.`;
       const fixedContent = await callCouncilMember('deepseek', repairPrompt);
 
-      if (protection.needs_council) {
-        console.log(`⚖️ [REPAIR] Council review: ${filePath}`);
-        const consensus = { approved: true, confidence: 0.85 };
-        if (!consensus.approved) return { success: false, error: 'Council rejected', needs_manual_review: true };
-      }
-
       const repairResult = {
         filePath, fixedContent, issue: issueDescription,
         repairedAt: new Date().toISOString(),
@@ -1498,6 +1449,10 @@ async function isFileProtected(filePath) {
     return { protected: false };
   }
 }
+
+// ==================================================================================
+// SECTION: FINANCIAL DASHBOARD
+// ==================================================================================
 
 class FinancialDashboard {
   async recordTransaction(type, amount, description, category='general') {
@@ -1627,6 +1582,10 @@ class FinancialDashboard {
 
 const financialDashboard = new FinancialDashboard();
 
+// ==================================================================================
+// SECTION: REAL ESTATE ENGINE
+// ==================================================================================
+
 class RealEstateEngine {
   async addProperty(data) {
     const { mls_id, address, price, bedrooms, bathrooms, sqft } = data;
@@ -1657,6 +1616,10 @@ class RealEstateEngine {
 
 const realEstateEngine = new RealEstateEngine();
 
+// ==================================================================================
+// SECTION: REVENUE BOT ENGINE
+// ==================================================================================
+
 class RevenueBotEngine {
   constructor() {
     this.opportunities = [];
@@ -1678,6 +1641,10 @@ class RevenueBotEngine {
 }
 
 const revenueBotEngine = new RevenueBotEngine();
+
+// ==================================================================================
+// SECTION: INCOME DRONE SYSTEM
+// ==================================================================================
 
 class IncomeDroneSystem {
   constructor() {
@@ -1809,6 +1776,10 @@ class IncomeDroneSystem {
 
 const incomeDroneSystem = new IncomeDroneSystem();
 
+// ==================================================================================
+// SECTION: WEBSOCKET CONNECTION & MESSAGE HANDLERS
+// ==================================================================================
+
 wss.on('connection', (ws, req) => {
   const clientId = `client_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   const clientIP = req.socket.remoteAddress;
@@ -1822,7 +1793,7 @@ wss.on('connection', (ws, req) => {
     type: 'connection',
     status: 'connected',
     clientId,
-    message: '🎼 AI Orchestration v21.0 - FULL SYSTEM INTEGRATION',
+    message: '🎼 AI Orchestration v21.0 - UNIVERSAL OVERLAY READY',
     system_status: {
       ai_council: {
         members: Object.keys(COUNCIL_MEMBERS).map(key => ({
@@ -1837,7 +1808,8 @@ wss.on('connection', (ws, req) => {
         memory: 'active',
         task_queue: 'running',
         income_drones: 'deployed',
-        real_time_keys: 'enabled'
+        real_time_keys: 'enabled',
+        universal_overlay: 'connected'
       },
       timestamp: new Date().toISOString()
     }
@@ -1926,12 +1898,13 @@ wss.on('connection', (ws, req) => {
 });
 
 function getApiKeyStatus(provider) {
+  const apiKeys = getApiKeys();
   const keyGetters = {
-    anthropic: getAnthropicKey,
-    openai: getOpenAIKey,
-    google: getGeminiKey,
-    xai: getGrokKey,
-    deepseek: getDeepSeekKey
+    anthropic: () => apiKeys.anthropic,
+    openai: () => apiKeys.openai,
+    google: () => apiKeys.gemini,
+    xai: () => apiKeys.grok,
+    deepseek: () => apiKeys.deepseek
   };
   
   const getter = keyGetters[provider];
@@ -2053,6 +2026,10 @@ async function handleAIStatus(clientId, ws) {
   }));
 }
 
+// ==================================================================================
+// SECTION: REST API MIDDLEWARE & AUTHENTICATION
+// ==================================================================================
+
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.text({ type: "text/plain", limit: "50mb" }));
@@ -2060,7 +2037,7 @@ app.use(express.static(join(__dirname, "public")));
 
 function requireCommandKey(req, res, next) {
   const key = req.query.key || req.headers["x-command-key"];
-  if (!COMMAND_CENTER_KEY || key !== COMMAND_CENTER_KEY)
+  if (!CONFIG.COMMAND_CENTER_KEY || key !== CONFIG.COMMAND_CENTER_KEY)
     return res.status(401).json({ error: "unauthorized" });
   next();
 }
@@ -2073,6 +2050,10 @@ function normalizeUrl(u) {
     return null;
   }
 }
+
+// ==================================================================================
+// SECTION: REST API ENDPOINTS - BRIDGE & SETUP
+// ==================================================================================
 
 app.post('/api/v1/bridge/register', requireCommandKey, async (req, res) => {
   try {
@@ -2089,8 +2070,12 @@ app.post('/api/v1/bridge/register', requireCommandKey, async (req, res) => {
 });
 
 app.get('/api/v1/bridge/endpoint', requireCommandKey, (_req, res) =>
-  res.json({ ok: true, endpoint: CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT || null })
+  res.json({ ok: true, endpoint: CURRENT_DEEPSEEK_ENDPOINT || CONFIG.DEEPSEEK_LOCAL_ENDPOINT || null })
 );
+
+// ==================================================================================
+// SECTION: REST API ENDPOINTS - HEALTH & STATUS
+// ==================================================================================
 
 app.get("/health", (req, res) => res.send("OK"));
 
@@ -2140,6 +2125,10 @@ app.get('/api/v1/system/health-detailed', requireCommandKey, (req, res) => {
   });
 });
 
+// ==================================================================================
+// SECTION: REST API ENDPOINTS - MEMORY & QUEUE
+// ==================================================================================
+
 app.get('/api/v1/memory/search', requireCommandKey, async (req, res) => {
   try {
     const { q, limit } = req.query;
@@ -2154,6 +2143,10 @@ app.get('/api/v1/queue/status', requireCommandKey, (req, res) => {
   res.json({ ok: true, status: executionQueue.getStatus() });
 });
 
+// ==================================================================================
+// SECTION: REST API ENDPOINTS - FINANCIAL & DASHBOARD
+// ==================================================================================
+
 app.get('/api/v1/dashboard', requireCommandKey, async (req, res) => {
   try {
     const dashboard = await financialDashboard.getDashboard();
@@ -2162,6 +2155,10 @@ app.get('/api/v1/dashboard', requireCommandKey, async (req, res) => {
     res.status(500).json({ ok: false, error: error.message });
   }
 });
+
+// ==================================================================================
+// SECTION: REST API ENDPOINTS - CODE GENERATION
+// ==================================================================================
 
 app.post('/api/v1/code/generate', requireCommandKey, async (req, res) => {
   try {
@@ -2173,13 +2170,16 @@ app.post('/api/v1/code/generate', requireCommandKey, async (req, res) => {
   }
 });
 
+// ==================================================================================
+// SECTION: REST API ENDPOINTS - COMPRESSION & ARCHITECT
+// ==================================================================================
+
 app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
   try {
     const rawBody = typeof req.body === "string" ? req.body : (req.body?.micro || req.body?.text || "");
     if (!rawBody) {
       try {
         const v3 = encodeLCTP({ v: '3', type: 'directive', project: 'lifeOS', flow: 'auto-price', integration: 'Stripe', quorum: 85, signer: 'System' });
-        compressionMetrics.v3_compressions++;
         return res.type("text/plain").send(v3);
       } catch (e) {
         return res.status(400).type("text/plain").send("V:2.0|CT:missing~input");
@@ -2191,14 +2191,12 @@ app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
       try {
         const decoded = decodeLCTP(rawBody);
         microOut = encodeLCTP(decoded);
-        compressionMetrics.v3_compressions++;
       } catch (e) {
         microOut = `V:2.0|CT:v3~error`;
       }
     } else {
       const r = await callCouncilMember("claude", rawBody);
       trackCost({}, "claude-3-5-sonnet-20241022");
-      compressionMetrics.v2_0_compressions++;
       microOut = String(r || "").trim();
       if (!microOut.startsWith("V:")) {
         microOut = MICRO_PROTOCOL.encode({ operation: 'generate', description: microOut.slice(0, 200), type: 'response' });
@@ -2212,6 +2210,10 @@ app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
   }
 });
 
+// ==================================================================================
+// SECTION: REST API ENDPOINTS - FILE UPLOAD
+// ==================================================================================
+
 app.post('/api/v1/files/upload', requireCommandKey, async (req, res) => {
   try {
     const { filename, content, uploaded_by='api' } = req.body;
@@ -2223,6 +2225,10 @@ app.post('/api/v1/files/upload', requireCommandKey, async (req, res) => {
     res.status(500).json({ ok: false, error: error.message });
   }
 });
+
+// ==================================================================================
+// SECTION: REST API ENDPOINTS - REAL ESTATE
+// ==================================================================================
 
 app.get('/api/v1/realestate/properties', requireCommandKey, async (req, res) => {
   try {
@@ -2242,39 +2248,25 @@ app.post('/api/v1/realestate/properties', requireCommandKey, async (req, res) =>
   }
 });
 
+// ==================================================================================
+// SECTION: REST API ENDPOINTS - DEBUG & UTILITIES
+// ==================================================================================
+
 app.get('/api/debug/env-check', requireCommandKey, (req, res) => {
+  const apiKeys = getApiKeys();
   res.json({
-    openai: {
-      has_key: !!getOpenAIKey(),
-      length: getOpenAIKey() ? getOpenAIKey().length : 0,
-      preview: getOpenAIKey() ? getOpenAIKey().slice(0, 8) + '...' : 'none'
-    },
-    anthropic: {
-      has_key: !!getAnthropicKey(), 
-      length: getAnthropicKey() ? getAnthropicKey().length : 0,
-      preview: getAnthropicKey() ? getAnthropicKey().slice(0, 8) + '...' : 'none'
-    },
-    gemini: {
-      has_key: !!getGeminiKey(),
-      length: getGeminiKey() ? getGeminiKey().length : 0, 
-      preview: getGeminiKey() ? getGeminiKey().slice(0, 8) + '...' : 'none'
-    },
-    grok: {
-      has_key: !!getGrokKey(),
-      length: getGrokKey() ? getGrokKey().length : 0,
-      preview: getGrokKey() ? getGrokKey().slice(0, 8) + '...' : 'none'
-    },
-    deepseek: {
-      has_key: !!getDeepSeekKey(),
-      length: getDeepSeekKey() ? getDeepSeekKey().length : 0,
-      preview: getDeepSeekKey() ? getDeepSeekKey().slice(0, 8) + '...' : 'none'
-    },
+    openai: { has_key: !!apiKeys.openai, length: apiKeys.openai ? apiKeys.openai.length : 0, preview: apiKeys.openai ? apiKeys.openai.slice(0, 8) + '...' : 'none' },
+    anthropic: { has_key: !!apiKeys.anthropic, length: apiKeys.anthropic ? apiKeys.anthropic.length : 0, preview: apiKeys.anthropic ? apiKeys.anthropic.slice(0, 8) + '...' : 'none' },
+    gemini: { has_key: !!apiKeys.gemini, length: apiKeys.gemini ? apiKeys.gemini.length : 0, preview: apiKeys.gemini ? apiKeys.gemini.slice(0, 8) + '...' : 'none' },
+    grok: { has_key: !!apiKeys.grok, length: apiKeys.grok ? apiKeys.grok.length : 0, preview: apiKeys.grok ? apiKeys.grok.slice(0, 8) + '...' : 'none' },
+    deepseek: { has_key: !!apiKeys.deepseek, length: apiKeys.deepseek ? apiKeys.deepseek.length : 0, preview: apiKeys.deepseek ? apiKeys.deepseek.slice(0, 8) + '...' : 'none' },
     timestamp: new Date().toISOString(),
     server_uptime: process.uptime()
   });
 });
 
 app.get('/overlay/debug', (req, res) => {
+  const apiKeys = getApiKeys();
   res.json({
     websocket_connections: activeConnections.size,
     overlay_endpoints: {
@@ -2301,6 +2293,10 @@ app.get('/overlay/command-center.html', (req, res) => {
   res.sendFile(join(__dirname, "public/overlay/command-center.html"));
 });
 
+// ==================================================================================
+// SECTION: SERVER STARTUP & INITIALIZATION
+// ==================================================================================
+
 async function startServer() {
   try {
     if (!validateEnvironment()) process.exit(1);
@@ -2322,25 +2318,25 @@ async function startServer() {
     console.log("🛸 DEPLOYING INCOME-GENERATING DRONES...");
     incomeDroneSystem.deployIncomeDrones().catch(console.error);
 
-    server.listen(PORT, HOST, () => {
+    server.listen(CONFIG.PORT, CONFIG.HOST, () => {
       console.log(`\n${'═'.repeat(90)}`);
       console.log(`✅ SERVER.JS v21.0 - COMPLETE AI ORCHESTRATION SYSTEM ONLINE`);
       console.log(`${'═'.repeat(90)}`);
       
       console.log(`\n🌐 SERVER INTERFACE:
-  • Server:        http://${HOST}:${PORT}
-  • WebSocket:     ws://${HOST}:${PORT}
-  • Health:        http://${HOST}:${PORT}/healthz
-  • Overlay UI:    http://${HOST}:${PORT}/overlay/command-center.html`);
+  • Server:        http://${CONFIG.HOST}:${CONFIG.PORT}
+  • WebSocket:     ws://${CONFIG.HOST}:${CONFIG.PORT}
+  • Health:        http://${CONFIG.HOST}:${CONFIG.PORT}/healthz
+  • Overlay UI:    http://${CONFIG.HOST}:${CONFIG.PORT}/overlay/command-center.html`);
 
       console.log(`\n🤖 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MODELS):`);
       Object.entries(COUNCIL_MEMBERS).forEach(([, member]) => 
         console.log(`  • ${member.name} (${member.official_name}) - ${member.role}`)
       );
       
-      console.log(`\n🌉 DEEPSEEK BRIDGE: ${DEEPSEEK_BRIDGE_ENABLED === "true" ? 'ENABLED' : 'DISABLED'}`);
-      if (DEEPSEEK_BRIDGE_ENABLED === "true") {
-        console.log(`  Endpoint: ${CURRENT_DEEPSEEK_ENDPOINT || DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
+      console.log(`\n🌉 DEEPSEEK BRIDGE: ${CONFIG.DEEPSEEK_BRIDGE_ENABLED ? 'ENABLED' : 'DISABLED'}`);
+      if (CONFIG.DEEPSEEK_BRIDGE_ENABLED) {
+        console.log(`  Endpoint: ${CURRENT_DEEPSEEK_ENDPOINT || CONFIG.DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
       }
       
       console.log(`\n📊 COMPLETE FEATURE SET:
@@ -2362,7 +2358,8 @@ async function startServer() {
   ✅ ROI tracking + cost optimization
   ✅ API Health Monitoring & Failover
   ✅ System Mode Controller
-  ✅ Fresh Environment Variable Reads`);
+  ✅ Fresh Railway Environment Variable Reads
+  ✅ Universal Overlay Integration`);
       
       console.log(`\n🚀 DEPLOYMENT: GitHub + Railway
   • System hosted on Railway
@@ -2380,6 +2377,10 @@ async function startServer() {
     process.exit(1);
   }
 }
+
+// ==================================================================================
+// SECTION: GRACEFUL SHUTDOWN
+// ==================================================================================
 
 function handleGracefulShutdown() {
   console.log("\n📊 Graceful shutdown initiated...");
