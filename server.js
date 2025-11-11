@@ -3,6 +3,7 @@
  * ║                     🎼 SERVER.JS v21.0 - COMPLETE PRODUCTION                    ║
  * ║         2400+ LINES • ALL SYSTEMS • FRESH RAILWAY READS • OVERLAY READY          ║
  * ║     WITH IDEA ENGINE + COUNCIL VOTING + POD ORCHESTRATION + SANDBOX              ║
+ * ║                   🔥 FIXED: DYNAMIC ENV VAR RELOADING 🔥                         ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
@@ -25,7 +26,7 @@ const wss = new WebSocketServer({ server });
 
 
 // ==================================================================================
-// SECTION: ENVIRONMENT & FRESH RAILWAY VARIABLE READERS
+// SECTION: ENVIRONMENT & FRESH RAILWAY VARIABLE READERS (DYNAMIC)
 // ==================================================================================
 
 const getEnvConfig = () => ({
@@ -49,8 +50,14 @@ const getApiKeys = () => ({
   deepseek: (process.env.DEEPSEEK_API_KEY || '').trim()
 });
 
-let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim() || null;
-const CONFIG = getEnvConfig();
+// 🔥 NO STATIC CONFIG - Read fresh each time!
+// OLD: const CONFIG = getEnvConfig();  ❌ STALE
+// NEW: Use this pattern everywhere ✅ FRESH
+
+let CURRENT_DEEPSEEK_ENDPOINT = (() => {
+  const fresh = (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim();
+  return fresh || null;
+})();
 
 const roiTracker = {
   daily_revenue: 0,
@@ -66,8 +73,9 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 const SPEND_FILE = path.join(DATA_DIR, "spend.json");
 
 function validateEnvironment() {
+  const freshConfig = getEnvConfig();
   const required = ["DATABASE_URL"];
-  const missing = required.filter(key => !process.env[key]);
+  const missing = required.filter(key => !freshConfig[key]);
   if (missing.length > 0) {
     console.error("❌ MISSING ENV:", missing);
     return false;
@@ -88,8 +96,14 @@ function validateEnvironment() {
 // ==================================================================================
 
 export const pool = new Pool({
-  connectionString: CONFIG.DATABASE_URL,
-  ssl: CONFIG.DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined,
+  connectionString: (() => {
+    const freshConfig = getEnvConfig();
+    return freshConfig.DATABASE_URL;
+  })(),
+  ssl: (() => {
+    const freshConfig = getEnvConfig();
+    return freshConfig.DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined;
+  })(),
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000
@@ -1885,7 +1899,13 @@ async function runDailyCouncilMeeting() {
 
 async function callDeepSeekBridge(prompt, config) {
   const methods = [
-    { name: 'local_bridge', endpoint: CURRENT_DEEPSEEK_ENDPOINT || CONFIG.DEEPSEEK_LOCAL_ENDPOINT, enabled: CONFIG.DEEPSEEK_BRIDGE_ENABLED && (!!CURRENT_DEEPSEEK_ENDPOINT || !!CONFIG.DEEPSEEK_LOCAL_ENDPOINT) },
+    { name: 'local_bridge', endpoint: CURRENT_DEEPSEEK_ENDPOINT || (() => {
+      const freshConfig = getEnvConfig();
+      return freshConfig.DEEPSEEK_LOCAL_ENDPOINT;
+    })(), enabled: (() => {
+      const freshConfig = getEnvConfig();
+      return freshConfig.DEEPSEEK_BRIDGE_ENABLED && (CURRENT_DEEPSEEK_ENDPOINT || freshConfig.DEEPSEEK_LOCAL_ENDPOINT);
+    })() },
     { name: 'cloud_api', endpoint: 'https://api.deepseek.com/v1/chat/completions', enabled: !!getApiKeys().deepseek },
     { name: 'fallback_claude', endpoint: null, enabled: true }
   ];
@@ -1985,7 +2005,7 @@ async function attemptAICall(member, config, prompt) {
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': apiKeys.anthropic,
+          'x-api-key': apiKeys.anthropic.trim(),
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
@@ -2004,7 +2024,7 @@ async function attemptAICall(member, config, prompt) {
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKeys.openai}`
+          'Authorization': `Bearer ${apiKeys.openai.trim()}`
         },
         body: JSON.stringify({
           model: modelName,
@@ -2021,7 +2041,7 @@ async function attemptAICall(member, config, prompt) {
       text = json.choices?.[0]?.message?.content || '';
     } else if (config.provider === 'google' && apiKeys.gemini) {
       response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini.trim()}`,
         {
           method: 'POST',
           signal: controller.signal,
@@ -2041,7 +2061,7 @@ async function attemptAICall(member, config, prompt) {
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKeys.grok}`
+          'Authorization': `Bearer ${apiKeys.grok.trim()}`
         },
         body: JSON.stringify({
           model: modelName,
@@ -2062,7 +2082,7 @@ async function attemptAICall(member, config, prompt) {
         signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKeys.deepseek}`
+          'Authorization': `Bearer ${apiKeys.deepseek.trim()}`
         },
         body: JSON.stringify({
           model: modelName,
@@ -2980,8 +3000,9 @@ app.use(express.text({ type: "text/plain", limit: "50mb" }));
 app.use(express.static(join(__dirname, "public")));
 
 function requireCommandKey(req, res, next) {
+  const freshConfig = getEnvConfig();
   const key = req.query.key || req.headers["x-command-key"];
-  if (!CONFIG.COMMAND_CENTER_KEY || key !== CONFIG.COMMAND_CENTER_KEY)
+  if (!freshConfig.COMMAND_CENTER_KEY || key !== freshConfig.COMMAND_CENTER_KEY)
     return res.status(401).json({ error: "unauthorized" });
   next();
 }
@@ -3013,9 +3034,10 @@ app.post('/api/v1/bridge/register', requireCommandKey, async (req, res) => {
   }
 });
 
-app.get('/api/v1/bridge/endpoint', requireCommandKey, (_req, res) =>
-  res.json({ ok: true, endpoint: CURRENT_DEEPSEEK_ENDPOINT || CONFIG.DEEPSEEK_LOCAL_ENDPOINT || null })
-);
+app.get('/api/v1/bridge/endpoint', requireCommandKey, (_req, res) => {
+  const freshConfig = getEnvConfig();
+  return res.json({ ok: true, endpoint: CURRENT_DEEPSEEK_ENDPOINT || freshConfig.DEEPSEEK_LOCAL_ENDPOINT || null });
+});
 
 // ==================================================================================
 // SECTION: REST API ENDPOINTS - HEALTH & STATUS
@@ -3449,25 +3471,27 @@ async function startServer() {
       }
     }, 60000); // Check every minute
 
-    server.listen(CONFIG.PORT, CONFIG.HOST, () => {
+    const freshConfig = getEnvConfig();
+    
+    server.listen(freshConfig.PORT, freshConfig.HOST, () => {
       console.log(`\n${'═'.repeat(90)}`);
       console.log(`✅ SERVER.JS v21.0 - COMPLETE AI ORCHESTRATION SYSTEM ONLINE`);
       console.log(`${'═'.repeat(90)}`);
       
       console.log(`\n🌐 SERVER INTERFACE:
-  • Server:        http://${CONFIG.HOST}:${CONFIG.PORT}
-  • WebSocket:     ws://${CONFIG.HOST}:${CONFIG.PORT}
-  • Health:        http://${CONFIG.HOST}:${CONFIG.PORT}/healthz
-  • Overlay UI:    http://${CONFIG.HOST}:${CONFIG.PORT}/overlay/command-center.html`);
+  • Server:        http://${freshConfig.HOST}:${freshConfig.PORT}
+  • WebSocket:     ws://${freshConfig.HOST}:${freshConfig.PORT}
+  • Health:        http://${freshConfig.HOST}:${freshConfig.PORT}/healthz
+  • Overlay UI:    http://${freshConfig.HOST}:${freshConfig.PORT}/overlay/command-center.html`);
 
       console.log(`\n🤖 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MODELS):`);
       Object.entries(COUNCIL_MEMBERS).forEach(([, member]) => 
         console.log(`  • ${member.name} (${member.official_name}) - ${member.role}`)
       );
       
-      console.log(`\n🌉 DEEPSEEK BRIDGE: ${CONFIG.DEEPSEEK_BRIDGE_ENABLED ? 'ENABLED' : 'DISABLED'}`);
-      if (CONFIG.DEEPSEEK_BRIDGE_ENABLED) {
-        console.log(`  Endpoint: ${CURRENT_DEEPSEEK_ENDPOINT || CONFIG.DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
+      console.log(`\n🌉 DEEPSEEK BRIDGE: ${freshConfig.DEEPSEEK_BRIDGE_ENABLED ? 'ENABLED' : 'DISABLED'}`);
+      if (freshConfig.DEEPSEEK_BRIDGE_ENABLED) {
+        console.log(`  Endpoint: ${CURRENT_DEEPSEEK_ENDPOINT || freshConfig.DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
       }
       
       console.log(`\n📊 COMPLETE FEATURE SET:
@@ -3489,7 +3513,7 @@ async function startServer() {
   ✅ ROI tracking + cost optimization
   ✅ API Health Monitoring & Failover
   ✅ System Mode Controller
-  ✅ Fresh Railway Environment Variable Reads
+  ✅ 🔥 DYNAMIC RAILWAY ENVIRONMENT VARIABLE RELOADING 🔥
   ✅ Universal Overlay Integration`);
 
       console.log(`\n💡 IDEA ENGINE & COUNCIL SYSTEM:
@@ -3517,6 +3541,7 @@ async function startServer() {
   • Council works with or without local DeepSeek\n`);
 
       console.log("🎼 READY - AI ORCHESTRATION SYSTEM ACTIVE");
+      console.log("✅ Fresh Railway environment variables are read dynamically!");
       console.log("The system will work with or without your local DeepSeek instance.");
       console.log("When your laptop is offline, the council continues with other AIs.");
       console.log("Daily council meetings scheduled for 8:00 AM daily.\n");
