@@ -693,240 +693,218 @@ class ExecutionQueue {
 const executionQueue = new ExecutionQueue();
 
 // ==================================================================================
-// SECTION: API HEALTH MONITOR & FAILOVER
+// SECTION: AI COUNCIL CALL HANDLER WITH FAILOVER
 // ==================================================================================
 
-class APIHealthMonitor {
-  constructor() {
-    this.apiStatus = {
-      anthropic: { healthy: true, lastCheck: null, failCount: 0, provider: 'anthropic' },
-      openai: { healthy: true, lastCheck: null, failCount: 0, provider: 'openai' },
-      google: { healthy: true, lastCheck: null, failCount: 0, provider: 'google' },
-      xai: { healthy: true, lastCheck: null, failCount: 0, provider: 'xai' },
-      deepseek: { healthy: true, lastCheck: null, failCount: 0, provider: 'deepseek' }
-    };
-    this.systemStatus = {
-      aiCount: 5,
-      canDoProgramming: true,
-      canUpgrade: true,
-      maintenanceMode: false
-    };
-    this.recoveryTasks = [];
-  }
-
-  async healthCheck() {
-    const results = {};
+async function attemptAICall(member, config, prompt) {
+  const modelName = config.model;
+  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Respond naturally and concisely.`;
+  
+  const timeoutMs = 8000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  
+  try {
     const apiKeys = getApiKeys();
-    const providers = [
-      { name: 'anthropic', key: apiKeys.anthropic, member: 'claude' },
-      { name: 'openai', key: apiKeys.openai, member: 'chatgpt' },
-      { name: 'google', key: apiKeys.gemini, member: 'gemini' },
-      { name: 'xai', key: apiKeys.grok, member: 'grok' },
-      { name: 'deepseek', key: apiKeys.deepseek, member: 'deepseek' }
-    ];
-
-    for (const provider of providers) {
-      try {
-        if (!provider.key) {
-          this.apiStatus[provider.name].healthy = false;
-          this.apiStatus[provider.name].failCount++;
-          results[provider.name] = false;
-          continue;
+    let response, json, text;
+    
+    if (config.provider === 'anthropic' && apiKeys.anthropic) {
+      response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKeys.anthropic.trim(),
+          'anthropic-version': '2024-06-15'
+        },
+        body: JSON.stringify({
+          model: modelName,
+          max_tokens: config.maxTokens,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      json = await response.json();
+      if (json.error) throw new Error(`API_ERROR: ${json.error.message || JSON.stringify(json.error)}`);
+      text = json.content?.[0]?.text || '';
+    } else if (config.provider === 'openai' && apiKeys.openai) {
+      response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKeys.openai.trim()}`
+        },
+        body: JSON.stringify({
+          model: modelName,
+          temperature: 0.7,
+          max_tokens: config.maxTokens,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: prompt }
+          ]
+        })
+      });
+      json = await response.json();
+      if (json.error) throw new Error(`API_ERROR`);
+      text = json.choices?.[0]?.message?.content || '';
+    } else if (config.provider === 'google' && apiKeys.gemini) {
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini.trim()}`,
+        {
+          method: 'POST',
+          signal: controller.signal,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
+          })
         }
-
-        const isHealthy = await this.testAPI(provider.name, provider.member);
-        this.apiStatus[provider.name].healthy = isHealthy;
-        this.apiStatus[provider.name].lastCheck = new Date();
-        
-        if (!isHealthy) {
-          this.apiStatus[provider.name].failCount++;
-        } else {
-          this.apiStatus[provider.name].failCount = 0;
-        }
-        results[provider.name] = isHealthy;
-      } catch (error) {
-        this.apiStatus[provider.name].healthy = false;
-        this.apiStatus[provider.name].failCount++;
-        results[provider.name] = false;
-      }
+      );
+      json = await response.json();
+      if (json.error) throw new Error(`API_ERROR`);
+      text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    } else if (config.provider === 'xai' && apiKeys.grok) {
+      response = await fetch('https://api.x.ai/v1/chat/completions', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKeys.grok.trim()}`
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: prompt }
+          ],
+          max_tokens: config.maxTokens,
+          temperature: 0.7
+        })
+      });
+      json = await response.json();
+      if (json.error) throw new Error(`API_ERROR`);
+      text = json.choices?.[0]?.message?.content || '';
+    } else if (config.provider === 'deepseek' && apiKeys.deepseek) {
+      response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKeys.deepseek.trim()}`
+        },
+        body: JSON.stringify({
+          model: modelName,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: prompt }
+          ],
+          max_tokens: config.maxTokens,
+          temperature: 0.7
+        })
+      });
+      json = await response.json();
+      if (json.error) throw new Error(`API_ERROR`);
+      text = json.choices?.[0]?.message?.content || '';
     }
     
-    this.updateSystemStatus();
-    return results;
-  }
-
-  async testAPI(providerName, member) {
-    const config = COUNCIL_MEMBERS[member];
-    const testPrompt = "Respond with: OK";
-    const timeout = 5000;
+    clearTimeout(timeoutId);
     
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), timeout);
-      const apiKeys = getApiKeys();
-      
-      console.log(`  [DEBUG] Testing ${providerName} - Key length: ${providerName === 'anthropic' ? apiKeys.anthropic.length : providerName === 'openai' ? apiKeys.openai.length : providerName === 'google' ? apiKeys.gemini.length : providerName === 'xai' ? apiKeys.grok.length : apiKeys.deepseek.length}`);
-      
-      let response;
-      
-      if (providerName === 'anthropic' && apiKeys.anthropic) {
-        response = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKeys.anthropic.trim(),
-            'anthropic-version': '2023-06-01'
-          },
-          body: JSON.stringify({
-            model: config.model,
-            max_tokens: 10,
-            system: "Respond only with OK",
-            messages: [{ role: 'user', content: testPrompt }]
-          })
-        });
-      } else if (providerName === 'openai' && apiKeys.openai) {
-        response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKeys.openai.trim()}`
-          },
-          body: JSON.stringify({
-            model: config.model,
-            max_tokens: 10,
-            messages: [
-              { role: 'system', content: "Respond only with OK" },
-              { role: 'user', content: testPrompt }
-            ]
-          })
-        });
-      } else if (providerName === 'google' && apiKeys.gemini) {
-        response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini.trim()}`,
-          {
-            method: 'POST',
-            signal: controller.signal,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: testPrompt }] }],
-              generationConfig: { maxOutputTokens: 10 }
-            })
-          }
-        );
-      } else if (providerName === 'xai' && apiKeys.grok) {
-        response = await fetch('https://api.x.ai/v1/chat/completions', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKeys.grok.trim()}`
-          },
-          body: JSON.stringify({
-            model: config.model,
-            max_tokens: 10,
-            messages: [
-              { role: 'system', content: "Respond only with OK" },
-              { role: 'user', content: testPrompt }
-            ]
-          })
-        });
-      } else if (providerName === 'deepseek' && apiKeys.deepseek) {
-        response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-          method: 'POST',
-          signal: controller.signal,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKeys.deepseek.trim()}`
-          },
-          body: JSON.stringify({
-            model: config.model,
-            max_tokens: 10,
-            messages: [
-              { role: 'system', content: "Respond only with OK" },
-              { role: 'user', content: testPrompt }
-            ]
-          })
-        });
-      }
-      
-      clearTimeout(timeoutId);
-      const isOk = response?.ok === true;
-      if (!isOk) {
-        console.log(`⚠️ [HEALTH] ${providerName} returned status ${response?.status}`);
-      } else {
-        console.log(`✅ [HEALTH] ${providerName} OK`);
-      }
-      return isOk;
-    } catch (error) {
-      console.error(`❌ [HEALTH] ${providerName} test failed:`, error.message);
-      return false;
-    }
-  }
-
-  updateSystemStatus() {
-    const healthyAPIs = Object.values(this.apiStatus).filter(s => s.healthy).length;
-    
-    this.systemStatus.aiCount = healthyAPIs;
-    this.systemStatus.canDoProgramming = healthyAPIs >= 2;
-    this.systemStatus.canUpgrade = healthyAPIs >= 3;
-    this.systemStatus.maintenanceMode = healthyAPIs < 2;
-    
-    console.log(`\n📊 [HEALTH] Status: ${healthyAPIs}/5 APIs healthy`);
-    console.log(`  • Programming: ${this.systemStatus.canDoProgramming ? '✅ YES' : '❌ NO'}`);
-    console.log(`  • Upgrades: ${this.systemStatus.canUpgrade ? '✅ ALLOWED' : '❌ BLOCKED'}`);
-    console.log(`  • Mode: ${this.systemStatus.maintenanceMode ? 'MAINTENANCE' : 'NORMAL'}`);
-  }
-
-  getHealthyProviders() {
-    return Object.entries(this.apiStatus)
-      .filter(([_, status]) => status.healthy)
-      .map(([provider, _]) => provider);
-  }
-
-  async attemptRecovery(provider) {
-    console.log(`🔧 [RECOVERY] Attempting to restore ${provider}...`);
-    
-    const recoveryTask = {
-      provider,
-      startedAt: new Date().toISOString(),
-      attempts: 0,
-      maxAttempts: 5,
-      status: 'in_progress'
-    };
-    
-    this.recoveryTasks.push(recoveryTask);
-    
-    while (recoveryTask.attempts < recoveryTask.maxAttempts) {
-      recoveryTask.attempts++;
-      console.log(`  Attempt ${recoveryTask.attempts}/${recoveryTask.maxAttempts}...`);
-      
-      const healthResults = await this.healthCheck();
-      if (healthResults[provider]) {
-        recoveryTask.status = 'recovered';
-        console.log(`✅ [RECOVERY] ${provider} restored!`);
-        return true;
-      }
-      
-      await new Promise(r => setTimeout(r, 2000 * recoveryTask.attempts));
+    if (!text) {
+      return { success: false, error: 'Empty response from API' };
     }
     
-    recoveryTask.status = 'failed';
-    console.log(`❌ [RECOVERY] ${provider} recovery failed after ${recoveryTask.maxAttempts} attempts`);
-    return false;
-  }
-
-  getRecoveryStatus() {
-    return {
-      activeRecoveries: this.recoveryTasks.filter(t => t.status === 'in_progress'),
-      recoveredAPIs: this.recoveryTasks.filter(t => t.status === 'recovered'),
-      failedRecoveries: this.recoveryTasks.filter(t => t.status === 'failed')
-    };
+    trackCost(json?.usage || {}, modelName);
+    return { success: true, text };
+  } catch (error) {
+    clearTimeout(timeoutId);
+    console.error(`  Error: ${error.message}`);
+    throw error;
   }
 }
 
-const apiHealthMonitor = new APIHealthMonitor();
+async function callCouncilMember(member, prompt) {
+  const config = COUNCIL_MEMBERS[member];
+  if (!config) throw new Error(`Unknown: ${member}`);
+  
+  if (systemModeController.mode === 'CRITICAL_FAILURE') {
+    throw new Error('🚨 CRITICAL: System offline - all AI APIs unavailable. Check API keys and billing.');
+  }
+
+  try {
+    if (member === 'deepseek') {
+      return await callDeepSeekBridge(prompt, config);
+    }
+    
+    const result = await attemptAICall(member, config, prompt);
+    
+    if (result.success) {
+      await storeConversationMemory(prompt, result.text, { 
+        ai_member: member, 
+        attempt: 1,
+        timestamp: new Date().toISOString()
+      });
+      return result.text;
+    }
+  } catch (error) {
+    console.error(`❌ [${member}] Primary call failed:`, error.message);
+    apiHealthMonitor.apiStatus[config.provider].failCount++;
+    
+    if (error.message.includes('BILLING_ERROR') || error.message.includes('AUTH_ERROR')) {
+      broadcastToOrchestrator({
+        type: 'critical_alert',
+        provider: config.provider,
+        message: `⚠️ CRITICAL: ${member} - ${error.message}`,
+        action: 'REQUIRES_MANUAL_INTERVENTION',
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+
+  console.log(`🔄 [FAILOVER] Primary ${member} failed, scanning for alternatives...`);
+  const healthyProviders = apiHealthMonitor.getHealthyProviders();
+  
+  for (const altProvider of healthyProviders) {
+    if (altProvider === config.provider) continue;
+    
+    const altMember = Object.entries(COUNCIL_MEMBERS)
+      .find(([, m]) => m.provider === altProvider)?.[0];
+    
+    if (!altMember) continue;
+    
+    try {
+      console.log(`  → Trying ${altMember}...`);
+      const altConfig = COUNCIL_MEMBERS[altMember];
+      const result = await attemptAICall(altMember, altConfig, prompt);
+      
+      if (result.success) {
+        await storeConversationMemory(
+          prompt, 
+          result.text, 
+          { 
+            ai_member: altMember, 
+            fallback_from: member,
+            attempt: 2,
+            timestamp: new Date().toISOString()
+          }
+        );
+        console.log(`✅ [FAILOVER] Success with ${altMember}`);
+        return result.text;
+      }
+    } catch (error) {
+      console.log(`  ✗ ${altMember} also failed`);
+      continue;
+    }
+  }
+
+  setImmediate(() => {
+    apiHealthMonitor.attemptRecovery(config.provider);
+  });
+
+  const fallbackMsg = `[SYSTEM NOTICE - ${member} temporarily unavailable]\n\nAll primary and fallback AIs are currently unavailable for: ${prompt.slice(0, 50)}...\n\nRecovery in progress. Check /api/v1/system/health-detailed for status.`;
+  
+  return fallbackMsg;
+
 
 // ==================================================================================
 // SECTION: SYSTEM MODE CONTROLLER
