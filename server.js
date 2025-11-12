@@ -3556,4 +3556,4 @@ process.on('SIGTERM', handleGracefulShutdown);
 
 startServer();
 
-export default app;
+// Server is running - no export needed
