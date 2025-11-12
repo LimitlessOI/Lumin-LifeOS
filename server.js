@@ -5,17 +5,16 @@
  * ║     WITH IDEA ENGINE + COUNCIL VOTING + POD ORCHESTRATION + SANDBOX              ║
  * ║                   🔥 FIXED: DYNAMIC ENV VAR RELOADING 🔥                         ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
- */
-
-import express from "express";
-import dayjs from "dayjs";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-import { Pool } from "pg";
-import { WebSocketServer } from "ws";
-import { createServer } from "http";
+*/
+import express from \"express\";
+import dayjs from \"dayjs\";
+import fs from \"fs\";
+import path from \"path\";
+import { fileURLToPath } from \"url\";
+import { dirname, join } from \"path\";
+import { Pool } from \"pg\";
+import { WebSocketServer } from \"ws\";
+import { createServer } from \"http\";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,22 +23,21 @@ const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
-
 // ==================================================================================
 // SECTION: ENVIRONMENT & FRESH RAILWAY VARIABLE READERS (DYNAMIC)
 // ==================================================================================
 
 const getEnvConfig = () => ({
   DATABASE_URL: process.env.DATABASE_URL,
-  COMMAND_CENTER_KEY: process.env.COMMAND_CENTER_KEY || "MySecretKey2025LifeOS",
+  COMMAND_CENTER_KEY: process.env.COMMAND_CENTER_KEY || \"MySecretKey2025LifeOS\",
   GITHUB_TOKEN: process.env.GITHUB_TOKEN,
-  GITHUB_REPO: process.env.GITHUB_REPO || "LimitlessOI/Lumin-LifeOS",
+  GITHUB_REPO: process.env.GITHUB_REPO || \"LimitlessOI/Lumin-LifeOS\",
   DEEPSEEK_LOCAL_ENDPOINT: process.env.DEEPSEEK_LOCAL_ENDPOINT,
-  DEEPSEEK_BRIDGE_ENABLED: process.env.DEEPSEEK_BRIDGE_ENABLED === "true",
-  HOST: process.env.HOST || "0.0.0.0",
-  PORT: parseInt(process.env.PORT || "8080"),
-  MAX_DAILY_SPEND: parseFloat(process.env.MAX_DAILY_SPEND || "50.0"),
-  AI_TIER: process.env.AI_TIER || "medium"
+  DEEPSEEK_BRIDGE_ENABLED: process.env.DEEPSEEK_BRIDGE_ENABLED === \"true\",
+  HOST: process.env.HOST || \"0.0.0.0\",
+  PORT: parseInt(process.env.PORT || \"8080\"),
+  MAX_DAILY_SPEND: parseFloat(process.env.MAX_DAILY_SPEND || \"50.0\"),
+  AI_TIER: process.env.AI_TIER || \"medium\"
 });
 
 const getApiKeys = () => ({
@@ -49,10 +47,6 @@ const getApiKeys = () => ({
   grok: (process.env.GROK_API_KEY || '').trim(),
   deepseek: (process.env.DEEPSEEK_API_KEY || '').trim()
 });
-
-// 🔥 NO STATIC CONFIG - Read fresh each time!
-// OLD: const CONFIG = getEnvConfig();  ❌ STALE
-// NEW: Use this pattern everywhere ✅ FRESH
 
 let CURRENT_DEEPSEEK_ENDPOINT = (() => {
   const fresh = (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim();
@@ -65,24 +59,24 @@ const roiTracker = {
   daily_tasks_completed: 0,
   total_tokens_saved: 0,
   roi_ratio: 0,
-  last_reset: dayjs().format("YYYY-MM-DD")
+  last_reset: dayjs().format(\"YYYY-MM-DD\")
 };
 
-const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, "data");
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, \"data\");
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-const SPEND_FILE = path.join(DATA_DIR, "spend.json");
+const SPEND_FILE = path.join(DATA_DIR, \"spend.json\");
 
 function validateEnvironment() {
   const freshConfig = getEnvConfig();
-  const required = ["DATABASE_URL"];
+  const required = [\"DATABASE_URL\"];
   const missing = required.filter(key => !freshConfig[key]);
   if (missing.length > 0) {
-    console.error("❌ MISSING ENV:", missing);
+    console.error(\"❌ MISSING ENV:\", missing);
     return false;
   }
   
   const keys = getApiKeys();
-  console.log("🔑 API Key Status:");
+  console.log(\"🔑 API Key Status:\");
   console.log(`  • OpenAI: ${keys.openai ? '✅ (' + keys.openai.length + ' chars)' : '❌'}`);
   console.log(`  • Anthropic: ${keys.anthropic ? '✅ (' + keys.anthropic.length + ' chars)' : '❌'}`);
   console.log(`  • Gemini: ${keys.gemini ? '✅ (' + keys.gemini.length + ' chars)' : '❌'}`);
@@ -102,7 +96,7 @@ export const pool = new Pool({
   })(),
   ssl: (() => {
     const freshConfig = getEnvConfig();
-    return freshConfig.DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined;
+    return freshConfig.DATABASE_URL?.includes(\"neon.tech\") ? { rejectUnauthorized: false } : undefined;
   })(),
   max: 20,
   idleTimeoutMillis: 30000,
@@ -291,9 +285,9 @@ async function initDb() {
       ON CONFLICT (file_path) DO NOTHING
     `);
 
-    console.log("✅ Database schema initialized");
+    console.log(\"✅ Database schema initialized\");
   } catch (error) {
-    console.error("❌ DB init error:", error.message);
+    console.error(\"❌ DB init error:\", error.message);
     throw error;
   }
 }
@@ -328,7 +322,7 @@ async function storeConversationMemory(orchestratorMessage, aiResponse, context 
     console.log(`✅ Memory: ${memId}`);
     return { memId, keyFacts };
   } catch (error) {
-    console.error("❌ Memory store error:", error.message);
+    console.error(\"❌ Memory store error:\", error.message);
     return null;
   }
 }
@@ -336,11 +330,16 @@ async function storeConversationMemory(orchestratorMessage, aiResponse, context 
 function extractKeyFacts(message, response) {
   const facts = [];
   const patterns = [
-    { name: 'action', regex: /(?:we|i|you|team)\s+(?:need to|should|will|must)\s+([^.!?\n]{10,150})/gi },
-    { name: 'priority', regex: /(?:priority|urgent|critical):\s*([^.!?\n]{10,150})/gi },
-    { name: 'decision', regex: /(?:decision|decided):\s*([^.!?\n]{10,150})/gi },
-    { name: 'problem', regex: /(?:problem|issue|bug):\s*([^.!?\n]{10,150})/gi },
-    { name: 'solution', regex: /(?:solution|fix):\s*([^.!?\n]{10,150})/gi }
+    { name: 'action', regex: /(?:we|i|you|team)\\s+(?:need to|should|will|must)\\s+([^.!?\
+]{10,150})/gi },
+    { name: 'priority', regex: /(?:priority|urgent|critical):\\s*([^.!?\
+]{10,150})/gi },
+    { name: 'decision', regex: /(?:decision|decided):\\s*([^.!?\
+]{10,150})/gi },
+    { name: 'problem', regex: /(?:problem|issue|bug):\\s*([^.!?\
+]{10,150})/gi },
+    { name: 'solution', regex: /(?:solution|fix):\\s*([^.!?\
+]{10,150})/gi }
   ];
   [message, response].forEach((text, idx) => {
     for (const pattern of patterns) {
@@ -369,7 +368,7 @@ async function recallConversationMemory(query, limit = 50) {
     console.log(`✅ Memory recall: ${result.rows.length} results`);
     return result.rows;
   } catch (error) {
-    console.error("❌ Memory recall error:", error.message);
+    console.error(\"❌ Memory recall error:\", error.message);
     return [];
   }
 }
@@ -379,7 +378,7 @@ async function recallConversationMemory(query, limit = 50) {
 // ==================================================================================
 
 const b64u = {
-  enc: (u8) => Buffer.from(u8).toString('base64').replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),
+  enc: (u8) => Buffer.from(u8).toString('base64').replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,''),
   dec: (s) => new Uint8Array(Buffer.from(s.replace(/-/g,'+').replace(/_/g,'/'), 'base64'))
 };
 
@@ -508,44 +507,44 @@ function decodeLCTP(b64) {
 
 const MICRO_PROTOCOL = {
   encode: (data) => {
-    const parts = ["V:2.0"];
+    const parts = [\"V:2.0\"];
     if (data.operation) parts.push(`OP:${data.operation.charAt(0).toUpperCase()}`);
     if (data.description) {
       const compressed = data.description
-        .replace(/generate/gi, "GEN").replace(/analyze/gi, "ANL")
-        .replace(/create/gi, "CRT").replace(/build/gi, "BLD")
-        .replace(/optimize/gi, "OPT").replace(/review/gi, "REV")
-        .replace(/\s+/g, "~");
+        .replace(/generate/gi, \"GEN\").replace(/analyze/gi, \"ANL\")
+        .replace(/create/gi, \"CRT\").replace(/build/gi, \"BLD\")
+        .replace(/optimize/gi, \"OPT\").replace(/review/gi, \"REV\")
+        .replace(/\\s+/g, \"~\");
       parts.push(`D:${compressed.slice(0, 240)}`);
     }
     if (data.type) parts.push(`T:${data.type.charAt(0).toUpperCase()}`);
-    if (data.returnFields) parts.push(`R:~${data.returnFields.join("~")}`);
+    if (data.returnFields) parts.push(`R:~${data.returnFields.join(\"~\")}`);
     if (data.memory) parts.push(`MEM:${data.memory}`);
-    return parts.join("|");
+    return parts.join(\"|\");
   },
 
   decode: (micro) => {
     const result = {};
-    micro.split("|").forEach((part) => {
-      const [key, value] = part.split(":");
+    micro.split(\"|\").forEach((part) => {
+      const [key, value] = part.split(\":\");
       if (!value) return;
       switch (key) {
-        case "V": result.version = value; break;
-        case "OP":
-          const ops = { G: "generate", A: "analyze", C: "create", B: "build", O: "optimize", R: "review" };
+        case \"V\": result.version = value; break;
+        case \"OP\":
+          const ops = { G: \"generate\", A: \"analyze\", C: \"create\", B: \"build\", O: \"optimize\", R: \"review\" };
           result.operation = ops[value] || value;
           break;
-        case "D":
-          result.description = value.replace(/GEN/g, "generate").replace(/ANL/g, "analyze")
-            .replace(/CRT/g, "create").replace(/BLD/g, "build").replace(/OPT/g, "optimize")
-            .replace(/REV/g, "review").replace(/~/g, " ");
+        case \"D\":
+          result.description = value.replace(/GEN/g, \"generate\").replace(/ANL/g, \"analyze\")
+            .replace(/CRT/g, \"create\").replace(/BLD/g, \"build\").replace(/OPT/g, \"optimize\")
+            .replace(/REV/g, \"review\").replace(/~/g, \" \");
           break;
-        case "T":
-          const types = { S: "script", R: "report", L: "list", C: "code", A: "analysis" };
+        case \"T\":
+          const types = { S: \"script\", R: \"report\", L: \"list\", C: \"code\", A: \"analysis\" };
           result.type = types[value] || value;
           break;
-        case "R": result.returnFields = value.split("~").filter(f => f); break;
-        case "MEM": result.memory = value; break;
+        case \"R\": result.returnFields = value.split(\"~\").filter(f => f); break;
+        case \"MEM\": result.memory = value; break;
       }
     });
     return result;
@@ -557,7 +556,7 @@ const MICRO_PROTOCOL = {
 // ==================================================================================
 
 function updateROI(revenue=0, cost=0, tasksCompleted=0, tokensSaved=0) {
-  const today = dayjs().format("YYYY-MM-DD");
+  const today = dayjs().format(\"YYYY-MM-DD\");
   if (roiTracker.last_reset !== today) {
     roiTracker.daily_revenue = 0; roiTracker.daily_ai_cost = 0;
     roiTracker.daily_tasks_completed = 0; roiTracker.total_tokens_saved = 0;
@@ -576,16 +575,16 @@ function updateROI(revenue=0, cost=0, tasksCompleted=0, tokensSaved=0) {
   return roiTracker;
 }
 
-function trackCost(usage, model="gpt-4o-mini") {
+function trackCost(usage, model=\"gpt-4o-mini\") {
   const prices = {
-    "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
-    "gpt-4o": { input: 0.0025, output: 0.01 },
-    "claude-3-5-sonnet-20241022": { input: 0.003, output: 0.015 },
-    "gemini-2.0-flash-exp": { input: 0.0001, output: 0.0004 },
-    "grok-beta": { input: 0.005, output: 0.015 },
-    "deepseek-coder": { input: 0.0001, output: 0.0003 }
+    \"gpt-4o-mini\": { input: 0.00015, output: 0.0006 },
+    \"gpt-4o\": { input: 0.0025, output: 0.01 },
+    \"claude-3-5-sonnet-20241022\": { input: 0.003, output: 0.015 },
+    \"gemini-2.0-flash-exp\": { input: 0.0001, output: 0.0004 },
+    \"grok-beta\": { input: 0.005, output: 0.015 },
+    \"deepseek-coder\": { input: 0.0001, output: 0.0003 }
   };
-  const price = prices[model] || prices["gpt-4o-mini"];
+  const price = prices[model] || prices[\"gpt-4o-mini\"];
   const cost = ((usage?.prompt_tokens || 0) * price.input / 1000) + ((usage?.completion_tokens || 0) * price.output / 1000);
   updateROI(0, cost, 0, 0);
   return cost;
@@ -693,218 +692,241 @@ class ExecutionQueue {
 const executionQueue = new ExecutionQueue();
 
 // ==================================================================================
-// SECTION: AI COUNCIL CALL HANDLER WITH FAILOVER
+// SECTION: API HEALTH MONITOR & FAILOVER
 // ==================================================================================
 
-async function attemptAICall(member, config, prompt) {
-  const modelName = config.model;
-  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Respond naturally and concisely.`;
-  
-  const timeoutMs = 8000;
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  
-  try {
+class APIHealthMonitor {
+  constructor() {
+    this.apiStatus = {
+      anthropic: { healthy: true, lastCheck: null, failCount: 0, provider: 'anthropic' },
+      openai: { healthy: true, lastCheck: null, failCount: 0, provider: 'openai' },
+      google: { healthy: true, lastCheck: null, failCount: 0, provider: 'google' },
+      xai: { healthy: true, lastCheck: null, failCount: 0, provider: 'xai' },
+      deepseek: { healthy: true, lastCheck: null, failCount: 0, provider: 'deepseek' }
+    };
+    this.systemStatus = {
+      aiCount: 5,
+      canDoProgramming: true,
+      canUpgrade: true,
+      maintenanceMode: false
+    };
+    this.recoveryTasks = [];
+  }
+
+  async healthCheck() {
+    const results = {};
     const apiKeys = getApiKeys();
-    let response, json, text;
+    const providers = [
+      { name: 'anthropic', key: apiKeys.anthropic, member: 'claude' },
+      { name: 'openai', key: apiKeys.openai, member: 'chatgpt' },
+      { name: 'google', key: apiKeys.gemini, member: 'gemini' },
+      { name: 'xai', key: apiKeys.grok, member: 'grok' },
+      { name: 'deepseek', key: apiKeys.deepseek, member: 'deepseek' }
+    ];
+
+    for (const provider of providers) {
+      try {
+        if (!provider.key) {
+          this.apiStatus[provider.name].healthy = false;
+          this.apiStatus[provider.name].failCount++;
+          results[provider.name] = false;
+          continue;
+        }
+
+        const isHealthy = await this.testAPI(provider.name, provider.member);
+        this.apiStatus[provider.name].healthy = isHealthy;
+        this.apiStatus[provider.name].lastCheck = new Date();
+        
+        if (!isHealthy) {
+          this.apiStatus[provider.name].failCount++;
+        } else {
+          this.apiStatus[provider.name].failCount = 0;
+        }
+        results[provider.name] = isHealthy;
+      } catch (error) {
+        this.apiStatus[provider.name].healthy = false;
+        this.apiStatus[provider.name].failCount++;
+        results[provider.name] = false;
+      }
+    }
     
-    if (config.provider === 'anthropic' && apiKeys.anthropic) {
-      response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKeys.anthropic.trim(),
-          'anthropic-version': '2024-06-15'
-        },
-        body: JSON.stringify({
-          model: modelName,
-          max_tokens: config.maxTokens,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
-      json = await response.json();
-      if (json.error) throw new Error(`API_ERROR: ${json.error.message || JSON.stringify(json.error)}`);
-      text = json.content?.[0]?.text || '';
-    } else if (config.provider === 'openai' && apiKeys.openai) {
-      response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKeys.openai.trim()}`
-        },
-        body: JSON.stringify({
-          model: modelName,
-          temperature: 0.7,
-          max_tokens: config.maxTokens,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ]
-        })
-      });
-      json = await response.json();
-      if (json.error) throw new Error(`API_ERROR`);
-      text = json.choices?.[0]?.message?.content || '';
-    } else if (config.provider === 'google' && apiKeys.gemini) {
-      response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini.trim()}`,
-        {
+    this.updateSystemStatus();
+    return results;
+  }
+
+  async testAPI(providerName, member) {
+    const config = COUNCIL_MEMBERS[member];
+    const testPrompt = \"Respond with: OK\";
+    const timeout = 5000;
+    
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      const apiKeys = getApiKeys();
+      
+      console.log(`  [DEBUG] Testing ${providerName} - Key length: ${providerName === 'anthropic' ? apiKeys.anthropic.length : providerName === 'openai' ? apiKeys.openai.length : providerName === 'google' ? apiKeys.gemini.length : providerName === 'xai' ? apiKeys.grok.length : apiKeys.deepseek.length}`);
+      
+      let response;
+      
+      if (providerName === 'anthropic' && apiKeys.anthropic) {
+        response = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
           signal: controller.signal,
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKeys.anthropic.trim(),
+            'anthropic-version': '2024-06-15'
+          },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
+            model: config.model,
+            max_tokens: 10,
+            system: \"Respond only with OK\",
+            messages: [{ role: 'user', content: testPrompt }]
           })
-        }
-      );
-      json = await response.json();
-      if (json.error) throw new Error(`API_ERROR`);
-      text = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    } else if (config.provider === 'xai' && apiKeys.grok) {
-      response = await fetch('https://api.x.ai/v1/chat/completions', {
-        method: 'POST',
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKeys.grok.trim()}`
-        },
-        body: JSON.stringify({
-          model: modelName,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ],
-          max_tokens: config.maxTokens,
-          temperature: 0.7
-        })
-      });
-      json = await response.json();
-      if (json.error) throw new Error(`API_ERROR`);
-      text = json.choices?.[0]?.message?.content || '';
-    } else if (config.provider === 'deepseek' && apiKeys.deepseek) {
-      response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-        method: 'POST',
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKeys.deepseek.trim()}`
-        },
-        body: JSON.stringify({
-          model: modelName,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
-          ],
-          max_tokens: config.maxTokens,
-          temperature: 0.7
-        })
-      });
-      json = await response.json();
-      if (json.error) throw new Error(`API_ERROR`);
-      text = json.choices?.[0]?.message?.content || '';
+        });
+      } else if (providerName === 'openai' && apiKeys.openai) {
+        response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKeys.openai.trim()}`
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            messages: [
+              { role: 'system', content: \"Respond only with OK\" },
+              { role: 'user', content: testPrompt }
+            ]
+          })
+        });
+      } else if (providerName === 'google' && apiKeys.gemini) {
+        response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKeys.gemini.trim()}`,
+          {
+            method: 'POST',
+            signal: controller.signal,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: testPrompt }] }],
+              generationConfig: { maxOutputTokens: 10 }
+            })
+          }
+        );
+      } else if (providerName === 'xai' && apiKeys.grok) {
+        response = await fetch('https://api.x.ai/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKeys.grok.trim()}`
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            messages: [
+              { role: 'system', content: \"Respond only with OK\" },
+              { role: 'user', content: testPrompt }
+            ]
+          })
+        });
+      } else if (providerName === 'deepseek' && apiKeys.deepseek) {
+        response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKeys.deepseek.trim()}`
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: 10,
+            messages: [
+              { role: 'system', content: \"Respond only with OK\" },
+              { role: 'user', content: testPrompt }
+            ]
+          })
+        });
+      }
+      
+      clearTimeout(timeoutId);
+      const isOk = response?.ok === true;
+      if (!isOk) {
+        console.log(`⚠️ [HEALTH] ${providerName} returned status ${response?.status}`);
+      } else {
+        console.log(`✅ [HEALTH] ${providerName} OK`);
+      }
+      return isOk;
+    } catch (error) {
+      console.error(`❌ [HEALTH] ${providerName} test failed:`, error.message);
+      return false;
+    }
+  }
+
+  updateSystemStatus() {
+    const healthyAPIs = Object.values(this.apiStatus).filter(s => s.healthy).length;
+    
+    this.systemStatus.aiCount = healthyAPIs;
+    this.systemStatus.canDoProgramming = healthyAPIs >= 2;
+    this.systemStatus.canUpgrade = healthyAPIs >= 3;
+    this.systemStatus.maintenanceMode = healthyAPIs < 2;
+    
+    console.log(`\
+📊 [HEALTH] Status: ${healthyAPIs}/5 APIs healthy`);
+    console.log(`  • Programming: ${this.systemStatus.canDoProgramming ? '✅ YES' : '❌ NO'}`);
+    console.log(`  • Upgrades: ${this.systemStatus.canUpgrade ? '✅ ALLOWED' : '❌ BLOCKED'}`);
+    console.log(`  • Mode: ${this.systemStatus.maintenanceMode ? 'MAINTENANCE' : 'NORMAL'}`);
+  }
+
+  getHealthyProviders() {
+    return Object.entries(this.apiStatus)
+      .filter(([_, status]) => status.healthy)
+      .map(([provider, _]) => provider);
+  }
+
+  async attemptRecovery(provider) {
+    console.log(`🔧 [RECOVERY] Attempting to restore ${provider}...`);
+    
+    const recoveryTask = {
+      provider,
+      startedAt: new Date().toISOString(),
+      attempts: 0,
+      maxAttempts: 5,
+      status: 'in_progress'
+    };
+    
+    this.recoveryTasks.push(recoveryTask);
+    
+    while (recoveryTask.attempts < recoveryTask.maxAttempts) {
+      recoveryTask.attempts++;
+      console.log(`  Attempt ${recoveryTask.attempts}/${recoveryTask.maxAttempts}...`);
+      
+      const healthResults = await this.healthCheck();
+      if (healthResults[provider]) {
+        recoveryTask.status = 'recovered';
+        console.log(`✅ [RECOVERY] ${provider} restored!`);
+        return true;
+      }
+      
+      await new Promise(r => setTimeout(r, 2000 * recoveryTask.attempts));
     }
     
-    clearTimeout(timeoutId);
-    
-    if (!text) {
-      return { success: false, error: 'Empty response from API' };
-    }
-    
-    trackCost(json?.usage || {}, modelName);
-    return { success: true, text };
-  } catch (error) {
-    clearTimeout(timeoutId);
-    console.error(`  Error: ${error.message}`);
-    throw error;
+    recoveryTask.status = 'failed';
+    console.log(`❌ [RECOVERY] ${provider} recovery failed after ${recoveryTask.maxAttempts} attempts`);
+    return false;
+  }
+
+  getRecoveryStatus() {
+    return {
+      activeRecoveries: this.recoveryTasks.filter(t => t.status === 'in_progress'),
+      recoveredAPIs: this.recoveryTasks.filter(t => t.status === 'recovered'),
+      failedRecoveries: this.recoveryTasks.filter(t => t.status === 'failed')
+    };
   }
 }
 
-async function callCouncilMember(member, prompt) {
-  const config = COUNCIL_MEMBERS[member];
-  if (!config) throw new Error(`Unknown: ${member}`);
-  
-  if (systemModeController.mode === 'CRITICAL_FAILURE') {
-    throw new Error('🚨 CRITICAL: System offline - all AI APIs unavailable. Check API keys and billing.');
-  }
-
-  try {
-    if (member === 'deepseek') {
-      return await callDeepSeekBridge(prompt, config);
-    }
-    
-    const result = await attemptAICall(member, config, prompt);
-    
-    if (result.success) {
-      await storeConversationMemory(prompt, result.text, { 
-        ai_member: member, 
-        attempt: 1,
-        timestamp: new Date().toISOString()
-      });
-      return result.text;
-    }
-  } catch (error) {
-    console.error(`❌ [${member}] Primary call failed:`, error.message);
-    apiHealthMonitor.apiStatus[config.provider].failCount++;
-    
-    if (error.message.includes('BILLING_ERROR') || error.message.includes('AUTH_ERROR')) {
-      broadcastToOrchestrator({
-        type: 'critical_alert',
-        provider: config.provider,
-        message: `⚠️ CRITICAL: ${member} - ${error.message}`,
-        action: 'REQUIRES_MANUAL_INTERVENTION',
-        timestamp: new Date().toISOString()
-      });
-    }
-  }
-
-  console.log(`🔄 [FAILOVER] Primary ${member} failed, scanning for alternatives...`);
-  const healthyProviders = apiHealthMonitor.getHealthyProviders();
-  
-  for (const altProvider of healthyProviders) {
-    if (altProvider === config.provider) continue;
-    
-    const altMember = Object.entries(COUNCIL_MEMBERS)
-      .find(([, m]) => m.provider === altProvider)?.[0];
-    
-    if (!altMember) continue;
-    
-    try {
-      console.log(`  → Trying ${altMember}...`);
-      const altConfig = COUNCIL_MEMBERS[altMember];
-      const result = await attemptAICall(altMember, altConfig, prompt);
-      
-      if (result.success) {
-        await storeConversationMemory(
-          prompt, 
-          result.text, 
-          { 
-            ai_member: altMember, 
-            fallback_from: member,
-            attempt: 2,
-            timestamp: new Date().toISOString()
-          }
-        );
-        console.log(`✅ [FAILOVER] Success with ${altMember}`);
-        return result.text;
-      }
-    } catch (error) {
-      console.log(`  ✗ ${altMember} also failed`);
-      continue;
-    }
-  }
-
-  setImmediate(() => {
-    apiHealthMonitor.attemptRecovery(config.provider);
-  });
-
-  const fallbackMsg = `[SYSTEM NOTICE - ${member} temporarily unavailable]\n\nAll primary and fallback AIs are currently unavailable for: ${prompt.slice(0, 50)}...\n\nRecovery in progress. Check /api/v1/system/health-detailed for status.`;
-  
-  return fallbackMsg;
-
+const apiHealthMonitor = new APIHealthMonitor();
 
 // ==================================================================================
 // SECTION: SYSTEM MODE CONTROLLER
@@ -930,7 +952,8 @@ class SystemModeController {
     }
     
     if (this.mode !== newMode) {
-      console.log(`\n📋 [MODE] ${this.mode} → ${newMode}`);
+      console.log(`\
+📋 [MODE] ${this.mode} → ${newMode}`);
       this.mode = newMode;
       
       if (newMode === 'CRITICAL_FAILURE') {
@@ -1007,7 +1030,9 @@ class SystemDiagnostics {
   }
 
   async runFullDiagnostic() {
-    console.log("\n🔍 RUNNING FULL SYSTEM DIAGNOSTIC...\n");
+    console.log(\"\
+🔍 RUNNING FULL SYSTEM DIAGNOSTIC...\
+\");
     
     const report = {
       timestamp: new Date().toISOString(),
@@ -1034,30 +1059,30 @@ class SystemDiagnostics {
   }
 
   async testDatabase() {
-    console.log("  🧪 Testing Database...");
+    console.log(\"  🧪 Testing Database...\");
     try {
       const start = Date.now();
-      await pool.query("SELECT NOW()");
+      await pool.query(\"SELECT NOW()\");
       const duration = Date.now() - start;
       
       const result = await pool.query(
-        "SELECT COUNT(*) as count FROM conversation_memory"
+        \"SELECT COUNT(*) as count FROM conversation_memory\"
       );
       
       return {
-        status: "✅ PASS",
+        status: \"✅ PASS\",
         duration: `${duration}ms`,
         memoryRecords: result.rows[0].count,
         poolActive: pool.totalCount,
         poolIdle: pool.idleCount
       };
     } catch (error) {
-      return { status: "❌ FAIL", error: error.message };
+      return { status: \"❌ FAIL\", error: error.message };
     }
   }
 
   async testApiKeys() {
-    console.log("  🧪 Testing API Keys...");
+    console.log(\"  🧪 Testing API Keys...\");
     const keys = getApiKeys();
     return {
       openai: { present: !!keys.openai, length: keys.openai?.length || 0, format: keys.openai?.slice(0, 10) },
@@ -1069,25 +1094,25 @@ class SystemDiagnostics {
   }
 
   async testAiModels() {
-    console.log("  🧪 Testing AI Models...");
+    console.log(\"  🧪 Testing AI Models...\");
     const results = {};
     
     for (const [member, config] of Object.entries(COUNCIL_MEMBERS)) {
       try {
         const start = Date.now();
         const response = await Promise.race([
-          attemptAICall(member, config, "Respond with 'OK' only"),
-          new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 3000))
+          attemptAICall(member, config, \"Respond with 'OK' only\"),
+          new Promise((_, reject) => setTimeout(() => reject(new Error(\"Timeout\")), 3000))
         ]);
         const duration = Date.now() - start;
         
         if (response.success) {
-          results[member] = { status: "✅ PASS", duration: `${duration}ms` };
+          results[member] = { status: \"✅ PASS\", duration: `${duration}ms` };
         } else {
-          results[member] = { status: "⚠️ FAIL", reason: response.error };
+          results[member] = { status: \"⚠️ FAIL\", reason: response.error };
         }
       } catch (error) {
-        results[member] = { status: "❌ ERROR", error: error.message };
+        results[member] = { status: \"❌ ERROR\", error: error.message };
       }
     }
     
@@ -1095,28 +1120,28 @@ class SystemDiagnostics {
   }
 
   async testMemory() {
-    console.log("  🧪 Testing Memory System...");
+    console.log(\"  🧪 Testing Memory System...\");
     try {
       const testMsg = `Test message ${Date.now()}`;
       const testResp = `Test response ${Date.now()}`;
       
       const stored = await storeConversationMemory(testMsg, testResp, { test: true });
-      const recalled = await recallConversationMemory("Test message");
+      const recalled = await recallConversationMemory(\"Test message\");
       
       return {
-        status: "✅ PASS",
+        status: \"✅ PASS\",
         stored: !!stored,
         memoryId: stored?.memId,
         recalled: recalled.length,
         keyFactsExtracted: stored?.keyFacts?.length || 0
       };
     } catch (error) {
-      return { status: "❌ FAIL", error: error.message };
+      return { status: \"❌ FAIL\", error: error.message };
     }
   }
 
   async testCompression() {
-    console.log("  🧪 Testing Compression...");
+    console.log(\"  🧪 Testing Compression...\");
     try {
       const testData = { type: 'directive', project: 'lifeOS', flow: 'auto-price', integration: 'Stripe' };
       const encoded = encodeLCTP(testData);
@@ -1126,28 +1151,28 @@ class SystemDiagnostics {
       const microDecoded = MICRO_PROTOCOL.decode(micro);
       
       return {
-        lctp: { status: "✅ PASS", encoded: encoded.length + " chars", decoded: decoded.type },
-        micro: { status: "✅ PASS", encoded: micro.length + " chars", decoded: microDecoded.operation }
+        lctp: { status: \"✅ PASS\", encoded: encoded.length + \" chars\", decoded: decoded.type },
+        micro: { status: \"✅ PASS\", encoded: micro.length + \" chars\", decoded: microDecoded.operation }
       };
     } catch (error) {
-      return { status: "❌ FAIL", error: error.message };
+      return { status: \"❌ FAIL\", error: error.message };
     }
   }
 
   testWebSocket() {
-    console.log("  🧪 Testing WebSocket...");
+    console.log(\"  🧪 Testing WebSocket...\");
     return {
-      status: "✅ PASS",
+      status: \"✅ PASS\",
       activeConnections: activeConnections.size,
       heartbeatEnabled: true
     };
   }
 
   testTaskQueue() {
-    console.log("  🧪 Testing Task Queue...");
+    console.log(\"  🧪 Testing Task Queue...\");
     const status = executionQueue.getStatus();
     return {
-      status: status.completed > 0 ? "✅ PASS" : "⚠️ IDLE",
+      status: status.completed > 0 ? \"✅ PASS\" : \"⚠️ IDLE\",
       queued: status.queued,
       active: status.active,
       completed: status.completed,
@@ -1156,29 +1181,31 @@ class SystemDiagnostics {
   }
 
   testFileSystem() {
-    console.log("  🧪 Testing File System...");
+    console.log(\"  🧪 Testing File System...\");
     try {
       const dirExists = fs.existsSync(DATA_DIR);
       const spendFileExists = fs.existsSync(SPEND_FILE);
       
       return {
-        status: dirExists ? "✅ PASS" : "❌ FAIL",
+        status: dirExists ? \"✅ PASS\" : \"❌ FAIL\",
         dataDir: DATA_DIR,
         dirExists,
         spendFileExists,
         files: fs.readdirSync(DATA_DIR)
       };
     } catch (error) {
-      return { status: "❌ FAIL", error: error.message };
+      return { status: \"❌ FAIL\", error: error.message };
     }
   }
 
   analyzeResults(report) {
-    console.log("\n📊 ANALYSIS:\n");
+    console.log(\"\
+📊 ANALYSIS:\
+\");
     
-    if (report.tests.database.status === "❌ FAIL") {
-      report.issues.push("DATABASE OFFLINE - Critical issue");
-      report.recommendations.push("Check DATABASE_URL in Railway variables");
+    if (report.tests.database.status === \"❌ FAIL\") {
+      report.issues.push(\"DATABASE OFFLINE - Critical issue\");
+      report.recommendations.push(\"Check DATABASE_URL in Railway variables\");
     }
 
     const keyTests = report.tests.apiKeys;
@@ -1187,27 +1214,27 @@ class SystemDiagnostics {
       .map(([name]) => name);
     
     if (missingKeys.length > 0) {
-      report.issues.push(`Missing API keys: ${missingKeys.join(", ")}`);
-      report.recommendations.push(`Add missing keys to Railway: ${missingKeys.join(", ")}`);
+      report.issues.push(`Missing API keys: ${missingKeys.join(\", \")}`);
+      report.recommendations.push(`Add missing keys to Railway: ${missingKeys.join(\", \")}`);
     }
 
     const aiTests = report.tests.aiModels;
-    const workingAis = Object.values(aiTests).filter(t => t.status === "✅ PASS").length;
+    const workingAis = Object.values(aiTests).filter(t => t.status === \"✅ PASS\").length;
     console.log(`  ✅ Working AIs: ${workingAis}/5`);
     
     if (workingAis < 2) {
       report.issues.push(`Only ${workingAis} AI(s) working - system in degraded mode`);
-      report.recommendations.push("Verify API keys and billing for all providers");
+      report.recommendations.push(\"Verify API keys and billing for all providers\");
     }
 
-    if (report.tests.memory.status === "✅ PASS") {
+    if (report.tests.memory.status === \"✅ PASS\") {
       console.log(`  ✅ Memory System: Working (${report.tests.memory.recalled} records)`);
     } else {
-      report.issues.push("Memory system offline");
+      report.issues.push(\"Memory system offline\");
     }
 
-    if (report.tests.compression.lctp?.status === "✅ PASS" && report.tests.compression.micro?.status === "✅ PASS") {
-      console.log("  ✅ Compression: Both LCTP v3 and MICRO v2.0 working");
+    if (report.tests.compression.lctp?.status === \"✅ PASS\" && report.tests.compression.micro?.status === \"✅ PASS\") {
+      console.log(\"  ✅ Compression: Both LCTP v3 and MICRO v2.0 working\");
     }
 
     if (report.tests.websocket.activeConnections > 0) {
@@ -1219,11 +1246,17 @@ class SystemDiagnostics {
     }
 
     if (report.issues.length === 0) {
-      console.log("\n✅ SYSTEM STATUS: ALL SYSTEMS NOMINAL\n");
+      console.log(\"\
+✅ SYSTEM STATUS: ALL SYSTEMS NOMINAL\
+\");
     } else {
-      console.log("\n⚠️ ISSUES DETECTED:\n");
+      console.log(\"\
+⚠️ ISSUES DETECTED:\
+\");
       report.issues.forEach(issue => console.log(`  • ${issue}`));
-      console.log("\n💡 RECOMMENDATIONS:\n");
+      console.log(\"\
+💡 RECOMMENDATIONS:\
+\");
       report.recommendations.forEach(rec => console.log(`  • ${rec}`));
     }
   }
@@ -1283,14 +1316,16 @@ class IdeaGenerationEngine {
   }
 
   async generateDailyIdeas() {
-    const today = dayjs().format("YYYY-MM-DD");
+    const today = dayjs().format(\"YYYY-MM-DD\");
     
     if (this.lastGenerationDate === today && this.dailyIdeas.length > 0) {
       console.log(`📋 Ideas already generated for ${today}`);
       return this.dailyIdeas;
     }
 
-    console.log(`\n💡 GENERATING DAILY IDEAS (20 per AI x 5 models = 100 total ideas)\n`);
+    console.log(`\
+💡 GENERATING DAILY IDEAS (20 per AI x 5 models = 100 total ideas)\
+`);
     
     this.dailyIdeas = [];
     const aiMembers = Object.keys(COUNCIL_MEMBERS);
@@ -1343,15 +1378,15 @@ HEALTHY APIs: ${apiHealthMonitor.systemStatus.aiCount}/5
 
 Generate 20 ideas to improve this system. Each idea MUST include:
 {
-  "id": "idea_TIMESTAMP",
-  "title": "Short title",
-  "description": "1-2 sentence description",
-  "category": "income|system|efficiency|feature",
-  "difficulty": "easy|medium|hard",
-  "estimatedROI": "$$$ per month",
-  "timeToImplement": "hours",
-  "author": "${member}",
-  "focus": "${config.focus}"
+  \"id\": \"idea_TIMESTAMP\",
+  \"title\": \"Short title\",
+  \"description\": \"1-2 sentence description\",
+  \"category\": \"income|system|efficiency|feature\",
+  \"difficulty\": \"easy|medium|hard\",
+  \"estimatedROI\": \"$$$ per month\",
+  \"timeToImplement\": \"hours\",
+  \"author\": \"${member}\",
+  \"focus\": \"${config.focus}\"
 }
 
 RESPOND ONLY WITH VALID JSON ARRAY. NO OTHER TEXT.`;
@@ -1386,7 +1421,7 @@ RESPOND ONLY WITH VALID JSON ARRAY. NO OTHER TEXT.`;
 
   parseIdeas(aiResponse, author) {
     try {
-      const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
+      const jsonMatch = aiResponse.match(/\\[[\\s\\S]*\\]/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         if (Array.isArray(parsed)) {
@@ -1401,13 +1436,13 @@ RESPOND ONLY WITH VALID JSON ARRAY. NO OTHER TEXT.`;
         }
       }
     } catch (e) {
-      console.error("Idea JSON parse failed");
+      console.error(\"Idea JSON parse failed\");
     }
 
     return [
-      { id: `idea_${Date.now()}_1`, title: "Optimize MICRO compression", category: "efficiency", difficulty: "medium", estimatedROI: "$500+/mo", author, status: 'generated', createdAt: new Date().toISOString() },
-      { id: `idea_${Date.now()}_2`, title: "Add more income pods", category: "income", difficulty: "easy", estimatedROI: "$1000+/mo", author, status: 'generated', createdAt: new Date().toISOString() },
-      { id: `idea_${Date.now()}_3`, title: "Implement real-time analytics", category: "system", difficulty: "hard", estimatedROI: "$200+/mo", author, status: 'generated', createdAt: new Date().toISOString() }
+      { id: `idea_${Date.now()}_1`, title: \"Optimize MICRO compression\", category: \"efficiency\", difficulty: \"medium\", estimatedROI: \"$500+/mo\", author, status: 'generated', createdAt: new Date().toISOString() },
+      { id: `idea_${Date.now()}_2`, title: \"Add more income pods\", category: \"income\", difficulty: \"easy\", estimatedROI: \"$1000+/mo\", author, status: 'generated', createdAt: new Date().toISOString() },
+      { id: `idea_${Date.now()}_3`, title: \"Implement real-time analytics\", category: \"system\", difficulty: \"hard\", estimatedROI: \"$200+/mo\", author, status: 'generated', createdAt: new Date().toISOString() }
     ];
   }
 
@@ -1434,7 +1469,9 @@ class CouncilVotingSystem {
   }
 
   async evaluateIdea(idea) {
-    console.log(`\n🗳️ COUNCIL EVALUATING: ${idea.title}\n`);
+    console.log(`\
+🗳️ COUNCIL EVALUATING: ${idea.title}\
+`);
 
     const evaluation = {
       ideaId: idea.id,
@@ -1454,11 +1491,17 @@ class CouncilVotingSystem {
   async evaluateAdamApproach(idea) {
     const prompt = MICRO_PROTOCOL.encode({
       operation: 'analyze',
-      description: `Would Adam Hopkins implement: "${idea.title}"? Analyze alignment with his preferences.`,
+      description: `Would Adam Hopkins implement: \"${idea.title}\"? Analyze alignment with his preferences.`,
       type: 'analysis'
     });
 
-    const response = await callCouncilMember('claude', `${prompt}\n\nIdea: ${idea.title}\nCategory: ${idea.category}\nROI: ${idea.estimatedROI}\n\nRate 1-10 alignment with Adam's preferences.`);
+    const response = await callCouncilMember('claude', `${prompt}\
+\
+Idea: ${idea.title}\
+Category: ${idea.category}\
+ROI: ${idea.estimatedROI}\
+\
+Rate 1-10 alignment with Adam's preferences.`);
 
     return {
       analysis: response,
@@ -1470,11 +1513,18 @@ class CouncilVotingSystem {
   async analyzeConsequences(idea) {
     const prompt = MICRO_PROTOCOL.encode({
       operation: 'analyze',
-      description: `Analyze unintended consequences of: "${idea.title}"`,
+      description: `Analyze unintended consequences of: \"${idea.title}\"`,
       type: 'consequences'
     });
 
-    const response = await callCouncilMember('gemini', `${prompt}\n\nIdentify 5 unintended consequences for:\n1. System stability\n2. Cost efficiency\n3. User experience\n4. Security\n5. Scalability`);
+    const response = await callCouncilMember('gemini', `${prompt}\
+\
+Identify 5 unintended consequences for:\
+1. System stability\
+2. Cost efficiency\
+3. User experience\
+4. Security\
+5. Scalability`);
 
     return {
       analysis: response,
@@ -1485,19 +1535,27 @@ class CouncilVotingSystem {
   async runDualArgumentation(idea) {
     const proPrompt = MICRO_PROTOCOL.encode({
       operation: 'argue',
-      description: `Make strongest PROS case for: "${idea.title}"`,
+      description: `Make strongest PROS case for: \"${idea.title}\"`,
       type: 'argument'
     });
 
     const conPrompt = MICRO_PROTOCOL.encode({
       operation: 'argue',
-      description: `Make strongest CONS case for: "${idea.title}"`,
+      description: `Make strongest CONS case for: \"${idea.title}\"`,
       type: 'argument'
     });
 
     const [prosResponse, consResponse] = await Promise.all([
-      callCouncilMember('chatgpt', `${proPrompt}\n\nIdea: ${idea.title}\n\nMake STRONGEST possible PRO arguments.`),
-      callCouncilMember('deepseek', `${conPrompt}\n\nIdea: ${idea.title}\n\nMake STRONGEST possible CON arguments.`)
+      callCouncilMember('chatgpt', `${proPrompt}\
+\
+Idea: ${idea.title}\
+\
+Make STRONGEST possible PRO arguments.`),
+      callCouncilMember('deepseek', `${conPrompt}\
+\
+Idea: ${idea.title}\
+\
+Make STRONGEST possible CON arguments.`)
     ]);
 
     const solutions = this.extractSolutions(prosResponse);
@@ -1541,13 +1599,14 @@ class CouncilVotingSystem {
   }
 
   extractScore(text) {
-    const match = text.match(/\b([1-9]|10)\b/);
+    const match = text.match(/\\b([1-9]|10)\\b/);
     return match ? parseInt(match[0]) : 5;
   }
 
   extractSolutions(text) {
     const solutions = [];
-    const lines = text.split('\n');
+    const lines = text.split('\
+');
     
     for (const line of lines) {
       if (line.includes('solution') || line.includes('Solution') || line.includes('→')) {
@@ -1610,7 +1669,9 @@ class PodOrchestrationSystem {
   }
 
   async orchestratePods() {
-    console.log("\n🎼 POD ORCHESTRATION - STARTING ALL 4 PODS\n");
+    console.log(\"\
+🎼 POD ORCHESTRATION - STARTING ALL 4 PODS\
+\");
 
     const tasks = [
       { podId: 'income_1', mission: 'income_generation', target: 500 },
@@ -1662,12 +1723,15 @@ class PodOrchestrationSystem {
     
     console.log(`    💰 Income target: $${target}`);
 
-    const prompt = `${instruction}\n\nGenerate 5 specific income tactics to reach $${target}.\nFormat: JSON array`;
+    const prompt = `${instruction}\
+\
+Generate 5 specific income tactics to reach $${target}.\
+Format: JSON array`;
 
     const response = await callCouncilMember('chatgpt', prompt);
     
     try {
-      const jsonMatch = response.match(/\[[\s\S]*\]/);
+      const jsonMatch = response.match(/\\[[\\s\\S]*\\]/);
       const tactics = JSON.parse(jsonMatch[0]);
       
       for (const tactic of tactics) {
@@ -1690,12 +1754,15 @@ class PodOrchestrationSystem {
   async researchPodTask(instruction, target) {
     console.log(`    🔍 Research: Finding ${target} opportunities`);
 
-    const prompt = `${instruction}\n\nIdentify ${target} business opportunities we could compete in.\nFormat: JSON array`;
+    const prompt = `${instruction}\
+\
+Identify ${target} business opportunities we could compete in.\
+Format: JSON array`;
 
     const response = await callCouncilMember('gemini', prompt);
     
     try {
-      const jsonMatch = response.match(/\[[\s\S]*\]/);
+      const jsonMatch = response.match(/\\[[\\s\\S]*\\]/);
       const opportunities = JSON.parse(jsonMatch[0]);
       
       this.podResults['research'] = opportunities;
@@ -1714,12 +1781,15 @@ class PodOrchestrationSystem {
   async systemPodTask(instruction, target) {
     console.log(`    🔧 System: Execute ${target} improvements`);
 
-    const prompt = `${instruction}\n\nTop ${target} system improvements.\nFormat: JSON array`;
+    const prompt = `${instruction}\
+\
+Top ${target} system improvements.\
+Format: JSON array`;
 
     const response = await callCouncilMember('deepseek', prompt);
     
     try {
-      const jsonMatch = response.match(/\[[\s\S]*\]/);
+      const jsonMatch = response.match(/\\[[\\s\\S]*\\]/);
       const improvements = JSON.parse(jsonMatch[0]);
       
       this.podResults['system'] = improvements;
@@ -1760,7 +1830,9 @@ class SandboxEnvironment {
   }
 
   async testIdeaInSandbox(idea) {
-    console.log(`\n🧪 SANDBOX TEST: ${idea.title}\n`);
+    console.log(`\
+🧪 SANDBOX TEST: ${idea.title}\
+`);
 
     const testId = `test_${Date.now()}`;
     const test = {
@@ -1780,7 +1852,9 @@ class SandboxEnvironment {
         type: 'sandbox'
       });
 
-      const simulation = await callCouncilMember('claude', `${sandboxPrompt}\n\nSimulate 30-day implementation of: ${idea.title}`);
+      const simulation = await callCouncilMember('claude', `${sandboxPrompt}\
+\
+Simulate 30-day implementation of: ${idea.title}`);
 
       const result = {
         ...test,
@@ -1804,7 +1878,7 @@ class SandboxEnvironment {
   }
 
   extractSuccessProbability(simulation) {
-    const match = simulation.match(/(\d+)%/);
+    const match = simulation.match(/(\\d+)%/);
     return match ? parseInt(match[1]) : 50;
   }
 
@@ -1839,15 +1913,19 @@ const podOrchestration = new PodOrchestrationSystem();
 const sandbox = new SandboxEnvironment();
 
 async function runDailyCouncilMeeting() {
-  console.log("\n" + "═".repeat(90));
-  console.log("🎼 DAILY COUNCIL MEETING & POD ORCHESTRATION");
-  console.log("═".repeat(90));
+  console.log(\"\
+\" + \"═\".repeat(90));
+  console.log(\"🎼 DAILY COUNCIL MEETING & POD ORCHESTRATION\");
+  console.log(\"═\".repeat(90));
 
   const ideas = await ideaEngine.generateDailyIdeas();
-  console.log(`\n✅ Generated ${ideas.length} ideas today`);
+  console.log(`\
+✅ Generated ${ideas.length} ideas today`);
 
   const topIdeas = ideas.slice(0, 5);
-  console.log(`\n📊 Council evaluating top ${topIdeas.length} ideas...\n`);
+  console.log(`\
+📊 Council evaluating top ${topIdeas.length} ideas...\
+`);
 
   for (const idea of topIdeas) {
     const evaluation = await councilVoting.evaluateIdea(idea);
@@ -1855,10 +1933,12 @@ async function runDailyCouncilMeeting() {
   }
 
   const podStatus = await podOrchestration.orchestratePods();
-  console.log(`\n✅ All 4 pods dispatched and running`);
+  console.log(`\
+✅ All 4 pods dispatched and running`);
 
   const votingReport = councilVoting.getSummaryReport();
-  console.log(`\n📈 COUNCIL SUMMARY:`);
+  console.log(`\
+📈 COUNCIL SUMMARY:`);
   console.log(`  • Ideas evaluated: ${votingReport.totalEvaluated}`);
   console.log(`  • Average confidence: ${votingReport.avgConfidence}%`);
 
@@ -1909,7 +1989,7 @@ async function callDeepSeekBridge(prompt, config) {
 }
 
 async function tryLocalDeepSeek(prompt, config, envEndpoint) {
-  const endpoint = (CURRENT_DEEPSEEK_ENDPOINT || envEndpoint || '').replace(/\/$/, '');
+  const endpoint = (CURRENT_DEEPSEEK_ENDPOINT || envEndpoint || '').replace(/\\/$/, '');
   if (!endpoint) throw new Error('Endpoint not configured');
   const response = await fetch(`${endpoint}/api/v1/chat`, {
     method: 'POST',
@@ -1917,8 +1997,8 @@ async function tryLocalDeepSeek(prompt, config, envEndpoint) {
     body: JSON.stringify({
       model: config.model,
       messages: [
-        { role: "system", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
-        { role: "user", content: prompt }
+        { role: \"system\", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
+        { role: \"user\", content: prompt }
       ],
       max_tokens: config.maxTokens,
       temperature: 0.7
@@ -1940,8 +2020,8 @@ async function tryCloudDeepSeek(prompt, config) {
     body: JSON.stringify({
       model: config.model,
       messages: [
-        { role: "system", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
-        { role: "user", content: prompt }
+        { role: \"system\", content: `You are ${config.name}. ${config.role}. ${config.focus}.` },
+        { role: \"user\", content: prompt }
       ],
       max_tokens: config.maxTokens,
       temperature: 0.7
@@ -1955,7 +2035,13 @@ async function tryCloudDeepSeek(prompt, config) {
 }
 
 async function tryFallbackClaude(prompt, config) {
-  const enhancedPrompt = `[DEEPSEEK FALLBACK - Acting as ${config.name}]\nRole: ${config.role}\nFocus: ${config.focus}\n\n${prompt}\n\nRespond with ${config.focus} focus.`;
+  const enhancedPrompt = `[DEEPSEEK FALLBACK - Acting as ${config.name}]\
+Role: ${config.role}\
+Focus: ${config.focus}\
+\
+${prompt}\
+\
+Respond with ${config.focus} focus.`;
   const text = await callCouncilMember('claude', enhancedPrompt);
   await storeConversationMemory(prompt, text, { ai_member: 'deepseek', context: 'fallback' });
   return { success: true, text };
@@ -1984,7 +2070,7 @@ async function attemptAICall(member, config, prompt) {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': apiKeys.anthropic.trim(),
-          'anthropic-version': '2023-06-01'
+          'anthropic-version': '2024-06-15'
         },
         body: JSON.stringify({
           model: modelName,
@@ -2025,7 +2111,9 @@ async function attemptAICall(member, config, prompt) {
           signal: controller.signal,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
+            contents: [{ parts: [{ text: `${systemPrompt}\
+\
+${prompt}` }] }],
             generationConfig: { temperature: 0.7, maxOutputTokens: config.maxTokens }
           })
         }
@@ -2170,7 +2258,11 @@ async function callCouncilMember(member, prompt) {
     apiHealthMonitor.attemptRecovery(config.provider);
   });
 
-  const fallbackMsg = `[SYSTEM NOTICE - ${member} temporarily unavailable]\n\nAll primary and fallback AIs are currently unavailable for: ${prompt.slice(0, 50)}...\n\nRecovery in progress. Check /api/v1/system/health-detailed for status.`;
+  const fallbackMsg = `[SYSTEM NOTICE - ${member} temporarily unavailable]\
+\
+All primary and fallback AIs are currently unavailable for: ${prompt.slice(0, 50)}...\
+\
+Recovery in progress. Check /api/v1/system/health-detailed for status.`;
   
   return fallbackMsg;
 }
@@ -2230,7 +2322,10 @@ class SelfRepairEngine {
         return { success: false, error: `Protected: ${filePath}`, needs_council: protection.needs_council };
       }
 
-      const repairPrompt = `FILE: ${filePath}\nISSUE: ${issueDescription}\n\nProvide complete corrected version.`;
+      const repairPrompt = `FILE: ${filePath}\
+ISSUE: ${issueDescription}\
+\
+Provide complete corrected version.`;
       const fixedContent = await callCouncilMember('deepseek', repairPrompt);
 
       const repairResult = {
@@ -2290,7 +2385,7 @@ class FinancialDashboard {
       console.log(`✅ Transaction: ${txId}`);
       return tx;
     } catch (error) {
-      console.error("❌ Transaction error:", error.message);
+      console.error(\"❌ Transaction error:\", error.message);
       return null;
     }
   }
@@ -2308,7 +2403,7 @@ class FinancialDashboard {
       console.log(`✅ Investment: ${invId}`);
       return inv;
     } catch (error) {
-      console.error("❌ Investment error:", error.message);
+      console.error(\"❌ Investment error:\", error.message);
       return null;
     }
   }
@@ -2327,7 +2422,7 @@ class FinancialDashboard {
       console.log(`✅ Crypto: ${symbol}`);
       return position;
     } catch (error) {
-      console.error("❌ Crypto error:", error.message);
+      console.error(\"❌ Crypto error:\", error.message);
       return null;
     }
   }
@@ -2390,7 +2485,7 @@ class FinancialDashboard {
         lastUpdated: new Date().toISOString()
       };
     } catch (error) {
-      console.error("❌ Dashboard error:", error.message);
+      console.error(\"❌ Dashboard error:\", error.message);
       return {
         daily: { income: 0, expenses: 0, net: 0, transactions: 0 },
         monthly: { income: 0, expenses: 0, net: 0 },
@@ -2422,7 +2517,7 @@ class RealEstateEngine {
   }
 
   async getProperties(filter={}) {
-    let query = "SELECT * FROM real_estate_properties WHERE 1=1";
+    let query = \"SELECT * FROM real_estate_properties WHERE 1=1\";
     const params = [];
     let paramCount = 1;
     if (filter.status) {
@@ -2430,7 +2525,7 @@ class RealEstateEngine {
       params.push(filter.status);
       paramCount++;
     }
-    query += " ORDER BY updated_at DESC LIMIT 100";
+    query += \" ORDER BY updated_at DESC LIMIT 100\";
     const result = await pool.query(query, params);
     return result.rows;
   }
@@ -2449,9 +2544,9 @@ class RevenueBotEngine {
 
   async scanForOpportunities() {
     const opportunities = [
-      { source: "Pay-Per-Decision", description: "AI decisions ($50-500)", estimated_revenue: 5000, effort: "easy", priority: 9 },
-      { source: "Real Estate", description: "Commissions (6% avg)", estimated_revenue: 18000, effort: "medium", priority: 10 },
-      { source: "SaaS", description: "AI Council ($500-5000/mo)", estimated_revenue: 12000, effort: "medium", priority: 9 }
+      { source: \"Pay-Per-Decision\", description: \"AI decisions ($50-500)\", estimated_revenue: 5000, effort: \"easy\", priority: 9 },
+      { source: \"Real Estate\", description: \"Commissions (6% avg)\", estimated_revenue: 18000, effort: \"medium\", priority: 10 },
+      { source: \"SaaS\", description: \"AI Council ($500-5000/mo)\", estimated_revenue: 12000, effort: \"medium\", priority: 9 }
     ];
     this.opportunities = opportunities;
     return {
@@ -2505,7 +2600,7 @@ class IncomeDroneSystem {
   }
 
   async generateIncomeTasks(droneConfig) {
-    const prompt = `GENERATE INCOME TASKS NOW. Type: ${droneConfig.type}. Target: $${droneConfig.expectedRevenue}. Return JSON array: [{"description":"...", "expectedRevenue":X, "deadline":"Yh"}]`;
+    const prompt = `GENERATE INCOME TASKS NOW. Type: ${droneConfig.type}. Target: $${droneConfig.expectedRevenue}. Return JSON array: [{\"description\":\"...\", \"expectedRevenue\":X, \"deadline\":\"Yh\"}]`;
     
     try {
       const response = await callCouncilMember('claude', prompt);
@@ -2525,7 +2620,7 @@ class IncomeDroneSystem {
 
   parseIncomeTasks(aiResponse) {
     try {
-      const jsonMatch = aiResponse.match(/\[[\s\S]*\]/);
+      const jsonMatch = aiResponse.match(/\\[[\\s\\S]*\\]/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -2537,7 +2632,8 @@ class IncomeDroneSystem {
     }
     
     const tasks = [];
-    const lines = aiResponse.split('\n').filter(line => 
+    const lines = aiResponse.split('\
+').filter(line => 
       line.trim() && (line.includes('description') || line.includes('$') || line.includes('deadline'))
     );
     
@@ -2545,7 +2641,7 @@ class IncomeDroneSystem {
       tasks.push({
         description: line.slice(0, 100),
         expectedRevenue: 25,
-        deadline: "4h"
+        deadline: \"4h\"
       });
     }
     
@@ -2555,29 +2651,29 @@ class IncomeDroneSystem {
   getFallbackIncomeTasks(droneConfig) {
     const templates = {
       affiliate_marketing: [
-        { description: "Research top 10 AI tools for affiliate promotions", expectedRevenue: 50, deadline: "6h" },
-        { description: "Create AI tool comparison blog post", expectedRevenue: 30, deadline: "3h" },
-        { description: "Set up social media promotion schedule", expectedRevenue: 20, deadline: "2h" }
+        { description: \"Research top 10 AI tools for affiliate promotions\", expectedRevenue: 50, deadline: \"6h\" },
+        { description: \"Create AI tool comparison blog post\", expectedRevenue: 30, deadline: \"3h\" },
+        { description: \"Set up social media promotion schedule\", expectedRevenue: 20, deadline: \"2h\" }
       ],
       micro_saas: [
-        { description: "Develop browser extension MVP", expectedRevenue: 100, deadline: "24h" },
-        { description: "Create landing page for SaaS product", expectedRevenue: 50, deadline: "8h" },
-        { description: "Set up user feedback system", expectedRevenue: 30, deadline: "4h" }
+        { description: \"Develop browser extension MVP\", expectedRevenue: 100, deadline: \"24h\" },
+        { description: \"Create landing page for SaaS product\", expectedRevenue: 50, deadline: \"8h\" },
+        { description: \"Set up user feedback system\", expectedRevenue: 30, deadline: \"4h\" }
       ],
       content_creation: [
-        { description: "Create 5 AI tutorial YouTube shorts", expectedRevenue: 40, deadline: "8h" },
-        { description: "Write 3 blog posts about AI trends", expectedRevenue: 25, deadline: "6h" },
-        { description: "Design social media content calendar", expectedRevenue: 15, deadline: "3h" }
+        { description: \"Create 5 AI tutorial YouTube shorts\", expectedRevenue: 40, deadline: \"8h\" },
+        { description: \"Write 3 blog posts about AI trends\", expectedRevenue: 25, deadline: \"6h\" },
+        { description: \"Design social media content calendar\", expectedRevenue: 15, deadline: \"3h\" }
       ],
       ai_consultation: [
-        { description: "Develop AI consultation service package", expectedRevenue: 200, deadline: "24h" },
-        { description: "Create client onboarding process", expectedRevenue: 150, deadline: "12h" },
-        { description: "Set up consultation scheduling system", expectedRevenue: 100, deadline: "6h" }
+        { description: \"Develop AI consultation service package\", expectedRevenue: 200, deadline: \"24h\" },
+        { description: \"Create client onboarding process\", expectedRevenue: 150, deadline: \"12h\" },
+        { description: \"Set up consultation scheduling system\", expectedRevenue: 100, deadline: \"6h\" }
       ]
     };
     return templates[droneConfig.type] || [
-      { description: `Research ${droneConfig.type} opportunities`, expectedRevenue: 25, deadline: "4h" },
-      { description: `Develop ${droneConfig.type} strategy`, expectedRevenue: 35, deadline: "6h" }
+      { description: `Research ${droneConfig.type} opportunities`, expectedRevenue: 25, deadline: \"4h\" },
+      { description: `Develop ${droneConfig.type} strategy`, expectedRevenue: 35, deadline: \"6h\" }
     ];
   }
 
@@ -2972,23 +3068,23 @@ async function handleRunCouncilMeeting(clientId, message, ws) {
 // SECTION: REST API MIDDLEWARE & AUTHENTICATION
 // ==================================================================================
 
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(express.text({ type: "text/plain", limit: "50mb" }));
-app.use(express.static(join(__dirname, "public")));
+app.use(express.json({ limit: \"50mb\" }));
+app.use(express.urlencoded({ extended: true, limit: \"50mb\" }));
+app.use(express.text({ type: \"text/plain\", limit: \"50mb\" }));
+app.use(express.static(join(__dirname, \"public\")));
 
 function requireCommandKey(req, res, next) {
   const freshConfig = getEnvConfig();
-  const key = req.query.key || req.headers["x-command-key"];
+  const key = req.query.key || req.headers[\"x-command-key\"];
   if (!freshConfig.COMMAND_CENTER_KEY || key !== freshConfig.COMMAND_CENTER_KEY)
-    return res.status(401).json({ error: "unauthorized" });
+    return res.status(401).json({ error: \"unauthorized\" });
   next();
 }
 
 function normalizeUrl(u) {
   try {
     const x = new URL(u);
-    return x.toString().replace(/\/$/, '');
+    return x.toString().replace(/\\/$/, '');
   } catch {
     return null;
   }
@@ -3021,11 +3117,11 @@ app.get('/api/v1/bridge/endpoint', requireCommandKey, (_req, res) => {
 // SECTION: REST API ENDPOINTS - HEALTH & STATUS
 // ==================================================================================
 
-app.get("/health", (req, res) => res.send("OK"));
+app.get(\"/health\", (req, res) => res.send(\"OK\"));
 
-app.get("/healthz", async (_req, res) => {
+app.get(\"/healthz\", async (_req, res) => {
   try {
-    await pool.query("SELECT NOW()");
+    await pool.query(\"SELECT NOW()\");
     const taskStatus = executionQueue.getStatus();
     const health = await selfRepairEngine.analyzeSystemHealth();
 
@@ -3120,18 +3216,18 @@ app.post('/api/v1/code/generate', requireCommandKey, async (req, res) => {
 
 app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
   try {
-    const rawBody = typeof req.body === "string" ? req.body : (req.body?.micro || req.body?.text || "");
+    const rawBody = typeof req.body === \"string\" ? req.body : (req.body?.micro || req.body?.text || \"\");
     if (!rawBody) {
       try {
         const v3 = encodeLCTP({ v: '3', type: 'directive', project: 'lifeOS', flow: 'auto-price', integration: 'Stripe', quorum: 85, signer: 'System' });
-        return res.type("text/plain").send(v3);
+        return res.type(\"text/plain\").send(v3);
       } catch (e) {
-        return res.status(400).type("text/plain").send("V:2.0|CT:missing~input");
+        return res.status(400).type(\"text/plain\").send(\"V:2.0|CT:missing~input\");
       }
     }
 
     let microOut;
-    if (String(rawBody).startsWith("V:3") || (rawBody.length > 30 && /^[A-Za-z0-9\-_]+$/.test(rawBody))) {
+    if (String(rawBody).startsWith(\"V:3\") || (rawBody.length > 30 && /^[A-Za-z0-9\\-_]+$/.test(rawBody))) {
       try {
         const decoded = decodeLCTP(rawBody);
         microOut = encodeLCTP(decoded);
@@ -3139,18 +3235,18 @@ app.post('/api/v1/architect/micro', requireCommandKey, async (req, res) => {
         microOut = `V:2.0|CT:v3~error`;
       }
     } else {
-      const r = await callCouncilMember("claude", rawBody);
-      trackCost({}, "claude-3-5-sonnet-20241022");
-      microOut = String(r || "").trim();
-      if (!microOut.startsWith("V:")) {
+      const r = await callCouncilMember(\"claude\", rawBody);
+      trackCost({}, \"claude-3-5-sonnet-20241022\");
+      microOut = String(r || \"\").trim();
+      if (!microOut.startsWith(\"V:\")) {
         microOut = MICRO_PROTOCOL.encode({ operation: 'generate', description: microOut.slice(0, 200), type: 'response' });
       }
     }
 
-    return res.type("text/plain").send(microOut || "V:2.0|CT:empty");
+    return res.type(\"text/plain\").send(microOut || \"V:2.0|CT:empty\");
   } catch (e) {
-    console.error("[architect.micro]", e);
-    return res.status(500).type("text/plain").send(`V:2.0|CT:error`);
+    console.error(\"[architect.micro]\", e);
+    return res.status(500).type(\"text/plain\").send(`V:2.0|CT:error`);
   }
 });
 
@@ -3407,7 +3503,7 @@ app.get('/overlay/debug', (req, res) => {
 });
 
 app.get('/overlay/command-center.html', (req, res) => {
-  res.sendFile(join(__dirname, "public/overlay/command-center.html"));
+  res.sendFile(join(__dirname, \"public/overlay/command-center.html\"));
 });
 
 // ==================================================================================
@@ -3420,7 +3516,7 @@ async function startServer() {
 
     await initDb();
 
-    console.log("🏥 Starting API health monitoring...");
+    console.log(\"🏥 Starting API health monitoring...\");
     await apiHealthMonitor.healthCheck();
     await systemModeController.updateMode();
     
@@ -3429,124 +3525,100 @@ async function startServer() {
       await systemModeController.updateMode();
     }, 30000);
 
-    console.log("🚀 Starting execution queue...");
+    console.log(\"🚀 Starting execution queue...\");
     executionQueue.executeNext();
 
-    console.log("🛸 DEPLOYING INCOME-GENERATING DRONES...");
+    console.log(\"🛸 DEPLOYING INCOME-GENERATING DRONES...\");
     incomeDroneSystem.deployIncomeDrones().catch(console.error);
 
-    console.log("🎼 SCHEDULING DAILY COUNCIL MEETINGS...");
+    console.log(\"🎼 SCHEDULING DAILY COUNCIL MEETINGS...\");
     setInterval(async () => {
       const now = dayjs();
-      // Run at 8 AM daily
       if (now.hour() === 8 && now.minute() === 0) {
         try {
-          console.log("\n⏰ DAILY COUNCIL MEETING TIME - Running...");
+          console.log(\"\
+⏰ DAILY COUNCIL MEETING TIME - Running...\");
           await runDailyCouncilMeeting();
         } catch (error) {
-          console.error("❌ Council meeting failed:", error.message);
+          console.error(\"❌ Council meeting failed:\", error.message);
         }
       }
-    }, 60000); // Check every minute
+    }, 60000);
 
     const freshConfig = getEnvConfig();
     
     server.listen(freshConfig.PORT, freshConfig.HOST, () => {
-      console.log(`\n${'═'.repeat(90)}`);
+      console.log(`\
+${'═'.repeat(90)}`);
       console.log(`✅ SERVER.JS v21.0 - COMPLETE AI ORCHESTRATION SYSTEM ONLINE`);
       console.log(`${'═'.repeat(90)}`);
       
-      console.log(`\n🌐 SERVER INTERFACE:
+      console.log(`\
+🌐 SERVER INTERFACE:
   • Server:        http://${freshConfig.HOST}:${freshConfig.PORT}
   • WebSocket:     ws://${freshConfig.HOST}:${freshConfig.PORT}
   • Health:        http://${freshConfig.HOST}:${freshConfig.PORT}/healthz
   • Overlay UI:    http://${freshConfig.HOST}:${freshConfig.PORT}/overlay/command-center.html`);
 
-      console.log(`\n🤖 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MODELS):`);
+      console.log(`\
+🤖 AI COUNCIL (${Object.keys(COUNCIL_MEMBERS).length} MODELS):`);
       Object.entries(COUNCIL_MEMBERS).forEach(([, member]) => 
         console.log(`  • ${member.name} (${member.official_name}) - ${member.role}`)
       );
       
-      console.log(`\n🌉 DEEPSEEK BRIDGE: ${freshConfig.DEEPSEEK_BRIDGE_ENABLED ? 'ENABLED' : 'DISABLED'}`);
+      console.log(`\
+🌉 DEEPSEEK BRIDGE: ${freshConfig.DEEPSEEK_BRIDGE_ENABLED ? 'ENABLED' : 'DISABLED'}`);
       if (freshConfig.DEEPSEEK_BRIDGE_ENABLED) {
         console.log(`  Endpoint: ${CURRENT_DEEPSEEK_ENDPOINT || freshConfig.DEEPSEEK_LOCAL_ENDPOINT || 'Not configured'}`);
       }
       
-      console.log(`\n📊 COMPLETE FEATURE SET:
+      console.log(`\
+📊 COMPLETE FEATURE SET:
   ✅ WebSocket real-time communication
-  ✅ 3-layer automatic memory system (extraction + recall)
-  ✅ Task execution queue with code generation
-  ✅ Financial dashboard (P&L, Investments, Crypto)
-  ✅ Real estate business engine
-  ✅ Revenue opportunity bot + Income drones
-  ✅ AI council integration (5 models with parallel voting)
-  ✅ Protected file system with council approval
-  ✅ Self-repair capabilities (auto-analysis + fix)
-  ✅ LCTP v3 Compression (80-95% reduction)
-  ✅ MICRO Protocol v2.0 (70-80% reduction)
-  ✅ CRC32 integrity checking
-  ✅ Bit-packing + Dictionary substitution
-  ✅ File upload & indexing
-  ✅ Complete overlay system
-  ✅ ROI tracking + cost optimization
-  ✅ API Health Monitoring & Failover
-  ✅ System Mode Controller
-  ✅ 🔥 DYNAMIC RAILWAY ENVIRONMENT VARIABLE RELOADING 🔥
-  ✅ Universal Overlay Integration`);
+  ✅ 3-layer automatic memory system
+  ✅ Task execution queue
+  ✅ Financial dashboard
+  ✅ Real estate engine
+  ✅ AI council (5 models)
+  ✅ LCTP v3 & MICRO compression
+  ✅ Health monitoring & failover
+  ✅ System diagnostics & self-repair
+  ✅ Idea engine & council voting
+  ✅ Pod orchestration
+  ✅ Sandbox testing
+  ✅ Income drone system
+  🔥 DYNAMIC RAILWAY ENV VAR RELOADING
+  🔥 UPDATED CLAUDE API v2024-06-15`);
 
-      console.log(`\n💡 IDEA ENGINE & COUNCIL SYSTEM:
-  ✅ Daily idea generation (20 per AI x 5 = 100 total ideas)
-  ✅ 4-stage council voting system
-  ✅ Adam Hopkins preference learning
-  ✅ Unintended consequences analysis
-  ✅ Dual argumentation (Pro/Con)
-  ✅ Sandbox testing environment
-  ✅ Risk mitigation strategies
-  ✅ Solution generation`);
-
-      console.log(`\n🎯 POD ORCHESTRATION:
-  ✅ Pod 1: Income Generation ($500 target)
-  ✅ Pod 2: Income Generation ($300 target)
-  ✅ Pod 3: Market Research (10 opportunities)
-  ✅ Pod 4: System Improvements (5 improvements)
-  ✅ All pods use MICRO compression (85-90% cost reduction)`);
-      
-      console.log(`\n🚀 DEPLOYMENT: GitHub + Railway
-  • System hosted on Railway
-  • Code managed on GitHub (LimitlessOI/Lumin-LifeOS)
-  • Database: Neon PostgreSQL (SSL enabled)
-  • DeepSeek runs locally (when available)
-  • Council works with or without local DeepSeek\n`);
-
-      console.log("🎼 READY - AI ORCHESTRATION SYSTEM ACTIVE");
-      console.log("✅ Fresh Railway environment variables are read dynamically!");
-      console.log("The system will work with or without your local DeepSeek instance.");
-      console.log("When your laptop is offline, the council continues with other AIs.");
-      console.log("Daily council meetings scheduled for 8:00 AM daily.\n");
+      console.log(`\
+✅ SYSTEM READY - All systems nominal!`);
+      console.log(`Daily council meetings scheduled for 8:00 AM daily.\
+`);
     });
   } catch (error) {
-    console.error("❌ Server startup error:", error);
+    console.error(\"❌ Server startup error:\", error);
     process.exit(1);
   }
 }
 
-  // ==================================================================================
+// ==================================================================================
 // SECTION: GRACEFUL SHUTDOWN
 // ==================================================================================
 
 function handleGracefulShutdown() {
-  console.log("\n📊 Graceful shutdown initiated...");
+  console.log(\"\
+📊 Graceful shutdown initiated...\");
   for (const [, ws] of activeConnections.entries()) {
-    try { ws.close(1000, "Server shutting down"); } 
+    try { ws.close(1000, \"Server shutting down\"); } 
     catch {}
   }
-  pool.end(() => console.log("✅ Database pool closed"));
+  pool.end(() => console.log(\"✅ Database pool closed\"));
   server.close(() => {
-    console.log("✅ Server closed");
+    console.log(\"✅ Server closed\");
     process.exit(0);
   });
   setTimeout(() => {
-    console.error("❌ Forcing shutdown");
+    console.error(\"❌ Forcing shutdown\");
     process.exit(1);
   }, 10000);
 }
@@ -3555,5 +3627,12 @@ process.on('SIGINT', handleGracefulShutdown);
 process.on('SIGTERM', handleGracefulShutdown);
 
 startServer();
+```
 
-// Server is running - no export needed
+---
+
+## 🚀 **DEPLOYMENT INSTRUCTIONS**
+
+1. **Replace your entire `server.js`** with the file I just create`,
+  `description`: `Complete corrected server.js v21.0 - Full working version with all fixes applied`
+}
