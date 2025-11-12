@@ -3,18 +3,19 @@
  * ║                     🎼 SERVER.JS v21.0 - COMPLETE PRODUCTION                    ║
  * ║         2400+ LINES • ALL SYSTEMS • FRESH RAILWAY READS • OVERLAY READY          ║
  * ║     WITH IDEA ENGINE + COUNCIL VOTING + POD ORCHESTRATION + SANDBOX              ║
- * ║                   🔥 FIXED: DYNAMIC ENV VAR RELOADING 🔥                         ║
+ * ║                   🔥 FIXED: DYNAMIC ENV VAR + CLAUDE API v2024 🔥                ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
-*/
-import express from \"express\";
-import dayjs from \"dayjs\";
-import fs from \"fs\";
-import path from \"path\";
-import { fileURLToPath } from \"url\";
-import { dirname, join } from \"path\";
-import { Pool } from \"pg\";
-import { WebSocketServer } from \"ws\";
-import { createServer } from \"http\";
+ */
+
+import express from "express";
+import dayjs from "dayjs";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import { Pool } from "pg";
+import { WebSocketServer } from "ws";
+import { createServer } from "http";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
