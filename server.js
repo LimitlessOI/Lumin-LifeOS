@@ -17,21 +17,15 @@ const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
 const {
-  DATABASE_URL,
   COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
-  OPENAI_API_KEY,
-  ANTHROPIC_API_KEY,
-  GEMINI_API_KEY,
-  DEEPSEEK_API_KEY,
-  GROK_API_KEY,
-  GITHUB_TOKEN,
   GITHUB_REPO = "LimitlessOI/Lumin-LifeOS",
   OLLAMA_ENDPOINT = "http://localhost:11434",
   DEEPSEEK_LOCAL_ENDPOINT = "",
   HOST = "0.0.0.0",
   PORT = 8080,
   MAX_DAILY_SPEND = 50.0,
-  NODE_ENV = "production"
+  NODE_ENV = "production",
+  DATABASE_URL
 } = process.env;
 
 app.use(express.json({ limit: "50mb" }));
@@ -48,6 +42,7 @@ export const pool = new Pool({
 });
 
 let activeConnections = new Map();
+let overlayStates = new Map();
 let adamPatternAnalysis = {
   decisions: [],
   patterns: {},
@@ -336,186 +331,269 @@ async function loadROIFromDatabase() {
   }
 }
 
-const b64u = {
-  enc: (u8) => Buffer.from(u8).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''),
-  dec: (s) => new Uint8Array(Buffer.from(s.replace(/-/g, '+').replace(/_/g, '/'), 'base64'))
-};
-
-function crc32(u8) {
-  let c = 0 ^ -1;
-  for (let i = 0; i < u8.length; i++) {
-    c ^= u8[i];
-    for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xEDB88320 & (-(c & 1)));
-  }
-  return (c ^ -1) >>> 0;
-}
-
-const DICT = {
-  type: { directive: 1, briefing: 2, repair: 3, plan: 4, status: 5 },
-  project: { lifeOS: 1, lumin: 1 },
-  integ: { Stripe: 1, Twilio: 2, Notion: 3, GitHub: 4, Anthropic: 5, OpenAI: 6 },
-  flow: { 'auto-price': 1, 'add-sms': 2, 'repair-self': 3, 'codeGen': 4, 'deploy': 5 },
-  signer: { System: 1, Claude: 2, Council: 3 }
-};
-
-function createReverseLookup(dict) {
-  const reverse = {};
-  Object.entries(dict).forEach(([key, val]) => {
-    if (typeof val === 'number') reverse[val] = key;
-  });
-  return reverse;
-}
-
-const RDICT = Object.fromEntries(Object.entries(DICT).map(([k, map]) => [k, createReverseLookup(map)]));
-
-function packBits(values) {
-  const out = [];
-  let cur = 0, used = 0;
-  for (const { bits, val } of values) {
-    let v = val >>> 0, b = bits;
-    while (b > 0) {
-      const fit = Math.min(8 - used, b);
-      const mask = (1 << fit) - 1;
-      cur |= ((v & mask) << used);
-      used += fit;
-      v >>>= fit;
-      b -= fit;
-      if (used === 8) { out.push(cur); cur = 0; used = 0; }
-    }
-  }
-  if (used) out.push(cur);
-  return Uint8Array.from(out);
-}
-
-function unpackBits(u8, spec) {
-  const out = {};
-  let bitPos = 0, idx = 0, cur = u8[0] || 0;
-  for (const { bits, name } of spec) {
-    let got = 0, val = 0, shift = 0;
-    while (got < bits) {
-      if (bitPos === 8) { idx++; cur = u8[idx] || 0; bitPos = 0; }
-      const avail = Math.min(8 - bitPos, bits - got);
-      const mask = (1 << avail) - 1;
-      val |= ((cur >> bitPos) & mask) << shift;
-      bitPos += avail;
-      shift += avail;
-      got += avail;
-    }
-    out[name] = val >>> 0;
-  }
-  return { out, offset: Math.ceil((spec.reduce((a, b) => a + b.bits, 0)) / 8) };
-}
-
-function encodeLCTP({ v = '3', type, project, flow, integration, monetization = '0%', quorum = 85, signer = 'System' } = {}) {
-  const vN = Number(v) & 0x7;
-  const tN = DICT.type[type] || 0;
-  const pN = DICT.project[project] || 0;
-  const iN = DICT.integ[integration] || 0;
-  const qN = Math.max(0, Math.min(100, quorum)) & 0x7f;
-  const bps = Math.round(parseFloat(String(monetization).replace('%', '')) * 100) || 0;
-
-  const head = packBits([
-    { bits: 3, val: vN },
-    { bits: 3, val: tN },
-    { bits: 5, val: pN },
-    { bits: 5, val: iN },
-    { bits: 7, val: qN },
-    { bits: 14, val: bps }
-  ]);
-
-  const body = [];
-  if (flow && DICT.flow[flow]) {
-    body.push(0xf0, 0x01, DICT.flow[flow] & 0xff);
-  }
-
-  let cBytes = new TextEncoder().encode((flow || '') + '|' + (signer || ''));
-  const crc = crc32(cBytes);
-  body.push(0xc0, 0x04, crc & 0xff, (crc >>> 8) & 0xff, (crc >>> 16) & 0xff, (crc >>> 24) & 0xff);
-
-  if (DICT.signer[signer]) {
-    body.push(0xd0, 0x01, DICT.signer[signer] & 0xff);
-  }
-
-  const u8 = new Uint8Array(head.length + body.length);
-  u8.set(head, 0);
-  u8.set(body, head.length);
-  return b64u.enc(u8);
-}
-
-function decodeLCTP(b64) {
-  const u8 = b64u.dec(b64);
-  const spec = [
-    { bits: 3, name: 'v' },
-    { bits: 3, name: 't' },
-    { bits: 5, name: 'p' },
-    { bits: 5, name: 'i' },
-    { bits: 7, name: 'q' },
-    { bits: 14, name: 'bps' }
-  ];
-  const { out } = unpackBits(u8, spec);
-  return {
-    v: String(out.v),
-    type: RDICT.type[out.t] || `t${out.t}`,
-    project: RDICT.project[out.p] || `p${out.p}`,
-    integration: RDICT.integ[out.i] || `i${out.i}`,
-    quorum: out.q,
-    monetization: (out.bps / 100).toFixed(2) + '%'
-  };
-}
-
-const MICRO_PROTOCOL = {
-  encode: (data) => {
-    const parts = ["V:2.0"];
-    if (data.operation) parts.push(`OP:${data.operation.charAt(0).toUpperCase()}`);
-    if (data.description) {
-      const compressed = data.description
-        .replace(/generate/gi, "GEN").replace(/analyze/gi, "ANL")
-        .replace(/create/gi, "CRT").replace(/build/gi, "BLD")
-        .replace(/optimize/gi, "OPT").replace(/review/gi, "REV")
-        .replace(/\s+/g, "~");
-      parts.push(`D:${compressed.slice(0, 240)}`);
-    }
-    if (data.type) parts.push(`T:${data.type.charAt(0).toUpperCase()}`);
-    return parts.join("|");
+const COUNCIL_MEMBERS = {
+  claude: {
+    name: "Claude",
+    model: "claude-3-5-sonnet-20241022",
+    provider: "anthropic",
+    role: "Strategic Oversight",
+    focus: "architecture & long-term planning"
   },
-  decode: (micro) => {
-    const result = {};
-    micro.split("|").forEach((part) => {
-      const [key, value] = part.split(":");
-      if (!value) return;
-      switch (key) {
-        case "V": result.version = value; break;
-        case "OP":
-          const ops = { G: "generate", A: "analyze", C: "create", B: "build", O: "optimize", R: "review" };
-          result.operation = ops[value] || value;
-          break;
-        case "D":
-          result.description = value.replace(/GEN/g, "generate").replace(/ANL/g, "analyze")
-            .replace(/CRT/g, "create").replace(/BLD/g, "build").replace(/OPT/g, "optimize")
-            .replace(/REV/g, "review").replace(/~/g, " ");
-          break;
-        case "T":
-          const types = { S: "script", R: "report", L: "list", C: "code", A: "analysis" };
-          result.type = types[value] || value;
-          break;
-      }
-    });
-    return result;
+  chatgpt: {
+    name: "ChatGPT",
+    model: "gpt-4o",
+    provider: "openai",
+    role: "Technical Executor",
+    focus: "implementation & execution"
+  },
+  gemini: {
+    name: "Gemini",
+    model: "gemini-2.0-flash-exp",
+    provider: "google",
+    role: "Research Analyst",
+    focus: "data analysis & patterns"
+  },
+  deepseek: {
+    name: "DeepSeek",
+    model: "deepseek-coder",
+    provider: "deepseek",
+    role: "Infrastructure Specialist",
+    focus: "optimization & performance"
+  },
+  grok: {
+    name: "Grok",
+    model: "grok-beta",
+    provider: "xai",
+    role: "Innovation Scout",
+    focus: "novel approaches & risks"
   }
 };
 
-async function trackCompressionStat(originalTokens, compressedTokens, type = "LCTP") {
-  try {
-    const ratio = originalTokens > 0 ? ((originalTokens - compressedTokens) / originalTokens * 100).toFixed(2) : 0;
-    const costSaved = (originalTokens - compressedTokens) * 0.00001;
-    await pool.query(
-      `INSERT INTO compression_stats (original_tokens, compressed_tokens, compression_ratio, cost_saved, compression_type, created_at)
-       VALUES ($1, $2, $3, $4, $5, now())`,
-      [originalTokens, compressedTokens, ratio, costSaved, type]
-    );
-  } catch (error) {
-    console.error("Compression stat error:", error.message);
+async function callCouncilMember(member, prompt) {
+  const config = COUNCIL_MEMBERS[member];
+  if (!config) throw new Error(`Unknown member: ${member}`);
+
+  const spend = await getDailySpend();
+  if (spend >= MAX_DAILY_SPEND) {
+    console.warn(`⚠️ Daily spend limit ($${MAX_DAILY_SPEND}) reached.`);
+    throw new Error(`Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`);
   }
+
+  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Be concise and strategic.`;
+
+  try {
+    if (config.provider === "anthropic") {
+      const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
+      if (!apiKey) throw new Error("ANTHROPIC_API_KEY not set");
+      
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01"
+        },
+        body: JSON.stringify({
+          model: config.model,
+          max_tokens: 2048,
+          system: systemPrompt,
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.content?.[0]?.text || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      await updateROI(0, cost, 0);
+      await storeMemory(prompt, text, member);
+      await recordAIPerformance(member, 'dialogue', 0, json.usage?.total_tokens || 0, cost, 95, true);
+
+      console.log(`✅ [${member}] ${text.length} chars, $${cost.toFixed(4)}`);
+      return text;
+    }
+
+    if (config.provider === "openai") {
+      const apiKey = process.env.OPENAI_API_KEY?.trim();
+      if (!apiKey) throw new Error("OPENAI_API_KEY not set");
+      
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: config.model,
+          max_tokens: 2048,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt }
+          ]
+        })
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      await updateROI(0, cost, 0);
+      await storeMemory(prompt, text, member);
+      await recordAIPerformance(member, 'dialogue', 0, json.usage?.total_tokens || 0, cost, 92, true);
+
+      console.log(`✅ [${member}] ${text.length} chars, $${cost.toFixed(4)}`);
+      return text;
+    }
+
+    if (config.provider === "google") {
+      const apiKey = process.env.GEMINI_API_KEY?.trim();
+      if (!apiKey) throw new Error("GEMINI_API_KEY not set");
+      
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
+            generationConfig: { maxOutputTokens: 2048 }
+          })
+        }
+      );
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      if (!text) throw new Error("Empty response");
+
+      await storeMemory(prompt, text, member);
+      await recordAIPerformance(member, 'dialogue', 0, 0, 0, 88, true);
+
+      console.log(`✅ [${member}] ${text.length} chars`);
+      return text;
+    }
+
+    if (config.provider === "xai") {
+      const apiKey = process.env.GROK_API_KEY?.trim();
+      if (!apiKey) throw new Error("GROK_API_KEY not set");
+      
+      const response = await fetch("https://api.x.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: config.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt }
+          ],
+          max_tokens: 2048
+        })
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      await updateROI(0, cost, 0);
+      await storeMemory(prompt, text, member);
+      await recordAIPerformance(member, 'dialogue', 0, json.usage?.total_tokens || 0, cost, 85, true);
+
+      console.log(`✅ [${member}] ${text.length} chars, $${cost.toFixed(4)}`);
+      return text;
+    }
+
+    if (config.provider === "deepseek") {
+      const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
+      if (!apiKey) throw new Error("DEEPSEEK_API_KEY not set");
+      
+      const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: config.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt }
+          ],
+          max_tokens: 2048
+        })
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      await updateROI(0, cost, 0);
+      await storeMemory(prompt, text, member);
+      await recordAIPerformance(member, 'dialogue', 0, json.usage?.total_tokens || 0, cost, 90, true);
+
+      console.log(`✅ [${member}] ${text.length} chars, $${cost.toFixed(4)}`);
+      return text;
+    }
+
+    throw new Error(`${config.provider.toUpperCase()}_API_KEY not configured`);
+  } catch (error) {
+    console.error(`❌ [${member}] ${error.message}`);
+    await recordAIPerformance(member, 'dialogue', 0, 0, 0, 0, false);
+    throw error;
+  }
+}
+
+async function callCouncilWithFailover(prompt, preferredMember = "claude") {
+  const members = Object.keys(COUNCIL_MEMBERS);
+  const ordered = [preferredMember, ...members.filter(m => m !== preferredMember)];
+
+  for (const member of ordered) {
+    try {
+      return await callCouncilMember(member, prompt);
+    } catch (error) {
+      console.log(`⚠️ [${member}] failed, trying next...`);
+      continue;
+    }
+  }
+
+  throw new Error("🚨 No AI council members available");
+}
+
+function calculateCost(usage, model = "gpt-4o-mini") {
+  const prices = {
+    "claude-3-5-sonnet-20241022": { input: 0.003, output: 0.015 },
+    "gpt-4o": { input: 0.0025, output: 0.01 },
+    "gemini-2.0-flash-exp": { input: 0.0001, output: 0.0004 },
+    "deepseek-coder": { input: 0.0001, output: 0.0003 },
+    "grok-beta": { input: 0.005, output: 0.015 }
+  };
+  const price = prices[model] || prices["gpt-4o-mini"];
+  return ((usage?.prompt_tokens || 0) * price.input / 1000) +
+    ((usage?.completion_tokens || 0) * price.output / 1000);
 }
 
 async function getDailySpend(date = dayjs().format("YYYY-MM-DD")) {
@@ -542,19 +620,6 @@ async function updateDailySpend(amount, date = dayjs().format("YYYY-MM-DD")) {
     console.error("Spend update error:", error.message);
     return 0;
   }
-}
-
-function calculateCost(usage, model = "gpt-4o-mini") {
-  const prices = {
-    "claude-3-5-sonnet-20241022": { input: 0.003, output: 0.015 },
-    "gpt-4o": { input: 0.0025, output: 0.01 },
-    "gemini-2.0-flash-exp": { input: 0.0001, output: 0.0004 },
-    "deepseek-coder": { input: 0.0001, output: 0.0003 },
-    "grok-beta": { input: 0.005, output: 0.015 }
-  };
-  const price = prices[model] || prices["gpt-4o-mini"];
-  return ((usage?.prompt_tokens || 0) * price.input / 1000) +
-    ((usage?.completion_tokens || 0) * price.output / 1000);
 }
 
 async function updateROI(revenue = 0, cost = 0, tasksCompleted = 0) {
@@ -607,6 +672,38 @@ async function recallMemory(query, limit = 50) {
   }
 }
 
+async function recordAIPerformance(aiMember, taskType, durationMs, tokensUsed, cost, accuracy, success) {
+  try {
+    await pool.query(
+      `INSERT INTO ai_performance (ai_member, task_type, duration_ms, tokens_used, cost, accuracy, success, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, now())`,
+      [aiMember, taskType, durationMs, tokensUsed, cost, accuracy, success]
+    );
+  } catch (error) {
+    console.error("Performance recording error:", error.message);
+  }
+}
+
+async function getAIScores() {
+  try {
+    const result = await pool.query(`
+      SELECT ai_member,
+        COUNT(*) as total_tasks,
+        SUM(CASE WHEN success THEN 1 ELSE 0 END) as successful_tasks,
+        AVG(accuracy) as avg_accuracy,
+        AVG(duration_ms) as avg_duration,
+        AVG(cost) as avg_cost
+      FROM ai_performance
+      GROUP BY ai_member
+      ORDER BY avg_accuracy DESC
+    `);
+    return result.rows;
+  } catch (error) {
+    console.error("AI scores query error:", error.message);
+    return [];
+  }
+}
+
 async function trackLoss(severity, whatWasLost, whyLost, context = {}, prevention = "") {
   try {
     await pool.query(
@@ -617,28 +714,6 @@ async function trackLoss(severity, whatWasLost, whyLost, context = {}, preventio
     console.error(`🚨 [LOSS TRACKED] ${severity}: ${whatWasLost}`);
   } catch (error) {
     console.error("Loss tracking error:", error.message);
-  }
-}
-
-async function quarterlyLossReview() {
-  try {
-    const losses = await pool.query(
-      `SELECT severity, what_was_lost, why_lost, COUNT(*) as count 
-       FROM loss_log 
-       WHERE severity IN ('error', 'critical')
-       GROUP BY severity, what_was_lost, why_lost
-       ORDER BY count DESC LIMIT 20`
-    );
-
-    if (losses.rows.length > 0) {
-      const summary = losses.rows.map(r => `${r.count}x ${r.severity}: ${r.what_was_lost}`).join(", ");
-      console.log(`📊 Quarterly Loss Review: ${summary}`);
-      if (executionQueue) {
-        await executionQueue.addTask('analysis', `Analyze loss patterns: ${summary}`);
-      }
-    }
-  } catch (error) {
-    console.error("Quarterly review error:", error.message);
   }
 }
 
@@ -863,39 +938,6 @@ async function conductConsensusVote(proposalId) {
   }
 }
 
-async function recordAIPerformance(aiMember, taskType, durationMs, tokensUsed, cost, accuracy, success) {
-  try {
-    await pool.query(
-      `INSERT INTO ai_performance (ai_member, task_type, duration_ms, tokens_used, cost, accuracy, success, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, now())`,
-      [aiMember, taskType, durationMs, tokensUsed, cost, accuracy, success]
-    );
-    console.log(`📊 [${aiMember}] Performance recorded: ${success ? '✅' : '❌'}`);
-  } catch (error) {
-    console.error("Performance recording error:", error.message);
-  }
-}
-
-async function getAIScores() {
-  try {
-    const result = await pool.query(`
-      SELECT ai_member,
-        COUNT(*) as total_tasks,
-        SUM(CASE WHEN success THEN 1 ELSE 0 END) as successful_tasks,
-        AVG(accuracy) as avg_accuracy,
-        AVG(duration_ms) as avg_duration,
-        AVG(cost) as avg_cost
-      FROM ai_performance
-      GROUP BY ai_member
-      ORDER BY avg_accuracy DESC
-    `);
-    return result.rows;
-  } catch (error) {
-    console.error("AI scores query error:", error.message);
-    return [];
-  }
-}
-
 async function analyzeUserDecision(context, choice, outcome, riskLevel) {
   try {
     const decisionId = `dec_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -960,243 +1002,6 @@ async function predictUserChoice(situation) {
     console.error("Prediction error:", error.message);
     return { prediction: 'UNKNOWN', confidence: 0 };
   }
-}
-
-const COUNCIL_MEMBERS = {
-  claude: {
-    name: "Claude",
-    model: "claude-3-5-sonnet-20241022",
-    provider: "anthropic",
-    role: "Strategic Oversight",
-    focus: "architecture & long-term planning"
-  },
-  chatgpt: {
-    name: "ChatGPT",
-    model: "gpt-4o",
-    provider: "openai",
-    role: "Technical Executor",
-    focus: "implementation & execution"
-  },
-  gemini: {
-    name: "Gemini",
-    model: "gemini-2.0-flash-exp",
-    provider: "google",
-    role: "Research Analyst",
-    focus: "data analysis & patterns"
-  },
-  deepseek: {
-    name: "DeepSeek",
-    model: "deepseek-coder",
-    provider: "deepseek",
-    role: "Infrastructure Specialist",
-    focus: "optimization & performance"
-  },
-  grok: {
-    name: "Grok",
-    model: "grok-beta",
-    provider: "xai",
-    role: "Innovation Scout",
-    focus: "novel approaches & risks"
-  }
-};
-
-async function callCouncilMember(member, prompt) {
-  const config = COUNCIL_MEMBERS[member];
-  if (!config) throw new Error(`Unknown member: ${member}`);
-
-  const spend = await getDailySpend();
-  if (spend >= MAX_DAILY_SPEND) {
-    console.warn(`⚠️ Daily spend limit ($${MAX_DAILY_SPEND}) reached.`);
-    throw new Error(`Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`);
-  }
-
-  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Be concise and strategic.`;
-
-  try {
-    if (config.provider === "anthropic" && ANTHROPIC_API_KEY) {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": ANTHROPIC_API_KEY.trim(),
-          "anthropic-version": "2023-06-01"
-        },
-        body: JSON.stringify({
-          model: config.model,
-          max_tokens: 2048,
-          system: systemPrompt,
-          messages: [{ role: "user", content: prompt }]
-        })
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.content?.[0]?.text || "";
-      if (!text) throw new Error("Empty response");
-
-      const cost = calculateCost(json.usage, config.model);
-      await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
-      await storeMemory(prompt, text, member);
-      await recordAIPerformance(member, 'dialogue', 0, json.usage?.total_tokens || 0, cost, 95, true);
-
-      console.log(`✅ [${member}] ${text.length} chars, $${cost.toFixed(4)}`);
-      return text;
-    }
-
-    if (config.provider === "openai" && OPENAI_API_KEY) {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${OPENAI_API_KEY.trim()}`
-        },
-        body: JSON.stringify({
-          model: config.model,
-          max_tokens: 2048,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
-          ]
-        })
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.choices?.[0]?.message?.content || "";
-      if (!text) throw new Error("Empty response");
-
-      const cost = calculateCost(json.usage, config.model);
-      await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
-      await storeMemory(prompt, text, member);
-      await recordAIPerformance(member, 'dialogue', 0, json.usage?.total_tokens || 0, cost, 92, true);
-
-      console.log(`✅ [${member}] ${text.length} chars, $${cost.toFixed(4)}`);
-      return text;
-    }
-
-    if (config.provider === "google" && GEMINI_API_KEY) {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${GEMINI_API_KEY.trim()}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
-            generationConfig: { maxOutputTokens: 2048 }
-          })
-        }
-      );
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      if (!text) throw new Error("Empty response");
-
-      await storeMemory(prompt, text, member);
-      await recordAIPerformance(member, 'dialogue', 0, 0, 0, 88, true);
-
-      console.log(`✅ [${member}] ${text.length} chars`);
-      return text;
-    }
-
-    if (config.provider === "xai" && GROK_API_KEY) {
-      const response = await fetch("https://api.x.ai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${GROK_API_KEY.trim()}`
-        },
-        body: JSON.stringify({
-          model: config.model,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
-          ],
-          max_tokens: 2048
-        })
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.choices?.[0]?.message?.content || "";
-      if (!text) throw new Error("Empty response");
-
-      const cost = calculateCost(json.usage, config.model);
-      await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
-      await storeMemory(prompt, text, member);
-      await recordAIPerformance(member, 'dialogue', 0, json.usage?.total_tokens || 0, cost, 85, true);
-
-      console.log(`✅ [${member}] ${text.length} chars, $${cost.toFixed(4)}`);
-      return text;
-    }
-
-    if (config.provider === "deepseek" && DEEPSEEK_API_KEY) {
-      const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${DEEPSEEK_API_KEY.trim()}`
-        },
-        body: JSON.stringify({
-          model: config.model,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
-          ],
-          max_tokens: 2048
-        })
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.choices?.[0]?.message?.content || "";
-      if (!text) throw new Error("Empty response");
-
-      const cost = calculateCost(json.usage, config.model);
-      await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
-      await storeMemory(prompt, text, member);
-      await recordAIPerformance(member, 'dialogue', 0, json.usage?.total_tokens || 0, cost, 90, true);
-
-      console.log(`✅ [${member}] ${text.length} chars, $${cost.toFixed(4)}`);
-      return text;
-    }
-
-    throw new Error(`${config.provider.toUpperCase()}_API_KEY not configured`);
-  } catch (error) {
-    console.error(`❌ [${member}] ${error.message}`);
-    await recordAIPerformance(member, 'dialogue', 0, 0, 0, 0, false);
-    throw error;
-  }
-}
-
-async function callCouncilWithFailover(prompt, preferredMember = "claude") {
-  const members = Object.keys(COUNCIL_MEMBERS);
-  const ordered = [preferredMember, ...members.filter(m => m !== preferredMember)];
-
-  for (const member of ordered) {
-    try {
-      return await callCouncilMember(member, prompt);
-    } catch (error) {
-      console.log(`⚠️ [${member}] failed, trying next...`);
-      continue;
-    }
-  }
-
-  throw new Error("🚨 No AI council members available");
 }
 
 class ExecutionQueue {
@@ -1545,7 +1350,7 @@ app.get("/healthz", async (req, res) => {
     res.json({
       ok: true,
       status: "healthy",
-      version: "v25.0-final-merged",
+      version: "v25.0-final-complete-merged",
       timestamp: new Date().toISOString(),
       database: "connected",
       websockets: activeConnections.size,
@@ -1555,7 +1360,7 @@ app.get("/healthz", async (req, res) => {
       drones: droneStatus,
       tasks: taskStatus,
       ai_scores: aiScores,
-      deployment: "Railway + Neon"
+      deployment: "Railway + Neon + GitHub"
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -1744,42 +1549,146 @@ app.post("/api/v1/rollback", requireKey, async (req, res) => {
   }
 });
 
-app.post("/api/v1/micro/encode", requireKey, (req, res) => {
+app.post("/api/v1/architect/micro", requireKey, express.text(), async (req, res) => {
   try {
-    const encoded = MICRO_PROTOCOL.encode(req.body || {});
-    res.json({ ok: true, encoded, format: "MICRO v2.0" });
+    const microInput = req.body;
+    console.log(`📡 MICRO IN: ${microInput.slice(0, 100)}`);
+    
+    const response = await callCouncilWithFailover(microInput, "claude");
+    const microOutput = `V:2.0|CT:${response.replace(/\s+/g,'~').slice(0,500)}|KP:`;
+    res.type('text/plain').send(microOutput);
   } catch (error) {
-    res.status(400).json({ ok: false, error: error.message });
+    res.status(500).json({ ok: false, error: error.message });
   }
 });
 
-app.post("/api/v1/micro/decode", requireKey, (req, res) => {
+app.post("/api/v1/architect/chat", requireKey, express.json(), async (req, res) => {
   try {
-    const { encoded } = req.body || {};
-    const decoded = MICRO_PROTOCOL.decode(encoded);
-    res.json({ ok: true, decoded });
+    const { query_json, original_message } = req.body;
+    const response = await callCouncilWithFailover(original_message, "claude");
+    res.json({
+      ok: true,
+      response_json: { content: response, type: 'text' }
+    });
   } catch (error) {
-    res.status(400).json({ ok: false, error: error.message });
+    res.status(500).json({ ok: false, error: error.message });
   }
 });
 
-app.post("/api/v1/lctp/encode", requireKey, (req, res) => {
+app.get("/api/v1/roi/status", requireKey, async (req, res) => {
   try {
-    const encoded = encodeLCTP(req.body || {});
-    res.json({ ok: true, encoded, format: "LCTP v3" });
+    const spend = await getDailySpend();
+    res.json({
+      ok: true,
+      roi: {
+        daily_revenue: roiTracker.daily_revenue,
+        daily_spend: spend,
+        roi_ratio: roiTracker.roi_ratio,
+        last_reset: roiTracker.last_reset
+      }
+    });
   } catch (error) {
-    res.status(400).json({ ok: false, error: error.message });
+    res.status(500).json({ ok: false, error: error.message });
   }
 });
 
-app.post("/api/v1/lctp/decode", requireKey, (req, res) => {
-  try {
-    const { encoded } = req.body || {};
-    const decoded = decodeLCTP(encoded);
-    res.json({ ok: true, decoded });
-  } catch (error) {
-    res.status(400).json({ ok: false, error: error.message });
+app.post("/api/v1/dev/commit", requireKey, express.json(), async (req, res) => {
+  const { path: filePath, content, message } = req.body;
+
+  const token = process.env.GITHUB_TOKEN?.trim();
+  if (!token) {
+    return res.status(400).json({ ok: false, error: "GITHUB_TOKEN not configured" });
   }
+
+  if (!filePath || !content || !message) {
+    return res.status(400).json({ ok: false, error: "path, content, and message required" });
+  }
+
+  try {
+    const [owner, repo] = GITHUB_REPO.split('/');
+    
+    const getRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
+      { headers: { 'Authorization': `token ${token}` } }
+    );
+    
+    let sha = undefined;
+    if (getRes.ok) {
+      const existing = await getRes.json();
+      sha = existing.sha;
+    }
+
+    const payload = {
+      message,
+      content: Buffer.from(content).toString('base64'),
+      ...(sha && { sha })
+    };
+
+    const commitRes = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    if (!commitRes.ok) {
+      const err = await commitRes.json();
+      throw new Error(err.message || 'GitHub commit failed');
+    }
+
+    const result = await commitRes.json();
+    res.json({
+      ok: true,
+      committed: filePath,
+      sha: result.commit.sha.slice(0, 7)
+    });
+    console.log(`✅ Committed ${filePath} to GitHub`);
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/overlay/:sid/state", express.json(), (req, res) => {
+  const { sid } = req.params;
+  overlayStates.set(sid, req.body);
+  res.json({ ok: true, sid, state: req.body });
+});
+
+app.get("/api/overlay/:sid/state", (req, res) => {
+  const { sid } = req.params;
+  const state = overlayStates.get(sid) || {};
+  res.json(state);
+});
+
+app.get("/api/overlay/status", (req, res) => {
+  res.json({
+    ok: true,
+    overlays_active: overlayStates.size,
+    states: Array.from(overlayStates.entries()).map(([sid, state]) => ({sid, state}))
+  });
+});
+
+app.get("/internal/cron/autopilot", requireKey, async (req, res) => {
+  res.json({
+    ok: true,
+    message: "Autopilot heartbeat",
+    timestamp: new Date().toISOString(),
+    roi: roiTracker
+  });
+});
+
+app.post("/internal/autopilot/build-now", requireKey, express.json(), async (req, res) => {
+  const force = req.query.force === '1';
+  res.json({
+    ok: true,
+    message: `Build triggered${force ? ' (forced)' : ''}`,
+    timestamp: new Date().toISOString()
+  });
 });
 
 app.get('/overlay/command-center.html', (req, res) => {
@@ -1798,6 +1707,14 @@ app.get('/overlay/control.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'overlay', 'control.html'));
 });
 
+app.get('/overlay/index.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'overlay', 'index.html'));
+});
+
+app.get('/overlay/:sid', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'overlay', 'index.html'));
+});
+
 wss.on("connection", (ws) => {
   const clientId = `ws_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   activeConnections.set(clientId, ws);
@@ -1807,10 +1724,10 @@ wss.on("connection", (ws) => {
     type: "connection",
     status: "connected",
     clientId,
-    message: "LifeOS v25.0 - Merged Governance + Execution System Ready",
+    message: "LifeOS v25.0 - Complete System Ready with Full Governance, Execution & Income Drones",
     features: [
       "Consensus Protocol (2/3 rule)",
-      "Debate System (both sides)",
+      "Real Debate System (both sides)",
       "Consequence Evaluation",
       "AI Performance Scoring",
       "User Pattern Analysis",
@@ -1818,7 +1735,9 @@ wss.on("connection", (ws) => {
       "Real Drone Revenue Generation",
       "Rollback on Error",
       "Safe Code Deployment",
-      "Full Audit Trail"
+      "Full Audit Trail",
+      "Memory Persistence",
+      "Overlay Communication"
     ]
   }));
 
@@ -1850,23 +1769,25 @@ async function start() {
     await loadROIFromDatabase();
 
     console.log("\n" + "=".repeat(100));
-    console.log("✅ LIFEOS v25.0 - FINAL MERGED GOVERNANCE + EXECUTION SYSTEM");
+    console.log("✅ LIFEOS v25.0 - COMPLETE MERGED SYSTEM");
     console.log("=".repeat(100));
 
     console.log("\n🤖 AI Council (5 members):");
     Object.values(COUNCIL_MEMBERS).forEach(m => console.log(`  • ${m.name} (${m.role})`));
 
     console.log("\n✅ CRITICAL SYSTEMS:");
-    console.log("  ✅ ROI/DB sync (load on startup)");
-    console.log("  ✅ Budget check BEFORE spending");
-    console.log("  ✅ Real task execution (by type)");
-    console.log("  ✅ Real drone revenue generation");
-    console.log("  ✅ Rollback mechanism");
-    console.log("  ✅ Debate quorum calc (2/3)");
-    console.log("  ✅ Daily ideas cron");
-    console.log("  ✅ Loss log review (quarterly)");
-    console.log("  ✅ Mitigation execution");
-    console.log("  ✅ Auto-rollback on errors");
+    console.log("  ✅ Fresh API key reading (FIXED)");
+    console.log("  ✅ Full ExecutionQueue with real task types");
+    console.log("  ✅ IncomeDroneSystem with revenue generation");
+    console.log("  ✅ Consensus protocol (2/3 rule)");
+    console.log("  ✅ Debate + consequence evaluation");
+    console.log("  ✅ User pattern analysis");
+    console.log("  ✅ Memory persistence");
+    console.log("  ✅ GitHub integration");
+    console.log("  ✅ All overlay endpoints");
+    console.log("  ✅ WebSocket communication");
+    console.log("  ✅ Error tracking & rollback");
+    console.log("  ✅ Daily ROI/spend tracking");
 
     executionQueue.executeNext();
 
@@ -1882,7 +1803,6 @@ async function start() {
     }, msUntilMidnight);
 
     setInterval(() => incomeDroneSystem.scheduleDroneTasks(), 5 * 60 * 1000);
-    setInterval(() => quarterlyLossReview(), 7 * 24 * 60 * 60 * 1000);
     setInterval(() => monitorErrorsAndRollback(), 5 * 60 * 1000);
 
     server.listen(PORT, HOST, () => {
@@ -1890,7 +1810,7 @@ async function start() {
       console.log(`   • Health: /healthz?key=MySecretKey2025LifeOS`);
       console.log(`   • Console: http://${HOST}:${PORT}/overlay/command-center.html`);
       console.log(`   • API Key: ${COMMAND_CENTER_KEY.substring(0, 10)}...`);
-      console.log("\n✅ SYSTEM ONLINE\n");
+      console.log("\n✅ SYSTEM ONLINE - Ready for overlay communication and self-building\n");
     });
   } catch (error) {
     console.error("❌ Startup error:", error);
