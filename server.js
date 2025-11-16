@@ -1081,13 +1081,13 @@ async function continuousSelfImprovement() {
        ORDER BY count DESC LIMIT 5`
     );
 
-    // Analyze performance
+    // Analyze performance - FIXED: changed task_type to type
     const slowTasks = await pool.query(
-      `SELECT task_type, AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) as avg_duration 
+      `SELECT type, AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) as avg_duration 
        FROM execution_tasks 
        WHERE created_at > NOW() - INTERVAL '24 hours'
        AND completed_at IS NOT NULL
-       GROUP BY task_type 
+       GROUP BY type 
        HAVING AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) > 5000`
     );
 
@@ -1111,6 +1111,8 @@ async function continuousSelfImprovement() {
     console.error("Self-improvement error:", error.message);
   }
 }
+
+// ==================== DEPLOYMENT TRIGGERS (NEW) ====================
 
 // ==================== DEPLOYMENT TRIGGERS (NEW) ====================
 async function triggerDeployment(modifiedFiles = []) {
