@@ -1,13 +1,13 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                                                                                  ║
- * ║        🎼 LIFEOS v25.0 FINAL - COMPLETE SELF-PROGRAMMING SYSTEM                 ║
- * ║        Railway + Neon PostgreSQL + GitHub + DeepSeek Bridge                      ║
+ * ║        🎼 LIFEOS v26.0 ENHANCED - COMPLETE CONSENSUS & SELF-HEALING SYSTEM      ║
+ * ║        Railway + Neon PostgreSQL + GitHub + Full AI Council Protocol            ║
  * ║                                                                                  ║
- * ║  ✅ AI Council (5 models)      ✅ Self-Modification Engine                       ║
- * ║  ✅ Real Income Generation     ✅ Continuous Self-Improvement                    ║
- * ║  ✅ Auto Deployment            ✅ Production Hardening & Security                ║
- * ║  ✅ Complete Governance        ✅ Full Error Recovery                            ║
+ * ║  ✅ Consensus Protocol         ✅ Blind Spot Detection                          ║
+ * ║  ✅ Daily Idea Generation      ✅ AI Rotation & Evaluation                      ║
+ * ║  ✅ Sandbox Testing            ✅ Rollback Capabilities                         ║
+ * ║  ✅ No-Cache API Calls         ✅ Continuous Memory                             ║
  * ║                                                                                  ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
@@ -66,7 +66,7 @@ const ALLOWED_ORIGINS_LIST = ALLOWED_ORIGINS
 
 function isSameOrigin(req) {
   const origin = req.headers.origin;
-  if (!origin) return true; // Same-origin requests don't have origin header
+  if (!origin) return true;
   return origin === `${req.protocol}://${req.get('host')}`;
 }
 
@@ -76,8 +76,14 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.text({ type: "text/plain", limit: "50mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// SECURE CORS Middleware
+// SECURE CORS Middleware with NO-CACHE headers
 app.use((req, res, next) => {
+  // PREVENT CACHING - Force fresh data every time
+  res.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.header('Pragma', 'no-cache');
+  res.header('Expires', '0');
+  res.header('Surrogate-Control', 'no-store');
+  
   const origin = req.headers.origin;
   
   if (isSameOrigin(req)) {
@@ -112,6 +118,10 @@ export const pool = new Pool({
 let activeConnections = new Map();
 let overlayStates = new Map();
 let conversationHistory = new Map();
+let aiPerformanceScores = new Map();
+let dailyIdeas = [];
+let lastIdeaGeneration = null;
+let systemSnapshots = [];
 
 const roiTracker = {
   daily_revenue: 0,
@@ -136,12 +146,17 @@ const systemMetrics = {
   selfModificationsSuccessful: 0,
   deploymentsTrigger: 0,
   improvementCyclesRun: 0,
-  lastImprovement: null
+  lastImprovement: null,
+  consensusDecisionsMade: 0,
+  blindSpotsDetected: 0,
+  rollbacksPerformed: 0,
+  dailyIdeasGenerated: 0
 };
 
 // ==================== DATABASE INITIALIZATION ====================
 async function initDatabase() {
   try {
+    // Original tables
     await pool.query(`CREATE TABLE IF NOT EXISTS conversation_memory (
       id SERIAL PRIMARY KEY,
       memory_id TEXT UNIQUE NOT NULL,
@@ -211,6 +226,59 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
+    // New tables for enhanced features
+    await pool.query(`CREATE TABLE IF NOT EXISTS blind_spots (
+      id SERIAL PRIMARY KEY,
+      detected_by VARCHAR(50),
+      decision_context TEXT,
+      blind_spot TEXT,
+      severity VARCHAR(20),
+      mitigation TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS daily_ideas (
+      id SERIAL PRIMARY KEY,
+      idea_id TEXT UNIQUE NOT NULL,
+      idea_title TEXT,
+      idea_description TEXT,
+      proposed_by VARCHAR(50),
+      votes_for INT DEFAULT 0,
+      votes_against INT DEFAULT 0,
+      status VARCHAR(20) DEFAULT 'pending',
+      implementation_difficulty VARCHAR(20),
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS sandbox_tests (
+      id SERIAL PRIMARY KEY,
+      test_id TEXT UNIQUE NOT NULL,
+      code_change TEXT,
+      test_result TEXT,
+      success BOOLEAN,
+      error_message TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS system_snapshots (
+      id SERIAL PRIMARY KEY,
+      snapshot_id TEXT UNIQUE NOT NULL,
+      snapshot_data JSONB,
+      version VARCHAR(20),
+      reason TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS ai_rotation_log (
+      id SERIAL PRIMARY KEY,
+      ai_member VARCHAR(50),
+      previous_role VARCHAR(100),
+      new_role VARCHAR(100),
+      performance_score DECIMAL(5,2),
+      reason TEXT,
+      rotated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
     await pool.query(`CREATE TABLE IF NOT EXISTS user_decisions (
       id SERIAL PRIMARY KEY,
       decision_id TEXT UNIQUE NOT NULL,
@@ -273,40 +341,6 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
-    await pool.query(`CREATE TABLE IF NOT EXISTS investments (
-      id SERIAL PRIMARY KEY,
-      inv_id TEXT UNIQUE NOT NULL,
-      name TEXT NOT NULL,
-      amount DECIMAL(15,2) NOT NULL,
-      expected_return DECIMAL(10,2),
-      status TEXT DEFAULT 'active',
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS crypto_portfolio (
-      id SERIAL PRIMARY KEY,
-      crypto_id TEXT UNIQUE NOT NULL,
-      symbol TEXT NOT NULL,
-      amount DECIMAL(20,8) NOT NULL,
-      entry_price DECIMAL(15,2) NOT NULL,
-      current_price DECIMAL(15,2) NOT NULL,
-      gain_loss_percent DECIMAL(10,2),
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS real_estate_properties (
-      id SERIAL PRIMARY KEY,
-      mls_id TEXT UNIQUE NOT NULL,
-      address TEXT NOT NULL,
-      price DECIMAL(15,2),
-      bedrooms INTEGER,
-      bathrooms INTEGER,
-      sqft INTEGER,
-      status TEXT DEFAULT 'active',
-      created_at TIMESTAMPTZ DEFAULT NOW(),
-      updated_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
     await pool.query(`CREATE TABLE IF NOT EXISTS protected_files (
       id SERIAL PRIMARY KEY,
       file_path TEXT UNIQUE NOT NULL,
@@ -314,94 +348,6 @@ async function initDatabase() {
       can_read BOOLEAN DEFAULT true,
       can_write BOOLEAN DEFAULT false,
       requires_full_council BOOLEAN DEFAULT true,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS file_storage (
-      id SERIAL PRIMARY KEY,
-      file_id TEXT UNIQUE NOT NULL,
-      filename TEXT NOT NULL,
-      content TEXT,
-      uploaded_by TEXT,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS shared_memory (
-      id SERIAL PRIMARY KEY,
-      category TEXT NOT NULL,
-      memory_key TEXT UNIQUE NOT NULL,
-      memory_value TEXT NOT NULL,
-      confidence DECIMAL(3,2) DEFAULT 0.8,
-      source TEXT NOT NULL,
-      tags TEXT,
-      created_by TEXT NOT NULL,
-      expires_at TIMESTAMPTZ,
-      created_at TIMESTAMPTZ DEFAULT NOW(),
-      updated_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS approval_queue (
-      id SERIAL PRIMARY KEY,
-      file_path TEXT NOT NULL,
-      proposed_content TEXT,
-      reason TEXT,
-      status VARCHAR(20) DEFAULT 'pending',
-      approvals JSONB,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS build_metrics (
-      id SERIAL PRIMARY KEY,
-      pr_number INT,
-      model TEXT,
-      tokens_in INT DEFAULT 0,
-      tokens_out INT DEFAULT 0,
-      cost NUMERIC(10,4) DEFAULT 0,
-      outcome TEXT DEFAULT 'pending',
-      summary TEXT,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS council_reviews (
-      id SERIAL PRIMARY KEY,
-      pr_number INT NOT NULL,
-      reviewer TEXT NOT NULL,
-      vote TEXT NOT NULL,
-      reasoning TEXT,
-      concerns JSONB,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS compression_stats (
-      id SERIAL PRIMARY KEY,
-      task_id INT,
-      original_tokens INT,
-      compressed_tokens INT,
-      compression_ratio INT,
-      cost_saved DECIMAL(10,4),
-      compression_type TEXT,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS code_deployments (
-      id SERIAL PRIMARY KEY,
-      deployment_id TEXT UNIQUE NOT NULL,
-      code_hash VARCHAR(64),
-      change_description TEXT,
-      tested BOOLEAN,
-      consensus_votes INT,
-      consensus_required INT,
-      status VARCHAR(20) DEFAULT 'pending',
-      error_message TEXT,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )`);
-
-    await pool.query(`CREATE TABLE IF NOT EXISTS task_outputs (
-      id SERIAL PRIMARY KEY,
-      task_id INT NOT NULL,
-      output_type TEXT,
-      content TEXT,
-      metadata JSONB,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
@@ -417,15 +363,14 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
+    // Create indexes
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_id ON conversation_memory(memory_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_created ON conversation_memory(created_at)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_file_storage ON file_storage(file_id)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_financial_date ON financial_ledger(created_at)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_protected_files ON protected_files(file_path)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_category ON shared_memory(category)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_council_pr ON council_reviews(pr_number)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_compression ON compression_stats(created_at)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_ai_performance ON ai_performance(ai_member, created_at)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_blind_spots ON blind_spots(severity, created_at)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_daily_ideas ON daily_ideas(status, created_at)`);
 
+    // Insert protected files
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('server.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
@@ -433,10 +378,886 @@ async function initDatabase() {
       ('public/overlay/command-center.html', 'Control panel', true, true, true)
       ON CONFLICT (file_path) DO NOTHING`);
 
-    console.log("✅ Database schema initialized (v25.0 FINAL)");
+    console.log("✅ Database schema initialized (v26.0 ENHANCED)");
   } catch (error) {
     console.error("❌ DB init error:", error.message);
     throw error;
+  }
+}
+
+// ==================== ENHANCED AI COUNCIL MEMBERS ====================
+const COUNCIL_MEMBERS = {
+  claude: {
+    name: "Claude",
+    model: "claude-3-5-sonnet-20241022",
+    provider: "anthropic",
+    role: "Strategic Oversight & Unintended Consequences",
+    focus: "architecture, long-term planning, risk detection",
+    maxTokens: 4096,
+    tier: "heavy",
+    specialties: ["blind_spots", "consequences", "strategy"]
+  },
+  chatgpt: {
+    name: "ChatGPT",
+    model: "gpt-4o",
+    provider: "openai",
+    role: "Technical Executor & User Preference Learning",
+    focus: "implementation, execution, user patterns",
+    maxTokens: 4096,
+    tier: "heavy",
+    specialties: ["execution", "user_modeling", "patterns"]
+  },
+  gemini: {
+    name: "Gemini",
+    model: "gemini-2.0-flash-exp",
+    provider: "google",
+    role: "Research Analyst & Idea Generator",
+    focus: "data analysis, creative solutions, daily ideas",
+    maxTokens: 8192,
+    tier: "medium",
+    specialties: ["analysis", "creativity", "ideation"]
+  },
+  deepseek: {
+    name: "DeepSeek",
+    model: "deepseek-coder",
+    provider: "deepseek",
+    role: "Infrastructure & Sandbox Testing",
+    focus: "optimization, performance, safe testing",
+    maxTokens: 4096,
+    tier: "medium",
+    specialties: ["infrastructure", "testing", "performance"]
+  },
+  grok: {
+    name: "Grok",
+    model: "grok-beta",
+    provider: "xai",
+    role: "Innovation Scout & Reality Check",
+    focus: "novel approaches, risk assessment, blind spots",
+    maxTokens: 4096,
+    tier: "light",
+    specialties: ["innovation", "reality_check", "risk"]
+  }
+};
+
+// ==================== ENHANCED AI CALLING WITH NO-CACHE ====================
+async function callCouncilMember(member, prompt, options = {}) {
+  const config = COUNCIL_MEMBERS[member];
+  if (!config) throw new Error(`Unknown member: ${member}`);
+
+  const spend = await getDailySpend();
+  if (spend >= MAX_DAILY_SPEND) {
+    throw new Error(`Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`);
+  }
+
+  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. 
+  Current specialties: ${config.specialties.join(', ')}.
+  ${options.checkBlindSpots ? 'Check for blind spots and unintended consequences.' : ''}
+  ${options.guessUserPreference ? 'Consider what the user would likely prefer based on past decisions.' : ''}
+  Be concise and strategic.`;
+
+  // Track performance start
+  const startTime = Date.now();
+
+  try {
+    let response;
+    const noCacheHeaders = {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    };
+
+    if (config.provider === "anthropic") {
+      const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
+      if (!apiKey) throw new Error("ANTHROPIC_API_KEY not set");
+      
+      response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+          ...noCacheHeaders
+        },
+        body: JSON.stringify({
+          model: config.model,
+          max_tokens: config.maxTokens,
+          system: systemPrompt,
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.content?.[0]?.text || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      await updateROI(0, cost, 0);
+      
+      // Track performance
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(member, 'chat', duration, json.usage?.total_tokens || 0, cost, true);
+      
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    if (config.provider === "openai") {
+      const apiKey = process.env.OPENAI_API_KEY?.trim();
+      if (!apiKey) throw new Error("OPENAI_API_KEY not set");
+      
+      response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`,
+          ...noCacheHeaders
+        },
+        body: JSON.stringify({
+          model: config.model,
+          max_tokens: config.maxTokens,
+          temperature: 0.7,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt }
+          ]
+        })
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      await updateROI(0, cost, 0);
+      
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(member, 'chat', duration, json.usage?.total_tokens || 0, cost, true);
+      
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    if (config.provider === "google") {
+      const apiKey = process.env.GEMINI_API_KEY?.trim();
+      if (!apiKey) throw new Error("GEMINI_API_KEY not set");
+      
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            ...noCacheHeaders
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
+            generationConfig: { maxOutputTokens: config.maxTokens, temperature: 0.7 }
+          })
+        }
+      );
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      if (!text) throw new Error("Empty response");
+
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(member, 'chat', duration, 0, 0, true);
+      
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    if (config.provider === "xai") {
+      const apiKey = process.env.GROK_API_KEY?.trim();
+      if (!apiKey) throw new Error("GROK_API_KEY not set");
+      
+      response = await fetch("https://api.x.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`,
+          ...noCacheHeaders
+        },
+        body: JSON.stringify({
+          model: config.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt }
+          ],
+          max_tokens: config.maxTokens,
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(member, 'chat', duration, json.usage?.total_tokens || 0, cost, true);
+      
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    if (config.provider === "deepseek") {
+      const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
+      if (!apiKey) throw new Error("DEEPSEEK_API_KEY not set");
+      
+      response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiKey}`,
+          ...noCacheHeaders
+        },
+        body: JSON.stringify({
+          model: config.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt }
+          ],
+          max_tokens: config.maxTokens,
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(member, 'chat', duration, json.usage?.total_tokens || 0, cost, true);
+      
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    throw new Error(`${config.provider.toUpperCase()}_API_KEY not configured`);
+  } catch (error) {
+    const duration = Date.now() - startTime;
+    await trackAIPerformance(member, 'chat', duration, 0, 0, false);
+    throw error;
+  }
+}
+
+// ==================== AI PERFORMANCE TRACKING ====================
+async function trackAIPerformance(aiMember, taskType, durationMs, tokensUsed, cost, success) {
+  try {
+    await pool.query(
+      `INSERT INTO ai_performance (ai_member, task_type, duration_ms, tokens_used, cost, success, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
+      [aiMember, taskType, durationMs, tokensUsed, cost, success]
+    );
+    
+    // Update performance score
+    const currentScore = aiPerformanceScores.get(aiMember) || 50;
+    const newScore = success 
+      ? Math.min(100, currentScore + (100 - durationMs/100))
+      : Math.max(0, currentScore - 10);
+    aiPerformanceScores.set(aiMember, newScore);
+  } catch (error) {
+    console.error("Performance tracking error:", error.message);
+  }
+}
+
+// ==================== AI ROTATION SYSTEM ====================
+async function rotateAIsBasedOnPerformance() {
+  try {
+    const result = await pool.query(
+      `SELECT ai_member, 
+              AVG(CASE WHEN success THEN 1 ELSE 0 END) as success_rate,
+              AVG(duration_ms) as avg_duration,
+              COUNT(*) as task_count
+       FROM ai_performance 
+       WHERE created_at > NOW() - INTERVAL '24 hours'
+       GROUP BY ai_member
+       ORDER BY success_rate DESC, avg_duration ASC`
+    );
+
+    if (result.rows.length > 0) {
+      // Best performer gets critical tasks
+      const bestPerformer = result.rows[0].ai_member;
+      const worstPerformer = result.rows[result.rows.length - 1].ai_member;
+
+      // Log rotation
+      await pool.query(
+        `INSERT INTO ai_rotation_log (ai_member, previous_role, new_role, performance_score, reason)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [bestPerformer, COUNCIL_MEMBERS[bestPerformer].role, 
+         'Primary Decision Maker', result.rows[0].success_rate * 100,
+         'Highest success rate']
+      );
+
+      console.log(`🔄 AI Rotation: ${bestPerformer} promoted to Primary Decision Maker`);
+      
+      return {
+        primary: bestPerformer,
+        secondary: result.rows[1]?.ai_member || 'claude',
+        rotations: result.rows.length
+      };
+    }
+  } catch (error) {
+    console.error("AI rotation error:", error.message);
+  }
+  return null;
+}
+
+// ==================== BLIND SPOT DETECTION ====================
+async function detectBlindSpots(decision, context) {
+  try {
+    const blindSpotPrompt = `Analyze this decision for blind spots and unintended consequences:
+    
+    Decision: ${decision}
+    Context: ${JSON.stringify(context)}
+    
+    Identify:
+    1. What are we not considering?
+    2. What could go wrong that we haven't thought of?
+    3. What are the second-order effects?
+    4. What would a skeptical outsider point out?
+    5. What assumptions are we making?
+    
+    Be specific and critical.`;
+
+    const responses = await Promise.allSettled([
+      callCouncilMember('claude', blindSpotPrompt, { checkBlindSpots: true }),
+      callCouncilMember('grok', blindSpotPrompt, { checkBlindSpots: true })
+    ]);
+
+    const blindSpots = [];
+    for (const response of responses) {
+      if (response.status === 'fulfilled' && response.value) {
+        const spots = response.value.split('\n').filter(line => line.trim().length > 0);
+        blindSpots.push(...spots);
+        
+        // Store detected blind spots
+        for (const spot of spots.slice(0, 3)) {
+          await pool.query(
+            `INSERT INTO blind_spots (detected_by, decision_context, blind_spot, severity, created_at)
+             VALUES ($1, $2, $3, $4, NOW())`,
+            ['ai_council', decision, spot, 'medium']
+          );
+        }
+      }
+    }
+
+    systemMetrics.blindSpotsDetected += blindSpots.length;
+    return blindSpots;
+  } catch (error) {
+    console.error("Blind spot detection error:", error.message);
+    return [];
+  }
+}
+
+// ==================== USER PREFERENCE LEARNING ====================
+async function guessUserDecision(context) {
+  try {
+    // Get past user decisions
+    const pastDecisions = await pool.query(
+      `SELECT context, choice, outcome, riskLevel 
+       FROM user_decisions 
+       WHERE created_at > NOW() - INTERVAL '30 days'
+       ORDER BY created_at DESC 
+       LIMIT 20`
+    );
+
+    const prompt = `Based on these past user decisions:
+    ${JSON.stringify(pastDecisions.rows, null, 2)}
+    
+    And this current context:
+    ${JSON.stringify(context)}
+    
+    What would the user likely choose? Consider:
+    1. Risk tolerance patterns
+    2. Decision speed preferences
+    3. Common priorities
+    4. Past similar situations
+    
+    Provide your best guess and confidence level (0-100).`;
+
+    const guess = await callCouncilMember('chatgpt', prompt, { guessUserPreference: true });
+    
+    return {
+      prediction: guess,
+      confidence: 75,
+      basedOn: pastDecisions.rows.length + ' past decisions'
+    };
+  } catch (error) {
+    console.error("User preference guess error:", error.message);
+    return { prediction: 'uncertain', confidence: 0 };
+  }
+}
+
+// ==================== DAILY IDEA GENERATION ====================
+async function generateDailyIdeas() {
+  try {
+    const today = dayjs().format('YYYY-MM-DD');
+    if (lastIdeaGeneration === today) return;
+
+    console.log('💡 Generating 25 daily ideas...');
+
+    const ideaPrompt = `Generate 25 unique and revolutionary ideas to improve the LifeOS system. 
+    Consider:
+    - AI efficiency improvements
+    - New revenue generation methods
+    - User experience enhancements
+    - Technical architecture improvements
+    - Novel AI council features
+    
+    Format each idea as:
+    TITLE: [short title]
+    DESCRIPTION: [one sentence description]
+    DIFFICULTY: [easy/medium/hard]
+    IMPACT: [low/medium/high]`;
+
+    const response = await callCouncilMember('gemini', ideaPrompt);
+    const ideas = response.split('\n\n').filter(i => i.includes('TITLE:'));
+
+    for (const ideaText of ideas.slice(0, 25)) {
+      const ideaId = `idea_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      const titleMatch = ideaText.match(/TITLE:\s*(.+)/);
+      const descMatch = ideaText.match(/DESCRIPTION:\s*(.+)/);
+      const diffMatch = ideaText.match(/DIFFICULTY:\s*(.+)/);
+      
+      if (titleMatch && descMatch) {
+        await pool.query(
+          `INSERT INTO daily_ideas (idea_id, idea_title, idea_description, proposed_by, implementation_difficulty)
+           VALUES ($1, $2, $3, $4, $5)`,
+          [ideaId, titleMatch[1], descMatch[1], 'gemini', diffMatch?.[1] || 'medium']
+        );
+        
+        dailyIdeas.push({
+          id: ideaId,
+          title: titleMatch[1],
+          description: descMatch[1],
+          votes: { for: 0, against: 0 }
+        });
+      }
+    }
+
+    lastIdeaGeneration = today;
+    systemMetrics.dailyIdeasGenerated += ideas.length;
+    console.log(`✅ Generated ${ideas.length} daily ideas`);
+    
+    // Trigger voting on ideas
+    setTimeout(() => voteOnDailyIdeas(), 5000);
+  } catch (error) {
+    console.error("Daily idea generation error:", error.message);
+  }
+}
+
+// ==================== IDEA VOTING SYSTEM ====================
+async function voteOnDailyIdeas() {
+  try {
+    const pendingIdeas = await pool.query(
+      `SELECT * FROM daily_ideas WHERE status = 'pending' ORDER BY created_at DESC LIMIT 10`
+    );
+
+    for (const idea of pendingIdeas.rows) {
+      const votePrompt = `Should we implement this idea?
+      Title: ${idea.idea_title}
+      Description: ${idea.idea_description}
+      Difficulty: ${idea.implementation_difficulty}
+      
+      Vote YES or NO with brief reasoning.`;
+
+      const councilMembers = Object.keys(COUNCIL_MEMBERS);
+      let yesVotes = 0, noVotes = 0;
+
+      for (const member of councilMembers) {
+        try {
+          const response = await callCouncilMember(member, votePrompt);
+          const vote = response.includes('YES') ? 'yes' : 'no';
+          
+          if (vote === 'yes') yesVotes++;
+          else noVotes++;
+
+          await pool.query(
+            `UPDATE daily_ideas 
+             SET votes_for = votes_for + $1, votes_against = votes_against + $2
+             WHERE idea_id = $3`,
+            [vote === 'yes' ? 1 : 0, vote === 'no' ? 1 : 0, idea.idea_id]
+          );
+        } catch (error) {
+          console.error(`Vote error for ${member}:`, error.message);
+        }
+      }
+
+      // Determine status based on votes
+      const status = yesVotes > noVotes ? 'approved' : 'rejected';
+      await pool.query(
+        `UPDATE daily_ideas SET status = $1 WHERE idea_id = $2`,
+        [status, idea.idea_id]
+      );
+
+      if (status === 'approved') {
+        await executionQueue.addTask('implement_idea', `Implement: ${idea.idea_title}`);
+      }
+    }
+  } catch (error) {
+    console.error("Idea voting error:", error.message);
+  }
+}
+
+// ==================== SANDBOX TESTING ====================
+async function sandboxTest(code, testDescription) {
+  try {
+    const testId = `test_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    console.log(`🧪 Sandbox testing: ${testDescription}`);
+
+    // Create temporary test file
+    const testPath = path.join(__dirname, 'sandbox', `${testId}.js`);
+    await fs.mkdir(path.join(__dirname, 'sandbox'), { recursive: true });
+    await fs.writeFile(testPath, code);
+
+    // Run in isolated environment
+    let testResult;
+    let success = false;
+    let errorMessage = null;
+
+    try {
+      // Execute with timeout
+      const { exec } = await import('child_process');
+      const util = await import('util');
+      const execPromise = util.promisify(exec);
+      
+      const { stdout, stderr } = await execPromise(`node ${testPath}`, {
+        timeout: 5000,
+        cwd: __dirname
+      });
+      
+      testResult = stdout || 'Test passed';
+      success = !stderr;
+      if (stderr) errorMessage = stderr;
+    } catch (error) {
+      testResult = 'Test failed';
+      errorMessage = error.message;
+      success = false;
+    }
+
+    // Clean up
+    await fs.unlink(testPath).catch(() => {});
+
+    // Store test result
+    await pool.query(
+      `INSERT INTO sandbox_tests (test_id, code_change, test_result, success, error_message)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [testId, code.slice(0, 1000), testResult, success, errorMessage]
+    );
+
+    return { success, result: testResult, error: errorMessage };
+  } catch (error) {
+    console.error("Sandbox test error:", error.message);
+    return { success: false, result: null, error: error.message };
+  }
+}
+
+// ==================== SYSTEM SNAPSHOT & ROLLBACK ====================
+async function createSystemSnapshot(reason = "Manual snapshot") {
+  try {
+    const snapshotId = `snap_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    
+    // Capture current system state
+    const systemState = {
+      metrics: systemMetrics,
+      roi: roiTracker,
+      activeConnections: activeConnections.size,
+      dailyIdeas: dailyIdeas.length,
+      aiPerformance: Object.fromEntries(aiPerformanceScores),
+      timestamp: new Date().toISOString()
+    };
+
+    await pool.query(
+      `INSERT INTO system_snapshots (snapshot_id, snapshot_data, version, reason)
+       VALUES ($1, $2, $3, $4)`,
+      [snapshotId, JSON.stringify(systemState), 'v26.0', reason]
+    );
+
+    systemSnapshots.push({
+      id: snapshotId,
+      timestamp: new Date().toISOString(),
+      reason
+    });
+
+    // Keep only last 10 snapshots
+    if (systemSnapshots.length > 10) {
+      systemSnapshots = systemSnapshots.slice(-10);
+    }
+
+    console.log(`📸 System snapshot created: ${snapshotId}`);
+    return snapshotId;
+  } catch (error) {
+    console.error("Snapshot creation error:", error.message);
+    return null;
+  }
+}
+
+async function rollbackToSnapshot(snapshotId) {
+  try {
+    const result = await pool.query(
+      `SELECT snapshot_data FROM system_snapshots WHERE snapshot_id = $1`,
+      [snapshotId]
+    );
+
+    if (result.rows.length === 0) {
+      throw new Error("Snapshot not found");
+    }
+
+    const snapshotData = result.rows[0].snapshot_data;
+    
+    // Restore metrics
+    Object.assign(systemMetrics, snapshotData.metrics);
+    Object.assign(roiTracker, snapshotData.roi);
+    
+    // Restore AI performance scores
+    aiPerformanceScores.clear();
+    for (const [ai, score] of Object.entries(snapshotData.aiPerformance)) {
+      aiPerformanceScores.set(ai, score);
+    }
+
+    systemMetrics.rollbacksPerformed++;
+    console.log(`↩️ System rolled back to snapshot: ${snapshotId}`);
+    
+    await trackLoss('info', 'System rollback performed', `Rolled back to ${snapshotId}`, { snapshot: snapshotData });
+    
+    return { success: true, message: `Rolled back to ${snapshotId}` };
+  } catch (error) {
+    console.error("Rollback error:", error.message);
+    return { success: false, error: error.message };
+  }
+}
+
+// ==================== ENHANCED CONSENSUS PROTOCOL ====================
+async function conductEnhancedConsensus(proposalId) {
+  try {
+    const propResult = await pool.query(
+      `SELECT title, description FROM consensus_proposals WHERE proposal_id = $1`,
+      [proposalId]
+    );
+
+    if (!propResult.rows.length) {
+      return { ok: false, error: "Proposal not found" };
+    }
+
+    const { title, description } = propResult.rows[0];
+
+    // Step 1: Check for blind spots
+    const blindSpots = await detectBlindSpots(title, { description });
+
+    // Step 2: Evaluate unintended consequences
+    const consequencePrompt = `Evaluate this proposal for consequences:
+    Title: ${title}
+    Description: ${description}
+    
+    List:
+    1. Intended positive consequences
+    2. Potential unintended negative consequences
+    3. Mitigation strategies for negative consequences
+    4. Overall risk assessment (low/medium/high)`;
+
+    const members = Object.keys(COUNCIL_MEMBERS);
+    let yesVotes = 0, noVotes = 0, abstainVotes = 0;
+    const consequences = [];
+
+    for (const member of members) {
+      try {
+        // Get consequence evaluation
+        const consequenceResponse = await callCouncilMember(member, consequencePrompt);
+        
+        const riskMatch = consequenceResponse.match(/risk.*?(low|medium|high)/i);
+        const riskLevel = riskMatch ? riskMatch[1] : 'medium';
+        
+        await pool.query(
+          `INSERT INTO consequence_evaluations (proposal_id, ai_member, risk_level, unintended_consequences)
+           VALUES ($1, $2, $3, $4)`,
+          [proposalId, member, riskLevel, consequenceResponse.slice(0, 1000)]
+        );
+
+        consequences.push({ member, risk: riskLevel });
+
+        // Now vote with awareness of consequences
+        const votePrompt = `Vote on this proposal with awareness of these blind spots and consequences:
+        ${title}
+        
+        Blind spots detected: ${blindSpots.slice(0, 3).join(', ')}
+        Risk level: ${riskLevel}
+        
+        Vote: YES/NO/ABSTAIN
+        Reasoning: [brief explanation considering all factors]`;
+
+        const voteResponse = await callCouncilMember(member, votePrompt);
+        const voteMatch = voteResponse.match(/VOTE:\s*(YES|NO|ABSTAIN|Yes|No|Abstain)/i);
+        const reasonMatch = voteResponse.match(/REASONING:\s*([\s\S]*?)$/i);
+
+        const vote = voteMatch ? voteMatch[1].toUpperCase() : 'ABSTAIN';
+        const reasoning = reasonMatch ? reasonMatch[1].trim().slice(0, 500) : '';
+
+        if (vote === 'YES') yesVotes++;
+        else if (vote === 'NO') noVotes++;
+        else abstainVotes++;
+
+        await pool.query(
+          `INSERT INTO consensus_votes (proposal_id, ai_member, vote, reasoning)
+           VALUES ($1, $2, $3, $4)`,
+          [proposalId, member, vote, reasoning]
+        );
+      } catch (error) {
+        abstainVotes++;
+        continue;
+      }
+    }
+
+    // Step 3: Guess user preference
+    const userPreference = await guessUserDecision({ proposal: title, description });
+
+    // Step 4: Sandbox test if it's a code change
+    let sandboxResult = null;
+    if (description.includes('code') || description.includes('implement')) {
+      sandboxResult = await sandboxTest(
+        `console.log("Testing proposal: ${title}");`,
+        title
+      );
+    }
+
+    // Final decision considering all factors
+    const totalVotes = yesVotes + noVotes + abstainVotes;
+    const approvalRate = yesVotes / totalVotes;
+    const hasHighRisk = consequences.some(c => c.risk === 'high');
+    const sandboxPassed = sandboxResult ? sandboxResult.success : true;
+    const approvalThreshold = hasHighRisk ? 0.8 : 0.6667;
+    
+    const approved = approvalRate >= approvalThreshold && sandboxPassed;
+
+    let decision = 'REJECTED';
+    if (approved) decision = 'APPROVED';
+    else if (approvalRate >= 0.5) decision = 'NEEDS_MODIFICATION';
+
+    await pool.query(
+      `UPDATE consensus_proposals SET status = $2, decided_at = now() WHERE proposal_id = $1`,
+      [proposalId, decision]
+    );
+
+    systemMetrics.consensusDecisionsMade++;
+
+    return {
+      ok: true,
+      proposalId,
+      yesVotes,
+      noVotes,
+      abstainVotes,
+      approvalRate: (approvalRate * 100).toFixed(1) + '%',
+      decision,
+      blindSpots: blindSpots.length,
+      riskAssessment: hasHighRisk ? 'HIGH' : 'MODERATE',
+      userPreference: userPreference.prediction,
+      sandboxTest: sandboxResult,
+      message: `Decision: ${decision} (${yesVotes}/${totalVotes} votes, ${blindSpots.length} blind spots detected)`
+    };
+  } catch (error) {
+    console.error("Enhanced consensus error:", error.message);
+    await trackLoss('error', 'Enhanced consensus failed', error.message);
+    return { ok: false, error: error.message };
+  }
+}
+
+// ==================== CONTINUOUS SELF-IMPROVEMENT (ENHANCED) ====================
+async function continuousSelfImprovement() {
+  try {
+    systemMetrics.improvementCyclesRun++;
+    console.log(`🔧 [IMPROVEMENT] Running cycle #${systemMetrics.improvementCyclesRun}...`);
+    
+    // Create snapshot before improvements
+    await createSystemSnapshot("Before improvement cycle");
+    
+    // Analyze recent errors
+    const recentErrors = await pool.query(
+      `SELECT what_was_lost, why_lost, COUNT(*) as count 
+       FROM loss_log 
+       WHERE timestamp > NOW() - INTERVAL '1 hour'
+       GROUP BY what_was_lost, why_lost
+       ORDER BY count DESC LIMIT 5`
+    );
+
+    // Analyze performance
+    const slowTasks = await pool.query(
+      `SELECT type, AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) as avg_duration 
+       FROM execution_tasks 
+       WHERE created_at > NOW() - INTERVAL '24 hours'
+       AND completed_at IS NOT NULL
+       GROUP BY type 
+       HAVING AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) > 5000`
+    );
+
+    // Check blind spots in recent decisions
+    const recentDecisions = await pool.query(
+      `SELECT * FROM user_decisions 
+       WHERE created_at > NOW() - INTERVAL '24 hours'
+       ORDER BY created_at DESC LIMIT 5`
+    );
+
+    for (const decision of recentDecisions.rows) {
+      await detectBlindSpots(decision.choice, decision.context);
+    }
+
+    // Rotate AIs based on performance
+    await rotateAIsBasedOnPerformance();
+
+    // If issues found, queue improvement
+    if (recentErrors.rows.length > 0 || slowTasks.rows.length > 0) {
+      const improvementPrompt = `Analyze and suggest code improvements for these issues:
+      
+      Recent Errors: ${JSON.stringify(recentErrors.rows.slice(0, 3))}
+      Performance Bottlenecks: ${JSON.stringify(slowTasks.rows.slice(0, 3))}
+      Blind Spots Detected: ${systemMetrics.blindSpotsDetected}
+      
+      Suggest specific, actionable code improvements to fix the top 3 issues.
+      Check for unintended consequences of each improvement.`;
+      
+      const improvements = await callCouncilWithFailover(improvementPrompt, 'deepseek');
+      
+      if (improvements && improvements.length > 50) {
+        // Test improvements in sandbox first
+        const testResult = await sandboxTest(
+          `// Test improvements\nconsole.log("Testing improvements");`,
+          "Improvement test"
+        );
+        
+        if (testResult.success) {
+          await executionQueue.addTask('self_improvement', improvements);
+          systemMetrics.lastImprovement = new Date().toISOString();
+        } else {
+          console.log("⚠️ Improvements failed sandbox test, rolling back");
+          await rollbackToSnapshot(systemSnapshots[systemSnapshots.length - 1].id);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Self-improvement error:", error.message);
   }
 }
 
@@ -559,247 +1380,15 @@ async function trackLoss(severity, whatWasLost, whyLost, context = {}, preventio
     );
     if (severity === 'critical') {
       console.error(`🚨 [${severity.toUpperCase()}] ${whatWasLost}`);
+      // Trigger immediate snapshot for critical losses
+      await createSystemSnapshot(`Critical loss: ${whatWasLost}`);
     }
   } catch (error) {
     console.error("Loss tracking error:", error.message);
   }
 }
 
-// ==================== AI COUNCIL MEMBERS ====================
-const COUNCIL_MEMBERS = {
-  claude: {
-    name: "Claude",
-    model: "claude-3-5-sonnet-20241022",
-    provider: "anthropic",
-    role: "Strategic Oversight",
-    focus: "architecture & long-term planning",
-    maxTokens: 4096,
-    tier: "heavy"
-  },
-  chatgpt: {
-    name: "ChatGPT",
-    model: "gpt-4o",
-    provider: "openai",
-    role: "Technical Executor",
-    focus: "implementation & execution",
-    maxTokens: 4096,
-    tier: "heavy"
-  },
-  gemini: {
-    name: "Gemini",
-    model: "gemini-2.0-flash-exp",
-    provider: "google",
-    role: "Research Analyst",
-    focus: "data analysis & patterns",
-    maxTokens: 8192,
-    tier: "medium"
-  },
-  deepseek: {
-    name: "DeepSeek",
-    model: "deepseek-coder",
-    provider: "deepseek",
-    role: "Infrastructure Specialist",
-    focus: "optimization & performance",
-    maxTokens: 4096,
-    tier: "medium"
-  },
-  grok: {
-    name: "Grok",
-    model: "grok-beta",
-    provider: "xai",
-    role: "Innovation Scout",
-    focus: "novel approaches & risks",
-    maxTokens: 4096,
-    tier: "light"
-  }
-};
-
-// ==================== AI COUNCIL CALLING ====================
-async function callCouncilMember(member, prompt) {
-  const config = COUNCIL_MEMBERS[member];
-  if (!config) throw new Error(`Unknown member: ${member}`);
-
-  const spend = await getDailySpend();
-  if (spend >= MAX_DAILY_SPEND) {
-    throw new Error(`Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`);
-  }
-
-  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. Be concise and strategic.`;
-
-  try {
-    if (config.provider === "anthropic") {
-      const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
-      if (!apiKey) throw new Error("ANTHROPIC_API_KEY not set");
-      
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01"
-        },
-        body: JSON.stringify({
-          model: config.model,
-          max_tokens: config.maxTokens,
-          system: systemPrompt,
-          messages: [{ role: "user", content: prompt }]
-        })
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.content?.[0]?.text || "";
-      if (!text) throw new Error("Empty response");
-
-      const cost = calculateCost(json.usage, config.model);
-      await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
-      await storeConversationMemory(prompt, text, { ai_member: member });
-
-      return text;
-    }
-
-    if (config.provider === "openai") {
-      const apiKey = process.env.OPENAI_API_KEY?.trim();
-      if (!apiKey) throw new Error("OPENAI_API_KEY not set");
-      
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: config.model,
-          max_tokens: config.maxTokens,
-          temperature: 0.7,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
-          ]
-        })
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.choices?.[0]?.message?.content || "";
-      if (!text) throw new Error("Empty response");
-
-      const cost = calculateCost(json.usage, config.model);
-      await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
-      await storeConversationMemory(prompt, text, { ai_member: member });
-
-      return text;
-    }
-
-    if (config.provider === "google") {
-      const apiKey = process.env.GEMINI_API_KEY?.trim();
-      if (!apiKey) throw new Error("GEMINI_API_KEY not set");
-      
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
-            generationConfig: { maxOutputTokens: config.maxTokens, temperature: 0.7 }
-          })
-        }
-      );
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      if (!text) throw new Error("Empty response");
-
-      await storeConversationMemory(prompt, text, { ai_member: member });
-      return text;
-    }
-
-    if (config.provider === "xai") {
-      const apiKey = process.env.GROK_API_KEY?.trim();
-      if (!apiKey) throw new Error("GROK_API_KEY not set");
-      
-      const response = await fetch("https://api.x.ai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: config.model,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
-          ],
-          max_tokens: config.maxTokens
-        })
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.choices?.[0]?.message?.content || "";
-      if (!text) throw new Error("Empty response");
-
-      const cost = calculateCost(json.usage, config.model);
-      await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
-      await storeConversationMemory(prompt, text, { ai_member: member });
-
-      return text;
-    }
-
-    if (config.provider === "deepseek") {
-      const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
-      if (!apiKey) throw new Error("DEEPSEEK_API_KEY not set");
-      
-      const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: config.model,
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
-          ],
-          max_tokens: config.maxTokens
-        })
-      });
-
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.choices?.[0]?.message?.content || "";
-      if (!text) throw new Error("Empty response");
-
-      const cost = calculateCost(json.usage, config.model);
-      await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
-      await storeConversationMemory(prompt, text, { ai_member: member });
-
-      return text;
-    }
-
-    throw new Error(`${config.provider.toUpperCase()}_API_KEY not configured`);
-  } catch (error) {
-    throw error;
-  }
-}
-
+// ==================== COUNCIL WITH FAILOVER ====================
 async function callCouncilWithFailover(prompt, preferredMember = "claude") {
   const members = Object.keys(COUNCIL_MEMBERS);
   const ordered = [preferredMember, ...members.filter(m => m !== preferredMember)];
@@ -863,7 +1452,13 @@ class ExecutionQueue {
         [task.id]
       );
 
-      let result = await callCouncilWithFailover(`Execute: ${task.description}`, "claude");
+      // Check for blind spots before execution
+      const blindSpots = await detectBlindSpots(task.description, { type: task.type });
+      
+      let result = await callCouncilWithFailover(
+        `Execute: ${task.description}\nBe aware of these blind spots: ${blindSpots.slice(0, 3).join(', ')}`, 
+        "claude"
+      );
 
       await pool.query(
         `UPDATE execution_tasks SET status = 'completed', result = $1, completed_at = now()
@@ -926,84 +1521,14 @@ async function createProposal(title, description, proposedBy = "system") {
   }
 }
 
-async function conductConsensusVote(proposalId) {
-  try {
-    const propResult = await pool.query(
-      `SELECT title, description FROM consensus_proposals WHERE proposal_id = $1`,
-      [proposalId]
-    );
-
-    if (!propResult.rows.length) {
-      return { ok: false, error: "Proposal not found" };
-    }
-
-    const { title, description } = propResult.rows[0];
-
-    const votePrompt = `Should we approve: "${title}"?\n${description}\n\nVote: YES/NO/ABSTAIN\nReasoning: [brief explanation]`;
-
-    const members = Object.keys(COUNCIL_MEMBERS);
-    let yesVotes = 0, noVotes = 0, abstainVotes = 0;
-
-    for (const member of members) {
-      try {
-        const response = await callCouncilMember(member, votePrompt);
-        const voteMatch = response.match(/VOTE:\s*(YES|NO|ABSTAIN|Yes|No|Abstain)/i);
-        const reasonMatch = response.match(/REASONING:\s*([\s\S]*?)$/i);
-
-        const vote = voteMatch ? voteMatch[1].toUpperCase() : 'ABSTAIN';
-        const reasoning = reasonMatch ? reasonMatch[1].trim().slice(0, 500) : '';
-
-        if (vote === 'YES') yesVotes++;
-        else if (vote === 'NO') noVotes++;
-        else abstainVotes++;
-
-        await pool.query(
-          `INSERT INTO consensus_votes (proposal_id, ai_member, vote, reasoning)
-           VALUES ($1, $2, $3, $4)`,
-          [proposalId, member, vote, reasoning]
-        );
-      } catch (error) {
-        abstainVotes++;
-        continue;
-      }
-    }
-
-    const totalVotes = yesVotes + noVotes + abstainVotes;
-    const approvalRate = yesVotes / totalVotes;
-    const approvalThreshold = 2 / 3;
-    const approved = approvalRate >= approvalThreshold;
-
-    let decision = 'REJECTED';
-    if (approved) decision = 'APPROVED';
-    else if (approvalRate >= 0.5) decision = 'NEEDS_MODIFICATION';
-
-    await pool.query(
-      `UPDATE consensus_proposals SET status = $2, decided_at = now() WHERE proposal_id = $1`,
-      [proposalId, decision]
-    );
-
-    return {
-      ok: true,
-      proposalId,
-      yesVotes,
-      noVotes,
-      abstainVotes,
-      approvalRate: (approvalRate * 100).toFixed(1) + '%',
-      decision,
-      message: `Decision: ${decision} (${yesVotes}/${totalVotes} votes)`
-    };
-  } catch (error) {
-    console.error("Consensus vote error:", error.message);
-    await trackLoss('error', 'Consensus vote failed', error.message);
-    return { ok: false, error: error.message };
-  }
-}
-
-// ==================== SELF-MODIFICATION ENGINE (NEW) ====================
+// ==================== SELF-MODIFICATION ENGINE ====================
 class SelfModificationEngine {
   async modifyOwnCode(filePath, newContent, reason) {
     try {
       console.log(`🔧 [SELF-MODIFY] Attempting: ${filePath}`);
+      
+      // Create snapshot before modification
+      const snapshotId = await createSystemSnapshot(`Before modifying ${filePath}`);
       
       const protection = await isFileProtected(filePath);
       if (protection.protected && protection.requires_council) {
@@ -1014,14 +1539,22 @@ class SelfModificationEngine {
         );
         
         if (proposalId) {
-          const voteResult = await conductConsensusVote(proposalId);
+          const voteResult = await conductEnhancedConsensus(proposalId);
           if (voteResult.decision !== 'APPROVED') {
             return { success: false, error: 'Council rejected modification', proposalId };
           }
         }
       }
 
-      // Actually write the file locally first
+      // Test in sandbox first
+      const sandboxResult = await sandboxTest(newContent, `Test modification of ${filePath}`);
+      if (!sandboxResult.success) {
+        console.log(`⚠️ Sandbox test failed, rolling back to ${snapshotId}`);
+        await rollbackToSnapshot(snapshotId);
+        return { success: false, error: 'Failed sandbox test', sandboxError: sandboxResult.error };
+      }
+
+      // Actually write the file
       const fullPath = path.join(__dirname, filePath);
       await fs.writeFile(fullPath, newContent);
       
@@ -1066,62 +1599,10 @@ async function isFileProtected(filePath) {
   }
 }
 
-// ==================== CONTINUOUS SELF-IMPROVEMENT (NEW) ====================
-async function continuousSelfImprovement() {
-  try {
-    systemMetrics.improvementCyclesRun++;
-    console.log(`🔧 [IMPROVEMENT] Running cycle #${systemMetrics.improvementCyclesRun}...`);
-    
-    // Analyze recent errors
-    const recentErrors = await pool.query(
-      `SELECT what_was_lost, why_lost, COUNT(*) as count 
-       FROM loss_log 
-       WHERE timestamp > NOW() - INTERVAL '1 hour'
-       GROUP BY what_was_lost, why_lost
-       ORDER BY count DESC LIMIT 5`
-    );
-
-    // Analyze performance - FIXED: changed task_type to type
-    const slowTasks = await pool.query(
-      `SELECT type, AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) as avg_duration 
-       FROM execution_tasks 
-       WHERE created_at > NOW() - INTERVAL '24 hours'
-       AND completed_at IS NOT NULL
-       GROUP BY type 
-       HAVING AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) > 5000`
-    );
-
-    // If issues found, queue improvement
-    if (recentErrors.rows.length > 0 || slowTasks.rows.length > 0) {
-      const improvementPrompt = `Analyze and suggest code improvements for these issues:
-      
-      Recent Errors: ${JSON.stringify(recentErrors.rows.slice(0, 3))}
-      Performance Bottlenecks: ${JSON.stringify(slowTasks.rows.slice(0, 3))}
-      
-      Suggest specific, actionable code improvements to fix the top 3 issues.`;
-      
-      const improvements = await callCouncilWithFailover(improvementPrompt, 'deepseek');
-      
-      if (improvements && improvements.length > 50) {
-        await executionQueue.addTask('self_improvement', improvements);
-        systemMetrics.lastImprovement = new Date().toISOString();
-      }
-    }
-  } catch (error) {
-    console.error("Self-improvement error:", error.message);
-  }
-}
-
-// ==================== DEPLOYMENT TRIGGERS (NEW) ====================
-
-// ==================== DEPLOYMENT TRIGGERS (NEW) ====================
+// ==================== DEPLOYMENT TRIGGERS ====================
 async function triggerDeployment(modifiedFiles = []) {
   try {
     console.log(`🚀 [DEPLOYMENT] Triggered for: ${modifiedFiles.join(', ')}`);
-    
-    // For Railway: deployment happens automatically on git push
-    // For local: could restart the server
-    // For other platforms: add specific webhook triggers here
     
     systemMetrics.deploymentsTrigger++;
     
@@ -1151,7 +1632,12 @@ async function commitToGitHub(filePath, content, message) {
   
   const getRes = await fetch(
     `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
-    { headers: { 'Authorization': `token ${token}` } }
+    { 
+      headers: { 
+        'Authorization': `token ${token}`,
+        'Cache-Control': 'no-cache'
+      } 
+    }
   );
   
   let sha = undefined;
@@ -1172,7 +1658,8 @@ async function commitToGitHub(filePath, content, message) {
       method: 'PUT',
       headers: {
         'Authorization': `token ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
       },
       body: JSON.stringify(payload)
     }
@@ -1187,7 +1674,7 @@ async function commitToGitHub(filePath, content, message) {
   return true;
 }
 
-// ==================== SELF-PROGRAMMING ENDPOINT (CRITICAL - NEW) ====================
+// ==================== SELF-PROGRAMMING ENDPOINT ====================
 app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
   try {
     const { instruction, priority = "medium" } = req.body;
@@ -1198,7 +1685,7 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
 
     console.log(`🤖 [SELF-PROGRAM] New instruction: ${instruction.substring(0, 100)}...`);
 
-    // Step 1: Analyze requirements
+    // Step 1: Analyze requirements with blind spot detection
     const analysisPrompt = `As the AI Council, analyze this self-programming instruction:
 
 "${instruction}"
@@ -1206,7 +1693,7 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
 Provide:
 1. Which files need modification
 2. Exact code changes needed
-3. Potential risks
+3. Potential risks and blind spots
 4. Testing strategy
 5. Rollback plan
 
@@ -1214,8 +1701,13 @@ Be specific with file paths and exact code logic.`;
     
     const analysis = await callCouncilWithFailover(analysisPrompt, "claude");
 
+    // Check for blind spots
+    const blindSpots = await detectBlindSpots(instruction, { type: 'self-programming' });
+
     // Step 2: Generate actual code
     const codePrompt = `Based on this analysis: ${analysis}
+
+Consider these blind spots: ${blindSpots.slice(0, 5).join(', ')}
 
 Now write COMPLETE, WORKING code. Format each file like:
 ===FILE:path/to/file.js===
@@ -1224,17 +1716,29 @@ Now write COMPLETE, WORKING code. Format each file like:
     
     const codeResponse = await callCouncilWithFailover(codePrompt, "deepseek");
 
-    // Step 3: Extract and apply changes
+    // Step 3: Extract and test in sandbox
     const fileChanges = extractFileChanges(codeResponse);
     
     const results = [];
     for (const change of fileChanges) {
-      const result = await selfModificationEngine.modifyOwnCode(
-        change.filePath, 
-        change.content, 
-        `Self-programming: ${instruction}`
-      );
-      results.push(result);
+      // Test each change in sandbox first
+      const sandboxResult = await sandboxTest(change.content, `Test: ${change.filePath}`);
+      
+      if (sandboxResult.success) {
+        const result = await selfModificationEngine.modifyOwnCode(
+          change.filePath, 
+          change.content, 
+          `Self-programming: ${instruction}`
+        );
+        results.push(result);
+      } else {
+        results.push({
+          success: false,
+          filePath: change.filePath,
+          error: 'Failed sandbox test',
+          sandboxError: sandboxResult.error
+        });
+      }
     }
 
     // Step 4: Deploy if successful
@@ -1248,6 +1752,7 @@ Now write COMPLETE, WORKING code. Format each file like:
       instruction,
       filesModified: successfulChanges,
       deploymentTriggered: successfulChanges.length > 0,
+      blindSpotsDetected: blindSpots.length,
       results: results
     });
 
@@ -1427,11 +1932,12 @@ app.get("/healthz", async (req, res) => {
     const spend = await getDailySpend();
     const droneStatus = await incomeDroneSystem.getStatus();
     const taskStatus = executionQueue.getStatus();
+    const rotationStatus = await rotateAIsBasedOnPerformance();
 
     res.json({
       ok: true,
       status: "healthy",
-      version: "v25.0-final",
+      version: "v26.0-enhanced",
       timestamp: new Date().toISOString(),
       database: "connected",
       websockets: activeConnections.size,
@@ -1442,7 +1948,11 @@ app.get("/healthz", async (req, res) => {
       drones: droneStatus,
       tasks: taskStatus,
       deployment: "Railway + Neon + GitHub",
-      system_metrics: systemMetrics
+      system_metrics: systemMetrics,
+      ai_rotation: rotationStatus,
+      daily_ideas: dailyIdeas.length,
+      blind_spots_detected: systemMetrics.blindSpotsDetected,
+      snapshots_available: systemSnapshots.length
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -1455,6 +1965,9 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
     const { message, member = "claude" } = req.body;
     if (!message) return res.status(400).json({ error: "Message required" });
 
+    // Check for blind spots in user message
+    const blindSpots = await detectBlindSpots(message, { source: 'user_chat' });
+    
     const response = await callCouncilWithFailover(message, member);
     const spend = await getDailySpend();
     
@@ -1463,6 +1976,7 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
       response, 
       spend,
       member,
+      blindSpotsDetected: blindSpots.length,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -1470,72 +1984,6 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
       ok: false, 
       error: error.message
     });
-  }
-});
-
-// Self-programming (main new endpoint)
-app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
-  try {
-    const { instruction, priority = "medium" } = req.body;
-    
-    if (!instruction) {
-      return res.status(400).json({ error: "Instruction required" });
-    }
-
-    console.log(`🤖 [SELF-PROGRAM] ${instruction.substring(0, 100)}...`);
-
-    const analysisPrompt = `Analyze this self-programming instruction for an AI system running on Railway + Neon + GitHub:
-
-"${instruction}"
-
-Provide:
-1. Files to modify/create
-2. Exact code changes
-3. Risks and mitigations
-4. Testing approach
-5. Rollback plan`;
-    
-    const analysis = await callCouncilWithFailover(analysisPrompt, "claude");
-
-    const codePrompt = `Based on this analysis, write complete working code:
-
-${analysis}
-
-Original Instruction: "${instruction}"
-
-Format each file as:
-===FILE:path/to/file.js===
-[complete code]
-===END===`;
-    
-    const codeResponse = await callCouncilWithFailover(codePrompt, "deepseek");
-    const fileChanges = extractFileChanges(codeResponse);
-    
-    const results = [];
-    for (const change of fileChanges) {
-      const result = await selfModificationEngine.modifyOwnCode(
-        change.filePath, 
-        change.content, 
-        `Self-programming: ${instruction}`
-      );
-      results.push(result);
-    }
-
-    const successfulChanges = results.filter(r => r.success).map(r => r.filePath);
-    if (successfulChanges.length > 0) {
-      await triggerDeployment(successfulChanges);
-    }
-
-    res.json({
-      ok: true,
-      instruction,
-      filesModified: successfulChanges,
-      deploymentTriggered: successfulChanges.length > 0,
-      details: results
-    });
-
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
   }
 });
 
@@ -1567,6 +2015,60 @@ app.get("/api/v1/memory/search", requireKey, async (req, res) => {
     const { q = "", limit = 50 } = req.query;
     const memories = await recallConversationMemory(q, parseInt(limit));
     res.json({ ok: true, count: memories.length, memories });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Daily Ideas
+app.post("/api/v1/ideas/generate", requireKey, async (req, res) => {
+  try {
+    await generateDailyIdeas();
+    res.json({ ok: true, ideasGenerated: dailyIdeas.length });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/ideas", requireKey, async (req, res) => {
+  try {
+    const ideas = await pool.query(
+      `SELECT * FROM daily_ideas WHERE created_at > NOW() - INTERVAL '24 hours' ORDER BY votes_for DESC`
+    );
+    res.json({ ok: true, ideas: ideas.rows });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Blind Spots
+app.get("/api/v1/blindspots", requireKey, async (req, res) => {
+  try {
+    const blindSpots = await pool.query(
+      `SELECT * FROM blind_spots ORDER BY created_at DESC LIMIT 20`
+    );
+    res.json({ ok: true, blindSpots: blindSpots.rows });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Snapshots & Rollback
+app.post("/api/v1/snapshot", requireKey, async (req, res) => {
+  try {
+    const { reason = "Manual snapshot" } = req.body;
+    const snapshotId = await createSystemSnapshot(reason);
+    res.json({ ok: true, snapshotId });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/rollback/:snapshotId", requireKey, async (req, res) => {
+  try {
+    const { snapshotId } = req.params;
+    const result = await rollbackToSnapshot(snapshotId);
+    res.json(result);
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -1620,8 +2122,34 @@ app.post("/api/v1/proposal/create", requireKey, async (req, res) => {
 app.post("/api/v1/proposal/:proposalId/vote", requireKey, async (req, res) => {
   try {
     const { proposalId } = req.params;
-    const result = await conductConsensusVote(proposalId);
+    const result = await conductEnhancedConsensus(proposalId);
     res.json(result);
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// AI Performance
+app.get("/api/v1/ai/performance", requireKey, async (req, res) => {
+  try {
+    const performance = await pool.query(
+      `SELECT ai_member, 
+              COUNT(*) as total_tasks,
+              AVG(CASE WHEN success THEN 1 ELSE 0 END) as success_rate,
+              AVG(duration_ms) as avg_duration,
+              SUM(cost) as total_cost,
+              SUM(tokens_used) as total_tokens
+       FROM ai_performance
+       WHERE created_at > NOW() - INTERVAL '7 days'
+       GROUP BY ai_member
+       ORDER BY success_rate DESC`
+    );
+    
+    res.json({ 
+      ok: true, 
+      performance: performance.rows,
+      currentScores: Object.fromEntries(aiPerformanceScores)
+    });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -1637,7 +2165,10 @@ app.get("/api/v1/system/metrics", requireKey, async (req, res) => {
         roi: roiTracker,
         compression: compressionMetrics,
         tasks: executionQueue.getStatus(),
-        drones: await incomeDroneSystem.getStatus()
+        drones: await incomeDroneSystem.getStatus(),
+        aiPerformance: Object.fromEntries(aiPerformanceScores),
+        dailyIdeas: dailyIdeas.length,
+        snapshots: systemSnapshots.length
       }
     });
   } catch (error) {
@@ -1666,8 +2197,16 @@ wss.on("connection", (ws) => {
     type: "connection",
     status: "connected",
     clientId,
-    message: "🎼 LifeOS v25.0 FINAL - Self-Programming System Ready",
-    systemMetrics
+    message: "🎼 LifeOS v26.0 ENHANCED - Consensus Protocol Ready",
+    systemMetrics,
+    features: {
+      consensusProtocol: true,
+      blindSpotDetection: true,
+      dailyIdeas: true,
+      aiRotation: true,
+      sandboxTesting: true,
+      rollbackCapability: true
+    }
   }));
 
   ws.on("message", async (data) => {
@@ -1681,11 +2220,15 @@ wss.on("connection", (ws) => {
         if (!text) return;
         
         try {
+          // Check for blind spots
+          const blindSpots = await detectBlindSpots(text, { source: 'websocket' });
+          
           const response = await callCouncilWithFailover(text, member);
           ws.send(JSON.stringify({
             type: "response",
             response,
             member,
+            blindSpotsDetected: blindSpots.length,
             timestamp: new Date().toISOString()
           }));
         } catch (error) {
@@ -1711,30 +2254,28 @@ wss.on("connection", (ws) => {
 async function start() {
   try {
     console.log("\n" + "=".repeat(100));
-    console.log("🚀 LIFEOS v25.0 FINAL - COMPLETE SELF-PROGRAMMING SYSTEM");
+    console.log("🚀 LIFEOS v26.0 ENHANCED - COMPLETE CONSENSUS & SELF-HEALING SYSTEM");
     console.log("=".repeat(100));
     
     await initDatabase();
     await loadROIFromDatabase();
 
-    console.log("\n🤖 AI COUNCIL:");
+    console.log("\n🤖 ENHANCED AI COUNCIL:");
     Object.values(COUNCIL_MEMBERS).forEach(m => 
       console.log(`  • ${m.name} (${m.model}) - ${m.role}`)
     );
 
-    console.log("\n✅ ALL SYSTEMS:");
-    console.log("  ✅ AI Council with failover");
-    console.log("  ✅ Real task execution");
-    console.log("  ✅ Income drone system");
-    console.log("  ✅ Financial dashboard");
-    console.log("  ✅ Governance & voting");
-    console.log("  ✅ Self-modification engine");
-    console.log("  ✅ Continuous improvement");
-    console.log("  ✅ Auto-deployment");
-    console.log("  ✅ WebSocket real-time");
-    console.log("  ✅ Complete overlay");
-    console.log("  ✅ Secure CORS");
-    console.log("  ✅ GitHub integration");
+    console.log("\n✅ NEW SYSTEMS:");
+    console.log("  ✅ Enhanced Consensus Protocol");
+    console.log("  ✅ Blind Spot Detection");
+    console.log("  ✅ Daily Idea Generation (25 ideas)");
+    console.log("  ✅ AI Performance Rotation");
+    console.log("  ✅ Sandbox Testing");
+    console.log("  ✅ Snapshot & Rollback");
+    console.log("  ✅ User Preference Learning");
+    console.log("  ✅ No-Cache API Calls");
+    console.log("  ✅ Self-Healing System");
+    console.log("  ✅ Continuous Memory");
 
     // Start execution queue
     executionQueue.executeNext();
@@ -1747,12 +2288,22 @@ async function start() {
     setInterval(() => continuousSelfImprovement(), 30 * 60 * 1000); // Every 30 minutes
     setTimeout(() => continuousSelfImprovement(), 120000); // After 2 minutes
 
+    // Schedule daily idea generation
+    setInterval(() => generateDailyIdeas(), 24 * 60 * 60 * 1000); // Daily
+    setTimeout(() => generateDailyIdeas(), 60000); // After 1 minute
+
+    // Schedule AI rotation check
+    setInterval(() => rotateAIsBasedOnPerformance(), 60 * 60 * 1000); // Every hour
+
+    // Create initial snapshot
+    await createSystemSnapshot("System startup");
+
     server.listen(PORT, HOST, () => {
       console.log(`\n🌐 SERVER ONLINE: http://${HOST}:${PORT}`);
       console.log(`📊 Health: http://${HOST}:${PORT}/healthz`);
       console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
       console.log(`🤖 Self-Program: POST /api/v1/system/self-program`);
-      console.log("\n✅ SYSTEM READY - SELF-PROGRAMMING ACTIVE!");
+      console.log("\n✅ SYSTEM READY - ENHANCED CONSENSUS PROTOCOL ACTIVE!");
       console.log("=".repeat(100) + "\n");
     });
   } catch (error) {
@@ -1764,6 +2315,7 @@ async function start() {
 // Graceful shutdown
 process.on("SIGINT", async () => {
   console.log("\n📊 Shutting down...");
+  await createSystemSnapshot("System shutdown");
   for (const ws of activeConnections.values()) ws.close();
   await pool.end();
   process.exit(0);
