@@ -835,42 +835,81 @@ async function generateDailyIdeas() {
     DIFFICULTY: [easy/medium/hard]
     IMPACT: [low/medium/high]`;
 
-    const response = await callCouncilMember('gemini', ideaPrompt);
-    const ideas = response.split('\n\n').filter(i => i.includes('TITLE:'));
+    let response;
+    try {
+      // 👉 This will try gemini first, then fall back to others
+      response = await callCouncilWithFailover(ideaPrompt, 'gemini');
+    } catch (err) {
+      console.error('Daily idea council error, using fallback:', err.message);
+      response = null;
+    }
 
-    for (const ideaText of ideas.slice(0, 25)) {
-      const ideaId = `idea_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      const titleMatch = ideaText.match(/TITLE:\s*(.+)/);
-      const descMatch = ideaText.match(/DESCRIPTION:\s*(.+)/);
-      const diffMatch = ideaText.match(/DIFFICULTY:\s*(.+)/);
-      
-      if (titleMatch && descMatch) {
-        await pool.query(
-          `INSERT INTO daily_ideas (idea_id, idea_title, idea_description, proposed_by, implementation_difficulty)
-           VALUES ($1, $2, $3, $4, $5)`,
-          [ideaId, titleMatch[1], descMatch[1], 'gemini', diffMatch?.[1] || 'medium']
-        );
-        
-        dailyIdeas.push({
-          id: ideaId,
-          title: titleMatch[1],
-          description: descMatch[1],
-          votes: { for: 0, against: 0 }
+    const ideas = [];
+    if (response && typeof response === 'string' && response.length > 50) {
+      const blocks = response.split('\n\n').filter(b => b.includes('TITLE:'));
+      for (const ideaText of blocks.slice(0, 25)) {
+        const titleMatch = ideaText.match(/TITLE:\s*(.+)/);
+        const descMatch = ideaText.match(/DESCRIPTION:\s*(.+)/);
+        const diffMatch = ideaText.match(/DIFFICULTY:\s*(.+)/);
+
+        if (titleMatch && descMatch) {
+          ideas.push({
+            title: titleMatch[1].trim(),
+            description: descMatch[1].trim(),
+            difficulty: (diffMatch?.[1] || 'medium').trim()
+          });
+        }
+      }
+    }
+
+    // 👉 HARD FALLBACK if council failed or parsing failed
+    if (ideas.length === 0) {
+      console.warn('Daily idea generation fell back to local template ideas.');
+      for (let i = 1; i <= 25; i++) {
+        ideas.push({
+          title: `Fallback Idea ${i}`,
+          description: `Improve one lifecycle of LifeOS (onboarding, overlay, council, drones, billing, or self-repair). Variant #${i}.`,
+          difficulty: i < 10 ? 'easy' : i < 20 ? 'medium' : 'hard'
         });
       }
     }
 
+    dailyIdeas = []; // reset in-memory list for today
+
+    for (const idea of ideas) {
+      const ideaId = `idea_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      await pool.query(
+        `INSERT INTO daily_ideas (idea_id, idea_title, idea_description, proposed_by, implementation_difficulty)
+         VALUES ($1, $2, $3, $4, $5)
+         ON CONFLICT (idea_id) DO NOTHING`,
+        [
+          ideaId,
+          idea.title,
+          idea.description,
+          response ? 'council' : 'fallback',
+          idea.difficulty
+        ]
+      );
+
+      dailyIdeas.push({
+        id: ideaId,
+        title: idea.title,
+        description: idea.description,
+        votes: { for: 0, against: 0 }
+      });
+    }
+
     lastIdeaGeneration = today;
-    systemMetrics.dailyIdeasGenerated += ideas.length;
-    console.log(`✅ Generated ${ideas.length} daily ideas`);
-    
+    systemMetrics.dailyIdeasGenerated += dailyIdeas.length;
+
+    console.log(`✅ Generated ${dailyIdeas.length} daily ideas (source: ${response ? 'council' : 'local fallback'})`);
+
     // Trigger voting on ideas
     setTimeout(() => voteOnDailyIdeas(), 5000);
   } catch (error) {
-    console.error("Daily idea generation error:", error.message);
+    console.error('Daily idea generation error (final):', error.message);
   }
 }
-
 // ==================== IDEA VOTING SYSTEM ====================
 async function voteOnDailyIdeas() {
   try {
