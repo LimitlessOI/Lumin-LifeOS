@@ -1923,6 +1923,54 @@ function requireKey(req, res, next) {
 
 // ==================== API ENDPOINTS ====================
 
+// --- Micro / LCTP helper functions for API layer ---
+// These DO NOT implement full LCTP v3 – they just speak the Micro envelope
+// that your overlay uses. Real compression can stay in separate modules.
+
+function decodeMicroBody(body = {}) {
+  // Accept either { micro: {...} } or a direct micro packet
+  const packet = body.micro || body;
+
+  // If there's no packet shape, fall back to legacy "message"
+  if (!packet || typeof packet !== "object" || (!packet.t && !packet.message && !packet.text)) {
+    const legacyText = body.message || body.text || "";
+    return {
+      text: String(legacyText || "").trim(),
+      channel: "chat",
+      meta: {},
+      packet: null
+    };
+  }
+
+  const text =
+    String(packet.t || packet.text || packet.message || "").trim();
+
+  const channel = packet.c || "chat";
+  const meta = packet.m || {};
+
+  return {
+    text,
+    channel,
+    meta,
+    packet
+  };
+}
+
+function buildMicroResponse({ text, channel = "chat", role = "a", meta = {} }) {
+  // Micro envelope (mp1) – outer shell, no real compression here
+  const packet = {
+    v: "mp1",
+    r: role,       // "a" = assistant
+    c: channel,    // "chat" | "cmd" | etc.
+    t: text || "",
+    lctp: null,    // you can wire real LCTP v3 here later
+    m: meta || {},
+    ts: Date.now()
+  };
+
+  return { micro: packet };
+}
+
 // Health checks
 app.get("/health", (req, res) => res.send("OK"));
 
@@ -1959,31 +2007,123 @@ app.get("/healthz", async (req, res) => {
   }
 });
 
-// Chat endpoint
+// Legacy Chat endpoint (kept for compatibility)
 app.post("/api/v1/chat", requireKey, async (req, res) => {
   try {
     const { message, member = "claude" } = req.body;
     if (!message) return res.status(400).json({ error: "Message required" });
 
     // Check for blind spots in user message
-    const blindSpots = await detectBlindSpots(message, { source: 'user_chat' });
-    
+    const blindSpots = await detectBlindSpots(message, { source: "user_chat_legacy" });
+
     const response = await callCouncilWithFailover(message, member);
     const spend = await getDailySpend();
-    
-    res.json({ 
-      ok: true, 
-      response, 
+
+    res.json({
+      ok: true,
+      response,
       spend,
       member,
       blindSpotsDetected: blindSpots.length,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    res.status(500).json({ 
-      ok: false, 
+    res.status(500).json({
+      ok: false,
       error: error.message
     });
+  }
+});
+
+/**
+ * Council + Micro endpoint for the overlay
+ *
+ * Expected request shape (from overlay / MicroProtocol.js):
+ *   POST /api/council/chat
+ *   {
+ *     "micro": {
+ *       "v": "mp1",
+ *       "r": "u",
+ *       "c": "chat" | "cmd" | ...,
+ *       "t": "User text",
+ *       "lctp": null or "LCTPv3|...",
+ *       "m": { ...meta },
+ *       "ts": 1732040000000
+ *     }
+ *   }
+ *
+ * Response shape:
+ *   {
+ *     "micro": {
+ *       "v": "mp1",
+ *       "r": "a",
+ *       "c": "...",
+ *       "t": "AI reply",
+ *       "lctp": null,        // you can wire real LCTP v3 later
+ *       "m": {
+ *         ...meta,
+ *         "member": "claude",
+ *         "spend": 0.1234,
+ *         "blindSpotsDetected": 3,
+ *         "aiName": "LifeOS Council"
+ *       },
+ *       "ts": 1732040001234
+ *     }
+ *   }
+ */
+app.post("/api/council/chat", requireKey, async (req, res) => {
+  try {
+    const { text, channel, meta, packet } = decodeMicroBody(req.body || {});
+
+    const userText = String(text || "").trim();
+    if (!userText) {
+      return res.status(400).json({ error: "Empty message" });
+    }
+
+    const member = meta.member || "claude";
+
+    // Run blind-spot detection using your existing system
+    const blindSpots = await detectBlindSpots(userText, {
+      source: "overlay_micro",
+      channel,
+      meta
+    });
+
+    // Call the AI council with your existing failover logic
+    const councilReply = await callCouncilWithFailover(userText, member);
+    const spend = await getDailySpend();
+
+    // Build meta for response
+    const responseMeta = {
+      ...meta,
+      member,
+      spend,
+      blindSpotsDetected: blindSpots.length,
+      aiName: "LifeOS Council",
+      source: "council_endpoint"
+    };
+
+    // Wrap reply in Micro envelope so overlay can display it
+    const responsePacket = buildMicroResponse({
+      text: councilReply,
+      channel,
+      role: "a",
+      meta: responseMeta
+    });
+
+    return res.json(responsePacket);
+  } catch (error) {
+    console.error("Council chat error:", error.message);
+
+    const errorPacket = buildMicroResponse({
+      text: `Error in council endpoint: ${error.message}`,
+      channel: "cmd",
+      role: "a",
+      meta: { error: true }
+    });
+
+    // Return 200 with an error packet so the overlay can show it gracefully
+    return res.status(200).json(errorPacket);
   }
 });
 
@@ -1992,7 +2132,7 @@ app.post("/api/v1/task", requireKey, async (req, res) => {
   try {
     const { type = "general", description } = req.body;
     if (!description) return res.status(400).json({ error: "Description required" });
-    
+
     const taskId = await executionQueue.addTask(type, description);
     res.json({ ok: true, taskId });
   } catch (error) {
@@ -2144,9 +2284,9 @@ app.get("/api/v1/ai/performance", requireKey, async (req, res) => {
        GROUP BY ai_member
        ORDER BY success_rate DESC`
     );
-    
-    res.json({ 
-      ok: true, 
+
+    res.json({
+      ok: true,
       performance: performance.rows,
       currentScores: Object.fromEntries(aiPerformanceScores)
     });
@@ -2177,12 +2317,12 @@ app.get("/api/v1/system/metrics", requireKey, async (req, res) => {
 });
 
 // Overlay
-app.get('/overlay', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'overlay', 'index.html'));
+app.get("/overlay", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "overlay", "index.html"));
 });
 
-app.get('/overlay/index.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'overlay', 'index.html'));
+app.get("/overlay/index.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "overlay", "index.html"));
 });
 
 // ==================== WEBSOCKET ====================
