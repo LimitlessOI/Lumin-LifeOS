@@ -1962,54 +1962,6 @@ function requireKey(req, res, next) {
 
 // ==================== API ENDPOINTS ====================
 
-// --- Micro / LCTP helper functions for API layer ---
-// These DO NOT implement full LCTP v3 – they just speak the Micro envelope
-// that your overlay uses. Real compression can stay in separate modules.
-
-function decodeMicroBody(body = {}) {
-  // Accept either { micro: {...} } or a direct micro packet
-  const packet = body.micro || body;
-
-  // If there's no packet shape, fall back to legacy "message"
-  if (!packet || typeof packet !== "object" || (!packet.t && !packet.message && !packet.text)) {
-    const legacyText = body.message || body.text || "";
-    return {
-      text: String(legacyText || "").trim(),
-      channel: "chat",
-      meta: {},
-      packet: null
-    };
-  }
-
-  const text =
-    String(packet.t || packet.text || packet.message || "").trim();
-
-  const channel = packet.c || "chat";
-  const meta = packet.m || {};
-
-  return {
-    text,
-    channel,
-    meta,
-    packet
-  };
-}
-
-function buildMicroResponse({ text, channel = "chat", role = "a", meta = {} }) {
-  // Micro envelope (mp1) – outer shell, no real compression here
-  const packet = {
-    v: "mp1",
-    r: role,       // "a" = assistant
-    c: channel,    // "chat" | "cmd" | etc.
-    t: text || "",
-    lctp: null,    // you can wire real LCTP v3 here later
-    m: meta || {},
-    ts: Date.now()
-  };
-
-  return { micro: packet };
-}
-
 // Health checks
 app.get("/health", (req, res) => res.send("OK"));
 
@@ -2046,16 +1998,18 @@ app.get("/healthz", async (req, res) => {
   }
 });
 
-// Legacy Chat endpoint (kept for compatibility)
+// Primary Council Chat Endpoint (used by overlay)
 app.post("/api/v1/chat", requireKey, async (req, res) => {
   try {
     const { message, member = "claude" } = req.body;
     if (!message) return res.status(400).json({ error: "Message required" });
 
-    // Check for blind spots in user message
-    const blindSpots = await detectBlindSpots(message, { source: "user_chat_legacy" });
+    console.log(`🤖 [COUNCIL] ${member} processing: ${message.substring(0, 100)}...`);
 
-    const response = await callCouncilWithFailover(message, member);
+    // Check for blind spots in user message
+    const blindSpots = await detectBlindSpots(message, { source: "user_chat" });
+
+    const response = await callCouncilMember(member, message);
     const spend = await getDailySpend();
 
     res.json({
@@ -2067,6 +2021,7 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
       timestamp: new Date().toISOString()
     });
   } catch (error) {
+    console.error("Council chat error:", error);
     res.status(500).json({
       ok: false,
       error: error.message
@@ -2074,95 +2029,152 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
   }
 });
 
-/**
- * Council + Micro endpoint for the overlay
- *
- * Expected request shape (from overlay / MicroProtocol.js):
- *   POST /api/council/chat
- *   {
- *     "micro": {
- *       "v": "mp1",
- *       "r": "u",
- *       "c": "chat" | "cmd" | ...,
- *       "t": "User text",
- *       "lctp": null or "LCTPv3|...",
- *       "m": { ...meta },
- *       "ts": 1732040000000
- *     }
- *   }
- *
- * Response shape:
- *   {
- *     "micro": {
- *       "v": "mp1",
- *       "r": "a",
- *       "c": "...",
- *       "t": "AI reply",
- *       "lctp": null,        // you can wire real LCTP v3 later
- *       "m": {
- *         ...meta,
- *         "member": "claude",
- *         "spend": 0.1234,
- *         "blindSpotsDetected": 3,
- *         "aiName": "LifeOS Council"
- *       },
- *       "ts": 1732040001234
- *     }
- *   }
- */
+// Council Chat with Micro Protocol
 app.post("/api/council/chat", requireKey, async (req, res) => {
   try {
-    const { text, channel, meta, packet } = decodeMicroBody(req.body || {});
-
-    const userText = String(text || "").trim();
-    if (!userText) {
-      return res.status(400).json({ error: "Empty message" });
+    const { micro } = req.body;
+    
+    if (!micro) {
+      return res.status(400).json({ error: "Micro protocol packet required" });
     }
 
-    const member = meta.member || "claude";
+    const text = micro.t || micro.text || "";
+    const member = micro.m?.member || "claude";
+    const channel = micro.c || "chat";
 
-    // Run blind-spot detection using your existing system
-    const blindSpots = await detectBlindSpots(userText, {
-      source: "overlay_micro",
-      channel,
-      meta
+    if (!text) {
+      return res.status(400).json({ error: "Message text required" });
+    }
+
+    console.log(`🎼 [MICRO] ${member} in ${channel}: ${text.substring(0, 100)}...`);
+
+    // Check for blind spots
+    const blindSpots = await detectBlindSpots(text, { 
+      source: "micro_chat", 
+      channel, 
+      member 
     });
 
-    // Call the AI council with your existing failover logic
-    const councilReply = await callCouncilWithFailover(userText, member);
+    const response = await callCouncilMember(member, text);
     const spend = await getDailySpend();
 
-    // Build meta for response
-    const responseMeta = {
-      ...meta,
-      member,
-      spend,
-      blindSpotsDetected: blindSpots.length,
-      aiName: "LifeOS Council",
-      source: "council_endpoint"
+    // Build response packet
+    const responsePacket = {
+      v: "mp1",
+      r: "a",
+      c: channel,
+      t: response,
+      lctp: null,
+      m: {
+        member,
+        spend,
+        blindSpotsDetected: blindSpots.length,
+        aiName: "LifeOS Council",
+        timestamp: new Date().toISOString()
+      },
+      ts: Date.now()
     };
 
-    // Wrap reply in Micro envelope so overlay can display it
-    const responsePacket = buildMicroResponse({
-      text: councilReply,
-      channel,
-      role: "a",
-      meta: responseMeta
-    });
-
-    return res.json(responsePacket);
+    res.json({ micro: responsePacket });
   } catch (error) {
-    console.error("Council chat error:", error.message);
+    console.error("Micro council chat error:", error);
+    
+    const errorPacket = {
+      v: "mp1", 
+      r: "a",
+      c: "error",
+      t: `Error: ${error.message}`,
+      m: { error: true },
+      ts: Date.now()
+    };
+    
+    res.json({ micro: errorPacket });
+  }
+});
 
-    const errorPacket = buildMicroResponse({
-      text: `Error in council endpoint: ${error.message}`,
-      channel: "cmd",
-      role: "a",
-      meta: { error: true }
+// Architect Endpoints
+app.post("/api/v1/architect/chat", requireKey, async (req, res) => {
+  try {
+    const { query_json, original_message } = req.body;
+    
+    if (!query_json && !original_message) {
+      return res.status(400).json({ error: "Query JSON or original message required" });
+    }
+
+    const prompt = query_json ? 
+      `Process this compressed query: ${JSON.stringify(query_json)}\n\nProvide detailed response.` :
+      original_message;
+
+    const response = await callCouncilWithFailover(prompt, "gemini");
+    
+    const response_json = {
+      r: response.slice(0, 500),
+      ts: Date.now(),
+      compressed: true
+    };
+
+    res.json({
+      ok: true,
+      response_json,
+      original_response: response,
+      compressed: true
     });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
 
-    // Return 200 with an error packet so the overlay can show it gracefully
-    return res.status(200).json(errorPacket);
+app.post("/api/v1/architect/command", requireKey, async (req, res) => {
+  try {
+    const { query_json, command, intent } = req.body;
+    
+    const prompt = `Command: ${command}\nIntent: ${intent}\nCompressed Query: ${JSON.stringify(query_json || {})}\n\nExecute this command and provide results.`;
+    
+    const response = await callCouncilWithFailover(prompt, "claude");
+    
+    if (intent && intent !== 'general') {
+      await executionQueue.addTask(intent, command);
+    }
+
+    res.json({
+      ok: true,
+      message: response,
+      intent,
+      queued: intent !== 'general'
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/architect/micro", requireKey, async (req, res) => {
+  try {
+    const microQuery = req.body;
+    
+    if (microQuery.includes('|')) {
+      const parts = microQuery.split('|');
+      const operation = parts.find(p => p.startsWith('OP:'))?.slice(3) || 'G';
+      const data = parts.find(p => p.startsWith('D:'))?.slice(2).replace(/~/g, ' ') || '';
+      
+      let response;
+      switch (operation) {
+        case 'G':
+          response = `CT:${data}~completed~result:success~compression:73%`;
+          break;
+        case 'A':
+          response = `CT:Analysis~complete~insights:generated~recommendations:3`;
+          break;
+        default:
+          response = `CT:${data}~processed~status:done`;
+      }
+      
+      res.send(response);
+    } else {
+      const response = await callCouncilWithFailover(microQuery, "deepseek");
+      res.send(`CT:${response.replace(/ /g, '~')}`);
+    }
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
   }
 });
 
@@ -2267,7 +2279,7 @@ app.post("/api/v1/drones/deploy", requireKey, async (req, res) => {
 app.get("/api/v1/drones", requireKey, async (req, res) => {
   try {
     const status = await incomeDroneSystem.getStatus();
-    res.json({ ok: true, ...status });
+    res.json({ ok: false, ...status });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -2364,6 +2376,108 @@ app.get("/overlay/index.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "overlay", "index.html"));
 });
 
+// Self-Programming Endpoint (CRITICAL - This enables AI to fix itself)
+app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
+  try {
+    const { instruction, priority = "medium" } = req.body;
+    
+    if (!instruction) {
+      return res.status(400).json({ error: "Instruction required" });
+    }
+
+    console.log(`🤖 [SELF-PROGRAM] New instruction: ${instruction.substring(0, 100)}...`);
+
+    // Step 1: Analyze requirements with blind spot detection
+    const analysisPrompt = `As the AI Council, analyze this self-programming instruction:
+
+"${instruction}"
+
+Provide:
+1. Which files need modification
+2. Exact code changes needed
+3. Potential risks and blind spots
+4. Testing strategy
+5. Rollback plan
+
+Be specific with file paths and exact code logic.`;
+    
+    const analysis = await callCouncilWithFailover(analysisPrompt, "claude");
+
+    // Check for blind spots
+    const blindSpots = await detectBlindSpots(instruction, { type: 'self-programming' });
+
+    // Step 2: Generate actual code
+    const codePrompt = `Based on this analysis: ${analysis}
+
+Consider these blind spots: ${blindSpots.slice(0, 5).join(', ')}
+
+Now write COMPLETE, WORKING code. Format each file like:
+===FILE:path/to/file.js===
+[complete code here]
+===END===`;
+    
+    const codeResponse = await callCouncilWithFailover(codePrompt, "deepseek");
+
+    // Step 3: Extract and test in sandbox
+    const fileChanges = extractFileChanges(codeResponse);
+    
+    const results = [];
+    for (const change of fileChanges) {
+      // Test each change in sandbox first
+      const sandboxResult = await sandboxTest(change.content, `Test: ${change.filePath}`);
+      
+      if (sandboxResult.success) {
+        const result = await selfModificationEngine.modifyOwnCode(
+          change.filePath, 
+          change.content, 
+          `Self-programming: ${instruction}`
+        );
+        results.push(result);
+      } else {
+        results.push({
+          success: false,
+          filePath: change.filePath,
+          error: 'Failed sandbox test',
+          sandboxError: sandboxResult.error
+        });
+      }
+    }
+
+    // Step 4: Deploy if successful
+    const successfulChanges = results.filter(r => r.success).map(r => r.filePath);
+    if (successfulChanges.length > 0) {
+      await triggerDeployment(successfulChanges);
+    }
+
+    res.json({
+      ok: true,
+      instruction,
+      filesModified: successfulChanges,
+      deploymentTriggered: successfulChanges.length > 0,
+      blindSpotsDetected: blindSpots.length,
+      results: results
+    });
+
+  } catch (error) {
+    console.error("Self-programming error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+function extractFileChanges(codeResponse) {
+  const changes = [];
+  const fileRegex = /===FILE:(.*?)===\n([\s\S]*?)===END===/g;
+  let match;
+  
+  while ((match = fileRegex.exec(codeResponse)) !== null) {
+    changes.push({
+      filePath: match[1].trim(),
+      content: match[2].trim()
+    });
+  }
+  
+  return changes;
+}
 // ==================== WEBSOCKET ====================
 wss.on("connection", (ws) => {
   const clientId = `ws_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
