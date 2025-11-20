@@ -12,13 +12,13 @@ class SecureMemorySystem {
             ai: aiResponse,
             context: context
         };
-        
+
         this.systemMemory.push(memory);
-        
+
         if (this.systemMemory.length > this.maxMemoryLength) {
             this.systemMemory = this.systemMemory.slice(-this.maxMemoryLength);
         }
-        
+
         this.saveToStorage();
     }
 
@@ -55,14 +55,8 @@ class LifeOSOverlay {
         this.apiKey = 'MySecretKey2025LifeOS';
         this.systemMemory = new SecureMemorySystem();
 
-        // 🔹 MicroProtocol wiring (from window)
-        this.micro = (typeof window !== 'undefined' && window.MicroProtocol)
-            ? window.MicroProtocol
-            : null;
-
-        if (!this.micro) {
-            console.warn('MicroProtocol not found on window. MICRO envelope will be skipped.');
-        }
+        // MicroProtocol (may be undefined if script not loaded)
+        this.micro = window.MicroProtocol || null;
 
         this.setupEventListeners();
         this.initializeSystem();
@@ -143,7 +137,7 @@ class LifeOSOverlay {
         const overlay = document.getElementById('lifeos-overlay');
         const header = document.querySelector('.overlay-header');
         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        
+
         const dragMouseDown = (e) => {
             e.preventDefault();
             pos3 = e.clientX;
@@ -172,191 +166,188 @@ class LifeOSOverlay {
 
     async initializeSystem() {
         this.addMessage('system', '🔗 Connecting to LifeOS AI Council...');
-        
+
         try {
-            console.log(`Attempting to connect to: ${this.baseURL}/healthz?key=${this.apiKey}`);
             const response = await fetch(`${this.baseURL}/healthz?key=${this.apiKey}`);
-            
             if (response.ok) {
                 const data = await response.json();
-                this.addMessage('ai', `✅ Connected to LifeOS v${data.version}!\n\n🤖 AI Council Online:\n• Claude\n• ChatGPT\n• Gemini\n• DeepSeek\n• Grok\n\nReady for commands!`, 'Claude');
-                console.log('✅ Connected to backend', data);
+                this.addMessage(
+                    'ai',
+                    `✅ Connected to LifeOS v${data.version}!\n\n🤖 AI Council Online:\n• Claude\n• ChatGPT\n• Gemini\n• DeepSeek\n• Grok\n\nReady for commands!`,
+                    'Claude'
+                );
             } else {
                 throw new Error(`HTTP ${response.status}`);
             }
         } catch (error) {
-            console.error('Connection error:', error);
-            this.addMessage('system', `⚠️ Backend connection failed: ${error.message}\n\nMake sure your server is running at: ${this.baseURL}`);
+            this.addMessage(
+                'system',
+                `⚠️ Backend connection failed: ${error.message}\n\nMake sure your server is running at: ${this.baseURL}`
+            );
         }
     }
 
-    /* ----------------------------------------------------------
-     * NEW: send via Micro council endpoint with fallback
-     * -------------------------------------------------------- */
+    // ---------- NEW: primary send via council/micro, fallback to legacy ----------
 
     async sendMessage() {
         const input = document.getElementById('text-input');
         const message = input.value.trim();
-        
         if (!message) return;
 
         this.addMessage('user', message);
         input.value = '';
 
-        // Show loading message
-        const loadingId = this.addMessage('system', '⏳ Consulting AI council...');
+        // show loading
+        this.addMessage('system', '⏳ Consulting AI council...');
 
         this.systemMemory.rememberSystemEvent(message, '', { app: this.currentApp });
 
+        // Build Micro envelope if MicroProtocol is available
+        const microPacket = this.micro
+            ? this.micro.encodeUserText(message, {
+                  channel: this.currentApp,
+                  meta: { app: this.currentApp }
+              })
+            : {
+                  v: 'mp1',
+                  r: 'u',
+                  c: this.currentApp,
+                  t: message,
+                  lctp: null,
+                  m: { app: this.currentApp },
+                  ts: Date.now()
+              };
+
+        // 1) Try council endpoint first
+        const councilOK = await this.trySendViaCouncil(microPacket, message);
+        if (councilOK) return;
+
+        // 2) Fallback to legacy /api/v1/chat so it never just breaks
+        await this.sendViaLegacy(message);
+    }
+
+    async trySendViaCouncil(microPacket, originalMessage) {
         try {
-            // Try MICRO council path first
-            const councilReply = await this.sendViaCouncilMicro(message);
-            
-            // Remove loading message
-            this.removeMessageById(loadingId);
+            const response = await fetch(
+                `${this.baseURL}/api/council/chat?key=${this.apiKey}`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ micro: microPacket })
+                }
+            );
 
-            this.addMessage('ai', councilReply.text, councilReply.aiName || 'Council');
-            this.systemMemory.rememberSystemEvent(message, councilReply.text, { 
-                app: this.currentApp,
-                ai: councilReply.aiName || 'council',
-                spend: councilReply.spend || null
-            });
-        } catch (err) {
-            console.warn('Council MICRO endpoint failed, falling back to legacy chat:', err);
+            const messages = document.getElementById('chat-messages');
+            const lastMessage = messages.lastChild;
+            if (lastMessage && lastMessage.textContent.includes('⏳ Consulting')) {
+                lastMessage.remove();
+            }
 
-            // FALLBACK: existing /api/v1/chat behavior
-            try {
-                const legacyReply = await this.sendViaLegacyChat(message);
-
-                this.removeMessageById(loadingId);
-
-                this.addMessage('ai', legacyReply.text, legacyReply.aiName || 'Claude');
-                this.systemMemory.rememberSystemEvent(message, legacyReply.text, { 
-                    app: this.currentApp,
-                    ai: legacyReply.aiName || 'claude',
-                    spend: legacyReply.spend || null
-                });
-            } catch (fallbackErr) {
-                console.error('Legacy chat also failed:', fallbackErr);
-                this.removeMessageById(loadingId);
+            if (!response.ok) {
+                const text = await response.text();
                 this.addMessage(
                     'ai',
-                    `❌ Connection error: ${fallbackErr.message}\n\nMake sure server is running at ${this.baseURL}`,
+                    `❌ Council endpoint error: HTTP ${response.status}: ${text}`,
                     'System'
                 );
+                return false;
             }
+
+            const data = await response.json();
+            const packet = data.micro || data;
+
+            let replyText = '';
+            if (this.micro) {
+                const decoded = this.micro.decodeAssistantMessage(packet);
+                replyText = decoded.text;
+            } else {
+                replyText = packet.t || packet.text || '';
+            }
+
+            this.addMessage('ai', replyText || '[empty reply]', 'LifeOS Council');
+
+            this.systemMemory.rememberSystemEvent(originalMessage, replyText, {
+                app: this.currentApp,
+                ai: 'council',
+                meta: packet.m || {}
+            });
+
+            return true;
+        } catch (error) {
+            const messages = document.getElementById('chat-messages');
+            const lastMessage = messages.lastChild;
+            if (lastMessage && lastMessage.textContent.includes('⏳ Consulting')) {
+                lastMessage.remove();
+            }
+
+            this.addMessage(
+                'ai',
+                `❌ Council connection error: ${error.message}`,
+                'System'
+            );
+            return false;
         }
     }
 
-    /**
-     * Primary path: talk to /api/council/chat using MicroProtocol
-     */
-    async sendViaCouncilMicro(message) {
-        if (!this.micro) {
-            throw new Error('MicroProtocol not available on client');
-        }
+    async sendViaLegacy(message) {
+        try {
+            this.addMessage('system', '↩️ Falling back to legacy chat...');
 
-        const meta = {
-            source: 'overlay',
-            app: this.currentApp,
-            micro: true
-        };
+            const response = await fetch(
+                `${this.baseURL}/api/v1/chat?key=${this.apiKey}`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message, member: 'claude' })
+                }
+            );
 
-        const microPacket = this.micro.encodeUserText(message, {
-            channel: 'chat',
-            meta,
-            withLCTP: false   // real LCTP v3 lives server-side
-        });
+            if (!response.ok) {
+                const text = await response.text();
+                this.addMessage(
+                    'ai',
+                    `❌ Legacy endpoint error: HTTP ${response.status}: ${text}`,
+                    'System'
+                );
+                return;
+            }
 
-        console.log('Sending MICRO packet to council:', microPacket);
-
-        const response = await fetch(`${this.baseURL}/api/council/chat?key=${this.apiKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ micro: microPacket })
-        });
-
-        if (!response.ok) {
-            const text = await response.text();
-            throw new Error(`Council HTTP ${response.status}: ${text}`);
-        }
-
-        const data = await response.json();
-        console.log('Council MICRO response:', data);
-
-        const rawMicro = data.micro || data;
-        const decoded = this.micro.decodeAssistantMessage(rawMicro);
-        const text = decoded.text || '[Empty council response]';
-        const metaOut = decoded.meta || {};
-
-        return {
-            text,
-            aiName: metaOut.aiName || 'Council',
-            spend: metaOut.spend || null
-        };
-    }
-
-    /**
-     * Fallback path: your existing /api/v1/chat endpoint
-     */
-    async sendViaLegacyChat(message) {
-        console.log(`Sending to legacy endpoint: ${this.baseURL}/api/v1/chat?key=${this.apiKey}`);
-        console.log('Message:', message);
-
-        const response = await fetch(`${this.baseURL}/api/v1/chat?key=${this.apiKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message, member: 'claude' })
-        });
-
-        console.log('Legacy response status:', response.status);
-        
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP ${response.status}: ${errorText}`);
-        }
-
-        const data = await response.json();
-        console.log('Legacy API Response:', data);
-
-        if (data.ok && data.response) {
-            return {
-                text: data.response,
-                aiName: 'Claude',
-                spend: data.spend || null
-            };
-        } else if (data.error) {
-            return {
-                text: `❌ Error: ${data.error}`,
-                aiName: 'System',
-                spend: null
-            };
-        } else {
-            return {
-                text: 'Unexpected response format from legacy endpoint',
-                aiName: 'System',
-                spend: null
-            };
+            const data = await response.json();
+            if (data.ok && data.response) {
+                this.addMessage('ai', data.response, 'Claude');
+                this.systemMemory.rememberSystemEvent(message, data.response, {
+                    app: this.currentApp,
+                    ai: 'claude',
+                    spend: data.spend
+                });
+            } else if (data.error) {
+                this.addMessage('ai', `❌ Error: ${data.error}`, 'System');
+            } else {
+                this.addMessage('ai', `Unexpected response format`, 'System');
+            }
+        } catch (error) {
+            this.addMessage(
+                'ai',
+                `❌ Connection error: ${error.message}\n\nMake sure server is running at ${this.baseURL}`,
+                'System'
+            );
         }
     }
 
-    /* ----------------------------------------------------------
-     * Message helpers
-     * -------------------------------------------------------- */
+    // ------------------------------------------------------------------
 
     addMessage(sender, content, aiName = 'Claude') {
         const chatMessages = document.getElementById('chat-messages');
         const messageDiv = document.createElement('div');
-        const id = `msg_${Date.now()}_${Math.floor(Math.random() * 1e9)}`;
-        messageDiv.dataset.id = id;
-
         messageDiv.className =
-            sender === 'user'
-                ? 'message user-message'
-                : sender === 'system'
-                ? 'message system-message'
-                : 'message ai-message';
-        
+            `message ${
+                sender === 'user'
+                    ? 'user-message'
+                    : sender === 'system'
+                    ? 'system-message'
+                    : 'ai-message'
+            }`;
+
         if (sender === 'ai') {
             messageDiv.innerHTML = `
                 <div class="message-header">
@@ -370,20 +361,9 @@ class LifeOSOverlay {
         } else {
             messageDiv.innerHTML = `<div class="message-content"><strong>You:</strong> ${content}</div>`;
         }
-        
+
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        return id;
-    }
-
-    removeMessageById(id) {
-        if (!id) return;
-        const chatMessages = document.getElementById('chat-messages');
-        const el = chatMessages.querySelector(`[data-id="${id}"]`);
-        if (el) {
-            el.remove();
-        }
     }
 
     handleQuickAction(action) {
@@ -397,7 +377,9 @@ class LifeOSOverlay {
             case 'show-memory':
                 const memories = this.systemMemory.getRecentContext();
                 if (memories.length > 0) {
-                    const summary = memories.map(m => `${m.timestamp.slice(11,16)}: ${m.user.slice(0,50)}`).join('\n');
+                    const summary = memories
+                        .map(m => `${m.timestamp.slice(11, 16)}: ${m.user.slice(0, 50)}`)
+                        .join('\n');
                     this.addMessage('ai', `📋 Recent conversations:\n${summary}`, 'Memory');
                 } else {
                     this.addMessage('ai', '📭 No conversations yet', 'Memory');
