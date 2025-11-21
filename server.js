@@ -51,23 +51,40 @@ const {
   NODE_ENV = "production"
 } = process.env;
 
-let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || '').trim() || null;
+let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "").trim() || null;
 
 // ==================== SECURITY: CORS WITH ORIGIN PINNING ====================
 const ALLOWED_ORIGINS_LIST = ALLOWED_ORIGINS
   .split(",")
-  .map(s => s.trim())
+  .map((s) => s.trim())
   .filter(Boolean)
   .concat([
     "http://localhost:8080",
     "http://localhost:3000",
-    "http://127.0.0.1:8080"
+    "http://127.0.0.1:8080",
   ]);
+
+// NEW: robust same-origin helper for Railway / proxies
+function getRequestHost(req) {
+  const forwarded = (req.headers["x-forwarded-host"] || "")
+    .toString()
+    .toLowerCase();
+  const direct = (req.get("host") || "").toString().toLowerCase();
+  return forwarded || direct;
+}
 
 function isSameOrigin(req) {
   const origin = req.headers.origin;
-  if (!origin) return true;
-  return origin === `${req.protocol}://${req.get('host')}`;
+  if (!origin) return true; // non-browser or curl: treat as same-origin
+
+  try {
+    const originUrl = new URL(origin);
+    const reqHost = getRequestHost(req);
+    // Compare host:port only, ignore protocol (http vs https)
+    return originUrl.host.toLowerCase() === reqHost;
+  } catch {
+    return false;
+  }
 }
 
 // ==================== MIDDLEWARE ====================
@@ -79,27 +96,36 @@ app.use(express.static(path.join(__dirname, "public")));
 // SECURE CORS Middleware with NO-CACHE headers
 app.use((req, res, next) => {
   // PREVENT CACHING - Force fresh data every time
-  res.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.header('Pragma', 'no-cache');
-  res.header('Expires', '0');
-  res.header('Surrogate-Control', 'no-store');
-  
+  res.header(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate"
+  );
+  res.header("Pragma", "no-cache");
+  res.header("Expires", "0");
+  res.header("Surrogate-Control", "no-store");
+
   const origin = req.headers.origin;
-  
+
   if (isSameOrigin(req)) {
-    res.header('Access-Control-Allow-Origin', origin || '*');
-    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header("Access-Control-Allow-Origin", origin || "*");
+    res.header("Access-Control-Allow-Credentials", "true");
   } else if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Credentials", "true");
   } else if (!origin) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header("Access-Control-Allow-Origin", "*");
   }
 
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, x-command-key, Authorization');
-  
-  if (req.method === 'OPTIONS') {
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, x-command-key, Authorization"
+  );
+
+  if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
   next();
@@ -108,10 +134,12 @@ app.use((req, res, next) => {
 // ==================== DATABASE POOL ====================
 export const pool = new Pool({
   connectionString: DATABASE_URL,
-  ssl: DATABASE_URL?.includes("neon.tech") ? { rejectUnauthorized: false } : undefined,
+  ssl: DATABASE_URL?.includes("neon.tech")
+    ? { rejectUnauthorized: false }
+    : undefined,
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000
+  connectionTimeoutMillis: 10000,
 });
 
 // ==================== GLOBAL STATE ====================
@@ -131,14 +159,14 @@ const roiTracker = {
   micro_compression_saves: 0,
   roi_ratio: 0,
   revenue_per_task: 0,
-  last_reset: dayjs().format("YYYY-MM-DD")
+  last_reset: dayjs().format("YYYY-MM-DD"),
 };
 
 const compressionMetrics = {
   v2_0_compressions: 0,
   v3_compressions: 0,
   total_bytes_saved: 0,
-  total_cost_saved: 0
+  total_cost_saved: 0,
 };
 
 const systemMetrics = {
@@ -150,7 +178,7 @@ const systemMetrics = {
   consensusDecisionsMade: 0,
   blindSpotsDetected: 0,
   rollbacksPerformed: 0,
-  dailyIdeasGenerated: 0
+  dailyIdeasGenerated: 0,
 };
 
 // ==================== DATABASE INITIALIZATION ====================
@@ -364,11 +392,21 @@ async function initDatabase() {
     )`);
 
     // Create indexes
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_id ON conversation_memory(memory_id)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_memory_created ON conversation_memory(created_at)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_ai_performance ON ai_performance(ai_member, created_at)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_blind_spots ON blind_spots(severity, created_at)`);
-    await pool.query(`CREATE INDEX IF NOT EXISTS idx_daily_ideas ON daily_ideas(status, created_at)`);
+    await pool.query(
+      `CREATE INDEX IF NOT EXISTS idx_memory_id ON conversation_memory(memory_id)`
+    );
+    await pool.query(
+      `CREATE INDEX IF NOT EXISTS idx_memory_created ON conversation_memory(created_at)`
+    );
+    await pool.query(
+      `CREATE INDEX IF NOT EXISTS idx_ai_performance ON ai_performance(ai_member, created_at)`
+    );
+    await pool.query(
+      `CREATE INDEX IF NOT EXISTS idx_blind_spots ON blind_spots(severity, created_at)`
+    );
+    await pool.query(
+      `CREATE INDEX IF NOT EXISTS idx_daily_ideas ON daily_ideas(status, created_at)`
+    );
 
     // Insert protected files
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
@@ -395,7 +433,7 @@ const COUNCIL_MEMBERS = {
     focus: "architecture, long-term planning, risk detection",
     maxTokens: 4096,
     tier: "heavy",
-    specialties: ["blind_spots", "consequences", "strategy"]
+    specialties: ["blind_spots", "consequences", "strategy"],
   },
   chatgpt: {
     name: "ChatGPT",
@@ -405,7 +443,7 @@ const COUNCIL_MEMBERS = {
     focus: "implementation, execution, user patterns",
     maxTokens: 4096,
     tier: "heavy",
-    specialties: ["execution", "user_modeling", "patterns"]
+    specialties: ["execution", "user_modeling", "patterns"],
   },
   gemini: {
     name: "Gemini",
@@ -415,7 +453,7 @@ const COUNCIL_MEMBERS = {
     focus: "data analysis, creative solutions, daily ideas",
     maxTokens: 8192,
     tier: "medium",
-    specialties: ["analysis", "creativity", "ideation"]
+    specialties: ["analysis", "creativity", "ideation"],
   },
   deepseek: {
     name: "DeepSeek",
@@ -425,7 +463,7 @@ const COUNCIL_MEMBERS = {
     focus: "optimization, performance, safe testing",
     maxTokens: 4096,
     tier: "medium",
-    specialties: ["infrastructure", "testing", "performance"]
+    specialties: ["infrastructure", "testing", "performance"],
   },
   grok: {
     name: "Grok",
@@ -435,8 +473,8 @@ const COUNCIL_MEMBERS = {
     focus: "novel approaches, risk assessment, blind spots",
     maxTokens: 4096,
     tier: "light",
-    specialties: ["innovation", "reality_check", "risk"]
-  }
+    specialties: ["innovation", "reality_check", "risk"],
+  },
 };
 
 // ==================== ENHANCED AI CALLING WITH NO-CACHE ====================
@@ -446,13 +484,25 @@ async function callCouncilMember(member, prompt, options = {}) {
 
   const spend = await getDailySpend();
   if (spend >= MAX_DAILY_SPEND) {
-    throw new Error(`Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`);
+    throw new Error(
+      `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`
+    );
   }
 
-  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${config.focus}. 
-  Current specialties: ${config.specialties.join(', ')}.
-  ${options.checkBlindSpots ? 'Check for blind spots and unintended consequences.' : ''}
-  ${options.guessUserPreference ? 'Consider what the user would likely prefer based on past decisions.' : ''}
+  const systemPrompt = `You are ${config.name}. Role: ${config.role}. Focus: ${
+    config.focus
+  }. 
+  Current specialties: ${config.specialties.join(", ")}.
+  ${
+    options.checkBlindSpots
+      ? "Check for blind spots and unintended consequences."
+      : ""
+  }
+  ${
+    options.guessUserPreference
+      ? "Consider what the user would likely prefer based on past decisions."
+      : ""
+  }
   Be concise and strategic.`;
 
   // Track performance start
@@ -461,30 +511,30 @@ async function callCouncilMember(member, prompt, options = {}) {
   try {
     let response;
     const noCacheHeaders = {
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0'
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      Pragma: "no-cache",
+      Expires: "0",
     };
 
     if (config.provider === "anthropic") {
       const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
       if (!apiKey) throw new Error("ANTHROPIC_API_KEY not set");
-      
+
       response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "x-api-key": apiKey,
           "anthropic-version": "2023-06-01",
-          ...noCacheHeaders
+          ...noCacheHeaders,
         },
         body: JSON.stringify({
           model: config.model,
           max_tokens: config.maxTokens,
           system: systemPrompt,
           messages: [{ role: "user", content: prompt }],
-          temperature: 0.7
-        })
+          temperature: 0.7,
+        }),
       });
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -497,11 +547,18 @@ async function callCouncilMember(member, prompt, options = {}) {
       const cost = calculateCost(json.usage, config.model);
       await updateDailySpend(cost);
       await updateROI(0, cost, 0);
-      
+
       // Track performance
       const duration = Date.now() - startTime;
-      await trackAIPerformance(member, 'chat', duration, json.usage?.total_tokens || 0, cost, true);
-      
+      await trackAIPerformance(
+        member,
+        "chat",
+        duration,
+        json.usage?.total_tokens || 0,
+        cost,
+        true
+      );
+
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
     }
@@ -509,13 +566,13 @@ async function callCouncilMember(member, prompt, options = {}) {
     if (config.provider === "openai") {
       const apiKey = process.env.OPENAI_API_KEY?.trim();
       if (!apiKey) throw new Error("OPENAI_API_KEY not set");
-      
+
       response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`,
-          ...noCacheHeaders
+          Authorization: `Bearer ${apiKey}`,
+          ...noCacheHeaders,
         },
         body: JSON.stringify({
           model: config.model,
@@ -523,9 +580,9 @@ async function callCouncilMember(member, prompt, options = {}) {
           temperature: 0.7,
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
-          ]
-        })
+            { role: "user", content: prompt },
+          ],
+        }),
       });
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -538,10 +595,17 @@ async function callCouncilMember(member, prompt, options = {}) {
       const cost = calculateCost(json.usage, config.model);
       await updateDailySpend(cost);
       await updateROI(0, cost, 0);
-      
+
       const duration = Date.now() - startTime;
-      await trackAIPerformance(member, 'chat', duration, json.usage?.total_tokens || 0, cost, true);
-      
+      await trackAIPerformance(
+        member,
+        "chat",
+        duration,
+        json.usage?.total_tokens || 0,
+        cost,
+        true
+      );
+
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
     }
@@ -549,19 +613,22 @@ async function callCouncilMember(member, prompt, options = {}) {
     if (config.provider === "google") {
       const apiKey = process.env.GEMINI_API_KEY?.trim();
       if (!apiKey) throw new Error("GEMINI_API_KEY not set");
-      
+
       response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKey}`,
         {
           method: "POST",
-          headers: { 
+          headers: {
             "Content-Type": "application/json",
-            ...noCacheHeaders
+            ...noCacheHeaders,
           },
           body: JSON.stringify({
             contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
-            generationConfig: { maxOutputTokens: config.maxTokens, temperature: 0.7 }
-          })
+            generationConfig: {
+              maxOutputTokens: config.maxTokens,
+              temperature: 0.7,
+            },
+          }),
         }
       );
 
@@ -573,8 +640,8 @@ async function callCouncilMember(member, prompt, options = {}) {
       if (!text) throw new Error("Empty response");
 
       const duration = Date.now() - startTime;
-      await trackAIPerformance(member, 'chat', duration, 0, 0, true);
-      
+      await trackAIPerformance(member, "chat", duration, 0, 0, true);
+
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
     }
@@ -582,23 +649,23 @@ async function callCouncilMember(member, prompt, options = {}) {
     if (config.provider === "xai") {
       const apiKey = process.env.GROK_API_KEY?.trim();
       if (!apiKey) throw new Error("GROK_API_KEY not set");
-      
+
       response = await fetch("https://api.x.ai/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`,
-          ...noCacheHeaders
+          Authorization: `Bearer ${apiKey}`,
+          ...noCacheHeaders,
         },
         body: JSON.stringify({
           model: config.model,
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
+            { role: "user", content: prompt },
           ],
           max_tokens: config.maxTokens,
-          temperature: 0.7
-        })
+          temperature: 0.7,
+        }),
       });
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -610,10 +677,17 @@ async function callCouncilMember(member, prompt, options = {}) {
 
       const cost = calculateCost(json.usage, config.model);
       await updateDailySpend(cost);
-      
+
       const duration = Date.now() - startTime;
-      await trackAIPerformance(member, 'chat', duration, json.usage?.total_tokens || 0, cost, true);
-      
+      await trackAIPerformance(
+        member,
+        "chat",
+        duration,
+        json.usage?.total_tokens || 0,
+        cost,
+        true
+      );
+
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
     }
@@ -621,23 +695,23 @@ async function callCouncilMember(member, prompt, options = {}) {
     if (config.provider === "deepseek") {
       const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
       if (!apiKey) throw new Error("DEEPSEEK_API_KEY not set");
-      
+
       response = await fetch("https://api.deepseek.com/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`,
-          ...noCacheHeaders
+          Authorization: `Bearer ${apiKey}`,
+          ...noCacheHeaders,
         },
         body: JSON.stringify({
           model: config.model,
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
+            { role: "user", content: prompt },
           ],
           max_tokens: config.maxTokens,
-          temperature: 0.7
-        })
+          temperature: 0.7,
+        }),
       });
 
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -649,10 +723,17 @@ async function callCouncilMember(member, prompt, options = {}) {
 
       const cost = calculateCost(json.usage, config.model);
       await updateDailySpend(cost);
-      
+
       const duration = Date.now() - startTime;
-      await trackAIPerformance(member, 'chat', duration, json.usage?.total_tokens || 0, cost, true);
-      
+      await trackAIPerformance(
+        member,
+        "chat",
+        duration,
+        json.usage?.total_tokens || 0,
+        cost,
+        true
+      );
+
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
     }
@@ -660,24 +741,31 @@ async function callCouncilMember(member, prompt, options = {}) {
     throw new Error(`${config.provider.toUpperCase()}_API_KEY not configured`);
   } catch (error) {
     const duration = Date.now() - startTime;
-    await trackAIPerformance(member, 'chat', duration, 0, 0, false);
+    await trackAIPerformance(member, "chat", duration, 0, 0, false);
     throw error;
   }
 }
 
 // ==================== AI PERFORMANCE TRACKING ====================
-async function trackAIPerformance(aiMember, taskType, durationMs, tokensUsed, cost, success) {
+async function trackAIPerformance(
+  aiMember,
+  taskType,
+  durationMs,
+  tokensUsed,
+  cost,
+  success
+) {
   try {
     await pool.query(
       `INSERT INTO ai_performance (ai_member, task_type, duration_ms, tokens_used, cost, success, created_at)
        VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
       [aiMember, taskType, durationMs, tokensUsed, cost, success]
     );
-    
+
     // Update performance score
     const currentScore = aiPerformanceScores.get(aiMember) || 50;
-    const newScore = success 
-      ? Math.min(100, currentScore + (100 - durationMs/100))
+    const newScore = success
+      ? Math.min(100, currentScore + (100 - durationMs / 100))
       : Math.max(0, currentScore - 10);
     aiPerformanceScores.set(aiMember, newScore);
   } catch (error) {
@@ -708,17 +796,23 @@ async function rotateAIsBasedOnPerformance() {
       await pool.query(
         `INSERT INTO ai_rotation_log (ai_member, previous_role, new_role, performance_score, reason)
          VALUES ($1, $2, $3, $4, $5)`,
-        [bestPerformer, COUNCIL_MEMBERS[bestPerformer].role, 
-         'Primary Decision Maker', result.rows[0].success_rate * 100,
-         'Highest success rate']
+        [
+          bestPerformer,
+          COUNCIL_MEMBERS[bestPerformer].role,
+          "Primary Decision Maker",
+          result.rows[0].success_rate * 100,
+          "Highest success rate",
+        ]
       );
 
-      console.log(`🔄 AI Rotation: ${bestPerformer} promoted to Primary Decision Maker`);
-      
+      console.log(
+        `🔄 AI Rotation: ${bestPerformer} promoted to Primary Decision Maker`
+      );
+
       return {
         primary: bestPerformer,
-        secondary: result.rows[1]?.ai_member || 'claude',
-        rotations: result.rows.length
+        secondary: result.rows[1]?.ai_member || "claude",
+        rotations: result.rows.length,
       };
     }
   } catch (error) {
@@ -745,22 +839,24 @@ async function detectBlindSpots(decision, context) {
     Be specific and critical.`;
 
     const responses = await Promise.allSettled([
-      callCouncilMember('claude', blindSpotPrompt, { checkBlindSpots: true }),
-      callCouncilMember('grok', blindSpotPrompt, { checkBlindSpots: true })
+      callCouncilMember("claude", blindSpotPrompt, { checkBlindSpots: true }),
+      callCouncilMember("grok", blindSpotPrompt, { checkBlindSpots: true }),
     ]);
 
     const blindSpots = [];
     for (const response of responses) {
-      if (response.status === 'fulfilled' && response.value) {
-        const spots = response.value.split('\n').filter(line => line.trim().length > 0);
+      if (response.status === "fulfilled" && response.value) {
+        const spots = response.value
+          .split("\n")
+          .filter((line) => line.trim().length > 0);
         blindSpots.push(...spots);
-        
+
         // Store detected blind spots
         for (const spot of spots.slice(0, 3)) {
           await pool.query(
             `INSERT INTO blind_spots (detected_by, decision_context, blind_spot, severity, created_at)
              VALUES ($1, $2, $3, $4, NOW())`,
-            ['ai_council', decision, spot, 'medium']
+            ["ai_council", decision, spot, "medium"]
           );
         }
       }
@@ -800,26 +896,28 @@ async function guessUserDecision(context) {
     
     Provide your best guess and confidence level (0-100).`;
 
-    const guess = await callCouncilMember('chatgpt', prompt, { guessUserPreference: true });
-    
+    const guess = await callCouncilMember("chatgpt", prompt, {
+      guessUserPreference: true,
+    });
+
     return {
       prediction: guess,
       confidence: 75,
-      basedOn: pastDecisions.rows.length + ' past decisions'
+      basedOn: pastDecisions.rows.length + " past decisions",
     };
   } catch (error) {
     console.error("User preference guess error:", error.message);
-    return { prediction: 'uncertain', confidence: 0 };
+    return { prediction: "uncertain", confidence: 0 };
   }
 }
 
 // ==================== DAILY IDEA GENERATION ====================
 async function generateDailyIdeas() {
   try {
-    const today = dayjs().format('YYYY-MM-DD');
+    const today = dayjs().format("YYYY-MM-DD");
     if (lastIdeaGeneration === today) return;
 
-    console.log('💡 Generating 25 daily ideas...');
+    console.log("💡 Generating 25 daily ideas...");
 
     const ideaPrompt = `Generate 25 unique and revolutionary ideas to improve the LifeOS system. 
     Consider:
@@ -838,15 +936,15 @@ async function generateDailyIdeas() {
     let response;
     try {
       // 👉 This will try gemini first, then fall back to others
-      response = await callCouncilWithFailover(ideaPrompt, 'gemini');
+      response = await callCouncilWithFailover(ideaPrompt, "gemini");
     } catch (err) {
-      console.error('Daily idea council error, using fallback:', err.message);
+      console.error("Daily idea council error, using fallback:", err.message);
       response = null;
     }
 
     const ideas = [];
-    if (response && typeof response === 'string' && response.length > 50) {
-      const blocks = response.split('\n\n').filter(b => b.includes('TITLE:'));
+    if (response && typeof response === "string" && response.length > 50) {
+      const blocks = response.split("\n\n").filter((b) => b.includes("TITLE:"));
       for (const ideaText of blocks.slice(0, 25)) {
         const titleMatch = ideaText.match(/TITLE:\s*(.+)/);
         const descMatch = ideaText.match(/DESCRIPTION:\s*(.+)/);
@@ -856,7 +954,7 @@ async function generateDailyIdeas() {
           ideas.push({
             title: titleMatch[1].trim(),
             description: descMatch[1].trim(),
-            difficulty: (diffMatch?.[1] || 'medium').trim()
+            difficulty: (diffMatch?.[1] || "medium").trim(),
           });
         }
       }
@@ -864,12 +962,12 @@ async function generateDailyIdeas() {
 
     // 👉 HARD FALLBACK if council failed or parsing failed
     if (ideas.length === 0) {
-      console.warn('Daily idea generation fell back to local template ideas.');
+      console.warn("Daily idea generation fell back to local template ideas.");
       for (let i = 1; i <= 25; i++) {
         ideas.push({
           title: `Fallback Idea ${i}`,
           description: `Improve one lifecycle of LifeOS (onboarding, overlay, council, drones, billing, or self-repair). Variant #${i}.`,
-          difficulty: i < 10 ? 'easy' : i < 20 ? 'medium' : 'hard'
+          difficulty: i < 10 ? "easy" : i < 20 ? "medium" : "hard",
         });
       }
     }
@@ -877,7 +975,9 @@ async function generateDailyIdeas() {
     dailyIdeas = []; // reset in-memory list for today
 
     for (const idea of ideas) {
-      const ideaId = `idea_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      const ideaId = `idea_${Date.now()}_${Math.random()
+        .toString(36)
+        .slice(2, 8)}`;
       await pool.query(
         `INSERT INTO daily_ideas (idea_id, idea_title, idea_description, proposed_by, implementation_difficulty)
          VALUES ($1, $2, $3, $4, $5)
@@ -886,8 +986,8 @@ async function generateDailyIdeas() {
           ideaId,
           idea.title,
           idea.description,
-          response ? 'council' : 'fallback',
-          idea.difficulty
+          response ? "council" : "fallback",
+          idea.difficulty,
         ]
       );
 
@@ -895,19 +995,23 @@ async function generateDailyIdeas() {
         id: ideaId,
         title: idea.title,
         description: idea.description,
-        votes: { for: 0, against: 0 }
+        votes: { for: 0, against: 0 },
       });
     }
 
     lastIdeaGeneration = today;
     systemMetrics.dailyIdeasGenerated += dailyIdeas.length;
 
-    console.log(`✅ Generated ${dailyIdeas.length} daily ideas (source: ${response ? 'council' : 'local fallback'})`);
+    console.log(
+      `✅ Generated ${dailyIdeas.length} daily ideas (source: ${
+        response ? "council" : "local fallback"
+      })`
+    );
 
     // Trigger voting on ideas
     setTimeout(() => voteOnDailyIdeas(), 5000);
   } catch (error) {
-    console.error('Daily idea generation error (final):', error.message);
+    console.error("Daily idea generation error (final):", error.message);
   }
 }
 // ==================== IDEA VOTING SYSTEM ====================
@@ -926,21 +1030,22 @@ async function voteOnDailyIdeas() {
       Vote YES or NO with brief reasoning.`;
 
       const councilMembers = Object.keys(COUNCIL_MEMBERS);
-      let yesVotes = 0, noVotes = 0;
+      let yesVotes = 0,
+        noVotes = 0;
 
       for (const member of councilMembers) {
         try {
           const response = await callCouncilMember(member, votePrompt);
-          const vote = response.includes('YES') ? 'yes' : 'no';
-          
-          if (vote === 'yes') yesVotes++;
+          const vote = response.includes("YES") ? "yes" : "no";
+
+          if (vote === "yes") yesVotes++;
           else noVotes++;
 
           await pool.query(
             `UPDATE daily_ideas 
              SET votes_for = votes_for + $1, votes_against = votes_against + $2
              WHERE idea_id = $3`,
-            [vote === 'yes' ? 1 : 0, vote === 'no' ? 1 : 0, idea.idea_id]
+            [vote === "yes" ? 1 : 0, vote === "no" ? 1 : 0, idea.idea_id]
           );
         } catch (error) {
           console.error(`Vote error for ${member}:`, error.message);
@@ -948,14 +1053,17 @@ async function voteOnDailyIdeas() {
       }
 
       // Determine status based on votes
-      const status = yesVotes > noVotes ? 'approved' : 'rejected';
+      const status = yesVotes > noVotes ? "approved" : "rejected";
       await pool.query(
         `UPDATE daily_ideas SET status = $1 WHERE idea_id = $2`,
         [status, idea.idea_id]
       );
 
-      if (status === 'approved') {
-        await executionQueue.addTask('implement_idea', `Implement: ${idea.idea_title}`);
+      if (status === "approved") {
+        await executionQueue.addTask(
+          "implement_idea",
+          `Implement: ${idea.idea_title}`
+        );
       }
     }
   } catch (error) {
@@ -966,12 +1074,14 @@ async function voteOnDailyIdeas() {
 // ==================== SANDBOX TESTING ====================
 async function sandboxTest(code, testDescription) {
   try {
-    const testId = `test_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const testId = `test_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
     console.log(`🧪 Sandbox testing: ${testDescription}`);
 
     // Create temporary test file
-    const testPath = path.join(__dirname, 'sandbox', `${testId}.js`);
-    await fs.mkdir(path.join(__dirname, 'sandbox'), { recursive: true });
+    const testPath = path.join(__dirname, "sandbox", `${testId}.js`);
+    await fs.mkdir(path.join(__dirname, "sandbox"), { recursive: true });
     await fs.writeFile(testPath, code);
 
     // Run in isolated environment
@@ -981,20 +1091,20 @@ async function sandboxTest(code, testDescription) {
 
     try {
       // Execute with timeout
-      const { exec } = await import('child_process');
-      const util = await import('util');
+      const { exec } = await import("child_process");
+      const util = await import("util");
       const execPromise = util.promisify(exec);
-      
+
       const { stdout, stderr } = await execPromise(`node ${testPath}`, {
         timeout: 5000,
-        cwd: __dirname
+        cwd: __dirname,
       });
-      
-      testResult = stdout || 'Test passed';
+
+      testResult = stdout || "Test passed";
       success = !stderr;
       if (stderr) errorMessage = stderr;
     } catch (error) {
-      testResult = 'Test failed';
+      testResult = "Test failed";
       errorMessage = error.message;
       success = false;
     }
@@ -1019,8 +1129,10 @@ async function sandboxTest(code, testDescription) {
 // ==================== SYSTEM SNAPSHOT & ROLLBACK ====================
 async function createSystemSnapshot(reason = "Manual snapshot") {
   try {
-    const snapshotId = `snap_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    
+    const snapshotId = `snap_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
+
     // Capture current system state
     const systemState = {
       metrics: systemMetrics,
@@ -1028,19 +1140,19 @@ async function createSystemSnapshot(reason = "Manual snapshot") {
       activeConnections: activeConnections.size,
       dailyIdeas: dailyIdeas.length,
       aiPerformance: Object.fromEntries(aiPerformanceScores),
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     await pool.query(
       `INSERT INTO system_snapshots (snapshot_id, snapshot_data, version, reason)
        VALUES ($1, $2, $3, $4)`,
-      [snapshotId, JSON.stringify(systemState), 'v26.0', reason]
+      [snapshotId, JSON.stringify(systemState), "v26.0", reason]
     );
 
     systemSnapshots.push({
       id: snapshotId,
       timestamp: new Date().toISOString(),
-      reason
+      reason,
     });
 
     // Keep only last 10 snapshots
@@ -1068,11 +1180,11 @@ async function rollbackToSnapshot(snapshotId) {
     }
 
     const snapshotData = result.rows[0].snapshot_data;
-    
+
     // Restore metrics
     Object.assign(systemMetrics, snapshotData.metrics);
     Object.assign(roiTracker, snapshotData.roi);
-    
+
     // Restore AI performance scores
     aiPerformanceScores.clear();
     for (const [ai, score] of Object.entries(snapshotData.aiPerformance)) {
@@ -1081,9 +1193,14 @@ async function rollbackToSnapshot(snapshotId) {
 
     systemMetrics.rollbacksPerformed++;
     console.log(`↩️ System rolled back to snapshot: ${snapshotId}`);
-    
-    await trackLoss('info', 'System rollback performed', `Rolled back to ${snapshotId}`, { snapshot: snapshotData });
-    
+
+    await trackLoss(
+      "info",
+      "System rollback performed",
+      `Rolled back to ${snapshotId}`,
+      { snapshot: snapshotData }
+    );
+
     return { success: true, message: `Rolled back to ${snapshotId}` };
   } catch (error) {
     console.error("Rollback error:", error.message);
@@ -1120,21 +1237,33 @@ async function conductEnhancedConsensus(proposalId) {
     4. Overall risk assessment (low/medium/high)`;
 
     const members = Object.keys(COUNCIL_MEMBERS);
-    let yesVotes = 0, noVotes = 0, abstainVotes = 0;
+    let yesVotes = 0,
+      noVotes = 0,
+      abstainVotes = 0;
     const consequences = [];
 
     for (const member of members) {
       try {
         // Get consequence evaluation
-        const consequenceResponse = await callCouncilMember(member, consequencePrompt);
-        
-        const riskMatch = consequenceResponse.match(/risk.*?(low|medium|high)/i);
-        const riskLevel = riskMatch ? riskMatch[1] : 'medium';
-        
+        const consequenceResponse = await callCouncilMember(
+          member,
+          consequencePrompt
+        );
+
+        const riskMatch = consequenceResponse.match(
+          /risk.*?(low|medium|high)/i
+        );
+        const riskLevel = riskMatch ? riskMatch[1] : "medium";
+
         await pool.query(
           `INSERT INTO consequence_evaluations (proposal_id, ai_member, risk_level, unintended_consequences)
            VALUES ($1, $2, $3, $4)`,
-          [proposalId, member, riskLevel, consequenceResponse.slice(0, 1000)]
+          [
+            proposalId,
+            member,
+            riskLevel,
+            consequenceResponse.slice(0, 1000),
+          ]
         );
 
         consequences.push({ member, risk: riskLevel });
@@ -1143,21 +1272,27 @@ async function conductEnhancedConsensus(proposalId) {
         const votePrompt = `Vote on this proposal with awareness of these blind spots and consequences:
         ${title}
         
-        Blind spots detected: ${blindSpots.slice(0, 3).join(', ')}
+        Blind spots detected: ${blindSpots.slice(0, 3).join(", ")}
         Risk level: ${riskLevel}
         
         Vote: YES/NO/ABSTAIN
         Reasoning: [brief explanation considering all factors]`;
 
         const voteResponse = await callCouncilMember(member, votePrompt);
-        const voteMatch = voteResponse.match(/VOTE:\s*(YES|NO|ABSTAIN|Yes|No|Abstain)/i);
-        const reasonMatch = voteResponse.match(/REASONING:\s*([\s\S]*?)$/i);
+        const voteMatch = voteResponse.match(
+          /VOTE:\s*(YES|NO|ABSTAIN|Yes|No|Abstain)/i
+        );
+        const reasonMatch = voteResponse.match(
+          /REASONING:\s*([\s\S]*?)$/i
+        );
 
-        const vote = voteMatch ? voteMatch[1].toUpperCase() : 'ABSTAIN';
-        const reasoning = reasonMatch ? reasonMatch[1].trim().slice(0, 500) : '';
+        const vote = voteMatch ? voteMatch[1].toUpperCase() : "ABSTAIN";
+        const reasoning = reasonMatch
+          ? reasonMatch[1].trim().slice(0, 500)
+          : "";
 
-        if (vote === 'YES') yesVotes++;
-        else if (vote === 'NO') noVotes++;
+        if (vote === "YES") yesVotes++;
+        else if (vote === "NO") noVotes++;
         else abstainVotes++;
 
         await pool.query(
@@ -1172,11 +1307,14 @@ async function conductEnhancedConsensus(proposalId) {
     }
 
     // Step 3: Guess user preference
-    const userPreference = await guessUserDecision({ proposal: title, description });
+    const userPreference = await guessUserDecision({
+      proposal: title,
+      description,
+    });
 
     // Step 4: Sandbox test if it's a code change
     let sandboxResult = null;
-    if (description.includes('code') || description.includes('implement')) {
+    if (description.includes("code") || description.includes("implement")) {
       sandboxResult = await sandboxTest(
         `console.log("Testing proposal: ${title}");`,
         title
@@ -1186,15 +1324,15 @@ async function conductEnhancedConsensus(proposalId) {
     // Final decision considering all factors
     const totalVotes = yesVotes + noVotes + abstainVotes;
     const approvalRate = yesVotes / totalVotes;
-    const hasHighRisk = consequences.some(c => c.risk === 'high');
+    const hasHighRisk = consequences.some((c) => c.risk === "high");
     const sandboxPassed = sandboxResult ? sandboxResult.success : true;
     const approvalThreshold = hasHighRisk ? 0.8 : 0.6667;
-    
+
     const approved = approvalRate >= approvalThreshold && sandboxPassed;
 
-    let decision = 'REJECTED';
-    if (approved) decision = 'APPROVED';
-    else if (approvalRate >= 0.5) decision = 'NEEDS_MODIFICATION';
+    let decision = "REJECTED";
+    if (approved) decision = "APPROVED";
+    else if (approvalRate >= 0.5) decision = "NEEDS_MODIFICATION";
 
     await pool.query(
       `UPDATE consensus_proposals SET status = $2, decided_at = now() WHERE proposal_id = $1`,
@@ -1209,17 +1347,17 @@ async function conductEnhancedConsensus(proposalId) {
       yesVotes,
       noVotes,
       abstainVotes,
-      approvalRate: (approvalRate * 100).toFixed(1) + '%',
+      approvalRate: (approvalRate * 100).toFixed(1) + "%",
       decision,
       blindSpots: blindSpots.length,
-      riskAssessment: hasHighRisk ? 'HIGH' : 'MODERATE',
+      riskAssessment: hasHighRisk ? "HIGH" : "MODERATE",
       userPreference: userPreference.prediction,
       sandboxTest: sandboxResult,
-      message: `Decision: ${decision} (${yesVotes}/${totalVotes} votes, ${blindSpots.length} blind spots detected)`
+      message: `Decision: ${decision} (${yesVotes}/${totalVotes} votes, ${blindSpots.length} blind spots detected)`,
     };
   } catch (error) {
     console.error("Enhanced consensus error:", error.message);
-    await trackLoss('error', 'Enhanced consensus failed', error.message);
+    await trackLoss("error", "Enhanced consensus failed", error.message);
     return { ok: false, error: error.message };
   }
 }
@@ -1228,11 +1366,13 @@ async function conductEnhancedConsensus(proposalId) {
 async function continuousSelfImprovement() {
   try {
     systemMetrics.improvementCyclesRun++;
-    console.log(`🔧 [IMPROVEMENT] Running cycle #${systemMetrics.improvementCyclesRun}...`);
-    
+    console.log(
+      `🔧 [IMPROVEMENT] Running cycle #${systemMetrics.improvementCyclesRun}...`
+    );
+
     // Create snapshot before improvements
     await createSystemSnapshot("Before improvement cycle");
-    
+
     // Analyze recent errors
     const recentErrors = await pool.query(
       `SELECT what_was_lost, why_lost, COUNT(*) as count 
@@ -1276,22 +1416,27 @@ async function continuousSelfImprovement() {
       
       Suggest specific, actionable code improvements to fix the top 3 issues.
       Check for unintended consequences of each improvement.`;
-      
-      const improvements = await callCouncilWithFailover(improvementPrompt, 'deepseek');
-      
+
+      const improvements = await callCouncilWithFailover(
+        improvementPrompt,
+        "deepseek"
+      );
+
       if (improvements && improvements.length > 50) {
         // Test improvements in sandbox first
         const testResult = await sandboxTest(
           `// Test improvements\nconsole.log("Testing improvements");`,
           "Improvement test"
         );
-        
+
         if (testResult.success) {
-          await executionQueue.addTask('self_improvement', improvements);
+          await executionQueue.addTask("self_improvement", improvements);
           systemMetrics.lastImprovement = new Date().toISOString();
         } else {
           console.log("⚠️ Improvements failed sandbox test, rolling back");
-          await rollbackToSnapshot(systemSnapshots[systemSnapshots.length - 1].id);
+          await rollbackToSnapshot(
+            systemSnapshots[systemSnapshots.length - 1].id
+          );
         }
       }
     }
@@ -1315,7 +1460,12 @@ async function loadROIFromDatabase() {
   }
 }
 
-function updateROI(revenue = 0, cost = 0, tasksCompleted = 0, tokensSaved = 0) {
+function updateROI(
+  revenue = 0,
+  cost = 0,
+  tasksCompleted = 0,
+  tokensSaved = 0
+) {
   const today = dayjs().format("YYYY-MM-DD");
   if (roiTracker.last_reset !== today) {
     roiTracker.daily_revenue = 0;
@@ -1330,10 +1480,12 @@ function updateROI(revenue = 0, cost = 0, tasksCompleted = 0, tokensSaved = 0) {
   roiTracker.daily_tasks_completed += tasksCompleted;
   roiTracker.total_tokens_saved += tokensSaved;
   if (roiTracker.daily_tasks_completed > 0) {
-    roiTracker.revenue_per_task = roiTracker.daily_revenue / roiTracker.daily_tasks_completed;
+    roiTracker.revenue_per_task =
+      roiTracker.daily_revenue / roiTracker.daily_tasks_completed;
   }
   if (roiTracker.daily_ai_cost > 0) {
-    roiTracker.roi_ratio = roiTracker.daily_revenue / roiTracker.daily_ai_cost;
+    roiTracker.roi_ratio =
+      roiTracker.daily_revenue / roiTracker.daily_ai_cost;
   }
   return roiTracker;
 }
@@ -1345,23 +1497,31 @@ function calculateCost(usage, model = "gpt-4o-mini") {
     "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
     "gemini-2.0-flash-exp": { input: 0.0001, output: 0.0004 },
     "deepseek-coder": { input: 0.0001, output: 0.0003 },
-    "grok-beta": { input: 0.005, output: 0.015 }
+    "grok-beta": { input: 0.005, output: 0.015 },
   };
   const price = prices[model] || prices["gpt-4o-mini"];
-  return ((usage?.prompt_tokens || 0) * price.input / 1000) +
-    ((usage?.completion_tokens || 0) * price.output / 1000);
+  return (
+    ((usage?.prompt_tokens || 0) * price.input) / 1000 +
+    ((usage?.completion_tokens || 0) * price.output) / 1000
+  );
 }
 
 async function getDailySpend(date = dayjs().format("YYYY-MM-DD")) {
   try {
-    const result = await pool.query(`SELECT usd FROM daily_spend WHERE date = $1`, [date]);
+    const result = await pool.query(
+      `SELECT usd FROM daily_spend WHERE date = $1`,
+      [date]
+    );
     return result.rows.length > 0 ? parseFloat(result.rows[0].usd) : 0;
   } catch (error) {
     return 0;
   }
 }
 
-async function updateDailySpend(amount, date = dayjs().format("YYYY-MM-DD")) {
+async function updateDailySpend(
+  amount,
+  date = dayjs().format("YYYY-MM-DD")
+) {
   try {
     const current = await getDailySpend(date);
     const newSpend = current + amount;
@@ -1377,15 +1537,27 @@ async function updateDailySpend(amount, date = dayjs().format("YYYY-MM-DD")) {
 }
 
 // ==================== MEMORY SYSTEM ====================
-async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
+async function storeConversationMemory(
+  orchestratorMessage,
+  aiResponse,
+  context = {}
+) {
   try {
-    const memId = `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const memId = `mem_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
     await pool.query(
       `INSERT INTO conversation_memory 
        (memory_id, orchestrator_msg, ai_response, context_metadata, memory_type, ai_member, created_at)
        VALUES ($1, $2, $3, $4, $5, $6, now())`,
-      [memId, orchestratorMessage, aiResponse, JSON.stringify(context), 
-       context.type || 'conversation', context.ai_member || 'system']
+      [
+        memId,
+        orchestratorMessage,
+        aiResponse,
+        JSON.stringify(context),
+        context.type || "conversation",
+        context.ai_member || "system",
+      ]
     );
     return { memId };
   } catch (error) {
@@ -1410,14 +1582,20 @@ async function recallConversationMemory(query, limit = 50) {
 }
 
 // ==================== LOSS TRACKING ====================
-async function trackLoss(severity, whatWasLost, whyLost, context = {}, prevention = "") {
+async function trackLoss(
+  severity,
+  whatWasLost,
+  whyLost,
+  context = {},
+  prevention = ""
+) {
   try {
     await pool.query(
       `INSERT INTO loss_log (severity, what_was_lost, why_lost, context, prevention_strategy, timestamp)
        VALUES ($1, $2, $3, $4, $5, now())`,
       [severity, whatWasLost, whyLost, JSON.stringify(context), prevention]
     );
-    if (severity === 'critical') {
+    if (severity === "critical") {
       console.error(`🚨 [${severity.toUpperCase()}] ${whatWasLost}`);
       // Trigger immediate snapshot for critical losses
       await createSystemSnapshot(`Critical loss: ${whatWasLost}`);
@@ -1430,7 +1608,10 @@ async function trackLoss(severity, whatWasLost, whyLost, context = {}, preventio
 // ==================== COUNCIL WITH FAILOVER ====================
 async function callCouncilWithFailover(prompt, preferredMember = "claude") {
   const members = Object.keys(COUNCIL_MEMBERS);
-  const ordered = [preferredMember, ...members.filter(m => m !== preferredMember)];
+  const ordered = [
+    preferredMember,
+    ...members.filter((m) => m !== preferredMember),
+  ];
 
   for (const member of ordered) {
     try {
@@ -1452,23 +1633,25 @@ class ExecutionQueue {
   }
 
   async addTask(type, description) {
-    const taskId = `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const taskId = `task_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
     try {
       await pool.query(
         `INSERT INTO execution_tasks (task_id, type, description, status, created_at)
          VALUES ($1, $2, $3, $4, now())`,
         [taskId, type, description, "queued"]
       );
-      
+
       this.tasks.push({
         id: taskId,
         type,
         description,
-        status: 'queued',
-        createdAt: new Date().toISOString()
+        status: "queued",
+        createdAt: new Date().toISOString(),
       });
-      
-      broadcastToAll({ type: 'task_queued', taskId, taskType: type });
+
+      broadcastToAll({ type: "task_queued", taskId, taskType: type });
       return taskId;
     } catch (error) {
       console.error("Task add error:", error.message);
@@ -1484,7 +1667,7 @@ class ExecutionQueue {
 
     const task = this.tasks.shift();
     this.activeTask = task;
-    
+
     try {
       await pool.query(
         `UPDATE execution_tasks SET status = 'running' WHERE task_id = $1`,
@@ -1492,10 +1675,14 @@ class ExecutionQueue {
       );
 
       // Check for blind spots before execution
-      const blindSpots = await detectBlindSpots(task.description, { type: task.type });
-      
+      const blindSpots = await detectBlindSpots(task.description, {
+        type: task.type,
+      });
+
       let result = await callCouncilWithFailover(
-        `Execute: ${task.description}\nBe aware of these blind spots: ${blindSpots.slice(0, 3).join(', ')}`, 
+        `Execute: ${task.description}\nBe aware of these blind spots: ${blindSpots
+          .slice(0, 3)
+          .join(", ")}`,
         "claude"
       );
 
@@ -1506,23 +1693,30 @@ class ExecutionQueue {
       );
 
       await updateROI(0, 0, 1);
-      this.history.push({ ...task, status: 'completed', result });
+      this.history.push({ ...task, status: "completed", result });
       this.activeTask = null;
-      
-      broadcastToAll({ type: 'task_completed', taskId: task.id, result });
 
+      broadcastToAll({ type: "task_completed", taskId: task.id, result });
     } catch (error) {
       await pool.query(
         `UPDATE execution_tasks SET status = 'failed', error = $1, completed_at = now()
          WHERE task_id = $2`,
         [error.message.slice(0, 500), task.id]
       );
-      
-      this.history.push({ ...task, status: 'failed', error: error.message });
+
+      this.history.push({ ...task, status: "failed", error: error.message });
       this.activeTask = null;
-      
-      await trackLoss('error', `Task execution failed: ${task.id}`, error.message);
-      broadcastToAll({ type: 'task_failed', taskId: task.id, error: error.message });
+
+      await trackLoss(
+        "error",
+        `Task execution failed: ${task.id}`,
+        error.message
+      );
+      broadcastToAll({
+        type: "task_failed",
+        taskId: task.id,
+        error: error.message,
+      });
     }
 
     setTimeout(() => this.executeNext(), 1000);
@@ -1532,11 +1726,11 @@ class ExecutionQueue {
     return {
       queued: this.tasks.length,
       active: this.activeTask ? 1 : 0,
-      completed: this.history.filter(t => t.status === 'completed').length,
-      failed: this.history.filter(t => t.status === 'failed').length,
+      completed: this.history.filter((t) => t.status === "completed").length,
+      failed: this.history.filter((t) => t.status === "failed").length,
       currentTask: this.activeTask,
       nextTasks: this.tasks.slice(0, 5),
-      recentHistory: this.history.slice(-10)
+      recentHistory: this.history.slice(-10),
     };
   }
 }
@@ -1546,13 +1740,15 @@ let executionQueue = new ExecutionQueue();
 // ==================== CONSENSUS & GOVERNANCE ====================
 async function createProposal(title, description, proposedBy = "system") {
   try {
-    const proposalId = `prop_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const proposalId = `prop_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
     await pool.query(
       `INSERT INTO consensus_proposals (proposal_id, title, description, proposed_by, status)
        VALUES ($1, $2, $3, $4, $5)`,
-      [proposalId, title, description, proposedBy, 'proposed']
+      [proposalId, title, description, proposedBy, "proposed"]
     );
-    broadcastToAll({ type: 'proposal_created', proposalId, title });
+    broadcastToAll({ type: "proposal_created", proposalId, title });
     return proposalId;
   } catch (error) {
     console.error("Proposal creation error:", error.message);
@@ -1565,55 +1761,81 @@ class SelfModificationEngine {
   async modifyOwnCode(filePath, newContent, reason) {
     try {
       console.log(`🔧 [SELF-MODIFY] Attempting: ${filePath}`);
-      
+
       // Create snapshot before modification
-      const snapshotId = await createSystemSnapshot(`Before modifying ${filePath}`);
-      
+      const snapshotId = await createSystemSnapshot(
+        `Before modifying ${filePath}`
+      );
+
       const protection = await isFileProtected(filePath);
       if (protection.protected && protection.requires_council) {
         const proposalId = await createProposal(
           `Self-Modify: ${filePath}`,
           `Reason: ${reason}\n\nChanges: ${newContent.slice(0, 300)}...`,
-          'self_modification_engine'
+          "self_modification_engine"
         );
-        
+
         if (proposalId) {
           const voteResult = await conductEnhancedConsensus(proposalId);
-          if (voteResult.decision !== 'APPROVED') {
-            return { success: false, error: 'Council rejected modification', proposalId };
+          if (voteResult.decision !== "APPROVED") {
+            return {
+              success: false,
+              error: "Council rejected modification",
+              proposalId,
+            };
           }
         }
       }
 
       // Test in sandbox first
-      const sandboxResult = await sandboxTest(newContent, `Test modification of ${filePath}`);
+      const sandboxResult = await sandboxTest(
+        newContent,
+        `Test modification of ${filePath}`
+      );
       if (!sandboxResult.success) {
         console.log(`⚠️ Sandbox test failed, rolling back to ${snapshotId}`);
         await rollbackToSnapshot(snapshotId);
-        return { success: false, error: 'Failed sandbox test', sandboxError: sandboxResult.error };
+        return {
+          success: false,
+          error: "Failed sandbox test",
+          sandboxError: sandboxResult.error,
+        };
       }
 
       // Actually write the file
       const fullPath = path.join(__dirname, filePath);
       await fs.writeFile(fullPath, newContent);
-      
+
       // Store in database
       const modId = `mod_${Date.now()}`;
       await pool.query(
         `INSERT INTO self_modifications (mod_id, file_path, change_description, new_content, status, council_approved)
          VALUES ($1, $2, $3, $4, $5, $6)`,
-        [modId, filePath, reason, newContent.slice(0, 5000), 'applied', protection.requires_council]
+        [
+          modId,
+          filePath,
+          reason,
+          newContent.slice(0, 5000),
+          "applied",
+          protection.requires_council,
+        ]
       );
 
       systemMetrics.selfModificationsSuccessful++;
       console.log(`✅ [SELF-MODIFY] Success: ${filePath}`);
-      await trackLoss('info', `File modified: ${filePath}`, reason, { approved: true });
-      
-      broadcastToAll({ type: 'self_modification', filePath, status: 'success' });
+      await trackLoss("info", `File modified: ${filePath}`, reason, {
+        approved: true,
+      });
+
+      broadcastToAll({
+        type: "self_modification",
+        filePath,
+        status: "success",
+      });
       return { success: true, filePath, reason, modId };
     } catch (error) {
       systemMetrics.selfModificationsAttempted++;
-      await trackLoss('error', `Failed to modify: ${filePath}`, error.message);
+      await trackLoss("error", `Failed to modify: ${filePath}`, error.message);
       return { success: false, error: error.message };
     }
   }
@@ -1624,14 +1846,14 @@ const selfModificationEngine = new SelfModificationEngine();
 async function isFileProtected(filePath) {
   try {
     const result = await pool.query(
-      'SELECT can_write, requires_full_council FROM protected_files WHERE file_path = $1',
+      "SELECT can_write, requires_full_council FROM protected_files WHERE file_path = $1",
       [filePath]
     );
     if (result.rows.length === 0) return { protected: false };
     return {
       protected: true,
       can_write: result.rows[0].can_write,
-      requires_council: result.rows[0].requires_full_council
+      requires_council: result.rows[0].requires_full_council,
     };
   } catch (e) {
     return { protected: false };
@@ -1641,22 +1863,30 @@ async function isFileProtected(filePath) {
 // ==================== DEPLOYMENT TRIGGERS ====================
 async function triggerDeployment(modifiedFiles = []) {
   try {
-    console.log(`🚀 [DEPLOYMENT] Triggered for: ${modifiedFiles.join(', ')}`);
-    
+    console.log(
+      `🚀 [DEPLOYMENT] Triggered for: ${modifiedFiles.join(", ")}`
+    );
+
     systemMetrics.deploymentsTrigger++;
-    
+
     // Push to GitHub to trigger Railway deployment
     for (const file of modifiedFiles) {
       try {
-        const content = await fs.readFile(path.join(__dirname, file), 'utf-8');
-        await commitToGitHub(file, content, `Auto-deployment: Updated ${file}`);
+        const content = await fs.readFile(path.join(__dirname, file), "utf-8");
+        await commitToGitHub(
+          file,
+          content,
+          `Auto-deployment: Updated ${file}`
+        );
       } catch (error) {
-        console.log(`⚠️ [DEPLOYMENT] Couldn't push ${file}: ${error.message}`);
+        console.log(
+          `⚠️ [DEPLOYMENT] Couldn't push ${file}: ${error.message}`
+        );
       }
     }
-    
-    broadcastToAll({ type: 'deployment_triggered', files: modifiedFiles });
-    return { success: true, message: 'Deployment triggered' };
+
+    broadcastToAll({ type: "deployment_triggered", files: modifiedFiles });
+    return { success: true, message: "Deployment triggered" };
   } catch (error) {
     console.error("Deployment trigger error:", error.message);
     return { success: false, error: error.message };
@@ -1667,18 +1897,18 @@ async function commitToGitHub(filePath, content, message) {
   const token = GITHUB_TOKEN?.trim();
   if (!token) throw new Error("GITHUB_TOKEN not configured");
 
-  const [owner, repo] = GITHUB_REPO.split('/');
-  
+  const [owner, repo] = GITHUB_REPO.split("/");
+
   const getRes = await fetch(
     `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
-    { 
-      headers: { 
-        'Authorization': `token ${token}`,
-        'Cache-Control': 'no-cache'
-      } 
+    {
+      headers: {
+        Authorization: `token ${token}`,
+        "Cache-Control": "no-cache",
+      },
     }
   );
-  
+
   let sha = undefined;
   if (getRes.ok) {
     const existing = await getRes.json();
@@ -1687,32 +1917,31 @@ async function commitToGitHub(filePath, content, message) {
 
   const payload = {
     message,
-    content: Buffer.from(content).toString('base64'),
-    ...(sha && { sha })
+    content: Buffer.from(content).toString("base64"),
+    ...(sha && { sha }),
   };
 
   const commitRes = await fetch(
     `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
     {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Authorization': `token ${token}`,
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
+        Authorization: `token ${token}`,
+        "Content-Type": "application/json",
+        "Cache-Control": "no-cache",
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     }
   );
 
   if (!commitRes.ok) {
     const err = await commitRes.json();
-    throw new Error(err.message || 'GitHub commit failed');
+    throw new Error(err.message || "GitHub commit failed");
   }
 
   console.log(`✅ Committed ${filePath} to GitHub`);
   return true;
 }
-
 
 // ==================== INCOME DRONE SYSTEM ====================
 class IncomeDroneSystem {
@@ -1721,7 +1950,9 @@ class IncomeDroneSystem {
   }
 
   async deployDrone(droneType, expectedRevenue = 500) {
-    const droneId = `drone_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const droneId = `drone_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
 
     try {
       await pool.query(
@@ -1737,9 +1968,9 @@ class IncomeDroneSystem {
         revenue: 0,
         tasks: 0,
         expectedRevenue,
-        deployed: new Date().toISOString()
+        deployed: new Date().toISOString(),
       });
-      
+
       return droneId;
     } catch (error) {
       console.error(`Drone deployment error: ${error.message}`);
@@ -1762,7 +1993,7 @@ class IncomeDroneSystem {
       }
 
       await updateROI(amount, 0, 0);
-      broadcastToAll({ type: 'revenue_generated', droneId, amount });
+      broadcastToAll({ type: "revenue_generated", droneId, amount });
     } catch (error) {
       console.error(`Revenue update error: ${error.message}`);
     }
@@ -1777,7 +2008,10 @@ class IncomeDroneSystem {
       return {
         active: result.rows.length,
         drones: result.rows,
-        total_revenue: result.rows.reduce((sum, d) => sum + parseFloat(d.revenue_generated || 0), 0)
+        total_revenue: result.rows.reduce(
+          (sum, d) => sum + parseFloat(d.revenue_generated || 0),
+          0
+        ),
       };
     } catch (error) {
       return { active: 0, drones: [], total_revenue: 0 };
@@ -1789,7 +2023,7 @@ let incomeDroneSystem = new IncomeDroneSystem();
 
 // ==================== FINANCIAL DASHBOARD ====================
 class FinancialDashboard {
-  async recordTransaction(type, amount, description, category = 'general') {
+  async recordTransaction(type, amount, description, category = "general") {
     try {
       const txId = `tx_${Date.now()}`;
       await pool.query(
@@ -1797,7 +2031,14 @@ class FinancialDashboard {
          VALUES ($1, $2, $3, $4, $5, now())`,
         [txId, type, amount, description, category]
       );
-      return { txId, type, amount, description, category, date: new Date().toISOString() };
+      return {
+        txId,
+        type,
+        amount,
+        description,
+        category,
+        date: new Date().toISOString(),
+      };
     } catch (error) {
       return null;
     }
@@ -1805,8 +2046,8 @@ class FinancialDashboard {
 
   async getDashboard() {
     try {
-      const todayStart = dayjs().startOf('day').toDate();
-      const todayEnd = dayjs().endOf('day').toDate();
+      const todayStart = dayjs().startOf("day").toDate();
+      const todayEnd = dayjs().endOf("day").toDate();
 
       const dailyResult = await pool.query(
         `SELECT SUM(CASE WHEN type='income' THEN amount ELSE 0 END) as total_income,
@@ -1821,12 +2062,17 @@ class FinancialDashboard {
         daily: {
           income: parseFloat(dailyRow.total_income) || 0,
           expenses: parseFloat(dailyRow.total_expenses) || 0,
-          net: (parseFloat(dailyRow.total_income) || 0) - (parseFloat(dailyRow.total_expenses) || 0)
+          net:
+            (parseFloat(dailyRow.total_income) || 0) -
+            (parseFloat(dailyRow.total_expenses) || 0),
         },
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       };
     } catch (error) {
-      return { daily: { income: 0, expenses: 0, net: 0 }, lastUpdated: new Date().toISOString() };
+      return {
+        daily: { income: 0, expenses: 0, net: 0 },
+        lastUpdated: new Date().toISOString(),
+      };
     }
   }
 }
@@ -1848,13 +2094,14 @@ function broadcastToAll(message) {
 function requireKey(req, res, next) {
   // Same-origin or allowed origins don't need API key
   if (isSameOrigin(req)) return next();
-  
+
   const origin = req.headers.origin;
   if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) return next();
-  
+
   // Otherwise check key
   const key = req.query.key || req.headers["x-command-key"];
-  if (key !== COMMAND_CENTER_KEY) return res.status(401).json({ error: "Unauthorized" });
+  if (key !== COMMAND_CENTER_KEY)
+    return res.status(401).json({ error: "Unauthorized" });
   next();
 }
 
@@ -1880,7 +2127,8 @@ app.get("/healthz", async (req, res) => {
       websockets: activeConnections.size,
       daily_spend: spend,
       max_daily_spend: MAX_DAILY_SPEND,
-      spend_percentage: ((spend / MAX_DAILY_SPEND) * 100).toFixed(1) + "%",
+      spend_percentage:
+        ((spend / MAX_DAILY_SPEND) * 100).toFixed(1) + "%",
       roi: roiTracker,
       drones: droneStatus,
       tasks: taskStatus,
@@ -1889,7 +2137,7 @@ app.get("/healthz", async (req, res) => {
       ai_rotation: rotationStatus,
       daily_ideas: dailyIdeas.length,
       blind_spots_detected: systemMetrics.blindSpotsDetected,
-      snapshots_available: systemSnapshots.length
+      snapshots_available: systemSnapshots.length,
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -1899,13 +2147,29 @@ app.get("/healthz", async (req, res) => {
 // Primary Council Chat Endpoint (used by overlay)
 app.post("/api/v1/chat", requireKey, async (req, res) => {
   try {
-    const { message, member = "claude" } = req.body;
-    if (!message) return res.status(400).json({ error: "Message required" });
+    // NEW: normalize body so overlay can send JSON or plain text
+    let body = req.body;
 
-    console.log(`🤖 [COUNCIL] ${member} processing: ${message.substring(0, 100)}...`);
+    if (typeof body === "string") {
+      body = { message: body };
+    } else if (!body || typeof body !== "object") {
+      body = {};
+    }
+
+    const { message, member = "claude" } = body;
+
+    if (!message || typeof message !== "string") {
+      return res.status(400).json({ error: "Message required" });
+    }
+
+    console.log(
+      `🤖 [COUNCIL] ${member} processing: ${message.substring(0, 100)}...`
+    );
 
     // Check for blind spots in user message
-    const blindSpots = await detectBlindSpots(message, { source: "user_chat" });
+    const blindSpots = await detectBlindSpots(message, {
+      source: "user_chat",
+    });
 
     const response = await callCouncilMember(member, message);
     const spend = await getDailySpend();
@@ -1916,13 +2180,13 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
       spend,
       member,
       blindSpotsDetected: blindSpots.length,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error("Council chat error:", error);
     res.status(500).json({
       ok: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -1930,8 +2194,9 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
 // Council Chat with Micro Protocol
 app.post("/api/council/chat", requireKey, async (req, res) => {
   try {
-    const { micro } = req.body;
-    
+    // NEW: accept either { micro: {...} } or the micro packet as body
+    const micro = req.body?.micro || req.body;
+
     if (!micro) {
       return res.status(400).json({ error: "Micro protocol packet required" });
     }
@@ -1944,13 +2209,15 @@ app.post("/api/council/chat", requireKey, async (req, res) => {
       return res.status(400).json({ error: "Message text required" });
     }
 
-    console.log(`🎼 [MICRO] ${member} in ${channel}: ${text.substring(0, 100)}...`);
+    console.log(
+      `🎼 [MICRO] ${member} in ${channel}: ${text.substring(0, 100)}...`
+    );
 
     // Check for blind spots
-    const blindSpots = await detectBlindSpots(text, { 
-      source: "micro_chat", 
-      channel, 
-      member 
+    const blindSpots = await detectBlindSpots(text, {
+      source: "micro_chat",
+      channel,
+      member,
     });
 
     const response = await callCouncilMember(member, text);
@@ -1968,24 +2235,24 @@ app.post("/api/council/chat", requireKey, async (req, res) => {
         spend,
         blindSpotsDetected: blindSpots.length,
         aiName: "LifeOS Council",
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
-      ts: Date.now()
+      ts: Date.now(),
     };
 
     res.json({ micro: responsePacket });
   } catch (error) {
     console.error("Micro council chat error:", error);
-    
+
     const errorPacket = {
-      v: "mp1", 
+      v: "mp1",
       r: "a",
       c: "error",
       t: `Error: ${error.message}`,
       m: { error: true },
-      ts: Date.now()
+      ts: Date.now(),
     };
-    
+
     res.json({ micro: errorPacket });
   }
 });
@@ -1994,28 +2261,32 @@ app.post("/api/council/chat", requireKey, async (req, res) => {
 app.post("/api/v1/architect/chat", requireKey, async (req, res) => {
   try {
     const { query_json, original_message } = req.body;
-    
+
     if (!query_json && !original_message) {
-      return res.status(400).json({ error: "Query JSON or original message required" });
+      return res
+        .status(400)
+        .json({ error: "Query JSON or original message required" });
     }
 
-    const prompt = query_json ? 
-      `Process this compressed query: ${JSON.stringify(query_json)}\n\nProvide detailed response.` :
-      original_message;
+    const prompt = query_json
+      ? `Process this compressed query: ${JSON.stringify(
+          query_json
+        )}\n\nProvide detailed response.`
+      : original_message;
 
     const response = await callCouncilWithFailover(prompt, "gemini");
-    
+
     const response_json = {
       r: response.slice(0, 500),
       ts: Date.now(),
-      compressed: true
+      compressed: true,
     };
 
     res.json({
       ok: true,
       response_json,
       original_response: response,
-      compressed: true
+      compressed: true,
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -2025,12 +2296,14 @@ app.post("/api/v1/architect/chat", requireKey, async (req, res) => {
 app.post("/api/v1/architect/command", requireKey, async (req, res) => {
   try {
     const { query_json, command, intent } = req.body;
-    
-    const prompt = `Command: ${command}\nIntent: ${intent}\nCompressed Query: ${JSON.stringify(query_json || {})}\n\nExecute this command and provide results.`;
-    
+
+    const prompt = `Command: ${command}\nIntent: ${intent}\nCompressed Query: ${JSON.stringify(
+      query_json || {}
+    )}\n\nExecute this command and provide results.`;
+
     const response = await callCouncilWithFailover(prompt, "claude");
-    
-    if (intent && intent !== 'general') {
+
+    if (intent && intent !== "general") {
       await executionQueue.addTask(intent, command);
     }
 
@@ -2038,7 +2311,7 @@ app.post("/api/v1/architect/command", requireKey, async (req, res) => {
       ok: true,
       message: response,
       intent,
-      queued: intent !== 'general'
+      queued: intent !== "general",
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -2048,28 +2321,32 @@ app.post("/api/v1/architect/command", requireKey, async (req, res) => {
 app.post("/api/v1/architect/micro", requireKey, async (req, res) => {
   try {
     const microQuery = req.body;
-    
-    if (microQuery.includes('|')) {
-      const parts = microQuery.split('|');
-      const operation = parts.find(p => p.startsWith('OP:'))?.slice(3) || 'G';
-      const data = parts.find(p => p.startsWith('D:'))?.slice(2).replace(/~/g, ' ') || '';
-      
+
+    if (typeof microQuery === "string" && microQuery.includes("|")) {
+      const parts = microQuery.split("|");
+      const operation = parts.find((p) => p.startsWith("OP:"))?.slice(3) || "G";
+      const data =
+        parts
+          .find((p) => p.startsWith("D:"))
+          ?.slice(2)
+          .replace(/~/g, " ") || "";
+
       let response;
       switch (operation) {
-        case 'G':
+        case "G":
           response = `CT:${data}~completed~result:success~compression:73%`;
           break;
-        case 'A':
+        case "A":
           response = `CT:Analysis~complete~insights:generated~recommendations:3`;
           break;
         default:
           response = `CT:${data}~processed~status:done`;
       }
-      
+
       res.send(response);
     } else {
       const response = await callCouncilWithFailover(microQuery, "deepseek");
-      res.send(`CT:${response.replace(/ /g, '~')}`);
+      res.send(`CT:${String(response).replace(/ /g, "~")}`);
     }
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -2080,7 +2357,8 @@ app.post("/api/v1/architect/micro", requireKey, async (req, res) => {
 app.post("/api/v1/task", requireKey, async (req, res) => {
   try {
     const { type = "general", description } = req.body;
-    if (!description) return res.status(400).json({ error: "Description required" });
+    if (!description)
+      return res.status(400).json({ error: "Description required" });
 
     const taskId = await executionQueue.addTask(type, description);
     res.json({ ok: true, taskId });
@@ -2167,7 +2445,10 @@ app.post("/api/v1/rollback/:snapshotId", requireKey, async (req, res) => {
 app.post("/api/v1/drones/deploy", requireKey, async (req, res) => {
   try {
     const { type = "affiliate", expectedRevenue = 500 } = req.body;
-    const droneId = await incomeDroneSystem.deployDrone(type, expectedRevenue);
+    const droneId = await incomeDroneSystem.deployDrone(
+      type,
+      expectedRevenue
+    );
     res.json({ ok: true, droneId });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -2177,7 +2458,8 @@ app.post("/api/v1/drones/deploy", requireKey, async (req, res) => {
 app.get("/api/v1/drones", requireKey, async (req, res) => {
   try {
     const status = await incomeDroneSystem.getStatus();
-    res.json({ ok: false, ...status });
+    // FIXED: ok should be true on success
+    res.json({ ok: true, ...status });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -2197,10 +2479,16 @@ app.get("/api/v1/dashboard", requireKey, async (req, res) => {
 app.post("/api/v1/proposal/create", requireKey, async (req, res) => {
   try {
     const { title, description, proposedBy = "system" } = req.body;
-    if (!title || !description) return res.status(400).json({ error: "Title and description required" });
+    if (!title || !description)
+      return res
+        .status(400)
+        .json({ error: "Title and description required" });
 
     const proposalId = await createProposal(title, description, proposedBy);
-    if (!proposalId) return res.status(500).json({ error: "Failed to create proposal" });
+    if (!proposalId)
+      return res
+        .status(500)
+        .json({ error: "Failed to create proposal" });
 
     res.json({ ok: true, proposalId });
   } catch (error) {
@@ -2237,7 +2525,7 @@ app.get("/api/v1/ai/performance", requireKey, async (req, res) => {
     res.json({
       ok: true,
       performance: performance.rows,
-      currentScores: Object.fromEntries(aiPerformanceScores)
+      currentScores: Object.fromEntries(aiPerformanceScores),
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -2257,8 +2545,8 @@ app.get("/api/v1/system/metrics", requireKey, async (req, res) => {
         drones: await incomeDroneSystem.getStatus(),
         aiPerformance: Object.fromEntries(aiPerformanceScores),
         dailyIdeas: dailyIdeas.length,
-        snapshots: systemSnapshots.length
-      }
+        snapshots: systemSnapshots.length,
+      },
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -2273,16 +2561,22 @@ app.get("/overlay", (req, res) => {
 app.get("/overlay/index.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "overlay", "index.html"));
 });
+
 // ==================== SELF-PROGRAMMING ENDPOINT (ONE TRUE VERSION) ====================
 app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
   try {
     const { instruction, priority = "medium" } = req.body;
-    
+
     if (!instruction) {
       return res.status(400).json({ error: "Instruction required" });
     }
 
-    console.log(`🤖 [SELF-PROGRAM] New instruction: ${instruction.substring(0, 100)}...`);
+    console.log(
+      `🤖 [SELF-PROGRAM] New instruction: ${instruction.substring(
+        0,
+        100
+      )}...`
+    );
 
     // Step 1: Analyze requirements with blind spot detection
     const analysisPrompt = `As the AI Council, analyze this self-programming instruction:
@@ -2297,36 +2591,43 @@ Provide:
 5. Rollback plan
 
 Be specific with file paths and exact code logic.`;
-    
+
     const analysis = await callCouncilWithFailover(analysisPrompt, "claude");
 
     // Check for blind spots
-    const blindSpots = await detectBlindSpots(instruction, { type: 'self-programming' });
+    const blindSpots = await detectBlindSpots(instruction, {
+      type: "self-programming",
+    });
 
     // Step 2: Generate actual code
     const codePrompt = `Based on this analysis: ${analysis}
 
-Consider these blind spots: ${blindSpots.slice(0, 5).join(', ')}
+Consider these blind spots: ${blindSpots
+      .slice(0, 5)
+      .join(", ")}
 
 Now write COMPLETE, WORKING code. Format each file like:
 ===FILE:path/to/file.js===
 [complete code here]
 ===END===`;
-    
+
     const codeResponse = await callCouncilWithFailover(codePrompt, "deepseek");
 
     // Step 3: Extract and test in sandbox
     const fileChanges = extractFileChanges(codeResponse);
-    
+
     const results = [];
     for (const change of fileChanges) {
       // Test each change in sandbox first
-      const sandboxResult = await sandboxTest(change.content, `Test: ${change.filePath}`);
-      
+      const sandboxResult = await sandboxTest(
+        change.content,
+        `Test: ${change.filePath}`
+      );
+
       if (sandboxResult.success) {
         const result = await selfModificationEngine.modifyOwnCode(
-          change.filePath, 
-          change.content, 
+          change.filePath,
+          change.content,
           `Self-programming: ${instruction}`
         );
         results.push(result);
@@ -2334,14 +2635,16 @@ Now write COMPLETE, WORKING code. Format each file like:
         results.push({
           success: false,
           filePath: change.filePath,
-          error: 'Failed sandbox test',
-          sandboxError: sandboxResult.error
+          error: "Failed sandbox test",
+          sandboxError: sandboxResult.error,
         });
       }
     }
 
     // Step 4: Deploy if successful
-    const successfulChanges = results.filter(r => r.success).map(r => r.filePath);
+    const successfulChanges = results
+      .filter((r) => r.success)
+      .map((r) => r.filePath);
     if (successfulChanges.length > 0) {
       await triggerDeployment(successfulChanges);
     }
@@ -2352,9 +2655,8 @@ Now write COMPLETE, WORKING code. Format each file like:
       filesModified: successfulChanges,
       deploymentTriggered: successfulChanges.length > 0,
       blindSpotsDetected: blindSpots.length,
-      results: results
+      results: results,
     });
-
   } catch (error) {
     console.error("Self-programming error:", error);
     res.status(500).json({ ok: false, error: error.message });
@@ -2365,72 +2667,85 @@ function extractFileChanges(codeResponse) {
   const changes = [];
   const fileRegex = /===FILE:(.*?)===\n([\s\S]*?)===END===/g;
   let match;
-  
+
   while ((match = fileRegex.exec(codeResponse)) !== null) {
     changes.push({
       filePath: match[1].trim(),
-      content: match[2].trim()
+      content: match[2].trim(),
     });
   }
-  
+
   return changes;
 }
 
 // ==================== WEBSOCKET ====================
 wss.on("connection", (ws) => {
-  const clientId = `ws_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const clientId = `ws_${Date.now()}_${Math.random()
+    .toString(36)
+    .slice(2, 8)}`;
   activeConnections.set(clientId, ws);
   conversationHistory.set(clientId, []);
 
   console.log(`✅ [WS] ${clientId} connected`);
-  
-  ws.send(JSON.stringify({
-    type: "connection",
-    status: "connected",
-    clientId,
-    message: "🎼 LifeOS v26.0 ENHANCED - Consensus Protocol Ready",
-    systemMetrics,
-    features: {
-      consensusProtocol: true,
-      blindSpotDetection: true,
-      dailyIdeas: true,
-      aiRotation: true,
-      sandboxTesting: true,
-      rollbackCapability: true
-    }
-  }));
+
+  ws.send(
+    JSON.stringify({
+      type: "connection",
+      status: "connected",
+      clientId,
+      message:
+        "🎼 LifeOS v26.0 ENHANCED - Consensus Protocol Ready",
+      systemMetrics,
+      features: {
+        consensusProtocol: true,
+        blindSpotDetection: true,
+        dailyIdeas: true,
+        aiRotation: true,
+        sandboxTesting: true,
+        rollbackCapability: true,
+      },
+    })
+  );
 
   ws.on("message", async (data) => {
     try {
       const msg = JSON.parse(data.toString());
-      
+
       if (msg.type === "chat") {
         const text = msg.text || msg.message;
         const member = msg.member || "claude";
-        
+
         if (!text) return;
-        
+
         try {
           // Check for blind spots
-          const blindSpots = await detectBlindSpots(text, { source: 'websocket' });
-          
+          const blindSpots = await detectBlindSpots(text, {
+            source: "websocket",
+          });
+
           const response = await callCouncilWithFailover(text, member);
-          ws.send(JSON.stringify({
-            type: "response",
-            response,
-            member,
-            blindSpotsDetected: blindSpots.length,
-            timestamp: new Date().toISOString()
-          }));
+          ws.send(
+            JSON.stringify({
+              type: "response",
+              response,
+              member,
+              blindSpotsDetected: blindSpots.length,
+              timestamp: new Date().toISOString(),
+            })
+          );
         } catch (error) {
-          ws.send(JSON.stringify({
-            type: "error",
-            error: error.message
-          }));
+          ws.send(
+            JSON.stringify({
+              type: "error",
+              error: error.message,
+            })
+          );
         }
       }
     } catch (error) {
-      ws.send(JSON.stringify({ type: "error", error: error.message }));
+      ws.send(
+        JSON.stringify({ type: "error", error: error.message })
+      );
     }
   });
 
@@ -2445,14 +2760,16 @@ wss.on("connection", (ws) => {
 async function start() {
   try {
     console.log("\n" + "=".repeat(100));
-    console.log("🚀 LIFEOS v26.0 ENHANCED - COMPLETE CONSENSUS & SELF-HEALING SYSTEM");
+    console.log(
+      "🚀 LIFEOS v26.0 ENHANCED - COMPLETE CONSENSUS & SELF-HEALING SYSTEM"
+    );
     console.log("=".repeat(100));
-    
+
     await initDatabase();
     await loadROIFromDatabase();
 
     console.log("\n🤖 ENHANCED AI COUNCIL:");
-    Object.values(COUNCIL_MEMBERS).forEach(m => 
+    Object.values(COUNCIL_MEMBERS).forEach((m) =>
       console.log(`  • ${m.name} (${m.model}) - ${m.role}`)
     );
 
@@ -2476,7 +2793,10 @@ async function start() {
     await incomeDroneSystem.deployDrone("content", 300);
 
     // Schedule continuous improvement
-    setInterval(() => continuousSelfImprovement(), 30 * 60 * 1000); // Every 30 minutes
+    setInterval(
+      () => continuousSelfImprovement(),
+      30 * 60 * 1000
+    ); // Every 30 minutes
     setTimeout(() => continuousSelfImprovement(), 120000); // After 2 minutes
 
     // Schedule daily idea generation
@@ -2484,7 +2804,10 @@ async function start() {
     setTimeout(() => generateDailyIdeas(), 60000); // After 1 minute
 
     // Schedule AI rotation check
-    setInterval(() => rotateAIsBasedOnPerformance(), 60 * 60 * 1000); // Every hour
+    setInterval(
+      () => rotateAIsBasedOnPerformance(),
+      60 * 60 * 1000
+    ); // Every hour
 
     // Create initial snapshot
     await createSystemSnapshot("System startup");
@@ -2492,9 +2815,15 @@ async function start() {
     server.listen(PORT, HOST, () => {
       console.log(`\n🌐 SERVER ONLINE: http://${HOST}:${PORT}`);
       console.log(`📊 Health: http://${HOST}:${PORT}/healthz`);
-      console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
-      console.log(`🤖 Self-Program: POST /api/v1/system/self-program`);
-      console.log("\n✅ SYSTEM READY - ENHANCED CONSENSUS PROTOCOL ACTIVE!");
+      console.log(
+        `🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`
+      );
+      console.log(
+        `🤖 Self-Program: POST /api/v1/system/self-program`
+      );
+      console.log(
+        "\n✅ SYSTEM READY - ENHANCED CONSENSUS PROTOCOL ACTIVE!"
+      );
       console.log("=".repeat(100) + "\n");
     });
   } catch (error) {
