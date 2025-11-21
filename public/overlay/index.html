@@ -1,47 +1,436 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LifeOS Overlay</title>
-  <link rel="manifest" href="/manifest.json">
+  <meta charset="UTF-8" />
+  <title>LifeOS Command Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { margin:0; background:transparent; font-family: -apple-system, system-ui, sans-serif; overflow:hidden; }
-    #lower-third { position:fixed; bottom:60px; left:60px; background:rgba(0,0,0,.85); color:#fff; padding:20px 35px; border-radius:8px; display:none; font-size:24px; box-shadow:0 4px 20px rgba(0,0,0,.3); backdrop-filter: blur(10px); }
-    #bullets { position:fixed; top:100px; right:60px; background:rgba(255,255,255,.95); padding:25px; border-radius:10px; max-width:400px; display:none; box-shadow:0 4px 20px rgba(0,0,0,.15); }
-    #bullets ul { margin:0; padding:0 0 0 20px; list-style-position:outside; }
-    #bullets li { margin:12px 0; font-size:18px; line-height:1.4; color:#333; }
-    .fade-in { animation: fadeIn .4s ease-out; }
-    @keyframes fadeIn { from { opacity:0; transform: translateY(20px);} to {opacity:1; transform:none;} }
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #f5f5f5;
+      background: #050816;
+    }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 45%, #000 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .shell {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 20px 24px 32px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 18px;
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      backdrop-filter: blur(22px);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .title {
+      font-size: 1.4rem;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge {
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.5);
+      color: #bbf7d0;
+    }
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: #e5e7eb;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #f97316;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2);
+    }
+    .status-dot.online {
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.4fr);
+      gap: 18px;
+      margin-top: 12px;
+    }
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .card {
+      background: radial-gradient(circle at top left, rgba(51, 65, 85, 0.45), rgba(15, 23, 42, 0.95));
+      border-radius: 16px;
+      padding: 14px 14px 16px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+    }
+    .card h2 {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin: 0 0 6px;
+    }
+    .card small {
+      display: block;
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+    label {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 4px;
+      display: inline-block;
+    }
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(75, 85, 99, 0.8);
+      padding: 7px 9px;
+      font-size: 0.9rem;
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      outline: none;
+      box-sizing: border-box;
+    }
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.35;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .row > div {
+      flex: 1 1 0;
+      min-width: 120px;
+    }
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 16px;
+      font-size: 0.9rem;
+      font-weight: 550;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #22c55e, #0ea5e9);
+      color: #0b1120;
+      margin-top: 8px;
+    }
+    button.secondary {
+      background: transparent;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+    }
+    button:disabled {
+      opacity: 0.55;
+      cursor: default;
+    }
+    pre {
+      margin: 4px 0 0;
+      padding: 8px 9px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      font-size: 0.8rem;
+      overflow: auto;
+      max-height: 260px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .pill-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .pill {
+      border-radius: 999px;
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      padding: 3px 8px;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+    .pill strong {
+      color: #e5e7eb;
+    }
+    .footer {
+      margin-top: 10px;
+      font-size: 0.72rem;
+      color: #6b7280;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
 <body>
-  <div id="lower-third"></div>
-  <div id="bullets"><ul id="bulletList"></ul></div>
+  <div class="shell">
+    <div class="header">
+      <div class="title">
+        LifeOS Command Center
+        <span class="badge">v26.0 · Consensus Online</span>
+      </div>
+      <div class="status-chip" id="statusChip">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Checking health…</span>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 8px;">
+      <div>
+        <label for="cmdKey">Command Key (x-command-key)</label>
+        <input id="cmdKey" type="text" autocomplete="off" placeholder="Paste your COMMAND_CENTER_KEY here…" />
+      </div>
+      <div>
+        <label for="apiBase">API Base</label>
+        <input
+          id="apiBase"
+          type="text"
+          autocomplete="off"
+          placeholder="https://robust-magic-production.up.railway.app"
+        />
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: Prompt / Council chat -->
+      <div class="card">
+        <h2>COUNCIL CONSOLE</h2>
+        <small>Send a message directly into the AI Council via <code>/api/v1/chat</code>.</small>
+
+        <label for="member">Council Member</label>
+        <div class="row">
+          <div>
+            <select id="member">
+              <option value="chatgpt">ChatGPT – Primary Executor</option>
+              <option value="claude">Claude – Strategy (may be offline)</option>
+              <option value="gemini">Gemini – Research / Ideas</option>
+              <option value="deepseek">DeepSeek – Infra / Sandbox</option>
+              <option value="grok">Grok – Reality Check</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="prompt" style="margin-top: 8px;">Message</label>
+        <textarea id="prompt" placeholder="Ask the system to do something: 'Outline the next 3 money-making tasks for today…'"></textarea>
+
+        <div class="row">
+          <button id="sendBtn">
+            ➤ Send to Council
+          </button>
+          <button id="clearBtn" class="secondary">
+            ⌫ Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Output / Health -->
+      <div class="card">
+        <h2>OUTPUT & HEALTH</h2>
+        <small>Responses, errors, and live health pulled from <code>/healthz</code>.</small>
+
+        <div class="pill-row" id="healthPills"></div>
+
+        <label style="margin-top: 10px;">Latest Response</label>
+        <pre id="responseBox">Waiting for first response…</pre>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>Tip: your browser never needs the API keys directly — only the <code>COMMAND_CENTER_KEY</code> gate.</div>
+      <div id="metaInfo"></div>
+    </div>
+  </div>
+
   <script>
-    const sid = window.location.pathname.split('/')[2] || 'demo';
-    let currentState = {};
-    async function refresh(){
-      try {
-        const res = await fetch(`/api/overlay/${sid}/state`);
-        const state = await res.json();
-        if (JSON.stringify(state) === JSON.stringify(currentState)) return;
-        currentState = state;
-        const lowerThird = document.getElementById('lower-third');
-        if (state.lowerThird) {
-          lowerThird.innerHTML = state.lowerThird;
-          lowerThird.style.display = 'block';
-          lowerThird.classList.add('fade-in');
-        } else lowerThird.style.display = 'none';
-        const bullets = document.getElementById('bullets');
-        if (state.bullets && state.bullets.length) {
-          document.getElementById('bulletList').innerHTML = state.bullets.map(b=>`<li>${b}</li>`).join('');
-          bullets.style.display = 'block';
-          bullets.classList.add('fade-in');
-        } else bullets.style.display = 'none';
-      } catch(e){ console.error(e); }
+    const statusDot = document.getElementById("statusDot");
+    const statusText = document.getElementById("statusText");
+    const healthPills = document.getElementById("healthPills");
+    const responseBox = document.getElementById("responseBox");
+    const sendBtn = document.getElementById("sendBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const promptEl = document.getElementById("prompt");
+    const memberEl = document.getElementById("member");
+    const cmdKeyEl = document.getElementById("cmdKey");
+    const apiBaseEl = document.getElementById("apiBase");
+    const metaInfo = document.getElementById("metaInfo");
+
+    // Load saved config
+    (function initConfig() {
+      const savedKey = localStorage.getItem("lifeos_cmd_key");
+      const savedBase = localStorage.getItem("lifeos_api_base");
+      if (savedKey) cmdKeyEl.value = savedKey;
+      if (savedBase) {
+        apiBaseEl.value = savedBase;
+      } else {
+        apiBaseEl.value = window.location.origin;
+      }
+    })();
+
+    function saveConfig() {
+      localStorage.setItem("lifeos_cmd_key", cmdKeyEl.value.trim());
+      localStorage.setItem("lifeos_api_base", apiBaseEl.value.trim());
     }
-    setInterval(refresh, 1000); refresh();
+
+    cmdKeyEl.addEventListener("change", saveConfig);
+    apiBaseEl.addEventListener("change", saveConfig);
+
+    function getBase() {
+      const val = apiBaseEl.value.trim() || window.location.origin;
+      return val.replace(/\/+$/, "");
+    }
+
+    async function checkHealth() {
+      try {
+        const res = await fetch(getBase() + "/healthz", { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+
+        statusDot.classList.add("online");
+        statusText.textContent = "Online · " + (data.version || "unknown");
+
+        healthPills.innerHTML = "";
+        const pill = (label, value) => {
+          const el = document.createElement("div");
+          el.className = "pill";
+          el.innerHTML = "<strong>" + label + ":</strong> " + value;
+          healthPills.appendChild(el);
+        };
+
+        pill("Spend", `${(data.daily_spend || 0).toFixed(3)} / ${data.max_daily_spend}`);
+        pill("ROI", (data.roi && data.roi.roi_ratio ? data.roi.roi_ratio.toFixed(2) : "0") + "x");
+        pill("Drones", data.drones ? data.drones.active : 0);
+        pill("Tasks done", data.tasks ? data.tasks.completed : 0);
+        pill("Ideas (24h)", data.daily_ideas ?? "?");
+
+        metaInfo.textContent =
+          "Snapshots: " +
+          (data.snapshots_available ?? "?") +
+          " · Primary AI: " +
+          (data.ai_rotation && data.ai_rotation.primary);
+      } catch (err) {
+        console.error("Health error", err);
+        statusDot.classList.remove("online");
+        statusText.textContent = "Offline / health error";
+        healthPills.innerHTML = "";
+      }
+    }
+
+    async function sendToCouncil() {
+      const text = promptEl.value.trim();
+      if (!text) {
+        alert("Type a message first.");
+        return;
+      }
+      const key = cmdKeyEl.value.trim();
+      if (!key) {
+        alert("Paste your COMMAND_CENTER_KEY (x-command-key).");
+        return;
+      }
+
+      saveConfig();
+
+      sendBtn.disabled = true;
+      responseBox.textContent = "Sending…";
+
+      try {
+        const res = await fetch(getBase() + "/api/v1/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-command-key": key
+          },
+          body: JSON.stringify({
+            message: text,
+            member: memberEl.value
+          })
+        });
+
+        const bodyText = await res.text();
+        let json;
+        try {
+          json = JSON.parse(bodyText);
+        } catch {
+          json = { raw: bodyText };
+        }
+
+        if (!res.ok) {
+          responseBox.textContent =
+            "Error " +
+            res.status +
+            ":\n" +
+            (json.error || JSON.stringify(json, null, 2));
+        } else {
+          const pretty = JSON.stringify(json, null, 2);
+          responseBox.textContent = pretty;
+        }
+      } catch (err) {
+        console.error(err);
+        responseBox.textContent = "Network / JS error:\n" + err.message;
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    sendBtn.addEventListener("click", sendToCouncil);
+    clearBtn.addEventListener("click", () => {
+      promptEl.value = "";
+      responseBox.textContent = "Cleared. Ready for next command.";
+    });
+
+    // Enter + Cmd/Ctrl+Enter shortcuts
+    promptEl.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        sendToCouncil();
+      }
+    });
+
+    checkHealth();
+    setInterval(checkHealth, 60000);
   </script>
 </body>
 </html>
