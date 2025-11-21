@@ -132,5 +132,141 @@
     <!-- IMPORTANT: MICRO protocol must load before command-center.js -->
     <script src="MicroProtocol.js"></script>
     <script src="command-center.js"></script>
+
+    <!-- Inline wiring: chat + self-program -->
+    <script>
+        // Must match COMMAND_CENTER_KEY in server.js
+        const LIFEOS_API_KEY = 'MySecretKey2025LifeOS';
+        const LIFEOS_BASE_URL = window.location.origin;
+
+        const chatMessagesEl = document.getElementById('chat-messages');
+        const textInputEl = document.getElementById('text-input');
+        const sendBtnEl = document.getElementById('send-message');
+
+        function addMessageBubble(role, text, meta = {}) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'message ' + (role === 'user' ? 'user-message' : 'ai-message');
+
+            const header = document.createElement('div');
+            header.className = 'message-header';
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'ai-name ' + (meta.member || '');
+            nameSpan.textContent = role === 'user' ? 'You' : (meta.member || 'Council');
+
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = new Date().toLocaleTimeString();
+
+            header.appendChild(nameSpan);
+            header.appendChild(timeSpan);
+
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.textContent = text;
+
+            wrapper.appendChild(header);
+            wrapper.appendChild(content);
+
+            chatMessagesEl.appendChild(wrapper);
+            chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+        }
+
+        async function sendChatMessage() {
+            const text = (textInputEl.value || '').trim();
+            if (!text) return;
+
+            addMessageBubble('user', text);
+            textInputEl.value = '';
+
+            try {
+                // Special command: !self <instruction>  →  self-programming API
+                if (text.startsWith('!self ')) {
+                    const instruction = text.slice('!self '.length).trim();
+
+                    const res = await fetch(
+                        `${LIFEOS_BASE_URL}/api/v1/system/self-program?key=${encodeURIComponent(LIFEOS_API_KEY)}`,
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ instruction, priority: 'medium' })
+                        }
+                    );
+
+                    const data = await res.json();
+
+                    if (!data || data.ok === false) {
+                        addMessageBubble(
+                            'assistant',
+                            `Self-program error: ${(data && data.error) || 'Unknown error'}`,
+                            { member: 'self-program' }
+                        );
+                        return;
+                    }
+
+                    const modified = (data.filesModified || []).join(', ') || 'none';
+                    const summaryLines = [
+                        'Self-program request accepted.',
+                        `Files modified: ${modified}`,
+                        `Deployment: ${data.deploymentTriggered ? 'triggered' : 'not triggered'}`,
+                        `Blind spots detected: ${data.blindSpotsDetected || 0}`
+                    ];
+
+                    addMessageBubble(
+                        'assistant',
+                        summaryLines.join('\n'),
+                        { member: 'self-program' }
+                    );
+                    return;
+                }
+
+                // Normal chat → /api/v1/chat
+                const res = await fetch(
+                    `${LIFEOS_BASE_URL}/api/v1/chat?key=${encodeURIComponent(LIFEOS_API_KEY)}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: text })
+                    }
+                );
+
+                const data = await res.json();
+                if (!data || data.ok === false) {
+                    addMessageBubble(
+                        'assistant',
+                        `Error: ${(data && data.error) || 'Unknown error'}`,
+                        {}
+                    );
+                    return;
+                }
+
+                addMessageBubble(
+                    'assistant',
+                    data.response || '[empty response]',
+                    { member: data.member || '' }
+                );
+            } catch (err) {
+                addMessageBubble(
+                    'assistant',
+                    `Network error: ${err && err.message ? err.message : 'Unknown network error'}`,
+                    {}
+                );
+            }
+        }
+
+        // Wire up events
+        if (sendBtnEl) {
+            sendBtnEl.addEventListener('click', sendChatMessage);
+        }
+
+        if (textInputEl) {
+            textInputEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendChatMessage();
+                }
+            });
+        }
+    </script>
 </body>
 </html>
