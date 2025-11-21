@@ -2375,8 +2375,7 @@ app.get("/overlay", (req, res) => {
 app.get("/overlay/index.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "overlay", "index.html"));
 });
-
-// Self-Programming Endpoint (CRITICAL - This enables AI to fix itself)
+// ==================== SELF-PROGRAMMING ENDPOINT (ONE TRUE VERSION) ====================
 app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
   try {
     const { instruction, priority = "medium" } = req.body;
@@ -2478,6 +2477,7 @@ function extractFileChanges(codeResponse) {
   
   return changes;
 }
+
 // ==================== WEBSOCKET ====================
 wss.on("connection", (ws) => {
   const clientId = `ws_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
