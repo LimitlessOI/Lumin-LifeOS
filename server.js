@@ -1801,20 +1801,6 @@ Now write COMPLETE, WORKING code. Format each file like:
   }
 });
 
-function extractFileChanges(codeResponse) {
-  const changes = [];
-  const fileRegex = /===FILE:(.*?)===\n([\s\S]*?)===END===/g;
-  let match;
-  
-  while ((match = fileRegex.exec(codeResponse)) !== null) {
-    changes.push({
-      filePath: match[1].trim(),
-      content: match[2].trim()
-    });
-  }
-  
-  return changes;
-}
 
 // ==================== INCOME DRONE SYSTEM ====================
 class IncomeDroneSystem {
