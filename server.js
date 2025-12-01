@@ -42,11 +42,13 @@ const wss = new WebSocketServer({ server });
 const {
   DATABASE_URL,
   COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
+  // PATCH: Reading LIFEOS_ keys instead of old names
   OPENAI_API_KEY,
-  ANTHROPIC_API_KEY,
-  GEMINI_API_KEY,
+  LIFEOS_ANTHROPIC_KEY,
+  LIFEOS_GEMINI_KEY,
   DEEPSEEK_API_KEY,
   GROK_API_KEY,
+  // END PATCH
   GITHUB_TOKEN,
   GITHUB_REPO = "LimitlessOI/Lumin-LifeOS",
   OLLAMA_ENDPOINT = "http://localhost:11434",
@@ -436,7 +438,7 @@ async function initDatabase() {
 const COUNCIL_MEMBERS = {
     claude: {
         name: "Claude",
-        // PATCH: Changing to the correct, non-hyphenated name that works with the Anthropic API
+        // PATCH: Using correct, non-hyphenated model name
         model: "claude-3-5-sonnet", 
         provider: "anthropic",
         role: "Strategic Oversight & Unintended Consequences",
@@ -457,7 +459,7 @@ const COUNCIL_MEMBERS = {
     },
     gemini: {
         name: "Gemini",
-        // PATCH: Using the supported model
+        // PATCH: Using supported model name
         model: "gemini-2.5-flash", 
         provider: "google",
         role: "Research Analyst & Idea Generator",
