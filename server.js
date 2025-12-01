@@ -2840,7 +2840,55 @@ process.on("SIGINT", async () => {
   await pool.end();
   process.exit(0);
 });
+// ==================== FULL FILE REPLACEMENT ENDPOINT ====================
+// Add this to your server.js ONCE, then never manually edit again!
 
+app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
+  try {
+    const { filePath, fullContent, backup = true } = req.body;
+    
+    if (!filePath || !fullContent) {
+      return res.status(400).json({ error: "filePath and fullContent required" });
+    }
+    
+    // Security: only allow certain files
+    const allowedFiles = [
+      'server.js',
+      'public/overlay/command-center.js',
+      'public/overlay/command-center.html',
+      'package.json'
+    ];
+    
+    if (!allowedFiles.includes(filePath)) {
+      return res.status(403).json({ error: "File not allowed for replacement" });
+    }
+    
+    const fullPath = path.join(__dirname, filePath);
+    
+    // Backup current file if requested
+    if (backup && fs.existsSync(fullPath)) {
+      const backupPath = `${fullPath}.backup.${Date.now()}`;
+      await fs.copyFile(fullPath, backupPath);
+      console.log(`📦 Backed up to: ${backupPath}`);
+    }
+    
+    // Write the ENTIRE new file
+    await fs.writeFile(fullPath, fullContent, 'utf-8');
+    
+    console.log(`✅ Completely replaced: ${filePath}`);
+    
+    res.json({
+      ok: true,
+      message: `File ${filePath} completely replaced`,
+      backup: backup ? `Created backup with timestamp` : 'No backup',
+      size: fullContent.length
+    });
+    
+  } catch (error) {
+    console.error("File replacement error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
 // Start
 start();
 
