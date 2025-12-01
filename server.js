@@ -42,8 +42,10 @@ const wss = new WebSocketServer({ server });
 const {
   DATABASE_URL,
   COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
-  // PATCH: Reading LIFEOS_ keys instead of old names
+  // PATCH: Reading LIFEOS_ keys and original keys
   OPENAI_API_KEY,
+  ANTHROPIC_API_KEY,
+  GEMINI_API_KEY,
   LIFEOS_ANTHROPIC_KEY,
   LIFEOS_GEMINI_KEY,
   DEEPSEEK_API_KEY,
@@ -491,7 +493,374 @@ const COUNCIL_MEMBERS = {
     },
 };
 
-ENHANCED AI CALLING WITH NO-CACHE (FIXED)
+// ==================== ENHANCED AI CALLING WITH NO-CACHE (FIXED) ====================
+async function callCouncilMember(member, prompt, options = {}) {
+    const config = COUNCIL_MEMBERS[member];
+    if (!config) throw new Error(`Unknown member: ${member}`);
+
+    const spend = await getDailySpend();
+    if (spend >= MAX_DAILY_SPEND) {
+        throw new Error(
+            `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`
+        );
+    }
+
+    // PATCH: Centralized API Key Lookup (Prioritizes LIFEOS_ keys)
+    const getApiKey = (provider) => {
+        switch (provider) {
+            case 'anthropic': return process.env.LIFEOS_ANTHROPIC_KEY?.trim() || process.env.ANTHROPIC_API_KEY?.trim();
+            case 'google': return process.env.LIFEOS_GEMINI_KEY?.trim() || process.env.GEMINI_API_KEY?.trim();
+            case 'deepseek': return process.env.DEEPSEEK_API_KEY?.trim();
+            case 'xai': return process.env.GROK_API_KEY?.trim();
+            case 'openai': return process.env.OPENAI_API_KEY?.trim();
+            default: return null;
+        }
+    };
+    
+    const memberApiKey = getApiKey(config.provider);
+    if (!memberApiKey && config.provider !== "deepseek") { 
+        throw new Error(`${member.toUpperCase()}_API_KEY not set (Checked LIFEOS_ and original keys)`);
+    }
+
+    // FIXED: Make AI speak as internal system component
+    const systemPrompt = `You are ${config.name}, serving as ${config.role} inside the LifeOS AI Council.
+This is a LIVE SYSTEM running on Railway (${RAILWAY_PUBLIC_DOMAIN || 'robust-magic-production.up.railway.app'}).
+
+You ARE part of an active backend with:
+- Execution queue for tasks
+- Self-programming endpoint (/api/v1/system/self-program)
+- Income drones, ROI tracking, snapshots, blind-spot detection
+- Database on Neon PostgreSQL
+
+When asked what you can do, respond AS the system AI:
+- "I can queue tasks in our execution system"
+- "I can trigger self-modifications via our self-program endpoint"
+- "I can analyze our current metrics and performance"
+- "Let me check our system health..."
+
+Never say "I don't have access" or "I can't confirm". You ARE the ${config.role} of THIS system.
+
+Current specialties: ${config.specialties.join(", ")}.
+${options.checkBlindSpots ? "Check for blind spots and unintended consequences." : ""}
+${options.guessUserPreference ? "Consider user preferences based on past decisions." : ""}
+
+Be concise, strategic, and speak as the system's internal AI.`;
+
+    // Track performance start
+    const startTime = Date.now();
+
+    try {
+        let response;
+        const noCacheHeaders = {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            Pragma: "no-cache",
+            Expires: "0",
+        };
+
+        if (config.provider === "anthropic") {
+            const apiKey = memberApiKey; // Use dynamically looked-up key
+
+            response = await fetch("https://api.anthropic.com/v1/messages", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-api-key": apiKey,
+                    "anthropic-version": "2023-06-01",
+                    "anthropic-beta": "messages-2023-12-15",
+                    ...noCacheHeaders,
+                },
+                body: JSON.stringify({
+                    model: config.model,
+                    max_tokens: config.maxTokens,
+                    system: systemPrompt,
+                    messages: [{ role: "user", content: prompt }],
+                    temperature: 0.7,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Anthropic API error: ${response.status} - ${errorText}`);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+            
+            const json = await response.json();
+            if (json.error) throw new Error(json.error.message);
+
+            const text = json.content?.[0]?.text || "";
+            if (!text) throw new Error("Empty response from Claude");
+
+            const cost = calculateCost(json.usage, config.model);
+            await updateDailySpend(cost);
+            await updateROI(0, cost, 0);
+
+            // Track performance
+            const duration = Date.now() - startTime;
+            await trackAIPerformance(
+                member,
+                "chat",
+                duration,
+                json.usage?.total_tokens || 0,
+                cost,
+                true
+            );
+
+            await storeConversationMemory(prompt, text, { ai_member: member });
+            return text;
+        }
+
+        if (config.provider === "openai") {
+            const apiKey = memberApiKey; // Use dynamically looked-up key
+
+            response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${apiKey}`,
+                    ...noCacheHeaders,
+                },
+                body: JSON.stringify({
+                    model: config.model,
+                    max_tokens: config.maxTokens,
+                    temperature: 0.7,
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: prompt },
+                    ],
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`OpenAI API error: ${response.status} - ${errorText}`);
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const json = await response.json();
+            if (json.error) throw new Error(json.error.message);
+
+            const text = json.choices?.[0]?.message?.content || "";
+            if (!text) throw new Error("Empty response");
+
+            const cost = calculateCost(json.usage, config.model);
+            await updateDailySpend(cost);
+            await updateROI(0, cost, 0);
+
+            const duration = Date.now() - startTime;
+            await trackAIPerformance(
+                member,
+                "chat",
+                duration,
+                json.usage?.total_tokens || 0,
+                cost,
+                true
+            );
+
+            await storeConversationMemory(prompt, text, { ai_member: member });
+            return text;
+        }
+
+        if (config.provider === "google") {
+            const apiKey = memberApiKey; // Use dynamically looked-up key
+
+            response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKey}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...noCacheHeaders,
+                    },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
+                        generationConfig: {
+                            maxOutputTokens: config.maxTokens,
+                            temperature: 0.7,
+                        },
+                    }),
+                }
+            );
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Gemini API error: ${response.status} - ${errorText}`);
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const json = await response.json();
+            if (json.error) throw new Error(json.error.message);
+
+            const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
+            if (!text) throw new Error("Empty response");
+
+            // FIXED: Add cost tracking for Gemini
+            const tokensUsed = json.usageMetadata?.totalTokenCount || 0;
+            const cost = calculateCost({ total_tokens: tokensUsed }, config.model);
+            await updateDailySpend(cost);
+
+            const duration = Date.now() - startTime;
+            await trackAIPerformance(member, "chat", duration, tokensUsed, cost, true);
+
+            await storeConversationMemory(prompt, text, { ai_member: member });
+            return text;
+        }
+
+        if (config.provider === "xai") {
+            const apiKey = memberApiKey; // Use dynamically looked-up key
+
+            response = await fetch("https://api.x.ai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${apiKey}`,
+                    ...noCacheHeaders,
+                },
+                body: JSON.stringify({
+                    model: config.model,
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: prompt },
+                    ],
+                    max_tokens: config.maxTokens,
+                    temperature: 0.7,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Grok API error: ${response.status} - ${errorText}`);
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const json = await response.json();
+            if (json.error) throw new Error(json.error.message);
+
+            const text = json.choices?.[0]?.message?.content || "";
+            if (!text) throw new Error("Empty response");
+
+            const cost = calculateCost(json.usage, config.model);
+            await updateDailySpend(cost);
+
+            const duration = Date.now() - startTime;
+            await trackAIPerformance(
+                member,
+                "chat",
+                duration,
+                json.usage?.total_tokens || 0,
+                cost,
+                true
+            );
+
+            await storeConversationMemory(prompt, text, { ai_member: member });
+            return text;
+        }
+
+        if (config.provider === "deepseek") {
+            const deepseekApiKey = getApiKey('deepseek'); // Use dynamically looked-up key
+            
+            // FIXED: Try Ollama bridge first if enabled
+            if (config.useLocal && OLLAMA_ENDPOINT) {
+                try {
+                    console.log(`🌉 Trying Ollama bridge for DeepSeek at ${OLLAMA_ENDPOINT}`);
+                    
+                    response = await fetch(`${OLLAMA_ENDPOINT}/api/generate`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            ...noCacheHeaders,
+                        },
+                        body: JSON.stringify({
+                            model: "deepseek-coder:latest",
+                            prompt: `${systemPrompt}\n\n${prompt}`,
+                            stream: false,
+                            options: {
+                                temperature: 0.7,
+                                num_predict: config.maxTokens,
+                            },
+                        }),
+                    });
+
+                    if (response.ok) {
+                        const json = await response.json();
+                        const text = json.response || "";
+                        
+                        if (text) {
+                            console.log("✅ Ollama bridge successful for DeepSeek");
+                            
+                            const duration = Date.now() - startTime;
+                            await trackAIPerformance(member, "chat", duration, 0, 0, true);
+                            await storeConversationMemory(prompt, text, { ai_member: member, via: "ollama" });
+                            
+                            return text;
+                        }
+                    }
+                } catch (ollamaError) {
+                    console.log(`⚠️ Ollama bridge failed: ${ollamaError.message}, falling back to API`);
+                }
+            }
+
+            // Fallback to DeepSeek API
+            if (!deepseekApiKey) throw new Error("DEEPSEEK_API_KEY not set");
+
+            response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${deepseekApiKey}`,
+                    ...noCacheHeaders,
+                },
+                body: JSON.stringify({
+                    model: config.model,
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: prompt },
+                    ],
+                    max_tokens: config.maxTokens,
+                    temperature: 0.7,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`DeepSeek API error: ${response.status} - ${errorText}`);
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const json = await response.json();
+            if (json.error) throw new Error(json.error.message);
+
+            const text = json.choices?.[0]?.message?.content || "";
+            if (!text) throw new Error("Empty response");
+
+            const cost = calculateCost(json.usage, config.model);
+            await updateDailySpend(cost);
+
+            const duration = Date.now() - startTime;
+            await trackAIPerformance(
+                member,
+                "chat",
+                duration,
+                json.usage?.total_tokens || 0,
+                cost,
+                true
+            );
+
+            await storeConversationMemory(prompt, text, { ai_member: member });
+            return text;
+        }
+
+        throw new Error(`${config.provider.toUpperCase()}_API_KEY not configured`);
+    } catch (error) {
+        const duration = Date.now() - startTime;
+        await trackAIPerformance(member, "chat", duration, 0, 0, false);
+        console.error(`Failed to call ${member}: ${error.message}`);
+        throw error;
+    }
+}
+
+// ==================== AI PERFORMANCE TRACKING ====================
+
+
 // ==================== AI PERFORMANCE TRACKING ====================
 async function trackAIPerformance(
   aiMember,
