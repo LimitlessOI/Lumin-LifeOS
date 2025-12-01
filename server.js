@@ -440,8 +440,8 @@ async function initDatabase() {
 const COUNCIL_MEMBERS = {
     claude: {
         name: "Claude",
-        // PATCH: Using correct, non-hyphenated model name
-        model: "claude-3-5-sonnet", 
+        // PATCH: Using DeepSeek's specific version suggestion for stability
+        model: "claude-3-5-sonnet-20241022", 
         provider: "anthropic",
         role: "Strategic Oversight & Unintended Consequences",
         focus: "architecture, long-term planning, risk detection",
@@ -461,7 +461,7 @@ const COUNCIL_MEMBERS = {
     },
     gemini: {
         name: "Gemini",
-        // PATCH: Using supported model name
+        // PATCH: Using the modern, supported model name
         model: "gemini-2.5-flash", 
         provider: "google",
         role: "Research Analyst & Idea Generator",
@@ -494,6 +494,7 @@ const COUNCIL_MEMBERS = {
 };
 
 // ==================== ENHANCED AI CALLING WITH NO-CACHE (FIXED) ====================
+
 async function callCouncilMember(member, prompt, options = {}) {
     const config = COUNCIL_MEMBERS[member];
     if (!config) throw new Error(`Unknown member: ${member}`);
