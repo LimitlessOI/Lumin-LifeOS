@@ -432,59 +432,61 @@ async function initDatabase() {
   }
 }
 
-// ==================== ENHANCED AI COUNCIL MEMBERS (FIXED CLAUDE MODEL) ====================
+// ==================== ENHANCED AI COUNCIL MEMBERS (CRITICAL PATCH) ====================
 const COUNCIL_MEMBERS = {
-  claude: {
-    name: "Claude",
-    model: "claude-3-5-sonnet-latest", // FIXED: Updated to latest model
-    provider: "anthropic",
-    role: "Strategic Oversight & Unintended Consequences",
-    focus: "architecture, long-term planning, risk detection",
-    maxTokens: 4096,
-    tier: "heavy",
-    specialties: ["blind_spots", "consequences", "strategy"],
-  },
-  chatgpt: {
-    name: "ChatGPT",
-    model: "gpt-4o",
-    provider: "openai",
-    role: "Technical Executor & User Preference Learning",
-    focus: "implementation, execution, user patterns",
-    maxTokens: 4096,
-    tier: "heavy",
-    specialties: ["execution", "user_modeling", "patterns"],
-  },
-  gemini: {
-    name: "Gemini",
-    model: "gemini-2.0-flash-exp",
-    provider: "google",
-    role: "Research Analyst & Idea Generator",
-    focus: "data analysis, creative solutions, daily ideas",
-    maxTokens: 8192,
-    tier: "medium",
-    specialties: ["analysis", "creativity", "ideation"],
-  },
-  deepseek: {
-    name: "DeepSeek",
-    model: "deepseek-coder",
-    provider: "deepseek",
-    role: "Infrastructure & Sandbox Testing",
-    focus: "optimization, performance, safe testing",
-    maxTokens: 4096,
-    tier: "medium",
-    specialties: ["infrastructure", "testing", "performance"],
-    useLocal: DEEPSEEK_BRIDGE_ENABLED === "true", // Enable Ollama bridge
-  },
-  grok: {
-    name: "Grok",
-    model: "grok-beta",
-    provider: "xai",
-    role: "Innovation Scout & Reality Check",
-    focus: "novel approaches, risk assessment, blind spots",
-    maxTokens: 4096,
-    tier: "light",
-    specialties: ["innovation", "reality_check", "risk"],
-  },
+    claude: {
+        name: "Claude",
+        // PATCH: Changed model name from -latest to supported name
+        model: "claude-3.5-sonnet", 
+        provider: "anthropic",
+        role: "Strategic Oversight & Unintended Consequences",
+        focus: "architecture, long-term planning, risk detection",
+        maxTokens: 4096,
+        tier: "heavy",
+        specialties: ["blind_spots", "consequences", "strategy"],
+    },
+    chatgpt: {
+        name: "ChatGPT",
+        model: "gpt-4o",
+        provider: "openai",
+        role: "Technical Executor & User Preference Learning",
+        focus: "implementation, execution, user patterns",
+        maxTokens: 4096,
+        tier: "heavy",
+        specialties: ["execution", "user_modeling", "patterns"],
+    },
+    gemini: {
+        name: "Gemini",
+        // PATCH: Changed model name from 2.0-flash-exp to supported 2.5-flash
+        model: "gemini-2.5-flash", 
+        provider: "google",
+        role: "Research Analyst & Idea Generator",
+        focus: "data analysis, creative solutions, daily ideas",
+        maxTokens: 8192,
+        tier: "medium",
+        specialties: ["analysis", "creativity", "ideation"],
+    },
+    deepseek: {
+        name: "DeepSeek",
+        model: "deepseek-coder",
+        provider: "deepseek",
+        role: "Infrastructure & Sandbox Testing",
+        focus: "optimization, performance, safe testing",
+        maxTokens: 4096,
+        tier: "medium",
+        specialties: ["infrastructure", "testing", "performance"],
+        useLocal: DEEPSEEK_BRIDGE_ENABLED === "true", 
+    },
+    grok: {
+        name: "Grok",
+        model: "grok-beta",
+        provider: "xai",
+        role: "Innovation Scout & Reality Check",
+        focus: "novel approaches, risk assessment, blind spots",
+        maxTokens: 4096,
+        tier: "light",
+        specialties: ["innovation", "reality_check", "risk"],
+    },
 };
 
 // ==================== ENHANCED AI CALLING WITH NO-CACHE (FIXED) ====================
