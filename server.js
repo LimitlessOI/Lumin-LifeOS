@@ -521,8 +521,7 @@ async function callCouncilMember(member, prompt, options = {}) {
                        process.env.DEEPSEEK_API_KEY?.trim() ||
                        process.env.DEEPSEEK_API_KEY?.trim();
             case 'xai': 
-                return process.env.GROK_API_KEY?.trim() || 
-                       "placeholder"; // Allow system to continue
+               return process.env.GROK_API_KEY?.trim();
             case 'openai': 
                 return process.env.OPENAI_API_KEY?.trim();
             default: 
@@ -1650,7 +1649,7 @@ function calculateCost(usage, model = "gpt-4o-mini") {
     "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
     "gemini-2.5-flash": { input: 0.0001, output: 0.0004 }, // Updated Gemini model
     "deepseek-coder": { input: 0.0001, output: 0.0003 },
-    "grok-beta": { input: 0.005, output: 0.015 },
+    "grok-4-latest": { input: 0.005, output: 0.015 },
   };
   const price = prices[model] || prices["gpt-4o-mini"];
   const promptTokens = usage?.prompt_tokens || usage?.input_tokens || usage?.total_tokens || 0;
