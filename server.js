@@ -481,9 +481,9 @@ const COUNCIL_MEMBERS = {
         specialties: ["infrastructure", "testing", "performance"],
         useLocal: DEEPSEEK_BRIDGE_ENABLED === "true", 
     },
-        grok: {
+         grok: {
         name: "Grok",
-        model: "grok-4-latest",
+        model: "grok-2-1212",  // CHANGED to working model
         provider: "xai",
         role: "Innovation Scout & Reality Check",
         focus: "novel approaches, risk assessment, blind spots",
@@ -1649,7 +1649,7 @@ function calculateCost(usage, model = "gpt-4o-mini") {
     "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
     "gemini-2.5-flash": { input: 0.0001, output: 0.0004 }, // Updated Gemini model
     "deepseek-coder": { input: 0.0001, output: 0.0003 },
-    "grok-4-latest": { input: 0.005, output: 0.015 },
+    "grok-2-1212": { input: 0.005, output: 0.015 },
   };
   const price = prices[model] || prices["gpt-4o-mini"];
   const promptTokens = usage?.prompt_tokens || usage?.input_tokens || usage?.total_tokens || 0;
