@@ -1646,10 +1646,9 @@ function updateROI(
 function calculateCost(usage, model = "gpt-4o-mini") {
   const prices = {
     "claude-3-5-sonnet-latest": { input: 0.003, output: 0.015 },
-    "claude-3-5-sonnet-20241022": { input: 0.003, output: 0.015 },
     "gpt-4o": { input: 0.0025, output: 0.01 },
     "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
-    "gemini-2.0-flash-exp": { input: 0.0001, output: 0.0004 },
+    "gemini-2.5-flash": { input: 0.0001, output: 0.0004 }, // Updated Gemini model
     "deepseek-coder": { input: 0.0001, output: 0.0003 },
     "grok-beta": { input: 0.005, output: 0.015 },
   };
