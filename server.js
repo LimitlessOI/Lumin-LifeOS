@@ -481,9 +481,9 @@ const COUNCIL_MEMBERS = {
         specialties: ["infrastructure", "testing", "performance"],
         useLocal: DEEPSEEK_BRIDGE_ENABLED === "true", 
     },
-    grok: {
+        grok: {
         name: "Grok",
-        model: "grok-beta",
+        model: "grok-4-latest",
         provider: "xai",
         role: "Innovation Scout & Reality Check",
         focus: "novel approaches, risk assessment, blind spots",
