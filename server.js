@@ -64,7 +64,8 @@ const {
   RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app"
 } = process.env;
 
-let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "").trim() || null;
+let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "")
+  .trim() || null;
 
 // ==================== SECURITY: CORS WITH ORIGIN PINNING ====================
 const ALLOWED_ORIGINS_LIST = ALLOWED_ORIGINS
@@ -379,6 +380,7 @@ async function initDatabase() {
       amount DECIMAL(15,2) NOT NULL,
       description TEXT,
       category TEXT,
+      external_id TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
@@ -403,6 +405,18 @@ async function initDatabase() {
       council_approved BOOLEAN,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
+
+    // Ensure external_id support + uniqueness for revenue events
+    await pool.query(`
+      ALTER TABLE financial_ledger
+      ADD COLUMN IF NOT EXISTS external_id TEXT
+    `);
+
+    await pool.query(`
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_financial_ledger_external
+      ON financial_ledger(external_id)
+      WHERE external_id IS NOT NULL
+    `);
 
     // Create indexes
     await pool.query(
@@ -438,113 +452,121 @@ async function initDatabase() {
 
 // ==================== ENHANCED AI COUNCIL MEMBERS (CRITICAL PATCH) ====================
 const COUNCIL_MEMBERS = {
-        claude: {
-        name: "Claude",
-        // ✅ FIXED: Correct Anthropic model name
-        model: "claude-3-5-sonnet-latest", 
-        provider: "anthropic",
-        role: "Strategic Oversight & Unintended Consequences",
-        focus: "architecture, long-term planning, risk detection",
-        maxTokens: 4096,
-        tier: "heavy",
-        specialties: ["blind_spots", "consequences", "strategy"],
-    },
-    chatgpt: {
-        name: "ChatGPT",
-        model: "gpt-4o",
-        provider: "openai",
-        role: "Technical Executor & User Preference Learning",
-        focus: "implementation, execution, user patterns",
-        maxTokens: 4096,
-        tier: "heavy",
-        specialties: ["execution", "user_modeling", "patterns"],
-    },
-    gemini: {
-        name: "Gemini",
-        // PATCH: Using the modern, supported model name
-        model: "gemini-2.5-flash", 
-        provider: "google",
-        role: "Research Analyst & Idea Generator",
-        focus: "data analysis, creative solutions, daily ideas",
-        maxTokens: 8192,
-        tier: "medium",
-        specialties: ["analysis", "creativity", "ideation"],
-    },
-    deepseek: {
-        name: "DeepSeek",
-        model: "deepseek-coder",
-        provider: "deepseek",
-        role: "Infrastructure & Sandbox Testing",
-        focus: "optimization, performance, safe testing",
-        maxTokens: 4096,
-        tier: "medium",
-        specialties: ["infrastructure", "testing", "performance"],
-        useLocal: DEEPSEEK_BRIDGE_ENABLED === "true", 
-    },
-         grok: {
-        name: "Grok",
-        model: "grok-2-1212",  // CHANGED to working model
-        provider: "xai",
-        role: "Innovation Scout & Reality Check",
-        focus: "novel approaches, risk assessment, blind spots",
-        maxTokens: 4096,
-        tier: "light",
-        specialties: ["innovation", "reality_check", "risk"],
-    },
+  claude: {
+    name: "Claude",
+    // ✅ FIXED: Correct Anthropic model name
+    model: "claude-3-5-sonnet-latest",
+    provider: "anthropic",
+    role: "Strategic Oversight & Unintended Consequences",
+    focus: "architecture, long-term planning, risk detection",
+    maxTokens: 4096,
+    tier: "heavy",
+    specialties: ["blind_spots", "consequences", "strategy"],
+  },
+  chatgpt: {
+    name: "ChatGPT",
+    model: "gpt-4o",
+    provider: "openai",
+    role: "Technical Executor & User Preference Learning",
+    focus: "implementation, execution, user patterns",
+    maxTokens: 4096,
+    tier: "heavy",
+    specialties: ["execution", "user_modeling", "patterns"],
+  },
+  gemini: {
+    name: "Gemini",
+    // PATCH: Using the modern, supported model name
+    model: "gemini-2.5-flash",
+    provider: "google",
+    role: "Research Analyst & Idea Generator",
+    focus: "data analysis, creative solutions, daily ideas",
+    maxTokens: 8192,
+    tier: "medium",
+    specialties: ["analysis", "creativity", "ideation"],
+  },
+  deepseek: {
+    name: "DeepSeek",
+    model: "deepseek-coder",
+    provider: "deepseek",
+    role: "Infrastructure & Sandbox Testing",
+    focus: "optimization, performance, safe testing",
+    maxTokens: 4096,
+    tier: "medium",
+    specialties: ["infrastructure", "testing", "performance"],
+    useLocal: DEEPSEEK_BRIDGE_ENABLED === "true",
+  },
+  grok: {
+    name: "Grok",
+    model: "grok-2-1212", // CHANGED to working model
+    provider: "xai",
+    role: "Innovation Scout & Reality Check",
+    focus: "novel approaches, risk assessment, blind spots",
+    maxTokens: 4096,
+    tier: "light",
+    specialties: ["innovation", "reality_check", "risk"],
+  },
 };
 
 // ==================== ENHANCED AI CALLING WITH NO-CACHE (FIXED) ====================
 
 async function callCouncilMember(member, prompt, options = {}) {
-    const config = COUNCIL_MEMBERS[member];
-    if (!config) throw new Error(`Unknown member: ${member}`);
+  const config = COUNCIL_MEMBERS[member];
+  if (!config) throw new Error(`Unknown member: ${member}`);
 
-    const spend = await getDailySpend();
-    if (spend >= MAX_DAILY_SPEND) {
-        throw new Error(
-            `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`
+  const spend = await getDailySpend();
+  if (spend >= MAX_DAILY_SPEND) {
+    throw new Error(
+      `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(
+        4
+      )}`
+    );
+  }
+
+  // 🔧 FIXED: Robust API Key Lookup (checks multiple variations)
+  const getApiKey = (provider) => {
+    switch (provider) {
+      case "anthropic":
+        return (
+          process.env.LIFEOS_ANTHROPIC_KEY?.trim() ||
+          process.env.ANTHROPIC_API_KEY?.trim()
         );
+      case "google":
+        return (
+          process.env.LIFEOS_GEMINI_KEY?.trim() ||
+          process.env.GEMINI_API_KEY?.trim()
+        );
+      case "deepseek":
+        // Check ALL possible spellings
+        return (
+          process.env.Deepseek_API_KEY?.trim() ||
+          process.env.DEEPSEEK_API_KEY?.trim() ||
+          process.env.DEEPSEEK_API_KEY?.trim()
+        );
+      case "xai":
+        return process.env.GROK_API_KEY?.trim();
+      case "openai":
+        return process.env.OPENAI_API_KEY?.trim();
+      default:
+        return null;
     }
+  };
 
-    // 🔧 FIXED: Robust API Key Lookup (checks multiple variations)
-    const getApiKey = (provider) => {
-        switch (provider) {
-            case 'anthropic': 
-                return process.env.LIFEOS_ANTHROPIC_KEY?.trim() || 
-                       process.env.ANTHROPIC_API_KEY?.trim();
-            case 'google': 
-                return process.env.LIFEOS_GEMINI_KEY?.trim() || 
-                       process.env.GEMINI_API_KEY?.trim();
-            case 'deepseek': 
-                // Check ALL possible spellings
-                return process.env.Deepseek_API_KEY?.trim() || 
-                       process.env.DEEPSEEK_API_KEY?.trim() ||
-                       process.env.DEEPSEEK_API_KEY?.trim();
-            case 'xai': 
-               return process.env.GROK_API_KEY?.trim();
-            case 'openai': 
-                return process.env.OPENAI_API_KEY?.trim();
-            default: 
-                return null;
-        }
-    };
-    
-    const memberApiKey = getApiKey(config.provider);
-    
-    // 🚨 ONLY fail if it's a critical AI and has no key
-    if (!memberApiKey) {
-        if (config.provider === "anthropic" || config.provider === "openai") {
-            throw new Error(`${member.toUpperCase()}_API_KEY not set`);
-        } else {
-            // For non-critical AIs, just log and skip
-            console.log(`⚠️ ${member} API key not found, skipping...`);
-            throw new Error(`${member} unavailable (no API key)`);
-        }
+  const memberApiKey = getApiKey(config.provider);
+
+  // 🚨 ONLY fail if it's a critical AI and has no key
+  if (!memberApiKey) {
+    if (config.provider === "anthropic" || config.provider === "openai") {
+      throw new Error(`${member.toUpperCase()}_API_KEY not set`);
+    } else {
+      // For non-critical AIs, just log and skip
+      console.log(`⚠️ ${member} API key not found, skipping...`);
+      throw new Error(`${member} unavailable (no API key)`);
     }
+  }
 
-    // FIXED: Make AI speak as internal system component
-    const systemPrompt = `You are ${config.name}, serving as ${config.role} inside the LifeOS AI Council.
-This is a LIVE SYSTEM running on Railway (${RAILWAY_PUBLIC_DOMAIN || 'robust-magic-production.up.railway.app'}).
+  // FIXED: Make AI speak as internal system component
+  const systemPrompt = `You are ${config.name}, serving as ${config.role} inside the LifeOS AI Council.
+This is a LIVE SYSTEM running on Railway (${RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app"}).
 
 You ARE part of an active backend with:
 - Execution queue for tasks
@@ -566,316 +588,321 @@ ${options.guessUserPreference ? "Consider user preferences based on past decisio
 
 Be concise, strategic, and speak as the system's internal AI.`;
 
-    // Track performance start
-    const startTime = Date.now();
+  // Track performance start
+  const startTime = Date.now();
 
-    try {
-        let response;
-        const noCacheHeaders = {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            Pragma: "no-cache",
-            Expires: "0",
-        };
+  try {
+    let response;
+    const noCacheHeaders = {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      Pragma: "no-cache",
+      Expires: "0",
+    };
 
-        if (config.provider === "anthropic") {
-            const apiKey = memberApiKey; // Use dynamically looked-up key
+    if (config.provider === "anthropic") {
+      const apiKey = memberApiKey; // Use dynamically looked-up key
 
-            response = await fetch("https://api.anthropic.com/v1/messages", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-api-key": apiKey,
-                    "anthropic-version": "2023-06-01",
-                    "anthropic-beta": "messages-2023-12-15",
-                    ...noCacheHeaders,
-                },
-                body: JSON.stringify({
-                    model: config.model,
-                    max_tokens: config.maxTokens,
-                    system: systemPrompt,
-                    messages: [{ role: "user", content: prompt }],
-                    temperature: 0.7,
-                }),
-            });
+      response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+          "anthropic-beta": "messages-2023-12-15",
+          ...noCacheHeaders,
+        },
+        body: JSON.stringify({
+          model: config.model,
+          max_tokens: config.maxTokens,
+          system: systemPrompt,
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.7,
+        }),
+      });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`Anthropic API error: ${response.status} - ${errorText}`);
-                throw new Error(`HTTP ${response.status}: ${errorText}`);
-            }
-            
-            const json = await response.json();
-            if (json.error) throw new Error(json.error.message);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Anthropic API error: ${response.status} - ${errorText}`);
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
 
-            const text = json.content?.[0]?.text || "";
-            if (!text) throw new Error("Empty response from Claude");
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
 
-            const cost = calculateCost(json.usage, config.model);
-            await updateDailySpend(cost);
-            await updateROI(0, cost, 0);
+      const text = json.content?.[0]?.text || "";
+      if (!text) throw new Error("Empty response from Claude");
 
-            // Track performance
-            const duration = Date.now() - startTime;
-            await trackAIPerformance(
-                member,
-                "chat",
-                duration,
-                json.usage?.total_tokens || 0,
-                cost,
-                true
-            );
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      await updateROI(0, cost, 0);
 
-            await storeConversationMemory(prompt, text, { ai_member: member });
-            return text;
-        }
+      // Track performance
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(
+        member,
+        "chat",
+        duration,
+        json.usage?.total_tokens || 0,
+        cost,
+        true
+      );
 
-        if (config.provider === "openai") {
-            const apiKey = memberApiKey; // Use dynamically looked-up key
-
-            response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${apiKey}`,
-                    ...noCacheHeaders,
-                },
-                body: JSON.stringify({
-                    model: config.model,
-                    max_tokens: config.maxTokens,
-                    temperature: 0.7,
-                    messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: prompt },
-                    ],
-                }),
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`OpenAI API error: ${response.status} - ${errorText}`);
-                throw new Error(`HTTP ${response.status}`);
-            }
-            
-            const json = await response.json();
-            if (json.error) throw new Error(json.error.message);
-
-            const text = json.choices?.[0]?.message?.content || "";
-            if (!text) throw new Error("Empty response");
-
-            const cost = calculateCost(json.usage, config.model);
-            await updateDailySpend(cost);
-            await updateROI(0, cost, 0);
-
-            const duration = Date.now() - startTime;
-            await trackAIPerformance(
-                member,
-                "chat",
-                duration,
-                json.usage?.total_tokens || 0,
-                cost,
-                true
-            );
-
-            await storeConversationMemory(prompt, text, { ai_member: member });
-            return text;
-        }
-
-        if (config.provider === "google") {
-            const apiKey = memberApiKey; // Use dynamically looked-up key
-
-            response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKey}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        ...noCacheHeaders,
-                    },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
-                        generationConfig: {
-                            maxOutputTokens: config.maxTokens,
-                            temperature: 0.7,
-                        },
-                    }),
-                }
-            );
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`Gemini API error: ${response.status} - ${errorText}`);
-                throw new Error(`HTTP ${response.status}`);
-            }
-            
-            const json = await response.json();
-            if (json.error) throw new Error(json.error.message);
-
-            const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
-            if (!text) throw new Error("Empty response");
-
-            // FIXED: Add cost tracking for Gemini
-            const tokensUsed = json.usageMetadata?.totalTokenCount || 0;
-            const cost = calculateCost({ total_tokens: tokensUsed }, config.model);
-            await updateDailySpend(cost);
-
-            const duration = Date.now() - startTime;
-            await trackAIPerformance(member, "chat", duration, tokensUsed, cost, true);
-
-            await storeConversationMemory(prompt, text, { ai_member: member });
-            return text;
-        }
-
-        if (config.provider === "xai") {
-            const apiKey = memberApiKey; // Use dynamically looked-up key
-
-            response = await fetch("https://api.x.ai/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${apiKey}`,
-                    ...noCacheHeaders,
-                },
-                body: JSON.stringify({
-                    model: config.model,
-                    messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: prompt },
-                    ],
-                    max_tokens: config.maxTokens,
-                    temperature: 0.7,
-                }),
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`Grok API error: ${response.status} - ${errorText}`);
-                throw new Error(`HTTP ${response.status}`);
-            }
-            
-            const json = await response.json();
-            if (json.error) throw new Error(json.error.message);
-
-            const text = json.choices?.[0]?.message?.content || "";
-            if (!text) throw new Error("Empty response");
-
-            const cost = calculateCost(json.usage, config.model);
-            await updateDailySpend(cost);
-
-            const duration = Date.now() - startTime;
-            await trackAIPerformance(
-                member,
-                "chat",
-                duration,
-                json.usage?.total_tokens || 0,
-                cost,
-                true
-            );
-
-            await storeConversationMemory(prompt, text, { ai_member: member });
-            return text;
-        }
-
-        if (config.provider === "deepseek") {
-            const deepseekApiKey = getApiKey('deepseek'); // Use dynamically looked-up key
-            
-            // FIXED: Try Ollama bridge first if enabled
-            if (config.useLocal && OLLAMA_ENDPOINT) {
-                try {
-                    console.log(`🌉 Trying Ollama bridge for DeepSeek at ${OLLAMA_ENDPOINT}`);
-                    
-                    response = await fetch(`${OLLAMA_ENDPOINT}/api/generate`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            ...noCacheHeaders,
-                        },
-                        body: JSON.stringify({
-                            model: "deepseek-coder:latest",
-                            prompt: `${systemPrompt}\n\n${prompt}`,
-                            stream: false,
-                            options: {
-                                temperature: 0.7,
-                                num_predict: config.maxTokens,
-                            },
-                        }),
-                    });
-
-                    if (response.ok) {
-                        const json = await response.json();
-                        const text = json.response || "";
-                        
-                        if (text) {
-                            console.log("✅ Ollama bridge successful for DeepSeek");
-                            
-                            const duration = Date.now() - startTime;
-                            await trackAIPerformance(member, "chat", duration, 0, 0, true);
-                            await storeConversationMemory(prompt, text, { ai_member: member, via: "ollama" });
-                            
-                            return text;
-                        }
-                    }
-                } catch (ollamaError) {
-                    console.log(`⚠️ Ollama bridge failed: ${ollamaError.message}, falling back to API`);
-                }
-            }
-
-            // Fallback to DeepSeek API
-            if (!deepseekApiKey) throw new Error("DEEPSEEK_API_KEY not set");
-
-            response = await fetch("https://api.deepseek.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${deepseekApiKey}`,
-                    ...noCacheHeaders,
-                },
-                body: JSON.stringify({
-                    model: config.model,
-                    messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: prompt },
-                    ],
-                    max_tokens: config.maxTokens,
-                    temperature: 0.7,
-                }),
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`DeepSeek API error: ${response.status} - ${errorText}`);
-                throw new Error(`HTTP ${response.status}`);
-            }
-            
-            const json = await response.json();
-            if (json.error) throw new Error(json.error.message);
-
-            const text = json.choices?.[0]?.message?.content || "";
-            if (!text) throw new Error("Empty response");
-
-            const cost = calculateCost(json.usage, config.model);
-            await updateDailySpend(cost);
-
-            const duration = Date.now() - startTime;
-            await trackAIPerformance(
-                member,
-                "chat",
-                duration,
-                json.usage?.total_tokens || 0,
-                cost,
-                true
-            );
-
-            await storeConversationMemory(prompt, text, { ai_member: member });
-            return text;
-        }
-
-        throw new Error(`${config.provider.toUpperCase()}_API_KEY not configured`);
-    } catch (error) {
-        const duration = Date.now() - startTime;
-        await trackAIPerformance(member, "chat", duration, 0, 0, false);
-        console.error(`Failed to call ${member}: ${error.message}`);
-        throw error;
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
     }
+
+    if (config.provider === "openai") {
+      const apiKey = memberApiKey; // Use dynamically looked-up key
+
+      response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+          ...noCacheHeaders,
+        },
+        body: JSON.stringify({
+          model: config.model,
+          max_tokens: config.maxTokens,
+          temperature: 0.7,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`OpenAI API error: ${response.status} - ${errorText}`);
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+      await updateROI(0, cost, 0);
+
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(
+        member,
+        "chat",
+        duration,
+        json.usage?.total_tokens || 0,
+        cost,
+        true
+      );
+
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    if (config.provider === "google") {
+      const apiKey = memberApiKey; // Use dynamically looked-up key
+
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...noCacheHeaders,
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
+            generationConfig: {
+              maxOutputTokens: config.maxTokens,
+              temperature: 0.7,
+            },
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Gemini API error: ${response.status} - ${errorText}`);
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      if (!text) throw new Error("Empty response");
+
+      // FIXED: Add cost tracking for Gemini
+      const tokensUsed = json.usageMetadata?.totalTokenCount || 0;
+      const cost = calculateCost({ total_tokens: tokensUsed }, config.model);
+      await updateDailySpend(cost);
+
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(member, "chat", duration, tokensUsed, cost, true);
+
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    if (config.provider === "xai") {
+      const apiKey = memberApiKey; // Use dynamically looked-up key
+
+      response = await fetch("https://api.x.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+          ...noCacheHeaders,
+        },
+        body: JSON.stringify({
+          model: config.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt },
+          ],
+          max_tokens: config.maxTokens,
+          temperature: 0.7,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Grok API error: ${response.status} - ${errorText}`);
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(
+        member,
+        "chat",
+        duration,
+        json.usage?.total_tokens || 0,
+        cost,
+        true
+      );
+
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    if (config.provider === "deepseek") {
+      const deepseekApiKey = getApiKey("deepseek"); // Use dynamically looked-up key
+
+      // FIXED: Try Ollama bridge first if enabled
+      if (config.useLocal && OLLAMA_ENDPOINT) {
+        try {
+          console.log(`🌉 Trying Ollama bridge for DeepSeek at ${OLLAMA_ENDPOINT}`);
+
+          response = await fetch(`${OLLAMA_ENDPOINT}/api/generate`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...noCacheHeaders,
+            },
+            body: JSON.stringify({
+              model: "deepseek-coder:latest",
+              prompt: `${systemPrompt}\n\n${prompt}`,
+              stream: false,
+              options: {
+                temperature: 0.7,
+                num_predict: config.maxTokens,
+              },
+            }),
+          });
+
+          if (response.ok) {
+            const json = await response.json();
+            const text = json.response || "";
+
+            if (text) {
+              console.log("✅ Ollama bridge successful for DeepSeek");
+
+              const duration = Date.now() - startTime;
+              await trackAIPerformance(member, "chat", duration, 0, 0, true);
+              await storeConversationMemory(prompt, text, {
+                ai_member: member,
+                via: "ollama",
+              });
+
+              return text;
+            }
+          }
+        } catch (ollamaError) {
+          console.log(
+            `⚠️ Ollama bridge failed: ${ollamaError.message}, falling back to API`
+          );
+        }
+      }
+
+      // Fallback to DeepSeek API
+      if (!deepseekApiKey) throw new Error("DEEPSEEK_API_KEY not set");
+
+      response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${deepseekApiKey}`,
+          ...noCacheHeaders,
+        },
+        body: JSON.stringify({
+          model: config.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt },
+          ],
+          max_tokens: config.maxTokens,
+          temperature: 0.7,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`DeepSeek API error: ${response.status} - ${errorText}`);
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(
+        member,
+        "chat",
+        duration,
+        json.usage?.total_tokens || 0,
+        cost,
+        true
+      );
+
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    throw new Error(`${config.provider.toUpperCase()}_API_KEY not configured`);
+  } catch (error) {
+    const duration = Date.now() - startTime;
+    await trackAIPerformance(member, "chat", duration, 0, 0, false);
+    console.error(`Failed to call ${member}: ${error.message}`);
+    throw error;
+  }
 }
 
 // ==================== AI PERFORMANCE TRACKING ====================
@@ -1218,14 +1245,14 @@ async function sandboxTest(code, testDescription) {
     // Create temporary test file
     const testPath = path.join(__dirname, "sandbox", `${testId}.js`);
     await fsPromises.mkdir(path.join(__dirname, "sandbox"), { recursive: true });
-    
+
     // Wrap code in ES module format
     const wrappedCode = `
       // Sandbox test: ${testDescription}
       ${code}
       console.log('Test completed successfully');
     `;
-    
+
     await fsPromises.writeFile(testPath, wrappedCode);
 
     // Run in isolated environment with limited permissions
@@ -1234,14 +1261,17 @@ async function sandboxTest(code, testDescription) {
     let errorMessage = null;
 
     try {
-      const { stdout, stderr } = await execAsync(`node --no-warnings ${testPath}`, {
-        timeout: 5000,
-        cwd: __dirname,
-        env: { ...process.env, NODE_ENV: 'test' }, // Limit environment
-      });
+      const { stdout, stderr } = await execAsync(
+        `node --no-warnings ${testPath}`,
+        {
+          timeout: 5000,
+          cwd: __dirname,
+          env: { ...process.env, NODE_ENV: "test" }, // Limit environment
+        }
+      );
 
       testResult = stdout || "Test passed";
-      success = !stderr || stderr.includes('Warning');
+      success = !stderr || stderr.includes("Warning");
       if (stderr && !success) errorMessage = stderr;
     } catch (error) {
       testResult = "Test failed";
@@ -1475,9 +1505,10 @@ async function conductEnhancedConsensus(proposalId) {
     const approvalRate = totalVotes > 0 ? yesVotes / totalVotes : 0;
     const hasHighRisk = consequences.some((c) => c.risk === "high");
     const sandboxPassed = sandboxResult ? sandboxResult.success : true;
-    
+
     // FIXED: Lower threshold if only 1-2 AIs available
-    const approvalThreshold = activeMembers <= 2 ? 0.5 : (hasHighRisk ? 0.8 : 0.6667);
+    const approvalThreshold =
+      activeMembers <= 2 ? 0.5 : hasHighRisk ? 0.8 : 0.6667;
 
     const approved = approvalRate >= approvalThreshold && sandboxPassed;
 
@@ -1652,9 +1683,10 @@ function calculateCost(usage, model = "gpt-4o-mini") {
     "grok-2-1212": { input: 0.005, output: 0.015 },
   };
   const price = prices[model] || prices["gpt-4o-mini"];
-  const promptTokens = usage?.prompt_tokens || usage?.input_tokens || usage?.total_tokens || 0;
+  const promptTokens =
+    usage?.prompt_tokens || usage?.input_tokens || usage?.total_tokens || 0;
   const completionTokens = usage?.completion_tokens || usage?.output_tokens || 0;
-  
+
   return (
     (promptTokens * price.input) / 1000 +
     (completionTokens * price.output) / 1000
@@ -1673,10 +1705,7 @@ async function getDailySpend(date = dayjs().format("YYYY-MM-DD")) {
   }
 }
 
-async function updateDailySpend(
-  amount,
-  date = dayjs().format("YYYY-MM-DD")
-) {
+async function updateDailySpend(amount, date = dayjs().format("YYYY-MM-DD")) {
   try {
     const current = await getDailySpend(date);
     const newSpend = current + amount;
@@ -1929,10 +1958,10 @@ class SelfModificationEngine {
       );
 
       const protection = await isFileProtected(filePath);
-      
+
       // FIXED: Only require consensus if multiple AIs are available
       const activeAIs = await this.countActiveAIs();
-      
+
       if (protection.protected && protection.requires_council && activeAIs > 1) {
         const proposalId = await createProposal(
           `Self-Modify: ${filePath}`,
@@ -2052,7 +2081,10 @@ async function triggerDeployment(modifiedFiles = []) {
     // Push to GitHub to trigger Railway deployment
     for (const file of modifiedFiles) {
       try {
-        const content = await fsPromises.readFile(path.join(__dirname, file), "utf-8");
+        const content = await fsPromises.readFile(
+          path.join(__dirname, file),
+          "utf-8"
+        );
         await commitToGitHub(
           file,
           content,
@@ -2203,23 +2235,56 @@ let incomeDroneSystem = new IncomeDroneSystem();
 
 // ==================== FINANCIAL DASHBOARD ====================
 class FinancialDashboard {
-  async recordTransaction(type, amount, description, category = "general") {
+  async recordTransaction(
+    type,
+    amount,
+    description,
+    category = "general",
+    externalId = null
+  ) {
     try {
-      const txId = `tx_${Date.now()}`;
+      const txId =
+        externalId && externalId.trim()
+          ? `ext_${externalId.trim()}`
+          : `tx_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+      // If we have an externalId, check if it already exists
+      if (externalId) {
+        const existing = await pool.query(
+          `SELECT id FROM financial_ledger WHERE external_id = $1`,
+          [externalId]
+        );
+        if (existing.rows.length > 0) {
+          // Already recorded – return the existing txId and skip
+          return {
+            txId: `ext_${externalId.trim()}`,
+            type,
+            amount: 0,
+            description: `[duplicate ignored] ${description}`,
+            category,
+            date: new Date().toISOString(),
+            duplicate: true,
+          };
+        }
+      }
+
       await pool.query(
-        `INSERT INTO financial_ledger (tx_id, type, amount, description, category, created_at)
-         VALUES ($1, $2, $3, $4, $5, now())`,
-        [txId, type, amount, description, category]
+        `INSERT INTO financial_ledger (tx_id, type, amount, description, category, external_id, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, now())`,
+        [txId, type, amount, description, category, externalId]
       );
+
       return {
         txId,
         type,
         amount,
         description,
         category,
+        externalId,
         date: new Date().toISOString(),
       };
     } catch (error) {
+      console.error("Financial ledger error:", error.message);
       return null;
     }
   }
@@ -2258,6 +2323,45 @@ class FinancialDashboard {
 }
 
 const financialDashboard = new FinancialDashboard();
+
+// ==================== REVENUE EVENT HELPER (LEDGER + DRONES + ROI) ====================
+async function recordRevenueEvent({
+  source = "unknown",
+  eventId = null,
+  amount,
+  currency = "USD",
+  droneId = null,
+  description = "",
+  category = "general",
+}) {
+  const cleanAmount = Number(amount);
+  if (!Number.isFinite(cleanAmount) || cleanAmount <= 0) {
+    throw new Error("Invalid amount for revenue event");
+  }
+
+  const desc =
+    description ||
+    `Revenue from ${source}${eventId ? ` (event ${eventId})` : ""}`;
+
+  // 1) Ledger (with external_id for dedupe)
+  const tx = await financialDashboard.recordTransaction(
+    "income",
+    cleanAmount,
+    desc,
+    category || source,
+    eventId
+  );
+
+  // 2) Drones (this also updates ROI via updateROI)
+  if (droneId) {
+    await incomeDroneSystem.recordRevenue(droneId, cleanAmount);
+  } else {
+    // If no drone, still update ROI directly
+    updateROI(cleanAmount, 0, 0);
+  }
+
+  return { tx, amount: cleanAmount, currency, source, droneId };
+}
 
 // ==================== UTILITY FUNCTIONS ====================
 function broadcastToAll(message) {
@@ -2307,8 +2411,7 @@ app.get("/healthz", async (req, res) => {
       websockets: activeConnections.size,
       daily_spend: spend,
       max_daily_spend: MAX_DAILY_SPEND,
-      spend_percentage:
-        ((spend / MAX_DAILY_SPEND) * 100).toFixed(1) + "%",
+      spend_percentage: ((spend / MAX_DAILY_SPEND) * 100).toFixed(1) + "%",
       roi: roiTracker,
       drones: droneStatus,
       tasks: taskStatus,
@@ -2318,7 +2421,8 @@ app.get("/healthz", async (req, res) => {
       daily_ideas: dailyIdeas.length,
       blind_spots_detected: systemMetrics.blindSpotsDetected,
       snapshots_available: systemSnapshots.length,
-      railway_url: RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app",
+      railway_url:
+        RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app",
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -2505,7 +2609,8 @@ app.post("/api/v1/architect/micro", requireKey, async (req, res) => {
 
     if (typeof microQuery === "string" && microQuery.includes("|")) {
       const parts = microQuery.split("|");
-      const operation = parts.find((p) => p.startsWith("OP:"))?.slice(3) || "G";
+      const operation =
+        parts.find((p) => p.startsWith("OP:"))?.slice(3) || "G";
       const data =
         parts
           .find((p) => p.startsWith("D:"))
@@ -2626,10 +2731,7 @@ app.post("/api/v1/rollback/:snapshotId", requireKey, async (req, res) => {
 app.post("/api/v1/drones/deploy", requireKey, async (req, res) => {
   try {
     const { type = "affiliate", expectedRevenue = 500 } = req.body;
-    const droneId = await incomeDroneSystem.deployDrone(
-      type,
-      expectedRevenue
-    );
+    const droneId = await incomeDroneSystem.deployDrone(type, expectedRevenue);
     res.json({ ok: true, droneId });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -2659,16 +2761,68 @@ app.get("/api/v1/dashboard", requireKey, async (req, res) => {
 app.get("/api/v1/roi/status", requireKey, async (req, res) => {
   try {
     const dashboard = await financialDashboard.getDashboard();
-    res.json({ 
-      ok: true, 
+    res.json({
+      ok: true,
       roi: {
         ...roiTracker,
         daily_spend: roiTracker.daily_ai_cost,
-        ratio: roiTracker.roi_ratio
+        ratio: roiTracker.roi_ratio,
       },
-      dashboard 
+      dashboard,
     });
   } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Revenue events -> ledger + drones + ROI
+app.post("/api/v1/revenue/event", requireKey, async (req, res) => {
+  try {
+    const {
+      source = "manual",
+      event_id,
+      amount,
+      currency = "USD",
+      drone_id,
+      description = "",
+      category = "general",
+      meta = {},
+    } = req.body || {};
+
+    if (amount == null) {
+      return res.status(400).json({ ok: false, error: "amount is required" });
+    }
+
+    const result = await recordRevenueEvent({
+      source,
+      eventId: event_id || null,
+      amount,
+      currency,
+      droneId: drone_id || null,
+      description,
+      category,
+    });
+
+    const roi = roiTracker;
+    const droneStatus = await incomeDroneSystem.getStatus();
+
+    res.json({
+      ok: true,
+      revenue: {
+        source,
+        event_id: event_id || null,
+        amount: result.amount,
+        currency,
+        drone_id: drone_id || null,
+        tx: result.tx,
+        meta,
+      },
+      roi,
+      drones: droneStatus,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Revenue event error:", error.message);
     res.status(500).json({ ok: false, error: error.message });
   }
 });
@@ -2684,9 +2838,7 @@ app.post("/api/v1/proposal/create", requireKey, async (req, res) => {
 
     const proposalId = await createProposal(title, description, proposedBy);
     if (!proposalId)
-      return res
-        .status(500)
-        .json({ error: "Failed to create proposal" });
+      return res.status(500).json({ error: "Failed to create proposal" });
 
     res.json({ ok: true, proposalId });
   } catch (error) {
@@ -2763,42 +2915,49 @@ app.get("/overlay/index.html", (req, res) => {
 // ==================== SELF-PROGRAMMING ENDPOINT (FIXED VERSION) ====================
 app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
   try {
-    const { instruction, priority = "medium", filePath, search, replace, autoDeploy = false } = req.body;
+    const {
+      instruction,
+      priority = "medium",
+      filePath,
+      search,
+      replace,
+      autoDeploy = false,
+    } = req.body;
 
     // Direct mode with filePath/search/replace
     if (filePath && search && replace) {
       console.log(`🤖 [SELF-PROGRAM] Direct modification: ${filePath}`);
-      
+
       const fullPath = path.join(__dirname, filePath);
-      
+
       // Check file exists
       if (!fs.existsSync(fullPath)) {
         return res.status(404).json({ error: `File not found: ${filePath}` });
       }
-      
+
       // Read current content
-      const originalContent = await readFile(fullPath, 'utf-8');
-      
+      const originalContent = await readFile(fullPath, "utf-8");
+
       // Check if search string exists
       if (!originalContent.includes(search)) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: "Search string not found in file",
-          search: search.substring(0, 100) 
+          search: search.substring(0, 100),
         });
       }
-      
+
       // Perform replacement
       const newContent = originalContent.replace(search, replace);
-      
+
       // Backup original
       const backupPath = `${fullPath}.backup.${Date.now()}`;
       await writeFile(backupPath, originalContent);
-      
+
       // Write new content
       await writeFile(fullPath, newContent);
-      
+
       // If JS file, verify syntax
-      if (filePath.endsWith('.js')) {
+      if (filePath.endsWith(".js")) {
         try {
           await execAsync(`node --check ${fullPath}`);
           console.log("✅ Syntax check passed");
@@ -2806,39 +2965,45 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
           // Rollback on syntax error
           await writeFile(fullPath, originalContent);
           await fsPromises.unlink(backupPath);
-          return res.status(400).json({ 
+          return res.status(400).json({
             error: "Syntax error in modified code, rolled back",
-            details: error.message 
+            details: error.message,
           });
         }
       }
-      
+
       // Auto-deploy if requested
       let deployed = false;
       if (autoDeploy && GITHUB_TOKEN) {
         try {
-          await commitToGitHub(filePath, newContent, instruction || 'Self-modification');
+          await commitToGitHub(
+            filePath,
+            newContent,
+            instruction || "Self-modification"
+          );
           deployed = true;
         } catch (error) {
           console.log(`⚠️ Deploy failed: ${error.message}`);
         }
       }
-      
+
       res.json({
         ok: true,
         filePath,
         modified: true,
-        backupPath: backupPath.split('/').pop(),
+        backupPath: backupPath.split("/").pop(),
         deployed,
-        message: `Successfully modified ${filePath}`
+        message: `Successfully modified ${filePath}`,
       });
-      
+
       return;
     }
 
     // Instruction mode
     if (!instruction) {
-      return res.status(400).json({ error: "Instruction or (filePath + search + replace) required" });
+      return res.status(400).json({
+        error: "Instruction or (filePath + search + replace) required",
+      });
     }
 
     console.log(
@@ -2947,65 +3112,68 @@ function extractFileChanges(codeResponse) {
 app.post("/api/v1/dev/commit", requireKey, async (req, res) => {
   try {
     const { path: filePath, content, message } = req.body;
-    
+
     if (!filePath || !content) {
       return res.status(400).json({ error: "Path and content required" });
     }
 
     await commitToGitHub(filePath, content, message || `Update ${filePath}`);
-    
+
     res.json({
       ok: true,
       committed: filePath,
-      message: message || `Update ${filePath}`
+      message: message || `Update ${filePath}`,
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
 });
 
-// ==================== FULL FILE REPLACEMENT ENDPOINT (ALREADY EXISTS!) ====================
+// ==================== FULL FILE REPLACEMENT ENDPOINT ====================
 app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
   try {
     const { filePath, fullContent, backup = true } = req.body;
-    
+
     if (!filePath || !fullContent) {
-      return res.status(400).json({ error: "filePath and fullContent required" });
+      return res
+        .status(400)
+        .json({ error: "filePath and fullContent required" });
     }
-    
+
     // Security: only allow certain files
     const allowedFiles = [
-      'server.js',
-      'public/overlay/command-center.js',
-      'public/overlay/command-center.html',
-      'package.json'
+      "server.js",
+      "public/overlay/command-center.js",
+      "public/overlay/command-center.html",
+      "package.json",
     ];
-    
+
     if (!allowedFiles.includes(filePath)) {
-      return res.status(403).json({ error: "File not allowed for replacement" });
+      return res
+        .status(403)
+        .json({ error: "File not allowed for replacement" });
     }
-    
+
     const fullPath = path.join(__dirname, filePath);
-    
+
     // Backup current file if requested
     if (backup && fs.existsSync(fullPath)) {
       const backupPath = `${fullPath}.backup.${Date.now()}`;
       await fsPromises.copyFile(fullPath, backupPath);
       console.log(`📦 Backed up to: ${backupPath}`);
     }
-    
+
     // Write the ENTIRE new file
-    await fsPromises.writeFile(fullPath, fullContent, 'utf-8');
-    
+    await fsPromises.writeFile(fullPath, fullContent, "utf-8");
+
     console.log(`✅ Completely replaced: ${filePath}`);
-    
+
     res.json({
       ok: true,
       message: `File ${filePath} completely replaced`,
-      backup: backup ? `Created backup with timestamp` : 'No backup',
-      size: fullContent.length
+      backup: backup ? `Created backup with timestamp` : "No backup",
+      size: fullContent.length,
     });
-    
   } catch (error) {
     console.error("File replacement error:", error);
     res.status(500).json({ ok: false, error: error.message });
@@ -3027,8 +3195,7 @@ wss.on("connection", (ws) => {
       type: "connection",
       status: "connected",
       clientId,
-      message:
-        "🎼 LifeOS v26.1 FIXED - Consensus Protocol Ready",
+      message: "🎼 LifeOS v26.1 FIXED - Consensus Protocol Ready",
       systemMetrics,
       features: {
         consensusProtocol: true,
@@ -3078,9 +3245,7 @@ wss.on("connection", (ws) => {
         }
       }
     } catch (error) {
-      ws.send(
-        JSON.stringify({ type: "error", error: error.message })
-      );
+      ws.send(JSON.stringify({ type: "error", error: error.message }));
     }
   });
 
@@ -3134,10 +3299,7 @@ async function start() {
     await incomeDroneSystem.deployDrone("content", 300);
 
     // Schedule continuous improvement
-    setInterval(
-      () => continuousSelfImprovement(),
-      30 * 60 * 1000
-    ); // Every 30 minutes
+    setInterval(() => continuousSelfImprovement(), 30 * 60 * 1000); // Every 30 minutes
     setTimeout(() => continuousSelfImprovement(), 120000); // After 2 minutes
 
     // Schedule daily idea generation
@@ -3145,10 +3307,7 @@ async function start() {
     setTimeout(() => generateDailyIdeas(), 60000); // After 1 minute
 
     // Schedule AI rotation check
-    setInterval(
-      () => rotateAIsBasedOnPerformance(),
-      60 * 60 * 1000
-    ); // Every hour
+    setInterval(() => rotateAIsBasedOnPerformance(), 60 * 60 * 1000); // Every hour
 
     // Create initial snapshot
     await createSystemSnapshot("System startup");
@@ -3156,21 +3315,15 @@ async function start() {
     server.listen(PORT, HOST, () => {
       console.log(`\n🌐 SERVER ONLINE: http://${HOST}:${PORT}`);
       console.log(`📊 Health: http://${HOST}:${PORT}/healthz`);
+      console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
+      console.log(`🤖 Self-Program: POST /api/v1/system/self-program`);
+      console.log(`🔄 Replace File: POST /api/v1/system/replace-file`);
       console.log(
-        `🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`
+        `🌐 Railway URL: https://${
+          RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app"
+        }`
       );
-      console.log(
-        `🤖 Self-Program: POST /api/v1/system/self-program`
-      );
-      console.log(
-        `🔄 Replace File: POST /api/v1/system/replace-file`
-      );
-      console.log(
-        `🌐 Railway URL: https://${RAILWAY_PUBLIC_DOMAIN || 'robust-magic-production.up.railway.app'}`
-      );
-      console.log(
-        "\n✅ SYSTEM READY - ALL FIXES APPLIED!"
-      );
+      console.log("\n✅ SYSTEM READY - ALL FIXES APPLIED!");
       console.log("=".repeat(100) + "\n");
     });
   } catch (error) {
