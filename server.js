@@ -438,10 +438,10 @@ async function initDatabase() {
 
 // ==================== ENHANCED AI COUNCIL MEMBERS (CRITICAL PATCH) ====================
 const COUNCIL_MEMBERS = {
-    claude: {
+        claude: {
         name: "Claude",
-        // PATCH: Using DeepSeek's specific version suggestion for stability
-        model: "claude-3-5-sonnet-20241022", 
+        // ✅ FIXED: Correct Anthropic model name
+        model: "claude-3-5-sonnet-latest", 
         provider: "anthropic",
         role: "Strategic Oversight & Unintended Consequences",
         focus: "architecture, long-term planning, risk detection",
