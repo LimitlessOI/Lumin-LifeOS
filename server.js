@@ -506,21 +506,41 @@ async function callCouncilMember(member, prompt, options = {}) {
         );
     }
 
-    // PATCH: Centralized API Key Lookup (Prioritizes LIFEOS_ keys)
+    // 🔧 FIXED: Robust API Key Lookup (checks multiple variations)
     const getApiKey = (provider) => {
         switch (provider) {
-            case 'anthropic': return process.env.LIFEOS_ANTHROPIC_KEY?.trim() || process.env.ANTHROPIC_API_KEY?.trim();
-            case 'google': return process.env.LIFEOS_GEMINI_KEY?.trim() || process.env.GEMINI_API_KEY?.trim();
-            case 'deepseek': return process.env.DEEPSEEK_API_KEY?.trim();
-            case 'xai': return process.env.GROK_API_KEY?.trim();
-            case 'openai': return process.env.OPENAI_API_KEY?.trim();
-            default: return null;
+            case 'anthropic': 
+                return process.env.LIFEOS_ANTHROPIC_KEY?.trim() || 
+                       process.env.ANTHROPIC_API_KEY?.trim();
+            case 'google': 
+                return process.env.LIFEOS_GEMINI_KEY?.trim() || 
+                       process.env.GEMINI_API_KEY?.trim();
+            case 'deepseek': 
+                // Check ALL possible spellings
+                return process.env.Deepseek_API_KEY?.trim() || 
+                       process.env.DEEPSEEK_API_KEY?.trim() ||
+                       process.env.DEEPSEEK_API_KEY?.trim();
+            case 'xai': 
+                return process.env.GROK_API_KEY?.trim() || 
+                       "placeholder"; // Allow system to continue
+            case 'openai': 
+                return process.env.OPENAI_API_KEY?.trim();
+            default: 
+                return null;
         }
     };
     
     const memberApiKey = getApiKey(config.provider);
-    if (!memberApiKey && config.provider !== "deepseek") { 
-        throw new Error(`${member.toUpperCase()}_API_KEY not set (Checked LIFEOS_ and original keys)`);
+    
+    // 🚨 ONLY fail if it's a critical AI and has no key
+    if (!memberApiKey) {
+        if (config.provider === "anthropic" || config.provider === "openai") {
+            throw new Error(`${member.toUpperCase()}_API_KEY not set`);
+        } else {
+            // For non-critical AIs, just log and skip
+            console.log(`⚠️ ${member} API key not found, skipping...`);
+            throw new Error(`${member} unavailable (no API key)`);
+        }
     }
 
     // FIXED: Make AI speak as internal system component
