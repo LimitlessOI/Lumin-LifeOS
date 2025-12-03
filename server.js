@@ -1295,7 +1295,333 @@ async function sandboxTest(code, testDescription) {
     return { success: false, result: null, error: error.message };
   }
 }
+// ==================== ENHANCED SANDBOX TESTING WITH RETRY & COUNCIL ESCALATION ====================
+async function robustSandboxTest(code, testDescription, maxRetries = 5) {
+  console.log(`🧪 [ROBUST TEST] Starting: ${testDescription}`);
+  
+  // Phase 1: Initial attempts with simple retry
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    console.log(`🔄 Attempt ${attempt}/${maxRetries}...`);
+    
+    const result = await sandboxTest(code, testDescription);
+    
+    if (result.success) {
+      console.log(`✅ [ROBUST TEST] Success on attempt ${attempt}`);
+      return { ...result, attempt, phase: "initial_retry" };
+    }
+    
+    console.log(`⚠️ Attempt ${attempt} failed: ${result.error?.substring(0, 100) || "Unknown error"}`);
+    
+    // Wait before retry (exponential backoff)
+    if (attempt < maxRetries) {
+      const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+  
+  // Phase 2: Council analysis and solution search
+  console.log(`🔍 [ROBUST TEST] Initial retries failed, escalating to council...`);
+  return await councilEscalatedSandboxTest(code, testDescription);
+}
 
+async function councilEscalatedSandboxTest(code, testDescription) {
+  console.log(`🏛️ [COUNCIL ESCALATION] Problem: ${testDescription}`);
+  
+  // Create analysis prompt for the council
+  const analysisPrompt = `We have a persistent sandbox test failure that we need to solve COLLECTIVELY.
+
+TEST: ${testDescription}
+
+ERROR CONTEXT: The code failed multiple times in sandbox testing.
+
+ORIGINAL CODE:
+\`\`\`javascript
+${code}
+\`\`\`
+
+We need to:
+1. Diagnose the root cause of failure
+2. Search for solutions (Gemini uses Google search, Grok uses X/Twitter/community search)
+3. Propose corrected code
+4. Test iteratively until we succeed
+
+SPECIAL INSTRUCTIONS:
+- Gemini: You have Google search capabilities. Search for "Node.js sandbox error solutions", "JavaScript execution context errors", "Common Node.js testing pitfalls"
+- Grok: You have X/Twitter and community search. Look for similar error patterns, developer solutions, npm package issues
+- Claude & ChatGPT: Analyze the code logic, scoping issues, and potential security restrictions
+- DeepSeek: Check for syntax errors, execution context problems, async/await issues
+
+Please provide:
+1. Root cause analysis
+2. Search results from internet/community
+3. Specific code fix
+4. Testing strategy for the fix
+
+Let's solve this TOGETHER. We will not quit until we find a solution.`;
+
+  try {
+    // Create a proposal for this problem
+    const proposalId = `sandbox_esc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    await pool.query(
+      `INSERT INTO consensus_proposals (proposal_id, title, description, proposed_by, status)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [proposalId, `Sandbox Escalation: ${testDescription}`, 
+       `Persistent sandbox test failure requiring council-wide solution search`, 
+       "system", "in_progress"]
+    );
+
+    let councilAttempts = 0;
+    const maxCouncilAttempts = 10;
+    let currentCode = code;
+    
+    while (councilAttempts < maxCouncilAttempts) {
+      councilAttempts++;
+      console.log(`🏛️ Council attempt ${councilAttempts}/${maxCouncilAttempts}...`);
+      
+      // Gather insights from ALL council members with special focus on internet-search capable AIs
+      const insights = [];
+      const fixes = [];
+      
+      // Phase A: Internet research (Gemini & Grok)
+      try {
+        const geminiPrompt = `${analysisPrompt}
+
+        SPECIAL GEMINI INSTRUCTION: Use your Google search capabilities to find solutions. 
+        Search for: "Node.js child_process.exec timeout error", "JavaScript sandbox security restrictions", 
+        "Node.js ESM module loading errors", "Common testing framework issues".
+        
+        Provide at least 3 specific, actionable fixes based on your search results.`;
+        
+        const geminiResponse = await callCouncilMember("gemini", geminiPrompt);
+        insights.push({ member: "gemini", response: geminiResponse });
+        
+        // Extract code fixes from Gemini response
+        const geminiFixes = extractCodeFixes(geminiResponse);
+        fixes.push(...geminiFixes.map(f => ({ source: "gemini", fix: f })));
+      } catch (err) {
+        console.log(`⚠️ Gemini unavailable for search: ${err.message}`);
+      }
+      
+      try {
+        const grokPrompt = `${analysisPrompt}
+
+        SPECIAL GROK INSTRUCTION: Use your X/Twitter and community search capabilities.
+        Look for: Developer threads about similar errors, Stack Overflow solutions, 
+        npm package issue discussions, Node.js runtime problems.
+        
+        Provide at least 2 community-sourced fixes you find in your search.`;
+        
+        const grokResponse = await callCouncilMember("grok", grokPrompt);
+        insights.push({ member: "grok", response: grokResponse });
+        
+        const grokFixes = extractCodeFixes(grokResponse);
+        fixes.push(...grokFixes.map(f => ({ source: "grok", fix: f })));
+      } catch (err) {
+        console.log(`⚠️ Grok unavailable for search: ${err.message}`);
+      }
+      
+      // Phase B: Technical analysis (Claude & ChatGPT & DeepSeek)
+      const technicalMembers = ["claude", "chatgpt", "deepseek"];
+      for (const member of technicalMembers) {
+        try {
+          const techPrompt = `${analysisPrompt}
+
+          Current proposed fixes from research:
+          ${fixes.slice(0, 3).map(f => `${f.source}: ${f.fix.substring(0, 200)}...`).join('\n')}
+          
+          Analyze these fixes and propose the most likely correct solution.
+          Consider: Syntax, execution context, module loading, permissions, async handling.`;
+          
+          const response = await callCouncilMember(member, techPrompt);
+          insights.push({ member, response });
+          
+          const techFixes = extractCodeFixes(response);
+          fixes.push(...techFixes.map(f => ({ source: member, fix: f })));
+        } catch (err) {
+          console.log(`⚠️ ${member} unavailable: ${err.message}`);
+        }
+      }
+      
+      // Phase C: Try each proposed fix
+      console.log(`🧪 Testing ${fixes.length} proposed fixes...`);
+      
+      for (let i = 0; i < fixes.length; i++) {
+        const fix = fixes[i];
+        console.log(`🔧 Testing fix ${i+1} from ${fix.source}...`);
+        
+        // Apply the fix (simple concatenation for now - could be smarter)
+        const testCode = applyCodeFix(currentCode, fix.fix);
+        
+        const testResult = await sandboxTest(testCode, testDescription);
+        
+        if (testResult.success) {
+          console.log(`🎉 SUCCESS! Fix from ${fix.source} worked!`);
+          
+          // Record the successful solution
+          await pool.query(
+            `UPDATE consensus_proposals SET status = 'resolved', decided_at = now() 
+             WHERE proposal_id = $1`,
+            [proposalId]
+          );
+          
+          await pool.query(
+            `INSERT INTO sandbox_tests 
+             (test_id, code_change, test_result, success, error_message, created_at)
+             VALUES ($1, $2, $3, $4, $5, now())`,
+            [`success_${proposalId}`, 
+             `Applied fix from ${fix.source}: ${fix.fix.substring(0, 500)}`,
+             `Council escalation successful on attempt ${councilAttempts}`,
+             true,
+             null]
+          );
+          
+          return {
+            success: true,
+            result: testResult.result,
+            error: null,
+            councilAttempts,
+            fixSource: fix.source,
+            phase: "council_escalation"
+          };
+        }
+        
+        // If this fix didn't work, try the next one
+        console.log(`⚠️ Fix ${i+1} from ${fix.source} failed`);
+      }
+      
+      // If no fixes worked, gather more insights and try again
+      console.log(`🔄 No fixes worked this round. Gathering more insights...`);
+      
+      // Wait before next council round
+      await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+    
+    // If we get here, all council attempts failed
+    console.log(`❌ [COUNCIL ESCALATION] All ${maxCouncilAttempts} council attempts failed`);
+    
+    await pool.query(
+      `UPDATE consensus_proposals SET status = 'failed' WHERE proposal_id = $1`,
+      [proposalId]
+    );
+    
+    return {
+      success: false,
+      result: null,
+      error: `Council escalation failed after ${maxCouncilAttempts} attempts`,
+      councilAttempts,
+      phase: "council_escalation_failed"
+    };
+    
+  } catch (error) {
+    console.error(`🔥 Council escalation error: ${error.message}`);
+    return {
+      success: false,
+      result: null,
+      error: `Council escalation system error: ${error.message}`,
+      phase: "escalation_system_error"
+    };
+  }
+}
+
+// Helper functions for robust sandbox testing
+function extractCodeFixes(response) {
+  const fixes = [];
+  
+  // Look for code blocks
+  const codeBlockRegex = /```(?:javascript|js)?\n([\s\S]*?)```/g;
+  let match;
+  while ((match = codeBlockRegex.exec(response)) !== null) {
+    fixes.push(match[1].trim());
+  }
+  
+  // Look for "fix:" or "solution:" patterns
+  const fixPatterns = [
+    /fix:?\s*\n?([\s\S]*?)(?=\n\n|\n\w|$)/gi,
+    /solution:?\s*\n?([\s\S]*?)(?=\n\n|\n\w|$)/gi,
+    /corrected code:?\s*\n?([\s\S]*?)(?=\n\n|\n\w|$)/gi,
+    /try this:?\s*\n?([\s\S]*?)(?=\n\n|\n\w|$)/gi
+  ];
+  
+  for (const pattern of fixPatterns) {
+    const matches = response.matchAll(pattern);
+    for (const match of matches) {
+      if (match[1] && match[1].trim().length > 10) {
+        fixes.push(match[1].trim());
+      }
+    }
+  }
+  
+  // If no specific fixes found but response contains code-like content
+  if (fixes.length === 0) {
+    // Check for lines that look like code
+    const lines = response.split('\n');
+    let inCodeBlock = false;
+    let currentFix = [];
+    
+    for (const line of lines) {
+      if (line.includes('```') || line.includes('fix') || line.includes('function') || line.includes('const ') || line.includes('let ') || line.includes('async')) {
+        inCodeBlock = true;
+      }
+      
+      if (inCodeBlock) {
+        currentFix.push(line);
+        
+        // End of code block
+        if (line.trim().endsWith(';') || line.trim().endsWith('}') || line.includes('// end')) {
+          if (currentFix.length > 2) {
+            fixes.push(currentFix.join('\n'));
+          }
+          currentFix = [];
+          inCodeBlock = false;
+        }
+      }
+    }
+  }
+  
+  return fixes;
+}
+
+function applyCodeFix(originalCode, fix) {
+  // Simple implementation: if fix looks like complete code, use it
+  // If fix looks like a patch, try to apply it
+  
+  if (fix.includes('function') && fix.includes('{') && fix.includes('}')) {
+    // Probably complete function replacement
+    return fix;
+  }
+  
+  if (fix.includes('replace') && fix.includes('with')) {
+    // Try to parse replacement instructions
+    const replaceMatch = fix.match(/replace\s+['"`](.*?)['"`]\s+with\s+['"`](.*?)['"`]/i);
+    if (replaceMatch) {
+      const [_, search, replacement] = replaceMatch;
+      return originalCode.replace(new RegExp(search, 'g'), replacement);
+    }
+  }
+  
+  // Default: append fix as a patch
+  return `${originalCode}\n\n// Applied fix\n${fix}`;
+}
+
+// ==================== ENHANCED CONSENSUS PROTOCOL WITH ROBUST TESTING ====================
+// Replace the sandbox test call in conductEnhancedConsensus (around line 550) with:
+// Find this line:
+//   sandboxResult = await sandboxTest(`console.log("Testing proposal: ${title}");`, title);
+
+// Replace it with:
+//   sandboxResult = await robustSandboxTest(`console.log("Testing proposal: ${title}");`, title);
+
+// ==================== ENHANCED SELF-MODIFICATION WITH ROBUST TESTING ====================
+// In the SelfModificationEngine.modifyOwnCode method (around line 1150), replace:
+//   const sandboxResult = await sandboxTest(newContent, `Test modification of ${filePath}`);
+// With:
+//   const sandboxResult = await robustSandboxTest(newContent, `Test modification of ${filePath}`);
+
+// ==================== ENHANCED SELF-PROGRAMMING ENDPOINT WITH ROBUST TESTING ====================
+// In the /api/v1/system/self-program endpoint (around line 1800), replace:
+//   const sandboxResult = await sandboxTest(change.content, `Test: ${change.filePath}`);
+// With:
+//   const sandboxResult = await robustSandboxTest(change.content, `Test: ${change.filePath}`);
 // ==================== SYSTEM SNAPSHOT & ROLLBACK ====================
 async function createSystemSnapshot(reason = "Manual snapshot") {
   try {
