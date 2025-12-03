@@ -3036,7 +3036,7 @@ Be specific with file paths and exact code logic.`;
 
 Consider these blind spots: ${blindSpots.slice(0, 5).join(", ")}
 
-Now write COMPLETE, WORKING code. Format each file like:
+Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND CONTAINS NO TRIPLE BACKTICKS. Format each file like:
 ===FILE:path/to/file.js===
 [complete code here]
 ===END===`;
