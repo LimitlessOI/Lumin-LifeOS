@@ -455,7 +455,7 @@ const COUNCIL_MEMBERS = {
   claude: {
     name: "Claude",
     // ✅ FIXED: Correct Anthropic model name
-    model: "claude-3-sonnet-20240229",
+    model: "claude-2.1",
     provider: "anthropic",
     role: "Strategic Oversight & Unintended Consequences",
     focus: "architecture, long-term planning, risk detection",
