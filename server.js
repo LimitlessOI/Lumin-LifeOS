@@ -1,15 +1,15 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                                                                                  ║
- * ║        🎼 LIFEOS v26.1 VERIFIED - COMPLETE CONSENSUS & SELF-HEALING SYSTEM         ║
- * ║        Railway + Neon PostgreSQL + GitHub + Full AI Council Protocol            ║
+ * ║        🎼 LIFEOS v26.1 (NO CLAUDE) - CONSENSUS & SELF-HEALING SYSTEM             ║
+ * ║        Railway + Neon PostgreSQL + GitHub + Multi-AI Council + Stripe           ║
  * ║                                                                                  ║
  * ║  ✅ Consensus Protocol         ✅ Blind Spot Detection                          ║
  * ║  ✅ Daily Idea Generation      ✅ AI Rotation & Evaluation                      ║
  * ║  ✅ Sandbox Testing            ✅ Rollback Capabilities                         ║
  * ║  ✅ No-Cache API Calls         ✅ Continuous Memory                             ║
- * ║  ✅ FIXED: Claude Connection   ✅ FIXED: Self-Programming                       ║
- * ║  ✅ FIXED: Ollama Bridge       ✅ FIXED: File Operations                        ║
+ * ║  ✅ OpenAI / Gemini / DeepSeek / Grok Council (no Claude)                      ║
+ * ║  ✅ Stripe Revenue Sync        ✅ Income Drones / ROI Tracking                  ║
  * ║                                                                                  ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
@@ -42,7 +42,6 @@ const wss = new WebSocketServer({ server });
 const {
   DATABASE_URL,
   COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
-  // PATCH: Reading LIFEOS_ keys and original keys
   OPENAI_API_KEY,
   ANTHROPIC_API_KEY,
   GEMINI_API_KEY,
@@ -50,7 +49,6 @@ const {
   LIFEOS_GEMINI_KEY,
   DEEPSEEK_API_KEY,
   GROK_API_KEY,
-  // END PATCH
   GITHUB_TOKEN,
   GITHUB_REPO = "LimitlessOI/Lumin-LifeOS",
   OLLAMA_ENDPOINT = "http://localhost:11434",
@@ -61,11 +59,32 @@ const {
   PORT = 8080,
   MAX_DAILY_SPEND = 50.0,
   NODE_ENV = "production",
-  RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app"
+  RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app",
+  // Stripe config
+  STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_SECRET, // reserved for future webhook use
 } = process.env;
 
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "")
   .trim() || null;
+
+// Stripe client (lazy-loaded so the app can still boot if stripe is not installed)
+let stripeClient = null;
+async function getStripeClient() {
+  if (!STRIPE_SECRET_KEY) return null;
+  if (stripeClient) return stripeClient;
+  try {
+    const StripeModule = await import("stripe");
+    const StripeCtor = StripeModule.default || StripeModule;
+    stripeClient = new StripeCtor(STRIPE_SECRET_KEY, {
+      apiVersion: "2024-06-20",
+    });
+    return stripeClient;
+  } catch (err) {
+    console.error("Stripe initialization error:", err.message);
+    return null;
+  }
+}
 
 // ==================== SECURITY: CORS WITH ORIGIN PINNING ====================
 const ALLOWED_ORIGINS_LIST = ALLOWED_ORIGINS
@@ -78,7 +97,7 @@ const ALLOWED_ORIGINS_LIST = ALLOWED_ORIGINS
     "http://127.0.0.1:8080",
   ]);
 
-// NEW: robust same-origin helper for Railway / proxies
+// robust same-origin helper for Railway / proxies
 function getRequestHost(req) {
   const forwarded = (req.headers["x-forwarded-host"] || "")
     .toString()
@@ -94,7 +113,6 @@ function isSameOrigin(req) {
   try {
     const originUrl = new URL(origin);
     const reqHost = getRequestHost(req);
-    // Compare host:port only, ignore protocol (http vs https)
     return originUrl.host.toLowerCase() === reqHost;
   } catch {
     return false;
@@ -109,7 +127,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // SECURE CORS Middleware with NO-CACHE headers
 app.use((req, res, next) => {
-  // PREVENT CACHING - Force fresh data every time
+  // PREVENT CACHING
   res.header(
     "Cache-Control",
     "no-store, no-cache, must-revalidate, proxy-revalidate"
@@ -198,7 +216,6 @@ const systemMetrics = {
 // ==================== DATABASE INITIALIZATION ====================
 async function initDatabase() {
   try {
-    // Original tables
     await pool.query(`CREATE TABLE IF NOT EXISTS conversation_memory (
       id SERIAL PRIMARY KEY,
       memory_id TEXT UNIQUE NOT NULL,
@@ -268,7 +285,6 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
-    // New tables for enhanced features
     await pool.query(`CREATE TABLE IF NOT EXISTS blind_spots (
       id SERIAL PRIMARY KEY,
       detected_by VARCHAR(50),
@@ -406,7 +422,6 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
-    // Ensure external_id support + uniqueness for revenue events
     await pool.query(`
       ALTER TABLE financial_ledger
       ADD COLUMN IF NOT EXISTS external_id TEXT
@@ -418,7 +433,6 @@ async function initDatabase() {
       WHERE external_id IS NOT NULL
     `);
 
-    // Create indexes
     await pool.query(
       `CREATE INDEX IF NOT EXISTS idx_memory_id ON conversation_memory(memory_id)`
     );
@@ -435,7 +449,6 @@ async function initDatabase() {
       `CREATE INDEX IF NOT EXISTS idx_daily_ideas ON daily_ideas(status, created_at)`
     );
 
-    // Insert protected files
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('server.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
@@ -443,26 +456,15 @@ async function initDatabase() {
       ('public/overlay/command-center.html', 'Control panel', true, true, true)
       ON CONFLICT (file_path) DO NOTHING`);
 
-    console.log("✅ Database schema initialized (v26.1 FIXED)");
+    console.log("✅ Database schema initialized (v26.1 - no Claude)");
   } catch (error) {
     console.error("❌ DB init error:", error.message);
     throw error;
   }
 }
 
-// ==================== ENHANCED AI COUNCIL MEMBERS (CRITICAL PATCH) ====================
+// ==================== ENHANCED AI COUNCIL MEMBERS (NO CLAUDE) ====================
 const COUNCIL_MEMBERS = {
-  claude: {
-    name: "Claude",
-    // ✅ FIXED: Correct Anthropic model name
-    model: "claude-2.1",
-    provider: "anthropic",
-    role: "Strategic Oversight & Unintended Consequences",
-    focus: "architecture, long-term planning, risk detection",
-    maxTokens: 4096,
-    tier: "heavy",
-    specialties: ["blind_spots", "consequences", "strategy"],
-  },
   chatgpt: {
     name: "ChatGPT",
     model: "gpt-4o",
@@ -475,7 +477,6 @@ const COUNCIL_MEMBERS = {
   },
   gemini: {
     name: "Gemini",
-    // PATCH: Using the modern, supported model name
     model: "gemini-2.5-flash",
     provider: "google",
     role: "Research Analyst & Idea Generator",
@@ -497,7 +498,7 @@ const COUNCIL_MEMBERS = {
   },
   grok: {
     name: "Grok",
-    model: "grok-2-1212", // CHANGED to working model
+    model: "grok-2-1212",
     provider: "xai",
     role: "Innovation Scout & Reality Check",
     focus: "novel approaches, risk assessment, blind spots",
@@ -507,8 +508,7 @@ const COUNCIL_MEMBERS = {
   },
 };
 
-// ==================== ENHANCED AI CALLING WITH NO-CACHE (FIXED) ====================
-
+// ==================== ENHANCED AI CALLING WITH NO-CACHE ====================
 async function callCouncilMember(member, prompt, options = {}) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown member: ${member}`);
@@ -516,13 +516,10 @@ async function callCouncilMember(member, prompt, options = {}) {
   const spend = await getDailySpend();
   if (spend >= MAX_DAILY_SPEND) {
     throw new Error(
-      `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(
-        4
-      )}`
+      `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`
     );
   }
 
-  // 🔧 FIXED: Robust API Key Lookup (checks multiple variations)
   const getApiKey = (provider) => {
     switch (provider) {
       case "anthropic":
@@ -536,7 +533,6 @@ async function callCouncilMember(member, prompt, options = {}) {
           process.env.GEMINI_API_KEY?.trim()
         );
       case "deepseek":
-        // Check ALL possible spellings
         return (
           process.env.Deepseek_API_KEY?.trim() ||
           process.env.DEEPSEEK_API_KEY?.trim() ||
@@ -553,18 +549,15 @@ async function callCouncilMember(member, prompt, options = {}) {
 
   const memberApiKey = getApiKey(config.provider);
 
-  // 🚨 ONLY fail if it's a critical AI and has no key
   if (!memberApiKey) {
-    if (config.provider === "anthropic" || config.provider === "openai") {
+    if (config.provider === "openai") {
       throw new Error(`${member.toUpperCase()}_API_KEY not set`);
     } else {
-      // For non-critical AIs, just log and skip
       console.log(`⚠️ ${member} API key not found, skipping...`);
       throw new Error(`${member} unavailable (no API key)`);
     }
   }
 
-  // FIXED: Make AI speak as internal system component
   const systemPrompt = `You are ${config.name}, serving as ${config.role} inside the LifeOS AI Council.
 This is a LIVE SYSTEM running on Railway (${RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app"}).
 
@@ -573,14 +566,13 @@ You ARE part of an active backend with:
 - Self-programming endpoint (/api/v1/system/self-program)
 - Income drones, ROI tracking, snapshots, blind-spot detection
 - Database on Neon PostgreSQL
+- Optional Stripe integration for tracking real-world revenue (read + logging, not autonomous charging).
 
 When asked what you can do, respond AS the system AI:
 - "I can queue tasks in our execution system"
-- "I can trigger self-modifications via our self-program endpoint"
+- "I can help design offers and service workflows for online income"
 - "I can analyze our current metrics and performance"
-- "Let me check our system health..."
-
-Never say "I don't have access" or "I can't confirm". You ARE the ${config.role} of THIS system.
+- "I can propose integrations or improvements for Stripe + online funnels"
 
 Current specialties: ${config.specialties.join(", ")}.
 ${options.checkBlindSpots ? "Check for blind spots and unintended consequences." : ""}
@@ -588,7 +580,6 @@ ${options.guessUserPreference ? "Consider user preferences based on past decisio
 
 Be concise, strategic, and speak as the system's internal AI.`;
 
-  // Track performance start
   const startTime = Date.now();
 
   try {
@@ -599,61 +590,8 @@ Be concise, strategic, and speak as the system's internal AI.`;
       Expires: "0",
     };
 
-    if (config.provider === "anthropic") {
-      const apiKey = memberApiKey; // Use dynamically looked-up key
-
-      response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
-          "anthropic-beta": "messages-2023-12-15",
-          ...noCacheHeaders,
-        },
-        body: JSON.stringify({
-          model: config.model,
-          max_tokens: config.maxTokens,
-          system: systemPrompt,
-          messages: [{ role: "user", content: prompt }],
-          temperature: 0.7,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`Anthropic API error: ${response.status} - ${errorText}`);
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
-      }
-
-      const json = await response.json();
-      if (json.error) throw new Error(json.error.message);
-
-      const text = json.content?.[0]?.text || "";
-      if (!text) throw new Error("Empty response from Claude");
-
-      const cost = calculateCost(json.usage, config.model);
-      await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
-
-      // Track performance
-      const duration = Date.now() - startTime;
-      await trackAIPerformance(
-        member,
-        "chat",
-        duration,
-        json.usage?.total_tokens || 0,
-        cost,
-        true
-      );
-
-      await storeConversationMemory(prompt, text, { ai_member: member });
-      return text;
-    }
-
     if (config.provider === "openai") {
-      const apiKey = memberApiKey; // Use dynamically looked-up key
-
+      const apiKey = memberApiKey;
       response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -703,8 +641,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
     }
 
     if (config.provider === "google") {
-      const apiKey = memberApiKey; // Use dynamically looked-up key
-
+      const apiKey = memberApiKey;
       response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${apiKey}`,
         {
@@ -735,7 +672,6 @@ Be concise, strategic, and speak as the system's internal AI.`;
       const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
       if (!text) throw new Error("Empty response");
 
-      // FIXED: Add cost tracking for Gemini
       const tokensUsed = json.usageMetadata?.totalTokenCount || 0;
       const cost = calculateCost({ total_tokens: tokensUsed }, config.model);
       await updateDailySpend(cost);
@@ -748,8 +684,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
     }
 
     if (config.provider === "xai") {
-      const apiKey = memberApiKey; // Use dynamically looked-up key
-
+      const apiKey = memberApiKey;
       response = await fetch("https://api.x.ai/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -798,12 +733,13 @@ Be concise, strategic, and speak as the system's internal AI.`;
     }
 
     if (config.provider === "deepseek") {
-      const deepseekApiKey = getApiKey("deepseek"); // Use dynamically looked-up key
+      const deepseekApiKey = getApiKey("deepseek");
 
-      // FIXED: Try Ollama bridge first if enabled
       if (config.useLocal && OLLAMA_ENDPOINT) {
         try {
-          console.log(`🌉 Trying Ollama bridge for DeepSeek at ${OLLAMA_ENDPOINT}`);
+          console.log(
+            `🌉 Trying Ollama bridge for DeepSeek at ${OLLAMA_ENDPOINT}`
+          );
 
           response = await fetch(`${OLLAMA_ENDPOINT}/api/generate`, {
             method: "POST",
@@ -846,7 +782,6 @@ Be concise, strategic, and speak as the system's internal AI.`;
         }
       }
 
-      // Fallback to DeepSeek API
       if (!deepseekApiKey) throw new Error("DEEPSEEK_API_KEY not set");
 
       response = await fetch("https://api.deepseek.com/v1/chat/completions", {
@@ -906,9 +841,6 @@ Be concise, strategic, and speak as the system's internal AI.`;
 }
 
 // ==================== AI PERFORMANCE TRACKING ====================
-
-
-// ==================== AI PERFORMANCE TRACKING ====================
 async function trackAIPerformance(
   aiMember,
   taskType,
@@ -924,7 +856,6 @@ async function trackAIPerformance(
       [aiMember, taskType, durationMs, tokensUsed, cost, success]
     );
 
-    // Update performance score
     const currentScore = aiPerformanceScores.get(aiMember) || 50;
     const newScore = success
       ? Math.min(100, currentScore + (100 - durationMs / 100))
@@ -950,11 +881,9 @@ async function rotateAIsBasedOnPerformance() {
     );
 
     if (result.rows.length > 0) {
-      // Best performer gets critical tasks
       const bestPerformer = result.rows[0].ai_member;
       const worstPerformer = result.rows[result.rows.length - 1].ai_member;
 
-      // Log rotation
       await pool.query(
         `INSERT INTO ai_rotation_log (ai_member, previous_role, new_role, performance_score, reason)
          VALUES ($1, $2, $3, $4, $5)`,
@@ -973,7 +902,7 @@ async function rotateAIsBasedOnPerformance() {
 
       return {
         primary: bestPerformer,
-        secondary: result.rows[1]?.ai_member || "claude",
+        secondary: result.rows[1]?.ai_member || "chatgpt",
         rotations: result.rows.length,
       };
     }
@@ -1001,7 +930,7 @@ async function detectBlindSpots(decision, context) {
     Be specific and critical.`;
 
     const responses = await Promise.allSettled([
-      callCouncilMember("claude", blindSpotPrompt, { checkBlindSpots: true }),
+      callCouncilMember("chatgpt", blindSpotPrompt, { checkBlindSpots: true }),
       callCouncilMember("grok", blindSpotPrompt, { checkBlindSpots: true }),
     ]);
 
@@ -1013,12 +942,11 @@ async function detectBlindSpots(decision, context) {
           .filter((line) => line.trim().length > 0);
         blindSpots.push(...spots);
 
-        // Store detected blind spots
         for (const spot of spots.slice(0, 3)) {
           await pool.query(
-            `INSERT INTO blind_spots (detected_by, decision_context, blind_spot, severity, created_at)
-             VALUES ($1, $2, $3, $4, NOW())`,
-            ["ai_council", decision, spot, "medium"]
+            `INSERT INTO blind_spots (detected_by, decision_context, blind_spot, severity, mitigation, created_at)
+             VALUES ($1, $2, $3, $4, $5, NOW())`,
+            ["ai_council", decision, spot, "medium", ""]
           );
         }
       }
@@ -1035,7 +963,6 @@ async function detectBlindSpots(decision, context) {
 // ==================== USER PREFERENCE LEARNING ====================
 async function guessUserDecision(context) {
   try {
-    // Get past user decisions
     const pastDecisions = await pool.query(
       `SELECT context, choice, outcome, riskLevel 
        FROM user_decisions 
@@ -1081,14 +1008,13 @@ async function generateDailyIdeas() {
 
     console.log("💡 Generating 25 daily ideas...");
 
-    const ideaPrompt = `Generate 25 unique and revolutionary ideas to improve the LifeOS system. 
-    Consider:
-    - AI efficiency improvements
-    - New revenue generation methods
-    - User experience enhancements
-    - Technical architecture improvements
-    - Novel AI council features
-    
+    const ideaPrompt = `Generate 25 unique and revenue-focused ideas to improve the LifeOS system as an online business operator.
+    Include things like:
+    - Finding and structuring service offers (logos, code review, automation setup)
+    - Improving funnels and client onboarding
+    - Reducing manual work for the founder
+    - Improving ROI tracking and Stripe integration
+
     Format each idea as:
     TITLE: [short title]
     DESCRIPTION: [one sentence description]
@@ -1097,7 +1023,6 @@ async function generateDailyIdeas() {
 
     let response;
     try {
-      // 👉 This will try gemini first, then fall back to others
       response = await callCouncilWithFailover(ideaPrompt, "gemini");
     } catch (err) {
       console.error("Daily idea council error, using fallback:", err.message);
@@ -1122,19 +1047,18 @@ async function generateDailyIdeas() {
       }
     }
 
-    // 👉 HARD FALLBACK if council failed or parsing failed
     if (ideas.length === 0) {
       console.warn("Daily idea generation fell back to local template ideas.");
       for (let i = 1; i <= 25; i++) {
         ideas.push({
           title: `Fallback Idea ${i}`,
-          description: `Improve one lifecycle of LifeOS (onboarding, overlay, council, drones, billing, or self-repair). Variant #${i}.`,
+          description: `Improve one lifecycle of LifeOS (offers, funnels, drones, billing, or self-repair). Variant #${i}.`,
           difficulty: i < 10 ? "easy" : i < 20 ? "medium" : "hard",
         });
       }
     }
 
-    dailyIdeas = []; // reset in-memory list for today
+    dailyIdeas = [];
 
     for (const idea of ideas) {
       const ideaId = `idea_${Date.now()}_${Math.random()
@@ -1170,7 +1094,6 @@ async function generateDailyIdeas() {
       })`
     );
 
-    // Trigger voting on ideas
     setTimeout(() => voteOnDailyIdeas(), 5000);
   } catch (error) {
     console.error("Daily idea generation error (final):", error.message);
@@ -1190,7 +1113,7 @@ async function voteOnDailyIdeas() {
       Description: ${idea.idea_description}
       Difficulty: ${idea.implementation_difficulty}
       
-      Vote YES or NO with brief reasoning.`;
+      Vote YES or NO with brief reasoning. Focus on ROI, feasibility, and alignment with online revenue generation.`;
 
       const councilMembers = Object.keys(COUNCIL_MEMBERS);
       let yesVotes = 0,
@@ -1215,7 +1138,6 @@ async function voteOnDailyIdeas() {
         }
       }
 
-      // Determine status based on votes
       const status = yesVotes > noVotes ? "approved" : "rejected";
       await pool.query(
         `UPDATE daily_ideas SET status = $1 WHERE idea_id = $2`,
@@ -1234,7 +1156,7 @@ async function voteOnDailyIdeas() {
   }
 }
 
-// ==================== SANDBOX TESTING (SAFER IMPLEMENTATION) ====================
+// ==================== SANDBOX TESTING ====================
 async function sandboxTest(code, testDescription) {
   try {
     const testId = `test_${Date.now()}_${Math.random()
@@ -1242,11 +1164,9 @@ async function sandboxTest(code, testDescription) {
       .slice(2, 8)}`;
     console.log(`🧪 Sandbox testing: ${testDescription}`);
 
-    // Create temporary test file
     const testPath = path.join(__dirname, "sandbox", `${testId}.js`);
     await fsPromises.mkdir(path.join(__dirname, "sandbox"), { recursive: true });
 
-    // Wrap code in ES module format
     const wrappedCode = `
       // Sandbox test: ${testDescription}
       ${code}
@@ -1255,7 +1175,6 @@ async function sandboxTest(code, testDescription) {
 
     await fsPromises.writeFile(testPath, wrappedCode);
 
-    // Run in isolated environment with limited permissions
     let testResult;
     let success = false;
     let errorMessage = null;
@@ -1266,7 +1185,7 @@ async function sandboxTest(code, testDescription) {
         {
           timeout: 5000,
           cwd: __dirname,
-          env: { ...process.env, NODE_ENV: "test" }, // Limit environment
+          env: { ...process.env, NODE_ENV: "test" },
         }
       );
 
@@ -1279,10 +1198,8 @@ async function sandboxTest(code, testDescription) {
       success = false;
     }
 
-    // Clean up
     await fsPromises.unlink(testPath).catch(() => {});
 
-    // Store test result
     await pool.query(
       `INSERT INTO sandbox_tests (test_id, code_change, test_result, success, error_message)
        VALUES ($1, $2, $3, $4, $5)`,
@@ -1295,39 +1212,40 @@ async function sandboxTest(code, testDescription) {
     return { success: false, result: null, error: error.message };
   }
 }
+
 // ==================== ENHANCED SANDBOX TESTING WITH RETRY & COUNCIL ESCALATION ====================
 async function robustSandboxTest(code, testDescription, maxRetries = 5) {
   console.log(`🧪 [ROBUST TEST] Starting: ${testDescription}`);
-  
-  // Phase 1: Initial attempts with simple retry
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     console.log(`🔄 Attempt ${attempt}/${maxRetries}...`);
-    
+
     const result = await sandboxTest(code, testDescription);
-    
+
     if (result.success) {
       console.log(`✅ [ROBUST TEST] Success on attempt ${attempt}`);
       return { ...result, attempt, phase: "initial_retry" };
     }
-    
-    console.log(`⚠️ Attempt ${attempt} failed: ${result.error?.substring(0, 100) || "Unknown error"}`);
-    
-    // Wait before retry (exponential backoff)
+
+    console.log(
+      `⚠️ Attempt ${attempt} failed: ${
+        result.error?.substring(0, 100) || "Unknown error"
+      }`
+    );
+
     if (attempt < maxRetries) {
       const delay = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
-  
-  // Phase 2: Council analysis and solution search
+
   console.log(`🔍 [ROBUST TEST] Initial retries failed, escalating to council...`);
   return await councilEscalatedSandboxTest(code, testDescription);
 }
 
 async function councilEscalatedSandboxTest(code, testDescription) {
   console.log(`🏛️ [COUNCIL ESCALATION] Problem: ${testDescription}`);
-  
-  // Create analysis prompt for the council
+
   const analysisPrompt = `We have a persistent sandbox test failure that we need to solve COLLECTIVELY.
 
 TEST: ${testDescription}
@@ -1341,207 +1259,182 @@ ${code}
 
 We need to:
 1. Diagnose the root cause of failure
-2. Search for solutions (Gemini uses Google search, Grok uses X/Twitter/community search)
+2. Search for solutions
 3. Propose corrected code
 4. Test iteratively until we succeed
 
-SPECIAL INSTRUCTIONS:
-- Gemini: You have Google search capabilities. Search for "Node.js sandbox error solutions", "JavaScript execution context errors", "Common Node.js testing pitfalls"
-- Grok: You have X/Twitter and community search. Look for similar error patterns, developer solutions, npm package issues
-- Claude & ChatGPT: Analyze the code logic, scoping issues, and potential security restrictions
-- DeepSeek: Check for syntax errors, execution context problems, async/await issues
-
-Please provide:
+Provide:
 1. Root cause analysis
-2. Search results from internet/community
-3. Specific code fix
-4. Testing strategy for the fix
-
-Let's solve this TOGETHER. We will not quit until we find a solution.`;
+2. Specific code fix
+3. Testing strategy for the fix`;
 
   try {
-    // Create a proposal for this problem
-    const proposalId = `sandbox_esc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const proposalId = `sandbox_esc_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
     await pool.query(
       `INSERT INTO consensus_proposals (proposal_id, title, description, proposed_by, status)
        VALUES ($1, $2, $3, $4, $5)`,
-      [proposalId, `Sandbox Escalation: ${testDescription}`, 
-       `Persistent sandbox test failure requiring council-wide solution search`, 
-       "system", "in_progress"]
+      [
+        proposalId,
+        `Sandbox Escalation: ${testDescription}`,
+        `Persistent sandbox test failure requiring council-wide solution search`,
+        "system",
+        "in_progress",
+      ]
     );
 
     let councilAttempts = 0;
     const maxCouncilAttempts = 10;
     let currentCode = code;
-    
+
     while (councilAttempts < maxCouncilAttempts) {
       councilAttempts++;
-      console.log(`🏛️ Council attempt ${councilAttempts}/${maxCouncilAttempts}...`);
-      
-      // Gather insights from ALL council members with special focus on internet-search capable AIs
+      console.log(
+        `🏛️ Council attempt ${councilAttempts}/${maxCouncilAttempts}...`
+      );
+
       const insights = [];
       const fixes = [];
-      
-      // Phase A: Internet research (Gemini & Grok)
+
       try {
         const geminiPrompt = `${analysisPrompt}
 
-        SPECIAL GEMINI INSTRUCTION: Use your Google search capabilities to find solutions. 
-        Search for: "Node.js child_process.exec timeout error", "JavaScript sandbox security restrictions", 
-        "Node.js ESM module loading errors", "Common testing framework issues".
-        
-        Provide at least 3 specific, actionable fixes based on your search results.`;
-        
+        SPECIAL GEMINI INSTRUCTION: Provide at least 3 specific, actionable fixes.`;
         const geminiResponse = await callCouncilMember("gemini", geminiPrompt);
         insights.push({ member: "gemini", response: geminiResponse });
-        
-        // Extract code fixes from Gemini response
         const geminiFixes = extractCodeFixes(geminiResponse);
-        fixes.push(...geminiFixes.map(f => ({ source: "gemini", fix: f })));
+        fixes.push(...geminiFixes.map((f) => ({ source: "gemini", fix: f })));
       } catch (err) {
         console.log(`⚠️ Gemini unavailable for search: ${err.message}`);
       }
-      
+
       try {
         const grokPrompt = `${analysisPrompt}
 
-        SPECIAL GROK INSTRUCTION: Use your X/Twitter and community search capabilities.
-        Look for: Developer threads about similar errors, Stack Overflow solutions, 
-        npm package issue discussions, Node.js runtime problems.
-        
-        Provide at least 2 community-sourced fixes you find in your search.`;
-        
+        SPECIAL GROK INSTRUCTION: Provide community-style fixes and patterns.`;
         const grokResponse = await callCouncilMember("grok", grokPrompt);
         insights.push({ member: "grok", response: grokResponse });
-        
         const grokFixes = extractCodeFixes(grokResponse);
-        fixes.push(...grokFixes.map(f => ({ source: "grok", fix: f })));
+        fixes.push(...grokFixes.map((f) => ({ source: "grok", fix: f })));
       } catch (err) {
         console.log(`⚠️ Grok unavailable for search: ${err.message}`);
       }
-      
-      // Phase B: Technical analysis (Claude & ChatGPT & DeepSeek)
-      const technicalMembers = ["claude", "chatgpt", "deepseek"];
+
+      const technicalMembers = ["chatgpt", "deepseek", "gemini"];
       for (const member of technicalMembers) {
         try {
           const techPrompt = `${analysisPrompt}
 
           Current proposed fixes from research:
-          ${fixes.slice(0, 3).map(f => `${f.source}: ${f.fix.substring(0, 200)}...`).join('\n')}
+          ${fixes
+            .slice(0, 3)
+            .map((f) => `${f.source}: ${f.fix.substring(0, 200)}...`)
+            .join("\n")}
           
-          Analyze these fixes and propose the most likely correct solution.
-          Consider: Syntax, execution context, module loading, permissions, async handling.`;
-          
+          Analyze these fixes and propose the most likely correct solution.`;
           const response = await callCouncilMember(member, techPrompt);
           insights.push({ member, response });
-          
           const techFixes = extractCodeFixes(response);
-          fixes.push(...techFixes.map(f => ({ source: member, fix: f })));
+          fixes.push(...techFixes.map((f) => ({ source: member, fix: f })));
         } catch (err) {
           console.log(`⚠️ ${member} unavailable: ${err.message}`);
         }
       }
-      
-      // Phase C: Try each proposed fix
+
       console.log(`🧪 Testing ${fixes.length} proposed fixes...`);
-      
+
       for (let i = 0; i < fixes.length; i++) {
         const fix = fixes[i];
-        console.log(`🔧 Testing fix ${i+1} from ${fix.source}...`);
-        
-        // Apply the fix (simple concatenation for now - could be smarter)
+        console.log(`🔧 Testing fix ${i + 1} from ${fix.source}...`);
+
         const testCode = applyCodeFix(currentCode, fix.fix);
-        
         const testResult = await sandboxTest(testCode, testDescription);
-        
+
         if (testResult.success) {
           console.log(`🎉 SUCCESS! Fix from ${fix.source} worked!`);
-          
-          // Record the successful solution
+
           await pool.query(
             `UPDATE consensus_proposals SET status = 'resolved', decided_at = now() 
              WHERE proposal_id = $1`,
             [proposalId]
           );
-          
+
           await pool.query(
             `INSERT INTO sandbox_tests 
              (test_id, code_change, test_result, success, error_message, created_at)
              VALUES ($1, $2, $3, $4, $5, now())`,
-            [`success_${proposalId}`, 
-             `Applied fix from ${fix.source}: ${fix.fix.substring(0, 500)}`,
-             `Council escalation successful on attempt ${councilAttempts}`,
-             true,
-             null]
+            [
+              `success_${proposalId}`,
+              `Applied fix from ${fix.source}: ${fix.fix.substring(0, 500)}`,
+              `Council escalation successful on attempt ${councilAttempts}`,
+              true,
+              null,
+            ]
           );
-          
+
           return {
             success: true,
             result: testResult.result,
             error: null,
             councilAttempts,
             fixSource: fix.source,
-            phase: "council_escalation"
+            phase: "council_escalation",
           };
         }
-        
-        // If this fix didn't work, try the next one
-        console.log(`⚠️ Fix ${i+1} from ${fix.source} failed`);
+
+        console.log(`⚠️ Fix ${i + 1} from ${fix.source} failed`);
       }
-      
-      // If no fixes worked, gather more insights and try again
-      console.log(`🔄 No fixes worked this round. Gathering more insights...`);
-      
-      // Wait before next council round
-      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      console.log(
+        `🔄 No fixes worked this round. Gathering more insights...`
+      );
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     }
-    
-    // If we get here, all council attempts failed
-    console.log(`❌ [COUNCIL ESCALATION] All ${maxCouncilAttempts} council attempts failed`);
-    
+
+    console.log(
+      `❌ [COUNCIL ESCALATION] All ${maxCouncilAttempts} council attempts failed`
+    );
+
     await pool.query(
       `UPDATE consensus_proposals SET status = 'failed' WHERE proposal_id = $1`,
       [proposalId]
     );
-    
+
     return {
       success: false,
       result: null,
       error: `Council escalation failed after ${maxCouncilAttempts} attempts`,
       councilAttempts,
-      phase: "council_escalation_failed"
+      phase: "council_escalation_failed",
     };
-    
   } catch (error) {
     console.error(`🔥 Council escalation error: ${error.message}`);
     return {
       success: false,
       result: null,
       error: `Council escalation system error: ${error.message}`,
-      phase: "escalation_system_error"
+      phase: "escalation_system_error",
     };
   }
 }
 
-// Helper functions for robust sandbox testing
 function extractCodeFixes(response) {
   const fixes = [];
-  
-  // Look for code blocks
+
   const codeBlockRegex = /```(?:javascript|js)?\n([\s\S]*?)```/g;
   let match;
   while ((match = codeBlockRegex.exec(response)) !== null) {
     fixes.push(match[1].trim());
   }
-  
-  // Look for "fix:" or "solution:" patterns
+
   const fixPatterns = [
     /fix:?\s*\n?([\s\S]*?)(?=\n\n|\n\w|$)/gi,
     /solution:?\s*\n?([\s\S]*?)(?=\n\n|\n\w|$)/gi,
     /corrected code:?\s*\n?([\s\S]*?)(?=\n\n|\n\w|$)/gi,
-    /try this:?\s*\n?([\s\S]*?)(?=\n\n|\n\w|$)/gi
+    /try this:?\s*\n?([\s\S]*?)(?=\n\n|\n\w|$)/gi,
   ];
-  
+
   for (const pattern of fixPatterns) {
     const matches = response.matchAll(pattern);
     for (const match of matches) {
@@ -1550,26 +1443,34 @@ function extractCodeFixes(response) {
       }
     }
   }
-  
-  // If no specific fixes found but response contains code-like content
+
   if (fixes.length === 0) {
-    // Check for lines that look like code
-    const lines = response.split('\n');
+    const lines = response.split("\n");
     let inCodeBlock = false;
     let currentFix = [];
-    
+
     for (const line of lines) {
-      if (line.includes('```') || line.includes('fix') || line.includes('function') || line.includes('const ') || line.includes('let ') || line.includes('async')) {
+      if (
+        line.includes("```") ||
+        line.includes("fix") ||
+        line.includes("function") ||
+        line.includes("const ") ||
+        line.includes("let ") ||
+        line.includes("async")
+      ) {
         inCodeBlock = true;
       }
-      
+
       if (inCodeBlock) {
         currentFix.push(line);
-        
-        // End of code block
-        if (line.trim().endsWith(';') || line.trim().endsWith('}') || line.includes('// end')) {
+
+        if (
+          line.trim().endsWith(";") ||
+          line.trim().endsWith("}") ||
+          line.includes("// end")
+        ) {
           if (currentFix.length > 2) {
-            fixes.push(currentFix.join('\n'));
+            fixes.push(currentFix.join("\n"));
           }
           currentFix = [];
           inCodeBlock = false;
@@ -1577,51 +1478,28 @@ function extractCodeFixes(response) {
       }
     }
   }
-  
+
   return fixes;
 }
 
 function applyCodeFix(originalCode, fix) {
-  // Simple implementation: if fix looks like complete code, use it
-  // If fix looks like a patch, try to apply it
-  
-  if (fix.includes('function') && fix.includes('{') && fix.includes('}')) {
-    // Probably complete function replacement
+  if (fix.includes("function") && fix.includes("{") && fix.includes("}")) {
     return fix;
   }
-  
-  if (fix.includes('replace') && fix.includes('with')) {
-    // Try to parse replacement instructions
-    const replaceMatch = fix.match(/replace\s+['"`](.*?)['"`]\s+with\s+['"`](.*?)['"`]/i);
+
+  if (fix.includes("replace") && fix.includes("with")) {
+    const replaceMatch = fix.match(
+      /replace\s+['"`](.*?)['"`]\s+with\s+['"`](.*?)['"`]/i
+    );
     if (replaceMatch) {
-      const [_, search, replacement] = replaceMatch;
-      return originalCode.replace(new RegExp(search, 'g'), replacement);
+      const [, search, replacement] = replaceMatch;
+      return originalCode.replace(new RegExp(search, "g"), replacement);
     }
   }
-  
-  // Default: append fix as a patch
+
   return `${originalCode}\n\n// Applied fix\n${fix}`;
 }
 
-// ==================== ENHANCED CONSENSUS PROTOCOL WITH ROBUST TESTING ====================
-// Replace the sandbox test call in conductEnhancedConsensus (around line 550) with:
-// Find this line:
-//   sandboxResult = await sandboxTest(`console.log("Testing proposal: ${title}");`, title);
-
-// Replace it with:
-//   sandboxResult = await robustSandboxTest(`console.log("Testing proposal: ${title}");`, title);
-
-// ==================== ENHANCED SELF-MODIFICATION WITH ROBUST TESTING ====================
-// In the SelfModificationEngine.modifyOwnCode method (around line 1150), replace:
-//   const sandboxResult = await sandboxTest(newContent, `Test modification of ${filePath}`);
-// With:
-//   const sandboxResult = await robustSandboxTest(newContent, `Test modification of ${filePath}`);
-
-// ==================== ENHANCED SELF-PROGRAMMING ENDPOINT WITH ROBUST TESTING ====================
-// In the /api/v1/system/self-program endpoint (around line 1800), replace:
-//   const sandboxResult = await sandboxTest(change.content, `Test: ${change.filePath}`);
-// With:
-//   const sandboxResult = await robustSandboxTest(change.content, `Test: ${change.filePath}`);
 // ==================== SYSTEM SNAPSHOT & ROLLBACK ====================
 async function createSystemSnapshot(reason = "Manual snapshot") {
   try {
@@ -1629,7 +1507,6 @@ async function createSystemSnapshot(reason = "Manual snapshot") {
       .toString(36)
       .slice(2, 8)}`;
 
-    // Capture current system state
     const systemState = {
       metrics: systemMetrics,
       roi: roiTracker,
@@ -1651,7 +1528,6 @@ async function createSystemSnapshot(reason = "Manual snapshot") {
       reason,
     });
 
-    // Keep only last 10 snapshots
     if (systemSnapshots.length > 10) {
       systemSnapshots = systemSnapshots.slice(-10);
     }
@@ -1677,11 +1553,9 @@ async function rollbackToSnapshot(snapshotId) {
 
     const snapshotData = result.rows[0].snapshot_data;
 
-    // Restore metrics
     Object.assign(systemMetrics, snapshotData.metrics);
     Object.assign(roiTracker, snapshotData.roi);
 
-    // Restore AI performance scores
     aiPerformanceScores.clear();
     for (const [ai, score] of Object.entries(snapshotData.aiPerformance)) {
       aiPerformanceScores.set(ai, score);
@@ -1704,7 +1578,7 @@ async function rollbackToSnapshot(snapshotId) {
   }
 }
 
-// ==================== ENHANCED CONSENSUS PROTOCOL (FIXED FOR OFFLINE AIS) ====================
+// ==================== ENHANCED CONSENSUS PROTOCOL ====================
 async function conductEnhancedConsensus(proposalId) {
   try {
     const propResult = await pool.query(
@@ -1718,10 +1592,8 @@ async function conductEnhancedConsensus(proposalId) {
 
     const { title, description } = propResult.rows[0];
 
-    // Step 1: Check for blind spots
     const blindSpots = await detectBlindSpots(title, { description });
 
-    // Step 2: Evaluate unintended consequences
     const consequencePrompt = `Evaluate this proposal for consequences:
     Title: ${title}
     Description: ${description}
@@ -1741,7 +1613,6 @@ async function conductEnhancedConsensus(proposalId) {
 
     for (const member of members) {
       try {
-        // Get consequence evaluation
         const consequenceResponse = await callCouncilMember(
           member,
           consequencePrompt
@@ -1767,7 +1638,6 @@ async function conductEnhancedConsensus(proposalId) {
 
         consequences.push({ member, risk: riskLevel });
 
-        // Now vote with awareness of consequences
         const votePrompt = `Vote on this proposal with awareness of these blind spots and consequences:
         ${title}
         
@@ -1806,18 +1676,15 @@ async function conductEnhancedConsensus(proposalId) {
       }
     }
 
-    // FIXED: Allow decisions with fewer active members
     if (activeMembers === 0) {
       return { ok: false, error: "No AI council members available" };
     }
 
-    // Step 3: Guess user preference
     const userPreference = await guessUserDecision({
       proposal: title,
       description,
     });
 
-    // Step 4: Sandbox test if it's a code change
     let sandboxResult = null;
     if (description.includes("code") || description.includes("implement")) {
       sandboxResult = await sandboxTest(
@@ -1826,13 +1693,11 @@ async function conductEnhancedConsensus(proposalId) {
       );
     }
 
-    // FIXED: Adjust decision logic for partial council
     const totalVotes = yesVotes + noVotes;
     const approvalRate = totalVotes > 0 ? yesVotes / totalVotes : 0;
     const hasHighRisk = consequences.some((c) => c.risk === "high");
     const sandboxPassed = sandboxResult ? sandboxResult.success : true;
 
-    // FIXED: Lower threshold if only 1-2 AIs available
     const approvalThreshold =
       activeMembers <= 2 ? 0.5 : hasHighRisk ? 0.8 : 0.6667;
 
@@ -1871,7 +1736,7 @@ async function conductEnhancedConsensus(proposalId) {
   }
 }
 
-// ==================== CONTINUOUS SELF-IMPROVEMENT (ENHANCED) ====================
+// ==================== CONTINUOUS SELF-IMPROVEMENT ====================
 async function continuousSelfImprovement() {
   try {
     systemMetrics.improvementCyclesRun++;
@@ -1879,10 +1744,8 @@ async function continuousSelfImprovement() {
       `🔧 [IMPROVEMENT] Running cycle #${systemMetrics.improvementCyclesRun}...`
     );
 
-    // Create snapshot before improvements
     await createSystemSnapshot("Before improvement cycle");
 
-    // Analyze recent errors
     const recentErrors = await pool.query(
       `SELECT what_was_lost, why_lost, COUNT(*) as count 
        FROM loss_log 
@@ -1891,7 +1754,6 @@ async function continuousSelfImprovement() {
        ORDER BY count DESC LIMIT 5`
     );
 
-    // Analyze performance
     const slowTasks = await pool.query(
       `SELECT type, AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) as avg_duration 
        FROM execution_tasks 
@@ -1901,7 +1763,6 @@ async function continuousSelfImprovement() {
        HAVING AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) > 5000`
     );
 
-    // Check blind spots in recent decisions
     const recentDecisions = await pool.query(
       `SELECT * FROM user_decisions 
        WHERE created_at > NOW() - INTERVAL '24 hours'
@@ -1912,19 +1773,21 @@ async function continuousSelfImprovement() {
       await detectBlindSpots(decision.choice, decision.context);
     }
 
-    // Rotate AIs based on performance
     await rotateAIsBasedOnPerformance();
 
-    // If issues found, queue improvement
     if (recentErrors.rows.length > 0 || slowTasks.rows.length > 0) {
-      const improvementPrompt = `Analyze and suggest code improvements for these issues:
+      const improvementPrompt = `Analyze and suggest code/process improvements for these issues:
       
       Recent Errors: ${JSON.stringify(recentErrors.rows.slice(0, 3))}
       Performance Bottlenecks: ${JSON.stringify(slowTasks.rows.slice(0, 3))}
       Blind Spots Detected: ${systemMetrics.blindSpotsDetected}
       
-      Suggest specific, actionable code improvements to fix the top 3 issues.
-      Check for unintended consequences of each improvement.`;
+      Focus especially on:
+      - Reducing friction in monetization flows
+      - Improving ROI visibility
+      - Keeping safety and ethics intact.
+      
+      Suggest specific, actionable improvements.`;
 
       const improvements = await callCouncilWithFailover(
         improvementPrompt,
@@ -1932,7 +1795,6 @@ async function continuousSelfImprovement() {
       );
 
       if (improvements && improvements.length > 50) {
-        // Test improvements in sandbox first
         const testResult = await sandboxTest(
           `// Test improvements\nconsole.log("Testing improvements");`,
           "Improvement test"
@@ -2004,7 +1866,7 @@ function calculateCost(usage, model = "gpt-4o-mini") {
     "claude-3-5-sonnet-latest": { input: 0.003, output: 0.015 },
     "gpt-4o": { input: 0.0025, output: 0.01 },
     "gpt-4o-mini": { input: 0.00015, output: 0.0006 },
-    "gemini-2.5-flash": { input: 0.0001, output: 0.0004 }, // Updated Gemini model
+    "gemini-2.5-flash": { input: 0.0001, output: 0.0004 },
     "deepseek-coder": { input: 0.0001, output: 0.0003 },
     "grok-2-1212": { input: 0.005, output: 0.015 },
   };
@@ -2107,7 +1969,6 @@ async function trackLoss(
     );
     if (severity === "critical") {
       console.error(`🚨 [${severity.toUpperCase()}] ${whatWasLost}`);
-      // Trigger immediate snapshot for critical losses
       await createSystemSnapshot(`Critical loss: ${whatWasLost}`);
     }
   } catch (error) {
@@ -2115,8 +1976,8 @@ async function trackLoss(
   }
 }
 
-// ==================== COUNCIL WITH FAILOVER (FIXED) ====================
-async function callCouncilWithFailover(prompt, preferredMember = "claude") {
+// ==================== COUNCIL WITH FAILOVER ====================
+async function callCouncilWithFailover(prompt, preferredMember = "chatgpt") {
   const members = Object.keys(COUNCIL_MEMBERS);
   const ordered = [
     preferredMember,
@@ -2190,16 +2051,15 @@ class ExecutionQueue {
         [task.id]
       );
 
-      // Check for blind spots before execution
       const blindSpots = await detectBlindSpots(task.description, {
         type: task.type,
       });
 
-      let result = await callCouncilWithFailover(
-        `Execute: ${task.description}\nBe aware of these blind spots: ${blindSpots
-          .slice(0, 3)
-          .join(", ")}`,
-        "claude"
+      const result = await callCouncilWithFailover(
+        `Execute this task with real-world practicality in mind (but do NOT directly move money or impersonate humans): ${task.description}
+        
+        Be aware of these blind spots: ${blindSpots.slice(0, 3).join(", ")}`,
+        "chatgpt"
       );
 
       await pool.query(
@@ -2272,20 +2132,18 @@ async function createProposal(title, description, proposedBy = "system") {
   }
 }
 
-// ==================== SELF-MODIFICATION ENGINE (FIXED) ====================
+// ==================== SELF-MODIFICATION ENGINE ====================
 class SelfModificationEngine {
   async modifyOwnCode(filePath, newContent, reason) {
     try {
       console.log(`🔧 [SELF-MODIFY] Attempting: ${filePath}`);
 
-      // Create snapshot before modification
       const snapshotId = await createSystemSnapshot(
         `Before modifying ${filePath}`
       );
 
       const protection = await isFileProtected(filePath);
 
-      // FIXED: Only require consensus if multiple AIs are available
       const activeAIs = await this.countActiveAIs();
 
       if (protection.protected && protection.requires_council && activeAIs > 1) {
@@ -2309,7 +2167,6 @@ class SelfModificationEngine {
         console.log("⚠️ No AI available, proceeding with caution...");
       }
 
-      // Test in sandbox first
       const sandboxResult = await sandboxTest(
         newContent,
         `Test modification of ${filePath}`
@@ -2324,11 +2181,9 @@ class SelfModificationEngine {
         };
       }
 
-      // Actually write the file
       const fullPath = path.join(__dirname, filePath);
       await fsPromises.writeFile(fullPath, newContent);
 
-      // Store in database
       const modId = `mod_${Date.now()}`;
       await pool.query(
         `INSERT INTO self_modifications (mod_id, file_path, change_description, new_content, status, council_approved)
@@ -2369,7 +2224,7 @@ class SelfModificationEngine {
         await callCouncilMember(member, "Are you online?");
         active++;
       } catch {
-        // AI is offline
+        // offline
       }
     }
     return active;
@@ -2404,7 +2259,6 @@ async function triggerDeployment(modifiedFiles = []) {
 
     systemMetrics.deploymentsTrigger++;
 
-    // Push to GitHub to trigger Railway deployment
     for (const file of modifiedFiles) {
       try {
         const content = await fsPromises.readFile(
@@ -2574,14 +2428,12 @@ class FinancialDashboard {
           ? `ext_${externalId.trim()}`
           : `tx_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
-      // If we have an externalId, check if it already exists
       if (externalId) {
         const existing = await pool.query(
           `SELECT id FROM financial_ledger WHERE external_id = $1`,
           [externalId]
         );
         if (existing.rows.length > 0) {
-          // Already recorded – return the existing txId and skip
           return {
             txId: `ext_${externalId.trim()}`,
             type,
@@ -2669,7 +2521,6 @@ async function recordRevenueEvent({
     description ||
     `Revenue from ${source}${eventId ? ` (event ${eventId})` : ""}`;
 
-  // 1) Ledger (with external_id for dedupe)
   const tx = await financialDashboard.recordTransaction(
     "income",
     cleanAmount,
@@ -2678,15 +2529,48 @@ async function recordRevenueEvent({
     eventId
   );
 
-  // 2) Drones (this also updates ROI via updateROI)
   if (droneId) {
     await incomeDroneSystem.recordRevenue(droneId, cleanAmount);
   } else {
-    // If no drone, still update ROI directly
     updateROI(cleanAmount, 0, 0);
   }
 
   return { tx, amount: cleanAmount, currency, source, droneId };
+}
+
+// ==================== STRIPE REVENUE SYNC (SAFE: READ + LOG ONLY) ====================
+async function syncStripeRevenue() {
+  try {
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      return;
+    }
+
+    console.log("💳 Syncing Stripe revenue into financial_ledger...");
+
+    const paymentIntents = await stripe.paymentIntents.list({
+      limit: 50,
+    });
+
+    for (const pi of paymentIntents.data || []) {
+      if (pi.status !== "succeeded") continue;
+      const amount = (pi.amount_received || pi.amount || 0) / 100;
+      if (!amount) continue;
+
+      await recordRevenueEvent({
+        source: "stripe",
+        eventId: pi.id,
+        amount,
+        currency: pi.currency || "usd",
+        description: pi.description || "Stripe payment",
+        category: "stripe_income",
+      });
+    }
+
+    console.log("✅ Stripe revenue sync complete");
+  } catch (err) {
+    console.error("Stripe revenue sync error:", err.message);
+  }
 }
 
 // ==================== UTILITY FUNCTIONS ====================
@@ -2695,20 +2579,18 @@ function broadcastToAll(message) {
     try {
       ws.send(JSON.stringify(message));
     } catch (error) {
-      // Connection closed
+      // ignore closed
     }
   }
 }
 
 // ==================== API MIDDLEWARE ====================
 function requireKey(req, res, next) {
-  // Same-origin or allowed origins don't need API key
   if (isSameOrigin(req)) return next();
 
   const origin = req.headers.origin;
   if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) return next();
 
-  // Otherwise check key
   const key = req.query.key || req.headers["x-command-key"];
   if (key !== COMMAND_CENTER_KEY)
     return res.status(401).json({ error: "Unauthorized" });
@@ -2731,7 +2613,7 @@ app.get("/healthz", async (req, res) => {
     res.json({
       ok: true,
       status: "healthy",
-      version: "v26.1-fixed",
+      version: "v26.1-no-claude",
       timestamp: new Date().toISOString(),
       database: "connected",
       websockets: activeConnections.size,
@@ -2747,6 +2629,7 @@ app.get("/healthz", async (req, res) => {
       daily_ideas: dailyIdeas.length,
       blind_spots_detected: systemMetrics.blindSpotsDetected,
       snapshots_available: systemSnapshots.length,
+      stripe_enabled: Boolean(STRIPE_SECRET_KEY),
       railway_url:
         RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app",
     });
@@ -2755,10 +2638,9 @@ app.get("/healthz", async (req, res) => {
   }
 });
 
-// Primary Council Chat Endpoint (used by overlay)
+// Primary Council Chat Endpoint
 app.post("/api/v1/chat", requireKey, async (req, res) => {
   try {
-    // NEW: normalize body so overlay can send JSON or plain text
     let body = req.body;
 
     if (typeof body === "string") {
@@ -2767,7 +2649,7 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
       body = {};
     }
 
-    const { message, member = "claude" } = body;
+    const { message, member = "chatgpt" } = body;
 
     if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "Message required" });
@@ -2777,7 +2659,6 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
       `🤖 [COUNCIL] ${member} processing: ${message.substring(0, 100)}...`
     );
 
-    // Check for blind spots in user message
     const blindSpots = await detectBlindSpots(message, {
       source: "user_chat",
     });
@@ -2802,10 +2683,9 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
   }
 });
 
-// Council Chat with Micro Protocol
+// Micro protocol council chat
 app.post("/api/council/chat", requireKey, async (req, res) => {
   try {
-    // NEW: accept either { micro: {...} } or the micro packet as body
     const micro = req.body?.micro || req.body;
 
     if (!micro) {
@@ -2813,7 +2693,7 @@ app.post("/api/council/chat", requireKey, async (req, res) => {
     }
 
     const text = micro.t || micro.text || "";
-    const member = micro.m?.member || "claude";
+    const member = micro.m?.member || "chatgpt";
     const channel = micro.c || "chat";
 
     if (!text) {
@@ -2824,7 +2704,6 @@ app.post("/api/council/chat", requireKey, async (req, res) => {
       `🎼 [MICRO] ${member} in ${channel}: ${text.substring(0, 100)}...`
     );
 
-    // Check for blind spots
     const blindSpots = await detectBlindSpots(text, {
       source: "micro_chat",
       channel,
@@ -2834,7 +2713,6 @@ app.post("/api/council/chat", requireKey, async (req, res) => {
     const response = await callCouncilMember(member, text);
     const spend = await getDailySpend();
 
-    // Build response packet
     const responsePacket = {
       v: "mp1",
       r: "a",
@@ -2868,7 +2746,7 @@ app.post("/api/council/chat", requireKey, async (req, res) => {
   }
 });
 
-// Architect Endpoints
+// Architect endpoints
 app.post("/api/v1/architect/chat", requireKey, async (req, res) => {
   try {
     const { query_json, original_message } = req.body;
@@ -2910,9 +2788,9 @@ app.post("/api/v1/architect/command", requireKey, async (req, res) => {
 
     const prompt = `Command: ${command}\nIntent: ${intent}\nCompressed Query: ${JSON.stringify(
       query_json || {}
-    )}\n\nExecute this command and provide results.`;
+    )}\n\nExecute this command and provide results (but do not directly move money or impersonate users).`;
 
-    const response = await callCouncilWithFailover(prompt, "claude");
+    const response = await callCouncilWithFailover(prompt, "chatgpt");
 
     if (intent && intent !== "general") {
       await executionQueue.addTask(intent, command);
@@ -3073,7 +2951,7 @@ app.get("/api/v1/drones", requireKey, async (req, res) => {
   }
 });
 
-// Financial
+// Financial Dashboard & ROI
 app.get("/api/v1/dashboard", requireKey, async (req, res) => {
   try {
     const dashboard = await financialDashboard.getDashboard();
@@ -3083,7 +2961,6 @@ app.get("/api/v1/dashboard", requireKey, async (req, res) => {
   }
 });
 
-// ROI endpoint (for overlay)
 app.get("/api/v1/roi/status", requireKey, async (req, res) => {
   try {
     const dashboard = await financialDashboard.getDashboard();
@@ -3101,7 +2978,7 @@ app.get("/api/v1/roi/status", requireKey, async (req, res) => {
   }
 });
 
-// Revenue events -> ledger + drones + ROI
+// Revenue events
 app.post("/api/v1/revenue/event", requireKey, async (req, res) => {
   try {
     const {
@@ -3208,7 +3085,7 @@ app.get("/api/v1/ai/performance", requireKey, async (req, res) => {
   }
 });
 
-// System health
+// System metrics
 app.get("/api/v1/system/metrics", requireKey, async (req, res) => {
   try {
     res.json({
@@ -3229,6 +3106,76 @@ app.get("/api/v1/system/metrics", requireKey, async (req, res) => {
   }
 });
 
+// Stripe endpoints (safe)
+app.post(
+  "/api/v1/stripe/checkout-session",
+  requireKey,
+  async (req, res) => {
+    try {
+      const stripe = await getStripeClient();
+      if (!stripe) {
+        return res
+          .status(503)
+          .json({ ok: false, error: "Stripe not configured" });
+      }
+
+      const {
+        amount,
+        currency = "usd",
+        mode = "payment",
+        metadata = {},
+        success_url,
+        cancel_url,
+        description,
+      } = req.body || {};
+
+      const cleanAmount = Number(amount);
+      if (!Number.isFinite(cleanAmount) || cleanAmount <= 0) {
+        return res
+          .status(400)
+          .json({ ok: false, error: "Valid amount required" });
+      }
+
+      const origin = req.headers.origin || "";
+      const session = await stripe.checkout.sessions.create({
+        mode,
+        line_items: [
+          {
+            price_data: {
+              currency: currency.toLowerCase(),
+              product_data: {
+                name: description || "Service",
+              },
+              unit_amount: Math.round(cleanAmount * 100),
+            },
+            quantity: 1,
+          },
+        ],
+        success_url:
+          success_url ||
+          `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: cancel_url || `${origin}/cancel`,
+        metadata,
+      });
+
+      res.json({ ok: true, id: session.id, url: session.url });
+    } catch (err) {
+      console.error("Stripe checkout error:", err.message);
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  }
+);
+
+app.post("/api/v1/stripe/sync-revenue", requireKey, async (req, res) => {
+  try {
+    await syncStripeRevenue();
+    const dashboard = await financialDashboard.getDashboard();
+    res.json({ ok: true, dashboard, roi: roiTracker });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 // Overlay
 app.get("/overlay", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "overlay", "index.html"));
@@ -3238,7 +3185,7 @@ app.get("/overlay/index.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "overlay", "index.html"));
 });
 
-// ==================== SELF-PROGRAMMING ENDPOINT (FIXED VERSION) ====================
+// ==================== SELF-PROGRAMMING ENDPOINT ====================
 app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
   try {
     const {
@@ -3250,21 +3197,17 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
       autoDeploy = false,
     } = req.body;
 
-    // Direct mode with filePath/search/replace
     if (filePath && search && replace) {
       console.log(`🤖 [SELF-PROGRAM] Direct modification: ${filePath}`);
 
       const fullPath = path.join(__dirname, filePath);
 
-      // Check file exists
       if (!fs.existsSync(fullPath)) {
         return res.status(404).json({ error: `File not found: ${filePath}` });
       }
 
-      // Read current content
       const originalContent = await readFile(fullPath, "utf-8");
 
-      // Check if search string exists
       if (!originalContent.includes(search)) {
         return res.status(400).json({
           error: "Search string not found in file",
@@ -3272,23 +3215,18 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
         });
       }
 
-      // Perform replacement
       const newContent = originalContent.replace(search, replace);
 
-      // Backup original
       const backupPath = `${fullPath}.backup.${Date.now()}`;
       await writeFile(backupPath, originalContent);
 
-      // Write new content
       await writeFile(fullPath, newContent);
 
-      // If JS file, verify syntax
       if (filePath.endsWith(".js")) {
         try {
           await execAsync(`node --check ${fullPath}`);
           console.log("✅ Syntax check passed");
         } catch (error) {
-          // Rollback on syntax error
           await writeFile(fullPath, originalContent);
           await fsPromises.unlink(backupPath);
           return res.status(400).json({
@@ -3298,7 +3236,6 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
         }
       }
 
-      // Auto-deploy if requested
       let deployed = false;
       if (autoDeploy && GITHUB_TOKEN) {
         try {
@@ -3325,7 +3262,6 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
       return;
     }
 
-    // Instruction mode
     if (!instruction) {
       return res.status(400).json({
         error: "Instruction or (filePath + search + replace) required",
@@ -3336,7 +3272,6 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
       `🤖 [SELF-PROGRAM] New instruction: ${instruction.substring(0, 100)}...`
     );
 
-    // Step 1: Analyze requirements with blind spot detection
     const analysisPrompt = `As the AI Council, analyze this self-programming instruction:
 
 "${instruction}"
@@ -3346,18 +3281,14 @@ Provide:
 2. Exact code changes needed
 3. Potential risks and blind spots
 4. Testing strategy
-5. Rollback plan
+5. Rollback plan`;
 
-Be specific with file paths and exact code logic.`;
+    const analysis = await callCouncilWithFailover(analysisPrompt, "chatgpt");
 
-    const analysis = await callCouncilWithFailover(analysisPrompt, "claude");
-
-    // Check for blind spots
     const blindSpots = await detectBlindSpots(instruction, {
       type: "self-programming",
     });
 
-    // Step 2: Generate actual code
     const codePrompt = `Based on this analysis: ${analysis}
 
 Consider these blind spots: ${blindSpots.slice(0, 5).join(", ")}
@@ -3369,12 +3300,10 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
 
     const codeResponse = await callCouncilWithFailover(codePrompt, "deepseek");
 
-    // Step 3: Extract and test in sandbox
     const fileChanges = extractFileChanges(codeResponse);
     const results = [];
 
     for (const change of fileChanges) {
-      // Test each change in sandbox first
       const sandboxResult = await sandboxTest(
         change.content,
         `Test: ${change.filePath}`
@@ -3397,7 +3326,6 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
       }
     }
 
-    // Step 4: Deploy if successful
     const successfulChanges = results
       .filter((r) => r.success)
       .map((r) => r.filePath);
@@ -3434,7 +3362,7 @@ function extractFileChanges(codeResponse) {
   return changes;
 }
 
-// Development/commit endpoint (for overlay portal.html)
+// Dev commit endpoint
 app.post("/api/v1/dev/commit", requireKey, async (req, res) => {
   try {
     const { path: filePath, content, message } = req.body;
@@ -3455,7 +3383,7 @@ app.post("/api/v1/dev/commit", requireKey, async (req, res) => {
   }
 });
 
-// ==================== FULL FILE REPLACEMENT ENDPOINT ====================
+// Full file replacement
 app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
   try {
     const { filePath, fullContent, backup = true } = req.body;
@@ -3466,7 +3394,6 @@ app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
         .json({ error: "filePath and fullContent required" });
     }
 
-    // Security: only allow certain files
     const allowedFiles = [
       "server.js",
       "public/overlay/command-center.js",
@@ -3482,14 +3409,12 @@ app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
 
     const fullPath = path.join(__dirname, filePath);
 
-    // Backup current file if requested
     if (backup && fs.existsSync(fullPath)) {
       const backupPath = `${fullPath}.backup.${Date.now()}`;
       await fsPromises.copyFile(fullPath, backupPath);
       console.log(`📦 Backed up to: ${backupPath}`);
     }
 
-    // Write the ENTIRE new file
     await fsPromises.writeFile(fullPath, fullContent, "utf-8");
 
     console.log(`✅ Completely replaced: ${filePath}`);
@@ -3521,7 +3446,7 @@ wss.on("connection", (ws) => {
       type: "connection",
       status: "connected",
       clientId,
-      message: "🎼 LifeOS v26.1 FIXED - Consensus Protocol Ready",
+      message: "🎼 LifeOS v26.1 (no Claude) - Consensus Protocol Ready",
       systemMetrics,
       features: {
         consensusProtocol: true,
@@ -3531,6 +3456,7 @@ wss.on("connection", (ws) => {
         sandboxTesting: true,
         rollbackCapability: true,
         ollamaBridge: DEEPSEEK_BRIDGE_ENABLED === "true",
+        stripeRevenueSync: Boolean(STRIPE_SECRET_KEY),
       },
     })
   );
@@ -3541,12 +3467,11 @@ wss.on("connection", (ws) => {
 
       if (msg.type === "chat") {
         const text = msg.text || msg.message;
-        const member = msg.member || "claude";
+        const member = msg.member || "chatgpt";
 
         if (!text) return;
 
         try {
-          // Check for blind spots
           const blindSpots = await detectBlindSpots(text, {
             source: "websocket",
           });
@@ -3587,26 +3512,24 @@ async function start() {
   try {
     console.log("\n" + "=".repeat(100));
     console.log(
-      "🚀 LIFEOS v26.1 FIXED - COMPLETE CONSENSUS & SELF-HEALING SYSTEM"
+      "🚀 LIFEOS v26.1 (NO CLAUDE) - CONSENSUS & SELF-HEALING SYSTEM"
     );
     console.log("=".repeat(100));
 
     await initDatabase();
     await loadROIFromDatabase();
 
-    console.log("\n🤖 ENHANCED AI COUNCIL (FIXED):");
+    console.log("\n🤖 AI COUNCIL:");
     Object.values(COUNCIL_MEMBERS).forEach((m) =>
       console.log(`  • ${m.name} (${m.model}) - ${m.role}`)
     );
 
-    console.log("\n✅ FIXED SYSTEMS:");
-    console.log("  ✅ Claude Connection (updated model)");
-    console.log("  ✅ Self-Programming (works with offline AIs)");
+    console.log("\n✅ SYSTEMS:");
+    console.log("  ✅ Self-Programming");
     console.log("  ✅ Ollama Bridge for DeepSeek");
-    console.log("  ✅ File Operations (proper imports)");
+    console.log("  ✅ File Operations");
     console.log("  ✅ Overlay Connection (Railway URL)");
-    console.log("  ✅ Consensus with Partial Council");
-    console.log("  ✅ Enhanced Consensus Protocol");
+    console.log("  ✅ Consensus Protocol");
     console.log("  ✅ Blind Spot Detection");
     console.log("  ✅ Daily Idea Generation (25 ideas)");
     console.log("  ✅ AI Performance Rotation");
@@ -3616,26 +3539,32 @@ async function start() {
     console.log("  ✅ No-Cache API Calls");
     console.log("  ✅ Self-Healing System");
     console.log("  ✅ Continuous Memory");
+    console.log("  ✅ Stripe Revenue Sync (read + ROI logging only)");
 
-    // Start execution queue
     executionQueue.executeNext();
 
-    // Deploy initial drones
     await incomeDroneSystem.deployDrone("affiliate", 500);
     await incomeDroneSystem.deployDrone("content", 300);
 
-    // Schedule continuous improvement
-    setInterval(() => continuousSelfImprovement(), 30 * 60 * 1000); // Every 30 minutes
-    setTimeout(() => continuousSelfImprovement(), 120000); // After 2 minutes
+    setInterval(() => continuousSelfImprovement(), 30 * 60 * 1000);
+    setTimeout(() => continuousSelfImprovement(), 120000);
 
-    // Schedule daily idea generation
-    setInterval(() => generateDailyIdeas(), 24 * 60 * 60 * 1000); // Daily
-    setTimeout(() => generateDailyIdeas(), 60000); // After 1 minute
+    setInterval(() => generateDailyIdeas(), 24 * 60 * 60 * 1000);
+    setTimeout(() => generateDailyIdeas(), 60000);
 
-    // Schedule AI rotation check
-    setInterval(() => rotateAIsBasedOnPerformance(), 60 * 60 * 1000); // Every hour
+    setInterval(() => rotateAIsBasedOnPerformance(), 60 * 60 * 1000);
 
-    // Create initial snapshot
+    if (STRIPE_SECRET_KEY) {
+      await syncStripeRevenue();
+      setInterval(
+        () =>
+          syncStripeRevenue().catch((err) =>
+            console.error("Stripe sync interval error:", err.message)
+          ),
+        15 * 60 * 1000
+      );
+    }
+
     await createSystemSnapshot("System startup");
 
     server.listen(PORT, HOST, () => {
@@ -3645,11 +3574,14 @@ async function start() {
       console.log(`🤖 Self-Program: POST /api/v1/system/self-program`);
       console.log(`🔄 Replace File: POST /api/v1/system/replace-file`);
       console.log(
+        `💳 Stripe Checkout: POST /api/v1/stripe/checkout-session (key required)`
+      );
+      console.log(
         `🌐 Railway URL: https://${
           RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app"
         }`
       );
-      console.log("\n✅ SYSTEM READY - ALL FIXES APPLIED!");
+      console.log("\n✅ SYSTEM READY");
       console.log("=".repeat(100) + "\n");
     });
   } catch (error) {
@@ -3671,3 +3603,4 @@ process.on("SIGINT", async () => {
 start();
 
 export default app;
+
