@@ -5929,18 +5929,19 @@ async function start() {
 
     // ✅ This is the important line – use the HTTP server, not a bare `.listen`
     server.listen(PORT, HOST, () => {
+      const railwayUrl = RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app";
       console.log(`\n🌐  ONLINE: http://${HOST}:${PORT}`);
       console.log(`📊 Health: http://${HOST}:${PORT}/healthz`);
       console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
+      console.log(`🔐 Command Center Activation: https://${railwayUrl}/activate`);
+      console.log(`🎯 Command Center: https://${railwayUrl}/command-center`);
       console.log(`🤖 Self-Program: POST /api/v1/system/self-program`);
       console.log(`🔄 Replace File: POST /api/v1/system/replace-file`);
       console.log(
         `💳 Stripe Checkout: POST /api/v1/stripe/checkout-session (key required)`
       );
       console.log(
-        `🌐 Railway URL: https://${
-          RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app"
-        }`
+        `🌐 Railway URL: https://${railwayUrl}`
       );
       console.log("\n✅ SYSTEM READY");
       console.log("=".repeat(100) + "\n");
