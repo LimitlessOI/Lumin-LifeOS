@@ -5012,6 +5012,105 @@ app.get("/api/v1/trial/status", requireKey, async (req, res) => {
   }
 });
 
+// ==================== CONVERSATION EXTRACTOR ENDPOINTS ====================
+app.post("/api/v1/conversations/extract-export", requireKey, async (req, res) => {
+  try {
+    if (!conversationExtractor) {
+      return res.status(503).json({ error: "Conversation extractor not initialized" });
+    }
+
+    const { provider, exportData } = req.body;
+    
+    if (!provider || !exportData) {
+      return res.status(400).json({ error: "Provider and exportData required" });
+    }
+
+    console.log(`🤖 [EXTRACTOR] Processing ${provider} export...`);
+    const result = await conversationExtractor.extractFromExport(provider, exportData);
+    
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    console.error('Extraction error:', error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/conversations/extract-all", requireKey, async (req, res) => {
+  try {
+    if (!conversationExtractor) {
+      return res.status(503).json({ error: "Conversation extractor not initialized" });
+    }
+
+    const { credentials } = req.body;
+    
+    if (!credentials) {
+      return res.status(400).json({ error: "Credentials or export data required" });
+    }
+
+    console.log(`🤖 [EXTRACTOR] Starting extraction from all platforms...`);
+    const results = await conversationExtractor.extractAll(credentials);
+    
+    res.json({ ok: true, results });
+  } catch (error) {
+    console.error('Extraction error:', error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/extract-conversations", (req, res) => {
+  const filePath = path.join(__dirname, "public", "overlay", "extract-conversations.html");
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).send("Extraction page not found.");
+  }
+});
+
+// ==================== AI ACCOUNT BOT ENDPOINTS ====================
+app.post("/api/v1/ai-accounts/process-export", requireKey, async (req, res) => {
+  try {
+    if (!aiAccountBot) {
+      return res.status(503).json({ error: "AI account bot not initialized" });
+    }
+
+    const { provider, data } = req.body;
+    
+    if (!provider || !data) {
+      return res.status(400).json({ error: "Provider and data required" });
+    }
+
+    console.log(`🤖 [AI BOT] Processing ${provider} export...`);
+    const result = await aiAccountBot.processExportedData(provider, data);
+    
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    console.error('AI account bot error:', error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/ai-accounts/process-all", requireKey, async (req, res) => {
+  try {
+    if (!aiAccountBot) {
+      return res.status(503).json({ error: "AI account bot not initialized" });
+    }
+
+    const { credentials } = req.body;
+    
+    if (!credentials) {
+      return res.status(400).json({ error: "Credentials required" });
+    }
+
+    console.log(`🤖 [AI BOT] Processing all AI accounts...`);
+    const results = await aiAccountBot.processAllAccounts(credentials);
+    
+    res.json({ ok: true, results });
+  } catch (error) {
+    console.error('AI account bot error:', error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // ==================== COMMAND CENTER ENDPOINTS ====================
 app.get("/api/v1/tasks/queue", requireKey, async (req, res) => {
   try {
@@ -5941,6 +6040,7 @@ async function start() {
       console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
       console.log(`🔐 Command Center Activation: https://${railwayUrl}/activate`);
       console.log(`🎯 Command Center: https://${railwayUrl}/command-center`);
+      console.log(`🤖 Extract Conversations: https://${railwayUrl}/extract-conversations`);
       console.log(`🤖 Self-Program: POST /api/v1/system/self-program`);
       console.log(`🔄 Replace File: POST /api/v1/system/replace-file`);
       console.log(

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extract AI Conversations - LifeOS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #151b2e;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #9ca3af;
+      margin-bottom: 30px;
+    }
+
+    .method-section {
+      margin-bottom: 40px;
+      padding: 24px;
+      background: #0f1419;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+    }
+
+    .method-section h2 {
+      color: #60a5fa;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+
+    .method-section p {
+      color: #d1d5db;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .platform-list {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .platform-list li {
+      padding: 8px 0;
+      color: #d1d5db;
+      border-bottom: 1px solid #2d3748;
+    }
+
+    .platform-list li:last-child {
+      border-bottom: none;
+    }
+
+    .upload-area {
+      border: 2px dashed #2d3748;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      margin: 20px 0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .upload-area:hover {
+      border-color: #60a5fa;
+      background: rgba(96, 165, 250, 0.05);
+    }
+
+    .upload-area.dragover {
+      border-color: #60a5fa;
+      background: rgba(96, 165, 250, 0.1);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 10px 5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(96, 165, 250, 0.3);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: #2d3748;
+    }
+
+    .status {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.success {
+      background: #14532d;
+      border: 1px solid #22c55e;
+      color: #86efac;
+    }
+
+    .status.error {
+      background: #7f1d1d;
+      border: 1px solid #dc2626;
+      color: #fca5a5;
+    }
+
+    .status.info {
+      background: #1e3a5f;
+      border: 1px solid #3b82f6;
+      color: #93c5fd;
+    }
+
+    .progress {
+      width: 100%;
+      height: 8px;
+      background: #2d3748;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 16px 0;
+      display: none;
+    }
+
+    .progress.show {
+      display: block;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #60a5fa 0%, #a78bfa 100%);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .results {
+      margin-top: 20px;
+      padding: 20px;
+      background: #0f1419;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .results.show {
+      display: block;
+    }
+
+    .result-item {
+      padding: 12px;
+      margin: 8px 0;
+      background: #1a1f3a;
+      border-radius: 6px;
+      border-left: 3px solid #60a5fa;
+    }
+
+    .result-item strong {
+      color: #60a5fa;
+    }
+
+    .info-box {
+      background: #1e3a5f;
+      border: 1px solid #3b82f6;
+      color: #93c5fd;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .info-box strong {
+      color: #60a5fa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🤖 Extract AI Conversations</h1>
+    <p class="subtitle">Collect all your ideas and insights from ChatGPT, Gemini, Claude, Grok, and DeepSeek</p>
+
+    <div class="info-box">
+      <strong>How it works:</strong> Export your conversation data from each platform, then upload it here. 
+      The system will extract business ideas, decisions, insights, and unique approaches automatically.
+    </div>
+
+    <!-- Method 1: Export Upload -->
+    <div class="method-section">
+      <h2>📤 Method 1: Upload Exports (Recommended)</h2>
+      <p>Export your conversations from each platform, then upload the files here.</p>
+      
+      <ul class="platform-list">
+        <li><strong>ChatGPT:</strong> Settings → Data Controls → Export Data</li>
+        <li><strong>Gemini:</strong> Google Takeout → Select Gemini</li>
+        <li><strong>Claude:</strong> Account → Export conversations</li>
+        <li><strong>Grok:</strong> X/Twitter → Settings → Your account → Download archive</li>
+        <li><strong>DeepSeek:</strong> Account settings → Export</li>
+      </ul>
+
+      <div class="upload-area" id="uploadArea">
+        <p style="font-size: 18px; margin-bottom: 10px;">📁 Drop export file here or click to select</p>
+        <p style="color: #9ca3af; font-size: 14px;">Supports JSON files from AI platforms</p>
+        <input type="file" id="fileInput" accept=".json,.txt" />
+      </div>
+
+      <div style="text-align: center;">
+        <button class="btn" id="uploadBtn" disabled>Upload & Extract</button>
+        <button class="btn btn-secondary" id="clearBtn">Clear</button>
+      </div>
+
+      <div class="progress" id="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="status" id="status"></div>
+      <div class="results" id="results"></div>
+    </div>
+
+    <!-- Method 2: Browser Automation -->
+    <div class="method-section">
+      <h2>🔐 Method 2: Browser Automation (Advanced)</h2>
+      <p>For platforms without export, use browser automation. Requires credentials.</p>
+      <button class="btn btn-secondary" id="browserBtn" onclick="alert('Browser automation requires API access. Use Method 1 (Export) for now.')">Launch Browser Extraction</button>
+    </div>
+  </div>
+
+  <script>
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const status = document.getElementById('status');
+    const results = document.getElementById('results');
+    const progress = document.getElementById('progress');
+    const progressBar = document.getElementById('progressBar');
+
+    // Get command key from localStorage
+    const commandKey = localStorage.getItem('lifeos_cmd_key') || sessionStorage.getItem('lifeos_cmd_key') || '';
+    if (!commandKey) {
+      status.className = 'status error show';
+      status.textContent = '⚠️ Please activate Command Center first to get your key.';
+    }
+
+    // File selection
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        fileInput.files = files;
+        handleFileSelect();
+      }
+    });
+
+    fileInput.addEventListener('change', handleFileSelect);
+
+    function handleFileSelect() {
+      if (fileInput.files.length > 0) {
+        uploadBtn.disabled = false;
+        uploadArea.querySelector('p').textContent = `📄 Selected: ${fileInput.files[0].name}`;
+      }
+    }
+
+    uploadBtn.addEventListener('click', async () => {
+      if (!fileInput.files.length) return;
+      if (!commandKey) {
+        alert('Please activate Command Center first');
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = async (e) => {
+        try {
+          const fileContent = e.target.result;
+          let exportData;
+
+          // Try to parse as JSON
+          try {
+            exportData = JSON.parse(fileContent);
+          } catch {
+            // If not JSON, treat as text
+            exportData = fileContent;
+          }
+
+          // Detect provider from filename or content
+          const provider = detectProvider(file.name, exportData);
+
+          uploadBtn.disabled = true;
+          progress.classList.add('show');
+          status.className = 'status info show';
+          status.textContent = `🔄 Processing ${provider} export...`;
+
+          const response = await fetch(`${window.location.origin}/api/v1/conversations/extract-export`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-command-key': commandKey,
+            },
+            body: JSON.stringify({
+              provider: provider,
+              exportData: exportData,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.ok) {
+            status.className = 'status success show';
+            status.textContent = `✅ Successfully extracted ${data.ideasExtracted || 0} ideas from ${data.conversationsProcessed || 0} conversations!`;
+
+            results.classList.add('show');
+            results.innerHTML = `
+              <h3 style="color: #60a5fa; margin-bottom: 16px;">Extraction Results</h3>
+              <div class="result-item">
+                <strong>Provider:</strong> ${data.provider || provider}
+              </div>
+              <div class="result-item">
+                <strong>Conversations Processed:</strong> ${data.conversationsProcessed || 0}
+              </div>
+              <div class="result-item">
+                <strong>Ideas Extracted:</strong> ${data.ideasExtracted || 0}
+              </div>
+              <div class="result-item">
+                <strong>Unique Ideas:</strong> ${data.uniqueIdeas || 0}
+              </div>
+              <div class="result-item">
+                <strong>Stored in Knowledge Base:</strong> ${data.stored || data.uniqueIdeas || 0}
+              </div>
+            `;
+          } else {
+            status.className = 'status error show';
+            status.textContent = `❌ Error: ${data.error || 'Failed to extract conversations'}`;
+          }
+        } catch (error) {
+          status.className = 'status error show';
+          status.textContent = `❌ Error: ${error.message}`;
+        } finally {
+          uploadBtn.disabled = false;
+          progress.classList.remove('show');
+        }
+      };
+
+      reader.readAsText(file);
+    });
+
+    clearBtn.addEventListener('click', () => {
+      fileInput.value = '';
+      uploadBtn.disabled = true;
+      status.className = 'status';
+      results.classList.remove('show');
+      uploadArea.querySelector('p').textContent = '📁 Drop export file here or click to select';
+    });
+
+    function detectProvider(filename, data) {
+      const lower = filename.toLowerCase();
+      if (lower.includes('chatgpt') || lower.includes('openai')) return 'chatgpt';
+      if (lower.includes('gemini') || lower.includes('google')) return 'gemini';
+      if (lower.includes('claude') || lower.includes('anthropic')) return 'claude';
+      if (lower.includes('grok') || lower.includes('x.com')) return 'grok';
+      if (lower.includes('deepseek')) return 'deepseek';
+
+      // Try to detect from data structure
+      if (typeof data === 'object') {
+        if (data.conversations && Array.isArray(data.conversations)) {
+          if (data.conversations[0]?.model?.includes('gpt')) return 'chatgpt';
+          if (data.conversations[0]?.model?.includes('gemini')) return 'gemini';
+          if (data.conversations[0]?.model?.includes('claude')) return 'claude';
+        }
+      }
+
+      return 'chatgpt'; // Default
+    }
+  </script>
+</body>
+</html>
