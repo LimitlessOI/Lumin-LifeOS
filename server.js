@@ -149,10 +149,14 @@ app.use(express.text({ type: "text/plain", limit: "50mb" }));
 
 // Command Center routes (before static files to ensure they work)
 app.get("/activate", (req, res) => {
+  console.log("🔐 [ROUTE] /activate accessed");
   const filePath = path.join(__dirname, "public", "overlay", "activate.html");
+  console.log("🔐 [ROUTE] File path:", filePath);
+  console.log("🔐 [ROUTE] File exists:", fs.existsSync(filePath));
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
+    console.error("❌ [ROUTE] Activation page not found at:", filePath);
     res.status(404).send("Activation page not found.");
   }
 });
