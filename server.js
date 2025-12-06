@@ -537,6 +537,15 @@ async function initDatabase() {
 
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_analysis_created ON cost_analysis_log(created_at)`);
 
+    // Cost Analysis Log
+    await pool.query(`CREATE TABLE IF NOT EXISTS cost_analysis_log (
+      id SERIAL PRIMARY KEY,
+      analysis_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_analysis_created ON cost_analysis_log(created_at)`);
+
     await pool.query(`
       ALTER TABLE financial_ledger
       ADD COLUMN IF NOT EXISTS external_id TEXT
@@ -3864,6 +3873,11 @@ function requireKey(req, res, next) {
 // Health checks
 app.get("/health", (req, res) => res.send("OK"));
 
+// Command Center Route
+app.get("/command-center", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "overlay", "command-center.html"));
+});
+
 app.get("/healthz", async (req, res) => {
   try {
     await pool.query("SELECT NOW()");
@@ -4847,7 +4861,10 @@ Respond with JSON: {"accuracy": 0.0-1.0, "completeness": 0.0-1.0, "relevance": 0
 // Cost saving re-examination endpoint
 app.post("/api/v1/system/re-examine-costs", requireKey, async (req, res) => {
   try {
-    const analysis = await analyzeCostSavings();
+    // Import cost re-examination module
+    const { CostReExamination } = await import("./core/cost-re-examination.js");
+    const costAnalyzer = new CostReExamination(pool, compressionMetrics, roiTracker);
+    const analysis = await costAnalyzer.examine();
     res.json({ ok: true, analysis });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
