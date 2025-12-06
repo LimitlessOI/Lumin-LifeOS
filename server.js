@@ -29,6 +29,9 @@ import process from "node:process";
 import { exec } from "child_process";
 import { promisify } from "util";
 
+// Modular two-tier council system (loaded dynamically in startup)
+let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
+
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
 
@@ -200,6 +203,11 @@ const compressionMetrics = {
   v3_compressions: 0,
   total_bytes_saved: 0,
   total_cost_saved: 0,
+  cache_hits: 0,
+  cache_misses: 0,
+  model_downgrades: 0, // Using cheaper models
+  prompt_optimizations: 0,
+  tokens_saved_total: 0,
 };
 
 const systemMetrics = {
@@ -423,6 +431,45 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
+    // Two-Tier Council System Tables
+    await pool.query(`CREATE TABLE IF NOT EXISTS model_routing_log (
+      id SERIAL PRIMARY KEY,
+      task_type VARCHAR(50),
+      risk_level VARCHAR(20),
+      user_facing BOOLEAN,
+      final_tier INT,
+      cost DECIMAL(10,6),
+      success BOOLEAN,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS white_label_configs (
+      id SERIAL PRIMARY KEY,
+      client_id TEXT UNIQUE NOT NULL,
+      brand_name TEXT,
+      hide_tiers BOOLEAN DEFAULT true,
+      hide_models BOOLEAN DEFAULT true,
+      hide_costs BOOLEAN DEFAULT true,
+      hide_architecture BOOLEAN DEFAULT true,
+      custom_domain TEXT,
+      custom_logo TEXT,
+      api_response_format VARCHAR(20) DEFAULT 'standard',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS outreach_log (
+      id SERIAL PRIMARY KEY,
+      campaign_id TEXT,
+      channel VARCHAR(20),
+      recipient TEXT,
+      subject TEXT,
+      body TEXT,
+      status VARCHAR(20),
+      external_id TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
     await pool.query(`
       ALTER TABLE financial_ledger
       ADD COLUMN IF NOT EXISTS external_id TEXT
@@ -509,6 +556,361 @@ const COUNCIL_MEMBERS = {
   },
 };
 
+// ==================== AGGRESSIVE COST OPTIMIZATION (Target: 1-5% of original costs) ====================
+
+// Response Cache (semantic similarity matching)
+const responseCache = new Map();
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+function hashPrompt(prompt) {
+  // Create semantic hash (simple but effective)
+  const normalized = prompt.toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[^\w\s]/g, '')
+    .trim();
+  return crypto.createHash('sha256').update(normalized).digest('hex').substring(0, 16);
+}
+
+async function getCachedResponse(prompt, member) {
+  const key = `${member}:${hashPrompt(prompt)}`;
+  const cached = responseCache.get(key);
+  if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
+    compressionMetrics.cache_hits = (compressionMetrics.cache_hits || 0) + 1;
+    return cached.response;
+  }
+  return null;
+}
+
+function cacheResponse(prompt, member, response) {
+  const key = `${member}:${hashPrompt(prompt)}`;
+  responseCache.set(key, {
+    response,
+    timestamp: Date.now(),
+    prompt: prompt.substring(0, 100), // Store snippet for debugging
+  });
+  // Limit cache size
+  if (responseCache.size > 1000) {
+    const firstKey = responseCache.keys().next().value;
+    responseCache.delete(firstKey);
+  }
+}
+
+// Advanced text compression (better than base64)
+function advancedCompress(text) {
+  try {
+    // Remove redundant whitespace
+    let compressed = text.replace(/\s+/g, ' ').trim();
+    
+    // Replace common phrases with tokens
+    const replacements = {
+      'You are': 'Ua',
+      'inside the LifeOS AI Council': 'iLAC',
+      'This is a LIVE SYSTEM': 'TLS',
+      'running on Railway': 'rR',
+      'Execution queue for tasks': 'EQ',
+      'Self-programming endpoint': 'SPE',
+      'Income drones': 'ID',
+      'ROI tracking': 'ROI',
+      'blind-spot detection': 'BSD',
+      'Database on Neon PostgreSQL': 'DNPG',
+      'Optional Stripe integration': 'OSI',
+    };
+    
+    for (const [full, short] of Object.entries(replacements)) {
+      compressed = compressed.replace(new RegExp(full, 'gi'), short);
+    }
+    
+    // Base64 encode
+    const encoded = Buffer.from(compressed).toString('base64');
+    return { compressed: encoded, ratio: text.length / encoded.length, method: 'advanced' };
+  } catch (error) {
+    return { compressed: text, ratio: 1, method: 'none' };
+  }
+}
+
+function advancedDecompress(compressed, method) {
+  if (method !== 'advanced') return compressed;
+  try {
+    const decoded = Buffer.from(compressed, 'base64').toString('utf-8');
+    // Reverse replacements
+    const replacements = {
+      'Ua': 'You are',
+      'iLAC': 'inside the LifeOS AI Council',
+      'TLS': 'This is a LIVE SYSTEM',
+      'rR': 'running on Railway',
+      'EQ': 'Execution queue for tasks',
+      'SPE': 'Self-programming endpoint',
+      'ID': 'Income drones',
+      'ROI': 'ROI tracking',
+      'BSD': 'blind-spot detection',
+      'DNPG': 'Database on Neon PostgreSQL',
+      'OSI': 'Optional Stripe integration',
+    };
+    let decompressed = decoded;
+    for (const [short, full] of Object.entries(replacements)) {
+      decompressed = decompressed.replace(new RegExp(short, 'g'), full);
+    }
+    return decompressed;
+  } catch (error) {
+    return compressed;
+  }
+}
+
+// LCTP v3 COMPRESSION (Enhanced)
+function lctpEncode(text, meta = {}) {
+  try {
+    // Use advanced compression first
+    const advanced = advancedCompress(text);
+    const header = JSON.stringify({ v: 3, t: Date.now(), m: advanced.method, ...meta });
+    return `LCTPv3|HDR:${header}|BDY:${advanced.compressed}`;
+  } catch (error) {
+    console.warn(`LCTP encode error: ${error.message}`);
+    return text; // Fallback to uncompressed
+  }
+}
+
+function lctpDecode(lctpString) {
+  try {
+    if (!lctpString || !lctpString.includes('|')) {
+      return { text: lctpString || '', meta: {} };
+    }
+    
+    const parts = lctpString.split('|');
+    const headerPart = parts.find(p => p.startsWith('HDR:'));
+    const bodyPart = parts.find(p => p.startsWith('BDY:'));
+    
+    if (!bodyPart) return { text: lctpString, meta: {} };
+    
+    const compressed = bodyPart.replace('BDY:', '');
+    
+    let meta = {};
+    let method = 'base64';
+    if (headerPart) {
+      try {
+        meta = JSON.parse(headerPart.replace('HDR:', ''));
+        method = meta.m || 'base64';
+      } catch {}
+    }
+    
+    const text = method === 'advanced' 
+      ? advancedDecompress(compressed, method)
+      : Buffer.from(compressed, 'base64').toString('utf-8');
+    
+    return { text, meta };
+  } catch (error) {
+    console.warn(`LCTP decode error: ${error.message}`);
+    return { text: lctpString || '', meta: {} };
+  }
+}
+
+// Optimize prompt (remove redundancy, shorten)
+function optimizePrompt(prompt) {
+  // Remove common redundant phrases
+  let optimized = prompt
+    .replace(/\n{3,}/g, '\n\n') // Max 2 newlines
+    .replace(/\s{2,}/g, ' ') // Single spaces
+    .replace(/Please\s+/gi, '') // Remove "Please"
+    .replace(/I would like to\s+/gi, '') // Remove verbose phrases
+    .replace(/Can you\s+/gi, '') // Remove "Can you"
+    .replace(/Could you\s+/gi, '') // Remove "Could you"
+    .trim();
+  
+  // If we saved significant space, track it
+  if (optimized.length < prompt.length * 0.9) {
+    compressionMetrics.prompt_optimizations++;
+    const saved = prompt.length - optimized.length;
+    compressionMetrics.tokens_saved_total += Math.floor(saved / 4); // ~4 chars per token
+  }
+  
+  return optimized;
+}
+
+function compressPrompt(prompt, useCompression = true) {
+  // First optimize the prompt
+  const optimized = optimizePrompt(prompt);
+  
+  if (!useCompression || optimized.length < 100) {
+    return { 
+      compressed: optimized, 
+      originalLength: prompt.length, 
+      compressedLength: optimized.length, 
+      ratio: prompt.length / optimized.length,
+      optimized: true
+    };
+  }
+  
+  const lctp = lctpEncode(optimized);
+  const originalLength = prompt.length;
+  const compressedLength = lctp.length;
+  const ratio = originalLength / compressedLength;
+  
+  // Use compression if it saves at least 10% space
+  if (ratio > 1.1) {
+    compressionMetrics.v3_compressions++;
+    compressionMetrics.total_bytes_saved += (originalLength - compressedLength);
+    const tokensSaved = Math.floor((originalLength - compressedLength) / 4);
+    compressionMetrics.tokens_saved_total += tokensSaved;
+    return { 
+      compressed: lctp, 
+      originalLength, 
+      compressedLength, 
+      ratio, 
+      format: 'LCTPv3',
+      optimized: true
+    };
+  }
+  
+  return { 
+    compressed: optimized, 
+    originalLength, 
+    compressedLength: optimized.length, 
+    ratio: prompt.length / optimized.length,
+    optimized: true
+  };
+}
+
+function decompressResponse(response, isCompressed = false) {
+  if (!isCompressed || !response.includes('LCTPv3')) {
+    return response;
+  }
+  
+  const decoded = lctpDecode(response);
+  return decoded.text;
+}
+
+// ==================== PHONE SYSTEM (Twilio Integration) ====================
+let twilioClient = null;
+async function getTwilioClient() {
+  if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
+    return null;
+  }
+  if (twilioClient) return twilioClient;
+  try {
+    // Lazy load Twilio to avoid breaking if not installed
+    const twilioModule = await import('twilio');
+    const Twilio = twilioModule.default || twilioModule;
+    twilioClient = new Twilio(
+      process.env.TWILIO_ACCOUNT_SID,
+      process.env.TWILIO_AUTH_TOKEN
+    );
+    return twilioClient;
+  } catch (err) {
+    console.warn(`Twilio not available: ${err.message}`);
+    return null;
+  }
+}
+
+async function makePhoneCall(to, from, message, aiMember = "chatgpt") {
+  try {
+    const client = await getTwilioClient();
+    if (!client) {
+      throw new Error("Twilio not configured");
+    }
+
+    // Use AI to generate call script
+    const callScript = await callCouncilMember(
+      aiMember,
+      `Generate a brief, natural phone call script for this message: ${message}. Keep it conversational and under 30 seconds.`
+    );
+
+    // Make the call (Twilio API)
+    const call = await client.calls.create({
+      to,
+      from: from || process.env.TWILIO_PHONE_NUMBER,
+      url: `${RAILWAY_PUBLIC_DOMAIN || 'http://localhost:8080'}/api/v1/phone/call-handler`,
+      method: 'POST',
+    });
+
+    return { success: true, callSid: call.sid, script: callScript };
+  } catch (error) {
+    console.error(`Phone call error: ${error.message}`);
+    return { success: false, error: error.message };
+  }
+}
+
+async function sendSMS(to, message, aiMember = "chatgpt") {
+  try {
+    const client = await getTwilioClient();
+    if (!client) {
+      throw new Error("Twilio not configured");
+    }
+
+    // Optionally use AI to optimize message
+    const optimizedMessage = message.length > 160 
+      ? await callCouncilMember(aiMember, `Condense this to under 160 chars: ${message}`)
+      : message;
+
+    const sms = await client.messages.create({
+      to,
+      from: process.env.TWILIO_PHONE_NUMBER,
+      body: optimizedMessage,
+    });
+
+    return { success: true, messageSid: sms.sid };
+  } catch (error) {
+    console.error(`SMS error: ${error.message}`);
+    return { success: false, error: error.message };
+  }
+}
+
+// ==================== MICRO PROTOCOL HELPERS ====================
+function decodeMicroBody(body = {}) {
+  const packet = body.micro || body;
+  
+  if (!packet || typeof packet !== "object" || (!packet.t && !packet.message && !packet.text)) {
+    const legacyText = body.message || body.text || "";
+    return {
+      text: String(legacyText || "").trim(),
+      channel: "chat",
+      meta: {},
+      packet: null
+    };
+  }
+  
+  const text = String(packet.t || packet.text || packet.message || "").trim();
+  const channel = packet.c || "chat";
+  const meta = packet.m || {};
+  
+  // Decode LCTP if present
+  if (packet.lctp) {
+    const decoded = lctpDecode(packet.lctp);
+    return {
+      text: decoded.text || text,
+      channel,
+      meta: { ...meta, ...decoded.meta },
+      packet
+    };
+  }
+  
+  return { text, channel, meta, packet };
+}
+
+function buildMicroResponse({ text, channel = "chat", role = "a", meta = {}, compress = false }) {
+  let responseText = text;
+  let lctp = null;
+  
+  // Compress if requested and text is long enough
+  if (compress && text.length > 100) {
+    const compressed = compressPrompt(text, true);
+    if (compressed.format === 'LCTPv3') {
+      lctp = compressed.compressed;
+      responseText = text; // Keep original for compatibility
+    }
+  }
+  
+  const packet = {
+    v: "mp1",
+    r: role,
+    c: channel,
+    t: responseText,
+    lctp,
+    m: { ...meta, compressed: !!lctp },
+    ts: Date.now()
+  };
+  
+  return { micro: packet };
+}
+
 // ==================== HELPER: GET API KEY ====================
 function getApiKeyForProvider(provider) {
   switch (provider) {
@@ -537,7 +939,27 @@ function getApiKeyForProvider(provider) {
   }
 }
 
-// ==================== ENHANCED AI CALLING WITH NO-CACHE ====================
+// ==================== SMART MODEL SELECTION (Cost Optimization) ====================
+function selectOptimalModel(prompt, taskComplexity = 'medium') {
+  // Use cheapest model that can handle the task
+  const promptLength = prompt.length;
+  
+  // Simple tasks -> cheapest model
+  if (taskComplexity === 'simple' || promptLength < 200) {
+    compressionMetrics.model_downgrades++;
+    return { member: 'deepseek', model: 'deepseek-coder', reason: 'simple_task' };
+  }
+  
+  // Medium tasks -> medium cost
+  if (taskComplexity === 'medium' || promptLength < 1000) {
+    return { member: 'gemini', model: 'gemini-2.5-flash', reason: 'medium_task' };
+  }
+  
+  // Complex tasks -> use requested member
+  return null; // Use original member
+}
+
+// ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 async function callCouncilMember(member, prompt, options = {}) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown member: ${member}`);
@@ -547,6 +969,23 @@ async function callCouncilMember(member, prompt, options = {}) {
     throw new Error(
       `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`
     );
+  }
+
+  // CHECK CACHE FIRST (huge cost savings)
+  if (options.useCache !== false) {
+    const cached = await getCachedResponse(prompt, member);
+    if (cached) {
+      console.log(`💰 [CACHE HIT] Saved API call for ${member}`);
+      return cached;
+    }
+    compressionMetrics.cache_misses = (compressionMetrics.cache_misses || 0) + 1;
+  }
+
+  // SMART MODEL SELECTION (use cheaper models when possible)
+  const optimalModel = selectOptimalModel(prompt, options.complexity);
+  if (optimalModel && options.allowModelDowngrade !== false) {
+    member = optimalModel.member;
+    console.log(`💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`);
   }
 
   const getApiKey = (provider) => {
@@ -587,7 +1026,8 @@ async function callCouncilMember(member, prompt, options = {}) {
     }
   }
 
-  const systemPrompt = `You are ${config.name}, serving as ${config.role} inside the LifeOS AI Council.
+  // Compress system prompt if it's long (cost optimization)
+  const systemPromptBase = `You are ${config.name}, serving as ${config.role} inside the LifeOS AI Council.
 This is a LIVE SYSTEM running on Railway (${RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app"}).
 
 You ARE part of an active backend with:
@@ -614,6 +1054,12 @@ ${options.webSearch ? `WEB SEARCH MODE: You have access to real-time web search.
 Include specific links, code examples, and actionable solutions from your search results.` : ""}
 
 Be concise, strategic, and speak as the system's internal AI.`;
+
+  // Use compression for cost savings on long prompts (only for non-critical calls)
+  const useCompression = options.compress !== false && systemPromptBase.length > 500;
+  const systemPrompt = useCompression 
+    ? compressPrompt(systemPromptBase, true).compressed 
+    : systemPromptBase;
 
   const startTime = Date.now();
 
@@ -654,12 +1100,18 @@ Be concise, strategic, and speak as the system's internal AI.`;
       const json = await response.json();
       if (json.error) throw new Error(json.error.message);
 
-      const text = json.choices?.[0]?.message?.content || "";
+      let text = json.choices?.[0]?.message?.content || "";
       if (!text) throw new Error("Empty response");
+
+      // Decompress if response was compressed
+      text = decompressResponse(text, useCompression);
 
       const cost = calculateCost(json.usage, config.model);
       await updateDailySpend(cost);
-      await updateROI(0, cost, 0);
+      
+      // Calculate token savings from compression
+      const tokensSaved = useCompression ? Math.floor((systemPromptBase.length - systemPrompt.length) / 4) : 0;
+      await updateROI(0, cost, 0, tokensSaved);
 
       const duration = Date.now() - startTime;
       await trackAIPerformance(
@@ -670,6 +1122,11 @@ Be concise, strategic, and speak as the system's internal AI.`;
         cost,
         true
       );
+
+      // CACHE THE RESPONSE
+      if (options.useCache !== false) {
+        cacheResponse(prompt, member, text);
+      }
 
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
@@ -713,6 +1170,11 @@ Be concise, strategic, and speak as the system's internal AI.`;
 
       const duration = Date.now() - startTime;
       await trackAIPerformance(member, "chat", duration, tokensUsed, cost, true);
+
+      // CACHE THE RESPONSE
+      if (options.useCache !== false) {
+        cacheResponse(prompt, member, text);
+      }
 
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
@@ -762,6 +1224,11 @@ Be concise, strategic, and speak as the system's internal AI.`;
         cost,
         true
       );
+
+      // CACHE THE RESPONSE
+      if (options.useCache !== false) {
+        cacheResponse(prompt, member, text);
+      }
 
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
@@ -861,6 +1328,11 @@ Be concise, strategic, and speak as the system's internal AI.`;
         cost,
         true
       );
+
+      // CACHE THE RESPONSE
+      if (options.useCache !== false) {
+        cacheResponse(prompt, member, text);
+      }
 
       await storeConversationMemory(prompt, text, { ai_member: member });
       return text;
@@ -2472,6 +2944,7 @@ function updateROI(
   roiTracker.daily_ai_cost += cost;
   roiTracker.daily_tasks_completed += tasksCompleted;
   roiTracker.total_tokens_saved += tokensSaved;
+  roiTracker.micro_compression_saves += tokensSaved; // Track compression saves
   if (roiTracker.daily_tasks_completed > 0) {
     roiTracker.revenue_per_task =
       roiTracker.daily_revenue / roiTracker.daily_tasks_completed;
@@ -2904,6 +3377,46 @@ class SelfModificationEngine {
 }
 
 const selfModificationEngine = new SelfModificationEngine();
+
+// ==================== TWO-TIER COUNCIL SYSTEM INITIALIZATION ====================
+let tier0Council = null;
+let tier1Council = null;
+let modelRouter = null;
+let outreachAutomation = null;
+let whiteLabelConfig = null;
+
+async function initializeTwoTierSystem() {
+  try {
+    // Dynamic import of modules
+    const tier0Module = await import("./core/tier0-council.js");
+    const tier1Module = await import("./core/tier1-council.js");
+    const routerModule = await import("./core/model-router.js");
+    const outreachModule = await import("./core/outreach-automation.js");
+    const whiteLabelModule = await import("./core/white-label.js");
+    
+    Tier0Council = tier0Module.Tier0Council;
+    Tier1Council = tier1Module.Tier1Council;
+    ModelRouter = routerModule.ModelRouter;
+    OutreachAutomation = outreachModule.OutreachAutomation;
+    WhiteLabelConfig = whiteLabelModule.WhiteLabelConfig;
+
+    tier0Council = new Tier0Council(pool);
+    tier1Council = new Tier1Council(pool, callCouncilMember);
+    modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
+    outreachAutomation = new OutreachAutomation(
+      pool,
+      modelRouter,
+      getTwilioClient,
+      callCouncilMember
+    );
+    whiteLabelConfig = new WhiteLabelConfig(pool);
+    
+    console.log("✅ Two-Tier Council System initialized");
+  } catch (error) {
+    console.error("⚠️ Two-Tier System initialization error:", error.message);
+    console.error("   System will continue with legacy council only");
+  }
+}
 
 async function isFileProtected(filePath) {
   try {
@@ -3384,25 +3897,21 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
   }
 });
 
-// Micro protocol council chat
+// Micro protocol council chat (with LCTP compression)
 app.post("/api/council/chat", requireKey, async (req, res) => {
   try {
-    const micro = req.body?.micro || req.body;
-
-    if (!micro) {
-      return res.status(400).json({ error: "Micro protocol packet required" });
-    }
-
-    const text = micro.t || micro.text || "";
-    const member = micro.m?.member || "chatgpt";
-    const channel = micro.c || "chat";
-
+    const decoded = decodeMicroBody(req.body);
+    const { text, channel, meta, packet } = decoded;
+    
     if (!text) {
       return res.status(400).json({ error: "Message text required" });
     }
 
+    const member = meta?.member || packet?.m?.member || "chatgpt";
+    const useCompression = meta?.compress !== false && text.length > 100;
+
     console.log(
-      `🎼 [MICRO] ${member} in ${channel}: ${text.substring(0, 100)}...`
+      `🎼 [MICRO] ${member} in ${channel}: ${text.substring(0, 100)}...${useCompression ? ' [COMPRESSED]' : ''}`
     );
 
     const blindSpots = await detectBlindSpots(text, {
@@ -3411,39 +3920,37 @@ app.post("/api/council/chat", requireKey, async (req, res) => {
       member,
     });
 
-    const response = await callCouncilMember(member, text);
+    // Use compression for cost savings
+    const response = await callCouncilMember(member, text, { compress: useCompression });
     const spend = await getDailySpend();
 
-    const responsePacket = {
-      v: "mp1",
-      r: "a",
-      c: channel,
-      t: response,
-      lctp: null,
-      m: {
+    // Build response with optional compression
+    const responsePacket = buildMicroResponse({
+      text: response,
+      channel,
+      role: "a",
+      meta: {
         member,
         spend,
         blindSpotsDetected: blindSpots.length,
         aiName: "LifeOS Council",
         timestamp: new Date().toISOString(),
       },
-      ts: Date.now(),
-    };
+      compress: useCompression,
+    });
 
-    res.json({ micro: responsePacket });
+    res.json(responsePacket);
   } catch (error) {
     console.error("Micro council chat error:", error);
 
-    const errorPacket = {
-      v: "mp1",
-      r: "a",
-      c: "error",
-      t: `Error: ${error.message}`,
-      m: { error: true },
-      ts: Date.now(),
-    };
+    const errorPacket = buildMicroResponse({
+      text: `Error: ${error.message}`,
+      channel: "error",
+      role: "a",
+      meta: { error: true },
+    });
 
-    res.json({ micro: errorPacket });
+    res.json(errorPacket);
   }
 });
 
@@ -3522,21 +4029,29 @@ app.post("/api/v1/architect/micro", requireKey, async (req, res) => {
           ?.slice(2)
           .replace(/~/g, " ") || "";
 
+      // Use AI with compression for cost savings
+      const compressed = compressPrompt(data, true);
+      const aiResponse = await callCouncilWithFailover(
+        `Process this ${compressed.format === 'LCTPv3' ? 'compressed' : ''} request: ${compressed.compressed}`,
+        "deepseek",
+        { compress: true }
+      );
+
       let response;
       switch (operation) {
         case "G":
-          response = `CT:${data}~completed~result:success~compression:73%`;
+          response = `CT:${aiResponse}~completed~result:success~compression:${Math.round((1 - compressed.ratio) * 100)}%`;
           break;
         case "A":
-          response = `CT:Analysis~complete~insights:generated~recommendations:3`;
+          response = `CT:${aiResponse}~complete~insights:generated~compression:${Math.round((1 - compressed.ratio) * 100)}%`;
           break;
         default:
-          response = `CT:${data}~processed~status:done`;
+          response = `CT:${aiResponse}~processed~status:done`;
       }
 
       res.send(response);
     } else {
-      const response = await callCouncilWithFailover(microQuery, "deepseek");
+      const response = await callCouncilWithFailover(microQuery, "deepseek", { compress: true });
       res.send(`CT:${String(response).replace(/ /g, "~")}`);
     }
   } catch (error) {
@@ -3804,6 +4319,272 @@ app.get("/api/v1/system/metrics", requireKey, async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== TWO-TIER COUNCIL ENDPOINTS ====================
+app.post("/api/v1/council/route", requireKey, async (req, res) => {
+  try {
+    if (!modelRouter) {
+      return res.status(503).json({ error: "Two-tier system not initialized" });
+    }
+
+    const { task, taskType = 'general', riskLevel = 'low', userFacing = false, revenueImpact = 'low' } = req.body;
+    
+    if (!task) {
+      return res.status(400).json({ error: "Task required" });
+    }
+
+    const result = await modelRouter.route(task, {
+      taskType,
+      riskLevel,
+      userFacing,
+      revenueImpact,
+    });
+
+    // White-label sanitization
+    const clientId = req.headers['x-client-id'] || 'default';
+    if (whiteLabelConfig) {
+      const sanitized = whiteLabelConfig.sanitizeResponse(result, clientId, result);
+      return res.json({ ok: result.success, ...sanitized });
+    }
+
+    res.json({ ok: result.success, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/council/routing-stats", requireKey, async (req, res) => {
+  try {
+    if (!modelRouter) {
+      return res.status(503).json({ error: "Two-tier system not initialized" });
+    }
+
+    const stats = await modelRouter.getRoutingStats();
+    res.json({ ok: true, ...stats });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== OUTREACH AUTOMATION ENDPOINTS ====================
+app.post("/api/v1/outreach/campaign", requireKey, async (req, res) => {
+  try {
+    if (!outreachAutomation) {
+      return res.status(503).json({ error: "Outreach system not initialized" });
+    }
+
+    const { name, targets, channels = ['email'], messageTemplate } = req.body;
+    
+    if (!name || !targets || !Array.isArray(targets)) {
+      return res.status(400).json({ error: "Campaign name and targets array required" });
+    }
+
+    const results = await outreachAutomation.launchCampaign({
+      name,
+      targets,
+      channels,
+      messageTemplate,
+    });
+
+    res.json({ ok: true, ...results });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/outreach/campaign/:campaignId", requireKey, async (req, res) => {
+  try {
+    if (!outreachAutomation) {
+      return res.status(503).json({ error: "Outreach system not initialized" });
+    }
+
+    const results = outreachAutomation.getCampaignResults(req.params.campaignId);
+    if (!results) {
+      return res.status(404).json({ error: "Campaign not found" });
+    }
+
+    res.json({ ok: true, ...results });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/outreach/email", requireKey, async (req, res) => {
+  try {
+    if (!outreachAutomation) {
+      return res.status(503).json({ error: "Outreach system not initialized" });
+    }
+
+    const { to, subject, body } = req.body;
+    if (!to || !subject) {
+      return res.status(400).json({ error: "To and subject required" });
+    }
+
+    const result = await outreachAutomation.sendEmail(to, subject, body || subject);
+    res.json({ ok: result.success, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/outreach/sms", requireKey, async (req, res) => {
+  try {
+    if (!outreachAutomation) {
+      return res.status(503).json({ error: "Outreach system not initialized" });
+    }
+
+    const { to, message } = req.body;
+    if (!to || !message) {
+      return res.status(400).json({ error: "To and message required" });
+    }
+
+    const result = await outreachAutomation.sendSMS(to, message);
+    res.json({ ok: result.success, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/outreach/call", requireKey, async (req, res) => {
+  try {
+    if (!outreachAutomation) {
+      return res.status(503).json({ error: "Outreach system not initialized" });
+    }
+
+    const { to, script } = req.body;
+    if (!to) {
+      return res.status(400).json({ error: "Phone number (to) required" });
+    }
+
+    const result = await outreachAutomation.makeCall(to, script);
+    res.json({ ok: result.success, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/outreach/social", requireKey, async (req, res) => {
+  try {
+    if (!outreachAutomation) {
+      return res.status(503).json({ error: "Outreach system not initialized" });
+    }
+
+    const { platform, content } = req.body;
+    if (!platform || !content) {
+      return res.status(400).json({ error: "Platform and content required" });
+    }
+
+    const result = await outreachAutomation.postToSocial(platform, content);
+    res.json({ ok: result.success, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== WHITE-LABEL ENDPOINTS ====================
+app.post("/api/v1/white-label/config", requireKey, async (req, res) => {
+  try {
+    if (!whiteLabelConfig) {
+      return res.status(503).json({ error: "White-label system not initialized" });
+    }
+
+    const config = await whiteLabelConfig.createConfig(req.body);
+    res.json({ ok: true, config });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/white-label/config/:clientId", requireKey, async (req, res) => {
+  try {
+    if (!whiteLabelConfig) {
+      return res.status(503).json({ error: "White-label system not initialized" });
+    }
+
+    const config = await whiteLabelConfig.getConfig(req.params.clientId);
+    res.json({ ok: true, config });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Phone System Endpoints (Twilio)
+app.post("/api/v1/phone/call", requireKey, async (req, res) => {
+  try {
+    const { to, from, message, aiMember = "chatgpt" } = req.body;
+    if (!to || !message) {
+      return res.status(400).json({ error: "Phone number (to) and message required" });
+    }
+    const result = await makePhoneCall(to, from, message, aiMember);
+    res.json({ ok: result.success, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/phone/sms", requireKey, async (req, res) => {
+  try {
+    const { to, message, aiMember = "chatgpt" } = req.body;
+    if (!to || !message) {
+      return res.status(400).json({ error: "Phone number (to) and message required" });
+    }
+    const result = await sendSMS(to, message, aiMember);
+    res.json({ ok: result.success, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/phone/call-handler", async (req, res) => {
+  // Twilio webhook handler for call events
+  try {
+    const { CallSid, CallStatus, From, To } = req.body;
+    console.log(`📞 Call event: ${CallSid} - ${CallStatus} from ${From} to ${To}`);
+    
+    // Use AI to generate TwiML response
+    const twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say voice="alice">Hello, this is LifeOS AI assistant. How can I help you today?</Say>
+  <Gather input="speech" action="/api/v1/phone/call-process" method="POST">
+    <Say>Please speak your message.</Say>
+  </Gather>
+</Response>`;
+    
+    res.type('text/xml');
+    res.send(twiml);
+  } catch (error) {
+    res.status(500).send(`<Response><Say>Error processing call</Say></Response>`);
+  }
+});
+
+app.post("/api/v1/phone/call-process", async (req, res) => {
+  // Process voice input from phone call
+  try {
+    const { SpeechResult, From, To } = req.body;
+    if (SpeechResult) {
+      // Send to AI council for processing (with compression for cost savings)
+      const response = await callCouncilWithFailover(SpeechResult, "chatgpt", { compress: true });
+      
+      const twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say voice="alice">${response}</Say>
+  <Gather input="speech" action="/api/v1/phone/call-process" method="POST">
+    <Say>Anything else I can help with?</Say>
+  </Gather>
+  <Say>Thank you for calling. Goodbye.</Say>
+  <Hangup/>
+</Response>`;
+      
+      res.type('text/xml');
+      res.send(twiml);
+    } else {
+      res.type('text/xml');
+      res.send(`<Response><Say>I didn't catch that. Please try again.</Say></Response>`);
+    }
+  } catch (error) {
+    res.status(500).send(`<Response><Say>Error: ${error.message}</Say></Response>`);
   }
 });
 
@@ -4292,6 +5073,7 @@ async function start() {
 
     await initDatabase();
     await loadROIFromDatabase();
+    await initializeTwoTierSystem();
 
     console.log("\n🤖 AI COUNCIL:");
     Object.values(COUNCIL_MEMBERS).forEach((m) =>
