@@ -21,8 +21,8 @@ import { promises as fsPromises } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { Pool } from "pg";
-import { WebSocket } from "ws";
-import { create } from "http";
+import { WebSocketServer } from "ws";
+import { createServer } from "http";
 import crypto from "crypto";
 import process from "node:process";
 import { exec } from "child_process";
@@ -35,8 +35,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const  = create(app);
-const wss = new WebSocket({  });
+const server = createServer(app);
+const wss = new WebSocketServer({ server });
 
 // ==================== ENVIRONMENT CONFIGURATION ====================
 const {
