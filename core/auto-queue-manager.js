@@ -6,10 +6,11 @@
  */
 
 export class AutoQueueManager {
-  constructor(pool, callCouncilMember, executionQueue) {
+  constructor(pool, callCouncilMember, executionQueue, modelRouter = null) {
     this.pool = pool;
     this.callCouncilMember = callCouncilMember;
     this.executionQueue = executionQueue;
+    this.modelRouter = modelRouter;
     this.lastIdeaGeneration = null;
     this.ideaGenerationInterval = 24 * 60 * 60 * 1000; // 24 hours
     this.minQueueSize = 5; // Always keep at least 5 tasks
@@ -29,7 +30,28 @@ export class AutoQueueManager {
   }
 
   /**
-   * Generate 25 improvement ideas and queue highest rated
+   * Generate ideas using enhanced generator (each AI gives 25, council debates, votes)
+   */
+  async generateDailyIdeasEnhanced() {
+    try {
+      const { EnhancedIdeaGenerator } = await import('./enhanced-idea-generator.js');
+      const generator = new EnhancedIdeaGenerator(
+        this.pool,
+        this.callCouncilMember,
+        this.modelRouter
+      );
+      
+      const result = await generator.runFullPipeline(this.executionQueue);
+      return result;
+    } catch (error) {
+      console.error('Enhanced idea generation failed:', error.message);
+      // Fallback to simple generation
+      return await this.generateDailyIdeas();
+    }
+  }
+
+  /**
+   * Generate 25 improvement ideas and queue highest rated (simple version)
    */
   async generateDailyIdeas() {
     const now = new Date();

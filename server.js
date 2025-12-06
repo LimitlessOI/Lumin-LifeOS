@@ -3498,6 +3498,7 @@ let costReExamination = null;
 let logMonitor = null;
 let autoQueueManager = null;
 let aiAccountBot = null;
+let conversationExtractor = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -3571,9 +3572,15 @@ async function initializeTwoTierSystem() {
     try {
       const queueModule = await import("./core/auto-queue-manager.js");
       const AutoQueueManager = queueModule.AutoQueueManager;
-      autoQueueManager = new AutoQueueManager(pool, callCouncilMember, executionQueue);
+      autoQueueManager = new AutoQueueManager(pool, callCouncilMember, executionQueue, modelRouter);
       autoQueueManager.start();
       console.log("✅ Auto-Queue Manager initialized");
+      
+      // Use enhanced idea generation (each AI gives 25, council debates, votes)
+      // Override the daily idea generation
+      autoQueueManager.generateDailyIdeas = async () => {
+        return await autoQueueManager.generateDailyIdeasEnhanced();
+      };
     } catch (error) {
       console.warn("⚠️ Auto-queue manager not available:", error.message);
     }
@@ -3586,6 +3593,16 @@ async function initializeTwoTierSystem() {
       console.log("✅ AI Account Bot initialized");
     } catch (error) {
       console.warn("⚠️ AI account bot not available:", error.message);
+    }
+
+    // Initialize conversation extractor bot
+    try {
+      const extractorModule = await import("./core/conversation-extractor-bot.js");
+      const ConversationExtractorBot = extractorModule.ConversationExtractorBot;
+      conversationExtractor = new ConversationExtractorBot(pool, knowledgeBase, callCouncilMember);
+      console.log("✅ Conversation Extractor Bot initialized");
+    } catch (error) {
+      console.warn("⚠️ Conversation extractor not available:", error.message);
     }
     
     console.log("✅ Two-Tier Council System initialized");
