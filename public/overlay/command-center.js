@@ -261,10 +261,16 @@ class CommandCenter {
       });
       
       const data = await response.json();
-      this.activeProjects = data.tasks || [];
+      if (data.ok) {
+        this.activeProjects = data.tasks || [];
+      } else {
+        this.activeProjects = [];
+      }
       this.renderProjects();
     } catch (error) {
       console.error('Error loading projects:', error);
+      this.activeProjects = [];
+      this.renderProjects();
     }
   }
 
@@ -272,23 +278,34 @@ class CommandCenter {
     const projectsDiv = document.getElementById('projectsList');
     projectsDiv.innerHTML = '';
     
+    if (this.activeProjects.length === 0) {
+      projectsDiv.innerHTML = '<div style="padding: 12px; color: #9ca3af; font-size: 12px;">No active projects. System will generate ideas automatically.</div>';
+      return;
+    }
+    
     this.activeProjects.forEach(project => {
       const item = document.createElement('div');
       item.className = 'project-item';
       item.innerHTML = `
-        <div class="project-title">${project.title || project.name}</div>
+        <div class="project-title">${this.escapeHtml(project.title || project.name || 'Task')}</div>
         <div class="project-progress">
           <div class="project-progress-bar" style="width: ${project.progress || 0}%"></div>
         </div>
         <div class="project-meta">
-          <span>${project.status || 'In Progress'}</span>
-          <span>ETA: ${project.eta || 'N/A'}</span>
+          <span>${project.status || 'pending'}</span>
+          <span>ETA: ${project.eta || 'Calculating...'}</span>
         </div>
       `;
       
       item.addEventListener('click', () => this.selectProject(project));
       projectsDiv.appendChild(item);
     });
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   selectProject(project) {
