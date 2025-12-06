@@ -3541,19 +3541,25 @@ async function start() {
     console.log("  ✅ Continuous Memory");
     console.log("  ✅ Stripe Revenue Sync (read + ROI logging only)");
 
+    // Kick off the execution queue
     executionQueue.executeNext();
 
+    // Deploy income drones
     await incomeDroneSystem.deployDrone("affiliate", 500);
     await incomeDroneSystem.deployDrone("content", 300);
 
+    // Continuous self-improvement cycles
     setInterval(() => continuousSelfImprovement(), 30 * 60 * 1000);
     setTimeout(() => continuousSelfImprovement(), 120000);
 
+    // Daily ideas
     setInterval(() => generateDailyIdeas(), 24 * 60 * 60 * 1000);
     setTimeout(() => generateDailyIdeas(), 60000);
 
+    // AI rotation
     setInterval(() => rotateAIsBasedOnPerformance(), 60 * 60 * 1000);
 
+    // Stripe revenue sync (if configured)
     if (STRIPE_SECRET_KEY) {
       await syncStripeRevenue();
       setInterval(
@@ -3565,9 +3571,11 @@ async function start() {
       );
     }
 
+    // Initial snapshot
     await createSystemSnapshot("System startup");
 
-    .listen(PORT, HOST, () => {
+    // ✅ This is the important line – use the HTTP server, not a bare `.listen`
+    server.listen(PORT, HOST, () => {
       console.log(`\n🌐  ONLINE: http://${HOST}:${PORT}`);
       console.log(`📊 Health: http://${HOST}:${PORT}/healthz`);
       console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
@@ -3603,4 +3611,3 @@ process.on("SIGINT", async () => {
 start();
 
 export default app;
-
