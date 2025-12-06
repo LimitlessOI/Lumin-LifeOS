@@ -8,7 +8,24 @@
 class CommandCenter {
   constructor() {
     this.apiBase = window.location.origin;
-    this.commandKey = localStorage.getItem('lifeos_cmd_key') || '';
+    
+    // Get key from URL, sessionStorage, or localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlKey = urlParams.get('key');
+    this.commandKey = urlKey || sessionStorage.getItem('lifeos_cmd_key') || localStorage.getItem('lifeos_cmd_key') || '';
+    
+    // If no key, redirect to activation
+    if (!this.commandKey) {
+      window.location.href = '/activate';
+      return;
+    }
+    
+    // Store key for future use
+    if (urlKey) {
+      sessionStorage.setItem('lifeos_cmd_key', urlKey);
+      localStorage.setItem('lifeos_cmd_key', urlKey);
+    }
+    
     this.conversationHistory = [];
     this.activeProjects = [];
     this.activeAIs = new Set();

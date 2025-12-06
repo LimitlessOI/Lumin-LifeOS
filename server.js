@@ -4077,15 +4077,77 @@ function requireKey(req, res, next) {
 // Health checks
 app.get("/health", (req, res) => res.send("OK"));
 
+// Auto-install missing packages endpoint
+app.post("/api/v1/system/auto-install", requireKey, async (req, res) => {
+  try {
+    const { AutoInstaller } = await import("./core/auto-installer.js");
+    const installer = new AutoInstaller();
+    
+    const { packages } = req.body;
+    
+    if (!packages || !Array.isArray(packages)) {
+      return res.status(400).json({ error: "packages array required" });
+    }
+
+    const results = await installer.installPackages(packages);
+    res.json({ ok: true, results });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // Command Center Route
 // Command Center Route
+// Command Center Activation Page
+app.get("/activate", (req, res) => {
+  const filePath = path.join(__dirname, "public", "overlay", "activate.html");
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).send("Activation page not found.");
+  }
+});
+
+// Command Center (requires activation)
 app.get("/command-center", (req, res) => {
+  // Check for key in query, header, or session
+  const key = req.query.key || req.headers["x-command-key"];
+  const sessionKey = req.session?.commandKey;
+  
+  // If no key provided, redirect to activation
+  if (!key && !sessionKey) {
+    return res.redirect('/activate');
+  }
+
+  // If key provided, verify it
+  if (key && key !== COMMAND_CENTER_KEY) {
+    return res.redirect('/activate?error=invalid_key');
+  }
+
+  // Store in session if valid
+  if (key === COMMAND_CENTER_KEY) {
+    if (!req.session) {
+      // Session middleware might not be initialized, that's okay
+    } else {
+      req.session.commandKey = key;
+    }
+  }
+
   const filePath = path.join(__dirname, "public", "overlay", "command-center.html");
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
     res.status(404).send("Command center not found. Please ensure command-center.html exists.");
   }
+});
+
+// Health check endpoint for activation verification
+app.get("/api/v1/health-check", requireKey, (req, res) => {
+  res.json({ 
+    ok: true, 
+    message: "Command Center Key verified",
+    timestamp: new Date().toISOString(),
+  });
 });
 
 app.get("/healthz", async (req, res) => {
