@@ -146,6 +146,41 @@ function isSameOrigin(req) {
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.text({ type: "text/plain", limit: "50mb" }));
+
+// Command Center routes (before static files to ensure they work)
+app.get("/activate", (req, res) => {
+  const filePath = path.join(__dirname, "public", "overlay", "activate.html");
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).send("Activation page not found.");
+  }
+});
+
+app.get("/command-center", (req, res) => {
+  // Check for key in query parameter
+  const key = req.query.key;
+  
+  // If key provided and valid, allow access
+  if (key && key === COMMAND_CENTER_KEY) {
+    const filePath = path.join(__dirname, "public", "overlay", "command-center.html");
+    if (fs.existsSync(filePath)) {
+      return res.sendFile(filePath);
+    } else {
+      return res.status(404).send("Command center not found. Please ensure command-center.html exists.");
+    }
+  }
+
+  // If no key or invalid key, redirect to activation
+  if (key && key !== COMMAND_CENTER_KEY) {
+    return res.redirect('/activate?error=invalid_key');
+  }
+
+  // No key provided, redirect to activation
+  res.redirect('/activate');
+});
+
+// Serve static files (after specific routes)
 app.use(express.static(path.join(__dirname, "public")));
 
 // SECURE CORS Middleware with NO-CACHE headers
@@ -4096,39 +4131,7 @@ app.post("/api/v1/system/auto-install", requireKey, async (req, res) => {
   }
 });
 
-// Command Center Activation Page
-app.get("/activate", (req, res) => {
-  const filePath = path.join(__dirname, "public", "overlay", "activate.html");
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    res.status(404).send("Activation page not found.");
-  }
-});
-
-// Command Center (requires activation/key)
-app.get("/command-center", (req, res) => {
-  // Check for key in query parameter
-  const key = req.query.key;
-  
-  // If key provided and valid, allow access
-  if (key && key === COMMAND_CENTER_KEY) {
-    const filePath = path.join(__dirname, "public", "overlay", "command-center.html");
-    if (fs.existsSync(filePath)) {
-      return res.sendFile(filePath);
-    } else {
-      return res.status(404).send("Command center not found. Please ensure command-center.html exists.");
-    }
-  }
-
-  // If no key or invalid key, redirect to activation
-  if (key && key !== COMMAND_CENTER_KEY) {
-    return res.redirect('/activate?error=invalid_key');
-  }
-
-  // No key provided, redirect to activation
-  res.redirect('/activate');
-});
+// Routes moved to top (before static middleware) to ensure they work
 
 // Health check endpoint for activation verification
 app.get("/api/v1/health-check", requireKey, (req, res) => {
