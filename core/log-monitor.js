@@ -19,8 +19,38 @@ export class LogMonitor {
     this.fixHistory = [];
     this.lastLogCheck = null;
     this.logFile = process.env.LOG_FILE || '/tmp/lifeos.log';
+    this.processLogs = []; // Store process output
+    this.maxProcessLogs = 1000; // Keep last 1000 lines
     
     this.initializeErrorPatterns();
+    this.captureProcessOutput();
+  }
+
+  /**
+   * Capture process stdout/stderr
+   */
+  captureProcessOutput() {
+    // Intercept console.error
+    const originalError = console.error;
+    console.error = (...args) => {
+      const message = args.map(a => String(a)).join(' ');
+      this.processLogs.push({ level: 'error', message, timestamp: new Date().toISOString() });
+      if (this.processLogs.length > this.maxProcessLogs) {
+        this.processLogs.shift();
+      }
+      originalError.apply(console, args);
+    };
+
+    // Intercept console.warn
+    const originalWarn = console.warn;
+    console.warn = (...args) => {
+      const message = args.map(a => String(a)).join(' ');
+      this.processLogs.push({ level: 'warn', message, timestamp: new Date().toISOString() });
+      if (this.processLogs.length > this.maxProcessLogs) {
+        this.processLogs.shift();
+      }
+      originalWarn.apply(console, args);
+    };
   }
 
   initializeErrorPatterns() {
@@ -138,17 +168,32 @@ export class LogMonitor {
    */
   async getRecentLogs() {
     try {
-      // Try to read from log file
+      let logs = '';
+      
+      // Get from process logs (captured output)
+      const recentProcessLogs = this.processLogs
+        .filter(log => log.level === 'error' || log.level === 'warn')
+        .slice(-100)
+        .map(log => log.message)
+        .join('\n');
+      
+      logs += recentProcessLogs;
+      
+      // Also try to read from log file
       if (fs.existsSync(this.logFile)) {
         const content = await fs.promises.readFile(this.logFile, 'utf8');
         const lines = content.split('\n');
-        return lines.slice(-100).join('\n'); // Last 100 lines
+        logs += '\n' + lines.slice(-100).join('\n'); // Last 100 lines
       }
       
-      // Fallback: check process output (if available)
-      return '';
+      return logs.trim();
     } catch (error) {
-      return '';
+      // Return process logs only if file read fails
+      return this.processLogs
+        .filter(log => log.level === 'error')
+        .slice(-50)
+        .map(log => log.message)
+        .join('\n');
     }
   }
 
