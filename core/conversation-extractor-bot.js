@@ -5,9 +5,21 @@
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
-import puppeteer from 'puppeteer';
-import fs from 'fs';
-import path from 'path';
+/**
+ * ╔══════════════════════════════════════════════════════════════════════════════════╗
+ * ║                    CONVERSATION EXTRACTOR BOT                                   ║
+ * ║                    Extracts all conversations from AI platforms                 ║
+ * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ */
+
+// Puppeteer is optional - only needed for browser automation
+let puppeteer = null;
+try {
+  const puppeteerModule = await import('puppeteer');
+  puppeteer = puppeteerModule.default || puppeteerModule;
+} catch {
+  // Puppeteer not installed - browser automation unavailable
+}
 
 export class ConversationExtractorBot {
   constructor(pool, knowledgeBase, callCouncilMember) {
@@ -15,6 +27,19 @@ export class ConversationExtractorBot {
     this.knowledgeBase = knowledgeBase;
     this.callCouncilMember = callCouncilMember;
     this.processedConversations = new Set();
+    this.initPuppeteer();
+  }
+
+  async initPuppeteer() {
+    if (puppeteer) return; // Already initialized
+    
+    try {
+      const puppeteerModule = await import('puppeteer');
+      puppeteer = puppeteerModule.default || puppeteerModule;
+    } catch {
+      // Puppeteer not installed - browser automation unavailable
+      console.warn('⚠️ Puppeteer not installed - browser automation unavailable');
+    }
   }
 
   /**
@@ -22,6 +47,14 @@ export class ConversationExtractorBot {
    * Uses browser automation to access conversation history
    */
   async extractChatGPT(credentials) {
+    if (!puppeteer) {
+      return {
+        provider: 'chatgpt',
+        error: 'Puppeteer not installed. Use export method instead.',
+        note: 'Install: npm install puppeteer',
+      };
+    }
+
     console.log('🤖 [EXTRACTOR] Extracting ChatGPT conversations...');
 
     const browser = await puppeteer.launch({
@@ -172,10 +205,146 @@ export class ConversationExtractorBot {
   }
 
   parseExport(provider, data) {
-    // Use same parser as AIAccountBot
-    const { AIAccountBot } = require('./ai-account-bot.js');
-    const bot = new AIAccountBot(this.pool, this.knowledgeBase, this.callCouncilMember);
-    return bot.parseExportedData(provider, data);
+    // Parse exported data based on provider format
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch {
+        // Not JSON, treat as text
+        return this.parseTextConversations(data);
+      }
+    }
+    
+    switch (provider) {
+      case 'chatgpt':
+        return this.parseChatGPTExport(data);
+      case 'gemini':
+        return this.parseGeminiExport(data);
+      case 'claude':
+        return this.parseClaudeExport(data);
+      case 'grok':
+        return this.parseGrokExport(data);
+      case 'deepseek':
+        return this.parseDeepSeekExport(data);
+      default:
+        return this.parseGenericExport(data);
+    }
+  }
+
+  parseChatGPTExport(data) {
+    const conversations = [];
+    if (Array.isArray(data)) {
+      data.forEach(item => {
+        if (item.mapping) {
+          Object.values(item.mapping).forEach(node => {
+            if (node.message) {
+              conversations.push({
+                id: node.id,
+                role: node.message.author?.role || 'user',
+                content: node.message.content?.parts?.[0] || node.message.content || '',
+                timestamp: node.message.create_time,
+              });
+            }
+          });
+        }
+      });
+    }
+    return conversations;
+  }
+
+  parseGeminiExport(data) {
+    const conversations = [];
+    if (data.conversations) {
+      data.conversations.forEach(conv => {
+        conversations.push({
+          id: conv.id,
+          role: 'user',
+          content: conv.prompt || conv.input || '',
+          timestamp: conv.timestamp,
+        });
+        conversations.push({
+          id: conv.id + '_response',
+          role: 'assistant',
+          content: conv.response || conv.output || '',
+          timestamp: conv.timestamp,
+        });
+      });
+    }
+    return conversations;
+  }
+
+  parseClaudeExport(data) {
+    const conversations = [];
+    if (data.conversations) {
+      data.conversations.forEach(conv => {
+        conv.messages?.forEach(msg => {
+          conversations.push({
+            id: conv.id,
+            role: msg.role,
+            content: msg.content,
+            timestamp: msg.timestamp,
+          });
+        });
+      });
+    }
+    return conversations;
+  }
+
+  parseGrokExport(data) {
+    return this.parseGenericExport(data);
+  }
+
+  parseDeepSeekExport(data) {
+    return this.parseGenericExport(data);
+  }
+
+  parseGenericExport(data) {
+    const conversations = [];
+    if (Array.isArray(data)) {
+      data.forEach(item => {
+        if (item.message || item.content || item.text) {
+          conversations.push({
+            id: item.id || Date.now(),
+            role: item.role || 'user',
+            content: item.message || item.content || item.text,
+            timestamp: item.timestamp || item.created_at,
+          });
+        }
+      });
+    } else if (data.messages) {
+      conversations.push(...data.messages);
+    }
+    return conversations;
+  }
+
+  parseTextConversations(text) {
+    const conversations = [];
+    const lines = text.split('\n');
+    let currentConv = null;
+    
+    for (const line of lines) {
+      if (line.match(/^(User|You|Human):/i)) {
+        if (currentConv) conversations.push(currentConv);
+        currentConv = {
+          role: 'user',
+          content: line.replace(/^(User|You|Human):\s*/i, ''),
+        };
+      } else if (line.match(/^(AI|Assistant|ChatGPT|Gemini|Claude|Grok|DeepSeek):/i)) {
+        if (currentConv) {
+          conversations.push(currentConv);
+          conversations.push({
+            role: 'assistant',
+            content: line.replace(/^(AI|Assistant|ChatGPT|Gemini|Claude|Grok|DeepSeek):\s*/i, ''),
+          });
+          currentConv = null;
+        }
+      } else if (currentConv) {
+        currentConv.content += '\n' + line;
+      }
+    }
+    
+    if (currentConv) conversations.push(currentConv);
+    return conversations;
   }
 
   async extractIdeasFromConversation(conversation) {
