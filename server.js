@@ -21,8 +21,8 @@ import { promises as fsPromises } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { Pool } from "pg";
-import { WebSocketServer } from "ws";
-import { createServer } from "http";
+import { WebSocket } from "ws";
+import { create } from "http";
 import crypto from "crypto";
 import process from "node:process";
 import { exec } from "child_process";
@@ -35,8 +35,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const server = createServer(app);
-const wss = new WebSocketServer({ server });
+const  = create(app);
+const wss = new WebSocket({  });
 
 // ==================== ENVIRONMENT CONFIGURATION ====================
 const {
@@ -450,7 +450,7 @@ async function initDatabase() {
     );
 
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
-      ('server.js', 'Core system', true, false, true),
+      ('.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
       ('.github/workflows/autopilot-build.yml', 'Autopilot', true, false, true),
       ('public/overlay/command-center.html', 'Control panel', true, true, true)
@@ -3395,7 +3395,7 @@ app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
     }
 
     const allowedFiles = [
-      "server.js",
+      ".js",
       "public/overlay/command-center.js",
       "public/overlay/command-center.html",
       "package.json",
@@ -3567,8 +3567,8 @@ async function start() {
 
     await createSystemSnapshot("System startup");
 
-    server.listen(PORT, HOST, () => {
-      console.log(`\n🌐 SERVER ONLINE: http://${HOST}:${PORT}`);
+    .listen(PORT, HOST, () => {
+      console.log(`\n🌐  ONLINE: http://${HOST}:${PORT}`);
       console.log(`📊 Health: http://${HOST}:${PORT}/healthz`);
       console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
       console.log(`🤖 Self-Program: POST /api/v1/system/self-program`);

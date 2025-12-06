@@ -1,2 +1,2 @@
-// websocketServer.js
-// WebSocket server setup and handling logic if needed can be added here.
+// websocket.js
+// WebSocket  setup and handling logic if needed can be added here.
