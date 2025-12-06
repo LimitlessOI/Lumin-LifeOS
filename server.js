@@ -2172,10 +2172,11 @@ class SelfModificationEngine {
         console.log("⚠️ No AI available, proceeding with caution...");
       }
 
-      const sandboxResult = await sandboxTest(
-        newContent,
-        `Test modification of ${filePath}`
-      );
+    const sandboxResult = await robustSandboxTest(
+  newContent,
+  `Test modification of ${filePath}`,
+  5
+);
       if (!sandboxResult.success) {
         console.log(`⚠️ Sandbox test failed, rolling back to ${snapshotId}`);
         await rollbackToSnapshot(snapshotId);
@@ -3338,10 +3339,11 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
     const results = [];
 
     for (const change of fileChanges) {
-      const sandboxResult = await sandboxTest(
-        change.content,
-        `Test: ${change.filePath}`
-      );
+      const sandboxResult = await robustSandboxTest(
+  change.content,
+  `Test: ${change.filePath}`,
+  5
+);
 
       if (sandboxResult.success) {
         const result = await selfModificationEngine.modifyOwnCode(
