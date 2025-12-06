@@ -509,6 +509,34 @@ const COUNCIL_MEMBERS = {
   },
 };
 
+// ==================== HELPER: GET API KEY ====================
+function getApiKeyForProvider(provider) {
+  switch (provider) {
+    case "anthropic":
+      return (
+        process.env.LIFEOS_ANTHROPIC_KEY?.trim() ||
+        process.env.ANTHROPIC_API_KEY?.trim()
+      );
+    case "google":
+      return (
+        process.env.LIFEOS_GEMINI_KEY?.trim() ||
+        process.env.GEMINI_API_KEY?.trim()
+      );
+    case "deepseek":
+      return (
+        process.env.Deepseek_API_KEY?.trim() ||
+        process.env.DEEPSEEK_API_KEY?.trim() ||
+        process.env.DEEPSEEK_API_KEY?.trim()
+      );
+    case "xai":
+      return process.env.GROK_API_KEY?.trim();
+    case "openai":
+      return process.env.OPENAI_API_KEY?.trim();
+    default:
+      return null;
+  }
+}
+
 // ==================== ENHANCED AI CALLING WITH NO-CACHE ====================
 async function callCouncilMember(member, prompt, options = {}) {
   const config = COUNCIL_MEMBERS[member];
@@ -578,6 +606,12 @@ When asked what you can do, respond AS the system AI:
 Current specialties: ${config.specialties.join(", ")}.
 ${options.checkBlindSpots ? "Check for blind spots and unintended consequences." : ""}
 ${options.guessUserPreference ? "Consider user preferences based on past decisions." : ""}
+${options.webSearch ? `WEB SEARCH MODE: You have access to real-time web search. When searching, look for:
+- Recent blog posts, documentation, and tutorials
+- Stack Overflow and GitHub discussions
+- Official documentation and examples
+- Community solutions and best practices
+Include specific links, code examples, and actionable solutions from your search results.` : ""}
 
 Be concise, strategic, and speak as the system's internal AI.`;
 
@@ -1214,6 +1248,383 @@ async function sandboxTest(code, testDescription) {
   }
 }
 
+// ==================== DRIFT & HALLUCINATION PROTECTION ====================
+async function detectHallucinations(aiResponse, context, sourceMember) {
+  try {
+    // Check for common hallucination patterns
+    const hallucinationIndicators = [
+      /I don't have access to/i,
+      /I cannot/i,
+      /I'm not able to/i,
+      /as an AI language model/i,
+      /I don't have real-time/i,
+      /I cannot browse/i,
+    ];
+
+    const hasHallucinationPattern = hallucinationIndicators.some(pattern =>
+      pattern.test(aiResponse)
+    );
+
+    // Check for vague or non-specific responses
+    const vaguePatterns = [
+      /might work/i,
+      /could potentially/i,
+      /perhaps/i,
+      /maybe/i,
+      /I think/i,
+      /I believe/i,
+    ];
+
+    const vagueCount = vaguePatterns.filter(pattern => pattern.test(aiResponse)).length;
+    const isVague = vagueCount >= 3;
+
+    // Check for contradictory statements
+    const contradictions = [
+      /but.*however/i,
+      /although.*but/i,
+      /on one hand.*on the other hand/i,
+    ];
+
+    const hasContradictions = contradictions.some(pattern => pattern.test(aiResponse));
+
+    return {
+      hasHallucinationPattern,
+      isVague,
+      hasContradictions,
+      vagueCount,
+      confidence: hasHallucinationPattern || isVague || hasContradictions ? "low" : "medium",
+    };
+  } catch (error) {
+    console.warn(`Hallucination detection error: ${error.message}`);
+    return { confidence: "unknown" };
+  }
+}
+
+async function crossValidateResponses(responses, context) {
+  try {
+    if (responses.length < 2) {
+      return { validated: true, confidence: "low", reason: "Insufficient responses for validation" };
+    }
+
+    // Extract key claims/fixes from each response
+    const claims = responses.map(r => ({
+      member: r.member,
+      claims: extractKeyClaims(r.response),
+    }));
+
+    // Check for agreement on core solutions
+    const solutionPatterns = responses.map(r => extractSolutionPattern(r.response));
+    const agreementScore = calculateAgreement(solutionPatterns);
+
+    // Check if responses reference each other or contradict
+    const contradictions = findContradictions(claims);
+
+    const validated = agreementScore >= 0.6 && contradictions.length === 0;
+    const confidence = agreementScore >= 0.8 ? "high" : agreementScore >= 0.6 ? "medium" : "low";
+
+    return {
+      validated,
+      confidence,
+      agreementScore,
+      contradictions,
+      reason: validated
+        ? `High agreement (${(agreementScore * 100).toFixed(0)}%)`
+        : `Low agreement (${(agreementScore * 100).toFixed(0)}%) or contradictions found`,
+    };
+  } catch (error) {
+    console.warn(`Cross-validation error: ${error.message}`);
+    return { validated: false, confidence: "unknown", reason: error.message };
+  }
+}
+
+function extractKeyClaims(response) {
+  const claims = [];
+  // Extract code blocks
+  const codeBlocks = response.match(/```[\s\S]*?```/g) || [];
+  claims.push(...codeBlocks);
+  // Extract numbered/bulleted solutions
+  const solutions = response.match(/(?:^|\n)[\d\-\*]\s+[^\n]+/g) || [];
+  claims.push(...solutions);
+  return claims;
+}
+
+function extractSolutionPattern(response) {
+  // Extract the core solution approach
+  const patterns = [
+    /(?:fix|solution|approach|method):\s*([^\n]+)/i,
+    /(?:use|try|implement):\s*([^\n]+)/i,
+  ];
+  for (const pattern of patterns) {
+    const match = response.match(pattern);
+    if (match) return match[1].toLowerCase();
+  }
+  return response.substring(0, 100).toLowerCase();
+}
+
+function calculateAgreement(patterns) {
+  if (patterns.length < 2) return 0;
+  
+  // Simple similarity check
+  let matches = 0;
+  for (let i = 0; i < patterns.length; i++) {
+    for (let j = i + 1; j < patterns.length; j++) {
+      // Check for keyword overlap
+      const words1 = new Set(patterns[i].split(/\s+/));
+      const words2 = new Set(patterns[j].split(/\s+/));
+      const intersection = new Set([...words1].filter(x => words2.has(x)));
+      const union = new Set([...words1, ...words2]);
+      const similarity = intersection.size / union.size;
+      if (similarity > 0.3) matches++;
+    }
+  }
+  
+  const totalPairs = (patterns.length * (patterns.length - 1)) / 2;
+  return matches / totalPairs;
+}
+
+function findContradictions(claims) {
+  const contradictions = [];
+  const keywords = ["cannot", "should not", "don't", "never", "avoid"];
+  const positiveKeywords = ["can", "should", "do", "always", "use"];
+
+  for (let i = 0; i < claims.length; i++) {
+    for (let j = i + 1; j < claims.length; j++) {
+      const text1 = claims[i].claims.join(" ").toLowerCase();
+      const text2 = claims[j].claims.join(" ").toLowerCase();
+      
+      // Check for direct contradictions
+      for (const neg of keywords) {
+        for (const pos of positiveKeywords) {
+          if (text1.includes(neg) && text2.includes(pos)) {
+            contradictions.push({
+              member1: claims[i].member,
+              member2: claims[j].member,
+              type: "contradiction",
+            });
+          }
+        }
+      }
+    }
+  }
+  return contradictions;
+}
+
+async function validateAgainstWebSearch(aiResponse, webSearchResults, problem) {
+  try {
+    if (!webSearchResults || !webSearchResults.success) {
+      return { validated: false, confidence: "low", reason: "No web search results available" };
+    }
+
+    // Extract key technical terms from AI response
+    const responseTerms = extractTechnicalTerms(aiResponse);
+    const webTerms = extractTechnicalTerms(webSearchResults.results);
+
+    // Check for overlap
+    const overlap = responseTerms.filter(term => webTerms.includes(term));
+    const overlapRatio = overlap.length / Math.max(responseTerms.length, 1);
+
+    // Check if web search confirms or contradicts
+    const confirms = overlapRatio > 0.4;
+    const confidence = overlapRatio > 0.6 ? "high" : overlapRatio > 0.4 ? "medium" : "low";
+
+    return {
+      validated: confirms,
+      confidence,
+      overlapRatio,
+      reason: confirms
+        ? `Response aligns with web search results (${(overlapRatio * 100).toFixed(0)}% overlap)`
+        : `Response may not align with web search results (${(overlapRatio * 100).toFixed(0)}% overlap)`,
+    };
+  } catch (error) {
+    console.warn(`Web search validation error: ${error.message}`);
+    return { validated: false, confidence: "unknown", reason: error.message };
+  }
+}
+
+function extractTechnicalTerms(text) {
+  // Extract technical terms: function names, APIs, error messages, etc.
+  const terms = [];
+  // Code patterns
+  const codeMatches = text.match(/\b[a-z_][a-z0-9_]*\s*\(/gi) || [];
+  terms.push(...codeMatches.map(m => m.replace(/\s*\(/, "").toLowerCase()));
+  // Error patterns
+  const errorMatches = text.match(/error[:\s]+([^\n]+)/gi) || [];
+  terms.push(...errorMatches.map(m => m.replace(/error[:\s]+/i, "").toLowerCase()));
+  // API/library names
+  const apiMatches = text.match(/\b(?:require|import|from)\s+['"]([^'"]+)['"]/gi) || [];
+  terms.push(...apiMatches.map(m => m.replace(/\b(?:require|import|from)\s+['"]|['"]/gi, "").toLowerCase()));
+  return [...new Set(terms)];
+}
+
+async function detectDrift(member, currentResponse, historicalResponses) {
+  try {
+    if (historicalResponses.length < 3) {
+      return { hasDrift: false, confidence: "low", reason: "Insufficient history" };
+    }
+
+    // Compare current response style/approach with historical
+    const currentPattern = extractSolutionPattern(currentResponse);
+    const historicalPatterns = historicalResponses.map(r => extractSolutionPattern(r));
+
+    // Check for significant deviation
+    const avgSimilarity = historicalPatterns.reduce((sum, pattern) => {
+      const words1 = new Set(currentPattern.split(/\s+/));
+      const words2 = new Set(pattern.split(/\s+/));
+      const intersection = new Set([...words1].filter(x => words2.has(x)));
+      const union = new Set([...words1, ...words2]);
+      return sum + (intersection.size / union.size);
+    }, 0) / historicalPatterns.length;
+
+    const hasDrift = avgSimilarity < 0.3;
+    const confidence = avgSimilarity < 0.2 ? "high" : avgSimilarity < 0.3 ? "medium" : "low";
+
+    return {
+      hasDrift,
+      confidence,
+      similarity: avgSimilarity,
+      reason: hasDrift
+        ? `Response style deviates significantly from historical patterns (${(avgSimilarity * 100).toFixed(0)}% similarity)`
+        : `Response consistent with historical patterns (${(avgSimilarity * 100).toFixed(0)}% similarity)`,
+    };
+  } catch (error) {
+    console.warn(`Drift detection error: ${error.message}`);
+    return { hasDrift: false, confidence: "unknown", reason: error.message };
+  }
+}
+
+// ==================== WEB SEARCH CAPABILITIES ====================
+async function searchWebWithGemini(query) {
+  try {
+    const apiKey = process.env.LIFEOS_GEMINI_KEY?.trim() || process.env.GEMINI_API_KEY?.trim();
+    if (!apiKey) {
+      throw new Error("Gemini API key not available for web search");
+    }
+
+    // Use Gemini with enhanced prompt for web knowledge
+    const searchPrompt = `🔍 WEB SEARCH REQUEST: ${query}
+
+Search your knowledge base and web-connected information for:
+1. Recent blog posts, Stack Overflow answers, and documentation
+2. Code examples and working solutions
+3. Best practices and patterns
+4. GitHub repositories with similar code
+5. Official documentation links
+
+Provide:
+- Specific solutions with code examples
+- Links to resources (if available in your knowledge)
+- Step-by-step fixes
+- Why these solutions work
+
+Focus on practical, tested solutions that have worked for others.`;
+
+    const response = await callCouncilMember("gemini", searchPrompt, {
+      webSearch: true,
+    });
+
+    return {
+      success: true,
+      results: response,
+      source: "gemini_web_search",
+    };
+  } catch (error) {
+    console.warn(`⚠️ Gemini web search failed: ${error.message}`);
+    return {
+      success: false,
+      error: error.message,
+      source: "gemini_web_search",
+    };
+  }
+}
+
+async function searchWebWithGrok(query) {
+  try {
+    const apiKey = process.env.GROK_API_KEY?.trim();
+    if (!apiKey) {
+      throw new Error("Grok API key not available for web search");
+    }
+
+    // Use Grok's real-time knowledge and X/Twitter access
+    const searchPrompt = `🔍 WEB SEARCH REQUEST: ${query}
+
+Using your real-time knowledge and access to X (Twitter), search for:
+1. Recent discussions on X/Twitter about this problem
+2. Reddit threads and community forums
+3. Developer blogs and tutorials
+4. Real-world solutions from the community
+5. Links to resources and examples
+
+Provide:
+- Community-tested solutions
+- Links to discussions or resources
+- Code examples that have worked
+- Why these approaches are effective
+
+Focus on practical, community-verified solutions.`;
+
+    const response = await callCouncilMember("grok", searchPrompt, {
+      webSearch: true,
+    });
+
+    return {
+      success: true,
+      results: response,
+      source: "grok_web_search",
+    };
+  } catch (error) {
+    console.warn(`⚠️ Grok web search failed: ${error.message}`);
+    return {
+      success: false,
+      error: error.message,
+      source: "grok_web_search",
+    };
+  }
+}
+
+// ==================== ESCALATION STRATEGY PROPOSAL ====================
+async function proposeEscalationStrategy(problem, errorContext, attemptsSoFar = 0) {
+  const strategyPrompt = `We have a persistent problem that needs solving:
+
+PROBLEM: ${problem}
+ERROR CONTEXT: ${errorContext}
+ATTEMPTS SO FAR: ${attemptsSoFar}
+
+Propose an escalation strategy with:
+1. Number of attempts at each tier
+2. Which AI members to involve at each tier
+3. When to escalate to web search
+4. Maximum total attempts before considering alternative approaches
+
+Format your response as:
+TIER 1: [description] - [X] attempts with [members]
+TIER 2: [description] - [X] attempts with [members]
+TIER 3: [description] - [X] attempts with [members]
+WEB SEARCH: [description] - [X] attempts with [members]
+MAX TOTAL: [X] attempts
+
+Be strategic - we want to solve this, not waste resources.`;
+
+  try {
+    const strategy = await callCouncilWithFailover(strategyPrompt, "chatgpt");
+    return {
+      success: true,
+      strategy,
+      proposedBy: "council",
+    };
+  } catch (error) {
+    // Default strategy if proposal fails
+    return {
+      success: false,
+      strategy: `TIER 1: Single AI analysis - 3 attempts with first available member
+TIER 2: Multiple AIs - 5 attempts with top 3 available members
+TIER 3: Full council - 10 attempts with all available members
+WEB SEARCH: Web research - 5 attempts with ALL available members (enhanced web search)
+MAX TOTAL: 25 attempts`,
+      proposedBy: "default",
+    };
+  }
+}
+
 // ==================== ENHANCED SANDBOX TESTING WITH RETRY & COUNCIL ESCALATION ====================
 async function robustSandboxTest(code, testDescription, maxRetries = 5) {
   console.log(`🧪 [ROBUST TEST] Starting: ${testDescription}`);
@@ -1240,121 +1651,266 @@ async function robustSandboxTest(code, testDescription, maxRetries = 5) {
     }
   }
 
-  console.log(`🔍 [ROBUST TEST] Initial retries failed, escalating to council...`);
-  return await councilEscalatedSandboxTest(code, testDescription);
+  console.log(`🔍 [ROBUST TEST] Initial retries failed, escalating to persistent council...`);
+  return await persistentCouncilEscalation(code, testDescription, result.error);
 }
 
-async function councilEscalatedSandboxTest(code, testDescription) {
-  console.log(`🏛️ [COUNCIL ESCALATION] Problem: ${testDescription}`);
+// ==================== PERSISTENT COUNCIL ESCALATION (WORKS UNTIL SOLVED) ====================
+async function persistentCouncilEscalation(code, testDescription, errorContext = "") {
+  console.log(`🏛️ [PERSISTENT ESCALATION] Problem: ${testDescription}`);
+  console.log(`🔄 This will continue until solved...`);
 
-  const analysisPrompt = `We have a persistent sandbox test failure that we need to solve COLLECTIVELY.
+  // Propose escalation strategy
+  const strategyResult = await proposeEscalationStrategy(
+    testDescription,
+    errorContext || "Code failed sandbox testing",
+    0
+  );
+  console.log(`📋 Escalation Strategy Proposed:\n${strategyResult.strategy}`);
 
-TEST: ${testDescription}
-
-ERROR CONTEXT: The code failed multiple times in sandbox testing.
-
-ORIGINAL CODE:
-\`\`\`javascript
-${code}
-\`\`\`
-
-We need to:
-1. Diagnose the root cause of failure
-2. Search for solutions
-3. Propose corrected code
-4. Test iteratively until we succeed
-
-Provide:
-1. Root cause analysis
-2. Specific code fix
-3. Testing strategy for the fix`;
-
+  const proposalId = `persist_esc_${Date.now()}_${Math.random()
+    .toString(36)
+    .slice(2, 8)}`;
+  
   try {
-    const proposalId = `sandbox_esc_${Date.now()}_${Math.random()
-      .toString(36)
-      .slice(2, 8)}`;
     await pool.query(
       `INSERT INTO consensus_proposals (proposal_id, title, description, proposed_by, status)
        VALUES ($1, $2, $3, $4, $5)`,
       [
         proposalId,
-        `Sandbox Escalation: ${testDescription}`,
-        `Persistent sandbox test failure requiring council-wide solution search`,
+        `Persistent Escalation: ${testDescription}`,
+        `Working until solved. Strategy: ${strategyResult.strategy.substring(0, 200)}...`,
         "system",
         "in_progress",
       ]
     );
+  } catch (err) {
+    console.warn(`⚠️ Could not create proposal: ${err.message}`);
+  }
 
-    let councilAttempts = 0;
-    const maxCouncilAttempts = 10;
-    let currentCode = code;
+  let totalAttempts = 0;
+  let currentCode = code;
+  let currentTier = 1;
+  let tierAttempts = 0;
+  const maxTierAttempts = 3; // Per tier before escalating
+  const maxTotalAttempts = 50; // Absolute maximum (safety limit)
 
-    while (councilAttempts < maxCouncilAttempts) {
-      councilAttempts++;
-      console.log(
-        `🏛️ Council attempt ${councilAttempts}/${maxCouncilAttempts}...`
-      );
-
-      const insights = [];
-      const fixes = [];
-
-      try {
-        const geminiPrompt = `${analysisPrompt}
-
-        SPECIAL GEMINI INSTRUCTION: Provide at least 3 specific, actionable fixes.`;
-        const geminiResponse = await callCouncilMember("gemini", geminiPrompt);
-        insights.push({ member: "gemini", response: geminiResponse });
-        const geminiFixes = extractCodeFixes(geminiResponse);
-        fixes.push(...geminiFixes.map((f) => ({ source: "gemini", fix: f })));
-      } catch (err) {
-        console.log(`⚠️ Gemini unavailable for search: ${err.message}`);
+  // Get list of available working AIs
+  const availableMembers = [];
+  for (const member of Object.keys(COUNCIL_MEMBERS)) {
+    try {
+      // Quick check if member is available (check API key exists)
+      const testKey = getApiKeyForProvider(COUNCIL_MEMBERS[member].provider);
+      if (testKey) {
+        availableMembers.push(member);
       }
+    } catch {
+      // Skip unavailable members
+    }
+  }
 
+  console.log(`✅ Available AI members: ${availableMembers.join(", ")}`);
+
+  // Tier definitions
+  const tiers = [
+    {
+      name: "Single AI Analysis",
+      members: availableMembers.length > 0 ? [availableMembers[0]] : ["deepseek"],
+      maxAttempts: 3,
+      description: "Deep analysis with one technical expert",
+    },
+    {
+      name: "Multiple Technical AIs",
+      members: availableMembers.length >= 3 
+        ? availableMembers.slice(0, 3) 
+        : ["chatgpt", "deepseek", "gemini"],
+      maxAttempts: 5,
+      description: "Collaborative analysis with technical experts",
+    },
+    {
+      name: "Full Council",
+      members: availableMembers.length > 0 ? availableMembers : ["chatgpt", "deepseek", "gemini", "grok"],
+      maxAttempts: 10,
+      description: "All council members working together",
+    },
+    {
+      name: "Web Search Enhanced - All Available AIs",
+      members: availableMembers.length > 0 ? availableMembers : ["chatgpt", "deepseek", "gemini", "grok"], // ALL available working AIs with web search
+      maxAttempts: 5,
+      description: "ALL available working AIs with web search capabilities - Gemini and Grok do enhanced web searches, others use their knowledge bases",
+      useWebSearch: true,
+    },
+  ];
+
+  while (totalAttempts < maxTotalAttempts) {
+    // Check if we need to escalate to next tier
+    if (tierAttempts >= tiers[currentTier - 1].maxAttempts && currentTier < tiers.length) {
+      console.log(`\n📈 ESCALATING to Tier ${currentTier + 1}: ${tiers[currentTier].name}`);
+      currentTier++;
+      tierAttempts = 0;
+    }
+
+    // If we've exhausted all tiers, propose new strategy or continue with web search
+    if (currentTier > tiers.length) {
+      console.log(`\n🔄 All tiers exhausted. Continuing with web search focus...`);
+      currentTier = tiers.length; // Stay on web search tier
+    }
+
+    const tier = tiers[currentTier - 1];
+    totalAttempts++;
+    tierAttempts++;
+
+    console.log(
+      `\n🏛️ [TIER ${currentTier}/${tiers.length}] ${tier.name} - Attempt ${tierAttempts}/${tier.maxAttempts} (Total: ${totalAttempts})`
+    );
+
+    const analysisPrompt = `We have a persistent problem that MUST be solved:
+
+PROBLEM: ${testDescription}
+ERROR: ${errorContext || "Code failed testing"}
+TIER: ${tier.name}
+ATTEMPT: ${tierAttempts}/${tier.maxAttempts} (Total: ${totalAttempts})
+
+ORIGINAL CODE:
+\`\`\`javascript
+${currentCode}
+\`\`\`
+
+${tier.useWebSearch ? "🔍 WEB SEARCH MODE: Search the web, blogs, Stack Overflow, GitHub, and documentation for solutions to this exact problem. Include links and code examples from real solutions." : ""}
+
+We need to:
+1. Diagnose the root cause
+2. ${tier.useWebSearch ? "Find web resources and examples" : "Analyze the code deeply"}
+3. Propose corrected code
+4. Ensure it will work
+
+Provide:
+1. Root cause analysis
+2. ${tier.useWebSearch ? "Web resources found (with links if possible)" : "Technical analysis"}
+3. Specific, complete code fix
+4. Why this fix will work`;
+
+    const insights = [];
+    const fixes = [];
+    const webSearchResults = {};
+
+    // Call tier members with drift & hallucination protection
+    for (const member of tier.members) {
       try {
-        const grokPrompt = `${analysisPrompt}
-
-        SPECIAL GROK INSTRUCTION: Provide community-style fixes and patterns.`;
-        const grokResponse = await callCouncilMember("grok", grokPrompt);
-        insights.push({ member: "grok", response: grokResponse });
-        const grokFixes = extractCodeFixes(grokResponse);
-        fixes.push(...grokFixes.map((f) => ({ source: "grok", fix: f })));
-      } catch (err) {
-        console.log(`⚠️ Grok unavailable for search: ${err.message}`);
-      }
-
-      const technicalMembers = ["chatgpt", "deepseek", "gemini"];
-      for (const member of technicalMembers) {
-        try {
-          const techPrompt = `${analysisPrompt}
-
-          Current proposed fixes from research:
-          ${fixes
-            .slice(0, 3)
-            .map((f) => `${f.source}: ${f.fix.substring(0, 200)}...`)
-            .join("\n")}
-          
-          Analyze these fixes and propose the most likely correct solution.`;
-          const response = await callCouncilMember(member, techPrompt);
-          insights.push({ member, response });
-          const techFixes = extractCodeFixes(response);
-          fixes.push(...techFixes.map((f) => ({ source: member, fix: f })));
-        } catch (err) {
-          console.log(`⚠️ ${member} unavailable: ${err.message}`);
+        let prompt = analysisPrompt;
+        
+        // Add web search for ALL members in web search tier
+        if (tier.useWebSearch) {
+          // Gemini and Grok have enhanced web search capabilities
+          if (member === "gemini") {
+            const webResults = await searchWebWithGemini(
+              `${testDescription}. Error: ${errorContext}`
+            );
+            webSearchResults.gemini = webResults;
+            if (webResults.success) {
+              prompt += `\n\n🔍 GEMINI WEB SEARCH RESULTS:\n${webResults.results}`;
+            }
+          } else if (member === "grok") {
+            const webResults = await searchWebWithGrok(
+              `${testDescription}. Error: ${errorContext}`
+            );
+            webSearchResults.grok = webResults;
+            if (webResults.success) {
+              prompt += `\n\n🔍 GROK WEB SEARCH RESULTS:\n${webResults.results}`;
+            }
+          } else {
+            // Other AIs also get web search context - they can use their knowledge bases
+            prompt += `\n\n🔍 WEB SEARCH MODE: Use your knowledge base and any available web-connected information to find solutions. Search for similar problems, Stack Overflow answers, GitHub issues, blog posts, and documentation. Include specific examples and code snippets from your knowledge.`;
+          }
         }
+
+        const response = await callCouncilMember(member, prompt);
+        
+        // DRIFT & HALLUCINATION PROTECTION
+        const hallucinationCheck = await detectHallucinations(response, { problem: testDescription, tier: currentTier }, member);
+        
+        // Get historical responses for this member (if available)
+        try {
+          const historyResult = await pool.query(
+            `SELECT response FROM conversation_memory 
+             WHERE ai_member = $1 AND created_at > NOW() - INTERVAL '24 hours'
+             ORDER BY created_at DESC LIMIT 5`,
+            [member]
+          );
+          const historicalResponses = historyResult.rows.map(r => r.response || "");
+          const driftCheck = await detectDrift(member, response, historicalResponses);
+          
+          if (hallucinationCheck.confidence === "low" || driftCheck.hasDrift) {
+            console.warn(`⚠️ [${member}] Hallucination/Drift detected:`, {
+              hallucination: hallucinationCheck,
+              drift: driftCheck,
+            });
+            // Still include but flag it
+            insights.push({ 
+              member, 
+              response, 
+              tier: currentTier,
+              flagged: true,
+              hallucinationCheck,
+              driftCheck,
+            });
+          } else {
+            insights.push({ member, response, tier: currentTier });
+          }
+        } catch (histErr) {
+          // If history check fails, still include the response
+          insights.push({ member, response, tier: currentTier });
+        }
+
+        // Validate against web search if available
+        if (tier.useWebSearch && (webSearchResults.gemini || webSearchResults.grok)) {
+          const webResult = webSearchResults.gemini || webSearchResults.grok;
+          const webValidation = await validateAgainstWebSearch(response, webResult, testDescription);
+          if (webValidation.confidence === "low") {
+            console.warn(`⚠️ [${member}] Response may not align with web search:`, webValidation.reason);
+          }
+        }
+
+        const memberFixes = extractCodeFixes(response);
+        fixes.push(...memberFixes.map((f) => ({ source: member, fix: f, tier: currentTier })));
+      } catch (err) {
+        console.log(`⚠️ ${member} unavailable: ${err.message}`);
       }
+    }
 
-      console.log(`🧪 Testing ${fixes.length} proposed fixes...`);
+    // CROSS-VALIDATION: Check if multiple AIs agree
+    if (insights.length >= 2) {
+      const validation = await crossValidateResponses(insights, { problem: testDescription });
+      if (!validation.validated || validation.confidence === "low") {
+        console.warn(`⚠️ CROSS-VALIDATION FAILED:`, validation);
+        // Continue but be more cautious
+      } else {
+        console.log(`✅ CROSS-VALIDATION PASSED: ${validation.reason}`);
+      }
+    }
 
-      for (let i = 0; i < fixes.length; i++) {
-        const fix = fixes[i];
-        console.log(`🔧 Testing fix ${i + 1} from ${fix.source}...`);
+    // If no fixes found, try to get more from other members
+    if (fixes.length === 0 && currentTier < tiers.length) {
+      console.log(`⚠️ No fixes found this round, escalating...`);
+      currentTier++;
+      tierAttempts = 0;
+      continue;
+    }
 
-        const testCode = applyCodeFix(currentCode, fix.fix);
-        const testResult = await sandboxTest(testCode, testDescription);
+    console.log(`🧪 Testing ${fixes.length} proposed fix(es)...`);
 
-        if (testResult.success) {
-          console.log(`🎉 SUCCESS! Fix from ${fix.source} worked!`);
+    // Test each fix
+    for (let i = 0; i < fixes.length; i++) {
+      const fix = fixes[i];
+      console.log(`🔧 Testing fix ${i + 1}/${fixes.length} from ${fix.source} (Tier ${fix.tier})...`);
 
+      const testCode = applyCodeFix(currentCode, fix.fix);
+      const testResult = await sandboxTest(testCode, testDescription);
+
+      if (testResult.success) {
+        console.log(`\n🎉 SUCCESS! Fix from ${fix.source} (Tier ${fix.tier}) worked after ${totalAttempts} total attempts!`);
+
+        try {
           await pool.query(
             `UPDATE consensus_proposals SET status = 'resolved', decided_at = now() 
              WHERE proposal_id = $1`,
@@ -1367,57 +1923,69 @@ Provide:
              VALUES ($1, $2, $3, $4, $5, now())`,
             [
               `success_${proposalId}`,
-              `Applied fix from ${fix.source}: ${fix.fix.substring(0, 500)}`,
-              `Council escalation successful on attempt ${councilAttempts}`,
+              `Applied fix from ${fix.source} (Tier ${fix.tier}): ${fix.fix.substring(0, 500)}`,
+              `Persistent escalation successful after ${totalAttempts} attempts`,
               true,
               null,
             ]
           );
-
-          return {
-            success: true,
-            result: testResult.result,
-            error: null,
-            councilAttempts,
-            fixSource: fix.source,
-            phase: "council_escalation",
-          };
+        } catch (dbErr) {
+          console.warn(`⚠️ Database update failed: ${dbErr.message}`);
         }
 
-        console.log(`⚠️ Fix ${i + 1} from ${fix.source} failed`);
+        return {
+          success: true,
+          result: testResult.result,
+          error: null,
+          totalAttempts,
+          tier: fix.tier,
+          fixSource: fix.source,
+          phase: "persistent_escalation_success",
+          strategy: strategyResult.strategy,
+        };
       }
 
-      console.log(
-        `🔄 No fixes worked this round. Gathering more insights...`
-      );
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log(`⚠️ Fix ${i + 1} from ${fix.source} failed`);
     }
 
-    console.log(
-      `❌ [COUNCIL ESCALATION] All ${maxCouncilAttempts} council attempts failed`
-    );
+    // Update current code with best fix attempt for next iteration
+    if (fixes.length > 0) {
+      // Use the first fix as the new baseline
+      currentCode = applyCodeFix(currentCode, fixes[0].fix);
+      console.log(`📝 Updated code baseline with best attempt for next iteration`);
+    }
 
+    console.log(`🔄 No fixes worked this round. Continuing...`);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+  }
+
+  // If we hit max attempts, don't give up - escalate to manual review
+  console.log(`\n⚠️ Reached maximum attempts (${maxTotalAttempts}). Creating manual review proposal...`);
+
+  try {
     await pool.query(
-      `UPDATE consensus_proposals SET status = 'failed' WHERE proposal_id = $1`,
+      `UPDATE consensus_proposals SET status = 'needs_review', description = description || ' - Reached max attempts, needs manual review'
+       WHERE proposal_id = $1`,
       [proposalId]
     );
-
-    return {
-      success: false,
-      result: null,
-      error: `Council escalation failed after ${maxCouncilAttempts} attempts`,
-      councilAttempts,
-      phase: "council_escalation_failed",
-    };
-  } catch (error) {
-    console.error(`🔥 Council escalation error: ${error.message}`);
-    return {
-      success: false,
-      result: null,
-      error: `Council escalation system error: ${error.message}`,
-      phase: "escalation_system_error",
-    };
+  } catch (err) {
+    console.warn(`⚠️ Could not update proposal: ${err.message}`);
   }
+
+  return {
+    success: false,
+    result: null,
+    error: `Reached maximum attempts (${maxTotalAttempts}) without solving. Problem requires manual review or alternative approach.`,
+    totalAttempts,
+    phase: "max_attempts_reached",
+    proposalId,
+    strategy: strategyResult.strategy,
+  };
+}
+
+// Legacy function for backward compatibility
+async function councilEscalatedSandboxTest(code, testDescription) {
+  return await persistentCouncilEscalation(code, testDescription);
 }
 
 function extractCodeFixes(response) {
@@ -1502,11 +2070,27 @@ function applyCodeFix(originalCode, fix) {
 }
 
 // ==================== SYSTEM SNAPSHOT & ROLLBACK ====================
-async function createSystemSnapshot(reason = "Manual snapshot") {
+async function createSystemSnapshot(reason = "Manual snapshot", filePaths = []) {
   try {
     const snapshotId = `snap_${Date.now()}_${Math.random()
       .toString(36)
       .slice(2, 8)}`;
+
+    // Store file contents if file paths are provided
+    const fileContents = {};
+    if (filePaths && filePaths.length > 0) {
+      for (const filePath of filePaths) {
+        try {
+          const fullPath = path.join(__dirname, filePath);
+          if (fs.existsSync(fullPath)) {
+            const content = await fsPromises.readFile(fullPath, "utf-8");
+            fileContents[filePath] = content;
+          }
+        } catch (error) {
+          console.warn(`⚠️ Could not snapshot file ${filePath}: ${error.message}`);
+        }
+      }
+    }
 
     const systemState = {
       metrics: systemMetrics,
@@ -1515,6 +2099,7 @@ async function createSystemSnapshot(reason = "Manual snapshot") {
       dailyIdeas: dailyIdeas.length,
       aiPerformance: Object.fromEntries(aiPerformanceScores),
       timestamp: new Date().toISOString(),
+      fileContents, // Store actual file contents for restoration
     };
 
     await pool.query(
@@ -1527,13 +2112,14 @@ async function createSystemSnapshot(reason = "Manual snapshot") {
       id: snapshotId,
       timestamp: new Date().toISOString(),
       reason,
+      filePaths: Object.keys(fileContents),
     });
 
     if (systemSnapshots.length > 10) {
       systemSnapshots = systemSnapshots.slice(-10);
     }
 
-    console.log(`📸 System snapshot created: ${snapshotId}`);
+    console.log(`📸 System snapshot created: ${snapshotId} (${Object.keys(fileContents).length} files backed up)`);
     return snapshotId;
   } catch (error) {
     console.error("Snapshot creation error:", error.message);
@@ -1552,27 +2138,62 @@ async function rollbackToSnapshot(snapshotId) {
       throw new Error("Snapshot not found");
     }
 
-    const snapshotData = result.rows[0].snapshot_data;
+    // Handle JSON parsing - PostgreSQL JSONB might return as object or string
+    let snapshotData = result.rows[0].snapshot_data;
+    if (typeof snapshotData === 'string') {
+      try {
+        snapshotData = JSON.parse(snapshotData);
+      } catch (parseError) {
+        throw new Error(`Failed to parse snapshot data: ${parseError.message}`);
+      }
+    }
 
+    // Restore in-memory state
     Object.assign(systemMetrics, snapshotData.metrics);
     Object.assign(roiTracker, snapshotData.roi);
 
     aiPerformanceScores.clear();
-    for (const [ai, score] of Object.entries(snapshotData.aiPerformance)) {
+    for (const [ai, score] of Object.entries(snapshotData.aiPerformance || {})) {
       aiPerformanceScores.set(ai, score);
     }
 
+    // Restore actual file contents if they were stored
+    const restoredFiles = [];
+    if (snapshotData.fileContents && typeof snapshotData.fileContents === 'object') {
+      for (const [filePath, content] of Object.entries(snapshotData.fileContents)) {
+        try {
+          const fullPath = path.join(__dirname, filePath);
+          // Create backup of current file before restoring
+          if (fs.existsSync(fullPath)) {
+            const backupPath = `${fullPath}.pre-rollback.${Date.now()}`;
+            await fsPromises.copyFile(fullPath, backupPath);
+            console.log(`📦 Backed up current ${filePath} to ${backupPath.split("/").pop()}`);
+          }
+          // Restore the file
+          await fsPromises.writeFile(fullPath, content, "utf-8");
+          restoredFiles.push(filePath);
+          console.log(`↩️ Restored file: ${filePath}`);
+        } catch (fileError) {
+          console.error(`⚠️ Failed to restore file ${filePath}: ${fileError.message}`);
+        }
+      }
+    }
+
     systemMetrics.rollbacksPerformed++;
-    console.log(`↩️ System rolled back to snapshot: ${snapshotId}`);
+    console.log(`↩️ System rolled back to snapshot: ${snapshotId} (${restoredFiles.length} files restored)`);
 
     await trackLoss(
       "info",
       "System rollback performed",
       `Rolled back to ${snapshotId}`,
-      { snapshot: snapshotData }
+      { snapshot: snapshotData, restoredFiles }
     );
 
-    return { success: true, message: `Rolled back to ${snapshotId}` };
+    return { 
+      success: true, 
+      message: `Rolled back to ${snapshotId}`,
+      restoredFiles: restoredFiles.length
+    };
   } catch (error) {
     console.error("Rollback error:", error.message);
     return { success: false, error: error.message };
@@ -2139,15 +2760,40 @@ class SelfModificationEngine {
     try {
       console.log(`🔧 [SELF-MODIFY] Attempting: ${filePath}`);
 
+      const fullPath = path.join(__dirname, filePath);
+      
+      // Create file backup before any modifications
+      let backupPath = null;
+      if (fs.existsSync(fullPath)) {
+        backupPath = `${fullPath}.backup.${Date.now()}`;
+        await fsPromises.copyFile(fullPath, backupPath);
+        console.log(`📦 Created file backup: ${backupPath.split("/").pop()}`);
+      }
+
+      // Create system snapshot with file contents
       const snapshotId = await createSystemSnapshot(
-        `Before modifying ${filePath}`
+        `Before modifying ${filePath}`,
+        [filePath] // Include this file in the snapshot
       );
 
       const protection = await isFileProtected(filePath);
 
       const activeAIs = await this.countActiveAIs();
 
-      if (protection.protected && protection.requires_council && activeAIs > 1) {
+      // Require at least one AI to be available for protected files
+      if (protection.protected && protection.requires_council) {
+        if (activeAIs === 0) {
+          // Restore from backup if no AIs available
+          if (backupPath && fs.existsSync(backupPath)) {
+            await fsPromises.copyFile(backupPath, fullPath);
+            await fsPromises.unlink(backupPath);
+          }
+          return {
+            success: false,
+            error: "No AI council members available - modification rejected for safety",
+          };
+        }
+
         const proposalId = await createProposal(
           `Self-Modify: ${filePath}`,
           `Reason: ${reason}\n\nChanges: ${newContent.slice(0, 300)}...`,
@@ -2157,6 +2803,11 @@ class SelfModificationEngine {
         if (proposalId) {
           const voteResult = await conductEnhancedConsensus(proposalId);
           if (voteResult.decision !== "APPROVED") {
+            // Restore from backup if council rejected
+            if (backupPath && fs.existsSync(backupPath)) {
+              await fsPromises.copyFile(backupPath, fullPath);
+              await fsPromises.unlink(backupPath);
+            }
             return {
               success: false,
               error: "Council rejected modification",
@@ -2165,7 +2816,7 @@ class SelfModificationEngine {
           }
         }
       } else if (activeAIs === 0) {
-        console.log("⚠️ No AI available, proceeding with caution...");
+        console.log("⚠️ No AI available, but file is not protected - proceeding with caution...");
       }
 
       const sandboxResult = await sandboxTest(
@@ -2174,16 +2825,26 @@ class SelfModificationEngine {
       );
       if (!sandboxResult.success) {
         console.log(`⚠️ Sandbox test failed, rolling back to ${snapshotId}`);
-        await rollbackToSnapshot(snapshotId);
+        // Try to restore from snapshot (which includes file contents)
+        const rollbackResult = await rollbackToSnapshot(snapshotId);
+        // Also restore from backup as fallback
+        if (backupPath && fs.existsSync(backupPath)) {
+          await fsPromises.copyFile(backupPath, fullPath);
+          await fsPromises.unlink(backupPath);
+        }
         return {
           success: false,
           error: "Failed sandbox test",
           sandboxError: sandboxResult.error,
+          rollbackResult,
         };
       }
 
-      const fullPath = path.join(__dirname, filePath);
-      await fsPromises.writeFile(fullPath, newContent);
+      // Write the new content
+      await fsPromises.writeFile(fullPath, newContent, "utf-8");
+      
+      // Clean up backup after successful modification (optional - could keep for extra safety)
+      // Keeping backup for now for extra safety
 
       const modId = `mod_${Date.now()}`;
       await pool.query(
@@ -2200,17 +2861,27 @@ class SelfModificationEngine {
       );
 
       systemMetrics.selfModificationsSuccessful++;
-      console.log(`✅ [SELF-MODIFY] Success: ${filePath}`);
+      console.log(`✅ [SELF-MODIFY] Success: ${filePath}${backupPath ? ` (backup: ${backupPath.split("/").pop()})` : ""}`);
       await trackLoss("info", `File modified: ${filePath}`, reason, {
         approved: true,
+        backupPath: backupPath ? backupPath.split("/").pop() : null,
+        snapshotId,
       });
 
       broadcastToAll({
         type: "self_modification",
         filePath,
         status: "success",
+        backupPath: backupPath ? backupPath.split("/").pop() : null,
       });
-      return { success: true, filePath, reason, modId };
+      return { 
+        success: true, 
+        filePath, 
+        reason, 
+        modId,
+        backupPath: backupPath ? backupPath.split("/").pop() : null,
+        snapshotId,
+      };
     } catch (error) {
       systemMetrics.selfModificationsAttempted++;
       await trackLoss("error", `Failed to modify: ${filePath}`, error.message);
@@ -3331,27 +4002,52 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
     const codeResponse = await callCouncilWithFailover(codePrompt, "deepseek");
 
     const fileChanges = extractFileChanges(codeResponse);
+    
+    if (fileChanges.length === 0) {
+      return res.status(400).json({
+        ok: false,
+        error: "No file changes could be extracted from AI response. The AI may not have followed the required format (===FILE:path=== ... ===END===).",
+        codeResponsePreview: codeResponse.substring(0, 500),
+      });
+    }
+
     const results = [];
+    const filePathsToSnapshot = fileChanges.map(c => c.filePath);
+
+    // Create snapshot with all files that will be modified
+    const snapshotId = await createSystemSnapshot(
+      `Before self-programming: ${instruction.substring(0, 50)}...`,
+      filePathsToSnapshot
+    );
 
     for (const change of fileChanges) {
-      const sandboxResult = await sandboxTest(
-        change.content,
-        `Test: ${change.filePath}`
-      );
-
-      if (sandboxResult.success) {
-        const result = await selfModificationEngine.modifyOwnCode(
-          change.filePath,
+      try {
+        const sandboxResult = await sandboxTest(
           change.content,
-          `Self-programming: ${instruction}`
+          `Test: ${change.filePath}`
         );
-        results.push(result);
-      } else {
+
+        if (sandboxResult.success) {
+          const result = await selfModificationEngine.modifyOwnCode(
+            change.filePath,
+            change.content,
+            `Self-programming: ${instruction}`
+          );
+          results.push(result);
+        } else {
+          results.push({
+            success: false,
+            filePath: change.filePath,
+            error: "Failed sandbox test",
+            sandboxError: sandboxResult.error,
+          });
+        }
+      } catch (error) {
+        console.error(`Error processing change for ${change.filePath}:`, error.message);
         results.push({
           success: false,
           filePath: change.filePath,
-          error: "Failed sandbox test",
-          sandboxError: sandboxResult.error,
+          error: error.message,
         });
       }
     }
@@ -3359,16 +4055,34 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
     const successfulChanges = results
       .filter((r) => r.success)
       .map((r) => r.filePath);
+    const failedChanges = results
+      .filter((r) => !r.success)
+      .map((r) => ({ filePath: r.filePath, error: r.error }));
+
+    // If any changes failed, offer to rollback
+    if (failedChanges.length > 0 && successfulChanges.length > 0) {
+      console.warn(`⚠️ Partial failure: ${failedChanges.length} file(s) failed, ${successfulChanges.length} succeeded`);
+      // Could auto-rollback here if desired, but for now just warn
+    }
+
+    // If all changes failed, rollback automatically
+    if (successfulChanges.length === 0 && failedChanges.length > 0) {
+      console.log(`🔄 All changes failed, rolling back to snapshot ${snapshotId}`);
+      await rollbackToSnapshot(snapshotId);
+    }
+
     if (successfulChanges.length > 0) {
       await triggerDeployment(successfulChanges);
     }
 
     res.json({
-      ok: true,
+      ok: successfulChanges.length > 0,
       instruction,
       filesModified: successfulChanges,
+      filesFailed: failedChanges,
       deploymentTriggered: successfulChanges.length > 0,
       blindSpotsDetected: blindSpots.length,
+      snapshotId,
       results: results,
     });
   } catch (error) {
@@ -3379,17 +4093,47 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
 
 function extractFileChanges(codeResponse) {
   const changes = [];
-  const fileRegex = /===FILE:(.*?)===\n([\s\S]*?)===END===/g;
-  let match;
-
-  while ((match = fileRegex.exec(codeResponse)) !== null) {
-    changes.push({
-      filePath: match[1].trim(),
-      content: match[2].trim(),
-    });
+  if (!codeResponse || typeof codeResponse !== 'string') {
+    console.warn("⚠️ extractFileChanges: Invalid codeResponse");
+    return changes;
   }
 
-  return changes;
+  try {
+    // Primary pattern: ===FILE:path/to/file.js=== ... ===END===
+    const fileRegex = /===FILE:(.*?)===\n([\s\S]*?)===END===/g;
+    let match;
+
+    while ((match = fileRegex.exec(codeResponse)) !== null) {
+      const filePath = match[1].trim();
+      const content = match[2].trim();
+      
+      if (filePath && content && content.length > 10) {
+        changes.push({
+          filePath,
+          content,
+        });
+      }
+    }
+
+    // Fallback: Look for code blocks with file paths in comments
+    if (changes.length === 0) {
+      const codeBlockRegex = /```(?:javascript|js|typescript|ts)?\n(?:.*?\/\/\s*file:\s*([^\n]+)\n)?([\s\S]*?)```/g;
+      let blockMatch;
+      while ((blockMatch = codeBlockRegex.exec(codeResponse)) !== null) {
+        const filePath = blockMatch[1]?.trim() || "unknown.js";
+        const content = blockMatch[2]?.trim() || "";
+        if (content && content.length > 10) {
+          changes.push({ filePath, content });
+        }
+      }
+    }
+
+    console.log(`📝 Extracted ${changes.length} file change(s) from AI response`);
+    return changes;
+  } catch (error) {
+    console.error("Error extracting file changes:", error.message);
+    return changes;
+  }
 }
 
 // Dev commit endpoint
