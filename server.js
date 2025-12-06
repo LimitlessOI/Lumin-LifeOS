@@ -2633,6 +2633,35 @@ app.get("/healthz", async (req, res) => {
       railway_url:
         RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app",
     });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ADMIN STATUS – human-friendly summary
+// ─────────────────────────────────────────────────────────────────────────────
+app.get("/admin/status", async (req, res) => {
+  try {
+    // Reuse the same helpers as /healthz so we don't drift
+    await pool.query("SELECT NOW()");
+    const spendStatus = await getDailySpend();
+    const droneStatus = await incomeDroneSystem.getStatus();
+    const taskStatus = executionQueue.getStatus();
+
+    res.json({
+      ok: true,
+      version: "v26.1-no-claude",
+      summary: {
+        daily_spend: spendStatus?.daily_spend ?? null,
+        max_daily_spend: spendStatus?.max_daily_spend ?? null,
+        spend_percentage: spendStatus?.spend_percentage ?? null,
+        drones: droneStatus ?? null,
+        tasks: taskStatus ?? null,
+      },
+    });
+  } catch (err) {
+    console.error("Error in /admin/status:", err);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
