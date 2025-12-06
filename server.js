@@ -1164,8 +1164,11 @@ async function sandboxTest(code, testDescription) {
       .slice(2, 8)}`;
     console.log(`🧪 Sandbox testing: ${testDescription}`);
 
-    const testPath = path.join(__dirname, "sandbox", `${testId}.js`);
-    await fsPromises.mkdir(path.join(__dirname, "sandbox"), { recursive: true });
+    // Create sandbox dir and use .cjs so Node treats it as CommonJS
+    const sandboxDir = path.join(__dirname, "sandbox");
+    await fsPromises.mkdir(sandboxDir, { recursive: true });
+
+    const testPath = path.join(sandboxDir, `${testId}.cjs`);
 
     const wrappedCode = `
       // Sandbox test: ${testDescription}
@@ -1173,7 +1176,7 @@ async function sandboxTest(code, testDescription) {
       console.log('Test completed successfully');
     `;
 
-    await fsPromises.writeFile(testPath, wrappedCode);
+    await fsPromises.writeFile(testPath, wrappedCode, "utf-8");
 
     let testResult;
     let success = false;
@@ -1198,8 +1201,10 @@ async function sandboxTest(code, testDescription) {
       success = false;
     }
 
+    // Clean up the sandbox file
     await fsPromises.unlink(testPath).catch(() => {});
 
+    // Log the test in the DB
     await pool.query(
       `INSERT INTO sandbox_tests (test_id, code_change, test_result, success, error_message)
        VALUES ($1, $2, $3, $4, $5)`,
