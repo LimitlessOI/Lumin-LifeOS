@@ -604,6 +604,54 @@ async function initDatabase() {
       `CREATE INDEX IF NOT EXISTS idx_daily_ideas ON daily_ideas(status, created_at)`
     );
 
+    // Task Improvement Reports (AI employees report improvements after tasks)
+    await pool.query(`CREATE TABLE IF NOT EXISTS task_improvement_reports (
+      id SERIAL PRIMARY KEY,
+      task_id TEXT NOT NULL,
+      task_description TEXT,
+      ai_model VARCHAR(50),
+      improvements JSONB DEFAULT '[]',
+      vote INT,
+      vote_reasoning TEXT,
+      recommend BOOLEAN DEFAULT true,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_improvement_task ON task_improvement_reports(task_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_improvement_model ON task_improvement_reports(ai_model)`);
+
+    // Tier 0 Improvement Ideas (from AI employees, before deduplication)
+    await pool.query(`CREATE TABLE IF NOT EXISTS tier0_improvement_ideas (
+      idea_id SERIAL PRIMARY KEY,
+      idea_text TEXT NOT NULL,
+      category VARCHAR(50),
+      impact VARCHAR(20),
+      effort VARCHAR(20),
+      reasoning TEXT,
+      source_vote INT,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(idea_text)
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_tier0_ideas_category ON tier0_improvement_ideas(category)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_tier0_ideas_impact ON tier0_improvement_ideas(impact)`);
+
+    // Tier 1 Pending Ideas (worthy ideas escalated from Tier 0)
+    await pool.query(`CREATE TABLE IF NOT EXISTS tier1_pending_ideas (
+      id SERIAL PRIMARY KEY,
+      idea_text TEXT NOT NULL,
+      category VARCHAR(50),
+      impact VARCHAR(20),
+      effort VARCHAR(20),
+      reasoning TEXT,
+      source_tier VARCHAR(20),
+      status VARCHAR(20) DEFAULT 'pending',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      reviewed_at TIMESTAMPTZ
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_tier1_pending_status ON tier1_pending_ideas(status)`);
+
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
@@ -3257,21 +3305,46 @@ class ExecutionQueue {
         type: task.type,
       });
 
-      const result = await callCouncilWithFailover(
+      // Route through model router to get optimal AI (Tier 0 first)
+      const routerResult = modelRouter ? await modelRouter.route(
         `Execute this task with real-world practicality in mind (but do NOT directly move money or impersonate humans): ${task.description}
         
         Be aware of these blind spots: ${blindSpots.slice(0, 3).join(", ")}`,
-        "chatgpt"
-      );
+        {
+          taskType: task.type,
+          riskLevel: 'medium',
+          userFacing: false,
+        }
+      ) : null;
+
+      const result = routerResult?.success 
+        ? routerResult.result 
+        : await callCouncilWithFailover(
+            `Execute this task with real-world practicality in mind (but do NOT directly move money or impersonate humans): ${task.description}
+            
+            Be aware of these blind spots: ${blindSpots.slice(0, 3).join(", ")}`,
+            "chatgpt"
+          );
+
+      const aiModel = routerResult?.model || 'chatgpt';
 
       await pool.query(
-        `UPDATE execution_tasks SET status = 'completed', result = $1, completed_at = now()
+        `UPDATE execution_tasks SET status = 'completed', result = $1, completed_at = now(), ai_model = $3
          WHERE task_id = $2`,
-        [String(result).slice(0, 5000), task.id]
+        [String(result).slice(0, 5000), task.id, aiModel]
       );
 
+      // AI employee reports improvements and votes on idea
+      if (taskImprovementReporter) {
+        try {
+          await taskImprovementReporter.reportAfterTask(task, String(result), aiModel);
+        } catch (error) {
+          console.warn('Improvement reporting failed:', error.message);
+        }
+      }
+
       await updateROI(0, 0, 1);
-      this.history.push({ ...task, status: "completed", result });
+      this.history.push({ ...task, status: "completed", result, aiModel });
       this.activeTask = null;
 
       broadcastToAll({ type: "task_completed", taskId: task.id, result });
@@ -3499,6 +3572,7 @@ let logMonitor = null;
 let autoQueueManager = null;
 let aiAccountBot = null;
 let conversationExtractor = null;
+let taskImprovementReporter = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -3603,6 +3677,16 @@ async function initializeTwoTierSystem() {
       console.log("✅ Conversation Extractor Bot initialized");
     } catch (error) {
       console.warn("⚠️ Conversation extractor not available:", error.message);
+    }
+
+    // Initialize task improvement reporter (AI employees report improvements)
+    try {
+      const reporterModule = await import("./core/task-improvement-reporter.js");
+      const TaskImprovementReporter = reporterModule.TaskImprovementReporter;
+      taskImprovementReporter = new TaskImprovementReporter(pool, tier0Council, callCouncilMember);
+      console.log("✅ Task Improvement Reporter initialized");
+    } catch (error) {
+      console.warn("⚠️ Task improvement reporter not available:", error.message);
     }
     
     console.log("✅ Two-Tier Council System initialized");
