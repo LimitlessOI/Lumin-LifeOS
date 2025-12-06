@@ -4096,8 +4096,6 @@ app.post("/api/v1/system/auto-install", requireKey, async (req, res) => {
   }
 });
 
-// Command Center Route
-// Command Center Route
 // Command Center Activation Page
 app.get("/activate", (req, res) => {
   const filePath = path.join(__dirname, "public", "overlay", "activate.html");
@@ -4108,37 +4106,28 @@ app.get("/activate", (req, res) => {
   }
 });
 
-// Command Center (requires activation)
+// Command Center (requires activation/key)
 app.get("/command-center", (req, res) => {
-  // Check for key in query, header, or session
-  const key = req.query.key || req.headers["x-command-key"];
-  const sessionKey = req.session?.commandKey;
+  // Check for key in query parameter
+  const key = req.query.key;
   
-  // If no key provided, redirect to activation
-  if (!key && !sessionKey) {
-    return res.redirect('/activate');
+  // If key provided and valid, allow access
+  if (key && key === COMMAND_CENTER_KEY) {
+    const filePath = path.join(__dirname, "public", "overlay", "command-center.html");
+    if (fs.existsSync(filePath)) {
+      return res.sendFile(filePath);
+    } else {
+      return res.status(404).send("Command center not found. Please ensure command-center.html exists.");
+    }
   }
 
-  // If key provided, verify it
+  // If no key or invalid key, redirect to activation
   if (key && key !== COMMAND_CENTER_KEY) {
     return res.redirect('/activate?error=invalid_key');
   }
 
-  // Store in session if valid
-  if (key === COMMAND_CENTER_KEY) {
-    if (!req.session) {
-      // Session middleware might not be initialized, that's okay
-    } else {
-      req.session.commandKey = key;
-    }
-  }
-
-  const filePath = path.join(__dirname, "public", "overlay", "command-center.html");
-  if (fs.existsSync(filePath)) {
-    res.sendFile(filePath);
-  } else {
-    res.status(404).send("Command center not found. Please ensure command-center.html exists.");
-  }
+  // No key provided, redirect to activation
+  res.redirect('/activate');
 });
 
 // Health check endpoint for activation verification
