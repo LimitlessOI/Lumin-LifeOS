@@ -3463,6 +3463,7 @@ let whiteLabelConfig = null;
 
 let knowledgeBase = null;
 let fileCleanupAnalyzer = null;
+let costReExamination = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -3496,8 +3497,24 @@ async function initializeTwoTierSystem() {
     knowledgeBase = new KnowledgeBase(pool);
     fileCleanupAnalyzer = new FileCleanupAnalyzer();
     
+    // Initialize cost re-examination
+    const costModule = await import("./core/cost-re-examination.js");
+    const CostReExamination = costModule.CostReExamination;
+    costReExamination = new CostReExamination(pool, compressionMetrics, roiTracker);
+    
     console.log("✅ Two-Tier Council System initialized");
     console.log("✅ Knowledge Base System initialized");
+    console.log("✅ Cost Re-Examination System initialized");
+    
+    // Schedule automatic cost re-examination
+    setInterval(async () => {
+      try {
+        await costReExamination.examine();
+        console.log("💰 [COST] Automatic re-examination completed");
+      } catch (error) {
+        console.warn("⚠️ Cost re-examination failed:", error.message);
+      }
+    }, 24 * 60 * 60 * 1000); // Every 24 hours
   } catch (error) {
     console.error("⚠️ Two-Tier System initialization error:", error.message);
     console.error("   System will continue with legacy council only");
@@ -4861,10 +4878,10 @@ Respond with JSON: {"accuracy": 0.0-1.0, "completeness": 0.0-1.0, "relevance": 0
 // Cost saving re-examination endpoint
 app.post("/api/v1/system/re-examine-costs", requireKey, async (req, res) => {
   try {
-    // Import cost re-examination module
-    const { CostReExamination } = await import("./core/cost-re-examination.js");
-    const costAnalyzer = new CostReExamination(pool, compressionMetrics, roiTracker);
-    const analysis = await costAnalyzer.examine();
+    if (!costReExamination) {
+      return res.status(503).json({ error: "Cost re-examination not initialized" });
+    }
+    const analysis = await costReExamination.examine();
     res.json({ ok: true, analysis });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
