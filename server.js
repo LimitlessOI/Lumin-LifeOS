@@ -1211,6 +1211,66 @@ async function sandboxTest(code, testDescription) {
     console.error("Sandbox test error:", error.message);
     return { success: false, result: null, error: error.message };
   }
+}// ==================== SANDBOX TESTING ====================
+async function sandboxTest(code, testDescription) {
+  try {
+    const testId = `test_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
+    console.log(`🧪 Sandbox testing: ${testDescription}`);
+
+    // Create sandbox dir and use .cjs so Node treats it as CommonJS
+    const sandboxDir = path.join(__dirname, "sandbox");
+    await fsPromises.mkdir(sandboxDir, { recursive: true });
+
+    const testPath = path.join(sandboxDir, `${testId}.cjs`);
+
+    const wrappedCode = `
+      // Sandbox test: ${testDescription}
+      ${code}
+      console.log('Test completed successfully');
+    `;
+
+    await fsPromises.writeFile(testPath, wrappedCode, "utf-8");
+
+    let testResult;
+    let success = false;
+    let errorMessage = null;
+
+    try {
+      const { stdout, stderr } = await execAsync(
+        `node --no-warnings ${testPath}`,
+        {
+          timeout: 5000,
+          cwd: __dirname,
+          env: { ...process.env, NODE_ENV: "test" },
+        }
+      );
+
+      testResult = stdout || "Test passed";
+      success = !stderr || stderr.includes("Warning");
+      if (stderr && !success) errorMessage = stderr;
+    } catch (error) {
+      testResult = "Test failed";
+      errorMessage = error.message;
+      success = false;
+    }
+
+    // Clean up the sandbox file
+    await fsPromises.unlink(testPath).catch(() => {});
+
+    // Log the test in the DB
+    await pool.query(
+      `INSERT INTO sandbox_tests (test_id, code_change, test_result, success, error_message)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [testId, code.slice(0, 1000), testResult, success, errorMessage]
+    );
+
+    return { success, result: testResult, error: errorMessage };
+  } catch (error) {
+    console.error("Sandbox test error:", error.message);
+    return { success: false, result: null, error: error.message };
+  }
 }
 
 // ==================== ENHANCED SANDBOX TESTING WITH RETRY & COUNCIL ESCALATION ====================
