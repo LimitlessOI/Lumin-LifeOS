@@ -142,12 +142,8 @@ function isSameOrigin(req) {
   }
 }
 
-// ==================== MIDDLEWARE ====================
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(express.text({ type: "text/plain", limit: "50mb" }));
-
-// Command Center routes (before static files to ensure they work)
+// ==================== COMMAND CENTER ROUTES (FIRST - Before all middleware) ====================
+// These MUST be defined before static middleware to work correctly
 app.get("/activate", (req, res) => {
   console.log("🔐 [ROUTE] /activate accessed");
   const filePath = path.join(__dirname, "public", "overlay", "activate.html");
@@ -162,6 +158,7 @@ app.get("/activate", (req, res) => {
 });
 
 app.get("/command-center", (req, res) => {
+  console.log("🎯 [ROUTE] /command-center accessed");
   // Check for key in query parameter
   const key = req.query.key;
   
@@ -183,6 +180,11 @@ app.get("/command-center", (req, res) => {
   // No key provided, redirect to activation
   res.redirect('/activate');
 });
+
+// ==================== MIDDLEWARE ====================
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(express.text({ type: "text/plain", limit: "50mb" }));
 
 // Serve static files (after specific routes)
 app.use(express.static(path.join(__dirname, "public")));
