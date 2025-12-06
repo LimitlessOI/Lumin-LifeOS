@@ -457,6 +457,193 @@ export class Tier0Council {
     }
   }
 
+  /**
+   * Process improvement ideas from AI employees
+   * Deduplicates and votes on which are worthy
+   */
+  async processImprovementIdeas(improvements, vote) {
+    console.log(`🔄 [TIER0] Processing ${improvements.length} improvement ideas`);
+
+    // Store all improvements
+    const stored = [];
+    for (const idea of improvements) {
+      try {
+        const result = await this.pool.query(
+          `INSERT INTO tier0_improvement_ideas
+           (idea_text, category, impact, effort, reasoning, source_vote, created_at)
+           VALUES ($1, $2, $3, $4, $5, $6, NOW())
+           ON CONFLICT (idea_text) DO NOTHING
+           RETURNING idea_id`,
+          [
+            idea.improvement,
+            idea.category,
+            idea.impact,
+            idea.effort,
+            idea.reasoning,
+            vote.vote,
+          ]
+        );
+        if (result.rows.length > 0) {
+          stored.push({ ...idea, id: result.rows[0].idea_id });
+        }
+      } catch (error) {
+        console.warn('Failed to store improvement idea:', error.message);
+      }
+    }
+
+    // Deduplicate using semantic similarity
+    const deduplicated = await this.deduplicateIdeas(stored);
+
+    // Council votes on which are worthy
+    const worthy = await this.voteOnIdeas(deduplicated);
+
+    // Only pass worthy ideas to Tier 1
+    if (worthy.length > 0) {
+      await this.escalateWorthyIdeas(worthy);
+    }
+
+    return {
+      received: improvements.length,
+      stored: stored.length,
+      deduplicated: deduplicated.length,
+      worthy: worthy.length,
+    };
+  }
+
+  /**
+   * Deduplicate ideas using semantic similarity
+   */
+  async deduplicateIdeas(ideas) {
+    if (ideas.length <= 1) return ideas;
+
+    const deduplicated = [];
+    const seen = new Set();
+
+    for (const idea of ideas) {
+      // Simple deduplication: check for similar text
+      const normalized = idea.improvement.toLowerCase()
+        .replace(/[^\w\s]/g, '')
+        .substring(0, 100);
+
+      // Check if we've seen something similar
+      let isDuplicate = false;
+      for (const seenText of seen) {
+        const similarity = this.calculateSimilarity(normalized, seenText);
+        if (similarity > 0.8) {
+          isDuplicate = true;
+          break;
+        }
+      }
+
+      if (!isDuplicate) {
+        seen.add(normalized);
+        deduplicated.push(idea);
+      }
+    }
+
+    return deduplicated;
+  }
+
+  calculateSimilarity(str1, str2) {
+    // Simple Jaccard similarity
+    const words1 = new Set(str1.split(/\s+/));
+    const words2 = new Set(str2.split(/\s+/));
+    
+    const intersection = new Set([...words1].filter(x => words2.has(x)));
+    const union = new Set([...words1, ...words2]);
+    
+    return intersection.size / union.size;
+  }
+
+  /**
+   * Tier 0 council votes on which ideas are worthy
+   */
+  async voteOnIdeas(ideas) {
+    if (ideas.length === 0) return [];
+
+    const prompt = `Vote on these improvement ideas. Only pass ones that are truly worthy:
+
+${ideas.slice(0, 20).map((idea, i) => 
+  `${i + 1}. ${idea.improvement}\n   Impact: ${idea.impact}, Effort: ${idea.effort}`
+).join('\n\n')}
+
+Return JSON array of indices (0-based) that are WORTHY of escalation:
+{
+  "worthy_indices": [0, 2, 5],
+  "reasoning": "Why these are worthy"
+}`;
+
+    try {
+      const response = await this.execute(prompt, {
+        taskType: 'voting',
+        maxTokens: 1000,
+      });
+
+      const result = this.parseVoteResponse(response);
+      const worthy = result.worthy_indices
+        .filter(idx => idx >= 0 && idx < ideas.length)
+        .map(idx => ideas[idx]);
+
+      return worthy;
+    } catch (error) {
+      console.warn('Voting failed, keeping all:', error.message);
+      // If voting fails, keep high-impact ideas
+      return ideas.filter(i => i.impact === 'high');
+    }
+  }
+
+  parseVoteResponse(response) {
+    try {
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]);
+      }
+    } catch (e) {
+      // Fallback
+    }
+
+    // Fallback: extract numbers
+    const indices = [];
+    const matches = response.match(/\d+/g);
+    if (matches) {
+      indices.push(...matches.map(m => parseInt(m) - 1)); // Convert to 0-based
+    }
+
+    return {
+      worthy_indices: indices,
+      reasoning: 'Parsed from response',
+    };
+  }
+
+  /**
+   * Escalate worthy ideas to Tier 1 for final approval
+   */
+  async escalateWorthyIdeas(ideas) {
+    // Store in database for Tier 1 to process
+    for (const idea of ideas) {
+      try {
+        await this.pool.query(
+          `INSERT INTO tier1_pending_ideas
+           (idea_text, category, impact, effort, reasoning, source_tier, created_at)
+           VALUES ($1, $2, $3, $4, $5, $6, NOW())
+           ON CONFLICT DO NOTHING`,
+          [
+            idea.improvement,
+            idea.category,
+            idea.impact,
+            idea.effort,
+            idea.reasoning,
+            'tier0',
+          ]
+        );
+      } catch (error) {
+        console.warn('Failed to escalate idea:', error.message);
+      }
+    }
+
+    console.log(`📤 [TIER0] Escalated ${ideas.length} worthy ideas to Tier 1`);
+  }
+
   getStatus() {
     return {
       activeDrones: this.activeDrones.size,
