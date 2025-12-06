@@ -323,6 +323,21 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
+    await pool.query(`CREATE TABLE IF NOT EXISTS execution_tasks (
+      id SERIAL PRIMARY KEY,
+      task_id TEXT UNIQUE NOT NULL,
+      type VARCHAR(50),
+      description TEXT,
+      status VARCHAR(20) DEFAULT 'pending',
+      result TEXT,
+      error TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      completed_at TIMESTAMPTZ
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_execution_tasks_status ON execution_tasks(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_execution_tasks_created ON execution_tasks(created_at)`);
+
     await pool.query(`CREATE TABLE IF NOT EXISTS daily_ideas (
       id SERIAL PRIMARY KEY,
       idea_id TEXT UNIQUE NOT NULL,
