@@ -87,6 +87,8 @@ export class Tier0Council {
   /**
    * Execute task with Tier 0 (cheapest) models
    * Returns result or null if needs escalation
+   * 
+   * OPTIMIZATION: Checks Neon cache first (FREE responses!)
    */
   async execute(task, options = {}) {
     const {
@@ -94,9 +96,50 @@ export class Tier0Council {
       riskLevel = 'low',
       userFacing = false,
       maxCost = 0.001, // Max $0.001 for Tier 0
+      useCache = true, // Check Neon cache first
     } = options;
 
-    // Select appropriate drone type
+    // STEP 1: Check Neon cache (FREE if found!)
+    if (useCache && this.pool) {
+      try {
+        const cacheKey = this.generateCacheKey(task);
+        const cached = await this.pool.query(
+          `SELECT response_text, model_used, cost_saved, hit_count 
+           FROM ai_response_cache 
+           WHERE prompt_hash = $1 
+           AND created_at > NOW() - INTERVAL '30 days'
+           ORDER BY last_used_at DESC
+           LIMIT 1`,
+          [cacheKey]
+        );
+
+        if (cached.rows.length > 0) {
+          // Update hit count and last used
+          await this.pool.query(
+            `UPDATE ai_response_cache 
+             SET hit_count = hit_count + 1, 
+                 last_used_at = NOW() 
+             WHERE prompt_hash = $1`,
+            [cacheKey]
+          );
+
+          console.log(`💰 [NEON CACHE HIT] Free response! (saved $${cached.rows[0].cost_saved || 0})`);
+          return {
+            success: true,
+            result: cached.rows[0].response_text,
+            tier: 0,
+            model: cached.rows[0].model_used || 'cached',
+            cost: 0, // FREE from cache!
+            cached: true,
+          };
+        }
+      } catch (error) {
+        console.warn(`⚠️ Cache check failed: ${error.message}`);
+        // Continue to normal execution
+      }
+    }
+
+    // STEP 2: Try Tier 0 models (Ollama = FREE, cloud = cheap)
     const droneType = DRONE_TYPES[taskType] || DRONE_TYPES.research;
     const selectedModel = droneType.models[0]; // Start with cheapest
 
@@ -107,12 +150,21 @@ export class Tier0Council {
       const isValid = await this.validateOutput(result, task, options);
       
       if (isValid) {
+        const cost = this.estimateCost(selectedModel, result);
+        
+        // Store in Neon cache for future FREE responses
+        if (this.pool && useCache) {
+          await this.storeInCache(task, result, selectedModel, cost).catch(err => {
+            console.warn(`⚠️ Failed to cache response: ${err.message}`);
+          });
+        }
+
         return {
           success: true,
           result,
           tier: 0,
           model: selectedModel,
-          cost: this.estimateCost(selectedModel, result),
+          cost,
         };
       }
 
@@ -320,6 +372,49 @@ export class Tier0Council {
     // Estimate tokens (rough: 4 chars per token)
     const tokens = Math.ceil(output.length / 4);
     return (tokens / 1000000) * model.cost;
+  }
+
+  /**
+   * Generate cache key from task (semantic hash)
+   */
+  generateCacheKey(task) {
+    // Simple hash for now - can upgrade to semantic embedding later
+    const crypto = require('crypto');
+    const normalized = String(task).toLowerCase().trim().replace(/\s+/g, ' ');
+    return crypto.createHash('sha256').update(normalized).digest('hex').substring(0, 32);
+  }
+
+  /**
+   * Store response in Neon cache for future FREE responses
+   */
+  async storeInCache(prompt, response, model, costSaved) {
+    if (!this.pool) return;
+
+    const cacheKey = this.generateCacheKey(prompt);
+    const promptText = String(prompt).substring(0, 1000); // Limit length
+    const responseText = String(response).substring(0, 10000); // Limit length
+
+    try {
+      await this.pool.query(
+        `INSERT INTO ai_response_cache 
+         (prompt_hash, prompt_text, response_text, model_used, cost_saved, created_at, last_used_at)
+         VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+         ON CONFLICT (prompt_hash) 
+         DO UPDATE SET 
+           response_text = $3,
+           model_used = $4,
+           cost_saved = $5,
+           last_used_at = NOW()`,
+        [cacheKey, promptText, responseText, model, costSaved]
+      );
+    } catch (error) {
+      // Table might not exist yet - that's okay
+      if (error.message.includes('does not exist')) {
+        console.warn('⚠️ Cache table not created yet. Run database migration.');
+      } else {
+        throw error;
+      }
+    }
   }
 
   /**

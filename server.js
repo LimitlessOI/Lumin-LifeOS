@@ -470,6 +470,23 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
+    // Enhanced AI Response Cache (Neon-optimized for massive cost savings)
+    await pool.query(`CREATE TABLE IF NOT EXISTS ai_response_cache (
+      id SERIAL PRIMARY KEY,
+      prompt_hash TEXT UNIQUE NOT NULL,
+      prompt_text TEXT,
+      response_text TEXT,
+      model_used VARCHAR(50),
+      cost_saved DECIMAL(10,6) DEFAULT 0,
+      hit_count INT DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      last_used_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_cache_prompt_hash ON ai_response_cache(prompt_hash)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_cache_created_at ON ai_response_cache(created_at)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_cache_last_used ON ai_response_cache(last_used_at)`);
+
     await pool.query(`
       ALTER TABLE financial_ledger
       ADD COLUMN IF NOT EXISTS external_id TEXT
