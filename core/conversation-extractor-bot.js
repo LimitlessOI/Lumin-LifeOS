@@ -13,13 +13,7 @@
  */
 
 // Puppeteer is optional - only needed for browser automation
-let puppeteer = null;
-try {
-  const puppeteerModule = await import('puppeteer');
-  puppeteer = puppeteerModule.default || puppeteerModule;
-} catch {
-  // Puppeteer not installed - browser automation unavailable
-}
+// Will be initialized in constructor
 
 export class ConversationExtractorBot {
   constructor(pool, knowledgeBase, callCouncilMember) {
