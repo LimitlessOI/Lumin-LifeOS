@@ -3481,6 +3481,8 @@ let knowledgeBase = null;
 let fileCleanupAnalyzer = null;
 let costReExamination = null;
 let logMonitor = null;
+let autoQueueManager = null;
+let aiAccountBot = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -3548,6 +3550,27 @@ async function initializeTwoTierSystem() {
       }, 30000); // After 30 seconds
     } catch (error) {
       console.warn("⚠️ Log monitoring not available:", error.message);
+    }
+
+    // Initialize auto-queue manager
+    try {
+      const queueModule = await import("./core/auto-queue-manager.js");
+      const AutoQueueManager = queueModule.AutoQueueManager;
+      autoQueueManager = new AutoQueueManager(pool, callCouncilMember, executionQueue);
+      autoQueueManager.start();
+      console.log("✅ Auto-Queue Manager initialized");
+    } catch (error) {
+      console.warn("⚠️ Auto-queue manager not available:", error.message);
+    }
+
+    // Initialize AI account bot
+    try {
+      const botModule = await import("./core/ai-account-bot.js");
+      const AIAccountBot = botModule.AIAccountBot;
+      aiAccountBot = new AIAccountBot(pool, knowledgeBase, callCouncilMember);
+      console.log("✅ AI Account Bot initialized");
+    } catch (error) {
+      console.warn("⚠️ AI account bot not available:", error.message);
     }
     
     console.log("✅ Two-Tier Council System initialized");
@@ -3939,8 +3962,14 @@ function requireKey(req, res, next) {
 app.get("/health", (req, res) => res.send("OK"));
 
 // Command Center Route
+// Command Center Route
 app.get("/command-center", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "overlay", "command-center.html"));
+  const filePath = path.join(__dirname, "public", "overlay", "command-center.html");
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).send("Command center not found. Please ensure command-center.html exists.");
+  }
 });
 
 app.get("/healthz", async (req, res) => {
@@ -4811,19 +4840,49 @@ app.get("/api/v1/trial/status", requireKey, async (req, res) => {
 app.get("/api/v1/tasks/queue", requireKey, async (req, res) => {
   try {
     // Get active tasks/projects
-    const tasks = await executionQueue.getStatus();
+    const queueStatus = executionQueue.getStatus();
+    
+    // Get tasks from database
+    const dbTasks = await pool.query(
+      `SELECT task_id, type, description, status, created_at, completed_at
+       FROM execution_tasks
+       WHERE status IN ('pending', 'running')
+       ORDER BY created_at DESC
+       LIMIT 50`
+    );
     
     // Format for command center
-    const projects = (tasks.active || []).map(task => ({
-      id: task.id,
-      title: task.name || task.type || 'Task',
-      status: task.status || 'in_progress',
-      progress: task.progress || 0,
-      eta: task.eta || 'Calculating...',
-      priority: task.priority || 'medium',
-    }));
+    const projects = dbTasks.rows.map((task, index) => {
+      const totalTasks = dbTasks.rows.length;
+      const progress = task.status === 'running' ? 50 : (index / totalTasks) * 100;
+      
+      // Estimate ETA based on task type
+      let eta = 'Calculating...';
+      if (task.status === 'running') {
+        eta = 'In progress...';
+      } else {
+        const minutes = Math.ceil((totalTasks - index) * 5); // ~5 min per task
+        eta = `${minutes} minutes`;
+      }
+      
+      return {
+        id: task.task_id,
+        title: task.description?.substring(0, 50) || task.type || 'Task',
+        status: task.status || 'pending',
+        progress: Math.round(progress),
+        eta,
+        priority: 'high',
+        type: task.type,
+        createdAt: task.created_at,
+      };
+    });
 
-    res.json({ ok: true, tasks: projects });
+    res.json({ 
+      ok: true, 
+      tasks: projects,
+      queueSize: queueStatus.queued || 0,
+      active: queueStatus.active || 0,
+    });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }

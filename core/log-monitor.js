@@ -6,10 +6,14 @@
  */
 
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
 const execAsync = promisify(exec);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export class LogMonitor {
   constructor(pool, callCouncilMember) {
@@ -301,19 +305,43 @@ export class LogMonitor {
   async installPackage(packageName, command) {
     try {
       console.log(`📦 [LOG MONITOR] Installing ${packageName}...`);
-      const { stdout, stderr } = await execAsync(command, {
+      
+      // Use npm install directly
+      const installCommand = `npm install ${packageName}`;
+      const { stdout, stderr } = await execAsync(installCommand, {
         cwd: process.cwd(),
-        timeout: 60000, // 60 second timeout
+        timeout: 120000, // 2 minute timeout for installs
+        maxBuffer: 10 * 1024 * 1024, // 10MB buffer
       });
       
-      if (stderr && !stderr.includes('npm WARN')) {
+      if (stderr && !stderr.includes('npm WARN') && !stderr.includes('added')) {
         console.warn(`⚠️ [LOG MONITOR] Install warning: ${stderr}`);
       }
       
       console.log(`✅ [LOG MONITOR] Package installed: ${packageName}`);
+      console.log(`   Run 'npm install' in production to persist the change`);
+      
+      // Also update package.json if possible
+      try {
+        const fs = await import('fs');
+        const packageJsonPath = path.join(process.cwd(), 'package.json');
+        if (fs.existsSync(packageJsonPath)) {
+          const packageJson = JSON.parse(await fs.promises.readFile(packageJsonPath, 'utf8'));
+          if (!packageJson.dependencies) packageJson.dependencies = {};
+          if (!packageJson.dependencies[packageName]) {
+            packageJson.dependencies[packageName] = 'latest';
+            await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+            console.log(`   Updated package.json`);
+          }
+        }
+      } catch (e) {
+        // Ignore package.json update errors
+      }
+      
       return true;
     } catch (error) {
       console.error(`❌ [LOG MONITOR] Install failed: ${error.message}`);
+      console.error(`   You may need to run: npm install ${packageName}`);
       return false;
     }
   }
