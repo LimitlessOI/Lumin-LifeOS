@@ -1,272 +1,621 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS Universal Overlay</title>
-    <link rel="stylesheet" href="command-center.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeOS Command Center</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0e27;
+      color: #e5e7eb;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .command-center {
+      display: grid;
+      grid-template-columns: 300px 1fr 400px;
+      grid-template-rows: auto 1fr auto;
+      height: 100vh;
+      gap: 1px;
+      background: #1a1f3a;
+    }
+
+    /* Header */
+    .header {
+      grid-column: 1 / -1;
+      background: #151b2e;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2d3748;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* Sidebar - Projects Queue */
+    .sidebar {
+      background: #151b2e;
+      overflow-y: auto;
+      border-right: 1px solid #2d3748;
+    }
+
+    .sidebar-section {
+      padding: 16px;
+      border-bottom: 1px solid #2d3748;
+    }
+
+    .sidebar-section h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .project-item {
+      background: #1a2332;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .project-item:hover {
+      background: #1f2937;
+      border-color: #3b82f6;
+    }
+
+    .project-item.active {
+      background: #1e3a8a;
+      border-color: #3b82f6;
+    }
+
+    .project-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .project-progress {
+      height: 4px;
+      background: #2d3748;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .project-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      transition: width 0.3s;
+    }
+
+    .project-meta {
+      font-size: 11px;
+      color: #9ca3af;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Main Chat Area */
+    .chat-area {
+      display: flex;
+      flex-direction: column;
+      background: #0f1419;
+      overflow: hidden;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      border: 2px solid;
+    }
+
+    .message.user .message-avatar {
+      background: #3b82f6;
+      border-color: #60a5fa;
+      color: white;
+    }
+
+    .message.ai .message-avatar {
+      background: #8b5cf6;
+      border-color: #a78bfa;
+      color: white;
+    }
+
+    .message-content {
+      flex: 1;
+      background: #1a2332;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .message-sender {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .message-ai-name {
+      color: #a78bfa;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .message-time {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .message-text {
+      line-height: 1.6;
+      color: #e5e7eb;
+      white-space: pre-wrap;
+    }
+
+    .message-symbols {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #9ca3af;
+      background: #0f1419;
+      padding: 8px;
+      border-radius: 6px;
+      margin-top: 8px;
+      border: 1px solid #2d3748;
+    }
+
+    /* Conference View - Multiple AIs */
+    .conference-view {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .ai-participant {
+      background: #1a2332;
+      border: 2px solid #2d3748;
+      border-radius: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .ai-participant.speaking {
+      border-color: #8b5cf6;
+      background: #1e1b3a;
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .ai-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6b7280;
+    }
+
+    .ai-indicator.active {
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    /* Input Area */
+    .input-area {
+      background: #151b2e;
+      border-top: 1px solid #2d3748;
+      padding: 16px 20px;
+    }
+
+    .input-controls {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .input-text {
+      flex: 1;
+      background: #1a2332;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: #e5e7eb;
+      font-size: 14px;
+      resize: none;
+      min-height: 44px;
+      max-height: 200px;
+      font-family: inherit;
+    }
+
+    .input-text:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    .btn-voice {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.2s;
+    }
+
+    .btn-voice:hover {
+      background: #2563eb;
+      transform: scale(1.05);
+    }
+
+    .btn-voice.recording {
+      background: #ef4444;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .btn-send {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: none;
+      background: #22c55e;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+
+    .btn-send:hover {
+      background: #16a34a;
+    }
+
+    .btn-upload {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid #2d3748;
+      background: #1a2332;
+      color: #9ca3af;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+
+    .btn-upload:hover {
+      background: #1f2937;
+      border-color: #3b82f6;
+      color: #3b82f6;
+    }
+
+    /* Dashboard Sidebar */
+    .dashboard {
+      background: #151b2e;
+      overflow-y: auto;
+      border-left: 1px solid #2d3748;
+    }
+
+    .dashboard-section {
+      padding: 16px;
+      border-bottom: 1px solid #2d3748;
+    }
+
+    .dashboard-section h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-card {
+      background: #1a2332;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .metric-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: #22c55e;
+    }
+
+    .metric-value.negative {
+      color: #ef4444;
+    }
+
+    .chart-container {
+      height: 120px;
+      margin-top: 8px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0f1419;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #2d3748;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3d4758;
+    }
+
+    /* File Upload Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #151b2e;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: 24px;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+
+    .btn-close:hover {
+      background: #1a2332;
+      color: #e5e7eb;
+    }
+  </style>
 </head>
 <body>
-    <!-- Universal Overlay Container -->
-    <div id="lifeos-overlay" class="overlay-container">
-        <!-- Header with App Switcher -->
-        <div class="overlay-header">
-            <div class="app-switcher">
-                <select id="app-selector">
-                    <option value="command-center">🚀 Command Center</option>
-                    <option value="architect">🏗️ Architect</option>
-                    <option value="grammarly">✍️ Writing Assistant</option>
-                    <option value="social">📱 Social Media</option>
-                    <option value="games">🎮 Games</option>
-                    <option value="custom">⚙️ Custom App</option>
-                </select>
-            </div>
-            <div class="controls">
-                <button id="toggle-voice" class="control-btn">🎤 Voice</button>
-                <button id="toggle-pin" class="control-btn">📌 Pin</button>
-                <button id="council-meeting" class="control-btn">👥 Council</button>
-                <button id="minimize" class="control-btn">−</button>
-            </div>
-        </div>
-
-        <!-- Main Content Area - Dynamic based on selected app -->
-        <div class="main-content" id="main-content">
-            <!-- Command Center App (Default) -->
-            <div class="app-content" id="app-command-center">
-                <!-- Project Tracker -->
-                <div class="project-tracker">
-                    <h4>📊 Active Projects</h4>
-                    <div id="project-list">
-                        <div class="project-item">
-                            <div class="project-header">
-                                <span class="project-title">Universal Overlay System</span>
-                                <span class="project-progress">75%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 75%"></div>
-                            </div>
-                            <div class="project-details" style="display: none;">
-                                <div class="detail-item">✅ Multi-app Foundation</div>
-                                <div class="detail-item">✅ Draggable & Resizable</div>
-                                <div class="detail-item">✅ White Theme</div>
-                                <div class="detail-item">🔄 App Switching System</div>
-                                <div class="detail-item">⏳ Voice Integration</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Council Chat -->
-                <div class="council-chat">
-                    <div class="chat-messages" id="chat-messages">
-                        <div class="message ai-message">
-                            <div class="message-header">
-                                <span class="ai-name claude">Claude</span>
-                                <span class="message-time">Just now</span>
-                            </div>
-                            <div class="message-content">
-                                Welcome to the Universal LifeOS Overlay! This is your foundation for all apps - Command Center, Architect, writing tools, games, and more. Everything runs in this single overlay system.
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="input-area">
-                        <textarea id="text-input" placeholder="Ask your AI council or give commands..."></textarea>
-                        <div class="input-buttons">
-                            <button id="voice-input" class="voice-btn">🎤</button>
-                            <button id="send-message" class="send-btn">Send</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <button class="action-btn" data-action="upload-file">📁 Upload File</button>
-                    <button class="action-btn" data-action="request-ideas">💡 Get 25 Ideas</button>
-                    <button class="action-btn" data-action="analyze-decision">⚖️ Dual Analysis</button>
-                    <button class="action-btn" data-action="performance-review">📊 Performance</button>
-                </div>
-            </div>
-
-            <!-- Architect App -->
-            <div class="app-content" id="app-architect" style="display: none;">
-                <div class="architect-panel">
-                    <h4>🏗️ Architect Mode</h4>
-                    <div class="micro-controls">
-                        <div class="mode-toggle">
-                            <button class="mode-btn active" data-mode="chat">💬 Chat</button>
-                            <button class="mode-btn" data-mode="command">⚡ Command</button>
-                            <button class="mode-btn" data-mode="team">👥 Team</button>
-                        </div>
-                        <div class="micro-stats">
-                            <span class="stat">MICRO: 73% savings</span>
-                            <span class="stat">STT: Ready</span>
-                            <span class="stat">TTS: Ready</span>
-                        </div>
-                    </div>
-                    <div class="architect-output" id="architect-output">
-                        <p>Architect mode loaded. Ready for MICRO protocol conversations.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Writing Assistant App -->
-            <div class="app-content" id="app-grammarly" style="display: none;">
-                <div class="writing-panel">
-                    <h4>✍️ Writing Assistant</h4>
-                    <textarea class="writing-input" placeholder="Paste your text here for AI analysis..."></textarea>
-                    <div class="writing-controls">
-                        <button class="writing-btn" data-action="grammar-check">Grammar Check</button>
-                        <button class="writing-btn" data-action="improve-style">Improve Style</button>
-                        <button class="writing-btn" data-action="summarize">Summarize</button>
-                    </div>
-                    <div class="writing-output" id="writing-output"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Hidden File Input -->
-        <input type="file" id="file-upload" style="display: none;" multiple>
+  <div class="command-center">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-title">
+        <span class="status-indicator"></span>
+        LifeOS Command Center
+      </div>
+      <div class="header-controls">
+        <button class="btn-upload" id="btnUpload" title="Upload File">📁</button>
+        <button id="btnSettings" title="Settings">⚙️</button>
+      </div>
     </div>
 
-    <!-- IMPORTANT: MICRO protocol must load before command-center.js -->
-    <script src="MicroProtocol.js"></script>
-    <script src="command-center.js"></script>
+    <!-- Sidebar - Projects -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <h3>Active Projects</h3>
+        <div id="projectsList"></div>
+      </div>
+    </div>
 
-    <!-- Inline wiring: chat + self-program -->
-    <script>
-        // Must match COMMAND_CENTER_KEY in server.js
-        const LIFEOS_API_KEY = 'MySecretKey2025LifeOS';
-        const LIFEOS_BASE_URL = window.location.origin;
+    <!-- Main Chat Area -->
+    <div class="chat-area">
+      <div class="chat-messages" id="chatMessages">
+        <!-- Conference view showing active AIs -->
+        <div class="conference-view" id="conferenceView"></div>
+        <!-- Messages will be added here -->
+      </div>
 
-        const chatMessagesEl = document.getElementById('chat-messages');
-        const textInputEl = document.getElementById('text-input');
-        const sendBtnEl = document.getElementById('send-message');
+      <div class="input-area">
+        <div class="input-controls">
+          <button class="btn-voice" id="btnVoice" title="Push to Talk">🎤</button>
+          <textarea 
+            class="input-text" 
+            id="inputText" 
+            placeholder="Type your message or use voice input..."
+            rows="1"
+          ></textarea>
+          <button class="btn-upload" id="btnUploadInline" title="Upload File">📎</button>
+          <button class="btn-send" id="btnSend" title="Send">➤</button>
+        </div>
+      </div>
+    </div>
 
-        function addMessageBubble(role, text, meta = {}) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'message ' + (role === 'user' ? 'user-message' : 'ai-message');
+    <!-- Dashboard -->
+    <div class="dashboard">
+      <div class="dashboard-section">
+        <h3>Company Health</h3>
+        <div class="metric-card">
+          <div class="metric-label">Monthly Revenue</div>
+          <div class="metric-value" id="metricRevenue">$0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Monthly Expenses</div>
+          <div class="metric-value negative" id="metricExpenses">$0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Net Income</div>
+          <div class="metric-value" id="metricNet">$0</div>
+        </div>
+      </div>
 
-            const header = document.createElement('div');
-            header.className = 'message-header';
+      <div class="dashboard-section">
+        <h3>ROI Tracker</h3>
+        <div class="metric-card">
+          <div class="metric-label">ROI Ratio</div>
+          <div class="metric-value" id="metricROI">0x</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">AI Cost Today</div>
+          <div class="metric-value negative" id="metricAICost">$0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Revenue Generated</div>
+          <div class="metric-value" id="metricRevenueGen">$0</div>
+        </div>
+      </div>
 
-            const nameSpan = document.createElement('span');
-            nameSpan.className = 'ai-name ' + (meta.member || '');
-            nameSpan.textContent = role === 'user' ? 'You' : (meta.member || 'Council');
+      <div class="dashboard-section">
+        <h3>AI Performance</h3>
+        <div class="metric-card">
+          <div class="metric-label">Accuracy Score</div>
+          <div class="metric-value" id="metricAccuracy">0%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Self-Evaluation</div>
+          <div class="metric-value" id="metricSelfEval">0%</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-            const timeSpan = document.createElement('span');
-            timeSpan.className = 'message-time';
-            timeSpan.textContent = new Date().toLocaleTimeString();
+  <!-- File Upload Modal -->
+  <div class="modal" id="uploadModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Upload File to Knowledge Base</div>
+        <button class="btn-close" id="btnCloseModal">×</button>
+      </div>
+      <input type="file" id="fileInput" style="display: none;">
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">Category</label>
+        <select id="fileCategory" style="width: 100%; padding: 8px; background: #1a2332; border: 1px solid #2d3748; border-radius: 6px; color: #e5e7eb;">
+          <option value="context">Context</option>
+          <option value="business-ideas">Business Ideas</option>
+          <option value="security">Security</option>
+          <option value="income-generation">Income Generation</option>
+          <option value="future-thoughts">Future Thoughts</option>
+          <option value="quantum-proof">Quantum Proof</option>
+          <option value="historical">Historical</option>
+        </select>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">Description</label>
+        <textarea id="fileDescription" style="width: 100%; padding: 8px; background: #1a2332; border: 1px solid #2d3748; border-radius: 6px; color: #e5e7eb; min-height: 60px;"></textarea>
+      </div>
+      <button id="btnUploadFile" style="width: 100%; padding: 12px; background: #3b82f6; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Upload</button>
+    </div>
+  </div>
 
-            header.appendChild(nameSpan);
-            header.appendChild(timeSpan);
-
-            const content = document.createElement('div');
-            content.className = 'message-content';
-            content.textContent = text;
-
-            wrapper.appendChild(header);
-            wrapper.appendChild(content);
-
-            chatMessagesEl.appendChild(wrapper);
-            chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
-        }
-
-        async function sendChatMessage() {
-            const text = (textInputEl.value || '').trim();
-            if (!text) return;
-
-            addMessageBubble('user', text);
-            textInputEl.value = '';
-
-            try {
-                // Special command: !self <instruction>  →  self-programming API
-                if (text.startsWith('!self ')) {
-                    const instruction = text.slice('!self '.length).trim();
-
-                    const res = await fetch(
-                        `${LIFEOS_BASE_URL}/api/v1/system/self-program?key=${encodeURIComponent(LIFEOS_API_KEY)}`,
-                        {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ instruction, priority: 'medium' })
-                        }
-                    );
-
-                    const data = await res.json();
-
-                    if (!data || data.ok === false) {
-                        addMessageBubble(
-                            'assistant',
-                            `Self-program error: ${(data && data.error) || 'Unknown error'}`,
-                            { member: 'self-program' }
-                        );
-                        return;
-                    }
-
-                    const modified = (data.filesModified || []).join(', ') || 'none';
-                    const summaryLines = [
-                        'Self-program request accepted.',
-                        `Files modified: ${modified}`,
-                        `Deployment: ${data.deploymentTriggered ? 'triggered' : 'not triggered'}`,
-                        `Blind spots detected: ${data.blindSpotsDetected || 0}`
-                    ];
-
-                    addMessageBubble(
-                        'assistant',
-                        summaryLines.join('\n'),
-                        { member: 'self-program' }
-                    );
-                    return;
-                }
-
-                // Normal chat → /api/v1/chat
-                const res = await fetch(
-                    `${LIFEOS_BASE_URL}/api/v1/chat?key=${encodeURIComponent(LIFEOS_API_KEY)}`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: text })
-                    }
-                );
-
-                const data = await res.json();
-                if (!data || data.ok === false) {
-                    addMessageBubble(
-                        'assistant',
-                        `Error: ${(data && data.error) || 'Unknown error'}`,
-                        {}
-                    );
-                    return;
-                }
-
-                addMessageBubble(
-                    'assistant',
-                    data.response || '[empty response]',
-                    { member: data.member || '' }
-                );
-            } catch (err) {
-                addMessageBubble(
-                    'assistant',
-                    `Network error: ${err && err.message ? err.message : 'Unknown network error'}`,
-                    {}
-                );
-            }
-        }
-
-        // Wire up events
-        if (sendBtnEl) {
-            sendBtnEl.addEventListener('click', sendChatMessage);
-        }
-
-        if (textInputEl) {
-            textInputEl.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendChatMessage();
-                }
-            });
-        }
-    </script>
+  <script src="command-center.js"></script>
 </body>
 </html>

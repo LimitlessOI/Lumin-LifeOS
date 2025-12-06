@@ -1,416 +1,472 @@
-class SecureMemorySystem {
-    constructor() {
-        this.systemMemory = [];
-        this.maxMemoryLength = 1000;
-        this.loadFromStorage();
-    }
+/**
+ * ╔══════════════════════════════════════════════════════════════════════════════════╗
+ * ║                    COMMAND CENTER - Personal Control Interface                  ║
+ * ║                    Conference-style AI communication with full control         ║
+ * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ */
 
-    rememberSystemEvent(userMessage, aiResponse, context = {}) {
-        const memory = {
-            timestamp: new Date().toISOString(),
-            user: userMessage,
-            ai: aiResponse,
-            context: context
-        };
+class CommandCenter {
+  constructor() {
+    this.apiBase = window.location.origin;
+    this.commandKey = localStorage.getItem('lifeos_cmd_key') || '';
+    this.conversationHistory = [];
+    this.activeProjects = [];
+    this.activeAIs = new Set();
+    this.isRecording = false;
+    this.recognition = null;
+    
+    this.init();
+  }
 
-        this.systemMemory.push(memory);
+  async init() {
+    // Load saved conversation
+    this.loadConversation();
+    
+    // Initialize voice recognition
+    this.initVoiceRecognition();
+    
+    // Setup event listeners
+    this.setupEventListeners();
+    
+    // Load initial data
+    await this.loadProjects();
+    await this.loadDashboard();
+    await this.updateConferenceView();
+    
+    // Auto-scroll to bottom
+    this.scrollToBottom();
+    
+    // Check for new messages periodically
+    setInterval(() => this.checkForUpdates(), 5000);
+  }
 
-        if (this.systemMemory.length > this.maxMemoryLength) {
-            this.systemMemory = this.systemMemory.slice(-this.maxMemoryLength);
-        }
-
-        this.saveToStorage();
-    }
-
-    getRecentContext() {
-        return this.systemMemory.slice(-10);
-    }
-
-    saveToStorage() {
-        try {
-            localStorage.setItem('lifeos_system_memory', JSON.stringify(this.systemMemory));
-        } catch (e) {
-            this.systemMemory = this.systemMemory.slice(-500);
-            this.saveToStorage();
-        }
-    }
-
-    loadFromStorage() {
-        try {
-            const stored = localStorage.getItem('lifeos_system_memory');
-            if (stored) this.systemMemory = JSON.parse(stored);
-        } catch (e) {
-            this.systemMemory = [];
-        }
-    }
-}
-
-class LifeOSOverlay {
-    constructor() {
-        this.isAlwaysOnTop = false;
-        this.isVoiceMode = false;
-        this.isMinimized = false;
-        this.currentApp = 'command-center';
-        this.baseURL = window.location.origin;
-        this.apiKey = 'MySecretKey2025LifeOS';
-        this.systemMemory = new SecureMemorySystem();
-
-        // MicroProtocol (may be undefined if script not loaded)
-        this.micro = window.MicroProtocol || null;
-
-        this.setupEventListeners();
-        this.initializeSystem();
-    }
-
-    setupEventListeners() {
-        document.getElementById('toggle-pin').addEventListener('click', () => this.toggleAlwaysOnTop());
-        document.getElementById('toggle-voice').addEventListener('click', () => this.toggleVoiceMode());
-        document.getElementById('minimize').addEventListener('click', () => this.toggleMinimize());
-        document.getElementById('council-meeting').addEventListener('click', () => this.startQuickMeeting());
-        document.getElementById('send-message').addEventListener('click', () => this.sendMessage());
-        document.getElementById('text-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.sendMessage(); }
-        });
-
-        document.getElementById('app-selector').addEventListener('change', (e) => {
-            this.switchApp(e.target.value);
-        });
-
-        document.querySelectorAll('.action-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const action = e.target.dataset.action;
-                this.handleQuickAction(action);
-            });
-        });
-
-        this.makeDraggable();
-    }
-
-    switchApp(appId) {
-        this.currentApp = appId;
-        document.querySelectorAll('.app-content').forEach(app => app.style.display = 'none');
-        const selectedApp = document.getElementById(`app-${appId}`);
-        if (selectedApp) selectedApp.style.display = 'flex';
-    }
-
-    toggleAlwaysOnTop() {
-        this.isAlwaysOnTop = !this.isAlwaysOnTop;
-        const overlay = document.getElementById('lifeos-overlay');
-        const button = document.getElementById('toggle-pin');
-        if (this.isAlwaysOnTop) {
-            overlay.classList.add('always-on-top');
-            button.textContent = '📌 Pinned';
-            button.classList.add('active');
-        } else {
-            overlay.classList.remove('always-on-top');
-            button.textContent = '📌 Pin';
-            button.classList.remove('active');
-        }
-    }
-
-    toggleVoiceMode() {
-        this.isVoiceMode = !this.isVoiceMode;
-        const button = document.getElementById('toggle-voice');
-        if (this.isVoiceMode) {
-            button.textContent = '🎤 On';
-            button.classList.add('active');
-        } else {
-            button.textContent = '🎤 Voice';
-            button.classList.remove('active');
-        }
-    }
-
-    toggleMinimize() {
-        this.isMinimized = !this.isMinimized;
-        const overlay = document.getElementById('lifeos-overlay');
-        const button = document.getElementById('minimize');
-        if (this.isMinimized) {
-            overlay.classList.add('minimized');
-            button.textContent = '+';
-        } else {
-            overlay.classList.remove('minimized');
-            button.textContent = '−';
-        }
-    }
-
-    makeDraggable() {
-        const overlay = document.getElementById('lifeos-overlay');
-        const header = document.querySelector('.overlay-header');
-        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-        const dragMouseDown = (e) => {
-            e.preventDefault();
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
-        };
-
-        const elementDrag = (e) => {
-            e.preventDefault();
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            overlay.style.top = (overlay.offsetTop - pos2) + "px";
-            overlay.style.left = (overlay.offsetLeft - pos1) + "px";
-        };
-
-        const closeDragElement = () => {
-            document.onmouseup = null;
-            document.onmousemove = null;
-        };
-
-        header.onmousedown = dragMouseDown;
-    }
-
-    async initializeSystem() {
-        this.addMessage('system', '🔗 Connecting to LifeOS AI Council...');
-
-        try {
-            const response = await fetch(`${this.baseURL}/healthz?key=${this.apiKey}`);
-            if (response.ok) {
-                const data = await response.json();
-                this.addMessage(
-                    'ai',
-                    `✅ Connected to LifeOS v${data.version}!\n\n🤖 AI Council Online:\n• Claude\n• ChatGPT\n• Gemini\n• DeepSeek\n• Grok\n\nReady for commands!`,
-                    'Claude'
-                );
-            } else {
-                throw new Error(`HTTP ${response.status}`);
-            }
-        } catch (error) {
-            this.addMessage(
-                'system',
-                `⚠️ Backend connection failed: ${error.message}\n\nMake sure your server is running at: ${this.baseURL}`
-            );
-        }
-    }
-
-    // ---------- NEW: primary send via council/micro, fallback to legacy ----------
-
-    async sendMessage() {
-        const input = document.getElementById('text-input');
-        const message = input.value.trim();
-        if (!message) return;
-
-        this.addMessage('user', message);
-        input.value = '';
-
-        // show loading
-        this.addMessage('system', '⏳ Consulting AI council...');
-
-        this.systemMemory.rememberSystemEvent(message, '', { app: this.currentApp });
-
-        // Build Micro envelope if MicroProtocol is available
-        const microPacket = this.micro
-            ? this.micro.encodeUserText(message, {
-                  channel: this.currentApp,
-                  meta: { app: this.currentApp }
-              })
-            : {
-                  v: 'mp1',
-                  r: 'u',
-                  c: this.currentApp,
-                  t: message,
-                  lctp: null,
-                  m: { app: this.currentApp },
-                  ts: Date.now()
-              };
-
-        // 1) Try council endpoint first
-        const councilOK = await this.trySendViaCouncil(microPacket, message);
-        if (councilOK) return;
-
-        // 2) Fallback to legacy /api/v1/chat so it never just breaks
-        await this.sendViaLegacy(message);
-    }
-
-    async trySendViaCouncil(microPacket, originalMessage) {
-        try {
-            const response = await fetch(
-                `${this.baseURL}/api/council/chat?key=${this.apiKey}`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ micro: microPacket })
-                }
-            );
-
-            const messages = document.getElementById('chat-messages');
-            const lastMessage = messages.lastChild;
-            if (lastMessage && lastMessage.textContent.includes('⏳ Consulting')) {
-                lastMessage.remove();
-            }
-
-            if (!response.ok) {
-                const text = await response.text();
-                this.addMessage(
-                    'ai',
-                    `❌ Council endpoint error: HTTP ${response.status}: ${text}`,
-                    'System'
-                );
-                return false;
-            }
-
-            const data = await response.json();
-            const packet = data.micro || data;
-
-            let replyText = '';
-            if (this.micro) {
-                const decoded = this.micro.decodeAssistantMessage(packet);
-                replyText = decoded.text;
-            } else {
-                replyText = packet.t || packet.text || '';
-            }
-
-            this.addMessage('ai', replyText || '[empty reply]', 'LifeOS Council');
-
-            this.systemMemory.rememberSystemEvent(originalMessage, replyText, {
-                app: this.currentApp,
-                ai: 'council',
-                meta: packet.m || {}
-            });
-
-            return true;
-        } catch (error) {
-            const messages = document.getElementById('chat-messages');
-            const lastMessage = messages.lastChild;
-            if (lastMessage && lastMessage.textContent.includes('⏳ Consulting')) {
-                lastMessage.remove();
-            }
-
-            this.addMessage(
-                'ai',
-                `❌ Council connection error: ${error.message}`,
-                'System'
-            );
-            return false;
-        }
-    }
-
-    async sendViaLegacy(message) {
-        try {
-            this.addMessage('system', '↩️ Falling back to legacy chat...');
-
-            const response = await fetch(
-                `${this.baseURL}/api/v1/chat?key=${this.apiKey}`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message, member: 'claude' })
-                }
-            );
-
-            if (!response.ok) {
-                const text = await response.text();
-                this.addMessage(
-                    'ai',
-                    `❌ Legacy endpoint error: HTTP ${response.status}: ${text}`,
-                    'System'
-                );
-                return;
-            }
-
-            const data = await response.json();
-            if (data.ok && data.response) {
-                this.addMessage('ai', data.response, 'Claude');
-                this.systemMemory.rememberSystemEvent(message, data.response, {
-                    app: this.currentApp,
-                    ai: 'claude',
-                    spend: data.spend
-                });
-            } else if (data.error) {
-                this.addMessage('ai', `❌ Error: ${data.error}`, 'System');
-            } else {
-                this.addMessage('ai', `Unexpected response format`, 'System');
-            }
-        } catch (error) {
-            this.addMessage(
-                'ai',
-                `❌ Connection error: ${error.message}\n\nMake sure server is running at ${this.baseURL}`,
-                'System'
-            );
-        }
-    }
-
-    // ------------------------------------------------------------------
-
-    addMessage(sender, content, aiName = 'Claude') {
-        const chatMessages = document.getElementById('chat-messages');
-        const messageDiv = document.createElement('div');
-        messageDiv.className =
-            `message ${
-                sender === 'user'
-                    ? 'user-message'
-                    : sender === 'system'
-                    ? 'system-message'
-                    : 'ai-message'
-            }`;
-
-        if (sender === 'ai') {
-            messageDiv.innerHTML = `
-                <div class="message-header">
-                    <span class="ai-name">${aiName}</span>
-                    <span class="message-time">${new Date().toLocaleTimeString()}</span>
-                </div>
-                <div class="message-content">${content}</div>
-            `;
-        } else if (sender === 'system') {
-            messageDiv.innerHTML = `<div class="message-content"><em>${content}</em></div>`;
-        } else {
-            messageDiv.innerHTML = `<div class="message-content"><strong>You:</strong> ${content}</div>`;
-        }
-
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    handleQuickAction(action) {
-        switch (action) {
-            case 'upload-file':
-                document.getElementById('file-upload').click();
-                break;
-            case 'request-ideas':
-                this.sendMessageDirect('What are 10 improvements you could make to this system?');
-                break;
-            case 'show-memory':
-                const memories = this.systemMemory.getRecentContext();
-                if (memories.length > 0) {
-                    const summary = memories
-                        .map(m => `${m.timestamp.slice(11, 16)}: ${m.user.slice(0, 50)}`)
-                        .join('\n');
-                    this.addMessage('ai', `📋 Recent conversations:\n${summary}`, 'Memory');
-                } else {
-                    this.addMessage('ai', '📭 No conversations yet', 'Memory');
-                }
-                break;
-        }
-    }
-
-    sendMessageDirect(text) {
-        document.getElementById('text-input').value = text;
+  setupEventListeners() {
+    // Send button
+    document.getElementById('btnSend').addEventListener('click', () => this.sendMessage());
+    
+    // Enter key (Shift+Enter for new line)
+    document.getElementById('inputText').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
         this.sendMessage();
+      }
+    });
+
+    // Auto-resize textarea
+    document.getElementById('inputText').addEventListener('input', (e) => {
+      e.target.style.height = 'auto';
+      e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
+    });
+
+    // Voice button
+    document.getElementById('btnVoice').addEventListener('mousedown', () => this.startRecording());
+    document.getElementById('btnVoice').addEventListener('mouseup', () => this.stopRecording());
+    document.getElementById('btnVoice').addEventListener('mouseleave', () => this.stopRecording());
+
+    // Upload buttons
+    document.getElementById('btnUpload').addEventListener('click', () => this.showUploadModal());
+    document.getElementById('btnUploadInline').addEventListener('click', () => this.showUploadModal());
+    document.getElementById('btnCloseModal').addEventListener('click', () => this.hideUploadModal());
+    document.getElementById('btnUploadFile').addEventListener('click', () => this.uploadFile());
+    document.getElementById('fileInput').addEventListener('change', (e) => this.handleFileSelect(e));
+  }
+
+  initVoiceRecognition() {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      this.recognition = new SpeechRecognition();
+      this.recognition.continuous = false;
+      this.recognition.interimResults = true;
+      this.recognition.lang = 'en-US';
+
+      this.recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        document.getElementById('inputText').value = transcript;
+      };
+
+      this.recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+      };
+    } else {
+      console.warn('Speech recognition not supported');
+      document.getElementById('btnVoice').style.display = 'none';
+    }
+  }
+
+  startRecording() {
+    if (!this.recognition) return;
+    
+    this.isRecording = true;
+    document.getElementById('btnVoice').classList.add('recording');
+    this.recognition.start();
+  }
+
+  stopRecording() {
+    if (!this.recognition || !this.isRecording) return;
+    
+    this.isRecording = false;
+    document.getElementById('btnVoice').classList.remove('recording');
+    this.recognition.stop();
+  }
+
+  async sendMessage() {
+    const input = document.getElementById('inputText');
+    const text = input.value.trim();
+    
+    if (!text) return;
+    if (!this.commandKey) {
+      alert('Please set your command key in settings');
+      return;
     }
 
-    startQuickMeeting() {
-        this.addMessage('system', '👥 Starting quick council meeting...');
-        this.sendMessageDirect('What is the current system status and what should we focus on next?');
+    // Add user message to chat
+    this.addMessage('user', text, 'You');
+    
+    // Clear input
+    input.value = '';
+    input.style.height = 'auto';
+
+    // Send to system
+    try {
+      const response = await fetch(`${this.apiBase}/api/v1/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-command-key': this.commandKey,
+        },
+        body: JSON.stringify({
+          message: text,
+          member: 'chatgpt', // Default, can be changed
+        }),
+      });
+
+      const data = await response.json();
+      
+      // Extract AI member name
+      const aiMember = data.member || 'System';
+      const responseText = data.response || data.message || JSON.stringify(data);
+      
+      // Add AI response
+      this.addMessage('ai', responseText, aiMember, data.symbols);
+      
+      // Update active AIs
+      this.activeAIs.add(aiMember);
+      await this.updateConferenceView();
+      
+      // Trigger self-evaluation
+      await this.triggerSelfEvaluation(text, responseText);
+      
+    } catch (error) {
+      console.error('Error sending message:', error);
+      this.addMessage('ai', `Error: ${error.message}`, 'System');
     }
+
+    // Save conversation
+    this.saveConversation();
+    this.scrollToBottom();
+  }
+
+  addMessage(type, text, sender, symbols = null) {
+    const messagesDiv = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}`;
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.textContent = type === 'user' ? 'U' : sender.charAt(0).toUpperCase();
+    
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    
+    const header = document.createElement('div');
+    header.className = 'message-header';
+    
+    const senderSpan = document.createElement('span');
+    senderSpan.className = 'message-sender';
+    senderSpan.textContent = sender;
+    
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'message-time';
+    timeSpan.textContent = new Date().toLocaleTimeString();
+    
+    header.appendChild(senderSpan);
+    if (type === 'ai') {
+      const aiName = document.createElement('span');
+      aiName.className = 'message-ai-name';
+      aiName.textContent = sender;
+      header.appendChild(aiName);
+    }
+    header.appendChild(timeSpan);
+    
+    const textDiv = document.createElement('div');
+    textDiv.className = 'message-text';
+    textDiv.textContent = text;
+    
+    content.appendChild(header);
+    content.appendChild(textDiv);
+    
+    // Show symbols if provided
+    if (symbols) {
+      const symbolsDiv = document.createElement('div');
+      symbolsDiv.className = 'message-symbols';
+      symbolsDiv.textContent = `Symbols: ${symbols}`;
+      content.appendChild(symbolsDiv);
+    }
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(content);
+    messagesDiv.appendChild(messageDiv);
+    
+    // Store in history
+    this.conversationHistory.push({
+      type,
+      text,
+      sender,
+      symbols,
+      timestamp: new Date().toISOString(),
+    });
+    
+    this.scrollToBottom();
+  }
+
+  async updateConferenceView() {
+    const conferenceDiv = document.getElementById('conferenceView');
+    conferenceDiv.innerHTML = '';
+    
+    const aiNames = ['ChatGPT', 'Gemini', 'DeepSeek', 'Grok'];
+    
+    aiNames.forEach(ai => {
+      const participant = document.createElement('div');
+      participant.className = `ai-participant ${this.activeAIs.has(ai) ? 'speaking' : ''}`;
+      
+      const indicator = document.createElement('div');
+      indicator.className = `ai-indicator ${this.activeAIs.has(ai) ? 'active' : ''}`;
+      
+      const name = document.createElement('span');
+      name.textContent = ai;
+      
+      participant.appendChild(indicator);
+      participant.appendChild(name);
+      conferenceDiv.appendChild(participant);
+    });
+  }
+
+  async loadProjects() {
+    try {
+      const response = await fetch(`${this.apiBase}/api/v1/tasks/queue`, {
+        headers: { 'x-command-key': this.commandKey },
+      });
+      
+      const data = await response.json();
+      this.activeProjects = data.tasks || [];
+      this.renderProjects();
+    } catch (error) {
+      console.error('Error loading projects:', error);
+    }
+  }
+
+  renderProjects() {
+    const projectsDiv = document.getElementById('projectsList');
+    projectsDiv.innerHTML = '';
+    
+    this.activeProjects.forEach(project => {
+      const item = document.createElement('div');
+      item.className = 'project-item';
+      item.innerHTML = `
+        <div class="project-title">${project.title || project.name}</div>
+        <div class="project-progress">
+          <div class="project-progress-bar" style="width: ${project.progress || 0}%"></div>
+        </div>
+        <div class="project-meta">
+          <span>${project.status || 'In Progress'}</span>
+          <span>ETA: ${project.eta || 'N/A'}</span>
+        </div>
+      `;
+      
+      item.addEventListener('click', () => this.selectProject(project));
+      projectsDiv.appendChild(item);
+    });
+  }
+
+  selectProject(project) {
+    // Show project details
+    console.log('Selected project:', project);
+    // Could open a modal or expand view
+  }
+
+  async loadDashboard() {
+    try {
+      // Load ROI data
+      const roiResponse = await fetch(`${this.apiBase}/api/v1/roi/status`, {
+        headers: { 'x-command-key': this.commandKey },
+      });
+      const roiData = await roiResponse.json();
+      
+      if (roiData.roi) {
+        document.getElementById('metricROI').textContent = `${roiData.roi.ratio?.toFixed(2) || 0}x`;
+        document.getElementById('metricAICost').textContent = `$${roiData.roi.daily_ai_cost?.toFixed(2) || 0}`;
+        document.getElementById('metricRevenueGen').textContent = `$${roiData.roi.revenue_generated?.toFixed(2) || 0}`;
+      }
+      
+      // Load financial data
+      const financialResponse = await fetch(`${this.apiBase}/api/v1/dashboard`, {
+        headers: { 'x-command-key': this.commandKey },
+      });
+      const financialData = await financialResponse.json();
+      
+      if (financialData.dashboard) {
+        const dash = financialData.dashboard;
+        document.getElementById('metricRevenue').textContent = `$${dash.monthly_revenue?.toFixed(2) || 0}`;
+        document.getElementById('metricExpenses').textContent = `$${dash.monthly_expenses?.toFixed(2) || 0}`;
+        document.getElementById('metricNet').textContent = `$${(dash.monthly_revenue - dash.monthly_expenses)?.toFixed(2) || 0}`;
+      }
+      
+      // Load AI performance
+      await this.loadAIPerformance();
+      
+    } catch (error) {
+      console.error('Error loading dashboard:', error);
+    }
+  }
+
+  async loadAIPerformance() {
+    try {
+      const response = await fetch(`${this.apiBase}/api/v1/ai/performance`, {
+        headers: { 'x-command-key': this.commandKey },
+      });
+      
+      const data = await response.json();
+      
+      if (data.accuracy) {
+        document.getElementById('metricAccuracy').textContent = `${(data.accuracy * 100).toFixed(1)}%`;
+      }
+      
+      if (data.self_evaluation) {
+        document.getElementById('metricSelfEval').textContent = `${(data.self_evaluation * 100).toFixed(1)}%`;
+      }
+    } catch (error) {
+      // Endpoint might not exist yet
+      console.warn('AI performance endpoint not available');
+    }
+  }
+
+  async triggerSelfEvaluation(userInput, aiResponse) {
+    // System evaluates its own response
+    try {
+      await fetch(`${this.apiBase}/api/v1/ai/self-evaluate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-command-key': this.commandKey,
+        },
+        body: JSON.stringify({
+          user_input: userInput,
+          ai_response: aiResponse,
+        }),
+      });
+    } catch (error) {
+      console.warn('Self-evaluation not available');
+    }
+  }
+
+  showUploadModal() {
+    document.getElementById('uploadModal').classList.add('active');
+  }
+
+  hideUploadModal() {
+    document.getElementById('uploadModal').classList.remove('active');
+  }
+
+  handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        // Store for upload
+        this.selectedFile = { file, content };
+      };
+      reader.readAsText(file);
+    }
+  }
+
+  async uploadFile() {
+    if (!this.selectedFile) {
+      alert('Please select a file first');
+      return;
+    }
+
+    const category = document.getElementById('fileCategory').value;
+    const description = document.getElementById('fileDescription').value;
+
+    try {
+      const response = await fetch(`${this.apiBase}/api/v1/knowledge/upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-command-key': this.commandKey,
+        },
+        body: JSON.stringify({
+          filename: this.selectedFile.file.name,
+          content: this.selectedFile.content,
+          category,
+          description,
+          businessIdea: category === 'business-ideas',
+          securityRelated: category === 'security' || category === 'quantum-proof',
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (data.ok) {
+        alert('File uploaded successfully!');
+        this.hideUploadModal();
+        this.selectedFile = null;
+        document.getElementById('fileInput').value = '';
+        document.getElementById('fileDescription').value = '';
+      } else {
+        alert('Upload failed: ' + data.error);
+      }
+    } catch (error) {
+      alert('Upload error: ' + error.message);
+    }
+  }
+
+  saveConversation() {
+    localStorage.setItem('lifeos_conversation', JSON.stringify(this.conversationHistory));
+  }
+
+  loadConversation() {
+    const saved = localStorage.getItem('lifeos_conversation');
+    if (saved) {
+      try {
+        this.conversationHistory = JSON.parse(saved);
+        // Render last 50 messages
+        const recent = this.conversationHistory.slice(-50);
+        recent.forEach(msg => {
+          this.addMessage(msg.type, msg.text, msg.sender, msg.symbols);
+        });
+      } catch (error) {
+        console.error('Error loading conversation:', error);
+      }
+    }
+  }
+
+  scrollToBottom() {
+    const messagesDiv = document.getElementById('chatMessages');
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  async checkForUpdates() {
+    await this.loadProjects();
+    await this.loadDashboard();
+  }
 }
 
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
-    window.overlay = new LifeOSOverlay();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('file-upload').addEventListener('change', (e) => {
-        const files = e.target.files;
-        if (files.length > 0 && window.overlay) {
-            window.overlay.addMessage('system', `📁 Uploading ${files.length} file(s)...`);
-            setTimeout(() => {
-                window.overlay.addMessage('ai', `Files processed successfully.`, 'System');
-            }, 1500);
-        }
-    });
+  window.commandCenter = new CommandCenter();
 });

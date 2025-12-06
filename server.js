@@ -528,6 +528,15 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_trials_user ON user_trials(user_id, command_key)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_trials_active ON user_trials(active) WHERE active = true`);
 
+    // Cost Analysis Log
+    await pool.query(`CREATE TABLE IF NOT EXISTS cost_analysis_log (
+      id SERIAL PRIMARY KEY,
+      analysis_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_analysis_created ON cost_analysis_log(created_at)`);
+
     await pool.query(`
       ALTER TABLE financial_ledger
       ADD COLUMN IF NOT EXISTS external_id TEXT
@@ -3948,9 +3957,13 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
     const response = await callCouncilMember(member, message);
     const spend = await getDailySpend();
 
+    // Convert to MICRO symbols for system (user sees English)
+    const microSymbols = compressToMicroSimple(response);
+    
     res.json({
       ok: true,
       response,
+      symbols: microSymbols, // System sees this
       spend,
       member,
       blindSpotsDetected: blindSpots.length,
@@ -4714,6 +4727,178 @@ app.get("/api/v1/trial/status", requireKey, async (req, res) => {
     res.status(500).json({ ok: false, error: error.message });
   }
 });
+
+// ==================== COMMAND CENTER ENDPOINTS ====================
+app.get("/api/v1/tasks/queue", requireKey, async (req, res) => {
+  try {
+    // Get active tasks/projects
+    const tasks = await executionQueue.getStatus();
+    
+    // Format for command center
+    const projects = (tasks.active || []).map(task => ({
+      id: task.id,
+      title: task.name || task.type || 'Task',
+      status: task.status || 'in_progress',
+      progress: task.progress || 0,
+      eta: task.eta || 'Calculating...',
+      priority: task.priority || 'medium',
+    }));
+
+    res.json({ ok: true, tasks: projects });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/ai/performance", requireKey, async (req, res) => {
+  try {
+    // Get AI performance scores
+    const scores = Array.from(aiPerformanceScores.entries()).map(([member, score]) => ({
+      member,
+      accuracy: score.accuracy || 0,
+      self_evaluation: score.self_evaluation || 0,
+      total_guesses: score.total_guesses || 0,
+      correct_guesses: score.correct_guesses || 0,
+    }));
+
+    const avgAccuracy = scores.length > 0 
+      ? scores.reduce((sum, s) => sum + s.accuracy, 0) / scores.length 
+      : 0;
+    
+    const avgSelfEval = scores.length > 0
+      ? scores.reduce((sum, s) => sum + s.self_evaluation, 0) / scores.length
+      : 0;
+
+    res.json({
+      ok: true,
+      accuracy: avgAccuracy,
+      self_evaluation: avgSelfEval,
+      scores,
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/ai/self-evaluate", requireKey, async (req, res) => {
+  try {
+    const { user_input, ai_response, member = 'chatgpt' } = req.body;
+
+    // AI evaluates its own response
+    const evaluationPrompt = `Evaluate your own response to this user input:
+
+USER INPUT: ${user_input}
+YOUR RESPONSE: ${ai_response}
+
+Rate your response on:
+1. Accuracy (0-1): Did you answer correctly?
+2. Completeness (0-1): Did you address all aspects?
+3. Relevance (0-1): Was your response relevant?
+4. User satisfaction prediction (0-1): How satisfied would the user be?
+
+Respond with JSON: {"accuracy": 0.0-1.0, "completeness": 0.0-1.0, "relevance": 0.0-1.0, "satisfaction": 0.0-1.0}`;
+
+    const evaluation = await callCouncilMember(member, evaluationPrompt);
+    
+    // Parse evaluation
+    let scores = { accuracy: 0.5, completeness: 0.5, relevance: 0.5, satisfaction: 0.5 };
+    try {
+      const jsonMatch = evaluation.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        scores = JSON.parse(jsonMatch[0]);
+      }
+    } catch (e) {
+      console.warn('Failed to parse self-evaluation:', e);
+    }
+
+    // Store evaluation
+    if (!aiPerformanceScores.has(member)) {
+      aiPerformanceScores.set(member, {
+        accuracy: 0,
+        self_evaluation: 0,
+        total_guesses: 0,
+        correct_guesses: 0,
+        evaluations: [],
+      });
+    }
+
+    const memberScore = aiPerformanceScores.get(member);
+    memberScore.evaluations.push({
+      user_input,
+      ai_response,
+      scores,
+      timestamp: new Date().toISOString(),
+    });
+
+    // Update averages
+    const avgAccuracy = memberScore.evaluations.reduce((sum, e) => sum + e.scores.accuracy, 0) / memberScore.evaluations.length;
+    const avgSelfEval = memberScore.evaluations.reduce((sum, e) => sum + (e.scores.satisfaction || e.scores.accuracy), 0) / memberScore.evaluations.length;
+    
+    memberScore.accuracy = avgAccuracy;
+    memberScore.self_evaluation = avgSelfEval;
+    memberScore.total_guesses++;
+
+    res.json({ ok: true, scores, member });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Cost saving re-examination endpoint
+app.post("/api/v1/system/re-examine-costs", requireKey, async (req, res) => {
+  try {
+    const analysis = await analyzeCostSavings();
+    res.json({ ok: true, analysis });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+async function analyzeCostSavings() {
+  // Analyze current cost optimization strategies
+  const analysis = {
+    current_savings: {
+      cache_hit_rate: compressionMetrics.cache_hits / (compressionMetrics.cache_hits + compressionMetrics.cache_misses) || 0,
+      model_downgrades: compressionMetrics.model_downgrades,
+      prompt_optimizations: compressionMetrics.prompt_optimizations,
+      tokens_saved: compressionMetrics.tokens_saved_total,
+    },
+    recommendations: [],
+    potential_savings: [],
+  };
+
+  // Check cache performance
+  if (analysis.current_savings.cache_hit_rate < 0.5) {
+    analysis.recommendations.push({
+      type: 'cache',
+      issue: 'Low cache hit rate',
+      suggestion: 'Increase cache TTL or improve cache key generation',
+      potential_savings: '20-30%',
+    });
+  }
+
+  // Check model selection
+  if (compressionMetrics.model_downgrades < 10) {
+    analysis.recommendations.push({
+      type: 'model_selection',
+      issue: 'Not using cheaper models enough',
+      suggestion: 'Route more tasks to Tier 0 (free/cheap models)',
+      potential_savings: '80-95%',
+    });
+  }
+
+  // Check prompt optimization
+  if (compressionMetrics.prompt_optimizations < 50) {
+    analysis.recommendations.push({
+      type: 'prompt_optimization',
+      issue: 'Prompts not being optimized',
+      suggestion: 'Enable automatic prompt compression',
+      potential_savings: '10-15%',
+    });
+  }
+
+  return analysis;
+}
 
 app.post("/api/v1/trial/start", requireKey, async (req, res) => {
   try {
