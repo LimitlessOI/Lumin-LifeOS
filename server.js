@@ -81,14 +81,30 @@ async function getStripeClient() {
   if (!STRIPE_SECRET_KEY) return null;
   if (stripeClient) return stripeClient;
   try {
-    const StripeModule = await import("stripe");
-    const StripeCtor = StripeModule.default || StripeModule;
-    stripeClient = new StripeCtor(STRIPE_SECRET_KEY, {
+    // Dynamic import with error handling - completely optional
+    let Stripe;
+    try {
+      const stripeModule = await import('stripe');
+      Stripe = stripeModule.default || stripeModule.Stripe || stripeModule;
+    } catch (importError) {
+      // Package not installed - this is OK, Stripe is optional
+      console.warn('⚠️ Stripe package not installed - Stripe features disabled');
+      console.warn('   To enable: npm install stripe');
+      return null;
+    }
+    
+    if (!Stripe) {
+      return null;
+    }
+    
+    stripeClient = new Stripe(STRIPE_SECRET_KEY, {
       apiVersion: "2024-06-20",
     });
+    console.log("✅ Stripe client initialized");
     return stripeClient;
   } catch (err) {
-    console.error("Stripe initialization error:", err.message);
+    // Any other error - log but don't crash
+    console.warn("⚠️ Stripe initialization error (non-fatal):", err.message);
     return null;
   }
 }
@@ -3464,6 +3480,7 @@ let whiteLabelConfig = null;
 let knowledgeBase = null;
 let fileCleanupAnalyzer = null;
 let costReExamination = null;
+let logMonitor = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -3501,6 +3518,37 @@ async function initializeTwoTierSystem() {
     const costModule = await import("./core/cost-re-examination.js");
     const CostReExamination = costModule.CostReExamination;
     costReExamination = new CostReExamination(pool, compressionMetrics, roiTracker);
+    
+    // Initialize log monitoring
+    try {
+      const logModule = await import("./core/log-monitor.js");
+      const LogMonitor = logModule.LogMonitor;
+      logMonitor = new LogMonitor(pool, callCouncilMember);
+      console.log("✅ Log Monitoring System initialized");
+      
+      // Monitor logs every 5 minutes
+      setInterval(async () => {
+        try {
+          const result = await logMonitor.monitorLogs();
+          if (result.errors && result.errors.length > 0) {
+            console.log(`🔍 [LOG MONITOR] Checked logs: ${result.errors.length} errors, ${result.fixed || 0} fixed`);
+          }
+        } catch (error) {
+          console.warn("⚠️ Log monitoring failed:", error.message);
+        }
+      }, 5 * 60 * 1000); // Every 5 minutes
+      
+      // Also monitor on startup after a delay
+      setTimeout(async () => {
+        try {
+          await logMonitor.monitorLogs();
+        } catch (error) {
+          // Silent fail on startup check
+        }
+      }, 30000); // After 30 seconds
+    } catch (error) {
+      console.warn("⚠️ Log monitoring not available:", error.message);
+    }
     
     console.log("✅ Two-Tier Council System initialized");
     console.log("✅ Knowledge Base System initialized");
@@ -4883,6 +4931,56 @@ app.post("/api/v1/system/re-examine-costs", requireKey, async (req, res) => {
     }
     const analysis = await costReExamination.examine();
     res.json({ ok: true, analysis });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== LOG MONITORING ENDPOINTS ====================
+app.post("/api/v1/system/monitor-logs", requireKey, async (req, res) => {
+  try {
+    if (!logMonitor) {
+      return res.status(503).json({ error: "Log monitoring not initialized" });
+    }
+    const result = await logMonitor.monitorLogs();
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/system/fix-history", requireKey, async (req, res) => {
+  try {
+    if (!logMonitor) {
+      return res.status(503).json({ error: "Log monitoring not initialized" });
+    }
+    const history = await logMonitor.getFixHistory(parseInt(req.query.limit) || 50);
+    res.json({ ok: true, history, count: history.length });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== LOG MONITORING ENDPOINTS ====================
+app.post("/api/v1/system/monitor-logs", requireKey, async (req, res) => {
+  try {
+    if (!logMonitor) {
+      return res.status(503).json({ error: "Log monitoring not initialized" });
+    }
+    const result = await logMonitor.monitorLogs();
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/system/fix-history", requireKey, async (req, res) => {
+  try {
+    if (!logMonitor) {
+      return res.status(503).json({ error: "Log monitoring not initialized" });
+    }
+    const history = await logMonitor.getFixHistory(parseInt(req.query.limit) || 50);
+    res.json({ ok: true, history, count: history.length });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
