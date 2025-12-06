@@ -32,6 +32,9 @@ import { promisify } from "util";
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
 
+// Knowledge Base System
+let KnowledgeBase, FileCleanupAnalyzer;
+
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
 
@@ -486,6 +489,44 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_cache_prompt_hash ON ai_response_cache(prompt_hash)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_cache_created_at ON ai_response_cache(created_at)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_cache_last_used ON ai_response_cache(last_used_at)`);
+
+    // Knowledge Base System
+    await pool.query(`CREATE TABLE IF NOT EXISTS knowledge_base_files (
+      id SERIAL PRIMARY KEY,
+      file_id TEXT UNIQUE NOT NULL,
+      filename TEXT NOT NULL,
+      file_path TEXT NOT NULL,
+      category VARCHAR(50) DEFAULT 'context',
+      tags JSONB DEFAULT '[]',
+      description TEXT,
+      business_idea BOOLEAN DEFAULT false,
+      security_related BOOLEAN DEFAULT false,
+      historical BOOLEAN DEFAULT false,
+      keywords JSONB DEFAULT '[]',
+      search_vector tsvector,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_kb_search ON knowledge_base_files USING gin(search_vector)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_kb_category ON knowledge_base_files(category)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_kb_business ON knowledge_base_files(business_idea) WHERE business_idea = true`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_kb_security ON knowledge_base_files(security_related) WHERE security_related = true`);
+
+    // Trial System
+    await pool.query(`CREATE TABLE IF NOT EXISTS user_trials (
+      id SERIAL PRIMARY KEY,
+      user_id TEXT,
+      command_key TEXT,
+      duration_days INT DEFAULT 7,
+      active BOOLEAN DEFAULT true,
+      has_subscription BOOLEAN DEFAULT false,
+      source VARCHAR(50),
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_trials_user ON user_trials(user_id, command_key)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_trials_active ON user_trials(active) WHERE active = true`);
 
     await pool.query(`
       ALTER TABLE financial_ledger
@@ -3402,6 +3443,9 @@ let modelRouter = null;
 let outreachAutomation = null;
 let whiteLabelConfig = null;
 
+let knowledgeBase = null;
+let fileCleanupAnalyzer = null;
+
 async function initializeTwoTierSystem() {
   try {
     // Dynamic import of modules
@@ -3410,12 +3454,16 @@ async function initializeTwoTierSystem() {
     const routerModule = await import("./core/model-router.js");
     const outreachModule = await import("./core/outreach-automation.js");
     const whiteLabelModule = await import("./core/white-label.js");
+    const knowledgeModule = await import("./core/knowledge-base.js");
+    const cleanupModule = await import("./core/file-cleanup-analyzer.js");
     
     Tier0Council = tier0Module.Tier0Council;
     Tier1Council = tier1Module.Tier1Council;
     ModelRouter = routerModule.ModelRouter;
     OutreachAutomation = outreachModule.OutreachAutomation;
     WhiteLabelConfig = whiteLabelModule.WhiteLabelConfig;
+    KnowledgeBase = knowledgeModule.KnowledgeBase;
+    FileCleanupAnalyzer = cleanupModule.FileCleanupAnalyzer;
 
     tier0Council = new Tier0Council(pool);
     tier1Council = new Tier1Council(pool, callCouncilMember);
@@ -3427,8 +3475,11 @@ async function initializeTwoTierSystem() {
       callCouncilMember
     );
     whiteLabelConfig = new WhiteLabelConfig(pool);
+    knowledgeBase = new KnowledgeBase(pool);
+    fileCleanupAnalyzer = new FileCleanupAnalyzer();
     
     console.log("✅ Two-Tier Council System initialized");
+    console.log("✅ Knowledge Base System initialized");
   } catch (error) {
     console.error("⚠️ Two-Tier System initialization error:", error.message);
     console.error("   System will continue with legacy council only");
@@ -4522,6 +4573,189 @@ app.get("/api/v1/white-label/config/:clientId", requireKey, async (req, res) => 
 
     const config = await whiteLabelConfig.getConfig(req.params.clientId);
     res.json({ ok: true, config });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== KNOWLEDGE BASE & FILE UPLOAD ENDPOINTS ====================
+app.post("/api/v1/knowledge/upload", requireKey, async (req, res) => {
+  try {
+    if (!knowledgeBase) {
+      return res.status(503).json({ error: "Knowledge base not initialized" });
+    }
+
+    const { filename, content, category, tags, description, businessIdea, securityRelated, historical } = req.body;
+
+    if (!filename || !content) {
+      return res.status(400).json({ error: "Filename and content required" });
+    }
+
+    const result = await knowledgeBase.uploadFile(content, {
+      filename,
+      category: category || 'context',
+      tags: tags || [],
+      description: description || '',
+      businessIdea: businessIdea || false,
+      securityRelated: securityRelated || false,
+      historical: historical || false,
+    });
+
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/knowledge/search", requireKey, async (req, res) => {
+  try {
+    if (!knowledgeBase) {
+      return res.status(503).json({ error: "Knowledge base not initialized" });
+    }
+
+    const { q, category, tags, businessIdeasOnly } = req.query;
+
+    if (!q) {
+      return res.status(400).json({ error: "Query (q) required" });
+    }
+
+    const results = await knowledgeBase.search(q, {
+      category: category || null,
+      tags: tags ? tags.split(',') : [],
+      businessIdeasOnly: businessIdeasOnly === 'true',
+      limit: parseInt(req.query.limit) || 50,
+    });
+
+    res.json({ ok: true, results, count: results.length });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/knowledge/business-ideas", requireKey, async (req, res) => {
+  try {
+    if (!knowledgeBase) {
+      return res.status(503).json({ error: "Knowledge base not initialized" });
+    }
+
+    const ideas = await knowledgeBase.getBusinessIdeas();
+    res.json({ ok: true, ideas, count: ideas.length });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/knowledge/security", requireKey, async (req, res) => {
+  try {
+    if (!knowledgeBase) {
+      return res.status(503).json({ error: "Knowledge base not initialized" });
+    }
+
+    const docs = await knowledgeBase.getSecurityDocs();
+    res.json({ ok: true, docs, count: docs.length });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== FILE CLEANUP ANALYZER ENDPOINTS ====================
+app.post("/api/v1/system/analyze-cleanup", requireKey, async (req, res) => {
+  try {
+    if (!fileCleanupAnalyzer) {
+      return res.status(503).json({ error: "Cleanup analyzer not initialized" });
+    }
+
+    const report = await fileCleanupAnalyzer.analyze();
+    const summary = fileCleanupAnalyzer.generateReport();
+
+    res.json({ ok: true, ...summary });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== TRIAL SYSTEM ENDPOINTS ====================
+app.get("/api/v1/trial/status", requireKey, async (req, res) => {
+  try {
+    // Check if user has active trial or subscription
+    const result = await pool.query(
+      `SELECT * FROM user_trials 
+       WHERE user_id = $1 OR command_key = $2
+       ORDER BY created_at DESC LIMIT 1`,
+      [req.headers['x-user-id'] || 'default', req.headers['x-command-key']]
+    );
+
+    const trial = result.rows[0];
+    const now = new Date();
+
+    if (trial) {
+      const trialEnd = new Date(trial.created_at);
+      trialEnd.setDate(trialEnd.getDate() + (trial.duration_days || 7));
+      
+      const isActive = now < trialEnd && trial.active;
+      const canOffer = !trial || (now > trialEnd && !trial.has_subscription);
+
+      res.json({
+        ok: true,
+        trialActive: isActive,
+        hasAccess: isActive || trial?.has_subscription,
+        canOfferTrial: canOffer,
+        trialEndsAt: trialEnd.toISOString(),
+      });
+    } else {
+      res.json({
+        ok: true,
+        trialActive: false,
+        hasAccess: false,
+        canOfferTrial: true,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/trial/start", requireKey, async (req, res) => {
+  try {
+    const { source = 'overlay' } = req.body;
+    const userId = req.headers['x-user-id'] || 'default';
+    const commandKey = req.headers['x-command-key'];
+
+    // Check if already has active trial
+    const existing = await pool.query(
+      `SELECT * FROM user_trials 
+       WHERE (user_id = $1 OR command_key = $2) AND active = true
+       ORDER BY created_at DESC LIMIT 1`,
+      [userId, commandKey]
+    );
+
+    if (existing.rows.length > 0) {
+      const trial = existing.rows[0];
+      const trialEnd = new Date(trial.created_at);
+      trialEnd.setDate(trialEnd.getDate() + (trial.duration_days || 7));
+      
+      if (new Date() < trialEnd) {
+        return res.json({
+          ok: true,
+          message: 'Trial already active',
+          trialEndsAt: trialEnd.toISOString(),
+        });
+      }
+    }
+
+    // Create new trial
+    const result = await pool.query(
+      `INSERT INTO user_trials (user_id, command_key, duration_days, active, source, created_at)
+       VALUES ($1, $2, $3, true, $4, NOW())
+       RETURNING *`,
+      [userId, commandKey, 7, source]
+    );
+
+    res.json({
+      ok: true,
+      trial: result.rows[0],
+      message: 'Free trial started! 7 days of full access.',
+    });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
