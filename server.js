@@ -4106,6 +4106,19 @@ async function initializeTwoTierSystem() {
         const EnhancedIncomeDrone = enhancedDroneModule.EnhancedIncomeDrone;
         incomeDroneSystem = new EnhancedIncomeDrone(pool, callCouncilMember, modelRouter);
         console.log("✅ Enhanced Income Drone System initialized");
+        
+        // IMMEDIATELY deploy all 5 drones to start generating income
+        console.log('🚀 [INCOME] Deploying income drones immediately...');
+        try {
+          const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
+          const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
+          const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
+          const productDrone = await incomeDroneSystem.deployDrone("product", 200);
+          const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
+          console.log(`✅ [INCOME] Deployed 5 income drones - they are NOW WORKING!`);
+        } catch (deployError) {
+          console.error('❌ [INCOME] Error deploying drones:', deployError.message);
+        }
       } catch (error) {
         console.warn("⚠️ Enhanced Drone System not available, using basic:", error.message);
       }
@@ -5962,6 +5975,30 @@ app.get("/api/v1/revenue/api-cost-savings/action-plan", requireKey, async (req, 
   }
 });
 
+// ==================== SYSTEM HEALTH CHECK ENDPOINT ====================
+app.get("/api/v1/system/health", async (req, res) => {
+  try {
+    if (!systemHealthChecker) {
+      return res.status(503).json({ 
+        ok: false, 
+        error: "System Health Checker not initialized",
+        status: "degraded"
+      });
+    }
+
+    const health = await systemHealthChecker.runFullHealthCheck();
+    const statusCode = health.overall === 'unhealthy' ? 503 : 
+                      health.overall === 'degraded' ? 200 : 200;
+    res.status(statusCode).json({ ok: true, ...health });
+  } catch (error) {
+    res.status(500).json({ 
+      ok: false, 
+      error: error.message,
+      status: "error"
+    });
+  }
+});
+
 // Financial Dashboard & ROI
 app.get("/api/v1/dashboard", requireKey, async (req, res) => {
   try {
@@ -7461,13 +7498,19 @@ async function start() {
     executionQueue.executeNext();
 
     // Deploy income drones (IMMEDIATELY START WORKING)
-    console.log('🚀 [STARTUP] Deploying income drones...');
-    const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
-    const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
-    const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
-    const productDrone = await incomeDroneSystem.deployDrone("product", 200);
-    const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
-    console.log(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
+    // Note: If EnhancedIncomeDrone is used, drones are already deployed during initialization
+    // Only deploy here if using basic IncomeDroneSystem
+    if (incomeDroneSystem && incomeDroneSystem.constructor.name === 'IncomeDroneSystem') {
+      console.log('🚀 [STARTUP] Deploying income drones (basic system)...');
+      const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
+      const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
+      const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
+      const productDrone = await incomeDroneSystem.deployDrone("product", 200);
+      const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
+      console.log(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
+    } else {
+      console.log('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
+    }
 
     // Continuous self-improvement cycles
     setInterval(() => continuousSelfImprovement(), 30 * 60 * 1000);
