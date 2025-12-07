@@ -808,6 +808,130 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_vapi_calls_status ON vapi_calls(status)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_vapi_calls_created ON vapi_calls(created_at)`);
 
+    // Autonomous Businesses
+    await pool.query(`CREATE TABLE IF NOT EXISTS autonomous_businesses (
+      id SERIAL PRIMARY KEY,
+      business_id TEXT UNIQUE NOT NULL,
+      business_name TEXT NOT NULL,
+      business_type VARCHAR(50),
+      revenue_30d DECIMAL(12,2) DEFAULT 0,
+      costs_30d DECIMAL(12,2) DEFAULT 0,
+      customer_count INT DEFAULT 0,
+      health_score INT DEFAULT 50,
+      status VARCHAR(20) DEFAULT 'active',
+      last_health_check TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_autonomous_businesses_status ON autonomous_businesses(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_autonomous_businesses_type ON autonomous_businesses(business_type)`);
+
+    // Revenue Opportunities
+    await pool.query(`CREATE TABLE IF NOT EXISTS revenue_opportunities (
+      id SERIAL PRIMARY KEY,
+      opportunity_id TEXT UNIQUE NOT NULL,
+      name TEXT NOT NULL,
+      revenue_potential DECIMAL(12,2),
+      time_to_implement INT,
+      required_resources JSONB,
+      market_demand TEXT,
+      competitive_advantage TEXT,
+      status VARCHAR(20) DEFAULT 'pending',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_revenue_opp_status ON revenue_opportunities(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_revenue_opp_potential ON revenue_opportunities(revenue_potential DESC)`);
+
+    // Generated Games
+    await pool.query(`CREATE TABLE IF NOT EXISTS generated_games (
+      id SERIAL PRIMARY KEY,
+      game_id TEXT UNIQUE NOT NULL,
+      game_name TEXT NOT NULL,
+      game_type VARCHAR(50),
+      complexity VARCHAR(20),
+      code_html TEXT,
+      code_css TEXT,
+      code_js TEXT,
+      description TEXT,
+      marketing_strategy JSONB,
+      monetization VARCHAR(20),
+      use_overlay BOOLEAN DEFAULT true,
+      status VARCHAR(20) DEFAULT 'generated',
+      deployed_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_games_type ON generated_games(game_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_games_status ON generated_games(status)`);
+
+    // Business Duplications
+    await pool.query(`CREATE TABLE IF NOT EXISTS business_duplications (
+      id SERIAL PRIMARY KEY,
+      business_id TEXT UNIQUE NOT NULL,
+      competitor_name TEXT NOT NULL,
+      competitor_url TEXT,
+      analysis_data JSONB,
+      improvement_target INT,
+      implementation_plan JSONB,
+      logo_data JSONB,
+      status VARCHAR(20) DEFAULT 'analyzed',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_biz_dup_status ON business_duplications(status)`);
+
+    // Code Services
+    await pool.query(`CREATE TABLE IF NOT EXISTS code_services (
+      id SERIAL PRIMARY KEY,
+      service_id TEXT UNIQUE NOT NULL,
+      service_type VARCHAR(50),
+      request_data JSONB,
+      response_data JSONB,
+      status VARCHAR(20) DEFAULT 'completed',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_code_services_type ON code_services(service_type)`);
+
+    // Make.com Scenarios
+    await pool.query(`CREATE TABLE IF NOT EXISTS makecom_scenarios (
+      id SERIAL PRIMARY KEY,
+      scenario_id TEXT UNIQUE NOT NULL,
+      description TEXT,
+      scenario_data JSONB,
+      status VARCHAR(20) DEFAULT 'generated',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    // Zapier Zaps
+    await pool.query(`CREATE TABLE IF NOT EXISTS zapier_zaps (
+      id SERIAL PRIMARY KEY,
+      zap_id TEXT UNIQUE NOT NULL,
+      description TEXT,
+      zap_data JSONB,
+      status VARCHAR(20) DEFAULT 'generated',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    // Approval Requests (for controversial items)
+    await pool.query(`CREATE TABLE IF NOT EXISTS approval_requests (
+      id SERIAL PRIMARY KEY,
+      request_id TEXT UNIQUE NOT NULL,
+      type VARCHAR(50),
+      description TEXT,
+      potential_issues JSONB,
+      request_data JSONB,
+      status VARCHAR(20) DEFAULT 'pending',
+      approval_notes TEXT,
+      approved_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_approval_status ON approval_requests(status)`);
+
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
@@ -3752,6 +3876,12 @@ let aiEffectivenessTracker = null;
 let postUpgradeChecker = null;
 let comprehensiveIdeaTracker = null;
 let vapiIntegration = null;
+let businessCenter = null;
+let gameGenerator = null;
+let businessDuplication = null;
+let codeServices = null;
+let makeComGenerator = null;
+let legalChecker = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -3886,6 +4016,61 @@ async function initializeTwoTierSystem() {
         console.log("✅ Enhanced Income Drone System initialized");
       } catch (error) {
         console.warn("⚠️ Enhanced Drone System not available, using basic:", error.message);
+      }
+      
+      // Initialize Business Center
+      try {
+        const businessCenterModule = await import("./core/business-center.js");
+        businessCenter = new businessCenterModule.BusinessCenter(pool, callCouncilMember, modelRouter);
+        await businessCenter.initialize();
+        console.log("✅ Business Center initialized");
+      } catch (error) {
+        console.warn("⚠️ Business Center not available:", error.message);
+      }
+      
+      // Initialize Game Generator
+      try {
+        const gameGeneratorModule = await import("./core/game-generator.js");
+        gameGenerator = new gameGeneratorModule.GameGenerator(pool, callCouncilMember, modelRouter);
+        console.log("✅ Game Generator initialized");
+      } catch (error) {
+        console.warn("⚠️ Game Generator not available:", error.message);
+      }
+      
+      // Initialize Business Duplication
+      try {
+        const businessDupModule = await import("./core/business-duplication.js");
+        businessDuplication = new businessDupModule.BusinessDuplication(pool, callCouncilMember, modelRouter);
+        console.log("✅ Business Duplication System initialized");
+      } catch (error) {
+        console.warn("⚠️ Business Duplication not available:", error.message);
+      }
+      
+      // Initialize Code Services
+      try {
+        const codeServicesModule = await import("./core/code-services.js");
+        codeServices = new codeServicesModule.CodeServices(pool, callCouncilMember, modelRouter);
+        console.log("✅ Code Services initialized");
+      } catch (error) {
+        console.warn("⚠️ Code Services not available:", error.message);
+      }
+      
+      // Initialize Make.com Generator
+      try {
+        const makeComModule = await import("./core/makecom-generator.js");
+        makeComGenerator = new makeComModule.MakeComGenerator(pool, callCouncilMember, modelRouter);
+        console.log("✅ Make.com Generator initialized");
+      } catch (error) {
+        console.warn("⚠️ Make.com Generator not available:", error.message);
+      }
+      
+      // Initialize Legal Checker
+      try {
+        const legalModule = await import("./core/legal-checker.js");
+        legalChecker = new legalModule.LegalChecker(pool);
+        console.log("✅ Legal Checker initialized");
+      } catch (error) {
+        console.warn("⚠️ Legal Checker not available:", error.message);
       }
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
@@ -5002,6 +5187,283 @@ app.get("/api/v1/vapi/calls", requireKey, async (req, res) => {
     const { limit = 50 } = req.query;
     const calls = await vapiIntegration.getCallHistory(parseInt(limit));
     res.json({ ok: true, count: calls.length, calls });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== BUSINESS CENTER ENDPOINTS ====================
+app.get("/api/v1/business-center/dashboard", requireKey, async (req, res) => {
+  try {
+    if (!businessCenter) {
+      return res.status(503).json({ error: "Business Center not initialized" });
+    }
+
+    const dashboard = await businessCenter.getDashboard();
+    res.json({ ok: true, dashboard });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== GAME GENERATOR ENDPOINTS ====================
+app.post("/api/v1/games/generate", requireKey, async (req, res) => {
+  try {
+    if (!gameGenerator) {
+      return res.status(503).json({ error: "Game Generator not initialized" });
+    }
+
+    const { gameType, complexity, useOverlay, monetization } = req.body;
+    const result = await gameGenerator.generateGame({
+      gameType: gameType || 'puzzle',
+      complexity: complexity || 'simple',
+      useOverlay: useOverlay !== false,
+      monetization: monetization || 'ads',
+    });
+
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/games", requireKey, async (req, res) => {
+  try {
+    if (!gameGenerator) {
+      return res.status(503).json({ error: "Game Generator not initialized" });
+    }
+
+    const { limit = 50 } = req.query;
+    const games = await gameGenerator.getGames(parseInt(limit));
+    res.json({ ok: true, count: games.length, games });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/games/:gameId/deploy", requireKey, async (req, res) => {
+  try {
+    if (!gameGenerator) {
+      return res.status(503).json({ error: "Game Generator not initialized" });
+    }
+
+    const deployed = await gameGenerator.deployGame(req.params.gameId);
+    res.json({ ok: deployed });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== BUSINESS DUPLICATION ENDPOINTS ====================
+app.post("/api/v1/business/duplicate", requireKey, async (req, res) => {
+  try {
+    if (!businessDuplication) {
+      return res.status(503).json({ error: "Business Duplication not initialized" });
+    }
+
+    const { competitorUrl, competitorName, improvementTarget, focusAreas } = req.body;
+    const result = await businessDuplication.duplicateAndImprove({
+      competitorUrl,
+      competitorName,
+      improvementTarget: improvementTarget || 15,
+      focusAreas: focusAreas || [],
+    });
+
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/business/duplications", requireKey, async (req, res) => {
+  try {
+    if (!businessDuplication) {
+      return res.status(503).json({ error: "Business Duplication not initialized" });
+    }
+
+    const { limit = 50 } = req.query;
+    const duplications = await businessDuplication.getDuplications(parseInt(limit));
+    res.json({ ok: true, count: duplications.length, duplications });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== CODE SERVICES ENDPOINTS ====================
+app.post("/api/v1/code/generate", requireKey, async (req, res) => {
+  try {
+    if (!codeServices) {
+      return res.status(503).json({ error: "Code Services not initialized" });
+    }
+
+    const { requirements, language, framework, style, includeTests, includeDocs } = req.body;
+    const result = await codeServices.generateCode({
+      requirements,
+      language: language || 'javascript',
+      framework,
+      style: style || 'clean',
+      includeTests: includeTests !== false,
+      includeDocs: includeDocs !== false,
+    });
+
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/code/review", requireKey, async (req, res) => {
+  try {
+    if (!codeServices) {
+      return res.status(503).json({ error: "Code Services not initialized" });
+    }
+
+    const { code, language, focusAreas } = req.body;
+    const result = await codeServices.reviewCode({
+      code,
+      language: language || 'javascript',
+      focusAreas: focusAreas || [],
+    });
+
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/code/fix", requireKey, async (req, res) => {
+  try {
+    if (!codeServices) {
+      return res.status(503).json({ error: "Code Services not initialized" });
+    }
+
+    const { code, bugs, language } = req.body;
+    const result = await codeServices.fixBugs({
+      code,
+      bugs,
+      language: language || 'javascript',
+    });
+
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== MAKE.COM GENERATOR ENDPOINTS ====================
+app.post("/api/v1/makecom/scenario", requireKey, async (req, res) => {
+  try {
+    if (!makeComGenerator) {
+      return res.status(503).json({ error: "Make.com Generator not initialized" });
+    }
+
+    const { description, trigger, actions, integrations } = req.body;
+    const result = await makeComGenerator.generateScenario({
+      description,
+      trigger,
+      actions,
+      integrations,
+    });
+
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/zapier/zap", requireKey, async (req, res) => {
+  try {
+    if (!makeComGenerator) {
+      return res.status(503).json({ error: "Make.com Generator not initialized" });
+    }
+
+    const { description, trigger, actions } = req.body;
+    const result = await makeComGenerator.generateZap({
+      description,
+      trigger,
+      actions,
+    });
+
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/makecom/scenarios", requireKey, async (req, res) => {
+  try {
+    if (!makeComGenerator) {
+      return res.status(503).json({ error: "Make.com Generator not initialized" });
+    }
+
+    const { limit = 50 } = req.query;
+    const scenarios = await makeComGenerator.getScenarios(parseInt(limit));
+    res.json({ ok: true, count: scenarios.length, scenarios });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/zapier/zaps", requireKey, async (req, res) => {
+  try {
+    if (!makeComGenerator) {
+      return res.status(503).json({ error: "Make.com Generator not initialized" });
+    }
+
+    const { limit = 50 } = req.query;
+    const zaps = await makeComGenerator.getZaps(parseInt(limit));
+    res.json({ ok: true, count: zaps.length, zaps });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== CONTROVERSIAL APPROVAL SYSTEM ====================
+app.post("/api/v1/approval/request", requireKey, async (req, res) => {
+  try {
+    const { type, description, potentialIssues, data } = req.body;
+    
+    await pool.query(
+      `INSERT INTO approval_requests 
+       (request_id, type, description, potential_issues, request_data, status, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
+      [
+        `approval_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        type,
+        description,
+        JSON.stringify(potentialIssues || []),
+        JSON.stringify(data || {}),
+        'pending',
+      ]
+    );
+
+    res.json({ ok: true, message: 'Approval request submitted. Awaiting your review.' });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/approval/pending", requireKey, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM approval_requests WHERE status = 'pending' ORDER BY created_at DESC`
+    );
+    res.json({ ok: true, count: result.rows.length, requests: result.rows });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/approval/:requestId/approve", requireKey, async (req, res) => {
+  try {
+    const { approved, notes } = req.body;
+    await pool.query(
+      `UPDATE approval_requests 
+       SET status = $1, approval_notes = $2, approved_at = NOW() 
+       WHERE request_id = $3`,
+      [approved ? 'approved' : 'rejected', notes, req.params.requestId]
+    );
+    res.json({ ok: true });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
