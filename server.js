@@ -3750,6 +3750,8 @@ let taskImprovementReporter = null;
 let userSimulation = null;
 let aiEffectivenessTracker = null;
 let postUpgradeChecker = null;
+let comprehensiveIdeaTracker = null;
+let vapiIntegration = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -3844,6 +3846,47 @@ async function initializeTwoTierSystem() {
           // Silent fail - feature index can be indexed manually
         }
       }, 20000); // 20 seconds after startup
+      
+      // Auto-run guides
+      setTimeout(async () => {
+        try {
+          const guidesScript = await import("./scripts/auto-run-guides.mjs");
+          if (guidesScript.autoRunGuides) {
+            await guidesScript.autoRunGuides();
+          }
+        } catch (error) {
+          // Silent fail
+        }
+      }, 25000); // 25 seconds after startup
+      
+      // Initialize comprehensive idea tracker
+      try {
+        const trackerModule = await import("./core/comprehensive-idea-tracker.js");
+        comprehensiveIdeaTracker = new trackerModule.ComprehensiveIdeaTracker(pool);
+        console.log("✅ Comprehensive Idea Tracker initialized");
+      } catch (error) {
+        console.warn("⚠️ Comprehensive Idea Tracker not available:", error.message);
+      }
+      
+      // Initialize Vapi integration
+      try {
+        const vapiModule = await import("./core/vapi-integration.js");
+        vapiIntegration = new vapiModule.VapiIntegration(pool, callCouncilMember);
+        await vapiIntegration.initialize();
+        console.log("✅ Vapi Integration initialized");
+      } catch (error) {
+        console.warn("⚠️ Vapi Integration not available:", error.message);
+      }
+      
+      // Replace basic drone system with enhanced version
+      try {
+        const enhancedDroneModule = await import("./core/enhanced-income-drone.js");
+        const EnhancedIncomeDrone = enhancedDroneModule.EnhancedIncomeDrone;
+        incomeDroneSystem = new EnhancedIncomeDrone(pool, callCouncilMember, modelRouter);
+        console.log("✅ Enhanced Income Drone System initialized");
+      } catch (error) {
+        console.warn("⚠️ Enhanced Drone System not available, using basic:", error.message);
+      }
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
       }
@@ -4801,6 +4844,164 @@ app.get("/api/v1/drones", requireKey, async (req, res) => {
   try {
     const status = await incomeDroneSystem.getStatus();
     res.json({ ok: true, ...status });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== COMPREHENSIVE IDEA TRACKER ENDPOINTS ====================
+let comprehensiveIdeaTracker = null;
+
+app.post("/api/v1/ideas/comprehensive", requireKey, async (req, res) => {
+  try {
+    if (!comprehensiveIdeaTracker) {
+      const trackerModule = await import("./core/comprehensive-idea-tracker.js");
+      comprehensiveIdeaTracker = new trackerModule.ComprehensiveIdeaTracker(pool);
+    }
+
+    const ideaId = await comprehensiveIdeaTracker.storeIdea(req.body);
+    res.json({ ok: true, ideaId });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/ideas/comprehensive", requireKey, async (req, res) => {
+  try {
+    if (!comprehensiveIdeaTracker) {
+      const trackerModule = await import("./core/comprehensive-idea-tracker.js");
+      comprehensiveIdeaTracker = new trackerModule.ComprehensiveIdeaTracker(pool);
+    }
+
+    const ideas = await comprehensiveIdeaTracker.getIdeas(req.query);
+    res.json({ ok: true, count: ideas.length, ideas });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/ideas/comprehensive/search", requireKey, async (req, res) => {
+  try {
+    if (!comprehensiveIdeaTracker) {
+      const trackerModule = await import("./core/comprehensive-idea-tracker.js");
+      comprehensiveIdeaTracker = new trackerModule.ComprehensiveIdeaTracker(pool);
+    }
+
+    const { q } = req.query;
+    const ideas = await comprehensiveIdeaTracker.searchIdeas(q);
+    res.json({ ok: true, count: ideas.length, ideas });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/ideas/comprehensive/statistics", requireKey, async (req, res) => {
+  try {
+    if (!comprehensiveIdeaTracker) {
+      const trackerModule = await import("./core/comprehensive-idea-tracker.js");
+      comprehensiveIdeaTracker = new trackerModule.ComprehensiveIdeaTracker(pool);
+    }
+
+    const stats = await comprehensiveIdeaTracker.getStatistics();
+    res.json({ ok: true, statistics: stats });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/ideas/export", requireKey, async (req, res) => {
+  try {
+    if (!comprehensiveIdeaTracker) {
+      const trackerModule = await import("./core/comprehensive-idea-tracker.js");
+      comprehensiveIdeaTracker = new trackerModule.ComprehensiveIdeaTracker(pool);
+    }
+
+    const exportData = await comprehensiveIdeaTracker.exportAllIdeas();
+    res.json(exportData);
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/ideas/comprehensive/:ideaId/contribute", requireKey, async (req, res) => {
+  try {
+    if (!comprehensiveIdeaTracker) {
+      const trackerModule = await import("./core/comprehensive-idea-tracker.js");
+      comprehensiveIdeaTracker = new trackerModule.ComprehensiveIdeaTracker(pool);
+    }
+
+    const { author, contribution } = req.body;
+    const contributionData = await comprehensiveIdeaTracker.addContribution(
+      req.params.ideaId,
+      author,
+      contribution
+    );
+    res.json({ ok: true, contribution: contributionData });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.put("/api/v1/ideas/comprehensive/:ideaId/status", requireKey, async (req, res) => {
+  try {
+    if (!comprehensiveIdeaTracker) {
+      const trackerModule = await import("./core/comprehensive-idea-tracker.js");
+      comprehensiveIdeaTracker = new trackerModule.ComprehensiveIdeaTracker(pool);
+    }
+
+    const { status, reason } = req.body;
+    await comprehensiveIdeaTracker.updateStatus(req.params.ideaId, status, reason);
+    res.json({ ok: true });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== VAPI INTEGRATION ENDPOINTS ====================
+let vapiIntegration = null;
+
+app.post("/api/v1/vapi/call", requireKey, async (req, res) => {
+  try {
+    if (!vapiIntegration) {
+      const vapiModule = await import("./core/vapi-integration.js");
+      vapiIntegration = new vapiModule.VapiIntegration(pool, callCouncilMember);
+      await vapiIntegration.initialize();
+    }
+
+    const callData = await vapiIntegration.makeCall(req.body);
+    res.json({ ok: true, call: callData });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/vapi/webhook", async (req, res) => {
+  try {
+    if (!vapiIntegration) {
+      const vapiModule = await import("./core/vapi-integration.js");
+      vapiIntegration = new vapiModule.VapiIntegration(pool, callCouncilMember);
+      await vapiIntegration.initialize();
+    }
+
+    const { event, data } = req.body;
+    await vapiIntegration.handleWebhook(event, data);
+    res.json({ ok: true });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/vapi/calls", requireKey, async (req, res) => {
+  try {
+    if (!vapiIntegration) {
+      const vapiModule = await import("./core/vapi-integration.js");
+      vapiIntegration = new vapiModule.VapiIntegration(pool, callCouncilMember);
+      await vapiIntegration.initialize();
+    }
+
+    const { limit = 50 } = req.query;
+    const calls = await vapiIntegration.getCallHistory(parseInt(limit));
+    res.json({ ok: true, count: calls.length, calls });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
