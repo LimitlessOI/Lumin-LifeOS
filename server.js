@@ -5469,6 +5469,33 @@ app.post("/api/v1/approval/:requestId/approve", requireKey, async (req, res) => 
   }
 });
 
+app.post("/api/v1/legal/check", requireKey, async (req, res) => {
+  try {
+    if (!legalChecker) {
+      return res.status(503).json({ error: "Legal Checker not initialized" });
+    }
+
+    const { action, description, data } = req.body;
+    const check = await legalChecker.checkRequiresApproval(action, description, data);
+    res.json({ ok: true, ...check });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/legal/ai-employee", requireKey, async (req, res) => {
+  try {
+    if (!legalChecker) {
+      return res.status(503).json({ error: "Legal Checker not initialized" });
+    }
+
+    const legality = await legalChecker.checkAIEmployeePlacementLegality();
+    res.json({ ok: true, ...legality });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // Financial Dashboard & ROI
 app.get("/api/v1/dashboard", requireKey, async (req, res) => {
   try {
