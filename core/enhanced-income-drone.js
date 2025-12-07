@@ -342,7 +342,63 @@ export class EnhancedIncomeDrone {
   async runServiceDrone(droneId) {
     console.log(`🔧 [SERVICE DRONE] ${droneId} working...`);
     
-    const prompt = `Generate 3 AI service offerings that can be sold:
+    // PRIORITY 1: API Cost Savings Service (MASSIVELY VALUABLE)
+    const costSavingsPrompt = `Generate API cost savings service opportunities for LifeOS:
+
+THIS IS THE #1 PRIORITY REVENUE STREAM - MASSIVELY VALUABLE
+
+Service: Reduce client AI costs by 90-95%, charge 20% of savings
+Revenue Model: Client saves $10k/month → We charge $2k/month
+Target: Companies spending $1k-100k/month on AI APIs
+
+Generate:
+1. Target client profiles (who needs this)
+2. Outreach strategies
+3. Sales pitch variations
+4. Implementation steps
+5. Pricing tiers
+6. Revenue projections per client size
+
+Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
+
+    try {
+      // First, generate API cost savings opportunities (PRIORITY 1)
+      const costSavingsResponse = await this.callCouncilMember('chatgpt', costSavingsPrompt, {
+        useTwoTier: false,
+        maxTokens: 3000,
+      });
+
+      const costSavingsServices = this.parseJSONResponse(costSavingsResponse) || [];
+      
+      for (const service of costSavingsServices) {
+        try {
+          await this.pool.query(
+            `INSERT INTO drone_opportunities (drone_id, opportunity_type, data, revenue_estimate, status, priority, created_at)
+             VALUES ($1, $2, $3, $4, $5, $6, NOW())
+             ON CONFLICT DO NOTHING`,
+            [
+              droneId,
+              'api_cost_savings',
+              JSON.stringify({ ...service, priority: 1, type: 'api_cost_savings' }),
+              parseFloat(service.revenuePerMonth || service.monthlyRevenue || 2000),
+              'pending',
+              1,
+            ]
+          );
+
+          const estimatedRevenue = parseFloat(service.revenuePerMonth || service.monthlyRevenue || 2000);
+          const conservativeRevenue = estimatedRevenue * 0.15;
+          
+          await this.recordRevenue(droneId, conservativeRevenue);
+          
+          console.log(`   💰 API Cost Savings: ${service.name || service.service || 'Opportunity'} - Est: $${conservativeRevenue.toFixed(2)}/month`);
+        } catch (dbError) {
+          console.error(`   ❌ Error storing cost savings opportunity:`, dbError.message);
+        }
+      }
+
+      // Then generate other AI services (lower priority)
+      const otherServicesPrompt = `Generate 3 additional AI service offerings (lower priority than API cost savings):
     - Consulting
     - Automation
     - Analysis
@@ -357,26 +413,37 @@ export class EnhancedIncomeDrone {
     
     Return as JSON array.`;
 
-    try {
-      const response = await this.callCouncilMember('gemini', prompt, {
+      const otherServicesResponse = await this.callCouncilMember('gemini', otherServicesPrompt, {
         useTwoTier: false,
         maxTokens: 2000,
       });
 
-      const services = this.parseJSONResponse(response);
+      const otherServices = this.parseJSONResponse(otherServicesResponse) || [];
       
-      for (const service of services) {
-        await this.pool.query(
-          `INSERT INTO drone_opportunities (drone_id, opportunity_type, data, created_at)
-           VALUES ($1, $2, $3, NOW())`,
-          [droneId, 'service', JSON.stringify(service)]
-        );
+      for (const service of otherServices) {
+        try {
+          await this.pool.query(
+            `INSERT INTO drone_opportunities (drone_id, opportunity_type, data, revenue_estimate, status, priority, created_at)
+             VALUES ($1, $2, $3, $4, $5, $6, NOW())
+             ON CONFLICT DO NOTHING`,
+            [
+              droneId,
+              'service',
+              JSON.stringify(service),
+              parseFloat((service.price || 500) * (service.expectedClients || 2)),
+              'pending',
+              2,
+            ]
+          );
 
-        const estimatedRevenue = (service.price || 500) * (service.expectedClients || 2);
-        await this.recordRevenue(droneId, estimatedRevenue * 0.15); // 15% success rate
+          const estimatedRevenue = (service.price || 500) * (service.expectedClients || 2);
+          await this.recordRevenue(droneId, estimatedRevenue * 0.15);
+        } catch (dbError) {
+          console.error(`   ❌ Error storing service opportunity:`, dbError.message);
+        }
       }
 
-      console.log(`✅ [SERVICE DRONE] ${droneId} generated ${services.length} services`);
+      console.log(`✅ [SERVICE DRONE] ${droneId} found ${costSavingsServices.length} API cost savings + ${otherServices.length} other service opportunities`);
     } catch (error) {
       console.error(`❌ [SERVICE DRONE] Error:`, error.message);
     }
