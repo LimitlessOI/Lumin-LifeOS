@@ -223,6 +223,11 @@ export class EnhancedIncomeDrone {
         maxTokens: 3000,
       });
 
+      if (!response) {
+        console.warn(`⚠️ [CONTENT DRONE] ${droneId} - No response from AI`);
+        return;
+      }
+
       const contentIdeas = this.parseJSONResponse(response) || [];
       
       if (contentIdeas.length === 0) {
