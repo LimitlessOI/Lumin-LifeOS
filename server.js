@@ -744,6 +744,70 @@ async function initDatabase() {
 
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_error_timing_seconds ON error_appearance_times(seconds_after_upgrade)`);
 
+    // Comprehensive Idea Tracker
+    await pool.query(`CREATE TABLE IF NOT EXISTS comprehensive_ideas (
+      id SERIAL PRIMARY KEY,
+      idea_id TEXT UNIQUE NOT NULL,
+      idea_text TEXT NOT NULL,
+      original_author VARCHAR(50) DEFAULT 'user',
+      contributors JSONB DEFAULT '[]',
+      priority VARCHAR(20) DEFAULT 'medium',
+      status VARCHAR(20) DEFAULT 'pending',
+      rejection_reason TEXT,
+      acceptance_reason TEXT,
+      impact INT,
+      revenue_potential DECIMAL(12,2),
+      difficulty VARCHAR(20),
+      category VARCHAR(50),
+      tags JSONB DEFAULT '[]',
+      related_ideas JSONB DEFAULT '[]',
+      implementation_notes TEXT,
+      estimated_time INT,
+      dependencies JSONB DEFAULT '[]',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_comprehensive_ideas_status ON comprehensive_ideas(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_comprehensive_ideas_author ON comprehensive_ideas(original_author)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_comprehensive_ideas_priority ON comprehensive_ideas(priority)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_comprehensive_ideas_category ON comprehensive_ideas(category)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_comprehensive_ideas_tags ON comprehensive_ideas USING gin(tags)`);
+
+    // Drone Opportunities
+    await pool.query(`CREATE TABLE IF NOT EXISTS drone_opportunities (
+      id SERIAL PRIMARY KEY,
+      drone_id TEXT NOT NULL,
+      opportunity_type VARCHAR(50),
+      data JSONB,
+      status VARCHAR(20) DEFAULT 'pending',
+      revenue_estimate DECIMAL(12,2),
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      FOREIGN KEY (drone_id) REFERENCES income_drones(drone_id)
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_drone_opp_drone ON drone_opportunities(drone_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_drone_opp_type ON drone_opportunities(opportunity_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_drone_opp_status ON drone_opportunities(status)`);
+
+    // Vapi Calls
+    await pool.query(`CREATE TABLE IF NOT EXISTS vapi_calls (
+      id SERIAL PRIMARY KEY,
+      call_id TEXT UNIQUE NOT NULL,
+      phone_number VARCHAR(20),
+      duration INT,
+      status VARCHAR(20),
+      transcript TEXT,
+      recording_url TEXT,
+      started_at TIMESTAMPTZ,
+      ended_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_vapi_calls_phone ON vapi_calls(phone_number)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_vapi_calls_status ON vapi_calls(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_vapi_calls_created ON vapi_calls(created_at)`);
+
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
@@ -3764,10 +3828,22 @@ async function initializeTwoTierSystem() {
           return await postUpgradeChecker.checkAfterUpgrade();
         };
         
-        // Auto-check after initialization (in case of startup errors)
-        setTimeout(async () => {
-          await postUpgradeChecker.checkAfterUpgrade();
-        }, 15000); // 15 seconds after startup
+      // Auto-check after initialization (in case of startup errors)
+      setTimeout(async () => {
+        await postUpgradeChecker.checkAfterUpgrade();
+      }, 15000); // 15 seconds after startup
+      
+      // Auto-index Feature Index into knowledge base
+      setTimeout(async () => {
+        try {
+          const indexScript = await import("./scripts/index-feature-catalog.mjs");
+          if (indexScript.indexFeatureCatalog) {
+            await indexScript.indexFeatureCatalog();
+          }
+        } catch (error) {
+          // Silent fail - feature index can be indexed manually
+        }
+      }, 20000); // 20 seconds after startup
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
       }
