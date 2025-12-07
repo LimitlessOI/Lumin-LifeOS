@@ -108,6 +108,11 @@ export class EnhancedIncomeDrone {
   async runAffiliateDrone(droneId) {
     console.log(`💰 [AFFILIATE DRONE] ${droneId} working...`);
 
+    if (!this.callCouncilMember) {
+      console.error(`❌ [AFFILIATE DRONE] ${droneId} - callCouncilMember not available`);
+      return;
+    }
+
     const prompt = `Generate 5 high-value affiliate marketing opportunities for LifeOS RIGHT NOW. 
     Focus on:
     - AI tools and services (OpenAI, Anthropic, etc.)
@@ -133,6 +138,11 @@ export class EnhancedIncomeDrone {
         useTwoTier: false,
         maxTokens: 3000,
       });
+
+      if (!response) {
+        console.warn(`⚠️ [AFFILIATE DRONE] ${droneId} - No response from AI`);
+        return;
+      }
 
       // Parse and process opportunities
       const opportunities = this.parseJSONResponse(response) || [];
@@ -181,6 +191,11 @@ export class EnhancedIncomeDrone {
    */
   async runContentDrone(droneId) {
     console.log(`📝 [CONTENT DRONE] ${droneId} working...`);
+
+    if (!this.callCouncilMember) {
+      console.error(`❌ [CONTENT DRONE] ${droneId} - callCouncilMember not available`);
+      return;
+    }
 
     const prompt = `Generate 5 high-value content ideas that can generate revenue IMMEDIATELY:
     

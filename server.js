@@ -4797,7 +4797,12 @@ app.get("/healthz", async (req, res) => {
     const spend = await getDailySpend();
     const droneStatus = await incomeDroneSystem.getStatus();
     const taskStatus = executionQueue.getStatus();
-    const rotationStatus = await rotateAIsBasedOnPerformance();
+    let rotationStatus = null;
+    try {
+      rotationStatus = await rotateAIsBasedOnPerformance();
+    } catch (rotationError) {
+      console.warn("⚠️ Health check: AI rotation check failed (non-critical):", rotationError.message);
+    }
 
     res.json({
       ok: true,
