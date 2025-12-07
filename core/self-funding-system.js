@@ -97,31 +97,47 @@ export class SelfFundingSystem {
   }
 
   /**
-   * Generate spending opportunities
+   * Generate spending opportunities (PRIORITIZE INCOME OVER SAVINGS)
    */
   async generateSpendingOpportunities() {
     const prompt = `Generate 10 spending opportunities for LifeOS to grow revenue:
 
 Current balance: $${this.revenueBalance.toFixed(2)}
+
+PRIORITY ORDER:
+1. HIGHEST PROBABILITY - Low hanging fruit that will definitely work
+2. INCOME GENERATION - Things that make money, not save money
+3. QUALITY IMPROVEMENTS - Give more value than paid for, continuously improve
+4. CUT OFF IF FAILS - If something doesn't work, stop spending immediately
+
 Focus on:
-- Advertising (Google Ads, Facebook, LinkedIn)
-- Content marketing
-- SEO
-- Partnerships
-- Product development
-- Marketing tools
-- Automation tools
+- Revenue-generating activities (ads, outreach, partnerships)
+- Product/service improvements (add more value)
+- Marketing that brings in customers
+- Tools that help us make more money
+- Low-hanging fruit (easy wins, high probability)
+
+AVOID:
+- Cost savings (secondary priority - only if it directly enables more income)
+- Long-term projects with uncertain returns
+- Things that don't directly generate revenue
 
 For each opportunity, provide:
 1. Name
 2. Cost
 3. Expected revenue (monthly)
-4. Projected ROI
-5. Time to see results
-6. Risk level
-7. Why it will work
+4. Probability of success (0-100%)
+5. Projected ROI
+6. Time to see results
+7. Risk level
+8. Why it will work (be specific)
+9. How we can give more value than paid for
 
-Return as JSON array. Prioritize opportunities with ROI > 3:1.`;
+Return as JSON array. Prioritize by:
+- Highest probability first
+- Highest revenue potential
+- Fastest time to results
+- Lowest risk`;
 
     try {
       const response = await this.callCouncilMember('chatgpt', prompt, {
@@ -138,11 +154,12 @@ Return as JSON array. Prioritize opportunities with ROI > 3:1.`;
   }
 
   /**
-   * Check ROI before spending
+   * Check ROI before spending (PRIORITIZE INCOME, HIGH PROBABILITY)
    */
   async checkROI(opportunity) {
     const cost = parseFloat(opportunity.cost || opportunity.expectedCost || 0);
     const expectedRevenue = parseFloat(opportunity.expectedRevenue || opportunity.revenue || 0);
+    const probability = parseFloat(opportunity.probability || opportunity.probabilityOfSuccess || 50);
     const projectedROI = expectedRevenue > 0 ? expectedRevenue / cost : 0;
 
     // Check if we have enough balance
@@ -155,22 +172,29 @@ Return as JSON array. Prioritize opportunities with ROI > 3:1.`;
       };
     }
 
-    // Check ROI thresholds
-    if (projectedROI >= this.minProjectedROI) {
+    // PRIORITY: High probability + income generation
+    // Lower ROI threshold if high probability and generates income
+    const adjustedMinROI = probability >= 70 ? 1.5 : this.minProjectedROI; // Lower threshold for high-probability opportunities
+    
+    // Check ROI thresholds (adjusted for probability)
+    if (projectedROI >= adjustedMinROI && expectedRevenue > 0) {
       return {
         approved: true,
         projectedROI,
         cost,
         expectedRevenue,
+        probability,
         riskLevel: opportunity.riskLevel || 'medium',
+        reason: probability >= 70 ? 'High probability income opportunity' : 'Meets ROI threshold',
       };
     }
 
     return {
       approved: false,
-      reason: 'ROI too low',
+      reason: `ROI too low (${projectedROI.toFixed(2)}:1, need ${adjustedMinROI}:1) or no revenue`,
       projectedROI,
-      minRequired: this.minProjectedROI,
+      minRequired: adjustedMinROI,
+      probability,
     };
   }
 
