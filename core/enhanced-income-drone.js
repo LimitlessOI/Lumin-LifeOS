@@ -469,6 +469,16 @@ Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
         drone.tasks++;
       }
 
+      // Also update ROI tracker (if available)
+      try {
+        // Try to call updateROI if it exists in global scope
+        if (typeof updateROI === 'function') {
+          await updateROI(amount, 0, 0);
+        }
+      } catch (roiError) {
+        // ROI update is optional, don't fail if it doesn't exist
+      }
+
       console.log(`💰 [DRONE] ${droneId} recorded $${amount.toFixed(2)} revenue`);
     } catch (error) {
       console.error(`❌ [DRONE] Revenue recording error:`, error.message);

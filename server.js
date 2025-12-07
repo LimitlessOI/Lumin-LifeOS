@@ -4569,6 +4569,7 @@ class IncomeDroneSystem {
   }
 }
 
+// Income drone system - will be replaced by EnhancedIncomeDrone if available
 let incomeDroneSystem = new IncomeDroneSystem();
 
 // ==================== FINANCIAL DASHBOARD ====================
@@ -5970,6 +5971,18 @@ app.get("/api/v1/revenue/api-cost-savings/action-plan", requireKey, async (req, 
 
     const plan = await apiCostSavingsRevenue.generateActionPlan();
     res.json({ ok: true, plan });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== INCOME DIAGNOSTIC ENDPOINT ====================
+app.get("/api/v1/income/diagnostic", requireKey, async (req, res) => {
+  try {
+    const { IncomeDiagnostic } = await import("./core/income-diagnostic.js");
+    const diagnostic = new IncomeDiagnostic(pool);
+    const result = await diagnostic.runDiagnostic();
+    res.json({ ok: true, ...result });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
