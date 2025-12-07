@@ -53,8 +53,56 @@ class CommandCenter {
     // Auto-scroll to bottom
     this.scrollToBottom();
     
+    // Auto-test AI council on load (silent, just updates status)
+    this.checkAIStatus();
+    
+    // Check AI status every 30 seconds
+    setInterval(() => this.checkAIStatus(), 30000);
+    
     // Check for new messages periodically
     setInterval(() => this.checkForUpdates(), 5000);
+  }
+
+  async checkAIStatus() {
+    // Quick status check - doesn't show in chat, just updates dots
+    try {
+      const response = await fetch(`${this.apiBase}/api/v1/ai-council/test`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-command-key': this.commandKey,
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.ok && data.results) {
+        data.results.forEach(result => {
+          const statusEl = document.getElementById(`status-${result.member}`);
+          if (statusEl) {
+            const dot = statusEl.querySelector('.ai-dot');
+            if (dot) {
+              if (result.success) {
+                dot.setAttribute('data-status', 'active');
+              } else {
+                dot.setAttribute('data-status', 'inactive');
+              }
+            }
+          }
+        });
+      }
+    } catch (error) {
+      // Silent fail - just mark all as unknown
+      ['chatgpt', 'gemini', 'deepseek', 'grok'].forEach(member => {
+        const statusEl = document.getElementById(`status-${member}`);
+        if (statusEl) {
+          const dot = statusEl.querySelector('.ai-dot');
+          if (dot) {
+            dot.setAttribute('data-status', 'unknown');
+          }
+        }
+      });
+    }
   }
 
   setupEventListeners() {
@@ -145,6 +193,11 @@ class CommandCenter {
       return;
     }
 
+    // Check if it's a task command
+    const isTaskCommand = text.toLowerCase().startsWith('task:') || 
+                         text.toLowerCase().startsWith('do:') ||
+                         text.toLowerCase().startsWith('execute:');
+
     // Add user message to chat
     this.addMessage('user', text, 'You');
     
@@ -152,7 +205,44 @@ class CommandCenter {
     input.value = '';
     input.style.height = 'auto';
 
-    // Send to system
+    // If it's a task, queue it
+    if (isTaskCommand) {
+      const taskDescription = text.replace(/^(task:|do:|execute:)\s*/i, '').trim();
+      
+      try {
+        const taskResponse = await fetch(`${this.apiBase}/api/v1/task`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-command-key': this.commandKey,
+          },
+          body: JSON.stringify({
+            type: 'user_request',
+            description: taskDescription,
+          }),
+        });
+
+        const taskData = await taskResponse.json();
+        
+        if (taskData.ok) {
+          this.addMessage('system', `✅ Task queued! ID: ${taskData.taskId}\n\nTask: ${taskDescription}\n\nStatus: The system will execute this task and report back when complete.`, 'Task Queue');
+          
+          // Reload projects to show new task
+          await this.loadProjects();
+        } else {
+          this.addMessage('system', `❌ Failed to queue task: ${taskData.error}`, 'Task Queue');
+        }
+      } catch (error) {
+        console.error('Error queueing task:', error);
+        this.addMessage('system', `❌ Error: ${error.message}`, 'Task Queue');
+      }
+      
+      this.saveConversation();
+      this.scrollToBottom();
+      return;
+    }
+
+    // Regular chat message
     try {
       const response = await fetch(`${this.apiBase}/api/v1/chat`, {
         method: 'POST',
@@ -282,10 +372,23 @@ class CommandCenter {
       const response = await fetch(`${this.apiBase}/api/v1/tasks/queue`, {
         headers: { 'x-command-key': this.commandKey },
       });
-      
+
       const data = await response.json();
       if (data.ok) {
         this.activeProjects = data.tasks || [];
+        
+        // Check for newly completed tasks and notify
+        const completedTasks = this.activeProjects.filter(p => p.status === 'completed');
+        if (completedTasks.length > 0) {
+          completedTasks.forEach(task => {
+            // Only notify if we haven't seen this completion before
+            const notificationKey = `notified_${task.id}`;
+            if (!sessionStorage.getItem(notificationKey)) {
+              this.addMessage('system', `✅ Task Completed!\n\n${task.title}\n\nStatus: ${task.status}\n\nYou can refresh to see the results.`, 'Task Complete');
+              sessionStorage.setItem(notificationKey, 'true');
+            }
+          });
+        }
       } else {
         this.activeProjects = [];
       }

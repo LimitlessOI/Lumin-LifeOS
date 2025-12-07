@@ -84,6 +84,72 @@
       transform: none;
     }
 
+    /* AI Status Bar */
+    .ai-status-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .ai-status-label {
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .ai-status-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      background: #1a2332;
+      border-radius: 6px;
+      border: 1px solid #2d3748;
+    }
+
+    .ai-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d1d5db;
+    }
+
+    .ai-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+
+    .ai-dot[data-status="active"] {
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .ai-dot[data-status="inactive"] {
+      background: #dc2626;
+      box-shadow: 0 0 8px #dc2626;
+    }
+
+    .ai-dot[data-status="unknown"] {
+      background: #6b7280;
+      box-shadow: 0 0 4px #6b7280;
+    }
+
+    .ai-dot[data-status="testing"] {
+      background: #f59e0b;
+      box-shadow: 0 0 8px #f59e0b;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
     /* Sidebar - Projects Queue */
     .sidebar {
       background: #151b2e;
@@ -526,8 +592,30 @@
         <span class="status-indicator"></span>
         LifeOS Command Center
       </div>
+      
+      <!-- AI Status Bar - Always Visible -->
+      <div class="ai-status-bar">
+        <span class="ai-status-label">AI Status:</span>
+        <div class="ai-status-item" id="status-chatgpt" title="ChatGPT">
+          <span class="ai-name">GPT</span>
+          <span class="ai-dot" data-status="unknown"></span>
+        </div>
+        <div class="ai-status-item" id="status-gemini" title="Gemini">
+          <span class="ai-name">Gem</span>
+          <span class="ai-dot" data-status="unknown"></span>
+        </div>
+        <div class="ai-status-item" id="status-deepseek" title="DeepSeek">
+          <span class="ai-name">DS</span>
+          <span class="ai-dot" data-status="unknown"></span>
+        </div>
+        <div class="ai-status-item" id="status-grok" title="Grok">
+          <span class="ai-name">Grok</span>
+          <span class="ai-dot" data-status="unknown"></span>
+        </div>
+      </div>
+      
       <div class="header-controls">
-        <button class="test-btn" id="btnTest" title="Test AI Council Communication">🧪 Test Council</button>
+        <button class="test-btn" id="btnTest" title="Test AI Council Communication">🧪 Test</button>
         <button class="btn-upload" id="btnUpload" title="Upload File">📁</button>
         <button id="btnSettings" title="Settings">⚙️</button>
       </div>
