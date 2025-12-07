@@ -5353,7 +5353,7 @@ app.put("/api/v1/ideas/comprehensive/:ideaId/status", requireKey, async (req, re
 });
 
 // ==================== VAPI INTEGRATION ENDPOINTS ====================
-let vapiIntegration = null;
+// Note: vapiIntegration is already declared at line 3963
 
 app.post("/api/v1/vapi/call", requireKey, async (req, res) => {
   try {
