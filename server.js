@@ -3972,6 +3972,7 @@ let marketingResearch = null;
 let marketingAgency = null;
 let webScraper = null;
 let enhancedConversationScraper = null;
+let apiCostSavingsRevenue = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -4215,6 +4216,19 @@ async function initializeTwoTierSystem() {
         console.log("✅ Enhanced Conversation Scraper initialized");
       } catch (error) {
         console.warn("⚠️ Enhanced Conversation Scraper not available:", error.message);
+      }
+      
+      // Initialize API Cost Savings Revenue System (PRIORITY 1)
+      try {
+        const costSavingsModule = await import("./core/api-cost-savings-revenue.js");
+        apiCostSavingsRevenue = new costSavingsModule.APICostSavingsRevenue(
+          pool,
+          callCouncilMember,
+          modelRouter
+        );
+        console.log("✅ API Cost Savings Revenue System initialized (PRIORITY 1)");
+      } catch (error) {
+        console.warn("⚠️ API Cost Savings Revenue System not available:", error.message);
       }
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
@@ -5883,6 +5897,33 @@ app.delete("/api/v1/conversations/credentials/:provider", requireKey, async (req
     } else {
       res.status(500).json({ ok: false, error: "Failed to delete credentials" });
     }
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== API COST SAVINGS REVENUE ENDPOINTS (PRIORITY 1) ====================
+app.get("/api/v1/revenue/api-cost-savings/status", requireKey, async (req, res) => {
+  try {
+    if (!apiCostSavingsRevenue) {
+      return res.status(503).json({ error: "API Cost Savings Revenue System not initialized" });
+    }
+
+    const status = await apiCostSavingsRevenue.getStatusAndProjections();
+    res.json({ ok: true, ...status });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/revenue/api-cost-savings/action-plan", requireKey, async (req, res) => {
+  try {
+    if (!apiCostSavingsRevenue) {
+      return res.status(503).json({ error: "API Cost Savings Revenue System not initialized" });
+    }
+
+    const plan = await apiCostSavingsRevenue.generateActionPlan();
+    res.json({ ok: true, plan });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
