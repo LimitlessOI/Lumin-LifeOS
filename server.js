@@ -5240,7 +5240,7 @@ app.get("/api/v1/drones", requireKey, async (req, res) => {
 });
 
 // ==================== COMPREHENSIVE IDEA TRACKER ENDPOINTS ====================
-let comprehensiveIdeaTracker = null;
+// Note: comprehensiveIdeaTracker is already declared at line 3962
 
 app.post("/api/v1/ideas/comprehensive", requireKey, async (req, res) => {
   try {
