@@ -516,6 +516,43 @@ class CommandCenter {
       // Load AI performance
       await this.loadAIPerformance();
       
+      // Load AI effectiveness ratings
+      try {
+        const effectivenessResponse = await fetch(`${this.apiBase}/api/v1/ai/effectiveness`, {
+          headers: { 'x-command-key': this.commandKey },
+        });
+        const effectivenessData = await effectivenessResponse.json();
+        
+        if (effectivenessData.ok && effectivenessData.ratings) {
+          // Update AI status dots with effectiveness scores
+          effectivenessData.ratings.forEach(rating => {
+            const statusEl = document.getElementById(`status-${rating.member}`);
+            if (statusEl) {
+              // Add effectiveness score as tooltip
+              const effectiveness = (rating.effectiveness * 100).toFixed(0);
+              statusEl.title = `${rating.member.toUpperCase()}: ${effectiveness}% effective (${rating.taskType})`;
+            }
+          });
+        }
+      } catch (error) {
+        // Effectiveness ratings optional
+      }
+
+      // Load user simulation accuracy
+      try {
+        const simResponse = await fetch(`${this.apiBase}/api/v1/user/simulation/accuracy`, {
+          headers: { 'x-command-key': this.commandKey },
+        });
+        const simData = await simResponse.json();
+        
+        if (simData.ok) {
+          // Could display accuracy somewhere in UI
+          console.log(`🎯 User Simulation Accuracy: ${simData.accuracyPercent}%`);
+        }
+      } catch (error) {
+        // User simulation optional
+      }
+      
     } catch (error) {
       console.error('Error loading dashboard:', error);
     }
