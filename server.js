@@ -932,6 +932,80 @@ async function initDatabase() {
 
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_approval_status ON approval_requests(status)`);
 
+    // Self-Funding Spending
+    await pool.query(`CREATE TABLE IF NOT EXISTS self_funding_spending (
+      id SERIAL PRIMARY KEY,
+      spending_id TEXT UNIQUE NOT NULL,
+      opportunity_name TEXT,
+      amount DECIMAL(12,2),
+      expected_revenue DECIMAL(12,2),
+      projected_roi DECIMAL(5,2),
+      category VARCHAR(50),
+      status VARCHAR(20) DEFAULT 'pending',
+      execution_data JSONB,
+      executed_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_self_funding_status ON self_funding_spending(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_self_funding_category ON self_funding_spending(category)`);
+
+    // Marketing Research
+    await pool.query(`CREATE TABLE IF NOT EXISTS marketing_research (
+      id SERIAL PRIMARY KEY,
+      research_id TEXT UNIQUE NOT NULL,
+      marketer_name VARCHAR(100),
+      research_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_marketing_research_marketer ON marketing_research(marketer_name)`);
+
+    // Marketing Playbook
+    await pool.query(`CREATE TABLE IF NOT EXISTS marketing_playbook (
+      id INT PRIMARY KEY DEFAULT 1,
+      playbook_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    // Marketing Campaigns
+    await pool.query(`CREATE TABLE IF NOT EXISTS marketing_campaigns (
+      id SERIAL PRIMARY KEY,
+      campaign_id TEXT UNIQUE NOT NULL,
+      client VARCHAR(100) DEFAULT 'lifeos',
+      campaign_name TEXT,
+      campaign_data JSONB,
+      status VARCHAR(20) DEFAULT 'active',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_marketing_campaigns_client ON marketing_campaigns(client)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_marketing_campaigns_status ON marketing_campaigns(status)`);
+
+    // Marketing Content
+    await pool.query(`CREATE TABLE IF NOT EXISTS marketing_content (
+      id SERIAL PRIMARY KEY,
+      content_id TEXT UNIQUE NOT NULL,
+      content_type VARCHAR(50),
+      content_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    // Web Scrapes
+    await pool.query(`CREATE TABLE IF NOT EXISTS web_scrapes (
+      id SERIAL PRIMARY KEY,
+      scrape_id TEXT UNIQUE NOT NULL,
+      url TEXT NOT NULL,
+      scrape_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_web_scrapes_url ON web_scrapes(url)`);
+
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
@@ -3882,6 +3956,10 @@ let businessDuplication = null;
 let codeServices = null;
 let makeComGenerator = null;
 let legalChecker = null;
+let selfFundingSystem = null;
+let marketingResearch = null;
+let marketingAgency = null;
+let webScraper = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -4071,6 +4149,45 @@ async function initializeTwoTierSystem() {
         console.log("✅ Legal Checker initialized");
       } catch (error) {
         console.warn("⚠️ Legal Checker not available:", error.message);
+      }
+      
+      // Initialize Self-Funding System
+      try {
+        const selfFundingModule = await import("./core/self-funding-system.js");
+        selfFundingSystem = new selfFundingModule.SelfFundingSystem(pool, callCouncilMember, modelRouter);
+        await selfFundingSystem.initialize();
+        console.log("✅ Self-Funding System initialized");
+      } catch (error) {
+        console.warn("⚠️ Self-Funding System not available:", error.message);
+      }
+      
+      // Initialize Marketing Research System
+      try {
+        const marketingResearchModule = await import("./core/marketing-research-system.js");
+        marketingResearch = new marketingResearchModule.MarketingResearchSystem(pool, callCouncilMember, modelRouter);
+        await marketingResearch.initialize();
+        console.log("✅ Marketing Research System initialized");
+      } catch (error) {
+        console.warn("⚠️ Marketing Research System not available:", error.message);
+      }
+      
+      // Initialize Marketing Agency
+      try {
+        const marketingAgencyModule = await import("./core/marketing-agency.js");
+        marketingAgency = new marketingAgencyModule.MarketingAgency(pool, callCouncilMember, modelRouter, marketingResearch);
+        await marketingAgency.initialize();
+        console.log("✅ Marketing Agency initialized");
+      } catch (error) {
+        console.warn("⚠️ Marketing Agency not available:", error.message);
+      }
+      
+      // Initialize Web Scraper
+      try {
+        const webScraperModule = await import("./core/web-scraper.js");
+        webScraper = new webScraperModule.WebScraper(pool, callCouncilMember, modelRouter);
+        console.log("✅ Web Scraper initialized");
+      } catch (error) {
+        console.warn("⚠️ Web Scraper not available:", error.message);
       }
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
@@ -5491,6 +5608,144 @@ app.get("/api/v1/legal/ai-employee", requireKey, async (req, res) => {
 
     const legality = await legalChecker.checkAIEmployeePlacementLegality();
     res.json({ ok: true, ...legality });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== SELF-FUNDING SYSTEM ENDPOINTS ====================
+app.get("/api/v1/self-funding/stats", requireKey, async (req, res) => {
+  try {
+    if (!selfFundingSystem) {
+      return res.status(503).json({ error: "Self-Funding System not initialized" });
+    }
+
+    const stats = await selfFundingSystem.getStats();
+    res.json({ ok: true, ...stats });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/self-funding/spending", requireKey, async (req, res) => {
+  try {
+    if (!selfFundingSystem) {
+      return res.status(503).json({ error: "Self-Funding System not initialized" });
+    }
+
+    const { limit = 50 } = req.query;
+    const spending = await selfFundingSystem.getSpendingHistory(parseInt(limit));
+    res.json({ ok: true, count: spending.length, spending });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== MARKETING RESEARCH ENDPOINTS ====================
+app.get("/api/v1/marketing/playbook", requireKey, async (req, res) => {
+  try {
+    if (!marketingResearch) {
+      return res.status(503).json({ error: "Marketing Research not initialized" });
+    }
+
+    const playbook = await marketingResearch.getPlaybook();
+    res.json({ ok: true, playbook });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/marketing/research", requireKey, async (req, res) => {
+  try {
+    if (!marketingResearch) {
+      return res.status(503).json({ error: "Marketing Research not initialized" });
+    }
+
+    const research = await marketingResearch.getAllResearch();
+    res.json({ ok: true, count: research.length, research });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/marketing/research/:marketer", requireKey, async (req, res) => {
+  try {
+    if (!marketingResearch) {
+      return res.status(503).json({ error: "Marketing Research not initialized" });
+    }
+
+    const research = await marketingResearch.researchMarketer(req.params.marketer);
+    res.json({ ok: true, research });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== MARKETING AGENCY ENDPOINTS ====================
+app.get("/api/v1/marketing/campaigns", requireKey, async (req, res) => {
+  try {
+    if (!marketingAgency) {
+      return res.status(503).json({ error: "Marketing Agency not initialized" });
+    }
+
+    const campaigns = await marketingAgency.getActiveCampaigns();
+    res.json({ ok: true, count: campaigns.length, campaigns });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/marketing/campaigns/create", requireKey, async (req, res) => {
+  try {
+    if (!marketingAgency) {
+      return res.status(503).json({ error: "Marketing Agency not initialized" });
+    }
+
+    const campaigns = await marketingAgency.createLifeOSCampaigns();
+    res.json({ ok: true, count: campaigns.length, campaigns });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== WEB SCRAPER ENDPOINTS ====================
+app.post("/api/v1/scraper/scrape", requireKey, async (req, res) => {
+  try {
+    if (!webScraper) {
+      return res.status(503).json({ error: "Web Scraper not initialized" });
+    }
+
+    const { url, options } = req.body;
+    const result = await webScraper.scrapeWebsite(url, options || {});
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/scraper/competitors", requireKey, async (req, res) => {
+  try {
+    if (!webScraper) {
+      return res.status(503).json({ error: "Web Scraper not initialized" });
+    }
+
+    const { urls } = req.body;
+    const result = await webScraper.scrapeCompetitors(urls);
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/scraper/scrapes", requireKey, async (req, res) => {
+  try {
+    if (!webScraper) {
+      return res.status(503).json({ error: "Web Scraper not initialized" });
+    }
+
+    const { limit = 50 } = req.query;
+    const scrapes = await webScraper.getScrapes(parseInt(limit));
+    res.json({ ok: true, count: scrapes.length, scrapes });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -6978,9 +7233,14 @@ async function start() {
     // Kick off the execution queue
     executionQueue.executeNext();
 
-    // Deploy income drones
-    await incomeDroneSystem.deployDrone("affiliate", 500);
-    await incomeDroneSystem.deployDrone("content", 300);
+    // Deploy income drones (IMMEDIATELY START WORKING)
+    console.log('🚀 [STARTUP] Deploying income drones...');
+    const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
+    const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
+    const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
+    const productDrone = await incomeDroneSystem.deployDrone("product", 200);
+    const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
+    console.log(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
 
     // Continuous self-improvement cycles
     setInterval(() => continuousSelfImprovement(), 30 * 60 * 1000);

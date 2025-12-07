@@ -68,10 +68,11 @@ export class EnhancedIncomeDrone {
       return;
     }
 
-    // Run strategy in background
-    setInterval(async () => {
+    // Store interval ID for cleanup
+    const intervalId = setInterval(async () => {
       const drone = this.activeDrones.get(droneId);
       if (!drone || drone.status !== 'active') {
+        clearInterval(intervalId);
         return; // Drone stopped
       }
 
@@ -83,8 +84,22 @@ export class EnhancedIncomeDrone {
       }
     }, 5 * 60 * 1000); // Every 5 minutes
 
-    // Initial run
-    setTimeout(() => strategy(droneId), 10000); // Start after 10 seconds
+    // Store interval for cleanup
+    const drone = this.activeDrones.get(droneId);
+    if (drone) {
+      drone.intervalId = intervalId;
+    }
+
+    // Initial run immediately
+    try {
+      await strategy(droneId);
+      const drone = this.activeDrones.get(droneId);
+      if (drone) {
+        drone.lastActivity = new Date();
+      }
+    } catch (error) {
+      console.error(`❌ [DRONE] ${droneId} initial run error:`, error.message);
+    }
   }
 
   /**
@@ -93,43 +108,66 @@ export class EnhancedIncomeDrone {
   async runAffiliateDrone(droneId) {
     console.log(`💰 [AFFILIATE DRONE] ${droneId} working...`);
 
-    const prompt = `Generate 5 high-value affiliate marketing opportunities for LifeOS. 
+    const prompt = `Generate 5 high-value affiliate marketing opportunities for LifeOS RIGHT NOW. 
     Focus on:
-    - AI tools and services
-    - Business automation software
-    - Developer tools
-    - SaaS products
+    - AI tools and services (OpenAI, Anthropic, etc.)
+    - Business automation software (Make.com, Zapier, etc.)
+    - Developer tools (GitHub, Railway, Neon, etc.)
+    - SaaS products we can promote
+    - Marketing tools
+    - Hosting services
     
-    For each opportunity, provide:
-    1. Product/service name
-    2. Affiliate program link
-    3. Commission rate
+    For each opportunity, provide REAL, ACTIONABLE opportunities:
+    1. Product/service name (real companies)
+    2. Affiliate program link (if known, or how to find it)
+    3. Commission rate (estimate if unknown)
     4. Target audience
-    5. Marketing strategy
-    6. Expected revenue per month
+    5. Marketing strategy (how to promote)
+    6. Expected revenue per month (realistic estimate)
+    7. Action items (what to do next)
     
-    Return as JSON array.`;
+    Return as JSON array. Be specific and actionable.`;
 
     try {
       const response = await this.callCouncilMember('chatgpt', prompt, {
         useTwoTier: false,
-        maxTokens: 2000,
+        maxTokens: 3000,
       });
 
       // Parse and process opportunities
-      const opportunities = this.parseJSONResponse(response);
+      const opportunities = this.parseJSONResponse(response) || [];
+      
+      if (opportunities.length === 0) {
+        console.warn(`⚠️ [AFFILIATE DRONE] No opportunities parsed from response`);
+        return;
+      }
       
       for (const opp of opportunities) {
         // Store opportunity
-        await this.pool.query(
-          `INSERT INTO drone_opportunities (drone_id, opportunity_type, data, created_at)
-           VALUES ($1, $2, $3, NOW())`,
-          [droneId, 'affiliate', JSON.stringify(opp)]
-        );
+        try {
+          await this.pool.query(
+            `INSERT INTO drone_opportunities (drone_id, opportunity_type, data, revenue_estimate, status, created_at)
+             VALUES ($1, $2, $3, $4, $5, NOW())
+             ON CONFLICT DO NOTHING`,
+            [
+              droneId,
+              'affiliate',
+              JSON.stringify(opp),
+              parseFloat(opp.expectedRevenue || opp.expected_revenue || 50),
+              'pending',
+            ]
+          );
 
-        // Estimate revenue
-        const estimatedRevenue = opp.expectedRevenue || 50;
-        await this.recordRevenue(droneId, estimatedRevenue * 0.1); // 10% success rate
+          // Estimate revenue (conservative: 5% success rate)
+          const estimatedRevenue = parseFloat(opp.expectedRevenue || opp.expected_revenue || 50);
+          const conservativeRevenue = estimatedRevenue * 0.05; // 5% success rate
+          
+          await this.recordRevenue(droneId, conservativeRevenue);
+          
+          console.log(`   💰 Found: ${opp.name || opp.product || 'Opportunity'} - Est: $${conservativeRevenue.toFixed(2)}/month`);
+        } catch (dbError) {
+          console.error(`   ❌ Error storing opportunity:`, dbError.message);
+        }
       }
 
       console.log(`✅ [AFFILIATE DRONE] ${droneId} found ${opportunities.length} opportunities`);
@@ -144,37 +182,63 @@ export class EnhancedIncomeDrone {
   async runContentDrone(droneId) {
     console.log(`📝 [CONTENT DRONE] ${droneId} working...`);
 
-    const prompt = `Generate 3 high-value content ideas that can generate revenue:
-    1. Blog posts (SEO optimized)
-    2. Video scripts (YouTube)
-    3. Social media content
+    const prompt = `Generate 5 high-value content ideas that can generate revenue IMMEDIATELY:
+    
+    Focus on:
+    1. Blog posts (SEO optimized, can rank quickly)
+    2. Video scripts (YouTube, TikTok)
+    3. Social media content (viral potential)
+    4. Twitter/X threads
+    5. LinkedIn articles
     
     For each, provide:
-    - Title/topic
-    - Target keywords
-    - Monetization strategy (ads, affiliate, sponsored)
-    - Expected monthly revenue
-    - Time to create
+    - Title/topic (specific, actionable)
+    - Target keywords (high volume, low competition)
+    - Monetization strategy (ads, affiliate, sponsored, lead gen)
+    - Expected monthly revenue (realistic)
+    - Time to create (hours)
+    - Distribution strategy
+    - Why it will work
     
-    Return as JSON array.`;
+    Return as JSON array. Be specific and actionable.`;
 
     try {
       const response = await this.callCouncilMember('gemini', prompt, {
         useTwoTier: false,
-        maxTokens: 2000,
+        maxTokens: 3000,
       });
 
-      const contentIdeas = this.parseJSONResponse(response);
+      const contentIdeas = this.parseJSONResponse(response) || [];
+      
+      if (contentIdeas.length === 0) {
+        console.warn(`⚠️ [CONTENT DRONE] No ideas parsed from response`);
+        return;
+      }
       
       for (const idea of contentIdeas) {
-        await this.pool.query(
-          `INSERT INTO drone_opportunities (drone_id, opportunity_type, data, created_at)
-           VALUES ($1, $2, $3, NOW())`,
-          [droneId, 'content', JSON.stringify(idea)]
-        );
+        try {
+          await this.pool.query(
+            `INSERT INTO drone_opportunities (drone_id, opportunity_type, data, revenue_estimate, status, created_at)
+             VALUES ($1, $2, $3, $4, $5, NOW())
+             ON CONFLICT DO NOTHING`,
+            [
+              droneId,
+              'content',
+              JSON.stringify(idea),
+              parseFloat(idea.expectedRevenue || idea.expected_revenue || 30),
+              'pending',
+            ]
+          );
 
-        const estimatedRevenue = idea.expectedRevenue || 30;
-        await this.recordRevenue(droneId, estimatedRevenue * 0.2); // 20% success rate
+          const estimatedRevenue = parseFloat(idea.expectedRevenue || idea.expected_revenue || 30);
+          const conservativeRevenue = estimatedRevenue * 0.15; // 15% success rate
+          
+          await this.recordRevenue(droneId, conservativeRevenue);
+          
+          console.log(`   📝 Content: ${idea.title || idea.topic || 'Idea'} - Est: $${conservativeRevenue.toFixed(2)}/month`);
+        } catch (dbError) {
+          console.error(`   ❌ Error storing content idea:`, dbError.message);
+        }
       }
 
       console.log(`✅ [CONTENT DRONE] ${droneId} generated ${contentIdeas.length} ideas`);
