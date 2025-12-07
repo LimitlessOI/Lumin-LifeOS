@@ -4,8 +4,12 @@
  * This prevents deployment failures from duplicate declarations
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const serverPath = path.join(__dirname, '..', 'server.js');
 const content = fs.readFileSync(serverPath, 'utf8');
