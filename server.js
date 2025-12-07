@@ -4213,6 +4213,70 @@ app.get("/admin/status", async (req, res) => {
   }
 });
 
+// AI Council Communication Test
+app.post("/api/v1/ai-council/test", requireKey, async (req, res) => {
+  try {
+    console.log("🧪 [TEST] Testing AI Council communication...");
+    
+    const testPrompt = "Respond with exactly: 'AI_COUNCIL_TEST_SUCCESS' followed by your name. This is a communication test.";
+    const testResults = [];
+    const members = ['chatgpt', 'gemini', 'deepseek', 'grok'];
+    
+    for (const member of members) {
+      try {
+        const startTime = Date.now();
+        const response = await callCouncilMember(member, testPrompt, { useCache: false });
+        const duration = Date.now() - startTime;
+        
+        const success = response.includes('AI_COUNCIL_TEST_SUCCESS') || response.length > 10;
+        
+        testResults.push({
+          member,
+          success,
+          response: response.substring(0, 200),
+          duration,
+          timestamp: new Date().toISOString(),
+        });
+        
+        console.log(`✅ [TEST] ${member}: ${success ? 'SUCCESS' : 'PARTIAL'} (${duration}ms)`);
+      } catch (error) {
+        testResults.push({
+          member,
+          success: false,
+          error: error.message,
+          duration: 0,
+          timestamp: new Date().toISOString(),
+        });
+        console.error(`❌ [TEST] ${member}: FAILED - ${error.message}`);
+      }
+    }
+    
+    const successCount = testResults.filter(r => r.success).length;
+    const totalCount = testResults.length;
+    const allSuccess = successCount === totalCount;
+    
+    res.json({
+      ok: true,
+      test: 'ai_council_communication',
+      results: testResults,
+      summary: {
+        total: totalCount,
+        successful: successCount,
+        failed: totalCount - successCount,
+        allSuccess,
+        successRate: `${Math.round((successCount / totalCount) * 100)}%`,
+      },
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Council test error:", error);
+    res.status(500).json({
+      ok: false,
+      error: error.message,
+    });
+  }
+});
+
 // Primary Council Chat Endpoint
 app.post("/api/v1/chat", requireKey, async (req, res) => {
   try {

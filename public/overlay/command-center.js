@@ -58,6 +58,12 @@ class CommandCenter {
   }
 
   setupEventListeners() {
+    // Test AI Council button
+    const testBtn = document.getElementById('btnTest');
+    if (testBtn) {
+      testBtn.addEventListener('click', () => this.testAICouncil());
+    }
+
     // Send button
     document.getElementById('btnSend').addEventListener('click', () => this.sendMessage());
     
