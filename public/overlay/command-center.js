@@ -31,6 +31,7 @@ class CommandCenter {
     this.activeAIs = new Set();
     this.isRecording = false;
     this.recognition = null;
+    this.selectedMember = null; // For clicking AI dots
     
     this.init();
   }
@@ -112,6 +113,16 @@ class CommandCenter {
       testBtn.addEventListener('click', () => this.testAICouncil());
     }
 
+    // Clickable AI status dots - chat with specific AI
+    ['chatgpt', 'gemini', 'deepseek', 'grok'].forEach(member => {
+      const statusEl = document.getElementById(`status-${member}`);
+      if (statusEl) {
+        statusEl.style.cursor = 'pointer';
+        statusEl.title = `Click to chat with ${member.toUpperCase()}`;
+        statusEl.addEventListener('click', () => this.chatWithAI(member));
+      }
+    });
+
     // Send button
     document.getElementById('btnSend').addEventListener('click', () => this.sendMessage());
     
@@ -183,6 +194,28 @@ class CommandCenter {
     this.recognition.stop();
   }
 
+  chatWithAI(member) {
+    // Focus input and set member
+    const input = document.getElementById('inputText');
+    input.focus();
+    input.placeholder = `Chat with ${member.toUpperCase()}...`;
+    
+    // Store selected member
+    this.selectedMember = member;
+    
+    // Highlight the selected AI
+    ['chatgpt', 'gemini', 'deepseek', 'grok'].forEach(m => {
+      const el = document.getElementById(`status-${m}`);
+      if (el) {
+        el.style.border = m === member ? '2px solid #60a5fa' : 'none';
+      }
+    });
+    
+    // Show message
+    this.addMessage('system', `💬 Now chatting with ${member.toUpperCase()}. Type your message below.`, 'System');
+    this.scrollToBottom();
+  }
+
   async sendMessage() {
     const input = document.getElementById('inputText');
     const text = input.value.trim();
@@ -193,6 +226,9 @@ class CommandCenter {
       return;
     }
 
+    // Get selected member or default
+    const member = this.selectedMember || 'chatgpt';
+
     // Check if it's a task command
     const isTaskCommand = text.toLowerCase().startsWith('task:') || 
                          text.toLowerCase().startsWith('do:') ||
@@ -201,9 +237,19 @@ class CommandCenter {
     // Add user message to chat
     this.addMessage('user', text, 'You');
     
-    // Clear input
+    // Clear input and reset placeholder
     input.value = '';
     input.style.height = 'auto';
+    input.placeholder = 'Type your message or use voice input...';
+    this.selectedMember = null;
+
+    // Reset AI highlights
+    ['chatgpt', 'gemini', 'deepseek', 'grok'].forEach(m => {
+      const el = document.getElementById(`status-${m}`);
+      if (el) {
+        el.style.border = 'none';
+      }
+    });
 
     // If it's a task, queue it
     if (isTaskCommand) {
@@ -252,14 +298,14 @@ class CommandCenter {
         },
         body: JSON.stringify({
           message: text,
-          member: 'chatgpt', // Default, can be changed
+          member: member,
         }),
       });
 
       const data = await response.json();
       
       // Extract AI member name
-      const aiMember = data.member || 'System';
+      const aiMember = data.member || member;
       const responseText = data.response || data.message || JSON.stringify(data);
       
       // Add AI response

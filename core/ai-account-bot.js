@@ -5,8 +5,7 @@
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
-import { Pool } from 'pg';
-import puppeteer from 'puppeteer';
+// Puppeteer is optional - will be initialized in constructor
 
 export class AIAccountBot {
   constructor(pool, knowledgeBase, callCouncilMember) {
@@ -15,6 +14,20 @@ export class AIAccountBot {
     this.callCouncilMember = callCouncilMember;
     this.processedConversations = new Set();
     this.extractedIdeas = new Map();
+    this.puppeteer = null;
+    this.initPuppeteer();
+  }
+
+  async initPuppeteer() {
+    if (this.puppeteer) return;
+    
+    try {
+      const puppeteerModule = await import('puppeteer');
+      this.puppeteer = puppeteerModule.default || puppeteerModule;
+    } catch {
+      // Puppeteer not installed - that's okay
+      this.puppeteer = null;
+    }
   }
 
   /**

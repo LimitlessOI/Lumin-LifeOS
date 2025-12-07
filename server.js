@@ -693,6 +693,46 @@ async function initDatabase() {
 
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_tier1_pending_status ON tier1_pending_ideas(status)`);
 
+    // User Decision History (for learning user's style)
+    await pool.query(`CREATE TABLE IF NOT EXISTS user_decision_history (
+      id SERIAL PRIMARY KEY,
+      context JSONB,
+      decision TEXT NOT NULL,
+      reasoning TEXT,
+      timestamp TIMESTAMPTZ DEFAULT NOW(),
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_user_decisions_timestamp ON user_decision_history(timestamp)`);
+
+    // User Style Profile (learned from decisions)
+    await pool.query(`CREATE TABLE IF NOT EXISTS user_style_profile (
+      id INT PRIMARY KEY DEFAULT 1,
+      profile_data JSONB,
+      accuracy_score DECIMAL(5,4) DEFAULT 0,
+      decision_count INT DEFAULT 0,
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    // AI Effectiveness Ratings
+    await pool.query(`CREATE TABLE IF NOT EXISTS ai_effectiveness_ratings (
+      id SERIAL PRIMARY KEY,
+      ai_member VARCHAR(50) NOT NULL,
+      task_type VARCHAR(50),
+      effectiveness_score DECIMAL(5,4) DEFAULT 0,
+      success_count INT DEFAULT 0,
+      total_count INT DEFAULT 0,
+      avg_response_time INT,
+      cost_efficiency DECIMAL(10,6),
+      quality_score DECIMAL(5,4),
+      last_rated_at TIMESTAMPTZ DEFAULT NOW(),
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(ai_member, task_type)
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_ai_effectiveness_member ON ai_effectiveness_ratings(ai_member)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_ai_effectiveness_task ON ai_effectiveness_ratings(task_type)`);
+
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
@@ -3384,6 +3424,24 @@ class ExecutionQueue {
         }
       }
 
+      // Rate AI effectiveness
+      if (aiEffectivenessTracker) {
+        try {
+          const startTime = task.createdAt ? new Date(task.createdAt).getTime() : Date.now();
+          const responseTime = Date.now() - startTime;
+          
+          await aiEffectivenessTracker.ratePerformance(aiModel, task.type, {
+            success: true,
+            responseTime,
+            cost: 0, // Will be calculated from actual API costs
+            quality: 0.8, // Default, can be improved with user feedback
+            userSatisfaction: 0.7, // Default
+          });
+        } catch (error) {
+          console.warn('Effectiveness rating failed:', error.message);
+        }
+      }
+
       await updateROI(0, 0, 1);
       this.history.push({ ...task, status: "completed", result, aiModel });
       this.activeTask = null;
@@ -3614,6 +3672,8 @@ let autoQueueManager = null;
 let aiAccountBot = null;
 let conversationExtractor = null;
 let taskImprovementReporter = null;
+let userSimulation = null;
+let aiEffectivenessTracker = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -3696,6 +3756,26 @@ async function initializeTwoTierSystem() {
       autoQueueManager.generateDailyIdeas = async () => {
         return await autoQueueManager.generateDailyIdeasEnhanced();
       };
+      
+      // Pass user simulation to enhanced idea generator
+      if (autoQueueManager.generateDailyIdeasEnhanced) {
+        const originalEnhanced = autoQueueManager.generateDailyIdeasEnhanced;
+        autoQueueManager.generateDailyIdeasEnhanced = async function() {
+          try {
+            const { EnhancedIdeaGenerator } = await import('./core/enhanced-idea-generator.js');
+            const generator = new EnhancedIdeaGenerator(
+              this.pool,
+              this.callCouncilMember,
+              this.modelRouter,
+              userSimulation // Pass user simulation for filtering
+            );
+            return await generator.runFullPipeline(this.executionQueue);
+          } catch (error) {
+            console.error('Enhanced idea generation failed:', error.message);
+            return await this.generateDailyIdeas();
+          }
+        };
+      }
     } catch (error) {
       console.warn("⚠️ Auto-queue manager not available:", error.message);
     }
@@ -3728,6 +3808,28 @@ async function initializeTwoTierSystem() {
       console.log("✅ Task Improvement Reporter initialized");
     } catch (error) {
       console.warn("⚠️ Task improvement reporter not available:", error.message);
+    }
+
+    // Initialize user simulation system (learns user's decision style)
+    try {
+      const simulationModule = await import("./core/user-simulation.js");
+      const UserSimulation = simulationModule.UserSimulation;
+      userSimulation = new UserSimulation(pool, callCouncilMember);
+      await userSimulation.rebuildStyleProfile();
+      const accuracy = await userSimulation.getAccuracyScore();
+      console.log(`✅ User Simulation System initialized (Accuracy: ${(accuracy * 100).toFixed(1)}%)`);
+    } catch (error) {
+      console.warn("⚠️ User simulation not available:", error.message);
+    }
+
+    // Initialize AI effectiveness tracker
+    try {
+      const trackerModule = await import("./core/ai-effectiveness-tracker.js");
+      const AIEffectivenessTracker = trackerModule.AIEffectivenessTracker;
+      aiEffectivenessTracker = new AIEffectivenessTracker(pool);
+      console.log("✅ AI Effectiveness Tracker initialized");
+    } catch (error) {
+      console.warn("⚠️ AI effectiveness tracker not available:", error.message);
     }
     
     console.log("✅ Two-Tier Council System initialized");

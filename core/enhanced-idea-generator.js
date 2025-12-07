@@ -6,10 +6,11 @@
  */
 
 export class EnhancedIdeaGenerator {
-  constructor(pool, callCouncilMember, modelRouter) {
+  constructor(pool, callCouncilMember, modelRouter, userSimulation = null) {
     this.pool = pool;
     this.callCouncilMember = callCouncilMember;
     this.router = modelRouter;
+    this.userSimulation = userSimulation;
     this.ideas = [];
     this.debatedIdeas = [];
     this.votedIdeas = [];
@@ -141,8 +142,14 @@ Return as JSON array:
   /**
    * Council debates ideas and creates new ones
    */
-  async debateIdeas() {
+  async debateIdeas(userSimulation = null) {
     console.log('💬 [IDEAS] Council debating ideas...');
+
+    // Get user style profile for filtering
+    let userStyle = null;
+    if (userSimulation) {
+      userStyle = userSimulation.getStyleProfile();
+    }
 
     // Group ideas by theme
     const themes = this.groupIdeasByTheme(this.ideas);
@@ -150,8 +157,8 @@ Return as JSON array:
     const debated = [];
     
     for (const [theme, themeIdeas] of Object.entries(themes)) {
-      // Have council debate this theme
-      const debatePrompt = `Debate these ${theme} ideas and create NEW improved ideas:
+      // Build debate prompt with user simulation filter
+      let debatePrompt = `Debate these ${theme} ideas and create NEW improved ideas:
 
 ${themeIdeas.slice(0, 10).map((idea, i) => `${i + 1}. ${idea.concept}`).join('\n')}
 
@@ -160,6 +167,8 @@ For each idea:
 2. Identify weaknesses
 3. Propose improvements
 4. Create a NEW combined/improved version
+
+${userStyle ? `\nIMPORTANT: Filter through the user's decision-making style:\n${JSON.stringify(userStyle, null, 2)}\n\nConsider: Would the user approve this? Does it match their style?` : ''}
 
 Return as JSON:
 {
@@ -480,8 +489,8 @@ Think outside the box. Consider unintended consequences.`;
     const generated = await this.generateIdeasFromAllAIs();
     console.log(`✅ Generated ${generated.length} ideas from ${new Set(generated.map(i => i.source)).size} AIs`);
 
-    // Step 2: Council debate
-    const debated = await this.debateIdeas();
+    // Step 2: Council debate (with user simulation filter)
+    const debated = await this.debateIdeas(this.userSimulation);
     console.log(`✅ Debated: ${debated.length} total ideas (${debated.length - generated.length} new from debate)`);
 
     // Step 3: Research and improve

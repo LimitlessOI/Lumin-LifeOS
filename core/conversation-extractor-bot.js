@@ -13,7 +13,7 @@
  */
 
 // Puppeteer is optional - only needed for browser automation
-// Will be initialized in constructor
+let puppeteer = null;
 
 export class ConversationExtractorBot {
   constructor(pool, knowledgeBase, callCouncilMember) {
@@ -21,17 +21,20 @@ export class ConversationExtractorBot {
     this.knowledgeBase = knowledgeBase;
     this.callCouncilMember = callCouncilMember;
     this.processedConversations = new Set();
+    this.puppeteer = null;
     this.initPuppeteer();
   }
 
   async initPuppeteer() {
-    if (puppeteer) return; // Already initialized
+    if (this.puppeteer) return; // Already initialized
     
     try {
       const puppeteerModule = await import('puppeteer');
-      puppeteer = puppeteerModule.default || puppeteerModule;
+      this.puppeteer = puppeteerModule.default || puppeteerModule;
+      puppeteer = this.puppeteer; // Set global for backward compatibility
     } catch {
       // Puppeteer not installed - browser automation unavailable
+      this.puppeteer = null;
       console.warn('⚠️ Puppeteer not installed - browser automation unavailable');
     }
   }
@@ -41,17 +44,19 @@ export class ConversationExtractorBot {
    * Uses browser automation to access conversation history
    */
   async extractChatGPT(credentials) {
-    if (!puppeteer) {
+    if (!this.puppeteer && !puppeteer) {
       return {
         provider: 'chatgpt',
         error: 'Puppeteer not installed. Use export method instead.',
         note: 'Install: npm install puppeteer',
       };
     }
+    
+    const puppeteerInstance = this.puppeteer || puppeteer;
 
     console.log('🤖 [EXTRACTOR] Extracting ChatGPT conversations...');
 
-    const browser = await puppeteer.launch({
+    const browser = await puppeteerInstance.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
