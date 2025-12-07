@@ -733,6 +733,17 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_ai_effectiveness_member ON ai_effectiveness_ratings(ai_member)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_ai_effectiveness_task ON ai_effectiveness_ratings(task_type)`);
 
+    // Error Appearance Timing (for adaptive log checking)
+    await pool.query(`CREATE TABLE IF NOT EXISTS error_appearance_times (
+      id SERIAL PRIMARY KEY,
+      seconds_after_upgrade DECIMAL(10,2) NOT NULL,
+      error_count INT DEFAULT 1,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(seconds_after_upgrade)
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_error_timing_seconds ON error_appearance_times(seconds_after_upgrade)`);
+
     await pool.query(`INSERT INTO protected_files (file_path, reason, can_read, can_write, requires_full_council) VALUES
       ('.js', 'Core system', true, false, true),
       ('package.json', 'Dependencies', true, false, true),
@@ -3745,7 +3756,7 @@ async function initializeTwoTierSystem() {
       try {
         const upgradeModule = await import("./core/post-upgrade-checker.js");
         const PostUpgradeChecker = upgradeModule.PostUpgradeChecker;
-        postUpgradeChecker = new PostUpgradeChecker(logMonitor, callCouncilMember);
+        postUpgradeChecker = new PostUpgradeChecker(logMonitor, callCouncilMember, pool);
         console.log("✅ Post-Upgrade Checker initialized");
         
         // Set up global hook for Cursor/development
