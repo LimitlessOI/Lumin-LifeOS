@@ -3973,6 +3973,7 @@ let marketingAgency = null;
 let webScraper = null;
 let enhancedConversationScraper = null;
 let apiCostSavingsRevenue = null;
+let systemHealthChecker = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -4229,6 +4230,38 @@ async function initializeTwoTierSystem() {
         console.log("✅ API Cost Savings Revenue System initialized (PRIORITY 1)");
       } catch (error) {
         console.warn("⚠️ API Cost Savings Revenue System not available:", error.message);
+      }
+      
+      // Initialize System Health Checker
+      try {
+        const healthModule = await import("./core/system-health-checker.js");
+        const allSystems = {
+          tier0Council,
+          tier1Council,
+          modelRouter,
+          knowledgeBase,
+          costReExamination,
+          logMonitor,
+          autoQueueManager,
+          comprehensiveIdeaTracker,
+          enhancedIncomeDrone: incomeDroneSystem,
+          businessCenter,
+          gameGenerator,
+          businessDuplication,
+          codeServices,
+          makeComGenerator,
+          legalChecker,
+          selfFundingSystem,
+          marketingResearch,
+          marketingAgency,
+          webScraper,
+          enhancedConversationScraper,
+          apiCostSavingsRevenue,
+        };
+        systemHealthChecker = new healthModule.SystemHealthChecker(pool, allSystems);
+        console.log("✅ System Health Checker initialized");
+      } catch (error) {
+        console.warn("⚠️ System Health Checker not available:", error.message);
       }
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
@@ -7384,6 +7417,22 @@ async function start() {
 
     await initDatabase();
     await loadROIFromDatabase();
+    
+    // Run dependency audit before initializing systems
+    try {
+      const { dependencyAuditor } = await import("./core/dependency-auditor.js");
+      const auditResults = await dependencyAuditor.auditAll();
+      if (auditResults.npmPackages.missing.length > 0) {
+        console.log(`⚠️ [STARTUP] ${auditResults.npmPackages.missing.length} packages were missing and have been installed`);
+      }
+      if (auditResults.coreModules.missing.length > 0) {
+        console.error(`❌ [STARTUP] ${auditResults.coreModules.missing.length} core modules are missing!`);
+        console.error(`   Missing: ${auditResults.coreModules.missing.join(', ')}`);
+      }
+    } catch (error) {
+      console.warn("⚠️ Dependency auditor not available:", error.message);
+    }
+    
     await initializeTwoTierSystem();
 
     console.log("\n🤖 AI COUNCIL:");
