@@ -4202,7 +4202,7 @@ async function initializeTwoTierSystem() {
         console.warn("⚠️ Web Scraper not available:", error.message);
       }
       
-      // Initialize Enhanced Conversation Scraper
+      // Initialize Enhanced Conversation Scraper (will auto-install Puppeteer if needed)
       try {
         const scraperModule = await import("./core/enhanced-conversation-scraper.js");
         enhancedConversationScraper = new scraperModule.EnhancedConversationScraper(
@@ -4210,6 +4210,8 @@ async function initializeTwoTierSystem() {
           knowledgeBase,
           callCouncilMember
         );
+        // Initialize Puppeteer (will auto-install if needed)
+        await enhancedConversationScraper.initPuppeteer();
         console.log("✅ Enhanced Conversation Scraper initialized");
       } catch (error) {
         console.warn("⚠️ Enhanced Conversation Scraper not available:", error.message);

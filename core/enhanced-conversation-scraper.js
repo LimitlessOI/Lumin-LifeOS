@@ -6,6 +6,7 @@
  */
 
 import crypto from 'crypto';
+import { autoInstaller } from './auto-installer.js';
 
 // Encryption key (should be in env var)
 const ENCRYPTION_KEY = process.env.CONVERSATION_ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
@@ -18,23 +19,47 @@ export class EnhancedConversationScraper {
     this.callCouncilMember = callCouncilMember;
     this.puppeteer = null;
     this.scrapingStatus = new Map(); // Track scraping progress
+    this.autoInstaller = autoInstaller;
   }
 
   /**
-   * Initialize Puppeteer for browser automation
+   * Initialize Puppeteer for browser automation (auto-installs if needed)
    */
   async initPuppeteer() {
     if (this.puppeteer) return true;
     
     try {
+      // Try to import Puppeteer
       const puppeteerModule = await import('puppeteer');
       this.puppeteer = puppeteerModule.default || puppeteerModule;
       console.log('✅ [SCRAPER] Puppeteer initialized');
       return true;
     } catch (error) {
-      console.warn('⚠️ [SCRAPER] Puppeteer not installed:', error.message);
-      console.warn('   Install: npm install puppeteer');
-      return false;
+      // Puppeteer not found - auto-install it
+      console.log('📦 [SCRAPER] Puppeteer not found, auto-installing...');
+      
+      const installResult = await this.autoInstaller.requireOrInstall('puppeteer', {
+        save: true,
+        dev: false,
+      });
+
+      if (!installResult.success) {
+        console.error('❌ [SCRAPER] Failed to auto-install Puppeteer:', installResult.error);
+        return false;
+      }
+
+      // Try to import again after installation
+      try {
+        // Clear module cache and re-import
+        const puppeteerModule = await import('puppeteer');
+        this.puppeteer = puppeteerModule.default || puppeteerModule;
+        console.log('✅ [SCRAPER] Puppeteer auto-installed and initialized');
+        return true;
+      } catch (importError) {
+        console.error('❌ [SCRAPER] Puppeteer installed but import failed:', importError.message);
+        console.warn('   You may need to restart the server for Puppeteer to work');
+        return false;
+      }
     }
   }
 

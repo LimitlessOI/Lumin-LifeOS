@@ -1,7 +1,7 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
- * ║                    AUTO-INSTALLER                                                 ║
- * ║                    Automatically installs missing packages and dependencies      ║
+ * ║                    AUTO-INSTALLER SYSTEM                                           ║
+ * ║                    Automatically installs missing packages when needed           ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
@@ -9,36 +9,40 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
 const execAsync = promisify(exec);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export class AutoInstaller {
   constructor() {
-    this.installedPackages = new Set();
-    this.installQueue = [];
-    this.isInstalling = false;
+    this.installing = new Set(); // Track packages being installed
+    this.installed = new Set(); // Cache of installed packages
   }
 
   /**
    * Check if a package is installed
    */
-  async isPackageInstalled(packageName) {
+  async isInstalled(packageName) {
     try {
-      const packageJsonPath = path.join(__dirname, '..', 'package.json');
-      if (!fs.existsSync(packageJsonPath)) {
-        return false;
+      // Check node_modules
+      const nodeModulesPath = path.join(process.cwd(), 'node_modules', packageName);
+      if (fs.existsSync(nodeModulesPath)) {
+        return true;
       }
 
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
-      const allDeps = {
-        ...packageJson.dependencies,
-        ...packageJson.devDependencies,
-      };
+      // Check package.json
+      const packageJsonPath = path.join(process.cwd(), 'package.json');
+      if (fs.existsSync(packageJsonPath)) {
+        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+        const allDeps = {
+          ...packageJson.dependencies,
+          ...packageJson.devDependencies,
+        };
+        if (allDeps[packageName]) {
+          return true;
+        }
+      }
 
-      return packageName in allDeps;
+      return false;
     } catch (error) {
       return false;
     }
@@ -47,94 +51,136 @@ export class AutoInstaller {
   /**
    * Install a package automatically
    */
-  async installPackage(packageName, options = {}) {
-    if (this.installedPackages.has(packageName)) {
-      return { success: true, message: `${packageName} already installed` };
+  async install(packageName, options = {}) {
+    // Check cache
+    if (this.installed.has(packageName)) {
+      return { success: true, cached: true };
     }
 
-    if (this.isInstalling) {
-      // Queue for later
-      this.installQueue.push({ packageName, options });
-      return { success: false, message: 'Installation queued', queued: true };
+    // Check if already installing
+    if (this.installing.has(packageName)) {
+      console.log(`⏳ [AUTO-INSTALL] ${packageName} is already being installed, waiting...`);
+      // Wait for installation to complete
+      while (this.installing.has(packageName)) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      return { success: true, waited: true };
     }
 
-    this.isInstalling = true;
+    // Check if already installed
+    if (await this.isInstalled(packageName)) {
+      this.installed.add(packageName);
+      return { success: true, alreadyInstalled: true };
+    }
+
+    // Mark as installing
+    this.installing.add(packageName);
 
     try {
       console.log(`📦 [AUTO-INSTALL] Installing ${packageName}...`);
-
-      const { dev = false, version = 'latest' } = options;
-      const flag = dev ? '--save-dev' : '--save';
-      const versionSpec = version === 'latest' ? packageName : `${packageName}@${version}`;
-
-      const command = `npm install ${versionSpec} ${flag}`;
+      
+      const { save = true, dev = false } = options;
+      const saveFlag = save ? (dev ? '--save-dev' : '--save') : '';
+      
+      const command = `npm install ${packageName} ${saveFlag}`.trim();
+      
+      console.log(`   Running: ${command}`);
+      
       const { stdout, stderr } = await execAsync(command, {
-        cwd: path.join(__dirname, '..'),
-        timeout: 120000, // 2 minutes
+        cwd: process.cwd(),
+        maxBuffer: 10 * 1024 * 1024, // 10MB buffer
+        timeout: 300000, // 5 minutes timeout
       });
 
-      this.installedPackages.add(packageName);
-      console.log(`✅ [AUTO-INSTALL] ${packageName} installed successfully`);
-
-      // Process queue
-      this.isInstalling = false;
-      if (this.installQueue.length > 0) {
-        const next = this.installQueue.shift();
-        return await this.installPackage(next.packageName, next.options);
+      if (stderr && !stderr.includes('npm WARN')) {
+        console.warn(`⚠️ [AUTO-INSTALL] ${packageName} install warnings:`, stderr);
       }
 
-      return { success: true, message: `${packageName} installed successfully`, stdout };
+      // Verify installation
+      if (await this.isInstalled(packageName)) {
+        this.installed.add(packageName);
+        console.log(`✅ [AUTO-INSTALL] Successfully installed ${packageName}`);
+        return { success: true, installed: true };
+      } else {
+        throw new Error(`Installation completed but package not found`);
+      }
     } catch (error) {
       console.error(`❌ [AUTO-INSTALL] Failed to install ${packageName}:`, error.message);
-      this.isInstalling = false;
-
-      // Process queue even on error
-      if (this.installQueue.length > 0) {
-        const next = this.installQueue.shift();
-        await this.installPackage(next.packageName, next.options);
-      }
-
       return { success: false, error: error.message };
+    } finally {
+      this.installing.delete(packageName);
     }
   }
 
   /**
    * Install multiple packages
    */
-  async installPackages(packages) {
-    const results = [];
+  async installMultiple(packages, options = {}) {
+    const results = {};
+    
     for (const pkg of packages) {
-      const name = typeof pkg === 'string' ? pkg : pkg.name;
-      const options = typeof pkg === 'string' ? {} : pkg.options || {};
-      const result = await this.installPackage(name, options);
-      results.push({ package: name, ...result });
+      const packageName = typeof pkg === 'string' ? pkg : pkg.name;
+      const packageOptions = typeof pkg === 'object' ? { ...options, ...pkg.options } : options;
+      
+      results[packageName] = await this.install(packageName, packageOptions);
     }
+    
     return results;
   }
 
   /**
-   * Check and install common dependencies
+   * Ensure package is installed, install if not
    */
-  async ensureCommonDependencies() {
-    const commonPackages = [
-      'stripe',
-      'puppeteer',
-      'express-session',
-      'cookie-parser',
-    ];
+  async ensureInstalled(packageName, options = {}) {
+    if (await this.isInstalled(packageName)) {
+      return { success: true, alreadyInstalled: true };
+    }
+    
+    return await this.install(packageName, options);
+  }
 
-    const missing = [];
-    for (const pkg of commonPackages) {
-      if (!(await this.isPackageInstalled(pkg))) {
-        missing.push(pkg);
+  /**
+   * Try to require/import a package, install if missing
+   */
+  async requireOrInstall(packageName, options = {}) {
+    try {
+      // Try to import
+      const module = await import(packageName);
+      return { success: true, module, alreadyInstalled: true };
+    } catch (error) {
+      // Package not found, try to install
+      console.log(`📦 [AUTO-INSTALL] ${packageName} not found, installing...`);
+      const installResult = await this.install(packageName, options);
+      
+      if (!installResult.success) {
+        return { success: false, error: installResult.error };
+      }
+
+      // Try to import again after installation
+      try {
+        // Clear require cache
+        const modulePath = path.join(process.cwd(), 'node_modules', packageName);
+        if (fs.existsSync(modulePath)) {
+          const module = await import(packageName);
+          return { success: true, module, installed: true };
+        }
+        
+        // If import still fails, might need to restart
+        return { 
+          success: false, 
+          error: 'Package installed but import failed. May need to restart.',
+          installed: true 
+        };
+      } catch (importError) {
+        return { 
+          success: false, 
+          error: `Installed but import failed: ${importError.message}`,
+          installed: true 
+        };
       }
     }
-
-    if (missing.length > 0) {
-      console.log(`📦 [AUTO-INSTALL] Installing missing packages: ${missing.join(', ')}`);
-      await this.installPackages(missing);
-    }
-
-    return { missing, installed: missing.length };
   }
 }
+
+// Export singleton instance
+export const autoInstaller = new AutoInstaller();
