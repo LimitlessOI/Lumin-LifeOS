@@ -60,16 +60,30 @@ export class LogMonitor {
   initializeErrorPatterns() {
     // Common error patterns and their fixes
     this.errorPatterns.set(
-      /Cannot find package ['"]([^'"]+)['"]/,
+      /Cannot find package ['"]([^'"]+)['"]|puppeteer is not defined|ReferenceError.*puppeteer/i,
       {
         type: 'missing_package',
-        fix: async (match) => {
-          const packageName = match[1];
+        fix: async (match, fullError) => {
+          // Extract package name from error
+          let packageName = match?.[1];
+          if (!packageName && fullError.includes('puppeteer')) {
+            packageName = 'puppeteer';
+          }
+          
+          if (packageName) {
+            return {
+              action: 'install_package',
+              package: packageName,
+              command: `npm install ${packageName}`,
+              description: `Install missing package: ${packageName}`,
+            };
+          }
+          
+          // Fallback: ask AI to identify package
           return {
-            action: 'install_package',
-            package: packageName,
-            command: `npm install ${packageName}`,
-            description: `Install missing package: ${packageName}`,
+            action: 'ai_identify_package',
+            error: fullError,
+            description: 'Identify and install missing package',
           };
         },
       }
@@ -141,9 +155,9 @@ export class LogMonitor {
   }
 
   /**
-   * Monitor logs for errors
+   * Monitor logs for errors (with AI council assistance for complex fixes)
    */
-  async monitorLogs() {
+  async monitorLogs(useAICouncil = true) {
     try {
       // Read recent logs (last 100 lines)
       const logs = await this.getRecentLogs();
@@ -155,7 +169,13 @@ export class LogMonitor {
         console.log(`🔍 [LOG MONITOR] Found ${errors.length} error(s)`);
         
         for (const error of errors) {
-          await this.attemptAutoFix(error);
+          // Try standard auto-fix first
+          const fixed = await this.attemptAutoFix(error);
+          
+          // If not fixed and AI council enabled, use AI to fix
+          if (!fixed && useAICouncil) {
+            await this.attemptAICouncilFix(error);
+          }
         }
       }
       
@@ -164,6 +184,57 @@ export class LogMonitor {
     } catch (error) {
       console.error('Log monitoring error:', error.message);
       return { errors: [], fixed: 0 };
+    }
+  }
+
+  /**
+   * Use AI council to fix complex errors
+   */
+  async attemptAICouncilFix(error) {
+    try {
+      console.log(`🤖 [LOG MONITOR] Asking AI council to fix: ${error.text.substring(0, 100)}`);
+      
+      const prompt = `Fix this error automatically:\n\n${error.text}\n\nContext:\n${error.context}\n\nProvide the exact fix needed. If it's a missing package, say "INSTALL: package-name". If it's a code error, provide the fixed code.`;
+      
+      const response = await this.callCouncilMember('chatgpt', prompt, {
+        useTwoTier: false,
+        maxTokens: 2000,
+      });
+      
+      // Check if it's an install command
+      const installMatch = response.match(/INSTALL:\s*([^\s\n]+)/i);
+      if (installMatch) {
+        const packageName = installMatch[1];
+        const success = await this.installPackage(packageName);
+        if (success) {
+          error.fixed = true;
+          return true;
+        }
+      }
+      
+      // Check if it's a code fix
+      const codeMatch = response.match(/FILE:\s*([^\n]+)\n([\s\S]+?)(?=\nFILE:|$)/i);
+      if (codeMatch) {
+        const filePath = codeMatch[1].trim();
+        const code = codeMatch[2].trim();
+        
+        const fs = await import('fs');
+        const path = await import('path');
+        const fullPath = path.join(process.cwd(), filePath);
+        
+        if (fs.existsSync(fullPath)) {
+          await fs.promises.writeFile(fullPath, code, 'utf8');
+          console.log(`✅ [LOG MONITOR] AI council fixed: ${filePath}`);
+          error.fixed = true;
+          return true;
+        }
+      }
+      
+      console.log(`⚠️ [LOG MONITOR] AI council response unclear: ${response.substring(0, 200)}`);
+      return false;
+    } catch (error) {
+      console.error(`❌ [LOG MONITOR] AI council fix failed: ${error.message}`);
+      return false;
     }
   }
 
@@ -274,6 +345,10 @@ export class LogMonitor {
         case 'check_database':
           success = await this.checkDatabase();
           break;
+        
+        case 'ai_identify_package':
+          success = await this.aiIdentifyPackage(fix.error);
+          break;
       }
 
       if (success) {
@@ -376,16 +451,53 @@ export class LogMonitor {
 
   async analyzeAndFixSyntax(errorText) {
     try {
-      // Ask AI to analyze and fix syntax error
-      const prompt = `There's a syntax error in the code:\n\n${errorText}\n\nAnalyze the error and provide the fix. Return only the fixed code, no explanations.`;
+      // Use AI council to analyze and fix syntax error
+      const prompt = `There's a syntax error in the codebase:\n\n${errorText}\n\nAnalyze the error, identify the file and line, and provide the exact fix needed. Return JSON:\n{\n  "file": "path/to/file.js",\n  "line": 123,\n  "issue": "description",\n  "fix": "exact code to replace or add",\n  "action": "replace|add|remove"\n}`;
       
-      const response = await this.callCouncilMember('deepseek', prompt);
+      const response = await this.callCouncilMember('chatgpt', prompt, {
+        useTwoTier: false,
+        maxTokens: 2000,
+      });
       
-      // This would need to be integrated with self-programming system
-      // For now, just log it
-      console.log(`🔍 [LOG MONITOR] Syntax analysis: ${response.substring(0, 200)}`);
+      // Parse AI response
+      try {
+        const jsonMatch = response.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const fix = JSON.parse(jsonMatch[0]);
+          
+          if (fix.file && fix.fix) {
+            // Apply the fix
+            const fs = await import('fs');
+            const path = await import('path');
+            const fullPath = path.join(process.cwd(), fix.file);
+            
+            if (fs.existsSync(fullPath)) {
+              const content = await fs.promises.readFile(fullPath, 'utf8');
+              const lines = content.split('\n');
+              
+              if (fix.action === 'replace' && fix.line) {
+                // Replace specific line
+                lines[fix.line - 1] = fix.fix;
+                await fs.promises.writeFile(fullPath, lines.join('\n'), 'utf8');
+                console.log(`✅ [LOG MONITOR] Fixed syntax error in ${fix.file} line ${fix.line}`);
+                return true;
+              } else if (fix.action === 'add') {
+                // Add code
+                const newContent = content + '\n' + fix.fix;
+                await fs.promises.writeFile(fullPath, newContent, 'utf8');
+                console.log(`✅ [LOG MONITOR] Added fix to ${fix.file}`);
+                return true;
+              }
+            }
+          }
+        }
+      } catch (parseError) {
+        console.warn('Failed to parse AI fix response:', parseError.message);
+      }
       
-      return false; // Not fully automated yet
+      // Fallback: log for manual review
+      console.log(`🔍 [LOG MONITOR] Syntax analysis needed: ${response.substring(0, 200)}`);
+      return false;
     } catch (error) {
       console.error(`❌ [LOG MONITOR] Syntax fix failed: ${error.message}`);
       return false;
@@ -407,6 +519,29 @@ export class LogMonitor {
       await this.pool.query('SELECT NOW()');
       return true;
     } catch {
+      return false;
+    }
+  }
+
+  async aiIdentifyPackage(errorText) {
+    try {
+      // Ask AI to identify missing package from error
+      const prompt = `This error indicates a missing package:\n\n${errorText}\n\nIdentify the exact npm package name needed and return only: "PACKAGE: package-name"`;
+      
+      const response = await this.callCouncilMember('chatgpt', prompt, {
+        useTwoTier: false,
+        maxTokens: 100,
+      });
+      
+      const packageMatch = response.match(/PACKAGE:\s*([^\s\n]+)/i);
+      if (packageMatch) {
+        const packageName = packageMatch[1].trim();
+        return await this.installPackage(packageName);
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('AI package identification failed:', error.message);
       return false;
     }
   }

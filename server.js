@@ -3674,6 +3674,7 @@ let conversationExtractor = null;
 let taskImprovementReporter = null;
 let userSimulation = null;
 let aiEffectivenessTracker = null;
+let postUpgradeChecker = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -3719,10 +3720,10 @@ async function initializeTwoTierSystem() {
       logMonitor = new LogMonitor(pool, callCouncilMember);
       console.log("✅ Log Monitoring System initialized");
       
-      // Monitor logs every 5 minutes
+      // Monitor logs every 5 minutes (with AI council for complex fixes)
       setInterval(async () => {
         try {
-          const result = await logMonitor.monitorLogs();
+          const result = await logMonitor.monitorLogs(true); // Use AI council
           if (result.errors && result.errors.length > 0) {
             console.log(`🔍 [LOG MONITOR] Checked logs: ${result.errors.length} errors, ${result.fixed || 0} fixed`);
           }
@@ -3734,11 +3735,31 @@ async function initializeTwoTierSystem() {
       // Also monitor on startup after a delay
       setTimeout(async () => {
         try {
-          await logMonitor.monitorLogs();
+          await logMonitor.monitorLogs(true); // Use AI council
         } catch (error) {
           // Silent fail on startup check
         }
       }, 30000); // After 30 seconds
+      
+      // Initialize post-upgrade checker
+      try {
+        const upgradeModule = await import("./core/post-upgrade-checker.js");
+        const PostUpgradeChecker = upgradeModule.PostUpgradeChecker;
+        postUpgradeChecker = new PostUpgradeChecker(logMonitor, callCouncilMember);
+        console.log("✅ Post-Upgrade Checker initialized");
+        
+        // Set up global hook for Cursor/development
+        global.postUpgradeCheck = async () => {
+          return await postUpgradeChecker.checkAfterUpgrade();
+        };
+        
+        // Auto-check after initialization (in case of startup errors)
+        setTimeout(async () => {
+          await postUpgradeChecker.checkAfterUpgrade();
+        }, 15000); // 15 seconds after startup
+      } catch (error) {
+        console.warn("⚠️ Post-upgrade checker not available:", error.message);
+      }
     } catch (error) {
       console.warn("⚠️ Log monitoring not available:", error.message);
     }
@@ -5922,6 +5943,18 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
 
     if (successfulChanges.length > 0) {
       await triggerDeployment(successfulChanges);
+      
+      // After deployment/upgrade, check logs and auto-fix
+      if (postUpgradeChecker) {
+        setTimeout(async () => {
+          await postUpgradeChecker.checkAfterUpgrade();
+          postUpgradeChecker.start(); // Start continuous monitoring
+        }, 10000); // Wait 10 seconds after changes
+      } else if (logMonitor) {
+        setTimeout(async () => {
+          await logMonitor.monitorLogs(true); // Use AI council
+        }, 10000);
+      }
     }
 
     res.json({
