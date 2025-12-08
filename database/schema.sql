@@ -1,53 +1,37 @@
 ```sql
-CREATE TABLE health_profiles (
+CREATE TABLE digital_twins (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    name VARCHAR(255),
-    date_of_birth DATE,
-    gender VARCHAR(50),
-    contact_info JSONB,
-    medical_history JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE biometric_streams (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    device_id VARCHAR(255),
-    timestamp TIMESTAMP NOT NULL,
-    data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE health_interventions (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    intervention_type VARCHAR(255),
+    name VARCHAR(255) NOT NULL,
     description TEXT,
-    status VARCHAR(50),
-    scheduled_date TIMESTAMP,
-    result JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE clinician_validations (
+CREATE TABLE iot_devices (
     id SERIAL PRIMARY KEY,
-    clinician_id INTEGER NOT NULL,
-    user_id INTEGER NOT NULL,
-    validation_type VARCHAR(255),
-    notes TEXT,
-    validation_date TIMESTAMP,
+    twin_id INT REFERENCES digital_twins(id),
+    device_type VARCHAR(255),
+    last_active TIMESTAMP
+);
+
+CREATE TABLE twin_telemetry (
+    id SERIAL PRIMARY KEY,
+    device_id INT REFERENCES iot_devices(id),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data JSONB
+);
+
+CREATE TABLE predictive_alerts (
+    id SERIAL PRIMARY KEY,
+    twin_id INT REFERENCES digital_twins(id),
+    alert_type VARCHAR(255),
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE nudging_logs (
+CREATE TABLE ar_sessions (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    nudge_type VARCHAR(255),
-    message TEXT,
-    status VARCHAR(50),
-    sent_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    twin_id INT REFERENCES digital_twins(id),
+    session_data JSONB,
+    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
