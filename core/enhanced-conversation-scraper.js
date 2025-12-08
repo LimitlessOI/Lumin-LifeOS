@@ -363,7 +363,7 @@ export class EnhancedConversationScraper {
           let lastHeight = sidebar.scrollHeight;
           while (true) {
             sidebar.scrollTop = sidebar.scrollHeight;
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             const newHeight = sidebar.scrollHeight;
             if (newHeight === lastHeight) break;
             lastHeight = newHeight;
