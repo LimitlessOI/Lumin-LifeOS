@@ -472,18 +472,15 @@ async function initDatabase() {
       prevention_strategy TEXT
     )`);
 
-    // Log fixes table for log monitor
+    // Log fixes table for log monitor (matches log-monitor.js expectations)
     await pool.query(`CREATE TABLE IF NOT EXISTS log_fixes (
       id SERIAL PRIMARY KEY,
-      error_pattern VARCHAR(100),
-      fix_type VARCHAR(50),
+      error_text TEXT,
+      error_type VARCHAR(50),
+      fix_action VARCHAR(50),
       fix_description TEXT,
-      fix_code TEXT,
-      status VARCHAR(20) DEFAULT 'attempted',
       success BOOLEAN DEFAULT false,
-      error_message TEXT,
-      created_at TIMESTAMPTZ DEFAULT NOW(),
-      applied_at TIMESTAMPTZ
+      created_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
     await pool.query(`CREATE TABLE IF NOT EXISTS execution_tasks (
