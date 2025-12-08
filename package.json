@@ -1,54 +1,18 @@
+```json
 {
-  "name": "lumin-lifeos",
-  "version": "20.0.0",
-  "description": "Unified Command Center - Complete AI Orchestration System",
-  "type": "module",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "test": "node test.js"
-  },
-  "dependencies": {
-    "axios": "^1.6.2",
-    "body-parser": "^1.20.2",
-    "crypto": "^1.0.1",
-    "dayjs": "^1.11.19",
-    "dotenv": "^17.2.3",
-    "express": "^4.22.1",
-    "pg": "^8.16.3",
-    "ws": "^8.18.3",
-    "stripe": "^14.21.0",
-    "twilio": "^4.20.0",
-    "puppeteer": "^24.15.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "keywords": [
-    "ai",
-    "orchestration",
-    "websocket",
-    "postgresql",
-    "automation",
-    "memory",
-    "council",
-    "financial",
-    "realestate",
-    "revenue"
-  ],
-  "author": "Adam Hopkins @ LimitlessOI",
+  "name": "translation-service",
+  "version": "1.0.0",
+  "main": "index.js",
   "license": "MIT",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
+  "dependencies": {
+    "express": "^4.17.1",
+    "sequelize": "^6.6.5",
+    "pg": "^8.6.0",
+    "@tensorflow/tfjs-node-gpu": "^3.11.0",
+    "dotenv": "^10.0.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LimitlessOI/Lumin-LifeOS.git"
-  },
-  "bugs": {
-    "url": "https://github.com/LimitlessOI/Lumin-LifeOS/issues"
-  },
-  "homepage": "https://github.com/LimitlessOI/Lumin-LifeOS#readme"
+  "devDependencies": {
+    "jest": "^27.0.6"
+  }
 }
+```
