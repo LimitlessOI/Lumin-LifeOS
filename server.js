@@ -5066,7 +5066,8 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
     const spend = await getDailySpend();
 
     // Convert to MICRO symbols for system (user sees English)
-    const microSymbols = compressToMicroSimple(response);
+    // Simple micro compression - replace spaces with ~ for micro protocol
+    const microSymbols = String(response).replace(/ /g, "~");
     
     res.json({
       ok: true,
