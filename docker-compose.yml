@@ -1,25 +1,42 @@
-```yaml
-version: '3'
+version: '3.8'
 
 services:
-  app:
-    build: .
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
     ports:
-      - "3000:3000"
-    depends_on:
-      - db
-
-  db:
-    image: postgres:13
+      - "5672:5672"
+      - "15672:15672"
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    networks:
+      - backend
+
+  postgres:
+    image: timescale/timescaledb-postgis:latest-pg12
+    container_name: postgres
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+networks:
+  backend:
 
 volumes:
-  db-data:
-```
+  postgres_data:
