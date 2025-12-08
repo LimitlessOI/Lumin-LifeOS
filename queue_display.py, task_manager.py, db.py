@@ -1,0 +1,1 @@
+Self-programming: can you deisplay the que for what we are buidling within the sysem and a que for what to build for t
