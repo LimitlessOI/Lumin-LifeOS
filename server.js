@@ -7395,12 +7395,13 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
       }
 
       // Auto-build after code changes
+      let buildResult = null;
       if (selfBuilder) {
         console.log('🔨 [SELF-PROGRAM] Auto-building after code changes...');
         if (taskTracker) await taskTracker.addStep(taskId, 'build', 'running');
         
         try {
-          const buildResult = await selfBuilder.build({
+          buildResult = await selfBuilder.build({
             installDependencies: true,
             validateSyntax: true,
             runTests: false, // Skip tests for now (can be enabled)
