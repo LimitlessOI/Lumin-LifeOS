@@ -5456,6 +5456,73 @@ app.get("/api/v1/tasks", requireKey, async (req, res) => {
   }
 });
 
+// Get specific task details (what is being built)
+app.get("/api/v1/tasks/:taskId", requireKey, async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    
+    // Get task from database
+    const taskResult = await pool.query(
+      `SELECT task_id, type, description, status, created_at, completed_at, result, error, ai_model
+       FROM execution_tasks
+       WHERE task_id = $1`,
+      [taskId]
+    );
+    
+    if (taskResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Task not found" });
+    }
+    
+    const task = taskResult.rows[0];
+    
+    // Get task steps if taskTracker is available
+    let steps = [];
+    let verificationResults = [];
+    try {
+      if (taskTracker) {
+        const taskData = await taskTracker.getTask(taskId);
+        if (taskData) {
+          steps = taskData.steps || [];
+          verificationResults = taskData.verificationResults || [];
+        }
+      }
+    } catch (error) {
+      console.warn('Could not get task tracker data:', error.message);
+    }
+    
+    // Get files modified if this was a self-programming task
+    let filesModified = [];
+    if (task.result && task.result.includes('filesModified')) {
+      try {
+        const resultData = JSON.parse(task.result);
+        filesModified = resultData.filesModified || [];
+      } catch (e) {
+        // Not JSON, that's okay
+      }
+    }
+    
+    res.json({
+      ok: true,
+      task: {
+        id: task.task_id,
+        type: task.type,
+        description: task.description,
+        status: task.status,
+        createdAt: task.created_at,
+        completedAt: task.completed_at,
+        result: task.result,
+        error: task.error,
+        aiModel: task.ai_model,
+        steps,
+        verificationResults,
+        filesModified,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // Memory endpoints
 app.get("/api/v1/memory/search", requireKey, async (req, res) => {
   try {

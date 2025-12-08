@@ -279,8 +279,12 @@ This is part of pipeline ${pipelineId}.`;
       
       const key = process.env.COMMAND_CENTER_KEY || 'MySecretKey2025LifeOS';
       
-      // Use node-fetch or native fetch (Node 18+)
-      const fetch = (await import('node-fetch')).default || globalThis.fetch;
+      // Use native fetch (Node 18+) - no need for node-fetch
+      const fetch = globalThis.fetch;
+      
+      if (!fetch) {
+        throw new Error('fetch is not available. Node.js 18+ required or install node-fetch.');
+      }
       
       const response = await fetch(`${baseUrl}/api/v1/system/self-program?key=${key}`, {
         method: 'POST',
