@@ -3712,22 +3712,7 @@ class ExecutionQueue {
         console.log(`🤖 [EXECUTION] Implementing idea via self-programming: ${task.description.substring(0, 100)}...`);
         
         try {
-          // Create comprehensive instruction
-          const instruction = `Implement this idea/feature:
-
-${task.description}
-
-Requirements:
-- Create complete, working code
-- Follow best practices
-- Include error handling
-- Add proper logging
-- Ensure all files are complete
-- Test the implementation
-
-This is an automatic implementation from the idea queue.`;
-
-          // Use idea-to-implementation pipeline if available, otherwise call self-programming directly
+          // Use idea-to-implementation pipeline if available
           if (ideaToImplementationPipeline) {
             const pipelineResult = await ideaToImplementationPipeline.implementIdea(task.description, {
               autoDeploy: true,
@@ -3753,13 +3738,11 @@ This is an automatic implementation from the idea queue.`;
               throw new Error(pipelineResult.error || 'Pipeline implementation failed');
             }
           } else {
-            // Fallback: create instruction and let it be handled by regular flow
-            // The regular flow will still work, just won't use the pipeline
+            // Fallback: log and continue to regular execution
             console.log('⚠️ [EXECUTION] Idea-to-Implementation Pipeline not available, using regular execution');
-            // Continue to regular execution below
           }
         } catch (error) {
-          console.error(`❌ [EXECUTION] Self-programming implementation failed:`, error.message);
+          console.error(`❌ [EXECUTION] Pipeline implementation failed:`, error.message);
           // Fall through to regular execution as fallback
         }
       }
