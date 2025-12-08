@@ -74,6 +74,47 @@
       background: #22c55e;
       box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
     }
+    .conversation-history {
+      background: radial-gradient(circle at top left, rgba(51, 65, 85, 0.45), rgba(15, 23, 42, 0.95));
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      margin-bottom: 18px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .conversation-history h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+      margin: 0 0 10px;
+    }
+    .conversation-item {
+      padding: 8px;
+      margin-bottom: 8px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 8px;
+      border-left: 3px solid #38bdf8;
+      font-size: 0.8rem;
+    }
+    .conversation-item .user-msg {
+      color: #e5e7eb;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    .conversation-item .ai-msg {
+      color: #9ca3af;
+      font-size: 0.75rem;
+      max-height: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .conversation-item .timestamp {
+      color: #6b7280;
+      font-size: 0.7rem;
+      margin-top: 4px;
+    }
     .grid {
       display: grid;
       grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.4fr);
@@ -235,6 +276,12 @@
       </div>
     </div>
 
+    <!-- CONVERSATION HISTORY WINDOW -->
+    <div class="conversation-history" id="conversationHistory">
+      <h3>📜 Conversation History</h3>
+      <div id="historyList">Loading conversation history...</div>
+    </div>
+
     <div class="grid">
       <!-- LEFT: Prompt / Council chat -->
       <div class="card">
@@ -322,6 +369,48 @@
       const val = apiBaseEl.value.trim() || window.location.origin;
       return val.replace(/\/+$/, "");
     }
+
+    function getKey() {
+      return cmdKeyEl.value.trim() || new URLSearchParams(window.location.search).get("key") || "";
+    }
+
+    // Load conversation history
+    async function loadConversationHistory() {
+      const historyList = document.getElementById("historyList");
+      try {
+        const key = getKey();
+        if (!key) {
+          historyList.innerHTML = "<div style='color: #6b7280; font-size: 0.8rem;'>Enter command key to view history</div>";
+          return;
+        }
+
+        const res = await fetch(`${getBase()}/api/v1/conversations/history?limit=10`, {
+          headers: { "x-command-key": key },
+        });
+        
+        if (!res.ok) throw new Error("Failed to load history");
+        
+        const data = await res.json();
+        
+        if (data.conversations && data.conversations.length > 0) {
+          historyList.innerHTML = data.conversations.map(conv => `
+            <div class="conversation-item">
+              <div class="user-msg">${conv.orchestrator_msg.substring(0, 100)}${conv.orchestrator_msg.length > 100 ? '...' : ''}</div>
+              <div class="ai-msg">${conv.ai_response.substring(0, 150)}${conv.ai_response.length > 150 ? '...' : ''}</div>
+              <div class="timestamp">${new Date(conv.created_at).toLocaleString()} · ${conv.ai_member || 'unknown'}</div>
+            </div>
+          `).join('');
+        } else {
+          historyList.innerHTML = "<div style='color: #6b7280; font-size: 0.8rem;'>No conversations yet</div>";
+        }
+      } catch (error) {
+        historyList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading history: ${error.message}</div>`;
+      }
+    }
+
+    // Load history on page load and refresh every 30 seconds
+    loadConversationHistory();
+    setInterval(loadConversationHistory, 30000);
 
     async function checkHealth() {
       try {

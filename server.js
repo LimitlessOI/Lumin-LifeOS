@@ -5163,7 +5163,7 @@ app.post("/api/v1/ai-council/test", requireKey, async (req, res) => {
   }
 });
 
-// Primary Council Chat Endpoint
+// Primary Council Chat Endpoint - NOW AUTO-IMPLEMENTS REQUESTS
 app.post("/api/v1/chat", requireKey, async (req, res) => {
   try {
     let body = req.body;
@@ -5174,7 +5174,7 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
       body = {};
     }
 
-    const { message, member = "chatgpt" } = body;
+    const { message, member = "chatgpt", autoImplement = true } = body;
 
     if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "Message required" });
@@ -5184,11 +5184,67 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
       `🤖 [COUNCIL] ${member} processing: ${message.substring(0, 100)}...`
     );
 
+    // Store conversation in database
+    const conversationId = `conv_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    try {
+      await pool.query(
+        `INSERT INTO conversation_memory (memory_id, orchestrator_msg, ai_response, ai_member, created_at)
+         VALUES ($1, $2, $3, $4, NOW())`,
+        [conversationId, message, 'pending', member]
+      );
+    } catch (dbError) {
+      console.warn('⚠️ Could not store conversation:', dbError.message);
+    }
+
     const blindSpots = await detectBlindSpots(message, {
       source: "user_chat",
     });
 
-    const response = await callCouncilMember(member, message);
+    // Check if this is an implementation request (contains action words)
+    const isImplementationRequest = /(?:add|create|implement|build|make|change|update|modify|fix|do|install|set up|configure|change this|add a|create a)/i.test(message);
+    
+    let response;
+    let implementationStarted = false;
+    
+    if (isImplementationRequest && autoImplement) {
+      // AUTO-IMPLEMENT: Don't just plan, actually do it!
+      console.log(`🚀 [AUTO-IMPLEMENT] Detected implementation request, starting self-programming...`);
+      
+      try {
+        // Call self-programming directly
+        const selfProgResult = await handleSelfProgramming({
+          instruction: message,
+          autoDeploy: true,
+          priority: 'high',
+        }, req);
+        
+        if (selfProgResult && selfProgResult.ok) {
+          implementationStarted = true;
+          response = `✅ **IMPLEMENTATION STARTED**\n\nI've automatically started implementing your request. The system is now:\n\n${selfProgResult.filesModified?.length ? `- Modifying ${selfProgResult.filesModified.length} file(s): ${selfProgResult.filesModified.join(", ")}\n` : ''}${selfProgResult.taskId ? `- Task ID: ${selfProgResult.taskId}\n` : ''}${selfProgResult.deployed ? `- ✅ Changes committed and deploying\n` : ''}\nThe changes will be deployed automatically. You can check the status via the health endpoint.\n\n**What I'm doing:** ${message}`;
+        } else {
+          // Fallback to regular chat if self-programming fails
+          console.warn('⚠️ Self-programming returned error, using chat:', selfProgResult?.error);
+          response = await callCouncilMember(member, message);
+        }
+      } catch (implError) {
+        console.warn('⚠️ Auto-implementation failed, falling back to chat:', implError.message);
+        response = await callCouncilMember(member, message);
+      }
+    } else {
+      // Regular chat response
+      response = await callCouncilMember(member, message);
+    }
+
+    // Update conversation with response
+    try {
+      await pool.query(
+        `UPDATE conversation_memory SET ai_response = $1 WHERE memory_id = $2`,
+        [response, conversationId]
+      );
+    } catch (dbError) {
+      console.warn('⚠️ Could not update conversation:', dbError.message);
+    }
+
     const spend = await getDailySpend();
 
     // Convert to MICRO symbols for system (user sees English)
@@ -5203,6 +5259,8 @@ app.post("/api/v1/chat", requireKey, async (req, res) => {
       member,
       blindSpotsDetected: blindSpots.length,
       timestamp: new Date().toISOString(),
+      implementationStarted,
+      conversationId,
     });
   } catch (error) {
     console.error("Council chat error:", error);
@@ -6879,6 +6937,61 @@ app.get("/api/v1/trial/status", requireKey, async (req, res) => {
   }
 });
 
+// ==================== CONVERSATION HISTORY ENDPOINTS ====================
+// Get conversation history (cataloged and indexed)
+app.get("/api/v1/conversations/history", requireKey, async (req, res) => {
+  try {
+    const { limit = 50, offset = 0, search = null } = req.query;
+    
+    let query = `SELECT memory_id, orchestrator_msg, ai_response, ai_member, created_at, key_facts, context_metadata
+                 FROM conversation_memory 
+                 WHERE memory_type = 'conversation'`;
+    const params = [];
+    
+    if (search) {
+      query += ` AND (orchestrator_msg ILIKE $1 OR ai_response ILIKE $1)`;
+      params.push(`%${search}%`);
+    }
+    
+    query += ` ORDER BY created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
+    params.push(parseInt(limit), parseInt(offset));
+    
+    const result = await pool.query(query, params);
+    const totalResult = await pool.query(
+      `SELECT COUNT(*) as total FROM conversation_memory WHERE memory_type = 'conversation'`
+    );
+    
+    res.json({
+      ok: true,
+      conversations: result.rows,
+      total: parseInt(totalResult.rows[0].total),
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+  } catch (error) {
+    console.error("Conversation history error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get conversation by ID
+app.get("/api/v1/conversations/:id", requireKey, async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM conversation_memory WHERE memory_id = $1`,
+      [req.params.id]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Conversation not found" });
+    }
+    
+    res.json({ ok: true, conversation: result.rows[0] });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // ==================== CONVERSATION EXTRACTOR ENDPOINTS ====================
 app.post("/api/v1/conversations/extract-export", requireKey, async (req, res) => {
   try {
@@ -7437,7 +7550,7 @@ app.get("/overlay/index.html", (req, res) => {
 });
 
 // ==================== SELF-PROGRAMMING HANDLER (can be called internally) ====================
-async function handleSelfProgramming(options = {}) {
+async function handleSelfProgramming(options = {}, req = null) {
   const {
     instruction,
     priority = "medium",
@@ -7447,9 +7560,107 @@ async function handleSelfProgramming(options = {}) {
     autoDeploy = false,
   } = options;
 
-  // This is the internal handler - same logic as endpoint but returns result instead of HTTP response
-  // Implementation continues below in the endpoint handler
-  return null; // Will be implemented by calling endpoint logic
+  if (!instruction) {
+    return { ok: false, error: "Instruction required" };
+  }
+
+  try {
+    // Call self-programming endpoint logic directly
+    const analysisPrompt = `As the AI Council, analyze this self-programming instruction:
+
+"${instruction}"
+
+Provide:
+1. Which files need modification
+2. Exact code changes needed
+3. Potential risks and blind spots
+4. Testing strategy
+5. Rollback plan`;
+
+    const analysis = await callCouncilWithFailover(analysisPrompt, "chatgpt");
+    const blindSpots = await detectBlindSpots(instruction, {
+      type: "self-programming",
+    });
+
+    const codePrompt = `Based on this analysis: ${analysis}
+
+Consider these blind spots: ${blindSpots.slice(0, 5).join(", ")}
+
+Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND CONTAINS NO TRIPLE BACKTICKS. Format each file like:
+===FILE:path/to/file.js===
+[complete code here]
+===END===`;
+
+    const codeResponse = await callCouncilWithFailover(codePrompt, "deepseek");
+    const fileChanges = extractFileChanges(codeResponse);
+    
+    if (fileChanges.length === 0) {
+      return { ok: false, error: "No file changes could be extracted from AI response" };
+    }
+
+    const results = [];
+    const filePathsToSnapshot = fileChanges.map(c => c.filePath);
+    const snapshotId = await createSystemSnapshot(
+      `Before self-programming: ${instruction.substring(0, 50)}...`,
+      filePathsToSnapshot
+    );
+
+    for (const change of fileChanges) {
+      try {
+        const sandboxResult = await sandboxTest(
+          change.content,
+          `Test: ${change.filePath}`
+        );
+
+        if (sandboxResult.success) {
+          const result = await selfModificationEngine.modifyOwnCode(
+            change.filePath,
+            change.content,
+            instruction
+          );
+          results.push({ ...result, filePath: change.filePath });
+        } else {
+          results.push({ 
+            filePath: change.filePath, 
+            success: false, 
+            error: "Sandbox test failed" 
+          });
+        }
+      } catch (error) {
+        results.push({ 
+          filePath: change.filePath, 
+          success: false, 
+          error: error.message 
+        });
+      }
+    }
+
+    let deployed = false;
+    if (autoDeploy && GITHUB_TOKEN) {
+      try {
+        await commitToGitHub(
+          fileChanges.map(c => c.filePath).join(", "),
+          "Self-programming: " + instruction.substring(0, 100),
+          instruction
+        );
+        deployed = true;
+      } catch (error) {
+        console.log(`⚠️ Deploy failed: ${error.message}`);
+      }
+    }
+
+    return {
+      ok: true,
+      filesModified: results.filter(r => r.success).map(r => r.filePath),
+      taskId: `task_${Date.now()}`,
+      snapshotId,
+      deployed,
+      results,
+    };
+  } catch (error) {
+    console.error("Self-programming handler error:", error);
+    return { ok: false, error: error.message };
+  }
 }
 
 // ==================== SELF-PROGRAMMING ENDPOINT ====================
