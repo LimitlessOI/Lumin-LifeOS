@@ -5457,7 +5457,8 @@ app.get("/api/v1/tasks", requireKey, async (req, res) => {
 });
 
 // Get specific task details (what is being built)
-app.get("/api/v1/tasks/:taskId", requireKey, async (req, res) => {
+// Task details endpoint (enhanced version that shows what's being built)
+app.get("/api/v1/tasks/:taskId/details", requireKey, async (req, res) => {
   try {
     const { taskId } = req.params;
     
@@ -5516,6 +5517,7 @@ app.get("/api/v1/tasks/:taskId", requireKey, async (req, res) => {
         steps,
         verificationResults,
         filesModified,
+        whatIsBeingBuilt: task.description, // What you asked for
       },
     });
   } catch (error) {
