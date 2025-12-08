@@ -1,0 +1,30 @@
+```yaml
+version: '3.8'
+services:
+  database:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: smartgrid
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://postgres:example@database:5432/smartgrid
+    ports:
+      - "3000:3000"
+
+  mqtt-broker:
+    image: eclipse-mosquitto
+    ports:
+      - "1883:1883"
+
+volumes:
+  db_data:
