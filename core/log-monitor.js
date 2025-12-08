@@ -63,17 +63,39 @@ export class LogMonitor {
   initializeErrorPatterns() {
     // Common error patterns and their fixes
     this.errorPatterns.set(
-      /Cannot find package ['"]([^'"]+)['"]|puppeteer is not defined|ReferenceError.*puppeteer/i,
+      /Cannot find package ['"]([^'"]+)['"]|puppeteer is not defined|ReferenceError.*puppeteer|Cannot find package.*imported from/i,
       {
         type: 'missing_package',
         fix: async (match, fullError) => {
-          // Extract package name from error
+          // Extract package name from error - clean up path references
           let packageName = match?.[1];
-          if (!packageName && fullError.includes('puppeteer')) {
-            packageName = 'puppeteer';
+          
+          // Clean up: remove paths, node_modules, etc.
+          if (packageName) {
+            // Remove /app/node_modules/ prefix
+            packageName = packageName.replace(/^\/app\/node_modules\//, '');
+            // Remove node_modules/ prefix
+            packageName = packageName.replace(/^node_modules\//, '');
+            // Remove any path separators and get just the package name
+            packageName = packageName.split('/')[0].split('\\')[0];
+            // Remove quotes if present
+            packageName = packageName.replace(/['"]/g, '');
           }
           
-          if (packageName) {
+          // Special cases
+          if (!packageName && fullError.includes('puppeteer')) {
+            packageName = 'puppeteer';
+          } else if (!packageName && fullError.includes('node-fetch')) {
+            // node-fetch is not needed in Node 18+ - this is a code issue, not package issue
+            return {
+              action: 'code_fix',
+              error: fullError,
+              description: 'Replace node-fetch with native fetch (Node 18+)',
+              fix: 'Use globalThis.fetch instead of importing node-fetch',
+            };
+          }
+          
+          if (packageName && packageName.length > 0 && !packageName.includes('/') && !packageName.includes('\\')) {
             return {
               action: 'install_package',
               package: packageName,
@@ -377,6 +399,14 @@ export class LogMonitor {
       switch (fix.action) {
         case 'install_package':
           success = await this.installPackage(fix.package, fix.command);
+          break;
+        
+        case 'code_fix':
+          // For code fixes (like node-fetch -> native fetch), log but don't auto-fix
+          console.log(`💡 [LOG MONITOR] Code fix needed: ${fix.description}`);
+          console.log(`   Fix: ${fix.fix}`);
+          // Could integrate with self-programming here if needed
+          success = false; // Don't mark as fixed automatically
           break;
         
         case 'create_file':

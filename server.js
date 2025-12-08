@@ -6661,6 +6661,89 @@ app.get("/api/v1/ai/performance", requireKey, async (req, res) => {
 });
 
 // System metrics
+// Cost savings diagnostic endpoint
+app.get("/api/v1/system/cost-savings", requireKey, async (req, res) => {
+  try {
+    // Get current spend
+    const spend = await getDailySpend();
+    
+    // Calculate cache hit rate
+    const totalCacheRequests = compressionMetrics.cache_hits + compressionMetrics.cache_misses;
+    const cacheHitRate = totalCacheRequests > 0 
+      ? (compressionMetrics.cache_hits / totalCacheRequests) * 100 
+      : 0;
+    
+    // Estimate savings
+    const estimatedSavings = {
+      fromCache: compressionMetrics.cache_hits * 0.001, // ~$0.001 per cache hit
+      fromCompression: compressionMetrics.tokens_saved_total * 0.0000001, // ~$0.0000001 per token
+      fromModelDowngrades: compressionMetrics.model_downgrades * 0.0005, // ~$0.0005 per downgrade
+      fromOptimization: compressionMetrics.prompt_optimizations * 0.0001, // ~$0.0001 per optimization
+    };
+    
+    const totalEstimatedSavings = Object.values(estimatedSavings).reduce((a, b) => a + b, 0);
+    
+    // Get ROI tracker data
+    const roiData = roiTracker;
+    
+    res.json({
+      ok: true,
+      currentSpend: spend.daily_spend || spend || 0,
+      maxSpend: spend.max_daily_spend || MAX_DAILY_SPEND,
+      spendPercentage: spend.daily_spend ? ((spend.daily_spend / MAX_DAILY_SPEND) * 100).toFixed(1) + '%' : '0%',
+      
+      // Cost-saving measures status
+      costSavingMeasures: {
+        caching: {
+          active: true,
+          cacheHits: compressionMetrics.cache_hits,
+          cacheMisses: compressionMetrics.cache_misses,
+          hitRate: cacheHitRate.toFixed(1) + '%',
+          working: cacheHitRate > 20, // >20% hit rate means it's working
+          estimatedSavings: estimatedSavings.fromCache.toFixed(4),
+        },
+        compression: {
+          active: true,
+          compressions: compressionMetrics.v3_compressions,
+          bytesSaved: compressionMetrics.total_bytes_saved,
+          tokensSaved: compressionMetrics.tokens_saved_total,
+          working: compressionMetrics.v3_compressions > 0,
+          estimatedSavings: estimatedSavings.fromCompression.toFixed(4),
+        },
+        modelRouting: {
+          active: true,
+          downgrades: compressionMetrics.model_downgrades,
+          working: compressionMetrics.model_downgrades > 0,
+          estimatedSavings: estimatedSavings.fromModelDowngrades.toFixed(4),
+        },
+        promptOptimization: {
+          active: true,
+          optimizations: compressionMetrics.prompt_optimizations,
+          working: compressionMetrics.prompt_optimizations > 0,
+          estimatedSavings: estimatedSavings.fromOptimization.toFixed(4),
+        },
+      },
+      
+      // Overall assessment
+      totalEstimatedSavings: totalEstimatedSavings.toFixed(4),
+      savingsWorking: cacheHitRate > 20 || compressionMetrics.v3_compressions > 0 || compressionMetrics.model_downgrades > 0,
+      
+      // Recommendations
+      recommendations: [
+        cacheHitRate < 20 ? 'Cache hit rate is low - increase cache TTL or improve cache keys' : null,
+        compressionMetrics.v3_compressions === 0 ? 'Compression not being used - check compression settings' : null,
+        compressionMetrics.model_downgrades === 0 ? 'Model routing not downgrading - check model router settings' : null,
+        compressionMetrics.prompt_optimizations === 0 ? 'Prompt optimization not active - check optimization settings' : null,
+      ].filter(r => r !== null),
+      
+      roi: roiData,
+      compression: compressionMetrics,
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 app.get("/api/v1/system/metrics", requireKey, async (req, res) => {
   try {
     res.json({
