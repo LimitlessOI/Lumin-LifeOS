@@ -1,23 +1,23 @@
 ```sql
-CREATE TABLE customer_interactions (
+CREATE TABLE biodegradable_materials (
     id SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL,
-    message TEXT NOT NULL,
-    sentiment TEXT,
-    processed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE customer_profiles (
-    id SERIAL PRIMARY KEY,
-    customer_id INT UNIQUE NOT NULL,
-    preferences JSONB,
+    name VARCHAR(255) NOT NULL,
+    composition JSON NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE handoff_logs (
+CREATE TABLE electronics_prototypes (
     id SERIAL PRIMARY KEY,
-    interaction_id INT NOT NULL REFERENCES customer_interactions(id),
-    handoff_reason TEXT,
-    handed_off_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(255) NOT NULL,
+    design JSON NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE manufacturing_runs (
+    id SERIAL PRIMARY KEY,
+    prototype_id INT REFERENCES electronics_prototypes(id),
+    status VARCHAR(50) NOT NULL,
+    run_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    results JSON
 );
 ```
