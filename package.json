@@ -1,24 +1,28 @@
 ```json
 {
-  "name": "biodegradable-electronics",
+  "name": "eco-device-system",
   "version": "1.0.0",
-  "description": "Biodegradable electronics simulation and management",
+  "description": "A system for managing eco-friendly devices.",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "jest"
-  },
   "dependencies": {
-    "@material-ui/core": "^5.0.0",
-    "three": "^0.132.2",
-    "tensorflow": "^3.12.0",
-    "mongoose": "^6.0.12",
+    "sequelize": "^6.3.5",
     "axios": "^0.21.1",
-    "dotenv": "^10.0.0"
+    "node-cron": "^3.0.0",
+    "joi": "^17.3.0",
+    "puppeteer": "^5.5.0",
+    "cheerio": "^1.0.0-rc.10",
+    "csv-parser": "^3.0.0",
+    "socket.io": "^4.0.0",
+    "express": "^4.17.1"
   },
   "devDependencies": {
-    "jest": "^27.0.6",
-    "supertest": "^6.1.6"
-  }
+    "jest": "^26.6.3"
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "node index.js"
+  },
+  "author": "AI Council",
+  "license": "ISC"
 }
 ```
