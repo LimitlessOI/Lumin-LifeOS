@@ -64,13 +64,19 @@ const {
   ALLOWED_ORIGINS = "",
   HOST = "0.0.0.0",
   PORT = 8080,
-  MAX_DAILY_SPEND = 50.0,
+  // Spend cap (can be overridden in Railway env). Set very high by default.
+  MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "1000000",
   NODE_ENV = "production",
   RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app",
   // Stripe config
   STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET, // reserved for future webhook use
 } = process.env;
+
+// Ensure spend cap is numeric; allow "no cap" by setting to a very large default
+const MAX_DAILY_SPEND = Number.isFinite(parseFloat(RAW_MAX_DAILY_SPEND))
+  ? parseFloat(RAW_MAX_DAILY_SPEND)
+  : 1000000;
 
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "")
   .trim() || null;
@@ -637,6 +643,23 @@ async function initDatabase() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )`);
+
+    // Source of Truth / System Constitution - Core mission, ethics, vision
+    await pool.query(`CREATE TABLE IF NOT EXISTS system_source_of_truth (
+      id SERIAL PRIMARY KEY,
+      document_type VARCHAR(50) NOT NULL DEFAULT 'master_vision',
+      version VARCHAR(20) DEFAULT '1.0',
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      section VARCHAR(100),
+      is_active BOOLEAN DEFAULT true,
+      priority INT DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_sot_type_active ON system_source_of_truth(document_type, is_active) WHERE is_active = true`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_sot_priority ON system_source_of_truth(priority DESC)`);
 
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_kb_search ON knowledge_base_files USING gin(search_vector)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_kb_category ON knowledge_base_files(category)`);
@@ -1553,11 +1576,31 @@ async function callCouncilMember(member, prompt, options = {}) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown member: ${member}`);
 
-  const spend = await getDailySpend();
+  // Get today's spend (automatically resets each day)
+  const today = dayjs().format("YYYY-MM-DD");
+  const spend = await getDailySpend(today);
+  
+  // Log for debugging (only log if significant spend)
+  if (spend > MAX_DAILY_SPEND * 0.1) {
+    console.log(`💰 [SPEND CHECK] Today (${today}): $${spend.toFixed(4)} / $${MAX_DAILY_SPEND}`);
+  }
+  
   if (spend >= MAX_DAILY_SPEND) {
     throw new Error(
-      `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`
+      `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)} for ${today}. Resets at midnight UTC.`
     );
+  }
+
+  // Inject Source of Truth into prompt if this is a mission-critical task
+  if (sourceOfTruthManager && options.requiresMissionAlignment !== false) {
+    const shouldRef = await sourceOfTruthManager.shouldReferenceSourceOfTruth(options.taskType || 'general', options);
+    if (shouldRef) {
+      const relevantSections = await sourceOfTruthManager.getRelevantSections(options.taskType || 'general', options);
+      if (relevantSections.length > 0) {
+        const sotContext = relevantSections.map(d => `[${d.document_type}${d.section ? ` / ${d.section}` : ''}]: ${d.content.substring(0, 500)}`).join('\n\n');
+        prompt = `[SYSTEM SOURCE OF TRUTH - Reference this for mission alignment]\n${sotContext}\n\n---\n\n[USER REQUEST]\n${prompt}`;
+      }
+    }
   }
 
   // CHECK CACHE FIRST (huge cost savings)
@@ -4085,6 +4128,7 @@ let apiCostSavingsRevenue = null;
 let systemHealthChecker = null;
 let selfBuilder = null;
 let ideaToImplementationPipeline = null;
+let sourceOfTruthManager = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -4408,6 +4452,23 @@ async function initializeTwoTierSystem() {
         console.log("✅ Idea-to-Implementation Pipeline module loaded");
       } catch (error) {
         console.warn("⚠️ Idea-to-Implementation Pipeline not available:", error.message);
+      }
+
+      // Initialize Source of Truth Manager
+      try {
+        const sotModule = await import("./core/source-of-truth-manager.js");
+        sourceOfTruthManager = new sotModule.SourceOfTruthManager(pool);
+        console.log("✅ Source of Truth Manager initialized");
+        
+        // Auto-load Source of Truth if it exists (for AI council reference)
+        const existingSOT = await sourceOfTruthManager.getDocument('master_vision');
+        if (existingSOT.length > 0) {
+          console.log(`📖 [SOURCE OF TRUTH] Loaded ${existingSOT.length} document(s) - AI Council will reference for mission alignment`);
+        } else {
+          console.log(`⚠️ [SOURCE OF TRUTH] No documents found. Use POST /api/v1/system/source-of-truth/store to add Source of Truth.`);
+        }
+      } catch (error) {
+        console.warn("⚠️ Source of Truth Manager not available:", error.message);
       }
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
@@ -6657,6 +6718,52 @@ app.get("/api/v1/ai/performance", requireKey, async (req, res) => {
       performance: performance.rows,
       currentScores: Object.fromEntries(aiPerformanceScores),
     });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Source of Truth endpoints
+app.post("/api/v1/system/source-of-truth/store", requireKey, async (req, res) => {
+  try {
+    if (!sourceOfTruthManager) {
+      return res.status(503).json({ error: "Source of Truth Manager not initialized" });
+    }
+
+    const { documentType = 'master_vision', title, content, section = null, version = '1.0', priority = 0 } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ error: "Title and content required" });
+    }
+
+    const success = await sourceOfTruthManager.storeDocument(documentType, title, content, section, version, priority);
+
+    if (success) {
+      res.json({ ok: true, message: "Source of Truth stored successfully" });
+    } else {
+      res.status(500).json({ ok: false, error: "Failed to store Source of Truth" });
+    }
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/system/source-of-truth", requireKey, async (req, res) => {
+  try {
+    if (!sourceOfTruthManager) {
+      return res.status(503).json({ error: "Source of Truth Manager not initialized" });
+    }
+
+    const { documentType, section, formatted } = req.query;
+    const includeInactive = req.query.includeInactive === 'true';
+
+    if (formatted === 'true') {
+      const formattedText = await sourceOfTruthManager.getFormattedForAI();
+      return res.json({ ok: true, formatted: formattedText });
+    }
+
+    const docs = await sourceOfTruthManager.getDocument(documentType || null, section || null, includeInactive);
+    res.json({ ok: true, documents: docs });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }

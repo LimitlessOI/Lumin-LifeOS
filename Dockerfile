@@ -7,9 +7,9 @@ WORKDIR /app
 # Copy package files first (for better Docker layer caching)
 COPY package*.json ./
 
-# Install dependencies
-# Use npm install to auto-generate/update package-lock.json if needed
-RUN npm install --production --no-audit --no-fund --package-lock-only || npm install --production --no-audit --no-fund
+# Install dependencies (production only)
+# Use npm install to ensure all deps are installed even if package-lock is slightly out of sync
+RUN npm install --production --no-audit --no-fund
 
 # Copy application files
 COPY . .
