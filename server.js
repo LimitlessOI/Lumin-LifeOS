@@ -390,6 +390,24 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_execution_tasks_status ON execution_tasks(status)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_execution_tasks_created ON execution_tasks(created_at)`);
 
+    // Task tracking table
+    await pool.query(`CREATE TABLE IF NOT EXISTS task_tracking (
+      id SERIAL PRIMARY KEY,
+      task_id TEXT UNIQUE NOT NULL,
+      task_type VARCHAR(50),
+      description TEXT,
+      expected_outcome TEXT,
+      status VARCHAR(20) DEFAULT 'in_progress',
+      steps JSONB,
+      errors JSONB,
+      verification_results JSONB,
+      completion_reason TEXT,
+      start_time TIMESTAMPTZ,
+      end_time TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
     await pool.query(`CREATE TABLE IF NOT EXISTS daily_ideas (
       id SERIAL PRIMARY KEY,
       idea_id TEXT UNIQUE NOT NULL,
@@ -3689,6 +3707,68 @@ class ExecutionQueue {
         type: task.type,
       });
 
+      // If this is an idea_implementation task, use self-programming to actually implement it
+      if (task.type === 'idea_implementation') {
+        console.log(`🤖 [EXECUTION] Implementing idea via self-programming: ${task.description.substring(0, 100)}...`);
+        
+        try {
+          // Call self-programming endpoint internally
+          const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN 
+            ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+            : 'http://localhost:8080';
+          
+          const key = COMMAND_CENTER_KEY || process.env.COMMAND_CENTER_KEY || 'MySecretKey2025LifeOS';
+          
+          // Create comprehensive instruction
+          const instruction = `Implement this idea/feature:
+
+${task.description}
+
+Requirements:
+- Create complete, working code
+- Follow best practices
+- Include error handling
+- Add proper logging
+- Ensure all files are complete
+- Test the implementation
+
+This is an automatic implementation from the idea queue.`;
+
+          const selfProgResponse = await fetch(`${baseUrl}/api/v1/system/self-program?key=${key}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-command-key': key,
+            },
+            body: JSON.stringify({
+              instruction,
+              autoDeploy: true,
+              priority: 'high',
+            }),
+          });
+
+          const selfProgResult = await selfProgResponse.json();
+          
+          if (selfProgResult.ok) {
+            const result = `Idea implemented via self-programming. Files modified: ${selfProgResult.filesModified?.join(', ') || 'none'}. Task ID: ${selfProgResult.taskId || 'N/A'}`;
+            const aiModel = 'self-programming';
+            
+            await pool.query(
+              `UPDATE execution_tasks SET status = 'completed', result = $1, completed_at = now(), ai_model = $3
+               WHERE task_id = $2`,
+              [result, task.id, aiModel]
+            );
+            
+            return; // Exit early, implementation is handled by self-programming
+          } else {
+            throw new Error(selfProgResult.error || 'Self-programming failed');
+          }
+        } catch (error) {
+          console.error(`❌ [EXECUTION] Self-programming implementation failed:`, error.message);
+          // Fall through to regular execution as fallback
+        }
+      }
+
       // Route through model router to get optimal AI (Tier 0 first)
       const routerResult = modelRouter ? await modelRouter.route(
         `Execute this task with real-world practicality in mind (but do NOT directly move money or impersonate humans): ${task.description}
@@ -3994,6 +4074,7 @@ let enhancedConversationScraper = null;
 let apiCostSavingsRevenue = null;
 let systemHealthChecker = null;
 let selfBuilder = null;
+let ideaToImplementationPipeline = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -4308,6 +4389,15 @@ async function initializeTwoTierSystem() {
         console.log("✅ Self-Builder initialized - system can now build itself");
       } catch (error) {
         console.warn("⚠️ Self-Builder not available:", error.message);
+      }
+
+      // Initialize Idea-to-Implementation Pipeline (complete flow from idea to completion)
+      try {
+        const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
+        // Will initialize after taskTracker is available
+        console.log("✅ Idea-to-Implementation Pipeline module loaded");
+      } catch (error) {
+        console.warn("⚠️ Idea-to-Implementation Pipeline not available:", error.message);
       }
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
@@ -6129,6 +6219,46 @@ app.post("/api/v1/tasks/:taskId/verify", requireKey, async (req, res) => {
   }
 });
 
+// ==================== IDEA TO IMPLEMENTATION PIPELINE ENDPOINTS ====================
+app.post("/api/v1/pipeline/implement-idea", requireKey, async (req, res) => {
+  try {
+    if (!ideaToImplementationPipeline) {
+      return res.status(503).json({ error: "Idea-to-Implementation Pipeline not initialized" });
+    }
+
+    const { idea, autoDeploy = true, verifyCompletion = true } = req.body;
+    
+    if (!idea) {
+      return res.status(400).json({ error: "idea required" });
+    }
+
+    const result = await ideaToImplementationPipeline.implementIdea(idea, {
+      autoDeploy,
+      verifyCompletion,
+    });
+
+    res.json({ ok: result.success, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/pipeline/auto-implement-queued", requireKey, async (req, res) => {
+  try {
+    if (!ideaToImplementationPipeline) {
+      return res.status(503).json({ error: "Idea-to-Implementation Pipeline not initialized" });
+    }
+
+    const { limit = 5 } = req.body;
+    
+    const result = await ideaToImplementationPipeline.autoImplementQueuedIdeas(limit);
+    
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // ==================== SYSTEM HEALTH CHECK ENDPOINT ====================
 app.get("/api/v1/system/health", async (req, res) => {
   try {
@@ -7752,6 +7882,50 @@ async function start() {
       console.log(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
     } else {
       console.log('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
+    }
+
+    // Initialize Idea-to-Implementation Pipeline (after taskTracker is available)
+    try {
+      const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
+      const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
+      const taskTracker = new TaskCompletionTracker(pool, callCouncilMember);
+      ideaToImplementationPipeline = new pipelineModule.IdeaToImplementationPipeline(
+        pool,
+        callCouncilMember,
+        selfBuilder,
+        taskTracker
+      );
+      console.log("✅ Idea-to-Implementation Pipeline initialized - system can now implement ideas from start to finish");
+      
+      // Auto-implement queued ideas every 10 minutes
+      setInterval(async () => {
+        if (ideaToImplementationPipeline) {
+          try {
+            const result = await ideaToImplementationPipeline.autoImplementQueuedIdeas(3);
+            if (result.implemented > 0) {
+              console.log(`✅ [PIPELINE] Auto-implemented ${result.implemented} idea(s)`);
+            }
+          } catch (error) {
+            console.error('❌ [PIPELINE] Auto-implementation error:', error.message);
+          }
+        }
+      }, 10 * 60 * 1000); // Every 10 minutes
+      
+      // Initial run after 2 minutes
+      setTimeout(async () => {
+        if (ideaToImplementationPipeline) {
+          try {
+            const result = await ideaToImplementationPipeline.autoImplementQueuedIdeas(5);
+            if (result.implemented > 0) {
+              console.log(`✅ [PIPELINE] Initial auto-implementation: ${result.implemented} idea(s)`);
+            }
+          } catch (error) {
+            console.error('❌ [PIPELINE] Initial auto-implementation error:', error.message);
+          }
+        }
+      }, 120000); // 2 minutes
+    } catch (error) {
+      console.warn("⚠️ Idea-to-Implementation Pipeline initialization failed:", error.message);
     }
 
     // Continuous self-improvement cycles

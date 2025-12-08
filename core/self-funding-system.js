@@ -51,17 +51,9 @@ export class SelfFundingSystem {
       const totalRevenue = parseFloat(revenueResult.rows[0]?.total_revenue || 0);
       const totalSpent = parseFloat(spendingResult.rows[0]?.total_spent || 0);
       
-      // Also check ROI tracker
-      const roiResult = await this.pool.query(
-        `SELECT daily_revenue, daily_ai_cost FROM roi_tracker ORDER BY last_reset DESC LIMIT 1`
-      );
-      
-      if (roiResult.rows.length > 0) {
-        const roi = roiResult.rows[0];
-        this.revenueBalance = parseFloat(roi.daily_revenue || 0) - parseFloat(roi.daily_ai_cost || 0);
-      } else {
-        this.revenueBalance = totalRevenue - totalSpent;
-      }
+      // ROI tracker is in-memory (roiTracker object), not a database table
+      // Calculate balance from revenue and spending
+      this.revenueBalance = totalRevenue - totalSpent;
     } catch (error) {
       console.warn('⚠️ [SELF-FUNDING] Could not load balance:', error.message);
       this.revenueBalance = 0;
