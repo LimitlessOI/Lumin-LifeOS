@@ -152,6 +152,37 @@ export class LogMonitor {
         },
       }
     );
+
+    // ES Module error: require is not defined
+    this.errorPatterns.set(
+      /require is not defined|ReferenceError.*require/i,
+      {
+        type: 'es_module_error',
+        fix: async (match, fullError) => {
+          // Extract the file and line if possible
+          const fileMatch = fullError.match(/file:\/\/[^\s]+:(\d+)/);
+          const requireMatch = fullError.match(/require\(['"]([^'"]+)['"]\)/);
+          
+          if (requireMatch && fileMatch) {
+            const moduleName = requireMatch[1];
+            const lineNum = fileMatch[1];
+            return {
+              action: 'fix_require_import',
+              file: fileMatch[0],
+              line: lineNum,
+              module: moduleName,
+              description: `Fix require() to import in ES module at line ${lineNum}: Change require('${moduleName}') to import ${moduleName} from '${moduleName}'`,
+            };
+          }
+          
+          return {
+            action: 'fix_require_import',
+            error: fullError,
+            description: 'Fix require() usage in ES module - convert to import statement',
+          };
+        },
+      }
+    );
   }
 
   /**
@@ -348,6 +379,10 @@ export class LogMonitor {
         
         case 'ai_identify_package':
           success = await this.aiIdentifyPackage(fix.error);
+          break;
+        
+        case 'fix_require_import':
+          success = await this.fixRequireImport(fix);
           break;
       }
 
@@ -572,6 +607,39 @@ export class LogMonitor {
       return result.rows;
     } catch (error) {
       return [];
+    }
+  }
+
+  /**
+   * Fix require() to import in ES modules
+   */
+  async fixRequireImport(fix) {
+    try {
+      if (!fix.file || !fix.module) {
+        console.warn('⚠️ [LOG MONITOR] Cannot fix require - missing file or module info');
+        return false;
+      }
+
+      // This would need file system access and AI to generate the fix
+      // For now, log it so we can fix manually
+      console.log(`🔧 [LOG MONITOR] Need to fix: Change require('${fix.module}') to import in ${fix.file}`);
+      
+      // Could use AI council to generate the fix
+      if (this.callCouncilMember) {
+        const prompt = `Fix this ES module error: ${fix.description}\n\nFile: ${fix.file}\nLine: ${fix.line}\n\nProvide the exact import statement to replace the require() call.`;
+        const response = await this.callCouncilMember('chatgpt', prompt, {
+          useTwoTier: false,
+          maxTokens: 500,
+        });
+        
+        console.log(`💡 [LOG MONITOR] AI suggests: ${response}`);
+        // Could integrate with self-programming system here
+      }
+      
+      return false; // Manual fix needed for now
+    } catch (error) {
+      console.error(`⚠️ [LOG MONITOR] Fix require import error:`, error.message);
+      return false;
     }
   }
 }

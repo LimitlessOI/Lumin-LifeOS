@@ -9,7 +9,7 @@
  * Premium council only validates/corrects their output.
  */
 
-// No imports needed - Pool passed in constructor
+import crypto from 'crypto';
 
 const TIER0_MODELS = {
   // Local Ollama models (FREE)
@@ -379,7 +379,7 @@ export class Tier0Council {
    */
   generateCacheKey(task) {
     // Simple hash for now - can upgrade to semantic embedding later
-    const crypto = require('crypto');
+    // crypto is now imported at the top of the file
     const normalized = String(task).toLowerCase().trim().replace(/\s+/g, ' ');
     return crypto.createHash('sha256').update(normalized).digest('hex').substring(0, 32);
   }
