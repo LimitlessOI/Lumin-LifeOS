@@ -7998,16 +7998,26 @@ Provide:
       type: "self-programming",
     });
 
-    const codePrompt = `Based on this analysis: ${analysis}
+    // IMPROVED: More direct prompt, like how I build
+    const codePrompt = `You are building this feature RIGHT NOW. Write COMPLETE, WORKING code.
 
-Consider these blind spots: ${blindSpots.slice(0, 5).join(", ")}
+Instruction: ${instruction}
 
-Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND CONTAINS NO TRIPLE BACKTICKS. Format each file like:
+Analysis: ${analysis}
+
+Blind spots: ${blindSpots.slice(0, 5).join(", ")}
+
+CRITICAL: Write COMPLETE files using EXACT format:
 ===FILE:path/to/file.js===
-[complete code here]
-===END===`;
+[COMPLETE file - ALL imports, ALL functions, ALL code - no placeholders]
+===END===
 
-    const codeResponse = await callCouncilWithFailover(codePrompt, "deepseek");
+Write the complete working code now:`;
+
+    const codeResponse = await callCouncilWithFailover(codePrompt, "chatgpt", {
+      maxTokens: 8000,
+      temperature: 0.3,
+    });
 
     const fileChanges = extractFileChanges(codeResponse);
     
