@@ -4297,6 +4297,15 @@ async function initializeTwoTierSystem() {
       } catch (error) {
         console.warn("⚠️ System Health Checker not available:", error.message);
       }
+
+      // Initialize Self-Builder (system can build itself)
+      try {
+        const builderModule = await import("./core/self-builder.js");
+        selfBuilder = new builderModule.SelfBuilder(pool, callCouncilMember);
+        console.log("✅ Self-Builder initialized - system can now build itself");
+      } catch (error) {
+        console.warn("⚠️ Self-Builder not available:", error.message);
+      }
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
       }
