@@ -1,18 +1,27 @@
 ```json
 {
-  "name": "translation-service",
+  "name": "voting-system",
   "version": "1.0.0",
+  "description": "Decentralized voting system using Hyperledger Fabric and ZKP",
   "main": "index.js",
-  "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
   "dependencies": {
-    "express": "^4.17.1",
-    "sequelize": "^6.6.5",
-    "pg": "^8.6.0",
-    "@tensorflow/tfjs-node-gpu": "^3.11.0",
-    "dotenv": "^10.0.0"
+    "axios": "^0.21.1",
+    "bull": "^3.22.9",
+    "circomlib": "^0.0.4",
+    "dotenv": "^8.2.0",
+    "fabric-ca-client": "^1.4.8",
+    "fabric-network": "^1.4.8",
+    "jsonwebtoken": "^8.5.1",
+    "redis": "^3.1.2",
+    "sequelize": "^6.3.5",
+    "snarkjs": "^0.2.0"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^26.6.3"
   }
 }
 ```
