@@ -1,20 +1,27 @@
-```dockerfile
-# Use Node.js as the base image
-FROM node:14
+# Use Node.js 18 LTS (required for native fetch API)
+FROM node:18-alpine
 
-# Set the working directory
-WORKDIR /usr/src/app
+# Set working directory
+WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy package files first (for better Docker layer caching)
 COPY package*.json ./
-RUN npm install
 
-# Copy all source files
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy application files
 COPY . .
 
-# Expose the application port
-EXPOSE 3000
+# Create necessary directories
+RUN mkdir -p /app/public/overlay /app/logs
 
-# Run the application
+# Expose port (Railway will set PORT env var)
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:' + (process.env.PORT || 8080) + '/healthz', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+
+# Start the application
 CMD ["node", "server.js"]
-```

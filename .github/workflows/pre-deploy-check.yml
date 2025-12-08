@@ -1,0 +1,50 @@
+name: Pre-Deploy Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Validate package.json
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"
+          echo "✅ package.json is valid JSON"
+      
+      - name: Validate Dockerfile
+        run: |
+          if grep -q '```' Dockerfile; then
+            echo "❌ Dockerfile contains markdown code blocks!"
+            exit 1
+          fi
+          echo "✅ Dockerfile is valid"
+      
+      - name: Check for required files
+        run: |
+          test -f server.js || (echo "❌ server.js missing" && exit 1)
+          test -f package.json || (echo "❌ package.json missing" && exit 1)
+          test -f Dockerfile || (echo "❌ Dockerfile missing" && exit 1)
+          echo "✅ All required files present"
+      
+      - name: Install dependencies (dry run)
+        run: |
+          npm ci --dry-run || (echo "❌ Dependency installation would fail" && exit 1)
+          echo "✅ Dependencies valid"
+      
+      - name: Syntax check server.js
+        run: |
+          node --check server.js || (echo "❌ server.js has syntax errors" && exit 1)
+          echo "✅ server.js syntax valid"
