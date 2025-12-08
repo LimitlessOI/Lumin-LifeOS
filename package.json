@@ -1,21 +1,24 @@
+```json
 {
-  "name": "energy-management-system",
+  "name": "biodegradable-electronics",
   "version": "1.0.0",
-  "description": "IoT-based energy management system",
+  "description": "Biodegradable electronics simulation and management",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "jest"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "mqtt": "^4.2.8",
-    "amqplib": "^0.8.0",
-    "sequelize": "^6.6.5",
-    "pg": "^8.6.0",
-    "pg-hstore": "^2.3.3"
+    "@material-ui/core": "^5.0.0",
+    "three": "^0.132.2",
+    "tensorflow": "^3.12.0",
+    "mongoose": "^6.0.12",
+    "axios": "^0.21.1",
+    "dotenv": "^10.0.0"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^27.0.6",
+    "supertest": "^6.1.6"
   }
 }
+```
