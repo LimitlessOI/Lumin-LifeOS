@@ -1,0 +1,9 @@
+```toml
+name = "edge-worker"
+type = "javascript"
+compatibility_date = "2023-10-01"
+
+[vars]
+MODEL_VERSION = "1.0"
+AB_TEST_CONFIG = "default"
+```
