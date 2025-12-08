@@ -74,6 +74,36 @@
       background: #22c55e;
       box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
     }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+    }
+    .tab {
+      padding: 8px 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #9ca3af;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .tab:hover {
+      color: #e5e7eb;
+    }
+    .tab.active {
+      color: #38bdf8;
+      border-bottom-color: #38bdf8;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
     .conversation-history {
       background: radial-gradient(circle at top left, rgba(51, 65, 85, 0.45), rgba(15, 23, 42, 0.95));
       border-radius: 16px;
@@ -82,6 +112,97 @@
       margin-bottom: 18px;
       max-height: 300px;
       overflow-y: auto;
+    }
+    .task-queue {
+      background: radial-gradient(circle at top left, rgba(51, 65, 85, 0.45), rgba(15, 23, 42, 0.95));
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid rgba(51, 65, 85, 0.9);
+      margin-bottom: 18px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .task-item {
+      padding: 12px;
+      margin-bottom: 10px;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 8px;
+      border-left: 3px solid #38bdf8;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .task-item:hover {
+      background: rgba(15, 23, 42, 0.8);
+      border-left-color: #22c55e;
+    }
+    .task-item.active {
+      border-left-color: #22c55e;
+      background: rgba(15, 23, 42, 0.9);
+    }
+    .task-item.running {
+      border-left-color: #f97316;
+    }
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+    .task-title {
+      font-weight: 600;
+      color: #e5e7eb;
+      font-size: 0.9rem;
+      flex: 1;
+    }
+    .task-status {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(75, 85, 99, 0.5);
+      color: #9ca3af;
+    }
+    .task-status.running {
+      background: rgba(249, 115, 22, 0.2);
+      color: #f97316;
+    }
+    .task-status.pending {
+      background: rgba(59, 130, 246, 0.2);
+      color: #3b82f6;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(75, 85, 99, 0.3);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e, #38bdf8);
+      transition: width 0.3s;
+    }
+    .task-eta {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .task-details {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(51, 65, 85, 0.5);
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+    .task-details.active {
+      display: block;
+    }
+    .task-details-item {
+      margin-bottom: 6px;
+    }
+    .task-details-item strong {
+      color: #e5e7eb;
     }
     .conversation-history h3 {
       font-size: 0.85rem;
@@ -276,10 +397,26 @@
       </div>
     </div>
 
-    <!-- CONVERSATION HISTORY WINDOW -->
-    <div class="conversation-history" id="conversationHistory">
-      <h3>📜 Conversation History</h3>
-      <div id="historyList">Loading conversation history...</div>
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" data-tab="queue">📋 Task Queue</button>
+      <button class="tab" data-tab="history">📜 Conversation History</button>
+    </div>
+
+    <!-- TAB CONTENT: TASK QUEUE -->
+    <div class="tab-content active" id="queueTab">
+      <div class="task-queue">
+        <h3 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.14em; color: #9ca3af; margin: 0 0 10px;">🚀 Active Projects & Queue</h3>
+        <div id="taskQueueList">Loading task queue...</div>
+      </div>
+    </div>
+
+    <!-- TAB CONTENT: CONVERSATION HISTORY -->
+    <div class="tab-content" id="historyTab">
+      <div class="conversation-history">
+        <h3>📜 Conversation History</h3>
+        <div id="historyList">Loading conversation history...</div>
+      </div>
     </div>
 
     <div class="grid">
@@ -411,6 +548,110 @@
     // Load history on page load and refresh every 30 seconds
     loadConversationHistory();
     setInterval(loadConversationHistory, 30000);
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+        
+        // Update active tab
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        // Update active content
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(tabName + 'Tab').classList.add('active');
+        
+        // Load data for active tab
+        if (tabName === 'queue') {
+          loadTaskQueue();
+        } else if (tabName === 'history') {
+          loadConversationHistory();
+        }
+      });
+    });
+
+    // Load task queue
+    async function loadTaskQueue() {
+      const taskQueueList = document.getElementById("taskQueueList");
+      try {
+        const key = getKey();
+        if (!key) {
+          taskQueueList.innerHTML = "<div style='color: #6b7280; font-size: 0.8rem;'>Enter command key to view queue</div>";
+          return;
+        }
+
+        const res = await fetch(`${getBase()}/api/v1/tasks/queue`, {
+          headers: { "x-command-key": key },
+        });
+        
+        if (!res.ok) throw new Error("Failed to load task queue");
+        
+        const data = await res.json();
+        
+        if (data.tasks && data.tasks.length > 0) {
+          taskQueueList.innerHTML = data.tasks.map((task, index) => {
+            const isActive = task.status === 'running';
+            const isExpanded = false; // Will be managed by click handler
+            
+            return `
+              <div class="task-item ${isActive ? 'running' : ''}" data-task-id="${task.id}" data-index="${index}">
+                <div class="task-header">
+                  <div class="task-title">${task.title || task.description || 'Task'}</div>
+                  <div class="task-status ${task.status}">${task.status}</div>
+                </div>
+                ${isActive ? `
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${task.progress || 0}%"></div>
+                  </div>
+                  <div class="task-eta">Progress: ${task.progress || 0}%</div>
+                ` : `
+                  <div class="task-eta">⏱️ ETA: ${task.eta || 'Calculating...'}</div>
+                `}
+                <div class="task-details" id="details-${task.id}">
+                  <div class="task-details-item"><strong>Type:</strong> ${task.type || 'N/A'}</div>
+                  <div class="task-details-item"><strong>Status:</strong> ${task.status}</div>
+                  <div class="task-details-item"><strong>Created:</strong> ${new Date(task.createdAt).toLocaleString()}</div>
+                  <div class="task-details-item"><strong>Description:</strong> ${task.description || task.title || 'No description'}</div>
+                  ${task.progress !== undefined ? `<div class="task-details-item"><strong>Progress:</strong> ${task.progress}%</div>` : ''}
+                  ${task.eta ? `<div class="task-details-item"><strong>ETA:</strong> ${task.eta}</div>` : ''}
+                </div>
+              </div>
+            `;
+          }).join('');
+          
+          // Add click handlers for task details
+          document.querySelectorAll('.task-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const taskId = item.dataset.taskId;
+              const details = document.getElementById(`details-${taskId}`);
+              
+              // Toggle details
+              if (details.classList.contains('active')) {
+                details.classList.remove('active');
+                item.classList.remove('active');
+              } else {
+                // Close all other details
+                document.querySelectorAll('.task-details').forEach(d => d.classList.remove('active'));
+                document.querySelectorAll('.task-item').forEach(i => i.classList.remove('active'));
+                
+                // Open this one
+                details.classList.add('active');
+                item.classList.add('active');
+              }
+            });
+          });
+        } else {
+          taskQueueList.innerHTML = "<div style='color: #6b7280; font-size: 0.8rem;'>No tasks in queue</div>";
+        }
+      } catch (error) {
+        taskQueueList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading queue: ${error.message}</div>`;
+      }
+    }
+
+    // Load task queue on page load and refresh every 10 seconds
+    loadTaskQueue();
+    setInterval(loadTaskQueue, 10000);
 
     async function checkHealth() {
       try {

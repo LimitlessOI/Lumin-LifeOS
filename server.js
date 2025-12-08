@@ -7097,38 +7097,82 @@ app.get("/api/v1/tasks/queue", requireKey, async (req, res) => {
     // Get active tasks/projects
     const queueStatus = executionQueue.getStatus();
     
-    // Get tasks from database
+    // Get tasks from database (pending, running, and recent completed)
     const dbTasks = await pool.query(
-      `SELECT task_id, type, description, status, created_at, completed_at
+      `SELECT task_id, type, description, status, created_at, completed_at, result, error, ai_model
        FROM execution_tasks
-       WHERE status IN ('pending', 'running')
-       ORDER BY created_at DESC
+       WHERE status IN ('pending', 'running', 'queued')
+       ORDER BY 
+         CASE status
+           WHEN 'running' THEN 1
+           WHEN 'queued' THEN 2
+           WHEN 'pending' THEN 3
+           ELSE 4
+         END,
+         created_at ASC
        LIMIT 50`
     );
     
+    // Get active task progress if available
+    const activeTask = queueStatus.currentTask;
+    
     // Format for command center
     const projects = dbTasks.rows.map((task, index) => {
-      const totalTasks = dbTasks.rows.length;
-      const progress = task.status === 'running' ? 50 : (index / totalTasks) * 100;
+      const isRunning = task.status === 'running';
+      const isActive = activeTask && activeTask.id === task.task_id;
       
-      // Estimate ETA based on task type
-      let eta = 'Calculating...';
-      if (task.status === 'running') {
-        eta = 'In progress...';
+      // Calculate progress
+      let progress = 0;
+      if (isRunning || isActive) {
+        // If actively running, estimate progress based on time
+        const createdTime = new Date(task.created_at).getTime();
+        const now = Date.now();
+        const elapsed = (now - createdTime) / 1000 / 60; // minutes
+        // Estimate 10-15 minutes per task on average
+        progress = Math.min(95, Math.round((elapsed / 12) * 100));
       } else {
-        const minutes = Math.ceil((totalTasks - index) * 5); // ~5 min per task
-        eta = `${minutes} minutes`;
+        // Queued tasks: progress based on position
+        const queuePosition = index;
+        progress = 0;
+      }
+      
+      // Estimate ETA based on task type and position
+      let eta = 'Calculating...';
+      if (isRunning || isActive) {
+        const createdTime = new Date(task.created_at).getTime();
+        const now = Date.now();
+        const elapsed = (now - createdTime) / 1000 / 60; // minutes
+        const estimatedTotal = 12; // average 12 minutes per task
+        const remaining = Math.max(1, Math.ceil(estimatedTotal - elapsed));
+        eta = `${remaining} minute${remaining !== 1 ? 's' : ''} remaining`;
+      } else {
+        // Calculate ETA based on queue position and average task time
+        const queuePosition = index;
+        const avgTaskTime = 12; // minutes
+        const minutes = Math.ceil(queuePosition * avgTaskTime);
+        if (minutes < 60) {
+          eta = `~${minutes} minute${minutes !== 1 ? 's' : ''}`;
+        } else {
+          const hours = Math.floor(minutes / 60);
+          const mins = minutes % 60;
+          eta = `~${hours}h ${mins}m`;
+        }
       }
       
       return {
         id: task.task_id,
-        title: task.description?.substring(0, 50) || task.type || 'Task',
+        title: task.description?.substring(0, 80) || task.type || 'Task',
+        description: task.description || '',
         status: task.status || 'pending',
-        progress: Math.round(progress),
+        progress: isRunning || isActive ? progress : 0,
         eta,
         priority: 'high',
         type: task.type,
         createdAt: task.created_at,
+        completedAt: task.completed_at,
+        result: task.result,
+        error: task.error,
+        aiModel: task.ai_model,
       };
     });
 
@@ -7137,6 +7181,7 @@ app.get("/api/v1/tasks/queue", requireKey, async (req, res) => {
       tasks: projects,
       queueSize: queueStatus.queued || 0,
       active: queueStatus.active || 0,
+      currentTask: activeTask,
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
