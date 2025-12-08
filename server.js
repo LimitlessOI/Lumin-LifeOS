@@ -5002,16 +5002,40 @@ app.get("/api/v1/health-check", requireKey, (req, res) => {
 
 app.get("/healthz", async (req, res) => {
   try {
+    // Quick database check
     await pool.query("SELECT NOW()");
-    const spend = await getDailySpend();
-    const droneStatus = await incomeDroneSystem.getStatus();
-    const taskStatus = executionQueue.getStatus();
+    
+    // Get status with error handling
+    let spend = { daily_spend: 0, max_daily_spend: MAX_DAILY_SPEND };
+    try {
+      spend = await getDailySpend();
+    } catch (e) {
+      console.warn("⚠️ Health check: getDailySpend failed (non-critical):", e.message);
+    }
+    
+    let droneStatus = { active: 0, drones: [], total_revenue: 0, actual_revenue: 0, projected_revenue: 0 };
+    try {
+      droneStatus = await incomeDroneSystem.getStatus();
+    } catch (e) {
+      console.warn("⚠️ Health check: drone status failed (non-critical):", e.message);
+    }
+    
+    let taskStatus = { queued: 0, active: 0, completed: 0, failed: 0 };
+    try {
+      taskStatus = executionQueue.getStatus();
+    } catch (e) {
+      console.warn("⚠️ Health check: task status failed (non-critical):", e.message);
+    }
+    
     let rotationStatus = null;
     try {
       rotationStatus = await rotateAIsBasedOnPerformance();
     } catch (rotationError) {
       console.warn("⚠️ Health check: AI rotation check failed (non-critical):", rotationError.message);
     }
+
+    const dailySpendValue = spend.daily_spend || spend || 0;
+    const maxSpendValue = spend.max_daily_spend || MAX_DAILY_SPEND;
 
     res.json({
       ok: true,
@@ -5020,9 +5044,9 @@ app.get("/healthz", async (req, res) => {
       timestamp: new Date().toISOString(),
       database: "connected",
       websockets: activeConnections.size,
-      daily_spend: spend,
-      max_daily_spend: MAX_DAILY_SPEND,
-      spend_percentage: ((spend / MAX_DAILY_SPEND) * 100).toFixed(1) + "%",
+      daily_spend: dailySpendValue,
+      max_daily_spend: maxSpendValue,
+      spend_percentage: dailySpendValue ? ((dailySpendValue / maxSpendValue) * 100).toFixed(1) + "%" : "0%",
       roi: roiTracker,
       drones: droneStatus,
       tasks: taskStatus,
