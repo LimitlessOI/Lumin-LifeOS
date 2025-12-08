@@ -376,6 +376,17 @@ async function initDatabase() {
       completed_at TIMESTAMPTZ
     )`);
 
+    // Build history table
+    await pool.query(`CREATE TABLE IF NOT EXISTS build_history (
+      id SERIAL PRIMARY KEY,
+      build_id TEXT UNIQUE NOT NULL,
+      status VARCHAR(20) DEFAULT 'running',
+      steps JSONB,
+      errors JSONB,
+      duration_ms INT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_execution_tasks_status ON execution_tasks(status)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_execution_tasks_created ON execution_tasks(created_at)`);
 
@@ -3982,6 +3993,7 @@ let webScraper = null;
 let enhancedConversationScraper = null;
 let apiCostSavingsRevenue = null;
 let systemHealthChecker = null;
+let selfBuilder = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -4268,6 +4280,7 @@ async function initializeTwoTierSystem() {
           enhancedIncomeDrone: incomeDroneSystem,
           businessCenter,
           gameGenerator,
+          selfBuilder,
           businessDuplication,
           codeServices,
           makeComGenerator,
@@ -6001,6 +6014,62 @@ app.get("/api/v1/income/diagnostic", requireKey, async (req, res) => {
   }
 });
 
+// ==================== SELF-BUILDER ENDPOINTS ====================
+app.post("/api/v1/system/build", requireKey, async (req, res) => {
+  try {
+    if (!selfBuilder) {
+      return res.status(503).json({ error: "Self-Builder not initialized" });
+    }
+
+    const {
+      installDependencies = true,
+      runTests = false,
+      validateSyntax = true,
+      commitChanges = false,
+      pushToGit = false,
+      triggerDeployment = false,
+      message = 'Self-build: Automated build',
+    } = req.body;
+
+    console.log('🔨 [API] Build requested via API');
+    
+    const buildResult = await selfBuilder.build({
+      installDependencies,
+      runTests,
+      validateSyntax,
+      commitChanges,
+      pushToGit,
+      triggerDeployment,
+      strict: false,
+    });
+
+    res.json({
+      ok: buildResult.success,
+      build: buildResult,
+      message: buildResult.success 
+        ? 'Build completed successfully' 
+        : `Build completed with ${buildResult.errors.length} error(s)`,
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/system/build-history", requireKey, async (req, res) => {
+  try {
+    if (!selfBuilder) {
+      return res.status(503).json({ error: "Self-Builder not initialized" });
+    }
+
+    const limit = parseInt(req.query.limit || 10);
+    const history = await selfBuilder.getBuildHistory(limit);
+    
+    res.json({ ok: true, count: history.length, builds: history });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // ==================== SYSTEM HEALTH CHECK ENDPOINT ====================
 app.get("/api/v1/system/health", async (req, res) => {
   try {
@@ -7248,6 +7317,30 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
     }
 
     if (successfulChanges.length > 0) {
+      // Auto-build after code changes
+      if (selfBuilder) {
+        console.log('🔨 [SELF-PROGRAM] Auto-building after code changes...');
+        try {
+          const buildResult = await selfBuilder.build({
+            installDependencies: true,
+            validateSyntax: true,
+            runTests: false, // Skip tests for now (can be enabled)
+            commitChanges: autoDeploy && GITHUB_TOKEN ? true : false,
+            pushToGit: autoDeploy && GITHUB_TOKEN ? true : false,
+            triggerDeployment: autoDeploy,
+            strict: false, // Don't fail on warnings
+          });
+          
+          if (buildResult.success) {
+            console.log('✅ [SELF-PROGRAM] Build succeeded');
+          } else {
+            console.warn('⚠️ [SELF-PROGRAM] Build completed with errors:', buildResult.errors);
+          }
+        } catch (buildError) {
+          console.error('❌ [SELF-PROGRAM] Build failed:', buildError.message);
+        }
+      }
+      
       await triggerDeployment(successfulChanges);
       
       // After deployment/upgrade, check logs and auto-fix
