@@ -8011,12 +8011,48 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
 
     const fileChanges = extractFileChanges(codeResponse);
     
+    // Multiple parsing strategies (same as handleSelfProgramming)
     if (fileChanges.length === 0) {
-      return res.status(400).json({
-        ok: false,
-        error: "No file changes could be extracted from AI response. The AI may not have followed the required format (===FILE:path=== ... ===END===).",
-        codeResponsePreview: codeResponse.substring(0, 500),
+      // Try alternative formats
+      const altRegex = /FILE:\s*([^\n]+)\n([\s\S]*?)(?=FILE:|END|$)/g;
+      let match;
+      while ((match = altRegex.exec(codeResponse)) !== null) {
+        fileChanges.push({
+          filePath: match[1].trim(),
+          content: match[2].trim(),
+        });
+      }
+    }
+    
+    if (fileChanges.length === 0) {
+      // Extract from code blocks
+      const codeBlockRegex = /```(?:javascript|js)?\n([\s\S]*?)```/g;
+      const pathMatch = codeResponse.match(/(?:file|path)[:\s]+([^\n]+)/i);
+      let codeMatch;
+      while ((codeMatch = codeBlockRegex.exec(codeResponse)) !== null) {
+        fileChanges.push({
+          filePath: pathMatch ? pathMatch[1].trim() : `new_file_${Date.now()}.js`,
+          content: codeMatch[1].trim(),
+        });
+      }
+    }
+    
+    if (fileChanges.length === 0) {
+      // Last resort: infer from instruction
+      let inferredPath = 'new_feature.js';
+      const instructionLower = instruction.toLowerCase();
+      if (instructionLower.includes('endpoint') || instructionLower.includes('api')) {
+        inferredPath = 'server.js';
+      } else if (instructionLower.includes('overlay') || instructionLower.includes('ui') || instructionLower.includes('tab')) {
+        inferredPath = 'public/overlay/index.html';
+      }
+      
+      fileChanges.push({
+        filePath: inferredPath,
+        content: codeResponse,
       });
+      
+      console.warn(`⚠️ [SELF-PROGRAM] Using entire response as ${inferredPath}`);
     }
 
     const results = [];
