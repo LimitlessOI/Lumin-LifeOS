@@ -5029,13 +5029,23 @@ app.get("/healthz", async (req, res) => {
       deployment: "Railway + Neon + GitHub",
       system_metrics: systemMetrics,
       ai_rotation: rotationStatus,
-      daily_ideas: dailyIdeas.length,
-      blind_spots_detected: systemMetrics.blindSpotsDetected,
-      snapshots_available: systemSnapshots.length,
+      daily_ideas: dailyIdeas ? dailyIdeas.length : 0,
+      blind_spots_detected: systemMetrics ? systemMetrics.blindSpotsDetected : 0,
+      snapshots_available: systemSnapshots ? systemSnapshots.length : 0,
       stripe_enabled: Boolean(STRIPE_SECRET_KEY),
       railway_url:
         RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app",
     });
+  } catch (error) {
+    console.error("Health check error:", error);
+    res.status(500).json({
+      ok: false,
+      status: "unhealthy",
+      error: error.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ADMIN STATUS – human-friendly summary
