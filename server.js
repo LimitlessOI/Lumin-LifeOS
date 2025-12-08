@@ -5099,11 +5099,6 @@ app.get("/admin/status", async (req, res) => {
   }
 });
 
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
-
 // AI Council Communication Test
 app.post("/api/v1/ai-council/test", requireKey, async (req, res) => {
   try {
