@@ -472,6 +472,20 @@ async function initDatabase() {
       prevention_strategy TEXT
     )`);
 
+    // Log fixes table for log monitor
+    await pool.query(`CREATE TABLE IF NOT EXISTS log_fixes (
+      id SERIAL PRIMARY KEY,
+      error_pattern VARCHAR(100),
+      fix_type VARCHAR(50),
+      fix_description TEXT,
+      fix_code TEXT,
+      status VARCHAR(20) DEFAULT 'attempted',
+      success BOOLEAN DEFAULT false,
+      error_message TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      applied_at TIMESTAMPTZ
+    )`);
+
     await pool.query(`CREATE TABLE IF NOT EXISTS execution_tasks (
       id SERIAL PRIMARY KEY,
       task_id TEXT UNIQUE NOT NULL,
@@ -7878,18 +7892,31 @@ async function start() {
       console.log('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
     }
 
-    // Initialize Idea-to-Implementation Pipeline (after taskTracker is available)
-    try {
-      const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
-      const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
-      const taskTracker = new TaskCompletionTracker(pool, callCouncilMember);
-      ideaToImplementationPipeline = new pipelineModule.IdeaToImplementationPipeline(
-        pool,
-        callCouncilMember,
-        selfBuilder,
-        taskTracker
-      );
-      console.log("✅ Idea-to-Implementation Pipeline initialized - system can now implement ideas from start to finish");
+      // Initialize Ollama Installer (auto-install Ollama if needed)
+      try {
+        const ollamaInstallerModule = await import("./core/ollama-installer.js");
+        const ollamaInstaller = new ollamaInstallerModule.OllamaInstaller(pool, callCouncilMember);
+        // Auto-configure in background (don't block startup)
+        ollamaInstaller.autoConfigure().catch(err => {
+          console.warn('⚠️ Ollama auto-configuration failed:', err.message);
+        });
+        console.log("✅ Ollama Installer initialized - will auto-configure Ollama if possible");
+      } catch (error) {
+        console.warn("⚠️ Ollama Installer not available:", error.message);
+      }
+
+      // Initialize Idea-to-Implementation Pipeline (after taskTracker is available)
+      try {
+        const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
+        const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
+        const taskTracker = new TaskCompletionTracker(pool, callCouncilMember);
+        ideaToImplementationPipeline = new pipelineModule.IdeaToImplementationPipeline(
+          pool,
+          callCouncilMember,
+          selfBuilder,
+          taskTracker
+        );
+        console.log("✅ Idea-to-Implementation Pipeline initialized - system can now implement ideas from start to finish");
       
       // Auto-implement queued ideas every 10 minutes
       setInterval(async () => {

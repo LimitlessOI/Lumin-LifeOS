@@ -42,8 +42,13 @@ export class IdeaToImplementationPipeline {
         pipelineId,
       });
       
+      // Check if implementation succeeded
+      if (!implementation.success) {
+        throw new Error(implementation.error || 'Implementation failed');
+      }
+      
       // Step 5: Verify Completion
-      if (verifyCompletion && implementation.taskId) {
+      if (verifyCompletion && implementation.taskId && this.taskTracker) {
         await this.verifyImplementation(implementation.taskId, plan);
       }
 
@@ -274,6 +279,9 @@ This is part of pipeline ${pipelineId}.`;
       
       const key = process.env.COMMAND_CENTER_KEY || 'MySecretKey2025LifeOS';
       
+      // Use node-fetch or native fetch (Node 18+)
+      const fetch = (await import('node-fetch')).default || globalThis.fetch;
+      
       const response = await fetch(`${baseUrl}/api/v1/system/self-program?key=${key}`, {
         method: 'POST',
         headers: {
@@ -286,6 +294,11 @@ This is part of pipeline ${pipelineId}.`;
           priority: 'high',
         }),
       });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Self-programming request failed: ${response.status} ${errorText}`);
+      }
 
       const result = await response.json();
       
@@ -302,7 +315,11 @@ This is part of pipeline ${pipelineId}.`;
       }
     } catch (error) {
       console.error(`❌ [PIPELINE] Self-programming call failed:`, error.message);
-      throw error;
+      // Don't throw - return error so pipeline can handle it
+      return {
+        success: false,
+        error: error.message,
+      };
     }
   }
 
