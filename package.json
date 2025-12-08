@@ -1,17 +1,20 @@
 ```json
 {
-  "name": "manufacturing-system",
+  "name": "lifeos-predictive-maintenance",
   "version": "1.0.0",
-  "description": "System for managing manufacturing processes.",
+  "description": "Predictive Maintenance Service for LifeOS",
   "main": "index.js",
+  "scripts": {
+    "start": "node services/predictive-maintenance/core-service.js",
+    "test": "jest"
+  },
   "dependencies": {
-    "nanotech-simulator": "^1.0.0",
-    "green-chemistry-lib": "^1.0.0",
-    "regulatory-api-client": "^1.0.0",
-    "environmental-metrics": "^1.0.0",
-    "express": "^4.17.1",
-    "pg": "^8.6.0",
-    "stripe": "^8.0.0"
+    "web3": "^1.6.0",
+    "tensorflow": "^3.9.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "supertest": "^6.2.3"
   }
 }
 ```
