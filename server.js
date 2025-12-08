@@ -3756,27 +3756,7 @@ This is an automatic implementation from the idea queue.`;
             // Fallback: create instruction and let it be handled by regular flow
             // The regular flow will still work, just won't use the pipeline
             console.log('⚠️ [EXECUTION] Idea-to-Implementation Pipeline not available, using regular execution');
-          }
-          
-          // If pipeline not available, continue to regular execution
-          // (The idea will be executed as a regular task)
-            const result = `Idea implemented via self-programming. Files modified: ${selfProgResult.filesModified?.join(', ') || 'none'}. Task ID: ${selfProgResult.taskId || 'N/A'}`;
-            const aiModel = 'self-programming';
-            
-            await pool.query(
-              `UPDATE execution_tasks SET status = 'completed', result = $1, completed_at = now(), ai_model = $3
-               WHERE task_id = $2`,
-              [result, task.id, aiModel]
-            );
-            
-            // Continue with normal flow for tracking
-            this.history.push({ ...task, status: "completed", result, aiModel });
-            this.activeTask = null;
-            broadcastToAll({ type: "task_completed", taskId: task.id, result });
-            setTimeout(() => this.executeNext(), 1000);
-            return; // Exit early, implementation is handled by self-programming
-          } else {
-            throw new Error(selfProgResult?.error || 'Self-programming failed');
+            // Continue to regular execution below
           }
         } catch (error) {
           console.error(`❌ [EXECUTION] Self-programming implementation failed:`, error.message);
