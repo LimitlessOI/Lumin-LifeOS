@@ -356,8 +356,8 @@ export class EnhancedConversationScraper {
     const status = this.scrapingStatus.get(statusId);
     
     try {
-      // Scroll to load all conversations
-      await page.evaluate(() => {
+      // Scroll to load all conversations (use page.evaluate with async function)
+      await page.evaluate(async () => {
         const sidebar = document.querySelector('nav[aria-label*="Chat"], nav[aria-label*="History"]');
         if (sidebar) {
           let lastHeight = sidebar.scrollHeight;
