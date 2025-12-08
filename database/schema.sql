@@ -1,23 +1,17 @@
 ```sql
-CREATE TABLE biodegradable_materials (
+CREATE TABLE VRSafetyCompany (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    composition JSON NOT NULL,
+    address TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE electronics_prototypes (
+CREATE TABLE VRScenario (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    design JSON NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE manufacturing_runs (
-    id SERIAL PRIMARY KEY,
-    prototype_id INT REFERENCES electronics_prototypes(id),
-    status VARCHAR(50) NOT NULL,
-    run_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    results JSON
+    company_id INT NOT NULL,
+    scenario_name VARCHAR(255) NOT NULL,
+    difficulty_level VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES VRSafetyCompany(id) ON DELETE CASCADE
 );
 ```
