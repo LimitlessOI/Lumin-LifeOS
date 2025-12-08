@@ -462,9 +462,17 @@ async function initDatabase() {
       status VARCHAR(20) DEFAULT 'active',
       revenue_generated DECIMAL(15,2) DEFAULT 0,
       tasks_completed INT DEFAULT 0,
+      expected_revenue DECIMAL(15,2) DEFAULT 500,
       deployed_at TIMESTAMPTZ,
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )`);
+    
+    // Add expected_revenue column if it doesn't exist (migration)
+    try {
+      await pool.query(`ALTER TABLE income_drones ADD COLUMN IF NOT EXISTS expected_revenue DECIMAL(15,2) DEFAULT 500`);
+    } catch (e) {
+      // Column might already exist, ignore
+    }
 
     await pool.query(`CREATE TABLE IF NOT EXISTS daily_spend (
       id SERIAL PRIMARY KEY,

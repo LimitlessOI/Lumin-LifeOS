@@ -15,10 +15,13 @@ const execAsync = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import { AutoSchemaFixer } from './auto-schema-fixer.js';
+
 export class LogMonitor {
   constructor(pool, callCouncilMember) {
     this.pool = pool;
     this.callCouncilMember = callCouncilMember;
+    this.schemaFixer = new AutoSchemaFixer(pool, callCouncilMember);
     this.errorPatterns = new Map();
     this.fixHistory = [];
     this.lastLogCheck = null;
@@ -148,6 +151,21 @@ export class LogMonitor {
           return {
             action: 'check_database',
             description: 'Check database connection and configuration',
+          };
+        },
+      }
+    );
+
+    // Database schema errors - column/table does not exist
+    this.errorPatterns.set(
+      /column\s+["'][^"']+["']\s+of\s+relation\s+["'][^"']+["']\s+does\s+not\s+exist|relation\s+["'][^"']+["']\s+does\s+not\s+exist/i,
+      {
+        type: 'schema_error',
+        fix: async (match, fullError) => {
+          return {
+            action: 'fix_schema',
+            error: fullError,
+            description: 'Fix database schema mismatch - add missing column or table',
           };
         },
       }
@@ -383,6 +401,10 @@ export class LogMonitor {
         
         case 'fix_require_import':
           success = await this.fixRequireImport(fix);
+          break;
+        
+        case 'fix_schema':
+          success = await this.fixSchema(fix.error);
           break;
       }
 
@@ -639,6 +661,27 @@ export class LogMonitor {
       return false; // Manual fix needed for now
     } catch (error) {
       console.error(`⚠️ [LOG MONITOR] Fix require import error:`, error.message);
+      return false;
+    }
+  }
+
+  /**
+   * Fix database schema errors
+   */
+  async fixSchema(errorText) {
+    try {
+      console.log(`🔧 [LOG MONITOR] Fixing schema error: ${errorText.substring(0, 100)}`);
+      const result = await this.schemaFixer.detectAndFix(errorText);
+      
+      if (result.fixed) {
+        console.log(`✅ [LOG MONITOR] Schema fixed: ${result.action}`);
+        return true;
+      } else {
+        console.log(`⚠️ [LOG MONITOR] Schema fix failed: ${result.reason || result.error}`);
+        return false;
+      }
+    } catch (error) {
+      console.error(`⚠️ [LOG MONITOR] Schema fix error:`, error.message);
       return false;
     }
   }

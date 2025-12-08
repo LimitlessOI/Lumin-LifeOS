@@ -36,16 +36,20 @@ export class SelfFundingSystem {
    */
   async loadRevenueBalance() {
     try {
-      const result = await this.pool.query(
-        `SELECT 
-          COALESCE(SUM(revenue_generated), 0) as total_revenue,
-          COALESCE(SUM(amount), 0) as total_spent
-         FROM (
-           SELECT revenue_generated FROM income_drones WHERE status = 'active'
-           UNION ALL
-           SELECT amount FROM self_funding_spending WHERE status = 'completed'
-         ) as combined`
+      // Get revenue from income drones
+      const revenueResult = await this.pool.query(
+        `SELECT COALESCE(SUM(revenue_generated), 0) as total_revenue
+         FROM income_drones WHERE status = 'active'`
       );
+      
+      // Get spending from self_funding_spending
+      const spendingResult = await this.pool.query(
+        `SELECT COALESCE(SUM(amount), 0) as total_spent
+         FROM self_funding_spending WHERE status = 'completed'`
+      );
+      
+      const totalRevenue = parseFloat(revenueResult.rows[0]?.total_revenue || 0);
+      const totalSpent = parseFloat(spendingResult.rows[0]?.total_spent || 0);
       
       // Also check ROI tracker
       const roiResult = await this.pool.query(
@@ -56,7 +60,7 @@ export class SelfFundingSystem {
         const roi = roiResult.rows[0];
         this.revenueBalance = parseFloat(roi.daily_revenue || 0) - parseFloat(roi.daily_ai_cost || 0);
       } else {
-        this.revenueBalance = parseFloat(result.rows[0]?.total_revenue || 0) - parseFloat(result.rows[0]?.total_spent || 0);
+        this.revenueBalance = totalRevenue - totalSpent;
       }
     } catch (error) {
       console.warn('⚠️ [SELF-FUNDING] Could not load balance:', error.message);
