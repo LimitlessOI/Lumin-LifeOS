@@ -8,7 +8,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+# Use npm install instead of npm ci since package-lock.json may be out of sync
+RUN npm install --production --no-audit --no-fund
 
 # Copy application files
 COPY . .
