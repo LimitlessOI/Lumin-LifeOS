@@ -474,7 +474,8 @@
           },
           body: JSON.stringify({
             message: text,
-            member: memberEl.value
+            member: memberEl.value,
+            autoImplement: true
           })
         });
 
@@ -493,8 +494,17 @@
             ":\n" +
             (json.error || JSON.stringify(json, null, 2));
         } else {
-          const pretty = JSON.stringify(json, null, 2);
-          responseBox.textContent = pretty;
+          let responseText = json.response || json.message || JSON.stringify(json, null, 2);
+          
+          // Show implementation status if applicable
+          if (json.implementationStarted) {
+            responseText = "🚀 IMPLEMENTATION STARTED!\n\n" + responseText;
+          }
+          
+          responseBox.textContent = responseText;
+          
+          // Reload conversation history after sending message
+          setTimeout(loadConversationHistory, 1000);
         }
       } catch (err) {
         console.error(err);
