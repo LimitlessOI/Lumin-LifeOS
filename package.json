@@ -1,28 +1,28 @@
 ```json
 {
-  "name": "zk-data-marketplace",
+  "name": "supply-chain-project",
   "version": "1.0.0",
+  "description": "A supply chain management system using blockchain, AI, IoT, and AR technologies.",
+  "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node index.js",
     "test": "jest"
   },
   "dependencies": {
-    "snarkjs": "^0.5.0",
-    "circomlib": "^0.0.1",
-    "web3.js": "^1.5.2",
-    "ethers": "^5.5.1",
-    "differential-privacy": "^0.1.0",
-    "tensorflow.js": "^3.8.0",
-    "leveldb": "^5.0.0",
-    "ipfs-http-client": "^50.1.2",
-    "express": "^4.17.1",
-    "express-rate-limit": "^5.2.6",
-    "stripe": "^8.174.0"
+    "snarkjs": "^0.2.0",
+    "circomlib": "^0.0.8",
+    "web3": "^1.6.0",
+    "node-red-contrib-iot": "^0.2.0",
+    "tensorflow": "^3.9.0",
+    "three": "^0.143.0",
+    "ar.js": "^3.3.2",
+    "openzeppelin-contracts": "^4.5.0",
+    "mqtt": "^4.2.8",
+    "redis": "^3.1.2",
+    "bull": "^3.28.1"
   },
   "devDependencies": {
-    "jest": "^27.0.6",
-    "hardhat": "^2.7.0",
-    "puppeteer": "^10.4.0"
+    "jest": "^27.4.7"
   }
 }
 ```
