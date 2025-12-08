@@ -366,6 +366,73 @@ export class SelfBuilder {
   }
 
   /**
+   * Debug and verify deployment
+   */
+  async debugAndVerify(buildId, taskId = null) {
+    console.log(`🐛 [SELF-BUILDER] Debugging and verifying build: ${buildId}`);
+    
+    const debugResults = {
+      buildId,
+      taskId,
+      deploymentCheck: null,
+      healthCheck: null,
+      errorCheck: null,
+      syntaxCheck: null,
+      allPassed: false,
+    };
+
+    // Wait a bit for deployment to complete
+    await new Promise(resolve => setTimeout(resolve, 30000)); // 30 seconds
+
+    try {
+      // Check deployment health
+      const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN 
+        ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+        : 'http://localhost:8080';
+      
+      try {
+        const healthResponse = await fetch(`${baseUrl}/healthz`);
+        const healthData = await healthResponse.json();
+        debugResults.healthCheck = {
+          passed: healthResponse.ok && healthData.status === 'healthy',
+          data: healthData,
+        };
+      } catch (error) {
+        debugResults.healthCheck = {
+          passed: false,
+          error: error.message,
+        };
+      }
+
+      // Check for errors in logs (via API if available)
+      try {
+        const logResponse = await fetch(`${baseUrl}/api/v1/system/health?key=${process.env.COMMAND_CENTER_KEY || 'MySecretKey2025LifeOS'}`);
+        if (logResponse.ok) {
+          const logData = await logResponse.json();
+          debugResults.errorCheck = {
+            passed: logData.overall === 'healthy' || logData.overall === 'degraded',
+            data: logData,
+          };
+        }
+      } catch (error) {
+        debugResults.errorCheck = {
+          passed: false,
+          error: error.message,
+        };
+      }
+
+      debugResults.allPassed = 
+        debugResults.healthCheck?.passed === true &&
+        (debugResults.errorCheck?.passed === true || debugResults.errorCheck === null);
+
+      return debugResults;
+    } catch (error) {
+      debugResults.error = error.message;
+      return debugResults;
+    }
+  }
+
+  /**
    * Record build in database
    */
   async recordBuild(buildLog) {

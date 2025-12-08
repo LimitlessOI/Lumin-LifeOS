@@ -4280,7 +4280,6 @@ async function initializeTwoTierSystem() {
           enhancedIncomeDrone: incomeDroneSystem,
           businessCenter,
           gameGenerator,
-          selfBuilder,
           businessDuplication,
           codeServices,
           makeComGenerator,
@@ -4292,6 +4291,10 @@ async function initializeTwoTierSystem() {
           enhancedConversationScraper,
           apiCostSavingsRevenue,
         };
+        // Add selfBuilder to allSystems if it exists
+        if (selfBuilder) {
+          allSystems.selfBuilder = selfBuilder;
+        }
         systemHealthChecker = new healthModule.SystemHealthChecker(pool, allSystems);
         console.log("✅ System Health Checker initialized");
       } catch (error) {
@@ -6079,6 +6082,53 @@ app.get("/api/v1/system/build-history", requireKey, async (req, res) => {
   }
 });
 
+// ==================== TASK COMPLETION TRACKER ENDPOINTS ====================
+app.get("/api/v1/tasks/:taskId", requireKey, async (req, res) => {
+  try {
+    const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
+    const tracker = new TaskCompletionTracker(pool, callCouncilMember);
+    const task = await tracker.getTaskStatus(req.params.taskId);
+    
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+    
+    res.json({ ok: true, task });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/tasks", requireKey, async (req, res) => {
+  try {
+    const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
+    const tracker = new TaskCompletionTracker(pool, callCouncilMember);
+    const activeTasks = await tracker.getActiveTasks();
+    
+    res.json({ ok: true, count: activeTasks.length, tasks: activeTasks });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/tasks/:taskId/verify", requireKey, async (req, res) => {
+  try {
+    const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
+    const tracker = new TaskCompletionTracker(pool, callCouncilMember);
+    const { checks } = req.body;
+    
+    if (!checks || !Array.isArray(checks)) {
+      return res.status(400).json({ error: "checks array required" });
+    }
+    
+    const verification = await tracker.verifyCompletion(req.params.taskId, checks);
+    
+    res.json({ ok: true, ...verification });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // ==================== SYSTEM HEALTH CHECK ENDPOINT ====================
 app.get("/api/v1/system/health", async (req, res) => {
   try {
@@ -7326,9 +7376,29 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
     }
 
     if (successfulChanges.length > 0) {
+      // Create task tracking for this self-programming session
+      const taskId = `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      let taskTracker = null;
+      
+      try {
+        const { TaskCompletionTracker } = await import("./core/task-completion-tracker.js");
+        taskTracker = new TaskCompletionTracker(pool, callCouncilMember);
+        await taskTracker.startTask(
+          taskId,
+          'self_programming',
+          instruction,
+          `Successfully implement: ${instruction}`
+        );
+        await taskTracker.addStep(taskId, 'code_generation', 'completed', { files: successfulChanges });
+      } catch (error) {
+        console.warn('⚠️ [SELF-PROGRAM] Task tracker not available:', error.message);
+      }
+
       // Auto-build after code changes
       if (selfBuilder) {
         console.log('🔨 [SELF-PROGRAM] Auto-building after code changes...');
+        if (taskTracker) await taskTracker.addStep(taskId, 'build', 'running');
+        
         try {
           const buildResult = await selfBuilder.build({
             installDependencies: true,
@@ -7342,15 +7412,54 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
           
           if (buildResult.success) {
             console.log('✅ [SELF-PROGRAM] Build succeeded');
+            if (taskTracker) await taskTracker.addStep(taskId, 'build', 'completed', buildResult);
           } else {
             console.warn('⚠️ [SELF-PROGRAM] Build completed with errors:', buildResult.errors);
+            if (taskTracker) await taskTracker.addStep(taskId, 'build', 'completed_with_errors', buildResult);
           }
         } catch (buildError) {
           console.error('❌ [SELF-PROGRAM] Build failed:', buildError.message);
+          if (taskTracker) await taskTracker.addStep(taskId, 'build', 'failed', { error: buildError.message });
         }
       }
       
       await triggerDeployment(successfulChanges);
+      if (taskTracker) await taskTracker.addStep(taskId, 'deployment', 'triggered');
+      
+      // Debug and verify after deployment
+      if (taskTracker && selfBuilder) {
+        console.log('🐛 [SELF-PROGRAM] Starting debug and verification...');
+        if (taskTracker) await taskTracker.addStep(taskId, 'verification', 'running');
+        
+        setTimeout(async () => {
+          try {
+            const buildId = buildResult?.id || `build_${Date.now()}`;
+            const debugResult = await selfBuilder.debugAndVerify(buildId, taskId);
+            
+            if (taskTracker) {
+              await taskTracker.addStep(taskId, 'verification', debugResult.allPassed ? 'completed' : 'failed', debugResult);
+              
+              // Verify task completion
+              const verificationChecks = [
+                { type: 'deployment_successful', name: 'Deployment Health' },
+                { type: 'no_errors_in_logs', name: 'No Errors in Logs', timeframe: 300 },
+                { type: 'ai_verification', name: 'AI Verification', prompt: `Verify that the task "${instruction}" was completed successfully. Check if all changes are working as expected.` },
+              ];
+              
+              const verification = await taskTracker.verifyCompletion(taskId, verificationChecks);
+              
+              if (verification.verified) {
+                console.log('✅ [SELF-PROGRAM] Task completed and verified successfully!');
+              } else {
+                console.warn('⚠️ [SELF-PROGRAM] Task completed but verification found issues:', verification.results);
+              }
+            }
+          } catch (debugError) {
+            console.error('❌ [SELF-PROGRAM] Debug/verification failed:', debugError.message);
+            if (taskTracker) await taskTracker.addStep(taskId, 'verification', 'failed', { error: debugError.message });
+          }
+        }, 60000); // Wait 1 minute for deployment to complete
+      }
       
       // After deployment/upgrade, check logs and auto-fix
       if (postUpgradeChecker) {
@@ -7374,6 +7483,10 @@ Now write COMPLETE, WORKING code. ENSURE ALL CODE IS PURE JAVASCRIPT/NODE.JS AND
       blindSpotsDetected: blindSpots.length,
       snapshotId,
       results: results,
+      taskId: taskTracker ? taskId : null,
+      message: taskTracker 
+        ? `Task ${taskId} created. System will build, deploy, debug, and verify completion automatically.`
+        : 'Changes applied. Build and deployment triggered.',
     });
   } catch (error) {
     console.error("Self-programming error:", error);
