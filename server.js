@@ -501,6 +501,8 @@ async function initDatabase() {
       drone_type VARCHAR(50),
       status VARCHAR(20) DEFAULT 'active',
       revenue_generated DECIMAL(15,2) DEFAULT 0,
+      actual_revenue DECIMAL(15,2) DEFAULT 0,
+      projected_revenue DECIMAL(15,2) DEFAULT 0,
       tasks_completed INT DEFAULT 0,
       expected_revenue DECIMAL(15,2) DEFAULT 500,
       deployed_at TIMESTAMPTZ,
@@ -512,6 +514,14 @@ async function initDatabase() {
       await pool.query(`ALTER TABLE income_drones ADD COLUMN IF NOT EXISTS expected_revenue DECIMAL(15,2) DEFAULT 500`);
     } catch (e) {
       // Column might already exist, ignore
+    }
+    
+    // Add actual_revenue and projected_revenue columns if they don't exist (migration)
+    try {
+      await pool.query(`ALTER TABLE income_drones ADD COLUMN IF NOT EXISTS actual_revenue DECIMAL(15,2) DEFAULT 0`);
+      await pool.query(`ALTER TABLE income_drones ADD COLUMN IF NOT EXISTS projected_revenue DECIMAL(15,2) DEFAULT 0`);
+    } catch (e) {
+      // Columns might already exist, ignore
     }
 
     await pool.query(`CREATE TABLE IF NOT EXISTS daily_spend (
@@ -1043,6 +1053,15 @@ async function initDatabase() {
     )`);
 
     // Web Scrapes
+    // AI Platform Credentials (for conversation scraping)
+    await pool.query(`CREATE TABLE IF NOT EXISTS ai_platform_credentials (
+      id SERIAL PRIMARY KEY,
+      provider VARCHAR(50) UNIQUE NOT NULL,
+      encrypted_credentials TEXT NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
     await pool.query(`CREATE TABLE IF NOT EXISTS web_scrapes (
       id SERIAL PRIMARY KEY,
       scrape_id TEXT UNIQUE NOT NULL,
@@ -4442,15 +4461,66 @@ async function initializeTwoTierSystem() {
       console.warn("⚠️ AI account bot not available:", error.message);
     }
 
-    // Initialize conversation extractor bot
-    try {
-      const extractorModule = await import("./core/conversation-extractor-bot.js");
-      const ConversationExtractorBot = extractorModule.ConversationExtractorBot;
-      conversationExtractor = new ConversationExtractorBot(pool, knowledgeBase, callCouncilMember);
-      console.log("✅ Conversation Extractor Bot initialized");
-    } catch (error) {
-      console.warn("⚠️ Conversation extractor not available:", error.message);
-    }
+      // Initialize conversation extractor bot
+      try {
+        const extractorModule = await import("./core/conversation-extractor-bot.js");
+        const ConversationExtractorBot = extractorModule.ConversationExtractorBot;
+        conversationExtractor = new ConversationExtractorBot(pool, knowledgeBase, callCouncilMember);
+        console.log("✅ Conversation Extractor Bot initialized");
+        
+        // Auto-start text scraping bot (scrapes and organizes text automatically)
+        // Check for stored credentials and start scraping if available
+        setTimeout(async () => {
+          try {
+            if (enhancedConversationScraper) {
+              const credentials = await enhancedConversationScraper.listStoredCredentials();
+              if (credentials && credentials.length > 0) {
+                console.log(`🤖 [EXTRACTOR] Found ${credentials.length} stored credential(s), starting auto-scraping...`);
+                
+                // Start scraping for each provider with credentials
+                for (const cred of credentials) {
+                  try {
+                    console.log(`🤖 [EXTRACTOR] Starting auto-scrape for ${cred.provider}...`);
+                    const result = await enhancedConversationScraper.scrapeAllConversations(cred.provider);
+                    if (result.success) {
+                      console.log(`✅ [EXTRACTOR] Auto-scraped ${result.conversations?.length || 0} conversations from ${cred.provider}`);
+                    }
+                  } catch (scrapeError) {
+                    console.warn(`⚠️ [EXTRACTOR] Auto-scrape failed for ${cred.provider}:`, scrapeError.message);
+                  }
+                }
+              } else {
+                console.log('📋 [EXTRACTOR] No stored credentials found. Use /api/v1/conversations/store-credentials to add credentials for auto-scraping.');
+              }
+            }
+          } catch (error) {
+            console.warn('⚠️ [EXTRACTOR] Auto-start check failed:', error.message);
+          }
+        }, 60000); // Start after 1 minute (give system time to fully initialize)
+        
+        // Also set up periodic scraping (every 6 hours)
+        setInterval(async () => {
+          try {
+            if (enhancedConversationScraper) {
+              const credentials = await enhancedConversationScraper.listStoredCredentials();
+              if (credentials && credentials.length > 0) {
+                console.log(`🤖 [EXTRACTOR] Periodic scrape starting...`);
+                for (const cred of credentials) {
+                  try {
+                    await enhancedConversationScraper.scrapeAllConversations(cred.provider);
+                  } catch (error) {
+                    console.warn(`⚠️ [EXTRACTOR] Periodic scrape failed for ${cred.provider}:`, error.message);
+                  }
+                }
+              }
+            }
+          } catch (error) {
+            console.warn('⚠️ [EXTRACTOR] Periodic scrape error:', error.message);
+          }
+        }, 6 * 60 * 60 * 1000); // Every 6 hours
+      } catch (error) {
+        console.warn("⚠️ Conversation extractor not available:", error.message);
+      }
 
     // Initialize task improvement reporter (AI employees report improvements)
     try {
@@ -4640,22 +4710,41 @@ class IncomeDroneSystem {
     }
   }
 
-  async recordRevenue(droneId, amount) {
+  async recordRevenue(droneId, amount, isActual = false) {
     try {
-      await pool.query(
-        `UPDATE income_drones SET revenue_generated = revenue_generated + $1, tasks_completed = tasks_completed + 1, updated_at = now()
-         WHERE drone_id = $2`,
-        [amount, droneId]
-      );
+      if (isActual) {
+        // ACTUAL revenue - real money received
+        await pool.query(
+          `UPDATE income_drones 
+           SET revenue_generated = revenue_generated + $1,
+               actual_revenue = actual_revenue + $1,
+               tasks_completed = tasks_completed + 1, 
+               updated_at = now()
+           WHERE drone_id = $2`,
+          [amount, droneId]
+        );
+        await updateROI(amount, 0, 0);
+        broadcastToAll({ type: "revenue_generated", droneId, amount, isActual: true });
+      } else {
+        // PROJECTED revenue - estimated, not real money yet
+        await pool.query(
+          `UPDATE income_drones 
+           SET projected_revenue = projected_revenue + $1,
+               tasks_completed = tasks_completed + 1, 
+               updated_at = now()
+           WHERE drone_id = $2`,
+          [amount, droneId]
+        );
+        broadcastToAll({ type: "revenue_projected", droneId, amount, isActual: false });
+      }
 
       const drone = this.activeDrones.get(droneId);
       if (drone) {
-        drone.revenue += amount;
+        if (isActual) {
+          drone.revenue += amount;
+        }
         drone.tasks++;
       }
-
-      await updateROI(amount, 0, 0);
-      broadcastToAll({ type: "revenue_generated", droneId, amount });
     } catch (error) {
       console.error(`Revenue update error: ${error.message}`);
     }
@@ -4664,19 +4753,27 @@ class IncomeDroneSystem {
   async getStatus() {
     try {
       const result = await pool.query(
-        `SELECT drone_id, drone_type, status, revenue_generated, tasks_completed
+        `SELECT drone_id, drone_type, status, revenue_generated, actual_revenue, projected_revenue, tasks_completed
          FROM income_drones WHERE status = 'active' ORDER BY deployed_at DESC`
+      );
+      const totalActual = result.rows.reduce(
+        (sum, d) => sum + parseFloat(d.actual_revenue || 0),
+        0
+      );
+      const totalProjected = result.rows.reduce(
+        (sum, d) => sum + parseFloat(d.projected_revenue || 0),
+        0
       );
       return {
         active: result.rows.length,
         drones: result.rows,
-        total_revenue: result.rows.reduce(
-          (sum, d) => sum + parseFloat(d.revenue_generated || 0),
-          0
-        ),
+        total_revenue: totalActual, // Only actual revenue
+        actual_revenue: totalActual,
+        projected_revenue: totalProjected,
+        revenue_generated: totalActual, // Backward compatibility
       };
     } catch (error) {
-      return { active: 0, drones: [], total_revenue: 0 };
+      return { active: 0, drones: [], total_revenue: 0, actual_revenue: 0, projected_revenue: 0 };
     }
   }
 }
@@ -4801,7 +4898,7 @@ async function recordRevenueEvent({
   );
 
   if (droneId) {
-    await incomeDroneSystem.recordRevenue(droneId, cleanAmount);
+    await incomeDroneSystem.recordRevenue(droneId, cleanAmount, true); // ACTUAL revenue - real money
   } else {
     updateROI(cleanAmount, 0, 0);
   }

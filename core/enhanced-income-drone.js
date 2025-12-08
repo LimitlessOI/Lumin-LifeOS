@@ -172,7 +172,7 @@ export class EnhancedIncomeDrone {
           const estimatedRevenue = parseFloat(opp.expectedRevenue || opp.expected_revenue || 50);
           const conservativeRevenue = estimatedRevenue * 0.05; // 5% success rate
           
-          await this.recordRevenue(droneId, conservativeRevenue);
+          await this.recordRevenue(droneId, conservativeRevenue, false); // PROJECTED revenue, not actual
           
           console.log(`   💰 Found: ${opp.name || opp.product || 'Opportunity'} - Est: $${conservativeRevenue.toFixed(2)}/month`);
         } catch (dbError) {
@@ -253,7 +253,7 @@ export class EnhancedIncomeDrone {
           const estimatedRevenue = parseFloat(idea.expectedRevenue || idea.expected_revenue || 30);
           const conservativeRevenue = estimatedRevenue * 0.15; // 15% success rate
           
-          await this.recordRevenue(droneId, conservativeRevenue);
+          await this.recordRevenue(droneId, conservativeRevenue, false); // PROJECTED revenue, not actual
           
           console.log(`   📝 Content: ${idea.title || idea.topic || 'Idea'} - Est: $${conservativeRevenue.toFixed(2)}/month`);
         } catch (dbError) {
@@ -301,7 +301,7 @@ export class EnhancedIncomeDrone {
         );
 
         const estimatedRevenue = opp.dealValue || 1000;
-        await this.recordRevenue(droneId, estimatedRevenue * 0.05); // 5% conversion
+        await this.recordRevenue(droneId, estimatedRevenue * 0.05, false); // PROJECTED revenue (5% conversion estimate)
       }
 
       console.log(`✅ [OUTREACH DRONE] ${droneId} found ${opportunities.length} opportunities`);
@@ -347,7 +347,7 @@ export class EnhancedIncomeDrone {
         );
 
         const estimatedRevenue = (product.price || 50) * (product.expectedSales || 10);
-        await this.recordRevenue(droneId, estimatedRevenue * 0.3); // 30% success rate
+        await this.recordRevenue(droneId, estimatedRevenue * 0.3, false); // PROJECTED revenue (30% success estimate)
       }
 
       console.log(`✅ [PRODUCT DRONE] ${droneId} generated ${products.length} products`);
@@ -409,7 +409,7 @@ Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
           const estimatedRevenue = parseFloat(service.revenuePerMonth || service.monthlyRevenue || 2000);
           const conservativeRevenue = estimatedRevenue * 0.15;
           
-          await this.recordRevenue(droneId, conservativeRevenue);
+          await this.recordRevenue(droneId, conservativeRevenue, false); // PROJECTED revenue, not actual
           
           console.log(`   💰 API Cost Savings: ${service.name || service.service || 'Opportunity'} - Est: $${conservativeRevenue.toFixed(2)}/month`);
         } catch (dbError) {
@@ -457,7 +457,7 @@ Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
           );
 
           const estimatedRevenue = (service.price || 500) * (service.expectedClients || 2);
-          await this.recordRevenue(droneId, estimatedRevenue * 0.15);
+          await this.recordRevenue(droneId, estimatedRevenue * 0.15, false); // PROJECTED revenue
         } catch (dbError) {
           console.error(`   ❌ Error storing service opportunity:`, dbError.message);
         }
@@ -471,35 +471,53 @@ Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
 
   /**
    * Record revenue for a drone
+   * @param {string} droneId - The drone ID
+   * @param {number} amount - The revenue amount
+   * @param {boolean} isActual - true for actual revenue, false for projected/estimated
    */
-  async recordRevenue(droneId, amount) {
+  async recordRevenue(droneId, amount, isActual = false) {
     try {
-      await this.pool.query(
-        `UPDATE income_drones 
-         SET revenue_generated = revenue_generated + $1, 
-             tasks_completed = tasks_completed + 1, 
-             updated_at = NOW()
-         WHERE drone_id = $2`,
-        [amount, droneId]
-      );
+      if (isActual) {
+        // ACTUAL revenue - real money received
+        await this.pool.query(
+          `UPDATE income_drones 
+           SET revenue_generated = revenue_generated + $1,
+               actual_revenue = actual_revenue + $1,
+               tasks_completed = tasks_completed + 1, 
+               updated_at = NOW()
+           WHERE drone_id = $2`,
+          [amount, droneId]
+        );
 
-      const drone = this.activeDrones.get(droneId);
-      if (drone) {
-        drone.revenue += amount;
-        drone.tasks++;
-      }
-
-      // Also update ROI tracker (if available)
-      try {
-        // Try to call updateROI if it exists in global scope
-        if (typeof updateROI === 'function') {
-          await updateROI(amount, 0, 0);
+        const drone = this.activeDrones.get(droneId);
+        if (drone) {
+          drone.revenue += amount;
+          drone.tasks++;
         }
-      } catch (roiError) {
-        // ROI update is optional, don't fail if it doesn't exist
-      }
 
-      console.log(`💰 [DRONE] ${droneId} recorded $${amount.toFixed(2)} revenue`);
+        // Update ROI tracker for actual revenue only
+        try {
+          if (typeof updateROI === 'function') {
+            await updateROI(amount, 0, 0);
+          }
+        } catch (roiError) {
+          // ROI update is optional
+        }
+
+        console.log(`💰 [DRONE] ${droneId} recorded $${amount.toFixed(2)} ACTUAL revenue`);
+      } else {
+        // PROJECTED revenue - estimated/expected, not real money yet
+        await this.pool.query(
+          `UPDATE income_drones 
+           SET projected_revenue = projected_revenue + $1,
+               tasks_completed = tasks_completed + 1, 
+               updated_at = NOW()
+           WHERE drone_id = $2`,
+          [amount, droneId]
+        );
+
+        console.log(`📊 [DRONE] ${droneId} recorded $${amount.toFixed(2)} PROJECTED revenue (estimated, not actual)`);
+      }
     } catch (error) {
       console.error(`❌ [DRONE] Revenue recording error:`, error.message);
     }
@@ -511,19 +529,28 @@ Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
   async getStatus() {
     try {
       const result = await this.pool.query(
-        `SELECT drone_id, drone_type, status, revenue_generated, tasks_completed, expected_revenue
+        `SELECT drone_id, drone_type, status, revenue_generated, actual_revenue, projected_revenue, tasks_completed, expected_revenue
          FROM income_drones 
          WHERE status = 'active' 
          ORDER BY deployed_at DESC`
       );
 
+      const totalActual = result.rows.reduce(
+        (sum, d) => sum + parseFloat(d.actual_revenue || 0),
+        0
+      );
+      const totalProjected = result.rows.reduce(
+        (sum, d) => sum + parseFloat(d.projected_revenue || 0),
+        0
+      );
+      
       return {
         active: result.rows.length,
         drones: result.rows,
-        total_revenue: result.rows.reduce(
-          (sum, d) => sum + parseFloat(d.revenue_generated || 0),
-          0
-        ),
+        total_revenue: totalActual, // Only actual revenue
+        actual_revenue: totalActual,
+        projected_revenue: totalProjected,
+        revenue_generated: totalActual, // Backward compatibility
       };
     } catch (error) {
       return { active: 0, drones: [], total_revenue: 0 };
