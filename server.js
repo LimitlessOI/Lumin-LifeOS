@@ -1165,6 +1165,8 @@ async function getCachedResponse(prompt, member) {
     compressionMetrics.cache_hits = (compressionMetrics.cache_hits || 0) + 1;
     return cached.response;
   }
+  // Track cache miss
+  compressionMetrics.cache_misses = (compressionMetrics.cache_misses || 0) + 1;
   return null;
 }
 
