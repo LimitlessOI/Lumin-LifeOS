@@ -1,0 +1,10 @@
+```yaml
+drones:
+  default_altitude: 100
+  max_speed: 50
+  communication_frequency: 2.4GHz
+  default_sensors:
+    - camera
+    - lidar
+    - gps
+```
