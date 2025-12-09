@@ -1,26 +1,29 @@
-```sql
--- Table for storing teleportation sessions
-CREATE TABLE teleportation_sessions (
+CREATE TABLE neural_sync_sessions (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    session_start TIMESTAMP NOT NULL,
-    session_end TIMESTAMP,
-    environment_id INT,
-    status VARCHAR(50) NOT NULL
+    session_data JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for caching environment data
-CREATE TABLE environment_cache (
+CREATE TABLE neural_sync_environments (
     id SERIAL PRIMARY KEY,
-    environment_id INT NOT NULL,
-    data JSONB NOT NULL
+    environment_name VARCHAR(255),
+    environment_data JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for storing wearable device profiles
-CREATE TABLE wearable_profiles (
+CREATE TABLE neural_sync_wearables (
+    id SERIAL PRIMARY KEY,
+    device_id VARCHAR(255),
+    user_id INT NOT NULL,
+    status VARCHAR(50),
+    last_synced TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE neural_sync_licenses (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    device_type VARCHAR(50) NOT NULL,
-    settings JSONB NOT NULL
+    license_key VARCHAR(255) UNIQUE,
+    subscription_tier VARCHAR(50),
+    valid_until DATE
 );
-```
