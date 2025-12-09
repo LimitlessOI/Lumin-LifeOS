@@ -1,31 +1,33 @@
 ```sql
-CREATE TABLE smart_city_devices (
+CREATE TABLE candidates (
     id SERIAL PRIMARY KEY,
-    device_name VARCHAR(255) NOT NULL,
-    location VARCHAR(255),
-    status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL
 );
 
-CREATE TABLE resource_metrics (
+CREATE TABLE assessments (
     id SERIAL PRIMARY KEY,
-    device_id INT REFERENCES smart_city_devices(id),
-    metric_type VARCHAR(255),
-    value NUMERIC,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    candidate_id INT REFERENCES candidates(id),
+    score DECIMAL(5,2),
+    completed_at TIMESTAMP
 );
 
-CREATE TABLE privacy_consents (
+CREATE TABLE bias_patterns (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    consent_granted BOOLEAN NOT NULL,
-    granted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    pattern_name VARCHAR(100),
+    description TEXT
 );
 
-CREATE TABLE ai_predictions (
+CREATE TABLE hiring_outcomes (
     id SERIAL PRIMARY KEY,
-    model_name VARCHAR(255),
-    prediction JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    candidate_id INT REFERENCES candidates(id),
+    outcome VARCHAR(50),
+    decision_date TIMESTAMP
+);
+
+CREATE TABLE role_simulations (
+    id SERIAL PRIMARY KEY,
+    role_name VARCHAR(100),
+    simulation_data JSONB
 );
 ```
