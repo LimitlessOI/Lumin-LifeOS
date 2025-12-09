@@ -4309,6 +4309,23 @@ async function initializeTwoTierSystem() {
         } catch (deployError) {
           console.error('❌ [INCOME] Error deploying drones:', deployError.message);
         }
+
+        // Initialize Opportunity Executor (actually implements opportunities to generate REAL revenue)
+        let opportunityExecutor = null;
+        try {
+          const executorModule = await import("./core/opportunity-executor.js");
+          opportunityExecutor = new executorModule.OpportunityExecutor(pool, callCouncilMember, incomeDroneSystem);
+          await opportunityExecutor.start();
+          console.log("✅ Opportunity Executor initialized - will actually implement opportunities to generate REAL revenue");
+          
+          // Connect executor to drone system so drones can use it
+          if (incomeDroneSystem && incomeDroneSystem.setOpportunityExecutor) {
+            incomeDroneSystem.setOpportunityExecutor(opportunityExecutor);
+            console.log("✅ Connected Opportunity Executor to Income Drone System - drones will implement opportunities when any exist");
+          }
+        } catch (error) {
+          console.warn("⚠️ Opportunity Executor not available:", error.message);
+        }
       } catch (error) {
         console.warn("⚠️ Enhanced Drone System not available, using basic:", error.message);
       }
