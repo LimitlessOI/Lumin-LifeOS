@@ -1,0 +1,7 @@
+```json
+{
+    "baseUrl": "http://localhost:8080",
+    "integrationFolder": "tests/e2e",
+    "testFiles": "**/*.spec.js"
+}
+```
