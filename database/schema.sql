@@ -1,30 +1,29 @@
 ```sql
-CREATE TABLE climate_data_streams (
+-- Create table for workspace sessions
+CREATE TABLE workspace_sessions (
     id SERIAL PRIMARY KEY,
-    stream_name VARCHAR(255) NOT NULL,
-    source_type VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    session_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    session_end TIMESTAMP,
+    status VARCHAR(20),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE climate_metrics (
+-- Create table for user preferences
+CREATE TABLE user_preferences (
     id SERIAL PRIMARY KEY,
-    stream_id INT REFERENCES climate_data_streams(id),
-    metric_name VARCHAR(255) NOT NULL,
-    value FLOAT NOT NULL,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    preference_key VARCHAR(50),
+    preference_value TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE policy_recommendations (
+-- Create table for spatial maps
+CREATE TABLE spatial_maps (
     id SERIAL PRIMARY KEY,
-    recommendation_text TEXT NOT NULL,
-    effectiveness_score FLOAT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE simulation_results (
-    id SERIAL PRIMARY KEY,
-    policy_id INT REFERENCES policy_recommendations(id),
-    result_data JSON NOT NULL,
-    simulation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    map_data JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 ```
