@@ -1,15 +1,23 @@
 ```json
 {
-  "name": "daro-system",
+  "name": "energy-grid-system",
   "version": "1.0.0",
+  "description": "Energy grid management and trading system using blockchain and AI.",
   "main": "index.js",
-  "dependencies": {
-    "@cosmjs/tendermint-rpc": "^0.24.0",
-    "@kubernetes/client-node": "^0.14.3",
-    "express": "^4.17.1"
-  },
   "scripts": {
     "start": "node index.js"
+  },
+  "dependencies": {
+    "snarkjs": "^0.6.11",
+    "circomlib": "^0.0.7",
+    "web3": "^1.5.2",
+    "energy-web-client": "^0.0.1",
+    "node-red-contrib-iot": "^2.0.0",
+    "tensorflow": "^3.8.0",
+    "ipfs-http-client": "^56.0.0",
+    "cross-fetch": "^3.1.4",
+    "dotenv": "^16.0.3",
+    "pg": "^8.7.1"
   }
 }
 ```
