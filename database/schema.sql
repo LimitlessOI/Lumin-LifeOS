@@ -1,48 +1,28 @@
--- Create sentinel_users table
-CREATE TABLE IF NOT EXISTS sentinel_users (
-    id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+```sql
+CREATE TABLE energy_mesh_nodes (
+    node_id SERIAL PRIMARY KEY,
+    node_name VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
+    status VARCHAR(50) NOT NULL
 );
 
--- Create sentinel_workspaces table
-CREATE TABLE IF NOT EXISTS sentinel_workspaces (
-    id SERIAL PRIMARY KEY,
-    workspace_id VARCHAR(255) UNIQUE NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    user_id INT REFERENCES sentinel_users(id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Create sentinel_wellness_events table
-CREATE TABLE IF NOT EXISTS sentinel_wellness_events (
-    id SERIAL PRIMARY KEY,
-    event_type VARCHAR(50) NOT NULL,
-    event_data JSONB NOT NULL,
-    user_id INT REFERENCES sentinel_users(id),
+CREATE TABLE energy_transactions (
+    transaction_id SERIAL PRIMARY KEY,
+    node_id INTEGER REFERENCES energy_mesh_nodes(node_id),
+    amount DECIMAL(10, 2) NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create sentinel_challenges table
-CREATE TABLE IF NOT EXISTS sentinel_challenges (
-    id SERIAL PRIMARY KEY,
-    challenge_name VARCHAR(255) NOT NULL,
-    description TEXT,
-    user_id INT REFERENCES sentinel_users(id),
-    status VARCHAR(50) DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE energy_predictions (
+    prediction_id SERIAL PRIMARY KEY,
+    node_id INTEGER REFERENCES energy_mesh_nodes(node_id),
+    predicted_value DECIMAL(10, 2) NOT NULL,
+    prediction_time TIMESTAMP NOT NULL
 );
 
--- Create sentinel_integrations table
-CREATE TABLE IF NOT EXISTS sentinel_integrations (
-    id SERIAL PRIMARY KEY,
-    integration_name VARCHAR(255) NOT NULL,
-    user_id INT REFERENCES sentinel_users(id),
-    config JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE regulatory_profiles (
+    profile_id SERIAL PRIMARY KEY,
+    region VARCHAR(255) NOT NULL,
+    compliance_rules JSONB NOT NULL
 );
+```
