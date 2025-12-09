@@ -1,29 +1,32 @@
 ```sql
--- Create table for workspace sessions
-CREATE TABLE workspace_sessions (
+CREATE TABLE vr_workspaces (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    session_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    session_end TIMESTAMP,
-    status VARCHAR(20),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    name VARCHAR(255) NOT NULL,
+    owner_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for user preferences
-CREATE TABLE user_preferences (
+CREATE TABLE vr_sessions (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    preference_key VARCHAR(50),
-    preference_value TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    workspace_id INT NOT NULL,
+    host_id INT NOT NULL,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    FOREIGN KEY (workspace_id) REFERENCES vr_workspaces(id)
 );
 
--- Create table for spatial maps
-CREATE TABLE spatial_maps (
+CREATE TABLE vr_assets (
+    id SERIAL PRIMARY KEY,
+    workspace_id INT NOT NULL,
+    asset_data JSONB NOT NULL,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (workspace_id) REFERENCES vr_workspaces(id)
+);
+
+CREATE TABLE ai_avatars (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    map_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    avatar_data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
