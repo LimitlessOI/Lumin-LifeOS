@@ -1,53 +1,27 @@
+```json
 {
-  "name": "lumin-lifeos",
-  "version": "27.0.0",
-  "description": "Unified Command Center - Complete AI Orchestration System",
-  "type": "module",
-  "main": "server.js",
+  "name": "supplychain-system",
+  "version": "1.0.0",
+  "description": "A comprehensive supply chain system using blockchain, AI, and other technologies.",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "test": "node test.js"
+    "start": "node src/index.js",
+    "test": "mocha"
   },
   "dependencies": {
-    "axios": "^1.6.2",
-    "body-parser": "^1.20.2",
-    "dayjs": "^1.11.19",
-    "dotenv": "^17.2.3",
-    "express": "^4.22.1",
-    "pg": "^8.16.3",
-    "ws": "^8.18.3",
-    "stripe": "^14.21.0",
-    "twilio": "^4.20.0",
-    "puppeteer": "^24.15.0"
+    "fabric-network": "^2.2.0",
+    "pysyft": "^0.2.9",
+    "zokrates-js": "^0.7.4",
+    "web3": "^1.3.0",
+    "express": "^4.17.1",
+    "body-parser": "^1.19.0"
   },
-  "engines": {
-    "node": ">=18.0.0"
+  "devDependencies": {
+    "mocha": "^8.3.2",
+    "chai": "^4.3.4",
+    "sinon": "^10.0.0"
   },
-  "keywords": [
-    "ai",
-    "orchestration",
-    "websocket",
-    "postgresql",
-    "automation",
-    "memory",
-    "council",
-    "financial",
-    "realestate",
-    "revenue"
-  ],
-  "author": "Adam Hopkins @ LimitlessOI",
-  "license": "MIT",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LimitlessOI/Lumin-LifeOS.git"
-  },
-  "bugs": {
-    "url": "https://github.com/LimitlessOI/Lumin-LifeOS/issues"
-  },
-  "homepage": "https://github.com/LimitlessOI/Lumin-LifeOS#readme"
+  "author": "AI Council",
+  "license": "ISC"
 }
+```
