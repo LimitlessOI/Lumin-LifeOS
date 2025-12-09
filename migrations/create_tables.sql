@@ -1,30 +1,27 @@
-```sql
-CREATE TABLE smart_materials (
+CREATE TABLE vr_environments (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    specifications JSONB NOT NULL,
-    performance_data JSONB,
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE material_tests (
+CREATE TABLE vr_sessions (
     id SERIAL PRIMARY KEY,
-    material_id INT REFERENCES smart_materials(id),
-    test_results JSONB NOT NULL,
-    conducted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    environment_id INT REFERENCES vr_environments(id),
+    user_id INT NOT NULL,
+    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end_time TIMESTAMP
 );
 
-CREATE TABLE manufacturing_partners (
+CREATE TABLE avatar_profiles (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    api_endpoint VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    avatar_data JSONB NOT NULL
 );
 
-CREATE TABLE client_products (
+CREATE TABLE collaboration_artifacts (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    material_id INT REFERENCES smart_materials(id),
+    session_id INT REFERENCES vr_sessions(id),
+    artifact_data JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
