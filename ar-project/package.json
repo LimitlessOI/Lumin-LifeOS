@@ -1,0 +1,23 @@
+```json
+{
+  "name": "ar-project",
+  "version": "1.0.0",
+  "description": "An AR application with cross-platform support",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "expo": "^48.0.0",
+    "expo-three": "^6.0.0",
+    "three": "^0.142.0",
+    "react": "18.2.0",
+    "react-native": "0.71.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "detox": "^20.0.0"
+  }
+}
+```
