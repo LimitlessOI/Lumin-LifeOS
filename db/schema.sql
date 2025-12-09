@@ -1,44 +1,39 @@
 ```sql
--- Table for supply chain entities
-CREATE TABLE supply_chain_entities (
+CREATE TABLE health_profiles (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    type VARCHAR(50),
+    user_id VARCHAR(255) NOT NULL,
+    profile_data JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for IoT sensor registry
-CREATE TABLE iot_sensor_registry (
+CREATE TABLE wearable_data (
     id SERIAL PRIMARY KEY,
-    sensor_id VARCHAR(100) NOT NULL UNIQUE,
-    entity_id INT REFERENCES supply_chain_entities(id),
-    location VARCHAR(255),
+    user_id VARCHAR(255) NOT NULL,
+    data JSONB NOT NULL,
+    timestamp TIMESTAMP NOT NULL
+);
+
+CREATE TABLE medical_records (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    record_data JSONB NOT NULL,
+    encrypted_field BYTEA NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for supply chain events
-CREATE TABLE supply_chain_events (
+CREATE TABLE federated_updates (
     id SERIAL PRIMARY KEY,
-    event_type VARCHAR(100) NOT NULL,
-    entity_id INT REFERENCES supply_chain_entities(id),
-    sensor_id VARCHAR(100) REFERENCES iot_sensor_registry(sensor_id),
-    data JSONB,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Table for ZKP compliance proofs
-CREATE TABLE zkp_compliance_proofs (
-    id SERIAL PRIMARY KEY,
-    proof_data BYTEA NOT NULL,
-    entity_id INT REFERENCES supply_chain_entities(id),
+    user_id VARCHAR(255) NOT NULL,
+    update_data JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for token incentives
-CREATE TABLE token_incentives (
+CREATE TABLE provider_access (
     id SERIAL PRIMARY KEY,
-    entity_id INT REFERENCES supply_chain_entities(id),
-    token_amount DECIMAL(10, 2) NOT NULL,
-    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    provider_id VARCHAR(255) NOT NULL,
+    patient_id VARCHAR(255) NOT NULL,
+    access_level VARCHAR(50) NOT NULL,
+    audit_trail JSONB,
+    granted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
