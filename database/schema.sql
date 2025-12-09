@@ -1,53 +1,55 @@
 ```sql
-CREATE TABLE farms (
+-- Collaboration table for real-time editing sessions
+CREATE TABLE collaboration_sessions (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    location VARCHAR(255),
+    document_id INT NOT NULL,
+    session_data JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Templates table for legal document templates
+CREATE TABLE legal_templates (
+    id SERIAL PRIMARY KEY,
+    jurisdiction VARCHAR(255),
+    template_name VARCHAR(255),
+    template_content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Compliance checks table
+CREATE TABLE compliance_checks (
+    id SERIAL PRIMARY KEY,
+    document_id INT NOT NULL,
+    compliance_status BOOLEAN,
+    details JSONB,
+    checked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- AI Suggestions table
+CREATE TABLE ai_suggestions (
+    id SERIAL PRIMARY KEY,
+    document_id INT NOT NULL,
+    suggestion TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE iot_devices (
+-- Document versioning table
+CREATE TABLE document_versions (
     id SERIAL PRIMARY KEY,
-    farm_id INT REFERENCES farms(id),
-    device_name VARCHAR(255) NOT NULL,
-    device_type VARCHAR(50),
-    status VARCHAR(50),
+    document_id INT NOT NULL,
+    version_number INT,
+    content TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE sensor_readings (
+-- Integration logs table
+CREATE TABLE integration_logs (
     id SERIAL PRIMARY KEY,
-    device_id INT REFERENCES iot_devices(id),
-    timestamp TIMESTAMP NOT NULL,
-    temperature FLOAT,
-    humidity FLOAT,
-    moisture_level FLOAT
-);
-
-CREATE TABLE crop_analytics (
-    id SERIAL PRIMARY KEY,
-    farm_id INT REFERENCES farms(id),
-    analysis_date DATE NOT NULL,
-    disease_prediction VARCHAR(255),
-    yield_forecast FLOAT,
-    recommendations TEXT
-);
-
-CREATE TABLE automation_rules (
-    id SERIAL PRIMARY KEY,
-    farm_id INT REFERENCES farms(id),
-    rule_name VARCHAR(255) NOT NULL,
-    condition TEXT,
-    action TEXT,
-    enabled BOOLEAN DEFAULT TRUE
-);
-
-CREATE TABLE equipment_integrations (
-    id SERIAL PRIMARY KEY,
-    farm_id INT REFERENCES farms(id),
-    equipment_name VARCHAR(255),
-    api_endpoint VARCHAR(255),
-    api_key VARCHAR(255),
+    integration_type VARCHAR(255),
+    request_data JSONB,
+    response_data JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
