@@ -1,0 +1,56 @@
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserHealthProfile {
+  id                 Int      @id @default(autoincrement())
+  userId             Int      @unique
+  height             Float
+  weight             Float
+  age                Int
+  gender             String
+  activityLevel      String
+  biometricStreams   BiometricStream[]
+  dietPlans          DietPlan[]
+  geneticInsights    GeneticInsight[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model BiometricStream {
+  id                 Int      @id @default(autoincrement())
+  userHealthProfile  UserHealthProfile @relation(fields: [userHealthProfileId], references: [id])
+  userHealthProfileId Int
+  source             String
+  type               String
+  data               Json
+  recordedAt         DateTime
+  createdAt          DateTime @default(now())
+}
+
+model DietPlan {
+  id                 Int      @id @default(autoincrement())
+  userHealthProfile  UserHealthProfile @relation(fields: [userHealthProfileId], references: [id])
+  userHealthProfileId Int
+  name               String
+  details            Json
+  startDate          DateTime
+  endDate            DateTime
+  createdAt          DateTime @default(now())
+}
+
+model GeneticInsight {
+  id                 Int      @id @default(autoincrement())
+  userHealthProfile  UserHealthProfile @relation(fields: [userHealthProfileId], references: [id])
+  userHealthProfileId Int
+  insightType        String
+  data               Json
+  createdAt          DateTime @default(now())
+}
+```
