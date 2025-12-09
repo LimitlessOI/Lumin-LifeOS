@@ -1,47 +1,22 @@
 ```sql
-CREATE TABLE farms (
+CREATE TABLE climate_simulations (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    location GEOGRAPHY(POINT, 4326),
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE sensor_readings (
+CREATE TABLE climate_data_sources (
     id SERIAL PRIMARY KEY,
-    farm_id INTEGER REFERENCES farms(id),
-    sensor_type VARCHAR(50),
-    reading_value NUMERIC,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    source_name VARCHAR(255) NOT NULL,
+    api_endpoint VARCHAR(255) NOT NULL,
+    last_updated TIMESTAMP
 );
 
-CREATE TABLE crop_health (
+CREATE TABLE quantum_algorithm_registry (
     id SERIAL PRIMARY KEY,
-    farm_id INTEGER REFERENCES farms(id),
-    health_score NUMERIC,
-    analysis_date DATE
-);
-
-CREATE TABLE resource_allocations (
-    id SERIAL PRIMARY KEY,
-    farm_id INTEGER REFERENCES farms(id),
-    resource_type VARCHAR(50),
-    allocated_amount NUMERIC,
-    allocation_date DATE
-);
-
-CREATE TABLE equipment_maintenance (
-    id SERIAL PRIMARY KEY,
-    farm_id INTEGER REFERENCES farms(id),
-    equipment_id VARCHAR(50),
-    maintenance_due DATE,
-    last_maintenance DATE
-);
-
-CREATE TABLE pest_alerts (
-    id SERIAL PRIMARY KEY,
-    farm_id INTEGER REFERENCES farms(id),
-    alert_type VARCHAR(50),
-    alert_details TEXT,
-    alert_date DATE
+    algorithm_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
