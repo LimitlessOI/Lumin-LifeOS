@@ -1,39 +1,39 @@
--- Drones table
-CREATE TABLE drones (
+CREATE TABLE health_risk_profiles (
     id SERIAL PRIMARY KEY,
-    model VARCHAR(50),
-    status VARCHAR(20),
-    current_location GEOGRAPHY(POINT),
-    battery_level INTEGER
+    user_id INT NOT NULL,
+    risk_factors JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Charging stations table
-CREATE TABLE charging_stations (
+CREATE TABLE genomic_data (
     id SERIAL PRIMARY KEY,
-    location GEOGRAPHY(POINT),
-    capacity INTEGER
+    user_id INT NOT NULL,
+    data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Delivery routes table
-CREATE TABLE delivery_routes (
+CREATE TABLE federated_models (
     id SERIAL PRIMARY KEY,
-    drone_id INTEGER REFERENCES drones(id),
-    start_location GEOGRAPHY(POINT),
-    end_location GEOGRAPHY(POINT),
-    status VARCHAR(20),
-    estimated_time TIMESTAMP
+    model_data BYTEA NOT NULL,
+    version INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Payload containers table
-CREATE TABLE payload_containers (
+CREATE TABLE intervention_pathways (
     id SERIAL PRIMARY KEY,
-    capacity INTEGER,
-    current_weight INTEGER
+    user_id INT NOT NULL,
+    intervention_details JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Retail partners table
-CREATE TABLE retail_partners (
+CREATE TABLE blockchain_consent (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    api_endpoint VARCHAR(200)
+    user_id INT NOT NULL,
+    consent_data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE health_risk_profiles ADD COLUMN encrypted_data BYTEA;
+ALTER TABLE genomic_data ADD COLUMN encrypted_data BYTEA;
+-- Add audit logging triggers and functions as needed
+--
