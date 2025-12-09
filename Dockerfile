@@ -1,20 +1,23 @@
 ```dockerfile
-# Dockerfile for a Node.js service
-FROM node:14
+# Base image for building
+FROM node:14 as build
 
-# Set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install
+COPY package.json yarn.lock ./
 
-# Copy source code
+RUN yarn install
+
 COPY . .
 
-# Expose port
-EXPOSE 8080
+RUN yarn build
 
-# Run the application
-CMD ["node", "app.js"]
+# Production image
+FROM node:14-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/dist ./dist
+
+CMD ["node", "dist/main.js"]
 ```
