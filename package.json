@@ -1,28 +1,25 @@
 ```json
 {
-  "name": "farm-management-system",
-  "version": "1.0.0",
-  "description": "A comprehensive system for managing modern farms with AI, blockchain, and IoT.",
-  "main": "index.js",
-  "scripts": {
-    "start": "node src/index.js",
-    "test": "jest"
-  },
-  "dependencies": {
-    "mqtt": "^4.2.8",
-    "tensorflow": "^3.11.0",
-    "web3": "^1.7.3",
-    "sequelize": "^6.28.0",
-    "pg": "^8.7.1",
-    "express": "^4.18.2",
-    "stripe": "^9.3.0",
-    "amqplib": "^0.8.0"
-  },
-  "devDependencies": {
-    "jest": "^29.2.1",
-    "puppeteer": "^19.0.0"
-  },
-  "author": "LifeOS AI Council",
-  "license": "MIT"
+    "name": "teleportation-system",
+    "version": "1.0.0",
+    "description": "A system for managing teleportation sessions and VR integration.",
+    "main": "server/index.js",
+    "dependencies": {
+        "@tensorflow/tfjs-node": "^3.9.0",
+        "three": "^0.132.2",
+        "socket.io": "^4.2.0",
+        "webxr-polyfill": "^1.1.0",
+        "express": "^4.17.1",
+        "redis": "^3.1.2"
+    },
+    "devDependencies": {
+        "eyejs": "^0.3.0"
+    },
+    "scripts": {
+        "start": "node server/index.js",
+        "test": "node tests/runtests.js"
+    },
+    "author": "AI Developer",
+    "license": "ISC"
 }
 ```
