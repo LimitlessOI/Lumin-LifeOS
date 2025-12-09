@@ -1,0 +1,13 @@
+```json
+{
+  "default": {
+    "greeting": "Hello"
+  },
+  "spanish": {
+    "greeting": "Hola"
+  },
+  "french": {
+    "greeting": "Bonjour"
+  }
+}
+```
