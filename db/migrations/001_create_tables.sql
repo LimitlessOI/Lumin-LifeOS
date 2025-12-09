@@ -1,30 +1,30 @@
 ```sql
-CREATE TABLE user_patterns (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    pattern_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE translation_sessions (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL,
+  source_language VARCHAR(10),
+  target_language VARCHAR(10),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE assistant_arbitration (
-    id SERIAL PRIMARY KEY,
-    task_id INT NOT NULL,
-    assistant_id INT,
-    success_rate DECIMAL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE cultural_context_cache (
+  id SERIAL PRIMARY KEY,
+  context_key VARCHAR(255) UNIQUE,
+  context_data JSONB,
+  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE service_adapters (
-    id SERIAL PRIMARY KEY,
-    service_name VARCHAR(255) NOT NULL,
-    api_endpoint VARCHAR(255),
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE voice_profiles (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL,
+  voice_data BYTEA,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE privacy_settings (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    settings JSONB,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE translation_models (
+  id SERIAL PRIMARY KEY,
+  model_name VARCHAR(255),
+  model_version VARCHAR(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
