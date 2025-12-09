@@ -1,42 +1,36 @@
 ```sql
-CREATE TABLE user_health_metrics (
+-- Table for storing user learning profiles
+CREATE TABLE learning_profiles (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    metric_name VARCHAR(255) NOT NULL,
-    metric_value FLOAT NOT NULL,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE nutrition_profiles (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    dietary_preferences JSONB,
-    allergens JSONB,
+    user_id INTEGER UNIQUE NOT NULL,
+    cognitive_data JSONB,
+    emotional_data JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE diet_plans (
+-- Table for storing learning sessions
+CREATE TABLE learning_sessions (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    plan_details JSONB,
-    start_date DATE,
-    end_date DATE,
+    user_id INTEGER NOT NULL,
+    session_data JSONB,
+    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ended_at TIMESTAMP
+);
+
+-- Table for storing peer matches
+CREATE TABLE peer_matches (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    peer_user_id INTEGER NOT NULL,
+    match_score FLOAT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE nutrition_logs (
+-- Table for storing school dashboards
+CREATE TABLE school_dashboards (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    log_date DATE NOT NULL,
-    meals JSONB,
-    total_calories FLOAT,
+    school_id INTEGER UNIQUE NOT NULL,
+    analytics_data JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE ai_model_versions (
-    id SERIAL PRIMARY KEY,
-    model_name VARCHAR(255) NOT NULL,
-    version VARCHAR(50) NOT NULL,
-    deployed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
