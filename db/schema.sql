@@ -1,33 +1,17 @@
 ```sql
-CREATE TABLE candidates (
+CREATE TABLE devices (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL
+    type VARCHAR(50),
+    status VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE assessments (
+CREATE TABLE sensor_data (
     id SERIAL PRIMARY KEY,
-    candidate_id INT REFERENCES candidates(id),
-    score DECIMAL(5,2),
-    completed_at TIMESTAMP
-);
-
-CREATE TABLE bias_patterns (
-    id SERIAL PRIMARY KEY,
-    pattern_name VARCHAR(100),
-    description TEXT
-);
-
-CREATE TABLE hiring_outcomes (
-    id SERIAL PRIMARY KEY,
-    candidate_id INT REFERENCES candidates(id),
-    outcome VARCHAR(50),
-    decision_date TIMESTAMP
-);
-
-CREATE TABLE role_simulations (
-    id SERIAL PRIMARY KEY,
-    role_name VARCHAR(100),
-    simulation_data JSONB
+    device_id INT REFERENCES devices(id),
+    temperature FLOAT,
+    humidity FLOAT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
