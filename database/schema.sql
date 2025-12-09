@@ -1,54 +1,44 @@
 ```sql
-CREATE TABLE edge_nodes (
+-- Create table for energy profiles
+CREATE TABLE energy_profiles (
     id SERIAL PRIMARY KEY,
-    node_name VARCHAR(255) NOT NULL,
-    location VARCHAR(255),
-    status VARCHAR(50),
-    last_heartbeat TIMESTAMP
-);
-
-CREATE TABLE maintenance_predictions (
-    id SERIAL PRIMARY KEY,
-    node_id INT REFERENCES edge_nodes(id),
-    prediction_time TIMESTAMP NOT NULL,
-    predicted_issue VARCHAR(255),
-    confidence_score DECIMAL(5, 2),
+    user_id INT NOT NULL,
+    profile_data JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE technician_feedback (
+-- Create table for energy transactions
+CREATE TABLE energy_transactions (
     id SERIAL PRIMARY KEY,
-    prediction_id INT REFERENCES maintenance_predictions(id),
-    technician_id INT,
-    feedback_text TEXT,
-    feedback_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE federated_learning_rounds (
+-- Create table for community challenges
+CREATE TABLE community_challenges (
     id SERIAL PRIMARY KEY,
-    round_number INT NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP,
-    model_version VARCHAR(50),
-    status VARCHAR(50),
+    challenge_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    start_date TIMESTAMP,
+    end_date TIMESTAMP,
+    reward DECIMAL(10, 2)
+);
+
+-- Create table for energy predictions
+CREATE TABLE energy_predictions (
+    id SERIAL PRIMARY KEY,
+    profile_id INT REFERENCES energy_profiles(id),
+    prediction_data JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE maintenance_records_chain (
+-- Create table for regulatory compliance
+CREATE TABLE regulatory_compliance (
     id SERIAL PRIMARY KEY,
-    record_hash CHAR(64),
-    previous_hash CHAR(64),
-    data JSONB,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE ar_sessions (
-    id SERIAL PRIMARY KEY,
-    session_id VARCHAR(255) NOT NULL,
-    technician_id INT,
-    start_time TIMESTAMP,
-    end_time TIMESTAMP,
-    status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    rule_name VARCHAR(255) NOT NULL,
+    compliance_status BOOLEAN NOT NULL,
+    checked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
