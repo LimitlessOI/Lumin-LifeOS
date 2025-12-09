@@ -1,0 +1,14 @@
+```json
+{
+    "types": [
+        {
+            "name": "Building Automation",
+            "sensors": ["temperature", "humidity", "occupancy"]
+        },
+        {
+            "name": "Industrial Machinery",
+            "sensors": ["vibration", "pressure", "temperature"]
+        }
+    ]
+}
+```
