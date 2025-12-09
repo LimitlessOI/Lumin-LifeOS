@@ -1,22 +1,20 @@
-```
-# Use an official Node.js runtime as a parent image
+```dockerfile
+# Dockerfile for a Node.js service
 FROM node:14
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json files
+# Install dependencies
 COPY package*.json ./
-
-# Install any needed packages
 RUN npm install
 
-# Copy the rest of the application code
+# Copy source code
 COPY . .
 
-# Make port 8080 available to the world outside this container
+# Expose port
 EXPOSE 8080
 
-# Run the app
-CMD [ "node", "index.js" ]
+# Run the application
+CMD ["node", "app.js"]
 ```
