@@ -1,27 +1,28 @@
 ```json
 {
-  "name": "energy-management-system",
+  "name": "lifeos-ai-security",
   "version": "1.0.0",
-  "description": "Energy management and battery monitoring system",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "migrate": "sequelize db:migrate",
     "test": "jest"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "modbus-serial": "^8.0.5",
-    "socket.io": "^4.2.0",
-    "influx": "^5.8.0",
-    "tensorflow": "^3.9.0",
-    "mqtt": "^4.2.6",
-    "sequelize": "^6.6.5",
-    "pg": "^8.7.1",
+    "@tensorflow/tfjs-node": "^3.9.0",
+    "socket.io": "^4.0.0",
+    "node-fetch": "^2.6.1",
+    "redis": "^3.1.2",
+    "joi": "^17.4.0",
+    "winston": "^3.3.3",
     "node-cron": "^3.0.0",
-    "winston": "^3.3.3"
+    "prom-client": "^14.0.0",
+    "sequelize": "^6.6.5",
+    "pg": "^8.6.0"
   },
   "devDependencies": {
-    "jest": "^27.3.1"
+    "jest": "^27.0.6",
+    "sequelize-cli": "^6.2.0"
   }
 }
 ```
