@@ -1,24 +1,31 @@
-```sql
-CREATE TABLE users (
+CREATE TABLE bci_sessions (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    session_start TIMESTAMP NOT NULL,
+    session_end TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE sensor_data (
+CREATE TABLE bci_metrics (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    type VARCHAR(50) NOT NULL,
-    value NUMERIC NOT NULL,
+    session_id INT NOT NULL REFERENCES bci_sessions(id),
+    metric_type VARCHAR(50),
+    metric_value DOUBLE PRECISION,
     recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE reports (
+CREATE TABLE bci_models (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    description TEXT,
-    location VARCHAR(255),
-    reported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    model_name VARCHAR(100),
+    model_version VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
+
+CREATE TABLE bci_feedback_logs (
+    id SERIAL PRIMARY KEY,
+    session_id INT NOT NULL REFERENCES bci_sessions(id),
+    feedback TEXT,
+    feedback_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+--
