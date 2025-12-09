@@ -1,32 +1,30 @@
 ```sql
-CREATE TABLE energy_grid_nodes (
+CREATE TABLE climate_data_streams (
     id SERIAL PRIMARY KEY,
-    node_name VARCHAR(255) NOT NULL,
-    location VARCHAR(255),
-    capacity FLOAT
-);
-
-CREATE TABLE energy_metrics (
-    id SERIAL PRIMARY KEY,
-    node_id INT REFERENCES energy_grid_nodes(id),
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    energy_consumed FLOAT,
-    energy_generated FLOAT
-);
-
-CREATE TABLE predictive_alerts (
-    id SERIAL PRIMARY KEY,
-    node_id INT REFERENCES energy_grid_nodes(id),
-    alert_type VARCHAR(255),
-    alert_message TEXT,
+    stream_name VARCHAR(255) NOT NULL,
+    source_type VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE energy_flow_logs (
+CREATE TABLE climate_metrics (
     id SERIAL PRIMARY KEY,
-    node_id INT REFERENCES energy_grid_nodes(id),
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    energy_flow_direction VARCHAR(50),
-    energy_flow_amount FLOAT
+    stream_id INT REFERENCES climate_data_streams(id),
+    metric_name VARCHAR(255) NOT NULL,
+    value FLOAT NOT NULL,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE policy_recommendations (
+    id SERIAL PRIMARY KEY,
+    recommendation_text TEXT NOT NULL,
+    effectiveness_score FLOAT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE simulation_results (
+    id SERIAL PRIMARY KEY,
+    policy_id INT REFERENCES policy_recommendations(id),
+    result_data JSON NOT NULL,
+    simulation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
