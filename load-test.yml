@@ -1,0 +1,14 @@
+```yaml
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 50
+scenarios:
+  - flow:
+    - post:
+        url: '/route'
+        json:
+          origin: 'pointA'
+          destination: 'pointB'
+```
