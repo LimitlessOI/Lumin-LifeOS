@@ -1,20 +1,25 @@
+```json
 {
-  "name": "lifeos-quantum",
+  "name": "neural-bridge",
   "version": "1.0.0",
+  "description": "Neural data bridge for non-invasive headband streaming",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
-    "axios": "^0.21.1",
-    "bullmq": "^1.36.0",
-    "node-cache": "^5.1.2",
-    "redis": "^3.1.2",
-    "mathjs": "^9.4.4",
-    "qiskit": "^0.23.0",
-    "cirq": "^0.11.0",
-    "pennylane": "^0.15.0",
-    "tensorflow-quantum": "^0.6.0",
-    "pyquil": "^3.0.0",
-    "qsharp": "^0.15.2101125890",
-    "tensorflow": "^2.4.1",
-    "pytorch": "^1.7.0",
-    "quantumlib": "^0.1.0"
+    "ws": "^8.0.0",
+    "libsodium-wrappers": "^0.7.9",
+    "brain.js": "^2.0.0",
+    "tensorflow.js": "^3.8.0",
+    "webbluetooth": "^0.1.0",
+    "node-fhir-server-core": "^2.1.0",
+    "regulations-parser": "^1.0.0",
+    "neural-data-standards": "^1.0.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^27.0.0"
   }
 }
+```
