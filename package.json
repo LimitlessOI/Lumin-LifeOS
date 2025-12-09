@@ -1,27 +1,22 @@
-```json
 {
-  "name": "cane-microservice",
+  "name": "vr-platform",
   "version": "1.0.0",
-  "description": "CANE microservice for LifeOS",
-  "main": "index.js",
+  "description": "A VR platform with AI interaction and real-time services",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "jest"
+    "start": "node server.js",
+    "test": "mocha tests/**/*.test.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "axios": "^0.21.1",
-    "sequelize": "^6.6.5",
-    "pg": "^8.6.0",
-    "node-cron": "^3.0.0",
-    "bull": "^3.22.0",
-    "tensorflow": "^2.8.0"
+    "axios": "^1.3.5",
+    "express": "^4.18.2",
+    "package-name": "^0.1.0",
+    "pg": "^8.7.1",
+    "sequelize": "^6.21.0",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
-    "jest": "^27.0.6",
-    "supertest": "^6.1.3",
-    "nock": "^13.1.0"
-  },
-  "author": "LifeOS AI Council",
-  "license": "ISC"
+    "chai": "^4.3.6",
+    "mocha": "^10.2.0"
+  }
 }
