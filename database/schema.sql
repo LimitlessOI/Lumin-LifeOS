@@ -1,18 +1,35 @@
 ```sql
-CREATE TABLE patients (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100),
-  dob DATE,
-  email VARCHAR(100) UNIQUE
+-- Table for learning paths
+CREATE TABLE learning_paths (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE health_data (
-  id SERIAL PRIMARY KEY,
-  patient_id INTEGER REFERENCES patients(id),
-  source VARCHAR(50),
-  data JSONB,
-  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Table for virtual labs
+CREATE TABLE virtual_labs (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX ON health_data (patient_id);
+-- Table for educational content
+CREATE TABLE educational_content (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    learning_path_id INT REFERENCES learning_paths(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for assessment results
+CREATE TABLE assessment_results (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    score DECIMAL,
+    learning_path_id INT REFERENCES learning_paths(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 ```
