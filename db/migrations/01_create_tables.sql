@@ -1,0 +1,35 @@
+```sql
+CREATE TABLE IF NOT EXISTS energy_transactions (
+  id SERIAL PRIMARY KEY,
+  transaction_hash VARCHAR(66) NOT NULL,
+  amount DECIMAL(18, 8) NOT NULL,
+  sender VARCHAR(42) NOT NULL,
+  receiver VARCHAR(42) NOT NULL,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS grid_nodes (
+  id SERIAL PRIMARY KEY,
+  node_id VARCHAR(42) UNIQUE NOT NULL,
+  location VARCHAR(255),
+  capacity DECIMAL(18, 8),
+  status VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS rec_tokens (
+  id SERIAL PRIMARY KEY,
+  token_id VARCHAR(66) UNIQUE NOT NULL,
+  owner VARCHAR(42) NOT NULL,
+  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS dao_proposals (
+  id SERIAL PRIMARY KEY,
+  proposal_id VARCHAR(66) UNIQUE NOT NULL,
+  description TEXT,
+  status VARCHAR(50),
+  votes_for INT DEFAULT 0,
+  votes_against INT DEFAULT 0,
+  creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
