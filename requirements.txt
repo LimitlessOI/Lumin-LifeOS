@@ -1,5 +1,6 @@
-```
-flask==2.0.2
-flask-socketio==5.1.1
-google-cloud-speech==2.5.1
-```
+flask
+psycopg2-binary
+numpy
+pandas
+scikit-learn
+pytest
