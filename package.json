@@ -1,6 +1,6 @@
 ```json
 {
-  "name": "industrial-heat-management",
+  "name": "lifeos-financial-optimizer",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,18 +9,14 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "sequelize": "^6.6.5",
-    "mqtt": "^4.2.8",
-    "web3": "^1.6.0",
-    "@tensorflow/tfjs": "^3.9.0",
     "pg": "^8.7.1",
-    "pg-hstore": "^2.3.4"
+    "d-wave-ocean-sdk": "^5.1.0",
+    "shap": "^0.39.0",
+    "lime": "^0.2.0.1"
   },
   "devDependencies": {
-    "jest": "^27.2.0",
-    "cypress": "^8.5.0"
-  },
-  "author": "",
-  "license": "ISC"
+    "jest": "^27.4.5",
+    "supertest": "^6.1.6"
+  }
 }
 ```
