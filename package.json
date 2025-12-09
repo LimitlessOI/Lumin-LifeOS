@@ -1,34 +1,12 @@
 ```json
 {
-  "name": "dumios-platform",
-  "version": "1.0.0",
-  "description": "A platform for IoT and urban data integration with blockchain and machine learning.",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "jest"
-  },
   "dependencies": {
-    "mqtt": "^4.2.8",
-    "node-red": "^2.1.4",
-    "web3": "^1.6.1",
-    "ipfs-http-client": "^56.0.2",
-    "tensorflow": "^3.8.0",
-    "socket.io": "^4.4.1",
-    "redis": "^4.0.4",
-    "pg": "^8.7.1",
-    "postgis": "^3.1.4",
-    "joi": "^17.6.0",
-    "node-cron": "^3.0.0",
-    "express": "^4.17.2",
-    "stripe": "^8.193.0",
-    "oauth2": "^1.9.3"
-  },
-  "devDependencies": {
-    "jest": "^27.4.5",
-    "supertest": "^6.2.2",
-    "artillery": "^2.0.0",
-    "owasp-zap": "^1.0.0"
+    "express": "^4.17.1",
+    "stripe": "^8.174.0",
+    "mediasoup": "^3.9.3",
+    "socket.io": "^4.3.2",
+    "lifeos-ai": "^1.0.0",
+    "device-capabilities": "^1.0.0"
   }
 }
 ```
