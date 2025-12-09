@@ -1,32 +1,32 @@
 ```sql
-CREATE TABLE vr_workspaces (
+CREATE TABLE healing_events (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    owner_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    timestamp TIMESTAMP NOT NULL,
+    event_type VARCHAR(50) NOT NULL,
+    description TEXT,
+    status VARCHAR(20) NOT NULL,
+    strategy_id INT REFERENCES healing_strategies(id)
 );
 
-CREATE TABLE vr_sessions (
+CREATE TABLE healing_strategies (
     id SERIAL PRIMARY KEY,
-    workspace_id INT NOT NULL,
-    host_id INT NOT NULL,
-    start_time TIMESTAMP,
-    end_time TIMESTAMP,
-    FOREIGN KEY (workspace_id) REFERENCES vr_workspaces(id)
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    efficacy_score FLOAT
 );
 
-CREATE TABLE vr_assets (
+CREATE TABLE agent_inventory (
     id SERIAL PRIMARY KEY,
-    workspace_id INT NOT NULL,
-    asset_data JSONB NOT NULL,
-    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (workspace_id) REFERENCES vr_workspaces(id)
+    agent_name VARCHAR(100) NOT NULL,
+    quantity INT NOT NULL,
+    last_updated TIMESTAMP NOT NULL
 );
 
-CREATE TABLE ai_avatars (
+CREATE TABLE ml_training_logs (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    avatar_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    model_name VARCHAR(100) NOT NULL,
+    accuracy FLOAT,
+    loss FLOAT,
+    timestamp TIMESTAMP NOT NULL
 );
 ```
