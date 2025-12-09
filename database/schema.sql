@@ -1,32 +1,31 @@
-```sql
-CREATE TABLE energy_assets (
-    id SERIAL PRIMARY KEY,
-    asset_name VARCHAR(255) NOT NULL,
-    asset_type VARCHAR(50) NOT NULL,
-    capacity DECIMAL NOT NULL,
-    owner_id INT NOT NULL,
-    location VARCHAR(255)
+CREATE EXTENSION IF NOT EXISTS postgis;
+
+CREATE TABLE iot_sensors (
+    sensor_id SERIAL PRIMARY KEY,
+    sensor_type VARCHAR(50),
+    location GEOGRAPHY(POINT),
+    last_active TIMESTAMP
 );
 
-CREATE TABLE microtransactions (
-    id SERIAL PRIMARY KEY,
-    asset_id INT REFERENCES energy_assets(id),
-    amount DECIMAL NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(50) NOT NULL
+CREATE TABLE edge_nodes (
+    node_id SERIAL PRIMARY KEY,
+    node_name VARCHAR(50),
+    location GEOGRAPHY(POINT),
+    status VARCHAR(20)
 );
 
-CREATE TABLE grid_predictions (
-    id SERIAL PRIMARY KEY,
-    prediction_date DATE NOT NULL,
-    predicted_demand DECIMAL NOT NULL,
-    predicted_supply DECIMAL NOT NULL
+CREATE TABLE data_transactions (
+    transaction_id SERIAL PRIMARY KEY,
+    sensor_id INT REFERENCES iot_sensors(sensor_id),
+    node_id INT REFERENCES edge_nodes(node_id),
+    data_payload JSONB,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE consumer_portfolios (
-    id SERIAL PRIMARY KEY,
-    consumer_id INT NOT NULL,
-    portfolio_value DECIMAL NOT NULL,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE mobility_services (
+    service_id SERIAL PRIMARY KEY,
+    service_name VARCHAR(50),
+    description TEXT,
+    api_endpoint VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
