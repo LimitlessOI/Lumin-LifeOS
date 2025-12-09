@@ -1,21 +1,21 @@
+```json
 {
-  "name": "learning-cortex",
+  "name": "arw-service",
   "version": "1.0.0",
-  "description": "A learning platform with VR/AR capabilities.",
-  "main": "index.js",
+  "description": "ARW microservice for LifeOS",
+  "main": "ARWService.js",
   "scripts": {
-    "start": "node services/learning-cortex/api.js",
-    "test": "jest"
+    "start": "node ARWService.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "redis": "^3.1.2",
+    "body-parser": "^1.19.0",
+    "ws": "^7.5.0",
     "pg": "^8.5.1",
-    "ws": "^7.4.6",
-    "three": "^0.132.2",
-    "webxr": "^0.2.3"
-  },
-  "devDependencies": {
-    "jest": "^27.0.6"
+    "three": "^0.129.0",
+    "aframe": "^1.2.0",
+    "webxr-polyfill": "^0.9.0"
   }
 }
+```
