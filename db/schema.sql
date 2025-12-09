@@ -1,27 +1,47 @@
-```sql
-CREATE TABLE energy_predictions (
-    id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP NOT NULL,
-    predicted_value DECIMAL NOT NULL
+-- Creating table for energy assets
+CREATE TABLE energy_assets (
+    asset_id SERIAL PRIMARY KEY,
+    asset_name VARCHAR(255) NOT NULL,
+    owner_id INT NOT NULL,
+    asset_type VARCHAR(50),
+    capacity DECIMAL(10, 2),
+    location VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE energy_trades (
-    id SERIAL PRIMARY KEY,
-    trade_time TIMESTAMP NOT NULL,
-    energy_amount DECIMAL NOT NULL,
-    trade_price DECIMAL NOT NULL
+-- Creating table for energy transactions
+CREATE TABLE energy_transactions (
+    transaction_id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES energy_assets(asset_id),
+    buyer_id INT NOT NULL,
+    seller_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'pending'
 );
 
-CREATE TABLE carbon_offsets (
-    id SERIAL PRIMARY KEY,
-    offset_value DECIMAL NOT NULL,
-    timestamp TIMESTAMP NOT NULL
+-- Creating table for IoT sensor data
+CREATE TABLE iot_sensor_data (
+    sensor_id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES energy_assets(asset_id),
+    data JSONB,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE hardware_devices (
-    id SERIAL PRIMARY KEY,
-    device_id VARCHAR(255) NOT NULL,
-    device_type VARCHAR(255),
-    last_active TIMESTAMP
+-- Creating table for pricing models
+CREATE TABLE pricing_models (
+    model_id SERIAL PRIMARY KEY,
+    model_name VARCHAR(255) NOT NULL,
+    algorithm VARCHAR(255),
+    parameters JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
+
+-- Creating table for energy tokens
+CREATE TABLE energy_tokens (
+    token_id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES energy_assets(asset_id),
+    owner_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
