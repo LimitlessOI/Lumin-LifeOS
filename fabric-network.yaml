@@ -1,0 +1,41 @@
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fabric-config
+data:
+  config.yaml: |-
+    # Hyperledger Fabric network configuration details
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peer-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fabric-peer
+  template:
+    metadata:
+      labels:
+        app: fabric-peer
+    spec:
+      containers:
+      - name: peer
+        image: hyperledger/fabric-peer
+        env:
+        - name: CORE_PEER_ID
+          value: peer0.org1.example.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: peer-service
+spec:
+  ports:
+  - port: 7051
+    targetPort: 7051
+  selector:
+    app: fabric-peer
+```
