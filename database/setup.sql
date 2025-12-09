@@ -1,40 +1,32 @@
 ```sql
-CREATE TABLE amt_vehicles (
+CREATE TABLE health_metrics (
     id SERIAL PRIMARY KEY,
-    model VARCHAR(100),
-    capacity INT,
-    status VARCHAR(50),
-    location GEOGRAPHY(POINT, 4326)
+    patient_id INT NOT NULL,
+    metric_type VARCHAR(50),
+    value FLOAT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE amt_routes (
+CREATE TABLE predictive_models (
     id SERIAL PRIMARY KEY,
-    origin GEOGRAPHY(POINT, 4326),
-    destination GEOGRAPHY(POINT, 4326),
-    distance FLOAT,
-    duration INT
+    model_name VARCHAR(100),
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE amt_bookings (
+CREATE TABLE health_alerts (
     id SERIAL PRIMARY KEY,
-    vehicle_id INT REFERENCES amt_vehicles(id),
-    route_id INT REFERENCES amt_routes(id),
-    passenger_count INT,
-    status VARCHAR(50),
-    booking_time TIMESTAMP
+    patient_id INT NOT NULL,
+    alert_type VARCHAR(50),
+    message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE amt_v2i_nodes (
+CREATE TABLE clinician_access (
     id SERIAL PRIMARY KEY,
-    location GEOGRAPHY(POINT, 4326),
-    node_type VARCHAR(50),
-    status VARCHAR(50)
-);
-
-CREATE TABLE amt_demand_predictions (
-    id SERIAL PRIMARY KEY,
-    prediction_date DATE,
-    demand INT,
-    confidence FLOAT
+    clinician_id INT NOT NULL,
+    patient_id INT NOT NULL,
+    access_level VARCHAR(50),
+    granted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
