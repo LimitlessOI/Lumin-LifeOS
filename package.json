@@ -1,25 +1,31 @@
 ```json
 {
-  "name": "health-system",
+  "name": "health-nexus",
   "version": "1.0.0",
-  "description": "A system for managing health data using IPFS, ZKP, and blockchain.",
+  "description": "Health Nexus microservice for LifeOS",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "jest"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "ipfs-http-client": "^47.2.2",
-    "snarkjs": "^0.1.0",
-    "fabric-client": "^2.2.0",
-    "sequelize": "^6.5.0",
-    "pg": "^8.5.1",
-    "grpc": "^1.24.3"
+    "axios": "^0.27.2",
+    "node-fetch": "^3.2.10",
+    "tensorflow": "^3.11.0",
+    "web3": "^1.7.0",
+    "openai": "^1.0.0",
+    "sequelize": "^6.21.1",
+    "bull": "^4.2.3",
+    "node-cron": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "stripe": "^11.6.0",
+    "express-validator": "^6.14.0",
+    "express": "^4.18.2"
   },
   "devDependencies": {
-    "jest": "^27.0.6",
-    "supertest": "^6.1.3"
+    "jest": "^29.2.0",
+    "hardhat": "^2.9.3",
+    "truffle": "^5.5.29"
   }
 }
 ```
