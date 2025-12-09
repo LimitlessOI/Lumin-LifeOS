@@ -1,0 +1,22 @@
+```json
+{
+  "name": "legal-service",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sequelize": "^6.3.5",
+    "socket.io": "^4.0.0",
+    "bull": "^3.20.1",
+    "redis": "^3.0.2",
+    "aws-sdk": "^2.799.0",
+    "stripe": "^8.0.0",
+    "axios": "^0.21.1",
+    "joi": "^17.3.0",
+    "pdf-lib": "^1.11.1"
+  },
+  "scripts": {
+    "start": "node src/server.js"
+  }
+}
+```
