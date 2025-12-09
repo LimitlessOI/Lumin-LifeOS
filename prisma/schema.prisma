@@ -1,79 +1,53 @@
 ```prisma
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model FinancialProfile {
+generator client {
+  provider = "prisma-client-js"
+}
+
+model UserFinancialProfile {
   id        Int    @id @default(autoincrement())
-  userId    Int
-  accounts  FinancialAccount[]
-  insights  FinancialInsight[]
-  progress  GamificationProgress?
+  userId    String
+  profile   Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model FinancialAccount {
-  id                 Int     @id @default(autoincrement())
-  profileId          Int
-  institutionName    String
-  accountType        String
-  balance            Float
-  transactions       Transaction[]
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-
-  @@index([profileId], name: "profileId_idx")
-  @@relation(fields: [profileId], references: [id])
+model FinancialTransaction {
+  id          Int    @id @default(autoincrement())
+  userId      String
+  amount      Float
+  category    String
+  date        DateTime
+  description String
+  createdAt   DateTime @default(now())
 }
 
-model Transaction {
-  id            Int     @id @default(autoincrement())
-  accountId     Int
-  amount        Float
-  date          DateTime
-  category      String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  @@index([accountId], name: "accountId_idx")
-  @@relation(fields: [accountId], references: [id])
+model AIInsight {
+  id        Int    @id @default(autoincrement())
+  userId    String
+  insight   Json
+  createdAt DateTime @default(now())
 }
 
-model EducationModule {
+model EducationalModule {
   id          Int    @id @default(autoincrement())
   title       String
   content     String
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
 
-model FinancialInsight {
-  id          Int    @id @default(autoincrement())
-  profileId   Int
-  insight     String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model UserLearningProgress {
+  id              Int    @id @default(autoincrement())
+  userId          String
+  moduleId        Int
+  progress        Float
+  completedAt     DateTime?
+  createdAt       DateTime @default(now())
 
-  @@index([profileId], name: "profileId_idx")
-  @@relation(fields: [profileId], references: [id])
-}
-
-model GamificationProgress {
-  id           Int    @id @default(autoincrement())
-  profileId    Int
-  points       Int
-  level        Int
-  achievements String[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@index([profileId], name: "profileId_idx")
-  @@relation(fields: [profileId], references: [id])
+  module EducationalModule @relation(fields: [moduleId], references: [id])
 }
 ```
