@@ -1,27 +1,31 @@
 ```sql
-CREATE TABLE IF NOT EXISTS energy_assets (
+CREATE TABLE candidates (
     id SERIAL PRIMARY KEY,
-    asset_name VARCHAR(255) NOT NULL,
-    energy_type VARCHAR(50) NOT NULL,
-    capacity DECIMAL NOT NULL
+    name VARCHAR(255) NOT NULL,
+    profile JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS microtransactions (
+CREATE TABLE job_listings (
     id SERIAL PRIMARY KEY,
-    asset_id INT REFERENCES energy_assets(id),
-    amount DECIMAL NOT NULL,
-    timestamp TIMESTAMPTZ DEFAULT NOW()
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    requirements JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS grid_states (
+CREATE TABLE matches (
     id SERIAL PRIMARY KEY,
-    state_data JSONB NOT NULL,
-    recorded_at TIMESTAMPTZ DEFAULT NOW()
+    candidate_id INTEGER REFERENCES candidates(id),
+    job_id INTEGER REFERENCES job_listings(id),
+    match_score REAL NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS compliance_contracts (
+CREATE TABLE diversity_analytics (
     id SERIAL PRIMARY KEY,
-    contract_address VARCHAR(255) NOT NULL,
-    deployed_at TIMESTAMPTZ DEFAULT NOW()
+    metric_name VARCHAR(255) NOT NULL,
+    metric_value JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
