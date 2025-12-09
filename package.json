@@ -1,27 +1,19 @@
 ```json
 {
-  "name": "supplychain-system",
+  "name": "decentralized-protocol",
   "version": "1.0.0",
-  "description": "A comprehensive supply chain system using blockchain, AI, and other technologies.",
+  "description": "Decentralized protocol implementation with blockchain and IPFS integration.",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "mocha"
+    "start": "node index.js"
   },
   "dependencies": {
-    "fabric-network": "^2.2.0",
-    "pysyft": "^0.2.9",
-    "zokrates-js": "^0.7.4",
-    "web3": "^1.3.0",
+    "snarkjs": "^0.2.11",
+    "circomlib": "^0.0.8",
+    "ipfs-http-client": "^56.0.2",
+    "lit-js-sdk": "^1.0.0",
     "express": "^4.17.1",
-    "body-parser": "^1.19.0"
-  },
-  "devDependencies": {
-    "mocha": "^8.3.2",
-    "chai": "^4.3.4",
-    "sinon": "^10.0.0"
-  },
-  "author": "AI Council",
-  "license": "ISC"
+    "ethers": "^5.7.0"
+  }
 }
 ```
