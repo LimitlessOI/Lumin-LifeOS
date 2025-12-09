@@ -1,27 +1,30 @@
 ```json
 {
-  "name": "skill-forge",
+  "name": "lifeos-farming",
   "version": "1.0.0",
-  "description": "A platform for immersive skill learning and credentialing.",
+  "description": "Farming management and optimization services for LifeOS",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "jest"
+    "test": "jest",
+    "migrate": "sequelize db:migrate",
+    "seed": "sequelize db:seed:all"
   },
   "dependencies": {
-    "@solana/web3.js": "^1.31.0",
-    "@project-serum/anchor": "^0.24.2",
-    "three": "^0.132.2",
-    "@react-three/fiber": "^7.0.19",
-    "@react-three/xr": "^1.1.0",
-    "tensorflow": "^3.11.0",
-    "openai": "^1.1.0",
-    "bull": "^4.0.2",
-    "web3.storage": "^3.0.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mqtt": "^4.2.8",
+    "sequelize": "^6.3.5",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "joi": "^17.3.0",
+    "tensorflow": "^2.0.0",
+    "web3": "^1.3.0",
+    "ipfs-http-client": "^48.1.2",
+    "stripe": "^8.137.0"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^26.4.2",
+    "sequelize-cli": "^6.2.0"
   }
 }
 ```
