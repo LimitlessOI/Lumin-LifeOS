@@ -1,35 +1,33 @@
 ```sql
--- Workspace table
-CREATE TABLE workspaces (
+CREATE TABLE user_profiles (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255) UNIQUE NOT NULL,
+    preferences JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE personalization_workflows (
+    id SERIAL PRIMARY KEY,
+    workflow_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE conversion_events (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    event_type VARCHAR(255),
+    event_value DECIMAL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Workspace sessions table
-CREATE TABLE workspace_sessions (
+CREATE TABLE ml_models (
     id SERIAL PRIMARY KEY,
-    workspace_id INT REFERENCES workspaces(id),
-    user_id INT NOT NULL,
-    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ended_at TIMESTAMP
+    model_name VARCHAR(255) NOT NULL,
+    model_data BYTEA,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- Spatial objects table
-CREATE TABLE spatial_objects (
-    id SERIAL PRIMARY KEY,
-    workspace_id INT REFERENCES workspaces(id),
-    type VARCHAR(255) NOT NULL,
-    properties JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Mode transitions table
-CREATE TABLE mode_transitions (
-    id SERIAL PRIMARY KEY,
-    workspace_id INT REFERENCES workspaces(id),
-    from_mode VARCHAR(50) NOT NULL,
-    to_mode VARCHAR(50) NOT NULL,
-    transitioned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
