@@ -1,46 +1,31 @@
 ```sql
-CREATE TABLE therapy_profiles (
+CREATE TABLE climate_indicators (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    name VARCHAR(255),
-    age INT,
-    gender VARCHAR(50),
-    primary_condition VARCHAR(255),
-    therapy_goals TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(255) NOT NULL,
+    value NUMERIC,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE therapy_sessions (
+CREATE TABLE policy_actions (
     id SERIAL PRIMARY KEY,
-    profile_id INT REFERENCES therapy_profiles(id),
-    session_date TIMESTAMP NOT NULL,
-    session_notes TEXT,
-    intervention_applied BOOLEAN,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    effective_date DATE
 );
 
-CREATE TABLE biometric_data (
+CREATE TABLE simulation_runs (
     id SERIAL PRIMARY KEY,
-    profile_id INT REFERENCES therapy_profiles(id),
-    data_source VARCHAR(255),
-    data JSONB,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    policy_action_id INT REFERENCES policy_actions(id),
+    start_date DATE,
+    end_date DATE,
+    result JSONB
 );
 
-CREATE TABLE intervention_logs (
+CREATE TABLE audit_trails (
     id SERIAL PRIMARY KEY,
-    session_id INT REFERENCES therapy_sessions(id),
-    intervention_type VARCHAR(255),
-    outcome VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE rl_feedback (
-    id SERIAL PRIMARY KEY,
-    session_id INT REFERENCES therapy_sessions(id),
-    feedback JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    action VARCHAR(255),
+    user_id INT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    details JSONB
 );
 ```
