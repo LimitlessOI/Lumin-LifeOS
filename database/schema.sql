@@ -1,36 +1,53 @@
 ```sql
-CREATE TABLE drones (
+CREATE TABLE farms (
     id SERIAL PRIMARY KEY,
-    model VARCHAR(255) NOT NULL,
-    battery_level FLOAT NOT NULL,
-    last_maintenance DATE NOT NULL,
-    status VARCHAR(50) NOT NULL
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE deliveries (
+CREATE TABLE iot_devices (
     id SERIAL PRIMARY KEY,
-    drone_id INTEGER REFERENCES drones(id),
-    pickup_location VARCHAR(255) NOT NULL,
-    dropoff_location VARCHAR(255) NOT NULL,
-    status VARCHAR(50) NOT NULL,
-    scheduled_time TIMESTAMP NOT NULL
+    farm_id INT REFERENCES farms(id),
+    device_name VARCHAR(255) NOT NULL,
+    device_type VARCHAR(50),
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE drone_telemetry (
+CREATE TABLE sensor_readings (
     id SERIAL PRIMARY KEY,
-    drone_id INTEGER REFERENCES drones(id),
+    device_id INT REFERENCES iot_devices(id),
     timestamp TIMESTAMP NOT NULL,
-    latitude FLOAT NOT NULL,
-    longitude FLOAT NOT NULL,
-    altitude FLOAT NOT NULL,
-    speed FLOAT NOT NULL
+    temperature FLOAT,
+    humidity FLOAT,
+    moisture_level FLOAT
 );
 
-CREATE TABLE compliance_logs (
+CREATE TABLE crop_analytics (
     id SERIAL PRIMARY KEY,
-    drone_id INTEGER REFERENCES drones(id),
-    timestamp TIMESTAMP NOT NULL,
-    compliance_status VARCHAR(255) NOT NULL,
-    details TEXT
+    farm_id INT REFERENCES farms(id),
+    analysis_date DATE NOT NULL,
+    disease_prediction VARCHAR(255),
+    yield_forecast FLOAT,
+    recommendations TEXT
+);
+
+CREATE TABLE automation_rules (
+    id SERIAL PRIMARY KEY,
+    farm_id INT REFERENCES farms(id),
+    rule_name VARCHAR(255) NOT NULL,
+    condition TEXT,
+    action TEXT,
+    enabled BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE equipment_integrations (
+    id SERIAL PRIMARY KEY,
+    farm_id INT REFERENCES farms(id),
+    equipment_name VARCHAR(255),
+    api_endpoint VARCHAR(255),
+    api_key VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
