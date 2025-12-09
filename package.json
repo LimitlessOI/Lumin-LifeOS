@@ -1,22 +1,25 @@
+```json
 {
-  "name": "ubi-system",
+  "name": "health-insight-system",
   "version": "1.0.0",
-  "description": "UBI distribution system",
+  "description": "A HIPAA-compliant health insight generation system using federated learning.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/**/*.test.js"
+    "start": "node index.js",
+    "test": "jest"
   },
   "dependencies": {
-    "@zksync/web3": "^0.1.0",
-    "@simplewebauthn/server": "^4.0.0",
-    "node-fido2": "^0.3.0",
     "express": "^4.17.1",
+    "sequelize": "^6.6.5",
     "pg": "^8.7.1",
-    "dotenv": "^10.0.0"
+    "pg-hstore": "^2.3.4",
+    "tensorflow": "^2.7.0",
+    "jsonwebtoken": "^8.5.1",
+    "crypto-js": "^4.1.1"
   },
   "devDependencies": {
-    "mocha": "^9.1.3",
-    "chai": "^4.3.4"
+    "jest": "^27.4.5",
+    "dotenv": "^10.0.0"
   }
 }
-//
+```
