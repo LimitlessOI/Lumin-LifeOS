@@ -1,35 +1,21 @@
 ```yaml
 version: '3.8'
 services:
-  postgres:
+  ccacp:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://user:password@db:5432/ccacpdb
+  db:
     image: postgres:13
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: supplychain
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ccacpdb
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-  timescaledb:
-    image: timescale/timescaledb:latest-pg12
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: supplychain
-    ports:
-      - "5433:5432"
-    volumes:
-      - timescaledb_data:/var/lib/postgresql/data
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    depends_on:
-      - postgres
-      - timescaledb
-
+      - db_data:/var/lib/postgresql/data
 volumes:
-  postgres_data:
-  timescaledb_data:
+  db_data:
 ```
