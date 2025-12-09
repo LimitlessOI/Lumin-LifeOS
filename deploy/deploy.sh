@@ -1,18 +1,13 @@
 ```bash
 #!/bin/bash
 
-echo "Deploying Climate AI Platform..."
+echo "Deploying AMVF services to Railway..."
 
-# Build steps
-npm install
-pip install -r requirements.txt
+# Build Docker image
+docker build -t amvf-service .
 
-# Database migration
-psql -h your_neon_host -U your_user -d your_database -f database/schema.sql
-
-# Start services
-node services/climate/api/recommendationService.js &
-node services/climate/dashboard/dashboardBackend.js &
+# Push the Docker image to Railway
+railway up
 
 echo "Deployment complete."
 ```
