@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  vr-training:
+    build: ./services/vr-training
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  biometrics:
+    build: ./services/biometrics
+    ports:
+      - "8081:8081"
+    networks:
+      - app-network
+
+  ai-engine:
+    build: ./services/ai-engine
+    ports:
+      - "8082:8082"
+    networks:
+      - app-network
+
+  ar-guidance:
+    build: ./services/ar-guidance
+    ports:
+      - "8083:8083"
+    networks:
+      - app-network
+
+  integration:
+    build: ./services/integration
+    ports:
+      - "8084:8084"
+    networks:
+      - app-network
+
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: training_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
