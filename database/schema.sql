@@ -1,37 +1,57 @@
 ```sql
--- Create 'neuralgrow_pods' table
-CREATE TABLE neuralgrow_pods (
-    id SERIAL PRIMARY KEY,
-    pod_name VARCHAR(255) NOT NULL,
+-- Table for storing predictive maintenance assets
+CREATE TABLE predictive_maintenance_assets (
+    asset_id SERIAL PRIMARY KEY,
+    asset_name VARCHAR(255) NOT NULL,
+    asset_type VARCHAR(100),
     location VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create 'pod_metrics' table
-CREATE TABLE pod_metrics (
-    id SERIAL PRIMARY KEY,
-    pod_id INTEGER NOT NULL,
-    metric_type VARCHAR(255) NOT NULL,
-    metric_value FLOAT NOT NULL,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (pod_id) REFERENCES neuralgrow_pods(id) ON DELETE CASCADE
+-- Table for storing sensor readings from assets
+CREATE TABLE sensor_readings (
+    reading_id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES predictive_maintenance_assets(asset_id),
+    sensor_type VARCHAR(100),
+    reading_value DOUBLE PRECISION,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create 'food_credits' table
-CREATE TABLE food_credits (
-    id SERIAL PRIMARY KEY,
-    pod_id INTEGER NOT NULL,
-    credits INTEGER NOT NULL,
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (pod_id) REFERENCES neuralgrow_pods(id) ON DELETE CASCADE
+-- Table for storing maintenance predictions
+CREATE TABLE maintenance_predictions (
+    prediction_id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES predictive_maintenance_assets(asset_id),
+    prediction_date TIMESTAMP,
+    predicted_issue VARCHAR(255),
+    confidence_level DOUBLE PRECISION,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create 'ai_optimizations' table
-CREATE TABLE ai_optimizations (
-    id SERIAL PRIMARY KEY,
-    pod_id INTEGER NOT NULL,
-    optimization_details TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (pod_id) REFERENCES neuralgrow_pods(id) ON DELETE CASCADE
+-- Table for storing actual maintenance events
+CREATE TABLE maintenance_events (
+    event_id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES predictive_maintenance_assets(asset_id),
+    event_date TIMESTAMP,
+    issue_resolved VARCHAR(255),
+    resolution_details TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
+
+-- Table for federated learning model management
+CREATE TABLE federated_learning_models (
+    model_id SERIAL PRIMARY KEY,
+    model_name VARCHAR(255),
+    version VARCHAR(50),
+    model_data BYTEA,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for storing ROI calculations
+CREATE TABLE roi_calculations (
+    calculation_id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES predictive_maintenance_assets(asset_id),
+    calculation_date TIMESTAMP,
+    cost_saved DOUBLE PRECISION,
+    revenue_generated DOUBLE PRECISION,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
