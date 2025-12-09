@@ -1,24 +1,33 @@
 ```sql
--- Assuming changes involve creating tables for sensor data, user models, and transactions.
-CREATE TABLE sensor_data (
+CREATE TABLE drones (
     id SERIAL PRIMARY KEY,
-    sensor_id VARCHAR(255) NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data JSONB
+    model VARCHAR(255),
+    status VARCHAR(50),
+    battery_level INT,
+    last_maintenance DATE
 );
 
-CREATE TABLE user_models (
+CREATE TABLE deliveries (
     id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
-    model_data BYTEA
+    drone_id INT REFERENCES drones(id),
+    hub_id INT REFERENCES delivery_hubs(id),
+    destination VARCHAR(255),
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE transactions (
+CREATE TABLE drone_flight_logs (
     id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2),
-    transaction_type VARCHAR(50),
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    drone_id INT REFERENCES drones(id),
+    flight_path JSON,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    status VARCHAR(50)
 );
--- Additional tables and fields based on 'databaseChanges'
+
+CREATE TABLE delivery_hubs (
+    id SERIAL PRIMARY KEY,
+    location VARCHAR(255),
+    capacity INT
+);
 ```
