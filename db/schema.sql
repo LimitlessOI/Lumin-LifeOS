@@ -1,30 +1,33 @@
 ```sql
-CREATE TABLE impact_verifications (
+CREATE TABLE exosuit_sessions (
     id SERIAL PRIMARY KEY,
-    verification_data JSONB NOT NULL,
-    status VARCHAR(50) NOT NULL,
+    user_id INTEGER NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP,
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE biomechanical_metrics (
+    id SERIAL PRIMARY KEY,
+    session_id INTEGER REFERENCES exosuit_sessions(id),
+    metric_name VARCHAR(100),
+    value FLOAT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE rehabilitation_programs (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE impact_tokens (
+CREATE TABLE suit_configurations (
     id SERIAL PRIMARY KEY,
-    token_hash VARCHAR(255) UNIQUE NOT NULL,
-    associated_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE resource_matches (
-    id SERIAL PRIMARY KEY,
-    resource_data JSONB NOT NULL,
-    match_score DECIMAL(5, 2) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE cross_platform_reputations (
-    id SERIAL PRIMARY KEY,
-    platform_name VARCHAR(100) NOT NULL,
-    reputation_score DECIMAL(5, 2) NOT NULL,
-    user_data JSONB NOT NULL,
+    session_id INTEGER REFERENCES exosuit_sessions(id),
+    configuration_data JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
