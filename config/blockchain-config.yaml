@@ -1,18 +1,17 @@
-name: "network-config"
-version: "1.0"
-client:
-  organization: Org1
-organizations:
-  Org1:
-    mspid: Org1MSP
-    peers:
-      - peer0.org1.example.com
-    certificateAuthorities:
-      - ca.org1.example.com
-peers:
-  peer0.org1.example.com:
-    url: grpc://localhost:7051
-certificateAuthorities:
-  ca.org1.example.com:
-    url: http://localhost:7054
-    caName: ca-org1
+---
+Organizations:
+  - Name: Org1
+    MspID: Org1MSP
+    Peers:
+      - Peer0
+Channels:
+  - Name: mychannel
+    Organizations:
+      - Org1
+Orderers:
+  - Name: orderer.example.com
+    URL: orderer.example.com:7050
+Peers:
+  - Name: peer0.org1.example.com
+    URL: peer0.org1.example.com:7051
+    Events: peer0.org1.example.com:7053
