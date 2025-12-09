@@ -1,39 +1,30 @@
--- Create table for wildlife observations
-CREATE TABLE IF NOT EXISTS wildlife_observations (
+```sql
+CREATE TABLE impact_verifications (
     id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP NOT NULL,
-    location GEOGRAPHY(POINT, 4326),
-    species VARCHAR(255),
-    observed_by VARCHAR(255),
-    observation_data JSONB
+    verification_data JSONB NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for conservation devices
-CREATE TABLE IF NOT EXISTS conservation_devices (
+CREATE TABLE impact_tokens (
     id SERIAL PRIMARY KEY,
-    device_id VARCHAR(255) UNIQUE NOT NULL,
-    type VARCHAR(255),
-    location GEOGRAPHY(POINT, 4326),
-    status VARCHAR(50),
-    last_maintenance TIMESTAMP
+    token_hash VARCHAR(255) UNIQUE NOT NULL,
+    associated_data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for habitat alerts
-CREATE TABLE IF NOT EXISTS habitat_alerts (
+CREATE TABLE resource_matches (
     id SERIAL PRIMARY KEY,
-    alert_type VARCHAR(255),
-    triggered_at TIMESTAMP NOT NULL,
-    location GEOGRAPHY(POINT, 4326),
-    details JSONB,
-    resolved BOOLEAN DEFAULT FALSE
+    resource_data JSONB NOT NULL,
+    match_score DECIMAL(5, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for predictive models
-CREATE TABLE IF NOT EXISTS predictive_models (
+CREATE TABLE cross_platform_reputations (
     id SERIAL PRIMARY KEY,
-    model_name VARCHAR(255),
-    version VARCHAR(50),
-    parameters JSONB,
-    accuracy FLOAT,
-    last_updated TIMESTAMP
+    platform_name VARCHAR(100) NOT NULL,
+    reputation_score DECIMAL(5, 2) NOT NULL,
+    user_data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
