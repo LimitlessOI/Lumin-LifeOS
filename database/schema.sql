@@ -1,33 +1,26 @@
-```sql
-CREATE TABLE neural_sessions (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    session_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    session_end TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE IF NOT EXISTS user_preferences (
+    user_id SERIAL PRIMARY KEY,
+    preferences JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE neural_patterns (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    pattern_data BYTEA NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE IF NOT EXISTS content_generation_jobs (
+    job_id SERIAL PRIMARY KEY,
+    content_type VARCHAR(50) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE neural_devices (
-    id SERIAL PRIMARY KEY,
-    device_name VARCHAR(255) NOT NULL,
-    mac_address VARCHAR(17) NOT NULL UNIQUE,
-    user_id INT,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+CREATE TABLE IF NOT EXISTS collaboration_sessions (
+    session_id SERIAL PRIMARY KEY,
+    user_ids INTEGER[] NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE neural_commands (
-    id SERIAL PRIMARY KEY,
-    session_id INT NOT NULL,
-    command VARCHAR(255) NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (session_id) REFERENCES neural_sessions(id)
+CREATE TABLE IF NOT EXISTS platform_integrations (
+    integration_id SERIAL PRIMARY KEY,
+    platform_name VARCHAR(50) NOT NULL,
+    api_key TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
+--
