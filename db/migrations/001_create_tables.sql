@@ -1,31 +1,33 @@
 ```sql
-CREATE TABLE user_preferences (
-    user_id SERIAL PRIMARY KEY,
-    preferences JSONB NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE supply_chain_entities (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE content_generation_jobs (
-    job_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    content_type VARCHAR(50),
-    status VARCHAR(20),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user_preferences(user_id)
+CREATE TABLE iot_devices (
+    id SERIAL PRIMARY KEY,
+    device_id VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT,
+    entity_id INT REFERENCES supply_chain_entities(id)
 );
 
-CREATE TABLE engagement_logs (
-    log_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    engagement_data JSONB,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user_preferences(user_id)
+CREATE TABLE carbon_footprint_records (
+    id SERIAL PRIMARY KEY,
+    entity_id INT REFERENCES supply_chain_entities(id),
+    carbon_footprint DECIMAL(10, 2) NOT NULL,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE ai_models (
-    model_id SERIAL PRIMARY KEY,
-    model_name VARCHAR(100),
-    version VARCHAR(20),
-    config JSONB,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE federated_learning_sessions (
+    id SERIAL PRIMARY KEY,
+    session_name VARCHAR(255) NOT NULL,
+    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE token_transactions (
+    id SERIAL PRIMARY KEY,
+    transaction_hash VARCHAR(255) UNIQUE NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL
+);
+```
