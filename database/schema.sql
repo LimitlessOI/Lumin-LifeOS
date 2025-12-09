@@ -1,24 +1,32 @@
-```sql
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    email VARCHAR(100) UNIQUE NOT NULL,
-    cognitive_profile JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Table for microgrid nodes
+CREATE TABLE microgrid_nodes (
+    node_id SERIAL PRIMARY KEY,
+    node_name VARCHAR(255) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE projects (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
+-- Table for energy transactions
+CREATE TABLE energy_transactions (
+    transaction_id SERIAL PRIMARY KEY,
+    node_id INT REFERENCES microgrid_nodes(node_id),
+    energy_amount DECIMAL(10, 2) NOT NULL,
+    transaction_type VARCHAR(50) NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for optimization schedules
+CREATE TABLE optimization_schedules (
+    schedule_id SERIAL PRIMARY KEY,
+    node_id INT REFERENCES microgrid_nodes(node_id),
+    schedule_time TIMESTAMP NOT NULL,
+    optimization_parameters JSONB
+);
+
+-- Table for grid services
+CREATE TABLE grid_services (
+    service_id SERIAL PRIMARY KEY,
+    service_name VARCHAR(255) NOT NULL,
     description TEXT,
-    skills JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    active BOOLEAN DEFAULT TRUE
 );
-
-CREATE TABLE credentials (
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    blockchain_id VARCHAR(255) UNIQUE,
-    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
