@@ -1,21 +1,30 @@
 ```json
 {
-  "name": "arw-service",
+  "name": "arw-microservice",
   "version": "1.0.0",
-  "description": "ARW microservice for LifeOS",
-  "main": "ARWService.js",
+  "description": "ARW Microservice for augmented reality web applications",
+  "main": "src/arw/ARWCore.js",
   "scripts": {
-    "start": "node ARWService.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/arw/ARWCore.js",
+    "test": "jest"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "body-parser": "^1.19.0",
-    "ws": "^7.5.0",
-    "pg": "^8.5.1",
-    "three": "^0.129.0",
+    "three": "^0.154.0",
     "aframe": "^1.2.0",
-    "webxr-polyfill": "^0.9.0"
+    "webxr-polyfill": "^2.0.1",
+    "tensorflow.js": "^4.0.0",
+    "@tensorflow-models/face-landmarks-detection": "^0.0.4",
+    "socket.io": "^4.4.1",
+    "openxr": "^0.1.0",
+    "redis": "^4.0.4",
+    "node-cron": "^3.0.0",
+    "axios": "^1.3.0",
+    "@slack/web-api": "^6.5.1",
+    "googleapis": "^105.0.0",
+    "@notionhq/client": "^0.4.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "puppeteer": "^19.0.0"
   }
 }
-```
