@@ -1,44 +1,30 @@
 ```sql
--- Create learner_profiles table
-CREATE TABLE learner_profiles (
+CREATE TABLE smart_materials (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    name VARCHAR(255),
-    age INT,
-    preferences JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(255) NOT NULL,
+    specifications JSONB NOT NULL,
+    performance_data JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create learning_sessions table
-CREATE TABLE learning_sessions (
+CREATE TABLE material_tests (
     id SERIAL PRIMARY KEY,
-    learner_id INT NOT NULL,
-    session_data JSONB,
-    start_time TIMESTAMP,
-    end_time TIMESTAMP,
-    FOREIGN KEY (learner_id) REFERENCES learner_profiles(id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    material_id INT REFERENCES smart_materials(id),
+    test_results JSONB NOT NULL,
+    conducted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create educator_dashboards table
-CREATE TABLE educator_dashboards (
+CREATE TABLE manufacturing_partners (
     id SERIAL PRIMARY KEY,
-    educator_id INT NOT NULL,
-    dashboard_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(255) NOT NULL,
+    api_endpoint VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create adaptive_rules table
-CREATE TABLE adaptive_rules (
+CREATE TABLE client_products (
     id SERIAL PRIMARY KEY,
-    rule_name VARCHAR(255) NOT NULL,
-    rule_description TEXT,
-    conditions JSONB,
-    actions JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(255) NOT NULL,
+    material_id INT REFERENCES smart_materials(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
