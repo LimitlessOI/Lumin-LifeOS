@@ -1,28 +1,30 @@
 ```json
 {
-  "name": "supply-chain-management",
+  "name": "translation-service",
   "version": "1.0.0",
-  "description": "A supply chain management system with real-time data ingestion, AI analytics, and blockchain integration.",
+  "description": "A microservice architecture for real-time translation and wearable integration.",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "jest"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "chart.js": "^3.5.1",
-    "express": "^4.17.1",
-    "joi": "^17.4.0",
-    "kafka-node": "^5.0.0",
-    "node-cron": "^3.0.0",
-    "redis": "^3.1.2",
-    "sequelize": "^6.6.5",
-    "socket.io": "^4.1.3",
-    "tensorflow": "^3.9.0",
-    "web3": "^1.5.1"
+    "express": "^4.18.2",
+    "socket.io": "^4.6.0",
+    "@google-cloud/speech": "^4.0.3",
+    "@google-cloud/text-to-speech": "^3.2.0",
+    "redis": "^4.0.1",
+    "bull": "^4.0.0",
+    "node-bluez": "^0.0.3",
+    "stripe": "^8.0.0",
+    "dotenv": "^10.0.0",
+    "pg": "^8.7.1",
+    "sequelize": "^6.3.5"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^27.4.5",
+    "nodemon": "^2.0.15"
   }
 }
 ```
