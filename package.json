@@ -1,25 +1,27 @@
 ```json
 {
-  "name": "neural-bridge",
+  "name": "ccacp",
   "version": "1.0.0",
-  "description": "Neural data bridge for non-invasive headband streaming",
-  "main": "index.js",
+  "main": "gateway.js",
   "scripts": {
-    "test": "jest"
+    "start": "node services/ccacp/src/api/gateway.js"
   },
   "dependencies": {
-    "ws": "^8.0.0",
-    "libsodium-wrappers": "^0.7.9",
-    "brain.js": "^2.0.0",
-    "tensorflow.js": "^3.8.0",
-    "webbluetooth": "^0.1.0",
-    "node-fhir-server-core": "^2.1.0",
-    "regulations-parser": "^1.0.0",
-    "neural-data-standards": "^1.0.0",
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "jest": "^27.0.0"
+    "express": "^4.17.1",
+    "sequelize": "^6.6.5",
+    "pg": "^8.6.0",
+    "redis": "^3.1.2",
+    "web3": "^1.5.2",
+    "@tensorflow/tfjs-node": "^3.9.0",
+    "three": "^0.132.2",
+    "socket.io": "^4.1.2",
+    "bull": "^3.22.6",
+    "argon2": "^0.28.2",
+    "joi": "^17.4.2",
+    "axios": "^0.21.1",
+    "multer": "^1.4.3",
+    "sharp": "^0.28.3",
+    "kafka-node": "^5.0.0"
   }
 }
 ```
