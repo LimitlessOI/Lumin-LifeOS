@@ -1,42 +1,37 @@
 ```sql
--- Create table for patients
-CREATE TABLE patients (
+CREATE TABLE farm_sensors (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    age INTEGER,
-    gender VARCHAR(10),
-    medical_history JSONB
+    sensor_id VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
+    type VARCHAR(255),
+    installed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for biomarker streams
-CREATE TABLE biomarker_streams (
+CREATE TABLE sensor_readings (
     id SERIAL PRIMARY KEY,
-    patient_id INTEGER REFERENCES patients(id),
-    biomarker_data JSONB,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    sensor_id VARCHAR(255) NOT NULL,
+    reading_value FLOAT NOT NULL,
+    reading_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (sensor_id) REFERENCES farm_sensors(sensor_id)
 );
 
--- Create table for treatment pathways
-CREATE TABLE treatment_pathways (
+CREATE TABLE environmental_credits (
     id SERIAL PRIMARY KEY,
-    patient_id INTEGER REFERENCES patients(id),
-    pathway_data JSONB,
-    effectiveness_score FLOAT
+    credit_type VARCHAR(255) NOT NULL,
+    amount FLOAT NOT NULL,
+    calculated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for genomic analyses
-CREATE TABLE genomic_analyses (
+CREATE TABLE federated_models (
     id SERIAL PRIMARY KEY,
-    patient_id INTEGER REFERENCES patients(id),
-    analysis_data JSONB,
-    findings TEXT
+    model_version VARCHAR(255) NOT NULL,
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for physician collaborations
-CREATE TABLE physician_collaborations (
+CREATE TABLE yield_outcomes (
     id SERIAL PRIMARY KEY,
-    patient_id INTEGER REFERENCES patients(id),
-    physician_notes TEXT,
-    collaboration_details JSONB
+    outcome_description TEXT NOT NULL,
+    yield_value FLOAT,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
