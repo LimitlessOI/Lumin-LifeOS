@@ -1,38 +1,39 @@
-```sql
-CREATE TABLE talent_candidates (
+-- Create table for wildlife observations
+CREATE TABLE IF NOT EXISTS wildlife_observations (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    skills TEXT,
-    experience INTEGER,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    timestamp TIMESTAMP NOT NULL,
+    location GEOGRAPHY(POINT, 4326),
+    species VARCHAR(255),
+    observed_by VARCHAR(255),
+    observation_data JSONB
 );
 
-CREATE TABLE talent_jobs (
+-- Create table for conservation devices
+CREATE TABLE IF NOT EXISTS conservation_devices (
     id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    requirements TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    device_id VARCHAR(255) UNIQUE NOT NULL,
+    type VARCHAR(255),
+    location GEOGRAPHY(POINT, 4326),
+    status VARCHAR(50),
+    last_maintenance TIMESTAMP
 );
 
-CREATE TABLE talent_matches (
+-- Create table for habitat alerts
+CREATE TABLE IF NOT EXISTS habitat_alerts (
     id SERIAL PRIMARY KEY,
-    candidate_id INTEGER REFERENCES talent_candidates(id),
-    job_id INTEGER REFERENCES talent_jobs(id),
-    score REAL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    alert_type VARCHAR(255),
+    triggered_at TIMESTAMP NOT NULL,
+    location GEOGRAPHY(POINT, 4326),
+    details JSONB,
+    resolved BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE talent_analytics (
+-- Create table for predictive models
+CREATE TABLE IF NOT EXISTS predictive_models (
     id SERIAL PRIMARY KEY,
-    candidate_id INTEGER REFERENCES talent_candidates(id),
-    job_id INTEGER REFERENCES talent_jobs(id),
-    match_attempts INTEGER DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    model_name VARCHAR(255),
+    version VARCHAR(50),
+    parameters JSONB,
+    accuracy FLOAT,
+    last_updated TIMESTAMP
 );
-
-CREATE INDEX idx_candidate_id ON talent_matches (candidate_id);
-CREATE INDEX idx_job_id ON talent_matches (job_id);
-CREATE INDEX idx_analytics_candidate_id ON talent_analytics (candidate_id);
-CREATE INDEX idx_analytics_job_id ON talent_analytics (job_id);
-```
