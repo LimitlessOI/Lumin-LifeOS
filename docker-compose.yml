@@ -1,26 +1,31 @@
 ```yaml
-version: '3.8'
+version: '3'
 
 services:
-  api-gateway:
+  app:
     build: .
     ports:
       - "3000:3000"
-    networks:
-      - supply-chain-network
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/mydb
     depends_on:
-      - db
+      - postgres
+      - redis
 
-  db:
-    image: postgres:13
+  postgres:
+    image: postgres
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: supply_chain
-    networks:
-      - supply-chain-network
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-networks:
-  supply-chain-network:
-    driver: bridge
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
 ```
