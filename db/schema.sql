@@ -1,21 +1,27 @@
 ```sql
-CREATE TABLE IF NOT EXISTS Farms (
+CREATE TABLE energy_predictions (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    timestamp TIMESTAMP NOT NULL,
+    predicted_value DECIMAL NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS EnergyAllocations (
+CREATE TABLE energy_trades (
     id SERIAL PRIMARY KEY,
-    farm_id INT REFERENCES Farms(id),
-    energy_amount DECIMAL(10, 2) NOT NULL,
-    allocation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    trade_time TIMESTAMP NOT NULL,
+    energy_amount DECIMAL NOT NULL,
+    trade_price DECIMAL NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS FederatedModels (
+CREATE TABLE carbon_offsets (
     id SERIAL PRIMARY KEY,
-    model_data BYTEA NOT NULL,
-    last_trained TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    offset_value DECIMAL NOT NULL,
+    timestamp TIMESTAMP NOT NULL
+);
+
+CREATE TABLE hardware_devices (
+    id SERIAL PRIMARY KEY,
+    device_id VARCHAR(255) NOT NULL,
+    device_type VARCHAR(255),
+    last_active TIMESTAMP
 );
 ```
