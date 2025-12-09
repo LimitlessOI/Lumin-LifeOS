@@ -1,23 +1,22 @@
-```dockerfile
-# Base image for building
-FROM node:14 as build
+```Dockerfile
+# Use Node.js as a base image
+FROM node:14
 
-WORKDIR /app
+# Set the working directory
+WORKDIR /usr/src/app
 
-COPY package.json yarn.lock ./
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-RUN yarn install
+# Install dependencies
+RUN npm install
 
+# Copy the rest of the application's source code
 COPY . .
 
-RUN yarn build
+# Expose the port the app runs on
+EXPOSE 3000
 
-# Production image
-FROM node:14-alpine
-
-WORKDIR /app
-
-COPY --from=build /app/dist ./dist
-
-CMD ["node", "dist/main.js"]
+# Command to run the app
+CMD ["node", "ARWService.js"]
 ```
