@@ -1,26 +1,21 @@
-```json
 {
-  "name": "energy-grid-management",
+  "name": "learning-cortex",
   "version": "1.0.0",
-  "description": "AI-driven energy grid management system with blockchain integration",
-  "main": "src/server.js",
+  "description": "A learning platform with VR/AR capabilities.",
+  "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node services/learning-cortex/api.js",
     "test": "jest"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "web3": "^1.6.0",
-    "@maticnetwork/pos": "^2.0.0",
-    "@wormhole-foundation/sdk": "^1.0.0",
-    "node-postgres": "^8.7.1",
-    "socket.io": "^4.4.1",
     "redis": "^3.1.2",
-    "tensorflow": "^2.7.0",
-    "hardhat": "^2.7.1"
+    "pg": "^8.5.1",
+    "ws": "^7.4.6",
+    "three": "^0.132.2",
+    "webxr": "^0.2.3"
   },
   "devDependencies": {
-    "jest": "^27.3.1"
+    "jest": "^27.0.6"
   }
 }
-```
