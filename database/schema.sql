@@ -1,39 +1,37 @@
 ```sql
-CREATE TABLE ar_experiences (
+-- Table for storing reputation scores
+CREATE TABLE dao_reputation_scores (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    template_id INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE ar_templates (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    model_url TEXT,
-    metadata JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE user_ar_progress (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    experience_id INT NOT NULL,
-    progress JSONB,
+    user_id UUID NOT NULL,
+    score NUMERIC(10, 2) NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE marketplace_transactions (
+-- Table for storing DAO proposals
+CREATE TABLE dao_proposals (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL,
-    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    proposal_id UUID UNIQUE NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE lms_integrations (
+-- Table for storing DAO contributions
+CREATE TABLE dao_contributions (
     id SERIAL PRIMARY KEY,
-    lms_name VARCHAR(255) NOT NULL,
-    api_key TEXT NOT NULL,
+    user_id UUID NOT NULL,
+    contribution_type VARCHAR(50) NOT NULL,
+    contribution_value NUMERIC(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for storing DAO templates
+CREATE TABLE dao_templates (
+    id SERIAL PRIMARY KEY,
+    template_name VARCHAR(255) UNIQUE NOT NULL,
+    template_description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
