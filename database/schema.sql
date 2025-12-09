@@ -1,37 +1,36 @@
 ```sql
-CREATE TABLE infrastructure_assets (
+CREATE TABLE drones (
     id SERIAL PRIMARY KEY,
-    asset_name VARCHAR(255) NOT NULL,
-    asset_type VARCHAR(100),
-    location VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    model VARCHAR(255) NOT NULL,
+    battery_level FLOAT NOT NULL,
+    last_maintenance DATE NOT NULL,
+    status VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE sensor_readings (
+CREATE TABLE deliveries (
     id SERIAL PRIMARY KEY,
-    asset_id INT NOT NULL,
-    sensor_type VARCHAR(100),
-    reading_value FLOAT,
-    reading_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (asset_id) REFERENCES infrastructure_assets(id)
+    drone_id INTEGER REFERENCES drones(id),
+    pickup_location VARCHAR(255) NOT NULL,
+    dropoff_location VARCHAR(255) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    scheduled_time TIMESTAMP NOT NULL
 );
 
-CREATE TABLE maintenance_predictions (
+CREATE TABLE drone_telemetry (
     id SERIAL PRIMARY KEY,
-    asset_id INT NOT NULL,
-    prediction_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    predicted_issue VARCHAR(255),
-    severity INT,
-    FOREIGN KEY (asset_id) REFERENCES infrastructure_assets(id)
+    drone_id INTEGER REFERENCES drones(id),
+    timestamp TIMESTAMP NOT NULL,
+    latitude FLOAT NOT NULL,
+    longitude FLOAT NOT NULL,
+    altitude FLOAT NOT NULL,
+    speed FLOAT NOT NULL
 );
 
-CREATE TABLE maintenance_logs (
+CREATE TABLE compliance_logs (
     id SERIAL PRIMARY KEY,
-    asset_id INT NOT NULL,
-    maintenance_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    maintenance_description TEXT,
-    maintenance_cost FLOAT,
-    FOREIGN KEY (asset_id) REFERENCES infrastructure_assets(id)
+    drone_id INTEGER REFERENCES drones(id),
+    timestamp TIMESTAMP NOT NULL,
+    compliance_status VARCHAR(255) NOT NULL,
+    details TEXT
 );
 ```
