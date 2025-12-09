@@ -1,16 +1,12 @@
 ```javascript
 const request = require('supertest');
-const app = require('../app'); // Assuming express app is exported from app.js
+const app = require('../main'); // Assuming FastAPI app is exported
 
-describe('Customer Service API', () => {
-    it('POST /api/v1/customer-service/process should process message', async () => {
-        const response = await request(app)
-            .post('/api/v1/customer-service/process')
-            .send({ message: 'I love this product!' });
+describe("GET /status", () => {
+    it("should return running status", async () => {
+        const response = await request(app).get("/status");
         expect(response.statusCode).toBe(200);
-        expect(response.body).toHaveProperty('sentiment');
+        expect(response.body.status).toBe("running");
     });
-
-    // Add more integration tests for other endpoints
 });
 ```
