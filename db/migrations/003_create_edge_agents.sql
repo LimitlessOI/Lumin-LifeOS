@@ -1,0 +1,6 @@
+```sql
+CREATE TABLE edge_agents (
+    id SERIAL PRIMARY KEY,
+    agent_id VARCHAR(255) UNIQUE NOT NULL,
+    last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
