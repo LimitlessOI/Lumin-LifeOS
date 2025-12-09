@@ -1,0 +1,7 @@
+```toml
+[build]
+  command = "npm install"
+
+[start]
+  command = "node src/server.js"
+```
