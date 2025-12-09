@@ -1,39 +1,38 @@
 ```sql
-CREATE TABLE legal_cases (
+CREATE TABLE energy_nodes (
     id SERIAL PRIMARY KEY,
-    case_number VARCHAR(255) UNIQUE NOT NULL,
-    title VARCHAR(255),
-    details TEXT,
+    node_id VARCHAR(255) UNIQUE NOT NULL,
+    status VARCHAR(50),
+    capacity FLOAT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE legal_research_sessions (
+CREATE TABLE energy_transactions (
     id SERIAL PRIMARY KEY,
-    session_id UUID UNIQUE NOT NULL,
-    user_id INT,
-    case_id INT REFERENCES legal_cases(id),
-    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ended_at TIMESTAMP
+    transaction_id VARCHAR(255) UNIQUE NOT NULL,
+    from_node_id VARCHAR(255) NOT NULL,
+    to_node_id VARCHAR(255) NOT NULL,
+    amount FLOAT,
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (from_node_id) REFERENCES energy_nodes(node_id),
+    FOREIGN KEY (to_node_id) REFERENCES energy_nodes(node_id)
 );
 
-CREATE TABLE jurisdiction_patterns (
+CREATE TABLE grid_events (
     id SERIAL PRIMARY KEY,
-    pattern_name VARCHAR(255) UNIQUE NOT NULL,
+    event_type VARCHAR(255),
+    node_id VARCHAR(255),
     description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (node_id) REFERENCES energy_nodes(node_id)
 );
 
-CREATE TABLE collaborative_workspaces (
+CREATE TABLE federated_models (
     id SERIAL PRIMARY KEY,
-    workspace_id UUID UNIQUE NOT NULL,
-    user_id INT,
+    model_id VARCHAR(255) UNIQUE NOT NULL,
+    version INT,
+    parameters BYTEA,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE blockchain_verifications (
-    id SERIAL PRIMARY KEY,
-    citation_hash VARCHAR(255) UNIQUE NOT NULL,
-    verified BOOLEAN DEFAULT FALSE,
-    verification_date TIMESTAMP
 );
 ```
