@@ -1,37 +1,25 @@
-```sql
--- Table for storing patient information
-CREATE TABLE healthcare_patients (
-    patient_id SERIAL PRIMARY KEY,
+CREATE TABLE quantum_simulations (
+    id SERIAL PRIMARY KEY,
+    partner_id INT NOT NULL,
+    simulation_data JSONB NOT NULL,
+    result_data JSONB,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (partner_id) REFERENCES pharma_partners(id)
+);
+
+CREATE TABLE pharma_partners (
+    id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    birth_date DATE NOT NULL,
-    gender VARCHAR(10),
-    contact_info JSONB,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for storing treatment plans
-CREATE TABLE treatment_plans (
-    plan_id SERIAL PRIMARY KEY,
-    patient_id INT REFERENCES healthcare_patients(patient_id),
-    plan_details JSONB NOT NULL,
+CREATE TABLE molecular_optimizations (
+    id SERIAL PRIMARY KEY,
+    simulation_id INT NOT NULL,
+    optimized_structure JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Table for storing health metrics from wearables and EHRs
-CREATE TABLE health_metrics (
-    metric_id SERIAL PRIMARY KEY,
-    patient_id INT REFERENCES healthcare_patients(patient_id),
-    metric_type VARCHAR(255) NOT NULL,
-    metric_value JSONB,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Table for managing federated learning models
-CREATE TABLE federated_models (
-    model_id SERIAL PRIMARY KEY,
-    model_version VARCHAR(50),
-    model_data BYTEA,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    FOREIGN KEY (simulation_id) REFERENCES quantum_simulations(id)
 );
