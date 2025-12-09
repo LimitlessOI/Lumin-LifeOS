@@ -1,38 +1,53 @@
 ```prisma
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model EnergyProfile {
-  id        Int      @id @default(autoincrement())
+generator client {
+  provider = "prisma-client-js"
+}
+
+model SkillProfile {
+  id        Int       @id @default(autoincrement())
+  name      String
   userId    String
-  profileData Json
-  createdAt DateTime @default(now())
+  assessments SkillAssessment[]
 }
 
-model EnergyTransaction {
-  id           Int      @id @default(autoincrement())
-  buyerId      String
-  sellerId     String
-  amount       Float
-  transactionDate DateTime @default(now())
+model SkillAssessment {
+  id          Int       @id @default(autoincrement())
+  skillId     Int
+  profile     SkillProfile @relation(fields: [skillId], references: [id])
+  score       Float
+  evidenceUrl String?
 }
 
-model IoTDeviceRegistry {
-  id       Int    @id @default(autoincrement())
-  deviceId String
-  ownerId  String
-  data     Json
+model LearningPath {
+  id        Int       @id @default(autoincrement())
+  name      String
+  description String
+  skillProfiles SkillProfile[]
 }
 
-model NeighborhoodGrid {
-  id       Int    @id @default(autoincrement())
-  gridData Json
-  location String
+model SkillNFT {
+  id        Int       @id @default(autoincrement())
+  tokenId   String
+  metadataUrl String
+}
+
+model GovernanceProposal {
+  id        Int       @id @default(autoincrement())
+  title     String
+  description String
+  status    String
+}
+
+model ProjectMarketplace {
+  id        Int       @id @default(autoincrement())
+  projectId String
+  title     String
+  description String
+  budget    Float
 }
 ```
