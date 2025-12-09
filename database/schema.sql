@@ -1,15 +1,32 @@
 ```sql
--- PostgreSQL Schema Setup
-CREATE TABLE IF NOT EXISTS water_usage (
+CREATE TABLE mental_health_assessments (
     id SERIAL PRIMARY KEY,
-    device_id VARCHAR(50) NOT NULL,
-    usage_volume FLOAT NOT NULL,
-    timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    assessment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    score INT,
+    assessment_data JSONB
 );
 
--- TimescaleDB Extension
-CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
+CREATE TABLE mood_tracking (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    mood_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    mood_level INT,
+    notes TEXT
+);
 
--- TimescaleDB Hypertable
-SELECT create_hypertable('water_usage', 'timestamp', migrate_data => true);
+CREATE TABLE therapy_sessions (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    therapist_id INT,
+    session_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    session_notes TEXT
+);
+
+CREATE TABLE therapist_connections (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    therapist_id INT,
+    connection_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 ```
