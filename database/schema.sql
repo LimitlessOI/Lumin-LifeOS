@@ -1,32 +1,29 @@
 ```sql
-CREATE TABLE healing_events (
+CREATE TABLE sensors (
     id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP NOT NULL,
-    event_type VARCHAR(50) NOT NULL,
-    description TEXT,
-    status VARCHAR(20) NOT NULL,
-    strategy_id INT REFERENCES healing_strategies(id)
+    type VARCHAR(50),
+    location VARCHAR(100),
+    last_reading TIMESTAMP
 );
 
-CREATE TABLE healing_strategies (
+CREATE TABLE sensor_data (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    description TEXT,
-    efficacy_score FLOAT
+    sensor_id INT REFERENCES sensors(id),
+    data JSONB,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE agent_inventory (
+CREATE TABLE drones (
     id SERIAL PRIMARY KEY,
-    agent_name VARCHAR(100) NOT NULL,
-    quantity INT NOT NULL,
-    last_updated TIMESTAMP NOT NULL
+    model VARCHAR(50),
+    status VARCHAR(20),
+    last_communication TIMESTAMP
 );
 
-CREATE TABLE ml_training_logs (
+CREATE TABLE drone_data (
     id SERIAL PRIMARY KEY,
-    model_name VARCHAR(100) NOT NULL,
-    accuracy FLOAT,
-    loss FLOAT,
-    timestamp TIMESTAMP NOT NULL
+    drone_id INT REFERENCES drones(id),
+    data JSONB,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
