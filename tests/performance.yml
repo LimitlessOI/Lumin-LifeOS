@@ -1,0 +1,15 @@
+```yaml
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 5
+scenarios:
+  - flow:
+      - post:
+          url: '/api/wildlife/ingest'
+          json:
+            species: 'Tiger'
+            location: [34.0522, -118.2437]
+            observed_at: '2023-10-12T08:00:00Z'
+```
