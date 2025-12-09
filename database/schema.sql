@@ -1,36 +1,32 @@
-CREATE TABLE health_metrics (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  ppg_data JSONB,
-  ecg_data JSONB,
-  temperature_data JSONB,
-  motion_data JSONB
+```sql
+CREATE TABLE energy_assets (
+    id SERIAL PRIMARY KEY,
+    asset_name VARCHAR(255) NOT NULL,
+    asset_type VARCHAR(50) NOT NULL,
+    capacity DECIMAL NOT NULL,
+    owner_id INT NOT NULL,
+    location VARCHAR(255)
 );
 
-CREATE TABLE health_baselines (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  baseline_data JSONB
+CREATE TABLE microtransactions (
+    id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES energy_assets(id),
+    amount DECIMAL NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE predictive_alerts (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  alert_type VARCHAR(50),
-  alert_data JSONB,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+CREATE TABLE grid_predictions (
+    id SERIAL PRIMARY KEY,
+    prediction_date DATE NOT NULL,
+    predicted_demand DECIMAL NOT NULL,
+    predicted_supply DECIMAL NOT NULL
 );
 
-CREATE TABLE clinician_assignments (
-  id SERIAL PRIMARY KEY,
-  clinician_id INT NOT NULL,
-  user_id INT NOT NULL,
-  assignment_details JSONB
+CREATE TABLE consumer_portfolios (
+    id SERIAL PRIMARY KEY,
+    consumer_id INT NOT NULL,
+    portfolio_value DECIMAL NOT NULL,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE federated_learning_models (
-  id SERIAL PRIMARY KEY,
-  model_data BYTEA,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
+```
