@@ -1,0 +1,14 @@
+```json
+{
+  "name": "xr-pwa",
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack serve --open"
+  },
+  "dependencies": {
+    "aframe": "^1.2.0"
+  }
+}
+```
