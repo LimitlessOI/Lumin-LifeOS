@@ -1,38 +1,27 @@
-```sql
-CREATE TABLE energy_nodes (
+CREATE TABLE xr_sessions (
     id SERIAL PRIMARY KEY,
-    node_id VARCHAR(255) UNIQUE NOT NULL,
-    status VARCHAR(50),
-    capacity FLOAT,
+    user_id INT NOT NULL,
+    session_data JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE energy_transactions (
+CREATE TABLE phygital_links (
     id SERIAL PRIMARY KEY,
-    transaction_id VARCHAR(255) UNIQUE NOT NULL,
-    from_node_id VARCHAR(255) NOT NULL,
-    to_node_id VARCHAR(255) NOT NULL,
-    amount FLOAT,
-    status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (from_node_id) REFERENCES energy_nodes(node_id),
-    FOREIGN KEY (to_node_id) REFERENCES energy_nodes(node_id)
-);
-
-CREATE TABLE grid_events (
-    id SERIAL PRIMARY KEY,
-    event_type VARCHAR(255),
-    node_id VARCHAR(255),
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (node_id) REFERENCES energy_nodes(node_id)
-);
-
-CREATE TABLE federated_models (
-    id SERIAL PRIMARY KEY,
-    model_id VARCHAR(255) UNIQUE NOT NULL,
-    version INT,
-    parameters BYTEA,
+    link_type VARCHAR(50),
+    link_data JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
+
+CREATE TABLE xr_analytics (
+    id SERIAL PRIMARY KEY,
+    session_id INT REFERENCES xr_sessions(id),
+    analytics_data JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ai_personalization (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    personalization_data JSONB,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
