@@ -8,46 +8,35 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model UserFinancialProfile {
-  id        Int    @id @default(autoincrement())
-  userId    String
-  profile   Json
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model LearningSession {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  sessionData Json     @db.JsonB
+  createdAt  DateTime  @default(now()) @db.Timestamptz
+  EmotionalMetrics EmotionalMetric[]
+  ContentAdaptations ContentAdaptation[]
 }
 
-model FinancialTransaction {
-  id          Int    @id @default(autoincrement())
-  userId      String
-  amount      Float
-  category    String
-  date        DateTime
-  description String
-  createdAt   DateTime @default(now())
+model EmotionalMetric {
+  id        Int       @id @default(autoincrement())
+  session   LearningSession @relation(fields: [sessionId], references: [id])
+  sessionId Int
+  metrics   Json      @db.JsonB
+  timestamp DateTime  @default(now()) @db.Timestamptz
 }
 
-model AIInsight {
-  id        Int    @id @default(autoincrement())
-  userId    String
-  insight   Json
-  createdAt DateTime @default(now())
+model ContentAdaptation {
+  id               Int       @id @default(autoincrement())
+  session          LearningSession @relation(fields: [sessionId], references: [id])
+  sessionId        Int
+  adaptationDetails Json     @db.JsonB
+  createdAt        DateTime  @default(now()) @db.Timestamptz
 }
 
-model EducationalModule {
-  id          Int    @id @default(autoincrement())
-  title       String
-  content     String
-  createdAt   DateTime @default(now())
-}
-
-model UserLearningProgress {
-  id              Int    @id @default(autoincrement())
-  userId          String
-  moduleId        Int
-  progress        Float
-  completedAt     DateTime?
-  createdAt       DateTime @default(now())
-
-  module EducationalModule @relation(fields: [moduleId], references: [id])
+model TeacherDashboard {
+  id            Int       @id @default(autoincrement())
+  teacherId     Int
+  dashboardData Json      @db.JsonB
+  updatedAt     DateTime  @default(now()) @db.Timestamptz
 }
 ```
