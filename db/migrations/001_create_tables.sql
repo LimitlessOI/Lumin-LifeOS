@@ -1,37 +1,29 @@
 ```sql
-CREATE TABLE vrtourism_users (
+CREATE TABLE user_genetic_profiles (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    genetic_data JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE vr_sessions (
+CREATE TABLE user_biomarkers (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES vrtourism_users(id),
-    session_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    session_end TIMESTAMP,
-    status VARCHAR(20) NOT NULL
+    user_id INT NOT NULL,
+    biomarker_data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE virtual_nfts (
+CREATE TABLE nutrition_plans (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES vrtourism_users(id),
-    nft_data JSONB,
-    minted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    plan_details JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE ai_locals (
+CREATE TABLE clinician_assignments (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    description TEXT,
-    narrative_data JSONB
-);
-
-CREATE TABLE sensory_devices (
-    id SERIAL PRIMARY KEY,
-    device_type VARCHAR(50),
-    user_id INT REFERENCES vrtourism_users(id),
-    configuration JSONB
+    clinician_id INT NOT NULL,
+    user_id INT NOT NULL,
+    assignment_details JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
