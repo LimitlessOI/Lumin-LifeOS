@@ -1,43 +1,39 @@
-```sql
--- User Financial Profiles Table
-CREATE TABLE user_financial_profiles (
-    user_id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    risk_tolerance INT,
-    investment_goals TEXT,
-    account_balance DECIMAL(15, 2),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Drones table
+CREATE TABLE drones (
+    id SERIAL PRIMARY KEY,
+    model VARCHAR(50),
+    status VARCHAR(20),
+    current_location GEOGRAPHY(POINT),
+    battery_level INTEGER
 );
 
--- Market Data Snapshots Table
-CREATE TABLE market_data_snapshots (
-    snapshot_id SERIAL PRIMARY KEY,
-    data JSONB NOT NULL,
-    captured_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Charging stations table
+CREATE TABLE charging_stations (
+    id SERIAL PRIMARY KEY,
+    location GEOGRAPHY(POINT),
+    capacity INTEGER
 );
 
--- Investment Recommendations Table
-CREATE TABLE investment_recommendations (
-    recommendation_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES user_financial_profiles(user_id),
-    recommendations JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Delivery routes table
+CREATE TABLE delivery_routes (
+    id SERIAL PRIMARY KEY,
+    drone_id INTEGER REFERENCES drones(id),
+    start_location GEOGRAPHY(POINT),
+    end_location GEOGRAPHY(POINT),
+    status VARCHAR(20),
+    estimated_time TIMESTAMP
 );
 
--- User Feedback Table
-CREATE TABLE user_feedback (
-    feedback_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES user_financial_profiles(user_id),
-    feedback TEXT,
-    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Payload containers table
+CREATE TABLE payload_containers (
+    id SERIAL PRIMARY KEY,
+    capacity INTEGER,
+    current_weight INTEGER
 );
 
--- ML Model Versions Table
-CREATE TABLE ml_model_versions (
-    model_id SERIAL PRIMARY KEY,
-    model_name VARCHAR(50),
-    version VARCHAR(10),
-    parameters JSONB,
-    trained_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Retail partners table
+CREATE TABLE retail_partners (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    api_endpoint VARCHAR(200)
 );
-```
