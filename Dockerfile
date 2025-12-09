@@ -1,15 +1,20 @@
 ```dockerfile
-FROM node:14
+# Base image
+FROM node:14-alpine
 
-WORKDIR /usr/src/app
+# Set working directory
+WORKDIR /app
 
-COPY package*.json ./
+# Copy package.json and install dependencies
+COPY package.json yarn.lock ./
+RUN yarn install
 
-RUN npm install
-
+# Copy application code
 COPY . .
 
+# Expose application port
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+# Start the application
+CMD ["yarn", "start"]
 ```
