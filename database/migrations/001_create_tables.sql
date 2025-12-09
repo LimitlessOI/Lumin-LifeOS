@@ -1,33 +1,17 @@
 ```sql
-CREATE TABLE user_profiles (
+CREATE TABLE vr_sessions (
     id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) UNIQUE NOT NULL,
-    preferences JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP
 );
 
-CREATE TABLE personalization_workflows (
+CREATE TABLE nft_mints (
     id SERIAL PRIMARY KEY,
-    workflow_name VARCHAR(255) NOT NULL,
-    description TEXT,
-    active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    nft_id VARCHAR(255) NOT NULL,
+    minted_at TIMESTAMP NOT NULL
 );
 
-CREATE TABLE conversion_events (
-    id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
-    event_type VARCHAR(255),
-    event_value DECIMAL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE ml_models (
-    id SERIAL PRIMARY KEY,
-    model_name VARCHAR(255) NOT NULL,
-    model_data BYTEA,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- Additional tables as per `databaseChanges` schema can be added here.
+```
