@@ -1,33 +1,37 @@
 ```sql
-CREATE TABLE equipment_metrics (
+-- Create 'neuralgrow_pods' table
+CREATE TABLE neuralgrow_pods (
     id SERIAL PRIMARY KEY,
-    equipment_id INT NOT NULL,
-    metric_name VARCHAR(100),
-    metric_value FLOAT,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    pod_name VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE predictive_alerts (
-    alert_id SERIAL PRIMARY KEY,
-    equipment_id INT NOT NULL,
-    alert_type VARCHAR(100),
-    alert_description TEXT,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Create 'pod_metrics' table
+CREATE TABLE pod_metrics (
+    id SERIAL PRIMARY KEY,
+    pod_id INTEGER NOT NULL,
+    metric_type VARCHAR(255) NOT NULL,
+    metric_value FLOAT NOT NULL,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pod_id) REFERENCES neuralgrow_pods(id) ON DELETE CASCADE
 );
 
-CREATE TABLE roi_calculations (
-    calculation_id SERIAL PRIMARY KEY,
-    equipment_id INT NOT NULL,
-    downtime_savings FLOAT,
-    maintenance_cost_reduction FLOAT,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Create 'food_credits' table
+CREATE TABLE food_credits (
+    id SERIAL PRIMARY KEY,
+    pod_id INTEGER NOT NULL,
+    credits INTEGER NOT NULL,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pod_id) REFERENCES neuralgrow_pods(id) ON DELETE CASCADE
 );
 
-CREATE TABLE federated_learning_rounds (
-    round_id SERIAL PRIMARY KEY,
-    model_type VARCHAR(100),
-    accuracy FLOAT,
-    loss FLOAT,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Create 'ai_optimizations' table
+CREATE TABLE ai_optimizations (
+    id SERIAL PRIMARY KEY,
+    pod_id INTEGER NOT NULL,
+    optimization_details TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pod_id) REFERENCES neuralgrow_pods(id) ON DELETE CASCADE
 );
 ```
