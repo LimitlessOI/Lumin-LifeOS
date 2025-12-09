@@ -1,22 +1,19 @@
 ```json
 {
-  "name": "panel-management-system",
+  "name": "organ-assembly-system",
   "version": "1.0.0",
-  "description": "A system for managing construction panels and sensor data",
-  "main": "src/index.js",
+  "description": "Organ assembly system managing vascular patterns, bioink formulations, and print operations.",
+  "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "jest"
+    "start": "node src/index.js"
   },
   "dependencies": {
+    "@tensorflow/tfjs-node": "^3.0.0",
+    "axios": "^0.21.1",
     "express": "^4.17.1",
+    "mqtt": "^4.2.6",
     "sequelize": "^6.6.5",
-    "pg": "^8.6.0",
-    "redis": "^3.1.2"
-  },
-  "devDependencies": {
-    "jest": "^27.0.6",
-    "supertest": "^6.1.3"
+    "web3": "^1.3.6"
   }
 }
 ```
