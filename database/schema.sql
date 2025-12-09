@@ -1,41 +1,38 @@
 ```sql
-CREATE TABLE biodegradable_materials (
+CREATE TABLE ethical_decisions (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    properties JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    decision_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE component_designs (
+CREATE TABLE skill_gaps (
     id SERIAL PRIMARY KEY,
-    material_id INT REFERENCES biodegradable_materials(id),
-    design_spec JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    skill_name VARCHAR(255) NOT NULL,
+    gap_level INTEGER NOT NULL,
+    user_id INTEGER REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE manufacturing_partners (
+CREATE TABLE ethical_frameworks (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    contact_info JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    framework_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE e_waste_impact (
+CREATE TABLE outcome_metrics (
     id SERIAL PRIMARY KEY,
-    material_id INT REFERENCES biodegradable_materials(id),
-    impact_metrics JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    metric_name VARCHAR(255) NOT NULL,
+    value FLOAT NOT NULL,
+    decision_id INTEGER REFERENCES ethical_decisions(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE research_tasks (
+CREATE TABLE life_domain_integrations (
     id SERIAL PRIMARY KEY,
-    task_details JSONB,
-    status VARCHAR(50) DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    domain_name VARCHAR(255) NOT NULL,
+    integration_status VARCHAR(50),
+    user_id INTEGER REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
