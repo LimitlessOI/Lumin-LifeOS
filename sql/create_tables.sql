@@ -1,24 +1,31 @@
 ```sql
-CREATE TABLE identity_profiles (
-  id SERIAL PRIMARY KEY,
-  user_id VARCHAR(255) UNIQUE NOT NULL,
-  did VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE supply_chain_products (
+    product_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE verification_sessions (
-  id SERIAL PRIMARY KEY,
-  user_id VARCHAR(255) NOT NULL,
-  session_status VARCHAR(50),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE iot_sensor_data (
+    data_id SERIAL PRIMARY KEY,
+    product_id INT REFERENCES supply_chain_products(product_id),
+    sensor_type VARCHAR(100),
+    value NUMERIC,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE consent_records (
-  id SERIAL PRIMARY KEY,
-  user_id VARCHAR(255) NOT NULL,
-  consent_type VARCHAR(255),
-  consent_status BOOLEAN,
-  recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE anomaly_detection_logs (
+    log_id SERIAL PRIMARY KEY,
+    data_id INT REFERENCES iot_sensor_data(data_id),
+    anomaly_type VARCHAR(100),
+    details TEXT,
+    detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ethical_scores (
+    score_id SERIAL PRIMARY KEY,
+    product_id INT REFERENCES supply_chain_products(product_id),
+    score NUMERIC,
+    calculated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
