@@ -1,27 +1,27 @@
 ```json
 {
-  "name": "ccacp",
+  "name": "lifeos",
   "version": "1.0.0",
-  "main": "gateway.js",
+  "description": "LifeOS AI Council project",
+  "main": "index.js",
   "scripts": {
-    "start": "node services/ccacp/src/api/gateway.js"
+    "start": "node src/index.js",
+    "test": "jest",
+    "cypress:open": "cypress open",
+    "build": "npm run build"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "sequelize": "^6.6.5",
-    "pg": "^8.6.0",
-    "redis": "^3.1.2",
-    "web3": "^1.5.2",
-    "@tensorflow/tfjs-node": "^3.9.0",
-    "three": "^0.132.2",
-    "socket.io": "^4.1.2",
-    "bull": "^3.22.6",
-    "argon2": "^0.28.2",
-    "joi": "^17.4.2",
-    "axios": "^0.21.1",
-    "multer": "^1.4.3",
-    "sharp": "^0.28.3",
-    "kafka-node": "^5.0.0"
+    "mqtt": "^4.2.8",
+    "socket.io": "^4.5.4",
+    "sequelize": "^6.25.0",
+    "node-cron": "^3.0.2",
+    "sharp": "^0.31.2",
+    "three": "^0.146.0",
+    "stripe": "^11.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "cypress": "^12.0.1"
   }
 }
 ```
