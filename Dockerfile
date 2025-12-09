@@ -1,20 +1,13 @@
 ```dockerfile
-# Base image
-FROM node:14-alpine
+FROM node:16
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json yarn.lock ./
-RUN yarn install
+COPY package*.json ./
 
-# Copy application code
+RUN npm install
+
 COPY . .
 
-# Expose application port
-EXPOSE 3000
-
-# Start the application
-CMD ["yarn", "start"]
+CMD ["node", "services/ccacp/src/api/gateway.js"]
 ```
