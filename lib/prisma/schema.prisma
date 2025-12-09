@@ -1,0 +1,54 @@
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserHealthProfile {
+  id          Int      @id @default(autoincrement())
+  userId      String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  metrics     HealthMetric[]
+  dietPlans   DietPlan[]
+}
+
+model HealthMetric {
+  id          Int      @id @default(autoincrement())
+  profileId   Int
+  metricType  String
+  value       Float
+  recordedAt  DateTime @default(now())
+  UserHealthProfile UserHealthProfile @relation(fields: [profileId], references: [id])
+}
+
+model DietPlan {
+  id          Int      @id @default(autoincrement())
+  profileId   Int
+  planName    String
+  startDate   DateTime
+  endDate     DateTime
+  meals       MealRecommendation[]
+  UserHealthProfile UserHealthProfile @relation(fields: [profileId], references: [id])
+}
+
+model MealRecommendation {
+  id          Int      @id @default(autoincrement())
+  dietPlanId  Int
+  mealTime    DateTime
+  foodItems   String
+  DietPlan    DietPlan @relation(fields: [dietPlanId], references: [id])
+}
+
+model NutrientTracking {
+  id          Int      @id @default(autoincrement())
+  profileId   Int
+  nutrient    String
+  amount      Float
+  recordedAt  DateTime @default(now())
+  UserHealthProfile UserHealthProfile @relation(fields: [profileId], references: [id])
+}
