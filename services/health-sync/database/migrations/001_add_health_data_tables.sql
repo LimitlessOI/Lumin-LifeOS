@@ -1,0 +1,15 @@
+```sql
+CREATE TABLE health_data (
+  id SERIAL PRIMARY KEY,
+  data JSONB NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE interventions (
+  id SERIAL PRIMARY KEY,
+  patient_id INTEGER NOT NULL,
+  details JSONB NOT NULL,
+  scheduled_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
