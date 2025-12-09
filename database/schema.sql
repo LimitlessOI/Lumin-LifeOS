@@ -1,32 +1,39 @@
 ```sql
-CREATE TABLE user_body_metrics (
+CREATE TABLE ar_experiences (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    height FLOAT,
-    weight FLOAT,
-    measurements JSONB,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    template_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE virtual_tryon_sessions (
+CREATE TABLE ar_templates (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    session_data JSONB,
-    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ended_at TIMESTAMP
-);
-
-CREATE TABLE ai_stylist_conversations (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    conversation TEXT,
+    name VARCHAR(255) NOT NULL,
+    model_url TEXT,
+    metadata JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE hybrid_store_integrations (
+CREATE TABLE user_ar_progress (
     id SERIAL PRIMARY KEY,
-    store_name VARCHAR(255),
-    integration_details JSONB,
+    user_id INT NOT NULL,
+    experience_id INT NOT NULL,
+    progress JSONB,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE marketplace_transactions (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE lms_integrations (
+    id SERIAL PRIMARY KEY,
+    lms_name VARCHAR(255) NOT NULL,
+    api_key TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
