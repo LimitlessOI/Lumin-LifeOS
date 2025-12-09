@@ -1,22 +1,40 @@
 ```sql
-CREATE TABLE climate_simulations (
+CREATE TABLE amvf_farms (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
+    location TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE climate_data_sources (
+CREATE TABLE amvf_plant_clusters (
     id SERIAL PRIMARY KEY,
-    source_name VARCHAR(255) NOT NULL,
-    api_endpoint VARCHAR(255) NOT NULL,
-    last_updated TIMESTAMP
+    farm_id INTEGER REFERENCES amvf_farms(id),
+    species VARCHAR(255),
+    health_status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE quantum_algorithm_registry (
+CREATE TABLE amvf_drones (
     id SERIAL PRIMARY KEY,
-    algorithm_name VARCHAR(255) NOT NULL,
-    description TEXT,
+    farm_id INTEGER REFERENCES amvf_farms(id),
+    status VARCHAR(50),
+    battery_level INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE amvf_tasks (
+    id SERIAL PRIMARY KEY,
+    drone_id INTEGER REFERENCES amvf_drones(id),
+    cluster_id INTEGER REFERENCES amvf_plant_clusters(id),
+    action VARCHAR(255),
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE amvf_blockchain_entries (
+    id SERIAL PRIMARY KEY,
+    task_id INTEGER REFERENCES amvf_tasks(id),
+    transaction_hash VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
