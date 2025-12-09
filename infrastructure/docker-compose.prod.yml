@@ -1,0 +1,17 @@
+```yaml
+version: '3.7'
+services:
+  app:
+    image: myapp:latest
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+```
