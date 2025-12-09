@@ -1,8 +1,7 @@
-qiskit==0.23.0
-cirq==0.11.0
-pennylane==0.15.0
-tensorflow-quantum==0.6.0
-pyquil==3.0.0
-qsharp==0.15.2101125890
-tensorflow==2.4.1
-torch==1.7.0
+scikit-learn
+tensorflow
+fastapi
+celery
+plotly
+dash
+psycopg2-binary
