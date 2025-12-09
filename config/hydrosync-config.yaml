@@ -1,0 +1,15 @@
+```yaml
+sensors:
+  - id: sensor1
+    location: field1
+  - id: sensor2
+    location: field2
+
+ai_models:
+  - name: water_usage_model
+    version: 1.0
+
+blockchain:
+  network: mychannel
+  contract: hydrosync
+```
