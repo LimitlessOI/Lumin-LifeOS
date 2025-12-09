@@ -1,33 +1,37 @@
-```json
 {
-  "name": "lifeos-legal-service",
+  "name": "lifeos-project",
   "version": "1.0.0",
-  "description": "Legal service for document analysis and case management.",
+  "description": "LifeOS project for blockchain-based microservices",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "jest"
+    "start": "node services/lending-service/index.js"
   },
   "dependencies": {
-    "tensorflow/tfjs-node": "^3.12.0",
-    "natural": "^0.6.3",
-    "compromise": "^12.0.2",
-    "pdf-parse": "^1.1.1",
-    "docx": "^6.0.0",
-    "crypto-js": "^4.1.1",
-    "axios": "^0.27.2",
-    "sequelize": "^6.13.0",
-    "pg": "^8.7.1",
-    "redis": "^3.1.2",
-    "bull": "^4.0.2",
     "express": "^4.17.1",
-    "express-rate-limit": "^5.2.6",
-    "helmet": "^4.6.0",
-    "jsonwebtoken": "^8.5.1"
+    "sequelize": "^6.6.2",
+    "web3": "^1.5.2"
   },
   "devDependencies": {
-    "jest": "^27.1.0",
-    "supertest": "^6.1.0"
-  }
+    "jest": "^27.0.6",
+    "supertest": "^6.1.3",
+    "hardhat": "^2.6.0",
+    "truffle": "^5.3.14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/lifeos-project.git"
+  },
+  "keywords": [
+    "blockchain",
+    "microservices",
+    "nodejs",
+    "express",
+    "web3"
+  ],
+  "author": "LifeOS AI Council",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/username/lifeos-project/issues"
+  },
+  "homepage": "https://github.com/username/lifeos-project#readme"
 }
-```
