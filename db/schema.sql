@@ -1,49 +1,31 @@
 ```sql
--- Enable PostGIS extension for geospatial data
-CREATE EXTENSION IF NOT EXISTS postgis;
-
--- Table for waste materials
-CREATE TABLE waste_materials (
+CREATE TABLE IF NOT EXISTS bci_devices (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    type VARCHAR(50),
-    description TEXT,
+    name VARCHAR(255),
+    model VARCHAR(255),
+    serial_number VARCHAR(255) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for IoT sensor readings
-CREATE TABLE iot_sensor_readings (
+CREATE TABLE IF NOT EXISTS neural_patterns (
     id SERIAL PRIMARY KEY,
-    sensor_id VARCHAR(255) NOT NULL,
-    material_id INT REFERENCES waste_materials(id),
-    value NUMERIC,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    location GEOGRAPHY(POINT, 4326)
-);
-
--- Table for collection routes
-CREATE TABLE collection_routes (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    route_points GEOMETRY(LINESTRING, 4326),
+    device_id INT REFERENCES bci_devices(id),
+    pattern_data BYTEA,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for marketplace listings
-CREATE TABLE marketplace_listings (
+CREATE TABLE IF NOT EXISTS bci_sessions (
     id SERIAL PRIMARY KEY,
-    material_id INT REFERENCES waste_materials(id),
-    price NUMERIC NOT NULL,
-    available_quantity INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    device_id INT REFERENCES bci_devices(id),
+    session_start TIMESTAMP,
+    session_end TIMESTAMP,
+    session_data BYTEA
 );
 
--- Table for user rewards
-CREATE TABLE user_rewards (
+CREATE TABLE IF NOT EXISTS bci_calibration_history (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    points INT NOT NULL,
-    badge VARCHAR(255),
-    earned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    session_id INT REFERENCES bci_sessions(id),
+    calibration_data BYTEA,
+    calibrated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
