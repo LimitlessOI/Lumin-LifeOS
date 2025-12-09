@@ -1,30 +1,31 @@
-```sql
-CREATE TABLE social_protocol_identities (
+CREATE TABLE ubi_users (
     id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) UNIQUE NOT NULL,
-    identity_data JSONB NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    biometric_data BYTEA,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE social_content_references (
+CREATE TABLE ubi_transactions (
     id SERIAL PRIMARY KEY,
-    content_hash VARCHAR(64) UNIQUE NOT NULL,
-    metadata JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT REFERENCES ubi_users(id),
+    amount NUMERIC(10, 2) NOT NULL,
+    currency VARCHAR(10) NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE cross_protocol_bridges (
+CREATE TABLE contribution_metrics (
     id SERIAL PRIMARY KEY,
-    protocol_name VARCHAR(255) NOT NULL,
-    bridge_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT REFERENCES ubi_users(id),
+    metric_type VARCHAR(50) NOT NULL,
+    value NUMERIC(10, 2) NOT NULL,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE social_reputation_events (
+CREATE TABLE merchant_taxes (
     id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
-    event_type VARCHAR(255) NOT NULL,
-    event_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    transaction_id INT REFERENCES ubi_transactions(id),
+    tax_amount NUMERIC(10, 2) NOT NULL,
+    tax_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
+--
