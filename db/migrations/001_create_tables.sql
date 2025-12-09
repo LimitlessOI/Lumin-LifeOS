@@ -1,30 +1,31 @@
 ```sql
-CREATE TABLE translation_sessions (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  source_language VARCHAR(10),
-  target_language VARCHAR(10),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE user_preferences (
+    user_id SERIAL PRIMARY KEY,
+    preferences JSONB NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE cultural_context_cache (
-  id SERIAL PRIMARY KEY,
-  context_key VARCHAR(255) UNIQUE,
-  context_data JSONB,
-  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE content_generation_jobs (
+    job_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    content_type VARCHAR(50),
+    status VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user_preferences(user_id)
 );
 
-CREATE TABLE voice_profiles (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  voice_data BYTEA,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE engagement_logs (
+    log_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    engagement_data JSONB,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user_preferences(user_id)
 );
 
-CREATE TABLE translation_models (
-  id SERIAL PRIMARY KEY,
-  model_name VARCHAR(255),
-  model_version VARCHAR(50),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE ai_models (
+    model_id SERIAL PRIMARY KEY,
+    model_name VARCHAR(100),
+    version VARCHAR(20),
+    config JSONB,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
