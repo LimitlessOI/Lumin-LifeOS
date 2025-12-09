@@ -1,44 +1,29 @@
 ```sql
--- Schema for Credentials and Users
-
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS credentials (
-    id SERIAL PRIMARY KEY,
+-- Table for storing individual sessions of the empathy earpiece
+CREATE TABLE empathy_earpiece_sessions (
+    session_id SERIAL PRIMARY KEY,
+    device_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
-    credential_data JSONB NOT NULL,
-    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP,
+    FOREIGN KEY (device_id) REFERENCES empathy_device_registry(device_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE IF NOT EXISTS did_documents (
-    id SERIAL PRIMARY KEY,
-    did VARCHAR(255) UNIQUE NOT NULL,
-    document JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Table for storing empathy insights derived from device sessions
+CREATE TABLE empathy_insights (
+    insight_id SERIAL PRIMARY KEY,
+    session_id INTEGER NOT NULL,
+    insight_type VARCHAR(50) NOT NULL,
+    insight_value TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (session_id) REFERENCES empathy_earpiece_sessions(session_id)
 );
 
--- Indexes for performance
-CREATE INDEX idx_user_id ON credentials(user_id);
-CREATE INDEX idx_did ON did_documents(did);
-
--- Example function for logging
-CREATE OR REPLACE FUNCTION log_activity() RETURNS TRIGGER AS $$
-BEGIN
-    INSERT INTO activity_log(table_name, action, timestamp)
-    VALUES (TG_TABLE_NAME, TG_OP, CURRENT_TIMESTAMP);
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Trigger example for logging changes to users
-CREATE TRIGGER log_user_changes
-AFTER INSERT OR UPDATE OR DELETE ON users
-FOR EACH ROW EXECUTE FUNCTION log_activity();
+-- Table for registering devices
+CREATE TABLE empathy_device_registry (
+    device_id SERIAL PRIMARY KEY,
+    device_serial VARCHAR(50) UNIQUE NOT NULL,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 ```
