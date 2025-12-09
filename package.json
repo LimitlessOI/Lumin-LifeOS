@@ -1,12 +1,28 @@
 ```json
 {
+  "name": "lifeos-system",
+  "version": "1.0.0",
+  "description": "LifeOS VR and AI integration project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest",
+    "cypress": "cypress open"
+  },
   "dependencies": {
     "express": "^4.17.1",
-    "stripe": "^8.174.0",
-    "mediasoup": "^3.9.3",
-    "socket.io": "^4.3.2",
-    "lifeos-ai": "^1.0.0",
-    "device-capabilities": "^1.0.0"
+    "three": "^0.133.1",
+    "webxr-polyfill": "^2.0.1",
+    "socket.io": "^4.1.2",
+    "tensorflow": "^3.11.0",
+    "multer": "^1.4.3",
+    "pg": "^8.7.1",
+    "axios": "^0.21.1",
+    "stripe": "^8.143.0"
+  },
+  "devDependencies": {
+    "jest": "^27.2.0",
+    "cypress": "^8.5.0"
   }
 }
 ```
