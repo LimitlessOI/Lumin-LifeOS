@@ -1,42 +1,37 @@
-```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model UserProfile {
+  id          Int    @id @default(autoincrement())
+  name        String
+  email       String @unique
+  createdAt   DateTime @default(now())
+  sessions    VirtualTryonSession[]
 }
 
-model LearningSession {
-  id         Int       @id @default(autoincrement())
-  userId     Int
-  sessionData Json     @db.JsonB
-  createdAt  DateTime  @default(now()) @db.Timestamptz
-  EmotionalMetrics EmotionalMetric[]
-  ContentAdaptations ContentAdaptation[]
+model VirtualTryonSession {
+  id          Int    @id @default(autoincrement())
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId Int
+  createdAt   DateTime @default(now())
 }
 
-model EmotionalMetric {
-  id        Int       @id @default(autoincrement())
-  session   LearningSession @relation(fields: [sessionId], references: [id])
-  sessionId Int
-  metrics   Json      @db.JsonB
-  timestamp DateTime  @default(now()) @db.Timestamptz
+model StylingSession {
+  id          Int    @id @default(autoincrement())
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId Int
+  createdAt   DateTime @default(now())
 }
 
-model ContentAdaptation {
-  id               Int       @id @default(autoincrement())
-  session          LearningSession @relation(fields: [sessionId], references: [id])
-  sessionId        Int
-  adaptationDetails Json     @db.JsonB
-  createdAt        DateTime  @default(now()) @db.Timestamptz
+model StoreIntegration {
+  id        Int    @id @default(autoincrement())
+  platform  String
+  apiKey    String
+  createdAt DateTime @default(now())
 }
-
-model TeacherDashboard {
-  id            Int       @id @default(autoincrement())
-  teacherId     Int
-  dashboardData Json      @db.JsonB
-  updatedAt     DateTime  @default(now()) @db.Timestamptz
-}
-```
