@@ -1,32 +1,24 @@
 ```sql
-CREATE TABLE learning_activities (
+-- Assuming changes involve creating tables for sensor data, user models, and transactions.
+CREATE TABLE sensor_data (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    activity_type VARCHAR(50),
-    description TEXT,
+    sensor_id VARCHAR(255) NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data JSONB
+);
+
+CREATE TABLE user_models (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    model_data BYTEA
+);
+
+CREATE TABLE transactions (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    amount DECIMAL(10, 2),
+    transaction_type VARCHAR(50),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE learning_pathways (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE credentials (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    credential_data JSONB,
-    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE marketplace_listings (
-    id SERIAL PRIMARY KEY,
-    tutor_id INT NOT NULL,
-    service_description TEXT,
-    price DECIMAL(10, 2),
-    available BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+-- Additional tables and fields based on 'databaseChanges'
 ```
