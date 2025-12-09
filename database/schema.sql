@@ -1,37 +1,24 @@
 ```sql
-CREATE TABLE digital_twins (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE NOT NULL,
+    cognitive_profile JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE iot_devices (
+CREATE TABLE projects (
     id SERIAL PRIMARY KEY,
-    twin_id INT REFERENCES digital_twins(id),
-    device_type VARCHAR(255),
-    last_active TIMESTAMP
-);
-
-CREATE TABLE twin_telemetry (
-    id SERIAL PRIMARY KEY,
-    device_id INT REFERENCES iot_devices(id),
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data JSONB
-);
-
-CREATE TABLE predictive_alerts (
-    id SERIAL PRIMARY KEY,
-    twin_id INT REFERENCES digital_twins(id),
-    alert_type VARCHAR(255),
+    name VARCHAR(100),
     description TEXT,
+    skills JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE ar_sessions (
+CREATE TABLE credentials (
     id SERIAL PRIMARY KEY,
-    twin_id INT REFERENCES digital_twins(id),
-    session_data JSONB,
-    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT REFERENCES users(id),
+    blockchain_id VARCHAR(255) UNIQUE,
+    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
