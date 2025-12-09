@@ -1,32 +1,32 @@
 ```sql
-CREATE TABLE printers (
+CREATE TABLE skill_pathways (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    location VARCHAR(255),
-    status VARCHAR(50),
-    last_maintenance TIMESTAMP
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE print_jobs (
+CREATE TABLE learning_sessions (
     id SERIAL PRIMARY KEY,
-    printer_id INT REFERENCES printers(id),
-    design_id INT NOT NULL,
-    status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    skill_pathway_id INT REFERENCES skill_pathways(id),
+    status VARCHAR(50) NOT NULL,
+    started_at TIMESTAMP,
+    completed_at TIMESTAMP
 );
 
-CREATE TABLE design_validations (
+CREATE TABLE credentials (
     id SERIAL PRIMARY KEY,
-    design_id INT NOT NULL,
-    validation_result JSONB,
-    validated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    credential_data JSONB
 );
 
-CREATE TABLE supply_chain_events (
+CREATE TABLE employer_verifications (
     id SERIAL PRIMARY KEY,
-    event_type VARCHAR(50),
-    details JSONB,
-    occurred_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    employer_id INT NOT NULL,
+    user_id INT NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    verified_at TIMESTAMP
 );
 ```
