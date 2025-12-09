@@ -1,35 +1,41 @@
 ```sql
-CREATE TABLE wildlife_observations (
+CREATE TABLE biodegradable_materials (
     id SERIAL PRIMARY KEY,
-    device_id INT NOT NULL,
-    species_id INT NOT NULL,
-    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    location GEOGRAPHY(POINT, 4326),
-    data JSONB
+    name VARCHAR(255) NOT NULL,
+    properties JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE conservation_alerts (
+CREATE TABLE component_designs (
     id SERIAL PRIMARY KEY,
-    observation_id INT REFERENCES wildlife_observations(id),
-    alert_type VARCHAR(50),
-    severity INT,
-    message TEXT,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    material_id INT REFERENCES biodegradable_materials(id),
+    design_spec JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE iot_devices (
+CREATE TABLE manufacturing_partners (
     id SERIAL PRIMARY KEY,
-    device_name VARCHAR(100),
-    location GEOGRAPHY(POINT, 4326),
-    status VARCHAR(20),
-    last_active TIMESTAMP
+    name VARCHAR(255) NOT NULL,
+    contact_info JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE species_catalog (
+CREATE TABLE e_waste_impact (
     id SERIAL PRIMARY KEY,
-    scientific_name VARCHAR(255),
-    common_name VARCHAR(255),
-    conservation_status VARCHAR(50),
-    habitat TEXT
+    material_id INT REFERENCES biodegradable_materials(id),
+    impact_metrics JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE research_tasks (
+    id SERIAL PRIMARY KEY,
+    task_details JSONB,
+    status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
