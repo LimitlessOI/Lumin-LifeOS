@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  iot-gateway:
+    build: ./services/energy
+    command: node iot-gateway.js
+    ports:
+      - '8080:8080'
+    networks:
+      - energy-network
+
+  prediction-engine:
+    build: ./services/energy
+    command: node prediction-engine.js
+    networks:
+      - energy-network
+
+  blockchain-settlement:
+    build: ./services/energy
+    command: node blockchain-settlement.js
+    networks:
+      - energy-network
+  
+  compliance-engine:
+    build: ./services/energy
+    command: node compliance-engine.js
+    networks:
+      - energy-network
+
+  gamification-service:
+    build: ./services/energy
+    command: node gamification-service.js
+    networks:
+      - energy-network
+
+networks:
+  energy-network:
+    driver: bridge
