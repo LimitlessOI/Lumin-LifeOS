@@ -1,0 +1,15 @@
+```json
+{
+    "geofences": [
+        {
+            "id": "1",
+            "name": "Downtown Area",
+            "coordinates": [
+                { "lat": 40.7128, "lng": -74.0060 },
+                { "lat": 40.7138, "lng": -74.0065 },
+                { "lat": 40.7148, "lng": -74.0070 }
+            ]
+        }
+    ]
+}
+```
