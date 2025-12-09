@@ -1,25 +1,26 @@
 ```json
 {
-    "name": "teleportation-system",
-    "version": "1.0.0",
-    "description": "A system for managing teleportation sessions and VR integration.",
-    "main": "server/index.js",
-    "dependencies": {
-        "@tensorflow/tfjs-node": "^3.9.0",
-        "three": "^0.132.2",
-        "socket.io": "^4.2.0",
-        "webxr-polyfill": "^1.1.0",
-        "express": "^4.17.1",
-        "redis": "^3.1.2"
-    },
-    "devDependencies": {
-        "eyejs": "^0.3.0"
-    },
-    "scripts": {
-        "start": "node server/index.js",
-        "test": "node tests/runtests.js"
-    },
-    "author": "AI Developer",
-    "license": "ISC"
+  "name": "lifeos-energy-management",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "sequelize": "^6.6.5",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.4",
+    "tensorflow": "^2.6.0",
+    "web3": "^1.5.2",
+    "socket.io": "^4.1.3",
+    "redis": "^3.1.2",
+    "energy-web-client": "^0.0.1"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "supertest": "^6.1.3"
+  }
 }
 ```
