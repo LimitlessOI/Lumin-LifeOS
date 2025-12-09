@@ -1,39 +1,31 @@
 ```sql
-CREATE TABLE health_profiles (
+CREATE TABLE translation_models (
     id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
-    profile_data JSONB NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    provider VARCHAR(255) NOT NULL,
+    supported_languages TEXT[] NOT NULL
+);
+
+CREATE TABLE translation_cache (
+    id SERIAL PRIMARY KEY,
+    source_text TEXT NOT NULL,
+    translated_text TEXT NOT NULL,
+    source_language VARCHAR(10) NOT NULL,
+    target_language VARCHAR(10) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE wearable_data (
-    id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
-    data JSONB NOT NULL,
-    timestamp TIMESTAMP NOT NULL
+CREATE TABLE user_translation_prefs (
+    user_id INT PRIMARY KEY,
+    preferred_language VARCHAR(10) NOT NULL,
+    preferred_model INT REFERENCES translation_models(id)
 );
 
-CREATE TABLE medical_records (
+CREATE TABLE translation_usage (
     id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
-    record_data JSONB NOT NULL,
-    encrypted_field BYTEA NOT NULL,
+    user_id INT NOT NULL,
+    characters_translated INT NOT NULL,
+    billing_period DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE federated_updates (
-    id SERIAL PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
-    update_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE provider_access (
-    id SERIAL PRIMARY KEY,
-    provider_id VARCHAR(255) NOT NULL,
-    patient_id VARCHAR(255) NOT NULL,
-    access_level VARCHAR(50) NOT NULL,
-    audit_trail JSONB,
-    granted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
