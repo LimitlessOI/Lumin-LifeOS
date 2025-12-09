@@ -1,55 +1,44 @@
+```yaml
 version: '3.8'
 
 services:
-  vr-training:
-    build: ./services/vr-training
+  nodejs:
+    image: node:14
+    working_dir: /app
+    volumes:
+      - ./backend:/app
     ports:
-      - "8080:8080"
-    networks:
-      - app-network
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
 
-  biometrics:
-    build: ./services/biometrics
-    ports:
-      - "8081:8081"
-    networks:
-      - app-network
-
-  ai-engine:
-    build: ./services/ai-engine
-    ports:
-      - "8082:8082"
-    networks:
-      - app-network
-
-  ar-guidance:
-    build: ./services/ar-guidance
-    ports:
-      - "8083:8083"
-    networks:
-      - app-network
-
-  integration:
-    build: ./services/integration
-    ports:
-      - "8084:8084"
-    networks:
-      - app-network
-
-  database:
+  postgres:
     image: postgres:13
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: training_db
+      POSTGRES_DB: vr_app
     volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - app-network
+      - pg_data:/var/lib/postgresql/data
 
-networks:
-  app-network:
-    driver: bridge
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
+
+  s3:
+    image: minio/minio
+    command: server /data
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: miniostorage
+    ports:
+      - "9000:9000"
+    volumes:
+      - s3_data:/data
 
 volumes:
-  db-data:
+  pg_data:
+  s3_data:
+```
