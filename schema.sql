@@ -1,40 +1,39 @@
 ```sql
-CREATE TABLE amvf_farms (
+CREATE TABLE iot_sensors (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    location TEXT,
+    sensor_id VARCHAR(255) NOT NULL,
+    sensor_type VARCHAR(255),
+    location GEOGRAPHY(POINT, 4326),
+    data JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE amvf_plant_clusters (
+CREATE TABLE edge_nodes (
     id SERIAL PRIMARY KEY,
-    farm_id INTEGER REFERENCES amvf_farms(id),
-    species VARCHAR(255),
-    health_status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE amvf_drones (
-    id SERIAL PRIMARY KEY,
-    farm_id INTEGER REFERENCES amvf_farms(id),
+    node_id VARCHAR(255) NOT NULL,
     status VARCHAR(50),
-    battery_level INTEGER,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    last_heartbeat TIMESTAMP
 );
 
-CREATE TABLE amvf_tasks (
+CREATE TABLE blockchain_transactions (
     id SERIAL PRIMARY KEY,
-    drone_id INTEGER REFERENCES amvf_drones(id),
-    cluster_id INTEGER REFERENCES amvf_plant_clusters(id),
-    action VARCHAR(255),
-    status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE amvf_blockchain_entries (
-    id SERIAL PRIMARY KEY,
-    task_id INTEGER REFERENCES amvf_tasks(id),
     transaction_hash VARCHAR(255),
+    data JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE mobility_services (
+    id SERIAL PRIMARY KEY,
+    service_id VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
+    api_key VARCHAR(255),
+    usage_count INT DEFAULT 0
+);
+
+CREATE TABLE predictive_analytics (
+    id SERIAL PRIMARY KEY,
+    model_id VARCHAR(255),
+    prediction_results JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
