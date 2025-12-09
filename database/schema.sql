@@ -1,32 +1,32 @@
 ```sql
-CREATE TABLE mental_health_assessments (
+CREATE TABLE energy_grid_nodes (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    assessment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    score INT,
-    assessment_data JSONB
+    node_name VARCHAR(255) NOT NULL,
+    location VARCHAR(255),
+    capacity FLOAT
 );
 
-CREATE TABLE mood_tracking (
+CREATE TABLE energy_metrics (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    mood_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    mood_level INT,
-    notes TEXT
+    node_id INT REFERENCES energy_grid_nodes(id),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    energy_consumed FLOAT,
+    energy_generated FLOAT
 );
 
-CREATE TABLE therapy_sessions (
+CREATE TABLE predictive_alerts (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    therapist_id INT,
-    session_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    session_notes TEXT
+    node_id INT REFERENCES energy_grid_nodes(id),
+    alert_type VARCHAR(255),
+    alert_message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE therapist_connections (
+CREATE TABLE energy_flow_logs (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    therapist_id INT,
-    connection_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    node_id INT REFERENCES energy_grid_nodes(id),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    energy_flow_direction VARCHAR(50),
+    energy_flow_amount FLOAT
 );
 ```
