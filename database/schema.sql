@@ -1,29 +1,33 @@
 ```sql
-CREATE TABLE training_scenarios (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255),
-  description TEXT,
-  data JSONB
+CREATE TABLE equipment_metrics (
+    id SERIAL PRIMARY KEY,
+    equipment_id INT NOT NULL,
+    metric_name VARCHAR(100),
+    metric_value FLOAT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE user_training_sessions (
-  id SERIAL PRIMARY KEY,
-  user_id INT,
-  scenario_id INT,
-  completion_status BOOLEAN,
-  FOREIGN KEY (scenario_id) REFERENCES training_scenarios(id)
+CREATE TABLE predictive_alerts (
+    alert_id SERIAL PRIMARY KEY,
+    equipment_id INT NOT NULL,
+    alert_type VARCHAR(100),
+    alert_description TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE skill_gap_predictions (
-  id SERIAL PRIMARY KEY,
-  user_id INT,
-  scenario_id INT,
-  prediction JSONB,
-  FOREIGN KEY (scenario_id) REFERENCES training_scenarios(id)
+CREATE TABLE roi_calculations (
+    calculation_id SERIAL PRIMARY KEY,
+    equipment_id INT NOT NULL,
+    downtime_savings FLOAT,
+    maintenance_cost_reduction FLOAT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE hardware_partners (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(255),
-  details JSONB
+CREATE TABLE federated_learning_rounds (
+    round_id SERIAL PRIMARY KEY,
+    model_type VARCHAR(100),
+    accuracy FLOAT,
+    loss FLOAT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
