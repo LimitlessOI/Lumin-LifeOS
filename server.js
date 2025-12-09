@@ -871,6 +871,41 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_drone_opp_type ON drone_opportunities(opportunity_type)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_drone_opp_status ON drone_opportunities(status)`);
 
+    // Add missing columns to drone_opportunities if they don't exist
+    try {
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS priority INT DEFAULT 0`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS actual_revenue DECIMAL(12,2) DEFAULT 0`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS execution_data JSONB`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS error TEXT`);
+    } catch (e) {
+      // Columns might already exist
+    }
+
+    // Content assets table (for storing created content)
+    await pool.query(`CREATE TABLE IF NOT EXISTS content_assets (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      opportunity_id TEXT,
+      status VARCHAR(20) DEFAULT 'ready_to_publish',
+      published_at TIMESTAMPTZ,
+      revenue_generated DECIMAL(12,2) DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    // Service proposals table (for storing service proposals)
+    await pool.query(`CREATE TABLE IF NOT EXISTS service_proposals (
+      id SERIAL PRIMARY KEY,
+      opportunity_id TEXT,
+      proposal_data JSONB,
+      status VARCHAR(20) DEFAULT 'ready_to_send',
+      sent_at TIMESTAMPTZ,
+      response_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
     // Vapi Calls
     await pool.query(`CREATE TABLE IF NOT EXISTS vapi_calls (
       id SERIAL PRIMARY KEY,

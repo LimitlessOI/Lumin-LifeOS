@@ -18,6 +18,28 @@ export class EnhancedIncomeDrone {
       product: this.runProductDrone.bind(this),
       service: this.runServiceDrone.bind(this),
     };
+    this.opportunityExecutor = null; // Will be set after executor is initialized
+  }
+
+  /**
+   * Set the opportunity executor (for implementing opportunities)
+   */
+  setOpportunityExecutor(executor) {
+    this.opportunityExecutor = executor;
+  }
+
+  /**
+   * Check how many pending opportunities exist
+   */
+  async getPendingOpportunityCount() {
+    try {
+      const result = await this.pool.query(
+        `SELECT COUNT(*) as count FROM drone_opportunities WHERE status = 'pending'`
+      );
+      return parseInt(result.rows[0]?.count || 0);
+    } catch (error) {
+      return 0;
+    }
   }
 
   /**
@@ -104,12 +126,23 @@ export class EnhancedIncomeDrone {
 
   /**
    * Affiliate drone: Finds and promotes affiliate products
+   * NOW: Implements existing opportunities if any exist, otherwise finds new ones
    */
   async runAffiliateDrone(droneId) {
     console.log(`💰 [AFFILIATE DRONE] ${droneId} working...`);
 
     if (!this.callCouncilMember) {
       console.error(`❌ [AFFILIATE DRONE] ${droneId} - callCouncilMember not available`);
+      return;
+    }
+
+    // Check if we should implement existing opportunities instead of finding new ones
+    // If there are ANY pending opportunities, implement them instead of finding new ones
+    const pendingCount = await this.getPendingOpportunityCount();
+    if (pendingCount > 0 && this.opportunityExecutor) {
+      // We have opportunities - implement them instead of finding new ones
+      console.log(`   🔧 [AFFILIATE DRONE] ${pendingCount} pending opportunities - implementing instead of finding new ones`);
+      await this.implementAffiliateOpportunities(droneId);
       return;
     }
 
@@ -137,6 +170,8 @@ export class EnhancedIncomeDrone {
       const response = await this.callCouncilMember('chatgpt', prompt, {
         useTwoTier: false,
         maxTokens: 3000,
+        requiresGoalProgress: false, // Drones ARE working on goals (revenue generation)
+        taskType: 'revenue_generation',
       });
 
       if (!response) {
@@ -188,12 +223,22 @@ export class EnhancedIncomeDrone {
 
   /**
    * Content drone: Creates and monetizes content
+   * NOW: Implements existing opportunities if any exist, otherwise finds new ones
    */
   async runContentDrone(droneId) {
     console.log(`📝 [CONTENT DRONE] ${droneId} working...`);
 
     if (!this.callCouncilMember) {
       console.error(`❌ [CONTENT DRONE] ${droneId} - callCouncilMember not available`);
+      return;
+    }
+
+    // Check if we should implement existing opportunities instead of finding new ones
+    const pendingCount = await this.getPendingOpportunityCount();
+    if (pendingCount > 0 && this.opportunityExecutor) {
+      // We have opportunities - implement them instead of finding new ones
+      console.log(`   🔧 [CONTENT DRONE] ${pendingCount} pending opportunities - implementing instead of finding new ones`);
+      await this.implementContentOpportunities(droneId);
       return;
     }
 
@@ -221,6 +266,8 @@ export class EnhancedIncomeDrone {
       const response = await this.callCouncilMember('gemini', prompt, {
         useTwoTier: false,
         maxTokens: 3000,
+        requiresGoalProgress: false, // Drones ARE working on goals (revenue generation)
+        taskType: 'revenue_generation',
       });
 
       if (!response) {
@@ -269,9 +316,19 @@ export class EnhancedIncomeDrone {
 
   /**
    * Outreach drone: Finds and contacts potential clients
+   * NOW: Implements existing opportunities if any exist, otherwise finds new ones
    */
   async runOutreachDrone(droneId) {
     console.log(`📞 [OUTREACH DRONE] ${droneId} working...`);
+    
+    // Check if we should implement existing opportunities instead of finding new ones
+    const pendingCount = await this.getPendingOpportunityCount();
+    if (pendingCount > 0 && this.opportunityExecutor) {
+      // We have opportunities - implement them instead of finding new ones
+      console.log(`   🔧 [OUTREACH DRONE] ${pendingCount} pending opportunities - implementing instead of finding new ones`);
+      await this.implementOutreachOpportunities(droneId);
+      return;
+    }
     
     // This would integrate with Twilio/Vapi for actual outreach
     // For now, generates outreach strategies
@@ -289,6 +346,8 @@ export class EnhancedIncomeDrone {
       const response = await this.callCouncilMember('grok', prompt, {
         useTwoTier: false,
         maxTokens: 2000,
+        requiresGoalProgress: false, // Drones ARE working on goals (revenue generation)
+        taskType: 'revenue_generation',
       });
 
       const opportunities = this.parseJSONResponse(response);
@@ -312,9 +371,19 @@ export class EnhancedIncomeDrone {
 
   /**
    * Product drone: Creates and sells digital products
+   * NOW: Implements existing opportunities if any exist, otherwise finds new ones
    */
   async runProductDrone(droneId) {
     console.log(`🛍️ [PRODUCT DRONE] ${droneId} working...`);
+    
+    // Check if we should implement existing opportunities instead of finding new ones
+    const pendingCount = await this.getPendingOpportunityCount();
+    if (pendingCount > 0 && this.opportunityExecutor) {
+      // We have opportunities - implement them instead of finding new ones
+      console.log(`   🔧 [PRODUCT DRONE] ${pendingCount} pending opportunities - implementing instead of finding new ones`);
+      await this.implementProductOpportunities(droneId);
+      return;
+    }
     
     const prompt = `Generate 3 digital product ideas that can be created and sold:
     - Templates
@@ -335,6 +404,8 @@ export class EnhancedIncomeDrone {
       const response = await this.callCouncilMember('chatgpt', prompt, {
         useTwoTier: false,
         maxTokens: 2000,
+        requiresGoalProgress: false, // Drones ARE working on goals (revenue generation)
+        taskType: 'revenue_generation',
       });
 
       const products = this.parseJSONResponse(response);
@@ -358,9 +429,15 @@ export class EnhancedIncomeDrone {
 
   /**
    * Service drone: Offers AI services
+   * THIS IS THE ONLY DRONE THAT CONTINUES FINDING NEW OPPORTUNITIES
+   * All other drones switch to implementation mode when opportunities exist
    */
   async runServiceDrone(droneId) {
     console.log(`🔧 [SERVICE DRONE] ${droneId} working...`);
+    
+    // Service drone ALWAYS looks for new opportunities (especially API cost savings)
+    // This is the ONE drone that keeps finding new opportunities
+    // All other drones (affiliate, content, outreach, product) implement existing opportunities
     
     // PRIORITY 1: API Cost Savings Service (MASSIVELY VALUABLE)
     const costSavingsPrompt = `Generate API cost savings service opportunities for LifeOS:
@@ -386,6 +463,8 @@ Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
       const costSavingsResponse = await this.callCouncilMember('chatgpt', costSavingsPrompt, {
         useTwoTier: false,
         maxTokens: 3000,
+        requiresGoalProgress: false, // Drones ARE working on goals (revenue generation)
+        taskType: 'revenue_generation',
       });
 
       const costSavingsServices = this.parseJSONResponse(costSavingsResponse) || [];
@@ -436,6 +515,8 @@ Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
       const otherServicesResponse = await this.callCouncilMember('gemini', otherServicesPrompt, {
         useTwoTier: false,
         maxTokens: 2000,
+        requiresGoalProgress: false, // Drones ARE working on goals (revenue generation)
+        taskType: 'revenue_generation',
       });
 
       const otherServices = this.parseJSONResponse(otherServicesResponse) || [];
@@ -554,6 +635,147 @@ Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
       };
     } catch (error) {
       return { active: 0, drones: [], total_revenue: 0 };
+    }
+  }
+
+  /**
+   * Implement affiliate opportunities (actually execute them)
+   */
+  async implementAffiliateOpportunities(droneId) {
+    try {
+      const result = await this.pool.query(
+        `SELECT * FROM drone_opportunities 
+         WHERE opportunity_type = 'affiliate' AND status = 'pending'
+         ORDER BY revenue_estimate DESC, created_at ASC
+         LIMIT 3`
+      );
+
+      if (result.rows.length === 0) {
+        console.log(`   ℹ️ [AFFILIATE DRONE] No pending affiliate opportunities to implement`);
+        return;
+      }
+
+      console.log(`   🎯 [AFFILIATE DRONE] Implementing ${result.rows.length} affiliate opportunities...`);
+
+      for (const opp of result.rows) {
+        if (this.opportunityExecutor) {
+          await this.opportunityExecutor.executeOpportunity(opp);
+        } else {
+          // Fallback: mark as implementing
+          await this.pool.query(
+            `UPDATE drone_opportunities SET status = 'implementing', started_at = NOW() WHERE opportunity_id = $1`,
+            [opp.opportunity_id]
+          );
+          console.log(`   ✅ [AFFILIATE DRONE] Started implementing: ${opp.opportunity_id}`);
+        }
+      }
+    } catch (error) {
+      console.error(`   ❌ [AFFILIATE DRONE] Implementation error:`, error.message);
+    }
+  }
+
+  /**
+   * Implement content opportunities (actually create and publish content)
+   */
+  async implementContentOpportunities(droneId) {
+    try {
+      const result = await this.pool.query(
+        `SELECT * FROM drone_opportunities 
+         WHERE opportunity_type = 'content' AND status = 'pending'
+         ORDER BY revenue_estimate DESC, created_at ASC
+         LIMIT 3`
+      );
+
+      if (result.rows.length === 0) {
+        console.log(`   ℹ️ [CONTENT DRONE] No pending content opportunities to implement`);
+        return;
+      }
+
+      console.log(`   🎯 [CONTENT DRONE] Implementing ${result.rows.length} content opportunities...`);
+
+      for (const opp of result.rows) {
+        if (this.opportunityExecutor) {
+          await this.opportunityExecutor.executeOpportunity(opp);
+        } else {
+          await this.pool.query(
+            `UPDATE drone_opportunities SET status = 'implementing', started_at = NOW() WHERE opportunity_id = $1`,
+            [opp.opportunity_id]
+          );
+          console.log(`   ✅ [CONTENT DRONE] Started implementing: ${opp.opportunity_id}`);
+        }
+      }
+    } catch (error) {
+      console.error(`   ❌ [CONTENT DRONE] Implementation error:`, error.message);
+    }
+  }
+
+  /**
+   * Implement outreach opportunities (actually send outreach)
+   */
+  async implementOutreachOpportunities(droneId) {
+    try {
+      const result = await this.pool.query(
+        `SELECT * FROM drone_opportunities 
+         WHERE opportunity_type = 'outreach' AND status = 'pending'
+         ORDER BY revenue_estimate DESC, created_at ASC
+         LIMIT 3`
+      );
+
+      if (result.rows.length === 0) {
+        console.log(`   ℹ️ [OUTREACH DRONE] No pending outreach opportunities to implement`);
+        return;
+      }
+
+      console.log(`   🎯 [OUTREACH DRONE] Implementing ${result.rows.length} outreach opportunities...`);
+
+      for (const opp of result.rows) {
+        if (this.opportunityExecutor) {
+          await this.opportunityExecutor.executeOpportunity(opp);
+        } else {
+          await this.pool.query(
+            `UPDATE drone_opportunities SET status = 'implementing', started_at = NOW() WHERE opportunity_id = $1`,
+            [opp.opportunity_id]
+          );
+          console.log(`   ✅ [OUTREACH DRONE] Started implementing: ${opp.opportunity_id}`);
+        }
+      }
+    } catch (error) {
+      console.error(`   ❌ [OUTREACH DRONE] Implementation error:`, error.message);
+    }
+  }
+
+  /**
+   * Implement product opportunities (actually build products)
+   */
+  async implementProductOpportunities(droneId) {
+    try {
+      const result = await this.pool.query(
+        `SELECT * FROM drone_opportunities 
+         WHERE opportunity_type = 'product' AND status = 'pending'
+         ORDER BY revenue_estimate DESC, created_at ASC
+         LIMIT 2`
+      );
+
+      if (result.rows.length === 0) {
+        console.log(`   ℹ️ [PRODUCT DRONE] No pending product opportunities to implement`);
+        return;
+      }
+
+      console.log(`   🎯 [PRODUCT DRONE] Implementing ${result.rows.length} product opportunities...`);
+
+      for (const opp of result.rows) {
+        if (this.opportunityExecutor) {
+          await this.opportunityExecutor.executeOpportunity(opp);
+        } else {
+          await this.pool.query(
+            `UPDATE drone_opportunities SET status = 'implementing', started_at = NOW() WHERE opportunity_id = $1`,
+            [opp.opportunity_id]
+          );
+          console.log(`   ✅ [PRODUCT DRONE] Started implementing: ${opp.opportunity_id}`);
+        }
+      }
+    } catch (error) {
+      console.error(`   ❌ [PRODUCT DRONE] Implementation error:`, error.message);
     }
   }
 
