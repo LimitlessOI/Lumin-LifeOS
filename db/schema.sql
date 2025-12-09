@@ -1,39 +1,30 @@
 ```sql
-CREATE TABLE micro_farms (
+CREATE TABLE health_data_contributors (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    location GEOGRAPHY(POINT, 4326),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    data_contributed JSONB NOT NULL,
+    contribution_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE sensor_readings (
-    id SERIAL PRIMARY KEY,
-    micro_farm_id INT REFERENCES micro_farms(id),
-    sensor_type VARCHAR(50) NOT NULL,
-    value FLOAT NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE federated_learning_sessions (
+    session_id SERIAL PRIMARY KEY,
+    session_details JSONB NOT NULL,
+    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end_time TIMESTAMP,
+    status VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE optimization_strategies (
-    id SERIAL PRIMARY KEY,
-    micro_farm_id INT REFERENCES micro_farms(id),
-    strategy JSON NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE data_usage_ledger (
+    entry_id SERIAL PRIMARY KEY,
+    contributor_id INT REFERENCES health_data_contributors(id),
+    usage_details JSONB NOT NULL,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE resource_allocations (
-    id SERIAL PRIMARY KEY,
-    micro_farm_id INT REFERENCES micro_farms(id),
-    resource_type VARCHAR(50) NOT NULL,
-    amount FLOAT NOT NULL,
-    allocation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE waste_integrations (
-    id SERIAL PRIMARY KEY,
-    micro_farm_id INT REFERENCES micro_farms(id),
-    waste_type VARCHAR(50) NOT NULL,
-    integration_details JSON NOT NULL,
-    integration_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE dao_proposals (
+    proposal_id SERIAL PRIMARY KEY,
+    proposal_details JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) NOT NULL
 );
 ```
