@@ -1,35 +1,37 @@
 ```sql
--- Table for learning paths
-CREATE TABLE learning_paths (
-    id SERIAL PRIMARY KEY,
+-- Table for storing patient information
+CREATE TABLE healthcare_patients (
+    patient_id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
+    birth_date DATE NOT NULL,
+    gender VARCHAR(10),
+    contact_info JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for virtual labs
-CREATE TABLE virtual_labs (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Table for storing treatment plans
+CREATE TABLE treatment_plans (
+    plan_id SERIAL PRIMARY KEY,
+    patient_id INT REFERENCES healthcare_patients(patient_id),
+    plan_details JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for educational content
-CREATE TABLE educational_content (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    content TEXT,
-    learning_path_id INT REFERENCES learning_paths(id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Table for storing health metrics from wearables and EHRs
+CREATE TABLE health_metrics (
+    metric_id SERIAL PRIMARY KEY,
+    patient_id INT REFERENCES healthcare_patients(patient_id),
+    metric_type VARCHAR(255) NOT NULL,
+    metric_value JSONB,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for assessment results
-CREATE TABLE assessment_results (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    score DECIMAL,
-    learning_path_id INT REFERENCES learning_paths(id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Table for managing federated learning models
+CREATE TABLE federated_models (
+    model_id SERIAL PRIMARY KEY,
+    model_version VARCHAR(50),
+    model_data BYTEA,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
