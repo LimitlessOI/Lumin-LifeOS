@@ -1,33 +1,40 @@
 ```sql
--- Create table for volumetric sessions
-CREATE TABLE volumetric_sessions (
-    session_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    session_data BYTEA NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE amt_vehicles (
+    id SERIAL PRIMARY KEY,
+    model VARCHAR(100),
+    capacity INT,
+    status VARCHAR(50),
+    location GEOGRAPHY(POINT, 4326)
 );
 
--- Create table for avatar profiles
-CREATE TABLE avatar_profiles (
-    profile_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    avatar_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE amt_routes (
+    id SERIAL PRIMARY KEY,
+    origin GEOGRAPHY(POINT, 4326),
+    destination GEOGRAPHY(POINT, 4326),
+    distance FLOAT,
+    duration INT
 );
 
--- Create table for haptic profiles
-CREATE TABLE haptic_profiles (
-    profile_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    haptic_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE amt_bookings (
+    id SERIAL PRIMARY KEY,
+    vehicle_id INT REFERENCES amt_vehicles(id),
+    route_id INT REFERENCES amt_routes(id),
+    passenger_count INT,
+    status VARCHAR(50),
+    booking_time TIMESTAMP
 );
 
--- Create table for enterprise integrations
-CREATE TABLE enterprise_integrations (
-    integration_id SERIAL PRIMARY KEY,
-    enterprise_name VARCHAR(100) NOT NULL,
-    integration_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE amt_v2i_nodes (
+    id SERIAL PRIMARY KEY,
+    location GEOGRAPHY(POINT, 4326),
+    node_type VARCHAR(50),
+    status VARCHAR(50)
+);
+
+CREATE TABLE amt_demand_predictions (
+    id SERIAL PRIMARY KEY,
+    prediction_date DATE,
+    demand INT,
+    confidence FLOAT
 );
 ```
