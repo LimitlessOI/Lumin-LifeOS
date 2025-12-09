@@ -1,55 +1,35 @@
 ```sql
--- Collaboration table for real-time editing sessions
-CREATE TABLE collaboration_sessions (
+CREATE TABLE wildlife_observations (
     id SERIAL PRIMARY KEY,
-    document_id INT NOT NULL,
-    session_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    device_id INT NOT NULL,
+    species_id INT NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    location GEOGRAPHY(POINT, 4326),
+    data JSONB
 );
 
--- Templates table for legal document templates
-CREATE TABLE legal_templates (
+CREATE TABLE conservation_alerts (
     id SERIAL PRIMARY KEY,
-    jurisdiction VARCHAR(255),
-    template_name VARCHAR(255),
-    template_content TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    observation_id INT REFERENCES wildlife_observations(id),
+    alert_type VARCHAR(50),
+    severity INT,
+    message TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Compliance checks table
-CREATE TABLE compliance_checks (
+CREATE TABLE iot_devices (
     id SERIAL PRIMARY KEY,
-    document_id INT NOT NULL,
-    compliance_status BOOLEAN,
-    details JSONB,
-    checked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    device_name VARCHAR(100),
+    location GEOGRAPHY(POINT, 4326),
+    status VARCHAR(20),
+    last_active TIMESTAMP
 );
 
--- AI Suggestions table
-CREATE TABLE ai_suggestions (
+CREATE TABLE species_catalog (
     id SERIAL PRIMARY KEY,
-    document_id INT NOT NULL,
-    suggestion TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Document versioning table
-CREATE TABLE document_versions (
-    id SERIAL PRIMARY KEY,
-    document_id INT NOT NULL,
-    version_number INT,
-    content TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Integration logs table
-CREATE TABLE integration_logs (
-    id SERIAL PRIMARY KEY,
-    integration_type VARCHAR(255),
-    request_data JSONB,
-    response_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    scientific_name VARCHAR(255),
+    common_name VARCHAR(255),
+    conservation_status VARCHAR(50),
+    habitat TEXT
 );
 ```
