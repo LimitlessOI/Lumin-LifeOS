@@ -1,26 +1,18 @@
 ```sql
-CREATE TABLE workspaces (
+CREATE TABLE sessions (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
+    user_id INTEGER NOT NULL,
+    session_data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE workspace_sessions (
+CREATE TABLE analytics (
     id SERIAL PRIMARY KEY,
-    workspace_id INT REFERENCES workspaces(id),
-    session_data JSONB,
-    started_at TIMESTAMP DEFAULT NOW()
+    session_id INTEGER REFERENCES sessions(id),
+    data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE spatial_profiles (
-    id SERIAL PRIMARY KEY,
-    workspace_id INT REFERENCES workspaces(id),
-    profile_data JSONB
-);
-
-CREATE TABLE hardware_compatibility (
-    id SERIAL PRIMARY KEY,
-    device_name VARCHAR(255),
-    compatibility_data JSONB
-);
+CREATE INDEX idx_user_id ON sessions(user_id);
+CREATE INDEX idx_session_id ON analytics(session_id);
 ```
