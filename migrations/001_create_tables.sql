@@ -1,35 +1,26 @@
 ```sql
-CREATE TABLE disaster_events (
-    id SERIAL PRIMARY KEY,
-    event_type VARCHAR(255) NOT NULL,
-    location GEOGRAPHY(POINT),
-    severity INT,
-    reported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE resources (
+CREATE TABLE workspaces (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    quantity INT DEFAULT 0
+    created_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE response_teams (
+CREATE TABLE workspace_sessions (
     id SERIAL PRIMARY KEY,
-    team_name VARCHAR(255) NOT NULL,
-    location GEOGRAPHY(POINT)
+    workspace_id INT REFERENCES workspaces(id),
+    session_data JSONB,
+    started_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE data_feeds (
+CREATE TABLE spatial_profiles (
     id SERIAL PRIMARY KEY,
-    source VARCHAR(255) NOT NULL,
-    data JSONB,
-    received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    workspace_id INT REFERENCES workspaces(id),
+    profile_data JSONB
 );
 
-CREATE TABLE allocation_decisions (
+CREATE TABLE hardware_compatibility (
     id SERIAL PRIMARY KEY,
-    event_id INT REFERENCES disaster_events(id),
-    resource_id INT REFERENCES resources(id),
-    team_id INT REFERENCES response_teams(id),
-    decision_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    device_name VARCHAR(255),
+    compatibility_data JSONB
 );
+```
