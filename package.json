@@ -1,21 +1,25 @@
 ```json
 {
-  "name": "hiatp",
+  "name": "health-system",
   "version": "1.0.0",
-  "description": "High-Immersion Augmented Tourism Platform",
+  "description": "A system for managing health data using IPFS, ZKP, and blockchain.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "jest"
+    "test": "jest",
+    "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "openai": "^3.0.0",
-    "web3": "^1.6.0",
-    "ws": "^7.5.0"
+    "ipfs-http-client": "^47.2.2",
+    "snarkjs": "^0.1.0",
+    "fabric-client": "^2.2.0",
+    "sequelize": "^6.5.0",
+    "pg": "^8.5.1",
+    "grpc": "^1.24.3"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^27.0.6",
+    "supertest": "^6.1.3"
   }
 }
 ```
