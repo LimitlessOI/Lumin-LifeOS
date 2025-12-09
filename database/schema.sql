@@ -1,29 +1,24 @@
 ```sql
-CREATE TABLE sensors (
+CREATE TABLE neural_users (
     id SERIAL PRIMARY KEY,
-    type VARCHAR(50),
-    location VARCHAR(100),
-    last_reading TIMESTAMP
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE sensor_data (
+CREATE TABLE neural_sessions (
     id SERIAL PRIMARY KEY,
-    sensor_id INT REFERENCES sensors(id),
-    data JSONB,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    session_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    session_end TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES neural_users(id)
 );
 
-CREATE TABLE drones (
+CREATE TABLE neural_commands (
     id SERIAL PRIMARY KEY,
-    model VARCHAR(50),
-    status VARCHAR(20),
-    last_communication TIMESTAMP
-);
-
-CREATE TABLE drone_data (
-    id SERIAL PRIMARY KEY,
-    drone_id INT REFERENCES drones(id),
-    data JSONB,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    session_id INT NOT NULL,
+    command VARCHAR(255) NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (session_id) REFERENCES neural_sessions(id)
 );
 ```
