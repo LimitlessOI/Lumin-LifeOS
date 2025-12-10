@@ -1,0 +1,10 @@
+```javascript
+const express = require('express');
+const workshopController = require('../controllers/workshopController');
+const authMiddleware = require('../middleware/authMiddleware');
+const router = express.Router();
+
+router.get('/', workshopController.getAllWorkshops);
+router.post('/', authMiddleware, workshopController.createWorkshop);
+
+module.exports = router;
