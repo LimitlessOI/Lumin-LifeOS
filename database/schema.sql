@@ -1,22 +1,45 @@
 ```sql
-CREATE TABLE user_learning_profiles (
-    user_id SERIAL PRIMARY KEY,
-    learning_style VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Create table for smart bins
+CREATE TABLE smart_bins (
+    id SERIAL PRIMARY KEY,
+    location VARCHAR(255) NOT NULL,
+    bin_type VARCHAR(50) NOT NULL,
+    status VARCHAR(50),
+    last_emptied TIMESTAMP
 );
 
-CREATE TABLE interaction_logs (
-    log_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES user_learning_profiles(user_id),
-    interaction_type VARCHAR(255),
-    interaction_data JSONB,
-    logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Create table for waste readings
+CREATE TABLE waste_readings (
+    id SERIAL PRIMARY KEY,
+    bin_id INT REFERENCES smart_bins(id),
+    reading_time TIMESTAMP NOT NULL,
+    waste_level INT NOT NULL,
+    FOREIGN KEY (bin_id) REFERENCES smart_bins(id)
 );
 
-CREATE TABLE adaptation_suggestions (
-    suggestion_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES user_learning_profiles(user_id),
-    suggestion_text TEXT,
-    suggested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- Create table for recycling transactions
+CREATE TABLE recycling_transactions (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    bin_id INT REFERENCES smart_bins(id),
+    transaction_time TIMESTAMP NOT NULL,
+    material_type VARCHAR(50) NOT NULL,
+    weight DECIMAL(10, 2) NOT NULL
 );
-```
+
+-- Create table for collection routes
+CREATE TABLE collection_routes (
+    id SERIAL PRIMARY KEY,
+    route_name VARCHAR(255) NOT NULL,
+    start_location VARCHAR(255) NOT NULL,
+    end_location VARCHAR(255) NOT NULL,
+    route_details JSONB
+);
+
+-- Create table for policy recommendations
+CREATE TABLE policy_recommendations (
+    id SERIAL PRIMARY KEY,
+    recommendation_text TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) NOT NULL
+);
