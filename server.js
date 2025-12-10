@@ -399,6 +399,7 @@ async function initDatabase() {
       type VARCHAR(50),
       description TEXT,
       status VARCHAR(20) DEFAULT 'pending',
+      metadata JSONB,
       result TEXT,
       error TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -4117,29 +4118,54 @@ class ExecutionQueue {
     this.history = [];
   }
 
-  async addTask(type, description) {
+  async addTask(type, description, metadata = null) {
     const taskId = `task_${Date.now()}_${Math.random()
       .toString(36)
       .slice(2, 8)}`;
     try {
       await pool.query(
-        `INSERT INTO execution_tasks (task_id, type, description, status, created_at)
-         VALUES ($1, $2, $3, $4, now())`,
-        [taskId, type, description, "queued"]
+        `INSERT INTO execution_tasks (task_id, type, description, status, metadata, created_at)
+         VALUES ($1, $2, $3, $4, $5, now())`,
+        [
+          taskId, 
+          type, 
+          description, 
+          "queued",
+          metadata ? JSON.stringify(metadata) : null
+        ]
       );
 
-      this.tasks.push({
+      const task = {
         id: taskId,
         type,
         description,
         status: "queued",
+        metadata,
         createdAt: new Date().toISOString(),
-      });
+      };
+      this.tasks.push(task);
 
       broadcastToAll({ type: "task_queued", taskId, taskType: type });
       return taskId;
     } catch (error) {
       console.error("Task add error:", error.message);
+      return null;
+    }
+  }
+
+  async getTaskMetadata(taskId) {
+    try {
+      const result = await pool.query(
+        "SELECT metadata FROM execution_tasks WHERE task_id = $1",
+        [taskId]
+      );
+      if (result.rows.length > 0 && result.rows[0].metadata) {
+        return typeof result.rows[0].metadata === 'string' 
+          ? JSON.parse(result.rows[0].metadata) 
+          : result.rows[0].metadata;
+      }
+      return null;
+    } catch (error) {
       return null;
     }
   }
@@ -4152,6 +4178,11 @@ class ExecutionQueue {
 
     const task = this.tasks.shift();
     this.activeTask = task;
+    
+    // Load metadata from DB if not in memory task
+    if (!task.metadata && task.id) {
+      task.metadata = await this.getTaskMetadata(task.id);
+    }
 
     try {
       await pool.query(
@@ -4208,9 +4239,12 @@ class ExecutionQueue {
         console.log(`🔨 [EXECUTION] Building opportunity via self-programming: ${task.description.substring(0, 100)}...`);
         
         try {
+          // Get metadata from task (could be from in-memory task or need to load from DB)
+          const taskMetadata = task.metadata || (task.id ? await this.getTaskMetadata(task.id) : null);
+          
           const buildResult = await handleSelfProgramming({
             instruction: task.description,
-            autoDeploy: task.data?.auto_deploy || false,
+            autoDeploy: taskMetadata?.auto_deploy || taskMetadata?.autoDeploy || false,
             priority: 'high',
           });
 
@@ -8865,16 +8899,19 @@ app.post("/api/v1/class/complete-module", requireKey, async (req, res) => {
       return res.status(404).json({ ok: false, error: "Not enrolled" });
     }
 
-    const completed = JSON.parse(enrollment.rows[0].completed_modules || '[]');
-    if (!completed.includes(module_name)) {
-      completed.push(module_name);
+    // completed_modules is JSONB, so it's already an object/array, not a string
+    const completed = enrollment.rows[0].completed_modules || [];
+    const completedArray = Array.isArray(completed) ? completed : (typeof completed === 'string' ? JSON.parse(completed) : []);
+    
+    if (!completedArray.includes(module_name)) {
+      completedArray.push(module_name);
     }
 
     await pool.query(
       `UPDATE virtual_class_enrollments 
        SET completed_modules = $1, updated_at = NOW()
        WHERE student_email = $2`,
-      [JSON.stringify(completed), email]
+      [JSON.stringify(completedArray), email]
     );
 
     // If enrolled in Express line, update mastery level
@@ -8938,8 +8975,9 @@ app.post("/api/v1/boldtrail/set-vacation-mode", requireKey, async (req, res) => 
     }
 
     const prefs = currentPrefs.rows[0].preferences || {};
-    if (vacation_mode !== undefined) prefs.vacation_mode = vacation_mode ? 'true' : 'false';
-    if (busy_mode !== undefined) prefs.busy_mode = busy_mode ? 'true' : 'false';
+    // Store as actual booleans, not strings
+    if (vacation_mode !== undefined) prefs.vacation_mode = Boolean(vacation_mode);
+    if (busy_mode !== undefined) prefs.busy_mode = Boolean(busy_mode);
     if (return_date) prefs.return_date = return_date;
 
     await pool.query(
@@ -11422,8 +11460,8 @@ async function start() {
           `SELECT a.*, e.onboarding_stage, e.mastery_level
            FROM boldtrail_agents a
            LEFT JOIN recruitment_enrollments e ON e.agent_id = a.id
-           WHERE a.preferences->>'vacation_mode' = 'true'
-           OR a.preferences->>'busy_mode' = 'true'`
+           WHERE (a.preferences->>'vacation_mode' = 'true' OR (a.preferences->>'vacation_mode')::boolean = true)
+           OR (a.preferences->>'busy_mode' = 'true' OR (a.preferences->>'busy_mode')::boolean = true)`
         );
 
         for (const agent of busyAgents.rows) {

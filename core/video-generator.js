@@ -37,14 +37,34 @@ export class VideoGenerator {
       for (const scene of scenes) {
         const imagePrompt = this.createImagePrompt(scene, style);
         const image = await this.generateImage(imagePrompt);
-        sceneImages.push({ scene, image });
+        // Only add if image generation succeeded
+        if (image) {
+          sceneImages.push({ scene, image });
+        } else {
+          console.warn(`⚠️ [VIDEO GEN] Image generation failed for scene: ${scene.description?.substring(0, 50)}`);
+        }
+      }
+
+      if (sceneImages.length === 0) {
+        throw new Error("Failed to generate any images for video scenes");
       }
 
       // Step 3: Convert images to video using Stable Video Diffusion
       const videoClips = [];
       for (const { scene, image } of sceneImages) {
+        // Double-check image is not null before processing
+        if (!image) {
+          console.warn(`⚠️ [VIDEO GEN] Skipping null image for scene`);
+          continue;
+        }
         const clip = await this.imageToVideo(image, scene.duration || 5);
-        videoClips.push(clip);
+        if (clip && clip.url) {
+          videoClips.push(clip);
+        }
+      }
+
+      if (videoClips.length === 0) {
+        throw new Error("Failed to generate any video clips from images");
       }
 
       // Step 4: Add voiceover (if agent voice available)
@@ -196,8 +216,7 @@ Style: ${style}, high quality, cinematic, professional lighting, modern real est
       const data = await response.json();
       return data.images?.[0] || null;
     } catch (error) {
-      console.error("Image generation error:", error);
-      // Fallback: return placeholder
+      console.error("❌ [VIDEO GEN] Image generation error:", error.message);
       return null;
     }
   }

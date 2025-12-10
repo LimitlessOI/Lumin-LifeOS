@@ -31,8 +31,9 @@ USER appuser
 EXPOSE 8080
 
 # Health check with longer start period for complex startup
+# Use sh -c to properly expand PORT env var, fallback to 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:${PORT:-8080}/healthz || exit 1
+  CMD sh -c 'curl -f http://localhost:${PORT:-8080}/healthz || exit 1'
 
 # Start the application
 CMD ["node", "server.js"]
