@@ -1,23 +1,22 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const { Pool } = require('pg');
-const winston = require('winston');
-
-dotenv.config();
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('./middleware/rateLimit');
+const logging = require('./middleware/logging');
+const userRoutes = require('./routes/userRoutes');
+require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3000;
-
-const pool = new Pool();
 
 app.use(express.json());
+app.use(cors());
+app.use(helmet());
+app.use(rateLimit);
+app.use(logging);
 
-// Placeholder for API endpoints
-app.get('/', (req, res) => {
-  res.send('LifeOS Backend is running');
-});
+app.use('/api/users', userRoutes);
 
-// Start server
-app.listen(port, () => {
-  winston.info(`Server is running on port ${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
