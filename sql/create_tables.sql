@@ -1,20 +1,17 @@
 ```sql
-CREATE TABLE user_dashboard_preferences (
-    user_id UUID PRIMARY KEY,
-    preferences JSONB NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE exported_reports (
-    report_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL,
-    report_data JSONB NOT NULL,
-    exported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE market_insights_cache (
-    insight_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    insight_data JSONB NOT NULL,
-    cached_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE user_audit_log (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(id),
+    action VARCHAR(50) NOT NULL,
+    timestamp TIMESTAMPTZ DEFAULT NOW()
 );
 ```
