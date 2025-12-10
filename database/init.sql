@@ -1,19 +1,15 @@
 ```sql
-CREATE TABLE translations (
-    id SERIAL PRIMARY KEY,
-    source_language VARCHAR(10),
-    target_language VARCHAR(10),
-    original_text TEXT,
-    translated_text TEXT,
-    context JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE user_feedback (
-    id SERIAL PRIMARY KEY,
-    translation_id INT REFERENCES translations(id),
-    user_id INT,
-    feedback TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE login_audit (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id),
+  login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  success BOOLEAN NOT NULL
 );
 ```
