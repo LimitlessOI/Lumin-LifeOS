@@ -1,14 +1,19 @@
 {
-  "name": "your-project-name",
+  "name": "course-management",
   "version": "1.0.0",
-  "dependencies": {
-    "dotenv": "^10.0.0",
-    "joi": "^17.0.0",
-    "stripe": "^8.0.0",
-    "winston": "^3.0.0",
-    "convict": "^6.0.0"
-  },
+  "description": "A course management system with Stripe integration",
+  "main": "index.js",
   "scripts": {
-    "validate-env": "node scripts/validate-env.js"
+    "test": "jest"
+  },
+  "dependencies": {
+    "knex": "^0.95.14",
+    "pg": "^8.7.1",
+    "stripe": "^8.174.0",
+    "joi": "^17.4.2"
+  },
+  "devDependencies": {
+    "jest": "^27.4.5",
+    "supertest": "^6.1.6"
   }
 }
