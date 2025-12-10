@@ -1,0 +1,10 @@
+```json
+{
+  "build": {
+    "builder": "Docker"
+  },
+  "deploy": {
+    "startCommand": "node src/server.js"
+  }
+}
+```
