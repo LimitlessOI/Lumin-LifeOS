@@ -1,0 +1,39 @@
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lifeos-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lifeos-api
+  template:
+    metadata:
+      labels:
+        app: lifeos-api
+    spec:
+      containers:
+        - name: api
+          image: lifeos-api:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: REDIS_HOST
+              value: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lifeos-api
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30001
+  selector:
+    app: lifeos-api
+```
