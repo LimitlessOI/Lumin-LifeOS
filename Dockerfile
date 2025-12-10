@@ -1,18 +1,11 @@
-```dockerfile
-# Use Node.js official image
 FROM node:14
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Install app dependencies
-COPY package*.json ./
-
+COPY package.json ./
 RUN npm install
 
-# Bundle app source
 COPY . .
 
-# Expose port and start application
-EXPOSE 3000
-CMD ["node", "src/server.js"]
+CMD ["node", "server.js"]
+#
