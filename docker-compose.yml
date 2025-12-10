@@ -1,14 +1,26 @@
-version: '3'
+version: '3.8'
+
 services:
-  abi-system:
+  app:
     build: .
     ports:
-      - "3000:3000"
+      - '4000:4000'
+    environment:
+      - DATABASE_URL=your_database_url_here
+      - MAKE_WEBHOOK_SECRET=your_make_webhook_secret_here
+      - JWT_SECRET=your_jwt_secret_here
+      - PORT=4000
     depends_on:
       - db
+
   db:
-    image: postgres:latest
+    image: postgres:13
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: abi_db
+      POSTGRES_DB: mydb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
