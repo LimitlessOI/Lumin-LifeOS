@@ -4,11 +4,9 @@ config:
   phases:
     - duration: 60
       arrivalRate: 5
+
 scenarios:
   - flow:
-    - post:
-        url: '/api/v1/metrics/log'
-        json:
-          reviewId: 1
-          metricName: 'response_time'
-          metricValue: 123.4
+      - get:
+          url: "/api/v1/system/db/test-connection"
+```
