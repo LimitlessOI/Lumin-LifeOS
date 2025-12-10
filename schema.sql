@@ -1,39 +1,35 @@
 ```sql
-CREATE TABLE delivery_swarms (
+CREATE TABLE workflows (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE workflow_templates (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    structure JSON NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE workflow_executions (
+    id SERIAL PRIMARY KEY,
+    workflow_id INT NOT NULL,
     status VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    result JSON,
+    started_at TIMESTAMP,
+    finished_at TIMESTAMP,
+    FOREIGN KEY (workflow_id) REFERENCES workflows(id)
 );
 
-CREATE TABLE delivery_stations (
+CREATE TABLE api_integrations (
     id SERIAL PRIMARY KEY,
-    location GEOGRAPHY NOT NULL,
-    capacity INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE delivery_routes (
-    id SERIAL PRIMARY KEY,
-    swarm_id INT REFERENCES delivery_swarms(id),
-    station_id INT REFERENCES delivery_stations(id),
-    route_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE delivery_payloads (
-    id SERIAL PRIMARY KEY,
-    swarm_id INT REFERENCES delivery_swarms(id),
-    weight DECIMAL(10, 2) NOT NULL,
-    dimensions JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE delivery_demand_forecasts (
-    id SERIAL PRIMARY KEY,
-    station_id INT REFERENCES delivery_stations(id),
-    forecast_data JSONB NOT NULL,
-    forecast_date DATE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(255) NOT NULL,
+    api_key VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
