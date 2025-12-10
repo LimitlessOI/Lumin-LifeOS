@@ -1,33 +1,31 @@
 ```sql
-CREATE EXTENSION IF NOT EXISTS timescaledb;
-
-CREATE TABLE fetin_threat_indicators (
-    id SERIAL PRIMARY KEY,
-    indicator_type VARCHAR(255),
-    description TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+CREATE TABLE vr_therapy_sessions (
+    session_id SERIAL PRIMARY KEY,
+    therapist_id INT NOT NULL,
+    environment_id INT NOT NULL,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    FOREIGN KEY (therapist_id) REFERENCES therapists(therapist_id),
+    FOREIGN KEY (environment_id) REFERENCES vr_environment_templates(environment_id)
 );
 
-CREATE TABLE fetin_federated_models (
-    id SERIAL PRIMARY KEY,
-    model_name VARCHAR(255),
-    version INTEGER,
-    parameters BYTEA,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+CREATE TABLE therapist_assignments (
+    assignment_id SERIAL PRIMARY KEY,
+    therapist_id INT NOT NULL,
+    session_id INT NOT NULL,
+    FOREIGN KEY (therapist_id) REFERENCES therapists(therapist_id),
+    FOREIGN KEY (session_id) REFERENCES vr_therapy_sessions(session_id)
 );
 
-CREATE TABLE fetin_inference_logs (
-    id SERIAL PRIMARY KEY,
-    model_id INTEGER REFERENCES fetin_federated_models(id),
-    input_data JSONB,
-    result JSONB,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+CREATE TABLE peer_groups (
+    group_id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    description TEXT
 );
 
-CREATE TABLE fetin_node_registry (
-    id SERIAL PRIMARY KEY,
-    node_name VARCHAR(255),
-    ip_address INET,
-    registered_at TIMESTAMPTZ DEFAULT NOW()
+CREATE TABLE vr_environment_templates (
+    environment_id SERIAL PRIMARY KEY,
+    template_name VARCHAR(255),
+    description TEXT
 );
 ```
