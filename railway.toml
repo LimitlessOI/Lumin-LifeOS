@@ -1,0 +1,2 @@
+[hooks]
+predeploy = "node-pg-migrate up"
