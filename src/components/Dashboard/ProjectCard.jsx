@@ -2,12 +2,12 @@
 import React from 'react';
 
 const ProjectCard = ({ project }) => {
-  return (
-    <div className="project-card">
-      <h3>{project.name}</h3>
-      <p>{project.description}</p>
-    </div>
-  );
+    return (
+        <div className="project-card">
+            <h2>{project.name}</h2>
+            <p>{project.description}</p>
+        </div>
+    );
 };
 
 export default ProjectCard;
