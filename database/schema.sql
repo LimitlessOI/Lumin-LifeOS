@@ -1,18 +1,16 @@
 ```sql
-CREATE TABLE code_submissions (
-    submission_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    code TEXT NOT NULL,
-    review_status VARCHAR(50) DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE code_review_history (
-    review_id SERIAL PRIMARY KEY,
-    submission_id INT NOT NULL,
-    analysis_result JSONB,
-    reviewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (submission_id) REFERENCES code_submissions(submission_id)
+CREATE TABLE sessions (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    token VARCHAR(255) UNIQUE NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
