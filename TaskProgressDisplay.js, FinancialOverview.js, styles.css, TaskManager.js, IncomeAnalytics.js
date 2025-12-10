@@ -1,0 +1,1 @@
+Self-programming: i would liek 5 ideas from each active ai counsil mamebers on what info i howujld have and how to dis
