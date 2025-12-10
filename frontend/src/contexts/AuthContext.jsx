@@ -1,11 +1,42 @@
-import React, { createContext, useContext } from 'react';
-import useAuth from '../hooks/useAuth';
+```javascript
+import React, { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const auth = useAuth();
-    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
-};
+  const [user, setUser] = useState(null);
 
-export const useAuthContext = () => useContext(AuthContext);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get('/api/auth/userinfo');
+        setUser(response.data);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+    fetchUserInfo();
+  }, []);
+
+  const login = async (email, password) => {
+    try {
+      await axios.post('/api/auth/login', { email, password });
+      await fetchUserInfo();
+    } catch (error) {
+      throw new Error('Login failed');
+    }
+  };
+
+  const logout = async () => {
+    await axios.post('/api/auth/logout');
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+```
