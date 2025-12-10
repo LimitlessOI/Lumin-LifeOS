@@ -1,26 +1,25 @@
+```yaml
 version: '3.8'
 
 services:
   app:
     build: .
     ports:
-      - '4000:4000'
-    environment:
-      - DATABASE_URL=your_database_url_here
-      - MAKE_WEBHOOK_SECRET=your_make_webhook_secret_here
-      - JWT_SECRET=your_jwt_secret_here
-      - PORT=4000
+      - '3000:3000'
+    env_file:
+      - .env
     depends_on:
       - db
 
   db:
-    image: postgres:13
+    image: postgres
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
+      POSTGRES_DB: mydatabase
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  db-data:
+```
