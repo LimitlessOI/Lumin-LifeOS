@@ -1,0 +1,20 @@
+```css
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+}
+
+.status-badge.active {
+    background-color: green;
+}
+
+.status-badge.inactive {
+    background-color: red;
+}
+
+.status-badge.pending {
+    background-color: orange;
+}
+```
