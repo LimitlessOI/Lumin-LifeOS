@@ -1,0 +1,14 @@
+```json
+{
+  "node": [
+    "node_modules/",
+    "npm-debug.log",
+    ".env"
+  ],
+  "python": [
+    "__pycache__/",
+    "*.py[cod]",
+    ".env"
+  ]
+}
+```
