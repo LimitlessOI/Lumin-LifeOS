@@ -1,17 +1,20 @@
-CREATE TABLE funnels (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+```sql
+CREATE TABLE user_dashboard_preferences (
+    user_id UUID PRIMARY KEY,
+    preferences JSONB NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE templates (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    content TEXT,
-    funnel_id INTEGER REFERENCES funnels(id) ON DELETE CASCADE
+CREATE TABLE exported_reports (
+    report_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    report_data JSONB NOT NULL,
+    exported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_funnel_name ON funnels(name);
-CREATE INDEX idx_template_name ON templates(name);
---
+CREATE TABLE market_insights_cache (
+    insight_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    insight_data JSONB NOT NULL,
+    cached_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
