@@ -1,19 +1,33 @@
 ```json
 {
-  "name": "learning-extension",
+  "name": "marketplace",
   "version": "1.0.0",
+  "description": "Blockchain-based marketplace service",
   "main": "index.js",
   "scripts": {
-    "start": "node services/learning-extension/api/adaptation-engine.js"
+    "test": "jest",
+    "deploy": "node services/marketplace/scripts/deploy-contracts.js"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^3.0.0",
-    "brain.js": "^2.0.0",
-    "puppeteer": "^10.0.0",
+    "ethers": "^5.7.0",
+    "web3": "^1.6.0",
+    "@maticnetwork/maticjs": "^2.0.0",
+    "ipfs-http-client": "^54.0.0",
+    "axios": "^0.24.0",
     "express": "^4.17.1",
-    "socket.io": "^4.0.0",
-    "bull": "^3.20.0",
-    "pg": "^8.7.1"
+    "sequelize": "^6.6.5",
+    "dotenv": "^10.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "crypto": "^1.0.1",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3",
+    "truffle": "^5.4.11",
+    "@openzeppelin/contracts": "^4.3.2",
+    "node-cron": "^2.0.3",
+    "redis": "^3.1.2"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1"
   }
 }
 ```
