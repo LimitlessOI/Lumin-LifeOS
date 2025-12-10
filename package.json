@@ -1,31 +1,17 @@
 ```json
 {
-  "name": "feedback-system",
-  "version": "1.0.0",
-  "description": "Feedback management system",
-  "main": "src/app.js",
-  "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "test": "jest"
-  },
   "dependencies": {
-    "axios": "^0.27.2",
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "express-rate-limit": "^5.5.1",
-    "helmet": "^5.0.2",
-    "jsonwebtoken": "^8.5.1",
-    "joi": "^17.6.0",
-    "pg": "^8.7.1",
-    "sequelize": "^6.6.5",
-    "winston": "^3.3.3"
+    "sequelize": "^6.x",
+    "express": "^4.x",
+    "joi": "^17.x",
+    "axios": "^0.21.x",
+    "cron-parser": "^4.x",
+    "bull": "^3.x",
+    "pg": "^8.x"
   },
   "devDependencies": {
-    "jest": "^27.4.5",
-    "supertest": "^6.1.6",
-    "nodemon": "^2.0.15"
+    "jest": "^26.x",
+    "supertest": "^6.x"
   }
 }
 ```
