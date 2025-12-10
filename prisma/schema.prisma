@@ -1,20 +1,63 @@
 ```prisma
-model WorkflowFeedback {
-  id          String   @id @default(uuid())
-  userId      String
-  workflowId  String
-  feedback    String
-  createdAt   DateTime @default(now())
-  metrics     FeedbackMetrics @relation(fields: [metricsId], references: [id])
-  metricsId   String
-
-  @@index([userId, workflowId])
+generator client {
+  provider = "prisma-client-js"
 }
 
-model FeedbackMetrics {
-  id          String   @id @default(uuid())
-  rating      Int
-  comments    String?
-  feedback    WorkflowFeedback?
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  tasks       Task[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Task {
+  id          String         @id @default(cuid())
+  title       String
+  description String?
+  status      String
+  project     Project        @relation(fields: [projectId], references: [id])
+  projectId   String
+  comments    TaskComment[]
+  attachments TaskAttachment[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model TaskComment {
+  id        String   @id @default(cuid())
+  content   String
+  task      Task     @relation(fields: [taskId], references: [id])
+  taskId    String
+  createdAt DateTime @default(now())
+}
+
+model TaskAttachment {
+  id        String   @id @default(cuid())
+  url       String
+  task      Task     @relation(fields: [taskId], references: [id])
+  taskId    String
+  createdAt DateTime @default(now())
+}
+
+model UserRole {
+  id     String @id @default(cuid())
+  role   String
+  users  User[]
+}
+
+model TaskAnalytics {
+  id        String   @id @default(cuid())
+  task      Task     @relation(fields: [taskId], references: [id])
+  taskId    String
+  metric    String
+  value     Float
+  createdAt DateTime @default(now())
 }
 ```
