@@ -1,19 +1,21 @@
-```json
 {
-  "name": "learning-extension",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "lumin-lifeos",
+  "version": "27.0.0",
+  "type": "module",
+  "main": "server.js",
   "scripts": {
-    "start": "node services/learning-extension/api/adaptation-engine.js"
+    "start": "node server.js"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^3.0.0",
-    "brain.js": "^2.0.0",
-    "puppeteer": "^10.0.0",
-    "express": "^4.17.1",
-    "socket.io": "^4.0.0",
-    "bull": "^3.20.0",
-    "pg": "^8.7.1"
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "dayjs": "^1.11.0",
+    "pg": "^8.11.0",
+    "ws": "^8.13.0",
+    "stripe": "^13.0.0",
+    "twilio": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
-```
