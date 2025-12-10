@@ -1,13 +1,9 @@
-```yaml
 config:
   target: 'http://localhost:3000'
   phases:
     - duration: 60
-      arrivalRate: 10
+      arrivalRate: 20
 scenarios:
   - flow:
-    - post:
-        url: '/users'
-        json:
-          name: 'Test User'
-          email: 'testuser@example.com'
+    - get:
+        url: "/api/tasks"
