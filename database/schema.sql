@@ -1,45 +1,23 @@
 ```sql
--- Create table for smart bins
-CREATE TABLE smart_bins (
-    id SERIAL PRIMARY KEY,
-    location VARCHAR(255) NOT NULL,
-    bin_type VARCHAR(50) NOT NULL,
-    status VARCHAR(50),
-    last_emptied TIMESTAMP
-);
-
--- Create table for waste readings
-CREATE TABLE waste_readings (
-    id SERIAL PRIMARY KEY,
-    bin_id INT REFERENCES smart_bins(id),
-    reading_time TIMESTAMP NOT NULL,
-    waste_level INT NOT NULL,
-    FOREIGN KEY (bin_id) REFERENCES smart_bins(id)
-);
-
--- Create table for recycling transactions
-CREATE TABLE recycling_transactions (
+CREATE TABLE ai_code_sessions (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    bin_id INT REFERENCES smart_bins(id),
-    transaction_time TIMESTAMP NOT NULL,
-    material_type VARCHAR(50) NOT NULL,
-    weight DECIMAL(10, 2) NOT NULL
+    session_data JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for collection routes
-CREATE TABLE collection_routes (
+CREATE TABLE ai_code_models (
     id SERIAL PRIMARY KEY,
-    route_name VARCHAR(255) NOT NULL,
-    start_location VARCHAR(255) NOT NULL,
-    end_location VARCHAR(255) NOT NULL,
-    route_details JSONB
+    model_name VARCHAR(255) NOT NULL,
+    version VARCHAR(50),
+    config JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for policy recommendations
-CREATE TABLE policy_recommendations (
+CREATE TABLE code_templates (
     id SERIAL PRIMARY KEY,
-    recommendation_text TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(50) NOT NULL
+    language VARCHAR(50) NOT NULL,
+    template TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
