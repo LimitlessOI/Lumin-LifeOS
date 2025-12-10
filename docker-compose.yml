@@ -1,16 +1,14 @@
-```yaml
-version: '3.8'
+version: '3'
 services:
-  postgres:
+  abi-system:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+  db:
     image: postgres:latest
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
-    ports:
-      - "5432:5432"
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
-```
+      POSTGRES_DB: abi_db
