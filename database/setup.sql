@@ -1,30 +1,24 @@
 ```sql
-CREATE TABLE edge_devices (
+CREATE TABLE env_templates (
     id SERIAL PRIMARY KEY,
-    device_name VARCHAR(255) NOT NULL,
-    location VARCHAR(255),
-    last_online TIMESTAMP
-);
-
-CREATE TABLE anomaly_logs (
-    id SERIAL PRIMARY KEY,
-    device_id INT REFERENCES edge_devices(id),
-    anomaly_timestamp TIMESTAMP NOT NULL,
-    anomaly_data JSONB NOT NULL
-);
-
-CREATE TABLE digital_twin_scenarios (
-    id SERIAL PRIMARY KEY,
-    scenario_name VARCHAR(255) NOT NULL,
-    parameters JSONB,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    template_data JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE performance_metrics (
+CREATE TABLE user_projects (
     id SERIAL PRIMARY KEY,
-    device_id INT REFERENCES edge_devices(id),
-    metric_name VARCHAR(255) NOT NULL,
-    metric_value DOUBLE PRECISION,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INTEGER NOT NULL,
+    project_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE cloud_integrations (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    provider VARCHAR(50) NOT NULL,
+    credentials JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
