@@ -1,30 +1,30 @@
 ```sql
-CREATE TABLE ai_models (
+CREATE TABLE fraud_scores (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    version VARCHAR(50) NOT NULL,
-    description TEXT,
+    user_id INT NOT NULL,
+    score DECIMAL(5, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE model_deployments (
+CREATE TABLE behavioral_profiles (
     id SERIAL PRIMARY KEY,
-    model_id INTEGER REFERENCES ai_models(id),
-    deployment_status VARCHAR(50),
-    deployed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE model_transactions (
-    id SERIAL PRIMARY KEY,
-    model_id INTEGER REFERENCES ai_models(id),
-    transaction_type VARCHAR(50),
-    amount DECIMAL(10, 2),
-    currency VARCHAR(10),
+    user_id INT NOT NULL,
+    behavior_data JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE model_reputation (
-    model_id INTEGER PRIMARY KEY REFERENCES ai_models(id),
-    reputation_score DECIMAL(5, 2),
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE threat_intelligence (
+    id SERIAL PRIMARY KEY,
+    source VARCHAR(255) NOT NULL,
+    data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE fraud_incidents (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    incident_details JSONB NOT NULL,
+    resolved BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
