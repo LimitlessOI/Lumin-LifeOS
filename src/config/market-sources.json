@@ -1,0 +1,10 @@
+```json
+[
+    {
+        "id": 1,
+        "name": "Example Source",
+        "api_endpoint": "https://api.example.com/market-data"
+    }
+    // Add more sources as needed
+]
+```
