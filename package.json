@@ -1,25 +1,27 @@
+```json
 {
-  "name": "lifeos-backend",
+  "name": "pipeline-system",
   "version": "1.0.0",
-  "description": "Backend for LifeOS AI Council pipeline.",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js",
+    "start": "node index.js",
     "test": "jest"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "pg": "^8.7.1",
-    "dockerode": "^3.3.0",
+    "@railway/cli": "^1.0.0",
+    "dockerode": "^3.2.1",
+    "node-fetch": "^2.6.1",
     "dotenv": "^10.0.0",
-    "stripe": "^8.174.0",
+    "joi": "^17.0.0",
     "winston": "^3.3.3",
-    "joi": "^17.4.0",
-    "axios": "^0.24.0"
+    "node-cron": "^3.0.0",
+    "github-webhook-handler": "^1.0.0",
+    "sequelize": "^6.6.5",
+    "pg": "^8.7.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15",
-    "jest": "^27.3.1",
-    "supertest": "^6.1.6"
+    "jest": "^27.0.0",
+    "supertest": "^6.1.3"
   }
 }
+```
