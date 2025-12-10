@@ -1,25 +1,30 @@
 ```javascript
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const UserService = require('../services/userService');
+const { User } = require('../db/models');
 
-exports.register = async (req, res) => {
-  try {
+exports.userController = {
+  register: async (req, res) => {
     const { username, password } = req.body;
-    const user = await UserService.createUser(username, password);
-    res.status(201).json({ message: 'User registered successfully', user });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+    const hashedPassword = await bcrypt.hash(password, 10);
+    try {
+      const user = await User.create({ username, password: hashedPassword });
+      res.status(201).send({ user });
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  },
+  
+  login: async (req, res) => {
+    const { username, password } = req.body;
+    const user = await User.findOne({ where: { username } });
+    if (!user) return res.status(400).send('Invalid username or password.');
 
-exports.login = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const token = await UserService.authenticateUser(username, password);
-    res.status(200).json({ message: 'Login successful', token });
-  } catch (error) {
-    res.status(401).json({ error: error.message });
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) return res.status(400).send('Invalid username or password.');
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+    res.send({ token });
   }
 };
 ```
