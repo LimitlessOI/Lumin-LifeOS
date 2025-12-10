@@ -1,29 +1,27 @@
 ```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model User {
+  id       Int       @id @default(autoincrement())
+  feedback Feedback[]
 }
 
-model AIModel {
-  id          Int      @id @default(autoincrement())
-  name        String
-  version     String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model ModelDeployment {
+model Feedback {
   id        Int      @id @default(autoincrement())
-  modelId   Int
-  endpoint  String
-  status    String
-  deployedAt DateTime @default(now())
+  userId    Int
+  content   String
+  rating    Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 
-  model AIModel @relation(fields: [modelId], references: [id])
+  @@index([userId])
+  @@index([rating])
 }
 ```
