@@ -1,39 +1,24 @@
 ```yaml
 version: '3.8'
-
 services:
-  database:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydb
-    volumes:
-      - db_data:/var/lib/postgresql/data
+  app:
+    build: .
     ports:
-      - "5432:5432"
-
-  iot_service:
-    build: ./src/edge
-    depends_on:
-      - database
+      - "3000:3000"
     environment:
-      DATABASE_URL: postgres://myuser:mypassword@database:5432/mydb
-
-  ai_service:
-    build: ./src/ai
+      - NODE_ENV=development
     depends_on:
-      - database
-    environment:
-      DATABASE_URL: postgres://myuser:mypassword@database:5432/mydb
+      - db
+      - redis
 
-  blockchain_service:
-    build: ./src/blockchain
-    depends_on:
-      - database
+  db:
+    image: postgres:13
+    restart: always
     environment:
-      DATABASE_URL: postgres://myuser:mypassword@database:5432/mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: code_generation
 
-volumes:
-  db_data:
+  redis:
+    image: redis:alpine
 ```
