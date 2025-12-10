@@ -1,24 +1,17 @@
 ```json
 {
-  "name": "mental-health-platform",
-  "version": "1.0.0",
-  "description": "A platform for managing mental health data with wearable integrations.",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "jest"
-  },
   "dependencies": {
     "express": "^4.17.1",
-    "sequelize": "^6.6.5",
-    "pg": "^8.6.0",
-    "pg-hstore": "^2.3.4",
-    "tensorflow": "^2.7.0",
-    "ipfs-http-client": "^50.1.2",
-    "ethers": "^5.4.7"
+    "express-validator": "^6.6.1",
+    "joi": "^17.4.0",
+    "axios": "^0.21.1",
+    "winston": "^3.3.3",
+    "uuid": "^8.3.2",
+    "pg": "^8.5.1"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^26.6.3",
+    "supertest": "^6.0.1",
+    "node-cron": "^2.0.3"
   }
 }
-```
