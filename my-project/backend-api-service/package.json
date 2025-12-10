@@ -1,0 +1,21 @@
+```json
+{
+  "name": "backend-api-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "stripe": "^8.174.0",
+    "body-parser": "^1.19.0",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "supertest": "^6.1.6"
+  }
+}
+```
