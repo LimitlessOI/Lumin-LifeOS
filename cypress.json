@@ -1,6 +1,6 @@
 {
-  "baseUrl": "http://localhost:3000",
-  "integrationFolder": "cypress/integration",
-  "fixturesFolder": "cypress/fixtures",
-  "supportFile": "cypress/support/index.js"
+    "baseUrl": "http://localhost:3000",
+    "integrationFolder": "tests/e2e",
+    "pluginsFile": "tests/e2e/plugins/index.js",
+    "supportFile": "tests/e2e/support/index.js"
 }
