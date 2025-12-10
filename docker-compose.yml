@@ -1,25 +1,28 @@
+```yaml
 version: '3.8'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
     volumes:
       - .:/usr/src/app
-    depends_on:
-      - db
+    command: npm start
 
   db:
     image: postgres:13
     environment:
+      POSTGRES_DB: mydb
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: lifeos_db
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  db-data:
+```
