@@ -1,20 +1,19 @@
-```dockerfile
-# Use Node.js 14 image
+```
+# Use the official Node.js 14 image.
 FROM node:14
 
-# Set working directory
+# Create and change to the app directory.
 WORKDIR /usr/src/app
 
-# Copy package.json and install dependencies
+# Copy application dependency manifests to the container image.
 COPY package*.json ./
+
+# Install production dependencies.
 RUN npm install
 
-# Copy the rest of the application code
+# Copy application code.
 COPY . .
 
-# Expose the application port
-EXPOSE 3000
-
-# Define the command to run the application
-CMD ["node", "src/server.js"]
+# Run the web service on container startup.
+CMD [ "node", "src/index.js" ]
 ```
