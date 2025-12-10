@@ -1,26 +1,13 @@
-```javascript
 const express = require('express');
+const userController = require('../controllers/userController');
+const auth = require('../middleware/auth');
+
 const router = express.Router();
-const UserService = require('../services/userService');
-const userValidation = require('../middleware/userValidation');
 
-router.post('/register', userValidation.validateRegister, async (req, res, next) => {
-    try {
-        const user = await UserService.registerUser(req.body.username, req.body.email, req.body.password);
-        res.status(201).json(user);
-    } catch (error) {
-        next(error);
-    }
-});
-
-router.post('/login', userValidation.validateLogin, async (req, res, next) => {
-    try {
-        const result = await UserService.authenticateUser(req.body.email, req.body.password);
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
-    }
-});
+router.get('/', auth, userController.getAllUsers);
+router.post('/', auth, userController.createUser);
+router.get('/:id', auth, userController.getUserById);
+router.put('/:id', auth, userController.updateUser);
+router.delete('/:id', auth, userController.deleteUser);
 
 module.exports = router;
-```
