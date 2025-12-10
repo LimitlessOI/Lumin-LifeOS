@@ -1,29 +1,34 @@
 ```sql
-CREATE TABLE users (
+-- Create nats_environments table
+CREATE TABLE nats_environments (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE sessions (
+-- Create nats_sessions table
+CREATE TABLE nats_sessions (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    token VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMP NOT NULL
+    environment_id INT REFERENCES nats_environments(id),
+    user_id INT NOT NULL,
+    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end_time TIMESTAMP
 );
 
-CREATE TABLE audit_logs (
+-- Create nats_hardware table
+CREATE TABLE nats_hardware (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    action VARCHAR(100) NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    details TEXT
+    type VARCHAR(255) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    last_checked TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_users_username ON users(username);
-CREATE INDEX idx_sessions_user_id ON sessions(user_id);
-CREATE INDEX idx_audit_logs_user_id ON audit_logs(user_id);
+-- Create nats_ai_guides table
+CREATE TABLE nats_ai_guides (
+    id SERIAL PRIMARY KEY,
+    guide_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 ```
