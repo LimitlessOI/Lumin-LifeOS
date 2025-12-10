@@ -1,20 +1,22 @@
-```prisma
-model CodeReview {
-  id                String   @id @default(uuid())
-  codeSnippet       String
-  feedback          String?
-  status            String   @default("pending")
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model CodeReviewMetric {
-  id          String   @id @default(uuid())
-  reviewId    String
-  metricName  String
-  metricValue Float
-  createdAt   DateTime @default(now())
-
-  @@index([reviewId], name: "reviewId_idx")
+generator client {
+  provider = "prisma-client-js"
 }
-```
+
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  name  String
+}
+
+model Subscription {
+  id       Int    @id @default(autoincrement())
+  userId   Int
+  plan     String
+  status   String
+  user     User   @relation(fields: [userId], references: [id])
+}
