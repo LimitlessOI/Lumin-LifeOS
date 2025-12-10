@@ -1,0 +1,19 @@
+```plaintext
+# Node.js/React specific files
+node_modules/
+build/
+dist/
+coverage/
+
+# Log files
+*.log
+
+# Environment files
+*.env
+
+# OS specific files
+.DS_Store
+
+# Temporary files
+*.tmp
+```
