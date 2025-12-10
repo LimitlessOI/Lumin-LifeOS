@@ -2,38 +2,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lifeos-api
+  name: nlp-service
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
-      app: lifeos-api
+      app: nlp-service
   template:
     metadata:
       labels:
-        app: lifeos-api
+        app: nlp-service
     spec:
       containers:
-        - name: api
-          image: lifeos-api:latest
-          ports:
-            - containerPort: 3000
-          env:
-            - name: DB_HOST
-              value: postgres
-            - name: REDIS_HOST
-              value: redis
+      - name: nlp-service
+        image: nlp-service:latest
+        ports:
+        - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: lifeos-api
+  name: nlp-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - port: 3000
-      targetPort: 3000
-      nodePort: 30001
+  - port: 8080
   selector:
-    app: lifeos-api
+    app: nlp-service
 ```
