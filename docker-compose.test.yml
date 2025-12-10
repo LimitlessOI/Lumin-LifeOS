@@ -1,18 +1,17 @@
 ```yaml
 version: '3.8'
-
 services:
   db:
-    image: postgres:13
+    image: postgres:latest
     environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpassword
       POSTGRES_DB: testdb
     ports:
-      - '5433:5432'
+      - "5433:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_test_data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  db_test_data:
 ```
