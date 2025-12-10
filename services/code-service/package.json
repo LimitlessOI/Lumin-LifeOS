@@ -1,0 +1,23 @@
+```json
+{
+  "name": "code-service",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sequelize": "^6.21.3",
+    "pg": "^8.8.0",
+    "helmet": "^5.1.1",
+    "cors": "^2.8.5",
+    "winston": "^3.8.1"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "supertest": "^6.3.0"
+  }
+}
+```
