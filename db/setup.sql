@@ -1,36 +1,23 @@
 ```sql
-CREATE TABLE virtual_wardrobes (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  items JSONB NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS business_processes (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE size_profiles (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  measurements JSONB NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS process_executions (
+    id SERIAL PRIMARY KEY,
+    process_id INTEGER REFERENCES business_processes(id),
+    status VARCHAR(50) NOT NULL,
+    started_at TIMESTAMP,
+    completed_at TIMESTAMP
 );
 
-CREATE TABLE social_feedback (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  feedback TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE retailer_integrations (
-  id SERIAL PRIMARY KEY,
-  retailer_name VARCHAR(255) NOT NULL,
-  api_key VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE ar_sessions (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  session_data JSONB NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS process_triggers (
+    id SERIAL PRIMARY KEY,
+    process_id INTEGER REFERENCES business_processes(id),
+    trigger_type VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
