@@ -1,39 +1,27 @@
 ```sql
-CREATE TABLE therapy_sessions (
+CREATE TABLE clients (
     id SERIAL PRIMARY KEY,
-    patient_id INT,
-    protocol_id INT,
-    start_time TIMESTAMP,
-    end_time TIMESTAMP,
-    status VARCHAR(50)
+    name VARCHAR(255) NOT NULL,
+    contact_email VARCHAR(255),
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE therapy_protocols (
+CREATE TABLE projects (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
+    client_id INT REFERENCES clients(id),
+    name VARCHAR(255) NOT NULL,
     description TEXT,
-    duration INT
+    status VARCHAR(50),
+    start_date DATE,
+    end_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE biometric_streams (
+CREATE TABLE project_updates (
     id SERIAL PRIMARY KEY,
-    session_id INT,
-    timestamp TIMESTAMP,
-    heart_rate INT,
-    brain_activity FLOAT
-);
-
-CREATE TABLE clinician_oversight (
-    id SERIAL PRIMARY KEY,
-    clinician_id INT,
-    session_id INT,
-    notes TEXT
-);
-
-CREATE TABLE xr_environments (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    description TEXT,
-    config JSONB
+    project_id INT REFERENCES projects(id),
+    update_text TEXT NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
