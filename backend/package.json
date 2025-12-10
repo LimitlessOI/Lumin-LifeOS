@@ -1,0 +1,24 @@
+```json
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend for managing user profiles and preferences",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "bcryptjs": "^2.4.3",
+    "helmet": "^4.6.0",
+    "cors": "^2.8.5",
+    "express-validator": "^6.14.0",
+    "@grpc/grpc-js": "^1.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
+```
