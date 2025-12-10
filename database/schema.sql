@@ -1,31 +1,18 @@
 ```sql
-CREATE TABLE stripe_clients (
-    id SERIAL PRIMARY KEY,
-    client_id VARCHAR(255) UNIQUE NOT NULL,
-    secret_key VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE code_submissions (
+    submission_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    code TEXT NOT NULL,
+    review_status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE stripe_metrics (
-    id SERIAL PRIMARY KEY,
-    client_id INTEGER REFERENCES stripe_clients(id),
-    metric_name VARCHAR(255) NOT NULL,
-    metric_value DOUBLE PRECISION,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE optimization_recommendations (
-    id SERIAL PRIMARY KEY,
-    client_id INTEGER REFERENCES stripe_clients(id),
-    recommendation TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE stripe_alerts (
-    id SERIAL PRIMARY KEY,
-    client_id INTEGER REFERENCES stripe_clients(id),
-    alert_message TEXT NOT NULL,
-    resolved BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE code_review_history (
+    review_id SERIAL PRIMARY KEY,
+    submission_id INT NOT NULL,
+    analysis_result JSONB,
+    reviewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (submission_id) REFERENCES code_submissions(submission_id)
 );
 ```
