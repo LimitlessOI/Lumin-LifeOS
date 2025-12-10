@@ -1,15 +1,16 @@
 ```sql
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS prototype_configs (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    value TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE login_audit (
-  id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES users(id),
-  login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  success BOOLEAN NOT NULL
+CREATE TABLE IF NOT EXISTS query_logs (
+    id SERIAL PRIMARY KEY,
+    query TEXT NOT NULL,
+    parameters JSONB,
+    executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    success BOOLEAN
 );
 ```
