@@ -1,6 +1,5 @@
-const stripe = require('stripe');
-const config = require('./index');
+```javascript
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-const stripeClient = stripe(config.get('stripe.apiKey'));
-
-module.exports = stripeClient;
+module.exports = stripe;
+```
