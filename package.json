@@ -1,24 +1,17 @@
 ```json
 {
-  "name": "learning-cortex",
-  "version": "1.0.0",
-  "description": "Learning Cortex for LifeOS",
-  "main": "index.js",
   "dependencies": {
-    "ipfs-http-client": "^54.0.2",
-    "arweave": "^1.10.0",
-    "tensorflow": "^4.0.0",
-    "brain.js": "^2.0.0",
-    "stripe": "^8.200.0",
-    "express": "^4.18.0",
-    "pg": "^8.7.1"
+    "express": "^4.17.1",
+    "stripe": "^8.0.0",
+    "node-cron": "^2.0.3",
+    "bull": "^3.19.0",
+    "winston": "^3.3.3",
+    "pg": "^8.5.1"
   },
   "devDependencies": {
-    "jest": "^29.0.0",
-    "supertest": "^6.2.3"
-  },
-  "scripts": {
-    "test": "jest"
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2",
+    "supertest": "^6.1.3"
   }
 }
 ```
