@@ -1847,6 +1847,57 @@ async function sendSMS(to, message, aiMember = "chatgpt") {
   }
 }
 
+// ============ CRITICAL ALERTING (SMS + CALL VIA TWILIO) ============
+async function sendAlertSms(message) {
+  try {
+    if (!ALERT_PHONE || !process.env.TWILIO_PHONE_NUMBER) return;
+    await sendSMS(ALERT_PHONE, message, "chatgpt");
+    console.log("📱 [ALERT] SMS sent");
+  } catch (err) {
+    console.warn("⚠️ Alert SMS failed:", err.message);
+  }
+}
+
+async function sendAlertCall(message) {
+  try {
+    if (!ALERT_PHONE || !process.env.TWILIO_PHONE_NUMBER) return;
+    const client = await getTwilioClient();
+    if (!client) return;
+    await client.calls.create({
+      twiml: `<Response><Say voice="alice">${message}</Say></Response>`,
+      to: ALERT_PHONE,
+      from: process.env.TWILIO_PHONE_NUMBER,
+    });
+    console.log("📞 [ALERT] Call placed");
+  } catch (err) {
+    console.warn("⚠️ Alert call failed:", err.message);
+  }
+}
+
+async function notifyCriticalIssue(reason) {
+  // Avoid spamming: only one alert sequence at a time
+  if (alertInProgress) return;
+  alertInProgress = true;
+
+  const msg =
+    `🚨 LifeOS alert: critical issue detected.\n` +
+    `${reason}\n` +
+    `System will continue with any available AI providers.`;
+
+  // Send SMS immediately
+  await sendAlertSms(msg);
+
+  // Place a call after 10 minutes if still needed
+  setTimeout(() => {
+    sendAlertCall(msg);
+  }, 10 * 60 * 1000);
+
+  // Reset after 15 minutes to allow future alerts
+  setTimeout(() => {
+    alertInProgress = false;
+  }, 15 * 60 * 1000);
+}
+
 // ==================== MICRO PROTOCOL HELPERS ====================
 function decodeMicroBody(body = {}) {
   const packet = body.micro || body;
@@ -1956,6 +2007,24 @@ function selectOptimalModel(prompt, taskComplexity = 'medium') {
 // Track provider cooldowns when rate-limited or out of quota
 // Map<member, timestamp_ms_when_we_can_try_again>
 const providerCooldowns = new Map();
+// Prevent alert spam
+let alertInProgress = false;
+
+// Alert destination (set one of these in env)
+const ALERT_PHONE =
+  process.env.ALERT_PHONE ||
+  process.env.ADMIN_PHONE ||
+  process.env.COMMAND_CENTER_PHONE ||
+  null;
+// Prevent alert spam
+let alertInProgress = false;
+
+// Alert destination (set one of these)
+const ALERT_PHONE =
+  process.env.ALERT_PHONE ||
+  process.env.ADMIN_PHONE ||
+  process.env.COMMAND_CENTER_PHONE ||
+  null;
 
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 async function callCouncilMember(member, prompt, options = {}) {
@@ -4125,6 +4194,7 @@ async function callCouncilWithFailover(prompt, preferredMember = "chatgpt") {
   // If everything is on cooldown, fall back to all members (last-resort attempt)
   const candidates = ordered.length > 0 ? ordered : members;
 
+  const errors = [];
   for (const member of candidates) {
     try {
       const response = await callCouncilMember(member, prompt);
@@ -4134,12 +4204,16 @@ async function callCouncilWithFailover(prompt, preferredMember = "chatgpt") {
       }
     } catch (error) {
       console.log(`⚠️ ${member} failed: ${error.message}, trying next...`);
+      errors.push(`${member}: ${error.message}`);
       continue;
     }
   }
 
   console.error("❌ All AI council members unavailable");
-  return "All AI council members currently unavailable. Check API keys in Railway environment.";
+  notifyCriticalIssue(
+    `All AI providers unavailable. Errors: ${errors.join(" | ")}`
+  );
+  return "All AI council members currently unavailable. Check API keys/quotas.";
 }
 
 // ==================== EXECUTION QUEUE ====================
