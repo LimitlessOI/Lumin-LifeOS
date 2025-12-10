@@ -1,23 +1,27 @@
 ```sql
-CREATE TABLE ai_code_sessions (
+-- Table for storing AI-generated routes
+CREATE TABLE ai_generated_routes (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    session_data JSONB,
+    route_name VARCHAR(255) NOT NULL,
+    route_path VARCHAR(255) NOT NULL,
+    code TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE ai_code_models (
+-- Table for logging code generation activities
+CREATE TABLE code_generation_logs (
     id SERIAL PRIMARY KEY,
-    model_name VARCHAR(255) NOT NULL,
-    version VARCHAR(50),
-    config JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    route_id INT REFERENCES ai_generated_routes(id),
+    action VARCHAR(255) NOT NULL,
+    log_message TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE code_templates (
+-- Table for storing metrics templates
+CREATE TABLE metrics_templates (
     id SERIAL PRIMARY KEY,
-    language VARCHAR(50) NOT NULL,
-    template TEXT NOT NULL,
+    template_name VARCHAR(255) NOT NULL,
+    template_definition JSONB NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
