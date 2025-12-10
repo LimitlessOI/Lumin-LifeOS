@@ -1,24 +1,26 @@
 ```sql
-CREATE TABLE env_templates (
+CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
     description TEXT,
-    template_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE user_projects (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    project_name VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE task_dependencies (
+    task_id INT NOT NULL,
+    dependency_id INT NOT NULL,
+    PRIMARY KEY (task_id, dependency_id),
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (dependency_id) REFERENCES tasks(id) ON DELETE CASCADE
 );
 
-CREATE TABLE cloud_integrations (
+CREATE TABLE task_automations (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    provider VARCHAR(50) NOT NULL,
-    credentials JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    task_id INT NOT NULL,
+    automation_type VARCHAR(100),
+    parameters JSONB,
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
 );
 ```
