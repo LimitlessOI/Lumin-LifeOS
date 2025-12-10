@@ -1,27 +1,15 @@
 ```json
 {
-  "name": "support-system",
-  "version": "1.0.0",
-  "description": "Support system for handling user queries and AI processing",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "jest"
-  },
   "dependencies": {
-    "express": "^4.17.1",
-    "openai": "^3.0.0",
-    "dialogflow": "^4.0.0",
-    "redis": "^3.1.2",
-    "bull": "^3.20.1",
-    "joi": "^17.4.0",
-    "rate-limiter-flexible": "^2.3.5",
-    "socket.io": "^4.4.1"
+    "pg": "^8.x",
+    "express-validator": "^6.x",
+    "express": "^4.x",
+    "uuid": "^8.x",
+    "node-cron": "^3.x"
   },
   "devDependencies": {
-    "jest": "^27.0.6",
-    "supertest": "^6.1.6",
-    "artillery": "^1.7.8"
+    "jest": "^27.x",
+    "supertest": "^6.x"
   }
 }
 ```
