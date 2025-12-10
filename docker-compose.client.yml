@@ -1,0 +1,20 @@
+```yaml
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      STRIPE_SECRET_KEY: your-stripe-secret-key
+    depends_on:
+      - db
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: clients_db
+    ports:
+      - "5432:5432"
+```
