@@ -1,37 +1,29 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
+```prisma
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model UserProfile {
-  id          Int    @id @default(autoincrement())
+generator client {
+  provider = "prisma-client-js"
+}
+
+model AIModel {
+  id          Int      @id @default(autoincrement())
   name        String
-  email       String @unique
+  version     String
+  description String?
   createdAt   DateTime @default(now())
-  sessions    VirtualTryonSession[]
+  updatedAt   DateTime @updatedAt
 }
 
-model VirtualTryonSession {
-  id          Int    @id @default(autoincrement())
-  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId Int
-  createdAt   DateTime @default(now())
-}
+model ModelDeployment {
+  id        Int      @id @default(autoincrement())
+  modelId   Int
+  endpoint  String
+  status    String
+  deployedAt DateTime @default(now())
 
-model StylingSession {
-  id          Int    @id @default(autoincrement())
-  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
-  userProfileId Int
-  createdAt   DateTime @default(now())
+  model AIModel @relation(fields: [modelId], references: [id])
 }
-
-model StoreIntegration {
-  id        Int    @id @default(autoincrement())
-  platform  String
-  apiKey    String
-  createdAt DateTime @default(now())
-}
+```
