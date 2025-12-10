@@ -1,36 +1,30 @@
-const pool = require('../utils/database');
+```javascript
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  protocol: 'postgres',
+  logging: false
+});
 
-class User {
-  static async getAll() {
-    const res = await pool.query('SELECT * FROM users');
-    return res.rows;
+const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  password_hash: {
+    type: DataTypes.STRING,
+    allowNull: false
   }
-
-  static async create({ name, email }) {
-    const res = await pool.query(
-      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
-      [name, email]
-    );
-    return res.rows[0];
-  }
-
-  static async getById(id) {
-    const res = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-    return res.rows[0];
-  }
-
-  static async update(id, { name, email }) {
-    const res = await pool.query(
-      'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
-      [name, email, id]
-    );
-    return res.rows[0];
-  }
-
-  static async delete(id) {
-    const res = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
-    return res.rowCount > 0;
-  }
-}
+}, {
+  timestamps: true,
+  tableName: 'users'
+});
 
 module.exports = User;
+```
