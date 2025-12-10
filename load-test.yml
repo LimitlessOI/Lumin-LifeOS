@@ -1,9 +1,14 @@
+```yaml
 config:
   target: 'http://localhost:3000'
   phases:
     - duration: 60
-      arrivalRate: 20
+      arrivalRate: 5
 scenarios:
   - flow:
-    - get:
-        url: "/api/tasks"
+    - post:
+        url: '/api/v1/metrics/log'
+        json:
+          reviewId: 1
+          metricName: 'response_time'
+          metricValue: 123.4
