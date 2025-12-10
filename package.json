@@ -1,25 +1,29 @@
 ```json
 {
-  "name": "codegen-system",
+  "name": "lifeos-code-generation",
   "version": "1.0.0",
+  "description": "AI-Driven Code Generation Service for LifeOS",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "express-validator": "^6.10.0",
-    "winston": "^3.3.3",
+    "joi": "^17.4.0",
     "helmet": "^4.6.0",
-    "rate-limiter-flexible": "^2.3.8",
-    "joi": "^17.4.2",
-    "uuid": "^8.3.2",
-    "pg": "^8.7.1"
+    "winston": "^3.3.3",
+    "@deepseek/deepseek-coder": "^1.0.0",
+    "code-parser": "^1.0.0",
+    "ast-generator": "^1.0.0",
+    "security-validator": "^1.0.0"
   },
   "devDependencies": {
-    "prettier": "^2.3.2",
     "eslint": "^7.32.0",
+    "prettier": "^2.3.2",
+    "jsdoc": "^3.6.7",
+    "supertest": "^6.1.3",
     "jest": "^27.0.6"
   }
 }
+```
