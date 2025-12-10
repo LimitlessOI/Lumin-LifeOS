@@ -1,17 +1,20 @@
 ```json
 {
   "dependencies": {
-    "sequelize": "^6.x",
-    "express": "^4.x",
-    "joi": "^17.x",
-    "axios": "^0.21.x",
-    "cron-parser": "^4.x",
-    "bull": "^3.x",
-    "pg": "^8.x"
+    "express": "^4.17.1",
+    "express-validator": "^6.10.0",
+    "sequelize": "^6.6.2",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "joi": "^17.4.2",
+    "winston": "^3.3.3",
+    "helmet": "^4.6.0",
+    "compression": "^1.7.4",
+    "rate-limiter-flexible": "^2.3.1"
   },
   "devDependencies": {
-    "jest": "^26.x",
-    "supertest": "^6.x"
+    "jest": "^26.6.3",
+    "supertest": "^6.1.3"
   }
 }
 ```
