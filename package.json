@@ -1,27 +1,14 @@
-```json
 {
-  "name": "user-management-system",
+  "name": "your-project-name",
   "version": "1.0.0",
-  "description": "User management system with authentication and authorization.",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "jest"
-  },
   "dependencies": {
-    "bcrypt": "^5.0.1",
-    "jsonwebtoken": "^8.5.1",
-    "express": "^4.17.1",
-    "express-validator": "^6.12.1",
-    "pg": "^8.7.1",
     "dotenv": "^10.0.0",
-    "helmet": "^4.6.0",
-    "cors": "^2.8.5",
-    "cookie-parser": "^1.4.5",
-    "node-pg-migrate": "^5.0.0"
+    "joi": "^17.0.0",
+    "stripe": "^8.0.0",
+    "winston": "^3.0.0",
+    "convict": "^6.0.0"
   },
-  "devDependencies": {
-    "jest": "^27.0.6",
-    "supertest": "^6.1.6"
+  "scripts": {
+    "validate-env": "node scripts/validate-env.js"
   }
 }
