@@ -64,8 +64,10 @@ const {
   ALLOWED_ORIGINS = "",
   HOST = "0.0.0.0",
   PORT = 8080,
-  // Spend cap (can be overridden in Railway env). Set very high by default.
-  MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "1000000",
+  // Spend cap (can be overridden in Railway env). Default: $5/day to prevent bleeding money
+  MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "5",
+  // Cost shutdown threshold - if spending exceeds this, only use free models
+  COST_SHUTDOWN_THRESHOLD: RAW_COST_SHUTDOWN = "10",
   NODE_ENV = "production",
   RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app",
   // Stripe config
@@ -76,10 +78,15 @@ const {
   VIDEO_GEN_API_KEY,
 } = process.env;
 
-// Ensure spend cap is numeric; allow "no cap" by setting to a very large default
+// Ensure spend cap is numeric
 const MAX_DAILY_SPEND = Number.isFinite(parseFloat(RAW_MAX_DAILY_SPEND))
   ? parseFloat(RAW_MAX_DAILY_SPEND)
-  : 1000000;
+  : 5; // Default $5/day
+
+// Cost shutdown threshold - if exceeded, only free models allowed
+const COST_SHUTDOWN_THRESHOLD = Number.isFinite(parseFloat(RAW_COST_SHUTDOWN))
+  ? parseFloat(RAW_COST_SHUTDOWN)
+  : 10; // Default $10/day
 
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "")
   .trim() || null;
@@ -1504,47 +1511,59 @@ async function initDatabase() {
 }
 
 // ==================== ENHANCED AI COUNCIL MEMBERS (NO CLAUDE) ====================
+// TIER 0: Open Source / Cheap Models (PRIMARY - Do all the work)
+// TIER 1: Expensive Models (OVERSIGHT ONLY - Validation when needed)
 const COUNCIL_MEMBERS = {
+  // TIER 0 - PRIMARY WORKERS (Cheap/Free)
+  deepseek: {
+    name: "DeepSeek",
+    model: "deepseek-coder",
+    provider: "deepseek",
+    role: "Primary Developer & Infrastructure",
+    focus: "optimization, performance, safe testing, development",
+    maxTokens: 4096,
+    tier: "tier0", // Open source tier
+    costPer1M: 0.1, // $0.10 per million tokens (cheapest)
+    specialties: ["infrastructure", "testing", "performance", "development"],
+    useLocal: DEEPSEEK_BRIDGE_ENABLED === "true",
+    isFree: DEEPSEEK_BRIDGE_ENABLED === "true", // Local is free
+  },
+  // TIER 1 - OVERSIGHT ONLY (Expensive - Only for validation)
   chatgpt: {
     name: "ChatGPT",
     model: "gpt-4o",
     provider: "openai",
-    role: "Technical Executor & User Preference Learning",
-    focus: "implementation, execution, user patterns",
+    role: "Oversight & Validation Only",
+    focus: "validation, critical decisions, user patterns",
     maxTokens: 4096,
-    tier: "heavy",
+    tier: "tier1", // Expensive tier - oversight only
+    costPer1M: 2.5, // $2.50 per million tokens
     specialties: ["execution", "user_modeling", "patterns"],
+    oversightOnly: true, // Only used for oversight, not primary work
   },
   gemini: {
     name: "Gemini",
     model: "gemini-2.5-flash",
     provider: "google",
-    role: "Research Analyst & Idea Generator",
-    focus: "data analysis, creative solutions, daily ideas",
+    role: "Oversight & Validation Only",
+    focus: "validation, analysis, critical review",
     maxTokens: 8192,
-    tier: "medium",
+    tier: "tier1", // Expensive tier - oversight only
+    costPer1M: 1.25, // $1.25 per million tokens
     specialties: ["analysis", "creativity", "ideation"],
-  },
-  deepseek: {
-    name: "DeepSeek",
-    model: "deepseek-coder",
-    provider: "deepseek",
-    role: "Infrastructure & Sandbox Testing",
-    focus: "optimization, performance, safe testing",
-    maxTokens: 4096,
-    tier: "medium",
-    specialties: ["infrastructure", "testing", "performance"],
-    useLocal: DEEPSEEK_BRIDGE_ENABLED === "true",
+    oversightOnly: true, // Only used for oversight, not primary work
   },
   grok: {
     name: "Grok",
     model: "grok-2-1212",
     provider: "xai",
-    role: "Innovation Scout & Reality Check",
-    focus: "novel approaches, risk assessment, blind spots",
+    role: "Oversight & Validation Only",
+    focus: "validation, risk assessment, blind spots",
     maxTokens: 4096,
-    tier: "light",
+    tier: "tier1", // Expensive tier - oversight only
+    costPer1M: 5.0, // $5.00 per million tokens
     specialties: ["innovation", "reality_check", "risk"],
+    oversightOnly: true, // Only used for oversight, not primary work
   },
 };
 
@@ -2034,6 +2053,16 @@ async function callCouncilMember(member, prompt, options = {}) {
   // Get today's spend (automatically resets each day)
   const today = dayjs().format("YYYY-MM-DD");
   const spend = await getDailySpend(today);
+  
+  // COST SHUTDOWN: Block expensive models if spending too much
+  const memberConfig = COUNCIL_MEMBERS[member];
+  const isExpensive = memberConfig?.tier === "tier1" || (memberConfig?.costPer1M && memberConfig.costPer1M > 0.5);
+  
+  if (spend >= COST_SHUTDOWN_THRESHOLD && isExpensive) {
+    throw new Error(
+      `💰 [COST SHUTDOWN] Blocked ${member} - Spending $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}. Use Tier 0 (free/cheap) models only.`
+    );
+  }
   
   // Log for debugging (only log if significant spend)
   if (spend > MAX_DAILY_SPEND * 0.1) {
@@ -2633,7 +2662,7 @@ async function generateDailyIdeas() {
 
     let response;
     try {
-      response = await callCouncilWithFailover(ideaPrompt, "gemini");
+      response = await callCouncilWithFailover(ideaPrompt, "deepseek"); // Use Tier 0
     } catch (err) {
       console.error("Daily idea council error, using fallback:", err.message);
       response = null;
@@ -3180,7 +3209,7 @@ MAX TOTAL: [X] attempts
 Be strategic - we want to solve this, not waste resources.`;
 
   try {
-    const strategy = await callCouncilWithFailover(strategyPrompt, "chatgpt");
+    const strategy = await callCouncilWithFailover(strategyPrompt, "deepseek"); // Use Tier 0
     return {
       success: true,
       strategy,
@@ -3988,7 +4017,7 @@ async function continuousSelfImprovement() {
 
       const improvements = await callCouncilWithFailover(
         improvementPrompt,
-        "deepseek"
+        "deepseek" // Already Tier 0
       );
 
       if (improvements && improvements.length > 50) {
@@ -4174,16 +4203,44 @@ async function trackLoss(
   }
 }
 
-// ==================== COUNCIL WITH FAILOVER ====================
-async function callCouncilWithFailover(prompt, preferredMember = "chatgpt") {
+// ==================== COUNCIL WITH FAILOVER (TIER 0 FIRST) ====================
+async function callCouncilWithFailover(prompt, preferredMember = "deepseek", requireOversight = false) {
+  // Check if we're in cost shutdown mode (spending too much)
+  const today = dayjs().format("YYYY-MM-DD");
+  const currentSpend = await getDailySpend(today);
+  const inCostShutdown = currentSpend >= COST_SHUTDOWN_THRESHOLD;
+  
+  if (inCostShutdown) {
+    console.warn(`💰 [COST SHUTDOWN] Spending $${currentSpend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} - Only using free/cheap models`);
+  }
+
   const members = Object.keys(COUNCIL_MEMBERS);
 
   // Skip members currently on cooldown
   const now = Date.now();
-  const availableMembers = members.filter((m) => {
+  let availableMembers = members.filter((m) => {
     const retryAt = providerCooldowns.get(m) || 0;
     return now >= retryAt;
   });
+
+  // In cost shutdown: ONLY use Tier 0 (free/cheap) models
+  if (inCostShutdown) {
+    availableMembers = availableMembers.filter((m) => {
+      const member = COUNCIL_MEMBERS[m];
+      return member.tier === "tier0" || member.isFree || (member.costPer1M && member.costPer1M < 0.5);
+    });
+    console.log(`💰 [COST SHUTDOWN] Filtered to Tier 0 only: ${availableMembers.join(", ")}`);
+  } else if (!requireOversight) {
+    // Normal mode: Prefer Tier 0 (cheap) models first, Tier 1 (expensive) only if needed
+    const tier0Members = availableMembers.filter((m) => COUNCIL_MEMBERS[m].tier === "tier0");
+    const tier1Members = availableMembers.filter((m) => COUNCIL_MEMBERS[m].tier === "tier1");
+    
+    // Try Tier 0 first, then Tier 1 as fallback
+    availableMembers = [...tier0Members, ...tier1Members];
+  } else {
+    // Oversight mode: Use Tier 1 (expensive) for validation
+    availableMembers = availableMembers.filter((m) => COUNCIL_MEMBERS[m].tier === "tier1");
+  }
 
   // Build ordered list: preferred first, then the rest (no duplicates)
   const ordered = [
@@ -4192,14 +4249,14 @@ async function callCouncilWithFailover(prompt, preferredMember = "chatgpt") {
   ].filter((m, idx, arr) => arr.indexOf(m) === idx);
 
   // If everything is on cooldown, fall back to all members (last-resort attempt)
-  const candidates = ordered.length > 0 ? ordered : members;
+  const candidates = ordered.length > 0 ? ordered : availableMembers;
 
   const errors = [];
   for (const member of candidates) {
     try {
       const response = await callCouncilMember(member, prompt);
       if (response) {
-        console.log(`✅ Got response from ${member}`);
+        console.log(`✅ Got response from ${member} (Tier ${COUNCIL_MEMBERS[member]?.tier || "unknown"})`);
         return response;
       }
     } catch (error) {
@@ -4396,7 +4453,7 @@ class ExecutionQueue {
             `Execute this task with real-world practicality in mind (but do NOT directly move money or impersonate humans): ${task.description}
             
             Be aware of these blind spots: ${blindSpots.slice(0, 3).join(", ")}`,
-            "chatgpt"
+            "deepseek" // Use Tier 0 for primary work
           );
 
       const aiModel = routerResult?.model || 'chatgpt';
@@ -5998,7 +6055,7 @@ app.post("/api/v1/architect/chat", requireKey, async (req, res) => {
         )}\n\nProvide detailed response.`
       : original_message;
 
-    const response = await callCouncilWithFailover(prompt, "gemini");
+    const response = await callCouncilWithFailover(prompt, "deepseek"); // Use Tier 0
 
     const response_json = {
       r: response.slice(0, 500),
@@ -6025,7 +6082,7 @@ app.post("/api/v1/architect/command", requireKey, async (req, res) => {
       query_json || {}
     )}\n\nExecute this command and provide results (but do not directly move money or impersonate users).`;
 
-    const response = await callCouncilWithFailover(prompt, "chatgpt");
+    const response = await callCouncilWithFailover(prompt, "deepseek"); // Use Tier 0
 
     if (intent && intent !== "general") {
       await executionQueue.addTask(intent, command);
