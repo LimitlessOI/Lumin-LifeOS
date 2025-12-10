@@ -1,24 +1,26 @@
-import React from 'react';
-import ProjectCard from './ProjectCard';
-import useProjects from '../../hooks/useProjects';
-import './Dashboard.css';
+```jsx
+import React, { useEffect } from 'react';
+import { useCodeReview } from '../../hooks/useCodeReview';
+import SubmissionCard from './SubmissionCard';
 
-function Dashboard() {
-  const { data: projects, error, isLoading } = useProjects();
+const Dashboard = () => {
+    const { submissions, fetchSubmissions } = useCodeReview();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading projects</div>;
+    useEffect(() => {
+        fetchSubmissions();
+    }, [fetchSubmissions]);
 
-  return (
-    <div className="dashboard">
-      <h1>Project Dashboard</h1>
-      <div className="project-list">
-        {projects.map(project => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-      </div>
-    </div>
-  );
-}
+    return (
+        <div className="p-4">
+            <h1 className="text-xl font-bold mb-4">Code Submissions</h1>
+            <div className="grid grid-cols-1 gap-4">
+                {submissions.map(submission => (
+                    <SubmissionCard key={submission.id} submission={submission} />
+                ))}
+            </div>
+        </div>
+    );
+};
 
 export default Dashboard;
+```
