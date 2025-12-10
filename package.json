@@ -1,21 +1,14 @@
 ```json
 {
-  "name": "your-project-name",
-  "version": "1.0.0",
-  "description": "Your project description",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "jest"
+    "test": "react-scripts test",
+    "cypress:open": "cypress open",
+    "lighthouse:ci": "lighthouse-ci"
   },
-  "dependencies": {
-    "dotenv": "^10.0.0",
-    "joi": "^17.4.0",
-    "stripe": "^8.0.0",
-    "@sendgrid/mail": "^7.4.0"
-  },
-  "devDependencies": {},
-  "author": "Your Name",
-  "license": "ISC"
+  "devDependencies": {
+    "cypress": "^9.0.0",
+    "jest": "^26.6.0",
+    "react-testing-library": "^11.2.2",
+    "lighthouse-ci": "^1.7.0"
+  }
 }
-```
