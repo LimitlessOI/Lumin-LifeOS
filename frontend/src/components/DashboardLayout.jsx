@@ -1,17 +1,13 @@
+```javascript
 import React from 'react';
-import FunnelAnalytics from './FunnelAnalytics';
-import AIModelConfig from './AIModelConfig';
-import AlertManager from './AlertManager';
+import { Outlet } from 'react-router-dom';
 
-const DashboardLayout = () => {
-  return (
-    <div>
-      <h1>Admin Dashboard</h1>
-      <FunnelAnalytics />
-      <AIModelConfig />
-      <AlertManager />
+const DashboardLayout = () => (
+    <div className="dashboard-layout">
+        <h1>Dashboard</h1>
+        <Outlet />
     </div>
-  );
-};
+);
 
 export default DashboardLayout;
+```
