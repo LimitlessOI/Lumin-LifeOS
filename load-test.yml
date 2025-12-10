@@ -3,12 +3,12 @@ config:
   target: 'http://localhost:3000'
   phases:
     - duration: 60
-      arrivalRate: 50
+      arrivalRate: 10
 scenarios:
   - flow:
     - post:
-        url: '/route'
+        url: '/api/reports'
         json:
-          origin: 'pointA'
-          destination: 'pointB'
+          title: 'Load Test Report'
+          content: 'This is a load test of report generation.'
 ```
