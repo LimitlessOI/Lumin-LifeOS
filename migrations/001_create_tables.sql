@@ -1,20 +1,22 @@
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(50) NOT NULL UNIQUE,
-  password_hash VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+```sql
+CREATE TABLE market_reports (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE user_sessions (
-  id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES users(id),
-  token VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE market_data_sources (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    api_endpoint VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE make_webhook_logs (
-  id SERIAL PRIMARY KEY,
-  event_type VARCHAR(50),
-  payload JSONB,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE report_templates (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    template JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
