@@ -1,0 +1,22 @@
+```
+/project-root
+    /services
+        webhookHandler.js
+        analyzer.js
+        feedbackGenerator.js
+        metricsCalculator.js
+        trainingPipeline.js
+    /models
+        javascriptModel.js
+        pythonModel.js
+        javaModel.js
+    /ui
+        CodeReviewDashboard.jsx
+        CodeIssuesList.jsx
+    /api
+        endpoints.js
+    /db
+        /migrations
+            20231013_create_new_tables.sql
+    package.json
+```
