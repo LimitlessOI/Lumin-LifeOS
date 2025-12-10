@@ -2,24 +2,28 @@
 version: '3.8'
 
 services:
-  app:
+  api:
     build: .
     ports:
-      - '3000:3000'
-    env_file:
-      - .env
+      - "3000:3000"
+    environment:
+      - DB_HOST=postgres
+      - REDIS_HOST=redis
     depends_on:
-      - db
+      - postgres
+      - redis
 
-  db:
-    image: postgres
+  postgres:
+    image: postgres:13
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydatabase
-    volumes:
-      - db-data:/var/lib/postgresql/data
+      POSTGRES_DB: lifeos
+    ports:
+      - "5432:5432"
 
-volumes:
-  db-data:
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
 ```
