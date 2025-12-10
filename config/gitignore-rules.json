@@ -1,0 +1,14 @@
+```json
+{
+  "patterns": [
+    "*.log",
+    "node_modules/",
+    "dist/",
+    ".env",
+    "tmp/",
+    "*.tmp",
+    "*.bak",
+    "coverage/"
+  ]
+}
+```
