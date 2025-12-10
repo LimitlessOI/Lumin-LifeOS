@@ -1953,6 +1953,10 @@ function selectOptimalModel(prompt, taskComplexity = 'medium') {
   return null; // Use original member
 }
 
+// Track provider cooldowns when rate-limited or out of quota
+// Map<member, timestamp_ms_when_we_can_try_again>
+const providerCooldowns = new Map();
+
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 async function callCouncilMember(member, prompt, options = {}) {
   const config = COUNCIL_MEMBERS[member];
@@ -2357,6 +2361,22 @@ Be concise, strategic, and speak as the system's internal AI.`;
     const duration = Date.now() - startTime;
     await trackAIPerformance(member, "chat", duration, 0, 0, false);
     console.error(`Failed to call ${member}: ${error.message}`);
+
+    // If provider is rate-limited or out of quota, set a cooldown so we skip it temporarily
+    const msg = (error?.message || "").toLowerCase();
+    const isRateLimited =
+      msg.includes("429") ||
+      msg.includes("rate limit") ||
+      msg.includes("insufficient_quota") ||
+      msg.includes("quota");
+    if (isRateLimited) {
+      const cooldownMs = 3 * 60 * 60 * 1000; // 3 hours
+      providerCooldowns.set(member, Date.now() + cooldownMs);
+      console.warn(
+        `⚠️ [COUNCIL] ${member} rate-limited/out-of-quota. Pausing for 3h.`
+      );
+    }
+
     throw error;
   }
 }
@@ -4088,12 +4108,24 @@ async function trackLoss(
 // ==================== COUNCIL WITH FAILOVER ====================
 async function callCouncilWithFailover(prompt, preferredMember = "chatgpt") {
   const members = Object.keys(COUNCIL_MEMBERS);
+
+  // Skip members currently on cooldown
+  const now = Date.now();
+  const availableMembers = members.filter((m) => {
+    const retryAt = providerCooldowns.get(m) || 0;
+    return now >= retryAt;
+  });
+
+  // Build ordered list: preferred first, then the rest (no duplicates)
   const ordered = [
     preferredMember,
-    ...members.filter((m) => m !== preferredMember),
-  ];
+    ...availableMembers.filter((m) => m !== preferredMember),
+  ].filter((m, idx, arr) => arr.indexOf(m) === idx);
 
-  for (const member of ordered) {
+  // If everything is on cooldown, fall back to all members (last-resort attempt)
+  const candidates = ordered.length > 0 ? ordered : members;
+
+  for (const member of candidates) {
     try {
       const response = await callCouncilMember(member, prompt);
       if (response) {
