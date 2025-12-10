@@ -1,0 +1,26 @@
+```yaml
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: <%= ENV['DB_HOST'] %>
+
+development:
+  <<: *default
+  database: lifeos_development
+
+test:
+  <<: *default
+  database: lifeos_test
+
+production:
+  <<: *default
+  database: lifeos_production
+
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  password: <%= ENV['REDIS_PASSWORD'] %>
