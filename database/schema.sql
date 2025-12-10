@@ -1,14 +1,17 @@
 ```sql
-CREATE TABLE quickstart_projects (
+CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE docker_templates (
+CREATE TABLE user_activities (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  user_id INT NOT NULL,
+  activity VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 ```
