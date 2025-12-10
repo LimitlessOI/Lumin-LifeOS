@@ -1,25 +1,31 @@
 ```json
 {
-  "name": "project-dashboard",
+  "name": "code-review-system",
   "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
   "scripts": {
-    "start": "node server.js",
-    "test": "jest",
-    "e2e": "cypress run"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "migrate": "sequelize db:migrate"
   },
   "dependencies": {
-    "axios": "^0.27.2",
-    "express": "^4.18.1",
-    "pg": "^8.7.1",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-router-dom": "^6.2.1",
-    "prop-types": "^15.8.1"
+    "@monaco-editor/react": "^4.2.0",
+    "axios": "^0.21.1",
+    "bull": "^3.22.0",
+    "express": "^4.17.1",
+    "highlight.js": "^10.7.2",
+    "js-beautify": "^1.13.13",
+    "pg": "^8.6.0",
+    "prisma": "^2.27.0",
+    "sequelize": "^6.6.2",
+    "socket.io": "^4.0.1",
+    "socket.io-client": "^4.0.1"
   },
   "devDependencies": {
-    "@testing-library/react": "^12.1.2",
-    "cypress": "^9.3.1",
-    "jest": "^27.4.3"
+    "eslint": "^7.26.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.3.0"
   }
 }
 ```
