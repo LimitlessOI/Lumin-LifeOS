@@ -1,37 +1,55 @@
-import React, { useState } from 'react';
-import { loginUser } from '../../api/auth';
-import './LoginForm.css';
+```javascript
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useAuth } from '../../hooks/useAuth';
 
 const LoginForm = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+  const { login } = useAuth();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const token = await loginUser({ email, password });
-            // Assuming we have a login function from context
-            login(token);
-        } catch (err) {
-            setError('Login failed');
-        }
-    };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email('Invalid email address').required('Required'),
+      password: Yup.string().required('Required'),
+    }),
+    onSubmit: async (values) => {
+      try {
+        await login(values.email, values.password);
+      } catch (error) {
+        console.error('Login error:', error);
+      }
+    },
+  });
 
-    return (
-        <form className="login-form" onSubmit={handleSubmit}>
-            <div>
-                <label>Email</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </div>
-            <div>
-                <label>Password</label>
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-            </div>
-            {error && <div className="error">{error}</div>}
-            <button type="submit">Login</button>
-        </form>
-    );
+  return (
+    <form onSubmit={formik.handleSubmit}>
+      <div>
+        <label>Email</label>
+        <input
+          type="email"
+          name="email"
+          onChange={formik.handleChange}
+          value={formik.values.email}
+        />
+        {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+      </div>
+      <div>
+        <label>Password</label>
+        <input
+          type="password"
+          name="password"
+          onChange={formik.handleChange}
+          value={formik.values.password}
+        />
+        {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  );
 };
 
 export default LoginForm;
