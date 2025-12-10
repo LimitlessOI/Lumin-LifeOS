@@ -1,19 +1,16 @@
 ```sql
-CREATE TABLE IF NOT EXISTS workshops (
+CREATE TABLE code_reviews (
     id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    date TIMESTAMP NOT NULL,
-    location VARCHAR(255),
-    capacity INT NOT NULL
+    code_snippet TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS workshop_registrations (
+CREATE TABLE review_metrics (
     id SERIAL PRIMARY KEY,
-    workshop_id INT NOT NULL,
-    user_id INT NOT NULL,
-    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (workshop_id) REFERENCES workshops(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    review_id INT NOT NULL,
+    metric_name VARCHAR(100) NOT NULL,
+    metric_value DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (review_id) REFERENCES code_reviews(id) ON DELETE CASCADE
 );
 ```
