@@ -1,0 +1,20 @@
+```json
+{
+  "family": "business-process-api",
+  "containerDefinitions": [
+    {
+      "name": "business-process-container",
+      "image": "your-docker-image-url",
+      "memory": 512,
+      "cpu": 256,
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "hostPort": 3000
+        }
+      ]
+    }
+  ]
+}
+```
