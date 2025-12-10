@@ -1,0 +1,11 @@
+```css
+.project-card {
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+}
+
+.code-review-page {
+    padding: 20px;
+}
