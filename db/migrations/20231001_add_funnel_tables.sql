@@ -1,0 +1,14 @@
+```sql
+CREATE TABLE funnels (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE funnel_analytics (
+  id SERIAL PRIMARY KEY,
+  funnel_id INT REFERENCES funnels(id),
+  data JSONB,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
