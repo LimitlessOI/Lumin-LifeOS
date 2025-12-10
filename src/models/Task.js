@@ -1,23 +1,26 @@
 ```javascript
-class Task {
-    constructor(id, title, description, status, createdAt, updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
 
-    static validate(taskData) {
-        const schema = Joi.object({
-            title: Joi.string().min(3).max(255).required(),
-            description: Joi.string().allow(''),
-            status: Joi.string().valid('pending', 'in_progress', 'completed').required()
-        });
-        return schema.validate(taskData);
-    }
-}
+class Task extends Model {}
+
+Task.init({
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.TEXT,
+  },
+  status: {
+    type: DataTypes.STRING,
+    defaultValue: 'pending',
+  },
+}, {
+  sequelize,
+  modelName: 'Task',
+  timestamps: true,
+});
 
 module.exports = Task;
 ```
