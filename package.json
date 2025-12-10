@@ -1,22 +1,14 @@
+```json
 {
-  "name": "stripe-integration-service",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "node services/stripe-integration/index.js"
-  },
   "dependencies": {
+    "@octokit/rest": "^18.0.0",
+    "@gitbeaker/node": "^25.0.0",
+    "bull": "^3.0.0",
     "express": "^4.17.1",
-    "stripe": "^8.0.0",
-    "dotenv": "^8.2.0",
-    "dotenv-safe": "^8.2.0",
-    "joi": "^17.3.0",
-    "crypto-js": "^4.0.0",
-    "node-rsa": "^1.0.0",
-    "axios": "^0.21.1",
-    "express-validator": "^6.9.2",
-    "helmet": "^4.1.1",
-    "morgan": "^1.10.0"
+    "sequelize": "^6.3.5",
+    "tree-sitter": "^0.20.0",
+    "eslint": "^7.0.0",
+    "redis": "^3.0.2"
   }
 }
-//
+```
