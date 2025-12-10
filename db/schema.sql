@@ -1,15 +1,20 @@
-```sql
-CREATE TABLE IF NOT EXISTS market_analyses (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(50) NOT NULL
+CREATE TABLE IF NOT EXISTS Tasks (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  status VARCHAR(50) DEFAULT 'pending'
 );
 
-CREATE TABLE IF NOT EXISTS analysis_insights (
-    id SERIAL PRIMARY KEY,
-    analysis_id INTEGER NOT NULL REFERENCES market_analyses(id),
-    insight TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS TaskHistory (
+  id SERIAL PRIMARY KEY,
+  taskId INTEGER REFERENCES Tasks(id),
+  status VARCHAR(50),
+  changeDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
+
+CREATE TABLE IF NOT EXISTS AutomationRules (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  condition TEXT NOT NULL,
+  action TEXT NOT NULL
+);
