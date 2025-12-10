@@ -1,0 +1,23 @@
+```css
+.project-details {
+  padding: 20px;
+}
+
+.project-header {
+  margin-bottom: 20px;
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.review-card {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+@media (max-width: 600px) {
+  .project-details {
+    padding: 10px;
+  }
+}
