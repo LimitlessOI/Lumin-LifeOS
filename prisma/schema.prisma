@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  id          Int    @id @default(autoincrement())
+  name        String
+  email       String @unique
+  createdAt   DateTime @default(now())
+  sessions    VirtualTryonSession[]
+}
+
+model VirtualTryonSession {
+  id          Int    @id @default(autoincrement())
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId Int
+  createdAt   DateTime @default(now())
+}
+
+model StylingSession {
+  id          Int    @id @default(autoincrement())
+  userProfile UserProfile @relation(fields: [userProfileId], references: [id])
+  userProfileId Int
+  createdAt   DateTime @default(now())
+}
+
+model StoreIntegration {
+  id        Int    @id @default(autoincrement())
+  platform  String
+  apiKey    String
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,28 @@
+```proto
+syntax = "proto3";
+
+package translation;
+
+service TranslationService {
+  rpc TranslateText (TranslateRequest) returns (TranslateResponse);
+  rpc GetCulturalContext (CulturalContextRequest) returns (CulturalContextResponse);
+}
+
+message TranslateRequest {
+  string text = 1;
+  string source_language = 2;
+  string target_language = 3;
+}
+
+message TranslateResponse {
+  string translated_text = 1;
+}
+
+message CulturalContextRequest {
+  string context_key = 1;
+}
+
+message CulturalContextResponse {
+  string context_data = 1;
+}
+```

@@ -1,0 +1,53 @@
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ConservationProject {
+  id        Int      @id @default(autoincrement())
+  name      String
+  location  String
+  startDate DateTime
+  endDate   DateTime?
+  strategies ConservationStrategy[]
+  metrics   ResourceMetric[]
+}
+
+model ResourceMetric {
+  id                  Int      @id @default(autoincrement())
+  type                String
+  value               Float
+  timestamp           DateTime @default(now())
+  conservationProject ConservationProject @relation(fields: [projectId], references: [id])
+  projectId           Int
+}
+
+model ML_Prediction {
+  id                  Int      @id @default(autoincrement())
+  predictionValue     Float
+  timestamp           DateTime @default(now())
+  conservationProject ConservationProject @relation(fields: [projectId], references: [id])
+  projectId           Int
+}
+
+model ConservationStrategy {
+  id                  Int      @id @default(autoincrement())
+  strategyDescription String
+  effectivenessScore  Float
+  timestamp           DateTime @default(now())
+  conservationProject ConservationProject @relation(fields: [projectId], references: [id])
+  projectId           Int
+}
+
+model IoTDevice {
+  id            Int      @id @default(autoincrement())
+  deviceId      String   @unique
+  lastActive    DateTime
+  metrics       ResourceMetric[]
+}
+```

@@ -1,0 +1,27 @@
+```json
+{
+  "name": "legal-cortex",
+  "version": "1.0.0",
+  "description": "Microservice for legal research and analysis",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.7.1",
+    "hyperledger-fabric": "latest",
+    "pinecone-client": "latest",
+    "weaviate-client": "latest",
+    "stripe": "^8.174.0",
+    "oauth2": "^1.6.3",
+    "websocket": "^1.0.34",
+    "crdt": "latest",
+    "crypto-js": "^4.1.1"
+  },
+  "devDependencies": {
+    "jest": "^27.4.3"
+  }
+}
+```

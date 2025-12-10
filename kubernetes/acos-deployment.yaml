@@ -1,0 +1,22 @@
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acos-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: acos
+  template:
+    metadata:
+      labels:
+        app: acos
+    spec:
+      containers:
+      - name: climate-data-ingestor
+        image: acos-climate-data-ingestor:latest
+        ports:
+        - containerPort: 80
+      # Define other containers similarly
+```

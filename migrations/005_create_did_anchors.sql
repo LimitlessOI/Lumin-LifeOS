@@ -1,0 +1,7 @@
+CREATE TABLE did_anchors (
+    id SERIAL PRIMARY KEY,
+    did VARCHAR(255) NOT NULL,
+    anchor_data JSONB NOT NULL,
+    chain VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

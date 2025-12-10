@@ -1,37 +1,22 @@
 ```sql
-CREATE TABLE digital_twins (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
+CREATE TABLE user_learning_profiles (
+    user_id SERIAL PRIMARY KEY,
+    learning_style VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE iot_devices (
-    id SERIAL PRIMARY KEY,
-    twin_id INT REFERENCES digital_twins(id),
-    device_type VARCHAR(255),
-    last_active TIMESTAMP
+CREATE TABLE interaction_logs (
+    log_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES user_learning_profiles(user_id),
+    interaction_type VARCHAR(255),
+    interaction_data JSONB,
+    logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE twin_telemetry (
-    id SERIAL PRIMARY KEY,
-    device_id INT REFERENCES iot_devices(id),
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    data JSONB
-);
-
-CREATE TABLE predictive_alerts (
-    id SERIAL PRIMARY KEY,
-    twin_id INT REFERENCES digital_twins(id),
-    alert_type VARCHAR(255),
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE ar_sessions (
-    id SERIAL PRIMARY KEY,
-    twin_id INT REFERENCES digital_twins(id),
-    session_data JSONB,
-    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE adaptation_suggestions (
+    suggestion_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES user_learning_profiles(user_id),
+    suggestion_text TEXT,
+    suggested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```

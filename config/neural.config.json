@@ -1,0 +1,18 @@
+```json
+{
+    "sensorConfig": {
+        "samplingRate": 256,
+        "channels": ["Fp1", "Fp2", "F3", "F4", "C3", "C4", "P3", "P4", "O1", "O2"]
+    },
+    "mlModel": {
+        "path": "services/neural/models/classifier.py"
+    },
+    "deviceMappings": {
+        "bluetooth": {},
+        "wifi": {}
+    },
+    "security": {
+        "encryptionKey": "your-encryption-key"
+    }
+}
+```

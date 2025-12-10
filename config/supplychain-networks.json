@@ -1,0 +1,18 @@
+```json
+{
+  "blockchain": {
+    "networkName": "supplychain",
+    "nodes": [
+      "node1.example.com",
+      "node2.example.com"
+    ]
+  },
+  "ai": {
+    "federationName": "supplychain-ai",
+    "nodes": [
+      "ai-node1.example.com",
+      "ai-node2.example.com"
+    ]
+  }
+}
+```

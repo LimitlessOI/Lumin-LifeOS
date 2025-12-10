@@ -1,0 +1,6 @@
+CREATE TABLE identity_profiles (
+    id SERIAL PRIMARY KEY,
+    did VARCHAR(255) UNIQUE NOT NULL,
+    profile_data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

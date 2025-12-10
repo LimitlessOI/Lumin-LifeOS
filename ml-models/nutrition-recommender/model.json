@@ -1,0 +1,6 @@
+```json
+{
+  "modelTopology": { /* Model topology goes here */ },
+  "weightsManifest": [ /* Weights manifest goes here */ ]
+}
+```

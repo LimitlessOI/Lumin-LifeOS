@@ -1,44 +1,30 @@
 ```sql
--- Table for supply chain entities
-CREATE TABLE supply_chain_entities (
+CREATE TABLE health_data_contributors (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    type VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    data_contributed JSONB NOT NULL,
+    contribution_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for IoT sensor registry
-CREATE TABLE iot_sensor_registry (
-    id SERIAL PRIMARY KEY,
-    sensor_id VARCHAR(100) NOT NULL UNIQUE,
-    entity_id INT REFERENCES supply_chain_entities(id),
-    location VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE federated_learning_sessions (
+    session_id SERIAL PRIMARY KEY,
+    session_details JSONB NOT NULL,
+    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end_time TIMESTAMP,
+    status VARCHAR(50) NOT NULL
 );
 
--- Table for supply chain events
-CREATE TABLE supply_chain_events (
-    id SERIAL PRIMARY KEY,
-    event_type VARCHAR(100) NOT NULL,
-    entity_id INT REFERENCES supply_chain_entities(id),
-    sensor_id VARCHAR(100) REFERENCES iot_sensor_registry(sensor_id),
-    data JSONB,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE data_usage_ledger (
+    entry_id SERIAL PRIMARY KEY,
+    contributor_id INT REFERENCES health_data_contributors(id),
+    usage_details JSONB NOT NULL,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table for ZKP compliance proofs
-CREATE TABLE zkp_compliance_proofs (
-    id SERIAL PRIMARY KEY,
-    proof_data BYTEA NOT NULL,
-    entity_id INT REFERENCES supply_chain_entities(id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Table for token incentives
-CREATE TABLE token_incentives (
-    id SERIAL PRIMARY KEY,
-    entity_id INT REFERENCES supply_chain_entities(id),
-    token_amount DECIMAL(10, 2) NOT NULL,
-    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE dao_proposals (
+    proposal_id SERIAL PRIMARY KEY,
+    proposal_details JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(50) NOT NULL
 );
 ```

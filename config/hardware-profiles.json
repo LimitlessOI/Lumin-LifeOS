@@ -1,0 +1,18 @@
+```json
+[
+    {
+        "device_name": "Oculus Quest",
+        "settings": {
+            "resolution": "1440x1600",
+            "refresh_rate": "72hz"
+        }
+    },
+    {
+        "device_name": "HTC Vive",
+        "settings": {
+            "resolution": "1080x1200",
+            "refresh_rate": "90hz"
+        }
+    }
+]
+```

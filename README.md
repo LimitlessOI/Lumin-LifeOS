@@ -1,16 +1,43 @@
-# Las Vegas Business Lead Collector
+# LifeOS Project
 
-## Description
-This application collects business leads for Las Vegas. It can generate mock data for testing if the GOOGLE_PLACES_API_KEY is not provided.
+This project is a blockchain-based microservice architecture designed for lending, insurance, and compliance services.
 
-## Setup
-1. Clone the repository.
-2. Run `npm install` to install dependencies.
-3. Set your environment variable `GOOGLE_PLACES_API_KEY` in a `.env` file.
-4. Run the application with `node app.js`.
+## Getting Started
 
-## API Endpoint
-- `POST /api/v1/outreach/collect-leads`
+### Prerequisites
 
-## Note
-If you see a message indicating that mock data is being used, please set the `GOOGLE_PLACES_API_KEY` in your environment variables for real leads.
+- Node.js and npm
+- Git
+- Docker (for running services in containers)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/username/lifeos-project.git
+   cd lifeos-project
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Usage
+
+- Start the lending service:
+  ```bash
+  npm start
+  ```
+
+### Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request.
+
+### License
+
+This project is licensed under the ISC License.
+
+### Contact
+
+For questions, please contact [support@lifeos.com](mailto:support@lifeos.com).

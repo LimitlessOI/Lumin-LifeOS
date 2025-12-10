@@ -1,0 +1,73 @@
+```
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model VerticalFarm {
+  id        Int    @id @default(autoincrement())
+  name      String
+  location  String
+  modules   FarmModule[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FarmModule {
+  id            Int         @id @default(autoincrement())
+  name          String
+  verticalFarm  VerticalFarm @relation(fields: [verticalFarmId], references: [id])
+  verticalFarmId Int
+  cropCycles    CropCycle[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CropCycle {
+  id         Int    @id @default(autoincrement())
+  startDate  DateTime
+  endDate    DateTime?
+  status     String
+  farmModule FarmModule @relation(fields: [farmModuleId], references: [id])
+  farmModuleId Int
+  roboticActions RoboticAction[]
+  sensorReadings SensorReading[]
+  aiOptimizationLogs AIOptimizationLog[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model RoboticAction {
+  id         Int    @id @default(autoincrement())
+  actionType String
+  status     String
+  cropCycle  CropCycle @relation(fields: [cropCycleId], references: [id])
+  cropCycleId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model SensorReading {
+  id         Int    @id @default(autoincrement())
+  reading    String
+  timestamp  DateTime
+  cropCycle  CropCycle @relation(fields: [cropCycleId], references: [id])
+  cropCycleId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AIOptimizationLog {
+  id         Int    @id @default(autoincrement())
+  details    String
+  outcome    String
+  cropCycle  CropCycle @relation(fields: [cropCycleId], references: [id])
+  cropCycleId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+```

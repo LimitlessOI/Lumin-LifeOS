@@ -1,0 +1,47 @@
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  id              Int      @id @default(autoincrement())
+  name            String
+  email           String   @unique
+  culturalContext String?
+  sessions        Session[]
+  moodEntries     MoodTracking[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Session {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  startTime   DateTime
+  endTime     DateTime?
+  notes       String?
+  user        UserProfile @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MoodTracking {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  mood        String
+  entryTime   DateTime @default(now())
+  user        UserProfile @relation(fields: [userId], references: [id])
+}
+
+model CulturalContext {
+  id          Int      @id @default(autoincrement())
+  culture     String
+  details     String
+  profiles    UserProfile[]
+}
+```

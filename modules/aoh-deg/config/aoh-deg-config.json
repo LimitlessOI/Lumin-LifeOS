@@ -1,0 +1,21 @@
+```json
+{
+  "aiModelPath": "./models/energyAssetModel.json",
+  "redisConfig": {
+    "host": "localhost",
+    "port": 6379
+  },
+  "federatedLearning": {
+    "rounds": 10,
+    "clients": 5
+  },
+  "weatherApi": {
+    "url": "https://api.weather.com",
+    "apiKey": "your_api_key"
+  },
+  "marketApi": {
+    "url": "https://api.energy-market.com",
+    "apiKey": "your_api_key"
+  }
+}
+```

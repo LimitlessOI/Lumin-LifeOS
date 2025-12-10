@@ -1,0 +1,29 @@
+```proto
+syntax = "proto3";
+
+package learning;
+
+service LearningService {
+    rpc GetUserProfile (UserProfileRequest) returns (UserProfileResponse);
+    rpc UpdateUserProfile (UserProfile) returns (UpdateResponse);
+}
+
+message UserProfileRequest {
+    int32 user_id = 1;
+}
+
+message UserProfileResponse {
+    int32 user_id = 1;
+    map<string, string> preferences = 2;
+}
+
+message UserProfile {
+    int32 user_id = 1;
+    map<string, string> preferences = 2;
+}
+
+message UpdateResponse {
+    bool success = 1;
+    string message = 2;
+}
+```

@@ -1,0 +1,21 @@
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ar-rendering-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ar-rendering
+  template:
+    metadata:
+      labels:
+        app: ar-rendering
+    spec:
+      containers:
+      - name: ar-rendering-container
+        image: ar-rendering-image:latest
+        ports:
+        - containerPort: 8080
+```

@@ -1,0 +1,36 @@
+```yaml
+version: '3.8'
+services:
+  climate-data-ingestor:
+    build: ./services/acos/ingestion
+    container_name: climate-data-ingestor
+    restart: always
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - database
+
+  energy-agent:
+    build: ./services/acos/agents
+    container_name: energy-agent
+    restart: always
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - database
+
+  # Define other agents and services similarly
+
+  database:
+    image: postgres:latest
+    container_name: acos-database
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: lifeos
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```

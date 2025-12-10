@@ -1,0 +1,12 @@
+```sql
+CREATE EXTENSION IF NOT EXISTS postgis;
+
+CREATE TABLE IF NOT EXISTS urban_metabolic_flows (
+    id SERIAL PRIMARY KEY,
+    flow_name VARCHAR(255) NOT NULL,
+    quantity FLOAT NOT NULL,
+    unit VARCHAR(50) NOT NULL,
+    geom GEOMETRY(POINT, 4326),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```

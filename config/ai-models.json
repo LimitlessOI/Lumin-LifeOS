@@ -1,0 +1,11 @@
+```json
+{
+  "stableVideoDiffusion": {
+    "modelName": "Stable Video Diffusion",
+    "version": "1.0",
+    "config": {
+      "frame_rate": 24,
+      "resolution": "1080p"
+    }
+  }
+}

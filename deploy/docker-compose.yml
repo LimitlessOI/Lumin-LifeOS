@@ -1,0 +1,21 @@
+```yaml
+version: '3.8'
+services:
+  dashboard-api:
+    build: ./services/agriculture
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+
+  iot-gateway:
+    build: ./services/agriculture
+    environment:
+      - MQTT_BROKER_URL=${MQTT_BROKER_URL}
+
+  ai-processor:
+    build: ./services/agriculture
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+```

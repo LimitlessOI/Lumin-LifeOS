@@ -1,0 +1,23 @@
+```json
+{
+    "manifest_version": 2,
+    "name": "Learning Cortex Extension",
+    "version": "1.0",
+    "description": "Captures and sends learning events to the Learning Cortex API.",
+    "permissions": [
+        "activeTab",
+        "storage",
+        "http://localhost:3000/"
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ]
+}
+```

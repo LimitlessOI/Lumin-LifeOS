@@ -1,35 +1,38 @@
 ```sql
--- Create table for storing life metrics
-CREATE TABLE life_metrics (
+CREATE TABLE health_profiles (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    metric_name VARCHAR(255) NOT NULL,
-    value NUMERIC NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    age INT,
+    gender VARCHAR(10),
+    height FLOAT,
+    weight FLOAT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for storing optimization suggestions
-CREATE TABLE optimization_suggestions (
+CREATE TABLE wearable_readings (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    suggestion TEXT NOT NULL,
-    status VARCHAR(50) DEFAULT 'pending',
+    timestamp TIMESTAMP NOT NULL,
+    heart_rate INT,
+    steps INT,
+    calories_burned INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for storing income drone data
-CREATE TABLE income_drones (
+CREATE TABLE predictive_insights (
     id SERIAL PRIMARY KEY,
-    drone_name VARCHAR(255) NOT NULL,
-    status VARCHAR(50) NOT NULL,
-    performance_metrics JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    insight TEXT,
+    confidence FLOAT,
+    generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table for storing blind spot detections
-CREATE TABLE blind_spot_detections (
+CREATE TABLE ehr_integrations (
     id SERIAL PRIMARY KEY,
-    description TEXT NOT NULL,
-    detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    ehr_system VARCHAR(255),
+    integration_status VARCHAR(50),
+    last_sync TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```

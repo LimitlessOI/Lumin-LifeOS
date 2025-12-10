@@ -1,0 +1,19 @@
+```json
+{
+    "providers": {
+        "IBM": {
+            "api_key": "your_ibm_api_key",
+            "endpoint": "https://quantum-computing.ibm.com"
+        },
+        "AWS": {
+            "access_key": "your_aws_access_key",
+            "secret_key": "your_aws_secret_key",
+            "endpoint": "https://aws.amazon.com/braket/"
+        },
+        "Google": {
+            "project_id": "your_google_project_id",
+            "endpoint": "https://quantumai.google.com"
+        }
+    }
+}
+```

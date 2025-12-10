@@ -1,0 +1,21 @@
+{
+    "deviceConfigurations": {
+        "default": {
+            "samplingRate": 10,
+            "transmitInterval": 60
+        },
+        "specificDevice": {
+            "device_id": "device_001",
+            "samplingRate": 5,
+            "transmitInterval": 30
+        }
+    },
+    "thresholds": {
+        "alert": 0.7,
+        "maintenance": 0.3
+    },
+    "aiModelParameters": {
+        "modelPath": "path/to/model.h5",
+        "inputSize": [224, 224, 3]
+    }
+}

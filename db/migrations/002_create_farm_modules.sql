@@ -1,0 +1,9 @@
+```sql
+CREATE TABLE farm_modules (
+  id SERIAL PRIMARY KEY,
+  farm_id INTEGER REFERENCES vertical_farms(id),
+  type VARCHAR(255) NOT NULL,
+  status VARCHAR(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,25 +1,39 @@
 ```yaml
-version: '3'
+version: '3.8'
 
 services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
-
-  db:
+  database:
     image: postgres:13
     environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    volumes:
-      - db-data:/var/lib/postgresql/data
+
+  iot_service:
+    build: ./src/edge
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@database:5432/mydb
+
+  ai_service:
+    build: ./src/ai
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@database:5432/mydb
+
+  blockchain_service:
+    build: ./src/blockchain
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@database:5432/mydb
 
 volumes:
-  db-data:
+  db_data:
 ```
