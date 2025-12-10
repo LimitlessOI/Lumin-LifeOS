@@ -3,9 +3,13 @@ config:
   target: 'http://localhost:3000'
   phases:
     - duration: 60
-      arrivalRate: 5
+      arrivalRate: 20
 scenarios:
   - flow:
       - get:
-          url: "/test-connection"
+          url: '/support/conversations'
+      - post:
+          url: '/support/conversations'
+          json:
+            user_id: 1
 ```
