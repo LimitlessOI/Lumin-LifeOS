@@ -6352,6 +6352,87 @@ app.post("/api/v1/ideas/generate", requireKey, async (req, res) => {
   }
 });
 
+// ==================== SPENDING & ROI ANALYSIS ====================
+app.get("/api/v1/analysis/spending-breakdown", requireKey, async (req, res) => {
+  try {
+    // Get total spending by date
+    const spending = await pool.query(
+      `SELECT date, usd, updated_at 
+       FROM daily_spend 
+       ORDER BY date DESC 
+       LIMIT 30`
+    );
+
+    // Get all ideas
+    const ideas = await pool.query(
+      `SELECT idea_id, idea_title, idea_description, proposed_by, status, 
+              votes_for, votes_against, created_at
+       FROM daily_ideas 
+       ORDER BY created_at DESC`
+    );
+
+    // Get all opportunities
+    const opportunities = await pool.query(
+      `SELECT id, drone_id, opportunity_type, data, status, 
+              revenue_estimate, created_at
+       FROM drone_opportunities 
+       ORDER BY created_at DESC`
+    );
+
+    // Get execution tasks (what was actually worked on)
+    const tasks = await pool.query(
+      `SELECT task_id, type, description, status, created_at, completed_at, result
+       FROM execution_tasks 
+       ORDER BY created_at DESC 
+       LIMIT 100`
+    );
+
+    // Get AI performance (which models were used and cost)
+    const aiUsage = await pool.query(
+      `SELECT ai_member, task_type, COUNT(*) as call_count, 
+              SUM(cost) as total_cost, 
+              AVG(duration_ms) as avg_duration,
+              SUM(CASE WHEN success THEN 1 ELSE 0 END) as success_count
+       FROM ai_performance 
+       WHERE created_at > NOW() - INTERVAL '30 days'
+       GROUP BY ai_member, task_type
+       ORDER BY total_cost DESC`
+    );
+
+    // Calculate total spend
+    const totalSpend = spending.rows.reduce((sum, row) => sum + parseFloat(row.usd || 0), 0);
+
+    // Calculate total opportunity value
+    const totalOpportunityValue = opportunities.rows.reduce((sum, row) => 
+      sum + parseFloat(row.revenue_estimate || 0), 0
+    );
+
+    // Calculate ROI
+    const roi = totalOpportunityValue > 0 ? (totalOpportunityValue / totalSpend) : 0;
+
+    res.json({
+      ok: true,
+      summary: {
+        totalSpend: totalSpend.toFixed(2),
+        totalOpportunities: opportunities.rows.length,
+        totalOpportunityValue: totalOpportunityValue.toFixed(2),
+        totalIdeas: ideas.rows.length,
+        totalTasks: tasks.rows.length,
+        roi: roi.toFixed(2),
+        roiPercentage: ((roi - 1) * 100).toFixed(1) + '%'
+      },
+      spending: spending.rows,
+      ideas: ideas.rows,
+      opportunities: opportunities.rows,
+      tasks: tasks.rows,
+      aiUsage: aiUsage.rows
+    });
+  } catch (error) {
+    console.error("Spending analysis error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 app.get("/api/v1/ideas", requireKey, async (req, res) => {
   try {
     const ideas = await pool.query(
