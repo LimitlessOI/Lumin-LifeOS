@@ -1,35 +1,39 @@
-CREATE TABLE digital_twins (
+```sql
+CREATE TABLE therapy_sessions (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    model_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    patient_id INT,
+    protocol_id INT,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    status VARCHAR(50)
 );
 
-CREATE TABLE vr_sessions (
+CREATE TABLE therapy_protocols (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    session_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(100),
+    description TEXT,
+    duration INT
 );
 
-CREATE TABLE fit_predictions (
+CREATE TABLE biometric_streams (
     id SERIAL PRIMARY KEY,
-    digital_twin_id INT NOT NULL,
-    prediction_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    session_id INT,
+    timestamp TIMESTAMP,
+    heart_rate INT,
+    brain_activity FLOAT
 );
 
-CREATE TABLE blockchain_verifications (
+CREATE TABLE clinician_oversight (
     id SERIAL PRIMARY KEY,
-    digital_twin_id INT NOT NULL,
-    verification_status BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    clinician_id INT,
+    session_id INT,
+    notes TEXT
 );
 
-CREATE TABLE virtual_tryons (
+CREATE TABLE xr_environments (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    tryon_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(100),
+    description TEXT,
+    config JSONB
 );
---
+```
