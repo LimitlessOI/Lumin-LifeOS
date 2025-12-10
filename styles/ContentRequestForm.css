@@ -1,0 +1,25 @@
+```css
+.content-request-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.content-request-form select,
+.content-request-form textarea {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.content-request-form button {
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.content-request-form .error {
+    color: red;
+    font-size: 14px;
+}
