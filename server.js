@@ -1514,19 +1514,47 @@ async function initDatabase() {
 // TIER 0: Open Source / Cheap Models (PRIMARY - Do all the work)
 // TIER 1: Expensive Models (OVERSIGHT ONLY - Validation when needed)
 const COUNCIL_MEMBERS = {
-  // TIER 0 - PRIMARY WORKERS (Cheap/Free)
+  // TIER 0 - PRIMARY WORKERS (Free/Cheap - Run system independently)
+  ollama_deepseek: {
+    name: "DeepSeek Coder (Local)",
+    model: "deepseek-coder:latest",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Primary Developer & Infrastructure",
+    focus: "optimization, performance, safe testing, development, code generation",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["infrastructure", "testing", "performance", "development", "code"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_llama: {
+    name: "Llama 3.2 (Local)",
+    model: "llama3.2:1b",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "General Assistant & Research",
+    focus: "general tasks, research, analysis, reasoning",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["research", "analysis", "general"],
+    isFree: true,
+    isLocal: true,
+  },
   deepseek: {
-    name: "DeepSeek",
+    name: "DeepSeek Cloud",
     model: "deepseek-coder",
     provider: "deepseek",
-    role: "Primary Developer & Infrastructure",
+    role: "Primary Developer & Infrastructure (Cloud Fallback)",
     focus: "optimization, performance, safe testing, development",
     maxTokens: 4096,
     tier: "tier0", // Open source tier
-    costPer1M: 0.1, // $0.10 per million tokens (cheapest)
+    costPer1M: 0.1, // $0.10 per million tokens (cheapest cloud)
     specialties: ["infrastructure", "testing", "performance", "development"],
     useLocal: DEEPSEEK_BRIDGE_ENABLED === "true",
-    isFree: DEEPSEEK_BRIDGE_ENABLED === "true", // Local is free
+    isFree: false,
   },
   // TIER 1 - OVERSIGHT ONLY (Expensive - Only for validation)
   chatgpt: {
@@ -2341,9 +2369,68 @@ Be concise, strategic, and speak as the system's internal AI.`;
       return text;
     }
 
+    // OLLAMA (FREE LOCAL MODELS) - Try first for Tier 0
+    if (config.provider === "ollama") {
+      const endpoint = config.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
+      
+      try {
+        console.log(`🆓 [TIER 0] Calling Ollama ${config.model} at ${endpoint}`);
+
+        // Ollama uses /api/generate for completion
+        response = await fetch(`${endpoint}/api/generate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...noCacheHeaders,
+          },
+          body: JSON.stringify({
+            model: config.model,
+            prompt: `${systemPrompt}\n\n${prompt}`,
+            stream: false,
+            options: {
+              temperature: 0.7,
+              num_predict: config.maxTokens || 4096,
+            },
+          }),
+        });
+
+        if (response.ok) {
+          const json = await response.json();
+          const text = json.response || "";
+
+          if (text) {
+            console.log(`✅ [TIER 0] Ollama ${config.model} successful (FREE)`);
+
+            const duration = Date.now() - startTime;
+            await trackAIPerformance(member, "chat", duration, 0, 0, true);
+            
+            // CACHE THE RESPONSE
+            if (options.useCache !== false) {
+              cacheResponse(prompt, member, text);
+            }
+            
+            await storeConversationMemory(prompt, text, {
+              ai_member: member,
+              via: "ollama",
+              cost: 0,
+            });
+
+            return text;
+          }
+        } else {
+          const errorText = await response.text();
+          throw new Error(`Ollama HTTP ${response.status}: ${errorText}`);
+        }
+      } catch (ollamaError) {
+        console.warn(`⚠️ [TIER 0] Ollama ${config.model} failed: ${ollamaError.message}`);
+        throw new Error(`Ollama unavailable: ${ollamaError.message}`);
+      }
+    }
+
     if (config.provider === "deepseek") {
       const deepseekApiKey = getApiKey("deepseek");
 
+      // Try Ollama bridge first if enabled
       if (config.useLocal && OLLAMA_ENDPOINT) {
         try {
           console.log(
@@ -2653,7 +2740,7 @@ async function generateDailyIdeas() {
 
     let response;
     try {
-      response = await callCouncilWithFailover(ideaPrompt, "deepseek"); // Use Tier 0
+      response = await callCouncilWithFailover(ideaPrompt, "ollama_deepseek"); // Use Tier 0 (free)
     } catch (err) {
       console.error("Daily idea council error, using fallback:", err.message);
       response = null;
@@ -3200,7 +3287,7 @@ MAX TOTAL: [X] attempts
 Be strategic - we want to solve this, not waste resources.`;
 
   try {
-    const strategy = await callCouncilWithFailover(strategyPrompt, "deepseek"); // Use Tier 0
+    const strategy = await callCouncilWithFailover(strategyPrompt, "ollama_deepseek"); // Use Tier 0 (free)
     return {
       success: true,
       strategy,
@@ -4008,7 +4095,7 @@ async function continuousSelfImprovement() {
 
       const improvements = await callCouncilWithFailover(
         improvementPrompt,
-        "deepseek" // Already Tier 0
+        "ollama_deepseek" // Use Tier 0 (free)
       );
 
       if (improvements && improvements.length > 50) {
@@ -4195,7 +4282,7 @@ async function trackLoss(
 }
 
 // ==================== COUNCIL WITH FAILOVER (TIER 0 FIRST) ====================
-async function callCouncilWithFailover(prompt, preferredMember = "deepseek", requireOversight = false) {
+async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepseek", requireOversight = false) {
   // Check if we're in cost shutdown mode (spending too much)
   const today = dayjs().format("YYYY-MM-DD");
   const currentSpend = await getDailySpend(today);
@@ -4444,7 +4531,7 @@ class ExecutionQueue {
             `Execute this task with real-world practicality in mind (but do NOT directly move money or impersonate humans): ${task.description}
             
             Be aware of these blind spots: ${blindSpots.slice(0, 3).join(", ")}`,
-            "deepseek" // Use Tier 0 for primary work
+            "ollama_deepseek" // Use Tier 0 (free) for primary work
           );
 
       const aiModel = routerResult?.model || 'chatgpt';
@@ -6046,7 +6133,7 @@ app.post("/api/v1/architect/chat", requireKey, async (req, res) => {
         )}\n\nProvide detailed response.`
       : original_message;
 
-    const response = await callCouncilWithFailover(prompt, "deepseek"); // Use Tier 0
+    const response = await callCouncilWithFailover(prompt, "ollama_deepseek"); // Use Tier 0 (free)
 
     const response_json = {
       r: response.slice(0, 500),
@@ -6073,7 +6160,7 @@ app.post("/api/v1/architect/command", requireKey, async (req, res) => {
       query_json || {}
     )}\n\nExecute this command and provide results (but do not directly move money or impersonate users).`;
 
-    const response = await callCouncilWithFailover(prompt, "deepseek"); // Use Tier 0
+    const response = await callCouncilWithFailover(prompt, "ollama_deepseek"); // Use Tier 0 (free)
 
     if (intent && intent !== "general") {
       await executionQueue.addTask(intent, command);
