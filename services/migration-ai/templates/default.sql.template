@@ -1,0 +1,12 @@
+```sql
+-- Migration: {{migrationName}}
+-- Project: {{projectName}}
+-- Generated on: {{date}}
+
+BEGIN;
+
+-- Add your SQL commands here
+-- Example: CREATE TABLE {{tableName}} (id SERIAL PRIMARY KEY, name VARCHAR(255));
+
+COMMIT;
+```
