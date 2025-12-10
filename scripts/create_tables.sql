@@ -1,17 +1,29 @@
 ```sql
-CREATE TABLE deployment_history (
+CREATE TABLE learning_patterns (
     id SERIAL PRIMARY KEY,
-    repository_name VARCHAR(255) NOT NULL,
-    deployment_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(50),
-    logs TEXT
+    user_id INT NOT NULL,
+    pattern_data BYTEA NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE pipeline_configs (
+CREATE TABLE competency_graph (
     id SERIAL PRIMARY KEY,
-    repository_name VARCHAR(255) NOT NULL,
-    config JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT NOT NULL,
+    graph_data BYTEA NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE learning_sessions (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    session_data BYTEA NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE adaptive_content (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    content_data BYTEA NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
