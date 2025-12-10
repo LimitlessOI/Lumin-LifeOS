@@ -1,16 +1,22 @@
+```json
 {
+  "name": "code-review-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
-    "sequelize": "^6.x.x",
-    "pg": "^8.x.x",
-    "axios": "^0.21.x",
-    "simple-git": "^2.x.x",
-    "joi": "^17.x.x",
-    "bull": "^3.x.x",
-    "jsonwebtoken": "^8.x.x",
-    "express-rate-limit": "^5.x.x"
+    "express": "^4.17.1",
+    "pg": "^8.7.1",
+    "sequelize": "^6.6.5",
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "dotenv": "^10.0.0"
   },
   "devDependencies": {
-    "jest": "^26.x.x",
-    "supertest": "^6.x.x"
+    "nodemon": "^2.0.12"
   }
 }
+```
