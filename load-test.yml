@@ -7,8 +7,7 @@ config:
 scenarios:
   - flow:
     - post:
-        url: '/api/reports'
+        url: '/users'
         json:
-          title: 'Load Test Report'
-          content: 'This is a load test of report generation.'
-```
+          name: 'Test User'
+          email: 'testuser@example.com'
