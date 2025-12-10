@@ -1,0 +1,16 @@
+```json
+{
+  "javascript": {
+    "model": "gpt-js",
+    "version": "1.0"
+  },
+  "python": {
+    "model": "gpt-py",
+    "version": "1.0"
+  },
+  "java": {
+    "model": "gpt-java",
+    "version": "1.0"
+  }
+}
+```
