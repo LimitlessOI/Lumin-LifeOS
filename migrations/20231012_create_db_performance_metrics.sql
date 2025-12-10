@@ -1,0 +1,6 @@
+CREATE TABLE db_performance_metrics (
+  id SERIAL PRIMARY KEY,
+  metric_name VARCHAR(255) NOT NULL,
+  value DOUBLE PRECISION NOT NULL,
+  recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
