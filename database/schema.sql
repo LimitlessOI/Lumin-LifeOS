@@ -1,19 +1,30 @@
 ```sql
-CREATE TABLE IF NOT EXISTS content_templates (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE clients (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  phone VARCHAR(20),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS ai_content_generations (
-    id SERIAL PRIMARY KEY,
-    template_id INT REFERENCES content_templates(id),
-    input_data JSONB NOT NULL,
-    generated_content TEXT,
-    status VARCHAR(50) DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE client_interactions (
+  id SERIAL PRIMARY KEY,
+  client_id INT REFERENCES clients(id),
+  interaction_date TIMESTAMP NOT NULL,
+  interaction_type VARCHAR(50),
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE client_projects (
+  id SERIAL PRIMARY KEY,
+  client_id INT REFERENCES clients(id),
+  project_name VARCHAR(255) NOT NULL,
+  start_date DATE,
+  end_date DATE,
+  status VARCHAR(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
