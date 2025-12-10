@@ -1,0 +1,1 @@
+Self-programming: is the system able to build its self and develup moeny making oportunitys it has fund can you start 
