@@ -1,12 +1,20 @@
 ```dockerfile
-FROM node:14
+# Use Node.js LTS version
+FROM node:16
 
-WORKDIR /app
+# Set working directory
+WORKDIR /usr/src/app
 
-COPY package*.json ./
-RUN npm install
+# Copy package files and install dependencies
+COPY package.json yarn.lock ./
+RUN yarn install
 
+# Copy the application code
 COPY . .
 
+# Expose application port
 EXPOSE 3000
-CMD ["node", "src/server.js"]
+
+# Start the application
+CMD ["yarn", "start"]
+```
