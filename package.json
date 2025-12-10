@@ -1,7 +1,8 @@
 ```json
 {
-  "name": "lifeos-ai",
+  "name": "support-system",
   "version": "1.0.0",
+  "description": "Support system for handling user queries and AI processing",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -9,17 +10,18 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "sequelize": "^6.6.5",
-    "pg": "^8.7.1",
-    "pg-hstore": "^2.3.4",
+    "openai": "^3.0.0",
+    "dialogflow": "^4.0.0",
+    "redis": "^3.1.2",
+    "bull": "^3.20.1",
     "joi": "^17.4.0",
-    "express-rate-limit": "^5.5.1",
-    "uuid": "^8.3.2"
+    "rate-limiter-flexible": "^2.3.5",
+    "socket.io": "^4.4.1"
   },
   "devDependencies": {
     "jest": "^27.0.6",
-    "supertest": "^6.1.3",
-    "artillery": "^2.0.0-27"
+    "supertest": "^6.1.6",
+    "artillery": "^1.7.8"
   }
 }
 ```
