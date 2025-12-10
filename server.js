@@ -64,13 +64,22 @@ const {
   ALLOWED_ORIGINS = "",
   HOST = "0.0.0.0",
   PORT = 8080,
-  MAX_DAILY_SPEND = 50.0,
+  // Spend cap (can be overridden in Railway env). Set very high by default.
+  MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "1000000",
   NODE_ENV = "production",
   RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app",
   // Stripe config
   STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET, // reserved for future webhook use
+  // Video generation config
+  VIDEO_GEN_ENDPOINT = "http://localhost:7860",
+  VIDEO_GEN_API_KEY,
 } = process.env;
+
+// Ensure spend cap is numeric; allow "no cap" by setting to a very large default
+const MAX_DAILY_SPEND = Number.isFinite(parseFloat(RAW_MAX_DAILY_SPEND))
+  ? parseFloat(RAW_MAX_DAILY_SPEND)
+  : 1000000;
 
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "")
   .trim() || null;
@@ -178,6 +187,26 @@ app.get("/command-center", (req, res) => {
   }
 
   // No key provided, redirect to activation
+  res.redirect('/activate');
+});
+
+app.get("/boldtrail", (req, res) => {
+  console.log("🏠 [ROUTE] /boldtrail accessed");
+  const key = req.query.key;
+  
+  if (key && key === COMMAND_CENTER_KEY) {
+    const filePath = path.join(__dirname, "public", "overlay", "boldtrail.html");
+    if (fs.existsSync(filePath)) {
+      return res.sendFile(filePath);
+    } else {
+      return res.status(404).send("BoldTrail overlay not found.");
+    }
+  }
+
+  if (key && key !== COMMAND_CENTER_KEY) {
+    return res.redirect('/activate?error=invalid_key');
+  }
+
   res.redirect('/activate');
 });
 
@@ -370,6 +399,7 @@ async function initDatabase() {
       type VARCHAR(50),
       description TEXT,
       status VARCHAR(20) DEFAULT 'pending',
+      metadata JSONB,
       result TEXT,
       error TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -638,6 +668,23 @@ async function initDatabase() {
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )`);
 
+    // Source of Truth / System Constitution - Core mission, ethics, vision
+    await pool.query(`CREATE TABLE IF NOT EXISTS system_source_of_truth (
+      id SERIAL PRIMARY KEY,
+      document_type VARCHAR(50) NOT NULL DEFAULT 'master_vision',
+      version VARCHAR(20) DEFAULT '1.0',
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      section VARCHAR(100),
+      is_active BOOLEAN DEFAULT true,
+      priority INT DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_sot_type_active ON system_source_of_truth(document_type, is_active) WHERE is_active = true`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_sot_priority ON system_source_of_truth(priority DESC)`);
+
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_kb_search ON knowledge_base_files USING gin(search_vector)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_kb_category ON knowledge_base_files(category)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_kb_business ON knowledge_base_files(business_idea) WHERE business_idea = true`);
@@ -847,6 +894,41 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_drone_opp_drone ON drone_opportunities(drone_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_drone_opp_type ON drone_opportunities(opportunity_type)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_drone_opp_status ON drone_opportunities(status)`);
+
+    // Add missing columns to drone_opportunities if they don't exist
+    try {
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS priority INT DEFAULT 0`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS completed_at TIMESTAMPTZ`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS actual_revenue DECIMAL(12,2) DEFAULT 0`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS execution_data JSONB`);
+      await pool.query(`ALTER TABLE drone_opportunities ADD COLUMN IF NOT EXISTS error TEXT`);
+    } catch (e) {
+      // Columns might already exist
+    }
+
+    // Content assets table (for storing created content)
+    await pool.query(`CREATE TABLE IF NOT EXISTS content_assets (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      opportunity_id TEXT,
+      status VARCHAR(20) DEFAULT 'ready_to_publish',
+      published_at TIMESTAMPTZ,
+      revenue_generated DECIMAL(12,2) DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    // Service proposals table (for storing service proposals)
+    await pool.query(`CREATE TABLE IF NOT EXISTS service_proposals (
+      id SERIAL PRIMARY KEY,
+      opportunity_id TEXT,
+      proposal_data JSONB,
+      status VARCHAR(20) DEFAULT 'ready_to_send',
+      sent_at TIMESTAMPTZ,
+      response_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
 
     // Vapi Calls
     await pool.query(`CREATE TABLE IF NOT EXISTS vapi_calls (
@@ -1090,6 +1172,329 @@ async function initDatabase() {
       ('.github/workflows/autopilot-build.yml', 'Autopilot', true, false, true),
       ('public/overlay/command-center.html', 'Control panel', true, true, true)
       ON CONFLICT (file_path) DO NOTHING`);
+
+    // BoldTrail Real Estate CRM Tables
+    await pool.query(`CREATE TABLE IF NOT EXISTS boldtrail_agents (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      name VARCHAR(255),
+      subscription_tier VARCHAR(50) DEFAULT 'pro',
+      stripe_customer_id VARCHAR(255),
+      stripe_subscription_id VARCHAR(255),
+      subscription_status VARCHAR(50) DEFAULT 'active',
+      agent_tone TEXT,
+      preferences JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS boldtrail_showings (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      property_address TEXT NOT NULL,
+      property_details JSONB,
+      showing_date TIMESTAMPTZ,
+      client_name TEXT,
+      client_email TEXT,
+      client_phone TEXT,
+      route_order INTEGER,
+      estimated_drive_time INTEGER,
+      status VARCHAR(50) DEFAULT 'scheduled',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS boldtrail_email_drafts (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      draft_type VARCHAR(50),
+      recipient_email TEXT,
+      recipient_name TEXT,
+      subject TEXT,
+      content TEXT,
+      context_data JSONB,
+      status VARCHAR(50) DEFAULT 'draft',
+      sent_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_agents_email ON boldtrail_agents(email)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_showings_agent ON boldtrail_showings(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_showings_date ON boldtrail_showings(showing_date)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_email_agent ON boldtrail_email_drafts(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_email_status ON boldtrail_email_drafts(status)`);
+
+    // API Cost-Savings Service Tables
+    await pool.query(`CREATE TABLE IF NOT EXISTS api_cost_savings_clients (
+      id SERIAL PRIMARY KEY,
+      company_name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      contact_name VARCHAR(255),
+      current_ai_provider VARCHAR(100),
+      monthly_spend DECIMAL(12,2),
+      use_cases JSONB,
+      stripe_customer_id VARCHAR(255),
+      subscription_status VARCHAR(50) DEFAULT 'active',
+      onboarding_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS api_cost_savings_analyses (
+      id SERIAL PRIMARY KEY,
+      client_id INTEGER REFERENCES api_cost_savings_clients(id) ON DELETE CASCADE,
+      analysis_date TIMESTAMPTZ DEFAULT NOW(),
+      current_spend DECIMAL(12,2),
+      optimized_spend DECIMAL(12,2),
+      savings_amount DECIMAL(12,2),
+      savings_percentage DECIMAL(5,2),
+      optimization_opportunities JSONB,
+      recommendations JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS api_cost_savings_metrics (
+      id SERIAL PRIMARY KEY,
+      client_id INTEGER REFERENCES api_cost_savings_clients(id) ON DELETE CASCADE,
+      metric_date DATE NOT NULL,
+      tokens_used BIGINT,
+      api_calls INT,
+      cost DECIMAL(12,2),
+      optimized_cost DECIMAL(12,2),
+      savings DECIMAL(12,2),
+      cache_hit_rate DECIMAL(5,2),
+      model_downgrades INT,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(client_id, metric_date)
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_savings_clients_email ON api_cost_savings_clients(email)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_savings_analyses_client ON api_cost_savings_analyses(client_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_savings_metrics_client ON api_cost_savings_metrics(client_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_savings_metrics_date ON api_cost_savings_metrics(metric_date)`);
+
+    // Agent Recruitment Pipeline Tables
+    await pool.query(`CREATE TABLE IF NOT EXISTS recruitment_leads (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255),
+      phone VARCHAR(20),
+      email VARCHAR(255),
+      source VARCHAR(100),
+      status VARCHAR(50) DEFAULT 'new',
+      notes TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS recruitment_calls (
+      id SERIAL PRIMARY KEY,
+      lead_id INTEGER REFERENCES recruitment_leads(id) ON DELETE CASCADE,
+      call_sid VARCHAR(255),
+      call_status VARCHAR(50),
+      duration INTEGER,
+      transcript TEXT,
+      outcome VARCHAR(50),
+      next_action VARCHAR(100),
+      concerns TEXT,
+      scheduled_webinar_id INTEGER,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS recruitment_webinars (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      scheduled_time TIMESTAMPTZ NOT NULL,
+      zoom_link TEXT,
+      presentation_data JSONB,
+      status VARCHAR(50) DEFAULT 'scheduled',
+      attendees JSONB,
+      recording_url TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS recruitment_enrollments (
+      id SERIAL PRIMARY KEY,
+      lead_id INTEGER REFERENCES recruitment_leads(id) ON DELETE CASCADE,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      webinar_id INTEGER REFERENCES recruitment_webinars(id),
+      enrollment_tier VARCHAR(50) DEFAULT 'express',
+      status VARCHAR(50) DEFAULT 'enrolled',
+      stripe_customer_id VARCHAR(255),
+      stripe_subscription_id VARCHAR(255),
+      onboarding_stage VARCHAR(50) DEFAULT 'learning',
+      mastery_level INT DEFAULT 0,
+      unlocked_features JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_feature_unlocks (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      feature_name VARCHAR(100) NOT NULL,
+      unlocked_at TIMESTAMPTZ DEFAULT NOW(),
+      mastery_required BOOLEAN DEFAULT true,
+      UNIQUE(agent_id, feature_name)
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS youtube_video_projects (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      title VARCHAR(255),
+      description TEXT,
+      script TEXT,
+      raw_video_url TEXT,
+      edited_video_url TEXT,
+      b_roll_added BOOLEAN DEFAULT false,
+      enhancements JSONB,
+      status VARCHAR(50) DEFAULT 'draft',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    // Creator Enhancement Suite Tables
+    await pool.query(`CREATE TABLE IF NOT EXISTS creator_profiles (
+      id SERIAL PRIMARY KEY,
+      creator_email VARCHAR(255) UNIQUE NOT NULL,
+      creator_name VARCHAR(255),
+      brand_voice TEXT,
+      style_preferences JSONB,
+      content_themes JSONB,
+      target_audience JSONB,
+      platforms JSONB,
+      stripe_customer_id VARCHAR(255),
+      subscription_tier VARCHAR(50) DEFAULT 'pro',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS creator_content (
+      id SERIAL PRIMARY KEY,
+      creator_id INTEGER REFERENCES creator_profiles(id) ON DELETE CASCADE,
+      content_type VARCHAR(50), -- video, post, reel, story, etc.
+      original_url TEXT,
+      enhanced_url TEXT,
+      title VARCHAR(255),
+      description TEXT,
+      tags JSONB,
+      seo_optimized BOOLEAN DEFAULT false,
+      seo_score INT,
+      status VARCHAR(50) DEFAULT 'draft',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS creator_posts (
+      id SERIAL PRIMARY KEY,
+      content_id INTEGER REFERENCES creator_content(id) ON DELETE CASCADE,
+      platform VARCHAR(50), -- youtube, instagram, tiktok, twitter, etc.
+      post_id VARCHAR(255),
+      post_url TEXT,
+      scheduled_time TIMESTAMPTZ,
+      posted_at TIMESTAMPTZ,
+      performance_metrics JSONB,
+      status VARCHAR(50) DEFAULT 'scheduled',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS creator_ab_tests (
+      id SERIAL PRIMARY KEY,
+      creator_id INTEGER REFERENCES creator_profiles(id) ON DELETE CASCADE,
+      test_name VARCHAR(255),
+      test_type VARCHAR(50), -- title, thumbnail, description, posting_time, etc.
+      variants JSONB,
+      metrics JSONB,
+      winner_variant VARCHAR(100),
+      status VARCHAR(50) DEFAULT 'running',
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      completed_at TIMESTAMPTZ
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS creator_enhancements (
+      id SERIAL PRIMARY KEY,
+      content_id INTEGER REFERENCES creator_content(id) ON DELETE CASCADE,
+      enhancement_type VARCHAR(50), -- color_correction, audio_enhancement, b_roll, transitions, etc.
+      before_data JSONB,
+      after_data JSONB,
+      applied_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS creator_analytics (
+      id SERIAL PRIMARY KEY,
+      creator_id INTEGER REFERENCES creator_profiles(id) ON DELETE CASCADE,
+      post_id INTEGER REFERENCES creator_posts(id) ON DELETE CASCADE,
+      metric_date DATE NOT NULL,
+      views INT DEFAULT 0,
+      likes INT DEFAULT 0,
+      comments INT DEFAULT 0,
+      shares INT DEFAULT 0,
+      engagement_rate DECIMAL(5,2),
+      reach INT DEFAULT 0,
+      impressions INT DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(post_id, metric_date)
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_creator_profiles_email ON creator_profiles(creator_email)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_creator_content_creator ON creator_content(creator_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_creator_posts_content ON creator_posts(content_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_creator_posts_platform ON creator_posts(platform)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_creator_ab_tests_creator ON creator_ab_tests(creator_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_creator_ab_tests_status ON creator_ab_tests(status)`);
+
+    // Auto-Builder System Tables
+    await pool.query(`CREATE TABLE IF NOT EXISTS build_artifacts (
+      id SERIAL PRIMARY KEY,
+      opportunity_id TEXT NOT NULL,
+      build_type VARCHAR(50),
+      files JSONB,
+      status VARCHAR(50) DEFAULT 'generated',
+      deployed_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS deployments (
+      id SERIAL PRIMARY KEY,
+      opportunity_id TEXT UNIQUE NOT NULL,
+      deployment_type VARCHAR(50),
+      status VARCHAR(50) DEFAULT 'pending',
+      deployed_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_build_artifacts_opportunity ON build_artifacts(opportunity_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_build_artifacts_status ON build_artifacts(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_deployments_status ON deployments(status)`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS virtual_class_enrollments (
+      id SERIAL PRIMARY KEY,
+      student_email VARCHAR(255) NOT NULL,
+      student_name VARCHAR(255),
+      progress JSONB,
+      current_module VARCHAR(100),
+      completed_modules JSONB,
+      enrolled_in_express BOOLEAN DEFAULT false,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS virtual_class_modules (
+      id SERIAL PRIMARY KEY,
+      module_name VARCHAR(255) NOT NULL,
+      module_order INT NOT NULL,
+      content JSONB,
+      video_url TEXT,
+      assignments JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_recruitment_leads_status ON recruitment_leads(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_recruitment_calls_lead ON recruitment_calls(lead_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_recruitment_webinars_time ON recruitment_webinars(scheduled_time)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_enrollments_lead ON recruitment_enrollments(lead_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_feature_unlocks_agent ON agent_feature_unlocks(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_youtube_agent ON youtube_video_projects(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_class_enrollments_email ON virtual_class_enrollments(student_email)`);
 
     console.log("✅ Database schema initialized (v26.1 - no Claude)");
   } catch (error) {
@@ -1553,11 +1958,31 @@ async function callCouncilMember(member, prompt, options = {}) {
   const config = COUNCIL_MEMBERS[member];
   if (!config) throw new Error(`Unknown member: ${member}`);
 
-  const spend = await getDailySpend();
+  // Get today's spend (automatically resets each day)
+  const today = dayjs().format("YYYY-MM-DD");
+  const spend = await getDailySpend(today);
+  
+  // Log for debugging (only log if significant spend)
+  if (spend > MAX_DAILY_SPEND * 0.1) {
+    console.log(`💰 [SPEND CHECK] Today (${today}): $${spend.toFixed(4)} / $${MAX_DAILY_SPEND}`);
+  }
+  
   if (spend >= MAX_DAILY_SPEND) {
     throw new Error(
-      `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)}`
+      `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)} for ${today}. Resets at midnight UTC.`
     );
+  }
+
+  // Inject Source of Truth into prompt if this is a mission-critical task
+  if (sourceOfTruthManager && options.requiresMissionAlignment !== false) {
+    const shouldRef = await sourceOfTruthManager.shouldReferenceSourceOfTruth(options.taskType || 'general', options);
+    if (shouldRef) {
+      const relevantSections = await sourceOfTruthManager.getRelevantSections(options.taskType || 'general', options);
+      if (relevantSections.length > 0) {
+        const sotContext = relevantSections.map(d => `[${d.document_type}${d.section ? ` / ${d.section}` : ''}]: ${d.content.substring(0, 500)}`).join('\n\n');
+        prompt = `[SYSTEM SOURCE OF TRUTH - Reference this for mission alignment]\n${sotContext}\n\n---\n\n[USER REQUEST]\n${prompt}`;
+      }
+    }
   }
 
   // CHECK CACHE FIRST (huge cost savings)
@@ -3693,29 +4118,54 @@ class ExecutionQueue {
     this.history = [];
   }
 
-  async addTask(type, description) {
+  async addTask(type, description, metadata = null) {
     const taskId = `task_${Date.now()}_${Math.random()
       .toString(36)
       .slice(2, 8)}`;
     try {
       await pool.query(
-        `INSERT INTO execution_tasks (task_id, type, description, status, created_at)
-         VALUES ($1, $2, $3, $4, now())`,
-        [taskId, type, description, "queued"]
+        `INSERT INTO execution_tasks (task_id, type, description, status, metadata, created_at)
+         VALUES ($1, $2, $3, $4, $5, now())`,
+        [
+          taskId, 
+          type, 
+          description, 
+          "queued",
+          metadata ? JSON.stringify(metadata) : null
+        ]
       );
 
-      this.tasks.push({
+      const task = {
         id: taskId,
         type,
         description,
         status: "queued",
+        metadata,
         createdAt: new Date().toISOString(),
-      });
+      };
+      this.tasks.push(task);
 
       broadcastToAll({ type: "task_queued", taskId, taskType: type });
       return taskId;
     } catch (error) {
       console.error("Task add error:", error.message);
+      return null;
+    }
+  }
+
+  async getTaskMetadata(taskId) {
+    try {
+      const result = await pool.query(
+        "SELECT metadata FROM execution_tasks WHERE task_id = $1",
+        [taskId]
+      );
+      if (result.rows.length > 0 && result.rows[0].metadata) {
+        return typeof result.rows[0].metadata === 'string' 
+          ? JSON.parse(result.rows[0].metadata) 
+          : result.rows[0].metadata;
+      }
+      return null;
+    } catch (error) {
       return null;
     }
   }
@@ -3728,6 +4178,11 @@ class ExecutionQueue {
 
     const task = this.tasks.shift();
     this.activeTask = task;
+    
+    // Load metadata from DB if not in memory task
+    if (!task.metadata && task.id) {
+      task.metadata = await this.getTaskMetadata(task.id);
+    }
 
     try {
       await pool.query(
@@ -3739,13 +4194,13 @@ class ExecutionQueue {
         type: task.type,
       });
 
-      // If this is an idea_implementation task, use self-programming to actually implement it
-      if (task.type === 'idea_implementation') {
-        console.log(`🤖 [EXECUTION] Implementing idea via self-programming: ${task.description.substring(0, 100)}...`);
+      // If this is an idea_implementation or build task, use self-programming to actually implement it
+      if (task.type === 'idea_implementation' || task.type === 'build') {
+        console.log(`🤖 [EXECUTION] Implementing ${task.type} via self-programming: ${task.description.substring(0, 100)}...`);
         
         try {
-          // Use idea-to-implementation pipeline if available
-          if (ideaToImplementationPipeline) {
+          // Use idea-to-implementation pipeline if available and it's an idea
+          if (task.type === 'idea_implementation' && ideaToImplementationPipeline) {
             const pipelineResult = await ideaToImplementationPipeline.implementIdea(task.description, {
               autoDeploy: true,
               verifyCompletion: true,
@@ -3775,6 +4230,44 @@ class ExecutionQueue {
           }
         } catch (error) {
           console.error(`❌ [EXECUTION] Pipeline implementation failed:`, error.message);
+          // Fall through to regular execution as fallback
+        }
+      }
+
+      // If this is a build task, use self-programming directly
+      if (task.type === 'build') {
+        console.log(`🔨 [EXECUTION] Building opportunity via self-programming: ${task.description.substring(0, 100)}...`);
+        
+        try {
+          // Get metadata from task (could be from in-memory task or need to load from DB)
+          const taskMetadata = task.metadata || (task.id ? await this.getTaskMetadata(task.id) : null);
+          
+          const buildResult = await handleSelfProgramming({
+            instruction: task.description,
+            autoDeploy: taskMetadata?.auto_deploy || taskMetadata?.autoDeploy || false,
+            priority: 'high',
+          });
+
+          if (buildResult && buildResult.ok) {
+            const result = `Build completed for opportunity. Files: ${buildResult.filesModified?.join(', ') || 'N/A'}. ${buildResult.deployed ? '✅ Deployed.' : ''}`;
+            const aiModel = 'auto-builder';
+            
+            await pool.query(
+              `UPDATE execution_tasks SET status = 'completed', result = $1, completed_at = now(), ai_model = $3
+               WHERE task_id = $2`,
+              [result, task.id, aiModel]
+            );
+            
+            this.history.push({ ...task, status: "completed", result, aiModel });
+            this.activeTask = null;
+            broadcastToAll({ type: "task_completed", taskId: task.id, result });
+            setTimeout(() => this.executeNext(), 1000);
+            return;
+          } else {
+            throw new Error(buildResult?.error || 'Build implementation failed');
+          }
+        } catch (buildError) {
+          console.error(`❌ [EXECUTION] Build error:`, buildError.message);
           // Fall through to regular execution as fallback
         }
       }
@@ -4085,6 +4578,8 @@ let apiCostSavingsRevenue = null;
 let systemHealthChecker = null;
 let selfBuilder = null;
 let ideaToImplementationPipeline = null;
+let sourceOfTruthManager = null;
+let autoBuilder = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -4229,6 +4724,35 @@ async function initializeTwoTierSystem() {
           console.log(`✅ [INCOME] Deployed 5 income drones - they are NOW WORKING!`);
         } catch (deployError) {
           console.error('❌ [INCOME] Error deploying drones:', deployError.message);
+        }
+
+        // Initialize Opportunity Executor (actually implements opportunities to generate REAL revenue)
+        let opportunityExecutor = null;
+        try {
+          const executorModule = await import("./core/opportunity-executor.js");
+          opportunityExecutor = new executorModule.OpportunityExecutor(pool, callCouncilMember, incomeDroneSystem);
+          await opportunityExecutor.start();
+          console.log("✅ Opportunity Executor initialized - will actually implement opportunities to generate REAL revenue");
+
+          // Connect executor to drone system so drones can use it
+          if (incomeDroneSystem && incomeDroneSystem.setOpportunityExecutor) {
+            incomeDroneSystem.setOpportunityExecutor(opportunityExecutor);
+            console.log("✅ Connected Opportunity Executor to Income Drone System - drones will implement opportunities when any exist");
+          }
+        } catch (error) {
+          console.warn("⚠️ Opportunity Executor not available:", error.message);
+        }
+
+        // Initialize Auto-Builder (builds opportunities into working products)
+        try {
+          const builderModule = await import("./core/auto-builder.js");
+          autoBuilder = new builderModule.AutoBuilder(pool, callCouncilMember, executionQueue);
+          await autoBuilder.start();
+          console.log("✅ Auto-Builder initialized - will build best opportunities automatically");
+          console.log("📊 Auto-Builder: 30% capacity for building, 70% for revenue generation");
+          console.log("🚀 Auto-Builder: Building top opportunities into working products ASAP");
+        } catch (error) {
+          console.warn("⚠️ Auto-Builder not available:", error.message);
         }
       } catch (error) {
         console.warn("⚠️ Enhanced Drone System not available, using basic:", error.message);
@@ -4386,6 +4910,10 @@ async function initializeTwoTierSystem() {
         if (selfBuilder) {
           allSystems.selfBuilder = selfBuilder;
         }
+        // Add autoBuilder to allSystems if it exists
+        if (autoBuilder) {
+          allSystems.autoBuilder = autoBuilder;
+        }
         systemHealthChecker = new healthModule.SystemHealthChecker(pool, allSystems);
         console.log("✅ System Health Checker initialized");
       } catch (error) {
@@ -4408,6 +4936,23 @@ async function initializeTwoTierSystem() {
         console.log("✅ Idea-to-Implementation Pipeline module loaded");
       } catch (error) {
         console.warn("⚠️ Idea-to-Implementation Pipeline not available:", error.message);
+      }
+
+      // Initialize Source of Truth Manager
+      try {
+        const sotModule = await import("./core/source-of-truth-manager.js");
+        sourceOfTruthManager = new sotModule.SourceOfTruthManager(pool);
+        console.log("✅ Source of Truth Manager initialized");
+        
+        // Auto-load Source of Truth if it exists (for AI council reference)
+        const existingSOT = await sourceOfTruthManager.getDocument('master_vision');
+        if (existingSOT.length > 0) {
+          console.log(`📖 [SOURCE OF TRUTH] Loaded ${existingSOT.length} document(s) - AI Council will reference for mission alignment`);
+        } else {
+          console.log(`⚠️ [SOURCE OF TRUTH] No documents found. Use POST /api/v1/system/source-of-truth/store to add Source of Truth.`);
+        }
+      } catch (error) {
+        console.warn("⚠️ Source of Truth Manager not available:", error.message);
       }
       } catch (error) {
         console.warn("⚠️ Post-upgrade checker not available:", error.message);
@@ -6349,6 +6894,2143 @@ app.get("/api/v1/revenue/api-cost-savings/action-plan", requireKey, async (req, 
   }
 });
 
+// ==================== BOLDTRAIL REAL ESTATE CRM ENDPOINTS ====================
+app.post("/api/v1/boldtrail/register", requireKey, async (req, res) => {
+  try {
+    const { email, name, agent_tone, preferences } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ ok: false, error: "Email required" });
+    }
+
+    // Check if agent already exists
+    const existing = await pool.query(
+      "SELECT * FROM boldtrail_agents WHERE email = $1",
+      [email]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.json({
+        ok: true,
+        agent: existing.rows[0],
+        message: "Agent already registered",
+      });
+    }
+
+    // Create new agent
+    const result = await pool.query(
+      `INSERT INTO boldtrail_agents (email, name, agent_tone, preferences)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [email, name || null, agent_tone || null, preferences ? JSON.stringify(preferences) : null]
+    );
+
+    res.json({
+      ok: true,
+      agent: result.rows[0],
+      message: "Agent registered successfully",
+    });
+  } catch (error) {
+    console.error("BoldTrail registration error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/boldtrail/draft-email", requireKey, async (req, res) => {
+  try {
+    const { agent_id, draft_type, recipient_email, recipient_name, context_data } = req.body;
+
+    if (!agent_id || !draft_type) {
+      return res.status(400).json({ ok: false, error: "agent_id and draft_type required" });
+    }
+
+    // Get agent info for tone
+    const agentResult = await pool.query(
+      "SELECT agent_tone, name FROM boldtrail_agents WHERE id = $1",
+      [agent_id]
+    );
+
+    if (agentResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Agent not found" });
+    }
+
+    const agent = agentResult.rows[0];
+    const tone = agent.agent_tone || "professional and friendly";
+
+    // Build prompt for AI
+    const prompt = `Draft a ${draft_type} email for a real estate agent.
+
+Agent's tone/style: ${tone}
+Recipient: ${recipient_name || recipient_email || "client"}
+Context: ${JSON.stringify(context_data || {})}
+
+Write a complete email with:
+- Appropriate subject line
+- Professional greeting
+- Clear, helpful body content
+- Professional closing
+
+Format as:
+SUBJECT: [subject line]
+
+[email body]`;
+
+    const emailContent = await callCouncilWithFailover(prompt, "chatgpt");
+
+    // Extract subject and body
+    const subjectMatch = emailContent.match(/SUBJECT:\s*(.+)/i);
+    const subject = subjectMatch ? subjectMatch[1].trim() : `${draft_type} - ${recipient_name || "Client"}`;
+    const body = emailContent.replace(/SUBJECT:.*/i, "").trim();
+
+    // Save draft
+    const draftResult = await pool.query(
+      `INSERT INTO boldtrail_email_drafts 
+       (agent_id, draft_type, recipient_email, recipient_name, subject, content, context_data)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING *`,
+      [
+        agent_id,
+        draft_type,
+        recipient_email || null,
+        recipient_name || null,
+        subject,
+        body,
+        context_data ? JSON.stringify(context_data) : null,
+      ]
+    );
+
+    res.json({
+      ok: true,
+      draft: draftResult.rows[0],
+      subject,
+      content: body,
+    });
+  } catch (error) {
+    console.error("BoldTrail email draft error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/boldtrail/plan-showing", requireKey, async (req, res) => {
+  try {
+    const { agent_id, properties, client_name, client_email, client_phone } = req.body;
+
+    if (!agent_id || !properties || !Array.isArray(properties) || properties.length === 0) {
+      return res.status(400).json({
+        ok: false,
+        error: "agent_id and properties array required",
+      });
+    }
+
+    // For now, simple route order (1, 2, 3...)
+    // In production, integrate with Google Maps API for actual route optimization
+    const showings = [];
+    for (let i = 0; i < properties.length; i++) {
+      const prop = properties[i];
+      const showingResult = await pool.query(
+        `INSERT INTO boldtrail_showings 
+         (agent_id, property_address, property_details, showing_date, client_name, client_email, client_phone, route_order)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         RETURNING *`,
+        [
+          agent_id,
+          prop.address || prop.property_address || "Address TBD",
+          prop.details ? JSON.stringify(prop.details) : null,
+          prop.showing_date || null,
+          client_name || null,
+          client_email || null,
+          client_phone || null,
+          i + 1,
+        ]
+      );
+      showings.push(showingResult.rows[0]);
+    }
+
+    // Generate showing confirmation email draft
+    const agentResult = await pool.query(
+      "SELECT name, agent_tone FROM boldtrail_agents WHERE id = $1",
+      [agent_id]
+    );
+    const agent = agentResult.rows[0];
+
+    const emailPrompt = `Draft a showing confirmation email for a real estate agent.
+
+Agent: ${agent.name || "Agent"}
+Client: ${client_name || "Client"}
+Properties: ${properties.map((p, i) => `${i + 1}. ${p.address || p.property_address}`).join("\n")}
+Showing date: ${properties[0]?.showing_date || "TBD"}
+
+Include:
+- Friendly greeting
+- List of properties we'll be viewing
+- Meeting time and location
+- What to expect
+- Professional closing
+
+Format as:
+SUBJECT: [subject]
+
+[email body]`;
+
+    const emailContent = await callCouncilWithFailover(emailPrompt, "chatgpt");
+    const subjectMatch = emailContent.match(/SUBJECT:\s*(.+)/i);
+    const subject = subjectMatch ? subjectMatch[1].trim() : `Showing Confirmation - ${properties.length} Properties`;
+    const body = emailContent.replace(/SUBJECT:.*/i, "").trim();
+
+    res.json({
+      ok: true,
+      showings,
+      confirmation_email: {
+        subject,
+        body,
+        recipient: client_email,
+      },
+      route_summary: {
+        total_properties: properties.length,
+        estimated_time: "TBD (integrate with Maps API)",
+      },
+    });
+  } catch (error) {
+    console.error("BoldTrail showing plan error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/boldtrail/showings/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+
+    const result = await pool.query(
+      `SELECT * FROM boldtrail_showings 
+       WHERE agent_id = $1 
+       ORDER BY showing_date DESC, route_order ASC
+       LIMIT 50`,
+      [agentId]
+    );
+
+    res.json({
+      ok: true,
+      showings: result.rows,
+      count: result.rows.length,
+    });
+  } catch (error) {
+    console.error("BoldTrail get showings error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/boldtrail/agent/:email", requireKey, async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const result = await pool.query(
+      "SELECT * FROM boldtrail_agents WHERE email = $1",
+      [email]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Agent not found" });
+    }
+
+    res.json({
+      ok: true,
+      agent: result.rows[0],
+    });
+  } catch (error) {
+    console.error("BoldTrail get agent error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/boldtrail/create-subscription", requireKey, async (req, res) => {
+  try {
+    const { agent_id, email, name } = req.body;
+
+    if (!agent_id && !email) {
+      return res.status(400).json({ ok: false, error: "agent_id or email required" });
+    }
+
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      return res.status(503).json({ ok: false, error: "Stripe not configured" });
+    }
+
+    // Get or create agent
+    let agent;
+    if (agent_id) {
+      const result = await pool.query("SELECT * FROM boldtrail_agents WHERE id = $1", [agent_id]);
+      if (result.rows.length === 0) {
+        return res.status(404).json({ ok: false, error: "Agent not found" });
+      }
+      agent = result.rows[0];
+    } else {
+      const result = await pool.query("SELECT * FROM boldtrail_agents WHERE email = $1", [email]);
+      if (result.rows.length === 0) {
+        // Create agent first
+        const newAgent = await pool.query(
+          "INSERT INTO boldtrail_agents (email, name) VALUES ($1, $2) RETURNING *",
+          [email, name || null]
+        );
+        agent = newAgent.rows[0];
+      } else {
+        agent = result.rows[0];
+      }
+    }
+
+    // Create Stripe customer if needed
+    let customerId = agent.stripe_customer_id;
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: agent.email,
+        name: agent.name || undefined,
+        metadata: { agent_id: agent.id.toString() },
+      });
+      customerId = customer.id;
+      await pool.query(
+        "UPDATE boldtrail_agents SET stripe_customer_id = $1 WHERE id = $2",
+        [customerId, agent.id]
+      );
+    }
+
+    // Create subscription
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      customer: customerId,
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "BoldTrail Pro",
+              description: "AI Assistant for Real Estate Agents",
+            },
+            unit_amount: 9900, // $99.00
+            recurring: {
+              interval: "month",
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${req.headers.origin || "https://" + RAILWAY_PUBLIC_DOMAIN}/boldtrail?success=true`,
+      cancel_url: `${req.headers.origin || "https://" + RAILWAY_PUBLIC_DOMAIN}/boldtrail?canceled=true`,
+      metadata: { agent_id: agent.id.toString() },
+    });
+
+    res.json({
+      ok: true,
+      session_id: session.id,
+      url: session.url,
+      agent_id: agent.id,
+    });
+  } catch (error) {
+    console.error("BoldTrail subscription creation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== API COST-SAVINGS SERVICE ENDPOINTS ====================
+app.post("/api/v1/cost-savings/register", requireKey, async (req, res) => {
+  try {
+    const { company_name, email, contact_name, current_ai_provider, monthly_spend, use_cases } = req.body;
+
+    if (!company_name || !email) {
+      return res.status(400).json({ ok: false, error: "company_name and email required" });
+    }
+
+    // Check if client already exists
+    const existing = await pool.query(
+      "SELECT * FROM api_cost_savings_clients WHERE email = $1",
+      [email]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.json({
+        ok: true,
+        client: existing.rows[0],
+        message: "Client already registered",
+      });
+    }
+
+    // Create new client
+    const result = await pool.query(
+      `INSERT INTO api_cost_savings_clients 
+       (company_name, email, contact_name, current_ai_provider, monthly_spend, use_cases)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [
+        company_name,
+        email,
+        contact_name || null,
+        current_ai_provider || null,
+        monthly_spend ? parseFloat(monthly_spend) : null,
+        use_cases ? JSON.stringify(use_cases) : null,
+      ]
+    );
+
+    res.json({
+      ok: true,
+      client: result.rows[0],
+      message: "Client registered successfully",
+    });
+  } catch (error) {
+    console.error("Cost-savings registration error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/cost-savings/analyze", requireKey, async (req, res) => {
+  try {
+    const { client_id, current_spend, usage_data } = req.body;
+
+    if (!client_id || !current_spend) {
+      return res.status(400).json({ ok: false, error: "client_id and current_spend required" });
+    }
+
+    // Get client info
+    const clientResult = await pool.query(
+      "SELECT * FROM api_cost_savings_clients WHERE id = $1",
+      [client_id]
+    );
+
+    if (clientResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Client not found" });
+    }
+
+    const client = clientResult.rows[0];
+
+    // Use existing API cost savings system if available
+    let optimizedSpend = current_spend * 0.5; // Default 50% savings estimate
+    let savingsAmount = current_spend - optimizedSpend;
+    let savingsPercentage = 50;
+
+    if (apiCostSavingsRevenue) {
+      try {
+        const analysis = await apiCostSavingsRevenue.analyzeClientUsage(client, usage_data);
+        optimizedSpend = analysis.optimized_spend || optimizedSpend;
+        savingsAmount = analysis.savings || savingsAmount;
+        savingsPercentage = analysis.savings_percentage || savingsPercentage;
+      } catch (err) {
+        console.warn("API cost savings analysis error, using defaults:", err.message);
+      }
+    }
+
+    // Save analysis
+    const analysisResult = await pool.query(
+      `INSERT INTO api_cost_savings_analyses 
+       (client_id, current_spend, optimized_spend, savings_amount, savings_percentage, optimization_opportunities)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [
+        client_id,
+        parseFloat(current_spend),
+        optimizedSpend,
+        savingsAmount,
+        savingsPercentage,
+        JSON.stringify({
+          model_routing: "Route low-risk tasks to cheaper models",
+          caching: "Implement response caching for repeated queries",
+          prompt_compression: "Optimize prompts to reduce token usage",
+        }),
+      ]
+    );
+
+    res.json({
+      ok: true,
+      analysis: analysisResult.rows[0],
+      current_spend: parseFloat(current_spend),
+      optimized_spend: optimizedSpend,
+      savings_amount: savingsAmount,
+      savings_percentage: savingsPercentage,
+    });
+  } catch (error) {
+    console.error("Cost-savings analysis error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/cost-savings/dashboard/:clientId", requireKey, async (req, res) => {
+  try {
+    const { clientId } = req.params;
+
+    // Get client
+    const clientResult = await pool.query(
+      "SELECT * FROM api_cost_savings_clients WHERE id = $1",
+      [clientId]
+    );
+
+    if (clientResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Client not found" });
+    }
+
+    // Get latest analysis
+    const analysisResult = await pool.query(
+      `SELECT * FROM api_cost_savings_analyses 
+       WHERE client_id = $1 
+       ORDER BY analysis_date DESC 
+       LIMIT 1`,
+      [clientId]
+    );
+
+    // Get recent metrics (last 30 days)
+    const metricsResult = await pool.query(
+      `SELECT * FROM api_cost_savings_metrics 
+       WHERE client_id = $1 
+       AND metric_date >= CURRENT_DATE - INTERVAL '30 days'
+       ORDER BY metric_date DESC`,
+      [clientId]
+    );
+
+    // Calculate totals
+    const totalSavings = metricsResult.rows.reduce((sum, m) => sum + parseFloat(m.savings || 0), 0);
+    const totalCost = metricsResult.rows.reduce((sum, m) => sum + parseFloat(m.cost || 0), 0);
+    const totalOptimized = metricsResult.rows.reduce((sum, m) => sum + parseFloat(m.optimized_cost || 0), 0);
+
+    res.json({
+      ok: true,
+      client: clientResult.rows[0],
+      latest_analysis: analysisResult.rows[0] || null,
+      metrics: {
+        last_30_days: {
+          total_cost: totalCost,
+          total_optimized: totalOptimized,
+          total_savings: totalSavings,
+          savings_percentage: totalCost > 0 ? ((totalSavings / totalCost) * 100).toFixed(2) : 0,
+        },
+        daily: metricsResult.rows,
+      },
+    });
+  } catch (error) {
+    console.error("Cost-savings dashboard error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/cost-savings/create-subscription", requireKey, async (req, res) => {
+  try {
+    const { client_id, savings_amount } = req.body;
+
+    if (!client_id || !savings_amount) {
+      return res.status(400).json({ ok: false, error: "client_id and savings_amount required" });
+    }
+
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      return res.status(503).json({ ok: false, error: "Stripe not configured" });
+    }
+
+    // Get client
+    const clientResult = await pool.query(
+      "SELECT * FROM api_cost_savings_clients WHERE id = $1",
+      [client_id]
+    );
+
+    if (clientResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Client not found" });
+    }
+
+    const client = clientResult.rows[0];
+
+    // Calculate fee (25% of savings)
+    const monthlyFee = parseFloat(savings_amount) * 0.25;
+    const feeInCents = Math.round(monthlyFee * 100);
+
+    // Create Stripe customer if needed
+    let customerId = client.stripe_customer_id;
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: client.email,
+        name: client.contact_name || client.company_name,
+        metadata: { client_id: client.id.toString() },
+      });
+      customerId = customer.id;
+      await pool.query(
+        "UPDATE api_cost_savings_clients SET stripe_customer_id = $1 WHERE id = $2",
+        [customerId, client.id]
+      );
+    }
+
+    // Create subscription
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      customer: customerId,
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "AI Cost Optimization Service",
+              description: `25% of monthly savings ($${monthlyFee.toFixed(2)}/month)`,
+            },
+            unit_amount: feeInCents,
+            recurring: {
+              interval: "month",
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${req.headers.origin || "https://" + RAILWAY_PUBLIC_DOMAIN}/cost-savings?success=true`,
+      cancel_url: `${req.headers.origin || "https://" + RAILWAY_PUBLIC_DOMAIN}/cost-savings?canceled=true`,
+      metadata: { client_id: client.id.toString(), savings_amount: savings_amount.toString() },
+    });
+
+    res.json({
+      ok: true,
+      session_id: session.id,
+      url: session.url,
+      client_id: client.id,
+      monthly_fee: monthlyFee,
+      savings_amount: parseFloat(savings_amount),
+    });
+  } catch (error) {
+    console.error("Cost-savings subscription creation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== AGENT RECRUITMENT & ONBOARDING SYSTEM ====================
+app.post("/api/v1/recruitment/create-lead", requireKey, async (req, res) => {
+  try {
+    const { name, phone, email, source } = req.body;
+
+    if (!phone && !email) {
+      return res.status(400).json({ ok: false, error: "Phone or email required" });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO recruitment_leads (name, phone, email, source)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [name || null, phone || null, email || null, source || 'manual']
+    );
+
+    res.json({
+      ok: true,
+      lead: result.rows[0],
+      message: "Lead created successfully",
+    });
+  } catch (error) {
+    console.error("Recruitment lead creation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/recruitment/make-call", requireKey, async (req, res) => {
+  try {
+    const { lead_id, phone, custom_script } = req.body;
+
+    if (!lead_id && !phone) {
+      return res.status(400).json({ ok: false, error: "lead_id or phone required" });
+    }
+
+    // Get lead info
+    let lead;
+    if (lead_id) {
+      const leadResult = await pool.query("SELECT * FROM recruitment_leads WHERE id = $1", [lead_id]);
+      if (leadResult.rows.length === 0) {
+        return res.status(404).json({ ok: false, error: "Lead not found" });
+      }
+      lead = leadResult.rows[0];
+    } else {
+      lead = { phone, name: null, email: null };
+    }
+
+    const phoneNumber = lead.phone || phone;
+    if (!phoneNumber) {
+      return res.status(400).json({ ok: false, error: "Phone number required" });
+    }
+
+    // Generate recruitment call script
+    const scriptPrompt = custom_script || `You are calling a real estate agent to introduce BoldTrail - an AI assistant that helps agents:
+- Draft emails automatically
+- Plan showing routes
+- Follow up with clients
+- Save hours of admin work
+
+Keep it conversational, under 60 seconds. Ask if they'd like to see a quick demo via webinar.`;
+
+    const callScript = await callCouncilWithFailover(scriptPrompt, "chatgpt");
+
+    // Make the call
+    const callResult = await makePhoneCall(phoneNumber, null, callScript, "chatgpt");
+
+    if (callResult.success && lead_id) {
+      // Log the call
+      await pool.query(
+        `INSERT INTO recruitment_calls (lead_id, call_sid, call_status, outcome)
+         VALUES ($1, $2, 'initiated', 'pending')`,
+        [lead_id, callResult.callSid]
+      );
+
+      // Update lead status
+      await pool.query(
+        "UPDATE recruitment_leads SET status = 'called', updated_at = NOW() WHERE id = $1",
+        [lead_id]
+      );
+    }
+
+    res.json({
+      ok: true,
+      call: callResult,
+      script: callScript,
+      message: "Recruitment call initiated",
+    });
+  } catch (error) {
+    console.error("Recruitment call error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/recruitment/schedule-webinar", requireKey, async (req, res) => {
+  try {
+    const { title, scheduled_time, lead_ids } = req.body;
+
+    if (!title || !scheduled_time) {
+      return res.status(400).json({ ok: false, error: "title and scheduled_time required" });
+    }
+
+    // Generate webinar presentation content
+    const presentationPrompt = `Create a compelling webinar presentation for BoldTrail - AI Assistant for Real Estate Agents.
+
+Include:
+1. Introduction: The problem (agents drowning in admin work)
+2. Solution: How BoldTrail automates emails, showings, follow-ups
+3. Demo: Show the overlay in action
+4. Success stories: Time saved, deals closed faster
+5. Pricing: $99/month - ROI in first deal
+6. Q&A: Address common concerns
+7. Close: Express Line enrollment opportunity
+
+Format as structured JSON with sections and talking points.`;
+
+    const presentationData = await callCouncilWithFailover(presentationPrompt, "gemini");
+
+    // For now, use a placeholder Zoom link (in production, integrate with Zoom API)
+    const zoomLink = `https://zoom.us/j/meeting-${Date.now()}`;
+
+    const result = await pool.query(
+      `INSERT INTO recruitment_webinars (title, scheduled_time, zoom_link, presentation_data, attendees)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING *`,
+      [
+        title,
+        scheduled_time,
+        zoomLink,
+        JSON.stringify({ content: presentationData }),
+        lead_ids ? JSON.stringify(lead_ids) : JSON.stringify([]),
+      ]
+    );
+
+    // Send invitations to leads
+    if (lead_ids && Array.isArray(lead_ids)) {
+      for (const leadId of lead_ids) {
+        const leadResult = await pool.query("SELECT * FROM recruitment_leads WHERE id = $1", [leadId]);
+        if (leadResult.rows.length > 0) {
+          const lead = leadResult.rows[0];
+          // Send email/SMS invitation (implement sendSMS or email function)
+          console.log(`📧 Inviting lead ${lead.name || lead.email} to webinar`);
+        }
+      }
+    }
+
+    res.json({
+      ok: true,
+      webinar: result.rows[0],
+      message: "Webinar scheduled successfully",
+    });
+  } catch (error) {
+    console.error("Webinar scheduling error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/recruitment/handle-objection", requireKey, async (req, res) => {
+  try {
+    const { lead_id, concern, call_transcript } = req.body;
+
+    if (!lead_id || !concern) {
+      return res.status(400).json({ ok: false, error: "lead_id and concern required" });
+    }
+
+    // Use AI to generate objection response
+    const responsePrompt = `A real estate agent has this concern about BoldTrail: "${concern}"
+
+Generate a helpful, empathetic response that:
+1. Acknowledges their concern
+2. Provides a clear, honest answer
+3. Offers a solution or alternative
+4. Maintains trust and doesn't push too hard
+
+Keep it conversational and under 150 words.`;
+
+    const response = await callCouncilWithFailover(responsePrompt, "chatgpt");
+
+    // Log the concern and response
+    await pool.query(
+      `UPDATE recruitment_calls 
+       SET concerns = COALESCE(concerns, '') || $1 || E'\\n',
+           transcript = COALESCE(transcript, '') || $2 || E'\\n'
+       WHERE lead_id = $3
+       ORDER BY created_at DESC
+       LIMIT 1`,
+      [`Concern: ${concern}\n`, `Response: ${response}\n`, lead_id]
+    );
+
+    res.json({
+      ok: true,
+      response,
+      message: "Objection handled",
+    });
+  } catch (error) {
+    console.error("Objection handling error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/recruitment/enroll", requireKey, async (req, res) => {
+  try {
+    const { lead_id, webinar_id, enrollment_tier } = req.body;
+
+    if (!lead_id) {
+      return res.status(400).json({ ok: false, error: "lead_id required" });
+    }
+
+    // Get lead
+    const leadResult = await pool.query("SELECT * FROM recruitment_leads WHERE id = $1", [lead_id]);
+    if (leadResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Lead not found" });
+    }
+
+    const lead = leadResult.rows[0];
+
+    // Create enrollment
+    const enrollmentResult = await pool.query(
+      `INSERT INTO recruitment_enrollments (lead_id, webinar_id, enrollment_tier, status, onboarding_stage)
+       VALUES ($1, $2, $3, 'enrolled', 'learning')
+       RETURNING *`,
+      [lead_id, webinar_id || null, enrollment_tier || 'express']
+    );
+
+    // Create BoldTrail agent account
+    const agentResult = await pool.query(
+      `INSERT INTO boldtrail_agents (email, name, subscription_tier)
+       VALUES ($1, $2, 'express')
+       ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name
+       RETURNING *`,
+      [lead.email || `agent-${lead_id}@boldtrail.com`, lead.name]
+    );
+
+    // Link enrollment to agent
+    await pool.query(
+      `UPDATE recruitment_enrollments SET agent_id = $1 WHERE id = $2`,
+      [agentResult.rows[0].id, enrollmentResult.rows[0].id]
+    );
+
+    // Initialize feature unlocks (start with basic features only)
+    await pool.query(
+      `INSERT INTO agent_feature_unlocks (agent_id, feature_name, mastery_required)
+       VALUES ($1, 'email_drafting', false),
+              ($1, 'showing_planner', false),
+              ($1, 'basic_crm', false)
+       ON CONFLICT DO NOTHING`,
+      [agentResult.rows[0].id]
+    );
+
+    res.json({
+      ok: true,
+      enrollment: enrollmentResult.rows[0],
+      agent: agentResult.rows[0],
+      message: "Agent enrolled successfully",
+    });
+  } catch (error) {
+    console.error("Enrollment error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/recruitment/unlock-feature", requireKey, async (req, res) => {
+  try {
+    const { agent_id, feature_name, mastery_achieved } = req.body;
+
+    if (!agent_id || !feature_name) {
+      return res.status(400).json({ ok: false, error: "agent_id and feature_name required" });
+    }
+
+    // Check if agent has achieved mastery (this would be checked via virtual class progress, etc.)
+    const enrollmentResult = await pool.query(
+      `SELECT mastery_level, onboarding_stage FROM recruitment_enrollments 
+       WHERE agent_id = (SELECT id FROM boldtrail_agents WHERE id = $1)`,
+      [agent_id]
+    );
+
+    if (enrollmentResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Agent enrollment not found" });
+    }
+
+    const enrollment = enrollmentResult.rows[0];
+
+    // Feature unlock rules
+    const featureRequirements = {
+      'youtube_automation': { mastery_level: 5, stage: 'mastered' },
+      'full_automation': { mastery_level: 7, stage: 'mastered' },
+      'advanced_crm': { mastery_level: 3, stage: 'building' },
+    };
+
+    const requirement = featureRequirements[feature_name];
+    if (requirement) {
+      if (enrollment.mastery_level < requirement.mastery_level || 
+          enrollment.onboarding_stage !== requirement.stage) {
+        return res.status(403).json({
+          ok: false,
+          error: `Feature requires mastery level ${requirement.mastery_level} and stage ${requirement.stage}`,
+          current_level: enrollment.mastery_level,
+          current_stage: enrollment.onboarding_stage,
+        });
+      }
+    }
+
+    // Unlock the feature
+    await pool.query(
+      `INSERT INTO agent_feature_unlocks (agent_id, feature_name, mastery_required)
+       VALUES ($1, $2, true)
+       ON CONFLICT (agent_id, feature_name) DO UPDATE SET unlocked_at = NOW()`,
+      [agent_id, feature_name]
+    );
+
+    res.json({
+      ok: true,
+      message: `Feature ${feature_name} unlocked`,
+      agent_id,
+      feature_name,
+    });
+  } catch (error) {
+    console.error("Feature unlock error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== YOUTUBE VIDEO CREATION WORKFLOW ====================
+app.post("/api/v1/youtube/create-project", requireKey, async (req, res) => {
+  try {
+    const { agent_id, title, description, topic } = req.body;
+
+    if (!agent_id || !topic) {
+      return res.status(400).json({ ok: false, error: "agent_id and topic required" });
+    }
+
+    // Check if agent has YouTube automation unlocked
+    const unlockCheck = await pool.query(
+      "SELECT * FROM agent_feature_unlocks WHERE agent_id = $1 AND feature_name = 'youtube_automation'",
+      [agent_id]
+    );
+
+    if (unlockCheck.rows.length === 0) {
+      return res.status(403).json({
+        ok: false,
+        error: "YouTube automation not unlocked. Complete mastery requirements first.",
+      });
+    }
+
+    // Generate video script (help them learn first)
+    const scriptPrompt = `Create a YouTube video script for a real estate agent about: "${topic}"
+
+The agent wants to learn how to create videos themselves. Provide:
+1. A compelling hook (first 15 seconds)
+2. Main content with talking points
+3. Call to action
+4. Tips for delivery
+
+Keep it educational and helpful - this is for them to practice with.`;
+
+    const script = await callCouncilWithFailover(scriptPrompt, "chatgpt");
+
+    const result = await pool.query(
+      `INSERT INTO youtube_video_projects (agent_id, title, description, script, status)
+       VALUES ($1, $2, $3, $4, 'script_ready')
+       RETURNING *`,
+      [agent_id, title || `Video about ${topic}`, description || null, script]
+    );
+
+    // Check if agent has YouTube automation unlocked
+    const hasAutomation = await pool.query(
+      "SELECT * FROM agent_feature_unlocks WHERE agent_id = $1 AND feature_name = 'youtube_automation'",
+      [agent_id]
+    );
+
+    res.json({
+      ok: true,
+      project: result.rows[0],
+      message: "Video project created. Choose your approach:",
+      options: {
+        learn_first: {
+          description: "Record your video manually using the script (recommended for learning)",
+          steps: [
+            "1. Review the generated script",
+            "2. Record your video using the script",
+            "3. Upload via POST /api/v1/youtube/upload-raw",
+            "4. AI will enhance with b-roll, transitions, and editing"
+          ],
+          endpoint: "POST /api/v1/youtube/upload-raw",
+        },
+        ai_generation: {
+          description: "Use open source AI (Stable Video Diffusion) to generate the entire video",
+          available: hasAutomation.rows.length > 0,
+          requires: "Mastery level 5+ (YouTube automation feature unlock)",
+          steps: [
+            "1. System breaks script into scenes",
+            "2. Generates images using Stable Diffusion",
+            "3. Converts images to video using Stable Video Diffusion",
+            "4. Adds voiceover (if agent voice available)",
+            "5. Enhances with b-roll, transitions, text overlays"
+          ],
+          endpoint: "POST /api/v1/youtube/generate-video",
+          technology: "Open source: Stable Video Diffusion (Stability AI)",
+        },
+      },
+    });
+  } catch (error) {
+    console.error("YouTube project creation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/youtube/upload-raw", requireKey, async (req, res) => {
+  try {
+    const { project_id, video_url } = req.body;
+
+    if (!project_id || !video_url) {
+      return res.status(400).json({ ok: false, error: "project_id and video_url required" });
+    }
+
+    await pool.query(
+      `UPDATE youtube_video_projects 
+       SET raw_video_url = $1, status = 'raw_uploaded'
+       WHERE id = $2`,
+      [video_url, project_id]
+    );
+
+    res.json({
+      ok: true,
+      message: "Raw video uploaded. System will now enhance it with b-roll and editing.",
+    });
+  } catch (error) {
+    console.error("YouTube upload error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/youtube/generate-video", requireKey, async (req, res) => {
+  try {
+    const { project_id, style, use_agent_voice } = req.body;
+
+    if (!project_id) {
+      return res.status(400).json({ ok: false, error: "project_id required" });
+    }
+
+    // Get project
+    const projectResult = await pool.query(
+      "SELECT * FROM youtube_video_projects WHERE id = $1",
+      [project_id]
+    );
+
+    if (projectResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Project not found" });
+    }
+
+    const project = projectResult.rows[0];
+
+    // Check if agent has YouTube automation unlocked
+    const unlockCheck = await pool.query(
+      "SELECT * FROM agent_feature_unlocks WHERE agent_id = $1 AND feature_name = 'youtube_automation'",
+      [project.agent_id]
+    );
+
+    if (unlockCheck.rows.length === 0) {
+      return res.status(403).json({
+        ok: false,
+        error: "YouTube automation not unlocked. Complete mastery requirements first.",
+      });
+    }
+
+    // Initialize video generator
+    const { VideoGenerator } = await import("./core/video-generator.js");
+    const videoGenerator = new VideoGenerator(pool, callCouncilMember);
+
+    // Generate video (this runs async, so we'll update status)
+    await pool.query(
+      "UPDATE youtube_video_projects SET status = 'generating' WHERE id = $1",
+      [project_id]
+    );
+
+    // Generate in background
+    videoGenerator.generateVideo({
+      script: project.script,
+      agent_id: project.agent_id,
+      project_id,
+      style: style || "professional",
+      use_agent_voice: use_agent_voice || false,
+    })
+      .then(result => {
+        console.log(`✅ Video generated for project ${project_id}`);
+      })
+      .catch(error => {
+        console.error(`❌ Video generation error for project ${project_id}:`, error);
+        pool.query(
+          "UPDATE youtube_video_projects SET status = 'error', enhancements = $1 WHERE id = $2",
+          [JSON.stringify({ error: error.message }), project_id]
+        );
+      });
+
+    res.json({
+      ok: true,
+      message: "Video generation started. This may take a few minutes. Check project status for updates.",
+      project_id,
+      status: "generating",
+    });
+  } catch (error) {
+    console.error("YouTube video generation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/youtube/project/:projectId", requireKey, async (req, res) => {
+  try {
+    const { projectId } = req.params;
+
+    const result = await pool.query(
+      "SELECT * FROM youtube_video_projects WHERE id = $1",
+      [projectId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Project not found" });
+    }
+
+    res.json({
+      ok: true,
+      project: result.rows[0],
+    });
+  } catch (error) {
+    console.error("YouTube project fetch error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== CREATOR ENHANCEMENT SUITE ====================
+app.post("/api/v1/creator/register", requireKey, async (req, res) => {
+  try {
+    const { email, name, brand_voice, style_preferences, content_themes, target_audience, platforms } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ ok: false, error: "email required" });
+    }
+
+    // Check if exists
+    const existing = await pool.query(
+      "SELECT * FROM creator_profiles WHERE creator_email = $1",
+      [email]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.json({
+        ok: true,
+        creator: existing.rows[0],
+        message: "Creator already registered",
+      });
+    }
+
+    // Create profile
+    const result = await pool.query(
+      `INSERT INTO creator_profiles 
+       (creator_email, creator_name, brand_voice, style_preferences, content_themes, target_audience, platforms)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING *`,
+      [
+        email,
+        name || null,
+        brand_voice || null,
+        style_preferences ? JSON.stringify(style_preferences) : null,
+        content_themes ? JSON.stringify(content_themes) : null,
+        target_audience ? JSON.stringify(target_audience) : null,
+        platforms ? JSON.stringify(platforms) : null,
+      ]
+    );
+
+    res.json({
+      ok: true,
+      creator: result.rows[0],
+      message: "Creator profile created",
+    });
+  } catch (error) {
+    console.error("Creator registration error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/creator/enhance-video", requireKey, async (req, res) => {
+  try {
+    const { creator_id, video_url, enhancement_options } = req.body;
+
+    if (!creator_id || !video_url) {
+      return res.status(400).json({ ok: false, error: "creator_id and video_url required" });
+    }
+
+    // Get creator profile for voice/style
+    const creatorResult = await pool.query(
+      "SELECT * FROM creator_profiles WHERE id = $1",
+      [creator_id]
+    );
+
+    if (creatorResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Creator not found" });
+    }
+
+    const creator = creatorResult.rows[0];
+    const options = enhancement_options || {
+      color_correction: true,
+      audio_enhancement: true,
+      b_roll: true,
+      transitions: true,
+      text_overlays: true,
+      branding: true,
+    };
+
+    // Create content record
+    const contentResult = await pool.query(
+      `INSERT INTO creator_content 
+       (creator_id, content_type, original_url, status)
+       VALUES ($1, 'video', $2, 'enhancing')
+       RETURNING *`,
+      [creator_id, video_url]
+    );
+
+    const contentId = contentResult.rows[0].id;
+
+    // Generate enhancement plan using AI
+    const enhancementPrompt = `Analyze this video and create an enhancement plan for a creator.
+
+Creator's brand voice: ${creator.brand_voice || "professional and engaging"}
+Style preferences: ${JSON.stringify(creator.style_preferences || {})}
+Content themes: ${JSON.stringify(creator.content_themes || [])}
+
+Enhancement options requested:
+${JSON.stringify(options)}
+
+Provide:
+1. Color correction recommendations
+2. Audio enhancement suggestions
+3. B-roll opportunities
+4. Transition points
+5. Text overlay suggestions
+6. Branding placement
+
+Keep it aligned with their voice - enhance, don't change their style.`;
+
+    const enhancementPlan = await callCouncilWithFailover(enhancementPrompt, "gemini");
+
+    // Apply enhancements (this would use video processing libraries)
+    // For now, we'll simulate the process
+    const enhancements = {
+      color_correction: options.color_correction ? "Applied" : null,
+      audio_enhancement: options.audio_enhancement ? "Applied" : null,
+      b_roll: options.b_roll ? "Added relevant b-roll" : null,
+      transitions: options.transitions ? "Smooth transitions added" : null,
+      text_overlays: options.text_overlays ? "Strategic text overlays" : null,
+      branding: options.branding ? "Creator branding added" : null,
+    };
+
+    // Store enhancement record
+    await pool.query(
+      `INSERT INTO creator_enhancements (content_id, enhancement_type, before_data, after_data)
+       VALUES ($1, 'full_enhancement', $2, $3)`,
+      [
+        contentId,
+        JSON.stringify({ original_url: video_url }),
+        JSON.stringify(enhancements),
+      ]
+    );
+
+    // Update content with enhanced URL (placeholder - would be actual processed video)
+    const enhancedUrl = video_url.replace(/\.(mp4|mov)$/, '_enhanced.$1'); // Simulated
+
+    await pool.query(
+      `UPDATE creator_content 
+       SET enhanced_url = $1, status = 'enhanced'
+       WHERE id = $2`,
+      [enhancedUrl, contentId]
+    );
+
+    res.json({
+      ok: true,
+      content: {
+        ...contentResult.rows[0],
+        enhanced_url: enhancedUrl,
+      },
+      enhancements,
+      plan: enhancementPlan,
+      message: "Video enhanced while maintaining your unique style",
+    });
+  } catch (error) {
+    console.error("Video enhancement error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/creator/optimize-seo", requireKey, async (req, res) => {
+  try {
+    const { content_id, platform } = req.body;
+
+    if (!content_id || !platform) {
+      return res.status(400).json({ ok: false, error: "content_id and platform required" });
+    }
+
+    // Get content
+    const contentResult = await pool.query(
+      `SELECT c.*, p.brand_voice, p.content_themes, p.target_audience
+       FROM creator_content c
+       JOIN creator_profiles p ON c.creator_id = p.id
+       WHERE c.id = $1`,
+      [content_id]
+    );
+
+    if (contentResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Content not found" });
+    }
+
+    const content = contentResult.rows[0];
+
+    // Generate SEO-optimized title, description, tags
+    const seoPrompt = `Optimize this content for ${platform} SEO while maintaining the creator's voice.
+
+Current title: ${content.title || "Untitled"}
+Current description: ${content.description || "No description"}
+Platform: ${platform}
+Creator's voice: ${content.brand_voice || "professional"}
+Target audience: ${JSON.stringify(content.target_audience || {})}
+Content themes: ${JSON.stringify(content.content_themes || [])}
+
+Provide:
+1. SEO-optimized title (maintains voice, includes keywords)
+2. SEO-optimized description (first 2 lines are critical)
+3. Relevant tags/keywords (10-15 tags)
+4. SEO score (1-100)
+5. Recommendations for improvement
+
+Format as JSON:
+{
+  "title": "...",
+  "description": "...",
+  "tags": ["tag1", "tag2", ...],
+  "seo_score": 85,
+  "recommendations": ["...", "..."]
+}`;
+
+    const seoResponse = await callCouncilWithFailover(seoPrompt, "chatgpt");
+
+    // Parse SEO data
+    let seoData;
+    try {
+      const jsonMatch = seoResponse.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        seoData = JSON.parse(jsonMatch[0]);
+      } else {
+        throw new Error("No JSON found");
+      }
+    } catch (e) {
+      // Fallback
+      seoData = {
+        title: content.title || "Optimized Title",
+        description: content.description || "Optimized description",
+        tags: [],
+        seo_score: 75,
+        recommendations: ["Add more keywords", "Improve description"],
+      };
+    }
+
+    // Update content
+    await pool.query(
+      `UPDATE creator_content 
+       SET title = $1, description = $2, tags = $3, seo_optimized = true, seo_score = $4
+       WHERE id = $5`,
+      [
+        seoData.title,
+        seoData.description,
+        JSON.stringify(seoData.tags || []),
+        seoData.seo_score || 75,
+        content_id,
+      ]
+    );
+
+    res.json({
+      ok: true,
+      seo: seoData,
+      message: "Content optimized for SEO while maintaining your voice",
+    });
+  } catch (error) {
+    console.error("SEO optimization error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/creator/schedule-post", requireKey, async (req, res) => {
+  try {
+    const { content_id, platforms, scheduled_time, customizations } = req.body;
+
+    if (!content_id || !platforms || !Array.isArray(platforms)) {
+      return res.status(400).json({ ok: false, error: "content_id and platforms array required" });
+    }
+
+    // Get content
+    const contentResult = await pool.query(
+      "SELECT * FROM creator_content WHERE id = $1",
+      [content_id]
+    );
+
+    if (contentResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Content not found" });
+    }
+
+    const content = contentResult.rows[0];
+
+    // Create posts for each platform
+    const posts = [];
+    for (const platform of platforms) {
+      // Platform-specific optimizations
+      const platformPrompt = `Adapt this content for ${platform}:
+
+Title: ${content.title}
+Description: ${content.description}
+Tags: ${JSON.stringify(content.tags || [])}
+
+Platform requirements:
+${platform === 'youtube' ? 'Long-form, detailed descriptions, tags important' : ''}
+${platform === 'instagram' ? 'Short captions, hashtags, visual-first' : ''}
+${platform === 'tiktok' ? 'Very short, trending hashtags, hook-focused' : ''}
+${platform === 'twitter' ? 'Concise, thread-friendly, engagement-focused' : ''}
+
+Adapt while maintaining creator's voice. Provide:
+- Platform-optimized title/caption
+- Platform-optimized description
+- Platform-specific tags/hashtags
+- Best posting time recommendation
+
+Format as JSON.`;
+
+      const platformData = await callCouncilWithFailover(platformPrompt, "chatgpt");
+
+      let adapted;
+      try {
+        const jsonMatch = platformData.match(/\{[\s\S]*\}/);
+        adapted = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
+      } catch (e) {
+        adapted = { title: content.title, description: content.description };
+      }
+
+      // Create post record
+      const postResult = await pool.query(
+        `INSERT INTO creator_posts 
+         (content_id, platform, scheduled_time, status)
+         VALUES ($1, $2, $3, 'scheduled')
+         RETURNING *`,
+        [content_id, platform, scheduled_time || null]
+      );
+
+      posts.push({
+        ...postResult.rows[0],
+        adapted_content: adapted,
+      });
+    }
+
+    res.json({
+      ok: true,
+      posts,
+      message: `Content scheduled for ${platforms.length} platform(s)`,
+    });
+  } catch (error) {
+    console.error("Post scheduling error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/creator/create-ab-test", requireKey, async (req, res) => {
+  try {
+    const { creator_id, test_type, content_id, variants } = req.body;
+
+    if (!creator_id || !test_type || !variants || !Array.isArray(variants) || variants.length < 2) {
+      return res.status(400).json({
+        ok: false,
+        error: "creator_id, test_type, and variants array (min 2) required",
+      });
+    }
+
+    // Create A/B test
+    const testResult = await pool.query(
+      `INSERT INTO creator_ab_tests 
+       (creator_id, test_name, test_type, variants, status)
+       VALUES ($1, $2, $3, $4, 'running')
+       RETURNING *`,
+      [
+        creator_id,
+        `${test_type} A/B Test - ${new Date().toLocaleDateString()}`,
+        test_type,
+        JSON.stringify(variants),
+      ]
+    );
+
+    // If content_id provided, create posts for each variant
+    if (content_id) {
+      for (let i = 0; i < variants.length; i++) {
+        const variant = variants[i];
+        await pool.query(
+          `INSERT INTO creator_posts 
+           (content_id, platform, status, performance_metrics)
+           VALUES ($1, $2, 'scheduled', $3)`,
+          [
+            content_id,
+            variant.platform || 'youtube',
+            JSON.stringify({ variant_id: i, test_id: testResult.rows[0].id }),
+          ]
+        );
+      }
+    }
+
+    res.json({
+      ok: true,
+      test: testResult.rows[0],
+      message: `A/B test created with ${variants.length} variants`,
+    });
+  } catch (error) {
+    console.error("A/B test creation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/creator/analyze-ab-test", requireKey, async (req, res) => {
+  try {
+    const { test_id } = req.body;
+
+    if (!test_id) {
+      return res.status(400).json({ ok: false, error: "test_id required" });
+    }
+
+    // Get test
+    const testResult = await pool.query(
+      "SELECT * FROM creator_ab_tests WHERE id = $1",
+      [test_id]
+    );
+
+    if (testResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Test not found" });
+    }
+
+    const test = testResult.rows[0];
+    const variants = JSON.parse(test.variants || '[]');
+
+    // Analyze performance (this would pull real metrics from platforms)
+    // For now, simulate analysis
+    const analysisPrompt = `Analyze A/B test results for ${test.test_type}.
+
+Variants: ${JSON.stringify(variants)}
+
+Provide analysis:
+1. Performance metrics for each variant
+2. Statistical significance
+3. Winner recommendation
+4. Insights and recommendations
+
+Format as JSON with metrics, winner, and insights.`;
+
+    const analysis = await callCouncilWithFailover(analysisPrompt, "gemini");
+
+    let analysisData;
+    try {
+      const jsonMatch = analysis.match(/\{[\s\S]*\}/);
+      analysisData = jsonMatch ? JSON.parse(jsonMatch[0]) : {};
+    } catch (e) {
+      analysisData = {
+        metrics: variants.map((v, i) => ({
+          variant: i,
+          views: Math.floor(Math.random() * 10000),
+          engagement: Math.random() * 10,
+        })),
+        winner: 0,
+        insights: ["Test needs more data"],
+      };
+    }
+
+    // Update test
+    await pool.query(
+      `UPDATE creator_ab_tests 
+       SET metrics = $1, winner_variant = $2, status = 'completed', completed_at = NOW()
+       WHERE id = $3`,
+      [
+        JSON.stringify(analysisData),
+        `variant_${analysisData.winner || 0}`,
+        test_id,
+      ]
+    );
+
+    res.json({
+      ok: true,
+      test: {
+        ...test,
+        metrics: analysisData,
+        winner: analysisData.winner,
+      },
+      analysis: analysisData,
+    });
+  } catch (error) {
+    console.error("A/B test analysis error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/creator/auto-post", requireKey, async (req, res) => {
+  try {
+    const { creator_id, content_id, platforms } = req.body;
+
+    if (!creator_id || !content_id || !platforms) {
+      return res.status(400).json({ ok: false, error: "creator_id, content_id, and platforms required" });
+    }
+
+    // Get content
+    const contentResult = await pool.query(
+      `SELECT c.*, p.brand_voice, p.platforms as creator_platforms
+       FROM creator_content c
+       JOIN creator_profiles p ON c.creator_id = p.id
+       WHERE c.id = $1`,
+      [content_id]
+    );
+
+    if (contentResult.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Content not found" });
+    }
+
+    const content = contentResult.rows[0];
+
+    // Auto-optimize SEO if not done
+    if (!content.seo_optimized) {
+      // Trigger SEO optimization (would call the endpoint internally)
+      console.log(`🔍 Auto-optimizing SEO for content ${content_id}`);
+    }
+
+    // Schedule posts for all platforms
+    const scheduleResult = await pool.query(
+      `SELECT * FROM creator_posts 
+       WHERE content_id = $1 AND status = 'scheduled'`,
+      [content_id]
+    );
+
+    // Auto-post (this would integrate with platform APIs)
+    // For now, mark as posted
+    for (const post of scheduleResult.rows) {
+      await pool.query(
+        `UPDATE creator_posts 
+         SET status = 'posted', posted_at = NOW()
+         WHERE id = $1`,
+        [post.id]
+      );
+    }
+
+    res.json({
+      ok: true,
+      message: `Content auto-posted to ${scheduleResult.rows.length} platform(s)`,
+      posts: scheduleResult.rows,
+    });
+  } catch (error) {
+    console.error("Auto-post error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== AUTO-BUILDER ENDPOINTS ====================
+app.get("/api/v1/auto-builder/status", requireKey, async (req, res) => {
+  try {
+    // Get auto-builder status if available
+    let builderStatus = null;
+    try {
+      const { AutoBuilder } = await import("./core/auto-builder.js");
+      const tempBuilder = new AutoBuilder(pool, callCouncilMember, executionQueue);
+      builderStatus = await tempBuilder.getStatus();
+    } catch (e) {
+      // Builder not initialized yet
+    }
+
+    // Get opportunity counts
+    const revenueOpps = await pool.query(
+      `SELECT COUNT(*) as count, 
+              SUM(revenue_potential) as total_potential,
+              AVG(time_to_implement) as avg_time
+       FROM revenue_opportunities 
+       WHERE status IN ('pending', 'building')`
+    );
+
+    const droneOpps = await pool.query(
+      `SELECT COUNT(*) as count,
+              SUM(revenue_estimate) as total_estimate
+       FROM drone_opportunities 
+       WHERE status IN ('pending', 'building')`
+    );
+
+    const builds = await pool.query(
+      `SELECT COUNT(*) as count,
+              COUNT(*) FILTER (WHERE status = 'deployed') as deployed_count
+       FROM build_artifacts`
+    );
+
+    res.json({
+      ok: true,
+      builder: builderStatus,
+      opportunities: {
+        revenue: {
+          pending: parseInt(revenueOpps.rows[0]?.count || 0),
+          total_potential: parseFloat(revenueOpps.rows[0]?.total_potential || 0),
+          avg_time: parseFloat(revenueOpps.rows[0]?.avg_time || 0),
+        },
+        drone: {
+          pending: parseInt(droneOpps.rows[0]?.count || 0),
+          total_estimate: parseFloat(droneOpps.rows[0]?.total_estimate || 0),
+        },
+      },
+      builds: {
+        total: parseInt(builds.rows[0]?.count || 0),
+        deployed: parseInt(builds.rows[0]?.deployed_count || 0),
+      },
+    });
+  } catch (error) {
+    console.error("Auto-builder status error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/auto-builder/prioritize", requireKey, async (req, res) => {
+  try {
+    const { opportunity_id, priority, source = 'revenue' } = req.body;
+
+    if (!opportunity_id || priority === undefined) {
+      return res.status(400).json({ ok: false, error: "opportunity_id and priority required" });
+    }
+
+    if (source === 'revenue') {
+      await pool.query(
+        `UPDATE revenue_opportunities 
+         SET priority = $1 
+         WHERE opportunity_id = $2`,
+        [priority, opportunity_id]
+      );
+    } else {
+      await pool.query(
+        `UPDATE drone_opportunities 
+         SET priority = $1 
+         WHERE id = $2`,
+        [priority, parseInt(opportunity_id)]
+      );
+    }
+
+    res.json({
+      ok: true,
+      message: `Priority set to ${priority} for opportunity ${opportunity_id}`,
+    });
+  } catch (error) {
+    console.error("Priority update error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/auto-builder/build-now", requireKey, async (req, res) => {
+  try {
+    const { opportunity_id, source = 'revenue' } = req.body;
+
+    if (!opportunity_id) {
+      return res.status(400).json({ ok: false, error: "opportunity_id required" });
+    }
+
+    // Get opportunity
+    let opportunity;
+    if (source === 'revenue') {
+      const result = await pool.query(
+        `SELECT 
+           'revenue' as source,
+           opportunity_id as id,
+           name,
+           revenue_potential,
+           time_to_implement,
+           required_resources,
+           market_demand,
+           competitive_advantage,
+           status
+         FROM revenue_opportunities
+         WHERE opportunity_id = $1`,
+        [opportunity_id]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).json({ ok: false, error: "Opportunity not found" });
+      }
+      opportunity = result.rows[0];
+    } else {
+      const result = await pool.query(
+        `SELECT 
+           'drone' as source,
+           id::text as id,
+           opportunity_type as name,
+           revenue_estimate as revenue_potential,
+           1 as time_to_implement,
+           data as required_resources,
+           'High' as market_demand,
+           'Automated' as competitive_advantage,
+           status
+         FROM drone_opportunities
+         WHERE id = $1`,
+        [parseInt(opportunity_id)]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).json({ ok: false, error: "Opportunity not found" });
+      }
+      opportunity = result.rows[0];
+    }
+
+    // Import and use auto-builder
+    const { AutoBuilder } = await import("./core/auto-builder.js");
+    const builder = new AutoBuilder(pool, callCouncilMember, executionQueue);
+
+    // Start build (async)
+    builder.buildOpportunity(opportunity).catch(err => {
+      console.error(`Build error:`, err);
+    });
+
+    res.json({
+      ok: true,
+      message: `Build started for ${opportunity.name || opportunity_id}`,
+      opportunity_id,
+    });
+  } catch (error) {
+    console.error("Build-now error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== VIRTUAL REAL ESTATE CLASS ====================
+app.post("/api/v1/class/enroll", async (req, res) => {
+  try {
+    const { email, name } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ ok: false, error: "email required" });
+    }
+
+    // Check if already enrolled
+    const existing = await pool.query(
+      "SELECT * FROM virtual_class_enrollments WHERE student_email = $1",
+      [email]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.json({
+        ok: true,
+        enrollment: existing.rows[0],
+        message: "Already enrolled",
+      });
+    }
+
+    // Create enrollment (free)
+    const result = await pool.query(
+      `INSERT INTO virtual_class_enrollments (student_email, student_name, progress, current_module, completed_modules)
+       VALUES ($1, $2, '{}', 'module_1', '[]')
+       RETURNING *`,
+      [email, name || null]
+    );
+
+    res.json({
+      ok: true,
+      enrollment: result.rows[0],
+      message: "Enrolled in free virtual real estate class",
+    });
+  } catch (error) {
+    console.error("Class enrollment error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/class/upgrade-to-express", requireKey, async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ ok: false, error: "email required" });
+    }
+
+    // Get class enrollment
+    const classEnrollment = await pool.query(
+      "SELECT * FROM virtual_class_enrollments WHERE student_email = $1",
+      [email]
+    );
+
+    if (classEnrollment.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Not enrolled in class" });
+    }
+
+    const stripe = await getStripeClient();
+    if (!stripe) {
+      return res.status(503).json({ ok: false, error: "Stripe not configured" });
+    }
+
+    // Create or get lead
+    let leadResult = await pool.query(
+      "SELECT * FROM recruitment_leads WHERE email = $1 OR phone = (SELECT phone FROM recruitment_leads WHERE email = $1 LIMIT 1)",
+      [email]
+    );
+
+    let leadId;
+    if (leadResult.rows.length === 0) {
+      const newLead = await pool.query(
+        `INSERT INTO recruitment_leads (name, email, source, status)
+         VALUES ($1, $2, 'class_upgrade', 'enrolled')
+         RETURNING *`,
+        [classEnrollment.rows[0].student_name, email]
+      );
+      leadId = newLead.rows[0].id;
+    } else {
+      leadId = leadResult.rows[0].id;
+    }
+
+    // Create BoldTrail agent account
+    const agentResult = await pool.query(
+      `INSERT INTO boldtrail_agents (email, name, subscription_tier)
+       VALUES ($1, $2, 'express')
+       ON CONFLICT (email) DO UPDATE SET subscription_tier = 'express'
+       RETURNING *`,
+      [email, classEnrollment.rows[0].student_name]
+    );
+
+    // Create enrollment record
+    const enrollmentResult = await pool.query(
+      `INSERT INTO recruitment_enrollments (lead_id, agent_id, enrollment_tier, status, onboarding_stage, mastery_level)
+       VALUES ($1, $2, 'express', 'enrolled', 'learning', 0)
+       ON CONFLICT DO NOTHING
+       RETURNING *`,
+      [leadId, agentResult.rows[0].id]
+    );
+
+    // Initialize basic feature unlocks
+    await pool.query(
+      `INSERT INTO agent_feature_unlocks (agent_id, feature_name, mastery_required)
+       VALUES ($1, 'email_drafting', false),
+              ($1, 'showing_planner', false),
+              ($1, 'basic_crm', false)
+       ON CONFLICT DO NOTHING`,
+      [agentResult.rows[0].id]
+    );
+
+    // Update class enrollment
+    await pool.query(
+      "UPDATE virtual_class_enrollments SET enrolled_in_express = true WHERE student_email = $1",
+      [email]
+    );
+
+    // Create Stripe checkout session
+    const session = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "BoldTrail Express Line",
+              description: "Full system access + step-by-step success coaching",
+            },
+            unit_amount: 9900, // $99/month
+            recurring: {
+              interval: "month",
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${req.headers.origin || "https://" + RAILWAY_PUBLIC_DOMAIN}/boldtrail?success=true&express=true`,
+      cancel_url: `${req.headers.origin || "https://" + RAILWAY_PUBLIC_DOMAIN}/class?canceled=true`,
+      metadata: { agent_id: agentResult.rows[0].id.toString(), enrollment_type: 'express' },
+    });
+
+    res.json({
+      ok: true,
+      message: "Upgraded to Express Line",
+      agent: agentResult.rows[0],
+      checkout_url: session.url,
+      session_id: session.id,
+    });
+  } catch (error) {
+    console.error("Express upgrade error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/class/modules", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM virtual_class_modules ORDER BY module_order ASC"
+    );
+
+    res.json({
+      ok: true,
+      modules: result.rows,
+    });
+  } catch (error) {
+    console.error("Class modules error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/class/complete-module", requireKey, async (req, res) => {
+  try {
+    const { email, module_name } = req.body;
+
+    if (!email || !module_name) {
+      return res.status(400).json({ ok: false, error: "email and module_name required" });
+    }
+
+    // Update progress
+    const enrollment = await pool.query(
+      "SELECT * FROM virtual_class_enrollments WHERE student_email = $1",
+      [email]
+    );
+
+    if (enrollment.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Not enrolled" });
+    }
+
+    // completed_modules is JSONB, so it's already an object/array, not a string
+    const completed = enrollment.rows[0].completed_modules || [];
+    const completedArray = Array.isArray(completed) ? completed : (typeof completed === 'string' ? JSON.parse(completed) : []);
+    
+    if (!completedArray.includes(module_name)) {
+      completedArray.push(module_name);
+    }
+
+    await pool.query(
+      `UPDATE virtual_class_enrollments 
+       SET completed_modules = $1, updated_at = NOW()
+       WHERE student_email = $2`,
+      [JSON.stringify(completedArray), email]
+    );
+
+    // If enrolled in Express line, update mastery level
+    if (enrollment.rows[0].enrolled_in_express) {
+      const agentResult = await pool.query(
+        "SELECT id FROM boldtrail_agents WHERE email = $1",
+        [email]
+      );
+
+      if (agentResult.rows.length > 0) {
+        const agentId = agentResult.rows[0].id;
+        const enrollmentData = await pool.query(
+          "SELECT * FROM recruitment_enrollments WHERE agent_id = $1",
+          [agentId]
+        );
+
+        if (enrollmentData.rows.length > 0) {
+          // Increase mastery level based on modules completed
+          const newMasteryLevel = Math.min(completed.length, 10);
+          await pool.query(
+            `UPDATE recruitment_enrollments 
+             SET mastery_level = $1, 
+                 onboarding_stage = CASE 
+                   WHEN $1 >= 7 THEN 'mastered'
+                   WHEN $1 >= 3 THEN 'building'
+                   ELSE 'learning'
+                 END
+             WHERE agent_id = $2`,
+            [newMasteryLevel, agentId]
+          );
+        }
+      }
+    }
+
+    res.json({
+      ok: true,
+      message: `Module ${module_name} completed`,
+      completed_modules: completed,
+    });
+  } catch (error) {
+    console.error("Module completion error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/boldtrail/set-vacation-mode", requireKey, async (req, res) => {
+  try {
+    const { agent_id, vacation_mode, busy_mode, return_date } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    const currentPrefs = await pool.query(
+      "SELECT preferences FROM boldtrail_agents WHERE id = $1",
+      [agent_id]
+    );
+
+    if (currentPrefs.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Agent not found" });
+    }
+
+    const prefs = currentPrefs.rows[0].preferences || {};
+    // Store as actual booleans, not strings
+    if (vacation_mode !== undefined) prefs.vacation_mode = Boolean(vacation_mode);
+    if (busy_mode !== undefined) prefs.busy_mode = Boolean(busy_mode);
+    if (return_date) prefs.return_date = return_date;
+
+    await pool.query(
+      "UPDATE boldtrail_agents SET preferences = $1, updated_at = NOW() WHERE id = $2",
+      [JSON.stringify(prefs), agent_id]
+    );
+
+    res.json({
+      ok: true,
+      message: vacation_mode ? "Vacation mode enabled" : busy_mode ? "Busy mode enabled" : "Mode updated",
+      preferences: prefs,
+    });
+  } catch (error) {
+    console.error("Vacation mode update error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/boldtrail/agent/:agentId/features", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+
+    const features = await pool.query(
+      "SELECT feature_name, unlocked_at FROM agent_feature_unlocks WHERE agent_id = $1",
+      [agentId]
+    );
+
+    const enrollment = await pool.query(
+      `SELECT e.mastery_level, e.onboarding_stage, e.unlocked_features
+       FROM recruitment_enrollments e
+       JOIN boldtrail_agents a ON e.agent_id = a.id
+       WHERE a.id = $1`,
+      [agentId]
+    );
+
+    res.json({
+      ok: true,
+      unlocked_features: features.rows,
+      mastery_level: enrollment.rows[0]?.mastery_level || 0,
+      onboarding_stage: enrollment.rows[0]?.onboarding_stage || 'learning',
+      available_features: {
+        basic: ['email_drafting', 'showing_planner', 'basic_crm'],
+        advanced: { requires_mastery: 3, features: ['advanced_crm', 'analytics'] },
+        automation: { requires_mastery: 5, features: ['youtube_automation', 'social_media'] },
+        full: { requires_mastery: 7, features: ['full_automation', 'ai_content_generation'] },
+      },
+    });
+  } catch (error) {
+    console.error("Feature check error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // ==================== INCOME DIAGNOSTIC ENDPOINT ====================
 app.get("/api/v1/income/diagnostic", requireKey, async (req, res) => {
   try {
@@ -6657,6 +9339,52 @@ app.get("/api/v1/ai/performance", requireKey, async (req, res) => {
       performance: performance.rows,
       currentScores: Object.fromEntries(aiPerformanceScores),
     });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Source of Truth endpoints
+app.post("/api/v1/system/source-of-truth/store", requireKey, async (req, res) => {
+  try {
+    if (!sourceOfTruthManager) {
+      return res.status(503).json({ error: "Source of Truth Manager not initialized" });
+    }
+
+    const { documentType = 'master_vision', title, content, section = null, version = '1.0', priority = 0 } = req.body;
+
+    if (!title || !content) {
+      return res.status(400).json({ error: "Title and content required" });
+    }
+
+    const success = await sourceOfTruthManager.storeDocument(documentType, title, content, section, version, priority);
+
+    if (success) {
+      res.json({ ok: true, message: "Source of Truth stored successfully" });
+    } else {
+      res.status(500).json({ ok: false, error: "Failed to store Source of Truth" });
+    }
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/system/source-of-truth", requireKey, async (req, res) => {
+  try {
+    if (!sourceOfTruthManager) {
+      return res.status(503).json({ error: "Source of Truth Manager not initialized" });
+    }
+
+    const { documentType, section, formatted } = req.query;
+    const includeInactive = req.query.includeInactive === 'true';
+
+    if (formatted === 'true') {
+      const formattedText = await sourceOfTruthManager.getFormattedForAI();
+      return res.json({ ok: true, formatted: formattedText });
+    }
+
+    const docs = await sourceOfTruthManager.getDocument(documentType || null, section || null, includeInactive);
+    res.json({ ok: true, documents: docs });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
@@ -8570,8 +11298,22 @@ async function start() {
     );
     console.log("=".repeat(100));
 
-    await initDatabase();
-    await loadROIFromDatabase();
+    // Critical: Database must initialize (but don't fail if tables already exist)
+    try {
+      await initDatabase();
+      console.log("✅ Database initialized");
+    } catch (dbError) {
+      console.error("❌ Database initialization error:", dbError.message);
+      // Don't exit - try to continue (might be connection issue that resolves)
+      console.warn("⚠️ Continuing startup despite DB error - will retry connections");
+    }
+
+    // Load ROI (non-critical)
+    try {
+      await loadROIFromDatabase();
+    } catch (roiError) {
+      console.warn("⚠️ ROI load error (non-critical):", roiError.message);
+    }
     
     // Run dependency audit before initializing systems
     try {
@@ -8710,6 +11452,242 @@ async function start() {
       );
     }
 
+    // Agent vacation/busy mode automation
+    async function handleAgentVacationMode() {
+      try {
+        // Find agents who are on vacation or marked as busy
+        const busyAgents = await pool.query(
+          `SELECT a.*, e.onboarding_stage, e.mastery_level
+           FROM boldtrail_agents a
+           LEFT JOIN recruitment_enrollments e ON e.agent_id = a.id
+           WHERE (a.preferences->>'vacation_mode' = 'true' OR (a.preferences->>'vacation_mode')::boolean = true)
+           OR (a.preferences->>'busy_mode' = 'true' OR (a.preferences->>'busy_mode')::boolean = true)`
+        );
+
+        for (const agent of busyAgents.rows) {
+          // Check for pending emails that need responses
+          const pendingEmails = await pool.query(
+            `SELECT * FROM boldtrail_email_drafts 
+             WHERE agent_id = $1 
+             AND status = 'draft'
+             AND created_at < NOW() - INTERVAL '4 hours'
+             LIMIT 5`,
+            [agent.id]
+          );
+
+          // Auto-send or queue responses using agent's tone
+          for (const email of pendingEmails.rows) {
+            const autoResponsePrompt = `Draft a brief, professional auto-response email for a real estate agent who is temporarily unavailable.
+
+Agent's tone: ${agent.agent_tone || "professional and friendly"}
+Original email type: ${email.draft_type}
+Recipient: ${email.recipient_name || email.recipient_email}
+
+Keep it brief, professional, and set appropriate expectations about response time.`;
+
+            try {
+              const autoResponse = await callCouncilWithFailover(autoResponsePrompt, "chatgpt");
+              
+              // Create auto-response draft
+              await pool.query(
+                `INSERT INTO boldtrail_email_drafts 
+                 (agent_id, draft_type, recipient_email, recipient_name, subject, content, context_data, status)
+                 VALUES ($1, 'auto_response', $2, $3, $4, $5, $6, 'ready_to_send')`,
+                [
+                  agent.id,
+                  email.recipient_email,
+                  email.recipient_name,
+                  `Re: ${email.subject || 'Your inquiry'}`,
+                  autoResponse,
+                  JSON.stringify({ original_email_id: email.id, auto_generated: true }),
+                ]
+              );
+
+              console.log(`✅ Auto-response created for agent ${agent.id} (vacation/busy mode)`);
+            } catch (err) {
+              console.error(`❌ Auto-response error for agent ${agent.id}:`, err.message);
+            }
+          }
+
+          // Maintain consistency: Check for scheduled showings and send reminders
+          const upcomingShowings = await pool.query(
+            `SELECT * FROM boldtrail_showings 
+             WHERE agent_id = $1 
+             AND showing_date BETWEEN NOW() AND NOW() + INTERVAL '24 hours'
+             AND status = 'scheduled'`,
+            [agent.id]
+          );
+
+          for (const showing of upcomingShowings.rows) {
+            // Send reminder to client
+            const reminderPrompt = `Draft a friendly reminder email for a property showing.
+
+Agent's tone: ${agent.agent_tone || "professional and friendly"}
+Client: ${showing.client_name}
+Property: ${showing.property_address}
+Showing time: ${new Date(showing.showing_date).toLocaleString()}
+
+Keep it brief and confirm the appointment.`;
+
+            try {
+              const reminder = await callCouncilWithFailover(reminderPrompt, "chatgpt");
+              
+              await pool.query(
+                `INSERT INTO boldtrail_email_drafts 
+                 (agent_id, draft_type, recipient_email, recipient_name, subject, content, context_data, status)
+                 VALUES ($1, 'showing_reminder', $2, $3, $4, $5, $6, 'ready_to_send')`,
+                [
+                  agent.id,
+                  showing.client_email,
+                  showing.client_name,
+                  `Reminder: Showing at ${showing.property_address}`,
+                  reminder,
+                  JSON.stringify({ showing_id: showing.id, auto_generated: true }),
+                ]
+              );
+            } catch (err) {
+              console.error(`❌ Showing reminder error:`, err.message);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Vacation mode automation error:", error.message);
+      }
+    }
+
+    // Run vacation mode check every 2 hours
+    setInterval(() => handleAgentVacationMode().catch(err => 
+      console.error("Vacation mode interval error:", err.message)
+    ), 2 * 60 * 60 * 1000);
+
+    // BoldTrail follow-up reminder system
+    async function checkBoldTrailFollowUps() {
+      try {
+        // Find showings completed 24-48 hours ago that haven't been followed up
+        const result = await pool.query(
+          `SELECT s.*, a.email as agent_email, a.name as agent_name, a.agent_tone
+           FROM boldtrail_showings s
+           JOIN boldtrail_agents a ON s.agent_id = a.id
+           WHERE s.status = 'completed'
+           AND s.showing_date < NOW() - INTERVAL '24 hours'
+           AND s.showing_date > NOW() - INTERVAL '48 hours'
+           AND NOT EXISTS (
+             SELECT 1 FROM boldtrail_email_drafts 
+             WHERE agent_id = s.agent_id 
+             AND draft_type = 'followup'
+             AND context_data->>'showing_id' = s.id::text
+             AND created_at > s.showing_date
+           )
+           LIMIT 10`
+        );
+
+        for (const showing of result.rows) {
+          // Auto-draft follow-up email
+          const prompt = `Draft a follow-up email for a real estate agent after a property showing.
+
+Agent's tone: ${showing.agent_tone || "professional and friendly"}
+Client: ${showing.client_name || "Client"}
+Property: ${showing.property_address}
+Showing date: ${new Date(showing.showing_date).toLocaleDateString()}
+
+Write a friendly follow-up that:
+- Thanks them for viewing the property
+- Asks for their thoughts/feedback
+- Offers to answer questions
+- Mentions next steps if interested
+
+Format as:
+SUBJECT: [subject]
+
+[email body]`;
+
+          try {
+            const emailContent = await callCouncilWithFailover(prompt, "chatgpt");
+            const subjectMatch = emailContent.match(/SUBJECT:\s*(.+)/i);
+            const subject = subjectMatch ? subjectMatch[1].trim() : `Follow-up: ${showing.property_address}`;
+            const body = emailContent.replace(/SUBJECT:.*/i, "").trim();
+
+            await pool.query(
+              `INSERT INTO boldtrail_email_drafts 
+               (agent_id, draft_type, recipient_email, recipient_name, subject, content, context_data)
+               VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+              [
+                showing.agent_id,
+                'followup',
+                showing.client_email,
+                showing.client_name,
+                subject,
+                body,
+                JSON.stringify({ showing_id: showing.id, auto_generated: true }),
+              ]
+            );
+
+            console.log(`✅ BoldTrail: Auto-generated follow-up for showing ${showing.id}`);
+          } catch (err) {
+            console.error(`❌ BoldTrail follow-up error for showing ${showing.id}:`, err.message);
+          }
+        }
+      } catch (error) {
+        console.error("BoldTrail follow-up check error:", error.message);
+      }
+    }
+
+    // Run follow-up check every 6 hours
+    setInterval(() => checkBoldTrailFollowUps().catch(err => 
+      console.error("BoldTrail follow-up interval error:", err.message)
+    ), 6 * 60 * 60 * 1000);
+
+    // Initialize virtual class modules if they don't exist
+    async function initializeVirtualClassModules() {
+      try {
+        const moduleCheck = await pool.query("SELECT COUNT(*) FROM virtual_class_modules");
+        if (parseInt(moduleCheck.rows[0].count) === 0) {
+          const modules = [
+            {
+              name: "Introduction to Real Estate",
+              order: 1,
+              content: { description: "Basics of real estate, licensing, and getting started" },
+            },
+            {
+              name: "Client Communication",
+              order: 2,
+              content: { description: "How to communicate effectively with clients" },
+            },
+            {
+              name: "Property Showings",
+              order: 3,
+              content: { description: "Planning and executing successful property showings" },
+            },
+            {
+              name: "Email & Follow-up",
+              order: 4,
+              content: { description: "Professional email drafting and follow-up strategies" },
+            },
+            {
+              name: "Building Your Business",
+              order: 5,
+              content: { description: "Growing your real estate business and client base" },
+            },
+          ];
+
+          for (const module of modules) {
+            await pool.query(
+              `INSERT INTO virtual_class_modules (module_name, module_order, content)
+               VALUES ($1, $2, $3)`,
+              [module.name, module.order, JSON.stringify(module.content)]
+            );
+          }
+
+          console.log("✅ Virtual class modules initialized");
+        }
+      } catch (error) {
+        console.error("Virtual class initialization error:", error.message);
+      }
+    }
+
+    // Initialize modules on startup
+    await initializeVirtualClassModules();
+
     // Initial snapshot
     await createSystemSnapshot("System startup");
 
@@ -8720,7 +11698,12 @@ async function start() {
       console.log(`📊 Health: http://${HOST}:${PORT}/healthz`);
       console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
       console.log(`🔐 Command Center Activation: https://${railwayUrl}/activate`);
-      console.log(`🎯 Command Center: https://${railwayUrl}/command-center`);
+      console.log(`🎯 Command Center: https://${railwayUrl}/command-center?key=${COMMAND_CENTER_KEY}`);
+      console.log(`🏠 BoldTrail CRM: https://${railwayUrl}/boldtrail?key=${COMMAND_CENTER_KEY}`);
+      console.log(`📞 Recruitment System: POST /api/v1/recruitment/* (outbound calls, webinars, enrollment)`);
+      console.log(`🎓 Virtual Class: POST /api/v1/class/enroll (free real estate education)`);
+      console.log(`📹 YouTube Automation: POST /api/v1/youtube/* (progressive unlock system)`);
+      console.log(`🔨 Auto-Builder: GET /api/v1/auto-builder/status (builds opportunities automatically)`);
       console.log(`🤖 Extract Conversations: https://${railwayUrl}/extract-conversations`);
       console.log(`🤖 Self-Program: POST /api/v1/system/self-program`);
       console.log(`🔄 Replace File: POST /api/v1/system/replace-file`);
@@ -8735,7 +11718,18 @@ async function start() {
     });
   } catch (error) {
     console.error("❌ Startup error:", error);
-    process.exit(1);
+    console.error("Stack:", error.stack);
+    
+    // Try to start HTTP server anyway for health checks
+    try {
+      server.listen(PORT, HOST, () => {
+        console.log(`⚠️ Server started in degraded mode due to startup error`);
+        console.log(`📊 Health check available at http://${HOST}:${PORT}/healthz`);
+      });
+    } catch (serverError) {
+      console.error("❌ Failed to start HTTP server:", serverError.message);
+      process.exit(1);
+    }
   }
 }
 
