@@ -1,16 +1,29 @@
 ```json
 {
-  "name": "payment-processor",
-  "version": "1.0.0",
-  "main": "index.js",
-  "dependencies": {
-    "stripe": "^8.0.0",
-    "pg": "^8.5.1",
-    "dotenv": "^10.0.0",
-    "joi": "^17.4.0",
-    "winston": "^3.3.3",
-    "helmet": "^4.6.0",
-    "cors": "^2.8.5"
-  }
+    "name": "code-review-module",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "test": "jest"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "jsonwebtoken": "^8.5.1",
+        "express": "^4.17.1",
+        "dotenv": "^10.0.0",
+        "axios": "^0.21.1",
+        "octokit": "^1.0.0",
+        "sequelize": "^6.3.5",
+        "pg": "^8.5.1",
+        "passport": "^0.4.1",
+        "passport-github2": "^0.1.12",
+        "express-rate-limit": "^5.2.6",
+        "helmet": "^4.6.0",
+        "cors": "^2.8.5"
+    },
+    "devDependencies": {
+        "jest": "^26.6.3",
+        "supertest": "^6.0.1"
+    }
 }
-```
