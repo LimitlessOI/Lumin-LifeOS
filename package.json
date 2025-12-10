@@ -1,28 +1,15 @@
 ```json
 {
-  "name": "royalty-system",
-  "version": "1.0.0",
-  "description": "A system for handling royalty distributions using smart contracts and fiat conversions.",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "npx hardhat test"
-  },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.4.1",
-    "@polygon-hermez/zkevm-js-sdk": "^1.0.0",
-    "ethers": "^5.5.4",
-    "web3": "^1.6.0",
-    "stripe": "^8.0.0",
-    "express": "^4.17.1",
     "pg": "^8.7.1",
     "sequelize": "^6.6.5",
-    "dotenv": "^10.0.0"
+    "uuid": "^8.3.2",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1"
   },
   "devDependencies": {
-    "hardhat": "^2.6.7",
-    "chai": "^4.3.4",
-    "mocha": "^9.1.3"
+    "mocha": "^9.1.2",
+    "chai": "^4.3.4"
   }
 }
 ```
