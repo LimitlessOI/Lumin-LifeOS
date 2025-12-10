@@ -1,16 +1,17 @@
-```sql
-CREATE TABLE code_snippets (
+CREATE TABLE funnels (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    language VARCHAR(50) NOT NULL,
-    code TEXT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE code_generation_sessions (
+CREATE TABLE templates (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    session_data JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(255) NOT NULL,
+    content TEXT,
+    funnel_id INTEGER REFERENCES funnels(id) ON DELETE CASCADE
 );
-```
+
+CREATE INDEX idx_funnel_name ON funnels(name);
+CREATE INDEX idx_template_name ON templates(name);
+--
