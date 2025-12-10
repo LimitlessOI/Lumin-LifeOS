@@ -1,33 +1,13 @@
 ```css
-.dashboard {
+.layout {
+    background: #f0f0f0;
     padding: 20px;
 }
 
-.project-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+.widget {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
-
-.project-card {
-    border: 1px solid #ccc;
-    padding: 10px;
-    width: 200px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
-
-.status-badge {
-    padding: 5px 10px;
-    border-radius: 3px;
-    color: white;
-    font-weight: bold;
-}
-
-.status-badge.completed {
-    background-color: green;
-}
-
-.status-badge.pending {
-    background-color: orange;
-}
+```
