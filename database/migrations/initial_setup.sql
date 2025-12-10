@@ -1,36 +1,24 @@
 ```sql
--- Create table for learning profiles
-CREATE TABLE learning_profiles (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL UNIQUE,
-    preferences JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE chatbot_configs (
+  id SERIAL PRIMARY KEY,
+  config JSONB NOT NULL
 );
 
--- Create table for learning sessions
-CREATE TABLE learning_sessions (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    session_data JSONB,
-    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ended_at TIMESTAMP
+CREATE TABLE chatbot_analytics (
+  id SERIAL PRIMARY KEY,
+  data JSONB NOT NULL
 );
 
--- Create table for content adaptation rules
-CREATE TABLE content_adaptation_rules (
-    id SERIAL PRIMARY KEY,
-    rule_name VARCHAR(255) NOT NULL,
-    rule_definition JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE admin_users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(50) NOT NULL
 );
 
--- Create table for progress metrics
-CREATE TABLE progress_metrics (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    metric_name VARCHAR(255) NOT NULL,
-    metric_value FLOAT NOT NULL,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE system_status_logs (
+  id SERIAL PRIMARY KEY,
+  status TEXT NOT NULL,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
