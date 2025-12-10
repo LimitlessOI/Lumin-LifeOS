@@ -1,0 +1,27 @@
+```css
+.task-editor-ui {
+    padding: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+}
+
+.task-editor-ui h3 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.task-editor-ui ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.task-editor-ui li {
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
+.task-editor-ui .error {
+    color: red;
+}
+```
