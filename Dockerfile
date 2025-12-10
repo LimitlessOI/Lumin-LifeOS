@@ -1,7 +1,7 @@
 ```dockerfile
 FROM node:14
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
@@ -11,5 +11,5 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["node", "src/index.js"]
+CMD ["node", "src/app.js"]
 ```
