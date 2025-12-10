@@ -1,4 +1,5 @@
 ```
-# Stripe configuration
-config/stripe.config.js
+node_modules
+.DS_Store
+.env
 ```
