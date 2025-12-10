@@ -1,37 +1,35 @@
 ```javascript
-import React from 'react';
-import AuthForm from './AuthForm';
-import { useAuth } from '../hooks/useAuth';
-import * as yup from 'yup';
+import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const LoginForm = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const { login } = useAuth();
 
-  const initialValues = {
-    email: '',
-    password: '',
-  };
-
-  const validationSchema = yup.object().shape({
-    email: yup.string().email('Invalid email').required('Email is required'),
-    password: yup.string().required('Password is required'),
-  });
-
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      await login(values.email, values.password);
+      await login(username, password);
+      // Redirect to profile or dashboard
     } catch (error) {
-      alert(error.message);
+      console.error('Login failed', error);
+      // Show error message to user
     }
   };
 
   return (
-    <AuthForm
-      onSubmit={handleSubmit}
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      buttonText="Login"
-    />
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Username</label>
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+      </div>
+      <button type="submit">Login</button>
+    </form>
   );
 };
 
