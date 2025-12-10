@@ -1,22 +1,25 @@
-```json
 {
-  "name": "docker-automation",
+  "name": "lifeos-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Backend for LifeOS AI Council pipeline.",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon src/index.js",
     "test": "jest"
   },
   "dependencies": {
-    "dockerode": "^3.2.1",
-    "js-yaml": "^4.1.0",
-    "handlebars": "^4.7.7",
-    "node-cron": "^3.0.0",
-    "prom-client": "^14.0.0",
-    "winston": "^3.3.3",
-    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "express-validator": "^6.10.0"
+    "pg": "^8.7.1",
+    "dockerode": "^3.3.0",
+    "dotenv": "^10.0.0",
+    "stripe": "^8.174.0",
+    "winston": "^3.3.3",
+    "joi": "^17.4.0",
+    "axios": "^0.24.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "jest": "^27.3.1",
+    "supertest": "^6.1.6"
   }
 }
-```
