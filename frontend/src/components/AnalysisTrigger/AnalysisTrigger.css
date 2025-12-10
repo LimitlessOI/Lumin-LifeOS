@@ -1,0 +1,31 @@
+```css
+.analysis-trigger {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.analysis-trigger form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+.analysis-trigger input {
+    margin-bottom: 10px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.analysis-trigger button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.analysis-result {
+    margin-top: 20px;
+    font-weight: bold;
+}
+```
