@@ -9,19 +9,19 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  feedback Feedback[]
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  sessions     Session[]
 }
 
-model Feedback {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  content   String
-  rating    Int
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+model Session {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  sessionToken String   @unique @map("session_token")
+  createdAt   DateTime  @default(now()) @map("created_at")
 
-  @@index([userId])
-  @@index([rating])
+  user        User      @relation(fields: [userId], references: [id])
 }
 ```
