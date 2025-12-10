@@ -1,40 +1,33 @@
 ```sql
--- Table for storing transaction data
-CREATE TABLE transactions (
+CREATE EXTENSION IF NOT EXISTS timescaledb;
+
+CREATE TABLE fetin_threat_indicators (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL,
-    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    indicator_type VARCHAR(255),
     description TEXT,
-    INDEX(user_id),
-    INDEX(date)
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Table for storing competitor data
-CREATE TABLE competitors (
+CREATE TABLE fetin_federated_models (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    metric_value DECIMAL(10, 2),
-    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX(name)
+    model_name VARCHAR(255),
+    version INTEGER,
+    parameters BYTEA,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Table for storing user data
-CREATE TABLE users (
+CREATE TABLE fetin_inference_logs (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    model_id INTEGER REFERENCES fetin_federated_models(id),
+    input_data JSONB,
+    result JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Table for cash flow analysis
-CREATE TABLE cash_flow_analysis (
+CREATE TABLE fetin_node_registry (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    projected_cash_flow DECIMAL(10, 2),
-    analysis_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX(user_id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    node_name VARCHAR(255),
+    ip_address INET,
+    registered_at TIMESTAMPTZ DEFAULT NOW()
 );
 ```
