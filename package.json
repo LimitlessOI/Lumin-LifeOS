@@ -1,24 +1,26 @@
 ```json
 {
-  "name": "auth-system",
+  "name": "biofeedback-vr-system",
   "version": "1.0.0",
-  "description": "Authentication system for LifeOS AI Council",
+  "description": "A system for biofeedback and VR therapy sessions.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node services/biofeedback-ingestion/index.js",
     "test": "jest"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "express": "^4.18.2",
-    "express-validator": "^6.14.0",
-    "jsonwebtoken": "^9.0.0",
-    "pg": "^8.8.0",
-    "dotenv": "^16.0.3"
+    "express": "^4.17.1",
+    "amqplib": "^0.7.1",
+    "node-bitalino": "^1.0.0",
+    "hrv-analysis": "^1.1.0",
+    "gsr-parser": "^0.1.0",
+    "react": "^17.0.2",
+    "react-three-fiber": "^6.0.0",
+    "chart.js": "^2.9.4",
+    "tensorflow": "^2.7.0"
   },
   "devDependencies": {
-    "jest": "^29.0.0",
-    "supertest": "^6.3.0"
+    "jest": "^27.0.6"
   }
 }
 ```
