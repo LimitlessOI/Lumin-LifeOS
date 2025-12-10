@@ -1,16 +1,19 @@
 ```json
 {
+  "name": "migrations-module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
   "dependencies": {
-    "express": "^4.17.1",
-    "stripe": "^8.0.0",
-    "node-cron": "^2.0.3",
-    "bull": "^3.19.0",
-    "winston": "^3.3.3",
-    "pg": "^8.5.1"
+    "axios": "^0.21.1",
+    "natural": "^0.6.3",
+    "pg": "^8.7.1"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
-    "mocha": "^8.3.2",
+    "jest": "^27.0.6",
     "supertest": "^6.1.3"
   }
 }
