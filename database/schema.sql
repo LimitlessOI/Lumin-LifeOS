@@ -1,19 +1,14 @@
 ```sql
-CREATE TABLE code_review_projects (
+CREATE TABLE clients (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
-    repository_url VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    email VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE code_review_analytics (
+CREATE TABLE client_metadata (
     id SERIAL PRIMARY KEY,
-    project_id INTEGER NOT NULL REFERENCES code_review_projects(id),
-    review_count INTEGER DEFAULT 0,
-    last_reviewed TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    client_id INT REFERENCES clients(id) ON DELETE CASCADE,
+    metadata JSONB NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-```
