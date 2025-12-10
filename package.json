@@ -1,19 +1,16 @@
-```json
 {
   "dependencies": {
-    "bull": "^3.22.0",
-    "uuid": "^8.3.2",
-    "highlight.js": "^10.7.2",
-    "eslint": "^7.32.0",
-    "pyflakes": "^2.3.1",
-    "node-cache": "^5.1.2",
-    "express": "^4.17.1",
-    "sequelize": "^6.6.5",
-    "pg": "^8.6.0"
+    "sequelize": "^6.x.x",
+    "pg": "^8.x.x",
+    "axios": "^0.21.x",
+    "simple-git": "^2.x.x",
+    "joi": "^17.x.x",
+    "bull": "^3.x.x",
+    "jsonwebtoken": "^8.x.x",
+    "express-rate-limit": "^5.x.x"
   },
   "devDependencies": {
-    "supertest": "^6.1.3",
-    "jest": "^27.0.6"
+    "jest": "^26.x.x",
+    "supertest": "^6.x.x"
   }
 }
-```
