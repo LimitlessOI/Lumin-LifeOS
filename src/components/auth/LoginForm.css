@@ -1,0 +1,14 @@
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: 0 auto;
+}
+
+.login-form div {
+    margin-bottom: 10px;
+}
+
+.error {
+    color: red;
+}
