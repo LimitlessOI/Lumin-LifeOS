@@ -1,6 +1,6 @@
 ```json
 {
-  "name": "codegen-service",
+  "name": "ai-auth-system",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,16 +9,21 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "pg": "^8.5.1",
-    "dotenv": "^8.2.0",
-    "jsonwebtoken": "^8.5.1",
+    "axios": "^0.21.1",
+    "openai": "^0.5.0",
+    "joi": "^17.4.0",
     "bcryptjs": "^2.4.3",
-    "bull": "^3.20.1",
-    "redis": "^3.1.2"
+    "jsonwebtoken": "^8.5.1",
+    "eslint": "^7.32.0",
+    "security-analyzer": "^1.0.0",
+    "code-ast-parser": "^2.2.0",
+    "bull": "^4.0.2",
+    "winston": "^3.3.3",
+    "helmet": "^4.6.0",
+    "rate-limiter-flexible": "^2.3.9"
   },
   "devDependencies": {
-    "jest": "^26.6.3",
-    "supertest": "^6.0.1"
+    "jest": "^27.0.6"
   }
 }
 ```
