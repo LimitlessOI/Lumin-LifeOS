@@ -1,0 +1,1 @@
+Self-programming: i am so pissed stop all production you have spend a shit getting nothing build that would make a sin
