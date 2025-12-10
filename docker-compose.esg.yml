@@ -1,0 +1,33 @@
+```yaml
+version: '3.8'
+services:
+  ai_verification_service:
+    image: node:14
+    container_name: ai_verification_service
+    volumes:
+      - ./src/modules/esg:/app
+    working_dir: /app
+    command: ['npm', 'start']
+    depends_on:
+      - db
+
+  blockchain_node:
+    image: ethereum/client-go:stable
+    container_name: blockchain_node
+    command: --dev
+    ports:
+      - "8545:8545"
+
+  db:
+    image: postgres:13
+    container_name: esg_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: esg_database
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+```
