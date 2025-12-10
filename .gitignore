@@ -1,9 +1,6 @@
-# Sensitive files
+```
+node_modules
 .env
-
-# Node.js directories
-node_modules/
-
-# OS generated files
 .DS_Store
-Thumbs.db
+*.log
+```
