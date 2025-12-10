@@ -1,0 +1,9 @@
+```json
+{
+  "aggregation": {
+    "algorithm": "federated_averaging",
+    "rounds": 10,
+    "batch_size": 32
+  }
+}
+```
