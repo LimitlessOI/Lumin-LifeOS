@@ -1,0 +1,17 @@
+```css
+.review-insights {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.insight-card {
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.insight-filters {
+  margin-bottom: 20px;
+}
+```
