@@ -1,29 +1,15 @@
 ```sql
-CREATE TABLE IF NOT EXISTS learning_sessions (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    session_data JSONB NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS knowledge_nodes (
+CREATE TABLE IF NOT EXISTS refresh_tokens (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    node_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS competency_graph (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    graph_data JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS privacy_aggregates (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    aggregate_data JSONB NOT NULL,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    token VARCHAR(255) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
