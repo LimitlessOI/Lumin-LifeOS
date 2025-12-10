@@ -1,14 +1,22 @@
 ```json
 {
-  "dependencies": {
-    "express": "^4.17.1",
-    "pg": "^8.7.1",
-    "express-validator": "^6.12.2",
-    "swagger-ui-express": "^4.2.0"
+  "name": "docker-automation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
   },
-  "devDependencies": {
-    "jest": "^29.0.0",
-    "supertest": "^6.1.0"
+  "dependencies": {
+    "dockerode": "^3.2.1",
+    "js-yaml": "^4.1.0",
+    "handlebars": "^4.7.7",
+    "node-cron": "^3.0.0",
+    "prom-client": "^14.0.0",
+    "winston": "^3.3.3",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.10.0"
   }
 }
 ```
