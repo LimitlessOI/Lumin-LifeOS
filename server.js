@@ -64,10 +64,10 @@ const {
   ALLOWED_ORIGINS = "",
   HOST = "0.0.0.0",
   PORT = 8080,
-  // Spend cap (can be overridden in Railway env). Default: $5/day to prevent bleeding money
-  MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "5",
+  // Spend cap (can be overridden in Railway env). Default: $0/day - NO SPENDING
+  MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "0",
   // Cost shutdown threshold - if spending exceeds this, only use free models
-  COST_SHUTDOWN_THRESHOLD: RAW_COST_SHUTDOWN = "10",
+  COST_SHUTDOWN_THRESHOLD: RAW_COST_SHUTDOWN = "0",
   NODE_ENV = "production",
   RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app",
   // Stripe config
@@ -81,12 +81,12 @@ const {
 // Ensure spend cap is numeric
 const MAX_DAILY_SPEND = Number.isFinite(parseFloat(RAW_MAX_DAILY_SPEND))
   ? parseFloat(RAW_MAX_DAILY_SPEND)
-  : 5; // Default $5/day
+  : 0; // Default $0/day - NO SPENDING
 
 // Cost shutdown threshold - if exceeded, only free models allowed
 const COST_SHUTDOWN_THRESHOLD = Number.isFinite(parseFloat(RAW_COST_SHUTDOWN))
   ? parseFloat(RAW_COST_SHUTDOWN)
-  : 10; // Default $10/day
+  : 0; // Default $0/day - BLOCK ALL PAID MODELS
 
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "")
   .trim() || null;
@@ -2073,13 +2073,21 @@ async function callCouncilMember(member, prompt, options = {}) {
   const today = dayjs().format("YYYY-MM-DD");
   const spend = await getDailySpend(today);
   
-  // COST SHUTDOWN: Block expensive models if spending too much
+  // COST SHUTDOWN: Block ALL paid models if spending disabled
   const memberConfig = COUNCIL_MEMBERS[member];
-  const isExpensive = memberConfig?.tier === "tier1" || (memberConfig?.costPer1M && memberConfig.costPer1M > 0.5);
+  const isPaid = !memberConfig?.isFree && (memberConfig?.costPer1M > 0 || memberConfig?.tier === "tier1");
   
-  if (spend >= COST_SHUTDOWN_THRESHOLD && isExpensive) {
+  // If MAX_DAILY_SPEND is 0, block ALL paid models
+  if (MAX_DAILY_SPEND === 0 && isPaid) {
     throw new Error(
-      `💰 [COST SHUTDOWN] Blocked ${member} - Spending $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}. Use Tier 0 (free/cheap) models only.`
+      `💰 [COST SHUTDOWN] Blocked ${member} - Spending disabled (MAX_DAILY_SPEND=$0). Use free models only (ollama_deepseek, ollama_llama).`
+    );
+  }
+  
+  // Also block if spending threshold reached
+  if (spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
+    throw new Error(
+      `💰 [COST SHUTDOWN] Blocked ${member} - Spending $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}. Use Tier 0 (free) models only.`
     );
   }
   
@@ -4283,12 +4291,17 @@ async function trackLoss(
 
 // ==================== COUNCIL WITH FAILOVER (TIER 0 FIRST) ====================
 async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepseek", requireOversight = false) {
+  // Check if spending is disabled (MAX_DAILY_SPEND = 0)
+  const spendingDisabled = MAX_DAILY_SPEND === 0;
+  
   // Check if we're in cost shutdown mode (spending too much)
   const today = dayjs().format("YYYY-MM-DD");
   const currentSpend = await getDailySpend(today);
-  const inCostShutdown = currentSpend >= COST_SHUTDOWN_THRESHOLD;
+  const inCostShutdown = currentSpend >= COST_SHUTDOWN_THRESHOLD || spendingDisabled;
   
-  if (inCostShutdown) {
+  if (spendingDisabled) {
+    console.warn(`💰 [COST SHUTDOWN] Spending DISABLED (MAX_DAILY_SPEND=$0) - Only using FREE models`);
+  } else if (inCostShutdown) {
     console.warn(`💰 [COST SHUTDOWN] Spending $${currentSpend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} - Only using free/cheap models`);
   }
 
@@ -4301,13 +4314,18 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
     return now >= retryAt;
   });
 
-  // In cost shutdown: ONLY use Tier 0 (free/cheap) models
+  // In cost shutdown: ONLY use FREE models (no paid models at all)
   if (inCostShutdown) {
     availableMembers = availableMembers.filter((m) => {
       const member = COUNCIL_MEMBERS[m];
-      return member.tier === "tier0" || member.isFree || (member.costPer1M && member.costPer1M < 0.5);
+      return member.isFree === true; // Only truly free models
     });
-    console.log(`💰 [COST SHUTDOWN] Filtered to Tier 0 only: ${availableMembers.join(", ")}`);
+    console.log(`💰 [COST SHUTDOWN] Filtered to FREE models only: ${availableMembers.join(", ")}`);
+    
+    if (availableMembers.length === 0) {
+      console.error("❌ [COST SHUTDOWN] No free models available. System cannot proceed without spending.");
+      return "System is in cost shutdown mode and no free models are available. Please enable Ollama or set MAX_DAILY_SPEND > 0.";
+    }
   } else if (!requireOversight) {
     // Normal mode: Prefer Tier 0 (cheap) models first, Tier 1 (expensive) only if needed
     const tier0Members = availableMembers.filter((m) => COUNCIL_MEMBERS[m].tier === "tier0");
