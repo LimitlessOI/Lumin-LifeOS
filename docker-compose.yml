@@ -1,24 +1,25 @@
-```yaml
 version: '3.8'
+
 services:
   app:
     build: .
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgres://user:pass@db:5432/coderequest
-      - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=your_jwt_secret
-      - OPENAI_API_KEY=your_openai_api_key
+      - NODE_ENV=development
+    volumes:
+      - .:/usr/src/app
     depends_on:
       - db
-      - redis
+
   db:
-    image: postgres
+    image: postgres:13
     environment:
       POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: coderequest
-  redis:
-    image: redis
-```
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: lifeos_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
