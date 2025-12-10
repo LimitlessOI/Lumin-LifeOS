@@ -1,26 +1,21 @@
 ```json
 {
-  "name": "biofeedback-vr-system",
+  "name": "reputation-service",
   "version": "1.0.0",
-  "description": "A system for biofeedback and VR therapy sessions.",
   "main": "index.js",
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^0.27.2",
+    "ethers": "^5.6.9",
+    "@openzeppelin/contracts": "^4.6.0",
+    "pg": "^8.7.3"
+  },
   "scripts": {
-    "start": "node services/biofeedback-ingestion/index.js",
+    "start": "node index.js",
     "test": "jest"
   },
-  "dependencies": {
-    "express": "^4.17.1",
-    "amqplib": "^0.7.1",
-    "node-bitalino": "^1.0.0",
-    "hrv-analysis": "^1.1.0",
-    "gsr-parser": "^0.1.0",
-    "react": "^17.0.2",
-    "react-three-fiber": "^6.0.0",
-    "chart.js": "^2.9.4",
-    "tensorflow": "^2.7.0"
-  },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "jest": "^28.1.0"
   }
 }
 ```
