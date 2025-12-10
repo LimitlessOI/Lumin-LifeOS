@@ -1,31 +1,41 @@
 ```sql
-CREATE TABLE biohybrid_panels (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    panel_id VARCHAR(255) UNIQUE NOT NULL,
-    manufacture_date TIMESTAMP NOT NULL,
-    status VARCHAR(50) NOT NULL
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE panel_sensor_data (
+CREATE TABLE cognitive_sessions (
     id SERIAL PRIMARY KEY,
-    panel_id VARCHAR(255) REFERENCES biohybrid_panels(panel_id),
-    sensor_type VARCHAR(50) NOT NULL,
+    user_id INT REFERENCES users(id),
+    session_data JSONB NOT NULL,
+    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ended_at TIMESTAMP
+);
+
+CREATE TABLE resilience_metrics (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    metric_data JSONB NOT NULL,
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE team_subscriptions (
+    id SERIAL PRIMARY KEY,
+    team_name VARCHAR(100) NOT NULL,
+    stripe_customer_id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE wearable_data (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
     data JSONB NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE construction_projects (
-    id SERIAL PRIMARY KEY,
-    project_id VARCHAR(255) UNIQUE NOT NULL,
-    start_date TIMESTAMP NOT NULL,
-    end_date TIMESTAMP,
-    status VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE material_provenance (
-    id SERIAL PRIMARY KEY,
-    material_id VARCHAR(255) UNIQUE NOT NULL,
-    source VARCHAR(255) NOT NULL,
-    details JSONB NOT NULL
-);
+CREATE INDEX idx_user_id ON cognitive_sessions(user_id);
+CREATE INDEX idx_user_id ON resilience_metrics(user_id);
+CREATE INDEX idx_user_id ON wearable_data(user_id);
 ```
