@@ -2035,15 +2035,6 @@ const ALERT_PHONE =
   process.env.ADMIN_PHONE ||
   process.env.COMMAND_CENTER_PHONE ||
   null;
-// Prevent alert spam
-let alertInProgress = false;
-
-// Alert destination (set one of these)
-const ALERT_PHONE =
-  process.env.ALERT_PHONE ||
-  process.env.ADMIN_PHONE ||
-  process.env.COMMAND_CENTER_PHONE ||
-  null;
 
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 async function callCouncilMember(member, prompt, options = {}) {
