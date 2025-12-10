@@ -1,27 +1,39 @@
 ```sql
-CREATE TABLE clients (
+CREATE TABLE delivery_swarms (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    contact_email VARCHAR(255),
-    status VARCHAR(50),
+    status VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE projects (
+CREATE TABLE delivery_stations (
     id SERIAL PRIMARY KEY,
-    client_id INT REFERENCES clients(id),
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    status VARCHAR(50),
-    start_date DATE,
-    end_date DATE,
+    location GEOGRAPHY NOT NULL,
+    capacity INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE project_updates (
+CREATE TABLE delivery_routes (
     id SERIAL PRIMARY KEY,
-    project_id INT REFERENCES projects(id),
-    update_text TEXT NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    swarm_id INT REFERENCES delivery_swarms(id),
+    station_id INT REFERENCES delivery_stations(id),
+    route_data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE delivery_payloads (
+    id SERIAL PRIMARY KEY,
+    swarm_id INT REFERENCES delivery_swarms(id),
+    weight DECIMAL(10, 2) NOT NULL,
+    dimensions JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE delivery_demand_forecasts (
+    id SERIAL PRIMARY KEY,
+    station_id INT REFERENCES delivery_stations(id),
+    forecast_data JSONB NOT NULL,
+    forecast_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
