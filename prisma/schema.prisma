@@ -1,28 +1,20 @@
 ```prisma
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+model WorkflowFeedback {
+  id          String   @id @default(uuid())
+  userId      String
+  workflowId  String
+  feedback    String
+  createdAt   DateTime @default(now())
+  metrics     FeedbackMetrics @relation(fields: [metricsId], references: [id])
+  metricsId   String
+
+  @@index([userId, workflowId])
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Session {
-  id        String   @id @default(uuid())
-  userId    String
-  token     String
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-
-  @@index([userId])
+model FeedbackMetrics {
+  id          String   @id @default(uuid())
+  rating      Int
+  comments    String?
+  feedback    WorkflowFeedback?
 }
 ```
