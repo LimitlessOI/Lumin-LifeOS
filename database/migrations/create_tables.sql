@@ -1,31 +1,21 @@
 ```sql
-CREATE TABLE skill_forge_users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(255) UNIQUE NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE chat_sessions (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE learning_sessions (
-  id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES skill_forge_users(id),
-  session_data JSONB,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE chat_messages (
+    id SERIAL PRIMARY KEY,
+    session_id INT NOT NULL REFERENCES chat_sessions(id),
+    message TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE credentials (
-  id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES skill_forge_users(id),
-  credential_data JSONB,
-  mint_address VARCHAR(255) UNIQUE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE market_demand (
-  id SERIAL PRIMARY KEY,
-  skill_name VARCHAR(255),
-  demand_level INT,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE analytics_metrics (
+    id SERIAL PRIMARY KEY,
+    metric_name VARCHAR(255) NOT NULL,
+    metric_value FLOAT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
