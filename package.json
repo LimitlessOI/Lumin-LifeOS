@@ -1,15 +1,26 @@
 ```json
 {
+  "name": "funnel-service",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest"
+  },
   "dependencies": {
-    "pg": "^8.x",
-    "express-validator": "^6.x",
-    "express": "^4.x",
-    "uuid": "^8.x",
-    "node-cron": "^3.x"
+    "bull": "^4.0.2",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "joi": "^17.4.0",
+    "pg": "^8.7.1",
+    "winston": "^3.3.3",
+    "@sendgrid/mail": "^7.4.2",
+    "stripe": "^8.174.0",
+    "node-cron": "^3.0.0"
   },
   "devDependencies": {
-    "jest": "^27.x",
-    "supertest": "^6.x"
+    "jest": "^27.0.6",
+    "supertest": "^6.1.3"
   }
 }
 ```
