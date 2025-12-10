@@ -1,0 +1,12 @@
+```sql
+CREATE TABLE payments (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    currency VARCHAR(3) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    stripe_payment_id VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
