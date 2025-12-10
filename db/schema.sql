@@ -1,40 +1,31 @@
-CREATE TABLE users_skills (
-    user_id SERIAL PRIMARY KEY,
-    skill_name VARCHAR(255) NOT NULL,
-    proficiency_level INT NOT NULL
-);
-
-CREATE TABLE learning_paths (
-    path_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users_skills(user_id),
-    path_name VARCHAR(255) NOT NULL,
+```sql
+CREATE TABLE predictive_maintenance_assets (
+    asset_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE learning_sessions (
-    session_id SERIAL PRIMARY KEY,
-    path_id INT NOT NULL REFERENCES learning_paths(path_id),
-    session_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    duration INT NOT NULL
+CREATE TABLE maintenance_predictions (
+    prediction_id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES predictive_maintenance_assets(asset_id),
+    prediction_date TIMESTAMP NOT NULL,
+    prediction_result JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE real_world_projects (
-    project_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users_skills(user_id),
-    project_name VARCHAR(255) NOT NULL,
-    completion_status BOOLEAN DEFAULT FALSE
+CREATE TABLE maintenance_strategies (
+    strategy_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    parameters JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE metacognitive_logs (
-    log_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users_skills(user_id),
-    log_entry TEXT NOT NULL,
-    entry_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE blockchain_maintenance_records (
+    record_id SERIAL PRIMARY KEY,
+    asset_id INT REFERENCES predictive_maintenance_assets(asset_id),
+    transaction_hash VARCHAR(255),
+    record_data JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE community_benchmarks (
-    benchmark_id SERIAL PRIMARY KEY,
-    skill_name VARCHAR(255) NOT NULL,
-    average_score FLOAT NOT NULL
-);
---
+```
