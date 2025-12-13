@@ -156,8 +156,24 @@ export class OllamaInstaller {
 
   /**
    * Pull required models
+   * Default: All open source models used by Tier 0 Council
    */
-  async pullModels(models = ['llama3.2:1b', 'phi3:mini']) {
+  async pullModels(models = [
+    // Lightweight & Fast
+    'llama3.2:1b',
+    'phi3:mini',
+    // Code Generation Specialists
+    'deepseek-coder:latest',
+    'deepseek-coder-v2:latest',
+    'deepseek-coder:33b',
+    'qwen2.5-coder:32b-instruct',
+    'codestral:latest',
+    // Reasoning & Analysis Specialists
+    'deepseek-v3:latest',
+    'llama3.3:70b-instruct-q4_0',
+    'qwen2.5:72b-q4_0',
+    'gemma2:27b-it-q4_0',
+  ]) {
     const check = await this.checkOllamaAvailable();
     if (!check.available) {
       console.log('⚠️ [OLLAMA] Cannot pull models: Ollama not available');

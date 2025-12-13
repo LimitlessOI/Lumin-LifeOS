@@ -34,6 +34,64 @@ const TIER0_MODELS = {
     cost: 0,
     provider: "ollama",
   },
+  // Code Generation Specialists
+  ollama_deepseek_coder_v2: {
+    name: "DeepSeek Coder V2",
+    endpoint: process.env.OLLAMA_ENDPOINT || "http://localhost:11434",
+    model: "deepseek-coder-v2:latest",
+    cost: 0,
+    provider: "ollama",
+  },
+  ollama_deepseek_coder_33b: {
+    name: "DeepSeek Coder 33B",
+    endpoint: process.env.OLLAMA_ENDPOINT || "http://localhost:11434",
+    model: "deepseek-coder:33b",
+    cost: 0,
+    provider: "ollama",
+  },
+  ollama_qwen_coder_32b: {
+    name: "Qwen2.5-Coder-32B",
+    endpoint: process.env.OLLAMA_ENDPOINT || "http://localhost:11434",
+    model: "qwen2.5-coder:32b-instruct",
+    cost: 0,
+    provider: "ollama",
+  },
+  ollama_codestral: {
+    name: "Mistral Codestral 25.01",
+    endpoint: process.env.OLLAMA_ENDPOINT || "http://localhost:11434",
+    model: "codestral:latest",
+    cost: 0,
+    provider: "ollama",
+  },
+  // Reasoning & Analysis Specialists
+  ollama_deepseek_v3: {
+    name: "DeepSeek V3",
+    endpoint: process.env.OLLAMA_ENDPOINT || "http://localhost:11434",
+    model: "deepseek-v3:latest",
+    cost: 0,
+    provider: "ollama",
+  },
+  ollama_llama_3_3_70b: {
+    name: "Llama 3.3 70B",
+    endpoint: process.env.OLLAMA_ENDPOINT || "http://localhost:11434",
+    model: "llama3.3:70b-instruct-q4_0",
+    cost: 0,
+    provider: "ollama",
+  },
+  ollama_qwen_2_5_72b: {
+    name: "Qwen 2.5 72B",
+    endpoint: process.env.OLLAMA_ENDPOINT || "http://localhost:11434",
+    model: "qwen2.5:72b-q4_0",
+    cost: 0,
+    provider: "ollama",
+  },
+  ollama_gemma_2_27b: {
+    name: "Gemma 2 27B",
+    endpoint: process.env.OLLAMA_ENDPOINT || "http://localhost:11434",
+    model: "gemma2:27b-it-q4_0",
+    cost: 0,
+    provider: "ollama",
+  },
   // Cheap cloud models
   deepseek_cloud: {
     name: "DeepSeek Cloud",
@@ -56,24 +114,44 @@ const TIER0_MODELS = {
 // Drone types for specialized tasks
 const DRONE_TYPES = {
   research: {
-    models: ['ollama_llama', 'gemini_flash'],
+    models: ['ollama_qwen_2_5_72b', 'ollama_llama_3_3_70b', 'ollama_llama', 'gemini_flash'],
     description: 'Research and data gathering',
   },
   code: {
-    models: ['ollama_deepseek', 'deepseek_cloud'],
+    models: ['ollama_deepseek_coder_v2', 'ollama_deepseek_coder_33b', 'ollama_qwen_coder_32b', 'ollama_deepseek', 'deepseek_cloud'],
     description: 'Code generation and analysis',
   },
+  code_review: {
+    models: ['ollama_deepseek_coder_v2', 'ollama_deepseek_coder_33b', 'ollama_codestral'],
+    description: 'Code review and debugging',
+  },
+  fast_code: {
+    models: ['ollama_codestral', 'ollama_phi', 'ollama_deepseek'],
+    description: 'Fast code snippets and quick code tasks',
+  },
+  reasoning: {
+    models: ['ollama_deepseek_v3', 'ollama_llama_3_3_70b', 'ollama_qwen_2_5_72b', 'ollama_gemma_2_27b'],
+    description: 'Complex reasoning and strategic decisions',
+  },
+  math: {
+    models: ['ollama_deepseek_v3', 'ollama_qwen_2_5_72b', 'ollama_llama_3_3_70b'],
+    description: 'Mathematical tasks and calculations',
+  },
   analysis: {
-    models: ['ollama_phi', 'gemini_flash'],
+    models: ['ollama_gemma_2_27b', 'ollama_llama_3_3_70b', 'ollama_phi', 'gemini_flash'],
     description: 'Data analysis and summarization',
   },
   translation: {
-    models: ['ollama_llama', 'gemini_flash'],
+    models: ['ollama_qwen_2_5_72b', 'ollama_llama_3_3_70b', 'ollama_llama', 'gemini_flash'],
     description: 'Language translation and conversion',
   },
   monitoring: {
-    models: ['ollama_phi'],
+    models: ['ollama_phi', 'ollama_llama'],
     description: 'System monitoring and alerts',
+  },
+  quick: {
+    models: ['ollama_llama', 'ollama_phi', 'ollama_codestral'],
+    description: 'Quick, simple tasks',
   },
 };
 

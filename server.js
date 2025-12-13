@@ -35,6 +35,9 @@ let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfi
 // Knowledge Base System
 let KnowledgeBase, FileCleanupAnalyzer;
 
+// Open Source Council Router
+let OpenSourceCouncil, openSourceCouncil;
+
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
 
@@ -1555,6 +1558,137 @@ const COUNCIL_MEMBERS = {
     specialties: ["infrastructure", "testing", "performance", "development"],
     useLocal: DEEPSEEK_BRIDGE_ENABLED === "true",
     isFree: false,
+  },
+  // TIER 0 - CODE GENERATION SPECIALISTS (Best for coding tasks)
+  ollama_deepseek_coder_v2: {
+    name: "DeepSeek Coder V2 (Local)",
+    model: "deepseek-coder-v2:latest",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Code Generation Specialist",
+    focus: "code generation, code review, debugging, infrastructure, production code",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["code", "code_review", "debugging", "infrastructure", "development"],
+    isFree: true,
+    isLocal: true,
+    priority: "high", // Best for code tasks
+  },
+  ollama_deepseek_coder_33b: {
+    name: "DeepSeek Coder 33B (Local)",
+    model: "deepseek-coder:33b",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Code Generation Specialist (Large)",
+    focus: "complex code generation, advanced algorithms, production code",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["code", "complex_algorithms", "production_code"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_qwen_coder_32b: {
+    name: "Qwen2.5-Coder-32B (Local)",
+    model: "qwen2.5-coder:32b-instruct",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Code Generation Specialist",
+    focus: "production code generation, complex algorithms, code understanding",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["code", "code_generation", "algorithms", "production"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_codestral: {
+    name: "Mistral Codestral 25.01 (Local)",
+    model: "codestral:latest",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Fast Code Generation",
+    focus: "quick code snippets, IDE integration, FIM tasks, fast responses",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["code", "fast_code", "snippets", "fim"],
+    isFree: true,
+    isLocal: true,
+  },
+  // TIER 0 - REASONING & ANALYSIS SPECIALISTS
+  ollama_deepseek_v3: {
+    name: "DeepSeek V3 (Local)",
+    model: "deepseek-v3:latest",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Complex Reasoning Specialist",
+    focus: "complex reasoning, mathematical tasks, strategic decisions, exceptional reasoning",
+    maxTokens: 128000, // 128K context
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["reasoning", "math", "strategic_decisions", "complex_analysis"],
+    isFree: true,
+    isLocal: true,
+    priority: "high", // Best for reasoning
+  },
+  ollama_llama_3_3_70b: {
+    name: "Llama 3.3 70B (Local)",
+    model: "llama3.3:70b-instruct-q4_0",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "High-Quality Reasoning",
+    focus: "complex reasoning, strategic decisions, general tasks, multilingual",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["reasoning", "strategic_decisions", "general", "multilingual"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_qwen_2_5_72b: {
+    name: "Qwen 2.5 72B (Local)",
+    model: "qwen2.5:72b-q4_0",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Research & Analysis Specialist",
+    focus: "research, analysis, mathematical tasks, multilingual, document understanding",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["research", "analysis", "math", "multilingual", "documents"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_gemma_2_27b: {
+    name: "Gemma 2 27B (Local)",
+    model: "gemma2:27b-it-q4_0",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Balanced Reasoning",
+    focus: "on-device reasoning, balanced performance, general tasks",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["reasoning", "general", "balanced"],
+    isFree: true,
+    isLocal: true,
+  },
+  // TIER 0 - LIGHTWEIGHT & FAST
+  ollama_phi3: {
+    name: "Phi-3 Mini (Local)",
+    model: "phi3:mini",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Lightweight Assistant",
+    focus: "light tasks, monitoring, simple analysis, fast responses",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["light_tasks", "monitoring", "simple_analysis"],
+    isFree: true,
+    isLocal: true,
   },
   // TIER 1 - OVERSIGHT ONLY (Expensive - Only for validation)
   chatgpt: {
@@ -4290,7 +4424,7 @@ async function trackLoss(
 }
 
 // ==================== COUNCIL WITH FAILOVER (TIER 0 FIRST) ====================
-async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepseek", requireOversight = false) {
+async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepseek", requireOversight = false, options = {}) {
   // Check if spending is disabled (MAX_DAILY_SPEND = 0)
   const spendingDisabled = MAX_DAILY_SPEND === 0;
   
@@ -4305,6 +4439,37 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
     console.warn(`💰 [COST SHUTDOWN] Spending $${currentSpend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} - Only using free/cheap models`);
   }
 
+  // Use Open Source Council Router if available and not requiring oversight
+  if (openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil !== false)) {
+    try {
+      // Determine task complexity
+      const promptLength = prompt.length;
+      const isComplex = promptLength > 2000 || 
+                       options.complexity === "complex" || 
+                       options.complexity === "critical" ||
+                       options.requireConsensus === true;
+      
+      const routerOptions = {
+        taskType: options.taskType,
+        requireConsensus: isComplex || options.requireConsensus,
+        consensusThreshold: options.consensusThreshold || 2,
+        complexity: options.complexity || (isComplex ? "complex" : "medium"),
+        ...options,
+      };
+      
+      const result = await openSourceCouncil.routeTask(prompt, routerOptions);
+      
+      if (result.success) {
+        console.log(`✅ [OSC] Got response from ${result.model}${result.consensus ? " (consensus)" : ""} (${result.taskType})`);
+        return result.response;
+      }
+    } catch (error) {
+      console.warn(`⚠️ [OSC] Router failed: ${error.message}, falling back to standard failover`);
+      // Fall through to standard failover logic
+    }
+  }
+
+  // Standard failover logic (fallback or when oversight required)
   const members = Object.keys(COUNCIL_MEMBERS);
 
   // Skip members currently on cooldown
@@ -4350,7 +4515,7 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
   const errors = [];
   for (const member of candidates) {
     try {
-      const response = await callCouncilMember(member, prompt);
+      const response = await callCouncilMember(member, prompt, options);
       if (response) {
         console.log(`✅ Got response from ${member} (Tier ${COUNCIL_MEMBERS[member]?.tier || "unknown"})`);
         return response;
@@ -4850,6 +5015,7 @@ async function initializeTwoTierSystem() {
     const whiteLabelModule = await import("./core/white-label.js");
     const knowledgeModule = await import("./core/knowledge-base.js");
     const cleanupModule = await import("./core/file-cleanup-analyzer.js");
+    const openSourceCouncilModule = await import("./core/open-source-council.js");
     
     Tier0Council = tier0Module.Tier0Council;
     Tier1Council = tier1Module.Tier1Council;
@@ -4858,10 +5024,12 @@ async function initializeTwoTierSystem() {
     WhiteLabelConfig = whiteLabelModule.WhiteLabelConfig;
     KnowledgeBase = knowledgeModule.KnowledgeBase;
     FileCleanupAnalyzer = cleanupModule.FileCleanupAnalyzer;
+    OpenSourceCouncil = openSourceCouncilModule.OpenSourceCouncil;
 
     tier0Council = new Tier0Council(pool);
     tier1Council = new Tier1Council(pool, callCouncilMember);
     modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
+    openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
     outreachAutomation = new OutreachAutomation(
       pool,
       modelRouter,
@@ -8353,6 +8521,64 @@ app.get("/api/v1/youtube/project/:projectId", requireKey, async (req, res) => {
     });
   } catch (error) {
     console.error("YouTube project fetch error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== VIDEO EDITING COUNCIL ====================
+// Open source video editing tools working together like an AI council
+let VideoEditingCouncil, videoEditingCouncil;
+
+app.post("/api/v1/video/process", requireKey, async (req, res) => {
+  try {
+    if (!videoEditingCouncil) {
+      const { VideoEditingCouncil: VEC } = await import("./core/video-editing-council.js");
+      videoEditingCouncil = new VEC(pool, callCouncilMember);
+    }
+
+    const { task, inputVideo, inputImage, script, options = {} } = req.body;
+
+    if (!task) {
+      return res.status(400).json({ ok: false, error: "task required" });
+    }
+
+    console.log(`🎬 [VIDEO COUNCIL] Processing: ${task}`);
+
+    const result = await videoEditingCouncil.processRequest({
+      task,
+      inputVideo,
+      inputImage,
+      script,
+      options,
+    });
+
+    res.json({
+      ok: result.success !== false,
+      ...result,
+    });
+  } catch (error) {
+    console.error("Video editing council error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/video/council/status", requireKey, async (req, res) => {
+  try {
+    if (!videoEditingCouncil) {
+      const { VideoEditingCouncil: VEC } = await import("./core/video-editing-council.js");
+      videoEditingCouncil = new VEC(pool, callCouncilMember);
+    }
+
+    const status = await videoEditingCouncil.getStatus();
+
+    res.json({
+      ok: true,
+      members: status,
+      totalMembers: Object.keys(status).length,
+      availableMembers: Object.values(status).filter(m => m.available).length,
+    });
+  } catch (error) {
+    console.error("Video council status error:", error);
     res.status(500).json({ ok: false, error: error.message });
   }
 });
