@@ -1,0 +1,730 @@
+{
+  "timestamp": "2025-12-14T02:22:06.934Z",
+  "filesAnalyzed": 418,
+  "filesWithIssues": 42,
+  "totalIssues": 90,
+  "errors": 2,
+  "warnings": 88,
+  "issues": [
+    {
+      "file": "core/ai-account-bot.js",
+      "line": 14,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/api-cost-savings-revenue.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/auto-builder.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/auto-queue-manager.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/auto-queue-manager.js",
+      "line": 40,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember,"
+    },
+    {
+      "file": "core/auto-schema-fixer.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/blind-spot-detection-drones.js",
+      "line": 12,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/business-center.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/business-duplication.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/code-services.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/conversation-extractor-bot.js",
+      "line": 22,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/enhanced-consensus-protocol.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/enhanced-conversation-scraper.js",
+      "line": 19,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/enhanced-idea-generator.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/enhanced-income-drone.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/enhanced-income-drone.js",
+      "line": 134,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "if (!this.callCouncilMember) {"
+    },
+    {
+      "file": "core/enhanced-income-drone.js",
+      "line": 135,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "console.error(`❌ [AFFILIATE DRONE] ${droneId} - callCouncilMember not available`);"
+    },
+    {
+      "file": "core/enhanced-income-drone.js",
+      "line": 231,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "if (!this.callCouncilMember) {"
+    },
+    {
+      "file": "core/enhanced-income-drone.js",
+      "line": 232,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "console.error(`❌ [CONTENT DRONE] ${droneId} - callCouncilMember not available`);"
+    },
+    {
+      "file": "core/game-generator.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/idea-to-implementation-pipeline.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/log-monitor.js",
+      "line": 23,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/log-monitor.js",
+      "line": 24,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.schemaFixer = new AutoSchemaFixer(pool, callCouncilMember);"
+    },
+    {
+      "file": "core/log-monitor.js",
+      "line": 680,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "if (this.callCouncilMember) {"
+    },
+    {
+      "file": "core/makecom-generator.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/marketing-agency.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/marketing-research-system.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/ollama-installer.js",
+      "line": 18,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/open-source-council.js",
+      "line": 235,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/opportunity-executor.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/outreach-automation.js",
+      "line": 16,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/post-upgrade-checker.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/post-upgrade-checker.js",
+      "line": 72,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "if (unfixed.length > 0 && this.callCouncilMember) {"
+    },
+    {
+      "file": "core/scalability-architecture.js",
+      "line": 12,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/self-builder.js",
+      "line": 21,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/self-funding-system.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/task-completion-tracker.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/task-improvement-reporter.js",
+      "line": 12,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/tier1-council.js",
+      "line": 53,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMemberFn;"
+    },
+    {
+      "file": "core/triage-priority-system.js",
+      "line": 12,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/user-simulation.js",
+      "line": 12,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/vapi-integration.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/video-editing-council.js",
+      "line": 93,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/video-generator.js",
+      "line": 9,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "core/web-scraper.js",
+      "line": 11,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "scripts/debug-all-files.js",
+      "line": 47,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "pattern: /callCouncilMember\\([^)]+\\)(?!\\s*\\.(then|catch))/,"
+    },
+    {
+      "file": "scripts/debug-all-files.js",
+      "line": 53,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "pattern: /^\\s*[^=]*callCouncilMember\\([^)]+\\)(?!\\s*;?\\s*$)/m,"
+    },
+    {
+      "file": "scripts/debug-all-files.js",
+      "line": 95,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "if (line.includes('callCouncilMember')) {"
+    },
+    {
+      "file": "scripts/debug-all-files.js",
+      "line": 119,
+      "type": "opt_out_logic",
+      "severity": "error",
+      "message": "Opt-out logic detected (should use === true for opt-in)",
+      "code": "if (line.includes('useOpenSourceCouncil') && line.includes('!== false')) {"
+    },
+    {
+      "file": "scripts/validate-model-keys.js",
+      "line": 51,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "if (line.includes('callCouncilMember')) {"
+    },
+    {
+      "file": "scripts/validate-model-keys.js",
+      "line": 87,
+      "type": "opt_out_logic",
+      "severity": "error",
+      "message": "Opt-out logic detected (should use === true for opt-in)",
+      "code": "if (line.includes('useOpenSourceCouncil') && line.includes('!== false')) {"
+    },
+    {
+      "file": "server.js",
+      "line": 2202,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "async function callCouncilMember(member, prompt, options = {}) {"
+    },
+    {
+      "file": "server.js",
+      "line": 2204,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2202',message:'callCouncilMember entry',data:{member,promptLength:prompt?.length,options:JSON.stringify(options)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});"
+    },
+    {
+      "file": "server.js",
+      "line": 2806,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "callCouncilMember(\"chatgpt\", blindSpotPrompt, { checkBlindSpots: true }),"
+    },
+    {
+      "file": "server.js",
+      "line": 2807,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "callCouncilMember(\"grok\", blindSpotPrompt, { checkBlindSpots: true }),"
+    },
+    {
+      "file": "server.js",
+      "line": 5053,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "tier1Council = new Tier1Council(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 5055,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);"
+    },
+    {
+      "file": "server.js",
+      "line": 5060,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "callCouncilMember"
+    },
+    {
+      "file": "server.js",
+      "line": 5075,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "logMonitor = new LogMonitor(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 5103,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "postUpgradeChecker = new PostUpgradeChecker(logMonitor, callCouncilMember, pool);"
+    },
+    {
+      "file": "server.js",
+      "line": 5152,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "vapiIntegration = new vapiModule.VapiIntegration(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 5163,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "incomeDroneSystem = new EnhancedIncomeDrone(pool, callCouncilMember, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5183,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "opportunityExecutor = new executorModule.OpportunityExecutor(pool, callCouncilMember, incomeDroneSystem);"
+    },
+    {
+      "file": "server.js",
+      "line": 5199,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "autoBuilder = new builderModule.AutoBuilder(pool, callCouncilMember, executionQueue);"
+    },
+    {
+      "file": "server.js",
+      "line": 5214,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "businessCenter = new businessCenterModule.BusinessCenter(pool, callCouncilMember, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5224,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "gameGenerator = new gameGeneratorModule.GameGenerator(pool, callCouncilMember, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5233,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "businessDuplication = new businessDupModule.BusinessDuplication(pool, callCouncilMember, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5242,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "codeServices = new codeServicesModule.CodeServices(pool, callCouncilMember, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5251,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "makeComGenerator = new makeComModule.MakeComGenerator(pool, callCouncilMember, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5269,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "selfFundingSystem = new selfFundingModule.SelfFundingSystem(pool, callCouncilMember, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5279,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "marketingResearch = new marketingResearchModule.MarketingResearchSystem(pool, callCouncilMember, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5289,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "marketingAgency = new marketingAgencyModule.MarketingAgency(pool, callCouncilMember, modelRouter, marketingResearch);"
+    },
+    {
+      "file": "server.js",
+      "line": 5299,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "webScraper = new webScraperModule.WebScraper(pool, callCouncilMember, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5311,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "callCouncilMember"
+    },
+    {
+      "file": "server.js",
+      "line": 5325,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "callCouncilMember,"
+    },
+    {
+      "file": "server.js",
+      "line": 5376,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "selfBuilder = new builderModule.SelfBuilder(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 5418,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "autoQueueManager = new AutoQueueManager(pool, callCouncilMember, executionQueue, modelRouter);"
+    },
+    {
+      "file": "server.js",
+      "line": 5436,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember,"
+    },
+    {
+      "file": "server.js",
+      "line": 5455,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "aiAccountBot = new AIAccountBot(pool, knowledgeBase, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 5465,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "conversationExtractor = new ConversationExtractorBot(pool, knowledgeBase, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 5526,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "taskImprovementReporter = new TaskImprovementReporter(pool, tier0Council, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 5536,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "userSimulation = new UserSimulation(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 6806,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "vapiIntegration = new vapiModule.VapiIntegration(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 6821,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "vapiIntegration = new vapiModule.VapiIntegration(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 6837,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "vapiIntegration = new vapiModule.VapiIntegration(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 8559,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "videoEditingCouncil = new VEC(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 8592,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "videoEditingCouncil = new VEC(pool, callCouncilMember);"
+    },
+    {
+      "file": "server.js",
+      "line": 11984,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "callCouncilMember,"
+    },
+    {
+      "file": "services/conflict-arbitrator/index.js",
+      "line": 13,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    },
+    {
+      "file": "services/idea-engine/index.js",
+      "line": 23,
+      "type": "possible_missing_await",
+      "severity": "warning",
+      "message": "Possible missing await on callCouncilMember",
+      "code": "this.callCouncilMember = callCouncilMember;"
+    }
+  ]
+}

@@ -187,7 +187,9 @@ Be neutral, empathetic, and constructive. Don't take sides.`;
       );
     } else {
       // Single model for speed
-      const primaryModel = models[0]?.name || 'deepseek-v3';
+      // Map model registry name to COUNCIL_MEMBERS key
+      const modelName = models[0]?.name;
+      const primaryModel = this.mapModelNameToCouncilKey(modelName) || 'ollama_deepseek_v3';
       return await this.callCouncilMember(primaryModel, prompt, {
         useOpenSourceCouncil: true,
         taskType: 'reasoning',
@@ -196,12 +198,31 @@ Be neutral, empathetic, and constructive. Don't take sides.`;
   }
 
   /**
+   * Map model registry name to COUNCIL_MEMBERS key
+   */
+  mapModelNameToCouncilKey(modelName) {
+    if (!modelName) return null;
+    
+    const modelMap = {
+      'deepseek-v3': 'ollama_deepseek_v3',
+      'deepseek-r1:32b': 'ollama_deepseek', // Fallback
+      'deepseek-r1:70b': 'ollama_deepseek', // Fallback
+      'llama3.3:70b-instruct-q4_0': 'ollama_llama_3_3_70b',
+      'qwen2.5:72b-q4_0': 'ollama_qwen_2_5_72b',
+      'qwen2.5:32b-instruct': 'ollama_qwen_2_5_72b', // Fallback
+      'gemma2:27b-it-q4_0': 'ollama_gemma_2_27b',
+    };
+
+    return modelMap[modelName] || null;
+  }
+
+  /**
    * Get appropriate models for mediation type
    */
   getMediationModels(conflictType) {
     const registry = this.modelRegistry;
     if (!registry) {
-      return [{ name: 'deepseek-v3' }];
+      return [{ name: 'ollama_deepseek_v3' }]; // Use COUNCIL_MEMBERS key
     }
 
     // Base models for all mediation

@@ -2200,8 +2200,22 @@ const ALERT_PHONE =
 
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 async function callCouncilMember(member, prompt, options = {}) {
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2202',message:'callCouncilMember entry',data:{member,promptLength:prompt?.length,options:JSON.stringify(options)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
+  
   const config = COUNCIL_MEMBERS[member];
-  if (!config) throw new Error(`Unknown member: ${member}`);
+  
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2204',message:'config lookup result',data:{member,configExists:!!config,configProvider:config?.provider},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
+  
+  if (!config) {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2205',message:'invalid member key error',data:{member,validKeys:Object.keys(COUNCIL_MEMBERS).slice(0,10)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
+    throw new Error(`Unknown member: ${member}`);
+  }
 
   // Get today's spend (automatically resets each day)
   const today = dayjs().format("YYYY-MM-DD");
@@ -2561,9 +2575,15 @@ Be concise, strategic, and speak as the system's internal AI.`;
           }
         } else {
           const errorText = await response.text();
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2577',message:'Ollama HTTP error',data:{status:response.status,member,model:config.model},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H'})}).catch(()=>{});
+          // #endregion
           throw new Error(`Ollama HTTP ${response.status}: ${errorText}`);
         }
       } catch (ollamaError) {
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2566',message:'Ollama call failed',data:{member,model:config.model,error:ollamaError.message},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H'})}).catch(()=>{});
+        // #endregion
         console.warn(`⚠️ [TIER 0] Ollama ${config.model} failed: ${ollamaError.message}`);
         throw new Error(`Ollama unavailable: ${ollamaError.message}`);
       }
@@ -4440,7 +4460,12 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
   }
 
   // Use Open Source Council Router if available and not requiring oversight
-  if (openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil !== false)) {
+  // Only activate when: in cost shutdown OR explicitly requested (opt-in behavior)
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4444',message:'OSC router check',data:{openSourceCouncilExists:!!openSourceCouncil,requireOversight,inCostShutdown,useOpenSourceCouncil:options.useOpenSourceCouncil,willUseOSC:!!openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil === true)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+  // #endregion
+  
+  if (openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil === true)) {
     try {
       // Determine task complexity
       const promptLength = prompt.length;
@@ -4448,6 +4473,10 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
                        options.complexity === "complex" || 
                        options.complexity === "critical" ||
                        options.requireConsensus === true;
+      
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4450',message:'OSC router activated',data:{promptLength,isComplex,taskType:options.taskType},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+      // #endregion
       
       const routerOptions = {
         taskType: options.taskType,
@@ -4459,11 +4488,18 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
       
       const result = await openSourceCouncil.routeTask(prompt, routerOptions);
       
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4461',message:'OSC router result',data:{success:result.success,model:result.model,consensus:result.consensus},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+      // #endregion
+      
       if (result.success) {
         console.log(`✅ [OSC] Got response from ${result.model}${result.consensus ? " (consensus)" : ""} (${result.taskType})`);
         return result.response;
       }
     } catch (error) {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4468',message:'OSC router error',data:{error:error.message},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+      // #endregion
       console.warn(`⚠️ [OSC] Router failed: ${error.message}, falling back to standard failover`);
       // Fall through to standard failover logic
     }

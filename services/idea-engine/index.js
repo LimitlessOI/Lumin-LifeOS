@@ -78,11 +78,19 @@ Return as JSON array with these exact fields:
 ]`;
 
     try {
-      // Use local reasoning model
-      const response = await this.callCouncilMember('deepseek-v3', prompt, {
+      // Use local reasoning model (must match COUNCIL_MEMBERS key)
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'idea-engine/index.js:82',message:'calling council member',data:{modelKey:'ollama_deepseek_v3',promptLength:prompt?.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
+      
+      const response = await this.callCouncilMember('ollama_deepseek_v3', prompt, {
         useOpenSourceCouncil: true,
         taskType: 'reasoning',
       });
+      
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'idea-engine/index.js:87',message:'council member response received',data:{responseLength:response?.length,hasResponse:!!response},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
 
       // Parse JSON from response
       const jsonMatch = response.match(/\[[\s\S]*\]/);
@@ -333,11 +341,40 @@ Return as JSON:
 
   getVotingModels() {
     // Use reasoning models for voting
+    // Return COUNCIL_MEMBERS keys (not model registry names)
+    // Fallback to known free reasoning models if registry unavailable
+    const fallbackModels = [
+      'ollama_deepseek_v3',
+      'ollama_llama_3_3_70b',
+      'ollama_qwen_2_5_72b',
+    ];
+
+    if (!this.modelRegistry) {
+      return fallbackModels;
+    }
+
     const models = this.modelRegistry?.getModelsByRole('reasoning') || [];
+    if (models.length === 0) {
+      return fallbackModels;
+    }
+
+    // Map model registry names to COUNCIL_MEMBERS keys
+    // Pattern: 'deepseek-v3' -> 'ollama_deepseek_v3'
+    const modelMap = {
+      'deepseek-v3': 'ollama_deepseek_v3',
+      'deepseek-r1:32b': 'ollama_deepseek', // Fallback to available model
+      'deepseek-r1:70b': 'ollama_deepseek', // Fallback to available model
+      'llama3.3:70b-instruct-q4_0': 'ollama_llama_3_3_70b',
+      'qwen2.5:72b-q4_0': 'ollama_qwen_2_5_72b',
+      'qwen2.5:32b-instruct': 'ollama_qwen_2_5_72b', // Fallback
+      'gemma2:27b-it-q4_0': 'ollama_gemma_2_27b',
+    };
+
     return models
       .filter(m => m.cost_class === 'free')
-      .slice(0, 3) // Use up to 3 models for voting
-      .map(m => m.name);
+      .slice(0, 3)
+      .map(m => modelMap[m.name] || m.name.replace(/[:\-]/g, '_').replace(/^/, 'ollama_'))
+      .filter(Boolean); // Remove any undefined mappings
   }
 
   average(values) {
