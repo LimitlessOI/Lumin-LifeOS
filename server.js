@@ -35,6 +35,9 @@ let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfi
 // Knowledge Base System
 let KnowledgeBase, FileCleanupAnalyzer;
 
+// Open Source Council Router
+let OpenSourceCouncil, openSourceCouncil;
+
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
 
@@ -64,8 +67,10 @@ const {
   ALLOWED_ORIGINS = "",
   HOST = "0.0.0.0",
   PORT = 8080,
-  // Spend cap (can be overridden in Railway env). Set very high by default.
-  MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "1000000",
+  // Spend cap (can be overridden in Railway env). Default: $0/day - NO SPENDING
+  MAX_DAILY_SPEND: RAW_MAX_DAILY_SPEND = "0",
+  // Cost shutdown threshold - if spending exceeds this, only use free models
+  COST_SHUTDOWN_THRESHOLD: RAW_COST_SHUTDOWN = "0",
   NODE_ENV = "production",
   RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app",
   // Stripe config
@@ -76,10 +81,15 @@ const {
   VIDEO_GEN_API_KEY,
 } = process.env;
 
-// Ensure spend cap is numeric; allow "no cap" by setting to a very large default
+// Ensure spend cap is numeric
 const MAX_DAILY_SPEND = Number.isFinite(parseFloat(RAW_MAX_DAILY_SPEND))
   ? parseFloat(RAW_MAX_DAILY_SPEND)
-  : 1000000;
+  : 0; // Default $0/day - NO SPENDING
+
+// Cost shutdown threshold - if exceeded, only free models allowed
+const COST_SHUTDOWN_THRESHOLD = Number.isFinite(parseFloat(RAW_COST_SHUTDOWN))
+  ? parseFloat(RAW_COST_SHUTDOWN)
+  : 0; // Default $0/day - BLOCK ALL PAID MODELS
 
 let CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "")
   .trim() || null;
@@ -1504,47 +1514,218 @@ async function initDatabase() {
 }
 
 // ==================== ENHANCED AI COUNCIL MEMBERS (NO CLAUDE) ====================
+// TIER 0: Open Source / Cheap Models (PRIMARY - Do all the work)
+// TIER 1: Expensive Models (OVERSIGHT ONLY - Validation when needed)
 const COUNCIL_MEMBERS = {
+  // TIER 0 - PRIMARY WORKERS (Free/Cheap - Run system independently)
+  ollama_deepseek: {
+    name: "DeepSeek Coder (Local)",
+    model: "deepseek-coder:latest",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Primary Developer & Infrastructure",
+    focus: "optimization, performance, safe testing, development, code generation",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["infrastructure", "testing", "performance", "development", "code"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_llama: {
+    name: "Llama 3.2 (Local)",
+    model: "llama3.2:1b",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "General Assistant & Research",
+    focus: "general tasks, research, analysis, reasoning",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["research", "analysis", "general"],
+    isFree: true,
+    isLocal: true,
+  },
+  deepseek: {
+    name: "DeepSeek Cloud",
+    model: "deepseek-coder",
+    provider: "deepseek",
+    role: "Primary Developer & Infrastructure (Cloud Fallback)",
+    focus: "optimization, performance, safe testing, development",
+    maxTokens: 4096,
+    tier: "tier0", // Open source tier
+    costPer1M: 0.1, // $0.10 per million tokens (cheapest cloud)
+    specialties: ["infrastructure", "testing", "performance", "development"],
+    useLocal: DEEPSEEK_BRIDGE_ENABLED === "true",
+    isFree: false,
+  },
+  // TIER 0 - CODE GENERATION SPECIALISTS (Best for coding tasks)
+  ollama_deepseek_coder_v2: {
+    name: "DeepSeek Coder V2 (Local)",
+    model: "deepseek-coder-v2:latest",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Code Generation Specialist",
+    focus: "code generation, code review, debugging, infrastructure, production code",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["code", "code_review", "debugging", "infrastructure", "development"],
+    isFree: true,
+    isLocal: true,
+    priority: "high", // Best for code tasks
+  },
+  ollama_deepseek_coder_33b: {
+    name: "DeepSeek Coder 33B (Local)",
+    model: "deepseek-coder:33b",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Code Generation Specialist (Large)",
+    focus: "complex code generation, advanced algorithms, production code",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["code", "complex_algorithms", "production_code"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_qwen_coder_32b: {
+    name: "Qwen2.5-Coder-32B (Local)",
+    model: "qwen2.5-coder:32b-instruct",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Code Generation Specialist",
+    focus: "production code generation, complex algorithms, code understanding",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["code", "code_generation", "algorithms", "production"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_codestral: {
+    name: "Mistral Codestral 25.01 (Local)",
+    model: "codestral:latest",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Fast Code Generation",
+    focus: "quick code snippets, IDE integration, FIM tasks, fast responses",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["code", "fast_code", "snippets", "fim"],
+    isFree: true,
+    isLocal: true,
+  },
+  // TIER 0 - REASONING & ANALYSIS SPECIALISTS
+  ollama_deepseek_v3: {
+    name: "DeepSeek V3 (Local)",
+    model: "deepseek-v3:latest",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Complex Reasoning Specialist",
+    focus: "complex reasoning, mathematical tasks, strategic decisions, exceptional reasoning",
+    maxTokens: 128000, // 128K context
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["reasoning", "math", "strategic_decisions", "complex_analysis"],
+    isFree: true,
+    isLocal: true,
+    priority: "high", // Best for reasoning
+  },
+  ollama_llama_3_3_70b: {
+    name: "Llama 3.3 70B (Local)",
+    model: "llama3.3:70b-instruct-q4_0",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "High-Quality Reasoning",
+    focus: "complex reasoning, strategic decisions, general tasks, multilingual",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["reasoning", "strategic_decisions", "general", "multilingual"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_qwen_2_5_72b: {
+    name: "Qwen 2.5 72B (Local)",
+    model: "qwen2.5:72b-q4_0",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Research & Analysis Specialist",
+    focus: "research, analysis, mathematical tasks, multilingual, document understanding",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["research", "analysis", "math", "multilingual", "documents"],
+    isFree: true,
+    isLocal: true,
+  },
+  ollama_gemma_2_27b: {
+    name: "Gemma 2 27B (Local)",
+    model: "gemma2:27b-it-q4_0",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Balanced Reasoning",
+    focus: "on-device reasoning, balanced performance, general tasks",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["reasoning", "general", "balanced"],
+    isFree: true,
+    isLocal: true,
+  },
+  // TIER 0 - LIGHTWEIGHT & FAST
+  ollama_phi3: {
+    name: "Phi-3 Mini (Local)",
+    model: "phi3:mini",
+    provider: "ollama",
+    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
+    role: "Lightweight Assistant",
+    focus: "light tasks, monitoring, simple analysis, fast responses",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0, // FREE (local)
+    specialties: ["light_tasks", "monitoring", "simple_analysis"],
+    isFree: true,
+    isLocal: true,
+  },
+  // TIER 1 - OVERSIGHT ONLY (Expensive - Only for validation)
   chatgpt: {
     name: "ChatGPT",
     model: "gpt-4o",
     provider: "openai",
-    role: "Technical Executor & User Preference Learning",
-    focus: "implementation, execution, user patterns",
+    role: "Oversight & Validation Only",
+    focus: "validation, critical decisions, user patterns",
     maxTokens: 4096,
-    tier: "heavy",
+    tier: "tier1", // Expensive tier - oversight only
+    costPer1M: 2.5, // $2.50 per million tokens
     specialties: ["execution", "user_modeling", "patterns"],
+    oversightOnly: true, // Only used for oversight, not primary work
   },
   gemini: {
     name: "Gemini",
     model: "gemini-2.5-flash",
     provider: "google",
-    role: "Research Analyst & Idea Generator",
-    focus: "data analysis, creative solutions, daily ideas",
+    role: "Oversight & Validation Only",
+    focus: "validation, analysis, critical review",
     maxTokens: 8192,
-    tier: "medium",
+    tier: "tier1", // Expensive tier - oversight only
+    costPer1M: 1.25, // $1.25 per million tokens
     specialties: ["analysis", "creativity", "ideation"],
-  },
-  deepseek: {
-    name: "DeepSeek",
-    model: "deepseek-coder",
-    provider: "deepseek",
-    role: "Infrastructure & Sandbox Testing",
-    focus: "optimization, performance, safe testing",
-    maxTokens: 4096,
-    tier: "medium",
-    specialties: ["infrastructure", "testing", "performance"],
-    useLocal: DEEPSEEK_BRIDGE_ENABLED === "true",
+    oversightOnly: true, // Only used for oversight, not primary work
   },
   grok: {
     name: "Grok",
     model: "grok-2-1212",
     provider: "xai",
-    role: "Innovation Scout & Reality Check",
-    focus: "novel approaches, risk assessment, blind spots",
+    role: "Oversight & Validation Only",
+    focus: "validation, risk assessment, blind spots",
     maxTokens: 4096,
-    tier: "light",
+    tier: "tier1", // Expensive tier - oversight only
+    costPer1M: 5.0, // $5.00 per million tokens
     specialties: ["innovation", "reality_check", "risk"],
+    oversightOnly: true, // Only used for oversight, not primary work
   },
 };
 
@@ -1847,6 +2028,57 @@ async function sendSMS(to, message, aiMember = "chatgpt") {
   }
 }
 
+// ============ CRITICAL ALERTING (SMS + CALL VIA TWILIO) ============
+async function sendAlertSms(message) {
+  try {
+    if (!ALERT_PHONE || !process.env.TWILIO_PHONE_NUMBER) return;
+    await sendSMS(ALERT_PHONE, message, "chatgpt");
+    console.log("📱 [ALERT] SMS sent");
+  } catch (err) {
+    console.warn("⚠️ Alert SMS failed:", err.message);
+  }
+}
+
+async function sendAlertCall(message) {
+  try {
+    if (!ALERT_PHONE || !process.env.TWILIO_PHONE_NUMBER) return;
+    const client = await getTwilioClient();
+    if (!client) return;
+    await client.calls.create({
+      twiml: `<Response><Say voice="alice">${message}</Say></Response>`,
+      to: ALERT_PHONE,
+      from: process.env.TWILIO_PHONE_NUMBER,
+    });
+    console.log("📞 [ALERT] Call placed");
+  } catch (err) {
+    console.warn("⚠️ Alert call failed:", err.message);
+  }
+}
+
+async function notifyCriticalIssue(reason) {
+  // Avoid spamming: only one alert sequence at a time
+  if (alertInProgress) return;
+  alertInProgress = true;
+
+  const msg =
+    `🚨 LifeOS alert: critical issue detected.\n` +
+    `${reason}\n` +
+    `System will continue with any available AI providers.`;
+
+  // Send SMS immediately
+  await sendAlertSms(msg);
+
+  // Place a call after 10 minutes if still needed
+  setTimeout(() => {
+    sendAlertCall(msg);
+  }, 10 * 60 * 1000);
+
+  // Reset after 15 minutes to allow future alerts
+  setTimeout(() => {
+    alertInProgress = false;
+  }, 15 * 60 * 1000);
+}
+
 // ==================== MICRO PROTOCOL HELPERS ====================
 function decodeMicroBody(body = {}) {
   const packet = body.micro || body;
@@ -1953,6 +2185,19 @@ function selectOptimalModel(prompt, taskComplexity = 'medium') {
   return null; // Use original member
 }
 
+// Track provider cooldowns when rate-limited or out of quota
+// Map<member, timestamp_ms_when_we_can_try_again>
+const providerCooldowns = new Map();
+// Prevent alert spam
+let alertInProgress = false;
+
+// Alert destination (set one of these in env)
+const ALERT_PHONE =
+  process.env.ALERT_PHONE ||
+  process.env.ADMIN_PHONE ||
+  process.env.COMMAND_CENTER_PHONE ||
+  null;
+
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 async function callCouncilMember(member, prompt, options = {}) {
   const config = COUNCIL_MEMBERS[member];
@@ -1961,6 +2206,24 @@ async function callCouncilMember(member, prompt, options = {}) {
   // Get today's spend (automatically resets each day)
   const today = dayjs().format("YYYY-MM-DD");
   const spend = await getDailySpend(today);
+  
+  // COST SHUTDOWN: Block ALL paid models if spending disabled
+  const memberConfig = COUNCIL_MEMBERS[member];
+  const isPaid = !memberConfig?.isFree && (memberConfig?.costPer1M > 0 || memberConfig?.tier === "tier1");
+  
+  // If MAX_DAILY_SPEND is 0, block ALL paid models
+  if (MAX_DAILY_SPEND === 0 && isPaid) {
+    throw new Error(
+      `💰 [COST SHUTDOWN] Blocked ${member} - Spending disabled (MAX_DAILY_SPEND=$0). Use free models only (ollama_deepseek, ollama_llama).`
+    );
+  }
+  
+  // Also block if spending threshold reached
+  if (spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
+    throw new Error(
+      `💰 [COST SHUTDOWN] Blocked ${member} - Spending $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}. Use Tier 0 (free) models only.`
+    );
+  }
   
   // Log for debugging (only log if significant spend)
   if (spend > MAX_DAILY_SPEND * 0.1) {
@@ -2248,9 +2511,68 @@ Be concise, strategic, and speak as the system's internal AI.`;
       return text;
     }
 
+    // OLLAMA (FREE LOCAL MODELS) - Try first for Tier 0
+    if (config.provider === "ollama") {
+      const endpoint = config.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
+      
+      try {
+        console.log(`🆓 [TIER 0] Calling Ollama ${config.model} at ${endpoint}`);
+
+        // Ollama uses /api/generate for completion
+        response = await fetch(`${endpoint}/api/generate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...noCacheHeaders,
+          },
+          body: JSON.stringify({
+            model: config.model,
+            prompt: `${systemPrompt}\n\n${prompt}`,
+            stream: false,
+            options: {
+              temperature: 0.7,
+              num_predict: config.maxTokens || 4096,
+            },
+          }),
+        });
+
+        if (response.ok) {
+          const json = await response.json();
+          const text = json.response || "";
+
+          if (text) {
+            console.log(`✅ [TIER 0] Ollama ${config.model} successful (FREE)`);
+
+            const duration = Date.now() - startTime;
+            await trackAIPerformance(member, "chat", duration, 0, 0, true);
+            
+            // CACHE THE RESPONSE
+            if (options.useCache !== false) {
+              cacheResponse(prompt, member, text);
+            }
+            
+            await storeConversationMemory(prompt, text, {
+              ai_member: member,
+              via: "ollama",
+              cost: 0,
+            });
+
+            return text;
+          }
+        } else {
+          const errorText = await response.text();
+          throw new Error(`Ollama HTTP ${response.status}: ${errorText}`);
+        }
+      } catch (ollamaError) {
+        console.warn(`⚠️ [TIER 0] Ollama ${config.model} failed: ${ollamaError.message}`);
+        throw new Error(`Ollama unavailable: ${ollamaError.message}`);
+      }
+    }
+
     if (config.provider === "deepseek") {
       const deepseekApiKey = getApiKey("deepseek");
 
+      // Try Ollama bridge first if enabled
       if (config.useLocal && OLLAMA_ENDPOINT) {
         try {
           console.log(
@@ -2357,6 +2679,22 @@ Be concise, strategic, and speak as the system's internal AI.`;
     const duration = Date.now() - startTime;
     await trackAIPerformance(member, "chat", duration, 0, 0, false);
     console.error(`Failed to call ${member}: ${error.message}`);
+
+    // If provider is rate-limited or out of quota, set a cooldown so we skip it temporarily
+    const msg = (error?.message || "").toLowerCase();
+    const isRateLimited =
+      msg.includes("429") ||
+      msg.includes("rate limit") ||
+      msg.includes("insufficient_quota") ||
+      msg.includes("quota");
+    if (isRateLimited) {
+      const cooldownMs = 3 * 60 * 60 * 1000; // 3 hours
+      providerCooldowns.set(member, Date.now() + cooldownMs);
+      console.warn(
+        `⚠️ [COUNCIL] ${member} rate-limited/out-of-quota. Pausing for 3h.`
+      );
+    }
+
     throw error;
   }
 }
@@ -2544,7 +2882,7 @@ async function generateDailyIdeas() {
 
     let response;
     try {
-      response = await callCouncilWithFailover(ideaPrompt, "gemini");
+      response = await callCouncilWithFailover(ideaPrompt, "ollama_deepseek"); // Use Tier 0 (free)
     } catch (err) {
       console.error("Daily idea council error, using fallback:", err.message);
       response = null;
@@ -3091,7 +3429,7 @@ MAX TOTAL: [X] attempts
 Be strategic - we want to solve this, not waste resources.`;
 
   try {
-    const strategy = await callCouncilWithFailover(strategyPrompt, "chatgpt");
+    const strategy = await callCouncilWithFailover(strategyPrompt, "ollama_deepseek"); // Use Tier 0 (free)
     return {
       success: true,
       strategy,
@@ -3899,7 +4237,7 @@ async function continuousSelfImprovement() {
 
       const improvements = await callCouncilWithFailover(
         improvementPrompt,
-        "deepseek"
+        "ollama_deepseek" // Use Tier 0 (free)
       );
 
       if (improvements && improvements.length > 50) {
@@ -4085,29 +4423,115 @@ async function trackLoss(
   }
 }
 
-// ==================== COUNCIL WITH FAILOVER ====================
-async function callCouncilWithFailover(prompt, preferredMember = "chatgpt") {
+// ==================== COUNCIL WITH FAILOVER (TIER 0 FIRST) ====================
+async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepseek", requireOversight = false, options = {}) {
+  // Check if spending is disabled (MAX_DAILY_SPEND = 0)
+  const spendingDisabled = MAX_DAILY_SPEND === 0;
+  
+  // Check if we're in cost shutdown mode (spending too much)
+  const today = dayjs().format("YYYY-MM-DD");
+  const currentSpend = await getDailySpend(today);
+  const inCostShutdown = currentSpend >= COST_SHUTDOWN_THRESHOLD || spendingDisabled;
+  
+  if (spendingDisabled) {
+    console.warn(`💰 [COST SHUTDOWN] Spending DISABLED (MAX_DAILY_SPEND=$0) - Only using FREE models`);
+  } else if (inCostShutdown) {
+    console.warn(`💰 [COST SHUTDOWN] Spending $${currentSpend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} - Only using free/cheap models`);
+  }
+
+  // Use Open Source Council Router if available and not requiring oversight
+  if (openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil !== false)) {
+    try {
+      // Determine task complexity
+      const promptLength = prompt.length;
+      const isComplex = promptLength > 2000 || 
+                       options.complexity === "complex" || 
+                       options.complexity === "critical" ||
+                       options.requireConsensus === true;
+      
+      const routerOptions = {
+        taskType: options.taskType,
+        requireConsensus: isComplex || options.requireConsensus,
+        consensusThreshold: options.consensusThreshold || 2,
+        complexity: options.complexity || (isComplex ? "complex" : "medium"),
+        ...options,
+      };
+      
+      const result = await openSourceCouncil.routeTask(prompt, routerOptions);
+      
+      if (result.success) {
+        console.log(`✅ [OSC] Got response from ${result.model}${result.consensus ? " (consensus)" : ""} (${result.taskType})`);
+        return result.response;
+      }
+    } catch (error) {
+      console.warn(`⚠️ [OSC] Router failed: ${error.message}, falling back to standard failover`);
+      // Fall through to standard failover logic
+    }
+  }
+
+  // Standard failover logic (fallback or when oversight required)
   const members = Object.keys(COUNCIL_MEMBERS);
+
+  // Skip members currently on cooldown
+  const now = Date.now();
+  let availableMembers = members.filter((m) => {
+    const retryAt = providerCooldowns.get(m) || 0;
+    return now >= retryAt;
+  });
+
+  // In cost shutdown: ONLY use FREE models (no paid models at all)
+  if (inCostShutdown) {
+    availableMembers = availableMembers.filter((m) => {
+      const member = COUNCIL_MEMBERS[m];
+      return member.isFree === true; // Only truly free models
+    });
+    console.log(`💰 [COST SHUTDOWN] Filtered to FREE models only: ${availableMembers.join(", ")}`);
+    
+    if (availableMembers.length === 0) {
+      console.error("❌ [COST SHUTDOWN] No free models available. System cannot proceed without spending.");
+      return "System is in cost shutdown mode and no free models are available. Please enable Ollama or set MAX_DAILY_SPEND > 0.";
+    }
+  } else if (!requireOversight) {
+    // Normal mode: Prefer Tier 0 (cheap) models first, Tier 1 (expensive) only if needed
+    const tier0Members = availableMembers.filter((m) => COUNCIL_MEMBERS[m].tier === "tier0");
+    const tier1Members = availableMembers.filter((m) => COUNCIL_MEMBERS[m].tier === "tier1");
+    
+    // Try Tier 0 first, then Tier 1 as fallback
+    availableMembers = [...tier0Members, ...tier1Members];
+  } else {
+    // Oversight mode: Use Tier 1 (expensive) for validation
+    availableMembers = availableMembers.filter((m) => COUNCIL_MEMBERS[m].tier === "tier1");
+  }
+
+  // Build ordered list: preferred first, then the rest (no duplicates)
   const ordered = [
     preferredMember,
-    ...members.filter((m) => m !== preferredMember),
-  ];
+    ...availableMembers.filter((m) => m !== preferredMember),
+  ].filter((m, idx, arr) => arr.indexOf(m) === idx);
 
-  for (const member of ordered) {
+  // If everything is on cooldown, fall back to all members (last-resort attempt)
+  const candidates = ordered.length > 0 ? ordered : availableMembers;
+
+  const errors = [];
+  for (const member of candidates) {
     try {
-      const response = await callCouncilMember(member, prompt);
+      const response = await callCouncilMember(member, prompt, options);
       if (response) {
-        console.log(`✅ Got response from ${member}`);
+        console.log(`✅ Got response from ${member} (Tier ${COUNCIL_MEMBERS[member]?.tier || "unknown"})`);
         return response;
       }
     } catch (error) {
       console.log(`⚠️ ${member} failed: ${error.message}, trying next...`);
+      errors.push(`${member}: ${error.message}`);
       continue;
     }
   }
 
   console.error("❌ All AI council members unavailable");
-  return "All AI council members currently unavailable. Check API keys in Railway environment.";
+  notifyCriticalIssue(
+    `All AI providers unavailable. Errors: ${errors.join(" | ")}`
+  );
+  return "All AI council members currently unavailable. Check API keys/quotas.";
 }
 
 // ==================== EXECUTION QUEUE ====================
@@ -4290,7 +4714,7 @@ class ExecutionQueue {
             `Execute this task with real-world practicality in mind (but do NOT directly move money or impersonate humans): ${task.description}
             
             Be aware of these blind spots: ${blindSpots.slice(0, 3).join(", ")}`,
-            "chatgpt"
+            "ollama_deepseek" // Use Tier 0 (free) for primary work
           );
 
       const aiModel = routerResult?.model || 'chatgpt';
@@ -4591,6 +5015,7 @@ async function initializeTwoTierSystem() {
     const whiteLabelModule = await import("./core/white-label.js");
     const knowledgeModule = await import("./core/knowledge-base.js");
     const cleanupModule = await import("./core/file-cleanup-analyzer.js");
+    const openSourceCouncilModule = await import("./core/open-source-council.js");
     
     Tier0Council = tier0Module.Tier0Council;
     Tier1Council = tier1Module.Tier1Council;
@@ -4599,10 +5024,12 @@ async function initializeTwoTierSystem() {
     WhiteLabelConfig = whiteLabelModule.WhiteLabelConfig;
     KnowledgeBase = knowledgeModule.KnowledgeBase;
     FileCleanupAnalyzer = cleanupModule.FileCleanupAnalyzer;
+    OpenSourceCouncil = openSourceCouncilModule.OpenSourceCouncil;
 
     tier0Council = new Tier0Council(pool);
     tier1Council = new Tier1Council(pool, callCouncilMember);
     modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
+    openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
     outreachAutomation = new OutreachAutomation(
       pool,
       modelRouter,
@@ -5892,7 +6319,7 @@ app.post("/api/v1/architect/chat", requireKey, async (req, res) => {
         )}\n\nProvide detailed response.`
       : original_message;
 
-    const response = await callCouncilWithFailover(prompt, "gemini");
+    const response = await callCouncilWithFailover(prompt, "ollama_deepseek"); // Use Tier 0 (free)
 
     const response_json = {
       r: response.slice(0, 500),
@@ -5919,7 +6346,7 @@ app.post("/api/v1/architect/command", requireKey, async (req, res) => {
       query_json || {}
     )}\n\nExecute this command and provide results (but do not directly move money or impersonate users).`;
 
-    const response = await callCouncilWithFailover(prompt, "chatgpt");
+    const response = await callCouncilWithFailover(prompt, "ollama_deepseek"); // Use Tier 0 (free)
 
     if (intent && intent !== "general") {
       await executionQueue.addTask(intent, command);
@@ -6089,6 +6516,87 @@ app.post("/api/v1/ideas/generate", requireKey, async (req, res) => {
     await generateDailyIdeas();
     res.json({ ok: true, ideasGenerated: dailyIdeas.length });
   } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== SPENDING & ROI ANALYSIS ====================
+app.get("/api/v1/analysis/spending-breakdown", requireKey, async (req, res) => {
+  try {
+    // Get total spending by date
+    const spending = await pool.query(
+      `SELECT date, usd, updated_at 
+       FROM daily_spend 
+       ORDER BY date DESC 
+       LIMIT 30`
+    );
+
+    // Get all ideas
+    const ideas = await pool.query(
+      `SELECT idea_id, idea_title, idea_description, proposed_by, status, 
+              votes_for, votes_against, created_at
+       FROM daily_ideas 
+       ORDER BY created_at DESC`
+    );
+
+    // Get all opportunities
+    const opportunities = await pool.query(
+      `SELECT id, drone_id, opportunity_type, data, status, 
+              revenue_estimate, created_at
+       FROM drone_opportunities 
+       ORDER BY created_at DESC`
+    );
+
+    // Get execution tasks (what was actually worked on)
+    const tasks = await pool.query(
+      `SELECT task_id, type, description, status, created_at, completed_at, result
+       FROM execution_tasks 
+       ORDER BY created_at DESC 
+       LIMIT 100`
+    );
+
+    // Get AI performance (which models were used and cost)
+    const aiUsage = await pool.query(
+      `SELECT ai_member, task_type, COUNT(*) as call_count, 
+              SUM(cost) as total_cost, 
+              AVG(duration_ms) as avg_duration,
+              SUM(CASE WHEN success THEN 1 ELSE 0 END) as success_count
+       FROM ai_performance 
+       WHERE created_at > NOW() - INTERVAL '30 days'
+       GROUP BY ai_member, task_type
+       ORDER BY total_cost DESC`
+    );
+
+    // Calculate total spend
+    const totalSpend = spending.rows.reduce((sum, row) => sum + parseFloat(row.usd || 0), 0);
+
+    // Calculate total opportunity value
+    const totalOpportunityValue = opportunities.rows.reduce((sum, row) => 
+      sum + parseFloat(row.revenue_estimate || 0), 0
+    );
+
+    // Calculate ROI
+    const roi = totalOpportunityValue > 0 ? (totalOpportunityValue / totalSpend) : 0;
+
+    res.json({
+      ok: true,
+      summary: {
+        totalSpend: totalSpend.toFixed(2),
+        totalOpportunities: opportunities.rows.length,
+        totalOpportunityValue: totalOpportunityValue.toFixed(2),
+        totalIdeas: ideas.rows.length,
+        totalTasks: tasks.rows.length,
+        roi: roi.toFixed(2),
+        roiPercentage: ((roi - 1) * 100).toFixed(1) + '%'
+      },
+      spending: spending.rows,
+      ideas: ideas.rows,
+      opportunities: opportunities.rows,
+      tasks: tasks.rows,
+      aiUsage: aiUsage.rows
+    });
+  } catch (error) {
+    console.error("Spending analysis error:", error);
     res.status(500).json({ ok: false, error: error.message });
   }
 });
@@ -8013,6 +8521,64 @@ app.get("/api/v1/youtube/project/:projectId", requireKey, async (req, res) => {
     });
   } catch (error) {
     console.error("YouTube project fetch error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== VIDEO EDITING COUNCIL ====================
+// Open source video editing tools working together like an AI council
+let VideoEditingCouncil, videoEditingCouncil;
+
+app.post("/api/v1/video/process", requireKey, async (req, res) => {
+  try {
+    if (!videoEditingCouncil) {
+      const { VideoEditingCouncil: VEC } = await import("./core/video-editing-council.js");
+      videoEditingCouncil = new VEC(pool, callCouncilMember);
+    }
+
+    const { task, inputVideo, inputImage, script, options = {} } = req.body;
+
+    if (!task) {
+      return res.status(400).json({ ok: false, error: "task required" });
+    }
+
+    console.log(`🎬 [VIDEO COUNCIL] Processing: ${task}`);
+
+    const result = await videoEditingCouncil.processRequest({
+      task,
+      inputVideo,
+      inputImage,
+      script,
+      options,
+    });
+
+    res.json({
+      ok: result.success !== false,
+      ...result,
+    });
+  } catch (error) {
+    console.error("Video editing council error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/video/council/status", requireKey, async (req, res) => {
+  try {
+    if (!videoEditingCouncil) {
+      const { VideoEditingCouncil: VEC } = await import("./core/video-editing-council.js");
+      videoEditingCouncil = new VEC(pool, callCouncilMember);
+    }
+
+    const status = await videoEditingCouncil.getStatus();
+
+    res.json({
+      ok: true,
+      members: status,
+      totalMembers: Object.keys(status).length,
+      availableMembers: Object.values(status).filter(m => m.available).length,
+    });
+  } catch (error) {
+    console.error("Video council status error:", error);
     res.status(500).json({ ok: false, error: error.message });
   }
 });

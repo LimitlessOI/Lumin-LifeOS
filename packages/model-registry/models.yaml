@@ -1,0 +1,512 @@
+# AI Counsel OS - Model Registry
+# Defines all available models with their capabilities and roles
+
+models:
+  # ============================================
+  # REASONING MODELS (Primary Orchestrators)
+  # ============================================
+  
+  - name: deepseek-r1:32b
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: deepseek-r1:32b
+    capabilities:
+      - reasoning
+      - instruction_following
+      - code_understanding
+    strengths:
+      - fast_reasoning
+      - code_understanding
+      - strategic_thinking
+    token_limit: 32768
+    latency_class: fast
+    cost_class: free
+    vision: false
+    default_role: reasoning_fast
+    priority: high
+
+  - name: deepseek-r1:70b
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: deepseek-r1:70b
+    capabilities:
+      - reasoning
+      - instruction_following
+      - complex_analysis
+    strengths:
+      - deep_reasoning
+      - complex_problem_solving
+      - strategic_decisions
+    token_limit: 32768
+    latency_class: medium
+    cost_class: free
+    vision: false
+    default_role: reasoning_deep
+    priority: high
+
+  - name: deepseek-v3
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: deepseek-v3:latest
+    capabilities:
+      - reasoning
+      - instruction_following
+      - complex_analysis
+      - math
+    strengths:
+      - exceptional_reasoning
+      - mathematical_tasks
+      - strategic_decisions
+      - 128k_context
+    token_limit: 131072
+    latency_class: medium
+    cost_class: free
+    vision: false
+    default_role: reasoning_best
+    priority: critical
+
+  # ============================================
+  # GENERAL INSTRUCTION MODELS
+  # ============================================
+
+  - name: qwen2.5:32b-instruct
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: qwen2.5:32b-instruct
+    capabilities:
+      - instruction_following
+      - general_conversation
+      - multilingual
+    strengths:
+      - balanced_performance
+      - multilingual_support
+      - good_instruction_following
+    token_limit: 32768
+    latency_class: fast
+    cost_class: free
+    vision: false
+    default_role: general_instruction
+    priority: medium
+
+  - name: qwen2.5:72b-instruct
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: qwen2.5:72b-instruct
+    capabilities:
+      - instruction_following
+      - general_conversation
+      - multilingual
+      - research
+    strengths:
+      - high_quality_responses
+      - multilingual_support
+      - research_capabilities
+    token_limit: 32768
+    latency_class: medium
+    cost_class: free
+    vision: false
+    default_role: general_instruction_large
+    priority: medium
+
+  - name: llama3.3:70b-instruct
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: llama3.3:70b-instruct-q4_0
+    capabilities:
+      - instruction_following
+      - general_conversation
+      - reasoning
+    strengths:
+      - high_quality_reasoning
+      - safety_guardrails
+      - multilingual
+    token_limit: 8192
+    latency_class: medium
+    cost_class: free
+    vision: false
+    default_role: general_instruction_fallback
+    priority: medium
+
+  # ============================================
+  # CODE GENERATION MODELS
+  # ============================================
+
+  - name: deepseek-coder-v2
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: deepseek-coder-v2:latest
+    capabilities:
+      - code_generation
+      - code_review
+      - debugging
+      - infrastructure
+    strengths:
+      - excellent_code_quality
+      - fast_inference
+      - production_code
+    token_limit: 8192
+    latency_class: fast
+    cost_class: free
+    vision: false
+    default_role: code_primary
+    priority: high
+
+  - name: deepseek-coder:33b
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: deepseek-coder:33b
+    capabilities:
+      - code_generation
+      - code_review
+      - complex_algorithms
+    strengths:
+      - large_code_model
+      - complex_algorithms
+      - production_code
+    token_limit: 8192
+    latency_class: medium
+    cost_class: free
+    vision: false
+    default_role: code_large
+    priority: medium
+
+  - name: qwen2.5-coder:32b
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: qwen2.5-coder:32b-instruct
+    capabilities:
+      - code_generation
+      - code_review
+      - algorithms
+    strengths:
+      - high_code_quality
+      - complex_algorithms
+      - production_ready
+    token_limit: 8192
+    latency_class: fast
+    cost_class: free
+    vision: false
+    default_role: code_backup
+    priority: medium
+
+  - name: codestral
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: codestral:latest
+    capabilities:
+      - code_generation
+      - fast_code
+      - fim
+    strengths:
+      - very_fast
+      - ide_integration
+      - quick_snippets
+    token_limit: 4096
+    latency_class: very_fast
+    cost_class: free
+    vision: false
+    default_role: code_fast
+    priority: low
+
+  # ============================================
+  # VISION MODELS
+  # ============================================
+
+  - name: qwen2.5vl:32b
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: qwen2.5-vl:32b
+    capabilities:
+      - vision
+      - image_understanding
+      - multimodal
+    strengths:
+      - high_quality_vision
+      - image_analysis
+      - multimodal_reasoning
+    token_limit: 32768
+    latency_class: medium
+    cost_class: free
+    vision: true
+    default_role: vision_primary
+    priority: high
+
+  - name: llava:7b
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: llava:7b
+    capabilities:
+      - vision
+      - image_understanding
+    strengths:
+      - fast_vision
+      - basic_image_understanding
+    token_limit: 4096
+    latency_class: fast
+    cost_class: free
+    vision: true
+    default_role: vision_fallback
+    priority: low
+
+  # ============================================
+  # EMBEDDING MODELS
+  # ============================================
+
+  - name: nomic-embed-text
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: nomic-embed-text
+    capabilities:
+      - embeddings
+      - semantic_search
+    strengths:
+      - high_quality_embeddings
+      - fast_inference
+    token_limit: 8192
+    latency_class: fast
+    cost_class: free
+    vision: false
+    default_role: embeddings
+    priority: high
+
+  # ============================================
+  # RERANKING MODELS
+  # ============================================
+
+  - name: bge-reranker-large
+    provider: local
+    endpoint: http://localhost:8000  # Local reranker service
+    model_id: BAAI/bge-reranker-large
+    capabilities:
+      - reranking
+      - relevance_scoring
+    strengths:
+      - high_quality_reranking
+      - relevance_accuracy
+    token_limit: 512
+    latency_class: fast
+    cost_class: free
+    vision: false
+    default_role: reranker
+    priority: medium
+
+  # ============================================
+  # SPEECH MODELS
+  # ============================================
+
+  - name: whisper-large-v3-turbo
+    provider: local
+    endpoint: local
+    model_id: openai/whisper-large-v3-turbo
+    capabilities:
+      - speech_to_text
+      - transcription
+    strengths:
+      - fast_transcription
+      - good_accuracy
+    token_limit: N/A
+    latency_class: fast
+    cost_class: free
+    vision: false
+    default_role: stt_fast
+    priority: high
+
+  - name: whisper-large-v3
+    provider: local
+    endpoint: local
+    model_id: openai/whisper-large-v3
+    capabilities:
+      - speech_to_text
+      - transcription
+    strengths:
+      - high_accuracy
+      - multilingual
+    token_limit: N/A
+    latency_class: medium
+    cost_class: free
+    vision: false
+    default_role: stt_accurate
+    priority: medium
+
+  - name: piper-tts
+    provider: local
+    endpoint: local
+    model_id: rhasspy/piper
+    capabilities:
+      - text_to_speech
+      - voice_synthesis
+    strengths:
+      - fast_tts
+      - local_privacy
+      - multiple_voices
+    token_limit: N/A
+    latency_class: fast
+    cost_class: free
+    vision: false
+    default_role: tts
+    priority: high
+
+  # ============================================
+  # LIGHTWEIGHT MODELS
+  # ============================================
+
+  - name: llama3.2:1b
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: llama3.2:1b
+    capabilities:
+      - quick_tasks
+      - simple_reasoning
+    strengths:
+      - very_fast
+      - low_memory
+    token_limit: 8192
+    latency_class: very_fast
+    cost_class: free
+    vision: false
+    default_role: quick_tasks
+    priority: low
+
+  - name: phi3:mini
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: phi3:mini
+    capabilities:
+      - quick_tasks
+      - simple_reasoning
+      - monitoring
+    strengths:
+      - fast
+      - efficient
+      - good_instruction_following
+    token_limit: 4096
+    latency_class: very_fast
+    cost_class: free
+    vision: false
+    default_role: quick_tasks_backup
+    priority: low
+
+  - name: gemma2:27b
+    provider: ollama
+    endpoint: http://localhost:11434
+    model_id: gemma2:27b-it-q4_0
+    capabilities:
+      - instruction_following
+      - reasoning
+      - general
+    strengths:
+      - balanced_performance
+      - single_gpu_optimized
+    token_limit: 8192
+    latency_class: medium
+    cost_class: free
+    vision: false
+    default_role: general_balanced
+    priority: medium
+
+  # ============================================
+  # PREMIUM MODELS (ROI-Gated)
+  # ============================================
+
+  - name: gpt-4o
+    provider: openai
+    endpoint: https://api.openai.com/v1
+    model_id: gpt-4o
+    capabilities:
+      - reasoning
+      - instruction_following
+      - code_generation
+      - vision
+    strengths:
+      - high_quality
+      - multimodal
+      - reliable
+    token_limit: 128000
+    latency_class: fast
+    cost_class: premium
+    vision: true
+    default_role: premium_reasoning
+    priority: low
+    roi_required: 5.0  # Must have 5x ROI to use
+
+  - name: gemini-2.5-pro
+    provider: google
+    endpoint: https://generativelanguage.googleapis.com/v1
+    model_id: gemini-2.5-pro
+    capabilities:
+      - reasoning
+      - instruction_following
+      - vision
+      - multimodal
+    strengths:
+      - high_quality
+      - multimodal
+      - web_search
+    token_limit: 1000000
+    latency_class: fast
+    cost_class: premium
+    vision: true
+    default_role: premium_reasoning
+    priority: low
+    roi_required: 5.0
+
+  - name: claude-3-5-sonnet
+    provider: anthropic
+    endpoint: https://api.anthropic.com/v1
+    model_id: claude-3-5-sonnet-20241022
+    capabilities:
+      - reasoning
+      - instruction_following
+      - code_generation
+    strengths:
+      - exceptional_reasoning
+      - safety
+      - long_context
+    token_limit: 200000
+    latency_class: medium
+    cost_class: premium
+    vision: true
+    default_role: premium_reasoning
+    priority: low
+    roi_required: 10.0  # Must have 10x ROI to use
+
+# ============================================
+# CAPABILITY MAPPINGS
+# ============================================
+
+capability_roles:
+  orchestrator:
+    primary: deepseek-v3
+    fallback: deepseek-r1:70b
+    lightweight: deepseek-r1:32b
+
+  reasoning:
+    primary: deepseek-v3
+    fallback: deepseek-r1:70b
+    fast: deepseek-r1:32b
+
+  code_generation:
+    primary: deepseek-coder-v2
+    fallback: deepseek-coder:33b
+    fast: codestral
+
+  vision:
+    primary: qwen2.5vl:32b
+    fallback: llava:7b
+
+  embeddings:
+    primary: nomic-embed-text
+
+  reranking:
+    primary: bge-reranker-large
+
+  speech_to_text:
+    fast: whisper-large-v3-turbo
+    accurate: whisper-large-v3
+
+  text_to_speech:
+    primary: piper-tts
+
+  quick_tasks:
+    primary: llama3.2:1b
+    fallback: phi3:mini

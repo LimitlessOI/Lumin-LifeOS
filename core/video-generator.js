@@ -130,8 +130,9 @@ For each scene, provide:
 
 Format as JSON array of scenes.`;
 
-    const response = await this.callCouncilMember("chatgpt", prompt, {
-      useTwoTier: false,
+    // Use local Ollama model instead of ChatGPT
+    const response = await this.callCouncilMember("ollama_deepseek_v3", prompt, {
+      useOpenSourceCouncil: true,
       maxTokens: 2000,
     });
 
