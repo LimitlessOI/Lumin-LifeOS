@@ -1,20 +1,22 @@
 ```sql
-CREATE TABLE financial_optimization_runs (
-  id SERIAL PRIMARY KEY,
-  parameters JSONB NOT NULL,
-  results JSONB NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE market_reports (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    data JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE anomaly_detection_events (
-  id SERIAL PRIMARY KEY,
-  event_data JSONB NOT NULL,
-  detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE market_data_sources (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    api_endpoint VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE ethical_boundary_rules (
-  id SERIAL PRIMARY KEY,
-  rule_definition TEXT NOT NULL,
-  active BOOLEAN DEFAULT TRUE
+CREATE TABLE report_templates (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    template JSONB NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```

@@ -1,30 +1,26 @@
 ```sql
-CREATE TABLE edge_devices (
+CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
-    device_name VARCHAR(255) NOT NULL,
-    location VARCHAR(255),
-    last_online TIMESTAMP
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE anomaly_logs (
-    id SERIAL PRIMARY KEY,
-    device_id INT REFERENCES edge_devices(id),
-    anomaly_timestamp TIMESTAMP NOT NULL,
-    anomaly_data JSONB NOT NULL
+CREATE TABLE task_dependencies (
+    task_id INT NOT NULL,
+    dependency_id INT NOT NULL,
+    PRIMARY KEY (task_id, dependency_id),
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (dependency_id) REFERENCES tasks(id) ON DELETE CASCADE
 );
 
-CREATE TABLE digital_twin_scenarios (
+CREATE TABLE task_automations (
     id SERIAL PRIMARY KEY,
-    scenario_name VARCHAR(255) NOT NULL,
+    task_id INT NOT NULL,
+    automation_type VARCHAR(100),
     parameters JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE performance_metrics (
-    id SERIAL PRIMARY KEY,
-    device_id INT REFERENCES edge_devices(id),
-    metric_name VARCHAR(255) NOT NULL,
-    metric_value DOUBLE PRECISION,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
 );
 ```

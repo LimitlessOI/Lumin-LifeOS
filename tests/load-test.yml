@@ -7,5 +7,11 @@ config:
 scenarios:
   - flow:
     - get:
-        url: '/twins/digital-twin/1'
+        url: '/tasks'
+    - post:
+        url: '/tasks'
+        json:
+          title: 'Load Test Task'
+          description: 'Load Test Description'
+          status: 'pending'
 ```

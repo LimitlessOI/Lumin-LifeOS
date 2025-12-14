@@ -1,0 +1,21 @@
+```css
+.project-list {
+    list-style: none;
+    padding: 0;
+}
+
+.project-item {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.project-item h2 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.project-item p {
+    margin: 0.5em 0 0;
+    color: #666;
+}
+```

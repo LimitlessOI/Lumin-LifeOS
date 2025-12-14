@@ -1,0 +1,20 @@
+```javascript
+const Workshop = require('../models/Workshop');
+const notificationService = require('../services/notificationService');
+const calendarService = require('../services/calendarService');
+
+exports.createWorkshop = async (req, res) => {
+  try {
+    const { title, description, date } = req.body;
+    const newWorkshop = await Workshop.create({ title, description, date });
+
+    // Notify users and schedule in calendar
+    notificationService.sendNotification('New workshop created', title);
+    calendarService.scheduleEvent({ title, date });
+
+    res.status(201).json(newWorkshop);
+  } catch (error) {
+    console.error('Error creating workshop:', error);
+    res.status(500).json({ error: 'Failed to create workshop' });
+  }
+};

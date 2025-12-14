@@ -1,0 +1,16 @@
+```json
+{
+  "name": "jest-configurator",
+  "version": "1.0.0",
+  "description": "A CLI tool to generate Jest configuration files.",
+  "main": "src/cli/index.js",
+  "bin": {
+    "setup-jest-config": "./bin/setup-jest-config.js"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "MIT"
+}
+```

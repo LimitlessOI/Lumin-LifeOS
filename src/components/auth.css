@@ -1,0 +1,43 @@
+```css
+.login-form {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-form h1 {
+  text-align: center;
+}
+
+.login-form div {
+  margin-bottom: 15px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  box-sizing: border-box;
+}
+
+.oauth-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #eee;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.oauth-button.google {
+  background-color: #db4437;
+  color: white;
+}
+
+.oauth-button.facebook {
+  background-color: #3b5998;
+  color: white;
+}
+```

@@ -1,0 +1,17 @@
+```css
+.project-detail-view {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.project-detail-view h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.project-detail-view p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+```

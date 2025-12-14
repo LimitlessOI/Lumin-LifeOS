@@ -1,0 +1,19 @@
+```css
+.payment-portal {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.payment-form {
+    margin: 20px 0;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}

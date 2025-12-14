@@ -1,0 +1,12 @@
+```ejs
+<% /* This is a base template for authentication routes. Modify as needed. */ %>
+const express = require('express');
+const router = express.Router();
+
+router.<%= method %>('<%= path %>', async (req, res) => {
+  // Implement authentication logic here
+  res.send('Auth route');
+});
+
+module.exports = router;
+```

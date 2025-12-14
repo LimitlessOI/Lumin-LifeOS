@@ -1,0 +1,1 @@
+Self-programming: if i have coded this with curser it would ahve this programed with in 15 mins. i do not beilive that

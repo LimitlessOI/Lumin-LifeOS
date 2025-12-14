@@ -1,0 +1,22 @@
+```json
+[
+    {
+        "id": 1,
+        "name": "Node.js App",
+        "description": "Default Node.js application environment variables",
+        "template_data": {
+            "PORT": "3000",
+            "DATABASE_URL": "postgres://user:password@localhost:5432/mydb"
+        }
+    },
+    {
+        "id": 2,
+        "name": "React App",
+        "description": "Default React application environment variables",
+        "template_data": {
+            "PORT": "3000",
+            "API_URL": "http://localhost:3000/api"
+        }
+    }
+]
+```

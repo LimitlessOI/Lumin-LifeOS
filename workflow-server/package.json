@@ -1,0 +1,26 @@
+```json
+{
+  "name": "workflow-server",
+  "version": "1.0.0",
+  "description": "A server for handling workflows and tasks.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.7.1",
+    "sequelize": "^6.6.5",
+    "dotenv": "^10.0.0",
+    "cors": "^2.8.5",
+    "helmet": "^4.6.0"
+  },
+  "devDependencies": {
+    "jest": "^27.2.5",
+    "supertest": "^6.1.6"
+  },
+  "author": "LifeOS AI",
+  "license": "MIT"
+}
+```

@@ -1,0 +1,30 @@
+```yaml
+version: '3.8'
+
+services:
+  market-analysis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://user:password@db:5432/market_analysis
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: market_analysis
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+```

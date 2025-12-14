@@ -1,22 +1,15 @@
 ```sql
-CREATE TABLE user_learning_profiles (
-    user_id SERIAL PRIMARY KEY,
-    learning_style VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE interaction_logs (
-    log_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES user_learning_profiles(user_id),
-    interaction_type VARCHAR(255),
-    interaction_data JSONB,
-    logged_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE adaptation_suggestions (
-    suggestion_id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES user_learning_profiles(user_id),
-    suggestion_text TEXT,
-    suggested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE user_sessions (
+  session_id UUID PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  expires_at TIMESTAMP NOT NULL
 );
 ```

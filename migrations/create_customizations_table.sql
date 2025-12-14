@@ -1,0 +1,8 @@
+CREATE TABLE customizations (
+  id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(id),
+  scenario_id INT REFERENCES scenarios(id),
+  settings JSONB,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

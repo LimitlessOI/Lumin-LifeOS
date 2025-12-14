@@ -1,0 +1,9 @@
+.dashboard {
+  padding: 20px;
+}
+
+.project-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}

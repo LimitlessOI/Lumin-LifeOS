@@ -1,0 +1,11 @@
+```yaml
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 5
+scenarios:
+  - flow:
+      - get:
+          url: '/fetch-data/1'
+```

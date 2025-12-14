@@ -1,0 +1,7 @@
+CREATE TABLE payments (
+  id VARCHAR(255) PRIMARY KEY,
+  amount INTEGER NOT NULL,
+  currency VARCHAR(3) NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);

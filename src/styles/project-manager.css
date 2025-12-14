@@ -1,0 +1,26 @@
+```css
+.project-manager {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+.project-manager h1 {
+  color: #333;
+}
+
+.project-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.project-list-item {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.project-list-item:hover {
+  background-color: #f9f9f9;
+}
+```

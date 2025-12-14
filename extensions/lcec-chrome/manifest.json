@@ -1,0 +1,18 @@
+```json
+{
+    "manifest_version": 3,
+    "name": "LCEC Chrome Extension",
+    "version": "1.0",
+    "description": "Scrapes platform data and communicates with backend.",
+    "permissions": ["activeTab", "scripting", "webRequest"],
+    "background": {
+        "service_worker": "background/ws-client.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content-scripts/platform-scrapers.js"]
+        }
+    ]
+}
+```

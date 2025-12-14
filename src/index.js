@@ -1,19 +1,22 @@
-```javascript
 const express = require('express');
-const bodyParser = require('body-parser');
-const orchestrator = require('./orchestrator/core');
-const mlEngine = require('./ml/local-engine');
-const setupSyncService = require('./device/sync-service');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('./middleware/rateLimit');
+const logging = require('./middleware/logging');
+const userRoutes = require('./routes/userRoutes');
+require('dotenv').config();
 
 const app = express();
-app.use(bodyParser.json());
 
-app.use('/orchestrator', orchestrator);
-app.use('/ml', mlEngine);
+app.use(express.json());
+app.use(cors());
+app.use(helmet());
+app.use(rateLimit);
+app.use(logging);
 
-const server = app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.use('/api/users', userRoutes);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-setupSyncService(server);
-```

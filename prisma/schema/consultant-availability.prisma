@@ -1,0 +1,41 @@
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Consultant {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  availabilitySlots ConsultantAvailabilitySlot[]
+  calendarIntegrations ConsultantCalendarIntegration[]
+}
+
+model ConsultantAvailabilitySlot {
+  id            Int      @id @default(autoincrement())
+  consultant    Consultant @relation(fields: [consultantId], references: [id])
+  consultantId  Int
+  startTime     DateTime
+  endTime       DateTime
+  isBooked      Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model ConsultantCalendarIntegration {
+  id           Int      @id @default(autoincrement())
+  consultant   Consultant @relation(fields: [consultantId], references: [id])
+  consultantId Int
+  provider     String
+  accessToken  String
+  refreshToken String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

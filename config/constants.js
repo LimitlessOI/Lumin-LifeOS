@@ -1,0 +1,23 @@
+const ENVIRONMENTS = {
+  DEVELOPMENT: 'development',
+  PRODUCTION: 'production',
+  TEST: 'test',
+};
+
+const CONFIG_KEYS = {
+  NODE_ENV: 'NODE_ENV',
+  PORT: 'PORT',
+  DB_HOST: 'DB_HOST',
+  DB_PORT: 'DB_PORT',
+  DB_USER: 'DB_USER',
+  DB_PASSWORD: 'DB_PASSWORD',
+  DB_NAME: 'DB_NAME',
+  STRIPE_SECRET_KEY: 'STRIPE_SECRET_KEY',
+  STRIPE_WEBHOOK_SECRET: 'STRIPE_WEBHOOK_SECRET',
+  LOG_LEVEL: 'LOG_LEVEL',
+};
+
+module.exports = {
+  ENVIRONMENTS,
+  CONFIG_KEYS,
+};

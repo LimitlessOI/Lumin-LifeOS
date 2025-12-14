@@ -1,30 +1,19 @@
 ```sql
-CREATE TABLE health_data_contributors (
+CREATE TABLE code_review_insights (
     id SERIAL PRIMARY KEY,
+    review_id INT NOT NULL,
+    insight_text TEXT NOT NULL,
+    confidence_score DECIMAL(5, 2),
+    type VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE insight_feedback (
+    id SERIAL PRIMARY KEY,
+    insight_id INT REFERENCES code_review_insights(id),
     user_id INT NOT NULL,
-    data_contributed JSONB NOT NULL,
-    contribution_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE federated_learning_sessions (
-    session_id SERIAL PRIMARY KEY,
-    session_details JSONB NOT NULL,
-    start_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    end_time TIMESTAMP,
-    status VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE data_usage_ledger (
-    entry_id SERIAL PRIMARY KEY,
-    contributor_id INT REFERENCES health_data_contributors(id),
-    usage_details JSONB NOT NULL,
-    recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE dao_proposals (
-    proposal_id SERIAL PRIMARY KEY,
-    proposal_details JSONB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(50) NOT NULL
+    feedback TEXT,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```

@@ -1,0 +1,32 @@
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlp-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nlp-service
+  template:
+    metadata:
+      labels:
+        app: nlp-service
+    spec:
+      containers:
+      - name: nlp-service
+        image: nlp-service:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlp-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: nlp-service
+```

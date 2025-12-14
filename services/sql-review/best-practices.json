@@ -1,0 +1,13 @@
+```json
+[
+    {
+        "rule_name": "Avoid SELECT *",
+        "description": "Using SELECT * can lead to performance issues.",
+        "severity": 2
+    },
+    {
+        "rule_name": "Use indexed columns in WHERE clause",
+        "description": "Ensure WHERE clause uses indexed columns for faster search.",
+        "severity": 3
+    }
+]

@@ -1,0 +1,25 @@
+```json
+{
+  "name": "code-service",
+  "version": "1.0.0",
+  "description": "Microservice for code generation and management",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sequelize": "^6.6.5",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "jsonwebtoken": "^8.5.1",
+    "bcryptjs": "^2.4.3",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "jest": "^27.2.1",
+    "supertest": "^6.1.6"
+  }
+}
+```

@@ -1,0 +1,33 @@
+```css
+.report-generator {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.report-generator h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.report-generator ul {
+    list-style: none;
+    padding: 0;
+}
+
+.report-generator li {
+    margin-bottom: 10px;
+}
+
+.report-generator button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.report-generator button:disabled {
+    background-color: #d6d6d6;
+    cursor: not-allowed;
+}
+```

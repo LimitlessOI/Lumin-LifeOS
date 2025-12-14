@@ -1,0 +1,19 @@
+```json
+{
+  "manifest_version": 3,
+  "name": "Data Extractor",
+  "version": "1.0",
+  "description": "Extract data from QuickBooks and Shopify.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.quickbooks.com/*", "*://*.shopify.com/*"],
+      "js": ["content-script.js"]
+    }
+  ],
+  "host_permissions": ["*://*.quickbooks.com/*", "*://*.shopify.com/*"]
+}
+```

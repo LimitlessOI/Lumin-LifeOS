@@ -1,0 +1,18 @@
+```sql
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE task_validations (
+    id SERIAL PRIMARY KEY,
+    task_id INT REFERENCES tasks(id) ON DELETE CASCADE,
+    validation_type VARCHAR(100) NOT NULL,
+    is_valid BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```

@@ -1,31 +1,29 @@
 ```sql
-CREATE TABLE supply_chain_products (
-    product_id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE code_submissions (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    repository_url VARCHAR(255),
+    branch_name VARCHAR(255),
+    code TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE iot_sensor_data (
-    data_id SERIAL PRIMARY KEY,
-    product_id INT REFERENCES supply_chain_products(product_id),
-    sensor_type VARCHAR(100),
-    value NUMERIC,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE review_history (
+    id SERIAL PRIMARY KEY,
+    submission_id INT REFERENCES code_submissions(id),
+    review_comments TEXT,
+    reviewer_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE anomaly_detection_logs (
-    log_id SERIAL PRIMARY KEY,
-    data_id INT REFERENCES iot_sensor_data(data_id),
-    anomaly_type VARCHAR(100),
-    details TEXT,
-    detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE ethical_scores (
-    score_id SERIAL PRIMARY KEY,
-    product_id INT REFERENCES supply_chain_products(product_id),
-    score NUMERIC,
-    calculated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE vcs_integrations (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    vcs_type VARCHAR(50),
+    access_token VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```

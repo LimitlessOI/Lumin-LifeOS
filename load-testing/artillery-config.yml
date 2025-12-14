@@ -1,0 +1,15 @@
+```yaml
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 10
+
+scenarios:
+  - flow:
+      - get:
+          url: '/api/code-review/some-existing-id'
+      - post:
+          url: '/api/code-review'
+          json:
+            codeSubmissionId: 'some-uuid'

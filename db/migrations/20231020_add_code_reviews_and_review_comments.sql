@@ -1,0 +1,17 @@
+```sql
+CREATE TABLE code_reviews (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE review_comments (
+    id SERIAL PRIMARY KEY,
+    review_id INT REFERENCES code_reviews(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    author VARCHAR(50) NOT NULL,
+    resolved BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

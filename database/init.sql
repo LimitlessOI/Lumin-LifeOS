@@ -1,19 +1,16 @@
 ```sql
-CREATE TABLE translations (
+CREATE TABLE IF NOT EXISTS prototype_configs (
     id SERIAL PRIMARY KEY,
-    source_language VARCHAR(10),
-    target_language VARCHAR(10),
-    original_text TEXT,
-    translated_text TEXT,
-    context JSONB,
+    name VARCHAR(255) NOT NULL,
+    value TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE user_feedback (
+CREATE TABLE IF NOT EXISTS query_logs (
     id SERIAL PRIMARY KEY,
-    translation_id INT REFERENCES translations(id),
-    user_id INT,
-    feedback TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    query TEXT NOT NULL,
+    parameters JSONB,
+    executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    success BOOLEAN
 );
 ```

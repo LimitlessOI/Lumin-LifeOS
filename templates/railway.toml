@@ -1,0 +1,4 @@
+```toml
+[service]
+name = "my-node-app"
+```
