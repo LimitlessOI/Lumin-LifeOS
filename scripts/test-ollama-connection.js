@@ -68,31 +68,47 @@ async function testConnection() {
     
     // Test 3: Test a simple API call
     console.log('🧪 Test 3: Testing API call...');
+    // Prefer small, fast models for testing
     const testModel = availableModels.find(m => 
-      m.name.includes('llama3.2') || 
-      m.name.includes('phi3') ||
-      m.name.includes('deepseek-coder')
+      m.name === 'llama3.2:1b' || 
+      m.name === 'phi3:mini' ||
+      m.name.includes('llama3.2:1b')
+    ) || availableModels.find(m => 
+      m.name.includes('llama3.2') && !m.name.includes('vision') && !m.name.includes('90b')
+    ) || availableModels.find(m => 
+      m.name.includes('phi3')
+    ) || availableModels.find(m => 
+      m.name.includes('deepseek-coder') && !m.name.includes('33b') && !m.name.includes('6.7b')
     );
     
     if (testModel) {
       console.log(`   Using model: ${testModel.name}`);
       
-      const generateResponse = await fetch(`${OLLAMA_ENDPOINT}/api/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: testModel.name,
-          prompt: 'Say "Hello, AI Counsel OS!"',
-          stream: false,
-        }),
-      });
-      
-      if (generateResponse.ok) {
-        const result = await generateResponse.json();
-        console.log(`   ✅ API call successful!`);
-        console.log(`   Response: ${result.response?.substring(0, 100)}...\n`);
-      } else {
-        console.log(`   ⚠️  API call failed: HTTP ${generateResponse.status}\n`);
+      try {
+        const generateResponse = await fetch(`${OLLAMA_ENDPOINT}/api/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: testModel.name,
+            prompt: 'Say "Hello, AI Counsel OS!" in one sentence.',
+            stream: false,
+            options: {
+              num_predict: 20, // Short response
+            },
+          }),
+        });
+        
+        if (generateResponse.ok) {
+          const result = await generateResponse.json();
+          console.log(`   ✅ API call successful!`);
+          console.log(`   Response: ${result.response?.substring(0, 100)}...\n`);
+        } else {
+          const errorText = await generateResponse.text();
+          console.log(`   ⚠️  API call failed: HTTP ${generateResponse.status}`);
+          console.log(`   Error: ${errorText.substring(0, 200)}...\n`);
+        }
+      } catch (error) {
+        console.log(`   ⚠️  API call error: ${error.message}\n`);
       }
     } else {
       console.log(`   ⚠️  No suitable test model found\n`);
