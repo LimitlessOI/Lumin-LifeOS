@@ -2170,15 +2170,36 @@ function selectOptimalModel(prompt, taskComplexity = 'medium') {
   // Use cheapest model that can handle the task
   const promptLength = prompt.length;
   
-  // Simple tasks -> cheapest model
+  // Check API key availability before selecting models
+  const hasGeminiKey = !!(process.env.LIFEOS_GEMINI_KEY?.trim() || process.env.GEMINI_API_KEY?.trim());
+  const hasDeepSeekKey = !!(process.env.Deepseek_API_KEY?.trim() || process.env.DEEPSEEK_API_KEY?.trim());
+  const hasOpenAIKey = !!process.env.OPENAI_API_KEY?.trim();
+  
+  // Check if we're in production (Railway/cloud) - Ollama won't work there
+  const isProduction = NODE_ENV === 'production' || !!process.env.RAILWAY_ENVIRONMENT;
+  const ollamaAvailable = OLLAMA_ENDPOINT && !isProduction;
+  
+  // Simple tasks -> cheapest model (only if key available)
   if (taskComplexity === 'simple' || promptLength < 200) {
-    compressionMetrics.model_downgrades++;
-    return { member: 'deepseek', model: 'deepseek-coder', reason: 'simple_task' };
+    if (hasDeepSeekKey) {
+      compressionMetrics.model_downgrades++;
+      return { member: 'deepseek', model: 'deepseek-coder', reason: 'simple_task' };
+    }
+    // Fall back to Ollama if available (free) - only in local/dev
+    if (ollamaAvailable) {
+      return { member: 'ollama_llama', model: 'llama3.2:1b', reason: 'simple_task_free' };
+    }
   }
   
-  // Medium tasks -> medium cost
+  // Medium tasks -> medium cost (only if key available)
   if (taskComplexity === 'medium' || promptLength < 1000) {
-    return { member: 'gemini', model: 'gemini-2.5-flash', reason: 'medium_task' };
+    if (hasGeminiKey) {
+      return { member: 'gemini', model: 'gemini-2.5-flash', reason: 'medium_task' };
+    }
+    // Fall back to Ollama if available (free) - only in local/dev
+    if (ollamaAvailable) {
+      return { member: 'ollama_llama', model: 'llama3.2:1b', reason: 'medium_task_free' };
+    }
   }
   
   // Complex tasks -> use requested member
@@ -2273,10 +2294,30 @@ async function callCouncilMember(member, prompt, options = {}) {
   }
 
   // SMART MODEL SELECTION (use cheaper models when possible)
-  const optimalModel = selectOptimalModel(prompt, options.complexity);
-  if (optimalModel && options.allowModelDowngrade !== false) {
-    member = optimalModel.member;
-    console.log(`💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`);
+  // Only optimize if we're not already using OSC (OSC handles its own routing)
+  if (!options.useOpenSourceCouncil) {
+    const optimalModel = selectOptimalModel(prompt, options.complexity);
+    if (optimalModel && options.allowModelDowngrade !== false) {
+      // Verify the selected model has an API key before switching
+      const optimalConfig = COUNCIL_MEMBERS[optimalModel.member];
+      if (optimalConfig) {
+        const optimalKey = getApiKeyForProvider(optimalConfig.provider);
+        // For Ollama, check if endpoint is accessible
+        if (optimalConfig.provider === 'ollama') {
+          // Ollama doesn't need API key, but check endpoint
+          if (optimalConfig.endpoint || OLLAMA_ENDPOINT) {
+            member = optimalModel.member;
+            console.log(`💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`);
+          }
+        } else if (optimalKey) {
+          // Cloud model - verify key exists
+          member = optimalModel.member;
+          console.log(`💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`);
+        } else {
+          console.log(`⚠️  [MODEL OPTIMIZATION] Skipped ${optimalModel.member} - API key not available`);
+        }
+      }
+    }
   }
 
   const getApiKey = (provider) => {
@@ -2308,7 +2349,11 @@ async function callCouncilMember(member, prompt, options = {}) {
 
   const memberApiKey = getApiKey(config.provider);
 
-  if (!memberApiKey) {
+  // Ollama doesn't need API key - check endpoint instead
+  if (config.provider === "ollama") {
+    const endpoint = config.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
+    // Will check availability when making the actual call
+  } else if (!memberApiKey) {
     if (config.provider === "openai") {
       throw new Error(`${member.toUpperCase()}_API_KEY not set`);
     } else {
@@ -2530,7 +2575,10 @@ Be concise, strategic, and speak as the system's internal AI.`;
       const endpoint = config.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
       
       try {
-        console.log(`🆓 [TIER 0] Calling Ollama ${config.model} at ${endpoint}`);
+        console.log(`\n🆓 [OLLAMA] Calling local model: ${config.model}`);
+        console.log(`    Endpoint: ${endpoint}`);
+        console.log(`    Member: ${member}`);
+        console.log(`    Prompt length: ${prompt.length} chars\n`);
 
         // Ollama uses /api/generate for completion
         response = await fetch(`${endpoint}/api/generate`, {
@@ -2555,7 +2603,15 @@ Be concise, strategic, and speak as the system's internal AI.`;
           const text = json.response || "";
 
           if (text) {
-            console.log(`✅ [TIER 0] Ollama ${config.model} successful (FREE)`);
+            const duration = Date.now() - startTime;
+            console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+            console.log(`║ ✅ [OLLAMA] SUCCESS - Local model response received                            ║`);
+            console.log(`║    Model: ${config.model}                                                      ║`);
+            console.log(`║    Member: ${member}                                                           ║`);
+            console.log(`║    Response Time: ${duration}ms                                               ║`);
+            console.log(`║    Response Length: ${text.length} chars                                      ║`);
+            console.log(`║    Cost: $0.00 (FREE - local Ollama)                                          ║`);
+            console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
 
             const duration = Date.now() - startTime;
             await trackAIPerformance(member, "chat", duration, 0, 0, true);
@@ -4445,6 +4501,9 @@ async function trackLoss(
 
 // ==================== COUNCIL WITH FAILOVER (TIER 0 FIRST) ====================
 async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepseek", requireOversight = false, options = {}) {
+  // Check if we're in production (Railway/cloud) - Ollama won't work there
+  const isProduction = NODE_ENV === 'production' || !!process.env.RAILWAY_ENVIRONMENT;
+  
   // Check if spending is disabled (MAX_DAILY_SPEND = 0)
   const spendingDisabled = MAX_DAILY_SPEND === 0;
   
@@ -4455,6 +4514,11 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
   
   if (spendingDisabled) {
     console.warn(`💰 [COST SHUTDOWN] Spending DISABLED (MAX_DAILY_SPEND=$0) - Only using FREE models`);
+  }
+  
+  // In production, OSC (Ollama) won't work - skip it
+  if (isProduction && openSourceCouncil) {
+    console.log(`⚠️  [OSC] Skipping Open Source Council in production (Ollama not available on Railway)`);
   } else if (inCostShutdown) {
     console.warn(`💰 [COST SHUTDOWN] Spending $${currentSpend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} - Only using free/cheap models`);
   }
@@ -4462,10 +4526,18 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
   // Use Open Source Council Router if available and not requiring oversight
   // Only activate when: in cost shutdown OR explicitly requested (opt-in behavior)
   // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4444',message:'OSC router check',data:{openSourceCouncilExists:!!openSourceCouncil,requireOversight,inCostShutdown,useOpenSourceCouncil:options.useOpenSourceCouncil,willUseOSC:!!openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil === true)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+  fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4444',message:'OSC router check',data:{openSourceCouncilExists:!!openSourceCouncil,requireOversight,inCostShutdown,useOpenSourceCouncil:options.useOpenSourceCouncil,isProduction,willUseOSC:!isProduction && !!openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil === true)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
   // #endregion
   
-  if (openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil === true)) {
+  // Skip OSC in production (Railway) - Ollama won't be accessible
+  const willUseOSC = !isProduction && openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil === true);
+  
+  if (willUseOSC) {
+    console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+    console.log(`║ 🆓 [OPEN SOURCE COUNCIL] ACTIVATED - Using local Ollama models (FREE)            ║`);
+    console.log(`║    Reason: ${inCostShutdown ? 'Cost shutdown mode' : 'Explicit opt-in'}                                    ║`);
+    console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
+    
     try {
       // Determine task complexity
       const promptLength = prompt.length;
@@ -4473,6 +4545,11 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
                        options.complexity === "complex" || 
                        options.complexity === "critical" ||
                        options.requireConsensus === true;
+      
+      console.log(`🔄 [OSC] Routing task: ${prompt.substring(0, 80)}...`);
+      console.log(`    Task Type: ${options.taskType || 'auto-detect'}`);
+      console.log(`    Complexity: ${isComplex ? 'COMPLEX (will use consensus)' : 'SIMPLE (single model)'}`);
+      console.log(`    Prompt Length: ${promptLength} chars\n`);
       
       // #region agent log
       fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4450',message:'OSC router activated',data:{promptLength,isComplex,taskType:options.taskType},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
@@ -4486,22 +4563,43 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
         ...options,
       };
       
+      const routeStartTime = Date.now();
       const result = await openSourceCouncil.routeTask(prompt, routerOptions);
+      const routeDuration = Date.now() - routeStartTime;
       
       // #region agent log
       fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4461',message:'OSC router result',data:{success:result.success,model:result.model,consensus:result.consensus},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
       // #endregion
       
       if (result.success) {
-        console.log(`✅ [OSC] Got response from ${result.model}${result.consensus ? " (consensus)" : ""} (${result.taskType})`);
+        console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+        console.log(`║ ✅ [OPEN SOURCE COUNCIL] SUCCESS                                                  ║`);
+        console.log(`║    Model: ${result.model}${result.consensus ? ' (consensus from multiple models)' : ''}                        ║`);
+        console.log(`║    Task Type: ${result.taskType || 'general'}                                                      ║`);
+        console.log(`║    Response Time: ${routeDuration}ms                                                      ║`);
+        console.log(`║    Cost: $0.00 (FREE - local Ollama)                                              ║`);
+        console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
         return result.response;
+      } else {
+        console.warn(`\n⚠️  [OSC] Router returned unsuccessful result, falling back...\n`);
       }
     } catch (error) {
       // #region agent log
       fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4468',message:'OSC router error',data:{error:error.message},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
       // #endregion
-      console.warn(`⚠️ [OSC] Router failed: ${error.message}, falling back to standard failover`);
+      console.error(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+      console.error(`║ ❌ [OPEN SOURCE COUNCIL] ERROR                                                    ║`);
+      console.error(`║    Error: ${error.message}                                                         ║`);
+      console.error(`║    Falling back to standard failover...                                           ║`);
+      console.error(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
       // Fall through to standard failover logic
+    }
+  } else if (openSourceCouncil) {
+    // Log why OSC is NOT being used (for debugging)
+    if (requireOversight) {
+      console.log(`ℹ️  [OSC] Skipped - Task requires oversight (Tier 1 models)`);
+    } else if (!inCostShutdown && options.useOpenSourceCouncil !== true) {
+      console.log(`ℹ️  [OSC] Skipped - Not in cost shutdown and not explicitly requested (opt-in)`);
     }
   }
 
@@ -5066,6 +5164,12 @@ async function initializeTwoTierSystem() {
     tier1Council = new Tier1Council(pool, callCouncilMember);
     modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
     openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
+    console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
+    console.log("║ ✅ [OPEN SOURCE COUNCIL] INITIALIZED                                              ║");
+    console.log("║    Status: Ready to route tasks to local Ollama models                           ║");
+    console.log("║    Activation: Cost shutdown OR explicit opt-in (useOpenSourceCouncil: true)    ║");
+    console.log("║    Models: Connected to Ollama at " + (OLLAMA_ENDPOINT || "http://localhost:11434").padEnd(47) + "║");
+    console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
     outreachAutomation = new OutreachAutomation(
       pool,
       modelRouter,

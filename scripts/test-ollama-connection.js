@@ -68,18 +68,13 @@ async function testConnection() {
     
     // Test 3: Test a simple API call
     console.log('🧪 Test 3: Testing API call...');
-    // Prefer small, fast models for testing
-    const testModel = availableModels.find(m => 
-      m.name === 'llama3.2:1b' || 
-      m.name === 'phi3:mini' ||
-      m.name.includes('llama3.2:1b')
-    ) || availableModels.find(m => 
-      m.name.includes('llama3.2') && !m.name.includes('vision') && !m.name.includes('90b')
-    ) || availableModels.find(m => 
-      m.name.includes('phi3')
-    ) || availableModels.find(m => 
-      m.name.includes('deepseek-coder') && !m.name.includes('33b') && !m.name.includes('6.7b')
-    );
+    // Prefer small, fast models for testing - exact matches first
+    const testModel = availableModels.find(m => m.name === 'llama3.2:1b') ||
+                      availableModels.find(m => m.name === 'phi3:mini') ||
+                      availableModels.find(m => m.name === 'deepseek-coder:latest') ||
+                      availableModels.find(m => m.name.includes('llama3.2:1b')) ||
+                      availableModels.find(m => m.name.includes('phi3:mini')) ||
+                      availableModels.find(m => m.name.includes('deepseek-coder:latest'));
     
     if (testModel) {
       console.log(`   Using model: ${testModel.name}`);

@@ -242,6 +242,10 @@ export class OpenSourceCouncil {
    * Route task to best model(s) based on specialization
    */
   async routeTask(prompt, options = {}) {
+    console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+    console.log(`║ 🧠 [OPEN SOURCE COUNCIL ROUTER] Starting task routing                            ║`);
+    console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
+    
     const {
       taskType = null, // Override auto-detection
       requireConsensus = false, // Require consensus voting
@@ -251,9 +255,13 @@ export class OpenSourceCouncil {
     
     // Detect task type if not provided
     const detectedType = taskType || detectTaskType(prompt);
+    console.log(`📋 [OSC] Detected task type: ${detectedType}`);
     
     // Get specialization config
     const specialization = MODEL_SPECIALIZATION_MATRIX[detectedType] || MODEL_SPECIALIZATION_MATRIX.general;
+    console.log(`    Specialization: ${specialization.description}`);
+    console.log(`    Primary models: ${specialization.primary.join(', ')}`);
+    console.log(`    Backup models: ${specialization.backup.join(', ')}\n`);
     
     // Determine if consensus is needed
     const needsConsensus = requireConsensus || 
@@ -262,8 +270,10 @@ export class OpenSourceCouncil {
                           prompt.length > 2000;
     
     if (needsConsensus) {
+      console.log(`🔄 [OSC] Task requires CONSENSUS (complex/critical task)\n`);
       return await this.executeWithConsensus(prompt, specialization, consensusThreshold, options);
     } else {
+      console.log(`⚡ [OSC] Task is SIMPLE (single model execution)\n`);
       return await this.executeSingle(prompt, specialization, options);
     }
   }
@@ -279,14 +289,29 @@ export class OpenSourceCouncil {
       throw new Error(`No available models for task type: ${specialization.description}`);
     }
     
+    console.log(`🎯 [OSC] Executing with single model (task: ${specialization.description})`);
+    console.log(`    Available models: ${availableModels.join(', ')}`);
+    console.log(`    Trying primary models first...\n`);
+    
     // Try primary models first
     for (const modelKey of availableModels) {
       try {
+        console.log(`    🔄 Trying ${modelKey}...`);
         const startTime = Date.now();
         const response = await this.callCouncilMember(modelKey, prompt, options);
         const responseTime = Date.now() - startTime;
         
         this.healthMonitor.recordSuccess(modelKey, responseTime);
+        
+        console.log(`    ✅ ${modelKey} succeeded in ${responseTime}ms\n`);
+        
+        console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+        console.log(`║ ✅ [OSC] SINGLE MODEL EXECUTION SUCCESS                                         ║`);
+        console.log(`║    Model: ${modelKey}                                                           ║`);
+        console.log(`║    Task: ${specialization.description}                                          ║`);
+        console.log(`║    Response Time: ${responseTime}ms                                             ║`);
+        console.log(`║    Response Length: ${response.length} chars                                   ║`);
+        console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
         
         return {
           success: true,
@@ -297,7 +322,7 @@ export class OpenSourceCouncil {
           consensus: false,
         };
       } catch (error) {
-        console.warn(`⚠️ [OSC] ${modelKey} failed: ${error.message}`);
+        console.warn(`    ⚠️  ${modelKey} failed: ${error.message}`);
         this.healthMonitor.recordFailure(modelKey);
         continue;
       }
@@ -320,15 +345,20 @@ export class OpenSourceCouncil {
     // Select models for consensus (prefer primary, use backup if needed)
     const consensusModels = availableModels.slice(0, Math.max(consensusThreshold, 2));
     
-    console.log(`🔄 [OSC] Executing consensus with ${consensusModels.length} models: ${consensusModels.join(", ")}`);
+    console.log(`\n🔄 [OSC] Executing CONSENSUS with ${consensusModels.length} models:`);
+    console.log(`    Models: ${consensusModels.join(', ')}`);
+    console.log(`    Task: ${specialization.description}`);
+    console.log(`    Running in parallel...\n`);
     
     // Execute all models in parallel
     const startTime = Date.now();
     const promises = consensusModels.map(async (modelKey) => {
       try {
+        console.log(`    🔄 [CONSENSUS] ${modelKey} processing...`);
         const modelStartTime = Date.now();
         const response = await this.callCouncilMember(modelKey, prompt, options);
         const modelResponseTime = Date.now() - modelStartTime;
+        console.log(`    ✅ [CONSENSUS] ${modelKey} completed in ${modelResponseTime}ms`);
         
         this.healthMonitor.recordSuccess(modelKey, modelResponseTime);
         
@@ -371,13 +401,24 @@ export class OpenSourceCouncil {
     
     // Analyze consensus
     const consensus = this.analyzeConsensus(successfulResults);
-    
+    const totalTime = Date.now() - startTime;
+
+    console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+    console.log(`║ ✅ [OSC] CONSENSUS EXECUTION COMPLETE                                             ║`);
+    console.log(`║    Successful Models: ${successfulResults.length}/${consensusModels.length}                                    ║`);
+    console.log(`║    Winning Model: ${consensus.winningModel}                                       ║`);
+    console.log(`║    Task: ${specialization.description}                                           ║`);
+    console.log(`║    Total Time: ${totalTime}ms                                                     ║`);
+    console.log(`║    Response Length: ${consensus.finalResponse.length} chars                      ║`);
+    console.log(`║    Analysis: ${consensus.analysis}                                                ║`);
+    console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
+
     return {
       success: true,
       response: consensus.finalResponse,
       model: consensus.winningModel,
       taskType: specialization.description,
-      responseTime: Date.now() - startTime,
+      responseTime: totalTime,
       consensus: true,
       consensusResults: results,
       consensusAnalysis: consensus.analysis,
