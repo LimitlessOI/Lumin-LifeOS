@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FSAR Proposal Report",
+  "type": "object",
+  "required": ["id", "timestamp", "proposal", "severity", "risks", "mitigations", "block_execution"],
+  "properties": {
+    "id": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "proposal": { "type": "string" },
+    "severity": { "type": "number", "minimum": 0, "maximum": 10 },
+    "risks": { "type": "array", "items": { "type": "string" } },
+    "mitigations": { "type": "array", "items": { "type": "string" } },
+    "block_execution": { "type": "boolean" }
+  },
+  "additionalProperties": true
+}

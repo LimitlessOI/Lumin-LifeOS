@@ -1,0 +1,17 @@
+{
+  "gold_1": {
+    "keywords": ["trade-offs", "latency", "deployment", "complexity"],
+    "min_score": 0.6,
+    "baseline_score": 0.75
+  },
+  "gold_2": {
+    "keywords": ["bug", "subtract", "a+b", "fix"],
+    "min_score": 0.7,
+    "baseline_score": 0.8
+  },
+  "gold_3": {
+    "keywords": ["Jest", "factorial", "expect", "edge"],
+    "min_score": 0.6,
+    "baseline_score": 0.7
+  }
+}

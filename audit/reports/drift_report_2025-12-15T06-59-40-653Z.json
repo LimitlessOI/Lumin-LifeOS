@@ -1,0 +1,15 @@
+{
+  "id": "drift_3b1e3fd4-e126-4086-b538-1ced1bd9fb7e",
+  "severity": 91,
+  "signals": {
+    "repeated_phrasing": 1,
+    "declining_disagreement": 0.925,
+    "rising_certainty": 0.775
+  },
+  "recommendations": [
+    "role reshuffle",
+    "reweighting",
+    "forced FSAR"
+  ],
+  "timestamp": "2025-12-15T06:59:40.654Z"
+}

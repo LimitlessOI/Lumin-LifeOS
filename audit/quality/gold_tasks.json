@@ -1,0 +1,22 @@
+[
+  {
+    "id": "gold_1",
+    "title": "Explain microservices vs monolith",
+    "prompt": "Explain trade-offs between microservices and monolith for a startup.",
+    "expected_keywords": ["trade-offs", "latency", "deployment", "complexity"],
+    "expected_style": "concise"
+  },
+  {
+    "id": "gold_2",
+    "title": "Find a bug in sample code",
+    "prompt": "Review this code and find a bug: function add(a,b){ return a-b; }",
+    "expected_keywords": ["bug", "subtract", "should be a+b", "fix"],
+    "expected_style": "direct"
+  },
+  {
+    "id": "gold_3",
+    "title": "Generate unit test",
+    "prompt": "Write a Jest unit test for a function that returns factorial(n).",
+    "expected_keywords": ["Jest", "factorial", "expect", "edge"]
+  }
+]

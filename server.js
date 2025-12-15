@@ -21,6 +21,8 @@ import fs from "fs";
 import { promises as fsPromises } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { runFSAR } from "./audit/fsar/fsar_runner.js";
+import { evaluateExecutionGate } from "./audit/gating/execution_gate.js";
 import { Pool } from "pg";
 import { WebSocketServer } from "ws";
 import { createServer } from "http";
@@ -4651,6 +4653,44 @@ class ExecutionQueue {
   }
 
   async addTask(type, description, metadata = null) {
+    // --- Execution Gate with FSAR (fail-closed) ---
+    try {
+      const proposalText = `${type}: ${description}`;
+      const { jsonPath: fsarJsonPath, mdPath: fsarMdPath, report } = await runFSAR(proposalText);
+      const gateDecision = evaluateExecutionGate(report);
+
+      const overrideHumanReview =
+        metadata?.override_human_review === true || metadata?.overrideHumanReview === true;
+
+      // Block if gate says no
+      if (!gateDecision.allow) {
+        throw new Error(
+          `${gateDecision.reason} (FSAR report: ${fsarJsonPath})`
+        );
+      }
+
+      // Human review required but not overridden
+      if (gateDecision.requires_human_review && !overrideHumanReview) {
+        throw new Error(
+          `Human review required: ${gateDecision.reason} (FSAR report: ${fsarJsonPath})`
+        );
+      }
+
+      // Attach FSAR artifacts to metadata for traceability
+      metadata = {
+        ...metadata,
+        fsar: {
+          json: fsarJsonPath,
+          md: fsarMdPath,
+          decision: gateDecision,
+        },
+      };
+    } catch (gateError) {
+      // Fail closed: if FSAR or gate fails, block the task
+      console.error(`❌ [EXECUTION GATE] Blocked: ${gateError.message}`);
+      throw gateError;
+    }
+
     const taskId = `task_${Date.now()}_${Math.random()
       .toString(36)
       .slice(2, 8)}`;
@@ -6456,6 +6496,7 @@ app.post("/api/v1/architect/chat", requireKey, async (req, res) => {
 app.post("/api/v1/architect/command", requireKey, async (req, res) => {
   try {
     const { query_json, command, intent } = req.body;
+    const override_human_review = req.body?.override_human_review === true;
 
     const prompt = `Command: ${command}\nIntent: ${intent}\nCompressed Query: ${JSON.stringify(
       query_json || {}
@@ -6464,7 +6505,7 @@ app.post("/api/v1/architect/command", requireKey, async (req, res) => {
     const response = await callCouncilWithFailover(prompt, "ollama_deepseek"); // Use Tier 0 (free)
 
     if (intent && intent !== "general") {
-      await executionQueue.addTask(intent, command);
+      await executionQueue.addTask(intent, command, { override_human_review });
     }
 
     res.json({

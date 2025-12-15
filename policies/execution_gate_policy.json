@@ -1,0 +1,5 @@
+{
+  "severity_threshold_block": 45,
+  "severity_threshold_review": 25,
+  "required_fields": ["id", "timestamp", "proposal", "severity", "risks", "mitigations", "block_execution"]
+}

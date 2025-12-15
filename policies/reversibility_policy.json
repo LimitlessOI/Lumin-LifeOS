@@ -1,0 +1,8 @@
+{
+  "description": "Bias toward reversible, low-impact actions. Escalate review for irreversible changes.",
+  "rules": {
+    "prefer_reversible": true,
+    "irreversible_requires_higher_threshold": true,
+    "document_reversal_plan": true
+  }
+}
