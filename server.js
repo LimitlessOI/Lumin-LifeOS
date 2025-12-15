@@ -2152,9 +2152,8 @@ function getApiKeyForProvider(provider) {
       );
     case "deepseek":
       return (
-        process.env.Deepseek_API_KEY?.trim() ||
         process.env.DEEPSEEK_API_KEY?.trim() ||
-        process.env.DEEPSEEK_API_KEY?.trim()
+        process.env.Deepseek_API_KEY?.trim()
       );
     case "xai":
       return process.env.GROK_API_KEY?.trim();
@@ -2172,7 +2171,7 @@ function selectOptimalModel(prompt, taskComplexity = 'medium') {
   
   // Check API key availability before selecting models
   const hasGeminiKey = !!(process.env.LIFEOS_GEMINI_KEY?.trim() || process.env.GEMINI_API_KEY?.trim());
-  const hasDeepSeekKey = !!(process.env.Deepseek_API_KEY?.trim() || process.env.DEEPSEEK_API_KEY?.trim());
+  const hasDeepSeekKey = !!(process.env.DEEPSEEK_API_KEY?.trim() || process.env.Deepseek_API_KEY?.trim());
   const hasOpenAIKey = !!process.env.OPENAI_API_KEY?.trim();
   
   // Check if we're in production (Railway/cloud) - Ollama won't work there
@@ -2203,6 +2202,11 @@ function selectOptimalModel(prompt, taskComplexity = 'medium') {
   }
   
   // Complex tasks -> use requested member
+  // If no API keys and Ollama not available, return null to use original member
+  if (!hasOpenAIKey && !hasGeminiKey && !hasDeepSeekKey && !ollamaAvailable) {
+    return null; // Use original member (will fail if no keys, but that's expected)
+  }
+  
   return null; // Use original member
 }
 
@@ -2221,20 +2225,9 @@ const ALERT_PHONE =
 
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 async function callCouncilMember(member, prompt, options = {}) {
-  // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2202',message:'callCouncilMember entry',data:{member,promptLength:prompt?.length,options:JSON.stringify(options)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-  // #endregion
-  
   const config = COUNCIL_MEMBERS[member];
   
-  // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2204',message:'config lookup result',data:{member,configExists:!!config,configProvider:config?.provider},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-  // #endregion
-  
   if (!config) {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2205',message:'invalid member key error',data:{member,validKeys:Object.keys(COUNCIL_MEMBERS).slice(0,10)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-    // #endregion
     throw new Error(`Unknown member: ${member}`);
   }
 
@@ -2334,9 +2327,8 @@ async function callCouncilMember(member, prompt, options = {}) {
         );
       case "deepseek":
         return (
-          process.env.Deepseek_API_KEY?.trim() ||
           process.env.DEEPSEEK_API_KEY?.trim() ||
-          process.env.DEEPSEEK_API_KEY?.trim()
+          process.env.Deepseek_API_KEY?.trim()
         );
       case "xai":
         return process.env.GROK_API_KEY?.trim();
@@ -2613,7 +2605,6 @@ Be concise, strategic, and speak as the system's internal AI.`;
             console.log(`║    Cost: $0.00 (FREE - local Ollama)                                          ║`);
             console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
 
-            const duration = Date.now() - startTime;
             await trackAIPerformance(member, "chat", duration, 0, 0, true);
             
             // CACHE THE RESPONSE
@@ -2631,15 +2622,9 @@ Be concise, strategic, and speak as the system's internal AI.`;
           }
         } else {
           const errorText = await response.text();
-          // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2577',message:'Ollama HTTP error',data:{status:response.status,member,model:config.model},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H'})}).catch(()=>{});
-          // #endregion
           throw new Error(`Ollama HTTP ${response.status}: ${errorText}`);
         }
       } catch (ollamaError) {
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:2566',message:'Ollama call failed',data:{member,model:config.model,error:ollamaError.message},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H'})}).catch(()=>{});
-        // #endregion
         console.warn(`⚠️ [TIER 0] Ollama ${config.model} failed: ${ollamaError.message}`);
         throw new Error(`Ollama unavailable: ${ollamaError.message}`);
       }
@@ -4525,17 +4510,14 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
 
   // Use Open Source Council Router if available and not requiring oversight
   // Only activate when: in cost shutdown OR explicitly requested (opt-in behavior)
-  // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4444',message:'OSC router check',data:{openSourceCouncilExists:!!openSourceCouncil,requireOversight,inCostShutdown,useOpenSourceCouncil:options.useOpenSourceCouncil,isProduction,willUseOSC:!isProduction && !!openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil === true)},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-  // #endregion
-  
   // Skip OSC in production (Railway) - Ollama won't be accessible
   const willUseOSC = !isProduction && openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil === true);
   
   if (willUseOSC) {
+    const reasonText = inCostShutdown ? 'Cost shutdown mode' : 'Explicit opt-in';
     console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
     console.log(`║ 🆓 [OPEN SOURCE COUNCIL] ACTIVATED - Using local Ollama models (FREE)            ║`);
-    console.log(`║    Reason: ${inCostShutdown ? 'Cost shutdown mode' : 'Explicit opt-in'}                                    ║`);
+    console.log(`║    Reason: ${reasonText.padEnd(63)}║`);
     console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
     
     try {
@@ -4551,10 +4533,6 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
       console.log(`    Complexity: ${isComplex ? 'COMPLEX (will use consensus)' : 'SIMPLE (single model)'}`);
       console.log(`    Prompt Length: ${promptLength} chars\n`);
       
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4450',message:'OSC router activated',data:{promptLength,isComplex,taskType:options.taskType},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-      // #endregion
-      
       const routerOptions = {
         taskType: options.taskType,
         requireConsensus: isComplex || options.requireConsensus,
@@ -4567,26 +4545,22 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
       const result = await openSourceCouncil.routeTask(prompt, routerOptions);
       const routeDuration = Date.now() - routeStartTime;
       
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4461',message:'OSC router result',data:{success:result.success,model:result.model,consensus:result.consensus},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-      // #endregion
-      
       if (result.success) {
+        const consensusText = result.consensus ? ' (consensus from multiple models)' : '';
+        const modelText = `${result.model}${consensusText}`;
+        const taskTypeText = result.taskType || 'general';
         console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
         console.log(`║ ✅ [OPEN SOURCE COUNCIL] SUCCESS                                                  ║`);
-        console.log(`║    Model: ${result.model}${result.consensus ? ' (consensus from multiple models)' : ''}                        ║`);
-        console.log(`║    Task Type: ${result.taskType || 'general'}                                                      ║`);
-        console.log(`║    Response Time: ${routeDuration}ms                                                      ║`);
-        console.log(`║    Cost: $0.00 (FREE - local Ollama)                                              ║`);
+        console.log(`║    Model: ${modelText.padEnd(63)}║`);
+        console.log(`║    Task Type: ${taskTypeText.padEnd(63)}║`);
+        console.log(`║    Response Time: ${routeDuration}ms`.padEnd(79) + '║');
+        console.log(`║    Cost: $0.00 (FREE - local Ollama)`.padEnd(79) + '║');
         console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
         return result.response;
       } else {
         console.warn(`\n⚠️  [OSC] Router returned unsuccessful result, falling back...\n`);
       }
     } catch (error) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'server.js:4468',message:'OSC router error',data:{error:error.message},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-      // #endregion
       console.error(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
       console.error(`║ ❌ [OPEN SOURCE COUNCIL] ERROR                                                    ║`);
       console.error(`║    Error: ${error.message}                                                         ║`);
@@ -5164,11 +5138,12 @@ async function initializeTwoTierSystem() {
     tier1Council = new Tier1Council(pool, callCouncilMember);
     modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
     openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
+    const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
     console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
     console.log("║ ✅ [OPEN SOURCE COUNCIL] INITIALIZED                                              ║");
     console.log("║    Status: Ready to route tasks to local Ollama models                           ║");
     console.log("║    Activation: Cost shutdown OR explicit opt-in (useOpenSourceCouncil: true)    ║");
-    console.log("║    Models: Connected to Ollama at " + (OLLAMA_ENDPOINT || "http://localhost:11434").padEnd(47) + "║");
+    console.log(`║    Models: Connected to Ollama at ${ollamaEndpoint.padEnd(47)}║`);
     console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
     outreachAutomation = new OutreachAutomation(
       pool,

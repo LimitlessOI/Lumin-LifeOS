@@ -79,18 +79,10 @@ Return as JSON array with these exact fields:
 
     try {
       // Use local reasoning model (must match COUNCIL_MEMBERS key)
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'idea-engine/index.js:82',message:'calling council member',data:{modelKey:'ollama_deepseek_v3',promptLength:prompt?.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-      // #endregion
-      
       const response = await this.callCouncilMember('ollama_deepseek_v3', prompt, {
         useOpenSourceCouncil: true,
         taskType: 'reasoning',
       });
-      
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/ba1dc292-0bca-4fc6-9635-c7350d04afd2',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'idea-engine/index.js:87',message:'council member response received',data:{responseLength:response?.length,hasResponse:!!response},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-      // #endregion
 
       // Parse JSON from response
       const jsonMatch = response.match(/\[[\s\S]*\]/);
@@ -359,22 +351,47 @@ Return as JSON:
     }
 
     // Map model registry names to COUNCIL_MEMBERS keys
-    // Pattern: 'deepseek-v3' -> 'ollama_deepseek_v3'
+    // Must explicitly map all possible reasoning models to prevent invalid keys
     const modelMap = {
+      // DeepSeek models
       'deepseek-v3': 'ollama_deepseek_v3',
+      'deepseek-v3:latest': 'ollama_deepseek_v3',
       'deepseek-r1:32b': 'ollama_deepseek', // Fallback to available model
       'deepseek-r1:70b': 'ollama_deepseek', // Fallback to available model
+      'deepseek-coder:latest': 'ollama_deepseek',
+      'deepseek-coder-v2:latest': 'ollama_deepseek_coder_v2',
+      'deepseek-coder:33b': 'ollama_deepseek_coder_33b',
+      // Llama models
       'llama3.3:70b-instruct-q4_0': 'ollama_llama_3_3_70b',
+      'llama3.2:1b': 'ollama_llama',
+      'llama3.2:3b': 'ollama_llama', // Fallback
+      // Qwen models
       'qwen2.5:72b-q4_0': 'ollama_qwen_2_5_72b',
-      'qwen2.5:32b-instruct': 'ollama_qwen_2_5_72b', // Fallback
+      'qwen2.5:72b-instruct': 'ollama_qwen_2_5_72b',
+      'qwen2.5:32b-instruct': 'ollama_qwen_coder_32b', // Coder model
+      'qwen2.5-coder:32b-instruct': 'ollama_qwen_coder_32b',
+      // Gemma models
       'gemma2:27b-it-q4_0': 'ollama_gemma_2_27b',
+      'gemma2:9b-it-q4_0': 'ollama_gemma_2_27b', // Fallback
+      // Other models
+      'codestral:latest': 'ollama_codestral',
+      'phi3:mini': 'ollama_phi3',
+      'phi3:medium': 'ollama_phi3', // Fallback
     };
 
     return models
       .filter(m => m.cost_class === 'free')
       .slice(0, 3)
-      .map(m => modelMap[m.name] || m.name.replace(/[:\-]/g, '_').replace(/^/, 'ollama_'))
-      .filter(Boolean); // Remove any undefined mappings
+      .map(m => {
+        const mapped = modelMap[m.name];
+        if (!mapped) {
+          // Log warning for unmapped models instead of generating invalid keys
+          console.warn(`⚠️ [IDEA ENGINE] Model "${m.name}" not in modelMap, skipping`);
+          return null;
+        }
+        return mapped;
+      })
+      .filter(Boolean); // Remove any null/undefined mappings
   }
 
   average(values) {
