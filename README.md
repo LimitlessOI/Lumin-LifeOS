@@ -41,3 +41,4 @@ This project is licensed under the ISC License.
 ### Contact
 
 For questions, please contact [support@lifeos.com](mailto:support@lifeos.com).
+Cursor push test
