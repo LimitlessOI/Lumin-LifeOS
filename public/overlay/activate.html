@@ -198,8 +198,8 @@
     // Check if already activated
     const savedKey = sessionStorage.getItem('lifeos_cmd_key') || localStorage.getItem('lifeos_cmd_key');
     if (savedKey) {
-      // Redirect to command center with key
-      window.location.href = `/command-center?key=${encodeURIComponent(savedKey)}`;
+      // Redirect to command center
+      window.location.href = '/overlay/command-center.html';
       return;
     }
 
@@ -246,11 +246,11 @@
         sessionStorage.setItem('lifeos_cmd_key', key);
         localStorage.setItem('lifeos_cmd_key', key);
 
-        // Show success and redirect with key
+        // Show success and redirect to command center
         showSuccess('Activation successful! Redirecting to Command Center...');
         
         setTimeout(() => {
-          window.location.href = `/command-center?key=${encodeURIComponent(key)}`;
+          window.location.href = '/overlay/command-center.html';
         }, 1000);
 
       } catch (error) {

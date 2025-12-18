@@ -11,7 +11,8 @@
     "cli": "node apps/cli/index.js",
     "test": "echo \"Tests not yet implemented\" && exit 0",
     "test:integration": "echo \"Integration tests not yet implemented\" && exit 0",
-    "benchmark": "echo \"Benchmarks not yet implemented\" && exit 0"
+    "benchmark": "echo \"Benchmarks not yet implemented\" && exit 0",
+    "check:overlay": "node scripts/check-overlay-syntax.js"
   },
   "dependencies": {
     "commander": "^11.1.0",
@@ -20,6 +21,7 @@
     "express": "^4.18.0",
     "js-yaml": "^4.1.1",
     "pg": "^8.11.0",
+    "puppeteer": "^24.33.0",
     "stripe": "^13.0.0",
     "twilio": "^4.0.0",
     "ws": "^8.13.0"

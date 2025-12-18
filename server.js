@@ -6088,9 +6088,11 @@ function requireKey(req, res, next) {
   const origin = req.headers.origin;
   if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) return next();
 
-  const key = req.query.key || req.headers["x-command-key"];
-  if (key !== COMMAND_CENTER_KEY)
-    return res.status(401).json({ error: "Unauthorized" });
+  // Normalize: accept either header or query param
+  const key = req.headers["x-command-key"] || req.query.key;
+  if (key !== COMMAND_CENTER_KEY) {
+    return res.status(401).json({ ok: false, error: "unauthorized" });
+  }
   next();
 }
 
@@ -10944,6 +10946,158 @@ app.get("/api/v1/system/fix-history", requireKey, async (req, res) => {
     }
     const history = await logMonitor.getFixHistory(parseInt(req.query.limit) || 50);
     res.json({ ok: true, history, count: history.length });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== MISSING OVERLAY ENDPOINTS ====================
+
+// AI Effectiveness ratings
+app.get("/api/v1/ai/effectiveness", requireKey, async (req, res) => {
+  try {
+    // Get effectiveness ratings for each AI member
+    const ratings = [];
+    const members = ['chatgpt', 'gemini', 'deepseek', 'grok', 'claude'];
+    
+    for (const member of members) {
+      const memberScore = aiPerformanceScores.get(member) || {
+        accuracy: 0.5,
+        self_evaluation: 0.5,
+        total_guesses: 0,
+        correct_guesses: 0,
+      };
+      
+      // Calculate effectiveness (weighted average of accuracy and self-evaluation)
+      const effectiveness = (memberScore.accuracy * 0.6 + memberScore.self_evaluation * 0.4);
+      
+      ratings.push({
+        member,
+        effectiveness,
+        accuracy: memberScore.accuracy,
+        self_evaluation: memberScore.self_evaluation,
+        taskType: 'general',
+        total_tasks: memberScore.total_guesses || 0,
+      });
+    }
+    
+    res.json({ ok: true, ratings });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// User simulation accuracy
+app.get("/api/v1/user/simulation/accuracy", requireKey, async (req, res) => {
+  try {
+    // Placeholder: return a default accuracy score
+    // In a real implementation, this would track how well the system predicts user behavior
+    const accuracyPercent = 75; // Default 75% accuracy
+    
+    res.json({ 
+      ok: true, 
+      accuracyPercent,
+      accuracy: accuracyPercent / 100,
+      note: "User simulation accuracy tracking"
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Internal autopilot cron heartbeat
+app.get("/internal/cron/autopilot", requireKey, async (req, res) => {
+  try {
+    // Heartbeat endpoint for autopilot cron jobs
+    const queueStatus = executionQueue.getStatus();
+    const spendStatus = await getDailySpend();
+    
+    res.json({
+      ok: true,
+      timestamp: new Date().toISOString(),
+      queued_tasks: queueStatus.queued || 0,
+      active_tasks: queueStatus.active || 0,
+      daily_spend: spendStatus.daily_spend || 0,
+      max_daily_spend: spendStatus.max_daily_spend || MAX_DAILY_SPEND,
+      spend_percentage: spendStatus.spend_percentage || '0%',
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Internal autopilot build-now
+app.post("/internal/autopilot/build-now", requireKey, async (req, res) => {
+  try {
+    const force = req.query.force === '1' || req.body.force === true;
+    
+    // Check if autoBuilder is available
+    if (!autoBuilder) {
+      // Try to initialize if not available
+      try {
+        const { AutoBuilder } = await import("./core/auto-builder.js");
+        autoBuilder = new AutoBuilder(pool, callCouncilMember, executionQueue);
+        await autoBuilder.start();
+      } catch (initError) {
+        console.warn('AutoBuilder not available:', initError.message);
+        return res.json({
+          ok: true,
+          skipped: true,
+          reason: 'AutoBuilder not initialized',
+          message: 'Autopilot build system not available'
+        });
+      }
+    }
+    
+    // Trigger build
+    const result = await autoBuilder.buildNextOpportunity({ force });
+    
+    res.json({
+      ok: true,
+      ...result,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('Autopilot build-now error:', error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Overlay state management
+app.post("/api/overlay/:sid/state", requireKey, async (req, res) => {
+  try {
+    const { sid } = req.params;
+    const state = req.body;
+    
+    // Store overlay state (could use Redis or database in production)
+    // For now, just return success
+    res.json({
+      ok: true,
+      sessionId: sid,
+      state,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Overlay status
+app.get("/api/overlay/status", async (req, res) => {
+  try {
+    // Return overlay system status
+    const queueStatus = executionQueue.getStatus();
+    const spendStatus = await getDailySpend();
+    
+    res.json({
+      ok: true,
+      status: "active",
+      queued_tasks: queueStatus.queued || 0,
+      active_tasks: queueStatus.active || 0,
+      daily_spend: spendStatus.daily_spend || 0,
+      max_daily_spend: spendStatus.max_daily_spend || MAX_DAILY_SPEND,
+      timestamp: new Date().toISOString(),
+    });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
