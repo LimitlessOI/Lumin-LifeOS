@@ -269,9 +269,16 @@ app.use((req, res, next) => {
 });
 
 // ==================== DATABASE POOL ====================
+// Validate DATABASE_URL to prevent searchParams errors from invalid connection strings
+let validatedDatabaseUrl = DATABASE_URL;
+if (!validatedDatabaseUrl || validatedDatabaseUrl === 'postgres://username:password@host:port/database') {
+  console.warn('⚠️ DATABASE_URL is missing or placeholder. Database features may not work.');
+  validatedDatabaseUrl = undefined; // Prevents searchParams crash
+}
+
 export const pool = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: DATABASE_URL?.includes("neon.tech")
+  connectionString: validatedDatabaseUrl,
+  ssl: validatedDatabaseUrl?.includes("neon.tech")
     ? { rejectUnauthorized: false }
     : undefined,
   max: 20,

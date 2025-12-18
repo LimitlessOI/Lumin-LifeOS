@@ -601,6 +601,8 @@
     // Load task queue
     async function loadTaskQueue() {
       const taskQueueList = document.getElementById("taskQueueList");
+      if (!taskQueueList) return;
+      
       try {
         const key = getKey();
         if (!key) {
@@ -619,39 +621,25 @@
         if (data.tasks && data.tasks.length > 0) {
           taskQueueList.innerHTML = data.tasks.map((task, index) => {
             const isActive = task.status === 'running';
-            const isExpanded = false; // Will be managed by click handler
+            const taskId = escapeHtml(String(task.id || ''));
+            const taskTitle = escapeHtml(task.title || task.description || 'Task');
+            const taskStatus = escapeHtml(task.status || '');
+            const taskType = escapeHtml(task.type || 'N/A');
+            const taskDesc = escapeHtml(task.description || task.title || 'No description');
+            const taskCreated = task.createdAt ? new Date(task.createdAt).toLocaleString() : 'Unknown';
+            const taskProgress = task.progress || 0;
+            const taskEta = escapeHtml(task.eta || 'Calculating...');
             
-            return `
-              <div class="task-item ${isActive ? 'running' : ''}" data-task-id="${task.id}" data-index="${index}">
-                <div class="task-header">
-                  <div class="task-title">${task.title || task.description || 'Task'}</div>
-                  <div class="task-status ${task.status}">${task.status}</div>
-                </div>
-                ${isActive ? `
-                  <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${task.progress || 0}%"></div>
-                  </div>
-                  <div class="task-eta">Progress: ${task.progress || 0}%</div>
-                ` : `
-                  <div class="task-eta">⏱️ ETA: ${task.eta || 'Calculating...'}</div>
-                `}
-                <div class="task-details" id="details-${task.id}">
-                  <div class="task-details-item"><strong>Type:</strong> ${task.type || 'N/A'}</div>
-                  <div class="task-details-item"><strong>Status:</strong> ${task.status}</div>
-                  <div class="task-details-item"><strong>Created:</strong> ${new Date(task.createdAt).toLocaleString()}</div>
-                  <div class="task-details-item"><strong>Description:</strong> ${task.description || task.title || 'No description'}</div>
-                  ${task.progress !== undefined ? `<div class="task-details-item"><strong>Progress:</strong> ${task.progress}%</div>` : ''}
-                  ${task.eta ? `<div class="task-details-item"><strong>ETA:</strong> ${task.eta}</div>` : ''}
-                </div>
-              </div>
-            `;
+            return `<div class="task-item ${isActive ? 'running' : ''}" data-task-id="${taskId}" data-index="${index}"><div class="task-header"><div class="task-title">${taskTitle}</div><div class="task-status ${escapeHtml(taskStatus)}">${taskStatus}</div></div>${isActive ? `<div class="progress-bar"><div class="progress-fill" style="width: ${taskProgress}%"></div></div><div class="task-eta">Progress: ${taskProgress}%</div>` : `<div class="task-eta">⏱️ ETA: ${taskEta}</div>`}<div class="task-details" id="details-${taskId}"><div class="task-details-item"><strong>Type:</strong> ${taskType}</div><div class="task-details-item"><strong>Status:</strong> ${taskStatus}</div><div class="task-details-item"><strong>Created:</strong> ${escapeHtml(taskCreated)}</div><div class="task-details-item"><strong>Description:</strong> ${taskDesc}</div>${task.progress !== undefined ? `<div class="task-details-item"><strong>Progress:</strong> ${taskProgress}%</div>` : ''}${task.eta ? `<div class="task-details-item"><strong>ETA:</strong> ${taskEta}</div>` : ''}</div></div>`;
           }).join('');
           
           // Add click handlers for task details
           document.querySelectorAll('.task-item').forEach(item => {
             item.addEventListener('click', () => {
               const taskId = item.dataset.taskId;
+              if (!taskId) return;
               const details = document.getElementById(`details-${taskId}`);
+              if (!details) return;
               
               // Toggle details
               if (details.classList.contains('active')) {
@@ -672,7 +660,8 @@
           taskQueueList.innerHTML = "<div style='color: #6b7280; font-size: 0.8rem;'>No tasks in queue</div>";
         }
       } catch (error) {
-        taskQueueList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading queue: ${error.message}</div>`;
+        const errorMsg = escapeHtml(error.message || String(error));
+        taskQueueList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading queue: ${errorMsg}</div>`;
       }
     }
 
@@ -693,11 +682,13 @@
         const pill = (label, value) => {
           const el = document.createElement("div");
           el.className = "pill";
-          el.innerHTML = "<strong>" + label + ":</strong> " + value;
+          const labelEscaped = escapeHtml(String(label));
+          const valueEscaped = escapeHtml(String(value));
+          el.innerHTML = "<strong>" + labelEscaped + ":</strong> " + valueEscaped;
           healthPills.appendChild(el);
         };
 
-        pill("Spend", `${(data.daily_spend || 0).toFixed(3)} / ${data.max_daily_spend}`);
+        pill("Spend", `${(data.daily_spend || 0).toFixed(3)} / ${data.max_daily_spend || 'N/A'}`);
         pill("ROI", (data.roi && data.roi.roi_ratio ? data.roi.roi_ratio.toFixed(2) : "0") + "x");
         pill("Drones", data.drones ? data.drones.active : 0);
         pill("Tasks done", data.tasks ? data.tasks.completed : 0);
