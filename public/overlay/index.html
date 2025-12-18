@@ -470,6 +470,14 @@
   </div>
 
   <script>
+    // HTML escape function for XSS protection
+    function escapeHtml(text) {
+      if (text == null) return '';
+      const div = document.createElement('div');
+      div.textContent = String(text);
+      return div.innerHTML;
+    }
+
     const statusDot = document.getElementById("statusDot");
     const statusText = document.getElementById("statusText");
     const healthPills = document.getElementById("healthPills");
@@ -481,6 +489,11 @@
     const cmdKeyEl = document.getElementById("cmdKey");
     const apiBaseEl = document.getElementById("apiBase");
     const metaInfo = document.getElementById("metaInfo");
+
+    // Defensive checks for required elements
+    if (!statusDot || !statusText || !healthPills || !responseBox || !sendBtn || !promptEl || !memberEl || !cmdKeyEl || !apiBaseEl || !metaInfo) {
+      console.error('Missing required DOM elements');
+    }
 
     // Load saved config
     (function initConfig() {
@@ -514,6 +527,8 @@
     // Load conversation history
     async function loadConversationHistory() {
       const historyList = document.getElementById("historyList");
+      if (!historyList) return;
+      
       try {
         const key = getKey();
         if (!key) {
@@ -521,27 +536,39 @@
           return;
         }
 
-        const res = await fetch(`${getBase()}/api/v1/conversations/history?limit=10`, {
+        const base = getBase();
+        if (!base) {
+          historyList.innerHTML = "<div style='color: #ef4444; font-size: 0.8rem;'>Error: Base URL not set</div>";
+          return;
+        }
+
+        const res = await fetch(`${base}/api/v1/conversations/history?limit=10`, {
           headers: { "x-command-key": key },
         });
         
-        if (!res.ok) throw new Error("Failed to load history");
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`HTTP ${res.status}: ${errorText.slice(0, 100)}`);
+        }
         
         const data = await res.json();
         
         if (data.conversations && data.conversations.length > 0) {
-          historyList.innerHTML = data.conversations.map(conv => `
-            <div class="conversation-item">
-              <div class="user-msg">${conv.orchestrator_msg.substring(0, 100)}${conv.orchestrator_msg.length > 100 ? '...' : ''}</div>
-              <div class="ai-msg">${conv.ai_response.substring(0, 150)}${conv.ai_response.length > 150 ? '...' : ''}</div>
-              <div class="timestamp">${new Date(conv.created_at).toLocaleString()} · ${conv.ai_member || 'unknown'}</div>
-            </div>
-          `).join('');
+          historyList.innerHTML = data.conversations.map(conv => {
+            const userMsg = (conv.orchestrator_msg || '').substring(0, 100);
+            const userMsgFull = (conv.orchestrator_msg || '').length > 100 ? userMsg + '...' : userMsg;
+            const aiMsg = (conv.ai_response || '').substring(0, 150);
+            const aiMsgFull = (conv.ai_response || '').length > 150 ? aiMsg + '...' : aiMsg;
+            const timestamp = conv.created_at ? new Date(conv.created_at).toLocaleString() : 'Unknown';
+            const aiMember = conv.ai_member || 'unknown';
+            return `<div class="conversation-item"><div class="user-msg">${escapeHtml(userMsgFull)}</div><div class="ai-msg">${escapeHtml(aiMsgFull)}</div><div class="timestamp">${escapeHtml(timestamp)} · ${escapeHtml(aiMember)}</div></div>`;
+          }).join('');
         } else {
           historyList.innerHTML = "<div style='color: #6b7280; font-size: 0.8rem;'>No conversations yet</div>";
         }
       } catch (error) {
-        historyList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading history: ${error.message}</div>`;
+        const errorMsg = escapeHtml(error.message || String(error));
+        historyList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading history: ${errorMsg}</div>`;
       }
     }
 
