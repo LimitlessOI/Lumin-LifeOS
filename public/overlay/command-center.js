@@ -5,6 +5,15 @@
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
+// AI member identifier mapping
+const AI_MEMBERS = {
+  chatgpt: { label: "ChatGPT", short: "GPT" },
+  gemini: { label: "Gemini", short: "Gem" },
+  deepseek: { label: "DeepSeek", short: "DS" },
+  grok: { label: "Grok", short: "Grok" },
+  claude: { label: "Claude", short: "Cl" }
+};
+
 class CommandCenter {
   constructor() {
     this.apiBase = window.location.origin;
@@ -34,6 +43,20 @@ class CommandCenter {
     this.selectedMember = null; // For clicking AI dots
     
     this.init();
+  }
+
+  // Normalize member ID to lowercase key
+  normalizeMemberId(member) {
+    if (!member) return null;
+    const normalized = member.toLowerCase();
+    return AI_MEMBERS[normalized] ? normalized : null;
+  }
+
+  // Get display label for member ID
+  getMemberLabel(memberId) {
+    if (!memberId) return memberId;
+    const normalized = this.normalizeMemberId(memberId);
+    return normalized ? AI_MEMBERS[normalized].label : memberId;
   }
 
   async init() {
@@ -79,14 +102,18 @@ class CommandCenter {
 
       if (data.ok && data.results) {
         data.results.forEach(result => {
-          const statusEl = document.getElementById(`status-${result.member}`);
-          if (statusEl) {
-            const dot = statusEl.querySelector('.ai-dot');
-            if (dot) {
-              if (result.success) {
-                dot.setAttribute('data-status', 'active');
-              } else {
-                dot.setAttribute('data-status', 'inactive');
+          // Normalize member ID from result
+          const memberId = this.normalizeMemberId(result.member);
+          if (memberId) {
+            const statusEl = document.getElementById(`status-${memberId}`);
+            if (statusEl) {
+              const dot = statusEl.querySelector('.ai-dot');
+              if (dot) {
+                if (result.success) {
+                  dot.setAttribute('data-status', 'active');
+                } else {
+                  dot.setAttribute('data-status', 'inactive');
+                }
               }
             }
           }
@@ -94,8 +121,8 @@ class CommandCenter {
       }
     } catch (error) {
       // Silent fail - just mark all as unknown
-      ['chatgpt', 'gemini', 'deepseek', 'grok'].forEach(member => {
-        const statusEl = document.getElementById(`status-${member}`);
+      Object.keys(AI_MEMBERS).forEach(memberId => {
+        const statusEl = document.getElementById(`status-${memberId}`);
         if (statusEl) {
           const dot = statusEl.querySelector('.ai-dot');
           if (dot) {
@@ -114,12 +141,13 @@ class CommandCenter {
     }
 
     // Clickable AI status dots - chat with specific AI
-    ['chatgpt', 'gemini', 'deepseek', 'grok'].forEach(member => {
-      const statusEl = document.getElementById(`status-${member}`);
+    Object.keys(AI_MEMBERS).forEach(memberId => {
+      const statusEl = document.getElementById(`status-${memberId}`);
       if (statusEl) {
         statusEl.style.cursor = 'pointer';
-        statusEl.title = `Click to chat with ${member.toUpperCase()}`;
-        statusEl.addEventListener('click', () => this.chatWithAI(member));
+        const label = AI_MEMBERS[memberId].label;
+        statusEl.title = `Click to chat with ${label}`;
+        statusEl.addEventListener('click', () => this.chatWithAI(memberId));
       }
     });
 
@@ -150,7 +178,29 @@ class CommandCenter {
     document.getElementById('btnUploadInline').addEventListener('click', () => this.showUploadModal());
     document.getElementById('btnCloseModal').addEventListener('click', () => this.hideUploadModal());
     document.getElementById('btnUploadFile').addEventListener('click', () => this.uploadFile());
+    document.getElementById('btnChooseFile').addEventListener('click', () => {
+      document.getElementById('fileInput').click();
+    });
     document.getElementById('fileInput').addEventListener('change', (e) => this.handleFileSelect(e));
+    document.getElementById('fileCategory').addEventListener('change', () => this.updateUploadButtonState());
+
+    // Settings button
+    const btnSettings = document.getElementById('btnSettings');
+    if (btnSettings) {
+      btnSettings.addEventListener('click', () => this.showSettingsModal());
+    }
+    const btnSettingsClose = document.getElementById('btnSettingsClose');
+    if (btnSettingsClose) {
+      btnSettingsClose.addEventListener('click', () => this.hideSettingsModal());
+    }
+    const btnSettingsSave = document.getElementById('btnSettingsSave');
+    if (btnSettingsSave) {
+      btnSettingsSave.addEventListener('click', () => this.saveSettings());
+    }
+    const btnSettingsClear = document.getElementById('btnSettingsClear');
+    if (btnSettingsClear) {
+      btnSettingsClear.addEventListener('click', () => this.clearSettings());
+    }
   }
 
   initVoiceRecognition() {
@@ -195,24 +245,29 @@ class CommandCenter {
   }
 
   chatWithAI(member) {
+    // Normalize member ID
+    const memberId = this.normalizeMemberId(member);
+    if (!memberId) return;
+    
     // Focus input and set member
     const input = document.getElementById('inputText');
     input.focus();
-    input.placeholder = `Chat with ${member.toUpperCase()}...`;
+    const label = this.getMemberLabel(memberId);
+    input.placeholder = `Chat with ${label}...`;
     
-    // Store selected member
-    this.selectedMember = member;
+    // Store selected member (normalized ID)
+    this.selectedMember = memberId;
     
     // Highlight the selected AI
-    ['chatgpt', 'gemini', 'deepseek', 'grok'].forEach(m => {
+    Object.keys(AI_MEMBERS).forEach(m => {
       const el = document.getElementById(`status-${m}`);
       if (el) {
-        el.style.border = m === member ? '2px solid #60a5fa' : 'none';
+        el.style.border = m === memberId ? '2px solid #60a5fa' : 'none';
       }
     });
     
     // Show message
-    this.addMessage('system', `💬 Now chatting with ${member.toUpperCase()}. Type your message below.`, 'System');
+    this.addMessage('system', `💬 Now chatting with ${label}. Type your message below.`, 'System');
     this.scrollToBottom();
   }
 
@@ -244,7 +299,7 @@ class CommandCenter {
     this.selectedMember = null;
 
     // Reset AI highlights
-    ['chatgpt', 'gemini', 'deepseek', 'grok'].forEach(m => {
+    Object.keys(AI_MEMBERS).forEach(m => {
       const el = document.getElementById(`status-${m}`);
       if (el) {
         el.style.border = 'none';
@@ -304,15 +359,17 @@ class CommandCenter {
 
       const data = await response.json();
       
-      // Extract AI member name
-      const aiMember = data.member || member;
+      // Extract and normalize AI member ID
+      const rawMember = data.member || member;
+      const aiMemberId = this.normalizeMemberId(rawMember) || this.normalizeMemberId(member) || 'chatgpt';
       const responseText = data.response || data.message || JSON.stringify(data);
       
-      // Add AI response
-      this.addMessage('ai', responseText, aiMember, data.symbols);
+      // Add AI response (use display label for sender)
+      const memberLabel = this.getMemberLabel(aiMemberId);
+      this.addMessage('ai', responseText, memberLabel, data.symbols);
       
-      // Update active AIs
-      this.activeAIs.add(aiMember);
+      // Update active AIs (store normalized ID)
+      this.activeAIs.add(aiMemberId);
       await this.updateConferenceView();
       
       // Trigger self-evaluation
@@ -328,14 +385,18 @@ class CommandCenter {
     this.scrollToBottom();
   }
 
-  addMessage(type, text, sender, symbols = null) {
+  // Render a message to DOM without mutating history
+  renderMessage(msg) {
     const messagesDiv = document.getElementById('chatMessages');
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}`;
+    messageDiv.className = `message ${msg.type}`;
+    
+    // Get display label for AI messages (normalize if needed)
+    const displaySender = msg.type === 'ai' ? this.getMemberLabel(msg.sender) : msg.sender;
     
     const avatar = document.createElement('div');
     avatar.className = 'message-avatar';
-    avatar.textContent = type === 'user' ? 'U' : sender.charAt(0).toUpperCase();
+    avatar.textContent = msg.type === 'user' ? 'U' : displaySender.charAt(0).toUpperCase();
     
     const content = document.createElement('div');
     content.className = 'message-content';
@@ -345,41 +406,51 @@ class CommandCenter {
     
     const senderSpan = document.createElement('span');
     senderSpan.className = 'message-sender';
-    senderSpan.textContent = sender;
+    senderSpan.textContent = displaySender;
     
     const timeSpan = document.createElement('span');
     timeSpan.className = 'message-time';
-    timeSpan.textContent = new Date().toLocaleTimeString();
+    // Use saved timestamp if available, otherwise use current time
+    if (msg.timestamp) {
+      timeSpan.textContent = new Date(msg.timestamp).toLocaleTimeString();
+    } else {
+      timeSpan.textContent = new Date().toLocaleTimeString();
+    }
     
     header.appendChild(senderSpan);
-    if (type === 'ai') {
+    if (msg.type === 'ai') {
       const aiName = document.createElement('span');
       aiName.className = 'message-ai-name';
-      aiName.textContent = sender;
+      aiName.textContent = displaySender;
       header.appendChild(aiName);
     }
     header.appendChild(timeSpan);
     
     const textDiv = document.createElement('div');
     textDiv.className = 'message-text';
-    textDiv.textContent = text;
+    textDiv.textContent = msg.text;
     
     content.appendChild(header);
     content.appendChild(textDiv);
     
     // Show symbols if provided
-    if (symbols) {
+    if (msg.symbols) {
       const symbolsDiv = document.createElement('div');
       symbolsDiv.className = 'message-symbols';
-      symbolsDiv.textContent = `Symbols: ${symbols}`;
+      symbolsDiv.textContent = `Symbols: ${msg.symbols}`;
       content.appendChild(symbolsDiv);
     }
     
     messageDiv.appendChild(avatar);
     messageDiv.appendChild(content);
     messagesDiv.appendChild(messageDiv);
+  }
+
+  addMessage(type, text, sender, symbols = null) {
+    // Render to DOM
+    this.renderMessage({ type, text, sender, symbols });
     
-    // Store in history
+    // Store in history (only function that mutates conversationHistory)
     this.conversationHistory.push({
       type,
       text,
@@ -395,17 +466,19 @@ class CommandCenter {
     const conferenceDiv = document.getElementById('conferenceView');
     conferenceDiv.innerHTML = '';
     
-    const aiNames = ['ChatGPT', 'Gemini', 'DeepSeek', 'Grok'];
-    
-    aiNames.forEach(ai => {
+    // Iterate over AI_MEMBERS to render conference view
+    Object.keys(AI_MEMBERS).forEach(memberId => {
+      const memberInfo = AI_MEMBERS[memberId];
+      const isActive = this.activeAIs.has(memberId);
+      
       const participant = document.createElement('div');
-      participant.className = `ai-participant ${this.activeAIs.has(ai) ? 'speaking' : ''}`;
+      participant.className = `ai-participant ${isActive ? 'speaking' : ''}`;
       
       const indicator = document.createElement('div');
-      indicator.className = `ai-indicator ${this.activeAIs.has(ai) ? 'active' : ''}`;
+      indicator.className = `ai-indicator ${isActive ? 'active' : ''}`;
       
       const name = document.createElement('span');
-      name.textContent = ai;
+      name.textContent = memberInfo.label;
       
       participant.appendChild(indicator);
       participant.appendChild(name);
@@ -526,11 +599,15 @@ class CommandCenter {
         if (effectivenessData.ok && effectivenessData.ratings) {
           // Update AI status dots with effectiveness scores
           effectivenessData.ratings.forEach(rating => {
-            const statusEl = document.getElementById(`status-${rating.member}`);
-            if (statusEl) {
-              // Add effectiveness score as tooltip
-              const effectiveness = (rating.effectiveness * 100).toFixed(0);
-              statusEl.title = `${rating.member.toUpperCase()}: ${effectiveness}% effective (${rating.taskType})`;
+            const memberId = this.normalizeMemberId(rating.member);
+            if (memberId) {
+              const statusEl = document.getElementById(`status-${memberId}`);
+              if (statusEl) {
+                // Add effectiveness score as tooltip
+                const effectiveness = (rating.effectiveness * 100).toFixed(0);
+                const label = this.getMemberLabel(memberId);
+                statusEl.title = `${label}: ${effectiveness}% effective (${rating.taskType})`;
+              }
             }
           });
         }
@@ -600,22 +677,157 @@ class CommandCenter {
 
   showUploadModal() {
     document.getElementById('uploadModal').classList.add('active');
+    // Reset modal state when opening
+    this.resetUploadModal();
   }
 
   hideUploadModal() {
     document.getElementById('uploadModal').classList.remove('active');
+    // Reset modal state when closing
+    this.resetUploadModal();
+  }
+
+  resetUploadModal() {
+    // Clear file selection
+    this.selectedFile = null;
+    document.getElementById('fileInput').value = '';
+    document.getElementById('fileNameDisplay').textContent = 'No file selected';
+    document.getElementById('fileDescription').value = '';
+    document.getElementById('fileCategory').value = '';
+    
+    // Disable upload button
+    const uploadBtn = document.getElementById('btnUploadFile');
+    uploadBtn.disabled = true;
+    uploadBtn.style.background = '#4b5563';
+    uploadBtn.style.color = '#9ca3af';
+    uploadBtn.style.cursor = 'not-allowed';
+  }
+
+  showSettingsModal() {
+    const modal = document.getElementById('settingsModal');
+    const baseInput = document.getElementById('settingsBase');
+    const keyInput = document.getElementById('settingsKey');
+    
+    if (modal) {
+      // Populate current values
+      if (baseInput) {
+        baseInput.value = this.apiBase || window.location.origin;
+      }
+      if (keyInput) {
+        // Get from storage (localStorage first, then sessionStorage, then empty)
+        keyInput.value = localStorage.getItem('lifeos_cmd_key') || sessionStorage.getItem('lifeos_cmd_key') || '';
+      }
+      // Clear any previous saved message
+      const savedMsg = document.getElementById('settingsSavedMsg');
+      if (savedMsg) {
+        savedMsg.textContent = '';
+        savedMsg.style.display = 'none';
+      }
+      modal.classList.add('active');
+    }
+  }
+
+  hideSettingsModal() {
+    const modal = document.getElementById('settingsModal');
+    if (modal) {
+      modal.classList.remove('active');
+    }
+  }
+
+  saveSettings() {
+    const keyInput = document.getElementById('settingsKey');
+    if (keyInput) {
+      const newKey = keyInput.value.trim();
+      if (newKey) {
+        // Store to both storages
+        localStorage.setItem('lifeos_cmd_key', newKey);
+        sessionStorage.setItem('lifeos_cmd_key', newKey);
+        
+        // Update the main command key so app immediately uses it
+        this.commandKey = newKey;
+        
+        // Show saved message
+        let savedMsg = document.getElementById('settingsSavedMsg');
+        if (!savedMsg) {
+          // Create message element if it doesn't exist
+          savedMsg = document.createElement('div');
+          savedMsg.id = 'settingsSavedMsg';
+          savedMsg.style.cssText = 'margin-top: 12px; padding: 8px; background: #1a2332; border: 1px solid #22c55e; border-radius: 6px; color: #22c55e; font-size: 13px; text-align: center;';
+          const modalContent = document.querySelector('#settingsModal .modal-content');
+          if (modalContent) {
+            modalContent.appendChild(savedMsg);
+          }
+        }
+        savedMsg.textContent = '✓ Settings saved';
+        savedMsg.style.display = 'block';
+        
+        // Hide message after 2 seconds
+        setTimeout(() => {
+          if (savedMsg) {
+            savedMsg.style.display = 'none';
+          }
+        }, 2000);
+      }
+    }
+  }
+
+  clearSettings() {
+    // Remove from both storages
+    localStorage.removeItem('lifeos_cmd_key');
+    sessionStorage.removeItem('lifeos_cmd_key');
+    
+    // Redirect immediately to activation page
+    window.location.href = '/activate';
+  }
+
+  updateUploadButtonState() {
+    const uploadBtn = document.getElementById('btnUploadFile');
+    const hasFile = this.selectedFile !== null;
+    const hasCategory = document.getElementById('fileCategory').value.trim() !== '';
+    
+    if (hasFile && hasCategory) {
+      uploadBtn.disabled = false;
+      uploadBtn.style.background = '#3b82f6';
+      uploadBtn.style.color = 'white';
+      uploadBtn.style.cursor = 'pointer';
+    } else {
+      uploadBtn.disabled = true;
+      uploadBtn.style.background = '#4b5563';
+      uploadBtn.style.color = '#9ca3af';
+      uploadBtn.style.cursor = 'not-allowed';
+    }
   }
 
   handleFileSelect(event) {
     const file = event.target.files[0];
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    
     if (file) {
+      // Show filename
+      fileNameDisplay.textContent = `📄 ${file.name}`;
+      fileNameDisplay.style.color = '#60a5fa';
+      
+      // Read file content
       const reader = new FileReader();
       reader.onload = (e) => {
         const content = e.target.result;
         // Store for upload
         this.selectedFile = { file, content };
+        // Update upload button state
+        this.updateUploadButtonState();
+      };
+      reader.onerror = () => {
+        fileNameDisplay.textContent = 'Error reading file';
+        fileNameDisplay.style.color = '#ef4444';
+        this.selectedFile = null;
+        this.updateUploadButtonState();
       };
       reader.readAsText(file);
+    } else {
+      fileNameDisplay.textContent = 'No file selected';
+      fileNameDisplay.style.color = '#9ca3af';
+      this.selectedFile = null;
+      this.updateUploadButtonState();
     }
   }
 
@@ -625,8 +837,13 @@ class CommandCenter {
       return;
     }
 
-    const category = document.getElementById('fileCategory').value;
-    const description = document.getElementById('fileDescription').value;
+    const category = document.getElementById('fileCategory').value.trim();
+    if (!category) {
+      alert('Please select a category');
+      return;
+    }
+
+    const description = document.getElementById('fileDescription').value.trim();
 
     try {
       const response = await fetch(`${this.apiBase}/api/v1/knowledge/upload`, {
@@ -650,9 +867,6 @@ class CommandCenter {
       if (data.ok) {
         alert('File uploaded successfully!');
         this.hideUploadModal();
-        this.selectedFile = null;
-        document.getElementById('fileInput').value = '';
-        document.getElementById('fileDescription').value = '';
       } else {
         alert('Upload failed: ' + data.error);
       }
@@ -670,11 +884,13 @@ class CommandCenter {
     if (saved) {
       try {
         this.conversationHistory = JSON.parse(saved);
-        // Render last 50 messages
+        // Render last 50 messages using renderMessage (does NOT mutate history)
         const recent = this.conversationHistory.slice(-50);
         recent.forEach(msg => {
-          this.addMessage(msg.type, msg.text, msg.sender, msg.symbols);
+          this.renderMessage(msg);
         });
+        // Scroll to bottom after rendering
+        this.scrollToBottom();
       } catch (error) {
         console.error('Error loading conversation:', error);
       }

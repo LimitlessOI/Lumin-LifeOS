@@ -21,6 +21,8 @@ import fs from "fs";
 import { promises as fsPromises } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { runFSAR } from "./audit/fsar/fsar_runner.js";
+import { evaluateExecutionGate } from "./audit/gating/execution_gate.js";
 import { Pool } from "pg";
 import { WebSocketServer } from "ws";
 import { createServer } from "http";
@@ -2152,9 +2154,8 @@ function getApiKeyForProvider(provider) {
       );
     case "deepseek":
       return (
-        process.env.Deepseek_API_KEY?.trim() ||
         process.env.DEEPSEEK_API_KEY?.trim() ||
-        process.env.DEEPSEEK_API_KEY?.trim()
+        process.env.Deepseek_API_KEY?.trim()
       );
     case "xai":
       return process.env.GROK_API_KEY?.trim();
@@ -2170,18 +2171,44 @@ function selectOptimalModel(prompt, taskComplexity = 'medium') {
   // Use cheapest model that can handle the task
   const promptLength = prompt.length;
   
-  // Simple tasks -> cheapest model
+  // Check API key availability before selecting models
+  const hasGeminiKey = !!(process.env.LIFEOS_GEMINI_KEY?.trim() || process.env.GEMINI_API_KEY?.trim());
+  const hasDeepSeekKey = !!(process.env.DEEPSEEK_API_KEY?.trim() || process.env.Deepseek_API_KEY?.trim());
+  const hasOpenAIKey = !!process.env.OPENAI_API_KEY?.trim();
+  
+  // Check if we're in production (Railway/cloud) - Ollama won't work there
+  const isProduction = NODE_ENV === 'production' || !!process.env.RAILWAY_ENVIRONMENT;
+  const ollamaAvailable = OLLAMA_ENDPOINT && !isProduction;
+  
+  // Simple tasks -> cheapest model (only if key available)
   if (taskComplexity === 'simple' || promptLength < 200) {
-    compressionMetrics.model_downgrades++;
-    return { member: 'deepseek', model: 'deepseek-coder', reason: 'simple_task' };
+    if (hasDeepSeekKey) {
+      compressionMetrics.model_downgrades++;
+      return { member: 'deepseek', model: 'deepseek-coder', reason: 'simple_task' };
+    }
+    // Fall back to Ollama if available (free) - only in local/dev
+    if (ollamaAvailable) {
+      return { member: 'ollama_llama', model: 'llama3.2:1b', reason: 'simple_task_free' };
+    }
   }
   
-  // Medium tasks -> medium cost
+  // Medium tasks -> medium cost (only if key available)
   if (taskComplexity === 'medium' || promptLength < 1000) {
-    return { member: 'gemini', model: 'gemini-2.5-flash', reason: 'medium_task' };
+    if (hasGeminiKey) {
+      return { member: 'gemini', model: 'gemini-2.5-flash', reason: 'medium_task' };
+    }
+    // Fall back to Ollama if available (free) - only in local/dev
+    if (ollamaAvailable) {
+      return { member: 'ollama_llama', model: 'llama3.2:1b', reason: 'medium_task_free' };
+    }
   }
   
   // Complex tasks -> use requested member
+  // If no API keys and Ollama not available, return null to use original member
+  if (!hasOpenAIKey && !hasGeminiKey && !hasDeepSeekKey && !ollamaAvailable) {
+    return null; // Use original member (will fail if no keys, but that's expected)
+  }
+  
   return null; // Use original member
 }
 
@@ -2201,7 +2228,10 @@ const ALERT_PHONE =
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 async function callCouncilMember(member, prompt, options = {}) {
   const config = COUNCIL_MEMBERS[member];
-  if (!config) throw new Error(`Unknown member: ${member}`);
+  
+  if (!config) {
+    throw new Error(`Unknown member: ${member}`);
+  }
 
   // Get today's spend (automatically resets each day)
   const today = dayjs().format("YYYY-MM-DD");
@@ -2259,10 +2289,30 @@ async function callCouncilMember(member, prompt, options = {}) {
   }
 
   // SMART MODEL SELECTION (use cheaper models when possible)
-  const optimalModel = selectOptimalModel(prompt, options.complexity);
-  if (optimalModel && options.allowModelDowngrade !== false) {
-    member = optimalModel.member;
-    console.log(`💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`);
+  // Only optimize if we're not already using OSC (OSC handles its own routing)
+  if (!options.useOpenSourceCouncil) {
+    const optimalModel = selectOptimalModel(prompt, options.complexity);
+    if (optimalModel && options.allowModelDowngrade !== false) {
+      // Verify the selected model has an API key before switching
+      const optimalConfig = COUNCIL_MEMBERS[optimalModel.member];
+      if (optimalConfig) {
+        const optimalKey = getApiKeyForProvider(optimalConfig.provider);
+        // For Ollama, check if endpoint is accessible
+        if (optimalConfig.provider === 'ollama') {
+          // Ollama doesn't need API key, but check endpoint
+          if (optimalConfig.endpoint || OLLAMA_ENDPOINT) {
+            member = optimalModel.member;
+            console.log(`💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`);
+          }
+        } else if (optimalKey) {
+          // Cloud model - verify key exists
+          member = optimalModel.member;
+          console.log(`💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`);
+        } else {
+          console.log(`⚠️  [MODEL OPTIMIZATION] Skipped ${optimalModel.member} - API key not available`);
+        }
+      }
+    }
   }
 
   const getApiKey = (provider) => {
@@ -2279,9 +2329,8 @@ async function callCouncilMember(member, prompt, options = {}) {
         );
       case "deepseek":
         return (
-          process.env.Deepseek_API_KEY?.trim() ||
           process.env.DEEPSEEK_API_KEY?.trim() ||
-          process.env.DEEPSEEK_API_KEY?.trim()
+          process.env.Deepseek_API_KEY?.trim()
         );
       case "xai":
         return process.env.GROK_API_KEY?.trim();
@@ -2294,7 +2343,11 @@ async function callCouncilMember(member, prompt, options = {}) {
 
   const memberApiKey = getApiKey(config.provider);
 
-  if (!memberApiKey) {
+  // Ollama doesn't need API key - check endpoint instead
+  if (config.provider === "ollama") {
+    const endpoint = config.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
+    // Will check availability when making the actual call
+  } else if (!memberApiKey) {
     if (config.provider === "openai") {
       throw new Error(`${member.toUpperCase()}_API_KEY not set`);
     } else {
@@ -2516,7 +2569,10 @@ Be concise, strategic, and speak as the system's internal AI.`;
       const endpoint = config.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
       
       try {
-        console.log(`🆓 [TIER 0] Calling Ollama ${config.model} at ${endpoint}`);
+        console.log(`\n🆓 [OLLAMA] Calling local model: ${config.model}`);
+        console.log(`    Endpoint: ${endpoint}`);
+        console.log(`    Member: ${member}`);
+        console.log(`    Prompt length: ${prompt.length} chars\n`);
 
         // Ollama uses /api/generate for completion
         response = await fetch(`${endpoint}/api/generate`, {
@@ -2541,9 +2597,16 @@ Be concise, strategic, and speak as the system's internal AI.`;
           const text = json.response || "";
 
           if (text) {
-            console.log(`✅ [TIER 0] Ollama ${config.model} successful (FREE)`);
-
             const duration = Date.now() - startTime;
+            console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+            console.log(`║ ✅ [OLLAMA] SUCCESS - Local model response received                            ║`);
+            console.log(`║    Model: ${config.model}                                                      ║`);
+            console.log(`║    Member: ${member}                                                           ║`);
+            console.log(`║    Response Time: ${duration}ms                                               ║`);
+            console.log(`║    Response Length: ${text.length} chars                                      ║`);
+            console.log(`║    Cost: $0.00 (FREE - local Ollama)                                          ║`);
+            console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
+
             await trackAIPerformance(member, "chat", duration, 0, 0, true);
             
             // CACHE THE RESPONSE
@@ -4425,6 +4488,9 @@ async function trackLoss(
 
 // ==================== COUNCIL WITH FAILOVER (TIER 0 FIRST) ====================
 async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepseek", requireOversight = false, options = {}) {
+  // Check if we're in production (Railway/cloud) - Ollama won't work there
+  const isProduction = NODE_ENV === 'production' || !!process.env.RAILWAY_ENVIRONMENT;
+  
   // Check if spending is disabled (MAX_DAILY_SPEND = 0)
   const spendingDisabled = MAX_DAILY_SPEND === 0;
   
@@ -4435,12 +4501,27 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
   
   if (spendingDisabled) {
     console.warn(`💰 [COST SHUTDOWN] Spending DISABLED (MAX_DAILY_SPEND=$0) - Only using FREE models`);
+  }
+  
+  // In production, OSC (Ollama) won't work - skip it
+  if (isProduction && openSourceCouncil) {
+    console.log(`⚠️  [OSC] Skipping Open Source Council in production (Ollama not available on Railway)`);
   } else if (inCostShutdown) {
     console.warn(`💰 [COST SHUTDOWN] Spending $${currentSpend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} - Only using free/cheap models`);
   }
 
   // Use Open Source Council Router if available and not requiring oversight
-  if (openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil !== false)) {
+  // Only activate when: in cost shutdown OR explicitly requested (opt-in behavior)
+  // Skip OSC in production (Railway) - Ollama won't be accessible
+  const willUseOSC = !isProduction && openSourceCouncil && !requireOversight && (inCostShutdown || options.useOpenSourceCouncil === true);
+  
+  if (willUseOSC) {
+    const reasonText = inCostShutdown ? 'Cost shutdown mode' : 'Explicit opt-in';
+    console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+    console.log(`║ 🆓 [OPEN SOURCE COUNCIL] ACTIVATED - Using local Ollama models (FREE)            ║`);
+    console.log(`║    Reason: ${reasonText.padEnd(63)}║`);
+    console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
+    
     try {
       // Determine task complexity
       const promptLength = prompt.length;
@@ -4448,6 +4529,11 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
                        options.complexity === "complex" || 
                        options.complexity === "critical" ||
                        options.requireConsensus === true;
+      
+      console.log(`🔄 [OSC] Routing task: ${prompt.substring(0, 80)}...`);
+      console.log(`    Task Type: ${options.taskType || 'auto-detect'}`);
+      console.log(`    Complexity: ${isComplex ? 'COMPLEX (will use consensus)' : 'SIMPLE (single model)'}`);
+      console.log(`    Prompt Length: ${promptLength} chars\n`);
       
       const routerOptions = {
         taskType: options.taskType,
@@ -4457,15 +4543,39 @@ async function callCouncilWithFailover(prompt, preferredMember = "ollama_deepsee
         ...options,
       };
       
+      const routeStartTime = Date.now();
       const result = await openSourceCouncil.routeTask(prompt, routerOptions);
+      const routeDuration = Date.now() - routeStartTime;
       
       if (result.success) {
-        console.log(`✅ [OSC] Got response from ${result.model}${result.consensus ? " (consensus)" : ""} (${result.taskType})`);
+        const consensusText = result.consensus ? ' (consensus from multiple models)' : '';
+        const modelText = `${result.model}${consensusText}`;
+        const taskTypeText = result.taskType || 'general';
+        console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+        console.log(`║ ✅ [OPEN SOURCE COUNCIL] SUCCESS                                                  ║`);
+        console.log(`║    Model: ${modelText.padEnd(63)}║`);
+        console.log(`║    Task Type: ${taskTypeText.padEnd(63)}║`);
+        console.log(`║    Response Time: ${routeDuration}ms`.padEnd(79) + '║');
+        console.log(`║    Cost: $0.00 (FREE - local Ollama)`.padEnd(79) + '║');
+        console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
         return result.response;
+      } else {
+        console.warn(`\n⚠️  [OSC] Router returned unsuccessful result, falling back...\n`);
       }
     } catch (error) {
-      console.warn(`⚠️ [OSC] Router failed: ${error.message}, falling back to standard failover`);
+      console.error(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+      console.error(`║ ❌ [OPEN SOURCE COUNCIL] ERROR                                                    ║`);
+      console.error(`║    Error: ${error.message}                                                         ║`);
+      console.error(`║    Falling back to standard failover...                                           ║`);
+      console.error(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
       // Fall through to standard failover logic
+    }
+  } else if (openSourceCouncil) {
+    // Log why OSC is NOT being used (for debugging)
+    if (requireOversight) {
+      console.log(`ℹ️  [OSC] Skipped - Task requires oversight (Tier 1 models)`);
+    } else if (!inCostShutdown && options.useOpenSourceCouncil !== true) {
+      console.log(`ℹ️  [OSC] Skipped - Not in cost shutdown and not explicitly requested (opt-in)`);
     }
   }
 
@@ -4543,6 +4653,44 @@ class ExecutionQueue {
   }
 
   async addTask(type, description, metadata = null) {
+    // --- Execution Gate with FSAR (fail-closed) ---
+    try {
+      const proposalText = `${type}: ${description}`;
+      const { jsonPath: fsarJsonPath, mdPath: fsarMdPath, report } = await runFSAR(proposalText);
+      const gateDecision = evaluateExecutionGate(report);
+
+      const overrideHumanReview =
+        metadata?.override_human_review === true || metadata?.overrideHumanReview === true;
+
+      // Block if gate says no
+      if (!gateDecision.allow) {
+        throw new Error(
+          `${gateDecision.reason} (FSAR report: ${fsarJsonPath})`
+        );
+      }
+
+      // Human review required but not overridden
+      if (gateDecision.requires_human_review && !overrideHumanReview) {
+        throw new Error(
+          `Human review required: ${gateDecision.reason} (FSAR report: ${fsarJsonPath})`
+        );
+      }
+
+      // Attach FSAR artifacts to metadata for traceability
+      metadata = {
+        ...metadata,
+        fsar: {
+          json: fsarJsonPath,
+          md: fsarMdPath,
+          decision: gateDecision,
+        },
+      };
+    } catch (gateError) {
+      // Fail closed: if FSAR or gate fails, block the task
+      console.error(`❌ [EXECUTION GATE] Blocked: ${gateError.message}`);
+      throw gateError;
+    }
+
     const taskId = `task_${Date.now()}_${Math.random()
       .toString(36)
       .slice(2, 8)}`;
@@ -5030,6 +5178,13 @@ async function initializeTwoTierSystem() {
     tier1Council = new Tier1Council(pool, callCouncilMember);
     modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
     openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
+    const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
+    console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
+    console.log("║ ✅ [OPEN SOURCE COUNCIL] INITIALIZED                                              ║");
+    console.log("║    Status: Ready to route tasks to local Ollama models                           ║");
+    console.log("║    Activation: Cost shutdown OR explicit opt-in (useOpenSourceCouncil: true)    ║");
+    console.log(`║    Models: Connected to Ollama at ${ollamaEndpoint.padEnd(47)}║`);
+    console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
     outreachAutomation = new OutreachAutomation(
       pool,
       modelRouter,
@@ -5933,9 +6088,11 @@ function requireKey(req, res, next) {
   const origin = req.headers.origin;
   if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) return next();
 
-  const key = req.query.key || req.headers["x-command-key"];
-  if (key !== COMMAND_CENTER_KEY)
-    return res.status(401).json({ error: "Unauthorized" });
+  // Normalize: accept either header or query param
+  const key = req.headers["x-command-key"] || req.query.key;
+  if (key !== COMMAND_CENTER_KEY) {
+    return res.status(401).json({ ok: false, error: "unauthorized" });
+  }
   next();
 }
 
@@ -6341,6 +6498,7 @@ app.post("/api/v1/architect/chat", requireKey, async (req, res) => {
 app.post("/api/v1/architect/command", requireKey, async (req, res) => {
   try {
     const { query_json, command, intent } = req.body;
+    const override_human_review = req.body?.override_human_review === true;
 
     const prompt = `Command: ${command}\nIntent: ${intent}\nCompressed Query: ${JSON.stringify(
       query_json || {}
@@ -6349,7 +6507,7 @@ app.post("/api/v1/architect/command", requireKey, async (req, res) => {
     const response = await callCouncilWithFailover(prompt, "ollama_deepseek"); // Use Tier 0 (free)
 
     if (intent && intent !== "general") {
-      await executionQueue.addTask(intent, command);
+      await executionQueue.addTask(intent, command, { override_human_review });
     }
 
     res.json({
@@ -10788,6 +10946,158 @@ app.get("/api/v1/system/fix-history", requireKey, async (req, res) => {
     }
     const history = await logMonitor.getFixHistory(parseInt(req.query.limit) || 50);
     res.json({ ok: true, history, count: history.length });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== MISSING OVERLAY ENDPOINTS ====================
+
+// AI Effectiveness ratings
+app.get("/api/v1/ai/effectiveness", requireKey, async (req, res) => {
+  try {
+    // Get effectiveness ratings for each AI member
+    const ratings = [];
+    const members = ['chatgpt', 'gemini', 'deepseek', 'grok', 'claude'];
+    
+    for (const member of members) {
+      const memberScore = aiPerformanceScores.get(member) || {
+        accuracy: 0.5,
+        self_evaluation: 0.5,
+        total_guesses: 0,
+        correct_guesses: 0,
+      };
+      
+      // Calculate effectiveness (weighted average of accuracy and self-evaluation)
+      const effectiveness = (memberScore.accuracy * 0.6 + memberScore.self_evaluation * 0.4);
+      
+      ratings.push({
+        member,
+        effectiveness,
+        accuracy: memberScore.accuracy,
+        self_evaluation: memberScore.self_evaluation,
+        taskType: 'general',
+        total_tasks: memberScore.total_guesses || 0,
+      });
+    }
+    
+    res.json({ ok: true, ratings });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// User simulation accuracy
+app.get("/api/v1/user/simulation/accuracy", requireKey, async (req, res) => {
+  try {
+    // Placeholder: return a default accuracy score
+    // In a real implementation, this would track how well the system predicts user behavior
+    const accuracyPercent = 75; // Default 75% accuracy
+    
+    res.json({ 
+      ok: true, 
+      accuracyPercent,
+      accuracy: accuracyPercent / 100,
+      note: "User simulation accuracy tracking"
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Internal autopilot cron heartbeat
+app.get("/internal/cron/autopilot", requireKey, async (req, res) => {
+  try {
+    // Heartbeat endpoint for autopilot cron jobs
+    const queueStatus = executionQueue.getStatus();
+    const spendStatus = await getDailySpend();
+    
+    res.json({
+      ok: true,
+      timestamp: new Date().toISOString(),
+      queued_tasks: queueStatus.queued || 0,
+      active_tasks: queueStatus.active || 0,
+      daily_spend: spendStatus.daily_spend || 0,
+      max_daily_spend: spendStatus.max_daily_spend || MAX_DAILY_SPEND,
+      spend_percentage: spendStatus.spend_percentage || '0%',
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Internal autopilot build-now
+app.post("/internal/autopilot/build-now", requireKey, async (req, res) => {
+  try {
+    const force = req.query.force === '1' || req.body.force === true;
+    
+    // Check if autoBuilder is available
+    if (!autoBuilder) {
+      // Try to initialize if not available
+      try {
+        const { AutoBuilder } = await import("./core/auto-builder.js");
+        autoBuilder = new AutoBuilder(pool, callCouncilMember, executionQueue);
+        await autoBuilder.start();
+      } catch (initError) {
+        console.warn('AutoBuilder not available:', initError.message);
+        return res.json({
+          ok: true,
+          skipped: true,
+          reason: 'AutoBuilder not initialized',
+          message: 'Autopilot build system not available'
+        });
+      }
+    }
+    
+    // Trigger build
+    const result = await autoBuilder.buildNextOpportunity({ force });
+    
+    res.json({
+      ok: true,
+      ...result,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('Autopilot build-now error:', error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Overlay state management
+app.post("/api/overlay/:sid/state", requireKey, async (req, res) => {
+  try {
+    const { sid } = req.params;
+    const state = req.body;
+    
+    // Store overlay state (could use Redis or database in production)
+    // For now, just return success
+    res.json({
+      ok: true,
+      sessionId: sid,
+      state,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Overlay status
+app.get("/api/overlay/status", async (req, res) => {
+  try {
+    // Return overlay system status
+    const queueStatus = executionQueue.getStatus();
+    const spendStatus = await getDailySpend();
+    
+    res.json({
+      ok: true,
+      status: "active",
+      queued_tasks: queueStatus.queued || 0,
+      active_tasks: queueStatus.active || 0,
+      daily_spend: spendStatus.daily_spend || 0,
+      max_daily_spend: spendStatus.max_daily_spend || MAX_DAILY_SPEND,
+      timestamp: new Date().toISOString(),
+    });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }

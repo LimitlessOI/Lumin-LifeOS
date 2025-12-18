@@ -1,0 +1,73 @@
+{
+  "id": "quality_regression_2025-12-15T07-01-41-432Z",
+  "timestamp": "2025-12-15T07:01:41.432Z",
+  "summary": {
+    "total": 3,
+    "passed": 0,
+    "average_score": 0.3333333333333333,
+    "pass": false
+  },
+  "tasks": [
+    {
+      "id": "gold_1",
+      "title": "Explain microservices vs monolith",
+      "prompt": "Explain trade-offs between microservices and monolith for a startup.",
+      "expected_keywords": [
+        "trade-offs",
+        "latency",
+        "deployment",
+        "complexity"
+      ],
+      "output": "Stub response for: Explain trade-offs between microservices and monolith for a startup.",
+      "hits": [
+        "trade-offs"
+      ],
+      "score": 0.25,
+      "baseline_score": 0.75,
+      "min_score": 0.6,
+      "delta": -0.5,
+      "pass": false
+    },
+    {
+      "id": "gold_2",
+      "title": "Find a bug in sample code",
+      "prompt": "Review this code and find a bug: function add(a,b){ return a-b; }",
+      "expected_keywords": [
+        "bug",
+        "subtract",
+        "a+b",
+        "fix"
+      ],
+      "output": "Stub response for: Review this code and find a bug: function add(a,b){ return a-b; }",
+      "hits": [
+        "bug"
+      ],
+      "score": 0.25,
+      "baseline_score": 0.8,
+      "min_score": 0.7,
+      "delta": -0.55,
+      "pass": false
+    },
+    {
+      "id": "gold_3",
+      "title": "Generate unit test",
+      "prompt": "Write a Jest unit test for a function that returns factorial(n).",
+      "expected_keywords": [
+        "Jest",
+        "factorial",
+        "expect",
+        "edge"
+      ],
+      "output": "Stub response for: Write a Jest unit test for a function that returns factorial(n).",
+      "hits": [
+        "Jest",
+        "factorial"
+      ],
+      "score": 0.5,
+      "baseline_score": 0.7,
+      "min_score": 0.6,
+      "delta": -0.19999999999999996,
+      "pass": false
+    }
+  ]
+}

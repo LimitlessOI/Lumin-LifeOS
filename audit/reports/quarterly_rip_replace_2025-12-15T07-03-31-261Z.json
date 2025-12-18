@@ -1,0 +1,48 @@
+{
+  "id": "quarterly_rip_replace_2025-12-15T07-03-31-261Z",
+  "timestamp": "2025-12-15T07:03:31.262Z",
+  "current_models": [
+    {
+      "name": "ollama_llama",
+      "role": "general",
+      "cost_class": "free"
+    },
+    {
+      "name": "ollama_deepseek_coder_v2",
+      "role": "code",
+      "cost_class": "free"
+    },
+    {
+      "name": "openai_gpt4o",
+      "role": "oversight",
+      "cost_class": "paid"
+    }
+  ],
+  "cost_hotspots": [
+    {
+      "area": "oversight",
+      "model": "openai_gpt4o",
+      "est_monthly": 120
+    }
+  ],
+  "latency_hotspots": [
+    {
+      "area": "long_context",
+      "model": "openai_gpt4o",
+      "p95_ms": 9000
+    }
+  ],
+  "open_source_alternatives": [
+    {
+      "replace": "openai_gpt4o",
+      "alternative": "ollama_llama_3_3_70b",
+      "notes": "Use locally when oversight is non-critical."
+    }
+  ],
+  "justifications": [
+    {
+      "model": "openai_gpt4o",
+      "reason": "Needed for edge cases; keeping until local eval matches parity."
+    }
+  ]
+}

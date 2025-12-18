@@ -1,0 +1,9 @@
+{
+  "description": "Paid model escalation policy (local-first). Use paid models only when local capability fails AND ROI is justified.",
+  "rules": {
+    "local_first": true,
+    "paid_requires_roi": true,
+    "paid_requires_two_models": true,
+    "log_justification": true
+  }
+}

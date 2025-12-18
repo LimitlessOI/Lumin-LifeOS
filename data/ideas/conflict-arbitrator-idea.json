@@ -1,0 +1,45 @@
+{
+  "id": "idea_conflict_arbitrator_20250113",
+  "title": "Conflict Arbitrator - AI-Powered Mediation Overlay",
+  "problem": "People struggle to resolve conflicts fairly and privately. Traditional mediation is expensive, requires scheduling, and may not be accessible. Couples, business partners, parents/teens, and friends need a neutral, empathetic mediator available instantly.",
+  "user": "Anyone in conflict: couples, business partners, parents/teens, friends, pre-court parties",
+  "solution": "An overlay-based AI mediator that works on any platform (Zoom, FaceTime, WhatsApp) to provide real-time, fair conflict resolution using multi-model consensus. Local-first for privacy, works instantly, costs a fraction of human mediation.",
+  "differentiator": "1) Overlay works anywhere (no app switching), 2) Multi-model consensus ensures fairness, 3) Local-first privacy (sensitive conflicts stay private), 4) Instant access (no scheduling), 5) Affordable (free tier + $29/month premium)",
+  "effort": "hard",
+  "roi_hypothesis": 9,
+  "novelty": 9,
+  "feasibility": 8,
+  "user_impact": 10,
+  "revenue_potential": 9,
+  "time_to_demo": 45,
+  "strategic_alignment": 10,
+  "ensemble_score": 9.2,
+  "cluster_id": "conflict_resolution",
+  "created_at": "2025-01-13T00:00:00.000Z",
+  "category": "product",
+  "tags": ["mediation", "conflict-resolution", "overlay", "privacy", "ai-counsel", "relationships", "business"],
+  "market_size": "$2B+ mediation market",
+  "target_users": "Couples, business partners, parents/teens, friends, legal parties",
+  "revenue_model": "Freemium: Free (3 sessions/month) → Premium ($29/month) → Pro ($99/month)",
+  "competitive_advantage": "Privacy (local-first), fairness (consensus), accessibility (overlay), affordability",
+  "implementation_phases": [
+    "Phase 1: MVP - Basic two-party mediation (4-6 weeks)",
+    "Phase 2: Enhanced - Multi-model consensus, bias detection (4-6 weeks)",
+    "Phase 3: Advanced - Multiple conflict types, tracking (6-8 weeks)",
+    "Phase 4: Professional - Legal docs, multi-party (8-10 weeks)"
+  ],
+  "technical_requirements": [
+    "Overlay framework (Electron/Tauri)",
+    "Multi-model consensus engine",
+    "Local-first storage (SQLite)",
+    "Encryption (AES-256)",
+    "Integration with video/chat apps"
+  ],
+  "success_metrics": [
+    "Resolution rate (% conflicts resolved)",
+    "User satisfaction (both parties)",
+    "Time to resolution",
+    "Agreement adherence",
+    "Privacy trust score"
+  ]
+}

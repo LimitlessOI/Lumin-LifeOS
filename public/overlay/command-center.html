@@ -85,6 +85,27 @@
       transform: none;
     }
 
+    #btnSettings {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid #2d3748;
+      background: #1a2332;
+      color: #9ca3af;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.2s;
+    }
+
+    #btnSettings:hover {
+      background: #1f2937;
+      border-color: #3b82f6;
+      color: #3b82f6;
+    }
+
     /* AI Status Bar */
     .ai-status-bar {
       display: flex;
@@ -583,6 +604,17 @@
       background: #1a2332;
       color: #e5e7eb;
     }
+
+    /* Settings Modal Buttons */
+    #btnSettingsSave:hover {
+      background: #16a34a;
+      transform: translateY(-1px);
+    }
+
+    #btnSettingsClear:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 <body>
@@ -710,8 +742,14 @@
       </div>
       <input type="file" id="fileInput" style="display: none;">
       <div style="margin-bottom: 16px;">
-        <label style="display: block; margin-bottom: 8px; font-size: 14px;">Category</label>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">File</label>
+        <button type="button" id="btnChooseFile" style="width: 100%; padding: 10px; background: #1a2332; border: 1px solid #2d3748; border-radius: 6px; color: #e5e7eb; font-weight: 500; cursor: pointer; margin-bottom: 8px;">Choose File</button>
+        <div id="fileNameDisplay" style="font-size: 13px; color: #9ca3af; min-height: 20px;">No file selected</div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">Category <span style="color: #ef4444;">*</span></label>
         <select id="fileCategory" style="width: 100%; padding: 8px; background: #1a2332; border: 1px solid #2d3748; border-radius: 6px; color: #e5e7eb;">
+          <option value="">Select a category...</option>
           <option value="context">Context</option>
           <option value="business-ideas">Business Ideas</option>
           <option value="security">Security</option>
@@ -722,10 +760,32 @@
         </select>
       </div>
       <div style="margin-bottom: 16px;">
-        <label style="display: block; margin-bottom: 8px; font-size: 14px;">Description</label>
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">Description (optional)</label>
         <textarea id="fileDescription" style="width: 100%; padding: 8px; background: #1a2332; border: 1px solid #2d3748; border-radius: 6px; color: #e5e7eb; min-height: 60px;"></textarea>
       </div>
-      <button id="btnUploadFile" style="width: 100%; padding: 12px; background: #3b82f6; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Upload</button>
+      <button id="btnUploadFile" style="width: 100%; padding: 12px; background: #4b5563; border: none; border-radius: 8px; color: #9ca3af; font-weight: 600; cursor: not-allowed;" disabled>Upload</button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal" id="settingsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Settings</div>
+        <button class="btn-close" id="btnSettingsClose">×</button>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">API Base</label>
+        <input type="text" id="settingsBase" readonly style="width: 100%; padding: 8px; background: #1a2332; border: 1px solid #2d3748; border-radius: 6px; color: #9ca3af; cursor: not-allowed;">
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 14px;">Command Key</label>
+        <input type="text" id="settingsKey" style="width: 100%; padding: 8px; background: #1a2332; border: 1px solid #2d3748; border-radius: 6px; color: #e5e7eb;">
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button id="btnSettingsSave" style="flex: 1; padding: 12px; background: #22c55e; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s;">Save</button>
+        <button id="btnSettingsClear" style="flex: 1; padding: 12px; background: #ef4444; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s;">Clear Key</button>
+      </div>
     </div>
   </div>
 
