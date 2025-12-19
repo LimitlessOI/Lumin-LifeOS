@@ -46,6 +46,9 @@ let salesTechniqueAnalyzer, callRecorder;
 // Goal Tracking & Coaching Services
 let goalTracker, activityTracker, coachingProgression, calendarService;
 
+// Motivation & Perfect Day Services
+let perfectDaySystem, goalCommitmentSystem, callSimulationSystem, relationshipMediation, meaningfulMoments;
+
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
 
@@ -1425,6 +1428,126 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_progression_agent ON agent_progression(agent_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_activity_analytics_agent ON activity_analytics(agent_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_activity_analytics_period ON activity_analytics(period_start, period_end)`);
+
+    // Perfect Day & Motivation System
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_perfect_day (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      wake_up_time TIME NOT NULL,
+      goal_reading_time INTEGER DEFAULT 5, -- minutes
+      visualization_time INTEGER DEFAULT 10,
+      inspiring_content_url TEXT,
+      training_schedule JSONB, -- Array of training activities
+      daily_routine JSONB, -- Complete daily routine
+      three_most_important JSONB, -- Today's 3 most important tasks
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_daily_log (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      log_date DATE NOT NULL,
+      wake_up_time TIME,
+      goal_reading_completed BOOLEAN DEFAULT FALSE,
+      visualization_completed BOOLEAN DEFAULT FALSE,
+      inspiring_content_watched BOOLEAN DEFAULT FALSE,
+      training_completed BOOLEAN DEFAULT FALSE,
+      three_most_important JSONB, -- What they committed to
+      three_most_important_completed JSONB, -- What they actually did
+      day_grade VARCHAR(50), -- 'great', 'good', 'poor'
+      day_score INTEGER, -- 0-100
+      system_score INTEGER, -- System's assessment
+      integrity_score DECIMAL(5,2), -- Based on commitments kept
+      notes TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_goal_commitments (
+      id SERIAL PRIMARY KEY,
+      goal_id INTEGER REFERENCES agent_goals(id) ON DELETE CASCADE,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      commitment_type VARCHAR(50) NOT NULL, -- 'daily_action', 'weekly_milestone', 'behavior'
+      commitment_description TEXT NOT NULL,
+      penalty_type VARCHAR(50), -- 'financial', 'time', 'privilege', 'custom'
+      penalty_description TEXT,
+      penalty_amount DECIMAL(10,2), -- If financial
+      reward_type VARCHAR(50), -- 'cruise', 'vacation', 'purchase', 'experience', 'custom'
+      reward_description TEXT,
+      reward_value DECIMAL(10,2),
+      agent_decided_worth_it BOOLEAN, -- Agent's decision
+      commitment_start_date DATE,
+      commitment_end_date DATE,
+      status VARCHAR(50) DEFAULT 'active', -- 'active', 'completed', 'failed', 'forgiven'
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_meaningful_moments (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      moment_type VARCHAR(50) NOT NULL, -- 'winning_moment', 'coaching_moment', 'breakthrough'
+      recording_url TEXT,
+      transcript TEXT,
+      timestamp TIMESTAMPTZ NOT NULL,
+      context TEXT,
+      tags JSONB,
+      playback_count INTEGER DEFAULT 0,
+      last_played_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_relationship_mediation (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      mediation_type VARCHAR(50) NOT NULL, -- 'personal', 'spouse', 'child', 'customer', 'business'
+      other_party_name TEXT,
+      other_party_contact TEXT,
+      issue_description TEXT,
+      mediation_status VARCHAR(50) DEFAULT 'requested', -- 'requested', 'in_progress', 'resolved', 'declined'
+      agreement_text TEXT,
+      both_parties_accepted BOOLEAN DEFAULT FALSE,
+      recording_consent BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      resolved_at TIMESTAMPTZ
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_call_simulations (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      simulation_type VARCHAR(50) NOT NULL, -- 'practice', 'training', 'skill_building'
+      scenario_description TEXT,
+      script_guidance JSONB, -- Step-by-step guidance
+      closes_to_practice JSONB, -- Array of closes (A/B close, etc.)
+      questions_to_ask JSONB, -- Suggested questions
+      personality_insights JSONB, -- What we learned about agent
+      comfort_zones JSONB, -- Where agent is comfortable/uncomfortable
+      recording_id INTEGER REFERENCES sales_call_recordings(id) ON DELETE SET NULL,
+      completed BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_integrity_tracking (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      commitment_id INTEGER REFERENCES agent_goal_commitments(id) ON DELETE SET NULL,
+      commitment_made TIMESTAMPTZ NOT NULL,
+      commitment_kept BOOLEAN,
+      commitment_kept_at TIMESTAMPTZ,
+      integrity_score_impact DECIMAL(5,2), -- How this affects overall score
+      notes TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_perfect_day_agent ON agent_perfect_day(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_daily_log_agent ON agent_daily_log(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_daily_log_date ON agent_daily_log(log_date)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_goal_commitments_goal ON agent_goal_commitments(goal_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_goal_commitments_agent ON agent_goal_commitments(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_meaningful_moments_agent ON agent_meaningful_moments(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_meaningful_moments_type ON agent_meaningful_moments(moment_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_relationship_mediation_agent ON agent_relationship_mediation(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_call_simulations_agent ON agent_call_simulations(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_integrity_tracking_agent ON agent_integrity_tracking(agent_id)`);
 
     // API Cost-Savings Service Tables
     await pool.query(`CREATE TABLE IF NOT EXISTS api_cost_savings_clients (
@@ -10446,6 +10569,282 @@ app.post("/api/v1/boldtrail/calendar/events/:eventId/complete", requireKey, asyn
   }
 });
 
+// ==================== PERFECT DAY ENDPOINTS ====================
+
+// Setup perfect day
+app.post("/api/v1/boldtrail/perfect-day/setup", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...config } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!perfectDaySystem) {
+      return res.status(503).json({ ok: false, error: "Perfect day system not initialized" });
+    }
+
+    const result = await perfectDaySystem.setupPerfectDay(agent_id, config);
+    res.json(result);
+  } catch (error) {
+    console.error("Setup perfect day error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Start perfect day routine
+app.post("/api/v1/boldtrail/perfect-day/start", requireKey, async (req, res) => {
+  try {
+    const { agent_id } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!perfectDaySystem) {
+      return res.status(503).json({ ok: false, error: "Perfect day system not initialized" });
+    }
+
+    const result = await perfectDaySystem.startPerfectDay(agent_id);
+    res.json(result);
+  } catch (error) {
+    console.error("Start perfect day error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Set three most important things
+app.post("/api/v1/boldtrail/perfect-day/three-important", requireKey, async (req, res) => {
+  try {
+    const { agent_id, three_things } = req.body;
+
+    if (!agent_id || !three_things || !Array.isArray(three_things)) {
+      return res.status(400).json({ ok: false, error: "agent_id and three_things array required" });
+    }
+
+    if (!perfectDaySystem) {
+      return res.status(503).json({ ok: false, error: "Perfect day system not initialized" });
+    }
+
+    const result = await perfectDaySystem.setThreeMostImportant(agent_id, three_things);
+    res.json(result);
+  } catch (error) {
+    console.error("Set three important error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// End of day review
+app.post("/api/v1/boldtrail/perfect-day/review", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...reviewData } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!perfectDaySystem) {
+      return res.status(503).json({ ok: false, error: "Perfect day system not initialized" });
+    }
+
+    const result = await perfectDaySystem.endOfDayReview(agent_id, reviewData);
+    res.json(result);
+  } catch (error) {
+    console.error("End of day review error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== GOAL COMMITMENT ENDPOINTS ====================
+
+// Create goal commitment
+app.post("/api/v1/boldtrail/commitments", requireKey, async (req, res) => {
+  try {
+    const { agent_id, goal_id, ...commitmentData } = req.body;
+
+    if (!agent_id || !goal_id) {
+      return res.status(400).json({ ok: false, error: "agent_id and goal_id required" });
+    }
+
+    if (!goalCommitmentSystem) {
+      return res.status(503).json({ ok: false, error: "Goal commitment system not initialized" });
+    }
+
+    const result = await goalCommitmentSystem.createCommitment(agent_id, goal_id, commitmentData);
+    res.json(result);
+  } catch (error) {
+    console.error("Create commitment error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Track commitment
+app.post("/api/v1/boldtrail/commitments/:commitmentId/track", requireKey, async (req, res) => {
+  try {
+    const { commitmentId } = req.params;
+    const { agent_id } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!goalCommitmentSystem) {
+      return res.status(503).json({ ok: false, error: "Goal commitment system not initialized" });
+    }
+
+    const result = await goalCommitmentSystem.trackCommitment(commitmentId, agent_id);
+    res.json(result);
+  } catch (error) {
+    console.error("Track commitment error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get agent commitments
+app.get("/api/v1/boldtrail/commitments/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { status } = req.query;
+
+    if (!goalCommitmentSystem) {
+      return res.status(503).json({ ok: false, error: "Goal commitment system not initialized" });
+    }
+
+    const result = await goalCommitmentSystem.getAgentCommitments(agentId, status);
+    res.json(result);
+  } catch (error) {
+    console.error("Get commitments error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== CALL SIMULATION ENDPOINTS ====================
+
+// Create simulation
+app.post("/api/v1/boldtrail/simulations", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...simulationData } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!callSimulationSystem) {
+      return res.status(503).json({ ok: false, error: "Call simulation system not initialized" });
+    }
+
+    const result = await callSimulationSystem.createSimulation(agent_id, simulationData);
+    res.json(result);
+  } catch (error) {
+    console.error("Create simulation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Start simulation
+app.post("/api/v1/boldtrail/simulations/:simulationId/start", requireKey, async (req, res) => {
+  try {
+    const { simulationId } = req.params;
+    const { agent_id } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!callSimulationSystem) {
+      return res.status(503).json({ ok: false, error: "Call simulation system not initialized" });
+    }
+
+    const result = await callSimulationSystem.startSimulation(agent_id, simulationId);
+    res.json(result);
+  } catch (error) {
+    console.error("Start simulation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== RELATIONSHIP MEDIATION ENDPOINTS ====================
+
+// Request mediation
+app.post("/api/v1/boldtrail/mediation/request", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...mediationData } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!relationshipMediation) {
+      return res.status(503).json({ ok: false, error: "Relationship mediation not initialized" });
+    }
+
+    const result = await relationshipMediation.requestMediation(agent_id, mediationData);
+    res.json(result);
+  } catch (error) {
+    console.error("Request mediation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Process mediation
+app.post("/api/v1/boldtrail/mediation/:mediationId/process", requireKey, async (req, res) => {
+  try {
+    const { mediationId } = req.params;
+    const { conversation_data } = req.body;
+
+    if (!relationshipMediation) {
+      return res.status(503).json({ ok: false, error: "Relationship mediation not initialized" });
+    }
+
+    const result = await relationshipMediation.processMediation(mediationId, conversation_data);
+    res.json(result);
+  } catch (error) {
+    console.error("Process mediation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== MEANINGFUL MOMENTS ENDPOINTS ====================
+
+// Start continuous recording
+app.post("/api/v1/boldtrail/moments/start-recording", requireKey, async (req, res) => {
+  try {
+    const { agent_id, consent, reset_interval_minutes = 60 } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!meaningfulMoments) {
+      return res.status(503).json({ ok: false, error: "Meaningful moments system not initialized" });
+    }
+
+    const result = await meaningfulMoments.startContinuousRecording(agent_id, consent, reset_interval_minutes);
+    res.json(result);
+  } catch (error) {
+    console.error("Start continuous recording error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get moments for playback
+app.get("/api/v1/boldtrail/moments/:agentId/playback", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { moment_type } = req.query;
+
+    if (!meaningfulMoments) {
+      return res.status(503).json({ ok: false, error: "Meaningful moments system not initialized" });
+    }
+
+    const result = await meaningfulMoments.getMomentsForPlayback(agentId, moment_type);
+    res.json(result);
+  } catch (error) {
+    console.error("Get moments for playback error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // ==================== INCOME DIAGNOSTIC ENDPOINT ====================
 app.get("/api/v1/income/diagnostic", requireKey, async (req, res) => {
   try {
@@ -12933,6 +13332,30 @@ async function start() {
       activityTracker = null;
       coachingProgression = null;
       calendarService = null;
+    }
+
+    // Initialize Motivation & Perfect Day Services
+    try {
+      const PerfectDayModule = await import("./src/services/perfect-day-system.js");
+      const GoalCommitmentModule = await import("./src/services/goal-commitment-system.js");
+      const CallSimulationModule = await import("./src/services/call-simulation-system.js");
+      const RelationshipMediationModule = await import("./src/services/relationship-mediation.js");
+      const MeaningfulMomentsModule = await import("./src/services/meaningful-moments.js");
+      
+      perfectDaySystem = new PerfectDayModule.PerfectDaySystem(pool, callCouncilWithFailover);
+      goalCommitmentSystem = new GoalCommitmentModule.GoalCommitmentSystem(pool, callCouncilWithFailover);
+      callSimulationSystem = new CallSimulationModule.CallSimulationSystem(pool, callRecorder, callCouncilWithFailover);
+      relationshipMediation = new RelationshipMediationModule.RelationshipMediation(pool, callCouncilWithFailover);
+      meaningfulMoments = new MeaningfulMomentsModule.MeaningfulMoments(pool, callRecorder);
+      
+      console.log("✅ Motivation & Perfect Day Services initialized");
+    } catch (error) {
+      console.warn("⚠️ Motivation & Perfect Day Services not available:", error.message);
+      perfectDaySystem = null;
+      goalCommitmentSystem = null;
+      callSimulationSystem = null;
+      relationshipMediation = null;
+      meaningfulMoments = null;
     }
 
     console.log("\n🤖 AI COUNCIL:");
