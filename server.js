@@ -10845,6 +10845,90 @@ app.get("/api/v1/boldtrail/moments/:agentId/playback", requireKey, async (req, r
   }
 });
 
+// ==================== PROGRESS TRACKING ENDPOINTS ====================
+
+// Get progress bars for goals
+app.get("/api/v1/boldtrail/progress/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+
+    // Get active goals
+    const goals = await pool.query(
+      `SELECT * FROM agent_goals WHERE agent_id = $1 AND status = 'active'`,
+      [agentId]
+    );
+
+    // Get activities counts
+    const activities = await pool.query(
+      `SELECT activity_type, COUNT(*) as count,
+              COUNT(CASE WHEN outcome IN ('appointment_set', 'sale', 'showing_scheduled') THEN 1 END) as success_count
+       FROM agent_activities
+       WHERE agent_id = $1 AND created_at >= NOW() - INTERVAL '30 days'
+       GROUP BY activity_type`,
+      [agentId]
+    );
+
+    // Calculate progress bars
+    const progressBars = {
+      goals: goals.rows.map(goal => ({
+        goal_id: goal.id,
+        goal_name: goal.goal_name,
+        current: parseFloat(goal.current_value || 0),
+        target: parseFloat(goal.target_value),
+        progress_percent: goal.target_value > 0 
+          ? Math.min(100, ((goal.current_value / goal.target_value) * 100).toFixed(1))
+          : 0,
+        on_track: goal.deadline 
+          ? this.isOnTrack(goal.current_value, goal.target_value, goal.deadline, goal.created_at)
+          : null,
+        projected_completion: goal.deadline || null
+      })),
+      activities: activities.rows.map(act => ({
+        activity_type: act.activity_type,
+        total: parseInt(act.count),
+        successful: parseInt(act.success_count),
+        success_rate: act.count > 0 ? ((act.success_count / act.count) * 100).toFixed(1) : 0
+      })),
+      appointments: {
+        current: activities.rows.find(a => a.activity_type === 'appointment')?.count || 0,
+        target: 0, // Would come from goal
+        progress_percent: 0
+      },
+      calls: {
+        current: activities.rows.find(a => a.activity_type === 'call')?.count || 0,
+        target: 0,
+        progress_percent: 0
+      },
+      deals: {
+        current: activities.rows.find(a => a.outcome === 'sale')?.count || 0,
+        target: 0,
+        progress_percent: 0
+      }
+    };
+
+    res.json({ ok: true, progress: progressBars });
+  } catch (error) {
+    console.error("Get progress error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Helper to check if goal is on track
+function isOnTrack(current, target, deadline, startDate) {
+  if (!deadline) return null;
+  
+  const now = new Date();
+  const deadlineDate = new Date(deadline);
+  const start = new Date(startDate);
+  
+  const totalTime = deadlineDate - start;
+  const elapsed = now - start;
+  const expectedProgress = (elapsed / totalTime) * 100;
+  const actualProgress = (current / target) * 100;
+  
+  return actualProgress >= expectedProgress * 0.9; // 90% of expected = on track
+}
+
 // ==================== INCOME DIAGNOSTIC ENDPOINT ====================
 app.get("/api/v1/income/diagnostic", requireKey, async (req, res) => {
   try {
