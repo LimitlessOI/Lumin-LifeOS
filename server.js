@@ -43,6 +43,9 @@ let OpenSourceCouncil, openSourceCouncil;
 // Sales Coaching Services
 let salesTechniqueAnalyzer, callRecorder;
 
+// Goal Tracking & Coaching Services
+let goalTracker, activityTracker, coachingProgression, calendarService;
+
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
 
@@ -1318,6 +1321,110 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_technique_patterns_type ON sales_technique_patterns(pattern_type)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_events_recording ON real_time_coaching_events(recording_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_events_delivered ON real_time_coaching_events(delivered)`);
+
+    // Agent Goals & Tracking System
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_goals (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      goal_type VARCHAR(50) NOT NULL, -- 'revenue', 'sales', 'calls', 'appointments', 'showings', 'custom'
+      goal_name VARCHAR(255) NOT NULL,
+      target_value DECIMAL(12,2) NOT NULL,
+      current_value DECIMAL(12,2) DEFAULT 0,
+      unit VARCHAR(50), -- 'dollars', 'count', 'percentage'
+      deadline TIMESTAMPTZ,
+      estimated_cost DECIMAL(12,2), -- Cost to achieve goal
+      estimated_roi DECIMAL(12,2), -- Expected ROI
+      is_worth_it BOOLEAN, -- System evaluation if goal is worth the cost
+      status VARCHAR(50) DEFAULT 'active', -- 'active', 'completed', 'paused', 'cancelled'
+      breakdown JSONB, -- Breakdown into controllable activities
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_activities (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      activity_type VARCHAR(50) NOT NULL, -- 'call', 'appointment', 'showing', 'email', 'follow_up', 'training', 'coaching'
+      activity_subtype VARCHAR(100), -- 'cold_call', 'warm_call', 'follow_up_call', etc.
+      client_name TEXT,
+      client_email TEXT,
+      client_phone TEXT,
+      property_address TEXT,
+      duration INTEGER, -- seconds
+      outcome VARCHAR(50), -- 'appointment_set', 'no_answer', 'not_interested', 'interested', 'sale', 'showing_scheduled', etc.
+      notes TEXT,
+      recording_id INTEGER REFERENCES sales_call_recordings(id) ON DELETE SET NULL,
+      metadata JSONB, -- Additional activity-specific data
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_calendar_events (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      event_type VARCHAR(50) NOT NULL, -- 'appointment', 'showing', 'training', 'coaching', 'meeting', 'custom'
+      title VARCHAR(255) NOT NULL,
+      description TEXT,
+      start_time TIMESTAMPTZ NOT NULL,
+      end_time TIMESTAMPTZ NOT NULL,
+      location TEXT,
+      client_name TEXT,
+      client_email TEXT,
+      client_phone TEXT,
+      property_address TEXT,
+      is_recurring BOOLEAN DEFAULT FALSE,
+      recurrence_pattern JSONB, -- For recurring events
+      status VARCHAR(50) DEFAULT 'scheduled', -- 'scheduled', 'completed', 'cancelled', 'no_show'
+      auto_record BOOLEAN DEFAULT TRUE, -- Auto-start recording for calls/appointments
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_progression (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      current_level VARCHAR(50) DEFAULT 'new_agent', -- 'new_agent', 'developing', 'consistent', 'top_performer', 'elite'
+      level_progress DECIMAL(5,2) DEFAULT 0, -- 0-100 percentage to next level
+      total_sales INTEGER DEFAULT 0,
+      total_revenue DECIMAL(12,2) DEFAULT 0,
+      skills_assessment JSONB, -- Current skill levels in different areas
+      strengths JSONB, -- Activities/skills agent excels at
+      improvement_areas JSONB, -- Areas needing development
+      next_level_requirements JSONB, -- What's needed to reach next level
+      coaching_plan JSONB, -- Personalized coaching plan
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS activity_analytics (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      activity_type VARCHAR(50) NOT NULL,
+      period_start TIMESTAMPTZ NOT NULL, -- Start of period (week/month)
+      period_end TIMESTAMPTZ NOT NULL,
+      period_type VARCHAR(20) NOT NULL, -- 'daily', 'weekly', 'monthly'
+      total_count INTEGER DEFAULT 0,
+      success_count INTEGER DEFAULT 0,
+      success_rate DECIMAL(5,2) DEFAULT 0, -- percentage
+      average_duration INTEGER, -- seconds
+      conversion_rate DECIMAL(5,2), -- percentage to next stage
+      best_time_of_day VARCHAR(50), -- When agent performs best
+      best_day_of_week VARCHAR(50),
+      performance_score DECIMAL(5,2), -- Overall performance score
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_goals_agent ON agent_goals(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_goals_status ON agent_goals(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_goals_deadline ON agent_goals(deadline)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_activities_agent ON agent_activities(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_activities_type ON agent_activities(activity_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_activities_created ON agent_activities(created_at)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_calendar_events_agent ON agent_calendar_events(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_calendar_events_start ON agent_calendar_events(start_time)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_calendar_events_type ON agent_calendar_events(event_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_progression_agent ON agent_progression(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_activity_analytics_agent ON activity_analytics(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_activity_analytics_period ON activity_analytics(period_start, period_end)`);
 
     // API Cost-Savings Service Tables
     await pool.query(`CREATE TABLE IF NOT EXISTS api_cost_savings_clients (
@@ -7896,6 +8003,7 @@ SUBJECT: [subject]
         total_properties: properties.length,
         estimated_time: "TBD (integrate with Maps API)",
       },
+      ai_source: aiSource, // "boldtrail_ai" or "our_ai"
     });
   } catch (error) {
     console.error("BoldTrail showing plan error:", error);
@@ -10107,6 +10215,233 @@ app.get("/api/v1/boldtrail/recording-status/:callId", requireKey, async (req, re
     res.json({ ok: true, ...status });
   } catch (error) {
     console.error("Get recording status error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== GOAL TRACKING ENDPOINTS ====================
+
+// Create a goal
+app.post("/api/v1/boldtrail/goals", requireKey, async (req, res) => {
+  try {
+    const { agent_id, goal_type, goal_name, target_value, deadline, unit } = req.body;
+
+    if (!agent_id || !goal_type || !goal_name || !target_value) {
+      return res.status(400).json({ ok: false, error: "agent_id, goal_type, goal_name, and target_value required" });
+    }
+
+    if (!goalTracker) {
+      return res.status(503).json({ ok: false, error: "Goal tracker not initialized" });
+    }
+
+    const result = await goalTracker.createGoal(agent_id, {
+      goal_type,
+      goal_name,
+      target_value,
+      deadline,
+      unit
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error("Create goal error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get agent goals
+app.get("/api/v1/boldtrail/goals/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { status } = req.query;
+
+    if (!goalTracker) {
+      return res.status(503).json({ ok: false, error: "Goal tracker not initialized" });
+    }
+
+    const result = await goalTracker.getAgentGoals(agentId, status);
+    res.json(result);
+  } catch (error) {
+    console.error("Get goals error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Update goal progress
+app.put("/api/v1/boldtrail/goals/:goalId", requireKey, async (req, res) => {
+  try {
+    const { goalId } = req.params;
+    const { current_value } = req.body;
+
+    if (!goalTracker) {
+      return res.status(503).json({ ok: false, error: "Goal tracker not initialized" });
+    }
+
+    const result = await goalTracker.updateGoalProgress(goalId, current_value);
+    res.json(result);
+  } catch (error) {
+    console.error("Update goal error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== ACTIVITY TRACKING ENDPOINTS ====================
+
+// Record an activity
+app.post("/api/v1/boldtrail/activities", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...activityData } = req.body;
+
+    if (!agent_id || !activityData.activity_type) {
+      return res.status(400).json({ ok: false, error: "agent_id and activity_type required" });
+    }
+
+    if (!activityTracker) {
+      return res.status(503).json({ ok: false, error: "Activity tracker not initialized" });
+    }
+
+    const result = await activityTracker.recordActivity(agent_id, activityData);
+    res.json(result);
+  } catch (error) {
+    console.error("Record activity error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Start call with auto-recording
+app.post("/api/v1/boldtrail/start-call", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...callData } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!activityTracker) {
+      return res.status(503).json({ ok: false, error: "Activity tracker not initialized" });
+    }
+
+    const result = await activityTracker.startCallWithRecording(agent_id, callData);
+    res.json(result);
+  } catch (error) {
+    console.error("Start call error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get activity analytics
+app.get("/api/v1/boldtrail/analytics/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { period = '30 days' } = req.query;
+
+    if (!activityTracker) {
+      return res.status(503).json({ ok: false, error: "Activity tracker not initialized" });
+    }
+
+    const result = await activityTracker.getActivityAnalytics(agentId, period);
+    res.json(result);
+  } catch (error) {
+    console.error("Get analytics error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== COACHING PROGRESSION ENDPOINTS ====================
+
+// Get agent progression
+app.get("/api/v1/boldtrail/progression/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+
+    if (!coachingProgression) {
+      return res.status(503).json({ ok: false, error: "Coaching progression not initialized" });
+    }
+
+    const result = await coachingProgression.getAgentProgression(agentId);
+    res.json(result);
+  } catch (error) {
+    console.error("Get progression error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== CALENDAR ENDPOINTS ====================
+
+// Create calendar event
+app.post("/api/v1/boldtrail/calendar/events", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...eventData } = req.body;
+
+    if (!agent_id || !eventData.start_time || !eventData.end_time) {
+      return res.status(400).json({ ok: false, error: "agent_id, start_time, and end_time required" });
+    }
+
+    if (!calendarService) {
+      return res.status(503).json({ ok: false, error: "Calendar service not initialized" });
+    }
+
+    const result = await calendarService.createEvent(agent_id, eventData);
+    res.json(result);
+  } catch (error) {
+    console.error("Create calendar event error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get calendar events
+app.get("/api/v1/boldtrail/calendar/events/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { start_date, end_date } = req.query;
+
+    if (!start_date || !end_date) {
+      return res.status(400).json({ ok: false, error: "start_date and end_date required" });
+    }
+
+    if (!calendarService) {
+      return res.status(503).json({ ok: false, error: "Calendar service not initialized" });
+    }
+
+    const result = await calendarService.getEvents(agentId, start_date, end_date);
+    res.json(result);
+  } catch (error) {
+    console.error("Get calendar events error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Handle event start (auto-record)
+app.post("/api/v1/boldtrail/calendar/events/:eventId/start", requireKey, async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    if (!calendarService) {
+      return res.status(503).json({ ok: false, error: "Calendar service not initialized" });
+    }
+
+    const result = await calendarService.handleEventStart(eventId);
+    res.json(result);
+  } catch (error) {
+    console.error("Handle event start error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Complete event
+app.post("/api/v1/boldtrail/calendar/events/:eventId/complete", requireKey, async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const { outcome } = req.body;
+
+    if (!calendarService) {
+      return res.status(503).json({ ok: false, error: "Calendar service not initialized" });
+    }
+
+    const result = await calendarService.completeEvent(eventId, outcome);
+    res.json(result);
+  } catch (error) {
+    console.error("Complete event error:", error);
     res.status(500).json({ ok: false, error: error.message });
   }
 });
@@ -12577,6 +12912,27 @@ async function start() {
       console.warn("⚠️ Sales Coaching Services not available:", error.message);
       salesTechniqueAnalyzer = null;
       callRecorder = null;
+    }
+
+    // Initialize Goal Tracking & Coaching Services
+    try {
+      const GoalTrackerModule = await import("./src/services/goal-tracker.js");
+      const ActivityTrackerModule = await import("./src/services/activity-tracker.js");
+      const CoachingProgressionModule = await import("./src/services/coaching-progression.js");
+      const CalendarServiceModule = await import("./src/services/calendar-service.js");
+      
+      goalTracker = new GoalTrackerModule.GoalTracker(pool, callCouncilWithFailover);
+      activityTracker = new ActivityTrackerModule.ActivityTracker(pool, callRecorder);
+      coachingProgression = new CoachingProgressionModule.CoachingProgression(pool, callCouncilWithFailover);
+      calendarService = new CalendarServiceModule.CalendarService(pool, callRecorder, activityTracker);
+      
+      console.log("✅ Goal Tracking & Coaching Services initialized");
+    } catch (error) {
+      console.warn("⚠️ Goal Tracking & Coaching Services not available:", error.message);
+      goalTracker = null;
+      activityTracker = null;
+      coachingProgression = null;
+      calendarService = null;
     }
 
     console.log("\n🤖 AI COUNCIL:");
