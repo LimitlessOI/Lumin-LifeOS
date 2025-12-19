@@ -7706,8 +7706,33 @@ app.post("/api/v1/boldtrail/draft-email", requireKey, async (req, res) => {
     const agent = agentResult.rows[0];
     const tone = agent.agent_tone || "professional and friendly";
 
-    // Build prompt for AI
-    const prompt = `Draft a ${draft_type} email for a real estate agent.
+    let subject, body, aiSource = "our_ai";
+
+    // Try BoldTrail AI first (if API key exists)
+    try {
+      const { draftEmailWithBoldTrailAI } = await import("./src/integrations/boldtrail.js");
+      const boldtrailResult = await draftEmailWithBoldTrailAI({
+        agent_tone: tone,
+        draft_type,
+        recipient_name,
+        recipient_email,
+        context_data,
+      });
+
+      if (boldtrailResult.ok && boldtrailResult.source === "boldtrail_ai") {
+        subject = boldtrailResult.subject;
+        body = boldtrailResult.content;
+        aiSource = "boldtrail_ai";
+        console.log("✅ Used BoldTrail AI for email drafting");
+      } else {
+        // Fallback to our AI
+        throw new Error("BoldTrail AI not available, using fallback");
+      }
+    } catch (boldtrailError) {
+      // Fallback to our AI
+      console.log("📝 Using our AI for email drafting (BoldTrail AI unavailable)");
+      
+      const prompt = `Draft a ${draft_type} email for a real estate agent.
 
 Agent's tone/style: ${tone}
 Recipient: ${recipient_name || recipient_email || "client"}
@@ -7724,12 +7749,13 @@ SUBJECT: [subject line]
 
 [email body]`;
 
-    const emailContent = await callCouncilWithFailover(prompt, "chatgpt");
+      const emailContent = await callCouncilWithFailover(prompt, "chatgpt");
 
-    // Extract subject and body
-    const subjectMatch = emailContent.match(/SUBJECT:\s*(.+)/i);
-    const subject = subjectMatch ? subjectMatch[1].trim() : `${draft_type} - ${recipient_name || "Client"}`;
-    const body = emailContent.replace(/SUBJECT:.*/i, "").trim();
+      // Extract subject and body
+      const subjectMatch = emailContent.match(/SUBJECT:\s*(.+)/i);
+      subject = subjectMatch ? subjectMatch[1].trim() : `${draft_type} - ${recipient_name || "Client"}`;
+      body = emailContent.replace(/SUBJECT:.*/i, "").trim();
+    }
 
     // Save draft
     const draftResult = await pool.query(
@@ -7753,6 +7779,7 @@ SUBJECT: [subject line]
       draft: draftResult.rows[0],
       subject,
       content: body,
+      ai_source: aiSource, // "boldtrail_ai" or "our_ai"
     });
   } catch (error) {
     console.error("BoldTrail email draft error:", error);
@@ -7771,15 +7798,45 @@ app.post("/api/v1/boldtrail/plan-showing", requireKey, async (req, res) => {
       });
     }
 
-    // For now, simple route order (1, 2, 3...)
-    // In production, integrate with Google Maps API for actual route optimization
+    let optimizedShowings = [];
+    let aiSource = "our_ai";
+
+    // Try BoldTrail AI first (if API key exists)
+    try {
+      const { planShowingsWithBoldTrailAI } = await import("./src/integrations/boldtrail.js");
+      const boldtrailResult = await planShowingsWithBoldTrailAI({
+        properties,
+        client_name,
+        client_email,
+        client_phone,
+      });
+
+      if (boldtrailResult.ok && boldtrailResult.source === "boldtrail_ai") {
+        optimizedShowings = boldtrailResult.showings || [];
+        aiSource = "boldtrail_ai";
+        console.log("✅ Used BoldTrail AI for showing planning");
+      } else {
+        // Fallback to our simple route order
+        throw new Error("BoldTrail AI not available, using fallback");
+      }
+    } catch (boldtrailError) {
+      // Fallback: Simple route order (1, 2, 3...)
+      console.log("📝 Using our simple route planning (BoldTrail AI unavailable)");
+      optimizedShowings = properties.map((prop, i) => ({
+        ...prop,
+        route_order: i + 1,
+        estimated_drive_time: null,
+      }));
+    }
+
+    // Save showings to database
     const showings = [];
-    for (let i = 0; i < properties.length; i++) {
-      const prop = properties[i];
+    for (let i = 0; i < optimizedShowings.length; i++) {
+      const prop = optimizedShowings[i];
       const showingResult = await pool.query(
         `INSERT INTO boldtrail_showings 
-         (agent_id, property_address, property_details, showing_date, client_name, client_email, client_phone, route_order)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         (agent_id, property_address, property_details, showing_date, client_name, client_email, client_phone, route_order, estimated_drive_time)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
          RETURNING *`,
         [
           agent_id,
@@ -7789,7 +7846,8 @@ app.post("/api/v1/boldtrail/plan-showing", requireKey, async (req, res) => {
           client_name || null,
           client_email || null,
           client_phone || null,
-          i + 1,
+          prop.route_order || i + 1,
+          prop.estimated_drive_time || null,
         ]
       );
       showings.push(showingResult.rows[0]);
