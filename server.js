@@ -40,6 +40,9 @@ let KnowledgeBase, FileCleanupAnalyzer;
 // Open Source Council Router
 let OpenSourceCouncil, openSourceCouncil;
 
+// Sales Coaching Services
+let salesTechniqueAnalyzer, callRecorder;
+
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
 
@@ -1242,6 +1245,79 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_showings_date ON boldtrail_showings(showing_date)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_email_agent ON boldtrail_email_drafts(agent_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_email_status ON boldtrail_email_drafts(status)`);
+
+    // Sales Coaching & Recording Tables
+    await pool.query(`CREATE TABLE IF NOT EXISTS sales_call_recordings (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      call_id VARCHAR(255) UNIQUE,
+      recording_url TEXT,
+      recording_type VARCHAR(50) DEFAULT 'phone_call', -- 'phone_call', 'showing_presentation', 'video_call'
+      transcript TEXT,
+      transcript_segments JSONB, -- Array of {timestamp, speaker, text}
+      duration INTEGER, -- seconds
+      client_name TEXT,
+      client_email TEXT,
+      client_phone TEXT,
+      property_address TEXT, -- For showing presentations
+      status VARCHAR(50) DEFAULT 'recording', -- 'recording', 'completed', 'analyzed'
+      ai_analysis JSONB, -- Full AI analysis results
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      completed_at TIMESTAMPTZ,
+      analyzed_at TIMESTAMPTZ
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS coaching_clips (
+      id SERIAL PRIMARY KEY,
+      recording_id INTEGER REFERENCES sales_call_recordings(id) ON DELETE CASCADE,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      clip_type VARCHAR(50) NOT NULL, -- 'good_moment', 'coaching_needed', 'technique_example'
+      start_time INTEGER NOT NULL, -- seconds from start
+      end_time INTEGER NOT NULL,
+      transcript_segment TEXT,
+      ai_analysis JSONB,
+      technique_detected VARCHAR(255), -- e.g., 'interrupting_client', 'not_listening', 'excellent_rapport'
+      severity VARCHAR(50), -- 'low', 'medium', 'high' (for coaching_needed)
+      coaching_suggestion TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS sales_technique_patterns (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      technique_name VARCHAR(255) NOT NULL,
+      pattern_type VARCHAR(50) NOT NULL, -- 'bad_habit', 'good_practice', 'neutral'
+      description TEXT,
+      frequency INTEGER DEFAULT 1,
+      first_detected TIMESTAMPTZ DEFAULT NOW(),
+      last_detected TIMESTAMPTZ DEFAULT NOW(),
+      examples JSONB, -- Array of clip IDs or transcript snippets
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS real_time_coaching_events (
+      id SERIAL PRIMARY KEY,
+      recording_id INTEGER REFERENCES sales_call_recordings(id) ON DELETE CASCADE,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      event_type VARCHAR(50) NOT NULL, -- 'suggestion', 'warning', 'praise', 'technique_detected'
+      timestamp INTEGER NOT NULL, -- seconds from call start
+      message TEXT NOT NULL,
+      severity VARCHAR(50), -- 'low', 'medium', 'high'
+      delivered BOOLEAN DEFAULT FALSE, -- Whether coaching was delivered to agent
+      delivered_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_call_recordings_agent ON sales_call_recordings(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_call_recordings_status ON sales_call_recordings(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_clips_recording ON coaching_clips(recording_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_clips_agent ON coaching_clips(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_clips_type ON coaching_clips(clip_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_technique_patterns_agent ON sales_technique_patterns(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_technique_patterns_type ON sales_technique_patterns(pattern_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_events_recording ON real_time_coaching_events(recording_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_events_delivered ON real_time_coaching_events(delivered)`);
 
     // API Cost-Savings Service Tables
     await pool.query(`CREATE TABLE IF NOT EXISTS api_cost_savings_clients (
@@ -9762,6 +9838,221 @@ app.get("/api/v1/boldtrail/agent/:agentId/features", requireKey, async (req, res
   }
 });
 
+// ==================== SALES COACHING & RECORDING ENDPOINTS ====================
+
+// Start recording a call or presentation
+app.post("/api/v1/boldtrail/start-recording", requireKey, async (req, res) => {
+  try {
+    const { agent_id, recording_type, client_name, client_email, client_phone, property_address } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const result = await callRecorder.startRecording(
+      agent_id,
+      recording_type || 'phone_call',
+      { client_name, client_email, client_phone, property_address }
+    );
+
+    res.json(result);
+  } catch (error) {
+    console.error("Start recording error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Add transcript segment (real-time during call)
+app.post("/api/v1/boldtrail/add-transcript", requireKey, async (req, res) => {
+  try {
+    const { call_id, segment } = req.body;
+
+    if (!call_id || !segment) {
+      return res.status(400).json({ ok: false, error: "call_id and segment required" });
+    }
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const result = await callRecorder.addTranscriptSegment(call_id, segment);
+    res.json(result);
+  } catch (error) {
+    console.error("Add transcript error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Stop recording and analyze
+app.post("/api/v1/boldtrail/stop-recording", requireKey, async (req, res) => {
+  try {
+    const { call_id, recording_url } = req.body;
+
+    if (!call_id) {
+      return res.status(400).json({ ok: false, error: "call_id required" });
+    }
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const result = await callRecorder.stopRecording(call_id, recording_url);
+    res.json(result);
+  } catch (error) {
+    console.error("Stop recording error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Mark a moment (good or bad) during recording
+app.post("/api/v1/boldtrail/mark-moment", requireKey, async (req, res) => {
+  try {
+    const { call_id, moment_type, start_time, end_time, notes } = req.body;
+
+    if (!call_id || !moment_type || start_time === undefined || end_time === undefined) {
+      return res.status(400).json({ ok: false, error: "call_id, moment_type, start_time, and end_time required" });
+    }
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const result = await callRecorder.markMoment(call_id, moment_type, start_time, end_time, notes);
+    res.json(result);
+  } catch (error) {
+    console.error("Mark moment error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get coaching clips for an agent
+app.get("/api/v1/boldtrail/coaching-clips/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { clip_type, limit = 20 } = req.query;
+
+    let query = `
+      SELECT cc.*, scr.call_id, scr.recording_type, scr.client_name, scr.property_address
+      FROM coaching_clips cc
+      JOIN sales_call_recordings scr ON cc.recording_id = scr.id
+      WHERE cc.agent_id = $1
+    `;
+    const params = [agentId];
+
+    if (clip_type) {
+      query += ` AND cc.clip_type = $2`;
+      params.push(clip_type);
+      query += ` ORDER BY cc.created_at DESC LIMIT $${params.length + 1}`;
+      params.push(parseInt(limit));
+    } else {
+      query += ` ORDER BY cc.created_at DESC LIMIT $2`;
+      params.push(parseInt(limit));
+    }
+
+    const result = await pool.query(query, params);
+
+    res.json({
+      ok: true,
+      clips: result.rows,
+      count: result.rows.length
+    });
+  } catch (error) {
+    console.error("Get coaching clips error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get sales technique patterns (bad habits) for an agent
+app.get("/api/v1/boldtrail/technique-patterns/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { pattern_type } = req.query;
+
+    let query = `
+      SELECT * FROM sales_technique_patterns
+      WHERE agent_id = $1
+    `;
+    const params = [agentId];
+
+    if (pattern_type) {
+      query += ` AND pattern_type = $2`;
+      params.push(pattern_type);
+    }
+
+    query += ` ORDER BY frequency DESC, last_detected DESC`;
+
+    const result = await pool.query(query, params);
+
+    res.json({
+      ok: true,
+      patterns: result.rows,
+      bad_habits: result.rows.filter(p => p.pattern_type === 'bad_habit'),
+      good_practices: result.rows.filter(p => p.pattern_type === 'good_practice')
+    });
+  } catch (error) {
+    console.error("Get technique patterns error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get real-time coaching events for a recording
+app.get("/api/v1/boldtrail/coaching-events/:callId", requireKey, async (req, res) => {
+  try {
+    const { callId } = req.params;
+
+    const recording = await pool.query(
+      "SELECT id FROM sales_call_recordings WHERE call_id = $1",
+      [callId]
+    );
+
+    if (recording.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Recording not found" });
+    }
+
+    const result = await pool.query(
+      `SELECT * FROM real_time_coaching_events
+       WHERE recording_id = $1
+       ORDER BY timestamp ASC`,
+      [recording.rows[0].id]
+    );
+
+    res.json({
+      ok: true,
+      events: result.rows,
+      count: result.rows.length
+    });
+  } catch (error) {
+    console.error("Get coaching events error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get recording status
+app.get("/api/v1/boldtrail/recording-status/:callId", requireKey, async (req, res) => {
+  try {
+    const { callId } = req.params;
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const status = callRecorder.getRecordingStatus(callId);
+    
+    if (!status) {
+      return res.status(404).json({ ok: false, error: "Recording not found or not active" });
+    }
+
+    res.json({ ok: true, ...status });
+  } catch (error) {
+    console.error("Get recording status error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // ==================== INCOME DIAGNOSTIC ENDPOINT ====================
 app.get("/api/v1/income/diagnostic", requireKey, async (req, res) => {
   try {
@@ -12214,6 +12505,21 @@ async function start() {
     }
     
     await initializeTwoTierSystem();
+
+    // Initialize Sales Coaching Services
+    try {
+      const SalesAnalyzerModule = await import("./src/services/sales-technique-analyzer.js");
+      const CallRecorderModule = await import("./src/services/call-recorder.js");
+      
+      salesTechniqueAnalyzer = new SalesAnalyzerModule.SalesTechniqueAnalyzer(pool, callCouncilWithFailover);
+      callRecorder = new CallRecorderModule.CallRecorder(pool, salesTechniqueAnalyzer);
+      
+      console.log("✅ Sales Coaching Services initialized");
+    } catch (error) {
+      console.warn("⚠️ Sales Coaching Services not available:", error.message);
+      salesTechniqueAnalyzer = null;
+      callRecorder = null;
+    }
 
     console.log("\n🤖 AI COUNCIL:");
     Object.values(COUNCIL_MEMBERS).forEach((m) =>
