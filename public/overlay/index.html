@@ -470,6 +470,14 @@
   </div>
 
   <script>
+    // HTML escape function for XSS protection
+    function escapeHtml(text) {
+      if (text == null) return '';
+      const div = document.createElement('div');
+      div.textContent = String(text);
+      return div.innerHTML;
+    }
+
     const statusDot = document.getElementById("statusDot");
     const statusText = document.getElementById("statusText");
     const healthPills = document.getElementById("healthPills");
@@ -481,6 +489,11 @@
     const cmdKeyEl = document.getElementById("cmdKey");
     const apiBaseEl = document.getElementById("apiBase");
     const metaInfo = document.getElementById("metaInfo");
+
+    // Defensive checks for required elements
+    if (!statusDot || !statusText || !healthPills || !responseBox || !sendBtn || !promptEl || !memberEl || !cmdKeyEl || !apiBaseEl || !metaInfo) {
+      console.error('Missing required DOM elements');
+    }
 
     // Load saved config
     (function initConfig() {
@@ -514,6 +527,8 @@
     // Load conversation history
     async function loadConversationHistory() {
       const historyList = document.getElementById("historyList");
+      if (!historyList) return;
+      
       try {
         const key = getKey();
         if (!key) {
@@ -521,27 +536,39 @@
           return;
         }
 
-        const res = await fetch(`${getBase()}/api/v1/conversations/history?limit=10`, {
+        const base = getBase();
+        if (!base) {
+          historyList.innerHTML = "<div style='color: #ef4444; font-size: 0.8rem;'>Error: Base URL not set</div>";
+          return;
+        }
+
+        const res = await fetch(`${base}/api/v1/conversations/history?limit=10`, {
           headers: { "x-command-key": key },
         });
         
-        if (!res.ok) throw new Error("Failed to load history");
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`HTTP ${res.status}: ${errorText.slice(0, 100)}`);
+        }
         
         const data = await res.json();
         
         if (data.conversations && data.conversations.length > 0) {
-          historyList.innerHTML = data.conversations.map(conv => `
-            <div class="conversation-item">
-              <div class="user-msg">${conv.orchestrator_msg.substring(0, 100)}${conv.orchestrator_msg.length > 100 ? '...' : ''}</div>
-              <div class="ai-msg">${conv.ai_response.substring(0, 150)}${conv.ai_response.length > 150 ? '...' : ''}</div>
-              <div class="timestamp">${new Date(conv.created_at).toLocaleString()} · ${conv.ai_member || 'unknown'}</div>
-            </div>
-          `).join('');
+          historyList.innerHTML = data.conversations.map(conv => {
+            const userMsg = (conv.orchestrator_msg || '').substring(0, 100);
+            const userMsgFull = (conv.orchestrator_msg || '').length > 100 ? userMsg + '...' : userMsg;
+            const aiMsg = (conv.ai_response || '').substring(0, 150);
+            const aiMsgFull = (conv.ai_response || '').length > 150 ? aiMsg + '...' : aiMsg;
+            const timestamp = conv.created_at ? new Date(conv.created_at).toLocaleString() : 'Unknown';
+            const aiMember = conv.ai_member || 'unknown';
+            return `<div class="conversation-item"><div class="user-msg">${escapeHtml(userMsgFull)}</div><div class="ai-msg">${escapeHtml(aiMsgFull)}</div><div class="timestamp">${escapeHtml(timestamp)} · ${escapeHtml(aiMember)}</div></div>`;
+          }).join('');
         } else {
           historyList.innerHTML = "<div style='color: #6b7280; font-size: 0.8rem;'>No conversations yet</div>";
         }
       } catch (error) {
-        historyList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading history: ${error.message}</div>`;
+        const errorMsg = escapeHtml(error.message || String(error));
+        historyList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading history: ${errorMsg}</div>`;
       }
     }
 
@@ -574,6 +601,8 @@
     // Load task queue
     async function loadTaskQueue() {
       const taskQueueList = document.getElementById("taskQueueList");
+      if (!taskQueueList) return;
+      
       try {
         const key = getKey();
         if (!key) {
@@ -592,39 +621,25 @@
         if (data.tasks && data.tasks.length > 0) {
           taskQueueList.innerHTML = data.tasks.map((task, index) => {
             const isActive = task.status === 'running';
-            const isExpanded = false; // Will be managed by click handler
+            const taskId = escapeHtml(String(task.id || ''));
+            const taskTitle = escapeHtml(task.title || task.description || 'Task');
+            const taskStatus = escapeHtml(task.status || '');
+            const taskType = escapeHtml(task.type || 'N/A');
+            const taskDesc = escapeHtml(task.description || task.title || 'No description');
+            const taskCreated = task.createdAt ? new Date(task.createdAt).toLocaleString() : 'Unknown';
+            const taskProgress = task.progress || 0;
+            const taskEta = escapeHtml(task.eta || 'Calculating...');
             
-            return `
-              <div class="task-item ${isActive ? 'running' : ''}" data-task-id="${task.id}" data-index="${index}">
-                <div class="task-header">
-                  <div class="task-title">${task.title || task.description || 'Task'}</div>
-                  <div class="task-status ${task.status}">${task.status}</div>
-                </div>
-                ${isActive ? `
-                  <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${task.progress || 0}%"></div>
-                  </div>
-                  <div class="task-eta">Progress: ${task.progress || 0}%</div>
-                ` : `
-                  <div class="task-eta">⏱️ ETA: ${task.eta || 'Calculating...'}</div>
-                `}
-                <div class="task-details" id="details-${task.id}">
-                  <div class="task-details-item"><strong>Type:</strong> ${task.type || 'N/A'}</div>
-                  <div class="task-details-item"><strong>Status:</strong> ${task.status}</div>
-                  <div class="task-details-item"><strong>Created:</strong> ${new Date(task.createdAt).toLocaleString()}</div>
-                  <div class="task-details-item"><strong>Description:</strong> ${task.description || task.title || 'No description'}</div>
-                  ${task.progress !== undefined ? `<div class="task-details-item"><strong>Progress:</strong> ${task.progress}%</div>` : ''}
-                  ${task.eta ? `<div class="task-details-item"><strong>ETA:</strong> ${task.eta}</div>` : ''}
-                </div>
-              </div>
-            `;
+            return `<div class="task-item ${isActive ? 'running' : ''}" data-task-id="${taskId}" data-index="${index}"><div class="task-header"><div class="task-title">${taskTitle}</div><div class="task-status ${escapeHtml(taskStatus)}">${taskStatus}</div></div>${isActive ? `<div class="progress-bar"><div class="progress-fill" style="width: ${taskProgress}%"></div></div><div class="task-eta">Progress: ${taskProgress}%</div>` : `<div class="task-eta">⏱️ ETA: ${taskEta}</div>`}<div class="task-details" id="details-${taskId}"><div class="task-details-item"><strong>Type:</strong> ${taskType}</div><div class="task-details-item"><strong>Status:</strong> ${taskStatus}</div><div class="task-details-item"><strong>Created:</strong> ${escapeHtml(taskCreated)}</div><div class="task-details-item"><strong>Description:</strong> ${taskDesc}</div>${task.progress !== undefined ? `<div class="task-details-item"><strong>Progress:</strong> ${taskProgress}%</div>` : ''}${task.eta ? `<div class="task-details-item"><strong>ETA:</strong> ${taskEta}</div>` : ''}</div></div>`;
           }).join('');
           
           // Add click handlers for task details
           document.querySelectorAll('.task-item').forEach(item => {
             item.addEventListener('click', () => {
               const taskId = item.dataset.taskId;
+              if (!taskId) return;
               const details = document.getElementById(`details-${taskId}`);
+              if (!details) return;
               
               // Toggle details
               if (details.classList.contains('active')) {
@@ -645,7 +660,8 @@
           taskQueueList.innerHTML = "<div style='color: #6b7280; font-size: 0.8rem;'>No tasks in queue</div>";
         }
       } catch (error) {
-        taskQueueList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading queue: ${error.message}</div>`;
+        const errorMsg = escapeHtml(error.message || String(error));
+        taskQueueList.innerHTML = `<div style='color: #ef4444; font-size: 0.8rem;'>Error loading queue: ${errorMsg}</div>`;
       }
     }
 
@@ -666,11 +682,13 @@
         const pill = (label, value) => {
           const el = document.createElement("div");
           el.className = "pill";
-          el.innerHTML = "<strong>" + label + ":</strong> " + value;
+          const labelEscaped = escapeHtml(String(label));
+          const valueEscaped = escapeHtml(String(value));
+          el.innerHTML = "<strong>" + labelEscaped + ":</strong> " + valueEscaped;
           healthPills.appendChild(el);
         };
 
-        pill("Spend", `${(data.daily_spend || 0).toFixed(3)} / ${data.max_daily_spend}`);
+        pill("Spend", `${(data.daily_spend || 0).toFixed(3)} / ${data.max_daily_spend || 'N/A'}`);
         pill("ROI", (data.roi && data.roi.roi_ratio ? data.roi.roi_ratio.toFixed(2) : "0") + "x");
         pill("Drones", data.drones ? data.drones.active : 0);
         pill("Tasks done", data.tasks ? data.tasks.completed : 0);

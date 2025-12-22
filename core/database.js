@@ -3,7 +3,7 @@ import { Pool } from "pg";
 import process from "node:process";
 
 // Destructure DB URL and establish SSL configuration for Neon
-const { DATABASE_URL, DATABASE_URL_SANDBOX, NODE_ENV } = process.env;
+const { DATABASE_URL, DATABASE_URL_SANDBOX, NODE_ENV, DB_SSL_REJECT_UNAUTHORIZED = "true" } = process.env;
 
 // Select the correct database URL based on the environment
 const connectionString = NODE_ENV === 'production' 
@@ -12,9 +12,9 @@ const connectionString = NODE_ENV === 'production'
 
 export const pool = new Pool({
   connectionString: connectionString,
-  // Required for Neon PostgreSQL on Railway
+  // SSL verification enabled by default (secure). Set DB_SSL_REJECT_UNAUTHORIZED=false to disable (not recommended).
   ssl: connectionString?.includes("neon.tech")
-    ? { rejectUnauthorized: false }
+    ? { rejectUnauthorized: DB_SSL_REJECT_UNAUTHORIZED !== "false" }
     : undefined,
   max: 20,
   idleTimeoutMillis: 30000,

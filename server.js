@@ -40,6 +40,15 @@ let KnowledgeBase, FileCleanupAnalyzer;
 // Open Source Council Router
 let OpenSourceCouncil, openSourceCouncil;
 
+// Sales Coaching Services
+let salesTechniqueAnalyzer, callRecorder;
+
+// Goal Tracking & Coaching Services
+let goalTracker, activityTracker, coachingProgression, calendarService;
+
+// Motivation & Perfect Day Services
+let perfectDaySystem, goalCommitmentSystem, callSimulationSystem, relationshipMediation, meaningfulMoments;
+
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
 
@@ -53,7 +62,7 @@ const wss = new WebSocketServer({ server });
 // ==================== ENVIRONMENT CONFIGURATION ====================
 const {
   DATABASE_URL,
-  COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
+  COMMAND_CENTER_KEY,
   OPENAI_API_KEY,
   ANTHROPIC_API_KEY,
   GEMINI_API_KEY,
@@ -81,7 +90,14 @@ const {
   // Video generation config
   VIDEO_GEN_ENDPOINT = "http://localhost:7860",
   VIDEO_GEN_API_KEY,
+  // Database SSL config (default: secure - verify certificates)
+  DB_SSL_REJECT_UNAUTHORIZED = "true",
 } = process.env;
+
+// Require COMMAND_CENTER_KEY (no default fallback)
+if (!COMMAND_CENTER_KEY) {
+  throw new Error('COMMAND_CENTER_KEY environment variable is required');
+}
 
 // Ensure spend cap is numeric
 const MAX_DAILY_SPEND = Number.isFinite(parseFloat(RAW_MAX_DAILY_SPEND))
@@ -269,10 +285,17 @@ app.use((req, res, next) => {
 });
 
 // ==================== DATABASE POOL ====================
+// Validate DATABASE_URL to prevent searchParams errors from invalid connection strings
+let validatedDatabaseUrl = DATABASE_URL;
+if (!validatedDatabaseUrl || validatedDatabaseUrl === 'postgres://username:password@host:port/database') {
+  console.warn('⚠️ DATABASE_URL is missing or placeholder. Database features may not work.');
+  validatedDatabaseUrl = undefined; // Prevents searchParams crash
+}
+
 export const pool = new Pool({
-  connectionString: DATABASE_URL,
-  ssl: DATABASE_URL?.includes("neon.tech")
-    ? { rejectUnauthorized: false }
+  connectionString: validatedDatabaseUrl,
+  ssl: validatedDatabaseUrl?.includes("neon.tech")
+    ? { rejectUnauthorized: DB_SSL_REJECT_UNAUTHORIZED !== "false" }
     : undefined,
   max: 20,
   idleTimeoutMillis: 30000,
@@ -1235,6 +1258,303 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_showings_date ON boldtrail_showings(showing_date)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_email_agent ON boldtrail_email_drafts(agent_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_boldtrail_email_status ON boldtrail_email_drafts(status)`);
+
+    // Sales Coaching & Recording Tables
+    await pool.query(`CREATE TABLE IF NOT EXISTS sales_call_recordings (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      call_id VARCHAR(255) UNIQUE,
+      recording_url TEXT,
+      recording_type VARCHAR(50) DEFAULT 'phone_call', -- 'phone_call', 'showing_presentation', 'video_call'
+      transcript TEXT,
+      transcript_segments JSONB, -- Array of {timestamp, speaker, text}
+      duration INTEGER, -- seconds
+      client_name TEXT,
+      client_email TEXT,
+      client_phone TEXT,
+      property_address TEXT, -- For showing presentations
+      status VARCHAR(50) DEFAULT 'recording', -- 'recording', 'completed', 'analyzed'
+      ai_analysis JSONB, -- Full AI analysis results
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      completed_at TIMESTAMPTZ,
+      analyzed_at TIMESTAMPTZ
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS coaching_clips (
+      id SERIAL PRIMARY KEY,
+      recording_id INTEGER REFERENCES sales_call_recordings(id) ON DELETE CASCADE,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      clip_type VARCHAR(50) NOT NULL, -- 'good_moment', 'coaching_needed', 'technique_example'
+      start_time INTEGER NOT NULL, -- seconds from start
+      end_time INTEGER NOT NULL,
+      transcript_segment TEXT,
+      ai_analysis JSONB,
+      technique_detected VARCHAR(255), -- e.g., 'interrupting_client', 'not_listening', 'excellent_rapport'
+      severity VARCHAR(50), -- 'low', 'medium', 'high' (for coaching_needed)
+      coaching_suggestion TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS sales_technique_patterns (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      technique_name VARCHAR(255) NOT NULL,
+      pattern_type VARCHAR(50) NOT NULL, -- 'bad_habit', 'good_practice', 'neutral'
+      description TEXT,
+      frequency INTEGER DEFAULT 1,
+      first_detected TIMESTAMPTZ DEFAULT NOW(),
+      last_detected TIMESTAMPTZ DEFAULT NOW(),
+      examples JSONB, -- Array of clip IDs or transcript snippets
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS real_time_coaching_events (
+      id SERIAL PRIMARY KEY,
+      recording_id INTEGER REFERENCES sales_call_recordings(id) ON DELETE CASCADE,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      event_type VARCHAR(50) NOT NULL, -- 'suggestion', 'warning', 'praise', 'technique_detected'
+      timestamp INTEGER NOT NULL, -- seconds from call start
+      message TEXT NOT NULL,
+      severity VARCHAR(50), -- 'low', 'medium', 'high'
+      delivered BOOLEAN DEFAULT FALSE, -- Whether coaching was delivered to agent
+      delivered_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_call_recordings_agent ON sales_call_recordings(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_call_recordings_status ON sales_call_recordings(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_clips_recording ON coaching_clips(recording_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_clips_agent ON coaching_clips(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_clips_type ON coaching_clips(clip_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_technique_patterns_agent ON sales_technique_patterns(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_technique_patterns_type ON sales_technique_patterns(pattern_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_events_recording ON real_time_coaching_events(recording_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_coaching_events_delivered ON real_time_coaching_events(delivered)`);
+
+    // Agent Goals & Tracking System
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_goals (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      goal_type VARCHAR(50) NOT NULL, -- 'revenue', 'sales', 'calls', 'appointments', 'showings', 'custom'
+      goal_name VARCHAR(255) NOT NULL,
+      target_value DECIMAL(12,2) NOT NULL,
+      current_value DECIMAL(12,2) DEFAULT 0,
+      unit VARCHAR(50), -- 'dollars', 'count', 'percentage'
+      deadline TIMESTAMPTZ,
+      estimated_cost DECIMAL(12,2), -- Cost to achieve goal
+      estimated_roi DECIMAL(12,2), -- Expected ROI
+      is_worth_it BOOLEAN, -- System evaluation if goal is worth the cost
+      status VARCHAR(50) DEFAULT 'active', -- 'active', 'completed', 'paused', 'cancelled'
+      breakdown JSONB, -- Breakdown into controllable activities
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_activities (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      activity_type VARCHAR(50) NOT NULL, -- 'call', 'appointment', 'showing', 'email', 'follow_up', 'training', 'coaching'
+      activity_subtype VARCHAR(100), -- 'cold_call', 'warm_call', 'follow_up_call', etc.
+      client_name TEXT,
+      client_email TEXT,
+      client_phone TEXT,
+      property_address TEXT,
+      duration INTEGER, -- seconds
+      outcome VARCHAR(50), -- 'appointment_set', 'no_answer', 'not_interested', 'interested', 'sale', 'showing_scheduled', etc.
+      notes TEXT,
+      recording_id INTEGER REFERENCES sales_call_recordings(id) ON DELETE SET NULL,
+      metadata JSONB, -- Additional activity-specific data
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_calendar_events (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      event_type VARCHAR(50) NOT NULL, -- 'appointment', 'showing', 'training', 'coaching', 'meeting', 'custom'
+      title VARCHAR(255) NOT NULL,
+      description TEXT,
+      start_time TIMESTAMPTZ NOT NULL,
+      end_time TIMESTAMPTZ NOT NULL,
+      location TEXT,
+      client_name TEXT,
+      client_email TEXT,
+      client_phone TEXT,
+      property_address TEXT,
+      is_recurring BOOLEAN DEFAULT FALSE,
+      recurrence_pattern JSONB, -- For recurring events
+      status VARCHAR(50) DEFAULT 'scheduled', -- 'scheduled', 'completed', 'cancelled', 'no_show'
+      auto_record BOOLEAN DEFAULT TRUE, -- Auto-start recording for calls/appointments
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_progression (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      current_level VARCHAR(50) DEFAULT 'new_agent', -- 'new_agent', 'developing', 'consistent', 'top_performer', 'elite'
+      level_progress DECIMAL(5,2) DEFAULT 0, -- 0-100 percentage to next level
+      total_sales INTEGER DEFAULT 0,
+      total_revenue DECIMAL(12,2) DEFAULT 0,
+      skills_assessment JSONB, -- Current skill levels in different areas
+      strengths JSONB, -- Activities/skills agent excels at
+      improvement_areas JSONB, -- Areas needing development
+      next_level_requirements JSONB, -- What's needed to reach next level
+      coaching_plan JSONB, -- Personalized coaching plan
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS activity_analytics (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      activity_type VARCHAR(50) NOT NULL,
+      period_start TIMESTAMPTZ NOT NULL, -- Start of period (week/month)
+      period_end TIMESTAMPTZ NOT NULL,
+      period_type VARCHAR(20) NOT NULL, -- 'daily', 'weekly', 'monthly'
+      total_count INTEGER DEFAULT 0,
+      success_count INTEGER DEFAULT 0,
+      success_rate DECIMAL(5,2) DEFAULT 0, -- percentage
+      average_duration INTEGER, -- seconds
+      conversion_rate DECIMAL(5,2), -- percentage to next stage
+      best_time_of_day VARCHAR(50), -- When agent performs best
+      best_day_of_week VARCHAR(50),
+      performance_score DECIMAL(5,2), -- Overall performance score
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_goals_agent ON agent_goals(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_goals_status ON agent_goals(status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_goals_deadline ON agent_goals(deadline)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_activities_agent ON agent_activities(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_activities_type ON agent_activities(activity_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_activities_created ON agent_activities(created_at)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_calendar_events_agent ON agent_calendar_events(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_calendar_events_start ON agent_calendar_events(start_time)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_calendar_events_type ON agent_calendar_events(event_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_agent_progression_agent ON agent_progression(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_activity_analytics_agent ON activity_analytics(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_activity_analytics_period ON activity_analytics(period_start, period_end)`);
+
+    // Perfect Day & Motivation System
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_perfect_day (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      wake_up_time TIME NOT NULL,
+      goal_reading_time INTEGER DEFAULT 5, -- minutes
+      visualization_time INTEGER DEFAULT 10,
+      inspiring_content_url TEXT,
+      training_schedule JSONB, -- Array of training activities
+      daily_routine JSONB, -- Complete daily routine
+      three_most_important JSONB, -- Today's 3 most important tasks
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_daily_log (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      log_date DATE NOT NULL,
+      wake_up_time TIME,
+      goal_reading_completed BOOLEAN DEFAULT FALSE,
+      visualization_completed BOOLEAN DEFAULT FALSE,
+      inspiring_content_watched BOOLEAN DEFAULT FALSE,
+      training_completed BOOLEAN DEFAULT FALSE,
+      three_most_important JSONB, -- What they committed to
+      three_most_important_completed JSONB, -- What they actually did
+      day_grade VARCHAR(50), -- 'great', 'good', 'poor'
+      day_score INTEGER, -- 0-100
+      system_score INTEGER, -- System's assessment
+      integrity_score DECIMAL(5,2), -- Based on commitments kept
+      notes TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_goal_commitments (
+      id SERIAL PRIMARY KEY,
+      goal_id INTEGER REFERENCES agent_goals(id) ON DELETE CASCADE,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      commitment_type VARCHAR(50) NOT NULL, -- 'daily_action', 'weekly_milestone', 'behavior'
+      commitment_description TEXT NOT NULL,
+      penalty_type VARCHAR(50), -- 'financial', 'time', 'privilege', 'custom'
+      penalty_description TEXT,
+      penalty_amount DECIMAL(10,2), -- If financial
+      reward_type VARCHAR(50), -- 'cruise', 'vacation', 'purchase', 'experience', 'custom'
+      reward_description TEXT,
+      reward_value DECIMAL(10,2),
+      agent_decided_worth_it BOOLEAN, -- Agent's decision
+      commitment_start_date DATE,
+      commitment_end_date DATE,
+      status VARCHAR(50) DEFAULT 'active', -- 'active', 'completed', 'failed', 'forgiven'
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_meaningful_moments (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      moment_type VARCHAR(50) NOT NULL, -- 'winning_moment', 'coaching_moment', 'breakthrough'
+      recording_url TEXT,
+      transcript TEXT,
+      timestamp TIMESTAMPTZ NOT NULL,
+      context TEXT,
+      tags JSONB,
+      playback_count INTEGER DEFAULT 0,
+      last_played_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_relationship_mediation (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      mediation_type VARCHAR(50) NOT NULL, -- 'personal', 'spouse', 'child', 'customer', 'business'
+      other_party_name TEXT,
+      other_party_contact TEXT,
+      issue_description TEXT,
+      mediation_status VARCHAR(50) DEFAULT 'requested', -- 'requested', 'in_progress', 'resolved', 'declined'
+      agreement_text TEXT,
+      both_parties_accepted BOOLEAN DEFAULT FALSE,
+      recording_consent BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      resolved_at TIMESTAMPTZ
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_call_simulations (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      simulation_type VARCHAR(50) NOT NULL, -- 'practice', 'training', 'skill_building'
+      scenario_description TEXT,
+      script_guidance JSONB, -- Step-by-step guidance
+      closes_to_practice JSONB, -- Array of closes (A/B close, etc.)
+      questions_to_ask JSONB, -- Suggested questions
+      personality_insights JSONB, -- What we learned about agent
+      comfort_zones JSONB, -- Where agent is comfortable/uncomfortable
+      recording_id INTEGER REFERENCES sales_call_recordings(id) ON DELETE SET NULL,
+      completed BOOLEAN DEFAULT FALSE,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS agent_integrity_tracking (
+      id SERIAL PRIMARY KEY,
+      agent_id INTEGER REFERENCES boldtrail_agents(id) ON DELETE CASCADE,
+      commitment_id INTEGER REFERENCES agent_goal_commitments(id) ON DELETE SET NULL,
+      commitment_made TIMESTAMPTZ NOT NULL,
+      commitment_kept BOOLEAN,
+      commitment_kept_at TIMESTAMPTZ,
+      integrity_score_impact DECIMAL(5,2), -- How this affects overall score
+      notes TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_perfect_day_agent ON agent_perfect_day(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_daily_log_agent ON agent_daily_log(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_daily_log_date ON agent_daily_log(log_date)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_goal_commitments_goal ON agent_goal_commitments(goal_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_goal_commitments_agent ON agent_goal_commitments(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_meaningful_moments_agent ON agent_meaningful_moments(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_meaningful_moments_type ON agent_meaningful_moments(moment_type)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_relationship_mediation_agent ON agent_relationship_mediation(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_call_simulations_agent ON agent_call_simulations(agent_id)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_integrity_tracking_agent ON agent_integrity_tracking(agent_id)`);
 
     // API Cost-Savings Service Tables
     await pool.query(`CREATE TABLE IF NOT EXISTS api_cost_savings_clients (
@@ -6083,14 +6403,9 @@ function broadcastToAll(message) {
 
 // ==================== API MIDDLEWARE ====================
 function requireKey(req, res, next) {
-  if (isSameOrigin(req)) return next();
-
-  const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) return next();
-
-  // Normalize: accept either header or query param
-  const key = req.headers["x-command-key"] || req.query.key;
-  if (key !== COMMAND_CENTER_KEY) {
+  // Only accept header, never query param or bypass
+  const key = req.headers["x-command-key"];
+  if (!key || key !== COMMAND_CENTER_KEY) {
     return res.status(401).json({ ok: false, error: "unauthorized" });
   }
   next();
@@ -7623,8 +7938,33 @@ app.post("/api/v1/boldtrail/draft-email", requireKey, async (req, res) => {
     const agent = agentResult.rows[0];
     const tone = agent.agent_tone || "professional and friendly";
 
-    // Build prompt for AI
-    const prompt = `Draft a ${draft_type} email for a real estate agent.
+    let subject, body, aiSource = "our_ai";
+
+    // Try BoldTrail AI first (if API key exists)
+    try {
+      const { draftEmailWithBoldTrailAI } = await import("./src/integrations/boldtrail.js");
+      const boldtrailResult = await draftEmailWithBoldTrailAI({
+        agent_tone: tone,
+        draft_type,
+        recipient_name,
+        recipient_email,
+        context_data,
+      });
+
+      if (boldtrailResult.ok && boldtrailResult.source === "boldtrail_ai") {
+        subject = boldtrailResult.subject;
+        body = boldtrailResult.content;
+        aiSource = "boldtrail_ai";
+        console.log("✅ Used BoldTrail AI for email drafting");
+      } else {
+        // Fallback to our AI
+        throw new Error("BoldTrail AI not available, using fallback");
+      }
+    } catch (boldtrailError) {
+      // Fallback to our AI
+      console.log("📝 Using our AI for email drafting (BoldTrail AI unavailable)");
+      
+      const prompt = `Draft a ${draft_type} email for a real estate agent.
 
 Agent's tone/style: ${tone}
 Recipient: ${recipient_name || recipient_email || "client"}
@@ -7641,12 +7981,13 @@ SUBJECT: [subject line]
 
 [email body]`;
 
-    const emailContent = await callCouncilWithFailover(prompt, "chatgpt");
+      const emailContent = await callCouncilWithFailover(prompt, "chatgpt");
 
-    // Extract subject and body
-    const subjectMatch = emailContent.match(/SUBJECT:\s*(.+)/i);
-    const subject = subjectMatch ? subjectMatch[1].trim() : `${draft_type} - ${recipient_name || "Client"}`;
-    const body = emailContent.replace(/SUBJECT:.*/i, "").trim();
+      // Extract subject and body
+      const subjectMatch = emailContent.match(/SUBJECT:\s*(.+)/i);
+      subject = subjectMatch ? subjectMatch[1].trim() : `${draft_type} - ${recipient_name || "Client"}`;
+      body = emailContent.replace(/SUBJECT:.*/i, "").trim();
+    }
 
     // Save draft
     const draftResult = await pool.query(
@@ -7670,6 +8011,7 @@ SUBJECT: [subject line]
       draft: draftResult.rows[0],
       subject,
       content: body,
+      ai_source: aiSource, // "boldtrail_ai" or "our_ai"
     });
   } catch (error) {
     console.error("BoldTrail email draft error:", error);
@@ -7688,15 +8030,45 @@ app.post("/api/v1/boldtrail/plan-showing", requireKey, async (req, res) => {
       });
     }
 
-    // For now, simple route order (1, 2, 3...)
-    // In production, integrate with Google Maps API for actual route optimization
+    let optimizedShowings = [];
+    let aiSource = "our_ai";
+
+    // Try BoldTrail AI first (if API key exists)
+    try {
+      const { planShowingsWithBoldTrailAI } = await import("./src/integrations/boldtrail.js");
+      const boldtrailResult = await planShowingsWithBoldTrailAI({
+        properties,
+        client_name,
+        client_email,
+        client_phone,
+      });
+
+      if (boldtrailResult.ok && boldtrailResult.source === "boldtrail_ai") {
+        optimizedShowings = boldtrailResult.showings || [];
+        aiSource = "boldtrail_ai";
+        console.log("✅ Used BoldTrail AI for showing planning");
+      } else {
+        // Fallback to our simple route order
+        throw new Error("BoldTrail AI not available, using fallback");
+      }
+    } catch (boldtrailError) {
+      // Fallback: Simple route order (1, 2, 3...)
+      console.log("📝 Using our simple route planning (BoldTrail AI unavailable)");
+      optimizedShowings = properties.map((prop, i) => ({
+        ...prop,
+        route_order: i + 1,
+        estimated_drive_time: null,
+      }));
+    }
+
+    // Save showings to database
     const showings = [];
-    for (let i = 0; i < properties.length; i++) {
-      const prop = properties[i];
+    for (let i = 0; i < optimizedShowings.length; i++) {
+      const prop = optimizedShowings[i];
       const showingResult = await pool.query(
         `INSERT INTO boldtrail_showings 
-         (agent_id, property_address, property_details, showing_date, client_name, client_email, client_phone, route_order)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         (agent_id, property_address, property_details, showing_date, client_name, client_email, client_phone, route_order, estimated_drive_time)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
          RETURNING *`,
         [
           agent_id,
@@ -7706,7 +8078,8 @@ app.post("/api/v1/boldtrail/plan-showing", requireKey, async (req, res) => {
           client_name || null,
           client_email || null,
           client_phone || null,
-          i + 1,
+          prop.route_order || i + 1,
+          prop.estimated_drive_time || null,
         ]
       );
       showings.push(showingResult.rows[0]);
@@ -7755,6 +8128,7 @@ SUBJECT: [subject]
         total_properties: properties.length,
         estimated_time: "TBD (integrate with Maps API)",
       },
+      ai_source: aiSource, // "boldtrail_ai" or "our_ai"
     });
   } catch (error) {
     console.error("BoldTrail showing plan error:", error);
@@ -9754,6 +10128,905 @@ app.get("/api/v1/boldtrail/agent/:agentId/features", requireKey, async (req, res
     res.status(500).json({ ok: false, error: error.message });
   }
 });
+
+// ==================== SALES COACHING & RECORDING ENDPOINTS ====================
+
+// Start recording a call or presentation
+app.post("/api/v1/boldtrail/start-recording", requireKey, async (req, res) => {
+  try {
+    const { agent_id, recording_type, client_name, client_email, client_phone, property_address } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const result = await callRecorder.startRecording(
+      agent_id,
+      recording_type || 'phone_call',
+      { client_name, client_email, client_phone, property_address }
+    );
+
+    res.json(result);
+  } catch (error) {
+    console.error("Start recording error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Add transcript segment (real-time during call)
+app.post("/api/v1/boldtrail/add-transcript", requireKey, async (req, res) => {
+  try {
+    const { call_id, segment } = req.body;
+
+    if (!call_id || !segment) {
+      return res.status(400).json({ ok: false, error: "call_id and segment required" });
+    }
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const result = await callRecorder.addTranscriptSegment(call_id, segment);
+    res.json(result);
+  } catch (error) {
+    console.error("Add transcript error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Stop recording and analyze
+app.post("/api/v1/boldtrail/stop-recording", requireKey, async (req, res) => {
+  try {
+    const { call_id, recording_url } = req.body;
+
+    if (!call_id) {
+      return res.status(400).json({ ok: false, error: "call_id required" });
+    }
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const result = await callRecorder.stopRecording(call_id, recording_url);
+    res.json(result);
+  } catch (error) {
+    console.error("Stop recording error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Mark a moment (good or bad) during recording
+app.post("/api/v1/boldtrail/mark-moment", requireKey, async (req, res) => {
+  try {
+    const { call_id, moment_type, start_time, end_time, notes } = req.body;
+
+    if (!call_id || !moment_type || start_time === undefined || end_time === undefined) {
+      return res.status(400).json({ ok: false, error: "call_id, moment_type, start_time, and end_time required" });
+    }
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const result = await callRecorder.markMoment(call_id, moment_type, start_time, end_time, notes);
+    res.json(result);
+  } catch (error) {
+    console.error("Mark moment error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get coaching clips for an agent
+app.get("/api/v1/boldtrail/coaching-clips/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { clip_type, limit = 20 } = req.query;
+
+    let query = `
+      SELECT cc.*, scr.call_id, scr.recording_type, scr.client_name, scr.property_address
+      FROM coaching_clips cc
+      JOIN sales_call_recordings scr ON cc.recording_id = scr.id
+      WHERE cc.agent_id = $1
+    `;
+    const params = [agentId];
+
+    if (clip_type) {
+      query += ` AND cc.clip_type = $2`;
+      params.push(clip_type);
+      query += ` ORDER BY cc.created_at DESC LIMIT $${params.length + 1}`;
+      params.push(parseInt(limit));
+    } else {
+      query += ` ORDER BY cc.created_at DESC LIMIT $2`;
+      params.push(parseInt(limit));
+    }
+
+    const result = await pool.query(query, params);
+
+    res.json({
+      ok: true,
+      clips: result.rows,
+      count: result.rows.length
+    });
+  } catch (error) {
+    console.error("Get coaching clips error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get sales technique patterns (bad habits) for an agent
+app.get("/api/v1/boldtrail/technique-patterns/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { pattern_type } = req.query;
+
+    let query = `
+      SELECT * FROM sales_technique_patterns
+      WHERE agent_id = $1
+    `;
+    const params = [agentId];
+
+    if (pattern_type) {
+      query += ` AND pattern_type = $2`;
+      params.push(pattern_type);
+    }
+
+    query += ` ORDER BY frequency DESC, last_detected DESC`;
+
+    const result = await pool.query(query, params);
+
+    res.json({
+      ok: true,
+      patterns: result.rows,
+      bad_habits: result.rows.filter(p => p.pattern_type === 'bad_habit'),
+      good_practices: result.rows.filter(p => p.pattern_type === 'good_practice')
+    });
+  } catch (error) {
+    console.error("Get technique patterns error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get real-time coaching events for a recording
+app.get("/api/v1/boldtrail/coaching-events/:callId", requireKey, async (req, res) => {
+  try {
+    const { callId } = req.params;
+
+    const recording = await pool.query(
+      "SELECT id FROM sales_call_recordings WHERE call_id = $1",
+      [callId]
+    );
+
+    if (recording.rows.length === 0) {
+      return res.status(404).json({ ok: false, error: "Recording not found" });
+    }
+
+    const result = await pool.query(
+      `SELECT * FROM real_time_coaching_events
+       WHERE recording_id = $1
+       ORDER BY timestamp ASC`,
+      [recording.rows[0].id]
+    );
+
+    res.json({
+      ok: true,
+      events: result.rows,
+      count: result.rows.length
+    });
+  } catch (error) {
+    console.error("Get coaching events error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get recording status
+app.get("/api/v1/boldtrail/recording-status/:callId", requireKey, async (req, res) => {
+  try {
+    const { callId } = req.params;
+
+    if (!callRecorder) {
+      return res.status(503).json({ ok: false, error: "Call recording service not initialized" });
+    }
+
+    const status = callRecorder.getRecordingStatus(callId);
+    
+    if (!status) {
+      return res.status(404).json({ ok: false, error: "Recording not found or not active" });
+    }
+
+    res.json({ ok: true, ...status });
+  } catch (error) {
+    console.error("Get recording status error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== GOAL TRACKING ENDPOINTS ====================
+
+// Create a goal
+app.post("/api/v1/boldtrail/goals", requireKey, async (req, res) => {
+  try {
+    const { agent_id, goal_type, goal_name, target_value, deadline, unit } = req.body;
+
+    if (!agent_id || !goal_type || !goal_name || !target_value) {
+      return res.status(400).json({ ok: false, error: "agent_id, goal_type, goal_name, and target_value required" });
+    }
+
+    if (!goalTracker) {
+      return res.status(503).json({ ok: false, error: "Goal tracker not initialized" });
+    }
+
+    const result = await goalTracker.createGoal(agent_id, {
+      goal_type,
+      goal_name,
+      target_value,
+      deadline,
+      unit
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error("Create goal error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get agent goals
+app.get("/api/v1/boldtrail/goals/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { status } = req.query;
+
+    if (!goalTracker) {
+      return res.status(503).json({ ok: false, error: "Goal tracker not initialized" });
+    }
+
+    const result = await goalTracker.getAgentGoals(agentId, status);
+    res.json(result);
+  } catch (error) {
+    console.error("Get goals error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Update goal progress
+app.put("/api/v1/boldtrail/goals/:goalId", requireKey, async (req, res) => {
+  try {
+    const { goalId } = req.params;
+    const { current_value } = req.body;
+
+    if (!goalTracker) {
+      return res.status(503).json({ ok: false, error: "Goal tracker not initialized" });
+    }
+
+    const result = await goalTracker.updateGoalProgress(goalId, current_value);
+    res.json(result);
+  } catch (error) {
+    console.error("Update goal error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== ACTIVITY TRACKING ENDPOINTS ====================
+
+// Record an activity
+app.post("/api/v1/boldtrail/activities", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...activityData } = req.body;
+
+    if (!agent_id || !activityData.activity_type) {
+      return res.status(400).json({ ok: false, error: "agent_id and activity_type required" });
+    }
+
+    if (!activityTracker) {
+      return res.status(503).json({ ok: false, error: "Activity tracker not initialized" });
+    }
+
+    const result = await activityTracker.recordActivity(agent_id, activityData);
+    res.json(result);
+  } catch (error) {
+    console.error("Record activity error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Start call with auto-recording
+app.post("/api/v1/boldtrail/start-call", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...callData } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!activityTracker) {
+      return res.status(503).json({ ok: false, error: "Activity tracker not initialized" });
+    }
+
+    const result = await activityTracker.startCallWithRecording(agent_id, callData);
+    res.json(result);
+  } catch (error) {
+    console.error("Start call error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get activity analytics
+app.get("/api/v1/boldtrail/analytics/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { period = '30 days' } = req.query;
+
+    if (!activityTracker) {
+      return res.status(503).json({ ok: false, error: "Activity tracker not initialized" });
+    }
+
+    const result = await activityTracker.getActivityAnalytics(agentId, period);
+    res.json(result);
+  } catch (error) {
+    console.error("Get analytics error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== COACHING PROGRESSION ENDPOINTS ====================
+
+// Get agent progression
+app.get("/api/v1/boldtrail/progression/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+
+    if (!coachingProgression) {
+      return res.status(503).json({ ok: false, error: "Coaching progression not initialized" });
+    }
+
+    const result = await coachingProgression.getAgentProgression(agentId);
+    res.json(result);
+  } catch (error) {
+    console.error("Get progression error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== CALENDAR ENDPOINTS ====================
+
+// Create calendar event
+app.post("/api/v1/boldtrail/calendar/events", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...eventData } = req.body;
+
+    if (!agent_id || !eventData.start_time || !eventData.end_time) {
+      return res.status(400).json({ ok: false, error: "agent_id, start_time, and end_time required" });
+    }
+
+    if (!calendarService) {
+      return res.status(503).json({ ok: false, error: "Calendar service not initialized" });
+    }
+
+    const result = await calendarService.createEvent(agent_id, eventData);
+    res.json(result);
+  } catch (error) {
+    console.error("Create calendar event error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get calendar events
+app.get("/api/v1/boldtrail/calendar/events/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { start_date, end_date } = req.query;
+
+    if (!start_date || !end_date) {
+      return res.status(400).json({ ok: false, error: "start_date and end_date required" });
+    }
+
+    if (!calendarService) {
+      return res.status(503).json({ ok: false, error: "Calendar service not initialized" });
+    }
+
+    const result = await calendarService.getEvents(agentId, start_date, end_date);
+    res.json(result);
+  } catch (error) {
+    console.error("Get calendar events error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Handle event start (auto-record)
+app.post("/api/v1/boldtrail/calendar/events/:eventId/start", requireKey, async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    if (!calendarService) {
+      return res.status(503).json({ ok: false, error: "Calendar service not initialized" });
+    }
+
+    const result = await calendarService.handleEventStart(eventId);
+    res.json(result);
+  } catch (error) {
+    console.error("Handle event start error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Complete event
+app.post("/api/v1/boldtrail/calendar/events/:eventId/complete", requireKey, async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const { outcome } = req.body;
+
+    if (!calendarService) {
+      return res.status(503).json({ ok: false, error: "Calendar service not initialized" });
+    }
+
+    const result = await calendarService.completeEvent(eventId, outcome);
+    res.json(result);
+  } catch (error) {
+    console.error("Complete event error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== PERFECT DAY ENDPOINTS ====================
+
+// Setup perfect day
+app.post("/api/v1/boldtrail/perfect-day/setup", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...config } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!perfectDaySystem) {
+      return res.status(503).json({ ok: false, error: "Perfect day system not initialized" });
+    }
+
+    const result = await perfectDaySystem.setupPerfectDay(agent_id, config);
+    res.json(result);
+  } catch (error) {
+    console.error("Setup perfect day error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Start perfect day routine
+app.post("/api/v1/boldtrail/perfect-day/start", requireKey, async (req, res) => {
+  try {
+    const { agent_id } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!perfectDaySystem) {
+      return res.status(503).json({ ok: false, error: "Perfect day system not initialized" });
+    }
+
+    const result = await perfectDaySystem.startPerfectDay(agent_id);
+    res.json(result);
+  } catch (error) {
+    console.error("Start perfect day error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Set three most important things
+app.post("/api/v1/boldtrail/perfect-day/three-important", requireKey, async (req, res) => {
+  try {
+    const { agent_id, three_things } = req.body;
+
+    if (!agent_id || !three_things || !Array.isArray(three_things)) {
+      return res.status(400).json({ ok: false, error: "agent_id and three_things array required" });
+    }
+
+    if (!perfectDaySystem) {
+      return res.status(503).json({ ok: false, error: "Perfect day system not initialized" });
+    }
+
+    const result = await perfectDaySystem.setThreeMostImportant(agent_id, three_things);
+    res.json(result);
+  } catch (error) {
+    console.error("Set three important error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// End of day review
+app.post("/api/v1/boldtrail/perfect-day/review", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...reviewData } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!perfectDaySystem) {
+      return res.status(503).json({ ok: false, error: "Perfect day system not initialized" });
+    }
+
+    const result = await perfectDaySystem.endOfDayReview(agent_id, reviewData);
+    res.json(result);
+  } catch (error) {
+    console.error("End of day review error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== GOAL COMMITMENT ENDPOINTS ====================
+
+// Create goal commitment
+app.post("/api/v1/boldtrail/commitments", requireKey, async (req, res) => {
+  try {
+    const { agent_id, goal_id, ...commitmentData } = req.body;
+
+    if (!agent_id || !goal_id) {
+      return res.status(400).json({ ok: false, error: "agent_id and goal_id required" });
+    }
+
+    if (!goalCommitmentSystem) {
+      return res.status(503).json({ ok: false, error: "Goal commitment system not initialized" });
+    }
+
+    const result = await goalCommitmentSystem.createCommitment(agent_id, goal_id, commitmentData);
+    res.json(result);
+  } catch (error) {
+    console.error("Create commitment error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Track commitment
+app.post("/api/v1/boldtrail/commitments/:commitmentId/track", requireKey, async (req, res) => {
+  try {
+    const { commitmentId } = req.params;
+    const { agent_id } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!goalCommitmentSystem) {
+      return res.status(503).json({ ok: false, error: "Goal commitment system not initialized" });
+    }
+
+    const result = await goalCommitmentSystem.trackCommitment(commitmentId, agent_id);
+    res.json(result);
+  } catch (error) {
+    console.error("Track commitment error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get agent commitments
+app.get("/api/v1/boldtrail/commitments/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { status } = req.query;
+
+    if (!goalCommitmentSystem) {
+      return res.status(503).json({ ok: false, error: "Goal commitment system not initialized" });
+    }
+
+    const result = await goalCommitmentSystem.getAgentCommitments(agentId, status);
+    res.json(result);
+  } catch (error) {
+    console.error("Get commitments error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== CALL SIMULATION ENDPOINTS ====================
+
+// Create simulation
+app.post("/api/v1/boldtrail/simulations", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...simulationData } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!callSimulationSystem) {
+      return res.status(503).json({ ok: false, error: "Call simulation system not initialized" });
+    }
+
+    const result = await callSimulationSystem.createSimulation(agent_id, simulationData);
+    res.json(result);
+  } catch (error) {
+    console.error("Create simulation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Start simulation
+app.post("/api/v1/boldtrail/simulations/:simulationId/start", requireKey, async (req, res) => {
+  try {
+    const { simulationId } = req.params;
+    const { agent_id } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!callSimulationSystem) {
+      return res.status(503).json({ ok: false, error: "Call simulation system not initialized" });
+    }
+
+    const result = await callSimulationSystem.startSimulation(agent_id, simulationId);
+    res.json(result);
+  } catch (error) {
+    console.error("Start simulation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== RELATIONSHIP MEDIATION ENDPOINTS ====================
+
+// Request mediation
+app.post("/api/v1/boldtrail/mediation/request", requireKey, async (req, res) => {
+  try {
+    const { agent_id, ...mediationData } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!relationshipMediation) {
+      return res.status(503).json({ ok: false, error: "Relationship mediation not initialized" });
+    }
+
+    const result = await relationshipMediation.requestMediation(agent_id, mediationData);
+    res.json(result);
+  } catch (error) {
+    console.error("Request mediation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Process mediation
+app.post("/api/v1/boldtrail/mediation/:mediationId/process", requireKey, async (req, res) => {
+  try {
+    const { mediationId } = req.params;
+    const { conversation_data } = req.body;
+
+    if (!relationshipMediation) {
+      return res.status(503).json({ ok: false, error: "Relationship mediation not initialized" });
+    }
+
+    const result = await relationshipMediation.processMediation(mediationId, conversation_data);
+    res.json(result);
+  } catch (error) {
+    console.error("Process mediation error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== MEANINGFUL MOMENTS ENDPOINTS ====================
+
+// Start continuous recording
+app.post("/api/v1/boldtrail/moments/start-recording", requireKey, async (req, res) => {
+  try {
+    const { agent_id, consent, reset_interval_minutes = 60 } = req.body;
+
+    if (!agent_id) {
+      return res.status(400).json({ ok: false, error: "agent_id required" });
+    }
+
+    if (!meaningfulMoments) {
+      return res.status(503).json({ ok: false, error: "Meaningful moments system not initialized" });
+    }
+
+    const result = await meaningfulMoments.startContinuousRecording(agent_id, consent, reset_interval_minutes);
+    res.json(result);
+  } catch (error) {
+    console.error("Start continuous recording error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Get moments for playback
+app.get("/api/v1/boldtrail/moments/:agentId/playback", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+    const { moment_type } = req.query;
+
+    if (!meaningfulMoments) {
+      return res.status(503).json({ ok: false, error: "Meaningful moments system not initialized" });
+    }
+
+    const result = await meaningfulMoments.getMomentsForPlayback(agentId, moment_type);
+    res.json(result);
+  } catch (error) {
+    console.error("Get moments for playback error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== COACH CHAT ENDPOINT ====================
+
+// Coach chat endpoint
+app.post("/api/coach/chat", requireKey, async (req, res) => {
+  try {
+    const { text, context } = req.body;
+
+    if (!text || typeof text !== "string") {
+      return res.status(400).json({ ok: false, error: "text required" });
+    }
+
+    const agentId = context?.agentId || req.body.agent_id;
+
+    console.log(`💬 [COACH] Agent ${agentId}: ${text.substring(0, 100)}...`);
+
+    // Log to audit
+    try {
+      await pool.query(
+        `INSERT INTO audit_log (action_type, user_id, details, created_at)
+         VALUES ($1, $2, $3, NOW())`,
+        [
+          'coach_chat',
+          agentId || 'unknown',
+          JSON.stringify({ text, context })
+        ]
+      );
+    } catch (dbError) {
+      console.warn('⚠️ Could not log coach chat to audit:', dbError.message);
+    }
+
+    // Check for special commands
+    const lowerText = text.toLowerCase();
+    let replyText = '';
+    let confidence = 0.9;
+    let suggestedActions: string[] = [];
+
+    // Handle "play my WHY" or discouraged messages
+    if (lowerText.includes('play my why') || lowerText.includes("i'm discouraged") || lowerText.includes('discouraged')) {
+      if (meaningfulMoments) {
+        const moments = await meaningfulMoments.getMomentsForPlayback(agentId, 'winning_moment');
+        if (moments.ok && moments.moments && moments.moments.length > 0) {
+          const recentMoment = moments.moments[0];
+          replyText = `I found ${moments.moments.length} winning moment${moments.moments.length > 1 ? 's' : ''} for you! Here's your most recent: "${recentMoment.context || 'Your success moment'}"\n\nRemember why you started. You've got this! 💪`;
+          suggestedActions = ['View all winning moments', 'Continue your perfect day routine'];
+        } else {
+          replyText = "I don't see any winning moments saved yet. Let's create one! What's something you're proud of accomplishing recently?";
+          suggestedActions = ['Save a winning moment', 'Start perfect day routine'];
+        }
+      } else {
+        replyText = "I'd love to help you reconnect with your WHY! The moments system isn't available right now, but remember: every expert was once a beginner. Keep going! 💪";
+      }
+    }
+    // Handle "next move" questions
+    else if (lowerText.includes('next move') || lowerText.includes('what should i do') || lowerText.includes('what do i do')) {
+      replyText = "Based on your goals, here's your next move:\n\n1. Check your 3 most important things for today\n2. Review your active commitments\n3. Take action on the highest priority item\n\nWhat specific area would you like help with?";
+      suggestedActions = ['View today tab', 'Check commitments', 'Review goals'];
+    }
+    // Handle follow-up requests
+    else if (lowerText.includes('follow-up') || lowerText.includes('follow up') || lowerText.includes('write me')) {
+      replyText = "I can help you write a follow-up! Here's a template:\n\n\"Hi [Name],\n\nThank you for our conversation today about [topic]. I wanted to follow up on [specific point] and see if you have any questions.\n\nLooking forward to hearing from you!\n\nBest,\n[Your name]\"\n\nWould you like me to customize this for a specific lead?";
+      suggestedActions = ['Provide lead details', 'View recent activities'];
+    }
+    // General coaching question - use AI council
+    else {
+      const aiResponse = await callCouncilWithFailover(
+        `You are a sales coach helping a real estate agent. They asked: "${text}"\n\nProvide a helpful, encouraging, and actionable response. Keep it concise (2-3 sentences max).`,
+        'ollama_llama'
+      );
+      replyText = aiResponse || "I'm here to help! Can you provide more details about what you need?";
+      confidence = 0.8;
+    }
+
+    // Check if user wants to save this as a meaningful moment
+    if (context?.saveAsMoment || lowerText.includes('save this') || lowerText.includes('remember this')) {
+      if (meaningfulMoments) {
+        await meaningfulMoments.captureMoment(agentId, {
+          moment_type: 'coaching_moment',
+          context: `Coach conversation: ${text.substring(0, 200)}`,
+          transcript: text,
+          tags: ['coach_chat']
+        });
+        replyText += '\n\n✓ Saved as a meaningful moment!';
+      }
+    }
+
+    res.json({
+      ok: true,
+      replyText,
+      confidence,
+      suggestedActions
+    });
+  } catch (error) {
+    console.error("Coach chat error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== PROGRESS TRACKING ENDPOINTS ====================
+
+// Get progress bars for goals
+app.get("/api/v1/boldtrail/progress/:agentId", requireKey, async (req, res) => {
+  try {
+    const { agentId } = req.params;
+
+    // Get active goals
+    const goals = await pool.query(
+      `SELECT * FROM agent_goals WHERE agent_id = $1 AND status = 'active'`,
+      [agentId]
+    );
+
+    // Get activities counts
+    const activities = await pool.query(
+      `SELECT activity_type, COUNT(*) as count,
+              COUNT(CASE WHEN outcome IN ('appointment_set', 'sale', 'showing_scheduled') THEN 1 END) as success_count
+       FROM agent_activities
+       WHERE agent_id = $1 AND created_at >= NOW() - INTERVAL '30 days'
+       GROUP BY activity_type`,
+      [agentId]
+    );
+
+    // Calculate progress bars
+    const progressBars = {
+      goals: goals.rows.map(goal => ({
+        goal_id: goal.id,
+        goal_name: goal.goal_name,
+        current: parseFloat(goal.current_value || 0),
+        target: parseFloat(goal.target_value),
+        progress_percent: goal.target_value > 0 
+          ? Math.min(100, ((goal.current_value / goal.target_value) * 100).toFixed(1))
+          : 0,
+        on_track: goal.deadline 
+          ? this.isOnTrack(goal.current_value, goal.target_value, goal.deadline, goal.created_at)
+          : null,
+        projected_completion: goal.deadline || null
+      })),
+      activities: activities.rows.map(act => ({
+        activity_type: act.activity_type,
+        total: parseInt(act.count),
+        successful: parseInt(act.success_count),
+        success_rate: act.count > 0 ? ((act.success_count / act.count) * 100).toFixed(1) : 0
+      })),
+      appointments: {
+        current: activities.rows.find(a => a.activity_type === 'appointment')?.count || 0,
+        target: 0, // Would come from goal
+        progress_percent: 0
+      },
+      calls: {
+        current: activities.rows.find(a => a.activity_type === 'call')?.count || 0,
+        target: 0,
+        progress_percent: 0
+      },
+      deals: {
+        current: activities.rows.find(a => a.outcome === 'sale')?.count || 0,
+        target: 0,
+        progress_percent: 0
+      }
+    };
+
+    res.json({ ok: true, progress: progressBars });
+  } catch (error) {
+    console.error("Get progress error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// Helper to check if goal is on track
+function isOnTrack(current, target, deadline, startDate) {
+  if (!deadline) return null;
+  
+  const now = new Date();
+  const deadlineDate = new Date(deadline);
+  const start = new Date(startDate);
+  
+  const totalTime = deadlineDate - start;
+  const elapsed = now - start;
+  const expectedProgress = (elapsed / totalTime) * 100;
+  const actualProgress = (current / target) * 100;
+  
+  return actualProgress >= expectedProgress * 0.9; // 90% of expected = on track
+}
 
 // ==================== INCOME DIAGNOSTIC ENDPOINT ====================
 app.get("/api/v1/income/diagnostic", requireKey, async (req, res) => {
@@ -12208,6 +13481,66 @@ async function start() {
     
     await initializeTwoTierSystem();
 
+    // Initialize Sales Coaching Services
+    try {
+      const SalesAnalyzerModule = await import("./src/services/sales-technique-analyzer.js");
+      const CallRecorderModule = await import("./src/services/call-recorder.js");
+      
+      salesTechniqueAnalyzer = new SalesAnalyzerModule.SalesTechniqueAnalyzer(pool, callCouncilWithFailover);
+      callRecorder = new CallRecorderModule.CallRecorder(pool, salesTechniqueAnalyzer);
+      
+      console.log("✅ Sales Coaching Services initialized");
+    } catch (error) {
+      console.warn("⚠️ Sales Coaching Services not available:", error.message);
+      salesTechniqueAnalyzer = null;
+      callRecorder = null;
+    }
+
+    // Initialize Goal Tracking & Coaching Services
+    try {
+      const GoalTrackerModule = await import("./src/services/goal-tracker.js");
+      const ActivityTrackerModule = await import("./src/services/activity-tracker.js");
+      const CoachingProgressionModule = await import("./src/services/coaching-progression.js");
+      const CalendarServiceModule = await import("./src/services/calendar-service.js");
+      
+      goalTracker = new GoalTrackerModule.GoalTracker(pool, callCouncilWithFailover);
+      activityTracker = new ActivityTrackerModule.ActivityTracker(pool, callRecorder);
+      coachingProgression = new CoachingProgressionModule.CoachingProgression(pool, callCouncilWithFailover);
+      calendarService = new CalendarServiceModule.CalendarService(pool, callRecorder, activityTracker);
+      
+      console.log("✅ Goal Tracking & Coaching Services initialized");
+    } catch (error) {
+      console.warn("⚠️ Goal Tracking & Coaching Services not available:", error.message);
+      goalTracker = null;
+      activityTracker = null;
+      coachingProgression = null;
+      calendarService = null;
+    }
+
+    // Initialize Motivation & Perfect Day Services
+    try {
+      const PerfectDayModule = await import("./src/services/perfect-day-system.js");
+      const GoalCommitmentModule = await import("./src/services/goal-commitment-system.js");
+      const CallSimulationModule = await import("./src/services/call-simulation-system.js");
+      const RelationshipMediationModule = await import("./src/services/relationship-mediation.js");
+      const MeaningfulMomentsModule = await import("./src/services/meaningful-moments.js");
+      
+      perfectDaySystem = new PerfectDayModule.PerfectDaySystem(pool, callCouncilWithFailover);
+      goalCommitmentSystem = new GoalCommitmentModule.GoalCommitmentSystem(pool, callCouncilWithFailover);
+      callSimulationSystem = new CallSimulationModule.CallSimulationSystem(pool, callRecorder, callCouncilWithFailover);
+      relationshipMediation = new RelationshipMediationModule.RelationshipMediation(pool, callCouncilWithFailover);
+      meaningfulMoments = new MeaningfulMomentsModule.MeaningfulMoments(pool, callRecorder);
+      
+      console.log("✅ Motivation & Perfect Day Services initialized");
+    } catch (error) {
+      console.warn("⚠️ Motivation & Perfect Day Services not available:", error.message);
+      perfectDaySystem = null;
+      goalCommitmentSystem = null;
+      callSimulationSystem = null;
+      relationshipMediation = null;
+      meaningfulMoments = null;
+    }
+
     console.log("\n🤖 AI COUNCIL:");
     Object.values(COUNCIL_MEMBERS).forEach((m) =>
       console.log(`  • ${m.name} (${m.model}) - ${m.role}`)
@@ -12574,8 +13907,8 @@ SUBJECT: [subject]
       console.log(`📊 Health: http://${HOST}:${PORT}/healthz`);
       console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
       console.log(`🔐 Command Center Activation: https://${railwayUrl}/activate`);
-      console.log(`🎯 Command Center: https://${railwayUrl}/command-center?key=${COMMAND_CENTER_KEY}`);
-      console.log(`🏠 BoldTrail CRM: https://${railwayUrl}/boldtrail?key=${COMMAND_CENTER_KEY}`);
+      console.log(`🎯 Command Center: https://${railwayUrl}/command-center`);
+      console.log(`🏠 BoldTrail CRM: https://${railwayUrl}/boldtrail`);
       console.log(`📞 Recruitment System: POST /api/v1/recruitment/* (outbound calls, webinars, enrollment)`);
       console.log(`🎓 Virtual Class: POST /api/v1/class/enroll (free real estate education)`);
       console.log(`📹 YouTube Automation: POST /api/v1/youtube/* (progressive unlock system)`);
