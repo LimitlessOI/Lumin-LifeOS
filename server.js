@@ -30,6 +30,7 @@ import crypto from "crypto";
 import process from "node:process";
 import { exec } from "child_process";
 import { promisify } from "util";
+import rateLimit from "express-rate-limit";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
@@ -196,8 +197,8 @@ app.get("/activate", (req, res) => {
 
 app.get("/command-center", (req, res) => {
   console.log("🎯 [ROUTE] /command-center accessed");
-  // Check for key in query parameter
-  const key = req.query.key;
+  // Only accept header-based auth (no query params)
+  const key = req.headers["x-command-key"];
   
   // If key provided and valid, allow access
   if (key && key === COMMAND_CENTER_KEY) {
@@ -209,18 +210,14 @@ app.get("/command-center", (req, res) => {
     }
   }
 
-  // If no key or invalid key, redirect to activation
-  if (key && key !== COMMAND_CENTER_KEY) {
-    return res.redirect('/activate?error=invalid_key');
-  }
-
-  // No key provided, redirect to activation
+  // No key or invalid key, redirect to activation
   res.redirect('/activate');
 });
 
 app.get("/boldtrail", (req, res) => {
   console.log("🏠 [ROUTE] /boldtrail accessed");
-  const key = req.query.key;
+  // Only accept header-based auth (no query params)
+  const key = req.headers["x-command-key"];
   
   if (key && key === COMMAND_CENTER_KEY) {
     const filePath = path.join(__dirname, "public", "overlay", "boldtrail.html");
@@ -231,12 +228,11 @@ app.get("/boldtrail", (req, res) => {
     }
   }
 
-  if (key && key !== COMMAND_CENTER_KEY) {
-    return res.redirect('/activate?error=invalid_key');
-  }
-
+  // No key or invalid key, redirect to activation
   res.redirect('/activate');
 });
+<｜tool▁calls▁begin｜><｜tool▁call▁begin｜>
+run_terminal_cmd
 
 // ==================== MIDDLEWARE ====================
 app.use(express.json({ limit: "50mb" }));
@@ -245,6 +241,36 @@ app.use(express.text({ type: "text/plain", limit: "50mb" }));
 
 // Serve static files (after specific routes)
 app.use(express.static(path.join(__dirname, "public")));
+
+// ==================== RATE LIMITING ====================
+// General API rate limiter: 100 requests per 15 minutes per IP
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: { ok: false, error: "Too many requests, please try again later." },
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Stricter limiter for AI-heavy endpoints: 20 requests per 15 minutes per IP
+const aiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // limit each IP to 20 requests per windowMs
+  message: { ok: false, error: "Too many AI requests, please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply general limiter to all API routes
+app.use("/api/", generalLimiter);
+
+// Apply stricter limiter to AI-heavy endpoints
+app.use("/api/v1/chat", aiLimiter);
+app.use("/api/council/chat", aiLimiter);
+app.use("/api/v1/architect/chat", aiLimiter);
+app.use("/api/v1/architect/command", aiLimiter);
+app.use("/api/v1/ai-council/test", aiLimiter);
+app.use("/api/coach/chat", aiLimiter);
 
 // SECURE CORS Middleware with NO-CACHE headers
 app.use((req, res, next) => {
@@ -6402,14 +6428,9 @@ function broadcastToAll(message) {
 }
 
 // ==================== API MIDDLEWARE ====================
-function requireKey(req, res, next) {
-  // Only accept header, never query param or bypass
-  const key = req.headers["x-command-key"];
-  if (!key || key !== COMMAND_CENTER_KEY) {
-    return res.status(401).json({ ok: false, error: "unauthorized" });
-  }
-  next();
-}
+// Auth middleware moved to src/server/auth/requireKey.js
+// (TypeScript source: src/server/auth/requireKey.ts)
+import { requireKey } from "./src/server/auth/requireKey.js";
 
 // ==================== API ENDPOINTS ====================
 

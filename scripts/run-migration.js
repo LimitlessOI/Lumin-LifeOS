@@ -6,9 +6,9 @@ const path = require('path');
 async function runMigration() {
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false
-    }
+    ssl: process.env.DATABASE_URL?.includes("neon.tech")
+      ? { rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== "false" }
+      : undefined,
   });
 
   try {
