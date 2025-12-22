@@ -62,7 +62,7 @@ const wss = new WebSocketServer({ server });
 // ==================== ENVIRONMENT CONFIGURATION ====================
 const {
   DATABASE_URL,
-  COMMAND_CENTER_KEY = "MySecretKey2025LifeOS",
+  COMMAND_CENTER_KEY,
   OPENAI_API_KEY,
   ANTHROPIC_API_KEY,
   GEMINI_API_KEY,
@@ -90,7 +90,14 @@ const {
   // Video generation config
   VIDEO_GEN_ENDPOINT = "http://localhost:7860",
   VIDEO_GEN_API_KEY,
+  // Database SSL config (default: secure - verify certificates)
+  DB_SSL_REJECT_UNAUTHORIZED = "true",
 } = process.env;
+
+// Require COMMAND_CENTER_KEY (no default fallback)
+if (!COMMAND_CENTER_KEY) {
+  throw new Error('COMMAND_CENTER_KEY environment variable is required');
+}
 
 // Ensure spend cap is numeric
 const MAX_DAILY_SPEND = Number.isFinite(parseFloat(RAW_MAX_DAILY_SPEND))
@@ -288,7 +295,7 @@ if (!validatedDatabaseUrl || validatedDatabaseUrl === 'postgres://username:passw
 export const pool = new Pool({
   connectionString: validatedDatabaseUrl,
   ssl: validatedDatabaseUrl?.includes("neon.tech")
-    ? { rejectUnauthorized: false }
+    ? { rejectUnauthorized: DB_SSL_REJECT_UNAUTHORIZED !== "false" }
     : undefined,
   max: 20,
   idleTimeoutMillis: 30000,
@@ -6396,14 +6403,9 @@ function broadcastToAll(message) {
 
 // ==================== API MIDDLEWARE ====================
 function requireKey(req, res, next) {
-  if (isSameOrigin(req)) return next();
-
-  const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS_LIST.includes(origin)) return next();
-
-  // Normalize: accept either header or query param
-  const key = req.headers["x-command-key"] || req.query.key;
-  if (key !== COMMAND_CENTER_KEY) {
+  // Only accept header, never query param or bypass
+  const key = req.headers["x-command-key"];
+  if (!key || key !== COMMAND_CENTER_KEY) {
     return res.status(401).json({ ok: false, error: "unauthorized" });
   }
   next();
@@ -10845,6 +10847,103 @@ app.get("/api/v1/boldtrail/moments/:agentId/playback", requireKey, async (req, r
   }
 });
 
+// ==================== COACH CHAT ENDPOINT ====================
+
+// Coach chat endpoint
+app.post("/api/coach/chat", requireKey, async (req, res) => {
+  try {
+    const { text, context } = req.body;
+
+    if (!text || typeof text !== "string") {
+      return res.status(400).json({ ok: false, error: "text required" });
+    }
+
+    const agentId = context?.agentId || req.body.agent_id;
+
+    console.log(`💬 [COACH] Agent ${agentId}: ${text.substring(0, 100)}...`);
+
+    // Log to audit
+    try {
+      await pool.query(
+        `INSERT INTO audit_log (action_type, user_id, details, created_at)
+         VALUES ($1, $2, $3, NOW())`,
+        [
+          'coach_chat',
+          agentId || 'unknown',
+          JSON.stringify({ text, context })
+        ]
+      );
+    } catch (dbError) {
+      console.warn('⚠️ Could not log coach chat to audit:', dbError.message);
+    }
+
+    // Check for special commands
+    const lowerText = text.toLowerCase();
+    let replyText = '';
+    let confidence = 0.9;
+    let suggestedActions: string[] = [];
+
+    // Handle "play my WHY" or discouraged messages
+    if (lowerText.includes('play my why') || lowerText.includes("i'm discouraged") || lowerText.includes('discouraged')) {
+      if (meaningfulMoments) {
+        const moments = await meaningfulMoments.getMomentsForPlayback(agentId, 'winning_moment');
+        if (moments.ok && moments.moments && moments.moments.length > 0) {
+          const recentMoment = moments.moments[0];
+          replyText = `I found ${moments.moments.length} winning moment${moments.moments.length > 1 ? 's' : ''} for you! Here's your most recent: "${recentMoment.context || 'Your success moment'}"\n\nRemember why you started. You've got this! 💪`;
+          suggestedActions = ['View all winning moments', 'Continue your perfect day routine'];
+        } else {
+          replyText = "I don't see any winning moments saved yet. Let's create one! What's something you're proud of accomplishing recently?";
+          suggestedActions = ['Save a winning moment', 'Start perfect day routine'];
+        }
+      } else {
+        replyText = "I'd love to help you reconnect with your WHY! The moments system isn't available right now, but remember: every expert was once a beginner. Keep going! 💪";
+      }
+    }
+    // Handle "next move" questions
+    else if (lowerText.includes('next move') || lowerText.includes('what should i do') || lowerText.includes('what do i do')) {
+      replyText = "Based on your goals, here's your next move:\n\n1. Check your 3 most important things for today\n2. Review your active commitments\n3. Take action on the highest priority item\n\nWhat specific area would you like help with?";
+      suggestedActions = ['View today tab', 'Check commitments', 'Review goals'];
+    }
+    // Handle follow-up requests
+    else if (lowerText.includes('follow-up') || lowerText.includes('follow up') || lowerText.includes('write me')) {
+      replyText = "I can help you write a follow-up! Here's a template:\n\n\"Hi [Name],\n\nThank you for our conversation today about [topic]. I wanted to follow up on [specific point] and see if you have any questions.\n\nLooking forward to hearing from you!\n\nBest,\n[Your name]\"\n\nWould you like me to customize this for a specific lead?";
+      suggestedActions = ['Provide lead details', 'View recent activities'];
+    }
+    // General coaching question - use AI council
+    else {
+      const aiResponse = await callCouncilWithFailover(
+        `You are a sales coach helping a real estate agent. They asked: "${text}"\n\nProvide a helpful, encouraging, and actionable response. Keep it concise (2-3 sentences max).`,
+        'ollama_llama'
+      );
+      replyText = aiResponse || "I'm here to help! Can you provide more details about what you need?";
+      confidence = 0.8;
+    }
+
+    // Check if user wants to save this as a meaningful moment
+    if (context?.saveAsMoment || lowerText.includes('save this') || lowerText.includes('remember this')) {
+      if (meaningfulMoments) {
+        await meaningfulMoments.captureMoment(agentId, {
+          moment_type: 'coaching_moment',
+          context: `Coach conversation: ${text.substring(0, 200)}`,
+          transcript: text,
+          tags: ['coach_chat']
+        });
+        replyText += '\n\n✓ Saved as a meaningful moment!';
+      }
+    }
+
+    res.json({
+      ok: true,
+      replyText,
+      confidence,
+      suggestedActions
+    });
+  } catch (error) {
+    console.error("Coach chat error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 // ==================== PROGRESS TRACKING ENDPOINTS ====================
 
 // Get progress bars for goals
@@ -13808,8 +13907,8 @@ SUBJECT: [subject]
       console.log(`📊 Health: http://${HOST}:${PORT}/healthz`);
       console.log(`🎮 Overlay: http://${HOST}:${PORT}/overlay/index.html`);
       console.log(`🔐 Command Center Activation: https://${railwayUrl}/activate`);
-      console.log(`🎯 Command Center: https://${railwayUrl}/command-center?key=${COMMAND_CENTER_KEY}`);
-      console.log(`🏠 BoldTrail CRM: https://${railwayUrl}/boldtrail?key=${COMMAND_CENTER_KEY}`);
+      console.log(`🎯 Command Center: https://${railwayUrl}/command-center`);
+      console.log(`🏠 BoldTrail CRM: https://${railwayUrl}/boldtrail`);
       console.log(`📞 Recruitment System: POST /api/v1/recruitment/* (outbound calls, webinars, enrollment)`);
       console.log(`🎓 Virtual Class: POST /api/v1/class/enroll (free real estate education)`);
       console.log(`📹 YouTube Automation: POST /api/v1/youtube/* (progressive unlock system)`);
