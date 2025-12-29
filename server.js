@@ -231,8 +231,6 @@ app.get("/boldtrail", (req, res) => {
   // No key or invalid key, redirect to activation
   res.redirect('/activate');
 });
-<｜tool▁calls▁begin｜><｜tool▁call▁begin｜>
-run_terminal_cmd
 
 // ==================== MIDDLEWARE ====================
 app.use(express.json({ limit: "50mb" }));
@@ -2606,7 +2604,12 @@ async function callCouncilMember(member, prompt, options = {}) {
     console.log(`💰 [SPEND CHECK] Today (${today}): $${spend.toFixed(4)} / $${MAX_DAILY_SPEND}`);
   }
   
-  if (spend >= MAX_DAILY_SPEND) {
+  // Skip spend limit check for Ollama/local models (always free)
+  const isOllama = memberConfig?.provider === 'ollama' || member?.startsWith('ollama_') || memberConfig?.isLocal === true;
+  const isFreeModel = memberConfig?.isFree === true || isOllama;
+  
+  // Only enforce spend limit for paid models
+  if (!isFreeModel && spend >= MAX_DAILY_SPEND) {
     throw new Error(
       `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)} for ${today}. Resets at midnight UTC.`
     );
@@ -5498,6 +5501,8 @@ let selfBuilder = null;
 let ideaToImplementationPipeline = null;
 let sourceOfTruthManager = null;
 let autoBuilder = null;
+let autonomousBuilder = null;
+let continuousImprovementEngine = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -5524,6 +5529,28 @@ async function initializeTwoTierSystem() {
     tier1Council = new Tier1Council(pool, callCouncilMember);
     modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
     openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
+    
+    // Initialize Autonomous Builder and Continuous Improvement Engine
+    try {
+      const autonomousBuilderModule = await import("./core/autonomous-builder.js");
+      const continuousImprovementModule = await import("./core/continuous-improvement-engine.js");
+      const AutonomousBuilder = autonomousBuilderModule.AutonomousBuilder;
+      const ContinuousImprovementEngine = continuousImprovementModule.ContinuousImprovementEngine;
+      
+      // Initialize autonomous builder (will start building ideas autonomously)
+      autonomousBuilder = new AutonomousBuilder(pool, modelRouter, executionQueue, handleSelfProgramming);
+      autonomousBuilder.start();
+      console.log("✅ Autonomous Builder initialized and started");
+      
+      // Initialize continuous improvement engine
+      continuousImprovementEngine = new ContinuousImprovementEngine(pool, modelRouter, autonomousBuilder);
+      continuousImprovementEngine.start();
+      console.log("✅ Continuous Improvement Engine initialized and started");
+    } catch (error) {
+      console.warn("⚠️ Autonomous Builder/Improvement Engine not available:", error.message);
+      autonomousBuilder = null;
+      continuousImprovementEngine = null;
+    }
     const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
     console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
     console.log("║ ✅ [OPEN SOURCE COUNCIL] INITIALIZED                                              ║");
@@ -6469,8 +6496,30 @@ app.get("/api/v1/health-check", requireKey, (req, res) => {
 
 app.get("/healthz", async (req, res) => {
   try {
-    // Quick database check
-    await pool.query("SELECT NOW()");
+    // Database check with graceful handling
+    let dbOk = false;
+    let dbError = null;
+    try {
+      await pool.query("SELECT NOW()");
+      dbOk = true;
+    } catch (dbErr) {
+      dbOk = false;
+      dbError = dbErr.message;
+      console.warn("⚠️ Health check: Database check failed (non-critical):", dbErr.message);
+    }
+    
+    // Check if strict DB mode is enabled
+    const HEALTHZ_STRICT_DB = process.env.HEALTHZ_STRICT_DB === 'true';
+    if (HEALTHZ_STRICT_DB && !dbOk) {
+      return res.status(500).json({
+        ok: false,
+        status: "unhealthy",
+        error: "Database check failed (strict mode enabled)",
+        dbOk: false,
+        dbError: dbError,
+        timestamp: new Date().toISOString(),
+      });
+    }
     
     // Get status with error handling
     let spend = { daily_spend: 0, max_daily_spend: MAX_DAILY_SPEND };
@@ -6482,14 +6531,18 @@ app.get("/healthz", async (req, res) => {
     
     let droneStatus = { active: 0, drones: [], total_revenue: 0, actual_revenue: 0, projected_revenue: 0 };
     try {
-      droneStatus = await incomeDroneSystem.getStatus();
+      if (incomeDroneSystem && typeof incomeDroneSystem.getStatus === 'function') {
+        droneStatus = await incomeDroneSystem.getStatus();
+      }
     } catch (e) {
       console.warn("⚠️ Health check: drone status failed (non-critical):", e.message);
     }
     
     let taskStatus = { queued: 0, active: 0, completed: 0, failed: 0 };
     try {
-      taskStatus = executionQueue.getStatus();
+      if (executionQueue && typeof executionQueue.getStatus === 'function') {
+        taskStatus = executionQueue.getStatus();
+      }
     } catch (e) {
       console.warn("⚠️ Health check: task status failed (non-critical):", e.message);
     }
@@ -6509,7 +6562,9 @@ app.get("/healthz", async (req, res) => {
       status: "healthy",
       version: "v26.1-no-claude",
       timestamp: new Date().toISOString(),
-      database: "connected",
+      database: dbOk ? "connected" : "disconnected",
+      dbOk: dbOk,
+      dbError: dbError,
       websockets: activeConnections.size,
       daily_spend: dailySpendValue,
       max_daily_spend: maxSpendValue,
@@ -10902,7 +10957,7 @@ app.post("/api/coach/chat", requireKey, async (req, res) => {
     const lowerText = text.toLowerCase();
     let replyText = '';
     let confidence = 0.9;
-    let suggestedActions: string[] = [];
+    let suggestedActions = [];
 
     // Handle "play my WHY" or discouraged messages
     if (lowerText.includes('play my why') || lowerText.includes("i'm discouraged") || lowerText.includes('discouraged')) {
@@ -12706,9 +12761,21 @@ If modifying existing file, write the complete modified file.
 
 Write the code now:`;
 
-    const codeResponse = await callCouncilWithFailover(codePrompt, "chatgpt", {
-      maxTokens: 8000, // Allow longer responses for complete files
-      temperature: 0.3, // Lower temperature for more consistent code
+    // Use model router (Tier 0 first) for code generation
+    const codeResult = modelRouter
+      ? await modelRouter.route(codePrompt, { 
+          taskType: 'code_generation', 
+          riskLevel: 'low',
+          maxTokens: 8000,
+          temperature: 0.3,
+        })
+      : await callCouncilWithFailover(codePrompt, "chatgpt", {
+          maxTokens: 8000,
+          temperature: 0.3,
+        });
+    const codeResponse = codeResult?.result || codeResult || await callCouncilWithFailover(codePrompt, "chatgpt", {
+      maxTokens: 8000,
+      temperature: 0.3,
     });
     
     // Try multiple parsing strategies
