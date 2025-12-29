@@ -6471,31 +6471,31 @@ app.get("/api/v1/health-check", requireKey, (req, res) => {
 
 app.get("/healthz", async (req, res) => {
   try {
-        // Database check with graceful handling
+    // Database check with graceful handling
     let dbOk = false;
     let dbError = null;
     try {
-      await pool.query(\"SELECT NOW()\");
+      await pool.query("SELECT NOW()");
       dbOk = true;
     } catch (dbErr) {
       dbOk = false;
       dbError = dbErr.message;
-      console.warn(\"⚠️ Health check: Database check failed (non-critical):\", dbErr.message);
+      console.warn("⚠️ Health check: Database check failed (non-critical):", dbErr.message);
     }
 
     const HEALTHZ_STRICT_DB = process.env.HEALTHZ_STRICT_DB === 'true';
     if (HEALTHZ_STRICT_DB && !dbOk) {
       return res.status(500).json({
         ok: false,
-        status: \"unhealthy\",
-        error: \"Database check failed (strict mode enabled)\",
+        status: "unhealthy",
+        error: "Database check failed (strict mode enabled)",
         dbOk: false,
         dbError: dbError,
         timestamp: new Date().toISOString(),
       });
     }
 
-// Get status with error handling
+    // Get status with error handling
     let spend = { daily_spend: 0, max_daily_spend: MAX_DAILY_SPEND };
     try {
       spend = await getDailySpend();
@@ -6506,9 +6506,7 @@ app.get("/healthz", async (req, res) => {
     let droneStatus = { active: 0, drones: [], total_revenue: 0, actual_revenue: 0, projected_revenue: 0 };
     try {
       if (incomeDroneSystem && typeof incomeDroneSystem.getStatus === 'function') {
-        if (incomeDroneSystem && typeof incomeDroneSystem.getStatus === 'function') {
         droneStatus = await incomeDroneSystem.getStatus();
-      }
       }
     } catch (e) {
       console.warn("⚠️ Health check: drone status failed (non-critical):", e.message);
@@ -6517,9 +6515,7 @@ app.get("/healthz", async (req, res) => {
     let taskStatus = { queued: 0, active: 0, completed: 0, failed: 0 };
     try {
       if (executionQueue && typeof executionQueue.getStatus === 'function') {
-        if (executionQueue && typeof executionQueue.getStatus === 'function') {
         taskStatus = executionQueue.getStatus();
-      }
       }
     } catch (e) {
       console.warn("⚠️ Health check: task status failed (non-critical):", e.message);
