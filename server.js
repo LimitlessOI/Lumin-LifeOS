@@ -231,9 +231,6 @@ app.get("/boldtrail", (req, res) => {
   // No key or invalid key, redirect to activation
   res.redirect('/activate');
 });
-<｜tool▁calls▁begin｜><｜tool▁call▁begin｜>
-run_terminal_cmd
-
 // ==================== MIDDLEWARE ====================
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -2606,7 +2603,12 @@ async function callCouncilMember(member, prompt, options = {}) {
     console.log(`💰 [SPEND CHECK] Today (${today}): $${spend.toFixed(4)} / $${MAX_DAILY_SPEND}`);
   }
   
-  if (spend >= MAX_DAILY_SPEND) {
+  // Skip spend limit check for Ollama/local models (always free)
+  const isOllama = memberConfig?.provider === 'ollama' || member?.startsWith('ollama_') || memberConfig?.isLocal === true;
+  const isFreeModel = memberConfig?.isFree === true || isOllama;
+
+  // Only enforce spend limit for paid models
+  if (!isFreeModel && spend >= MAX_DAILY_SPEND) {
     throw new Error(
       `Daily spend limit ($${MAX_DAILY_SPEND}) reached at $${spend.toFixed(4)} for ${today}. Resets at midnight UTC.`
     );
@@ -6469,10 +6471,31 @@ app.get("/api/v1/health-check", requireKey, (req, res) => {
 
 app.get("/healthz", async (req, res) => {
   try {
-    // Quick database check
-    await pool.query("SELECT NOW()");
-    
-    // Get status with error handling
+        // Database check with graceful handling
+    let dbOk = false;
+    let dbError = null;
+    try {
+      await pool.query(\"SELECT NOW()\");
+      dbOk = true;
+    } catch (dbErr) {
+      dbOk = false;
+      dbError = dbErr.message;
+      console.warn(\"⚠️ Health check: Database check failed (non-critical):\", dbErr.message);
+    }
+
+    const HEALTHZ_STRICT_DB = process.env.HEALTHZ_STRICT_DB === 'true';
+    if (HEALTHZ_STRICT_DB && !dbOk) {
+      return res.status(500).json({
+        ok: false,
+        status: \"unhealthy\",
+        error: \"Database check failed (strict mode enabled)\",
+        dbOk: false,
+        dbError: dbError,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+// Get status with error handling
     let spend = { daily_spend: 0, max_daily_spend: MAX_DAILY_SPEND };
     try {
       spend = await getDailySpend();
@@ -6482,14 +6505,22 @@ app.get("/healthz", async (req, res) => {
     
     let droneStatus = { active: 0, drones: [], total_revenue: 0, actual_revenue: 0, projected_revenue: 0 };
     try {
-      droneStatus = await incomeDroneSystem.getStatus();
+      if (incomeDroneSystem && typeof incomeDroneSystem.getStatus === 'function') {
+        if (incomeDroneSystem && typeof incomeDroneSystem.getStatus === 'function') {
+        droneStatus = await incomeDroneSystem.getStatus();
+      }
+      }
     } catch (e) {
       console.warn("⚠️ Health check: drone status failed (non-critical):", e.message);
     }
     
     let taskStatus = { queued: 0, active: 0, completed: 0, failed: 0 };
     try {
-      taskStatus = executionQueue.getStatus();
+      if (executionQueue && typeof executionQueue.getStatus === 'function') {
+        if (executionQueue && typeof executionQueue.getStatus === 'function') {
+        taskStatus = executionQueue.getStatus();
+      }
+      }
     } catch (e) {
       console.warn("⚠️ Health check: task status failed (non-critical):", e.message);
     }
@@ -6509,7 +6540,9 @@ app.get("/healthz", async (req, res) => {
       status: "healthy",
       version: "v26.1-no-claude",
       timestamp: new Date().toISOString(),
-      database: "connected",
+      database: dbOk ? "connected" : "disconnected",
+      dbOk: dbOk,
+      dbError: dbError,
       websockets: activeConnections.size,
       daily_spend: dailySpendValue,
       max_daily_spend: maxSpendValue,
@@ -10902,7 +10935,7 @@ app.post("/api/coach/chat", requireKey, async (req, res) => {
     const lowerText = text.toLowerCase();
     let replyText = '';
     let confidence = 0.9;
-    let suggestedActions: string[] = [];
+    let suggestedActions = [];
 
     // Handle "play my WHY" or discouraged messages
     if (lowerText.includes('play my why') || lowerText.includes("i'm discouraged") || lowerText.includes('discouraged')) {
