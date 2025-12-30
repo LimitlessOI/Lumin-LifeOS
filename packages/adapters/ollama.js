@@ -86,37 +86,78 @@ export class OllamaAdapter {
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let fullText = '';
+    let promptEvalCount = 0;
+    let evalCount = 0;
+    let buffer = ''; // Buffer for partial JSON lines across chunks
 
     while (true) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done) {
+        // Process any remaining buffer
+        if (buffer.trim()) {
+          try {
+            const data = JSON.parse(buffer.trim());
+            if (data.response !== undefined) fullText += data.response;
+            if (data.prompt_eval_count !== undefined) promptEvalCount = data.prompt_eval_count;
+            if (data.eval_count !== undefined) evalCount = data.eval_count;
+          } catch (e) {
+            // Ignore parse errors in final buffer
+          }
+        }
+        break;
+      }
 
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n').filter(line => line.trim());
+      // Decode chunk and add to buffer
+      const chunk = decoder.decode(value, { stream: true });
+      buffer += chunk;
+
+      // Process complete lines (ending with \n)
+      const lines = buffer.split('\n');
+      // Keep the last incomplete line in buffer
+      buffer = lines.pop() || '';
 
       for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+
         try {
-          const data = JSON.parse(line);
-          if (data.response) {
+          const data = JSON.parse(trimmed);
+          if (data.response !== undefined) {
             fullText += data.response;
           }
-          if (data.done) {
+          if (data.prompt_eval_count !== undefined) {
+            promptEvalCount = data.prompt_eval_count;
+          }
+          if (data.eval_count !== undefined) {
+            evalCount = data.eval_count;
+          }
+          if (data.done === true) {
+            // Final chunk - use its metadata
+            if (data.prompt_eval_count !== undefined) promptEvalCount = data.prompt_eval_count;
+            if (data.eval_count !== undefined) evalCount = data.eval_count;
             return {
               text: fullText,
               usage: {
-                prompt_tokens: data.prompt_eval_count || 0,
-                completion_tokens: data.eval_count || 0,
-                total_tokens: (data.prompt_eval_count || 0) + (data.eval_count || 0),
+                prompt_tokens: promptEvalCount,
+                completion_tokens: evalCount,
+                total_tokens: promptEvalCount + evalCount,
               },
             };
           }
         } catch (e) {
-          // Skip invalid JSON
+          // Skip invalid JSON - might be partial line that will be completed in next chunk
         }
       }
     }
 
-    return { text: fullText, usage: {} };
+    return {
+      text: fullText,
+      usage: {
+        prompt_tokens: promptEvalCount,
+        completion_tokens: evalCount,
+        total_tokens: promptEvalCount + evalCount,
+      },
+    };
   }
 
   getCostEstimate(prompt, options = {}) {

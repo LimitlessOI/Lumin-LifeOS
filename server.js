@@ -2643,48 +2643,90 @@ async function callOllamaWithStreaming(endpoint, model, prompt, options = {}) {
     let fullText = '';
     let promptEvalCount = 0;
     let evalCount = 0;
+    let modelName = model;
     let done = false;
+    let buffer = ''; // Buffer for partial JSON lines across chunks
 
     while (!done) {
       const { done: streamDone, value } = await reader.read();
-      if (streamDone) break;
+      if (streamDone) {
+        // Process any remaining buffer
+        if (buffer.trim()) {
+          try {
+            const data = JSON.parse(buffer.trim());
+            if (data.response) fullText += data.response;
+            if (data.prompt_eval_count !== undefined) promptEvalCount = data.prompt_eval_count;
+            if (data.eval_count !== undefined) evalCount = data.eval_count;
+            if (data.model) modelName = data.model;
+          } catch (e) {
+            // Ignore parse errors in final buffer
+          }
+        }
+        break;
+      }
 
+      // Decode chunk and add to buffer
       const chunk = decoder.decode(value, { stream: true });
-      const lines = chunk.split('\n').filter(line => line.trim());
+      buffer += chunk;
+
+      // Process complete lines (ending with \n)
+      const lines = buffer.split('\n');
+      // Keep the last incomplete line in buffer
+      buffer = lines.pop() || '';
 
       for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+
         try {
-          const data = JSON.parse(line);
-          if (data.response) {
+          const data = JSON.parse(trimmed);
+          
+          // Accumulate response text
+          if (data.response !== undefined) {
             fullText += data.response;
           }
+          
+          // Update metadata (last chunk has final values)
           if (data.prompt_eval_count !== undefined) {
             promptEvalCount = data.prompt_eval_count;
           }
           if (data.eval_count !== undefined) {
             evalCount = data.eval_count;
           }
-          if (data.done) {
+          if (data.model) {
+            modelName = data.model;
+          }
+          
+          // Check if stream is done
+          if (data.done === true) {
             done = true;
-            // Get final token counts if available
+            // Final chunk has all metadata - use it
             if (data.prompt_eval_count !== undefined) promptEvalCount = data.prompt_eval_count;
             if (data.eval_count !== undefined) evalCount = data.eval_count;
             break;
           }
         } catch (e) {
-          // Skip invalid JSON lines
+          // Skip invalid JSON - might be partial line that will be completed in next chunk
+          // Only log if it's clearly not a partial line
+          if (trimmed.length > 10 && !trimmed.startsWith('{')) {
+            console.warn(`⚠️ [OLLAMA STREAM] Skipping invalid JSON line: ${trimmed.substring(0, 50)}...`);
+          }
         }
       }
     }
 
     clearTimeout(timeoutId);
 
-    // Return same shape as non-streaming response
+    // Return same shape as non-streaming response (matches Ollama API format)
     return {
+      model: modelName,
       response: fullText,
+      done: true,
       prompt_eval_count: promptEvalCount,
       eval_count: evalCount,
-      done: true,
+      total_duration: 0, // Not available in streaming
+      load_duration: 0,
+      eval_duration: 0,
     };
   } catch (error) {
     clearTimeout(timeoutId);

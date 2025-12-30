@@ -323,30 +323,55 @@ export class Tier0Council {
           throw new Error(`Ollama error: ${response.status}`);
         }
 
-        // Stream and aggregate
+        // Stream and aggregate (handle partial JSON across chunks)
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let fullText = '';
+        let buffer = ''; // Buffer for partial JSON lines
 
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            // Process any remaining buffer
+            if (buffer.trim()) {
+              try {
+                const json = JSON.parse(buffer.trim());
+                if (json.response) fullText += json.response;
+                data = { response: fullText };
+              } catch (e) {
+                // Ignore parse errors in final buffer
+                data = { response: fullText };
+              }
+            } else {
+              data = { response: fullText };
+            }
+            break;
+          }
 
+          // Decode chunk and add to buffer
           const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n').filter(line => line.trim());
+          buffer += chunk;
+
+          // Process complete lines (ending with \n)
+          const lines = buffer.split('\n');
+          // Keep the last incomplete line in buffer
+          buffer = lines.pop() || '';
 
           for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+
             try {
-              const json = JSON.parse(line);
-              if (json.response) {
+              const json = JSON.parse(trimmed);
+              if (json.response !== undefined) {
                 fullText += json.response;
               }
-              if (json.done) {
+              if (json.done === true) {
                 data = { response: fullText };
                 break;
               }
             } catch (e) {
-              // Skip invalid JSON
+              // Skip invalid JSON - might be partial line
             }
           }
           if (data) break;
