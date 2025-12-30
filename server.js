@@ -3156,6 +3156,9 @@ async function callCouncilMember(member, prompt, options = {}) {
     }
   }
 
+  // Inject knowledge context into user prompt
+  const enhancedPrompt = injectKnowledgeContext(prompt, 5);
+  
   // Compress system prompt if it's long (cost optimization)
   const systemPromptBase = `You are ${config.name}, serving as ${config.role} inside the LifeOS AI Council.
 This is a LIVE SYSTEM running on Railway (${RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app"}).
@@ -3216,7 +3219,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
           temperature: 0.7,
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: prompt },
+            { role: "user", content: enhancedPrompt },
           ],
         }),
       });
@@ -3273,7 +3276,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
             ...noCacheHeaders,
           },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: `${systemPrompt}\n\n${prompt}` }] }],
+            contents: [{ parts: [{ text: `${systemPrompt}\n\n${enhancedPrompt}` }] }],
             generationConfig: {
               maxOutputTokens: config.maxTokens,
               temperature: 0.7,
@@ -3323,7 +3326,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
           model: config.model,
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: prompt },
+            { role: "user", content: enhancedPrompt },
           ],
           max_tokens: config.maxTokens,
           temperature: 0.7,
@@ -3374,7 +3377,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
         console.log(`    Endpoint: ${endpoint}`);
         console.log(`    Member: ${member}`);
         console.log(`    Streaming: ${useStreaming ? 'YES (tunnel detected)' : 'NO'}`);
-        console.log(`    Prompt length: ${prompt.length} chars\n`);
+        console.log(`    Prompt length: ${enhancedPrompt.length} chars\n`);
 
         let json;
         let text = "";
@@ -3385,7 +3388,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
             json = await callOllamaWithStreaming(
               endpoint,
               config.model,
-              `${systemPrompt}\n\n${prompt}`,
+              `${systemPrompt}\n\n${enhancedPrompt}`,
               {
                 maxTokens: config.maxTokens || 4096,
                 temperature: 0.7,
@@ -3403,7 +3406,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
                 json = await callOllamaWithStreaming(
                   endpoint,
                   fallback.model,
-                  `${systemPrompt}\n\n${prompt}`,
+                  `${systemPrompt}\n\n${enhancedPrompt}`,
                   {
                     maxTokens: config.maxTokens || 4096,
                     temperature: 0.7,
@@ -3499,7 +3502,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
             json = await callOllamaWithStreaming(
               OLLAMA_ENDPOINT,
               "deepseek-coder:latest",
-              `${systemPrompt}\n\n${prompt}`,
+              `${systemPrompt}\n\n${enhancedPrompt}`,
               {
                 maxTokens: config.maxTokens,
                 temperature: 0.7,
@@ -3568,7 +3571,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
           model: config.model,
           messages: [
             { role: "system", content: systemPrompt },
-            { role: "user", content: prompt },
+            { role: "user", content: enhancedPrompt },
           ],
           max_tokens: config.maxTokens,
           temperature: 0.7,
@@ -3795,6 +3798,8 @@ async function guessUserDecision(context) {
 }
 
 // ==================== KNOWLEDGE LOADING ====================
+let knowledgeContext = null; // Global knowledge context
+
 /**
  * Load knowledge context from processed dumps
  */
@@ -3834,16 +3839,78 @@ async function loadKnowledgeContext() {
       console.log('📚 [KNOWLEDGE] Loaded PROJECT_CONTEXT.md');
     }
     
-    return {
+    const context = {
       entries,
       coreTruths,
       projectContext,
       totalEntries: entries.length
     };
+    
+    // Store globally
+    knowledgeContext = context;
+    
+    return context;
   } catch (e) {
     console.warn(`⚠️ [KNOWLEDGE] Could not load index: ${e.message}`);
     return null;
   }
+}
+
+/**
+ * Inject knowledge context into prompt
+ */
+function injectKnowledgeContext(prompt, maxIdeas = 5) {
+  if (!knowledgeContext) return prompt;
+  
+  let contextSection = '';
+  
+  // Add core truths
+  if (knowledgeContext.coreTruths) {
+    contextSection += `\n\n=== CORE TRUTHS (Immutable Principles) ===\n${knowledgeContext.coreTruths}\n`;
+  }
+  
+  // Add project context
+  if (knowledgeContext.projectContext) {
+    contextSection += `\n\n=== PROJECT CONTEXT ===\n${knowledgeContext.projectContext}\n`;
+  }
+  
+  // Add relevant ideas from knowledge dumps
+  if (knowledgeContext.entries && knowledgeContext.entries.length > 0) {
+    const allIdeas = [];
+    for (const entry of knowledgeContext.entries) {
+      if (entry.ideas && Array.isArray(entry.ideas)) {
+        allIdeas.push(...entry.ideas.map(idea => ({
+          ...idea,
+          source: entry.filename
+        })));
+      }
+    }
+    
+    if (allIdeas.length > 0) {
+      // Simple keyword matching to find relevant ideas
+      const promptLower = prompt.toLowerCase();
+      const relevantIdeas = allIdeas
+        .filter(idea => {
+          const ideaText = (idea.text || '').toLowerCase();
+          const keywords = promptLower.split(/\s+/).filter(w => w.length > 3);
+          return keywords.some(kw => ideaText.includes(kw));
+        })
+        .slice(0, maxIdeas);
+      
+      if (relevantIdeas.length > 0) {
+        contextSection += `\n\n=== RELEVANT IDEAS FROM KNOWLEDGE BASE ===\n`;
+        relevantIdeas.forEach((idea, i) => {
+          contextSection += `${i+1}. ${idea.text}\n   (Source: ${idea.source})\n`;
+        });
+      }
+    }
+  }
+  
+  if (contextSection) {
+    return `${prompt}\n\n${contextSection}\n\nUse this knowledge to inform your response.`;
+  }
+  
+  return prompt;
 }
 
 // ==================== DAILY IDEA GENERATION ====================
