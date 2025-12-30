@@ -335,7 +335,13 @@ export class Tier0Council {
             // Process any remaining buffer
             if (buffer.trim()) {
               try {
-                const json = JSON.parse(buffer.trim());
+                // Sanitize JSON to remove comments and trailing commas
+                const sanitized = buffer.trim()
+                  .replace(/\/\/.*$/gm, '')
+                  .replace(/\/\*[\s\S]*?\*\//g, '')
+                  .replace(/,(\s*[}\]])/g, '$1')
+                  .trim();
+                const json = JSON.parse(sanitized);
                 if (json.response) fullText += json.response;
                 data = { response: fullText };
               } catch (e) {
@@ -362,7 +368,13 @@ export class Tier0Council {
             if (!trimmed) continue;
 
             try {
-              const json = JSON.parse(trimmed);
+              // Sanitize JSON to remove comments and trailing commas
+              const sanitized = trimmed
+                .replace(/\/\/.*$/gm, '')
+                .replace(/\/\*[\s\S]*?\*\//g, '')
+                .replace(/,(\s*[}\]])/g, '$1')
+                .trim();
+              const json = JSON.parse(sanitized);
               if (json.response !== undefined) {
                 fullText += json.response;
               }

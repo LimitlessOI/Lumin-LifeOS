@@ -2592,6 +2592,37 @@ const OLLAMA_MODEL_ALIASES = {
   'ollama_qwen_coder_32b': 'qwen3-coder:30b',
 };
 
+// ==================== JSON SANITIZER (for LLM responses with comments) ====================
+/**
+ * Sanitize JSON response from LLM (removes comments, trailing commas, etc.)
+ * Fixes JSON parsing errors from models that output comments in JSON
+ */
+function sanitizeJsonResponse(text) {
+  if (!text || typeof text !== 'string') return text;
+  
+  // Remove common JSON-breaking patterns from LLM responses
+  let cleaned = text
+    // Remove single-line comments
+    .replace(/\/\/.*$/gm, '')
+    // Remove multi-line comments
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    // Remove trailing commas before } or ]
+    .replace(/,(\s*[}\]])/g, '$1')
+    // Remove markdown code fences
+    .replace(/```json\s*/gi, '')
+    .replace(/```\s*/g, '')
+    // Trim whitespace
+    .trim();
+  
+  // Try to extract JSON if wrapped in other text
+  const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    cleaned = jsonMatch[0];
+  }
+  
+  return cleaned;
+}
+
 // ==================== OLLAMA STREAMING ADAPTER (Cloudflare 524 Fix) ====================
 /**
  * Detects if endpoint is a Cloudflare tunnel and requires streaming
@@ -2653,13 +2684,15 @@ async function callOllamaWithStreaming(endpoint, model, prompt, options = {}) {
         // Process any remaining buffer
         if (buffer.trim()) {
           try {
-            const data = JSON.parse(buffer.trim());
+            const sanitized = sanitizeJsonResponse(buffer.trim());
+            const data = JSON.parse(sanitized);
             if (data.response) fullText += data.response;
             if (data.prompt_eval_count !== undefined) promptEvalCount = data.prompt_eval_count;
             if (data.eval_count !== undefined) evalCount = data.eval_count;
             if (data.model) modelName = data.model;
           } catch (e) {
             // Ignore parse errors in final buffer
+            console.warn(`⚠️ [OLLAMA STREAM] Failed to parse final buffer: ${e.message}`);
           }
         }
         break;
@@ -2679,7 +2712,8 @@ async function callOllamaWithStreaming(endpoint, model, prompt, options = {}) {
         if (!trimmed) continue;
 
         try {
-          const data = JSON.parse(trimmed);
+          const sanitized = sanitizeJsonResponse(trimmed);
+          const data = JSON.parse(sanitized);
           
           // Accumulate response text
           if (data.response !== undefined) {

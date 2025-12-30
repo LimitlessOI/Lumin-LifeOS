@@ -121,7 +121,13 @@ export class OllamaAdapter {
         if (!trimmed) continue;
 
         try {
-          const data = JSON.parse(trimmed);
+          // Sanitize JSON to remove comments and trailing commas from LLM responses
+          const sanitized = trimmed
+            .replace(/\/\/.*$/gm, '')
+            .replace(/\/\*[\s\S]*?\*\//g, '')
+            .replace(/,(\s*[}\]])/g, '$1')
+            .trim();
+          const data = JSON.parse(sanitized);
           if (data.response !== undefined) {
             fullText += data.response;
           }
