@@ -1,4 +1,3 @@
-```dockerfile
 # Use Node.js LTS version
 FROM node:16
 
@@ -17,4 +16,3 @@ EXPOSE 3000
 
 # Start the application
 CMD ["yarn", "start"]
-```
