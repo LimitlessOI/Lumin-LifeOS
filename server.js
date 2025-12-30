@@ -35,6 +35,9 @@ import rateLimit from "express-rate-limit";
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
 
+// Ollama Runtime Manager
+let OllamaRuntimeManager, ollamaRuntimeManager;
+
 // Knowledge Base System
 let KnowledgeBase, FileCleanupAnalyzer;
 
@@ -1944,7 +1947,7 @@ const COUNCIL_MEMBERS = {
   },
   ollama_qwen_coder_32b: {
     name: "Qwen2.5-Coder-32B (Local)",
-    model: "qwen2.5-coder:32b-instruct",
+    model: "qwen2.5-coder:7b-instruct",
     provider: "ollama",
     endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
     role: "Code Generation Specialist",
@@ -1958,7 +1961,7 @@ const COUNCIL_MEMBERS = {
   },
   ollama_codestral: {
     name: "Mistral Codestral 25.01 (Local)",
-    model: "codestral:latest",
+    model: "qwen2.5-coder:7b-instruct",
     provider: "ollama",
     endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
     role: "Fast Code Generation",
@@ -1973,7 +1976,7 @@ const COUNCIL_MEMBERS = {
   // TIER 0 - REASONING & ANALYSIS SPECIALISTS
   ollama_deepseek_v3: {
     name: "DeepSeek V3 (Local)",
-    model: "deepseek-v3:latest",
+    model: "deepseek-coder-v2:latest",
     provider: "ollama",
     endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
     role: "Complex Reasoning Specialist",
@@ -1988,7 +1991,7 @@ const COUNCIL_MEMBERS = {
   },
   ollama_llama_3_3_70b: {
     name: "Llama 3.3 70B (Local)",
-    model: "llama3.3:70b-instruct-q4_0",
+    model: "llama3.2:3b",
     provider: "ollama",
     endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
     role: "High-Quality Reasoning",
@@ -2002,7 +2005,7 @@ const COUNCIL_MEMBERS = {
   },
   ollama_qwen_2_5_72b: {
     name: "Qwen 2.5 72B (Local)",
-    model: "qwen2.5:72b-q4_0",
+    model: "qwen2.5:7b-instruct",
     provider: "ollama",
     endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
     role: "Research & Analysis Specialist",
@@ -2016,7 +2019,7 @@ const COUNCIL_MEMBERS = {
   },
   ollama_gemma_2_27b: {
     name: "Gemma 2 27B (Local)",
-    model: "gemma2:27b-it-q4_0",
+    model: "phi3:mini",
     provider: "ollama",
     endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
     role: "Balanced Reasoning",
@@ -2531,28 +2534,94 @@ function selectOptimalModel(prompt, taskComplexity = 'medium') {
   const isProduction = NODE_ENV === 'production' || !!process.env.RAILWAY_ENVIRONMENT;
   const ollamaAvailable = Boolean(OLLAMA_ENDPOINT);
   
-  // Simple tasks -> cheapest model (only if key available)
-  if (taskComplexity === 'simple' || promptLength < 200) {
-    if (hasDeepSeekKey) {
-      compressionMetrics.model_downgrades++;
-      return { member: 'deepseek', model: 'deepseek-coder', reason: 'simple_task' };
+
+// RAILWAY_OLLAMA_MODEL_BOOTSTRAP
+const RAILWAY_OLLAMA_MODELS = (process.env.RAILWAY_OLLAMA_MODELS || "phi3:mini,llama3.2:3b,qwen2.5:7b-instruct,qwen2.5-coder:7b-instruct,nomic-embed-text")
+  .split(",")
+  .map(s => s.trim())
+  .filter(Boolean);
+
+async function railwayEnsureOllamaModels() {
+  const isRailway = Boolean(process.env.RAILWAY_PROJECT_ID || process.env.RAILWAY_SERVICE_ID || process.env.RAILWAY_ENVIRONMENT);
+  if (!isRailway) return;
+  if (!OLLAMA_ENDPOINT) return;
+
+  try {
+    const tagsRes = await fetch(`${OLLAMA_ENDPOINT}/api/tags`, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!tagsRes.ok) {
+      const t = await tagsRes.text().catch(() => "");
+      console.warn("[OLLAMA][bootstrap] /api/tags failed", tagsRes.status, t.slice(0, 300));
+      return;
     }
-    // Fall back to Ollama if available (free) - only in local/dev
-    if (ollamaAvailable) {
-      return { member: 'ollama_llama', model: 'llama3.2:1b', reason: 'simple_task_free' };
+
+    const tags = await tagsRes.json().catch(() => ({}));
+    const have = new Set(((tags.models || [])).map(m => m.name));
+    const missing = RAILWAY_OLLAMA_MODELS.filter(name => !have.has(name));
+
+    if (!missing.length) {
+      console.log("[OLLAMA][bootstrap] models already present:", Array.from(have).slice(0, 50));
+      return;
     }
+
+    console.log("[OLLAMA][bootstrap] pulling models:", missing);
+
+    for (const name of missing) {
+      try {
+        const pullRes = await fetch(`${OLLAMA_ENDPOINT}/api/pull`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name }),
+        });
+
+        const bodyText = await pullRes.text().catch(() => "");
+
+        if (!pullRes.ok) {
+          console.warn("[OLLAMA][bootstrap] pull failed", name, pullRes.status, bodyText.slice(0, 300));
+          continue;
+        }
+
+        console.log("[OLLAMA][bootstrap] pulled:", name);
+      } catch (e) {
+        console.warn("[OLLAMA][bootstrap] pull error", name, e?.message || e);
+      }
+    }
+  } catch (e) {
+    console.warn("[OLLAMA][bootstrap] unexpected error", e?.message || e);
   }
-  
-  // Medium tasks -> medium cost (only if key available)
-  if (taskComplexity === 'medium' || promptLength < 1000) {
-    if (hasGeminiKey) {
-      return { member: 'gemini', model: 'gemini-2.5-flash', reason: 'medium_task' };
+}
+
+setTimeout(() => {
+  railwayEnsureOllamaModels();
+}, 5000);
+
+
+    // Simple tasks -> cheapest model (only if key available)
+    if (taskComplexity === 'simple' || promptLength < 200) {
+      if (hasDeepSeekKey) {
+        compressionMetrics.model_downgrades++;
+        return { member: 'deepseek', model: 'deepseek-coder', reason: 'simple_task' };
+      }
+      // Fall back to Ollama if available (free) - only in local/dev
+      if (ollamaAvailable && ollamaRuntimeManager) {
+        const selectedModel = ollamaRuntimeManager.selectedDefaultModel || 'llama3.2:1b';
+        return { member: 'ollama_llama', model: selectedModel, reason: 'simple_task_free' };
+      }
     }
-    // Fall back to Ollama if available (free) - only in local/dev
-    if (ollamaAvailable) {
-      return { member: 'ollama_llama', model: 'llama3.2:1b', reason: 'medium_task_free' };
+    
+    // Medium tasks -> medium cost (only if key available)
+    if (taskComplexity === 'medium' || promptLength < 1000) {
+      if (hasGeminiKey) {
+        return { member: 'gemini', model: 'gemini-2.5-flash', reason: 'medium_task' };
+      }
+      // Fall back to Ollama if available (free) - only in local/dev
+      if (ollamaAvailable && ollamaRuntimeManager) {
+        const selectedModel = ollamaRuntimeManager.selectedDefaultModel || 'llama3.2:1b';
+        return { member: 'ollama_llama', model: selectedModel, reason: 'medium_task_free' };
+      }
     }
-  }
   
   // Complex tasks -> use requested member
   // If no API keys and Ollama not available, return null to use original member
@@ -2922,10 +2991,12 @@ Be concise, strategic, and speak as the system's internal AI.`;
 
     // OLLAMA (FREE LOCAL MODELS) - Try first for Tier 0
     if (config.provider === "ollama") {
-      const endpoint = config.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
+      // Use manager to get installed model
+      const endpoint = ollamaRuntimeManager ? ollamaRuntimeManager.endpoint : (config.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434");
+      const selectedModel = ollamaRuntimeManager ? await ollamaRuntimeManager.getModel(config.model) : config.model;
       
       try {
-        console.log(`\n🆓 [OLLAMA] Calling local model: ${config.model}`);
+        console.log(`\n🆓 [OLLAMA] Calling local model: ${selectedModel}${selectedModel !== config.model ? ` (requested: ${config.model})` : ''}`);
         console.log(`    Endpoint: ${endpoint}`);
         console.log(`    Member: ${member}`);
         console.log(`    Prompt length: ${prompt.length} chars\n`);
@@ -2938,7 +3009,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
             ...noCacheHeaders,
           },
           body: JSON.stringify({
-            model: config.model,
+            model: selectedModel,
             prompt: `${systemPrompt}\n\n${prompt}`,
             stream: false,
             options: {
@@ -2956,7 +3027,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
             const duration = Date.now() - startTime;
             console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
             console.log(`║ ✅ [OLLAMA] SUCCESS - Local model response received                            ║`);
-            console.log(`║    Model: ${config.model}                                                      ║`);
+            console.log(`║    Model: ${selectedModel}                                                      ║`);
             console.log(`║    Member: ${member}                                                           ║`);
             console.log(`║    Response Time: ${duration}ms                                               ║`);
             console.log(`║    Response Length: ${text.length} chars                                      ║`);
@@ -2980,10 +3051,14 @@ Be concise, strategic, and speak as the system's internal AI.`;
           }
         } else {
           const errorText = await response.text();
+          // If 404 "model not found", try auto-update check
+          if (response.status === 404 && ollamaRuntimeManager) {
+            await ollamaRuntimeManager.checkAutoUpdate();
+          }
           throw new Error(`Ollama HTTP ${response.status}: ${errorText}`);
         }
       } catch (ollamaError) {
-        console.warn(`⚠️ [TIER 0] Ollama ${config.model} failed: ${ollamaError.message}`);
+        console.warn(`⚠️ [TIER 0] Ollama ${selectedModel} failed: ${ollamaError.message}`);
         throw new Error(`Ollama unavailable: ${ollamaError.message}`);
       }
     }
@@ -5520,6 +5595,7 @@ async function initializeTwoTierSystem() {
     const knowledgeModule = await import("./core/knowledge-base.js");
     const cleanupModule = await import("./core/file-cleanup-analyzer.js");
     const openSourceCouncilModule = await import("./core/open-source-council.js");
+    const ollamaManagerModule = await import("./core/ollama-runtime-manager.js");
     
     Tier0Council = tier0Module.Tier0Council;
     Tier1Council = tier1Module.Tier1Council;
@@ -5529,18 +5605,16 @@ async function initializeTwoTierSystem() {
     KnowledgeBase = knowledgeModule.KnowledgeBase;
     FileCleanupAnalyzer = cleanupModule.FileCleanupAnalyzer;
     OpenSourceCouncil = openSourceCouncilModule.OpenSourceCouncil;
+    OllamaRuntimeManager = ollamaManagerModule.OllamaRuntimeManager;
+    
+    // Initialize Ollama Runtime Manager
+    ollamaRuntimeManager = new OllamaRuntimeManager();
+    await ollamaRuntimeManager.initialize();
 
-    tier0Council = new Tier0Council(pool);
+    tier0Council = new Tier0Council(pool, ollamaRuntimeManager);
     tier1Council = new Tier1Council(pool, callCouncilMember);
     modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
     openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
-    const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
-    console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
-    console.log("║ ✅ [OPEN SOURCE COUNCIL] INITIALIZED                                              ║");
-    console.log("║    Status: Ready to route tasks to local Ollama models                           ║");
-    console.log("║    Activation: Cost shutdown OR explicit opt-in (useOpenSourceCouncil: true)    ║");
-    console.log(`║    Models: Connected to Ollama at ${ollamaEndpoint.padEnd(47)}║`);
-    console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
     outreachAutomation = new OutreachAutomation(
       pool,
       modelRouter,
