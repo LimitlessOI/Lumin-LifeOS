@@ -5991,17 +5991,22 @@ async function initializeTwoTierSystem() {
         incomeDroneSystem = new EnhancedIncomeDrone(pool, callCouncilMember, modelRouter);
         console.log("✅ Enhanced Income Drone System initialized");
         
-        // IMMEDIATELY deploy all 5 drones to start generating income
-        console.log('🚀 [INCOME] Deploying income drones immediately...');
-        try {
-          const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
-          const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
-          const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
-          const productDrone = await incomeDroneSystem.deployDrone("product", 200);
-          const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
-          console.log(`✅ [INCOME] Deployed 5 income drones - they are NOW WORKING!`);
-        } catch (deployError) {
-          console.error('❌ [INCOME] Error deploying drones:', deployError.message);
+        // Income drones DISABLED - set ENABLE_INCOME_DRONES=true to enable
+        const ENABLE_INCOME_DRONES = process.env.ENABLE_INCOME_DRONES === 'true';
+        if (ENABLE_INCOME_DRONES) {
+          console.log('🚀 [INCOME] Deploying income drones immediately...');
+          try {
+            const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
+            const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
+            const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
+            const productDrone = await incomeDroneSystem.deployDrone("product", 200);
+            const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
+            console.log(`✅ [INCOME] Deployed 5 income drones - they are NOW WORKING!`);
+          } catch (deployError) {
+            console.error('❌ [INCOME] Error deploying drones:', deployError.message);
+          }
+        } else {
+          console.log('ℹ️ [INCOME] Income drones DISABLED (set ENABLE_INCOME_DRONES=true to enable)');
         }
 
         // Initialize Opportunity Executor (actually implements opportunities to generate REAL revenue)
@@ -6820,102 +6825,21 @@ app.get("/api/v1/health-check", requireKey, (req, res) => {
   });
 });
 
-app.get("/healthz", async (req, res) => {
-  try {
-    // Database check with graceful handling
-    let dbOk = false;
-    let dbError = null;
-    try {
-      await pool.query("SELECT NOW()");
-      dbOk = true;
-    } catch (dbErr) {
-      dbOk = false;
-      dbError = dbErr.message;
-      console.warn("⚠️ Health check: Database check failed (non-critical):", dbErr.message);
-    }
+// Simple health check endpoint for Railway (must be fast and reliable)
+app.get("/healthz", (req, res) => {
+  console.log('✅ Health check hit');
+  res.status(200).send('OK');
+});
 
-    const HEALTHZ_STRICT_DB = process.env.HEALTHZ_STRICT_DB === 'true';
-    if (HEALTHZ_STRICT_DB && !dbOk) {
-      return res.status(500).json({
-        ok: false,
-        status: "unhealthy",
-        error: "Database check failed (strict mode enabled)",
-        dbOk: false,
-        dbError: dbError,
-        timestamp: new Date().toISOString(),
-      });
-    }
-
-    // Get status with error handling
-    let spend = { daily_spend: 0, max_daily_spend: MAX_DAILY_SPEND };
-    try {
-      spend = await getDailySpend();
-    } catch (e) {
-      console.warn("⚠️ Health check: getDailySpend failed (non-critical):", e.message);
-    }
-    
-    let droneStatus = { active: 0, drones: [], total_revenue: 0, actual_revenue: 0, projected_revenue: 0 };
-    try {
-      if (incomeDroneSystem && typeof incomeDroneSystem.getStatus === 'function') {
-        droneStatus = await incomeDroneSystem.getStatus();
-      }
-    } catch (e) {
-      console.warn("⚠️ Health check: drone status failed (non-critical):", e.message);
-    }
-    
-    let taskStatus = { queued: 0, active: 0, completed: 0, failed: 0 };
-    try {
-      if (executionQueue && typeof executionQueue.getStatus === 'function') {
-        taskStatus = executionQueue.getStatus();
-      }
-    } catch (e) {
-      console.warn("⚠️ Health check: task status failed (non-critical):", e.message);
-    }
-    
-    let rotationStatus = null;
-    try {
-      rotationStatus = await rotateAIsBasedOnPerformance();
-    } catch (rotationError) {
-      console.warn("⚠️ Health check: AI rotation check failed (non-critical):", rotationError.message);
-    }
-
-    const dailySpendValue = spend.daily_spend || spend || 0;
-    const maxSpendValue = spend.max_daily_spend || MAX_DAILY_SPEND;
-
-    res.json({
-      ok: true,
-      status: "healthy",
-      version: "v26.1-no-claude",
-      timestamp: new Date().toISOString(),
-      database: dbOk ? "connected" : "disconnected",
-      dbOk: dbOk,
-      dbError: dbError,
-      websockets: activeConnections.size,
-      daily_spend: dailySpendValue,
-      max_daily_spend: maxSpendValue,
-      spend_percentage: dailySpendValue ? ((dailySpendValue / maxSpendValue) * 100).toFixed(1) + "%" : "0%",
-      roi: roiTracker,
-      drones: droneStatus,
-      tasks: taskStatus,
-      deployment: "Railway + Neon + GitHub",
-      system_metrics: systemMetrics,
-      ai_rotation: rotationStatus,
-      daily_ideas: dailyIdeas ? dailyIdeas.length : 0,
-      blind_spots_detected: systemMetrics ? systemMetrics.blindSpotsDetected : 0,
-      snapshots_available: systemSnapshots ? systemSnapshots.length : 0,
-      stripe_enabled: Boolean(STRIPE_SECRET_KEY),
-      railway_url:
-        RAILWAY_PUBLIC_DOMAIN || "robust-magic-production.up.railway.app",
-    });
-  } catch (error) {
-    console.error("Health check error:", error);
-    res.status(500).json({
-      ok: false,
-      status: "unhealthy",
-      error: error.message,
-      timestamp: new Date().toISOString(),
-    });
-  }
+// Detailed health endpoint with system status
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    ollama: OLLAMA_ENDPOINT ? 'Connected' : 'Not configured',
+    version: '26.1',
+    uptime: process.uptime(),
+  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -13967,19 +13891,24 @@ async function start() {
     // Kick off the execution queue
     executionQueue.executeNext();
 
-    // Deploy income drones (IMMEDIATELY START WORKING)
-    // Note: If EnhancedIncomeDrone is used, drones are already deployed during initialization
-    // Only deploy here if using basic IncomeDroneSystem
-    if (incomeDroneSystem && incomeDroneSystem.constructor.name === 'IncomeDroneSystem') {
-      console.log('🚀 [STARTUP] Deploying income drones (basic system)...');
-      const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
-      const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
-      const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
-      const productDrone = await incomeDroneSystem.deployDrone("product", 200);
-      const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
-      console.log(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
+    // Income drones DISABLED - set ENABLE_INCOME_DRONES=true to enable
+    const ENABLE_INCOME_DRONES = process.env.ENABLE_INCOME_DRONES === 'true';
+    if (ENABLE_INCOME_DRONES) {
+      // Note: If EnhancedIncomeDrone is used, drones are already deployed during initialization
+      // Only deploy here if using basic IncomeDroneSystem
+      if (incomeDroneSystem && incomeDroneSystem.constructor.name === 'IncomeDroneSystem') {
+        console.log('🚀 [STARTUP] Deploying income drones (basic system)...');
+        const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
+        const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
+        const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
+        const productDrone = await incomeDroneSystem.deployDrone("product", 200);
+        const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
+        console.log(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
+      } else {
+        console.log('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
+      }
     } else {
-      console.log('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
+      console.log('ℹ️ [STARTUP] Income drones DISABLED (set ENABLE_INCOME_DRONES=true to enable)');
     }
 
       // Initialize Ollama Installer (auto-install Ollama if needed)
