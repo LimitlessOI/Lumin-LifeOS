@@ -2576,6 +2576,80 @@ const ALERT_PHONE =
   process.env.COMMAND_CENTER_PHONE ||
   null;
 
+// Model alias mappings for Ollama (maps requested models to installed aliases)
+// These aliases are used when the requested model isn't installed but an alias is available
+const OLLAMA_MODEL_ALIASES = {
+  'deepseek-coder:33b': 'deepseek-r1:32b',
+  'qwen2.5-coder:32b-instruct': 'qwen3-coder:30b',
+  'deepseek-coder:latest': 'deepseek-coder:latest',
+  'deepseek-coder-v2:latest': 'deepseek-coder-v2:latest',
+  'llama3.2:1b': 'llama3.2:1b',
+  'phi3:mini': 'phi3:mini',
+  'qwen2.5:7b-instruct': 'qwen2.5:7b-instruct',
+  'qwen2.5-coder:7b-instruct': 'qwen2.5-coder:7b-instruct',
+  // Map member names to their Ollama model aliases
+  'ollama_deepseek_coder_33b': 'deepseek-r1:32b',
+  'ollama_qwen_coder_32b': 'qwen3-coder:30b',
+};
+
+// Get best Ollama fallback model based on requested model or task type
+function getOllamaFallbackModel(requestedMember, taskType = 'general') {
+  // Check if Ollama is available
+  if (!OLLAMA_ENDPOINT) {
+    return null;
+  }
+  
+  const requestedConfig = COUNCIL_MEMBERS[requestedMember];
+  const requestedModel = requestedConfig?.model;
+  
+  // First, try direct member alias mapping
+  if (OLLAMA_MODEL_ALIASES[requestedMember]) {
+    const aliasModel = OLLAMA_MODEL_ALIASES[requestedMember];
+    // Find Ollama member that uses this alias model
+    for (const [memberKey, memberConfig] of Object.entries(COUNCIL_MEMBERS)) {
+      if (memberConfig.provider === 'ollama' && memberConfig.model === aliasModel) {
+        return memberKey;
+      }
+    }
+  }
+  
+  // Try to map requested model to Ollama alias
+  if (requestedModel && OLLAMA_MODEL_ALIASES[requestedModel]) {
+    const aliasModel = OLLAMA_MODEL_ALIASES[requestedModel];
+    // Find Ollama member that uses this alias model
+    for (const [memberKey, memberConfig] of Object.entries(COUNCIL_MEMBERS)) {
+      if (memberConfig.provider === 'ollama' && memberConfig.model === aliasModel) {
+        return memberKey;
+      }
+    }
+  }
+  
+  // Task-based fallback selection
+  const taskTypeLower = (taskType || '').toLowerCase();
+  if (taskTypeLower.includes('code') || taskTypeLower.includes('development') || 
+      taskTypeLower.includes('infrastructure') || taskTypeLower.includes('revenue_generation')) {
+    // Prefer code models for code/development/revenue tasks
+    if (COUNCIL_MEMBERS.ollama_deepseek_coder_v2) return 'ollama_deepseek_coder_v2';
+    if (COUNCIL_MEMBERS.ollama_deepseek) return 'ollama_deepseek';
+    if (COUNCIL_MEMBERS.ollama_qwen_coder_32b) return 'ollama_qwen_coder_32b';
+    if (COUNCIL_MEMBERS.ollama_deepseek_coder_33b) return 'ollama_deepseek_coder_33b';
+  }
+  
+  // Default fallback order (general tasks)
+  if (COUNCIL_MEMBERS.ollama_llama) return 'ollama_llama';
+  if (COUNCIL_MEMBERS.ollama_deepseek) return 'ollama_deepseek';
+  if (COUNCIL_MEMBERS.ollama_phi3) return 'ollama_phi3';
+  
+  // Last resort: any Ollama model
+  for (const [memberKey, memberConfig] of Object.entries(COUNCIL_MEMBERS)) {
+    if (memberConfig.provider === 'ollama' || memberKey.startsWith('ollama_')) {
+      return memberKey;
+    }
+  }
+  
+  return null;
+}
+
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
 async function callCouncilMember(member, prompt, options = {}) {
   const config = COUNCIL_MEMBERS[member];
@@ -2592,15 +2666,27 @@ async function callCouncilMember(member, prompt, options = {}) {
   const memberConfig = COUNCIL_MEMBERS[member];
   const isPaid = !memberConfig?.isFree && (memberConfig?.costPer1M > 0 || memberConfig?.tier === "tier1");
   
-  // If MAX_DAILY_SPEND is 0, block ALL paid models
+  // If MAX_DAILY_SPEND is 0, block ALL paid models - AUTOMATICALLY FALL BACK TO OLLAMA
   if (MAX_DAILY_SPEND === 0 && isPaid) {
+    const ollamaFallback = getOllamaFallbackModel(member, options.taskType);
+    if (ollamaFallback && OLLAMA_ENDPOINT) {
+      console.log(`💰 [COST SHUTDOWN] Blocked ${member} - Auto-falling back to ${ollamaFallback} (Ollama)`);
+      // Recursively call with Ollama fallback
+      return await callCouncilMember(ollamaFallback, prompt, options);
+    }
     throw new Error(
       `💰 [COST SHUTDOWN] Blocked ${member} - Spending disabled (MAX_DAILY_SPEND=$0). Use free models only (ollama_deepseek, ollama_llama).`
     );
   }
   
-  // Also block if spending threshold reached
+  // Also block if spending threshold reached - AUTOMATICALLY FALL BACK TO OLLAMA
   if (spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
+    const ollamaFallback = getOllamaFallbackModel(member, options.taskType);
+    if (ollamaFallback && OLLAMA_ENDPOINT) {
+      console.log(`💰 [COST SHUTDOWN] Blocked ${member} ($${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}) - Auto-falling back to ${ollamaFallback} (Ollama)`);
+      // Recursively call with Ollama fallback
+      return await callCouncilMember(ollamaFallback, prompt, options);
+    }
     throw new Error(
       `💰 [COST SHUTDOWN] Blocked ${member} - Spending $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}. Use Tier 0 (free) models only.`
     );

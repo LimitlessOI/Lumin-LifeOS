@@ -202,3 +202,12 @@ curl http://ollama-service:11434/api/version
 - **Savings**: 90-95% vs pure cloud API approach
 
 🎉 **You're running AI for almost free!**
+
+## Expose Local Ollama via Cloudflare Tunnel (LOW COST)
+
+This lets Railway call **your laptop’s** Ollama (no Ollama service/models on Railway).
+
+### Start the tunnel
+```bash
+caffeinate -d ./scripts/ollama_tunnel_start_and_print_url.sh
+curl -H "Host: localhost:11434" https://xxxx.trycloudflare.com/api/tags
