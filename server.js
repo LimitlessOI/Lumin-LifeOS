@@ -6434,6 +6434,28 @@ function broadcastToAll(message) {
 // (TypeScript source: src/server/auth/requireKey.ts)
 import { requireKey } from "./src/server/auth/requireKey.js";
 
+
+// RAILWAY_OLLAMA_ENDPOINT_AUTOFIX
+const __ollamaEnv =
+  process.env.OLLAMA_ENDPOINT ||
+  process.env.OLLAMA_BASE_URL ||
+  process.env.OLLAMA_URL ||
+  process.env.OLLAMA_API_BASE ||
+  (process.env.OLLAMA_HOST ? `http://${process.env.OLLAMA_HOST}` : "");
+
+if ((process.env.RAILWAY_PROJECT_ID || process.env.RAILWAY_SERVICE_ID || process.env.RAILWAY_ENVIRONMENT) && !__ollamaEnv) {
+  process.env.OLLAMA_ENDPOINT = "http://ollama.railway.internal:11434";
+}
+
+console.log("[OLLAMA][env]", {
+  OLLAMA_ENDPOINT: process.env.OLLAMA_ENDPOINT,
+  OLLAMA_BASE_URL: process.env.OLLAMA_BASE_URL,
+  OLLAMA_URL: process.env.OLLAMA_URL,
+  OLLAMA_API_BASE: process.env.OLLAMA_API_BASE,
+  OLLAMA_HOST: process.env.OLLAMA_HOST,
+});
+
+
 // ==================== API ENDPOINTS ====================
 
 // Health checks
