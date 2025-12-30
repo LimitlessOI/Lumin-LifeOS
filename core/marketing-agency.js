@@ -243,7 +243,13 @@ Return as JSON.`;
       if (objMatch) {
         return JSON.parse(objMatch[0]);
       }
-      return JSON.parse(response);
+      // Sanitize before parsing
+      let cleaned = response
+        .replace(/\/\/.*$/gm, '')
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/,(\s*[}\]])/g, '$1')
+        .trim();
+      return JSON.parse(cleaned);
     } catch (error) {
       console.warn('Failed to parse JSON:', error.message);
       return [];

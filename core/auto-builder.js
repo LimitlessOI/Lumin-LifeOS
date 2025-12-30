@@ -319,9 +319,14 @@ Generate ALL files needed to make this work. Be complete and production-ready.`;
       const files = this.extractFiles(codeResponse);
 
       if (files.length === 0) {
+        // Log the response for debugging
+        console.warn(`⚠️ [AUTO-BUILDER] No files extracted. Response length: ${codeResponse?.length || 0}`);
+        console.warn(`⚠️ [AUTO-BUILDER] Response preview: ${codeResponse?.substring(0, 500)}...`);
+        
         return {
           success: false,
-          error: "No files extracted from AI response",
+          error: "No files extracted from AI response. Check if AI returned files in ===FILE:path=== format.",
+          responsePreview: codeResponse?.substring(0, 500),
         };
       }
 

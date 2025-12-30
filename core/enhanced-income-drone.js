@@ -780,17 +780,33 @@ Return as JSON array. Focus on API cost savings as the PRIMARY opportunity.`;
   }
 
   /**
-   * Parse JSON from AI response
+   * Parse JSON from AI response (with sanitization)
    */
   parseJSONResponse(response) {
     try {
+      // Sanitize JSON to remove comments and trailing commas
+      let cleaned = (response || '')
+        .replace(/\/\/.*$/gm, '')           // Remove // comments
+        .replace(/\/\*[\s\S]*?\*\//g, '')   // Remove /* */ comments
+        .replace(/,(\s*[}\]])/g, '$1')      // Remove trailing commas
+        .replace(/```json\s*/gi, '')         // Remove ```json
+        .replace(/```\s*/g, '')              // Remove ```
+        .trim();
+      
       // Try to extract JSON from response
-      const jsonMatch = response.match(/\[[\s\S]*\]/);
+      const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0]);
       }
+      
+      // Try object match
+      const objMatch = cleaned.match(/\{[\s\S]*\}/);
+      if (objMatch) {
+        return JSON.parse(objMatch[0]);
+      }
+      
       // Fallback: try parsing entire response
-      return JSON.parse(response);
+      return JSON.parse(cleaned);
     } catch (error) {
       console.warn('Failed to parse JSON response:', error.message);
       return [];

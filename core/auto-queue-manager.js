@@ -111,8 +111,15 @@ Return as JSON array with fields: concept, impact, consequences, difficulty, rev
     const ideas = [];
     
     try {
+      // Sanitize JSON first
+      let cleaned = (response || '')
+        .replace(/\/\/.*$/gm, '')
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/,(\s*[}\]])/g, '$1')
+        .trim();
+      
       // Try to parse JSON
-      const jsonMatch = response.match(/\[[\s\S]*\]/);
+      const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         ideas.push(...JSON.parse(jsonMatch[0]));
       } else {

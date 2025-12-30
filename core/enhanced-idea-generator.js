@@ -83,8 +83,15 @@ Return as JSON array:
     const ideas = [];
     
     try {
+      // Sanitize JSON first
+      let cleaned = (response || '')
+        .replace(/\/\/.*$/gm, '')
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/,(\s*[}\]])/g, '$1')
+        .trim();
+      
       // Try to parse JSON
-      const jsonMatch = response.match(/\[[\s\S]*\]/);
+      const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         if (Array.isArray(parsed)) {

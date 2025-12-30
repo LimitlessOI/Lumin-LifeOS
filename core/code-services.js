@@ -240,15 +240,22 @@ Return as JSON.`;
   }
 
   /**
-   * Parse JSON response
+   * Parse JSON response (with sanitization)
    */
   parseJSONResponse(response) {
     try {
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      // Sanitize JSON to remove comments and trailing commas
+      let cleaned = (response || '')
+        .replace(/\/\/.*$/gm, '')
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/,(\s*[}\]])/g, '$1')
+        .trim();
+      
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0]);
       }
-      return JSON.parse(response);
+      return JSON.parse(cleaned);
     } catch (error) {
       console.warn('Failed to parse JSON:', error.message);
       return {};
