@@ -1,47 +1,50 @@
 # CORE TRUTHS v1.0
 # Last Updated: 2024-12-30
-# Status: Human-curated, immutable without approval
+# Owner: Adam Hopkins
 
 ## 1. Identity
 LifeOS is built by Adam Hopkins.
 
-## 2. Business Model  
+## 2. Business Model
 We take 20% of customer API savings. No savings = no payment.
 
-## 3. Technical Foundation
-- Local-first: Ollama models are primary
-- Railway for production hosting
-- Neon for PostgreSQL database
+## 3. Architecture  
+- Local-first: Ollama on Mac M2 Max (32GB RAM)
+- Production: Railway
+- Database: Neon PostgreSQL
+- Code: GitHub
 
 ## 4. AI Council
-- Four main members: ChatGPT, Gemini, DeepSeek, Grok
-- Open Source Council: Local Ollama models
-- Cost shutdown: Route to free models when budget is $0
+- Paid tier: ChatGPT, Gemini, DeepSeek, Grok
+- Free tier: Ollama (local), Groq (free API)
+- Multiple models prevent drift and hallucinations
 
 ## 5. Cost Philosophy
-- Default limit: $0 during development (use free models)
-- Always prefer local/free models
-- Only use paid APIs when quality requires it
+- $0 budget until revenue
+- Free models only during bootstrap
+- Paid APIs unlock with first income
 
 ## 6. Revenue Priority
-- Income generation is the north star
+- Income generation is north star
 - Quick wins before perfect solutions
-- Every feature should lead toward revenue
+- Every feature should lead to revenue
 
-## 7. Self-Improvement
-- System can program itself with human direction
-- All changes logged and reversible
-- Continuous improvement cycles
+## 7. Scale Strategy
+- Start with local Mac
+- Add dedicated servers with revenue
+- Stronger models for harder problems
 
 ## 8. Knowledge Base
-- Dumps located in: •	Lumin-Memory/00_INBOX/raw/
-- Process into: knowledge/index/entries.jsonl
-- Use for context injection in all AI calls
+- Dumps: Lumin-Memory/00_INBOX/raw/
+- Index: knowledge/index/entries.jsonl
+- 18 dump files from GPT, Gemini, DeepSeek, Grok
 
-## 9. Data Security
-- Never store customer data unencrypted
-- Human override always available
+## 9. Self-Improvement
+- System can program itself
+- All changes logged and reversible
+- Human direction required
 
-## 10. Open Source
-- Transparency in all decisions
-- Open Source Council governs contributions
+## 10. Quality Control
+- Multiple LLMs cross-check each other
+- Stronger models oversee weaker ones
+- Prevents drift and hallucinations
