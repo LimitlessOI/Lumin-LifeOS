@@ -93,6 +93,8 @@ const {
   COST_SHUTDOWN_THRESHOLD: RAW_COST_SHUTDOWN = "0",
   NODE_ENV = "production",
   RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app",
+  // Database SSL config (default: false for Neon.tech compatibility)
+  DB_SSL_REJECT_UNAUTHORIZED = "false",
   // Stripe config
   STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET, // reserved for future webhook use
