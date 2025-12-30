@@ -2592,6 +2592,146 @@ const OLLAMA_MODEL_ALIASES = {
   'ollama_qwen_coder_32b': 'qwen3-coder:30b',
 };
 
+// ==================== OLLAMA STREAMING ADAPTER (Cloudflare 524 Fix) ====================
+/**
+ * Detects if endpoint is a Cloudflare tunnel and requires streaming
+ */
+function isCloudflareTunnel(endpoint) {
+  return endpoint && (endpoint.includes('trycloudflare.com') || endpoint.includes('cloudflare'));
+}
+
+/**
+ * Streams Ollama response and aggregates it internally
+ * This prevents Cloudflare 524 timeouts by keeping the connection alive
+ * Returns the same shape as non-streaming calls for compatibility
+ */
+async function callOllamaWithStreaming(endpoint, model, prompt, options = {}) {
+  const {
+    maxTokens = 4096,
+    temperature = 0.7,
+    timeout = 300000, // 5 minutes max
+  } = options;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(`${endpoint}/api/generate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        prompt,
+        stream: true, // Always stream for tunnel endpoints
+        options: {
+          temperature,
+          num_predict: maxTokens,
+        },
+      }),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Ollama HTTP ${response.status}: ${await response.text().catch(() => 'Unknown error')}`);
+    }
+
+    // Stream and aggregate response
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+    let promptEvalCount = 0;
+    let evalCount = 0;
+    let done = false;
+
+    while (!done) {
+      const { done: streamDone, value } = await reader.read();
+      if (streamDone) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+      const lines = chunk.split('\n').filter(line => line.trim());
+
+      for (const line of lines) {
+        try {
+          const data = JSON.parse(line);
+          if (data.response) {
+            fullText += data.response;
+          }
+          if (data.prompt_eval_count !== undefined) {
+            promptEvalCount = data.prompt_eval_count;
+          }
+          if (data.eval_count !== undefined) {
+            evalCount = data.eval_count;
+          }
+          if (data.done) {
+            done = true;
+            // Get final token counts if available
+            if (data.prompt_eval_count !== undefined) promptEvalCount = data.prompt_eval_count;
+            if (data.eval_count !== undefined) evalCount = data.eval_count;
+            break;
+          }
+        } catch (e) {
+          // Skip invalid JSON lines
+        }
+      }
+    }
+
+    clearTimeout(timeoutId);
+
+    // Return same shape as non-streaming response
+    return {
+      response: fullText,
+      prompt_eval_count: promptEvalCount,
+      eval_count: evalCount,
+      done: true,
+    };
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      throw new Error(`Ollama request timeout after ${timeout}ms`);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Get model size category for fallback selection
+ */
+function getModelSizeCategory(modelName) {
+  const name = (modelName || '').toLowerCase();
+  if (name.includes('70b') || name.includes('72b') || name.includes('120b')) return 'xlarge';
+  if (name.includes('33b') || name.includes('32b') || name.includes('30b')) return 'large';
+  if (name.includes('7b') || name.includes('8b') || name.includes('13b')) return 'medium';
+  return 'small';
+}
+
+/**
+ * Get smaller fallback model for timeout scenarios
+ */
+function getSmallerOllamaModel(currentModel, currentMember) {
+  const size = getModelSizeCategory(currentModel);
+  
+  // Fallback chain: xlarge -> large -> medium -> small
+  const fallbacks = {
+    xlarge: ['ollama_qwen_coder_32b', 'ollama_deepseek_coder_33b', 'ollama_deepseek_coder_v2', 'ollama_deepseek'],
+    large: ['ollama_deepseek_coder_v2', 'ollama_deepseek', 'ollama_llama'],
+    medium: ['ollama_llama', 'ollama_phi3'],
+    small: ['ollama_phi3'],
+  };
+
+  const chain = fallbacks[size] || fallbacks.medium;
+  
+  // Find first available fallback
+  for (const memberKey of chain) {
+    if (memberKey !== currentMember && COUNCIL_MEMBERS[memberKey]) {
+      return { member: memberKey, model: COUNCIL_MEMBERS[memberKey].model };
+    }
+  }
+  
+  return null;
+}
+
 // Get best Ollama fallback model based on requested model or task type
 function getOllamaFallbackModel(requestedMember, taskType = 'general') {
   // Check if Ollama is available
@@ -3009,64 +3149,112 @@ Be concise, strategic, and speak as the system's internal AI.`;
     // OLLAMA (FREE LOCAL MODELS) - Try first for Tier 0
     if (config.provider === "ollama") {
       const endpoint = config.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
+      const useStreaming = isCloudflareTunnel(endpoint); // Auto-detect tunnel
       
       try {
         console.log(`\n🆓 [OLLAMA] Calling local model: ${config.model}`);
         console.log(`    Endpoint: ${endpoint}`);
         console.log(`    Member: ${member}`);
+        console.log(`    Streaming: ${useStreaming ? 'YES (tunnel detected)' : 'NO'}`);
         console.log(`    Prompt length: ${prompt.length} chars\n`);
 
-        // Ollama uses /api/generate for completion
-        response = await fetch(`${endpoint}/api/generate`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...noCacheHeaders,
-          },
-          body: JSON.stringify({
-            model: config.model,
-            prompt: `${systemPrompt}\n\n${prompt}`,
-            stream: false,
-            options: {
-              temperature: 0.7,
-              num_predict: config.maxTokens || 4096,
-            },
-          }),
-        });
-
-        if (response.ok) {
-          const json = await response.json();
-          const text = json.response || "";
-
-          if (text) {
-            const duration = Date.now() - startTime;
-            console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
-            console.log(`║ ✅ [OLLAMA] SUCCESS - Local model response received                            ║`);
-            console.log(`║    Model: ${config.model}                                                      ║`);
-            console.log(`║    Member: ${member}                                                           ║`);
-            console.log(`║    Response Time: ${duration}ms                                               ║`);
-            console.log(`║    Response Length: ${text.length} chars                                      ║`);
-            console.log(`║    Cost: $0.00 (FREE - local Ollama)                                          ║`);
-            console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
-
-            await trackAIPerformance(member, "chat", duration, 0, 0, true);
-            
-            // CACHE THE RESPONSE
-            if (options.useCache !== false) {
-              cacheResponse(prompt, member, text);
+        let json;
+        let text = "";
+        
+        // Use streaming for Cloudflare tunnels to prevent 524 timeouts
+        if (useStreaming) {
+          try {
+            json = await callOllamaWithStreaming(
+              endpoint,
+              config.model,
+              `${systemPrompt}\n\n${prompt}`,
+              {
+                maxTokens: config.maxTokens || 4096,
+                temperature: 0.7,
+                timeout: 300000, // 5 minutes
+              }
+            );
+            text = json.response || "";
+          } catch (streamError) {
+            // If streaming fails with timeout, try smaller model
+            if (streamError.message.includes('timeout')) {
+              console.warn(`⚠️ [OLLAMA] ${config.model} timed out, trying smaller fallback...`);
+              const fallback = getSmallerOllamaModel(config.model, member);
+              if (fallback) {
+                console.log(`🔄 [OLLAMA] Falling back to ${fallback.member} (${fallback.model})`);
+                json = await callOllamaWithStreaming(
+                  endpoint,
+                  fallback.model,
+                  `${systemPrompt}\n\n${prompt}`,
+                  {
+                    maxTokens: config.maxTokens || 4096,
+                    temperature: 0.7,
+                    timeout: 180000, // 3 minutes for smaller model
+                  }
+                );
+                text = json.response || "";
+              } else {
+                throw streamError;
+              }
+            } else {
+              throw streamError;
             }
-            
-            await storeConversationMemory(prompt, text, {
-              ai_member: member,
-              via: "ollama",
-              cost: 0,
-            });
-
-            return text;
           }
         } else {
-          const errorText = await response.text();
-          throw new Error(`Ollama HTTP ${response.status}: ${errorText}`);
+          // Non-tunnel: use regular fetch (faster for local)
+          response = await fetch(`${endpoint}/api/generate`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...noCacheHeaders,
+            },
+            body: JSON.stringify({
+              model: config.model,
+              prompt: `${systemPrompt}\n\n${prompt}`,
+              stream: false,
+              options: {
+                temperature: 0.7,
+                num_predict: config.maxTokens || 4096,
+              },
+            }),
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Ollama HTTP ${response.status}: ${errorText}`);
+          }
+
+          json = await response.json();
+          text = json.response || "";
+        }
+
+        if (text) {
+          const duration = Date.now() - startTime;
+          console.log(`\n╔══════════════════════════════════════════════════════════════════════════════════╗`);
+          console.log(`║ ✅ [OLLAMA] SUCCESS - Local model response received                            ║`);
+          console.log(`║    Model: ${config.model}                                                      ║`);
+          console.log(`║    Member: ${member}                                                           ║`);
+          console.log(`║    Response Time: ${duration}ms                                               ║`);
+          console.log(`║    Response Length: ${text.length} chars                                      ║`);
+          console.log(`║    Cost: $0.00 (FREE - local Ollama)                                          ║`);
+          console.log(`╚══════════════════════════════════════════════════════════════════════════════════╝\n`);
+
+          await trackAIPerformance(member, "chat", duration, 0, 0, true);
+          
+          // CACHE THE RESPONSE
+          if (options.useCache !== false) {
+            cacheResponse(prompt, member, text);
+          }
+          
+          await storeConversationMemory(prompt, text, {
+            ai_member: member,
+            via: "ollama",
+            cost: 0,
+          });
+
+          return text;
+        } else {
+          throw new Error("Empty response from Ollama");
         }
       } catch (ollamaError) {
         console.warn(`⚠️ [TIER 0] Ollama ${config.model} failed: ${ollamaError.message}`);
@@ -3084,26 +3272,50 @@ Be concise, strategic, and speak as the system's internal AI.`;
             `🌉 Trying Ollama bridge for DeepSeek at ${OLLAMA_ENDPOINT}`
           );
 
-          response = await fetch(`${OLLAMA_ENDPOINT}/api/generate`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              ...noCacheHeaders,
-            },
-            body: JSON.stringify({
-              model: "deepseek-coder:latest",
-              prompt: `${systemPrompt}\n\n${prompt}`,
-              stream: false,
-              options: {
-                temperature: 0.7,
-                num_predict: config.maxTokens,
-              },
-            }),
-          });
+          // Use streaming for Cloudflare tunnels
+          const useStreaming = isCloudflareTunnel(OLLAMA_ENDPOINT);
+          let json;
+          let text = "";
 
-          if (response.ok) {
-            const json = await response.json();
-            const text = json.response || "";
+          if (useStreaming) {
+            json = await callOllamaWithStreaming(
+              OLLAMA_ENDPOINT,
+              "deepseek-coder:latest",
+              `${systemPrompt}\n\n${prompt}`,
+              {
+                maxTokens: config.maxTokens,
+                temperature: 0.7,
+                timeout: 300000,
+              }
+            );
+            text = json.response || "";
+          } else {
+            response = await fetch(`${OLLAMA_ENDPOINT}/api/generate`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                ...noCacheHeaders,
+              },
+              body: JSON.stringify({
+                model: "deepseek-coder:latest",
+                prompt: `${systemPrompt}\n\n${prompt}`,
+                stream: false,
+                options: {
+                  temperature: 0.7,
+                  num_predict: config.maxTokens,
+                },
+              }),
+            });
+
+            if (response.ok) {
+              json = await response.json();
+              text = json.response || "";
+            } else {
+              throw new Error(`Ollama bridge HTTP ${response.status}`);
+            }
+          }
+
+          if (text) {
 
             if (text) {
               console.log("✅ Ollama bridge successful for DeepSeek");

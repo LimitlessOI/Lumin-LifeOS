@@ -33,12 +33,16 @@ export class OllamaAdapter {
       model,
       maxTokens = 4096,
       temperature = 0.7,
-      stream = false,
+      stream = null, // null = auto-detect
     } = options;
 
     if (!model) {
       throw new Error('Model name required for Ollama');
     }
+
+    // Auto-detect Cloudflare tunnel and force streaming
+    const isTunnel = this.endpoint.includes('trycloudflare.com') || this.endpoint.includes('cloudflare');
+    const useStreaming = stream !== null ? stream : isTunnel;
 
     try {
       const response = await fetch(`${this.endpoint}/api/generate`, {
@@ -47,7 +51,7 @@ export class OllamaAdapter {
         body: JSON.stringify({
           model,
           prompt,
-          stream,
+          stream: useStreaming,
           options: {
             num_predict: maxTokens,
             temperature,
@@ -59,7 +63,7 @@ export class OllamaAdapter {
         throw new Error(`Ollama error: ${response.status}`);
       }
 
-      if (stream) {
+      if (useStreaming) {
         // Handle streaming response
         return this.handleStream(response);
       }

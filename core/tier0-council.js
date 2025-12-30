@@ -302,21 +302,74 @@ export class Tier0Council {
 
   async callOllama(model, prompt) {
     try {
-      const response = await fetch(`${model.endpoint}/api/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: model.model,
-          prompt: prompt,
-          stream: false,
-        }),
-      });
+      const endpoint = model.endpoint || 'http://localhost:11434';
+      const isTunnel = endpoint.includes('trycloudflare.com') || endpoint.includes('cloudflare');
+      
+      let data;
+      
+      if (isTunnel) {
+        // Use streaming for Cloudflare tunnels to prevent 524 timeouts
+        const response = await fetch(`${endpoint}/api/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: model.model,
+            prompt: prompt,
+            stream: true,
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error(`Ollama error: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`Ollama error: ${response.status}`);
+        }
+
+        // Stream and aggregate
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let fullText = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split('\n').filter(line => line.trim());
+
+          for (const line of lines) {
+            try {
+              const json = JSON.parse(line);
+              if (json.response) {
+                fullText += json.response;
+              }
+              if (json.done) {
+                data = { response: fullText };
+                break;
+              }
+            } catch (e) {
+              // Skip invalid JSON
+            }
+          }
+          if (data) break;
+        }
+      } else {
+        // Non-tunnel: use regular fetch
+        const response = await fetch(`${endpoint}/api/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: model.model,
+            prompt: prompt,
+            stream: false,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Ollama error: ${response.status}`);
+        }
+
+        data = await response.json();
       }
 
-      const data = await response.json();
       return data.response || '';
     } catch (error) {
       console.warn(`Ollama unavailable: ${error.message}`);
