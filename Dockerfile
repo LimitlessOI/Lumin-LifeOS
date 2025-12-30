@@ -1,12 +1,12 @@
 # Use Node.js LTS version
-FROM node:16
+FROM node:18
 
 # Set working directory
 WORKDIR /usr/src/app
 
 # Copy package files and install dependencies
 COPY package.json ./
-RUN yarn install
+RUN corepack enable && yarn install
 
 # Copy the application code
 COPY . .
