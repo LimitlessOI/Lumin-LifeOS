@@ -96,12 +96,10 @@ const {
   // Stripe config
   STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET, // reserved for future webhook use
-  // Video generation config
-  VIDEO_GEN_ENDPOINT = "http://localhost:7860",
-  VIDEO_GEN_API_KEY,
-  // Database SSL config (default: secure - verify certificates)
-  DB_SSL_REJECT_UNAUTHORIZED = "true",
 } = process.env;
+
+// Feature flags
+const DISABLE_INCOME_DRONES = true; // Set to false to re-enable income drones
 
 // Require COMMAND_CENTER_KEY (no default fallback)
 if (!COMMAND_CENTER_KEY) {
@@ -5991,9 +5989,8 @@ async function initializeTwoTierSystem() {
         incomeDroneSystem = new EnhancedIncomeDrone(pool, callCouncilMember, modelRouter);
         console.log("✅ Enhanced Income Drone System initialized");
         
-        // Income drones DISABLED - set ENABLE_INCOME_DRONES=true to enable
-        const ENABLE_INCOME_DRONES = process.env.ENABLE_INCOME_DRONES === 'true';
-        if (ENABLE_INCOME_DRONES) {
+        // Deploy income drones (if not disabled)
+        if (!DISABLE_INCOME_DRONES) {
           console.log('🚀 [INCOME] Deploying income drones immediately...');
           try {
             const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
@@ -6006,7 +6003,7 @@ async function initializeTwoTierSystem() {
             console.error('❌ [INCOME] Error deploying drones:', deployError.message);
           }
         } else {
-          console.log('ℹ️ [INCOME] Income drones DISABLED (set ENABLE_INCOME_DRONES=true to enable)');
+          console.log('ℹ️ [INCOME] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)');
         }
 
         // Initialize Opportunity Executor (actually implements opportunities to generate REAL revenue)
@@ -13891,9 +13888,8 @@ async function start() {
     // Kick off the execution queue
     executionQueue.executeNext();
 
-    // Income drones DISABLED - set ENABLE_INCOME_DRONES=true to enable
-    const ENABLE_INCOME_DRONES = process.env.ENABLE_INCOME_DRONES === 'true';
-    if (ENABLE_INCOME_DRONES) {
+    // Deploy income drones (if not disabled)
+    if (!DISABLE_INCOME_DRONES) {
       // Note: If EnhancedIncomeDrone is used, drones are already deployed during initialization
       // Only deploy here if using basic IncomeDroneSystem
       if (incomeDroneSystem && incomeDroneSystem.constructor.name === 'IncomeDroneSystem') {
@@ -13908,7 +13904,7 @@ async function start() {
         console.log('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
       }
     } else {
-      console.log('ℹ️ [STARTUP] Income drones DISABLED (set ENABLE_INCOME_DRONES=true to enable)');
+      console.log('ℹ️ [STARTUP] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)');
     }
 
       // Initialize Ollama Installer (auto-install Ollama if needed)
