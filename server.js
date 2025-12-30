@@ -12963,6 +12963,28 @@ async function handleSelfProgramming(options = {}, req = null) {
   }
 
   try {
+    // Load self-programming enhancement modules
+    let codebaseReader, dependencyManager, errorRecovery, migrationGenerator;
+    try {
+      const codebaseReaderModule = await import("./core/codebase-reader.js");
+      codebaseReader = codebaseReaderModule.codebaseReader || codebaseReaderModule.default;
+      
+      const dependencyManagerModule = await import("./core/dependency-manager.js");
+      dependencyManager = dependencyManagerModule.dependencyManager || dependencyManagerModule.default;
+      
+      const errorRecoveryModule = await import("./core/error-recovery.js");
+      const ErrorRecovery = errorRecoveryModule.default || errorRecoveryModule.ErrorRecovery;
+      errorRecovery = new ErrorRecovery(3, callCouncilWithFailover);
+      
+      const migrationGeneratorModule = await import("./core/migration-generator.js");
+      migrationGenerator = migrationGeneratorModule.migrationGenerator || migrationGeneratorModule.default;
+      
+      console.log("✅ [SELF-PROGRAM] Enhanced self-programming modules loaded");
+    } catch (importError) {
+      console.warn(`⚠️ [SELF-PROGRAM] Could not load enhancement modules: ${importError.message}`);
+      console.warn("   Continuing with basic self-programming...");
+    }
+
     // Call self-programming endpoint logic directly
     const analysisPrompt = `As the AI Council, analyze this self-programming instruction:
 
@@ -12980,14 +13002,53 @@ Provide:
       type: "self-programming",
     });
 
+    // NEW: Read existing codebase context before generating code
+    let existingContext = {};
+    let targetFiles = [];
+    
+    if (codebaseReader) {
+      try {
+        // First, try to identify files that will be modified (from analysis or instruction)
+        const instructionLower = instruction.toLowerCase();
+        const potentialFiles = [];
+        
+        // Infer files from instruction
+        if (instructionLower.includes('endpoint') || instructionLower.includes('api') || instructionLower.includes('route')) {
+          potentialFiles.push('server.js');
+        }
+        if (instructionLower.includes('database') || instructionLower.includes('table') || instructionLower.includes('schema')) {
+          potentialFiles.push('server.js');
+        }
+        
+        // Get related files
+        targetFiles = await codebaseReader.identifyRelatedFiles(instruction, []);
+        existingContext = await codebaseReader.buildContext(targetFiles);
+        
+        if (Object.keys(existingContext).length > 0) {
+          console.log(`📖 [SELF-PROGRAM] Read context from ${Object.keys(existingContext).length} file(s)`);
+        }
+      } catch (contextError) {
+        console.warn(`⚠️ [SELF-PROGRAM] Could not read codebase context: ${contextError.message}`);
+      }
+    }
+
     // IMPROVED: More direct, like how I build things
+    const contextSection = Object.keys(existingContext).length > 0
+      ? `\n\nEXISTING CODEBASE CONTEXT (integrate with this code):
+${Object.entries(existingContext).map(([file, content]) => 
+  `===FILE:${file}===\n${content.substring(0, 5000)}\n===END===`
+).join('\n\n')}
+
+IMPORTANT: When modifying existing files, preserve existing functionality and patterns.`
+      : '';
+
     const codePrompt = `You are building this feature RIGHT NOW. Write COMPLETE, WORKING code.
 
 Instruction: ${instruction}
 
 Analysis: ${analysis}
 
-Blind spots to avoid: ${blindSpots.slice(0, 5).join(", ")}
+Blind spots to avoid: ${blindSpots.slice(0, 5).join(", ")}${contextSection}
 
 CRITICAL FORMAT REQUIREMENTS:
 1. For EACH file, use EXACTLY this format (no variations):
@@ -13011,6 +13072,36 @@ Write the code now:`;
       maxTokens: 8000, // Allow longer responses for complete files
       temperature: 0.3, // Lower temperature for more consistent code
     });
+    
+    // NEW: Ensure dependencies are installed before processing
+    if (dependencyManager) {
+      try {
+        const depResult = await dependencyManager.ensureDependencies(codeResponse);
+        if (depResult.installed && depResult.installed.length > 0) {
+          console.log(`📦 [SELF-PROGRAM] Installed dependencies: ${depResult.installed.join(', ')}`);
+        }
+      } catch (depError) {
+        console.warn(`⚠️ [SELF-PROGRAM] Dependency check failed: ${depError.message}`);
+      }
+    }
+    
+    // NEW: Detect database schema needs
+    let migrationGenerated = null;
+    if (migrationGenerator) {
+      try {
+        const schemaNeeds = await migrationGenerator.detectSchemaNeeds(codeResponse);
+        if (schemaNeeds.tables.length > 0) {
+          console.log(`🗄️ [SELF-PROGRAM] Detected database needs: ${schemaNeeds.tables.join(', ')}`);
+          migrationGenerated = await migrationGenerator.generateMigration(
+            schemaNeeds,
+            `auto_${instruction.substring(0, 30).replace(/\s+/g, '_')}`
+          );
+          console.log(`✅ [SELF-PROGRAM] Generated migration: ${migrationGenerated.filename}`);
+        }
+      } catch (migrationError) {
+        console.warn(`⚠️ [SELF-PROGRAM] Migration generation failed: ${migrationError.message}`);
+      }
+    }
     
     // Try multiple parsing strategies
     let fileChanges = extractFileChanges(codeResponse);
@@ -13062,13 +13153,21 @@ Write the code now:`;
 
     const results = [];
     const filePathsToSnapshot = fileChanges.map(c => c.filePath);
+    if (migrationGenerated) {
+      filePathsToSnapshot.push(migrationGenerated.filepath);
+    }
+    
     const snapshotId = await createSystemSnapshot(
       `Before self-programming: ${instruction.substring(0, 50)}...`,
       filePathsToSnapshot
     );
 
-    // IMPROVED: Build faster, like I do - skip sandbox for simple changes, write directly
-    for (const change of fileChanges) {
+    // NEW: Wrap file writing in error recovery
+    const writeFilesOperation = async () => {
+      const writeResults = [];
+      
+      // IMPROVED: Build faster, like I do - skip sandbox for simple changes, write directly
+      for (const change of fileChanges) {
       try {
         const fullPath = path.join(__dirname, change.filePath);
         const isNewFile = !fs.existsSync(fullPath);
@@ -13089,7 +13188,7 @@ Write the code now:`;
           );
 
           if (!sandboxResult.success) {
-            results.push({ 
+            writeResults.push({ 
               filePath: change.filePath, 
               success: false, 
               error: `Sandbox test failed: ${sandboxResult.error}` 
@@ -13113,6 +13212,15 @@ Write the code now:`;
         // Write the file
         await fsPromises.writeFile(fullPath, change.content, 'utf-8');
         
+        // NEW: Ensure dependencies for this file
+        if (dependencyManager && isJsFile) {
+          try {
+            await dependencyManager.ensureDependencies(change.content);
+          } catch (depError) {
+            console.warn(`⚠️ [SELF-PROGRAM] Dependency check for ${change.filePath} failed: ${depError.message}`);
+          }
+        }
+        
         // Quick syntax check for JS files
         if (isJsFile) {
           try {
@@ -13123,7 +13231,7 @@ Write the code now:`;
               await fsPromises.copyFile(backupPath, fullPath);
               await fsPromises.unlink(backupPath);
             }
-            results.push({
+            writeResults.push({
               filePath: change.filePath,
               success: false,
               error: `Syntax error: ${syntaxError.message}`,
@@ -13132,22 +13240,50 @@ Write the code now:`;
           }
         }
         
-        results.push({
+        console.log(`✅ [SELF-PROGRAM] ${isNewFile ? 'Created' : 'Modified'}: ${change.filePath}`);
+        
+        // NEW: Clear cache for modified file
+        if (codebaseReader) {
+          codebaseReader.clearCache(change.filePath);
+        }
+        
+        writeResults.push({
           success: true,
           filePath: change.filePath,
           isNewFile,
           backupPath: backupPath ? backupPath.split('/').pop() : null,
         });
-        
-        console.log(`✅ [SELF-PROGRAM] ${isNewFile ? 'Created' : 'Modified'}: ${change.filePath}`);
       } catch (error) {
-        results.push({ 
+        writeResults.push({ 
           filePath: change.filePath, 
           success: false, 
           error: error.message 
         });
         console.error(`❌ [SELF-PROGRAM] Failed ${change.filePath}:`, error.message);
       }
+    }
+    
+    return writeResults;
+    };
+    
+    // Execute with error recovery if available
+    if (errorRecovery) {
+      const recoveryResult = await errorRecovery.withRetry(writeFilesOperation, {
+        instruction,
+        fileChanges: fileChanges.map(c => c.filePath),
+        rootDir: __dirname
+      });
+      
+      if (recoveryResult.success) {
+        results.push(...recoveryResult.result);
+      } else {
+        // If all retries failed, use the last attempt's results
+        results.push(...(recoveryResult.result || []));
+        console.error(`❌ [SELF-PROGRAM] All retry attempts failed`);
+      }
+    } else {
+      // Fallback to direct execution
+      results.push(...(await writeFilesOperation()));
     }
 
     let deployed = false;
@@ -13171,9 +13307,30 @@ Write the code now:`;
       snapshotId,
       deployed,
       results,
+      migrationGenerated: migrationGenerated ? {
+        filename: migrationGenerated.filename,
+        filepath: migrationGenerated.filepath
+      } : null,
+      dependenciesInstalled: dependencyManager ? true : false,
+      contextFilesRead: Object.keys(existingContext).length,
     };
   } catch (error) {
     console.error("Self-programming handler error:", error);
+    
+    // Try error recovery if available
+    if (errorRecovery) {
+      const fix = await errorRecovery.generateFix(error, { instruction, rootDir: __dirname });
+      if (fix) {
+        console.log(`🔧 [SELF-PROGRAM] Attempting automatic fix: ${fix.description}`);
+        try {
+          await fix.apply();
+          console.log(`✅ [SELF-PROGRAM] Fix applied, you may want to retry`);
+        } catch (fixError) {
+          console.warn(`⚠️ [SELF-PROGRAM] Fix failed: ${fixError.message}`);
+        }
+      }
+    }
+    
     return { ok: false, error: error.message };
   }
 }
