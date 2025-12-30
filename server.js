@@ -2592,6 +2592,148 @@ const OLLAMA_MODEL_ALIASES = {
   'ollama_qwen_coder_32b': 'qwen3-coder:30b',
 };
 
+// ==================== MODEL SIZE DETECTION ====================
+/**
+ * Detect model size/capability for prompt adaptation
+ */
+function getModelSize(modelName) {
+  if (!modelName) return 'small';
+  const model = (modelName || '').toLowerCase();
+  
+  const smallModels = ['llama3.2:1b', 'llama3.2:3b', 'phi3:mini', 'phi3', 'tinyllama', 'gemma:2b', '1b', '3b'];
+  const mediumModels = ['llama3.1:8b', 'mistral:7b', 'deepseek-coder:6.7b', 'codellama:7b', 'gemma:7b', '7b', '8b'];
+  const largeModels = ['deepseek-coder:33b', 'qwen2.5-coder:32b', 'llama3.1:70b', 'deepseek-coder-v2', 'codestral', 'deepseek-v3', '32b', '33b', '70b'];
+  
+  if (smallModels.some(m => model.includes(m))) return 'small';
+  if (largeModels.some(m => model.includes(m))) return 'large';
+  if (mediumModels.some(m => model.includes(m))) return 'medium';
+  
+  // Default for Ollama (usually small)
+  if (model.includes('ollama')) return 'small';
+  
+  // Premium models are usually large
+  if (model.includes('gpt-4') || model.includes('gpt4') || model.includes('claude') || model.includes('gemini-pro')) return 'large';
+  
+  return 'medium';
+}
+
+/**
+ * Get simplified prompt based on model capability
+ */
+function getIdeasPromptForModel(modelSize) {
+  if (modelSize === 'small') {
+    return `List 5 simple software business ideas.
+
+Format EXACTLY like this:
+1. Name: Description in one sentence
+2. Name: Description in one sentence
+3. Name: Description in one sentence
+4. Name: Description in one sentence
+5. Name: Description in one sentence
+
+Example:
+1. API Monitor: Track API costs for startups
+2. Resume AI: Improve resumes with AI
+
+Your 5 ideas:`;
+  }
+  
+  if (modelSize === 'medium') {
+    return `Generate 8 software/AI business ideas.
+
+For each idea provide:
+- Name (2-3 words)
+- Description (1 sentence)
+- How it makes money (1 sentence)
+
+Format as numbered list:
+1. **Name**: Description. Revenue: how it makes money.
+2. **Name**: Description. Revenue: how it makes money.`;
+  }
+  
+  // Large models can handle more complexity
+  return `Generate 15 innovative AI/software business ideas with market analysis.
+For each: name, description, target market, revenue model, competition level.
+Return as JSON array.`;
+}
+
+/**
+ * Parse ideas from various response formats
+ */
+function parseIdeasFromResponse(response, modelSize) {
+  const ideas = [];
+  if (!response || typeof response !== 'string') return ideas;
+  
+  // Try JSON first (for large models)
+  try {
+    const sanitized = sanitizeJsonResponse(response);
+    const jsonMatch = sanitized.match(/\[[\s\S]*?\]/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      if (Array.isArray(parsed)) {
+        return parsed.map((item, i) => ({
+          id: `idea_${Date.now()}_${i}`,
+          name: item.name || item.title || item.concept || `Idea ${i+1}`,
+          description: item.description || item.desc || item.concept || '',
+          revenue: item.revenue || item.revenue_model || '',
+          difficulty: item.difficulty || 'medium',
+          impact: item.impact || 'medium',
+          source: 'ollama_json'
+        }));
+      }
+    }
+  } catch (e) { /* JSON failed, try text */ }
+  
+  // Parse numbered list format (for small/medium models)
+  const lines = response.split('\n');
+  for (const line of lines) {
+    // Match: "1. Name: Description" or "1. **Name**: Description"
+    const match = line.match(/^\d+[\.\)]\s*\*{0,2}([^:*]+)\*{0,2}:\s*(.+)/);
+    if (match) {
+      ideas.push({
+        id: `idea_${Date.now()}_${ideas.length}`,
+        name: match[1].trim(),
+        description: match[2].trim(),
+        difficulty: 'medium',
+        impact: 'medium',
+        source: 'ollama_text'
+      });
+    }
+    
+    // Also match TITLE: format (from existing parser)
+    const titleMatch = line.match(/TITLE:\s*(.+)/);
+    const descMatch = line.match(/DESCRIPTION:\s*(.+)/);
+    const diffMatch = line.match(/DIFFICULTY:\s*(.+)/);
+    if (titleMatch && descMatch && !ideas.find(i => i.name === titleMatch[1].trim())) {
+      ideas.push({
+        id: `idea_${Date.now()}_${ideas.length}`,
+        name: titleMatch[1].trim(),
+        description: descMatch[1].trim(),
+        difficulty: (diffMatch?.[1] || 'medium').trim(),
+        impact: 'medium',
+        source: 'ollama_title_format'
+      });
+    }
+  }
+  
+  // Fallback: extract any sentences that look like ideas
+  if (ideas.length === 0) {
+    const sentences = response.match(/[A-Z][^.!?]*(?:app|tool|platform|service|system|AI|software|business)[^.!?]*[.!?]/gi) || [];
+    for (let i = 0; i < Math.min(sentences.length, 5); i++) {
+      ideas.push({
+        id: `idea_${Date.now()}_${i}`,
+        name: `Extracted Idea ${i+1}`,
+        description: sentences[i].trim(),
+        difficulty: 'medium',
+        impact: 'medium',
+        source: 'ollama_fallback'
+      });
+    }
+  }
+  
+  return ideas;
+}
+
 // ==================== JSON SANITIZER (for LLM responses with comments) ====================
 /**
  * Sanitize JSON response from LLM (removes comments, trailing commas, etc.)
@@ -3652,60 +3794,123 @@ async function guessUserDecision(context) {
   }
 }
 
+// ==================== KNOWLEDGE LOADING ====================
+/**
+ * Load knowledge context from processed dumps
+ */
+async function loadKnowledgeContext() {
+  try {
+    const indexPath = path.join(__dirname, 'knowledge', 'index', 'entries.jsonl');
+    if (!fs.existsSync(indexPath)) {
+      console.log('📚 [KNOWLEDGE] No index found - run: node scripts/process-knowledge.js');
+      return null;
+    }
+    
+    const lines = fs.readFileSync(indexPath, 'utf-8').split('\n').filter(Boolean);
+    const entries = lines.map(l => {
+      try {
+        return JSON.parse(l);
+      } catch (e) {
+        return null;
+      }
+    }).filter(Boolean);
+    
+    console.log(`📚 [KNOWLEDGE] Loaded ${entries.length} entries from index`);
+    
+    // Load core truths and project context
+    const coreTruthsPath = path.join(__dirname, 'docs', 'CORE_TRUTHS.md');
+    const projectContextPath = path.join(__dirname, 'docs', 'PROJECT_CONTEXT.md');
+    
+    let coreTruths = null;
+    let projectContext = null;
+    
+    if (fs.existsSync(coreTruthsPath)) {
+      coreTruths = fs.readFileSync(coreTruthsPath, 'utf-8');
+      console.log('📚 [KNOWLEDGE] Loaded CORE_TRUTHS.md');
+    }
+    
+    if (fs.existsSync(projectContextPath)) {
+      projectContext = fs.readFileSync(projectContextPath, 'utf-8');
+      console.log('📚 [KNOWLEDGE] Loaded PROJECT_CONTEXT.md');
+    }
+    
+    return {
+      entries,
+      coreTruths,
+      projectContext,
+      totalEntries: entries.length
+    };
+  } catch (e) {
+    console.warn(`⚠️ [KNOWLEDGE] Could not load index: ${e.message}`);
+    return null;
+  }
+}
+
 // ==================== DAILY IDEA GENERATION ====================
 async function generateDailyIdeas() {
   try {
     const today = dayjs().format("YYYY-MM-DD");
     if (lastIdeaGeneration === today) return;
 
-    console.log("💡 Generating 25 daily ideas...");
-
-    const ideaPrompt = `Generate 25 unique and revenue-focused ideas to improve the LifeOS system as an online business operator.
-    Include things like:
-    - Finding and structuring service offers (logos, code review, automation setup)
-    - Improving funnels and client onboarding
-    - Reducing manual work for the founder
-    - Improving ROI tracking and Stripe integration
-
-    Format each idea as:
-    TITLE: [short title]
-    DESCRIPTION: [one sentence description]
-    DIFFICULTY: [easy/medium/hard]
-    IMPACT: [low/medium/high]`;
-
-    let response;
-    try {
-      response = await callCouncilWithFailover(ideaPrompt, "ollama_deepseek"); // Use Tier 0 (free)
-    } catch (err) {
-      console.error("Daily idea council error, using fallback:", err.message);
-      response = null;
-    }
-
-    const ideas = [];
-    if (response && typeof response === "string" && response.length > 50) {
-      const blocks = response.split("\n\n").filter((b) => b.includes("TITLE:"));
-      for (const ideaText of blocks.slice(0, 25)) {
-        const titleMatch = ideaText.match(/TITLE:\s*(.+)/);
-        const descMatch = ideaText.match(/DESCRIPTION:\s*(.+)/);
-        const diffMatch = ideaText.match(/DIFFICULTY:\s*(.+)/);
-
-        if (titleMatch && descMatch) {
-          ideas.push({
-            title: titleMatch[1].trim(),
-            description: descMatch[1].trim(),
-            difficulty: (diffMatch?.[1] || "medium").trim(),
-          });
-        }
+    console.log("💡 [IDEAS] Starting ideas generation...");
+    
+    // Detect what model we're actually using
+    const memberToUse = OLLAMA_ENDPOINT ? 'ollama_deepseek' : 'chatgpt';
+    const memberConfig = COUNCIL_MEMBERS[memberToUse] || COUNCIL_MEMBERS['ollama_deepseek'] || {};
+    const modelName = memberConfig.model || 'llama3.2:1b';
+    const modelSize = getModelSize(modelName);
+    
+    console.log(`💡 [IDEAS] Model: ${modelName} (size: ${modelSize})`);
+    
+    // Get appropriate prompt for model size
+    const ideaPrompt = getIdeasPromptForModel(modelSize);
+    
+    // For small models, only run once (they're slow)
+    const iterations = modelSize === 'small' ? 1 : 3;
+    const allIdeas = [];
+    
+    for (let i = 0; i < iterations; i++) {
+      try {
+        console.log(`💡 [IDEAS] Iteration ${i+1}/${iterations}...`);
+        
+        const response = await callCouncilWithFailover(ideaPrompt, memberToUse);
+        const ideas = parseIdeasFromResponse(response, modelSize);
+        
+        console.log(`💡 [IDEAS] Iteration ${i+1}: Extracted ${ideas.length} ideas`);
+        allIdeas.push(...ideas);
+        
+      } catch (error) {
+        console.warn(`⚠️ [IDEAS] Iteration ${i+1} failed: ${error.message}`);
       }
     }
+    
+    // Deduplicate
+    const seen = new Set();
+    const uniqueIdeas = allIdeas.filter(idea => {
+      const key = (idea.name || idea.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    
+    console.log(`✅ [IDEAS] Generated ${uniqueIdeas.length} unique ideas from ${allIdeas.length} total`);
 
+    const ideas = uniqueIdeas.map(idea => ({
+      title: idea.name || idea.title || `Idea ${Math.random().toString(36).slice(2, 8)}`,
+      description: idea.description || '',
+      difficulty: idea.difficulty || 'medium',
+      impact: idea.impact || 'medium',
+    }));
+
+    // If still no ideas, use simple fallback (but log warning)
     if (ideas.length === 0) {
-      console.warn("Daily idea generation fell back to local template ideas.");
-      for (let i = 1; i <= 25; i++) {
+      console.warn("⚠️ [IDEAS] No ideas extracted, using fallback template.");
+      for (let i = 1; i <= 5; i++) {
         ideas.push({
-          title: `Fallback Idea ${i}`,
-          description: `Improve one lifecycle of LifeOS (offers, funnels, drones, billing, or self-repair). Variant #${i}.`,
-          difficulty: i < 10 ? "easy" : i < 20 ? "medium" : "hard",
+          title: `Template Idea ${i}`,
+          description: `Improve LifeOS system (offers, funnels, automation, billing). Variant #${i}.`,
+          difficulty: i <= 2 ? "easy" : i <= 4 ? "medium" : "hard",
+          impact: 'medium',
         });
       }
     }
@@ -13977,6 +14182,16 @@ async function start() {
       await loadROIFromDatabase();
     } catch (roiError) {
       console.warn("⚠️ ROI load error (non-critical):", roiError.message);
+    }
+    
+    // Load knowledge context from processed dumps
+    try {
+      const knowledgeContext = await loadKnowledgeContext();
+      if (knowledgeContext) {
+        console.log(`📚 [KNOWLEDGE] Context loaded: ${knowledgeContext.totalEntries} entries`);
+      }
+    } catch (knowledgeError) {
+      console.warn("⚠️ Knowledge load error (non-critical):", knowledgeError.message);
     }
     
     // Run dependency audit before initializing systems
