@@ -1,15 +1,30 @@
 ```javascript
-const UserService = require('../services/UserService');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { User } = require('../db/models');
 
-module.exports = {
-  async updateSubscription(req, res) {
+exports.userController = {
+  register: async (req, res) => {
+    const { username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
     try {
-      const { userId, status } = req.body;
-      await UserService.updateUserSubscription(userId, status);
-      res.status(200).send({ message: 'Subscription updated' });
+      const user = await User.create({ username, password: hashedPassword });
+      res.status(201).send({ user });
     } catch (error) {
-      res.status(500).send({ error: 'Error updating subscription' });
+      res.status(400).send(error);
     }
+  },
+  
+  login: async (req, res) => {
+    const { username, password } = req.body;
+    const user = await User.findOne({ where: { username } });
+    if (!user) return res.status(400).send('Invalid username or password.');
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) return res.status(400).send('Invalid username or password.');
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+    res.send({ token });
   }
 };
 ```
