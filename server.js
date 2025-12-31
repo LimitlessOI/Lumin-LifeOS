@@ -2082,19 +2082,33 @@ const COUNCIL_MEMBERS = {
     oversightOnly: true, // Only used for oversight, not primary work
   },
   // TIER 0 - FREE CLOUD BACKUP (No tunnel needed)
-  groq: {
-    name: "Groq (Free Cloud)",
-    model: "llama-3.1-70b-versatile",
+  groq_llama: {
+    name: "Groq Llama 3.1 8B (Free Cloud)",
+    model: "llama-3.1-8b-instant",
     provider: "groq",
-    role: "Free Cloud Backup",
-    focus: "fast inference, general tasks, code generation, backup when Ollama unavailable",
-    maxTokens: 8192,
+    role: "Free Cloud Backup - Fast",
+    focus: "fast inference, general tasks, quick responses, backup when Ollama unavailable",
+    maxTokens: 4096,
     tier: "tier0", // Free tier
     costPer1M: 0, // FREE (Groq free tier)
-    specialties: ["fast_inference", "general", "code", "backup"],
+    specialties: ["fast_inference", "general", "quick_responses", "backup"],
     isFree: true,
     isLocal: false, // Cloud but free
-    priority: "medium", // Use when Ollama unavailable
+    priority: "high", // Primary Groq fallback
+  },
+  groq_mixtral: {
+    name: "Groq Mixtral 8x7B (Free Cloud)",
+    model: "mixtral-8x7b-32768",
+    provider: "groq",
+    role: "Free Cloud Backup - Quality",
+    focus: "high quality inference, complex tasks, code generation, backup when Ollama unavailable",
+    maxTokens: 4096,
+    tier: "tier0", // Free tier
+    costPer1M: 0, // FREE (Groq free tier)
+    specialties: ["quality", "complex_tasks", "code", "backup"],
+    isFree: true,
+    isLocal: false, // Cloud but free
+    priority: "medium", // Secondary Groq fallback
   },
 };
 
@@ -3042,43 +3056,68 @@ async function callCouncilMember(member, prompt, options = {}) {
   const memberConfig = COUNCIL_MEMBERS[member];
   const isPaid = !memberConfig?.isFree && (memberConfig?.costPer1M > 0 || memberConfig?.tier === "tier1");
   
+  // FREE FALLBACK ORDER: Groq (no tunnel) → Ollama (tunnel) → Error
+  const FREE_FALLBACK_ORDER = ['groq_llama', 'groq_mixtral', 'ollama_phi3', 'ollama_llama', 'ollama_deepseek'];
+  
   // If MAX_DAILY_SPEND is 0, block ALL paid models - AUTOMATICALLY FALL BACK TO FREE MODELS
   if (MAX_DAILY_SPEND === 0 && isPaid) {
-    // Try Ollama first
-    const ollamaFallback = getOllamaFallbackModel(member, options.taskType);
-    if (ollamaFallback && OLLAMA_ENDPOINT) {
-      console.log(`💰 [COST SHUTDOWN] Blocked ${member} - Auto-falling back to ${ollamaFallback} (Ollama)`);
-      return await callCouncilMember(ollamaFallback, prompt, options);
-    }
-    
-    // If Ollama unavailable, try Groq (free cloud backup)
-    if (GROQ_API_KEY) {
-      console.log(`💰 [COST SHUTDOWN] Blocked ${member} - Ollama unavailable, falling back to Groq (free cloud)`);
-      return await callCouncilMember('groq', prompt, options);
+    // Try free models in order
+    for (const fallbackMember of FREE_FALLBACK_ORDER) {
+      const fallbackConfig = COUNCIL_MEMBERS[fallbackMember];
+      if (!fallbackConfig) continue;
+      
+      // Check if Groq (needs API key)
+      if (fallbackConfig.provider === 'groq') {
+        if (GROQ_API_KEY) {
+          console.log(`💰 [COST SHUTDOWN] Blocked ${member} - Falling back to ${fallbackMember} (Groq - no tunnel needed)`);
+          return await callCouncilMember(fallbackMember, prompt, options);
+        }
+        continue; // Skip if no API key
+      }
+      
+      // Check if Ollama (needs endpoint)
+      if (fallbackConfig.provider === 'ollama') {
+        if (OLLAMA_ENDPOINT) {
+          console.log(`💰 [COST SHUTDOWN] Blocked ${member} - Falling back to ${fallbackMember} (Ollama)`);
+          return await callCouncilMember(fallbackMember, prompt, options);
+        }
+        continue; // Skip if no endpoint
+      }
     }
     
     throw new Error(
-      `💰 [COST SHUTDOWN] Blocked ${member} - Spending disabled (MAX_DAILY_SPEND=$0). Use free models only (ollama_deepseek, ollama_llama, groq).`
+      `💰 [COST SHUTDOWN] Blocked ${member} - Spending disabled (MAX_DAILY_SPEND=$0). No free models available.`
     );
   }
   
   // Also block if spending threshold reached - AUTOMATICALLY FALL BACK TO FREE MODELS
   if (spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
-    // Try Ollama first
-    const ollamaFallback = getOllamaFallbackModel(member, options.taskType);
-    if (ollamaFallback && OLLAMA_ENDPOINT) {
-      console.log(`💰 [COST SHUTDOWN] Blocked ${member} ($${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}) - Auto-falling back to ${ollamaFallback} (Ollama)`);
-      return await callCouncilMember(ollamaFallback, prompt, options);
-    }
-    
-    // If Ollama unavailable, try Groq (free cloud backup)
-    if (GROQ_API_KEY) {
-      console.log(`💰 [COST SHUTDOWN] Blocked ${member} ($${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}) - Ollama unavailable, falling back to Groq (free cloud)`);
-      return await callCouncilMember('groq', prompt, options);
+    // Try free models in order
+    for (const fallbackMember of FREE_FALLBACK_ORDER) {
+      const fallbackConfig = COUNCIL_MEMBERS[fallbackMember];
+      if (!fallbackConfig) continue;
+      
+      // Check if Groq (needs API key)
+      if (fallbackConfig.provider === 'groq') {
+        if (GROQ_API_KEY) {
+          console.log(`💰 [COST SHUTDOWN] Blocked ${member} ($${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}) - Falling back to ${fallbackMember} (Groq - no tunnel needed)`);
+          return await callCouncilMember(fallbackMember, prompt, options);
+        }
+        continue; // Skip if no API key
+      }
+      
+      // Check if Ollama (needs endpoint)
+      if (fallbackConfig.provider === 'ollama') {
+        if (OLLAMA_ENDPOINT) {
+          console.log(`💰 [COST SHUTDOWN] Blocked ${member} ($${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}) - Falling back to ${fallbackMember} (Ollama)`);
+          return await callCouncilMember(fallbackMember, prompt, options);
+        }
+        continue; // Skip if no endpoint
+      }
     }
     
     throw new Error(
-      `💰 [COST SHUTDOWN] Blocked ${member} - Spending $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}. Use Tier 0 (free) models only.`
+      `💰 [COST SHUTDOWN] Blocked ${member} - Spending $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}. No free models available.`
     );
   }
   
@@ -12478,6 +12517,212 @@ app.get("/api/v1/knowledge/security", requireKey, async (req, res) => {
 
     const docs = await knowledgeBase.getSecurityDocs();
     res.json({ ok: true, docs, count: docs.length });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+// ==================== KNOWLEDGE CONTEXT ENDPOINTS (Processed Dumps) ====================
+app.get("/api/v1/knowledge/ideas", requireKey, async (req, res) => {
+  try {
+    if (!knowledgeContext || !knowledgeContext.entries) {
+      return res.status(503).json({ error: "Knowledge context not loaded. Run: node scripts/process-knowledge.js" });
+    }
+
+    const allIdeas = [];
+    const sources = new Set();
+
+    for (const entry of knowledgeContext.entries) {
+      if (entry.ideas && Array.isArray(entry.ideas)) {
+        sources.add(entry.filename);
+        for (const idea of entry.ideas) {
+          allIdeas.push({
+            text: idea.text || idea,
+            source: entry.filename,
+            topics: entry.topics || [],
+            context: idea.context || null,
+          });
+        }
+      }
+    }
+
+    res.json({
+      ok: true,
+      total: allIdeas.length,
+      sources_count: sources.size,
+      ideas: allIdeas,
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/knowledge/stats", requireKey, async (req, res) => {
+  try {
+    if (!knowledgeContext) {
+      return res.status(503).json({ error: "Knowledge context not loaded" });
+    }
+
+    const topicFreq = {};
+    const sourceStats = {};
+
+    for (const entry of knowledgeContext.entries || []) {
+      // Count topics
+      if (entry.topics && Array.isArray(entry.topics)) {
+        for (const topic of entry.topics) {
+          topicFreq[topic] = (topicFreq[topic] || 0) + 1;
+        }
+      }
+
+      // Per-source stats
+      const source = entry.filename || 'unknown';
+      if (!sourceStats[source]) {
+        sourceStats[source] = {
+          ideas_count: 0,
+          topics_count: 0,
+        };
+      }
+      sourceStats[source].ideas_count += (entry.ideas?.length || 0);
+      sourceStats[source].topics_count += (entry.topics?.length || 0);
+    }
+
+    const topTopics = Object.entries(topicFreq)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([topic, count]) => ({ topic, count }));
+
+    res.json({
+      ok: true,
+      total_entries: knowledgeContext.totalEntries || 0,
+      total_ideas: knowledgeContext.entries?.reduce((sum, e) => sum + (e.ideas?.length || 0), 0) || 0,
+      has_core_truths: !!knowledgeContext.coreTruths,
+      has_project_context: !!knowledgeContext.projectContext,
+      top_topics: topTopics,
+      sources: sourceStats,
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post("/api/v1/knowledge/rank", requireKey, async (req, res) => {
+  try {
+    if (!knowledgeContext || !knowledgeContext.entries) {
+      return res.status(503).json({ error: "Knowledge context not loaded" });
+    }
+
+    const { criteria, limit = 50 } = req.body;
+
+    if (!criteria) {
+      return res.status(400).json({ error: "criteria required in body" });
+    }
+
+    // Collect all ideas
+    const allIdeas = [];
+    for (const entry of knowledgeContext.entries) {
+      if (entry.ideas && Array.isArray(entry.ideas)) {
+        for (const idea of entry.ideas) {
+          allIdeas.push({
+            text: idea.text || idea,
+            source: entry.filename,
+            topics: entry.topics || [],
+          });
+        }
+      }
+    }
+
+    const ideasToRank = allIdeas.slice(0, Math.min(limit, allIdeas.length));
+
+    // Send to AI for ranking
+    const rankingPrompt = `Rank these ${ideasToRank.length} business/software ideas based on this criteria:
+
+Criteria: ${criteria}
+
+Ideas to rank:
+${ideasToRank.map((idea, i) => `${i + 1}. ${idea.text.substring(0, 200)} (Source: ${idea.source})`).join('\n')}
+
+Return a JSON array with ranked ideas, each with:
+- rank: number (1 = best)
+- idea_text: string
+- score: number (0-100)
+- reasoning: string (why this rank)
+
+Return ONLY valid JSON array. Start with [ end with ].`;
+
+    const rankingResponse = await callCouncilWithFailover(rankingPrompt, 'ollama_deepseek', false, {
+      maxTokens: 4000,
+    });
+
+    // Parse ranking
+    let ranking = [];
+    try {
+      const { sanitizeJsonResponse, extractAndParseJSON } = await import('./core/json-sanitizer.js');
+      ranking = extractAndParseJSON(rankingResponse, []);
+      if (!Array.isArray(ranking)) {
+        ranking = [];
+      }
+    } catch (e) {
+      console.warn('Failed to parse ranking response:', e.message);
+    }
+
+    res.json({
+      ok: true,
+      criteria,
+      total_ideas_analyzed: ideasToRank.length,
+      ranking: ranking.slice(0, 20), // Top 20
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get("/api/v1/knowledge/search", requireKey, async (req, res) => {
+  try {
+    if (!knowledgeContext || !knowledgeContext.entries) {
+      return res.status(503).json({ error: "Knowledge context not loaded" });
+    }
+
+    const { q, topic } = req.query;
+
+    if (!q) {
+      return res.status(400).json({ error: "Query parameter 'q' required" });
+    }
+
+    const queryLower = q.toLowerCase();
+    const topicFilter = topic ? topic.toLowerCase() : null;
+
+    const results = [];
+
+    for (const entry of knowledgeContext.entries || []) {
+      // Filter by topic if specified
+      if (topicFilter && entry.topics) {
+        const hasTopic = entry.topics.some(t => t.toLowerCase().includes(topicFilter));
+        if (!hasTopic) continue;
+      }
+
+      // Search in ideas
+      if (entry.ideas && Array.isArray(entry.ideas)) {
+        for (const idea of entry.ideas) {
+          const ideaText = (idea.text || idea).toLowerCase();
+          if (ideaText.includes(queryLower)) {
+            results.push({
+              text: idea.text || idea,
+              source: entry.filename,
+              topics: entry.topics || [],
+              context: idea.context || null,
+            });
+          }
+        }
+      }
+    }
+
+    res.json({
+      ok: true,
+      query: q,
+      topic_filter: topic || null,
+      results_count: results.length,
+      results: results.slice(0, 50), // Limit to 50
+    });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }

@@ -284,12 +284,10 @@ Be specific and actionable. This will be executed automatically.`;
   }
 
   /**
-   * Execute the build
+   * Get code generation prompt with strict formatting requirements
    */
-  async executeBuild(opportunity, plan) {
-    try {
-      // Parse plan and extract actionable steps
-      const buildPrompt = `Based on this implementation plan, generate the actual code/files needed:
+  getCodeGenerationPrompt(opportunity, plan) {
+    return `Based on this implementation plan, generate the actual code/files needed:
 
 Plan: ${plan}
 
@@ -302,12 +300,116 @@ Generate:
 4. Configuration files
 5. Any other necessary files
 
-Format as:
-===FILE:path/to/file===
-[complete file content]
-===END===
+CRITICAL FORMAT REQUIREMENTS:
+1. Return ALL code files in EXACT format: ===FILE:path/to/filename.ext===
+2. End every file with: ===END FILE===
+3. DO NOT use markdown code blocks (no \`\`\`)
+4. DO NOT add explanations outside the file tags
+5. Include ALL necessary files (JS, SQL, CSS, HTML, JSON, etc.)
+6. Write COMPLETE files - not snippets, not placeholders
+7. Include ALL imports, ALL functions, ALL code
+
+Example format:
+===FILE:routes/api.js===
+const express = require('express');
+const router = express.Router();
+// ... complete file content ...
+===END FILE===
+
+===FILE:migrations/001_create_table.sql===
+CREATE TABLE IF NOT EXISTS ...
+===END FILE===
 
 Generate ALL files needed to make this work. Be complete and production-ready.`;
+  }
+
+  /**
+   * Extract files from response with multiple fallback strategies
+   */
+  extractFilesFromResponse(response) {
+    const files = [];
+    
+    if (!response || typeof response !== 'string') {
+      console.warn('⚠️ [AUTO-BUILDER] Invalid response for file extraction');
+      return files;
+    }
+
+    // Strategy 1: Primary format ===FILE:path=== ... ===END FILE===
+    const primaryRegex = /===FILE:(.+?)===\s*\n([\s\S]*?)===END\s+FILE===/g;
+    let match;
+    while ((match = primaryRegex.exec(response)) !== null) {
+      const filePath = match[1].trim();
+      const content = match[2].trim();
+      if (filePath && content && content.length > 10) {
+        files.push({ path: filePath, content });
+        console.log(`📝 [AUTO-BUILDER] Extracted file: ${filePath} (${content.length} chars)`);
+      }
+    }
+
+    // Strategy 2: Fallback 1 - Markdown code blocks with language:path
+    if (files.length === 0) {
+      const markdownRegex = /```(?:javascript|js|typescript|ts|json|sql|html|css|python|py)?:([^\n]+)\n([\s\S]*?)```/g;
+      while ((match = markdownRegex.exec(response)) !== null) {
+        const filePath = match[1].trim();
+        const content = match[2].trim();
+        if (filePath && content && content.length > 10) {
+          files.push({ path: filePath, content });
+          console.log(`📝 [AUTO-BUILDER] Extracted file (markdown): ${filePath} (${content.length} chars)`);
+        }
+      }
+    }
+
+    // Strategy 3: Fallback 2 - Comment-based format // FILE: path ... // END FILE
+    if (files.length === 0) {
+      const commentRegex = /\/\/\s*FILE:\s*([^\n]+)\n([\s\S]*?)\/\/\s*END\s+FILE/g;
+      while ((match = commentRegex.exec(response)) !== null) {
+        const filePath = match[1].trim();
+        const content = match[2].trim();
+        if (filePath && content && content.length > 10) {
+          files.push({ path: filePath, content });
+          console.log(`📝 [AUTO-BUILDER] Extracted file (comment): ${filePath} (${content.length} chars)`);
+        }
+      }
+    }
+
+    // Strategy 4: Fallback 3 - Extract code blocks and infer filename
+    if (files.length === 0) {
+      const codeBlockRegex = /```(?:javascript|js|typescript|ts|json|sql|html|css|python|py)?\n([\s\S]*?)```/g;
+      let blockIndex = 0;
+      while ((match = codeBlockRegex.exec(response)) !== null) {
+        const content = match[1].trim();
+        if (content && content.length > 10) {
+          // Infer file type from content
+          let extension = 'js';
+          if (/CREATE\s+TABLE|SELECT|INSERT|UPDATE/i.test(content)) extension = 'sql';
+          else if (/<html|<div|<body/i.test(content)) extension = 'html';
+          else if (/\{[^}]*:[^}]*\}/.test(content) && !content.includes('function')) extension = 'css';
+          else if (/^\s*[\{\[]/.test(content.trim()) && /[\}\]]\s*$/.test(content.trim())) {
+            try {
+              JSON.parse(content);
+              extension = 'json';
+            } catch {}
+          }
+          
+          const filePath = `generated_${blockIndex + 1}.${extension}`;
+          files.push({ path: filePath, content });
+          console.log(`📝 [AUTO-BUILDER] Extracted file (inferred): ${filePath} (${content.length} chars)`);
+          blockIndex++;
+        }
+      }
+    }
+
+    console.log(`✅ [AUTO-BUILDER] Extracted ${files.length} file(s) from response`);
+    return files;
+  }
+
+  /**
+   * Execute the build
+   */
+  async executeBuild(opportunity, plan) {
+    try {
+      // Use improved code generation prompt
+      const buildPrompt = this.getCodeGenerationPrompt(opportunity, plan);
 
       const codeResponse = await this.callCouncilMember('chatgpt', buildPrompt, {
         useTwoTier: false,
@@ -315,8 +417,8 @@ Generate ALL files needed to make this work. Be complete and production-ready.`;
         temperature: 0.3,
       });
 
-      // Extract files from response
-      const files = await this.extractFiles(codeResponse);
+      // Extract files using improved extractor
+      const files = this.extractFilesFromResponse(codeResponse);
 
       if (files.length === 0) {
         // Log the response for debugging
@@ -342,10 +444,30 @@ Generate ALL files needed to make this work. Be complete and production-ready.`;
         ]
       );
 
-      // Actually implement files using self-programming endpoint
+      // Lint and implement files
       const implementedFiles = [];
       for (const file of files) {
         try {
+          // Lint generated code before saving
+          let lintResult = null;
+          try {
+            const { codeLinter } = await import('./code-linter.js');
+            lintResult = await codeLinter.lintGeneratedCode(file.path, file.content);
+            
+            if (lintResult.criticalCount > 0) {
+              console.warn(`⚠️ [AUTO-BUILDER] Critical linting errors in ${file.path}:`);
+              lintResult.errors.filter(e => e.severity === 'error').forEach(err => {
+                console.warn(`   - ${err.rule}: ${err.message}`);
+              });
+            }
+            
+            if (lintResult.warningCount > 0) {
+              console.warn(`⚠️ [AUTO-BUILDER] Linting warnings in ${file.path}: ${lintResult.warningCount}`);
+            }
+          } catch (lintError) {
+            console.warn(`⚠️ [AUTO-BUILDER] Could not lint ${file.path}: ${lintError.message}`);
+          }
+
           // Use self-programming to create/update the file
           const instruction = `Create or update the file ${file.path} with this complete content:
 
@@ -360,10 +482,11 @@ Make sure the file is complete, working, and production-ready.`;
             opportunity_id: opportunity.id,
             auto_deploy: true,
             build_type: 'opportunity',
+            lint_result: lintResult,
           });
 
           implementedFiles.push(file.path);
-          console.log(`📝 [AUTO-BUILDER] Queued file: ${file.path}`);
+          console.log(`📝 [AUTO-BUILDER] Queued file: ${file.path}${lintResult?.valid ? ' (linted)' : ' (has issues)'}`);
         } catch (err) {
           console.error(`❌ [AUTO-BUILDER] Error queueing file ${file.path}:`, err.message);
         }
@@ -384,7 +507,8 @@ Make sure the file is complete, working, and production-ready.`;
   }
 
   /**
-   * Extract files from AI response (using enhanced extractor)
+   * Extract files from AI response (DEPRECATED - use extractFilesFromResponse)
+   * @deprecated Use extractFilesFromResponse instead
    */
   async extractFiles(response) {
     // Use enhanced file extractor for robust parsing

@@ -152,7 +152,7 @@ For each opportunity, provide:
 5. Market demand
 6. Competitive advantage
 
-Return as JSON array.`;
+CRITICAL: Return ONLY valid JSON array. No text before or after. Start with [ and end with ].`;
 
     try {
       const response = await this.callCouncilMember('chatgpt', prompt, {
@@ -162,11 +162,19 @@ Return as JSON array.`;
       
       const opportunities = this.parseJSONResponse(response);
       
-      for (const opp of opportunities) {
+      // Ensure it's an array
+      const oppArray = Array.isArray(opportunities) ? opportunities : [];
+      
+      if (oppArray.length === 0) {
+        console.warn('⚠️ [BUSINESS CENTER] No opportunities parsed from response');
+        return;
+      }
+      
+      for (const opp of oppArray) {
         await this.storeRevenueOpportunity(opp);
       }
       
-      console.log(`✅ [BUSINESS CENTER] Generated ${opportunities.length} opportunities`);
+      console.log(`✅ [BUSINESS CENTER] Generated ${oppArray.length} opportunities`);
     } catch (error) {
       console.error('❌ [BUSINESS CENTER] Opportunity generation error:', error.message);
     }
@@ -268,12 +276,17 @@ Return as JSON array.`;
   }
 
   /**
-   * Parse JSON from AI response (with sanitization)
+   * Parse JSON from AI response (with enhanced sanitization and multiple strategies)
    */
   parseJSONResponse(response) {
+    if (!response || typeof response !== 'string') {
+      console.warn('⚠️ [BUSINESS CENTER] Invalid response for JSON parsing');
+      return [];
+    }
+
     try {
       // Sanitize JSON to remove comments and trailing commas
-      let cleaned = (response || '')
+      let cleaned = response
         .replace(/\/\/.*$/gm, '')           // Remove // comments
         .replace(/\/\*[\s\S]*?\*\//g, '')   // Remove /* */ comments
         .replace(/,(\s*[}\]])/g, '$1')      // Remove trailing commas
@@ -281,23 +294,59 @@ Return as JSON array.`;
         .replace(/```\s*/g, '')              // Remove ```
         .trim();
       
-      // Try to extract JSON array
-      const jsonMatch = cleaned.match(/\[[\s\S]*\]/);
-      if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]);
+      // Strategy 1: Try to extract JSON array first (most common)
+      const arrayMatch = cleaned.match(/\[[\s\S]*\]/);
+      if (arrayMatch) {
+        try {
+          const parsed = JSON.parse(arrayMatch[0]);
+          if (Array.isArray(parsed)) {
+            console.log(`✅ [BUSINESS CENTER] Parsed ${parsed.length} opportunities from JSON array`);
+            return parsed;
+          }
+        } catch (e) {
+          console.warn(`⚠️ [BUSINESS CENTER] Array extraction failed: ${e.message}`);
+        }
       }
       
-      // Try to extract JSON object
+      // Strategy 2: Try to extract JSON object (might be wrapped)
       const objMatch = cleaned.match(/\{[\s\S]*\}/);
       if (objMatch) {
-        return JSON.parse(objMatch[0]);
+        try {
+          const parsed = JSON.parse(objMatch[0]);
+          // If it's an object with an array property, extract it
+          if (parsed.opportunities && Array.isArray(parsed.opportunities)) {
+            console.log(`✅ [BUSINESS CENTER] Parsed ${parsed.opportunities.length} opportunities from object`);
+            return parsed.opportunities;
+          }
+          // If it's a single opportunity object, wrap in array
+          if (parsed.name || parsed.revenue_potential) {
+            console.log(`✅ [BUSINESS CENTER] Parsed single opportunity, wrapping in array`);
+            return [parsed];
+          }
+        } catch (e) {
+          console.warn(`⚠️ [BUSINESS CENTER] Object extraction failed: ${e.message}`);
+        }
       }
       
-      // Try parsing entire response
-      return JSON.parse(cleaned);
+      // Strategy 3: Try parsing entire cleaned response
+      try {
+        const parsed = JSON.parse(cleaned);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+        // Wrap single object in array
+        return [parsed];
+      } catch (e) {
+        console.warn(`⚠️ [BUSINESS CENTER] Full response parsing failed: ${e.message}`);
+      }
+      
+      // Strategy 4: Last resort - return empty array
+      console.warn('⚠️ [BUSINESS CENTER] All JSON parsing strategies failed, returning empty array');
+      console.warn(`⚠️ [BUSINESS CENTER] Response preview: ${response.substring(0, 500)}...`);
+      return [];
     } catch (error) {
-      console.warn('Failed to parse JSON response:', error.message);
-      return null;
+      console.error('❌ [BUSINESS CENTER] JSON parsing error:', error.message);
+      return [];
     }
   }
 }
