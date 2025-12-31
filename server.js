@@ -4176,7 +4176,7 @@ async function generateDailyIdeas() {
 
     console.log(
       `✅ Generated ${dailyIdeas.length} daily ideas (source: ${
-        response ? "council" : "local fallback"
+        hasSuccessfulResponse ? "council" : "local fallback"
       })`
     );
 
