@@ -4093,12 +4093,16 @@ async function generateDailyIdeas() {
     // For small models, only run once (they're slow)
     const iterations = modelSize === 'small' ? 1 : 3;
     const allIdeas = [];
+    let hasSuccessfulResponse = false; // Track if we got any successful response
     
     for (let i = 0; i < iterations; i++) {
       try {
         console.log(`💡 [IDEAS] Iteration ${i+1}/${iterations}...`);
         
         const response = await callCouncilWithFailover(ideaPrompt, memberToUse);
+        if (response) {
+          hasSuccessfulResponse = true;
+        }
         const ideas = parseIdeasFromResponse(response, modelSize);
         
         console.log(`💡 [IDEAS] Iteration ${i+1}: Extracted ${ideas.length} ideas`);
@@ -4154,7 +4158,7 @@ async function generateDailyIdeas() {
           ideaId,
           idea.title,
           idea.description,
-          response ? "council" : "fallback",
+          hasSuccessfulResponse ? "council" : "fallback",
           idea.difficulty,
         ]
       );

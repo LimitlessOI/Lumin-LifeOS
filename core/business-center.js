@@ -185,6 +185,12 @@ CRITICAL: Return ONLY valid JSON array. No text before or after. Start with [ an
    */
   async storeRevenueOpportunity(opportunity) {
     try {
+      // Validate required fields before INSERT
+      if (!opportunity.name || !opportunity.name.trim()) {
+        console.warn('⚠️ [BUSINESS CENTER] Skipping opportunity with no name');
+        return;
+      }
+      
       await this.pool.query(
         `INSERT INTO revenue_opportunities 
          (opportunity_id, name, revenue_potential, time_to_implement, required_resources,
@@ -193,7 +199,7 @@ CRITICAL: Return ONLY valid JSON array. No text before or after. Start with [ an
          ON CONFLICT (opportunity_id) DO NOTHING`,
         [
           `opp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-          opportunity.name,
+          opportunity.name.trim(),
           opportunity.revenuePotential || opportunity.revenue_potential,
           opportunity.timeToImplement || opportunity.time_to_implement,
           JSON.stringify(opportunity.requiredResources || opportunity.required_resources || []),
@@ -203,7 +209,7 @@ CRITICAL: Return ONLY valid JSON array. No text before or after. Start with [ an
         ]
       );
     } catch (error) {
-      console.error('Error storing opportunity:', error.message);
+      console.error('❌ [BUSINESS CENTER] Error storing opportunity:', error.message);
     }
   }
 
