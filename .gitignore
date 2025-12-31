@@ -2,6 +2,8 @@
 node_modules
 .DS_Store
 .env
+.env.local
+.env.*.local
 
 # Generated knowledge index (can be regenerated with scripts/process-knowledge.js)
 knowledge/index/entries.jsonl

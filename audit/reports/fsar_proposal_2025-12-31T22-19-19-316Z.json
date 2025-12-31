@@ -1,0 +1,17 @@
+{
+  "id": "fsar_1b6a0707-1954-4f06-be5d-d003884913fa",
+  "timestamp": "2025-12-31T22:19:19.316Z",
+  "proposal": "idea_implementation: Create or update the file migrations/001_create_roi_snapshots.sql with this complete content:\n\nBEGIN;\n\nCREATE TABLE IF NOT EXISTS roi_snapshots (\n    id SERIAL PRIMARY KEY,\n    timestamp TIMESTAMP NOT NULL,\n    amount DECIMAL(15, 2) NOT NULL DEFAULT 0.00,\n    status VARCHAR(50),\n    created_at TIMESTAMP WITH TIME ZONE DEFAULT (NOW() AT TIME ZONE 'utc'),\n    updated_at TIMESTAMP WITH TIME ZONE DEFAULT (NOW() AT TIME ZONE 'utc')\n);\n\nCREATE INDEX IF NOT EXISTS idx_roi_snapshots_timestamp ON roi_snapshots(timestamp);\n\nCOMMIT;\n\nThis is for opportunity: Automated Business Process Optimization\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2027-12-31",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}
