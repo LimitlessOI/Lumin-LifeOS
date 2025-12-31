@@ -618,7 +618,7 @@ Make sure the file is complete, working, and production-ready.`;
           priority
         FROM revenue_opportunities 
         WHERE status = 'pending' OR status = 'queued'
-        ORDER BY priority DESC NULLS LAST, created_at ASC 
+        ORDER BY created_at DESC 
         LIMIT 1
       `);
       
