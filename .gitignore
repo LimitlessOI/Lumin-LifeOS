@@ -2,4 +2,12 @@
 node_modules
 .DS_Store
 .env
+
+# Generated knowledge index (can be regenerated with scripts/process-knowledge.js)
+knowledge/index/entries.jsonl
+.cursor/
+.next/
+*.log
+sandbox/
+.temp_*.js
 ```
