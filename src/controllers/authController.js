@@ -1,47 +1,25 @@
 ```javascript
-const { validationResult } = require('express-validator');
-const { hashPassword, verifyPassword } = require('../utils/security/password');
-const { generateToken } = require('../utils/security/jwt');
-const { createUser, findUserByUsername } = require('../models/User');
-const { createSession, deleteSession } = require('../models/Session');
+const AuthService = require('../services/AuthService');
 
-const register = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+module.exports = {
+  async register(req, res) {
+    try {
+      const { email, password } = req.body;
+      const user = await AuthService.register(email, password);
+      res.status(201).send(user);
+    } catch (error) {
+      res.status(500).send({ error: 'Error registering user' });
+    }
+  },
+
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      const token = await AuthService.login(email, password);
+      res.status(200).send({ token });
+    } catch (error) {
+      res.status(401).send({ error: 'Invalid credentials' });
+    }
   }
-
-  const { username, email, password } = req.body;
-  const passwordHash = await hashPassword(password);
-  const user = await createUser(username, email, passwordHash);
-
-  res.status(201).json({ user });
 };
-
-const login = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { username, password } = req.body;
-  const user = await findUserByUsername(username);
-
-  if (!user || !(await verifyPassword(password, user.password_hash))) {
-    return res.status(401).json({ message: 'Invalid credentials' });
-  }
-
-  const token = generateToken({ userId: user.id });
-  await createSession(user.id, token, new Date(Date.now() + 3600000)); // 1 hour session
-
-  res.json({ token });
-};
-
-const logout = async (req, res) => {
-  const { token } = req.body;
-  await deleteSession(token);
-  res.status(204).send();
-};
-
-module.exports = { register, login, logout };
 ```

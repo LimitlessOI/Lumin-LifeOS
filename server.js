@@ -13517,6 +13517,42 @@ Write the code now:`;
           await fsPromises.mkdir(dir, { recursive: true });
         }
         
+        // NEW: Validate code before writing (security, quality)
+        let validationResult = null;
+        try {
+          const codeValidatorModule = await import('./core/code-validator.js');
+          const codeValidator = codeValidatorModule.codeValidator || codeValidatorModule.default;
+          validationResult = await codeValidator.validateFile(change.filePath, change.content);
+          
+          if (!validationResult.valid) {
+            console.warn(`⚠️ [SELF-PROGRAM] Validation issues for ${change.filePath}:`);
+            validationResult.issues.forEach(issue => {
+              console.warn(`   - ${issue.severity.toUpperCase()}: ${issue.message}`);
+            });
+            
+            // Block on security errors, warn on others
+            const securityErrors = validationResult.issues.filter(i => i.type === 'security' && i.severity === 'error');
+            if (securityErrors.length > 0) {
+              writeResults.push({
+                filePath: change.filePath,
+                success: false,
+                error: `Security validation failed: ${securityErrors[0].message}`,
+              });
+              continue;
+            }
+          }
+          
+          if (validationResult.warnings.length > 0) {
+            console.warn(`⚠️ [SELF-PROGRAM] Warnings for ${change.filePath}:`);
+            validationResult.warnings.forEach(warning => {
+              console.warn(`   - ${warning.message}`);
+            });
+          }
+        } catch (validationError) {
+          console.warn(`⚠️ [SELF-PROGRAM] Could not validate ${change.filePath}: ${validationError.message}`);
+          // Continue anyway if validation fails to load
+        }
+        
         // Write the file
         await fsPromises.writeFile(fullPath, change.content, 'utf-8');
         
@@ -13768,7 +13804,7 @@ Write the complete working code now:`;
       temperature: 0.3,
     });
 
-    const fileChanges = extractFileChanges(codeResponse);
+    const fileChanges = await extractFileChanges(codeResponse);
     
     // Multiple parsing strategies (same as handleSelfProgramming)
     if (fileChanges.length === 0) {
@@ -14035,7 +14071,7 @@ Write the complete working code now:`;
   }
 });
 
-function extractFileChanges(codeResponse) {
+async function extractFileChanges(codeResponse) {
   const changes = [];
   if (!codeResponse || typeof codeResponse !== 'string') {
     console.warn("⚠️ extractFileChanges: Invalid codeResponse");
@@ -14043,8 +14079,28 @@ function extractFileChanges(codeResponse) {
   }
 
   try {
-    // Primary pattern: ===FILE:path/to/file.js=== ... ===END===
-    const fileRegex = /===FILE:(.*?)===\n([\s\S]*?)===END===/g;
+    // Try enhanced file extractor first
+    try {
+      const { extractFilesWithValidation } = await import('./core/enhanced-file-extractor.js');
+      const result = extractFilesWithValidation(codeResponse, {
+        source: 'self-programming'
+      });
+      
+      if (result.files.length > 0) {
+        console.log(`📝 [EXTRACT] Extracted ${result.files.length} file(s) using enhanced extractor`);
+        return result.files.map(f => ({ filePath: f.path, content: f.content }));
+      }
+      
+      // If enhanced extractor found files but they're invalid, log and continue to fallback
+      if (result.invalid.length > 0) {
+        console.warn(`⚠️ [EXTRACT] Enhanced extractor found ${result.invalid.length} invalid file(s), trying fallback`);
+      }
+    } catch (importError) {
+      console.warn(`⚠️ [EXTRACT] Could not load enhanced extractor: ${importError.message}`);
+    }
+
+    // Fallback: Primary pattern: ===FILE:path/to/file.js=== ... ===END===
+    const fileRegex = /===FILE:(.*?)===\s*\n([\s\S]*?)===END===/g;
     let match;
 
     while ((match = fileRegex.exec(codeResponse)) !== null) {
@@ -14072,7 +14128,7 @@ function extractFileChanges(codeResponse) {
       }
     }
 
-    console.log(`📝 Extracted ${changes.length} file change(s) from AI response`);
+    console.log(`📝 [EXTRACT] Extracted ${changes.length} file change(s) from AI response`);
     return changes;
   } catch (error) {
     console.error("Error extracting file changes:", error.message);

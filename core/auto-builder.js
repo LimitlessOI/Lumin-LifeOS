@@ -316,7 +316,7 @@ Generate ALL files needed to make this work. Be complete and production-ready.`;
       });
 
       // Extract files from response
-      const files = this.extractFiles(codeResponse);
+      const files = await this.extractFiles(codeResponse);
 
       if (files.length === 0) {
         // Log the response for debugging
@@ -384,32 +384,66 @@ Make sure the file is complete, working, and production-ready.`;
   }
 
   /**
-   * Extract files from AI response
+   * Extract files from AI response (using enhanced extractor)
    */
-  extractFiles(response) {
-    const files = [];
-    const fileRegex = /===FILE:(.+?)===\n([\s\S]*?)===END===/g;
-    let match;
-
-    while ((match = fileRegex.exec(response)) !== null) {
-      files.push({
-        path: match[1].trim(),
-        content: match[2].trim(),
+  async extractFiles(response) {
+    // Use enhanced file extractor for robust parsing
+    try {
+      const { extractFilesWithValidation } = await import('./enhanced-file-extractor.js');
+      const result = extractFilesWithValidation(response, {
+        source: 'auto-builder',
+        opportunity: this.currentOpportunity?.id
       });
-    }
+      
+      if (result.files.length === 0 && result.invalid.length > 0) {
+        console.warn(`⚠️ [AUTO-BUILDER] All ${result.invalid.length} extracted files had validation issues`);
+        // Still return invalid files as fallback, but log the issues
+        return result.invalid.map(f => ({ path: f.path, content: f.content }));
+      }
+      
+      return result.files;
+    } catch (importError) {
+      console.warn(`⚠️ [AUTO-BUILDER] Could not load enhanced extractor, using fallback: ${importError.message}`);
+      
+      // Fallback to basic extraction
+      const files = [];
+      const fileRegex = /===FILE:(.+?)===\s*\n([\s\S]*?)===END===/g;
+      let match;
 
-    // Fallback: try alternative format
-    if (files.length === 0) {
-      const altRegex = /FILE:\s*(.+?)\n([\s\S]*?)(?=FILE:|$)/g;
-      while ((match = altRegex.exec(response)) !== null) {
+      while ((match = fileRegex.exec(response)) !== null) {
         files.push({
           path: match[1].trim(),
           content: match[2].trim(),
         });
       }
-    }
 
-    return files;
+      // Try alternative format
+      if (files.length === 0) {
+        const altRegex = /FILE:\s*(.+?)\n([\s\S]*?)(?=FILE:|END|$)/g;
+        while ((match = altRegex.exec(response)) !== null) {
+          files.push({
+            path: match[1].trim(),
+            content: match[2].trim(),
+          });
+        }
+      }
+
+      // Try markdown code blocks
+      if (files.length === 0) {
+        const codeBlockRegex = /```(?:javascript|js|typescript|ts)?\n([\s\S]*?)```/g;
+        let blockMatch;
+        let blockIndex = 0;
+        while ((blockMatch = codeBlockRegex.exec(response)) !== null) {
+          files.push({
+            path: `generated_${blockIndex + 1}.js`,
+            content: blockMatch[1].trim(),
+          });
+          blockIndex++;
+        }
+      }
+
+      return files;
+    }
   }
 
   /**

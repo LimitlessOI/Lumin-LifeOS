@@ -1,21 +1,27 @@
 ```javascript
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const db = require('../db/config');
 
-exports.createUser = async (username, password) => {
-  const salt = await bcrypt.genSalt(10);
-  const passwordHash = await bcrypt.hash(password, salt);
-  return await User.create({ username, password_hash: passwordHash });
-};
+class UserService {
+  static async createUser(email, passwordHash) {
+    const result = await db.query(
+      'INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING *',
+      [email, passwordHash]
+    );
+    return result.rows[0];
+  }
 
-exports.authenticateUser = async (username, password) => {
-  const user = await User.findOne({ where: { username } });
-  if (!user) throw new Error('User not found');
+  static async getUserByEmail(email) {
+    const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+    return result.rows[0];
+  }
 
-  const validPassword = await bcrypt.compare(password, user.password_hash);
-  if (!validPassword) throw new Error('Invalid password');
+  static async updateUserSubscription(userId, status) {
+    await db.query(
+      'UPDATE users SET subscription_status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+      [status, userId]
+    );
+  }
+}
 
-  return jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
-};
+module.exports = UserService;
 ```
