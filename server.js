@@ -3935,85 +3935,110 @@ let knowledgeContext = null; // Global knowledge context
 
 /**
  * Load knowledge context from processed dumps
+ * TRUE_VISION.md is loaded FIRST as the primary foundation
  */
 async function loadKnowledgeContext() {
   try {
-    const indexPath = path.join(__dirname, 'knowledge', 'index', 'entries.jsonl');
-    if (!fs.existsSync(indexPath)) {
-      console.log('📚 [KNOWLEDGE] No index found - run: node scripts/process-knowledge.js');
-      return null;
+    const context = {
+      trueVision: null,      // PRIMARY - Foundation document
+      coreTruths: null,
+      projectContext: null,
+      entries: [],
+      totalEntries: 0
+    };
+    
+    // Load TRUE_VISION.md FIRST (most important - supersedes everything)
+    const trueVisionPath = path.join(__dirname, 'docs', 'TRUE_VISION.md');
+    if (fs.existsSync(trueVisionPath)) {
+      context.trueVision = fs.readFileSync(trueVisionPath, 'utf-8');
+      console.log('📚 [KNOWLEDGE] Loaded TRUE_VISION.md (PRIMARY FOUNDATION)');
+    } else {
+      console.warn('⚠️ [KNOWLEDGE] TRUE_VISION.md not found - this is the foundational mission document');
     }
     
-    const lines = fs.readFileSync(indexPath, 'utf-8').split('\n').filter(Boolean);
-    const entries = lines.map(l => {
-      try {
-        return JSON.parse(l);
-      } catch (e) {
-        return null;
-      }
-    }).filter(Boolean);
-    
-    console.log(`📚 [KNOWLEDGE] Loaded ${entries.length} entries from index`);
-    
-    // Load core truths and project context
+    // Load core truths
     const coreTruthsPath = path.join(__dirname, 'docs', 'CORE_TRUTHS.md');
-    const projectContextPath = path.join(__dirname, 'docs', 'PROJECT_CONTEXT.md');
-    
-    let coreTruths = null;
-    let projectContext = null;
-    
     if (fs.existsSync(coreTruthsPath)) {
-      coreTruths = fs.readFileSync(coreTruthsPath, 'utf-8');
+      context.coreTruths = fs.readFileSync(coreTruthsPath, 'utf-8');
       console.log('📚 [KNOWLEDGE] Loaded CORE_TRUTHS.md');
     }
     
+    // Load project context
+    const projectContextPath = path.join(__dirname, 'docs', 'PROJECT_CONTEXT.md');
     if (fs.existsSync(projectContextPath)) {
-      projectContext = fs.readFileSync(projectContextPath, 'utf-8');
+      context.projectContext = fs.readFileSync(projectContextPath, 'utf-8');
       console.log('📚 [KNOWLEDGE] Loaded PROJECT_CONTEXT.md');
     }
     
-    const context = {
-      entries,
-      coreTruths,
-      projectContext,
-      totalEntries: entries.length
-    };
+    // Load knowledge index entries (optional - may contain code snippets)
+    const indexPath = path.join(__dirname, 'knowledge', 'index', 'entries.jsonl');
+    if (fs.existsSync(indexPath)) {
+      const lines = fs.readFileSync(indexPath, 'utf-8').split('\n').filter(Boolean);
+      const entries = lines.map(l => {
+        try {
+          return JSON.parse(l);
+        } catch (e) {
+          return null;
+        }
+      }).filter(Boolean);
+      
+      context.entries = entries;
+      context.totalEntries = entries.length;
+      console.log(`📚 [KNOWLEDGE] Loaded ${entries.length} entries from index`);
+    } else {
+      console.log('📚 [KNOWLEDGE] No index found - run: node scripts/process-knowledge.js');
+    }
     
     // Store globally
     knowledgeContext = context;
     
     return context;
   } catch (e) {
-    console.warn(`⚠️ [KNOWLEDGE] Could not load index: ${e.message}`);
+    console.warn(`⚠️ [KNOWLEDGE] Could not load knowledge context: ${e.message}`);
     return null;
   }
 }
 
 /**
  * Inject knowledge context into prompt
+ * TRUE_VISION.md is ALWAYS included FIRST as the foundation
  */
 function injectKnowledgeContext(prompt, maxIdeas = 5) {
   if (!knowledgeContext) return prompt;
   
   let contextSection = '';
   
-  // Add core truths
+  // TRUE_VISION is the foundation - ALWAYS FIRST and most important
+  if (knowledgeContext.trueVision) {
+    // Include full TRUE_VISION (it's the mission - no truncation)
+    contextSection += `\n\n=== FOUNDATION: TRUE VISION (This Supersedes Everything) ===\n${knowledgeContext.trueVision}\n`;
+  }
+  
+  // Add core truths (secondary to TRUE_VISION)
   if (knowledgeContext.coreTruths) {
-    contextSection += `\n\n=== CORE TRUTHS (Immutable Principles) ===\n${knowledgeContext.coreTruths}\n`;
+    contextSection += `\n\n=== CORE TRUTHS (Immutable Principles) ===\n${knowledgeContext.coreTruths.substring(0, 2000)}\n`;
   }
   
-  // Add project context
+  // Add project context (tertiary)
   if (knowledgeContext.projectContext) {
-    contextSection += `\n\n=== PROJECT CONTEXT ===\n${knowledgeContext.projectContext}\n`;
+    contextSection += `\n\n=== PROJECT CONTEXT ===\n${knowledgeContext.projectContext.substring(0, 1500)}\n`;
   }
   
-  // Add relevant ideas from knowledge dumps
+  // Add relevant ideas from knowledge dumps (filtered to avoid code snippets)
   if (knowledgeContext.entries && knowledgeContext.entries.length > 0) {
     const allIdeas = [];
     for (const entry of knowledgeContext.entries) {
       if (entry.ideas && Array.isArray(entry.ideas)) {
-        allIdeas.push(...entry.ideas.map(idea => ({
-          ...idea,
+        // Filter out obvious code snippets (simple heuristic)
+        const validIdeas = entry.ideas.filter(idea => {
+          const ideaText = (typeof idea === 'string' ? idea : idea.text || '').toLowerCase();
+          // Skip if looks like code (contains common code patterns)
+          const codePatterns = ['this.currentapp', 'function(', 'const ', 'let ', 'var ', '=>', '{}', '()'];
+          return !codePatterns.some(pattern => ideaText.includes(pattern)) && ideaText.length > 20;
+        });
+        
+        allIdeas.push(...validIdeas.map(idea => ({
+          text: typeof idea === 'string' ? idea : (idea.text || String(idea)),
           source: entry.filename
         })));
       }
@@ -4024,7 +4049,7 @@ function injectKnowledgeContext(prompt, maxIdeas = 5) {
       const promptLower = prompt.toLowerCase();
       const relevantIdeas = allIdeas
         .filter(idea => {
-          const ideaText = (idea.text || '').toLowerCase();
+          const ideaText = idea.text.toLowerCase();
           const keywords = promptLower.split(/\s+/).filter(w => w.length > 3);
           return keywords.some(kw => ideaText.includes(kw));
         })
@@ -4033,14 +4058,14 @@ function injectKnowledgeContext(prompt, maxIdeas = 5) {
       if (relevantIdeas.length > 0) {
         contextSection += `\n\n=== RELEVANT IDEAS FROM KNOWLEDGE BASE ===\n`;
         relevantIdeas.forEach((idea, i) => {
-          contextSection += `${i+1}. ${idea.text}\n   (Source: ${idea.source})\n`;
+          contextSection += `${i+1}. ${idea.text.substring(0, 200)}\n   (Source: ${idea.source})\n`;
         });
       }
     }
   }
   
   if (contextSection) {
-    return `${prompt}\n\n${contextSection}\n\nUse this knowledge to inform your response.`;
+    return `${contextSection}\n\n=== USER REQUEST ===\n${prompt}\n\nIMPORTANT: All responses must align with the TRUE VISION above. Use this knowledge to inform your response.`;
   }
   
   return prompt;
@@ -12595,6 +12620,7 @@ app.get("/api/v1/knowledge/stats", requireKey, async (req, res) => {
       ok: true,
       total_entries: knowledgeContext.totalEntries || 0,
       total_ideas: knowledgeContext.entries?.reduce((sum, e) => sum + (e.ideas?.length || 0), 0) || 0,
+      has_true_vision: !!knowledgeContext.trueVision,
       has_core_truths: !!knowledgeContext.coreTruths,
       has_project_context: !!knowledgeContext.projectContext,
       top_topics: topTopics,
