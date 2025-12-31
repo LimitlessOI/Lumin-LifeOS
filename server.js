@@ -71,6 +71,7 @@ const {
   LIFEOS_GEMINI_KEY,
   DEEPSEEK_API_KEY,
   GROK_API_KEY,
+  GROQ_API_KEY,
   GITHUB_TOKEN,
   GITHUB_REPO = "LimitlessOI/Lumin-LifeOS",
   OLLAMA_ENDPOINT =
@@ -2080,6 +2081,21 @@ const COUNCIL_MEMBERS = {
     specialties: ["innovation", "reality_check", "risk"],
     oversightOnly: true, // Only used for oversight, not primary work
   },
+  // TIER 0 - FREE CLOUD BACKUP (No tunnel needed)
+  groq: {
+    name: "Groq (Free Cloud)",
+    model: "llama-3.1-70b-versatile",
+    provider: "groq",
+    role: "Free Cloud Backup",
+    focus: "fast inference, general tasks, code generation, backup when Ollama unavailable",
+    maxTokens: 8192,
+    tier: "tier0", // Free tier
+    costPer1M: 0, // FREE (Groq free tier)
+    specialties: ["fast_inference", "general", "code", "backup"],
+    isFree: true,
+    isLocal: false, // Cloud but free
+    priority: "medium", // Use when Ollama unavailable
+  },
 };
 
 // ==================== AGGRESSIVE COST OPTIMIZATION (Target: 1-5% of original costs) ====================
@@ -2510,6 +2526,8 @@ function getApiKeyForProvider(provider) {
       );
     case "xai":
       return process.env.GROK_API_KEY?.trim();
+    case "groq":
+      return process.env.GROQ_API_KEY?.trim();
     case "openai":
       return process.env.OPENAI_API_KEY?.trim();
     default:
@@ -3024,27 +3042,41 @@ async function callCouncilMember(member, prompt, options = {}) {
   const memberConfig = COUNCIL_MEMBERS[member];
   const isPaid = !memberConfig?.isFree && (memberConfig?.costPer1M > 0 || memberConfig?.tier === "tier1");
   
-  // If MAX_DAILY_SPEND is 0, block ALL paid models - AUTOMATICALLY FALL BACK TO OLLAMA
+  // If MAX_DAILY_SPEND is 0, block ALL paid models - AUTOMATICALLY FALL BACK TO FREE MODELS
   if (MAX_DAILY_SPEND === 0 && isPaid) {
+    // Try Ollama first
     const ollamaFallback = getOllamaFallbackModel(member, options.taskType);
     if (ollamaFallback && OLLAMA_ENDPOINT) {
       console.log(`💰 [COST SHUTDOWN] Blocked ${member} - Auto-falling back to ${ollamaFallback} (Ollama)`);
-      // Recursively call with Ollama fallback
       return await callCouncilMember(ollamaFallback, prompt, options);
     }
+    
+    // If Ollama unavailable, try Groq (free cloud backup)
+    if (GROQ_API_KEY) {
+      console.log(`💰 [COST SHUTDOWN] Blocked ${member} - Ollama unavailable, falling back to Groq (free cloud)`);
+      return await callCouncilMember('groq', prompt, options);
+    }
+    
     throw new Error(
-      `💰 [COST SHUTDOWN] Blocked ${member} - Spending disabled (MAX_DAILY_SPEND=$0). Use free models only (ollama_deepseek, ollama_llama).`
+      `💰 [COST SHUTDOWN] Blocked ${member} - Spending disabled (MAX_DAILY_SPEND=$0). Use free models only (ollama_deepseek, ollama_llama, groq).`
     );
   }
   
-  // Also block if spending threshold reached - AUTOMATICALLY FALL BACK TO OLLAMA
+  // Also block if spending threshold reached - AUTOMATICALLY FALL BACK TO FREE MODELS
   if (spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
+    // Try Ollama first
     const ollamaFallback = getOllamaFallbackModel(member, options.taskType);
     if (ollamaFallback && OLLAMA_ENDPOINT) {
       console.log(`💰 [COST SHUTDOWN] Blocked ${member} ($${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}) - Auto-falling back to ${ollamaFallback} (Ollama)`);
-      // Recursively call with Ollama fallback
       return await callCouncilMember(ollamaFallback, prompt, options);
     }
+    
+    // If Ollama unavailable, try Groq (free cloud backup)
+    if (GROQ_API_KEY) {
+      console.log(`💰 [COST SHUTDOWN] Blocked ${member} ($${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}) - Ollama unavailable, falling back to Groq (free cloud)`);
+      return await callCouncilMember('groq', prompt, options);
+    }
+    
     throw new Error(
       `💰 [COST SHUTDOWN] Blocked ${member} - Spending $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD}. Use Tier 0 (free) models only.`
     );
@@ -3346,6 +3378,68 @@ Be concise, strategic, and speak as the system's internal AI.`;
       if (!text) throw new Error("Empty response");
 
       const cost = calculateCost(json.usage, config.model);
+      await updateDailySpend(cost);
+
+      const duration = Date.now() - startTime;
+      await trackAIPerformance(
+        member,
+        "chat",
+        duration,
+        json.usage?.total_tokens || 0,
+        cost,
+        true
+      );
+
+      // CACHE THE RESPONSE
+      if (options.useCache !== false) {
+        cacheResponse(prompt, member, text);
+      }
+
+      await storeConversationMemory(prompt, text, { ai_member: member });
+      return text;
+    }
+
+    // GROQ (FREE CLOUD - No tunnel needed)
+    if (config.provider === "groq") {
+      const apiKey = getApiKey("groq");
+      if (!apiKey) {
+        throw new Error("Groq API key not configured (GROQ_API_KEY)");
+      }
+
+      console.log(`🆓 [GROQ] Calling free cloud model: ${config.model}`);
+      
+      response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+          ...noCacheHeaders,
+        },
+        body: JSON.stringify({
+          model: config.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: enhancedPrompt },
+          ],
+          max_tokens: config.maxTokens,
+          temperature: 0.7,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Groq API error: ${response.status} - ${errorText}`);
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const json = await response.json();
+      if (json.error) throw new Error(json.error.message);
+
+      const text = json.choices?.[0]?.message?.content || "";
+      if (!text) throw new Error("Empty response");
+
+      // Groq is free, so cost is 0
+      const cost = 0;
       await updateDailySpend(cost);
 
       const duration = Date.now() - startTime;

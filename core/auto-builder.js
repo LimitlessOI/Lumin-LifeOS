@@ -477,6 +477,108 @@ Make sure the file is complete, working, and production-ready.`;
   }
 
   /**
+   * Build next opportunity from queue
+   */
+  async buildNextOpportunity() {
+    console.log('🔨 [AUTO-BUILDER] Building next opportunity...');
+    
+    try {
+      // Get pending opportunities from both tables
+      const revenueResult = await this.pool.query(`
+        SELECT 
+          'revenue' as source,
+          opportunity_id as id,
+          name,
+          status,
+          created_at,
+          priority
+        FROM revenue_opportunities 
+        WHERE status = 'pending' OR status = 'queued'
+        ORDER BY priority DESC NULLS LAST, created_at ASC 
+        LIMIT 1
+      `);
+      
+      const droneResult = await this.pool.query(`
+        SELECT 
+          'drone' as source,
+          id::text as id,
+          opportunity_type as name,
+          status,
+          created_at,
+          5 as priority
+        FROM drone_opportunities 
+        WHERE status = 'pending' OR status = 'queued'
+        ORDER BY created_at ASC 
+        LIMIT 1
+      `);
+      
+      // Choose the highest priority opportunity
+      const opportunities = [
+        ...revenueResult.rows.map(r => ({ ...r, source: 'revenue' })),
+        ...droneResult.rows.map(r => ({ ...r, source: 'drone' }))
+      ].sort((a, b) => (b.priority || 0) - (a.priority || 0));
+      
+      if (opportunities.length === 0) {
+        console.log('📭 [AUTO-BUILDER] No pending opportunities');
+        return { success: false, message: 'No pending opportunities' };
+      }
+      
+      const opportunity = opportunities[0];
+      const oppId = opportunity.id;
+      console.log(`🎯 [AUTO-BUILDER] Building opportunity: ${opportunity.name || oppId}`);
+      
+      // Update status to building
+      if (opportunity.source === 'revenue') {
+        await this.pool.query(
+          `UPDATE revenue_opportunities SET status = 'building', updated_at = NOW() WHERE opportunity_id = $1`,
+          [oppId]
+        );
+      } else {
+        await this.pool.query(
+          `UPDATE drone_opportunities SET status = 'building', updated_at = NOW() WHERE id = $1`,
+          [oppId]
+        );
+      }
+      
+      // Call existing build method
+      const buildResult = await this.buildOpportunity(opportunity);
+      
+      // Update status based on result
+      if (buildResult.success) {
+        if (opportunity.source === 'revenue') {
+          await this.pool.query(
+            `UPDATE revenue_opportunities SET status = 'completed', updated_at = NOW() WHERE opportunity_id = $1`,
+            [oppId]
+          );
+        } else {
+          await this.pool.query(
+            `UPDATE drone_opportunities SET status = 'completed', updated_at = NOW() WHERE id = $1`,
+            [oppId]
+          );
+        }
+      } else {
+        if (opportunity.source === 'revenue') {
+          await this.pool.query(
+            `UPDATE revenue_opportunities SET status = 'failed', error_message = $2, updated_at = NOW() WHERE opportunity_id = $1`,
+            [oppId, buildResult.error || 'Unknown error']
+          );
+        } else {
+          await this.pool.query(
+            `UPDATE drone_opportunities SET status = 'failed', updated_at = NOW() WHERE id = $1`,
+            [oppId]
+          );
+        }
+      }
+      
+      return buildResult;
+      
+    } catch (error) {
+      console.error('❌ [AUTO-BUILDER] buildNextOpportunity error:', error.message);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
    * Get build status
    */
   async getStatus() {
