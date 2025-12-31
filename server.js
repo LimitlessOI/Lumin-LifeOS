@@ -13308,7 +13308,7 @@ app.post("/internal/autopilot/build-now", requireKey, async (req, res) => {
       // Try to initialize if not available
       try {
         const { AutoBuilder } = await import("./core/auto-builder.js");
-        autoBuilder = new AutoBuilder(pool, callCouncilMember, executionQueue);
+        autoBuilder = new AutoBuilder(pool, callCouncilMember, executionQueue, getCouncilConsensus);
         await autoBuilder.start();
       } catch (initError) {
         console.warn('AutoBuilder not available:', initError.message);
@@ -14289,10 +14289,25 @@ CRITICAL: Write COMPLETE files using EXACT format:
 
 Write the complete working code now:`;
 
-    const codeResponse = await callCouncilWithFailover(codePrompt, "chatgpt", {
-      maxTokens: 8000,
-      temperature: 0.3,
-    });
+    // Use consensus mode for code generation (requires 2+ models to agree)
+    let codeResponse;
+    console.log('🤝 [SELF-PROGRAM] Using consensus mode for code generation...');
+    try {
+      codeResponse = await getCouncilConsensus(codePrompt, 'code_generation');
+      if (!codeResponse) {
+        console.warn('⚠️ [SELF-PROGRAM] Consensus failed, falling back to single model');
+        codeResponse = await callCouncilWithFailover(codePrompt, "chatgpt", {
+          maxTokens: 8000,
+          temperature: 0.3,
+        });
+      }
+    } catch (consensusError) {
+      console.warn(`⚠️ [SELF-PROGRAM] Consensus error: ${consensusError.message}, using single model`);
+      codeResponse = await callCouncilWithFailover(codePrompt, "chatgpt", {
+        maxTokens: 8000,
+        temperature: 0.3,
+      });
+    }
 
     const fileChanges = await extractFileChanges(codeResponse);
     
