@@ -6,10 +6,11 @@
  */
 
 export class AutoBuilder {
-  constructor(pool, callCouncilMember, executionQueue) {
+  constructor(pool, callCouncilMember, executionQueue, getCouncilConsensus = null) {
     this.pool = pool;
     this.callCouncilMember = callCouncilMember;
     this.executionQueue = executionQueue;
+    this.getCouncilConsensus = getCouncilConsensus; // Consensus function for code decisions
     this.isRunning = false;
     this.capacityAllocation = {
       building: 0.30, // 30% capacity for building new opportunities
@@ -411,11 +412,19 @@ Generate ALL files needed to make this work. Be complete and production-ready.`;
       // Use improved code generation prompt
       const buildPrompt = this.getCodeGenerationPrompt(opportunity, plan);
 
-      const codeResponse = await this.callCouncilMember('chatgpt', buildPrompt, {
-        useTwoTier: false,
-        maxTokens: 8000,
-        temperature: 0.3,
-      });
+      // Use consensus mode for code generation (requires 2+ models to agree)
+      let codeResponse;
+      if (typeof this.getCouncilConsensus === 'function') {
+        console.log('🤝 [AUTO-BUILDER] Using consensus mode for code generation...');
+        codeResponse = await this.getCouncilConsensus(buildPrompt, 'code_generation');
+      } else {
+        // Fallback to single model if consensus not available
+        codeResponse = await this.callCouncilMember('chatgpt', buildPrompt, {
+          useTwoTier: false,
+          maxTokens: 8000,
+          temperature: 0.3,
+        });
+      }
 
       // Extract files using improved extractor
       const files = this.extractFilesFromResponse(codeResponse);
