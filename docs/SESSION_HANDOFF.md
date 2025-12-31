@@ -1,7 +1,18 @@
-# SESSION HANDOFF DOCUMENT
+# SESSION HANDOFF - LifeOS Project
 
-> **Last Updated:** 2025-01-02  
-> **Purpose:** Help new Claude instances quickly understand project state
+> **Last Updated:** December 31, 2024  
+> **Session:** TRUE_VISION foundation + local server setup  
+> **Purpose:** Help new Claude/AI instances quickly get up to speed
+
+---
+
+## Quick Start for New AI Instances
+
+**Read these files in order:**
+1. `docs/TRUE_VISION.md` - The complete mission and philosophy
+2. `docs/CORE_TRUTHS.md` - 10 immutable principles
+3. `docs/PROJECT_CONTEXT.md` - Technical status
+4. This file - Current state and priorities
 
 ---
 
@@ -40,99 +51,46 @@ Both run on the **Overlay** - a lightweight window connected to cloud servers.
 
 ## 3. WHAT'S WORKING ✅
 
-### Infrastructure
-- ✅ Railway deployment (production)
-- ✅ Neon PostgreSQL database connected
-- ✅ Local Ollama on Mac M2 Max (32GB RAM)
-- ✅ Groq API integration (free cloud backup)
-- ✅ Health endpoints (`/healthz`, `/health`, `/api/health`)
-
-### AI System
-- ✅ Multi-tier AI Council (Tier 0: free, Tier 1: paid)
-- ✅ Cost shutdown protection (blocks paid models when budget = $0)
-- ✅ Automatic fallback chain: Groq → Ollama → Error
-- ✅ Knowledge context loading (TRUE_VISION.md as primary)
-- ✅ JSON sanitization for Ollama responses
-- ✅ Streaming support for Cloudflare tunnels
-
-### Core Features
-- ✅ Self-programming capability (codebase reader, dependency manager, error recovery)
-- ✅ Auto-builder for revenue opportunities
-- ✅ Business Center (opportunity generation)
-- ✅ Knowledge base processing (18 dumps, 402 ideas indexed)
-- ✅ Knowledge query endpoints (`/api/v1/knowledge/*`)
-
-### Knowledge System
-- ✅ TRUE_VISION.md loaded as primary context in all AI prompts
-- ✅ CORE_TRUTHS.md and PROJECT_CONTEXT.md loaded
-- ✅ Knowledge dumps processed into `knowledge/index/entries.jsonl`
-- ✅ Code snippet filtering to avoid garbage in prompts
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Server (local) | ✅ Works | `node --env-file=.env.local server.js` |
+| Ollama AI | ✅ Works | Free, local, no API costs |
+| Database (Neon) | ✅ Works | Cloud, free tier |
+| TRUE_VISION context | ✅ Added | Now injected into all AI prompts |
+| Knowledge base | ⚠️ Partial | Has entries but extraction was poor |
+| Health endpoints | ✅ Works | `/healthz`, `/health`, `/api/health` |
+| JSON sanitization | ✅ Works | Handles Ollama response parsing |
+| Cost shutdown | ✅ Works | Blocks paid models when budget = $0 |
+| Multi-tier AI Council | ✅ Works | Tier 0 (free) + Tier 1 (paid) |
+| Knowledge query endpoints | ✅ Works | `/api/v1/knowledge/*` |
 
 ---
 
-## 4. WHAT'S BROKEN / NEEDS WORK ⚠️
+## 4. WHAT'S NOT WORKING ❌
 
-### Critical Issues
-- ⚠️ **Railway auto-deploy** - May not trigger automatically (webhook issues)
-  - **Workaround:** Manual redeploy in Railway dashboard
-  - **Fix needed:** Reconnect GitHub webhook or verify auto-deploy settings
-
-### Known Limitations
-- ⚠️ **Knowledge dumps contain code snippets** - Some entries in `entries.jsonl` are code fragments, not ideas
-  - **Status:** Filtering added, but may need refinement
-  - **Impact:** Low (filtering works, but some garbage may slip through)
-
-- ⚠️ **Database query in buildNextOpportunity** - Fixed but needs testing
-  - **Status:** Changed from `ORDER BY priority DESC` to `ORDER BY created_at DESC`
-  - **Needs:** Verification that it works correctly
-
-### Missing Features
-- ⚠️ **AST parsing** - Not yet implemented (from SELF_PROGRAMMING_GAPS_ANALYSIS.md)
-- ⚠️ **Advanced code quality checks** - Basic linting only
-- ⚠️ **Automated testing** - Not integrated into self-programming flow
-- ⚠️ **Migration generator** - Created but needs integration testing
-
-### Environment Setup
-- ⚠️ **`.env.local`** - Needs DATABASE_URL from Railway
-  - **Status:** Template created, user needs to fill in actual DATABASE_URL
-  - **Guide:** See `docs/HOW_TO_FIND_RAILWAY_DATABASE_URL.md`
+| Component | Status | Issue |
+|-----------|--------|-------|
+| Railway server | ❌ Broken | Tunnel to Ollama fails (HTTP 403) |
+| Groq fallback | ❌ Bug | MODEL OPTIMIZATION overrides it |
+| Self-programming | ❌ Broken | Can't save generated files |
+| Auto-builder | ❌ Broken | File extraction fails |
+| Overlay UI | ⚠️ Untested | Needs verification |
+| Railway auto-deploy | ⚠️ Intermittent | Webhook may be disconnected |
+| Knowledge extraction | ⚠️ Poor quality | Code snippets mixed with ideas |
+| AST parsing | ❌ Missing | Not yet implemented |
+| Advanced testing | ❌ Missing | Not integrated into self-programming |
 
 ---
 
 ## 5. IMMEDIATE PRIORITIES
 
-### Priority 1: Revenue Generation
-1. **Launch Builder pods + Money pods**
-   - Get overlay, receptionist, CRM, outbound, and TC live
-   - Scale to $500+/day with ROI-gated spend
-
-2. **Revenue-generating apps/services:**
-   - AI CRM Overlay (always-on, screen-aware)
-   - AI Story/Anime/Movie Generator
-   - AI Legal Documents
-   - Screen Shopping Overlay
-   - Employee Training Overlay
-   - KeepMyWordTracker
-   - ADHD/Executive Function Assistant
-   - AI Homework Helper
-   - Commercial Property Finder
-   - Habit Tracker for salespeople
-
-### Priority 2: System Hardening
-1. **Test and verify recent fixes:**
-   - Database query fix in `buildNextOpportunity`
-   - Groq API handler (verify it works end-to-end)
-   - Knowledge context loading (verify TRUE_VISION is used)
-
-2. **Improve knowledge processing:**
-   - Better filtering of code snippets
-   - Smarter idea extraction from dumps
-   - Process remaining 114 MB of dumps intelligently
-
-### Priority 3: Self-Programming Enhancement
-1. **Add AST parsing** (from gaps analysis)
-2. **Improve code modification** (insert into existing files, not just replace)
-3. **Add automated testing** to self-programming flow
+1. **Test TRUE_VISION injection** - Verify AI knows the real mission
+2. **Fix Groq fallback** - So cloud server can work without tunnel
+3. **Test overlay** - Verify communication works
+4. **Fix self-programming** - Enable file saving for generated code
+5. **Fix auto-builder** - Get file extraction working
+6. **Fix Railway tunnel** - Resolve HTTP 403 to Ollama
+7. **Improve knowledge extraction** - Filter out code snippets better
 
 ---
 
