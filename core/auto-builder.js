@@ -5,6 +5,50 @@
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+/**
+ * Write built files to disk in sandbox/ directory
+ */
+async function writeBuiltFiles(build) {
+  try {
+    const baseDir = path.join(process.cwd(), 'sandbox', build.opportunity_id || `build_${build.id}`);
+    
+    // Create directory
+    await fs.mkdir(baseDir, { recursive: true });
+    
+    let filesWritten = 0;
+    for (const file of build.files || []) {
+      if (!file.path || !file.content) {
+        console.warn(`⚠️ [AUTO-BUILDER] Skipping invalid file: ${file.path || 'no path'}`);
+        continue;
+      }
+      
+      const filePath = path.join(baseDir, file.path);
+      const fileDir = path.dirname(filePath);
+      
+      // Create subdirectories if needed
+      await fs.mkdir(fileDir, { recursive: true });
+      
+      // Write the file
+      await fs.writeFile(filePath, file.content, 'utf-8');
+      console.log(`📁 [AUTO-BUILDER] Wrote file: ${filePath}`);
+      filesWritten++;
+    }
+    
+    console.log(`✅ [AUTO-BUILDER] Saved ${filesWritten} files to ${baseDir}`);
+    return baseDir;
+  } catch (error) {
+    console.error(`❌ [AUTO-BUILDER] Error writing files to disk: ${error.message}`);
+    throw error;
+  }
+}
+
 export class AutoBuilder {
   constructor(pool, callCouncilMember, executionQueue, getCouncilConsensus = null) {
     this.pool = pool;
@@ -452,6 +496,21 @@ Generate ALL files needed to make this work. Be complete and production-ready.`;
           JSON.stringify(files),
         ]
       );
+
+      // Write files to disk immediately
+      console.log('📁 [AUTO-BUILDER] Writing files to disk...');
+      try {
+        const buildData = {
+          opportunity_id: opportunity.id,
+          id: opportunity.id,
+          files: files.map(f => ({ path: f.path, content: f.content })),
+        };
+        const writtenDir = await writeBuiltFiles(buildData);
+        console.log(`✅ [AUTO-BUILDER] Files written to: ${writtenDir}`);
+      } catch (writeError) {
+        console.error(`❌ [AUTO-BUILDER] Failed to write files to disk: ${writeError.message}`);
+        // Continue anyway - files are in database
+      }
 
       // Lint and implement files
       const implementedFiles = [];
