@@ -259,20 +259,12 @@ async function findDumpFiles() {
   const possiblePaths = [
     path.join(ROOT_DIR, '• Lumin-Memory', '00_INBOX', 'raw'),
     path.join(ROOT_DIR, 'Lumin-Memory', '00_INBOX', 'raw'),
-    path.join(ROOT_DIR, '*Lumin*', '00_INBOX', 'raw'),
-    path.join(ROOT_DIR, '**', '*Lumin*', '**', 'raw'),
   ];
   
   const files = [];
   
   for (const basePath of possiblePaths) {
     try {
-      // Handle glob patterns
-      if (basePath.includes('*')) {
-        // Skip glob for now, try direct paths first
-        continue;
-      }
-      
       const entries = await fs.readdir(basePath, { withFileTypes: true });
       
       for (const entry of entries) {
@@ -288,6 +280,33 @@ async function findDumpFiles() {
     } catch (error) {
       // Path doesn't exist, try next
       continue;
+    }
+  }
+  
+  // If no files found, try recursive search
+  if (files.length === 0) {
+    console.log('   Searching recursively for dump files...');
+    try {
+      const searchDir = path.join(ROOT_DIR, '• Lumin-Memory');
+      const searchRecursive = async (dir) => {
+        const entries = await fs.readdir(dir, { withFileTypes: true });
+        for (const entry of entries) {
+          const fullPath = path.join(dir, entry.name);
+          if (entry.isDirectory() && entry.name === 'raw') {
+            const rawEntries = await fs.readdir(fullPath, { withFileTypes: true });
+            for (const rawEntry of rawEntries) {
+              if (rawEntry.isFile() && !rawEntry.name.startsWith('.') && rawEntry.name !== 'README.md') {
+                files.push(path.join(fullPath, rawEntry.name));
+              }
+            }
+          } else if (entry.isDirectory()) {
+            await searchRecursive(fullPath);
+          }
+        }
+      };
+      await searchRecursive(searchDir);
+    } catch (error) {
+      // Ignore recursive search errors
     }
   }
   
