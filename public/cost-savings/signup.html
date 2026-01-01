@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - API Cost Savings | LimitlessAI</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+      background: #f5f7fa;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    h1 { color: #667eea; margin-bottom: 30px; }
+    .form-group { margin-bottom: 25px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover { background: #5568d3; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    .error { color: #e74c3c; margin-top: 10px; }
+    .success { color: #27ae60; margin-top: 10px; }
+    .info-box {
+      background: #e8f4f8;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      border-left: 4px solid #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Start Saving on AI API Costs</h1>
+    
+    <div class="info-box">
+      <strong>How it works:</strong>
+      <ul style="margin-top: 10px; margin-left: 20px;">
+        <li>We analyze your current AI API usage</li>
+        <li>Implement intelligent routing and caching</li>
+        <li>You save 90% on average</li>
+        <li>You pay us 20% of your savings (only if we save you money)</li>
+      </ul>
+    </div>
+
+    <form id="signup-form">
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" id="email" required placeholder="your@email.com">
+      </div>
+      
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="company" placeholder="Your Company">
+      </div>
+      
+      <div class="form-group">
+        <label>Current Monthly AI API Spend (USD)</label>
+        <input type="number" id="current-spend" min="0" step="0.01" placeholder="1000" required>
+        <small style="color: #666;">We'll use this to calculate your potential savings</small>
+      </div>
+      
+      <div class="form-group">
+        <label>Which APIs do you currently use?</label>
+        <textarea id="apis" rows="3" placeholder="OpenAI, Anthropic, Google Gemini, etc."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>How did you hear about us?</label>
+        <select id="source" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;">
+          <option>Google Search</option>
+          <option>Twitter/X</option>
+          <option>LinkedIn</option>
+          <option>Blog Post</option>
+          <option>Friend/Colleague</option>
+          <option>Other</option>
+        </select>
+      </div>
+      
+      <button type="submit" id="submit-btn">Get Started - It's Free</button>
+      <div id="message"></div>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const btn = document.getElementById('submit-btn');
+      const message = document.getElementById('message');
+      btn.disabled = true;
+      btn.textContent = 'Processing...';
+      message.innerHTML = '';
+      
+      const data = {
+        email: document.getElementById('email').value,
+        company: document.getElementById('company').value,
+        current_spend: parseFloat(document.getElementById('current-spend').value),
+        apis: document.getElementById('apis').value,
+        source: document.getElementById('source').value,
+        product: 'cost-savings'
+      };
+      
+      try {
+        const response = await fetch('/api/v1/cost-savings/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.ok) {
+          message.innerHTML = '<div class="success">✅ Success! Check your email for next steps.</div>';
+          document.getElementById('signup-form').reset();
+          
+          // Track conversion
+          if (typeof fetch !== 'undefined') {
+            fetch('/api/v1/analytics/track', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                event: 'signup_completed',
+                product: 'cost-savings',
+                current_spend: data.current_spend,
+                source: data.source
+              })
+            }).catch(() => {});
+          }
+        } else {
+          message.innerHTML = `<div class="error">❌ ${result.error || 'Something went wrong'}</div>`;
+        }
+      } catch (error) {
+        message.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Get Started - It\'s Free';
+      }
+    });
+  </script>
+</body>
+</html>

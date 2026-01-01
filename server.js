@@ -248,6 +248,24 @@ app.use(express.text({ type: "text/plain", limit: "50mb" }));
 // Serve static files (after specific routes)
 app.use(express.static(path.join(__dirname, "public")));
 
+// Cost Savings Landing Page
+app.get("/cost-savings", (req, res) => {
+  const filePath = path.join(__dirname, "public", "cost-savings", "index.html");
+  if (fs.existsSync(filePath)) {
+    return res.sendFile(filePath);
+  }
+  res.status(404).send("Cost savings page not found");
+});
+
+// Cost Savings Signup Page
+app.get("/cost-savings/signup", (req, res) => {
+  const filePath = path.join(__dirname, "public", "cost-savings", "signup.html");
+  if (fs.existsSync(filePath)) {
+    return res.sendFile(filePath);
+  }
+  res.status(404).send("Signup page not found");
+});
+
 // ==================== RATE LIMITING ====================
 // General API rate limiter: 100 requests per 15 minutes per IP
 const generalLimiter = rateLimit({
@@ -1600,9 +1618,17 @@ async function initDatabase() {
       stripe_customer_id VARCHAR(255),
       subscription_status VARCHAR(50) DEFAULT 'active',
       onboarding_data JSONB,
+      source VARCHAR(100),
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )`);
+    
+    // Add source column if it doesn't exist (migration)
+    try {
+      await pool.query(`ALTER TABLE api_cost_savings_clients ADD COLUMN IF NOT EXISTS source VARCHAR(100)`);
+    } catch (e) {
+      // Column might already exist, ignore
+    }
 
     await pool.query(`CREATE TABLE IF NOT EXISTS api_cost_savings_analyses (
       id SERIAL PRIMARY KEY,
@@ -1636,6 +1662,53 @@ async function initDatabase() {
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_savings_analyses_client ON api_cost_savings_analyses(client_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_savings_metrics_client ON api_cost_savings_metrics(client_id)`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_cost_savings_metrics_date ON api_cost_savings_metrics(metric_date)`);
+
+    // Promotion Engine Tables
+    await pool.query(`CREATE TABLE IF NOT EXISTS blog_posts (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(500) NOT NULL,
+      content TEXT NOT NULL,
+      slug VARCHAR(500) UNIQUE NOT NULL,
+      status VARCHAR(50) DEFAULT 'draft',
+      published_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS social_media_posts (
+      id SERIAL PRIMARY KEY,
+      platform VARCHAR(50) NOT NULL,
+      message TEXT NOT NULL,
+      url VARCHAR(500),
+      status VARCHAR(50) DEFAULT 'draft',
+      scheduled_at TIMESTAMPTZ,
+      posted_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS email_campaigns (
+      id SERIAL PRIMARY KEY,
+      recipient_email VARCHAR(255) NOT NULL,
+      subject VARCHAR(500) NOT NULL,
+      content TEXT NOT NULL,
+      status VARCHAR(50) DEFAULT 'draft',
+      sent_at TIMESTAMPTZ,
+      opened_at TIMESTAMPTZ,
+      clicked_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE TABLE IF NOT EXISTS promotion_analytics (
+      id SERIAL PRIMARY KEY,
+      event_type VARCHAR(100) NOT NULL,
+      event_data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )`);
+
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_social_posts_platform ON social_media_posts(platform, status)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_email_campaigns_email ON email_campaigns(recipient_email)`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_promotion_analytics_event ON promotion_analytics(event_type, created_at)`);
 
     // Agent Recruitment Pipeline Tables
     await pool.query(`CREATE TABLE IF NOT EXISTS recruitment_leads (
@@ -6316,6 +6389,7 @@ let selfBuilder = null;
 let ideaToImplementationPipeline = null;
 let sourceOfTruthManager = null;
 let autoBuilder = null;
+let promotionEngine = null;
 
 async function initializeTwoTierSystem() {
   try {
@@ -9062,6 +9136,89 @@ app.post("/api/v1/boldtrail/create-subscription", requireKey, async (req, res) =
 });
 
 // ==================== API COST-SAVINGS SERVICE ENDPOINTS ====================
+// Public signup endpoint (no API key required)
+app.post("/api/v1/cost-savings/signup", async (req, res) => {
+  try {
+    const { email, company, current_spend, apis, source, product = 'cost-savings' } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ ok: false, error: "Email required" });
+    }
+
+    // Check if client already exists
+    const existing = await pool.query(
+      "SELECT * FROM api_cost_savings_clients WHERE email = $1",
+      [email]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.json({
+        ok: true,
+        client: existing.rows[0],
+        message: "You're already registered! Check your email for next steps.",
+      });
+    }
+
+    // Create new client
+    const result = await pool.query(
+      `INSERT INTO api_cost_savings_clients 
+       (company_name, email, contact_name, current_ai_provider, monthly_spend, use_cases, source)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING *`,
+      [
+        company || null,
+        email,
+        null, // contact_name
+        apis || null, // current_ai_provider
+        current_spend ? parseFloat(current_spend) : null,
+        null, // use_cases
+        source || 'direct', // source
+      ]
+    );
+
+    const client = result.rows[0];
+
+    // Calculate potential savings
+    const estimatedSavings = current_spend ? (current_spend * 0.9) : null;
+    const estimatedFee = estimatedSavings ? (estimatedSavings * 0.2) : null;
+
+    // TODO: Send welcome email with next steps
+    // TODO: Create initial analysis
+
+    // Track signup
+    try {
+      await pool.query(
+        `INSERT INTO api_cost_savings_analyses 
+         (client_id, current_spend, optimized_spend, savings_amount, savings_percentage)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [
+          client.id,
+          current_spend || 0,
+          current_spend ? (current_spend * 0.1) : 0, // 90% savings
+          estimatedSavings || 0,
+          90, // 90% savings estimate
+        ]
+      );
+    } catch (analysisError) {
+      console.warn('Could not create initial analysis:', analysisError.message);
+    }
+
+    res.json({
+      ok: true,
+      client: {
+        id: client.id,
+        email: client.email,
+      },
+      estimated_savings: estimatedSavings,
+      estimated_fee: estimatedFee,
+      message: "Registration successful! Check your email for next steps.",
+    });
+  } catch (error) {
+    console.error("Cost-savings signup error:", error);
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 app.post("/api/v1/cost-savings/register", requireKey, async (req, res) => {
   try {
     const { company_name, email, contact_name, current_ai_provider, monthly_spend, use_cases } = req.body;
@@ -13707,7 +13864,7 @@ function compareResponses(a, b) {
   if (!a || !b) return 0;
   
   // Simple word overlap comparison
-  const wordsA = new Set(a.toLowerCase().split(/\s+/).filter(w => w.length > 2)));
+  const wordsA = new Set(a.toLowerCase().split(/\s+/).filter(w => w.length > 2));
   const wordsB = new Set(b.toLowerCase().split(/\s+/).filter(w => w.length > 2));
   const intersection = [...wordsA].filter(w => wordsB.has(w));
   const union = new Set([...wordsA, ...wordsB]);

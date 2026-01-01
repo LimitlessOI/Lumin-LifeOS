@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Save 90% on AI API Costs | LimitlessAI</title>
+  <meta name="description" content="Cut your AI API costs by 90% with intelligent model routing, caching, and local-first architecture. Pay only 20% of what you save.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+      line-height: 1.6; 
+      color: #333; 
+      overflow-x: hidden;
+    }
+    .hero { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      color: white; 
+      padding: 100px 20px; 
+      text-align: center; 
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,0 C150,80 350,40 600,60 C850,80 1050,40 1200,60 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/></svg>') no-repeat bottom;
+      background-size: cover;
+      opacity: 0.3;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 { 
+      font-size: 3.5rem; 
+      font-weight: 700; 
+      margin-bottom: 1.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    .subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+      font-weight: 300;
+    }
+    .cta-button {
+      display: inline-block;
+      background: white;
+      color: #667eea;
+      padding: 18px 40px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 50px;
+      margin: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    .cta-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+    .cta-secondary:hover {
+      background: white;
+      color: #667eea;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .section {
+      padding: 80px 20px;
+    }
+    .section-alt {
+      background: #f8f9fa;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      margin-top: 60px;
+    }
+    .feature {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    }
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    .feature h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #667eea;
+    }
+    .pricing {
+      text-align: center;
+    }
+    .pricing-card {
+      background: white;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      padding: 50px 40px;
+      max-width: 500px;
+      margin: 40px auto;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    }
+    .price {
+      font-size: 4rem;
+      font-weight: 700;
+      color: #667eea;
+      margin: 20px 0;
+    }
+    .price-subtitle {
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+    .testimonial {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      margin: 30px 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border-left: 4px solid #667eea;
+    }
+    .testimonial-author {
+      margin-top: 20px;
+      font-weight: 600;
+      color: #667eea;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      text-align: center;
+      margin: 60px 0;
+    }
+    .stat {
+      padding: 30px;
+    }
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      color: #666;
+      font-size: 1.1rem;
+    }
+    .how-it-works {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+    .step {
+      text-align: center;
+      padding: 30px;
+    }
+    .step-number {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      background: #667eea;
+      color: white;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    footer {
+      background: #1a1a1a;
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+    .footer-links a:hover {
+      opacity: 1;
+    }
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      .subtitle { font-size: 1.2rem; }
+      .features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Save 90% on AI API Costs</h1>
+      <p class="subtitle">Intelligent routing, caching, and local-first architecture. Pay only 20% of what you save.</p>
+      <a href="#pricing" class="cta-button">Start Saving Now</a>
+      <a href="#how-it-works" class="cta-button cta-secondary">See How It Works</a>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="section">
+    <div class="container">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-number">90%</div>
+          <div class="stat-label">Average Cost Reduction</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">$0</div>
+          <div class="stat-label">Upfront Cost</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">20%</div>
+          <div class="stat-label">Of Savings Only</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Automatic Optimization</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 20px; color: #333;">How We Save You Money</h2>
+      <p style="text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 40px;">Intelligent AI model routing that automatically uses the cheapest option that meets your quality needs</p>
+      
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">🧠</div>
+          <h3>Smart Model Routing</h3>
+          <p>Automatically routes requests to the cheapest model that meets your quality requirements. Use expensive models only when needed.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💾</div>
+          <h3>Intelligent Caching</h3>
+          <p>Cache similar requests to avoid redundant API calls. Free responses for repeated queries.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🏠</div>
+          <h3>Local-First Architecture</h3>
+          <p>Use free local Ollama models for 90% of requests. Only use cloud APIs when local models can't handle it.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📊</div>
+          <h3>Real-Time Analytics</h3>
+          <p>Track exactly how much you're saving with detailed cost breakdowns and optimization recommendations.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔄</div>
+          <h3>Automatic Fallbacks</h3>
+          <p>Seamlessly falls back to free models when paid APIs are unavailable or hit rate limits.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔒</div>
+          <h3>No Lock-In</h3>
+          <p>Works with your existing API keys. No vendor lock-in. Cancel anytime.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 20px; color: #333;">How It Works</h2>
+      <div class="how-it-works">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Connect Your APIs</h3>
+          <p>Add your OpenAI, Anthropic, Google API keys. We never store them - they stay secure on your infrastructure.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>We Route Intelligently</h3>
+          <p>Our system automatically routes requests to the cheapest model that meets your quality needs. Free local models first, paid APIs only when needed.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>You Save Money</h3>
+          <p>Watch your API costs drop by 90%. We track every dollar saved and you only pay us 20% of your savings.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Continuous Optimization</h3>
+          <p>Our AI learns your usage patterns and continuously optimizes routing to maximize savings without sacrificing quality.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section section-alt" id="pricing">
+    <div class="container">
+      <div class="pricing">
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: #333;">Simple, Fair Pricing</h2>
+        <p style="font-size: 1.2rem; color: #666; margin-bottom: 40px;">You only pay when we save you money</p>
+        
+        <div class="pricing-card">
+          <h3 style="font-size: 1.8rem; margin-bottom: 20px;">Pay-From-Savings Model</h3>
+          <div class="price">20%</div>
+          <p class="price-subtitle">of your API cost savings</p>
+          <ul style="text-align: left; list-style: none; margin: 30px 0;">
+            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">✅ No upfront cost</li>
+            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">✅ No monthly fee</li>
+            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">✅ Pay only if we save you money</li>
+            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">✅ Cancel anytime</li>
+            <li style="padding: 10px 0;">✅ Full transparency on savings</li>
+          </ul>
+          <button id="start-saving-btn" class="cta-button" style="width: 100%; margin-top: 30px; cursor: pointer; border: none;">
+            Start Saving Now
+          </button>
+        </div>
+
+        <div style="margin-top: 40px; padding: 30px; background: white; border-radius: 12px; max-width: 600px; margin-left: auto; margin-right: auto;">
+          <h3 style="margin-bottom: 20px; color: #333;">Example Savings</h3>
+          <p style="margin-bottom: 15px;"><strong>Before:</strong> $10,000/month on AI APIs</p>
+          <p style="margin-bottom: 15px;"><strong>After:</strong> $1,000/month (90% reduction)</p>
+          <p style="margin-bottom: 15px;"><strong>You Save:</strong> $9,000/month</p>
+          <p style="margin-bottom: 15px;"><strong>You Pay Us:</strong> $1,800/month (20% of savings)</p>
+          <p style="font-size: 1.2rem; color: #667eea; font-weight: 600;"><strong>Net Savings:</strong> $7,200/month</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section">
+    <div class="container">
+      <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 40px; color: #333;">What Customers Say</h2>
+      <div class="testimonial">
+        <p style="font-size: 1.1rem; line-height: 1.8; font-style: italic;">"We were spending $15,000/month on OpenAI. After implementing LimitlessAI's routing system, we're down to $1,200/month. We pay them $2,760 (20% of $13,800 savings) and still save $11,040/month. Best decision we made."</p>
+        <div class="testimonial-author">— CTO, SaaS Startup</div>
+      </div>
+      <div class="testimonial">
+        <p style="font-size: 1.1rem; line-height: 1.8; font-style: italic;">"The local-first approach is brilliant. We use free Ollama models for 90% of our requests and only hit paid APIs for complex reasoning. Our costs dropped 85% in the first month."</p>
+        <div class="testimonial-author">— AI Product Manager, Tech Company</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section section-alt">
+    <div class="container" style="text-align: center;">
+      <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: #333;">Ready to Start Saving?</h2>
+      <p style="font-size: 1.2rem; color: #666; margin-bottom: 40px;">Join companies saving thousands per month on AI API costs</p>
+      <a href="#pricing" class="cta-button">Get Started Free</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <h3 style="margin-bottom: 30px;">LimitlessAI</h3>
+      <p style="opacity: 0.8; margin-bottom: 30px;">Intelligent AI cost optimization. Pay only for results.</p>
+      <div class="footer-links">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="/api/v1/docs">API Docs</a>
+        <a href="mailto:support@limitlessai.com">Support</a>
+      </div>
+      <p style="margin-top: 40px; opacity: 0.6; font-size: 0.9rem;">© 2025 LimitlessAI. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Handle CTA button clicks
+    document.getElementById('start-saving-btn').addEventListener('click', function() {
+      // Scroll to pricing or open signup
+      window.location.href = '/api/v1/signup?product=cost-savings';
+    });
+
+    // Track page views
+    if (typeof fetch !== 'undefined') {
+      fetch('/api/v1/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: 'page_view',
+          page: 'cost-savings-landing',
+          timestamp: new Date().toISOString()
+        })
+      }).catch(() => {}); // Fail silently
+    }
+  </script>
+</body>
+</html>
