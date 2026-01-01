@@ -252,6 +252,30 @@ export class AutoBuilder {
 
       // Deploy if successful
       if (result.success) {
+        // Write files to disk before deploying
+        try {
+          // Get files from build artifacts
+          const artifactsResult = await this.pool.query(
+            `SELECT files FROM build_artifacts WHERE opportunity_id = $1 ORDER BY created_at DESC LIMIT 1`,
+            [opportunity.id]
+          );
+          
+          if (artifactsResult.rows.length > 0) {
+            const files = JSON.parse(artifactsResult.rows[0].files || '[]');
+            if (files.length > 0) {
+              console.log('📁 [AUTO-BUILDER] Writing files to disk before deployment...');
+              const buildData = {
+                opportunity_id: opportunity.id,
+                id: opportunity.id,
+                files: files.map(f => ({ path: f.path, content: f.content })),
+              };
+              await writeBuiltFiles(buildData);
+            }
+          }
+        } catch (writeError) {
+          console.error(`❌ [AUTO-BUILDER] Failed to write files to disk: ${writeError.message}`);
+        }
+
         await this.deployBuild(opportunity, result);
         
         // Mark as deployed
@@ -644,6 +668,45 @@ Make sure the file is complete, working, and production-ready.`;
   async deployBuild(opportunity, buildResult) {
     try {
       console.log(`🚀 [AUTO-BUILDER] Deploying: ${opportunity.name}`);
+
+      // Write files to disk before marking as deployed
+      try {
+        // Get files from build artifacts
+        const artifactsResult = await this.pool.query(
+          `SELECT files FROM build_artifacts WHERE opportunity_id = $1 ORDER BY created_at DESC LIMIT 1`,
+          [opportunity.id]
+        );
+        
+        if (artifactsResult.rows.length > 0) {
+          const files = JSON.parse(artifactsResult.rows[0].files || '[]');
+          if (files.length > 0) {
+            console.log('📁 [AUTO-BUILDER] Writing files to disk before deployment...');
+            const buildData = {
+              opportunity_id: opportunity.id,
+              id: opportunity.id,
+              files: files.map(f => ({ path: f.path, content: f.content })),
+            };
+            await writeBuiltFiles(buildData);
+          }
+        } else if (buildResult?.file_paths) {
+          // Fallback: use file paths from build result if available
+          console.log('📁 [AUTO-BUILDER] Writing files from build result...');
+          const buildData = {
+            opportunity_id: opportunity.id,
+            id: opportunity.id,
+            files: (buildResult.file_paths || []).map(fp => ({ 
+              path: fp, 
+              content: '' // Content would need to be retrieved separately
+            })),
+          };
+          if (buildData.files.length > 0) {
+            await writeBuiltFiles(buildData);
+          }
+        }
+      } catch (writeError) {
+        console.error(`❌ [AUTO-BUILDER] Failed to write files to disk: ${writeError.message}`);
+        // Continue with deployment even if file writing fails
+      }
 
       // Mark as deployed
       await this.pool.query(
