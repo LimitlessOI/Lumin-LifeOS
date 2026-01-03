@@ -65,6 +65,8 @@ const wss = new WebSocketServer({ server });
 // ==================== ENVIRONMENT CONFIGURATION ====================
 const {
   DATABASE_URL,
+  DATABASE_URL_SANDBOX,
+  SANDBOX_MODE,
   COMMAND_CENTER_KEY,
   OPENAI_API_KEY,
   ANTHROPIC_API_KEY,
@@ -96,6 +98,7 @@ const {
   COST_SHUTDOWN_THRESHOLD: RAW_COST_SHUTDOWN = "0",
   NODE_ENV = "production",
   RAILWAY_PUBLIC_DOMAIN = "robust-magic-production.up.railway.app",
+  RAILWAY_ENVIRONMENT,
   // Database SSL config (default: false for Neon.tech compatibility)
   DB_SSL_REJECT_UNAUTHORIZED = "false",
   // Stripe config
@@ -318,14 +321,106 @@ app.use((req, res, next) => {
   next();
 });
 
-// ==================== DATABASE POOL ====================
-// Validate DATABASE_URL to prevent searchParams errors from invalid connection strings
-let validatedDatabaseUrl = DATABASE_URL;
-if (!validatedDatabaseUrl || validatedDatabaseUrl === 'postgres://username:password@host:port/database') {
-  console.warn('⚠️ DATABASE_URL is missing or placeholder. Database features may not work.');
-  validatedDatabaseUrl = undefined; // Prevents searchParams crash
+// ==================== DATABASE ENVIRONMENT VALIDATION ====================
+/**
+ * Validates database environment variables and determines the correct connection string
+ * Fails fast if required variables are missing or misconfigured
+ */
+function validateDatabaseConfig() {
+  const errors = [];
+  const warnings = [];
+  
+  // Detect environment: Railway production vs Railway sandbox
+  const isRailway = !!(RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID || process.env.RAILWAY_SERVICE_ID);
+  const isSandboxEnv = SANDBOX_MODE === 'true' || 
+                       RAILWAY_ENVIRONMENT?.toLowerCase().includes('sandbox') ||
+                       RAILWAY_ENVIRONMENT?.toLowerCase().includes('lumin');
+  const isProductionEnv = !isSandboxEnv && (NODE_ENV === 'production' || isRailway);
+  
+  console.log('\n🔍 [DB VALIDATOR] Environment Detection:');
+  console.log(`   Railway: ${isRailway ? '✅' : '❌'}`);
+  console.log(`   Environment: ${RAILWAY_ENVIRONMENT || 'not set'}`);
+  console.log(`   SANDBOX_MODE: ${SANDBOX_MODE || 'not set'}`);
+  console.log(`   Detected: ${isSandboxEnv ? '🔶 SANDBOX' : isProductionEnv ? '🔵 PRODUCTION' : '⚪ LOCAL/DEV'}`);
+  
+  // Determine which database URL to use
+  let finalDatabaseUrl;
+  let databaseSource;
+  
+  if (isSandboxEnv) {
+    // SANDBOX: Must use DATABASE_URL_SANDBOX
+    if (!DATABASE_URL_SANDBOX) {
+      errors.push('DATABASE_URL_SANDBOX is required when SANDBOX_MODE=true or in sandbox environment');
+    } else {
+      finalDatabaseUrl = DATABASE_URL_SANDBOX;
+      databaseSource = 'DATABASE_URL_SANDBOX (sandbox)';
+      
+      // Safety check: If DATABASE_URL is set and points to production, warn
+      if (DATABASE_URL && DATABASE_URL !== DATABASE_URL_SANDBOX) {
+        const isProdUrl = DATABASE_URL.includes('neon.tech') && !DATABASE_URL.includes('sandbox');
+        if (isProdUrl) {
+          errors.push(`CRITICAL: SANDBOX_MODE=true but DATABASE_URL points to production database. This would cause data corruption.`);
+        }
+      }
+    }
+  } else {
+    // PRODUCTION: Must use DATABASE_URL
+    if (!DATABASE_URL) {
+      errors.push('DATABASE_URL is required for production environment');
+    } else if (DATABASE_URL === 'postgres://username:password@host:port/database') {
+      errors.push('DATABASE_URL is set to placeholder value. Set the actual production database URL.');
+    } else {
+      finalDatabaseUrl = DATABASE_URL;
+      databaseSource = 'DATABASE_URL (production)';
+    }
+  }
+  
+  // Validate connection string format
+  if (finalDatabaseUrl) {
+    if (!finalDatabaseUrl.startsWith('postgres://') && !finalDatabaseUrl.startsWith('postgresql://')) {
+      errors.push(`Invalid DATABASE_URL format. Must start with postgres:// or postgresql://`);
+    }
+    
+    // Check for placeholder values
+    if (finalDatabaseUrl.includes('username:password') || finalDatabaseUrl.includes('localhost:5432')) {
+      warnings.push(`DATABASE_URL appears to contain placeholder values: ${finalDatabaseUrl.substring(0, 50)}...`);
+    }
+  }
+  
+  // Report results
+  if (errors.length > 0) {
+    console.error('\n❌ [DB VALIDATOR] CRITICAL ERRORS:');
+    errors.forEach((err, i) => console.error(`   ${i + 1}. ${err}`));
+    console.error('\n💡 [DB VALIDATOR] Fix these errors before starting the server.');
+    console.error('   See docs/RAILWAY_ENV_SETUP.md for correct environment variable configuration.\n');
+    throw new Error(`Database configuration invalid: ${errors.join('; ')}`);
+  }
+  
+  if (warnings.length > 0) {
+    console.warn('\n⚠️ [DB VALIDATOR] WARNINGS:');
+    warnings.forEach((warn, i) => console.warn(`   ${i + 1}. ${warn}`));
+  }
+  
+  console.log(`\n✅ [DB VALIDATOR] Using: ${databaseSource}`);
+  if (finalDatabaseUrl) {
+    // Mask sensitive parts of URL for logging
+    const masked = finalDatabaseUrl.replace(/:([^:@]+)@/, ':****@').replace(/@([^/]+)/, '@****');
+    console.log(`   Connection: ${masked.substring(0, 80)}...`);
+  }
+  
+  return finalDatabaseUrl;
 }
 
+// Validate and get the correct database URL
+let validatedDatabaseUrl;
+try {
+  validatedDatabaseUrl = validateDatabaseConfig();
+} catch (error) {
+  console.error('\n💥 [DB VALIDATOR] Server startup aborted due to database configuration errors.');
+  process.exit(1);
+}
+
+// ==================== DATABASE POOL ====================
 export const pool = new Pool({
   connectionString: validatedDatabaseUrl,
   ssl: validatedDatabaseUrl?.includes("neon.tech")
@@ -14948,6 +15043,9 @@ async function start() {
     } catch (error) {
       console.warn("⚠️ Dependency auditor not available:", error.message);
     }
+    
+    // Database validation runs at module load time (before this point)
+    // If we reach here, database config is valid
     
     await initializeTwoTierSystem();
     
