@@ -45,10 +45,11 @@ RAILWAY_PUBLIC_DOMAIN=[YOUR_PRODUCTION_DOMAIN].up.railway.app
 
 **Required Variables:**
 - ✅ `DATABASE_URL` - **MUST** point to your production Neon database
-- ✅ `SANDBOX_MODE=false` - Explicitly set to false for production
+- ✅ `SANDBOX_MODE=false` - Explicitly set to false for production (or omit it)
 - ✅ `NODE_ENV=production`
 
-**Optional but Recommended:**
+**Optional Variables:**
+- `DATABASE_URL_SANDBOX` - Can be set to sandbox DB connection string (for reference, not used in production)
 - `COMMAND_CENTER_KEY` - API key for command center access
 - `OLLAMA_ENDPOINT` - If using Railway Ollama service
 - `RAILWAY_PUBLIC_DOMAIN` - Your production domain
@@ -62,6 +63,7 @@ RAILWAY_PUBLIC_DOMAIN=[YOUR_PRODUCTION_DOMAIN].up.railway.app
 ### Railway Raw Editor Block (Sandbox)
 
 ```bash
+DATABASE_URL=postgresql://[YOUR_SANDBOX_NEON_CONNECTION_STRING]
 DATABASE_URL_SANDBOX=postgresql://[YOUR_SANDBOX_NEON_CONNECTION_STRING]
 SANDBOX_MODE=true
 NODE_ENV=production
@@ -75,41 +77,46 @@ HOST=0.0.0.0
 RAILWAY_PUBLIC_DOMAIN=[YOUR_SANDBOX_DOMAIN].up.railway.app
 ```
 
-**How to get DATABASE_URL_SANDBOX:**
+**How to get your sandbox Neon connection string:**
 1. Go to [Neon Console](https://console.neon.tech)
 2. Select your **SANDBOX** database project (or create a separate Neon project for sandbox)
 3. Click **"Connection Details"** or **"Connection String"**
 4. Copy the **PostgreSQL connection string**
-5. Replace `[YOUR_SANDBOX_NEON_CONNECTION_STRING]` above
+5. Replace `[YOUR_SANDBOX_NEON_CONNECTION_STRING]` above in **BOTH** `DATABASE_URL` and `DATABASE_URL_SANDBOX`
 
 **Required Variables:**
-- ✅ `DATABASE_URL_SANDBOX` - **MUST** point to your sandbox Neon database
+- ✅ `DATABASE_URL` - **MUST** be set to your sandbox Neon connection string
+- ✅ `DATABASE_URL_SANDBOX` - **MUST** be set to the **SAME** sandbox Neon connection string
 - ✅ `SANDBOX_MODE=true` - **MUST** be set to true for sandbox
 - ✅ `NODE_ENV=production` (still production for Railway, but using sandbox DB)
 
-**⚠️ CRITICAL:**
-- **DO NOT** set `DATABASE_URL` in sandbox environment (or ensure it's different from production)
-- The system will **fail fast** if `SANDBOX_MODE=true` but `DATABASE_URL` points to production
-- This prevents accidental data corruption
+**⚠️ CRITICAL - Exact Match Required:**
+- **BOTH** `DATABASE_URL` and `DATABASE_URL_SANDBOX` must be set
+- **BOTH** must be **exactly equal** (character-for-character match)
+- The system will **fail fast** if they don't match exactly
+- This prevents confusion and ensures sandbox always uses the correct database
 
 ---
 
 ## 🔍 How the System Detects Environment
 
-The system automatically detects which database to use:
+The system uses a simple, foolproof detection method:
 
-1. **Checks `SANDBOX_MODE` env var:**
-   - If `SANDBOX_MODE=true` → Uses `DATABASE_URL_SANDBOX`
-   - If `SANDBOX_MODE=false` or unset → Uses `DATABASE_URL`
+1. **Checks `SANDBOX_MODE` env var (ONLY):**
+   - If `SANDBOX_MODE=true` → **SANDBOX MODE**
+   - If `SANDBOX_MODE=false` or unset → **PRODUCTION MODE**
+   - **No heuristics** - only the explicit flag is checked
 
-2. **Checks Railway environment name:**
-   - If `RAILWAY_ENVIRONMENT` contains "sandbox" or "lumin" → Uses `DATABASE_URL_SANDBOX`
-   - Otherwise → Uses `DATABASE_URL`
+2. **SANDBOX MODE Rules:**
+   - **REQUIRES** both `DATABASE_URL` and `DATABASE_URL_SANDBOX`
+   - **REQUIRES** exact equality: `DATABASE_URL === DATABASE_URL_SANDBOX` (character-for-character)
+   - Uses `DATABASE_URL` as the connection string (both are equal anyway)
+   - **Fails fast** if either is missing or they don't match exactly
 
-3. **Fails fast if misconfigured:**
-   - Missing `DATABASE_URL` in production → **Server won't start**
-   - Missing `DATABASE_URL_SANDBOX` in sandbox → **Server won't start**
-   - `SANDBOX_MODE=true` but `DATABASE_URL` points to prod → **Server won't start**
+3. **PRODUCTION MODE Rules:**
+   - **REQUIRES** `DATABASE_URL` (must not be placeholder)
+   - `DATABASE_URL_SANDBOX` is optional (can be set for reference, not used)
+   - **Fails fast** if `DATABASE_URL` is missing or is a placeholder
 
 ---
 
@@ -137,8 +144,9 @@ Or for sandbox:
    SANDBOX_MODE: true
    Detected: 🔶 SANDBOX
 
-✅ [DB VALIDATOR] Using: DATABASE_URL_SANDBOX (sandbox)
-   Connection: postgresql://****@****...
+✅ [DB VALIDATOR] Configuration valid
+   Using: DATABASE_URL (sandbox, matches DATABASE_URL_SANDBOX)
+   Connection: postgresql://****@neon.tech/your-sandbox-db
 ```
 
 **If you see errors**, the server will **not start** and will tell you exactly what's missing.
@@ -157,9 +165,9 @@ Or for sandbox:
 ### For Sandbox Environment:
 - [ ] Selected "Lumin" (or sandbox) environment in Railway sidebar
 - [ ] Pasted sandbox Raw Editor block
-- [ ] Replaced `[YOUR_SANDBOX_NEON_CONNECTION_STRING]` with actual sandbox Neon connection string
+- [ ] Replaced `[YOUR_SANDBOX_NEON_CONNECTION_STRING]` with actual sandbox Neon connection string in **BOTH** `DATABASE_URL` and `DATABASE_URL_SANDBOX` (same value)
+- [ ] Verified both `DATABASE_URL` and `DATABASE_URL_SANDBOX` are exactly equal
 - [ ] Set `SANDBOX_MODE=true`
-- [ ] **Did NOT set `DATABASE_URL`** (or ensured it's different from production)
 - [ ] Verified server starts without errors
 
 ---
@@ -169,13 +177,15 @@ Or for sandbox:
 ### Error: "DATABASE_URL is required for production environment"
 - **Fix:** Set `DATABASE_URL` in your production environment variables
 
+### Error: "DATABASE_URL is required when SANDBOX_MODE=true"
+- **Fix:** Set `DATABASE_URL` in your sandbox environment variables
+
 ### Error: "DATABASE_URL_SANDBOX is required when SANDBOX_MODE=true"
 - **Fix:** Set `DATABASE_URL_SANDBOX` in your sandbox environment variables
 
-### Error: "SANDBOX_MODE=true but DATABASE_URL points to production database"
-- **Fix:** Either:
-  1. Remove `DATABASE_URL` from sandbox environment, OR
-  2. Set `DATABASE_URL` to point to your sandbox database (not production)
+### Error: "SANDBOX_MODE=true but DATABASE_URL !== DATABASE_URL_SANDBOX"
+- **Fix:** Set both `DATABASE_URL` and `DATABASE_URL_SANDBOX` to the **exact same** sandbox connection string
+- They must match character-for-character (copy/paste the same value to both)
 
 ### Server starts but connects to wrong database
 - **Check:** Look at startup logs for `[DB VALIDATOR]` section

@@ -325,46 +325,51 @@ app.use((req, res, next) => {
 /**
  * Validates database environment variables and determines the correct connection string
  * Fails fast if required variables are missing or misconfigured
+ * 
+ * Rules:
+ * - SANDBOX_MODE=true: Requires both DATABASE_URL and DATABASE_URL_SANDBOX, must be exactly equal
+ * - Production: Requires DATABASE_URL (not placeholder)
  */
 function validateDatabaseConfig() {
   const errors = [];
   const warnings = [];
   
-  // Detect environment: Railway production vs Railway sandbox
+  // Detect environment: Use SANDBOX_MODE flag (no heuristics)
+  const isSandboxMode = SANDBOX_MODE === 'true';
   const isRailway = !!(RAILWAY_ENVIRONMENT || process.env.RAILWAY_PROJECT_ID || process.env.RAILWAY_SERVICE_ID);
-  const isSandboxEnv = SANDBOX_MODE === 'true' || 
-                       RAILWAY_ENVIRONMENT?.toLowerCase().includes('sandbox') ||
-                       RAILWAY_ENVIRONMENT?.toLowerCase().includes('lumin');
-  const isProductionEnv = !isSandboxEnv && (NODE_ENV === 'production' || isRailway);
   
   console.log('\n🔍 [DB VALIDATOR] Environment Detection:');
   console.log(`   Railway: ${isRailway ? '✅' : '❌'}`);
   console.log(`   Environment: ${RAILWAY_ENVIRONMENT || 'not set'}`);
   console.log(`   SANDBOX_MODE: ${SANDBOX_MODE || 'not set'}`);
-  console.log(`   Detected: ${isSandboxEnv ? '🔶 SANDBOX' : isProductionEnv ? '🔵 PRODUCTION' : '⚪ LOCAL/DEV'}`);
+  console.log(`   Detected: ${isSandboxMode ? '🔶 SANDBOX' : '🔵 PRODUCTION'}`);
   
   // Determine which database URL to use
   let finalDatabaseUrl;
   let databaseSource;
   
-  if (isSandboxEnv) {
-    // SANDBOX: Must use DATABASE_URL_SANDBOX
+  if (isSandboxMode) {
+    // SANDBOX MODE: Both DATABASE_URL and DATABASE_URL_SANDBOX are REQUIRED and must match exactly
+    if (!DATABASE_URL) {
+      errors.push('DATABASE_URL is required when SANDBOX_MODE=true');
+    }
     if (!DATABASE_URL_SANDBOX) {
-      errors.push('DATABASE_URL_SANDBOX is required when SANDBOX_MODE=true or in sandbox environment');
-    } else {
-      finalDatabaseUrl = DATABASE_URL_SANDBOX;
-      databaseSource = 'DATABASE_URL_SANDBOX (sandbox)';
-      
-      // Safety check: If DATABASE_URL is set and points to production, warn
-      if (DATABASE_URL && DATABASE_URL !== DATABASE_URL_SANDBOX) {
-        const isProdUrl = DATABASE_URL.includes('neon.tech') && !DATABASE_URL.includes('sandbox');
-        if (isProdUrl) {
-          errors.push(`CRITICAL: SANDBOX_MODE=true but DATABASE_URL points to production database. This would cause data corruption.`);
-        }
+      errors.push('DATABASE_URL_SANDBOX is required when SANDBOX_MODE=true');
+    }
+    
+    if (DATABASE_URL && DATABASE_URL_SANDBOX) {
+      // Exact equality check (no heuristics)
+      if (DATABASE_URL !== DATABASE_URL_SANDBOX) {
+        errors.push(`CRITICAL: SANDBOX_MODE=true but DATABASE_URL !== DATABASE_URL_SANDBOX. They must be exactly equal.`);
+        errors.push(`   DATABASE_URL: ${DATABASE_URL.substring(0, 50)}...`);
+        errors.push(`   DATABASE_URL_SANDBOX: ${DATABASE_URL_SANDBOX.substring(0, 50)}...`);
+      } else {
+        finalDatabaseUrl = DATABASE_URL; // Use DATABASE_URL (both are equal)
+        databaseSource = 'DATABASE_URL (sandbox, matches DATABASE_URL_SANDBOX)';
       }
     }
   } else {
-    // PRODUCTION: Must use DATABASE_URL
+    // PRODUCTION MODE: DATABASE_URL is required
     if (!DATABASE_URL) {
       errors.push('DATABASE_URL is required for production environment');
     } else if (DATABASE_URL === 'postgres://username:password@host:port/database') {
@@ -372,18 +377,25 @@ function validateDatabaseConfig() {
     } else {
       finalDatabaseUrl = DATABASE_URL;
       databaseSource = 'DATABASE_URL (production)';
+      
+      // Optional: DATABASE_URL_SANDBOX can be set in production (for reference, not used)
+      if (DATABASE_URL_SANDBOX) {
+        console.log('   ℹ️  DATABASE_URL_SANDBOX is set but not used in production mode');
+      }
     }
   }
   
-  // Validate connection string format
+  // Validate connection string format (if we have a URL)
   if (finalDatabaseUrl) {
     if (!finalDatabaseUrl.startsWith('postgres://') && !finalDatabaseUrl.startsWith('postgresql://')) {
-      errors.push(`Invalid DATABASE_URL format. Must start with postgres:// or postgresql://`);
+      errors.push(`Invalid database URL format. Must start with postgres:// or postgresql://`);
     }
     
     // Check for placeholder values
-    if (finalDatabaseUrl.includes('username:password') || finalDatabaseUrl.includes('localhost:5432')) {
-      warnings.push(`DATABASE_URL appears to contain placeholder values: ${finalDatabaseUrl.substring(0, 50)}...`);
+    if (finalDatabaseUrl.includes('username:password') || 
+        finalDatabaseUrl.includes('localhost:5432') ||
+        finalDatabaseUrl.includes('[YOUR_')) {
+      warnings.push(`Database URL appears to contain placeholder values: ${finalDatabaseUrl.substring(0, 60)}...`);
     }
   }
   
@@ -401,11 +413,13 @@ function validateDatabaseConfig() {
     warnings.forEach((warn, i) => console.warn(`   ${i + 1}. ${warn}`));
   }
   
-  console.log(`\n✅ [DB VALIDATOR] Using: ${databaseSource}`);
+  console.log(`\n✅ [DB VALIDATOR] Configuration valid`);
+  console.log(`   Using: ${databaseSource}`);
   if (finalDatabaseUrl) {
-    // Mask sensitive parts of URL for logging
-    const masked = finalDatabaseUrl.replace(/:([^:@]+)@/, ':****@').replace(/@([^/]+)/, '@****');
-    console.log(`   Connection: ${masked.substring(0, 80)}...`);
+    // Mask sensitive parts of URL for logging (show protocol, host, and path but mask credentials)
+    const urlObj = new URL(finalDatabaseUrl);
+    const masked = `${urlObj.protocol}//${urlObj.username ? '****' : ''}@${urlObj.host}${urlObj.pathname}${urlObj.search ? '?' + urlObj.search : ''}`;
+    console.log(`   Connection: ${masked}`);
   }
   
   return finalDatabaseUrl;
