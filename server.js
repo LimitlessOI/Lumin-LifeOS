@@ -13654,10 +13654,7 @@ app.post('/api/build/reset-failed', (req, res) => {
 });
 
 // ==================== STRIPE AUTOMATION ROUTES ====================
-// Stripe routes (webhook needs raw body, others use JSON)
-app.use('/api/stripe', stripeRoutes);
-
-// Webhook route needs raw body parser (must be before JSON parser)
+// Stripe webhook route (needs raw body - must be before JSON parser)
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
   const sig = req.headers['stripe-signature'];
   
@@ -13674,6 +13671,9 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
     res.status(400).json({ error: error.message });
   }
 });
+
+// Other Stripe routes (use JSON parser)
+app.use('/api/stripe', stripeRoutes);
 
 // Enhanced health check
 app.get('/api/health', async (req, res) => {
