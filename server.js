@@ -31,7 +31,7 @@ import process from "node:process";
 import { exec } from "child_process";
 import { promisify } from "util";
 import rateLimit from "express-rate-limit";
-import * as autoBuilder from "./core/auto-builder.js";
+import autoBuilder from "./core/auto-builder.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;

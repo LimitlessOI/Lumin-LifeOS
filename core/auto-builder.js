@@ -246,3 +246,12 @@ export function resetComponent(componentId) {
 }
 
 export { PRODUCT_QUEUE };
+
+// Default export for convenience
+export default {
+  runBuildCycle,
+  getStatus,
+  resetAllFailed,
+  resetComponent,
+  PRODUCT_QUEUE
+};
