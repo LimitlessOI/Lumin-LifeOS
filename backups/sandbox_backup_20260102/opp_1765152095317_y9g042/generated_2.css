@@ -1,0 +1,11 @@
+const express = require('express');
+const router = new express.Router();
+// Assume Sequelize ORM has been set up for the User, Scenario, and Interaction models with necessary associations defined within those objects before this file is run.
+
+router.post('/scenarios', async (req, res) => {
+    try {
+        const scenario = await scenariosModel.create(req.body); // Replace 'scenariosModel' with the actual model from Sequelize ORM setup for Scenarios table
+        return res.status(201).json(scenario);
+    } catch (error) {
+        return res.status(400).json({ message: error.message }); 
+    end file===

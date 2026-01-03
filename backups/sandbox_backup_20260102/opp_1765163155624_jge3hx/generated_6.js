@@ -1,0 +1,2 @@
+#### Step 6 - Progress Tracking and Recommendations:
+Use MongoDB/Mongoose to create CRUD operations for user progress tracking, with GraphQL resolvers fetching personalized recommendations based on the level_preference field of a User document. This step involves setting up dynamic recommendation logic using NLP techniques which can be quite complex without external libraries and is not trivially implementable in this format:

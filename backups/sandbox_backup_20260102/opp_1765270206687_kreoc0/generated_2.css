@@ -1,0 +1,16 @@
+module.exports = {
+  up: async (queryInterface, Promise) => {
+    await queryInterface.sequelize.transaction(async transaction => {
+      await queryInterface.createTable('Overlays', {
+        id: 'uuid', // Using UUID for each overlay ID as primary key - ensure this matches your database schema requirements 
+        title: Sequelize.STRING,
+        description: Sequelize.TEXT,
+        userId: Sequelize.INTEGER,
+        price: Sequelize.FLOAT,
+        createdAt: Sequelize.DATE // Assuming these fields are required as per your schema specification 
+      }, { transaction });
+    });
+  },
+  
+  down: async (queryInterface) => Promise.resolve(), // No-op for rollback in this example - implement according to actual needs if deletion is needed!
+};

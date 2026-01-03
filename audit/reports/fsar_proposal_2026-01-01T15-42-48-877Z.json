@@ -1,0 +1,17 @@
+{
+  "id": "fsar_18bceb59-003d-4f65-9d7d-7aa7abb53065",
+  "timestamp": "2026-01-01T15:42:48.877Z",
+  "proposal": "idea_implementation: Create or update the file db/migrate/2023_create_templates_table.sql with this complete content:\n\nCREATE TABLE templates (\n    id SERIAL PRIMARY KEY NOT NULL,\n    design_id serial UNIQUE, -- Foreign Key from the designs table for relational integrity.\n    title VARCHAR(255) NOT NULL,\n    description TEXT,\n    category VARCHAR(100),\n    efficiency_score DECIMAL(5, 2),\n    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, -- Automatically set when a new template is added.\n    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP\n);\n\nThis is for opportunity: Digital Product Templates\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-01",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

@@ -1,0 +1,31 @@
+// File: ./routes/overlays.js
+const express = require('express');
+const router = express.Router();
+const overlayController = require('./controllers/overlay-controller');
+
+router.post('/api/v1/overlays', async (req, res) => {
+  try {
+    const newOverlay = await overlayController.createNewOverlay(req.body);
+    return res.status(201).json(newOverlay);
+  } catch (error) {
+    return res.status(400).json({ error: 'Failed to create a new overlay' });
+ 0}
+});
+
+router.get('/api/v1/overlays', async (req, res) => {
+  try {
+    const overlays = await overlayController.getAllOverlays();
+    return res.json(overlays);
+  } catch (error) {
+    return res.status(400).json({ error: 'Failed to retrieve all overlays' });
+  }
+});
+
+router.delete('/api/v1/overlays/:id', async (req, res) => {
+  try {
+    await overlayController.removeOverlayById(req.params.id);
+    return res.status(204).send(); // No content to send back
+  } catch (error) {
+    return res.status(400).json({ error: 'Failed to delete an overlay' });
+  }
+});

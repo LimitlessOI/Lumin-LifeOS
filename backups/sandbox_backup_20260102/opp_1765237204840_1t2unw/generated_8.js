@@ -1,0 +1,1 @@
+5. Implement `db_migrations.js` to handle migrations specifics, where you would configure and apply the PostgreSQL database structure changes suitable for handling large files:

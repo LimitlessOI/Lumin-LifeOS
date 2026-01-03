@@ -1,0 +1,2 @@
+### Stripe Charge Integration ###
+*Optional but not mandatory as per the plan.* (Note: This code will integrate with an external API, so it should be developed after setting up secure authentication and handling sensitive data.)

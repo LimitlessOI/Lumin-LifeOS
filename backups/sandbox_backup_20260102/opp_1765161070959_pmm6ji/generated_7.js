@@ -1,0 +1,2 @@
+// frontend/tests/__init__.js - Jest setup for testing Vue components using `jest`, `@testing-library/vue` along with snapshot tests to simulate user interaction, ensuring integration works as expected in a production environment:
+import { render, screen } from '@testing-library/vue';  // Import necessary utilities to handle rendering and queries within test files.

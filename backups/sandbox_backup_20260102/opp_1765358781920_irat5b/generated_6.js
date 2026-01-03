@@ -1,0 +1,3 @@
+#### Monitoring and Optimization #### (E.g., Prometheus configuration) *(File Paths vary by implementation)*
+*Prometheus Configuration YAML file content here...  
+Custom monitoring scripts or logic for analyzing performance metrics from tools like New Relic, etc. in a separate 'monitoring/' directory as needed to configure and run these services alongside the main application deployment (file paths: monitoring/)...  // Define Prometheus configuration files within the 'monitoring/' directory required to collect system-wide health checks data points for continuous performance evaluation against specific thresholds or key metrics of interest.

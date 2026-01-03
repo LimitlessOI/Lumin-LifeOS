@@ -1,0 +1,8 @@
+{
+  "files": [
+    {
+      "path": "/config/server_settings.js",
+      "content": `export const SERVER_SETTINGS = ${JSON.stringify({"ip_address": "127.0.0.1","port":3000})};`  // Example, no external code or explanations here!
+    }
+  ]
+}

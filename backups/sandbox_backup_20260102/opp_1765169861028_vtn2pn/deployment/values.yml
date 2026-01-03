@@ -1,0 +1,4 @@
+replicaCount: 3
+## Other necessary configuration settings ... # based on requirements and monitoring data
+serviceAnnotations: { autoPort: "true" }
+# Additional required configurations... (not included for brevity)

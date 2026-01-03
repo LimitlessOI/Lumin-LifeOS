@@ -1,0 +1,17 @@
+import React, { useState, useEffect, useReducer } from 'react';
+import axios from 'axios';
+
+const createTemplate = async () => {
+    const templateData = new Formik({ initialValues: {}, onSubmit }); // Placeholder for form data structure and validation logic.
+    
+    return (
+        <div>
+            <form id="templateCreator">
+                <input type="text" name="title" placeholder="Template Name"/>
+                {/* Add more fields as necessary */}
+                
+                <button onClick={handleSubmit}>Create Template</button>
+            end of form;
+        </div>
+    );
+};

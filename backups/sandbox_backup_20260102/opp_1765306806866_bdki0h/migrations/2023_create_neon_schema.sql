@@ -1,0 +1,54 @@
+BEGIN;
+
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS courses (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(50) CHECK (category IN ('Standard', 'Enhanced Interactivity')),
+    content TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS instructors (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    bio TEXT,
+    image_url VARCHAR(255),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENTENTTIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS course_materials (
+    id SERIAL PRIMARY KEY,
+    content_id INTEGER REFERENCES courses ON DELETE CASCADE,
+    material VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS payments (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users ON DELETE CASCADE,
+    course_material_id INTEGER REFERENCES course_materials(id) ON DELETE SET NULL,
+    amount NUMERIC(10, 2),
+    status VARCHAR CHECK (status IN ('pending', 'completed')),
+    payment_method VARCHAR,
+    transaction_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP WITH TIMEZON DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS interaction_logs (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    instructor_id INTEGER REFERENCES instructors(id) ON DELETE SET NULL,
+    feedback TEXT,
+    created_at TIMESTAMP WITH TIMEZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_user_email ON users (email);
+COMMIT;

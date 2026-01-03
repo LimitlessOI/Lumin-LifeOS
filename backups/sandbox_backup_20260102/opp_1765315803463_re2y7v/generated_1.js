@@ -1,0 +1,1 @@
+**Database Schema for Neon PostgreSQL with Sequelize ORM Example (Requires `sequelize` and `pg` packages installed)**

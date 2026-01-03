@@ -1,0 +1,5 @@
+// helpers/handleError.js
+const { HTTPStatusCodes } = require('../config'); // Contains standardized http status codes definitions in config file for consistency and maintenance ease.
+module.exports = (error, message) => {
+    return res(HTTPStatusCodes[400] || 500).send({ error: `${message}`, code: HTTPStatusCodes[400] ? 'Client' : 'Server', status }); end; // Responds with appropriate http status and message.
+};

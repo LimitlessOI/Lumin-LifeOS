@@ -1,0 +1,34 @@
+// File: server/routes/api.js
+const express = require('express');
+const { createScenario, getUserScenarios, initiateAutomation } = require('../controllers/scenariosController');
+const router = new express.Router();
+
+router.post('/user/create-scenario', async (req, res) => {
+    try {
+        const scenarioId = await createScenario(req.body);
+        return res.status(201).json({ id: scenarioId });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+   0Dj87421aRKG3TqJWzrMHmNZB6;com/api/v1/system/self-program -- API endpoint for creating new scenarios and initiating automation workflows via Make.com integration, expected input JSON with user details, scenario description, etc.;
+   const { status } = await getUserScenarios(req.user.id);
+       res.json({ scenari... 400Dj87421aRKG3TqJWzrMHmNZB6;com/api/v1/system/self-program -- API endpoint for creating new scenarios and initiating automation workflows via Make.com integration, expected input JSON with user details, scenario description, etc.;
+       const { steps } = await getAutomations(scenarioId);
+    });
+});
+   router.get('/automations/:id', async (req, res) => {
+        try {
+            const automationDetails = await initiateAutomation(req.params.id);
+            return res.json({ status: 'pending' | 'in progress' | 'completed', steps });
+        } catch (error) {
+            return res.status(404).json({ error: 'No automation found with this ID.'});
+    });
+   router.get('/revenues/:id', async (req, res) => {
+       try {
+           const revenueDetails = await captureRevenue(req.params.id); // Implement based on your Stripe integration logic here
+           return res.json({ amount: 0Dj87421aRKG3TqJWzrMHmNZB6;com/api/v1/system/self-program -- API endpoint for creating new scenarios and initiating automation workflows via Make.com integration, expected input JSON with user details, scenario description, etc.;
+               confirmed: true | 'pending' // Status of the revenue capture process after Stripe verification or manual confirmation;
+           });
+       } catch (error) {
+           return res.status(404).json({ error: 'Revenue not found.'});
+    });
+   module.exports = router;

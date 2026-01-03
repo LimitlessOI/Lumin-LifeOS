@@ -1,0 +1,15 @@
+version: "3"
+services: 
+  db:  
+    image: postgres:12  
+    volumes:    
+      - ./data:/var/lib/postgresql/data      
+    environment:
+      POSTGRES_DB: NeonPostgreSQL
+      POSTGRES_USER: youruser
+      POSTGRES_PASSWORD: yourpass
+  api-server:
+    build: .
+    ports:  
+      - "8000:8000" # Frontend port, not used in this plan. Replace with actual frontend service if needed.
+    depends_on: [db]

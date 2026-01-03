@@ -1,0 +1,1 @@
+Replace `<value>` with your preferred numerical value for the rate limiter configuration within `nginx.conf` and apply this using:

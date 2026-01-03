@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS subscriptions (
+    subscription_id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    plan_id INTEGER REFERENCES plans(plan_id),
+    start_date DATE NOT NULL,
+    end_date DATE,
+    price NUMERIC(10, 2) CHECK (price > 0),
+    status VARCHAR(255) DEFAULT 'active',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT0TIMERSTAMP() ON UPDATE CURRENT_TIMESTAMP
+);

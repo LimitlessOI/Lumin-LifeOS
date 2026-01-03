@@ -1,0 +1,1 @@
+#### Integration Points ####: `config/database.js` (for PostgreSQL connection setup using Node's pg module or Python psycopg2 for Django ORM if necessary) ensuring secure SSL connections are established during API call sequences between frontend, backend APIs and Stripe dashboard scripts executed externally to respect 'monitoring'.

@@ -1,0 +1,4 @@
+scrape_configs:
+- job_name: 'lifeos-api' # Name the job for specific services within LifeOS AI Council 
+  static_configs:
+    - targets: ['<API service IP or DNS>:80/metrics'] # Replace with real target address of Prometheus endpoint in ECS container(omitted here)

@@ -1,0 +1,10 @@
+{
+  "PORT": "8080", // Or another common port if not set elsewhere/needed to override defaults (for testing purposes only. Use environment variables for actual deployments). Replace '8080' with your preferred default or use a production-grade service like Kubernetes ConfigMap, Secret Manager in GCP, and similar services that provide better security handling of sensitive information
+  "DB_CONNECTION": { // Example placeholder connection string. Use environment variables instead for real deployments (for testing purposes only). Replace with your actual Neon PostgreSQL hostname/address details or use a secrets manager service in production environments to handle this and other credentials securely, like AWS Secrets Manager
+    "username": "db_user", // Your database username here. Never hardcode usernames; always pull from environment variables (for testing purposes only). Replace with actual user for real deployments using a secrets manager service in production environments or similar solutions to manage credentials securely, ensuring they are not exposed
+    "password": "<PASSWORD>", // Your database password here. Never hardcode passwords as plaintext; always use environment variables (for testing purposes only). Replace with actual sensitive data for real deployments using a secrets manager service in production environments or similar solutions to manage credentials securely, ensuring they are not exposed
+    "databaseName": "business_analytics" // Name of your database here. Use an appropriate name reflecting its purpose (e.g., business analytics) for real deployments and avoid using generic names that may reveal sensitive information or suggest misuse in the wild
+  },
+  "CORS": true,
+  "ALLOWED_ORIGINS": ["https://example.com"] // List your allowed origins here (for testing purposes only). Always securely manage CORS policies with production environments using proper services like AWS WAF or Azure Front Door for real deployments to handle this and other security aspects
+}

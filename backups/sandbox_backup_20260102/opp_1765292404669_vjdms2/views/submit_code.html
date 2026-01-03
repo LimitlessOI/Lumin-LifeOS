@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Code</title>
+    <!-- Add necessary meta tags for proper rendering -->
+</head>
+<body>
+    <form action="/submit" method="post">
+        <input type="text" name="username" placeholder="Username..." required>  
+        <textarea name="code_snippet"></textarea>  # Assuming we store full code submissions as text for simplicity here. Can be changed based on Railway's robust infrastructure needs and size constraints    
+        <!-- Additional fields like problem statement, etc., go here -->
+        <button type="submit">Submit</button>  
+    </form>
+<!-- Frontend JavaScript would handle form submission via AJAX using Fetch API or XMLHttpRequest to the `/submit` route which will interact with RabbitMQ and Kafka Consumer services directly in Railway's robust infrastructure system itself, handling queues setup as required for light_tasks management capabilities -->  
+</body> end of body content here

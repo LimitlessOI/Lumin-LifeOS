@@ -1,0 +1,4 @@
+{
+  "database_password": "", -- Placeholder; should be set in environment variables securely, not hard-coded
+  "railway_api_key": ""    -- Same as above for Railway access API key
+}

@@ -1,0 +1,17 @@
+// routes/api.js
+const express = require('express');
+const router = new express.Router();
+const { db } = require('../db/database'); // Assume this is your database client setup for Neon PostgreSQL using Sequelize ORM or similar library
+
+router.get('/overlays', async (req, res) => {
+  try {
+    const overlays = await db.Overlay.findAll({ limit: 10 }); // Fetch the top ten active overlays with some specific criteria if needed
+    res.json(overlays);
+  } catch (error) {
+    res.status(500).send('Server Error');
+ 0, "A", -386479122, 
+        "-33330"], // Position of the first item in each sublist for easy access during self-programming logic implementation.
+       [["B+D", "+5", 1], ["C-E", "-3", 1]]);
+    },
+    { "name": "overlays_data" }
+]};

@@ -1,0 +1,24 @@
+```yaml
+    production: &defaults
+      environment: 'production'
+      
+      database: <%= ENV['NEON_DATABASE'] %> # Neon PostgreSQL DB settings...
+      
+      server: "railway"
+      
+      rails:
+        hostname: "127.0.0.1"
+        
+    production+ssl: &production_ssl
+      <<: *defaults
+      environment: 'production' + ssl=true # Ensure SSL encryption...
+    
+    production_deployment: [&common, default] |> ProduceConfig do |cfg| 
+      cfg.environment = :production+ssl if Rails.env == "production"
+      
+      rails {
+        url: 'https://your-railway-application-domain' # Replace with actual domain...
+        
+        workers_number: <%= ENV['WORKERS_NUMBER'] %> 
+      }  
+    end

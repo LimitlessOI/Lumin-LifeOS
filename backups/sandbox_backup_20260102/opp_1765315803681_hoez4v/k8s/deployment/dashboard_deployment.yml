@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: performance-analytics-dashboard
+spec:
+  selector:
+    matchLabels:
+      app: dashboard
+  replicas: 3
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: dashboard
+    spec:
+      containers:
+      - name: performance-analytics-dashboard
+        image: railway/performance_analytics_dashboard # Hypothetical Railway Image for the Dashboard Container; not shown here as it's beyond this snippet and would involve setting up a Dockerfile, building images, pushing to your Kubernetes cluster.
+---

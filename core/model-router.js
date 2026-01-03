@@ -1,230 +1,127 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════════════════════╗
- * ║                    MODEL ROUTER - Cost-Optimized Task Routing                   ║
- * ║                    Automatically picks cheapest viable path                       ║
- * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * MODEL ROUTER - Anti-Hallucination Edition
  * 
- * Routes tasks through Tier 0 → Tier 0.5 → Tier 1 based on:
- * - Task type
- * - Risk level
- * - User-facing requirement
- * - Revenue impact
- * 
- * Learns over time which tier works best for each task type.
+ * CRITICAL: phi3:mini is BANNED from code generation
  */
 
-export class ModelRouter {
-  constructor(tier0Council, tier1Council, pool) {
-    this.tier0 = tier0Council;
-    this.tier1 = tier1Council;
-    this.pool = pool;
-    this.learningData = new Map(); // Task type → best tier
+const MODELS = {
+  primary: {
+    name: 'qwen2.5:32b',
+    endpoint: 'http://localhost:11434',
+    maxTokens: 8192
+  },
+  coder: {
+    name: 'deepseek-coder-v2:latest',
+    endpoint: 'http://localhost:11434', 
+    maxTokens: 8192
+  },
+  fast: {
+    name: 'llama3.2:latest',
+    endpoint: 'http://localhost:11434',
+    maxTokens: 2048
   }
+};
 
-  /**
-   * Route task through optimal cost path
-   */
-  async route(task, options = {}) {
-    const {
-      taskType = 'general',
-      riskLevel = 'low',
-      userFacing = false,
-      revenueImpact = 'low',
-      forceTier = null, // Override for testing
-    } = options;
+const BANNED_MODELS = ['phi3:mini', 'phi3', 'tinyllama'];
 
-    // Tag task
-    const taskMeta = {
-      taskType,
-      riskLevel,
-      userFacing,
-      revenueImpact,
-      timestamp: new Date(),
-    };
+const TASK_ROUTING = {
+  'code_generation': 'coder',
+  'file_creation': 'coder',
+  'bug_fix': 'coder',
+  'architecture_planning': 'primary',
+  'json_output': 'primary',
+  'code_review': 'primary',
+  'opportunity_analysis': 'primary',
+  'simple_classification': 'fast',
+  'yes_no_question': 'fast'
+};
 
-    // Determine starting tier
-    const startingTier = forceTier || this.pickStartingTier(taskMeta);
+export async function routeTask(task, prompt, options = {}) {
+  const modelKey = TASK_ROUTING[task] || 'primary';
+  const model = MODELS[modelKey];
+  
+  console.log(`🎯 [ROUTER] Task: ${task} → Model: ${model.name}`);
+  
+  return await callOllama(model.name, prompt, options);
+}
 
-    console.log(`🔄 [ROUTER] Task: ${taskType}, Risk: ${riskLevel}, Starting Tier: ${startingTier}`);
-
-    // Try Tier 0 first (cheapest)
-    if (startingTier === 0) {
-      const tier0Result = await this.tier0.execute(task, {
-        taskType,
-        riskLevel,
-        userFacing,
-      });
-
-      if (tier0Result.success) {
-        // Quick validation (Tier 0.5) - cheap premium model check
-        const validation = await this.tier1.quickValidate(
-          tier0Result.result,
-          task,
-          tier0Result.result.substring(0, 300)
-        );
-
-        if (validation.valid && validation.confidence > 0.7) {
-          // Tier 0 passed validation - use it!
-          await this.logSuccess(taskMeta, 0, tier0Result.cost);
-          return {
-            success: true,
-            result: tier0Result.result,
-            tier: 0,
-            validated: true,
-            cost: tier0Result.cost + validation.cost,
-            path: 'tier0 → tier0.5_validation → approved',
-          };
+export async function callOllama(modelName, prompt, options = {}) {
+  if (BANNED_MODELS.includes(modelName)) {
+    console.error(`🚫 [ROUTER] BLOCKED: ${modelName} is banned`);
+    modelName = 'qwen2.5:32b';
+  }
+  
+  const temperature = options.temperature || 0.3;
+  const endpoint = options.endpoint || process.env.OLLAMA_ENDPOINT || 'http://localhost:11434';
+  
+  try {
+    const response = await fetch(`${endpoint}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: modelName,
+        prompt: prompt,
+        stream: false,
+        options: {
+          temperature: temperature,
+          top_p: 0.9,
+          num_predict: 8192
         }
-
-        // Tier 0.5 validation failed - escalate to Tier 1
-        console.log(`⚠️ [ROUTER] Tier 0.5 validation failed, escalating to Tier 1`);
-        const tier1Result = await this.tier1.validateAndCorrect(
-          tier0Result.result,
-          task,
-          taskMeta
-        );
-
-        if (tier1Result.valid) {
-          await this.logSuccess(taskMeta, 1, tier1Result.cost || 0.01);
-          return {
-            success: true,
-            result: tier1Result.corrected,
-            tier: 1,
-            corrected: true,
-            cost: tier0Result.cost + (tier1Result.cost || 0.01),
-            path: 'tier0 → tier0.5_failed → tier1_corrected',
-          };
-        }
-      }
-
-      // Tier 0 failed or Tier 1 correction failed - full escalation
-      console.log(`🚨 [ROUTER] Full escalation needed`);
-      const escalated = await this.tier1.escalate(task, {
-        ...taskMeta,
-        tier0Attempts: tier0Result.needsEscalation ? tier0Result.tier0Attempts : [],
-      });
-
-      if (escalated.success) {
-        await this.logSuccess(taskMeta, 1, 0.05); // Estimate
-        return {
-          success: true,
-          result: escalated.result,
-          tier: 1,
-          escalated: true,
-          cost: 0.05, // Premium model cost
-          path: 'tier0_failed → tier1_full_escalation',
-        };
-      }
-    } else {
-      // Start directly at Tier 1 (high-risk tasks)
-      const escalated = await this.tier1.escalate(task, taskMeta);
-      if (escalated.success) {
-        await this.logSuccess(taskMeta, 1, 0.05);
-        return {
-          success: true,
-          result: escalated.result,
-          tier: 1,
-          directTier1: true,
-          cost: 0.05,
-          path: 'direct_tier1',
-        };
-      }
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Ollama returned ${response.status}`);
     }
-
-    // All tiers failed
-    return {
-      success: false,
-      error: 'All tiers failed',
-      taskMeta,
-    };
-  }
-
-  /**
-   * Pick starting tier based on task characteristics
-   */
-  pickStartingTier(taskMeta) {
-    const { riskLevel, userFacing, revenueImpact, taskType } = taskMeta;
-
-    // High-risk or user-facing → start at Tier 1
-    if (riskLevel === 'high' || userFacing) {
-      return 1;
+    
+    const data = await response.json();
+    
+    if (!data.response) {
+      throw new Error('Empty response from model');
     }
-
-    // Check learning data - have we learned this task type works at Tier 0?
-    if (this.learningData.has(taskType)) {
-      const learned = this.learningData.get(taskType);
-      if (learned.successRate > 0.8 && learned.avgTier < 0.5) {
-        return 0; // We've learned Tier 0 works well
-      }
-    }
-
-    // Default: start at Tier 0 for low/medium risk
-    return riskLevel === 'low' ? 0 : 1;
-  }
-
-  /**
-   * Log successful routing for learning
-   */
-  async logSuccess(taskMeta, finalTier, cost) {
-    try {
-      const { taskType } = taskMeta;
-      
-      // Update learning data
-      if (!this.learningData.has(taskType)) {
-        this.learningData.set(taskType, {
-          attempts: 0,
-          successes: 0,
-          totalCost: 0,
-          avgTier: 0,
-        });
-      }
-
-      const data = this.learningData.get(taskType);
-      data.attempts++;
-      data.successes++;
-      data.totalCost += cost;
-      data.avgTier = ((data.avgTier * (data.attempts - 1)) + finalTier) / data.attempts;
-      data.successRate = data.successes / data.attempts;
-
-      // Store in database
-      await this.pool.query(
-        `INSERT INTO model_routing_log (task_type, risk_level, user_facing, final_tier, cost, success, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6, NOW())
-         ON CONFLICT DO NOTHING`,
-        [taskMeta.taskType, taskMeta.riskLevel, taskMeta.userFacing, finalTier, cost, true]
-      );
-    } catch (error) {
-      console.warn(`Failed to log routing: ${error.message}`);
-    }
-  }
-
-  /**
-   * Get routing statistics for optimization
-   */
-  async getRoutingStats() {
-    try {
-      const result = await this.pool.query(
-        `SELECT 
-          task_type,
-          final_tier,
-          AVG(cost) as avg_cost,
-          COUNT(*) as attempts,
-          SUM(CASE WHEN success THEN 1 ELSE 0 END) as successes
-         FROM model_routing_log
-         WHERE created_at > NOW() - INTERVAL '7 days'
-         GROUP BY task_type, final_tier
-         ORDER BY task_type, final_tier`
-      );
-
-      return {
-        stats: result.rows,
-        learning: Object.fromEntries(this.learningData),
-      };
-    } catch (error) {
-      return {
-        stats: [],
-        learning: Object.fromEntries(this.learningData),
-      };
-    }
+    
+    console.log(`✅ [ROUTER] Response: ${data.response.length} chars from ${modelName}`);
+    return data.response;
+    
+  } catch (error) {
+    console.error(`❌ [ROUTER] Failed: ${error.message}`);
+    throw error;
   }
 }
+
+export async function callWithRetry(task, prompt, validator, maxRetries = 3) {
+  let lastError = null;
+  let temperature = 0.3;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    console.log(`🔄 [ROUTER] Attempt ${attempt}/${maxRetries}`);
+    
+    let adjustedPrompt = prompt;
+    if (lastError && attempt > 1) {
+      adjustedPrompt = `PREVIOUS ATTEMPT FAILED: ${lastError}\n\nFix the issue and try again.\n\n${prompt}`;
+      temperature = Math.max(0.1, temperature - 0.1);
+    }
+    
+    try {
+      const response = await routeTask(task, adjustedPrompt, { temperature });
+      
+      if (validator) {
+        const validation = validator(response);
+        if (validation.valid || validation.passed) {
+          return { success: true, response, data: validation.data };
+        }
+        lastError = validation.error || validation.errors?.join('; ') || 'Validation failed';
+      } else {
+        return { success: true, response };
+      }
+    } catch (e) {
+      lastError = e.message;
+    }
+    
+    console.log(`⚠️ [ROUTER] Attempt ${attempt} failed: ${lastError}`);
+  }
+  
+  return { success: false, error: lastError };
+}
+
+export { MODELS, TASK_ROUTING, BANNED_MODELS };

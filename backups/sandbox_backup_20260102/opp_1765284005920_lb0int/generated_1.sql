@@ -1,0 +1,11 @@
+// routes/api.js - This file will contain the logic to handle all of our RESTful services related to overlays, incomes and integrations with Stripe as well as user interactions within Lightweight Assistant's system via OAuth2 tokens.
+const express = require('express');
+const router = new express.Router();
+// Import other necessary modules here such as the ORM for PostgreSQL or any data handling libraries if needed.
+require('./models/overlays')(router); // Separate file that will contain all related logic and database models like CREATE, READ, UPDATE & DELETE operations on overlays using Neon Postgres (or another preferred DBMS). 
+// Import Stripe API client here to handle payments. You would need a secure way of handling sensitive data so you might want look into environment variables or secret management solutions for storing keys and tokens safely, complying with financial regulations like PCI DSS standards when dealing with payment processing in the gaming industry.
+require('./models/incomes')(router); // Separate file that will contain all related logic to income tracking using Stripe API integration which should be thoroughly tested for security and performance as per your requirements mentioned above, including real-time dashboard updates through a pub/sub model or similar if needed.
+require('./models/users')(router); // Separate file that will contain the user authentication logic with OAuth2 token handling using JWTs (to be done safely and securely). Make sure to leverage libraries like jsonwebtoken for this purpose. 
+// Additional routing files can follow a similar pattern, defining specific endpoints as needed in separate .js or .ts files under their respective directories following the Express Router structure: /api/v1/{routeName}. Use async/await patterns where possible and ensure proper error handling using try-catch blocks. 
+// Remember to use secure HTTP headers (e.g., Content Security Policy, X-Content-Type-Options) on your server responses for security best practices as well.
+module.exports = router;

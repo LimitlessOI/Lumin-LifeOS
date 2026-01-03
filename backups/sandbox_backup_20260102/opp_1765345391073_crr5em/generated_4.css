@@ -1,0 +1,4 @@
+@app.route('/api/v1/revenue', methods=['GET'])
+def get_monthly_summary():
+   # Fetching summary data from Neon PostgreSQL... (omitted for brevity) 
+    return jsonify({'total': calculated_total, 'transactions': transaction_counts})

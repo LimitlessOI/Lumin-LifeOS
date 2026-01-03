@@ -1,0 +1,1 @@
+// frontend/src/components/Dashboard.vue - Implementation of dashboard component with navigation links between different sections, tool usage statistics and a form for Stripe payment gateway integration using Axios or Fetch API as per the plan in Phase IV above to ensure all dependencies are properly resolved:

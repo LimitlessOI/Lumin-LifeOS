@@ -1,0 +1,46 @@
+const express = require('express');
+const router = new express.Router();
+const jwt = require('jsonwebtoken');
+// Import other necessary modules here, such as bcrypt for password hashing and stripe to handle payments securely
+const { v4: uuidv4 } = require('uuid');
+const db = require('../database/db'); // Assuming this is your PostgreSQL connection module. Adjust accordingly based on how you implement it, e.g., Sequelize or pg-promise 
+
+// User registration endpoint - using JWT for secure authentication after successful OAuth login via PassportJS strategy (not fully implemented)
+router.post('/auth/register', async (req, res) => {
+    // Assume we have a user model with fields: username, email, and hashedPassword
+    const newUser = await db('users').insert({
+        ...req.body,
+        uniqueId: uuidv4(),  // Generating secure UUIDs for each user account instead of using PassportJS directly here
+        passwordHash: await bcrypt.hash(req.body.password)
+    }).returning('id'); // Assuming we are returning the database id as a token after registration
+    
+    const { id } = newUser;
+    res.json({ userId: id, accessToken: jwt.sign({ sub: req.body.username }, 'secret_key', { expiresIn: '1h' }) }); // Implement proper secret management here! 
+});
+
+// User login endpoint (simplified - assumes PassportJS has already handled OAuth)
+router.post('/auth/login', async (req, res) => {
+    const user = await db('users').findOne({ where: req.body }) || null;
+    
+    if (!user) return res.status(401).send('User not found');
+
+    // Checks the password against what was hashed in database (bcrypt usage here is simplified and assumed to be done through PassportJS strategy, which isn't fully implemented below): 
+     const validPassword = await bcrypt.compare(req.body.password, user.passwordHash);
+    if (!validPassword) return res.status(401).send('Invalid password'); // Or handle insecurely with PassportJS strategy (omitted here for brevity). 
+    
+    const accessToken = jwt.sign({ sub: req.body.username }, 'secret_key', { expiresIn: '2h' });
+    res.json({ userId: user.id, accessToken }); // Send back the JWT as a response to login success (again using simplified secret management). 
+});
+
+// Overlay creation endpoint - assuming overlay model and schema are defined elsewhere in your codebase
+router.post('/overlays', async (_req, res) => {
+    const newOverlay = await db('overlays').create({ ..._req.body }); // Assumes ORM-like structure for simplicity here; replace with actual implementation details from Sequelize or similar package used 
+    
+    return res.status(201).json(newOverlay);
+});
+
+// Overlay retrieval, update and deletion endpoints - these should be implemented similarly to registration/login examples above (omitting full OAuth handling here for brevity)
+router.get('/overlays', async (_req, res) => {...}); // Retrieval implementation details go here 
+router.put('/overlays/:id', async (_req, res) => {...}); // Update and delete implementations follow a similar pattern (omitting full OAuth handling for brevity)...
+
+module.exports = router;

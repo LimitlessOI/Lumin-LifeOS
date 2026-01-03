@@ -1,0 +1,2 @@
+#### Database Migrations (SQL):
+Generate SQL migrations based on models. Run them with `sequelize db:migrate` command in your terminal, ensuring to drop previous tables before running it if needed. The below script should give you an idea of how this could look like using Sequelize CLI and TypeORM for the database schema (notice that some fields were replaced by `#PRIMARY KEY(PRIMARY)` as a placeholder):

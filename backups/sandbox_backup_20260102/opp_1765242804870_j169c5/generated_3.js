@@ -1,0 +1,1 @@
+2. **Script Generation Service (`/api/v1/generate_script`)** - This endpoint leverages NLP techniques to interpret user requests and map them with pre-existing logic templates stored in `script_logic`. It returns generated scripts or appropriate error messages if the input is not understood, following a robust script generation process that scales according to demand.

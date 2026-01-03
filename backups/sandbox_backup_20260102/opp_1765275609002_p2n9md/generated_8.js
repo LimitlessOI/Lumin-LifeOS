@@ -1,0 +1,1 @@
+// configs/.env file would go here including: STORE_API_KEY="sk_test..." CUSTOMER_TABLE=customers WALLET_COLLECTION=wallets DASHBOARD_CACHE_LAMBDA=/* Cache lambda function code for caching mechanisms (optional) -- to be auto-generated using `touch .env` command if not already present with standard content.

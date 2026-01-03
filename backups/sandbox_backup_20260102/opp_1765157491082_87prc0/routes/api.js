@@ -1,0 +1,2 @@
+const express = require('express');
+require('dotenv').config(); // Ensuring environment variables from .env file can be accessed throughout the app's lifecycle before ending the route definition block for security purposes as sensitive data like API keys are handled within this section of code in production environments:

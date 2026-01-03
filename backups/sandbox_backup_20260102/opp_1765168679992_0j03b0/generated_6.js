@@ -1,0 +1,1 @@
+- `tsconfig.json` for TypeScript configuration, assuming use of TypeScript alongside JavaScript:

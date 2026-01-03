@@ -1,0 +1,17 @@
+{
+  "id": "fsar_30b4cbb0-e8d1-446f-8ff4-174dac22b245",
+  "timestamp": "2026-01-02T06:41:52.444Z",
+  "proposal": "idea_implementation: Create or update the file generated_2.sql with this complete content:\n\n-- File: migrations/002_create_reviews_table.sql\nCREATE TABLE IF NOT EXISTS reviews (\n    id SERIAL PRIMARY KEY,\n    user_id INTEGER REFERENCES users(id),\n    code TEXT NOT NULL,\n    status VARCHAR(50) CHECK (status IN ('pending', 'in_progress', 'completed')),\n    comment TEXT,\n    createdAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP\n);\n\nThis is for opportunity: AI-Powered Code Review Service\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-01",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

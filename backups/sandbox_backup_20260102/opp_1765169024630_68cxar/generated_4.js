@@ -1,0 +1,2 @@
+*Note: This file intentionally leaves out certain configurations that are only needed in development and test environments.*  
+**FILE:config/environments/development.rb (for load balancer configuration)*

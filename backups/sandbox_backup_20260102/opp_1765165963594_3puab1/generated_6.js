@@ -1,0 +1,1 @@
+### Monitoring and Logging Setup ### - Configuration files to set up Prometheus & Grafana monitoring as well as Sentry exception tracking would be necessary here:

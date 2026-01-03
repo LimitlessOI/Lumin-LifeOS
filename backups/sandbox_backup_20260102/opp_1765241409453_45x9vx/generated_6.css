@@ -1,0 +1,6 @@
+// File: routes/initiatePaymentForm.jsx- Placeholder configuration file containing necessary API keys, such as publishable key and customer information 
+{
+    "client_id": process.env.CLIENT_ID, // Client ID for Stripe Checkout integration (security practice). Replace with your actual client id after setting up in the admin panel of Stripe dashboard. This should be kept confidential outside this file as per security best practices and localization strategy documentation provided by Stripe
+    "stripePublicKey": process.env.PUBLIC_SDK_KEY, // The public API key from your own instance or service account (security practice). Store in environment variables for production to avoid exposing secret keys on the client side 
+    "priceIncludesTaxes" : true
+}

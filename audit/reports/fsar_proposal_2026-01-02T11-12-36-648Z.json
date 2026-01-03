@@ -1,0 +1,17 @@
+{
+  "id": "fsar_4e50b6b4-40b5-4338-bc78-c98b36893e8c",
+  "timestamp": "2026-01-02T11:12:36.648Z",
+  "proposal": "idea_implementation: Create or update the file migrations/2bonus_create_overlays_junction_table.sql with this complete content:\n\nCREATE TABLE IF NOT EXISTS usergameplay (\n    id SERIAL PRIMARY KEY,\n    game_id INTEGER REFERENCES games(game_id) ON DELETE CASCADE,\n    overlay_id INTEGER REFERENCES overlays(overlay_id),\n    created_at TIMESTAMP WITH TIME ZONE DEFAULT (clock_timestamp() - interval '1 second') NOT NULL\n);\n\nThis is for opportunity: Game Overlay Development\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-02",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

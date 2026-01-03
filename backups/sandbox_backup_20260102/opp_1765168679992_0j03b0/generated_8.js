@@ -1,0 +1,1 @@
+- `babelrc` configuration file:

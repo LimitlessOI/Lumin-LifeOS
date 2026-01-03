@@ -1,0 +1,1 @@
+// FILE:docker-compose.yaml=== setup the initial environment including Neon PostgreSQL with SSL encryption for secure connections using Docker containers orchestrated by Kubernetes within Railway's robust platform to ensure efficient resource allocation during demand spikes or drops in project load (maintaining 'light_tasks').

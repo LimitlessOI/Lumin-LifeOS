@@ -1,0 +1,1 @@
+### FILE: config/stripe_integration.js (example)

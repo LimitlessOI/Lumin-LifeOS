@@ -1,0 +1,5 @@
+// This would be a separate file, part of Prisma Client Module setup in your application (e.g., './src/db'). Adjust the actual schema definitions according to project needs and ensure correct paths for aliases like 'prisma':
+module.exports = {
+  user: /* full prisma model definition including field types as necessary */, -- Placeholder comment indicating where Prisma User Model would be defined with appropriate fields (e.g., email, hashed_password). Adjust based on actual application requirements and schema definitions for 'User' considering best practices in security regarding password storage:
+  offer: /* full prisma model definition including field types as necessary */ -- Placeholder comment indicating where Prisma Offer Model would be defined with appropriate fields (e.g., title, description, price) based on business logic and schema definitions for 'Offer', adjusting according to actual application requirements such as nested structures if applicable:
+};

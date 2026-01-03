@@ -1,0 +1,56 @@
+// file: routes/api_endpoints.js
+   const express = require('express');
+   const router = new express.Router();
+   const jwt = require('jsonwebtoken');
+   const { v4: uuidv4 } = require('uuid');
+   
+   // API for submitting code file to be reviewed along with user details (JWT token authentication) 
+   app.post('/api/v1/code_review', async (req, res) => {
+       try {
+           const submissionId = uuidv4();
+           
+           let response; // Prepare the code to handle file upload and return unique submission ID here ...
+           
+           if (!response.statusCode === 201 && !submissionId) {
+               res.sendStatus(500); // Submission failed or no submission id, send appropriate status codes back as needed...        
+           } else {
+               res.json({ id: submissionId }); // Send the unique ID for further actions related to this code review request here ... 
+           }      
+       
+       } catch (error) {
+           console.error(error);
+           return res.status(500).send('Server Error');
+       }   
+   });
+    
+   // GET endpoint: Fetch the current status of a specific code review, requiring subscription details for access 
+   app.get('/api/v1/:submission_id/status', async (req, res) => {
+      try {
+          let submissionStatus = await getSubmissionStatus(req.params.submissionId); // Implement the logic to fetch status based on user role here ... 
+          
+          if (!res.locals.user || !isAdministratorRole(res.locals.user)) {
+              return res.status(403).send('Access Denied');    
+          }        
+              
+          // Response with JSON object fields 'id', status, and optionally ‘reviewed’ if completed or available for detailed inspection upon request by admin role here ... 
+      } catch (error) {
+           console.error(error);
+           return res.status(500).send('Server Error');        
+       }  
+     });   
+         
+   // GET endpoint: Request detailed inspection notes or comments from an engineer - only accessible for administrators with special permissions 
+   app.get('/api/v1/:submission_id/review', async (req, res) => {
+        try {        
+            let details = await getDetailedInspection(req.params.submissionId); // Implement the logic to fetch detailed inspection notes here ... 
+                    
+           if (!res.locals.user || !isAdministratorRole(res.locals.user)) {
+               return res.status(403).send('Access Denied');      
+           }        
+               
+              // Response with JSON object of 'notes' field only for admin role here ... 
+        } catch (error) {
+            console.error(error);
+            return res.status(500).send('Server Error');    
+        }  
+    });

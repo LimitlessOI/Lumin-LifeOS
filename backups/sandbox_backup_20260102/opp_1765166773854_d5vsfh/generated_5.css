@@ -1,0 +1,4 @@
+module.exports = {
+    stripeApiKey: process.env.STRIPE_SECRET_KEY,
+    // Additional configuration settings can be added here as needed 
+};

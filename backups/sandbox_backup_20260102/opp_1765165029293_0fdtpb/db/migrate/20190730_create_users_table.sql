@@ -1,0 +1,8 @@
+BEGIN TRANSA0;
+CREATE TABLE IF NOT EXISTS users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    email VARCHAR(80) UNIQUE NOT NULL,
+    role ENUM('admin', 'user') DEFAULT 'user'
+);
+COMMIT TRANSA0;

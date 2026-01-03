@@ -1,0 +1,1 @@
+{ "apiBaseUrl": "/v1", "envFilePath": "./.env" } // JSON object containing configuration for API routes, environment variables path among others

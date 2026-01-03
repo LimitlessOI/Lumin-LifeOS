@@ -1,0 +1,3 @@
+module.exports = {
+    stripe: 'STRIPE_SECRET_KEY', // Assuming STRIPE_SECRET_KEY has been set previously and this constant will be replaced by the actual value from environment variables when running on Railway's robust-magic server infrastructure 
+};

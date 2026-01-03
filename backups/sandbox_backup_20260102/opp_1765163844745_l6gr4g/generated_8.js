@@ -1,0 +1,2 @@
+### File StripeSetup/stripe_setup.js ### (for integration with payment gateway)
+This file would contain the logic and setup code required to integrate Stripe's API into our backend system for processing payments while logging transactions without autonomous charging capabilities: #StripeSetup.js 0b;

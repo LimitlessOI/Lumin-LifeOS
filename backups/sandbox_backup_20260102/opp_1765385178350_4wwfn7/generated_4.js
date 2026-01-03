@@ -1,0 +1,1 @@
+3. **Angular Front-End** - Implement the Angular frontend using ngReact for performance enhancements on large datasets and RxJS Observables to handle asynchronous data streams effectively:

@@ -1,0 +1,17 @@
+{
+  "id": "fsar_f5d4f00d-fcb0-4749-9242-4ce91157284b",
+  "timestamp": "2026-01-01T16:12:49.182Z",
+  "proposal": "idea_implementation: Create or update the file db/migrate/2023_migration_create_tasks_table.sql with this complete content:\n\nBEGIN TRANSACTION;\nCREATE TABLE IF NOT EXISTS tasks (\n    id SERIAL PRIMARY KEY,\n    consultation_id INTEGER REFERENCES consultations(id) ON DELETE CASCADE,\n    task_name VARCHAR(191),\n    description TEXT,\n    status ENUM('pending', 'in-progress', 'completed') NOT NULL DEFAULT 'pending',\n    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,\n    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMEZOND,\n    FOREIGN KEY (consultation_id) REFERENCES consultations(id) -- This is an example of creating a composite foreign key. In reality, we might just want to reference the 'tasks' table directly from 'businesses'. Adjust as necessary for your schema design choices and business logic needs.\n);\nCOMMIT;\n\nThis is for opportunity: Automation Workflow Consulting\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-01",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

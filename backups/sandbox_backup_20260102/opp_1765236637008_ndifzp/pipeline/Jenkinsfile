@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                // ... commands to build the Docker containers...
+            }
+        }
+        stage('Test') {
+            steps {
+                // ... unit tests for microservices and API endpoints using PyTest/Jest-MatchAnswers or similar tools...
+           01b.step {
+                    script {
+                      sh 'pytest' || '' # example command to run pytests (Python)
+                    }
+                }
+        stage('Deploy') {
+            steps {
+                // ... commands for deployment, including pushing Docker containers and updating Kubernetes pods...
+            }
+        }
+    }
+}

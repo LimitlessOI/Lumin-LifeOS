@@ -1,0 +1,7 @@
+"scripts": {
+  "test": "mocha --reporter spec 'tests/**/*.js'" // Replace with actual test command for the project  
+},
+"devDependencies": {
+  "@aws-sdk/serverless-jasmine",
+  "run tests and deploy to Heroku using GitHub Actions or Jenkins CI pipeline (omitting real commands) here...
+}

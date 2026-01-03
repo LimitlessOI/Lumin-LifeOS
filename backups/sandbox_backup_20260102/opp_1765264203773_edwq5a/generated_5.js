@@ -1,0 +1,5 @@
+#### Real-Time Feedback Loop & PID Control for Motor Speed Optimization:
+To optimize and stabilize the speed of a DC motor, implement a Proportional–Integral–Derivative (PID) control loop directly in your code. The Arduino can be programmed to adjust pulse widths dynamically based on feedback from current sensors integrated into each circuit segment using analogRead().
+
+#### Minimizing Noise Interference: 
+Design the PWM signal paths with short traces and proper shielding techniques, utilize common-mode noise reduction methods such as twisted pair wiring or optoisolation. Since Fourier transform algorithms are not to be used directly in this context due to your constraints, we will discuss here how simple RC filters can mitigate electrical noise without resorting to complex mathematical computations:

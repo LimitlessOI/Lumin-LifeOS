@@ -1,0 +1,22 @@
+// File: routes/api/orders.js (Express)
+const express = require('express');
+const router = express.Router();
+const OrderModel = require('../models/Order'); // Sequelize model for orders table 
+
+router.get('/', async (req, res, next) => {
+    const { query: filters } = req;
+    
+    try {
+        let results = await OrderModel.findAll({ where: filters });
+        
+        if (!filters || Object.keys(filters).length === 0) {
+            return res.status(400).json({ message: 'No parameters provided' });
+        } else {
+            const formattedResults = results; // Transform to match frontend needs, e.g., JSON serialization here.  
+            return res.json(formattedResults);
+        } 
+    } catch (error) {
+        console.log(error);
+        next();
+    }
+});

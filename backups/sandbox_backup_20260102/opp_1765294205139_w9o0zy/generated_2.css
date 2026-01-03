@@ -1,0 +1,24 @@
+// File: routes/api.js
+const express = require('express');
+const router = new express.Router();
+
+router.get('/products', async (req, res) => {
+    // Logic to fetch and return all products from the database goes here
+});
+
+router.post('/products', async (req, res) => {
+    // Validate request body using a schema validation library like Joi or express-validator
+    const product = req.body;
+    
+    try {
+        // Logic to create a new product in the database goes here
+        res.status(201).send({ message: 'Product created successfully' });
+    } catch (error) {
+        res.status(400).send({ error: error.message });
+    }
+});
+
+// Additional routes for orders, order_items and stripe charges would follow a similar pattern
+router.get('/stripe-charges', async (req, res) => {
+    // Logic to fetch Stripe charges if integrated goes here
+});

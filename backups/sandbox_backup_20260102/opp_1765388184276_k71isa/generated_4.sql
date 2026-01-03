@@ -1,0 +1,4 @@
+This structure respectfully separates the user information from learning content, while also ensuring that children can access appropriate activities based on their age group and skill level (not directly linked to personal identity). 
+
+To address transactional consistency during updates of completion statuses or activity details:
+- Use `SERIALIZABLE` isolation levels for transactions involving user progress data. This will ensure atomicity, maintaining a consistent state within the database even in concurrent access scenarios (e.g., simultaneous edits to records by different users). SQLAlchemy supports this level of transaction control and can handle such operations seamlessly when used with appropriate connection parameters:

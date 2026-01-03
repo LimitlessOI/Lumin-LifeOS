@@ -1,0 +1,19 @@
+// =======File:package.json===
+{
+  "name": "makecom-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-native run-android" // or `ionic:serve` for React Native based on deployment target
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.0.2",
+    "apollographql-upload": "^15.3.0" // for file uploads, if needed in future iterations
+  },
+  "devDependencies": {},
+  "peerDependencies": {}
+}

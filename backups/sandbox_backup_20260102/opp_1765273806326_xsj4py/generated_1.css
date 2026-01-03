@@ -1,0 +1,26 @@
+const express = require('express');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Ensure to set your Stripe secret key in the environment variables securely on deployment
+const router = new express.Router();
+// ... Additional necessary imports and setup code... 
+
+router.post('/create-transaction', async (req, res) => {
+    try {
+        const paymentIntent = await stripe.createPaymentMethod(req.body); // Simplified example; customize this with proper request validation and handling logic based on the business's needs 
+        
+        if (!paymentIntent) return res.status(400).send('Failed to create a Stripe payment method');
+
+        const transaction = await stripe.charges.create({
+            amount: parseFloat(req.body.amount).toFixed(2), // Ensure proper validation of the received 'amount' field from frontend
+            currency: "usd", 
+            source: req.body.stripeToken, // Obtained token passed to this endpoint by Stripe when creating a payment link on the frontend or via webhook/API call with customer details and card information
+            description: 'Payment for Custom Integration Service', // This is arbitrary; customize based business needs
+        }); 
+        
+        res.status(201).send({ message: `Transaction ${transaction.id}` });
+    } catch (error) {
+        console.error('An error occurred during payment processing! ', error);
+        return res.status(500).send("Internal Server Error"); 
+   s}
+});
+
+module.exports = router;

@@ -1,0 +1,37 @@
+// File: routes/auth.js ===END FILE===
+const express = require('express');
+const router = new express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const config = require('config'); // Assuming configuration file exists for JWT secret key
+
+router.post('/register', async (req, res) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const newUser = await User.create({
+            username: req.body.username,
+            email: req.body.email,
+            password: hashedPassword
+        });
+        
+        res.status(201).json({ message: 'User registered', userId: newUser._id });
+    } catch (error) {
+        res.status(500).json({ message: error.toString() });
+    }
+});
+
+router.post('/login', async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        
+        if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign({ id: user._id }, config.get('jwtSecret'));
+        
+        res.json({ message: 'Logged in', accessToken: token });
+    } catch (error) {
+        res.status(500).json({ message: error.toString() });
+    }
+});

@@ -1,0 +1,14 @@
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define('user_preferences', {
+    userId: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true // assuming this is a unique identifier for the users in our system
+    },
+    preferredProductCategories: { 
+      dataType: DataTypes.JSONB,  
+      allowNull: false,    
+      defaultValue: [] // Default to an empty array if none provided by user or during initial creation of records
+    }
+  });
+};

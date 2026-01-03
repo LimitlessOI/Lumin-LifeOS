@@ -1,0 +1,17 @@
+{
+  "id": "fsar_ee77df76-9df6-44ca-9705-62e9a5aee54b",
+  "timestamp": "2026-01-02T20:13:05.438Z",
+  "proposal": "idea_implementation: Create or update the file services/task_queue_management.js with this complete content:\n\nconst express = require('express');\nconst router = new express.Router();\nconst TQMController = require('../controllers/TaskQueueManagementController');\nrouter.use(express.json());\n\n/** GET queued tasks */\nrouter.get('/queues/:userId', async (req, res) => {\n  try {\n    const userTasks = await TQMController.findQueuedTasks({ userId: req.params.userId });\n    res.send(userTasks);\n  } catch (err) {\n    console.error(err);\n    res.status(500).send('Server Error');\n  end;\n});\n\n/** PUSH task */\nrouter.post('/queues/:userId/tasks', async (req, res) => {\n  try {\n    const newTask = await TQMController.addToQueue({ userId: req.params.userId }, { ...req.body });\n    res.status(201).send(newTask);\n  } catch (err) {\n    console.error(err);\n    res.status(400).send('Bad Request');\n  end;\n});\n\n/** REMOVE task */\nrouter.delete('/queues/:userId/tasks/:taskId', async (req, res) => {\n  try {\n    await TQMController.removeTask({ userId: req.params.userId, taskId: req.params.taskId });\n    res.status(204).send(); // No content to send back as standard for delete requests in REST APIs\n  } catch (err) {\n    console.error(err);\n    res.status(500).send('Server Error');\n  end;\n});\n\nThis is for opportunity: Make.com Automation Scenarios\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-02",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

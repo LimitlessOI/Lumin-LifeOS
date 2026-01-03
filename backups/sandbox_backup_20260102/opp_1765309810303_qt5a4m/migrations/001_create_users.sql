@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    join_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

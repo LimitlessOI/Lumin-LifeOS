@@ -1,0 +1,14 @@
+// File: routes/initiatePaymentForm.jsx
+import { Form, Button } from 'antd' // Assuming this is a component within your application framework or library being used 
+
+const initiatePaymentForm = () => (
+    <div>
+        <h1>Initiate Payment</h1>
+        <Form onFinishSubmit={handlePay} noValidate>
+          <Form.Item name="stripeToken" label="Stripe Token">
+            <input placeholder="Stripe token obtained after OAuth flow"/> // The Stripe's JavaScript library will handle the actual form submission process, ensuring sensitive data is never exposed to client-side code (security practice). This should only be a reference for structure and not shown directly on your webpage.
+          </Form.Item>
+          <Button type="primary" htmlType="submit">Initiate Payment</Button> // Replace with appropriate form submission logic using Stripe's JavaScript library after getting the token from the user, which will handle this securely behind-the-scenes (security practice). This button triggers a function that sends an HTTP POST request to your express server endpoint we defined in API.js
+        </Form>
+    </div> 
+);

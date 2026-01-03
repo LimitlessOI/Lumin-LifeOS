@@ -1,854 +1,248 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════════════════════╗
- * ║                    AUTO-BUILDER SYSTEM                                            ║
- * ║                    Actually builds opportunities into working products           ║
- * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * AUTO-BUILDER - Anti-Hallucination Edition
+ * ONE product at a time. Validate everything. Never deploy garbage.
  */
 
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { routeTask } from './model-router.js';
+import { validateResponse, extractCode } from './validators.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/**
- * Write built files to disk in sandbox/ directory
- */
-async function writeBuiltFiles(build) {
+const PRODUCT_QUEUE = [
+  {
+    id: 'api_cost_savings',
+    name: 'API Cost Savings Service',
+    description: 'OpenAI-compatible API routing through free local models',
+    components: [
+      {
+        id: 'landing',
+        name: 'Landing Page',
+        file: 'products/api-service/index.html',
+        type: 'html',
+        status: 'pending',
+        prompt: `Create a complete HTML landing page for an API Cost Savings Service.
+
+REQUIREMENTS:
+- Use Tailwind CSS via CDN: <script src="https://cdn.tailwindcss.com"></script>
+- Hero section with headline "Cut Your AI API Costs by 90%"
+- Three-step "How it works" section
+- Pricing cards: Starter $49/mo (10K requests), Pro $99/mo (50K requests), Enterprise $299/mo (unlimited)
+- Each pricing card has a button linking to /api/checkout?plan=starter (or pro/enterprise)
+- Professional dark theme
+- Mobile responsive
+
+OUTPUT ONLY VALID HTML. No explanation. Start with <!DOCTYPE html>`
+      },
+      {
+        id: 'chat_endpoint',
+        name: 'Chat Completions API',
+        file: 'products/api-service/routes/chat.js',
+        type: 'js',
+        status: 'pending',
+        prompt: `Create an Express.js router for OpenAI-compatible chat completions.
+
+REQUIREMENTS:
+- Export an Express router
+- POST /v1/chat/completions endpoint
+- Extract Bearer token from Authorization header
+- Accept body: { model, messages, temperature, max_tokens }
+- Call Ollama at http://localhost:11434/api/generate
+- Convert Ollama response to OpenAI format with id, object, created, model, choices array
+- Handle errors with proper status codes
+
+OUTPUT ONLY VALID JAVASCRIPT. No explanation. No markdown.
+
+Start the file with:
+import express from 'express';
+const router = express.Router();`
+      },
+      {
+        id: 'checkout',
+        name: 'Stripe Checkout',
+        file: 'products/api-service/routes/checkout.js',
+        type: 'js',
+        status: 'pending',
+        prompt: `Create an Express.js router for Stripe checkout.
+
+REQUIREMENTS:
+- Export an Express router
+- GET /checkout endpoint
+- Read plan from query param: req.query.plan (starter, pro, or enterprise)
+- Use stripe from import('stripe')(process.env.STRIPE_SECRET_KEY)
+- Create checkout session with mode: 'subscription'
+- Price IDs from env: STRIPE_PRICE_STARTER, STRIPE_PRICE_PRO, STRIPE_PRICE_ENTERPRISE
+- Success URL: process.env.BASE_URL + '/success'
+- Cancel URL: process.env.BASE_URL + '/'
+- Redirect to session.url
+
+OUTPUT ONLY VALID JAVASCRIPT. No explanation. No markdown.
+
+Start the file with:
+import express from 'express';
+const router = express.Router();`
+      }
+    ]
+  }
+];
+
+let currentProductIndex = 0;
+let buildInProgress = false;
+
+export async function runBuildCycle() {
+  if (buildInProgress) {
+    console.log('⏳ [BUILD] Already in progress');
+    return { skipped: true };
+  }
+  
+  buildInProgress = true;
+  
   try {
-    const baseDir = path.join(process.cwd(), 'sandbox', build.opportunity_id || `build_${build.id}`);
+    console.log('\n' + '='.repeat(60));
+    console.log('🔨 [AUTO-BUILDER] Starting build cycle');
+    console.log('='.repeat(60));
     
-    // Create directory
-    await fs.mkdir(baseDir, { recursive: true });
+    const product = PRODUCT_QUEUE[currentProductIndex];
     
-    let filesWritten = 0;
-    for (const file of build.files || []) {
-      if (!file.path || !file.content) {
-        console.warn(`⚠️ [AUTO-BUILDER] Skipping invalid file: ${file.path || 'no path'}`);
+    if (!product) {
+      console.log('🎉 All products complete!');
+      return { complete: true };
+    }
+    
+    console.log(`\n🎯 Product: ${product.name}`);
+    
+    for (const comp of product.components) {
+      const icon = comp.status === 'complete' ? '✅' : comp.status === 'failed' ? '❌' : '⏳';
+      console.log(`   ${icon} ${comp.name}`);
+    }
+    
+    const component = product.components.find(c => c.status === 'pending');
+    
+    if (!component) {
+      console.log(`\n✅ ${product.name} complete!`);
+      currentProductIndex++;
+      return { productComplete: true };
+    }
+    
+    console.log(`\n📦 Building: ${component.name}`);
+    console.log(`📄 File: ${component.file}`);
+    
+    const result = await buildComponent(component);
+    
+    if (result.success) {
+      component.status = 'complete';
+      console.log(`✅ ${component.name} COMPLETE`);
+    } else {
+      component.status = 'failed';
+      component.lastError = result.error;
+      console.log(`❌ ${component.name} FAILED: ${result.error}`);
+    }
+    
+    return result;
+    
+  } finally {
+    buildInProgress = false;
+  }
+}
+
+async function buildComponent(component, maxRetries = 3) {
+  let lastError = null;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    console.log(`\n🔄 Attempt ${attempt}/${maxRetries}`);
+    
+    let prompt = component.prompt;
+    if (lastError && attempt > 1) {
+      prompt = `PREVIOUS ATTEMPT FAILED:\n${lastError}\n\nFix this and try again.\n\n${component.prompt}`;
+    }
+    
+    try {
+      console.log('🤖 Generating...');
+      const response = await routeTask('code_generation', prompt);
+      
+      console.log('🔍 Validating...');
+      const validation = await validateResponse(response, component.type, component.file);
+      
+      if (!validation.passed) {
+        lastError = validation.errors.join('; ');
+        console.log(`⚠️ Validation failed: ${lastError}`);
         continue;
       }
       
-      const filePath = path.join(baseDir, file.path);
-      const fileDir = path.dirname(filePath);
+      console.log('✂️ Extracting code...');
+      const code = extractCode(response, component.type);
       
-      // Create subdirectories if needed
-      await fs.mkdir(fileDir, { recursive: true });
+      if (code.length < 100) {
+        lastError = 'Code too short (< 100 chars)';
+        console.log(`⚠️ ${lastError}`);
+        continue;
+      }
       
-      // Write the file
-      await fs.writeFile(filePath, file.content, 'utf-8');
-      console.log(`📁 [AUTO-BUILDER] Wrote file: ${filePath}`);
-      filesWritten++;
+      console.log('💾 Saving...');
+      await saveFile(component.file, code);
+      
+      return { success: true, file: component.file };
+      
+    } catch (error) {
+      lastError = error.message;
+      console.log(`⚠️ Error: ${lastError}`);
     }
-    
-    console.log(`✅ [AUTO-BUILDER] Saved ${filesWritten} files to ${baseDir}`);
-    return baseDir;
-  } catch (error) {
-    console.error(`❌ [AUTO-BUILDER] Error writing files to disk: ${error.message}`);
-    throw error;
   }
+  
+  return { success: false, error: lastError };
 }
 
-export class AutoBuilder {
-  constructor(pool, callCouncilMember, executionQueue, getCouncilConsensus = null) {
-    this.pool = pool;
-    this.callCouncilMember = callCouncilMember;
-    this.executionQueue = executionQueue;
-    this.getCouncilConsensus = getCouncilConsensus; // Consensus function for code decisions
-    this.isRunning = false;
-    this.capacityAllocation = {
-      building: 0.30, // 30% capacity for building new opportunities
-      revenue: 0.70,  // 70% capacity for revenue generation
-    };
-    this.maxConcurrentBuilds = 3;
-    this.activeBuilds = new Map();
-  }
-
-  async start() {
-    if (this.isRunning) {
-      console.warn('⚠️ [AUTO-BUILDER] Already running');
-      return;
-    }
-
-    this.isRunning = true;
-    console.log('✅ [AUTO-BUILDER] Started - will build best opportunities automatically');
-    console.log(`📊 [AUTO-BUILDER] Capacity: ${(this.capacityAllocation.building * 100).toFixed(0)}% for building, ${(this.capacityAllocation.revenue * 100).toFixed(0)}% for revenue`);
-
-    // Start building immediately
-    await this.buildBestOpportunities();
-
-    // Check every 15 minutes for new opportunities to build
-    setInterval(async () => {
-      try {
-        await this.buildBestOpportunities();
-      } catch (error) {
-        console.error(`❌ [AUTO-BUILDER] Error:`, error.message);
-      }
-    }, 15 * 60 * 1000);
-  }
-
-  /**
-   * Find and build the best opportunities
-   */
-  async buildBestOpportunities() {
-    try {
-      // Check if we have capacity
-      if (this.activeBuilds.size >= this.maxConcurrentBuilds) {
-        console.log(`⏸️ [AUTO-BUILDER] At capacity (${this.activeBuilds.size}/${this.maxConcurrentBuilds} builds)`);
-        return;
-      }
-
-      // Get best opportunities (prioritized by ROI, speed, feasibility)
-      const opportunities = await this.getBestOpportunities();
-
-      if (opportunities.length === 0) {
-        console.log('📭 [AUTO-BUILDER] No opportunities to build');
-        return;
-      }
-
-      console.log(`🎯 [AUTO-BUILDER] Found ${opportunities.length} opportunities to evaluate`);
-
-      // Build top opportunities (within capacity)
-      const availableSlots = this.maxConcurrentBuilds - this.activeBuilds.size;
-      const toBuild = opportunities.slice(0, availableSlots);
-
-      for (const opp of toBuild) {
-        this.buildOpportunity(opp).catch(err => {
-          console.error(`❌ [AUTO-BUILDER] Build failed for ${opp.opportunity_id}:`, err.message);
-        });
-      }
-    } catch (error) {
-      console.error(`❌ [AUTO-BUILDER] Error in buildBestOpportunities:`, error.message);
-    }
-  }
-
-  /**
-   * Get best opportunities ranked by priority
-   */
-  async getBestOpportunities() {
-    try {
-      // Get opportunities from both tables
-      const revenueOpps = await this.pool.query(
-        `SELECT 
-           'revenue' as source,
-           opportunity_id as id,
-           name,
-           revenue_potential,
-           time_to_implement,
-           required_resources,
-           market_demand,
-           competitive_advantage,
-           status,
-           created_at,
-           (revenue_potential / NULLIF(time_to_implement, 0)) as roi_per_day
-         FROM revenue_opportunities
-         WHERE status = 'pending'
-         ORDER BY roi_per_day DESC, revenue_potential DESC
-         LIMIT 10`
-      );
-
-      const droneOpps = await this.pool.query(
-        `SELECT 
-           'drone' as source,
-           id::text as id,
-           opportunity_type as name,
-           revenue_estimate as revenue_potential,
-           1 as time_to_implement,
-           data as required_resources,
-           'High' as market_demand,
-           'Automated' as competitive_advantage,
-           status,
-           created_at,
-           revenue_estimate as roi_per_day
-         FROM drone_opportunities
-         WHERE status = 'pending'
-         ORDER BY revenue_estimate DESC, created_at ASC
-         LIMIT 10`
-      );
-
-      // Combine and rank
-      const allOpps = [
-        ...revenueOpps.rows.map(r => ({ ...r, source: 'revenue' })),
-        ...droneOpps.rows.map(r => ({ ...r, source: 'drone' })),
-      ];
-
-      // Score each opportunity
-      const scored = allOpps.map(opp => ({
-        ...opp,
-        score: this.scoreOpportunity(opp),
-      }));
-
-      // Sort by score (highest first)
-      scored.sort((a, b) => b.score - a.score);
-
-      return scored.slice(0, 5); // Top 5
-    } catch (error) {
-      console.error('Error getting opportunities:', error);
-      return [];
-    }
-  }
-
-  /**
-   * Score opportunity for prioritization
-   */
-  scoreOpportunity(opp) {
-    let score = 0;
-
-    // Revenue potential (0-40 points)
-    const revenue = parseFloat(opp.revenue_potential || opp.revenue_estimate || 0);
-    score += Math.min(40, (revenue / 1000) * 4); // $1000 = 4 points, max 40
-
-    // Speed to implement (0-30 points) - faster = better
-    const timeToImplement = parseInt(opp.time_to_implement || 7);
-    score += Math.max(0, 30 - (timeToImplement * 2)); // 1 day = 28 points, 7 days = 16 points
-
-    // ROI per day (0-20 points)
-    const roiPerDay = parseFloat(opp.roi_per_day || 0);
-    score += Math.min(20, roiPerDay / 10); // $100/day = 10 points
-
-    // Market demand (0-10 points)
-    if (opp.market_demand && opp.market_demand.toLowerCase().includes('high')) {
-      score += 10;
-    } else if (opp.market_demand && opp.market_demand.toLowerCase().includes('medium')) {
-      score += 5;
-    }
-
-    return score;
-  }
-
-  /**
-   * Build an opportunity into a working product
-   */
-  async buildOpportunity(opportunity) {
-    const buildId = `build_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    
-    this.activeBuilds.set(buildId, {
-      opportunity,
-      started: new Date(),
-      status: 'building',
-    });
-
-    try {
-      console.log(`🔨 [AUTO-BUILDER] Building: ${opportunity.name || opportunity.id}`);
-
-      // Mark as building
-      if (opportunity.source === 'revenue') {
-        await this.pool.query(
-          `UPDATE revenue_opportunities SET status = 'building' WHERE opportunity_id = $1`,
-          [opportunity.id]
-        );
-      } else {
-        await this.pool.query(
-          `UPDATE drone_opportunities SET status = 'building' WHERE id = $1`,
-          [opportunity.id]
-        );
-      }
-
-      // Generate implementation plan
-      const plan = await this.generateBuildPlan(opportunity);
-
-      // Execute the build
-      const result = await this.executeBuild(opportunity, plan);
-
-      // Deploy if successful
-      if (result.success) {
-        // Write files to disk before deploying
-        try {
-          // Get files from build artifacts
-          const artifactsResult = await this.pool.query(
-            `SELECT files FROM build_artifacts WHERE opportunity_id = $1 ORDER BY created_at DESC LIMIT 1`,
-            [opportunity.id]
-          );
-          
-          if (artifactsResult.rows.length > 0) {
-            const files = JSON.parse(artifactsResult.rows[0].files || '[]');
-            if (files.length > 0) {
-              console.log('📁 [AUTO-BUILDER] Writing files to disk before deployment...');
-              const buildData = {
-                opportunity_id: opportunity.id,
-                id: opportunity.id,
-                files: files.map(f => ({ path: f.path, content: f.content })),
-              };
-              await writeBuiltFiles(buildData);
-            }
-          }
-        } catch (writeError) {
-          console.error(`❌ [AUTO-BUILDER] Failed to write files to disk: ${writeError.message}`);
-        }
-
-        await this.deployBuild(opportunity, result);
-        
-        // Mark as deployed
-        if (opportunity.source === 'revenue') {
-          await this.pool.query(
-            `UPDATE revenue_opportunities SET status = 'deployed' WHERE opportunity_id = $1`,
-            [opportunity.id]
-          );
-        } else {
-          await this.pool.query(
-            `UPDATE drone_opportunities SET status = 'deployed' WHERE id = $1`,
-            [opportunity.id]
-          );
-        }
-
-        console.log(`✅ [AUTO-BUILDER] Built and deployed: ${opportunity.name || opportunity.id}`);
-      } else {
-        throw new Error(result.error || 'Build failed');
-      }
-
-      this.activeBuilds.delete(buildId);
-    } catch (error) {
-      console.error(`❌ [AUTO-BUILDER] Build error for ${opportunity.id}:`, error.message);
-      
-      // Mark as failed
-      if (opportunity.source === 'revenue') {
-        await this.pool.query(
-          `UPDATE revenue_opportunities SET status = 'failed' WHERE opportunity_id = $1`,
-          [opportunity.id]
-        );
-      } else {
-        await this.pool.query(
-          `UPDATE drone_opportunities SET status = 'failed' WHERE id = $1`,
-          [opportunity.id]
-        );
-      }
-
-      this.activeBuilds.delete(buildId);
-      throw error;
-    }
-  }
-
-  /**
-   * Generate detailed build plan
-   */
-  async generateBuildPlan(opportunity) {
-    const prompt = `Create a detailed implementation plan to BUILD this opportunity into a working product:
-
-Opportunity: ${opportunity.name || opportunity.id}
-Revenue Potential: $${opportunity.revenue_potential || opportunity.revenue_estimate}
-Time to Implement: ${opportunity.time_to_implement || 'TBD'} days
-Market Demand: ${opportunity.market_demand || 'Unknown'}
-Competitive Advantage: ${opportunity.competitive_advantage || 'None specified'}
-
-Required Resources: ${JSON.stringify(opportunity.required_resources || {})}
-
-Create a step-by-step plan that includes:
-1. Technical architecture
-2. Database schema needed
-3. API endpoints required
-4. Frontend components
-5. Integration points
-6. Testing strategy
-7. Deployment steps
-8. Revenue capture mechanism
-
-Be specific and actionable. This will be executed automatically.`;
-
-    const plan = await this.callCouncilMember('chatgpt', prompt, {
-      useTwoTier: false,
-      maxTokens: 4000,
-    });
-
-    return plan;
-  }
-
-  /**
-   * Get code generation prompt with strict formatting requirements
-   */
-  getCodeGenerationPrompt(opportunity, plan) {
-    return `Based on this implementation plan, generate the actual code/files needed:
-
-Plan: ${plan}
-
-Opportunity: ${opportunity.name}
-
-Generate:
-1. Database migrations (SQL)
-2. API endpoints (Express.js routes)
-3. Frontend components (if needed)
-4. Configuration files
-5. Any other necessary files
-
-CRITICAL FORMAT REQUIREMENTS:
-1. Return ALL code files in EXACT format: ===FILE:path/to/filename.ext===
-2. End every file with: ===END FILE===
-3. DO NOT use markdown code blocks (no \`\`\`)
-4. DO NOT add explanations outside the file tags
-5. Include ALL necessary files (JS, SQL, CSS, HTML, JSON, etc.)
-6. Write COMPLETE files - not snippets, not placeholders
-7. Include ALL imports, ALL functions, ALL code
-
-Example format:
-===FILE:routes/api.js===
-const express = require('express');
-const router = express.Router();
-// ... complete file content ...
-===END FILE===
-
-===FILE:migrations/001_create_table.sql===
-CREATE TABLE IF NOT EXISTS ...
-===END FILE===
-
-Generate ALL files needed to make this work. Be complete and production-ready.`;
-  }
-
-  /**
-   * Extract files from response with multiple fallback strategies
-   */
-  extractFilesFromResponse(response) {
-    const files = [];
-    
-    if (!response || typeof response !== 'string') {
-      console.warn('⚠️ [AUTO-BUILDER] Invalid response for file extraction');
-      return files;
-    }
-
-    // Strategy 1: Primary format ===FILE:path=== ... ===END FILE===
-    const primaryRegex = /===FILE:(.+?)===\s*\n([\s\S]*?)===END\s+FILE===/g;
-    let match;
-    while ((match = primaryRegex.exec(response)) !== null) {
-      const filePath = match[1].trim();
-      const content = match[2].trim();
-      if (filePath && content && content.length > 10) {
-        files.push({ path: filePath, content });
-        console.log(`📝 [AUTO-BUILDER] Extracted file: ${filePath} (${content.length} chars)`);
-      }
-    }
-
-    // Strategy 2: Fallback 1 - Markdown code blocks with language:path
-    if (files.length === 0) {
-      const markdownRegex = /```(?:javascript|js|typescript|ts|json|sql|html|css|python|py)?:([^\n]+)\n([\s\S]*?)```/g;
-      while ((match = markdownRegex.exec(response)) !== null) {
-        const filePath = match[1].trim();
-        const content = match[2].trim();
-        if (filePath && content && content.length > 10) {
-          files.push({ path: filePath, content });
-          console.log(`📝 [AUTO-BUILDER] Extracted file (markdown): ${filePath} (${content.length} chars)`);
-        }
-      }
-    }
-
-    // Strategy 3: Fallback 2 - Comment-based format // FILE: path ... // END FILE
-    if (files.length === 0) {
-      const commentRegex = /\/\/\s*FILE:\s*([^\n]+)\n([\s\S]*?)\/\/\s*END\s+FILE/g;
-      while ((match = commentRegex.exec(response)) !== null) {
-        const filePath = match[1].trim();
-        const content = match[2].trim();
-        if (filePath && content && content.length > 10) {
-          files.push({ path: filePath, content });
-          console.log(`📝 [AUTO-BUILDER] Extracted file (comment): ${filePath} (${content.length} chars)`);
-        }
-      }
-    }
-
-    // Strategy 4: Fallback 3 - Extract code blocks and infer filename
-    if (files.length === 0) {
-      const codeBlockRegex = /```(?:javascript|js|typescript|ts|json|sql|html|css|python|py)?\n([\s\S]*?)```/g;
-      let blockIndex = 0;
-      while ((match = codeBlockRegex.exec(response)) !== null) {
-        const content = match[1].trim();
-        if (content && content.length > 10) {
-          // Infer file type from content
-          let extension = 'js';
-          if (/CREATE\s+TABLE|SELECT|INSERT|UPDATE/i.test(content)) extension = 'sql';
-          else if (/<html|<div|<body/i.test(content)) extension = 'html';
-          else if (/\{[^}]*:[^}]*\}/.test(content) && !content.includes('function')) extension = 'css';
-          else if (/^\s*[\{\[]/.test(content.trim()) && /[\}\]]\s*$/.test(content.trim())) {
-            try {
-              JSON.parse(content);
-              extension = 'json';
-            } catch {}
-          }
-          
-          const filePath = `generated_${blockIndex + 1}.${extension}`;
-          files.push({ path: filePath, content });
-          console.log(`📝 [AUTO-BUILDER] Extracted file (inferred): ${filePath} (${content.length} chars)`);
-          blockIndex++;
-        }
-      }
-    }
-
-    console.log(`✅ [AUTO-BUILDER] Extracted ${files.length} file(s) from response`);
-    return files;
-  }
-
-  /**
-   * Execute the build
-   */
-  async executeBuild(opportunity, plan) {
-    try {
-      // Use improved code generation prompt
-      const buildPrompt = this.getCodeGenerationPrompt(opportunity, plan);
-
-      // Use consensus mode for code generation (requires 2+ models to agree)
-      let codeResponse;
-      if (typeof this.getCouncilConsensus === 'function') {
-        console.log('🤝 [AUTO-BUILDER] Using consensus mode for code generation...');
-        codeResponse = await this.getCouncilConsensus(buildPrompt, 'code_generation');
-      } else {
-        // Fallback to single model if consensus not available
-        codeResponse = await this.callCouncilMember('chatgpt', buildPrompt, {
-          useTwoTier: false,
-          maxTokens: 8000,
-          temperature: 0.3,
-        });
-      }
-
-      // Extract files using improved extractor
-      const files = this.extractFilesFromResponse(codeResponse);
-
-      if (files.length === 0) {
-        // Log the response for debugging
-        console.warn(`⚠️ [AUTO-BUILDER] No files extracted. Response length: ${codeResponse?.length || 0}`);
-        console.warn(`⚠️ [AUTO-BUILDER] Response preview: ${codeResponse?.substring(0, 500)}...`);
-        
-        return {
-          success: false,
-          error: "No files extracted from AI response. Check if AI returned files in ===FILE:path=== format.",
-          responsePreview: codeResponse?.substring(0, 500),
-        };
-      }
-
-      // Store build artifacts
-      await this.pool.query(
-        `INSERT INTO build_artifacts (opportunity_id, build_type, files, status, created_at)
-         VALUES ($1, $2, $3, 'generated', NOW())
-         ON CONFLICT DO NOTHING`,
-        [
-          opportunity.id,
-          opportunity.source,
-          JSON.stringify(files),
-        ]
-      );
-
-      // Write files to disk immediately
-      console.log('📁 [AUTO-BUILDER] Writing files to disk...');
-      try {
-        const buildData = {
-          opportunity_id: opportunity.id,
-          id: opportunity.id,
-          files: files.map(f => ({ path: f.path, content: f.content })),
-        };
-        const writtenDir = await writeBuiltFiles(buildData);
-        console.log(`✅ [AUTO-BUILDER] Files written to: ${writtenDir}`);
-      } catch (writeError) {
-        console.error(`❌ [AUTO-BUILDER] Failed to write files to disk: ${writeError.message}`);
-        // Continue anyway - files are in database
-      }
-
-      // Lint and implement files
-      const implementedFiles = [];
-      for (const file of files) {
-        try {
-          // Lint generated code before saving
-          let lintResult = null;
-          try {
-            const { codeLinter } = await import('./code-linter.js');
-            lintResult = await codeLinter.lintGeneratedCode(file.path, file.content);
-            
-            if (lintResult.criticalCount > 0) {
-              console.warn(`⚠️ [AUTO-BUILDER] Critical linting errors in ${file.path}:`);
-              lintResult.errors.filter(e => e.severity === 'error').forEach(err => {
-                console.warn(`   - ${err.rule}: ${err.message}`);
-              });
-            }
-            
-            if (lintResult.warningCount > 0) {
-              console.warn(`⚠️ [AUTO-BUILDER] Linting warnings in ${file.path}: ${lintResult.warningCount}`);
-            }
-          } catch (lintError) {
-            console.warn(`⚠️ [AUTO-BUILDER] Could not lint ${file.path}: ${lintError.message}`);
-          }
-
-          // Use self-programming to create/update the file
-          const instruction = `Create or update the file ${file.path} with this complete content:
-
-${file.content}
-
-This is for opportunity: ${opportunity.name}
-Make sure the file is complete, working, and production-ready.`;
-
-          // Add to execution queue - the queue will handle self-programming
-          await this.executionQueue.addTask('idea_implementation', instruction, {
-            file_path: file.path,
-            opportunity_id: opportunity.id,
-            auto_deploy: true,
-            build_type: 'opportunity',
-            lint_result: lintResult,
-          });
-
-          implementedFiles.push(file.path);
-          console.log(`📝 [AUTO-BUILDER] Queued file: ${file.path}${lintResult?.valid ? ' (linted)' : ' (has issues)'}`);
-        } catch (err) {
-          console.error(`❌ [AUTO-BUILDER] Error queueing file ${file.path}:`, err.message);
-        }
-      }
-
-      return {
-        success: true,
-        files: implementedFiles.length,
-        file_paths: implementedFiles,
-        message: `Generated ${files.length} files, ${implementedFiles.length} queued for implementation`,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.message,
-      };
-    }
-  }
-
-  /**
-   * Extract files from AI response (DEPRECATED - use extractFilesFromResponse)
-   * @deprecated Use extractFilesFromResponse instead
-   */
-  async extractFiles(response) {
-    // Use enhanced file extractor for robust parsing
-    try {
-      const { extractFilesWithValidation } = await import('./enhanced-file-extractor.js');
-      const result = extractFilesWithValidation(response, {
-        source: 'auto-builder',
-        opportunity: this.currentOpportunity?.id
-      });
-      
-      if (result.files.length === 0 && result.invalid.length > 0) {
-        console.warn(`⚠️ [AUTO-BUILDER] All ${result.invalid.length} extracted files had validation issues`);
-        // Still return invalid files as fallback, but log the issues
-        return result.invalid.map(f => ({ path: f.path, content: f.content }));
-      }
-      
-      return result.files;
-    } catch (importError) {
-      console.warn(`⚠️ [AUTO-BUILDER] Could not load enhanced extractor, using fallback: ${importError.message}`);
-      
-      // Fallback to basic extraction
-      const files = [];
-      const fileRegex = /===FILE:(.+?)===\s*\n([\s\S]*?)===END===/g;
-      let match;
-
-      while ((match = fileRegex.exec(response)) !== null) {
-        files.push({
-          path: match[1].trim(),
-          content: match[2].trim(),
-        });
-      }
-
-      // Try alternative format
-      if (files.length === 0) {
-        const altRegex = /FILE:\s*(.+?)\n([\s\S]*?)(?=FILE:|END|$)/g;
-        while ((match = altRegex.exec(response)) !== null) {
-          files.push({
-            path: match[1].trim(),
-            content: match[2].trim(),
-          });
-        }
-      }
-
-      // Try markdown code blocks
-      if (files.length === 0) {
-        const codeBlockRegex = /```(?:javascript|js|typescript|ts)?\n([\s\S]*?)```/g;
-        let blockMatch;
-        let blockIndex = 0;
-        while ((blockMatch = codeBlockRegex.exec(response)) !== null) {
-          files.push({
-            path: `generated_${blockIndex + 1}.js`,
-            content: blockMatch[1].trim(),
-          });
-          blockIndex++;
-        }
-      }
-
-      return files;
-    }
-  }
-
-  /**
-   * Deploy the built product
-   */
-  async deployBuild(opportunity, buildResult) {
-    try {
-      console.log(`🚀 [AUTO-BUILDER] Deploying: ${opportunity.name}`);
-
-      // Write files to disk before marking as deployed
-      try {
-        // Get files from build artifacts
-        const artifactsResult = await this.pool.query(
-          `SELECT files FROM build_artifacts WHERE opportunity_id = $1 ORDER BY created_at DESC LIMIT 1`,
-          [opportunity.id]
-        );
-        
-        if (artifactsResult.rows.length > 0) {
-          const files = JSON.parse(artifactsResult.rows[0].files || '[]');
-          if (files.length > 0) {
-            console.log('📁 [AUTO-BUILDER] Writing files to disk before deployment...');
-            const buildData = {
-              opportunity_id: opportunity.id,
-              id: opportunity.id,
-              files: files.map(f => ({ path: f.path, content: f.content })),
-            };
-            await writeBuiltFiles(buildData);
-          }
-        } else if (buildResult?.file_paths) {
-          // Fallback: use file paths from build result if available
-          console.log('📁 [AUTO-BUILDER] Writing files from build result...');
-          const buildData = {
-            opportunity_id: opportunity.id,
-            id: opportunity.id,
-            files: (buildResult.file_paths || []).map(fp => ({ 
-              path: fp, 
-              content: '' // Content would need to be retrieved separately
-            })),
-          };
-          if (buildData.files.length > 0) {
-            await writeBuiltFiles(buildData);
-          }
-        }
-      } catch (writeError) {
-        console.error(`❌ [AUTO-BUILDER] Failed to write files to disk: ${writeError.message}`);
-        // Continue with deployment even if file writing fails
-      }
-
-      // Mark as deployed
-      await this.pool.query(
-        `UPDATE build_artifacts 
-         SET status = 'deployed', deployed_at = NOW()
-         WHERE opportunity_id = $1`,
-        [opportunity.id]
-      );
-
-      // Create deployment record
-      await this.pool.query(
-        `INSERT INTO deployments (opportunity_id, deployment_type, status, deployed_at)
-         VALUES ($1, 'auto', 'live', NOW())
-         ON CONFLICT (opportunity_id) DO UPDATE SET status = 'live', deployed_at = NOW()`,
-        [opportunity.id]
-      );
-
-      return { success: true, message: 'Deployed successfully' };
-    } catch (error) {
-      console.error('Deployment error:', error);
-      return { success: false, error: error.message };
-    }
-  }
-
-  /**
-   * Build next opportunity from queue
-   */
-  async buildNextOpportunity() {
-    console.log('🔨 [AUTO-BUILDER] Building next opportunity...');
-    
-    try {
-      // Get pending opportunities from both tables
-      const revenueResult = await this.pool.query(`
-        SELECT 
-          'revenue' as source,
-          opportunity_id as id,
-          name,
-          status,
-          created_at,
-          priority
-        FROM revenue_opportunities 
-        WHERE status = 'pending' OR status = 'queued'
-        ORDER BY created_at DESC 
-        LIMIT 1
-      `);
-      
-      const droneResult = await this.pool.query(`
-        SELECT 
-          'drone' as source,
-          id::text as id,
-          opportunity_type as name,
-          status,
-          created_at,
-          5 as priority
-        FROM drone_opportunities 
-        WHERE status = 'pending' OR status = 'queued'
-        ORDER BY created_at ASC 
-        LIMIT 1
-      `);
-      
-      // Choose the highest priority opportunity
-      const opportunities = [
-        ...revenueResult.rows.map(r => ({ ...r, source: 'revenue' })),
-        ...droneResult.rows.map(r => ({ ...r, source: 'drone' }))
-      ].sort((a, b) => (b.priority || 0) - (a.priority || 0));
-      
-      if (opportunities.length === 0) {
-        console.log('📭 [AUTO-BUILDER] No pending opportunities');
-        return { success: false, message: 'No pending opportunities' };
-      }
-      
-      const opportunity = opportunities[0];
-      const oppId = opportunity.id;
-      console.log(`🎯 [AUTO-BUILDER] Building opportunity: ${opportunity.name || oppId}`);
-      
-      // Update status to building
-      if (opportunity.source === 'revenue') {
-        await this.pool.query(
-          `UPDATE revenue_opportunities SET status = 'building', updated_at = NOW() WHERE opportunity_id = $1`,
-          [oppId]
-        );
-      } else {
-        await this.pool.query(
-          `UPDATE drone_opportunities SET status = 'building', updated_at = NOW() WHERE id = $1`,
-          [oppId]
-        );
-      }
-      
-      // Call existing build method
-      const buildResult = await this.buildOpportunity(opportunity);
-      
-      // Update status based on result
-      if (buildResult.success) {
-        if (opportunity.source === 'revenue') {
-          await this.pool.query(
-            `UPDATE revenue_opportunities SET status = 'completed', updated_at = NOW() WHERE opportunity_id = $1`,
-            [oppId]
-          );
-        } else {
-          await this.pool.query(
-            `UPDATE drone_opportunities SET status = 'completed', updated_at = NOW() WHERE id = $1`,
-            [oppId]
-          );
-        }
-      } else {
-        if (opportunity.source === 'revenue') {
-          await this.pool.query(
-            `UPDATE revenue_opportunities SET status = 'failed', error_message = $2, updated_at = NOW() WHERE opportunity_id = $1`,
-            [oppId, buildResult.error || 'Unknown error']
-          );
-        } else {
-          await this.pool.query(
-            `UPDATE drone_opportunities SET status = 'failed', updated_at = NOW() WHERE id = $1`,
-            [oppId]
-          );
-        }
-      }
-      
-      return buildResult;
-      
-    } catch (error) {
-      console.error('❌ [AUTO-BUILDER] buildNextOpportunity error:', error.message);
-      return { success: false, error: error.message };
-    }
-  }
-
-  /**
-   * Get build status
-   */
-  async getStatus() {
-    const active = Array.from(this.activeBuilds.values());
-    const recent = await this.pool.query(
-      `SELECT * FROM build_artifacts 
-       ORDER BY created_at DESC 
-       LIMIT 10`
-    );
-
-    return {
-      active_builds: active.length,
-      max_concurrent: this.maxConcurrentBuilds,
-      capacity_allocation: this.capacityAllocation,
-      recent_builds: recent.rows,
-    };
-  }
+async function saveFile(filepath, content) {
+  const fullPath = path.join(process.cwd(), filepath);
+  await fs.mkdir(path.dirname(fullPath), { recursive: true });
+  await fs.writeFile(fullPath, content, 'utf8');
+  console.log(`💾 Saved: ${filepath}`);
 }
+
+export function getStatus() {
+  const product = PRODUCT_QUEUE[currentProductIndex];
+  if (!product) return { status: 'all_complete' };
+  
+  return {
+    status: 'in_progress',
+    product: product.name,
+    components: product.components.map(c => ({
+      name: c.name,
+      status: c.status,
+      file: c.file,
+      error: c.lastError || null
+    })),
+    buildInProgress
+  };
+}
+
+export function resetAllFailed() {
+  let count = 0;
+  for (const product of PRODUCT_QUEUE) {
+    for (const comp of product.components) {
+      if (comp.status === 'failed') {
+        comp.status = 'pending';
+        comp.lastError = null;
+        count++;
+      }
+    }
+  }
+  return count;
+}
+
+export function resetComponent(componentId) {
+  for (const product of PRODUCT_QUEUE) {
+    const comp = product.components.find(c => c.id === componentId);
+    if (comp) {
+      comp.status = 'pending';
+      comp.lastError = null;
+      return true;
+    }
+  }
+  return false;
+}
+
+export { PRODUCT_QUEUE };

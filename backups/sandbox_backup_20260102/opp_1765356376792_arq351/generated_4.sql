@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS tasks (
+    id SERIAL PRIMARY KEY,
+    project_id INT REFERENCES projects(id) UNIQUE NOT NULL, -- assuming this is the foreign key to `projects` table and it's unique in each row. Modify as needed if using MySQL/MariaDB: use BIGINT or UUID for auto-increment fields with custom data types on MariaDB that are not available by default
+    description VARCHAR(255), -- assuming this is the only field to be updated, otherwise modify accordingly (e.g., include a timestamp). Modify as needed if using MySQL/MariaDB: `ENUM` type for statuses and use BIGINT auto-increment starting from 10^9 on MariaDB
+    user_id INT REFERENCES users(id) UNIQUE NOT NULL, -- assuming this is the foreign key to `users`, not roles. Modify as needed if using MySQL/MariaDB: change datatype for unique constraint and add default values (e.g., use VARCHAR or CHAR).
+    status ENUM('in-review', 'complete') DEFAULT 'in-review' -- assuming that this is a custom enum type, modify the column definition to match your DBMS capabilities if needed; MariaDB does not natively support enumerations like PostgreSQL but can be simulated with CHECK constraints. Modify as needed: `ENUM` types are MySQL specific and need replacement for other systems or use check validity in application logic.
+);

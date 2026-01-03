@@ -1,0 +1,7 @@
+const expressRateLimit = require('express-ratebuster'); // Hypothetical package as a placeholder, actual implementation required based on libraries available at time 
+// ... other necessary middleware and code here... 
+
+app.use('/api', rateLimiter({
+    max: 100,     // Limit of requests per minute (this is an example value)  
+    delayBetweenRequests: 60000 // Time in milliseconds between each request allowed after a previous one has been made. Adjust as necessary for your use case and compliance with PCI DSS standards, ensuring it does not hinder legitimate users significantly while protecting against abuse
+}));

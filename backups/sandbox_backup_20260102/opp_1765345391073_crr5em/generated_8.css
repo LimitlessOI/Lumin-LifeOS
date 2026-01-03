@@ -1,0 +1,21 @@
+import stripe
+from flask import jsonify
+
+def convert_currency(amount, from_currency, to_currency):
+    # Implement logic for fetching real-time exchange rates (omitted due to brevity).
+    
+stripe.api_key = get_secret("STRIPE_SECRET")  # Ensure API keys are securely managed using environment variables or a secret management system like HashiCorp's Vault, AWS KMS etc.
+
+@app.route('/process-payment', methods=['POST'])
+async def process_order():
+    try:
+        order_id = request.form.get('code')  # Assuming 'code' is the discount code in Stripe format (omitted due to brevity).
+        
+        charge_info = stripe.Charge.create(amount=calculate_final_price_with_currency(order_data['total'] * Decimal(stripe_rate), order_data, currency='usd'),  # This is pseudocode as Stripe API integration needs to handle complex logic (omitted due to length constraints).
+                                       source=charge_info)
+        
+        await process_payment_async() if user.is_stripe_crypto(order_data['email'], order_id, charge_info)  # Assuming 'user' is an object that holds customer-specific data and has a method for processing payments (omitted due to length constraints).
+        
+        return jsonify({"status": "success"}), 200
+    except stripe.StripeError as e:
+        log.error('An error occurred while interacting with Stripe API', exc_info=True)

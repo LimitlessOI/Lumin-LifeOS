@@ -1,0 +1,1 @@
+3. Configuration files - `config.json`: (assuming we're using dotenv for environment variables)

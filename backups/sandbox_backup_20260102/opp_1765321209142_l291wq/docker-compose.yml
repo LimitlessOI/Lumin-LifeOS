@@ -1,0 +1,14 @@
+version: "3"
+services:
+  database:
+    image: neon/neon:latest
+    environment:
+      NEON_DATABASE_URL: ${NEON_DATABASE_URL:-postgres://user:password@localhost:5432}
+    volumes:
+      - db-data:/var/lib/postgresql
+  webapp:
+    image: your-webapp-image:latest
+    ports:
+      - "80:80"
+volumes:
+  db-data: {}

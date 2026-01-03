@@ -1,0 +1,2 @@
+**Deployment Steps:**  
+Containerize all microservices within Railway's environment using Docker; set up Kubernetes manifests that include auto-scaling rules based on utilization metrics to adapt dynamically during varying loads, prioritizing efficiency and elasticity (maintaining 'light_tasks').

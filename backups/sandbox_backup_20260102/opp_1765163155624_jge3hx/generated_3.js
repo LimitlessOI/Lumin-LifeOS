@@ -1,0 +1,2 @@
+#### Step 3 - Express Router with GraphQL Setup (optional):
+If using graphql, set up schema definitions in `graphql/schema.js` and create resolvers that include methods to fetch the user's progress data securely:

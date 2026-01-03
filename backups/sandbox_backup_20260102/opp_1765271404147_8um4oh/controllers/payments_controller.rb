@@ -1,0 +1,3 @@
+class PaymentsController < ApplicationController
+  # Define controller actions that handle potential payments with stripe integration...
+end

@@ -1,0 +1,4 @@
+// config/dbConfig.js
+module.exports = {
+    neonPostgresDB: 'your_connection_string' // Replace with actual connection string to your Neon PostgreSQL instance for development and production environments, using environment variables or secrets management tools as appropriate (like dotenv). 
+}; end;

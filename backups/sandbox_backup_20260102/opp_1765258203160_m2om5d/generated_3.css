@@ -1,0 +1,4 @@
+// File: config/dbConfig.js (Database configuration)
+require('dotenv').config(); // Make sure Dotenv is installed via npm first...
+const { DB_USER, DB_PASSWORD } = process.env;
+module.exports = { dbUrl: `postgres://${DB_USER}:${DB_PASSWORD}@localhost/mydb` };

@@ -1,0 +1,17 @@
+{
+  "id": "fsar_a3b902a1-2b41-4064-bac7-801144b1aa4d",
+  "timestamp": "2026-01-01T16:12:49.132Z",
+  "proposal": "idea_implementation: Create or update the file db/migrate/2023_migration_create_consultations_table.sql with this complete content:\n\nBEGIN TRANSA0DITION;\nCREATE TABLE IF NOT EXISTS consultations (\n    id SERIAL PRIMARY KEY,\n    business_id INTEGER REFERENCES businesses(id) ON DELETE CASCADE,\n    description TEXT,\n    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,\n    completed BOOLEAN NOT NULL DEFAULT FALSE,\n    assigned INTEGER REFERENCES users(id), -- Assuming there is a 'users' table for assigning consultations to specialists.\n    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP\n);\nCOMMIT;\n\nThis is for opportunity: Automation Workflow Consulting\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-01",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

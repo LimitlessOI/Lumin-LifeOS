@@ -1,0 +1,8 @@
+version: '3'
+services:
+  webapp:
+    image: railway/lifeos-courses:latest
+    ports:
+      - "8080:80"
+    environment:
+      DATABASE_URL: postgres://postgres@db/railway?sslmode=require

@@ -1,0 +1,19 @@
+```javascript
+const express = require('express');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Ensure to set STRIPE_SECRET_KEY in production environment variables for security reasons
+const router = new express.Router();
+
+// Endpoint: Create a client profile with Stripe information and business type (E-commerce)
+router.post('/', async (req, res) => {
+    try {
+        const session = await stripe.setupSession(req.body.stripe_checkout_session); // Using Checkout to capture payment details securely through Stripe's hosted form
+        
+        req.session.id = session.id; // Store the Session ID in user'selfesession for later use (e.g., during charge)
+        
+        res.status(201).json({ clientId: uuidv4(), stripeSessionId: session.id });
+    } catch (error) {
+        console.error('Stripe setup error', error);
+        res.status(500).send('Error setting up Stripe');
+    }
+});
+```

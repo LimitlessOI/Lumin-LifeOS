@@ -1,0 +1,53 @@
+# Kubernetes configurations (if necessary) using Terraform scripts go beyond the scope of this response but would follow similar JSON or YAML structures to configure clusters, services etc. 
+
+## API Endpoint Code Generation on Railway with Express.js for Make.com Automation Scenarios:
+
+===FILE:routes/api/users.js===
+const express = require('express');
+const router = new express.Router();
+const UserController = require('../controllers/UserController');
+router.use(express.json());
+
+/** GET users */
+router.get('/', async (req, res) => {
+  try {
+    const users = await UserController.findAll();
+    res.send(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  end;
+});
+
+/** POST user */
+router.post('/', async (req, res) => {
+  try {
+    const newUser = await UserController.createNewUser({ ...req.body });
+    res.status(201).send(newUser);
+  } catch (err) {
+    console.error(err);
+    res.status(400).send('Bad Request');
+  end;
+});
+
+/** PUT user */
+router.put('/:userId', async (req, res) => {
+  try {
+    const updatedUser = await UserController.updateUser({ id: req.params.userId }, { ...req.body });
+    res.send(updatedUser);
+  } catch (err) {
+    console.error(err);
+    res.status(400).send('Bad Request');
+  end;
+});
+
+/** DELETE user */
+router.delete('/:userId', async (req, res) => {
+  try {
+    await UserController.removeUser({ id: req.params.userId });
+    res.status(204).send(); // No content to send back as standard for delete requests in REST APIs
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  end;
+});

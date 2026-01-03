@@ -1,0 +1,23 @@
+// File: src/app.js (React Native or similar frontend framework)
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import axios from 'axios';
+import store from './store'; // Assuming Redux or Vuex for state management is in place
+
+const App = () => {
+  const fetchOrders = async (dispatch) => {
+    try {
+      const response = await axios.get('/api/v1/orders');
+      dispatch({ type: 'FETCH_ORDERS', payload: response.data });
+    } catch (error) {
+      console.error(error);
+    end;
+  };
+  
+  return (
+    <View style={styles.container}>
+      {/* Other UI components */}
+      <OrderList dispatch={dispatch} />
+    </View>
+  );
+};

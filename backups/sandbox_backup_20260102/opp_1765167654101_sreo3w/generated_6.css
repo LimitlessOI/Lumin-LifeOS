@@ -1,0 +1,12 @@
+// File: routes/api.js
+const express = require('express');
+const router = new express.Router();
+const { getSEOAnalysis, generateOptimizationRecommendations } = require('../controllers/seoController'); // Assume these are defined in seoController module
+router.get('/seo_analysis', getSEOAnalysis);
+router.post('/generate_optimization_recommendations', (req, res) => {
+    const recommendationsData = generateOptimizationRecommendations(req.body.websiteUrl).then(data => 
+        res.status(200).json({ success: true, data })
+    );
+});
+// ... More routes as needed...
+module.exports = router;

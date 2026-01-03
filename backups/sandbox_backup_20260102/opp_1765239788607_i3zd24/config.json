@@ -1,0 +1,4 @@
+{
+  "database_name": "workflows",
+  "host": "your-db-connection-string-here" // Replace with your actual database connection string or config file path if needed
+}

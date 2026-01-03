@@ -1,0 +1,5 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # The DATABASE_URL would dynamically load the connection string from an environment file or service like Neon's secrets manager, which is not covered in this example but should be implemented securely for production use.
+  url: <%= ENV['DATABASE_URL'] %>

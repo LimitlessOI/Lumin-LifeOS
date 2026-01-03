@@ -1,0 +1,8 @@
+-- migrations/001_create_table.sql
+CREATE TABLE IF NOT EXISTS funnel_progresses (
+    id SERIAL PRIMARY KEY,
+    sessionId VARCHAR(255) UNIQUE NOT NULL, -- Unique identifier for the user's interaction within a specific session to ensure referential integrity and avoid duplicate records in our Neon PostgreSQL database tables that capture their funnel journey. This will link back to `user_interactions` through common identifiers like this unique ID or transactional keys
+    currentStage TEXT NOT NULL, -- Capture the user's progress within a specific stage of our online marketing funnel for targeted optimization strategies and promotional offers based on their journey position (e.g., 'Homepage', 'Landing Page Visit') with appropriate textual descriptions or identifiers
+    lastVisitedAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP -- Record the timestamp of when a user's interaction was captured within this table, using PostgreSQL default values and types to ensure accurate time tracking without requiring additional input parameters from users. This will help us monitor real-time progress throughout their funnel journey
+);
+-- ... other necessary migrations for setting up essential schema elements such as `user_interactions`, etc., if not already included in the initial plan, along with foreign key relationships and relevant constraints to maintain referential integrity within our Neon PostgreSQL database tables capturing user interactions (`userId` column) -- End of file.

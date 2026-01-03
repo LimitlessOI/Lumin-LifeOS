@@ -1,0 +1,3 @@
+require('dotenv').config(); // Load environment variables from .env file if in production mode, otherwise comment it out or set to false for development purposes.const express = require('express'); const bodyParser = require('body-parser'); const cors = require('cors'); const app = express(); const port = process.env.PORT || 8000; // Parse request bodies if neededapp.use(bodyParser.json());
+// Set CORS headers for all responsesif(!process.env.NODE_ENV) {console.error("You are in development mode");} app.options('*', cors()); const apiRoutes = require('./routes/api'); // Register API routesapp.use('/api/v1', apiRoutes);
+// Start the serverconst server = app.listen(port, () => { console.log(`Server running on port ${port}`); });

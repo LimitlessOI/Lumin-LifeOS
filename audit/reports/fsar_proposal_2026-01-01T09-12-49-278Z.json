@@ -1,0 +1,17 @@
+{
+  "id": "fsar_f3b41538-c2d7-478e-90a6-d3102d780be5",
+  "timestamp": "2026-01-01T09:12:49.278Z",
+  "proposal": "idea_implementation: Create or update the file models/interaction.js with this complete content:\n\nmodule.exports = (sequelize, dataTypes) => sequelize.define('Interaction', {\n  id: {\n    type: DataTypes.INTEGER(10).UNSIGNED,\n    primaryKey: true,\n    autoIncrement: true,\n    field: 'interaction_id'\n  },\n  campaign_id: {\n    type: DataTypes.INTEGER(10).UNSIGNED,\n    references: { model: 'campaign', key: 'id' }\n  },\n  customer_id: {\n    type: DataTypes.INTEGER(10).UNSIGNED,\nthanDataTypes.STRING(256),\nallowNull: false\n  }\n}, {}, {});\n\nThis is for opportunity: AI-Driven Marketing Services\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-01",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

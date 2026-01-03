@@ -1,0 +1,2 @@
+### Configuration Files ###
+*Since there were no explicit configuration files mentioned, I'll assume Rails configurations for the Python Flask backend.* (Note: This is a placeholder and should be tailored to your specific environment.)

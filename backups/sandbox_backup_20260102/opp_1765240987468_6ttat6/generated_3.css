@@ -1,0 +1,6 @@
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define('repositories', {
+    repositoryName: Sequelize.STRING,
+    owner_id: { type: DataTypes.INTEGER }, // Foreign key association with `users` table if needed AUTOINCREMENTENTER PRIMARY KEY (PRIMARY) ,
+  });
+};

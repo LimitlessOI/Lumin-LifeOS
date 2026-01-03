@@ -1,0 +1,4 @@
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;
+// ... other configuration settings based on the .env file...
+module.exports = {PSQL_DB: 'your-database', NODE_ENV: 'production'}; // Example configurations exported for use in server and migration scripts.

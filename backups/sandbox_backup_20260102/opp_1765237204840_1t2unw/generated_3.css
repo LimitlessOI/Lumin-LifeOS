@@ -1,0 +1,11 @@
+===FILE:package.json===
+{
+  "name": "sandboxed-clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {} // Dependencies like express, sequelize etc., would be listed here...
+}

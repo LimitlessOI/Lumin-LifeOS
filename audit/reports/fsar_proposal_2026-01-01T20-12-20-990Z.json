@@ -1,0 +1,17 @@
+{
+  "id": "fsar_f3ff6e60-16f6-44b9-828d-082fbf84782e",
+  "timestamp": "2026-01-01T20:12:20.990Z",
+  "proposal": "idea_implementation: Create or update the file generated_3.js with this complete content:\n\n4. Create a navigation bar in `./components/_navbar.html` that includes links to the main sections of your site, using semantic HTML tags where appropriate (e.g., `<nav>`, `<ul>` for list items). Use ARIA roles and attributes such as `aria-label=\"main navigation\"`:\n\nThis is for opportunity: Small Business Automation Packages\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-01",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

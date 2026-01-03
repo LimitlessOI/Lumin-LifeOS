@@ -1,0 +1,7 @@
+{
+  "username": "your_db_user",
+  "password": "your_secure_password",
+  "database": "lifeos-ai-council",
+  "host": "localhost",
+  "dialect": "postgres"
+}

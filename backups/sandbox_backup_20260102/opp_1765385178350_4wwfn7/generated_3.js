@@ -1,0 +1,1 @@
+2. **API Endpoints** - The API endpoints for user management, template creation and payment integration will be designed using Express routes with OAuth2 authentication middleware:

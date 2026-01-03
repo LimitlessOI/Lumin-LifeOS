@@ -1,0 +1,2 @@
+5. Stripe Integration setup instructions or scripts can be documented separately as they involve a mix of scripting to handle API interactions with the external service and database updates that are not detailed here due to complexity/lack of specifics in user prompt 
+6. CI/CD pipeline configuration - `jenkinsfile` (Jenkins Pipeline Example):

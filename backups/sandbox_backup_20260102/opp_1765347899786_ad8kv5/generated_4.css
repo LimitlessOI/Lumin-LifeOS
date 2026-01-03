@@ -1,0 +1,11 @@
+{
+  "server": {
+    "ip_address": "127.0.0.1", // Localhost for development purposes only! Change as needed.
+    "port": 3000,
+    "routes": ["/temperature"], # Temperature control route defined in 'API Routes' above code snippet (express_js)
+    "dataEndpoint": "/api/seismic-wave" // Endpoint for raw seismic data collection and processing. Implement this with Express Router.
+  },
+  "frontendComponents": {
+    "liveDataDisplay": false, # Optional - if we want to display realtime results on a webpage or app interface using React Native components (or similar technology). If not needed: remove the frontend component file and skip setting up a web server for live data. The 'server' object in JSON will remain unchanged
+  }
+}

@@ -1,0 +1,8 @@
+===FILE:models/GameOverlayDistributionPlatformModel===""
+const mongoose = require('mongoose');
+const GameSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    developer: { type: String, required: true },
+    platform: { type: String, required: true },
+    price: Number, // Assuming we're using a simple numeric representation for the sake of this example; should be refined as per actual use case.
+});

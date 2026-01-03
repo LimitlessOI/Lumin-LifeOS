@@ -1,0 +1,40 @@
+-- Create Users table with indexes on email for faster lookups in case of marketing efforts related targeting.
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL
+);
+
+-- Create Tasks table to log all tasks with foreign key reference to Users and creation timestamp for tracking. Status field is optional since status can change throughout task lifecycle in Railway environment before they are queued via API Gateway.
+CREATE TABLE tasks (
+    task_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status ENUM('pending', 'in progress', 'completed') DEFAULT 'pending',
+    user_id INTEGER REFERENCES users(user_id),
+    creation_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Scenarios table to define and optimize custom scenarios for efficiency before implementation in Railway environment. This includes trigger conditions, execution steps (stored as JSON or text if necessary) and performance metrics which can be captured after scenario runs completes via RevenueLogs insertion when Stripe integration is used during offer holds conversion into sales.
+CREATE TABLE scenarios (
+    scenario_id SERIAL PRIMARY KEY,
+    scenario_name VARCHAR(255) NOT NULL,
+    trigger_condition TEXT, -- Assuming this will be stored as text and evaluated within Railway environment for simplicity in concept demonstration here
+    execution_steps TEXT[],  -- Array of steps or JSON array representing multiple complex instructions if necessary. Simplified to string representation for the purpose of illustrating table creation with Rails schema-related syntax, actual implementation may vary based on Ruby/Rails ORM choice and use case specifics (e.g., ActiveRecord)
+    performance_metrics FLOAT[] -- Placeholder representing an array or structured field type that can hold various metrics to be analyzed post execution for scenario optimization purposes; in Rails, this might require a custom data type if using native types like arrays with complex structures are not straightforwardly supported. However, JSON datatype is often used as alternative approach within Ruby/Rails contexts.
+);
+
+-- Create RevenueLogs table to capture revenue generated from the Stripe integration when applicable tasks or offer holds convert into sales; note that Rails does not directly support automatic foreign key constraints on non-primary keys but can be enforced through database settings and application logic for integrity checks as necessary. Indices are assumed here based on likely query patterns, with Email being a candidate index due to its role in user account details tracking which is relevant for engagement metrics analysis:
+CREATE TABLE revenue_logs (
+    log_id SERIAL PRIMARY KEY,
+    user_id INTEGER REFEREN0ES users(user_id),
+    amount NUMERIC CHECK (amount > 0) DEFAULT '0.0', -- Ensuring positive values as expected for logged revenues; using numeric type instead of float to avoid precision issues commonly encountered in financial data handling, though the choice here is illustrative and could vary based on actual requirements or database capabilities at time of implementation
+    transaction_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP -- Assumes default timestamp capture upon successful revenue generation for simplicity. Actual Rails schema may employ 'timestamps' to automatically track creation and update times when applicable, but explicit management is shown here given the specificity of this scenario
+);
+
+-- Create PerformanceData table to keep performance data on scenarios after they have been deployed in Railway environment; assuming a many-to-one relationship between multiple records pertaining to different executions or iterations under the same Scenario:
+CREATE TABLE performance_data (
+    data_log_id SERIAL PRIMARY KEY,
+    scenario_id INTEGER REFERENCES scenarios(scenario_id),
+    execution_time NUMERIC DEFAULT 0.0 -- Simplified as illustrative purposes and Rails convention; time-based calculations are assumed to be handled within the application logic for timing based on actual Railway environment operational characteristics, with appropriate indexing if necessary by scenario_id or similar attributes expected in regular query use patterns
+);

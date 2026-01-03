@@ -1,0 +1,10 @@
+{
+  "sensors": [
+    {
+      "name": "SeismicSensor",
+      "type": "accelerometer_or_geophone"
+    }
+  ],
+  "computers": ["High-Pressure Chamber Computer"],
+  "software": ["Python with NumPy and SciPy installed", "Express.js for API routes"]
+}

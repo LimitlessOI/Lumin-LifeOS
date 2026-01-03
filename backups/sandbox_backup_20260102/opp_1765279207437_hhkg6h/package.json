@@ -1,0 +1,14 @@
+```json
+{
+  "name": "ai-powered-game",
+  "version": "1.0.0",
+  "description": "An AI-Powered MMORPG Game Development Platform",
+  "dependencies": {
+    "express": "^4.17.3"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js"
+  }
+}
+```

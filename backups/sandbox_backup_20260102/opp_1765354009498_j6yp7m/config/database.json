@@ -1,0 +1,10 @@
+{
+  "useStrict": true,
+  "development": {
+    "username": "<Your_Username>",
+    "password": "<Your_Password>!",
+    "host": "localhost",
+    "dialectModulePaths": ["sequelize/pg"]
+  },
+  // other configurations...
+}

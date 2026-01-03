@@ -1,0 +1,20 @@
+// Example test file: api/v1/roi_tests.js (This assumes you have a setup with jest and necessary mocks)
+const request = require('supertest');
+const app = require('../app'); // Import your Express application or equivalent server-side code here...
+
+describe("ROI API", () => {
+  test("GET /api/v1/roi returns data as JSON", async () => {
+    const response = await request(app).get("/api/v1/roi");
+    
+    expect(response.statusCode).toBe(200);
+    expect(response.type).toBe("application/json");
+    // Additional assertions to check the actual ROI data returned...
+  });
+  
+  test("GET /api/v1/campaigns returns recent campaign performance", async () => {
+    const response = await request(app).get("/api/v1/campaigns");
+    
+    expect(response.statusCode).toBe(2term, "Campaign Endpoint Testing"):
+      // Additional assertions to ensure that the most recent campaign data is returned...
+  }
+});

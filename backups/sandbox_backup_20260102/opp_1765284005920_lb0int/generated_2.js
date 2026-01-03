@@ -1,0 +1,3 @@
+For database migrations and configurations, please refer to express-validated for a comprehensive guide: https://dev.to/enriqsouza/how-to-create-a-lightweight-nodejs-mern stack snippet 2+ below (not included here due to the length of code required).
+
+Next comes testing strategies that you could include in your setup as well, which would be separate files with express routes and tests for each endpoint. Here's an example using Jest/Jasmine framework:

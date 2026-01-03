@@ -1,0 +1,17 @@
+{
+  "id": "fsar_b17525c2-44da-4726-a2f7-782a523d6260",
+  "timestamp": "2026-01-01T04:52:38.035Z",
+  "proposal": "implement_idea: Implement: Fallback Idea 11",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2027-12-31",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

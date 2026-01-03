@@ -1,0 +1,17 @@
+{
+  "id": "fsar_1bccc8c6-c502-473e-ab40-8abe138e4c9c",
+  "timestamp": "2026-01-02T10:42:50.451Z",
+  "proposal": "idea_implementation: Create or update the file /src/models/educationContent.js with this complete content:\n\nconst { Model, DataTypes } = require('sequelize');\nmodule.exports = (sequelize) => {\n  return sequelize.define(\"EducationalContent\", {\n    id: { type: DataTypes.INTEGER, primaryKey: true },\n    scenario_id: DataTypes.INTEGER,\n    lesson_name: DataTypes.STRING(100),\n    content: DataTypes.TEXT(), // Storing the educational material here; consider storing in a blob or file storage system for large files if necessary.\n    createdAt: { type: DataTypes.DATE }, \n    updatedAt: { type: DataTypes.DATE }\n  });\n};\n\nThis is for opportunity: Make.com Scenario Generation\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-02",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

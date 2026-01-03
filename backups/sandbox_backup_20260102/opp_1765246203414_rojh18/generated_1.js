@@ -1,0 +1,4 @@
+Create a new project and app using the following commands: `django-admin startproject inventory_management`, then navigate to your newly created directory with `./manage.py` command prompt, create an app within Django by executing this line of code for example `python manage.py startapp products`. Then follow these steps sequentially in order and remember not to skip any step:
+
+- Define models ✅
+To define the product model along with its fields like name, SKU, price etc., utilize Python's class inheritance by extending Django’s built-in `models.Model` as shown below within your app directory (`products/models.py`). Make sure to run migrations using `./manage.py makemigrations products` and then `./manage.py migrate`.

@@ -1,0 +1,1 @@
+3. Define color and typography variables in `./styles/_variables.scss`. This should include at least primary, secondary colors, accent colors (for buttons or links), backgrounds for text areas to ensure good contrast with the content's body text:

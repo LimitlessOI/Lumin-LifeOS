@@ -1,0 +1,8 @@
+router.post('/api/v1/refund', async (req, res) => {
+  try {
+    await paymentController.processRefund(req.body); // Function to handle refund operations; see controller for details.
+    return res.status(204).send();
+  } catch (error) {
+    return res.status(400).json({ error: 'Failed to process a refund' });
+  })
+});

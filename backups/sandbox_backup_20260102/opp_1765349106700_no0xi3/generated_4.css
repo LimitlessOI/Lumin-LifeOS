@@ -1,0 +1,22 @@
+{
+  "timestamp": "07-13T22:34:26",
+  "log_level": "INFO",
+  "message": "Starting application..."
+}, {
+  "timestamp": "07-13T22:34:26.905",
+  "log_level": "ERROR",
+  "error_details": {
+    "exception_name": "NullPointerException",
+    "stack_trace": [
+      "<Dec 18, 2021 5:34:26 PM EET>",
+      "",
+      "- <Log Stmt> @Order=9 Method = doWork() TimeTaken=00:00:00.278 Threw="
+    ],
+    "file_path": "/opt/java/glassfish_home/glassfish/domains/domain1/logs/jobs.log",
+    "line_number": null,
+    "method_name": "doWork"
+  },
+  "trace_context": {
+    "nullPointerExceptionId": "@e5f46b3"
+  }
+}

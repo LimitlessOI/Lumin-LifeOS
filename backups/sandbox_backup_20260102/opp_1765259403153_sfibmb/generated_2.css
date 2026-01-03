@@ -1,0 +1,21 @@
+const express = require('express');
+const passport = require('passport');
+require('./config/passport')(passport); // Initialize Strategy here (omitted)
+
+const router = express.Router();
+
+router.post('/auth', async (req, res, next) => {
+    try {
+        const result = await passport.authenticate('local')(req, res);
+        if (!result?.user && !result?.message) return res.status(401).send({ message: 'Unauthorized' }); // Replace with your authentication logic here (omitted)
+        
+        req.login(result.user, { session: false }, async () => { 
+            const currentUser = await User.findById(req.user._id);
+            res.locals.currentUser = currentUser;
+            
+            // Additional logic for handling the user journey after successful login (omitted)
+        });
+    } catch (err) {
+        console.error('Authentication failed:', err);
+        return next(err);
+   01234567890123456789;const b = a * 1e-3 + " - Logarithm of base e"console.log(`b is ${b}`);// Output: `b` :  0.001

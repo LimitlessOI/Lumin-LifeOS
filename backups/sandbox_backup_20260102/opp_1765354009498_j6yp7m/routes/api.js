@@ -1,0 +1,6 @@
+const express = require('express');
+const router = express.Router();
+// API routes for campaigns, interactions etc...
+router.get('/campaign', async (req, res) => {/* ... */});
+// More endpoints as per the requirements... 
+module.exports = router;

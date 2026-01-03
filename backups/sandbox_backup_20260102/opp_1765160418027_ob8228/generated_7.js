@@ -1,0 +1,3 @@
+require('dotenv').config(); // Ensure you have dotenv installed & .env file for environmental settings. In production, use Stripe's CLI tool `stripe keys` command instead of hardcoding API secrets directly into the codebase. 
+const stripe = require('stripe')(process.env.STRIPE_SECRET); // Replace 'your-secret-key' with actual secret key obtained from Stripe CLI in real environment setup not within this example for security reasons: (This is a placeholder and should be replaced by the appropriate method of retrieving API keys)
+// ... Rest of stripe integration code using `stripe` object goes here, following best practices...

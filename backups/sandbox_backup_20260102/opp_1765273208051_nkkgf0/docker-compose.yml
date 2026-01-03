@@ -1,0 +1,21 @@
+version: "3"
+services:
+  webapp:
+    image: lifeosai/ecommerce_chatbot:latest
+    ports:
+      - "8001:8000"
+    depends_on:
+      - api
+    environment:
+      DATABASE_URL: postgres://lifeos-neo@localhost:5432/lightweightassistant?sslmode=require&applicationIntent=high
+  api:
+    build: .
+    command: npm start
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://lifeos-neo@localhost:5432/lightweightassistant?sslmode=require&applicationIntent=high
+  db:
+    image: neo4j:latest

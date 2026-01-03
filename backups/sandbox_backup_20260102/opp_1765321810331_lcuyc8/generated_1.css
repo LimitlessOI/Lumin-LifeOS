@@ -1,0 +1,6 @@
+{
+  "database": {
+    "connectionString": "DATABASE_URL", // Replace with your actual database URL or connection string here
+    "stripeSecretKey": "" // Placeholder for Stripe's secret API key, replace with the obtained value from Quick-Start Inc.'s dashboard.
+  }
+}

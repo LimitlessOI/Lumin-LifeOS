@@ -1,0 +1,1 @@
+**`parseCustomerRow`:** This helper function will parse a single row into the Customer Profile struct:

@@ -1,0 +1,7 @@
+// File: config/stripe.json - Configuration settings for Stripe integration with dummy credentials placeholder 
+{
+    "apiKey": process.env.STRIPE_SECRET_KEY, // Secret key should not be hardcoded in production environments; this is just a stubbed example using environment variables as per best practices (security practice). Use actual API keys provided by Stripe after setting them up through their dashboard and keeping the sensitive data securely stored.
+    "stripeRegion": process.env.STRIPE_REGION, // Set your preferred region here based on where you're operating from or hosting resources (e.g., 'us', 'eu'). It helps in reducing latency by connecting to closer geographical locations if needed for faster processing during high load periods as per user location and legal requirements/compliance with Stripe API documentation
+    "stripeAPIEndpoint": process.env.STRIPE_API_ENDPOINT, // Use the actual endpoint of your production environment here (not publicly exposed in this example). 
+    "publishableKey": process.env.PUBLIC_SDK_KEY // This is for Stripe's publishable key that allows you to create charges via their Node.js library without handling sensitive data directly on the front-end application as per best practices (security practice). Replace this with your actual public API secret after setting it up through Stripe Dashboard, and ensure its security is maintained throughout deployment 
+}

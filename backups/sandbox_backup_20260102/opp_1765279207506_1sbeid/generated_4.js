@@ -1,0 +1,1 @@
+5. For the footer, ensure that it includes copyright information and links to privacy policy and terms of service using semantic HTML (e.g., `<footer>`): Add `aria-label="Privacy Policy"` attribute on your policies:

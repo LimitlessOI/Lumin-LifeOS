@@ -1,0 +1,2 @@
+#### Model and Migration Generation for Sequelized Models (`migrations` folder):
+Create the repository table with necessary fields using `Sequelize CLI`. Run below command to create models, associations and initial seed data. Generated code should be placed in respective files within your project's directory:

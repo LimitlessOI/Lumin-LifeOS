@@ -1,0 +1,3 @@
+const dotenv = require('dotenv');
+require('dotenv').config(); // Load environment variables from .env file for database credentials and API keys, if necessary...
+// Omitted additional configuration code like Sequelize settings (e.g., dialect options) that might be present in a complete solution..

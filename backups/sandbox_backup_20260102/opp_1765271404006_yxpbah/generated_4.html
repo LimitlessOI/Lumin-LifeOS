@@ -1,0 +1,15 @@
+import React from 'react';
+import { Line } from 'd3-line'; // Assuming d3-v5 or later for line chart creation. If using an older version of D3JS: import * as d3 from 'd3'; 
+import ChartContainer from './ChartContainer';
+import StripePaymentForm from './StripePaymentForm'; // This would be a custom form we create to handle the payment process through our Django backend.
+
+function App() {
+    return (
+        <div className="App">
+            <h1>Make.com Scenario Dashboard</h1>
+            <StripePaymentForm />
+            <ChartContainer scenarios={this.state.scenarios} />  // This would be a function that renders chart components dynamically based on the state of `scenarios`.
+        </div>
+    );
+}
+export default App;

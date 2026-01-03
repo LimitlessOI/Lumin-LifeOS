@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS users (
+    user_id SERIAL PRIMARY KEY,  -- Unique identifier of the User. This can be replaced with UUIDs or GUID in actual implementation to avoid collisions and facilitate scaling on distributed systems like Firebase Cloud Functions/Databases for backend services where real-time updates might apply:
+    name VARCHAR(255) NOT NULL, -- Name field should store only letters (A-Z), numbers (0-9), underscores (_), lowercase characters and spaces. No special chars or symbols like @#$% are included in the example for simplicity but can be used as per requirement:
+    email VARCHAR(255) UNIQUE NOT NULL, -- Email field will contain an '@' symbol followed by a domain name (e.g., john.doe@example.com). Use regex to validate format and uniqueness constraints may apply in your actual implementation for more robustness against SQL injection or other attacks:
+    email_verified BOOLEAN NOT NULL DEFAULT false, -- Email verification step prior login/signup will likely be necessary here:
+    password VARCHAR(255) NOT NULL UNIQUE CHECK (password ~* '^(?=.*[A-Z])(?=.*\d)[a-zA-Z0-9]{8,}$') DEFAULT '' CONSTRAINT email_unique SCRUBBED -- Ensure the password meets complex requirements and is stored securely using hashing algorithms:
+    createdAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),  // Default to current timestamp upon creation. Use UTC for global consistency if needed, or timezone-aware timestamps depending on your application's needs:
+    role VARCHAR(20) CHECK (role IN ('Admin', 'Editor', 'Player')) -- Roles are limited as per the requirement and should be used in access control logic throughout your codebase. Ensure to use prepared statements for SQL queries to prevent injection attacks, which can also help with maintainability of larger-scale applications:
+);

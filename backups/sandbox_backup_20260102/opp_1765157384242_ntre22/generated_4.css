@@ -1,0 +1,13 @@
+import { gql, useSubscription } from '@apollo/client';
+
+export const GET_USER_GAMES = gql`
+  subscription onGameProgress(userId: String!, sessionId: ID!) {
+    userGames(filter: { gameSessionId: $sessionId }, first: 10, orderBy: createdAt) {
+      id
+      username
+      progress
+      completedAchievementsCount
+      incompleteAchievementsCount
+    }
+  }
+`;

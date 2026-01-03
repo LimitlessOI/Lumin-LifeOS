@@ -1,0 +1,30 @@
+// routes/api.js
+const express = require('express');
+const router = new express.Router();
+
+router.get('/tasks', async (req, res) => {
+    // This endpoint returns all tasks with a filter for priority or coder availability if provided as query parameters
+});
+
+router.post('/coder-availability', async (req, res) => {
+    // Store and return available coders based on skillset categorized in list format; this will likely involve creating another model/table to store skills
+});
+
+router.get('/snapshots', async (req, res) => {
+    const snapshots = await SnapshotService.findAll(); // Assuming a 'SnapshotService' exists that interacts with the snapshot table in Neon PostgreSQL DB
+    return res.json(snapshots);
+});
+
+router.post('/income', async (req, res) => {
+    try {
+        const incomeData = await StripeIncomeProcessor.processPayment({ ...StripeAPIOptions, paymentMethod: req.body }); // Assuming a service object that integrates with the Stripe API
+        return res.status(201).json(incomeData);
+    } catch (error) {
+        return res.status(400).json({ message: 'Payment processing error', details: error.message });
+    }
+});
+
+router.get('/blindspots', async (req, res) => {
+    const blindSpots = await BlindspotService.findAll(); // Assuming a service object that interacts with the blindspot table in Neon PostgreSQL DB
+    return res.json(blindSpots);
+});

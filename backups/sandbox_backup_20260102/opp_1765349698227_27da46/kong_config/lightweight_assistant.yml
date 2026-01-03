@@ -1,0 +1,5 @@
+route:
+  type: live-service
+  nodes: ["railways"] # Railway backend service hostname or IP address with a port number if needed, for example "api.trainingscouncil":443
+  plugins: [# list of necessary Kong plugins here ]
+  routes: [{method: GET, path: "/api/v1/auth/register", plugin_configs: {}}] # Register endpoint configuration with OAuth2 or OpenID Connect setup if needed. Add other endpoints similarly...

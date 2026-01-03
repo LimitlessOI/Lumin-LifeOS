@@ -1,0 +1,11 @@
+{
+    "name": "ecommerce_chatbot",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js" // Script to start the application 
+    },
+    "author": "",
+    "license": ""
+}

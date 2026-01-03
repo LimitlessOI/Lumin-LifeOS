@@ -1,0 +1,15 @@
+```yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: checkout-service
+spec:
+  rules:
+    - host: yourdomain.com # Replace with actual domain to be used for the frontend application, ensuring it corresponds correctly in DNS records and Railway’ner backend capabilities settings (if applicable).  
+      http:
+        paths:
+          - path: /api/v1/orders  # Define routes within our Express app that should not go through Stripe but directly to the corresponding microservices; replace '/api/v1/orders' with other necessary API endpoints.   
+            backend:
+              serviceName: checkout-service
+              servicePort: 80  # Port and name must match those in your Service definition, ensure this is set correctly for frontend access as per Railway’ner capabilities when not using a cloud provider managed load balancer (i.e., 'clusterIP').  
+```

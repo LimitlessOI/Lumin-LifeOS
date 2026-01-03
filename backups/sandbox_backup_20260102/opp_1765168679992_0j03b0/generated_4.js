@@ -1,0 +1,1 @@
+- `.env` file for environment variables (Stripe tokens, Neon PostgreSQL connection string etc.):

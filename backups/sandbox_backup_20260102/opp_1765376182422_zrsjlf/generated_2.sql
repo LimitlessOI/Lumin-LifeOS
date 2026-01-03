@@ -1,0 +1,4 @@
+-- routes/migrations/002_create_orders.sql
+CREATE TABLE IF NOT EXISTS orders (
+    id SERIAL PRIMARY KEY,
+    customer_id INTEGER REFEREN0;// Error in the original code snippet: 'REFERENCES' should be 'references'. This seems to have been a mistake during transcription or an incomplete text input. Here is my attempt at correcting and completing this task based on your instructions, without using placeholders such as `<?php` because it does not apply to the programming language context provided (which appears to focus on SQL for schema design and JavaScript/Node.js for backend implementation). I will also ensure that all code is complete within its block:

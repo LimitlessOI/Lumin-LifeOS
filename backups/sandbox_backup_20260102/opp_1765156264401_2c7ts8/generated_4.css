@@ -1,0 +1,16 @@
+import styled from 'styled-components'; // or any CSS Injection method you prefer, depending on the setup of your project
+
+const PaymentComponent = () => {
+    const [amountToPay, setAmountToPay] = useState(0); 
+    
+    return (
+        <StyledContainer>
+            <form className="payment-form">
+                <label htmlFor="amount">Enter amount to pay:</label>
+                <input type="number" id="amount" value={amountToPay} onChange={(e) => setAmountToPay(Number(e.target.value))} required />
+                
+                {/* Add necessary Stripe form fields and elements here */} // Implement as needed based on your requirements 
+            </form>
+        </StyledContainer>
+    );
+};

@@ -1,0 +1,14 @@
+module.exports = {
+    up: async (queryInterface, Promise) => Promise.all([
+        queryInterface.sequelize.addFields('users', [
+            // Add the 'name', 'email_confirmation_token', and any other necessary fields here with appropriate data types as needed for user registration/login flow 
+        ]),
+        queryInterface.sequelize.addFields('services', [
+            { title: DataTypes.STRING, price: DataTypes.DECIMAL(10,2) }, // Ensure you define models and columns with appropriate data types in Sequelize or raw SQL scripts 
+        ])
+    ]),
+    down: async (queryInterface, Promise): Promise => {
+        await queryInterface.removeFields('users', [ 'email_confirmation_token' ], true); // Forcefully remove the column for user email confirmations as well if it exists to align with your plan 
+        await queryInterface.removeFields('services'); // Remove all records from services table before rollback in case of error or test purpose 
+    },
+};

@@ -1,0 +1,17 @@
+{
+  "id": "fsar_80cc0db1-dd50-47c2-9ad6-47881debd8b5",
+  "timestamp": "2026-01-01T16:12:49.282Z",
+  "proposal": "idea_implementation: Create or update the file components/Dashboard.js with this complete content:\n\nimport React from 'react';\nimport BusinessList from './BusinessList';\nimport ConsultationsForm from './ConsultationsForm';\n// Additional imports as necessary for component functionality, e.g., useState and other hooks or components like Card if needed to display individual businesses/consultation options etc.. \nexport default function Dashboard() {\n    return (\n        <div>\n            <h1>Automation Workflow Consulting</h1>\n            <BusinessList />\n            <ConsultationsForm />\n            // Additional components for displaying revenue tracking, etc. as necessary based on your system requirements and design choices \n        </div>\n    );\n}\n\nThis is for opportunity: Automation Workflow Consulting\nMake sure the file is complete, working, and production-ready.",
+  "severity": 6,
+  "risks": [
+    "Slow failure: unnoticed degradation accumulating by 2028-01-01",
+    "Unintended consequence: incentives shift toward short-term metrics, long-term reliability decays",
+    "Incentive drift: stakeholders habituate to optimistic outputs, raising risk of silent defects"
+  ],
+  "mitigations": [
+    "Add scheduled adversarial audits with hard pass/fail gates",
+    "Track leading indicators for drift and trust inflation; alert on trend change",
+    "Prefer reversible rollouts; keep rollback artifacts warm and tested"
+  ],
+  "block_execution": false
+}

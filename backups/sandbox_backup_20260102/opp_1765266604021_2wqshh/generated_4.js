@@ -1,0 +1,3 @@
+import React from 'react';
+import { Table, Space } from 'antd'; // Importing necessary components for dashboard page layout: /api/v1/system/self-program or a custom library setup if required by Railway's build system.
+// ... rest of your server code and component logic...

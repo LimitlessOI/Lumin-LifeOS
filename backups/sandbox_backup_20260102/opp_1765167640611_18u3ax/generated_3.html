@@ -1,0 +1,28 @@
+<!-- Simulated front-end HTML structure representing a basic dashboard layout; ensure proper Bootstrap classes are used in actual development setup -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags for rendering and responsiveness, assuming CSP is configured to allow 'Chart.js' scripts from trusted sources such as CDN links below; add additional required HTML5 semantics here based on actual application setup requirements -->
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS for responsive design should be included properly in the layout, assuming jQuery is loaded beforehand or as per Bootstrap's documentation; other stylesheets like 'Highcharts.css' can also be linked if required --> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"> <!-- Bootstrap CSS Link, actual version numbers may vary based on the time of implementation and latest versions available at that point in time -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery Script (if used alongside non-jQuery libraries like Vue or React which would not require this) -- assumes Bootstrap JavaScript bundle is loaded afterward, if using with a frontend library that depends on it for certain components -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.6"></script> <!-- Popper JS dependency required by Tippy and Bootstrap's popover functionality; assumes inclusion in actual project setup where needed, with corresponding script tags added -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> <!-- Actual Bootstrap JavaScript bundle version at the time of integration; assumes correct jQuery or other dependency inclusion prior to loading this script as required by actual project setup -->
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Dashboard content here with proper structure, classes and accessibility attributes (alt text for images etc.); ensure Bootstrap grid/flexbox system is used appropriately to define layout; assume usage of a charting library like 'Chart.js' or similar which needs correct version CDN link in actual setup -->
+        <div class="row">
+            <!-- Dashboard title and status indicators for queued tasks could be included here, possibly as an unordered list with Bootstrap styling; assuming use of a charting library like 'Chart.js' to visualize metrics which requires corresponding script link in actual setup --> 
+            <div class="col-md-8">
+                <!-- Chart container and logic for displaying the tasks queue status based on business data retrieved from backend API calls, possibly using AJAX requests or similar mechanisms with proper error handling; assume integration of 'Highcharts' library if required for more advanced visualization needs --> 
+            </div>
+        </div>
+    </div>
+</body>
+<!-- Bootstrap-based responsive layout design should continue in the full body content here, ensuring accessibility standards and best practices are adhered to; script tags necessary for any additional libraries used alongside it like 'Vue.js' or 'React', if applicable --> 
+<script src="https://cdn.jsdelivr.net/npm/chartkick@2.1.3"></script> <!-- ChartKick library that simplifies rendering of charts with data from Rails using AJAX calls -- assumes correct Bootstrap and jQuery inclusion before this script tag as needed by actual project setup -->
+<!-- Include any additional scripts for front-end libraries or custom JavaScript here, ensuring they are loaded after dependencies like 'Chart.js', '@popperjs/core' have been included in the layout; assume proper modularization of JS code into separate files linked at end of body as required by actual project setup -->
+</html>
