@@ -31,6 +31,7 @@ import process from "node:process";
 import { exec } from "child_process";
 import { promisify } from "util";
 import rateLimit from "express-rate-limit";
+import * as autoBuilder from "./core/auto-builder.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
@@ -6315,7 +6316,7 @@ let systemHealthChecker = null;
 let selfBuilder = null;
 let ideaToImplementationPipeline = null;
 let sourceOfTruthManager = null;
-let autoBuilder = null;
+// autoBuilder is now imported at top of file
 
 async function initializeTwoTierSystem() {
   try {
@@ -6494,17 +6495,11 @@ async function initializeTwoTierSystem() {
         }
 
         // Initialize Auto-Builder (builds opportunities into working products)
-        try {
-          const builderModule = await import("./core/auto-builder.js");
-          // New auto-builder doesn't need constructor params - it's self-contained
-          autoBuilder = builderModule;
-          console.log("✅ Auto-Builder initialized (Anti-Hallucination Edition)");
-          console.log("📊 Auto-Builder: Focused on single product at a time");
-          console.log("🚫 Auto-Builder: phi3:mini is BANNED");
-          console.log("🔍 Auto-Builder: All outputs validated before saving");
-        } catch (error) {
-          console.warn("⚠️ Auto-Builder not available:", error.message);
-        }
+        // Auto-builder is now imported at top of file
+        console.log("✅ Auto-Builder available (Anti-Hallucination Edition)");
+        console.log("📊 Auto-Builder: Focused on single product at a time");
+        console.log("🚫 Auto-Builder: phi3:mini is BANNED");
+        console.log("🔍 Auto-Builder: All outputs validated before saving");
       } catch (error) {
         console.warn("⚠️ Enhanced Drone System not available, using basic:", error.message);
       }
@@ -13639,9 +13634,6 @@ app.post(
 // Trigger build manually
 app.post('/api/build/run', async (req, res) => {
   try {
-    if (!autoBuilder) {
-      return res.status(503).json({ error: 'Auto-builder not initialized' });
-    }
     const result = await autoBuilder.runBuildCycle();
     res.json(result);
   } catch (error) {
@@ -13651,27 +13643,13 @@ app.post('/api/build/run', async (req, res) => {
 
 // Get build status
 app.get('/api/build/status', (req, res) => {
-  try {
-    if (!autoBuilder) {
-      return res.status(503).json({ error: 'Auto-builder not initialized' });
-    }
-    res.json(autoBuilder.getStatus());
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  res.json(autoBuilder.getStatus());
 });
 
 // Reset failed components
-app.post('/api/build/reset-failed', async (req, res) => {
-  try {
-    if (!autoBuilder) {
-      return res.status(503).json({ error: 'Auto-builder not initialized' });
-    }
-    const count = autoBuilder.resetAllFailed();
-    res.json({ reset: count });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+app.post('/api/build/reset-failed', (req, res) => {
+  const count = autoBuilder.resetAllFailed();
+  res.json({ reset: count });
 });
 
 // Enhanced health check
@@ -13707,14 +13685,10 @@ app.get('/api/health', async (req, res) => {
   }
   
   // Build status
-  if (autoBuilder) {
-    try {
-      health.build = autoBuilder.getStatus();
-    } catch (e) {
-      health.build = { status: 'error', message: e.message };
-    }
-  } else {
-    health.build = { status: 'not_initialized' };
+  try {
+    health.build = autoBuilder.getStatus();
+  } catch (e) {
+    health.build = { status: 'error', message: e.message };
   }
   
   res.json(health);
