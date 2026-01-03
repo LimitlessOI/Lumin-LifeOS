@@ -32,6 +32,7 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import rateLimit from "express-rate-limit";
 import autoBuilder from "./core/auto-builder.js";
+import stripeRoutes from "./routes/stripe-routes.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
@@ -13652,6 +13653,28 @@ app.post('/api/build/reset-failed', (req, res) => {
   res.json({ reset: count });
 });
 
+// ==================== STRIPE AUTOMATION ROUTES ====================
+// Stripe routes (webhook needs raw body, others use JSON)
+app.use('/api/stripe', stripeRoutes);
+
+// Webhook route needs raw body parser (must be before JSON parser)
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  
+  if (!sig) {
+    return res.status(400).json({ error: 'Missing stripe-signature header' });
+  }
+  
+  try {
+    const stripeAutomation = await import('./core/stripe-automation.js');
+    await stripeAutomation.handleWebhook(req.body, sig);
+    res.json({ received: true });
+  } catch (error) {
+    console.error('❌ [STRIPE] Webhook error:', error.message);
+    res.status(400).json({ error: error.message });
+  }
+});
+
 // Enhanced health check
 app.get('/api/health', async (req, res) => {
   const health = { 
@@ -14927,6 +14950,16 @@ async function start() {
     }
     
     await initializeTwoTierSystem();
+    
+    // Initialize Stripe products on startup
+    try {
+      const stripeAutomation = await import('./core/stripe-automation.js');
+      await stripeAutomation.ensureProductsExist();
+      console.log('✅ [STRIPE] Products ensured on startup');
+    } catch (error) {
+      console.warn('⚠️ [STRIPE] Could not ensure products on startup:', error.message);
+      console.warn('   This is OK if STRIPE_SECRET_KEY is not set');
+    }
 
     // Initialize Sales Coaching Services
     try {
