@@ -3341,7 +3341,7 @@ async function callCouncilMember(member, prompt, options = {}) {
   }
 
   // Inject knowledge context into user prompt
-  const enhancedPrompt = injectKnowledgeContext(prompt, 5);
+  const enhancedPrompt = await injectKnowledgeContext(prompt, 5);
   
   // Compress system prompt if it's long (cost optimization)
   const systemPromptBase = `You are ${config.name}, serving as ${config.role} inside the LifeOS AI Council.
@@ -4114,27 +4114,55 @@ async function loadKnowledgeContext() {
 
 /**
  * Inject knowledge context into prompt
- * TRUE_VISION.md is ALWAYS included FIRST as the foundation
+ * SOURCE_OF_TRUTH.md is ALWAYS included FIRST as the absolute foundation
+ * TRUE_VISION.md is included second
  */
-function injectKnowledgeContext(prompt, maxIdeas = 5) {
-  if (!knowledgeContext) return prompt;
-  
+async function injectKnowledgeContext(prompt, maxIdeas = 5) {
   let contextSection = '';
   
-  // TRUE_VISION is the foundation - ALWAYS FIRST and most important
-  if (knowledgeContext.trueVision) {
-    // Include full TRUE_VISION (it's the mission - no truncation)
-    contextSection += `\n\n=== FOUNDATION: TRUE VISION (This Supersedes Everything) ===\n${knowledgeContext.trueVision}\n`;
+  // SOURCE OF TRUTH is the ABSOLUTE FOUNDATION - ALWAYS FIRST
+  try {
+    const sourceOfTruthMemories = await memorySystem.retrieveMemories('facts', {
+      minConfidence: 1.0,
+      type: memorySystem.MEMORY_TYPES.SYSTEM_FACT,
+      limit: 1
+    });
+    
+    if (sourceOfTruthMemories.length > 0) {
+      const sotMemory = sourceOfTruthMemories[0];
+      if (sotMemory.content && typeof sotMemory.content === 'object' && sotMemory.content.content) {
+        contextSection += `\n\n╔══════════════════════════════════════════════════════════════════════════════════╗\n`;
+        contextSection += `║                                                                                  ║\n`;
+        contextSection += `║  🎯 ABSOLUTE SOURCE OF TRUTH - LifeOS / LimitlessOS (v1.0)                      ║\n`;
+        contextSection += `║  This document supersedes ALL other context. Reference this for ALL decisions.  ║\n`;
+        contextSection += `║                                                                                  ║\n`;
+        contextSection += `╚══════════════════════════════════════════════════════════════════════════════════╝\n\n`;
+        contextSection += `${sotMemory.content.content}\n\n`;
+        contextSection += `╔══════════════════════════════════════════════════════════════════════════════════╗\n`;
+        contextSection += `║  END OF SOURCE OF TRUTH                                                          ║\n`;
+        contextSection += `╚══════════════════════════════════════════════════════════════════════════════════╝\n\n`;
+      }
+    }
+  } catch (sotError) {
+    console.warn('⚠️ [CONTEXT] Could not load Source of Truth from memory:', sotError.message);
   }
   
-  // Add core truths (secondary to TRUE_VISION)
-  if (knowledgeContext.coreTruths) {
-    contextSection += `\n\n=== CORE TRUTHS (Immutable Principles) ===\n${knowledgeContext.coreTruths.substring(0, 2000)}\n`;
-  }
-  
-  // Add project context (tertiary)
-  if (knowledgeContext.projectContext) {
-    contextSection += `\n\n=== PROJECT CONTEXT ===\n${knowledgeContext.projectContext.substring(0, 1500)}\n`;
+  // TRUE_VISION is secondary foundation (if knowledge context exists)
+  if (knowledgeContext) {
+    if (knowledgeContext.trueVision) {
+      // Include full TRUE_VISION (it's the mission - no truncation)
+      contextSection += `\n\n=== FOUNDATION: TRUE VISION (Secondary to Source of Truth) ===\n${knowledgeContext.trueVision}\n`;
+    }
+    
+    // Add core truths (tertiary)
+    if (knowledgeContext.coreTruths) {
+      contextSection += `\n\n=== CORE TRUTHS (Immutable Principles) ===\n${knowledgeContext.coreTruths.substring(0, 2000)}\n`;
+    }
+    
+    // Add project context (quaternary)
+    if (knowledgeContext.projectContext) {
+      contextSection += `\n\n=== PROJECT CONTEXT ===\n${knowledgeContext.projectContext.substring(0, 1500)}\n`;
+    }
   }
   
   // Add relevant ideas from knowledge dumps (filtered to avoid code snippets)
@@ -15072,6 +15100,28 @@ async function start() {
     try {
       await memorySystem.initMemoryStore();
       console.log('✅ [MEMORY] Memory System initialized');
+      
+      // Load and store Source of Truth document as system fact
+      try {
+        const sourceOfTruthPath = path.join(__dirname, 'docs', 'SOURCE_OF_TRUTH.md');
+        const sourceOfTruthContent = await fsPromises.readFile(sourceOfTruthPath, 'utf-8');
+        
+        // Store as system fact with maximum confidence
+        await memorySystem.storeMemory('facts', {
+          title: 'LifeOS / LimitlessOS Source of Truth (v1.0)',
+          content: sourceOfTruthContent,
+          type: 'system_foundation',
+          last_updated: '2026-01-03'
+        }, {
+          type: memorySystem.MEMORY_TYPES.SYSTEM_FACT,
+          confidence: 1.0,
+          userConfirmed: true
+        });
+        
+        console.log('✅ [MEMORY] Source of Truth document stored as system fact');
+      } catch (sotError) {
+        console.warn('⚠️ [MEMORY] Could not load Source of Truth document:', sotError.message);
+      }
     } catch (error) {
       console.warn('⚠️ [MEMORY] Memory System initialization failed:', error.message);
     }
