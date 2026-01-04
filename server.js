@@ -4205,8 +4205,48 @@ async function injectKnowledgeContext(prompt, maxIdeas = 5) {
     }
   }
   
+  // Add relevant ideas from knowledge dumps (filtered to avoid code snippets)
+  if (knowledgeContext && knowledgeContext.entries && knowledgeContext.entries.length > 0) {
+    const allIdeas = [];
+    for (const entry of knowledgeContext.entries) {
+      if (entry.ideas && Array.isArray(entry.ideas)) {
+        // Filter out obvious code snippets (simple heuristic)
+        const validIdeas = entry.ideas.filter(idea => {
+          const ideaText = (typeof idea === 'string' ? idea : idea.text || '').toLowerCase();
+          // Skip if looks like code (contains common code patterns)
+          const codePatterns = ['this.currentapp', 'function(', 'const ', 'let ', 'var ', '=>', '{}', '()'];
+          return !codePatterns.some(pattern => ideaText.includes(pattern)) && ideaText.length > 20;
+        });
+        
+        allIdeas.push(...validIdeas.map(idea => ({
+          text: typeof idea === 'string' ? idea : (idea.text || String(idea)),
+          source: entry.filename
+        })));
+      }
+    }
+    
+    if (allIdeas.length > 0) {
+      // Simple keyword matching to find relevant ideas
+      const promptLower = prompt.toLowerCase();
+      const relevantIdeas = allIdeas
+        .filter(idea => {
+          const ideaText = idea.text.toLowerCase();
+          const keywords = promptLower.split(/\s+/).filter(w => w.length > 3);
+          return keywords.some(kw => ideaText.includes(kw));
+        })
+        .slice(0, maxIdeas);
+      
+      if (relevantIdeas.length > 0) {
+        contextSection += `\n\n=== RELEVANT IDEAS FROM KNOWLEDGE BASE ===\n`;
+        relevantIdeas.forEach((idea, i) => {
+          contextSection += `${i+1}. ${idea.text.substring(0, 200)}\n   (Source: ${idea.source})\n`;
+        });
+      }
+    }
+  }
+  
   if (contextSection) {
-    return `${contextSection}\n\n=== USER REQUEST ===\n${prompt}\n\nIMPORTANT: All responses must align with the TRUE VISION above. Use this knowledge to inform your response.`;
+    return `${contextSection}\n\n=== USER REQUEST ===\n${prompt}\n\n⚠️ CRITICAL: All responses must align with the SOURCE OF TRUTH above. Reference it for ALL decisions, product choices, and ethical considerations.`;
   }
   
   return prompt;
