@@ -33,11 +33,11 @@ router.post('/setup', async (req, res) => {
 /**
  * GET /api/stripe/checkout
  * Creates checkout session and redirects to Stripe
- * Query params: ?plan=starter|pro|enterprise
+ * Query params: ?plan=starter|pro|enterprise&project_id=YOUR_PROJECT_ID
  */
 router.get('/checkout', async (req, res) => {
   try {
-    const { plan } = req.query;
+    const { plan, project_id } = req.query;
     
     if (!plan || !['starter', 'pro', 'enterprise'].includes(plan)) {
       return res.status(400).json({
@@ -46,10 +46,17 @@ router.get('/checkout', async (req, res) => {
       });
     }
     
+    if (!project_id) {
+      return res.status(400).json({
+        ok: false,
+        error: 'project_id is required. Use: ?plan=starter&project_id=YOUR_PROJECT_ID'
+      });
+    }
+    
     // Optional: get customer ID from session/auth
     const customerId = req.user?.stripe_customer_id || null;
     
-    const session = await stripeAutomation.createCheckoutSession(plan, customerId, {
+    const session = await stripeAutomation.createCheckoutSession(plan, project_id, customerId, {
       user_id: req.user?.id || null,
       source: 'api_checkout'
     });

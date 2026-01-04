@@ -198,11 +198,20 @@ export async function ensureProductsExist() {
 
 /**
  * Create a checkout session
+ * @param {string} plan - Plan ID (starter, pro, enterprise)
+ * @param {string} projectId - Project/tenant ID (required for multi-tenant)
+ * @param {string|null} customerId - Optional existing Stripe customer ID
+ * @param {object} metadata - Additional metadata to include
  */
-export async function createCheckoutSession(plan, customerId = null, metadata = {}) {
+export async function createCheckoutSession(plan, projectId, customerId = null, metadata = {}) {
   const stripeClient = await getStripeClient();
   if (!stripeClient) {
     throw new Error('Stripe not initialized');
+  }
+  
+  // Validate projectId is provided
+  if (!projectId) {
+    throw new Error('projectId is required for multi-tenant checkout sessions');
   }
   
   // Load price IDs
@@ -226,7 +235,7 @@ export async function createCheckoutSession(plan, customerId = null, metadata = 
   const successUrl = `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`;
   const cancelUrl = `${baseUrl}/`;
   
-  console.log(`🛒 [STRIPE] Creating checkout session for plan: ${plan}`);
+  console.log(`🛒 [STRIPE] Creating checkout session for plan: ${plan}, project: ${projectId}`);
   
   const session = await stripeClient.checkout.sessions.create({
     mode: 'subscription',
@@ -240,23 +249,83 @@ export async function createCheckoutSession(plan, customerId = null, metadata = 
     success_url: successUrl,
     cancel_url: cancelUrl,
     metadata: {
+      project_id: projectId, // CRITICAL: Required for multi-tenant webhook routing
       plan,
       ...metadata
+    },
+    subscription_data: {
+      metadata: {
+        project_id: projectId, // Also store in subscription metadata for future events
+        plan
+      }
     },
     allow_promotion_codes: true,
   });
   
-  console.log(`✅ [STRIPE] Checkout session created: ${session.id}`);
+  console.log(`✅ [STRIPE] Checkout session created: ${session.id} (project: ${projectId})`);
   
   return {
     session_id: session.id,
     url: session.url,
-    plan
+    plan,
+    project_id: projectId
   };
 }
 
 /**
- * Handle Stripe webhook events
+ * Extract project_id from Stripe event object
+ * Tries multiple sources: metadata, subscription metadata, checkout session metadata
+ */
+async function extractProjectId(stripeClient, event) {
+  const obj = event.data.object;
+  
+  // Try direct metadata first
+  if (obj.metadata?.project_id) {
+    return obj.metadata.project_id;
+  }
+  
+  // For subscription events, check subscription metadata
+  if (obj.subscription && typeof obj.subscription === 'string') {
+    try {
+      const subscription = await stripeClient.subscriptions.retrieve(obj.subscription);
+      if (subscription.metadata?.project_id) {
+        return subscription.metadata.project_id;
+      }
+    } catch (e) {
+      // Subscription might not exist yet
+    }
+  }
+  
+  // For invoice events, get subscription and check its metadata
+  if (obj.subscription && typeof obj.subscription === 'string') {
+    try {
+      const subscription = await stripeClient.subscriptions.retrieve(obj.subscription);
+      if (subscription.metadata?.project_id) {
+        return subscription.metadata.project_id;
+      }
+    } catch (e) {
+      // Subscription might not exist
+    }
+  }
+  
+  // For checkout.session.completed, check session metadata
+  if (event.type === 'checkout.session.completed' && obj.id) {
+    try {
+      const session = await stripeClient.checkout.sessions.retrieve(obj.id);
+      if (session.metadata?.project_id) {
+        return session.metadata.project_id;
+      }
+    } catch (e) {
+      // Session might not be retrievable
+    }
+  }
+  
+  return null;
+}
+
+/**
+ * Handle Stripe webhook events (multi-tenant)
+ * Extracts project_id from event metadata and routes to appropriate handler
  */
 export async function handleWebhook(payload, signature) {
   const stripeClient = await getStripeClient();
@@ -285,57 +354,80 @@ export async function handleWebhook(payload, signature) {
     throw new Error(`Webhook Error: ${err.message}`);
   }
   
-  console.log(`📥 [STRIPE] Webhook received: ${event.type}`);
+  // Extract project_id for multi-tenant routing
+  const projectId = await extractProjectId(stripeClient, event);
+  
+  if (!projectId) {
+    console.warn(`⚠️ [STRIPE] No project_id found in event: ${event.type}`);
+    console.warn(`   Event ID: ${event.id}`);
+    console.warn(`   This event cannot be routed to a specific project.`);
+  }
+  
+  console.log(`📥 [STRIPE] Webhook received: ${event.type}${projectId ? ` (project: ${projectId})` : ' (no project_id)'}`);
   
   // Handle different event types
   switch (event.type) {
     case 'checkout.session.completed':
       const session = event.data.object;
       console.log(`✅ [STRIPE] Checkout completed: ${session.id}`);
+      console.log(`   Project: ${projectId || 'unknown'}`);
       console.log(`   Customer: ${session.customer || 'new customer'}`);
       console.log(`   Amount: $${(session.amount_total / 100).toFixed(2)}`);
       console.log(`   Plan: ${session.metadata?.plan || 'unknown'}`);
       
-      // TODO: Store in database, send confirmation email, etc.
+      // TODO: Store in database for project, send confirmation email, etc.
+      // Example: await storeSubscriptionForProject(projectId, session);
       break;
       
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
       const subscription = event.data.object;
       console.log(`📋 [STRIPE] Subscription ${event.type}: ${subscription.id}`);
+      console.log(`   Project: ${projectId || 'unknown'}`);
       console.log(`   Status: ${subscription.status}`);
       console.log(`   Customer: ${subscription.customer}`);
       
-      // TODO: Update database with subscription status
+      // TODO: Update database with subscription status for project
+      // Example: await updateProjectSubscription(projectId, subscription);
       break;
       
     case 'customer.subscription.deleted':
       const deletedSub = event.data.object;
       console.log(`🗑️ [STRIPE] Subscription cancelled: ${deletedSub.id}`);
+      console.log(`   Project: ${projectId || 'unknown'}`);
       
-      // TODO: Update database, revoke access, etc.
+      // TODO: Update database, revoke access for project, etc.
+      // Example: await cancelProjectSubscription(projectId, deletedSub);
       break;
       
     case 'invoice.paid':
       const invoice = event.data.object;
       console.log(`💰 [STRIPE] Invoice paid: ${invoice.id}`);
+      console.log(`   Project: ${projectId || 'unknown'}`);
       console.log(`   Amount: $${(invoice.amount_paid / 100).toFixed(2)}`);
       
-      // TODO: Record payment, update subscription, etc.
+      // TODO: Record payment for project, update subscription, etc.
+      // Example: await recordPaymentForProject(projectId, invoice);
       break;
       
     case 'invoice.payment_failed':
       const failedInvoice = event.data.object;
       console.log(`❌ [STRIPE] Payment failed: ${failedInvoice.id}`);
+      console.log(`   Project: ${projectId || 'unknown'}`);
       
-      // TODO: Notify customer, update subscription status
+      // TODO: Notify customer for project, update subscription status
+      // Example: await handlePaymentFailureForProject(projectId, failedInvoice);
       break;
       
     default:
-      console.log(`ℹ️ [STRIPE] Unhandled event type: ${event.type}`);
+      console.log(`ℹ️ [STRIPE] Unhandled event type: ${event.type}${projectId ? ` (project: ${projectId})` : ''}`);
   }
   
-  return { received: true, type: event.type };
+  return { 
+    received: true, 
+    type: event.type,
+    project_id: projectId || null
+  };
 }
 
 /**
