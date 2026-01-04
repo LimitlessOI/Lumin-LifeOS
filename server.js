@@ -33,6 +33,8 @@ import { promisify } from "util";
 import rateLimit from "express-rate-limit";
 import autoBuilder from "./core/auto-builder.js";
 import stripeRoutes from "./routes/stripe-routes.js";
+import memorySystem from "./core/memory-system.js";
+import memoryRoutes from "./routes/memory-routes.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
@@ -13762,6 +13764,9 @@ app.post('/api/build/reset-failed', (req, res) => {
   res.json({ reset: count });
 });
 
+// ==================== MEMORY SYSTEM ROUTES ====================
+app.use('/api', memoryRoutes);
+
 // ==================== STRIPE AUTOMATION ROUTES ====================
 // Stripe webhook route (needs raw body - must be before JSON parser)
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
@@ -15062,6 +15067,14 @@ async function start() {
     // If we reach here, database config is valid
     
     await initializeTwoTierSystem();
+    
+    // Initialize Memory System
+    try {
+      await memorySystem.initMemoryStore();
+      console.log('✅ [MEMORY] Memory System initialized');
+    } catch (error) {
+      console.warn('⚠️ [MEMORY] Memory System initialization failed:', error.message);
+    }
     
     // Initialize Stripe products on startup
     try {
