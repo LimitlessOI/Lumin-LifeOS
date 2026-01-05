@@ -247,6 +247,19 @@ app.get("/boldtrail", (req, res) => {
   // No key or invalid key, redirect to activation
   res.redirect('/activate');
 });
+
+// ==================== ROOT ROUTE - API COST SAVINGS LANDING PAGE ====================
+// Must be defined BEFORE static middleware to take precedence
+app.get('/', (req, res) => {
+  const landingPagePath = path.join(__dirname, 'products', 'api-service', 'index.html');
+  if (fs.existsSync(landingPagePath)) {
+    res.sendFile(landingPagePath);
+  } else {
+    console.warn('⚠️ [ROUTE] API Cost Savings landing page not found, serving default');
+    res.status(404).send('Landing page not found');
+  }
+});
+
 // ==================== MIDDLEWARE ====================
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
