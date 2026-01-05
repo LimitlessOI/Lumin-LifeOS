@@ -260,6 +260,25 @@ app.get('/', (req, res) => {
   }
 });
 
+// ==================== STRIPE CHECKOUT SUCCESS/CANCEL PAGES ====================
+app.get('/success', (req, res) => {
+  const successPagePath = path.join(__dirname, 'products', 'api-service', 'success.html');
+  if (fs.existsSync(successPagePath)) {
+    res.sendFile(successPagePath);
+  } else {
+    res.status(404).send('Success page not found');
+  }
+});
+
+app.get('/cancel', (req, res) => {
+  const cancelPagePath = path.join(__dirname, 'products', 'api-service', 'cancel.html');
+  if (fs.existsSync(cancelPagePath)) {
+    res.sendFile(cancelPagePath);
+  } else {
+    res.status(404).send('Cancel page not found');
+  }
+});
+
 // ==================== MIDDLEWARE ====================
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
