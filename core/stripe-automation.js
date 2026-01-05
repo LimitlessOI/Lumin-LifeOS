@@ -233,7 +233,7 @@ export async function createCheckoutSession(plan, projectId, customerId = null, 
   
   const baseUrl = process.env.BASE_URL || process.env.RAILWAY_PUBLIC_DOMAIN || 'http://localhost:3000';
   const successUrl = `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`;
-  const cancelUrl = `${baseUrl}/`;
+  const cancelUrl = `${baseUrl}/cancel`;
   
   console.log(`🛒 [STRIPE] Creating checkout session for plan: ${plan}, project: ${projectId}`);
   
