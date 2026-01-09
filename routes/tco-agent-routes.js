@@ -300,6 +300,114 @@ export function initTCOAgentRoutes({ pool, tcoSalesAgent }) {
     }
   });
 
+  /**
+   * POST /api/tco-agent/negotiate
+   * Negotiate pricing for a customer
+   */
+  router.post('/negotiate', async (req, res) => {
+    try {
+      const { customer_id, tier, notes } = req.body;
+
+      if (!customer_id || !tier) {
+        return res.status(400).json({
+          error: 'Missing required fields',
+          required: ['customer_id', 'tier'],
+        });
+      }
+
+      const result = await tcoSalesAgent.negotiatePrice({
+        customerId: customer_id,
+        tier,
+        notes,
+      });
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error negotiating price:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  /**
+   * GET /api/tco-agent/negotiations
+   * Get all negotiations (for review)
+   */
+  router.get('/negotiations', async (req, res) => {
+    try {
+      const result = await pool.query(
+        `SELECT * FROM tco_agent_negotiations
+         ORDER BY created_at DESC
+         LIMIT 100`
+      );
+
+      res.json({
+        success: true,
+        negotiations: result.rows,
+        count: result.rows.length,
+      });
+    } catch (error) {
+      console.error('Error getting negotiations:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  /**
+   * GET /api/tco-agent/objections
+   * Get objection analytics
+   */
+  router.get('/objections', async (req, res) => {
+    try {
+      // Get count of each objection type
+      const result = await pool.query(
+        `SELECT
+           objection_type,
+           COUNT(*) as count,
+           AVG(CASE WHEN became_lead = TRUE THEN 1 ELSE 0 END) * 100 as conversion_rate
+         FROM tco_agent_interactions
+         WHERE objection_type IS NOT NULL
+         GROUP BY objection_type
+         ORDER BY count DESC`
+      );
+
+      res.json({
+        success: true,
+        objections: result.rows,
+      });
+    } catch (error) {
+      console.error('Error getting objections:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  /**
+   * GET /api/tco-agent/persistence-stats
+   * Get persistence mode analytics (follow-up effectiveness)
+   */
+  router.get('/persistence-stats', async (req, res) => {
+    try {
+      const result = await pool.query(
+        `SELECT
+           follow_up_count,
+           COUNT(*) as total_interactions,
+           SUM(CASE WHEN became_lead = TRUE THEN 1 ELSE 0 END) as conversions,
+           AVG(CASE WHEN became_lead = TRUE THEN 1 ELSE 0 END) * 100 as conversion_rate
+         FROM tco_agent_interactions
+         WHERE follow_up_count IS NOT NULL
+         GROUP BY follow_up_count
+         ORDER BY follow_up_count ASC`
+      );
+
+      res.json({
+        success: true,
+        stats: result.rows,
+        message: 'Shows how many conversions happen at each follow-up stage',
+      });
+    } catch (error) {
+      console.error('Error getting persistence stats:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   return router;
 }
 

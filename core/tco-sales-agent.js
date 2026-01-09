@@ -131,12 +131,20 @@ export class TCOSalesAgent {
       // Generate response if it's a complaint
       let agentResponse = null;
       let responseStatus = 'not_applicable';
+      let detectedObjectionType = null;
 
       if (detection.isCostComplaint) {
         const config = await this.getConfig();
 
         // Only generate response if confidence is high enough
         if (detection.confidenceScore >= config.confidenceThreshold) {
+          // Check for objections first
+          const objection = await this.detectObjection(message);
+          if (objection.detected) {
+            detectedObjectionType = objection.type;
+            console.log(`🛡️ [TCO AGENT] Objection detected: ${objection.type}`);
+          }
+
           agentResponse = await this.generateResponse({
             message,
             authorUsername,
@@ -170,8 +178,10 @@ export class TCOSalesAgent {
           response_status,
           follow_up_scheduled,
           follow_up_at,
+          follow_up_count,
+          objection_type,
           metadata
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
         RETURNING id`,
         [
           sourcePlatform,
@@ -189,6 +199,8 @@ export class TCOSalesAgent {
           detection.isCostComplaint && agentResponse !== null
             ? new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours from now
             : null,
+          0, // Initial follow_up_count
+          detectedObjectionType, // Track objection type
           JSON.stringify(metadata),
         ]
       );
