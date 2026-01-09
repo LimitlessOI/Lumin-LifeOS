@@ -206,7 +206,9 @@ Respond in JSON:
 }`;
 
     // Use appropriate model tier based on lens importance
-    const model = lens.weight >= 0.5 ? 'claude' : 'gpt';
+    // High-weight lenses (>=50%): Use premium tier1 models
+    // Lower-weight lenses: Use tier0 models for cost efficiency
+    const model = lens.weight >= 0.5 ? 'chatgpt' : 'deepseek';
 
     const response = await this.callCouncilMember(model, prompt, {
       maxTokens: 1000,

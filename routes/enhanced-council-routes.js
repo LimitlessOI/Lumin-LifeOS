@@ -101,7 +101,7 @@ export function registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requ
         return res.status(503).json({ error: "Enhanced Consensus not initialized" });
       }
 
-      const { decision, agents = ['claude', 'gpt', 'gemini'] } = req.body;
+      const { decision, agents = ['chatgpt', 'gemini', 'deepseek'] } = req.body;
 
       if (!decision) {
         return res.status(400).json({ error: "Decision is required" });

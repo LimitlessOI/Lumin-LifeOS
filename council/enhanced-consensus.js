@@ -26,10 +26,10 @@ export class EnhancedConsensusProtocol {
   /**
    * Run the full 5-phase enhanced consensus protocol
    * @param {object} decision - The decision to evaluate
-   * @param {array} coreAgents - Array of agent keys ['claude', 'gpt', 'gemini']
+   * @param {array} coreAgents - Array of agent keys ['chatgpt', 'gemini', 'deepseek']
    * @returns {Promise<object>} - Consensus result with full audit trail
    */
-  async runProtocol(decision, coreAgents = ['claude', 'gpt', 'gemini']) {
+  async runProtocol(decision, coreAgents = ['chatgpt', 'gemini', 'deepseek']) {
     console.log('🎯 [CONSENSUS] Starting Enhanced 5-Phase Protocol');
 
     const protocolStart = Date.now();
@@ -366,7 +366,7 @@ Respond in JSON:
       );
 
       // Re-run Phase 4 with expanded council
-      const allAgents = ['claude', 'gpt', 'gemini', 'deepseek', 'grok'];
+      const allAgents = ['chatgpt', 'gemini', 'deepseek', 'grok', 'ollama_deepseek_v3'];
       const expandedVote = await this.phase4_InformedFinalVote(decision, allAgents, {
         phase4: phase4Results,
       });

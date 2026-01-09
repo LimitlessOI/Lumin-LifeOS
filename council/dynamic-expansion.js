@@ -14,44 +14,44 @@
 
 // Core 3-agent council (always active)
 const CORE_AGENTS = {
-  claude: {
-    name: 'Claude Sonnet 4.5',
-    provider: 'anthropic',
-    role: 'Strategy & Architecture',
-    specialty: 'Long-horizon risk, governance, policy',
-    tier: 1,
-  },
-  gpt: {
-    name: 'GPT-4o (Brock)',
+  chatgpt: {
+    name: 'ChatGPT (GPT-4o)',
     provider: 'openai',
     role: 'Execution & Implementation',
     specialty: 'Shipping, coding, glue work',
     tier: 1,
   },
   gemini: {
-    name: 'Gemini 2.5 Pro',
+    name: 'Gemini 2.5 Flash',
     provider: 'google',
     role: 'Innovation & Creative',
     specialty: 'Ideation, exploration, creativity',
     tier: 1,
   },
+  deepseek: {
+    name: 'DeepSeek Cloud',
+    provider: 'deepseek',
+    role: 'Strategy & Architecture',
+    specialty: 'Infrastructure, testing, performance, development',
+    tier: 0,
+  },
 };
 
 // Extended agents (activated when expansion needed)
 const EXTENDED_AGENTS = {
-  deepseek: {
-    name: 'DeepSeek V3',
-    provider: 'deepseek',
-    role: 'Optimization & Efficiency',
-    specialty: 'TCO, compression, performance, cost optimization',
-    tier: 1,
-  },
   grok: {
     name: 'Grok 2',
     provider: 'xai',
     role: 'Reality Check',
     specialty: 'Feasibility, constraints, "what breaks"',
     tier: 1,
+  },
+  ollama_deepseek_v3: {
+    name: 'DeepSeek V3 (Local)',
+    provider: 'ollama',
+    role: 'Complex Reasoning',
+    specialty: 'Complex reasoning, mathematical tasks, strategic decisions',
+    tier: 0,
   },
 };
 
