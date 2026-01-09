@@ -40,6 +40,9 @@ import initTCORoutes from "./routes/tco-routes.js";
 import TCOSalesAgent from "./core/tco-sales-agent.js";
 import initTCOAgentRoutes from "./routes/tco-agent-routes.js";
 
+// Enhanced Council Features
+import { registerEnhancedCouncilRoutes } from "./routes/enhanced-council-routes.js";
+
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
 
@@ -6585,6 +6588,15 @@ async function initializeTwoTierSystem() {
     console.log("║    Mode: TEST MODE (auto_reply=false, requires human approval)                   ║");
     console.log("║    Webhooks: /api/tco-agent/webhook/*                                            ║");
     console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
+
+    // Initialize Enhanced Council Features
+    console.log("🎯 [STARTUP] Registering Enhanced Council routes...");
+    registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requireKey);
+    console.log("✅ [STARTUP] Enhanced Council routes registered");
+    console.log("   - Dynamic Council Expansion (3→5 agents)");
+    console.log("   - Enhanced Consensus Protocol (5-phase with steel-manning)");
+    console.log("   - Decision Filters (7 wisdom lenses)");
+    console.log("   - FSAR Severity Gate (Likelihood × Damage × Reversibility)");
 
     const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
     console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
