@@ -37,6 +37,8 @@ import memorySystem from "./core/memory-system.js";
 import memoryRoutes from "./routes/memory-routes.js";
 import TCOTracker from "./core/tco-tracker.js";
 import initTCORoutes from "./routes/tco-routes.js";
+import TCOSalesAgent from "./core/tco-sales-agent.js";
+import initTCOAgentRoutes from "./routes/tco-agent-routes.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
@@ -57,7 +59,7 @@ let goalTracker, activityTracker, coachingProgression, calendarService;
 let perfectDaySystem, goalCommitmentSystem, callSimulationSystem, relationshipMediation, meaningfulMoments;
 
 // TCO (TotalCostOptimizer) System
-let tcoTracker, tcoRoutes;
+let tcoTracker, tcoRoutes, tcoSalesAgent, tcoAgentRoutes;
 
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
@@ -6569,6 +6571,20 @@ async function initializeTwoTierSystem() {
       modelRouter,
       callCouncilMember,
     });
+
+    // Initialize TCO AI Sales Agent (TCO-F01)
+    tcoSalesAgent = new TCOSalesAgent(pool, callCouncilMember);
+    tcoAgentRoutes = initTCOAgentRoutes({
+      pool,
+      tcoSalesAgent,
+    });
+
+    console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
+    console.log("║ 🤖 [TCO SALES AGENT] INITIALIZED                                                  ║");
+    console.log("║    Status: Autonomous agent ready to detect cost complaints                      ║");
+    console.log("║    Mode: TEST MODE (auto_reply=false, requires human approval)                   ║");
+    console.log("║    Webhooks: /api/tco-agent/webhook/*                                            ║");
+    console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
 
     const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
     console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
@@ -13907,6 +13923,9 @@ app.use('/api/stripe', stripeRoutes);
 // TCO (TotalCostOptimizer) routes
 app.use('/api/tco', tcoRoutes);
 
+// TCO AI Sales Agent routes
+app.use('/api/tco-agent', tcoAgentRoutes);
+
 // Enhanced health check
 app.get('/api/health', async (req, res) => {
   const health = { 
@@ -15673,6 +15692,22 @@ SUBJECT: [subject]
       );
       console.log("\n✅ SYSTEM READY");
       console.log("=".repeat(100) + "\n");
+
+      // Start TCO Sales Agent follow-up scheduler (runs every hour)
+      if (tcoSalesAgent) {
+        console.log("🕐 [TCO AGENT] Starting follow-up scheduler (every hour)");
+        setInterval(async () => {
+          try {
+            console.log("⏰ [TCO AGENT] Running scheduled follow-up check...");
+            const result = await tcoSalesAgent.processFollowUps();
+            if (result.success && result.processed > 0) {
+              console.log(`✅ [TCO AGENT] Processed ${result.processed} follow-ups`);
+            }
+          } catch (error) {
+            console.error("❌ [TCO AGENT] Follow-up scheduler error:", error);
+          }
+        }, 60 * 60 * 1000); // Every hour
+      }
     });
   } catch (error) {
     console.error("❌ Startup error:", error);
