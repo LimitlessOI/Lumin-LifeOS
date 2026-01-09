@@ -474,7 +474,400 @@ export function initTCORoutes({
     }
   });
 
+  /**
+   * POST /api/tco/leads
+   * Capture leads from cost analyzer
+   */
+  router.post('/leads', async (req, res) => {
+    try {
+      const {
+        email,
+        monthlySpend,
+        providers,
+        useCase,
+        volume,
+        monthlySavings,
+        netSavings,
+        savingsPercent,
+      } = req.body;
+
+      if (!email) {
+        return res.status(400).json({
+          error: 'Missing email',
+          message: 'Email is required',
+        });
+      }
+
+      // Save lead to database
+      const result = await pool.query(
+        `INSERT INTO tco_leads (
+          email,
+          monthly_spend,
+          providers,
+          use_case,
+          volume,
+          monthly_savings_estimate,
+          net_savings_estimate,
+          savings_percent_estimate,
+          source,
+          created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW())
+        ON CONFLICT (email)
+        DO UPDATE SET
+          monthly_spend = EXCLUDED.monthly_spend,
+          providers = EXCLUDED.providers,
+          updated_at = NOW()
+        RETURNING id`,
+        [
+          email,
+          monthlySpend || 0,
+          JSON.stringify(providers || []),
+          useCase || 'unknown',
+          volume || 'unknown',
+          monthlySavings || 0,
+          netSavings || 0,
+          savingsPercent || 0,
+          'cost_analyzer',
+        ]
+      );
+
+      const leadId = result.rows[0].id;
+
+      console.log(`💰 [TCO LEADS] New lead captured: ${email} (ID: ${leadId})`);
+
+      // TODO: Send email with savings report
+
+      res.json({
+        success: true,
+        leadId,
+        message: 'Lead captured successfully',
+      });
+    } catch (error) {
+      console.error('Error capturing lead:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  /**
+   * POST /api/tco/checkout
+   * Create Stripe checkout session for TCO subscription
+   */
+  router.post('/checkout', async (req, res) => {
+    try {
+      const { customerId, email, estimatedSavings } = req.body;
+
+      if (!email) {
+        return res.status(400).json({
+          error: 'Missing email',
+          message: 'Email is required',
+        });
+      }
+
+      // Get Stripe client
+      const stripe = await getStripeClient();
+
+      if (!stripe) {
+        return res.status(500).json({
+          error: 'Stripe not configured',
+          message: 'Payment processing is not available',
+        });
+      }
+
+      // Create or get Stripe customer
+      const stripeCustomers = await stripe.customers.list({
+        email,
+        limit: 1,
+      });
+
+      let stripeCustomer;
+      if (stripeCustomers.data.length > 0) {
+        stripeCustomer = stripeCustomers.data[0];
+      } else {
+        stripeCustomer = await stripe.customers.create({
+          email,
+          metadata: {
+            tco_customer_id: customerId || '',
+            estimated_monthly_savings: estimatedSavings || 0,
+          },
+        });
+      }
+
+      // Create checkout session
+      const session = await stripe.checkout.sessions.create({
+        customer: stripeCustomer.id,
+        mode: 'subscription',
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: 'TotalCostOptimizer - Monthly',
+                description: 'AI API cost optimization service (20% of verified savings)',
+              },
+              recurring: {
+                interval: 'month',
+              },
+              unit_amount: 0, // Usage-based pricing, actual billing happens via invoices
+            },
+            quantity: 1,
+          },
+        ],
+        success_url: `${req.headers.origin || 'http://localhost:8080'}/tco/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin || 'http://localhost:8080'}/tco/analyzer.html`,
+        metadata: {
+          tco_customer_id: customerId || '',
+        },
+      });
+
+      res.json({
+        success: true,
+        sessionId: session.id,
+        url: session.url,
+      });
+    } catch (error) {
+      console.error('Stripe checkout error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  /**
+   * POST /api/tco/webhook/stripe
+   * Handle Stripe webhooks for TCO payments
+   */
+  router.post('/webhook/stripe', express.raw({ type: 'application/json' }), async (req, res) => {
+    try {
+      const stripe = await getStripeClient();
+
+      if (!stripe) {
+        return res.status(500).json({ error: 'Stripe not configured' });
+      }
+
+      const sig = req.headers['stripe-signature'];
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+      let event;
+
+      if (webhookSecret) {
+        // Verify webhook signature
+        try {
+          event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+        } catch (err) {
+          console.error('Webhook signature verification failed:', err.message);
+          return res.status(400).send(`Webhook Error: ${err.message}`);
+        }
+      } else {
+        // No signature verification (development only)
+        event = req.body;
+      }
+
+      // Handle the event
+      switch (event.type) {
+        case 'checkout.session.completed':
+          const session = event.data.object;
+          console.log('✅ [STRIPE] Checkout session completed:', session.id);
+
+          // Update customer record
+          if (session.metadata.tco_customer_id) {
+            await pool.query(
+              `UPDATE tco_customers
+               SET stripe_customer_id = $1,
+                   subscription_status = 'active',
+                   subscription_start_date = NOW(),
+                   updated_at = NOW()
+               WHERE id = $2`,
+              [session.customer, parseInt(session.metadata.tco_customer_id)]
+            );
+          }
+          break;
+
+        case 'invoice.payment_succeeded':
+          const invoice = event.data.object;
+          console.log('💳 [STRIPE] Invoice paid:', invoice.id);
+
+          // Mark invoice as paid in our database
+          await pool.query(
+            `UPDATE tco_invoices
+             SET status = 'paid',
+                 paid_at = NOW(),
+                 stripe_invoice_id = $1
+             WHERE stripe_invoice_id = $1`,
+            [invoice.id]
+          );
+          break;
+
+        case 'invoice.payment_failed':
+          const failedInvoice = event.data.object;
+          console.log('❌ [STRIPE] Invoice payment failed:', failedInvoice.id);
+
+          // Mark invoice as failed
+          await pool.query(
+            `UPDATE tco_invoices
+             SET status = 'failed'
+             WHERE stripe_invoice_id = $1`,
+            [failedInvoice.id]
+          );
+          break;
+
+        case 'customer.subscription.deleted':
+          const subscription = event.data.object;
+          console.log('🔴 [STRIPE] Subscription cancelled:', subscription.id);
+
+          // Update customer status
+          await pool.query(
+            `UPDATE tco_customers
+             SET subscription_status = 'cancelled',
+                 subscription_end_date = NOW()
+             WHERE stripe_customer_id = $1`,
+            [subscription.customer]
+          );
+          break;
+
+        default:
+          console.log(`Unhandled event type: ${event.type}`);
+      }
+
+      res.json({ received: true });
+    } catch (error) {
+      console.error('Stripe webhook error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  /**
+   * POST /api/tco/create-invoice
+   * Create monthly invoice for customer (20% of verified savings)
+   */
+  router.post('/create-invoice', async (req, res) => {
+    try {
+      const { customerId, month, year } = req.body;
+
+      if (!customerId || !month || !year) {
+        return res.status(400).json({
+          error: 'Missing required fields',
+          message: 'customerId, month, and year are required',
+        });
+      }
+
+      // Get customer
+      const customerResult = await pool.query(
+        'SELECT * FROM tco_customers WHERE id = $1',
+        [customerId]
+      );
+
+      if (customerResult.rows.length === 0) {
+        return res.status(404).json({ error: 'Customer not found' });
+      }
+
+      const customer = customerResult.rows[0];
+
+      // Calculate savings for the month
+      const revenue = await tcoTracker.calculateRevenue(
+        customerId,
+        new Date(year, month - 1, 1),
+        new Date(year, month, 0, 23, 59, 59, 999)
+      );
+
+      if (!revenue.success) {
+        throw new Error('Failed to calculate revenue');
+      }
+
+      // Create invoice in our database
+      const invoiceResult = await pool.query(
+        `INSERT INTO tco_invoices (
+          customer_id,
+          invoice_month,
+          invoice_year,
+          total_savings,
+          amount_due,
+          status,
+          created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6, NOW())
+        RETURNING id`,
+        [
+          customerId,
+          month,
+          year,
+          revenue.totalSavings,
+          revenue.ourRevenue,
+          'pending',
+        ]
+      );
+
+      const invoiceId = invoiceResult.rows[0].id;
+
+      // Create Stripe invoice if customer has Stripe ID
+      if (customer.stripe_customer_id) {
+        const stripe = await getStripeClient();
+
+        if (stripe) {
+          const stripeInvoice = await stripe.invoices.create({
+            customer: customer.stripe_customer_id,
+            description: `TotalCostOptimizer - ${month}/${year}`,
+            metadata: {
+              tco_invoice_id: invoiceId,
+              month,
+              year,
+            },
+          });
+
+          // Add invoice item
+          await stripe.invoiceItems.create({
+            customer: customer.stripe_customer_id,
+            invoice: stripeInvoice.id,
+            amount: Math.round(revenue.ourRevenue * 100), // Convert to cents
+            currency: 'usd',
+            description: `20% of $${revenue.totalSavings.toFixed(2)} in verified AI cost savings`,
+          });
+
+          // Finalize and send invoice
+          await stripe.invoices.finalizeInvoice(stripeInvoice.id);
+
+          // Update our database with Stripe invoice ID
+          await pool.query(
+            'UPDATE tco_invoices SET stripe_invoice_id = $1 WHERE id = $2',
+            [stripeInvoice.id, invoiceId]
+          );
+
+          console.log(`📄 [TCO INVOICE] Created invoice #${invoiceId} for customer #${customerId}: $${revenue.ourRevenue.toFixed(2)}`);
+        }
+      }
+
+      res.json({
+        success: true,
+        invoiceId,
+        totalSavings: revenue.totalSavings,
+        amountDue: revenue.ourRevenue,
+      });
+    } catch (error) {
+      console.error('Error creating invoice:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   return router;
+}
+
+// Helper: Get Stripe client
+async function getStripeClient() {
+  const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+
+  if (!STRIPE_SECRET_KEY) {
+    console.warn('⚠️ STRIPE_SECRET_KEY not set');
+    return null;
+  }
+
+  try {
+    const stripeModule = await import('stripe');
+    const Stripe = stripeModule.default || stripeModule.Stripe || stripeModule;
+
+    return new Stripe(STRIPE_SECRET_KEY, {
+      apiVersion: '2024-06-20',
+    });
+  } catch (error) {
+    console.error('Stripe initialization error:', error);
+    return null;
+  }
 }
 
 /**
