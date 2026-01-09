@@ -1,4 +1,3 @@
-```
 node_modules
 .DS_Store
 .env
@@ -12,4 +11,7 @@ knowledge/index/entries.jsonl
 *.log
 sandbox/
 .temp_*.js
-```
+
+# FSAR reports (auto-generated, can be regenerated)
+audit/reports/fsar_proposal_*.json
+audit/reports/fsar_proposal_*.md

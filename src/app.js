@@ -1,22 +1,27 @@
-```javascript
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const helmet = require('helmet');
-const clientRoutes = require('./modules/clients/client.routes');
-const stripeWebhook = require('./modules/clients/stripe.webhook');
+```jsx
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import WorkflowBuilder from './components/WorkflowBuilder/WorkflowBuilder';
+import TaskLibrary from './components/TaskLibrary/TaskLibrary';
+import ExecutionHistory from './components/ExecutionHistory/ExecutionHistory';
+import NotificationCenter from './components/Notifications/NotificationCenter';
+import './App.css';
 
-const app = express();
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <NotificationCenter />
+        <Switch>
+          <Route path="/workflow-builder" component={WorkflowBuilder} />
+          <Route path="/task-library" component={TaskLibrary} />
+          <Route path="/execution-history" component={ExecutionHistory} />
+          <Route path="/" exact component={() => <div>Welcome to Automation Feature</div>} />
+        </Switch>
+      </div>
+    </Router>
+  );
+}
 
-app.use(bodyParser.json());
-app.use(cors());
-app.use(helmet());
-
-// Add client routes
-app.use('/api/clients', clientRoutes);
-
-// Stripe webhook endpoint
-app.post('/webhook', bodyParser.raw({ type: 'application/json' }), stripeWebhook.handleStripeWebhook);
-
-module.exports = app;
+export default App;
 ```
