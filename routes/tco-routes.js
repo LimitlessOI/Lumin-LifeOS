@@ -910,9 +910,9 @@ async function selectOptimalModel({ provider, model, messages, modelRouter }) {
       model: 'deepseek-r1:8b',
     },
     google: {
-      councilMember: 'gemini', // Use Gemini (already cheap)
-      provider: 'google',
-      model: 'gemini-pro',
+      councilMember: 'ollama_deepseek', // FREE local alternative (same as Anthropic)
+      provider: 'ollama',
+      model: 'deepseek-coder:latest',
     },
   };
 
