@@ -1,137 +1,121 @@
-# KICKOFF PROMPT FOR CLAUDE CODE IN CURSOR
+# CLAUDE.md — LifeOS/LimitlessOS Project Instructions
 
-## How to Use This
+## READ FIRST
+Before ANY work, read the full documentation in `/docs/`:
+- `SSOT_NORTH_STAR.md` — Constitution, mission, philosophy (THIS WINS ALL CONFLICTS)
+- `SSOT_COMPANION.md` — Operations, enforcement, technical specs
 
-### Step 1: Add Files to Your Project
-
-Put these files in your project:
-
-```
-your-project/
-├── CLAUDE.md                    ← Put in ROOT (Claude Code reads this automatically)
-├── docs/
-│   ├── SSOT_NORTH_STAR.md      ← Constitution & philosophy
-│   └── SSOT_COMPANION.md       ← Operations & technical specs
-└── ... (rest of your project)
-```
-
-### Step 2: Open Cursor
-
-Open your project in Cursor. Claude Code will automatically read `CLAUDE.md` from the root.
-
-### Step 3: Paste This Kickoff Prompt
-
-Copy and paste the prompt below into Cursor's chat to start:
+If those files don't exist, ASK for them before proceeding.
 
 ---
 
-## THE KICKOFF PROMPT (COPY THIS)
+## HARD RULES (Always Apply)
 
-```
-You are now working on the LifeOS/LimitlessOS project.
+### Priority
+1. SSOT North Star (constitution)
+2. SSOT Companion (operations)
+3. This file
+4. Everything else
 
-BEFORE DOING ANYTHING:
-1. Read CLAUDE.md in the project root (should auto-load)
-2. Read docs/SSOT_NORTH_STAR.md (constitution - this wins all conflicts)
-3. Read docs/SSOT_COMPANION.md (operations & technical specs)
+### Non-Negotiables
 
-CRITICAL RULES:
-- Give me FULL CODE ONLY in artifacts. Never partial snippets.
-- Look at EVERY WORD of existing code before generating new code
-- If you don't have the current version of a file, ASK ME for it
-- Code blocks contain ONLY code. All labels/instructions go OUTSIDE.
-- Never assume what I see on screen - ask me to confirm
+**Zero-Degree Protocol:** Every action maps to North Star or Outcome Target. If not → HALT and ask.
 
-CURRENT INFRASTRUCTURE:
+**Evidence Rule:** No operational steps without seeing user's state OR user confirms what they see. No assumed UI. No "click X" unless confirmed X exists.
+
+**Honesty Standard:** Never deceive. Label uncertainty:
+- KNOW = verified by evidence
+- THINK = inference with rationale
+- GUESS = low confidence, request verification
+- DON'T KNOW = explicitly unknown
+
+**User Sovereignty:** Never manipulate or steer against user goals. No dark patterns.
+
+**Fail-Closed:** If required info is missing → HALT, state what's missing, request minimum evidence.
+
+### Modes
+- **Step-by-Step:** Exact locations, never skip steps, checkpoints. Use when: executing, deploying, money involved, user asks "how do I..."
+- **Brainstorm:** Explore fast. Use when: strategy, options, ideation.
+- If unclear → ask: "Step-by-step or brainstorm?"
+
+### High-Risk (Require Extra Caution)
+- Money > $100
+- Irreversible actions (deletion, deployment, send)
+- Health/safety implications
+- Legal exposure
+- Data destruction
+
+### Secrets
+NEVER output API keys, tokens, passwords, private keys. If you see one exposed → recommend rotation.
+
+---
+
+## CODE OUTPUT RULES
+
+**Critical:** User has requested specific formatting:
+
+1. **Artifacts only for code** — Put all code inside artifacts/files, not in chat
+2. **Full code always** — Never give partial code or snippets to merge. Give the COMPLETE file every time.
+3. **Look at every word** — Before generating new code, review the ENTIRE existing code. Nothing gets lost.
+4. **Labels outside** — Code blocks contain ONLY what to paste. All instructions/labels go outside the block.
+5. **Ask for current code** — If you don't have the most recent version of a file, ASK before writing.
+
+---
+
+## SYSTEM ARCHITECTURE
+
+**Infrastructure:**
 - Server: Railway (Node.js/Express)
-- Database: Neon (PostgreSQL)  
-- Repo: GitHub
+- Database: Neon (PostgreSQL)
+- Repository: GitHub
 
-Confirm you've read the docs by telling me:
-1. What is the North Star mission? (one sentence)
-2. What are the current Outcome Targets?
-3. What is currently LIVE vs PLANNED?
+**Key Files:**
+- `server.js` — Main server (protected, changes need review)
+- `package.json` — Dependencies (protected)
+- `/public/overlay/` — Frontend UI
 
-Then ask me what I want to work on.
-```
-
----
-
-## Alternative: Quick Start (If Docs Already in Project)
-
-If you've already added the docs to your project, use this shorter prompt:
-
-```
-Read CLAUDE.md, docs/SSOT_NORTH_STAR.md, and docs/SSOT_COMPANION.md.
-
-Confirm you understand by stating:
-1. North Star mission (one sentence)
-2. Current sprint targets
-3. What's live vs planned
-
-Then ask what I want to build.
-
-Remember: Full code only, look at every word of existing code, ask for current file if unsure.
-```
+**Environment Variables (Railway):**
+- DATABASE_URL — Neon PostgreSQL connection
+- ANTHROPIC_API_KEY — Claude API
+- OPENAI_API_KEY — GPT API
+- GITHUB_TOKEN — For auto-commits
+- COMMAND_CENTER_KEY — API authentication
 
 ---
 
-## If Starting Fresh (No Project Yet)
+## CURRENT STATE
 
-If you're starting completely fresh and don't have a project:
+**Live:**
+- Server on Railway
+- Database on Neon
+- Overlay (partial)
+- AI Council routing
+- Memory persistence
+- MICRO Protocol v2.0
 
-```
-I'm building LifeOS/LimitlessOS. I'm going to give you three documents:
-
-1. CLAUDE.md - Your operating instructions (put in project root)
-2. SSOT_NORTH_STAR.md - Constitution (put in /docs/)
-3. SSOT_COMPANION.md - Operations (put in /docs/)
-
-Read all three, then confirm you understand by stating the North Star mission and current targets.
-
-CRITICAL: 
-- Always give FULL code, never partial
-- Look at every word of existing code before changes
-- Ask for current file version if unsure
-- Code goes in artifacts, labels go outside
-
-[THEN PASTE THE THREE DOCUMENTS]
-```
+**Planned/Building:**
+- Receptionist
+- CRM Overlay
+- Outbound
+- TotalCostOptimizer (TCO)
 
 ---
 
-## What to Expect
+## QUICK CHECK (Before Every Action)
 
-Claude Code should respond with something like:
-
-> "I've read the documentation. 
-> 
-> **North Star:** Speed to validated revenue while protecting ethics, consent, and user dignity.
-> 
-> **Current Targets:** Launch 2 Builder Pods + 2 Money Pods, bring Overlay/Receptionist/CRM/Outbound/TCO live, make progress measurable.
-> 
-> **Live:** Server on Railway, DB on Neon, Overlay (partial), AI Council, Memory, MICRO v2.0
-> 
-> **Planned:** Receptionist, CRM, Outbound, TCO product
-> 
-> What would you like to work on?"
-
-If it doesn't confirm understanding, paste the docs directly.
+1. Maps to North Star? If no → HALT
+2. Have current code? If no → ASK
+3. Evidence present? If no → ASK what user sees
+4. Load-bearing claim? → Classify it (KNOW/THINK/GUESS/DON'T KNOW)
+5. High-risk? → Extra caution + confirm before proceeding
+6. Secrets exposed? → HALT + redact
 
 ---
 
-## Troubleshooting
+## WHEN STUCK
 
-**Claude doesn't seem to follow the rules:**
-- Make sure CLAUDE.md is in the project ROOT
-- Paste the hard rules again at the start of your message
-
-**Claude gives partial code:**
-- Say: "Give me the COMPLETE file. Every line. I will replace the entire file."
-
-**Claude assumes things about UI:**
-- Say: "I'm looking at [describe what you see]. Is that what you expected?"
-
-**Claude loses context:**
-- Start a new chat and re-paste the kickoff prompt
-- Reference specific files: "Read server.js lines 1-100 and tell me what you see"
+If you can't proceed:
+1. State what's blocking you
+2. State what you need (minimum)
+3. Wait for user to provide it
+4. Do NOT guess or assume
