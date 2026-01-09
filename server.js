@@ -35,6 +35,8 @@ import autoBuilder from "./core/auto-builder.js";
 import stripeRoutes from "./routes/stripe-routes.js";
 import memorySystem from "./core/memory-system.js";
 import memoryRoutes from "./routes/memory-routes.js";
+import TCOTracker from "./core/tco-tracker.js";
+import initTCORoutes from "./routes/tco-routes.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig;
@@ -53,6 +55,9 @@ let goalTracker, activityTracker, coachingProgression, calendarService;
 
 // Motivation & Perfect Day Services
 let perfectDaySystem, goalCommitmentSystem, callSimulationSystem, relationshipMediation, meaningfulMoments;
+
+// TCO (TotalCostOptimizer) System
+let tcoTracker, tcoRoutes;
 
 const execAsync = promisify(exec);
 const { readFile, writeFile } = fsPromises;
@@ -6555,6 +6560,16 @@ async function initializeTwoTierSystem() {
     tier1Council = new Tier1Council(pool, callCouncilMember);
     modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
     openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
+
+    // Initialize TCO (TotalCostOptimizer) system
+    tcoTracker = new TCOTracker(pool);
+    tcoRoutes = initTCORoutes({
+      pool,
+      tcoTracker,
+      modelRouter,
+      callCouncilMember,
+    });
+
     const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
     console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
     console.log("║ ✅ [OPEN SOURCE COUNCIL] INITIALIZED                                              ║");
@@ -13888,6 +13903,9 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
 
 // Other Stripe routes (use JSON parser)
 app.use('/api/stripe', stripeRoutes);
+
+// TCO (TotalCostOptimizer) routes
+app.use('/api/tco', tcoRoutes);
 
 // Enhanced health check
 app.get('/api/health', async (req, res) => {
