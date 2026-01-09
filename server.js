@@ -13920,11 +13920,8 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
 // Other Stripe routes (use JSON parser)
 app.use('/api/stripe', stripeRoutes);
 
-// TCO (TotalCostOptimizer) routes
-app.use('/api/tco', tcoRoutes);
-
-// TCO AI Sales Agent routes
-app.use('/api/tco-agent', tcoAgentRoutes);
+// TCO routes will be mounted after initialization
+// See initializeTwoTierSystem() call below
 
 // Enhanced health check
 app.get('/api/health', async (req, res) => {
@@ -15204,7 +15201,17 @@ async function start() {
     // If we reach here, database config is valid
     
     await initializeTwoTierSystem();
-    
+
+    // Mount TCO routes after initialization
+    if (tcoRoutes) {
+      app.use('/api/tco', tcoRoutes);
+      console.log('✅ [TCO] Routes mounted at /api/tco');
+    }
+    if (tcoAgentRoutes) {
+      app.use('/api/tco-agent', tcoAgentRoutes);
+      console.log('✅ [TCO AGENT] Routes mounted at /api/tco-agent');
+    }
+
     // Initialize Memory System
     try {
       await memorySystem.initMemoryStore();
