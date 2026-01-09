@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TCO Dashboard - TotalCostOptimizer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      color: #1a202c;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: #718096;
+      font-size: 16px;
+    }
+
+    .period-selector {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .period-btn {
+      padding: 10px 20px;
+      border: 2px solid #667eea;
+      background: white;
+      color: #667eea;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .period-btn:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .period-btn.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .metric-card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .metric-label {
+      font-size: 14px;
+      color: #718096;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .metric-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 5px;
+    }
+
+    .metric-value.green {
+      color: #48bb78;
+    }
+
+    .metric-value.red {
+      color: #f56565;
+    }
+
+    .metric-value.blue {
+      color: #4299e1;
+    }
+
+    .metric-value.purple {
+      color: #9f7aea;
+    }
+
+    .metric-change {
+      font-size: 14px;
+      color: #48bb78;
+      font-weight: 600;
+    }
+
+    .comparison-section {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .comparison-section h2 {
+      font-size: 24px;
+      color: #1a202c;
+      margin-bottom: 20px;
+    }
+
+    .comparison-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .bar-label .name {
+      color: #1a202c;
+    }
+
+    .bar-label .value {
+      color: #667eea;
+    }
+
+    .bar-container {
+      height: 40px;
+      background: #f7fafc;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 15px;
+      color: white;
+      font-weight: 700;
+      transition: width 0.6s ease;
+    }
+
+    .bar-fill.savings {
+      background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+    }
+
+    .actions {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5a67d8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+      background: #f7fafc;
+    }
+
+    .stats-table {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow-x: auto;
+    }
+
+    .stats-table h2 {
+      font-size: 24px;
+      color: #1a202c;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 2px solid #e2e8f0;
+      font-size: 14px;
+      color: #718096;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tbody td {
+      padding: 15px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1a202c;
+    }
+
+    tbody tr:hover {
+      background: #f7fafc;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 50px;
+      color: white;
+      font-size: 18px;
+    }
+
+    .error {
+      background: #fed7d7;
+      color: #c53030;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge.success {
+      background: #c6f6d5;
+      color: #22543d;
+    }
+
+    .badge.warning {
+      background: #feebc8;
+      color: #7c2d12;
+    }
+
+    .footer {
+      text-align: center;
+      color: white;
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: white;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>💰 TotalCostOptimizer Dashboard</h1>
+      <p>Track your AI API cost savings in real-time</p>
+
+      <div class="period-selector">
+        <button class="period-btn active" onclick="setPeriod('today')">Today</button>
+        <button class="period-btn" onclick="setPeriod('week')">This Week</button>
+        <button class="period-btn" onclick="setPeriod('month')">This Month</button>
+        <button class="period-btn" onclick="setPeriod('all')">All Time</button>
+      </div>
+    </div>
+
+    <div id="error-container"></div>
+    <div id="loading" class="loading">Loading your dashboard...</div>
+
+    <div id="dashboard-content" style="display: none;">
+      <!-- Key Metrics -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">Total Requests</div>
+          <div class="metric-value blue" id="total-requests">0</div>
+          <div class="metric-change" id="requests-change">+0% vs last period</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Cost Without TCO</div>
+          <div class="metric-value red" id="cost-without">$0.00</div>
+          <div class="metric-change" style="color: #718096;">What you would have paid</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Cost With TCO</div>
+          <div class="metric-value purple" id="cost-with">$0.00</div>
+          <div class="metric-change" style="color: #718096;">What you actually paid</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Total Savings</div>
+          <div class="metric-value green" id="total-savings">$0.00</div>
+          <div class="metric-change" id="savings-percent">0% reduction</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Our Fee (20%)</div>
+          <div class="metric-value blue" id="our-fee">$0.00</div>
+          <div class="metric-change" style="color: #718096;">Due this period</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label">Your Net Savings</div>
+          <div class="metric-value green" id="net-savings">$0.00</div>
+          <div class="metric-change" style="color: #718096;">After our fee</div>
+        </div>
+      </div>
+
+      <!-- Cost Comparison Bars -->
+      <div class="comparison-section">
+        <h2>📊 Cost Breakdown</h2>
+        <div class="comparison-bars">
+          <div class="bar-item">
+            <div class="bar-label">
+              <span class="name">Cost Without TCO</span>
+              <span class="value" id="bar-without">$0.00</span>
+            </div>
+            <div class="bar-container">
+              <div class="bar-fill" id="bar-without-fill" style="width: 100%;">100%</div>
+            </div>
+          </div>
+
+          <div class="bar-item">
+            <div class="bar-label">
+              <span class="name">Cost With TCO</span>
+              <span class="value" id="bar-with">$0.00</span>
+            </div>
+            <div class="bar-container">
+              <div class="bar-fill" id="bar-with-fill" style="width: 0%;">0%</div>
+            </div>
+          </div>
+
+          <div class="bar-item">
+            <div class="bar-label">
+              <span class="name">Your Savings</span>
+              <span class="value" id="bar-savings">$0.00</span>
+            </div>
+            <div class="bar-container">
+              <div class="bar-fill savings" id="bar-savings-fill" style="width: 0%;">0%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button class="btn btn-primary" onclick="exportToCSV()">📥 Export to CSV</button>
+        <button class="btn btn-secondary" onclick="refreshData()">🔄 Refresh Data</button>
+        <a href="/api/tco/invoice/2026/1" class="btn btn-secondary" target="_blank">📄 View Invoice</a>
+      </div>
+
+      <!-- Request Breakdown by Model -->
+      <div class="stats-table">
+        <h2>📈 Request Breakdown by Model</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Provider</th>
+              <th>Model</th>
+              <th>Requests</th>
+              <th>Savings</th>
+              <th>Avg Savings %</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="model-breakdown">
+            <tr>
+              <td colspan="6" style="text-align: center; color: #718096;">No data available</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Powered by <strong>TotalCostOptimizer</strong> |
+    <a href="/cost-savings/index.html">Learn More</a> |
+    <a href="mailto:support@totalcostoptimizer.com">Support</a>
+  </div>
+
+  <script>
+    // Get API key from URL parameter or localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const apiKey = urlParams.get('api_key') || localStorage.getItem('tco_api_key');
+
+    if (!apiKey) {
+      showError('No API key found. Please include ?api_key=YOUR_KEY in the URL.');
+    }
+
+    // Store API key for future visits
+    if (apiKey) {
+      localStorage.setItem('tco_api_key', apiKey);
+    }
+
+    let currentPeriod = 'today';
+
+    // Initialize dashboard
+    async function initDashboard() {
+      if (!apiKey) return;
+
+      try {
+        await loadDashboardData();
+      } catch (error) {
+        showError('Failed to load dashboard: ' + error.message);
+      }
+    }
+
+    // Load dashboard data from API
+    async function loadDashboardData() {
+      const loading = document.getElementById('loading');
+      const content = document.getElementById('dashboard-content');
+
+      loading.style.display = 'block';
+      content.style.display = 'none';
+
+      try {
+        // Calculate date range based on period
+        const { startDate, endDate } = getDateRange(currentPeriod);
+
+        // Fetch savings data
+        const response = await fetch(
+          `/api/tco/savings?start_date=${startDate}&end_date=${endDate}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error(data.error || 'Failed to load data');
+        }
+
+        // Update dashboard with data
+        updateDashboard(data);
+
+        loading.style.display = 'none';
+        content.style.display = 'block';
+      } catch (error) {
+        loading.style.display = 'none';
+        showError('Error loading data: ' + error.message);
+      }
+    }
+
+    // Update dashboard with fetched data
+    function updateDashboard(data) {
+      const summary = data.summary || {};
+      const byModel = data.byModel || [];
+
+      // Calculate values
+      const totalRequests = parseInt(summary.total_requests || 0);
+      const wouldHaveCost = parseFloat(summary.total_would_have_cost || 0);
+      const actualCost = parseFloat(summary.total_actual_cost || 0);
+      const totalSavings = parseFloat(summary.total_savings || 0);
+      const avgSavingsPercent = parseFloat(summary.avg_savings_percent || 0);
+      const ourFee = totalSavings * 0.20;
+      const netSavings = totalSavings - ourFee;
+
+      // Update metrics
+      document.getElementById('total-requests').textContent = totalRequests.toLocaleString();
+      document.getElementById('cost-without').textContent = formatCurrency(wouldHaveCost);
+      document.getElementById('cost-with').textContent = formatCurrency(actualCost);
+      document.getElementById('total-savings').textContent = formatCurrency(totalSavings);
+      document.getElementById('savings-percent').textContent =
+        `${avgSavingsPercent.toFixed(1)}% reduction`;
+      document.getElementById('our-fee').textContent = formatCurrency(ourFee);
+      document.getElementById('net-savings').textContent = formatCurrency(netSavings);
+
+      // Update comparison bars
+      const maxCost = wouldHaveCost;
+      const withPercent = maxCost > 0 ? (actualCost / maxCost) * 100 : 0;
+      const savingsPercent = maxCost > 0 ? (totalSavings / maxCost) * 100 : 0;
+
+      document.getElementById('bar-without').textContent = formatCurrency(wouldHaveCost);
+      document.getElementById('bar-with').textContent = formatCurrency(actualCost);
+      document.getElementById('bar-savings').textContent = formatCurrency(totalSavings);
+
+      document.getElementById('bar-without-fill').style.width = '100%';
+      document.getElementById('bar-with-fill').style.width = withPercent.toFixed(1) + '%';
+      document.getElementById('bar-with-fill').textContent = withPercent.toFixed(1) + '%';
+      document.getElementById('bar-savings-fill').style.width = savingsPercent.toFixed(1) + '%';
+      document.getElementById('bar-savings-fill').textContent = savingsPercent.toFixed(1) + '%';
+
+      // Update model breakdown table
+      updateModelBreakdown(byModel);
+    }
+
+    // Update model breakdown table
+    function updateModelBreakdown(models) {
+      const tbody = document.getElementById('model-breakdown');
+
+      if (models.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #718096;">No requests yet</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = models.map(model => `
+        <tr>
+          <td><strong>${model.original_provider}</strong></td>
+          <td>${model.original_model}</td>
+          <td>${parseInt(model.request_count).toLocaleString()}</td>
+          <td>${formatCurrency(parseFloat(model.total_savings))}</td>
+          <td>${parseFloat(model.avg_savings_percent).toFixed(1)}%</td>
+          <td><span class="badge success">Optimized</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // Export data to CSV
+    async function exportToCSV() {
+      try {
+        const { startDate, endDate } = getDateRange(currentPeriod);
+
+        const response = await fetch(
+          `/api/tco/savings?start_date=${startDate}&end_date=${endDate}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error('Failed to fetch data for export');
+        }
+
+        // Build CSV
+        const csvRows = [];
+
+        // Header
+        csvRows.push('Provider,Model,Requests,Savings ($),Avg Savings (%)');
+
+        // Data
+        (data.byModel || []).forEach(model => {
+          csvRows.push([
+            model.original_provider,
+            model.original_model,
+            model.request_count,
+            parseFloat(model.total_savings).toFixed(2),
+            parseFloat(model.avg_savings_percent).toFixed(2)
+          ].join(','));
+        });
+
+        // Summary row
+        csvRows.push('');
+        csvRows.push('Summary');
+        csvRows.push(`Total Requests,${data.summary.total_requests}`);
+        csvRows.push(`Total Savings,${parseFloat(data.summary.total_savings).toFixed(2)}`);
+        csvRows.push(`Average Savings %,${parseFloat(data.summary.avg_savings_percent).toFixed(2)}`);
+
+        // Download
+        const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tco-savings-${currentPeriod}-${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        showError('Failed to export CSV: ' + error.message);
+      }
+    }
+
+    // Refresh data
+    function refreshData() {
+      loadDashboardData();
+    }
+
+    // Set period and reload
+    function setPeriod(period) {
+      currentPeriod = period;
+
+      // Update button states
+      document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      // Reload data
+      loadDashboardData();
+    }
+
+    // Get date range for period
+    function getDateRange(period) {
+      const now = new Date();
+      let startDate, endDate;
+
+      endDate = now.toISOString();
+
+      switch (period) {
+        case 'today':
+          startDate = new Date(now.setHours(0, 0, 0, 0)).toISOString();
+          break;
+        case 'week':
+          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          startDate = weekAgo.toISOString();
+          break;
+        case 'month':
+          const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          startDate = monthAgo.toISOString();
+          break;
+        case 'all':
+          startDate = new Date('2020-01-01').toISOString();
+          break;
+      }
+
+      return { startDate, endDate };
+    }
+
+    // Format currency
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(amount);
+    }
+
+    // Show error
+    function showError(message) {
+      const container = document.getElementById('error-container');
+      container.innerHTML = `<div class="error">⚠️ ${message}</div>`;
+
+      const loading = document.getElementById('loading');
+      loading.style.display = 'none';
+    }
+
+    // Initialize on load
+    initDashboard();
+  </script>
+</body>
+</html>
