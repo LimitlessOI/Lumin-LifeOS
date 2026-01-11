@@ -5816,15 +5816,19 @@ async function storeConversationMemory(
       .toString(36)
       .slice(2, 8)}`;
     await pool.query(
-      `INSERT INTO conversation_memory 
+      `INSERT INTO conversation_memory
        (memory_id, orchestrator_msg, ai_response, context_metadata, memory_type, ai_member, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6, now())`,
+       VALUES ($1, $2, $3, $4::jsonb, $5::jsonb, $6, now())`,
       [
         memId,
         orchestratorMessage,
         aiResponse,
         JSON.stringify(context),
-        context.type || "conversation",
+        JSON.stringify({
+          type: context.type || "conversation",
+          importance: context.importance || "medium",
+          source: context.source || "system"
+        }),
         context.ai_member || "system",
       ]
     );
