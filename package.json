@@ -24,6 +24,7 @@
     "express-rate-limit": "^7.1.5",
     "js-yaml": "^4.1.1",
     "pg": "^8.11.0",
+    "postgresql": "^0.0.1",
     "puppeteer": "^24.33.0",
     "stripe": "^13.0.0",
     "twilio": "^4.0.0",
