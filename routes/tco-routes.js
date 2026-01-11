@@ -189,9 +189,12 @@ export function initTCORoutes({
           });
 
           // Use our two-tier council system for routing
+          // Convert messages array to string for callCouncilMember
+          const promptString = messagesToPrompt(messages || prompt);
+
           response = await callCouncilMember(
             routedModel.councilMember,
-            messages || prompt,
+            promptString,
             {
               maxTokens: max_tokens,
               temperature,
@@ -890,33 +893,123 @@ function estimateTokenCount(input) {
 }
 
 /**
+ * Convert messages array to a single string prompt
+ * (for compatibility with callCouncilMember which expects strings)
+ */
+function messagesToPrompt(messages) {
+  if (typeof messages === 'string') {
+    return messages;
+  }
+
+  if (Array.isArray(messages)) {
+    return messages.map(m => `${m.role}: ${m.content}`).join('\n\n');
+  }
+
+  return String(messages);
+}
+
+/**
+ * Classify the difficulty of a request based on content analysis
+ */
+function classifyDifficulty(messages) {
+  // Convert to string and extract content
+  let fullPrompt;
+  if (typeof messages === 'string') {
+    fullPrompt = messages;
+  } else if (Array.isArray(messages)) {
+    fullPrompt = messages.map(m => m.content || m).join(' ');
+  } else {
+    fullPrompt = String(messages);
+  }
+
+  const wordCount = fullPrompt.split(/\s+/).length;
+
+  // Indicators of complexity
+  const hasCode = /```|function |class |import |def |public |private|const |let |var /.test(fullPrompt);
+  const hasComplexKeywords = /architecture|design pattern|refactor|optimize|analyze|compare|evaluate|implement|debug|troubleshoot/.test(fullPrompt.toLowerCase());
+  const hasMultiStep = /step|first|then|finally|next|after|before|and then/.test(fullPrompt.toLowerCase());
+  const isLongForm = wordCount > 200;
+  const hasMath = /calculate|equation|formula|algorithm|compute/.test(fullPrompt.toLowerCase());
+
+  let complexityScore = 0;
+  if (hasCode) complexityScore += 2;
+  if (hasComplexKeywords) complexityScore += 2;
+  if (hasMultiStep) complexityScore += 1;
+  if (isLongForm) complexityScore += 1;
+  if (hasMath) complexityScore += 1;
+
+  // Classification thresholds
+  if (complexityScore >= 5) return 'hard';      // Complex: Use Tier 1 (premium models)
+  if (complexityScore <= 1 && wordCount < 50) return 'easy';  // Simple: Use Tier 0 only
+  return 'medium';  // Normal: Use two-tier routing
+}
+
+/**
  * Select optimal model based on difficulty
  * This is TCO-B01: Difficulty classifier
  */
 async function selectOptimalModel({ provider, model, messages, modelRouter }) {
-  // For now, route everything to Tier 0 (cheap/free models)
-  // TODO: Implement real difficulty classification
+  // Classify request difficulty
+  const difficulty = classifyDifficulty(messages);
 
-  // Map providers to our council members
-  const routingMap = {
+  // Tier 0 (FREE local Ollama) alternatives mapping
+  const tier0Map = {
     openai: {
-      councilMember: 'groq_llama', // Cheap Tier 0 alternative
-      provider: 'groq',
-      model: 'llama-3.1-70b-versatile',
+      councilMember: 'ollama_deepseek',
+      provider: 'ollama',
+      model: 'deepseek-r1:32b',
+      tier: 0,
+      difficulty,
     },
     anthropic: {
-      councilMember: 'ollama_deepseek', // Free Tier 0 alternative
+      councilMember: 'ollama_qwen',
       provider: 'ollama',
-      model: 'deepseek-r1:8b',
+      model: 'qwen2.5:32b',
+      tier: 0,
+      difficulty,
     },
     google: {
-      councilMember: 'ollama_deepseek', // FREE local alternative (same as Anthropic)
+      councilMember: 'ollama_llama',
       provider: 'ollama',
-      model: 'deepseek-coder:latest',
+      model: 'llama3.3:70b-instruct-q4_0',
+      tier: 0,
+      difficulty,
     },
   };
 
-  return routingMap[provider] || routingMap.openai;
+  // Tier 1 (premium) routing for hard requests
+  const tier1Map = {
+    openai: {
+      councilMember: 'chatgpt-4o',
+      provider: 'openai',
+      model: model || 'gpt-4o',
+      tier: 1,
+      difficulty,
+    },
+    anthropic: {
+      councilMember: 'claude-opus',
+      provider: 'anthropic',
+      model: model || 'claude-opus-4',
+      tier: 1,
+      difficulty,
+    },
+    google: {
+      councilMember: 'gemini-pro',
+      provider: 'google',
+      model: model || 'gemini-2.0-flash-exp',
+      tier: 1,
+      difficulty,
+    },
+  };
+
+  // Route based on difficulty
+  if (difficulty === 'hard') {
+    // Hard requests → go straight to Tier 1 (premium)
+    return tier1Map[provider] || tier1Map.openai;
+  } else {
+    // Easy/Medium → use Tier 0 (free/cheap)
+    return tier0Map[provider] || tier0Map.openai;
+  }
 }
 
 /**
@@ -940,7 +1033,10 @@ async function runOptimizedRequest({
     modelRouter,
   });
 
-  const response = await callCouncilMember(routedModel.councilMember, messages, {
+  // Convert messages to string for callCouncilMember
+  const promptString = messagesToPrompt(messages);
+
+  const response = await callCouncilMember(routedModel.councilMember, promptString, {
     maxTokens: max_tokens,
     temperature,
     useTwoTier: true,
@@ -986,15 +1082,112 @@ async function runDirectRequest({
     throw new Error(`No API key found for provider: ${provider}`);
   }
 
-  // Call provider API directly (simplified - TODO: implement actual API calls)
-  // For now, just simulate with a placeholder
-  const response = `[Direct API response from ${provider}/${model}]`;
-  const tokens = estimateTokenCount(response);
-  const latency = Date.now() - startTime;
+  // Call provider API directly using customer's encrypted key
+  let response, tokens, cost;
 
-  // Estimate actual cost
-  const costPer1K = provider === 'openai' ? 0.03 : 0.015;
-  const cost = (tokens / 1000) * costPer1K;
+  try {
+    if (provider === 'openai') {
+      const apiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          max_tokens: max_tokens || 4096,
+          temperature: temperature || 0.7
+        })
+      });
+
+      if (!apiResponse.ok) {
+        throw new Error(`OpenAI API failed: ${apiResponse.status} ${apiResponse.statusText}`);
+      }
+
+      const data = await apiResponse.json();
+      response = data.choices[0].message.content;
+      tokens = (data.usage?.prompt_tokens || 0) + (data.usage?.completion_tokens || 0);
+
+      // OpenAI pricing (rough estimates, adjust per model)
+      const costPer1K = model.includes('gpt-4') ? 0.03 : 0.002;
+      cost = (tokens / 1000) * costPer1K;
+
+    } else if (provider === 'anthropic') {
+      const apiResponse = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          max_tokens: max_tokens || 4096
+        })
+      });
+
+      if (!apiResponse.ok) {
+        throw new Error(`Anthropic API failed: ${apiResponse.status} ${apiResponse.statusText}`);
+      }
+
+      const data = await apiResponse.json();
+      response = data.content[0].text;
+      tokens = (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0);
+
+      // Anthropic pricing (rough estimates)
+      const costPer1K = model.includes('opus') ? 0.015 : 0.003;
+      cost = (tokens / 1000) * costPer1K;
+
+    } else if (provider === 'google') {
+      // Convert messages to Google format
+      const contents = messages.map(m => ({
+        role: m.role === 'user' ? 'user' : 'model',
+        parts: [{ text: m.content }]
+      }));
+
+      const apiResponse = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            contents,
+            generationConfig: {
+              temperature: temperature || 0.7,
+              maxOutputTokens: max_tokens || 4096
+            }
+          })
+        }
+      );
+
+      if (!apiResponse.ok) {
+        throw new Error(`Google API failed: ${apiResponse.status} ${apiResponse.statusText}`);
+      }
+
+      const data = await apiResponse.json();
+      response = data.candidates[0].content.parts[0].text;
+
+      // Google doesn't always provide token counts, estimate
+      tokens = estimateTokenCount(response) + estimateTokenCount(JSON.stringify(messages));
+
+      // Google pricing (rough estimates)
+      const costPer1K = 0.0005; // Gemini is very cheap
+      cost = (tokens / 1000) * costPer1K;
+
+    } else {
+      throw new Error(`Unsupported provider: ${provider}`);
+    }
+
+  } catch (error) {
+    console.error(`[TCO] Direct API call failed for ${provider}/${model}:`, error.message);
+    throw error;
+  }
+
+  const latency = Date.now() - startTime;
 
   return {
     response,
@@ -1025,11 +1218,44 @@ function compareQuality(optimizedResponse, directResponse) {
 
 /**
  * Calculate quality score for a response
+ * Uses AI-based evaluation with fallback to heuristics
  */
-async function calculateQualityScore(response) {
-  // Simple quality heuristics
-  // TODO: Implement real quality scoring with AI evaluation
+async function calculateQualityScore(response, originalPrompt = '') {
+  // Try AI-based quality scoring first
+  if (originalPrompt && callCouncilMember) {
+    try {
+      const checkPrompt = `Rate the quality of this AI response on a scale of 1-100.
 
+Request: ${originalPrompt}
+
+Response: ${response}
+
+Consider:
+- Relevance to the request
+- Completeness of the answer
+- Accuracy and correctness
+- Clarity and coherence
+
+Return ONLY a number between 1 and 100, nothing else.`;
+
+      const scoreResponse = await callCouncilMember('chatgpt-4o', checkPrompt, {
+        customerId: 'INTERNAL',
+        capability: 'tco_quality_check',
+        temperature: 0.1, // Low temperature for consistent scoring
+        max_tokens: 10
+      });
+
+      const score = parseInt(scoreResponse.trim());
+      if (!isNaN(score) && score >= 1 && score <= 100) {
+        return score;
+      }
+    } catch (error) {
+      console.warn('[TCO] AI quality scoring failed, using heuristics:', error.message);
+      // Fall through to heuristic scoring
+    }
+  }
+
+  // Fallback: Heuristic-based quality scoring
   let score = 50; // Base score
 
   // Length check
