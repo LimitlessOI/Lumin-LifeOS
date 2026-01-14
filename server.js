@@ -14263,6 +14263,24 @@ Write the code now:`;
   }
 }
 
+async function requestJsonOnly(prompt, model = "chatgpt") {
+  const jsonPrompt = `${prompt}\n\nReturn ONLY valid JSON. No markdown, no code fences.`;
+  let response = await callCouncilWithFailover(jsonPrompt, model);
+
+  const tryParse = (text) => {
+    const cleaned = text.replace(/```json\s*|```/g, "").trim();
+    return JSON.parse(cleaned);
+  };
+
+  try {
+    return tryParse(response);
+  } catch {
+    const retryPrompt = `${prompt}\n\nSTRICT: Return ONLY valid JSON. No prose. No markdown.`;
+    response = await callCouncilWithFailover(retryPrompt, model);
+    return tryParse(response);
+  }
+}
+
 // ==================== SELF-PROGRAMMING ENDPOINT ====================
 app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
   try {
@@ -14273,6 +14291,7 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
       search,
       replace,
       autoDeploy = false,
+      jsonOnly = false,
     } = req.body;
 
     if (filePath && search && replace) {
@@ -14344,6 +14363,15 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
       return res.status(400).json({
         error: "Instruction or (filePath + search + replace) required",
       });
+    }
+
+    if (jsonOnly) {
+      const prompt =
+        `As the AI Council, produce a JSON response with:` +
+        `\\n{\"ok\":true,\"model\":\"chatgpt\",\"date\":\"${new Date().toISOString()}\"}` +
+        `\\nInstruction: ${instruction}`;
+      const jsonResponse = await requestJsonOnly(prompt, "chatgpt");
+      return res.json(jsonResponse);
     }
 
     console.log(
