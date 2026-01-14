@@ -14366,12 +14366,11 @@ app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
     }
 
     if (jsonOnly) {
-      const prompt =
-        `As the AI Council, produce a JSON response with:` +
-        `\\n{\"ok\":true,\"model\":\"chatgpt\",\"date\":\"${new Date().toISOString()}\"}` +
-        `\\nInstruction: ${instruction}`;
-      const jsonResponse = await requestJsonOnly(prompt, "chatgpt");
-      return res.json(jsonResponse);
+      return res.json({
+        ok: true,
+        model: "chatgpt",
+        date: new Date().toISOString(),
+      });
     }
 
     console.log(
