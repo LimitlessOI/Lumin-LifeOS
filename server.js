@@ -23,7 +23,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { runFSAR } from "./audit/fsar/fsar_runner.js";
 import { evaluateExecutionGate } from "./audit/gating/execution_gate.js";
-import { Pool } from "pg";
 import { WebSocketServer } from "ws";
 import { createServer } from "http";
 import crypto from "crypto";
@@ -42,6 +41,7 @@ import initTCOAgentRoutes from "./routes/tco-agent-routes.js";
 import { loadRuntimeEnv } from "./config/runtime-env.js";
 import { applyMiddleware } from "./middleware/apply-middleware.js";
 import { registerPublicRoutes } from "./routes/public-routes.js";
+import { createDbPool } from "./services/db.js";
 
 // Enhanced Council Features
 import { registerEnhancedCouncilRoutes } from "./routes/enhanced-council-routes.js";
@@ -202,14 +202,9 @@ applyMiddleware(app, {
 });
 
 // ==================== DATABASE POOL ====================
-export const pool = new Pool({
-  connectionString: validatedDatabaseUrl,
-  ssl: validatedDatabaseUrl?.includes("neon.tech")
-    ? { rejectUnauthorized: DB_SSL_REJECT_UNAUTHORIZED !== "false" }
-    : undefined,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000,
+export const pool = createDbPool({
+  validatedDatabaseUrl,
+  DB_SSL_REJECT_UNAUTHORIZED,
 });
 
 // ==================== GLOBAL STATE ====================
