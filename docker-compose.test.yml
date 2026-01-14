@@ -1,17 +1,17 @@
-```yaml
-version: '3.8'
 services:
   db:
-    image: postgres:latest
+    image: postgres:17
+    ports:
+      - "5433:5432"
     environment:
       POSTGRES_USER: testuser
       POSTGRES_PASSWORD: testpassword
       POSTGRES_DB: testdb
-    ports:
-      - "5433:5432"
-    volumes:
-      - db_test_data:/var/lib/postgresql/data
-
-volumes:
-  db_test_data:
-```
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testuser -d testdb -h 127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    tmpfs:
+      - /var/lib/postgresql/data
