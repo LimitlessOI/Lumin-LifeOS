@@ -10,9 +10,11 @@
     "start": "node server.js",
     "cli": "node apps/cli/index.js",
     "test": "echo \"Tests not yet implemented\" && exit 0",
+    "test:smoke": "node scripts/smoke-test-server.js",
     "test:integration": "echo \"Integration tests not yet implemented\" && exit 0",
     "benchmark": "echo \"Benchmarks not yet implemented\" && exit 0",
-    "check:overlay": "node scripts/check-overlay-syntax.js"
+    "check:overlay": "node scripts/check-overlay-syntax.js",
+    "ssot:validate": "node scripts/ssot-validate.js"
   },
   "dependencies": {
     "acorn": "^8.15.0",
