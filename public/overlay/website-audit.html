@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Website Audit (V0 Proof)</title>
+    <style>
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        margin: 0;
+        padding: 24px;
+        background: #f6f1e7;
+        color: #1f1a15;
+      }
+      .panel {
+        max-width: 920px;
+        margin: 0 auto;
+        background: #fff6e4;
+        border: 1px solid #d8cbb2;
+        padding: 24px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 32px;
+      }
+      label {
+        display: block;
+        margin: 16px 0 6px;
+        font-weight: 600;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #c7b08b;
+        border-radius: 6px;
+        background: #fffdf7;
+        font-family: inherit;
+      }
+      button {
+        margin-top: 20px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 6px;
+        background: #4b2f1a;
+        color: #fef6e9;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      pre {
+        background: #1f1a15;
+        color: #fef6e9;
+        padding: 16px;
+        border-radius: 6px;
+        overflow: auto;
+      }
+      .hint {
+        font-size: 14px;
+        color: #6a5b47;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <h1>AI Website Audit (V0 Proof)</h1>
+      <p class="hint">Requires Command Center Key to call the API.</p>
+
+      <label for="key">Command Center Key</label>
+      <input id="key" type="password" placeholder="smoke_test_key" />
+
+      <label for="business">Business Type</label>
+      <input id="business" type="text" placeholder="Real estate photographer" />
+
+      <label for="location">Location</label>
+      <input id="location" type="text" placeholder="Austin, TX" />
+
+      <label for="competitors">Competitor URLs (one per line)</label>
+      <textarea id="competitors" rows="3"></textarea>
+
+      <label for="goals">Goals (one per line)</label>
+      <textarea id="goals" rows="3"></textarea>
+
+      <button id="run">Run Audit</button>
+
+      <h2>Result</h2>
+      <pre id="output">Awaiting request...</pre>
+    </div>
+
+    <script>
+      const output = document.getElementById("output");
+      const runButton = document.getElementById("run");
+
+      runButton.addEventListener("click", async () => {
+        output.textContent = "Running audit...";
+        const key = document.getElementById("key").value.trim();
+        const business = document.getElementById("business").value.trim();
+        const location = document.getElementById("location").value.trim();
+        const competitors = document
+          .getElementById("competitors")
+          .value.split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean);
+        const goals = document
+          .getElementById("goals")
+          .value.split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean);
+
+        try {
+          const res = await fetch("/api/v1/website/audit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-command-key": key,
+            },
+            body: JSON.stringify({
+              business_type: business,
+              location,
+              competitor_urls: competitors,
+              goals,
+            }),
+          });
+
+          const text = await res.text();
+          if (!res.ok) {
+            output.textContent = `Error ${res.status}: ${text}`;
+            return;
+          }
+
+          try {
+            const data = JSON.parse(text);
+            output.textContent = JSON.stringify(data, null, 2);
+          } catch {
+            output.textContent = text;
+          }
+        } catch (error) {
+          output.textContent = `Request failed: ${error.message}`;
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+{
+  "queue": [
+    {
+      "id": "proof-website-audit",
+      "type": "feature",
+      "status": "done",
+      "requireWork": false,
+      "acceptance_tests": [
+        "npm run ssot:validate",
+        "npm run test:smoke",
+        "node scripts/autonomy/verify-website-audit.js"
+      ],
+      "notes": "Build and verify /api/v1/website/audit + overlay UI proof. Requires COMMAND_CENTER_KEY + DATABASE_URL.",
+      "reason": null
+    },
+    {
+      "id": "refactor-middleware-wiring",
+      "type": "refactor",
+      "status": "todo",
+      "requireWork": true,
+      "acceptance_tests": [
+        "npm run ssot:validate",
+        "npm run test:smoke"
+      ],
+      "notes": "Extract middleware wiring into a module; preserve order."
+    },
+    {
+      "id": "refactor-route-groups",
+      "type": "refactor",
+      "status": "todo",
+      "requireWork": true,
+      "acceptance_tests": [
+        "npm run ssot:validate",
+        "npm run test:smoke"
+      ],
+      "notes": "Extract health/public/command-center routes."
+    },
+    {
+      "id": "revenue-website-audit-landing",
+      "type": "revenue",
+      "status": "todo",
+      "requireWork": true,
+      "acceptance_tests": [
+        "npm run ssot:validate"
+      ],
+      "notes": "Create simple landing + outreach kit for website audit offer."
+    },
+    {
+      "id": "refactor-services-extraction",
+      "type": "refactor",
+      "status": "todo",
+      "requireWork": true,
+      "acceptance_tests": [
+        "npm run ssot:validate",
+        "npm run test:smoke"
+      ],
+      "notes": "Extract services (db/stripe/ws) behind stable interfaces."
+    },
+    {
+      "id": "revenue-tc-checklist-launch",
+      "type": "revenue",
+      "status": "todo",
+      "requireWork": true,
+      "acceptance_tests": [
+        "npm run ssot:validate",
+        "npm run test:smoke"
+      ],
+      "notes": "Ship Transaction Coordinator checklist + outreach kit."
+    }
+  ]
+}

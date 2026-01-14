@@ -63,6 +63,32 @@ export function registerPublicRoutes(app, {
     res.redirect("/activate");
   });
 
+  app.get("/overlay/website-audit", (req, res) => {
+    const filePath = path.join(
+      __dirname,
+      "public",
+      "overlay",
+      "website-audit.html"
+    );
+    if (fs.existsSync(filePath)) {
+      return res.sendFile(filePath);
+    }
+    res.status(404).send("Website audit overlay not found.");
+  });
+
+  app.get("/overlay/website-audit.html", (req, res) => {
+    const filePath = path.join(
+      __dirname,
+      "public",
+      "overlay",
+      "website-audit.html"
+    );
+    if (fs.existsSync(filePath)) {
+      return res.sendFile(filePath);
+    }
+    res.status(404).send("Website audit overlay not found.");
+  });
+
   // ==================== ROOT ROUTE - API COST SAVINGS LANDING PAGE ====================
   // Must be defined BEFORE static middleware to take precedence
   app.get("/", (req, res) => {

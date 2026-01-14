@@ -41,6 +41,7 @@ import initTCOAgentRoutes from "./routes/tco-agent-routes.js";
 import { loadRuntimeEnv } from "./config/runtime-env.js";
 import { applyMiddleware } from "./middleware/apply-middleware.js";
 import { registerPublicRoutes } from "./routes/public-routes.js";
+import { registerWebsiteAuditRoutes } from "./routes/website-audit-routes.js";
 import { createDbPool } from "./services/db.js";
 
 // Enhanced Council Features
@@ -14280,6 +14281,11 @@ async function requestJsonOnly(prompt, model = "chatgpt") {
     return tryParse(response);
   }
 }
+
+registerWebsiteAuditRoutes(app, {
+  requireKey,
+  callCouncilWithFailover,
+});
 
 // ==================== SELF-PROGRAMMING ENDPOINT ====================
 app.post("/api/v1/system/self-program", requireKey, async (req, res) => {
