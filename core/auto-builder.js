@@ -8,9 +8,66 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { routeTask } from './model-router.js';
 import { validateResponse, extractCode } from './validators.js';
+import { createDbPool } from '../services/db.js';
+import { loadRuntimeEnv } from '../config/runtime-env.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+let validatedDatabaseUrl;
+let DB_SSL_REJECT_UNAUTHORIZED;
+try {
+  const RUNTIME_ENV = loadRuntimeEnv();
+  validatedDatabaseUrl = RUNTIME_ENV.validatedDatabaseUrl;
+  DB_SSL_REJECT_UNAUTHORIZED = RUNTIME_ENV.DB_SSL_REJECT_UNAUTHORIZED;
+} catch (error) {
+  validatedDatabaseUrl = null;
+  DB_SSL_REJECT_UNAUTHORIZED = undefined;
+  console.warn(`[AUTO-BUILDER] Runtime env unavailable (receipts disabled): ${error.message}`);
+}
+let receiptPool;
+
+function getReceiptPool() {
+  if (!validatedDatabaseUrl) return null;
+  if (receiptPool) return receiptPool;
+  try {
+    receiptPool = createDbPool({
+      validatedDatabaseUrl,
+      DB_SSL_REJECT_UNAUTHORIZED,
+    });
+    return receiptPool;
+  } catch (error) {
+    console.warn(`[AUTO-BUILDER] Unable to create receipt pool: ${error.message}`);
+    receiptPool = null;
+    return null;
+  }
+}
+
+async function recordBuildArtifact(product, component) {
+  const pool = getReceiptPool();
+  if (!pool) return;
+
+  const payload = {
+    product_id: product.id,
+    product_name: product.name,
+    component_id: component.id,
+    component_name: component.name,
+    file: component.file,
+    type: component.type,
+    success: true,
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    await pool.query(
+      `INSERT INTO build_artifacts (opportunity_id, build_type, files, status)
+       VALUES ($1, $2, $3, $4)`,
+      [product.id, 'auto_builder', JSON.stringify(payload), 'generated']
+    );
+  } catch (error) {
+    console.warn(`[AUTO-BUILDER] Build receipt insert failed: ${error.message}`);
+  }
+}
 
 const PRODUCT_QUEUE = [
   {
@@ -135,6 +192,7 @@ export async function runBuildCycle() {
     if (result.success) {
       component.status = 'complete';
       console.log(`✅ ${component.name} COMPLETE`);
+      await recordBuildArtifact(product, component);
     } else {
       component.status = 'failed';
       component.lastError = result.error;
@@ -247,8 +305,27 @@ export function resetComponent(componentId) {
 
 export { PRODUCT_QUEUE };
 
+export class AutoBuilder {
+  constructor(pool, callCouncilMember, executionQueue, getCouncilConsensus) {
+    this.pool = pool;
+    this.callCouncilMember = callCouncilMember;
+    this.executionQueue = executionQueue;
+    this.getCouncilConsensus = getCouncilConsensus;
+  }
+
+  async getStatus() {
+    return getStatus();
+  }
+
+  async buildOpportunity(opportunity) {
+    console.log(`🔨 [AUTO-BUILDER] buildOpportunity invoked for ${opportunity?.name || opportunity?.id || 'unknown'}`);
+    return runBuildCycle();
+  }
+}
+
 // Default export for convenience
 export default {
+  AutoBuilder,
   runBuildCycle,
   getStatus,
   resetAllFailed,
