@@ -13,14 +13,18 @@ sandbox/
 .temp_*.js
 .worktrees/
 pr-ref-2.patch
+# Backup and rollback artifacts (prevent repo pollution)
+*.backup.*
+*.pre-rollback.*
+*_backup_*
+
+# Self-programming artifacts
+new_feature.js*
+generated_*.js
+
+# Legacy cleanup (can be removed after verification)
 file_9.js
 file_10.js
-= req.body.statusUpdate;
-a new endpoint in `/
-status in database
-status in database.backup.*
-task status in database or cache
-task status in database or cache.backup.*
 
 # FSAR reports (auto-generated, can be regenerated)
 audit/reports/fsar_proposal_*.json
