@@ -13,6 +13,9 @@ sandbox/
 .temp_*.js
 .worktrees/
 pr-ref-2.patch
+# Archive folder — old/backup files, never commit
+archive/
+
 # Backup and rollback artifacts (prevent repo pollution)
 *.backup.*
 *.pre-rollback.*
@@ -29,3 +32,7 @@ file_10.js
 # FSAR reports (auto-generated, can be regenerated)
 audit/reports/fsar_proposal_*.json
 audit/reports/fsar_proposal_*.md
+
+# Local quarantine + generated proof
+.quarantine/
+docs/THREAD_REALITY/outputs/**

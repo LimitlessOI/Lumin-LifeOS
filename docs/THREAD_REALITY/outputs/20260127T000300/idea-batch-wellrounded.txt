@@ -1,0 +1,35 @@
+curl -s -H "content-type: application/json" -H "x-command-key: MySecretKey2025LifeOS" -H "x-lifeos-key: MySecretKey2025LifeOS" -d '{"focus":"WellRoundedMomma site overhaul","targetImprovement":200,"count":25}' http://localhost:8080/api/v1/business-center/idea-batch
+
+Response: (truncated first 5 ideas)
+{"ok":true,"batchId":"batch_wellroundedmomma_site_overhaul_1769473513216","focus":"WellRoundedMomma site overhaul","targetImprovement":200,"totalIdeas":25,"ideas":[
+  {
+    "idea_title":"Conversion-First Homepage 1",
+    "revenue_potential":"15000.00",
+    "time_to_implement":"12.00",
+    "metrics":{"roiScore":15.625,"candidateRatio":1250}
+  },
+  {
+    "idea_title":"Authority Content Cluster 2",
+    "revenue_potential":"10000.00",
+    "time_to_implement":"18.00",
+    "metrics":{"roiScore":6.9444,"candidateRatio":555.56}
+  },
+  {
+    "idea_title":"Personalized Booking Flow 3",
+    "revenue_potential":"12000.00",
+    "time_to_implement":"10.00",
+    "metrics":{"roiScore":15,"candidateRatio":1200}
+  },
+  {
+    "idea_title":"Client Testimonial Highlight 4",
+    "revenue_potential":"8000.00",
+    "time_to_implement":"6.00",
+    "metrics":{"roiScore":16.6667,"candidateRatio":1333.33}
+  },
+  {
+    "idea_title":"Conversion-First Homepage 5",
+    "revenue_potential":"15000.00",
+    "time_to_implement":"12.00",
+    "metrics":{"roiScore":15.625,"candidateRatio":1250}
+  }
+]}

@@ -1,0 +1,5 @@
+curl -sI http://localhost:8080/previews/wellrounded/index.html
+
+Response headers:
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
