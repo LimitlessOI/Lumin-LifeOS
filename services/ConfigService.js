@@ -3,9 +3,9 @@
  * to validated environment variables, throwing on unknown keys.
  *
  * Dependencies: ../config/env-validator
- * Exports: ConfigService (class, default export via module.exports)
+ * Exports: ConfigService (class, default export)
  */
-const envVars = require('../config/env-validator');
+import envVars from '../config/env-validator.js';
 
 class ConfigService {
   static get(key) {
@@ -16,4 +16,4 @@ class ConfigService {
   }
 }
 
-module.exports = ConfigService;
+export default ConfigService;

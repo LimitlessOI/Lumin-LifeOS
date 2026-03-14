@@ -6,7 +6,7 @@
  * Dependencies: ../models/outreachLog, process.env.TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN
  * Exports: callOutreach(req, res), smsOutreach(req, res)
  */
-const OutreachLog = require('../models/outreachLog');
+import OutreachLog from '../models/outreachLog.js';
 const isSimulationMode = !process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN;
 
 // Generate a fake recording URL
@@ -28,4 +28,4 @@ const smsOutreach = async (req, res) => {
   return res.status(200).json({ message: 'SMS processed', outcome: logEntry.outcome });
 };
 
-module.exports = { callOutreach, smsOutreach };
+export { callOutreach, smsOutreach };

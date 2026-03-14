@@ -3,9 +3,9 @@
  * path contains the substring '/sensitive', flagging potential sensitive-data access.
  *
  * Dependencies: winston (npm), process.env.LOG_LEVEL
- * Exports: configSecurity (Express middleware function) via module.exports
+ * Exports: configSecurity (Express middleware function), default export
  */
-const winston = require('winston');
+import winston from 'winston';
 
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
@@ -26,4 +26,4 @@ function configSecurity(req, res, next) {
   next();
 }
 
-module.exports = configSecurity;
+export default configSecurity;

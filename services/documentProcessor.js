@@ -3,10 +3,10 @@
  * tokenizes/stems the result using the natural NLP library.
  *
  * Dependencies: pdf-parse, natural (NlpManager)
- * Exports: DocumentProcessor (class via module.exports)
+ * Exports: DocumentProcessor (class, default export)
  */
-const pdfParse = require('pdf-parse');
-const { NlpManager } = require('natural');
+import pdfParse from 'pdf-parse';
+import { NlpManager } from 'natural';
 
 class DocumentProcessor {
   constructor() {
@@ -31,4 +31,4 @@ class DocumentProcessor {
   }
 }
 
-module.exports = DocumentProcessor;
+export default DocumentProcessor;

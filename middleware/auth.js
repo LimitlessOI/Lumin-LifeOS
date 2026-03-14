@@ -3,10 +3,10 @@
  * passes all requests through; intended for future authentication logic.
  *
  * Dependencies: None
- * Exports: middleware function (req, res, next) via module.exports
+ * Exports: middleware function (req, res, next), default export
  */
 // Authentication middleware (if needed in the future)
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   // Authentication logic here
   next();
 };

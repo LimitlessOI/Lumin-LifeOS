@@ -3,10 +3,10 @@
  * data and exposes a predict() method for personalized recommendations.
  *
  * Dependencies: brain.js, @tensorflow/tfjs-node
- * Exports: AdaptiveLearningEngine instance (singleton via module.exports)
+ * Exports: AdaptiveLearningEngine instance (singleton, default export)
  */
-const brain = require('brain.js');
-const tf = require('@tensorflow/tfjs-node');
+import brain from 'brain.js';
+import tf from '@tensorflow/tfjs-node';
 
 class AdaptiveLearningEngine {
   constructor() {
@@ -25,4 +25,4 @@ class AdaptiveLearningEngine {
   // TensorFlow.js logic can be added here
 }
 
-module.exports = new AdaptiveLearningEngine();
+export default new AdaptiveLearningEngine();

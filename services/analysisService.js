@@ -5,14 +5,14 @@
  * Dependencies: openai (npm), ../config/config (openaiApiKey)
  * Exports: analyzeText(text), extractNextActions(analysis)
  */
-const { Configuration, OpenAIApi } = require('openai');
-const config = require('../config/config');
+import { Configuration, OpenAIApi } from 'openai';
+import config from '../config/config.js';
 
 const openai = new OpenAIApi(new Configuration({
   apiKey: config.openaiApiKey,
 }));
 
-exports.analyzeText = async (text) => {
+export const analyzeText = async (text) => {
   try {
     const response = await openai.createCompletion({
       model: 'gpt-4',
@@ -25,7 +25,7 @@ exports.analyzeText = async (text) => {
   }
 };
 
-exports.extractNextActions = (analysis) => {
+export const extractNextActions = (analysis) => {
   // Simple example of action extraction logic based on analysis
   return analysis.match(/action:\s*(.*)/i)?.[1]?.split(',') || [];
 };

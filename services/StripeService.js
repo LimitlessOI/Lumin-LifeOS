@@ -3,9 +3,10 @@
  * redirecting to success/cancel URLs from FRONTEND_URL env var.
  *
  * Dependencies: stripe (npm), process.env.STRIPE_SECRET_KEY, process.env.FRONTEND_URL
- * Exports: StripeService instance (singleton via module.exports)
+ * Exports: StripeService instance (singleton, default export)
  */
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 class StripeService {
   async createCheckoutSession(items) {
@@ -20,4 +21,4 @@ class StripeService {
   }
 }
 
-module.exports = new StripeService();
+export default new StripeService();

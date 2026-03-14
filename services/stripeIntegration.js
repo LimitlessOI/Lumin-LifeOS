@@ -5,7 +5,8 @@
  * Dependencies: stripe (npm)
  * Exports: createConservationCharge(amount, currency, description)
  */
-const stripe = require('stripe')('your-stripe-secret-key');
+import Stripe from 'stripe';
+const stripe = new Stripe('your-stripe-secret-key');
 
 async function createConservationCharge(amount, currency, description) {
     try {
@@ -22,4 +23,4 @@ async function createConservationCharge(amount, currency, description) {
     }
 }
 
-module.exports = { createConservationCharge };
+export { createConservationCharge };

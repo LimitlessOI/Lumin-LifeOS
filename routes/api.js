@@ -1,6 +1,7 @@
-const express = require('express');
-const ConfigService = require('../services/ConfigService');
-const router = express.Router();
+import express from 'express';
+import ConfigService from '../services/ConfigService.js';
+
+const router = new express.Router();
 
 router.get('/health', (req, res) => {
   res.status(200).send('OK');
@@ -19,4 +20,4 @@ router.get('/config', (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

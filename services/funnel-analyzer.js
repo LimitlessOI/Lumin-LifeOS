@@ -3,7 +3,7 @@
  * execution queue for async processing.
  *
  * Dependencies: executionQueue (injected via constructor)
- * Exports: FunnelAnalyzer (class via module.exports)
+ * Exports: FunnelAnalyzer (class, default export)
  */
 class FunnelAnalyzer {
   constructor(executionQueue) {
@@ -18,4 +18,4 @@ class FunnelAnalyzer {
   }
 }
 
-module.exports = FunnelAnalyzer;
+export default FunnelAnalyzer;

@@ -1,6 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const { callOutreach, smsOutreach } = require('../middleware/simulationMiddleware');
+import express from 'express';
+import { callOutreach, smsOutreach } from '../middleware/simulationMiddleware.js';
+
+const router = new express.Router();
 
 // POST /api/v1/outreach/call
 router.post('/call', callOutreach);
@@ -8,4 +9,4 @@ router.post('/call', callOutreach);
 // POST /api/v1/outreach/sms
 router.post('/sms', smsOutreach);
 
-module.exports = router;
+export default router;
