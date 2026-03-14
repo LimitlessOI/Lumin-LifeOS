@@ -48,35 +48,82 @@ Everything else is infrastructure that supports these three or future-phase prod
 ---
 
 ## REFACTOR STATUS
-Server.js reduced from ~12,000 → **6,490 lines**. Target: <3,000 lines (pure routing only).
+Server.js reduced from ~15,000 → **2,636 lines** (82% reduction). Target: <2,000 lines.
+**Last verified:** 2026-03-13 | `node --check server.js` → PASS
 
-### Extracted (own route files) — ALL 15 PROJECTS ✅
-- ✅ AI Council: `services/council-service.js`
-- ✅ Site Builder: `routes/site-builder-routes.js`
-- ✅ Website Audit: `routes/website-audit-routes.js`
-- ✅ Enhanced Council: `routes/enhanced-council-routes.js`
-- ✅ Outreach: `routes/outreach.js`
-- ✅ Memory: `routes/memory-routes.js`
-- ✅ Stripe: `routes/stripe-routes.js`
-- ✅ Financial & Revenue: `routes/financial-routes.js`
-- ✅ Business Tools: `routes/business-routes.js`
-- ✅ Game Publisher: `routes/game-routes.js`
-- ✅ Video Pipeline: `routes/video-routes.js`
+### Route Modules (36 files in `routes/`)
+- ✅ AI Council enhanced: `routes/enhanced-council-routes.js`
 - ✅ Agent Recruitment: `routes/agent-recruitment-routes.js`
-- ✅ BoldTrail CRM: `routes/boldtrail-routes.js`
 - ✅ API Cost Savings: `routes/api-cost-savings-routes.js`
-- ✅ Web Intelligence: `routes/web-intelligence-routes.js`
 - ✅ Auto-Builder: `routes/auto-builder-routes.js`
-- ✅ Life Coaching: `routes/life-coaching-routes.js`
-- ✅ Two-Tier Council: `routes/two-tier-council-routes.js`
-- ✅ Outreach & CRM: `routes/outreach-crm-routes.js`
-- ✅ Billing & White-Label: `routes/billing-routes.js`
-- ✅ Knowledge Base: `routes/knowledge-routes.js`
+- ✅ Billing & White-Label & Trials: `routes/billing-routes.js`
+- ✅ BoldTrail Real Estate CRM: `routes/boldtrail-routes.js`
+- ✅ Business Center & Tools: `routes/business-routes.js`
+- ✅ Command Center & Overlay: `routes/command-center-routes.js`
 - ✅ Conversation History: `routes/conversation-routes.js`
-- ✅ Command Center: `routes/command-center-routes.js`
+- ✅ Financial & Revenue: `routes/financial-routes.js`
+- ✅ Game Publisher: `routes/game-routes.js`
+- ✅ Knowledge Base: `routes/knowledge-routes.js`
+- ✅ Life Coaching / Personal OS: `routes/life-coaching-routes.js`
+- ✅ Memory System: `routes/memory-routes.js`
+- ✅ Outreach & CRM Sequences: `routes/outreach-crm-routes.js`
+- ✅ Outreach (legacy): `routes/outreach.js`
+- ✅ Site Builder + Prospect Pipeline: `routes/site-builder-routes.js`
+- ✅ Stripe Payments: `routes/stripe-routes.js`
+- ✅ Two-Tier AI Council: `routes/two-tier-council-routes.js`
+- ✅ Video Pipeline: `routes/video-routes.js`
+- ✅ Web Intelligence & Scraper: `routes/web-intelligence-routes.js`
+- ✅ Website Audit: `routes/website-audit-routes.js`
 
-### Next Phase: Revenue Activation
-- 🔲 Register POS affiliate links (Jane App, Mindbody, Square) in `services/site-builder.js`
-- 🔲 Configure email sender (Postmark or SendGrid) for prospect cold emails
-- 🔲 End-to-end test: `POST /api/v1/sites/build` with real wellness business URL
-- 🔲 Continue reducing server.js → <3,000 lines (inline utility code still present)
+### Service Modules (35 files in `services/`)
+- ✅ AI Guard: `services/ai-guard.js`
+- ✅ AI Model Selector + Ollama bridge: `services/ai-model-selector.js`
+- ✅ AI Performance Tracker: `services/ai-performance-tracker.js`
+- ✅ Autonomy Scheduler: `services/autonomy-scheduler.js`
+- ✅ Consensus Service: `services/consensus-service.js`
+- ✅ Council Service: `services/council-service.js`
+- ✅ Deployment Service: `services/deployment-service.js`
+- ✅ Env Validator: `services/env-validator.js`
+- ✅ Execution Queue: `services/execution-queue.js`
+- ✅ Knowledge Context: `services/knowledge-context.js`
+- ✅ Logger (Pino): `services/logger.js`
+- ✅ Preview Expiry Cron: `services/preview-expiry-cron.js`
+- ✅ Prospect Pipeline: `services/prospect-pipeline.js`
+- ✅ Response Cache: `services/response-cache.js`
+- ✅ Search Service: `services/searchService.js`
+- ✅ Self-Improvement Loop: `services/self-improvement-loop.js`
+- ✅ Self-Programming: `services/self-programming.js`
+- ✅ Site Builder: `services/site-builder.js`
+- ✅ Snapshot Service: `services/snapshot-service.js`
+- ✅ Twilio (SMS/calls): `services/twilio-service.js`
+- ✅ Video Pipeline: `services/video-pipeline.js`
+- ✅ Web Search Integration: `services/web-search-integration.js`
+- ✅ WebSocket Handler: `services/websocket-handler.js`
+
+### Core Modules (new files in `core/`)
+- ✅ Code Escalation: `core/code-escalation.js`
+- ✅ Financial Dashboard: `core/financial-dashboard.js`
+- ✅ Financial Revenue: `core/financial-revenue.js`
+- ✅ Income Drone System: `core/income-drone-system.js`
+- ✅ Self-Modification Engine: `core/self-modification-engine.js`
+- ✅ Two-Tier System Init: `core/two-tier-system-init.js`
+
+### DB Migrations
+- ✅ `db/migrations/20260313_core_schema.sql` — main platform schema
+- ✅ `db/migrations/20260313_site_builder_prospect_pipeline.sql` — prospect_sites, email_suppressions, outreach_log
+
+### Production Readiness Checklist
+- ✅ `node --check` passes on all 36 route + 35 service + 6 core files
+- ✅ 5 critical runtime bugs fixed (undefined variables, init order)
+- ✅ Env var validation at startup (`services/env-validator.js`)
+- ✅ Rate limiting on site builder endpoints
+- ✅ Preview site 30-day expiry cron (`services/preview-expiry-cron.js`)
+- ✅ GitHub Actions smoke test (`.github/workflows/smoke-test.yml`)
+- ✅ NotificationService (Postmark) wired for cold email with suppression
+- ✅ POS affiliate URLs driven by env vars
+- ✅ DB migrations confirmed live in Neon production
+- 🔲 Replace remaining `console.*` with `logger.*` in server.js
+- 🔲 Extract `initializeTwoTierSystem()` to `core/two-tier-system-init.js`
+- 🔲 Set Railway env vars to go live (see Amendment 05)
+- 🔲 Register POS affiliate programs + set AFFILIATE_*_URL in Railway
+- 🔲 End-to-end test `POST /api/v1/sites/build` with real business URL

@@ -1,0 +1,51 @@
+name: Smoke Test
+
+on:
+  push:
+    branches: [main, pr-cleanup-1]
+  pull_request:
+    branches: [main]
+
+jobs:
+  syntax-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Syntax check server.js
+        run: node --check server.js
+
+      - name: Syntax check all route files
+        run: |
+          for f in routes/*.js; do
+            echo "Checking $f..."
+            node --check "$f"
+          done
+
+      - name: Syntax check all service files
+        run: |
+          for f in services/*.js; do
+            echo "Checking $f..."
+            node --check "$f"
+          done
+
+      - name: Syntax check all core files
+        run: |
+          for f in core/*.js; do
+            echo "Checking $f..."
+            node --check "$f"
+          done
+
+      - name: Run existing tests
+        run: npm test --if-present
+        env:
+          NODE_ENV: test

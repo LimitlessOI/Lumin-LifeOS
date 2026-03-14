@@ -78,6 +78,8 @@ import GamePublisher from "./services/game-publisher.js";
 import { createSiteBuilderRoutes } from "./routes/site-builder-routes.js";
 import { initDb } from "./db/index.js";
 import { getAllFlags } from "./lib/flags.js";
+import { validateEnv } from './services/env-validator.js';
+import { runPreviewExpiry } from './services/preview-expiry-cron.js';
 
 import { createFinancialRoutes } from './routes/financial-routes.js';
 import { createBusinessRoutes } from './routes/business-routes.js';
@@ -155,6 +157,7 @@ function isGovernorAutonomyPaused() {
 
 // Enhanced Council Features
 import { registerEnhancedCouncilRoutes } from "./routes/enhanced-council-routes.js";
+import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig, CrmSequenceRunner;
@@ -207,19 +210,19 @@ async function ensureLatestRunFile() {
   try {
     await fsPromises.writeFile(latestRunRoot, JSON.stringify(template, null, 2));
   } catch (error) {
-    console.warn("[LATEST-RUN] unable to create placeholder:", error.message);
+    logger.warn("[LATEST-RUN] unable to create placeholder:", { error: error.message });
   }
 }
 
 ensureLatestRunFile().catch((error) => {
-  console.warn("[LATEST-RUN] initialization error:", error.message);
+  logger.warn("[LATEST-RUN] initialization error:", { error: error.message });
 });
 
 const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 wss.on("error", (error) => {
-  console.error("❌ [WS] WebSocket server error:", error.message);
+  logger.error("❌ [WS] WebSocket server error:", { error: error.message });
 });
 
 const moduleRouter = new ModuleRouter();
@@ -309,23 +312,23 @@ async function getStripeClient() {
       Stripe = stripeModule.default || stripeModule.Stripe || stripeModule;
     } catch (importError) {
       // Package not installed - this is OK, Stripe is optional
-      console.warn('⚠️ Stripe package not installed - Stripe features disabled');
-      console.warn('   To enable: npm install stripe');
+      logger.warn('⚠️ Stripe package not installed - Stripe features disabled');
+      logger.warn('   To enable: npm install stripe');
       return null;
     }
-    
+
     if (!Stripe) {
       return null;
     }
-    
+
     stripeClient = new Stripe(STRIPE_SECRET_KEY, {
       apiVersion: "2024-06-20",
     });
-    console.log("✅ Stripe client initialized");
+    logger.info("✅ Stripe client initialized");
     return stripeClient;
   } catch (err) {
     // Any other error - log but don't crash
-    console.warn("⚠️ Stripe initialization error (non-fatal):", err.message);
+    logger.warn("⚠️ Stripe initialization error (non-fatal):", { error: err.message });
     return null;
   }
 }
@@ -412,25 +415,25 @@ async function ensureTcoAgentTables() {
     return;
   } catch (error) {
     if (error?.code !== "42P01") {
-      console.warn("⚠️ TCO tables check failed:", error.message);
+      logger.warn("⚠️ TCO tables check failed:", { error: error.message });
       return;
     }
   }
 
-  console.log("ℹ️ TCO tables missing; creating from migrations/create_tco_agent_tables.sql");
+  logger.info("ℹ️ TCO tables missing; creating from migrations/create_tco_agent_tables.sql");
   try {
     const sqlPath = path.join(__dirname, "database", "migrations", "create_tco_agent_tables.sql");
     const sql = await readFile(sqlPath, "utf-8");
     await pool.query(sql);
     tcoTablesEnsured = true;
-    console.log("✅ Created TCO agent tables");
+    logger.info("✅ Created TCO agent tables");
   } catch (error) {
-    console.error("❌ Failed to create TCO agent tables:", error.message);
+    logger.error("❌ Failed to create TCO agent tables:", { error: error.message });
   }
 }
 
 ensureTcoAgentTables().catch((error) => {
-  console.warn("⚠️ ensureTcoAgentTables failed:", error.message);
+  logger.warn("⚠️ ensureTcoAgentTables failed:", { error: error.message });
 });
 
 // ==================== GLOBAL STATE ====================
@@ -501,11 +504,11 @@ const systemMetrics = {
 function scheduleAutonomyLoop(name, intervalMs, task, initialDelayMs = intervalMs) {
   try {
     if (isGovernorAutonomyPaused()) {
-      console.log(`⏸️ [AUTONOMY] ${name} disabled (PAUSE_AUTONOMY=1)`);
+      logger.info(`⏸️ [AUTONOMY] ${name} disabled (PAUSE_AUTONOMY=1)`);
       return;
     }
   } catch (govErr) {
-    console.warn(`⚠️ [AUTONOMY] Governor check failed for ${name}:`, govErr.message);
+    logger.warn(`⚠️ [AUTONOMY] Governor check failed for ${name}:`, { error: govErr.message });
   }
 
   const run = async () => {
@@ -523,7 +526,7 @@ function scheduleAutonomyLoop(name, intervalMs, task, initialDelayMs = intervalM
     try {
       await task();
     } catch (error) {
-      console.warn(`⚠️ [${name}]`, error.message);
+      logger.warn(`⚠️ [${name}]`, { error: error.message });
     } finally {
       lease.release();
       setTimeout(run, intervalMs);
@@ -548,7 +551,7 @@ function scheduleAutonomyOnce(name, delayMs, task) {
     try {
       await task();
     } catch (error) {
-      console.warn(`⚠️ [${name}]`, error.message);
+      logger.warn(`⚠️ [${name}]`, { error: error.message });
     } finally {
       lease.release();
     }
@@ -872,7 +875,7 @@ async function guessUserDecision(context) {
       basedOn: pastDecisions.rows.length + " past decisions",
     };
   } catch (error) {
-    console.error("User preference guess error:", error.message);
+    logger.error("User preference guess error:", { error: error.message });
     return { prediction: "uncertain", confidence: 0 };
   }
 }
@@ -970,7 +973,7 @@ async function loadROIFromDatabase() {
       roiTracker.daily_ai_cost = parseFloat(result.rows[0].total);
     }
   } catch (error) {
-    console.error("ROI load error:", error.message);
+    logger.error("ROI load error:", { error: error.message });
   }
 }
 
@@ -1034,7 +1037,7 @@ async function storeConversationMemory(
     );
     return { memId };
   } catch (error) {
-    console.error("❌ Memory store error:", error.message);
+    logger.error("❌ Memory store error:", { error: error.message });
     return null;
   }
 }
@@ -1069,11 +1072,11 @@ async function trackLoss(
       [severity, whatWasLost, whyLost, JSON.stringify(context), prevention]
     );
     if (severity === "critical") {
-      console.error(`🚨 [${severity.toUpperCase()}] ${whatWasLost}`);
+      logger.error(`🚨 [${severity.toUpperCase()}] ${whatWasLost}`);
       await createSystemSnapshot(`Critical loss: ${whatWasLost}`);
     }
   } catch (error) {
-    console.error("Loss tracking error:", error.message);
+    logger.error("Loss tracking error:", { error: error.message });
   }
 }
 
@@ -1163,687 +1166,134 @@ let implementNextQueuedIdea = async () => {
   return { ok: false, error: "Execution queue not yet initialized" };
 };
 
-async function initializeTwoTierSystem() {
-  try {
-    // Dynamic import of modules
-    const tier0Module = await import("./core/tier0-council.js");
-    const tier1Module = await import("./core/tier1-council.js");
-    const routerModule = await import("./core/model-router.js");
-    const outreachModule = await import("./core/outreach-automation.js");
-    const crmModule = await import("./core/crm-sequence-runner.js");
-    const notificationModule = await import("./core/notification-service.js");
-    const whiteLabelModule = await import("./core/white-label.js");
-    const knowledgeModule = await import("./core/knowledge-base.js");
-    const cleanupModule = await import("./core/file-cleanup-analyzer.js");
-    const openSourceCouncilModule = await import("./core/open-source-council.js");
-    
-    Tier0Council = tier0Module.Tier0Council;
-    Tier1Council = tier1Module.Tier1Council;
-    ModelRouter = routerModule.ModelRouter;
-    OutreachAutomation = outreachModule.OutreachAutomation;
-    CrmSequenceRunner = crmModule.CrmSequenceRunner || crmModule.default;
-    WhiteLabelConfig = whiteLabelModule.WhiteLabelConfig;
-    KnowledgeBase = knowledgeModule.KnowledgeBase;
-    FileCleanupAnalyzer = cleanupModule.FileCleanupAnalyzer;
-    OpenSourceCouncil = openSourceCouncilModule.OpenSourceCouncil;
+async function runInitializeTwoTierSystem() {
+  const result = await initializeTwoTierSystem({
+    pool,
+    app,
+    selfProgrammingDepsRef,
+    callCouncilMember,
+    callCouncilWithFailover,
+    broadcastToAll,
+    detectBlindSpots,
+    getCouncilConsensus,
+    getTwilioClient,
+    providerCooldowns,
+    OLLAMA_ENDPOINT,
+    PORT,
+    RAILWAY_PUBLIC_DOMAIN,
+    requireKey,
+    requireKeyFn: requireKey,
+    scheduleAutonomyOnce,
+    healthModuleInstance,
+    autoBuilder,
+    COUNCIL_MEMBERS,
+    __dirname,
+    execAsync,
+    createSystemSnapshot,
+    rollbackToSnapshot,
+    sandboxTest,
+    GITHUB_TOKEN,
+    commitToGitHub,
+    dayjs,
+    updateROI,
+    getStripeClient,
+    roiTracker,
+    financialDashboard,
+    incomeDroneSystem,
+    recordRevenueEvent,
+    syncStripeRevenue,
+    aiSafetyGate,
+    searchLimiter,
+    searchService,
+    checkHumanAttentionBudget,
+    GamePublisher,
+    VideoPipeline,
+    makePhoneCall,
+    outreachLimiter,
+    aiPerformanceScores,
+    compressionMetrics,
+    getDailySpend,
+    MAX_DAILY_SPEND,
+    systemMetrics,
+    systemSnapshots,
+    ideaEngine,
+    createProposal,
+    conductEnhancedConsensus,
+    sendSMS,
+    path,
+    fs,
+    express,
+    callRecorder,
+    salesTechniqueAnalyzer,
+    goalTracker,
+    activityTracker,
+    coachingProgression,
+    calendarService,
+    perfectDaySystem,
+    goalCommitmentSystem,
+    callSimulationSystem,
+    relationshipMediation,
+    meaningfulMoments,
+    DISABLE_INCOME_DRONES,
+  });
 
-    tier0Council = new Tier0Council(pool);
-    tier1Council = new Tier1Council(pool, callCouncilMember);
-    modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
-    openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
-
-    // ==================== SELF-PROGRAMMING SERVICE INITIALIZATION ====================
-    {
-      const spService = createSelfProgrammingService(() => selfProgrammingDepsRef.current);
-      handleSelfProgramming = spService.handleSelfProgramming;
-      selfProgrammingDepsRef.current = {
-        pool,
-        path,
-        fs,
-        fsPromises,
-        __dirname,
-        execAsync,
-        createSystemSnapshot,
-        rollbackToSnapshot,
-        sandboxTest,
-        callCouncilWithFailover,
-        detectBlindSpots,
-        getCouncilConsensus: (...args) => getCouncilConsensus(...args),
-        GITHUB_TOKEN,
-        commitToGitHub,
-      };
-      console.log("✅ Self-Programming Service initialized");
-    }
-
-    // ==================== EXECUTION QUEUE INITIALIZATION ====================
-    executionQueue = createExecutionQueue({
-      pool,
-      modelRouter,
-      ideaToImplementationPipeline: null, // set later when pipeline loads
-      handleSelfProgramming,
-      detectBlindSpots,
-      callCouncilWithFailover,
-      broadcastToAll,
-    });
-    implementNextQueuedIdea = async () => {
-      if (!executionQueue) return { ok: false, error: "Queue not ready" };
-      const status = executionQueue.getStatus();
-      return { ok: true, queued: status.queued, active: status.active };
-    };
-    console.log("✅ Execution Queue initialized");
-
-    // Initialize TCO (TotalCostOptimizer) system
-    tcoTracker = new TCOTracker(pool);
-    tcoRoutes = initTCORoutes({
-      pool,
-      tcoTracker,
-      modelRouter,
-      callCouncilMember,
-    });
-
-    // Initialize TCO AI Sales Agent (TCO-F01)
-    tcoSalesAgent = new TCOSalesAgent(pool, callCouncilMember);
-    tcoAgentRoutes = initTCOAgentRoutes({
-      pool,
-      tcoSalesAgent,
-    });
-
-    console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
-    console.log("║ 🤖 [TCO SALES AGENT] INITIALIZED                                                  ║");
-    console.log("║    Status: Autonomous agent ready to detect cost complaints                      ║");
-    console.log("║    Mode: TEST MODE (auto_reply=false, requires human approval)                   ║");
-    console.log("║    Webhooks: /api/tco-agent/webhook/*                                            ║");
-    console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
-
-    // Initialize Enhanced Council Features
-    console.log("🎯 [STARTUP] Registering Enhanced Council routes...");
-    registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requireKey);
-    console.log("✅ [STARTUP] Enhanced Council routes registered");
-
-    // Site Builder + Prospect Pipeline
-    const siteBaseUrl = RAILWAY_PUBLIC_DOMAIN
-      ? `https://${RAILWAY_PUBLIC_DOMAIN}`
-      : `http://localhost:${PORT}`;
-    createSiteBuilderRoutes(app, {
-      pool,
-      requireKey,
-      callCouncilMember,
-      baseUrl: siteBaseUrl,
-      outreachAutomation: typeof outreachAutomation !== 'undefined' ? outreachAutomation : null,
-      notificationService,
-    });
-    console.log("✅ [STARTUP] Site Builder routes registered");
-    console.log("   - Dynamic Council Expansion (3→5 agents)");
-    console.log("   - Enhanced Consensus Protocol (5-phase with steel-manning)");
-    console.log("   - Decision Filters (7 wisdom lenses)");
-    console.log("   - FSAR Severity Gate (Likelihood × Damage × Reversibility)");
-
-    const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
-    console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
-    console.log("║ ✅ [OPEN SOURCE COUNCIL] INITIALIZED                                              ║");
-    console.log("║    Status: Ready to route tasks to local Ollama models                           ║");
-    console.log("║    Activation: Cost shutdown OR explicit opt-in (useOpenSourceCouncil: true)    ║");
-    console.log(`║    Models: Connected to Ollama at ${ollamaEndpoint.padEnd(47)}║`);
-    console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
-
-    // Initialize NotificationService (Email/SMS abstractions)
-    const NotificationService = notificationModule.NotificationService || notificationModule.default;
-    notificationService = new NotificationService({ pool });
-
-    outreachAutomation = new OutreachAutomation(
-      pool,
-      modelRouter,
-      getTwilioClient,
-      callCouncilMember,
-      notificationService
-    );
-
-    // CRM sequence runner (uses outreachAutomation + governance)
-    crmSequenceRunner = new CrmSequenceRunner({ pool, outreachAutomation });
-
-    whiteLabelConfig = new WhiteLabelConfig(pool);
-    knowledgeBase = new KnowledgeBase(pool);
-    fileCleanupAnalyzer = new FileCleanupAnalyzer();
-    
-    // Initialize cost re-examination
-    const costModule = await import("./core/cost-re-examination.js");
-    const CostReExamination = costModule.CostReExamination;
-    costReExamination = new CostReExamination(pool, compressionMetrics, roiTracker);
-    
-    // Initialize log monitoring
-    try {
-      const logModule = await import("./core/log-monitor.js");
-      const LogMonitor = logModule.LogMonitor;
-      logMonitor = new LogMonitor(pool, callCouncilMember);
-      if (selfProgrammingDepsRef) selfProgrammingDepsRef.current.logMonitor = logMonitor;
-      console.log("✅ Log Monitoring System initialized");
-      
-      // Initialize post-upgrade checker
-      try {
-        const upgradeModule = await import("./core/post-upgrade-checker.js");
-        const PostUpgradeChecker = upgradeModule.PostUpgradeChecker;
-        postUpgradeChecker = new PostUpgradeChecker(logMonitor, callCouncilMember, pool);
-        if (selfProgrammingDepsRef) selfProgrammingDepsRef.current.postUpgradeChecker = postUpgradeChecker;
-        console.log("✅ Post-Upgrade Checker initialized");
-        
-        // Set up global hook for Cursor/development
-        global.postUpgradeCheck = async () => {
-          return await postUpgradeChecker.checkAfterUpgrade();
-        };
-        
-      // Initialize comprehensive idea tracker
-      try {
-        const trackerModule = await import("./core/comprehensive-idea-tracker.js");
-        comprehensiveIdeaTracker = new trackerModule.ComprehensiveIdeaTracker(pool);
-        console.log("✅ Comprehensive Idea Tracker initialized");
-      } catch (error) {
-        console.warn("⚠️ Comprehensive Idea Tracker not available:", error.message);
-      }
-      
-      // Initialize Vapi integration
-      try {
-        const vapiModule = await import("./core/vapi-integration.js");
-        vapiIntegration = new vapiModule.VapiIntegration(pool, callCouncilMember);
-        await vapiIntegration.initialize();
-        console.log("✅ Vapi Integration initialized");
-      } catch (error) {
-        console.warn("⚠️ Vapi Integration not available:", error.message);
-      }
-      
-      // Replace basic drone system with enhanced version
-      try {
-        const enhancedDroneModule = await import("./core/enhanced-income-drone.js");
-        const EnhancedIncomeDrone = enhancedDroneModule.EnhancedIncomeDrone;
-        incomeDroneSystem = new EnhancedIncomeDrone(pool, callCouncilMember, modelRouter);
-        console.log("✅ Enhanced Income Drone System initialized");
-        
-        // Deploy income drones (if not disabled)
-        if (!DISABLE_INCOME_DRONES) {
-          console.log('🚀 [INCOME] Deploying income drones immediately...');
-          try {
-            const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
-            const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
-            const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
-            const productDrone = await incomeDroneSystem.deployDrone("product", 200);
-            const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
-            console.log(`✅ [INCOME] Deployed 5 income drones - they are NOW WORKING!`);
-          } catch (deployError) {
-            console.error('❌ [INCOME] Error deploying drones:', deployError.message);
-          }
-        } else {
-          console.log('ℹ️ [INCOME] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)');
-        }
-
-        // Initialize Opportunity Executor (actually implements opportunities to generate REAL revenue)
-        let opportunityExecutor = null;
-        try {
-          const executorModule = await import("./core/opportunity-executor.js");
-          opportunityExecutor = new executorModule.OpportunityExecutor(pool, callCouncilMember, incomeDroneSystem);
-          await opportunityExecutor.start();
-          console.log("✅ Opportunity Executor initialized - will actually implement opportunities to generate REAL revenue");
-
-          // Connect executor to drone system so drones can use it
-          if (incomeDroneSystem && incomeDroneSystem.setOpportunityExecutor) {
-            incomeDroneSystem.setOpportunityExecutor(opportunityExecutor);
-            console.log("✅ Connected Opportunity Executor to Income Drone System - drones will implement opportunities when any exist");
-          }
-        } catch (error) {
-          console.warn("⚠️ Opportunity Executor not available:", error.message);
-        }
-
-        // Initialize Auto-Builder (builds opportunities into working products)
-        // Auto-builder is now imported at top of file
-        console.log("✅ Auto-Builder available (Anti-Hallucination Edition)");
-        console.log("📊 Auto-Builder: Focused on single product at a time");
-        console.log("🚫 Auto-Builder: phi3:mini is BANNED");
-        console.log("🔍 Auto-Builder: All outputs validated before saving");
-      } catch (error) {
-        console.warn("⚠️ Enhanced Drone System not available, using basic:", error.message);
-      }
-      
-      // Initialize Business Center
-      try {
-        const businessCenterModule = await import("./core/business-center.js");
-        businessCenter = new businessCenterModule.BusinessCenter(pool, callCouncilMember, modelRouter);
-        await businessCenter.initialize();
-        console.log("✅ Business Center initialized");
-      } catch (error) {
-        console.warn("⚠️ Business Center not available:", error.message);
-      }
-      
-      // Initialize Game Generator
-      try {
-        const gameGeneratorModule = await import("./core/game-generator.js");
-        gameGenerator = new gameGeneratorModule.GameGenerator(pool, callCouncilMember, modelRouter);
-        console.log("✅ Game Generator initialized");
-      } catch (error) {
-        console.warn("⚠️ Game Generator not available:", error.message);
-      }
-      
-      // Initialize Business Duplication
-      try {
-        const businessDupModule = await import("./core/business-duplication.js");
-        businessDuplication = new businessDupModule.BusinessDuplication(pool, callCouncilMember, modelRouter);
-        console.log("✅ Business Duplication System initialized");
-      } catch (error) {
-        console.warn("⚠️ Business Duplication not available:", error.message);
-      }
-      
-      // Initialize Code Services
-      try {
-        const codeServicesModule = await import("./core/code-services.js");
-        codeServices = new codeServicesModule.CodeServices(pool, callCouncilMember, modelRouter);
-        console.log("✅ Code Services initialized");
-      } catch (error) {
-        console.warn("⚠️ Code Services not available:", error.message);
-      }
-      
-      // Initialize Make.com Generator
-      try {
-        const makeComModule = await import("./core/makecom-generator.js");
-        makeComGenerator = new makeComModule.MakeComGenerator(pool, callCouncilMember, modelRouter);
-        console.log("✅ Make.com Generator initialized");
-      } catch (error) {
-        console.warn("⚠️ Make.com Generator not available:", error.message);
-      }
-      
-      // Initialize Legal Checker
-      try {
-        const legalModule = await import("./core/legal-checker.js");
-        legalChecker = new legalModule.LegalChecker(pool);
-        console.log("✅ Legal Checker initialized");
-      } catch (error) {
-        console.warn("⚠️ Legal Checker not available:", error.message);
-      }
-      
-      // Initialize Self-Funding System
-      try {
-        const selfFundingModule = await import("./core/self-funding-system.js");
-        selfFundingSystem = new selfFundingModule.SelfFundingSystem(pool, callCouncilMember, modelRouter);
-        await selfFundingSystem.initialize();
-        console.log("✅ Self-Funding System initialized");
-      } catch (error) {
-        console.warn("⚠️ Self-Funding System not available:", error.message);
-      }
-      
-      // Initialize Marketing Research System
-      try {
-        const marketingResearchModule = await import("./core/marketing-research-system.js");
-        marketingResearch = new marketingResearchModule.MarketingResearchSystem(pool, callCouncilMember, modelRouter);
-        await marketingResearch.initialize();
-        console.log("✅ Marketing Research System initialized");
-      } catch (error) {
-        console.warn("⚠️ Marketing Research System not available:", error.message);
-      }
-      
-      // Initialize Marketing Agency
-      try {
-        const marketingAgencyModule = await import("./core/marketing-agency.js");
-        marketingAgency = new marketingAgencyModule.MarketingAgency(pool, callCouncilMember, modelRouter, marketingResearch);
-        await marketingAgency.initialize();
-        console.log("✅ Marketing Agency initialized");
-      } catch (error) {
-        console.warn("⚠️ Marketing Agency not available:", error.message);
-      }
-      
-      // Initialize Web Scraper
-      try {
-        const webScraperModule = await import("./core/web-scraper.js");
-        webScraper = new webScraperModule.WebScraper(pool, callCouncilMember, modelRouter);
-        console.log("✅ Web Scraper initialized");
-      } catch (error) {
-        console.warn("⚠️ Web Scraper not available:", error.message);
-      }
-      
-      // Initialize Enhanced Conversation Scraper (will auto-install Puppeteer if needed)
-      try {
-        const scraperModule = await import("./core/enhanced-conversation-scraper.js");
-        enhancedConversationScraper = new scraperModule.EnhancedConversationScraper(
-          pool,
-          knowledgeBase,
-          callCouncilMember
-        );
-        // Initialize Puppeteer (will auto-install if needed)
-        await enhancedConversationScraper.initPuppeteer();
-        console.log("✅ Enhanced Conversation Scraper initialized");
-      } catch (error) {
-        console.warn("⚠️ Enhanced Conversation Scraper not available:", error.message);
-      }
-      
-      // Initialize API Cost Savings Revenue System (PRIORITY 1)
-      try {
-        const costSavingsModule = await import("./core/api-cost-savings-revenue.js");
-        apiCostSavingsRevenue = new costSavingsModule.APICostSavingsRevenue(
-          pool,
-          callCouncilMember,
-          modelRouter
-        );
-        console.log("✅ API Cost Savings Revenue System initialized (PRIORITY 1)");
-      } catch (error) {
-        console.warn("⚠️ API Cost Savings Revenue System not available:", error.message);
-      }
-      
-      // Initialize System Health Checker
-      try {
-        const healthModule = await import("./core/system-health-checker.js");
-        const allSystems = {
-          tier0Council,
-          tier1Council,
-          modelRouter,
-          knowledgeBase,
-          costReExamination,
-          logMonitor,
-          autoQueueManager,
-          comprehensiveIdeaTracker,
-          enhancedIncomeDrone: incomeDroneSystem,
-          businessCenter,
-          gameGenerator,
-          businessDuplication,
-          codeServices,
-          makeComGenerator,
-          legalChecker,
-          selfFundingSystem,
-          marketingResearch,
-          marketingAgency,
-          webScraper,
-          enhancedConversationScraper,
-          apiCostSavingsRevenue,
-        };
-        // Add selfBuilder to allSystems if it exists
-        if (selfBuilder) {
-          allSystems.selfBuilder = selfBuilder;
-        }
-        // Add autoBuilder to allSystems if it exists
-        if (autoBuilder) {
-          allSystems.autoBuilder = autoBuilder;
-        }
-        systemHealthChecker = new healthModule.SystemHealthChecker(pool, allSystems);
-        console.log("✅ System Health Checker initialized");
-        healthModuleInstance.setHealthChecker(systemHealthChecker);
-      } catch (error) {
-        console.warn("⚠️ System Health Checker not available:", error.message);
-      }
-
-      // Initialize Self-Builder (system can build itself)
-      try {
-        const builderModule = await import("./core/self-builder.js");
-        selfBuilder = new builderModule.SelfBuilder(pool, callCouncilMember);
-        if (selfProgrammingDepsRef) selfProgrammingDepsRef.current.selfBuilder = selfBuilder;
-        console.log("✅ Self-Builder initialized - system can now build itself");
-      } catch (error) {
-        console.warn("⚠️ Self-Builder not available:", error.message);
-      }
-
-      // Initialize Idea-to-Implementation Pipeline (complete flow from idea to completion)
-      try {
-        const pipelineModule = await import("./core/idea-to-implementation-pipeline.js");
-        // Will initialize after taskTracker is available
-        console.log("✅ Idea-to-Implementation Pipeline module loaded");
-      } catch (error) {
-        console.warn("⚠️ Idea-to-Implementation Pipeline not available:", error.message);
-      }
-
-      // Initialize Source of Truth Manager
-      try {
-        const sotModule = await import("./core/source-of-truth-manager.js");
-        sourceOfTruthManager = new sotModule.SourceOfTruthManager(pool);
-        console.log("✅ Source of Truth Manager initialized");
-        
-        // Auto-load Source of Truth if it exists (for AI council reference)
-        const existingSOT = await sourceOfTruthManager.getDocument('master_vision');
-        if (existingSOT.length > 0) {
-          console.log(`📖 [SOURCE OF TRUTH] Loaded ${existingSOT.length} document(s) - AI Council will reference for mission alignment`);
-        } else {
-          console.log(`⚠️ [SOURCE OF TRUTH] No documents found. Use POST /api/v1/system/source-of-truth/store to add Source of Truth.`);
-        }
-      } catch (error) {
-        console.warn("⚠️ Source of Truth Manager not available:", error.message);
-      }
-      } catch (error) {
-        console.warn("⚠️ Post-upgrade checker not available:", error.message);
-      }
-    } catch (error) {
-      console.warn("⚠️ Log monitoring not available:", error.message);
-    }
-
-    // Initialize auto-queue manager
-    try {
-      const queueModule = await import("./core/auto-queue-manager.js");
-      const AutoQueueManager = queueModule.AutoQueueManager;
-      autoQueueManager = new AutoQueueManager(pool, callCouncilMember, executionQueue, modelRouter);
-      scheduleAutonomyOnce("AUTO_QUEUE_START", 30000, async () => {
-        autoQueueManager.start();
-        console.log("✅ Auto-Queue Manager initialized");
-      });
-      
-      // Use enhanced idea generation (each AI gives 25, council debates, votes)
-      // Override the daily idea generation
-      autoQueueManager.generateDailyIdeas = async () => {
-        return await autoQueueManager.generateDailyIdeasEnhanced();
-      };
-      
-      // Pass user simulation to enhanced idea generator
-      if (autoQueueManager.generateDailyIdeasEnhanced) {
-        const originalEnhanced = autoQueueManager.generateDailyIdeasEnhanced;
-        autoQueueManager.generateDailyIdeasEnhanced = async function() {
-          try {
-            const { EnhancedIdeaGenerator } = await import('./core/enhanced-idea-generator.js');
-            const generator = new EnhancedIdeaGenerator(
-              this.pool,
-              this.callCouncilMember,
-              this.modelRouter,
-              userSimulation // Pass user simulation for filtering
-            );
-            return await generator.runFullPipeline(this.executionQueue);
-          } catch (error) {
-            console.error('Enhanced idea generation failed:', error.message);
-            return await this.generateDailyIdeas();
-          }
-        };
-      }
-    } catch (error) {
-      console.warn("⚠️ Auto-queue manager not available:", error.message);
-    }
-
-    // Initialize AI account bot
-    try {
-      const botModule = await import("./core/ai-account-bot.js");
-      const AIAccountBot = botModule.AIAccountBot;
-      aiAccountBot = new AIAccountBot(pool, knowledgeBase, callCouncilMember);
-      console.log("✅ AI Account Bot initialized");
-    } catch (error) {
-      console.warn("⚠️ AI account bot not available:", error.message);
-    }
-
-      // Initialize conversation extractor bot
-      try {
-        const extractorModule = await import("./core/conversation-extractor-bot.js");
-        const ConversationExtractorBot = extractorModule.ConversationExtractorBot;
-        conversationExtractor = new ConversationExtractorBot(pool, knowledgeBase, callCouncilMember);
-        console.log("✅ Conversation Extractor Bot initialized");
-        
-        // Auto-start text scraping bot (scrapes and organizes text automatically)
-        // Check for stored credentials and start scraping if available
-        scheduleAutonomyOnce("EXTRACTOR_AUTOSTART", 60000, async () => {
-          if (enhancedConversationScraper) {
-            const credentials = await enhancedConversationScraper.listStoredCredentials();
-            if (credentials && credentials.length > 0) {
-              console.log(`🤖 [EXTRACTOR] Found ${credentials.length} stored credential(s), starting auto-scraping...`);
-              
-              // Start scraping for each provider with credentials
-              for (const cred of credentials) {
-                try {
-                  console.log(`🤖 [EXTRACTOR] Starting auto-scrape for ${cred.provider}...`);
-                  const result = await enhancedConversationScraper.scrapeAllConversations(cred.provider);
-                  if (result.success) {
-                    console.log(`✅ [EXTRACTOR] Auto-scraped ${result.conversations?.length || 0} conversations from ${cred.provider}`);
-                  }
-                } catch (scrapeError) {
-                  console.warn(`⚠️ [EXTRACTOR] Auto-scrape failed for ${cred.provider}:`, scrapeError.message);
-                }
-              }
-            } else {
-              console.log('📋 [EXTRACTOR] No stored credentials found. Use /api/v1/conversations/store-credentials to add credentials for auto-scraping.');
-            }
-          }
-        });
-        
-      } catch (error) {
-        console.warn("⚠️ Conversation extractor not available:", error.message);
-      }
-
-    // Initialize task improvement reporter (AI employees report improvements)
-    try {
-      const reporterModule = await import("./core/task-improvement-reporter.js");
-      const TaskImprovementReporter = reporterModule.TaskImprovementReporter;
-      taskImprovementReporter = new TaskImprovementReporter(pool, tier0Council, callCouncilMember);
-      console.log("✅ Task Improvement Reporter initialized");
-    } catch (error) {
-      console.warn("⚠️ Task improvement reporter not available:", error.message);
-    }
-
-    // Initialize user simulation system (learns user's decision style)
-    try {
-      const simulationModule = await import("./core/user-simulation.js");
-      const UserSimulation = simulationModule.UserSimulation;
-      userSimulation = new UserSimulation(pool, callCouncilMember);
-      await userSimulation.rebuildStyleProfile();
-      const accuracy = await userSimulation.getAccuracyScore();
-      console.log(`✅ User Simulation System initialized (Accuracy: ${(accuracy * 100).toFixed(1)}%)`);
-    } catch (error) {
-      console.warn("⚠️ User simulation not available:", error.message);
-    }
-
-    // Initialize AI effectiveness tracker
-    try {
-      const trackerModule = await import("./core/ai-effectiveness-tracker.js");
-      const AIEffectivenessTracker = trackerModule.AIEffectivenessTracker;
-      aiEffectivenessTracker = new AIEffectivenessTracker(pool);
-      console.log("✅ AI Effectiveness Tracker initialized");
-    } catch (error) {
-      console.warn("⚠️ AI effectiveness tracker not available:", error.message);
-    }
-    
-    console.log("✅ Two-Tier Council System initialized");
-    console.log("✅ Knowledge Base System initialized");
-    console.log("✅ Cost Re-Examination System initialized");
-
-    // ==================== MODULAR ROUTE REGISTRATION ====================
-    const routeCtx = {
-      pool,
-      requireKey,
-      callCouncilMember,
-      callCouncilWithFailover,
-      broadcastToAll,
-      dayjs,
-      logger,
-      // Financial
-      updateROI,
-      getStripeClient,
-      roiTracker,
-      financialDashboard,
-      incomeDroneSystem,
-      recordRevenueEvent,
-      syncStripeRevenue,
-      RAILWAY_PUBLIC_DOMAIN,
-      // Business
-      aiSafetyGate,
-      searchLimiter,
-      searchService,
-      checkHumanAttentionBudget,
-      businessCenter,
-      businessDuplication,
-      codeServices,
-      makeComGenerator,
-      legalChecker,
-      selfFundingSystem,
-      marketingResearch,
-      marketingAgency,
-      // Game
-      GamePublisher,
-      gameGenerator,
-      // Video
-      VideoPipeline,
-      // Agent Recruitment
-      makePhoneCall,
-      // BoldTrail / API Cost Savings
-      apiCostSavingsRevenue,
-      // Web Intelligence
-      webScraper,
-      enhancedConversationScraper,
-      // Auto-Builder
-      executionQueue,
-      selfBuilder,
-      ideaToImplementationPipeline,
-      autoBuilder,
-      getCouncilConsensus,
-      // Life Coaching
-      callRecorder,
-      salesTechniqueAnalyzer,
-      goalTracker,
-      activityTracker,
-      coachingProgression,
-      calendarService,
-      perfectDaySystem,
-      goalCommitmentSystem,
-      callSimulationSystem,
-      relationshipMediation,
-      meaningfulMoments,
-      // Two-Tier Council
-      modelRouter,
-      whiteLabelConfig,
-      // Outreach & CRM
-      outreachLimiter,
-      outreachAutomation,
-      crmSequenceRunner,
-      notificationService,
-      express,
-      // Knowledge Base
-      knowledgeBase,
-      fileCleanupAnalyzer,
-      // Conversation
-      conversationExtractor,
-      aiAccountBot,
-      path,
-      fs,
-      // Command Center
-      aiPerformanceScores,
-      logMonitor,
-      costReExamination,
-      compressionMetrics,
-      getDailySpend,
-      MAX_DAILY_SPEND,
-      systemMetrics,
-      systemSnapshots,
-      ideaEngine,
-      createProposal,
-      conductEnhancedConsensus,
-      sendSMS,
-      sourceOfTruthManager,
-    };
-
-    createFinancialRoutes(app, routeCtx);
-    createBusinessRoutes(app, routeCtx);
-    createGameRoutes(app, routeCtx);
-    createVideoRoutes(app, routeCtx);
-    createAgentRecruitmentRoutes(app, routeCtx);
-    createBoldTrailRoutes(app, routeCtx);
-    createApiCostSavingsRoutes(app, routeCtx);
-    createWebIntelligenceRoutes(app, routeCtx);
-    createAutoBuilderRoutes(app, routeCtx);
-    createLifeCoachingRoutes(app, routeCtx);
-    createTwoTierCouncilRoutes(app, routeCtx);
-    createOutreachCrmRoutes(app, routeCtx);
-    createBillingRoutes(app, routeCtx);
-    createKnowledgeRoutes(app, routeCtx);
-    createConversationRoutes(app, routeCtx);
-    createCommandCenterRoutes(app, routeCtx);
-    console.log('✅ [STARTUP] All modular routes registered');
-
-  } catch (error) {
-    console.error("⚠️ Two-Tier System initialization error:", error.message);
-    console.error("   System will continue with legacy council only");
-  }
+  // Apply all returned values to module-scope variables
+  ({
+    tier0Council,
+    tier1Council,
+    modelRouter,
+    outreachAutomation,
+    notificationService,
+    crmSequenceRunner,
+    whiteLabelConfig,
+    openSourceCouncil,
+    knowledgeBase,
+    fileCleanupAnalyzer,
+    costReExamination,
+    logMonitor,
+    autoQueueManager,
+    aiAccountBot,
+    conversationExtractor,
+    taskImprovementReporter,
+    userSimulation,
+    aiEffectivenessTracker,
+    postUpgradeChecker,
+    comprehensiveIdeaTracker,
+    vapiIntegration,
+    businessCenter,
+    gameGenerator,
+    businessDuplication,
+    codeServices,
+    makeComGenerator,
+    legalChecker,
+    selfFundingSystem,
+    marketingResearch,
+    marketingAgency,
+    webScraper,
+    enhancedConversationScraper,
+    apiCostSavingsRevenue,
+    incomeDroneSystem,
+    systemHealthChecker,
+    selfBuilder,
+    ideaToImplementationPipeline,
+    sourceOfTruthManager,
+    executionQueue,
+    handleSelfProgramming,
+    implementNextQueuedIdea,
+    tcoTracker,
+    tcoRoutes,
+    tcoSalesAgent,
+    tcoAgentRoutes,
+    Tier0Council,
+    Tier1Council,
+    ModelRouter,
+    OutreachAutomation,
+    WhiteLabelConfig,
+    CrmSequenceRunner,
+    KnowledgeBase,
+    FileCleanupAnalyzer,
+    OpenSourceCouncil,
+  } = result);
 }
 
 
@@ -1916,7 +1366,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
     await stripeAutomation.handleWebhook(req.body, sig, { pool });
     res.json({ received: true });
   } catch (error) {
-    console.error('❌ [STRIPE] Webhook error:', error.message);
+    logger.error('❌ [STRIPE] Webhook error:', { error: error.message });
     res.status(400).json({ error: error.message });
   }
 });
@@ -1925,7 +1375,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async
 app.use('/api/stripe', stripeRoutes);
 
 // TCO routes will be mounted after initialization
-// See initializeTwoTierSystem() call below
+// See runInitializeTwoTierSystem() call below
 
 // Enhanced health check
 // Feature flags status endpoint
@@ -2054,12 +1504,12 @@ app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
     if (backup && fs.existsSync(fullPath)) {
       const backupPath = `${fullPath}.backup.${Date.now()}`;
       await fsPromises.copyFile(fullPath, backupPath);
-      console.log(`📦 Backed up to: ${backupPath}`);
+      logger.info(`📦 Backed up to: ${backupPath}`);
     }
 
     await fsPromises.writeFile(fullPath, fullContent, "utf-8");
 
-    console.log(`✅ Completely replaced: ${filePath}`);
+    logger.info(`✅ Completely replaced: ${filePath}`);
 
     res.json({
       ok: true,
@@ -2068,7 +1518,7 @@ app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
       size: fullContent.length,
     });
   } catch (error) {
-    console.error("File replacement error:", error);
+    logger.error("File replacement error:", { error: error.message });
     res.status(500).json({ ok: false, error: error.message });
   }
 });
@@ -2102,7 +1552,7 @@ async function start() {
       await fsPromises.mkdir(path.dirname(autonomyPortFile), { recursive: true });
       await writeFile(autonomyPortFile, String(port), "utf-8");
     } catch (error) {
-      console.warn("⚠️ Unable to write autonomy port file:", error.message);
+      logger.warn("⚠️ Unable to write autonomy port file:", { error: error.message });
     }
   }
 
@@ -2116,9 +1566,7 @@ async function start() {
           targetServer.off("listening", onListening);
           const retryable = ["EADDRINUSE", "EACCES", "EPERM"].includes(error.code);
           if (retryable && attempts < maxAttempts - 1) {
-            console.warn(
-              `⚠️ Port ${currentPort} unavailable (${error.code}). Trying ${currentPort + 1}...`
-            );
+            logger.warn(`⚠️ Port ${currentPort} unavailable (${error.code}). Trying ${currentPort + 1}...`);
             attempts += 1;
             currentPort += 1;
             tryListen();
@@ -2191,6 +1639,8 @@ async function start() {
     );
     console.log("=".repeat(100));
 
+    validateEnv(logger);
+
     await startListening();
     autoBuilder.startBuildScheduler({
       initialDelay: 15000,
@@ -2200,32 +1650,32 @@ async function start() {
     // Critical: Database must initialize (but don't fail if tables already exist)
     try {
       await initDatabase();
-      console.log("✅ Database initialized");
+      logger.info("✅ Database initialized");
     } catch (dbError) {
-      console.error("❌ Database initialization error:", dbError.message);
+      logger.error("❌ Database initialization error:", { error: dbError.message });
       // Don't exit - try to continue (might be connection issue that resolves)
-      console.warn("⚠️ Continuing startup despite DB error - will retry connections");
+      logger.warn("⚠️ Continuing startup despite DB error - will retry connections");
     }
 
     // Load ROI (non-critical)
     try {
       await loadROIFromDatabase();
     } catch (roiError) {
-      console.warn("⚠️ ROI load error (non-critical):", roiError.message);
+      logger.warn("⚠️ ROI load error (non-critical):", { error: roiError.message });
     }
-    
+
     // Load knowledge context from processed dumps
     try {
       const knowledgeContext = await loadKnowledgeContext();
       if (knowledgeContext) {
-        console.log(`📚 [KNOWLEDGE] Context loaded: ${knowledgeContext.totalEntries} entries`);
+        logger.info(`📚 [KNOWLEDGE] Context loaded: ${knowledgeContext.totalEntries} entries`);
       }
     } catch (knowledgeError) {
-      console.warn("⚠️ Knowledge load error (non-critical):", knowledgeError.message);
+      logger.warn("⚠️ Knowledge load error (non-critical):", { error: knowledgeError.message });
     }
-    
+
     if (SMOKE_MODE) {
-      console.log("🧪 [SMOKE] SMOKE_MODE enabled - skipping optional startup systems and schedulers");
+      logger.info("🧪 [SMOKE] SMOKE_MODE enabled - skipping optional startup systems and schedulers");
     }
 
     // Run dependency audit before initializing systems
@@ -2234,14 +1684,14 @@ async function start() {
         const { dependencyAuditor } = await import("./core/dependency-auditor.js");
         const auditResults = await dependencyAuditor.auditAll();
         if (auditResults.npmPackages.missing.length > 0) {
-          console.log(`⚠️ [STARTUP] ${auditResults.npmPackages.missing.length} packages were missing and have been installed`);
+          logger.info(`⚠️ [STARTUP] ${auditResults.npmPackages.missing.length} packages were missing and have been installed`);
         }
         if (auditResults.coreModules.missing.length > 0) {
-          console.error(`❌ [STARTUP] ${auditResults.coreModules.missing.length} core modules are missing!`);
-          console.error(`   Missing: ${auditResults.coreModules.missing.join(', ')}`);
+          logger.error(`❌ [STARTUP] ${auditResults.coreModules.missing.length} core modules are missing!`);
+          logger.error(`   Missing: ${auditResults.coreModules.missing.join(', ')}`);
         }
       } catch (error) {
-        console.warn("⚠️ Dependency auditor not available:", error.message);
+        logger.warn("⚠️ Dependency auditor not available:", { error: error.message });
       }
     }
     
@@ -2249,16 +1699,16 @@ async function start() {
     // If we reach here, database config is valid
     
     if (!SMOKE_MODE) {
-      await initializeTwoTierSystem();
+      await runInitializeTwoTierSystem();
 
       // Mount TCO routes after initialization
       if (tcoRoutes) {
         app.use('/api/tco', tcoRoutes);
-        console.log('✅ [TCO] Routes mounted at /api/tco');
+        logger.info('✅ [TCO] Routes mounted at /api/tco');
       }
       if (tcoAgentRoutes) {
         app.use('/api/tco-agent', tcoAgentRoutes);
-        console.log('✅ [TCO AGENT] Routes mounted at /api/tco-agent');
+        logger.info('✅ [TCO AGENT] Routes mounted at /api/tco-agent');
       }
     }
 
@@ -2266,13 +1716,13 @@ async function start() {
       // Initialize Memory System
       try {
         await memorySystem.initMemoryStore();
-        console.log('✅ [MEMORY] Memory System initialized');
-        
+        logger.info('✅ [MEMORY] Memory System initialized');
+
         // Load and store Source of Truth document as system fact
         try {
           const sourceOfTruthPath = path.join(__dirname, 'docs', 'SOURCE_OF_TRUTH.md');
           const sourceOfTruthContent = await fsPromises.readFile(sourceOfTruthPath, 'utf-8');
-          
+
           // Store as system fact with maximum confidence
           await memorySystem.storeMemory('facts', {
             title: 'LifeOS / LimitlessOS Source of Truth (v1.0)',
@@ -2284,13 +1734,13 @@ async function start() {
             confidence: 1.0,
             userConfirmed: true
           });
-          
-          console.log('✅ [MEMORY] Source of Truth document stored as system fact');
+
+          logger.info('✅ [MEMORY] Source of Truth document stored as system fact');
         } catch (sotError) {
-          console.warn('⚠️ [MEMORY] Could not load Source of Truth document:', sotError.message);
+          logger.warn('⚠️ [MEMORY] Could not load Source of Truth document:', { error: sotError.message });
         }
       } catch (error) {
-        console.warn('⚠️ [MEMORY] Memory System initialization failed:', error.message);
+        logger.warn('⚠️ [MEMORY] Memory System initialization failed:', { error: error.message });
       }
     }
     
@@ -2299,10 +1749,10 @@ async function start() {
       try {
         const stripeAutomation = await import('./core/stripe-automation.js');
         await stripeAutomation.ensureProductsExist();
-        console.log('✅ [STRIPE] Products ensured on startup');
+        logger.info('✅ [STRIPE] Products ensured on startup');
       } catch (error) {
-        console.warn('⚠️ [STRIPE] Could not ensure products on startup:', error.message);
-        console.warn('   This is OK if STRIPE_SECRET_KEY is not set');
+        logger.warn('⚠️ [STRIPE] Could not ensure products on startup:', { error: error.message });
+        logger.warn('   This is OK if STRIPE_SECRET_KEY is not set');
       }
     }
 
@@ -2315,9 +1765,9 @@ async function start() {
         salesTechniqueAnalyzer = new SalesAnalyzerModule.SalesTechniqueAnalyzer(pool, callCouncilWithFailover);
         callRecorder = new CallRecorderModule.CallRecorder(pool, salesTechniqueAnalyzer);
         
-        console.log("✅ Sales Coaching Services initialized");
+        logger.info("✅ Sales Coaching Services initialized");
       } catch (error) {
-        console.warn("⚠️ Sales Coaching Services not available:", error.message);
+        logger.warn("⚠️ Sales Coaching Services not available:", { error: error.message });
         salesTechniqueAnalyzer = null;
         callRecorder = null;
       }
@@ -2336,9 +1786,9 @@ async function start() {
         coachingProgression = new CoachingProgressionModule.CoachingProgression(pool, callCouncilWithFailover);
         calendarService = new CalendarServiceModule.CalendarService(pool, callRecorder, activityTracker);
         
-        console.log("✅ Goal Tracking & Coaching Services initialized");
+        logger.info("✅ Goal Tracking & Coaching Services initialized");
       } catch (error) {
-        console.warn("⚠️ Goal Tracking & Coaching Services not available:", error.message);
+        logger.warn("⚠️ Goal Tracking & Coaching Services not available:", { error: error.message });
         goalTracker = null;
         activityTracker = null;
         coachingProgression = null;
@@ -2361,9 +1811,9 @@ async function start() {
         relationshipMediation = new RelationshipMediationModule.RelationshipMediation(pool, callCouncilWithFailover);
         meaningfulMoments = new MeaningfulMomentsModule.MeaningfulMoments(pool, callRecorder);
         
-        console.log("✅ Motivation & Perfect Day Services initialized");
+        logger.info("✅ Motivation & Perfect Day Services initialized");
       } catch (error) {
-        console.warn("⚠️ Motivation & Perfect Day Services not available:", error.message);
+        logger.warn("⚠️ Motivation & Perfect Day Services not available:", { error: error.message });
         perfectDaySystem = null;
         goalCommitmentSystem = null;
         callSimulationSystem = null;
@@ -2442,18 +1892,18 @@ async function start() {
       // Note: If EnhancedIncomeDrone is used, drones are already deployed during initialization
       // Only deploy here if using basic IncomeDroneSystem
       if (incomeDroneSystem && incomeDroneSystem.constructor.name === 'IncomeDroneSystem') {
-        console.log('🚀 [STARTUP] Deploying income drones (basic system)...');
+        logger.info('🚀 [STARTUP] Deploying income drones (basic system)...');
         const affiliateDrone = await incomeDroneSystem.deployDrone("affiliate", 500);
         const contentDrone = await incomeDroneSystem.deployDrone("content", 300);
         const outreachDrone = await incomeDroneSystem.deployDrone("outreach", 1000);
         const productDrone = await incomeDroneSystem.deployDrone("product", 200);
         const serviceDrone = await incomeDroneSystem.deployDrone("service", 500);
-        console.log(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
+        logger.info(`✅ [STARTUP] Deployed 5 income drones (affiliate, content, outreach, product, service)`);
       } else {
-        console.log('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
+        logger.info('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
       }
     } else {
-      console.log('ℹ️ [STARTUP] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)');
+      logger.info('ℹ️ [STARTUP] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)');
     }
 
       // Initialize Ollama Installer (auto-install Ollama if needed)
@@ -2462,11 +1912,11 @@ async function start() {
         const ollamaInstaller = new ollamaInstallerModule.OllamaInstaller(pool, callCouncilMember);
         // Auto-configure in background (don't block startup)
         ollamaInstaller.autoConfigure().catch(err => {
-          console.warn('⚠️ Ollama auto-configuration failed:', err.message);
+          logger.warn('⚠️ Ollama auto-configuration failed:', { error: err.message });
         });
-        console.log("✅ Ollama Installer initialized - will auto-configure Ollama if possible");
+        logger.info("✅ Ollama Installer initialized - will auto-configure Ollama if possible");
       } catch (error) {
-        console.warn("⚠️ Ollama Installer not available:", error.message);
+        logger.warn("⚠️ Ollama Installer not available:", { error: error.message });
       }
 
       // Initialize Idea-to-Implementation Pipeline (after taskTracker is available)
@@ -2480,10 +1930,10 @@ async function start() {
           selfBuilder,
           taskTracker
         );
-        console.log("✅ Idea-to-Implementation Pipeline initialized - system can now implement ideas from start to finish");
-      
+        logger.info("✅ Idea-to-Implementation Pipeline initialized - system can now implement ideas from start to finish");
+
     } catch (error) {
-      console.warn("⚠️ Idea-to-Implementation Pipeline initialization failed:", error.message);
+      logger.warn("⚠️ Idea-to-Implementation Pipeline initialization failed:", { error: error.message });
     }
 
     if (STRIPE_SECRET_KEY) {
@@ -2531,10 +1981,10 @@ async function start() {
             );
           }
 
-          console.log("✅ Virtual class modules initialized");
+          logger.info("✅ Virtual class modules initialized");
         }
       } catch (error) {
-        console.error("Virtual class initialization error:", error.message);
+        logger.error("Virtual class initialization error:", { error: error.message });
       }
     }
 
@@ -2575,18 +2025,20 @@ async function start() {
     };
     startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOnce, () => autonomyDepsRef.current);
 
+    // Preview site expiry: Amendment 05 — expire previews older than 30 days
+    scheduleAutonomyLoop('preview-expiry', 24 * 60 * 60 * 1000, () => runPreviewExpiry(pool), 5 * 60 * 1000);
+
     // Initial snapshot
     await createSystemSnapshot("System startup");
 
     await startListening();
     }
   } catch (error) {
-    console.error("❌ Startup error:", error);
-    console.error("Stack:", error.stack);
-    
+    logger.error("❌ Startup error:", { error: error.message, stack: error.stack });
+
     // Try to start HTTP server anyway for health checks
     if (selectedPort !== null || server.listening) {
-      console.warn("⚠️ Startup error after server already started - continuing in degraded mode");
+      logger.warn("⚠️ Startup error after server already started - continuing in degraded mode");
       return;
     }
     try {
@@ -2597,10 +2049,10 @@ async function start() {
         MAX_PORT_ATTEMPTS
       );
       await writeAutonomyPortFile(degradedPort);
-      console.log(`⚠️ Server started in degraded mode due to startup error`);
-      console.log(`📊 Health check available at http://${HOST}:${degradedPort}/healthz`);
+      logger.warn(`⚠️ Server started in degraded mode due to startup error`);
+      logger.info(`📊 Health check available at http://${HOST}:${degradedPort}/healthz`);
     } catch (serverError) {
-      console.error("❌ Failed to start HTTP server:", serverError.message);
+      logger.error("❌ Failed to start HTTP server:", { error: serverError.message });
       process.exit(1);
     }
   }
@@ -2628,7 +2080,7 @@ app.get("/api/v1/queue/stats", requireKey, async (req, res) => {
 
 // Start
 if (process.env.AUTONOMY_NO_LISTEN === "true") {
-  console.log("⚠️ [STARTUP] AUTONOMY_NO_LISTEN enabled - skipping network bind");
+  logger.info("⚠️ [STARTUP] AUTONOMY_NO_LISTEN enabled - skipping network bind");
 } else {
   start();
 }

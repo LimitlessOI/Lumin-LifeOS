@@ -15,6 +15,7 @@
  */
 
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import SiteBuilder, { POS_PARTNERS } from '../services/site-builder.js';
 import ProspectPipeline from '../services/prospect-pipeline.js';
 import logger from '../services/logger.js';
@@ -72,6 +73,22 @@ function getProspectPipeline({ callCouncilMember, pool, outreachAutomation, noti
 export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMember, baseUrl, outreachAutomation, notificationService } = {}) {
   const router = Router();
 
+  const buildLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 10, // max 10 site builds per IP per hour
+    message: { error: 'Too many site builds — try again in an hour' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
+  const prospectLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 50, // max 50 prospects per IP per hour
+    message: { error: 'Too many prospect requests — try again in an hour' },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+
   // Serve preview sites statically at /previews/*
   app.use('/previews', async (req, res, next) => {
     const { default: path } = await import('path');
@@ -84,7 +101,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    * Build a new site from a business URL.
    * Body: { url, businessInfo? }
    */
-  router.post('/build', requireKey, async (req, res) => {
+  router.post('/build', requireKey, buildLimiter, async (req, res) => {
     try {
       const { url, businessInfo } = req.body;
       if (!url) return res.status(400).json({ ok: false, error: 'url is required' });
@@ -105,7 +122,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    * Build a mock site for a prospect + send cold outreach email.
    * Body: { businessUrl, contactEmail?, contactName?, businessName?, skipEmail?, businessInfo? }
    */
-  router.post('/prospect', requireKey, async (req, res) => {
+  router.post('/prospect', requireKey, prospectLimiter, async (req, res) => {
     try {
       const { businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo } = req.body;
       if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
@@ -128,7 +145,7 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    * Process multiple prospects in batch.
    * Body: { prospects: [{ businessUrl, contactEmail, contactName, businessName }] }
    */
-  router.post('/bulk-prospect', requireKey, async (req, res) => {
+  router.post('/bulk-prospect', requireKey, prospectLimiter, async (req, res) => {
     try {
       const { prospects = [] } = req.body;
       if (!prospects.length) return res.status(400).json({ ok: false, error: 'prospects array required' });
