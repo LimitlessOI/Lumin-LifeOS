@@ -1,0 +1,44 @@
+{
+  "tasks": [
+    {
+      "id": "task-followup-cron-001",
+      "description": "Add an auto follow-up cron to services/prospect-pipeline.js that queries the prospect_sites table for prospects whose status is 'emailed' and whose last_contacted date is either 3 or 7 days ago, then calls POST /api/v1/sites/follow-up for each one. Expose it as a scheduled function that can be triggered by an external cron (e.g. node -e \"import('./services/prospect-pipeline.js').then(m => m.runFollowUpCron())\"). Log every send attempt to the outreach_log table.",
+      "ssotRef": "AMENDMENT_05",
+      "status": "pending",
+      "addedAt": "2026-03-13T00:00:00Z",
+      "result": null
+    },
+    {
+      "id": "task-prospect-scoring-002",
+      "description": "Add a prospect scoring function to services/prospect-pipeline.js called scoreProspect(prospectId) that reads the scraped website data for a prospect from prospect_sites, scores it on a 0-100 scale based on: missing mobile responsiveness (-20), no HTTPS (-20), no booking link (-20), page load score from Lighthouse if available (-20), outdated design indicators like table layouts or inline styles (-20). Store the score in a new 'website_score' integer column on prospect_sites (add migration SQL in db/migrations/20260313_add_website_score.sql) and expose it via GET /api/v1/sites/prospects sorted by score ascending so worst websites surface first.",
+      "ssotRef": "AMENDMENT_05",
+      "status": "pending",
+      "addedAt": "2026-03-13T00:00:00Z",
+      "result": null
+    },
+    {
+      "id": "task-preview-expiry-003",
+      "description": "Add a preview site expiry cleanup function to services/site-builder.js called cleanupExpiredPreviews() that queries prospect_sites for rows where status is not 'converted' and created_at is older than 30 days, then deletes the directory at public/previews/{clientId}/ for each expired prospect and marks the row status as 'expired' in the database. Expose it as an exported async function that can be called from an external cron.",
+      "ssotRef": "AMENDMENT_05",
+      "status": "pending",
+      "addedAt": "2026-03-13T00:00:00Z",
+      "result": null
+    },
+    {
+      "id": "task-builder-receipts-004",
+      "description": "Add GET /api/v1/builder/receipts endpoint to routes/auto-builder-routes.js that queries the build_artifacts table and returns the last 20 rows ordered by created_at DESC as JSON array with fields: id, component, status, files_modified, created_at. Requires x-command-center-key header for auth.",
+      "ssotRef": "INFRASTRUCTURE",
+      "status": "pending",
+      "addedAt": "2026-03-13T00:00:00Z",
+      "result": null
+    },
+    {
+      "id": "task-builder-enqueue-005",
+      "description": "Add POST /api/v1/builder/enqueue endpoint to routes/auto-builder-routes.js that accepts JSON body { description, ssotRef } and inserts a row into the execution_tasks table with type='build', status='pending', payload=JSON.stringify({description, ssotRef}), created_at=NOW(). Returns { ok: true, taskId } on success. Requires x-command-center-key header for auth.",
+      "ssotRef": "INFRASTRUCTURE",
+      "status": "pending",
+      "addedAt": "2026-03-13T00:00:00Z",
+      "result": null
+    }
+  ]
+}

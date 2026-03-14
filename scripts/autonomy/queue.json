@@ -1,71 +1,179 @@
 {
   "queue": [
     {
-      "id": "proof-website-audit",
+      "id": "builder-proof-slice",
       "type": "feature",
-      "status": "done",
-      "requireWork": false,
-      "acceptance_tests": [
-        "npm run ssot:validate",
-        "npm run test:smoke",
-        "node scripts/autonomy/verify-website-audit.js"
+      "status": "todo",
+      "commands": [
+        "ssot_validate"
       ],
-      "notes": "Build and verify /api/v1/website/audit + overlay UI proof. Requires COMMAND_CENTER_KEY + DATABASE_URL.",
-      "reason": null
+      "env": [
+        {
+          "key": "DATABASE_URL",
+          "value": "postgres://testuser:testpassword@localhost:5433/testdb"
+        },
+        {
+          "key": "COMMAND_CENTER_KEY",
+          "value": "smoke_test_key"
+        },
+        {
+          "key": "OLLAMA_ENDPOINT",
+          "value": "http://localhost:11434"
+        }
+      ],
+      "verifiers": [
+        "noop"
+      ],
+      "proof_artifacts": [
+        "scripts/autonomy/proof/builder-proof-slice/stdout.log",
+        "scripts/autonomy/proof/builder-proof-slice/stderr.log",
+        "scripts/autonomy/proof/builder-proof-slice/exit.json",
+        "scripts/autonomy/proof/builder-proof-slice/diff.patch",
+        "scripts/autonomy/proof/builder-proof-slice/ssot_refs.json"
+      ],
+      "ssot_refs": [],
+      "notes": "Thin vertical slice: ssot validate + noop verifier. Fail-closed JSON-only proof."
+    },
+    {
+      "id": "council-knowledge-context-fix",
+      "type": "feature",
+      "status": "todo",
+      "commands": [
+        "noop"
+      ],
+      "env": [],
+      "verifiers": [
+        "noop"
+      ],
+      "proof_artifacts": [],
+      "ssot_refs": [],
+      "notes": "Fix injectKnowledgeContext null handling to avoid council failures in proof mode."
+    },
+    {
+      "id": "overlay-command-center-improvements",
+      "type": "feature",
+      "status": "todo",
+      "commands": [
+        "noop"
+      ],
+      "env": [],
+      "verifiers": [
+        "noop"
+      ],
+      "proof_artifacts": [],
+      "ssot_refs": [],
+      "notes": "Align command center/overlay UX with SSOT_OVERLAY: evidence-first, council routing, registry-driven entrypoints."
     },
     {
       "id": "refactor-middleware-wiring",
       "type": "refactor",
       "status": "todo",
-      "requireWork": true,
-      "acceptance_tests": [
-        "npm run ssot:validate",
-        "npm run test:smoke"
+      "commands": [
+        "noop"
       ],
+      "env": [],
+      "verifiers": [
+        "test_smoke"
+      ],
+      "proof_artifacts": [],
+      "ssot_refs": [],
       "notes": "Extract middleware wiring into a module; preserve order."
     },
     {
       "id": "refactor-route-groups",
       "type": "refactor",
       "status": "todo",
-      "requireWork": true,
-      "acceptance_tests": [
-        "npm run ssot:validate",
-        "npm run test:smoke"
+      "commands": [
+        "noop"
       ],
+      "env": [],
+      "verifiers": [
+        "test_smoke"
+      ],
+      "proof_artifacts": [],
+      "ssot_refs": [],
       "notes": "Extract health/public/command-center routes."
     },
     {
       "id": "revenue-website-audit-landing",
       "type": "revenue",
       "status": "todo",
-      "requireWork": true,
-      "acceptance_tests": [
-        "npm run ssot:validate"
+      "commands": [
+        "noop"
       ],
+      "env": [],
+      "verifiers": [
+        "ssot_validate"
+      ],
+      "proof_artifacts": [],
+      "ssot_refs": [],
       "notes": "Create simple landing + outreach kit for website audit offer."
+    },
+    {
+      "id": "revenue-tier-a-first-dollar",
+      "type": "revenue",
+      "status": "todo",
+      "commands": [
+        "noop"
+      ],
+      "env": [],
+      "verifiers": [
+        "noop"
+      ],
+      "proof_artifacts": [],
+      "ssot_refs": [],
+      "notes": "Build Tier A product to $1 pipeline with ethical consent + ready-to-send outreach kit (no paid keys)."
     },
     {
       "id": "refactor-services-extraction",
       "type": "refactor",
       "status": "todo",
-      "requireWork": true,
-      "acceptance_tests": [
-        "npm run ssot:validate",
-        "npm run test:smoke"
+      "commands": [
+        "noop"
       ],
+      "env": [],
+      "verifiers": [
+        "test_smoke"
+      ],
+      "proof_artifacts": [],
+      "ssot_refs": [],
       "notes": "Extract services (db/stripe/ws) behind stable interfaces."
     },
     {
       "id": "revenue-tc-checklist-launch",
       "type": "revenue",
       "status": "todo",
-      "requireWork": true,
-      "acceptance_tests": [
-        "npm run ssot:validate",
-        "npm run test:smoke"
+      "commands": [
+        "noop"
       ],
+      "env": [],
+      "verifiers": [
+        "test_smoke"
+      ],
+      "proof_artifacts": [],
+      "ssot_refs": [],
       "notes": "Ship Transaction Coordinator checklist + outreach kit."
+    },
+    {
+      "id": "ideas-top-25",
+      "type": "revenue",
+      "status": "done",
+      "commands": [
+        "generate_revenue_ideas"
+      ],
+      "env": [
+        {
+          "key": "OLLAMA_ENDPOINT",
+          "value": "http://localhost:11434"
+        }
+      ],
+      "verifiers": [
+        "noop"
+      ],
+      "proof_artifacts": [],
+      "ssot_refs": [],
+      "notes": "Generate the top 25 grounded revenue ideas that can be launched quickly with existing tools.",
+      "reason": "Manual script parsed 25 ideas after automated pipeline hit Ollama fetch failure."
     }
   ]
 }

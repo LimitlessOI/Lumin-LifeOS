@@ -952,5 +952,40 @@ app.post('/api/build/reset-failed', (req, res) => {
   res.json({ reset: count });
 });
 
+app.get("/api/v1/builder/receipts", requireKey, async (req, res) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit) || 20, 100);
+    const result = await pool.query(
+      `SELECT id, product, component, status, metadata, created_at
+       FROM build_artifacts
+       ORDER BY created_at DESC
+       LIMIT $1`,
+      [limit]
+    );
+    res.json({ ok: true, receipts: result.rows, count: result.rows.length });
+  } catch (err) {
+    logger.error('[BUILDER] Failed to fetch receipts', { error: err.message });
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+app.post("/api/v1/builder/enqueue", requireKey, async (req, res) => {
+  try {
+    const { instruction, description, priority = 'normal', ssotRef } = req.body;
+    if (!instruction && !description) {
+      return res.status(400).json({ ok: false, error: 'instruction or description required' });
+    }
+    const taskDesc = instruction || description;
+    if (!executionQueue) {
+      return res.status(503).json({ ok: false, error: 'Execution queue not available' });
+    }
+    const task = await executionQueue.addTask('build', taskDesc, { priority, ssotRef });
+    res.json({ ok: true, taskId: task?.id || 'queued', description: taskDesc });
+  } catch (err) {
+    logger.error('[BUILDER] Failed to enqueue task', { error: err.message });
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 
 }
