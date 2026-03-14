@@ -50,7 +50,7 @@ import { ModuleRouter } from "./core/module-router.js";
 import { HealthModule } from "./modules/system/health-module.js";
 import { registerModules } from "./modules/module-loader.js";
 import { CouncilModule } from "./modules/council/council-module.js";
-import { configureAiGuard, aiSafetyGate } from "./services/ai-guard.js";
+import { configureAiGuard, aiSafetyGate, detectHallucinations, crossValidateResponses } from "./services/ai-guard.js";
 import {
   loadKnowledgeContext,
   injectKnowledgeContext,
@@ -70,6 +70,8 @@ import {
   rollbackToSnapshot as rollbackToSnapshotService,
 } from "./services/snapshot-service.js";
 import logger from "./services/logger.js";
+import { setupWebSocketHandler } from "./services/websocket-handler.js";
+import { createSelfImprovementLoop } from "./services/self-improvement-loop.js";
 import { addJob, getQueueStats, getAllQueueStats, registerProcessor, shutdownQueues } from "./services/queue.js";
 import VideoPipeline from "./services/video-pipeline.js";
 import GamePublisher from "./services/game-publisher.js";
@@ -94,6 +96,9 @@ import { createKnowledgeRoutes } from './routes/knowledge-routes.js';
 import { createConversationRoutes } from './routes/conversation-routes.js';
 import { createCommandCenterRoutes } from './routes/command-center-routes.js';
 import { SelfModificationEngine } from './core/self-modification-engine.js';
+import IncomeDroneSystem from './core/income-drone-system.js';
+import FinancialDashboard from './core/financial-dashboard.js';
+import { createFinancialRevenue } from './core/financial-revenue.js';
 import {
   selectOptimalModel,
   getModelSize,
@@ -104,7 +109,7 @@ import {
   getOllamaFallbackModel,
 } from './services/ai-model-selector.js';
 import { createCodeEscalation } from './core/code-escalation.js';
-import { createConsensusService } from './services/consensus-service.js';
+import { createConsensusService, createGetCouncilConsensus } from './services/consensus-service.js';
 import { createTwilioService } from './services/twilio-service.js';
 import { createAIPerformanceTracker } from './services/ai-performance-tracker.js';
 import { createDeploymentService } from './services/deployment-service.js';
@@ -431,6 +436,7 @@ ensureTcoAgentTables().catch((error) => {
 // ==================== GLOBAL STATE ====================
 const apiV1DepsRef = { current: {} };
 let autonomyDepsRef = { current: {} };
+const selfProgrammingDepsRef = { current: {} };
 let activeConnections = new Map();
 
 // ==================== UTILITY FUNCTIONS ====================
@@ -493,16 +499,22 @@ const systemMetrics = {
 
 
 function scheduleAutonomyLoop(name, intervalMs, task, initialDelayMs = intervalMs) {
-  if (isGovernorAutonomyPaused()) {
-    console.log(`⏸️ [AUTONOMY] ${name} disabled (PAUSE_AUTONOMY=1)`);
-    return;
+  try {
+    if (isGovernorAutonomyPaused()) {
+      console.log(`⏸️ [AUTONOMY] ${name} disabled (PAUSE_AUTONOMY=1)`);
+      return;
+    }
+  } catch (govErr) {
+    console.warn(`⚠️ [AUTONOMY] Governor check failed for ${name}:`, govErr.message);
   }
 
   const run = async () => {
-    if (isGovernorAutonomyPaused()) {
-      setTimeout(run, intervalMs);
-      return;
-    }
+    try {
+      if (isGovernorAutonomyPaused()) {
+        setTimeout(run, intervalMs);
+        return;
+      }
+    } catch (_) { /* ignore governor errors in loop */ }
     const lease = acquireGovernorHeavyLease();
     if (!lease) {
       setTimeout(run, intervalMs);
@@ -870,166 +882,8 @@ async function sandboxTest(code, testDescription) {
   return runSandboxTest({ code, testDescription, __dirname, pool });
 }
 
-// ==================== DRIFT & HALLUCINATION PROTECTION ====================
-async function detectHallucinations(aiResponse, context, sourceMember) {
-  try {
-    // Check for common hallucination patterns
-    const hallucinationIndicators = [
-      /I don't have access to/i,
-      /I cannot/i,
-      /I'm not able to/i,
-      /as an AI language model/i,
-      /I don't have real-time/i,
-      /I cannot browse/i,
-    ];
+// detectHallucinations and crossValidateResponses extracted to services/ai-guard.js
 
-    const hasHallucinationPattern = hallucinationIndicators.some(pattern =>
-      pattern.test(aiResponse)
-    );
-
-    // Check for vague or non-specific responses
-    const vaguePatterns = [
-      /might work/i,
-      /could potentially/i,
-      /perhaps/i,
-      /maybe/i,
-      /I think/i,
-      /I believe/i,
-    ];
-
-    const vagueCount = vaguePatterns.filter(pattern => pattern.test(aiResponse)).length;
-    const isVague = vagueCount >= 3;
-
-    // Check for contradictory statements
-    const contradictions = [
-      /but.*however/i,
-      /although.*but/i,
-      /on one hand.*on the other hand/i,
-    ];
-
-    const hasContradictions = contradictions.some(pattern => pattern.test(aiResponse));
-
-    return {
-      hasHallucinationPattern,
-      isVague,
-      hasContradictions,
-      vagueCount,
-      confidence: hasHallucinationPattern || isVague || hasContradictions ? "low" : "medium",
-    };
-  } catch (error) {
-    console.warn(`Hallucination detection error: ${error.message}`);
-    return { confidence: "unknown" };
-  }
-}
-
-async function crossValidateResponses(responses, context) {
-  try {
-    if (responses.length < 2) {
-      return { validated: true, confidence: "low", reason: "Insufficient responses for validation" };
-    }
-
-    // Extract key claims/fixes from each response
-    const claims = responses.map(r => ({
-      member: r.member,
-      claims: extractKeyClaims(r.response),
-    }));
-
-    // Check for agreement on core solutions
-    const solutionPatterns = responses.map(r => extractSolutionPattern(r.response));
-    const agreementScore = calculateAgreement(solutionPatterns);
-
-    // Check if responses reference each other or contradict
-    const contradictions = findContradictions(claims);
-
-    const validated = agreementScore >= 0.6 && contradictions.length === 0;
-    const confidence = agreementScore >= 0.8 ? "high" : agreementScore >= 0.6 ? "medium" : "low";
-
-    return {
-      validated,
-      confidence,
-      agreementScore,
-      contradictions,
-      reason: validated
-        ? `High agreement (${(agreementScore * 100).toFixed(0)}%)`
-        : `Low agreement (${(agreementScore * 100).toFixed(0)}%) or contradictions found`,
-    };
-  } catch (error) {
-    console.warn(`Cross-validation error: ${error.message}`);
-    return { validated: false, confidence: "unknown", reason: error.message };
-  }
-}
-
-function extractKeyClaims(response) {
-  const claims = [];
-  // Extract code blocks
-  const codeBlocks = response.match(/```[\s\S]*?```/g) || [];
-  claims.push(...codeBlocks);
-  // Extract numbered/bulleted solutions
-  const solutions = response.match(/(?:^|\n)[\d\-\*]\s+[^\n]+/g) || [];
-  claims.push(...solutions);
-  return claims;
-}
-
-function extractSolutionPattern(response) {
-  // Extract the core solution approach
-  const patterns = [
-    /(?:fix|solution|approach|method):\s*([^\n]+)/i,
-    /(?:use|try|implement):\s*([^\n]+)/i,
-  ];
-  for (const pattern of patterns) {
-    const match = response.match(pattern);
-    if (match) return match[1].toLowerCase();
-  }
-  return response.substring(0, 100).toLowerCase();
-}
-
-function calculateAgreement(patterns) {
-  if (patterns.length < 2) return 0;
-  
-  // Simple similarity check
-  let matches = 0;
-  for (let i = 0; i < patterns.length; i++) {
-    for (let j = i + 1; j < patterns.length; j++) {
-      // Check for keyword overlap
-      const words1 = new Set(patterns[i].split(/\s+/));
-      const words2 = new Set(patterns[j].split(/\s+/));
-      const intersection = new Set([...words1].filter(x => words2.has(x)));
-      const union = new Set([...words1, ...words2]);
-      const similarity = intersection.size / union.size;
-      if (similarity > 0.3) matches++;
-    }
-  }
-  
-  const totalPairs = (patterns.length * (patterns.length - 1)) / 2;
-  return matches / totalPairs;
-}
-
-function findContradictions(claims) {
-  const contradictions = [];
-  const keywords = ["cannot", "should not", "don't", "never", "avoid"];
-  const positiveKeywords = ["can", "should", "do", "always", "use"];
-
-  for (let i = 0; i < claims.length; i++) {
-    for (let j = i + 1; j < claims.length; j++) {
-      const text1 = claims[i].claims.join(" ").toLowerCase();
-      const text2 = claims[j].claims.join(" ").toLowerCase();
-      
-      // Check for direct contradictions
-      for (const neg of keywords) {
-        for (const pos of positiveKeywords) {
-          if (text1.includes(neg) && text2.includes(pos)) {
-            contradictions.push({
-              member1: claims[i].member,
-              member2: claims[j].member,
-              type: "contradiction",
-            });
-          }
-        }
-      }
-    }
-  }
-  return contradictions;
-}
 // ==================== WEB SEARCH INTEGRATION INITIALIZATION ====================
 const {
   validateAgainstWebSearch,
@@ -1091,84 +945,19 @@ async function rollbackToSnapshot(snapshotId) {
 
 
 // ==================== CONTINUOUS SELF-IMPROVEMENT ====================
-async function continuousSelfImprovement() {
-  try {
-    systemMetrics.improvementCyclesRun++;
-    console.log(
-      `🔧 [IMPROVEMENT] Running cycle #${systemMetrics.improvementCyclesRun}...`
-    );
-
-    await createSystemSnapshot("Before improvement cycle");
-
-    const recentErrors = await pool.query(
-      `SELECT what_was_lost, why_lost, COUNT(*) as count 
-       FROM loss_log 
-       WHERE timestamp > NOW() - INTERVAL '1 hour'
-       GROUP BY what_was_lost, why_lost
-       ORDER BY count DESC LIMIT 5`
-    );
-
-    const slowTasks = await pool.query(
-      `SELECT type, AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) as avg_duration 
-       FROM execution_tasks 
-       WHERE created_at > NOW() - INTERVAL '24 hours'
-       AND completed_at IS NOT NULL
-       GROUP BY type 
-       HAVING AVG(EXTRACT(EPOCH FROM (completed_at - created_at)) * 1000) > 5000`
-    );
-
-    const recentDecisions = await pool.query(
-      `SELECT * FROM user_decisions 
-       WHERE created_at > NOW() - INTERVAL '24 hours'
-       ORDER BY created_at DESC LIMIT 5`
-    );
-
-    for (const decision of recentDecisions.rows) {
-      await detectBlindSpots(decision.choice, decision.context);
-    }
-
-    await rotateAIsBasedOnPerformance();
-
-    if (recentErrors.rows.length > 0 || slowTasks.rows.length > 0) {
-      const improvementPrompt = `Analyze and suggest code/process improvements for these issues:
-      
-      Recent Errors: ${JSON.stringify(recentErrors.rows.slice(0, 3))}
-      Performance Bottlenecks: ${JSON.stringify(slowTasks.rows.slice(0, 3))}
-      Blind Spots Detected: ${systemMetrics.blindSpotsDetected}
-      
-      Focus especially on:
-      - Reducing friction in monetization flows
-      - Improving ROI visibility
-      - Keeping safety and ethics intact.
-      
-      Suggest specific, actionable improvements.`;
-
-      const improvements = await callCouncilWithFailover(
-        improvementPrompt,
-        "ollama_deepseek" // Use Tier 0 (free)
-      );
-
-      if (improvements && improvements.length > 50) {
-        const testResult = await sandboxTest(
-          `// Test improvements\nconsole.log("Testing improvements");`,
-          "Improvement test"
-        );
-
-        if (testResult.success) {
-          await executionQueue.addTask("self_improvement", improvements);
-          systemMetrics.lastImprovement = new Date().toISOString();
-        } else {
-          console.log("⚠️ Improvements failed sandbox test, rolling back");
-          await rollbackToSnapshot(
-            systemSnapshots[systemSnapshots.length - 1].id
-          );
-        }
-      }
-    }
-  } catch (error) {
-    console.error("Self-improvement error:", error.message);
-  }
-}
+// Function extracted to services/self-improvement-loop.js
+const continuousSelfImprovement = createSelfImprovementLoop(() => ({
+  systemMetrics,
+  pool,
+  createSystemSnapshot,
+  detectBlindSpots,
+  rotateAIsBasedOnPerformance,
+  callCouncilWithFailover,
+  sandboxTest,
+  executionQueue,
+  systemSnapshots,
+  rollbackToSnapshot,
+}));
 
 // ==================== ROI & FINANCIAL TRACKING ====================
 async function loadROIFromDatabase() {
@@ -1364,6 +1153,16 @@ let ideaToImplementationPipeline = null;
 let sourceOfTruthManager = null;
 // autoBuilder is now imported at top of file
 
+// ==================== SELF-PROGRAMMING SERVICE (stub until initialized) ====================
+let executionQueue = null;
+let handleSelfProgramming = async (options = {}) => {
+  logger.warn("[SELF-PROGRAMMING] Service not yet initialized");
+  return { ok: false, error: "Self-programming service not yet initialized" };
+};
+let implementNextQueuedIdea = async () => {
+  return { ok: false, error: "Execution queue not yet initialized" };
+};
+
 async function initializeTwoTierSystem() {
   try {
     // Dynamic import of modules
@@ -1392,6 +1191,46 @@ async function initializeTwoTierSystem() {
     tier1Council = new Tier1Council(pool, callCouncilMember);
     modelRouter = new ModelRouter(tier0Council, tier1Council, pool);
     openSourceCouncil = new OpenSourceCouncil(callCouncilMember, COUNCIL_MEMBERS, providerCooldowns);
+
+    // ==================== SELF-PROGRAMMING SERVICE INITIALIZATION ====================
+    {
+      const spService = createSelfProgrammingService(() => selfProgrammingDepsRef.current);
+      handleSelfProgramming = spService.handleSelfProgramming;
+      selfProgrammingDepsRef.current = {
+        pool,
+        path,
+        fs,
+        fsPromises,
+        __dirname,
+        execAsync,
+        createSystemSnapshot,
+        rollbackToSnapshot,
+        sandboxTest,
+        callCouncilWithFailover,
+        detectBlindSpots,
+        getCouncilConsensus: (...args) => getCouncilConsensus(...args),
+        GITHUB_TOKEN,
+        commitToGitHub,
+      };
+      console.log("✅ Self-Programming Service initialized");
+    }
+
+    // ==================== EXECUTION QUEUE INITIALIZATION ====================
+    executionQueue = createExecutionQueue({
+      pool,
+      modelRouter,
+      ideaToImplementationPipeline: null, // set later when pipeline loads
+      handleSelfProgramming,
+      detectBlindSpots,
+      callCouncilWithFailover,
+      broadcastToAll,
+    });
+    implementNextQueuedIdea = async () => {
+      if (!executionQueue) return { ok: false, error: "Queue not ready" };
+      const status = executionQueue.getStatus();
+      return { ok: true, queued: status.queued, active: status.active };
+    };
+    console.log("✅ Execution Queue initialized");
 
     // Initialize TCO (TotalCostOptimizer) system
     tcoTracker = new TCOTracker(pool);
@@ -2008,271 +1847,22 @@ async function initializeTwoTierSystem() {
 }
 
 
-// ==================== INCOME DRONE SYSTEM ====================
-class IncomeDroneSystem {
-  constructor() {
-    this.activeDrones = new Map();
-  }
-
-  async deployDrone(droneType, expectedRevenue = 500) {
-    const droneId = `drone_${Date.now()}_${Math.random()
-      .toString(36)
-      .slice(2, 8)}`;
-
-    try {
-      await pool.query(
-        `INSERT INTO income_drones (drone_id, drone_type, status, deployed_at, updated_at)
-         VALUES ($1, $2, $3, now(), now())`,
-        [droneId, droneType, "active"]
-      );
-
-      this.activeDrones.set(droneId, {
-        id: droneId,
-        type: droneType,
-        status: "active",
-        revenue: 0,
-        tasks: 0,
-        expectedRevenue,
-        deployed: new Date().toISOString(),
-      });
-
-      return droneId;
-    } catch (error) {
-      console.error(`Drone deployment error: ${error.message}`);
-      return null;
-    }
-  }
-
-  async recordRevenue(droneId, amount, isActual = false) {
-    try {
-      if (isActual) {
-        // ACTUAL revenue - real money received
-        await pool.query(
-          `UPDATE income_drones
-           SET revenue_generated = revenue_generated + $1,
-               actual_revenue = actual_revenue + $1,
-               tasks_completed = tasks_completed + 1,
-               updated_at = now()
-           WHERE drone_id = $2`,
-          [amount, droneId]
-        );
-        await updateROI(amount, 0, 0);
-        broadcastToAll({ type: "revenue_generated", droneId, amount, isActual: true });
-      } else {
-        // PROJECTED revenue - estimated, not real money yet
-        await pool.query(
-          `UPDATE income_drones
-           SET projected_revenue = projected_revenue + $1,
-               tasks_completed = tasks_completed + 1,
-               updated_at = now()
-           WHERE drone_id = $2`,
-          [amount, droneId]
-        );
-        broadcastToAll({ type: "revenue_projected", droneId, amount, isActual: false });
-      }
-
-      const drone = this.activeDrones.get(droneId);
-      if (drone) {
-        if (isActual) {
-          drone.revenue += amount;
-        }
-        drone.tasks++;
-      }
-    } catch (error) {
-      console.error(`Revenue update error: ${error.message}`);
-    }
-  }
-
-  async getStatus() {
-    try {
-      const result = await pool.query(
-        `SELECT drone_id, drone_type, status, revenue_generated, actual_revenue, projected_revenue, tasks_completed
-         FROM income_drones WHERE status = 'active' ORDER BY deployed_at DESC`
-      );
-      const totalActual = result.rows.reduce(
-        (sum, d) => sum + parseFloat(d.actual_revenue || 0),
-        0
-      );
-      const totalProjected = result.rows.reduce(
-        (sum, d) => sum + parseFloat(d.projected_revenue || 0),
-        0
-      );
-      return {
-        active: result.rows.length,
-        drones: result.rows,
-        total_revenue: totalActual, // Only actual revenue
-        actual_revenue: totalActual,
-        projected_revenue: totalProjected,
-        revenue_generated: totalActual, // Backward compatibility
-      };
-    } catch (error) {
-      return { active: 0, drones: [], total_revenue: 0, actual_revenue: 0, projected_revenue: 0 };
-    }
-  }
-}
-
 // Income drone system - will be replaced by EnhancedIncomeDrone if available
-let incomeDroneSystem = new IncomeDroneSystem();
+// Class extracted to core/income-drone-system.js
+let incomeDroneSystem = new IncomeDroneSystem({ pool, updateROI, broadcastToAll });
 
 // ==================== FINANCIAL DASHBOARD ====================
-class FinancialDashboard {
-  async recordTransaction(
-    type,
-    amount,
-    description,
-    category = "general",
-    externalId = null
-  ) {
-    try {
-      const txId =
-        externalId && externalId.trim()
-          ? `ext_${externalId.trim()}`
-          : `tx_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+// Class extracted to core/financial-dashboard.js
+const financialDashboard = new FinancialDashboard({ pool });
 
-      if (externalId) {
-        const existing = await pool.query(
-          `SELECT id FROM financial_ledger WHERE external_id = $1`,
-          [externalId]
-        );
-        if (existing.rows.length > 0) {
-          return {
-            txId: `ext_${externalId.trim()}`,
-            type,
-            amount: 0,
-            description: `[duplicate ignored] ${description}`,
-            category,
-            date: new Date().toISOString(),
-            duplicate: true,
-          };
-        }
-      }
-
-      await pool.query(
-        `INSERT INTO financial_ledger (tx_id, type, amount, description, category, external_id, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6, now())`,
-        [txId, type, amount, description, category, externalId]
-      );
-
-      return {
-        txId,
-        type,
-        amount,
-        description,
-        category,
-        externalId,
-        date: new Date().toISOString(),
-      };
-    } catch (error) {
-      console.error("Financial ledger error:", error.message);
-      return null;
-    }
-  }
-
-  async getDashboard() {
-    try {
-      const todayStart = dayjs().startOf("day").toDate();
-      const todayEnd = dayjs().endOf("day").toDate();
-
-      const dailyResult = await pool.query(
-        `SELECT SUM(CASE WHEN type='income' THEN amount ELSE 0 END) as total_income,
-                SUM(CASE WHEN type='expense' THEN amount ELSE 0 END) as total_expenses
-         FROM financial_ledger
-         WHERE created_at >= $1 AND created_at <= $2`,
-        [todayStart, todayEnd]
-      );
-
-      const dailyRow = dailyResult.rows[0];
-      return {
-        daily: {
-          income: parseFloat(dailyRow.total_income) || 0,
-          expenses: parseFloat(dailyRow.total_expenses) || 0,
-          net:
-            (parseFloat(dailyRow.total_income) || 0) -
-            (parseFloat(dailyRow.total_expenses) || 0),
-        },
-        lastUpdated: new Date().toISOString(),
-      };
-    } catch (error) {
-      return {
-        daily: { income: 0, expenses: 0, net: 0 },
-        lastUpdated: new Date().toISOString(),
-      };
-    }
-  }
-}
-
-const financialDashboard = new FinancialDashboard();
-
-// ==================== REVENUE EVENT HELPER (LEDGER + DRONES + ROI) ====================
-async function recordRevenueEvent({
-  source = "unknown",
-  eventId = null,
-  amount,
-  currency = "USD",
-  droneId = null,
-  description = "",
-  category = "general",
-}) {
-  const cleanAmount = Number(amount);
-  if (!Number.isFinite(cleanAmount) || cleanAmount <= 0) {
-    throw new Error("Invalid amount for revenue event");
-  }
-
-  const desc =
-    description ||
-    `Revenue from ${source}${eventId ? ` (event ${eventId})` : ""}`;
-
-  const tx = await financialDashboard.recordTransaction(
-    "income",
-    cleanAmount,
-    desc,
-    category || source,
-    eventId
-  );
-
-  if (droneId) {
-    await incomeDroneSystem.recordRevenue(droneId, cleanAmount, true); // ACTUAL revenue - real money
-  } else {
-    updateROI(cleanAmount, 0, 0);
-  }
-
-  return { tx, amount: cleanAmount, currency, source, droneId };
-}
-
-// ==================== STRIPE REVENUE SYNC (SAFE: READ + LOG ONLY) ====================
-async function syncStripeRevenue() {
-  try {
-    const stripe = await getStripeClient();
-    if (!stripe) {
-      return;
-    }
-
-    console.log("💳 Syncing Stripe revenue into financial_ledger...");
-
-    const paymentIntents = await stripe.paymentIntents.list({
-      limit: 50,
-    });
-
-    for (const pi of paymentIntents.data || []) {
-      if (pi.status !== "succeeded") continue;
-      const amount = (pi.amount_received || pi.amount || 0) / 100;
-      if (!amount) continue;
-
-      await recordRevenueEvent({
-        source: "stripe",
-        eventId: pi.id,
-        amount,
-        currency: pi.currency || "usd",
-        description: pi.description || "Stripe payment",
-        category: "stripe_income",
-      });
-    }
-
-    console.log("✅ Stripe revenue sync complete");
-  } catch (err) {
-    console.error("Stripe revenue sync error:", err.message);
-  }
-}
+// ==================== REVENUE EVENT HELPER + STRIPE SYNC ====================
+// Functions extracted to core/financial-revenue.js
+const { recordRevenueEvent, syncStripeRevenue } = createFinancialRevenue({
+  financialDashboard,
+  incomeDroneSystem,
+  updateROI,
+  getStripeClient,
+});
 
 
 // ==================== API MIDDLEWARE ====================
@@ -2404,125 +1994,8 @@ app.get("/overlay/index.html", (req, res) => {
 });
 
 // ==================== AI COUNCIL CONSENSUS MODE ====================
-/**
- * Get consensus from multiple AI models before making code decisions
- * Requires 2+ models to agree before proceeding
- */
-async function getCouncilConsensus(prompt, taskType = 'code') {
-  console.log('🤝 [COUNCIL CONSENSUS] Getting multiple opinions for code decision...');
-  
-  // Use available Ollama code models
-  const models = ['ollama_deepseek_coder', 'ollama_qwen_coder_32b', 'ollama_llama', 'ollama_deepseek'];
-  const availableModels = models.filter(m => COUNCIL_MEMBERS[m] && (OLLAMA_ENDPOINT || COUNCIL_MEMBERS[m].provider === 'groq'));
-  
-  if (availableModels.length < 2) {
-    console.warn('⚠️ [CONSENSUS] Not enough models available, using single model');
-    if (availableModels.length > 0) {
-      return await callCouncilMember(availableModels[0], prompt);
-    }
-    // Fallback to any available model
-    return await callCouncilMember('ollama_deepseek', prompt);
-  }
-  
-  const responses = [];
-  
-  // Get 2 opinions minimum
-  for (const model of availableModels.slice(0, 2)) {
-    try {
-      console.log(`🔄 [CONSENSUS] Getting opinion from ${model}...`);
-      const response = await callCouncilMember(model, prompt, {
-        useOpenSourceCouncil: true,
-        maxTokens: 8000,
-        temperature: 0.3,
-      });
-      if (response) {
-        responses.push({ model, response });
-        console.log(`✅ [CONSENSUS] ${model} responded (${response.length} chars)`);
-      }
-    } catch (e) {
-      console.warn(`⚠️ [CONSENSUS] ${model} failed: ${e.message}`);
-    }
-  }
-  
-  if (responses.length < 2) {
-    console.warn('⚠️ [CONSENSUS] Not enough responses, using single model result');
-    return responses[0]?.response || null;
-  }
-  
-  // Check if responses agree (simple similarity check)
-  const similarity = compareResponses(responses[0].response, responses[1].response);
-  console.log(`📊 [CONSENSUS] Similarity: ${(similarity * 100).toFixed(0)}%`);
-  
-  if (similarity > 0.7) {
-    console.log(`✅ [CONSENSUS] Models agree (similarity: ${(similarity * 100).toFixed(0)}%)`);
-    return responses[0].response; // Use first response
-  }
-  
-  // Get tiebreaker
-  console.log('🔄 [CONSENSUS] Models disagree, getting 3rd opinion...');
-  try {
-    const tiebreakerModel = availableModels[2] || availableModels[0];
-    const tiebreaker = await callCouncilMember(tiebreakerModel, prompt, {
-      useOpenSourceCouncil: true,
-      maxTokens: 8000,
-      temperature: 0.3,
-    });
-    responses.push({ model: tiebreakerModel, response: tiebreaker });
-    
-    // Vote on best response (use the one with highest similarity to others)
-    const bestResponse = selectBestResponse(responses);
-    console.log(`✅ [CONSENSUS] Selected best response after tiebreaker`);
-    return bestResponse;
-  } catch (e) {
-    console.warn(`⚠️ [CONSENSUS] Tiebreaker failed: ${e.message}, using first response`);
-    return responses[0].response;
-  }
-}
-
-/**
- * Compare two responses for similarity (word overlap)
- */
-function compareResponses(a, b) {
-  if (!a || !b) return 0;
-  
-  // Simple word overlap comparison
-  const wordsA = new Set(a.toLowerCase().split(/\s+/).filter(w => w.length > 2));
-  const wordsB = new Set(b.toLowerCase().split(/\s+/).filter(w => w.length > 2));
-  const intersection = [...wordsA].filter(w => wordsB.has(w));
-  const union = new Set([...wordsA, ...wordsB]);
-  
-  return intersection.length / Math.max(union.size, 1);
-}
-
-/**
- * Select best response from multiple responses (highest average similarity)
- */
-function selectBestResponse(responses) {
-  if (responses.length === 0) return null;
-  if (responses.length === 1) return responses[0].response;
-  
-  // Calculate average similarity for each response
-  const scores = responses.map((r1, i) => {
-    let totalSimilarity = 0;
-    let count = 0;
-    for (let j = 0; j < responses.length; j++) {
-      if (i !== j) {
-        totalSimilarity += compareResponses(r1.response, responses[j].response);
-        count++;
-      }
-    }
-    return {
-      response: r1.response,
-      model: r1.model,
-      avgSimilarity: count > 0 ? totalSimilarity / count : 0,
-    };
-  });
-  
-  // Return response with highest average similarity
-  scores.sort((a, b) => b.avgSimilarity - a.avgSimilarity);
-  console.log(`📊 [CONSENSUS] Best response from ${scores[0].model} (avg similarity: ${(scores[0].avgSimilarity * 100).toFixed(0)}%)`);
-  return scores[0].response;
-}
+// Functions extracted to services/consensus-service.js (createGetCouncilConsensus, compareResponses, selectBestResponse)
+const getCouncilConsensus = createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT });
 
 registerWebsiteAuditRoutes(app, {
   requireKey,
@@ -2601,79 +2074,18 @@ app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
 });
 
 // ==================== WEBSOCKET ====================
-wss.on("connection", (ws) => {
-  const clientId = `ws_${Date.now()}_${Math.random()
-    .toString(36)
-    .slice(2, 8)}`;
-  activeConnections.set(clientId, ws);
-  conversationHistory.set(clientId, []);
-
-  console.log(`✅ [WS] ${clientId} connected`);
-
-  ws.send(
-    JSON.stringify({
-      type: "connection",
-      status: "connected",
-      clientId,
-      message: "🎼 LifeOS v26.1 (no Claude) - Consensus Protocol Ready",
-      systemMetrics,
-      features: {
-        consensusProtocol: true,
-        blindSpotDetection: true,
-        dailyIdeas: true,
-        aiRotation: true,
-        sandboxTesting: true,
-        rollbackCapability: true,
-        ollamaBridge: DEEPSEEK_BRIDGE_ENABLED === "true",
-        stripeRevenueSync: Boolean(STRIPE_SECRET_KEY),
-      },
-    })
-  );
-
-  ws.on("message", async (data) => {
-    try {
-      const msg = JSON.parse(data.toString());
-
-      if (msg.type === "chat") {
-        const text = msg.text || msg.message;
-        const member = msg.member || "chatgpt";
-
-        if (!text) return;
-
-        try {
-          const blindSpots = await detectBlindSpots(text, {
-            source: "websocket",
-          });
-
-          const response = await callCouncilWithFailover(text, member);
-          ws.send(
-            JSON.stringify({
-              type: "response",
-              response,
-              member,
-              blindSpotsDetected: blindSpots.length,
-              timestamp: new Date().toISOString(),
-            })
-          );
-        } catch (error) {
-          ws.send(
-            JSON.stringify({
-              type: "error",
-              error: error.message,
-            })
-          );
-        }
-      }
-    } catch (error) {
-      ws.send(JSON.stringify({ type: "error", error: error.message }));
-    }
-  });
-
-  ws.on("close", () => {
-    activeConnections.delete(clientId);
-    conversationHistory.delete(clientId);
-    console.log(`👋 [WS] ${clientId} disconnected`);
-  });
+// Handler extracted to services/websocket-handler.js
+setupWebSocketHandler(wss, {
+  activeConnections,
+  conversationHistory,
+  logger,
+  pool,
+  broadcastToAll,
+  detectBlindSpots,
+  callCouncilWithFailover,
+  systemMetrics,
+  DEEPSEEK_BRIDGE_ENABLED,
+  STRIPE_SECRET_KEY,
 });
 
 // ==================== STARTUP ====================

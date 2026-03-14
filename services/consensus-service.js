@@ -213,3 +213,117 @@ export function createConsensusService(deps) {
 
   return { conductEnhancedConsensus, createProposal };
 }
+
+// ==================== COUNCIL CONSENSUS (getCouncilConsensus) ====================
+// Extracted from server.js. Requires { callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT } at call time.
+
+/**
+ * Compare two responses for similarity (word overlap)
+ */
+export function compareResponses(a, b) {
+  if (!a || !b) return 0;
+  const wordsA = new Set(a.toLowerCase().split(/\s+/).filter(w => w.length > 2));
+  const wordsB = new Set(b.toLowerCase().split(/\s+/).filter(w => w.length > 2));
+  const intersection = [...wordsA].filter(w => wordsB.has(w));
+  const union = new Set([...wordsA, ...wordsB]);
+  return intersection.length / Math.max(union.size, 1);
+}
+
+/**
+ * Select best response from multiple responses (highest average similarity)
+ */
+export function selectBestResponse(responses) {
+  if (responses.length === 0) return null;
+  if (responses.length === 1) return responses[0].response;
+
+  const scores = responses.map((r1, i) => {
+    let totalSimilarity = 0;
+    let count = 0;
+    for (let j = 0; j < responses.length; j++) {
+      if (i !== j) {
+        totalSimilarity += compareResponses(r1.response, responses[j].response);
+        count++;
+      }
+    }
+    return {
+      response: r1.response,
+      model: r1.model,
+      avgSimilarity: count > 0 ? totalSimilarity / count : 0,
+    };
+  });
+
+  scores.sort((a, b) => b.avgSimilarity - a.avgSimilarity);
+  console.log(`📊 [CONSENSUS] Best response from ${scores[0].model} (avg similarity: ${(scores[0].avgSimilarity * 100).toFixed(0)}%)`);
+  return scores[0].response;
+}
+
+/**
+ * Factory — returns getCouncilConsensus bound to the provided deps.
+ * @param {{ callCouncilMember: function, COUNCIL_MEMBERS: object, OLLAMA_ENDPOINT: string }} deps
+ */
+export function createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT }) {
+  return async function getCouncilConsensus(prompt, taskType = 'code') {
+    console.log('🤝 [COUNCIL CONSENSUS] Getting multiple opinions for code decision...');
+
+    const models = ['ollama_deepseek_coder', 'ollama_qwen_coder_32b', 'ollama_llama', 'ollama_deepseek'];
+    const availableModels = models.filter(m => COUNCIL_MEMBERS[m] && (OLLAMA_ENDPOINT || COUNCIL_MEMBERS[m].provider === 'groq'));
+
+    if (availableModels.length < 2) {
+      console.warn('⚠️ [CONSENSUS] Not enough models available, using single model');
+      if (availableModels.length > 0) {
+        return await callCouncilMember(availableModels[0], prompt);
+      }
+      return await callCouncilMember('ollama_deepseek', prompt);
+    }
+
+    const responses = [];
+
+    for (const model of availableModels.slice(0, 2)) {
+      try {
+        console.log(`🔄 [CONSENSUS] Getting opinion from ${model}...`);
+        const response = await callCouncilMember(model, prompt, {
+          useOpenSourceCouncil: true,
+          maxTokens: 8000,
+          temperature: 0.3,
+        });
+        if (response) {
+          responses.push({ model, response });
+          console.log(`✅ [CONSENSUS] ${model} responded (${response.length} chars)`);
+        }
+      } catch (e) {
+        console.warn(`⚠️ [CONSENSUS] ${model} failed: ${e.message}`);
+      }
+    }
+
+    if (responses.length < 2) {
+      console.warn('⚠️ [CONSENSUS] Not enough responses, using single model result');
+      return responses[0]?.response || null;
+    }
+
+    const similarity = compareResponses(responses[0].response, responses[1].response);
+    console.log(`📊 [CONSENSUS] Similarity: ${(similarity * 100).toFixed(0)}%`);
+
+    if (similarity > 0.7) {
+      console.log(`✅ [CONSENSUS] Models agree (similarity: ${(similarity * 100).toFixed(0)}%)`);
+      return responses[0].response;
+    }
+
+    console.log('🔄 [CONSENSUS] Models disagree, getting 3rd opinion...');
+    try {
+      const tiebreakerModel = availableModels[2] || availableModels[0];
+      const tiebreaker = await callCouncilMember(tiebreakerModel, prompt, {
+        useOpenSourceCouncil: true,
+        maxTokens: 8000,
+        temperature: 0.3,
+      });
+      responses.push({ model: tiebreakerModel, response: tiebreaker });
+
+      const bestResponse = selectBestResponse(responses);
+      console.log(`✅ [CONSENSUS] Selected best response after tiebreaker`);
+      return bestResponse;
+    } catch (e) {
+      console.warn(`⚠️ [CONSENSUS] Tiebreaker failed: ${e.message}, using first response`);
+      return responses[0].response;
+    }
+  };
+}
