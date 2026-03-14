@@ -1,3 +1,12 @@
+/**
+ * Governance — holds global runtime state (ROI tracker, system metrics,
+ * compression metrics, AI performance scores, daily ideas, snapshots) and
+ * provides daily-reset / persistence helpers used throughout the server.
+ *
+ * Dependencies: dayjs, ./database.js (pool), process.env
+ * Exports: roiTracker, compressionMetrics, systemMetrics, aiPerformanceScores,
+ *          dailyIdeas, systemSnapshots, resetDailyMetrics, updateROI, persistMetrics
+ */
 // ===FILE:core/governance.js===
 import dayjs from "dayjs";
 import { pool } from "./database.js"; // Requires core/database.js to be present

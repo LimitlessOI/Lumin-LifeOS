@@ -1,3 +1,11 @@
+/**
+ * Simulation Middleware — intercepts outreach call/SMS routes and, when Twilio
+ * credentials are absent, logs a simulated outcome with a fake recording URL
+ * instead of making real API calls.
+ *
+ * Dependencies: ../models/outreachLog, process.env.TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN
+ * Exports: callOutreach(req, res), smsOutreach(req, res)
+ */
 const OutreachLog = require('../models/outreachLog');
 const isSimulationMode = !process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN;
 

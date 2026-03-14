@@ -1,3 +1,10 @@
+/**
+ * Analysis Service — sends call transcription text to GPT-4 for analysis and
+ * extracts next-action items from the model response.
+ *
+ * Dependencies: openai (npm), ../config/config (openaiApiKey)
+ * Exports: analyzeText(text), extractNextActions(analysis)
+ */
 const { Configuration, OpenAIApi } = require('openai');
 const config = require('../config/config');
 

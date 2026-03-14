@@ -1,3 +1,10 @@
+/**
+ * DB Pool Factory — creates a configured pg connection pool for Neon PostgreSQL,
+ * enabling SSL when the connection string points to neon.tech.
+ *
+ * Dependencies: pg (Pool)
+ * Exports: createDbPool({ validatedDatabaseUrl, DB_SSL_REJECT_UNAUTHORIZED })
+ */
 import { Pool } from "pg";
 
 export function createDbPool({ validatedDatabaseUrl, DB_SSL_REJECT_UNAUTHORIZED }) {

@@ -1,4 +1,10 @@
-```js
+/**
+ * Adaptive Learning Engine — trains a brain.js neural network on user preference
+ * data and exposes a predict() method for personalized recommendations.
+ *
+ * Dependencies: brain.js, @tensorflow/tfjs-node
+ * Exports: AdaptiveLearningEngine instance (singleton via module.exports)
+ */
 const brain = require('brain.js');
 const tf = require('@tensorflow/tfjs-node');
 
@@ -20,4 +26,3 @@ class AdaptiveLearningEngine {
 }
 
 module.exports = new AdaptiveLearningEngine();
-```

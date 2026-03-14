@@ -5,7 +5,6 @@
  * Dependencies: executionQueue (injected via constructor)
  * Exports: FunnelAnalyzer (class via module.exports)
  */
-```javascript
 class FunnelAnalyzer {
   constructor(executionQueue) {
     this.executionQueue = executionQueue;
@@ -20,4 +19,3 @@ class FunnelAnalyzer {
 }
 
 module.exports = FunnelAnalyzer;
-```

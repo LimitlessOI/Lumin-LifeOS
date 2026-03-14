@@ -1,3 +1,10 @@
+/**
+ * Config Service — thin wrapper around env-validator that provides typed access
+ * to validated environment variables, throwing on unknown keys.
+ *
+ * Dependencies: ../config/env-validator
+ * Exports: ConfigService (class, default export via module.exports)
+ */
 const envVars = require('../config/env-validator');
 
 class ConfigService {

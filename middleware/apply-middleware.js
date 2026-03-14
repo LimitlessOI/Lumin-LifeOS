@@ -1,3 +1,12 @@
+/**
+ * Apply Middleware — registers all Express middleware for the app: body parsers,
+ * static file serving, general + AI-specific rate limiters, and CORS with
+ * same-origin + allowlist enforcement.
+ *
+ * Dependencies: express, express-rate-limit (rateLimit), path
+ *               (all injected: express, path, __dirname, rateLimit, ALLOWED_ORIGINS_LIST, isSameOrigin)
+ * Exports: applyMiddleware(app, deps)
+ */
 export function applyMiddleware(app, {
   express,
   path,
