@@ -25,7 +25,7 @@ export function setupWebSocketHandler(wss, {
     activeConnections.set(clientId, ws);
     conversationHistory.set(clientId, []);
 
-    console.log(`✅ [WS] ${clientId} connected`);
+    logger.info(`✅ [WS] ${clientId} connected`);
 
     ws.send(
       JSON.stringify({
@@ -89,7 +89,7 @@ export function setupWebSocketHandler(wss, {
     ws.on("close", () => {
       activeConnections.delete(clientId);
       conversationHistory.delete(clientId);
-      console.log(`👋 [WS] ${clientId} disconnected`);
+      logger.info(`👋 [WS] ${clientId} disconnected`);
     });
   });
 }

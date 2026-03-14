@@ -1,3 +1,10 @@
+/**
+ * Transcription Service — sends an audio file URL to OpenAI Whisper-1 for
+ * speech-to-text transcription.
+ *
+ * Dependencies: openai (npm), ../config/config (openaiApiKey)
+ * Exports: transcribeAudio(audioFileUrl)
+ */
 const { Configuration, OpenAIApi } = require('openai');
 const config = require('../config/config');
 

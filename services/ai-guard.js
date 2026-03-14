@@ -1,3 +1,12 @@
+/**
+ * AI Guard — runtime safety layer that gates AI-heavy routes behind proof-of-reality
+ * checks, enforces a daily hallucination-attempt budget (HAB), and manages an
+ * enable/disable toggle for all AI calls.
+ *
+ * Dependencies: crypto, dayjs, process.env.HAB_DAILY_LIMIT
+ * Exports: configureAiGuard, recordHAB, checkAiEnabled, setAiEnabled, getAiStatus,
+ *          setExpectedReality, checkRealityDrift, validateProof
+ */
 import crypto from "crypto";
 import dayjs from "dayjs";
 

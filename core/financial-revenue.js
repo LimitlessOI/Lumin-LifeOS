@@ -2,6 +2,7 @@
  * recordRevenueEvent + syncStripeRevenue — extracted from server.js.
  * Factory: createFinancialRevenue({ financialDashboard, incomeDroneSystem, updateROI, getStripeClient })
  */
+import logger from '../services/logger.js';
 
 /**
  * @param {{ financialDashboard: object, incomeDroneSystem: object, updateROI: function, getStripeClient: function }} deps
@@ -49,7 +50,7 @@ export function createFinancialRevenue({ financialDashboard, incomeDroneSystem, 
         return;
       }
 
-      console.log("💳 Syncing Stripe revenue into financial_ledger...");
+      logger.info("💳 Syncing Stripe revenue into financial_ledger...");
 
       const paymentIntents = await stripe.paymentIntents.list({
         limit: 50,
@@ -70,9 +71,9 @@ export function createFinancialRevenue({ financialDashboard, incomeDroneSystem, 
         });
       }
 
-      console.log("✅ Stripe revenue sync complete");
+      logger.info("✅ Stripe revenue sync complete");
     } catch (err) {
-      console.error("Stripe revenue sync error:", err.message);
+      logger.error("Stripe revenue sync error:", { error: err.message });
     }
   }
 

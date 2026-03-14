@@ -1,3 +1,10 @@
+/**
+ * Document Processor — extracts text from PDF buffers via pdf-parse and
+ * tokenizes/stems the result using the natural NLP library.
+ *
+ * Dependencies: pdf-parse, natural (NlpManager)
+ * Exports: DocumentProcessor (class via module.exports)
+ */
 const pdfParse = require('pdf-parse');
 const { NlpManager } = require('natural');
 

@@ -1,3 +1,10 @@
+/**
+ * Funnel Analyzer — queues AI-driven funnel data analysis tasks into the
+ * execution queue for async processing.
+ *
+ * Dependencies: executionQueue (injected via constructor)
+ * Exports: FunnelAnalyzer (class via module.exports)
+ */
 ```javascript
 class FunnelAnalyzer {
   constructor(executionQueue) {

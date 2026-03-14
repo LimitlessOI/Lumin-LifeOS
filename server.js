@@ -80,6 +80,9 @@ import { initDb } from "./db/index.js";
 import { getAllFlags } from "./lib/flags.js";
 import { validateEnv } from './services/env-validator.js';
 import { runPreviewExpiry } from './services/preview-expiry-cron.js';
+import { requestTracer } from './middleware/request-tracer.js';
+import { errorBoundary } from './middleware/error-boundary.js';
+import { startDbHealthMonitor } from './services/db-health-monitor.js';
 
 import { createFinancialRoutes } from './routes/financial-routes.js';
 import { createBusinessRoutes } from './routes/business-routes.js';
@@ -383,6 +386,8 @@ applyMiddleware(app, {
   isSameOrigin,
 });
 
+app.use(requestTracer(logger));
+
 app.use((req, res, next) => {
   if (typeof resourceGovernor?.noteRequest === 'function') {
     resourceGovernor.noteRequest(req);
@@ -404,6 +409,9 @@ export const pool = createDbPool({
 
 // Initialize Drizzle ORM (shares the same pool — no second connection)
 initDb(pool);
+
+// Start DB pool health monitoring
+startDbHealthMonitor(pool);
 
 let tcoTablesEnsured = false;
 
@@ -1537,6 +1545,35 @@ setupWebSocketHandler(wss, {
   DEEPSEEK_BRIDGE_ENABLED,
   STRIPE_SECRET_KEY,
 });
+
+// ==================== HEALTH CHECK ====================
+app.get('/healthz', async (req, res) => {
+  const checks = {
+    server: 'ok',
+    db: 'unknown',
+    ai: process.env.ANTHROPIC_API_KEY ? 'configured' : 'missing_key',
+    email: process.env.POSTMARK_SERVER_TOKEN ? 'configured' : 'not_configured',
+  };
+
+  try {
+    await pool.query('SELECT 1');
+    checks.db = 'ok';
+  } catch (e) {
+    checks.db = 'error: ' + e.message;
+  }
+
+  const allOk = checks.db === 'ok' && checks.ai === 'configured';
+  res.status(allOk ? 200 : 503).json({
+    status: allOk ? 'healthy' : 'degraded',
+    checks,
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// ==================== GLOBAL ERROR BOUNDARY ====================
+// Must be registered after all routes
+app.use(errorBoundary(logger));
 
 // ==================== STARTUP ====================
 async function start() {

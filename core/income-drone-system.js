@@ -2,6 +2,7 @@
  * IncomeDroneSystem — basic income drone management.
  * Extracted from server.js. Enhanced version is in core/enhanced-income-drone.js.
  */
+import logger from '../services/logger.js';
 export class IncomeDroneSystem {
   constructor({ pool, updateROI, broadcastToAll } = {}) {
     this.pool = pool;
@@ -34,7 +35,7 @@ export class IncomeDroneSystem {
 
       return droneId;
     } catch (error) {
-      console.error(`Drone deployment error: ${error.message}`);
+      logger.error(`Drone deployment error: ${error.message}`);
       return null;
     }
   }
@@ -75,7 +76,7 @@ export class IncomeDroneSystem {
         drone.tasks++;
       }
     } catch (error) {
-      console.error(`Revenue update error: ${error.message}`);
+      logger.error(`Revenue update error: ${error.message}`);
     }
   }
 

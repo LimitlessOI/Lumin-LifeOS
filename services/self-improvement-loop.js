@@ -2,6 +2,7 @@
  * continuousSelfImprovement — extracted from server.js.
  * Factory pattern: call createSelfImprovementLoop(getDeps) to get the bound async function.
  */
+import logger from './logger.js';
 
 /**
  * @param {() => object} getDeps  Returns: { systemMetrics, pool, createSystemSnapshot,
@@ -25,7 +26,7 @@ export function createSelfImprovementLoop(getDeps) {
 
     try {
       systemMetrics.improvementCyclesRun++;
-      console.log(
+      logger.info(
         `🔧 [IMPROVEMENT] Running cycle #${systemMetrics.improvementCyclesRun}...`
       );
 
@@ -89,7 +90,7 @@ export function createSelfImprovementLoop(getDeps) {
             await executionQueue.addTask("self_improvement", improvements);
             systemMetrics.lastImprovement = new Date().toISOString();
           } else {
-            console.log("⚠️ Improvements failed sandbox test, rolling back");
+            logger.warn("⚠️ Improvements failed sandbox test, rolling back");
             await rollbackToSnapshot(
               systemSnapshots[systemSnapshots.length - 1].id
             );
@@ -97,7 +98,7 @@ export function createSelfImprovementLoop(getDeps) {
         }
       }
     } catch (error) {
-      console.error("Self-improvement error:", error.message);
+      logger.error("Self-improvement error:", { error: error.message });
     }
   };
 }

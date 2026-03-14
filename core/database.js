@@ -1,3 +1,11 @@
+/**
+ * Database — initialises the global pg connection pool for Neon PostgreSQL and
+ * runs all CREATE TABLE / CREATE INDEX migrations needed by LifeOS on startup.
+ *
+ * Dependencies: pg (Pool), process.env.DATABASE_URL, DATABASE_URL_SANDBOX,
+ *               NODE_ENV, DB_SSL_REJECT_UNAUTHORIZED
+ * Exports: pool (Pool), initDatabase()
+ */
 // ===FILE:core/database.js===
 import { Pool } from "pg";
 import process from "node:process";

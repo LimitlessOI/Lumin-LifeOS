@@ -1,3 +1,10 @@
+/**
+ * Stripe Integration (conservation/legacy) — creates Stripe charges using a
+ * hardcoded test key placeholder. Used for conservation-domain charge flows.
+ *
+ * Dependencies: stripe (npm)
+ * Exports: createConservationCharge(amount, currency, description)
+ */
 const stripe = require('stripe')('your-stripe-secret-key');
 
 async function createConservationCharge(amount, currency, description) {

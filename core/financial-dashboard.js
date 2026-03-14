@@ -3,6 +3,7 @@
  * Extracted from server.js.
  */
 import dayjs from "dayjs";
+import logger from '../services/logger.js';
 
 export class FinancialDashboard {
   constructor({ pool } = {}) {
@@ -56,7 +57,7 @@ export class FinancialDashboard {
         date: new Date().toISOString(),
       };
     } catch (error) {
-      console.error("Financial ledger error:", error.message);
+      logger.error("Financial ledger error:", { error: error.message });
       return null;
     }
   }
