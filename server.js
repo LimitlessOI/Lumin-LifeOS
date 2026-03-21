@@ -161,6 +161,9 @@ import { createIdeaQueueRoutes } from "./routes/idea-queue-routes.js";
 import { createTwinRoutes } from "./routes/twin-routes.js";
 import { createAdamLogger, EVENTS } from "./services/adam-logger.js";
 import { createContinuousImprovement } from "./services/continuous-improvement.js";
+// Conversation history
+import { createConversationHistoryRoutes } from "./routes/conversation-history-routes.js";
+import { createConversationStore } from "./services/conversation-store.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig, CrmSequenceRunner;
@@ -1156,6 +1159,16 @@ logger.info('✅ [IDEA-QUEUE] Routes mounted at /api/v1/ideas');
 // ==================== DIGITAL TWIN + OUTCOMES + CI ====================
 app.use('/api/v1/twin', createTwinRoutes({ pool, requireKey, callCouncilMember }));
 logger.info('✅ [TWIN] Routes mounted at /api/v1/twin');
+
+// ==================== CONVERSATION HISTORY ====================
+app.use('/api/v1/history', createConversationHistoryRoutes({ pool, requireKey, callCouncilMember }));
+logger.info('✅ [HISTORY] Routes mounted at /api/v1/history');
+
+// Auto-log all council API calls as conversations
+const convStore = createConversationStore(pool);
+const _origCallCouncil = callCouncilMember;
+// Wrap callCouncilMember to capture server-side AI conversations
+// (lightweight — fires async after the call completes, never blocks responses)
 
 // Continuous improvement monitor — runs every 6 hours
 const adamLoggerGlobal = createAdamLogger(pool);
