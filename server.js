@@ -157,6 +157,10 @@ import { registerEnhancedCouncilRoutes } from "./routes/enhanced-council-routes.
 import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
 // Idea Queue — human-approval gate for self-building pipeline
 import { createIdeaQueueRoutes } from "./routes/idea-queue-routes.js";
+// Digital Twin, Outcomes, Continuous Improvement
+import { createTwinRoutes } from "./routes/twin-routes.js";
+import { createAdamLogger, EVENTS } from "./services/adam-logger.js";
+import { createContinuousImprovement } from "./services/continuous-improvement.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig, CrmSequenceRunner;
@@ -1148,6 +1152,47 @@ registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requireKey);
 // ==================== IDEA QUEUE ====================
 app.use('/api/v1/ideas', createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));
 logger.info('✅ [IDEA-QUEUE] Routes mounted at /api/v1/ideas');
+
+// ==================== DIGITAL TWIN + OUTCOMES + CI ====================
+app.use('/api/v1/twin', createTwinRoutes({ pool, requireKey, callCouncilMember }));
+logger.info('✅ [TWIN] Routes mounted at /api/v1/twin');
+
+// Continuous improvement monitor — runs every 6 hours
+const adamLoggerGlobal = createAdamLogger(pool);
+const ciMonitor = createContinuousImprovement({
+  pool,
+  callAI: async (prompt) => {
+    try {
+      const result = await callCouncilMember('anthropic', prompt);
+      return typeof result === 'string' ? result : result?.content || result?.text || '';
+    } catch {
+      return '';
+    }
+  },
+  adamLogger: adamLoggerGlobal,
+});
+
+// Run first check after 5 minutes, then every 6 hours
+setTimeout(() => {
+  ciMonitor.runMonitorCycle().catch(err =>
+    logger.warn('[CI] Monitor cycle failed', { error: err.message })
+  );
+  setInterval(() => {
+    ciMonitor.runMonitorCycle().catch(err =>
+      logger.warn('[CI] Monitor cycle failed', { error: err.message })
+    );
+  }, 6 * 60 * 60 * 1000); // every 6 hours
+}, 5 * 60 * 1000); // 5 min after startup
+
+// Rebuild Adam's profile every 12 hours
+setInterval(() => {
+  adamLoggerGlobal.buildProfile(async (prompt) => {
+    try {
+      const result = await callCouncilMember('anthropic', prompt);
+      return typeof result === 'string' ? result : result?.content || '';
+    } catch { return ''; }
+  }).catch(err => logger.warn('[ADAM-TWIN] Profile rebuild failed', { error: err.message }));
+}, 12 * 60 * 60 * 1000); // every 12 hours
 
 // ==================== RAILWAY CONTROL ====================
 // GET  /api/v1/railway/env          — list all env vars on Railway
