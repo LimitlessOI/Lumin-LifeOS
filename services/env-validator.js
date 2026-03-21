@@ -6,11 +6,11 @@
 
 const REQUIRED = [
   { key: 'DATABASE_URL', desc: 'Neon PostgreSQL connection string' },
-  { key: 'ANTHROPIC_API_KEY', desc: 'Claude AI API key' },
   { key: 'COMMAND_CENTER_KEY', desc: 'API authentication key for all routes' },
 ];
 
 const OPTIONAL_WITH_WARNINGS = [
+  { key: 'ANTHROPIC_API_KEY', desc: 'Claude AI disabled — council will use Ollama/other providers only', feature: 'AI Council (Claude)' },
   { key: 'POSTMARK_SERVER_TOKEN', desc: 'Email sending disabled — cold prospect emails will not send', feature: 'Site Builder cold email' },
   { key: 'EMAIL_FROM', desc: 'Email sending disabled — no From address configured', feature: 'Site Builder cold email' },
   { key: 'SITE_BASE_URL', desc: 'Preview links in emails will be broken', feature: 'Site Builder previews' },

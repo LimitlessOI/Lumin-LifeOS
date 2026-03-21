@@ -18,7 +18,10 @@ async function getAcorn() {
   }
 }
 
-export function validateJavaScript(code) {
+export async function validateJavaScript(code) {
+  if (!acorn) {
+    await getAcorn();
+  }
   if (!acorn) {
     return { valid: true, warning: 'acorn not installed, skipping syntax check' };
   }

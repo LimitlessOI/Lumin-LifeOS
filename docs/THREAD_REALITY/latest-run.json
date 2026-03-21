@@ -1,0 +1,12 @@
+{
+  "runId": "2026-03-20T10-34-51-673Z",
+  "whatWasAttempted": "Auto-builder cycle (scheduler)",
+  "result": "UNVERIFIED",
+  "proofPaths": [
+    "docs/THREAD_REALITY/outputs/2026-03-20T10-34-51-673Z/status-before.json",
+    "docs/THREAD_REALITY/outputs/2026-03-20T10-34-51-673Z/status-after.json",
+    "docs/THREAD_REALITY/outputs/2026-03-20T10-34-51-673Z/cycle-log.txt"
+  ],
+  "runDir": "docs/THREAD_REALITY/outputs/2026-03-20T10-34-51-673Z",
+  "blocker": "cycle failed"
+}

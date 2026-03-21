@@ -9,13 +9,16 @@ const ROOT = process.cwd();
 const QUEUE_PATH = path.join(ROOT, "scripts", "autonomy", "queue.json");
 const REPORT_PATH = path.join(ROOT, "scripts", "autonomy", "proof-report.md");
 const LOG_DIR = path.join(ROOT, "scripts", "autonomy", "logs");
+const REGISTRY_PATH = path.join(ROOT, "scripts", "autonomy", "task-registry.json");
+const PROOF_ROOT = path.join(ROOT, "scripts", "autonomy", "proof");
 
 const TIMESTAMP = new Date().toISOString().replace(/[:.]/g, "-");
 const LOG_PATH = path.join(LOG_DIR, `${TIMESTAMP}.log`);
+const LATEST_RUN_PATH = path.join(ROOT, "docs", "THREAD_REALITY", "latest-run.json");
 
-function ensureLogDir() {
-  if (!fs.existsSync(LOG_DIR)) {
-    fs.mkdirSync(LOG_DIR, { recursive: true });
+function ensureDir(dir) {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
   }
 }
 
@@ -25,13 +28,13 @@ function logLine(line) {
   fs.appendFileSync(LOG_PATH, text + "\n");
 }
 
-function readQueue() {
-  const raw = fs.readFileSync(QUEUE_PATH, "utf8");
+function readJson(filePath) {
+  const raw = fs.readFileSync(filePath, "utf8");
   return JSON.parse(raw);
 }
 
-function writeQueue(queue) {
-  fs.writeFileSync(QUEUE_PATH, JSON.stringify(queue, null, 2) + "\n");
+function writeJson(filePath, payload) {
+  fs.writeFileSync(filePath, JSON.stringify(payload, null, 2) + "\n");
 }
 
 function runCommand(command, env = {}) {
@@ -41,37 +44,140 @@ function runCommand(command, env = {}) {
     env: { ...process.env, ...env },
     encoding: "utf8",
   });
-  if (result.stdout) logLine(result.stdout.trim());
-  if (result.stderr) logLine(result.stderr.trim());
-  logLine(`EXIT:${result.status ?? 1}`);
-  return result.status ?? 1;
+  const stdout = result.stdout || "";
+  const stderr = result.stderr || "";
+  if (stdout.trim()) logLine(stdout.trim());
+  if (stderr.trim()) logLine(stderr.trim());
+  const status = result.status ?? 1;
+  logLine(`EXIT:${status}`);
+  return { status, stdout, stderr };
 }
 
-function runPrecheck() {
-  const results = [];
-  results.push({
-    name: "ssot:validate",
-    exit: runCommand("npm run ssot:validate"),
-  });
+function readQueue() {
+  return readJson(QUEUE_PATH);
+}
 
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
-    results.push({
-      name: "test:smoke",
-      exit: 1,
-      note: "DATABASE_URL missing",
+function writeQueue(queue) {
+  writeJson(QUEUE_PATH, queue);
+}
+
+function readRegistry() {
+  return readJson(REGISTRY_PATH);
+}
+
+function validateTask(item) {
+  const errors = [];
+  if (!Array.isArray(item.commands) || item.commands.length === 0) {
+    errors.push("commands[] is required and must be non-empty");
+  }
+  if (!Array.isArray(item.env)) {
+    errors.push("env[] is required");
+  }
+  if (!Array.isArray(item.verifiers) || item.verifiers.length === 0) {
+    errors.push("verifiers[] is required and must be non-empty");
+  }
+  if (!Array.isArray(item.proof_artifacts)) {
+    errors.push("proof_artifacts[] is required");
+  }
+  if (!Array.isArray(item.ssot_refs)) {
+    errors.push("ssot_refs[] is required");
+  }
+  return errors;
+}
+
+function resolveCommand(commandId, registry) {
+  const entry = registry[commandId];
+  if (!entry) {
+    throw new Error(`Command '${commandId}' is not in task registry`);
+  }
+  return entry;
+}
+
+function envArrayToObject(envArray) {
+  const env = {};
+  for (const pair of envArray) {
+    if (!pair || typeof pair.key !== "string") continue;
+    env[pair.key] = String(pair.value ?? "");
+  }
+  return env;
+}
+
+function verifyJsonOutput(stdout) {
+  try {
+    JSON.parse(stdout);
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, error: error.message };
+  }
+}
+
+function writeProofBundle(taskId, proof, proofPaths) {
+  const proofDir = path.join(PROOF_ROOT, taskId);
+  ensureDir(proofDir);
+  fs.writeFileSync(path.join(proofDir, "stdout.log"), proof.stdout.join("\n") + "\n");
+  fs.writeFileSync(path.join(proofDir, "stderr.log"), proof.stderr.join("\n") + "\n");
+  writeJson(path.join(proofDir, "exit.json"), proof.exitJson);
+  fs.writeFileSync(path.join(proofDir, "diff.patch"), proof.diffPatch);
+  writeJson(path.join(proofDir, "ssot_refs.json"), proof.ssotRefs);
+  const files = ["stdout.log", "stderr.log", "exit.json", "diff.patch", "ssot_refs.json"];
+  for (const file of files) {
+    proofPaths.add(path.relative(ROOT, path.join(proofDir, file)));
+  }
+}
+
+function getDiffPatch() {
+  const result = spawnSync("git diff", { shell: true, encoding: "utf8" });
+  if (result.status !== 0) return "";
+  return result.stdout || "";
+}
+
+function runSteps(stepIds, registry, env, expectsJson) {
+  const steps = [];
+  const stdoutLines = [];
+  const stderrLines = [];
+
+  for (const stepId of stepIds) {
+    const entry = resolveCommand(stepId, registry);
+    const requiredEnv = Array.isArray(entry.requiredEnv) ? entry.requiredEnv : [];
+    for (const key of requiredEnv) {
+      if (!env[key]) {
+        steps.push({
+          id: stepId,
+          command: entry.command,
+          exit: 1,
+          ok: false,
+          error: `Missing required env: ${key}`,
+        });
+        return { steps, stdoutLines, stderrLines, failed: true };
+      }
+    }
+
+    const result = runCommand(entry.command, env);
+    stdoutLines.push(`[${stepId}] ${result.stdout}`.trim());
+    stderrLines.push(`[${stepId}] ${result.stderr}`.trim());
+
+    let ok = result.status === 0;
+    let jsonError = null;
+    if (ok && expectsJson) {
+      const jsonCheck = verifyJsonOutput(result.stdout.trim());
+      ok = jsonCheck.ok;
+      jsonError = jsonCheck.ok ? null : jsonCheck.error;
+    }
+
+    steps.push({
+      id: stepId,
+      command: entry.command,
+      exit: result.status,
+      ok,
+      jsonError,
     });
-    return { ok: false, results, reason: "DATABASE_URL missing" };
+
+    if (!ok) {
+      return { steps, stdoutLines, stderrLines, failed: true };
+    }
   }
 
-  const smokeExit = runCommand("npm run test:smoke", {
-    DATABASE_URL: databaseUrl,
-    COMMAND_CENTER_KEY: process.env.COMMAND_CENTER_KEY || "smoke_test_key",
-  });
-  results.push({ name: "test:smoke", exit: smokeExit });
-
-  const ok = results.every((r) => r.exit === 0);
-  return { ok, results, reason: ok ? null : "Precheck failed" };
+  return { steps, stdoutLines, stderrLines, failed: false };
 }
 
 function writeReport({ tasksRan, filesChanged, verifications }) {
@@ -104,7 +210,8 @@ function writeReport({ tasksRan, filesChanged, verifications }) {
     lines.push("- None");
   } else {
     for (const v of verifications) {
-      lines.push(`- ${v.name}: EXIT:${v.exit}${v.note ? ` (${v.note})` : ""}`);
+      const jsonNote = v.jsonError ? ` JSON_ERROR:${v.jsonError}` : "";
+      lines.push(`- ${v.id}: EXIT:${v.exit}${jsonNote}`);
     }
   }
   lines.push("");
@@ -118,6 +225,10 @@ function writeReport({ tasksRan, filesChanged, verifications }) {
   fs.writeFileSync(REPORT_PATH, lines.join("\n") + "\n");
 }
 
+function writeLatestRun(record) {
+  fs.writeFileSync(LATEST_RUN_PATH, JSON.stringify(record, null, 2) + "\n");
+}
+
 function getFilesChanged() {
   const result = spawnSync("git diff --name-only", { shell: true, encoding: "utf8" });
   if (result.status !== 0) return [];
@@ -128,10 +239,13 @@ function getFilesChanged() {
 }
 
 function runQueue() {
-  ensureLogDir();
+  ensureDir(LOG_DIR);
+  ensureDir(PROOF_ROOT);
   logLine("Autonomy runner starting.");
+  const proofPaths = new Set([path.relative(ROOT, LOG_PATH)]);
 
   const queue = readQueue();
+  const registry = readRegistry();
   const tasksRan = [];
   const verifications = [];
 
@@ -142,53 +256,76 @@ function runQueue() {
     writeQueue(queue);
 
     logLine(`Starting task ${item.id}`);
-    const requireWork = item.requireWork !== false;
-    const hasCommands = Array.isArray(item.commands) && item.commands.length > 0;
-    if (requireWork && !hasCommands) {
+
+    const validationErrors = validateTask(item);
+    if (validationErrors.length > 0) {
       item.status = "blocked";
-      item.reason = "No commands defined for task";
+      item.reason = `Invalid task schema: ${validationErrors.join("; ")}`;
       tasksRan.push({ id: item.id, status: item.status, reason: item.reason });
       writeQueue(queue);
       continue;
     }
 
-    const precheck = runPrecheck();
-    verifications.push(...precheck.results);
+    const taskEnv = envArrayToObject(item.env);
+    const proof = {
+      stdout: [],
+      stderr: [],
+      exitJson: {
+        taskId: item.id,
+        startedAt: new Date().toISOString(),
+        steps: [],
+        status: "running",
+      },
+      diffPatch: "",
+      ssotRefs: item.ssot_refs,
+    };
 
-    if (!precheck.ok) {
+    const commandRun = runSteps(item.commands, registry, taskEnv, false);
+    proof.stdout.push(...commandRun.stdoutLines);
+    proof.stderr.push(...commandRun.stderrLines);
+    proof.exitJson.steps.push(...commandRun.steps.map((step) => ({
+      phase: "command",
+      ...step,
+    })));
+
+    if (commandRun.failed) {
       item.status = "blocked";
-      item.reason = precheck.reason;
+      item.reason = "Command failed";
+      proof.exitJson.status = "blocked";
+      proof.exitJson.finishedAt = new Date().toISOString();
+      proof.diffPatch = getDiffPatch();
+      writeProofBundle(item.id, proof, proofPaths);
       tasksRan.push({ id: item.id, status: item.status, reason: item.reason });
       writeQueue(queue);
       continue;
     }
 
-    const commandResults = [];
-    if (Array.isArray(item.commands)) {
-      for (const command of item.commands) {
-        const exit = runCommand(command);
-        commandResults.push({ name: command, exit });
-      }
-    }
+    const verifierRun = runSteps(item.verifiers, registry, taskEnv, true);
+    proof.stdout.push(...verifierRun.stdoutLines);
+    proof.stderr.push(...verifierRun.stderrLines);
+    proof.exitJson.steps.push(...verifierRun.steps.map((step) => ({
+      phase: "verifier",
+      ...step,
+    })));
+    verifications.push(...verifierRun.steps.map((step) => ({
+      id: step.id,
+      exit: step.exit,
+      jsonError: step.jsonError,
+    })));
 
-    const acceptanceResults = [];
-    if (Array.isArray(item.acceptance_tests)) {
-      for (const test of item.acceptance_tests) {
-        const exit = runCommand(test);
-        acceptanceResults.push({ name: test, exit });
-      }
-    }
-
-    verifications.push(...commandResults, ...acceptanceResults);
-
-    const failed = [...commandResults, ...acceptanceResults].find((r) => r.exit !== 0);
-    if (failed) {
+    if (verifierRun.failed) {
       item.status = "blocked";
-      item.reason = `Failed: ${failed.name}`;
+      item.reason = "Verifier failed or returned non-JSON";
+      proof.exitJson.status = "blocked";
     } else {
       item.status = "done";
       item.reason = null;
+      proof.exitJson.status = "done";
     }
+
+    proof.exitJson.finishedAt = new Date().toISOString();
+    proof.diffPatch = getDiffPatch();
+    writeProofBundle(item.id, proof, proofPaths);
 
     tasksRan.push({ id: item.id, status: item.status, reason: item.reason });
     writeQueue(queue);
@@ -197,12 +334,34 @@ function runQueue() {
   const filesChanged = getFilesChanged();
   writeReport({ tasksRan, filesChanged, verifications });
   logLine("Autonomy runner finished.");
+
+  const runId = TIMESTAMP.replace(/[:.]/g, "");
+  const attemptSummary =
+    tasksRan.length > 0
+      ? tasksRan.map((t) => `${t.id}:${t.status}`).join(", ")
+      : "no tasks";
+  const record = {
+    runId,
+    whatWasAttempted: attemptSummary,
+    result: "UNVERIFIED",
+    proofPaths: Array.from(proofPaths),
+    runDir: "",
+    blocker: proofPaths.size === 0 ? "No proof artifacts recorded" : "",
+  };
+  writeLatestRun(record);
+  const guardResult = runCommand(
+    `node scripts/truth-guard-preflight.js ${LATEST_RUN_PATH}`
+  );
+  if (guardResult.status !== 0) {
+    logLine("Truth guard preflight failed");
+    process.exit(guardResult.status);
+  }
 }
 
 try {
   runQueue();
 } catch (error) {
-  ensureLogDir();
+  ensureDir(LOG_DIR);
   logLine(`Runner failed: ${error.message}`);
   process.exit(1);
 }

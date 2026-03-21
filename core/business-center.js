@@ -5,6 +5,10 @@
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
+const DEFAULT_UPLIFT_THRESHOLD = Number(process.env.BUSINESS_UPLIFT_THRESHOLD || 1.1);
+const LABOR_RATE_PER_HOUR = Number(process.env.LABOR_RATE_PER_HOUR || 80);
+const DEFAULT_IDEA_BATCH_SIZE = Number(process.env.BUSINESS_IDEA_BATCH_SIZE || 25);
+
 export class BusinessCenter {
   constructor(pool, callCouncilMember, modelRouter) {
     this.pool = pool;
@@ -12,6 +16,164 @@ export class BusinessCenter {
     this.modelRouter = modelRouter;
     this.activeBusinesses = new Map();
     this.revenueStreams = [];
+  }
+
+  static sanitizeNumeric(value, { min = null, max = null } = {}) {
+    if (value == null) return null;
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      if (min != null && value < min) return min;
+      if (max != null && value > max) return max;
+      return value;
+    }
+    if (typeof value !== 'string') return null;
+    const cleaned = value.replace(/[^0-9.-]/g, '').trim();
+    if (!cleaned) return null;
+    const parsed = Number(cleaned);
+    if (!Number.isFinite(parsed)) return null;
+    if (min != null && parsed < min) return min;
+    if (max != null && parsed > max) return max;
+    return parsed;
+  }
+
+  static sanitizeRevenue(value) {
+    return this.sanitizeNumeric(value, { min: 0, max: 10_000_000 });
+  }
+
+  static sanitizeDuration(value) {
+    return this.sanitizeNumeric(value, { min: 0.5, max: 200 });
+  }
+
+  static logSanitization(field, raw, sanitized) {
+    if (raw && sanitized != null && raw.toString().trim() && raw.toString().trim() !== sanitized.toString()) {
+      console.log(`ℹ️ [BUSINESS CENTER] Sanitized ${field}: ${raw} → ${sanitized}`);
+    }
+  }
+
+  static buildIdeaPrompt(focus, count, improvementTarget) {
+    return `Generate ${count} detailed, revenue-focused business ideas for LifeOS with the core focus on "${focus}".
+Each idea must include:
+- title
+- 1 sentence summary
+- revenue potential ($/month)
+- time to implement (hours)
+- proof that it is at least ${improvementTarget}% better than current competitors (describe metric)
+- improvement levers (how it wins)
+- difficulty rating (easy/medium/hard)
+
+Respond with a strict JSON array, where each entry looks like:
+{
+  "title": "Short idea title",
+  "summary": "Why this works",
+  "revenuePotential": "$12,000/month",
+  "timeToImplement": "8",
+  "proof": [
+    { "type": "human_confirm", "value": "Outlined plan" }
+  ],
+  "focus": focus,
+  "difficulty": "medium",
+  "impact": "high"
+}
+
+Start with [ and end with ]. No prose before or after.`;
+  }
+
+  static normalizeIdeaPayload(raw) {
+    const idea = raw || {};
+    const normalized = {
+      title: (idea.title || idea.name || idea.idea_title || '').trim(),
+      description: (idea.summary || idea.description || idea.details || '').trim(),
+      difficulty: (idea.difficulty || idea.level || 'medium').toLowerCase(),
+      impact: (idea.impact || idea.impact_level || 'medium').toLowerCase(),
+      revenuePotential: idea.revenuePotential || idea.revenue_potential || idea.revenue || null,
+      timeToImplement: idea.timeToImplement || idea.time_to_implement || idea.time || null,
+      proof: Array.isArray(idea.proof) ? idea.proof : idea.evidence ? Array.isArray(idea.evidence) ? idea.evidence : [idea.evidence] : [{ type: 'human_confirm', value: 'Generated idea' }],
+    };
+    return normalized;
+  }
+
+  static generateFallbackIdeas(focus, count) {
+    const templates = [
+      {
+        title: "Conversion-First Homepage",
+        summary: "Rebuild the hero/copy to highlight proof, offer a booking CTA, and add trust badges.",
+        proof: [{ type: "human_confirm", value: "Fallback hero redesign plan" }],
+        revenuePotential: "$15,000/month",
+        timeToImplement: "12",
+        difficulty: "easy",
+        impact: "high",
+      },
+      {
+        title: "Authority Content Cluster",
+        summary: "Build a content hub (blogs, FAQs) around midwife/parenting keywords so you own the niche.",
+        proof: [{ type: "human_confirm", value: "Fallback content map" }],
+        revenuePotential: "$10,000/month",
+        timeToImplement: "18",
+        difficulty: "medium",
+        impact: "medium",
+      },
+      {
+        title: "Personalized Booking Flow",
+        summary: "Add a segmented booking path (pregnancy stage, service type) with instant availability.",
+        proof: [{ type: "human_confirm", value: "Fallback booking flow" }],
+        revenuePotential: "$12,000/month",
+        timeToImplement: "10",
+        difficulty: "easy",
+        impact: "high",
+      },
+      {
+        title: "Client Testimonial Highlight",
+        summary: "Turn current testimonials into dynamic proof (video, slider, ROI metrics).",
+        proof: [{ type: "human_confirm", value: "Fallback testimonial plan" }],
+        revenuePotential: "$8,000/month",
+        timeToImplement: "6",
+        difficulty: "easy",
+        impact: "medium",
+      },
+    ];
+
+    const ideas = [];
+    for (let i = 0; i < count; i += 1) {
+      const template = templates[i % templates.length];
+      ideas.push({
+        ...template,
+        title: `${template.title} ${i + 1}`,
+        summary: `${template.summary} (Fallback focus: ${focus}).`,
+      });
+    }
+
+    return ideas;
+  }
+
+  static calculateRoi(revenue, timeHours, hourlyRate = LABOR_RATE_PER_HOUR) {
+    if (!revenue || !timeHours) return null;
+    const cost = timeHours * hourlyRate;
+    if (cost <= 0) return null;
+    return Number((revenue / cost).toFixed(4));
+  }
+
+  static async getBaselineRatio(pool) {
+    try {
+      const result = await pool.query(
+        `SELECT revenue_potential, time_to_implement
+         FROM revenue_opportunities
+         WHERE revenue_potential IS NOT NULL AND time_to_implement > 0
+         AND status = 'closed'
+         ORDER BY revenue_potential::float / time_to_implement DESC
+         LIMIT 1`
+      );
+      if (!result.rows.length) return null;
+      const { revenue_potential, time_to_implement } = result.rows[0];
+      if (!time_to_implement) return null;
+      return Number((revenue_potential / time_to_implement).toFixed(4));
+    } catch (error) {
+      console.warn('⚠️ [BUSINESS CENTER] Baseline ratio fetch failed:', error.message);
+      return null;
+    }
+  }
+
+  static requiresImprovement(candidateRatio, baselineRatio, threshold = DEFAULT_UPLIFT_THRESHOLD) {
+    if (!baselineRatio) return true;
+    return candidateRatio >= baselineRatio * threshold;
   }
 
   /**
@@ -191,6 +353,41 @@ CRITICAL: Return ONLY valid JSON array. No text before or after. Start with [ an
         return;
       }
       
+      const revenueRaw = opportunity.revenuePotential || opportunity.revenue_potential;
+      const revenueValue = BusinessCenter.sanitizeRevenue(revenueRaw);
+      BusinessCenter.logSanitization('revenue_potential', revenueRaw, revenueValue);
+      if (revenueValue == null) {
+        console.warn('⚠️ [BUSINESS CENTER] Skipping opportunity with invalid revenue value', revenueRaw);
+        return;
+      }
+
+      const timeRaw = opportunity.timeToImplement || opportunity.time_to_implement;
+      const timeValue = BusinessCenter.sanitizeDuration(timeRaw) ?? 1;
+      BusinessCenter.logSanitization('time_to_implement', timeRaw, timeValue);
+
+      const requiredResources = opportunity.requiredResources || opportunity.required_resources || [];
+      const resourcesPayload = JSON.stringify(requiredResources).slice(0, 2048);
+      const marketDemand = (opportunity.marketDemand || opportunity.market_demand || '').toString().slice(0, 256);
+      const competitive = (opportunity.competitiveAdvantage || opportunity.competitive_advantage || '').toString().slice(0, 256);
+
+      const baselineRatio = await BusinessCenter.getBaselineRatio(this.pool);
+      const candidateRatio = revenueValue / timeValue;
+      const improvementPct = baselineRatio
+        ? ((candidateRatio / baselineRatio - 1) * 100).toFixed(2)
+        : 100;
+      if (!BusinessCenter.requiresImprovement(candidateRatio, baselineRatio)) {
+        console.warn(
+          '⚠️ [BUSINESS CENTER] Opportunity skipped, needs >=10% improvement over baseline ratio',
+          `baseline=${baselineRatio?.toFixed(4) || 'n/a'}`,
+          `candidate=${candidateRatio.toFixed(4)}`
+        );
+        return;
+      }
+
+      const roiScore = BusinessCenter.calculateRoi(revenueValue, timeValue);
+
+      const generatedId = `opp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
       await this.pool.query(
         `INSERT INTO revenue_opportunities 
          (opportunity_id, name, revenue_potential, time_to_implement, required_resources,
@@ -198,19 +395,173 @@ CRITICAL: Return ONLY valid JSON array. No text before or after. Start with [ an
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
          ON CONFLICT (opportunity_id) DO NOTHING`,
         [
-          `opp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+          generatedId,
           opportunity.name.trim(),
-          opportunity.revenuePotential || opportunity.revenue_potential,
-          opportunity.timeToImplement || opportunity.time_to_implement,
-          JSON.stringify(opportunity.requiredResources || opportunity.required_resources || []),
-          opportunity.marketDemand || opportunity.market_demand,
-          opportunity.competitiveAdvantage || opportunity.competitive_advantage,
+          revenueValue,
+          timeValue,
+          resourcesPayload,
+          marketDemand,
+          competitive,
           'pending',
         ]
       );
+
+      if (roiScore != null) {
+        await this.pool.query(
+          `UPDATE revenue_opportunities SET roi_score = $1, improvement_pct = $2
+           WHERE opportunity_id = $3`,
+          [roiScore, Number(improvementPct), generatedId]
+        );
+      }
     } catch (error) {
       console.error('❌ [BUSINESS CENTER] Error storing opportunity:', error.message);
     }
+  }
+
+  /**
+   * Generate a focused idea batch for a specific business focus
+   */
+  async generateIdeaBatch({ focus, targetImprovement = 10, count = DEFAULT_IDEA_BATCH_SIZE } = {}) {
+    if (!focus || typeof focus !== 'string' || !focus.trim()) {
+      throw new Error('Focus is required for idea batch generation');
+    }
+
+    const ideaPrompt = BusinessCenter.buildIdeaPrompt(focus, count, targetImprovement);
+    const response = await this.callCouncilMember('chatgpt', ideaPrompt, {
+      maxTokens: 4000,
+      useTwoTier: false,
+    });
+
+    const rawIdeas = this.parseJSONResponse(response);
+    const buildingIdeas = (Array.isArray(rawIdeas) ? rawIdeas : [])
+      .map(BusinessCenter.normalizeIdeaPayload)
+      .filter((idea) => idea.title);
+
+    let ideas = buildingIdeas;
+    if (ideas.length === 0) {
+      console.warn('⚠️ [BUSINESS CENTER] No ideas parsed from council response - using fallback templates');
+      ideas = BusinessCenter.generateFallbackIdeas(focus, count);
+    }
+
+    const batchIdBase = focus.replace(/[^\w]+/g, '_').toLowerCase() || 'focus';
+    const batchId = `batch_${batchIdBase}_${Date.now()}`;
+
+    await this.persistIdeaBatch(batchId, focus, targetImprovement, ideas.slice(0, count));
+
+    const stored = await this.getIdeaBatch(batchId, count);
+    return {
+      batchId,
+      focus,
+      targetImprovement,
+      totalIdeas: stored.length,
+      ideas: stored,
+    };
+  }
+
+  async persistIdeaBatch(batchId, focus, targetImprovement, ideas) {
+    if (!ideas || !ideas.length) return;
+
+    const baselineRatio = (await BusinessCenter.getBaselineRatio(this.pool)) || null;
+
+    await this.pool.query(
+      `INSERT INTO idea_batches (batch_id, focus, target_improvement, created_at)
+       VALUES ($1, $2, $3, NOW())
+       ON CONFLICT (batch_id) DO NOTHING`,
+      [batchId, focus, targetImprovement]
+    );
+
+    let order = 1;
+    for (const idea of ideas) {
+      const revenueValue = BusinessCenter.sanitizeRevenue(idea.revenuePotential);
+      const timeValue = BusinessCenter.sanitizeDuration(idea.timeToImplement) || 1;
+      BusinessCenter.logSanitization('idea.revenuePotential', idea.revenuePotential, revenueValue);
+      BusinessCenter.logSanitization('idea.timeToImplement', idea.timeToImplement, timeValue);
+
+      const candidateRatio =
+        revenueValue != null && timeValue > 0 ? revenueValue / timeValue : null;
+
+      const improvementPct =
+        candidateRatio != null && baselineRatio
+          ? Number((((candidateRatio / baselineRatio - 1) * 100) || 0).toFixed(2))
+          : null;
+
+      const roiScore = BusinessCenter.calculateRoi(revenueValue, timeValue);
+      const metrics = {
+        candidateRatio,
+        baselineRatio,
+        roiScore,
+      };
+
+      const status =
+        improvementPct != null && improvementPct >= targetImprovement ? 'ready' : 'needs_work';
+
+      await this.pool.query(
+        `INSERT INTO idea_batch_items
+         (batch_id, idea_order, idea_title, idea_description, difficulty, impact,
+          revenue_potential, time_to_implement, improvement_pct, proof, status, metrics, created_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())`,
+        [
+          batchId,
+          order,
+          idea.title,
+          idea.description,
+          idea.difficulty,
+          idea.impact,
+          revenueValue,
+          timeValue,
+          improvementPct,
+          JSON.stringify(idea.proof),
+          status,
+          JSON.stringify(metrics),
+        ]
+      );
+
+      order += 1;
+    }
+  }
+
+  async getIdeaBatch(batchId, limit = DEFAULT_IDEA_BATCH_SIZE) {
+    if (!batchId) return [];
+
+    const result = await this.pool.query(
+      `SELECT batch_id, idea_order, idea_title, idea_description, difficulty, impact,
+              revenue_potential, time_to_implement, improvement_pct, proof, status, metrics, created_at
+       FROM idea_batch_items
+       WHERE batch_id = $1
+       ORDER BY idea_order ASC
+       LIMIT $2`,
+      [batchId, limit]
+    );
+
+    const safeParse = (value, fallback) => {
+      if (!value) return fallback;
+      if (typeof value === 'string') {
+        try {
+          return JSON.parse(value);
+        } catch {
+          return fallback;
+        }
+      }
+      return value;
+    };
+
+    return result.rows.map((row) => ({
+      ...row,
+      proof: safeParse(row.proof, []),
+      metrics: safeParse(row.metrics, {}),
+    }));
+  }
+
+  async listIdeaBatches(limit = 10) {
+    const result = await this.pool.query(
+      `SELECT batch_id, focus, target_improvement, created_at
+       FROM idea_batches
+       ORDER BY created_at DESC
+       LIMIT $1`,
+      [limit]
+    );
+
+    return result.rows;
   }
 
   /**

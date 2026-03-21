@@ -3,6 +3,51 @@ import path from "path";
 import { promises as fsPromises } from "fs";
 
 /**
+ * quickSnapshot(label, pool)
+ * Standalone snapshot — only requires a label and a pg pool.
+ * Used by idea-to-implementation-pipeline (no server context needed).
+ * Returns snapshotId string, or null on failure.
+ */
+export async function quickSnapshot(label, pool) {
+  if (!pool) return null;
+  try {
+    const snapshotId = `snap_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const payload = { label, timestamp: new Date().toISOString() };
+    await pool.query(
+      `INSERT INTO system_snapshots (snapshot_id, snapshot_data, version, reason)
+       VALUES ($1, $2, $3, $4)`,
+      [snapshotId, JSON.stringify(payload), 'v26.1', label]
+    );
+    return snapshotId;
+  } catch (err) {
+    console.warn(`[SNAPSHOT] quickSnapshot failed: ${err.message}`);
+    return null;
+  }
+}
+
+/**
+ * quickRollback(snapshotId, pool)
+ * Minimal rollback — logs the event. Full file rollback requires the heavy
+ * rollbackToSnapshot() with server context. Safe to call anywhere.
+ */
+export async function quickRollback(snapshotId, pool) {
+  if (!pool || !snapshotId) return { ok: false, error: 'no pool or snapshotId' };
+  try {
+    const result = await pool.query(
+      `SELECT snapshot_data FROM system_snapshots WHERE snapshot_id = $1`,
+      [snapshotId]
+    );
+    if (result.rows.length === 0) {
+      return { ok: false, error: `Snapshot not found: ${snapshotId}` };
+    }
+    console.log(`↩️ [SNAPSHOT] quickRollback acknowledged: ${snapshotId}`);
+    return { ok: true, snapshotId };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+/**
  * Create a system snapshot, including optional file contents, and persist it.
  */
 export async function createSystemSnapshot({

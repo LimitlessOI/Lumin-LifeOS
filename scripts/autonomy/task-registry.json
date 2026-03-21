@@ -1,0 +1,44 @@
+{
+  "ssot_validate": {
+    "command": "npm run ssot:validate",
+    "requiredEnv": ["COMMAND_CENTER_KEY"],
+    "verifiers": [],
+    "proof_artifacts": [],
+    "ssot_refs": []
+  },
+  "verify_website_audit": {
+    "command": "node scripts/autonomy/verify-website-audit.js",
+    "requiredEnv": ["COMMAND_CENTER_KEY"],
+    "verifiers": [],
+    "proof_artifacts": [],
+    "ssot_refs": []
+  },
+  "noop": {
+    "command": "true",
+    "requiredEnv": [],
+    "verifiers": [],
+    "proof_artifacts": [],
+    "ssot_refs": []
+  },
+  "test_smoke": {
+    "command": "node --check server.js && node --check core/auto-builder.js && node --check core/idea-queue.js",
+    "requiredEnv": [],
+    "verifiers": [],
+    "proof_artifacts": [],
+    "ssot_refs": []
+  },
+  "syntax_check_all": {
+    "command": "find . -name '*.js' -not -path '*/node_modules/*' -not -path '*/.git/*' | xargs -I{} node --check {}",
+    "requiredEnv": [],
+    "verifiers": [],
+    "proof_artifacts": [],
+    "ssot_refs": []
+  },
+  "run_migration": {
+    "command": "node -e \"import('./db/index.js').then(m => m.runMigrations()).catch(console.error)\"",
+    "requiredEnv": ["DATABASE_URL"],
+    "verifiers": [],
+    "proof_artifacts": [],
+    "ssot_refs": []
+  }
+}

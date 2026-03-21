@@ -1,0 +1,11 @@
+{
+  "total_ideas": 0,
+  "extraction_date": "2026-01-27T19:09:39.078Z",
+  "sources_processed": 1,
+  "categories": {},
+  "sources": {},
+  "output_files": {
+    "json": "/Users/adamhopkins/Projects/Lumin-LifeOS/knowledge/extracted-ideas/all-ideas-2026-01-27T19-09-39-075Z.json",
+    "jsonl": "/Users/adamhopkins/Projects/Lumin-LifeOS/knowledge/extracted-ideas/all-ideas-2026-01-27T19-09-39-075Z.jsonl"
+  }
+}

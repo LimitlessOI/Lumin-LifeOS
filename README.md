@@ -12,6 +12,15 @@
 npm start
 ```
 
+## Process supervision
+
+- PM2 is configured to keep `server.js` alive with zero downtime. The ecosystem file is located at `ecosystem.config.js` and points at the same entry point used by `npm start`.
+- Use the provided npm scripts:
+  - `npm run pm2:start` to launch the lifeos app under PM2 supervision.
+  - `npm run pm2:restart` to restart it if needed.
+  - `npm run pm2:logs` to tail the latest PM2 output and ensure the watcher is healthy.
+  - PM2 automatically restarts the process on exit/crash, adds a 1s restart delay, and writes logs to `logs/pm2-out.log` and `logs/pm2-error.log` for later audit.
+
 ## Testing
 
 - Run unit and integration tests:

@@ -11,9 +11,15 @@ export function loadRuntimeEnv() {
     LIFEOS_GEMINI_KEY,
     DEEPSEEK_API_KEY,
     GROK_API_KEY,
-    GROQ_API_KEY,
     GITHUB_TOKEN,
     GITHUB_REPO = "LimitlessOI/Lumin-LifeOS",
+    GITHUB_DEPLOY_BRANCH = "main",
+    // Railway API (needed to set env vars + trigger deploys programmatically)
+    // Get your token: railway.app → Account Settings → Tokens → New Token
+    RAILWAY_TOKEN,
+    RAILWAY_PROJECT_ID,
+    RAILWAY_SERVICE_ID,
+    RAILWAY_ENVIRONMENT_ID,
     OLLAMA_ENDPOINT =
       process.env.OLLAMA_ENDPOINT ||
       process.env.OLLAMA_BASE_URL ||
@@ -221,9 +227,13 @@ export function loadRuntimeEnv() {
     LIFEOS_GEMINI_KEY,
     DEEPSEEK_API_KEY,
     GROK_API_KEY,
-    GROQ_API_KEY,
     GITHUB_TOKEN,
     GITHUB_REPO,
+    GITHUB_DEPLOY_BRANCH,
+    RAILWAY_TOKEN,
+    RAILWAY_PROJECT_ID,
+    RAILWAY_SERVICE_ID,
+    RAILWAY_ENVIRONMENT_ID,
     OLLAMA_ENDPOINT,
     DEEPSEEK_LOCAL_ENDPOINT,
     DEEPSEEK_BRIDGE_ENABLED,

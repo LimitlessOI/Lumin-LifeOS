@@ -49,11 +49,27 @@ export class APICostSavingsRevenue {
   }
 
   /**
-   * Get current cost metrics
+   * Get current cost metrics.
+   * Resilient to: missing roi_tracker table, empty table, missing columns.
+   * Never throws; returns default metrics on any error.
    */
   async getCurrentCostMetrics() {
+    let roi = {};
+    let cache = {};
+    const defaults = {
+      dailyCost: 0,
+      dailyRevenue: 0,
+      totalTokens: 0,
+      totalCostSaved: 0,
+      cacheHits: 0,
+      cacheMisses: 0,
+      compressionSaves: 0,
+      cachedResponses: 0,
+      cacheCostSaved: 0,
+      avgCostSavedPerHit: 0,
+    };
+
     try {
-      // Get ROI tracker data
       const roiResult = await this.pool.query(
         `SELECT 
           daily_ai_cost,
@@ -66,10 +82,15 @@ export class APICostSavingsRevenue {
          FROM roi_tracker 
          ORDER BY last_reset DESC LIMIT 1`
       );
+      roi = roiResult.rows[0] || {};
+    } catch (roiError) {
+      if (!this._roiTrackerWarned) {
+        console.warn('⚠️ [API-COST-SAVINGS] roi_tracker not found or empty; using defaults:', roiError.message);
+        this._roiTrackerWarned = true;
+      }
+    }
 
-      const roi = roiResult.rows[0] || {};
-      
-      // Get cache statistics
+    try {
       const cacheResult = await this.pool.query(
         `SELECT 
           COUNT(*) as total_cached,
@@ -78,33 +99,23 @@ export class APICostSavingsRevenue {
          FROM ai_response_cache
          WHERE created_at > NOW() - INTERVAL '24 hours'`
       );
-
-      const cache = cacheResult.rows[0] || {};
-
-      return {
-        dailyCost: parseFloat(roi.daily_ai_cost || 0),
-        dailyRevenue: parseFloat(roi.daily_revenue || 0),
-        totalTokens: parseFloat(roi.total_tokens_used || 0),
-        totalCostSaved: parseFloat(roi.total_cost_saved || 0),
-        cacheHits: parseInt(roi.cache_hits || 0),
-        cacheMisses: parseInt(roi.cache_misses || 0),
-        compressionSaves: parseFloat(roi.micro_compression_saves || 0),
-        cachedResponses: parseInt(cache.total_cached || 0),
-        cacheCostSaved: parseFloat(cache.total_cost_saved || 0),
-        avgCostSavedPerHit: parseFloat(cache.avg_cost_saved_per_hit || 0),
-      };
-    } catch (error) {
-      console.error('Error getting cost metrics:', error.message);
-      return {
-        dailyCost: 0,
-        dailyRevenue: 0,
-        totalTokens: 0,
-        totalCostSaved: 0,
-        cacheHits: 0,
-        cacheMisses: 0,
-        compressionSaves: 0,
-      };
+      cache = cacheResult.rows[0] || {};
+    } catch (cacheError) {
+      console.warn('⚠️ [API-COST-SAVINGS] ai_response_cache query failed; using defaults:', cacheError.message);
     }
+
+    return {
+      dailyCost: parseFloat(roi.daily_ai_cost ?? defaults.dailyCost),
+      dailyRevenue: parseFloat(roi.daily_revenue ?? defaults.dailyRevenue),
+      totalTokens: parseFloat(roi.total_tokens_used ?? defaults.totalTokens),
+      totalCostSaved: parseFloat(roi.total_cost_saved ?? defaults.totalCostSaved),
+      cacheHits: parseInt(roi.cache_hits ?? defaults.cacheHits, 10),
+      cacheMisses: parseInt(roi.cache_misses ?? defaults.cacheMisses, 10),
+      compressionSaves: parseFloat(roi.micro_compression_saves ?? defaults.compressionSaves),
+      cachedResponses: parseInt(cache.total_cached ?? defaults.cachedResponses, 10),
+      cacheCostSaved: parseFloat(cache.total_cost_saved ?? defaults.cacheCostSaved),
+      avgCostSavedPerHit: parseFloat(cache.avg_cost_saved_per_hit ?? defaults.avgCostSavedPerHit),
+    };
   }
 
   /**

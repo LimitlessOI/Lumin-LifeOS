@@ -9,12 +9,133 @@
 // No imports needed - dependencies passed in constructor
 
 export class OutreachAutomation {
-  constructor(pool, modelRouter, getTwilioClient, callCouncilMember) {
+  constructor(pool, modelRouter, getTwilioClient, callCouncilMember, notificationService = null) {
     this.pool = pool;
     this.router = modelRouter;
     this.getTwilioClient = getTwilioClient;
     this.callCouncilMember = callCouncilMember;
+    this.notificationService = notificationService;
     this.campaigns = new Map();
+  }
+
+  normalizeEmail(email) {
+    return String(email || '').trim().toLowerCase();
+  }
+
+  normalizePhone(phone) {
+    return String(phone || '').trim();
+  }
+
+  recipientKeyFor(channel, recipient) {
+    if (!recipient) return null;
+    if (channel === 'email') return `email:${this.normalizeEmail(recipient)}`;
+    if (channel === 'sms' || channel === 'call') return `phone:${this.normalizePhone(recipient)}`;
+    return `recipient:${String(recipient).trim()}`;
+  }
+
+  isWithinQuietHoursUtc(policy) {
+    const start = policy?.quiet_hours_start_utc;
+    const end = policy?.quiet_hours_end_utc;
+    if (start == null || end == null) return false;
+
+    const hour = new Date().getUTCHours();
+    const s = Number(start);
+    const e = Number(end);
+    if (!Number.isFinite(s) || !Number.isFinite(e)) return false;
+
+    // If start < end: quiet between [start, end)
+    // If start > end: quiet wraps midnight
+    if (s === e) return true; // fully quiet day
+    if (s < e) return hour >= s && hour < e;
+    return hour >= s || hour < e;
+  }
+
+  /**
+   * Outbound governance gate (fail-closed): blocks if consent record missing.
+   */
+  async enforceOutboundPolicy(channel, recipient) {
+    const key = this.recipientKeyFor(channel, recipient);
+    if (!key) return { ok: false, error: 'Missing recipient' };
+
+    // Social posting is platform-targeted; treat as internal/log-only for now.
+    if (channel === 'social') {
+      return { ok: true };
+    }
+
+    let row;
+    try {
+      const result = await this.pool.query(
+        `SELECT *
+         FROM outreach_recipients
+         WHERE recipient_key = $1
+         LIMIT 1`,
+        [key]
+      );
+      row = result.rows[0] || null;
+    } catch (e) {
+      return { ok: false, error: `Governance DB error (fail-closed): ${e.message}` };
+    }
+
+    if (!row) {
+      return { ok: false, error: `No consent record for ${key} (fail-closed)` };
+    }
+
+    if (row.do_not_contact) {
+      return { ok: false, error: `Recipient is marked do_not_contact` };
+    }
+
+    if (this.isWithinQuietHoursUtc(row)) {
+      return { ok: false, error: `Within recipient quiet hours (UTC)` };
+    }
+
+    if (channel === 'email' && !row.consent_email) {
+      return { ok: false, error: `No email consent` };
+    }
+    if (channel === 'sms' && !row.consent_sms) {
+      return { ok: false, error: `No SMS consent` };
+    }
+    if (channel === 'call' && !row.consent_call) {
+      return { ok: false, error: `No call consent` };
+    }
+
+    // Per-recipient rate limit (DB-backed)
+    const maxPerHour = Number(process.env.OUTREACH_MAX_PER_RECIPIENT_PER_HOUR || '3');
+    const maxPerDay = Number(process.env.OUTREACH_MAX_PER_RECIPIENT_PER_DAY || '10');
+
+    try {
+      const hour = await this.pool.query(
+        `SELECT COUNT(*)::int AS c
+         FROM outreach_log
+         WHERE recipient = $1
+           AND channel = $2
+           AND created_at >= NOW() - INTERVAL '1 hour'
+           AND status IN ('sent','initiated')`,
+        [recipient, channel]
+      );
+      const day = await this.pool.query(
+        `SELECT COUNT(*)::int AS c
+         FROM outreach_log
+         WHERE recipient = $1
+           AND channel = $2
+           AND created_at >= NOW() - INTERVAL '24 hours'
+           AND status IN ('sent','initiated')`,
+        [recipient, channel]
+      );
+
+      const hourCount = hour.rows[0]?.c || 0;
+      const dayCount = day.rows[0]?.c || 0;
+
+      if (Number.isFinite(maxPerHour) && hourCount >= maxPerHour) {
+        return { ok: false, error: `Rate limited: recipient hourly cap reached` };
+      }
+      if (Number.isFinite(maxPerDay) && dayCount >= maxPerDay) {
+        return { ok: false, error: `Rate limited: recipient daily cap reached` };
+      }
+    } catch (e) {
+      return { ok: false, error: `Rate-limit check failed (fail-closed): ${e.message}` };
+    }
+
+    return { ok: true };
   }
 
   /**
@@ -50,12 +171,19 @@ LENGTH: ${channel === 'email' ? '3-4 paragraphs' : channel === 'text' ? '2-3 sen
    * Send email via configured SMTP or service
    */
   async sendEmail(to, subject, body, from = null) {
-    // Check if email service configured
-    const emailService = process.env.EMAIL_SERVICE; // 'sendgrid', 'ses', 'resend', etc.
-    
-    if (!emailService) {
-      console.warn('Email service not configured');
-      return { success: false, error: 'Email service not configured' };
+    const policy = await this.enforceOutboundPolicy('email', to);
+    if (!policy.ok) {
+      return { success: false, error: policy.error };
+    }
+
+    // Prefer the canonical NotificationService (production path)
+    if (this.notificationService) {
+      return await this.notificationService.sendEmail({
+        to,
+        subject,
+        text: body,
+        from: from || undefined,
+      });
     }
 
     // Generate email using AI if body is a prompt
@@ -69,27 +197,31 @@ LENGTH: ${channel === 'email' ? '3-4 paragraphs' : channel === 'text' ? '2-3 sen
       if (generated) emailBody = generated;
     }
 
-    // TODO: Implement actual email sending based on service
-    // For now, log it
-    console.log(`📧 [EMAIL] To: ${to}, Subject: ${subject}`);
+    // Legacy fallback: log only (non-production)
+    console.warn('⚠️ [EMAIL] NotificationService not configured; falling back to log-only mode');
     
     try {
       await this.pool.query(
         `INSERT INTO outreach_log (channel, recipient, subject, body, status, created_at)
          VALUES ($1, $2, $3, $4, $5, NOW())`,
-        ['email', to, subject, emailBody, 'sent']
+        ['email', to, subject, emailBody, 'logged_only']
       );
     } catch (err) {
       console.warn(`Failed to log email: ${err.message}`);
     }
 
-    return { success: true, messageId: `email_${Date.now()}` };
+    return { success: false, error: 'Email not sent (NotificationService not configured)', messageId: null };
   }
 
   /**
    * Send SMS via Twilio
    */
   async sendSMS(to, message) {
+    const policy = await this.enforceOutboundPolicy('sms', to);
+    if (!policy.ok) {
+      return { success: false, error: policy.error };
+    }
+
     const client = await this.getTwilioClient();
     if (!client) {
       return { success: false, error: 'Twilio not configured' };
@@ -128,6 +260,11 @@ LENGTH: ${channel === 'email' ? '3-4 paragraphs' : channel === 'text' ? '2-3 sen
    * Make phone call via Twilio
    */
   async makeCall(to, script = null) {
+    const policy = await this.enforceOutboundPolicy('call', to);
+    if (!policy.ok) {
+      return { success: false, error: policy.error };
+    }
+
     const client = await this.getTwilioClient();
     if (!client) {
       return { success: false, error: 'Twilio not configured' };

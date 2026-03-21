@@ -1,31 +1,189 @@
 // src/integrations/boldtrail.js (FULL)
 import axios from "axios";
 
-const BASE = process.env.BOLDTRAIL_API_URL || "https://api.boldtrail.io";
-const KEY  = process.env.BOLDTRAIL_API_KEY || "";
-
-function authHeaders() { return KEY ? { Authorization: `Bearer ${KEY}` } : {}; }
-
 /**
- * Check if BoldTrail API is available
+ * BoldTrail integration notes (evidence-based):
+ * - Inside Real Estate's "BoldTrail Public API" documentation hub points to kvCORE Public API v2.
+ * - Base URL: https://api.kvcore.com (docs). Auth: Authorization: Bearer <JWT>.
+ * - There is no public evidence of an "AI assistant API" endpoint in the public docs.
+ *
+ * Therefore:
+ * - We support kvCORE v2 public API for CRM data flows (contacts/users/etc).
+ * - We keep a "legacy" BoldTrail base URL override for private/vendor deployments if needed.
+ * - We do NOT guess AI endpoints; we return fallback unless explicitly enabled and confirmed.
  */
-export function isBoldTrailAPIAvailable() {
-  return !!KEY && KEY.trim() !== "";
+
+function getConfig() {
+  const token = (process.env.BOLDTRAIL_API_KEY || process.env.KVCORE_API_TOKEN || "").trim();
+  const baseUrl = (process.env.BOLDTRAIL_API_URL || "https://api.kvcore.com").trim().replace(/\/$/, "");
+  const apiPrefix = (process.env.KVCORE_API_PREFIX || "/v2/public").trim().replace(/\/$/, "");
+
+  return {
+    token,
+    baseUrl,
+    apiPrefix,
+    aiEnabled: ["1", "true", "yes"].includes(String(process.env.BOLDTRAIL_AI_ENABLED || "").toLowerCase()),
+  };
 }
 
-export async function createLead(data = {}) {
-  if (!KEY) return { id: null, note: "no_api_key" };
+function authHeaders() {
+  const { token } = getConfig();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+export function isBoldTrailAPIAvailable() {
+  const { token } = getConfig();
+  return !!token;
+}
+
+async function request(method, path, body = null, options = {}) {
+  const { baseUrl, apiPrefix } = getConfig();
+  const url = `${baseUrl}${path.startsWith("/") ? "" : "/"}${path.startsWith(apiPrefix) ? path : `${apiPrefix}${path.startsWith("/") ? "" : "/"}${path}`}`;
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...authHeaders(),
+    ...(options.headers || {}),
+  };
+
   try {
-    const res = await axios.post(`${BASE}/v1/leads`, {
-      phone: data.phone || "",
-      meta: {
-        intent:   data.intent   || "",
-        area:     data.area     || "",
-        timeline: data.timeline || "",
-        duration: data.duration || 0,
-        source:   data.source   || "LifeOS",
+    const res = await axios.request({
+      url,
+      method,
+      headers,
+      data: body ? body : undefined,
+      timeout: options.timeoutMs || 10000,
+      validateStatus: () => true,
+    });
+
+    return {
+      ok: res.status >= 200 && res.status < 300,
+      status: res.status,
+      data: res.data,
+    };
+  } catch (err) {
+    return {
+      ok: false,
+      status: null,
+      error: err.message,
+    };
+  }
+}
+
+/**
+ * Probe the configured kvCORE/BoldTrail API.
+ * This is safe to call from a status endpoint and does not leak secrets.
+ */
+export async function probeBoldTrailApi() {
+  const cfg = getConfig();
+  if (!cfg.token) {
+    return { ok: false, configured: false, reason: "missing_token" };
+  }
+
+  // We don't know which endpoints are permitted by the token scopes.
+  // The safest universal probe is to attempt a small GET on a common resource.
+  const candidates = [
+    "/contacts?limit=1",
+    "/users?limit=1",
+    "/me",
+  ];
+
+  for (const candidate of candidates) {
+    const r = await request("GET", candidate, null, { timeoutMs: 6000 });
+    if (r.ok) {
+      return {
+        ok: true,
+        configured: true,
+        baseUrl: cfg.baseUrl,
+        apiPrefix: cfg.apiPrefix,
+        probe: candidate,
+        status: r.status,
+      };
+    }
+
+    // If unauthorized, config is likely correct but token/scopes are wrong.
+    if (r.status === 401 || r.status === 403) {
+      return {
+        ok: false,
+        configured: true,
+        baseUrl: cfg.baseUrl,
+        apiPrefix: cfg.apiPrefix,
+        probe: candidate,
+        status: r.status,
+        reason: "unauthorized_or_forbidden",
+      };
+    }
+  }
+
+  return {
+    ok: false,
+    configured: true,
+    baseUrl: cfg.baseUrl,
+    apiPrefix: cfg.apiPrefix,
+    reason: "no_known_probe_succeeded",
+  };
+}
+
+/**
+ * CRM primitives (best-effort; endpoint shapes depend on kvCORE API schema).
+ * These functions fail soft (return ok:false) and never throw.
+ */
+export async function listContacts({ limit = 25, page = 1 } = {}) {
+  if (!isBoldTrailAPIAvailable()) return { ok: false, reason: "missing_token" };
+  return await request("GET", `/contacts?limit=${encodeURIComponent(limit)}&page=${encodeURIComponent(page)}`);
+}
+
+export async function createOrUpdateContact(contact = {}) {
+  if (!isBoldTrailAPIAvailable()) return { ok: false, reason: "missing_token" };
+  // kvCORE typically matches on email/phone; exact schema varies, so we pass a conservative payload.
+  const payload = {
+    name: contact.name || undefined,
+    first_name: contact.first_name || undefined,
+    last_name: contact.last_name || undefined,
+    email: contact.email || undefined,
+    phone: contact.phone || undefined,
+    source: contact.source || "LifeOS",
+    meta: contact.meta || undefined,
+  };
+  return await request("POST", "/contacts", payload);
+}
+
+export async function addContactNote(contactId, text) {
+  if (!isBoldTrailAPIAvailable()) return { ok: false, reason: "missing_token" };
+  if (!contactId || !text) return { ok: false, reason: "missing_params" };
+  return await request("POST", `/contacts/${encodeURIComponent(contactId)}/notes`, { text: String(text) });
+}
+
+export async function tagContact(contactId, tag) {
+  if (!isBoldTrailAPIAvailable()) return { ok: false, reason: "missing_token" };
+  if (!contactId || !tag) return { ok: false, reason: "missing_params" };
+  return await request("POST", `/contacts/${encodeURIComponent(contactId)}/tags`, { tag: String(tag) });
+}
+
+/**
+ * Legacy lead functions (kept for backward compatibility with older internal flows).
+ * These will only work if BOLDTRAIL_API_URL points to a private deployment that supports /v1/leads.
+ */
+export async function createLead(data = {}) {
+  const token = (process.env.BOLDTRAIL_API_KEY || "").trim();
+  const base = (process.env.BOLDTRAIL_LEGACY_API_URL || process.env.BOLDTRAIL_API_URL || "").trim().replace(/\/$/, "");
+  if (!token || !base) return { id: null, note: "no_api_key_or_base" };
+
+  try {
+    const res = await axios.post(
+      `${base}/v1/leads`,
+      {
+        phone: data.phone || "",
+        meta: {
+          intent: data.intent || "",
+          area: data.area || "",
+          timeline: data.timeline || "",
+          duration: data.duration || 0,
+          source: data.source || "LifeOS",
+        },
       },
-    }, { headers: authHeaders() });
+      { headers: { Authorization: `Bearer ${token}` }, timeout: 10000 }
+    );
     return { id: res.data?.id || null, note: "ok" };
   } catch (err) {
     console.error("BoldTrail.createLead error:", err?.response?.data || err.message);
@@ -34,10 +192,15 @@ export async function createLead(data = {}) {
 }
 
 export async function appendTranscript(leadId, text) {
-  if (!KEY || !leadId || !text) return { ok: false, note: "skipped" };
+  const token = (process.env.BOLDTRAIL_API_KEY || "").trim();
+  const base = (process.env.BOLDTRAIL_LEGACY_API_URL || process.env.BOLDTRAIL_API_URL || "").trim().replace(/\/$/, "");
+  if (!token || !base || !leadId || !text) return { ok: false, note: "skipped" };
   try {
-    await axios.post(`${BASE}/v1/leads/${encodeURIComponent(leadId)}/notes`,
-      { text: String(text) }, { headers: authHeaders() });
+    await axios.post(
+      `${base}/v1/leads/${encodeURIComponent(leadId)}/notes`,
+      { text: String(text) },
+      { headers: { Authorization: `Bearer ${token}` }, timeout: 10000 }
+    );
     return { ok: true };
   } catch (err) {
     console.error("BoldTrail.appendTranscript error:", err?.response?.data || err.message);
@@ -46,10 +209,15 @@ export async function appendTranscript(leadId, text) {
 }
 
 export async function tagLead(leadId, tag) {
-  if (!KEY || !leadId || !tag) return { ok: false, note: "skipped" };
+  const token = (process.env.BOLDTRAIL_API_KEY || "").trim();
+  const base = (process.env.BOLDTRAIL_LEGACY_API_URL || process.env.BOLDTRAIL_API_URL || "").trim().replace(/\/$/, "");
+  if (!token || !base || !leadId || !tag) return { ok: false, note: "skipped" };
   try {
-    await axios.post(`${BASE}/v1/leads/${encodeURIComponent(leadId)}/tags`,
-      { tag: String(tag) }, { headers: authHeaders() });
+    await axios.post(
+      `${base}/v1/leads/${encodeURIComponent(leadId)}/tags`,
+      { tag: String(tag) },
+      { headers: { Authorization: `Bearer ${token}` }, timeout: 10000 }
+    );
     return { ok: true };
   } catch (err) {
     console.error("BoldTrail.tagLead error:", err?.response?.data || err.message);
@@ -58,111 +226,16 @@ export async function tagLead(leadId, tag) {
 }
 
 /**
- * Use BoldTrail's AI to draft an email
- * Falls back gracefully if endpoint doesn't exist
+ * AI “inside BoldTrail”
+ * Public docs do not expose AI endpoints; so default is always fallback.
+ * If you later confirm/whitelist a real endpoint, we can add it behind BOLDTRAIL_AI_ENABLED.
  */
-export async function draftEmailWithBoldTrailAI(params) {
-  if (!KEY) return { ok: false, fallback: true, reason: "no_api_key" };
-  
-  try {
-    // Try BoldTrail's AI email endpoint (common patterns: /v1/ai/email, /v1/emails/draft, /v1/ai/draft-email)
-    const endpoints = [
-      `${BASE}/v1/ai/email/draft`,
-      `${BASE}/v1/emails/draft`,
-      `${BASE}/v1/ai/draft-email`,
-      `${BASE}/v1/ai/email`,
-    ];
-
-    for (const endpoint of endpoints) {
-      try {
-        const res = await axios.post(
-          endpoint,
-          {
-            agent_tone: params.agent_tone || "professional and friendly",
-            draft_type: params.draft_type,
-            recipient_name: params.recipient_name,
-            recipient_email: params.recipient_email,
-            context: params.context_data || {},
-          },
-          { 
-            headers: authHeaders(),
-            timeout: 10000 // 10 second timeout
-          }
-        );
-
-        if (res.data && (res.data.subject || res.data.content || res.data.email)) {
-          return {
-            ok: true,
-            source: "boldtrail_ai",
-            subject: res.data.subject || res.data.email?.subject || "",
-            content: res.data.content || res.data.email?.body || res.data.email || "",
-          };
-        }
-      } catch (endpointError) {
-        // Try next endpoint
-        continue;
-      }
-    }
-
-    // If all endpoints fail, return fallback
-    return { ok: false, fallback: true, reason: "endpoint_not_found" };
-  } catch (err) {
-    console.warn("BoldTrail AI email draft not available, using fallback:", err.message);
-    return { ok: false, fallback: true, reason: err.message };
-  }
+export async function draftEmailWithBoldTrailAI() {
+  const { aiEnabled } = getConfig();
+  return { ok: false, fallback: true, reason: aiEnabled ? "no_public_ai_api" : "ai_disabled" };
 }
 
-/**
- * Use BoldTrail's AI to plan/showings route
- * Falls back gracefully if endpoint doesn't exist
- */
-export async function planShowingsWithBoldTrailAI(params) {
-  if (!KEY) return { ok: false, fallback: true, reason: "no_api_key" };
-  
-  try {
-    // Try BoldTrail's AI showing planning endpoint
-    const endpoints = [
-      `${BASE}/v1/ai/showings/plan`,
-      `${BASE}/v1/showings/plan`,
-      `${BASE}/v1/ai/route-optimize`,
-      `${BASE}/v1/route/optimize`,
-    ];
-
-    for (const endpoint of endpoints) {
-      try {
-        const res = await axios.post(
-          endpoint,
-          {
-            properties: params.properties,
-            client_name: params.client_name,
-            client_email: params.client_email,
-            client_phone: params.client_phone,
-            preferences: params.preferences || {},
-          },
-          { 
-            headers: authHeaders(),
-            timeout: 10000
-          }
-        );
-
-        if (res.data && (res.data.showings || res.data.route || res.data.optimized_route)) {
-          return {
-            ok: true,
-            source: "boldtrail_ai",
-            showings: res.data.showings || res.data.route || res.data.optimized_route || [],
-            estimated_drive_time: res.data.estimated_drive_time,
-            total_distance: res.data.total_distance,
-          };
-        }
-      } catch (endpointError) {
-        // Try next endpoint
-        continue;
-      }
-    }
-
-    return { ok: false, fallback: true, reason: "endpoint_not_found" };
-  } catch (err) {
-    console.warn("BoldTrail AI showing planning not available, using fallback:", err.message);
-    return { ok: false, fallback: true, reason: err.message };
-  }
+export async function planShowingsWithBoldTrailAI() {
+  const { aiEnabled } = getConfig();
+  return { ok: false, fallback: true, reason: aiEnabled ? "no_public_ai_api" : "ai_disabled" };
 }
