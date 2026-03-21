@@ -493,6 +493,87 @@
       </div>
     </div>
 
+    <!-- ══ IDEAS QUEUE ══ -->
+    <div class="section" id="ideasSection">
+      <h2>💡 Ideas Queue</h2>
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+        <select id="ideasFilter" onchange="loadIdeas()" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:6px 10px;border-radius:6px;font-size:13px;">
+          <option value="all">All</option>
+          <option value="pending_review">Pending Review</option>
+          <option value="approved">Approved</option>
+          <option value="building">Building</option>
+          <option value="built">Built</option>
+          <option value="deployed">Deployed</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <button onclick="loadIdeas()" style="background:#1e3a5f;padding:6px 14px;border-radius:6px;font-size:13px;">🔄 Refresh</button>
+        <button onclick="showSubmitIdea()" style="background:#2e7d32;padding:6px 14px;border-radius:6px;font-size:13px;">+ Submit Idea</button>
+        <span id="ideasCount" style="color:#888;font-size:13px;"></span>
+      </div>
+
+      <!-- Submit form (hidden by default) -->
+      <div id="submitIdeaForm" style="display:none;background:#0d1330;border:1px solid #2a3f5f;border-radius:8px;padding:16px;margin-bottom:16px;">
+        <h3 style="color:#81c784;margin-bottom:12px;font-size:15px;">Submit New Idea</h3>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <input id="ideaTitle" placeholder="Title *" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:8px;border-radius:6px;font-size:14px;">
+          <textarea id="ideaDesc" rows="2" placeholder="Description" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:8px;border-radius:6px;font-size:14px;resize:vertical;"></textarea>
+          <input id="ideaTargetAudience" placeholder="Target audience (e.g. 'wellness studio owners')" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:8px;border-radius:6px;font-size:14px;">
+          <input id="ideaDesignNotes" placeholder="Design notes (e.g. 'dark theme, minimal, like Stripe')" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:8px;border-radius:6px;font-size:14px;">
+          <input id="ideaReferenceUrl" placeholder="Reference URL (design inspiration)" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:8px;border-radius:6px;font-size:14px;">
+          <textarea id="ideaUserFlow" rows="2" placeholder="User flow (e.g. 'User lands → sees pricing → clicks CTA → checkout')" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:8px;border-radius:6px;font-size:14px;resize:vertical;"></textarea>
+          <textarea id="ideaAcceptance" rows="2" placeholder="Acceptance criteria — what does done look like?" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:8px;border-radius:6px;font-size:14px;resize:vertical;"></textarea>
+          <div style="display:flex;gap:8px;">
+            <button onclick="submitIdea()" style="background:#2e7d32;flex:1;padding:8px;border-radius:6px;">Submit</button>
+            <button onclick="document.getElementById('submitIdeaForm').style.display='none'" style="background:#333;padding:8px 16px;border-radius:6px;">Cancel</button>
+          </div>
+          <div id="submitIdeaStatus" style="font-size:13px;"></div>
+        </div>
+      </div>
+
+      <div id="ideasList" style="display:flex;flex-direction:column;gap:8px;">
+        <p style="color:#888;">Loading ideas…</p>
+      </div>
+    </div>
+
+    <!-- ══ CONVERSATIONS ══ -->
+    <div class="section" id="conversationsSection">
+      <h2>💬 Conversation History</h2>
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+        <input id="convSearch" placeholder="Search across all conversations…" onkeydown="if(event.key==='Enter')searchConversations()" style="flex:1;min-width:200px;background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:8px 12px;border-radius:6px;font-size:14px;">
+        <button onclick="searchConversations()" style="background:#1e3a5f;padding:6px 14px;border-radius:6px;font-size:13px;">🔍 Search</button>
+        <button onclick="loadConversations()" style="background:#1e3a5f;padding:6px 14px;border-radius:6px;font-size:13px;">📋 All</button>
+        <span id="convCount" style="color:#888;font-size:13px;"></span>
+      </div>
+      <div id="convList" style="display:flex;flex-direction:column;gap:6px;">
+        <p style="color:#888;">Loading conversations…</p>
+      </div>
+      <!-- Conversation detail panel -->
+      <div id="convDetail" style="display:none;margin-top:16px;background:#0d1330;border:1px solid #4fc3f7;border-radius:8px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h3 id="convDetailTitle" style="color:#4fc3f7;font-size:15px;"></h3>
+          <div style="display:flex;gap:8px;">
+            <button onclick="summarizeConversation()" style="background:#1e3a5f;padding:5px 12px;border-radius:6px;font-size:12px;">🤖 AI Summarize</button>
+            <button onclick="document.getElementById('convDetail').style.display='none'" style="background:#333;padding:5px 10px;border-radius:6px;font-size:12px;">✕ Close</button>
+          </div>
+        </div>
+        <div id="convDetailSummary" style="display:none;background:#0a0e27;border-radius:6px;padding:12px;margin-bottom:12px;font-size:13px;line-height:1.6;"></div>
+        <div id="convDetailMessages" style="max-height:500px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+    </div>
+
+    <!-- ══ IMPROVEMENT PROPOSALS ══ -->
+    <div class="section" id="proposalsSection">
+      <h2>🔍 Improvement Proposals</h2>
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+        <button onclick="loadProposals()" style="background:#1e3a5f;padding:6px 14px;border-radius:6px;font-size:13px;">🔄 Refresh</button>
+        <button onclick="runMonitor()" style="background:#4a148c;padding:6px 14px;border-radius:6px;font-size:13px;">⚡ Run Monitor Now</button>
+        <span id="proposalsCount" style="color:#888;font-size:13px;"></span>
+      </div>
+      <div id="proposalsList" style="display:flex;flex-direction:column;gap:8px;">
+        <p style="color:#888;">Loading proposals…</p>
+      </div>
+    </div>
+
     <div class="detail-drawer" id="detailDrawer">
       <div class="drawer-header">
         <h3 id="drawerTitle">Details</h3>
@@ -592,6 +673,315 @@
         autoRefreshInterval = setInterval(refresh, 10000);
       }
     }
+
+    // ══ SHARED API HELPER ══════════════════════════════════════════════════
+    function getKey() {
+      return localStorage.getItem('cmdKey') || localStorage.getItem('LIFEOS_KEY') || '';
+    }
+    async function api(method, path, body) {
+      const key = getKey();
+      const opts = {
+        method,
+        headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+      };
+      if (body) opts.body = JSON.stringify(body);
+      const res = await fetch(path, opts);
+      return res.json();
+    }
+
+    // ══ IDEAS QUEUE ════════════════════════════════════════════════════════
+    let currentIdeas = [];
+
+    async function loadIdeas() {
+      const filter = document.getElementById('ideasFilter').value;
+      const list = document.getElementById('ideasList');
+      list.innerHTML = '<p style="color:#888;">Loading…</p>';
+      try {
+        const data = await api('GET', `/api/v1/ideas?status=${filter}&limit=100`);
+        currentIdeas = data.ideas || [];
+        document.getElementById('ideasCount').textContent = `${currentIdeas.length} idea(s)`;
+        if (currentIdeas.length === 0) {
+          list.innerHTML = '<p style="color:#888;">No ideas found.</p>';
+          return;
+        }
+        list.innerHTML = currentIdeas.map(idea => renderIdea(idea)).join('');
+      } catch(e) {
+        list.innerHTML = `<p style="color:#e57373;">Error: ${e.message}</p>`;
+      }
+    }
+
+    function statusColor(s) {
+      return { pending_review:'#f59e0b', approved:'#10b981', building:'#6366f1',
+               built:'#3b82f6', deployed:'#22c55e', rejected:'#ef4444' }[s] || '#888';
+    }
+
+    function renderIdea(idea) {
+      const color = statusColor(idea.approval_status);
+      const hasVision = idea.design_notes || idea.reference_url || idea.user_flow;
+      return `<div style="background:#0d1330;border:1px solid #2a3f5f;border-radius:8px;padding:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
+          <div style="flex:1;">
+            <span style="background:${color}22;color:${color};font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;text-transform:uppercase;">${idea.approval_status}</span>
+            <span style="font-weight:600;font-size:15px;margin-left:10px;">${idea.title}</span>
+            ${hasVision ? '<span style="font-size:11px;color:#6366f1;margin-left:8px;">✦ has vision</span>' : ''}
+            ${idea.description ? `<p style="color:#aaa;font-size:13px;margin-top:6px;">${idea.description}</p>` : ''}
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+            ${idea.approval_status === 'pending_review' ? `<button onclick="approveIdea('${idea.id}')" style="background:#2e7d32;padding:4px 12px;border-radius:6px;font-size:12px;">✓ Approve</button>` : ''}
+            ${idea.approval_status === 'pending_review' ? `<button onclick="rejectIdea('${idea.id}')" style="background:#7f1d1d;padding:4px 12px;border-radius:6px;font-size:12px;">✕ Reject</button>` : ''}
+            ${idea.approval_status === 'approved' ? `<button onclick="triggerBuild('${idea.id}')" style="background:#4338ca;padding:4px 12px;border-radius:6px;font-size:12px;">⚡ Build</button>` : ''}
+            <button onclick="showIdeaDetail('${idea.id}')" style="background:#1e3a5f;padding:4px 12px;border-radius:6px;font-size:12px;">Detail</button>
+          </div>
+        </div>
+        <div id="idea-detail-${idea.id}" style="display:none;margin-top:10px;font-size:13px;color:#aaa;border-top:1px solid #2a3f5f;padding-top:10px;">
+          ${idea.target_audience ? `<p>👥 <b>Audience:</b> ${idea.target_audience}</p>` : ''}
+          ${idea.design_notes ? `<p>🎨 <b>Design:</b> ${idea.design_notes}</p>` : ''}
+          ${idea.user_flow ? `<p>🔀 <b>Flow:</b> ${idea.user_flow}</p>` : ''}
+          ${idea.reference_url ? `<p>🔗 <b>Ref:</b> <a href="${idea.reference_url}" target="_blank" style="color:#6366f1;">${idea.reference_url}</a></p>` : ''}
+          ${idea.acceptance_criteria ? `<p>✅ <b>Done when:</b> ${idea.acceptance_criteria}</p>` : ''}
+          ${idea.notes ? `<p>📝 <b>Notes:</b> ${idea.notes}</p>` : ''}
+          ${idea.quality_score ? `<p>🎯 <b>Quality score:</b> ${idea.quality_score}/10</p>` : ''}
+        </div>
+      </div>`;
+    }
+
+    function showIdeaDetail(id) {
+      const el = document.getElementById(`idea-detail-${id}`);
+      if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    async function approveIdea(id) {
+      if (!confirm('Approve this idea?')) return;
+      const data = await api('POST', `/api/v1/ideas/${id}/approve`);
+      if (data.ok) { loadIdeas(); } else { alert(data.error); }
+    }
+
+    async function rejectIdea(id) {
+      const reason = prompt('Reason for rejection:');
+      if (!reason) return;
+      const data = await api('POST', `/api/v1/ideas/${id}/reject`, { reason });
+      if (data.ok) { loadIdeas(); } else { alert(data.error); }
+    }
+
+    async function triggerBuild(id) {
+      if (!confirm('Trigger build for this idea? You\'ll need to provide components.')) return;
+      alert('To build with custom components, use POST /api/v1/ideas/' + id + '/build with a components[] array. Simplified build UI coming soon.');
+    }
+
+    function showSubmitIdea() {
+      document.getElementById('submitIdeaForm').style.display = 'block';
+      document.getElementById('ideaTitle').focus();
+    }
+
+    async function submitIdea() {
+      const title = document.getElementById('ideaTitle').value.trim();
+      if (!title) { alert('Title is required'); return; }
+      const status = document.getElementById('submitIdeaStatus');
+      status.textContent = 'Submitting…';
+      const data = await api('POST', '/api/v1/ideas', {
+        title,
+        description: document.getElementById('ideaDesc').value.trim() || undefined,
+        target_audience: document.getElementById('ideaTargetAudience').value.trim() || undefined,
+        design_notes: document.getElementById('ideaDesignNotes').value.trim() || undefined,
+        reference_url: document.getElementById('ideaReferenceUrl').value.trim() || undefined,
+        user_flow: document.getElementById('ideaUserFlow').value.trim() || undefined,
+        acceptance_criteria: document.getElementById('ideaAcceptance').value.trim() || undefined,
+      });
+      if (data.ok) {
+        status.innerHTML = '<span style="color:#10b981">✓ Submitted! Now approve it below.</span>';
+        ['ideaTitle','ideaDesc','ideaTargetAudience','ideaDesignNotes','ideaReferenceUrl','ideaUserFlow','ideaAcceptance'].forEach(id => document.getElementById(id).value = '');
+        setTimeout(() => { document.getElementById('submitIdeaForm').style.display='none'; loadIdeas(); }, 1500);
+      } else {
+        status.innerHTML = `<span style="color:#ef4444">Error: ${data.error}</span>`;
+      }
+    }
+
+    // ══ CONVERSATIONS ══════════════════════════════════════════════════════
+    let currentConvSessionId = null;
+
+    async function loadConversations() {
+      const list = document.getElementById('convList');
+      list.innerHTML = '<p style="color:#888;">Loading…</p>';
+      try {
+        const data = await api('GET', '/api/v1/history?limit=50');
+        const convs = data.conversations || [];
+        document.getElementById('convCount').textContent = `${convs.length} session(s)`;
+        if (convs.length === 0) { list.innerHTML = '<p style="color:#888;">No conversations stored yet.</p>'; return; }
+        list.innerHTML = convs.map(c => renderConv(c)).join('');
+      } catch(e) {
+        list.innerHTML = `<p style="color:#e57373;">Error: ${e.message}</p>`;
+      }
+    }
+
+    async function searchConversations() {
+      const q = document.getElementById('convSearch').value.trim();
+      if (!q) { loadConversations(); return; }
+      const list = document.getElementById('convList');
+      list.innerHTML = '<p style="color:#888;">Searching…</p>';
+      try {
+        const data = await api('GET', `/api/v1/history/search?q=${encodeURIComponent(q)}&limit=30`);
+        const results = data.results || [];
+        document.getElementById('convCount').textContent = `${results.length} result(s) for "${q}"`;
+        if (results.length === 0) { list.innerHTML = `<p style="color:#888;">No results for "${q}"</p>`; return; }
+        list.innerHTML = results.map(r => `
+          <div onclick="openConversation('${r.session_id}')" style="background:#0d1330;border:1px solid #2a3f5f;border-radius:8px;padding:12px;cursor:pointer;hover:border-color:#4fc3f7;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="color:#888;font-size:12px;">${r.role.toUpperCase()} — ${r.session_id?.substring(0,8)}…</span>
+              <span style="color:#888;font-size:12px;">${r.timestamp ? new Date(r.timestamp).toLocaleDateString() : ''}</span>
+            </div>
+            <p style="font-size:13px;color:#ccc;line-height:1.5;">"${r.content.substring(0,200)}${r.content.length > 200 ? '…' : ''}"</p>
+          </div>`).join('');
+      } catch(e) {
+        list.innerHTML = `<p style="color:#e57373;">Error: ${e.message}</p>`;
+      }
+    }
+
+    function renderConv(c) {
+      const date = c.started_at ? new Date(c.started_at).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : 'Unknown date';
+      const preview = c.first_message ? c.first_message.substring(0, 120) + '…' : 'No preview';
+      const sourceColor = { claude_code:'#6366f1', council_api:'#10b981', manual:'#f59e0b' }[c.source] || '#888';
+      return `<div onclick="openConversation('${c.session_id}')" style="background:#0d1330;border:1px solid #2a3f5f;border-radius:8px;padding:12px;cursor:pointer;transition:border-color 0.2s;" onmouseover="this.style.borderColor='#4fc3f7'" onmouseout="this.style.borderColor='#2a3f5f'">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span style="background:${sourceColor}22;color:${sourceColor};font-size:11px;padding:2px 8px;border-radius:12px;">${c.source}</span>
+            <span style="color:#888;font-size:12px;">${c.message_count || 0} messages</span>
+            ${c.summary ? '<span style="color:#10b981;font-size:11px;">✓ summarized</span>' : ''}
+          </div>
+          <span style="color:#888;font-size:12px;">${date}</span>
+        </div>
+        ${c.summary ? `<p style="font-size:13px;color:#aaa;line-height:1.5;margin-bottom:4px;">${c.summary.substring(0,150)}…</p>` : `<p style="font-size:13px;color:#666;font-style:italic;">Click to view — ${preview}</p>`}
+        ${(c.key_decisions||[]).length > 0 ? `<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;">${c.key_decisions.slice(0,3).map(d=>`<span style="background:#1e3a5f;color:#aaa;font-size:11px;padding:2px 8px;border-radius:12px;">${d.substring(0,50)}</span>`).join('')}</div>` : ''}
+      </div>`;
+    }
+
+    async function openConversation(sessionId) {
+      currentConvSessionId = sessionId;
+      const detail = document.getElementById('convDetail');
+      const messages = document.getElementById('convDetailMessages');
+      const title = document.getElementById('convDetailTitle');
+      const summaryEl = document.getElementById('convDetailSummary');
+      detail.style.display = 'block';
+      messages.innerHTML = '<p style="color:#888;">Loading…</p>';
+      title.textContent = `Session: ${sessionId.substring(0,8)}…`;
+      summaryEl.style.display = 'none';
+      detail.scrollIntoView({ behavior:'smooth', block:'start' });
+
+      try {
+        const data = await api('GET', `/api/v1/history/${sessionId}`);
+        const conv = data.conversation;
+        if (!conv) { messages.innerHTML = '<p style="color:#e57373;">Not found</p>'; return; }
+
+        if (conv.summary) {
+          summaryEl.style.display = 'block';
+          summaryEl.innerHTML = `<strong style="color:#10b981;">Summary:</strong> ${conv.summary}
+            ${(conv.key_decisions||[]).length > 0 ? `<br><br><strong style="color:#10b981;">Key decisions:</strong><ul style="margin:6px 0 0 16px;">${conv.key_decisions.map(d=>`<li>${d}</li>`).join('')}</ul>` : ''}`;
+        }
+
+        const msgs = conv.messages || [];
+        if (msgs.length === 0) { messages.innerHTML = '<p style="color:#888;">No messages stored.</p>'; return; }
+
+        messages.innerHTML = msgs.map(m => {
+          const isUser = m.role === 'user';
+          const bg = isUser ? '#1a2a4a' : '#1a3a2a';
+          const nameColor = isUser ? '#6366f1' : '#10b981';
+          const name = isUser ? 'You' : 'Claude';
+          return `<div style="background:${bg};border-radius:8px;padding:12px;">
+            <div style="color:${nameColor};font-size:12px;font-weight:600;margin-bottom:6px;">${name}</div>
+            <div style="font-size:13px;color:#ccc;line-height:1.6;white-space:pre-wrap;">${m.content.substring(0,2000)}${m.content.length > 2000 ? '\n\n[truncated…]' : ''}</div>
+          </div>`;
+        }).join('');
+      } catch(e) {
+        messages.innerHTML = `<p style="color:#e57373;">Error: ${e.message}</p>`;
+      }
+    }
+
+    async function summarizeConversation() {
+      if (!currentConvSessionId) return;
+      const btn = event.target;
+      btn.textContent = '⏳ Summarizing…';
+      btn.disabled = true;
+      try {
+        const data = await api('POST', `/api/v1/history/${currentConvSessionId}/summarize`);
+        if (data.ok) {
+          const summaryEl = document.getElementById('convDetailSummary');
+          summaryEl.style.display = 'block';
+          summaryEl.innerHTML = `<strong style="color:#10b981;">Summary:</strong> ${data.summary}
+            ${(data.key_decisions||[]).length > 0 ? `<br><br><strong style="color:#10b981;">Key decisions:</strong><ul style="margin:6px 0 0 16px;">${data.key_decisions.map(d=>`<li>${d}</li>`).join('')}</ul>` : ''}
+            ${(data.topics||[]).length > 0 ? `<br><strong style="color:#10b981;">Topics:</strong> ${data.topics.join(', ')}` : ''}`;
+          btn.textContent = '✓ Done';
+        } else {
+          btn.textContent = '❌ Failed';
+          alert(data.error);
+        }
+      } catch(e) {
+        btn.textContent = '❌ Error';
+        alert(e.message);
+      }
+    }
+
+    // ══ IMPROVEMENT PROPOSALS ══════════════════════════════════════════════
+    async function loadProposals() {
+      const list = document.getElementById('proposalsList');
+      list.innerHTML = '<p style="color:#888;">Loading…</p>';
+      try {
+        const data = await api('GET', '/api/v1/twin/proposals?status=pending');
+        const proposals = data.proposals || [];
+        document.getElementById('proposalsCount').textContent = `${proposals.length} pending`;
+        if (proposals.length === 0) { list.innerHTML = '<p style="color:#10b981;">✓ No pending proposals — system looks clean.</p>'; return; }
+        const impactColor = { critical:'#ef4444', high:'#f59e0b', medium:'#6366f1', low:'#888' };
+        list.innerHTML = proposals.map(p => `
+          <div style="background:#0d1330;border:1px solid ${impactColor[p.impact_estimate]||'#2a3f5f'}44;border-left:3px solid ${impactColor[p.impact_estimate]||'#2a3f5f'};border-radius:8px;padding:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
+              <div style="flex:1;">
+                <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;flex-wrap:wrap;">
+                  <span style="background:${impactColor[p.impact_estimate]||'#888'}22;color:${impactColor[p.impact_estimate]||'#888'};font-size:11px;padding:2px 8px;border-radius:12px;text-transform:uppercase;">${p.impact_estimate}</span>
+                  <span style="color:#888;font-size:11px;background:#1a1f3a;padding:2px 8px;border-radius:12px;">${p.category}</span>
+                  <span style="color:#888;font-size:11px;">${p.effort_estimate}</span>
+                </div>
+                <p style="font-weight:600;font-size:14px;">${p.title}</p>
+                <p style="color:#aaa;font-size:13px;margin-top:4px;">${p.description}</p>
+                ${p.proposed_fix ? `<p style="color:#6366f1;font-size:13px;margin-top:6px;">💡 ${p.proposed_fix}</p>` : ''}
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button onclick="approveProposal(${p.id})" style="background:#2e7d32;padding:4px 12px;border-radius:6px;font-size:12px;">✓ Approve</button>
+                <button onclick="rejectProposal(${p.id})" style="background:#7f1d1d;padding:4px 12px;border-radius:6px;font-size:12px;">✕ Dismiss</button>
+              </div>
+            </div>
+          </div>`).join('');
+      } catch(e) {
+        list.innerHTML = `<p style="color:#e57373;">Error: ${e.message}</p>`;
+      }
+    }
+
+    async function approveProposal(id) {
+      const data = await api('POST', `/api/v1/twin/proposals/${id}/approve`);
+      if (data.ok) { alert('✓ Approved and added to your ideas queue'); loadProposals(); loadIdeas(); }
+      else { alert(data.error); }
+    }
+
+    async function rejectProposal(id) {
+      const reason = prompt('Why are you dismissing this? (helps the AI learn)') || 'Dismissed';
+      const data = await api('POST', `/api/v1/twin/proposals/${id}/reject`, { reason });
+      if (data.ok) { loadProposals(); }
+      else { alert(data.error); }
+    }
+
+    async function runMonitor() {
+      const btn = event.target;
+      btn.textContent = '⏳ Running…';
+      btn.disabled = true;
+      const data = await api('POST', '/api/v1/twin/monitor');
+      btn.textContent = '⚡ Run Monitor Now';
+      btn.disabled = false;
+      if (data.ok) { alert(`✓ Monitor complete — ${data.proposals || 0} new proposal(s) found`); loadProposals(); }
+      else { alert(data.error || 'Error'); }
+    }
+
+    // Load all new sections on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      // Slight delay so auth key loads first
+      setTimeout(() => { loadIdeas(); loadConversations(); loadProposals(); }, 800);
+    });
   </script>
 </body>
 </html>
