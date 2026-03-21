@@ -21,8 +21,9 @@ const DRY_RUN = process.argv.includes('--dry-run');
 const PROJECT_PATH = process.cwd(); // /Users/adamhopkins/Projects/Lumin-LifeOS
 
 // Encode project path the way Claude Code does
+// /Users/foo/bar → -Users-foo-bar (each slash becomes a dash, leading slash kept as dash)
 function encodeProjectPath(p) {
-  return p.replace(/\//g, '-').replace(/^-/, '');
+  return p.split('/').join('-');
 }
 
 async function findJsonlFiles() {

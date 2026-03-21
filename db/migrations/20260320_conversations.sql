@@ -3,9 +3,24 @@
 
 BEGIN;
 
+-- If the conversations table already exists (legacy schema), add the new columns
+ALTER TABLE conversations ALTER COLUMN user_id DROP NOT NULL;
+ALTER TABLE conversations ALTER COLUMN messages DROP NOT NULL;
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS session_id TEXT;
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS source TEXT NOT NULL DEFAULT 'legacy';
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS project TEXT;
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS started_at TIMESTAMPTZ;
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS ended_at TIMESTAMPTZ;
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS message_count INTEGER DEFAULT 0;
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS summary TEXT;
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS key_decisions TEXT[];
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS topics TEXT[];
+ALTER TABLE conversations ADD COLUMN IF NOT EXISTS metadata JSONB;
+
+-- Create fresh if it doesn't exist at all
 CREATE TABLE IF NOT EXISTS conversations (
   id              BIGSERIAL PRIMARY KEY,
-  session_id      TEXT NOT NULL,           -- source session UUID
+  session_id      TEXT,                    -- source session UUID
   source          TEXT NOT NULL,           -- 'claude_code'|'council_api'|'webhook'|'manual'
   project         TEXT,                    -- project path or name
   started_at      TIMESTAMPTZ,
