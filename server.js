@@ -1402,6 +1402,15 @@ async function start() {
 
     validateEnv(logger);
 
+    // ── Run DB migrations automatically ───────────────────────────────────
+    // Scans db/migrations/*.sql and runs any not yet applied. Safe on every restart.
+    try {
+      const { runMigrations } = await import('./services/migration-runner.js');
+      await runMigrations(pool);
+    } catch (err) {
+      logger.warn('[STARTUP] Migration runner failed (non-blocking)', { error: err.message });
+    }
+
     await startListening();
 
     // ── Auto-builder persistence + startup recovery ────────────────────────
