@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Word Keeper</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --border: #334155;
+    --accent: #6366f1;
+    --accent2: #22d3ee;
+    --green: #10b981;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --radius: 12px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100dvh;
+    padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 16px);
+    padding-bottom: 90px;
+    padding-top: 16px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    margin-bottom: 20px;
+  }
+  .header h1 { font-size: 20px; font-weight: 700; }
+  .header h1 span { color: var(--accent); }
+
+  /* Score card */
+  .score-card {
+    background: linear-gradient(135deg, #312e81, #1e1b4b);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 0 16px 20px;
+    text-align: center;
+  }
+  .score-number { font-size: 56px; font-weight: 800; color: var(--accent2); line-height: 1; }
+  .score-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .score-title { font-size: 16px; font-weight: 600; color: var(--accent); margin-top: 8px; }
+  .score-bar-wrap { margin-top: 12px; background: #1e293b; border-radius: 99px; height: 8px; overflow: hidden; }
+  .score-bar { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.8s ease; }
+  .score-stats { display: flex; gap: 12px; margin-top: 12px; justify-content: center; }
+  .score-stat { text-align: center; }
+  .score-stat .val { font-size: 20px; font-weight: 700; }
+  .score-stat .lbl { font-size: 11px; color: var(--muted); }
+
+  /* Section */
+  .section { padding: 0 16px; margin-bottom: 24px; }
+  .section-title {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px;
+  }
+
+  /* Record button */
+  .record-area { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 0 16px 24px; }
+  .record-btn {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--surface); border: 3px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; cursor: pointer; transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+  }
+  .record-btn.recording {
+    border-color: var(--red);
+    background: rgba(239,68,68,0.15);
+    animation: pulse-rec 1.5s infinite;
+  }
+  @keyframes pulse-rec {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+    50% { box-shadow: 0 0 0 16px rgba(239,68,68,0); }
+  }
+  .record-status { font-size: 14px; color: var(--muted); text-align: center; }
+  .record-status.active { color: var(--red); }
+  .phone-warning {
+    font-size: 12px; color: var(--yellow); text-align: center;
+    background: rgba(245,158,11,0.1); border-radius: 8px; padding: 8px 12px;
+    display: none;
+  }
+  .phone-warning.show { display: block; }
+
+  /* Commitment card */
+  .commitment-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+  }
+  .commitment-card .c-text { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .commitment-card .c-meta { font-size: 12px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+  .commitment-card .c-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .btn-sm {
+    padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: transparent; color: var(--text); font-size: 12px;
+    cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+  }
+  .btn-sm.green  { border-color: var(--green); color: var(--green); }
+  .btn-sm.green:active { background: var(--green); color: white; }
+  .btn-sm.red    { border-color: var(--red); color: var(--red); }
+  .btn-sm.red:active { background: var(--red); color: white; }
+  .btn-sm.yellow { border-color: var(--yellow); color: var(--yellow); }
+  .btn-sm.yellow:active { background: var(--yellow); color: black; }
+  .btn-sm.accent { border-color: var(--accent); color: var(--accent); }
+
+  /* Status badges */
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600;
+  }
+  .badge.pending  { background: rgba(245,158,11,0.15); color: var(--yellow); }
+  .badge.confirmed{ background: rgba(99,102,241,0.15); color: var(--accent); }
+  .badge.kept     { background: rgba(16,185,129,0.15); color: var(--green); }
+  .badge.broken   { background: rgba(239,68,68,0.15);  color: var(--red); }
+
+  /* Detected alert */
+  .detected-alert {
+    position: fixed; bottom: 90px; left: 16px; right: 16px;
+    background: #1e293b; border: 2px solid var(--accent);
+    border-radius: var(--radius); padding: 16px; z-index: 100;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    transform: translateY(20px); opacity: 0; pointer-events: none;
+    transition: all 0.3s ease;
+  }
+  .detected-alert.show { transform: translateY(0); opacity: 1; pointer-events: all; }
+  .detected-alert h3 { font-size: 14px; color: var(--accent2); margin-bottom: 6px; }
+  .detected-alert p  { font-size: 14px; margin-bottom: 12px; }
+  .detected-alert .alert-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1e293b; border-top: 1px solid var(--border);
+    display: flex; padding: 8px 0 env(safe-area-inset-bottom, 8px);
+    z-index: 50;
+  }
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 6px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    color: var(--muted); font-size: 11px; transition: color 0.15s;
+  }
+  .nav-item.active { color: var(--accent); }
+  .nav-item .icon { font-size: 20px; }
+
+  /* Mediator button */
+  .mediator-trigger {
+    position: fixed; bottom: 80px; right: 16px;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--surface); border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; cursor: pointer; z-index: 60;
+    transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+  }
+  .mediator-trigger:active { background: var(--accent); border-color: var(--accent); }
+
+  /* Add commitment form */
+  .add-form {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px; margin-bottom: 16px;
+  }
+  .add-form textarea {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 14px;
+    padding: 10px; resize: none; height: 80px; font-family: inherit;
+  }
+  .add-form textarea:focus { outline: none; border-color: var(--accent); }
+  .add-form .submit-btn {
+    margin-top: 10px; padding: 10px 16px; background: var(--accent);
+    border: none; border-radius: 8px; color: white; font-size: 14px;
+    font-weight: 600; cursor: pointer; width: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Views */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Empty state */
+  .empty { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 14px; }
+
+  /* Toast */
+  .toast {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 16px; font-size: 14px; z-index: 200; transition: transform 0.3s ease;
+    white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>Word <span>Keeper</span></h1>
+  <div id="streakBadge" style="font-size:13px; color:var(--accent2);">🔥 0 streak</div>
+</div>
+
+<!-- Bottom navigation -->
+<div class="bottom-nav">
+  <div class="nav-item active" data-view="home" onclick="switchView('home',this)">
+    <div class="icon">🏠</div>Home
+  </div>
+  <div class="nav-item" data-view="commitments" onclick="switchView('commitments',this)">
+    <div class="icon">📋</div>Pledges
+  </div>
+  <div class="nav-item" data-view="record" onclick="switchView('record',this)">
+    <div class="icon">🎙</div>Record
+  </div>
+  <div class="nav-item" data-view="score" onclick="switchView('score',this)">
+    <div class="icon">📊</div>Score
+  </div>
+  <div class="nav-item" data-view="add" onclick="switchView('add',this)">
+    <div class="icon">➕</div>Add
+  </div>
+</div>
+
+<!-- Mediator trigger -->
+<div class="mediator-trigger" id="mediatorBtn" onclick="startMediator()" title="Start Mediator">🕊️</div>
+
+<!-- Detected commitment alert -->
+<div class="detected-alert" id="detectedAlert">
+  <h3>🔍 Commitment Detected</h3>
+  <p id="detectedText"></p>
+  <div class="alert-btns">
+    <button class="btn-sm green" onclick="confirmCommitment()">✓ Track It</button>
+    <button class="btn-sm red"   onclick="declineCommitment()">✗ Ignore</button>
+    <button class="btn-sm yellow" onclick="honourableExit()">🚪 Help Me Back Out</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- HOME VIEW -->
+<div class="view active" id="view-home">
+  <div class="score-card">
+    <div class="score-number" id="homeScore">—</div>
+    <div class="score-label">Integrity Score / 1000</div>
+    <div class="score-title" id="homeTitle">Loading…</div>
+    <div class="score-bar-wrap">
+      <div class="score-bar" id="homeBar" style="width:0%"></div>
+    </div>
+    <div class="score-stats">
+      <div class="score-stat">
+        <div class="val" id="homeKept">—</div>
+        <div class="lbl">Kept</div>
+      </div>
+      <div class="score-stat">
+        <div class="val" id="homeBroken">—</div>
+        <div class="lbl">Broken</div>
+      </div>
+      <div class="score-stat">
+        <div class="val" id="homeStreak">—</div>
+        <div class="lbl">Streak</div>
+      </div>
+      <div class="score-stat">
+        <div class="val" id="homeRate">—</div>
+        <div class="lbl">Keep%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Upcoming Commitments</div>
+    <div id="homeCommitments"><div class="empty">Loading…</div></div>
+  </div>
+</div>
+
+<!-- COMMITMENTS VIEW -->
+<div class="view" id="view-commitments">
+  <div class="section">
+    <div class="section-title">All Commitments</div>
+    <div id="allCommitments"><div class="empty">Loading…</div></div>
+  </div>
+</div>
+
+<!-- RECORD VIEW -->
+<div class="view" id="view-record">
+  <div class="record-area">
+    <div class="record-btn" id="recordBtn" onclick="toggleRecording()">🎙</div>
+    <div class="record-status" id="recordStatus">Tap to start listening</div>
+    <div class="phone-warning" id="phoneWarning">
+      📞 Phone call detected — recording paused (NV law requires two-party consent)
+    </div>
+    <div style="font-size:12px; color:var(--muted); text-align:center; padding: 0 24px;">
+      Recording is off by default. Enabled only while active. Transcripts auto-purge after 24h unless a commitment is detected.
+    </div>
+  </div>
+</div>
+
+<!-- SCORE VIEW -->
+<div class="view" id="view-score">
+  <div class="section">
+    <div class="section-title">Score Breakdown</div>
+    <div id="scoreBreakdown"><div class="empty">Loading…</div></div>
+  </div>
+</div>
+
+<!-- ADD VIEW -->
+<div class="view" id="view-add">
+  <div class="section">
+    <div class="section-title">Add a Commitment</div>
+    <div class="add-form">
+      <textarea id="addText" placeholder="I'll have the proposal ready by Friday…"></textarea>
+      <button class="submit-btn" onclick="addCommitment()">Add Commitment</button>
+    </div>
+    <div class="section-title" style="margin-top:20px">Integrations</div>
+    <div class="commitment-card" id="calendarCard">
+      <div class="c-text">📅 Google Calendar</div>
+      <div class="c-meta" id="calendarStatus">Checking…</div>
+      <div class="c-actions">
+        <button class="btn-sm accent" id="calendarBtn" onclick="connectCalendar()">Connect</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '/api/v1/word-keeper';
+const KEY = localStorage.getItem('wk_key') || prompt('Enter API key:') || '';
+if (KEY) localStorage.setItem('wk_key', KEY);
+
+const headers = { 'Content-Type': 'application/json', 'x-api-key': KEY };
+
+let currentView = 'home';
+let isRecording = false;
+let mediaRecorder = null;
+let audioChunks = [];
+let chunkIndex = 0;
+let chunkTimer = null;
+let pendingCommitmentId = null;
+
+// ── Navigation ──────────────────────────────────────────────────────────────
+function switchView(view, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  if (el) el.classList.add('active');
+  currentView = view;
+  loadView(view);
+}
+
+async function loadView(view) {
+  if (view === 'home' || view === 'score') await loadScore();
+  if (view === 'home') await loadCommitments('home');
+  if (view === 'commitments') await loadCommitments('all');
+}
+
+// ── Score ───────────────────────────────────────────────────────────────────
+async function loadScore() {
+  try {
+    const r = await fetch(`${API}/score`, { headers });
+    if (!r.ok) return;
+    const d = await r.json();
+
+    // Home score card
+    document.getElementById('homeScore').textContent = d.score;
+    document.getElementById('homeTitle').textContent = `Level ${d.level}: ${d.title}`;
+    document.getElementById('homeBar').style.width = `${d.score / 10}%`;
+    document.getElementById('homeKept').textContent = d.counts.kept;
+    document.getElementById('homeBroken').textContent = d.counts.broken;
+    document.getElementById('homeStreak').textContent = d.streak.current;
+    document.getElementById('homeRate').textContent = `${d.keepRate}%`;
+    document.getElementById('streakBadge').textContent = `🔥 ${d.streak.current} streak`;
+
+    // Score breakdown view
+    if (currentView === 'score') {
+      const el = document.getElementById('scoreBreakdown');
+      el.innerHTML = `
+        <div class="commitment-card">
+          <div class="c-text" style="font-size:13px;color:var(--muted)">By Category</div>
+          ${(d.byCategory || []).map(c => `
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--border);font-size:13px">
+              <span>${c.category}</span>
+              <span><span style="color:var(--green)">${c.kept} kept</span> / <span style="color:var(--red)">${c.broken} broken</span></span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="commitment-card">
+          <div class="c-text" style="font-size:13px;color:var(--muted)">By Person</div>
+          ${(d.byPerson || []).map(p => `
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--border);font-size:13px">
+              <span>${p.person || 'Self'}</span>
+              <span><span style="color:var(--green)">${p.kept}</span> / <span style="color:var(--red)">${p.broken}</span></span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+  } catch (e) { console.warn('loadScore:', e); }
+}
+
+// ── Commitments ─────────────────────────────────────────────────────────────
+async function loadCommitments(mode) {
+  try {
+    const status = mode === 'home' ? '&status=confirmed' : '';
+    const r = await fetch(`${API}/commitments?limit=20${status}`, { headers });
+    if (!r.ok) return;
+    const d = await r.json();
+
+    const targetId = mode === 'home' ? 'homeCommitments' : 'allCommitments';
+    const el = document.getElementById(targetId);
+
+    if (!d.commitments?.length) {
+      el.innerHTML = '<div class="empty">No commitments yet</div>';
+      return;
+    }
+
+    el.innerHTML = d.commitments.map(c => `
+      <div class="commitment-card" id="cc-${c.id}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+          <div class="c-text">${esc(c.normalized_text || c.raw_text)}</div>
+          <span class="badge ${c.status}">${c.status}</span>
+        </div>
+        <div class="c-meta">
+          ${c.to_person ? `<span>👤 ${esc(c.to_person)}</span>` : ''}
+          ${c.deadline ? `<span>📅 ${fmtDate(c.deadline)}</span>` : ''}
+          ${c.category ? `<span>🏷 ${c.category}</span>` : ''}
+        </div>
+        ${c.status === 'pending' ? `
+          <div class="c-actions">
+            <button class="btn-sm green" onclick="commitAction(${c.id},'confirm')">✓ Confirm</button>
+            <button class="btn-sm red"   onclick="commitAction(${c.id},'decline')">✗ Decline</button>
+          </div>` : ''}
+        ${c.status === 'confirmed' ? `
+          <div class="c-actions">
+            <button class="btn-sm green"  onclick="commitAction(${c.id},'kept')">✓ Kept</button>
+            <button class="btn-sm red"    onclick="commitAction(${c.id},'broken')">✗ Broken</button>
+            <button class="btn-sm yellow" onclick="commitAction(${c.id},'honourable_exit')">🚪 Exit</button>
+            <button class="btn-sm accent" onclick="commitAction(${c.id},'renegotiate')">🔄 Renegotiate</button>
+          </div>` : ''}
+      </div>
+    `).join('');
+  } catch (e) { console.warn('loadCommitments:', e); }
+}
+
+async function commitAction(id, action) {
+  try {
+    const r = await fetch(`${API}/commitments/${id}`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ action }),
+    });
+    const d = await r.json();
+    showToast(action === 'kept' ? `+${d.pointsAwarded || 0} pts 🎉` : 'Updated');
+    await loadCommitments(currentView === 'home' ? 'home' : 'all');
+    await loadScore();
+  } catch (e) { showToast('Error — try again'); }
+}
+
+async function addCommitment() {
+  const text = document.getElementById('addText').value.trim();
+  if (!text) return;
+  try {
+    const r = await fetch(`${API}/commitments`, {
+      method: 'POST', headers, body: JSON.stringify({ rawText: text }),
+    });
+    const d = await r.json();
+    document.getElementById('addText').value = '';
+    showToast('Commitment added ✓');
+    if (d.realityCheck?.concern) {
+      showToast(`⚠️ ${d.realityCheck.concern}`);
+    }
+    switchView('commitments', document.querySelector('[data-view=commitments]'));
+  } catch (e) { showToast('Error — try again'); }
+}
+
+// ── Recording ───────────────────────────────────────────────────────────────
+async function toggleRecording() {
+  if (isRecording) {
+    stopRecording();
+  } else {
+    await startRecording();
+  }
+}
+
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    isRecording = true;
+    chunkIndex = 0;
+    document.getElementById('recordBtn').classList.add('recording');
+    document.getElementById('recordBtn').textContent = '⏹';
+    document.getElementById('recordStatus').textContent = 'Listening… 60s chunks';
+    document.getElementById('recordStatus').classList.add('active');
+
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = sendChunk;
+
+    // 60-second chunks
+    mediaRecorder.start();
+    chunkTimer = setInterval(() => {
+      if (mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        setTimeout(() => {
+          if (isRecording) {
+            audioChunks = [];
+            mediaRecorder.start();
+          }
+        }, 200);
+      }
+    }, 60000);
+
+  } catch (e) {
+    showToast('Microphone access denied');
+    isRecording = false;
+  }
+}
+
+function stopRecording() {
+  isRecording = false;
+  clearInterval(chunkTimer);
+  if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
+  document.getElementById('recordBtn').classList.remove('recording');
+  document.getElementById('recordBtn').textContent = '🎙';
+  document.getElementById('recordStatus').textContent = 'Tap to start listening';
+  document.getElementById('recordStatus').classList.remove('active');
+}
+
+async function sendChunk() {
+  if (!audioChunks.length) return;
+  const blob = new Blob(audioChunks, { type: 'audio/webm' });
+  const idx = chunkIndex++;
+
+  // Show transcribing indicator
+  document.getElementById('recordStatus').textContent = 'Transcribing…';
+
+  try {
+    // Send real audio blob to server → Whisper → commitment scan
+    const formData = new FormData();
+    formData.append('audio', blob, `chunk-${idx}.webm`);
+    formData.append('chunkIndex', String(idx));
+
+    const r = await fetch(`${API}/transcript/audio`, {
+      method: 'POST',
+      headers: { 'x-api-key': KEY }, // no Content-Type — let browser set multipart boundary
+      body: formData,
+    });
+
+    const d = await r.json();
+
+    // Show transcript snippet in status
+    if (d.transcript) {
+      const preview = d.transcript.slice(0, 60) + (d.transcript.length > 60 ? '…' : '');
+      document.getElementById('recordStatus').textContent = `"${preview}"`;
+      setTimeout(() => {
+        if (isRecording) document.getElementById('recordStatus').textContent = 'Listening… 60s chunks';
+      }, 4000);
+    } else {
+      document.getElementById('recordStatus').textContent = 'Listening… 60s chunks';
+    }
+
+    // Show commitment alert if detected
+    if (d.commitmentsDetected > 0) {
+      showCommitmentAlert(d.commitments[0]);
+    }
+  } catch (e) {
+    console.warn('sendChunk:', e);
+    document.getElementById('recordStatus').textContent = 'Listening… 60s chunks';
+  }
+}
+
+// ── Detected alert ──────────────────────────────────────────────────────────
+function showCommitmentAlert(commitment) {
+  pendingCommitmentId = commitment.commitmentId;
+  document.getElementById('detectedText').textContent = `"${commitment.rawText}"`;
+  document.getElementById('detectedAlert').classList.add('show');
+}
+
+async function confirmCommitment() {
+  if (!pendingCommitmentId) return;
+  await commitAction(pendingCommitmentId, 'confirm');
+  document.getElementById('detectedAlert').classList.remove('show');
+  pendingCommitmentId = null;
+}
+
+async function declineCommitment() {
+  if (!pendingCommitmentId) return;
+  await commitAction(pendingCommitmentId, 'decline');
+  document.getElementById('detectedAlert').classList.remove('show');
+  pendingCommitmentId = null;
+}
+
+function honourableExit() {
+  if (!pendingCommitmentId) return;
+  document.getElementById('detectedAlert').classList.remove('show');
+  window.location.href = `#exit-${pendingCommitmentId}`;
+  showToast('Generating exit message…');
+  // TODO: open exit flow modal
+}
+
+// ── Mediator ────────────────────────────────────────────────────────────────
+async function startMediator() {
+  const other = prompt('Other person\'s name (optional):') || null;
+  try {
+    const r = await fetch(`${API}/mediator/start`, {
+      method: 'POST', headers,
+      body: JSON.stringify({ otherParty: other, triggerMethod: 'manual' }),
+    });
+    const d = await r.json();
+    showToast('Mediator started');
+    alert(d.message + '\n\nSession ID: ' + d.sessionId + '\n\nBoth parties share their perspective privately. Analysis only runs with mutual consent.');
+  } catch (e) { showToast('Error starting mediator'); }
+}
+
+// ── Utilities ───────────────────────────────────────────────────────────────
+function esc(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── Google Calendar ──────────────────────────────────────────────────────────
+async function checkCalendarStatus() {
+  try {
+    const r = await fetch(`${API}/calendar/status`, { headers });
+    const d = await r.json();
+    const statusEl = document.getElementById('calendarStatus');
+    const btnEl    = document.getElementById('calendarBtn');
+    if (d.connected) {
+      statusEl.textContent = `Connected since ${fmtDate(d.connectedSince)}`;
+      btnEl.textContent = 'Disconnect';
+      btnEl.className = 'btn-sm red';
+    } else {
+      statusEl.textContent = 'Not connected';
+      btnEl.textContent = 'Connect';
+      btnEl.className = 'btn-sm accent';
+    }
+  } catch { /* silent */ }
+}
+
+async function connectCalendar() {
+  try {
+    const r = await fetch(`${API}/calendar/connect`, { headers });
+    const d = await r.json();
+    if (d.authUrl) {
+      window.open(d.authUrl, '_blank', 'width=500,height=600');
+      showToast('Complete Google sign-in in the popup');
+      setTimeout(checkCalendarStatus, 5000);
+    } else {
+      showToast(d.error || 'Calendar setup failed');
+    }
+  } catch { showToast('Error connecting calendar'); }
+}
+
+// ── Init ────────────────────────────────────────────────────────────────────
+loadView('home');
+checkCalendarStatus();
+</script>
+</body>
+</html>

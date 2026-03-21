@@ -55,6 +55,7 @@ import {
   injectKnowledgeContext,
 } from "./services/knowledge-context.js";
 import { createCouncilService } from "./services/council-service.js";
+import { createSavingsLedger } from "./services/savings-ledger.js";
 import { AdminModule } from "./modules/admin/admin-module.js";
 import { ToolsModule } from "./modules/system/tools-module.js";
 import { KnowledgeModule } from "./modules/system/knowledge-module.js";
@@ -164,6 +165,14 @@ import { createContinuousImprovement } from "./services/continuous-improvement.j
 // Conversation history
 import { createConversationHistoryRoutes } from "./routes/conversation-history-routes.js";
 import { createConversationStore } from "./services/conversation-store.js";
+// Word Keeper & Integrity Engine (Amendment 16)
+import { createWordKeeperRoutes } from "./routes/word-keeper-routes.js";
+import { startReminderCron } from "./services/reminder-cron.js";
+import { createIntegrityEngine as createWKIntegrityEngine } from "./services/integrity-engine.js";
+// Autonomy Orchestrator — self-programming without bottlenecks (Amendment 17)
+import { createAutonomyOrchestrator } from "./services/autonomy-orchestrator.js";
+import { createAutonomyRoutes } from "./routes/autonomy-routes.js";
+import { registerTwilioWebhook } from "./services/twilio-webhook-registrar.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig, CrmSequenceRunner;
@@ -520,6 +529,84 @@ const COUNCIL_MEMBERS = {
     useLocal: DEEPSEEK_BRIDGE_ENABLED === "true",
     isFree: false,
   },
+  groq_llama: {
+    name: "Groq Llama (Free)",
+    model: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
+    provider: "groq",
+    role: "Fast Cloud Generalist",
+    focus: "quick routing, lightweight reasoning, free-tier responses",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0,
+    specialties: ["fast", "routing", "general", "reasoning"],
+    isFree: true,
+    isLocal: false,
+  },
+  gemini_flash: {
+    name: "Gemini Flash (Free)",
+    model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+    provider: "gemini",
+    role: "Fast Cloud Reasoning",
+    focus: "summaries, planning, lightweight analysis, free-tier responses",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0,
+    specialties: ["analysis", "planning", "summaries", "reasoning"],
+    isFree: true,
+    isLocal: false,
+  },
+  cerebras_llama: {
+    name: "Cerebras Llama (Free)",
+    model: process.env.CEREBRAS_MODEL || "llama3.1-8b",
+    provider: "cerebras",
+    role: "High-Speed Cloud Reasoning",
+    focus: "fast generation, routing, throughput-heavy tasks",
+    maxTokens: 8192,
+    tier: "tier0",
+    costPer1M: 0,
+    specialties: ["speed", "throughput", "reasoning", "general"],
+    isFree: true,
+    isLocal: false,
+  },
+  openrouter_free: {
+    name: "OpenRouter Free",
+    model: process.env.OPENROUTER_MODEL || "meta-llama/llama-3.1-8b-instruct:free",
+    provider: "openrouter",
+    role: "Free Model Aggregator",
+    focus: "fallback routing across free hosted models",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0,
+    specialties: ["fallback", "general", "routing"],
+    isFree: true,
+    isLocal: false,
+  },
+  mistral_free: {
+    name: "Mistral Free",
+    model: process.env.MISTRAL_MODEL || "open-mistral-7b",
+    provider: "mistral",
+    role: "Lightweight Cloud Assistant",
+    focus: "concise generation, chat, lightweight planning",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0,
+    specialties: ["chat", "planning", "lightweight"],
+    isFree: true,
+    isLocal: false,
+  },
+  together_free: {
+    name: "Together Free",
+    model: process.env.TOGETHER_MODEL || "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+    provider: "together",
+    role: "Shared Cloud Fallback",
+    focus: "free/shared routing, fallback execution, fast responses",
+    maxTokens: 4096,
+    tier: "tier0",
+    costPer1M: 0,
+    specialties: ["fallback", "speed", "general"],
+    isFree: true,
+    isLocal: false,
+  },
   // TIER 0 - CODE GENERATION SPECIALISTS (Best for coding tasks)
   ollama_deepseek_coder_v2: {
     name: "DeepSeek Coder V2 (Local)",
@@ -724,6 +811,7 @@ const {
   updateROIWithTracker,
   trackAIPerformance,
   notifyCriticalIssue,
+  savingsLedger: createSavingsLedger(pool), // TCO-E01
 });
 
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
@@ -1152,6 +1240,17 @@ registerWebsiteAuditRoutes(app, {
 
 registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requireKey);
 
+// ==================== API COST SAVINGS ROUTES ====================
+// Imported but was never mounted — gap found by TCO audit 2026-03-21
+createApiCostSavingsRoutes(app, {
+  pool,
+  requireKey,
+  apiCostSavingsRevenue,
+  getStripeClient,
+  RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
+});
+logger.info('✅ [API-COST-SAVINGS] Routes mounted at /api/v1/cost-savings + /api/v1/revenue/api-cost-savings');
+
 // ==================== IDEA QUEUE ====================
 app.use('/api/v1/ideas', createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));
 logger.info('✅ [IDEA-QUEUE] Routes mounted at /api/v1/ideas');
@@ -1163,6 +1262,93 @@ logger.info('✅ [TWIN] Routes mounted at /api/v1/twin');
 // ==================== CONVERSATION HISTORY ====================
 app.use('/api/v1/history', createConversationHistoryRoutes({ pool, requireKey, callCouncilMember }));
 logger.info('✅ [HISTORY] Routes mounted at /api/v1/history');
+
+// ==================== WORD KEEPER & INTEGRITY ENGINE (Amendment 16) ====================
+// Thin adapter: word-keeper services call councilService.ask(prompt, opts)
+const wordKeeperCouncil = {
+  ask: (prompt, opts = {}) => callCouncilMember(opts.model || 'claude', prompt, opts.systemPrompt || '', opts),
+};
+app.use('/api/v1/word-keeper', createWordKeeperRoutes({ pool, councilService: wordKeeperCouncil, twilioService: null }));
+logger.info('✅ [WORD-KEEPER] Routes mounted at /api/v1/word-keeper');
+
+// ── Word Keeper reminder cron — check every 60s, send SMS, weekly coaching ──
+const wkIntegrityEngine = createWKIntegrityEngine(pool, wordKeeperCouncil);
+startReminderCron(pool, async (to, msg) => {
+  // Use Twilio sendSMS if configured, otherwise log
+  try {
+    const { createTwilioService } = await import('./services/twilio-service.js');
+    const twilio = createTwilioService({
+      callCouncilMember,
+      RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
+      ALERT_PHONE: to,
+      alertState: { inProgress: false },
+    });
+    return twilio.sendSMS(to, msg);
+  } catch { return { success: false }; }
+}, {
+  userPhone: process.env.ALERT_PHONE || process.env.ADMIN_PHONE,
+  integrityEngine: wkIntegrityEngine,
+});
+logger.info('✅ [WORD-KEEPER] Reminder cron started');
+
+// ==================== AUTONOMY ORCHESTRATOR (Amendment 17) ====================
+// Runs every 15 min — scores proposals, auto-approves risk ≤2, SMS Adam for 3-4, skips 5-6.
+// Adam is never the bottleneck for routine work.
+const autonomyOrchestrator = createAutonomyOrchestrator({
+  pool,
+  callAI: async (task, prompt) => {
+    try {
+      const result = await callCouncilMember('anthropic', prompt);
+      return typeof result === 'string' ? result : result?.content || result?.text || '';
+    } catch { return ''; }
+  },
+  sendSMS: async (to, msg) => {
+    try {
+      const twilio = createTwilioService({
+        callCouncilMember,
+        RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
+        ALERT_PHONE: to,
+        alertState: { inProgress: false },
+      });
+      return twilio.sendSMS(to, msg);
+    } catch { return { success: false }; }
+  },
+  adminPhone: process.env.ALERT_PHONE || process.env.ADMIN_PHONE,
+});
+autonomyOrchestrator.start();
+app.use('/api/v1/autonomy', createAutonomyRoutes({ pool, requireKey, orchestrator: autonomyOrchestrator }));
+logger.info('✅ [AUTONOMY] Orchestrator started + routes mounted at /api/v1/autonomy');
+
+// Self-register Twilio SMS webhook — no manual Twilio console action needed
+registerTwilioWebhook().then(result => {
+  if (result.registered) {
+    logger.info({ url: result.url, changed: result.changed }, '✅ [TWILIO] SMS webhook confirmed');
+  } else {
+    logger.warn({ error: result.error }, '⚠️ [TWILIO] SMS webhook registration failed (non-fatal)');
+  }
+}).catch(() => {});
+
+// Self-configure email env vars in Railway if not yet set
+// SMTP_PASS must be set manually (requires Google login) — everything else the system sets itself.
+(async () => {
+  try {
+    const needed = {};
+    if (!process.env.EMAIL_PROVIDER) needed.EMAIL_PROVIDER = 'smtp';
+    if (!process.env.EMAIL_FROM)     needed.EMAIL_FROM     = 'lifeOS@hopkinsgroup.org';
+    if (!process.env.SMTP_HOST)      needed.SMTP_HOST      = 'smtp.gmail.com';
+    if (!process.env.SMTP_PORT)      needed.SMTP_PORT      = '587';
+    if (!process.env.SMTP_USER)      needed.SMTP_USER      = 'adam@hopkinsgroup.org';
+
+    if (Object.keys(needed).length > 0) {
+      await setRailwayEnvVars(needed);
+      logger.info({ vars: Object.keys(needed) }, '✅ [SELF-CONFIG] Email env vars set in Railway');
+    } else {
+      logger.info('[SELF-CONFIG] Email env vars already set — no action needed');
+    }
+  } catch (err) {
+    logger.warn({ error: err.message }, '⚠️ [SELF-CONFIG] Could not set email env vars (non-fatal)');
+  }
+})();
 
 // Auto-log all council API calls as conversations
 const convStore = createConversationStore(pool);
@@ -1662,6 +1848,10 @@ async function start() {
     console.log("  ✅ Continuous Memory");
     console.log("  ✅ Stripe Revenue Sync (read + ROI logging only)");
 
+    const selfProgrammingHttpService = createSelfProgrammingService(
+      () => selfProgrammingDepsRef.current
+    );
+
     registerModules(
       moduleRouter,
       [
@@ -1681,6 +1871,10 @@ async function start() {
           name: "knowledge",
           factory: (deps) => new KnowledgeModule(deps),
         },
+        {
+          name: "self-programming",
+          factory: (deps) => new SelfProgrammingModule(deps),
+        },
       ],
       {
         pool,
@@ -1692,8 +1886,11 @@ async function start() {
         callCouncilMember,
         callCouncilWithFailover,
         pingCouncilMember,
+        requireKey,
         detectBlindSpots,
         handleSelfProgramming,
+        handleSelfProgramRequest: selfProgrammingHttpService.handleSelfProgramRequest,
+        aiSafetyGate,
         decodeMicroBody,
         buildMicroResponse,
         compressPrompt,

@@ -13,6 +13,7 @@ import { loadRuntimeEnv } from '../config/runtime-env.js';
 import { createDeploymentService } from '../services/deployment-service.js';
 import { createWebSearchService } from '../services/web-search-service.js';
 import { createDesignQualityGate } from '../services/design-quality-gate.js';
+import { createBuildCritic } from '../services/build-critic.js';
 
 const BRAND_PATH = path.join(process.cwd(), 'docs', 'brand.md');
 const PREFS_PATH = path.join(process.cwd(), 'data', 'adam-preferences.json');
@@ -290,7 +291,10 @@ export async function loadPersistedQueue(pool) {
  * Called by the idea-queue route when Adam triggers a build.
  *
  * @param {object} definition  Same shape as PRODUCT_DEFINITIONS entries:
- *   { id, name, description, components: [{id, name, file, type, prompt}] }
+ *   { id, name, description, components: [{id, name, file, type, prompt, ssotSpec?}] }
+ *
+ * ssotSpec (optional per component): paste the relevant SSOT Amendment section.
+ * The build critic will validate the generated code against it before shipping.
  */
 export function addProductToQueue(definition) {
   if (!definition || !definition.id || !Array.isArray(definition.components)) {
@@ -514,9 +518,20 @@ async function buildComponent(component, maxRetries = 3, product = null) {
   const enrichedBasePrompt = `${component.prompt}${brandBlock}${prefBlock}${researchBlock}${visionBlock}`;
 
   // Quality gate (for visual components only)
+  // Use a different model for critique to avoid "grading its own homework"
+  // code_generation → deepseek-coder (builder), code_review → primary/qwen (critic)
+  const callCritic     = async (prompt) => routeTaskImpl('code_review', prompt);
+  const callValidator  = async (prompt) => routeTaskImpl('code_validation', prompt);
   const qualityGate = ['html', 'css'].includes(component.type)
-    ? createDesignQualityGate({ callAI })
+    ? createDesignQualityGate({ callAI, callCritic })
     : null;
+
+  // Build critic — runs on ALL file types. Builder writes, critic reads cold,
+  // builder fixes, validator checks spec. Max 3 rounds per attempt.
+  const buildCritic = createBuildCritic({ callAI, callCritic, callValidator });
+
+  // Load SSOT spec for this component if available (optional — stored in component.ssotSpec)
+  const ssotSpec = component.ssotSpec || null;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     console.log(`\n🔄 Attempt ${attempt}/${maxRetries}`);
@@ -561,6 +576,38 @@ async function buildComponent(component, maxRetries = 3, product = null) {
 
         if (gateResult.hadIssues) {
           console.log(`⚠️ [QUALITY-GATE] Shipped with warnings — review ${component.file}`);
+        }
+      }
+
+      // ── Build critic loop: runs on ALL file types ──────────────────────────
+      // Different models for builder vs critic vs validator = no homework grading.
+      // Skipped on final attempt (attempt === maxRetries) to avoid infinite loops.
+      if (attempt < maxRetries) {
+        console.log('🔍 Running build critic loop...');
+        try {
+          const criticResult = await buildCritic.review(code, component, ssotSpec, 3);
+          code = criticResult.code; // may be improved version
+
+          if (!criticResult.passed) {
+            // Log unresolved issues but don't block shipping — critic is advisory
+            const criticalIssues = criticResult.issues.filter(i => i.severity === 'critical');
+            if (criticalIssues.length > 0) {
+              console.warn(`⚠️ [BUILD-CRITIC] ${criticalIssues.length} critical issue(s) unresolved in ${component.file}:`);
+              for (const issue of criticalIssues) {
+                console.warn(`   - ${issue.location}: ${issue.description}`);
+              }
+              // Treat as a soft failure — retry the whole attempt rather than shipping broken code
+              if (criticalIssues.length >= 2) {
+                lastError = `Build critic: ${criticalIssues.length} critical issues — ${criticalIssues.map(i => i.description).join('; ')}`;
+                continue;
+              }
+            }
+          } else {
+            console.log(`✅ [BUILD-CRITIC] ${criticResult.summary}`);
+          }
+        } catch (criticErr) {
+          // Critic failure is never blocking — ship original code
+          console.warn(`⚠️ [BUILD-CRITIC] Review failed (non-blocking): ${criticErr.message}`);
         }
       }
 

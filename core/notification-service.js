@@ -1,14 +1,20 @@
 /**
  * NotificationService
- * - Email (recommended: Postmark) with suppression + event logging
+ * - Email via SMTP (Gmail/Workspace) or Postmark, with suppression + event logging
  * - Intended as the single abstraction for outbound comms
  *
  * Env:
- * - EMAIL_PROVIDER: "postmark" (default) | "disabled"
+ * - EMAIL_PROVIDER: "smtp" | "postmark" | "disabled"
  * - EMAIL_FROM: default From address (required for sending)
+ * - SMTP_HOST: SMTP server (e.g. smtp.gmail.com)
+ * - SMTP_PORT: SMTP port (e.g. 587)
+ * - SMTP_USER: SMTP username (usually the sending email address)
+ * - SMTP_PASS: SMTP password or Google App Password
  * - POSTMARK_SERVER_TOKEN: Postmark server token (required if provider=postmark)
- * - EMAIL_WEBHOOK_SECRET: shared secret for webhook endpoints (required to accept webhooks)
+ * - EMAIL_WEBHOOK_SECRET: shared secret for webhook endpoints
  */
+
+import nodemailer from 'nodemailer';
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -36,6 +42,22 @@ export class NotificationService {
     this.provider = (process.env.EMAIL_PROVIDER || "postmark").toLowerCase();
     this.fromDefault = process.env.EMAIL_FROM || null;
     this.postmarkToken = process.env.POSTMARK_SERVER_TOKEN || null;
+    // SMTP transporter (lazy-created on first send)
+    this._smtpTransporter = null;
+  }
+
+  _getSmtpTransporter() {
+    if (this._smtpTransporter) return this._smtpTransporter;
+    this._smtpTransporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: Number(process.env.SMTP_PORT || 587),
+      secure: false, // STARTTLS
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+    return this._smtpTransporter;
   }
 
   /**
@@ -172,6 +194,45 @@ export class NotificationService {
         status: "blocked_disabled",
       });
       return { success: false, error: "Email provider disabled" };
+    }
+
+    // ── SMTP (Gmail / Google Workspace / any SMTP) ─────────────────────────
+    if (provider === "smtp") {
+      if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+        return { success: false, error: "SMTP_USER or SMTP_PASS not set" };
+      }
+
+      try {
+        const transporter = this._getSmtpTransporter();
+        const info = await transporter.sendMail({
+          from: fromAddr,
+          to: recipient,
+          subject,
+          text: text || undefined,
+          html: html || undefined,
+        });
+
+        await this.logOutreach({
+          campaignId, channel: "email", recipient, subject,
+          body: text || html || "", status: "sent", externalId: info.messageId,
+        });
+        await this.logEmailEvent({
+          provider: "smtp", eventType: "sent", messageId: info.messageId,
+          recipient, payload: safeJson({ at: nowIso(), messageId: info.messageId }), severity: "info",
+        });
+
+        return { success: true, provider: "smtp", messageId: info.messageId };
+      } catch (e) {
+        await this.logOutreach({
+          campaignId, channel: "email", recipient, subject,
+          body: bodyText, status: "failed",
+        });
+        await this.logEmailEvent({
+          provider: "smtp", eventType: "send_failed", messageId: null,
+          recipient, payload: safeJson({ at: nowIso(), error: e.message }), severity: "error",
+        });
+        return { success: false, error: e.message };
+      }
     }
 
     if (provider !== "postmark") {
