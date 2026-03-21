@@ -11,6 +11,21 @@ import { validateResponse, extractCode } from './validators.js';
 import { createDbPool } from '../services/db.js';
 import { loadRuntimeEnv } from '../config/runtime-env.js';
 import { createDeploymentService } from '../services/deployment-service.js';
+import { createWebSearchService } from '../services/web-search-service.js';
+import { createDesignQualityGate } from '../services/design-quality-gate.js';
+
+const BRAND_PATH = path.join(process.cwd(), 'docs', 'brand.md');
+const PREFS_PATH = path.join(process.cwd(), 'data', 'adam-preferences.json');
+
+async function loadBrandContext() {
+  try {
+    const brand = await fs.readFile(BRAND_PATH, 'utf-8');
+    const prefs = JSON.parse(await fs.readFile(PREFS_PATH, 'utf-8'));
+    return { brand, prefs };
+  } catch {
+    return { brand: '', prefs: {} };
+  }
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -363,7 +378,7 @@ function applyStripeGate(product) {
 async function buildComponentResult(product, component) {
   console.log(`\n📦 Building: ${component.name}`);
   console.log(`📄 File: ${component.file}`);
-  const result = await buildComponent(component);
+  const result = await buildComponent(component, 3, product);
   if (result.success) {
     component.status = 'complete';
     component.lastError = null;
@@ -447,50 +462,119 @@ export async function runBuildCycle() {
   }
 }
 
-async function buildComponent(component, maxRetries = 3) {
+async function buildComponent(component, maxRetries = 3, product = null) {
   let lastError = null;
-  
+
+  // ── Load brand context + run research before first attempt ─────────────────
+  const { brand, prefs } = await loadBrandContext();
+
+  // Build AI helper for search/quality (uses the overridden routeTaskImpl)
+  const callAI = async (prompt) => routeTaskImpl('code_generation', prompt);
+
+  // Research: only for visual components (html/css), skip for API routes
+  let researchBrief = '';
+  if (['html', 'css'].includes(component.type) && product) {
+    try {
+      const searchService = createWebSearchService({
+        BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
+        PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
+        callAI,
+      });
+      const brief = await searchService.researchFeature(
+        product.name || 'web product',
+        product.description || component.name,
+        component.type === 'html' ? 'landing_page' : 'web_component'
+      );
+      if (brief) {
+        researchBrief = brief;
+        console.log(`📚 [AUTO-BUILDER] Research brief loaded for ${component.name}`);
+      }
+    } catch (err) {
+      console.warn(`[AUTO-BUILDER] Research failed (non-blocking): ${err.message}`);
+    }
+  }
+
+  // Build enriched base prompt with brand + research context
+  const brandBlock = brand
+    ? `\n\n---\n## BRAND GUIDELINES (MUST FOLLOW)\n${brand.substring(0, 2000)}\n---\n`
+    : '';
+
+  const prefBlock = prefs.design?.dislikes?.length
+    ? `\n\n## DESIGN PREFERENCES\nAVOID: ${prefs.design.dislikes.join(', ')}\nUSE: ${(prefs.design.likes || []).join(', ')}\n`
+    : '';
+
+  const researchBlock = researchBrief
+    ? `\n\n## UX RESEARCH\n${researchBrief.substring(0, 1500)}\n`
+    : '';
+
+  const visionBlock = product?.vision
+    ? `\n\n## VISION\nTarget audience: ${product.vision.target_audience || 'general users'}\nDesign notes: ${product.vision.design_notes || 'none'}\nReference: ${product.vision.reference_url || 'none'}\nAcceptance criteria: ${product.vision.acceptance_criteria || 'none'}\n`
+    : '';
+
+  const enrichedBasePrompt = `${component.prompt}${brandBlock}${prefBlock}${researchBlock}${visionBlock}`;
+
+  // Quality gate (for visual components only)
+  const qualityGate = ['html', 'css'].includes(component.type)
+    ? createDesignQualityGate({ callAI })
+    : null;
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     console.log(`\n🔄 Attempt ${attempt}/${maxRetries}`);
-    
-    let prompt = component.prompt;
+
+    let prompt = enrichedBasePrompt;
     if (lastError && attempt > 1) {
-      prompt = `PREVIOUS ATTEMPT FAILED:\n${lastError}\n\nFix this and try again.\n\n${component.prompt}`;
+      prompt = `PREVIOUS ATTEMPT FAILED:\n${lastError}\n\nFix this and try again.\n\n${enrichedBasePrompt}`;
     }
-    
+
     try {
       console.log('🤖 Generating...');
       const response = await routeTaskImpl('code_generation', prompt);
-      
+
       console.log('🔍 Validating...');
       const validation = await validateResponseImpl(response, component.type, component.file);
-      
+
       if (!validation.passed) {
         lastError = validation.errors.join('; ');
         console.log(`⚠️ Validation failed: ${lastError}`);
         continue;
       }
-      
+
       console.log('✂️ Extracting code...');
-      const code = extractCodeImpl(response, component.type);
-      
+      let code = extractCodeImpl(response, component.type);
+
       if (code.length < 100) {
         lastError = 'Code too short (< 100 chars)';
         console.log(`⚠️ ${lastError}`);
         continue;
       }
-      
+
+      // ── Quality gate: check + auto-fix before saving ──────────────────────
+      if (qualityGate) {
+        console.log('🎨 Running design quality gate...');
+        const gateResult = await qualityGate.checkAndFix(
+          code,
+          component.type,
+          product?.description || component.name,
+          product?.vision || {}
+        );
+        code = gateResult.code; // may be auto-fixed version
+
+        if (gateResult.hadIssues) {
+          console.log(`⚠️ [QUALITY-GATE] Shipped with warnings — review ${component.file}`);
+        }
+      }
+
       console.log('💾 Saving...');
       await saveFile(component.file, code);
-      
+
       return { success: true, file: component.file };
-      
+
     } catch (error) {
       lastError = error.message;
       console.log(`⚠️ Error: ${lastError}`);
     }
   }
-  
+
   return { success: false, error: lastError };
 }
 

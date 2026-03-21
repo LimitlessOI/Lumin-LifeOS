@@ -22,6 +22,8 @@ import express from 'express';
 import { createIdeaQueue } from '../core/idea-queue.js';
 import { addProductToQueue } from '../core/auto-builder.js';
 import { IdeaToImplementationPipeline } from '../core/idea-to-implementation-pipeline.js';
+import { createDesignQualityGate } from '../services/design-quality-gate.js';
+import { createWebSearchService } from '../services/web-search-service.js';
 import logger from '../services/logger.js';
 
 export function createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }) {
@@ -85,6 +87,13 @@ export function createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }) {
         buildPriority,
         notes,
         metadata,
+        // Vision fields
+        reference_url,
+        user_flow,
+        target_audience,
+        design_notes,
+        competitor_urls,
+        acceptance_criteria,
       } = req.body;
 
       if (!title) {
@@ -96,6 +105,8 @@ export function createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }) {
         revenuePotential: revenuePotential ? parseInt(revenuePotential, 10) : undefined,
         effortEstimate: effortEstimate ? parseInt(effortEstimate, 10) : undefined,
         riskLevel, buildPriority, notes, metadata,
+        reference_url, user_flow, target_audience, design_notes,
+        competitor_urls, acceptance_criteria,
       });
 
       res.status(201).json({ ok: true, idea });
@@ -183,6 +194,13 @@ export function createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }) {
           name: idea.title,
           description: idea.description || idea.title,
           ideaId: idea.id,
+          vision: {
+            reference_url: idea.reference_url,
+            user_flow: idea.user_flow,
+            target_audience: idea.target_audience,
+            design_notes: idea.design_notes,
+            acceptance_criteria: idea.acceptance_criteria,
+          },
           components: components.map(c => ({
             id: c.id,
             name: c.name,
@@ -234,6 +252,58 @@ export function createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }) {
       });
     } catch (err) {
       logger.error('[IDEA-QUEUE] build trigger error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Feedback — teach the system Adam's preferences ──────────────────────────
+  // POST /api/v1/ideas/feedback  { feedback: "I hate modals", context: "checkout flow" }
+  router.post('/feedback', requireKey, async (req, res) => {
+    try {
+      const { feedback, context = '' } = req.body;
+      if (!feedback) return res.status(400).json({ ok: false, error: 'feedback is required' });
+
+      const gate = createDesignQualityGate({ callAI: null });
+      await gate.recordFeedback(feedback, context);
+
+      res.json({ ok: true, message: 'Preference recorded. Builder will apply this going forward.' });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Research — run UX research for a topic on demand ────────────────────────
+  // POST /api/v1/ideas/research  { topic: "checkout flow for wellness apps", type: "landing_page" }
+  router.post('/research', requireKey, async (req, res) => {
+    try {
+      const { topic, type = 'web_app' } = req.body;
+      if (!topic) return res.status(400).json({ ok: false, error: 'topic is required' });
+
+      const searchService = createWebSearchService({
+        BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
+        PERPLEXITY_API_KEY: process.env.PERPLEXITY_API_KEY,
+        callAI: callCouncilMember
+          ? async (prompt) => {
+              const result = await callCouncilMember('anthropic', prompt);
+              return typeof result === 'string' ? result : result?.content || '';
+            }
+          : null,
+      });
+
+      const [uxPatterns, bestPractices, competitors] = await Promise.allSettled([
+        searchService.searchUXPatterns(`${type}: ${topic}`),
+        searchService.getBestPractices(topic),
+        searchService.searchCompetitors(topic),
+      ]);
+
+      res.json({
+        ok: true,
+        topic,
+        ux_patterns: uxPatterns.status === 'fulfilled' ? uxPatterns.value : null,
+        best_practices: bestPractices.status === 'fulfilled' ? bestPractices.value : null,
+        competitors: competitors.status === 'fulfilled' ? competitors.value : null,
+      });
+    } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
   });

@@ -43,6 +43,13 @@ export class IdeaQueue {
       buildPriority = 50,
       notes = null,
       metadata = null,
+      // Vision capture fields
+      reference_url = null,
+      user_flow = null,
+      target_audience = null,
+      design_notes = null,
+      competitor_urls = null,
+      acceptance_criteria = null,
     } = idea;
 
     if (!title || !title.trim()) {
@@ -56,8 +63,9 @@ export class IdeaQueue {
     const result = await this.pool.query(
       `INSERT INTO ideas
          (title, description, source, status, revenue_potential, effort_estimate,
-          risk_level, priority_score, approval_status, build_priority, notes, metadata)
-       VALUES ($1,$2,$3,'queued',$4,$5,$6,$7,'pending_review',$8,$9,$10)
+          risk_level, priority_score, approval_status, build_priority, notes, metadata,
+          reference_url, user_flow, target_audience, design_notes, competitor_urls, acceptance_criteria)
+       VALUES ($1,$2,$3,'queued',$4,$5,$6,$7,'pending_review',$8,$9,$10,$11,$12,$13,$14,$15,$16)
        RETURNING *`,
       [
         title.trim(),
@@ -70,6 +78,12 @@ export class IdeaQueue {
         buildPriority,
         notes,
         metadata ? JSON.stringify(metadata) : null,
+        reference_url,
+        user_flow,
+        target_audience,
+        design_notes,
+        competitor_urls || null,
+        acceptance_criteria,
       ]
     );
 
@@ -178,7 +192,9 @@ export class IdeaQueue {
     }
 
     const allowed = ['title', 'description', 'revenue_potential', 'effort_estimate',
-      'risk_level', 'build_priority', 'notes', 'metadata'];
+      'risk_level', 'build_priority', 'notes', 'metadata',
+      'reference_url', 'user_flow', 'target_audience', 'design_notes',
+      'competitor_urls', 'acceptance_criteria'];
     const sets = [];
     const vals = [];
     let idx = 1;

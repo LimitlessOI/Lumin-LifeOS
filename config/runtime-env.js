@@ -48,6 +48,9 @@ export function loadRuntimeEnv() {
     // Stripe config
     STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET, // reserved for future webhook use
+    // Web search APIs (for UX research during builds — both optional)
+    BRAVE_SEARCH_API_KEY,
+    PERPLEXITY_API_KEY,
   } = process.env;
 
   // Require COMMAND_CENTER_KEY (no default fallback)
@@ -248,6 +251,8 @@ export function loadRuntimeEnv() {
     DB_SSL_REJECT_UNAUTHORIZED,
     STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET,
+    BRAVE_SEARCH_API_KEY,
+    PERPLEXITY_API_KEY,
     CURRENT_DEEPSEEK_ENDPOINT,
     validatedDatabaseUrl,
   };

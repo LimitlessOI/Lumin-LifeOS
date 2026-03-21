@@ -1,0 +1,52 @@
+{
+  "_description": "Adam's design and product preferences. Updated automatically when feedback is given. Read by the AI builder before every task.",
+  "_updated": "2026-03-20",
+
+  "design": {
+    "theme": "dark",
+    "density": "comfortable",
+    "animation": "subtle",
+    "likes": [
+      "clean minimal layouts",
+      "strong typography hierarchy",
+      "indigo/emerald color palette",
+      "cards with subtle borders",
+      "data-dense dashboards that stay readable",
+      "smooth hover states"
+    ],
+    "dislikes": [
+      "modals for everything — prefer slide panels or inline editing",
+      "rainbow color schemes",
+      "cluttered navigation with too many items",
+      "stock photo hero images",
+      "excessive white space that wastes screen space",
+      "tooltips that are too small to read"
+    ]
+  },
+
+  "ux": {
+    "navigation": "sidebar for dashboards, top nav for marketing pages",
+    "forms": "inline validation, not submit-then-error",
+    "feedback": "toast notifications, not alert boxes",
+    "loading": "skeleton screens, not spinners",
+    "empty_states": "always show a helpful empty state with a CTA",
+    "errors": "plain English, tell the user what to do next",
+    "confirmations": "only ask for confirmation on destructive actions"
+  },
+
+  "code": {
+    "framework": "vanilla JS + Tailwind for frontend, Express for backend",
+    "state": "keep it simple, no React unless explicitly asked",
+    "apis": "RESTful, JSON, consistent error format { ok: false, error: string }",
+    "auth": "COMMAND_CENTER_KEY Bearer token on all admin routes"
+  },
+
+  "priorities": {
+    "revenue_first": true,
+    "shipping_over_perfection": true,
+    "mobile_responsive": true,
+    "accessibility_baseline": true
+  },
+
+  "feedback_history": []
+}
