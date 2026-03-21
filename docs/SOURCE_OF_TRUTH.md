@@ -262,7 +262,7 @@ Capabilities (with consent):
 ### 8.3 LifeOS Core Modules (Individual)
 - integrity/keep-my-word tracker
 - habit + executive function assistant
-- journaling companion (reflective, not clinical)
+- journaling companion (reflective, not clinical)10,814,777 bytes (10.8 MB on disk)
 - "Does it serve me?" cost-benefit mirror
 - conflict moderator (impartial)
 - education companion (how to think; success laws)
@@ -484,3 +484,130 @@ We build the future by:
 - generating revenue ethically to fund deeper missions
 
 If a feature doesn't map to Outcome/North Star and UEP, we do not ship it.
+
+---
+
+## 15) Vision Expansion (Draft from Founder Brief)
+This section captures the expanded vision ideas to be evaluated against Outcome/North Star + UEP.
+These are not commitments; they are an idea bank pending validation and build order.
+
+### 15.1 AI Story + Anime + Movie Generator (Kids/Teens/Adults)
+- Overlay story companion that reacts while writing and guides creation.
+- "Click-to-Film" engine: sketch -> character -> scene -> animation.
+- Story universe system with crossovers and world-building continuity.
+- Interactive play-to-film loop: choices become the final animation.
+- Merch-from-story: plush/poster/backpack/print-on-demand (opt-in).
+- School-safe mode with parent controls and consent-first sharing.
+
+### 15.2 Legal + Trust Document Builder (Life-Aware)
+- Life-aware legal engine that updates when life events change (opt-in).
+- Scenario simulator: "What happens if..." for family/business outcomes.
+- Auto-update pipeline with explicit user approval per change.
+- Legal blind-spot detector for conflicts/missing clauses/risks.
+- Insurance marketplace (life/health/other) with best-fit search and consent-first disclosure of commissions.
+
+### 15.3 AI CRM Overlay (Always-On, Privacy-Preserving)
+- Screen-aware CRM prompts (contextual save, follow-up, next-best action).
+- Privacy-preserving vision mode with redaction zones and consent gating.
+- Proactive agent assistant (promises, follow-ups, call prep, scripts).
+- Real-time call helper (opt-in) with notes and reminders.
+- Lead scoring based on activity/intent/responsiveness.
+- "Schedule showing for me" automation: itinerary order, client notifications, printable packet, and quick CMA snapshot (consent required).
+- Offer drafting from conversation context (user review + approval before sending).
+- Recording loop with user-controlled retention: local-first clips/text; optional paid cloud storage.
+
+### 15.4 Employee Training Builder Overlay
+- "Click-here" onboarding overlays with step-by-step guidance.
+- Adaptive skill tree progression with performance feedback.
+- Training replay mode with coaching overlays.
+- Error anticipation before mistakes occur.
+
+### 15.5 Click-Anything-To-Buy Overlay (Commerce)
+- Object detection on any screen/video; find exact/similar items.
+- One-click purchase flows with explicit user approval.
+- Track character outfits/furniture and build wishlists.
+- Works on paused frames and live video (consent + privacy controls).
+
+### 15.6 BoldTrail CRM + Sales Enablement (Real Estate Wedge)
+- Built-in habit tracker + ADHD/executive function support.
+- "Keep My Word" system: commitments, reminders, and renegotiation.
+- Integrity score / keep-my-word tracker with opt-in accountability.
+- Follow-up cadence and script builder tied to pipeline stage.
+
+### 15.7 Journal Companion + LifeOS Integration
+- Reflective prompts based on the day (opt-in, privacy-first).
+- Weekly summaries, gratitude lists, pattern detection.
+- Conflict moderation prompts and cognitive reframing support.
+
+### 15.8 ADHD / Executive Function Assistant
+- Task initiation boosters and overwhelm defusers.
+- Focus-mode bubble (reduce visual noise, highlight next action).
+- Gentle accountability without shame; opt-out by default.
+
+### 15.9 Homework Helper Overlay (Teach-Not-Solve)
+- Converts videos into lessons (notes, quizzes, flashcards).
+- Interactive explanations and adaptive difficulty.
+- Encourages love of learning rather than answer dumping.
+
+### 15.10 Career Discovery + Life Blueprint (App #83 Expansion)
+- Values/strengths mapping, skill evaluation, salary projections.
+- Overlay guidance on job sites and learning content.
+- Timeline planning and side-business suggestions.
+
+### 15.11 Commercial Real Estate Signal Finder
+- Aggregates major sites + blogs + news + off-market indicators.
+- AI predictions: likely-to-sell, undervalued signals, risk/cap-rate.
+- Overlay insights while browsing maps, listings, or tours.
+
+### 15.12 LifeOS Performance Engine (Identity + Behavior)
+- Identity engine (be -> do -> have) with user-defined target identity.
+- Integrity loops and promise renegotiation to protect relationships.
+- Presence engine for low-risk replies in user voice (opt-in).
+- Wealth mindset reinforcement and goal execution coaching (non-therapy).
+
+### 15.13 Therapist Partnership Mode (Opt-In)
+- Dynamic safety gating: feature not shown if unsafe.
+- Therapist dashboard with user-controlled sharing and summaries.
+- Clinic ops automation: billing/POS, session prep, assignments tracking.
+
+### 15.14 TV Overlay + Media Intelligence (Opt-In)
+- Watch history memory + "do not recommend again" list.
+- Mood-aware content suggestions (local-first, privacy-respecting).
+- Overlay interaction via remote/phone pointer for click-to-buy.
+
+### 15.15 Marketing Engine (Ethical, Consent-First)
+- Claude Hopkins style direct-response training + modern channel playbooks.
+- In-user voice marketing assets (captions, scripts, videos) with approval.
+
+### 15.16 Non-Manipulation Reaffirmation (Canonical)
+- AI must never steer users against their stated goals, values, or identity.
+- Teach how to think, not what to think; help users discover their own answers.
+- Respect stated religion/politics/worldview; offer understanding of other views without persuasion.
+- User is the conductor, AI is the musician; the life created is user-directed.
+
+### 15.17 Revenue Acceleration Principle (Long-Term Vision)
+- $500/day is a minimum validation gate, not a ceiling.
+- Long-term intent is to grow ethical revenue as fast as safely possible to fund higher-order missions (sovereign AI, health, human freedom).
+- ROI-gated spend remains non-negotiable, but ambition is not capped by the initial target.
+
+### 15.18 Decision Filter + Delegation Model (Long-Term Vision)
+- The system learns the founder’s decision patterns to act quickly on small items without constant approvals.
+- A decision filter replicates founder intent, values, and risk tolerance.
+- Small decisions: automated via the filter.
+- Large decisions: routed to the founder.
+- Engineering and operations judgment add additional filters for safety and quality.
+
+### 15.19 Human Simulated Council (Long-Term Vision)
+- A “historical lens” council draws on patterns from high-impact thinkers and builders.
+- Use this as a perspective filter, not as an authority override.
+- Religious or philosophical figures are included only for values framing, never for coercion.
+
+### 15.20 Autonomy With Approval Tiers (Long-Term Vision)
+- System can install tools or sign up for services only within pre-approved scopes.
+- Explicit approval is required for new vendors, costs, or permissions outside the approved scope.
+- Always-on autonomy is bounded by consent, logs, and rollback.
+
+### 15.21 Next Steps (Draft Options)
+- Unified product vision doc (internal).
+- 30/60/90-day roadmap and module-by-module blueprint.
+- Pick first product for fastest ethical revenue.

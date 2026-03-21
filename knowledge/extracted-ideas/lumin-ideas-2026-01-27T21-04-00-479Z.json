@@ -1,0 +1,491 @@
+[
+  {
+    "id": "low-hanging-fruit-1",
+    "title": "Automated Wix-style sites for small businesses with SEO and AI chatbots",
+    "summary": "Create automated Wix-style sites for small businesses with SEO and AI chatbots, proof logging changes before live edits.",
+    "score": 80,
+    "effort": 5,
+    "impact": 9,
+    "ease": 8,
+    "revenueModel": "SEO and automation services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Wix",
+      "AI chatbots"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Wix-styles-and-chatbots"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-2",
+    "title": "Sell Make.com/Zapier automations to clients for handling appointments, lead follow-ups, reminders triggered by new conversations.",
+    "summary": "Sell Make.com/Zapier automations to clients for handling appointments, lead follow-ups, reminders triggered by new conversations.",
+    "score": 90,
+    "effort": 3,
+    "impact": 8,
+    "ease": 7,
+    "revenueModel": "Automation services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Make.com/Zapier",
+      "Automation services"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Automations-and-Zapier"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-3",
+    "title": "Build a digital product for immediate consulting: revenue calculators, insurance concierge for homebirth families.",
+    "summary": "Build a digital product for immediate consulting: revenue calculators, insurance concierge for homebirth families.",
+    "score": 85,
+    "effort": 6,
+    "impact": 7,
+    "ease": 9,
+    "revenueModel": "Digital products and consulting services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Revenue calculators",
+      "Insurance concierge"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Digital-products-and-consulting"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-4",
+    "title": "Offer copywriting + landing page rewrites based on competitor audits (score 200% improvement) and proof bundles.",
+    "summary": "Offer copywriting + landing page rewrites based on competitor audits (score 200% improvement) and proof bundles.",
+    "score": 95,
+    "effort": 4,
+    "impact": 10,
+    "ease": 8,
+    "revenueModel": "Copywriting and marketing services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Competitor audits",
+      "Proof bundles"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Copywriting-and-marketing"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-5",
+    "title": "Launch a loyalty membership (Be Her Village) with postpartum kits, group coaching, weekly live reiki.",
+    "summary": "Launch a loyalty membership (Be Her Village) with postpartum kits, group coaching, weekly live reiki.",
+    "score": 80,
+    "effort": 6,
+    "impact": 9,
+    "ease": 8,
+    "revenueModel": "Membership and wellness services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Be Her Village",
+      "Postpartum kits, group coaching, reiki"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Loyalty-membership"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-6",
+    "title": "Design a marketplace for hiring remote wellness practitioners.",
+    "summary": "Design a marketplace for hiring remote wellness practitioners.",
+    "score": 75,
+    "effort": 8,
+    "impact": 7,
+    "ease": 9,
+    "revenueModel": "Marketplace services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Remote wellness practitioners"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Marketplace"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-7",
+    "title": "Provide automation for cleaning transcripts and shipping follow-up actions to clients.",
+    "summary": "Provide automation for cleaning transcripts and shipping follow-up actions to clients.",
+    "score": 90,
+    "effort": 2,
+    "impact": 8,
+    "ease": 7,
+    "revenueModel": "Automation services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Cleaning transcripts and shipping follow-up actions"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Automations-for-transcripts-and-follow-ups"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-8",
+    "title": "Capture testimonials into highlight reels for their YouTube channel.",
+    "summary": "Capture testimonials into highlight reels for their YouTube channel.",
+    "score": 85,
+    "effort": 5,
+    "impact": 9,
+    "ease": 8,
+    "revenueModel": "Marketing services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "YouTube channel"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Capturing-testimonials"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-9",
+    "title": "Create revenue plan for massage gift cards and corporate wellness days.",
+    "summary": "Create revenue plan for massage gift cards and corporate wellness days.",
+    "score": 80,
+    "effort": 4,
+    "impact": 8,
+    "ease": 7,
+    "revenueModel": "Services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Massage gift cards, Corporate Wellness Days"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/R revenue-plans"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-10",
+    "title": "Build a concierge for midwife training labs with accessible scheduling and payments.",
+    "summary": "Build a concierge for midwife training labs with accessible scheduling and payments.",
+    "score": 85,
+    "effort": 6,
+    "impact": 8,
+    "ease": 9,
+    "revenueModel": "Concierge services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Midwife training labs"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Consierge-for-training-labs"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-11",
+    "title": "Offer monthly website health audits for other homebirth midwives curated by AI council.",
+    "summary": "Offer monthly website health audits for other homebirth midwives curated by AI council.",
+    "score": 80,
+    "effort": 5,
+    "impact": 9,
+    "ease": 8,
+    "revenueModel": "Website services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Homebirth midwives"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Website-health-audits"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-12",
+    "title": "Package automation for launching lead magnets, email drips, CTA scheduling.",
+    "summary": "Package automation for launching lead magnets, email drips, CTA scheduling.",
+    "score": 90,
+    "effort": 3,
+    "impact": 8,
+    "ease": 7,
+    "revenueModel": "Automation services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Lead magnets, Email drips, CTA scheduling"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Automations-for-launching"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-13",
+    "title": "Provide Shopify-style checkout for placenta products, lactation goodies, herbal postpartum kits.",
+    "summary": "Provide Shopify-style checkout for placenta products, lactation goodies, herbal postpartum kits.",
+    "score": 85,
+    "effort": 6,
+    "impact": 8,
+    "ease": 9,
+    "revenueModel": "E-commerce services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Placenta products, Lactation goodies, Herbal postpartum kits"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Shopify-style-checkouts"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-14",
+    "title": "Deliver rebooking + upsell flows for wellness clients with reminders and dynamic offers.",
+    "summary": "Deliver rebooking + upsell flows for wellness clients with reminders and dynamic offers.",
+    "score": 90,
+    "effort": 2,
+    "impact": 8,
+    "ease": 7,
+    "revenueModel": "Services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Wellness clients"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Delivering-rebooking-upsell"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-15",
+    "title": "Offer inclusive doula packages by segment (VBAC, LGBTQ, birthing people of color).",
+    "summary": "Offer inclusive doula packages by segment (VBAC, LGBTQ, birthing people of color).",
+    "score": 80,
+    "effort": 5,
+    "impact": 9,
+    "ease": 8,
+    "revenueModel": "Services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Doulas"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Doula-packages-by-segment"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-16",
+    "title": "Launch a booking funnel for energy retreats and reiki Reiki + sound bathing events.",
+    "summary": "Launch a booking funnel for energy retreats and reiki Reiki + sound bathing events.",
+    "score": 85,
+    "effort": 6,
+    "impact": 8,
+    "ease": 9,
+    "revenueModel": "Services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "Energy retreats, Reiki + sound bathing events"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Booking-funnels"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-17",
+    "title": "Build autopilot dream kit for new arrivals: postpartum meal services, lactation, bodywork scheduling.",
+    "summary": "Build autopilot dream kit for new arrivals: postpartum meal services, lactation, bodywork scheduling.",
+    "score": 90,
+    "effort": 3,
+    "impact": 8,
+    "ease": 7,
+    "revenueModel": "Services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [
+      "New arrivals"
+    ],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Autopilot-dream-kits"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-18",
+    "title": "Provide AI guard for compliance: track ROI, proof, logs, marketing conversions.",
+    "summary": "Provide AI guard for compliance: track ROI, proof, logs, marketing conversions.",
+    "score": 95,
+    "effort": 4,
+    "impact": 10,
+    "ease": 8,
+    "revenueModel": "Services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [],
+    "proofPaths": [
+      "docs/THREAD_REALITY/AI-guard-for-compliance"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-19",
+    "title": "Automate referral tracker for doctors, midwives, doulas.",
+    "summary": "Automate referral tracker for doctors, midwives, doulas.",
+    "score": 80,
+    "effort": 5,
+    "impact": 9,
+    "ease": 8,
+    "revenueModel": "Services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Automating-referrals"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-20",
+    "title": "Offer analytics + growth dashboards for homebirth clinics.",
+    "summary": "Offer analytics + growth dashboards for homebirth clinics.",
+    "score": 85,
+    "effort": 6,
+    "impact": 8,
+    "ease": 9,
+    "revenueModel": "Analytics and marketing services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Analytics-and-growth-dashboards"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-21",
+    "title": "Provide autop-run plan for advertising with 10% budgets reinvested automatically.",
+    "summary": "Provide autop-run plan for advertising with 10% budgets reinvested automatically.",
+    "score": 90,
+    "effort": 2,
+    "impact": 8,
+    "ease": 7,
+    "revenueModel": "Advertising services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Autop-run-plans-for-advertising"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-22",
+    "title": "Launch tutoring for birth professionals, recorded modules + live Q&A.",
+    "summary": "Launch tutoring for birth professionals, recorded modules + live Q&A.",
+    "score": 80,
+    "effort": 5,
+    "impact": 9,
+    "ease": 8,
+    "revenueModel": "Tutoring services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Tutoring-for-birth-professionals"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-23",
+    "title": "Offer small business automation for holistic spas (PPC, web, email) using Lumin.",
+    "summary": "Offer small business automation for holistic spas (PPC, web, email) using Lumin.",
+    "score": 85,
+    "effort": 6,
+    "impact": 8,
+    "ease": 9,
+    "revenueModel": "Services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Small-business-automation-for-holistic-spas"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-24",
+    "title": "Package research and benchmarking of competitors for 200% improvement guarantee.",
+    "summary": "Package research and benchmarking of competitors for 200% improvement guarantee.",
+    "score": 90,
+    "effort": 3,
+    "impact": 8,
+    "ease": 7,
+    "revenueModel": "Research and consulting services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Packages-of-research-and-benchmarking"
+    ]
+  },
+  {
+    "id": "low-hanging-fruit-25",
+    "title": "Automate concierge for booking cross-sell services (massage + reiki) with immediate payment.",
+    "summary": "Automate concierge for booking cross-sell services (massage + reiki) with immediate payment.",
+    "score": 95,
+    "effort": 4,
+    "impact": 10,
+    "ease": 8,
+    "revenueModel": "Services",
+    "nextSteps": [
+      "Proof",
+      "Marketing"
+    ],
+    "assets": [],
+    "proofPaths": [
+      "docs/THREAD_REALITY/Automating-concierge-for-cross-selling"
+    ]
+  }
+]

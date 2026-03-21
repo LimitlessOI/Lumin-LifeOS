@@ -14,7 +14,6 @@ http://localhost:8080/overlay/command-center.html
 "What are you working on?"
 "How is the company doing?"
 "Show me the current status"
-```
 → Single AI responds quickly
 
 ### Ask for Advice (Medium - 10-15s)

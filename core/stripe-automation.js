@@ -327,7 +327,7 @@ async function extractProjectId(stripeClient, event) {
  * Handle Stripe webhook events (multi-tenant)
  * Extracts project_id from event metadata and routes to appropriate handler
  */
-export async function handleWebhook(payload, signature) {
+export async function handleWebhook(payload, signature, { pool } = {}) {
   const stripeClient = await getStripeClient();
   if (!stripeClient) {
     throw new Error('Stripe not initialized');
@@ -353,6 +353,20 @@ export async function handleWebhook(payload, signature) {
     console.error(`❌ [STRIPE] Webhook signature verification failed: ${err.message}`);
     throw new Error(`Webhook Error: ${err.message}`);
   }
+
+  // Idempotency ledger (optional but recommended)
+  if (pool) {
+    try {
+      await pool.query(
+        `INSERT INTO stripe_webhook_events (event_id, event_type, payload, created_at)
+         VALUES ($1, $2, $3, NOW())
+         ON CONFLICT (event_id) DO NOTHING`,
+        [event.id, event.type, event.data ? JSON.stringify(event.data) : JSON.stringify(event)]
+      );
+    } catch (e) {
+      console.warn(`⚠️ [STRIPE] Failed to write webhook ledger: ${e.message}`);
+    }
+  }
   
   // Extract project_id for multi-tenant routing
   const projectId = await extractProjectId(stripeClient, event);
@@ -375,8 +389,26 @@ export async function handleWebhook(payload, signature) {
       console.log(`   Amount: $${(session.amount_total / 100).toFixed(2)}`);
       console.log(`   Plan: ${session.metadata?.plan || 'unknown'}`);
       
-      // TODO: Store in database for project, send confirmation email, etc.
-      // Example: await storeSubscriptionForProject(projectId, session);
+      if (pool && projectId) {
+        try {
+          // Ensure billing project exists and store stripe_customer_id
+          await pool.query(
+            `INSERT INTO billing_projects (project_id, stripe_customer_id, created_at, updated_at)
+             VALUES ($1, $2, NOW(), NOW())
+             ON CONFLICT (project_id)
+             DO UPDATE SET stripe_customer_id = COALESCE(EXCLUDED.stripe_customer_id, billing_projects.stripe_customer_id),
+                           updated_at = NOW()`,
+            [projectId, session.customer || null]
+          );
+
+          // Update entitlements based on plan + paid status
+          const plan = session.metadata?.plan || null;
+          const active = true;
+          await upsertEntitlementsForPlan(pool, projectId, plan, active, 'stripe_checkout');
+        } catch (e) {
+          console.warn(`⚠️ [STRIPE] Failed to persist checkout completion: ${e.message}`);
+        }
+      }
       break;
       
     case 'customer.subscription.created':
@@ -387,8 +419,56 @@ export async function handleWebhook(payload, signature) {
       console.log(`   Status: ${subscription.status}`);
       console.log(`   Customer: ${subscription.customer}`);
       
-      // TODO: Update database with subscription status for project
-      // Example: await updateProjectSubscription(projectId, subscription);
+      if (pool && projectId) {
+        try {
+          const plan = subscription.metadata?.plan || null;
+          const status = subscription.status || null;
+          const cancelAtPeriodEnd = !!subscription.cancel_at_period_end;
+          const cps = subscription.current_period_start ? new Date(subscription.current_period_start * 1000).toISOString() : null;
+          const cpe = subscription.current_period_end ? new Date(subscription.current_period_end * 1000).toISOString() : null;
+
+          await pool.query(
+            `INSERT INTO billing_projects (project_id, stripe_customer_id, created_at, updated_at)
+             VALUES ($1, $2, NOW(), NOW())
+             ON CONFLICT (project_id)
+             DO UPDATE SET stripe_customer_id = COALESCE(EXCLUDED.stripe_customer_id, billing_projects.stripe_customer_id),
+                           updated_at = NOW()`,
+            [projectId, String(subscription.customer || '') || null]
+          );
+
+          await pool.query(
+            `INSERT INTO project_subscriptions (
+               project_id, stripe_subscription_id, stripe_customer_id, plan, status, cancel_at_period_end,
+               current_period_start, current_period_end, created_at, updated_at
+             ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,NOW(),NOW())
+             ON CONFLICT (stripe_subscription_id)
+             DO UPDATE SET
+               project_id = EXCLUDED.project_id,
+               stripe_customer_id = EXCLUDED.stripe_customer_id,
+               plan = COALESCE(EXCLUDED.plan, project_subscriptions.plan),
+               status = EXCLUDED.status,
+               cancel_at_period_end = EXCLUDED.cancel_at_period_end,
+               current_period_start = EXCLUDED.current_period_start,
+               current_period_end = EXCLUDED.current_period_end,
+               updated_at = NOW()`,
+            [
+              projectId,
+              subscription.id,
+              subscription.customer ? String(subscription.customer) : null,
+              plan,
+              status,
+              cancelAtPeriodEnd,
+              cps,
+              cpe,
+            ]
+          );
+
+          const isActive = status === 'active' || status === 'trialing';
+          await upsertEntitlementsForPlan(pool, projectId, plan, isActive, 'stripe_subscription');
+        } catch (e) {
+          console.warn(`⚠️ [STRIPE] Failed to persist subscription update: ${e.message}`);
+        }
+      }
       break;
       
     case 'customer.subscription.deleted':
@@ -396,8 +476,21 @@ export async function handleWebhook(payload, signature) {
       console.log(`🗑️ [STRIPE] Subscription cancelled: ${deletedSub.id}`);
       console.log(`   Project: ${projectId || 'unknown'}`);
       
-      // TODO: Update database, revoke access for project, etc.
-      // Example: await cancelProjectSubscription(projectId, deletedSub);
+      if (pool && projectId) {
+        try {
+          await pool.query(
+            `UPDATE project_subscriptions
+             SET status = $1, updated_at = NOW()
+             WHERE stripe_subscription_id = $2`,
+            ['canceled', deletedSub.id]
+          );
+
+          const plan = deletedSub.metadata?.plan || null;
+          await upsertEntitlementsForPlan(pool, projectId, plan, false, 'stripe_subscription_deleted');
+        } catch (e) {
+          console.warn(`⚠️ [STRIPE] Failed to persist subscription deletion: ${e.message}`);
+        }
+      }
       break;
       
     case 'invoice.paid':
@@ -406,8 +499,7 @@ export async function handleWebhook(payload, signature) {
       console.log(`   Project: ${projectId || 'unknown'}`);
       console.log(`   Amount: $${(invoice.amount_paid / 100).toFixed(2)}`);
       
-      // TODO: Record payment for project, update subscription, etc.
-      // Example: await recordPaymentForProject(projectId, invoice);
+      // Optional: keep this for revenue ledgers; entitlements are driven by subscription status
       break;
       
     case 'invoice.payment_failed':
@@ -415,8 +507,7 @@ export async function handleWebhook(payload, signature) {
       console.log(`❌ [STRIPE] Payment failed: ${failedInvoice.id}`);
       console.log(`   Project: ${projectId || 'unknown'}`);
       
-      // TODO: Notify customer for project, update subscription status
-      // Example: await handlePaymentFailureForProject(projectId, failedInvoice);
+      // Optional: mark risk; entitlements remain as-is until subscription status changes
       break;
       
     default:
@@ -428,6 +519,28 @@ export async function handleWebhook(payload, signature) {
     type: event.type,
     project_id: projectId || null
   };
+}
+
+async function upsertEntitlementsForPlan(pool, projectId, plan, enabled, source) {
+  // Current product: api_cost_savings. Map plan -> entitlements
+  const entitlementSet = new Set();
+  entitlementSet.add('api_cost_savings');
+  entitlementSet.add('tco_proxy'); // alias for compatibility
+
+  // You can expand this later by plan:
+  // if (plan === 'enterprise') entitlementSet.add('priority_support');
+
+  const entitlements = Array.from(entitlementSet);
+
+  for (const ent of entitlements) {
+    await pool.query(
+      `INSERT INTO project_entitlements (project_id, entitlement, enabled, source, updated_at, created_at)
+       VALUES ($1,$2,$3,$4,NOW(),NOW())
+       ON CONFLICT (project_id, entitlement)
+       DO UPDATE SET enabled = EXCLUDED.enabled, source = EXCLUDED.source, updated_at = NOW()`,
+      [projectId, ent, !!enabled, source || 'stripe']
+    );
+  }
 }
 
 /**

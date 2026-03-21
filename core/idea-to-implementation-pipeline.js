@@ -5,6 +5,10 @@
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
  */
 
+import logger from '../services/logger.js';
+import { quickSnapshot, quickRollback } from '../services/snapshot-service.js';
+import { addProductToQueue } from './auto-builder.js';
+
 export class IdeaToImplementationPipeline {
   constructor(pool, callCouncilMember, selfBuilder, taskTracker) {
     this.pool = pool;
@@ -14,67 +18,119 @@ export class IdeaToImplementationPipeline {
   }
 
   /**
-   * Complete pipeline: Take an idea and implement it fully
+   * Complete pipeline: Take an idea and implement it fully.
+   *
+   * Safety rules (North Star Art. III, IV):
+   *   - autoDeploy defaults to FALSE — human must opt in
+   *   - Snapshot is taken before any code change
+   *   - Rollback triggered automatically on failure
+   *   - Minimum viability checked before advancing to implementation
    */
   async implementIdea(idea, options = {}) {
     const {
-      autoDeploy = true,
+      autoDeploy = false,       // SAFE DEFAULT: do not auto-deploy without explicit opt-in
       verifyCompletion = true,
     } = options;
 
     const pipelineId = `pipeline_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    
-    console.log(`🚀 [PIPELINE] Starting implementation for idea: ${idea.concept || idea.idea_title || idea}`);
+    const ideaText = idea.concept || idea.idea_title || (typeof idea === 'string' ? idea : JSON.stringify(idea));
+
+    logger.info('[PIPELINE] Starting implementation', { pipelineId, idea: ideaText.slice(0, 80), autoDeploy });
+
+    // Take a snapshot before any changes (North Star §4.2)
+    let snapshotId = null;
+    try {
+      snapshotId = await quickSnapshot(`pre-pipeline-${pipelineId}`, this.pool);
+      if (snapshotId) logger.info('[PIPELINE] Snapshot created', { pipelineId, snapshotId });
+    } catch (snapErr) {
+      logger.warn('[PIPELINE] Could not create snapshot — proceeding without rollback', { error: snapErr.message });
+    }
 
     try {
       // Step 1: Develop Concept
       const concept = await this.developConcept(idea);
-      
+
+      // Minimum viability gate — reject vague/broken concepts
+      const viability = this.checkConceptViability(concept);
+      if (!viability.ok) {
+        throw new Error(`Concept failed viability check: ${viability.reason}`);
+      }
+
       // Step 2: Design Solution
       const design = await this.designSolution(concept);
-      
+
       // Step 3: Create Implementation Plan
       const plan = await this.createImplementationPlan(design);
-      
+
       // Step 4: Implement via Self-Programming
       const implementation = await this.implementViaSelfProgramming(plan, {
         autoDeploy,
         pipelineId,
       });
-      
-      // Check if implementation succeeded
+
       if (!implementation.success) {
         throw new Error(implementation.error || 'Implementation failed');
       }
-      
+
       // Step 5: Verify Completion
       if (verifyCompletion && implementation.taskId && this.taskTracker) {
         await this.verifyImplementation(implementation.taskId, plan);
       }
 
+      logger.info('[PIPELINE] Implementation complete', { pipelineId, autoDeploy });
+
       return {
         success: true,
         pipelineId,
+        snapshotId,
         concept,
         design,
         plan,
         implementation,
       };
     } catch (error) {
-      console.error(`❌ [PIPELINE] Implementation failed:`, error.message);
+      logger.error('[PIPELINE] Implementation failed — triggering rollback', { pipelineId, error: error.message });
+
+      // Rollback to snapshot if one was taken
+      if (snapshotId) {
+        try {
+          await quickRollback(snapshotId, this.pool);
+          logger.info('[PIPELINE] Rolled back to snapshot', { pipelineId, snapshotId });
+        } catch (rollbackErr) {
+          logger.error('[PIPELINE] Rollback also failed', { pipelineId, snapshotId, error: rollbackErr.message });
+        }
+      }
+
       return {
         success: false,
         pipelineId,
+        snapshotId,
+        rolledBack: !!snapshotId,
         error: error.message,
       };
     }
   }
 
   /**
+   * Minimum viability check — prevents vague/broken concepts from going to implementation.
+   */
+  checkConceptViability(concept) {
+    if (!concept) return { ok: false, reason: 'No concept returned' };
+    if (!concept.features || concept.features.length === 0) return { ok: false, reason: 'No features defined' };
+    if (!concept.valueProposition || concept.valueProposition === 'Provides value') {
+      return { ok: false, reason: 'Generic value proposition — needs specificity' };
+    }
+    if (!concept.successCriteria || concept.successCriteria.length === 0) {
+      return { ok: false, reason: 'No success criteria defined' };
+    }
+    return { ok: true };
+  }
+
+  /**
    * Step 1: Develop concept from idea
    */
   async developConcept(idea) {
-    console.log(`💡 [PIPELINE] Developing concept...`);
+    logger.info(`[PIPELINE] Developing concept...`);
     
     const ideaText = typeof idea === 'string' 
       ? idea 
@@ -114,7 +170,7 @@ Return as JSON: {
       const jsonMatch = response.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const concept = JSON.parse(jsonMatch[0]);
-        console.log(`✅ [PIPELINE] Concept developed: ${concept.concept}`);
+        logger.info(`[PIPELINE] Concept developed: ${concept.concept}`);
         return concept;
       }
 
@@ -130,7 +186,7 @@ Return as JSON: {
         phases: [{ phase: 1, name: 'Implementation', description: 'Implement the feature' }],
       };
     } catch (error) {
-      console.error(`❌ [PIPELINE] Concept development failed:`, error.message);
+      logger.error(`[PIPELINE] Concept development failed:`, error.message);
       throw error;
     }
   }
@@ -139,7 +195,7 @@ Return as JSON: {
    * Step 2: Design solution
    */
   async designSolution(concept) {
-    console.log(`🎨 [PIPELINE] Designing solution...`);
+    logger.info(`[PIPELINE] Designing solution...`);
     
     const prompt = `Design a complete technical solution for this concept:
 
@@ -175,7 +231,7 @@ Return as JSON: {
       const jsonMatch = response.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const design = JSON.parse(jsonMatch[0]);
-        console.log(`✅ [PIPELINE] Solution designed`);
+        logger.info(`[PIPELINE] Solution designed`);
         return design;
       }
 
@@ -190,7 +246,7 @@ Return as JSON: {
         testingStrategy: 'Manual testing',
       };
     } catch (error) {
-      console.error(`❌ [PIPELINE] Design failed:`, error.message);
+      logger.error(`[PIPELINE] Design failed:`, error.message);
       throw error;
     }
   }
@@ -199,7 +255,7 @@ Return as JSON: {
    * Step 3: Create implementation plan
    */
   async createImplementationPlan(design) {
-    console.log(`📋 [PIPELINE] Creating implementation plan...`);
+    logger.info(`[PIPELINE] Creating implementation plan...`);
     
     const prompt = `Create a detailed implementation plan:
 
@@ -231,7 +287,7 @@ Return as JSON: {
       const jsonMatch = response.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const plan = JSON.parse(jsonMatch[0]);
-        console.log(`✅ [PIPELINE] Plan created: ${plan.steps?.length || 0} steps`);
+        logger.info(`[PIPELINE] Plan created: ${plan.steps?.length || 0} steps`);
         return plan;
       }
 
@@ -242,84 +298,80 @@ Return as JSON: {
         riskLevel: 'medium',
       };
     } catch (error) {
-      console.error(`❌ [PIPELINE] Planning failed:`, error.message);
+      logger.error(`[PIPELINE] Planning failed:`, error.message);
       throw error;
     }
   }
 
   /**
-   * Step 4: Implement via self-programming
+   * Step 4: Inject into auto-builder queue.
+   *
+   * Converts the implementation plan into auto-builder product components
+   * and injects them directly — no HTTP self-call required.
    */
   async implementViaSelfProgramming(plan, options = {}) {
-    console.log(`🔨 [PIPELINE] Implementing via self-programming...`);
-    
-    const { autoDeploy = true, pipelineId } = options;
+    logger.info('[PIPELINE] Injecting plan into auto-builder queue...');
 
-    // Create comprehensive instruction from plan
-    const instruction = `Implement this feature according to the following plan:
+    const { pipelineId } = options;
 
+    try {
+      if (!plan.steps || plan.steps.length === 0) {
+        throw new Error('Plan has no steps — cannot build');
+      }
+
+      // Convert plan steps into auto-builder component definitions.
+      // Each step that specifies a file becomes a component.
+      const fileSteps = plan.steps.filter(s => s.file || s.action?.toLowerCase().includes('create'));
+
+      if (fileSteps.length === 0) {
+        // No discrete files — create a single summary component
+        fileSteps.push({
+          step: 1,
+          action: 'Implement feature',
+          file: `core/generated/pipeline-${pipelineId}.js`,
+          details: plan.steps.map(s => s.action).join('\n'),
+        });
+      }
+
+      const components = fileSteps.map((step, idx) => ({
+        id: `step_${step.step || idx + 1}`,
+        name: step.action || `Step ${idx + 1}`,
+        file: step.file || `core/generated/step_${idx + 1}.js`,
+        type: (step.file || '').endsWith('.html') ? 'html' : 'js',
+        status: 'pending',
+        prompt: `Implement the following step as complete, working code:
+
+Action: ${step.action}
+Details: ${step.details || ''}
+
+Full plan context:
 ${JSON.stringify(plan, null, 2)}
 
-Requirements:
-- Follow the plan exactly
-- Create all necessary files
-- Implement all endpoints
-- Add database changes if needed
-- Ensure code is complete and working
-- Include error handling
-- Add proper logging
+Output ONLY valid code. No explanation. No markdown fences.`,
+      }));
 
-This is part of pipeline ${pipelineId}.`;
+      const productDef = {
+        id: `pipeline_${pipelineId}`,
+        name: `Pipeline: ${pipelineId}`,
+        description: `Auto-generated from idea pipeline ${pipelineId}`,
+        pipelineId,
+        components,
+      };
 
-    // Call self-programming endpoint internally
-    try {
-      const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN 
-        ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
-        : 'http://localhost:8080';
-      
-      const key = process.env.COMMAND_CENTER_KEY || 'MySecretKey2025LifeOS';
-      
-      // Use native fetch (Node 18+) - no need for node-fetch
-      const fetch = globalThis.fetch;
-      
-      if (!fetch) {
-        throw new Error('fetch is not available. Node.js 18+ required or install node-fetch.');
-      }
-      
-      const response = await fetch(`${baseUrl}/api/v1/system/self-program?key=${key}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-command-key': key,
-        },
-        body: JSON.stringify({
-          instruction,
-          autoDeploy,
-          priority: 'high',
-        }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Self-programming request failed: ${response.status} ${errorText}`);
+      const queued = addProductToQueue(productDef);
+      if (!queued) {
+        throw new Error(`Product ${productDef.id} already in queue`);
       }
 
-      const result = await response.json();
-      
-      if (result.ok) {
-        console.log(`✅ [PIPELINE] Implementation started: ${result.taskId || 'task created'}`);
-        return {
-          success: true,
-          taskId: result.taskId,
-          filesModified: result.filesModified || [],
-          result,
-        };
-      } else {
-        throw new Error(result.error || 'Self-programming failed');
-      }
+      logger.info(`[PIPELINE] Injected ${components.length} components into auto-builder`, { pipelineId });
+
+      return {
+        success: true,
+        taskId: productDef.id,
+        filesModified: components.map(c => c.file),
+      };
     } catch (error) {
-      console.error(`❌ [PIPELINE] Self-programming call failed:`, error.message);
-      // Don't throw - return error so pipeline can handle it
+      logger.error('[PIPELINE] Queue injection failed', { error: error.message });
       return {
         success: false,
         error: error.message,
@@ -328,18 +380,36 @@ This is part of pipeline ${pipelineId}.`;
   }
 
   /**
-   * Step 5: Verify implementation
+   * Step 5: Verify implementation.
+   * Polls execution_tasks table until status changes — no hardcoded sleep.
    */
   async verifyImplementation(taskId, plan) {
-    console.log(`🔍 [PIPELINE] Verifying implementation...`);
-    
+    logger.info('[PIPELINE] Verifying implementation', { taskId });
+
     if (!this.taskTracker) {
-      console.warn('⚠️ [PIPELINE] Task tracker not available for verification');
+      logger.warn('[PIPELINE] Task tracker not available for verification');
       return;
     }
 
-    // Wait a bit for implementation to complete
-    await new Promise(resolve => setTimeout(resolve, 60000)); // 1 minute
+    // Poll until task completes or 5-minute timeout
+    const maxWaitMs = 5 * 60 * 1000;
+    const pollIntervalMs = 5000;
+    const startTime = Date.now();
+
+    while (Date.now() - startTime < maxWaitMs) {
+      const result = await this.pool.query(
+        `SELECT status FROM execution_tasks WHERE task_id = $1`,
+        [taskId]
+      ).catch(() => null);
+
+      const status = result?.rows?.[0]?.status;
+      if (status === 'completed' || status === 'failed') {
+        logger.info('[PIPELINE] Task settled', { taskId, status });
+        break;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, pollIntervalMs));
+    }
 
     const verificationChecks = [
       { type: 'deployment_successful', name: 'Deployment Health' },
@@ -364,71 +434,6 @@ This is part of pipeline ${pipelineId}.`;
     return verification;
   }
 
-  /**
-   * Auto-implement queued ideas
-   */
-  async autoImplementQueuedIdeas(limit = 5) {
-    try {
-      // Get top queued ideas
-      const result = await this.pool.query(
-        `SELECT * FROM execution_tasks 
-         WHERE type = 'idea_implementation' 
-         AND status = 'queued'
-         ORDER BY created_at ASC
-         LIMIT $1`,
-        [limit]
-      );
-
-      const implemented = [];
-      
-      for (const task of result.rows) {
-        try {
-          console.log(`🚀 [PIPELINE] Auto-implementing: ${task.description.substring(0, 100)}`);
-          
-          const implementation = await this.implementIdea(task.description, {
-            autoDeploy: true,
-            verifyCompletion: true,
-          });
-          
-          if (implementation.success) {
-            // Update task status
-            await this.pool.query(
-              `UPDATE execution_tasks 
-               SET status = 'completed', 
-                   result = $1,
-                   completed_at = NOW()
-               WHERE task_id = $2`,
-              [JSON.stringify(implementation), task.task_id]
-            );
-            
-            implemented.push({
-              taskId: task.task_id,
-              success: true,
-              pipelineId: implementation.pipelineId,
-            });
-          } else {
-            await this.pool.query(
-              `UPDATE execution_tasks 
-               SET status = 'failed', 
-                   error = $1,
-                   completed_at = NOW()
-               WHERE task_id = $2`,
-              [implementation.error, task.task_id]
-            );
-          }
-        } catch (error) {
-          console.error(`❌ [PIPELINE] Failed to implement ${task.task_id}:`, error.message);
-        }
-      }
-
-      return {
-        attempted: result.rows.length,
-        implemented: implemented.length,
-        results: implemented,
-      };
-    } catch (error) {
-      console.error(`❌ [PIPELINE] Auto-implementation error:`, error.message);
-      return { attempted: 0, implemented: 0, error: error.message };
-    }
-  }
+  // autoImplementQueuedIdeas() removed — ideas are submitted and approved by Adam only.
+  // Use the idea queue API (POST /api/v1/ideas/:id/build) to trigger builds.
 }

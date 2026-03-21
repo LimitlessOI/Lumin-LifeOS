@@ -862,8 +862,89 @@ Be concise, strategic, and speak as the system's internal AI.`;
         return text;
       }
 
-      // Non-OpenAI providers can be added as needed; for now, reuse existing
-      // HTTP-compatible completion-style APIs.
+      if (config.provider === "ollama" || member.startsWith("ollama_")) {
+        const currentConfig = COUNCIL_MEMBERS[member] || config;
+        const ollamaEndpoint =
+          currentConfig.endpoint || OLLAMA_ENDPOINT || "http://localhost:11434";
+
+        response = await fetch(`${ollamaEndpoint}/api/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: currentConfig.model,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: enhancedPrompt },
+            ],
+            stream: false,
+          }),
+          signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(
+            `Ollama HTTP ${response.status}: ${errorText.slice(0, 200)}`
+          );
+        }
+
+        const json = await response.json();
+        let text = json.message?.content || json.response || "";
+        if (!text) throw new Error("Empty response from Ollama");
+
+        text = decompressResponse(text, useCompression);
+
+        if (options.useCache !== false) {
+          await cacheResponse(prompt, member, text);
+        }
+
+        return text;
+      }
+
+      if (config.provider === "deepseek") {
+        const dsApiKey = getApiKey("deepseek");
+        if (!dsApiKey) throw new Error("DEEPSEEK_API_KEY not set");
+
+        response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${dsApiKey}`,
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: config.maxTokens,
+            temperature: 0.7,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: enhancedPrompt },
+            ],
+          }),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`DeepSeek HTTP ${response.status}: ${errorText.slice(0, 200)}`);
+        }
+
+        const json = await response.json();
+        if (json.error) throw new Error(json.error.message);
+
+        let text = json.choices?.[0]?.message?.content || "";
+        if (!text) throw new Error("Empty response from DeepSeek");
+
+        text = decompressResponse(text, useCompression);
+
+        const cost = calculateCost(json.usage, config.model);
+        await updateDailySpend(cost);
+
+        if (options.useCache !== false) {
+          await cacheResponse(prompt, member, text);
+        }
+
+        return text;
+      }
+
       throw new Error(
         `Provider ${config.provider} not yet wired in council-service`
       );

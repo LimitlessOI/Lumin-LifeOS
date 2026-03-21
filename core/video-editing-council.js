@@ -501,7 +501,9 @@ video.write_videofile("${outputPath}")
       await execAsync(`python "${scriptPath}"`);
       await fs.unlink(scriptPath);
     } catch (error) {
-      await fs.unlink(scriptPath).catch(() => {});
+      await fs.unlink(scriptPath).catch((cleanupError) => {
+        console.debug('[VIDEO COUNCIL] Failed to cleanup script file:', cleanupError.message);
+      });
       throw error;
     }
 
@@ -558,7 +560,9 @@ print(json.dumps({"scenes": scenes, "frame_count": frame_count}))
         member: 'opencv_analyzer',
       };
     } catch (error) {
-      await fs.unlink(scriptPath).catch(() => {});
+      await fs.unlink(scriptPath).catch((cleanupError) => {
+        console.debug('[VIDEO COUNCIL] Failed to cleanup script file:', cleanupError.message);
+      });
       throw error;
     }
   }

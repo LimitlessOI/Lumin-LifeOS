@@ -255,5 +255,27 @@ export function registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requ
     }
   });
 
+  // ==================== DIRECT MEMBER CALL ====================
+
+  /**
+   * POST /api/v1/enhanced-council/call
+   * Call a single council member directly by name
+   * Body: { member: string, prompt: string }
+   */
+  app.post("/api/v1/enhanced-council/call", requireKey, async (req, res) => {
+    try {
+      const { member, prompt } = req.body;
+
+      if (!member || !prompt) {
+        return res.status(400).json({ error: "member and prompt are required" });
+      }
+
+      const response = await callCouncilMember(member, prompt);
+      res.json({ ok: true, member, response });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   console.log('✅ [ROUTES] Enhanced Council routes registered');
 }

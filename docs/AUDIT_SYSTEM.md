@@ -1,9 +1,15 @@
 # Audit System Overview
 
-This document summarizes local-only audit utilities and how to run them.
+This document defines the local-only audit utilities and how they run as non-optional system loops.
 
-**System law:** “No decision is complete until future-us has tried to destroy it.”  
-→ FSAR runs are **required** (not optional) before decisions are considered complete.
+**System law:** "No decision is complete until future-us has tried to destroy it."  
+FSAR runs are required before decisions are considered complete.
+
+## Core Loops (Non-Optional)
+1) **FSAR** — future-hindsight adversarial review, pre-execution and scheduled.
+2) **Drift Sentinel** — detects council drift and forces re-evaluation.
+3) **Quality Regression** — gold-standard tasks, regression deltas, and pass/fail gates.
+4) **Quarterly Rip-and-Replace** — mandatory justification to keep current models.
 
 ## Components
 - **FSAR** (`audit/fsar/fsar_runner.js`): Future-State Adversarial Retrospection; generates JSON/MD artifacts.
@@ -27,7 +33,7 @@ node scripts/run_quarterly_rip_replace.js
 
 Optional: provide a JSON payload (arg or stdin) to override defaults:
 ```bash
-cat <<'EOF' | node scripts/run_quarterly_rip_replace.js
+cat <<'RIPJSON' | node scripts/run_quarterly_rip_replace.js
 {
   "current_models": [
     {"name": "openai_gpt4o", "role": "oversight", "cost_class": "paid"}
@@ -45,7 +51,7 @@ cat <<'EOF' | node scripts/run_quarterly_rip_replace.js
     {"model": "openai_gpt4o", "reason": "Needed for parity; reevaluate next quarter."}
   ]
 }
-EOF
+RIPJSON
 ```
 
 Outputs: `audit/reports/quarterly_rip_replace_<timestamp>.json` and `.md`.

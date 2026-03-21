@@ -144,7 +144,9 @@ export class CodeLinter {
         );
 
         const lintResults = JSON.parse(result.toString());
-        await fs.unlink(tempPath).catch(() => {});
+        await fs.unlink(tempPath).catch((cleanupError) => {
+          console.debug('[CODE LINTER] Failed to cleanup temp file:', cleanupError.message);
+        });
 
         return {
           available: true,
@@ -154,7 +156,9 @@ export class CodeLinter {
       } catch (lintError) {
         // ESLint found issues
         const output = lintError.stdout?.toString() || lintError.stderr?.toString();
-        await fs.unlink(tempPath).catch(() => {});
+        await fs.unlink(tempPath).catch((cleanupError) => {
+          console.debug('[CODE LINTER] Failed to cleanup temp file:', cleanupError.message);
+        });
 
         try {
           const lintResults = JSON.parse(output);

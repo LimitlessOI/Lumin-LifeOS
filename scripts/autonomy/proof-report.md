@@ -1,32 +1,45 @@
 # Autonomy Proof Report
 
-- Status: COMPLETED
-- Last run: 2026-01-14T18:56:48.131Z
+- Status: NO TASKS
+- Last run: 2026-01-27T20:02:12.527Z
 
 ## Tasks Executed
-- proof-website-audit: done
+- None
 
 ## Files Changed
-- routes/public-routes.js
-- server.js
+- .gitignore
+- config/runtime-env.js
+- core/auto-builder.js
+- core/business-center.js
+- data/memories.json
+- docs/AUDIT_SYSTEM.md
+- docs/COMMAND_CENTER_QUICK_START.md
+- docs/DRIFT_SENTINEL.md
+- docs/FSAR.md
+- docs/QUALITY_REGRESSION.md
+- docs/SOURCE_OF_TRUTH.md
+- docs/SSOT_NORTH_STAR.md
+- env.template
+- package-lock.json
+- package.json
+- public/overlay/command-center.html
+- public/overlay/command-center.js
+- public/overlay/index.html
 - routes/website-audit-routes.js
-- public/overlay/website-audit.html
-- scripts/autonomy/run-nightly.js
-- scripts/autonomy/queue.json
 - scripts/autonomy/proof-report.md
+- scripts/autonomy/queue.json
+- scripts/autonomy/run-nightly.js
 - scripts/autonomy/verify-website-audit.js
+- scripts/verify-landing-page.js
+- server.js
 
 ## Verification Commands + Exit Codes
-- npm run ssot:validate: EXIT:0
-- npm run test:smoke: EXIT:0
-- node scripts/autonomy/verify-website-audit.js: EXIT:0
+- None
 
 ## Proof Artifacts
 - UI: /overlay/website-audit
 - API: POST /api/v1/website/audit
 
 ## Logs
-- scripts/autonomy/logs/2026-01-14T18-56-30-634Z.log
+- scripts/autonomy/logs/2026-01-27T20-02-12-460Z.log
 
-## Notes
-- Queue statuses were corrected after the run to keep refactor/revenue tasks queued.

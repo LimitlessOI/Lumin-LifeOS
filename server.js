@@ -38,7 +38,6 @@ import TCOTracker from "./core/tco-tracker.js";
 import initTCORoutes from "./routes/tco-routes.js";
 import TCOSalesAgent from "./core/tco-sales-agent.js";
 import initTCOAgentRoutes from "./routes/tco-agent-routes.js";
-import { loadRuntimeEnv } from "./config/runtime-env.js";
 import { applyMiddleware } from "./middleware/apply-middleware.js";
 import { registerPublicRoutes } from "./routes/public-routes.js";
 import { registerWebsiteAuditRoutes } from "./routes/website-audit-routes.js";
@@ -126,41 +125,38 @@ import {
   advancedCompress,
   advancedDecompress,
 } from './services/response-cache.js';
+import { createEventBus } from "./core/event-bus.js";
+import { createPodManager } from "./core/pod-manager.js";
+import { createTelemetry } from "./services/telemetry.js";
 
-function getGovernorFunction(name) {
-  return (
-    (resourceGovernor && typeof resourceGovernor[name] === "function" && resourceGovernor[name]) ||
-    (resourceGovernor?.default && typeof resourceGovernor.default[name] === "function" && resourceGovernor.default[name]) ||
-    null
-  );
-}
-
-function acquireGovernorHeavyLease() {
-  const fn = getGovernorFunction("acquireHeavyLease");
-  if (fn) {
-    return fn();
-  }
-  return { release: () => {} };
-}
-
-async function runGovernorOllamaTask(fn) {
-  const wrapper = getGovernorFunction("runOllamaTask");
-  if (wrapper) {
-    return await wrapper(fn);
-  }
-  return await fn();
-}
-
-function isGovernorAutonomyPaused() {
-  const fn = getGovernorFunction("isAutonomyPaused");
-  if (fn) return !!fn();
-  return false;
-}
-
+import {
+  RUNTIME,
+  DISABLE_INCOME_DRONES,
+  SMOKE_MODE,
+  COUNCIL_TIMEOUT_MS,
+  COUNCIL_PING_TIMEOUT_MS,
+  SEARCH_ENABLED,
+  searchLimiter,
+  outreachLimiter,
+  ALLOWED_ORIGINS_LIST,
+  getStripeClient,
+} from "./startup/environment.js";
+import { createLatestRunManager } from "./startup/latest-run.js";
+import { registerServerRoutes } from "./startup/routes/server-routes.js";
+import { createAutonomyScheduler } from "./startup/schedulers.js";
+import { initDatabase, ensureTcoAgentTables } from "./startup/database.js";
+import { createUserPreferenceGuesser } from "./startup/user-preferences.js";
+import { createSandboxTester } from "./startup/sandbox.js";
+import { createSnapshotManager } from "./startup/snapshots.js";
+import { loadROIFromDatabase, updateROI } from "./startup/roi.js";
+import { createMemoryHandlers } from "./startup/memory.js";
+import { createLossTracker } from "./startup/loss.js";
 
 // Enhanced Council Features
 import { registerEnhancedCouncilRoutes } from "./routes/enhanced-council-routes.js";
 import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
+// Idea Queue — human-approval gate for self-building pipeline
+import { createIdeaQueueRoutes } from "./routes/idea-queue-routes.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig, CrmSequenceRunner;
@@ -184,42 +180,20 @@ let perfectDaySystem, goalCommitmentSystem, callSimulationSystem, relationshipMe
 let tcoTracker, tcoRoutes, tcoSalesAgent, tcoAgentRoutes;
 
 const execAsync = promisify(exec);
-const { readFile, writeFile } = fsPromises;
+const { writeFile } = fsPromises;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const latestRunRoot = path.join(__dirname, "latest-run.json");
-const latestRunDoc = path.join(__dirname, "docs", "THREAD_REALITY", "latest-run.json");
-
-async function ensureLatestRunFile() {
-  try {
-    await fsPromises.access(latestRunRoot);
-    return;
-  } catch {}
-
-  try {
-    await fsPromises.access(latestRunDoc);
-    await fsPromises.copyFile(latestRunDoc, latestRunRoot);
-    return;
-  } catch {}
-
-  const template = {
-    runDir: "",
-    result: "UNVERIFIED",
-    notes: "",
-  };
-
-  try {
-    await fsPromises.writeFile(latestRunRoot, JSON.stringify(template, null, 2));
-  } catch (error) {
-    logger.warn("[LATEST-RUN] unable to create placeholder:", { error: error.message });
-  }
-}
-
-ensureLatestRunFile().catch((error) => {
+const latestRunManager = createLatestRunManager(__dirname, logger);
+latestRunManager.ensureLatestRunFile().catch((error) => {
   logger.warn("[LATEST-RUN] initialization error:", { error: error.message });
 });
+
+const telemetry = createTelemetry({ logger });
+const eventBus = createEventBus();
+const podManager = createPodManager({ eventBus, telemetry, logger });
+const lifecycleSubscriptions = [];
 
 const app = express();
 const server = createServer(app);
@@ -228,11 +202,65 @@ wss.on("error", (error) => {
   logger.error("❌ [WS] WebSocket server error:", { error: error.message });
 });
 
+const { scheduleAutonomyLoop, scheduleAutonomyOnce } = createAutonomyScheduler(logger);
+
 const moduleRouter = new ModuleRouter();
 const healthModuleInstance = new HealthModule();
 moduleRouter.register("system-health", healthModuleInstance);
+
+const corePod = podManager.createPod({
+  name: "platform-core",
+  project: "Platform Backbone",
+  priority: 1,
+  labels: ["core"],
+});
+const growthPod = podManager.createPod({
+  name: "growth-engineering",
+  project: "New Product Pods",
+  priority: 2,
+  labels: ["growth"],
+});
+
+const schedulerDrone = podManager.registerDrone({
+  label: "scheduler-drone",
+  skills: ["self-healing", "monitoring"],
+});
+const growthDrone = podManager.registerDrone({
+  label: "growth-drone",
+  skills: ["experiment", "automation"],
+});
+podManager.assignDroneToPod(schedulerDrone.id, corePod.id);
+podManager.assignDroneToPod(growthDrone.id, growthPod.id);
+
+podManager.registerDrone({
+  label: "maintenance-drone",
+  skills: ["support", "ops"],
+});
+
+const followUpTransition = eventBus.subscribe("pod:completed", ({ pod }) => {
+  if (!pod || pod.labels?.includes("maintenance")) return;
+  if (pod.labels?.includes("followup")) return;
+  const trace = telemetry.startTrace("pod.auto-transition", { pod: pod.name });
+  const maintenancePod = podManager.ensureMaintenancePod();
+  const followUp = podManager.createPod({
+    name: `${pod.name}-followup`,
+    project: `${pod.project} (continuous improvement)`,
+    priority: Math.max(1, pod.priority),
+    labels: ["followup"],
+  });
+  const moved = podManager.moveDronesBetweenPods(maintenancePod.id, followUp.id, 2);
+  if (moved.length === 0) {
+    const floatDrone = podManager.registerDrone({
+      label: `${pod.name}-float`,
+      skills: ["adaptive"],
+    });
+    podManager.assignDroneToPod(floatDrone.id, followUp.id);
+  }
+  trace.end("ok", { followUp: followUp.name, dronesMoved: moved.length });
+});
+lifecycleSubscriptions.push(followUpTransition);
+
 // ==================== ENVIRONMENT CONFIGURATION ====================
-const RUNTIME = loadRuntimeEnv();
 const {
   DATABASE_URL,
   DATABASE_URL_SANDBOX,
@@ -264,88 +292,9 @@ const {
   validatedDatabaseUrl,
 } = RUNTIME;
 
-// Feature flags
-const DISABLE_INCOME_DRONES = true; // Set to false to re-enable income drones
-const SMOKE_MODE =
-  ["1", "true", "yes"].includes(String(process.env.SMOKE_MODE || "").toLowerCase()) ||
-  ["1", "true", "yes"].includes(String(process.env.AUTONOMY_SMOKE || "").toLowerCase());
-const COUNCIL_TIMEOUT_MS = Number(process.env.COUNCIL_TIMEOUT_MS || "300000");
-const COUNCIL_PING_TIMEOUT_MS = Number(process.env.COUNCIL_PING_TIMEOUT_MS || "5000");
-const SEARCH_MAX_PER_MINUTE = Number(process.env.SEARCH_RATE_LIMIT_PER_MINUTE || "10");
-const SEARCH_MAX_PER_DAY = Number(process.env.SEARCH_DAILY_LIMIT || "100");
-const SEARCH_ENABLED = !["0", "false", "no"].includes(
-  (process.env.SEARCH_ENABLED || "").toString().toLowerCase()
-);
-
-// Derived env values are resolved in config/runtime-env.js
-
-const searchLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: SEARCH_MAX_PER_MINUTE,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    error: "SEARCH_RATE_LIMIT_EXCEEDED",
-    message: "Too many search requests, try again in a moment",
-  },
-});
-
-const OUTREACH_MAX_PER_MINUTE = Number(process.env.OUTREACH_RATE_LIMIT_PER_MINUTE || "20");
-const outreachLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: OUTREACH_MAX_PER_MINUTE,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    error: "OUTREACH_RATE_LIMIT_EXCEEDED",
-    message: "Too many outreach requests, try again in a moment",
-  },
-});
-
-// Stripe client (lazy-loaded so the app can still boot if stripe is not installed)
-let stripeClient = null;
-async function getStripeClient() {
-  if (!STRIPE_SECRET_KEY) return null;
-  if (stripeClient) return stripeClient;
-  try {
-    // Dynamic import with error handling - completely optional
-    let Stripe;
-    try {
-      const stripeModule = await import('stripe');
-      Stripe = stripeModule.default || stripeModule.Stripe || stripeModule;
-    } catch (importError) {
-      // Package not installed - this is OK, Stripe is optional
-      logger.warn('⚠️ Stripe package not installed - Stripe features disabled');
-      logger.warn('   To enable: npm install stripe');
-      return null;
-    }
-
-    if (!Stripe) {
-      return null;
-    }
-
-    stripeClient = new Stripe(STRIPE_SECRET_KEY, {
-      apiVersion: "2024-06-20",
-    });
-    logger.info("✅ Stripe client initialized");
-    return stripeClient;
-  } catch (err) {
-    // Any other error - log but don't crash
-    logger.warn("⚠️ Stripe initialization error (non-fatal):", { error: err.message });
-    return null;
-  }
-}
+// Feature flags + derived env values are provided by ./startup/environment.js
 
 // ==================== SECURITY: CORS WITH ORIGIN PINNING ====================
-const ALLOWED_ORIGINS_LIST = ALLOWED_ORIGINS
-  .split(",")
-  .map((s) => s.trim())
-  .filter(Boolean)
-  .concat([
-    "http://localhost:8080",
-    "http://localhost:3000",
-    "http://127.0.0.1:8080",
-  ]);
 
 // robust same-origin helper for Railway / proxies
 function getRequestHost(req) {
@@ -413,34 +362,7 @@ initDb(pool);
 // Start DB pool health monitoring
 startDbHealthMonitor(pool);
 
-let tcoTablesEnsured = false;
-
-async function ensureTcoAgentTables() {
-  if (tcoTablesEnsured) return;
-  try {
-    await pool.query("SELECT 1 FROM tco_agent_interactions LIMIT 1");
-    tcoTablesEnsured = true;
-    return;
-  } catch (error) {
-    if (error?.code !== "42P01") {
-      logger.warn("⚠️ TCO tables check failed:", { error: error.message });
-      return;
-    }
-  }
-
-  logger.info("ℹ️ TCO tables missing; creating from migrations/create_tco_agent_tables.sql");
-  try {
-    const sqlPath = path.join(__dirname, "database", "migrations", "create_tco_agent_tables.sql");
-    const sql = await readFile(sqlPath, "utf-8");
-    await pool.query(sql);
-    tcoTablesEnsured = true;
-    logger.info("✅ Created TCO agent tables");
-  } catch (error) {
-    logger.error("❌ Failed to create TCO agent tables:", { error: error.message });
-  }
-}
-
-ensureTcoAgentTables().catch((error) => {
+ensureTcoAgentTables(pool, logger, __dirname).catch((error) => {
   logger.warn("⚠️ ensureTcoAgentTables failed:", { error: error.message });
 });
 
@@ -484,6 +406,8 @@ const roiTracker = {
   last_reset: dayjs().format("YYYY-MM-DD"),
 };
 
+const updateROIWithTracker = (...args) => updateROI(roiTracker, ...args);
+
 const compressionMetrics = {
   v2_0_compressions: 0,
   v3_compressions: 0,
@@ -508,82 +432,32 @@ const systemMetrics = {
   dailyIdeasGenerated: 0,
 };
 
+const { storeConversationMemory, recallConversationMemory } = createMemoryHandlers({
+  pool,
+  logger,
+});
+const sandboxTest = createSandboxTester({
+  runSandboxTest,
+  rootDir: __dirname,
+  pool,
+});
+let trackLossFunction = null;
+const { createSystemSnapshot, rollbackToSnapshot } = createSnapshotManager({
+  createSystemSnapshotService,
+  rollbackToSnapshotService,
+  rootDir: __dirname,
+  pool,
+  systemMetrics,
+  roiTracker,
+  activeConnections,
+  ideaEngine,
+  aiPerformanceScores,
+  systemSnapshots,
+  getTrackLoss: () => trackLossFunction,
+});
+const trackLoss = createLossTracker({ pool, logger, createSystemSnapshot });
+trackLossFunction = trackLoss;
 
-function scheduleAutonomyLoop(name, intervalMs, task, initialDelayMs = intervalMs) {
-  try {
-    if (isGovernorAutonomyPaused()) {
-      logger.info(`⏸️ [AUTONOMY] ${name} disabled (PAUSE_AUTONOMY=1)`);
-      return;
-    }
-  } catch (govErr) {
-    logger.warn(`⚠️ [AUTONOMY] Governor check failed for ${name}:`, { error: govErr.message });
-  }
-
-  const run = async () => {
-    try {
-      if (isGovernorAutonomyPaused()) {
-        setTimeout(run, intervalMs);
-        return;
-      }
-    } catch (_) { /* ignore governor errors in loop */ }
-    const lease = acquireGovernorHeavyLease();
-    if (!lease) {
-      setTimeout(run, intervalMs);
-      return;
-    }
-    try {
-      await task();
-    } catch (error) {
-      logger.warn(`⚠️ [${name}]`, { error: error.message });
-    } finally {
-      lease.release();
-      setTimeout(run, intervalMs);
-    }
-  };
-
-  setTimeout(run, initialDelayMs);
-}
-
-function scheduleAutonomyOnce(name, delayMs, task) {
-  if (isGovernorAutonomyPaused()) {
-    return;
-  }
-
-  const run = async () => {
-    if (isGovernorAutonomyPaused()) return;
-    const lease = acquireGovernorHeavyLease();
-    if (!lease) {
-      setTimeout(run, delayMs);
-      return;
-    }
-    try {
-      await task();
-    } catch (error) {
-      logger.warn(`⚠️ [${name}]`, { error: error.message });
-    } finally {
-      lease.release();
-    }
-  };
-
-  setTimeout(run, delayMs);
-}
-
-// ==================== DATABASE INITIALIZATION ====================
-async function initDatabase() {
-  const { readFileSync } = await import('fs');
-  const sqlPath = new URL('./db/migrations/20260313_core_schema.sql', import.meta.url).pathname;
-  const sql = readFileSync(sqlPath, 'utf8');
-  // Run each statement individually, tolerating "already exists" errors
-  const statements = sql.split(/;\s*\n/).filter(s => s.trim().length > 0 && !s.trim().startsWith('--'));
-  for (const stmt of statements) {
-    try {
-      await pool.query(stmt);
-    } catch (e) {
-      if (!e.message.includes('already exists')) throw e;
-    }
-  }
-  logger.info('[DB] Schema initialized');
-}
 
 // ==================== ENHANCED AI COUNCIL MEMBERS (NO CLAUDE) ====================
 // TIER 0: Open Source / Cheap Models (PRIMARY - Do all the work)
@@ -840,7 +714,7 @@ const {
   getOpenSourceCouncil: () => openSourceCouncil,
   providerCooldowns,
   getSourceOfTruthManager: () => sourceOfTruthManager,
-  updateROI,
+  updateROIWithTracker,
   trackAIPerformance,
   notifyCriticalIssue,
 });
@@ -849,49 +723,14 @@ const {
 // resolveCouncilMember, callCouncilMember, callCouncilWithFailover provided by createCouncilService above
 
 // ==================== USER PREFERENCE LEARNING ====================
-async function guessUserDecision(context) {
-  try {
-    const pastDecisions = await pool.query(
-      `SELECT context, choice, outcome, riskLevel 
-       FROM user_decisions 
-       WHERE created_at > NOW() - INTERVAL '30 days'
-       ORDER BY created_at DESC 
-       LIMIT 20`
-    );
-
-    const prompt = `Based on these past user decisions:
-    ${JSON.stringify(pastDecisions.rows, null, 2)}
-    
-    And this current context:
-    ${JSON.stringify(context)}
-    
-    What would the user likely choose? Consider:
-    1. Risk tolerance patterns
-    2. Decision speed preferences
-    3. Common priorities
-    4. Past similar situations
-    
-    Provide your best guess and confidence level (0-100).`;
-
-    const guess = await callCouncilMember("chatgpt", prompt, {
-      guessUserPreference: true,
-    });
-
-    return {
-      prediction: guess,
-      confidence: 75,
-      basedOn: pastDecisions.rows.length + " past decisions",
-    };
-  } catch (error) {
-    logger.error("User preference guess error:", { error: error.message });
-    return { prediction: "uncertain", confidence: 0 };
-  }
-}
+const guessUserDecision = createUserPreferenceGuesser({
+  pool,
+  callCouncilMember,
+  logger,
+});
 
 // ==================== SANDBOX TESTING ====================
-async function sandboxTest(code, testDescription) {
-  return runSandboxTest({ code, testDescription, __dirname, pool });
-}
+// Provided by startup/sandbox.js.
 
 // detectHallucinations and crossValidateResponses extracted to services/ai-guard.js
 
@@ -927,32 +766,7 @@ const {
 });
 
 // ==================== SYSTEM SNAPSHOT & ROLLBACK ====================
-async function createSystemSnapshot(reason = "Manual snapshot", filePaths = []) {
-  return createSystemSnapshotService({
-    reason,
-    filePaths,
-    __dirname,
-    pool,
-    systemMetrics,
-    roiTracker,
-    activeConnectionsSize: activeConnections.size,
-    ideaEngine,
-    aiPerformanceScores,
-    systemSnapshots,
-  });
-}
-
-async function rollbackToSnapshot(snapshotId) {
-  return rollbackToSnapshotService({
-    snapshotId,
-    __dirname,
-    pool,
-    systemMetrics,
-    roiTracker,
-    aiPerformanceScores,
-    trackLoss,
-  });
-}
+// Provided by startup/snapshots.js.
 
 
 // ==================== CONTINUOUS SELF-IMPROVEMENT ====================
@@ -971,122 +785,13 @@ const continuousSelfImprovement = createSelfImprovementLoop(() => ({
 }));
 
 // ==================== ROI & FINANCIAL TRACKING ====================
-async function loadROIFromDatabase() {
-  try {
-    const result = await pool.query(
-      `SELECT SUM(usd) as total FROM daily_spend WHERE date = $1`,
-      [dayjs().format("YYYY-MM-DD")]
-    );
-    if (result.rows[0]?.total) {
-      roiTracker.daily_ai_cost = parseFloat(result.rows[0].total);
-    }
-  } catch (error) {
-    logger.error("ROI load error:", { error: error.message });
-  }
-}
-
-function updateROI(
-  revenue = 0,
-  cost = 0,
-  tasksCompleted = 0,
-  tokensSaved = 0
-) {
-  const today = dayjs().format("YYYY-MM-DD");
-  if (roiTracker.last_reset !== today) {
-    roiTracker.daily_revenue = 0;
-    roiTracker.daily_ai_cost = 0;
-    roiTracker.daily_tasks_completed = 0;
-    roiTracker.total_tokens_saved = 0;
-    roiTracker.micro_compression_saves = 0;
-    roiTracker.last_reset = today;
-  }
-  roiTracker.daily_revenue += revenue;
-  roiTracker.daily_ai_cost += cost;
-  roiTracker.daily_tasks_completed += tasksCompleted;
-  roiTracker.total_tokens_saved += tokensSaved;
-  roiTracker.micro_compression_saves += tokensSaved; // Track compression saves
-  if (roiTracker.daily_tasks_completed > 0) {
-    roiTracker.revenue_per_task =
-      roiTracker.daily_revenue / roiTracker.daily_tasks_completed;
-  }
-  if (roiTracker.daily_ai_cost > 0) {
-    roiTracker.roi_ratio =
-      roiTracker.daily_revenue / roiTracker.daily_ai_cost;
-  }
-  return roiTracker;
-}
+// Functionality now lives under startup/roi.js.
 
 // ==================== MEMORY SYSTEM ====================
-async function storeConversationMemory(
-  orchestratorMessage,
-  aiResponse,
-  context = {}
-) {
-  try {
-    const memId = `mem_${Date.now()}_${Math.random()
-      .toString(36)
-      .slice(2, 8)}`;
-    await pool.query(
-      `INSERT INTO conversation_memory
-       (memory_id, orchestrator_msg, ai_response, context_metadata, memory_type, ai_member, created_at)
-       VALUES ($1, $2, $3, $4::jsonb, $5::jsonb, $6, now())`,
-      [
-        memId,
-        orchestratorMessage,
-        aiResponse,
-        JSON.stringify(context),
-        JSON.stringify({
-          type: context.type || "conversation",
-          importance: context.importance || "medium",
-          source: context.source || "system"
-        }),
-        context.ai_member || "system",
-      ]
-    );
-    return { memId };
-  } catch (error) {
-    logger.error("❌ Memory store error:", { error: error.message });
-    return null;
-  }
-}
-
-async function recallConversationMemory(query, limit = 50) {
-  try {
-    const result = await pool.query(
-      `SELECT memory_id, orchestrator_msg, ai_response, ai_member, created_at 
-       FROM conversation_memory
-       WHERE orchestrator_msg ILIKE $1 OR ai_response ILIKE $1
-       ORDER BY created_at DESC LIMIT $2`,
-      [`%${query}%`, limit]
-    );
-    return result.rows;
-  } catch (error) {
-    return [];
-  }
-}
+// Handlers now provided via startup/memory.js.
 
 // ==================== LOSS TRACKING ====================
-async function trackLoss(
-  severity,
-  whatWasLost,
-  whyLost,
-  context = {},
-  prevention = ""
-) {
-  try {
-    await pool.query(
-      `INSERT INTO loss_log (severity, what_was_lost, why_lost, context, prevention_strategy, timestamp)
-       VALUES ($1, $2, $3, $4, $5, now())`,
-      [severity, whatWasLost, whyLost, JSON.stringify(context), prevention]
-    );
-    if (severity === "critical") {
-      logger.error(`🚨 [${severity.toUpperCase()}] ${whatWasLost}`);
-      await createSystemSnapshot(`Critical loss: ${whatWasLost}`);
-    }
-  } catch (error) {
-    logger.error("Loss tracking error:", { error: error.message });
-  }
-}
+// Delegated to startup/loss.js.
 
 
 // ==================== DEPLOYMENT SERVICE INITIALIZATION ====================
@@ -1094,12 +799,21 @@ const {
   isFileProtected,
   triggerDeployment,
   commitToGitHub,
+  triggerRailwayRedeploy,
+  setRailwayEnvVar,
+  setRailwayEnvVars,
+  getRailwayEnvVars,
 } = createDeploymentService({
   pool,
   systemMetrics,
   broadcastToAll,
   GITHUB_TOKEN,
   GITHUB_REPO,
+  GITHUB_DEPLOY_BRANCH: process.env.GITHUB_DEPLOY_BRANCH || 'main',
+  RAILWAY_TOKEN: process.env.RAILWAY_TOKEN,
+  RAILWAY_PROJECT_ID: process.env.RAILWAY_PROJECT_ID,
+  RAILWAY_SERVICE_ID: process.env.RAILWAY_SERVICE_ID,
+  RAILWAY_ENVIRONMENT_ID: process.env.RAILWAY_ENVIRONMENT_ID,
   __dirname,
 });
 
@@ -1203,7 +917,7 @@ async function runInitializeTwoTierSystem() {
     GITHUB_TOKEN,
     commitToGitHub,
     dayjs,
-    updateROI,
+    updateROIWithTracker,
     getStripeClient,
     roiTracker,
     financialDashboard,
@@ -1307,7 +1021,11 @@ async function runInitializeTwoTierSystem() {
 
 // Income drone system - will be replaced by EnhancedIncomeDrone if available
 // Class extracted to core/income-drone-system.js
-let incomeDroneSystem = new IncomeDroneSystem({ pool, updateROI, broadcastToAll });
+let incomeDroneSystem = new IncomeDroneSystem({
+  pool,
+  updateROI: updateROIWithTracker,
+  broadcastToAll,
+});
 
 // ==================== FINANCIAL DASHBOARD ====================
 // Class extracted to core/financial-dashboard.js
@@ -1318,7 +1036,7 @@ const financialDashboard = new FinancialDashboard({ pool });
 const { recordRevenueEvent, syncStripeRevenue } = createFinancialRevenue({
   financialDashboard,
   incomeDroneSystem,
-  updateROI,
+  updateROI: updateROIWithTracker,
   getStripeClient,
 });
 
@@ -1357,177 +1075,130 @@ const checkHumanAttentionBudget = (req, res, next) => next();
 // Extracted to routes/conversation-routes.js
 // Extracted to routes/command-center-routes.js
 // Extracted to routes/auto-builder-routes.js (part 3: AUTO-BUILDER CONTROL)
-// ==================== MEMORY SYSTEM ROUTES ====================
-app.use('/api', memoryRoutes);
-
-// ==================== STRIPE AUTOMATION ROUTES ====================
-// Stripe webhook route (needs raw body - must be before JSON parser)
-app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  
-  if (!sig) {
-    return res.status(400).json({ error: 'Missing stripe-signature header' });
-  }
-  
-  try {
-    const stripeAutomation = await import('./core/stripe-automation.js');
-    await stripeAutomation.handleWebhook(req.body, sig, { pool });
-    res.json({ received: true });
-  } catch (error) {
-    logger.error('❌ [STRIPE] Webhook error:', { error: error.message });
-    res.status(400).json({ error: error.message });
-  }
-});
-
-// Other Stripe routes (use JSON parser)
-app.use('/api/stripe', stripeRoutes);
-
-// TCO routes will be mounted after initialization
-// See runInitializeTwoTierSystem() call below
-
-// Enhanced health check
-// Feature flags status endpoint
-app.get('/api/v1/flags', requireKey, (req, res) => {
-  res.json({ ok: true, flags: getAllFlags() });
-});
-
-app.get('/api/health', async (req, res) => {
-  const health = {
-    server: 'ok',
-    timestamp: new Date().toISOString()
-  };
-  
-  try {
-    const ollamaEndpoint = OLLAMA_ENDPOINT || 'http://localhost:11434';
-    const ollamaRes = await fetch(`${ollamaEndpoint}/api/tags`);
-    if (ollamaRes.ok) {
-      const data = await ollamaRes.json();
-      health.ollama = { 
-        status: 'ok', 
-        endpoint: ollamaEndpoint,
-        models: data.models?.map(m => m.name) || [] 
-      };
-    } else {
-      health.ollama = { status: 'error', message: `HTTP ${ollamaRes.status}` };
-    }
-  } catch (e) {
-    health.ollama = { status: 'error', message: e.message };
-  }
-  
-  // Database check
-  try {
-    await pool.query('SELECT 1');
-    health.database = { status: 'ok' };
-  } catch (e) {
-    health.database = { status: 'error', message: e.message };
-  }
-  
-  // Build status
-  try {
-    health.build = autoBuilder.getStatus();
-  } catch (e) {
-    health.build = { status: 'error', message: e.message };
-  }
-  
-  res.json(health);
-});
-
-app.post("/api/v1/stripe/sync-revenue", requireKey, async (req, res) => {
-  try {
-    await syncStripeRevenue();
-    const dashboard = await financialDashboard.getDashboard();
-    res.json({ ok: true, dashboard, roi: roiTracker });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-// Overlay
-app.get("/overlay", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "overlay", "index.html"));
-});
-
-app.get("/overlay/index.html", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "overlay", "index.html"));
+registerServerRoutes(app, {
+  express,
+  memoryRoutes,
+  stripeRoutes,
+  requireKey,
+  getAllFlags,
+  OLLAMA_ENDPOINT,
+  pool,
+  autoBuilder,
+  syncStripeRevenue,
+  financialDashboard,
+  roiTracker,
+  logger,
+  commitToGitHub,
+  getAllQueueStats,
+  rootDir: __dirname,
+  telemetry,
+  podManager,
 });
 
 // ==================== AI COUNCIL CONSENSUS MODE ====================
 // Functions extracted to services/consensus-service.js (createGetCouncilConsensus, compareResponses, selectBestResponse)
 const getCouncilConsensus = createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT });
 
+// ==================== AUTO-BUILDER: CLOUD AI + PERSISTENCE ====================
+// Override routeTask so the builder uses Ollama when available, falls back to the
+// council (OpenAI / DeepSeek / Groq) when Ollama is unreachable (e.g. Railway prod).
+autoBuilder.overrideBuildHelpers({
+  routeTask: async (task, prompt) => {
+    const ollamaEndpoint = OLLAMA_ENDPOINT || 'http://localhost:11434';
+    const modelName = task === 'code_generation' ? 'deepseek-coder-v2:latest' : 'qwen2.5:32b';
+
+    // Try Ollama first (free, local)
+    try {
+      const res = await fetch(`${ollamaEndpoint}/api/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: modelName,
+          prompt,
+          stream: false,
+          options: { temperature: 0.2, num_predict: 8192 },
+        }),
+        signal: AbortSignal.timeout(60000),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.response && data.response.length > 50) {
+          logger.info(`[AUTO-BUILDER] Ollama OK: ${data.response.length} chars (${modelName})`);
+          return data.response;
+        }
+      }
+    } catch (ollamaErr) {
+      logger.warn(`[AUTO-BUILDER] Ollama unavailable (${ollamaErr.message}) — falling back to council`);
+    }
+
+    // Cloud fallback: prefer DeepSeek for code, ChatGPT otherwise
+    const councilMember = task === 'code_generation' ? 'deepseek' : 'chatgpt';
+    logger.info(`[AUTO-BUILDER] Using council fallback: ${councilMember}`);
+    return callCouncilMember(councilMember, prompt, { maxTokens: 4000, useTwoTier: false });
+  },
+});
+
 registerWebsiteAuditRoutes(app, {
   requireKey,
   callCouncilWithFailover,
 });
 
-// Self-programming endpoint: handled by SelfProgrammingModule via moduleRouter
+registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requireKey);
 
-// Dev commit endpoint
-app.post("/api/v1/dev/commit", requireKey, async (req, res) => {
+// ==================== IDEA QUEUE ====================
+app.use('/api/v1/ideas', createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));
+logger.info('✅ [IDEA-QUEUE] Routes mounted at /api/v1/ideas');
+
+// ==================== RAILWAY CONTROL ====================
+// GET  /api/v1/railway/env          — list all env vars on Railway
+// POST /api/v1/railway/env          — set one: { name, value }
+// POST /api/v1/railway/env/bulk     — set many: { vars: { KEY: 'value' } }
+// POST /api/v1/railway/deploy       — trigger immediate redeploy
+app.get('/api/v1/railway/env', requireKey, async (req, res) => {
   try {
-    const { path: filePath, content, message } = req.body;
-
-    if (!filePath || !content) {
-      return res.status(400).json({ error: "Path and content required" });
-    }
-
-    await commitToGitHub(filePath, content, message || `Update ${filePath}`);
-
-    res.json({
-      ok: true,
-      committed: filePath,
-      message: message || `Update ${filePath}`,
-    });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
+    const vars = await getRailwayEnvVars();
+    // Mask values for security — just show key names + first 4 chars
+    const masked = Object.fromEntries(
+      Object.entries(vars).map(([k, v]) => [k, `${String(v).slice(0, 4)}****`])
+    );
+    res.json({ ok: true, vars: masked, count: Object.keys(masked).length });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 
-// Full file replacement
-app.post("/api/v1/system/replace-file", requireKey, async (req, res) => {
+app.post('/api/v1/railway/env', requireKey, async (req, res) => {
   try {
-    const { filePath, fullContent, backup = true } = req.body;
-
-    if (!filePath || !fullContent) {
-      return res
-        .status(400)
-        .json({ error: "filePath and fullContent required" });
+    const { name, value } = req.body;
+    if (!name || value === undefined) {
+      return res.status(400).json({ ok: false, error: 'name and value are required' });
     }
+    await setRailwayEnvVar(name, value);
+    res.json({ ok: true, set: name });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
 
-    const allowedFiles = [
-      ".js",
-      "public/overlay/command-center.js",
-      "public/overlay/command-center.html",
-      "package.json",
-    ];
-
-    if (!allowedFiles.includes(filePath)) {
-      return res
-        .status(403)
-        .json({ error: "File not allowed for replacement" });
+app.post('/api/v1/railway/env/bulk', requireKey, async (req, res) => {
+  try {
+    const { vars } = req.body;
+    if (!vars || typeof vars !== 'object') {
+      return res.status(400).json({ ok: false, error: 'vars must be an object { KEY: value }' });
     }
+    const results = await setRailwayEnvVars(vars);
+    res.json({ ok: true, results });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
 
-    const fullPath = path.join(__dirname, filePath);
-
-    if (backup && fs.existsSync(fullPath)) {
-      const backupPath = `${fullPath}.backup.${Date.now()}`;
-      await fsPromises.copyFile(fullPath, backupPath);
-      logger.info(`📦 Backed up to: ${backupPath}`);
-    }
-
-    await fsPromises.writeFile(fullPath, fullContent, "utf-8");
-
-    logger.info(`✅ Completely replaced: ${filePath}`);
-
-    res.json({
-      ok: true,
-      message: `File ${filePath} completely replaced`,
-      backup: backup ? `Created backup with timestamp` : "No backup",
-      size: fullContent.length,
-    });
-  } catch (error) {
-    logger.error("File replacement error:", { error: error.message });
-    res.status(500).json({ ok: false, error: error.message });
+app.post('/api/v1/railway/deploy', requireKey, async (req, res) => {
+  try {
+    await triggerRailwayRedeploy();
+    res.json({ ok: true, message: 'Redeploy triggered on Railway' });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
   }
 });
 
@@ -1577,6 +1248,14 @@ app.use(errorBoundary(logger));
 
 // ==================== STARTUP ====================
 async function start() {
+  const startupTrace = telemetry.startTrace("system.start");
+  let startupFinished = false;
+  const finalizeStartup = (status, detail = {}) => {
+    if (!startupFinished) {
+      startupFinished = true;
+      startupTrace.end(status, detail);
+    }
+  };
   const DEFAULT_PORT = 64266;
   const MAX_PORT_ATTEMPTS = 20;
   const basePort = Number.isFinite(Number(PORT)) ? Number(PORT) : DEFAULT_PORT;
@@ -1679,6 +1358,41 @@ async function start() {
     validateEnv(logger);
 
     await startListening();
+
+    // ── Auto-builder persistence + startup recovery ────────────────────────
+    // Wire the DB pool so addProductToQueue() persists products across restarts
+    autoBuilder.initPersistence(pool);
+
+    // Recover any products that were in-flight before the last restart
+    try {
+      const recovered = await autoBuilder.loadPersistedQueue(pool);
+      if (recovered > 0) {
+        logger.info(`[AUTO-BUILDER] Startup recovery: ${recovered} product(s) reloaded from DB`);
+      }
+    } catch (recoverErr) {
+      logger.warn('[AUTO-BUILDER] Startup recovery failed (non-critical):', { error: recoverErr.message });
+    }
+
+    // Reset ideas stuck in 'building' state from a previous crash/restart.
+    // If a build was triggered > 5 min ago and is still 'building', nothing is working on it.
+    try {
+      const stuckReset = await pool.query(
+        `UPDATE ideas
+         SET approval_status = 'approved', build_triggered_at = NULL
+         WHERE approval_status = 'building'
+           AND build_triggered_at < NOW() - INTERVAL '5 minutes'
+         RETURNING id, title`
+      );
+      if (stuckReset.rows.length > 0) {
+        logger.warn(`[STARTUP] Reset ${stuckReset.rows.length} stuck 'building' idea(s) → 'approved'`, {
+          ids: stuckReset.rows.map(r => r.id),
+        });
+      }
+    } catch (stuckErr) {
+      logger.warn('[STARTUP] Could not reset stuck ideas (non-critical):', { error: stuckErr.message });
+    }
+    // ──────────────────────────────────────────────────────────────────────
+
     autoBuilder.startBuildScheduler({
       initialDelay: 15000,
       interval: 60000,
@@ -1696,7 +1410,7 @@ async function start() {
 
     // Load ROI (non-critical)
     try {
-      await loadROIFromDatabase();
+      await loadROIFromDatabase(pool, logger, roiTracker);
     } catch (roiError) {
       logger.warn("⚠️ ROI load error (non-critical):", { error: roiError.message });
     }
@@ -2069,10 +1783,11 @@ async function start() {
     await createSystemSnapshot("System startup");
 
     await startListening();
+    finalizeStartup("ok");
     }
   } catch (error) {
+    finalizeStartup("error", { error: error.message });
     logger.error("❌ Startup error:", { error: error.message, stack: error.stack });
-
     // Try to start HTTP server anyway for health checks
     if (selectedPort !== null || server.listening) {
       logger.warn("⚠️ Startup error after server already started - continuing in degraded mode");
@@ -2102,6 +1817,8 @@ process.on("SIGINT", async () => {
   for (const ws of activeConnections.values()) ws.close();
   await shutdownQueues();
   await pool.end();
+  lifecycleSubscriptions.forEach((unsubscribe) => unsubscribe?.());
+  lifecycleSubscriptions.length = 0;
   process.exit(0);
 });
 
