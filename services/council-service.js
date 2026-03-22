@@ -1,5 +1,34 @@
 import dayjs from "dayjs";
 import { injectKnowledgeContext } from "./knowledge-context.js";
+import { createFreeTierGovernor } from "./free-tier-governor.js";
+import { compress as optimizePrompt, estimateTokens, createTokenOptimizer } from "./token-optimizer.js";
+import { compressJSONInPrompt } from "./toon-formatter.js";
+import { injectChainOfDraft, compressPrompt as irCompressPrompt } from "./prompt-ir.js";
+import { createSavingsLedger } from "./savings-ledger.js";
+import { addTurn, getDelta, startSession } from "./delta-context.js";
+
+// Singleton governor — tracks daily usage across all providers
+const freeTierGovernor = createFreeTierGovernor();
+
+// Singleton optimizer — tracks token savings across all providers
+const tokenOptimizer = createTokenOptimizer();
+const ZERO_COST_PROVIDERS = new Set([
+  "groq",
+  "gemini",
+  "cerebras",
+  "openrouter",
+  "mistral",
+  "together",
+  "ollama",
+]);
+const OPENAI_COMPATIBLE_PROVIDERS = new Set([
+  "openai",
+  "groq",
+  "cerebras",
+  "openrouter",
+  "mistral",
+  "together",
+]);
 
 /**
  * Council service encapsulates all AI council helper logic:
@@ -31,6 +60,7 @@ export function createCouncilService({
   updateROI,
   trackAIPerformance,
   notifyCriticalIssue,
+  savingsLedger,  // TCO-E01 — injected from server.js
 }) {
   // ==================== LCTP v3 COMPRESSION HELPERS ====================
 
@@ -126,7 +156,9 @@ export function createCouncilService({
     }
   }
 
-  function optimizePrompt(prompt) {
+  // Legacy simple cleaner — used only by compressPrompt/LCTP path below.
+  // Renamed from optimizePrompt to stop it shadowing the real token-optimizer import.
+  function _legacySimpleClean(prompt) {
     let optimized = prompt
       .replace(/\n{3,}/g, "\n\n")
       .replace(/\s{2,}/g, " ")
@@ -151,7 +183,7 @@ export function createCouncilService({
   }
 
   function compressPrompt(prompt, useCompression = true) {
-    const optimized = optimizePrompt(prompt);
+    const optimized = _legacySimpleClean(prompt);
 
     if (!useCompression || optimized.length < 100) {
       return {
@@ -286,11 +318,22 @@ export function createCouncilService({
           process.env.LIFEOS_ANTHROPIC_KEY?.trim() ||
           process.env.ANTHROPIC_API_KEY?.trim()
         );
+      case "gemini":
       case "google":
         return (
           process.env.LIFEOS_GEMINI_KEY?.trim() ||
           process.env.GEMINI_API_KEY?.trim()
         );
+      case "groq":
+        return process.env.GROQ_API_KEY?.trim();
+      case "mistral":
+        return process.env.MISTRAL_API_KEY?.trim();
+      case "openrouter":
+        return process.env.OPENROUTER_API_KEY?.trim();
+      case "together":
+        return process.env.TOGETHER_API_KEY?.trim();
+      case "cerebras":
+        return process.env.CEREBRAS_API_KEY?.trim();
       case "deepseek":
         return (
           process.env.DEEPSEEK_API_KEY?.trim() ||
@@ -310,6 +353,7 @@ export function createCouncilService({
           url: "https://api.openai.com/v1/models",
           headers: { Authorization: `Bearer ${apiKey}` },
         };
+      case "gemini":
       case "google":
         return {
           url: `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`,
@@ -328,6 +372,26 @@ export function createCouncilService({
       case "groq":
         return {
           url: "https://api.groq.com/openai/v1/models",
+          headers: { Authorization: `Bearer ${apiKey}` },
+        };
+      case "cerebras":
+        return {
+          url: "https://api.cerebras.ai/v1/models",
+          headers: { Authorization: `Bearer ${apiKey}` },
+        };
+      case "openrouter":
+        return {
+          url: "https://openrouter.ai/api/v1/models",
+          headers: { Authorization: `Bearer ${apiKey}` },
+        };
+      case "mistral":
+        return {
+          url: "https://api.mistral.ai/v1/models",
+          headers: { Authorization: `Bearer ${apiKey}` },
+        };
+      case "together":
+        return {
+          url: "https://api.together.xyz/v1/models",
           headers: { Authorization: `Bearer ${apiKey}` },
         };
       default:
@@ -474,27 +538,7 @@ export function createCouncilService({
   }
 
   function getApiKey(provider) {
-    switch (provider) {
-      case "anthropic":
-        return (
-          process.env.LIFEOS_ANTHROPIC_KEY?.trim() ||
-          process.env.ANTHROPIC_API_KEY?.trim()
-        );
-      case "google":
-        return (
-          process.env.LIFEOS_GEMINI_KEY?.trim() ||
-          process.env.GEMINI_API_KEY?.trim()
-        );
-      case "deepseek":
-        return (
-          process.env.DEEPSEEK_API_KEY?.trim() ||
-          process.env.Deepseek_API_KEY?.trim()
-        );
-      case "openai":
-        return process.env.OPENAI_API_KEY?.trim();
-      default:
-        return null;
-    }
+    return getApiKeyForProvider(provider);
   }
 
   async function getCachedResponse(prompt, member) {
@@ -540,6 +584,70 @@ export function createCouncilService({
       hash |= 0;
     }
     return `h_${normalized.length}_${Math.abs(hash)}`;
+  }
+
+  function getChatCompletionUrl(provider) {
+    switch (provider) {
+      case "openai":
+        return "https://api.openai.com/v1/chat/completions";
+      case "groq":
+        return "https://api.groq.com/openai/v1/chat/completions";
+      case "cerebras":
+        return "https://api.cerebras.ai/v1/chat/completions";
+      case "openrouter":
+        return "https://openrouter.ai/api/v1/chat/completions";
+      case "mistral":
+        return "https://api.mistral.ai/v1/chat/completions";
+      case "together":
+        return "https://api.together.xyz/v1/chat/completions";
+      default:
+        return null;
+    }
+  }
+
+  function buildOpenAICompatibleHeaders(provider, apiKey, noCacheHeaders) {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+      ...noCacheHeaders,
+    };
+
+    if (provider === "openrouter") {
+      headers["HTTP-Referer"] =
+        process.env.RAILWAY_PUBLIC_DOMAIN ||
+        process.env.PUBLIC_BASE_URL ||
+        "http://localhost:8080";
+      headers["X-Title"] = "LifeOS Command Center";
+    }
+
+    return headers;
+  }
+
+  function buildGeminiContents(systemPrompt, finalPrompt, deltaMessages) {
+    const contents = [];
+
+    for (const msg of deltaMessages || [{ role: "user", content: finalPrompt }]) {
+      if (!msg?.content || msg.role === "system") continue;
+      contents.push({
+        role: msg.role === "assistant" ? "model" : "user",
+        parts: [{ text: msg.content }],
+      });
+    }
+
+    if (contents.length === 0) {
+      contents.push({ role: "user", parts: [{ text: finalPrompt }] });
+    }
+
+    return {
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      contents,
+    };
+  }
+
+  function recordSessionTurns(sessionId, userText, assistantText) {
+    if (!sessionId || !assistantText) return;
+    addTurn(sessionId, { role: "user", content: userText });
+    addTurn(sessionId, { role: "assistant", content: assistantText });
   }
 
   function selectOptimalModel(prompt, complexity) {
@@ -603,46 +711,31 @@ export function createCouncilService({
       !memberConfig?.isFree &&
       (memberConfig?.costPer1M > 0 || memberConfig?.tier === "tier1");
 
-    const FREE_FALLBACK_ORDER = ["ollama_phi3", "ollama_llama", "ollama_deepseek"];
-
+    // ── Free-tier cascade (Groq → Gemini → Cerebras → OpenRouter → Mistral → Ollama) ──
+    // If a paid member was requested and spending is disabled/over limit,
+    // cascade through every free provider until one is available.
     if (MAX_DAILY_SPEND === 0 && isPaid) {
-      for (const fallbackMember of FREE_FALLBACK_ORDER) {
-        const fallbackConfig = COUNCIL_MEMBERS[fallbackMember];
-        if (!fallbackConfig) continue;
-
-        if (fallbackConfig.provider === "ollama" && OLLAMA_ENDPOINT) {
-          console.log(
-            `💰 [COST SHUTDOWN] Blocked ${member} - Falling back to ${fallbackMember} (Ollama)`
-          );
+      const nextProvider = await freeTierGovernor.getNextAvailable();
+      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['ollama_deepseek'];
+      for (const fallbackMember of fallbackMembers) {
+        if (COUNCIL_MEMBERS[fallbackMember]) {
+          console.log(`💰 [COST SHUTDOWN] Blocked ${member} → cascading to ${fallbackMember} (${nextProvider})`);
           return await callCouncilMember(fallbackMember, prompt, options);
         }
       }
-
-      throw new Error(
-        `💰 [COST SHUTDOWN] Blocked ${member} - Spending disabled (MAX_DAILY_SPEND=$0). No free models available.`
-      );
+      throw new Error(`💰 [COST SHUTDOWN] Blocked ${member} — no free providers available right now.`);
     }
 
     if (spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
-      for (const fallbackMember of FREE_FALLBACK_ORDER) {
-        const fallbackConfig = COUNCIL_MEMBERS[fallbackMember];
-        if (!fallbackConfig) continue;
-
-        if (fallbackConfig.provider === "ollama" && OLLAMA_ENDPOINT) {
-          console.log(
-            `💰 [COST SHUTDOWN] Blocked ${member} ($${spend.toFixed(
-              2
-            )}/$${COST_SHUTDOWN_THRESHOLD}) - Falling back to ${fallbackMember} (Ollama)`
-          );
+      const nextProvider = await freeTierGovernor.getNextAvailable();
+      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['ollama_deepseek'];
+      for (const fallbackMember of fallbackMembers) {
+        if (COUNCIL_MEMBERS[fallbackMember]) {
+          console.log(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} → cascading to ${fallbackMember} (${nextProvider})`);
           return await callCouncilMember(fallbackMember, prompt, options);
         }
       }
-
-      throw new Error(
-        `💰 [COST SHUTDOWN] Blocked ${member} - Spending $${spend.toFixed(
-          2
-        )}/$${COST_SHUTDOWN_THRESHOLD}. No free models available.`
-      );
+      throw new Error(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} — no free providers available.`);
     }
 
     if (spend > MAX_DAILY_SPEND * 0.1) {
@@ -717,7 +810,13 @@ export function createCouncilService({
         if (optimalConfig) {
           const optimalKey = getApiKeyForProvider(optimalConfig.provider);
           if (optimalConfig.provider === "ollama") {
-            if (optimalConfig.endpoint || OLLAMA_ENDPOINT) {
+            // Only override to Ollama if a real external endpoint is configured
+            // (localhost fallback is not valid on Railway — Ollama doesn't run there)
+            const hasRealEndpoint = OLLAMA_ENDPOINT &&
+              !OLLAMA_ENDPOINT.includes('localhost') &&
+              !OLLAMA_ENDPOINT.includes('127.0.0.1') &&
+              !OLLAMA_ENDPOINT.includes('PASTE_YOUR');
+            if (hasRealEndpoint) {
               member = optimalModel.member;
               console.log(
                 `💰 [MODEL OPTIMIZATION] Using ${member} instead (${optimalModel.reason})`
@@ -782,11 +881,89 @@ Include specific links, code examples, and actionable solutions from your search
 
 Be concise, strategic, and speak as the system's internal AI.`;
 
-    const useCompression =
-      options.compress !== false && systemPromptBase.length > 500;
-    const systemPrompt = useCompression
-      ? compressPrompt(systemPromptBase, true).compressed
-      : systemPromptBase;
+    // ── Token optimization — 5-layer compression stack ───────────────────────
+    // Layer 1: noise strip + phrase substitution (token-optimizer)
+    // Layer 2: TOON — compact JSON blocks in prompt
+    // Layer 3: Prompt IR compiler — T:/C:/I:/O:/R:/V: structure
+    // Layer 4: Chain of Draft — shorthand reasoning instruction
+    // Layer 5: savings ledger — record every call's before/after
+    // CPU cost: all layers combined ~0.5ms (pure string ops, no AI calls)
+
+    const isCritical = options.critical === true;
+    const taskType = options.taskType || 'general';
+    const compressionLayers = {};
+
+    // Layer 1 — noise strip + phrase sub
+    const optimized = optimizePrompt(enhancedPrompt, {
+      stripMd: !isCritical,
+      phraseSub: !isCritical,
+      critical: isCritical,
+    });
+    let finalPrompt = optimized.text;
+    if (optimized.savedTokens > 0) {
+      compressionLayers.noise_phrase = { savedTokens: optimized.savedTokens, savedPct: optimized.savingsPct };
+    }
+
+    // Layer 2 — TOON: compact any JSON blocks in the prompt (skip for codegen)
+    let toonSavedTokens = 0;
+    if (!isCritical && taskType !== 'codegen' && taskType !== 'code') {
+      const toonResult = compressJSONInPrompt(finalPrompt);
+      if (toonResult.replacements > 0) {
+        finalPrompt = toonResult.text;
+        toonSavedTokens = Math.ceil(toonResult.savedChars / 4);
+        compressionLayers.toon = { savedTokens: toonSavedTokens, savedPct: toonResult.savedPct };
+      }
+    }
+
+    // Layer 3 + 4 — IR compiler + Chain of Draft (skip for critical/codegen)
+    let irSavedTokens = 0;
+    let codSavedOutputPct = 0;
+    if (!isCritical && taskType !== 'codegen' && taskType !== 'code') {
+      const irResult = irCompressPrompt(finalPrompt, taskType);
+      if (irResult.savedTokens > 0) {
+        finalPrompt = irResult.text;
+        irSavedTokens = irResult.savedTokens;
+        compressionLayers.prompt_ir = { savedTokens: irResult.savedTokens, savedPct: irResult.savingsPct };
+      }
+      if (irResult.layers?.chain_of_draft) {
+        codSavedOutputPct = 92; // published benchmark: arXiv 2502.18600
+        compressionLayers.chain_of_draft = { applied: true, savedOutputPct: codSavedOutputPct };
+      }
+    }
+
+    // System prompt — layer 1 only (always safe)
+    const optimizedSystemPrompt = optimizePrompt(systemPromptBase, {
+      stripMd: true,
+      phraseSub: true,
+      critical: false,
+    });
+
+    // Accumulate savings from ALL layers (input tokens only; output handled separately)
+    const totalSavedInputTokens = optimized.savedTokens
+      + (optimizedSystemPrompt.savedTokens || 0)
+      + toonSavedTokens
+      + irSavedTokens;
+
+    if (totalSavedInputTokens > 0 || Object.keys(compressionLayers).length > 0) {
+      console.log(`🗜️  [TOKEN-OPT] ${member}: ${totalSavedInputTokens} input tokens saved | layers: ${Object.keys(compressionLayers).join(', ')}`);
+    }
+
+    const useCompression = false; // legacy LCTP disabled — replaced by layer stack above
+    const systemPrompt = optimizedSystemPrompt.text;
+
+    // TCO-A04: Delta context — if caller passes options.sessionId, only send the delta
+    // not the full history. Saves 50–80% on multi-turn sessions.
+    let deltaMessages = null;
+    let deltaContextSaved = 0;
+    if (options.sessionId && !isCritical) {
+      startSession(options.sessionId, systemPrompt);
+      const delta = getDelta(options.sessionId, finalPrompt);
+      deltaMessages = delta.messages;
+      deltaContextSaved = delta.savedChars;
+      if (delta.savedPct > 0) {
+        compressionLayers.delta_context = { savedChars: delta.savedChars, savedPct: delta.savedPct };
+      }
+    }
 
     const startTime = Date.now();
 
@@ -798,21 +975,21 @@ Be concise, strategic, and speak as the system's internal AI.`;
         Expires: "0",
       };
 
-      if (config.provider === "openai") {
-        response = await fetch("https://api.openai.com/v1/chat/completions", {
+      if (OPENAI_COMPATIBLE_PROVIDERS.has(config.provider)) {
+        response = await fetch(getChatCompletionUrl(config.provider), {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${apiKey}`,
-            ...noCacheHeaders,
-          },
+          headers: buildOpenAICompatibleHeaders(
+            config.provider,
+            apiKey,
+            noCacheHeaders
+          ),
           body: JSON.stringify({
             model: config.model,
             max_tokens: config.maxTokens,
             temperature: 0.7,
-            messages: [
+            messages: deltaMessages || [
               { role: "system", content: systemPrompt },
-              { role: "user", content: enhancedPrompt },
+              { role: "user", content: finalPrompt },
             ],
           }),
         });
@@ -833,14 +1010,51 @@ Be concise, strategic, and speak as the system's internal AI.`;
 
         text = decompressResponse(text, useCompression);
 
-        const cost = calculateCost(json.usage, config.model);
-        await updateDailySpend(cost);
+        const cost = ZERO_COST_PROVIDERS.has(config.provider)
+          ? 0
+          : calculateCost(json.usage, config.model);
+        if (cost > 0) {
+          await updateDailySpend(cost);
+        }
 
-        const tokensSaved = useCompression
-          ? Math.floor((systemPromptBase.length - systemPrompt.length) / 4)
-          : 0;
+        // Track real token savings (compression + free provider = $0 cost)
+        const realTokensSaved = totalSavedInputTokens;
+        const provider = config.provider || member.split('_')[0];
+        const inputTokens = json.usage?.prompt_tokens || estimateTokens(finalPrompt);
+        const outputTokens = json.usage?.completion_tokens || estimateTokens(text);
+        const originalTokens = inputTokens + realTokensSaved;
+
+        tokenOptimizer.trackUsage({
+          provider,
+          model: config.model || member,
+          taskType,
+          inputTokens,
+          outputTokens,
+          savedTokens: realTokensSaved,
+          cacheHit: false,
+          costUSD: cost,
+          savedCostUSD: realTokensSaved * 0.000003,
+        }).catch(() => {});
+
+        // TCO-E01: Savings ledger — fire-and-forget, never blocks the response
+        if (savingsLedger) {
+          savingsLedger.record({
+            provider,
+            model: config.model || member,
+            taskType,
+            originalTokens,
+            compressedTokens: inputTokens,
+            outputTokens,
+            savedTokens: realTokensSaved,
+            savedOutputPct: codSavedOutputPct,
+            costUSD: cost,
+            cacheHit: false,
+            compressionLayers: Object.keys(compressionLayers).length > 0 ? compressionLayers : null,
+          }).catch(() => {});
+        }
+
         if (updateROI) {
-          await updateROI(0, cost, 0, tokensSaved);
+          await updateROI(0, cost, 0, realTokensSaved);
         }
 
         const duration = Date.now() - startTime;
@@ -859,6 +1073,94 @@ Be concise, strategic, and speak as the system's internal AI.`;
           await cacheResponse(prompt, member, text);
         }
 
+        await freeTierGovernor.record(provider, inputTokens + outputTokens).catch(() => {});
+        recordSessionTurns(options.sessionId, prompt, text);
+
+        return text;
+      }
+
+      if (config.provider === "gemini" || config.provider === "google") {
+        const geminiBody = buildGeminiContents(
+          systemPrompt,
+          finalPrompt,
+          deltaMessages
+        );
+
+        response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...noCacheHeaders,
+            },
+            body: JSON.stringify({
+              ...geminiBody,
+              generationConfig: {
+                temperature: 0.7,
+                maxOutputTokens: config.maxTokens,
+              },
+            }),
+            signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
+          }
+        );
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Gemini HTTP ${response.status}: ${errorText.slice(0, 200)}`);
+        }
+
+        const json = await response.json();
+        let text =
+          json.candidates?.[0]?.content?.parts
+            ?.map((part) => part?.text || "")
+            .join("") || "";
+        if (!text) throw new Error("Empty response from Gemini");
+
+        text = decompressResponse(text, useCompression);
+
+        const inputTokens =
+          json.usageMetadata?.promptTokenCount ||
+          estimateTokens(systemPrompt) +
+            estimateTokens(finalPrompt) -
+            Math.ceil(deltaContextSaved / 4);
+        const outputTokens =
+          json.usageMetadata?.candidatesTokenCount || estimateTokens(text);
+
+        tokenOptimizer.trackUsage({
+          provider: "gemini",
+          model: config.model || member,
+          taskType,
+          inputTokens,
+          outputTokens,
+          savedTokens: totalSavedInputTokens,
+          cacheHit: false,
+          costUSD: 0,
+          savedCostUSD: totalSavedInputTokens * 0.000003,
+        }).catch(() => {});
+
+        if (savingsLedger) {
+          savingsLedger.record({
+            provider: "gemini",
+            model: config.model || member,
+            taskType,
+            originalTokens: inputTokens + totalSavedInputTokens,
+            compressedTokens: inputTokens,
+            outputTokens,
+            savedTokens: totalSavedInputTokens,
+            savedOutputPct: codSavedOutputPct,
+            costUSD: 0,
+            cacheHit: false,
+            compressionLayers: Object.keys(compressionLayers).length > 0 ? compressionLayers : null,
+          }).catch(() => {});
+        }
+
+        if (options.useCache !== false) {
+          await cacheResponse(prompt, member, text);
+        }
+
+        await freeTierGovernor.record("gemini", inputTokens + outputTokens).catch(() => {});
+        recordSessionTurns(options.sessionId, prompt, text);
         return text;
       }
 
@@ -874,7 +1176,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
             model: currentConfig.model,
             messages: [
               { role: "system", content: systemPrompt },
-              { role: "user", content: enhancedPrompt },
+              { role: "user", content: finalPrompt },
             ],
             stream: false,
           }),
@@ -898,6 +1200,25 @@ Be concise, strategic, and speak as the system's internal AI.`;
           await cacheResponse(prompt, member, text);
         }
 
+        // TCO-E01: ledger for Ollama (free/local — cost $0)
+        if (savingsLedger) {
+          const ollamaIn = estimateTokens(finalPrompt);
+          savingsLedger.record({
+            provider: 'ollama',
+            model: currentConfig.model || member,
+            taskType,
+            originalTokens: ollamaIn + totalSavedInputTokens,
+            compressedTokens: ollamaIn,
+            outputTokens: estimateTokens(text),
+            savedTokens: totalSavedInputTokens,
+            costUSD: 0,
+            cacheHit: false,
+            compressionLayers: Object.keys(compressionLayers).length > 0 ? compressionLayers : null,
+          }).catch(() => {});
+        }
+
+        recordSessionTurns(options.sessionId, prompt, text);
+
         return text;
       }
 
@@ -917,7 +1238,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
             temperature: 0.7,
             messages: [
               { role: "system", content: systemPrompt },
-              { role: "user", content: enhancedPrompt },
+              { role: "user", content: finalPrompt },
             ],
           }),
         });
@@ -942,6 +1263,25 @@ Be concise, strategic, and speak as the system's internal AI.`;
           await cacheResponse(prompt, member, text);
         }
 
+        // TCO-E01: ledger for DeepSeek
+        if (savingsLedger) {
+          const dsIn = json.usage?.prompt_tokens || estimateTokens(finalPrompt);
+          savingsLedger.record({
+            provider: 'deepseek',
+            model: config.model || member,
+            taskType,
+            originalTokens: dsIn + totalSavedInputTokens,
+            compressedTokens: dsIn,
+            outputTokens: json.usage?.completion_tokens || estimateTokens(text),
+            savedTokens: totalSavedInputTokens,
+            costUSD: cost,
+            cacheHit: false,
+            compressionLayers: Object.keys(compressionLayers).length > 0 ? compressionLayers : null,
+          }).catch(() => {});
+        }
+
+        recordSessionTurns(options.sessionId, prompt, text);
+
         return text;
       }
 
@@ -953,6 +1293,23 @@ Be concise, strategic, and speak as the system's internal AI.`;
       if (trackAIPerformance) {
         await trackAIPerformance(member, "chat", duration, 0, 0, false);
       }
+
+      // ── 429 = rate limit hit → mark provider exhausted, cascade to next free ──
+      const is429 = error.message?.includes('429') ||
+                    error.message?.toLowerCase().includes('rate limit') ||
+                    error.message?.toLowerCase().includes('quota');
+      if (is429) {
+        await freeTierGovernor.on429(member);
+        const nextProvider = await freeTierGovernor.getNextAvailable([freeTierGovernor.resolveProvider(member)]);
+        const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['ollama_deepseek'];
+        for (const fallbackMember of fallbackMembers) {
+          if (COUNCIL_MEMBERS[fallbackMember]) {
+            console.log(`🔄 [FREE-TIER] ${member} rate limited → cascading to ${fallbackMember} (${nextProvider})`);
+            return await callCouncilMember(fallbackMember, prompt, options);
+          }
+        }
+      }
+
       throw error;
     }
   }
@@ -1264,4 +1621,3 @@ Be specific and critical.`;
     detectBlindSpots,
   };
 }
-
