@@ -650,6 +650,10 @@ export function createCouncilService({
     addTurn(sessionId, { role: "assistant", content: assistantText });
   }
 
+  // selectOptimalModel is synchronous so we track exhausted providers in a
+  // lightweight in-memory set that the 429 handler keeps updated.
+  const _exhaustedProviders = new Set();
+
   function selectOptimalModel(prompt, complexity) {
     const length = prompt.length;
     const isComplex =
@@ -663,42 +667,45 @@ export function createCouncilService({
       !OLLAMA_ENDPOINT.includes('127.0.0.1') &&
       !OLLAMA_ENDPOINT.includes('PASTE_YOUR');
 
-    // Only consider tier0 models. Exclude local-only models when Ollama isn't available
-    // (e.g. Railway deployment with no tunnel) — they have no API key and will always fail.
+    // Only consider tier0 models that are actually reachable right now:
+    //  - exclude local-only (Ollama) models when no real tunnel is configured
+    //  - exclude providers already rate-limited this session (_exhaustedProviders)
     const candidates = Object.entries(COUNCIL_MEMBERS).filter(
       ([, cfg]) => {
         if (!cfg || cfg.tier !== "tier0") return false;
         if (cfg.isLocal && !hasRealOllama) return false;
+        if (_exhaustedProviders.has(cfg.provider)) return false;
         return true;
       }
     );
 
+    if (candidates.length === 0) return null; // all free-tier exhausted — skip optimization
+
     if (isComplex) {
       const reasoningModel = candidates.find(
-        ([, cfg]) =>
-          cfg.specialties && cfg.specialties.includes("reasoning")
+        ([, cfg]) => cfg.specialties && cfg.specialties.includes("reasoning")
       );
       if (reasoningModel) {
-        return {
-          member: reasoningModel[0],
-          reason: "complex reasoning task",
-        };
+        return { member: reasoningModel[0], reason: "complex reasoning task" };
       }
     }
 
     const codeModel = candidates.find(
-      ([, cfg]) =>
-        cfg.specialties && cfg.specialties.includes("code")
+      ([, cfg]) => cfg.specialties && cfg.specialties.includes("code")
     );
     if (codeModel) {
       return { member: codeModel[0], reason: "code-focused task" };
     }
 
-    if (candidates.length > 0) {
-      return { member: candidates[0][0], reason: "default tier0 model" };
-    }
+    return { member: candidates[0][0], reason: "default tier0 model" };
+  }
 
-    return null;
+  // Called by the 429 handler so selectOptimalModel stops picking exhausted providers
+  function _markProviderExhausted(providerKey) {
+    _exhaustedProviders.add(providerKey);
+    // Auto-clear at midnight UTC so tomorrow's limit is fresh
+    const msUntilMidnight = new Date().setUTCHours(24, 0, 0, 0) - Date.now();
+    setTimeout(() => _exhaustedProviders.delete(providerKey), msUntilMidnight);
   }
 
   async function callCouncilMember(member, prompt, options = {}) {
@@ -727,7 +734,7 @@ export function createCouncilService({
     // cascade through every free provider until one is available.
     if (MAX_DAILY_SPEND === 0 && isPaid) {
       const nextProvider = await freeTierGovernor.getNextAvailable();
-      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['ollama_deepseek'];
+      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
       for (const fallbackMember of fallbackMembers) {
         if (COUNCIL_MEMBERS[fallbackMember]) {
           console.log(`💰 [COST SHUTDOWN] Blocked ${member} → cascading to ${fallbackMember} (${nextProvider})`);
@@ -739,7 +746,7 @@ export function createCouncilService({
 
     if (spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
       const nextProvider = await freeTierGovernor.getNextAvailable();
-      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['ollama_deepseek'];
+      const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
       for (const fallbackMember of fallbackMembers) {
         if (COUNCIL_MEMBERS[fallbackMember]) {
           console.log(`💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} → cascading to ${fallbackMember} (${nextProvider})`);
@@ -1311,8 +1318,10 @@ Be concise, strategic, and speak as the system's internal AI.`;
                     error.message?.toLowerCase().includes('quota');
       if (is429) {
         await freeTierGovernor.on429(member);
-        const nextProvider = await freeTierGovernor.getNextAvailable([freeTierGovernor.resolveProvider(member)]);
-        const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['ollama_deepseek'];
+        const exhaustedProvider = freeTierGovernor.resolveProvider(member);
+        _markProviderExhausted(exhaustedProvider); // keep selectOptimalModel from re-picking it
+        const nextProvider = await freeTierGovernor.getNextAvailable([exhaustedProvider]);
+        const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
         for (const fallbackMember of fallbackMembers) {
           if (COUNCIL_MEMBERS[fallbackMember]) {
             console.log(`🔄 [FREE-TIER] ${member} rate limited → cascading to ${fallbackMember} (${nextProvider})`);
@@ -1327,7 +1336,7 @@ Be concise, strategic, and speak as the system's internal AI.`;
 
   async function callCouncilWithFailover(
     prompt,
-    preferredMember = "ollama_deepseek",
+    preferredMember = "cerebras_llama",
     requireOversight = false,
     options = {}
   ) {

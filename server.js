@@ -547,7 +547,7 @@ const COUNCIL_MEMBERS = {
   },
   gemini_flash: {
     name: "Gemini Flash (Free)",
-    model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+    model: process.env.GEMINI_MODEL || "gemini-1.5-flash",
     provider: "gemini",
     role: "Fast Cloud Reasoning",
     focus: "summaries, planning, lightweight analysis, free-tier responses",
