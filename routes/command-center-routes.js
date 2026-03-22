@@ -384,7 +384,7 @@ app.post("/internal/autopilot/build-now", requireKey, async (req, res) => {
     }
     
     // Trigger build
-    const result = await autoBuilder.buildNextOpportunity({ force });
+    const result = await autoBuilder.runBuildCycle({ force });
     
     res.json({
       ok: true,
