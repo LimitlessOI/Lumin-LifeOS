@@ -30,6 +30,7 @@ export function createCommandCenterRoutes(app, ctx) {
     makePhoneCall,
     sendSMS,
   } = ctx;
+  // autonomyOrchestrator accessed as ctx.autonomyOrchestrator (lazy — created after routes register)
 
 // ==================== COMMAND CENTER ENDPOINTS ====================
 app.get("/api/v1/tasks/queue", requireKey, async (req, res) => {
@@ -606,6 +607,115 @@ app.post("/api/v1/phone/call-process", async (req, res) => {
     res.status(500).send(`<Response><Say>Error: ${error.message}</Say></Response>`);
   }
 });
+
+// ── Project Backlog ───────────────────────────────────────────────────────────
+
+// List all projects in priority order
+app.get("/api/v1/projects/backlog", requireKey, async (req, res) => {
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, name, description, amendment, priority, status, notes,
+              last_triggered_at, completed_at, created_at
+       FROM project_backlog
+       ORDER BY priority ASC`
+    );
+    res.json({ ok: true, projects: rows });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// Add a new project to the backlog
+app.post("/api/v1/projects/backlog", requireKey, async (req, res) => {
+  try {
+    const { name, description, priority, notes } = req.body;
+    if (!name || !description) {
+      return res.status(400).json({ ok: false, error: 'name and description required' });
+    }
+    const { rows } = await pool.query(
+      `INSERT INTO project_backlog (name, description, priority, notes, status)
+       VALUES ($1, $2, $3, $4, 'pending') RETURNING *`,
+      [name, description, priority ?? 50, notes ?? null]
+    );
+    res.json({ ok: true, project: rows[0] });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// Mark a project complete → system moves to next one
+app.post("/api/v1/projects/backlog/:id/complete", requireKey, async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (ctx.autonomyOrchestrator?.completeProject) {
+      await ctx.autonomyOrchestrator.completeProject(Number(id));
+    } else {
+      await pool.query(
+        `UPDATE project_backlog SET status = 'complete', completed_at = NOW() WHERE id = $1`,
+        [id]
+      );
+    }
+    res.json({ ok: true, message: `Project ${id} marked complete` });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// Skip current project → activate next pending one
+app.post("/api/v1/projects/backlog/:id/skip", requireKey, async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (ctx.autonomyOrchestrator?.skipProject) {
+      await ctx.autonomyOrchestrator.skipProject(Number(id));
+    } else {
+      await pool.query(
+        `UPDATE project_backlog SET status = 'skipped' WHERE id = $1`,
+        [id]
+      );
+    }
+    res.json({ ok: true, message: `Project ${id} skipped` });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// Reactivate a skipped/complete project
+app.post("/api/v1/projects/backlog/:id/reactivate", requireKey, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await pool.query(
+      `UPDATE project_backlog SET status = 'pending', completed_at = NULL WHERE id = $1`,
+      [id]
+    );
+    res.json({ ok: true, message: `Project ${id} reactivated` });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// Update priority / notes
+app.patch("/api/v1/projects/backlog/:id", requireKey, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { priority, notes } = req.body;
+    const updates = [];
+    const vals = [];
+    let i = 1;
+    if (priority !== undefined) { updates.push(`priority = $${i++}`); vals.push(priority); }
+    if (notes !== undefined)    { updates.push(`notes = $${i++}`);    vals.push(notes); }
+    if (updates.length === 0) return res.status(400).json({ ok: false, error: 'nothing to update' });
+    vals.push(id);
+    await pool.query(
+      `UPDATE project_backlog SET ${updates.join(', ')} WHERE id = $${i}`,
+      vals
+    );
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// ── Stripe endpoints (safe) ───────────────────────────────────────────────────
 
 // Stripe endpoints (safe)
 app.post(

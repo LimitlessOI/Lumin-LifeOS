@@ -986,6 +986,30 @@ let implementNextQueuedIdea = async () => {
   return { ok: false, error: "Execution queue not yet initialized" };
 };
 
+// Create orchestrator early so it can be passed into initializeTwoTierSystem's routeCtx
+// Uses lambda closures so callCouncilMember + createTwilioService are available at call time
+const autonomyOrchestrator = createAutonomyOrchestrator({
+  pool,
+  callAI: async (_task, prompt) => {
+    try {
+      const result = await callCouncilMember('anthropic', prompt);
+      return typeof result === 'string' ? result : result?.content || result?.text || '';
+    } catch { return ''; }
+  },
+  sendSMS: async (to, msg) => {
+    try {
+      const twilio = createTwilioService({
+        callCouncilMember,
+        RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
+        ALERT_PHONE: to,
+        alertState: { inProgress: false },
+      });
+      return twilio.sendSMS(to, msg);
+    } catch { return { success: false }; }
+  },
+  adminPhone: process.env.ALERT_PHONE || process.env.ADMIN_PHONE,
+});
+
 async function runInitializeTwoTierSystem() {
   const result = await initializeTwoTierSystem({
     pool,
@@ -1055,6 +1079,7 @@ async function runInitializeTwoTierSystem() {
     relationshipMediation,
     meaningfulMoments,
     DISABLE_INCOME_DRONES,
+    autonomyOrchestrator,
   });
 
   // Apply all returned values to module-scope variables
@@ -1295,29 +1320,8 @@ startReminderCron(pool, async (to, msg) => {
 logger.info('✅ [WORD-KEEPER] Reminder cron started');
 
 // ==================== AUTONOMY ORCHESTRATOR (Amendment 17) ====================
-// Runs every 15 min — scores proposals, auto-approves risk ≤2, SMS Adam for 3-4, skips 5-6.
-// Adam is never the bottleneck for routine work.
-const autonomyOrchestrator = createAutonomyOrchestrator({
-  pool,
-  callAI: async (task, prompt) => {
-    try {
-      const result = await callCouncilMember('anthropic', prompt);
-      return typeof result === 'string' ? result : result?.content || result?.text || '';
-    } catch { return ''; }
-  },
-  sendSMS: async (to, msg) => {
-    try {
-      const twilio = createTwilioService({
-        callCouncilMember,
-        RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
-        ALERT_PHONE: to,
-        alertState: { inProgress: false },
-      });
-      return twilio.sendSMS(to, msg);
-    } catch { return { success: false }; }
-  },
-  adminPhone: process.env.ALERT_PHONE || process.env.ADMIN_PHONE,
-});
+// Created before initializeTwoTierSystem so routeCtx can include it.
+// autonomyOrchestrator is defined earlier in this file (above runInitializeTwoTierSystem).
 autonomyOrchestrator.start();
 app.use('/api/v1/autonomy', createAutonomyRoutes({ pool, requireKey, orchestrator: autonomyOrchestrator }));
 logger.info('✅ [AUTONOMY] Orchestrator started + routes mounted at /api/v1/autonomy');

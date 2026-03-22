@@ -153,6 +153,19 @@ export function createAutonomyOrchestrator({
         }
       }
 
+      // ── Project backlog fallback ───────────────────────────────────────────
+      // If nothing in the manual idea queue, work through the project backlog.
+      // One project active at a time. Only re-trigger a project every 2 hours
+      // to avoid hammering the same project every 15-min cycle.
+      const queueEmpty = proposals.length === 0 && approvedIdeas.length === 0;
+      if (queueEmpty) {
+        const projectResult = await workNextProject();
+        if (projectResult?.queued) {
+          results.buildsQueued++;
+          console.log(`📋 [AUTONOMY] Project fallback: queued tasks for "${projectResult.projectName}"`);
+        }
+      }
+
       // ── Expire stale SMS approvals ────────────────────────────────────────
       const now = Date.now();
       for (const [code, approval] of pendingSMSApprovals.entries()) {
@@ -273,9 +286,90 @@ export function createAutonomyOrchestrator({
     };
   }
 
-  return { start, stop, getStatus, approvePendingSMS, runCycle, healthCheckAfterBuild };
+  return { start, stop, getStatus, approvePendingSMS, runCycle, healthCheckAfterBuild, completeProject, skipProject };
 
   // ── Internal helpers ───────────────────────────────────────────────────────
+
+  // Project backlog: pick the active project (or promote next pending one) and
+  // queue build tasks for it. Re-triggers at most once every 2 hours per project.
+  const PROJECT_RETRIGGER_MS = 2 * 60 * 60 * 1000;
+
+  async function workNextProject() {
+    if (!pool) return null;
+    try {
+      // Find currently active project
+      let { rows } = await pool.query(
+        `SELECT * FROM project_backlog WHERE status = 'active' ORDER BY priority ASC LIMIT 1`
+      );
+
+      // If none active, promote the highest-priority pending one
+      if (rows.length === 0) {
+        const pending = await pool.query(
+          `SELECT * FROM project_backlog WHERE status = 'pending' ORDER BY priority ASC LIMIT 1`
+        );
+        if (pending.rows.length === 0) {
+          console.log('[AUTONOMY] Project backlog exhausted — all projects complete or skipped');
+          return null;
+        }
+        await pool.query(
+          `UPDATE project_backlog SET status = 'active' WHERE id = $1`,
+          [pending.rows[0].id]
+        );
+        rows = pending.rows;
+        console.log(`📋 [AUTONOMY] Activated project: "${rows[0].name}"`);
+      }
+
+      const project = rows[0];
+
+      // Throttle: don't re-trigger within 2 hours of the last trigger
+      if (project.last_triggered_at) {
+        const elapsed = Date.now() - new Date(project.last_triggered_at).getTime();
+        if (elapsed < PROJECT_RETRIGGER_MS) {
+          console.log(`[AUTONOMY] Project "${project.name}" triggered recently — waiting ${Math.round((PROJECT_RETRIGGER_MS - elapsed) / 60000)} min`);
+          return null;
+        }
+      }
+
+      // Generate components and queue the build
+      const queued = await generateComponentsAndQueue(
+        { id: `project_${project.id}`, title: project.name, description: project.description },
+        callAI,
+        queueFn
+      );
+
+      if (queued) {
+        await pool.query(
+          `UPDATE project_backlog SET last_triggered_at = NOW() WHERE id = $1`,
+          [project.id]
+        ).catch(() => {});
+      }
+
+      return { queued, projectName: project.name, projectId: project.id };
+    } catch (err) {
+      console.error('[AUTONOMY] workNextProject error:', err.message);
+      return null;
+    }
+  }
+
+  // Mark a project complete (called from route or manually)
+  async function completeProject(projectId) {
+    if (!pool) return;
+    await pool.query(
+      `UPDATE project_backlog SET status = 'complete', completed_at = NOW() WHERE id = $1`,
+      [projectId]
+    );
+    console.log(`✅ [AUTONOMY] Project ${projectId} marked complete`);
+  }
+
+  // Skip a project and move on
+  async function skipProject(projectId) {
+    if (!pool) return;
+    await pool.query(
+      `UPDATE project_backlog SET status = 'skipped' WHERE id = $1`,
+      [projectId]
+    );
+    console.log(`⏭️ [AUTONOMY] Project ${projectId} skipped`);
+  }
 
   async function getPendingProposals() {
     if (!pool) return [];

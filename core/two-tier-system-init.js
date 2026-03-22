@@ -93,6 +93,7 @@ export async function initializeTwoTierSystem(deps) {
     relationshipMediation,
     meaningfulMoments,
     DISABLE_INCOME_DRONES,
+    autonomyOrchestrator,
   } = deps;
 
   // These will be mutated/built and returned at the end
@@ -807,6 +808,7 @@ export async function initializeTwoTierSystem(deps) {
       conductEnhancedConsensus,
       sendSMS,
       sourceOfTruthManager,
+      autonomyOrchestrator,
     };
 
     createFinancialRoutes(app, routeCtx);
