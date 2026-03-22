@@ -479,12 +479,14 @@ trackLossFunction = trackLoss;
 // TIER 0: Open Source / Cheap Models (PRIMARY - Do all the work)
 // TIER 1: Expensive Models (OVERSIGHT ONLY - Validation when needed)
 const COUNCIL_ALIAS_MAP = {
-  // Map friendly names to real cloud APIs — Ollama is not available on Railway
-  claude:   "anthropic",
-  chatgpt:  "openai",
-  gemini:   "gemini",
-  grok:     "grok",
-  deepseek: "deepseek",
+  // Map friendly names to real COUNCIL_MEMBERS keys that exist and have API keys
+  claude:     "groq_llama",    // fast, free via Groq
+  anthropic:  "groq_llama",    // same
+  chatgpt:    "groq_llama",    // same
+  openai:     "groq_llama",    // same
+  gemini:     "gemini_flash",  // free via Google AI
+  grok:       "groq_llama",    // grok not configured — use Groq as substitute
+  deepseek:   "deepseek",      // cheap cloud deepseek ($0.10/1M tokens)
 };
 
 const COUNCIL_MEMBERS = {
