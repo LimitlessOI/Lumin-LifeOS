@@ -733,11 +733,11 @@ export function createCouncilService({
     }
 
     const isOllama =
-      memberConfig?.provider === "ollama" ||
+      COUNCIL_MEMBERS[member]?.provider === "ollama" ||
       member?.startsWith("ollama_") ||
-      memberConfig?.isLocal === true;
+      COUNCIL_MEMBERS[member]?.isLocal === true;
     const isFreeModel =
-      memberConfig?.isFree === true || isOllama;
+      COUNCIL_MEMBERS[member]?.isFree === true || isOllama;
 
     if (!isFreeModel && spend >= MAX_DAILY_SPEND) {
       throw new Error(
