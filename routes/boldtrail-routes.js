@@ -16,7 +16,7 @@ export function createBoldTrailRoutes(app, ctx) {
 // ==================== BOLDTRAIL REAL ESTATE CRM ENDPOINTS ====================
 app.get("/api/v1/boldtrail/api/status", requireKey, async (req, res) => {
   try {
-    const boldtrail = await import("./src/integrations/boldtrail.js");
+    const boldtrail = await import("../src/integrations/boldtrail.js");
     const status = await boldtrail.probeBoldTrailApi();
 
     res.json({
@@ -103,7 +103,7 @@ app.post("/api/v1/boldtrail/draft-email", requireKey, async (req, res) => {
 
     // Try BoldTrail AI first (if API key exists)
     try {
-      const { draftEmailWithBoldTrailAI } = await import("./src/integrations/boldtrail.js");
+      const { draftEmailWithBoldTrailAI } = await import("../src/integrations/boldtrail.js");
       const boldtrailResult = await draftEmailWithBoldTrailAI({
         agent_tone: tone,
         draft_type,
@@ -196,7 +196,7 @@ app.post("/api/v1/boldtrail/plan-showing", requireKey, async (req, res) => {
 
     // Try BoldTrail AI first (if API key exists)
     try {
-      const { planShowingsWithBoldTrailAI } = await import("./src/integrations/boldtrail.js");
+      const { planShowingsWithBoldTrailAI } = await import("../src/integrations/boldtrail.js");
       const boldtrailResult = await planShowingsWithBoldTrailAI({
         properties,
         client_name,
