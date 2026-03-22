@@ -657,9 +657,20 @@ export function createCouncilService({
       complexity === "complex" ||
       complexity === "critical";
 
-    // Prefer local models first
+    // Determine if a real Ollama endpoint is reachable on this deployment
+    const hasRealOllama = OLLAMA_ENDPOINT &&
+      !OLLAMA_ENDPOINT.includes('localhost') &&
+      !OLLAMA_ENDPOINT.includes('127.0.0.1') &&
+      !OLLAMA_ENDPOINT.includes('PASTE_YOUR');
+
+    // Only consider tier0 models. Exclude local-only models when Ollama isn't available
+    // (e.g. Railway deployment with no tunnel) — they have no API key and will always fail.
     const candidates = Object.entries(COUNCIL_MEMBERS).filter(
-      ([, cfg]) => cfg && cfg.tier === "tier0"
+      ([, cfg]) => {
+        if (!cfg || cfg.tier !== "tier0") return false;
+        if (cfg.isLocal && !hasRealOllama) return false;
+        return true;
+      }
     );
 
     if (isComplex) {
