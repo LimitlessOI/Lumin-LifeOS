@@ -55,6 +55,9 @@ CREATE TABLE IF NOT EXISTS outreach_log (
   sent_at       TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Add sent_at if table pre-existed without it
+ALTER TABLE outreach_log ADD COLUMN IF NOT EXISTS sent_at TIMESTAMPTZ DEFAULT NOW();
+
 CREATE INDEX IF NOT EXISTS idx_outreach_log_recipient ON outreach_log(recipient);
 CREATE INDEX IF NOT EXISTS idx_outreach_log_campaign ON outreach_log(campaign_id);
 CREATE INDEX IF NOT EXISTS idx_outreach_log_sent ON outreach_log(sent_at DESC);
