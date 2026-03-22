@@ -193,15 +193,7 @@ export function startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOn
     if (continuousSelfImprovement) await continuousSelfImprovement();
   });
 
-  scheduleAutonomyLoop("DAILY_IDEAS", 24 * 60 * 60 * 1000, async () => {
-    const { ideaEngine } = d();
-    if (ideaEngine) await ideaEngine.generateDailyIdeas();
-  }, 24 * 60 * 60 * 1000);
-
-  scheduleAutonomyOnce("DAILY_IDEAS_STARTUP", 60000, async () => {
-    const { ideaEngine } = d();
-    if (ideaEngine) await ideaEngine.generateDailyIdeas();
-  });
+  // DAILY_IDEAS and DAILY_IDEAS_STARTUP disabled — Adam provides ideas manually
 
   scheduleAutonomyLoop("AI_ROTATION", 60 * 60 * 1000, async () => {
     const { rotateAIsBasedOnPerformance } = d();

@@ -20,13 +20,7 @@ export class AutoQueueManager {
    * Ensure queue is never empty
    */
   async ensureQueuePopulated() {
-    const queueStatus = this.executionQueue.getStatus();
-    const queueSize = (queueStatus.active || []).length + (queueStatus.pending || []).length;
-    
-    if (queueSize < this.minQueueSize) {
-      console.log(`📋 [QUEUE] Queue low (${queueSize} items), generating ideas...`);
-      await this.generateAndQueueIdeas(this.minQueueSize - queueSize);
-    }
+    // Disabled — idea generation is manual only
   }
 
   /**
@@ -283,31 +277,10 @@ Think outside the box. Consider unintended consequences.`;
   }
 
   /**
-   * Start auto-queue management
+   * Auto-queue management disabled — ideas are provided manually by Adam.
+   * Keeping method stub so callers don't crash.
    */
   start() {
-    // Check queue every hour
-    setInterval(async () => {
-      try {
-        await this.ensureQueuePopulated();
-      } catch (error) {
-        console.error('Queue management error:', error.message);
-      }
-    }, 60 * 60 * 1000); // Every hour
-
-    // Generate daily ideas
-    setInterval(async () => {
-      try {
-        await this.generateDailyIdeas();
-      } catch (error) {
-        console.error('Daily idea generation error:', error.message);
-      }
-    }, this.ideaGenerationInterval);
-
-    // Initial check
-    setTimeout(async () => {
-      await this.ensureQueuePopulated();
-      await this.generateDailyIdeas();
-    }, 30000); // After 30 seconds
+    console.log('📋 [QUEUE] Auto-queue manager running in manual mode (idea generation disabled)');
   }
 }
