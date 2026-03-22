@@ -48,28 +48,93 @@ function registerContext(text) {
 
 // Phrase compression table — common LifeOS council phrases → short codes.
 // Only applied to non-critical text blocks (system context, preamble).
-// MUST be reversible — keys are short codes, values are full phrases.
+// MUST be reversible — match longer phrases first to avoid partial collisions.
+// Keys are full phrases, values are short codes.
 const PHRASE_TABLE = [
-  // Council boilerplate
+  // ── Council / system boilerplate ────────────────────────────────────────────
   ['You are serving as', 'Ua'],
   ['inside the LifeOS AI Council', 'iLAC'],
   ['This is a LIVE SYSTEM running on Railway', 'LIVE:Railway'],
   ['You ARE part of an active backend', 'activeBackend'],
   ['RAILWAY_ENVIRONMENT', 'RAILWAY_ENV'],
-  // Common prompt patterns
+  ['LifeOS AI Council', 'LAC'],
+  ['income drones', 'iDrn'],
+  ['ROI tracking', 'ROItrk'],
+  ['blind-spot detection', 'BSD'],
+  ['Database on Neon PostgreSQL', 'DNPG'],
+  ['Optional Stripe integration', 'OSI'],
+  ['Execution queue for tasks', 'EQtsk'],
+  ['Self-programming endpoint', 'SPE'],
+  ['running on Railway', 'onRwy'],
+
+  // ── Common instruction patterns ──────────────────────────────────────────────
   ['OUTPUT ONLY VALID', 'OUT:'],
   ['No explanation. No markdown', 'noexp.nomd'],
+  ['No explanation, no markdown', 'noexp.nomd'],
+  ['Return ONLY valid JSON', 'JSON:'],
+  ['Return only valid JSON', 'JSON:'],
+  ['Return a JSON array', 'JSONarr:'],
   ['Start the file with', 'startFile:'],
   ['Make minimal targeted changes', 'minChange'],
   ['Be specific and actionable', 'beSpecific'],
-  // Technical terms
+  ['Do not include any explanation', 'noexpl'],
+  ['Think step by step', 'step:'],
+  ['You are a software architect', 'SWarch:'],
+  ['You are a software engineer', 'SWeng:'],
+  ['Generate the minimal set', 'minSet:'],
+  ['For each component', 'perComp:'],
+  ['Complete detailed prompt', 'fullPrmpt:'],
+
+  // ── LifeOS domain terms ──────────────────────────────────────────────────────
+  ['improvement proposal', 'impProp'],
+  ['improvement proposals', 'impProps'],
+  ['autonomy orchestrator', 'autoOrch'],
+  ['auto-builder', 'autoBld'],
+  ['project backlog', 'projBklog'],
+  ['command center', 'cmdCtr'],
+  ['council member', 'cMbr'],
+  ['site builder', 'siteBld'],
+  ['prospect pipeline', 'proPipe'],
+  ['token optimizer', 'tokOpt'],
+  ['response cache', 'respCache'],
+  ['free tier', 'freeTier'],
+  ['rate limit', 'rateLimit'],
+  ['rate limited', 'rateLimited'],
+
+  // ── AI model names ────────────────────────────────────────────────────────────
+  ['claude-sonnet', 'C3S'],
+  ['claude-haiku', 'C3H'],
+  ['claude-opus', 'C3O'],
+  ['gpt-4o-mini', 'G4m'],
+  ['gpt-4o', 'G4o'],
+  ['gemini-1.5-flash', 'GmF'],
+  ['gemini-2.0-flash', 'Gm2F'],
+  ['llama-3.1-8b-instant', 'L3i'],
+  ['llama3.1-8b', 'L3c'],
+  ['deepseek-coder', 'DSC'],
+
+  // ── Technical terms ───────────────────────────────────────────────────────────
   ['JavaScript', 'JS'],
   ['TypeScript', 'TS'],
   ['PostgreSQL', 'PgSQL'],
   ['Express.js router', 'ExpRouter'],
+  ['Express.js', 'Express'],
   ['Tailwind CSS', 'TwCSS'],
   ['environment variables', 'envVars'],
+  ['environment variable', 'envVar'],
   ['API key', 'apiKey'],
+  ['API endpoint', 'apiEP'],
+  ['async function', 'asyncFn'],
+  ['async/await', 'async'],
+  ['error handling', 'errHdl'],
+  ['try/catch', 'tryCatch'],
+  ['middleware', 'mw'],
+  ['authentication', 'auth'],
+  ['authorization', 'authz'],
+  ['database', 'db'],
+  ['import statement', 'import'],
+  ['export default', 'expDef'],
+  ['Node.js', 'Node'],
 ];
 
 // Build reverse table for decompression

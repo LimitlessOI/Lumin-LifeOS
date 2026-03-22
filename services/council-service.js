@@ -869,35 +869,33 @@ export function createCouncilService({
       }
     }
 
-    const enhancedPrompt = await injectKnowledgeContext(prompt, 5);
+    // ── Auto-detect taskType from prompt content if not provided ─────────────
+    // Enables Layers 2-4 for far more calls without callers needing to set options.
+    const isCritical = options.critical === true;
+    let taskType = options.taskType || '';
+    if (!taskType) {
+      const pl = prompt.toLowerCase();
+      if (/\bgenerate code\b|write a (function|class|route|service|component|script)|\bimplement\b/.test(pl)) taskType = 'codegen';
+      else if (/\banalyze\b|\breview\b|\baudit\b|\bevaluate\b/.test(pl)) taskType = 'analysis';
+      else if (/\bclassify\b|\broute\b|\bis this\b|\bdetect\b|\bvalidate\b/.test(pl)) taskType = 'routing';
+      else if (/\bsummarize\b|\bsummary\b|\btldr\b/.test(pl)) taskType = 'analysis';
+      else if (/\bplan\b|\bstrategy\b|\bproposal\b|\bdesign\b/.test(pl)) taskType = 'planning';
+      else taskType = 'general';
+    }
 
-    const systemPromptBase = `You are ${config.name}, serving as ${config.role} inside the LifeOS AI Council.
-This is a LIVE SYSTEM running on Railway (${RAILWAY_ENVIRONMENT || "robust-magic-production.up.railway.app"}).
+    // ── Gate knowledge context injection — only for calls that need it ────────
+    // Skipping saves ~1,200–2,000 tokens on every routing/classification/codegen call.
+    const needsKnowledgeContext = !isCritical
+      && !['routing', 'codegen', 'validation'].includes(taskType)
+      && options.skipKnowledge !== true;
+    const enhancedPrompt = needsKnowledgeContext
+      ? await injectKnowledgeContext(prompt, 3)  // reduced from 5 → 3 ideas
+      : prompt;
 
-You ARE part of an active backend with:
-- Execution queue for tasks
-- Self-programming endpoint (/api/v1/system/self-program)
-- Income drones, ROI tracking, snapshots, blind-spot detection
-- Database on Neon PostgreSQL
-- Optional Stripe integration for tracking real-world revenue (read + logging, not autonomous charging).
-
-When asked what you can do, respond AS the system AI:
-- "I can queue tasks in our execution system"
-- "I can help design offers and service workflows for online income"
-- "I can analyze our current metrics and performance"
-- "I can propose integrations or improvements for Stripe + online funnels"
-
-Current specialties: ${config.specialties.join(", ")}.
-${options.checkBlindSpots ? "Check for blind spots and unintended consequences." : ""}
-${options.guessUserPreference ? "Consider user preferences based on past decisions." : ""}
-${options.webSearch ? `WEB SEARCH MODE: You have access to real-time web search. When searching, look for:
-- Recent blog posts, documentation, and tutorials
-- Stack Overflow and GitHub discussions
-- Official documentation and examples
-- Community solutions and best practices
-Include specific links, code examples, and actionable solutions from your search results.` : ""}
-
-Be concise, strategic, and speak as the system's internal AI.`;
+    // ── Compact system prompt — only include what's needed per call ───────────
+    const systemPromptBase = `You are ${config.name} (${config.role}) in LifeOS AI Council on Railway.
+Specialties: ${config.specialties.join(', ')}.${options.checkBlindSpots ? ' Check blind spots.' : ''}${options.guessUserPreference ? ' Use user preferences.' : ''}${options.webSearch ? '\nWEB SEARCH: Include links, code, actionable solutions.' : ''}
+Be concise.`;
 
     // ── Token optimization — 5-layer compression stack ───────────────────────
     // Layer 1: noise strip + phrase substitution (token-optimizer)
@@ -906,9 +904,6 @@ Be concise, strategic, and speak as the system's internal AI.`;
     // Layer 4: Chain of Draft — shorthand reasoning instruction
     // Layer 5: savings ledger — record every call's before/after
     // CPU cost: all layers combined ~0.5ms (pure string ops, no AI calls)
-
-    const isCritical = options.critical === true;
-    const taskType = options.taskType || 'general';
     const compressionLayers = {};
 
     // Layer 1 — noise strip + phrase sub
