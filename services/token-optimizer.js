@@ -192,27 +192,86 @@ export function createTokenOptimizer(pool = null) {
 
   async function loadStats() {
     if (statsLoaded) return;
+    const today = new Date().toISOString().slice(0, 10);
+
+    // L1: try local file (fastest, works in dev)
     try {
       const raw = await fs.readFile(STATS_FILE, 'utf-8');
       const saved = JSON.parse(raw);
-      // Reset if new day
-      if (saved.date !== new Date().toISOString().slice(0, 10)) {
-        stats = emptyStats();
-      } else {
+      if (saved.date === today) {
         stats = saved;
+        statsLoaded = true;
+        return;
       }
-    } catch {
-      stats = emptyStats();
+    } catch {}
+
+    // L2: fall back to DB — survives Railway deploys
+    if (pool) {
+      try {
+        const { rows } = await pool.query(
+          'SELECT * FROM token_optimizer_daily WHERE date = $1', [today]
+        );
+        if (rows[0]) {
+          stats = {
+            date: today,
+            totalRequests:      rows[0].total_requests,
+            totalInputTokens:   rows[0].total_input_tokens,
+            totalOutputTokens:  0,
+            totalSavedTokens:   rows[0].total_saved_tokens,
+            cacheHits:          rows[0].cache_hits,
+            estimatedCostSaved: parseFloat(rows[0].estimated_cost_saved || 0),
+            byProvider:         rows[0].by_provider || {},
+            qualityScores:      [],
+            compressionHistory: [],
+          };
+          statsLoaded = true;
+          return;
+        }
+      } catch {}
     }
+
+    stats = emptyStats();
     statsLoaded = true;
   }
 
   async function saveStats() {
+    // Write local file (fast, dev-friendly)
     try {
       await fs.mkdir(path.dirname(STATS_FILE), { recursive: true });
       await fs.writeFile(STATS_FILE, JSON.stringify(stats, null, 2));
-    } catch (err) {
-      console.warn(`[TOKEN-OPT] Could not save stats: ${err.message}`);
+    } catch {}
+
+    // Upsert to DB — this is what survives deploys
+    if (pool) {
+      try {
+        const avgCompPct = stats.compressionHistory.length > 0
+          ? Math.round(stats.compressionHistory.reduce((s, h) => s + h.savedPct, 0) / stats.compressionHistory.length)
+          : 0;
+        await pool.query(`
+          INSERT INTO token_optimizer_daily
+            (date, total_requests, total_input_tokens, total_saved_tokens,
+             cache_hits, avg_compression_pct, estimated_cost_saved, by_provider, updated_at)
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,NOW())
+          ON CONFLICT (date) DO UPDATE SET
+            total_requests      = EXCLUDED.total_requests,
+            total_input_tokens  = EXCLUDED.total_input_tokens,
+            total_saved_tokens  = EXCLUDED.total_saved_tokens,
+            cache_hits          = EXCLUDED.cache_hits,
+            avg_compression_pct = EXCLUDED.avg_compression_pct,
+            estimated_cost_saved= EXCLUDED.estimated_cost_saved,
+            by_provider         = EXCLUDED.by_provider,
+            updated_at          = NOW()
+        `, [
+          stats.date,
+          stats.totalRequests,
+          stats.totalInputTokens,
+          stats.totalSavedTokens,
+          stats.cacheHits,
+          avgCompPct,
+          stats.estimatedCostSaved,
+          JSON.stringify(stats.byProvider),
+        ]);
+      } catch {}
     }
   }
 

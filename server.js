@@ -123,6 +123,9 @@ import {
   hashPrompt,
   getCachedResponse,
   cacheResponse,
+  initCache,
+  getCacheStats,
+  pruneExpiredCache,
   advancedCompress,
   advancedDecompress,
 } from './services/response-cache.js';
@@ -794,6 +797,7 @@ const {
   callCouncilMember,
   callCouncilWithFailover,
   detectBlindSpots,
+  tokenOptimizer,
 } = createCouncilService({
   pool,
   COUNCIL_MEMBERS,
@@ -1080,6 +1084,7 @@ async function runInitializeTwoTierSystem() {
     meaningfulMoments,
     DISABLE_INCOME_DRONES,
     autonomyOrchestrator,
+    tokenOptimizer,
   });
 
   // Apply all returned values to module-scope variables
@@ -1327,6 +1332,9 @@ app.use('/api/v1/autonomy', createAutonomyRoutes({ pool, requireKey, orchestrato
 logger.info('✅ [AUTONOMY] Orchestrator started + routes mounted at /api/v1/autonomy');
 
 // Self-register Twilio SMS webhook — no manual Twilio console action needed
+// Warm response cache L1 from DB — picks up where last deploy left off
+initCache(pool).catch(() => {});
+
 registerTwilioWebhook().then(result => {
   if (result.registered) {
     logger.info({ url: result.url, changed: result.changed }, '✅ [TWILIO] SMS webhook confirmed');
@@ -2029,6 +2037,8 @@ async function start() {
       rotateAIsBasedOnPerformance,
       tcoSalesAgent,
       enhancedConversationScraper,
+      tokenOptimizer,              // API savings monitor
+      pruneCache: pruneExpiredCache, // cache hygiene
     };
     apiV1DepsRef.current = {
       pool,

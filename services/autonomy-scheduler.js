@@ -98,6 +98,32 @@ async function checkBoldTrailFollowUps(getDeps) {
 export function startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOnce, getDeps) {
   const d = () => getDeps() || {};
 
+  // ── Token Optimizer Monitor (every hour) ────────────────────────────────────
+  // This is our API savings engine — track it constantly, improve it over time.
+  // Every hour: log stats, flag if compression is slipping, prune expired cache.
+  scheduleAutonomyLoop("TOKEN_OPT_MONITOR", 60 * 60 * 1000, async () => {
+    const { tokenOptimizer, pruneCache } = d();
+    if (tokenOptimizer) {
+      try {
+        const report = await tokenOptimizer.getReport();
+        const hitRate = report.cacheHitRate || '0%';
+        const saved = report.totalSavedTokens || 0;
+        const reqs  = report.totalRequests || 0;
+        const cost  = report.estimatedCostSaved || '$0.0000';
+        console.log(`📊 [TOKEN-OPT] ${reqs} calls today | ${saved} tokens saved | ${hitRate} cache | ${cost} saved | ${report.avgCompressionPct || 0}% avg compression`);
+        for (const rec of (report.recommendations || [])) {
+          console.log(`💡 [TOKEN-OPT] ${rec.priority}: ${rec.action} → ${rec.expectedSaving}`);
+        }
+      } catch (err) {
+        console.warn('[TOKEN-OPT] Monitor error:', err.message);
+      }
+    }
+    if (pruneCache) {
+      const pruned = await pruneCache().catch(() => 0);
+      if (pruned > 0) console.log(`🧹 [CACHE] Pruned ${pruned} expired cache entries`);
+    }
+  }, 5 * 60 * 1000); // first run after 5 min
+
   scheduleAutonomyLoop("CRM_SEQUENCE_RUNNER", 60 * 1000, async () => {
     const { crmSequenceRunner } = d();
     if (crmSequenceRunner) await crmSequenceRunner.runDueEnrollments(25);

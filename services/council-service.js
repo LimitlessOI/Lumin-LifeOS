@@ -1639,5 +1639,6 @@ Be specific and critical.`;
     callCouncilMember,
     callCouncilWithFailover,
     detectBlindSpots,
+    tokenOptimizer, // exposed for monitoring dashboard
   };
 }

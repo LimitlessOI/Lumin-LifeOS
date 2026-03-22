@@ -1,24 +1,31 @@
 /**
- * response-cache.js — extracted from server.js
- * In-memory response cache helpers and text compression utilities.
+ * response-cache.js
+ * Two-tier AI response cache: L1 in-memory (fast) + L2 Neon DB (survives deploys).
  *
- * Note: council-service.js contains its own internal copies of these
- * for DB-backed caching. This module provides the in-memory Map cache.
+ * On startup: warms L1 from recent DB rows so cache hits resume immediately.
+ * On cache write: writes to L1 synchronously, DB asynchronously.
+ * On cache hit: serves from L1; if L1 cold, checks DB (post-deploy warm path).
+ *
+ * TTL: 24h default. Research/analysis prompts use 72h (low churn).
  */
 
 import crypto from 'crypto';
 
-// ---------------------------------------------------------------------------
-// In-memory cache state (module-level singleton)
-// ---------------------------------------------------------------------------
-const responseCache = new Map();
-const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+const CACHE_TTL_MS  = 24 * 60 * 60 * 1000;  // 24h default
+const CACHE_TTL_LONG = 72 * 60 * 60 * 1000; // 72h for analysis tasks
+const MAX_L1_SIZE   = 1000;
+
+// L1 — in-memory Map: key → { response, expiresAt, taskType }
+const L1 = new Map();
+
+// Pool reference — set once via initCache()
+let _pool = null;
+let _warmed = false;
 
 // ---------------------------------------------------------------------------
-// hashPrompt
+// hashPrompt — stable key from prompt content
 // ---------------------------------------------------------------------------
 export function hashPrompt(prompt) {
-  // Create semantic hash (simple but effective)
   const normalized = prompt.toLowerCase()
     .replace(/\s+/g, ' ')
     .replace(/[^\w\s]/g, '')
@@ -26,104 +33,182 @@ export function hashPrompt(prompt) {
   return crypto.createHash('sha256').update(normalized).digest('hex').substring(0, 16);
 }
 
+function cacheKey(member, prompt) {
+  return `${member}:${hashPrompt(prompt)}`;
+}
+
+function ttlMs(taskType = '') {
+  const longTypes = ['research', 'analysis', 'planning', 'summaries'];
+  return longTypes.some(t => taskType.includes(t)) ? CACHE_TTL_LONG : CACHE_TTL_MS;
+}
+
 // ---------------------------------------------------------------------------
-// getCachedResponse
+// initCache — call once at startup with the DB pool
+// ---------------------------------------------------------------------------
+export async function initCache(pool) {
+  _pool = pool;
+  await _warmL1FromDB();
+}
+
+async function _warmL1FromDB() {
+  if (_warmed || !_pool) return;
+  _warmed = true;
+  try {
+    const { rows } = await _pool.query(
+      `SELECT cache_key, response_text, expires_at, task_type
+       FROM ai_response_cache
+       WHERE expires_at > NOW()
+       ORDER BY last_hit_at DESC NULLS LAST
+       LIMIT 500`
+    );
+    for (const row of rows) {
+      L1.set(row.cache_key, {
+        response: row.response_text,
+        expiresAt: new Date(row.expires_at).getTime(),
+        taskType: row.task_type || '',
+      });
+    }
+    if (rows.length > 0) {
+      console.log(`♻️  [CACHE] Warmed L1 with ${rows.length} entries from DB`);
+    }
+  } catch {
+    // Table may not exist yet — non-fatal
+  }
+}
+
+// ---------------------------------------------------------------------------
+// getCachedResponse — L1 first, then L2 (DB), then null
 // ---------------------------------------------------------------------------
 export async function getCachedResponse(prompt, member, compressionMetrics) {
-  const key = `${member}:${hashPrompt(prompt)}`;
-  const cached = responseCache.get(key);
-  if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
-    if (compressionMetrics) {
-      compressionMetrics.cache_hits = (compressionMetrics.cache_hits || 0) + 1;
-    }
-    return cached.response;
+  const key = cacheKey(member, prompt);
+  const now = Date.now();
+
+  // L1 check
+  const l1 = L1.get(key);
+  if (l1 && l1.expiresAt > now) {
+    if (compressionMetrics) compressionMetrics.cache_hits = (compressionMetrics.cache_hits || 0) + 1;
+    // Bump hit count in DB async (fire-and-forget)
+    _bumpHitCount(key).catch(() => {});
+    return l1.response;
   }
-  // Track cache miss
-  if (compressionMetrics) {
-    compressionMetrics.cache_misses = (compressionMetrics.cache_misses || 0) + 1;
+  if (l1) L1.delete(key); // expired
+
+  // L2 check — DB (handles post-deploy cold L1)
+  if (_pool) {
+    try {
+      const { rows } = await _pool.query(
+        `UPDATE ai_response_cache
+         SET hit_count = hit_count + 1, last_hit_at = NOW()
+         WHERE cache_key = $1 AND expires_at > NOW()
+         RETURNING response_text, expires_at, task_type`,
+        [key]
+      );
+      if (rows[0]) {
+        // Repopulate L1
+        L1.set(key, {
+          response: rows[0].response_text,
+          expiresAt: new Date(rows[0].expires_at).getTime(),
+          taskType: rows[0].task_type || '',
+        });
+        if (compressionMetrics) compressionMetrics.cache_hits = (compressionMetrics.cache_hits || 0) + 1;
+        return rows[0].response_text;
+      }
+    } catch {}
   }
+
+  if (compressionMetrics) compressionMetrics.cache_misses = (compressionMetrics.cache_misses || 0) + 1;
   return null;
 }
 
 // ---------------------------------------------------------------------------
-// cacheResponse
+// cacheResponse — write to L1 + DB
 // ---------------------------------------------------------------------------
-export function cacheResponse(prompt, member, response) {
-  const key = `${member}:${hashPrompt(prompt)}`;
-  responseCache.set(key, {
-    response,
-    timestamp: Date.now(),
-    prompt: prompt.substring(0, 100), // Store snippet for debugging
-  });
-  // Limit cache size
-  if (responseCache.size > 1000) {
-    const firstKey = responseCache.keys().next().value;
-    responseCache.delete(firstKey);
+export function cacheResponse(prompt, member, response, taskType = '') {
+  const key = cacheKey(member, prompt);
+  const expiresAt = Date.now() + ttlMs(taskType);
+
+  // L1 write (synchronous)
+  L1.set(key, { response, expiresAt, taskType });
+  if (L1.size > MAX_L1_SIZE) {
+    L1.delete(L1.keys().next().value); // evict oldest
   }
+
+  // L2 write (async, non-blocking)
+  _writeToDb(key, member, prompt, response, taskType, expiresAt).catch(() => {});
+}
+
+async function _writeToDb(key, member, prompt, response, taskType, expiresAt) {
+  if (!_pool) return;
+  try {
+    await _pool.query(
+      `INSERT INTO ai_response_cache
+         (cache_key, member, prompt_hash, prompt_snippet, response_text, task_type, expires_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7)
+       ON CONFLICT (cache_key) DO UPDATE SET
+         response_text = EXCLUDED.response_text,
+         expires_at    = EXCLUDED.expires_at,
+         task_type     = EXCLUDED.task_type`,
+      [
+        key, member,
+        hashPrompt(prompt),
+        prompt.substring(0, 120),
+        response,
+        taskType || null,
+        new Date(expiresAt).toISOString(),
+      ]
+    );
+  } catch {}
+}
+
+async function _bumpHitCount(key) {
+  if (!_pool) return;
+  await _pool.query(
+    `UPDATE ai_response_cache SET hit_count = hit_count + 1, last_hit_at = NOW() WHERE cache_key = $1`,
+    [key]
+  );
 }
 
 // ---------------------------------------------------------------------------
-// advancedCompress
+// getCacheStats — for monitoring dashboard
+// ---------------------------------------------------------------------------
+export async function getCacheStats() {
+  const l1Size = L1.size;
+  let dbStats = null;
+  if (_pool) {
+    try {
+      const { rows } = await _pool.query(`
+        SELECT
+          COUNT(*)                                      AS total_entries,
+          SUM(hit_count)                                AS total_hits,
+          COUNT(*) FILTER (WHERE expires_at > NOW())    AS live_entries,
+          MAX(last_hit_at)                              AS last_hit_at
+        FROM ai_response_cache
+      `);
+      dbStats = rows[0];
+    } catch {}
+  }
+  return { l1Size, dbStats };
+}
+
+// ---------------------------------------------------------------------------
+// pruneExpired — call periodically to keep DB tidy
+// ---------------------------------------------------------------------------
+export async function pruneExpiredCache() {
+  if (!_pool) return 0;
+  try {
+    const { rowCount } = await _pool.query(
+      `DELETE FROM ai_response_cache WHERE expires_at < NOW()`
+    );
+    return rowCount || 0;
+  } catch { return 0; }
+}
+
+// ---------------------------------------------------------------------------
+// Legacy exports — keep existing callers working
 // ---------------------------------------------------------------------------
 export function advancedCompress(text) {
-  try {
-    // Remove redundant whitespace
-    let compressed = text.replace(/\s+/g, ' ').trim();
-
-    // Replace common phrases with tokens
-    const replacements = {
-      'You are': 'Ua',
-      'inside the LifeOS AI Council': 'iLAC',
-      'This is a LIVE SYSTEM': 'TLS',
-      'running on Railway': 'rR',
-      'Execution queue for tasks': 'EQ',
-      'Self-programming endpoint': 'SPE',
-      'Income drones': 'ID',
-      'ROI tracking': 'ROI',
-      'blind-spot detection': 'BSD',
-      'Database on Neon PostgreSQL': 'DNPG',
-      'Optional Stripe integration': 'OSI',
-    };
-
-    for (const [full, short] of Object.entries(replacements)) {
-      compressed = compressed.replace(new RegExp(full, 'gi'), short);
-    }
-
-    // Base64 encode
-    const encoded = Buffer.from(compressed).toString('base64');
-    return { compressed: encoded, ratio: text.length / encoded.length, method: 'advanced' };
-  } catch (error) {
-    return { compressed: text, ratio: 1, method: 'none' };
-  }
+  return { compressed: text, ratio: 1, method: 'none' };
 }
-
-// ---------------------------------------------------------------------------
-// advancedDecompress
-// ---------------------------------------------------------------------------
-export function advancedDecompress(compressed, method) {
-  if (method !== 'advanced') return compressed;
-  try {
-    const decoded = Buffer.from(compressed, 'base64').toString('utf-8');
-    // Reverse replacements
-    const replacements = {
-      'Ua': 'You are',
-      'iLAC': 'inside the LifeOS AI Council',
-      'TLS': 'This is a LIVE SYSTEM',
-      'rR': 'running on Railway',
-      'EQ': 'Execution queue for tasks',
-      'SPE': 'Self-programming endpoint',
-      'ID': 'Income drones',
-      'ROI': 'ROI tracking',
-      'BSD': 'blind-spot detection',
-      'DNPG': 'Database on Neon PostgreSQL',
-      'OSI': 'Optional Stripe integration',
-    };
-    let decompressed = decoded;
-    for (const [short, full] of Object.entries(replacements)) {
-      decompressed = decompressed.replace(new RegExp(short, 'g'), full);
-    }
-    return decompressed;
-  } catch (error) {
-    return compressed;
-  }
+export function advancedDecompress(compressed) {
+  return compressed;
 }

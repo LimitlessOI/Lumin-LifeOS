@@ -608,6 +608,55 @@ app.post("/api/v1/phone/call-process", async (req, res) => {
   }
 });
 
+// ── API Savings Dashboard ─────────────────────────────────────────────────────
+
+// Current day stats + 30-day trend
+app.get("/api/v1/optimizer/stats", requireKey, async (req, res) => {
+  try {
+    // Today's live stats from token optimizer
+    const todayReport = ctx.tokenOptimizer
+      ? await ctx.tokenOptimizer.getReport()
+      : null;
+
+    // 30-day historical trend from DB
+    const trend = await pool.query(`
+      SELECT date, total_requests, total_input_tokens, total_saved_tokens,
+             cache_hits, avg_compression_pct, estimated_cost_saved, by_provider
+      FROM token_optimizer_daily
+      ORDER BY date DESC
+      LIMIT 30
+    `).catch(() => ({ rows: [] }));
+
+    // Cache stats
+    const { getCacheStats: _getCacheStats } = await import('../services/response-cache.js').catch(() => ({}));
+    const cacheStats = _getCacheStats ? await _getCacheStats() : null;
+
+    // Totals across 30 days
+    const totals = trend.rows.reduce((acc, row) => ({
+      requests:    acc.requests    + (row.total_requests || 0),
+      savedTokens: acc.savedTokens + (row.total_saved_tokens || 0),
+      cacheHits:   acc.cacheHits   + (row.cache_hits || 0),
+      costSaved:   acc.costSaved   + parseFloat(row.estimated_cost_saved || 0),
+    }), { requests: 0, savedTokens: 0, cacheHits: 0, costSaved: 0 });
+
+    res.json({
+      ok: true,
+      today: todayReport,
+      cache: cacheStats,
+      trend: trend.rows,
+      totals30d: {
+        ...totals,
+        costSaved: `$${totals.costSaved.toFixed(4)}`,
+        avgCacheHitRate: totals.requests > 0
+          ? `${Math.round((totals.cacheHits / totals.requests) * 100)}%`
+          : '0%',
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 // ── Project Backlog ───────────────────────────────────────────────────────────
 
 // List all projects in priority order

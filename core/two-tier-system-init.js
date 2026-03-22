@@ -94,6 +94,7 @@ export async function initializeTwoTierSystem(deps) {
     meaningfulMoments,
     DISABLE_INCOME_DRONES,
     autonomyOrchestrator,
+    tokenOptimizer,
   } = deps;
 
   // These will be mutated/built and returned at the end
@@ -809,6 +810,7 @@ export async function initializeTwoTierSystem(deps) {
       sendSMS,
       sourceOfTruthManager,
       autonomyOrchestrator,
+      tokenOptimizer,
     };
 
     createFinancialRoutes(app, routeCtx);
