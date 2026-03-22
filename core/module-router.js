@@ -14,6 +14,48 @@ export class ModuleRouter {
     this.moduleStats = new Map();
   }
 
+  async runMiddleware(middleware, req, res) {
+    if (typeof middleware !== "function") return;
+
+    // Support both Express-style middleware(req, res, next) and simple async
+    // handlers that only accept (req, res).
+    if (middleware.length >= 3) {
+      await new Promise((resolve, reject) => {
+        let settled = false;
+        const next = (err) => {
+          if (settled) return;
+          settled = true;
+          if (err) reject(err);
+          else resolve();
+        };
+
+        try {
+          const maybePromise = middleware(req, res, next);
+          const isPromise =
+            maybePromise && typeof maybePromise.then === "function";
+          if (!isPromise && !settled && res.headersSent) {
+            settled = true;
+            resolve();
+            return;
+          }
+          if (isPromise) {
+            maybePromise.then(() => {
+              if (!settled && res.headersSent) {
+                settled = true;
+                resolve();
+              }
+            }).catch(reject);
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
+      return;
+    }
+
+    await middleware(req, res);
+  }
+
   /**
    * Register a module with the router
    */
@@ -97,7 +139,7 @@ export class ModuleRouter {
     try {
       // Run middleware
       for (const middleware of route.middleware) {
-        await middleware(req, res);
+        await this.runMiddleware(middleware, req, res);
         if (res.headersSent) return; // Middleware already sent response
       }
 

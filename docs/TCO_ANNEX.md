@@ -1,6 +1,16 @@
 SSOT ANNEX — TOTALCOSTOPTIMIZER (TCO)
-Version: 2026-01-08
+Version: 2026-03-21
 Status: Canonical Annex (referenced by North Star; does not override Constitution)
+
+CHANGE LOG:
+- 2026-03-21: Updated statuses from PLANNED → LIVE/IN_BUILD based on actual code audit.
+  Critical shadowing bug fixed in council-service.js (local optimizePrompt was silently
+  overriding the real token-optimizer import — system prompts were being sent as undefined).
+  Five new components started: savings ledger, TOON formatter, Chain of Draft, delta context,
+  prompt IR compiler. Free-tier cascade keys added: Groq, Gemini, Cerebras, OpenRouter,
+  Mistral, Together. Product framing clarified: "verified savings without quality regression"
+  is the product — the ledger/receipt is the moat, not compression alone.
+- 2026-01-08: Initial annex created.
 
 Purpose:
 List concrete mechanisms + product systems that produce verified savings WITHOUT meaning drift and WITHOUT compute overhead erasing gains.
@@ -21,23 +31,27 @@ Fields:
 A) TOKEN + CONTEXT REDUCTION (SAVINGS MECHANISMS)
 ============================================================
 
-TCO-A01 | STATUS:PLANNED | TYPE:SAVINGS
+TCO-A01 | STATUS:LIVE | TYPE:SAVINGS
 MECHANISM: Session dictionary learning (customer/workspace vocabulary → short codes).
+FILE: services/token-optimizer.js (PHRASE_TABLE — 15 entries, reversible)
 METRIC: token reduction % + unchanged quality score.
 RISKS: dictionary drift; requires versioning + rollback.
+NOTE: Base phrase table live. Auto-learning from traffic = PLANNED.
 
 TCO-A02 | STATUS:PLANNED | TYPE:SAVINGS
 MECHANISM: Industry dictionaries (legal/health/real-estate) layered over customer dictionaries.
 METRIC: incremental savings from dictionary layer (delta tokens).
 RISKS: wrong mappings; must be reversible.
 
-TCO-A03 | STATUS:PLANNED | TYPE:SAVINGS
+TCO-A03 | STATUS:LIVE | TYPE:SAVINGS
 MECHANISM: Prompt template detection (send template once; subsequent calls send template_id + variables).
+FILE: services/token-optimizer.js (CONTEXT_REGISTRY — SHA-256 hash dedup, short IDs)
 METRIC: instruction-token reduction + identical outputs on A/B tests.
 RISKS: template mis-detection; needs fallback to full prompt.
 
-TCO-A04 | STATUS:PLANNED | TYPE:SAVINGS
+TCO-A04 | STATUS:IN_BUILD | TYPE:SAVINGS
 MECHANISM: Conversation state snapshot (store structured state; stop resending full chat history).
+FILE: services/delta-context.js (started 2026-03-21)
 METRIC: reduced context tokens per request; stable task success rate.
 RISKS: state corruption; requires audit + diff logs.
 
@@ -46,8 +60,9 @@ MECHANISM: Context pruning with proofs (only keep evidence-bearing facts; record
 METRIC: token reduction + no drop in user-rated correctness.
 RISKS: removing critical nuance; mitigated by critical-fields whitelist.
 
-TCO-A06 | STATUS:PLANNED | TYPE:SAVINGS
-MECHANISM: “Stop sending history” detector (when history no longer improves outcomes, cut it).
+TCO-A06 | STATUS:LIVE | TYPE:SAVINGS
+MECHANISM: History truncation (keep last 6 turns; first turn always preserved; dropped count noted).
+FILE: services/token-optimizer.js (truncateHistory)
 METRIC: quality unchanged with reduced tokens over N requests.
 RISKS: false positives; must backoff to include history.
 
@@ -56,10 +71,29 @@ MECHANISM: Chunk routing (cheap model per chunk; one final compose call).
 METRIC: total cost vs baseline while preserving factuality.
 RISKS: cross-chunk inconsistency; requires merge checks.
 
-TCO-A08 | STATUS:PLANNED | TYPE:SAVINGS
+TCO-A08 | STATUS:LIVE | TYPE:SAVINGS
 MECHANISM: Semantic dedup cache (same meaning → return cached answer).
+FILE: ai_response_cache table in Neon production (hit_count tracked)
 METRIC: cache hit rate + cost saved + user satisfaction.
 RISKS: stale answers; requires TTL + invalidation rules.
+
+TCO-A09-NEW | STATUS:IN_BUILD | TYPE:SAVINGS
+MECHANISM: TOON compact notation (JSON payloads → YAML-style indentation + CSV arrays).
+FILE: services/toon-formatter.js (started 2026-03-21)
+METRIC: 61% token reduction on structured data (per TOON benchmark, InfoQ 2025).
+RISKS: parser compatibility; only apply to AI-consumed payloads, not API responses.
+
+TCO-A10-NEW | STATUS:IN_BUILD | TYPE:SAVINGS
+MECHANISM: Chain of Draft — AI reasons in ≤5-word shorthand steps, symbols where possible.
+FILE: services/prompt-ir.js (started 2026-03-21)
+METRIC: 92% output token reduction (Claude 3.5 Sonnet benchmark, arXiv 2502.18600).
+RISKS: 4% accuracy loss on reasoning tasks; do not apply to codegen or high-stakes outputs.
+
+TCO-A11-NEW | STATUS:IN_BUILD | TYPE:SAVINGS
+MECHANISM: Prompt IR compiler — converts verbose prose to T:/C:/I:/O:/R:/V: structured format.
+FILE: services/prompt-ir.js (started 2026-03-21)
+METRIC: 20–40% input reduction; enables automated drift detection.
+RISKS: IR parse errors; always fall back to original prompt on parse failure.
 
 TCO-A09 | STATUS:PLANNED | TYPE:SAVINGS
 MECHANISM: Response prediction / precompute for scheduled patterns (batch off-peak).
@@ -70,8 +104,10 @@ RISKS: wasted compute if predictions wrong; must be opt-in for batch jobs.
 B) MODEL ROUTING (CHEAP WHEN SUFFICIENT, EXPENSIVE WHEN REQUIRED)
 ============================================================
 
-TCO-B01 | STATUS:PLANNED | TYPE:SAVINGS
-MECHANISM: Difficulty classifier selects model tier before calling.
+TCO-B01 | STATUS:LIVE | TYPE:SAVINGS
+MECHANISM: Difficulty classifier + free-tier cascade (Groq → Gemini → Cerebras → OpenRouter → Mistral → Ollama).
+FILE: services/free-tier-governor.js + services/council-service.js
+KEYS-IN-RAILWAY: GROQ_API_KEY, GEMINI_API_KEY, CEREBRAS_API_KEY, OPENROUTER_API_KEY, MISTRAL_API_KEY, TOGETHER_API_KEY
 METRIC: cost reduction with stable success rate.
 RISKS: under-routing; mitigated by auto-escalation.
 
@@ -172,10 +208,12 @@ RISKS: client complexity; must be optional.
 E) PROOF, TRUST, AND GUARANTEES (SELLABLE WITHOUT HYPE)
 ============================================================
 
-TCO-E01 | STATUS:PLANNED | TYPE:PROOF
-MECHANISM: Savings ledger per request (before/after tokens, model used, cost, quality score).
+TCO-E01 | STATUS:IN_BUILD | TYPE:PROOF
+MECHANISM: Savings ledger per request (before/after tokens, model used, cost, quality score, receipt).
+FILE: services/savings-ledger.js + db/migrations/20260321_token_usage_log.sql (started 2026-03-21)
 METRIC: verified savings report (monthly).
 RISKS: sensitive data; redact + consent.
+NOTE: This is the sellable moat — the signed receipt per request that no competitor ships.
 
 TCO-E02 | STATUS:PLANNED | TYPE:QUALITY
 MECHANISM: Quality score guarantee (auto-escalate if below threshold).
@@ -291,11 +329,18 @@ I) IMPLEMENTATION PRIORITY (ANTI-SPRAWL)
 ACTIVE BUILD CAP (rule):
 At any time, no more than 5 items can be IN_BUILD. Everything else remains PLANNED.
 
-Suggested “first 5” candidates (modifiable):
-- TCO-E01 Savings ledger (proof)
-- TCO-B01 Difficulty classifier (routing)
+Current IN_BUILD (2026-03-21) — 5 active:
+- TCO-E01 Savings ledger (proof) ← started this session
+- TCO-A04 Delta context / stop resending history ← started this session
+- TCO-A09-NEW TOON compact notation ← started this session
+- TCO-A10-NEW Chain of Draft output compression ← started this session
+- TCO-A11-NEW Prompt IR compiler ← started this session
+
+Next candidates (after above complete):
 - TCO-C01 Critical-fields whitelist (meaning safety)
-- TCO-D01 Lazy expansion (overhead control)
+- TCO-C02 Meaning checksum (round-trip validation)
+- TCO-B04 Cheap→expensive ladder (confidence gating)
 - TCO-F03 Onboarding agent (time-to-first-value)
+- TCO-D01 Lazy expansion (overhead control)
 
 End of Annex.

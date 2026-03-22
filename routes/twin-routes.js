@@ -257,5 +257,43 @@ export function createTwinRoutes({ pool, requireKey, callCouncilMember }) {
     }
   });
 
+  // ── Free-tier usage status ────────────────────────────────────────────────
+  // GET /api/v1/twin/free-tier — shows remaining free calls per provider today
+  router.get('/free-tier', requireKey, async (req, res) => {
+    try {
+      const { createFreeTierGovernor } = await import('../services/free-tier-governor.js');
+      const governor = createFreeTierGovernor();
+      const status = await governor.getStatus();
+      res.json({ ok: true, ...status });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Token optimization stats + savings report ─────────────────────────────
+  // GET /api/v1/twin/tokens — today's token savings, cost avoided, recommendations
+  router.get('/tokens', requireKey, async (req, res) => {
+    try {
+      const { createTokenOptimizer } = await import('../services/token-optimizer.js');
+      const optimizer = createTokenOptimizer(pool);
+      const report = await optimizer.getReport();
+      res.json({ ok: true, ...report });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/twin/tokens/history — DB-backed daily rollup (last 30 days)
+  router.get('/tokens/history', requireKey, async (req, res) => {
+    try {
+      const rows = await pool.query(
+        `SELECT * FROM token_usage_daily WHERE day >= NOW() - INTERVAL '30 days' ORDER BY day DESC, requests DESC`
+      );
+      res.json({ ok: true, history: rows.rows });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   return router;
 }

@@ -21,28 +21,18 @@ export function registerPublicRoutes(app, {
 
   app.get("/command-center", (req, res) => {
     console.log("🎯 [ROUTE] /command-center accessed");
-    // Only accept header-based auth (no query params)
-    const key = req.headers["x-command-key"];
-
-    // If key provided and valid, allow access
-    if (key && key === COMMAND_CENTER_KEY) {
-      const filePath = path.join(
-        __dirname,
-        "public",
-        "overlay",
-        "command-center.html"
-      );
-      if (fs.existsSync(filePath)) {
-        return res.sendFile(filePath);
-      } else {
-        return res
-          .status(404)
-          .send("Command center not found. Please ensure command-center.html exists.");
-      }
+    const filePath = path.join(
+      __dirname,
+      "public",
+      "overlay",
+      "command-center.html"
+    );
+    if (fs.existsSync(filePath)) {
+      return res.sendFile(filePath);
     }
-
-    // No key or invalid key, redirect to activation
-    res.redirect("/activate");
+    return res
+      .status(404)
+      .send("Command center not found. Please ensure command-center.html exists.");
   });
 
   app.get("/boldtrail", (req, res) => {

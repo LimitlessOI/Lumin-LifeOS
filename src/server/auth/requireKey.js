@@ -2,21 +2,39 @@ export function createRequireKey(options = {}) {
   const header = options.header || "x-api-key";
   const envVar = options.envVar || "API_KEY";
   const queryKeys = options.queryKeys || ["api_key", "apiKey"];
+  const headerAliases = options.headerAliases || [
+    header,
+    "x-lifeos-key",
+    "x-command-key",
+    "x-command-center-key",
+  ];
+  const envVars = options.envVars || [
+    envVar,
+    "LIFEOS_KEY",
+    "COMMAND_CENTER_KEY",
+  ];
 
   return function requireKeyMiddleware(req, res, next) {
     try {
-      const configured = process.env[envVar];
+      const configuredValues = envVars
+        .map((name) => process.env[name])
+        .filter(Boolean);
 
       // If no key is configured, do not block requests (avoids breaking deploys).
-      if (!configured) return next();
+      if (configuredValues.length === 0) return next();
 
-      const providedHeader = (typeof req.get === "function" ? req.get(header) : null) || null;
+      const providedHeader = headerAliases
+        .map((name) =>
+          (typeof req.get === "function" ? req.get(name) : null) ||
+          req?.headers?.[name]
+        )
+        .find(Boolean) || null;
       const providedQuery =
         (req && req.query && queryKeys.map(k => req.query[k]).find(Boolean)) || null;
 
       const provided = providedHeader || providedQuery;
 
-      if (provided && provided === configured) return next();
+      if (provided && configuredValues.includes(provided)) return next();
       return res.status(401).json({ ok: false, error: "Unauthorized" });
     } catch (e) {
       return next(e);

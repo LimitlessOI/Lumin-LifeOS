@@ -52,7 +52,7 @@ export function setupWebSocketHandler(wss, {
         const msg = JSON.parse(data.toString());
 
         if (msg.type === "chat") {
-          const text = msg.text || msg.message;
+          const text = msg.text || msg.message || msg.content;
           const member = msg.member || "chatgpt";
 
           if (!text) return;

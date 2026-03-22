@@ -228,6 +228,20 @@ export function injectChainOfDraft(prompt, taskType = 'general') {
     return { text: prompt, applied: false };
   }
 
+  // Never apply CoD to JSON-generation prompts — reasoning steps corrupt the output
+  const lower = prompt.toLowerCase();
+  if (
+    lower.includes('return only valid json') ||
+    lower.includes('return only json') ||
+    lower.includes('output only json') ||
+    lower.includes('respond with json') ||
+    lower.includes('return a json') ||
+    lower.includes('start with [') ||
+    lower.includes('start with {')
+  ) {
+    return { text: prompt, applied: false };
+  }
+
   return { text: prompt + COD_INSTRUCTION, applied: true };
 }
 

@@ -39,8 +39,14 @@ async function loadPreferences() {
   }
 }
 
-export function createDesignQualityGate({ callAI }) {
-  const { evaluate } = createUXEvaluator({ callAI });
+/**
+ * Separate builder AI from critic AI to avoid conflict of interest.
+ * If callCritic is provided, it's used for evaluation (ideally a different model).
+ * Falls back to callAI if no critic is provided.
+ */
+export function createDesignQualityGate({ callAI, callCritic }) {
+  const criticAI = callCritic || callAI; // Different model for critique
+  const { evaluate } = createUXEvaluator({ callAI: criticAI });
 
   // ── Accessibility check ───────────────────────────────────────────────────
   function checkAccessibilitySignals(code) {

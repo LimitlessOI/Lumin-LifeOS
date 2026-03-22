@@ -12,6 +12,48 @@ const chatModes = [
     help: 'Fast local Ollama AI (free, runs on your machine).',
   },
   {
+    id: 'groq_free',
+    label: 'Groq Free',
+    endpoint: '/api/v1/chat',
+    member: 'groq_llama',
+    help: 'Free Groq route. Requires GROQ_API_KEY on the server.',
+  },
+  {
+    id: 'gemini_free',
+    label: 'Gemini Free',
+    endpoint: '/api/v1/chat',
+    member: 'gemini_flash',
+    help: 'Free Gemini Flash route. Requires GEMINI_API_KEY or LIFEOS_GEMINI_KEY.',
+  },
+  {
+    id: 'cerebras_free',
+    label: 'Cerebras Free',
+    endpoint: '/api/v1/chat',
+    member: 'cerebras_llama',
+    help: 'Free Cerebras route. Requires CEREBRAS_API_KEY.',
+  },
+  {
+    id: 'openrouter_free',
+    label: 'OpenRouter Free',
+    endpoint: '/api/v1/chat',
+    member: 'openrouter_free',
+    help: 'Free OpenRouter route. Requires OPENROUTER_API_KEY.',
+  },
+  {
+    id: 'mistral_free',
+    label: 'Mistral Free',
+    endpoint: '/api/v1/chat',
+    member: 'mistral_free',
+    help: 'Free Mistral route. Requires MISTRAL_API_KEY.',
+  },
+  {
+    id: 'together_free',
+    label: 'Together Free',
+    endpoint: '/api/v1/chat',
+    member: 'together_free',
+    help: 'Free/shared Together route. Requires TOGETHER_API_KEY.',
+  },
+  {
     id: 'brainstorm',
     label: 'Brainstorm',
     endpoint: '/api/v1/chat',
@@ -51,13 +93,20 @@ const chatModes = [
     help: 'Give a self-programming instruction; the council will analyze & act.',
   },
 ];
-const councilMembers = ['claude', 'chatgpt', 'gemini', 'deepseek', 'grok'];
+const FREE_CLOUD_MEMBERS = ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openrouter_free', 'mistral_free', 'together_free'];
+const councilMembers = ['claude', 'chatgpt', 'gemini', 'deepseek', 'grok', ...FREE_CLOUD_MEMBERS];
 const memberLabels = {
   claude: 'Claude',
   chatgpt: 'ChatGPT',
   gemini: 'Gemini',
   deepseek: 'DeepSeek',
   grok: 'Grok',
+  groq_llama: 'Groq Free',
+  gemini_flash: 'Gemini Flash',
+  cerebras_llama: 'Cerebras',
+  openrouter_free: 'OpenRouter Free',
+  mistral_free: 'Mistral Free',
+  together_free: 'Together Free',
 };
 const specialMemberNames = {
   council: 'Council Decision',
@@ -74,19 +123,25 @@ let lastBuilderStatus = null;
 function getHeaders(json = true) {
   const headers = {};
   if (json) headers['Content-Type'] = 'application/json';
-  const lifeosKey = localStorage.getItem('LIFEOS_KEY');
-  if (lifeosKey) {
-    headers['x-api-key'] = lifeosKey;      // Default requireKey header
-    headers['x-lifeos-key'] = lifeosKey;   // Legacy/fallback header
+  const authKey =
+    localStorage.getItem('LIFEOS_KEY') ||
+    localStorage.getItem('COMMAND_CENTER_KEY') ||
+    localStorage.getItem('lifeos_cmd_key');
+  if (authKey) {
+    headers['x-api-key'] = authKey;
+    headers['x-lifeos-key'] = authKey;
+    headers['x-command-key'] = authKey;
+    headers['x-command-center-key'] = authKey;
   }
   return headers;
 }
 
 function getCommandHeaders(json = true) {
   const headers = getHeaders(json);
-  const commandKey = localStorage.getItem('COMMAND_CENTER_KEY');
+  const commandKey = getCommandCenterKey();
   if (commandKey) {
     headers['x-command-key'] = commandKey;
+    headers['x-command-center-key'] = commandKey;
     headers['x-lifeos-key'] = commandKey;
   }
   return headers;
@@ -492,6 +547,44 @@ function updateBuilderPanel(data) {
   document.getElementById('builderRaw').textContent = JSON.stringify(data, null, 2);
 }
 
+function updateFreeTierPanel(freeTierData, councilHealthData) {
+  const panel = document.getElementById('freeTierStatus');
+  const raw = document.getElementById('freeTierRaw');
+  if (!panel || !raw) return;
+
+  const healthByMember = new Map(
+    (councilHealthData?.members || []).map(member => [member.member, member])
+  );
+
+  let html = '';
+  if (freeTierData?.ok === false) {
+    html = `<span class="status-error">✗ ${escapeHtml(freeTierData.error || 'Free-tier status unavailable')}</span>`;
+  } else {
+    html += '<div class="status-card"><h3>Free Provider Pool</h3>';
+    FREE_CLOUD_MEMBERS.forEach(member => {
+      const providerKey = member.replace(/_(llama|flash|free)$/,'');
+      const freeStatus = freeTierData?.providers?.[providerKey] || null;
+      const health = healthByMember.get(member) || null;
+      const configured = health && health.error !== 'api_key_missing';
+      const online = Boolean(health?.ok);
+      const statusClass = online ? 'status-ok' : configured ? 'status-warning' : 'status-error';
+      const statusText = online ? 'ONLINE' : configured ? 'CONFIGURED' : 'MISSING KEY';
+      const requestPct = freeStatus?.requests?.pct;
+      const requestText = requestPct === null || requestPct === undefined
+        ? 'n/a'
+        : `${requestPct}%`;
+      html += `<div class="component-item"><span>${escapeHtml(memberLabels[member] || member)}</span><span class="${statusClass}">${statusText} · used ${requestText}</span></div>`;
+    });
+    html += '</div>';
+  }
+
+  panel.innerHTML = html;
+  raw.textContent = JSON.stringify({
+    freeTier: freeTierData,
+    councilHealth: councilHealthData,
+  }, null, 2);
+}
+
 function showRateLimit(message) {
   const banner = document.getElementById('rateLimitBanner');
   if (message) {
@@ -688,7 +781,12 @@ function saveConversationLog() {
 }
 
 function getCommandCenterKey() {
-  return localStorage.getItem('COMMAND_CENTER_KEY') || '';
+  return (
+    localStorage.getItem('COMMAND_CENTER_KEY') ||
+    localStorage.getItem('lifeos_cmd_key') ||
+    localStorage.getItem('LIFEOS_KEY') ||
+    ''
+  );
 }
 
 function saveCommandKey() {
@@ -696,6 +794,8 @@ function saveCommandKey() {
   const key = input.value.trim();
   if (!key) return;
   localStorage.setItem('COMMAND_CENTER_KEY', key);
+  localStorage.setItem('lifeos_cmd_key', key);
+  localStorage.setItem('LIFEOS_KEY', key);
   input.value = '';
   updateCommandKeyStatus();
   refreshSafetyStatus();
@@ -792,7 +892,13 @@ function submitChat() {
   let requestPromise;
   if (mode.id === 'ollama') {
     // Route through Ollama local AI
-    payload = { task: prompt, options: { taskType: 'general', riskLevel: 'low' } };
+    payload = {
+      task: prompt,
+      taskType: 'general',
+      riskLevel: 'low',
+      userFacing: false,
+      revenueImpact: 'low',
+    };
     requestPromise = postJson(endpoint, payload);
   } else if (mode.id === 'council') {
     payload = { decision: prompt, agents: Array.from(selectedCouncilMembers) };
@@ -824,14 +930,15 @@ function refresh() {
   };
 
   Promise.allSettled([
-    fetch('/health'),
+    fetchJson('/api/health'),
     fetchJson('/api/v1/tools/status'),
     fetchJson('/api/v1/auto-builder/status'),
-  ]).then(async ([healthResult, toolsResult, builderResult]) => {
+    fetchCommandJson('/api/v1/twin/free-tier'),
+    fetchCommandJson(`/api/v1/council/health?members=${encodeURIComponent(FREE_CLOUD_MEMBERS.join(','))}`),
+  ]).then(async ([healthResult, toolsResult, builderResult, freeTierResult, freeHealthResult]) => {
     // health
     if (healthResult.status === 'fulfilled') {
-      const text = await healthResult.value.text();
-      updateHealthPanel(text, healthResult.value.ok && /OK|healthy/i.test(text));
+      updateHealthPanel('System OK', healthResult.value.server === 'ok');
     } else {
       updateHealthPanel(`Health: ${classifyErr(healthResult.reason)}`, false);
     }
@@ -863,6 +970,18 @@ function refresh() {
       document.getElementById('builderStatus').innerHTML =
         `<span class="status-error">✗ Builder: ${kind}</span>`;
       document.getElementById('builderRaw').textContent = 'No data';
+    }
+
+    if (freeTierResult.status === 'fulfilled' || freeHealthResult.status === 'fulfilled') {
+      updateFreeTierPanel(
+        freeTierResult.status === 'fulfilled' ? freeTierResult.value : { ok: false, error: classifyErr(freeTierResult.reason) },
+        freeHealthResult.status === 'fulfilled' ? freeHealthResult.value : { ok: false, error: classifyErr(freeHealthResult.reason) }
+      );
+    } else {
+      updateFreeTierPanel(
+        { ok: false, error: classifyErr(freeTierResult.reason) },
+        { ok: false, error: classifyErr(freeHealthResult.reason) }
+      );
     }
 
     refreshSafetyStatus();
@@ -949,7 +1068,10 @@ async function testOllama() {
   try {
     const response = await postJson('/api/v1/council/route', {
       task: 'Hello, are you working?',
-      options: { taskType: 'simple_classification', riskLevel: 'low' }
+      taskType: 'simple_classification',
+      riskLevel: 'low',
+      userFacing: false,
+      revenueImpact: 'low',
     });
 
     if (response?.success) {

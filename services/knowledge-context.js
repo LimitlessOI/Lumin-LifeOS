@@ -134,54 +134,69 @@ function appendRelevantIdeas(contextSection, prompt, entries, maxIdeas) {
   return contextSection;
 }
 
-export async function injectKnowledgeContext(prompt, maxIdeas = 5) {
-  let contextSection = "";
+// In-process SOT cache — avoids a DB round-trip on every AI call.
+// Refreshes every 10 minutes.
+let _sotCache = null;
+let _sotCacheAt = 0;
+const SOT_CACHE_TTL_MS = 10 * 60 * 1000;
 
+async function _getSOTContent() {
+  const now = Date.now();
+  if (_sotCache !== null && (now - _sotCacheAt) < SOT_CACHE_TTL_MS) {
+    return _sotCache;
+  }
   try {
-    const sourceOfTruthMemories = await memorySystem.retrieveMemories("facts", {
+    const mems = await memorySystem.retrieveMemories("facts", {
       minConfidence: 1.0,
       type: memorySystem.MEMORY_TYPES.SYSTEM_FACT,
       limit: 1,
     });
+    const content = mems[0]?.content?.content || null;
+    _sotCache = content;
+    _sotCacheAt = now;
+    return content;
+  } catch {
+    return _sotCache; // return stale rather than nothing
+  }
+}
 
-    if (sourceOfTruthMemories.length > 0) {
-      const sotMemory = sourceOfTruthMemories[0];
-      if (sotMemory.content && typeof sotMemory.content === "object" && sotMemory.content.content) {
-        contextSection += `\n\n╔══════════════════════════════════════════════════════════════════════════════════╗\n`;
-        contextSection += `║                                                                                  ║\n`;
-        contextSection += `║  🎯 ABSOLUTE SOURCE OF TRUTH - LifeOS / LimitlessOS (v1.0)                      ║\n`;
-        contextSection += `║  This document supersedes ALL other context. Reference this for ALL decisions.  ║\n`;
-        contextSection += `║                                                                                  ║\n`;
-        contextSection += `╚══════════════════════════════════════════════════════════════════════════════════╝\n\n`;
-        contextSection += `${sotMemory.content.content}\n\n`;
-        contextSection += `╔══════════════════════════════════════════════════════════════════════════════════╗\n`;
-        contextSection += `║  END OF SOURCE OF TRUTH                                                          ║\n`;
-        contextSection += `╚══════════════════════════════════════════════════════════════════════════════════╝\n\n`;
-      }
-    }
-  } catch (sotError) {
-    console.warn("⚠️ [CONTEXT] Could not load Source of Truth from memory:", sotError.message);
+/**
+ * buildSystemContext — returns just the knowledge/SOT section (no user prompt).
+ * Intended to be inserted into the system message so providers can cache it.
+ */
+export async function buildSystemContext(prompt, maxIdeas = 3) {
+  let section = "";
+
+  const sotContent = await _getSOTContent();
+  if (sotContent) {
+    section += `[SOT: LifeOS/LimitlessOS — supersedes all]\n${sotContent.substring(0, 1200)}\n[/SOT]\n`;
   }
 
   const ctx = knowledgeContext;
   if (ctx) {
     if (ctx.trueVision) {
-      contextSection += `\n\n=== FOUNDATION: TRUE VISION (Secondary to Source of Truth) ===\n${ctx.trueVision}\n`;
+      section += `[VISION]\n${ctx.trueVision.substring(0, 1000)}\n[/VISION]\n`;
     }
     if (ctx.coreTruths) {
-      contextSection += `\n\n=== CORE TRUTHS (Immutable Principles) ===\n${ctx.coreTruths.substring(0, 2000)}\n`;
+      section += `[TRUTHS]\n${ctx.coreTruths.substring(0, 700)}\n[/TRUTHS]\n`;
     }
     if (ctx.projectContext) {
-      contextSection += `\n\n=== PROJECT CONTEXT ===\n${ctx.projectContext.substring(0, 1500)}\n`;
+      section += `[CTX]\n${ctx.projectContext.substring(0, 500)}\n[/CTX]\n`;
     }
+    section = appendRelevantIdeas(section, prompt, ctx.entries, maxIdeas);
   }
 
-  contextSection = appendRelevantIdeas(contextSection, prompt, ctx?.entries, maxIdeas);
-  contextSection = appendRelevantIdeas(contextSection, prompt, ctx?.entries, maxIdeas);
+  return section;
+}
 
-  if (contextSection) {
-    return `${contextSection}\n\n=== USER REQUEST ===\n${prompt}\n\n⚠️ CRITICAL: All responses must align with the SOURCE OF TRUTH above. Reference it for ALL decisions, product choices, and ethical considerations.`;
+/**
+ * injectKnowledgeContext — legacy compat. Now delegates to buildSystemContext
+ * and wraps the user prompt for callers that still expect a single string.
+ */
+export async function injectKnowledgeContext(prompt, maxIdeas = 5) {
+  const section = await buildSystemContext(prompt, maxIdeas);
+  if (section) {
+    return `${section}\n[REQUEST]\n${prompt}\n[/REQUEST]`;
   }
-
   return prompt;
 }

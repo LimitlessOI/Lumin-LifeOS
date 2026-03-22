@@ -15,8 +15,43 @@ const CACHE_TTL_MS  = 24 * 60 * 60 * 1000;  // 24h default
 const CACHE_TTL_LONG = 72 * 60 * 60 * 1000; // 72h for analysis tasks
 const MAX_L1_SIZE   = 1000;
 
-// L1 — in-memory Map: key → { response, expiresAt, taskType }
+// L1 — in-memory Map: key → { response, expiresAt, taskType, words }
 const L1 = new Map();
+
+// ---------------------------------------------------------------------------
+// Semantic helpers — Jaccard similarity for fuzzy cache matching
+// ---------------------------------------------------------------------------
+const SEMANTIC_THRESHOLD = 0.75;
+
+function tokenize(text) {
+  return text.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter(w => w.length > 2);
+}
+
+function jaccardSimilarity(wordsA, wordsB) {
+  const setA = new Set(wordsA);
+  const setB = new Set(wordsB);
+  let intersection = 0;
+  for (const w of setA) { if (setB.has(w)) intersection++; }
+  const union = setA.size + setB.size - intersection;
+  return union === 0 ? 0 : intersection / union;
+}
+
+function semanticLookupL1(words, member) {
+  const now = Date.now();
+  let bestKey = null, bestScore = 0;
+  const prefix = `${member}:`;
+  for (const [key, entry] of L1) {
+    if (!key.startsWith(prefix)) continue;
+    if (entry.expiresAt <= now) continue;
+    if (!entry.words || entry.words.length === 0) continue;
+    const score = jaccardSimilarity(words, entry.words);
+    if (score > bestScore && score >= SEMANTIC_THRESHOLD) {
+      bestScore = score;
+      bestKey = key;
+    }
+  }
+  return bestKey ? { key: bestKey, score: bestScore } : null;
+}
 
 // Pool reference — set once via initCache()
 let _pool = null;
@@ -66,6 +101,7 @@ async function _warmL1FromDB() {
         response: row.response_text,
         expiresAt: new Date(row.expires_at).getTime(),
         taskType: row.task_type || '',
+        words: row.prompt_snippet ? tokenize(row.prompt_snippet) : [],
       });
     }
     if (rows.length > 0) {
@@ -116,6 +152,17 @@ export async function getCachedResponse(prompt, member, compressionMetrics) {
     } catch {}
   }
 
+  // Semantic fallback — fuzzy match via Jaccard similarity on L1 word sets
+  const words = tokenize(prompt);
+  const semantic = semanticLookupL1(words, member);
+  if (semantic) {
+    const entry = L1.get(semantic.key);
+    if (compressionMetrics) compressionMetrics.semantic_hits = (compressionMetrics.semantic_hits || 0) + 1;
+    _bumpHitCount(semantic.key).catch(() => {});
+    console.log(`🔍 [SEMANTIC-CACHE] Hit for ${member} (Jaccard: ${semantic.score.toFixed(2)})`);
+    return entry.response;
+  }
+
   if (compressionMetrics) compressionMetrics.cache_misses = (compressionMetrics.cache_misses || 0) + 1;
   return null;
 }
@@ -127,8 +174,8 @@ export function cacheResponse(prompt, member, response, taskType = '') {
   const key = cacheKey(member, prompt);
   const expiresAt = Date.now() + ttlMs(taskType);
 
-  // L1 write (synchronous)
-  L1.set(key, { response, expiresAt, taskType });
+  // L1 write (synchronous) — include word set for semantic lookup
+  L1.set(key, { response, expiresAt, taskType, words: tokenize(prompt) });
   if (L1.size > MAX_L1_SIZE) {
     L1.delete(L1.keys().next().value); // evict oldest
   }

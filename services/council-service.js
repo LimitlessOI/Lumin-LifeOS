@@ -1,11 +1,16 @@
 import dayjs from "dayjs";
-import { injectKnowledgeContext } from "./knowledge-context.js";
+import { injectKnowledgeContext, buildSystemContext } from "./knowledge-context.js";
 import { createFreeTierGovernor } from "./free-tier-governor.js";
 import { compress as optimizePrompt, estimateTokens, createTokenOptimizer } from "./token-optimizer.js";
 import { compressJSONInPrompt } from "./toon-formatter.js";
 import { injectChainOfDraft, compressPrompt as irCompressPrompt } from "./prompt-ir.js";
 import { createSavingsLedger } from "./savings-ledger.js";
 import { addTurn, getDelta, startSession } from "./delta-context.js";
+import {
+  getCachedResponse as _rcGet,
+  cacheResponse as _rcSet,
+  initCache as _rcInit,
+} from "./response-cache.js";
 
 // Singleton governor — tracks daily usage across all providers
 const freeTierGovernor = createFreeTierGovernor();
@@ -541,49 +546,14 @@ export function createCouncilService({
     return getApiKeyForProvider(provider);
   }
 
+  // Delegate to response-cache.js — L1 in-memory + L2 Neon DB, with
+  // semantic (Jaccard) fuzzy matching and post-deploy L1 warm-up.
   async function getCachedResponse(prompt, member) {
-    try {
-      const result = await pool.query(
-        `SELECT response_text FROM ai_cache WHERE prompt_hash = $1 AND ai_member = $2`,
-        [hashPrompt(prompt), member]
-      );
-      if (result.rows.length > 0) {
-        if (compressionMetrics) {
-          compressionMetrics.cache_hits =
-            (compressionMetrics.cache_hits || 0) + 1;
-        }
-        return result.rows[0].response_text;
-      }
-      return null;
-    } catch {
-      return null;
-    }
+    return _rcGet(prompt, member, compressionMetrics);
   }
 
-  async function cacheResponse(prompt, member, responseText) {
-    try {
-      await pool.query(
-        `INSERT INTO ai_cache (prompt_hash, ai_member, response_text, created_at)
-         VALUES ($1, $2, $3, now())
-         ON CONFLICT (prompt_hash, ai_member) DO UPDATE SET response_text = $3, created_at = now()`,
-        [hashPrompt(prompt), member, responseText]
-      );
-    } catch {
-      // cache failures are non-fatal
-    }
-  }
-
-  function hashPrompt(prompt) {
-    // Simple stable hash (node crypto not imported here to keep service lightweight);
-    // rely on database-level deduplication by normalized prompt length + prefix.
-    const normalized = String(prompt || "").slice(0, 512);
-    let hash = 0;
-    for (let i = 0; i < normalized.length; i++) {
-      const chr = normalized.charCodeAt(i);
-      hash = (hash << 5) - hash + chr;
-      hash |= 0;
-    }
-    return `h_${normalized.length}_${Math.abs(hash)}`;
+  async function cacheResponse(prompt, member, responseText, taskType) {
+    return _rcSet(prompt, member, responseText, taskType || '');
   }
 
   function getChatCompletionUrl(provider) {
@@ -715,19 +685,17 @@ export function createCouncilService({
       console.log(`🔁 [ALIAS] ${requestedMember} → ${resolvedMember}`);
     }
     member = resolvedMember;
-    const config = COUNCIL_MEMBERS[member];
-
-    if (!config) {
+    // config is declared later, after selectOptimalModel may rewrite member
+    if (!COUNCIL_MEMBERS[member]) {
       throw new Error(`Unknown member: ${member}`);
     }
 
     const today = dayjs().format("YYYY-MM-DD");
     const spend = await getDailySpend(today);
 
-    const memberConfig = COUNCIL_MEMBERS[member];
     const isPaid =
-      !memberConfig?.isFree &&
-      (memberConfig?.costPer1M > 0 || memberConfig?.tier === "tier1");
+      !COUNCIL_MEMBERS[member]?.isFree &&
+      (COUNCIL_MEMBERS[member]?.costPer1M > 0 || COUNCIL_MEMBERS[member]?.tier === "tier1");
 
     // ── Free-tier cascade (Groq → Gemini → Cerebras → OpenRouter → Mistral → Ollama) ──
     // If a paid member was requested and spending is disabled/over limit,
@@ -779,47 +747,8 @@ export function createCouncilService({
       );
     }
 
-    const sourceOfTruthManager = getSourceOfTruthManager
-      ? getSourceOfTruthManager()
-      : null;
-
-    if (sourceOfTruthManager && options.requiresMissionAlignment !== false) {
-      const shouldRef =
-        await sourceOfTruthManager.shouldReferenceSourceOfTruth(
-          options.taskType || "general",
-          options
-        );
-      if (shouldRef) {
-        const relevantSections =
-          await sourceOfTruthManager.getRelevantSections(
-            options.taskType || "general",
-            options
-          );
-        if (relevantSections.length > 0) {
-          const sotContext = relevantSections
-            .map(
-              (d) =>
-                `[${d.document_type}${
-                  d.section ? ` / ${d.section}` : ""
-                }]: ${d.content.substring(0, 500)}`
-            )
-            .join("\n\n");
-          prompt = `[SYSTEM SOURCE OF TRUTH - Reference this for mission alignment]\n${sotContext}\n\n---\n\n[USER REQUEST]\n${prompt}`;
-        }
-      }
-    }
-
-    if (options.useCache !== false) {
-      const cached = await getCachedResponse(prompt, member);
-      if (cached) {
-        console.log(`💰 [CACHE HIT] Saved API call for ${member}`);
-        return cached;
-      }
-      if (compressionMetrics) {
-        compressionMetrics.cache_misses =
-          (compressionMetrics.cache_misses || 0) + 1;
-      }
-    }
+    // SOT context is now injected into the system prompt via buildSystemContext().
+    // Removed: duplicate SOT injection into user prompt that caused double-billing.
 
     if (!options.useOpenSourceCouncil) {
       const optimalModel = selectOptimalModel(prompt, options.complexity);
@@ -854,6 +783,23 @@ export function createCouncilService({
       }
     }
 
+    // Recompute config after selectOptimalModel may have rewritten member
+    const config = COUNCIL_MEMBERS[member];
+    if (!config) throw new Error(`Unknown member after routing: ${member}`);
+
+    // Cache lookup happens AFTER member rewrite so the resolved member/model is the key
+    if (options.useCache !== false) {
+      const cached = await getCachedResponse(prompt, member);
+      if (cached) {
+        console.log(`💰 [CACHE HIT] Saved API call for ${member}`);
+        return cached;
+      }
+      if (compressionMetrics) {
+        compressionMetrics.cache_misses =
+          (compressionMetrics.cache_misses || 0) + 1;
+      }
+    }
+
     const apiKey = getApiKey(config.provider);
 
     if (config.provider === "ollama") {
@@ -884,18 +830,22 @@ export function createCouncilService({
     }
 
     // ── Gate knowledge context injection — only for calls that need it ────────
-    // Skipping saves ~1,200–2,000 tokens on every routing/classification/codegen call.
+    // Knowledge context now goes into system prompt (cached by providers),
+    // not prepended to user turn. Saves 800-1,350 tokens per eligible call.
     const needsKnowledgeContext = !isCritical
       && !['routing', 'codegen', 'validation'].includes(taskType)
       && options.skipKnowledge !== true;
-    const enhancedPrompt = needsKnowledgeContext
-      ? await injectKnowledgeContext(prompt, 3)  // reduced from 5 → 3 ideas
-      : prompt;
+    const knowledgeSection = needsKnowledgeContext
+      ? await buildSystemContext(prompt, 3)
+      : '';
 
-    // ── Compact system prompt — only include what's needed per call ───────────
+    // User prompt stays clean — only the actual request.
+    const enhancedPrompt = prompt;
+
+    // ── Compact system prompt — knowledge context baked in for cacheability ───
     const systemPromptBase = `You are ${config.name} (${config.role}) in LifeOS AI Council on Railway.
 Specialties: ${config.specialties.join(', ')}.${options.checkBlindSpots ? ' Check blind spots.' : ''}${options.guessUserPreference ? ' Use user preferences.' : ''}${options.webSearch ? '\nWEB SEARCH: Include links, code, actionable solutions.' : ''}
-Be concise.`;
+Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
     // ── Token optimization — 5-layer compression stack ───────────────────────
     // Layer 1: noise strip + phrase substitution (token-optimizer)
@@ -933,14 +883,23 @@ Be concise.`;
     let codSavedOutputPct = 0;
     if (!isCritical && taskType !== 'codegen' && taskType !== 'code') {
       const irResult = irCompressPrompt(finalPrompt, taskType);
+      // Always apply irResult.text — it includes CoD even when IR saves 0 tokens.
+      // (CoD adds ~10 tokens to input but saves 60-92% on output tokens.)
+      finalPrompt = irResult.text;
       if (irResult.savedTokens > 0) {
-        finalPrompt = irResult.text;
         irSavedTokens = irResult.savedTokens;
         compressionLayers.prompt_ir = { savedTokens: irResult.savedTokens, savedPct: irResult.savingsPct };
       }
       if (irResult.layers?.chain_of_draft) {
         codSavedOutputPct = 92; // published benchmark: arXiv 2502.18600
         compressionLayers.chain_of_draft = { applied: true, savedOutputPct: codSavedOutputPct };
+      }
+    }
+
+    // Layer 5b — Output constraint for routing/classification (≤5 words)
+    if (!isCritical && (taskType === 'routing' || taskType === 'classification')) {
+      if (!finalPrompt.includes('≤5 words')) {
+        finalPrompt += '\nAnswer in ≤5 words.';
       }
     }
 
@@ -964,46 +923,51 @@ Be concise.`;
     const useCompression = false; // legacy LCTP disabled — replaced by layer stack above
     const systemPrompt = optimizedSystemPrompt.text;
 
-    // TCO-A04: Delta context — if caller passes options.sessionId, only send the delta
-    // not the full history. Saves 50–80% on multi-turn sessions.
+    // TCO-A04: Delta context — auto-generate sessionId if not provided.
+    // Groups calls by member:taskType so multi-turn savings fire automatically.
     let deltaMessages = null;
     let deltaContextSaved = 0;
-    if (options.sessionId && !isCritical) {
-      startSession(options.sessionId, systemPrompt);
-      const delta = getDelta(options.sessionId, finalPrompt);
+    const effectiveSessionId = options.sessionId
+      || (!isCritical ? `auto:${member}:${taskType}` : null);
+    if (effectiveSessionId) {
+      startSession(effectiveSessionId, systemPrompt);
+      const delta = getDelta(effectiveSessionId, finalPrompt);
       deltaMessages = delta.messages;
       deltaContextSaved = delta.savedChars;
       if (delta.savedPct > 0) {
         compressionLayers.delta_context = { savedChars: delta.savedChars, savedPct: delta.savedPct };
       }
+      // User + assistant turns recorded after the response via recordSessionTurns.
     }
+
+    // ── max_tokens scoped to taskType — routing needs ≤50 tokens, not 2000 ──
+    const scopedMaxTokens = (() => {
+      if (taskType === 'routing' || taskType === 'classification') return 50;
+      if (taskType === 'summary') return 300;
+      if (taskType === 'analysis' || taskType === 'review') return 600;
+      return config.maxTokens || 1000;
+    })();
 
     const startTime = Date.now();
 
     try {
       let response;
-      const noCacheHeaders = {
-        "Cache-Control": "no-cache, no-store, must-revalidate",
-        Pragma: "no-cache",
-        Expires: "0",
-      };
 
       if (OPENAI_COMPATIBLE_PROVIDERS.has(config.provider)) {
         response = await fetch(getChatCompletionUrl(config.provider), {
           method: "POST",
-          headers: buildOpenAICompatibleHeaders(
-            config.provider,
-            apiKey,
-            noCacheHeaders
-          ),
+          headers: buildOpenAICompatibleHeaders(config.provider, apiKey),
           body: JSON.stringify({
             model: config.model,
-            max_tokens: config.maxTokens,
+            max_tokens: scopedMaxTokens,
             temperature: 0.7,
-            messages: deltaMessages || [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: finalPrompt },
-            ],
+            messages: deltaMessages
+              // Always prepend system message — delta window never carries it
+              ? [{ role: "system", content: systemPrompt }, ...deltaMessages]
+              : [
+                  { role: "system", content: systemPrompt },
+                  { role: "user", content: finalPrompt },
+                ],
           }),
         });
 
@@ -1083,11 +1047,11 @@ Be concise.`;
         }
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, text);
+          await cacheResponse(prompt, member, text, taskType);
         }
 
         await freeTierGovernor.record(provider, inputTokens + outputTokens).catch(() => {});
-        recordSessionTurns(options.sessionId, prompt, text);
+        recordSessionTurns(effectiveSessionId, prompt, text);
 
         return text;
       }
@@ -1105,13 +1069,12 @@ Be concise.`;
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              ...noCacheHeaders,
             },
             body: JSON.stringify({
               ...geminiBody,
               generationConfig: {
                 temperature: 0.7,
-                maxOutputTokens: config.maxTokens,
+                maxOutputTokens: scopedMaxTokens,
               },
             }),
             signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
@@ -1169,11 +1132,11 @@ Be concise.`;
         }
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, text);
+          await cacheResponse(prompt, member, text, taskType);
         }
 
         await freeTierGovernor.record("gemini", inputTokens + outputTokens).catch(() => {});
-        recordSessionTurns(options.sessionId, prompt, text);
+        recordSessionTurns(effectiveSessionId, prompt, text);
         return text;
       }
 
@@ -1187,10 +1150,12 @@ Be concise.`;
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             model: currentConfig.model,
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: finalPrompt },
-            ],
+            messages: deltaMessages
+              ? [{ role: "system", content: systemPrompt }, ...deltaMessages]
+              : [
+                  { role: "system", content: systemPrompt },
+                  { role: "user", content: finalPrompt },
+                ],
             stream: false,
           }),
           signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
@@ -1210,7 +1175,7 @@ Be concise.`;
         text = decompressResponse(text, useCompression);
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, text);
+          await cacheResponse(prompt, member, text, taskType);
         }
 
         // TCO-E01: ledger for Ollama (free/local — cost $0)
@@ -1230,7 +1195,7 @@ Be concise.`;
           }).catch(() => {});
         }
 
-        recordSessionTurns(options.sessionId, prompt, text);
+        recordSessionTurns(effectiveSessionId, prompt, text);
 
         return text;
       }
@@ -1247,12 +1212,14 @@ Be concise.`;
           },
           body: JSON.stringify({
             model: config.model,
-            max_tokens: config.maxTokens,
+            max_tokens: scopedMaxTokens,
             temperature: 0.7,
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: finalPrompt },
-            ],
+            messages: deltaMessages
+              ? [{ role: "system", content: systemPrompt }, ...deltaMessages]
+              : [
+                  { role: "system", content: systemPrompt },
+                  { role: "user", content: finalPrompt },
+                ],
           }),
         });
 
@@ -1273,7 +1240,7 @@ Be concise.`;
         await updateDailySpend(cost);
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, text);
+          await cacheResponse(prompt, member, text, taskType);
         }
 
         // TCO-E01: ledger for DeepSeek
@@ -1293,7 +1260,7 @@ Be concise.`;
           }).catch(() => {});
         }
 
-        recordSessionTurns(options.sessionId, prompt, text);
+        recordSessionTurns(effectiveSessionId, prompt, text);
 
         return text;
       }

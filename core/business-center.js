@@ -295,26 +295,23 @@ Return JSON: {"score": 0-100, "issues": ["issue1", "issue2"], "recommendations":
   async generateRevenueOpportunities() {
     console.log('💰 [BUSINESS CENTER] Generating revenue opportunities...');
     
-    const prompt = `Generate 10 immediate revenue opportunities for LifeOS:
-    
-Focus on:
-- Services we can offer NOW
-- Products we can create quickly
-- Businesses we can duplicate and improve by 10-20%
-- Code generation/review services
-- Make.com scenario generation
-- Game development (for overlay distribution)
-- Automation services
+    const prompt = `Generate 10 immediate revenue opportunities for LifeOS.
 
-For each opportunity, provide:
-1. Name
-2. Revenue potential ($/month)
-3. Time to implement (hours)
-4. Required resources
-5. Market demand
-6. Competitive advantage
+Focus on: services we can offer NOW, automation, code generation/review, AI workflows, game distribution.
 
-CRITICAL: Return ONLY valid JSON array. No text before or after. Start with [ and end with ].`;
+Return ONLY a valid JSON array using EXACTLY these field names:
+[
+  {
+    "name": "opportunity name",
+    "revenuePotential": 5000,
+    "timeToImplement": 8,
+    "requiredResources": "what is needed",
+    "marketDemand": "high/medium/low",
+    "competitiveAdvantage": "why we win"
+  }
+]
+
+No text before or after. No markdown. Start with [ and end with ].`;
 
     try {
       const response = await this.callCouncilMember('chatgpt', prompt, {
@@ -347,13 +344,25 @@ CRITICAL: Return ONLY valid JSON array. No text before or after. Start with [ an
    */
   async storeRevenueOpportunity(opportunity) {
     try {
-      // Validate required fields before INSERT
-      if (!opportunity.name || !opportunity.name.trim()) {
-        console.warn('⚠️ [BUSINESS CENTER] Skipping opportunity with no name');
+      // Normalize field names — models return different keys despite exact-schema instructions
+      const name = opportunity.name
+        || opportunity.title
+        || opportunity.opportunity_name
+        || opportunity.service
+        || opportunity.service_name
+        || opportunity.opportunityName
+        || opportunity.label
+        || '';
+
+      if (!name || !name.trim()) {
+        console.warn('⚠️ [BUSINESS CENTER] Skipping opportunity with no name', JSON.stringify(Object.keys(opportunity)));
         return;
       }
-      
-      const revenueRaw = opportunity.revenuePotential || opportunity.revenue_potential;
+      opportunity.name = name; // normalize for the rest of this function
+
+      const revenueRaw = opportunity.revenuePotential || opportunity.revenue_potential
+        || opportunity.monthlyRevenue || opportunity.monthly_revenue
+        || opportunity.revenue;
       const revenueValue = BusinessCenter.sanitizeRevenue(revenueRaw);
       BusinessCenter.logSanitization('revenue_potential', revenueRaw, revenueValue);
       if (revenueValue == null) {
@@ -361,14 +370,18 @@ CRITICAL: Return ONLY valid JSON array. No text before or after. Start with [ an
         return;
       }
 
-      const timeRaw = opportunity.timeToImplement || opportunity.time_to_implement;
+      const timeRaw = opportunity.timeToImplement || opportunity.time_to_implement
+        || opportunity.implementationTime || opportunity.hours || opportunity.hoursToImplement;
       const timeValue = BusinessCenter.sanitizeDuration(timeRaw) ?? 1;
       BusinessCenter.logSanitization('time_to_implement', timeRaw, timeValue);
 
-      const requiredResources = opportunity.requiredResources || opportunity.required_resources || [];
+      const requiredResources = opportunity.requiredResources || opportunity.required_resources
+        || opportunity.resources || opportunity.requirements || [];
       const resourcesPayload = JSON.stringify(requiredResources).slice(0, 2048);
-      const marketDemand = (opportunity.marketDemand || opportunity.market_demand || '').toString().slice(0, 256);
-      const competitive = (opportunity.competitiveAdvantage || opportunity.competitive_advantage || '').toString().slice(0, 256);
+      const marketDemand = (opportunity.marketDemand || opportunity.market_demand
+        || opportunity.demand || '').toString().slice(0, 256);
+      const competitive = (opportunity.competitiveAdvantage || opportunity.competitive_advantage
+        || opportunity.advantage || opportunity.differentiator || '').toString().slice(0, 256);
 
       const baselineRatio = await BusinessCenter.getBaselineRatio(this.pool);
       const candidateRatio = revenueValue / timeValue;

@@ -39,6 +39,12 @@ export class CouncilModule {
         handler: this.handleCouncilTest.bind(this),
       },
       {
+        path: "/api/v1/council/health",
+        method: "GET",
+        middleware: [requireKey],
+        handler: this.handleCouncilHealth.bind(this),
+      },
+      {
         path: "/api/v1/chat",
         method: "POST",
         middleware: [requireKey, aiSafetyGate],
@@ -125,6 +131,63 @@ export class CouncilModule {
       });
     } catch (error) {
       console.error("Council test error:", error);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  }
+
+  async handleCouncilHealth(req, res) {
+    try {
+      const defaultMembers = [
+        "chatgpt",
+        "gemini",
+        "deepseek",
+        "grok",
+        "claude",
+        "ollama_llama",
+        "ollama_deepseek",
+        "ollama_deepseek_v3",
+        "ollama_deepseek_coder_v2",
+      ];
+      const freeCloudMembers = [
+        process.env.GROQ_API_KEY ? "groq_llama" : null,
+        (process.env.GEMINI_API_KEY || process.env.LIFEOS_GEMINI_KEY) ? "gemini_flash" : null,
+        process.env.CEREBRAS_API_KEY ? "cerebras_llama" : null,
+        process.env.OPENROUTER_API_KEY ? "openrouter_free" : null,
+        process.env.MISTRAL_API_KEY ? "mistral_free" : null,
+        process.env.TOGETHER_API_KEY ? "together_free" : null,
+      ].filter(Boolean);
+
+      const requestedMembers = String(req.query.members || "")
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+      const members = requestedMembers.length > 0
+        ? requestedMembers
+        : [...defaultMembers, ...freeCloudMembers];
+      const checks = await Promise.all(
+        members.map(async (member) => {
+          try {
+            const status = await this.pingCouncilMember(member);
+            return { member, ...status };
+          } catch (error) {
+            return { member, ok: false, error: error.message };
+          }
+        })
+      );
+
+      const online = checks.filter((item) => item.ok).length;
+      res.json({
+        ok: true,
+        summary: {
+          total: checks.length,
+          online,
+          offline: checks.length - online,
+        },
+        members: checks,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }
   }

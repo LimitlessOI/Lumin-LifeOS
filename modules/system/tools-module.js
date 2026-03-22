@@ -130,7 +130,7 @@ export class ToolsModule {
           available: ollamaData.available,
           models: ollamaData.models,
         },
-        tool_checks,
+        tool_checks: toolChecks,
       };
     } catch (error) {
       console.warn("[TOOLS STATUS] refresh error:", error.message);

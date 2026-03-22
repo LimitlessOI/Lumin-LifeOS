@@ -196,10 +196,13 @@
     const activateBtn = document.getElementById('activateBtn');
 
     // Check if already activated
-    const savedKey = sessionStorage.getItem('lifeos_cmd_key') || localStorage.getItem('lifeos_cmd_key');
+    const savedKey =
+      sessionStorage.getItem('lifeos_cmd_key') ||
+      localStorage.getItem('lifeos_cmd_key') ||
+      localStorage.getItem('COMMAND_CENTER_KEY') ||
+      localStorage.getItem('LIFEOS_KEY');
     if (savedKey) {
-      // Redirect to command center
-      window.location.href = '/overlay/command-center.html';
+      window.location.href = '/command-center';
       return;
     }
 
@@ -242,15 +245,18 @@
           throw new Error('Activation failed');
         }
 
-        // Store key in session storage and localStorage
+        // Store under all legacy/current keys so the dashboard and API clients
+        // can use the same credential without another prompt.
         sessionStorage.setItem('lifeos_cmd_key', key);
         localStorage.setItem('lifeos_cmd_key', key);
+        localStorage.setItem('COMMAND_CENTER_KEY', key);
+        localStorage.setItem('LIFEOS_KEY', key);
 
         // Show success and redirect to command center
         showSuccess('Activation successful! Redirecting to Command Center...');
         
         setTimeout(() => {
-          window.location.href = '/overlay/command-center.html';
+          window.location.href = '/command-center';
         }, 1000);
 
       } catch (error) {

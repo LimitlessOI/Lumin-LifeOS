@@ -3,7 +3,8 @@ class UnifiedConsole {
     constructor() {
         this.chatHistory = [];
         this.voiceCommands = [];
-        this.socket = new WebSocket('ws://localhost:8080');
+        const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        this.socket = new WebSocket(`${protocol}://${window.location.host}`);
         this.init();
     }
 
@@ -18,7 +19,7 @@ class UnifiedConsole {
     }
 
     sendChat(message) {
-        this.socket.send(JSON.stringify({ type: 'chat', content: message }));
+        this.socket.send(JSON.stringify({ type: 'chat', message }));
     }
 
     updateUI() {

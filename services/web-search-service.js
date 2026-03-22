@@ -77,7 +77,7 @@ export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KE
     // AI fallback — use training knowledge
     if (callAI) {
       const content = await callAI(
-        `Research this topic and share the most important findings, best practices, and current standards. Be specific and actionable.\n\nTopic: ${query}`
+        `You are a UX researcher and product designer. Based on your training knowledge, provide a detailed, structured answer to this query. Include: specific patterns, common mistakes, measurable impact where known, and concrete implementation guidance.\n\nQuery: ${query}\n\nFormat your answer with clear sections and bullet points. Be specific — avoid generic advice.`
       );
       console.log(`🔍 [WEB-SEARCH] AI fallback: "${query}"`);
       return { source: 'ai_knowledge', results: [{ title: query, description: content, url: null }] };
@@ -104,7 +104,7 @@ export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KE
     if (callAI && allResults.length > 0) {
       const context = allResults.map(r => `${r.title}: ${r.description}`).join('\n\n');
       const synthesis = await callAI(
-        `Based on these research findings, give me the TOP 10 UX best practices for building a "${featureType}" interface. Be specific, actionable, and focused on what makes users feel the product is intuitive.\n\nResearch:\n${context}`
+        `You are a senior UX designer. Based on the research below (or your training knowledge if research is sparse), give me the TOP 10 UX best practices for building a "${featureType}" interface.\n\nFor each practice:\n- State the rule clearly\n- Explain WHY it matters (user psychology or measurable impact)\n- Give one concrete implementation example\n\nFocus on: reducing cognitive load, clear affordances, error prevention, visual hierarchy, and mobile-first patterns.\n\nResearch:\n${context}`
       );
       return synthesis;
     }
@@ -122,7 +122,7 @@ export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KE
     if (callAI && results.length > 0) {
       const context = results.map(r => `${r.title}: ${r.description}`).join('\n\n');
       return await callAI(
-        `Based on these competitor examples for "${productType}", identify: 1) What UI patterns they use 2) What makes them intuitive 3) What to do differently to stand out. Be specific.\n\nContext:\n${context}`
+        `You are a product strategist and UX expert. Analyze these competitor examples for "${productType}" and extract:\n\n1. **Common UI patterns** — what navigation, layout, CTA placement do they use?\n2. **What makes the best ones intuitive** — specific design decisions that reduce friction\n3. **Gaps and opportunities** — what do they all do poorly that we can do better?\n4. **Conversion patterns** — how do they guide users toward the key action?\n\nBe specific with names of patterns (e.g. "sticky CTA bar", "social proof below fold", "3-step wizard").\n\nContext:\n${context || 'No external data — use training knowledge about top SaaS products in this category.'}`
       );
     }
 
@@ -136,7 +136,7 @@ export function createWebSearchService({ BRAVE_SEARCH_API_KEY, PERPLEXITY_API_KE
     if (callAI) {
       const context = results.map(r => `${r.title}: ${r.description}`).join('\n\n');
       return await callAI(
-        `What are the current best practices for "${topic}"? Use any research below plus your knowledge. Give me a concise, bulleted list of the most important rules. Focus on things that make a real difference to users.\n\nResearch:\n${context || 'No external research available — use training knowledge.'}`
+        `You are a UX and accessibility expert. Give me the current best practices for "${topic}".\n\nStructure your answer as:\n**Must-haves** (non-negotiable, impacts all users)\n**Should-haves** (strong best practice, most products implement this)\n**Nice-to-haves** (differentiators that delight users)\n\nFor each item, include: the rule, a one-sentence rationale, and any WCAG/Nielsen/platform standard it maps to.\n\nResearch:\n${context || 'No external research available — use training knowledge.'}`
       );
     }
 
