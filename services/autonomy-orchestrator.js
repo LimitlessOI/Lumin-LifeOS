@@ -309,7 +309,7 @@ export function createAutonomyOrchestrator({
     try {
       // Mark proposal approved
       await pool.query(
-        `UPDATE improvement_proposals SET status = 'approved', updated_at = NOW() WHERE id = $1`,
+        `UPDATE improvement_proposals SET status = 'approved' WHERE id = $1`,
         [proposal.id]
       );
       // Create idea
