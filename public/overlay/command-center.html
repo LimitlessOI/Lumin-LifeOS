@@ -704,7 +704,7 @@
   <script>
     // Initialize on page load
     window.addEventListener('DOMContentLoaded', () => {
-      const saved = localStorage.getItem('LIFEOS_KEY');
+      const saved = localStorage.getItem('LIFEOS_KEY') || localStorage.getItem('COMMAND_CENTER_KEY');
       if (saved) {
         document.getElementById('keyStatus').innerHTML = '<span class="status-ok">✓ Key loaded</span>';
       }
@@ -717,6 +717,7 @@
       const key = input.value.trim();
       if (key) {
         localStorage.setItem('LIFEOS_KEY', key);
+        localStorage.setItem('COMMAND_CENTER_KEY', key);
         document.getElementById('keyStatus').innerHTML = '<span class="status-ok">✓ Key saved</span>';
         input.value = '';
         refresh();
@@ -735,20 +736,8 @@
       }
     }
 
-    // ══ SHARED API HELPER ══════════════════════════════════════════════════
-    function getKey() {
-      return localStorage.getItem('cmdKey') || localStorage.getItem('LIFEOS_KEY') || '';
-    }
-    async function api(method, path, body) {
-      const key = getKey();
-      const opts = {
-        method,
-        headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
-      };
-      if (body) opts.body = JSON.stringify(body);
-      const res = await fetch(path, opts);
-      return res.json();
-    }
+    // ══ API helpers — use postCommandJson/fetchCommandJson from command-center.js
+    // Those functions send x-command-key headers and are the single source of truth.
 
     // ══ IDEAS QUEUE ════════════════════════════════════════════════════════
     let currentIdeas = [];
@@ -1051,18 +1040,13 @@
       if (!key || !value) { status.style.display='block'; status.style.color='#e57373'; status.textContent='Both name and value are required.'; return; }
       status.style.display='block'; status.style.color='#888'; status.textContent='Saving…';
       try {
-        const data = await api('POST', '/api/v1/railway/managed-env/bulk', { vars: { [key]: value } });
-        if (data.ok || data.stored) {
-          status.style.color='#81c784';
-          const pushed = data.sync?.changed ?? '?';
-          status.textContent = `✓ ${key} saved & pushed to Railway (${pushed} var(s) synced)`;
-          document.getElementById('vaultKeyInput').value = '';
-          document.getElementById('vaultValueInput').value = '';
-          loadMissingVars();
-        } else {
-          status.style.color='#e57373';
-          status.textContent = `Error: ${data.error || 'Unknown error'}`;
-        }
+        const data = await postCommandJson('/api/v1/railway/managed-env/bulk', { vars: { [key]: value } });
+        status.style.color='#81c784';
+        const pushed = data.sync?.changed ?? '?';
+        status.textContent = `✓ ${key} saved & pushed to Railway (${pushed} var(s) synced)`;
+        document.getElementById('vaultKeyInput').value = '';
+        document.getElementById('vaultValueInput').value = '';
+        loadMissingVars();
       } catch(e) {
         status.style.color='#e57373'; status.textContent = `Error: ${e.message}`;
       }
@@ -1083,15 +1067,11 @@
       if (!Object.keys(vars).length) { status.style.display='block'; status.style.color='#e57373'; status.textContent='No valid KEY=value lines found.'; return; }
       status.style.display='block'; status.style.color='#888'; status.textContent=`Saving ${Object.keys(vars).length} var(s)…`;
       try {
-        const data = await api('POST', '/api/v1/railway/managed-env/bulk', { vars });
-        if (data.ok || data.stored) {
-          status.style.color='#81c784';
-          status.textContent = `✓ ${Object.keys(vars).length} var(s) saved & pushed to Railway`;
-          document.getElementById('vaultBulkInput').value = '';
-          loadMissingVars();
-        } else {
-          status.style.color='#e57373'; status.textContent = `Error: ${data.error}`;
-        }
+        const data = await postCommandJson('/api/v1/railway/managed-env/bulk', { vars });
+        status.style.color='#81c784';
+        status.textContent = `✓ ${Object.keys(vars).length} var(s) saved & pushed to Railway`;
+        document.getElementById('vaultBulkInput').value = '';
+        loadMissingVars();
       } catch(e) {
         status.style.color='#e57373'; status.textContent = `Error: ${e.message}`;
       }
@@ -1103,7 +1083,7 @@
       list.style.display = 'flex';
       list.innerHTML = '<span style="color:#888;font-size:12px;">Loading…</span>';
       try {
-        const data = await api('GET', '/api/v1/railway/managed-env');
+        const data = await fetchCommandJson('/api/v1/railway/managed-env');
         const vars = data.vars || [];
         count.textContent = `${vars.length} stored`;
         list.innerHTML = vars.map(v =>
@@ -1117,7 +1097,7 @@
     async function loadMissingVars() {
       const REQUIRED = ['IMAP_PASS','IMAP_USER','IMAP_HOST','POSTMARK_SERVER_TOKEN','GITHUB_TOKEN','COMMAND_CENTER_KEY'];
       try {
-        const data = await api('GET', '/api/v1/railway/managed-env');
+        const data = await fetchCommandJson('/api/v1/railway/managed-env');
         const stored = new Set((data.vars || []).map(v => v.env_name));
         const missing = REQUIRED.filter(k => !stored.has(k));
         const alert   = document.getElementById('missingVarsAlert');
