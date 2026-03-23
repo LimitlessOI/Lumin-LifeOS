@@ -1,6 +1,8 @@
 /**
  * tc-browser-agent.js
- * Browser automation for GLVAR MLS login and TransactionDesk TC workflows.
+ * Browser automation for TC workflows:
+ *   - GLVAR MLS → TransactionDesk (via Clareity IAM SSO)
+ *   - eXp Realty Okta → SkySlope (via Okta SSO)
  *
  * Deps: services/browser-agent.js, services/account-manager.js
  * Exports: createTCBrowserAgent(deps)
@@ -11,6 +13,7 @@ import fs from 'fs/promises';
 import { createSession } from './browser-agent.js';
 
 const GLVAR_LOGIN_URL = 'https://glvar.clareityiam.net/idp/login';
+const EXP_OKTA_URL   = 'https://exprealty.okta.com';
 const SCREENSHOT_DIR = '/tmp/tc-screenshots';
 const LOGIN_TIMEOUT_MS = 45_000;
 const NAV_TIMEOUT_MS = 30_000;
@@ -39,6 +42,122 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     const account = await accountManager.getAccount('glvar_mls', '232953');
     if (!account) throw new Error('GLVAR credentials not found in vault — store via POST /api/v1/accounts/store');
     return { username: account.username || account.emailUsed, password: account.password };
+  }
+
+  /**
+   * Retrieve eXp Okta credentials from encrypted vault.
+   */
+  async function getExpCredentials() {
+    const account = await accountManager.getAccount('exp_okta', 'adam.hopkins@exprealty.com');
+    if (!account) throw new Error('eXp Okta credentials not found in vault');
+    return { username: account.username || account.emailUsed, password: account.password };
+  }
+
+  /**
+   * Log into eXp Realty via Okta SSO.
+   * Returns open session — do NOT close before calling navigateToSkySlope.
+   */
+  async function loginToExpOkta(dryRun = false) {
+    const credentials = await getExpCredentials();
+    const session = await createSession();
+
+    try {
+      await session.navigate(EXP_OKTA_URL);
+      const sp = await screenshotPath('exp-okta-login-page');
+      await session.page.screenshot({ path: sp });
+      logger.info?.({ screenshot: sp }, '[TC-BROWSER] eXp Okta login page loaded');
+
+      if (dryRun) {
+        return { session, ok: true, dryRun: true, screenshots: [sp] };
+      }
+
+      // Okta standard login form
+      await session.fill('#okta-signin-username, input[name="identifier"], input[type="email"]', credentials.username);
+
+      // Okta may show password on same screen or after clicking Next
+      const nextBtn = await session.page.$('#okta-signin-submit, [data-type="save"]');
+      if (nextBtn) {
+        await nextBtn.click();
+        await session.page.waitForTimeout(1500);
+      }
+
+      await session.fill('#okta-signin-password, input[name="credentials.passcode"], input[type="password"]', credentials.password);
+      await session.click('#okta-signin-submit, [data-type="save"], button[type="submit"]');
+
+      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: LOGIN_TIMEOUT_MS }).catch(() => {});
+
+      const url = session.page.url();
+      const content = await session.page.content();
+
+      if (/sign.?in|login|error|incorrect/i.test(content) && url.includes('okta.com')) {
+        const failSp = await screenshotPath('exp-okta-login-failed');
+        await session.page.screenshot({ path: failSp });
+        await session.close();
+        throw new Error(`eXp Okta login failed. Screenshot: ${failSp}`);
+      }
+
+      const successSp = await screenshotPath('exp-okta-login-success');
+      await session.page.screenshot({ path: successSp });
+      logger.info?.({ url, screenshot: successSp }, '[TC-BROWSER] eXp Okta login success');
+
+      return { session, ok: true, screenshots: [sp, successSp] };
+    } catch (err) {
+      await session.close().catch(() => {});
+      throw err;
+    }
+  }
+
+  /**
+   * After eXp Okta login, navigate to SkySlope.
+   * Must use the same session returned by loginToExpOkta.
+   */
+  async function navigateToSkySlope(session) {
+    const screenshots = [];
+
+    // Try to find SkySlope tile/link on the Okta dashboard
+    const skySlopeSelectors = [
+      'a[href*="skyslope"]',
+      '[data-se*="skyslope" i]',
+      '.app-name',
+    ];
+
+    let clicked = false;
+    for (const sel of skySlopeSelectors) {
+      const el = await session.page.$(sel);
+      if (el) {
+        const text = await session.page.evaluate(e => e.textContent, el);
+        if (!sel.includes('app-name') || /skyslope/i.test(text)) {
+          await el.click();
+          clicked = true;
+          break;
+        }
+      }
+    }
+
+    if (!clicked) {
+      // Text-based search across all links/buttons
+      clicked = await session.page.evaluate(() => {
+        const els = Array.from(document.querySelectorAll('a, button, [role="link"]'));
+        const el = els.find(e => /skyslope/i.test(e.textContent));
+        if (el) { el.click(); return true; }
+        return false;
+      });
+    }
+
+    if (!clicked) {
+      // Direct navigation as fallback (SkySlope accepts Okta tokens in cookies)
+      await session.navigate('https://skyslope.com/sign-in');
+    }
+
+    await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+
+    const url = session.page.url();
+    const sp = await screenshotPath('skyslope-loaded');
+    await session.page.screenshot({ path: sp });
+    screenshots.push(sp);
+
+    logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] SkySlope loaded');
+    return { ok: true, url, screenshots };
   }
 
   /**
@@ -310,6 +429,8 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     createTransaction,
     uploadDocument,
     getTransactionStatus,
+    loginToExpOkta,
+    navigateToSkySlope,
     NEVADA_DEFAULTS,
   };
 }

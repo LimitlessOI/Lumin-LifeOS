@@ -144,6 +144,52 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
     }
   });
 
+  // POST /api/v1/tc/test-glvar-login — dry-run GLVAR MLS login (screenshots, no form submit)
+  router.post('/test-glvar-login', requireKey, async (req, res) => {
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createAccountManager } = await import('../services/account-manager.js');
+      const accountManager = createAccountManager(pool);
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+
+      const dryRun = req.body?.dryRun !== false; // default true — safe
+      const result = await tcBrowser.loginToGLVAR(dryRun);
+      await result.session?.close?.();
+
+      res.json({ ok: true, dryRun: result.dryRun || false, screenshots: result.screenshots });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] test-glvar-login error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/test-skyslope-login — dry-run eXp Okta → SkySlope login
+  router.post('/test-skyslope-login', requireKey, async (req, res) => {
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createAccountManager } = await import('../services/account-manager.js');
+      const accountManager = createAccountManager(pool);
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+
+      const dryRun = req.body?.dryRun !== false; // default true — safe
+      const loginResult = await tcBrowser.loginToExpOkta(dryRun);
+
+      if (dryRun || !loginResult.ok) {
+        await loginResult.session?.close?.();
+        return res.json({ ok: loginResult.ok, dryRun: true, screenshots: loginResult.screenshots });
+      }
+
+      // Full: navigate to SkySlope via Okta dashboard
+      const navResult = await tcBrowser.navigateToSkySlope(loginResult.session);
+      await loginResult.session?.close?.();
+
+      res.json({ ok: true, skySlopeUrl: navResult.url, screenshots: [...loginResult.screenshots, ...navResult.screenshots] });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] test-skyslope-login error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   app.use('/api/v1/tc', router);
   logger.info?.('✅ [TC-ROUTES] Mounted at /api/v1/tc');
 }
