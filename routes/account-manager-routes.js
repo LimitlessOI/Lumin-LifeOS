@@ -133,6 +133,30 @@ export function createAccountManagerRoutes({ requireKey, accountManager, pool, l
     }
   });
 
+  // Store credentials manually (for accounts not created via signup agent)
+  router.post("/store", requireKey, async (req, res) => {
+    try {
+      const { service, email, username, password, apiKey, metadata, notes } = req.body || {};
+      if (!service) return res.status(400).json({ ok: false, error: "service is required" });
+      if (!password && !apiKey) return res.status(400).json({ ok: false, error: "password or apiKey is required" });
+      const account = await accountManager.upsertAccount({
+        serviceName: service,
+        emailUsed: email || username || service,
+        username: username || email,
+        password,
+        apiKey,
+        status: "active",
+        notes: notes || `Manually stored on ${new Date().toISOString().slice(0,10)}`,
+        accountId: metadata?.accountId || null,
+        lastAction: "manual_store",
+        metadata,
+      });
+      res.json({ ok: true, message: `Credentials stored for ${service}`, id: account.id });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // Manually update account status/notes
   router.patch("/:service", requireKey, async (req, res) => {
     try {
