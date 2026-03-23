@@ -214,21 +214,11 @@ Start with [ and end with ]. No prose before or after.`;
    * Start autonomous business operations
    */
   startAutonomousOperations() {
-    // Monitor business health every 5 minutes
-    setInterval(() => this.monitorBusinessHealth(), 5 * 60 * 1000);
-    
-    // Generate revenue opportunities every 10 minutes
-    setInterval(() => this.generateRevenueOpportunities(), 10 * 60 * 1000);
-    
-    // Optimize operations every 30 minutes
-    setInterval(() => this.optimizeOperations(), 30 * 60 * 1000);
-    
-    // Generate new business ideas every hour
-    setInterval(() => this.generateNewBusinesses(), 60 * 60 * 1000);
-    
-    // Initial runs
-    setTimeout(() => this.monitorBusinessHealth(), 10000);
-    setTimeout(() => this.generateRevenueOpportunities(), 20000);
+    // All autonomous idea/opportunity generation is paused until:
+    // 1. TC is proven with real transactions
+    // 2. Token savings are confirmed >70%
+    // Re-enable by restoring the setInterval calls below.
+    console.log('📋 [BUSINESS CENTER] Autonomous operations paused — manual mode only');
   }
 
   /**
