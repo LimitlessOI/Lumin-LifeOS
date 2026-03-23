@@ -150,6 +150,12 @@ export const ENV_REGISTRY = [
   { name: "NOTION_API_KEY",      status: "OPTIONAL",   category: "notion",   purpose: "Notion integration token" },
   { name: "NOTION_CONTACTS_DB_ID",status: "OPTIONAL",  category: "notion",   purpose: "Notion database ID for contacts" },
   { name: "NOTION_TASKS_DB_ID",  status: "OPTIONAL",   category: "notion",   purpose: "Notion database ID for tasks" },
+
+  // ── Signup Agent ──────────────────────────────────────────────────────────────
+  { name: "GMAIL_SIGNUP_EMAIL",       status: "SET",      category: "signup",   purpose: "System signup email — lumea.lifeos@gmail.com" },
+  { name: "GMAIL_SIGNUP_APP_PASSWORD",status: "NEEDED",   category: "signup",   purpose: "Gmail App Password for IMAP email verification reads" },
+  { name: "TWOCAPTCHA_API_KEY",       status: "OPTIONAL", category: "signup",   purpose: "2captcha key for captcha solving during signups ($1/1000)" },
+  { name: "SCREENSHOT_DIR",           status: "OPTIONAL", category: "signup",   purpose: "Directory for browser error screenshots (default: /tmp)" },
 ];
 
 /**

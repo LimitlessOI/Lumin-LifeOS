@@ -131,6 +131,8 @@ import {
 } from './services/response-cache.js';
 import { createRailwayManagedEnvService } from "./services/railway-managed-env-service.js";
 import { createRailwayManagedEnvRoutes } from "./routes/railway-managed-env-routes.js";
+import { createAccountManager } from "./services/account-manager.js";
+import { createAccountManagerRoutes } from "./routes/account-manager-routes.js";
 import { createEventBus } from "./core/event-bus.js";
 import { createPodManager } from "./core/pod-manager.js";
 import { createTelemetry } from "./services/telemetry.js";
@@ -928,6 +930,8 @@ const railwayManagedEnvService = createRailwayManagedEnvService({
   logger,
 });
 
+const accountManager = createAccountManager({ pool, logger });
+
 // Consensus service — initialized after all dependencies are defined
 const { conductEnhancedConsensus, createProposal } = createConsensusService({
   pool,
@@ -1346,6 +1350,9 @@ app.use('/api/v1/railway/managed-env', createRailwayManagedEnvRoutes({
 }));
 logger.info('✅ [RAILWAY-MANAGED-ENV] Routes mounted at /api/v1/railway/managed-env');
 
+app.use('/api/v1/accounts', createAccountManagerRoutes({ requireKey, accountManager, pool, logger }));
+logger.info('✅ [ACCOUNT-MANAGER] Routes mounted at /api/v1/accounts');
+
 // Self-register Twilio SMS webhook — no manual Twilio console action needed
 // Warm response cache L1 from DB — picks up where last deploy left off
 initCache(pool).catch(() => {});
@@ -1360,6 +1367,10 @@ railwayManagedEnvService.ensureSchema()
   .catch((error) => {
     logger.warn({ error: error.message }, '⚠️ [RAILWAY-MANAGED-ENV] Boot sync failed');
   });
+
+accountManager.ensureSchema().catch((err) => {
+  logger.warn({ error: err.message }, '⚠️ [ACCOUNT-MANAGER] Schema init failed');
+});
 
 registerTwilioWebhook().then(result => {
   if (result.registered) {
