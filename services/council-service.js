@@ -6,6 +6,7 @@ import { compressJSONInPrompt } from "./toon-formatter.js";
 import { injectChainOfDraft, compressPrompt as irCompressPrompt } from "./prompt-ir.js";
 import { createSavingsLedger } from "./savings-ledger.js";
 import { addTurn, getDelta, startSession } from "./delta-context.js";
+import { sanitizeJsonResponse } from "../core/json-sanitizer.js";
 import {
   getCachedResponse as _rcGet,
   cacheResponse as _rcSet,
@@ -1003,6 +1004,13 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       const temperature = isDeterministic ? 0 : 0.7;
       const stopSequences = isDeterministic ? ['\n\n\n'] : undefined;
 
+      // Strip markdown fencing from any response before caching — prevents
+      // callers receiving ```json ... ``` and failing on JSON.parse
+      const cleanForCache = (t) => t
+        .replace(/^```(?:json|js|javascript|text)?\s*/i, '')
+        .replace(/\s*```\s*$/i, '')
+        .trim();
+
       if (OPENAI_COMPATIBLE_PROVIDERS.has(config.provider)) {
         response = await fetch(getChatCompletionUrl(config.provider), {
           method: "POST",
@@ -1098,7 +1106,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, text, taskType);
+          await cacheResponse(prompt, member, cleanForCache(text), taskType);
         }
 
         await freeTierGovernor.record(provider, inputTokens + outputTokens).catch(() => {});
@@ -1183,7 +1191,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, text, taskType);
+          await cacheResponse(prompt, member, cleanForCache(text), taskType);
         }
 
         await freeTierGovernor.record("gemini", inputTokens + outputTokens).catch(() => {});
@@ -1226,7 +1234,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         text = decompressResponse(text, useCompression);
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, text, taskType);
+          await cacheResponse(prompt, member, cleanForCache(text), taskType);
         }
 
         // TCO-E01: ledger for Ollama (free/local — cost $0)
@@ -1291,7 +1299,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         await updateDailySpend(cost);
 
         if (options.useCache !== false) {
-          await cacheResponse(prompt, member, text, taskType);
+          await cacheResponse(prompt, member, cleanForCache(text), taskType);
         }
 
         // TCO-E01: ledger for DeepSeek

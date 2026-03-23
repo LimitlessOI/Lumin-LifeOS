@@ -47,6 +47,10 @@ export function createAutonomyOrchestrator({
   let lastCycleAt = null;
   let lastCycleResult = null;
 
+  // Must be declared here (top of factory scope) — workNextProject is hoisted but
+  // const declarations are not, causing TDZ error if declared near workNextProject.
+  const PROJECT_RETRIGGER_MS = 2 * 60 * 60 * 1000;
+
   // ── Main orchestration cycle ────────────────────────────────────────────────
   async function runCycle() {
     if (running) return { skipped: true };
@@ -292,8 +296,6 @@ export function createAutonomyOrchestrator({
 
   // Project backlog: pick the active project (or promote next pending one) and
   // queue build tasks for it. Re-triggers at most once every 2 hours per project.
-  const PROJECT_RETRIGGER_MS = 2 * 60 * 60 * 1000;
-
   async function workNextProject() {
     if (!pool) return null;
     try {
