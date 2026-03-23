@@ -13,10 +13,7 @@ import {
   initCache as _rcInit,
 } from "./response-cache.js";
 
-// Governor is initialized inside createCouncilService with pool (see below)
-
-// Singleton optimizer — tracks token savings across all providers
-const tokenOptimizer = createTokenOptimizer();
+// tokenOptimizer and freeTierGovernor are initialized inside createCouncilService with pool
 const ZERO_COST_PROVIDERS = new Set([
   "groq",
   "gemini",
@@ -67,7 +64,8 @@ export function createCouncilService({
   notifyCriticalIssue,
   savingsLedger,  // TCO-E01 — injected from server.js
 }) {
-  // Governor with Neon-backed persistence — survives Railway deploys
+  // Both backed by Neon — stats survive Railway deploys
+  const tokenOptimizer = createTokenOptimizer(pool);
   const freeTierGovernor = createFreeTierGovernor({ pool });
 
   // Startup Ollama ping — pre-mark exhausted before first call so nothing gets routed there
@@ -877,7 +875,7 @@ export function createCouncilService({
       && !['routing', 'codegen', 'validation'].includes(taskType)
       && options.skipKnowledge !== true;
     const knowledgeSection = needsKnowledgeContext
-      ? await buildSystemContext(prompt, 3)
+      ? await buildSystemContext(prompt, { taskType, maxIdeas: 2 })
       : '';
 
     // User prompt stays clean — only the actual request.
@@ -951,16 +949,6 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       critical: false,
     });
 
-    // Accumulate savings from ALL layers (input tokens only; output handled separately)
-    const totalSavedInputTokens = optimized.savedTokens
-      + (optimizedSystemPrompt.savedTokens || 0)
-      + toonSavedTokens
-      + irSavedTokens;
-
-    if (totalSavedInputTokens > 0 || Object.keys(compressionLayers).length > 0) {
-      console.log(`🗜️  [TOKEN-OPT] ${member}: ${totalSavedInputTokens} input tokens saved | layers: ${Object.keys(compressionLayers).join(', ')}`);
-    }
-
     const useCompression = false; // legacy LCTP disabled — replaced by layer stack above
     const systemPrompt = optimizedSystemPrompt.text;
 
@@ -979,6 +967,19 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         compressionLayers.delta_context = { savedChars: delta.savedChars, savedPct: delta.savedPct };
       }
       // User + assistant turns recorded after the response via recordSessionTurns.
+    }
+
+    const deltaSavedTokens = Math.ceil(deltaContextSaved / 4);
+
+    // Accumulate savings from ALL layers (input tokens only; output handled separately)
+    const totalSavedInputTokens = optimized.savedTokens
+      + (optimizedSystemPrompt.savedTokens || 0)
+      + toonSavedTokens
+      + irSavedTokens
+      + deltaSavedTokens;
+
+    if (totalSavedInputTokens > 0 || Object.keys(compressionLayers).length > 0) {
+      console.log(`🗜️  [TOKEN-OPT] ${member}: ${totalSavedInputTokens} input tokens saved | layers: ${Object.keys(compressionLayers).join(', ')}`);
     }
 
     // ── max_tokens scoped to taskType — hard caps prevent runaway verbose output ──
@@ -1110,7 +1111,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         await freeTierGovernor.record(provider, inputTokens + outputTokens).catch(() => {});
-        recordSessionTurns(effectiveSessionId, prompt, text);
+        recordSessionTurns(effectiveSessionId, finalPrompt, text);
 
         return text;
       }
@@ -1195,7 +1196,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         await freeTierGovernor.record("gemini", inputTokens + outputTokens).catch(() => {});
-        recordSessionTurns(effectiveSessionId, prompt, text);
+        recordSessionTurns(effectiveSessionId, finalPrompt, text);
         return text;
       }
 
@@ -1254,7 +1255,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           }).catch(() => {});
         }
 
-        recordSessionTurns(effectiveSessionId, prompt, text);
+        recordSessionTurns(effectiveSessionId, finalPrompt, text);
 
         return text;
       }
@@ -1319,7 +1320,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           }).catch(() => {});
         }
 
-        recordSessionTurns(effectiveSessionId, prompt, text);
+        recordSessionTurns(effectiveSessionId, finalPrompt, text);
 
         return text;
       }
