@@ -561,6 +561,58 @@
       </div>
     </div>
 
+    <!-- ══ SECRETS VAULT ══ -->
+    <div class="section" id="secretsVaultSection" style="border-color:#f59e0b;">
+      <h2>🔐 Secrets Vault — System Environment Variables</h2>
+      <p style="color:#888;font-size:13px;margin-bottom:14px;">Enter sensitive values here. They are encrypted in Neon and pushed to Railway automatically — no dashboard needed.</p>
+
+      <!-- Missing vars alert -->
+      <div id="missingVarsAlert" style="display:none;background:#1a1200;border:1px solid #f59e0b;border-radius:6px;padding:12px;margin-bottom:14px;">
+        <p style="color:#f59e0b;font-weight:600;font-size:13px;margin-bottom:8px;">⚠️ Required vars not yet set:</p>
+        <div id="missingVarsList" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      </div>
+
+      <!-- Quick-set row for common sensitive vars -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;">
+          <input id="vaultKeyInput" type="text" placeholder="VAR_NAME (e.g. IMAP_PASS)" style="padding:8px;background:#0a0e27;border:1px solid #2a3f5f;border-radius:4px;color:#e0e0e0;font-size:13px;font-family:monospace;">
+          <input id="vaultValueInput" type="password" placeholder="value" style="padding:8px;background:#0a0e27;border:1px solid #2a3f5f;border-radius:4px;color:#e0e0e0;font-size:13px;">
+          <button onclick="saveVaultVar()" style="background:#b45309;white-space:nowrap;">Save &amp; Push</button>
+        </div>
+        <p id="vaultSaveStatus" style="font-size:12px;color:#888;display:none;"></p>
+      </div>
+
+      <!-- Quick-fill buttons for known required vars -->
+      <div style="margin-bottom:14px;">
+        <p style="color:#888;font-size:12px;margin-bottom:8px;">Quick fill:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button onclick="quickFill('IMAP_PASS')" style="background:#1a1f3a;border:1px solid #2a3f5f;font-size:12px;padding:4px 10px;">IMAP_PASS</button>
+          <button onclick="quickFill('IMAP_USER')" style="background:#1a1f3a;border:1px solid #2a3f5f;font-size:12px;padding:4px 10px;">IMAP_USER</button>
+          <button onclick="quickFill('POSTMARK_SERVER_TOKEN')" style="background:#1a1f3a;border:1px solid #2a3f5f;font-size:12px;padding:4px 10px;">POSTMARK_SERVER_TOKEN</button>
+          <button onclick="quickFill('GITHUB_TOKEN')" style="background:#1a1f3a;border:1px solid #2a3f5f;font-size:12px;padding:4px 10px;">GITHUB_TOKEN</button>
+          <button onclick="quickFill('COMMAND_CENTER_KEY')" style="background:#1a1f3a;border:1px solid #2a3f5f;font-size:12px;padding:4px 10px;">COMMAND_CENTER_KEY</button>
+        </div>
+      </div>
+
+      <!-- Bulk set (multiple at once) -->
+      <details style="margin-bottom:12px;">
+        <summary style="cursor:pointer;color:#4fc3f7;font-size:13px;padding:6px;background:#0a0e27;border-radius:4px;">+ Set multiple at once</summary>
+        <div style="margin-top:10px;">
+          <p style="color:#888;font-size:12px;margin-bottom:6px;">One per line: VAR_NAME=value</p>
+          <textarea id="vaultBulkInput" rows="5" placeholder="IMAP_PASS=mypassword&#10;IMAP_USER=adam@hopkinsgroup.org&#10;POSTMARK_SERVER_TOKEN=abc123" style="width:100%;padding:8px;background:#0a0e27;border:1px solid #2a3f5f;border-radius:4px;color:#e0e0e0;font-size:13px;font-family:monospace;"></textarea>
+          <button onclick="saveBulkVars()" style="margin-top:8px;background:#b45309;">Save All &amp; Push to Railway</button>
+          <p id="vaultBulkStatus" style="font-size:12px;color:#888;margin-top:6px;display:none;"></p>
+        </div>
+      </details>
+
+      <!-- Currently stored vars (names only, no values) -->
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+        <button onclick="loadStoredVars()" style="background:#1e3a5f;font-size:12px;padding:5px 12px;">🔄 Show Stored Vars</button>
+        <span id="storedVarsCount" style="color:#888;font-size:12px;"></span>
+      </div>
+      <div id="storedVarsList" style="display:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;"></div>
+    </div>
+
     <!-- ══ IMPROVEMENT PROPOSALS ══ -->
     <div class="section" id="proposalsSection">
       <h2>🔍 Improvement Proposals</h2>
@@ -986,10 +1038,110 @@
       else { alert(data.error || 'Error'); }
     }
 
+    // ══ SECRETS VAULT ══════════════════════════════════════════════════════
+    function quickFill(varName) {
+      document.getElementById('vaultKeyInput').value = varName;
+      document.getElementById('vaultValueInput').focus();
+    }
+
+    async function saveVaultVar() {
+      const key   = document.getElementById('vaultKeyInput').value.trim().toUpperCase();
+      const value = document.getElementById('vaultValueInput').value;
+      const status = document.getElementById('vaultSaveStatus');
+      if (!key || !value) { status.style.display='block'; status.style.color='#e57373'; status.textContent='Both name and value are required.'; return; }
+      status.style.display='block'; status.style.color='#888'; status.textContent='Saving…';
+      try {
+        const data = await api('POST', '/api/v1/railway/managed-env/bulk', { vars: { [key]: value } });
+        if (data.ok || data.stored) {
+          status.style.color='#81c784';
+          const pushed = data.sync?.changed ?? '?';
+          status.textContent = `✓ ${key} saved & pushed to Railway (${pushed} var(s) synced)`;
+          document.getElementById('vaultKeyInput').value = '';
+          document.getElementById('vaultValueInput').value = '';
+          loadMissingVars();
+        } else {
+          status.style.color='#e57373';
+          status.textContent = `Error: ${data.error || 'Unknown error'}`;
+        }
+      } catch(e) {
+        status.style.color='#e57373'; status.textContent = `Error: ${e.message}`;
+      }
+    }
+
+    async function saveBulkVars() {
+      const raw    = document.getElementById('vaultBulkInput').value.trim();
+      const status = document.getElementById('vaultBulkStatus');
+      if (!raw) return;
+      const vars = {};
+      for (const line of raw.split('\n')) {
+        const idx = line.indexOf('=');
+        if (idx < 1) continue;
+        const k = line.slice(0, idx).trim().toUpperCase();
+        const v = line.slice(idx + 1).trim();
+        if (k && v) vars[k] = v;
+      }
+      if (!Object.keys(vars).length) { status.style.display='block'; status.style.color='#e57373'; status.textContent='No valid KEY=value lines found.'; return; }
+      status.style.display='block'; status.style.color='#888'; status.textContent=`Saving ${Object.keys(vars).length} var(s)…`;
+      try {
+        const data = await api('POST', '/api/v1/railway/managed-env/bulk', { vars });
+        if (data.ok || data.stored) {
+          status.style.color='#81c784';
+          status.textContent = `✓ ${Object.keys(vars).length} var(s) saved & pushed to Railway`;
+          document.getElementById('vaultBulkInput').value = '';
+          loadMissingVars();
+        } else {
+          status.style.color='#e57373'; status.textContent = `Error: ${data.error}`;
+        }
+      } catch(e) {
+        status.style.color='#e57373'; status.textContent = `Error: ${e.message}`;
+      }
+    }
+
+    async function loadStoredVars() {
+      const list  = document.getElementById('storedVarsList');
+      const count = document.getElementById('storedVarsCount');
+      list.style.display = 'flex';
+      list.innerHTML = '<span style="color:#888;font-size:12px;">Loading…</span>';
+      try {
+        const data = await api('GET', '/api/v1/railway/managed-env');
+        const vars = data.vars || [];
+        count.textContent = `${vars.length} stored`;
+        list.innerHTML = vars.map(v =>
+          `<span style="background:#0a0e27;border:1px solid #2a3f5f;border-radius:4px;padding:2px 8px;font-size:12px;font-family:monospace;color:#4fc3f7;">${v.env_name}</span>`
+        ).join('');
+      } catch(e) {
+        list.innerHTML = `<span style="color:#e57373;font-size:12px;">${e.message}</span>`;
+      }
+    }
+
+    async function loadMissingVars() {
+      const REQUIRED = ['IMAP_PASS','IMAP_USER','IMAP_HOST','POSTMARK_SERVER_TOKEN','GITHUB_TOKEN','COMMAND_CENTER_KEY'];
+      try {
+        const data = await api('GET', '/api/v1/railway/managed-env');
+        const stored = new Set((data.vars || []).map(v => v.env_name));
+        const missing = REQUIRED.filter(k => !stored.has(k));
+        const alert   = document.getElementById('missingVarsAlert');
+        const mList   = document.getElementById('missingVarsList');
+        if (missing.length) {
+          alert.style.display = 'block';
+          mList.innerHTML = missing.map(k =>
+            `<button onclick="quickFill('${k}')" style="background:#1a1200;border:1px solid #f59e0b;color:#f59e0b;font-size:12px;padding:3px 10px;border-radius:4px;">${k}</button>`
+          ).join('');
+        } else {
+          alert.style.display = 'none';
+        }
+      } catch { /* silent — key may not be set yet */ }
+    }
+
+    // Allow Enter key in single-var inputs
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('vaultValueInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') saveVaultVar(); });
+    });
+
     // Load all new sections on startup
     window.addEventListener('DOMContentLoaded', () => {
       // Slight delay so auth key loads first
-      setTimeout(() => { loadIdeas(); loadConversations(); loadProposals(); }, 800);
+      setTimeout(() => { loadIdeas(); loadConversations(); loadProposals(); loadMissingVars(); }, 800);
     });
   </script>
 </body>

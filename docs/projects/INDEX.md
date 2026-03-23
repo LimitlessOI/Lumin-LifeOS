@@ -32,6 +32,8 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 13 | [Knowledge Base & Web Intelligence](AMENDMENT_13_KNOWLEDGE_BASE.md) | LIVE | Enabler | Medium |
 | 14 | [White-Label Platform](AMENDMENT_14_WHITE_LABEL.md) | BUILDING | High (long-term) | Low |
 | 15 | [Business Tools Suite](AMENDMENT_15_BUSINESS_TOOLS.md) | LIVE (various) | Supporting | High |
+| 16 | [Word Keeper & Integrity Engine](AMENDMENT_16_WORD_KEEPER.md) | LIVE | Accountability | Low |
+| 17 | [TC Service — Transaction Coordinator](AMENDMENT_17_TC_SERVICE.md) | BUILDING | **#1 Active Revenue** | High |
 
 ---
 

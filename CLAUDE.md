@@ -149,6 +149,35 @@ If no target file exists, create it. Do not use server.js as a fallback.
 
 ---
 
+## SSOT MAINTENANCE — MANDATORY BEFORE EVERY TASK IS DONE
+
+Every source file has a `@ssot` tag in its JSDoc header pointing to its amendment.
+
+**Rule: Before marking any task complete, you MUST:**
+1. Check every file you created or modified for a `@ssot` tag
+2. Open that amendment file and update its `Last Updated` date and relevant sections
+3. If you created a new file with no `@ssot` tag — add one pointing to the correct amendment (or create a new amendment if this is a new domain)
+4. If no amendment exists for what you built — create one using the format in `docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md` as a template
+
+**@ssot tag format** (goes in the JSDoc header of every .js file):
+```
+* @ssot docs/projects/AMENDMENT_XX_NAME.md
+```
+
+**How to find the right amendment:**
+- TC / real estate / SkySlope / GLVAR / MLS → `AMENDMENT_17_TC_SERVICE.md`
+- AI Council / model routing → `AMENDMENT_01_AI_COUNCIL.md`
+- Memory / conversation storage → `AMENDMENT_02_MEMORY_SYSTEM.md`
+- Revenue / financial tracking → `AMENDMENT_03_FINANCIAL_REVENUE.md`
+- Site builder / prospect pipeline → `AMENDMENT_05_SITE_BUILDER.md`
+- BoldTrail CRM → `AMENDMENT_11_BOLDTRAIL_REALESTATE.md`
+- Command Center / overlay → `AMENDMENT_12_COMMAND_CENTER.md`
+- If unsure → run `node scripts/ssot-check.js --report` to see all amendments
+
+**Verify compliance:** `node scripts/ssot-check.js --all` shows every file missing its tag.
+
+---
+
 ## WHEN STUCK
 
 If you can't proceed:
