@@ -103,14 +103,14 @@ Status dots change color:
 Type: "Add a POST endpoint at /api/v1/feedback for collecting user feedback"
 
 System will:
-1. Read server.js
-2. Find where other endpoints are defined
-3. Generate the new endpoint code
-4. Write it to server.js
+1. Read `startup/register-routes.js` and existing route files
+2. Create or update `routes/<feature>-routes.js`
+3. Add any needed logic in `services/<feature>.js`
+4. Register the route in `startup/register-routes.js`
 5. Auto-deploy
 
 You'll see:
-✅ Files Modified: server.js
+✅ Files Modified: routes/feedback-routes.js, startup/register-routes.js
 ✅ Code Generated: 847 characters
 🚀 Changes automatically deployed!
 ```
@@ -137,12 +137,12 @@ Type: "Implement a rate limiter that allows 100 requests per hour per IP"
 System will:
 1. Read existing middleware
 2. Generate rate limiter code
-3. Add to server.js
-4. Configure Redis (if needed)
+3. Add route wiring to `startup/register-routes.js`
+4. Add logic to `services/` or `middleware/` as needed
 5. Deploy
 
 You'll see:
-✅ Files Modified: server.js, middleware/rate-limiter.js
+✅ Files Modified: startup/register-routes.js, middleware/rate-limiter.js
 ⚠️ Blind Spots Detected: 2 (Redis configuration, IP detection behind proxy)
 ```
 
@@ -196,7 +196,7 @@ Shows which AIs are active in current conversation
 ## 🔥 Pro Tips
 
 1. **Be specific**: "Add a GET endpoint" is better than "make an API"
-2. **Mention files**: "Add to server.js" helps the system locate code
+2. **Mention targets**: "Add a new route file and register it in startup/register-routes.js" is better than "add to server.js"
 3. **Test first**: Click 🧪 Test to see what's online before asking
 4. **Check sidebar**: Active projects show current tasks
 5. **Use voice**: Push and hold 🎤 button to speak
