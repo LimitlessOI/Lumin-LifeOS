@@ -1,18 +1,36 @@
-# Use Node.js LTS version
-FROM node:18
+FROM node:20-slim
 
-# Set working directory
 WORKDIR /usr/src/app
 
-# Copy package files and install dependencies
-COPY package.json ./
-RUN corepack enable && yarn install
+# Install Chromium dependencies for Puppeteer (signup agent)
+RUN apt-get update && apt-get install -y \
+    chromium \
+    fonts-liberation \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libcups2 \
+    libdrm2 \
+    libgbm1 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxkbcommon0 \
+    libxrandr2 \
+    xdg-utils \
+    --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-# Copy the application code
+# Tell Puppeteer to use system Chromium instead of downloading its own
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev
+
 COPY . .
 
-# Expose application port
 EXPOSE 3000
 
-# Start the application
-CMD ["yarn", "start"]
+CMD ["node", "server.js"]
