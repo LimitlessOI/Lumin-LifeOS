@@ -135,6 +135,7 @@ import { createAccountManager } from "./services/account-manager.js";
 import { createAccountManagerRoutes } from "./routes/account-manager-routes.js";
 import { createTCCoordinator, startTCDeadlineCron } from "./services/tc-coordinator.js";
 import { createTCRoutes } from "./routes/tc-routes.js";
+import { createMLSRoutes } from "./routes/mls-routes.js";
 import { createEventBus } from "./core/event-bus.js";
 import { createPodManager } from "./core/pod-manager.js";
 import { createTelemetry } from "./services/telemetry.js";
@@ -1369,6 +1370,7 @@ logger.info('✅ [ACCOUNT-MANAGER] Routes mounted at /api/v1/accounts');
 const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
 createTCRoutes(app, { pool, requireKey, coordinator: tcCoordinator, logger });
 startTCDeadlineCron(pool, tcCoordinator);
+createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger });
 
 // GLVAR dues (monthly) + violations (4× daily email scan)
 (async () => {
