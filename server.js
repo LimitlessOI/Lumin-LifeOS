@@ -221,6 +221,7 @@ const podManager = createPodManager({ eventBus, telemetry, logger });
 const lifecycleSubscriptions = [];
 
 const app = express();
+app.set('trust proxy', 1); // Railway sits behind a proxy — needed for rate-limit + IP detection
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 wss.on("error", (error) => {
