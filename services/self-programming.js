@@ -1,6 +1,7 @@
 /**
  * Self-programming service: handleSelfProgramming (internal) and HTTP handler.
  * All dependencies are provided via getDeps() so the composition root can wire and mutate over time.
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import path from "path";
 import { pathToFileURL } from "url";
