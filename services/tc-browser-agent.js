@@ -424,8 +424,9 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   }
 
   /**
-   * After GLVAR login, navigate to BoldTrail (kvCORE) via SSO.
-   * Must use the same session returned by loginToGLVAR.
+   * After eXp Okta login, navigate to BoldTrail via the Okta dashboard tile.
+   * Must use the same session returned by loginToExpOkta.
+   * BoldTrail and SkySlope are both on the eXp Okta dashboard.
    */
   async function navigateToBoldTrail(session) {
     const screenshots = [];
@@ -433,7 +434,8 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     const btSelectors = [
       'a[href*="boldtrail"]',
       'a[href*="kvcore"]',
-      'a[href*="boldtrail.com"]',
+      '[data-se*="boldtrail" i]',
+      '[data-se*="kvcore" i]',
     ];
 
     let clicked = false;
@@ -448,17 +450,17 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
 
     if (!clicked) {
       clicked = await session.page.evaluate(() => {
-        const links = Array.from(document.querySelectorAll('a, button, [role="link"]'));
-        const el = links.find(e => /boldtrail|kvcore/i.test(e.textContent));
+        const els = Array.from(document.querySelectorAll('a, button, [role="link"]'));
+        const el = els.find(e => /boldtrail|kvcore/i.test(e.textContent));
         if (el) { el.click(); return true; }
         return false;
       });
     }
 
     if (!clicked) {
-      const sp = await screenshotPath('glvar-no-boldtrail-link');
+      const sp = await screenshotPath('okta-no-boldtrail-tile');
       await session.page.screenshot({ path: sp, fullPage: true });
-      throw new Error(`BoldTrail link not found on GLVAR portal. Screenshot: ${sp}`);
+      throw new Error(`BoldTrail tile not found on eXp Okta dashboard. Screenshot: ${sp}`);
     }
 
     await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
@@ -468,7 +470,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     await session.page.screenshot({ path: sp });
     screenshots.push(sp);
 
-    logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] Navigated to BoldTrail');
+    logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] Navigated to BoldTrail via eXp Okta');
     return { ok: true, url, screenshots };
   }
 

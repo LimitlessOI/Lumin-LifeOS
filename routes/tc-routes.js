@@ -144,7 +144,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
     }
   });
 
-  // POST /api/v1/tc/test-boldtrail — login to GLVAR then navigate to BoldTrail via SSO
+  // POST /api/v1/tc/test-boldtrail — eXp Okta login → BoldTrail tile (same portal as SkySlope)
   router.post('/test-boldtrail', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
@@ -153,7 +153,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
 
       const dryRun = req.body?.dryRun !== false;
-      const loginResult = await tcBrowser.loginToGLVAR(dryRun);
+      const loginResult = await tcBrowser.loginToExpOkta(dryRun);
 
       if (dryRun || !loginResult.ok) {
         await loginResult.session?.close?.();
