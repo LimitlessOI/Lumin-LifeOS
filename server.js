@@ -58,7 +58,6 @@ import TCOSalesAgent from "./core/tco-sales-agent.js";
 import initTCOAgentRoutes from "./routes/tco-agent-routes.js";
 import { applyMiddleware } from "./middleware/apply-middleware.js";
 import { registerPublicRoutes } from "./routes/public-routes.js";
-import { registerWebsiteAuditRoutes } from "./routes/website-audit-routes.js";
 import { registerApiV1CoreRoutes } from "./routes/api-v1-core.js";
 import { createDbPool } from "./services/db.js";
 import resourceGovernor from "./lib/resource-governor.js";
@@ -98,7 +97,6 @@ import { getAllFlags } from "./lib/flags.js";
 import { validateEnv } from './services/env-validator.js';
 import { runPreviewExpiry } from './services/preview-expiry-cron.js';
 import { requestTracer } from './middleware/request-tracer.js';
-import { errorBoundary } from './middleware/error-boundary.js';
 import { startDbHealthMonitor } from './services/db-health-monitor.js';
 
 import { createFinancialRoutes } from './routes/financial-routes.js';
@@ -107,7 +105,6 @@ import { createGameRoutes } from './routes/game-routes.js';
 import { createVideoRoutes } from './routes/video-routes.js';
 import { createAgentRecruitmentRoutes } from './routes/agent-recruitment-routes.js';
 import { createBoldTrailRoutes } from './routes/boldtrail-routes.js';
-import { createApiCostSavingsRoutes } from './routes/api-cost-savings-routes.js';
 import { createWebIntelligenceRoutes } from './routes/web-intelligence-routes.js';
 import { createAutoBuilderRoutes } from './routes/auto-builder-routes.js';
 import { createLifeCoachingRoutes } from './routes/life-coaching-routes.js';
@@ -147,12 +144,7 @@ import {
   advancedDecompress,
 } from './services/response-cache.js';
 import { createRailwayManagedEnvService } from "./services/railway-managed-env-service.js";
-import { createRailwayManagedEnvRoutes } from "./routes/railway-managed-env-routes.js";
 import { createAccountManager } from "./services/account-manager.js";
-import { createAccountManagerRoutes } from "./routes/account-manager-routes.js";
-import { createTCCoordinator } from "./services/tc-coordinator.js";
-import { createTCRoutes } from "./routes/tc-routes.js";
-import { createMLSRoutes } from "./routes/mls-routes.js";
 import { createEventBus } from "./core/event-bus.js";
 import { createPodManager } from "./core/pod-manager.js";
 import { createTelemetry } from "./services/telemetry.js";
@@ -170,7 +162,6 @@ import {
   getStripeClient,
 } from "./startup/environment.js";
 import { createLatestRunManager } from "./startup/latest-run.js";
-import { registerServerRoutes } from "./startup/routes/server-routes.js";
 import { createAutonomyScheduler } from "./startup/schedulers.js";
 import { initDatabase, ensureTcoAgentTables } from "./startup/database.js";
 import { createUserPreferenceGuesser } from "./startup/user-preferences.js";
@@ -181,26 +172,21 @@ import { createMemoryHandlers } from "./startup/memory.js";
 import { createLossTracker } from "./startup/loss.js";
 import { bootAllDomains } from "./startup/boot-domains.js";
 import { registerAllSchedulers } from "./startup/register-schedulers.js";
+import { registerRuntimeRoutes } from "./startup/register-routes.js";
 import { COUNCIL_ALIAS_MAP, createCouncilMembers } from "./config/council-members.js";
 
 // Enhanced Council Features
-import { registerEnhancedCouncilRoutes } from "./routes/enhanced-council-routes.js";
 import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
 // Idea Queue — human-approval gate for self-building pipeline
-import { createIdeaQueueRoutes } from "./routes/idea-queue-routes.js";
 // Digital Twin, Outcomes, Continuous Improvement
-import { createTwinRoutes } from "./routes/twin-routes.js";
 import { createAdamLogger, EVENTS } from "./services/adam-logger.js";
 import { createContinuousImprovement } from "./services/continuous-improvement.js";
 // Conversation history
-import { createConversationHistoryRoutes } from "./routes/conversation-history-routes.js";
 import { createConversationStore } from "./services/conversation-store.js";
 // Word Keeper & Integrity Engine (Amendment 16)
-import { createWordKeeperRoutes } from "./routes/word-keeper-routes.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "./services/integrity-engine.js";
 // Autonomy Orchestrator — self-programming without bottlenecks (Amendment 17)
 import { createAutonomyOrchestrator } from "./services/autonomy-orchestrator.js";
-import { createAutonomyRoutes } from "./routes/autonomy-routes.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig, CrmSequenceRunner;
@@ -976,7 +962,7 @@ const checkHumanAttentionBudget = (req, res, next) => next();
 // Extracted to routes/conversation-routes.js
 // Extracted to routes/command-center-routes.js
 // Extracted to routes/auto-builder-routes.js (part 3: AUTO-BUILDER CONTROL)
-registerServerRoutes(app, {
+const { tcCoordinator, wordKeeperCouncil } = registerRuntimeRoutes(app, {
   express,
   memoryRoutes,
   stripeRoutes,
@@ -994,123 +980,25 @@ registerServerRoutes(app, {
   rootDir: __dirname,
   telemetry,
   podManager,
-});
-
-// ==================== AI COUNCIL CONSENSUS MODE ====================
-// Functions extracted to services/consensus-service.js (createGetCouncilConsensus, compareResponses, selectBestResponse)
-const getCouncilConsensus = createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT });
-
-// ==================== AUTO-BUILDER: CLOUD AI + PERSISTENCE ====================
-// Override routeTask so the builder uses Ollama when available, falls back to the
-// council (OpenAI / DeepSeek / Groq) when Ollama is unreachable (e.g. Railway prod).
-autoBuilder.overrideBuildHelpers({
-  routeTask: async (task, prompt) => {
-    const ollamaEndpoint = OLLAMA_ENDPOINT || 'http://localhost:11434';
-    const modelName = task === 'code_generation' ? 'deepseek-coder-v2:latest' : 'qwen2.5:32b';
-
-    // Try Ollama first (free, local)
-    try {
-      const res = await fetch(`${ollamaEndpoint}/api/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: modelName,
-          prompt,
-          stream: false,
-          options: { temperature: 0.2, num_predict: 8192 },
-        }),
-        signal: AbortSignal.timeout(60000),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.response && data.response.length > 50) {
-          logger.info(`[AUTO-BUILDER] Ollama OK: ${data.response.length} chars (${modelName})`);
-          return data.response;
-        }
-      }
-    } catch (ollamaErr) {
-      logger.warn(`[AUTO-BUILDER] Ollama unavailable (${ollamaErr.message}) — falling back to council`);
-    }
-
-    // Cloud fallback: pick first free-tier model with an API key
-    const fallbackOrder = ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openrouter_free', 'claude'];
-    const councilMember = fallbackOrder.find((m) => {
-      const cfg = COUNCIL_MEMBERS[m];
-      if (!cfg) return false;
-      if (cfg.provider === 'groq')       return !!process.env.GROQ_API_KEY;
-      if (cfg.provider === 'gemini')     return !!process.env.GEMINI_API_KEY;
-      if (cfg.provider === 'cerebras')   return !!process.env.CEREBRAS_API_KEY;
-      if (cfg.provider === 'openrouter') return !!process.env.OPENROUTER_API_KEY;
-      if (cfg.provider === 'anthropic')  return !!process.env.ANTHROPIC_API_KEY;
-      return false;
-    }) || 'groq_llama';
-    logger.info(`[AUTO-BUILDER] Using council fallback: ${councilMember}`);
-    return callCouncilMember(councilMember, prompt, { maxTokens: 4000, useTwoTier: false });
-  },
-});
-
-registerWebsiteAuditRoutes(app, {
-  requireKey,
+  callCouncilMember,
   callCouncilWithFailover,
-});
-
-registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requireKey);
-
-// ==================== API COST SAVINGS ROUTES ====================
-// Imported but was never mounted — gap found by TCO audit 2026-03-21
-createApiCostSavingsRoutes(app, {
-  pool,
-  requireKey,
   apiCostSavingsRevenue,
   getStripeClient,
-  RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
+  publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN,
+  autonomyOrchestrator,
+  railwayManagedEnvService,
+  accountManager,
+  notificationService,
+  getRailwayEnvVars,
+  setRailwayEnvVar,
+  setRailwayEnvVars,
+  triggerRailwayRedeploy,
 });
-logger.info('✅ [API-COST-SAVINGS] Routes mounted at /api/v1/cost-savings + /api/v1/revenue/api-cost-savings');
 
-// ==================== IDEA QUEUE ====================
-app.use('/api/v1/ideas', createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));
-logger.info('✅ [IDEA-QUEUE] Routes mounted at /api/v1/ideas');
-
-// ==================== DIGITAL TWIN + OUTCOMES + CI ====================
-app.use('/api/v1/twin', createTwinRoutes({ pool, requireKey, callCouncilMember }));
-logger.info('✅ [TWIN] Routes mounted at /api/v1/twin');
-
-// ==================== CONVERSATION HISTORY ====================
-app.use('/api/v1/history', createConversationHistoryRoutes({ pool, requireKey, callCouncilMember }));
-logger.info('✅ [HISTORY] Routes mounted at /api/v1/history');
-
-// ==================== WORD KEEPER & INTEGRITY ENGINE (Amendment 16) ====================
-// Thin adapter: word-keeper services call councilService.ask(prompt, opts)
-const wordKeeperCouncil = {
-  ask: (prompt, opts = {}) => callCouncilMember(opts.model || 'claude', prompt, opts.systemPrompt || '', opts),
-};
-app.use('/api/v1/word-keeper', createWordKeeperRoutes({ pool, councilService: wordKeeperCouncil, twilioService: null }));
-logger.info('✅ [WORD-KEEPER] Routes mounted at /api/v1/word-keeper');
-
-// ── Word Keeper scheduler registration moved to startup/register-schedulers.js ──
+// Scheduler registration depends on route-scoped adapters initialized above.
 const wkIntegrityEngine = createWKIntegrityEngine(pool, wordKeeperCouncil);
 
-// ==================== AUTONOMY ORCHESTRATOR (Amendment 17) ====================
-// Created before initializeTwoTierSystem so routeCtx can include it.
-// autonomyOrchestrator is defined earlier in this file (above runInitializeTwoTierSystem).
-autonomyOrchestrator.start();
-app.use('/api/v1/autonomy', createAutonomyRoutes({ pool, requireKey, orchestrator: autonomyOrchestrator }));
-logger.info('✅ [AUTONOMY] Orchestrator started + routes mounted at /api/v1/autonomy');
-
-app.use('/api/v1/railway/managed-env', createRailwayManagedEnvRoutes({
-  requireKey,
-  managedEnvService: railwayManagedEnvService,
-}));
-logger.info('✅ [RAILWAY-MANAGED-ENV] Routes mounted at /api/v1/railway/managed-env');
-
-app.use('/api/v1/accounts', createAccountManagerRoutes({ requireKey, accountManager, pool, logger }));
-logger.info('✅ [ACCOUNT-MANAGER] Routes mounted at /api/v1/accounts');
-
-const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
-createTCRoutes(app, { pool, requireKey, coordinator: tcCoordinator, logger });
-createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger });
-
-// Warm response cache L1 from DB — picks up where last deploy left off
+// Warm response cache L1 from DB - picks up where last deploy left off
 initCache(pool).catch(() => {});
 
 bootAllDomains({
@@ -1130,6 +1018,7 @@ bootAllDomains({
   logger.warn({ error: error.message }, 'WARN [BOOT] Domain bootstrap failed');
 });
 
+// Most startup-only globals still feed the two-tier initializer and remain in server.js for now.
 registerAllSchedulers({
   pool,
   logger,
@@ -1143,9 +1032,9 @@ registerAllSchedulers({
 const convStore = createConversationStore(pool);
 const _origCallCouncil = callCouncilMember;
 // Wrap callCouncilMember to capture server-side AI conversations
-// (lightweight — fires async after the call completes, never blocks responses)
+// (lightweight - fires async after the call completes, never blocks responses)
 
-// Continuous improvement monitor — runs every 6 hours
+// Continuous improvement monitor - schedule registration lives in startup/register-schedulers.js
 const adamLoggerGlobal = createAdamLogger(pool);
 const ciMonitor = createContinuousImprovement({
   pool,
@@ -1160,79 +1049,11 @@ const ciMonitor = createContinuousImprovement({
   adamLogger: adamLoggerGlobal,
 });
 
-// Run first check after 5 minutes, then every 6 hours
-setTimeout(() => {
-  ciMonitor.runMonitorCycle().catch(err =>
-    logger.warn('[CI] Monitor cycle failed', { error: err.message })
-  );
-  setInterval(() => {
-    ciMonitor.runMonitorCycle().catch(err =>
-      logger.warn('[CI] Monitor cycle failed', { error: err.message })
-    );
-  }, 6 * 60 * 60 * 1000); // every 6 hours
-}, 5 * 60 * 1000); // 5 min after startup
-
-// Rebuild Adam's profile every 12 hours
-setInterval(() => {
-  adamLoggerGlobal.buildProfile(async (prompt) => {
-    try {
-      const result = await callCouncilMember('anthropic', prompt);
-      return typeof result === 'string' ? result : result?.content || '';
-    } catch { return ''; }
-  }).catch(err => logger.warn('[ADAM-TWIN] Profile rebuild failed', { error: err.message }));
-}, 12 * 60 * 60 * 1000); // every 12 hours
-
-// ==================== RAILWAY CONTROL ====================
-// GET  /api/v1/railway/env          — list all env vars on Railway
-// POST /api/v1/railway/env          — set one: { name, value }
-// POST /api/v1/railway/env/bulk     — set many: { vars: { KEY: 'value' } }
-// POST /api/v1/railway/deploy       — trigger immediate redeploy
-app.get('/api/v1/railway/env', requireKey, async (req, res) => {
-  try {
-    const vars = await getRailwayEnvVars();
-    // Mask values for security — just show key names + first 4 chars
-    const masked = Object.fromEntries(
-      Object.entries(vars).map(([k, v]) => [k, `${String(v).slice(0, 4)}****`])
-    );
-    res.json({ ok: true, vars: masked, count: Object.keys(masked).length });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-app.post('/api/v1/railway/env', requireKey, async (req, res) => {
-  try {
-    const { name, value } = req.body;
-    if (!name || value === undefined) {
-      return res.status(400).json({ ok: false, error: 'name and value are required' });
-    }
-    await setRailwayEnvVar(name, value);
-    res.json({ ok: true, set: name });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-app.post('/api/v1/railway/env/bulk', requireKey, async (req, res) => {
-  try {
-    const { vars } = req.body;
-    if (!vars || typeof vars !== 'object') {
-      return res.status(400).json({ ok: false, error: 'vars must be an object { KEY: value }' });
-    }
-    const results = await setRailwayEnvVars(vars);
-    res.json({ ok: true, results });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-app.post('/api/v1/railway/deploy', requireKey, async (req, res) => {
-  try {
-    await triggerRailwayRedeploy();
-    res.json({ ok: true, message: 'Redeploy triggered on Railway' });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
+registerAllSchedulers({
+  ciMonitor,
+  adamLogger: adamLoggerGlobal,
+  callCouncilMember,
+  logger,
 });
 
 // ==================== WEBSOCKET ====================
@@ -1249,35 +1070,6 @@ setupWebSocketHandler(wss, {
   DEEPSEEK_BRIDGE_ENABLED,
   STRIPE_SECRET_KEY,
 });
-
-// ==================== HEALTH CHECK ====================
-app.get('/healthz', async (req, res) => {
-  const checks = {
-    server: 'ok',
-    db: 'unknown',
-    ai: process.env.ANTHROPIC_API_KEY ? 'configured' : 'missing_key',
-    email: process.env.POSTMARK_SERVER_TOKEN ? 'configured' : 'not_configured',
-  };
-
-  try {
-    await pool.query('SELECT 1');
-    checks.db = 'ok';
-  } catch (e) {
-    checks.db = 'error: ' + e.message;
-  }
-
-  const allOk = checks.db === 'ok' && checks.ai === 'configured';
-  res.status(allOk ? 200 : 503).json({
-    status: allOk ? 'healthy' : 'degraded',
-    checks,
-    uptime: Math.floor(process.uptime()),
-    timestamp: new Date().toISOString(),
-  });
-});
-
-// ==================== GLOBAL ERROR BOUNDARY ====================
-// Must be registered after all routes
-app.use(errorBoundary(logger));
 
 // ==================== STARTUP ====================
 async function start() {
@@ -1878,16 +1670,6 @@ process.on("SIGINT", async () => {
   lifecycleSubscriptions.forEach((unsubscribe) => unsubscribe?.());
   lifecycleSubscriptions.length = 0;
   process.exit(0);
-});
-
-// Queue status endpoint
-app.get("/api/v1/queue/stats", requireKey, async (req, res) => {
-  try {
-    const stats = await getAllQueueStats();
-    res.json({ ok: true, queues: stats });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
 });
 
 // Start
