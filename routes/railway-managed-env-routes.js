@@ -1,4 +1,5 @@
 import express from "express";
+import { getRegistryHealth } from "../services/env-registry-map.js";
 
 function getActor(req) {
   return req.get("x-actor") || req.body?.actor || req.query?.actor || "system";
@@ -100,6 +101,21 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
         : null;
       const result = await managedEnvService.verifyManagedVars({ names });
       res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  // Live health check of every var in the ENV_REGISTRY against process.env
+  // No Railway API call needed — Railway injects all vars at boot
+  router.get("/registry", requireKey, (req, res) => {
+    try {
+      const category = req.query.category || null;
+      const health = getRegistryHealth();
+      if (category) {
+        health.vars = health.vars.filter((v) => v.category === category);
+      }
+      res.json({ ok: true, ...health });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }
