@@ -5,156 +5,232 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI API Cost Savings</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
-
-    <!-- Header (Simple) -->
-    <header class="py-4 px-6 md:px-12 bg-gray-800 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-blue-500">API<span class="text-white">Saver</span></a>
-            <nav>
-                <ul class="hidden md:flex space-x-6">
-                    <li><a href="#how-it-works" class="hover:text-blue-400 transition-colors">How it Works</a></li>
-                    <li><a href="#pricing" class="hover:text-blue-400 transition-colors">Pricing</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<body class="bg-gray-900 text-white font-sans antialiased">
 
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-br from-gray-900 to-gray-800 py-20 md:py-32 text-center overflow-hidden">
-        <div class="container mx-auto px-6 relative z-10">
-            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-                Cut Your AI API Costs by 90%
+    <section class="bg-gray-900 py-20 md:py-32 text-center">
+        <div class="container mx-auto px-4">
+            <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-4">
+                Cut Your AI API Costs by <span class="text-blue-500">90%</span>
             </h1>
-            <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10">
-                Optimize your AI API usage with intelligent routing and caching, without compromising performance.
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Optimize your AI model usage, reduce spend, and scale efficiently.
             </p>
-            <a href="#pricing" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
-                See Pricing Plans
+            <a href="/api/checkout?plan=pro" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition duration-300">
+                Get Started Now
             </a>
-        </div>
-        <!-- Background elements for visual interest -->
-        <div class="absolute inset-0 z-0 opacity-10">
-            <svg class="w-full h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
-                <path fill="#2d3748" fill-opacity="1" d="M0,160L48,165.3C96,171,192,181,288,197.3C384,213,480,235,576,218.7C672,203,768,149,864,138.7C960,128,1056,160,1152,176C1248,192,1344,192,1392,192L1440,192L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
-            </svg>
         </div>
     </section>
 
-    <!-- How it Works Section -->
-    <section id="how-it-works" class="py-16 md:py-24 bg-gray-900">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-5xl font-bold mb-12 text-blue-400">How It Works</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-
+    <!-- How it works Section -->
+    <section class="py-16 md:py-24 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Step 1 -->
-                <div class="bg-gray-800 p-8 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2">
-                    <div class="text-5xl mb-4 text-blue-500">1</div>
-                    <h3 class="text-2xl font-semibold mb-4">Integrate Our Proxy</h3>
-                    <p class="text-gray-300">
-                        Replace your existing OpenAI API endpoint with our intelligent proxy URL. It's a simple, drop-in change.
-                    </p>
+                <div class="bg-gray-900 p-8 rounded-lg shadow-xl text-center">
+                    <div class="text-blue-500 text-5xl font-bold mb-4">1</div>
+                    <h3 class="text-2xl font-semibold mb-4">Connect Your APIs</h3>
+                    <p class="text-gray-300">Seamlessly integrate your existing AI API keys with our platform.</p>
                 </div>
-
                 <!-- Step 2 -->
-                <div class="bg-gray-800 p-8 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2">
-                    <div class="text-5xl mb-4 text-blue-500">2</div>
-                    <h3 class="text-2xl font-semibold mb-4">Smart Routing & Caching</h3>
-                    <p class="text-gray-300">
-                        Our system intelligently routes requests to the cheapest available models and caches common responses, reducing redundant calls.
-                    </p>
+                <div class="bg-gray-900 p-8 rounded-lg shadow-xl text-center">
+                    <div class="text-blue-500 text-5xl font-bold mb-4">2</div>
+                    <h3 class="text-2xl font-semibold mb-4">AI Routes & Optimizes</h3>
+                    <p class="text-gray-300">Our engine intelligently routes requests to the most cost-effective models.</p>
                 </div>
-
                 <!-- Step 3 -->
-                <div class="bg-gray-800 p-8 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2">
-                    <div class="text-5xl mb-4 text-blue-500">3</div>
+                <div class="bg-gray-900 p-8 rounded-lg shadow-xl text-center">
+                    <div class="text-blue-500 text-5xl font-bold mb-4">3</div>
                     <h3 class="text-2xl font-semibold mb-4">Enjoy Massive Savings</h3>
-                    <p class="text-gray-300">
-                        Watch your API costs plummet, often by 90% or more, all while maintaining or even improving performance.
-                    </p>
+                    <p class="text-gray-300">Watch your API bills shrink by up to 90% without sacrificing performance.</p>
                 </div>
-
             </div>
         </div>
     </section>
 
     <!-- Pricing Section -->
-    <section id="pricing" class="py-16 md:py-24 bg-gray-800">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl md:text-5xl font-bold mb-12 text-purple-400">Simple, Transparent Pricing</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-
-                <!-- Starter Plan -->
-                <div class="bg-gray-900 p-8 rounded-lg shadow-xl border-t-4 border-blue-500 flex flex-col justify-between transform hover:scale-105 transition-transform duration-300">
+    <section class="py-16 md:py-24 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Simple, Transparent Pricing</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Starter Card -->
+                <div class="bg-gray-800 p-8 rounded-lg shadow-xl text-center flex flex-col justify-between">
                     <div>
-                        <h3 class="text-3xl font-bold mb-4 text-blue-400">Starter</h3>
-                        <p class="text-5xl font-extrabold mb-4">$49<span class="text-xl font-normal text-gray-400">/mo</span></p>
-                        <p class="text-gray-300 mb-6">Perfect for small projects & development.</p>
-                        <ul class="text-left text-gray-200 space-y-3 mb-8">
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Up to 10,000 requests/month</li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Basic cost optimization</li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Standard support</li>
+                        <h3 class="text-3xl font-bold mb-4">Starter</h3>
+                        <p class="text-5xl font-extrabold mb-6">$49<span class="text-gray-400 text-xl font-normal">/mo</span></p>
+                        <ul class="text-gray-300 text-lg mb-8 space-y-2">
+                            <li>10K Requests/Month</li>
+                            <li>Basic Optimization</li>
+                            <li>Email Support</li>
                         </ul>
                     </div>
-                    <a href="/api/checkout?plan=starter" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300">
-                        Get Started
+                    <a href="/api/checkout?plan=starter" class="block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
+                        Choose Starter
                     </a>
                 </div>
 
-                <!-- Pro Plan -->
-                <div class="bg-gray-900 p-8 rounded-lg shadow-xl border-t-4 border-purple-500 flex flex-col justify-between transform hover:scale-105 transition-transform duration-300">
+                <!-- Pro Card -->
+                <div class="bg-blue-700 p-8 rounded-lg shadow-xl text-center flex flex-col justify-between transform scale-105">
                     <div>
-                        <h3 class="text-3xl font-bold mb-4 text-purple-400">Pro</h3>
-                        <p class="text-5xl font-extrabold mb-4">$99<span class="text-xl font-normal text-gray-400">/mo</span></p>
-                        <p class="text-gray-300 mb-6">Ideal for growing applications & teams.</p>
-                        <ul class="text-left text-gray-200 space-y-3 mb-8">
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Up to 50,000 requests/month</li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Advanced cost optimization & caching</li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Priority support</li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Real-time analytics</li>
+                        <h3 class="text-3xl font-bold mb-4">Pro</h3>
+                        <p class="text-5xl font-extrabold mb-6">$99<span class="text-blue-200 text-xl font-normal">/mo</span></p>
+                        <ul class="text-blue-100 text-lg mb-8 space-y-2">
+                            <li>50K Requests/Month</li>
+                            <li>Advanced Optimization</li>
+                            <li>Priority Support</li>
+                            <li>Real-time Analytics</li>
                         </ul>
                     </div>
-                    <a href="/api/checkout?plan=pro" class="block w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300">
-                        Go Pro
+                    <a href="/api/checkout?plan=pro" class="block bg-white text-blue-700 font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-100 transition duration-300">
+                        Choose Pro
                     </a>
                 </div>
 
-                <!-- Enterprise Plan -->
-                <div class="bg-gray-900 p-8 rounded-lg shadow-xl border-t-4 border-emerald-500 flex flex-col justify-between transform hover:scale-105 transition-transform duration-300">
+                <!-- Enterprise Card -->
+                <div class="bg-gray-800 p-8 rounded-lg shadow-xl text-center flex flex-col justify-between">
                     <div>
-                        <h3 class="text-3xl font-bold mb-4 text-emerald-400">Enterprise</h3>
-                        <p class="text-5xl font-extrabold mb-4">$299<span class="text-xl font-normal text-gray-400">/mo</span></p>
-                        <p class="text-gray-300 mb-6">For large-scale operations & custom needs.</p>
-                        <ul class="text-left text-gray-200 space-y-3 mb-8">
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Unlimited requests</li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Dedicated account manager</li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Custom integrations</li>
-                            <li class="flex items-center"><svg class="w-5 h-5 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>SLA & uptime guarantee</li>
+                        <h3 class="text-3xl font-bold mb-4">Enterprise</h3>
+                        <p class="text-5xl font-extrabold mb-6">$299<span class="text-gray-400 text-xl font-normal">/mo</span></p>
+                        <ul class="text-gray-300 text-lg mb-8 space-y-2">
+                            <li>Unlimited Requests</li>
+                            <li>Custom Optimization</li>
+                            <li>Dedicated Account Manager</li>
+                            <li>SLA & Compliance</li>
                         </ul>
                     </div>
-                    <a href="/api/checkout?plan=enterprise" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-300">
-                        Contact Sales
+                    <a href="/api/checkout?plan=enterprise" class="block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
+                        Choose Enterprise
                     </a>
                 </div>
-
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 py-8 text-center text-gray-400">
-        <div class="container mx-auto px-6">
-            <p>&copy; 2024 APISaver. All rights reserved.</p>
-            <div class="mt-4 space-x-4">
-                <a href="#" class="hover:text-blue-400">Privacy Policy</a>
-                <a href="#" class="hover:text-blue-400">Terms of Service</a>
+    <footer class="bg-gray-900 py-8 text-center text-gray-500 text-sm">
+        <div class="container mx-auto px-4">
+            &copy; 2024 AI API Cost Savings Service. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>
+ANSWER: <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI API Cost Savings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans antialiased">
+
+    <!-- Hero Section -->
+    <section class="bg-gray-900 py-20 md:py-32 text-center">
+        <div class="container mx-auto px-4">
+            <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-4">
+                Cut Your AI API Costs by <span class="text-blue-500">90%</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Optimize your AI model usage, reduce spend, and scale efficiently.
+            </p>
+            <a href="/api/checkout?plan=pro" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition duration-300">
+                Get Started Now
+            </a>
+        </div>
+    </section>
+
+    <!-- How it works Section -->
+    <section class="py-16 md:py-24 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="bg-gray-900 p-8 rounded-lg shadow-xl text-center">
+                    <div class="text-blue-500 text-5xl font-bold mb-4">1</div>
+                    <h3 class="text-2xl font-semibold mb-4">Connect Your APIs</h3>
+                    <p class="text-gray-300">Seamlessly integrate your existing AI API keys with our platform.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="bg-gray-900 p-8 rounded-lg shadow-xl text-center">
+                    <div class="text-blue-500 text-5xl font-bold mb-4">2</div>
+                    <h3 class="text-2xl font-semibold mb-4">AI Routes & Optimizes</h3>
+                    <p class="text-gray-300">Our engine intelligently routes requests to the most cost-effective models.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="bg-gray-900 p-8 rounded-lg shadow-xl text-center">
+                    <div class="text-blue-500 text-5xl font-bold mb-4">3</div>
+                    <h3 class="text-2xl font-semibold mb-4">Enjoy Massive Savings</h3>
+                    <p class="text-gray-300">Watch your API bills shrink by up to 90% without sacrificing performance.</p>
+                </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="py-16 md:py-24 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Simple, Transparent Pricing</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Starter Card -->
+                <div class="bg-gray-800 p-8 rounded-lg shadow-xl text-center flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4">Starter</h3>
+                        <p class="text-5xl font-extrabold mb-6">$49<span class="text-gray-400 text-xl font-normal">/mo</span></p>
+                        <ul class="text-gray-300 text-lg mb-8 space-y-2">
+                            <li>10K Requests/Month</li>
+                            <li>Basic Optimization</li>
+                            <li>Email Support</li>
+                        </ul>
+                    </div>
+                    <a href="/api/checkout?plan=starter" class="block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
+                        Choose Starter
+                    </a>
+                </div>
+
+                <!-- Pro Card -->
+                <div class="bg-blue-700 p-8 rounded-lg shadow-xl text-center flex flex-col justify-between transform scale-105">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4">Pro</h3>
+                        <p class="text-5xl font-extrabold mb-6">$99<span class="text-blue-200 text-xl font-normal">/mo</span></p>
+                        <ul class="text-blue-100 text-lg mb-8 space-y-2">
+                            <li>50K Requests/Month</li>
+                            <li>Advanced Optimization</li>
+                            <li>Priority Support</li>
+                            <li>Real-time Analytics</li>
+                        </ul>
+                    </div>
+                    <a href="/api/checkout?plan=pro" class="block bg-white text-blue-700 font-bold py-3 px-6 rounded-lg text-lg hover:bg-gray-100 transition duration-300">
+                        Choose Pro
+                    </a>
+                </div>
+
+                <!-- Enterprise Card -->
+                <div class="bg-gray-800 p-8 rounded-lg shadow-xl text-center flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-4">Enterprise</h3>
+                        <p class="text-5xl font-extrabold mb-6">$299<span class="text-gray-400 text-xl font-normal">/mo</span></p>
+                        <ul class="text-gray-300 text-lg mb-8 space-y-2">
+                            <li>Unlimited Requests</li>
+                            <li>Custom Optimization</li>
+                            <li>Dedicated Account Manager</li>
+                            <li>SLA & Compliance</li>
+                        </ul>
+                    </div>
+                    <a href="/api/checkout?plan=enterprise" class="block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300">
+                        Choose Enterprise
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8 text-center text-gray-500 text-sm">
+        <div class="container mx-auto px-4">
+            &copy; 2024 AI API Cost Savings Service. All rights reserved.
         </div>
     </footer>
 
