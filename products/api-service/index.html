@@ -1,53 +1,76 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Cost Savings Service - Cut Your AI API Costs by 90%</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+    <title>AI API Cost Savings - Cut Costs by 90%</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Optional: Custom scrollbar for dark theme */
-        body::-webkit-scrollbar {
-            width: 8px;
+        body {
+            font-family: 'Inter', sans-serif;
         }
-        body::-webkit-scrollbar-track {
-            background: #2d3748; /* gray-800 */
+        /* Customizing Tailwind for a professional dark theme */
+        :root {
+            --color-primary: #6366f1; /* Indigo-500 */
+            --color-secondary: #a78bfa; /* Violet-400 */
+            --color-bg-dark: #1a202c; /* Dark Grey */
+            --color-bg-card: #2d3748; /* Slightly lighter dark grey */
+            --color-text-light: #f7fafc; /* White */
+            --color-text-muted: #cbd5e0; /* Light Grey */
+            --color-border: #4a5568; /* Grey for borders */
         }
-        body::-webkit-scrollbar-thumb {
-            background-color: #4a5568; /* gray-700 */
-            border-radius: 4px;
-            border: 2px solid #2d3748; /* gray-800 */
+        body {
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
         }
-        body::-webkit-scrollbar-thumb:hover {
-            background-color: #6b7280; /* gray-600 */
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #4f46e5; /* Indigo-600 */
+        }
+        .card {
+            background-color: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans leading-relaxed antialiased">
+<body class="antialiased">
 
-    <!-- Header (Optional, for navigation/branding) -->
-    <header class="py-4 bg-gray-900 border-b border-gray-800">
+    <!-- Header (Optional - Minimal for a landing page) -->
+    <header class="py-6 border-b border-gray-700">
         <div class="container mx-auto px-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-indigo-400">API<span class="text-gray-200">Savings</span></a>
-            <!-- Could add nav links here if needed -->
+            <a href="#" class="text-2xl font-bold text-white">API Cost Saver</a>
+            <nav>
+                <!-- Could add links here like "How It Works", "Pricing" if needed -->
+            </nav>
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="relative bg-gradient-to-br from-gray-900 to-gray-800 py-20 md:py-32 overflow-hidden">
-            <div class="container mx-auto px-4 text-center relative z-10">
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">
-                    Cut Your AI API Costs by 90%
-                </h1>
-                <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10">
-                    Optimize your API usage with our intelligent proxy and caching service, designed to drastically reduce your cloud expenditure.
-                </p>
-                <a href="#pricing" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
-                    See Pricing Plans
-                </a>
-            </div>
-            <!-- Background gradient/blob for visual flair -->
-            <div class="absolute inset-0 z-0 opacity-20">
-                <div class="w-96 h-9
+    <!-- Hero Section -->
+    <section class="py-20 md:py-32 text-center bg-gradient-to-b from-gray-900 to-gray-800">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6 text-white">
+                Cut Your AI API Costs by 90%
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+                Seamlessly route your OpenAI-compatible API requests through cheaper, local, or optimized models without changing your code.
+            </p>
+            <a href="#pricing" class="btn-primary text-lg">
+                View Pricing Plans
+            </a>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 md:py-24 bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center
