@@ -1,17 +1,35 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════════════════════╗
  * ║                                                                                  ║
- * ║        🎼 LIFEOS v26.1 (NO CLAUDE) - CONSENSUS & SELF-HEALING SYSTEM             ║
+ * ║        🎼 LIFEOS v26.1 — CONSENSUS & SELF-HEALING SYSTEM                        ║
  * ║        Railway + Neon PostgreSQL + GitHub + Multi-AI Council + Stripe           ║
  * ║                                                                                  ║
  * ║  ✅ Consensus Protocol         ✅ Blind Spot Detection                          ║
  * ║  ✅ Daily Idea Generation      ✅ AI Rotation & Evaluation                      ║
  * ║  ✅ Sandbox Testing            ✅ Rollback Capabilities                         ║
  * ║  ✅ No-Cache API Calls         ✅ Continuous Memory                             ║
- * ║  ✅ OpenAI / Gemini / DeepSeek / Grok Council (no Claude)                      ║
+ * ║  ✅ OpenAI / Gemini / DeepSeek / Grok Council                                  ║
  * ║  ✅ Stripe Revenue Sync        ✅ Income Drones / ROI Tracking                  ║
  * ║                                                                                  ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ *
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * ⛔  COMPOSITION ROOT — DO NOT ADD FEATURE CODE HERE
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ *
+ * This file wires the system together. It does NOT implement features.
+ * If you are an AI agent, human developer, or automated system about to add
+ * new functionality here — STOP and put it in the right place instead:
+ *
+ *   New route/feature  →  routes/<feature>-routes.js + services/<feature>.js
+ *   Boot/startup logic →  startup/boot-domains.js
+ *   Cron/schedulers    →  startup/register-schedulers.js
+ *   Config values      →  config/<topic>.js
+ *   DB changes         →  db/migrations/<date>_<name>.sql
+ *
+ * Allowed in this file: imports, pool/app/server creation, middleware setup,
+ *   registerRoutes(), bootDomains(), app.listen(). Nothing else.
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  */
 
 import "dotenv/config";

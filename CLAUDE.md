@@ -62,6 +62,39 @@ NEVER output API keys, tokens, passwords, private keys. If you see one exposed �
 
 ---
 
+## SERVER.JS IS A PROTECTED BOUNDARY — READ THIS BEFORE TOUCHING ANYTHING
+
+`server.js` is a **composition root only**. Its only jobs are:
+1. Load config
+2. Create the db pool, app, and server
+3. Call `registerMiddleware`, `registerRoutes`, `bootDomains`
+4. Call `app.listen`
+
+**NEVER add to server.js:**
+- Feature routes (put in `routes/`)
+- Service logic (put in `services/`)
+- Domain boot code / async IIFEs (put in `startup/boot-domains.js`)
+- Inline config objects like COUNCIL_MEMBERS (put in `config/`)
+- Cron registration (put in `startup/register-schedulers.js`)
+- Any `let x = null` global state (put it in the service that owns it)
+
+**WHERE NEW THINGS GO — mandatory lookup before writing code:**
+
+| What you're adding | Where it goes |
+|--------------------|--------------|
+| New API feature | `routes/<feature>-routes.js` + `services/<feature>.js` |
+| Boot/startup logic | `startup/boot-domains.js` |
+| Scheduler / cron | `startup/register-schedulers.js` |
+| Config values | `config/<topic>.js` |
+| DB migration | `db/migrations/<date>_<name>.sql` |
+| Inline Railway/env routes | `routes/railway-managed-env-routes.js` |
+
+**If you are an AI agent and you are about to add code to server.js — STOP.**
+Find the correct target file from the table above and put it there instead.
+If no target file exists, create it. Do not use server.js as a fallback.
+
+---
+
 ## SYSTEM ARCHITECTURE
 
 **Infrastructure:**
@@ -70,7 +103,11 @@ NEVER output API keys, tokens, passwords, private keys. If you see one exposed �
 - Repository: GitHub
 
 **Key Files:**
-- `server.js` — Main server (protected, changes need review)
+- `server.js` — Composition root ONLY (see boundary rules above)
+- `startup/` — Boot sequences, route registration, scheduler setup
+- `routes/` — One file per feature domain
+- `services/` — Pure service logic, no app wiring
+- `config/` — Static config (council members, feature flags, pricing)
 - `package.json` — Dependencies (protected)
 - `/public/overlay/` — Frontend UI
 
