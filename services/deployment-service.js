@@ -108,7 +108,10 @@ export function createDeploymentService(deps) {
 
     if (!commitRes.ok) {
       const err = await commitRes.json();
-      throw new Error(err.message || 'GitHub commit failed');
+      const msg = err.message || 'GitHub commit failed';
+      if (commitRes.status === 401) throw new Error(`GitHub auth failed (GITHUB_TOKEN expired/invalid): ${msg}`);
+      if (commitRes.status === 403) throw new Error(`GitHub permission denied (token lacks Contents write): ${msg}`);
+      throw new Error(msg);
     }
 
     console.log(`✅ [DEPLOY] Committed ${filePath} → ${targetBranch}`);
