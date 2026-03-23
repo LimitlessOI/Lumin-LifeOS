@@ -444,13 +444,16 @@ Rules:
 
 Today's date: ${new Date().toISOString().slice(0,10)}
 
+Return ONLY a valid JSON array. No markdown, no explanation, no code fences. Start your response with [ and end with ].
+
+Example shape:
 [
   {
     "id": "snake_case_id",
     "name": "Human readable name",
     "file": "relative/path/to/file.ext",
     "type": "js|html|css|sql",
-    "prompt": "Complete detailed prompt — include all requirements, exports, function signatures, API contracts"
+    "prompt": "Complete detailed prompt for this file only"
   }
 ]`;
 

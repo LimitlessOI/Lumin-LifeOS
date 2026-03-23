@@ -678,6 +678,22 @@ No text before or after. No markdown. Start with [ and end with ].`;
         }
       }
       
+      // Strategy 2.5: Partial array recovery — token limit cuts JSON mid-stream
+      // Extract every complete {...} object from a truncated array
+      if (cleaned.includes('[')) {
+        try {
+          const objectMatches = [...cleaned.matchAll(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)?\}/g)];
+          const salvaged = objectMatches
+            .map((m) => { try { return JSON.parse(m[0]); } catch { return null; } })
+            .filter(Boolean)
+            .filter((o) => o.name || o.title || o.opportunity_name);
+          if (salvaged.length > 0) {
+            console.log(`✅ [BUSINESS CENTER] Salvaged ${salvaged.length} opportunities from truncated JSON`);
+            return salvaged;
+          }
+        } catch { /* fall through */ }
+      }
+
       // Strategy 2: Try to extract JSON object (might be wrapped)
       const objMatch = cleaned.match(/\{[\s\S]*\}/);
       if (objMatch) {
