@@ -1,40 +1,54 @@
 import express from 'express';
-import axios from 'axios';
 const router = express.Router();
 
-router.post('/v1/chat/completions', async (req, res) => {
-  const bearerToken = req.headers['authorization']?.split(' ')[1];
-  if (!bearerToken) {
-    return res.status(401).json({ error: { message: "Unauthorized" } });
+// Extract Bearer token from Authorization header
+const auth = (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
+  next();
+};
 
-  const body = req.body;
+// POST /v1/chat/completions endpoint
+router.post('/v1/chat/completions', auth, (req, res) => {
   try {
-    const ollamaResponse = await axios.post('http://localhost:11434/api/generate', body, {
-      headers: { Authorization: `Bearer ${bearerToken}` }
-    });
+    // Extract request body
+    const { model, messages, temperature, max_tokens } = req.body;
 
-    const openAIFormat = {
-      id: ollamaResponse.data.id,
-      object: 'chat.completion',
-      created: new Date(),
-      model: ollamaResponse.data.model,
-      choices: ollamaResponse.data.choices.map(choice => ({
-        index: choice.index,
-        message: { role: choice.role, content: choice.content },
-        finish_reason: choice.finish_reason
-      }))
+    // Call Ollama API
+    const ollamaUrl = 'http://localhost:11434/api/generate';
+    const ollamaOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages, temperature, max_tokens }),
     };
-
-    res.status(200).json(openAIFormat);
+    fetch(ollamaUrl, ollamaOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        // Convert Ollama response to OpenAI format
+        const openaiResponse = {
+          id: data.id,
+          object: 'chat.completion',
+          created: data.created,
+          model: 'davinci',
+          choices: [
+            {
+              text: data.text,
+              index: 0,
+              finish_reason: data.finish_reason,
+            },
+          ],
+        };
+        res.json(openaiResponse);
+      })
+      .catch((error) => {
+        res.status(500).json({ error: 'Internal Server Error' });
+      });
   } catch (error) {
-    console.error('Error calling Ollama:', error);
-    if (error.response) {
-      return res.status(error.response.status || 500).json({ error: { message: error.message } });
-    } else {
-      return res.status(500).json({ error: { message: "Internal Server Error" } });
-    }
+    res.status(400).json({ error: 'Bad Request' });
   }
 });
 
+// Export Express router
 export default router;
