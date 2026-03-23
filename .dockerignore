@@ -25,10 +25,9 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Documentation
-*.md
+# Large doc folders not needed at runtime
 docs/
-*.md
+• Lumin-Memory/
 
 # Tests
 tests/

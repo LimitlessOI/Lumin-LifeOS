@@ -69,6 +69,24 @@ export function createCouncilService({
   // Governor with Neon-backed persistence — survives Railway deploys
   const freeTierGovernor = createFreeTierGovernor({ pool });
 
+  // Startup Ollama ping — pre-mark exhausted before first call so nothing gets routed there
+  // Runs async immediately; result cached in _exhaustedProviders for this session
+  const _exhaustedProviders = new Set();
+  (async () => {
+    const endpoint = OLLAMA_ENDPOINT || 'http://localhost:11434';
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 3000);
+      const res = await fetch(`${endpoint}/api/tags`, { signal: ctrl.signal });
+      clearTimeout(t);
+      if (!res.ok) throw new Error(`status ${res.status}`);
+      console.log(`✅ [COUNCIL] Ollama reachable at ${endpoint}`);
+    } catch {
+      _exhaustedProviders.add('ollama');
+      console.log(`🔌 [COUNCIL] Ollama unreachable at startup — excluded from routing`);
+    }
+  })();
+
   // ==================== LCTP v3 COMPRESSION HELPERS ====================
 
   function advancedCompress(text) {
@@ -622,9 +640,7 @@ export function createCouncilService({
     addTurn(sessionId, { role: "assistant", content: assistantText });
   }
 
-  // selectOptimalModel is synchronous so we track exhausted providers in a
-  // lightweight in-memory set that the 429 handler keeps updated.
-  const _exhaustedProviders = new Set();
+  // _exhaustedProviders declared at factory top (line ~74) — pre-seeded by startup ping
 
   function selectOptimalModel(prompt, complexity) {
     const length = prompt.length;
