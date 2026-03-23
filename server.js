@@ -81,7 +81,6 @@ import { IdeaEngine } from "./services/idea-engine.js";
 import { createExecutionQueue } from "./services/execution-queue.js";
 import { createSelfProgrammingService } from "./services/self-programming.js";
 import { SelfProgrammingModule } from "./modules/system/self-programming-module.js";
-import { startAutonomySchedulers } from "./services/autonomy-scheduler.js";
 import { sandboxTest as runSandboxTest } from "./services/sandbox-service.js";
 import {
   createSystemSnapshot as createSystemSnapshotService,
@@ -151,7 +150,7 @@ import { createRailwayManagedEnvService } from "./services/railway-managed-env-s
 import { createRailwayManagedEnvRoutes } from "./routes/railway-managed-env-routes.js";
 import { createAccountManager } from "./services/account-manager.js";
 import { createAccountManagerRoutes } from "./routes/account-manager-routes.js";
-import { createTCCoordinator, startTCDeadlineCron } from "./services/tc-coordinator.js";
+import { createTCCoordinator } from "./services/tc-coordinator.js";
 import { createTCRoutes } from "./routes/tc-routes.js";
 import { createMLSRoutes } from "./routes/mls-routes.js";
 import { createEventBus } from "./core/event-bus.js";
@@ -180,6 +179,8 @@ import { createSnapshotManager } from "./startup/snapshots.js";
 import { loadROIFromDatabase, updateROI } from "./startup/roi.js";
 import { createMemoryHandlers } from "./startup/memory.js";
 import { createLossTracker } from "./startup/loss.js";
+import { bootAllDomains } from "./startup/boot-domains.js";
+import { registerAllSchedulers } from "./startup/register-schedulers.js";
 import { COUNCIL_ALIAS_MAP, createCouncilMembers } from "./config/council-members.js";
 
 // Enhanced Council Features
@@ -196,12 +197,10 @@ import { createConversationHistoryRoutes } from "./routes/conversation-history-r
 import { createConversationStore } from "./services/conversation-store.js";
 // Word Keeper & Integrity Engine (Amendment 16)
 import { createWordKeeperRoutes } from "./routes/word-keeper-routes.js";
-import { startReminderCron } from "./services/reminder-cron.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "./services/integrity-engine.js";
 // Autonomy Orchestrator — self-programming without bottlenecks (Amendment 17)
 import { createAutonomyOrchestrator } from "./services/autonomy-orchestrator.js";
 import { createAutonomyRoutes } from "./routes/autonomy-routes.js";
-import { registerTwilioWebhook } from "./services/twilio-webhook-registrar.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig, CrmSequenceRunner;
@@ -249,6 +248,7 @@ wss.on("error", (error) => {
 });
 
 const { scheduleAutonomyLoop, scheduleAutonomyOnce } = createAutonomyScheduler(logger);
+const asyncStartAutonomySchedulers = (...args) => import("./services/autonomy-scheduler.js").then((mod) => mod.startAutonomySchedulers(...args));
 
 const moduleRouter = new ModuleRouter();
 const healthModuleInstance = new HealthModule();
@@ -1087,25 +1087,8 @@ const wordKeeperCouncil = {
 app.use('/api/v1/word-keeper', createWordKeeperRoutes({ pool, councilService: wordKeeperCouncil, twilioService: null }));
 logger.info('✅ [WORD-KEEPER] Routes mounted at /api/v1/word-keeper');
 
-// ── Word Keeper reminder cron — check every 60s, send SMS, weekly coaching ──
+// ── Word Keeper scheduler registration moved to startup/register-schedulers.js ──
 const wkIntegrityEngine = createWKIntegrityEngine(pool, wordKeeperCouncil);
-startReminderCron(pool, async (to, msg) => {
-  // Use Twilio sendSMS if configured, otherwise log
-  try {
-    const { createTwilioService } = await import('./services/twilio-service.js');
-    const twilio = createTwilioService({
-      callCouncilMember,
-      RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
-      ALERT_PHONE: to,
-      alertState: { inProgress: false },
-    });
-    return twilio.sendSMS(to, msg);
-  } catch { return { success: false }; }
-}, {
-  userPhone: process.env.ALERT_PHONE || process.env.ADMIN_PHONE,
-  integrityEngine: wkIntegrityEngine,
-});
-logger.info('✅ [WORD-KEEPER] Reminder cron started');
 
 // ==================== AUTONOMY ORCHESTRATOR (Amendment 17) ====================
 // Created before initializeTwoTierSystem so routeCtx can include it.
@@ -1125,102 +1108,36 @@ logger.info('✅ [ACCOUNT-MANAGER] Routes mounted at /api/v1/accounts');
 
 const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
 createTCRoutes(app, { pool, requireKey, coordinator: tcCoordinator, logger });
-startTCDeadlineCron(pool, tcCoordinator);
 createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger });
 
-// GLVAR dues (monthly) + violations (4× daily email scan)
-(async () => {
-  try {
-    const { createGLVARMonitor } = await import('./services/glvar-monitor.js');
-    const { createTCBrowserAgent } = await import('./services/tc-browser-agent.js');
-    const tcBrowser = createTCBrowserAgent({ accountManager, logger });
-    const glvarMonitor = createGLVARMonitor({ pool, tcBrowser, accountManager, notificationService, logger });
-    glvarMonitor.startDuesCron();
-    glvarMonitor.startViolationsCron();
-  } catch (err) {
-    logger.warn?.({ err: err.message }, '[GLVAR-MONITOR] Failed to start');
-  }
-})();
-
-// Email triage — scans inbox every 30 min, daily digest at 7am
-(async () => {
-  try {
-    const { createEmailTriage } = await import('./services/email-triage.js');
-    const emailTriage = createEmailTriage({ pool, notificationService, callCouncilMember, logger });
-    emailTriage.startTriageCron();
-  } catch (err) {
-    logger.warn?.({ err: err.message }, '[EMAIL-TRIAGE] Failed to start');
-  }
-})();
-
-// Self-register Twilio SMS webhook — no manual Twilio console action needed
 // Warm response cache L1 from DB — picks up where last deploy left off
 initCache(pool).catch(() => {});
-railwayManagedEnvService.ensureSchema()
-  .then(() => {
-    railwayManagedEnvService.startScheduler();
-    return railwayManagedEnvService.syncDesiredVars({ actor: 'boot', syncOnBootOnly: true });
-  })
-  .then((result) => {
-    logger.info({ changed: result.changed, failed: result.failed }, '✅ [RAILWAY-MANAGED-ENV] Boot sync complete');
-  })
-  .catch((error) => {
-    logger.warn({ error: error.message }, '⚠️ [RAILWAY-MANAGED-ENV] Boot sync failed');
-  });
 
-accountManager.ensureSchema().catch((err) => {
-  logger.warn({ error: err.message }, '⚠️ [ACCOUNT-MANAGER] Schema init failed');
+bootAllDomains({
+  pool,
+  logger,
+  notificationService,
+  callCouncilMember,
+  accountManager,
+  railwayManagedEnvService,
+  onManagedEnvReady: () => registerAllSchedulers({ railwayManagedEnvService }),
+  registerTwilioWebhook: async () => {
+    const { registerTwilioWebhook } = await import('./services/twilio-webhook-registrar.js');
+    return registerTwilioWebhook();
+  },
+  publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN || '',
+}).catch((error) => {
+  logger.warn({ error: error.message }, 'WARN [BOOT] Domain bootstrap failed');
 });
 
-registerTwilioWebhook().then(result => {
-  if (result.registered) {
-    logger.info({ url: result.url, changed: result.changed }, '✅ [TWILIO] SMS webhook confirmed');
-  } else {
-    logger.warn({ error: result.error }, '⚠️ [TWILIO] SMS webhook registration failed (non-fatal)');
-  }
-}).catch(() => {});
-
-// Boot seeder — sets every env var the system knows the value for.
-// Uses managed-env service so all changes are encrypted, audited, and persist in Neon.
-// Only writes a var if it isn't already set in process.env (never overwrites live values).
-(async () => {
-  try {
-    const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN || '';
-    const siteBaseUrl = publicDomain
-      ? (publicDomain.startsWith('http') ? publicDomain : `https://${publicDomain}`)
-      : '';
-
-    const knownVars = {
-      // Email — Postmark is the provider, lifeos@ is the FROM address
-      EMAIL_PROVIDER: { value: 'postmark',                   description: 'Email provider — set by boot seeder' },
-      EMAIL_FROM:     { value: 'lifeOS@hopkinsgroup.org',    description: 'Outreach FROM address — set by boot seeder' },
-      // Site builder — derive from Railway public domain
-      ...(siteBaseUrl && { SITE_BASE_URL: { value: siteBaseUrl, description: 'Preview site base URL — derived from RAILWAY_PUBLIC_DOMAIN' } }),
-      // Signup agent — system emails for autonomous account creation
-      GMAIL_SIGNUP_EMAIL: { value: 'lumea.lifeos@gmail.com', description: 'System signup email (public domain services) — set by boot seeder' },
-      WORK_EMAIL:         { value: 'LifeOS@hopkinsgroup.org', description: 'Work email (private domain, for Postmark etc.) — set by boot seeder' },
-    };
-
-    const toSet = Object.fromEntries(
-      Object.entries(knownVars).filter(([key]) => !process.env[key])
-    );
-
-    if (Object.keys(toSet).length > 0) {
-      const results = await railwayManagedEnvService.upsertDesiredVars(toSet, 'boot-seeder');
-      const ok = results.filter((r) => r.ok).map((r) => r.envName);
-      const failed = results.filter((r) => !r.ok).map((r) => `${r.envName}: ${r.error}`);
-      if (ok.length)     logger.info({ vars: ok },     '✅ [BOOT-SEEDER] Vars stored in managed-env');
-      if (failed.length) logger.warn({ failed },       '⚠️ [BOOT-SEEDER] Some vars failed');
-      // Push to Railway immediately so this deploy picks them up
-      await railwayManagedEnvService.syncDesiredVars({ actor: 'boot-seeder', names: ok });
-      logger.info({ count: ok.length }, '✅ [BOOT-SEEDER] Known vars pushed to Railway');
-    } else {
-      logger.info('[BOOT-SEEDER] All known vars already set — no action needed');
-    }
-  } catch (err) {
-    logger.warn({ error: err.message }, '⚠️ [BOOT-SEEDER] Non-fatal error');
-  }
-})();
+registerAllSchedulers({
+  pool,
+  logger,
+  callCouncilMember,
+  wkIntegrityEngine,
+  publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN,
+  tcCoordinator,
+});
 
 // Auto-log all council API calls as conversations
 const convStore = createConversationStore(pool);
@@ -1518,9 +1435,8 @@ async function start() {
     }
     // ──────────────────────────────────────────────────────────────────────
 
-    autoBuilder.startBuildScheduler({
-      initialDelay: 60000,          // 1 min initial delay (was 15s)
-      interval: 6 * 60 * 60 * 1000, // 6 hours (was 60s) — preserve token quota until TC proven
+    registerAllSchedulers({
+      autoBuilder,
     });
 
     // Critical: Database must initialize (but don't fail if tables already exist)
@@ -1912,10 +1828,14 @@ async function start() {
       comprehensiveIdeaTracker,
       vapiIntegration,
     };
-    startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOnce, () => autonomyDepsRef.current);
-
-    // Preview site expiry: Amendment 05 — expire previews older than 30 days
-    scheduleAutonomyLoop('preview-expiry', 24 * 60 * 60 * 1000, () => runPreviewExpiry(pool), 5 * 60 * 1000);
+    registerAllSchedulers({
+      pool,
+      startAutonomySchedulers: asyncStartAutonomySchedulers,
+      scheduleAutonomyLoop,
+      scheduleAutonomyOnce,
+      getAutonomyDeps: () => autonomyDepsRef.current,
+      runPreviewExpiry,
+    });
 
     // Initial snapshot
     await createSystemSnapshot("System startup");
