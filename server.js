@@ -1406,8 +1406,9 @@ registerTwilioWebhook().then(result => {
       EMAIL_FROM:     { value: 'lifeOS@hopkinsgroup.org',    description: 'Outreach FROM address — set by boot seeder' },
       // Site builder — derive from Railway public domain
       ...(siteBaseUrl && { SITE_BASE_URL: { value: siteBaseUrl, description: 'Preview site base URL — derived from RAILWAY_PUBLIC_DOMAIN' } }),
-      // Signup agent — system email for autonomous account creation
-      GMAIL_SIGNUP_EMAIL: { value: 'lumea.lifeos@gmail.com', description: 'System signup email — set by boot seeder' },
+      // Signup agent — system emails for autonomous account creation
+      GMAIL_SIGNUP_EMAIL: { value: 'lumea.lifeos@gmail.com', description: 'System signup email (public domain services) — set by boot seeder' },
+      WORK_EMAIL:         { value: 'LifeOS@hopkinsgroup.org', description: 'Work email (private domain, for Postmark etc.) — set by boot seeder' },
     };
 
     const toSet = Object.fromEntries(

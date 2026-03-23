@@ -14,8 +14,10 @@ import { createSession } from "../services/browser-agent.js";
 import { waitForVerificationEmail, findVerificationLink } from "../services/email-reader.js";
 import crypto from "crypto";
 
-// Default system signup email
+// Default system signup email (Gmail — for services that accept public domains)
 const SIGNUP_EMAIL = process.env.GMAIL_SIGNUP_EMAIL || "lumea.lifeos@gmail.com";
+// Work email on private domain (for services that require non-Gmail/Yahoo)
+const WORK_EMAIL = process.env.WORK_EMAIL || "LifeOS@hopkinsgroup.org";
 
 /**
  * Signup recipes — one per service.
@@ -40,8 +42,8 @@ export const SIGNUP_RECIPES = {
     subjectHint: "confirm",
     plan: "free",
     fields: [
-      { selector: "#name",  valueKey: "fullName", value: "LifeOS System" },
-      { selector: "#email", valueKey: "email",    value: SIGNUP_EMAIL },
+      { selector: "#name",  valueKey: "fullName", value: "Adam Hopkins" },
+      { selector: "#email", valueKey: "email",    value: WORK_EMAIL },
       { selector: "#password", valueKey: "password", generate: true },
     ],
     submitSelector: "input[type=submit], button[type=submit]",
