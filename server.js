@@ -1272,8 +1272,18 @@ autoBuilder.overrideBuildHelpers({
       logger.warn(`[AUTO-BUILDER] Ollama unavailable (${ollamaErr.message}) — falling back to council`);
     }
 
-    // Cloud fallback: prefer DeepSeek for code, ChatGPT otherwise
-    const councilMember = task === 'code_generation' ? 'deepseek' : 'chatgpt';
+    // Cloud fallback: pick first free-tier model with an API key
+    const fallbackOrder = ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openrouter_free', 'claude'];
+    const councilMember = fallbackOrder.find((m) => {
+      const cfg = COUNCIL_MEMBERS[m];
+      if (!cfg) return false;
+      if (cfg.provider === 'groq')       return !!process.env.GROQ_API_KEY;
+      if (cfg.provider === 'gemini')     return !!process.env.GEMINI_API_KEY;
+      if (cfg.provider === 'cerebras')   return !!process.env.CEREBRAS_API_KEY;
+      if (cfg.provider === 'openrouter') return !!process.env.OPENROUTER_API_KEY;
+      if (cfg.provider === 'anthropic')  return !!process.env.ANTHROPIC_API_KEY;
+      return false;
+    }) || 'groq_llama';
     logger.info(`[AUTO-BUILDER] Using council fallback: ${councilMember}`);
     return callCouncilMember(councilMember, prompt, { maxTokens: 4000, useTwoTier: false });
   },
