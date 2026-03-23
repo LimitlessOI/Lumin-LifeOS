@@ -587,6 +587,7 @@ function updateFreeTierPanel(freeTierData, councilHealthData) {
 
 function showRateLimit(message) {
   const banner = document.getElementById('rateLimitBanner');
+  if (!banner) return;
   if (message) {
     banner.textContent = message;
     banner.style.display = 'block';

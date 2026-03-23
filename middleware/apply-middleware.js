@@ -1,17 +1,19 @@
 /**
  * Apply Middleware — registers all Express middleware for the app: body parsers,
- * static file serving, general + AI-specific rate limiters, and CORS with
- * same-origin + allowlist enforcement.
+ * static file serving, and CORS with same-origin + allowlist enforcement.
  *
- * Dependencies: express, express-rate-limit (rateLimit), path
- *               (all injected: express, path, __dirname, rateLimit, ALLOWED_ORIGINS_LIST, isSameOrigin)
+ * Rate limiting is intentionally disabled. The system uses free-tier providers
+ * (Groq, Gemini, Cerebras, etc.) and exhausts them in order rather than
+ * stopping. Token efficiency is tracked post-session, not enforced at runtime.
+ *
+ * Dependencies: express, path
+ *               (injected: express, path, __dirname, ALLOWED_ORIGINS_LIST, isSameOrigin)
  * Exports: applyMiddleware(app, deps)
  */
 export function applyMiddleware(app, {
   express,
   path,
   __dirname,
-  rateLimit,
   ALLOWED_ORIGINS_LIST,
   isSameOrigin,
 }) {
@@ -22,47 +24,6 @@ export function applyMiddleware(app, {
 
   // Serve static files (after specific routes)
   app.use(express.static(path.join(__dirname, "public")));
-
-  // ==================== RATE LIMITING ====================
-  // Authenticated admin requests (valid x-command-key) are never rate-limited.
-  const KEY_HEADERS = ["x-command-key", "x-command-center-key", "x-lifeos-key", "x-api-key"];
-  function isAuthenticatedAdmin(req) {
-    const configured = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY;
-    if (!configured) return false;
-    const provided = KEY_HEADERS.map(h => req.headers[h]).find(Boolean);
-    return provided === configured;
-  }
-
-  // General API rate limiter: 100 requests per 15 minutes per IP
-  const generalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
-    skip: isAuthenticatedAdmin,
-    message: { ok: false, error: "Too many requests, please try again later." },
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  });
-
-  // Stricter limiter for AI-heavy endpoints: 20 requests per 15 minutes per IP
-  const aiLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 20, // limit each IP to 20 requests per windowMs
-    skip: isAuthenticatedAdmin,
-    message: { ok: false, error: "Too many AI requests, please try again later." },
-    standardHeaders: true,
-    legacyHeaders: false,
-  });
-
-  // Apply general limiter to all API routes
-  app.use("/api/", generalLimiter);
-
-  // Apply stricter limiter to AI-heavy endpoints
-  app.use("/api/v1/chat", aiLimiter);
-  app.use("/api/council/chat", aiLimiter);
-  app.use("/api/v1/architect/chat", aiLimiter);
-  app.use("/api/v1/architect/command", aiLimiter);
-  app.use("/api/v1/ai-council/test", aiLimiter);
-  app.use("/api/coach/chat", aiLimiter);
 
   // SECURE CORS Middleware with NO-CACHE headers
   app.use((req, res, next) => {
