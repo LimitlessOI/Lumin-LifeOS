@@ -1736,8 +1736,8 @@ async function start() {
     // ──────────────────────────────────────────────────────────────────────
 
     autoBuilder.startBuildScheduler({
-      initialDelay: 15000,
-      interval: 60000,
+      initialDelay: 60000,          // 1 min initial delay (was 15s)
+      interval: 6 * 60 * 60 * 1000, // 6 hours (was 60s) — preserve token quota until TC proven
     });
 
     // Critical: Database must initialize (but don't fail if tables already exist)

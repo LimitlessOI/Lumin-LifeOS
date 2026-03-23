@@ -193,26 +193,28 @@ export function startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOn
     }
   }, 24 * 60 * 60 * 1000);
 
-  scheduleAutonomyLoop("PIPELINE_AUTO_IMPLEMENT", 10 * 60 * 1000, async () => {
+  // Throttled: 6 hours (was 10 min) — preserve token quota until TC is proven and token savings >70%
+  scheduleAutonomyLoop("PIPELINE_AUTO_IMPLEMENT", 6 * 60 * 60 * 1000, async () => {
     const { ideaToImplementationPipeline } = d();
     if (ideaToImplementationPipeline) {
       const result = await ideaToImplementationPipeline.autoImplementQueuedIdeas(3);
       if (result.implemented > 0) console.log(`✅ [PIPELINE] Auto-implemented ${result.implemented} idea(s)`);
     }
-  }, 10 * 60 * 1000);
+  }, 6 * 60 * 60 * 1000);
 
-  scheduleAutonomyOnce("PIPELINE_INITIAL", 120000, async () => {
+  scheduleAutonomyOnce("PIPELINE_INITIAL", 5 * 60 * 1000, async () => {
     const { ideaToImplementationPipeline } = d();
     if (ideaToImplementationPipeline) {
-      const result = await ideaToImplementationPipeline.autoImplementQueuedIdeas(5);
+      const result = await ideaToImplementationPipeline.autoImplementQueuedIdeas(2);
       if (result.implemented > 0) console.log(`✅ [PIPELINE] Initial auto-implementation: ${result.implemented} idea(s)`);
     }
   });
 
-  scheduleAutonomyLoop("SELF_IMPROVEMENT", 30 * 60 * 1000, async () => {
+  // Throttled: 4 hours (was 30 min) — preserve token quota
+  scheduleAutonomyLoop("SELF_IMPROVEMENT", 4 * 60 * 60 * 1000, async () => {
     const { continuousSelfImprovement } = d();
     if (continuousSelfImprovement) await continuousSelfImprovement();
-  }, 30 * 60 * 1000);
+  }, 4 * 60 * 60 * 1000);
 
   scheduleAutonomyOnce("SELF_IMPROVEMENT_STARTUP", 120000, async () => {
     const { continuousSelfImprovement } = d();
