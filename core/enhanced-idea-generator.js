@@ -3,6 +3,7 @@
  * ║                    ENHANCED IDEA GENERATOR                                       ║
  * ║                    Each AI generates 25 ideas, council debates, votes, implements ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class EnhancedIdeaGenerator {

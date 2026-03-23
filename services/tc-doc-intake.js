@@ -11,6 +11,7 @@
  *
  * Deps: imapflow, tc-browser-agent.js
  * Exports: createTCDocIntake(deps)
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  */
 
 import { ImapFlow } from 'imapflow';

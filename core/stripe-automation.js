@@ -2,6 +2,7 @@
  * STRIPE AUTOMATION - Complete Stripe Management via API
  * Creates products, prices, checkout sessions, handles webhooks
  * No manual Stripe dashboard work needed
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 
 import fs from 'fs/promises';

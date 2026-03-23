@@ -4,6 +4,7 @@
  *
  * Mounted at: /api/v1/tc
  * Deps: services/tc-coordinator.js
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  */
 
 import express from 'express';

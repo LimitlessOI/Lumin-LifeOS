@@ -3,6 +3,7 @@
  * ║                    WHITE-LABEL CONFIGURATION SYSTEM                              ║
  * ║                    Hide all internal logic from clients                         ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_14_WHITE_LABEL.md
  */
 
 export class WhiteLabelConfig {

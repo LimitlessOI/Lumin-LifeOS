@@ -6,6 +6,7 @@
  * Dependencies: dayjs, ./database.js (pool), process.env
  * Exports: roiTracker, compressionMetrics, systemMetrics, aiPerformanceScores,
  *          dailyIdeas, systemSnapshots, resetDailyMetrics, updateROI, persistMetrics
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 // ===FILE:core/governance.js===
 import dayjs from "dayjs";

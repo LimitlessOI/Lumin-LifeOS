@@ -3,6 +3,7 @@
  * ║                    IDEA TO IMPLEMENTATION PIPELINE                               ║
  * ║                    Complete flow: Idea → Concept → Design → Implementation      ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import logger from '../services/logger.js';

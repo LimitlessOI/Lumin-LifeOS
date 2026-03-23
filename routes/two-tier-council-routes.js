@@ -1,6 +1,7 @@
 /**
  * Two-Tier Council Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 import logger from '../services/logger.js';
 

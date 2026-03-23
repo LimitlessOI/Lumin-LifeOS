@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import { promises as fsPromises } from "fs";
 import path from "path";
 

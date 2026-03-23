@@ -4,6 +4,7 @@
  *
  * Dependencies: executionQueue (injected via constructor)
  * Exports: FunnelAnalyzer (class, default export)
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 class FunnelAnalyzer {
   constructor(executionQueue) {

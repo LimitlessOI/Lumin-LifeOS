@@ -4,6 +4,7 @@
  * code fix extraction and application helpers.
  *
  * Use createCodeEscalation(deps) to get a bound set of functions.
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 /**

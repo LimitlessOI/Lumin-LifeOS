@@ -17,6 +17,7 @@
  * - Predicts future issues (human reactive)
  * - Consistent standards (human subjective)
  * - Runs on every commit (human monthly)
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import fs from 'fs';

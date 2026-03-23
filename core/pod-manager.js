@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import crypto from "crypto";
 
 export class PodManager {

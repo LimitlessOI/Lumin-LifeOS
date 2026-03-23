@@ -1,6 +1,7 @@
 /**
  * Command Center Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 import logger from '../services/logger.js';
 

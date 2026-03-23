@@ -12,6 +12,7 @@
  *   6. System health trends (declining = alert)
  *
  * Exports: createContinuousImprovement(deps) → { runMonitorCycle, getProposals, approveProposal, rejectProposal }
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export function createContinuousImprovement({ pool, callAI, adamLogger }) {

@@ -15,6 +15,7 @@
  *
  * Each lens evaluates the decision from its unique perspective,
  * providing a multi-dimensional view before final approval.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 const WISDOM_LENSES = {

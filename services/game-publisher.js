@@ -26,6 +26,7 @@
  *     features: ['double-jump', 'enemies', 'coins', 'score'],
  *   });
  *   // result.gameUrl — e.g. https://yourdomain.com/games/game_abc123
+ * @ssot docs/projects/AMENDMENT_06_GAME_PUBLISHER.md
  */
 
 import { promises as fs } from 'fs';

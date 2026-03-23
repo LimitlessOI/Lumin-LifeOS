@@ -17,6 +17,7 @@
  * - Fixes in seconds (human takes hours/days)
  * - Learns from every error (human forgets)
  * - Tests every fix before deploying (human sometimes skips)
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import fs from 'fs';

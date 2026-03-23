@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import { performance } from "node:perf_hooks";
 
 export class TelemetryRecorder {

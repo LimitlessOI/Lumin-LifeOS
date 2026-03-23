@@ -5,6 +5,7 @@
  * Uses OAuth2 with stored tokens — user connects once via /api/v1/word-keeper/calendar/connect.
  *
  * Exports: createGoogleCalendarService(pool) → { getAuthUrl, handleCallback, addCommitment, removeCommitment }
+ * @ssot docs/projects/AMENDMENT_09_LIFE_COACHING.md
  */
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];

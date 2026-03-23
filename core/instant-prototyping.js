@@ -16,6 +16,7 @@
  * - Fully functional (human: mockups only)
  * - Multiple iterations instantly (human: hours per iteration)
  * - Consistent patterns (human varies)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

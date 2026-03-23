@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
+ */
 export function createLossTracker({ pool, logger, createSystemSnapshot }) {
   return async function trackLoss(
     severity,

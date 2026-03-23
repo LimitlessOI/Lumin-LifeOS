@@ -5,6 +5,7 @@
  * Dependencies: dayjs, ../core/json-sanitizer.js, pool (pg), callCouncilWithFailover,
  *               executionQueue, systemMetrics (all injected via constructor)
  * Exports: IdeaEngine (class)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 import dayjs from "dayjs";
 import { sanitizeJsonResponse } from "../core/json-sanitizer.js";

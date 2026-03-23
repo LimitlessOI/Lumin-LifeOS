@@ -11,6 +11,7 @@
  *
  * Deps: services/council-service.js (AI), pool (Neon)
  * Exports: createMLSDealScanner(deps)
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  */
 
 // Nevada average cost-per-sqft repair tiers (rough estimates for AI guidance)

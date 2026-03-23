@@ -18,6 +18,7 @@
  *   POST   /matches/:id/draft     — draft offer in TransactionDesk for review
  *   POST   /matches/:id/pass      — mark as passed (not pursuing)
  *   POST   /matches/:id/status    — update status (under_contract, closed, etc.)
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  */
 
 import express from 'express';

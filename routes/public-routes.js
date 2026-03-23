@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ */
 export function registerPublicRoutes(app, {
   fs,
   path,

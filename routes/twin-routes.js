@@ -20,6 +20,7 @@
  *   POST /api/v1/twin/proposals/:id/approve — approve a proposal (→ creates an idea)
  *   POST /api/v1/twin/proposals/:id/reject  — reject a proposal
  *   POST /api/v1/twin/monitor               — run improvement monitor cycle now
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 
 import express from 'express';

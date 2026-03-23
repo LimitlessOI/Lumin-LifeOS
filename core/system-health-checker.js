@@ -3,6 +3,7 @@
  * ║                    SYSTEM HEALTH CHECKER                                          ║
  * ║                    Comprehensive system health validation                        ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class SystemHealthChecker {

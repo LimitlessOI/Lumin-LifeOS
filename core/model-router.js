@@ -9,6 +9,7 @@
  * - Tier 1 (PAID): OpenAI, Anthropic, Google - $0.10-$5 per 1M tokens
  *
  * CRITICAL: Always try Tier 0 first, only escalate to Tier 1 if quality insufficient
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 const MODELS = {

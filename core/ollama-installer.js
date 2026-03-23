@@ -3,6 +3,7 @@
  * ║                    OLLAMA AUTO-INSTALLER                                          ║
  * ║                    Automatically installs and configures Ollama                   ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { exec } from 'child_process';

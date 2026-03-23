@@ -3,6 +3,7 @@
  * ║                    COST SAVING RE-EXAMINATION SYSTEM                             ║
  * ║                    Automatically analyzes and optimizes costs                    ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class CostReExamination {

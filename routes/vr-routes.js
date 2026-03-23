@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_06_GAME_PUBLISHER.md
+ */
 const express = require('express');
 const { VRSession } = require('../models/vr-models');
 const { renderVRSession } = require('../services/vr-experience/engine');

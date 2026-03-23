@@ -15,6 +15,7 @@
  * - OpenCV (video analysis, scene detection)
  * 
  * Each tool can request help from others to improve its output.
+ * @ssot docs/projects/AMENDMENT_07_VIDEO_PIPELINE.md
  */
 
 import { exec } from 'child_process';

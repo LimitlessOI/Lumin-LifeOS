@@ -1,6 +1,7 @@
 /**
  * Life Coaching Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_09_LIFE_COACHING.md
  */
 import logger from '../services/logger.js';
 

@@ -8,6 +8,7 @@
  * TYPE: PROOF
  * MECHANISM: Track every request with before/after metrics to prove savings
  * METRIC: Verified savings report (monthly)
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 export class TCOTracker {

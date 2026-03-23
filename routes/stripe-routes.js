@@ -1,5 +1,6 @@
 /**
  * STRIPE ROUTES - Express router for Stripe automation
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 
 import express from 'express';

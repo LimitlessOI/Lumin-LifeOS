@@ -3,6 +3,7 @@
  * ║                    GAME GENERATOR FOR OVERLAY                                     ║
  * ║                    Generates games to distribute overlay system                  ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_06_GAME_PUBLISHER.md
  */
 
 export class GameGenerator {

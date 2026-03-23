@@ -6,6 +6,7 @@
  * Dependencies: crypto, dayjs, process.env.HAB_DAILY_LIMIT
  * Exports: configureAiGuard, recordHAB, checkAiEnabled, setAiEnabled, getAiStatus,
  *          setExpectedReality, checkRealityDrift, validateProof
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 import crypto from "crypto";
 import dayjs from "dayjs";

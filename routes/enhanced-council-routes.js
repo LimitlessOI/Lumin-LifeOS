@@ -9,6 +9,7 @@
  * - Enhanced Consensus Protocol
  * - Decision Filters
  * - FSAR Severity Gate
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { DynamicCouncilExpansion } from '../council/dynamic-expansion.js';

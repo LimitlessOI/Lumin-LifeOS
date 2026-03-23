@@ -17,6 +17,7 @@
  * - Zero merge conflicts (human: constant conflicts)
  * - Detects dependencies automatically (human misses)
  * - Coordinates deployment order (human guesses)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

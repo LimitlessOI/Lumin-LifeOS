@@ -2,6 +2,7 @@
  * Preview Site Expiry Cron
  * Deletes preview sites older than 30 days where status != 'converted'
  * Amendment 05 non-negotiable: "Preview sites expire after 30 days unless client converts"
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  */
 import { promises as fs } from 'fs';
 import path from 'path';

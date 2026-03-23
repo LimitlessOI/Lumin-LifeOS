@@ -4,6 +4,7 @@
  * All Word Keeper API endpoints. Requires COMMAND_CENTER_KEY header.
  *
  * Mounted at: /api/v1/word-keeper
+ * @ssot docs/projects/AMENDMENT_16_WORD_KEEPER.md
  */
 
 import express from 'express';

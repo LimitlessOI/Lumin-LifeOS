@@ -17,6 +17,7 @@
  * - Instant responses (human takes minutes)
  * - Never gets tired (human energy drops)
  * - Knows entire codebase (human knows subset)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

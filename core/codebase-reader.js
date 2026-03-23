@@ -3,6 +3,7 @@
  * ║                    CODEBASE READER                                                 ║
  * ║                    Reads existing files to provide context for AI                 ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs/promises';

@@ -3,6 +3,7 @@
  * ║                    MARKETING AGENCY SYSTEM                                         ║
  * ║                    Best marketing agency for us first, then public               ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class MarketingAgency {

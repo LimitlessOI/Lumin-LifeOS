@@ -3,6 +3,7 @@
  * ║                    WEB SCRAPER FOR COMPETITIVE INTELLIGENCE                        ║
  * ║                    Scrapes all info we can for business intelligence            ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class WebScraper {

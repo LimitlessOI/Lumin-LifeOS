@@ -4,6 +4,7 @@
  * getDeps() must return { pool, requireKey, executionQueue, ideaEngine, taskTracker, recallConversationMemory,
  *   createSystemSnapshot, rollbackToSnapshot, implementNextQueuedIdea, incomeDroneSystem, callCouncilMember }
  * and mutable refs for comprehensiveIdeaTracker, vapiIntegration (lazy init in handlers).
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 export function registerApiV1CoreRoutes(app, getDeps) {
   const auth = (req, res, next) => {

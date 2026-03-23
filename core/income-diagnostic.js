@@ -3,6 +3,7 @@
  * ║                    INCOME GENERATION DIAGNOSTIC                                  ║
  * ║                    Checks if drones are actually generating income              ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 
 export class IncomeDiagnostic {

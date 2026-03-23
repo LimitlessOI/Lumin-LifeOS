@@ -3,6 +3,7 @@
  * ║                    JSON SANITIZER                                                 ║
  * ║                    Removes comments and invalid JSON from LLM responses          ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 /**

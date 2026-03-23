@@ -1,5 +1,6 @@
 /**
  * MEMORY ROUTES - API endpoints for memory system
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
  */
 
 import express from 'express';

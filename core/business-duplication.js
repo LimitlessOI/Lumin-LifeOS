@@ -3,6 +3,7 @@
  * ║                    BUSINESS DUPLICATION & IMPROVEMENT SYSTEM                      ║
  * ║                    Duplicate businesses and make them 10-20% better              ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 
 export class BusinessDuplication {

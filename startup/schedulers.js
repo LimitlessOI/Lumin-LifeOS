@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import { acquireGovernorHeavyLease, isGovernorAutonomyPaused } from "./governor.js";
 
 export function createAutonomyScheduler(logger) {

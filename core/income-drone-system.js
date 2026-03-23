@@ -1,6 +1,7 @@
 /**
  * IncomeDroneSystem — basic income drone management.
  * Extracted from server.js. Enhanced version is in core/enhanced-income-drone.js.
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 import logger from '../services/logger.js';
 export class IncomeDroneSystem {

@@ -13,6 +13,7 @@
  *   6 — Security, payments, deployment config        → manual login required
  *
  * Exports: scoreIdea(idea) → { score, reasons, autoApprove, needsSMS, needsManual }
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 // Files that are protected — touching them raises risk immediately

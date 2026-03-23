@@ -4,6 +4,7 @@
  *
  * Dependencies: openai (npm), ../config/config (openaiApiKey)
  * Exports: analyzeText(text), extractNextActions(analysis)
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 import { Configuration, OpenAIApi } from 'openai';
 import config from '../config/config.js';

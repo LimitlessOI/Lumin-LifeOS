@@ -1,6 +1,7 @@
 /**
  * Auto-Builder Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import logger from '../services/logger.js';
 

@@ -7,6 +7,7 @@
  * On cache hit: serves from L1; if L1 cold, checks DB (post-deploy warm path).
  *
  * TTL: 24h default. Research/analysis prompts use 72h (low churn).
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 import crypto from 'crypto';

@@ -16,6 +16,7 @@
  *   POST   /api/v1/ideas/:id/build    — trigger build for approved idea
  *
  * Deps: pool, requireKey, addProductToQueue (from auto-builder), logger
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 
 import express from 'express';

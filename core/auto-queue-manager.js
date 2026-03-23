@@ -3,6 +3,7 @@
  * ║                    AUTO-QUEUE MANAGER                                            ║
  * ║                    Ensures queue is never empty, generates ideas automatically  ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 export class AutoQueueManager {

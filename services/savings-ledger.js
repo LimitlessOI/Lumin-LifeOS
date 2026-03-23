@@ -8,6 +8,7 @@
  * No claim is made without a DB record backing it.
  *
  * Exports: createSavingsLedger(pool) → { record, getReport, getDashboard, getReceipt }
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 // Cost per 1M tokens by provider/model (USD). Used when provider doesn't return usage.

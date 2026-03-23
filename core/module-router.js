@@ -4,6 +4,7 @@
  * ║                    Routes requests to appropriate modules                        ║
  * ║                    Provides isolation, health checks, and graceful failures      ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class ModuleRouter {

@@ -1,6 +1,7 @@
 /**
  * Conversation & AI Bot Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
  */
 import logger from '../services/logger.js';
 

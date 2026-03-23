@@ -3,6 +3,7 @@
  * Stores and retrieves all conversations: Claude Code sessions, server AI calls, any channel.
  *
  * Exports: createConversationStore(pool) → { save, search, get, getAll, summarize }
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
  */
 
 export function createConversationStore(pool) {

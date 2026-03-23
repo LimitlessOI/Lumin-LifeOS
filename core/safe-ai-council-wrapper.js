@@ -12,6 +12,7 @@
  * - Automatic failover to expensive APIs (cost control)
  * - Runaway API costs from bugs
  * - Using paid APIs when free works fine
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { EnhancedAIUsageTracker } from './enhanced-ai-usage-tracker.js';

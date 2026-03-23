@@ -17,6 +17,7 @@
  * - Tests 100+ optimization techniques (human tries 3-5)
  * - Never breaks functionality (human introduces bugs)
  * - Optimizes for actual usage patterns (human optimizes blindly)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

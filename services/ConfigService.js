@@ -4,6 +4,7 @@
  *
  * Dependencies: ../config/env-validator
  * Exports: ConfigService (class, default export)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 import envVars from '../config/env-validator.js';
 

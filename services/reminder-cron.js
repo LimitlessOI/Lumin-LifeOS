@@ -7,6 +7,7 @@
  * Also schedules the Monday morning weekly coaching SMS.
  *
  * Exports: startReminderCron(pool, twilioSendSMS, opts) → stopFn
+ * @ssot docs/projects/AMENDMENT_16_WORD_KEEPER.md
  */
 
 const WEEKLY_COACHING_HOUR   = 8;   // 8am local (server time — configure TZ on Railway)

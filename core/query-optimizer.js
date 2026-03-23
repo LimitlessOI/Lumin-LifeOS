@@ -17,6 +17,7 @@
  * - Detects patterns instantly (human takes days)
  * - Never forgets optimizations (human rediscovers)
  * - Optimizes 24/7 (human does quarterly)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

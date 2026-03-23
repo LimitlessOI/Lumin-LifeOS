@@ -2,6 +2,7 @@
  * Startup environment variable validator.
  * Call validateEnv() before server starts. Logs warnings for optional vars,
  * throws for required vars so Railway redeploy catches misconfigurations immediately.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 const REQUIRED = [

@@ -1,6 +1,7 @@
 /**
  * Autonomy scheduler: registers all scheduleAutonomyLoop / scheduleAutonomyOnce tasks.
  * getDeps() returns current refs (pool, crmSequenceRunner, logMonitor, etc.) so server.js only wires once at startup.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 import path from "path";
 import { pathToFileURL } from "url";

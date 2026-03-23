@@ -3,6 +3,7 @@
  * ║                    CODE LINTER                                                   ║
  * ║                    Basic linting for generated code                              ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import { execSync } from 'child_process';

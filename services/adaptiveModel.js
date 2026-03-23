@@ -4,6 +4,7 @@
  *
  * Dependencies: brain.js, @tensorflow/tfjs-node
  * Exports: AdaptiveLearningEngine instance (singleton, default export)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 import brain from 'brain.js';
 import tf from '@tensorflow/tfjs-node';

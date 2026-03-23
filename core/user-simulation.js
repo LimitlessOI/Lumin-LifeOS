@@ -4,6 +4,7 @@
  * ║                    Learns user's decision-making style over time                ║
  * ║                    Goal: 99% accuracy in simulating user choices               ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class UserSimulation {

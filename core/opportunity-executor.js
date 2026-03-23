@@ -3,6 +3,7 @@
  * ║                    OPPORTUNITY EXECUTOR                                            ║
  * ║                    Actually implements opportunities to generate REAL revenue     ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class OpportunityExecutor {

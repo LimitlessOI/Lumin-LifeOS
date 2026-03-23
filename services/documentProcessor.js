@@ -4,6 +4,7 @@
  *
  * Dependencies: pdf-parse, natural (NlpManager)
  * Exports: DocumentProcessor (class, default export)
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 import pdfParse from 'pdf-parse';
 import { NlpManager } from 'natural';

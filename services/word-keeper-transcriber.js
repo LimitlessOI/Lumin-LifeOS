@@ -8,6 +8,7 @@
  * Falls back to mock transcript if Whisper unavailable (dev mode).
  *
  * Exports: createTranscriber(apiKey) → { transcribeBuffer, transcribeFormData }
+ * @ssot docs/projects/AMENDMENT_16_WORD_KEEPER.md
  */
 
 import { Readable } from 'stream';

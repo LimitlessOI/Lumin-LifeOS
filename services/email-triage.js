@@ -16,6 +16,7 @@
  * Exports: createEmailTriage(deps)
  *
  * DB table: email_triage_log (see db/migrations/20260323_email_triage.sql)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { ImapFlow } from 'imapflow';

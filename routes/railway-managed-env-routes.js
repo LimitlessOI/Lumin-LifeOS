@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import express from "express";
 import { getRegistryHealth } from "../services/env-registry-map.js";
 

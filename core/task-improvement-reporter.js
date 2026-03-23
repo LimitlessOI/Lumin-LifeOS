@@ -3,6 +3,7 @@
  * ║                    TASK IMPROVEMENT REPORTER                                     ║
  * ║                    Each AI employee reports improvements after tasks           ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 export class TaskImprovementReporter {

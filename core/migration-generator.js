@@ -3,6 +3,7 @@
  * ║                    MIGRATION GENERATOR                                             ║
  * ║                    Auto-generates database migrations from code                   ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import fs from 'fs/promises';

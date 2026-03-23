@@ -12,6 +12,7 @@
  * - SMTP_PASS: SMTP password or Google App Password
  * - POSTMARK_SERVER_TOKEN: Postmark server token (required if provider=postmark)
  * - EMAIL_WEBHOOK_SECRET: shared secret for webhook endpoints
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import nodemailer from 'nodemailer';

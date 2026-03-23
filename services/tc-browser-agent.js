@@ -6,6 +6,7 @@
  *
  * Deps: services/browser-agent.js, services/account-manager.js
  * Exports: createTCBrowserAgent(deps)
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  */
 
 import path from 'path';

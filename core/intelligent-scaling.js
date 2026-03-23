@@ -17,6 +17,7 @@
  * - Scales in seconds (human hours)
  * - Optimizes costs automatically (human guesses)
  * - Never over/under-provisions (human estimation error)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class IntelligentScaling {

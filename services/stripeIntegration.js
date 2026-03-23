@@ -4,6 +4,7 @@
  *
  * Dependencies: stripe (npm)
  * Exports: createConservationCharge(amount, currency, description)
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 import Stripe from 'stripe';
 const stripe = new Stripe('your-stripe-secret-key');

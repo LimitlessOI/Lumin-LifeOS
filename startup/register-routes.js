@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import { errorBoundary } from '../middleware/error-boundary.js';
 import { registerWebsiteAuditRoutes } from '../routes/website-audit-routes.js';
 import { registerEnhancedCouncilRoutes } from '../routes/enhanced-council-routes.js';

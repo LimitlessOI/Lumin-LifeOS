@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import resourceGovernor from "../lib/resource-governor.js";
 
 function getGovernorFunction(name) {

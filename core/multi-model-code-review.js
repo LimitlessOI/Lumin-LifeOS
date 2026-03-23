@@ -10,6 +10,7 @@
  * - Claude: Security, vulnerabilities, edge cases
  *
  * Result: 3 expert reviewers in 5 seconds vs 1-2 humans in 2 hours
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 export class MultiModelCodeReview {

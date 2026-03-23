@@ -3,6 +3,7 @@
  * ║                    COMPREHENSIVE IDEA TRACKER                                    ║
  * ║                    Tracks all ideas with complete metadata                      ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class ComprehensiveIdeaTracker {

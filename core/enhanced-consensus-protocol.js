@@ -3,6 +3,7 @@
  * ║          ENHANCED CONSENSUS PROTOCOL - Unintended Consequences Filter             ║
  * ║          Impact Analysis, Tool Evaluation, Better Implementation                 ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class EnhancedConsensusProtocol {

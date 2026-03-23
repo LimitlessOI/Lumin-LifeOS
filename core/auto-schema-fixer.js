@@ -3,6 +3,7 @@
  * ║                    AUTO SCHEMA FIXER                                             ║
  * ║                    Automatically fixes database schema mismatches               ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 export class AutoSchemaFixer {

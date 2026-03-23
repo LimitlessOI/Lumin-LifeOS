@@ -1,6 +1,7 @@
 /**
  * recordRevenueEvent + syncStripeRevenue — extracted from server.js.
  * Factory: createFinancialRevenue({ financialDashboard, incomeDroneSystem, updateROI, getStripeClient })
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 import logger from '../services/logger.js';
 

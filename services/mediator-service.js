@@ -7,6 +7,7 @@
  * Crisis phrases → immediately route to professional resources.
  *
  * Exports: createMediatorService(pool, councilService)
+ * @ssot docs/projects/AMENDMENT_09_LIFE_COACHING.md
  */
 
 // Crisis phrases that trigger immediate professional resource routing

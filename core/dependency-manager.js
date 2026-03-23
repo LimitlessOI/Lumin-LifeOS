@@ -3,6 +3,7 @@
  * ║                    DEPENDENCY MANAGER                                             ║
  * ║                    Auto-installs missing dependencies from code                    ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs/promises';

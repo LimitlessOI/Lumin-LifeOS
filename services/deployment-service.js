@@ -13,6 +13,7 @@
  *   GITHUB_DEPLOY_BRANCH   — Branch Railway watches for auto-deploy (default: main)
  *
  * Use createDeploymentService(deps) to get bound functions.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import path from 'path';

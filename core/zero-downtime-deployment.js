@@ -17,6 +17,7 @@
  * - Health checks automated (human skips)
  * - Instant rollback (human takes minutes)
  * - Deploy anytime (human avoids peak hours)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

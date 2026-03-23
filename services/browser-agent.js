@@ -5,6 +5,7 @@
  *
  * Deps: puppeteer (already in package.json)
  * Railway: runs headless Chromium in the container
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 
 import puppeteer from "puppeteer";

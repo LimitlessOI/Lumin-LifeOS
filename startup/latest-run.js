@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ */
 import { promises as fsPromises } from "fs";
 import path from "path";
 

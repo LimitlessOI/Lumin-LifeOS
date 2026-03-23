@@ -3,6 +3,7 @@
  * ║                    ENHANCED CONVERSATION SCRAPER                                    ║
  * ║                    Scrapes ALL conversations from AI platforms with login        ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
  */
 
 import crypto from 'crypto';

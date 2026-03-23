@@ -16,6 +16,7 @@
  *   registerTwilioWebhook,
  *   publicDomain,
  * }
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 async function bootGLVARMonitor(deps) {

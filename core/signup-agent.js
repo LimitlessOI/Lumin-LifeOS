@@ -8,6 +8,7 @@
  * Usage:
  *   const agent = createSignupAgent({ pool, logger });
  *   const result = await agent.signup(SIGNUP_RECIPES.postmark);
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { createSession } from "../services/browser-agent.js";

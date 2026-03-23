@@ -5,6 +5,7 @@
  *
  * Dependencies: path, fs, child_process (exec), util (promisify), pool (pg, injected)
  * Exports: sandboxTest({ code, testDescription, __dirname, pool })
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import path from "path";
 import fs from "fs";

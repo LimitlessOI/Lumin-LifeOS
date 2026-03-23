@@ -3,6 +3,7 @@
  * Web search validation, drift detection, and Gemini web search helpers.
  *
  * Use createWebSearchIntegration(deps) to get bound functions.
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 
 /**

@@ -12,6 +12,7 @@
  * Usage (register in server.js):
  *   import { createSiteBuilderRoutes } from './routes/site-builder-routes.js';
  *   createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMember, baseUrl, outreachAutomation });
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  */
 
 import { Router } from 'express';

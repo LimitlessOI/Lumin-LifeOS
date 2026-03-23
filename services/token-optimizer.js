@@ -18,6 +18,7 @@
  * Exports: createTokenOptimizer(pool) → {
  *   compress, decompress, trackUsage, getStats, getReport, shouldCache, recordQuality
  * }
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 import crypto from 'crypto';

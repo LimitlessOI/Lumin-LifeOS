@@ -25,6 +25,7 @@
  *     outputPath: 'outputs/video_123.mp4',
  *   });
  *   // result.videoUrl — publicly accessible URL or local path
+ * @ssot docs/projects/AMENDMENT_07_VIDEO_PIPELINE.md
  */
 
 import { exec } from 'child_process';

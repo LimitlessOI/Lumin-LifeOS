@@ -17,6 +17,7 @@
  * - Tracks all competitors (human: 2-3)
  * - Never misses updates (human overlooks)
  * - Quantifies everything (human estimates)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class CompetitiveIntelligence {

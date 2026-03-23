@@ -7,6 +7,7 @@
  * Score: 0–1000. Starts at 500. Append-only event log.
  *
  * Exports: createIntegrityEngine(pool, councilService) → { recordOutcome, getScore, getPatterns, weeklyCoaching }
+ * @ssot docs/projects/AMENDMENT_16_WORD_KEEPER.md
  */
 
 // Score delta per event type (from Amendment 16 SSOT)

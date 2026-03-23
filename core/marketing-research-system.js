@@ -3,6 +3,7 @@
  * ║                    MARKETING RESEARCH SYSTEM                                       ║
  * ║                    Studies Claude C. Hopkins and greatest marketers             ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 
 export class MarketingResearchSystem {

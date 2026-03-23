@@ -3,6 +3,7 @@
  * ║                    FILE CLEANUP ANALYZER                                         ║
  * ║                    Identify unused/redundant files from self-programming        ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

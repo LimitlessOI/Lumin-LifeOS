@@ -19,6 +19,7 @@
  *   'game-build'     — spec → code → deploy → serve URL
  *   'self-program'   — instruction → snapshot → patch → validate → rollback on fail
  *   'outreach'       — campaign → send → track
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { createRequire } from 'module';

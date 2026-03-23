@@ -13,6 +13,7 @@
  * - Metadata (risk, revenue impact)
  * 
  * This reduces premium model usage by 90-98%.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 const TIER1_MODELS = {

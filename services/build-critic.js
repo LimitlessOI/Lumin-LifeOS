@@ -15,6 +15,7 @@
  *   Validator (gemini or claude)      → checks spec compliance
  *
  * Exports: createBuildCritic(callAI, callCritic, callValidator) → { review }
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 // Issues below this severity are warnings only — don't force a fix pass

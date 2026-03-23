@@ -1,6 +1,7 @@
 /**
  * VALIDATORS - The Hallucination Firewall
  * Nothing passes without validation.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 let acorn = null;

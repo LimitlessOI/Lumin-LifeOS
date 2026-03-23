@@ -9,6 +9,7 @@
  *
  * Deps: pool (pg), logger
  * Exports: createIdeaQueue(pool, logger) → IdeaQueue instance
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 
 import logger from '../services/logger.js';

@@ -17,6 +17,7 @@
  * - Never forgets patterns (human rediscovers)
  * - Cross-file pattern detection (human misses)
  * - Quantifies pattern usage (human estimates)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

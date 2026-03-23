@@ -5,6 +5,7 @@
  * Dependencies: pg (Pool), process.env.DATABASE_URL, DATABASE_URL_SANDBOX,
  *               NODE_ENV, DB_SSL_REJECT_UNAUTHORIZED
  * Exports: pool (Pool), initDatabase()
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 // ===FILE:core/database.js===
 import { Pool } from "pg";

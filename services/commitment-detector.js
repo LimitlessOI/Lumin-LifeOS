@@ -5,6 +5,7 @@
  * Uses Claude for nuanced intent classification + Grok for reality check.
  *
  * Exports: createCommitmentDetector(councilService) → { scan, extractDetails }
+ * @ssot docs/projects/AMENDMENT_09_LIFE_COACHING.md
  */
 
 // High-confidence commitment patterns — always flag

@@ -3,6 +3,7 @@
  * ║                    VAPI PHONE SYSTEM INTEGRATION                                   ║
  * ║                    Complete Vapi integration for phone calls                      ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class VapiIntegration {

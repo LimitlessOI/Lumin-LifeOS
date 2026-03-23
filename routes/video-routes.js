@@ -1,6 +1,7 @@
 /**
  * Video Pipeline Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_07_VIDEO_PIPELINE.md
  */
 import logger from '../services/logger.js';
 

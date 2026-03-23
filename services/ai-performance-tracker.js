@@ -3,6 +3,7 @@
  * AI performance tracking and rotation based on performance.
  *
  * Use createAIPerformanceTracker(deps) to get bound functions.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 /**
