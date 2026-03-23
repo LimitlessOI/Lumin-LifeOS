@@ -146,22 +146,24 @@ export function createFreeTierGovernor({ pool = null } = {}) {
   async function upsertNeon(providerKey, { requestsDelta = 0, tokensDelta = 0, exhaustedAt = undefined, last429At = undefined } = {}) {
     if (!pool) return;
     try {
-      // Build SET clauses dynamically based on what changed
-      const setClauses = ['updated_at = NOW()'];
-      const params = [todayUTC(), providerKey];
-      let p = 3;
-
-      if (requestsDelta > 0) { setClauses.push(`requests = requests + $${p++}`); params.push(requestsDelta); }
-      if (tokensDelta > 0)   { setClauses.push(`tokens = tokens + $${p++}`);     params.push(tokensDelta); }
-      if (exhaustedAt !== undefined) { setClauses.push(`exhausted_at = $${p++}`); params.push(exhaustedAt); }
-      if (last429At !== undefined)   { setClauses.push(`last_429_at = $${p++}`);  params.push(last429At); }
-
+      // Use explicit table-qualified column references to avoid ambiguity in ON CONFLICT DO UPDATE
       await pool.query(
         `INSERT INTO free_tier_usage (date, provider_key, requests, tokens)
-         VALUES ($1, $2, ${ requestsDelta > 0 ? `$${params.indexOf(requestsDelta) + 1}` : '0' },
-                          ${ tokensDelta > 0   ? `$${params.indexOf(tokensDelta)   + 1}` : '0' })
-         ON CONFLICT (date, provider_key) DO UPDATE SET ${setClauses.join(', ')}`,
-        params
+         VALUES ($1, $2, $3, $4)
+         ON CONFLICT (date, provider_key) DO UPDATE SET
+           requests     = free_tier_usage.requests + $3,
+           tokens       = free_tier_usage.tokens   + $4,
+           exhausted_at = CASE WHEN $5::timestamptz IS NOT NULL THEN $5::timestamptz ELSE free_tier_usage.exhausted_at END,
+           last_429_at  = CASE WHEN $6::timestamptz IS NOT NULL THEN $6::timestamptz ELSE free_tier_usage.last_429_at  END,
+           updated_at   = NOW()`,
+        [
+          todayUTC(),
+          providerKey,
+          requestsDelta,
+          tokensDelta,
+          exhaustedAt ?? null,
+          last429At   ?? null,
+        ]
       );
     } catch (err) {
       console.warn(`[FREE-TIER] Neon write failed: ${err.message}`);

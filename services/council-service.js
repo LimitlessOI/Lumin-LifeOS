@@ -1294,6 +1294,16 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
       }
 
+      // ── fetch failed = provider unreachable → mark Ollama out for this session ──
+      const isConnRefused = error.message?.toLowerCase().includes('fetch failed') ||
+                            error.message?.toLowerCase().includes('econnrefused') ||
+                            error.message?.toLowerCase().includes('enotfound') ||
+                            error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND';
+      if (isConnRefused && COUNCIL_MEMBERS[member]?.isLocal) {
+        _markProviderExhausted('ollama');
+        console.log(`🔌 [COUNCIL] Ollama unreachable — removed from routing for this session`);
+      }
+
       throw error;
     }
   }
