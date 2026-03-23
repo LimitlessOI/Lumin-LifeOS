@@ -232,12 +232,106 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
     }
   });
 
-  // ── TC Fees ───────────────────────────────────────────────────────────────
+  // ── TC Fees + Agent Clients ───────────────────────────────────────────────
 
   async function getPricing() {
     const { createTCPricing } = await import('../services/tc-pricing.js');
     return createTCPricing({ pool, logger });
   }
+
+  // GET /api/v1/tc/plans — all available pricing plans
+  router.get('/plans', async (req, res) => {
+    try {
+      const { PLAN_DETAILS } = await import('../services/tc-pricing.js');
+      res.json({ ok: true, plans: PLAN_DETAILS });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Agent Client Registry ────────────────────────────────────────────────
+
+  // GET /api/v1/tc/clients — all agent clients
+  router.get('/clients', requireKey, async (req, res) => {
+    try {
+      const pricing = await getPricing();
+      const clients = await pricing.listAgentClients({ activeOnly: req.query.all !== 'true' });
+      res.json({ ok: true, count: clients.length, clients });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/clients — enroll a new agent client
+  router.post('/clients', requireKey, async (req, res) => {
+    try {
+      const { name, email, phone, plan, waive_setup, setup_fee, monthly_fee, notes } = req.body || {};
+      if (!name || !email) return res.status(400).json({ ok: false, error: 'name and email required' });
+
+      const pricing = await getPricing();
+      const client = await pricing.createAgentClient({
+        name, email, phone, plan,
+        waivedSetup:      !!waive_setup,
+        customSetupFee:   setup_fee   != null ? parseFloat(setup_fee)   : undefined,
+        customMonthlyFee: monthly_fee != null ? parseFloat(monthly_fee) : undefined,
+        notes,
+      });
+      res.status(201).json({ ok: true, client });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/clients/:id
+  router.get('/clients/:id', requireKey, async (req, res) => {
+    try {
+      const pricing = await getPricing();
+      const client = await pricing.getAgentClient(
+        isNaN(req.params.id) ? req.params.id : parseInt(req.params.id)
+      );
+      if (!client) return res.status(404).json({ ok: false, error: 'Client not found' });
+      res.json({ ok: true, client });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/clients/:id/setup-paid — mark setup fee as received
+  router.post('/clients/:id/setup-paid', requireKey, async (req, res) => {
+    try {
+      const pricing = await getPricing();
+      const client = await pricing.markSetupPaid(parseInt(req.params.id), {
+        amountPaid: req.body?.amount ? parseFloat(req.body.amount) : undefined,
+      });
+      if (!client) return res.status(404).json({ ok: false, error: 'Client not found' });
+      res.json({ ok: true, client });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/clients/:id/deactivate
+  router.post('/clients/:id/deactivate', requireKey, async (req, res) => {
+    try {
+      const pricing = await getPricing();
+      const client = await pricing.deactivateClient(parseInt(req.params.id), req.body?.reason);
+      if (!client) return res.status(404).json({ ok: false, error: 'Client not found' });
+      res.json({ ok: true, client });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/fees/revenue — MRR, ARR, outstanding by plan
+  router.get('/fees/revenue', requireKey, async (req, res) => {
+    try {
+      const pricing = await getPricing();
+      const summary = await pricing.getRevenueSummary();
+      res.json({ ok: true, ...summary });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
 
   // GET /api/v1/tc/fees/config — current default pricing
   router.get('/fees/config', requireKey, async (req, res) => {
