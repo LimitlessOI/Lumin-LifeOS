@@ -4,6 +4,7 @@
  *
  * Dependencies: stripe (npm), process.env.STRIPE_SECRET_KEY, process.env.FRONTEND_URL
  * Exports: StripeService instance (singleton, default export)
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

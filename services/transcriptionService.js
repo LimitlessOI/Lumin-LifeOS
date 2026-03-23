@@ -4,6 +4,7 @@
  *
  * Dependencies: openai (npm), ../config/config (openaiApiKey)
  * Exports: transcribeAudio(audioFileUrl)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 const { Configuration, OpenAIApi } = require('openai');
 const config = require('../config/config');

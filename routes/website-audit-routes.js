@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
+ */
 function extractFirstJsonValue(rawText) {
   if (!rawText || typeof rawText !== "string") return null;
 

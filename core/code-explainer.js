@@ -16,6 +16,7 @@
  * - Never skips assumed knowledge (human assumes too much)
  * - Consistent terminology (human varies)
  * - Instant explanations (human takes minutes)
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 export class CodeExplainer {

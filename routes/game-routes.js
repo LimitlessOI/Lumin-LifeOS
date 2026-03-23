@@ -1,6 +1,7 @@
 /**
  * Game Publisher Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_06_GAME_PUBLISHER.md
  */
 import logger from '../services/logger.js';
 

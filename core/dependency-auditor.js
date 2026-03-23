@@ -3,6 +3,7 @@
  * ║                    DEPENDENCY AUDITOR                                             ║
  * ║                    Pre-flight check for all required dependencies               ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { autoInstaller } from './auto-installer.js';

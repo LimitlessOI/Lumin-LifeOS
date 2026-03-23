@@ -1,6 +1,7 @@
 /**
  * Open Source Video Generation Service
  * Uses Stable Video Diffusion or other open source models
+ * @ssot docs/projects/AMENDMENT_07_VIDEO_PIPELINE.md
  */
 
 export class VideoGenerator {

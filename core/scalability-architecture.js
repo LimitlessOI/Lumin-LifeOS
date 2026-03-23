@@ -4,6 +4,7 @@
  * ║                    Duplicate system across multiple accounts                      ║
  * ║                    Scale to build thousands of businesses simultaneously          ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class ScalabilityArchitecture {

@@ -4,6 +4,7 @@
  *
  * Deps: services/tc-browser-agent.js, services/tc-email-monitor.js, pool (Neon)
  * Exports: createTCCoordinator(deps), startTCDeadlineCron(pool, coordinator)
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  */
 
 import { createTCBrowserAgent } from './tc-browser-agent.js';

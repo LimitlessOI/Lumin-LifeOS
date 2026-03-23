@@ -3,6 +3,7 @@
  * ║                    ERROR RECOVERY SYSTEM                                          ║
  * ║                    Retries operations with automatic fixes                        ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { execSync } from 'child_process';

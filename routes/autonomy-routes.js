@@ -11,6 +11,7 @@
  *   POST /run             — Manually trigger one orchestration cycle
  *   GET  /proposals       — View all pending proposals with risk scores
  *   POST /proposals/:id/force-build — Force-build a proposal regardless of risk
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import express from 'express';

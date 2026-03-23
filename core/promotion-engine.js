@@ -3,6 +3,7 @@
  * ║                    PROMOTION ENGINE                                                ║
  * ║                    Self-promotion: blog posts, social media, email                ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 
 export class PromotionEngine {

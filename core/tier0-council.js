@@ -7,6 +7,7 @@
  * 
  * This is the "worker" tier - thousands of cheap AI drones that do the bulk work.
  * Premium council only validates/corrects their output.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import crypto from 'crypto';

@@ -13,6 +13,7 @@
  *
  * In production (Railway): outputs newline-delimited JSON — searchable/alertable.
  * In development: outputs colorized human-readable via pino-pretty.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import pino from 'pino';

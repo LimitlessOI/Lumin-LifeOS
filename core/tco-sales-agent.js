@@ -10,6 +10,7 @@
  * METRIC: Leads/week + conversion rate
  * SAFETY: All actions logged, human approval required by default
  * UPGRADED: World-class objection handling, beta framing, persistence mode
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 // ══════════════════════════════════════════════════════════════════════════════════

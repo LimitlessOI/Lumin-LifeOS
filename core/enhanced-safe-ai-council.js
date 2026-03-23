@@ -3,6 +3,7 @@
  * ║              ENHANCED SAFE AI COUNCIL (Your Implementation + 2029 Lessons)      ║
  * ║              Free-first (Ollama), optional paid fallback, full tracking         ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { EnhancedAIUsageTracker } from './enhanced-ai-usage-tracker.js';

@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
+ */
 export function createMemoryHandlers({ pool, logger }) {
   async function storeConversationMemory(orchestratorMessage, aiResponse, context = {}) {
     try {

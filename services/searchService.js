@@ -5,6 +5,7 @@
  *
  * Dependencies: axios, crypto, process.env.SEARCH_API_URL, process.env.SEARCH_DAILY_LIMIT
  * Exports: SearchService (class), default singleton instance
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 import axios from "axios";
 import crypto from "crypto";

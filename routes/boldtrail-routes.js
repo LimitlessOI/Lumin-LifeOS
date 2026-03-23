@@ -1,6 +1,7 @@
 /**
  * BoldTrail Real Estate CRM Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md
  */
 import logger from '../services/logger.js';
 

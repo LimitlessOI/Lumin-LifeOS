@@ -9,6 +9,7 @@
  * - Good techniques to reinforce
  * - Coaching suggestions
  * - Bad habit patterns over time
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class SalesTechniqueAnalyzer {

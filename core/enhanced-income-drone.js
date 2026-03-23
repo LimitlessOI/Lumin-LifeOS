@@ -3,6 +3,7 @@
  * ║                    ENHANCED INCOME DRONE SYSTEM                                   ║
  * ║                    Actually generates revenue autonomously                        ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 
 export class EnhancedIncomeDrone {

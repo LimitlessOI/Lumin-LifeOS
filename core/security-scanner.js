@@ -19,6 +19,7 @@
  * - Real-time detection (human monthly)
  * - Never misses patterns (human overlooks)
  * - Learns new vulnerabilities (human needs training)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

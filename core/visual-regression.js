@@ -17,6 +17,7 @@
  * - Tests all screen sizes (human: 1-2)
  * - Compares instantly (human: slow visual review)
  * - Never misses regressions (human overlooks)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs';

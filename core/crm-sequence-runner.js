@@ -8,6 +8,7 @@
  * - Log sends + basic “reply captured” events
  *
  * This is intentionally minimal and uses existing OutreachAutomation + governance gates.
+ * @ssot docs/projects/AMENDMENT_08_OUTREACH_CRM.md
  */
 
 function toInt(value, fallback = 0) {

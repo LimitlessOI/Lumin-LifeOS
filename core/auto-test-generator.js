@@ -12,6 +12,7 @@
  * - Security tests
  *
  * Target: 100% coverage (vs human average of 60-70%)
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 export class AutoTestGenerator {

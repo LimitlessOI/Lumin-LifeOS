@@ -3,6 +3,7 @@
  * ║                    AI ACCOUNT BOT - Extract Ideas from AI Conversations         ║
  * ║                    Reads ChatGPT, Gemini, Claude, Grok, DeepSeek accounts      ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 // Puppeteer is optional - will be initialized in constructor

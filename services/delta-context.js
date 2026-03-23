@@ -14,6 +14,7 @@
  * Audit trail: every snapshot is timestamped; nothing is silently deleted.
  *
  * Exports: createDeltaContext() → { startSession, addTurn, getDelta, getSnapshot, stats }
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 const MAX_TURNS_IN_WINDOW  = 6;   // keep last N turns in active window

@@ -17,6 +17,7 @@
  * - Finds edge cases humans miss (100% vs 5%)
  * - Runs 24/7 (human: occasional)
  * - Never gets bored (human: repetitive)
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class FuzzTesting {

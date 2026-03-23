@@ -2,6 +2,7 @@
  * ai-model-selector.js — extracted from server.js
  * Smart model selection, Cloudflare-tunnel detection, Ollama streaming adapter,
  * and model fallback helpers.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { sanitizeJsonResponse } from '../core/json-sanitizer.js';

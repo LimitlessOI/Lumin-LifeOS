@@ -3,6 +3,7 @@
  * ║                    AUTO-INSTALLER SYSTEM                                           ║
  * ║                    Automatically installs missing packages when needed           ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import { exec } from 'child_process';

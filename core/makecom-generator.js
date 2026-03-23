@@ -3,6 +3,7 @@
  * ║                    MAKE.COM SCENARIO & ZAP GENERATOR                               ║
  * ║                    Generate Make.com scenarios and Zapier zaps                     ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class MakeComGenerator {

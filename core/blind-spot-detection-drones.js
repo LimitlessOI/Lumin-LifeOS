@@ -4,6 +4,7 @@
  * ║                    AI bots that scour system for missed opportunities            ║
  * ║                    Pattern detection, obvious connections, auto-improvements      ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class BlindSpotDetectionDrones {

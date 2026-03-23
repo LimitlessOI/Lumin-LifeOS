@@ -4,6 +4,7 @@
  * ║                    Always work on highest priority, most profitable first         ║
  * ║                    Auto-scale if not completing in reasonable time                ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class TriagePrioritySystem {

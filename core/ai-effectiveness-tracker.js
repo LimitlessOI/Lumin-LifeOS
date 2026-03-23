@@ -3,6 +3,7 @@
  * ║                    AI EFFECTIVENESS TRACKER                                      ║
  * ║                    Rates each AI model's effectiveness by task type              ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class AIEffectivenessTracker {

@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import process from "node:process";
 import rateLimit from "express-rate-limit";
 import { loadRuntimeEnv } from "../config/runtime-env.js";

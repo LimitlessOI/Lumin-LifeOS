@@ -17,6 +17,7 @@
  * - Analyzes 100% of bugs (human cherry-picks)
  * - Spots patterns across codebase (human sees local)
  * - Learns continuously (human needs meetings)
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 
 import fs from 'fs';

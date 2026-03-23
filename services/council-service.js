@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import dayjs from "dayjs";
 import { injectKnowledgeContext, buildSystemContext } from "./knowledge-context.js";
 import { createFreeTierGovernor } from "./free-tier-governor.js";

@@ -11,6 +11,7 @@
  *
  * getRegistryHealth() compares this map against process.env and returns
  * a live status for every var without any Railway API call.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export const ENV_REGISTRY = [

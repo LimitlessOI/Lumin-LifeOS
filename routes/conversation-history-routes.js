@@ -10,6 +10,7 @@
  * GET  /:sessionId          — full conversation with all messages
  * POST /                    — manually log a conversation
  * POST /:sessionId/summarize — AI-generate summary + key decisions
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
  */
 
 import express from 'express';

@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ */
 import { runFSAR } from "../audit/fsar/fsar_runner.js";
 import { evaluateExecutionGate } from "../audit/gating/execution_gate.js";
 

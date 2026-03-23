@@ -4,6 +4,7 @@
  * Stores and retrieves account credentials from Neon with AES-256-GCM encryption.
  *
  * Deps: pool (pg), core/tco-encryption.js
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { encrypt, decrypt } from "../core/tco-encryption.js";

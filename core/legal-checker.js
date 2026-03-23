@@ -3,6 +3,7 @@
  * ║                    LEGAL CHECKER FOR CONTROVERSIAL ITEMS                         ║
  * ║                    Flags potentially illegal or controversial actions            ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class LegalChecker {

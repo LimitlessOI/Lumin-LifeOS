@@ -17,6 +17,7 @@
  * {id, name, file, type, prompt} components[] the auto-builder needs.
  *
  * Exports: createAutonomyOrchestrator(deps) → { start, stop, getStatus, approvePendingSMS }
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { scoreIdea } from './risk-scorer.js';

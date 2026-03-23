@@ -3,6 +3,7 @@
  * ║                    POST-UPGRADE CHECKER                                           ║
  * ║                    Automatically checks logs and fixes errors after upgrades     ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class PostUpgradeChecker {

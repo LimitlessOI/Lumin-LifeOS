@@ -3,6 +3,7 @@
  * ║                    TASK COMPLETION TRACKER                                       ║
  * ║                    Tracks tasks from start to finish, verifies completion      ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 export class TaskCompletionTracker {

@@ -3,6 +3,7 @@
  * ║                    CODE VALIDATOR                                                 ║
  * ║                    Validates code quality, security, and correctness            ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import { execSync } from 'child_process';

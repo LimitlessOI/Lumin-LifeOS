@@ -3,6 +3,7 @@
  * ║                    CODE GENERATION & REVIEW SERVICES                              ║
  * ║                    Generate code, review code, fix bugs                            ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 export class CodeServices {

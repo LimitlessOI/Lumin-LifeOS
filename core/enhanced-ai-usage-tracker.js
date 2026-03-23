@@ -20,6 +20,7 @@
  * - Runaway AI costs from infinite loops
  * - Expensive capabilities running unchecked
  * - Budget overruns without warning
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class EnhancedAIUsageTracker {

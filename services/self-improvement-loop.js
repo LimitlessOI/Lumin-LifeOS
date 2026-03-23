@@ -1,6 +1,7 @@
 /**
  * continuousSelfImprovement — extracted from server.js.
  * Factory pattern: call createSelfImprovementLoop(getDeps) to get the bound async function.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 import logger from './logger.js';
 

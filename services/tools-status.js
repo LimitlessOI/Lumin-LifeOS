@@ -4,6 +4,7 @@
  *
  * Dependencies: child_process (exec), util (promisify)
  * Exports: checkCommandPresence(cmd), checkPythonModules(modules[]), checkNodeModule(moduleName)
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 import { exec } from "child_process";
 import { promisify } from "util";

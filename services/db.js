@@ -4,6 +4,7 @@
  *
  * Dependencies: pg (Pool)
  * Exports: createDbPool({ validatedDatabaseUrl, DB_SSL_REJECT_UNAUTHORIZED })
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 import { Pool } from "pg";
 

@@ -5,6 +5,7 @@
  *
  * Dependencies: fs, path, ../core/memory-system.js
  * Exports: loadKnowledgeContext(), injectKnowledgeContext(prompt), getKnowledgeContext()
+ * @ssot docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md
  */
 import fs from "fs";
 import path from "path";

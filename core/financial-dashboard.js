@@ -1,6 +1,7 @@
 /**
  * FinancialDashboard — ledger transactions and daily financial summary.
  * Extracted from server.js.
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 import dayjs from "dayjs";
 import logger from '../services/logger.js';

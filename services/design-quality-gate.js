@@ -13,6 +13,7 @@
  * Max 2 fix attempts before passing with warnings.
  *
  * Exports: createDesignQualityGate(deps) → { check, checkAndFix }
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import fs from 'fs/promises';

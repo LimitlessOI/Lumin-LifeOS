@@ -17,6 +17,7 @@
  * - 100% coverage (human documents 20%)
  * - Consistent format (human varies)
  * - Includes examples (human skips)
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import fs from 'fs';

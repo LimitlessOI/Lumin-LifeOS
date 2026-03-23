@@ -14,6 +14,7 @@
  * DB tables:
  *   glvar_dues_log       — see db/migrations/20260323_glvar_dues.sql
  *   glvar_violations_log — see db/migrations/20260323_glvar_dues.sql
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  */
 
 import { ImapFlow } from 'imapflow';

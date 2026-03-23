@@ -10,6 +10,7 @@
  * - POST /api/v1/boldtrail/mark-moment - Mark good/bad moment
  * - GET /api/v1/boldtrail/coaching-clips/:agentId - Get coaching clips
  * - GET /api/v1/boldtrail/technique-patterns/:agentId - Get bad habits
+ * @ssot docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md
  */
 
 import { SalesTechniqueAnalyzer } from '../core/sales-technique-analyzer.js';

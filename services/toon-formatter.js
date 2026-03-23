@@ -13,6 +13,7 @@
  *   - Protected spans: never reformats code, URLs, IDs, SQL — pass through raw
  *
  * Exports: { toTOON, fromJSON, estimateSavings }
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 // Values that must never be reformatted — they go through as-is

@@ -5,6 +5,7 @@
  *
  * Deps: imapflow
  * Env: GMAIL_SIGNUP_EMAIL, GMAIL_SIGNUP_APP_PASSWORD
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { ImapFlow } from "imapflow";

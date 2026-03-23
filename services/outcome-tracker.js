@@ -4,6 +4,7 @@
  * Connects features → real-world results (revenue, conversions, time saved, errors fixed).
  *
  * Exports: createOutcomeTracker(pool) → { record, get, getForIdea, getSummary, calculateROI }
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 export function createOutcomeTracker(pool) {

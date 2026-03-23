@@ -8,6 +8,7 @@
  *   3. AI fallback       (uses council AI training knowledge when no search key available)
  *
  * Exports: createWebSearchService(deps) → { search, searchUXPatterns, searchCompetitors, getBestPractices, researchFeature }
+ * @ssot docs/projects/AMENDMENT_15_BUSINESS_TOOLS.md
  */
 
 const BRAVE_API = 'https://api.search.brave.com/res/v1/web/search';

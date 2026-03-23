@@ -7,6 +7,7 @@
  * 3. Memories have confidence scores
  * 4. Memories can be marked as "user confirmed" vs "inferred"
  * 5. Retrieval includes confidence and source
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
  */
 
 import fs from 'fs/promises';

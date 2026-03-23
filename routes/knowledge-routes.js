@@ -1,6 +1,7 @@
 /**
  * Knowledge Base Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md
  */
 import logger from '../services/logger.js';
 

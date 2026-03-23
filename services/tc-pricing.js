@@ -15,6 +15,7 @@
  * agents pay the full $349 only when the deal closes).
  *
  * Exports: createTCPricing(deps)
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  */
 
 export const PLANS = {

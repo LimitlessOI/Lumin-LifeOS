@@ -24,6 +24,7 @@
  * Protected spans: code blocks, URLs, IDs, SQL are never touched.
  *
  * Exports: { compileToIR, renderIR, injectChainOfDraft, compressPrompt }
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 // Task types where Chain of Draft is safe to apply

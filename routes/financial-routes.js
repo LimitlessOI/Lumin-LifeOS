@@ -6,6 +6,7 @@
  * and helper functions (recordRevenueEvent, syncStripeRevenue) are defined
  * in server.js at module level for shared access across all route handlers.
  * This file registers the financial API routes that use those helpers.
+ * @ssot docs/projects/AMENDMENT_03_FINANCIAL_REVENUE.md
  */
 import logger from '../services/logger.js';
 

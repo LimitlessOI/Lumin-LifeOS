@@ -5,6 +5,7 @@
  *
  * Deps: services/email-reader.js pattern, core/notification-service.js
  * Exports: createTCEmailMonitor(deps)
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  */
 
 import { ImapFlow } from 'imapflow';

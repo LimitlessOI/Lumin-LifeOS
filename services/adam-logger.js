@@ -7,6 +7,7 @@
  * It's fire-and-forget — never blocks the main action.
  *
  * Exports: createAdamLogger(pool) → { log, logConversation, getDecisions, buildProfile, simulateDecision }
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import crypto from 'crypto';

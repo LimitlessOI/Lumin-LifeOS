@@ -3,6 +3,7 @@
  * ║                    KNOWLEDGE BASE SYSTEM                                         ║
  * ║                    Store business ideas, context, historical records            ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md
  */
 
 import fs from 'fs';

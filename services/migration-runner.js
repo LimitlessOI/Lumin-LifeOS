@@ -11,6 +11,7 @@
  * Safe to run on every startup — already-run migrations are skipped.
  *
  * Exports: runMigrations(pool) → { ran: string[], skipped: string[], failed: string[] }
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import fs from 'fs/promises';

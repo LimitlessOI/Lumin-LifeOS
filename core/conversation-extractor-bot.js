@@ -3,6 +3,7 @@
  * ║                    CONVERSATION EXTRACTOR BOT                                   ║
  * ║                    Extracts all conversations from AI platforms                 ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md
  */
 
 /**

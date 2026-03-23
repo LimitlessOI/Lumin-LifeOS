@@ -3,6 +3,7 @@
  * ║                    SELF-BUILDER SYSTEM                                            ║
  * ║                    System can build, test, and deploy itself                    ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import { exec } from 'child_process';

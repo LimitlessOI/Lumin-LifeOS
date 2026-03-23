@@ -3,6 +3,7 @@
  * Handles AI-council-gated self-modification of files.
  *
  * Dependencies (server.js globals) are injected via the constructor options object.
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import path from 'path';

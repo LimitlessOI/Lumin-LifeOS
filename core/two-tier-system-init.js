@@ -2,6 +2,7 @@
  * Two-Tier AI Council System Initialization
  * Initializes the full two-tier (Tier 0 Ollama + Tier 1 Claude) council system,
  * model router, execution queue, self-programming service, and all dependent modules.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import { createSelfProgrammingService } from '../services/self-programming.js';

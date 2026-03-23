@@ -1,6 +1,7 @@
 /**
  * AUTO-BUILDER - Anti-Hallucination Edition
  * ONE product at a time. Validate everything. Never deploy garbage.
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import fs from 'fs/promises';

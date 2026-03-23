@@ -20,6 +20,7 @@
  *   - Mindbody: https://www.mindbodyonline.com/partner — fitness/wellness POS
  *   - Square: https://squareup.com/us/en/referral — general POS
  *   We earn referral commission when client signs up via our link.
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  */
 
 import { promises as fs } from 'fs';

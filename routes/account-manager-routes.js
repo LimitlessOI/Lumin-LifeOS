@@ -13,6 +13,7 @@
  *   POST /signup/batch        — trigger signups for multiple services
  *   PATCH /:service           — manually update account (status, notes, etc.)
  *   GET  /recipes             — list all available signup recipes
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 import express from "express";

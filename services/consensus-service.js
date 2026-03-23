@@ -3,6 +3,7 @@
  * conductEnhancedConsensus and createProposal helpers.
  *
  * Use createConsensusService(deps) to get bound functions.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 /**

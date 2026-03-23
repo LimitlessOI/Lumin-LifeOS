@@ -58,7 +58,6 @@ import TCOSalesAgent from "./core/tco-sales-agent.js";
 import initTCOAgentRoutes from "./routes/tco-agent-routes.js";
 import { applyMiddleware } from "./middleware/apply-middleware.js";
 import { registerPublicRoutes } from "./routes/public-routes.js";
-import { registerWebsiteAuditRoutes } from "./routes/website-audit-routes.js";
 import { registerApiV1CoreRoutes } from "./routes/api-v1-core.js";
 import { createDbPool } from "./services/db.js";
 import resourceGovernor from "./lib/resource-governor.js";
@@ -81,7 +80,6 @@ import { IdeaEngine } from "./services/idea-engine.js";
 import { createExecutionQueue } from "./services/execution-queue.js";
 import { createSelfProgrammingService } from "./services/self-programming.js";
 import { SelfProgrammingModule } from "./modules/system/self-programming-module.js";
-import { startAutonomySchedulers } from "./services/autonomy-scheduler.js";
 import { sandboxTest as runSandboxTest } from "./services/sandbox-service.js";
 import {
   createSystemSnapshot as createSystemSnapshotService,
@@ -99,7 +97,6 @@ import { getAllFlags } from "./lib/flags.js";
 import { validateEnv } from './services/env-validator.js';
 import { runPreviewExpiry } from './services/preview-expiry-cron.js';
 import { requestTracer } from './middleware/request-tracer.js';
-import { errorBoundary } from './middleware/error-boundary.js';
 import { startDbHealthMonitor } from './services/db-health-monitor.js';
 
 import { createFinancialRoutes } from './routes/financial-routes.js';
@@ -108,7 +105,6 @@ import { createGameRoutes } from './routes/game-routes.js';
 import { createVideoRoutes } from './routes/video-routes.js';
 import { createAgentRecruitmentRoutes } from './routes/agent-recruitment-routes.js';
 import { createBoldTrailRoutes } from './routes/boldtrail-routes.js';
-import { createApiCostSavingsRoutes } from './routes/api-cost-savings-routes.js';
 import { createWebIntelligenceRoutes } from './routes/web-intelligence-routes.js';
 import { createAutoBuilderRoutes } from './routes/auto-builder-routes.js';
 import { createLifeCoachingRoutes } from './routes/life-coaching-routes.js';
@@ -148,12 +144,7 @@ import {
   advancedDecompress,
 } from './services/response-cache.js';
 import { createRailwayManagedEnvService } from "./services/railway-managed-env-service.js";
-import { createRailwayManagedEnvRoutes } from "./routes/railway-managed-env-routes.js";
 import { createAccountManager } from "./services/account-manager.js";
-import { createAccountManagerRoutes } from "./routes/account-manager-routes.js";
-import { createTCCoordinator, startTCDeadlineCron } from "./services/tc-coordinator.js";
-import { createTCRoutes } from "./routes/tc-routes.js";
-import { createMLSRoutes } from "./routes/mls-routes.js";
 import { createEventBus } from "./core/event-bus.js";
 import { createPodManager } from "./core/pod-manager.js";
 import { createTelemetry } from "./services/telemetry.js";
@@ -171,7 +162,6 @@ import {
   getStripeClient,
 } from "./startup/environment.js";
 import { createLatestRunManager } from "./startup/latest-run.js";
-import { registerServerRoutes } from "./startup/routes/server-routes.js";
 import { createAutonomyScheduler } from "./startup/schedulers.js";
 import { initDatabase, ensureTcoAgentTables } from "./startup/database.js";
 import { createUserPreferenceGuesser } from "./startup/user-preferences.js";
@@ -180,27 +170,23 @@ import { createSnapshotManager } from "./startup/snapshots.js";
 import { loadROIFromDatabase, updateROI } from "./startup/roi.js";
 import { createMemoryHandlers } from "./startup/memory.js";
 import { createLossTracker } from "./startup/loss.js";
+import { bootAllDomains } from "./startup/boot-domains.js";
+import { registerAllSchedulers } from "./startup/register-schedulers.js";
+import { registerRuntimeRoutes } from "./startup/register-routes.js";
+import { COUNCIL_ALIAS_MAP, createCouncilMembers } from "./config/council-members.js";
 
 // Enhanced Council Features
-import { registerEnhancedCouncilRoutes } from "./routes/enhanced-council-routes.js";
 import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
 // Idea Queue — human-approval gate for self-building pipeline
-import { createIdeaQueueRoutes } from "./routes/idea-queue-routes.js";
 // Digital Twin, Outcomes, Continuous Improvement
-import { createTwinRoutes } from "./routes/twin-routes.js";
 import { createAdamLogger, EVENTS } from "./services/adam-logger.js";
 import { createContinuousImprovement } from "./services/continuous-improvement.js";
 // Conversation history
-import { createConversationHistoryRoutes } from "./routes/conversation-history-routes.js";
 import { createConversationStore } from "./services/conversation-store.js";
 // Word Keeper & Integrity Engine (Amendment 16)
-import { createWordKeeperRoutes } from "./routes/word-keeper-routes.js";
-import { startReminderCron } from "./services/reminder-cron.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "./services/integrity-engine.js";
 // Autonomy Orchestrator — self-programming without bottlenecks (Amendment 17)
 import { createAutonomyOrchestrator } from "./services/autonomy-orchestrator.js";
-import { createAutonomyRoutes } from "./routes/autonomy-routes.js";
-import { registerTwilioWebhook } from "./services/twilio-webhook-registrar.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
 let Tier0Council, Tier1Council, ModelRouter, OutreachAutomation, WhiteLabelConfig, CrmSequenceRunner;
@@ -248,6 +234,7 @@ wss.on("error", (error) => {
 });
 
 const { scheduleAutonomyLoop, scheduleAutonomyOnce } = createAutonomyScheduler(logger);
+const asyncStartAutonomySchedulers = (...args) => import("./services/autonomy-scheduler.js").then((mod) => mod.startAutonomySchedulers(...args));
 
 const moduleRouter = new ModuleRouter();
 const healthModuleInstance = new HealthModule();
@@ -505,273 +492,10 @@ trackLossFunction = trackLoss;
 
 
 // ==================== ENHANCED AI COUNCIL MEMBERS (NO CLAUDE) ====================
-// TIER 0: Open Source / Cheap Models (PRIMARY - Do all the work)
-// TIER 1: Expensive Models (OVERSIGHT ONLY - Validation when needed)
-const COUNCIL_ALIAS_MAP = {
-  // Map friendly names to real COUNCIL_MEMBERS keys that exist and have API keys
-  claude:     "groq_llama",    // fast, free via Groq
-  anthropic:  "groq_llama",    // same
-  chatgpt:    "groq_llama",    // same
-  openai:     "groq_llama",    // same
-  gemini:     "gemini_flash",  // free via Google AI
-  grok:       "groq_llama",    // grok not configured — use Groq as substitute
-  deepseek:   "deepseek",      // cheap cloud deepseek ($0.10/1M tokens)
-};
-
-const COUNCIL_MEMBERS = {
-  // TIER 0 - PRIMARY WORKERS (Free/Cheap - Run system independently)
-  ollama_deepseek: {
-    name: "DeepSeek Coder (Local)",
-    model: "deepseek-coder:latest",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "Primary Developer & Infrastructure",
-    focus: "optimization, performance, safe testing, development, code generation",
-    maxTokens: 4096,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["infrastructure", "testing", "performance", "development", "code"],
-    isFree: true,
-    isLocal: true,
-  },
-  ollama_llama: {
-    name: "Llama 3.2 (Local)",
-    model: "llama3.2:1b",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "General Assistant & Research",
-    focus: "general tasks, research, analysis, reasoning",
-    maxTokens: 8192,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["research", "analysis", "general"],
-    isFree: true,
-    isLocal: true,
-  },
-  deepseek: {
-    name: "DeepSeek Cloud",
-    model: "deepseek-coder",
-    provider: "deepseek",
-    role: "Primary Developer & Infrastructure (Cloud Fallback)",
-    focus: "optimization, performance, safe testing, development",
-    maxTokens: 4096,
-    tier: "tier0", // Open source tier
-    costPer1M: 0.1, // $0.10 per million tokens (cheapest cloud)
-    specialties: ["infrastructure", "testing", "performance", "development"],
-    useLocal: DEEPSEEK_BRIDGE_ENABLED === "true",
-    isFree: false,
-  },
-  groq_llama: {
-    name: "Groq Llama (Free)",
-    model: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
-    provider: "groq",
-    role: "Fast Cloud Generalist",
-    focus: "quick routing, lightweight reasoning, free-tier responses",
-    maxTokens: 4096,
-    tier: "tier0",
-    costPer1M: 0,
-    specialties: ["fast", "routing", "general", "reasoning"],
-    isFree: true,
-    isLocal: false,
-  },
-  gemini_flash: {
-    name: "Gemini Flash (Free)",
-    model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
-    provider: "gemini",
-    role: "Fast Cloud Reasoning",
-    focus: "summaries, planning, lightweight analysis, free-tier responses",
-    maxTokens: 8192,
-    tier: "tier0",
-    costPer1M: 0,
-    specialties: ["analysis", "planning", "summaries", "reasoning"],
-    isFree: true,
-    isLocal: false,
-  },
-  cerebras_llama: {
-    name: "Cerebras Llama (Free)",
-    model: process.env.CEREBRAS_MODEL || "llama3.1-8b",
-    provider: "cerebras",
-    role: "High-Speed Cloud Reasoning",
-    focus: "fast generation, routing, throughput-heavy tasks",
-    maxTokens: 8192,
-    tier: "tier0",
-    costPer1M: 0,
-    specialties: ["speed", "throughput", "reasoning", "general"],
-    isFree: true,
-    isLocal: false,
-  },
-  openrouter_free: {
-    name: "OpenRouter Free",
-    model: process.env.OPENROUTER_MODEL || "meta-llama/llama-3.1-8b-instruct:free",
-    provider: "openrouter",
-    role: "Free Model Aggregator",
-    focus: "fallback routing across free hosted models",
-    maxTokens: 4096,
-    tier: "tier0",
-    costPer1M: 0,
-    specialties: ["fallback", "general", "routing"],
-    isFree: true,
-    isLocal: false,
-  },
-  mistral_free: {
-    name: "Mistral Free",
-    model: process.env.MISTRAL_MODEL || "open-mistral-7b",
-    provider: "mistral",
-    role: "Lightweight Cloud Assistant",
-    focus: "concise generation, chat, lightweight planning",
-    maxTokens: 4096,
-    tier: "tier0",
-    costPer1M: 0,
-    specialties: ["chat", "planning", "lightweight"],
-    isFree: true,
-    isLocal: false,
-  },
-  together_free: {
-    name: "Together Free",
-    model: process.env.TOGETHER_MODEL || "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
-    provider: "together",
-    role: "Shared Cloud Fallback",
-    focus: "free/shared routing, fallback execution, fast responses",
-    maxTokens: 4096,
-    tier: "tier0",
-    costPer1M: 0,
-    specialties: ["fallback", "speed", "general"],
-    isFree: true,
-    isLocal: false,
-  },
-  // TIER 0 - CODE GENERATION SPECIALISTS (Best for coding tasks)
-  ollama_deepseek_coder_v2: {
-    name: "DeepSeek Coder V2 (Local)",
-    model: "deepseek-coder-v2:latest",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "Code Generation Specialist",
-    focus: "code generation, code review, debugging, infrastructure, production code",
-    maxTokens: 8192,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["code", "code_review", "debugging", "infrastructure", "development"],
-    isFree: true,
-    isLocal: true,
-    priority: "high", // Best for code tasks
-  },
-  ollama_deepseek_coder_33b: {
-    name: "DeepSeek Coder 33B (Local)",
-    model: "deepseek-coder:33b",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "Code Generation Specialist (Large)",
-    focus: "complex code generation, advanced algorithms, production code",
-    maxTokens: 8192,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["code", "complex_algorithms", "production_code"],
-    isFree: true,
-    isLocal: true,
-  },
-  ollama_qwen_coder_32b: {
-    name: "Qwen2.5-Coder-32B (Local)",
-    model: "qwen2.5-coder:32b-instruct",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "Code Generation Specialist",
-    focus: "production code generation, complex algorithms, code understanding",
-    maxTokens: 8192,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["code", "code_generation", "algorithms", "production"],
-    isFree: true,
-    isLocal: true,
-  },
-  ollama_codestral: {
-    name: "Mistral Codestral 25.01 (Local)",
-    model: "codestral:latest",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "Fast Code Generation",
-    focus: "quick code snippets, IDE integration, FIM tasks, fast responses",
-    maxTokens: 4096,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["code", "fast_code", "snippets", "fim"],
-    isFree: true,
-    isLocal: true,
-  },
-  // TIER 0 - REASONING & ANALYSIS SPECIALISTS
-  ollama_deepseek_v3: {
-    name: "DeepSeek V3 (Local)",
-    model: "deepseek-v3:latest",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "Complex Reasoning Specialist",
-    focus: "complex reasoning, mathematical tasks, strategic decisions, exceptional reasoning",
-    maxTokens: 128000, // 128K context
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["reasoning", "math", "strategic_decisions", "complex_analysis"],
-    isFree: true,
-    isLocal: true,
-    priority: "high", // Best for reasoning
-  },
-  ollama_llama_3_3_70b: {
-    name: "Llama 3.3 70B (Local)",
-    model: "llama3.3:70b-instruct-q4_0",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "High-Quality Reasoning",
-    focus: "complex reasoning, strategic decisions, general tasks, multilingual",
-    maxTokens: 8192,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["reasoning", "strategic_decisions", "general", "multilingual"],
-    isFree: true,
-    isLocal: true,
-  },
-  ollama_qwen_2_5_72b: {
-    name: "Qwen 2.5 72B (Local)",
-    model: "qwen2.5:72b-q4_0",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "Research & Analysis Specialist",
-    focus: "research, analysis, mathematical tasks, multilingual, document understanding",
-    maxTokens: 8192,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["research", "analysis", "math", "multilingual", "documents"],
-    isFree: true,
-    isLocal: true,
-  },
-  ollama_gemma_2_27b: {
-    name: "Gemma 2 27B (Local)",
-    model: "gemma2:27b-it-q4_0",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "Balanced Reasoning",
-    focus: "on-device reasoning, balanced performance, general tasks",
-    maxTokens: 8192,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["reasoning", "general", "balanced"],
-    isFree: true,
-    isLocal: true,
-  },
-  // TIER 0 - LIGHTWEIGHT & FAST
-  ollama_phi3: {
-    name: "Phi-3 Mini (Local)",
-    model: "phi3:mini",
-    provider: "ollama",
-    endpoint: OLLAMA_ENDPOINT || "http://localhost:11434",
-    role: "Lightweight Assistant",
-    focus: "light tasks, monitoring, simple analysis, fast responses",
-    maxTokens: 4096,
-    tier: "tier0",
-    costPer1M: 0, // FREE (local)
-    specialties: ["light_tasks", "monitoring", "simple_analysis"],
-    isFree: true,
-    isLocal: true,
-  },
-  // TIER 1 - OVERSIGHT ONLY (Expensive - Only for validation)
-};
+const COUNCIL_MEMBERS = createCouncilMembers({
+  OLLAMA_ENDPOINT,
+  DEEPSEEK_BRIDGE_ENABLED,
+});
 
 // LCTP v3 helpers are now provided by services/council-service.js via compressPrompt/decompressResponse
 
@@ -1238,7 +962,7 @@ const checkHumanAttentionBudget = (req, res, next) => next();
 // Extracted to routes/conversation-routes.js
 // Extracted to routes/command-center-routes.js
 // Extracted to routes/auto-builder-routes.js (part 3: AUTO-BUILDER CONTROL)
-registerServerRoutes(app, {
+const { tcCoordinator, wordKeeperCouncil } = registerRuntimeRoutes(app, {
   express,
   memoryRoutes,
   stripeRoutes,
@@ -1256,241 +980,61 @@ registerServerRoutes(app, {
   rootDir: __dirname,
   telemetry,
   podManager,
-});
-
-// ==================== AI COUNCIL CONSENSUS MODE ====================
-// Functions extracted to services/consensus-service.js (createGetCouncilConsensus, compareResponses, selectBestResponse)
-const getCouncilConsensus = createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT });
-
-// ==================== AUTO-BUILDER: CLOUD AI + PERSISTENCE ====================
-// Override routeTask so the builder uses Ollama when available, falls back to the
-// council (OpenAI / DeepSeek / Groq) when Ollama is unreachable (e.g. Railway prod).
-autoBuilder.overrideBuildHelpers({
-  routeTask: async (task, prompt) => {
-    const ollamaEndpoint = OLLAMA_ENDPOINT || 'http://localhost:11434';
-    const modelName = task === 'code_generation' ? 'deepseek-coder-v2:latest' : 'qwen2.5:32b';
-
-    // Try Ollama first (free, local)
-    try {
-      const res = await fetch(`${ollamaEndpoint}/api/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: modelName,
-          prompt,
-          stream: false,
-          options: { temperature: 0.2, num_predict: 8192 },
-        }),
-        signal: AbortSignal.timeout(60000),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.response && data.response.length > 50) {
-          logger.info(`[AUTO-BUILDER] Ollama OK: ${data.response.length} chars (${modelName})`);
-          return data.response;
-        }
-      }
-    } catch (ollamaErr) {
-      logger.warn(`[AUTO-BUILDER] Ollama unavailable (${ollamaErr.message}) — falling back to council`);
-    }
-
-    // Cloud fallback: pick first free-tier model with an API key
-    const fallbackOrder = ['groq_llama', 'gemini_flash', 'cerebras_llama', 'openrouter_free', 'claude'];
-    const councilMember = fallbackOrder.find((m) => {
-      const cfg = COUNCIL_MEMBERS[m];
-      if (!cfg) return false;
-      if (cfg.provider === 'groq')       return !!process.env.GROQ_API_KEY;
-      if (cfg.provider === 'gemini')     return !!process.env.GEMINI_API_KEY;
-      if (cfg.provider === 'cerebras')   return !!process.env.CEREBRAS_API_KEY;
-      if (cfg.provider === 'openrouter') return !!process.env.OPENROUTER_API_KEY;
-      if (cfg.provider === 'anthropic')  return !!process.env.ANTHROPIC_API_KEY;
-      return false;
-    }) || 'groq_llama';
-    logger.info(`[AUTO-BUILDER] Using council fallback: ${councilMember}`);
-    return callCouncilMember(councilMember, prompt, { maxTokens: 4000, useTwoTier: false });
-  },
-});
-
-registerWebsiteAuditRoutes(app, {
-  requireKey,
+  callCouncilMember,
   callCouncilWithFailover,
-});
-
-registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requireKey);
-
-// ==================== API COST SAVINGS ROUTES ====================
-// Imported but was never mounted — gap found by TCO audit 2026-03-21
-createApiCostSavingsRoutes(app, {
-  pool,
-  requireKey,
   apiCostSavingsRevenue,
   getStripeClient,
-  RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
+  publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN,
+  autonomyOrchestrator,
+  railwayManagedEnvService,
+  accountManager,
+  notificationService,
+  getRailwayEnvVars,
+  setRailwayEnvVar,
+  setRailwayEnvVars,
+  triggerRailwayRedeploy,
 });
-logger.info('✅ [API-COST-SAVINGS] Routes mounted at /api/v1/cost-savings + /api/v1/revenue/api-cost-savings');
 
-// ==================== IDEA QUEUE ====================
-app.use('/api/v1/ideas', createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));
-logger.info('✅ [IDEA-QUEUE] Routes mounted at /api/v1/ideas');
-
-// ==================== DIGITAL TWIN + OUTCOMES + CI ====================
-app.use('/api/v1/twin', createTwinRoutes({ pool, requireKey, callCouncilMember }));
-logger.info('✅ [TWIN] Routes mounted at /api/v1/twin');
-
-// ==================== CONVERSATION HISTORY ====================
-app.use('/api/v1/history', createConversationHistoryRoutes({ pool, requireKey, callCouncilMember }));
-logger.info('✅ [HISTORY] Routes mounted at /api/v1/history');
-
-// ==================== WORD KEEPER & INTEGRITY ENGINE (Amendment 16) ====================
-// Thin adapter: word-keeper services call councilService.ask(prompt, opts)
-const wordKeeperCouncil = {
-  ask: (prompt, opts = {}) => callCouncilMember(opts.model || 'claude', prompt, opts.systemPrompt || '', opts),
-};
-app.use('/api/v1/word-keeper', createWordKeeperRoutes({ pool, councilService: wordKeeperCouncil, twilioService: null }));
-logger.info('✅ [WORD-KEEPER] Routes mounted at /api/v1/word-keeper');
-
-// ── Word Keeper reminder cron — check every 60s, send SMS, weekly coaching ──
+// Scheduler registration depends on route-scoped adapters initialized above.
 const wkIntegrityEngine = createWKIntegrityEngine(pool, wordKeeperCouncil);
-startReminderCron(pool, async (to, msg) => {
-  // Use Twilio sendSMS if configured, otherwise log
-  try {
-    const { createTwilioService } = await import('./services/twilio-service.js');
-    const twilio = createTwilioService({
-      callCouncilMember,
-      RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
-      ALERT_PHONE: to,
-      alertState: { inProgress: false },
-    });
-    return twilio.sendSMS(to, msg);
-  } catch { return { success: false }; }
-}, {
-  userPhone: process.env.ALERT_PHONE || process.env.ADMIN_PHONE,
-  integrityEngine: wkIntegrityEngine,
-});
-logger.info('✅ [WORD-KEEPER] Reminder cron started');
 
-// ==================== AUTONOMY ORCHESTRATOR (Amendment 17) ====================
-// Created before initializeTwoTierSystem so routeCtx can include it.
-// autonomyOrchestrator is defined earlier in this file (above runInitializeTwoTierSystem).
-autonomyOrchestrator.start();
-app.use('/api/v1/autonomy', createAutonomyRoutes({ pool, requireKey, orchestrator: autonomyOrchestrator }));
-logger.info('✅ [AUTONOMY] Orchestrator started + routes mounted at /api/v1/autonomy');
-
-app.use('/api/v1/railway/managed-env', createRailwayManagedEnvRoutes({
-  requireKey,
-  managedEnvService: railwayManagedEnvService,
-}));
-logger.info('✅ [RAILWAY-MANAGED-ENV] Routes mounted at /api/v1/railway/managed-env');
-
-app.use('/api/v1/accounts', createAccountManagerRoutes({ requireKey, accountManager, pool, logger }));
-logger.info('✅ [ACCOUNT-MANAGER] Routes mounted at /api/v1/accounts');
-
-const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
-createTCRoutes(app, { pool, requireKey, coordinator: tcCoordinator, logger });
-startTCDeadlineCron(pool, tcCoordinator);
-createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger });
-
-// GLVAR dues (monthly) + violations (4× daily email scan)
-(async () => {
-  try {
-    const { createGLVARMonitor } = await import('./services/glvar-monitor.js');
-    const { createTCBrowserAgent } = await import('./services/tc-browser-agent.js');
-    const tcBrowser = createTCBrowserAgent({ accountManager, logger });
-    const glvarMonitor = createGLVARMonitor({ pool, tcBrowser, accountManager, notificationService, logger });
-    glvarMonitor.startDuesCron();
-    glvarMonitor.startViolationsCron();
-  } catch (err) {
-    logger.warn?.({ err: err.message }, '[GLVAR-MONITOR] Failed to start');
-  }
-})();
-
-// Email triage — scans inbox every 30 min, daily digest at 7am
-(async () => {
-  try {
-    const { createEmailTriage } = await import('./services/email-triage.js');
-    const emailTriage = createEmailTriage({ pool, notificationService, callCouncilMember, logger });
-    emailTriage.startTriageCron();
-  } catch (err) {
-    logger.warn?.({ err: err.message }, '[EMAIL-TRIAGE] Failed to start');
-  }
-})();
-
-// Self-register Twilio SMS webhook — no manual Twilio console action needed
-// Warm response cache L1 from DB — picks up where last deploy left off
+// Warm response cache L1 from DB - picks up where last deploy left off
 initCache(pool).catch(() => {});
-railwayManagedEnvService.ensureSchema()
-  .then(() => {
-    railwayManagedEnvService.startScheduler();
-    return railwayManagedEnvService.syncDesiredVars({ actor: 'boot', syncOnBootOnly: true });
-  })
-  .then((result) => {
-    logger.info({ changed: result.changed, failed: result.failed }, '✅ [RAILWAY-MANAGED-ENV] Boot sync complete');
-  })
-  .catch((error) => {
-    logger.warn({ error: error.message }, '⚠️ [RAILWAY-MANAGED-ENV] Boot sync failed');
-  });
 
-accountManager.ensureSchema().catch((err) => {
-  logger.warn({ error: err.message }, '⚠️ [ACCOUNT-MANAGER] Schema init failed');
+bootAllDomains({
+  pool,
+  logger,
+  notificationService,
+  callCouncilMember,
+  accountManager,
+  railwayManagedEnvService,
+  onManagedEnvReady: () => registerAllSchedulers({ railwayManagedEnvService }),
+  registerTwilioWebhook: async () => {
+    const { registerTwilioWebhook } = await import('./services/twilio-webhook-registrar.js');
+    return registerTwilioWebhook();
+  },
+  publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN || '',
+}).catch((error) => {
+  logger.warn({ error: error.message }, 'WARN [BOOT] Domain bootstrap failed');
 });
 
-registerTwilioWebhook().then(result => {
-  if (result.registered) {
-    logger.info({ url: result.url, changed: result.changed }, '✅ [TWILIO] SMS webhook confirmed');
-  } else {
-    logger.warn({ error: result.error }, '⚠️ [TWILIO] SMS webhook registration failed (non-fatal)');
-  }
-}).catch(() => {});
-
-// Boot seeder — sets every env var the system knows the value for.
-// Uses managed-env service so all changes are encrypted, audited, and persist in Neon.
-// Only writes a var if it isn't already set in process.env (never overwrites live values).
-(async () => {
-  try {
-    const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN || '';
-    const siteBaseUrl = publicDomain
-      ? (publicDomain.startsWith('http') ? publicDomain : `https://${publicDomain}`)
-      : '';
-
-    const knownVars = {
-      // Email — Postmark is the provider, lifeos@ is the FROM address
-      EMAIL_PROVIDER: { value: 'postmark',                   description: 'Email provider — set by boot seeder' },
-      EMAIL_FROM:     { value: 'lifeOS@hopkinsgroup.org',    description: 'Outreach FROM address — set by boot seeder' },
-      // Site builder — derive from Railway public domain
-      ...(siteBaseUrl && { SITE_BASE_URL: { value: siteBaseUrl, description: 'Preview site base URL — derived from RAILWAY_PUBLIC_DOMAIN' } }),
-      // Signup agent — system emails for autonomous account creation
-      GMAIL_SIGNUP_EMAIL: { value: 'lumea.lifeos@gmail.com', description: 'System signup email (public domain services) — set by boot seeder' },
-      WORK_EMAIL:         { value: 'LifeOS@hopkinsgroup.org', description: 'Work email (private domain, for Postmark etc.) — set by boot seeder' },
-    };
-
-    const toSet = Object.fromEntries(
-      Object.entries(knownVars).filter(([key]) => !process.env[key])
-    );
-
-    if (Object.keys(toSet).length > 0) {
-      const results = await railwayManagedEnvService.upsertDesiredVars(toSet, 'boot-seeder');
-      const ok = results.filter((r) => r.ok).map((r) => r.envName);
-      const failed = results.filter((r) => !r.ok).map((r) => `${r.envName}: ${r.error}`);
-      if (ok.length)     logger.info({ vars: ok },     '✅ [BOOT-SEEDER] Vars stored in managed-env');
-      if (failed.length) logger.warn({ failed },       '⚠️ [BOOT-SEEDER] Some vars failed');
-      // Push to Railway immediately so this deploy picks them up
-      await railwayManagedEnvService.syncDesiredVars({ actor: 'boot-seeder', names: ok });
-      logger.info({ count: ok.length }, '✅ [BOOT-SEEDER] Known vars pushed to Railway');
-    } else {
-      logger.info('[BOOT-SEEDER] All known vars already set — no action needed');
-    }
-  } catch (err) {
-    logger.warn({ error: err.message }, '⚠️ [BOOT-SEEDER] Non-fatal error');
-  }
-})();
+// Most startup-only globals still feed the two-tier initializer and remain in server.js for now.
+registerAllSchedulers({
+  pool,
+  logger,
+  callCouncilMember,
+  wkIntegrityEngine,
+  publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN,
+  tcCoordinator,
+});
 
 // Auto-log all council API calls as conversations
 const convStore = createConversationStore(pool);
 const _origCallCouncil = callCouncilMember;
 // Wrap callCouncilMember to capture server-side AI conversations
-// (lightweight — fires async after the call completes, never blocks responses)
+// (lightweight - fires async after the call completes, never blocks responses)
 
-// Continuous improvement monitor — runs every 6 hours
+// Continuous improvement monitor - schedule registration lives in startup/register-schedulers.js
 const adamLoggerGlobal = createAdamLogger(pool);
 const ciMonitor = createContinuousImprovement({
   pool,
@@ -1505,79 +1049,11 @@ const ciMonitor = createContinuousImprovement({
   adamLogger: adamLoggerGlobal,
 });
 
-// Run first check after 5 minutes, then every 6 hours
-setTimeout(() => {
-  ciMonitor.runMonitorCycle().catch(err =>
-    logger.warn('[CI] Monitor cycle failed', { error: err.message })
-  );
-  setInterval(() => {
-    ciMonitor.runMonitorCycle().catch(err =>
-      logger.warn('[CI] Monitor cycle failed', { error: err.message })
-    );
-  }, 6 * 60 * 60 * 1000); // every 6 hours
-}, 5 * 60 * 1000); // 5 min after startup
-
-// Rebuild Adam's profile every 12 hours
-setInterval(() => {
-  adamLoggerGlobal.buildProfile(async (prompt) => {
-    try {
-      const result = await callCouncilMember('anthropic', prompt);
-      return typeof result === 'string' ? result : result?.content || '';
-    } catch { return ''; }
-  }).catch(err => logger.warn('[ADAM-TWIN] Profile rebuild failed', { error: err.message }));
-}, 12 * 60 * 60 * 1000); // every 12 hours
-
-// ==================== RAILWAY CONTROL ====================
-// GET  /api/v1/railway/env          — list all env vars on Railway
-// POST /api/v1/railway/env          — set one: { name, value }
-// POST /api/v1/railway/env/bulk     — set many: { vars: { KEY: 'value' } }
-// POST /api/v1/railway/deploy       — trigger immediate redeploy
-app.get('/api/v1/railway/env', requireKey, async (req, res) => {
-  try {
-    const vars = await getRailwayEnvVars();
-    // Mask values for security — just show key names + first 4 chars
-    const masked = Object.fromEntries(
-      Object.entries(vars).map(([k, v]) => [k, `${String(v).slice(0, 4)}****`])
-    );
-    res.json({ ok: true, vars: masked, count: Object.keys(masked).length });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-app.post('/api/v1/railway/env', requireKey, async (req, res) => {
-  try {
-    const { name, value } = req.body;
-    if (!name || value === undefined) {
-      return res.status(400).json({ ok: false, error: 'name and value are required' });
-    }
-    await setRailwayEnvVar(name, value);
-    res.json({ ok: true, set: name });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-app.post('/api/v1/railway/env/bulk', requireKey, async (req, res) => {
-  try {
-    const { vars } = req.body;
-    if (!vars || typeof vars !== 'object') {
-      return res.status(400).json({ ok: false, error: 'vars must be an object { KEY: value }' });
-    }
-    const results = await setRailwayEnvVars(vars);
-    res.json({ ok: true, results });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
-});
-
-app.post('/api/v1/railway/deploy', requireKey, async (req, res) => {
-  try {
-    await triggerRailwayRedeploy();
-    res.json({ ok: true, message: 'Redeploy triggered on Railway' });
-  } catch (err) {
-    res.status(500).json({ ok: false, error: err.message });
-  }
+registerAllSchedulers({
+  ciMonitor,
+  adamLogger: adamLoggerGlobal,
+  callCouncilMember,
+  logger,
 });
 
 // ==================== WEBSOCKET ====================
@@ -1594,35 +1070,6 @@ setupWebSocketHandler(wss, {
   DEEPSEEK_BRIDGE_ENABLED,
   STRIPE_SECRET_KEY,
 });
-
-// ==================== HEALTH CHECK ====================
-app.get('/healthz', async (req, res) => {
-  const checks = {
-    server: 'ok',
-    db: 'unknown',
-    ai: process.env.ANTHROPIC_API_KEY ? 'configured' : 'missing_key',
-    email: process.env.POSTMARK_SERVER_TOKEN ? 'configured' : 'not_configured',
-  };
-
-  try {
-    await pool.query('SELECT 1');
-    checks.db = 'ok';
-  } catch (e) {
-    checks.db = 'error: ' + e.message;
-  }
-
-  const allOk = checks.db === 'ok' && checks.ai === 'configured';
-  res.status(allOk ? 200 : 503).json({
-    status: allOk ? 'healthy' : 'degraded',
-    checks,
-    uptime: Math.floor(process.uptime()),
-    timestamp: new Date().toISOString(),
-  });
-});
-
-// ==================== GLOBAL ERROR BOUNDARY ====================
-// Must be registered after all routes
-app.use(errorBoundary(logger));
 
 // ==================== STARTUP ====================
 async function start() {
@@ -1780,9 +1227,8 @@ async function start() {
     }
     // ──────────────────────────────────────────────────────────────────────
 
-    autoBuilder.startBuildScheduler({
-      initialDelay: 60000,          // 1 min initial delay (was 15s)
-      interval: 6 * 60 * 60 * 1000, // 6 hours (was 60s) — preserve token quota until TC proven
+    registerAllSchedulers({
+      autoBuilder,
     });
 
     // Critical: Database must initialize (but don't fail if tables already exist)
@@ -2174,10 +1620,14 @@ async function start() {
       comprehensiveIdeaTracker,
       vapiIntegration,
     };
-    startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOnce, () => autonomyDepsRef.current);
-
-    // Preview site expiry: Amendment 05 — expire previews older than 30 days
-    scheduleAutonomyLoop('preview-expiry', 24 * 60 * 60 * 1000, () => runPreviewExpiry(pool), 5 * 60 * 1000);
+    registerAllSchedulers({
+      pool,
+      startAutonomySchedulers: asyncStartAutonomySchedulers,
+      scheduleAutonomyLoop,
+      scheduleAutonomyOnce,
+      getAutonomyDeps: () => autonomyDepsRef.current,
+      runPreviewExpiry,
+    });
 
     // Initial snapshot
     await createSystemSnapshot("System startup");
@@ -2220,16 +1670,6 @@ process.on("SIGINT", async () => {
   lifecycleSubscriptions.forEach((unsubscribe) => unsubscribe?.());
   lifecycleSubscriptions.length = 0;
   process.exit(0);
-});
-
-// Queue status endpoint
-app.get("/api/v1/queue/stats", requireKey, async (req, res) => {
-  try {
-    const stats = await getAllQueueStats();
-    res.json({ ok: true, queues: stats });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
 });
 
 // Start

@@ -1,3 +1,6 @@
+/**
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ */
 export function createUserPreferenceGuesser({ pool, callCouncilMember, logger }) {
   return async function guessUserDecision(context) {
     try {

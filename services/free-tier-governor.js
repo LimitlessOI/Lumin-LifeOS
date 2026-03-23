@@ -19,6 +19,7 @@
  *  - State stored in Neon (free_tier_usage table) — survives Railway deploys
  *
  * Exports: createFreeTierGovernor({ pool? }) → { canUse, record, markExhausted, getStatus, ... }
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 
 // Daily limits — set 10% below actual free limit as safety buffer

@@ -3,6 +3,7 @@
  * ║                    SELF-FUNDING SYSTEM                                             ║
  * ║                    System spends its own revenue if ROI is healthy                ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 export class SelfFundingSystem {

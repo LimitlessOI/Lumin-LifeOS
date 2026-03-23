@@ -4,6 +4,7 @@
  * ║                    Calls, Emails, Texts, Social Media                           ║
  * ║                    Ready for Monday Sales Launch                                ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_08_OUTREACH_CRM.md
  */
 
 // No imports needed - dependencies passed in constructor

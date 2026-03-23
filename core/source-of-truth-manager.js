@@ -4,6 +4,7 @@
  * ║                    Stores and retrieves system mission, vision, ethics          ║
  * ║                    AI Council and Drones reference this as North Star           ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_13_KNOWLEDGE_BASE.md
  */
 
 export class SourceOfTruthManager {

@@ -3,6 +3,7 @@
  * ║                    ENHANCED FILE EXTRACTOR                                        ║
  * ║                    Robust extraction from multiple AI response formats          ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 /**

@@ -16,6 +16,7 @@
  *   RAILWAY_PUBLIC_DOMAIN — Your app's public URL (e.g. https://lifeos.up.railway.app)
  *
  * Exports: registerTwilioWebhook() → Promise<{ registered, url, error? }>
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 const TWILIO_API_BASE = 'https://api.twilio.com/2010-04-01';

@@ -7,6 +7,7 @@
  * 
  * This router intelligently routes tasks to specialized open source models
  * and implements consensus voting for complex/critical tasks.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 /**

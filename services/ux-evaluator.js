@@ -6,6 +6,7 @@
  * No browser required — evaluates HTML/JS source directly using AI.
  *
  * Exports: createUXEvaluator(deps) → { evaluate, evaluateUserFlow, scoreHeuristics }
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 // Nielsen's 10 Usability Heuristics

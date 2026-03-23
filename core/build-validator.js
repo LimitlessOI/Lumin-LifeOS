@@ -4,6 +4,7 @@
  * ║                    Validates builds before deployment                            ║
  * ║                    Prevents deployment failures                                   ║
  * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import fs from 'fs';
