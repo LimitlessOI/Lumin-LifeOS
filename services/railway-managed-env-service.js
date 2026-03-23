@@ -556,15 +556,7 @@ export function createRailwayManagedEnvService({
       );
     }
 
-    // Step 1: Validate token
-    try {
-      await bGql(`query { me { id name } }`, {});
-      logger.info?.('[RAILWAY-BOOTSTRAP] Token validated');
-    } catch (err) {
-      throw new Error(`Railway token validation failed: ${err.message}`);
-    }
-
-    // Step 2: Push RAILWAY_TOKEN to Railway + update in-memory immediately
+    // Step 1: Push RAILWAY_TOKEN to Railway + update in-memory immediately
     await pushVar('RAILWAY_TOKEN', railwayToken);
     process.env.RAILWAY_TOKEN = railwayToken;
     logger.info?.('[RAILWAY-BOOTSTRAP] RAILWAY_TOKEN pushed to Railway and updated in process.env');

@@ -73,8 +73,15 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       if (!vars || typeof vars !== "object") {
         return res.status(400).json({ ok: false, error: "vars must be an object" });
       }
-      const results = await managedEnvService.upsertDesiredVars(vars, getActor(req));
-      res.json({ ok: results.every((item) => item.ok), results });
+      const actor = getActor(req);
+      // Store encrypted in Neon
+      const stored = await managedEnvService.upsertDesiredVars(vars, actor);
+      // Immediately push to Railway if token is available (best-effort — never blocks)
+      const sync = await managedEnvService.syncDesiredVars({
+        actor,
+        names: Object.keys(vars),
+      }).catch((err) => ({ ok: false, error: err.message }));
+      res.json({ ok: stored.every((item) => item.ok), stored, sync });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }
