@@ -474,9 +474,115 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     return { ok: true, url, screenshots };
   }
 
+  /**
+   * After GLVAR login, navigate to the MLS search portal (FlexMLS or similar).
+   * Must use the same session returned by loginToGLVAR.
+   */
+  async function navigateToMLS(session) {
+    const mlsSelectors = [
+      'a[href*="flexmls"]',
+      'a[href*="paragonrels"]',
+      'a[href*="matrix"]',
+      'a[href*="/mls"]',
+    ];
+
+    let clicked = false;
+    for (const sel of mlsSelectors) {
+      const el = await session.page.$(sel);
+      if (el) { await el.click(); clicked = true; break; }
+    }
+
+    if (!clicked) {
+      clicked = await session.page.evaluate(() => {
+        const links = Array.from(document.querySelectorAll('a'));
+        const el = links.find(l => /\bMLS\b|flexmls|paragon|matrix/i.test(l.textContent));
+        if (el) { el.click(); return true; }
+        return false;
+      });
+    }
+
+    await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+
+    const url = session.page.url();
+    const sp = await screenshotPath('glvar-mls-loaded');
+    await session.page.screenshot({ path: sp });
+    logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] Navigated to MLS');
+    return { ok: true, url, screenshots: [sp] };
+  }
+
+  /**
+   * After GLVAR login, navigate to the member/billing page and scrape dues info.
+   * Returns: { dueItems: [{ description, amount, dueDate, status }], screenshots }
+   */
+  async function checkGLVARDues(session) {
+    const screenshots = [];
+
+    // Try billing/dues/account links in the portal
+    const duesSelectors = [
+      'a[href*="billing"]',
+      'a[href*="dues"]',
+      'a[href*="invoice"]',
+      'a[href*="payment"]',
+      'a[href*="account"]',
+    ];
+
+    let clicked = false;
+    for (const sel of duesSelectors) {
+      const el = await session.page.$(sel);
+      if (el) { await el.click(); clicked = true; break; }
+    }
+
+    if (!clicked) {
+      clicked = await session.page.evaluate(() => {
+        const links = Array.from(document.querySelectorAll('a, button'));
+        const el = links.find(l => /dues|billing|invoice|payment|account/i.test(l.textContent));
+        if (el) { el.click(); return true; }
+        return false;
+      });
+    }
+
+    await session.page.waitForTimeout(2000);
+
+    const sp = await screenshotPath('glvar-dues-page');
+    await session.page.screenshot({ path: sp, fullPage: true });
+    screenshots.push(sp);
+
+    // Scrape any visible due amounts and dates
+    const dueItems = await session.page.evaluate(() => {
+      const rows = Array.from(document.querySelectorAll('table tr, .invoice-row, .billing-row, .dues-item'));
+      return rows.map(row => {
+        const text = row.textContent || '';
+        const amountMatch = text.match(/\$[\d,]+\.?\d{0,2}/);
+        const dateMatch = text.match(/\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b|\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+\d{1,2},?\s+\d{4}\b/i);
+        if (!amountMatch && !dateMatch) return null;
+        return {
+          description: row.querySelector('td:first-child, .description, .name')?.textContent?.trim() || text.substring(0, 80).trim(),
+          amount: amountMatch?.[0] || null,
+          dueDate: dateMatch?.[0] || null,
+          status: row.querySelector('.status, .paid, .unpaid, td:last-child')?.textContent?.trim() || null,
+        };
+      }).filter(Boolean);
+    });
+
+    // Also grab page-level summary text (sometimes dues shown in a header)
+    const summaryText = await session.page.evaluate(() => {
+      const candidates = ['h1','h2','h3','.balance','.amount-due','.total-due'];
+      return candidates.flatMap(sel => Array.from(document.querySelectorAll(sel)))
+        .map(el => el.textContent?.trim())
+        .filter(t => t && /\$|due|balance|owed/i.test(t))
+        .slice(0, 5);
+    });
+
+    const url = session.page.url();
+    logger.info?.({ url, dueItems, screenshots }, '[TC-BROWSER] GLVAR dues scraped');
+    return { ok: true, url, dueItems, summaryText, screenshots };
+  }
+
   return {
     loginToGLVAR,
     navigateToTransactionDesk,
+    navigateToMLS,
+    checkGLVARDues,
     navigateToBoldTrail,
     createTransaction,
     uploadDocument,

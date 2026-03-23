@@ -1370,6 +1370,20 @@ const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationSe
 createTCRoutes(app, { pool, requireKey, coordinator: tcCoordinator, logger });
 startTCDeadlineCron(pool, tcCoordinator);
 
+// GLVAR dues (monthly) + violations (4× daily email scan)
+(async () => {
+  try {
+    const { createGLVARMonitor } = await import('./services/glvar-monitor.js');
+    const { createTCBrowserAgent } = await import('./services/tc-browser-agent.js');
+    const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+    const glvarMonitor = createGLVARMonitor({ pool, tcBrowser, accountManager, notificationService, logger });
+    glvarMonitor.startDuesCron();
+    glvarMonitor.startViolationsCron();
+  } catch (err) {
+    logger.warn?.({ err: err.message }, '[GLVAR-MONITOR] Failed to start');
+  }
+})();
+
 // Self-register Twilio SMS webhook — no manual Twilio console action needed
 // Warm response cache L1 from DB — picks up where last deploy left off
 initCache(pool).catch(() => {});

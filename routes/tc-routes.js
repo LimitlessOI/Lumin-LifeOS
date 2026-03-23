@@ -216,6 +216,120 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
     }
   });
 
+  // ── GLVAR Dues Monitor ────────────────────────────────────────────────────
+
+  // GET /api/v1/tc/glvar/dues — last scraped dues status (no browser needed)
+  router.get('/glvar/dues', requireKey, async (req, res) => {
+    try {
+      const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
+      const monitor = createGLVARMonitor({ pool, logger });
+      const dues = await monitor.getDuesStatus();
+      const overdue  = dues.filter(d => d.daysUntilDue !== null && d.daysUntilDue < 0 && !d.paid_at);
+      const upcoming = dues.filter(d => d.daysUntilDue !== null && d.daysUntilDue >= 0 && d.daysUntilDue <= 30 && !d.paid_at);
+      res.json({ ok: true, dues, overdue, upcoming });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/glvar/check-dues — login, scrape, store, alert if needed
+  router.post('/glvar/check-dues', requireKey, async (req, res) => {
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createAccountManager } = await import('../services/account-manager.js');
+      const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
+      const accountManager = createAccountManager(pool);
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+      const { createNotificationService } = await import('../core/notification-service.js');
+      const notificationService = createNotificationService();
+
+      const monitor = createGLVARMonitor({ pool, tcBrowser, accountManager, notificationService, logger });
+      const result = await monitor.checkDues();
+      res.json(result);
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] check-dues error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/glvar/dues/:id/mark-paid — mark a dues item as paid
+  router.post('/glvar/dues/:id/mark-paid', requireKey, async (req, res) => {
+    try {
+      const { rows } = await pool.query(
+        `UPDATE glvar_dues_log SET paid_at = NOW(), notes = $2 WHERE id = $1 RETURNING *`,
+        [parseInt(req.params.id), req.body?.notes || null]
+      );
+      if (!rows[0]) return res.status(404).json({ ok: false, error: 'Dues entry not found' });
+      res.json({ ok: true, dues: rows[0] });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/glvar/violations — recent violation notices detected
+  router.get('/glvar/violations', requireKey, async (req, res) => {
+    try {
+      const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
+      const monitor = createGLVARMonitor({ pool, logger });
+      const violations = await monitor.getViolationsLog({ limit: parseInt(req.query.limit) || 50 });
+      res.json({ ok: true, count: violations.length, violations });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/glvar/check-violations — run inbox scan now
+  router.post('/glvar/check-violations', requireKey, async (req, res) => {
+    try {
+      const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
+      const { createNotificationService } = await import('../core/notification-service.js');
+      const notificationService = createNotificationService();
+      const monitor = createGLVARMonitor({ pool, notificationService, logger });
+      const result = await monitor.checkViolationEmails();
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/glvar/violations/:id/resolve — mark a violation as resolved
+  router.post('/glvar/violations/:id/resolve', requireKey, async (req, res) => {
+    try {
+      const { rows } = await pool.query(
+        `UPDATE glvar_violations_log SET resolved_at=NOW(), notes=$2 WHERE id=$1 RETURNING *`,
+        [parseInt(req.params.id), req.body?.notes || null]
+      );
+      if (!rows[0]) return res.status(404).json({ ok: false, error: 'Violation not found' });
+      res.json({ ok: true, violation: rows[0] });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/test-glvar-mls — login to GLVAR then navigate to MLS
+  router.post('/test-glvar-mls', requireKey, async (req, res) => {
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createAccountManager } = await import('../services/account-manager.js');
+      const accountManager = createAccountManager(pool);
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+
+      const dryRun = req.body?.dryRun !== false;
+      const loginResult = await tcBrowser.loginToGLVAR(dryRun);
+
+      if (dryRun || !loginResult.ok) {
+        await loginResult.session?.close?.();
+        return res.json({ ok: loginResult.ok, dryRun: true, screenshots: loginResult.screenshots });
+      }
+
+      const navResult = await tcBrowser.navigateToMLS(loginResult.session);
+      await loginResult.session?.close?.();
+      res.json({ ok: true, mlsUrl: navResult.url, screenshots: [...loginResult.screenshots, ...navResult.screenshots] });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   app.use('/api/v1/tc', router);
   logger.info?.('✅ [TC-ROUTES] Mounted at /api/v1/tc');
 }
