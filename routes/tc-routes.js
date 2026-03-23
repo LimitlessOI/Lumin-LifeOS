@@ -186,6 +186,92 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
     }
   });
 
+  // ── Document Intake ───────────────────────────────────────────────────────
+
+  // POST /api/v1/tc/intake/run — search email, find executed RPA, upload to SkySlope
+  router.post('/intake/run', requireKey, async (req, res) => {
+    try {
+      const { days = 90, address, dry_run = true } = req.body || {};
+      const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createAccountManager } = await import('../services/account-manager.js');
+      const accountManager = createAccountManager(pool);
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+      const intake = createTCDocIntake({ pool, tcBrowser, accountManager, logger });
+
+      // Always dry_run=true first for safety unless explicitly set false
+      const result = await intake.runFullIntake({ days, address, dryRun: dry_run !== false });
+      res.json(result);
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] intake/run error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/intake/email-search — just search, don't upload
+  router.post('/intake/email-search', requireKey, async (req, res) => {
+    try {
+      const { days = 90 } = req.body || {};
+      const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createAccountManager } = await import('../services/account-manager.js');
+      const accountManager = createAccountManager(pool);
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+      const intake = createTCDocIntake({ pool, tcBrowser, accountManager, logger });
+      const emails = await intake.findExecutedAgreements({ days });
+      res.json({
+        ok: true,
+        found: emails.length,
+        emails: emails.map(e => ({
+          subject: e.subject, from: e.from, date: e.date,
+          isRPA: e.isRPA, isListing: e.isListing,
+          files: e.files.map(f => ({ filename: f.filename, docType: f.docType, size: f.size })),
+        })),
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] email-search error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/intake/upload — manual file upload (scanned docs, photos)
+  // Send as multipart/form-data with field "document" (file) + "doc_type" + "address"
+  router.post('/intake/upload', requireKey, upload.single('document'), async (req, res) => {
+    const tmpPath = req.file?.path;
+    try {
+      if (!req.file) return res.status(400).json({ ok: false, error: 'No file uploaded. Use multipart field "document"' });
+
+      const docType  = req.body?.doc_type || 'Transaction Document';
+      const address  = req.body?.address  || null;
+      const dryRun   = req.body?.dry_run === 'true';
+
+      logger.info?.({ filename: req.file.originalname, docType, address, dryRun }, '[TC-ROUTES] Manual doc intake');
+
+      if (dryRun) {
+        return res.json({ ok: true, dryRun: true, filename: req.file.originalname, docType, size: req.file.size });
+      }
+
+      const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createAccountManager } = await import('../services/account-manager.js');
+      const accountManager = createAccountManager(pool);
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+      const intake = createTCDocIntake({ pool, tcBrowser, accountManager, logger });
+
+      const result = await intake.uploadToSkySlope(
+        [{ filePath: tmpPath, filename: req.file.originalname, docType }],
+        { address }
+      );
+
+      res.json({ ok: true, filename: req.file.originalname, docType, ...result });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] intake/upload error');
+      res.status(500).json({ ok: false, error: err.message });
+    } finally {
+      if (tmpPath) await fs.unlink(tmpPath).catch(() => {});
+    }
+  });
+
   // POST /api/v1/tc/test-glvar-login — dry-run GLVAR MLS login (screenshots, no form submit)
   router.post('/test-glvar-login', requireKey, async (req, res) => {
     try {
