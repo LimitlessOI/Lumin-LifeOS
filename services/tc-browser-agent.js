@@ -423,9 +423,59 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     return { ok: true, checklist, overallStatus, screenshot: sp };
   }
 
+  /**
+   * After GLVAR login, navigate to BoldTrail (kvCORE) via SSO.
+   * Must use the same session returned by loginToGLVAR.
+   */
+  async function navigateToBoldTrail(session) {
+    const screenshots = [];
+
+    const btSelectors = [
+      'a[href*="boldtrail"]',
+      'a[href*="kvcore"]',
+      'a[href*="boldtrail.com"]',
+    ];
+
+    let clicked = false;
+    for (const sel of btSelectors) {
+      const el = await session.page.$(sel);
+      if (el) {
+        await el.click();
+        clicked = true;
+        break;
+      }
+    }
+
+    if (!clicked) {
+      clicked = await session.page.evaluate(() => {
+        const links = Array.from(document.querySelectorAll('a, button, [role="link"]'));
+        const el = links.find(e => /boldtrail|kvcore/i.test(e.textContent));
+        if (el) { el.click(); return true; }
+        return false;
+      });
+    }
+
+    if (!clicked) {
+      const sp = await screenshotPath('glvar-no-boldtrail-link');
+      await session.page.screenshot({ path: sp, fullPage: true });
+      throw new Error(`BoldTrail link not found on GLVAR portal. Screenshot: ${sp}`);
+    }
+
+    await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+
+    const url = session.page.url();
+    const sp = await screenshotPath('boldtrail-loaded');
+    await session.page.screenshot({ path: sp });
+    screenshots.push(sp);
+
+    logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] Navigated to BoldTrail');
+    return { ok: true, url, screenshots };
+  }
+
   return {
     loginToGLVAR,
     navigateToTransactionDesk,
+    navigateToBoldTrail,
     createTransaction,
     uploadDocument,
     getTransactionStatus,

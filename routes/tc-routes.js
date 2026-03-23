@@ -144,6 +144,32 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
     }
   });
 
+  // POST /api/v1/tc/test-boldtrail — login to GLVAR then navigate to BoldTrail via SSO
+  router.post('/test-boldtrail', requireKey, async (req, res) => {
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createAccountManager } = await import('../services/account-manager.js');
+      const accountManager = createAccountManager(pool);
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+
+      const dryRun = req.body?.dryRun !== false;
+      const loginResult = await tcBrowser.loginToGLVAR(dryRun);
+
+      if (dryRun || !loginResult.ok) {
+        await loginResult.session?.close?.();
+        return res.json({ ok: loginResult.ok, dryRun: true, screenshots: loginResult.screenshots });
+      }
+
+      const navResult = await tcBrowser.navigateToBoldTrail(loginResult.session);
+      await loginResult.session?.close?.();
+
+      res.json({ ok: true, boldTrailUrl: navResult.url, screenshots: [...loginResult.screenshots, ...navResult.screenshots] });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] test-boldtrail error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // POST /api/v1/tc/test-glvar-login — dry-run GLVAR MLS login (screenshots, no form submit)
   router.post('/test-glvar-login', requireKey, async (req, res) => {
     try {
