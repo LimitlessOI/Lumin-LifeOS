@@ -1390,25 +1390,44 @@ registerTwilioWebhook().then(result => {
   }
 }).catch(() => {});
 
-// Self-configure email env vars in Railway if not yet set
-// SMTP_PASS must be set manually (requires Google login) — everything else the system sets itself.
+// Boot seeder — sets every env var the system knows the value for.
+// Uses managed-env service so all changes are encrypted, audited, and persist in Neon.
+// Only writes a var if it isn't already set in process.env (never overwrites live values).
 (async () => {
   try {
-    const needed = {};
-    if (!process.env.EMAIL_PROVIDER) needed.EMAIL_PROVIDER = 'smtp';
-    if (!process.env.EMAIL_FROM)     needed.EMAIL_FROM     = 'lifeOS@hopkinsgroup.org';
-    if (!process.env.SMTP_HOST)      needed.SMTP_HOST      = 'smtp.gmail.com';
-    if (!process.env.SMTP_PORT)      needed.SMTP_PORT      = '587';
-    if (!process.env.SMTP_USER)      needed.SMTP_USER      = 'adam@hopkinsgroup.org';
+    const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN || '';
+    const siteBaseUrl = publicDomain
+      ? (publicDomain.startsWith('http') ? publicDomain : `https://${publicDomain}`)
+      : '';
 
-    if (Object.keys(needed).length > 0) {
-      await setRailwayEnvVars(needed);
-      logger.info({ vars: Object.keys(needed) }, '✅ [SELF-CONFIG] Email env vars set in Railway');
+    const knownVars = {
+      // Email — Postmark is the provider, lifeos@ is the FROM address
+      EMAIL_PROVIDER: { value: 'postmark',                   description: 'Email provider — set by boot seeder' },
+      EMAIL_FROM:     { value: 'lifeOS@hopkinsgroup.org',    description: 'Outreach FROM address — set by boot seeder' },
+      // Site builder — derive from Railway public domain
+      ...(siteBaseUrl && { SITE_BASE_URL: { value: siteBaseUrl, description: 'Preview site base URL — derived from RAILWAY_PUBLIC_DOMAIN' } }),
+      // Signup agent — system email for autonomous account creation
+      GMAIL_SIGNUP_EMAIL: { value: 'lumea.lifeos@gmail.com', description: 'System signup email — set by boot seeder' },
+    };
+
+    const toSet = Object.fromEntries(
+      Object.entries(knownVars).filter(([key]) => !process.env[key])
+    );
+
+    if (Object.keys(toSet).length > 0) {
+      const results = await railwayManagedEnvService.upsertDesiredVars(toSet, 'boot-seeder');
+      const ok = results.filter((r) => r.ok).map((r) => r.envName);
+      const failed = results.filter((r) => !r.ok).map((r) => `${r.envName}: ${r.error}`);
+      if (ok.length)     logger.info({ vars: ok },     '✅ [BOOT-SEEDER] Vars stored in managed-env');
+      if (failed.length) logger.warn({ failed },       '⚠️ [BOOT-SEEDER] Some vars failed');
+      // Push to Railway immediately so this deploy picks them up
+      await railwayManagedEnvService.syncDesiredVars({ actor: 'boot-seeder', names: ok });
+      logger.info({ count: ok.length }, '✅ [BOOT-SEEDER] Known vars pushed to Railway');
     } else {
-      logger.info('[SELF-CONFIG] Email env vars already set — no action needed');
+      logger.info('[BOOT-SEEDER] All known vars already set — no action needed');
     }
   } catch (err) {
-    logger.warn({ error: err.message }, '⚠️ [SELF-CONFIG] Could not set email env vars (non-fatal)');
+    logger.warn({ error: err.message }, '⚠️ [BOOT-SEEDER] Non-fatal error');
   }
 })();
 
