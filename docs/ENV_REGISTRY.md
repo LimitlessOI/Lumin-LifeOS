@@ -1,7 +1,11 @@
-# ENV_REGISTRY.md — Environment Variable SSOT
+# ENV_REGISTRY.md — Environment Variable Registry
+
+**SSOT Position:** This file sits under `docs/SSOT_COMPANION.md § 0.4` as the canonical env var reference.
+Priority: SSOT North Star → SSOT Companion → **This file** → everything else.
 
 **This file is the single source of truth for every environment variable the system uses.**
 Every variable must be listed here. When a new var is added anywhere in the codebase, it goes here first.
+The vault is Railway → Project → Variables. This file is the map.
 
 Legend:
 - ✅ **SET** — confirmed in Railway production

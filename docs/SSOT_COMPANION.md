@@ -34,17 +34,28 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - Repository: GitHub (LimitlessOI/Lumin-LifeOS)
 
 **Live:**
-- Overlay (partial functionality)
-- AI Council routing (Claude, GPT, Gemini, DeepSeek, Grok)
+- AI Council routing (Groq, Gemini, Cerebras — free tier cascade)
+- Token savings engine (CoD, semantic cache, delta context, IR compiler)
 - Memory persistence (PostgreSQL)
+- Autonomy orchestrator (15-min cycle, project backlog driven)
 - MICRO Protocol v2.0
+- Command Center overlay
 
-**Planned/In-Build:**
-- Receptionist
-- CRM Overlay
-- Outbound
-- TotalCostOptimizer (TCO) product
-- MICRO Protocol v3 / LCTP
+**Planned/In-Build (priority order):**
+1. Site Builder + Prospect Pipeline (Amendment 05) — infra done, needs email env vars
+2. Outreach & CRM (Amendment 08)
+3. API Cost Savings Service / TCO (Amendment 10) — case study in progress
+4. Remaining amendments 01–15 in backlog
+
+**Environment Variables:**
+→ Canonical list: `docs/ENV_REGISTRY.md` (master registry, status per var)
+→ Copy-paste template: `.env.railway.example`
+→ Vault: Railway → Project → Variables (never in code or .env files)
+
+**Currently blocking revenue:**
+- `EMAIL_PROVIDER`, `EMAIL_FROM`, `POSTMARK_SERVER_TOKEN` — Site Builder emails dead without these
+- `SITE_BASE_URL` — preview links broken
+- `AFFILIATE_JANE_APP_URL/MINDBODY_URL/SQUARE_URL` — no commission tracking
 
 ---
 
