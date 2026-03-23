@@ -807,14 +807,36 @@ export function createCouncilService({
 
     // Cache lookup happens AFTER member rewrite so the resolved member/model is the key
     if (options.useCache !== false) {
-      const cached = await getCachedResponse(prompt, member);
+      const cached = await getCachedResponse(prompt, member, compressionMetrics);
       if (cached) {
         console.log(`💰 [CACHE HIT] Saved API call for ${member}`);
+        // Fix: track cache hit in both tokenOptimizer and savingsLedger so dashboard is accurate
+        const estimatedTokens = Math.ceil(prompt.length / 4);
+        tokenOptimizer.trackUsage({
+          provider: COUNCIL_MEMBERS[member]?.provider || member,
+          model: COUNCIL_MEMBERS[member]?.model || member,
+          taskType: options.taskType || 'general',
+          inputTokens: 0,
+          outputTokens: 0,
+          savedTokens: estimatedTokens,
+          cacheHit: true,
+          costUSD: 0,
+          savedCostUSD: estimatedTokens * 0.000003,
+        }).catch(() => {});
+        if (savingsLedger) {
+          savingsLedger.record({
+            provider: COUNCIL_MEMBERS[member]?.provider || member,
+            model: COUNCIL_MEMBERS[member]?.model || member,
+            taskType: options.taskType || 'general',
+            originalTokens: estimatedTokens,
+            compressedTokens: 0,
+            outputTokens: 0,
+            savedTokens: estimatedTokens,
+            cacheHit: true,
+            costUSD: 0,
+          }).catch(() => {});
+        }
         return cached;
-      }
-      if (compressionMetrics) {
-        compressionMetrics.cache_misses =
-          (compressionMetrics.cache_misses || 0) + 1;
       }
     }
 
@@ -958,18 +980,28 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       // User + assistant turns recorded after the response via recordSessionTurns.
     }
 
-    // ── max_tokens scoped to taskType — routing needs ≤50 tokens, not 2000 ──
+    // ── max_tokens scoped to taskType — hard caps prevent runaway verbose output ──
     const scopedMaxTokens = (() => {
       if (taskType === 'routing' || taskType === 'classification') return 50;
+      if (taskType === 'validation') return 100;
+      if (taskType === 'health' || taskType === 'status') return 150;
       if (taskType === 'summary') return 300;
+      if (taskType === 'extraction' || taskType === 'json') return 400;
       if (taskType === 'analysis' || taskType === 'review') return 600;
-      return config.maxTokens || 1000;
+      if (taskType === 'planning') return 700;
+      if (taskType === 'codegen' || taskType === 'code') return 1500;
+      return Math.min(config.maxTokens || 800, 800); // default cap: 800 (was 1000)
     })();
 
     const startTime = Date.now();
 
     try {
       let response;
+
+      // Deterministic tasks get temp=0 (shorter, no rambling) + stop sequences
+      const isDeterministic = ['routing','classification','validation','extraction','json','health','status'].includes(taskType);
+      const temperature = isDeterministic ? 0 : 0.7;
+      const stopSequences = isDeterministic ? ['\n\n\n'] : undefined;
 
       if (OPENAI_COMPATIBLE_PROVIDERS.has(config.provider)) {
         response = await fetch(getChatCompletionUrl(config.provider), {
@@ -978,7 +1010,8 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
           body: JSON.stringify({
             model: config.model,
             max_tokens: scopedMaxTokens,
-            temperature: 0.7,
+            temperature,
+            ...(stopSequences && { stop: stopSequences }),
             messages: deltaMessages
               // Always prepend system message — delta window never carries it
               ? [{ role: "system", content: systemPrompt }, ...deltaMessages]
@@ -1091,7 +1124,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             body: JSON.stringify({
               ...geminiBody,
               generationConfig: {
-                temperature: 0.7,
+                temperature,
                 maxOutputTokens: scopedMaxTokens,
               },
             }),

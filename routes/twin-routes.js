@@ -270,14 +270,62 @@ export function createTwinRoutes({ pool, requireKey, callCouncilMember }) {
     }
   });
 
-  // ── Token optimization stats + savings report ─────────────────────────────
-  // GET /api/v1/twin/tokens — today's token savings, cost avoided, recommendations
+  // ── Token savings dashboard — reads from savingsLedger (authoritative source) ─
+  // GET /api/v1/twin/tokens
   router.get('/tokens', requireKey, async (req, res) => {
     try {
-      const { createTokenOptimizer } = await import('../services/token-optimizer.js');
-      const optimizer = createTokenOptimizer(pool);
-      const report = await optimizer.getReport();
-      res.json({ ok: true, ...report });
+      const { createSavingsLedger } = await import('../services/savings-ledger.js');
+      const ledger = createSavingsLedger(pool);
+      const dashboard = await ledger.getDashboard();
+
+      // Top token offenders — which task types / routes burn the most
+      const { rows: offenders } = await pool.query(`
+        SELECT
+          task_type,
+          COUNT(*)                    AS calls,
+          SUM(input_tokens)           AS total_input_tokens,
+          SUM(output_tokens)          AS total_output_tokens,
+          SUM(saved_tokens)           AS saved_tokens,
+          ROUND(AVG(savings_pct),1)   AS avg_savings_pct,
+          COUNT(*) FILTER (WHERE cache_hit) AS cache_hits
+        FROM token_usage_log
+        WHERE logged_at >= NOW() - INTERVAL '24 hours'
+        GROUP BY task_type
+        ORDER BY total_input_tokens DESC
+        LIMIT 10
+      `).catch(() => ({ rows: [] }));
+
+      // True token savings % (separate from cost savings)
+      const today = dashboard?.today || {};
+      const totalCalls = parseInt(today.calls || 0);
+      const cacheHits = parseInt(today.cache_hits || 0);
+      const savedTokens = parseInt(today.saved_tokens || 0);
+      const avgSavingsPct = parseFloat(today.avg_savings_pct || 0);
+
+      res.json({
+        ok: true,
+        source: 'savings-ledger',
+        today: {
+          calls: totalCalls,
+          cacheHits,
+          cacheHitRate: totalCalls > 0 ? `${Math.round(cacheHits/totalCalls*100)}%` : '0%',
+          savedTokens,
+          avgSavingsPct,        // token savings % — the number to track toward 70%
+          freeCalls: parseInt(today.free_calls || 0),
+          costUSD: parseFloat(today.cost_usd || 0),
+          savedCostUSD: parseFloat(today.saved_cost_usd || 0),
+        },
+        month: dashboard?.month,
+        byProvider: dashboard?.byProvider,
+        byLayer: dashboard?.byLayer,
+        topOffenders: offenders,
+        goal: {
+          target: '70% avg token savings',
+          current: `${avgSavingsPct}%`,
+          gap: `${Math.max(0, 70 - avgSavingsPct).toFixed(1)}% to go`,
+          note: 'Token savings % and cost savings % are tracked separately',
+        },
+      });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

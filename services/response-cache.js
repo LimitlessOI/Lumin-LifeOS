@@ -21,7 +21,7 @@ const L1 = new Map();
 // ---------------------------------------------------------------------------
 // Semantic helpers — Jaccard similarity for fuzzy cache matching
 // ---------------------------------------------------------------------------
-const SEMANTIC_THRESHOLD = 0.75;
+const SEMANTIC_THRESHOLD = 0.65; // lowered from 0.75 — catches near-duplicate prompts
 
 function tokenize(text) {
   return text.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter(w => w.length > 2);
@@ -62,6 +62,16 @@ let _warmed = false;
 // ---------------------------------------------------------------------------
 export function hashPrompt(prompt) {
   const normalized = prompt.toLowerCase()
+    // Strip timestamps (10:32am, 2026-03-23T10:32:00Z, Mar 23 2026, etc.)
+    .replace(/\d{4}-\d{2}-\d{2}t\d{2}:\d{2}:\d{2}(\.\d+)?z?/gi, '__TS__')
+    .replace(/\b\d{1,2}:\d{2}(:\d{2})?\s*(am|pm)?\b/gi, '__TIME__')
+    .replace(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+\d{1,2},?\s+\d{4}\b/gi, '__DATE__')
+    .replace(/\b\d{4}-\d{2}-\d{2}\b/g, '__DATE__')
+    // Strip UUIDs and request IDs
+    .replace(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '__UUID__')
+    .replace(/\b[a-z]+_[0-9a-f]{8,}\b/gi, '__ID__')
+    // Strip log noise (numbers that change every call)
+    .replace(/\b\d{10,}\b/g, '__EPOCH__')
     .replace(/\s+/g, ' ')
     .replace(/[^\w\s]/g, '')
     .trim();
