@@ -12,8 +12,7 @@ import {
   initCache as _rcInit,
 } from "./response-cache.js";
 
-// Singleton governor — tracks daily usage across all providers
-const freeTierGovernor = createFreeTierGovernor();
+// Governor is initialized inside createCouncilService with pool (see below)
 
 // Singleton optimizer — tracks token savings across all providers
 const tokenOptimizer = createTokenOptimizer();
@@ -67,6 +66,9 @@ export function createCouncilService({
   notifyCriticalIssue,
   savingsLedger,  // TCO-E01 — injected from server.js
 }) {
+  // Governor with Neon-backed persistence — survives Railway deploys
+  const freeTierGovernor = createFreeTierGovernor({ pool });
+
   // ==================== LCTP v3 COMPRESSION HELPERS ====================
 
   function advancedCompress(text) {

@@ -262,7 +262,7 @@ export function createTwinRoutes({ pool, requireKey, callCouncilMember }) {
   router.get('/free-tier', requireKey, async (req, res) => {
     try {
       const { createFreeTierGovernor } = await import('../services/free-tier-governor.js');
-      const governor = createFreeTierGovernor();
+      const governor = createFreeTierGovernor({ pool });
       const status = await governor.getStatus();
       res.json({ ok: true, ...status });
     } catch (err) {
