@@ -1,54 +1,53 @@
 import express from 'express';
 const router = express.Router();
+const axios = require('axios');
 
-// Extract Bearer token from Authorization header
-const auth = (req, res, next) => {
-  const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  next();
-};
-
-// POST /v1/chat/completions endpoint
-router.post('/v1/chat/completions', auth, (req, res) => {
+router.post('/v1/chat/completions', async (req, res) => {
   try {
-    // Extract request body
-    const { model, messages, temperature, max_tokens } = req.body;
+    // Extract Bearer token from Authorization header
+    const authHeader = req.headers.authorization;
+    const token = authHeader.match(/Bearer (.+)/)[1];
 
-    // Call Ollama API
-    const ollamaUrl = 'http://localhost:11434/api/generate';
-    const ollamaOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, messages, temperature, max_tokens }),
+    // Extract body from request
+    const body = req.body;
+    const { model, messages, temperature, max_tokens } = body;
+
+    // Call Ollama at http://localhost:11434/api/generate
+    const ollamaResponse = await axios.post('http://localhost:11434/api/generate', {
+      model,
+      messages,
+      temperature,
+      max_tokens,
+    });
+
+    // Convert Ollama response to OpenAI format
+    const openAIResponse = {
+      id: ollamaResponse.data.id,
+      object: 'text',
+      created: ollamaResponse.data.created,
+      model: ollamaResponse.data.model,
+      choices: ollamaResponse.data.choices.map((choice) => ({
+        text: choice.text,
+        index: choice.index,
+        logprobs: choice.logprobs,
+        offset: choice.offset,
+        length: choice.length,
+        finish_reason: choice.finish_reason,
+      })),
     };
-    fetch(ollamaUrl, ollamaOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        // Convert Ollama response to OpenAI format
-        const openaiResponse = {
-          id: data.id,
-          object: 'chat.completion',
-          created: data.created,
-          model: 'davinci',
-          choices: [
-            {
-              text: data.text,
-              index: 0,
-              finish_reason: data.finish_reason,
-            },
-          ],
-        };
-        res.json(openaiResponse);
-      })
-      .catch((error) => {
-        res.status(500).json({ error: 'Internal Server Error' });
-      });
+
+    // Return OpenAI response
+    res.json(openAIResponse);
   } catch (error) {
-    res.status(400).json({ error: 'Bad Request' });
+    // Handle errors with proper status codes
+    if (error.response) {
+      res.status(401).json({ error: 'Unauthorized' });
+    } else if (error.request) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.status(500).json({ error: 'Unknown Error' });
+    }
   }
 });
 
-// Export Express router
 export default router;
