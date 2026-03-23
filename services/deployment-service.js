@@ -153,13 +153,16 @@ export function createDeploymentService(deps) {
 
   // ── Railway GraphQL helper ─────────────────────────────────────────────────
   async function railwayGql(query, variables = {}) {
-    if (!RAILWAY_TOKEN) throw new Error('RAILWAY_TOKEN not configured');
+    // Read dynamically — bootstrap can update process.env.RAILWAY_TOKEN at
+    // runtime and it will be picked up immediately without a restart.
+    const token = RAILWAY_TOKEN || process.env.RAILWAY_TOKEN;
+    if (!token) throw new Error('RAILWAY_TOKEN not configured');
 
     const res = await fetch(RAILWAY_GQL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${RAILWAY_TOKEN}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ query, variables }),
     });

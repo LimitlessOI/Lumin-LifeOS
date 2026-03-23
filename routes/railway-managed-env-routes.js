@@ -121,6 +121,41 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
     }
   });
 
+  /**
+   * POST /bootstrap
+   * One-time setup: provide a Railway API token and the system becomes fully
+   * self-managing.  After this call you never need to touch the Railway dashboard
+   * to add env vars again — use POST /bulk instead.
+   *
+   * Body: {
+   *   railway_token:   string   (required) — Railway account API token
+   *   project_id:      string?  — overrides RAILWAY_PROJECT_ID
+   *   service_id:      string?  — overrides RAILWAY_SERVICE_ID
+   *   environment_id:  string?  — overrides RAILWAY_ENVIRONMENT_ID
+   *   vars:            object?  — { KEY: value } — additional vars to store+push
+   * }
+   *
+   * How to get a Railway token:
+   *   railway.app → Account Settings → Tokens → New Token
+   */
+  router.post("/bootstrap", requireKey, async (req, res) => {
+    try {
+      const { railway_token, project_id, service_id, environment_id, vars } = req.body || {};
+      if (!railway_token) {
+        return res.status(400).json({ ok: false, error: "railway_token is required" });
+      }
+      const result = await managedEnvService.bootstrapWithToken(railway_token, {
+        projectId:     project_id,
+        serviceId:     service_id,
+        environmentId: environment_id,
+        vars:          vars || {},
+      });
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.delete("/:name", requireKey, async (req, res) => {
     try {
       const result = await managedEnvService.deleteDesiredVar(req.params.name, getActor(req));

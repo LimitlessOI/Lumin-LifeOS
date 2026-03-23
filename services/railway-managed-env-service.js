@@ -498,6 +498,130 @@ export function createRailwayManagedEnvService({
     return true;
   }
 
+  // ── bootstrapWithToken ────────────────────────────────────────────────────
+  /**
+   * One-time bootstrap: provide a valid Railway API token and this method will:
+   *   1. Validate the token against Railway's API
+   *   2. Push RAILWAY_TOKEN itself to Railway (persists after restart)
+   *   3. Update process.env.RAILWAY_TOKEN in-memory (takes effect immediately)
+   *   4. Store + push any additional vars provided
+   *   5. Sync all existing managed vars from Neon → Railway
+   *
+   * After this call the system is fully self-managing — no manual Railway
+   * dashboard access is ever needed again.
+   *
+   * @param {string} railwayToken  — A valid Railway account API token
+   * @param {object} opts
+   *   @param {string} [opts.projectId]     — Override RAILWAY_PROJECT_ID
+   *   @param {string} [opts.serviceId]     — Override RAILWAY_SERVICE_ID
+   *   @param {string} [opts.environmentId] — Override RAILWAY_ENVIRONMENT_ID
+   *   @param {object} [opts.vars]          — Additional vars to store+push { KEY: value }
+   */
+  async function bootstrapWithToken(railwayToken, {
+    projectId, serviceId, environmentId, vars = {},
+  } = {}) {
+    const pid = projectId || process.env.RAILWAY_PROJECT_ID;
+    const sid = serviceId || process.env.RAILWAY_SERVICE_ID;
+    const eid = environmentId || process.env.RAILWAY_ENVIRONMENT_ID;
+
+    if (!railwayToken) throw new Error('railway_token is required');
+    if (!pid || !sid || !eid) {
+      throw new Error(
+        'projectId, serviceId, and environmentId are required ' +
+        '(or set RAILWAY_PROJECT_ID / RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID in process.env)'
+      );
+    }
+
+    const RAILWAY_GQL = 'https://backboard.railway.app/graphql/v2';
+
+    async function bGql(query, variables = {}) {
+      const res = await fetch(RAILWAY_GQL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${railwayToken}`,
+        },
+        body: JSON.stringify({ query, variables }),
+      });
+      if (!res.ok) throw new Error(`Railway API HTTP ${res.status}: ${res.statusText}`);
+      const json = await res.json();
+      if (json.errors?.length) throw new Error(`Railway GraphQL: ${json.errors[0].message}`);
+      return json.data;
+    }
+
+    async function pushVar(name, value) {
+      return bGql(
+        `mutation SetVar($input: VariableUpsertInput!) { variableUpsert(input: $input) }`,
+        { input: { projectId: pid, environmentId: eid, serviceId: sid, name, value: String(value) } }
+      );
+    }
+
+    // Step 1: Validate token
+    try {
+      await bGql(`query { me { id name } }`, {});
+      logger.info?.('[RAILWAY-BOOTSTRAP] Token validated');
+    } catch (err) {
+      throw new Error(`Railway token validation failed: ${err.message}`);
+    }
+
+    // Step 2: Push RAILWAY_TOKEN to Railway + update in-memory immediately
+    await pushVar('RAILWAY_TOKEN', railwayToken);
+    process.env.RAILWAY_TOKEN = railwayToken;
+    logger.info?.('[RAILWAY-BOOTSTRAP] RAILWAY_TOKEN pushed to Railway and updated in process.env');
+
+    // Step 3: Store + push all provided additional vars
+    const pushed = [];
+    const pushFailed = [];
+
+    if (Object.keys(vars).length) {
+      await upsertDesiredVars(vars, 'bootstrap');
+      for (const [name, rawVal] of Object.entries(vars)) {
+        const value = typeof rawVal === 'object' && rawVal !== null ? rawVal.value : rawVal;
+        if (value === undefined || value === null || value === '') continue;
+        try {
+          await pushVar(name, value);
+          pushed.push(name);
+        } catch (err) {
+          pushFailed.push({ name, error: err.message });
+          logger.warn?.(`[RAILWAY-BOOTSTRAP] Failed to push ${name}: ${err.message}`);
+        }
+      }
+    }
+
+    // Step 4: Sync all existing managed vars from Neon → Railway (now that token works)
+    let syncResult = { ok: true, total: 0, changed: 0 };
+    try {
+      syncResult = await syncDesiredVars({ actor: 'bootstrap' });
+      logger.info?.({ ...syncResult }, '[RAILWAY-BOOTSTRAP] Managed vars synced');
+    } catch (err) {
+      logger.warn?.(`[RAILWAY-BOOTSTRAP] Sync pass failed: ${err.message}`);
+      syncResult = { ok: false, error: err.message };
+    }
+
+    await audit({
+      envName: 'RAILWAY_TOKEN',
+      action: 'bootstrap',
+      actor: 'bootstrap',
+      status: 'ok',
+      details: {
+        varsProvided: Object.keys(vars).length,
+        pushed: pushed.length,
+        pushFailed: pushFailed.length,
+        syncTotal: syncResult.total,
+        syncChanged: syncResult.changed,
+      },
+    });
+
+    return {
+      ok: true,
+      message: 'Bootstrap complete. Railway token set, managed vars synced. System is now self-managing.',
+      tokenSet: true,
+      varsPushed: pushed,
+      varsFailed: pushFailed,
+      sync: syncResult,
+    };
+  }
+
   return {
     ensureSchema,
     isAllowedName,
@@ -513,6 +637,7 @@ export function createRailwayManagedEnvService({
     getStatus,
     startScheduler,
     stopScheduler,
+    bootstrapWithToken,
   };
 }
 
