@@ -27,9 +27,9 @@ export const PLAN_DETAILS = {
   [PLANS.FOUNDING]: {
     label:          'Founding Member',
     setup_fee:      500,
-    monthly_fee:    50,
+    monthly_fee:    249,
     closing_fee:    0,     // included in monthly — no extra per deal
-    description:    'Beta rate locked forever. $500 setup + $50/month.',
+    description:    'Lock in $249/month forever. $500 one-time setup. Rate never increases — founding members keep this price for life.',
     beta_only:      true,
   },
   [PLANS.MONTHLY]: {

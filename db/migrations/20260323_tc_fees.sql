@@ -49,7 +49,7 @@ ALTER TABLE tc_transactions
 CREATE TABLE IF NOT EXISTS tc_pricing_config (
   id                    INT  PRIMARY KEY DEFAULT 1,
   founding_setup_fee    NUMERIC(8,2) NOT NULL DEFAULT 500,
-  founding_monthly_fee  NUMERIC(8,2) NOT NULL DEFAULT 50,
+  founding_monthly_fee  NUMERIC(8,2) NOT NULL DEFAULT 249,
   monthly_fee           NUMERIC(8,2) NOT NULL DEFAULT 149,
   per_tx_fee            NUMERIC(8,2) NOT NULL DEFAULT 349,
   beta_open             BOOLEAN      NOT NULL DEFAULT true,  -- false = founding plan no longer offered
