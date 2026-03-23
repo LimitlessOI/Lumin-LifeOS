@@ -1,51 +1,39 @@
 import express from 'express';
 const router = express.Router();
-const axios = require('axios');
+import axios from 'axios';
 
 router.post('/v1/chat/completions', async (req, res) => {
   try {
     // Extract Bearer token from Authorization header
-    const authHeader = req.headers.authorization;
-    const token = authHeader.match(/Bearer (.+)/)[1];
-
-    // Extract body from request
-    const body = req.body;
-    const { model, messages, temperature, max_tokens } = body;
-
+    const token = req.header('Authorization').replace('Bearer ', '');
+    
+    // Accept body: { model, messages, temperature, max_tokens }
+    const { model, messages, temperature, max_tokens } = req.body;
+    
     // Call Ollama at http://localhost:11434/api/generate
-    const ollamaResponse = await axios.post('http://localhost:11434/api/generate', {
+    const response = await axios.post('http://localhost:11434/api/generate', {
       model,
       messages,
       temperature,
-      max_tokens,
+      max_tokens
     });
-
-    // Convert Ollama response to OpenAI format
-    const openAIResponse = {
-      id: ollamaResponse.data.id,
-      object: 'text',
-      created: ollamaResponse.data.created,
-      model: ollamaResponse.data.model,
-      choices: ollamaResponse.data.choices.map((choice) => ({
-        text: choice.text,
-        index: choice.index,
-        logprobs: choice.logprobs,
-        offset: choice.offset,
-        length: choice.length,
-        finish_reason: choice.finish_reason,
-      })),
+    
+    // Convert Ollama response to OpenAI format with id, object, created, model, choices array
+    const openaiResponse = {
+      id: response.data.id,
+      object: 'text_completion',
+      created: response.data.created,
+      model: response.data.model,
+      choices: response.data.choices
     };
-
-    // Return OpenAI response
-    res.json(openAIResponse);
+    
+    res.json(openaiResponse);
   } catch (error) {
     // Handle errors with proper status codes
-    if (error.response) {
-      res.status(401).json({ error: 'Unauthorized' });
-    } else if (error.request) {
-      res.status(500).json({ error: 'Internal Server Error' });
+    if (error.code === 'ECONNREFUSED') {
+      res.status(503).json({ error: 'Service unavailable' });
     } else {
-      res.status(500).json({ error: 'Unknown Error' });
+      res.status(400).json({ error: 'Invalid request' });
     }
   }
 });
