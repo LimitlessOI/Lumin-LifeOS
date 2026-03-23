@@ -1384,6 +1384,17 @@ startTCDeadlineCron(pool, tcCoordinator);
   }
 })();
 
+// Email triage — scans inbox every 30 min, daily digest at 7am
+(async () => {
+  try {
+    const { createEmailTriage } = await import('./services/email-triage.js');
+    const emailTriage = createEmailTriage({ pool, notificationService, callCouncilMember, logger });
+    emailTriage.startTriageCron();
+  } catch (err) {
+    logger.warn?.({ err: err.message }, '[EMAIL-TRIAGE] Failed to start');
+  }
+})();
+
 // Self-register Twilio SMS webhook — no manual Twilio console action needed
 // Warm response cache L1 from DB — picks up where last deploy left off
 initCache(pool).catch(() => {});

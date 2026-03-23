@@ -306,6 +306,54 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
     }
   });
 
+  // ── Email Triage ──────────────────────────────────────────────────────────
+
+  // GET /api/v1/tc/email/triage — get triaged emails (filterable)
+  router.get('/email/triage', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const triage = createEmailTriage({ pool, logger });
+      const { category, action_required, limit, since } = req.query;
+      const items = await triage.getTriagedEmails({
+        category,
+        actionRequired: action_required === 'true' ? true : action_required === 'false' ? false : undefined,
+        limit: parseInt(limit) || 50,
+        since,
+      });
+      const unactioned = items.filter(i => i.action_required && !i.actioned_at);
+      res.json({ ok: true, count: items.length, unactioned: unactioned.length, items });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/email/scan — trigger inbox scan now
+  router.post('/email/scan', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const { createNotificationService } = await import('../core/notification-service.js');
+      const notificationService = createNotificationService();
+      const triage = createEmailTriage({ pool, notificationService, callCouncilMember, logger });
+      const result = await triage.scanInbox();
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/email/triage/:id/action — mark an email as handled
+  router.post('/email/triage/:id/action', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const triage = createEmailTriage({ pool, logger });
+      const item = await triage.markActioned(parseInt(req.params.id), req.body?.notes || null);
+      if (!item) return res.status(404).json({ ok: false, error: 'Email not found' });
+      res.json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // POST /api/v1/tc/test-glvar-mls — login to GLVAR then navigate to MLS
   router.post('/test-glvar-mls', requireKey, async (req, res) => {
     try {
