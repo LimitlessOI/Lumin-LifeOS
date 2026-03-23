@@ -58,7 +58,12 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
   // POST /api/v1/tc/transactions — manually create a transaction
   router.post('/transactions', requireKey, async (req, res) => {
     try {
-      const { address, mls_number, purchase_price, agent_role, acceptance_date, close_date, parties } = req.body || {};
+      const {
+        address, mls_number, purchase_price, agent_role, acceptance_date, close_date, parties,
+        // fee fields
+        waive_setup = false, setup_fee, closing_fee, closing_fee_note,
+        client_name, client_email, client_phone,
+      } = req.body || {};
       if (!address) return res.status(400).json({ ok: false, error: 'address is required' });
 
       const { computeKeyDates } = (await import('../services/tc-email-monitor.js')).createTCEmailMonitor?.({}) || {};
@@ -74,7 +79,18 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
       });
       await coordinator.logEvent(row.id, 'created', { source: 'manual_api' });
 
-      res.json({ ok: true, transaction: row });
+      // Apply TC fees
+      const { createTCPricing } = await import('../services/tc-pricing.js');
+      const pricing = createTCPricing({ pool, logger });
+      const fees = await pricing.applyToTransaction(row.id, {
+        waivedSetup: !!waive_setup,
+        customSetupFee:   setup_fee   != null ? parseFloat(setup_fee)   : undefined,
+        customClosingFee: closing_fee != null ? parseFloat(closing_fee) : undefined,
+        closingFeeNote: closing_fee_note,
+        clientName: client_name, clientEmail: client_email, clientPhone: client_phone,
+      });
+
+      res.json({ ok: true, transaction: { ...row, ...fees } });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
@@ -212,6 +228,107 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
       res.json({ ok: true, skySlopeUrl: navResult.url, screenshots: [...loginResult.screenshots, ...navResult.screenshots] });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] test-skyslope-login error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── TC Fees ───────────────────────────────────────────────────────────────
+
+  async function getPricing() {
+    const { createTCPricing } = await import('../services/tc-pricing.js');
+    return createTCPricing({ pool, logger });
+  }
+
+  // GET /api/v1/tc/fees/config — current default pricing
+  router.get('/fees/config', requireKey, async (req, res) => {
+    try {
+      const pricing = await getPricing();
+      const config = await pricing.getConfig();
+      res.json({ ok: true, config });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PATCH /api/v1/tc/fees/config — update default pricing
+  router.patch('/fees/config', requireKey, async (req, res) => {
+    try {
+      const { default_setup_fee, default_closing_fee, waive_setup_allowed, min_closing_fee, notes } = req.body || {};
+      const pricing = await getPricing();
+      const config = await pricing.updateConfig({
+        defaultSetupFee:   default_setup_fee   != null ? parseFloat(default_setup_fee)   : undefined,
+        defaultClosingFee: default_closing_fee  != null ? parseFloat(default_closing_fee) : undefined,
+        waiveSetupAllowed: waive_setup_allowed  != null ? !!waive_setup_allowed           : undefined,
+        minClosingFee:     min_closing_fee      != null ? parseFloat(min_closing_fee)     : undefined,
+        notes,
+      });
+      res.json({ ok: true, config });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/fees/summary — totals: earned, pending, outstanding
+  router.get('/fees/summary', requireKey, async (req, res) => {
+    try {
+      const pricing = await getPricing();
+      const [summary, outstanding] = await Promise.all([
+        pricing.getFeeSummary(),
+        pricing.getOutstandingFees(),
+      ]);
+      res.json({ ok: true, summary, outstanding });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PATCH /api/v1/tc/transactions/:id/fees — update fees on an existing transaction
+  router.patch('/transactions/:id/fees', requireKey, async (req, res) => {
+    try {
+      const { waive_setup, setup_fee, closing_fee, closing_fee_note, client_name, client_email, client_phone } = req.body || {};
+      const pricing = await getPricing();
+      const fees = await pricing.applyToTransaction(parseInt(req.params.id), {
+        waivedSetup:      waive_setup  != null ? !!waive_setup                            : undefined,
+        customSetupFee:   setup_fee    != null ? parseFloat(setup_fee)                    : undefined,
+        customClosingFee: closing_fee  != null ? parseFloat(closing_fee)                  : undefined,
+        closingFeeNote: closing_fee_note,
+        clientName: client_name, clientEmail: client_email, clientPhone: client_phone,
+      });
+      if (!fees) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      res.json({ ok: true, fees });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/fees/collect — mark closing fee collected
+  router.post('/transactions/:id/fees/collect', requireKey, async (req, res) => {
+    try {
+      const { amount_collected, notes } = req.body || {};
+      const pricing = await getPricing();
+      const tx = await pricing.markCollected(parseInt(req.params.id), {
+        amountCollected: amount_collected ? parseFloat(amount_collected) : undefined,
+        notes,
+      });
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      await pool.query(
+        `INSERT INTO tc_transaction_events (transaction_id, event_type, payload) VALUES ($1,'fee_collected',$2)`,
+        [tx.id, JSON.stringify({ amount: amount_collected, notes })]
+      ).catch(() => {});
+      res.json({ ok: true, transaction: tx });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/fees/statement — plain-text fee statement
+  router.get('/transactions/:id/fees/statement', requireKey, async (req, res) => {
+    try {
+      const pricing = await getPricing();
+      const statement = await pricing.generateFeeStatement(parseInt(req.params.id));
+      if (!statement) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      res.type('text/plain').send(statement);
+    } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
   });
