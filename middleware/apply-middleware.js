@@ -24,10 +24,20 @@ export function applyMiddleware(app, {
   app.use(express.static(path.join(__dirname, "public")));
 
   // ==================== RATE LIMITING ====================
+  // Authenticated admin requests (valid x-command-key) are never rate-limited.
+  const KEY_HEADERS = ["x-command-key", "x-command-center-key", "x-lifeos-key", "x-api-key"];
+  function isAuthenticatedAdmin(req) {
+    const configured = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY;
+    if (!configured) return false;
+    const provided = KEY_HEADERS.map(h => req.headers[h]).find(Boolean);
+    return provided === configured;
+  }
+
   // General API rate limiter: 100 requests per 15 minutes per IP
   const generalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // limit each IP to 100 requests per windowMs
+    skip: isAuthenticatedAdmin,
     message: { ok: false, error: "Too many requests, please try again later." },
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
@@ -37,6 +47,7 @@ export function applyMiddleware(app, {
   const aiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 20, // limit each IP to 20 requests per windowMs
+    skip: isAuthenticatedAdmin,
     message: { ok: false, error: "Too many AI requests, please try again later." },
     standardHeaders: true,
     legacyHeaders: false,
