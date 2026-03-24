@@ -97,6 +97,7 @@ export function createFreeTierGovernor({ pool = null } = {}) {
   // In-memory cache of today's state — refreshed from Neon on day change
   let cachedDate = null;
   let cachedState = null; // { [providerKey]: { requests, tokens, exhaustedAt, last429At } }
+  let _loadPromise = null; // mutex — prevents concurrent Neon loads logging "New day" N times
 
   // RPM sliding window — in-memory only (per-minute, no need to persist)
   const lastRpmCheck = {}; // providerKey → { count, windowStart }
@@ -178,20 +179,23 @@ export function createFreeTierGovernor({ pool = null } = {}) {
     // Return cached if same day
     if (cachedDate === today && cachedState) return cachedState;
 
-    // New day or first load — fetch from Neon
-    const neonState = await loadFromNeon(today);
-    cachedDate = today;
-    cachedState = {};
+    // Mutex: if a load is already in flight, wait for it instead of firing another
+    if (_loadPromise) return _loadPromise;
 
-    for (const key of PROVIDER_PRIORITY) {
-      cachedState[key] = neonState?.[key] || emptyProviderState();
-    }
+    _loadPromise = (async () => {
+      const neonState = await loadFromNeon(today);
+      cachedDate = today;
+      cachedState = {};
+      for (const key of PROVIDER_PRIORITY) {
+        cachedState[key] = neonState?.[key] || emptyProviderState();
+      }
+      if (neonState && Object.keys(neonState).length === 0) {
+        console.log(`[FREE-TIER] New day (${today}) — fresh counters`);
+      }
+      return cachedState;
+    })().finally(() => { _loadPromise = null; });
 
-    if (neonState && Object.keys(neonState).length === 0) {
-      console.log(`[FREE-TIER] New day (${today}) — fresh counters`);
-    }
-
-    return cachedState;
+    return _loadPromise;
   }
 
   function patchCache(providerKey, patch) {

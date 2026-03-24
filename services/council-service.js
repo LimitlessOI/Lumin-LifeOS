@@ -68,11 +68,14 @@ export function createCouncilService({
   const tokenOptimizer = createTokenOptimizer(pool);
   const freeTierGovernor = createFreeTierGovernor({ pool });
 
-  // Startup Ollama ping — pre-mark exhausted before first call so nothing gets routed there
-  // Runs async immediately; result cached in _exhaustedProviders for this session
+  // Startup Ollama ping — skip entirely if OLLAMA_ENDPOINT is not set or disabled
   const _exhaustedProviders = new Set();
   (async () => {
-    const endpoint = OLLAMA_ENDPOINT || 'http://localhost:11434';
+    const endpoint = OLLAMA_ENDPOINT;
+    if (!endpoint || endpoint === 'disabled' || endpoint === 'none') {
+      _exhaustedProviders.add('ollama');
+      return; // silent — no Ollama configured
+    }
     try {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), 3000);
@@ -82,7 +85,7 @@ export function createCouncilService({
       console.log(`✅ [COUNCIL] Ollama reachable at ${endpoint}`);
     } catch {
       _exhaustedProviders.add('ollama');
-      console.log(`🔌 [COUNCIL] Ollama unreachable at startup — excluded from routing`);
+      console.log(`🔌 [COUNCIL] Ollama not available — excluded from routing`);
     }
   })();
 

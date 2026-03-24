@@ -47,14 +47,16 @@ export async function checkNodeModule(moduleName) {
 }
 
 export async function fetchOllamaModels(endpoint) {
-  if (!endpoint) {
+  // Skip entirely if not configured or explicitly disabled
+  const ep = endpoint || process.env.OLLAMA_ENDPOINT;
+  if (!ep || ep === 'disabled' || ep === 'none') {
     return { endpoint: null, available: false, models: [] };
   }
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 1500);
   try {
-    const response = await fetch(`${endpoint}/api/tags`, {
+    const response = await fetch(`${ep}/api/tags`, {
       signal: controller.signal,
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -62,10 +64,13 @@ export async function fetchOllamaModels(endpoint) {
     const models = Array.isArray(data.models)
       ? data.models.map((m) => m.name || m.model || "")
       : [];
-    return { endpoint, available: true, models };
+    return { endpoint: ep, available: true, models };
   } catch (error) {
-    console.warn("[TOOLS STATUS] Ollama fetch failed:", error.message);
-    return { endpoint, available: false, models: [] };
+    // Only log if someone actually configured an endpoint — not for the default localhost guess
+    if (endpoint) {
+      console.warn("[TOOLS STATUS] Ollama fetch failed:", error.message);
+    }
+    return { endpoint: ep, available: false, models: [] };
   } finally {
     clearTimeout(timeoutId);
   }
