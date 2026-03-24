@@ -1,63 +1,52 @@
 import express from 'express';
 const router = express.Router();
 
-// Define the POST /v1/chat/completions endpoint
-router.post('/v1/chat/completions', async (req, res) => {
-  // Extract Bearer token from Authorization header
-  const token = req.header('Authorization').replace('Bearer ', '');
-
-  // Check if token is valid
+// Extract Bearer token from Authorization header
+const authenticate = async (req, res, next) => {
+  const token = req.headers.authorization;
   if (!token) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    res.status(401).send({ error: 'Unauthorized' });
+  } else {
+    next();
   }
+};
 
-  // Extract request body
+// POST /v1/chat/completions endpoint
+router.post('/v1/chat/completions', authenticate, async (req, res) => {
   const { model, messages, temperature, max_tokens } = req.body;
 
-  // Check if required fields are present
-  if (!model || !messages || !temperature || !max_tokens) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
-
-  // Call Ollama API at http://localhost:11434/api/generate
   try {
+    // Call Ollama at http://localhost:11434/api/generate
     const response = await fetch('http://localhost:11434/api/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        model,
-        messages,
-        temperature,
-        max_tokens,
-      }),
+      body: JSON.stringify({ model, messages, temperature, max_tokens }),
     });
 
     // Convert Ollama response to OpenAI format
-    const ollamaResponse = await response.json();
+    const data = await response.json();
     const openaiResponse = {
-      id: ollamaResponse.id,
-      object: 'text_completion',
-      created: ollamaResponse.created,
-      model: ollamaResponse.model,
-      choices: ollamaResponse.choices.map((choice) => ({
-        text: choice.text,
-        finish_reason: choice.finish_reason,
-      })),
+      id: data.id,
+      object: 'completion',
+      created: data.created,
+      model: data.model,
+      choices: data.choices,
     };
 
-    // Return OpenAI response
+    // Send response
     res.json(openaiResponse);
   } catch (error) {
     // Handle errors with proper status codes
-    if (error.code === 'ECONNREFUSED') {
-      return res.status(502).json({ error: 'Bad Gateway' });
+    console.error(error);
+    if (error.status === 500) {
+      res.status(500).send({ error: 'Internal Server Error' });
     } else {
-      return res.status(500).json({ error: 'Internal Server Error' });
+      res.status(error.status).send({ error: error.message });
     }
   }
 });
 
-export default router;
+// Export router
+module.exports = router;
