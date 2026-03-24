@@ -1,56 +1,59 @@
 import express from 'express';
 const router = express.Router();
 
-// Extract Bearer token from Authorization header
-const authenticate = async (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  if (!authHeader) return res.status(401).send({ error: 'Unauthorized' });
+const ollamaUrl = 'http://localhost:11434/api/generate';
+
+router.post('/v1/chat/completions', async (req, res) => {
+  const authHeader = req.header('Authorization');
   const token = authHeader.split(' ')[1];
-  // Verify token here (e.g., with OpenAI API)
-  req.token = token;
-  next();
-};
 
-// POST /v1/chat/completions endpoint
-router.post('/v1/chat/completions', authenticate, async (req, res) => {
+  const body = req.body;
+  const { model, messages, temperature, max_tokens } = body;
+
+  if (!token) {
+    return res.status(401).send({ error: 'Unauthorized' });
+  }
+
+  if (!model || !messages || !temperature || !max_tokens) {
+    return res.status(400).send({ error: 'Invalid request body' });
+  }
+
   try {
-    // Extract request body
-    const { model, messages, temperature, max_tokens } = req.body;
-
-    // Call Ollama at http://localhost:11434/api/generate
-    const response = await fetch('http://localhost:11434/api/generate', {
+    const response = await fetch(ollamaUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${req.token}`,
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ model, messages, temperature, max_tokens }),
+      body: JSON.stringify({
+        model,
+        messages,
+        temperature,
+        max_tokens,
+      }),
     });
 
-    // Convert Ollama response to OpenAI format
     const data = await response.json();
     const openaiResponse = {
       id: data.id,
       object: 'text_completion',
-      generated_text: data.choices[0].text,
       created: data.created,
-      model: data.model,
-      choices: data.choices,
+      model,
+      choices: [
+        {
+          text: data.choices[0].text,
+          index: 0,
+          logprobs: null,
+          finish_reason: data.choices[0].finish_reason,
+        },
+      ],
     };
 
-    // Return response in OpenAI format
-    res.send(openaiResponse);
+    res.json(openaiResponse);
   } catch (error) {
-    // Handle errors with proper status codes
-    if (error.status === 401) {
-      res.status(401).send({ error: 'Unauthorized' });
-    } else if (error.status === 500) {
-      res.status(500).send({ error: 'Internal Server Error' });
-    } else {
-      res.status(500).send({ error: 'Unknown Error' });
-    }
+    console.error(error);
+    res.status(500).send({ error: 'Internal Server Error' });
   }
 });
 
-// Export the router
 export default router;
