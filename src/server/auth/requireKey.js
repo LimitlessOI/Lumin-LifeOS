@@ -16,6 +16,10 @@ export function createRequireKey(options = {}) {
 
   return function requireKeyMiddleware(req, res, next) {
     try {
+      // Open access mode — set LIFEOS_OPEN_ACCESS=true in Railway to bypass auth for testing.
+      // Remove this env var when done testing.
+      if (process.env.LIFEOS_OPEN_ACCESS === 'true') return next();
+
       const configuredValues = envVars
         .map((name) => process.env[name])
         .filter(Boolean);
