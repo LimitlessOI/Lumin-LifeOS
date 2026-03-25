@@ -1,6 +1,6 @@
 # LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT
 ## Zero-Context Operational Manual + Enforcement Contract
-**Version:** 2026-01-08 (FINAL)  
+**Version:** 2026-03-25 (TC + Amendment Hygiene)  
 **Status:** CANONICAL COMPANION (SSOT-adjacent)  
 **Purpose:** Ensure any AI can operate with zero prior exposure without drift or hallucinations.
 
@@ -37,25 +37,32 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - AI Council routing (Groq, Gemini, Cerebras — free tier cascade)
 - Token savings engine (CoD, semantic cache, delta context, IR compiler)
 - Memory persistence (PostgreSQL)
-- Autonomy orchestrator (15-min cycle, project backlog driven)
-- MICRO Protocol v2.0
-- Command Center overlay
+- Command Center overlay / operator control surface
+- Managed Railway env sync + deployment controls
+- TC core runtime wiring: inbox intake, deadline reminders, GLVAR monitoring, SkySlope/BoldTrail browser paths, pricing/fees
 
-**Planned/In-Build (priority order):**
-1. Site Builder + Prospect Pipeline (Amendment 05) — infra done, needs email env vars
-2. Outreach & CRM (Amendment 08)
-3. API Cost Savings Service / TCO (Amendment 10) — case study in progress
-4. Remaining amendments 01–15 in backlog
+**Active Build Priority:**
+1. TC Service / Transaction Coordinator (Amendment 17) — active revenue priority
+2. API Cost Savings Service / TCO (Amendment 10) — productization and verified savings
+3. BoldTrail / real estate agent workflow systems (Amendment 11)
+4. Remaining amendments continue only when they support the active revenue lane or are required infrastructure
 
 **Environment Variables:**
 → Canonical list: `docs/ENV_REGISTRY.md` (master registry, status per var)
 → Copy-paste template: `.env.railway.example`
 → Vault: Railway → Project → Variables (never in code or .env files)
 
-**Currently blocking revenue:**
-- `EMAIL_PROVIDER`, `EMAIL_FROM`, `POSTMARK_SERVER_TOKEN` — Site Builder emails dead without these
-- `SITE_BASE_URL` — preview links broken
-- `AFFILIATE_JANE_APP_URL/MINDBODY_URL/SQUARE_URL` — no commission tracking
+**Current revenue blockers / build-critical gaps:**
+- TC portal / status engine / client communication layer not yet live
+- TC document completeness / compliance QA not yet live
+- Official MLS feed/API must be reconnected for market reporting and offer intelligence
+- Provider savings math must stay evidence-backed before product claims
+
+## 0.5 Amendment Hygiene Rule (NEW)
+- Every meaningful product/system/code change must update the correct project amendment in `docs/projects/` before the work is considered done.
+- If a change affects shared platform behavior, also update this Companion and, when relevant, `docs/projects/INDEX.md` and `docs/CONTINUITY_LOG.md`.
+- If an idea grows into its own product/subsystem with its own mission, revenue path, technical surface, or non-negotiables, create a new amendment instead of burying it in chat history.
+- Brainstorms, raw notes, and conversation dumps are not authoritative until promoted into the relevant amendment.
 
 ---
 

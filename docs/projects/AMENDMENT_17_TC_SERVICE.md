@@ -60,6 +60,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/email-triage.js` | Inbox scanner — classifies TC contracts, flags for immediate action |
 | `services/mls-deal-scanner.js` | AI deal scoring, investor criteria matching, offer drafting |
 | `services/tc-imap-config.js` | Canonical IMAP resolver shared by TC intake, triage, and GLVAR monitor |
+| `services/tc-status-engine.js` | Computes derived file stage, health, next action, blockers, and portal-ready status views |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `db/migrations/20260322_tc_transactions.sql` | Core transactions table |
@@ -111,7 +112,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
   - what issue needs escalation now?
 
 ### File State Model (must be computed, not manual)
-- `stage` — current transaction stage
+- `stage` — current transaction stage (now implemented in code via `services/tc-status-engine.js`)
 - `health_status` — `green | yellow | red`
 - `next_action`
 - `next_action_owner`

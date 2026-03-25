@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-routes.js
  * Transaction Coordinator API endpoints.
  *
@@ -10,6 +11,7 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs/promises';
+import { createTCStatusEngine } from '../services/tc-status-engine.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 
@@ -26,6 +28,7 @@ export function createTCRoutes(
   } = {}
 ) {
   const router = express.Router();
+  const statusEngine = createTCStatusEngine();
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -51,7 +54,30 @@ export function createTCRoutes(
   router.get('/dashboard', requireKey, async (req, res) => {
     try {
       const data = await coordinator.getDashboard();
-      res.json({ ok: true, ...data });
+      const activeRows = await pool.query(
+        `SELECT id FROM tc_transactions WHERE status IN ('active','pending') ORDER BY close_date ASC NULLS LAST LIMIT 25`
+      );
+      const reports = await Promise.all(activeRows.rows.map((row) => coordinator.generateStatusReport(row.id)));
+      const validReports = reports.filter(Boolean);
+      const portfolioHealth = {
+        green: validReports.filter((item) => item.health_status === 'green').length,
+        yellow: validReports.filter((item) => item.health_status === 'yellow').length,
+        red: validReports.filter((item) => item.health_status === 'red').length,
+      };
+      const attention = validReports
+        .filter((item) => item.health_status !== 'green' || item.blocker_count > 0)
+        .slice(0, 10)
+        .map((item) => ({
+          transaction_id: item.transaction.id,
+          address: item.transaction.address,
+          stage: item.stage,
+          health_status: item.health_status,
+          next_action: item.next_action,
+          blocker_count: item.blocker_count,
+          missing_doc_count: item.missing_doc_count,
+        }));
+
+      res.json({ ok: true, ...data, portfolioHealth, attention });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] dashboard error');
       res.status(500).json({ ok: false, error: err.message });
@@ -62,6 +88,7 @@ export function createTCRoutes(
   router.get('/transactions', requireKey, async (req, res) => {
     try {
       const status = req.query.status || null;
+      const includeStatus = String(req.query.includeStatus || 'false').toLowerCase() === 'true';
       const limit = Math.min(parseInt(req.query.limit) || 50, 200);
       const where = status ? 'WHERE status=$1' : '';
       const params = status ? [status] : [];
@@ -69,7 +96,20 @@ export function createTCRoutes(
         `SELECT * FROM tc_transactions ${where} ORDER BY close_date ASC NULLS LAST LIMIT ${limit}`,
         params
       );
-      res.json({ ok: true, transactions: rows, count: rows.length });
+
+      if (!includeStatus) {
+        return res.json({ ok: true, transactions: rows, count: rows.length });
+      }
+
+      const transactions = await Promise.all(rows.map(async (transaction) => {
+        const events = await coordinator.getTransactionEvents(transaction.id, 20);
+        return {
+          ...transaction,
+          status_summary: statusEngine.deriveTransactionState({ transaction, events }),
+        };
+      }));
+
+      res.json({ ok: true, transactions, count: transactions.length, includeStatus: true });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
@@ -81,6 +121,18 @@ export function createTCRoutes(
       const report = await coordinator.generateStatusReport(parseInt(req.params.id));
       if (!report) return res.status(404).json({ ok: false, error: 'Transaction not found' });
       res.json({ ok: true, ...report });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/status — derived at-a-glance file state for portal views
+  router.get('/transactions/:id/status', requireKey, async (req, res) => {
+    try {
+      const report = await coordinator.generateStatusReport(parseInt(req.params.id));
+      if (!report) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const { transaction, recentEvents, ...statusView } = report;
+      res.json({ ok: true, transaction: { id: transaction.id, address: transaction.address, status: transaction.status, agent_role: transaction.agent_role }, status: statusView, recentEvents });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

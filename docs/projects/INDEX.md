@@ -1,5 +1,5 @@
 # PROJECT AMENDMENTS INDEX
-**Last Updated:** 2026-03-13
+**Last Updated:** 2026-03-25
 **Parent:** SSOT North Star Constitution (`docs/SSOT_NORTH_STAR.md`)
 **Authority:** All amendments subordinate to the North Star Constitution
 
@@ -26,8 +26,8 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 07 | [Video Pipeline](AMENDMENT_07_VIDEO_PIPELINE.md) | BUILDING | Medium-term | High |
 | 08 | [Outreach & CRM](AMENDMENT_08_OUTREACH_CRM.md) | LIVE (partial) | **#2 — Feeds Site Builder** | High |
 | 09 | [Life Coaching / Personal OS](AMENDMENT_09_LIFE_COACHING.md) | LIVE (local) | Subscription MRR | High |
-| 10 | [API Cost Savings Service](AMENDMENT_10_API_COST_SAVINGS.md) | LIVE | **#3 — B2B SaaS** | Medium |
-| 11 | [BoldTrail Real Estate CRM](AMENDMENT_11_BOLDTRAIL_REALESTATE.md) | LIVE | Per-agent subscription | Medium |
+| 10 | [API Cost Savings Service](AMENDMENT_10_API_COST_SAVINGS.md) | IN_BUILD | **#2 — Verified savings product** | Medium |
+| 11 | [BoldTrail Real Estate CRM](AMENDMENT_11_BOLDTRAIL_REALESTATE.md) | BUILDING | Real-estate workflow expansion | Medium |
 | 12 | [Command Center & Overlay](AMENDMENT_12_COMMAND_CENTER.md) | LIVE (dev) | UX/retention | High |
 | 13 | [Knowledge Base & Web Intelligence](AMENDMENT_13_KNOWLEDGE_BASE.md) | LIVE | Enabler | Medium |
 | 14 | [White-Label Platform](AMENDMENT_14_WHITE_LABEL.md) | BUILDING | High (long-term) | Low |
@@ -41,17 +41,17 @@ They do NOT override the North Star — they add project-specific rules that ope
 Per the SSOT North Star: **ONE killer feature → ONE paying segment → ONE economic model → then expand.**
 
 **Current Priority:**
-1. **Site Builder** (Amendment 05) — fastest path to $500/day with wellness businesses
-2. **Outreach CRM** (Amendment 08) — powers Site Builder cold email pipeline
-3. **API Cost Savings** (Amendment 10) — B2B SaaS, easiest to demo value
+1. **TC Service** (Amendment 17) — active revenue lane; service-backed real-estate operations
+2. **API Cost Savings** (Amendment 10) — verified savings product / case-study-to-product path
+3. **BoldTrail + Real Estate Workflow Systems** (Amendment 11) — adjacent expansion once TC foundations are stable
 
-Everything else is infrastructure that supports these three or future-phase products.
+Everything else is supporting infrastructure, future-phase work, or must prove a tighter link to current revenue.
 
 ---
 
 ## REFACTOR STATUS
-Server.js reduced from ~15,000 → **2,636 lines** (82% reduction). Target: <2,000 lines.
-**Last verified:** 2026-03-13 | `node --check server.js` → PASS
+Server.js is thinner than the historical monolith but still a composition-root hotspot; continue extracting config, route mounting, and startup orchestration conservatively.
+**Last verified:** 2026-03-25 | `node --check server.js` → PASS
 
 ### Route Modules (36 files in `routes/`)
 - ✅ AI Council enhanced: `routes/enhanced-council-routes.js`
@@ -129,3 +129,11 @@ Server.js reduced from ~15,000 → **2,636 lines** (82% reduction). Target: <2,0
 - 🔲 Set Railway env vars to go live (see Amendment 05)
 - 🔲 Register POS affiliate programs + set AFFILIATE_*_URL in Railway
 - 🔲 End-to-end test `POST /api/v1/sites/build` with real business URL
+
+## AMENDMENT HYGIENE
+- Each major product/subsystem needs one owning amendment.
+- Add a new amendment only when an idea has its own mission, revenue path, technical surface, or non-negotiables.
+- Otherwise, extend the existing owning amendment and cross-link related systems.
+- Current candidate concepts that should stay nested for now:
+  - TC recording / commitment / coaching features remain inside Amendment 17 and cross-link to Amendment 16 and Amendment 09.
+  - Agent portal / client portal remains inside Amendment 17 until it becomes a shared cross-product portal.

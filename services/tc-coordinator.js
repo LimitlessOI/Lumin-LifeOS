@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-coordinator.js
  * Main Transaction Coordinator orchestrator — from contract email to close of escrow.
  *
@@ -8,6 +9,7 @@
 
 import { createTCBrowserAgent } from './tc-browser-agent.js';
 import { createTCEmailMonitor } from './tc-email-monitor.js';
+import { createTCStatusEngine } from './tc-status-engine.js';
 
 const REMINDER_DAYS = [3, 1]; // Send reminders at 3 days and 1 day before deadline
 const CRON_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
@@ -15,6 +17,7 @@ const CRON_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
 export function createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger = console }) {
   const browserAgent = createTCBrowserAgent({ accountManager, logger });
   const emailMonitor = createTCEmailMonitor({ notificationService, callCouncilMember, accountManager, logger });
+  const statusEngine = createTCStatusEngine();
 
   // ── DB helpers ─────────────────────────────────────────────────────────────
 
@@ -78,6 +81,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
   // ── Core flows ─────────────────────────────────────────────────────────────
 
   /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
    * Full new-contract flow: parse email → DB → TransactionDesk → party intro.
    * TransactionDesk failures are non-blocking.
    */
@@ -139,6 +143,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
   }
 
   /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
    * Check all active transactions for upcoming deadlines and send reminders.
    * Runs on cron every 15 minutes.
    */
@@ -178,60 +183,33 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
   }
 
   /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
    * Generate a full status report for a transaction.
    */
+  async function getTransactionEvents(transactionId, limit = 20) {
+    const { rows } = await pool.query(
+      `SELECT * FROM tc_transaction_events WHERE transaction_id=$1 ORDER BY created_at DESC LIMIT $2`,
+      [transactionId, limit]
+    );
+    return rows;
+  }
+
   async function generateStatusReport(transactionId) {
     const tx = await getTransaction(transactionId);
     if (!tx) return null;
 
-    const { rows: events } = await pool.query(
-      `SELECT * FROM tc_transaction_events WHERE transaction_id=$1 ORDER BY created_at DESC LIMIT 20`,
-      [transactionId]
-    );
-
-    const now = new Date();
-    const closeDate = tx.close_date ? new Date(tx.close_date) : null;
-    const daysToClose = closeDate ? Math.ceil((closeDate - now) / (1000 * 60 * 60 * 24)) : null;
-
-    const contingencies = Object.entries(tx.key_dates || {})
-      .filter(([k]) => k !== 'acceptance')
-      .map(([name, dateStr]) => {
-        const date = dateStr ? new Date(dateStr) : null;
-        const daysRemaining = date ? Math.ceil((date - now) / (1000 * 60 * 60 * 24)) : null;
-        return {
-          name: name.replace(/_/g, ' '),
-          date: dateStr,
-          daysRemaining,
-          status: daysRemaining === null ? 'unknown' : daysRemaining < 0 ? 'expired' : daysRemaining === 0 ? 'today' : 'upcoming',
-        };
-      });
-
-    const riskFlags = contingencies
-      .filter(c => c.daysRemaining !== null && c.daysRemaining >= 0 && c.daysRemaining <= 3)
-      .map(c => `${c.name} deadline in ${c.daysRemaining} day(s) (${c.date})`);
-
-    if (daysToClose !== null && daysToClose <= 7 && daysToClose >= 0) {
-      riskFlags.unshift(`Close of escrow in ${daysToClose} day(s)`);
-    }
+    const events = await getTransactionEvents(transactionId, 50);
+    const derived = statusEngine.deriveTransactionState({ transaction: tx, events });
 
     return {
       transaction: tx,
-      daysToClose,
-      contingencies,
-      missingDocs: getMissingDocs(tx.documents),
-      recentEvents: events,
-      riskFlags,
+      recentEvents: events.slice(0, 20),
+      ...derived,
     };
   }
 
-  function getMissingDocs(documents) {
-    const checklist = documents?.checklist || [];
-    return checklist
-      .filter(doc => doc.required && !doc.received)
-      .map(doc => doc.name);
-  }
-
   /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
    * Dashboard summary stats.
    */
   async function getDashboard() {
@@ -258,6 +236,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
     checkDeadlines,
     generateStatusReport,
     getDashboard,
+    getTransactionEvents,
     insertTransaction,
     getTransaction,
     logEvent,
@@ -265,6 +244,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
 }
 
 /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * Start the TC deadline cron — runs checkDeadlines() every 15 minutes.
  */
 export function startTCDeadlineCron(poolOrDeps, coordinatorArg) {
