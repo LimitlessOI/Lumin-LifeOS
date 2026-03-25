@@ -5,21 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Cost Savings Service</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter&family=Lato:wght@100;300;400;700&display=swap">
     <style>
+        /* Dark theme */
         body {
-            font-family: 'Lato', sans-serif;
+            background-color: #2c2c2c;
+            color: #fff;
+        }
+        
+        h1, h2, h3 {
+            color: #fff;
+        }
+        
+        /* Mobile responsiveness */
+        @media only screen and (max-width: 768px) {
+            .hero {
+                height: 200px;
+            }
+            .pricing-cards {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white">
-    <section class="hero">
-        <div class="container mx-auto px-4 py-12">
-            <h1 class="text-5xl font-bold mb-4">Cut Your AI API Costs by 90%</h1>
-            <p class="text-lg mb-8">Save money on API usage with our efficient routing service</p>
-            <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Get Started</button>
-        </div>
-    </section>
-    <section class="how-it-works bg-gray-800 py-12">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-4
+<body>
+    <div class="hero bg-gray-800 text-center py-20">
+        <h1 class="text-5xl font-bold mb-4">Cut Your AI API Costs by 90%</h1>
+        <p class="text-lg mb-8">Save money on API calls with our cost-effective solution</p>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Started</button>
+    </div>
+    
+    <div class="container mx-auto px-4 py-16">
+        <
