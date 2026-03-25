@@ -7,20 +7,26 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            background-color: #1a1c2e;
+            background-color: #171717;
+            color: #FFFFFF;
         }
-        .hero {
-            background-image: linear-gradient(to bottom, #2b2f44, #1a1c2e);
+        .logo {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            margin: 20px;
         }
     </style>
 </head>
-<body class="h-screen">
-    <section class="hero text-white h-96 flex justify-center items-center">
-        <h1 class="text-5xl font-bold mb-4">Cut Your AI API Costs by 90%</h1>
-        <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Get Started</button>
-    </section>
-    <section class="py-12">
-        <h2 class="text-3xl font-bold mb-4">How it Works</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-gray-800 p-4 rounded">
-                <h3 class="text-lg font-bold mb-2">Step 1: Sign Up</h3>
+<body class="bg-gray-900 text-white">
+    <header class="bg-gray-800 p-4 flex justify-between items-center">
+        <a href="#" class="logo inline-block">
+            <img src="logo.png" alt="API Logo">
+        </a>
+        <nav class="hidden md:block">
+            <ul class="flex justify-between items-center">
+                <li class="mr-4"><a href="#" class="text-white hover:text-gray-200">API Overview</a></li>
+                <li class="mr-4"><a href="#" class="text-white hover:text-gray-200">Getting Started</a></li>
+            </ul>
+        </nav>
+        <button class="hidden md:block md:p-4 md:text-sm md:bg-gray-700 md:hover:bg-gray-600
