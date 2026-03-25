@@ -14,6 +14,17 @@ import crypto from 'crypto';
 const CACHE_TTL_MS  = 24 * 60 * 60 * 1000;  // 24h default
 const CACHE_TTL_LONG = 72 * 60 * 60 * 1000; // 72h for analysis tasks
 const MAX_L1_SIZE   = 1000;
+const SHARED_MEMBER = '__shared__';
+const SHARED_TASK_TYPES = new Set([
+  'routing',
+  'classification',
+  'status',
+  'health',
+  'summary',
+  'json',
+  'extraction',
+  'validation',
+]);
 
 // L1 — in-memory Map: key → { response, expiresAt, taskType, words }
 const L1 = new Map();
@@ -36,12 +47,12 @@ function jaccardSimilarity(wordsA, wordsB) {
   return union === 0 ? 0 : intersection / union;
 }
 
-function semanticLookupL1(words, member) {
+function semanticLookupL1(words, members) {
   const now = Date.now();
   let bestKey = null, bestScore = 0;
-  const prefix = `${member}:`;
+  const prefixes = (Array.isArray(members) ? members : [members]).map((member) => `${member}:`);
   for (const [key, entry] of L1) {
-    if (!key.startsWith(prefix)) continue;
+    if (!prefixes.some((prefix) => key.startsWith(prefix))) continue;
     if (entry.expiresAt <= now) continue;
     if (!entry.words || entry.words.length === 0) continue;
     const score = jaccardSimilarity(words, entry.words);
@@ -82,9 +93,17 @@ function cacheKey(member, prompt) {
   return `${member}:${hashPrompt(prompt)}`;
 }
 
+function sharedCacheKey(prompt) {
+  return cacheKey(SHARED_MEMBER, prompt);
+}
+
 function ttlMs(taskType = '') {
   const longTypes = ['research', 'analysis', 'planning', 'summaries'];
   return longTypes.some(t => taskType.includes(t)) ? CACHE_TTL_LONG : CACHE_TTL_MS;
+}
+
+function shouldUseSharedCache(taskType = '') {
+  return SHARED_TASK_TYPES.has(String(taskType || '').toLowerCase());
 }
 
 // ---------------------------------------------------------------------------
@@ -100,7 +119,7 @@ async function _warmL1FromDB() {
   _warmed = true;
   try {
     const { rows } = await _pool.query(
-      `SELECT cache_key, response_text, expires_at, task_type
+      `SELECT cache_key, response_text, expires_at, task_type, prompt_snippet
        FROM ai_response_cache
        WHERE expires_at > NOW()
        ORDER BY last_hit_at DESC NULLS LAST
@@ -127,50 +146,95 @@ async function _warmL1FromDB() {
 // ---------------------------------------------------------------------------
 export async function getCachedResponse(prompt, member, compressionMetrics) {
   const key = cacheKey(member, prompt);
+  const sharedKey = sharedCacheKey(prompt);
   const now = Date.now();
 
-  // L1 check
-  const l1 = L1.get(key);
-  if (l1 && l1.expiresAt > now) {
-    if (compressionMetrics) compressionMetrics.cache_hits = (compressionMetrics.cache_hits || 0) + 1;
-    // Bump hit count in DB async (fire-and-forget)
-    _bumpHitCount(key).catch(() => {});
-    return l1.response;
+  // L1 check — exact member, then provider-agnostic shared key
+  for (const candidateKey of [key, sharedKey]) {
+    const l1 = L1.get(candidateKey);
+    if (l1 && l1.expiresAt > now) {
+      if (compressionMetrics) compressionMetrics.cache_hits = (compressionMetrics.cache_hits || 0) + 1;
+      _bumpHitCount(candidateKey).catch(() => {});
+      return l1.response;
+    }
+    if (l1) L1.delete(candidateKey);
   }
-  if (l1) L1.delete(key); // expired
 
-  // L2 check — DB (handles post-deploy cold L1)
+  // L2 check — DB (handles post-deploy cold L1), exact member then shared
   if (_pool) {
     try {
-      const { rows } = await _pool.query(
-        `UPDATE ai_response_cache
-         SET hit_count = hit_count + 1, last_hit_at = NOW()
-         WHERE cache_key = $1 AND expires_at > NOW()
-         RETURNING response_text, expires_at, task_type`,
-        [key]
-      );
-      if (rows[0]) {
-        // Repopulate L1
-        L1.set(key, {
-          response: rows[0].response_text,
-          expiresAt: new Date(rows[0].expires_at).getTime(),
-          taskType: rows[0].task_type || '',
-        });
-        if (compressionMetrics) compressionMetrics.cache_hits = (compressionMetrics.cache_hits || 0) + 1;
-        return rows[0].response_text;
+      for (const candidateKey of [key, sharedKey]) {
+        const { rows } = await _pool.query(
+          `UPDATE ai_response_cache
+           SET hit_count = hit_count + 1, last_hit_at = NOW()
+           WHERE cache_key = $1 AND expires_at > NOW()
+           RETURNING response_text, expires_at, task_type, prompt_snippet`,
+          [candidateKey]
+        );
+        if (rows[0]) {
+          L1.set(candidateKey, {
+            response: rows[0].response_text,
+            expiresAt: new Date(rows[0].expires_at).getTime(),
+            taskType: rows[0].task_type || '',
+            words: rows[0].prompt_snippet ? tokenize(rows[0].prompt_snippet) : [],
+          });
+          if (compressionMetrics) compressionMetrics.cache_hits = (compressionMetrics.cache_hits || 0) + 1;
+          return rows[0].response_text;
+        }
       }
     } catch {}
   }
 
   // Semantic fallback — fuzzy match via Jaccard similarity on L1 word sets
   const words = tokenize(prompt);
-  const semantic = semanticLookupL1(words, member);
+  const semantic = semanticLookupL1(words, [member, SHARED_MEMBER]);
   if (semantic) {
     const entry = L1.get(semantic.key);
     if (compressionMetrics) compressionMetrics.semantic_hits = (compressionMetrics.semantic_hits || 0) + 1;
     _bumpHitCount(semantic.key).catch(() => {});
     console.log(`🔍 [SEMANTIC-CACHE] Hit for ${member} (Jaccard: ${semantic.score.toFixed(2)})`);
     return entry.response;
+  }
+
+  // Semantic fallback — DB, used after deploy/restart before L1 repopulates.
+  if (_pool) {
+    try {
+      const { rows } = await _pool.query(
+        `SELECT cache_key, response_text, expires_at, task_type, prompt_snippet
+         FROM ai_response_cache
+         WHERE member = ANY($1::text[])
+           AND expires_at > NOW()
+           AND prompt_snippet IS NOT NULL
+         ORDER BY last_hit_at DESC NULLS LAST
+         LIMIT 200`,
+        [[member, SHARED_MEMBER]]
+      );
+
+      let best = null;
+      let bestScore = 0;
+      for (const row of rows) {
+        const candidateWords = tokenize(row.prompt_snippet || '');
+        if (candidateWords.length === 0) continue;
+        const score = jaccardSimilarity(words, candidateWords);
+        if (score >= SEMANTIC_THRESHOLD && score > bestScore) {
+          best = row;
+          bestScore = score;
+        }
+      }
+
+      if (best) {
+        L1.set(best.cache_key, {
+          response: best.response_text,
+          expiresAt: new Date(best.expires_at).getTime(),
+          taskType: best.task_type || '',
+          words: tokenize(best.prompt_snippet || ''),
+        });
+        if (compressionMetrics) compressionMetrics.semantic_hits = (compressionMetrics.semantic_hits || 0) + 1;
+        _bumpHitCount(best.cache_key).catch(() => {});
+        console.log(`🔍 [SEMANTIC-CACHE][DB] Hit for ${member} (Jaccard: ${bestScore.toFixed(2)})`);
+        return best.response_text;
+      }
+    } catch {}
   }
 
   if (compressionMetrics) compressionMetrics.cache_misses = (compressionMetrics.cache_misses || 0) + 1;
@@ -182,16 +246,24 @@ export async function getCachedResponse(prompt, member, compressionMetrics) {
 // ---------------------------------------------------------------------------
 export function cacheResponse(prompt, member, response, taskType = '') {
   const key = cacheKey(member, prompt);
+  const sharedKey = sharedCacheKey(prompt);
   const expiresAt = Date.now() + ttlMs(taskType);
+  const words = tokenize(prompt);
 
   // L1 write (synchronous) — include word set for semantic lookup
-  L1.set(key, { response, expiresAt, taskType, words: tokenize(prompt) });
+  L1.set(key, { response, expiresAt, taskType, words });
+  if (shouldUseSharedCache(taskType)) {
+    L1.set(sharedKey, { response, expiresAt, taskType, words });
+  }
   if (L1.size > MAX_L1_SIZE) {
     L1.delete(L1.keys().next().value); // evict oldest
   }
 
   // L2 write (async, non-blocking)
   _writeToDb(key, member, prompt, response, taskType, expiresAt).catch(() => {});
+  if (shouldUseSharedCache(taskType)) {
+    _writeToDb(sharedKey, SHARED_MEMBER, prompt, response, taskType, expiresAt).catch(() => {});
+  }
 }
 
 async function _writeToDb(key, member, prompt, response, taskType, expiresAt) {

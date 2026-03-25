@@ -6,11 +6,13 @@ import { compressJSONInPrompt } from "./toon-formatter.js";
 import { injectChainOfDraft, compressPrompt as irCompressPrompt } from "./prompt-ir.js";
 import { createSavingsLedger } from "./savings-ledger.js";
 import { addTurn, getDelta, startSession } from "./delta-context.js";
+import { createRulesEngine } from "./rules-engine.js";
 import { sanitizeJsonResponse } from "../core/json-sanitizer.js";
 import {
   getCachedResponse as _rcGet,
   cacheResponse as _rcSet,
   initCache as _rcInit,
+  hashPrompt as hashCachePrompt,
 } from "./response-cache.js";
 
 // tokenOptimizer and freeTierGovernor are initialized inside createCouncilService with pool
@@ -67,6 +69,10 @@ export function createCouncilService({
   // Both backed by Neon — stats survive Railway deploys
   const tokenOptimizer = createTokenOptimizer(pool);
   const freeTierGovernor = createFreeTierGovernor({ pool });
+  const rulesEngine = createRulesEngine({
+    COUNCIL_MEMBERS,
+    timeZone: process.env.TZ || "America/Los_Angeles",
+  });
 
   // Startup Ollama ping — skip entirely if OLLAMA_ENDPOINT is not set or disabled
   const _exhaustedProviders = new Set();
@@ -642,6 +648,39 @@ export function createCouncilService({
     addTurn(sessionId, { role: "assistant", content: assistantText });
   }
 
+  function deriveDeltaSessionId({ options = {}, member, taskType, prompt, isCritical }) {
+    if (options.sessionId) return options.sessionId;
+
+    const explicitScopedKey = options.conversationId
+      || options.chatId
+      || options.sessionKey
+      || options.contextKey
+      || options.workflowId;
+    if (explicitScopedKey) {
+      return `ctx:${explicitScopedKey}`;
+    }
+
+    if (isCritical || options.autoSession === false) {
+      return null;
+    }
+
+    // Conservative auto-sessioning:
+    // scope by normalized prompt signature so unrelated requests no longer share
+    // one member/task bucket. This keeps delta useful for repeated workflow prompts
+    // without causing broad cross-request drift.
+    const signature = hashCachePrompt(String(prompt || "")).slice(0, 10);
+    return `auto:${member}:${taskType}:${signature}`;
+  }
+
+  function buildRecordedCompressionLayers(baseLayers, outputTokens = 0, savedOutputPct = 0) {
+    if (!baseLayers || Object.keys(baseLayers).length === 0) return null;
+    const layers = JSON.parse(JSON.stringify(baseLayers));
+    if (layers.chain_of_draft && savedOutputPct > 0 && outputTokens > 0) {
+      layers.chain_of_draft.savedTokens = Math.round(outputTokens * (savedOutputPct / 100));
+    }
+    return layers;
+  }
+
   // _exhaustedProviders declared at factory top (line ~74) — pre-seeded by startup ping
 
   function selectOptimalModel(prompt, complexity) {
@@ -804,20 +843,100 @@ export function createCouncilService({
     }
 
     // Recompute config after selectOptimalModel may have rewritten member
-    const config = COUNCIL_MEMBERS[member];
+    let config = COUNCIL_MEMBERS[member];
     if (!config) throw new Error(`Unknown member after routing: ${member}`);
+
+    // ── Auto-detect taskType from prompt content if not provided ─────────────
+    // Enables Layers 2-4 for far more calls without callers needing to set options.
+    const isCritical = options.critical === true;
+    let taskType = options.taskType || '';
+    if (!taskType) {
+      const pl = prompt.toLowerCase();
+      if (/\bgenerate code\b|write a (function|class|route|service|component|script)|\bimplement\b/.test(pl)) taskType = 'codegen';
+      else if (/\banalyze\b|\breview\b|\baudit\b|\bevaluate\b/.test(pl)) taskType = 'analysis';
+      else if (/\bclassify\b|\broute\b|\bis this\b|\bdetect\b|\bvalidate\b/.test(pl)) taskType = 'routing';
+      else if (/\bsummarize\b|\bsummary\b|\btldr\b/.test(pl)) taskType = 'analysis';
+      else if (/\bplan\b|\bstrategy\b|\bproposal\b|\bdesign\b/.test(pl)) taskType = 'planning';
+      else taskType = 'general';
+    }
+
+    // ── Rules engine pre-flight — deterministic no-AI answers + lightweight routing ──
+    const ruleDecision = rulesEngine.evaluate({
+      prompt,
+      requestedMember,
+      member,
+      taskType,
+      options,
+    });
+
+    if (ruleDecision.action === "respond" && ruleDecision.responseText) {
+      const text = ruleDecision.responseText;
+      const estimatedBaseline = ruleDecision.receipt?.estimatedSavedTokens
+        || (estimateTokens(prompt) + estimateTokens(text));
+      console.log(`🧠 [RULES] ${ruleDecision.receipt?.ruleId || "direct"} → answered without AI`);
+
+      tokenOptimizer.trackUsage({
+        provider: "logic",
+        model: "rules-engine-v1",
+        taskType,
+        inputTokens: 0,
+        outputTokens: 0,
+        savedTokens: estimatedBaseline,
+        cacheHit: false,
+        costUSD: 0,
+        savedCostUSD: estimatedBaseline * 0.000003,
+      }).catch(() => {});
+
+      if (savingsLedger) {
+        savingsLedger.record({
+          provider: "logic",
+          model: "rules-engine-v1",
+          taskType,
+          originalTokens: estimatedBaseline,
+          compressedTokens: 0,
+          outputTokens: 0,
+          savedTokens: estimatedBaseline,
+          costUSD: 0,
+          cacheHit: false,
+          compressionLayers: {
+            rules_engine: {
+              savedTokens: estimatedBaseline,
+              ruleId: ruleDecision.receipt?.ruleId || "direct",
+              category: ruleDecision.receipt?.category || "direct",
+              confidence: ruleDecision.receipt?.confidence || 1,
+            },
+          },
+          qualityMethod: "rules-engine",
+        }).catch(() => {});
+      }
+
+      return text;
+    }
+
+    if (ruleDecision.action === "override") {
+      if (ruleDecision.member && COUNCIL_MEMBERS[ruleDecision.member]) {
+        member = ruleDecision.member;
+      }
+      if (ruleDecision.taskType) {
+        taskType = ruleDecision.taskType;
+      }
+      if (ruleDecision.optionsPatch) {
+        options = { ...options, ...ruleDecision.optionsPatch };
+      }
+      config = COUNCIL_MEMBERS[member];
+      console.log(`🧠 [RULES] ${ruleDecision.receipt?.ruleId || "override"} → ${member}/${taskType}`);
+    }
 
     // Cache lookup happens AFTER member rewrite so the resolved member/model is the key
     if (options.useCache !== false) {
       const cached = await getCachedResponse(prompt, member, compressionMetrics);
       if (cached) {
         console.log(`💰 [CACHE HIT] Saved API call for ${member}`);
-        // Fix: track cache hit in both tokenOptimizer and savingsLedger so dashboard is accurate
         const estimatedTokens = Math.ceil(prompt.length / 4);
         tokenOptimizer.trackUsage({
           provider: COUNCIL_MEMBERS[member]?.provider || member,
           model: COUNCIL_MEMBERS[member]?.model || member,
-          taskType: options.taskType || 'general',
+          taskType,
           inputTokens: 0,
           outputTokens: 0,
           savedTokens: estimatedTokens,
@@ -829,7 +948,7 @@ export function createCouncilService({
           savingsLedger.record({
             provider: COUNCIL_MEMBERS[member]?.provider || member,
             model: COUNCIL_MEMBERS[member]?.model || member,
-            taskType: options.taskType || 'general',
+            taskType,
             originalTokens: estimatedTokens,
             compressedTokens: 0,
             outputTokens: 0,
@@ -855,20 +974,6 @@ export function createCouncilService({
         );
         throw new Error(`${member} unavailable (no API key)`);
       }
-    }
-
-    // ── Auto-detect taskType from prompt content if not provided ─────────────
-    // Enables Layers 2-4 for far more calls without callers needing to set options.
-    const isCritical = options.critical === true;
-    let taskType = options.taskType || '';
-    if (!taskType) {
-      const pl = prompt.toLowerCase();
-      if (/\bgenerate code\b|write a (function|class|route|service|component|script)|\bimplement\b/.test(pl)) taskType = 'codegen';
-      else if (/\banalyze\b|\breview\b|\baudit\b|\bevaluate\b/.test(pl)) taskType = 'analysis';
-      else if (/\bclassify\b|\broute\b|\bis this\b|\bdetect\b|\bvalidate\b/.test(pl)) taskType = 'routing';
-      else if (/\bsummarize\b|\bsummary\b|\btldr\b/.test(pl)) taskType = 'analysis';
-      else if (/\bplan\b|\bstrategy\b|\bproposal\b|\bdesign\b/.test(pl)) taskType = 'planning';
-      else taskType = 'general';
     }
 
     // ── Gate knowledge context injection — only for calls that need it ────────
@@ -897,6 +1002,14 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
     // Layer 5: savings ledger — record every call's before/after
     // CPU cost: all layers combined ~0.5ms (pure string ops, no AI calls)
     const compressionLayers = {};
+    if (ruleDecision.action === "override") {
+      compressionLayers.rules_engine = {
+        applied: true,
+        ruleId: ruleDecision.receipt?.ruleId || "override",
+        category: ruleDecision.receipt?.category || "routing",
+        confidence: ruleDecision.receipt?.confidence || 0.9,
+      };
+    }
 
     // Layer 1 — noise strip + phrase sub
     const optimized = optimizePrompt(enhancedPrompt, {
@@ -955,12 +1068,18 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
     const useCompression = false; // legacy LCTP disabled — replaced by layer stack above
     const systemPrompt = optimizedSystemPrompt.text;
 
-    // TCO-A04: Delta context — auto-generate sessionId if not provided.
-    // Groups calls by member:taskType so multi-turn savings fire automatically.
+    // TCO-A04: Delta context — prefer explicit conversation/workflow keys.
+    // Auto-session fallback is now scoped by normalized prompt signature to
+    // avoid unrelated traffic sharing one member/task bucket.
     let deltaMessages = null;
     let deltaContextSaved = 0;
-    const effectiveSessionId = options.sessionId
-      || (!isCritical ? `auto:${member}:${taskType}` : null);
+    const effectiveSessionId = deriveDeltaSessionId({
+      options,
+      member,
+      taskType,
+      prompt,
+      isCritical,
+    });
     if (effectiveSessionId) {
       startSession(effectiveSessionId, systemPrompt);
       const delta = getDelta(effectiveSessionId, finalPrompt);
@@ -1089,7 +1208,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             savedOutputPct: codSavedOutputPct,
             costUSD: cost,
             cacheHit: false,
-            compressionLayers: Object.keys(compressionLayers).length > 0 ? compressionLayers : null,
+            compressionLayers: buildRecordedCompressionLayers(compressionLayers, outputTokens, codSavedOutputPct),
           }).catch(() => {});
         }
 
@@ -1190,7 +1309,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
             savedOutputPct: codSavedOutputPct,
             costUSD: 0,
             cacheHit: false,
-            compressionLayers: Object.keys(compressionLayers).length > 0 ? compressionLayers : null,
+            compressionLayers: buildRecordedCompressionLayers(compressionLayers, outputTokens, codSavedOutputPct),
           }).catch(() => {});
         }
 
@@ -1244,17 +1363,19 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         // TCO-E01: ledger for Ollama (free/local — cost $0)
         if (savingsLedger) {
           const ollamaIn = estimateTokens(finalPrompt);
+          const ollamaOut = estimateTokens(text);
           savingsLedger.record({
             provider: 'ollama',
             model: currentConfig.model || member,
             taskType,
             originalTokens: ollamaIn + totalSavedInputTokens,
             compressedTokens: ollamaIn,
-            outputTokens: estimateTokens(text),
+            outputTokens: ollamaOut,
             savedTokens: totalSavedInputTokens,
+            savedOutputPct: codSavedOutputPct,
             costUSD: 0,
             cacheHit: false,
-            compressionLayers: Object.keys(compressionLayers).length > 0 ? compressionLayers : null,
+            compressionLayers: buildRecordedCompressionLayers(compressionLayers, ollamaOut, codSavedOutputPct),
           }).catch(() => {});
         }
 
@@ -1309,17 +1430,19 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         // TCO-E01: ledger for DeepSeek
         if (savingsLedger) {
           const dsIn = json.usage?.prompt_tokens || estimateTokens(finalPrompt);
+          const dsOut = json.usage?.completion_tokens || estimateTokens(text);
           savingsLedger.record({
             provider: 'deepseek',
             model: config.model || member,
             taskType,
             originalTokens: dsIn + totalSavedInputTokens,
             compressedTokens: dsIn,
-            outputTokens: json.usage?.completion_tokens || estimateTokens(text),
+            outputTokens: dsOut,
             savedTokens: totalSavedInputTokens,
+            savedOutputPct: codSavedOutputPct,
             costUSD: cost,
             cacheHit: false,
-            compressionLayers: Object.keys(compressionLayers).length > 0 ? compressionLayers : null,
+            compressionLayers: buildRecordedCompressionLayers(compressionLayers, dsOut, codSavedOutputPct),
           }).catch(() => {});
         }
 

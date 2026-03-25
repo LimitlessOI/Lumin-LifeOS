@@ -21,10 +21,11 @@ const COST_PER_M = {
   'mistral':    { input: 0.00,  output: 0.00  }, // free tier
   'together':   { input: 0.00,  output: 0.00  }, // free tier
   'ollama':     { input: 0.00,  output: 0.00  }, // local
+  'logic':      { input: 0.00,  output: 0.00  }, // deterministic no-AI path
   'default':    { input: 3.00,  output: 10.00 },
 };
 
-const FREE_PROVIDERS = new Set(['groq','gemini','cerebras','openrouter','mistral','together','ollama']);
+const FREE_PROVIDERS = new Set(['groq','gemini','cerebras','openrouter','mistral','together','ollama','logic']);
 
 function estimateCost(tokens, type, provider, model) {
   const rates = COST_PER_M[provider?.toLowerCase()] || COST_PER_M.default;
@@ -44,6 +45,7 @@ export function createSavingsLedger(pool) {
     originalTokens,
     compressedTokens,
     outputTokens = 0,
+    savedTokens: explicitSavedTokens = null,
     savedOutputPct = 0,   // Chain of Draft output savings % (input math can't capture this)
     cacheHit = false,
     qualityScore = null,
@@ -55,14 +57,16 @@ export function createSavingsLedger(pool) {
   } = {}) {
     if (!pool) return null;
 
-    const orig = originalTokens || compressedTokens || 0;
-    const comp = compressedTokens || orig;
+    const orig = originalTokens ?? compressedTokens ?? 0;
+    const comp = compressedTokens ?? orig;
     // Input savings from compression; output savings from Chain of Draft
     const inputSaved = Math.max(0, orig - comp);
     const outputSaved = savedOutputPct > 0
       ? Math.round(outputTokens * (savedOutputPct / 100))
       : 0;
-    const savedTokens = inputSaved + outputSaved;
+    const savedTokens = explicitSavedTokens !== null
+      ? explicitSavedTokens + outputSaved
+      : inputSaved + outputSaved;
     const totalBaseline = orig + (outputTokens + outputSaved);
     const savingsPct = totalBaseline > 0
       ? Math.round((savedTokens / totalBaseline) * 100 * 100) / 100
@@ -76,7 +80,7 @@ export function createSavingsLedger(pool) {
 
     // What we saved: cost of original tokens at paid rates vs actual cost
     const baselineCost = estimateCost(orig, 'input', 'default', null)
-                       + estimateCost(outputTokens, 'output', 'default', null);
+                       + estimateCost(outputTokens + outputSaved, 'output', 'default', null);
     const savedCostUSD = Math.max(0, baselineCost - actualCost);
 
     try {
@@ -103,7 +107,7 @@ export function createSavingsLedger(pool) {
         orig, comp, savingsPct,
         cacheHit, providerWasFree,
         actualCost, savedCostUSD,
-        qualityScore, qualityMethod,
+        qualityScore, qualityMethod || 'savings-ledger',
         compressionLayers ? JSON.stringify(compressionLayers) : null,
         fallbackTriggered, driftDetected,
       ]);
@@ -136,6 +140,10 @@ export function createSavingsLedger(pool) {
       const { rows: today } = await pool.query(`
         SELECT
           COUNT(*) AS calls,
+          SUM(input_tokens) AS input_tokens,
+          SUM(output_tokens) AS output_tokens,
+          SUM(original_tokens) AS original_tokens,
+          SUM(compressed_tokens) AS compressed_tokens,
           SUM(saved_tokens) AS saved_tokens,
           ROUND(AVG(savings_pct),1) AS avg_savings_pct,
           SUM(cost_usd) AS cost_usd,
@@ -145,12 +153,17 @@ export function createSavingsLedger(pool) {
           ROUND(AVG(quality_score),2) AS avg_quality
         FROM token_usage_log
         WHERE logged_at >= NOW() - INTERVAL '24 hours'
+          AND provider_was_free IS NOT NULL
         ${filter}
       `, params);
 
       const { rows: month } = await pool.query(`
         SELECT
           COUNT(*) AS calls,
+          SUM(input_tokens) AS input_tokens,
+          SUM(output_tokens) AS output_tokens,
+          SUM(original_tokens) AS original_tokens,
+          SUM(compressed_tokens) AS compressed_tokens,
           SUM(saved_tokens) AS saved_tokens,
           ROUND(AVG(savings_pct),1) AS avg_savings_pct,
           SUM(cost_usd) AS cost_usd,
@@ -159,16 +172,22 @@ export function createSavingsLedger(pool) {
           COUNT(*) FILTER (WHERE provider_was_free) AS free_calls
         FROM token_usage_log
         WHERE logged_at >= NOW() - INTERVAL '30 days'
+          AND provider_was_free IS NOT NULL
         ${filter}
       `, params);
 
       const { rows: byProvider } = await pool.query(`
         SELECT provider, COUNT(*) AS calls,
+          SUM(input_tokens) AS input_tokens,
+          SUM(output_tokens) AS output_tokens,
+          SUM(original_tokens) AS original_tokens,
+          SUM(compressed_tokens) AS compressed_tokens,
           SUM(saved_tokens) AS saved_tokens,
           SUM(cost_usd) AS cost_usd,
           SUM(saved_cost_usd) AS saved_cost_usd
         FROM token_usage_log
         WHERE logged_at >= NOW() - INTERVAL '30 days'
+          AND provider_was_free IS NOT NULL
         ${filter}
         GROUP BY provider ORDER BY calls DESC
       `, params);
@@ -189,6 +208,7 @@ export function createSavingsLedger(pool) {
         FROM token_usage_log,
           jsonb_each(compression_layers) AS t(layer_key, layer_val)
         WHERE compression_layers IS NOT NULL
+          AND provider_was_free IS NOT NULL
           AND logged_at >= NOW() - INTERVAL '30 days'
           ${filter}
         GROUP BY layer_key
@@ -234,6 +254,7 @@ export function createSavingsLedger(pool) {
           COUNT(*) FILTER (WHERE fallback_triggered) AS fallbacks
         FROM token_usage_log
         WHERE logged_at BETWEEN $1 AND $2
+          AND provider_was_free IS NOT NULL
         ${filter}
       `, params);
 

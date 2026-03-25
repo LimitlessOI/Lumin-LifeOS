@@ -290,6 +290,7 @@ export function createTwinRoutes({ pool, requireKey, callCouncilMember }) {
           COUNT(*) FILTER (WHERE cache_hit) AS cache_hits
         FROM token_usage_log
         WHERE logged_at >= NOW() - INTERVAL '24 hours'
+          AND provider_was_free IS NOT NULL
         GROUP BY task_type
         ORDER BY total_input_tokens DESC
         LIMIT 10
@@ -309,6 +310,10 @@ export function createTwinRoutes({ pool, requireKey, callCouncilMember }) {
           calls: totalCalls,
           cacheHits,
           cacheHitRate: totalCalls > 0 ? `${Math.round(cacheHits/totalCalls*100)}%` : '0%',
+          inputTokens: parseInt(today.input_tokens || 0),
+          outputTokens: parseInt(today.output_tokens || 0),
+          baselineTokens: parseInt(today.original_tokens || 0),
+          actualTokens: parseInt(today.compressed_tokens || 0),
           savedTokens,
           avgSavingsPct,        // token savings % — the number to track toward 70%
           freeCalls: parseInt(today.free_calls || 0),
@@ -335,7 +340,20 @@ export function createTwinRoutes({ pool, requireKey, callCouncilMember }) {
   router.get('/tokens/history', requireKey, async (req, res) => {
     try {
       const rows = await pool.query(
-        `SELECT * FROM token_usage_daily WHERE day >= NOW() - INTERVAL '30 days' ORDER BY day DESC, requests DESC`
+        `SELECT
+           DATE(logged_at) AS day,
+           COUNT(*) AS requests,
+           SUM(input_tokens) AS input_tokens,
+           SUM(output_tokens) AS output_tokens,
+           SUM(saved_tokens) AS saved_tokens,
+           ROUND(AVG(savings_pct), 1) AS avg_savings_pct,
+           SUM(cost_usd) AS cost_usd,
+           SUM(saved_cost_usd) AS saved_cost_usd
+         FROM token_usage_log
+         WHERE logged_at >= NOW() - INTERVAL '30 days'
+           AND provider_was_free IS NOT NULL
+         GROUP BY DATE(logged_at)
+         ORDER BY day DESC`
       );
       res.json({ ok: true, history: rows.rows });
     } catch (err) {

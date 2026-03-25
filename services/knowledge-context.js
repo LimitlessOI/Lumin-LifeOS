@@ -1,6 +1,6 @@
 /**
- * Knowledge Context — loads project documentation (TRUE_VISION.md, CORE_TRUTHS.md,
- * PROJECT_CONTEXT.md) and knowledge index entries into a cached in-memory context
+ * Knowledge Context — loads project documentation (SSOT/vision/truths/context)
+ * and the knowledge index into a cached in-memory context
  * that council prompts can draw from at request time.
  *
  * Dependencies: fs, path, ../core/memory-system.js
@@ -16,15 +16,87 @@ const knowledgeIndexPath = path.join(projectRoot, "knowledge", "index", "entries
 
 let knowledgeContext = null;
 
+function compactText(text, maxChars) {
+  return String(text || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/`{3}[\s\S]*?`{3}/g, " ")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^\s*[-*+]\s+/gm, "- ")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/[ \t]+/g, " ")
+    .trim()
+    .slice(0, maxChars);
+}
+
+function firstMatch(text, pattern, fallback = "") {
+  const match = String(text || "").match(pattern);
+  return match?.[1]?.trim() || fallback;
+}
+
+function extractBulletLines(text, limit = 3) {
+  return String(text || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("- "))
+    .slice(0, limit)
+    .map((line) => line.replace(/^- /, "").trim());
+}
+
+function buildStaticKernel(context) {
+  const ssot = context.ssotNorthStar || "";
+  const vision = context.trueVision || "";
+  const truths = context.coreTruths || "";
+  const project = context.projectContext || "";
+
+  const mission = firstMatch(ssot, /## ARTICLE I: MISSION\s+([\s\S]*?)\n\n## /, "Speed to validated revenue while protecting ethics, consent, and user dignity.");
+  const strategy = firstMatch(ssot, /ONE killer feature[^.\n]*/i, "ONE killer feature -> ONE paying segment -> ONE economic model -> then expand.");
+  const evidenceRules = extractBulletLines(firstMatch(ssot, /### 2\.3 Evidence Rule \(No Blind Instructions\)\s+([\s\S]*?)\n\n### /, ""), 2);
+  const failClosedRules = extractBulletLines(firstMatch(ssot, /### 2\.5 Fail-Closed Rule \(Safety First\)\s+([\s\S]*?)\n\n## /, ""), 2);
+  const visionOverview = extractBulletLines(firstMatch(vision, /## Overview\s+([\s\S]*?)\n\n## /, ""), 2);
+  const currentGoal = firstMatch(vision, /### Phase 1: [^\n]+\n\n\*\*Goal:\*\*\s*([^\n]+)/, "Make money fast so the system cannot be controlled by profit motives.");
+  const businessModel = firstMatch(truths, /## 2\. Business Model\s+([^\n]+)/, "We take 20% of customer API savings. No savings = no payment.");
+  const architecture = extractBulletLines(firstMatch(truths, /## 3\. Architecture\s+([\s\S]*?)\n\n## /, ""), 3);
+  const revenuePriority = extractBulletLines(firstMatch(truths, /## 6\. Revenue Priority\s+([\s\S]*?)\n\n## /, ""), 2);
+  const immediateGoals = String(project)
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => /^\d+\./.test(line))
+    .slice(0, 2)
+    .map((line) => line.replace(/^\d+\.\s*/, "").trim());
+
+  const lines = [
+    `Mission: ${compactText(mission, 140)}`,
+    `Strategy: ${compactText(strategy, 120)}`,
+    `Business model: ${compactText(businessModel, 100)}`,
+    evidenceRules[0] ? `Evidence: ${compactText(evidenceRules[0], 110)}` : "",
+    failClosedRules[0] ? `Safety: ${compactText(failClosedRules[0], 110)}` : "",
+    visionOverview.length > 0 ? `Scope: ${compactText(visionOverview.join("; "), 110)}` : "",
+    `Current priority: ${compactText(currentGoal, 110)}`,
+    architecture.length > 0 ? `Runtime: ${compactText(architecture.join("; "), 120)}` : "",
+    revenuePriority.length > 0 ? `Revenue: ${compactText(revenuePriority.join("; "), 120)}` : "",
+    immediateGoals.length > 0 ? `Immediate goals: ${compactText(immediateGoals.join("; "), 140)}` : "",
+  ].filter(Boolean);
+
+  return `[KERNEL]\n${lines.join("\n")}\n[/KERNEL]`;
+}
+
 export async function loadKnowledgeContext() {
   try {
     const context = {
+      ssotNorthStar: null,
       trueVision: null,
       coreTruths: null,
       projectContext: null,
       entries: [],
       totalEntries: 0,
+      staticKernel: "",
     };
+
+    const ssotNorthStarPath = path.join(docsDir, "SSOT_NORTH_STAR.md");
+    if (fs.existsSync(ssotNorthStarPath)) {
+      context.ssotNorthStar = fs.readFileSync(ssotNorthStarPath, "utf-8");
+      console.log("📚 [KNOWLEDGE] Loaded SSOT_NORTH_STAR.md");
+    }
 
     const trueVisionPath = path.join(docsDir, "TRUE_VISION.md");
     if (fs.existsSync(trueVisionPath)) {
@@ -67,6 +139,7 @@ export async function loadKnowledgeContext() {
       console.log("📚 [KNOWLEDGE] No index found - run: node scripts/process-knowledge.js");
     }
 
+    context.staticKernel = buildStaticKernel(context);
     knowledgeContext = context;
     return context;
   } catch (error) {
@@ -126,10 +199,11 @@ function appendRelevantIdeas(contextSection, prompt, entries, maxIdeas) {
     return contextSection;
   }
 
-  contextSection += "\n\n=== RELEVANT IDEAS FROM KNOWLEDGE BASE ===\n";
+  contextSection += "\n[IDEAS]\n";
   relevantIdeas.forEach((idea, index) => {
-    contextSection += `${index + 1}. ${idea.text.substring(0, 200)}\n   (Source: ${idea.source})\n`;
+    contextSection += `${index + 1}. ${compactText(idea.text, 120)}\n`;
   });
+  contextSection += "[/IDEAS]\n";
 
   return contextSection;
 }
@@ -160,30 +234,48 @@ async function _getSOTContent() {
   }
 }
 
+function compactSOTContent(sotContent) {
+  if (!sotContent) return "";
+  const lines = String(sotContent)
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .filter((line) => !/^[-=]{3,}$/.test(line))
+    .slice(0, 4)
+    .map((line) => compactText(line, 120));
+  return lines.join("\n");
+}
+
 /**
  * buildSystemContext — returns just the knowledge/SOT section (no user prompt).
  * Intended to be inserted into the system message so providers can cache it.
  */
-export async function buildSystemContext(prompt, maxIdeas = 3) {
+export async function buildSystemContext(prompt, options = {}) {
+  const {
+    maxIdeas = 2,
+    taskType = "general",
+    includeIdeas = true,
+  } = typeof options === "number" ? { maxIdeas: options } : options;
+
   let section = "";
 
   const sotContent = await _getSOTContent();
   if (sotContent) {
-    section += `[SOT: LifeOS/LimitlessOS — supersedes all]\n${sotContent.substring(0, 1200)}\n[/SOT]\n`;
+    const compactSOT = compactSOTContent(sotContent);
+    if (compactSOT) {
+      section += `[SOT]\n${compactSOT}\n[/SOT]\n`;
+    }
   }
 
   const ctx = knowledgeContext;
   if (ctx) {
-    if (ctx.trueVision) {
-      section += `[VISION]\n${ctx.trueVision.substring(0, 1000)}\n[/VISION]\n`;
+    if (ctx.staticKernel) {
+      section += `${ctx.staticKernel}\n`;
     }
-    if (ctx.coreTruths) {
-      section += `[TRUTHS]\n${ctx.coreTruths.substring(0, 700)}\n[/TRUTHS]\n`;
+    const ideasAllowed = includeIdeas && !["routing", "classification", "validation", "health", "status"].includes(taskType);
+    if (ideasAllowed) {
+      section = appendRelevantIdeas(section, prompt, ctx.entries, maxIdeas);
     }
-    if (ctx.projectContext) {
-      section += `[CTX]\n${ctx.projectContext.substring(0, 500)}\n[/CTX]\n`;
-    }
-    section = appendRelevantIdeas(section, prompt, ctx.entries, maxIdeas);
   }
 
   return section;
