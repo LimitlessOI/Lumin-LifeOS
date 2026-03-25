@@ -36,7 +36,14 @@ function addDays(dateStr, days) {
 
 export function createTCEmailMonitor({ notificationService, callCouncilMember, logger = console }) {
   const IMAP_EMAIL = process.env.TC_IMAP_EMAIL || process.env.WORK_EMAIL || 'LifeOS@hopkinsgroup.org';
-  const IMAP_PASSWORD = process.env.TC_IMAP_APP_PASSWORD || process.env.WORK_EMAIL_APP_PASSWORD;
+  // Fallback chain: standard names → email-address-as-key-name (how user stored it in Vault)
+  const IMAP_PASSWORD =
+    process.env.TC_IMAP_APP_PASSWORD ||
+    process.env.WORK_EMAIL_APP_PASSWORD ||
+    process.env['LifeOS@hopkinsgroup.org'] ||
+    process.env['lifeos@hopkinsgroup.org'] ||
+    process.env['Adam@hopkinsgroup.org'] ||
+    process.env['adam@hopkinsgroup.org'];
   const TC_FROM = process.env.TC_EMAIL_FROM || process.env.EMAIL_FROM || 'LifeOS@hopkinsgroup.org';
   const TC_NAME = process.env.TC_AGENT_NAME || 'Adam Hopkins';
   const TC_PHONE = process.env.TC_AGENT_PHONE || '';

@@ -736,8 +736,12 @@
       }
     }
 
-    // ══ API helpers — use postCommandJson/fetchCommandJson from command-center.js
-    // Those functions send x-command-key headers and are the single source of truth.
+    // ══ API helper — thin wrapper around command-center.js fetch functions.
+    // Uses x-command-key headers (the correct auth mechanism).
+    async function api(method, path, body) {
+      if (method === 'GET') return fetchCommandJson(path);
+      return postCommandJson(path, body || {});
+    }
 
     // ══ IDEAS QUEUE ════════════════════════════════════════════════════════
     let currentIdeas = [];
