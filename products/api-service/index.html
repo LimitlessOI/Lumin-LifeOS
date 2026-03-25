@@ -6,22 +6,28 @@
     <title>API Cost Savings Service</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            background-color: #121212;
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+        @media (max-width: 768px) {
+            .hero {
+                margin-bottom: 20px;
+            }
+            .how-it-works {
+                margin-bottom: 20px;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-800 text-white">
-    <section class="bg-gray-800 text-white py-20">
-        <div class="container mx-auto px-4">
-            <h1 class="text-5xl font-bold text-center mb-4">Cut Your AI API Costs by 90%</h1>
-            <p class="text-lg text-center">Unlock the power of OpenAI-compatible models without breaking the bank.</p>
-            <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Get Started</button>
-        </div>
-    </section>
-
-    <section class="py-20">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold mb-4">How it works</h2>
-            <div class="flex flex-wrap justify-center">
-                <div class="w-full md:w-1/2 xl:w-1/3 p-
+<body class="dark-mode">
+    <div class="hero">
+        <h1 class="text-6xl font-bold text-center p-10">Cut Your AI API Costs by 90%</h1>
+        <p class="text-2xl text-center p-10">Unlock your savings with our OpenAI-compatible API routing solution.</p>
+    </div>
+    <div class="container mx-auto p-10">
+        <div class="how-it-works">
+            <h2 class="text-4xl font-bold mb-5">How it works</h2>
+            <ol class="list-decimal list-inside mb-5">
+                <li class="mb-2">
+                    <h3 class
