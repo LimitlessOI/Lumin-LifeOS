@@ -1,40 +1,31 @@
-**Fixed Code:**
-
-```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI API Cost Savings</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Custom styles for dark theme professionalism */
-    body {
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
-      background-color: #1a1a1a; /* Dark theme background color */
-      color: #fff; /* Dark theme text color */
-    }
-    /* Fix 2: Remove noexp.nomd fences */
-    .no-exp-fences {
-      display: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI API Cost Savings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1', // Indigo 500
+                        secondary: '#a78bfa', // Violet 400
+                        darkbg: '#111827', // Gray 900
+                        darkcard: '#1f2937', // Gray 800
+                        darktext: '#d1d5db' // Gray 300
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-  <!-- Fix 1: Replace [object Object] with actual content -->
-  <h1>AI API Cost Savings Calculator</h1>
-  <p>Calculate your monthly cost savings with our AI API calculator.</p>
-  <div class="container mx-auto p-4">
-    <!-- Rest of the content goes here -->
-  </div>
-</body>
-</html>
-```
+<body class="bg-darkbg text-darktext font-sans">
 
-**Explanation:**
+    <div class="container mx-auto px-4 py-8">
 
-1. **Fix 1:** Replaced `[object Object]` with actual content (`AI API Cost Savings Calculator`) to make the page more informative and user-friendly.
-2. **Fix 2:** Removed `noexp.nomd fences` by adding a CSS rule to hide elements with class `no-exp-fences`.
-
-**Note:** I assumed that the `noexp.nomd fences` issue is related to a custom Tailwind CSS configuration. If this is not the case, please provide more context or information about the issue.
+        <!-- Hero Section -->
+        <section class="text-center py-20 bg-darkcard rounded-lg shadow-lg mb-16">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">Cut Your AI API Costs by 90%</h1>
