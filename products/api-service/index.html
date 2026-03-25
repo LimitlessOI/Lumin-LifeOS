@@ -5,27 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Cost Savings Service</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            background-color: #1a1d23;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3498db',
+                        secondary: '#f1c40f',
+                        dark: '#2c3e50'
+                    }
+                }
+            }
         }
-        .hero-text {
-            font-size: 3rem;
-            color: #9be9ff;
-        }
-        .hero-subtext {
-            font-size: 1.5rem;
-            color: #9be9ff;
-        }
-    </style>
+    </script>
 </head>
-<body class="text-center">
-    <header class="bg-gray-800">
-        <nav class="flex justify-center py-4">
-            <a href="#" class="text-2xl text-white font-bold">API Cost Savings Service</a>
-        </nav>
+<body class="bg-dark text-white">
+    <header class="bg-primary py-8">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-4">Cut Your AI API Costs by 90%</h1>
+            <p class="text-lg mb-8">Unlock the power of AI without breaking the bank.</p>
+        </div>
     </header>
-    <section class="hero text-center py-20">
-        <h1 class="hero-text mb-4">Cut Your AI API Costs by 90%</h1>
-        <p class="hero-subtext mb-8">Unlock the power of AI without breaking the bank.</p>
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-8">Get Started →</button
+    <main class="container mx-auto px-4 pt-4">
+        <section class="text-center mb-8">
+            <h2 class="text-3xl font-bold mb-4">How it works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="
