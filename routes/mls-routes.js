@@ -22,8 +22,21 @@
 
 import express from 'express';
 
-export function createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger = console }) {
+export function createMLSRoutes(
+  app,
+  { pool, requireKey, callCouncilMember, logger = console, accountManager: injectedAccountManager = null } = {}
+) {
   const router = express.Router();
+  let accountManagerPromise = null;
+
+  async function getAccountManager() {
+    if (injectedAccountManager) return injectedAccountManager;
+    if (!accountManagerPromise) {
+      accountManagerPromise = import('../services/account-manager.js')
+        .then(({ createAccountManager }) => createAccountManager({ pool, logger }));
+    }
+    return accountManagerPromise;
+  }
 
   async function getScanner() {
     const { createMLSDealScanner } = await import('../services/mls-deal-scanner.js');
@@ -193,8 +206,7 @@ export function createMLSRoutes(app, { pool, requireKey, callCouncilMember, logg
     try {
       const { override_price } = req.body || {};
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { createAccountManager }  = await import('../services/account-manager.js');
-      const accountManager = createAccountManager(pool);
+      const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
 
       const scanner = await getScanner();

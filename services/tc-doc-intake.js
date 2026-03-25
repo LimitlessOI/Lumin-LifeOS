@@ -17,6 +17,7 @@ import { ImapFlow } from 'imapflow';
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
+import { resolveTCImapConfig } from './tc-imap-config.js';
 
 const DOWNLOAD_DIR = '/tmp/tc-doc-intake';
 
@@ -68,18 +69,7 @@ export function createTCDocIntake({ pool, tcBrowser, accountManager, logger = co
   }
 
   function getImapConfig() {
-    // Prefer env vars; fall back to vault lookup at call time
-    return {
-      host:   process.env.IMAP_HOST   || 'imap.gmail.com',
-      port:   parseInt(process.env.IMAP_PORT || '993'),
-      secure: true,
-      auth: {
-        user: process.env.IMAP_USER || 'adam@hopkinsgroup.org',
-        pass: process.env.IMAP_PASS,
-      },
-      logger: false,
-      tls: { rejectUnauthorized: false },
-    };
+    return resolveTCImapConfig({ accountManager, logger });
   }
 
   // ── Email search ──────────────────────────────────────────────────────────
@@ -91,16 +81,10 @@ export function createTCDocIntake({ pool, tcBrowser, accountManager, logger = co
   async function findExecutedAgreements({ days = 90, searchAll = false } = {}) {
     await ensureDownloadDir();
 
-    // Try to get IMAP password from vault if not in env
-    let imapPass = process.env.IMAP_PASS;
-    if (!imapPass && accountManager) {
-      const account = await accountManager.getAccount('email_imap', 'adam@hopkinsgroup.org').catch(() => null);
-      imapPass = account?.password;
+    const cfg = await getImapConfig();
+    if (!cfg.auth.pass) {
+      throw new Error('IMAP_PASS not set and not found in vault. Add to Railway env vars or store via /api/v1/accounts/store');
     }
-    if (!imapPass) throw new Error('IMAP_PASS not set and not found in vault. Add to Railway env vars or store via /api/v1/accounts/store');
-
-    const cfg = getImapConfig();
-    cfg.auth.pass = imapPass;
 
     const client = new ImapFlow(cfg);
     const found = [];

@@ -1386,9 +1386,17 @@ app.use('/api/v1/accounts', createAccountManagerRoutes({ requireKey, accountMana
 logger.info('✅ [ACCOUNT-MANAGER] Routes mounted at /api/v1/accounts');
 
 const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
-createTCRoutes(app, { pool, requireKey, coordinator: tcCoordinator, logger });
+createTCRoutes(app, {
+  pool,
+  requireKey,
+  coordinator: tcCoordinator,
+  logger,
+  accountManager,
+  notificationService,
+  callCouncilMember,
+});
 startTCDeadlineCron(pool, tcCoordinator);
-createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger });
+createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
 
 // GLVAR dues (monthly) + violations (4× daily email scan)
 (async () => {
@@ -1408,7 +1416,7 @@ createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger });
 (async () => {
   try {
     const { createEmailTriage } = await import('./services/email-triage.js');
-    const emailTriage = createEmailTriage({ pool, notificationService, callCouncilMember, logger });
+    const emailTriage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
     emailTriage.startTriageCron();
   } catch (err) {
     logger.warn?.({ err: err.message }, '[EMAIL-TRIAGE] Failed to start');

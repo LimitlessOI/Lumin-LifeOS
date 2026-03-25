@@ -17,6 +17,7 @@
  */
 
 import { ImapFlow } from 'imapflow';
+import { resolveTCImapConfig } from './tc-imap-config.js';
 
 const DUES_WARN_DAYS   = 30;
 const DUES_URGENT_DAYS = 7;
@@ -165,22 +166,13 @@ export function createGLVARMonitor({ pool, tcBrowser, accountManager, notificati
    * Stores new ones in glvar_violations_log and alerts immediately.
    */
   async function checkViolationEmails() {
-    const imapHost = process.env.IMAP_HOST;
-    const imapUser = process.env.IMAP_USER;
-    const imapPass = process.env.WORK_EMAIL_APP_PASSWORD || process.env.IMAP_PASS;
-
-    if (!imapHost || !imapUser || !imapPass) {
+    const imapConfig = await resolveTCImapConfig({ accountManager, logger });
+    if (!imapConfig.host || !imapConfig.auth.user || !imapConfig.auth.pass) {
       logger.warn?.('[GLVAR-MONITOR] IMAP not configured — skipping violation scan');
       return { ok: false, reason: 'IMAP not configured' };
     }
 
-    const client = new ImapFlow({
-      host: imapHost,
-      port: 993,
-      secure: true,
-      auth: { user: imapUser, pass: imapPass },
-      logger: false,
-    });
+    const client = new ImapFlow(imapConfig);
 
     const found = [];
     try {

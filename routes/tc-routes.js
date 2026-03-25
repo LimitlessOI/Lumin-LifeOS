@@ -13,8 +13,39 @@ import fs from 'fs/promises';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 
-export function createTCRoutes(app, { pool, requireKey, coordinator, logger = console }) {
+export function createTCRoutes(
+  app,
+  {
+    pool,
+    requireKey,
+    coordinator,
+    logger = console,
+    accountManager: injectedAccountManager = null,
+    notificationService: injectedNotificationService = null,
+    callCouncilMember = null,
+  } = {}
+) {
   const router = express.Router();
+  let accountManagerPromise = null;
+  let notificationServicePromise = null;
+
+  async function getAccountManager() {
+    if (injectedAccountManager) return injectedAccountManager;
+    if (!accountManagerPromise) {
+      accountManagerPromise = import('../services/account-manager.js')
+        .then(({ createAccountManager }) => createAccountManager({ pool, logger }));
+    }
+    return accountManagerPromise;
+  }
+
+  async function getNotificationService() {
+    if (injectedNotificationService) return injectedNotificationService;
+    if (!notificationServicePromise) {
+      notificationServicePromise = import('../core/notification-service.js')
+        .then(({ NotificationService }) => new NotificationService({ pool }));
+    }
+    return notificationServicePromise;
+  }
 
   // GET /api/v1/tc/dashboard — summary stats
   router.get('/dashboard', requireKey, async (req, res) => {
@@ -125,7 +156,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
     try {
       const tx = await coordinator.getTransaction(parseInt(req.params.id));
       if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
-      const result = await coordinator.checkDeadlines();
+      const result = await coordinator.checkDeadlines({ transactionId: tx.id });
       res.json({ ok: true, message: 'Deadline check triggered', ...result });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
@@ -144,7 +175,8 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
 
       const docType = req.body?.docType || req.file?.originalname || 'document';
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const tcBrowser = createTCBrowserAgent({ accountManager: null, logger });
+      const accountManager = await getAccountManager();
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
 
       const { session } = await tcBrowser.loginToGLVAR();
       await tcBrowser.navigateToTransactionDesk(session);
@@ -164,8 +196,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
   router.post('/test-boldtrail', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { createAccountManager } = await import('../services/account-manager.js');
-      const accountManager = createAccountManager(pool);
+      const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
 
       const dryRun = req.body?.dryRun !== false;
@@ -194,8 +225,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
       const { days = 90, address, dry_run = true } = req.body || {};
       const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { createAccountManager } = await import('../services/account-manager.js');
-      const accountManager = createAccountManager(pool);
+      const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
       const intake = createTCDocIntake({ pool, tcBrowser, accountManager, logger });
 
@@ -214,8 +244,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
       const { days = 90 } = req.body || {};
       const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { createAccountManager } = await import('../services/account-manager.js');
-      const accountManager = createAccountManager(pool);
+      const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
       const intake = createTCDocIntake({ pool, tcBrowser, accountManager, logger });
       const emails = await intake.findExecutedAgreements({ days });
@@ -253,8 +282,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
 
       const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { createAccountManager } = await import('../services/account-manager.js');
-      const accountManager = createAccountManager(pool);
+      const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
       const intake = createTCDocIntake({ pool, tcBrowser, accountManager, logger });
 
@@ -276,8 +304,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
   router.post('/test-glvar-login', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { createAccountManager } = await import('../services/account-manager.js');
-      const accountManager = createAccountManager(pool);
+      const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
 
       const dryRun = req.body?.dryRun !== false; // default true — safe
@@ -295,8 +322,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
   router.post('/test-skyslope-login', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { createAccountManager } = await import('../services/account-manager.js');
-      const accountManager = createAccountManager(pool);
+      const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
 
       const dryRun = req.body?.dryRun !== false; // default true — safe
@@ -533,12 +559,10 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
   router.post('/glvar/check-dues', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { createAccountManager } = await import('../services/account-manager.js');
       const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
-      const accountManager = createAccountManager(pool);
+      const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
-      const { createNotificationService } = await import('../core/notification-service.js');
-      const notificationService = createNotificationService();
+      const notificationService = await getNotificationService();
 
       const monitor = createGLVARMonitor({ pool, tcBrowser, accountManager, notificationService, logger });
       const result = await monitor.checkDues();
@@ -579,9 +603,9 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
   router.post('/glvar/check-violations', requireKey, async (req, res) => {
     try {
       const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
-      const { createNotificationService } = await import('../core/notification-service.js');
-      const notificationService = createNotificationService();
-      const monitor = createGLVARMonitor({ pool, notificationService, logger });
+      const accountManager = await getAccountManager();
+      const notificationService = await getNotificationService();
+      const monitor = createGLVARMonitor({ pool, accountManager, notificationService, logger });
       const result = await monitor.checkViolationEmails();
       res.json(result);
     } catch (err) {
@@ -628,9 +652,9 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
   router.post('/email/scan', requireKey, async (req, res) => {
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
-      const { createNotificationService } = await import('../core/notification-service.js');
-      const notificationService = createNotificationService();
-      const triage = createEmailTriage({ pool, notificationService, callCouncilMember, logger });
+      const accountManager = await getAccountManager();
+      const notificationService = await getNotificationService();
+      const triage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
       const result = await triage.scanInbox();
       res.json(result);
     } catch (err) {
@@ -655,8 +679,7 @@ export function createTCRoutes(app, { pool, requireKey, coordinator, logger = co
   router.post('/test-glvar-mls', requireKey, async (req, res) => {
     try {
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
-      const { createAccountManager } = await import('../services/account-manager.js');
-      const accountManager = createAccountManager(pool);
+      const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
 
       const dryRun = req.body?.dryRun !== false;

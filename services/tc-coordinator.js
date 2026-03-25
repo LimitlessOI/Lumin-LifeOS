@@ -14,7 +14,7 @@ const CRON_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
 
 export function createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger = console }) {
   const browserAgent = createTCBrowserAgent({ accountManager, logger });
-  const emailMonitor = createTCEmailMonitor({ notificationService, callCouncilMember, logger });
+  const emailMonitor = createTCEmailMonitor({ notificationService, callCouncilMember, accountManager, logger });
 
   // ── DB helpers ─────────────────────────────────────────────────────────────
 
@@ -142,8 +142,10 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
    * Check all active transactions for upcoming deadlines and send reminders.
    * Runs on cron every 15 minutes.
    */
-  async function checkDeadlines() {
-    const transactions = await getActiveTransactions();
+  async function checkDeadlines({ transactionId = null } = {}) {
+    const transactions = transactionId
+      ? [await getTransaction(transactionId)].filter(Boolean)
+      : await getActiveTransactions();
     let remindersSet = 0;
 
     for (const tx of transactions) {
@@ -171,8 +173,8 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
       }
     }
 
-    logger.info?.({ checked: transactions.length, remindersSet }, '[TC] Deadline check complete');
-    return { checked: transactions.length, remindersSet };
+    logger.info?.({ checked: transactions.length, remindersSet, transactionId }, '[TC] Deadline check complete');
+    return { checked: transactions.length, remindersSet, transactionId };
   }
 
   /**
@@ -265,7 +267,16 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
 /**
  * Start the TC deadline cron — runs checkDeadlines() every 15 minutes.
  */
-export function startTCDeadlineCron(pool, coordinator) {
+export function startTCDeadlineCron(poolOrDeps, coordinatorArg) {
+  const coordinator =
+    poolOrDeps && typeof poolOrDeps === 'object' && 'coordinator' in poolOrDeps
+      ? poolOrDeps.coordinator
+      : coordinatorArg;
+
+  if (!coordinator?.checkDeadlines) {
+    throw new Error('startTCDeadlineCron requires a coordinator with checkDeadlines()');
+  }
+
   const tick = async () => {
     try {
       await coordinator.checkDeadlines();

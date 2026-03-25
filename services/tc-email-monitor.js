@@ -8,6 +8,7 @@
  */
 
 import { ImapFlow } from 'imapflow';
+import { resolveTCImapConfig } from './tc-imap-config.js';
 
 const NEVADA_DEFAULTS = {
   inspection_contingency_days: 10,
@@ -34,16 +35,7 @@ function addDays(dateStr, days) {
   return d.toISOString().slice(0, 10);
 }
 
-export function createTCEmailMonitor({ notificationService, callCouncilMember, logger = console }) {
-  const IMAP_EMAIL = process.env.TC_IMAP_EMAIL || process.env.WORK_EMAIL || 'LifeOS@hopkinsgroup.org';
-  // Fallback chain: standard names → email-address-as-key-name (how user stored it in Vault)
-  const IMAP_PASSWORD =
-    process.env.TC_IMAP_APP_PASSWORD ||
-    process.env.WORK_EMAIL_APP_PASSWORD ||
-    process.env['LifeOS@hopkinsgroup.org'] ||
-    process.env['lifeos@hopkinsgroup.org'] ||
-    process.env['Adam@hopkinsgroup.org'] ||
-    process.env['adam@hopkinsgroup.org'];
+export function createTCEmailMonitor({ notificationService, callCouncilMember, accountManager, logger = console }) {
   const TC_FROM = process.env.TC_EMAIL_FROM || process.env.EMAIL_FROM || 'LifeOS@hopkinsgroup.org';
   const TC_NAME = process.env.TC_AGENT_NAME || 'Adam Hopkins';
   const TC_PHONE = process.env.TC_AGENT_PHONE || '';
@@ -56,18 +48,13 @@ export function createTCEmailMonitor({ notificationService, callCouncilMember, l
    * Poll the IMAP inbox once and return emails that look like contracts.
    */
   async function checkForNewContracts({ since = null } = {}) {
-    if (!IMAP_PASSWORD) {
+    const imapConfig = await resolveTCImapConfig({ accountManager, logger });
+    if (!imapConfig.auth.pass) {
       logger.warn?.('[TC-EMAIL] IMAP password not set — email monitoring disabled');
       return [];
     }
 
-    const client = new ImapFlow({
-      host: 'imap.gmail.com',
-      port: 993,
-      secure: true,
-      auth: { user: IMAP_EMAIL, pass: IMAP_PASSWORD },
-      logger: false,
-    });
+    const client = new ImapFlow(imapConfig);
 
     const found = [];
     try {
@@ -195,6 +182,11 @@ ${emailText.slice(0, 4000)}`;
    * Send party introduction email to all transaction parties.
    */
   async function sendPartyIntro(transaction) {
+    if (!notificationService?.sendEmail) {
+      logger.warn?.('[TC-EMAIL] Notification service unavailable — skipping party intro');
+      return [];
+    }
+
     const keyDates = transaction.key_dates || {};
     const parties = transaction.parties || {};
 
@@ -252,6 +244,14 @@ ${TC_FROM}
    * Send a deadline reminder to relevant parties.
    */
   async function sendDeadlineReminder(transaction, deadlineName, deadlineDate, daysRemaining) {
+    if (!notificationService?.sendEmail) {
+      logger.warn?.(
+        { transactionId: transaction?.id, deadlineName },
+        '[TC-EMAIL] Notification service unavailable — skipping deadline reminder'
+      );
+      return [];
+    }
+
     const parties = transaction.parties || {};
 
     // Who gets reminded depends on which deadline

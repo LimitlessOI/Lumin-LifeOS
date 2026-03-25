@@ -14,7 +14,7 @@
  *   }
  *   // then add bootMyDomain(deps) to the exports at the bottom
  *
- * Deps shape: { pool, logger, notificationService, callCouncilMember, accountManager }
+ * Deps shape: { pool, logger, notificationService, callCouncilMember, accountManager, tcCoordinator }
  */
 
 // ── GLVAR Monitor (dues + violations) ────────────────────────────────────────
@@ -35,10 +35,10 @@ async function bootGLVARMonitor(deps) {
 
 // ── Email Triage (inbox scanning + daily digest) ──────────────────────────────
 async function bootEmailTriage(deps) {
-  const { pool, logger, notificationService, callCouncilMember } = deps;
+  const { pool, logger, notificationService, callCouncilMember, accountManager } = deps;
   try {
     const { createEmailTriage } = await import('../services/email-triage.js');
-    const triage = createEmailTriage({ pool, notificationService, callCouncilMember, logger });
+    const triage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
     triage.startTriageCron();
     logger.info?.('[BOOT] Email triage started');
   } catch (err) {
@@ -48,10 +48,14 @@ async function bootEmailTriage(deps) {
 
 // ── TC Deadline Cron ──────────────────────────────────────────────────────────
 async function bootTCDeadlineCron(deps) {
-  const { pool, logger, notificationService } = deps;
+  const { logger, tcCoordinator } = deps;
   try {
+    if (!tcCoordinator) {
+      logger.warn?.('[BOOT] TC deadline cron skipped — tcCoordinator missing');
+      return;
+    }
     const { startTCDeadlineCron } = await import('../services/tc-coordinator.js');
-    startTCDeadlineCron({ pool, notificationService, logger });
+    startTCDeadlineCron({ coordinator: tcCoordinator, logger });
     logger.info?.('[BOOT] TC deadline cron started');
   } catch (err) {
     logger.warn?.(`[BOOT] TC deadline cron failed to start: ${err.message}`);

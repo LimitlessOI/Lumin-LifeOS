@@ -19,6 +19,7 @@
  */
 
 import { ImapFlow } from 'imapflow';
+import { isTCImapConfigured, resolveTCImapConfig } from './tc-imap-config.js';
 
 const SCAN_INTERVAL_MS  = 30 * 60 * 1000; // 30 minutes
 const DIGEST_HOUR       = 7;               // 7am daily digest
@@ -43,25 +44,7 @@ const RULES = [
 
 const ALERT_CATEGORIES = new Set([CATEGORIES.TC_CONTRACT, CATEGORIES.TC_DEADLINE, CATEGORIES.TIME_SENSITIVE, CATEGORIES.GLVAR]);
 
-export function createEmailTriage({ pool, notificationService, callCouncilMember, logger = console }) {
-
-  function getImapConfig() {
-    return {
-      host:   process.env.IMAP_HOST,
-      port:   993,
-      secure: true,
-      auth: {
-        user: process.env.IMAP_USER,
-        pass: process.env.WORK_EMAIL_APP_PASSWORD || process.env.IMAP_PASS,
-      },
-      logger: false,
-    };
-  }
-
-  function isImapConfigured() {
-    const cfg = getImapConfig();
-    return !!(cfg.host && cfg.auth.user && cfg.auth.pass);
-  }
+export function createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger = console }) {
 
   // Fast rule-based classification
   function classifyByRules(subject = '', from = '', snippet = '') {
@@ -98,12 +81,12 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
    * Scan inbox for emails since last check. Store and alert as needed.
    */
   async function scanInbox() {
-    if (!isImapConfigured()) {
+    if (!(await isTCImapConfigured({ accountManager, logger }))) {
       logger.warn?.('[EMAIL-TRIAGE] IMAP not configured — skipping');
       return { ok: false, reason: 'IMAP not configured' };
     }
 
-    const client = new ImapFlow(getImapConfig());
+    const client = new ImapFlow(await resolveTCImapConfig({ accountManager, logger }));
     const newItems = [];
 
     try {
