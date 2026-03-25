@@ -909,9 +909,9 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       compressionLayers.noise_phrase = { savedTokens: optimized.savedTokens, savedPct: optimized.savingsPct };
     }
 
-    // Layer 2 — TOON: compact any JSON blocks in the prompt (skip for codegen)
+    // Layer 2 — TOON: compact any JSON blocks in the prompt
     let toonSavedTokens = 0;
-    if (!isCritical && taskType !== 'codegen' && taskType !== 'code') {
+    if (!isCritical) {
       const toonResult = compressJSONInPrompt(finalPrompt);
       if (toonResult.replacements > 0) {
         finalPrompt = toonResult.text;
@@ -920,15 +920,15 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       }
     }
 
-    // Layer 3 + 4 — IR compiler + Chain of Draft (skip for critical/codegen)
+    // Layer 3 + 4 — IR compiler + Chain of Draft
+    // IR restructuring skipped for codegen (breaks code prompts), but CoD applies to all.
     let irSavedTokens = 0;
     let codSavedOutputPct = 0;
-    if (!isCritical && taskType !== 'codegen' && taskType !== 'code') {
-      const irResult = irCompressPrompt(finalPrompt, taskType);
-      // Always apply irResult.text — it includes CoD even when IR saves 0 tokens.
-      // (CoD adds ~10 tokens to input but saves 60-92% on output tokens.)
+    if (!isCritical) {
+      const isCode = taskType === 'codegen' || taskType === 'code';
+      const irResult = irCompressPrompt(finalPrompt, isCode ? 'general' : taskType);
       finalPrompt = irResult.text;
-      if (irResult.savedTokens > 0) {
+      if (irResult.savedTokens > 0 && !isCode) {
         irSavedTokens = irResult.savedTokens;
         compressionLayers.prompt_ir = { savedTokens: irResult.savedTokens, savedPct: irResult.savingsPct };
       }

@@ -145,7 +145,7 @@ const REVERSE_TABLE = PHRASE_TABLE.map(([full, short]) => [short, full]);
 function stripNoise(text) {
   return text
     .replace(/\r\n/g, '\n')           // normalize line endings
-    .replace(/\n{3,}/g, '\n\n')       // max 2 consecutive blank lines
+    .replace(/\n{2,}/g, '\n')          // collapse all multi-blank lines to single newline
     .replace(/[ \t]+$/gm, '')         // trailing whitespace on each line
     .replace(/^[ \t]+$/gm, '')        // lines that are only whitespace
     .trim();
@@ -378,9 +378,10 @@ export function createTokenOptimizer(pool = null) {
 
     // Compression history (rolling 200)
     if (savedTokens > 0) {
+      const baselineTokens = (inputTokens || 0) + (savedTokens || 0);
       stats.compressionHistory.push({
         ts: Date.now(),
-        savedPct: inputTokens > 0 ? Math.round((savedTokens / (inputTokens + savedTokens)) * 100) : 0,
+        savedPct: baselineTokens > 0 ? Math.round((savedTokens / baselineTokens) * 100) : 0,
         provider,
         taskType,
       });
@@ -390,7 +391,10 @@ export function createTokenOptimizer(pool = null) {
     }
 
     await saveStats();
-    if (pool) await persistToDB({ provider, model, taskType, inputTokens, outputTokens, savedTokens, cacheHit, costUSD, savedCostUSD });
+
+    // Persist per-call row to DB (fire-and-forget — never blocks the response)
+    persistToDB({ provider, model, taskType, inputTokens, outputTokens,
+                  savedTokens, cacheHit, costUSD, savedCostUSD }).catch(() => {});
   }
 
   // ── Record response quality (0-10 scale, used by improvement loop) ─────────
@@ -484,15 +488,20 @@ export function createTokenOptimizer(pool = null) {
   async function persistToDB(data) {
     if (!pool) return;
     try {
+      const originalTokens = (data.inputTokens || 0) + (data.savedTokens || 0);
+      const savingsPct = originalTokens > 0
+        ? Math.round((data.savedTokens / originalTokens) * 100 * 100) / 100
+        : 0;
       await pool.query(
         `INSERT INTO token_usage_log
           (provider, model, task_type, input_tokens, output_tokens,
-           saved_tokens, cache_hit, cost_usd, saved_cost_usd, logged_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,NOW())
-         ON CONFLICT DO NOTHING`,
+           saved_tokens, cache_hit, cost_usd, saved_cost_usd,
+           original_tokens, compressed_tokens, savings_pct, logged_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())`,
         [data.provider, data.model, data.taskType,
          data.inputTokens, data.outputTokens, data.savedTokens,
-         data.cacheHit, data.costUSD, data.savedCostUSD]
+         data.cacheHit, data.costUSD, data.savedCostUSD,
+         originalTokens, data.inputTokens, savingsPct]
       );
     } catch {
       // Table may not exist yet — non-blocking
