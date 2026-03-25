@@ -64,6 +64,8 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-document-validator.js` | Fail-closed completeness validator for doc intake and upload gating |
 | `services/tc-portal-service.js` | Builds agent/client portal read models and tracks communications + document requests |
 | `services/tc-report-service.js` | Showings, feedback, listing health scoring, and weekly seller/agent reports |
+| `services/tc-automation-service.js` | Prepared-send automation for feedback requests, document requests, and weekly report delivery |
+| `services/tc-approval-service.js` | Approval cockpit state for review / approve / reject / snooze flows |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `public/tc/agent-portal.html` | Agent-facing at-a-glance portal for file health, blockers, docs, comms, and reports |
@@ -76,6 +78,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `db/migrations/20260323_mls_investors.sql` | mls_investors, mls_deal_matches |
 | `db/migrations/20260325_tc_portal.sql` | tc_document_requests, tc_communications for portal/service tracking |
 | `db/migrations/20260325_tc_reporting.sql` | tc_showings, feedback, market snapshots, and weekly reports |
+| `db/migrations/20260325_tc_approvals_automation.sql` | tc_approval_items for one-tap review / approve / send flows |
 
 ### Portal Access
 | Portal | URL | Purpose |
@@ -105,6 +108,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 ### Portal Requirements
 - Agent portal and client portal read from the same canonical transaction state
 - Backend APIs for portal overview now exist; frontend pages should remain thin projections of those APIs
+- Approval cockpit data now has a concrete backend path in code; agent portal can surface pending approvals and resolve them in-place
 - Agent portal is detailed and operational
 - Client portal is simplified, confidence-building, and real-time
 - Client portal must answer:
@@ -203,6 +207,19 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - Weekly report generation now has a concrete backend path in code: showings + feedback + latest market snapshot -> health score -> recommendations -> persisted report
 - Market snapshot inputs are currently manual/API-fed placeholders until MLS/showing-system feeds are wired back in
 - Feedback and showing capture are first-class records so weekly seller updates can be grounded in evidence, not memory
+- Weekly report delivery can now be prepared as communication drafts and routed through approval flows instead of sending blindly
+
+### Automation + Approval Cockpit
+- Showing feedback requests can be prepared and optionally sent by SMS/email immediately after a showing
+- Document requests can be prepared and optionally sent through the same communication ledger
+- Weekly reports can be generated, turned into communication drafts, and queued for approval
+- Approval items are first-class records with:
+  - status: `pending | awaiting_review | approved | rejected | snoozed | completed`
+  - priority: `low | normal | urgent | critical`
+  - prepared action metadata so one tap can continue the workflow
+- Product rule:
+  - no urgent alert without a prepared next action
+  - no irreversible submission without explicit approval
 
 ### Weekly Listing Report (seller-facing + agent-facing)
 - Showings completed and showing velocity trend
@@ -416,12 +433,12 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 Run `POST /api/v1/tc/intake/email-search` dry run to verify email scan works
 - 🔲 Run `POST /api/v1/tc/test-skyslope-login` to verify SSO works
 - 🔲 Build document completeness / missing-signature / missing-field QA before trusting automated filing
-- 🔲 Build transaction status engine + real-time agent/client portal
-- 🔲 Build communication engine + weekly seller reporting
+- 🔲 Strengthen form-specific Nevada/eXp validation packs beyond the current generic fail-closed gate
+- 🔲 Polish agent/client portal UI on top of the now-live overview/report/approval APIs
+- 🔲 Wire communication delivery callbacks / acknowledgements into the approval cockpit
 - 🔲 Build Asana sync from canonical file state instead of task-only workflow
 - 🔲 Build recording/consent gate and fail-closed policy before any rolling buffer feature ships
 - 🔲 Convert existing Asana listing/buyer templates into structured workflow specs with triggers, dependencies, and communication hooks
-- 🔲 Build client-safe portal with real-time visibility into file state, blockers, and next steps
 - 🔲 Secure official MLS/API access and wire it into the listing health/reporting engine
 
 ### Next milestones
@@ -431,6 +448,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - First real-time file status card visible to agent at a glance
 - First weekly seller property report generated from live market + showing + feedback data
 - First one-tap mobile approval flow (review → approve/sign → continue automation)
+- First automated showing-feedback request delivered and tracked through the TC communication ledger
 - First structured Asana-to-LifeOS workflow mapping for listing side and buyer side templates
 - First offer-prep command run using real client profile + comp set + contingency logic
 

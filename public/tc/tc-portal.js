@@ -53,22 +53,47 @@
     }
 
     try {
-      const [overview, reports] = await Promise.all([
+      const requests = [
         api(`/api/v1/tc/transactions/${txId}/overview?view=${view}`),
         api(`/api/v1/tc/transactions/${txId}/reports`),
-      ]);
-      renderOverview(overview, reports.items || []);
+      ];
+      if (view === 'agent') requests.push(api(`/api/v1/tc/transactions/${txId}/approvals?limit=25`));
+      const [overview, reports, approvals] = await Promise.all(requests);
+      renderOverview(overview, reports.items || [], approvals?.items || []);
     } catch (err) {
       document.getElementById('app').innerHTML = `<div class="card error"><h2>Load failed</h2><p>${escapeHtml(err.message)}</p></div>`;
     }
   }
 
-  function renderOverview(data, reports) {
+  async function runApprovalAction(id, action) {
+    await api(`/api/v1/tc/approvals/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ action, actor: 'agent_portal' }),
+    });
+    await load();
+  }
+
+  function renderOverview(data, reports, approvals) {
     const root = document.getElementById('app');
     const isClient = data.view === 'client';
     const tx = data.transaction || {};
     const status = data.status || {};
     const recentReports = reports.slice(0, 3);
+    const approvalRows = approvals.map((item) => `
+      <tr>
+        <td>${escapeHtml(item.title)}</td>
+        <td><span class="badge ${badgeClass(item.priority)}">${escapeHtml(item.priority)}</span></td>
+        <td>${escapeHtml(item.summary || '')}</td>
+        <td>${escapeHtml(item.due_at || '')}</td>
+        <td>
+          <div class="row-actions">
+            <button data-approval="${item.id}" data-action="approve">Approve</button>
+            <button data-approval="${item.id}" data-action="snooze">Snooze</button>
+            <button data-approval="${item.id}" data-action="reject" class="ghost">Reject</button>
+          </div>
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan="5">No pending approvals</td></tr>';
 
     const documentRows = (data.requested_documents || data.document_requests || []).map((item) => `
       <tr>
@@ -163,10 +188,27 @@
 
       ${isClient ? '' : `
       <div class="card">
+        <h2>Approval Cockpit</h2>
+        <table><thead><tr><th>Item</th><th>Priority</th><th>Summary</th><th>Due</th><th>Actions</th></tr></thead><tbody>${approvalRows}</tbody></table>
+      </div>
+
+      <div class="card">
         <h2>Recent Events</h2>
         <table><thead><tr><th>Event</th><th>When</th></tr></thead><tbody>${eventRows}</tbody></table>
       </div>`}
     `;
+
+    root.querySelectorAll('[data-approval]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        button.disabled = true;
+        try {
+          await runApprovalAction(button.dataset.approval, button.dataset.action);
+        } catch (err) {
+          alert(err.message);
+          button.disabled = false;
+        }
+      });
+    });
   }
 
   window.addEventListener('DOMContentLoaded', load);

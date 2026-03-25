@@ -1131,6 +1131,7 @@ createTCRoutes(app, {
   accountManager,
   notificationService,
   callCouncilMember,
+  sendSMS,
 });
 startTCDeadlineCron(pool, tcCoordinator);
 createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });

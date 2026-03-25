@@ -14,6 +14,8 @@ import fs from 'fs/promises';
 import { createTCStatusEngine } from '../services/tc-status-engine.js';
 import { createTCPortalService } from '../services/tc-portal-service.js';
 import { createTCReportService } from '../services/tc-report-service.js';
+import { createTCAutomationService } from '../services/tc-automation-service.js';
+import { createTCApprovalService } from '../services/tc-approval-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 
@@ -27,12 +29,23 @@ export function createTCRoutes(
     accountManager: injectedAccountManager = null,
     notificationService: injectedNotificationService = null,
     callCouncilMember = null,
+    sendSMS = null,
   } = {}
 ) {
   const router = express.Router();
   const statusEngine = createTCStatusEngine();
   const portalService = createTCPortalService({ pool, coordinator, logger });
   const reportService = createTCReportService({ pool, coordinator, logger });
+  const automationService = createTCAutomationService({
+    pool,
+    coordinator,
+    portalService,
+    reportService,
+    logger,
+    getNotificationService,
+    sendSMS,
+  });
+  const approvalService = createTCApprovalService({ pool, coordinator, automationService, logger });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -52,6 +65,32 @@ export function createTCRoutes(
         .then(({ NotificationService }) => new NotificationService({ pool }));
     }
     return notificationServicePromise;
+  }
+
+  async function queueCommunicationApprovals(transactionId, communications, {
+    titlePrefix = 'Review prepared communication',
+    summary = null,
+    priority = 'normal',
+    dueAt = null,
+    actorMetadata = {},
+  } = {}) {
+    const approvals = [];
+    for (const item of communications || []) {
+      const title = `${titlePrefix}: ${item.subject || item.template_key || item.channel}`;
+      const approval = await approvalService.createApproval(transactionId, {
+        category: 'communication',
+        title,
+        summary: summary || `Prepared ${item.channel} message for ${item.audience}.`,
+        priority,
+        due_at: dueAt,
+        target_type: 'communication',
+        target_id: item.id,
+        prepared_action: { kind: 'send_communication', communication_id: item.id },
+        metadata: { communication_id: item.id, ...actorMetadata },
+      });
+      approvals.push(approval);
+    }
+    return approvals;
   }
 
   // GET /api/v1/tc/dashboard — summary stats
@@ -233,6 +272,70 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/communications/:communicationId/send
+  router.post('/communications/:communicationId/send', requireKey, async (req, res) => {
+    try {
+      const result = await automationService.sendCommunicationById(parseInt(req.params.communicationId));
+      if (!result.ok) return res.status(400).json({ ok: false, error: result.error || 'Send failed', ...result });
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/approvals/pending
+  router.get('/approvals/pending', requireKey, async (req, res) => {
+    try {
+      const status = req.query.status || null;
+      const limit = Math.min(parseInt(req.query.limit) || 50, 200);
+      const items = await approvalService.listApprovals({ status, limit });
+      res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/approvals
+  router.get('/transactions/:id/approvals', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const status = req.query.status || null;
+      const limit = Math.min(parseInt(req.query.limit) || 50, 200);
+      const items = await approvalService.listApprovals({ transactionId: txId, status, limit });
+      res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/approvals
+  router.post('/transactions/:id/approvals', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const { category = 'task', title, summary = null, priority = 'normal', due_at = null, target_type = null, target_id = null, prepared_action = {}, metadata = {} } = req.body || {};
+      if (!title) return res.status(400).json({ ok: false, error: 'title is required' });
+      const item = await approvalService.createApproval(txId, { category, title, summary, priority, due_at, target_type, target_id, prepared_action, metadata });
+      res.status(201).json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PATCH /api/v1/tc/approvals/:approvalId
+  router.patch('/approvals/:approvalId', requireKey, async (req, res) => {
+    try {
+      const item = await approvalService.updateApproval(parseInt(req.params.approvalId), req.body || {});
+      if (!item) return res.status(404).json({ ok: false, error: 'Approval not found' });
+      res.json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // GET /api/v1/tc/transactions/:id/showings
   router.get('/transactions/:id/showings', requireKey, async (req, res) => {
     try {
@@ -267,6 +370,32 @@ export function createTCRoutes(
       const item = await reportService.updateShowing(parseInt(req.params.showingId), req.body || {});
       if (!item) return res.status(404).json({ ok: false, error: 'Showing not found or no patch fields supplied' });
       res.json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/showings/:showingId/request-feedback
+  router.post('/showings/:showingId/request-feedback', requireKey, async (req, res) => {
+    try {
+      const showingId = parseInt(req.params.showingId);
+      const { channels = ['sms', 'email'], send_now = true, require_approval = false, due_at = null } = req.body || {};
+      const result = await automationService.prepareShowingFeedbackRequest(showingId, {
+        channels: Array.isArray(channels) ? channels : [channels],
+        sendNow: !require_approval && send_now !== false,
+      });
+      if (!result.ok) return res.status(404).json(result);
+      let approvals = [];
+      if (require_approval && result.showing?.transaction_id) {
+        approvals = await queueCommunicationApprovals(result.showing.transaction_id, result.communications, {
+          titlePrefix: 'Approve showing feedback request',
+          summary: 'Prepared follow-up to collect showing feedback.',
+          priority: 'normal',
+          dueAt: due_at,
+          actorMetadata: { showing_id: showingId },
+        });
+      }
+      res.json({ ok: true, ...result, approvals });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
@@ -325,6 +454,49 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/transactions/:id/reports/weekly/prepare
+  router.post('/transactions/:id/reports/weekly/prepare', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const {
+        audience = 'seller',
+        reference_date = new Date().toISOString(),
+        channels = ['email'],
+        require_approval = true,
+        due_at = null,
+      } = req.body || {};
+
+      const generated = await automationService.prepareWeeklyReport(txId, {
+        audience,
+        referenceDate: new Date(reference_date),
+      });
+      if (!generated.ok) return res.status(400).json(generated);
+
+      const delivery = await automationService.prepareWeeklyReportDelivery(generated.report.id, {
+        channels: Array.isArray(channels) ? channels : [channels],
+        audience,
+        sendNow: !require_approval,
+      });
+
+      let approvals = [];
+      if (require_approval) {
+        approvals = await queueCommunicationApprovals(txId, delivery.communications, {
+          titlePrefix: 'Approve weekly report send',
+          summary: 'Prepared weekly seller/agent update for delivery.',
+          priority: 'normal',
+          dueAt: due_at,
+          actorMetadata: { report_id: generated.report.id, audience },
+        });
+      }
+
+      res.status(201).json({ ok: true, report: generated.report, payload: generated.payload, delivery, approvals });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // GET /api/v1/tc/transactions/:id/reports
   router.get('/transactions/:id/reports', requireKey, async (req, res) => {
     try {
@@ -333,6 +505,32 @@ export function createTCRoutes(
       if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
       const items = await reportService.listReports(txId);
       res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/document-requests/:requestId/send
+  router.post('/document-requests/:requestId/send', requireKey, async (req, res) => {
+    try {
+      const requestId = parseInt(req.params.requestId);
+      const { channels = ['email'], send_now = true, require_approval = false, due_at = null } = req.body || {};
+      const result = await automationService.sendDocumentRequest(requestId, {
+        channels: Array.isArray(channels) ? channels : [channels],
+        sendNow: !require_approval && send_now !== false,
+      });
+      if (!result.ok) return res.status(404).json(result);
+      let approvals = [];
+      if (require_approval && result.request?.transaction_id) {
+        approvals = await queueCommunicationApprovals(result.request.transaction_id, result.communications, {
+          titlePrefix: 'Approve document request send',
+          summary: 'Prepared document request for client delivery.',
+          priority: 'urgent',
+          dueAt: due_at || result.request.due_at || null,
+          actorMetadata: { request_id: requestId },
+        });
+      }
+      res.json({ ok: true, ...result, approvals });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
