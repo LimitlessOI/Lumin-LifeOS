@@ -60,6 +60,9 @@ export class ToolsModule {
 
   async refreshStatus() {
     if (this.refreshInProgress) return;
+    // Don't re-probe more often than every 5 minutes
+    const now = Date.now();
+    if (this._lastRefreshAt && now - this._lastRefreshAt < 5 * 60 * 1000) return;
     this.refreshInProgress = true;
 
     try {
@@ -135,6 +138,7 @@ export class ToolsModule {
     } catch (error) {
       console.warn("[TOOLS STATUS] refresh error:", error.message);
     } finally {
+      this._lastRefreshAt = Date.now();
       this.refreshInProgress = false;
     }
   }

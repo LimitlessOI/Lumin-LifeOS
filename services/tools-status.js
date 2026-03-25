@@ -46,6 +46,10 @@ export async function checkNodeModule(moduleName) {
   }
 }
 
+// Suppress repeated Ollama failure logs — log once, then silence for 30 min
+let _ollamaLastWarnAt = 0;
+const _OLLAMA_WARN_COOLDOWN = 30 * 60 * 1000;
+
 export async function fetchOllamaModels(endpoint) {
   // Skip entirely if not configured or explicitly disabled
   const ep = endpoint || process.env.OLLAMA_ENDPOINT;
@@ -64,11 +68,13 @@ export async function fetchOllamaModels(endpoint) {
     const models = Array.isArray(data.models)
       ? data.models.map((m) => m.name || m.model || "")
       : [];
+    _ollamaLastWarnAt = 0; // reset on success
     return { endpoint: ep, available: true, models };
   } catch (error) {
-    // Only log if someone actually configured an endpoint — not for the default localhost guess
-    if (endpoint) {
-      console.warn("[TOOLS STATUS] Ollama fetch failed:", error.message);
+    const now = Date.now();
+    if (now - _ollamaLastWarnAt > _OLLAMA_WARN_COOLDOWN) {
+      console.warn("[TOOLS STATUS] Ollama unavailable (silencing for 30 min):", error.message);
+      _ollamaLastWarnAt = now;
     }
     return { endpoint: ep, available: false, models: [] };
   } finally {
