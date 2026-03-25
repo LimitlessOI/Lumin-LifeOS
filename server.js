@@ -1596,6 +1596,23 @@ setupWebSocketHandler(wss, {
 });
 
 // ==================== HEALTH CHECK ====================
+// Auth diagnostic — shows which key env vars are SET (not their values) and what header was received
+app.get('/auth-check', (req, res) => {
+  const envVars = ['API_KEY', 'LIFEOS_KEY', 'COMMAND_CENTER_KEY'];
+  const configured = envVars.filter(k => !!process.env[k]);
+  const headerAliases = ['x-api-key', 'x-lifeos-key', 'x-command-key', 'x-command-center-key'];
+  const receivedHeader = headerAliases.map(h => req.headers[h]).find(Boolean) || null;
+  const receivedQuery = req.query.api_key || req.query.apiKey || null;
+  const provided = receivedHeader || receivedQuery;
+  const match = configured.some(k => process.env[k] === provided);
+  res.json({
+    configured_vars: configured,
+    open_access: process.env.LIFEOS_OPEN_ACCESS === 'true',
+    key_received: provided ? `${provided.slice(0,4)}...${provided.slice(-4)} (len:${provided.length})` : null,
+    match,
+  });
+});
+
 app.get('/healthz', async (req, res) => {
   const checks = {
     server: 'ok',
