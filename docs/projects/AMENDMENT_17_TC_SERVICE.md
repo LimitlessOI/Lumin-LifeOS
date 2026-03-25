@@ -61,6 +61,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/mls-deal-scanner.js` | AI deal scoring, investor criteria matching, offer drafting |
 | `services/tc-imap-config.js` | Canonical IMAP resolver shared by TC intake, triage, and GLVAR monitor |
 | `services/tc-status-engine.js` | Computes derived file stage, health, next action, blockers, and portal-ready status views |
+| `services/tc-document-validator.js` | Fail-closed completeness validator for doc intake and upload gating |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `db/migrations/20260322_tc_transactions.sql` | Core transactions table |
@@ -150,6 +151,16 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - `closing_prep`
 - `closed`
 - `blocked`
+
+### Document QA / Completeness Gate
+- Every inbound file should be classified and validated before automatic filing
+- Uploads must fail closed by default when required signals are missing
+- Validator output must include:
+  - pass / review / fail verdict
+  - missing-items list
+  - extracted facts (address / price / parties when possible)
+  - confidence
+- Automatic SkySlope filing should only proceed when the validator passes or a human force-approves the upload
 
 ### Communication Engine
 - Every file must track what has been sent, what is waiting, and what is overdue

@@ -226,17 +226,30 @@ export function createTCRoutes(
       }
 
       const docType = req.body?.docType || req.file?.originalname || 'document';
+      const forceUpload = String(req.body?.force_upload || req.body?.forceUpload || 'false').toLowerCase() === 'true';
       const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createTCDocumentValidator } = await import('../services/tc-document-validator.js');
       const accountManager = await getAccountManager();
       const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+      const validator = createTCDocumentValidator({ logger });
+      const validation = await validator.validateFile({
+        filePath: tmpPath,
+        fileName: req.file.originalname,
+        docType,
+        expectedAddress: tx.address || null,
+      });
+
+      if (validation.blocks_upload && !forceUpload) {
+        return res.status(409).json({ ok: false, blocked: true, error: 'Document validation blocked upload', validation });
+      }
 
       const { session } = await tcBrowser.loginToGLVAR();
       await tcBrowser.navigateToTransactionDesk(session);
       const result = await tcBrowser.uploadDocument(session, tx.transaction_desk_id, tmpPath, docType);
       await session.close?.();
 
-      await coordinator.logEvent(tx.id, 'doc_uploaded', { docType, ok: result.ok });
-      res.json({ ok: true, ...result });
+      await coordinator.logEvent(tx.id, 'doc_uploaded', { docType, ok: result.ok, validation });
+      res.json({ ok: true, validation, ...result });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     } finally {
@@ -315,6 +328,32 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/intake/validate — validate a document before filing
+  router.post('/intake/validate', requireKey, upload.single('document'), async (req, res) => {
+    const tmpPath = req.file?.path;
+    try {
+      if (!req.file) return res.status(400).json({ ok: false, error: 'No file uploaded. Use multipart field "document"' });
+
+      const docType = req.body?.doc_type || 'Transaction Document';
+      const address = req.body?.address || null;
+      const { createTCDocumentValidator } = await import('../services/tc-document-validator.js');
+      const validator = createTCDocumentValidator({ logger });
+      const validation = await validator.validateFile({
+        filePath: tmpPath,
+        fileName: req.file.originalname,
+        docType,
+        expectedAddress: address,
+      });
+
+      res.json({ ok: true, validation });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] intake/validate error');
+      res.status(500).json({ ok: false, error: err.message });
+    } finally {
+      if (tmpPath) await fs.unlink(tmpPath).catch(() => {});
+    }
+  });
+
   // POST /api/v1/tc/intake/upload — manual file upload (scanned docs, photos)
   // Send as multipart/form-data with field "document" (file) + "doc_type" + "address"
   router.post('/intake/upload', requireKey, upload.single('document'), async (req, res) => {
@@ -325,11 +364,21 @@ export function createTCRoutes(
       const docType  = req.body?.doc_type || 'Transaction Document';
       const address  = req.body?.address  || null;
       const dryRun   = req.body?.dry_run === 'true';
+      const forceUpload = String(req.body?.force_upload || 'false').toLowerCase() === 'true';
 
-      logger.info?.({ filename: req.file.originalname, docType, address, dryRun }, '[TC-ROUTES] Manual doc intake');
+      logger.info?.({ filename: req.file.originalname, docType, address, dryRun, forceUpload }, '[TC-ROUTES] Manual doc intake');
+
+      const { createTCDocumentValidator } = await import('../services/tc-document-validator.js');
+      const validator = createTCDocumentValidator({ logger });
+      const validation = await validator.validateFile({
+        filePath: tmpPath,
+        fileName: req.file.originalname,
+        docType,
+        expectedAddress: address,
+      });
 
       if (dryRun) {
-        return res.json({ ok: true, dryRun: true, filename: req.file.originalname, docType, size: req.file.size });
+        return res.json({ ok: true, dryRun: true, filename: req.file.originalname, docType, size: req.file.size, validation });
       }
 
       const { createTCDocIntake } = await import('../services/tc-doc-intake.js');
@@ -340,10 +389,11 @@ export function createTCRoutes(
 
       const result = await intake.uploadToSkySlope(
         [{ filePath: tmpPath, filename: req.file.originalname, docType }],
-        { address }
+        { address, validateBeforeUpload: true, forceUpload }
       );
 
-      res.json({ ok: true, filename: req.file.originalname, docType, ...result });
+      const statusCode = result.blocked ? 409 : 200;
+      res.status(statusCode).json({ filename: req.file.originalname, docType, validation, ...result });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] intake/upload error');
       res.status(500).json({ ok: false, error: err.message });

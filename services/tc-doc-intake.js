@@ -18,6 +18,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
 import { resolveTCImapConfig } from './tc-imap-config.js';
+import { createTCDocumentValidator } from './tc-document-validator.js';
 
 const DOWNLOAD_DIR = '/tmp/tc-doc-intake';
 
@@ -63,6 +64,7 @@ function isRelevantAttachment(filename = '') {
 }
 
 export function createTCDocIntake({ pool, tcBrowser, accountManager, logger = console }) {
+  const documentValidator = createTCDocumentValidator({ logger });
 
   async function ensureDownloadDir() {
     await fs.mkdir(DOWNLOAD_DIR, { recursive: true });
@@ -175,10 +177,25 @@ export function createTCDocIntake({ pool, tcBrowser, accountManager, logger = co
    * Upload a list of local files to SkySlope via eXp Okta SSO.
    * Finds or creates the transaction in SkySlope by address.
    */
-  async function uploadToSkySlope(files, { address, transactionName } = {}) {
+  async function uploadToSkySlope(files, { address, transactionName, validateBeforeUpload = true, forceUpload = false } = {}) {
     const screenshots = [];
     const uploaded = [];
     const failed = [];
+    const validation = validateBeforeUpload
+      ? await documentValidator.validateFiles(files, { expectedAddress: address || transactionName || null })
+      : { ok: true, blocked: false, results: [] };
+
+    if (validation.blocked && !forceUpload) {
+      return {
+        ok: false,
+        blocked: true,
+        message: 'Document validation blocked automatic upload. Review required before filing.',
+        validation,
+        uploaded: 0,
+        failed: 0,
+        screenshots,
+      };
+    }
 
     const loginResult = await tcBrowser.loginToExpOkta(false);
     const { session } = loginResult;
@@ -207,7 +224,7 @@ export function createTCDocIntake({ pool, tcBrowser, accountManager, logger = co
       await session.close?.().catch(() => {});
     }
 
-    return { ok: true, uploaded: uploaded.length, failed: failed.length, uploaded, failed, screenshots };
+    return { ok: true, uploaded: uploaded.length, failed: failed.length, uploaded, failed, screenshots, validation };
   }
 
   async function _findOrCreateSkySllopeTransaction(session, address, screenshots) {
@@ -353,7 +370,7 @@ export function createTCDocIntake({ pool, tcBrowser, accountManager, logger = co
     }
 
     // Step 2: Upload to SkySlope
-    const uploadResult = await uploadToSkySlope(allFiles, { address });
+    const uploadResult = await uploadToSkySlope(allFiles, { address, validateBeforeUpload: true, forceUpload: false });
 
     // Step 3: Store in DB
     for (const email of emails) {
@@ -378,5 +395,9 @@ export function createTCDocIntake({ pool, tcBrowser, accountManager, logger = co
     };
   }
 
-  return { findExecutedAgreements, uploadToSkySlope, runFullIntake };
+  async function validateFiles(files, options = {}) {
+    return documentValidator.validateFiles(files, options);
+  }
+
+  return { findExecutedAgreements, uploadToSkySlope, runFullIntake, validateFiles };
 }
