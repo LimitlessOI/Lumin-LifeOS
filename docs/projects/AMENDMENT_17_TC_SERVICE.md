@@ -1,7 +1,7 @@
 # AMENDMENT 17 — Transaction Coordinator (TC) Service
-**Status:** BUILDING — infrastructure complete, IMAP vars pending
+**Status:** BUILDING — core infrastructure exists; portal, communication, QA, and compliance layers still in build
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-23
+**Last Updated:** 2026-03-25
 
 ---
 
@@ -15,8 +15,12 @@ The system handles:
 - MLS deal scanning for investor clients (flip/buy-and-hold/BRRRR)
 - TC pricing and billing across three plan tiers
 - eXp Realty Okta SSO browser automation for SkySlope and BoldTrail
+- Agent portal + client portal with real-time file status
+- Communication engine for milestone updates, missing docs, approvals, and weekly seller reports
+- Escalation engine for urgent/critical deadlines that persists until acknowledged and resolved
+- Commitment / integrity tracking, training review, and client-memory extraction where lawful and consented
 
-**Mission:** Give Adam a fully automated TC back-office so he can service multiple agent clients with near-zero manual overhead.
+**Mission:** Give Adam a fully automated TC back-office and client-facing service layer so he can service multiple agent clients with near-zero manual overhead while delivering premium communication, visibility, and compliance discipline.
 
 ---
 
@@ -36,6 +40,11 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - Monthly billing → subscription revenue
 - Transaction closes → closing fee from escrow
 
+**Strategic positioning:**
+- This is not just "AI TC"
+- The wedge is: inbox-to-compliance execution + premium visibility + premium communication
+- The moat is: local-market specialization, real file-state visibility, document QA, portal automation, and closed-loop escalation
+
 ---
 
 ## TECHNICAL SPEC
@@ -50,6 +59,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/glvar-monitor.js` | GLVAR dues scraping (monthly) + violation email monitoring (4× daily) |
 | `services/email-triage.js` | Inbox scanner — classifies TC contracts, flags for immediate action |
 | `services/mls-deal-scanner.js` | AI deal scoring, investor criteria matching, offer drafting |
+| `services/tc-imap-config.js` | Canonical IMAP resolver shared by TC intake, triage, and GLVAR monitor |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `db/migrations/20260322_tc_transactions.sql` | Core transactions table |
@@ -73,6 +83,256 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `IMAP_PORT` | IMAP port (993) |
 | `IMAP_USER` | adam@hopkinsgroup.org |
 | `IMAP_PASS` | Email account password (store via /api/v1/railway/managed-env/bulk) |
+| `TC_IMAP_*` | TC-specific mailbox overrides when different from shared IMAP vars |
+
+### Product Surfaces
+| Surface | User | Purpose |
+|---------|------|---------|
+| Agent Portal | Agent / TC team | At-a-glance file state, blockers, next action, missing docs, communications, approval queue |
+| Client Portal | Seller / Buyer client | Real-time simplified status, requested documents, recent updates, weekly property report |
+| Ops Layer | TC team | Asana task sync, exception handling, internal checklist execution |
+| Approval Cockpit | Adam / agent | One-tap review → approve/reject/snooze/sign from phone |
+
+### Portal Requirements
+- Agent portal and client portal read from the same canonical transaction state
+- Agent portal is detailed and operational
+- Client portal is simplified, confidence-building, and real-time
+- Client portal must answer:
+  - where are we?
+  - what is complete?
+  - what is waiting?
+  - what is blocking us?
+  - what is next?
+- Agent portal must answer:
+  - what is the next best action?
+  - what is overdue?
+  - what was already sent?
+  - what is waiting on seller / buyer / lender / title / admin?
+  - what issue needs escalation now?
+
+### File State Model (must be computed, not manual)
+- `stage` — current transaction stage
+- `health_status` — `green | yellow | red`
+- `next_action`
+- `next_action_owner`
+- `waiting_on`
+- `last_completed_step`
+- `missing_doc_count`
+- `blocker_count`
+- `last_client_update_at`
+- `next_client_update_due_at`
+- `portal_sync_status` — SkySlope / BoldTrail / Asana / Dropbox where relevant
+
+### File Timeline / Event Log
+- Every transaction should maintain a full event trail:
+  - intake found
+  - document received
+  - document reviewed
+  - portal sync attempted
+  - communication prepared
+  - communication sent
+  - approval requested
+  - approval granted/rejected
+  - issue/blocker raised
+  - issue resolved
+- Timeline is the base for both dashboards and audit
+
+### Stage Machine (minimum)
+- `intake`
+- `docs_review`
+- `awaiting_missing_items`
+- `awaiting_internal_review`
+- `awaiting_client_approval`
+- `ready_for_filing`
+- `filed`
+- `active_listing` / `active_transaction`
+- `closing_prep`
+- `closed`
+- `blocked`
+
+### Communication Engine
+- Every file must track what has been sent, what is waiting, and what is overdue
+- Standard communication events include:
+  - welcome / file opened
+  - docs received / under review
+  - missing docs / action needed
+  - seller approval request
+  - listing live / milestone reached
+  - weekly seller update
+  - issue escalation
+- System prepares the communication, human reviews only where required
+
+### Service Standard
+- The product is not just doing work; it is communicating clearly and professionally
+- A file is not "on track" unless both execution and communication are on track
+- Default posture:
+  - proactive updates
+  - no client guessing
+  - no agent hunting for status
+- Communication quality is part of the product's definition of done
+
+### Weekly Listing Report (seller-facing + agent-facing)
+- Showings completed and showing velocity trend
+- Feedback requested from showing agents immediately after showing; summarize returned themes
+- New competing listings, pendings, solds, price reductions, DOM trend
+- Online engagement metrics only from lawful/compliant sources (MLS feed, showing system, CRM, official portal/API access)
+- Listing health score: `Healthy | Watch | At Risk`
+- Clear recommendation: hold / adjust price / improve presentation / improve access / follow up
+
+### Listing Health Engine
+- Inputs may include:
+  - showing velocity
+  - inquiry velocity
+  - showing feedback sentiment/themes
+  - comp movement
+  - DOM pressure
+  - price competitiveness
+  - saves/views/leads where officially available
+- Outputs:
+  - `Healthy`
+  - `Watch`
+  - `At Risk`
+- Goal is directional guidance with reasoning, not fake precision
+
+### Data Source Hierarchy
+- Prefer:
+  1. official MLS/API/feed access
+  2. official showing / CRM / task APIs
+  3. direct provider integrations
+  4. browser automation where no API exists
+  5. scraping only as last resort and only where lawful/permitted
+- Product rule:
+  - API first
+  - browser automation second
+  - scraping last
+- Client-facing reporting should not depend on brittle or non-compliant scraping
+
+### Offer Prep Command Engine
+- Natural-language command target:
+  - `prepare an offer for X client on Z property`
+- System should pull:
+  - client profile and constraints
+  - comp set / market context
+  - contingency needs
+  - urgency, financing, appraisal-gap tolerance, sale-of-home dependency
+- Output:
+  - recommended range
+  - confidence
+  - assumptions
+  - contingency suggestions
+  - prepared docs/tasks for review
+- Never pretend certainty or use fake precision; ranges + rationale only
+
+### Client Profile Memory
+- Offer prep and communication should use structured client knowledge such as:
+  - budget / max stretch
+  - financing type
+  - sale contingency requirement
+  - appraisal-gap tolerance
+  - inspection tolerance
+  - urgency / timing
+  - communication preferences
+  - deal-breakers / must-haves
+- Profile updates suggested by the system must be reviewable before becoming authoritative
+
+### Mobile Approval Flow
+- Every urgent review should open directly on phone
+- One tap should bring up:
+  - exact file
+  - exact document
+  - issue summary
+  - prepared recommendation
+  - deadline
+- One-tap actions:
+  - approve
+  - reject
+  - snooze
+  - sign
+  - escalate
+- Goal: Adam can step out briefly, approve, and let automation continue
+
+### Escalation Engine
+- Severity classes: `info`, `action_required`, `urgent`, `critical`
+- Alerts escalate until one of: `acknowledged`, `snoozed`, `approved`, `completed`, `resolved`
+- For Adam specifically:
+  - SMS / push first
+  - repeated escalation for urgent deadlines
+  - critical path may escalate to call/alarm-style behavior where technically and legally permitted
+- Alert payload must always include:
+  - what happened
+  - why it matters
+  - what is already prepared
+  - deadline
+  - one-tap next step
+
+### Closed-Loop Task Model
+- The system should do the setup work first
+- Human role is reduced to review / approve / sign where needed
+- Task states:
+  - `open`
+  - `prepared`
+  - `awaiting_review`
+  - `approved`
+  - `completed`
+  - `blocked`
+- Alert states:
+  - `sent`
+  - `acknowledged`
+  - `snoozed`
+  - `resolved`
+- Product principle:
+  - never escalate noise
+  - escalate prepared work with a clear next step
+
+### Recording / Commitment / Coaching Layer
+- Personal operating preference: rolling one-hour buffer for memory support and missed-detail recovery
+- Commitment tracking:
+  - capture promises/commitments where lawful and consented
+  - require completion, renegotiation, or ethical withdrawal — never silent forgetting
+- Client memory extraction:
+  - automatically suggest profile updates from interactions
+  - only store high-signal, relevant facts
+- Coaching review:
+  - what happened
+  - result
+  - what was missed
+  - how client reacted
+  - how to improve next time
+- Recording must fail closed where legal/consent conditions are not satisfied
+
+### Training / Improvement Loop
+- The system should ask reflective review questions after key interactions:
+  - what happened?
+  - what were the results?
+  - how did the client react?
+  - what did we miss?
+  - how can we improve next time?
+- Goal is structured learning, not generic motivational coaching
+- Coaching outputs should feed:
+  - agent improvement notes
+  - commitment review
+  - client profile refinement
+  - future communication quality
+
+### Recording / Consent Rules
+- System follows only what is lawful in the applicable jurisdiction
+- Phone calls must use disclosed recording when required; if disclosure/consent path is unavailable, recording is disabled
+- No stealth or hidden call recording flows
+- In-person / local recording features are permissioned and must expose visible recording state
+- If legal status is uncertain for a given interaction type → no recording, notes-only mode
+- Recording is for service quality, commitment tracking, and coaching — not for blanket retention of irrelevant private conversation
+- System should support rolling-buffer capture preferences for Adam where lawful, but only preserve relevant segments after a trigger or review action
+
+### Asana Role
+- Asana is the human operations surface, not the source of truth
+- System DB is canonical for transaction state, communications, blockers, and portal status
+- Asana sync should focus on:
+  - project/task generation from templates
+  - exceptions
+  - ownership
+  - human review work
+- Avoid making agents manage status manually in two places
+- Asana templates are a useful base, but must be converted into machine-readable workflow specs that the system can execute against
 
 ### API Endpoints (all under `/api/v1/tc/`)
 | Method | Path | Purpose |
@@ -114,6 +374,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - ✅ All DB migrations written
 - ✅ Railway managed-env bootstrap — one-time token endpoint to self-manage vars
 - ✅ `POST /bulk` now stores in Neon AND pushes to Railway in one call
+- ✅ TC runtime wiring hardened — account-manager injection, notification service usage, IMAP config consistency, route/runtime fixes
 
 ### Blocking (must resolve before first real transaction)
 - 🔲 IMAP vars not yet in Railway — set via `POST /api/v1/railway/managed-env/bulk`
@@ -121,11 +382,24 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 adam@hopkinsgroup.org password needs rotation (shared in conversation)
 - 🔲 Run `POST /api/v1/tc/intake/email-search` dry run to verify email scan works
 - 🔲 Run `POST /api/v1/tc/test-skyslope-login` to verify SSO works
+- 🔲 Build document completeness / missing-signature / missing-field QA before trusting automated filing
+- 🔲 Build transaction status engine + real-time agent/client portal
+- 🔲 Build communication engine + weekly seller reporting
+- 🔲 Build Asana sync from canonical file state instead of task-only workflow
+- 🔲 Build recording/consent gate and fail-closed policy before any rolling buffer feature ships
+- 🔲 Convert existing Asana listing/buyer templates into structured workflow specs with triggers, dependencies, and communication hooks
+- 🔲 Build client-safe portal with real-time visibility into file state, blockers, and next steps
+- 🔲 Secure official MLS/API access and wire it into the listing health/reporting engine
 
 ### Next milestones
 - First real transaction intake end-to-end (email → SkySlope)
 - First paying agent client enrolled
 - MLS investor registry populated with at least one buyer profile
+- First real-time file status card visible to agent at a glance
+- First weekly seller property report generated from live market + showing + feedback data
+- First one-tap mobile approval flow (review → approve/sign → continue automation)
+- First structured Asana-to-LifeOS workflow mapping for listing side and buyer side templates
+- First offer-prep command run using real client profile + comp set + contingency logic
 
 ---
 
@@ -136,6 +410,19 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - Setup fee can be waived at Adam's discretion — `waivedSetup: true` in createAgentClient()
 - All browser sessions use screenshots at every step for audit trail
 - IMAP credentials stored encrypted in Neon via managed-env service — never in plaintext
+- Client portal shows real-time status, next step, blockers, and recent updates; client should not need to ask where the file stands
+- Agent portal must show at a glance: current stage, next action, waiting_on, missing docs, blockers, communications sent, and file health
+- Document QA must fail closed when uncertain — never file incomplete or questionable paperwork as if it passed review
+- Communications are part of the product, not an afterthought; every major milestone should have a prepared update path
+- Alerts for Adam should escalate until acknowledged and continue lighter pressure until approved/completed/resolved
+- No urgent alert without a prepared next step
+- Phone-call recording must only occur when legally and operationally permitted by the system's consent/disclosure policy
+- If recording legality/consent is unclear, recording features are disabled and notes-only mode is used
+- Extracted client-profile facts must be useful, relevant, and reviewable — never dump raw transcript noise into memory
+- Asana is not the source of truth; canonical transaction state remains in LifeOS DB/services
+- The best version of this product is API-first for MLS/CRM/tasks, browser-automation where APIs do not exist, and scraping only as a last resort
+- Seller/Buyer weekly updates must be easy to read, professional, and clearly indicate whether the file/listing is healthy, watch, or at risk
+- The system should reduce Adam's role to: review, approve, sign, and handle true exceptions
 
 ---
 
