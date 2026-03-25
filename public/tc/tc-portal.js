@@ -73,12 +73,21 @@
     await load();
   }
 
+  async function runAlertAction(id, action) {
+    await api(`/api/v1/tc/alerts/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ action, actor: 'agent_portal' }),
+    });
+    await load();
+  }
+
   function renderOverview(data, reports, approvals) {
     const root = document.getElementById('app');
     const isClient = data.view === 'client';
     const tx = data.transaction || {};
     const status = data.status || {};
     const recentReports = reports.slice(0, 3);
+    const alerts = data.alerts || [];
     const approvalRows = approvals.map((item) => `
       <tr>
         <td>${escapeHtml(item.title)}</td>
@@ -94,6 +103,21 @@
         </td>
       </tr>
     `).join('') || '<tr><td colspan="5">No pending approvals</td></tr>';
+    const alertRows = alerts.map((item) => `
+      <tr>
+        <td>${escapeHtml(item.title)}</td>
+        <td><span class="badge ${badgeClass(item.severity)}">${escapeHtml(item.severity)}</span></td>
+        <td>${escapeHtml(item.summary || '')}</td>
+        <td>${escapeHtml(item.next_escalation_at || '')}</td>
+        <td>
+          <div class="row-actions">
+            <button data-alert="${item.id}" data-action="acknowledge">Ack</button>
+            <button data-alert="${item.id}" data-action="resolve">Resolve</button>
+            <button data-alert="${item.id}" data-action="snooze" class="ghost">Snooze</button>
+          </div>
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan="5">No active alerts</td></tr>';
 
     const documentRows = (data.requested_documents || data.document_requests || []).map((item) => `
       <tr>
@@ -193,6 +217,11 @@
       </div>
 
       <div class="card">
+        <h2>Alerts</h2>
+        <table><thead><tr><th>Alert</th><th>Severity</th><th>Summary</th><th>Next</th><th>Actions</th></tr></thead><tbody>${alertRows}</tbody></table>
+      </div>
+
+      <div class="card">
         <h2>Recent Events</h2>
         <table><thead><tr><th>Event</th><th>When</th></tr></thead><tbody>${eventRows}</tbody></table>
       </div>`}
@@ -203,6 +232,18 @@
         button.disabled = true;
         try {
           await runApprovalAction(button.dataset.approval, button.dataset.action);
+        } catch (err) {
+          alert(err.message);
+          button.disabled = false;
+        }
+      });
+    });
+
+    root.querySelectorAll('[data-alert]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        button.disabled = true;
+        try {
+          await runAlertAction(button.dataset.alert, button.dataset.action);
         } catch (err) {
           alert(err.message);
           button.disabled = false;

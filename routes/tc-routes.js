@@ -16,6 +16,7 @@ import { createTCPortalService } from '../services/tc-portal-service.js';
 import { createTCReportService } from '../services/tc-report-service.js';
 import { createTCAutomationService } from '../services/tc-automation-service.js';
 import { createTCApprovalService } from '../services/tc-approval-service.js';
+import { createTCAlertService } from '../services/tc-alert-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 
@@ -30,6 +31,9 @@ export function createTCRoutes(
     notificationService: injectedNotificationService = null,
     callCouncilMember = null,
     sendSMS = null,
+    sendAlertSms = null,
+    sendAlertCall = null,
+    startAlertLoop = false,
   } = {}
 ) {
   const router = express.Router();
@@ -46,6 +50,7 @@ export function createTCRoutes(
     sendSMS,
   });
   const approvalService = createTCApprovalService({ pool, coordinator, automationService, logger });
+  const alertService = createTCAlertService({ pool, coordinator, logger, sendSMS, sendAlertSms, sendAlertCall });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -89,8 +94,24 @@ export function createTCRoutes(
         metadata: { communication_id: item.id, ...actorMetadata },
       });
       approvals.push(approval);
+
+      if (priority === 'urgent' || priority === 'critical') {
+        await alertService.createAlert(transactionId, {
+          severity: priority === 'critical' ? 'critical' : 'urgent',
+          title,
+          summary: summary || `Prepared ${item.channel} communication requires approval.`,
+          target_type: 'approval',
+          target_id: approval.id,
+          prepared_action: { label: 'Review and approve prepared communication' },
+          metadata: { communication_id: item.id },
+        });
+      }
     }
     return approvals;
+  }
+
+  if (startAlertLoop) {
+    alertService.startScheduler();
   }
 
   // GET /api/v1/tc/dashboard — summary stats
@@ -290,6 +311,47 @@ export function createTCRoutes(
       const limit = Math.min(parseInt(req.query.limit) || 50, 200);
       const items = await approvalService.listApprovals({ status, limit });
       res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/alerts
+  router.get('/transactions/:id/alerts', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const status = req.query.status || null;
+      const limit = Math.min(parseInt(req.query.limit) || 50, 200);
+      const items = await alertService.listAlerts({ transactionId: txId, status, limit });
+      res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/alerts
+  router.post('/transactions/:id/alerts', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const { severity = 'action_required', title, summary = null, assigned_to = null, target_type = null, target_id = null, prepared_action = {}, metadata = {}, next_escalation_at = new Date().toISOString() } = req.body || {};
+      if (!title) return res.status(400).json({ ok: false, error: 'title is required' });
+      const item = await alertService.createAlert(txId, { severity, title, summary, assigned_to, target_type, target_id, prepared_action, metadata, next_escalation_at });
+      res.status(201).json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PATCH /api/v1/tc/alerts/:alertId
+  router.patch('/alerts/:alertId', requireKey, async (req, res) => {
+    try {
+      const item = await alertService.updateAlert(parseInt(req.params.alertId), req.body || {});
+      if (!item) return res.status(404).json({ ok: false, error: 'Alert not found' });
+      res.json({ ok: true, item });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

@@ -66,6 +66,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-report-service.js` | Showings, feedback, listing health scoring, and weekly seller/agent reports |
 | `services/tc-automation-service.js` | Prepared-send automation for feedback requests, document requests, and weekly report delivery |
 | `services/tc-approval-service.js` | Approval cockpit state for review / approve / reject / snooze flows |
+| `services/tc-alert-service.js` | Escalating alert engine for urgent/critical blockers with acknowledgement and resolution state |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `public/tc/agent-portal.html` | Agent-facing at-a-glance portal for file health, blockers, docs, comms, and reports |
@@ -79,6 +80,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `db/migrations/20260325_tc_portal.sql` | tc_document_requests, tc_communications for portal/service tracking |
 | `db/migrations/20260325_tc_reporting.sql` | tc_showings, feedback, market snapshots, and weekly reports |
 | `db/migrations/20260325_tc_approvals_automation.sql` | tc_approval_items for one-tap review / approve / send flows |
+| `db/migrations/20260325_tc_alerts.sql` | tc_alerts, tc_alert_deliveries for closed-loop escalation |
 
 ### Portal Access
 | Portal | URL | Purpose |
@@ -220,6 +222,22 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - Product rule:
   - no urgent alert without a prepared next action
   - no irreversible submission without explicit approval
+
+### Alert Escalation Engine
+- Alerts are first-class records with:
+  - severity: `info | action_required | urgent | critical`
+  - status: `open | acknowledged | snoozed | resolved`
+  - escalation step + next escalation timestamp
+  - delivery receipts per escalation attempt
+- For agent-facing urgent/critical items the system should escalate by policy until acknowledged, then continue reminding until resolved
+- Portal/mobile UX should expose one-tap:
+  - acknowledge
+  - snooze
+  - resolve
+- System rule:
+  - low-friction by default
+  - repeated escalation only when the issue is still open
+  - every urgent alert should include the prepared next step
 
 ### Weekly Listing Report (seller-facing + agent-facing)
 - Showings completed and showing velocity trend
@@ -436,6 +454,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 Strengthen form-specific Nevada/eXp validation packs beyond the current generic fail-closed gate
 - 🔲 Polish agent/client portal UI on top of the now-live overview/report/approval APIs
 - 🔲 Wire communication delivery callbacks / acknowledgements into the approval cockpit
+- 🔲 Refine alert escalation cadence and device-specific mobile delivery behavior
 - 🔲 Build Asana sync from canonical file state instead of task-only workflow
 - 🔲 Build recording/consent gate and fail-closed policy before any rolling buffer feature ships
 - 🔲 Convert existing Asana listing/buyer templates into structured workflow specs with triggers, dependencies, and communication hooks
