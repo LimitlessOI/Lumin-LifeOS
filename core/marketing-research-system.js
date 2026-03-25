@@ -105,7 +105,7 @@ Provide comprehensive analysis. Return as JSON.`;
     try {
       const response = await this.callCouncilMember('chatgpt', prompt, {
         useTwoTier: false,
-        maxTokens: 3000,
+        maxTokens: 1200,
       });
 
       const research = this.parseJSONResponse(response);
@@ -155,7 +155,7 @@ Create a comprehensive marketing playbook. Return as JSON.`;
     try {
       const response = await this.callCouncilMember('chatgpt', prompt, {
         useTwoTier: false,
-        maxTokens: 4000,
+        maxTokens: 1200,
       });
 
       const principles = this.parseJSONResponse(response);
@@ -270,7 +270,7 @@ Return as JSON.`;
     try {
       const response = await this.callCouncilMember('chatgpt', prompt, {
         useTwoTier: false,
-        maxTokens: 4000,
+        maxTokens: 1200,
       });
 
       return this.parseJSONResponse(response);
@@ -314,7 +314,7 @@ Return as JSON.`;
         .replace(/,(\s*[}\]])/g, '$1')
         .trim();
       
-      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/) || cleaned.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0]);
       }
