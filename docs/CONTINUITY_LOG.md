@@ -6,6 +6,7 @@
 - Governance: every meaningful product/code change must now update the owning amendment before the work is considered done; SSOT Companion and project index also update when shared platform state changes.
 - TC scope expanded: real-time agent/client portal, file-state engine, communication engine, weekly listing reports, escalation engine, mobile approval flow, offer-prep command engine, and lawful/consented recording/coaching loop are now part of the canonical TC product definition.
 - TC implementation now includes a portal-ready status engine plus a fail-closed document QA gate for intake/uploads; next build step is the client/agent portal surface on top of those APIs.
+- TC portal surface now has schema/service/API support for transaction overview, communication tracking, and document requests; next step is UI and stronger Nevada-specific form packs.
 
 ## Update 2026-01-30 #1
 - Hardware: MacBook Pro M2 Max, 32 GB RAM, 2 TB SSD running server-only mode; machine doubles as development host but being stripped down for LifeOS server.

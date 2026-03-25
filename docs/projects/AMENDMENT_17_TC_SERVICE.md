@@ -62,6 +62,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-imap-config.js` | Canonical IMAP resolver shared by TC intake, triage, and GLVAR monitor |
 | `services/tc-status-engine.js` | Computes derived file stage, health, next action, blockers, and portal-ready status views |
 | `services/tc-document-validator.js` | Fail-closed completeness validator for doc intake and upload gating |
+| `services/tc-portal-service.js` | Builds agent/client portal read models and tracks communications + document requests |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `db/migrations/20260322_tc_transactions.sql` | Core transactions table |
@@ -69,6 +70,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `db/migrations/20260323_glvar_dues.sql` | glvar_dues_log, glvar_violations_log |
 | `db/migrations/20260323_email_triage.sql` | email_triage_log |
 | `db/migrations/20260323_mls_investors.sql` | mls_investors, mls_deal_matches |
+| `db/migrations/20260325_tc_portal.sql` | tc_document_requests, tc_communications for portal/service tracking |
 
 ### Portal Access
 | Portal | URL | Purpose |
@@ -161,6 +163,14 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
   - extracted facts (address / price / parties when possible)
   - confidence
 - Automatic SkySlope filing should only proceed when the validator passes or a human force-approves the upload
+
+### Portal Service Tracking
+- Communications and requested-document records must be first-class data, not inferred only from ad-hoc tasks
+- Agent/client portal overview must be able to show:
+  - requested documents still open
+  - communications drafted/sent/failed
+  - recent updates and next required outreach
+- Client portal view should be a filtered projection of the same canonical file state, not a separate system
 
 ### Communication Engine
 - Every file must track what has been sent, what is waiting, and what is overdue

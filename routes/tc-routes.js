@@ -12,6 +12,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs/promises';
 import { createTCStatusEngine } from '../services/tc-status-engine.js';
+import { createTCPortalService } from '../services/tc-portal-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 
@@ -29,6 +30,7 @@ export function createTCRoutes(
 ) {
   const router = express.Router();
   const statusEngine = createTCStatusEngine();
+  const portalService = createTCPortalService({ pool, coordinator, logger });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -77,7 +79,8 @@ export function createTCRoutes(
           missing_doc_count: item.missing_doc_count,
         }));
 
-      res.json({ ok: true, ...data, portfolioHealth, attention });
+      const dashboardSlice = await portalService.buildDashboardSlice(25);
+      res.json({ ok: true, ...data, portfolioHealth, attention, files: dashboardSlice });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] dashboard error');
       res.status(500).json({ ok: false, error: err.message });
@@ -133,6 +136,96 @@ export function createTCRoutes(
       if (!report) return res.status(404).json({ ok: false, error: 'Transaction not found' });
       const { transaction, recentEvents, ...statusView } = report;
       res.json({ ok: true, transaction: { id: transaction.id, address: transaction.address, status: transaction.status, agent_role: transaction.agent_role }, status: statusView, recentEvents });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/overview — portal-ready overview (agent or client view)
+  router.get('/transactions/:id/overview', requireKey, async (req, res) => {
+    try {
+      const view = String(req.query.view || 'agent').toLowerCase() === 'client' ? 'client' : 'agent';
+      const overview = await portalService.buildOverview(parseInt(req.params.id), { view });
+      if (!overview) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      res.json({ ok: true, view, ...overview });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/document-requests
+  router.get('/transactions/:id/document-requests', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const items = await portalService.listDocumentRequests(txId);
+      res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/document-requests
+  router.post('/transactions/:id/document-requests', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const { title, description = null, requested_from = 'client', due_at = null, metadata = {} } = req.body || {};
+      if (!title) return res.status(400).json({ ok: false, error: 'title is required' });
+      const item = await portalService.createDocumentRequest(txId, { title, description, requested_from, due_at, metadata });
+      res.status(201).json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PATCH /api/v1/tc/document-requests/:requestId
+  router.patch('/document-requests/:requestId', requireKey, async (req, res) => {
+    try {
+      const item = await portalService.updateDocumentRequest(parseInt(req.params.requestId), req.body || {});
+      if (!item) return res.status(404).json({ ok: false, error: 'Document request not found or no patch fields supplied' });
+      res.json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/communications
+  router.get('/transactions/:id/communications', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const items = await portalService.listCommunications(txId);
+      res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/communications
+  router.post('/transactions/:id/communications', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const { channel = 'email', audience = 'client', template_key = null, subject = null, body, status = 'draft', sent_at = null, metadata = {} } = req.body || {};
+      if (!body) return res.status(400).json({ ok: false, error: 'body is required' });
+      const item = await portalService.createCommunication(txId, { channel, audience, template_key, subject, body, status, sent_at, metadata });
+      res.status(201).json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PATCH /api/v1/tc/communications/:communicationId
+  router.patch('/communications/:communicationId', requireKey, async (req, res) => {
+    try {
+      const item = await portalService.updateCommunication(parseInt(req.params.communicationId), req.body || {});
+      if (!item) return res.status(404).json({ ok: false, error: 'Communication not found or no patch fields supplied' });
+      res.json({ ok: true, item });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
