@@ -35,6 +35,18 @@ export function registerPublicRoutes(app, {
       .send("Command center not found. Please ensure command-center.html exists.");
   });
 
+  app.get("/tc", (req, res) => {
+    const filePath = path.join(__dirname, "public", "tc", "agent-portal.html");
+    if (fs.existsSync(filePath)) return res.sendFile(filePath);
+    return res.status(404).send("TC agent portal not found.");
+  });
+
+  app.get("/tc/client", (req, res) => {
+    const filePath = path.join(__dirname, "public", "tc", "client-portal.html");
+    if (fs.existsSync(filePath)) return res.sendFile(filePath);
+    return res.status(404).send("TC client portal not found.");
+  });
+
   app.get("/boldtrail", (req, res) => {
     console.log("🏠 [ROUTE] /boldtrail accessed");
     // Only accept header-based auth (no query params)

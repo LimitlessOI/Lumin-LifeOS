@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TC Agent Portal</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; margin: 0; background:#0b1020; color:#edf2f7; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 24px; }
+    .hero { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:20px; }
+    .eyebrow { color:#8aa4ff; text-transform:uppercase; letter-spacing:.08em; font-size:12px; }
+    h1,h2 { margin:0 0 10px; }
+    .grid { display:grid; gap:16px; margin-bottom:16px; }
+    .grid.two { grid-template-columns: repeat(auto-fit, minmax(320px,1fr)); }
+    .grid.four { grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+    .card { background:#131a2e; border:1px solid #27304a; border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.18); }
+    .card.error { border-color:#8b2c2c; }
+    .stat span { display:block; color:#98a5c3; font-size:12px; margin-bottom:8px; }
+    .stat strong { display:block; font-size:18px; }
+    .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; text-transform:uppercase; letter-spacing:.04em; margin-left:8px; }
+    .badge.ok { background:#113b2d; color:#7ef0b8; }
+    .badge.warn { background:#4a3a12; color:#ffd666; }
+    .badge.bad { background:#4a1f28; color:#ff9db0; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th, td { text-align:left; padding:10px 8px; border-bottom:1px solid #27304a; vertical-align:top; }
+    th { color:#98a5c3; font-weight:600; }
+    .meta { display:grid; gap:10px; }
+    .meta div { display:flex; justify-content:space-between; gap:16px; }
+    .meta dt { color:#98a5c3; }
+    .meta dd { margin:0; text-align:right; }
+    .report-card { border:1px solid #27304a; border-radius:12px; padding:12px; margin-bottom:10px; }
+    .report-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .mini-grid span { display:block; color:#98a5c3; font-size:12px; }
+    .mini-grid strong { display:block; margin-top:4px; }
+    code { color:#cbd5ff; }
+  </style>
+</head>
+<body data-view="agent">
+  <div class="wrap" id="app"><div class="card"><p>Loading agent portal…</p></div></div>
+  <script src="/tc/tc-portal.js"></script>
+</body>
+</html>

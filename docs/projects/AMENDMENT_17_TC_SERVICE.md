@@ -66,6 +66,9 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-report-service.js` | Showings, feedback, listing health scoring, and weekly seller/agent reports |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
+| `public/tc/agent-portal.html` | Agent-facing at-a-glance portal for file health, blockers, docs, comms, and reports |
+| `public/tc/client-portal.html` | Client-facing portal for simplified real-time status, requested docs, and updates |
+| `public/tc/tc-portal.js` | Shared TC portal UI client for agent/client views |
 | `db/migrations/20260322_tc_transactions.sql` | Core transactions table |
 | `db/migrations/20260323_tc_fees.sql` | tc_agent_clients, tc_pricing_config, fee columns |
 | `db/migrations/20260323_glvar_dues.sql` | glvar_dues_log, glvar_violations_log |
@@ -101,6 +104,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 
 ### Portal Requirements
 - Agent portal and client portal read from the same canonical transaction state
+- Backend APIs for portal overview now exist; frontend pages should remain thin projections of those APIs
 - Agent portal is detailed and operational
 - Client portal is simplified, confidence-building, and real-time
 - Client portal must answer:

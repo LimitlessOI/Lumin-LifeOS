@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TC Client Portal</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; margin: 0; background:#f4f6fb; color:#1b2435; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 24px; }
+    .hero { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom:20px; }
+    .eyebrow { color:#4b5fd1; text-transform:uppercase; letter-spacing:.08em; font-size:12px; }
+    h1,h2 { margin:0 0 10px; }
+    .grid { display:grid; gap:16px; margin-bottom:16px; }
+    .grid.two { grid-template-columns: repeat(auto-fit, minmax(320px,1fr)); }
+    .grid.four { grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+    .card { background:#fff; border:1px solid #e2e8f3; border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+    .card.error { border-color:#ef4444; }
+    .stat span { display:block; color:#60708d; font-size:12px; margin-bottom:8px; }
+    .stat strong { display:block; font-size:18px; }
+    .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; text-transform:uppercase; letter-spacing:.04em; margin-left:8px; }
+    .badge.ok { background:#dff8ea; color:#167a49; }
+    .badge.warn { background:#fff1cc; color:#9a6700; }
+    .badge.bad { background:#ffe1e7; color:#b4233c; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th, td { text-align:left; padding:10px 8px; border-bottom:1px solid #e8edf6; vertical-align:top; }
+    th { color:#60708d; font-weight:600; }
+    .meta { display:grid; gap:10px; }
+    .meta div { display:flex; justify-content:space-between; gap:16px; }
+    .meta dt { color:#60708d; }
+    .meta dd { margin:0; text-align:right; }
+    .report-card { border:1px solid #e2e8f3; border-radius:12px; padding:12px; margin-bottom:10px; }
+    .report-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .mini-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .mini-grid span { display:block; color:#60708d; font-size:12px; }
+    .mini-grid strong { display:block; margin-top:4px; }
+  </style>
+</head>
+<body data-view="client">
+  <div class="wrap" id="app"><div class="card"><p>Loading client portal…</p></div></div>
+  <script src="/tc/tc-portal.js"></script>
+</body>
+</html>
