@@ -724,17 +724,7 @@
       }
     }
 
-    let autoRefreshInterval = null;
-    function toggleAutoRefresh() {
-      const enabled = document.getElementById('autoRefreshToggle').checked;
-      if (autoRefreshInterval) {
-        clearInterval(autoRefreshInterval);
-        autoRefreshInterval = null;
-      }
-      if (enabled) {
-        autoRefreshInterval = setInterval(refresh, 10000);
-      }
-    }
+    // autoRefreshInterval + toggleAutoRefresh already defined in command-center.js
 
     // ══ API helper — thin wrapper around command-center.js fetch functions.
     // Uses x-command-key headers (the correct auth mechanism).
