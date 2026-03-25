@@ -63,6 +63,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-status-engine.js` | Computes derived file stage, health, next action, blockers, and portal-ready status views |
 | `services/tc-document-validator.js` | Fail-closed completeness validator for doc intake and upload gating |
 | `services/tc-portal-service.js` | Builds agent/client portal read models and tracks communications + document requests |
+| `services/tc-report-service.js` | Showings, feedback, listing health scoring, and weekly seller/agent reports |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `db/migrations/20260322_tc_transactions.sql` | Core transactions table |
@@ -71,6 +72,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `db/migrations/20260323_email_triage.sql` | email_triage_log |
 | `db/migrations/20260323_mls_investors.sql` | mls_investors, mls_deal_matches |
 | `db/migrations/20260325_tc_portal.sql` | tc_document_requests, tc_communications for portal/service tracking |
+| `db/migrations/20260325_tc_reporting.sql` | tc_showings, feedback, market snapshots, and weekly reports |
 
 ### Portal Access
 | Portal | URL | Purpose |
@@ -192,6 +194,11 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
   - no client guessing
   - no agent hunting for status
 - Communication quality is part of the product's definition of done
+
+### Reporting Engine Implementation Notes
+- Weekly report generation now has a concrete backend path in code: showings + feedback + latest market snapshot -> health score -> recommendations -> persisted report
+- Market snapshot inputs are currently manual/API-fed placeholders until MLS/showing-system feeds are wired back in
+- Feedback and showing capture are first-class records so weekly seller updates can be grounded in evidence, not memory
 
 ### Weekly Listing Report (seller-facing + agent-facing)
 - Showings completed and showing velocity trend

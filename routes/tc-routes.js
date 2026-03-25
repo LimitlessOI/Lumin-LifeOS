@@ -13,6 +13,7 @@ import path from 'path';
 import fs from 'fs/promises';
 import { createTCStatusEngine } from '../services/tc-status-engine.js';
 import { createTCPortalService } from '../services/tc-portal-service.js';
+import { createTCReportService } from '../services/tc-report-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 
@@ -31,6 +32,7 @@ export function createTCRoutes(
   const router = express.Router();
   const statusEngine = createTCStatusEngine();
   const portalService = createTCPortalService({ pool, coordinator, logger });
+  const reportService = createTCReportService({ pool, coordinator, logger });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -226,6 +228,111 @@ export function createTCRoutes(
       const item = await portalService.updateCommunication(parseInt(req.params.communicationId), req.body || {});
       if (!item) return res.status(404).json({ ok: false, error: 'Communication not found or no patch fields supplied' });
       res.json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/showings
+  router.get('/transactions/:id/showings', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const items = await reportService.listShowings(txId);
+      res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/showings
+  router.post('/transactions/:id/showings', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const { showing_at, status = 'scheduled', showing_agent_name = null, showing_agent_email = null, showing_agent_phone = null, source = 'manual', notes = null, metadata = {} } = req.body || {};
+      if (!showing_at) return res.status(400).json({ ok: false, error: 'showing_at is required' });
+      const item = await reportService.createShowing(txId, { showing_at, status, showing_agent_name, showing_agent_email, showing_agent_phone, source, notes, metadata });
+      res.status(201).json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PATCH /api/v1/tc/showings/:showingId
+  router.patch('/showings/:showingId', requireKey, async (req, res) => {
+    try {
+      const item = await reportService.updateShowing(parseInt(req.params.showingId), req.body || {});
+      if (!item) return res.status(404).json({ ok: false, error: 'Showing not found or no patch fields supplied' });
+      res.json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/showings/:showingId/feedback
+  router.post('/showings/:showingId/feedback', requireKey, async (req, res) => {
+    try {
+      const { raw_feedback, sentiment = null, rating = null, price_feedback = null, condition_feedback = null, competition_feedback = null, source = 'manual' } = req.body || {};
+      if (!raw_feedback) return res.status(400).json({ ok: false, error: 'raw_feedback is required' });
+      const item = await reportService.recordShowingFeedback(parseInt(req.params.showingId), { raw_feedback, sentiment, rating, price_feedback, condition_feedback, competition_feedback, source });
+      if (!item) return res.status(404).json({ ok: false, error: 'Showing not found' });
+      res.status(201).json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/feedback
+  router.get('/transactions/:id/feedback', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const items = await reportService.listShowingFeedback(txId);
+      res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/market-snapshot
+  router.post('/transactions/:id/market-snapshot', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const item = await reportService.createMarketSnapshot(txId, req.body || {});
+      res.status(201).json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/reports/weekly
+  router.post('/transactions/:id/reports/weekly', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const { audience = 'seller', reference_date = new Date().toISOString() } = req.body || {};
+      const report = await reportService.generateWeeklyReport(txId, { audience, referenceDate: new Date(reference_date) });
+      res.status(201).json({ ok: true, ...report });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/reports
+  router.get('/transactions/:id/reports', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const items = await reportService.listReports(txId);
+      res.json({ ok: true, items, count: items.length });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
