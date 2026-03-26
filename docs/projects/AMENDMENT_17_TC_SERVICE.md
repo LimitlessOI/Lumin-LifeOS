@@ -68,6 +68,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-communication-callback-service.js` | Normalizes delivery/reply callbacks into canonical communication status and showing-feedback capture |
 | `services/tc-approval-service.js` | Approval cockpit state for review / approve / reject / snooze flows |
 | `services/tc-alert-service.js` | Escalating alert engine for urgent/critical blockers with acknowledgement and resolution state |
+| `services/tc-mobile-link-service.js` | Signed mobile one-tap links for approval and alert actions |
 | `services/tc-asana-sync-service.js` | Canonical TC -> Asana sync for parent transaction tasks and derived subtasks |
 | `services/tc-workflow-specs.js` | Machine-readable listing and buyer workflow templates derived from TC operations |
 | `services/tc-workflow-service.js` | Derived workflow task read model from canonical TC file state |
@@ -500,7 +501,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 Expand the new communication callback path into provider-specific webhooks / receipts across SMS and email vendors
 - 🔲 Refine alert escalation cadence and device-specific mobile delivery behavior
 - 🔲 Wire real Asana credentials/project and run first live sync
-- 🔲 Polish the new interaction/recording review flow for mobile approval and add explicit device-side rolling-buffer UX
+- 🔲 Extend the new mobile one-tap link flow into full document review / sign handoff and explicit device-side rolling-buffer UX
 - 🔲 Refine machine-readable listing/buyer workflow specs against the full real Asana templates
 - 🔲 Secure official MLS/API access and wire it into the listing health/reporting engine
 

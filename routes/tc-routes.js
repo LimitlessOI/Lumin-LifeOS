@@ -22,6 +22,7 @@ import { createTCWorkflowService } from '../services/tc-workflow-service.js';
 import { createTCOfferPrepService } from '../services/tc-offer-prep-service.js';
 import { createTCInteractionService } from '../services/tc-interaction-service.js';
 import { createTCCommunicationCallbackService } from '../services/tc-communication-callback-service.js';
+import { createTCMobileLinkService } from '../services/tc-mobile-link-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
@@ -62,6 +63,7 @@ export function createTCRoutes(
   const offerPrepService = createTCOfferPrepService({ logger, callCouncilMember });
   const interactionService = createTCInteractionService({ pool, coordinator, callCouncilMember, logger });
   const callbackService = createTCCommunicationCallbackService({ pool, portalService, reportService, coordinator, logger });
+  const mobileLinkService = createTCMobileLinkService({});
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -585,6 +587,48 @@ export function createTCRoutes(
       res.json({ ok: true, item });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/mobile-links/approval/:approvalId
+  router.post('/mobile-links/approval/:approvalId', requireKey, async (req, res) => {
+    try {
+      const approval = await approvalService.getApproval(parseInt(req.params.approvalId));
+      if (!approval) return res.status(404).json({ ok: false, error: 'Approval not found' });
+      const link = mobileLinkService.createApprovalLink(approval, req.body || {});
+      res.json({ ok: true, ...link });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/mobile-links/alert/:alertId
+  router.post('/mobile-links/alert/:alertId', requireKey, async (req, res) => {
+    try {
+      const alert = await alertService.getAlert(parseInt(req.params.alertId));
+      if (!alert) return res.status(404).json({ ok: false, error: 'Alert not found' });
+      const link = mobileLinkService.createAlertLink(alert, req.body || {});
+      res.json({ ok: true, ...link });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/mobile-links/execute
+  router.get('/mobile-links/execute', async (req, res) => {
+    try {
+      const payload = mobileLinkService.verifyToken(req.query.token);
+      let result = null;
+      if (payload.kind === 'approval') {
+        result = await approvalService.actOnApproval(payload.target_id, { action: payload.action, actor: 'mobile_link' });
+      } else if (payload.kind === 'alert') {
+        result = await alertService.actOnAlert(payload.target_id, { action: payload.action, actor: 'mobile_link' });
+      }
+      if (!result) return res.status(404).send('<html><body><h2>Link invalid</h2></body></html>');
+      const reviewLink = payload.review_url ? `<p><a href="${payload.review_url}">Open transaction</a></p>` : '';
+      res.send(`<html><body style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;padding:24px"><h2>Action complete</h2><p>${payload.kind} ${payload.action} applied.</p>${reviewLink}</body></html>`);
+    } catch (err) {
+      res.status(400).send(`<html><body style="font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;padding:24px"><h2>Link unavailable</h2><p>${String(err.message || 'Invalid token')}</p></body></html>`);
     }
   });
 

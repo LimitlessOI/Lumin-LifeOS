@@ -82,6 +82,20 @@
     await load();
   }
 
+  async function createMobileLink(kind, id, action) {
+    const data = await api(`/api/v1/tc/mobile-links/${kind}/${id}`, {
+      method: 'POST',
+      body: JSON.stringify({ action }),
+    });
+    const url = data.execute_url || data.review_url || '';
+    if (url && navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url);
+      alert(`Copied link: ${url}`);
+      return;
+    }
+    alert(url || 'Link generated');
+  }
+
   function renderOverview(data, reports, approvals, interactions) {
     const root = document.getElementById('app');
     const isClient = data.view === 'client';
@@ -109,6 +123,7 @@
           <div class="row-actions">
             <button data-approval="${item.id}" data-action="approve">Approve</button>
             <button data-approval="${item.id}" data-action="snooze">Snooze</button>
+            <button data-approval-link="${item.id}" data-action="approve" class="ghost">Link</button>
             <button data-approval="${item.id}" data-action="reject" class="ghost">Reject</button>
           </div>
         </td>
@@ -124,6 +139,7 @@
           <div class="row-actions">
             <button data-alert="${item.id}" data-action="acknowledge">Ack</button>
             <button data-alert="${item.id}" data-action="resolve">Resolve</button>
+            <button data-alert-link="${item.id}" data-action="acknowledge" class="ghost">Link</button>
             <button data-alert="${item.id}" data-action="snooze" class="ghost">Snooze</button>
           </div>
         </td>
@@ -255,6 +271,19 @@
       });
     });
 
+    root.querySelectorAll('[data-approval-link]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        button.disabled = true;
+        try {
+          await createMobileLink('approval', button.dataset.approvalLink, button.dataset.action);
+        } catch (err) {
+          alert(err.message);
+        } finally {
+          button.disabled = false;
+        }
+      });
+    });
+
     root.querySelectorAll('[data-alert]').forEach((button) => {
       button.addEventListener('click', async () => {
         button.disabled = true;
@@ -262,6 +291,19 @@
           await runAlertAction(button.dataset.alert, button.dataset.action);
         } catch (err) {
           alert(err.message);
+          button.disabled = false;
+        }
+      });
+    });
+
+    root.querySelectorAll('[data-alert-link]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        button.disabled = true;
+        try {
+          await createMobileLink('alert', button.dataset.alertLink, button.dataset.action);
+        } catch (err) {
+          alert(err.message);
+        } finally {
           button.disabled = false;
         }
       });
