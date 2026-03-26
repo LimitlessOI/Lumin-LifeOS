@@ -239,6 +239,18 @@ Legend:
 
 ---
 
+## 🛡️ Autonomy & Safety Controls
+
+| Variable | Status | Purpose | Used By |
+|---|---|---|---|
+| `LIFEOS_DIRECTED_MODE` | ✅ SET | `true` = all autonomous AI schedulers OFF. Default is `true` (safe). Set to `false` only to enable autonomous mode. | services/autonomy-scheduler.js, core/auto-builder.js |
+| `LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER` | ✅ SET | `false` = auto-builder never writes code or commits to GitHub on a schedule. Must be explicitly `true` to enable. | core/auto-builder.js |
+| `PAUSE_AUTONOMY` | ✅ SET | `1` = secondary kill switch — all scheduleAutonomyLoop calls are no-ops. | startup/schedulers.js |
+
+> **Rule:** These three must always be explicitly set in Railway. Never rely on defaults. The system can set its own vars via `POST /api/v1/railway/env/bulk` using its own RAILWAY_TOKEN.
+
+---
+
 ## 🗂️ Notion (Knowledge Base)
 
 | Variable | Status | Purpose | Used By |
@@ -256,6 +268,7 @@ Legend:
 | 2026-03-21 | Initial registry created — all vars audited from codebase grep |
 | 2026-03-21 | Added Google Calendar OAuth2 vars (Amendment 16) |
 | 2026-03-21 | Added Twilio auto-webhook note (Amendment 17) |
+| 2026-03-26 | Added Autonomy & Safety Controls section — LIFEOS_DIRECTED_MODE, LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER, PAUSE_AUTONOMY set via system self-management |
 
 ---
 
