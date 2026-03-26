@@ -61,6 +61,33 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/browser/inspect-page', async (req, res) => {
+    try {
+      const result = await browserService.inspectPage({
+        href: req.body?.href,
+        includeScreenshots: Boolean(req.body?.include_screenshots),
+        pageTimeoutMs: req.body?.page_timeout_ms,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] browser inspect page failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/browser/billing-overview', async (req, res) => {
+    try {
+      const result = await browserService.buildBillingOverview({
+        includeScreenshots: String(req.query?.include_screenshots || '').toLowerCase() === 'true',
+        pageTimeoutMs: req.query?.page_timeout_ms,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] browser billing overview failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/extract-claims', async (req, res) => {
     try {
       const result = await browserService.extractClaimTables({

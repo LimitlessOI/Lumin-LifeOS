@@ -190,6 +190,7 @@ Operational inputs needed regardless of integration path:
 - Browser diagnostics are fail-soft: screenshot capture problems must not block live login/discovery/extraction.
 - Browser automation must be compatible with the Puppeteer build available in Railway; helper shims are acceptable when newer page helpers are missing.
 - Browser discovery/extraction must return partial results quickly under Railway request budgets; limit candidate pages, avoid blocking screenshots by default, and surface page-level errors instead of failing the whole run.
+- Browser tooling must include a billing-operations overview and targeted page inspection so the operator can answer where billing stands before exports are available.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.

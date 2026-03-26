@@ -187,10 +187,36 @@ async function collectPageSummary(page) {
       title: document.title,
       headings,
       candidateLinks: candidates,
+      allLinks: links.slice(0, 100),
       tables,
       textPreview: (document.body.innerText || '').trim().slice(0, 3000),
     };
   });
+}
+
+function extractDashboardCounts(summary = {}) {
+  const text = `${summary.textPreview || ''}`;
+  const count = (pattern) => {
+    const match = text.match(pattern);
+    return match ? Number(match[1]) : 0;
+  };
+  return {
+    newBillingNotes: count(/You have\s+(\d+)\s+New Billing Notes/i),
+    newLabs: count(/You have\s+(\d+)\s+New Labs/i),
+    newUltrasounds: count(/You have\s+(\d+)\s+New Ultrasounds/i),
+  };
+}
+
+function derivePageState(summary = {}) {
+  const text = `${summary.textPreview || ''}`.toLowerCase();
+  return {
+    noItems: /no items to display/.test(text),
+    noRecords: /no record\(s\) added to workspace/.test(text),
+    hasBillingNotes: /billing notes/i.test(summary.textPreview || ''),
+    hasChargeSlip: /charge slip/i.test(summary.textPreview || ''),
+    hasSentBills: /review sent bills/i.test(summary.textPreview || ''),
+    hasRemittance: /remittance report/i.test(summary.textPreview || ''),
+  };
 }
 
 export function createClientCareBrowserService({ env = process.env, logger = console, syncService = null } = {}) {
@@ -349,6 +375,90 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
+  async function inspectPage({ href, includeScreenshots = false, pageTimeoutMs = 15000 } = {}) {
+    if (!href) throw new Error('href required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const landing = result.page || await collectPageSummary(session.page);
+      const origin = new URL(landing.url || session.currentUrl()).origin;
+      const target = href.startsWith('http') ? href : new URL(href, `${origin}/`).toString();
+      const nav = await gotoWithBudget(session.page, target, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+      if (!nav.ok) {
+        return {
+          ok: false,
+          href: target,
+          error: nav.error,
+          screenshots,
+        };
+      }
+      const summary = await collectPageSummary(session.page);
+      let shot = null;
+      if (includeScreenshots) {
+        shot = await screenshotPath('clientcare-inspect-page');
+        await safeScreenshot(session.page, shot);
+        screenshots.push(shot);
+      }
+      return {
+        ok: true,
+        page: summary,
+        state: derivePageState(summary),
+        screenshots,
+        screenshot: shot,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  async function buildBillingOverview({ includeScreenshots = false, pageTimeoutMs = 15000 } = {}) {
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const landing = result.page || await collectPageSummary(session.page);
+      const origin = new URL(landing.url || session.currentUrl()).origin;
+      const routes = [
+        { id: 'billing_home', label: 'Billing Home', href: '/Home/BillingPartial' },
+        { id: 'sent_bills', label: 'Review Sent Bills', href: '/Billing/BillingListView' },
+        { id: 'remittance', label: 'Record Insurance Payment', href: '/Billing/RecordRemittanceAdvice' },
+        { id: 'charge_slip', label: 'Billing Slip', href: '/Company/ChargeSlip' },
+      ];
+      const pages = [];
+      for (const route of routes) {
+        const target = new URL(route.href, `${origin}/`).toString();
+        const nav = await gotoWithBudget(session.page, target, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+        if (!nav.ok) {
+          pages.push({ ...route, href: target, ok: false, error: nav.error });
+          continue;
+        }
+        const summary = await collectPageSummary(session.page);
+        let shot = null;
+        if (includeScreenshots) {
+          shot = await screenshotPath(`clientcare-overview-${route.id}`);
+          await safeScreenshot(session.page, shot);
+          screenshots.push(shot);
+        }
+        pages.push({
+          ...route,
+          href: target,
+          ok: true,
+          page: summary,
+          state: derivePageState(summary),
+          screenshot: shot,
+        });
+      }
+      return {
+        ok: true,
+        landing,
+        dashboardCounts: extractDashboardCounts(landing),
+        pages,
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   async function extractClaimTables({ importIntoQueue = false, maxCandidates = 2, includeScreenshots = false, pageTimeoutMs = 20000 } = {}) {
     if (!syncService) throw new Error('ClientCare sync service not configured');
     const discovery = await discoverBillingSurface({ maxCandidates, includeScreenshots, pageTimeoutMs });
@@ -393,6 +503,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     listWorkflowTemplates: () => WORKFLOW_TEMPLATES,
     login,
     discoverBillingSurface,
+    inspectPage,
+    buildBillingOverview,
     extractClaimTables,
   };
 }
