@@ -9,6 +9,7 @@
   - `services/clientcare-browser-service.js` — browser/export fallback readiness contract and workflow templates
   - `routes/clientcare-billing-routes.js` — dashboard, import, classification, actions, and ClientCare readiness endpoints
   - `db/migrations/20260326_clientcare_billing.sql` — `clientcare_claims` and `clientcare_claim_actions`
+- ClientCare billing now also has an operator overlay at `/clientcare-billing` for CSV import, dashboard review, claim drill-down, and action completion.
 - Working assumption remains: no public ClientCare API or self-serve API key exists until the vendor proves otherwise; browser/export fallback is the primary path.
 - Immediate next operational step is to export the 90-claim backlog from ClientCare and import it into the new rescue queue.
 

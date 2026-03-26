@@ -86,6 +86,8 @@ Every claim lands in one of these buckets:
 | `services/clientcare-billing-service.js` | Claim classification, rescue planning, dashboard summaries |
 | `services/clientcare-browser-service.js` | No-API browser-readiness contract and workflow templates |
 | `routes/clientcare-billing-routes.js` | Operational API for imports, classification, rescue queue, browser readiness |
+| `public/clientcare-billing/overlay.html` | Operator overlay page for claims rescue |
+| `public/clientcare-billing/clientcare-billing.js` | Overlay UI logic for import, queue review, and claim planning |
 | `db/migrations/20260326_clientcare_billing.sql` | Claims + action tables |
 
 ### Endpoints
@@ -99,6 +101,7 @@ Every claim lands in one of these buckets:
 - `POST /api/v1/clientcare-billing/claims/:claimId/reclassify`
 - `GET /api/v1/clientcare-billing/actions`
 - `PATCH /api/v1/clientcare-billing/actions/:actionId`
+- `GET /clientcare-billing`
 
 ### Data model
 #### `clientcare_claims`
@@ -175,4 +178,5 @@ Operational inputs needed regardless of integration path:
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.
+- Operator overlay exists for queue review and CSV import.
 - Amendment and continuity stay current as the system changes.
