@@ -355,6 +355,54 @@ function summarizeBillingAccount(billingFields = []) {
   };
 }
 
+function extractBillingQueueLinks(summary = {}, { offset = 0, limit = 10 } = {}) {
+  const links = Array.isArray(summary.allLinks) ? summary.allLinks : [];
+  const queue = [];
+  const seen = new Set();
+  for (const link of links) {
+    const href = link?.href || '';
+    if (!/\/Pregnancy\/Billing\//i.test(href)) continue;
+    if (seen.has(href)) continue;
+    seen.add(href);
+    queue.push({
+      href,
+      label: (link.text || '').replace(/\s+/g, ' ').trim(),
+    });
+  }
+  const start = Math.max(0, Number(offset) || 0);
+  return queue.slice(start, start + Math.max(1, Math.min(Number(limit) || 10, 25)));
+}
+
+function extractInsurancePreview(summary = {}) {
+  const tables = Array.isArray(summary.tables) ? summary.tables : [];
+  const insuranceEntries = [];
+  const insuranceTable = tables.find((table) =>
+    Array.isArray(table) && table.some((row) => row.some((cell) => /insurance name:|payor id:|subscriber name:/i.test(String(cell || ''))))
+  );
+
+  if (!insuranceTable) return insuranceEntries;
+
+  let current = null;
+  for (const row of insuranceTable) {
+    const cells = row.map((cell) => String(cell || '').trim()).filter(Boolean);
+    if (!cells.length) continue;
+    if (/^Insurance Name:$/i.test(cells[0]) && cells[1]) {
+      if (current) insuranceEntries.push(current);
+      current = { insuranceName: cells[1] };
+      continue;
+    }
+    if (!current) continue;
+    if (/^Mem ID\/Pol#:/i.test(cells[0]) && cells[1]) current.memberId = cells[1];
+    else if (/^Group #:/i.test(cells[0]) && cells[1]) current.groupNumber = cells[1];
+    else if (/^Insurance Priority:/i.test(cells[0]) && cells[1]) current.priority = cells[1];
+    else if (/^Relationship to Insured:/i.test(cells[0]) && cells[1]) current.relationship = cells[1];
+    else if (/^Subscriber Name:/i.test(cells[0]) && cells[1]) current.subscriberName = cells[1];
+    else if (/^Payor ID:/i.test(cells[0]) && cells[1]) current.payorId = cells[1];
+  }
+  if (current) insuranceEntries.push(current);
+  return insuranceEntries;
+}
+
 function extractDashboardCounts(summary = {}) {
   const text = `${summary.textPreview || ''}`;
   const count = (pattern) => {
@@ -590,6 +638,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
       const summary = await collectPageSummary(session.page);
       const billingFields = await extractBillingFieldPairs(session.page);
+      const insurancePreview = extractInsurancePreview(summary);
       let shot = null;
       if (includeScreenshots) {
         shot = await screenshotPath('clientcare-client-billing');
@@ -602,7 +651,12 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         clientHref,
         page: summary,
         billingFields,
-        accountSummary: summarizeBillingAccount(billingFields),
+        insurancePreview,
+        accountSummary: {
+          ...summarizeBillingAccount(billingFields),
+          insuranceCount: insurancePreview.length,
+          insurers: insurancePreview.map((item) => item.insuranceName).filter(Boolean),
+        },
         state: {
           hasBillingTab: Boolean(billingTab),
           billingFieldCount: billingFields.length,
@@ -619,15 +673,37 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     const result = await login({ dryRun: false });
     const { session } = result;
     try {
-      const directoryNav = await gotoWithBudget(session.page, new URL('/Pregnancy?donotRedirect=Y', session.currentUrl()).toString(), {
+      const billingHomeUrl = new URL('/Home/BillingPartial', session.currentUrl()).toString();
+      const billingHomeNav = await gotoWithBudget(session.page, billingHomeUrl, {
         timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
       });
-      if (!directoryNav.ok) {
-        return { ok: false, error: directoryNav.error, accounts: [] };
+      if (!billingHomeNav.ok) {
+        return { ok: false, error: billingHomeNav.error, accounts: [] };
+      }
+      await waitForBillingHome(session.page, Math.max(5000, Number(pageTimeoutMs) || 15000));
+      const billingHomeSummary = await collectPageSummary(session.page);
+      let clients = extractBillingQueueLinks(billingHomeSummary, { offset, limit }).map((item) => ({
+        href: item.href,
+        rawText: item.label,
+        name: item.label || item.href,
+        mrn: null,
+        source: 'billing_queue',
+      }));
+
+      if (!clients.length) {
+        const directoryNav = await gotoWithBudget(session.page, new URL('/Pregnancy?donotRedirect=Y', session.currentUrl()).toString(), {
+          timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
+        });
+        if (!directoryNav.ok) {
+          return { ok: false, error: directoryNav.error, accounts: [] };
+        }
+        const directory = await extractClientDirectory(session.page, Math.max((Number(offset) || 0) + (Number(limit) || 10), 10));
+        clients = directory.slice(Math.max(0, Number(offset) || 0), Math.max(0, Number(offset) || 0) + Math.max(1, Math.min(Number(limit) || 10, 25))).map((item) => ({
+          ...item,
+          source: 'client_directory',
+        }));
       }
 
-      const directory = await extractClientDirectory(session.page, Math.max((Number(offset) || 0) + (Number(limit) || 10), 10));
-      const clients = directory.slice(Math.max(0, Number(offset) || 0), Math.max(0, Number(offset) || 0) + Math.max(1, Math.min(Number(limit) || 10, 25)));
       const accounts = [];
       for (const client of clients) {
         const nav = await gotoWithBudget(session.page, client.href, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
@@ -644,13 +720,19 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
         const pageSummary = await collectPageSummary(session.page);
         const billingFields = await extractBillingFieldPairs(session.page);
-        const accountSummary = summarizeBillingAccount(billingFields);
+        const insurancePreview = extractInsurancePreview(pageSummary);
+        const accountSummary = {
+          ...summarizeBillingAccount(billingFields),
+          insuranceCount: insurancePreview.length,
+          insurers: insurancePreview.map((item) => item.insuranceName).filter(Boolean),
+        };
         accounts.push({
           ...client,
           ok: true,
           currentUrl: pageSummary.url,
           billingFieldCount: billingFields.length,
           billingFields,
+          insurancePreview,
           accountSummary,
           preview: (pageSummary.textPreview || '').slice(0, 700),
         });
