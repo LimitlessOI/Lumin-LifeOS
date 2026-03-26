@@ -373,6 +373,25 @@ function extractBillingQueueLinks(summary = {}, { offset = 0, limit = 10 } = {})
   return queue.slice(start, start + Math.max(1, Math.min(Number(limit) || 10, 25)));
 }
 
+async function extractBillingQueueLinksFromPage(page, { offset = 0, limit = 10 } = {}) {
+  const links = await page.evaluate(() => {
+    const rows = Array.from(document.querySelectorAll('a[href*="/Pregnancy/Billing/"]')).map((el) => ({
+      href: el.href || '',
+      label: (el.textContent || '').replace(/\s+/g, ' ').trim(),
+    }));
+    const unique = [];
+    const seen = new Set();
+    for (const row of rows) {
+      if (!row.href || seen.has(row.href)) continue;
+      seen.add(row.href);
+      unique.push(row);
+    }
+    return unique;
+  });
+  const start = Math.max(0, Number(offset) || 0);
+  return links.slice(start, start + Math.max(1, Math.min(Number(limit) || 10, 25)));
+}
+
 function extractInsurancePreview(summary = {}) {
   const tables = Array.isArray(summary.tables) ? summary.tables : [];
   const insuranceEntries = [];
@@ -682,13 +701,23 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       }
       await waitForBillingHome(session.page, Math.max(5000, Number(pageTimeoutMs) || 15000));
       const billingHomeSummary = await collectPageSummary(session.page);
-      let clients = extractBillingQueueLinks(billingHomeSummary, { offset, limit }).map((item) => ({
+      let clients = (await extractBillingQueueLinksFromPage(session.page, { offset, limit })).map((item) => ({
         href: item.href,
         rawText: item.label,
         name: item.label || item.href,
         mrn: null,
         source: 'billing_queue',
       }));
+
+      if (!clients.length) {
+        clients = extractBillingQueueLinks(billingHomeSummary, { offset, limit }).map((item) => ({
+          href: item.href,
+          rawText: item.label,
+          name: item.label || item.href,
+          mrn: null,
+          source: 'billing_queue_summary',
+        }));
+      }
 
       if (!clients.length) {
         const directoryNav = await gotoWithBudget(session.page, new URL('/Pregnancy?donotRedirect=Y', session.currentUrl()).toString(), {
