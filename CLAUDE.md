@@ -9,6 +9,27 @@ If those files don't exist, ASK for them before proceeding.
 
 ---
 
+## SYSTEM SELF-EXECUTION RULE (Read This Every Session)
+
+**If the system can do it → have the system do it.**
+**If the system can't do it yet → build the capability, then have the system do it.**
+
+Adam is the decision-maker, not the executor. Never ask him to manually do something the system can handle.
+
+Before asking Adam to touch any UI, CLI, or dashboard — ask: does the running Railway app have an API for this?
+
+| Task | How the system does it |
+|------|----------------------|
+| Set Railway env vars | `POST /api/v1/railway/env/bulk` with `x-command-key` header |
+| Trigger redeploy | `POST /api/v1/railway/deploy` |
+| DB schema changes | Write migration → commit → auto-applies on boot |
+| Git commits | `services/deployment-service.js` → `commitToGitHub()` |
+| Read Railway vars | `GET /api/v1/railway/env` |
+
+Only escalate to Adam when a **decision** is needed — approvals, credentials that don't exist anywhere yet, or judgment calls.
+
+---
+
 ## HARD RULES (Always Apply)
 
 ### Priority
