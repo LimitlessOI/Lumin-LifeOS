@@ -115,6 +115,7 @@ import { createLifeCoachingRoutes } from './routes/life-coaching-routes.js';
 import { createTwoTierCouncilRoutes } from './routes/two-tier-council-routes.js';
 import { createOutreachCrmRoutes } from './routes/outreach-crm-routes.js';
 import { createBillingRoutes } from './routes/billing-routes.js';
+import { createClientCareBillingRoutes } from './routes/clientcare-billing-routes.js';
 import { createKnowledgeRoutes } from './routes/knowledge-routes.js';
 import { createConversationRoutes } from './routes/conversation-routes.js';
 import { createCommandCenterRoutes } from './routes/command-center-routes.js';
@@ -1077,6 +1078,9 @@ logger.info('✅ [TWIN] Routes mounted at /api/v1/twin');
 // ==================== CONVERSATION HISTORY ====================
 app.use('/api/v1/history', createConversationHistoryRoutes({ pool, requireKey, callCouncilMember }));
 logger.info('✅ [HISTORY] Routes mounted at /api/v1/history');
+
+app.use('/api/v1/clientcare-billing', createClientCareBillingRoutes({ pool, requireKey, logger }));
+logger.info('✅ [CLIENTCARE-BILLING] Routes mounted at /api/v1/clientcare-billing');
 
 // ==================== WORD KEEPER & INTEGRITY ENGINE (Amendment 16) ====================
 // Thin adapter: word-keeper services call councilService.ask(prompt, opts)

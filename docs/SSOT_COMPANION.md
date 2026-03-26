@@ -1,6 +1,6 @@
 # LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT
 ## Zero-Context Operational Manual + Enforcement Contract
-**Version:** 2026-03-25 (TC + Amendment Hygiene)  
+**Version:** 2026-03-26 (ClientCare Billing Recovery)  
 **Status:** CANONICAL COMPANION (SSOT-adjacent)  
 **Purpose:** Ensure any AI can operate with zero prior exposure without drift or hallucinations.
 
@@ -42,10 +42,11 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - TC core runtime wiring: inbox intake, deadline reminders, GLVAR monitoring, SkySlope/BoldTrail browser paths, pricing/fees
 
 **Active Build Priority:**
-1. TC Service / Transaction Coordinator (Amendment 17) — active revenue priority
-2. API Cost Savings Service / TCO (Amendment 10) — productization and verified savings
-3. BoldTrail / real estate agent workflow systems (Amendment 11)
-4. Remaining amendments continue only when they support the active revenue lane or are required infrastructure
+1. ClientCare Billing Recovery (Amendment 18) — immediate claims-rescue / revenue-recovery lane while TC is paused
+2. TC Service / Transaction Coordinator (Amendment 17) — hold state; foundation remains in repo
+3. API Cost Savings Service / TCO (Amendment 10) — productization and verified savings
+4. BoldTrail / real estate agent workflow systems (Amendment 11)
+5. Remaining amendments continue only when they support the active revenue lane or are required infrastructure
 
 **Environment Variables:**
 → Canonical list: `docs/ENV_REGISTRY.md` (master registry, status per var)
@@ -53,9 +54,10 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 → Vault: Railway → Project → Variables (never in code or .env files)
 
 **Current revenue blockers / build-critical gaps:**
-- TC portal / status engine / client communication layer not yet live
-- TC document completeness / compliance QA not yet live
-- Official MLS feed/API must be reconnected for market reporting and offer intelligence
+- ClientCare API access remains unconfirmed; browser/export fallback is the working assumption
+- Claim exports for the current unpaid ClientCare backlog have not yet been ingested
+- Payer-specific rule verification is still needed for commercial plans before patient-balance decisions
+- TC live feed/signature polish remains pending but is temporarily deprioritized
 - Provider savings math must stay evidence-backed before product claims
 
 ## 0.5 Amendment Hygiene Rule (NEW)

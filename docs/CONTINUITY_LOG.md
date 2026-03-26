@@ -1,6 +1,17 @@
 # Continuity Log
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
+## Update 2026-03-26 #1
+- Priority shifted temporarily from TC to ClientCare billing recovery because there is already earned revenue trapped in unpaid / unbilled / rejected / denied claims.
+- New amendment added: `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` defines the no-API-first operating model for ClientCare West billing rescue.
+- New backend foundation added for ClientCare billing rescue:
+  - `services/clientcare-billing-service.js` — claim classification, timely-filing triage, rescue buckets, action planning
+  - `services/clientcare-browser-service.js` — browser/export fallback readiness contract and workflow templates
+  - `routes/clientcare-billing-routes.js` — dashboard, import, classification, actions, and ClientCare readiness endpoints
+  - `db/migrations/20260326_clientcare_billing.sql` — `clientcare_claims` and `clientcare_claim_actions`
+- Working assumption remains: no public ClientCare API or self-serve API key exists until the vendor proves otherwise; browser/export fallback is the primary path.
+- Immediate next operational step is to export the 90-claim backlog from ClientCare and import it into the new rescue queue.
+
 ## Update 2026-03-25 #1
 - Priority reset: TC Service (Amendment 17) is the active revenue lane; API Cost Savings is secondary productization work.
 - Governance: every meaningful product/code change must now update the owning amendment before the work is considered done; SSOT Companion and project index also update when shared platform state changes.

@@ -1,5 +1,5 @@
 # PROJECT AMENDMENTS INDEX
-**Last Updated:** 2026-03-25
+**Last Updated:** 2026-03-26
 **Parent:** SSOT North Star Constitution (`docs/SSOT_NORTH_STAR.md`)
 **Authority:** All amendments subordinate to the North Star Constitution
 
@@ -34,6 +34,7 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 15 | [Business Tools Suite](AMENDMENT_15_BUSINESS_TOOLS.md) | LIVE (various) | Supporting | High |
 | 16 | [Word Keeper & Integrity Engine](AMENDMENT_16_WORD_KEEPER.md) | LIVE | Accountability | Low |
 | 17 | [TC Service — Transaction Coordinator](AMENDMENT_17_TC_SERVICE.md) | BUILDING | **#1 Active Revenue** | High |
+| 18 | [ClientCare Billing Recovery](AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md) | BUILDING | **#1 Active Recovery** | High |
 
 ---
 
@@ -41,9 +42,10 @@ They do NOT override the North Star — they add project-specific rules that ope
 Per the SSOT North Star: **ONE killer feature → ONE paying segment → ONE economic model → then expand.**
 
 **Current Priority:**
-1. **TC Service** (Amendment 17) — active revenue lane; service-backed real-estate operations
-2. **API Cost Savings** (Amendment 10) — verified savings product / case-study-to-product path
-3. **BoldTrail + Real Estate Workflow Systems** (Amendment 11) — adjacent expansion once TC foundations are stable
+1. **ClientCare Billing Recovery** (Amendment 18) — immediate claims-rescue / revenue-recovery lane while TC is paused
+2. **TC Service** (Amendment 17) — hold state; resume after billing rescue priority clears
+3. **API Cost Savings** (Amendment 10) — verified savings product / case-study-to-product path
+4. **BoldTrail + Real Estate Workflow Systems** (Amendment 11) — adjacent expansion once active revenue lanes are stable
 
 Everything else is supporting infrastructure, future-phase work, or must prove a tighter link to current revenue.
 
