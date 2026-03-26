@@ -19,8 +19,12 @@ const DOC_PROFILES = {
       { id: 'doc_language', label: 'Listing agreement language present', test: ({ text }) => /listing\s+agreement|exclusive\s+listing|listing\s+contract/i.test(text) },
       { id: 'property_address', label: 'Property address found', test: ({ facts, expectedAddressMatch }) => Boolean(facts.address) || expectedAddressMatch },
       { id: 'seller_identity', label: 'Seller/owner section found', test: ({ text }) => /seller|owner/i.test(text) },
+      { id: 'list_date', label: 'Listing date / start date found', test: ({ text }) => /list\s+date|listing\s+date|commencement|start\s+date/i.test(text) || DATE_RE.test(text) },
+      { id: 'expiration_date', label: 'Expiration date found', test: ({ text }) => /expiration|expires|termination\s+date/i.test(text) || /expiration\s+date/i.test(text) },
       { id: 'list_price', label: 'List price found', test: ({ facts }) => Boolean(facts.price) },
+      { id: 'commission', label: 'Commission / compensation found', test: ({ facts, text }) => Boolean(facts.commission) || /commission|compensation|brokerage\s+fee/i.test(text) },
       { id: 'signature', label: 'Signature indicator found', test: ({ text }) => /signature|signed/i.test(text) },
+      { id: 'initials', label: 'Initials/sign-off markers found', test: ({ text, facts }) => facts.initials_detected || /\binitial(?:s)?\b/i.test(text) },
       { id: 'date', label: 'Date indicator found', test: ({ text }) => DATE_RE.test(text) },
     ],
   },
@@ -32,6 +36,10 @@ const DOC_PROFILES = {
       { id: 'buyer_identity', label: 'Buyer section found', test: ({ text }) => /buyer/i.test(text) },
       { id: 'seller_identity', label: 'Seller section found', test: ({ text }) => /seller/i.test(text) },
       { id: 'price', label: 'Purchase price found', test: ({ facts }) => Boolean(facts.price) },
+      { id: 'earnest_money', label: 'Earnest money / deposit found', test: ({ facts, text }) => Boolean(facts.earnest_money) || /earnest\s+money|emd|deposit/i.test(text) },
+      { id: 'close_date', label: 'Close of escrow / close date found', test: ({ facts, text }) => Boolean(facts.close_date) || /close\s+of\s+escrow|coe|close\s+date/i.test(text) },
+      { id: 'financing', label: 'Financing / cash terms found', test: ({ facts, text }) => Boolean(facts.financing_type) || /cash|conventional|fha|va|loan/i.test(text) },
+      { id: 'contingencies', label: 'Contingency terms found', test: ({ facts, text }) => facts.contingencies.length > 0 || /contingency|inspection|appraisal|loan/i.test(text) },
       { id: 'execution', label: 'Execution/acceptance indicator found', test: ({ text }) => /accepted|fully\s+executed|binding|acceptance/i.test(text) },
       { id: 'signature', label: 'Signature indicator found', test: ({ text }) => /signature|signed/i.test(text) },
     ],
@@ -60,6 +68,27 @@ const DOC_PROFILES = {
       { id: 'property_address', label: 'Property address found', test: ({ facts, expectedAddressMatch }) => Boolean(facts.address) || expectedAddressMatch },
       { id: 'signature', label: 'Signature indicator found', test: ({ text }) => /signature|signed/i.test(text) },
       { id: 'date', label: 'Date indicator found', test: ({ text }) => DATE_RE.test(text) },
+    ],
+  },
+  'Lead-Based Paint Disclosure': {
+    aliases: [/lead[-\s]?based\s+paint/i, /lead\s+paint\s+disclosure/i],
+    requiredChecks: [
+      { id: 'doc_language', label: 'Lead-based paint disclosure language present', test: ({ text }) => /lead[-\s]?based\s+paint/i.test(text) },
+      { id: 'property_address', label: 'Property address found', test: ({ facts, expectedAddressMatch }) => Boolean(facts.address) || expectedAddressMatch },
+      { id: 'buyer_identity', label: 'Buyer section found', test: ({ text }) => /buyer/i.test(text) },
+      { id: 'seller_identity', label: 'Seller section found', test: ({ text }) => /seller/i.test(text) },
+      { id: 'signature', label: 'Signature indicator found', test: ({ text }) => /signature|signed/i.test(text) },
+      { id: 'date', label: 'Date indicator found', test: ({ text }) => DATE_RE.test(text) },
+    ],
+  },
+  'Seller Property Disclosure': {
+    aliases: [/seller\s+real\s+property\s+disclosure/i, /\bspds\b/i, /property\s+disclosure/i],
+    requiredChecks: [
+      { id: 'doc_language', label: 'Seller disclosure language present', test: ({ text }) => /seller\s+real\s+property\s+disclosure|spds|property\s+disclosure/i.test(text) },
+      { id: 'property_address', label: 'Property address found', test: ({ facts, expectedAddressMatch }) => Boolean(facts.address) || expectedAddressMatch },
+      { id: 'seller_identity', label: 'Seller section found', test: ({ text }) => /seller|owner/i.test(text) },
+      { id: 'questionnaire', label: 'Disclosure questionnaire / statements found', test: ({ text }) => /yes|no|unknown|explain/i.test(text) },
+      { id: 'signature', label: 'Signature indicator found', test: ({ text }) => /signature|signed/i.test(text) },
     ],
   },
   'Transaction Document': {
@@ -101,6 +130,45 @@ function detectPrice(text) {
   const matches = text.match(PRICE_RE) || [];
   if (!matches.length) return null;
   return matches[0].replace(/\s+/g, '');
+}
+
+function detectEarnestMoney(text) {
+  const match = text.match(/(?:earnest\s+money|emd|deposit)[^$0-9]{0,30}(\$?\s?\d[\d,]*(?:\.\d{2})?)/i);
+  return match?.[1]?.replace(/\s+/g, '') || null;
+}
+
+function detectCommission(text) {
+  const match = text.match(/(\d{1,2}(?:\.\d{1,2})?\s?%)[^.\n]{0,40}(?:commission|compensation|brokerage\s+fee)|(?:commission|compensation)[^.\n]{0,40}(\d{1,2}(?:\.\d{1,2})?\s?%)/i);
+  return (match?.[1] || match?.[2] || null);
+}
+
+function detectCloseDate(text) {
+  const match = text.match(/(?:close\s+of\s+escrow|close\s+date|closing\s+date|coe)[^A-Za-z0-9]{0,20}([A-Za-z]{3,9}\s+\d{1,2},?\s+\d{4}|\d{1,2}[/-]\d{1,2}[/-]\d{2,4})/i);
+  return match?.[1] || null;
+}
+
+function detectFinancing(text) {
+  const lower = text.toLowerCase();
+  if (/\bcash\b/.test(lower)) return 'cash';
+  if (/\bconventional\b/.test(lower)) return 'conventional';
+  if (/\bfha\b/.test(lower)) return 'fha';
+  if (/\bva\b/.test(lower)) return 'va';
+  if (/\bloan\b|\bfinancing\b/.test(lower)) return 'financed';
+  return null;
+}
+
+function detectContingencies(text) {
+  const lower = text.toLowerCase();
+  const items = [];
+  if (/inspection/.test(lower)) items.push('inspection');
+  if (/appraisal/.test(lower)) items.push('appraisal');
+  if (/\bloan\b|\bfinancing\b/.test(lower)) items.push('loan');
+  if (/sale\s+of\s+buyer'?s\s+property|contingent\s+on\s+buyer.?s\s+property/.test(lower)) items.push('sale_of_home');
+  return items;
+}
+
+function detectInitials(text) {
+  return /\binitial(?:s)?\b|\/s\/|buyer(?:\(s\))?\s+initial|seller(?:\(s\))?\s+initial/i.test(text);
 }
 
 function detectParties(text) {
@@ -167,6 +235,12 @@ export function createTCDocumentValidator({ logger = console } = {}) {
     const facts = {
       address: detectAddress(text),
       price: detectPrice(text),
+      earnest_money: detectEarnestMoney(text),
+      commission: detectCommission(text),
+      close_date: detectCloseDate(text),
+      financing_type: detectFinancing(text),
+      contingencies: detectContingencies(text),
+      initials_detected: detectInitials(text),
       parties: detectParties(text),
     };
     const addressMatch = expectedAddressMatch(text, expectedAddress);

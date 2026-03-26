@@ -17,6 +17,7 @@ import { createTCReportService } from '../services/tc-report-service.js';
 import { createTCAutomationService } from '../services/tc-automation-service.js';
 import { createTCApprovalService } from '../services/tc-approval-service.js';
 import { createTCAlertService } from '../services/tc-alert-service.js';
+import { createTCAsanaSyncService } from '../services/tc-asana-sync-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 
@@ -51,6 +52,7 @@ export function createTCRoutes(
   });
   const approvalService = createTCApprovalService({ pool, coordinator, automationService, logger });
   const alertService = createTCAlertService({ pool, coordinator, logger, sendSMS, sendAlertSms, sendAlertCall });
+  const asanaSyncService = createTCAsanaSyncService({ pool, coordinator, portalService, logger });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -210,6 +212,33 @@ export function createTCRoutes(
       const overview = await portalService.buildOverview(parseInt(req.params.id), { view });
       if (!overview) return res.status(404).json({ ok: false, error: 'Transaction not found' });
       res.json({ ok: true, view, ...overview });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/asana/preview
+  router.get('/transactions/:id/asana/preview', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const preview = await asanaSyncService.previewTransaction(txId);
+      if (!preview) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      res.json({ ok: true, configured: asanaSyncService.isConfigured(), ...preview });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/asana/sync
+  router.post('/transactions/:id/asana/sync', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const result = await asanaSyncService.syncTransaction(txId);
+      if (!result.ok) {
+        const status = result.error === 'Transaction not found' ? 404 : 503;
+        return res.status(status).json(result);
+      }
+      res.json(result);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

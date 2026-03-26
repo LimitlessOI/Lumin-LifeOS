@@ -67,6 +67,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-automation-service.js` | Prepared-send automation for feedback requests, document requests, and weekly report delivery |
 | `services/tc-approval-service.js` | Approval cockpit state for review / approve / reject / snooze flows |
 | `services/tc-alert-service.js` | Escalating alert engine for urgent/critical blockers with acknowledgement and resolution state |
+| `services/tc-asana-sync-service.js` | Canonical TC -> Asana sync for parent transaction tasks and derived subtasks |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `public/tc/agent-portal.html` | Agent-facing at-a-glance portal for file health, blockers, docs, comms, and reports |
@@ -81,6 +82,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `db/migrations/20260325_tc_reporting.sql` | tc_showings, feedback, market snapshots, and weekly reports |
 | `db/migrations/20260325_tc_approvals_automation.sql` | tc_approval_items for one-tap review / approve / send flows |
 | `db/migrations/20260325_tc_alerts.sql` | tc_alerts, tc_alert_deliveries for closed-loop escalation |
+| `db/migrations/20260326_tc_external_refs.sql` | tc_external_refs for Asana and future external sync mappings |
 
 ### Portal Access
 | Portal | URL | Purpose |
@@ -98,6 +100,8 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `IMAP_USER` | adam@hopkinsgroup.org |
 | `IMAP_PASS` | Email account password (store via /api/v1/railway/managed-env/bulk) |
 | `TC_IMAP_*` | TC-specific mailbox overrides when different from shared IMAP vars |
+| `ASANA_ACCESS_TOKEN` | Asana API token for TC sync |
+| `ASANA_TC_PROJECT_GID` | Asana project GID for TC operational sync |
 
 ### Product Surfaces
 | Surface | User | Purpose |
@@ -401,6 +405,11 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
   - human review work
 - Avoid making agents manage status manually in two places
 - Asana templates are a useful base, but must be converted into machine-readable workflow specs that the system can execute against
+- Initial backend support now exists to:
+  - preview the Asana sync plan from canonical TC state
+  - upsert a parent task per transaction
+  - upsert subtasks for open document requests, approvals, and alerts
+  - persist external ID mappings in `tc_external_refs`
 
 ### API Endpoints (all under `/api/v1/tc/`)
 | Method | Path | Purpose |
@@ -455,7 +464,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 Polish agent/client portal UI on top of the now-live overview/report/approval APIs
 - 🔲 Wire communication delivery callbacks / acknowledgements into the approval cockpit
 - 🔲 Refine alert escalation cadence and device-specific mobile delivery behavior
-- 🔲 Build Asana sync from canonical file state instead of task-only workflow
+- 🔲 Wire real Asana credentials/project and run first live sync
 - 🔲 Build recording/consent gate and fail-closed policy before any rolling buffer feature ships
 - 🔲 Convert existing Asana listing/buyer templates into structured workflow specs with triggers, dependencies, and communication hooks
 - 🔲 Secure official MLS/API access and wire it into the listing health/reporting engine
