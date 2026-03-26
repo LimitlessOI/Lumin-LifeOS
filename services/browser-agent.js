@@ -44,6 +44,10 @@ export async function createSession({ headless = true, logger = console } = {}) 
   );
   await page.setViewport({ width: 1280, height: 800 });
 
+  if (typeof page.waitForTimeout !== "function") {
+    page.waitForTimeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   page.setDefaultTimeout(DEFAULT_TIMEOUT);
   page.setDefaultNavigationTimeout(DEFAULT_NAV_TIMEOUT);
 
