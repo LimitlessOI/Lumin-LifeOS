@@ -102,6 +102,10 @@ async function screenshotPath(label) {
   return path.join(SCREENSHOT_DIR, `${Date.now()}-${label.replace(/[^a-z0-9_-]/gi, '_')}.png`);
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function safeScreenshot(page, targetPath) {
   try {
     const dims = await page.evaluate(() => ({
@@ -250,7 +254,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       }
 
       await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 45000 }).catch(() => {});
-      await session.page.waitForTimeout(1500);
+      await sleep(1500);
 
       const after = await collectPageSummary(session.page);
       const sp1 = await screenshotPath('clientcare-after-login');
@@ -286,7 +290,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       for (const item of candidates) {
         try {
           await session.page.goto(item.href, { waitUntil: 'domcontentloaded', timeout: 30000 });
-          await session.page.waitForTimeout(1000);
+          await sleep(1000);
           const summary = await collectPageSummary(session.page);
           const shot = await screenshotPath(`clientcare-discovery-${visited.length + 1}`);
           await safeScreenshot(session.page, shot);
