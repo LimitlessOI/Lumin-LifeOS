@@ -95,6 +95,35 @@
   function renderBrowserOutput(result) {
     if (!result) return '<p class="muted">No browser run yet.</p>';
 
+    if (Array.isArray(result.items)) {
+      return `
+        <div class="stack">
+          <div class="grid four" style="margin-bottom:0">
+            <div class="card stat"><span>Visible queue items</span><strong>${escapeHtml(result.totalVisibleQueueItems || 0)}</strong></div>
+            <div class="card stat"><span>Returned</span><strong>${escapeHtml((result.items || []).length)}</strong></div>
+            <div class="card stat"><span>Offset</span><strong>${escapeHtml(result.offset || 0)}</strong></div>
+            <div class="card stat"><span>Billing notes</span><strong>${escapeHtml(result.dashboardCounts?.newBillingNotes || 0)}</strong></div>
+          </div>
+          <table>
+            <thead><tr><th>Client</th><th>Note</th><th>Status</th><th>What went wrong</th><th>Needed now</th><th>Insurance</th></tr></thead>
+            <tbody>
+              ${(result.items || []).map((item) => `
+                <tr>
+                  <td>${escapeHtml(item.client || '')}</td>
+                  <td>${escapeHtml(item.notePreview || '')}</td>
+                  <td><span class="badge ${badgeClass(item.diagnosis?.status || 'review')}">${escapeHtml(item.diagnosis?.status || 'review')}</span></td>
+                  <td>${escapeHtml((item.diagnosis?.whatWentWrong || []).join(' | ') || 'Needs review')}</td>
+                  <td>${escapeHtml((item.diagnosis?.needed || []).join(' | ') || 'Review billing page')}</td>
+                  <td>${escapeHtml((item.accountSummary?.insurers || []).join(', ') || 'none visible')}</td>
+                </tr>
+              `).join('') || '<tr><td colspan="6">No account items returned.</td></tr>'}
+            </tbody>
+          </table>
+          <details><summary>Raw details</summary><pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre></details>
+        </div>
+      `;
+    }
+
     if (result.dashboardCounts && result.notes) {
       const notes = (result.notes.billingNotes || []).slice(0, 10);
       const followUps = (result.notes.followUpReminders || []).slice(0, 10);
@@ -334,6 +363,23 @@
     }
   }
 
+  async function browserAccountReport() {
+    try {
+      const limit = Number(document.getElementById('browser-scan-limit')?.value || 5);
+      const offset = Number(document.getElementById('browser-scan-offset')?.value || 0);
+      const params = new URLSearchParams({
+        limit: String(Math.max(1, Math.min(limit, 25))),
+        offset: String(Math.max(0, offset)),
+        page_timeout_ms: '12000',
+      });
+      const result = await api(`/api/v1/clientcare-billing/browser/account-report?${params.toString()}`);
+      setBrowserOutput(result);
+      alert(`Loaded ${result.items?.length || 0} account rescue rows.`);
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function browserExtract(importIntoQueue = false) {
     try {
       const result = await api('/api/v1/clientcare-billing/browser/extract-claims', {
@@ -483,6 +529,7 @@
             <input id="browser-scan-limit" type="number" min="1" max="25" value="5" style="max-width:90px">
             <input id="browser-scan-offset" type="number" min="0" value="0" style="max-width:90px">
             <button id="browser-scan-accounts" class="ghost">Scan Accounts</button>
+            <button id="browser-account-report" class="ghost">Account Report</button>
           </div>
         </div>
         <div class="card">
@@ -530,6 +577,7 @@
     document.getElementById('browser-extract').addEventListener('click', () => browserExtract(false));
     document.getElementById('browser-extract-import').addEventListener('click', () => browserExtract(true));
     document.getElementById('browser-scan-accounts').addEventListener('click', browserScanAccounts);
+    document.getElementById('browser-account-report').addEventListener('click', browserAccountReport);
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));

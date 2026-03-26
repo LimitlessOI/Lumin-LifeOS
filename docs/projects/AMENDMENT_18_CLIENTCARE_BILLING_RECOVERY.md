@@ -195,6 +195,7 @@ Operational inputs needed regardless of integration path:
 - Browser tooling must surface the billing-notes queue because that is likely where real unpaid-work backlog sits when sent-bills and ERA workspaces are empty.
 - Operator-facing UI must summarize billing state in plain language tables/cards; raw JSON is diagnostic only and should stay secondary.
 - The browser path must produce a live account rescue report from the billing-notes queue, including per-account status, likely root cause, and the next action needed.
+- The operator overlay must expose the account rescue report directly so staff can review account status and next actions without reading raw payloads.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.
