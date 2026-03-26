@@ -12,8 +12,8 @@ import { createClientCareSyncService } from '../services/clientcare-sync-service
 export function createClientCareBillingRoutes({ pool, requireKey, logger = console }) {
   const router = express.Router();
   const billingService = createClientCareBillingService({ pool, logger });
-  const browserService = createClientCareBrowserService({});
   const syncService = createClientCareSyncService({ billingService, logger });
+  const browserService = createClientCareBrowserService({ logger, syncService });
 
   router.use(express.json({ limit: '5mb' }));
   router.use(requireKey);
@@ -29,6 +29,44 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.get('/clientcare/readiness', async (_req, res) => {
     res.json({ ok: true, readiness: browserService.getReadiness() });
+  });
+
+  router.post('/browser/login-test', async (_req, res) => {
+    try {
+      const result = await browserService.login({ dryRun: false });
+      await result.session.close().catch(() => {});
+      res.json({
+        ok: true,
+        page: result.page,
+        screenshots: result.screenshots,
+        loginSelectors: result.loginSelectors,
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] browser login test failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/browser/discover', async (_req, res) => {
+    try {
+      const result = await browserService.discoverBillingSurface();
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] browser discover failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/browser/extract-claims', async (req, res) => {
+    try {
+      const result = await browserService.extractClaimTables({
+        importIntoQueue: Boolean(req.body?.import_into_queue),
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] browser extract failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.get('/claims/import-template', async (_req, res) => {

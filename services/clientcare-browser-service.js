@@ -1,20 +1,23 @@
 /**
  * @ssot docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md
  * clientcare-browser-service.js
- * Browser-first fallback contract for ClientCare when API access is unavailable.
+ * Browser-first fallback contract and discovery automation for ClientCare when API access is unavailable.
  */
 
+import path from 'path';
+import fs from 'fs/promises';
+import { createSession } from './browser-agent.js';
+
+const SCREENSHOT_DIR = '/tmp/clientcare-browser';
 const REQUIRED_BROWSER_SECRETS = [
   'CLIENTCARE_BASE_URL',
   'CLIENTCARE_USERNAME',
   'CLIENTCARE_PASSWORD',
 ];
-
 const OPTIONAL_BROWSER_SECRETS = [
   'CLIENTCARE_MFA_MODE',
   'CLIENTCARE_MFA_SECRET',
 ];
-
 const WORKFLOW_TEMPLATES = [
   {
     id: 'claim-aging-export',
@@ -60,8 +63,91 @@ const WORKFLOW_TEMPLATES = [
     ],
   },
 ];
+const USERNAME_SELECTORS = [
+  'input[type="email"]',
+  'input[name*="email" i]',
+  'input[name*="user" i]',
+  'input[id*="user" i]',
+  'input[name*="login" i]',
+  'input[id*="login" i]',
+  'input[type="text"]',
+];
+const PASSWORD_SELECTORS = [
+  'input[type="password"]',
+  'input[name*="pass" i]',
+  'input[id*="pass" i]',
+];
+const SUBMIT_SELECTORS = [
+  'button[type="submit"]',
+  'input[type="submit"]',
+  'button[name*="login" i]',
+  'button[id*="login" i]',
+  'button[class*="login" i]',
+  'button[class*="sign" i]',
+];
+const BILLING_KEYWORDS = /billing|claim|claims|invoice|insurance|ar\b|accounts receivable|denial|rejection|payment|era|eob/i;
 
-export function createClientCareBrowserService({ env = process.env } = {}) {
+function redact(value = '') {
+  const text = String(value || '');
+  if (text.length <= 8) return `${text.slice(0, 2)}****`;
+  return `${text.slice(0, 4)}****${text.slice(-2)}`;
+}
+
+async function ensureScreenshotDir() {
+  await fs.mkdir(SCREENSHOT_DIR, { recursive: true });
+}
+
+async function screenshotPath(label) {
+  await ensureScreenshotDir();
+  return path.join(SCREENSHOT_DIR, `${Date.now()}-${label.replace(/[^a-z0-9_-]/gi, '_')}.png`);
+}
+
+async function tryFill(page, selectors, value) {
+  for (const selector of selectors) {
+    const el = await page.$(selector);
+    if (!el) continue;
+    await el.click({ clickCount: 3 }).catch(() => {});
+    await el.type(String(value), { delay: 20 });
+    return selector;
+  }
+  return null;
+}
+
+async function tryClick(page, selectors) {
+  for (const selector of selectors) {
+    const el = await page.$(selector);
+    if (!el) continue;
+    await el.click().catch(() => {});
+    return selector;
+  }
+  return null;
+}
+
+async function collectPageSummary(page) {
+  return page.evaluate(() => {
+    const links = Array.from(document.querySelectorAll('a[href]')).slice(0, 500).map((el) => ({
+      text: (el.textContent || '').trim(),
+      href: el.href || '',
+    }));
+    const candidates = links.filter((item) => /billing|claim|claims|invoice|insurance|ar\b|accounts receivable|denial|rejection|payment|era|eob/i.test(`${item.text} ${item.href}`)).slice(0, 20);
+    const headings = Array.from(document.querySelectorAll('h1,h2,h3,h4')).map((el) => (el.textContent || '').trim()).filter(Boolean).slice(0, 20);
+    const tables = Array.from(document.querySelectorAll('table')).slice(0, 5).map((table) =>
+      Array.from(table.querySelectorAll('tr')).slice(0, 20).map((row) =>
+        Array.from(row.querySelectorAll('th,td')).map((cell) => (cell.textContent || '').trim())
+      )
+    );
+    return {
+      url: location.href,
+      title: document.title,
+      headings,
+      candidateLinks: candidates,
+      tables,
+      textPreview: (document.body.innerText || '').trim().slice(0, 3000),
+    };
+  });
+}
+
+export function createClientCareBrowserService({ env = process.env, logger = console, syncService = null } = {}) {
   function getReadiness() {
     const configured = [];
     const missing = [];
@@ -79,6 +165,8 @@ export function createClientCareBrowserService({ env = process.env } = {}) {
       missingSecrets: missing,
       optionalConfigured,
       workflowTemplates: WORKFLOW_TEMPLATES,
+      configuredBaseUrl: env.CLIENTCARE_BASE_URL ? redact(env.CLIENTCARE_BASE_URL) : null,
+      configuredUsername: env.CLIENTCARE_USERNAME ? redact(env.CLIENTCARE_USERNAME) : null,
       notes: [
         'Do not store ClientCare credentials in code or docs.',
         'Use Railway secrets or the encrypted account vault only if browser automation is confirmed necessary.',
@@ -87,8 +175,150 @@ export function createClientCareBrowserService({ env = process.env } = {}) {
     };
   }
 
+  function getCredentials() {
+    if (!env.CLIENTCARE_BASE_URL || !env.CLIENTCARE_USERNAME || !env.CLIENTCARE_PASSWORD) {
+      throw new Error('ClientCare browser credentials are not fully configured');
+    }
+    return {
+      baseUrl: env.CLIENTCARE_BASE_URL,
+      username: env.CLIENTCARE_USERNAME,
+      password: env.CLIENTCARE_PASSWORD,
+      mfaMode: env.CLIENTCARE_MFA_MODE || null,
+      mfaSecret: env.CLIENTCARE_MFA_SECRET || null,
+    };
+  }
+
+  async function login({ dryRun = false } = {}) {
+    const credentials = getCredentials();
+    const session = await createSession({ logger });
+    const screenshots = [];
+
+    try {
+      await session.navigate(credentials.baseUrl);
+      const sp0 = await screenshotPath('clientcare-login-page');
+      await session.page.screenshot({ path: sp0, fullPage: true });
+      screenshots.push(sp0);
+
+      if (dryRun) {
+        return { ok: true, dryRun: true, session, screenshots, url: session.currentUrl() };
+      }
+
+      const userSelector = await tryFill(session.page, USERNAME_SELECTORS, credentials.username);
+      const passSelector = await tryFill(session.page, PASSWORD_SELECTORS, credentials.password);
+      if (!userSelector || !passSelector) {
+        const failShot = await screenshotPath('clientcare-login-fields-missing');
+        await session.page.screenshot({ path: failShot, fullPage: true });
+        screenshots.push(failShot);
+        throw new Error('Could not locate ClientCare login fields');
+      }
+
+      const submitSelector = await tryClick(session.page, SUBMIT_SELECTORS);
+      if (!submitSelector) {
+        await session.page.keyboard.press('Enter').catch(() => {});
+      }
+
+      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 45000 }).catch(() => {});
+      await session.page.waitForTimeout(1500);
+
+      const after = await collectPageSummary(session.page);
+      const sp1 = await screenshotPath('clientcare-after-login');
+      await session.page.screenshot({ path: sp1, fullPage: true });
+      screenshots.push(sp1);
+
+      const stillOnLogin = /login|sign in/i.test(after.title) && await session.page.$(PASSWORD_SELECTORS[0]);
+      if (stillOnLogin) {
+        throw new Error('ClientCare login appears to have failed; still on login screen');
+      }
+
+      return {
+        ok: true,
+        session,
+        screenshots,
+        loginSelectors: { userSelector, passSelector, submitSelector },
+        page: after,
+      };
+    } catch (error) {
+      await session.close().catch(() => {});
+      throw error;
+    }
+  }
+
+  async function discoverBillingSurface() {
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const landing = result.page || await collectPageSummary(session.page);
+      const origin = new URL(landing.url || session.currentUrl()).origin;
+      const visited = [];
+      const candidates = (landing.candidateLinks || []).filter((item) => item.href && item.href.startsWith(origin)).slice(0, 6);
+      for (const item of candidates) {
+        try {
+          await session.page.goto(item.href, { waitUntil: 'domcontentloaded', timeout: 30000 });
+          await session.page.waitForTimeout(1000);
+          const summary = await collectPageSummary(session.page);
+          const shot = await screenshotPath(`clientcare-discovery-${visited.length + 1}`);
+          await session.page.screenshot({ path: shot, fullPage: true });
+          screenshots.push(shot);
+          visited.push({ label: item.text || item.href, screenshot: shot, ...summary });
+        } catch (error) {
+          logger.warn?.({ err: error.message, href: item.href }, '[CLIENTCARE-BROWSER] discovery candidate failed');
+        }
+      }
+      return {
+        ok: true,
+        landing,
+        visited,
+        screenshots,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  async function extractClaimTables({ importIntoQueue = false } = {}) {
+    if (!syncService) throw new Error('ClientCare sync service not configured');
+    const discovery = await discoverBillingSurface();
+    const pages = [discovery.landing, ...(discovery.visited || [])];
+    const extracted = [];
+    for (const page of pages) {
+      const fromTables = Array.isArray(page.tables)
+        ? page.tables.flatMap((table) => syncService.parseSnapshot({ rows: table.length > 1 ? [Object.fromEntries(table[0].map((h, i) => [h, table[1]?.[i] || '']))] : [], source: 'browser_table_preview' }))
+        : [];
+      const fromHtml = syncService.parseSnapshot({ html: `<table>${(page.tables || []).map((table) => table.map((row) => `<tr>${row.map((cell) => `<td>${String(cell || '').replace(/</g, '&lt;')}</td>`).join('')}</tr>`).join('')).join('')}</table>`, source: 'browser_html_preview' });
+      extracted.push({
+        url: page.url,
+        title: page.title,
+        parsedClaims: fromHtml.length || fromTables.length,
+        preview: (fromHtml.length ? fromHtml : fromTables).slice(0, 20),
+      });
+    }
+
+    let imported = null;
+    if (importIntoQueue) {
+      const snapshots = [];
+      for (const page of pages) {
+        for (const table of page.tables || []) {
+          snapshots.push(syncService.parseSnapshot({ rows: table.length > 1 ? table.slice(1).map((row) => Object.fromEntries(table[0].map((h, i) => [h, row[i] || '']))) : [], source: 'browser_snapshot' }));
+        }
+      }
+      const flat = snapshots.flat();
+      imported = await syncService.importSnapshot({ rows: flat, source: 'browser_snapshot' });
+    }
+
+    return {
+      ok: true,
+      discovery,
+      extracted,
+      imported,
+    };
+  }
+
   return {
     getReadiness,
+    getCredentials,
     listWorkflowTemplates: () => WORKFLOW_TEMPLATES,
+    login,
+    discoverBillingSurface,
+    extractClaimTables,
   };
 }

@@ -102,6 +102,46 @@
     }
   }
 
+  async function browserLoginTest() {
+    try {
+      const result = await api('/api/v1/clientcare-billing/browser/login-test', {
+        method: 'POST',
+        body: JSON.stringify({}),
+      });
+      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      alert('Browser login test completed.');
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function browserDiscover() {
+    try {
+      const result = await api('/api/v1/clientcare-billing/browser/discover', {
+        method: 'POST',
+        body: JSON.stringify({}),
+      });
+      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      alert('Browser discovery completed.');
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function browserExtract(importIntoQueue = false) {
+    try {
+      const result = await api('/api/v1/clientcare-billing/browser/extract-claims', {
+        method: 'POST',
+        body: JSON.stringify({ import_into_queue: importIntoQueue }),
+      });
+      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      alert(importIntoQueue ? 'Browser extraction and import completed.' : 'Browser extraction preview completed.');
+      await loadDashboard();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function reclassify(id) {
     try {
       await api(`/api/v1/clientcare-billing/claims/${id}/reclassify`, { method: 'POST', body: JSON.stringify({ actor: 'overlay' }) });
@@ -216,6 +256,23 @@
         </div>
       </div>
 
+      <div class="grid two">
+        <div class="card">
+          <h2>Browser automation</h2>
+          <p class="hint" style="margin:10px 0">Uses the Railway ClientCare credentials to log in, inspect billing pages, and preview claim tables.</p>
+          <div class="row-actions">
+            <button id="browser-login-test">Login Test</button>
+            <button id="browser-discover" class="ghost">Discover</button>
+            <button id="browser-extract" class="ghost">Extract Preview</button>
+            <button id="browser-extract-import">Extract + Import</button>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Browser output</h2>
+          <pre id="browser-output">No browser run yet.</pre>
+        </div>
+      </div>
+
       <div class="split">
         <div class="stack">
           <div class="card">
@@ -248,6 +305,10 @@
     });
     document.getElementById('import-csv').addEventListener('click', importCsv);
     document.getElementById('import-snapshot').addEventListener('click', importSnapshot);
+    document.getElementById('browser-login-test').addEventListener('click', browserLoginTest);
+    document.getElementById('browser-discover').addEventListener('click', browserDiscover);
+    document.getElementById('browser-extract').addEventListener('click', () => browserExtract(false));
+    document.getElementById('browser-extract-import').addEventListener('click', () => browserExtract(true));
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));

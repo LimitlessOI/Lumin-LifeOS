@@ -72,6 +72,7 @@ Every claim lands in one of these buckets:
 ### 3. What the system must do
 - Import/export claims from ClientCare reports
 - Parse copied ClientCare tables or raw HTML when no report export is available
+- Use credential-backed browser discovery to inspect the live ClientCare billing surface when secrets are configured
 - Classify claims by payer, age, status, and rescueability
 - Generate exact next actions per claim
 - Track proof needed (ERA/EOB, clearinghouse submission proof, auth, enrollment, etc.)
@@ -86,7 +87,7 @@ Every claim lands in one of these buckets:
 | File | Purpose |
 |------|---------|
 | `services/clientcare-billing-service.js` | Claim classification, rescue planning, dashboard summaries |
-| `services/clientcare-browser-service.js` | No-API browser-readiness contract and workflow templates |
+| `services/clientcare-browser-service.js` | No-API browser-readiness contract, login automation, and page discovery |
 | `services/clientcare-sync-service.js` | Snapshot parsing, fallback import, and reconciliation logic |
 | `routes/clientcare-billing-routes.js` | Operational API for imports, classification, rescue queue, browser readiness |
 | `public/clientcare-billing/overlay.html` | Operator overlay page for claims rescue |
@@ -96,6 +97,9 @@ Every claim lands in one of these buckets:
 ### Endpoints
 - `GET /api/v1/clientcare-billing/dashboard`
 - `GET /api/v1/clientcare-billing/clientcare/readiness`
+- `POST /api/v1/clientcare-billing/browser/login-test`
+- `POST /api/v1/clientcare-billing/browser/discover`
+- `POST /api/v1/clientcare-billing/browser/extract-claims`
 - `GET /api/v1/clientcare-billing/claims/import-template`
 - `POST /api/v1/clientcare-billing/snapshots/parse`
 - `POST /api/v1/clientcare-billing/snapshots/import`
@@ -182,6 +186,7 @@ Operational inputs needed regardless of integration path:
 ## DEFINITION OF DONE (PHASE 1)
 - Claims import endpoint exists and works.
 - Snapshot HTML/text import exists and works as fallback.
+- Credential-backed browser login/discovery exists and can preview billing pages and claim tables.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.
