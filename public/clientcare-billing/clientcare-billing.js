@@ -119,7 +119,11 @@
     try {
       const result = await api('/api/v1/clientcare-billing/browser/discover', {
         method: 'POST',
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          max_candidates: 2,
+          include_screenshots: false,
+          page_timeout_ms: 15000,
+        }),
       });
       document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
       alert('Browser discovery completed.');
@@ -132,7 +136,12 @@
     try {
       const result = await api('/api/v1/clientcare-billing/browser/extract-claims', {
         method: 'POST',
-        body: JSON.stringify({ import_into_queue: importIntoQueue }),
+        body: JSON.stringify({
+          import_into_queue: importIntoQueue,
+          max_candidates: 2,
+          include_screenshots: false,
+          page_timeout_ms: 15000,
+        }),
       });
       document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
       alert(importIntoQueue ? 'Browser extraction and import completed.' : 'Browser extraction preview completed.');

@@ -47,9 +47,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
-  router.post('/browser/discover', async (_req, res) => {
+  router.post('/browser/discover', async (req, res) => {
     try {
-      const result = await browserService.discoverBillingSurface();
+      const result = await browserService.discoverBillingSurface({
+        maxCandidates: req.body?.max_candidates,
+        includeScreenshots: Boolean(req.body?.include_screenshots),
+        pageTimeoutMs: req.body?.page_timeout_ms,
+      });
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] browser discover failed');
@@ -61,6 +65,9 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     try {
       const result = await browserService.extractClaimTables({
         importIntoQueue: Boolean(req.body?.import_into_queue),
+        maxCandidates: req.body?.max_candidates,
+        includeScreenshots: Boolean(req.body?.include_screenshots),
+        pageTimeoutMs: req.body?.page_timeout_ms,
       });
       res.json(result);
     } catch (error) {

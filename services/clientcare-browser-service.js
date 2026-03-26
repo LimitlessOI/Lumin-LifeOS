@@ -138,6 +138,16 @@ async function safeScreenshot(page, targetPath) {
   }
 }
 
+async function gotoWithBudget(page, href, { timeout = 20000 } = {}) {
+  try {
+    await page.goto(href, { waitUntil: 'domcontentloaded', timeout });
+    await sleep(750);
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, error: error.message };
+  }
+}
+
 async function tryFill(page, selectors, value) {
   for (const selector of selectors) {
     const el = await page.$(selector);
@@ -279,25 +289,53 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
-  async function discoverBillingSurface() {
+  async function discoverBillingSurface({ maxCandidates = 2, includeScreenshots = false, pageTimeoutMs = 20000 } = {}) {
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
     try {
       const landing = result.page || await collectPageSummary(session.page);
       const origin = new URL(landing.url || session.currentUrl()).origin;
       const visited = [];
-      const candidates = (landing.candidateLinks || []).filter((item) => item.href && item.href.startsWith(origin)).slice(0, 6);
+      const candidateLimit = Math.max(1, Math.min(Number(maxCandidates) || 2, 4));
+      const candidates = (landing.candidateLinks || [])
+        .filter((item) => item.href && item.href.startsWith(origin))
+        .slice(0, candidateLimit);
       for (const item of candidates) {
         try {
-          await session.page.goto(item.href, { waitUntil: 'domcontentloaded', timeout: 30000 });
-          await sleep(1000);
+          const nav = await gotoWithBudget(session.page, item.href, { timeout: Math.max(5000, Number(pageTimeoutMs) || 20000) });
+          if (!nav.ok) {
+            visited.push({
+              label: item.text || item.href,
+              url: item.href,
+              title: null,
+              headings: [],
+              candidateLinks: [],
+              tables: [],
+              textPreview: '',
+              error: nav.error,
+            });
+            continue;
+          }
           const summary = await collectPageSummary(session.page);
-          const shot = await screenshotPath(`clientcare-discovery-${visited.length + 1}`);
-          await safeScreenshot(session.page, shot);
-          screenshots.push(shot);
+          let shot = null;
+          if (includeScreenshots) {
+            shot = await screenshotPath(`clientcare-discovery-${visited.length + 1}`);
+            await safeScreenshot(session.page, shot);
+            screenshots.push(shot);
+          }
           visited.push({ label: item.text || item.href, screenshot: shot, ...summary });
         } catch (error) {
           logger.warn?.({ err: error.message, href: item.href }, '[CLIENTCARE-BROWSER] discovery candidate failed');
+          visited.push({
+            label: item.text || item.href,
+            url: item.href,
+            title: null,
+            headings: [],
+            candidateLinks: [],
+            tables: [],
+            textPreview: '',
+            error: error.message,
+          });
         }
       }
       return {
@@ -311,9 +349,9 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
-  async function extractClaimTables({ importIntoQueue = false } = {}) {
+  async function extractClaimTables({ importIntoQueue = false, maxCandidates = 2, includeScreenshots = false, pageTimeoutMs = 20000 } = {}) {
     if (!syncService) throw new Error('ClientCare sync service not configured');
-    const discovery = await discoverBillingSurface();
+    const discovery = await discoverBillingSurface({ maxCandidates, includeScreenshots, pageTimeoutMs });
     const pages = [discovery.landing, ...(discovery.visited || [])];
     const extracted = [];
     for (const page of pages) {
