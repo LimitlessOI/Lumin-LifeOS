@@ -65,12 +65,14 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-portal-service.js` | Builds agent/client portal read models and tracks communications + document requests |
 | `services/tc-report-service.js` | Showings, feedback, listing health scoring, and weekly seller/agent reports |
 | `services/tc-automation-service.js` | Prepared-send automation for feedback requests, document requests, and weekly report delivery |
+| `services/tc-communication-callback-service.js` | Normalizes delivery/reply callbacks into canonical communication status and showing-feedback capture |
 | `services/tc-approval-service.js` | Approval cockpit state for review / approve / reject / snooze flows |
 | `services/tc-alert-service.js` | Escalating alert engine for urgent/critical blockers with acknowledgement and resolution state |
 | `services/tc-asana-sync-service.js` | Canonical TC -> Asana sync for parent transaction tasks and derived subtasks |
 | `services/tc-workflow-specs.js` | Machine-readable listing and buyer workflow templates derived from TC operations |
 | `services/tc-workflow-service.js` | Derived workflow task read model from canonical TC file state |
 | `services/tc-offer-prep-service.js` | Client/property/comp-based offer recommendation engine for review-only offer prep |
+| `services/tc-interaction-service.js` | Lawful interaction capture, disclosed/visible recording gate, commitment extraction, client-memory suggestions, and coaching review |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `public/tc/agent-portal.html` | Agent-facing at-a-glance portal for file health, blockers, docs, comms, and reports |
@@ -86,6 +88,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `db/migrations/20260325_tc_approvals_automation.sql` | tc_approval_items for one-tap review / approve / send flows |
 | `db/migrations/20260325_tc_alerts.sql` | tc_alerts, tc_alert_deliveries for closed-loop escalation |
 | `db/migrations/20260326_tc_external_refs.sql` | tc_external_refs for Asana and future external sync mappings |
+| `db/migrations/20260326_tc_interactions.sql` | tc_interactions for lawful capture, transcript review, commitments, profile updates, and coaching artifacts |
 
 ### Portal Access
 | Portal | URL | Purpose |
@@ -494,10 +497,10 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 Build document completeness / missing-signature / missing-field QA before trusting automated filing
 - 🔲 Strengthen form-specific Nevada/eXp validation packs beyond the current generic fail-closed gate
 - 🔲 Polish agent/client portal UI on top of the now-live overview/report/approval APIs
-- 🔲 Wire communication delivery callbacks / acknowledgements into the approval cockpit
+- 🔲 Expand the new communication callback path into provider-specific webhooks / receipts across SMS and email vendors
 - 🔲 Refine alert escalation cadence and device-specific mobile delivery behavior
 - 🔲 Wire real Asana credentials/project and run first live sync
-- 🔲 Build recording/consent gate and fail-closed policy before any rolling buffer feature ships
+- 🔲 Polish the new interaction/recording review flow for mobile approval and add explicit device-side rolling-buffer UX
 - 🔲 Refine machine-readable listing/buyer workflow specs against the full real Asana templates
 - 🔲 Secure official MLS/API access and wire it into the listing health/reporting engine
 

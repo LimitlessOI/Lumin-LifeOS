@@ -14,6 +14,8 @@
 - TC now has an initial Asana sync backend: preview canonical transaction sync plans, upsert parent/subtasks, and persist external mappings in `tc_external_refs`.
 - TC now has initial machine-readable listing/buyer workflow specs and a derived workflow API, which also feeds the Asana sync layer.
 - TC now has the first offer-prep backend: structured recommendation bands from property facts, comp data, seller signals, and client constraints, exposed through TC routes for review-first offer prep.
+- TC now has the first lawful interaction-intelligence backend: disclosed/visible recording gate, notes-only fail-closed mode, transcript/audio analysis, commitment extraction into Word Keeper commitments, client-profile update suggestions, coaching review, and portal visibility for recent interactions.
+- TC now has a canonical communication callback path so delivery/reply events can update `tc_communications` and inbound showing feedback replies can land back in TC reporting automatically.
 
 ## Update 2026-01-30 #1
 - Hardware: MacBook Pro M2 Max, 32 GB RAM, 2 TB SSD running server-only mode; machine doubles as development host but being stripped down for LifeOS server.

@@ -72,6 +72,19 @@ export function createTCPortalService({ pool, coordinator, logger = console }) {
     return rows;
   }
 
+  async function listInteractions(transactionId, { limit = 20 } = {}) {
+    const { rows } = await pool.query(
+      `SELECT id, interaction_type, contact_name, contact_role, channel, recording_mode, recording_allowed,
+              status, started_at, ended_at, summary, next_actions, metadata
+       FROM tc_interactions
+       WHERE transaction_id=$1
+       ORDER BY COALESCE(ended_at, started_at) DESC
+       LIMIT $2`,
+      [transactionId, limit]
+    );
+    return rows;
+  }
+
   async function listDocumentRequests(transactionId) {
     const { rows } = await pool.query(
       `SELECT * FROM tc_document_requests WHERE transaction_id=$1 ORDER BY created_at DESC`,
@@ -167,12 +180,13 @@ export function createTCPortalService({ pool, coordinator, logger = console }) {
   async function buildOverview(transactionId, { view = 'agent' } = {}) {
     const transaction = await coordinator.getTransaction(transactionId);
     if (!transaction) return null;
-    const [events, docRequests, communications, approvals, alerts] = await Promise.all([
+    const [events, docRequests, communications, approvals, alerts, interactions] = await Promise.all([
       coordinator.getTransactionEvents(transactionId, 50),
       listDocumentRequests(transactionId),
       listCommunications(transactionId),
       listApprovals(transactionId),
       listAlerts(transactionId),
+      listInteractions(transactionId),
     ]);
     const derived = statusEngine.deriveTransactionState({ transaction, events });
     const report = { transaction, recentEvents: events.slice(0, 20), ...derived };
@@ -186,6 +200,7 @@ export function createTCPortalService({ pool, coordinator, logger = console }) {
       communications,
       approvals,
       alerts,
+      interactions,
       recent_events: events.slice(0, 20),
     };
   }
@@ -196,11 +211,12 @@ export function createTCPortalService({ pool, coordinator, logger = console }) {
       [limit]
     );
     return Promise.all(rows.map(async (transaction) => {
-      const [events, docRequests, approvals, alerts] = await Promise.all([
+      const [events, docRequests, approvals, alerts, interactions] = await Promise.all([
         coordinator.getTransactionEvents(transaction.id, 20),
         listDocumentRequests(transaction.id),
         listApprovals(transaction.id, { limit: 10 }),
         listAlerts(transaction.id, { limit: 10 }),
+        listInteractions(transaction.id, { limit: 5 }),
       ]);
       const status = statusEngine.deriveTransactionState({ transaction, events });
       return {
@@ -215,6 +231,7 @@ export function createTCPortalService({ pool, coordinator, logger = console }) {
         open_document_requests: docRequests.filter((item) => item.status === 'pending' || item.status === 'sent').length,
         open_approvals: approvals.length,
         open_alerts: alerts.length,
+        recent_interactions: interactions.length,
       };
     }));
   }
@@ -222,6 +239,7 @@ export function createTCPortalService({ pool, coordinator, logger = console }) {
   return {
     buildOverview,
     buildDashboardSlice,
+    listInteractions,
     listDocumentRequests,
     createDocumentRequest,
     updateDocumentRequest,

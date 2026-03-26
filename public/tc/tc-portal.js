@@ -58,8 +58,9 @@
         api(`/api/v1/tc/transactions/${txId}/reports`),
       ];
       if (view === 'agent') requests.push(api(`/api/v1/tc/transactions/${txId}/approvals?limit=25`));
-      const [overview, reports, approvals] = await Promise.all(requests);
-      renderOverview(overview, reports.items || [], approvals?.items || []);
+      if (view === 'agent') requests.push(api(`/api/v1/tc/transactions/${txId}/interactions?limit=20`));
+      const [overview, reports, approvals, interactions] = await Promise.all(requests);
+      renderOverview(overview, reports.items || [], approvals?.items || [], interactions?.items || []);
     } catch (err) {
       document.getElementById('app').innerHTML = `<div class="card error"><h2>Load failed</h2><p>${escapeHtml(err.message)}</p></div>`;
     }
@@ -81,13 +82,23 @@
     await load();
   }
 
-  function renderOverview(data, reports, approvals) {
+  function renderOverview(data, reports, approvals, interactions) {
     const root = document.getElementById('app');
     const isClient = data.view === 'client';
     const tx = data.transaction || {};
     const status = data.status || {};
     const recentReports = reports.slice(0, 3);
     const alerts = data.alerts || [];
+    const interactionRows = interactions.map((item) => `
+      <tr>
+        <td>${escapeHtml(item.interaction_type)}</td>
+        <td>${escapeHtml(item.contact_name || item.contact_role || '')}</td>
+        <td><span class="badge ${badgeClass(item.recording_allowed ? 'healthy' : 'watch')}">${escapeHtml(item.recording_mode || 'notes_only')}</span></td>
+        <td><span class="badge ${badgeClass(item.status)}">${escapeHtml(item.status || '')}</span></td>
+        <td>${escapeHtml(item.summary || (Array.isArray(item.next_actions) ? item.next_actions[0] : '') || '')}</td>
+        <td>${escapeHtml(item.started_at || '')}</td>
+      </tr>
+    `).join('') || '<tr><td colspan="6">No interactions recorded</td></tr>';
     const approvalRows = approvals.map((item) => `
       <tr>
         <td>${escapeHtml(item.title)}</td>
@@ -219,6 +230,11 @@
       <div class="card">
         <h2>Alerts</h2>
         <table><thead><tr><th>Alert</th><th>Severity</th><th>Summary</th><th>Next</th><th>Actions</th></tr></thead><tbody>${alertRows}</tbody></table>
+      </div>
+
+      <div class="card">
+        <h2>Interactions</h2>
+        <table><thead><tr><th>Type</th><th>Contact</th><th>Mode</th><th>Status</th><th>Summary</th><th>When</th></tr></thead><tbody>${interactionRows}</tbody></table>
       </div>
 
       <div class="card">

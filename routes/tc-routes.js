@@ -20,8 +20,11 @@ import { createTCAlertService } from '../services/tc-alert-service.js';
 import { createTCAsanaSyncService } from '../services/tc-asana-sync-service.js';
 import { createTCWorkflowService } from '../services/tc-workflow-service.js';
 import { createTCOfferPrepService } from '../services/tc-offer-prep-service.js';
+import { createTCInteractionService } from '../services/tc-interaction-service.js';
+import { createTCCommunicationCallbackService } from '../services/tc-communication-callback-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
+const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
 
 export function createTCRoutes(
   app,
@@ -57,6 +60,8 @@ export function createTCRoutes(
   const asanaSyncService = createTCAsanaSyncService({ pool, coordinator, portalService, logger });
   const workflowService = createTCWorkflowService({ portalService, logger });
   const offerPrepService = createTCOfferPrepService({ logger, callCouncilMember });
+  const interactionService = createTCInteractionService({ pool, coordinator, callCouncilMember, logger });
+  const callbackService = createTCCommunicationCallbackService({ pool, portalService, reportService, coordinator, logger });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -289,6 +294,106 @@ export function createTCRoutes(
     }
   });
 
+  // GET /api/v1/tc/transactions/:id/interactions
+  router.get('/transactions/:id/interactions', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const limit = Math.min(parseInt(req.query.limit) || 25, 200);
+      const items = await interactionService.listInteractions(txId, { limit });
+      res.json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/interactions
+  router.post('/transactions/:id/interactions', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const item = await interactionService.createInteraction(txId, req.body || {});
+      res.status(201).json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PATCH /api/v1/tc/interactions/:interactionId
+  router.patch('/interactions/:interactionId', requireKey, async (req, res) => {
+    try {
+      const item = await interactionService.updateInteraction(parseInt(req.params.interactionId), req.body || {});
+      if (!item) return res.status(404).json({ ok: false, error: 'Interaction not found' });
+      res.json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/interactions/:interactionId/analyze
+  router.post('/interactions/:interactionId/analyze', requireKey, async (req, res) => {
+    try {
+      const interactionId = parseInt(req.params.interactionId);
+      const result = await interactionService.analyzeInteraction(interactionId, req.body || {});
+      if (!result.ok) return res.status(400).json(result);
+
+      const approvals = [];
+      if ((req.body?.queue_review ?? true) && result.interaction?.transaction_id && (result.profile_updates?.length || result.commitments?.length)) {
+        approvals.push(await approvalService.createApproval(result.interaction.transaction_id, {
+          category: 'interaction_review',
+          title: `Review interaction insights: ${result.interaction.contact_name || result.interaction.contact_role || 'client interaction'}`,
+          summary: `${result.profile_updates.length} profile updates and ${result.commitments.length} commitments detected.`,
+          priority: result.commitments.length ? 'high' : 'normal',
+          target_type: 'interaction',
+          target_id: interactionId,
+          prepared_action: { kind: 'review_interaction_insights', interaction_id: interactionId },
+          metadata: { profile_update_count: result.profile_updates.length, commitment_count: result.commitments.length },
+        }));
+      }
+
+      const alerts = [];
+      for (const commitment of result.stored_commitments || []) {
+        if (!commitment.deadline) continue;
+        const deadline = new Date(commitment.deadline);
+        const hours = (deadline.getTime() - Date.now()) / (1000 * 60 * 60);
+        if (hours <= 24) {
+          alerts.push(await alertService.createAlert(result.interaction.transaction_id, {
+            severity: hours <= 6 ? 'critical' : 'urgent',
+            title: `Commitment deadline approaching: ${commitment.normalized_text || commitment.raw_text}`,
+            summary: `Detected from interaction review. Deadline: ${commitment.deadline}.`,
+            target_type: 'interaction',
+            target_id: interactionId,
+            prepared_action: { label: 'Review commitment and confirm follow-through plan' },
+            metadata: { commitment_id: commitment.id, deadline: commitment.deadline },
+          }));
+        }
+      }
+
+      res.json({ ok: true, ...result, approvals, alerts });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/interactions/:interactionId/analyze/audio
+  router.post('/interactions/:interactionId/analyze/audio', requireKey, audioUpload.single('audio'), async (req, res) => {
+    try {
+      const interactionId = parseInt(req.params.interactionId);
+      const payload = {
+        ...req.body,
+        audioFile: req.file || null,
+        persist_commitments: String(req.body?.persist_commitments || 'true').toLowerCase() !== 'false',
+      };
+      const result = await interactionService.analyzeInteraction(interactionId, payload);
+      if (!result.ok) return res.status(400).json(result);
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // GET /api/v1/tc/transactions/:id/document-requests
   router.get('/transactions/:id/document-requests', requireKey, async (req, res) => {
     try {
@@ -373,6 +478,17 @@ export function createTCRoutes(
       const result = await automationService.sendCommunicationById(parseInt(req.params.communicationId));
       if (!result.ok) return res.status(400).json({ ok: false, error: result.error || 'Send failed', ...result });
       res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/communications/:communicationId/callback
+  router.post('/communications/:communicationId/callback', async (req, res) => {
+    try {
+      const result = await callbackService.handleCallback(parseInt(req.params.communicationId), req.body || {});
+      if (!result.ok) return res.status(404).json(result);
+      res.json(result);
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
