@@ -88,6 +88,33 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/browser/inspect-client-account', async (req, res) => {
+    try {
+      const result = await browserService.inspectClientBillingAccount({
+        clientHref: req.body?.client_href,
+        includeScreenshots: Boolean(req.body?.include_screenshots),
+        pageTimeoutMs: req.body?.page_timeout_ms,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] inspect client account failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/browser/scan-client-accounts', async (req, res) => {
+    try {
+      const result = await browserService.scanClientBillingAccounts({
+        limit: req.body?.limit,
+        pageTimeoutMs: req.body?.page_timeout_ms,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] scan client accounts failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/extract-claims', async (req, res) => {
     try {
       const result = await browserService.extractClaimTables({

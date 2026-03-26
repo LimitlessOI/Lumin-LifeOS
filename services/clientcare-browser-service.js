@@ -86,6 +86,7 @@ const SUBMIT_SELECTORS = [
   'button[class*="sign" i]',
 ];
 const BILLING_KEYWORDS = /billing|claim|claims|invoice|insurance|ar\b|accounts receivable|denial|rejection|payment|era|eob/i;
+const CLIENT_LINK_PATTERN = /\/Pregnancy\/ShowDefaultClientScreen\//i;
 
 function redact(value = '') {
   const text = String(value || '');
@@ -191,6 +192,85 @@ async function collectPageSummary(page) {
       tables,
       textPreview: (document.body.innerText || '').trim().slice(0, 3000),
     };
+  });
+}
+
+async function extractClientDirectory(page, limit = 10) {
+  return page.evaluate((maxItems) => {
+    const links = Array.from(document.querySelectorAll('a[href]'))
+      .map((el) => ({
+        text: (el.textContent || '').trim().replace(/\s+/g, ' '),
+        href: el.href || '',
+      }))
+      .filter((item) => /\/Pregnancy\/ShowDefaultClientScreen\//i.test(item.href));
+
+    const unique = [];
+    const seen = new Set();
+    for (const link of links) {
+      if (!link.href || seen.has(link.href)) continue;
+      seen.add(link.href);
+      const text = link.text || '';
+      const mrnMatch = text.match(/MRN#?:?\s*([0-9]+)/i);
+      unique.push({
+        href: link.href,
+        rawText: text,
+        name: text.split('MRN#:')[0].trim() || text,
+        mrn: mrnMatch ? mrnMatch[1] : null,
+      });
+      if (unique.length >= maxItems) break;
+    }
+    return unique;
+  }, Math.max(1, Math.min(Number(limit) || 10, 25)));
+}
+
+async function extractBillingFieldPairs(page) {
+  return page.evaluate(() => {
+    const isVisible = (el) => {
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden') return false;
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    };
+
+    const keyword = /billing|insurance|claim|payer|policy|subscriber|member|group|guarantor|copay|deduct|remit|era|balance|payment|auto debit|bill/i;
+    const controls = Array.from(document.querySelectorAll('input, select, textarea')).filter(isVisible);
+    const rows = [];
+
+    for (const el of controls) {
+      const id = el.id || '';
+      const name = el.name || '';
+      const type = (el.getAttribute('type') || '').toLowerCase();
+      let value = '';
+      if (el.tagName === 'SELECT') value = el.options?.[el.selectedIndex]?.text || '';
+      else if (type === 'checkbox' || type === 'radio') value = el.checked ? 'checked' : 'unchecked';
+      else value = el.value || '';
+
+      const labelByFor = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`) : null;
+      const nearestLabel = el.closest('label');
+      const containerText = el.closest('tr, .form-group, .field, td, li, div')?.innerText || '';
+      const label = (labelByFor?.innerText || nearestLabel?.innerText || containerText || name || id || '').replace(/\s+/g, ' ').trim();
+      const haystack = `${label} ${name} ${id} ${value}`.toLowerCase();
+      if (!keyword.test(haystack)) continue;
+
+      rows.push({
+        label,
+        name,
+        id,
+        value: String(value || '').trim(),
+      });
+    }
+
+    const unique = [];
+    const seen = new Set();
+    for (const row of rows) {
+      const key = `${row.label}|${row.name}|${row.id}|${row.value}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      unique.push(row);
+      if (unique.length >= 60) break;
+    }
+    return unique;
   });
 }
 
@@ -411,6 +491,96 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
+  async function inspectClientBillingAccount({ clientHref, pageTimeoutMs = 15000, includeScreenshots = false } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+      if (!nav.ok) {
+        return { ok: false, clientHref, error: nav.error, screenshots };
+      }
+
+      const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+      if (billingTab) {
+        await billingTab.click().catch(() => {});
+        await sleep(1200);
+      }
+
+      const summary = await collectPageSummary(session.page);
+      const billingFields = await extractBillingFieldPairs(session.page);
+      let shot = null;
+      if (includeScreenshots) {
+        shot = await screenshotPath('clientcare-client-billing');
+        await safeScreenshot(session.page, shot);
+        screenshots.push(shot);
+      }
+
+      return {
+        ok: true,
+        clientHref,
+        page: summary,
+        billingFields,
+        state: {
+          hasBillingTab: Boolean(billingTab),
+          billingFieldCount: billingFields.length,
+        },
+        screenshots,
+        screenshot: shot,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  async function scanClientBillingAccounts({ limit = 10, pageTimeoutMs = 15000 } = {}) {
+    const result = await login({ dryRun: false });
+    const { session } = result;
+    try {
+      const directoryNav = await gotoWithBudget(session.page, new URL('/Pregnancy?donotRedirect=Y', session.currentUrl()).toString(), {
+        timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
+      });
+      if (!directoryNav.ok) {
+        return { ok: false, error: directoryNav.error, accounts: [] };
+      }
+
+      const clients = await extractClientDirectory(session.page, limit);
+      const accounts = [];
+      for (const client of clients) {
+        const nav = await gotoWithBudget(session.page, client.href, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+        if (!nav.ok) {
+          accounts.push({ ...client, ok: false, error: nav.error });
+          continue;
+        }
+
+        const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+        if (billingTab) {
+          await billingTab.click().catch(() => {});
+          await sleep(1200);
+        }
+
+        const pageSummary = await collectPageSummary(session.page);
+        const billingFields = await extractBillingFieldPairs(session.page);
+        accounts.push({
+          ...client,
+          ok: true,
+          currentUrl: pageSummary.url,
+          billingFieldCount: billingFields.length,
+          billingFields,
+          preview: (pageSummary.textPreview || '').slice(0, 700),
+        });
+      }
+
+      return {
+        ok: true,
+        totalScanned: accounts.length,
+        accounts,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   async function buildBillingOverview({ includeScreenshots = false, pageTimeoutMs = 15000 } = {}) {
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
@@ -505,6 +675,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     discoverBillingSurface,
     inspectPage,
     buildBillingOverview,
+    inspectClientBillingAccount,
+    scanClientBillingAccounts,
     extractClaimTables,
   };
 }
