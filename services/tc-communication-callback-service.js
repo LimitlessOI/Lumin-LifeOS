@@ -35,6 +35,20 @@ export function createTCCommunicationCallbackService({ pool, portalService, repo
     return rows[0] || null;
   }
 
+  async function getCommunicationByExternalId(externalId) {
+    if (!externalId) return null;
+    const { rows } = await pool.query(
+      `SELECT * FROM tc_communications
+       WHERE metadata->>'external_id' = $1
+          OR metadata->'delivery'->>'messageId' = $1
+          OR metadata->'delivery'->>'sid' = $1
+       ORDER BY created_at DESC
+       LIMIT 1`,
+      [String(externalId)]
+    );
+    return rows[0] || null;
+  }
+
   async function handleCallback(communicationId, payload = {}) {
     const communication = await getCommunication(communicationId);
     if (!communication) return { ok: false, error: 'Communication not found' };
@@ -103,8 +117,19 @@ export function createTCCommunicationCallbackService({ pool, portalService, repo
     };
   }
 
+  async function handleProviderWebhook(payload = {}) {
+    const externalId = payload.external_id || payload.externalId || payload.MessageID || payload.MessageSid || payload.Sid || null;
+    const communicationId = payload.communication_id || payload.communicationId || payload.Metadata?.communication_id || payload.metadata?.communication_id || null;
+    let communication = null;
+    if (communicationId) communication = await getCommunication(Number(communicationId));
+    if (!communication && externalId) communication = await getCommunicationByExternalId(externalId);
+    if (!communication) return { ok: false, error: 'Communication not found for webhook' };
+    return handleCallback(communication.id, payload);
+  }
+
   return {
     handleCallback,
+    handleProviderWebhook,
   };
 }
 

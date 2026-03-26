@@ -110,6 +110,8 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `TC_IMAP_*` | TC-specific mailbox overrides when different from shared IMAP vars |
 | `ASANA_ACCESS_TOKEN` | Asana API token for TC sync |
 | `ASANA_TC_PROJECT_GID` | Asana project GID for TC operational sync |
+| `EMAIL_WEBHOOK_SECRET` | Validates Postmark and TC email callback webhooks |
+| `TWILIO_WEBHOOK_SECRET` | Optional TC-specific secret for Twilio callbacks when different from email webhook secret |
 
 ### Product Surfaces
 | Surface | User | Purpose |
@@ -499,7 +501,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 Build document completeness / missing-signature / missing-field QA before trusting automated filing
 - 🔲 Strengthen form-specific Nevada/eXp validation packs beyond the current generic fail-closed gate
 - 🔲 Polish agent/client portal UI on top of the now-live overview/report/approval APIs
-- 🔲 Expand the new communication callback path into provider-specific webhooks / receipts across SMS and email vendors
+- 🔲 Validate the new Postmark/Twilio TC webhook paths against live provider payloads and external-id mapping
 - 🔲 Refine alert escalation cadence and device-specific mobile delivery behavior
 - 🔲 Wire real Asana credentials/project and run first live sync
 - 🔲 Extend the new mobile one-tap link flow into full document review / sign handoff and explicit device-side rolling-buffer UX

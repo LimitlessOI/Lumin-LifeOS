@@ -202,7 +202,12 @@ export function createTCAutomationService({
       ? {
           status: 'sent',
           sent_at: new Date().toISOString(),
-          metadata: { ...(communication.metadata || {}), recipient: recipient.to, delivery },
+          metadata: {
+            ...(communication.metadata || {}),
+            recipient: recipient.to,
+            external_id: delivery.messageId || delivery.sid || delivery.id || null,
+            delivery,
+          },
         }
       : {
           status: 'failed',

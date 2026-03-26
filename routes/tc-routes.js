@@ -498,6 +498,60 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/webhooks/postmark
+  router.post('/webhooks/postmark', express.json({ type: 'application/json' }), async (req, res) => {
+    try {
+      const secret = process.env.EMAIL_WEBHOOK_SECRET;
+      if (!secret) return res.status(503).json({ ok: false, error: 'EMAIL_WEBHOOK_SECRET not configured' });
+      const provided = req.headers['x-email-webhook-secret'];
+      if (!provided || provided !== secret) return res.status(401).json({ ok: false, error: 'Unauthorized webhook' });
+
+      const metadata = req.body?.Metadata || req.body?.metadata || {};
+      const result = await callbackService.handleProviderWebhook({
+        provider: 'postmark',
+        external_id: req.body?.MessageID || req.body?.MessageId || null,
+        event_type: req.body?.RecordType || req.body?.Type || req.body?.EmailEvent || 'delivered',
+        communication_id: metadata.communication_id || null,
+        status: req.body?.Type || req.body?.RecordType || null,
+        body: req.body?.TextBody || null,
+        from: req.body?.From || null,
+        to: req.body?.Recipient || null,
+        raw: req.body,
+      });
+      if (!result.ok) return res.status(404).json(result);
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/webhooks/twilio
+  router.post('/webhooks/twilio', express.urlencoded({ extended: false }), async (req, res) => {
+    try {
+      const secret = process.env.EMAIL_WEBHOOK_SECRET || process.env.TWILIO_WEBHOOK_SECRET || null;
+      if (secret) {
+        const provided = req.headers['x-email-webhook-secret'] || req.headers['x-tc-webhook-secret'];
+        if (!provided || provided !== secret) return res.status(401).json({ ok: false, error: 'Unauthorized webhook' });
+      }
+
+      const result = await callbackService.handleProviderWebhook({
+        provider: 'twilio',
+        external_id: req.body?.MessageSid || req.body?.SmsSid || req.body?.Sid || null,
+        event_type: req.body?.MessageStatus || req.body?.SmsStatus || req.body?.EventType || 'delivered',
+        communication_id: req.body?.communication_id || null,
+        status: req.body?.MessageStatus || req.body?.SmsStatus || null,
+        body: req.body?.Body || null,
+        from: req.body?.From || null,
+        to: req.body?.To || null,
+        raw: req.body,
+      });
+      if (!result.ok) return res.status(404).json(result);
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // GET /api/v1/tc/approvals/pending
   router.get('/approvals/pending', requireKey, async (req, res) => {
     try {
