@@ -109,7 +109,7 @@ export class IdeaQueue {
 
     const result = await this.pool.query(
       `SELECT * FROM ideas ${whereClause}
-       ORDER BY build_priority DESC, created_at DESC
+       ORDER BY COALESCE(build_priority, 0) DESC, created_at DESC
        LIMIT $1`,
       params
     );

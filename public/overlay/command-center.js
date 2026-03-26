@@ -931,7 +931,7 @@ function refresh() {
   };
 
   Promise.allSettled([
-    fetchJson('/api/health'),
+    fetchCommandJson('/api/health'),
     fetchJson('/api/v1/tools/status'),
     fetchJson('/api/v1/auto-builder/status'),
     fetchCommandJson('/api/v1/twin/free-tier'),

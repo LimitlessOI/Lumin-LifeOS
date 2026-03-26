@@ -51,7 +51,8 @@ export function configureAiGuard({ app, initialAiEnabled = true } = {}) {
   aiStatusReason = aiEnabled ? "enabled" : "disabled";
   aiStatusUpdatedAt = new Date().toISOString();
   aiStatusUpdatedBy = "system";
-  ensureExpectedRealityHash();
+  // Do NOT capture the hash here — routes aren't fully registered yet.
+  // ensureExpectedRealityHash() is called lazily on the first guarded request.
 }
 
 export function getAiStatus() {
