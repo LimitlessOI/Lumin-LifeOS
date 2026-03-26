@@ -48,14 +48,15 @@
     const root = document.getElementById('app');
     try {
       const query = new URLSearchParams(filters).toString();
-      const [dashboard, readiness, template, claims, actions] = await Promise.all([
+      const [dashboard, readiness, template, claims, actions, reconciliation] = await Promise.all([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
         api('/api/v1/clientcare-billing/claims/import-template'),
         api(`/api/v1/clientcare-billing/claims${query ? `?${query}` : ''}`),
         api('/api/v1/clientcare-billing/actions'),
+        api('/api/v1/clientcare-billing/reconciliation'),
       ]);
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || []);
+      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {});
     } catch (error) {
       root.innerHTML = `<div class="card"><h2>Load failed</h2><p>${escapeHtml(error.message)}</p></div>`;
     }
@@ -70,6 +71,31 @@
         body: JSON.stringify({ csv, source: 'overlay_csv_import' }),
       });
       alert('CSV imported.');
+      await loadDashboard();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function importSnapshot() {
+    const text = document.getElementById('snapshot-input').value;
+    if (!text.trim()) return alert('Paste snapshot text or HTML first.');
+    const payload = {
+      source: 'overlay_snapshot_import',
+      html: /<table|<tr|<td|<th/i.test(text) ? text : '',
+      text: /<table|<tr|<td|<th/i.test(text) ? '' : text,
+    };
+    try {
+      const preview = await api('/api/v1/clientcare-billing/snapshots/parse', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      if (!preview.parsed) return alert('No rows parsed from snapshot.');
+      await api('/api/v1/clientcare-billing/snapshots/import', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      alert(`Imported ${preview.parsed} rows from snapshot.`);
       await loadDashboard();
     } catch (error) {
       alert(error.message);
@@ -112,7 +138,7 @@
     }
   }
 
-  function render(root, dashboard, readiness, templateFields, claims, actions) {
+  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation) {
     const summary = dashboard.summary || {};
     const claimRows = claims.map((claim) => `
       <tr>
@@ -177,6 +203,19 @@
         </div>
       </div>
 
+      <div class="grid two">
+        <div class="card">
+          <h2>Snapshot import</h2>
+          <p class="hint" style="margin:10px 0">Paste copied ClientCare table HTML or tab/comma-delimited text. This is the no-export fallback.</p>
+          <textarea id="snapshot-input" placeholder="Paste copied table HTML or delimited text here"></textarea>
+          <div style="margin-top:10px"><button id="import-snapshot">Import Snapshot</button></div>
+        </div>
+        <div class="card">
+          <h2>Reconciliation</h2>
+          <pre>${escapeHtml(JSON.stringify(reconciliation, null, 2))}</pre>
+        </div>
+      </div>
+
       <div class="split">
         <div class="stack">
           <div class="card">
@@ -208,6 +247,7 @@
       await loadDashboard();
     });
     document.getElementById('import-csv').addEventListener('click', importCsv);
+    document.getElementById('import-snapshot').addEventListener('click', importSnapshot);
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));

@@ -7,11 +7,13 @@
 import express from 'express';
 import { createClientCareBillingService } from '../services/clientcare-billing-service.js';
 import { createClientCareBrowserService } from '../services/clientcare-browser-service.js';
+import { createClientCareSyncService } from '../services/clientcare-sync-service.js';
 
 export function createClientCareBillingRoutes({ pool, requireKey, logger = console }) {
   const router = express.Router();
   const billingService = createClientCareBillingService({ pool, logger });
   const browserService = createClientCareBrowserService({});
+  const syncService = createClientCareSyncService({ billingService, logger });
 
   router.use(express.json({ limit: '5mb' }));
   router.use(requireKey);
@@ -31,6 +33,37 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.get('/claims/import-template', async (_req, res) => {
     res.json({ ok: true, fields: billingService.getImportTemplate() });
+  });
+
+  router.post('/snapshots/parse', async (req, res) => {
+    try {
+      const claims = syncService.parseSnapshot(req.body || {});
+      const preview = claims.slice(0, 50);
+      res.json({ ok: true, parsed: claims.length, preview });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] parse snapshot failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/snapshots/import', async (req, res) => {
+    try {
+      const result = await syncService.importSnapshot(req.body || {});
+      res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] import snapshot failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/reconciliation', async (req, res) => {
+    try {
+      const reconciliation = await syncService.buildReconciliationSummary(req.query || {});
+      res.json({ ok: true, ...reconciliation });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] reconciliation failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.get('/claims', async (req, res) => {
