@@ -23,6 +23,7 @@ import { createTCOfferPrepService } from '../services/tc-offer-prep-service.js';
 import { createTCInteractionService } from '../services/tc-interaction-service.js';
 import { createTCCommunicationCallbackService } from '../services/tc-communication-callback-service.js';
 import { createTCMobileLinkService } from '../services/tc-mobile-link-service.js';
+import { createTCFeedIngestService } from '../services/tc-feed-ingest-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
@@ -64,6 +65,7 @@ export function createTCRoutes(
   const interactionService = createTCInteractionService({ pool, coordinator, callCouncilMember, logger });
   const callbackService = createTCCommunicationCallbackService({ pool, portalService, reportService, coordinator, logger });
   const mobileLinkService = createTCMobileLinkService({});
+  const feedIngestService = createTCFeedIngestService({ coordinator, reportService, pool, logger });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -660,6 +662,19 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/transactions/:id/feed/showings
+  router.post('/transactions/:id/feed/showings', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const items = await feedIngestService.ingestShowings(txId, req.body || {});
+      res.status(201).json({ ok: true, items, count: items.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // PATCH /api/v1/tc/showings/:showingId
   router.patch('/showings/:showingId', requireKey, async (req, res) => {
     try {
@@ -731,6 +746,19 @@ export function createTCRoutes(
       if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
       const item = await reportService.createMarketSnapshot(txId, req.body || {});
       res.status(201).json({ ok: true, item });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/feed/mls
+  router.post('/transactions/:id/feed/mls', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const snapshot = await feedIngestService.ingestMarketSnapshot(txId, req.body || {});
+      res.status(201).json({ ok: true, snapshot });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

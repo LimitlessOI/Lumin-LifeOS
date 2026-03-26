@@ -69,6 +69,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-approval-service.js` | Approval cockpit state for review / approve / reject / snooze flows |
 | `services/tc-alert-service.js` | Escalating alert engine for urgent/critical blockers with acknowledgement and resolution state |
 | `services/tc-mobile-link-service.js` | Signed mobile one-tap links for approval and alert actions |
+| `services/tc-feed-ingest-service.js` | Official MLS/showing-feed normalization into canonical TC reporting data |
 | `services/tc-asana-sync-service.js` | Canonical TC -> Asana sync for parent transaction tasks and derived subtasks |
 | `services/tc-workflow-specs.js` | Machine-readable listing and buyer workflow templates derived from TC operations |
 | `services/tc-workflow-service.js` | Derived workflow task read model from canonical TC file state |
@@ -503,7 +504,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 Wire real Asana credentials/project and run first live sync
 - 🔲 Extend the new mobile one-tap link flow into full document review / sign handoff and explicit device-side rolling-buffer UX
 - 🔲 Refine machine-readable listing/buyer workflow specs against the full real Asana templates
-- 🔲 Secure official MLS/API access and wire it into the listing health/reporting engine
+- 🔲 Wire live official MLS/showing provider credentials into the new feed-ingest endpoints and validate the first production snapshots
 
 ### Next milestones
 - First real transaction intake end-to-end (email → SkySlope)
