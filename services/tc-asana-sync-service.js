@@ -10,7 +10,7 @@ function compactText(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
-function toAsanaNotes({ transaction, status, document_requests = [], approvals = [], alerts = [] }) {
+function toAsanaNotes({ transaction, status, document_requests = [], approvals = [], alerts = [], interactions = [], communications = [] }) {
   const lines = [
     `Address: ${transaction.address || 'Unknown'}`,
     `Stage: ${status.stage || 'unknown'}`,
@@ -21,6 +21,8 @@ function toAsanaNotes({ transaction, status, document_requests = [], approvals =
     `Blockers: ${status.blocker_count || 0}`,
     `Open approvals: ${approvals.length}`,
     `Open alerts: ${alerts.length}`,
+    `Recent interactions: ${interactions.length}`,
+    `Open communications: ${(communications || []).filter((item) => !['sent', 'delivered', 'replied', 'resolved'].includes(String(item.status || '').toLowerCase())).length}`,
     '',
     'Open document requests:',
     ...(document_requests.length ? document_requests.slice(0, 10).map((item) => `- ${item.title} [${item.status}]`) : ['- None']),
@@ -64,6 +66,32 @@ function buildSubtaskSpecs(overview) {
       name: `Alert: ${alert.title}`,
       notes: compactText(`${alert.summary || ''} Severity: ${alert.severity || 'action_required'}`),
       due_on: alert.next_escalation_at ? String(alert.next_escalation_at).slice(0, 10) : null,
+    });
+  }
+
+  for (const communication of overview.communications || []) {
+    const status = String(communication.status || '').toLowerCase();
+    if (['sent', 'delivered', 'replied', 'resolved'].includes(status)) continue;
+    items.push({
+      entity_type: 'task',
+      local_entity_type: 'communication',
+      local_entity_id: String(communication.id),
+      name: `Communication: ${communication.subject || communication.template_key || communication.channel}`,
+      notes: compactText(`${communication.audience || 'client'} via ${communication.channel || 'email'} — status: ${communication.status || 'draft'}`),
+      due_on: null,
+    });
+  }
+
+  for (const interaction of overview.interactions || []) {
+    const status = String(interaction.status || '').toLowerCase();
+    if (!['analyzed', 'open'].includes(status)) continue;
+    items.push({
+      entity_type: 'task',
+      local_entity_type: 'interaction',
+      local_entity_id: String(interaction.id),
+      name: `Interaction review: ${interaction.contact_name || interaction.contact_role || interaction.interaction_type}`,
+      notes: compactText(`${interaction.interaction_type} — ${interaction.summary || 'Review coaching notes and profile updates.'}`),
+      due_on: interaction.started_at ? String(interaction.started_at).slice(0, 10) : null,
     });
   }
 

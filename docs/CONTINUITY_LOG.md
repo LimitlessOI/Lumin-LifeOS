@@ -19,6 +19,7 @@
 - TC now has signed mobile action links for approvals and alerts, plus agent-portal copy-link actions, so one-tap phone execution exists even before the full mobile review/sign surface is built.
 - TC now has official-feed ingestion endpoints for MLS market snapshots and showing-system events, normalized into canonical TC reporting data before weekly reports/health scoring.
 - TC now also has provider-specific TC webhook endpoints for Postmark and Twilio, layered over the canonical callback service so live delivery/reply events can update communication state without manual polling.
+- TC Asana sync now also carries unsent communications and analyzed interactions into the ops surface so human follow-up work does not drift out of canonical state.
 
 ## Update 2026-01-30 #1
 - Hardware: MacBook Pro M2 Max, 32 GB RAM, 2 TB SSD running server-only mode; machine doubles as development host but being stripped down for LifeOS server.

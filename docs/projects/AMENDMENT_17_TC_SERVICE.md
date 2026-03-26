@@ -413,6 +413,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
   - exceptions
   - ownership
   - human review work
+  - analyzed interactions and unsent communications that still need action
 - Avoid making agents manage status manually in two places
 - Asana templates are a useful base, but must be converted into machine-readable workflow specs that the system can execute against
 - Initial backend support now exists to:
