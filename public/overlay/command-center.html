@@ -712,17 +712,7 @@
       toggleAutoRefresh(); // Start auto-refresh if enabled
     });
 
-    function saveKey() {
-      const input = document.getElementById('keyInput');
-      const key = input.value.trim();
-      if (key) {
-        localStorage.setItem('LIFEOS_KEY', key);
-        localStorage.setItem('COMMAND_CENTER_KEY', key);
-        document.getElementById('keyStatus').innerHTML = '<span class="status-ok">✓ Key saved</span>';
-        input.value = '';
-        refresh();
-      }
-    }
+    // saveKey() defined in command-center.js — do not redeclare here
 
     // autoRefreshInterval + toggleAutoRefresh already defined in command-center.js
 

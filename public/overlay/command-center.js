@@ -1005,7 +1005,10 @@ function saveKey() {
   const input = document.getElementById('keyInput');
   const key = input.value.trim();
   if (key) {
+    // Store under all known keys so every auth path picks it up
     localStorage.setItem('LIFEOS_KEY', key);
+    localStorage.setItem('COMMAND_CENTER_KEY', key);
+    localStorage.setItem('lifeos_cmd_key', key);
     document.getElementById('keyStatus').innerHTML = '<span class="status-ok">✓ Key saved</span>';
     input.value = '';
     refresh();
@@ -1025,6 +1028,10 @@ window.addEventListener('DOMContentLoaded', () => {
   refresh();
   refreshSafetyStatus();
   toggleAutoRefresh();
+});
+
+window.addEventListener('beforeunload', () => {
+  if (autoRefreshInterval) clearInterval(autoRefreshInterval);
 });
 
 function updateOllamaStatus(toolsData) {

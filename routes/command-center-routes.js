@@ -261,29 +261,54 @@ app.get("/api/v1/system/fix-history", requireKey, async (req, res) => {
   }
 });
 
-// ==================== LOG MONITORING ENDPOINTS ====================
-app.post("/api/v1/system/monitor-logs", requireKey, async (req, res) => {
+// ==================== ADMIN AI KILL SWITCH ====================
+// In-memory toggle — survives the request but resets on redeploy.
+// For persistent disable, set LIFEOS_AI_DISABLED=true in Railway.
+let _aiEnabled = process.env.LIFEOS_AI_DISABLED !== 'true';
+let _aiKillReason = '';
+let _aiKillUpdatedAt = null;
+
+app.get("/api/v1/admin/ai/status", requireKey, (req, res) => {
+  res.json({
+    ok: true,
+    aiEnabled: _aiEnabled,
+    reason: _aiKillReason || null,
+    updatedAt: _aiKillUpdatedAt,
+  });
+});
+
+app.post("/api/v1/admin/ai/enable", requireKey, (req, res) => {
+  _aiEnabled = true;
+  _aiKillReason = req.body?.reason || 'manual-enable';
+  _aiKillUpdatedAt = new Date().toISOString();
+  res.json({ ok: true, aiEnabled: true, reason: _aiKillReason });
+});
+
+app.post("/api/v1/admin/ai/disable", requireKey, (req, res) => {
+  _aiEnabled = false;
+  _aiKillReason = req.body?.reason || 'manual-disable';
+  _aiKillUpdatedAt = new Date().toISOString();
+  res.json({ ok: true, aiEnabled: false, reason: _aiKillReason });
+});
+
+// ==================== REALITY SNAPSHOT ====================
+app.get("/api/v1/reality/snapshot", requireKey, async (req, res) => {
   try {
-    if (!logMonitor) {
-      return res.status(503).json({ error: "Log monitoring not initialized" });
-    }
-    const result = await logMonitor.monitorLogs();
-    res.json({ ok: true, ...result });
+    const { createHash } = await import('crypto');
+    const snap = systemSnapshots?.[systemSnapshots.length - 1] || null;
+    const hash = snap
+      ? createHash('sha256').update(JSON.stringify(snap)).digest('hex')
+      : createHash('sha256').update(new Date().toISOString()).digest('hex');
+    res.json({ ok: true, hash, timestamp: snap?.timestamp || new Date().toISOString() });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
 });
 
-app.get("/api/v1/system/fix-history", requireKey, async (req, res) => {
-  try {
-    if (!logMonitor) {
-      return res.status(503).json({ error: "Log monitoring not initialized" });
-    }
-    const history = await logMonitor.getFixHistory(parseInt(req.query.limit) || 50);
-    res.json({ ok: true, history, count: history.length });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
+// ==================== HEALTH ALIAS ====================
+// Frontend calls /api/health — alias to match /healthz
+app.get("/api/health", (req, res) => {
+  res.json({ ok: true, server: 'ok', timestamp: new Date().toISOString() });
 });
 
 // ==================== MISSING OVERLAY ENDPOINTS ====================
