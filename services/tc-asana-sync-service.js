@@ -4,6 +4,8 @@
  * Asana sync from canonical TC transaction state. Asana is the ops surface, not the source of truth.
  */
 
+import { createTCWorkflowService } from './tc-workflow-service.js';
+
 function compactText(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
@@ -70,6 +72,7 @@ function buildSubtaskSpecs(overview) {
 
 export function createTCAsanaSyncService({ pool, coordinator, portalService, logger = console }) {
   const ASANA_API_BASE = 'https://app.asana.com/api/1.0';
+  const workflowService = createTCWorkflowService({ portalService, logger });
 
   function isConfigured() {
     return Boolean(process.env.ASANA_ACCESS_TOKEN && process.env.ASANA_TC_PROJECT_GID);
@@ -120,8 +123,21 @@ export function createTCAsanaSyncService({ pool, coordinator, portalService, log
   async function previewTransaction(transactionId) {
     const overview = await portalService.buildOverview(transactionId, { view: 'agent' });
     if (!overview) return null;
+    const workflow = await workflowService.buildWorkflow(transactionId);
     const notes = toAsanaNotes(overview);
-    const subtasks = buildSubtaskSpecs(overview);
+    const workflowTasks = (workflow?.workflow?.stages || []).flatMap((stage) =>
+      stage.tasks
+        .filter((task) => task.status !== 'completed')
+        .map((task) => ({
+          entity_type: 'task',
+          local_entity_type: 'workflow_task',
+          local_entity_id: `${workflow.workflow.key}:${stage.key}:${task.key}`,
+          name: `Workflow: ${task.label}`,
+          notes: compactText(`${stage.label} — status: ${task.status}`),
+          due_on: overview.transaction.close_date ? String(overview.transaction.close_date).slice(0, 10) : null,
+        }))
+    );
+    const subtasks = [...workflowTasks, ...buildSubtaskSpecs(overview)].slice(0, 75);
     return {
       transaction: overview.transaction,
       parentTask: {
@@ -131,6 +147,7 @@ export function createTCAsanaSyncService({ pool, coordinator, portalService, log
         notes,
         due_on: overview.transaction.close_date ? String(overview.transaction.close_date).slice(0, 10) : null,
       },
+      workflow: workflow?.workflow || null,
       subtasks,
     };
   }

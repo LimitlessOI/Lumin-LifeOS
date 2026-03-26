@@ -68,6 +68,8 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-approval-service.js` | Approval cockpit state for review / approve / reject / snooze flows |
 | `services/tc-alert-service.js` | Escalating alert engine for urgent/critical blockers with acknowledgement and resolution state |
 | `services/tc-asana-sync-service.js` | Canonical TC -> Asana sync for parent transaction tasks and derived subtasks |
+| `services/tc-workflow-specs.js` | Machine-readable listing and buyer workflow templates derived from TC operations |
+| `services/tc-workflow-service.js` | Derived workflow task read model from canonical TC file state |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `public/tc/agent-portal.html` | Agent-facing at-a-glance portal for file health, blockers, docs, comms, and reports |
@@ -411,6 +413,16 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
   - upsert subtasks for open document requests, approvals, and alerts
   - persist external ID mappings in `tc_external_refs`
 
+### Workflow Specs
+- Listing-side and buyer-side workflow templates must exist as machine-readable specs, not screenshots only
+- Workflow specs should include:
+  - stage grouping
+  - task labels
+  - trigger/completion signals
+  - communication hooks
+  - exceptions / review gates
+- Initial backend support now exists to derive workflow tasks from canonical file state and expose them for portal/Asana use
+
 ### API Endpoints (all under `/api/v1/tc/`)
 | Method | Path | Purpose |
 |--------|------|---------|
@@ -466,7 +478,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 Refine alert escalation cadence and device-specific mobile delivery behavior
 - 🔲 Wire real Asana credentials/project and run first live sync
 - 🔲 Build recording/consent gate and fail-closed policy before any rolling buffer feature ships
-- 🔲 Convert existing Asana listing/buyer templates into structured workflow specs with triggers, dependencies, and communication hooks
+- 🔲 Refine machine-readable listing/buyer workflow specs against the full real Asana templates
 - 🔲 Secure official MLS/API access and wire it into the listing health/reporting engine
 
 ### Next milestones

@@ -18,6 +18,7 @@ import { createTCAutomationService } from '../services/tc-automation-service.js'
 import { createTCApprovalService } from '../services/tc-approval-service.js';
 import { createTCAlertService } from '../services/tc-alert-service.js';
 import { createTCAsanaSyncService } from '../services/tc-asana-sync-service.js';
+import { createTCWorkflowService } from '../services/tc-workflow-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 
@@ -53,6 +54,7 @@ export function createTCRoutes(
   const approvalService = createTCApprovalService({ pool, coordinator, automationService, logger });
   const alertService = createTCAlertService({ pool, coordinator, logger, sendSMS, sendAlertSms, sendAlertCall });
   const asanaSyncService = createTCAsanaSyncService({ pool, coordinator, portalService, logger });
+  const workflowService = createTCWorkflowService({ portalService, logger });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -212,6 +214,18 @@ export function createTCRoutes(
       const overview = await portalService.buildOverview(parseInt(req.params.id), { view });
       if (!overview) return res.status(404).json({ ok: false, error: 'Transaction not found' });
       res.json({ ok: true, view, ...overview });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/transactions/:id/workflow
+  router.get('/transactions/:id/workflow', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const workflow = await workflowService.buildWorkflow(txId);
+      if (!workflow) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      res.json({ ok: true, ...workflow });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
