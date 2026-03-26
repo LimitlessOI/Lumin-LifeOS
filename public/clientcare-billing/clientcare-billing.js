@@ -30,6 +30,169 @@
     return 'bad';
   }
 
+  function money(value) {
+    const n = Number(value || 0);
+    return Number.isFinite(n) ? n.toLocaleString(undefined, { style: 'currency', currency: 'USD' }) : '$0.00';
+  }
+
+  function renderKeyValueTable(rows) {
+    if (!rows.length) return '<p class="muted">No data.</p>';
+    return `
+      <table>
+        <tbody>
+          ${rows.map((row) => `<tr><th>${escapeHtml(row.label)}</th><td>${escapeHtml(row.value)}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function renderReadiness(readiness) {
+    const workflowTitles = (readiness.workflowTemplates || []).map((item) => item.title);
+    return `
+      <div class="stack">
+        <div><span class="badge ${badgeClass(readiness.ready ? 'ready' : 'warn')}">${readiness.ready ? 'Ready' : 'Missing secrets'}</span></div>
+        ${renderKeyValueTable([
+          { label: 'Mode', value: readiness.mode || 'unknown' },
+          { label: 'Configured base URL', value: readiness.configuredBaseUrl || 'Not set' },
+          { label: 'Configured username', value: readiness.configuredUsername || 'Not set' },
+          { label: 'Required secrets', value: (readiness.requiredSecrets || []).join(', ') || 'None' },
+          { label: 'Missing secrets', value: (readiness.missingSecrets || []).join(', ') || 'None' },
+          { label: 'Optional configured', value: (readiness.optionalConfigured || []).join(', ') || 'None' },
+          { label: 'Workflow templates', value: workflowTitles.join(', ') || 'None' },
+        ])}
+      </div>
+    `;
+  }
+
+  function renderImportTemplate(templateFields) {
+    return `
+      <div class="stack">
+        <p class="hint">Expected columns for claim import.</p>
+        <div class="card" style="padding:12px; background:#0f1528;">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:6px 12px;">
+            ${templateFields.map((field) => `<div class="muted">${escapeHtml(field)}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderReconciliation(reconciliation) {
+    return `
+      <div class="grid four" style="margin-bottom:0">
+        <div class="card stat"><span>Total</span><strong>${escapeHtml(reconciliation.total || 0)}</strong></div>
+        <div class="card stat"><span>Unbilled</span><strong>${escapeHtml(reconciliation.unbilled || 0)}</strong></div>
+        <div class="card stat"><span>Rejected</span><strong>${escapeHtml(reconciliation.rejected || 0)}</strong></div>
+        <div class="card stat"><span>Denied</span><strong>${escapeHtml(reconciliation.denied || 0)}</strong></div>
+        <div class="card stat"><span>Submitted</span><strong>${escapeHtml(reconciliation.submitted || 0)}</strong></div>
+        <div class="card stat"><span>Paid</span><strong>${escapeHtml(reconciliation.paid || 0)}</strong></div>
+        <div class="card stat"><span>Missing submit date</span><strong>${escapeHtml(reconciliation.missing_submission_date || 0)}</strong></div>
+        <div class="card stat"><span>High priority</span><strong>${escapeHtml(reconciliation.high_priority || 0)}</strong></div>
+      </div>
+    `;
+  }
+
+  function renderBrowserOutput(result) {
+    if (!result) return '<p class="muted">No browser run yet.</p>';
+
+    if (result.dashboardCounts && result.notes) {
+      const notes = (result.notes.billingNotes || []).slice(0, 10);
+      const followUps = (result.notes.followUpReminders || []).slice(0, 10);
+      return `
+        <div class="stack">
+          <div class="grid four" style="margin-bottom:0">
+            <div class="card stat"><span>Billing notes</span><strong>${escapeHtml(result.dashboardCounts.newBillingNotes || 0)}</strong></div>
+            <div class="card stat"><span>Labs</span><strong>${escapeHtml(result.dashboardCounts.newLabs || 0)}</strong></div>
+            <div class="card stat"><span>Ultrasounds</span><strong>${escapeHtml(result.dashboardCounts.newUltrasounds || 0)}</strong></div>
+            <div class="card stat"><span>Follow-up rows</span><strong>${escapeHtml(followUps.length)}</strong></div>
+          </div>
+          <div>
+            <h3 style="margin-bottom:8px">Top billing notes</h3>
+            <table>
+              <thead><tr><th>Date</th><th>Client</th><th>Preview</th><th>By</th><th>For</th></tr></thead>
+              <tbody>
+                ${notes.map((note) => `<tr><td>${escapeHtml(note.Date || '')}</td><td>${escapeHtml(note.Client || '')}</td><td>${escapeHtml(note['Note Preview'] || '')}</td><td>${escapeHtml(note.By || '')}</td><td>${escapeHtml(note.For || '')}</td></tr>`).join('') || '<tr><td colspan="5">No note rows parsed.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+          <details><summary>Raw details</summary><pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre></details>
+        </div>
+      `;
+    }
+
+    if (Array.isArray(result.accounts)) {
+      return `
+        <div class="stack">
+          <div class="grid four" style="margin-bottom:0">
+            <div class="card stat"><span>Scanned</span><strong>${escapeHtml(result.totalScanned || 0)}</strong></div>
+            <div class="card stat"><span>Offset</span><strong>${escapeHtml(result.offset || 0)}</strong></div>
+          </div>
+          <table>
+            <thead><tr><th>Client</th><th>Source</th><th>Payment</th><th>Billing status</th><th>Insurers</th><th>Flags</th></tr></thead>
+            <tbody>
+              ${result.accounts.map((account) => `
+                <tr>
+                  <td>${escapeHtml(account.name || '')}</td>
+                  <td>${escapeHtml(account.source || '')}</td>
+                  <td>${escapeHtml(account.accountSummary?.paymentStatus || '')}</td>
+                  <td>${escapeHtml(account.accountSummary?.clientBillingStatus || 'blank')}</td>
+                  <td>${escapeHtml((account.accountSummary?.insurers || []).join(', ') || 'none')}</td>
+                  <td>${escapeHtml((account.accountSummary?.flags || []).join(', ') || 'none')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <details><summary>Raw details</summary><pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre></details>
+        </div>
+      `;
+    }
+
+    if (Array.isArray(result.pages)) {
+      return `
+        <div class="stack">
+          <div class="grid four" style="margin-bottom:0">
+            <div class="card stat"><span>Billing notes</span><strong>${escapeHtml(result.dashboardCounts?.newBillingNotes || 0)}</strong></div>
+            <div class="card stat"><span>Labs</span><strong>${escapeHtml(result.dashboardCounts?.newLabs || 0)}</strong></div>
+            <div class="card stat"><span>Ultrasounds</span><strong>${escapeHtml(result.dashboardCounts?.newUltrasounds || 0)}</strong></div>
+          </div>
+          <table>
+            <thead><tr><th>Page</th><th>Status</th><th>Signals</th><th>Notes</th></tr></thead>
+            <tbody>
+              ${result.pages.map((page) => `
+                <tr>
+                  <td>${escapeHtml(page.label || page.id || '')}</td>
+                  <td>${page.ok ? '<span class="badge ok">ok</span>' : '<span class="badge bad">failed</span>'}</td>
+                  <td>${escapeHtml(Object.entries(page.state || {}).filter(([,v]) => v).map(([k]) => k).join(', ') || 'none')}</td>
+                  <td>${escapeHtml(page.error || ((page.page || {}).textPreview || '').slice(0, 180))}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <details><summary>Raw details</summary><pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre></details>
+        </div>
+      `;
+    }
+
+    if (result.page) {
+      return `
+        <div class="stack">
+          ${renderKeyValueTable([
+            { label: 'Title', value: result.page.title || 'Untitled' },
+            { label: 'URL', value: result.page.url || '' },
+            { label: 'Signals', value: Object.entries(result.state || {}).filter(([, v]) => v).map(([k]) => k).join(', ') || 'none' },
+          ])}
+          <details><summary>Raw details</summary><pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre></details>
+        </div>
+      `;
+    }
+
+    return `<details open><summary>Raw result</summary><pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre></details>`;
+  }
+
+  function setBrowserOutput(result) {
+    document.getElementById('browser-output').innerHTML = renderBrowserOutput(result);
+  }
+
   async function api(url, options) {
     const res = await fetch(url, {
       ...options,
@@ -108,7 +271,7 @@
         method: 'POST',
         body: JSON.stringify({}),
       });
-      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      setBrowserOutput(result);
       alert('Browser login test completed.');
     } catch (error) {
       alert(error.message);
@@ -125,7 +288,7 @@
           page_timeout_ms: 15000,
         }),
       });
-      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      setBrowserOutput(result);
       alert('Browser discovery completed.');
     } catch (error) {
       alert(error.message);
@@ -135,7 +298,7 @@
   async function browserOverview() {
     try {
       const result = await api('/api/v1/clientcare-billing/browser/billing-overview?page_timeout_ms=12000');
-      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      setBrowserOutput(result);
       alert('Billing overview loaded.');
     } catch (error) {
       alert(error.message);
@@ -145,7 +308,7 @@
   async function browserScanBillingNotes() {
     try {
       const result = await api('/api/v1/clientcare-billing/browser/scan-billing-notes?page_timeout_ms=12000');
-      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      setBrowserOutput(result);
       alert('Billing notes scan completed.');
     } catch (error) {
       alert(error.message);
@@ -164,7 +327,7 @@
           page_timeout_ms: 8000,
         }),
       });
-      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      setBrowserOutput(result);
       alert(`Scanned ${result.totalScanned || 0} client billing accounts.`);
     } catch (error) {
       alert(error.message);
@@ -182,7 +345,7 @@
           page_timeout_ms: 15000,
         }),
       });
-      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      setBrowserOutput(result);
       alert(importIntoQueue ? 'Browser extraction and import completed.' : 'Browser extraction preview completed.');
       await loadDashboard();
     } catch (error) {
@@ -280,12 +443,12 @@
         <div class="card">
           <h2>Browser fallback readiness</h2>
           <p style="margin:10px 0"><span class="badge ${badgeClass(readiness.ready ? 'ready' : 'warn')}">${readiness.ready ? 'ready' : 'not ready'}</span></p>
-          <pre>${escapeHtml(JSON.stringify(readiness, null, 2))}</pre>
+          ${renderReadiness(readiness)}
         </div>
         <div class="card">
           <h2>Import backlog</h2>
           <p class="hint" style="margin:10px 0">Paste CSV from ClientCare exports. Required/expected fields are listed below.</p>
-          <pre>${escapeHtml(templateFields.join('\n'))}</pre>
+          ${renderImportTemplate(templateFields)}
           <textarea id="csv-input" placeholder="Paste claim export CSV here"></textarea>
           <div style="margin-top:10px"><button id="import-csv">Import CSV</button></div>
         </div>
@@ -300,7 +463,7 @@
         </div>
         <div class="card">
           <h2>Reconciliation</h2>
-          <pre>${escapeHtml(JSON.stringify(reconciliation, null, 2))}</pre>
+          ${renderReconciliation(reconciliation)}
         </div>
       </div>
 
@@ -324,7 +487,7 @@
         </div>
         <div class="card">
           <h2>Browser output</h2>
-          <pre id="browser-output">No browser run yet.</pre>
+          <div id="browser-output"><p class="muted">No browser run yet.</p></div>
         </div>
       </div>
 
