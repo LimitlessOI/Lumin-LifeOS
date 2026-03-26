@@ -128,6 +128,20 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/browser/account-report', async (req, res) => {
+    try {
+      const result = await browserService.buildAccountRescueReport({
+        limit: req.query?.limit,
+        offset: req.query?.offset,
+        pageTimeoutMs: req.query?.page_timeout_ms,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] account report failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/extract-claims', async (req, res) => {
     try {
       const result = await browserService.extractClaimTables({

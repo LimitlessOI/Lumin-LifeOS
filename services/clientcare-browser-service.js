@@ -331,6 +331,38 @@ async function extractBillingNotesFromPage(page) {
   });
 }
 
+async function extractBillingQueueItems(page) {
+  return page.evaluate(() => {
+    const tables = Array.from(document.querySelectorAll('table'));
+    const noteTable = tables.find((table) => {
+      const headerCells = Array.from(table.querySelectorAll('tr:first-child th, tr:first-child td')).map((cell) => (cell.textContent || '').trim().toLowerCase());
+      return headerCells.includes('client') && headerCells.some((cell) => cell.includes('note'));
+    });
+    if (!noteTable) return [];
+
+    const rows = Array.from(noteTable.querySelectorAll('tr')).slice(1);
+    return rows.map((row) => {
+      const cells = Array.from(row.querySelectorAll('td')).map((cell) => (cell.textContent || '').replace(/\s+/g, ' ').trim());
+      const links = Array.from(row.querySelectorAll('a[href]')).map((el) => ({
+        text: (el.textContent || '').replace(/\s+/g, ' ').trim(),
+        href: el.href || '',
+      }));
+      const billingLink = links.find((link) => /\/Pregnancy\/Billing\//i.test(link.href));
+      const noteLink = links.find((link) => /\/Pregnancy\/BillingClientNote\//i.test(link.href));
+      return {
+        date: cells[0] || '',
+        client: cells[1] || '',
+        notePreview: cells[2] || '',
+        by: cells[3] || '',
+        forUser: cells[4] || '',
+        read: cells[5] || '',
+        billingHref: billingLink?.href || '',
+        noteHref: noteLink?.href || '',
+      };
+    }).filter((item) => item.client || item.notePreview || item.billingHref);
+  });
+}
+
 function summarizeBillingAccount(billingFields = []) {
   const map = Object.fromEntries(
     billingFields.map((field) => [String(field.label || field.name || '').toLowerCase(), field.value || ''])
@@ -350,6 +382,54 @@ function summarizeBillingAccount(billingFields = []) {
     billProviderType: providerType,
     flags,
     needsReview: flags.length > 0,
+  };
+}
+
+function diagnoseBillingIssue(queueItem = {}, account = {}) {
+  const preview = String(queueItem.notePreview || '').toLowerCase();
+  const flags = Array.isArray(account.accountSummary?.flags) ? account.accountSummary.flags : [];
+  const insurers = Array.isArray(account.insurancePreview) ? account.insurancePreview : [];
+
+  const needed = [];
+  const whatWentWrong = [];
+
+  if (/can't find client/.test(preview)) {
+    whatWentWrong.push('Client matching failed in the billing workflow.');
+    needed.push('Match the billing note to the correct client record and verify identifiers.');
+  }
+  if (/address/.test(preview)) {
+    whatWentWrong.push('Required demographic data is missing.');
+    needed.push('Add or verify the client address before billing can progress.');
+  }
+  if (/effective date/.test(preview)) {
+    whatWentWrong.push('Insurance effective-date verification or insurance setup is incomplete.');
+    needed.push('Verify policy effective date and confirm the correct payer is attached.');
+  }
+  if (flags.includes('payment_not_started')) {
+    needed.push('Change payment status from not started once billing work is actually underway.');
+  }
+  if (flags.includes('billing_status_blank')) {
+    needed.push('Set the client billing status so the account can be tracked correctly.');
+  }
+  if (flags.includes('bill_provider_type_blank')) {
+    needed.push('Set the billing provider type.');
+  }
+  if (!insurers.length) {
+    whatWentWrong.push('No insurer details were visible on the billing page.');
+    needed.push('Verify insurance is entered and the payer/member data is complete.');
+  }
+
+  let status = 'needs_review';
+  if (!whatWentWrong.length && needed.length) status = 'configuration_incomplete';
+  if (/can't find client/.test(preview)) status = 'client_match_issue';
+  else if (/address/.test(preview)) status = 'missing_demographics';
+  else if (/effective date/.test(preview)) status = 'insurance_setup_issue';
+  else if (flags.length) status = 'billing_configuration_issue';
+
+  return {
+    status,
+    whatWentWrong: whatWentWrong.length ? whatWentWrong : ['Needs manual billing review.'],
+    needed: Array.from(new Set(needed)),
   };
 }
 
@@ -801,6 +881,68 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
+  async function buildAccountRescueReport({ limit = 15, offset = 0, pageTimeoutMs = 15000 } = {}) {
+    const result = await login({ dryRun: false });
+    const { session } = result;
+    try {
+      const billingHome = new URL('/Home/BillingPartial', session.currentUrl()).toString();
+      const nav = await gotoWithBudget(session.page, billingHome, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+      if (!nav.ok) return { ok: false, error: nav.error };
+      await waitForBillingHome(session.page, Math.max(5000, Number(pageTimeoutMs) || 15000));
+      const summary = await collectPageSummary(session.page);
+      const queueItems = await extractBillingQueueItems(session.page);
+      const selected = queueItems.slice(Math.max(0, Number(offset) || 0), Math.max(0, Number(offset) || 0) + Math.max(1, Math.min(Number(limit) || 15, 25)));
+
+      const items = [];
+      for (const queueItem of selected) {
+        let account = {
+          billingFields: [],
+          insurancePreview: [],
+          accountSummary: { paymentStatus: 'unknown', clientBillingStatus: '', billProviderType: '', flags: [], needsReview: true, insuranceCount: 0, insurers: [] },
+        };
+        if (queueItem.billingHref) {
+          const accountNav = await gotoWithBudget(session.page, queueItem.billingHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+          if (accountNav.ok) {
+            const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+            if (billingTab) {
+              await billingTab.click().catch(() => {});
+              await sleep(1000);
+            }
+            const pageSummary = await collectPageSummary(session.page);
+            const billingFields = await extractBillingFieldPairs(session.page);
+            const insurancePreview = extractInsurancePreview(pageSummary);
+            account = {
+              billingFields,
+              insurancePreview,
+              accountSummary: {
+                ...summarizeBillingAccount(billingFields),
+                insuranceCount: insurancePreview.length,
+                insurers: insurancePreview.map((item) => item.insuranceName).filter(Boolean),
+              },
+            };
+          }
+        }
+        const diagnosis = diagnoseBillingIssue(queueItem, account);
+        items.push({
+          ...queueItem,
+          ...account,
+          diagnosis,
+        });
+      }
+
+      return {
+        ok: true,
+        offset: Math.max(0, Number(offset) || 0),
+        limit: Math.max(1, Math.min(Number(limit) || 15, 25)),
+        totalVisibleQueueItems: queueItems.length,
+        dashboardCounts: extractDashboardCounts(summary),
+        items,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   async function buildBillingOverview({ includeScreenshots = false, pageTimeoutMs = 15000 } = {}) {
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
@@ -898,6 +1040,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     inspectClientBillingAccount,
     scanClientBillingAccounts,
     scanBillingNotes,
+    buildAccountRescueReport,
     extractClaimTables,
   };
 }

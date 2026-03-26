@@ -194,6 +194,7 @@ Operational inputs needed regardless of integration path:
 - Browser tooling must include client-account scanning so we can inspect billing state per account directly from ClientCare when exports are delayed or unavailable.
 - Browser tooling must surface the billing-notes queue because that is likely where real unpaid-work backlog sits when sent-bills and ERA workspaces are empty.
 - Operator-facing UI must summarize billing state in plain language tables/cards; raw JSON is diagnostic only and should stay secondary.
+- The browser path must produce a live account rescue report from the billing-notes queue, including per-account status, likely root cause, and the next action needed.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.
