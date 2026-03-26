@@ -187,6 +187,7 @@ Operational inputs needed regardless of integration path:
 - Claims import endpoint exists and works.
 - Snapshot HTML/text import exists and works as fallback.
 - Credential-backed browser login/discovery exists and can preview billing pages and claim tables.
+- Browser diagnostics are fail-soft: screenshot capture problems must not block live login/discovery/extraction.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.

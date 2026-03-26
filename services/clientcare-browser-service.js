@@ -102,6 +102,38 @@ async function screenshotPath(label) {
   return path.join(SCREENSHOT_DIR, `${Date.now()}-${label.replace(/[^a-z0-9_-]/gi, '_')}.png`);
 }
 
+async function safeScreenshot(page, targetPath) {
+  try {
+    const dims = await page.evaluate(() => ({
+      width: Math.max(
+        document.documentElement?.scrollWidth || 0,
+        document.documentElement?.clientWidth || 0,
+        window.innerWidth || 0,
+        document.body?.scrollWidth || 0,
+        document.body?.clientWidth || 0
+      ),
+      height: Math.max(
+        document.documentElement?.scrollHeight || 0,
+        document.documentElement?.clientHeight || 0,
+        window.innerHeight || 0,
+        document.body?.scrollHeight || 0,
+        document.body?.clientHeight || 0
+      ),
+    })).catch(() => ({ width: 0, height: 0 }));
+
+    const width = Math.max(1280, Number(dims.width) || 0);
+    const height = Math.max(800, Number(dims.height) || 0);
+    await page.setViewport({ width: Math.min(width, 1600), height: Math.min(height, 2400) }).catch(() => {});
+
+    await page.screenshot({
+      path: targetPath,
+      fullPage: width > 0 && height > 0,
+    });
+  } catch (error) {
+    // Screenshot failures are diagnostic only — never block the billing workflow.
+  }
+}
+
 async function tryFill(page, selectors, value) {
   for (const selector of selectors) {
     const el = await page.$(selector);
@@ -196,7 +228,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     try {
       await session.navigate(credentials.baseUrl);
       const sp0 = await screenshotPath('clientcare-login-page');
-      await session.page.screenshot({ path: sp0, fullPage: true });
+      await safeScreenshot(session.page, sp0);
       screenshots.push(sp0);
 
       if (dryRun) {
@@ -207,7 +239,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       const passSelector = await tryFill(session.page, PASSWORD_SELECTORS, credentials.password);
       if (!userSelector || !passSelector) {
         const failShot = await screenshotPath('clientcare-login-fields-missing');
-        await session.page.screenshot({ path: failShot, fullPage: true });
+        await safeScreenshot(session.page, failShot);
         screenshots.push(failShot);
         throw new Error('Could not locate ClientCare login fields');
       }
@@ -222,7 +254,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
       const after = await collectPageSummary(session.page);
       const sp1 = await screenshotPath('clientcare-after-login');
-      await session.page.screenshot({ path: sp1, fullPage: true });
+      await safeScreenshot(session.page, sp1);
       screenshots.push(sp1);
 
       const stillOnLogin = /login|sign in/i.test(after.title) && await session.page.$(PASSWORD_SELECTORS[0]);
@@ -257,7 +289,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           await session.page.waitForTimeout(1000);
           const summary = await collectPageSummary(session.page);
           const shot = await screenshotPath(`clientcare-discovery-${visited.length + 1}`);
-          await session.page.screenshot({ path: shot, fullPage: true });
+          await safeScreenshot(session.page, shot);
           screenshots.push(shot);
           visited.push({ label: item.text || item.href, screenshot: shot, ...summary });
         } catch (error) {

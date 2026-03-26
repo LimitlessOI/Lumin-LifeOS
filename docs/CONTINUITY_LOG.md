@@ -14,6 +14,7 @@
   - enhanced/basic income drone deployment
   - `core/opportunity-executor.js`
 - Savings dashboard/reporting is being corrected to use authoritative ledger rows only; duplicate token-optimizer writes to `token_usage_log` are being disabled so metrics stop overstating activity.
+- ClientCare browser path hit a real production issue: screenshot capture failed on a zero-width page. Browser diagnostics are now being hardened so screenshots are best-effort and cannot block live login/discovery/extraction.
 
 ## Update 2026-03-26 #1
 - Priority shifted temporarily from TC to ClientCare billing recovery because there is already earned revenue trapped in unpaid / unbilled / rejected / denied claims.
