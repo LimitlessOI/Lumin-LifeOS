@@ -23,6 +23,7 @@
 - ClientCare overlay is being shifted away from raw JSON blocks toward operator-readable summaries; raw payloads remain available only as secondary diagnostics.
 - ClientCare browser path now also exposes a live account rescue report so billing-note items can be turned into per-account status, likely root cause, and next action within one browser session.
 - ClientCare overlay now also surfaces the account rescue report in a readable table so operators do not need to interpret raw JSON to work the queue.
+- ClientCare overlay now also has an account status board with hover summaries and click-through details so Sherry can see where each account is stuck at a glance.
 
 ## Update 2026-03-26 #1
 - Priority shifted temporarily from TC to ClientCare billing recovery because there is already earned revenue trapped in unpaid / unbilled / rejected / denied claims.

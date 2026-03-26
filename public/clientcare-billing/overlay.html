@@ -34,6 +34,18 @@
     .stack { display:grid; gap:10px; }
     .muted { color:#98a5c3; }
     pre { white-space:pre-wrap; word-break:break-word; background:#0f1528; border:1px solid #27304a; border-radius:10px; padding:12px; }
+    .small { font-size:12px; }
+    .account-board { display:grid; gap:10px; max-height:700px; overflow:auto; }
+    .account-card { width:100%; text-align:left; background:#0f1528; border:1px solid #27304a; border-radius:12px; padding:12px; display:grid; gap:10px; }
+    .account-card.selected { border-color:#5c7cff; box-shadow:0 0 0 1px #5c7cff inset; }
+    .account-card-top, .progress-label, .account-detail-header { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+    .progress-track { width:100%; height:10px; background:#1a223a; border-radius:999px; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:999px; }
+    .progress-fill.ok { background:#26c281; }
+    .progress-fill.warn { background:#f0b429; }
+    .progress-fill.bad { background:#ef476f; }
+    .account-meta { font-size:12px; color:#98a5c3; }
+    .detail-list { margin:8px 0 0 18px; padding:0; display:grid; gap:6px; }
   </style>
 </head>
 <body>

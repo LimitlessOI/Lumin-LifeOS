@@ -4,6 +4,9 @@
  * Operator overlay for ClientCare billing rescue.
  */
 (function () {
+  let lastAccountReport = null;
+  let selectedAccountIndex = 0;
+
   function getApiKey() {
     return localStorage.getItem('COMMAND_CENTER_KEY') || localStorage.getItem('lifeos_cmd_key') || localStorage.getItem('x_api_key') || '';
   }
@@ -33,6 +36,140 @@
   function money(value) {
     const n = Number(value || 0);
     return Number.isFinite(n) ? n.toLocaleString(undefined, { style: 'currency', currency: 'USD' }) : '$0.00';
+  }
+
+  function summarizeHoverText(item) {
+    const lines = [
+      item.client || 'Unknown client',
+      `Status: ${item.diagnosis?.status || 'review'}`,
+      `Note: ${item.notePreview || 'No note preview'}`,
+    ];
+    const wrong = item.diagnosis?.whatWentWrong || [];
+    const needed = item.diagnosis?.needed || [];
+    if (wrong.length) lines.push(`Issue: ${wrong[0]}`);
+    if (needed.length) lines.push(`Next: ${needed[0]}`);
+    return lines.join('\n');
+  }
+
+  function deriveAccountStage(item) {
+    const status = String(item.diagnosis?.status || '').toLowerCase();
+    const flags = item.accountSummary?.flags || [];
+    if (status === 'client_match_issue') {
+      return { label: 'Match client record', percent: 20 };
+    }
+    if (flags.includes('billing_status_blank') || flags.includes('bill_provider_type_blank')) {
+      return { label: 'Complete billing setup', percent: 45 };
+    }
+    if (status === 'insurance_setup_issue') {
+      return { label: 'Verify insurance/effective date', percent: 35 };
+    }
+    if (status === 'billing_configuration_issue') {
+      return { label: 'Resolve billing configuration', percent: 50 };
+    }
+    if (item.accountSummary?.paymentStatus === 'no') {
+      return { label: 'Start claim work', percent: 65 };
+    }
+    return { label: 'Ready for submission review', percent: 85 };
+  }
+
+  function renderAccountBoard() {
+    const container = document.getElementById('account-board');
+    const detail = document.getElementById('account-detail');
+    if (!container || !detail) return;
+
+    const report = lastAccountReport;
+    if (!report || !Array.isArray(report.items) || !report.items.length) {
+      container.innerHTML = '<p class="muted">Run Account Report to load live billing accounts.</p>';
+      detail.innerHTML = '<p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p>';
+      return;
+    }
+
+    if (selectedAccountIndex >= report.items.length) selectedAccountIndex = 0;
+
+    container.innerHTML = report.items.map((item, index) => {
+      const stage = deriveAccountStage(item);
+      const selected = index === selectedAccountIndex;
+      return `
+        <button
+          class="account-card${selected ? ' selected' : ''}"
+          data-account-index="${index}"
+          title="${escapeHtml(summarizeHoverText(item))}"
+        >
+          <div class="account-card-top">
+            <strong>${escapeHtml(item.client || 'Unknown client')}</strong>
+            <span class="badge ${badgeClass(item.diagnosis?.status || 'review')}">${escapeHtml(item.diagnosis?.status || 'review')}</span>
+          </div>
+          <div class="muted small">${escapeHtml(item.notePreview || 'No note preview')}</div>
+          <div class="progress-label">
+            <span>${escapeHtml(stage.label)}</span>
+            <span>${escapeHtml(`${stage.percent}%`)}</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill ${badgeClass(item.diagnosis?.status || 'review')}" style="width:${stage.percent}%"></div></div>
+          <div class="account-meta">
+            <span>${escapeHtml((item.accountSummary?.insurers || []).join(', ') || 'No insurer visible')}</span>
+          </div>
+        </button>
+      `;
+    }).join('');
+
+    const item = report.items[selectedAccountIndex];
+    detail.innerHTML = `
+      <div class="stack">
+        <div class="account-detail-header">
+          <div>
+            <h3>${escapeHtml(item.client || 'Unknown client')}</h3>
+            <p class="muted">${escapeHtml(item.date || '')} · ${escapeHtml(item.notePreview || '')}</p>
+          </div>
+          <span class="badge ${badgeClass(item.diagnosis?.status || 'review')}">${escapeHtml(item.diagnosis?.status || 'review')}</span>
+        </div>
+        ${renderKeyValueTable([
+          { label: 'Payment status', value: item.accountSummary?.paymentStatus || 'unknown' },
+          { label: 'Client billing status', value: item.accountSummary?.clientBillingStatus || 'blank' },
+          { label: 'Bill provider type', value: item.accountSummary?.billProviderType || 'blank' },
+          { label: 'Insurers', value: (item.accountSummary?.insurers || []).join(', ') || 'none visible' },
+          { label: 'Flags', value: (item.accountSummary?.flags || []).join(', ') || 'none' },
+        ])}
+        <div>
+          <strong>What went wrong</strong>
+          <ul class="detail-list">
+            ${(item.diagnosis?.whatWentWrong || ['Needs review']).map((entry) => `<li>${escapeHtml(entry)}</li>`).join('')}
+          </ul>
+        </div>
+        <div>
+          <strong>What is needed</strong>
+          <ul class="detail-list">
+            ${(item.diagnosis?.needed || ['Review billing page']).map((entry) => `<li>${escapeHtml(entry)}</li>`).join('')}
+          </ul>
+        </div>
+        <div>
+          <strong>Insurance preview</strong>
+          ${(item.insurancePreview || []).length ? `
+            <table>
+              <thead><tr><th>Carrier</th><th>Member ID</th><th>Priority</th><th>Subscriber</th><th>Payor ID</th></tr></thead>
+              <tbody>
+                ${(item.insurancePreview || []).map((insurance) => `
+                  <tr>
+                    <td>${escapeHtml(insurance.insuranceName || '')}</td>
+                    <td>${escapeHtml(insurance.memberId || '')}</td>
+                    <td>${escapeHtml(insurance.priority || '')}</td>
+                    <td>${escapeHtml(insurance.subscriberName || '')}</td>
+                    <td>${escapeHtml(insurance.payorId || '')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          ` : '<p class="muted">No insurer details visible on this page.</p>'}
+        </div>
+        <details><summary>Raw account details</summary><pre>${escapeHtml(JSON.stringify(item, null, 2))}</pre></details>
+      </div>
+    `;
+
+    container.querySelectorAll('[data-account-index]').forEach((button) => {
+      button.addEventListener('click', () => {
+        selectedAccountIndex = Number(button.getAttribute('data-account-index') || 0);
+        renderAccountBoard();
+      });
+    });
   }
 
   function renderKeyValueTable(rows) {
@@ -373,7 +510,10 @@
         page_timeout_ms: '12000',
       });
       const result = await api(`/api/v1/clientcare-billing/browser/account-report?${params.toString()}`);
+      lastAccountReport = result;
+      selectedAccountIndex = 0;
       setBrowserOutput(result);
+      renderAccountBoard();
       alert(`Loaded ${result.items?.length || 0} account rescue rows.`);
     } catch (error) {
       alert(error.message);
@@ -538,6 +678,18 @@
         </div>
       </div>
 
+      <div class="grid two">
+        <div class="card">
+          <h2>Account status board</h2>
+          <p class="hint" style="margin:10px 0">Each account shows where it is stuck. Hover for a quick overview. Click for full details.</p>
+          <div id="account-board" class="account-board"><p class="muted">Run Account Report to load live billing accounts.</p></div>
+        </div>
+        <div class="card">
+          <h2>Account details</h2>
+          <div id="account-detail"><p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p></div>
+        </div>
+      </div>
+
       <div class="split">
         <div class="stack">
           <div class="card">
@@ -581,6 +733,7 @@
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));
+    renderAccountBoard();
   }
 
   loadDashboard();

@@ -196,6 +196,7 @@ Operational inputs needed regardless of integration path:
 - Operator-facing UI must summarize billing state in plain language tables/cards; raw JSON is diagnostic only and should stay secondary.
 - The browser path must produce a live account rescue report from the billing-notes queue, including per-account status, likely root cause, and the next action needed.
 - The operator overlay must expose the account rescue report directly so staff can review account status and next actions without reading raw payloads.
+- The operator overlay must visualize each account's current billing state with a simple progress/status board, hover summary, and click-through detail pane.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.
