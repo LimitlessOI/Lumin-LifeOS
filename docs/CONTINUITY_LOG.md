@@ -19,6 +19,7 @@
 - ClientCare browser discovery/extraction is now being tightened for Railway request budgets: smaller candidate sets, no subpage screenshots by default, and partial page-level errors instead of whole-request failure wherever possible.
 - ClientCare browser path now also exposes targeted page inspection and a billing-operations overview so we can answer where billing stands even before export automation is finalized.
 - ClientCare browser path now also exposes client-account scanning by walking the client list and opening each account's billing tab, so per-account billing state can be inspected directly from the live system.
+- ClientCare browser path now also exposes a billing-notes scan and client-scan batching (`offset`/`limit`) so we can work through the live backlog queue without waiting for exports.
 
 ## Update 2026-03-26 #1
 - Priority shifted temporarily from TC to ClientCare billing recovery because there is already earned revenue trapped in unpaid / unbilled / rejected / denied claims.

@@ -142,13 +142,25 @@
     }
   }
 
+  async function browserScanBillingNotes() {
+    try {
+      const result = await api('/api/v1/clientcare-billing/browser/scan-billing-notes?page_timeout_ms=12000');
+      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      alert('Billing notes scan completed.');
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function browserScanAccounts() {
     try {
       const limit = Number(document.getElementById('browser-scan-limit')?.value || 5);
+      const offset = Number(document.getElementById('browser-scan-offset')?.value || 0);
       const result = await api('/api/v1/clientcare-billing/browser/scan-client-accounts', {
         method: 'POST',
         body: JSON.stringify({
           limit: Math.max(1, Math.min(limit, 25)),
+          offset: Math.max(0, offset),
           page_timeout_ms: 8000,
         }),
       });
@@ -299,12 +311,14 @@
           <div class="row-actions">
             <button id="browser-login-test">Login Test</button>
             <button id="browser-overview" class="ghost">Billing Overview</button>
+            <button id="browser-scan-billing-notes" class="ghost">Scan Billing Notes</button>
             <button id="browser-discover" class="ghost">Discover</button>
             <button id="browser-extract" class="ghost">Extract Preview</button>
             <button id="browser-extract-import">Extract + Import</button>
           </div>
           <div class="row-actions" style="margin-top:10px">
             <input id="browser-scan-limit" type="number" min="1" max="25" value="5" style="max-width:90px">
+            <input id="browser-scan-offset" type="number" min="0" value="0" style="max-width:90px">
             <button id="browser-scan-accounts" class="ghost">Scan Accounts</button>
           </div>
         </div>
@@ -348,6 +362,7 @@
     document.getElementById('import-snapshot').addEventListener('click', importSnapshot);
     document.getElementById('browser-login-test').addEventListener('click', browserLoginTest);
     document.getElementById('browser-overview').addEventListener('click', browserOverview);
+    document.getElementById('browser-scan-billing-notes').addEventListener('click', browserScanBillingNotes);
     document.getElementById('browser-discover').addEventListener('click', browserDiscover);
     document.getElementById('browser-extract').addEventListener('click', () => browserExtract(false));
     document.getElementById('browser-extract-import').addEventListener('click', () => browserExtract(true));

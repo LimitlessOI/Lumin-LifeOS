@@ -107,6 +107,20 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function waitForCondition(fn, { timeoutMs = 10000, intervalMs = 500 } = {}) {
+  const started = Date.now();
+  while (Date.now() - started < timeoutMs) {
+    try {
+      const result = await fn();
+      if (result) return true;
+    } catch (_) {
+      // best-effort polling only
+    }
+    await sleep(intervalMs);
+  }
+  return false;
+}
+
 async function safeScreenshot(page, targetPath) {
   try {
     const dims = await page.evaluate(() => ({
@@ -272,6 +286,73 @@ async function extractBillingFieldPairs(page) {
     }
     return unique;
   });
+}
+
+async function waitForBillingHome(page, timeoutMs = 10000) {
+  await waitForCondition(async () => page.evaluate(() => {
+    const text = document.body?.innerText || '';
+    const hasLoading = /Loading Front Desk Notes|Loading Service Tickets|Loading Client Chats/i.test(text);
+    const rows = Array.from(document.querySelectorAll('table tr'))
+      .map((row) => Array.from(row.querySelectorAll('th,td')).map((cell) => (cell.textContent || '').trim()))
+      .filter((cells) => cells.some(Boolean));
+    return !hasLoading || rows.length > 10;
+  }), { timeoutMs, intervalMs: 750 });
+}
+
+async function extractBillingNotesFromPage(page) {
+  return page.evaluate(() => {
+    const tables = Array.from(document.querySelectorAll('table')).map((table) =>
+      Array.from(table.querySelectorAll('tr')).map((row) =>
+        Array.from(row.querySelectorAll('th,td')).map((cell) => (cell.textContent || '').replace(/\s+/g, ' ').trim())
+      )
+    );
+
+    const compactRows = (rows) => rows
+      .map((row) => row.map((cell) => String(cell || '').trim()))
+      .filter((row) => row.some(Boolean));
+
+    const normalizeObjects = (rows) => {
+      if (rows.length < 2) return [];
+      const headers = rows[0];
+      return rows.slice(1).map((row) => {
+        const obj = {};
+        headers.forEach((header, index) => {
+          obj[header || `col_${index + 1}`] = row[index] || '';
+        });
+        return obj;
+      });
+    };
+
+    const notesTable = compactRows(tables[0] || []);
+    const followupTable = compactRows(tables[1] || []);
+
+    return {
+      billingNotes: normalizeObjects(notesTable).slice(0, 100),
+      followUpReminders: normalizeObjects(followupTable).slice(0, 100),
+    };
+  });
+}
+
+function summarizeBillingAccount(billingFields = []) {
+  const map = Object.fromEntries(
+    billingFields.map((field) => [String(field.label || field.name || '').toLowerCase(), field.value || ''])
+  );
+  const paymentStatusYes = billingFields.find((field) => /paymentstatus_yes/i.test(field.id || ''))?.value === 'checked';
+  const paymentStatusNo = billingFields.find((field) => /paymentstatus_no/i.test(field.id || ''))?.value === 'checked';
+  const clientBillingStatus = billingFields.find((field) => /client billing status/i.test(field.label || ''))?.value || '';
+  const providerType = billingFields.find((field) => /bill provider type/i.test(field.label || ''))?.value || '';
+
+  const flags = [];
+  if (paymentStatusNo) flags.push('payment_not_started');
+  if (!clientBillingStatus) flags.push('billing_status_blank');
+  if (!providerType) flags.push('bill_provider_type_blank');
+  return {
+    paymentStatus: paymentStatusYes ? 'yes' : paymentStatusNo ? 'no' : 'unknown',
+    clientBillingStatus,
+    billProviderType: providerType,
+    flags,
+    needsReview: flags.length > 0,
+  };
 }
 
 function extractDashboardCounts(summary = {}) {
@@ -521,6 +602,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         clientHref,
         page: summary,
         billingFields,
+        accountSummary: summarizeBillingAccount(billingFields),
         state: {
           hasBillingTab: Boolean(billingTab),
           billingFieldCount: billingFields.length,
@@ -533,7 +615,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
-  async function scanClientBillingAccounts({ limit = 10, pageTimeoutMs = 15000 } = {}) {
+  async function scanClientBillingAccounts({ limit = 10, offset = 0, pageTimeoutMs = 15000 } = {}) {
     const result = await login({ dryRun: false });
     const { session } = result;
     try {
@@ -544,7 +626,8 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         return { ok: false, error: directoryNav.error, accounts: [] };
       }
 
-      const clients = await extractClientDirectory(session.page, limit);
+      const directory = await extractClientDirectory(session.page, Math.max((Number(offset) || 0) + (Number(limit) || 10), 10));
+      const clients = directory.slice(Math.max(0, Number(offset) || 0), Math.max(0, Number(offset) || 0) + Math.max(1, Math.min(Number(limit) || 10, 25)));
       const accounts = [];
       for (const client of clients) {
         const nav = await gotoWithBudget(session.page, client.href, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
@@ -561,12 +644,14 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
         const pageSummary = await collectPageSummary(session.page);
         const billingFields = await extractBillingFieldPairs(session.page);
+        const accountSummary = summarizeBillingAccount(billingFields);
         accounts.push({
           ...client,
           ok: true,
           currentUrl: pageSummary.url,
           billingFieldCount: billingFields.length,
           billingFields,
+          accountSummary,
           preview: (pageSummary.textPreview || '').slice(0, 700),
         });
       }
@@ -574,7 +659,33 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       return {
         ok: true,
         totalScanned: accounts.length,
+        offset: Math.max(0, Number(offset) || 0),
         accounts,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  async function scanBillingNotes({ pageTimeoutMs = 15000 } = {}) {
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const billingHome = new URL('/Home/BillingPartial', session.currentUrl()).toString();
+      const nav = await gotoWithBudget(session.page, billingHome, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+      if (!nav.ok) {
+        return { ok: false, error: nav.error, screenshots };
+      }
+      await waitForBillingHome(session.page, Math.max(5000, Number(pageTimeoutMs) || 15000));
+      const summary = await collectPageSummary(session.page);
+      const notes = await extractBillingNotesFromPage(session.page);
+      return {
+        ok: true,
+        dashboardCounts: extractDashboardCounts(summary),
+        page: summary,
+        notes,
+        state: derivePageState(summary),
+        screenshots,
       };
     } finally {
       await session.close().catch(() => {});
@@ -677,6 +788,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     buildBillingOverview,
     inspectClientBillingAccount,
     scanClientBillingAccounts,
+    scanBillingNotes,
     extractClaimTables,
   };
 }

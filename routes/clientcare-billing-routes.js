@@ -106,11 +106,24 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     try {
       const result = await browserService.scanClientBillingAccounts({
         limit: req.body?.limit,
+        offset: req.body?.offset,
         pageTimeoutMs: req.body?.page_timeout_ms,
       });
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] scan client accounts failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/browser/scan-billing-notes', async (req, res) => {
+    try {
+      const result = await browserService.scanBillingNotes({
+        pageTimeoutMs: req.query?.page_timeout_ms,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] scan billing notes failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });

@@ -192,6 +192,7 @@ Operational inputs needed regardless of integration path:
 - Browser discovery/extraction must return partial results quickly under Railway request budgets; limit candidate pages, avoid blocking screenshots by default, and surface page-level errors instead of failing the whole run.
 - Browser tooling must include a billing-operations overview and targeted page inspection so the operator can answer where billing stands before exports are available.
 - Browser tooling must include client-account scanning so we can inspect billing state per account directly from ClientCare when exports are delayed or unavailable.
+- Browser tooling must surface the billing-notes queue because that is likely where real unpaid-work backlog sits when sent-bills and ERA workspaces are empty.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.
