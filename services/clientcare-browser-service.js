@@ -292,10 +292,8 @@ async function waitForBillingHome(page, timeoutMs = 10000) {
   await waitForCondition(async () => page.evaluate(() => {
     const text = document.body?.innerText || '';
     const hasLoading = /Loading Front Desk Notes|Loading Service Tickets|Loading Client Chats/i.test(text);
-    const rows = Array.from(document.querySelectorAll('table tr'))
-      .map((row) => Array.from(row.querySelectorAll('th,td')).map((cell) => (cell.textContent || '').trim()))
-      .filter((cells) => cells.some(Boolean));
-    return !hasLoading || rows.length > 10;
+    const billingQueueLinks = document.querySelectorAll('a[href*="/Pregnancy/Billing/"]').length;
+    return billingQueueLinks > 0 || !hasLoading;
   }), { timeoutMs, intervalMs: 750 });
 }
 
