@@ -132,6 +132,33 @@
     }
   }
 
+  async function browserOverview() {
+    try {
+      const result = await api('/api/v1/clientcare-billing/browser/billing-overview?page_timeout_ms=12000');
+      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      alert('Billing overview loaded.');
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function browserScanAccounts() {
+    try {
+      const limit = Number(document.getElementById('browser-scan-limit')?.value || 5);
+      const result = await api('/api/v1/clientcare-billing/browser/scan-client-accounts', {
+        method: 'POST',
+        body: JSON.stringify({
+          limit: Math.max(1, Math.min(limit, 25)),
+          page_timeout_ms: 8000,
+        }),
+      });
+      document.getElementById('browser-output').textContent = JSON.stringify(result, null, 2);
+      alert(`Scanned ${result.totalScanned || 0} client billing accounts.`);
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function browserExtract(importIntoQueue = false) {
     try {
       const result = await api('/api/v1/clientcare-billing/browser/extract-claims', {
@@ -271,9 +298,14 @@
           <p class="hint" style="margin:10px 0">Uses the Railway ClientCare credentials to log in, inspect billing pages, and preview claim tables.</p>
           <div class="row-actions">
             <button id="browser-login-test">Login Test</button>
+            <button id="browser-overview" class="ghost">Billing Overview</button>
             <button id="browser-discover" class="ghost">Discover</button>
             <button id="browser-extract" class="ghost">Extract Preview</button>
             <button id="browser-extract-import">Extract + Import</button>
+          </div>
+          <div class="row-actions" style="margin-top:10px">
+            <input id="browser-scan-limit" type="number" min="1" max="25" value="5" style="max-width:90px">
+            <button id="browser-scan-accounts" class="ghost">Scan Accounts</button>
           </div>
         </div>
         <div class="card">
@@ -315,9 +347,11 @@
     document.getElementById('import-csv').addEventListener('click', importCsv);
     document.getElementById('import-snapshot').addEventListener('click', importSnapshot);
     document.getElementById('browser-login-test').addEventListener('click', browserLoginTest);
+    document.getElementById('browser-overview').addEventListener('click', browserOverview);
     document.getElementById('browser-discover').addEventListener('click', browserDiscover);
     document.getElementById('browser-extract').addEventListener('click', () => browserExtract(false));
     document.getElementById('browser-extract-import').addEventListener('click', () => browserExtract(true));
+    document.getElementById('browser-scan-accounts').addEventListener('click', browserScanAccounts);
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));
