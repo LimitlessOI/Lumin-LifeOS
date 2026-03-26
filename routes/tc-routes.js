@@ -19,6 +19,7 @@ import { createTCApprovalService } from '../services/tc-approval-service.js';
 import { createTCAlertService } from '../services/tc-alert-service.js';
 import { createTCAsanaSyncService } from '../services/tc-asana-sync-service.js';
 import { createTCWorkflowService } from '../services/tc-workflow-service.js';
+import { createTCOfferPrepService } from '../services/tc-offer-prep-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 
@@ -55,6 +56,7 @@ export function createTCRoutes(
   const alertService = createTCAlertService({ pool, coordinator, logger, sendSMS, sendAlertSms, sendAlertCall });
   const asanaSyncService = createTCAsanaSyncService({ pool, coordinator, portalService, logger });
   const workflowService = createTCWorkflowService({ portalService, logger });
+  const offerPrepService = createTCOfferPrepService({ logger, callCouncilMember });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -238,6 +240,35 @@ export function createTCRoutes(
       const preview = await asanaSyncService.previewTransaction(txId);
       if (!preview) return res.status(404).json({ ok: false, error: 'Transaction not found' });
       res.json({ ok: true, configured: asanaSyncService.isConfigured(), ...preview });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/offers/prepare
+  router.post('/offers/prepare', requireKey, async (req, res) => {
+    try {
+      const result = await offerPrepService.prepareOffer(req.body || {});
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/offers/prepare
+  router.post('/transactions/:id/offers/prepare', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id);
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const body = req.body || {};
+      const clientProfile = body.clientProfile || body.client_profile || tx.parties?.buyer || tx.parties?.seller || {};
+      const result = await offerPrepService.prepareOffer({
+        ...body,
+        clientProfile,
+        property: body.property || { address: tx.address, list_price: tx.purchase_price || null },
+      });
+      res.json({ transaction_id: txId, ...result });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

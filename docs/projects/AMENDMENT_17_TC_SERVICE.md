@@ -70,6 +70,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-asana-sync-service.js` | Canonical TC -> Asana sync for parent transaction tasks and derived subtasks |
 | `services/tc-workflow-specs.js` | Machine-readable listing and buyer workflow templates derived from TC operations |
 | `services/tc-workflow-service.js` | Derived workflow task read model from canonical TC file state |
+| `services/tc-offer-prep-service.js` | Client/property/comp-based offer recommendation engine for review-only offer prep |
 | `routes/tc-routes.js` | All TC API endpoints |
 | `routes/mls-routes.js` | MLS scanning and investor management endpoints |
 | `public/tc/agent-portal.html` | Agent-facing at-a-glance portal for file health, blockers, docs, comms, and reports |
@@ -439,6 +440,25 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | GET | `/glvar/violations` | Violation log |
 | POST | `/test-skyslope-login` | Test eXp Okta → SkySlope connection |
 | POST | `/test-boldtrail` | Test eXp Okta → BoldTrail connection |
+| POST | `/offers/prepare` | Build offer recommendation set from property, client constraints, and comps |
+| POST | `/transactions/:id/offers/prepare` | Build offer recommendation set using a transaction as the starting context |
+
+### Offer Prep Command Engine
+- Command shape should support:
+  - client / buyer profile
+  - subject property
+  - comp set
+  - seller/market signals
+  - client-specific constraints like sale contingency, financing type, close window, and risk tolerance
+- Output should include:
+  - conservative / balanced / aggressive options
+  - likely acceptance range
+  - confidence band
+  - rationale and assumption notes
+- Product rule:
+  - no fake precision
+  - guidance must be review-oriented and clearly state constraints
+  - Adam still reviews and signs all offers
 
 ### MLS Investor Endpoints (under `/api/v1/mls/`)
 | Method | Path | Purpose |
