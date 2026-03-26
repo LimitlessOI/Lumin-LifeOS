@@ -34,6 +34,8 @@ function estimateCost(tokens, type, provider, model) {
 }
 
 export function createSavingsLedger(pool) {
+  const authoritativeFilter = `quality_method IS NOT NULL`;
+
   // ── Record a single AI call receipt ─────────────────────────────────────────
   async function record({
     sessionId,
@@ -153,7 +155,7 @@ export function createSavingsLedger(pool) {
           ROUND(AVG(quality_score),2) AS avg_quality
         FROM token_usage_log
         WHERE logged_at >= NOW() - INTERVAL '24 hours'
-          AND provider_was_free IS NOT NULL
+          AND ${authoritativeFilter}
         ${filter}
       `, params);
 
@@ -172,7 +174,7 @@ export function createSavingsLedger(pool) {
           COUNT(*) FILTER (WHERE provider_was_free) AS free_calls
         FROM token_usage_log
         WHERE logged_at >= NOW() - INTERVAL '30 days'
-          AND provider_was_free IS NOT NULL
+          AND ${authoritativeFilter}
         ${filter}
       `, params);
 
@@ -187,7 +189,7 @@ export function createSavingsLedger(pool) {
           SUM(saved_cost_usd) AS saved_cost_usd
         FROM token_usage_log
         WHERE logged_at >= NOW() - INTERVAL '30 days'
-          AND provider_was_free IS NOT NULL
+          AND ${authoritativeFilter}
         ${filter}
         GROUP BY provider ORDER BY calls DESC
       `, params);
@@ -208,7 +210,7 @@ export function createSavingsLedger(pool) {
         FROM token_usage_log,
           jsonb_each(compression_layers) AS t(layer_key, layer_val)
         WHERE compression_layers IS NOT NULL
-          AND provider_was_free IS NOT NULL
+          AND ${authoritativeFilter}
           AND logged_at >= NOW() - INTERVAL '30 days'
           ${filter}
         GROUP BY layer_key
@@ -254,7 +256,7 @@ export function createSavingsLedger(pool) {
           COUNT(*) FILTER (WHERE fallback_triggered) AS fallbacks
         FROM token_usage_log
         WHERE logged_at BETWEEN $1 AND $2
-          AND provider_was_free IS NOT NULL
+          AND ${authoritativeFilter}
         ${filter}
       `, params);
 

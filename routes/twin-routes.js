@@ -290,7 +290,7 @@ export function createTwinRoutes({ pool, requireKey, callCouncilMember }) {
           COUNT(*) FILTER (WHERE cache_hit) AS cache_hits
         FROM token_usage_log
         WHERE logged_at >= NOW() - INTERVAL '24 hours'
-          AND provider_was_free IS NOT NULL
+          AND quality_method IS NOT NULL
         GROUP BY task_type
         ORDER BY total_input_tokens DESC
         LIMIT 10
@@ -351,7 +351,7 @@ export function createTwinRoutes({ pool, requireKey, callCouncilMember }) {
            SUM(saved_cost_usd) AS saved_cost_usd
          FROM token_usage_log
          WHERE logged_at >= NOW() - INTERVAL '30 days'
-           AND provider_was_free IS NOT NULL
+           AND quality_method IS NOT NULL
          GROUP BY DATE(logged_at)
          ORDER BY day DESC`
       );

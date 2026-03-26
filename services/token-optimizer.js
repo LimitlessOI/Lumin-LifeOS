@@ -486,26 +486,10 @@ export function createTokenOptimizer(pool = null) {
 
   // ── Persist to DB for long-term trend analysis ─────────────────────────────
   async function persistToDB(data) {
-    if (!pool) return;
-    try {
-      const originalTokens = (data.inputTokens || 0) + (data.savedTokens || 0);
-      const savingsPct = originalTokens > 0
-        ? Math.round((data.savedTokens / originalTokens) * 100 * 100) / 100
-        : 0;
-      await pool.query(
-        `INSERT INTO token_usage_log
-          (provider, model, task_type, input_tokens, output_tokens,
-           saved_tokens, cache_hit, cost_usd, saved_cost_usd,
-           original_tokens, compressed_tokens, savings_pct, logged_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())`,
-        [data.provider, data.model, data.taskType,
-         data.inputTokens, data.outputTokens, data.savedTokens,
-         data.cacheHit, data.costUSD, data.savedCostUSD,
-         originalTokens, data.inputTokens, savingsPct]
-      );
-    } catch {
-      // Table may not exist yet — non-blocking
-    }
+    // Disabled intentionally: savings-ledger is the authoritative writer to
+    // token_usage_log. A second write path pollutes the dashboard with duplicate rows.
+    void data;
+    return;
   }
 
   // ── Continuous improvement: analyze patterns, update phrase table ──────────

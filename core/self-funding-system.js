@@ -24,7 +24,12 @@ export class SelfFundingSystem {
     
     // Load revenue balance
     await this.loadRevenueBalance();
-    
+
+    if (process.env.LIFEOS_DIRECTED_MODE !== 'false') {
+      console.log('🛑 [SELF-FUNDING] Directed mode active — manual mode only');
+      return;
+    }
+
     // Start spending decisions
     this.startSpendingDecisions();
     

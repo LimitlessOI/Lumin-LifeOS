@@ -838,6 +838,13 @@ function scheduleNextCycle(interval) {
 }
 
 export function startBuildScheduler(options = {}) {
+  const directedMode = process.env.LIFEOS_DIRECTED_MODE !== 'false';
+  const autoBuilderAutonomyEnabled = process.env.LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER === 'true';
+  if (directedMode && !autoBuilderAutonomyEnabled) {
+    console.log('🛑 [AUTO-BUILDER][SCHEDULER] Directed mode active — scheduler disabled; build only on explicit request');
+    return;
+  }
+
   const initialDelay = options.initialDelay ?? DEFAULT_INITIAL_DELAY;
   const interval = options.interval ?? DEFAULT_SCHEDULER_INTERVAL;
 

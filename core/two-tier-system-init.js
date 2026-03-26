@@ -32,6 +32,7 @@ import { createConversationRoutes } from '../routes/conversation-routes.js';
 import { createCommandCenterRoutes } from '../routes/command-center-routes.js';
 
 export async function initializeTwoTierSystem(deps) {
+  const directedMode = process.env.LIFEOS_DIRECTED_MODE !== 'false';
   const {
     pool,
     app,
@@ -347,7 +348,7 @@ export async function initializeTwoTierSystem(deps) {
           logger.info("✅ Enhanced Income Drone System initialized");
 
           // Deploy income drones (if not disabled)
-          if (!DISABLE_INCOME_DRONES) {
+          if (!DISABLE_INCOME_DRONES && !directedMode) {
             logger.info('🚀 [INCOME] Deploying income drones immediately...');
             try {
               await incomeDroneSystem.deployDrone("affiliate", 500);
@@ -360,7 +361,11 @@ export async function initializeTwoTierSystem(deps) {
               logger.error('❌ [INCOME] Error deploying drones:', { error: deployError.message });
             }
           } else {
-            logger.info('ℹ️ [INCOME] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)');
+            logger.info(
+              directedMode
+                ? '🛑 [INCOME] Directed mode active — income drones disabled until explicitly enabled'
+                : 'ℹ️ [INCOME] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)'
+            );
           }
 
           // Initialize Opportunity Executor (actually implements opportunities to generate REAL revenue)
@@ -368,8 +373,12 @@ export async function initializeTwoTierSystem(deps) {
           try {
             const executorModule = await import("./opportunity-executor.js");
             opportunityExecutor = new executorModule.OpportunityExecutor(pool, callCouncilMember, incomeDroneSystem);
-            await opportunityExecutor.start();
-            logger.info("✅ Opportunity Executor initialized - will actually implement opportunities to generate REAL revenue");
+            if (!directedMode) {
+              await opportunityExecutor.start();
+              logger.info("✅ Opportunity Executor initialized - will actually implement opportunities to generate REAL revenue");
+            } else {
+              logger.info("🛑 Opportunity Executor initialized in manual mode — not started automatically");
+            }
 
             // Connect executor to drone system so drones can use it
             if (incomeDroneSystem && incomeDroneSystem.setOpportunityExecutor) {

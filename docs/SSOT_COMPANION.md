@@ -59,12 +59,19 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - Payer-specific rule verification is still needed for commercial plans before patient-balance decisions
 - TC live feed/signature polish remains pending but is temporarily deprioritized
 - Provider savings math must stay evidence-backed before product claims
+- Directed-mode trust reset is now in force: autonomous AI/build/research/improvement loops are disabled by default until explicitly re-enabled
 
 ## 0.5 Amendment Hygiene Rule (NEW)
 - Every meaningful product/system/code change must update the correct project amendment in `docs/projects/` before the work is considered done.
 - If a change affects shared platform behavior, also update this Companion and, when relevant, `docs/projects/INDEX.md` and `docs/CONTINUITY_LOG.md`.
 - If an idea grows into its own product/subsystem with its own mission, revenue path, technical surface, or non-negotiables, create a new amendment instead of burying it in chat history.
 - Brainstorms, raw notes, and conversation dumps are not authoritative until promoted into the relevant amendment.
+
+## 0.6 Directed Mode Rule (NEW)
+- Default operating posture is now directed mode: the system does not autonomously build, research, self-improve, market, or spend unless explicitly instructed or explicitly re-enabled.
+- Hidden/self-starting timers in subsystems are not trusted by default and must remain off unless their behavior has been reviewed and explicitly approved.
+- Auto-builder is manual-first: queueing/build runs happen on direct operator request; background scheduler remains off unless explicitly enabled.
+- Savings/reporting must be based on authoritative ledger rows only; duplicate/non-authoritative write paths must not drive operator dashboards.
 
 ---
 

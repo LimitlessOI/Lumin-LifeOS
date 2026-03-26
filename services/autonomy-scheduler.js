@@ -96,6 +96,12 @@ async function checkBoldTrailFollowUps(getDeps) {
  *   continuousSelfImprovement, rotateAIsBasedOnPerformance, tcoSalesAgent, enhancedConversationScraper }.
  */
 export function startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOnce, getDeps) {
+  const directedMode = process.env.LIFEOS_DIRECTED_MODE !== 'false';
+  if (directedMode) {
+    console.log("🛑 [AUTONOMY] Directed mode active — autonomous schedulers disabled by default");
+    return;
+  }
+
   const d = () => getDeps() || {};
 
   // ── Token Optimizer Monitor (every hour) ────────────────────────────────────

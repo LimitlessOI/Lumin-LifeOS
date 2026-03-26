@@ -7,6 +7,8 @@
 import { randomUUID } from 'crypto';
 
 export function requestTracer(logger) {
+  const logSuccessfulRequests = process.env.LIFEOS_LOG_REQUESTS === 'true';
+
   return (req, res, next) => {
     const requestId = req.headers['x-request-id'] || randomUUID();
     req.requestId = requestId;
@@ -26,7 +28,7 @@ export function requestTracer(logger) {
         logger.error('[REQ]', { requestId, method, url, statusCode, duration, ip });
       } else if (statusCode >= 400) {
         logger.warn('[REQ]', { requestId, method, url, statusCode, duration, ip });
-      } else {
+      } else if (logSuccessfulRequests) {
         logger.info('[REQ]', { requestId, method, url, statusCode, duration, ip });
       }
     });

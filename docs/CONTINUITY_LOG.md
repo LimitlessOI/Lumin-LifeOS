@@ -1,6 +1,20 @@
 # Continuity Log
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
+## Update 2026-03-26 #2
+- Trust reset applied: directed mode is now the default operating posture. Autonomous AI/build/research/improvement loops are being disabled unless explicitly re-enabled.
+- Background auto-builder scheduling is now off by default; auto-builder should only run on explicit operator direction unless `LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER=true`.
+- Hidden self-starting subsystem timers were identified as a major source of unwanted work:
+  - `core/marketing-research-system.js`
+  - `core/marketing-agency.js`
+  - `core/self-funding-system.js`
+  - `services/autonomy-scheduler.js`
+- Startup-time autonomous workers are also now being held behind directed mode:
+  - `services/autonomy-orchestrator.js`
+  - enhanced/basic income drone deployment
+  - `core/opportunity-executor.js`
+- Savings dashboard/reporting is being corrected to use authoritative ledger rows only; duplicate token-optimizer writes to `token_usage_log` are being disabled so metrics stop overstating activity.
+
 ## Update 2026-03-26 #1
 - Priority shifted temporarily from TC to ClientCare billing recovery because there is already earned revenue trapped in unpaid / unbilled / rejected / denied claims.
 - New amendment added: `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md` defines the no-API-first operating model for ClientCare West billing rescue.

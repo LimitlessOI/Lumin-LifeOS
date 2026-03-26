@@ -25,7 +25,12 @@ export class MarketingAgency {
     if (!playbook) {
       console.warn('⚠️ [MARKETING AGENCY] No playbook found, will generate one');
     }
-    
+
+    if (process.env.LIFEOS_DIRECTED_MODE !== 'false') {
+      console.log('🛑 [MARKETING AGENCY] Directed mode active — manual mode only');
+      return;
+    }
+
     // Start agency operations
     this.startAgencyOperations();
     

@@ -1,5 +1,5 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
-**Status:** LIVE (guarded)
+**Status:** LIVE (manual-first)
 **Authority:** Subordinate to SSOT North Star Constitution
 **Last Updated:** 2026-03-13
 
@@ -8,7 +8,7 @@
 ## WHAT THIS IS
 The system that writes, tests, and deploys its own code. Takes an idea → generates code → runs in sandbox → creates a snapshot → applies changes → validates → rolls back on failure. It is the most powerful and most dangerous feature in the platform.
 
-**Mission:** Ship validated code improvements autonomously, with human approval for any production deployment.
+**Mission:** Ship validated code improvements on explicit operator direction, with human approval for any production deployment.
 
 ---
 
@@ -57,6 +57,7 @@ The system that writes, tests, and deploys its own code. Takes an idea → gener
 - **KNOW:** Snapshot-before-change is implemented in `idea-to-implementation-pipeline.js`
 - **KNOW:** `build_artifacts` table records receipts on component completion
 - **KNOW:** Nightly runner exists at `scripts/autonomy/run-nightly.js`
+- **KNOW:** Directed mode now disables the background auto-builder scheduler by default; builds must be explicitly triggered unless `LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER=true`
 - **THINK:** Sandbox testing is limited — no real isolated execution environment, tests run in-process
 - **DON'T KNOW:** Whether the self-modification engine has been successfully used to ship a real feature end-to-end
 
@@ -74,6 +75,8 @@ The system that writes, tests, and deploys its own code. Takes an idea → gener
 
 ## NON-NEGOTIABLES (this project)
 - `autoDeploy` MUST default to `false` — this is constitutional (North Star 4.2)
+- Background build scheduling MUST default to off in directed mode
+- Auto-builder may only run on explicit operator request unless the scheduler is intentionally re-enabled
 - Snapshot MUST be created before ANY file modification
 - Rollback MUST be tested before the feature is considered complete
 - Syntax validation (`node --check`) MUST pass before applying any JS change

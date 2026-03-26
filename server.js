@@ -1113,9 +1113,13 @@ logger.info('✅ [WORD-KEEPER] Reminder cron started');
 // ==================== AUTONOMY ORCHESTRATOR (Amendment 17) ====================
 // Created before initializeTwoTierSystem so routeCtx can include it.
 // autonomyOrchestrator is defined earlier in this file (above runInitializeTwoTierSystem).
-autonomyOrchestrator.start();
+if (process.env.LIFEOS_DIRECTED_MODE === 'false') {
+  autonomyOrchestrator.start();
+  logger.info('✅ [AUTONOMY] Orchestrator started + routes mounted at /api/v1/autonomy');
+} else {
+  logger.info('🛑 [AUTONOMY] Directed mode active — orchestrator not auto-started');
+}
 app.use('/api/v1/autonomy', createAutonomyRoutes({ pool, requireKey, orchestrator: autonomyOrchestrator }));
-logger.info('✅ [AUTONOMY] Orchestrator started + routes mounted at /api/v1/autonomy');
 
 app.use('/api/v1/railway/managed-env', createRailwayManagedEnvRoutes({
   requireKey,
@@ -1807,7 +1811,7 @@ async function start() {
       executionQueue.executeNext();
 
     // Deploy income drones (if not disabled)
-    if (!DISABLE_INCOME_DRONES) {
+    if (!DISABLE_INCOME_DRONES && process.env.LIFEOS_DIRECTED_MODE === 'false') {
       // Note: If EnhancedIncomeDrone is used, drones are already deployed during initialization
       // Only deploy here if using basic IncomeDroneSystem
       if (incomeDroneSystem && incomeDroneSystem.constructor.name === 'IncomeDroneSystem') {
@@ -1822,7 +1826,11 @@ async function start() {
         logger.info('✅ [STARTUP] Income drones already deployed by EnhancedIncomeDrone system');
       }
     } else {
-      logger.info('ℹ️ [STARTUP] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)');
+      logger.info(
+        process.env.LIFEOS_DIRECTED_MODE !== 'false'
+          ? '🛑 [STARTUP] Directed mode active — income drones disabled until explicitly enabled'
+          : 'ℹ️ [STARTUP] Income drones DISABLED (set DISABLE_INCOME_DRONES=false to enable)'
+      );
     }
 
       // Initialize Ollama Installer (auto-install Ollama if needed)

@@ -45,7 +45,12 @@ export class MarketingResearchSystem {
    */
   async initialize() {
     console.log('📚 [MARKETING RESEARCH] Initializing...');
-    
+
+    if (process.env.LIFEOS_DIRECTED_MODE !== 'false') {
+      console.log('🛑 [MARKETING RESEARCH] Directed mode active — manual mode only');
+      return;
+    }
+
     // Start research process
     this.startResearch();
     
