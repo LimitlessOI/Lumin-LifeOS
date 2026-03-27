@@ -9,6 +9,7 @@
   let lastInsurancePreview = null;
   let lastRepairResult = null;
   let lastReimbursementIntelligence = null;
+  let lastPayerPlaybooks = null;
   let lastUnderpayments = null;
   let lastAppeals = null;
   let lastOpsOverview = null;
@@ -51,8 +52,8 @@
     localStorage.setItem('clientcare_assistant_open', String(assistantOpen));
   }
 
-  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals) {
-    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals };
+  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, opsOverview, underpayments, appeals) {
+    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, opsOverview, underpayments, appeals };
   }
 
   function rerender() {
@@ -66,6 +67,7 @@
       lastViewState.actions,
       lastViewState.reconciliation,
       lastViewState.intelligence,
+      lastViewState.payerPlaybooks,
       lastViewState.opsOverview,
       lastViewState.underpayments,
       lastViewState.appeals,
@@ -832,6 +834,34 @@
     `;
   }
 
+  function renderPayerPlaybooks(playbooks) {
+    const summary = playbooks?.summary || {};
+    const items = playbooks?.items || [];
+    return `
+      <div class="stack">
+        <div class="grid four">
+          <div class="card stat"><span>Payers</span><strong>${escapeHtml(summary.total_payers || 0)}</strong></div>
+          <div class="card stat"><span>Commercial</span><strong>${escapeHtml(summary.commercial_payers || 0)}</strong></div>
+          <div class="card stat"><span>Govt</span><strong>${escapeHtml((summary.medicare_payers || 0) + (summary.medicaid_payers || 0))}</strong></div>
+          <div class="card stat"><span>Tracked unpaid</span><strong>${escapeHtml(money(summary.total_unpaid_balance || 0))}</strong></div>
+        </div>
+        <table>
+          <thead><tr><th>Payer</th><th>Avg days</th><th>Top denial</th><th>Recommendation</th></tr></thead>
+          <tbody>
+            ${items.length ? items.slice(0, 10).map((item) => `
+              <tr>
+                <td>${escapeHtml(item.payer_name || '')}</td>
+                <td>${escapeHtml(item.avg_days_to_pay ?? '—')}</td>
+                <td>${escapeHtml(item.top_denial_category || 'unknown')}</td>
+                <td>${escapeHtml(item.recommendations?.[0] || 'Review payer history')}</td>
+              </tr>
+            `).join('') : '<tr><td colspan="4">No payer playbooks yet.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   function renderBrowserOutput(result) {
     if (!result) return '<p class="muted">No browser run yet.</p>';
 
@@ -1019,7 +1049,7 @@
     const root = document.getElementById('app');
     try {
       const query = new URLSearchParams(filters).toString();
-      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals] = await Promise.all([
+      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, payerPlaybooks, opsOverview, underpayments, appeals] = await Promise.all([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
         api('/api/v1/clientcare-billing/claims/import-template'),
@@ -1027,15 +1057,17 @@
         api('/api/v1/clientcare-billing/actions'),
         api('/api/v1/clientcare-billing/reconciliation'),
         api('/api/v1/clientcare-billing/reimbursement-intelligence'),
+        api('/api/v1/clientcare-billing/payer-playbooks?limit=25'),
         api('/api/v1/clientcare-billing/ops/overview'),
         api('/api/v1/clientcare-billing/underpayments?limit=100'),
         api('/api/v1/clientcare-billing/appeals/queue?limit=100'),
       ]);
       lastReimbursementIntelligence = intelligence.intelligence || null;
+      lastPayerPlaybooks = payerPlaybooks || null;
       lastOpsOverview = opsOverview.overview || null;
       lastUnderpayments = underpayments || null;
       lastAppeals = appeals || null;
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastOpsOverview, lastUnderpayments, lastAppeals);
+      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastOpsOverview, lastUnderpayments, lastAppeals);
       await ensureAssistantSession();
       if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
@@ -1555,8 +1587,8 @@
     }
   }
 
-  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals) {
-    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals);
+  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, opsOverview, underpayments, appeals) {
+    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, opsOverview, underpayments, appeals);
     const summary = dashboard.summary || {};
     const liveSummary = lastAccountReport?.summary || null;
     const patientArSummary = opsOverview?.patient_ar?.summary || {};
@@ -1750,6 +1782,10 @@
                   <h3>Appeals Queue</h3>
                   <div id="appeals-queue">${renderAppealsQueue(appeals)}</div>
                 </div>
+                <div class="card">
+                  <h3>Payer Playbooks</h3>
+                  <div id="payer-playbooks">${renderPayerPlaybooks(payerPlaybooks)}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1777,12 +1813,12 @@
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
     document.getElementById('assistant-pin-toggle').addEventListener('click', () => {
       setAssistantPinned(!assistantPinned);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, opsOverview, underpayments, appeals);
       ensureAssistantSession();
     });
     document.getElementById('assistant-open-toggle').addEventListener('click', () => {
       setAssistantOpen(!assistantOpen);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, opsOverview, underpayments, appeals);
       ensureAssistantSession();
     });
     document.getElementById('assistant-input').addEventListener('keydown', (event) => {

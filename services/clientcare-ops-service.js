@@ -516,6 +516,17 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       };
     }
 
+    if (/payer playbook|payer rules|commercial rules|payer-specific/.test(text)) {
+      const playbooks = await billingService.getPayerPlaybooks({ limit: 25 });
+      return {
+        ok: true,
+        type: 'payer_playbooks',
+        reply: 'Here are the current payer-specific playbooks derived from imported denial and payment history.',
+        data: playbooks,
+        suggested_actions: playbooks.items?.slice(0, 5).map((item) => `${item.payer_name}: ${item.recommendations?.[0] || 'Review payer history'}`) || [],
+      };
+    }
+
     if (/era|remit|835|paid claims import|payment history import/.test(text)) {
       return {
         ok: true,

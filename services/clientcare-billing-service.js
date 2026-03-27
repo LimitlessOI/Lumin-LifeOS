@@ -63,6 +63,14 @@ const CLAIM_IMPORT_ALIASES = {
   notes: ['notes', 'note', 'description'],
 };
 
+const PAYMENT_METADATA_ALIASES = {
+  carc_codes: ['carc_codes', 'carc code', 'carc', 'claim_adjustment_reason_code', 'adjustment_reason_code'],
+  rarc_codes: ['rarc_codes', 'rarc code', 'rarc', 'remark_codes', 'remittance_remark_code'],
+  payment_reference: ['payment_reference', 'trace_number', 'eft_trace', 'check_number', 'check number'],
+  payment_method: ['payment_method', 'payment method', 'method', 'payment_type'],
+  paid_date: ['paid_date', 'payment_date', 'payment date', 'check_date', 'era_date', 'remit_date'],
+};
+
 function parseCsvLine(line = '') {
   const values = [];
   let current = '';
@@ -157,12 +165,39 @@ function normalizeArray(value) {
   return [];
 }
 
+function normalizeReasonCodes(value) {
+  return normalizeArray(value).map((item) => String(item || '').trim()).filter(Boolean);
+}
+
+function extractPaymentMetadata(input = {}) {
+  const metadata = {};
+  for (const [target, aliases] of Object.entries(PAYMENT_METADATA_ALIASES)) {
+    const value = findAliasValue(input, aliases);
+    if (value == null || String(value).trim() === '') continue;
+    metadata[target] = /codes$/i.test(target) ? normalizeReasonCodes(value) : String(value).trim();
+  }
+  return metadata;
+}
+
 function normalizeImportedClaim(input = {}) {
   const out = { ...input };
   for (const [target, aliases] of Object.entries(CLAIM_IMPORT_ALIASES)) {
     if (out[target] != null && String(out[target]).trim() !== '') continue;
     const value = findAliasValue(input, aliases);
     if (value != null && String(value).trim() !== '') out[target] = value;
+  }
+
+  out.metadata = {
+    ...(out.metadata || {}),
+    ...extractPaymentMetadata(input),
+  };
+
+  if ((!out.denial_code || String(out.denial_code).trim() === '') && Array.isArray(out.metadata?.carc_codes) && out.metadata.carc_codes.length) {
+    out.denial_code = out.metadata.carc_codes[0];
+  }
+
+  if ((!out.denial_reason || String(out.denial_reason).trim() === '') && Array.isArray(out.metadata?.rarc_codes) && out.metadata.rarc_codes.length) {
+    out.denial_reason = out.metadata.rarc_codes.join(', ');
   }
 
   const billed = money(out.billed_amount);
@@ -182,7 +217,7 @@ function normalizeImportedClaim(input = {}) {
   if (!out.claim_status && paid > 0) out.claim_status = 'paid';
   if (!out.submission_status && paid > 0) out.submission_status = 'paid';
   if (!out.latest_submitted_at && paid > 0) {
-    out.latest_submitted_at = out.paid_date || out.remit_date || out.original_submitted_at || null;
+    out.latest_submitted_at = out.paid_date || out.remit_date || out.metadata?.paid_date || out.original_submitted_at || null;
   }
 
   return out;
@@ -492,6 +527,45 @@ function classifyAppealPlaybook(claim = {}) {
   }
 
   return packet;
+}
+
+function classifyDenialCategory(claim = {}) {
+  const text = `${claim.denial_code || ''} ${claim.denial_reason || ''}`.toLowerCase();
+  if (!text.trim()) return 'unknown';
+  if (/timely|late filing|deadline/.test(text)) return 'timely_filing';
+  if (/auth|authorization|precert|pre-cert/.test(text)) return 'authorization';
+  if (/medical necessity|not medically necessary|clinical/.test(text)) return 'medical_necessity';
+  if (/eligib|member|coverage|subscriber|dob|identity/.test(text)) return 'eligibility';
+  if (/provider|credential|enroll|network|npi|taxonomy/.test(text)) return 'provider_enrollment';
+  if (/modifier|coding|diagnosis|procedure|bundl|duplicate/.test(text)) return 'coding';
+  return 'other';
+}
+
+function buildPayerRecommendations({ payerName, payerType, topDenialCategory, paidClaims, avgDaysToPay }) {
+  const recommendations = [];
+  if (payerType === 'commercial') {
+    recommendations.push('Do not assume a universal filing or appeal window; verify payer-specific rules before escalation.');
+  }
+  if (topDenialCategory === 'authorization') {
+    recommendations.push('Verify authorization workflow and attach approval/support before rebilling or appealing.');
+  }
+  if (topDenialCategory === 'eligibility') {
+    recommendations.push('Check member ID, coverage dates, and primary/secondary payer order before resubmission.');
+  }
+  if (topDenialCategory === 'coding') {
+    recommendations.push('Review modifiers, CPT/ICD pairing, and any duplicate/bundling edits before correcting the claim.');
+  }
+  if (topDenialCategory === 'timely_filing') {
+    recommendations.push('Pull clearinghouse acceptance and prior-submission proof before attempting appeal or exception review.');
+  }
+  if (avgDaysToPay != null) {
+    recommendations.push(`Observed average payment lag is about ${avgDaysToPay} days; use that as the first forecast baseline.`);
+  }
+  if (!paidClaims) {
+    recommendations.push('Import more paid claims or ERA history for this payer before trusting payout and timing forecasts.');
+  }
+  if (!recommendations.length) recommendations.push(`Build a payer-specific playbook for ${payerName || 'this payer'} from the current denial and payment history.`);
+  return recommendations;
 }
 
 function buildAppealLetter(packet = {}, claim = {}, outstandingAmount = 0) {
@@ -938,6 +1012,86 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     };
   }
 
+  async function getPayerPlaybooks({ limit = 25 } = {}) {
+    const { rows } = await pool.query(
+      `SELECT
+         payer_name,
+         COALESCE(NULLIF(payer_type, ''), 'unknown') AS payer_type,
+         COUNT(*)::int AS total_claims,
+         COUNT(*) FILTER (WHERE COALESCE(paid_amount, 0) > 0)::int AS paid_claims,
+         COALESCE(AVG(NULLIF(allowed_amount, 0)) FILTER (WHERE COALESCE(allowed_amount, 0) > 0), 0)::numeric AS avg_allowed,
+         COALESCE(AVG(NULLIF(paid_amount, 0)) FILTER (WHERE COALESCE(paid_amount, 0) > 0), 0)::numeric AS avg_paid,
+         COALESCE(AVG(EXTRACT(EPOCH FROM (latest_submitted_at - original_submitted_at)) / 86400)
+           FILTER (WHERE original_submitted_at IS NOT NULL AND latest_submitted_at IS NOT NULL AND COALESCE(paid_amount, 0) > 0), 0)::numeric AS avg_days_to_pay,
+         COALESCE(SUM(insurance_balance), 0)::numeric AS unpaid_balance
+       FROM clientcare_claims
+       WHERE COALESCE(payer_name, '') <> ''
+       GROUP BY payer_name, COALESCE(NULLIF(payer_type, ''), 'unknown')
+       ORDER BY unpaid_balance DESC, total_claims DESC
+       LIMIT $1`,
+      [Math.max(1, Math.min(Number(limit || 25), 100))]
+    );
+
+    const playbooks = [];
+    for (const row of rows) {
+      const { rows: denialRows } = await pool.query(
+        `SELECT
+           COALESCE(NULLIF(denial_code, ''), NULLIF(denial_reason, ''), 'Unknown') AS denial_key,
+           denial_code,
+           denial_reason,
+           COUNT(*)::int AS count
+         FROM clientcare_claims
+         WHERE payer_name = $1
+           AND (COALESCE(denial_code, '') <> '' OR COALESCE(denial_reason, '') <> '')
+         GROUP BY COALESCE(NULLIF(denial_code, ''), NULLIF(denial_reason, ''), 'Unknown'), denial_code, denial_reason
+         ORDER BY count DESC
+         LIMIT 5`,
+        [row.payer_name]
+      );
+
+      const normalizedDenials = denialRows.map((entry) => ({
+        key: entry.denial_key,
+        denial_code: entry.denial_code,
+        denial_reason: entry.denial_reason,
+        count: Number(entry.count || 0),
+        category: classifyDenialCategory(entry),
+      }));
+
+      const topDenial = normalizedDenials[0] || null;
+      const topCategory = topDenial?.category || 'unknown';
+      playbooks.push({
+        payer_name: row.payer_name,
+        payer_type: row.payer_type,
+        total_claims: Number(row.total_claims || 0),
+        paid_claims: Number(row.paid_claims || 0),
+        unpaid_balance: Number(row.unpaid_balance || 0),
+        avg_allowed: Number(row.avg_allowed || 0),
+        avg_paid: Number(row.avg_paid || 0),
+        avg_days_to_pay: row.avg_days_to_pay ? Number(Number(row.avg_days_to_pay).toFixed(1)) : null,
+        top_denial_category: topCategory,
+        top_denials: normalizedDenials,
+        recommendations: buildPayerRecommendations({
+          payerName: row.payer_name,
+          payerType: row.payer_type,
+          topDenialCategory: topCategory,
+          paidClaims: Number(row.paid_claims || 0),
+          avgDaysToPay: row.avg_days_to_pay ? Number(Number(row.avg_days_to_pay).toFixed(1)) : null,
+        }),
+      });
+    }
+
+    return {
+      summary: {
+        total_payers: playbooks.length,
+        commercial_payers: playbooks.filter((item) => item.payer_type === 'commercial').length,
+        medicare_payers: playbooks.filter((item) => item.payer_type === 'medicare').length,
+        medicaid_payers: playbooks.filter((item) => item.payer_type === 'nevada_medicaid').length,
+        total_unpaid_balance: Number(playbooks.reduce((sum, item) => sum + money(item.unpaid_balance), 0).toFixed(2)),
+      },
+      items: playbooks,
+    };
+  }
+
   async function getUnderpaymentQueue({ limit = 100 } = {}) {
     const { rows } = await pool.query(
       `SELECT
@@ -1191,6 +1345,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     getDashboard,
     buildClaimPlan,
     getReimbursementIntelligence,
+    getPayerPlaybooks,
     getUnderpaymentQueue,
     getAppealsQueue,
     buildAppealPacketPreview,

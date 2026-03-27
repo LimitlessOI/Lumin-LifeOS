@@ -46,6 +46,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/payer-playbooks', async (req, res) => {
+    try {
+      const playbooks = await billingService.getPayerPlaybooks({ limit: req.query?.limit });
+      res.json({ ok: true, ...playbooks });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] payer playbooks failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/underpayments', async (req, res) => {
     try {
       const underpayments = await billingService.getUnderpaymentQueue({ limit: req.query?.limit });

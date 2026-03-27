@@ -111,6 +111,7 @@ Every claim lands in one of these buckets:
 - `POST /api/v1/clientcare-billing/ops/repair-account`
 - `POST /api/v1/clientcare-billing/insurance/verification-preview`
 - `GET /api/v1/clientcare-billing/patient-ar/summary`
+- `GET /api/v1/clientcare-billing/payer-playbooks`
 - `GET /api/v1/clientcare-billing/underpayments`
 - `POST /api/v1/clientcare-billing/underpayments/:claimId/queue-action`
 - `POST /api/v1/clientcare-billing/history/import-csv`
@@ -244,8 +245,10 @@ Operational inputs needed regardless of integration path:
 - Account Recovery Detail must support preview/apply repair actions for billing status, provider type, and payment-status updates with clear before/after feedback.
 - The system must support provider-directed patient AR follow-up and payment-plan monitoring, but debt-collection style workflows remain compliance-gated until legal/licensing review is complete.
 - The system should learn expected payer reimbursement and collection timing from paid claims / ERAs / remits so projected amount and projected date tighten over time instead of staying rescue-bucket-only.
+- Payment-history import should capture ERA/remit metadata such as CARC/RARC, trace/check reference, and paid date so payer learning and denial playbooks are grounded in remittance data rather than only free-text denial reasons.
 - The system should evolve toward underpayment detection, payer playbooks, eligibility verification, and appeals packet preparation because those are core differentiators versus generic billing dashboards.
 - The claims ledger must surface a real underpayment queue so short-paid claims can be reviewed against allowed amount, patient responsibility, and payer payment variance.
 - The claims ledger must also surface an appeals queue and claim-level appeal packet preview so denied or follow-up claims can be worked by playbook instead of ad hoc memory.
 - The underpayment queue and appeals queue must support controlled action queueing so likely recovery work can be turned into tracked follow-up instead of staying dashboard-only.
+- The system must expose payer playbooks derived from actual imported denial/payment history so commercial-plan follow-up is not driven by generic rules alone.
 - Amendment and continuity stay current as the system changes.
