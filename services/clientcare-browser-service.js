@@ -434,6 +434,80 @@ async function extractAllBillingQueueItems(page, { maxPages = 8, pageTimeoutMs =
   return allItems;
 }
 
+function normalizeBillingNoteRecord(record = {}) {
+  const pregnancyId = record.PregnancyID || record.pregnancyID || record.PregnancyId || record.pregnancyId || '';
+  const clientNoteId = record.ClientNoteID || record.clientNoteID || record.ClientNoteId || record.clientNoteId || '';
+  return {
+    date: record.ClientNoteDate ? String(record.ClientNoteDate).slice(0, 10) : '',
+    client: record.ClientName || record.clientName || '',
+    notePreview: String(record.NoteText || record.noteText || '').replace(/\s+/g, ' ').trim().slice(0, 80),
+    by: record.ProviderName || record.CreatedByName || record.CreatedBy || '',
+    forUser: record.NoteForName || record.NoteFor || '',
+    read: String(record.IsRead ?? ''),
+    billingHref: pregnancyId ? `https://clientcarewest.net/Pregnancy/Billing/${pregnancyId}` : '',
+    noteHref: clientNoteId ? `https://clientcarewest.net/Pregnancy/BillingClientNote/${clientNoteId}` : '',
+    raw: record,
+  };
+}
+
+async function captureBillingNotesApiConfig(page, { pageTimeoutMs = 15000 } = {}) {
+  const hits = [];
+  const handler = async (response) => {
+    try {
+      const url = response.url();
+      if (!/\/Home\/GetMidwifeNotesList\//i.test(url)) return;
+      let payload = null;
+      try {
+        payload = await response.json();
+      } catch (_) {
+        // ignore
+      }
+      hits.push({ url, payload });
+    } catch (_) {
+      // ignore
+    }
+  };
+
+  page.on('response', handler);
+  try {
+    const billingHome = new URL('/Home/BillingPartial', page.url() || 'https://clientcarewest.net/').toString();
+    const nav = await gotoWithBudget(page, billingHome, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+    if (!nav.ok) return null;
+    await waitForBillingHome(page, Math.max(5000, Number(pageTimeoutMs) || 15000));
+    await waitForCondition(async () => hits.length > 0, { timeoutMs: Math.max(5000, Number(pageTimeoutMs) || 15000), intervalMs: 500 });
+    return hits[0] || null;
+  } finally {
+    page.off('response', handler);
+  }
+}
+
+async function fetchBillingNotesViaApi(page, apiUrl, { maxPages = 12 } = {}) {
+  if (!apiUrl) return [];
+  const firstUrl = new URL(apiUrl);
+  const firstPageNo = Number(firstUrl.searchParams.get('pageNo') || '1');
+  const pageSize = Number(firstUrl.searchParams.get('PageSize') || firstUrl.searchParams.get('pageSize') || '15');
+
+  const results = [];
+  let totalPages = Math.max(1, firstPageNo);
+  for (let pageNo = firstPageNo; pageNo <= Math.max(firstPageNo, maxPages); pageNo += 1) {
+    const requestUrl = new URL(firstUrl.toString());
+    requestUrl.searchParams.set('pageNo', String(pageNo));
+    requestUrl.searchParams.set('PageSize', String(pageSize));
+    const payload = await page.evaluate(async (href) => {
+      const response = await fetch(href, { credentials: 'include' });
+      return response.json();
+    }, requestUrl.toString()).catch(() => null);
+    if (!payload || payload.success === false) break;
+    const records = Array.isArray(payload.RecordList) ? payload.RecordList : [];
+    if (!records.length) break;
+    results.push(...records);
+    const candidateTotalPages = Number(records[0]?.TotalPages || payload.TotalPages || payload.totalPages || 0);
+    if (candidateTotalPages > 0) totalPages = candidateTotalPages;
+    if (pageNo >= totalPages) break;
+  }
+  return results.map(normalizeBillingNoteRecord);
+}
+
 async function extractBillingNotesDiagnostics(page) {
   return page.evaluate(() => {
     const tables = Array.from(document.querySelectorAll('table'));
@@ -1066,12 +1140,15 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     const result = await login({ dryRun: false });
     const { session } = result;
     try {
-      const billingHome = new URL('/Home/BillingPartial', session.currentUrl()).toString();
-      const nav = await gotoWithBudget(session.page, billingHome, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
-      if (!nav.ok) return { ok: false, error: nav.error };
-      await waitForBillingHome(session.page, Math.max(5000, Number(pageTimeoutMs) || 15000));
+      const apiConfig = await captureBillingNotesApiConfig(session.page, { pageTimeoutMs });
+      if (!apiConfig?.url) {
+        return { ok: false, error: 'Could not capture ClientCare billing notes transport' };
+      }
       const summary = await collectPageSummary(session.page);
-      const queueItems = await extractAllBillingQueueItems(session.page, { maxPages, pageTimeoutMs });
+      const queueItems = await fetchBillingNotesViaApi(session.page, apiConfig.url, { maxPages });
+      if (!queueItems.length) {
+        return { ok: false, error: 'Billing notes transport returned no records', transport: apiConfig.url };
+      }
 
       const grouped = new Map();
       for (const item of queueItems) {
@@ -1148,6 +1225,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
       return {
         ok: true,
+        transport: apiConfig.url,
         dashboardCounts: extractDashboardCounts(summary),
         totalQueueItems: queueItems.length,
         totalAccounts: accounts.length,
