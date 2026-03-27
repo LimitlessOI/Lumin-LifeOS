@@ -106,12 +106,14 @@ async function runAssertion(assertion, manifest) {
     }
 
     case 'route': {
-      // Live route check against Railway if PUBLIC_BASE_URL set, else skip
-      const base = process.env.PUBLIC_BASE_URL || process.env.RAILWAY_PUBLIC_DOMAIN;
-      if (!base) return { ok: null, detail: 'skipped — no PUBLIC_BASE_URL set', skipped: true };
+      const rawBase = process.env.PUBLIC_BASE_URL || process.env.RAILWAY_PUBLIC_DOMAIN;
+      if (!rawBase) return { ok: null, detail: 'skipped — no PUBLIC_BASE_URL set', skipped: true };
+      const base = /^https?:\/\//.test(rawBase) ? rawBase : `https://${rawBase}`;
+      const commandKey = process.env.COMMAND_CENTER_KEY || process.env.API_KEY || process.env.LIFEOS_KEY;
+      const headers = commandKey ? { 'x-command-key': commandKey } : {};
       try {
         const url = `${base.replace(/\/$/, '')}${check}`;
-        const resp = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        const resp = await fetch(url, { headers, signal: AbortSignal.timeout(5000) });
         const ok = resp.status === (expect || 200);
         return { ok, detail: `${check} → ${resp.status} (expected ${expect || 200})` };
       } catch (e) {

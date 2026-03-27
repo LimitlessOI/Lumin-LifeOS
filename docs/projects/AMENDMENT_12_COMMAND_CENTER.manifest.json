@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "stabilization",
-  "next_task": "Build Projects Dashboard panel and Pending Adam panel in C&C UI",
+  "next_task": "Make the overlay mobile-responsive and add role-based access controls",
   "stability_class": "needs-review",
-  "current_focus": "SSOT governance infrastructure + C&C portal stability",
+  "current_focus": "Governance panels are live; next step is mobile responsiveness and access control",
   "owned_files": [
     "routes/command-center-routes.js",
     "public/overlay/command-center.html",

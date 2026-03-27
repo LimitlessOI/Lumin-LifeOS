@@ -9,7 +9,7 @@
 # Run via: node scripts/check-coupling.mjs
 # Or:      conftest test --input <git-diff-json> policy/
 #
-# @ssot docs/projects/AMENDMENT_18_PROJECT_GOVERNANCE.md
+# @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
 
 package main
 

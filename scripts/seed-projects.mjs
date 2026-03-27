@@ -6,7 +6,7 @@
  *
  * Usage: node scripts/seed-projects.mjs [--dry-run]
  *
- * @ssot docs/projects/AMENDMENT_18_PROJECT_GOVERNANCE.md
+ * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  */
 
 import 'dotenv/config';
@@ -29,6 +29,7 @@ const PROJECTS = [
     phase: 'optimization',
     stability_class: 'needs-review',
     amendment_path: 'docs/projects/AMENDMENT_01_AI_COUNCIL.md',
+    manifest_path: 'docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json',
     current_focus: 'Token savings optimization — general/codegen task types at 4% savings vs target 20%+',
     segments: [
       { title: 'Council routing + failover',            status: 'done',        estimated_hours: 8,  actual_hours: 10, stability_class: 'high-risk',    sort_order: 1 },
@@ -57,6 +58,7 @@ const PROJECTS = [
     phase: 'expansion',
     stability_class: 'needs-review',
     amendment_path: 'docs/projects/AMENDMENT_12_COMMAND_CENTER.md',
+    manifest_path: 'docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json',
     current_focus: 'Projects Dashboard panel and Pending Adam panel — just built',
     segments: [
       { title: 'Extract routes to command-center-routes.js', status: 'done',  estimated_hours: 2,  actual_hours: 2,  stability_class: 'safe',         sort_order: 1 },
@@ -82,6 +84,7 @@ const PROJECTS = [
     phase: 'core-infrastructure',
     stability_class: 'needs-review',
     amendment_path: 'docs/projects/AMENDMENT_17_TC_SERVICE.md',
+    manifest_path: 'docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json',
     current_focus: 'First real transaction intake end-to-end (6453 Mahogany Peak)',
     segments: [
       { title: 'TC coordinator — core transaction/deadline/party model', status: 'done', estimated_hours: 8,  actual_hours: 10, stability_class: 'high-risk',   sort_order: 1 },
@@ -112,7 +115,8 @@ const PROJECTS = [
     priority: 'high',
     phase: 'core-infrastructure',
     stability_class: 'needs-review',
-    amendment_path: 'docs/projects/AMENDMENT_18_PROJECT_GOVERNANCE.md',
+    amendment_path: 'docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md',
+    manifest_path: 'docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json',
     current_focus: 'Governance infrastructure live — seed data, C&C panels, CI pipeline',
     segments: [
       { title: 'DB schema (projects, segments, estimation_log, pending_adam)', status: 'done', estimated_hours: 3, actual_hours: 3, stability_class: 'safe', sort_order: 1 },
@@ -126,10 +130,10 @@ const PROJECTS = [
       { title: 'manifest.schema.json — JSON Schema draft-07',             status: 'done', estimated_hours: 1,  actual_hours: 1,  stability_class: 'safe',         sort_order: 9 },
       { title: 'AMENDMENT_01, 12, 17 upgraded to full template',         status: 'done', estimated_hours: 3,  actual_hours: 4,  stability_class: 'safe',         sort_order: 10 },
       { title: 'C&C Projects Dashboard + Pending Adam panels',            status: 'done', estimated_hours: 6,  actual_hours: 5,  stability_class: 'needs-review', sort_order: 11 },
-      { title: 'Seed projects + segments into DB',                        status: 'pending', estimated_hours: 1,  stability_class: 'safe', is_next_task: true, sort_order: 12 },
-      { title: 'AMENDMENT_18 created for governance system itself',       status: 'pending', estimated_hours: 1,  stability_class: 'safe',         sort_order: 13 },
+      { title: 'Seed projects + segments into DB',                        status: 'done', estimated_hours: 1,  actual_hours: 1, stability_class: 'safe', sort_order: 12 },
+      { title: 'AMENDMENT_19 created for governance system itself',       status: 'done', estimated_hours: 1, actual_hours: 1, stability_class: 'safe', sort_order: 13 },
       { title: 'Upgrade remaining amendments to full template',           status: 'pending', estimated_hours: 4,  stability_class: 'safe',         sort_order: 14 },
-      { title: 'Wire estimation accuracy to C&C accuracy panel',          status: 'pending', estimated_hours: 2,  stability_class: 'safe',         sort_order: 15 },
+      { title: 'Wire estimation accuracy to C&C accuracy panel',          status: 'pending', estimated_hours: 2,  stability_class: 'safe',         is_next_task: true, sort_order: 15 },
     ],
   },
 ];
@@ -158,8 +162,8 @@ async function seed() {
       const { rows: [project] } = await client.query(`
         INSERT INTO projects (
           slug, name, lifecycle, status, priority, phase, stability_class,
-          amendment_path, current_focus, total_segments, completed_segments, last_worked_on
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,NOW())
+          amendment_path, manifest_path, current_focus, total_segments, completed_segments, last_worked_on
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,NOW())
         ON CONFLICT (slug) DO UPDATE SET
           name = EXCLUDED.name,
           lifecycle = EXCLUDED.lifecycle,
@@ -168,12 +172,13 @@ async function seed() {
           phase = EXCLUDED.phase,
           stability_class = EXCLUDED.stability_class,
           amendment_path = EXCLUDED.amendment_path,
+          manifest_path = EXCLUDED.manifest_path,
           current_focus = EXCLUDED.current_focus,
           total_segments = EXCLUDED.total_segments,
           completed_segments = EXCLUDED.completed_segments
         RETURNING id, slug
       `, [p.slug, p.name, p.lifecycle, p.status, p.priority, p.phase, p.stability_class,
-          p.amendment_path, p.current_focus, totalSegs, doneSegs]);
+          p.amendment_path, p.manifest_path, p.current_focus, totalSegs, doneSegs]);
 
       projectsUpserted++;
 

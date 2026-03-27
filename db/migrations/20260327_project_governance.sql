@@ -1,6 +1,6 @@
 -- ============================================================
 -- Project Governance System
--- Amendment: docs/projects/AMENDMENT_18_PROJECT_GOVERNANCE.md
+-- Amendment: docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
 --
 -- Tables:
 --   projects          — one row per active project, links to SSOT amendment

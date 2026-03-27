@@ -31,11 +31,12 @@
 /public/overlay/command-center.js    @adamhopkins
 /public/overlay/index.html           @adamhopkins
 
-# ── Project Governance (AMENDMENT_18) ─────────────────────────────────────
+# ── Project Governance (AMENDMENT_19) ─────────────────────────────────────
 /routes/project-governance-routes.js @adamhopkins
 /scripts/verify-project.mjs          @adamhopkins
 /scripts/ssot-staleness-check.mjs    @adamhopkins
 /scripts/check-coupling.mjs          @adamhopkins
+/scripts/seed-projects.mjs           @adamhopkins
 /db/migrations/*project_governance*  @adamhopkins
 /policy/ssot-coupling.rego           @adamhopkins
 
