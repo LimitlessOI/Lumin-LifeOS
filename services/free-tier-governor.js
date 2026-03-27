@@ -21,45 +21,47 @@
  * Exports: createFreeTierGovernor({ pool? }) → { canUse, record, markExhausted, getStatus, ... }
  */
 
-// Daily limits — set 10% below actual free limit as safety buffer
+// Daily limits — set 3% below actual free limit as safety buffer (down from 10%)
+// Rationale: we have no billing set up, so hitting limits = access revoked.
+// 3% is enough to avoid accidental overrun while giving maximum usable headroom.
 const PROVIDER_LIMITS = {
   groq: {
-    dailyRequests: 13000,   // actual: 14,400 — buffer: 1,400
-    rpm: 28,                 // actual: 30 — buffer: 2
+    dailyRequests: 13950,   // actual: 14,400 — buffer: 450 (3%)
+    rpm: 29,                 // actual: 30 — buffer: 1
     dailyTokens: null,
     councilMembers: ['groq_llama', 'groq_deepseek', 'groq'],
     label: 'Groq',
   },
   gemini: {
-    dailyRequests: 1350,    // actual: 1,500 — buffer: 150
-    rpm: 13,                 // actual: 15 — buffer: 2
-    dailyTokens: 900000,    // actual: 1,000,000 — buffer: 100k
+    dailyRequests: 1455,    // actual: 1,500 — buffer: 45 (3%)
+    rpm: 14,                 // actual: 15 — buffer: 1
+    dailyTokens: 970000,    // actual: 1,000,000 — buffer: 30k (3%)
     councilMembers: ['gemini', 'gemini_flash', 'gemini-2.0-flash'],
     label: 'Gemini Flash',
   },
   cerebras: {
-    dailyRequests: 900,
-    rpm: 28,
+    dailyRequests: 970,     // actual: ~1,000 — buffer: 30 (3%)
+    rpm: 29,
     dailyTokens: null,
     councilMembers: ['cerebras', 'cerebras_llama'],
     label: 'Cerebras',
   },
   openrouter: {
-    dailyRequests: 180,
+    dailyRequests: 195,     // actual: ~200 — buffer: 5 (3%)
     rpm: 10,
     dailyTokens: null,
     councilMembers: ['openrouter', 'openrouter_free'],
     label: 'OpenRouter (free)',
   },
   mistral: {
-    dailyRequests: 450,
-    rpm: 8,
+    dailyRequests: 485,     // actual: ~500 — buffer: 15 (3%)
+    rpm: 9,
     dailyTokens: null,
     councilMembers: ['mistral', 'mistral_free'],
     label: 'Mistral (free)',
   },
   together: {
-    dailyRequests: 900,
+    dailyRequests: 970,     // actual: ~1,000 — buffer: 30 (3%)
     rpm: 15,
     dailyTokens: null,
     councilMembers: ['together', 'together_free'],
@@ -244,14 +246,14 @@ export function createFreeTierGovernor({ pool = null } = {}) {
     }
 
     if (limits.dailyRequests !== null) {
-      const cap = Math.floor(limits.dailyRequests * 0.9);
+      const cap = Math.floor(limits.dailyRequests * 0.97);
       if (usage.requests >= cap) {
         console.log(`📊 [FREE-TIER] ${limits.label} at ${usage.requests}/${limits.dailyRequests} req — skip`);
         return false;
       }
     }
 
-    if (limits.dailyTokens !== null && usage.tokens >= limits.dailyTokens * 0.9) {
+    if (limits.dailyTokens !== null && usage.tokens >= limits.dailyTokens * 0.97) {
       console.log(`📊 [FREE-TIER] ${limits.label} token limit approached (${usage.tokens}/${limits.dailyTokens}) — skip`);
       return false;
     }
