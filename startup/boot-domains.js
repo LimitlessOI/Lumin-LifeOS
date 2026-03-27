@@ -20,6 +20,10 @@
 // ── GLVAR Monitor (dues + violations) ────────────────────────────────────────
 async function bootGLVARMonitor(deps) {
   const { pool, logger, notificationService, accountManager } = deps;
+  if (process.env.LIFEOS_DIRECTED_MODE === 'true' || process.env.PAUSE_AUTONOMY === '1') {
+    logger.info?.('[BOOT] GLVAR monitor skipped — directed mode active');
+    return;
+  }
   try {
     const { createGLVARMonitor } = await import('../services/glvar-monitor.js');
     const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
@@ -36,6 +40,10 @@ async function bootGLVARMonitor(deps) {
 // ── Email Triage (inbox scanning + daily digest) ──────────────────────────────
 async function bootEmailTriage(deps) {
   const { pool, logger, notificationService, callCouncilMember, accountManager } = deps;
+  if (process.env.LIFEOS_DIRECTED_MODE === 'true' || process.env.PAUSE_AUTONOMY === '1') {
+    logger.info?.('[BOOT] Email triage skipped — directed mode active');
+    return;
+  }
   try {
     const { createEmailTriage } = await import('../services/email-triage.js');
     const triage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
@@ -49,6 +57,10 @@ async function bootEmailTriage(deps) {
 // ── TC Deadline Cron ──────────────────────────────────────────────────────────
 async function bootTCDeadlineCron(deps) {
   const { logger, tcCoordinator } = deps;
+  if (process.env.LIFEOS_DIRECTED_MODE === 'true' || process.env.PAUSE_AUTONOMY === '1') {
+    logger.info?.('[BOOT] TC deadline cron skipped — directed mode active');
+    return;
+  }
   try {
     if (!tcCoordinator) {
       logger.warn?.('[BOOT] TC deadline cron skipped — tcCoordinator missing');
