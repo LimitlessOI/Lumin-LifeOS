@@ -6,7 +6,9 @@
 (function () {
   let lastAccountReport = null;
   let selectedAccountIndex = 0;
+  let lastInsurancePreview = null;
   let lastReimbursementIntelligence = null;
+  let lastOpsOverview = null;
   let lastBrowserResult = null;
   let lastViewState = null;
   let fullQueueHydrated = false;
@@ -46,8 +48,8 @@
     localStorage.setItem('clientcare_assistant_open', String(assistantOpen));
   }
 
-  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence) {
-    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence };
+  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview) {
+    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview };
   }
 
   function rerender() {
@@ -61,6 +63,7 @@
       lastViewState.actions,
       lastViewState.reconciliation,
       lastViewState.intelligence,
+      lastViewState.opsOverview,
     );
     void ensureAssistantSession();
   }
@@ -516,7 +519,10 @@
           <div class="card" style="padding:12px; background:#0f1528;">
             <div class="account-card-top">
               <strong>${escapeHtml(playbook.title || '')}</strong>
-              <span class="badge ${badgeClass(playbook.count > 10 ? 'warn' : 'ok')}">${escapeHtml(`${playbook.count} accounts`)}</span>
+              <div class="row-actions">
+                <span class="badge ${badgeClass(playbook.count > 10 ? 'warn' : 'ok')}">${escapeHtml(`${playbook.count} accounts`)}</span>
+                <button class="ghost" data-run-workflow="${escapeHtml(playbook.id || '')}">Run</button>
+              </div>
             </div>
             <ol class="detail-list" style="margin-left:18px;">
               ${(playbook.steps || []).map((step) => `<li>${escapeHtml(step)}</li>`).join('')}
@@ -538,6 +544,123 @@
           </div>
         `).join('') : '<p class="muted">Run Full Queue Report to build workflow groups.</p>'}
       </div>
+    `;
+  }
+
+  function renderInsuranceIntakeRule(opsOverview) {
+    const rule = opsOverview?.insurance_intake_rule || null;
+    if (!rule) return '<p class="muted">No insurance intake rule loaded yet.</p>';
+    return `
+      <div class="stack">
+        <p>${escapeHtml(rule.rule || '')}</p>
+        <p class="muted">${escapeHtml(rule.note || '')}</p>
+        ${renderKeyValueTable([
+          { label: 'Target', value: rule.target || 'Not set' },
+          { label: 'Required fields', value: (rule.required_fields || []).join(', ') || 'none' },
+        ])}
+        <div class="card" style="padding:12px; background:#0f1528;">
+          <strong>Preview endpoint</strong>
+          <p class="muted" style="margin-top:8px">Use `/api/v1/clientcare-billing/insurance/verification-preview` to check take/review/do-not-schedule decisions before accepting insurance clients.</p>
+        </div>
+        <div class="card" style="padding:12px; background:#0f1528;">
+          <strong>Verification preview</strong>
+          <div class="grid two" style="margin-top:12px;">
+            <input id="insurance-payer-name" placeholder="Payer name">
+            <input id="insurance-member-id" placeholder="Member ID">
+            <input id="insurance-billed-amount" type="number" min="0" step="0.01" placeholder="Billed amount">
+            <input id="insurance-copay" type="number" min="0" step="0.01" placeholder="Copay">
+            <input id="insurance-deductible" type="number" min="0" step="0.01" placeholder="Deductible remaining">
+            <input id="insurance-coinsurance" type="number" min="0" step="1" placeholder="Coinsurance %">
+            <select id="insurance-coverage-active">
+              <option value="">Coverage status</option>
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+            <select id="insurance-in-network">
+              <option value="">Network status</option>
+              <option value="true">In network</option>
+              <option value="false">Out of network</option>
+            </select>
+            <select id="insurance-auth-required">
+              <option value="">Authorization</option>
+              <option value="true">Required</option>
+              <option value="false">Not required</option>
+            </select>
+          </div>
+          <div style="margin-top:10px"><button id="insurance-preview-run">Run preview</button></div>
+          <div id="insurance-preview-output" style="margin-top:12px;">
+            ${lastInsurancePreview ? `
+              <div class="stack">
+                ${renderKeyValueTable([
+                  { label: 'Decision', value: lastInsurancePreview.decision || 'review' },
+                  { label: 'Confidence', value: lastInsurancePreview.confidence || 'low' },
+                  { label: 'Estimated insurer payment', value: money(lastInsurancePreview.estimated_insurance_payment || 0) },
+                  { label: 'Estimated patient responsibility', value: money(lastInsurancePreview.estimated_patient_responsibility || 0) },
+                ])}
+                <div><strong>Reasons</strong><ul class="detail-list">${(lastInsurancePreview.reasons || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>No reasons returned.</li>'}</ul></div>
+                <div><strong>Missing</strong><ul class="detail-list">${(lastInsurancePreview.missing || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>No missing fields.</li>'}</ul></div>
+              </div>
+            ` : '<p class="muted">Run a preview to see take/review/do-not-schedule guidance.</p>'}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderPatientArSummary(opsOverview) {
+    const patientAr = opsOverview?.patient_ar || null;
+    const summary = patientAr?.summary || {};
+    const topAccounts = patientAr?.top_accounts || [];
+    return `
+      <div class="stack">
+        <div class="grid four" style="margin-bottom:0">
+          <div class="card stat"><span>Patient AR</span><strong>${escapeHtml(money(summary.total_balance || 0))}</strong></div>
+          <div class="card stat"><span>Accounts</span><strong>${escapeHtml(summary.total_accounts || 0)}</strong></div>
+          <div class="card stat"><span>61-90</span><strong>${escapeHtml(money(summary.balance_61_90 || 0))}</strong></div>
+          <div class="card stat"><span>90+</span><strong>${escapeHtml(money(summary.balance_90_plus || 0))}</strong></div>
+        </div>
+        <div>
+          <strong>Top patient balances</strong>
+          <table>
+            <thead><tr><th>Patient</th><th>Payer</th><th>Age</th><th>Balance</th></tr></thead>
+            <tbody>
+              ${topAccounts.length ? topAccounts.map((item) => `
+                <tr>
+                  <td>${escapeHtml(item.patient_name || '')}</td>
+                  <td>${escapeHtml(item.payer_name || '')}</td>
+                  <td>${escapeHtml(item.age_bucket || '')}</td>
+                  <td>${escapeHtml(money(item.patient_balance || 0))}</td>
+                </tr>
+              `).join('') : '<tr><td colspan="4">No patient balances imported yet.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <strong>Recommendations</strong>
+          <ul class="detail-list">
+            ${(patientAr?.recommendations || ['No patient AR recommendations yet.']).map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderCapabilityQueue(opsOverview) {
+    const requests = opsOverview?.open_capability_requests || [];
+    return `
+      <table>
+        <thead><tr><th>Request</th><th>Priority</th><th>Status</th><th>Requested by</th></tr></thead>
+        <tbody>
+          ${requests.length ? requests.map((item) => `
+            <tr>
+              <td>${escapeHtml(item.request_text || '')}</td>
+              <td><span class="badge ${badgeClass(item.priority)}">${escapeHtml(item.priority || 'normal')}</span></td>
+              <td>${escapeHtml(item.status || '')}</td>
+              <td>${escapeHtml(item.requested_by || '')}</td>
+            </tr>
+          `).join('') : '<tr><td colspan="4">No queued capability requests.</td></tr>'}
+        </tbody>
+      </table>
     `;
   }
 
@@ -728,7 +851,7 @@
     const root = document.getElementById('app');
     try {
       const query = new URLSearchParams(filters).toString();
-      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence] = await Promise.all([
+      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, opsOverview] = await Promise.all([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
         api('/api/v1/clientcare-billing/claims/import-template'),
@@ -736,9 +859,11 @@
         api('/api/v1/clientcare-billing/actions'),
         api('/api/v1/clientcare-billing/reconciliation'),
         api('/api/v1/clientcare-billing/reimbursement-intelligence'),
+        api('/api/v1/clientcare-billing/ops/overview'),
       ]);
       lastReimbursementIntelligence = intelligence.intelligence || null;
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence);
+      lastOpsOverview = opsOverview.overview || null;
+      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastOpsOverview);
       await ensureAssistantSession();
       if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
@@ -1052,6 +1177,49 @@
     }
   }
 
+  async function runInsurancePreview() {
+    try {
+      const parseBool = (value) => value === 'true' ? true : value === 'false' ? false : null;
+      const payload = {
+        payer_name: document.getElementById('insurance-payer-name')?.value || '',
+        member_id: document.getElementById('insurance-member-id')?.value || '',
+        billed_amount: Number(document.getElementById('insurance-billed-amount')?.value || 0) || null,
+        copay: Number(document.getElementById('insurance-copay')?.value || 0) || null,
+        deductible_remaining: Number(document.getElementById('insurance-deductible')?.value || 0) || null,
+        coinsurance_pct: Number(document.getElementById('insurance-coinsurance')?.value || 0) || null,
+        coverage_active: parseBool(document.getElementById('insurance-coverage-active')?.value || ''),
+        in_network: parseBool(document.getElementById('insurance-in-network')?.value || ''),
+        auth_required: parseBool(document.getElementById('insurance-auth-required')?.value || ''),
+      };
+      const result = await api('/api/v1/clientcare-billing/insurance/verification-preview', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      lastInsurancePreview = result.preview || null;
+      rerender();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function runWorkflow(workflowId) {
+    try {
+      const result = await api('/api/v1/clientcare-billing/ops/run-workflow', {
+        method: 'POST',
+        body: JSON.stringify({ workflow_id: workflowId, requested_by: 'overlay' }),
+      });
+      const lines = [
+        result.reply || 'Workflow loaded.',
+        '',
+        ...(result.workflow?.steps || []),
+      ].filter(Boolean);
+      alert(lines.join('\n'));
+      await browserBacklogSummary({ silent: true });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function showClaim(id) {
     try {
       const plan = await api(`/api/v1/clientcare-billing/claims/${id}`);
@@ -1070,10 +1238,11 @@
     }
   }
 
-  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence) {
-    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence);
+  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview) {
+    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview);
     const summary = dashboard.summary || {};
     const liveSummary = lastAccountReport?.summary || null;
+    const patientArSummary = opsOverview?.patient_ar?.summary || {};
     const forecastBuckets = intelligence?.collection_forecast?.timing_buckets || [];
     const bucket30 = forecastBuckets.find((b) => b.label === '0-30 days');
     const bucket60 = forecastBuckets.find((b) => b.label === '31-60 days');
@@ -1084,8 +1253,8 @@
       { label: 'Projected 60d', value: liveSummary ? money(bucket60?.amount || 0) : 'Loading…' },
       { label: 'Strong/possible', value: liveSummary ? ((liveSummary.recoveryBandCounts?.strong || 0) + (liveSummary.recoveryBandCounts?.possible || 0)) : 'Loading…' },
       { label: 'Insurance setup', value: liveSummary ? (liveSummary.diagnosisCounts?.insurance_setup_issue || 0) : 'Loading…' },
-      { label: 'Missing insurance', value: liveSummary ? (liveSummary.missingInsurer || 0) : 'Loading…' },
-      { label: 'Oldest account age', value: liveSummary ? (liveSummary.oldestAccounts?.[0]?.oldestNoteDate || '—') : 'Loading…' },
+      { label: 'Patient AR', value: escapeHtml(money(patientArSummary.total_balance || 0)) },
+      { label: '90+ patient AR', value: escapeHtml(money(patientArSummary.balance_90_plus || 0)) },
     ];
 
     const claimRows = claims.map((claim) => `
@@ -1216,10 +1385,17 @@
               <h2>Collections Forecast</h2>
               <p class="hint" style="margin:10px 0">Projection improves as paid claims, ERAs, and remits are imported.</p>
               <div id="reimbursement-intelligence">${renderReimbursementIntelligence(intelligence)}</div>
+              <hr style="border-color:#27304a; margin:16px 0;">
+              <h3>Patient AR</h3>
+              <div id="patient-ar-summary">${renderPatientArSummary(opsOverview)}</div>
             </div>
             <div class="card">
               <h2>Claims Ledger</h2>
               <div class="stack">
+                <div class="card">
+                  <h3>Insurance Intake Rule</h3>
+                  <div id="insurance-intake-rule">${renderInsuranceIntakeRule(opsOverview)}</div>
+                </div>
                 <div class="card">
                   <h3>Reconciliation</h3>
                   ${renderReconciliation(reconciliation)}
@@ -1241,6 +1417,10 @@
                 <div class="card" id="claim-plan">
                   <h3>Claim plan</h3>
                   <p class="muted">Select a claim to inspect its filing rule, rescue bucket, and recommended actions.</p>
+                </div>
+                <div class="card">
+                  <h3>Capability Queue</h3>
+                  <div id="capability-queue">${renderCapabilityQueue(opsOverview)}</div>
                 </div>
               </div>
             </div>
@@ -1268,17 +1448,19 @@
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
     document.getElementById('assistant-pin-toggle').addEventListener('click', () => {
       setAssistantPinned(!assistantPinned);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview);
       ensureAssistantSession();
     });
     document.getElementById('assistant-open-toggle').addEventListener('click', () => {
       setAssistantOpen(!assistantOpen);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview);
       ensureAssistantSession();
     });
     document.getElementById('assistant-input').addEventListener('keydown', (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') sendAssistantMessage();
     });
+    const insurancePreviewButton = document.getElementById('insurance-preview-run');
+    if (insurancePreviewButton) insurancePreviewButton.addEventListener('click', runInsurancePreview);
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));
@@ -1286,6 +1468,7 @@
     if (lastBrowserResult) setBrowserOutput(lastBrowserResult);
     const workflowNode = document.getElementById('workflow-playbooks');
     if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
+    root.querySelectorAll('[data-run-workflow]').forEach((button) => button.addEventListener('click', () => runWorkflow(button.getAttribute('data-run-workflow'))));
   }
 
   loadDashboard();

@@ -69,6 +69,7 @@
 - TC Asana sync now also carries unsent communications and analyzed interactions into the ops surface so human follow-up work does not drift out of canonical state.
 - ClientCare Collections Control Center now auto-hydrates the live backlog into the KPI strip and account board, instead of leaving the top row tied to the empty local claim ledger.
 - ClientCare operator chat is now explicitly `Operations Assistant` with pinned/unpinned behavior, and the overlay layout is split into overview, accounts needing action, account recovery detail, and collapsible tools.
+- ClientCare billing now has a first actionable ops layer: optimization checklist, patient AR summary, insurance-verification preview, workflow runner, capability queue, and assistant routing through `clientcare-ops-service` instead of raw chat-only behavior.
 - `server.js` route composition has been reduced again: runtime route wiring now lives in `startup/register-runtime-routes.js`, and domain startup calls now go through `startup/boot-domains.js` instead of inline IIFEs.
 - Project governance is now a first-class amendment (`AMENDMENT_19_PROJECT_GOVERNANCE.md`) with tracked manifest, migration, verifier scripts, CI workflow, and a seed script for populating the governance tables from amendment build plans.
 - Project governance is now seeded in the real DB and the live governance endpoints (`/api/v1/projects`, `/api/v1/pending-adam`, `/api/v1/estimation/accuracy`) are verified against production; next work is wiring estimation accuracy and drill-downs into the Command Center.

@@ -8,6 +8,7 @@ import express from 'express';
 import { randomUUID } from 'crypto';
 import { createClientCareBillingService } from '../services/clientcare-billing-service.js';
 import { createClientCareBrowserService } from '../services/clientcare-browser-service.js';
+import { createClientCareOpsService } from '../services/clientcare-ops-service.js';
 import { createClientCareSyncService } from '../services/clientcare-sync-service.js';
 import { createConversationStore } from '../services/conversation-store.js';
 
@@ -16,6 +17,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   const billingService = createClientCareBillingService({ pool, logger });
   const syncService = createClientCareSyncService({ billingService, logger });
   const browserService = createClientCareBrowserService({ logger, syncService });
+  const opsService = createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember, logger });
   const conversationStore = createConversationStore(pool);
 
   router.use(express.json({ limit: '5mb' }));
@@ -40,6 +42,85 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, intelligence });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] reimbursement intelligence failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/ops/overview', async (_req, res) => {
+    try {
+      const overview = await opsService.buildOperationsOverview();
+      res.json({ ok: true, overview });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] ops overview failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/ops/checklist', async (_req, res) => {
+    try {
+      const checklist = await opsService.getOptimizationChecklist();
+      res.json({ ok: true, checklist });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] ops checklist failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/ops/capability-requests', async (req, res) => {
+    try {
+      const requests = await opsService.listCapabilityRequests({
+        status: req.query?.status || null,
+        limit: req.query?.limit,
+      });
+      res.json({ ok: true, requests });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] capability request list failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.patch('/ops/capability-requests/:id', async (req, res) => {
+    try {
+      const request = await opsService.updateCapabilityRequest(req.params.id, req.body || {});
+      if (!request) return res.status(404).json({ ok: false, error: 'Capability request not found or no patch fields supplied' });
+      res.json({ ok: true, request });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] capability request update failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/ops/run-workflow', async (req, res) => {
+    try {
+      const workflowId = String(req.body?.workflow_id || '').trim();
+      if (!workflowId) return res.status(400).json({ ok: false, error: 'workflow_id required' });
+      const result = await opsService.runWorkflow(workflowId, {
+        requestedBy: String(req.body?.requested_by || 'overlay'),
+      });
+      if (!result.ok) return res.status(404).json(result);
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] run workflow failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/insurance/verification-preview', async (req, res) => {
+    try {
+      const preview = await opsService.getInsuranceVerificationPreview(req.body || {});
+      res.json({ ok: true, preview });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] insurance verification preview failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/patient-ar/summary', async (_req, res) => {
+    try {
+      const summary = await opsService.getPatientArSummary();
+      res.json({ ok: true, summary });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] patient AR summary failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });
@@ -262,43 +343,19 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const message = String(req.body?.message || '').trim();
       if (!sessionId) return res.status(400).json({ ok: false, error: 'session_id required' });
       if (!message) return res.status(400).json({ ok: false, error: 'message required' });
-      if (!callCouncilMember) return res.status(503).json({ ok: false, error: 'AI not available' });
-
       const existing = await conversationStore.get(sessionId);
       if (!existing) return res.status(404).json({ ok: false, error: 'Session not found' });
-
       const priorMessages = Array.isArray(existing.messages) ? existing.messages : [];
-      const transcript = priorMessages
-        .slice(-16)
-        .map((m) => `${String(m.role || '').toUpperCase()}: ${String(m.content || '').slice(0, 800)}`)
-        .join('\n\n');
-
-      const prompt = `You are the ClientCare billing operations assistant for LifeOS.\n\nYou help Sherry operate billing, collections, insurance verification, and system customization requests. If a request is only useful for one user, scope it as personal. If it should improve the whole system, scope it as shared. Do not claim a system change was applied unless it was actually executed. Give direct, operational answers.\n\nReturn strict JSON:\n{\n  \"reply\": \"plain-language response for Sherry\",\n  \"intent\": \"question|workflow_change|system_change|customization|report_request\",\n  \"scope\": \"personal|shared|unclear\",\n  \"should_apply_systemwide\": true,\n  \"suggested_actions\": [\"step 1\"],\n  \"notes\": [\"short note\"]\n}\n\nRecent context:\n${transcript || 'No prior context.'}\n\nUser message:\n${message}`;
-
-      const raw = await callCouncilMember('claude', prompt, {
-        taskType: 'json',
-        skipKnowledge: true,
-        maxTokens: 700,
-        allowModelDowngrade: true,
-      });
-      const text = typeof raw === 'string' ? raw : raw?.content || JSON.stringify(raw);
-      let parsed;
-      try {
-        const match = text.match(/\{[\s\S]*\}/);
-        parsed = match ? JSON.parse(match[0]) : null;
-      } catch {
-        parsed = null;
-      }
-      if (!parsed) {
-        parsed = {
-          reply: text,
-          intent: 'question',
-          scope: 'unclear',
-          should_apply_systemwide: false,
-          suggested_actions: [],
-          notes: [],
-        };
-      }
+      const result = await opsService.ask(message, { requestedBy: 'sherry_console' });
+      const parsed = {
+        reply: result.reply || result.error || 'No response generated.',
+        intent: result.type || 'question',
+        scope: result.scope || 'unclear',
+        should_apply_systemwide: Boolean(result.should_apply_systemwide),
+        suggested_actions: result.suggested_actions || [],
+        notes: result.notes || [],
+        data: result.data || null,
+      };
 
       const messages = [
         ...priorMessages.map((m) => ({
@@ -308,7 +365,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
           metadata: m.metadata,
         })),
         { role: 'user', content: message, timestamp: new Date().toISOString(), metadata: { channel: 'clientcare_billing_overlay' } },
-        { role: 'assistant', content: parsed.reply, timestamp: new Date().toISOString(), metadata: { intent: parsed.intent, scope: parsed.scope, should_apply_systemwide: parsed.should_apply_systemwide, suggested_actions: parsed.suggested_actions || [], notes: parsed.notes || [] } },
+        { role: 'assistant', content: parsed.reply, timestamp: new Date().toISOString(), metadata: { intent: parsed.intent, scope: parsed.scope, should_apply_systemwide: parsed.should_apply_systemwide, suggested_actions: parsed.suggested_actions || [], notes: parsed.notes || [], data: parsed.data } },
       ];
 
       const archivedCount = Math.max(0, messages.length - 16);

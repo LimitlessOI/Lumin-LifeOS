@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-26
+**Last Updated:** 2026-03-27
 
 ---
 
@@ -12,6 +12,10 @@ A billing-recovery and revenue-cycle operating system built around ClientCare We
 2. **Fallback path:** browser-assisted operations against our own ClientCare account, with exports/imports and human approval gates.
 
 The immediate mission is not generic billing software. It is to **rescue unpaid claims already earned**, prevent additional claims from aging out, and give Sherry a controlled work queue with clear next actions.
+
+This now expands into two linked lanes:
+- **Insurance Recovery OS** — eligibility, claims, denials, underpayments, ERA/remits, appeals, collections forecast
+- **Patient AR OS** — payment-plan monitoring, past-due balance work queue, provider-directed escalation, and controlled outreach
 
 ---
 
@@ -88,15 +92,24 @@ Every claim lands in one of these buckets:
 |------|---------|
 | `services/clientcare-billing-service.js` | Claim classification, rescue planning, dashboard summaries |
 | `services/clientcare-browser-service.js` | No-API browser-readiness contract, login automation, and page discovery |
+| `services/clientcare-ops-service.js` | Operations checklist, assistant execution layer, insurance-intake preview, patient AR summary |
 | `services/clientcare-sync-service.js` | Snapshot parsing, fallback import, and reconciliation logic |
 | `routes/clientcare-billing-routes.js` | Operational API for imports, classification, rescue queue, browser readiness |
 | `public/clientcare-billing/overlay.html` | Operator overlay page for claims rescue |
 | `public/clientcare-billing/clientcare-billing.js` | Overlay UI logic for import, queue review, and claim planning |
 | `db/migrations/20260326_clientcare_billing.sql` | Claims + action tables |
+| `db/migrations/20260326_clientcare_ops.sql` | Capability queue for requested billing/system improvements |
 
 ### Endpoints
 - `GET /api/v1/clientcare-billing/dashboard`
 - `GET /api/v1/clientcare-billing/clientcare/readiness`
+- `GET /api/v1/clientcare-billing/ops/overview`
+- `GET /api/v1/clientcare-billing/ops/checklist`
+- `GET /api/v1/clientcare-billing/ops/capability-requests`
+- `PATCH /api/v1/clientcare-billing/ops/capability-requests/:id`
+- `POST /api/v1/clientcare-billing/ops/run-workflow`
+- `POST /api/v1/clientcare-billing/insurance/verification-preview`
+- `GET /api/v1/clientcare-billing/patient-ar/summary`
 - `POST /api/v1/clientcare-billing/browser/login-test`
 - `POST /api/v1/clientcare-billing/browser/discover`
 - `POST /api/v1/clientcare-billing/browser/extract-claims`
@@ -119,6 +132,9 @@ Canonical claim ledger for imported/exported billing data.
 
 #### `clientcare_claim_actions`
 Per-claim action queue: submit, resubmit, call payer, request proof, appeal, etc.
+
+#### `clientcare_capability_requests`
+Queue of requested assistant/system capabilities that are not yet fully automated.
 
 ---
 
@@ -179,7 +195,8 @@ Operational inputs needed regardless of integration path:
 - ClientCare has not yet confirmed whether private API/webhook access exists.
 - Payer list for the 90 claims is not yet in-repo.
 - Claim exports have not yet been ingested.
-- Browser selectors/workflows cannot be finalized until we see the actual ClientCare billing screens.
+- Paid claims / ERA / remit history has not been imported, so payout/date forecasting is still low-confidence.
+- Browser selectors for read paths are working; writeback workflows still need controlled rollout and approval gates.
 
 ---
 
@@ -213,4 +230,9 @@ Operational inputs needed regardless of integration path:
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.
 - Operator overlay exists for queue review and CSV import.
+- Operations layer must expose an optimization checklist, patient AR summary, insurance-intake preview, and capability queue instead of leaving those as chat-only concepts.
+- `Operations Assistant` should use the ops layer first for actionable commands (workflow, AR, eligibility, setup) and only fall back to general AI when needed.
+- The system must support provider-directed patient AR follow-up and payment-plan monitoring, but debt-collection style workflows remain compliance-gated until legal/licensing review is complete.
+- The system should learn expected payer reimbursement and collection timing from paid claims / ERAs / remits so projected amount and projected date tighten over time instead of staying rescue-bucket-only.
+- The system should evolve toward underpayment detection, payer playbooks, eligibility verification, and appeals packet preparation because those are core differentiators versus generic billing dashboards.
 - Amendment and continuity stay current as the system changes.
