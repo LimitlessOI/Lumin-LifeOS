@@ -185,15 +185,21 @@ Every source file has a `@ssot` tag in its JSDoc header pointing to its amendmen
 * @ssot docs/projects/AMENDMENT_XX_NAME.md
 ```
 
-**How to find the right amendment:**
-- TC / real estate / SkySlope / GLVAR / MLS → `AMENDMENT_17_TC_SERVICE.md`
-- AI Council / model routing → `AMENDMENT_01_AI_COUNCIL.md`
-- Memory / conversation storage → `AMENDMENT_02_MEMORY_SYSTEM.md`
-- Revenue / financial tracking → `AMENDMENT_03_FINANCIAL_REVENUE.md`
-- Site builder / prospect pipeline → `AMENDMENT_05_SITE_BUILDER.md`
-- BoldTrail CRM → `AMENDMENT_11_BOLDTRAIL_REALESTATE.md`
-- Command Center / overlay → `AMENDMENT_12_COMMAND_CENTER.md`
-- If unsure → run `node scripts/ssot-check.js --report` to see all amendments
+**File-pattern → Amendment trigger table (use this FIRST):**
+
+| File pattern | Amendment |
+|---|---|
+| `routes/tc-*.js`, `services/tc-*.js`, `services/glvar-*.js` | `AMENDMENT_17_TC_SERVICE.md` |
+| `routes/mls-*.js` | `AMENDMENT_17_TC_SERVICE.md` |
+| `services/council-*.js`, `services/token-*.js`, `services/free-tier-*.js`, `services/savings-*.js`, `services/ai-*.js`, `config/council-*.js` | `AMENDMENT_01_AI_COUNCIL.md` |
+| `services/memory*.js`, `routes/conversation-*.js`, `routes/history-*.js` | `AMENDMENT_02_MEMORY_SYSTEM.md` |
+| `routes/revenue*.js`, `services/billing*.js`, `routes/api-cost-savings*.js` | `AMENDMENT_03_FINANCIAL_REVENUE.md` |
+| `routes/site-builder*.js`, `services/site-builder*.js`, `services/prospect*.js` | `AMENDMENT_05_SITE_BUILDER.md` |
+| `routes/boldtrail*.js`, `services/boldtrail*.js`, `services/crm*.js` | `AMENDMENT_11_BOLDTRAIL_REALESTATE.md` |
+| `routes/command-center*.js`, `public/overlay/command-center*` | `AMENDMENT_12_COMMAND_CENTER.md` |
+| `routes/project-governance*.js`, `scripts/verify-project*`, `scripts/ssot-*`, `db/migrations/*project_governance*`, `db/migrations/*pending_adam*` | `AMENDMENT_18_PROJECT_GOVERNANCE.md` |
+| `routes/twin-*.js`, `services/twin*.js` | `AMENDMENT_09_DIGITAL_TWIN.md` (or closest match) |
+| Any file with no obvious match → run `node scripts/ssot-check.js --report` |
 
 **Verify compliance:** `node scripts/ssot-check.js --all` shows every file missing its tag.
 

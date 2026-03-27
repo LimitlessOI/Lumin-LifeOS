@@ -92,10 +92,8 @@ export function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/accounts", createAccountManagerRoutes({ requireKey, accountManager, pool, logger }));
   logger.info("✅ [ACCOUNT-MANAGER] Routes mounted at /api/v1/accounts");
 
-  app.use("/api/v1/projects", createProjectGovernanceRoutes({ requireKey, pool }));
-  app.use("/api/v1/pending-adam", createProjectGovernanceRoutes({ requireKey, pool }));
-  app.use("/api/v1/estimation", createProjectGovernanceRoutes({ requireKey, pool }));
-  logger.info("✅ [PROJECT-GOVERNANCE] Routes mounted at /api/v1/projects, /api/v1/pending-adam, /api/v1/estimation");
+  app.use("/api/v1", createProjectGovernanceRoutes({ requireKey, pool }));
+  logger.info("✅ [PROJECT-GOVERNANCE] Routes mounted at /api/v1/projects, /api/v1/pending-adam, /api/v1/estimation/accuracy");
 
   const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
   createTCRoutes(app, {

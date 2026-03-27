@@ -1,3 +1,4 @@
+<!-- @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -412,6 +413,149 @@
       font-size: 12px;
       color: #90caf9;
     }
+    /* ── Projects Dashboard ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .project-card {
+      background: #0d1330;
+      border: 1px solid #2a3f5f;
+      border-radius: 8px;
+      padding: 14px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .project-card:hover {
+      border-color: #4fc3f7;
+      transform: translateY(-1px);
+    }
+    .project-card-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #e0e0e0;
+      margin-bottom: 6px;
+    }
+    .project-card-focus {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.5;
+      margin-bottom: 10px;
+      min-height: 36px;
+    }
+    .project-card-meta {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .proj-badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    .proj-badge-prod   { background: #052e16; color: #4ade80; border: 1px solid #166534; }
+    .proj-badge-exp    { background: #1c1917; color: #fb923c; border: 1px solid #7c2d12; }
+    .proj-badge-dep    { background: #1c1917; color: #888;    border: 1px solid #333; }
+    .proj-badge-safe   { background: #052e16; color: #4ade80; border: 1px solid #166534; }
+    .proj-badge-review { background: #1c1430; color: #a78bfa; border: 1px solid #5b21b6; }
+    .proj-badge-risk   { background: #450a0a; color: #f87171; border: 1px solid #991b1b; }
+    .proj-progress-bar {
+      height: 4px;
+      background: #1a1f3a;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .proj-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4fc3f7, #81c784);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+    .proj-pct {
+      font-size: 11px;
+      color: #888;
+      margin-top: 4px;
+    }
+    .proj-pending-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #f59e0b;
+      color: #000;
+      font-size: 10px;
+      font-weight: 700;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* ── Pending Adam ── */
+    .pending-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pending-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: start;
+      background: #0d1330;
+      border: 1px solid #2a3f5f;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .pending-type-badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .pending-type-approval  { background: #1e3a5f; color: #60a5fa; }
+    .pending-type-decision  { background: #2e1065; color: #a78bfa; }
+    .pending-type-credential{ background: #451a03; color: #fb923c; }
+    .pending-type-review    { background: #14532d; color: #4ade80; }
+    .pending-type-other     { background: #1c1917; color: #a8a29e; }
+    .pending-pri-critical   { border-left: 3px solid #ef4444; }
+    .pending-pri-high       { border-left: 3px solid #f97316; }
+    .pending-pri-medium     { border-left: 3px solid #a78bfa; }
+    .pending-pri-low        { border-left: 3px solid #4b5563; }
+    /* ── Project Drawer content ── */
+    .drawer-segment {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 7px 0;
+      border-bottom: 1px solid #1a1f3a;
+      font-size: 13px;
+    }
+    .drawer-segment:last-child { border-bottom: none; }
+    .seg-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      border: 1px solid #2a3f5f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .seg-check.done { background: #052e16; border-color: #166534; color: #4ade80; }
+    .seg-check.next { background: #1c1430; border-color: #5b21b6; color: #a78bfa; }
   </style>
 </head>
 <body>
@@ -623,6 +767,42 @@
       </div>
       <div id="proposalsList" style="display:flex;flex-direction:column;gap:8px;">
         <p style="color:#888;">Loading proposals…</p>
+      </div>
+    </div>
+
+    <!-- ══ PROJECTS DASHBOARD ══ -->
+    <div class="section" id="projectsSection">
+      <h2>📋 Active Projects</h2>
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+        <select id="projectsFilter" onchange="loadProjects()" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:6px 10px;border-radius:6px;font-size:13px;">
+          <option value="all">All Lifecycles</option>
+          <option value="production">Production</option>
+          <option value="experimental">Experimental</option>
+          <option value="deprecated">Deprecated</option>
+        </select>
+        <button onclick="loadProjects()" style="background:#1e3a5f;padding:6px 14px;border-radius:6px;font-size:13px;">🔄 Refresh</button>
+        <span id="projectsCount" style="color:#888;font-size:13px;"></span>
+      </div>
+      <div class="projects-grid" id="projectsGrid">
+        <p style="color:#888;">Loading projects…</p>
+      </div>
+    </div>
+
+    <!-- ══ PENDING ADAM ══ -->
+    <div class="section" id="pendingAdamSection" style="border-color:#f59e0b;">
+      <h2>⏳ Pending Adam <span id="pendingAdamBadge" style="background:#f59e0b;color:#000;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:8px;display:none;"></span></h2>
+      <p style="color:#888;font-size:13px;margin-bottom:14px;">Items blocked on you. Resolve them to keep the system moving.</p>
+      <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+        <select id="pendingFilter" onchange="loadPendingAdam()" style="background:#0a0e27;border:1px solid #2a3f5f;color:#e0e0e0;padding:6px 10px;border-radius:6px;font-size:13px;">
+          <option value="open">Open</option>
+          <option value="all">All</option>
+          <option value="resolved">Resolved</option>
+        </select>
+        <button onclick="loadPendingAdam()" style="background:#1e3a5f;padding:6px 14px;border-radius:6px;font-size:13px;">🔄 Refresh</button>
+        <span id="pendingAdamCount" style="color:#888;font-size:13px;"></span>
+      </div>
+      <div class="pending-list" id="pendingAdamList">
+        <p style="color:#888;">Loading…</p>
       </div>
     </div>
 
@@ -1102,10 +1282,223 @@
       document.getElementById('vaultValueInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') saveVaultVar(); });
     });
 
+    // ══ PROJECTS DASHBOARD ═════════════════════════════════════════════════
+    const lifecycleBadgeClass = { production:'proj-badge-prod', experimental:'proj-badge-exp', deprecated:'proj-badge-dep' };
+    const stabilityBadgeClass = { safe:'proj-badge-safe', 'needs-review':'proj-badge-review', 'high-risk':'proj-badge-risk' };
+
+    async function loadProjects() {
+      const filter = document.getElementById('projectsFilter').value;
+      const grid = document.getElementById('projectsGrid');
+      grid.innerHTML = '<p style="color:#888;">Loading…</p>';
+      try {
+        const data = await api('GET', '/api/v1/projects');
+        let projects = data.projects || [];
+        if (filter !== 'all') projects = projects.filter(p => p.lifecycle === filter);
+        document.getElementById('projectsCount').textContent = `${projects.length} project(s)`;
+        if (projects.length === 0) { grid.innerHTML = '<p style="color:#888;">No projects found.</p>'; return; }
+        grid.innerHTML = projects.map(p => renderProjectCard(p)).join('');
+      } catch(e) {
+        grid.innerHTML = `<p style="color:#e57373;">Error: ${e.message}</p>`;
+      }
+    }
+
+    function renderProjectCard(p) {
+      const pct = p.pct_complete ?? 0;
+      const lcClass = lifecycleBadgeClass[p.lifecycle] || 'proj-badge-exp';
+      const stClass = stabilityBadgeClass[p.stability_class] || 'proj-badge-review';
+      const pendingHtml = p.pending_count > 0
+        ? `<div class="proj-pending-badge" title="${p.pending_count} pending action(s)">${p.pending_count}</div>` : '';
+      const focus = p.current_focus || p.next_task || 'No current focus set';
+      return `<div class="project-card" onclick="openProjectDrawer('${p.slug || p.project_id}')">
+        ${pendingHtml}
+        <div class="project-card-title">${p.name}</div>
+        <div class="project-card-meta">
+          <span class="proj-badge ${lcClass}">${p.lifecycle}</span>
+          <span class="proj-badge ${stClass}">${p.stability_class || 'unknown'}</span>
+          ${p.phase ? `<span style="font-size:11px;color:#888;">${p.phase}</span>` : ''}
+        </div>
+        <div class="project-card-focus">${focus.substring(0, 120)}${focus.length > 120 ? '…' : ''}</div>
+        <div class="proj-progress-bar">
+          <div class="proj-progress-fill" style="width:${pct}%"></div>
+        </div>
+        <div class="proj-pct">${pct}% complete</div>
+      </div>`;
+    }
+
+    async function openProjectDrawer(id) {
+      const drawer = document.getElementById('detailDrawer');
+      const drawerTitle = document.getElementById('drawerTitle');
+      const drawerContent = document.getElementById('drawerContent');
+      drawerTitle.textContent = 'Loading…';
+      drawerContent.innerHTML = '<p style="color:#888;">Fetching project details…</p>';
+      drawer.classList.add('open');
+      try {
+        const data = await api('GET', `/api/v1/projects/${id}`);
+        const p = data.project;
+        if (!p) { drawerContent.innerHTML = '<p style="color:#e57373;">Project not found.</p>'; return; }
+        drawerTitle.textContent = p.name;
+        const lcClass = lifecycleBadgeClass[p.lifecycle] || 'proj-badge-exp';
+        const stClass = stabilityBadgeClass[p.stability_class] || 'proj-badge-review';
+        const segments = data.segments || [];
+        const pendingItems = data.pendingItems || [];
+        const estStats = data.estimationStats || {};
+        const pct = p.pct_complete ?? 0;
+        drawerContent.innerHTML = `
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+            <span class="proj-badge ${lcClass}">${p.lifecycle}</span>
+            <span class="proj-badge ${stClass}">${p.stability_class || 'unknown'}</span>
+            ${p.phase ? `<span style="font-size:11px;color:#888;padding:2px 0;">${p.phase}</span>` : ''}
+          </div>
+          ${p.current_focus ? `<p style="font-size:13px;color:#aaa;line-height:1.5;margin-bottom:12px;">${p.current_focus}</p>` : ''}
+          <div class="proj-progress-bar" style="margin-bottom:4px;">
+            <div class="proj-progress-fill" style="width:${pct}%"></div>
+          </div>
+          <div class="proj-pct" style="margin-bottom:14px;">${pct}% complete</div>
+
+          ${segments.length > 0 ? `
+          <h4 style="color:#81c784;font-size:13px;margin-bottom:8px;">Build Plan</h4>
+          <div>
+            ${segments.map(s => {
+              const isDone = s.status === 'done';
+              const isNext = s.is_next_task;
+              const checkClass = isDone ? 'done' : (isNext ? 'next' : '');
+              const checkIcon = isDone ? '✓' : (isNext ? '→' : '');
+              const nameStyle = isDone ? 'text-decoration:line-through;color:#555;' : (isNext ? 'color:#a78bfa;' : 'color:#ccc;');
+              const estLabel = s.estimate_hours ? `${s.estimate_hours}h est` : '';
+              const actualLabel = s.actual_hours ? `/ ${s.actual_hours}h actual` : '';
+              const stClass2 = s.stability_class === 'high-risk' ? 'color:#f87171' : s.stability_class === 'needs-review' ? 'color:#a78bfa' : 'color:#4ade80';
+              return `<div class="drawer-segment">
+                <div class="seg-check ${checkClass}">${checkIcon}</div>
+                <div style="flex:1;">
+                  <span style="${nameStyle}">${s.name}</span>
+                  ${isNext ? '<span style="font-size:10px;color:#a78bfa;margin-left:6px;">← NEXT</span>' : ''}
+                  ${s.stability_class ? `<span style="font-size:10px;${stClass2};margin-left:6px;">[${s.stability_class}]</span>` : ''}
+                  ${(estLabel || actualLabel) ? `<div style="font-size:11px;color:#888;margin-top:2px;">${estLabel} ${actualLabel}</div>` : ''}
+                </div>
+              </div>`;
+            }).join('')}
+          </div>` : ''}
+
+          ${pendingItems.length > 0 ? `
+          <h4 style="color:#f59e0b;font-size:13px;margin-top:14px;margin-bottom:8px;">Pending Your Action (${pendingItems.length})</h4>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            ${pendingItems.map(item => {
+              const typeCls = `pending-type-${item.type || 'other'}`;
+              return `<div style="background:#0a0e27;border-radius:6px;padding:10px;font-size:13px;">
+                <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px;">
+                  <span class="pending-type-badge ${typeCls}">${item.type}</span>
+                  <span style="color:#e0e0e0;">${item.title}</span>
+                </div>
+                ${item.description ? `<p style="color:#888;font-size:12px;">${item.description}</p>` : ''}
+                <button onclick="resolveAdamItem(${item.id})" style="margin-top:6px;background:#2e7d32;font-size:11px;padding:3px 10px;border-radius:4px;">✓ Resolve</button>
+              </div>`;
+            }).join('')}
+          </div>` : ''}
+
+          ${estStats.total_estimates > 0 ? `
+          <h4 style="color:#4fc3f7;font-size:13px;margin-top:14px;margin-bottom:6px;">Estimation Accuracy</h4>
+          <div style="font-size:12px;color:#888;">
+            <p>Avg accuracy: <span style="color:#e0e0e0;">${Math.round(estStats.avg_accuracy_pct || 0)}%</span></p>
+            <p>Segments tracked: <span style="color:#e0e0e0;">${estStats.total_estimates}</span></p>
+          </div>` : ''}
+
+          <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="verifyProject('${p.slug || p.project_id}')" style="background:#1e3a5f;font-size:12px;padding:6px 14px;border-radius:6px;">🔍 Run Verify</button>
+            <button onclick="closeDrawer()" style="background:#333;font-size:12px;padding:6px 14px;border-radius:6px;">✕ Close</button>
+          </div>
+          <div id="verifyResult" style="margin-top:10px;font-size:12px;color:#888;"></div>
+        `;
+      } catch(e) {
+        drawerContent.innerHTML = `<p style="color:#e57373;">Error: ${e.message}</p>`;
+      }
+    }
+
+    async function verifyProject(id) {
+      const resultEl = document.getElementById('verifyResult');
+      if (!resultEl) return;
+      resultEl.style.color = '#888';
+      resultEl.textContent = '⏳ Running verification…';
+      try {
+        const data = await api('POST', `/api/v1/projects/${id}/verify`);
+        if (data.ok) {
+          const r = data.result;
+          resultEl.style.color = r.passed ? '#4ade80' : '#f87171';
+          resultEl.textContent = r.passed
+            ? `✓ Passed — ${r.passed_count}/${r.total} checks (${new Date().toLocaleTimeString()})`
+            : `✗ Failed — ${r.failed_count} of ${r.total} checks failed`;
+        } else {
+          resultEl.style.color = '#f87171';
+          resultEl.textContent = `Error: ${data.error}`;
+        }
+      } catch(e) {
+        resultEl.style.color = '#f87171';
+        resultEl.textContent = `Error: ${e.message}`;
+      }
+    }
+
+    // ══ PENDING ADAM ═══════════════════════════════════════════════════════
+    const pendingTypeCls = { approval:'pending-type-approval', decision:'pending-type-decision',
+      credential:'pending-type-credential', review:'pending-type-review', other:'pending-type-other' };
+    const pendingPriCls  = { critical:'pending-pri-critical', high:'pending-pri-high',
+      medium:'pending-pri-medium', low:'pending-pri-low' };
+
+    async function loadPendingAdam() {
+      const filter = document.getElementById('pendingFilter').value;
+      const list = document.getElementById('pendingAdamList');
+      list.innerHTML = '<p style="color:#888;">Loading…</p>';
+      try {
+        const data = await api('GET', '/api/v1/pending-adam' + (filter !== 'all' ? `?resolved=${filter === 'resolved'}` : ''));
+        const items = data.items || [];
+        const openCount = items.filter(i => !i.resolved_at).length;
+        document.getElementById('pendingAdamCount').textContent = `${items.length} item(s)`;
+        const badge = document.getElementById('pendingAdamBadge');
+        if (openCount > 0) { badge.style.display = 'inline-flex'; badge.textContent = openCount; }
+        else { badge.style.display = 'none'; }
+        if (items.length === 0) { list.innerHTML = '<p style="color:#10b981;">✓ Nothing pending — you\'re clear!</p>'; return; }
+        list.innerHTML = items.map(item => renderPendingItem(item)).join('');
+      } catch(e) {
+        list.innerHTML = `<p style="color:#e57373;">Error: ${e.message}</p>`;
+      }
+    }
+
+    function renderPendingItem(item) {
+      const typeCls = pendingTypeCls[item.type] || 'pending-type-other';
+      const priCls  = pendingPriCls[item.priority] || 'pending-pri-medium';
+      const resolved = !!item.resolved_at;
+      return `<div class="pending-item ${priCls}" style="${resolved ? 'opacity:0.5;' : ''}">
+        <span class="pending-type-badge ${typeCls}">${item.type || 'other'}</span>
+        <div>
+          <div style="font-weight:600;font-size:13px;color:${resolved ? '#555' : '#e0e0e0'};${resolved ? 'text-decoration:line-through;' : ''}">${item.title}</div>
+          ${item.description ? `<p style="color:#888;font-size:12px;margin-top:3px;line-height:1.4;">${item.description}</p>` : ''}
+          ${item.project_name ? `<p style="color:#4fc3f7;font-size:11px;margin-top:4px;">📋 ${item.project_name}</p>` : ''}
+          ${item.due_date ? `<p style="color:#f59e0b;font-size:11px;margin-top:2px;">🗓 Due ${new Date(item.due_date).toLocaleDateString()}</p>` : ''}
+          ${resolved ? `<p style="color:#4ade80;font-size:11px;margin-top:4px;">✓ Resolved ${new Date(item.resolved_at).toLocaleDateString()}</p>` : ''}
+        </div>
+        <div>
+          ${!resolved
+            ? `<button onclick="resolveAdamItem(${item.id})" style="background:#2e7d32;font-size:12px;padding:5px 12px;border-radius:6px;white-space:nowrap;">✓ Done</button>`
+            : `<span style="color:#4ade80;font-size:12px;">✓</span>`}
+        </div>
+      </div>`;
+    }
+
+    async function resolveAdamItem(id) {
+      try {
+        const data = await api('POST', `/api/v1/pending-adam/${id}/resolve`);
+        if (data.ok) { loadPendingAdam(); loadProjects(); }
+        else { alert(data.error || 'Error resolving item'); }
+      } catch(e) { alert(e.message); }
+    }
+
+    // Allow Enter key in single-var inputs
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('vaultValueInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') saveVaultVar(); });
+    });
+
     // Load all new sections on startup
     window.addEventListener('DOMContentLoaded', () => {
       // Slight delay so auth key loads first
-      setTimeout(() => { loadIdeas(); loadConversations(); loadProposals(); loadMissingVars(); }, 800);
+      setTimeout(() => { loadIdeas(); loadConversations(); loadProposals(); loadMissingVars(); loadProjects(); loadPendingAdam(); }, 800);
     });
   </script>
 </body>

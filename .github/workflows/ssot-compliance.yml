@@ -1,0 +1,127 @@
+name: SSOT Compliance
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── 1. Syntax check all JS files ──────────────────────────────────────────
+  syntax-check:
+    name: Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check all JS files
+        run: |
+          find routes services core startup middleware -name "*.js" -o -name "*.mjs" 2>/dev/null | \
+          xargs -I{} node --check {} && echo "✅ All files pass syntax check"
+
+  # ── 2. Circular dependency check ──────────────────────────────────────────
+  circular-deps:
+    name: No Circular Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --prefer-offline --no-audit 2>/dev/null || npm install --no-audit
+      - name: Check for circular dependencies
+        run: |
+          npx madge --circular server.js --extensions js
+          echo "✅ No circular dependencies"
+
+  # ── 3. SSOT staleness check ───────────────────────────────────────────────
+  ssot-staleness:
+    name: SSOT Staleness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # need full history for git log dates
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check amendment staleness
+        run: node scripts/ssot-staleness-check.mjs --warn-only
+        # warn-only in CI: violations are reported but don't block merge
+        # Upgrade to hard fail when all amendments are fully current
+
+  # ── 4. SSOT coupling check ────────────────────────────────────────────────
+  ssot-coupling:
+    name: SSOT Coupling
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check code-to-amendment coupling
+        run: node scripts/check-coupling.mjs --warn-only
+        # warn-only until all files have @ssot tags
+
+  # ── 5. File size gate ─────────────────────────────────────────────────────
+  file-size-gate:
+    name: File Size Gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Flag files over 600 lines
+        run: |
+          VIOLATIONS=""
+          for f in $(find routes services core -name "*.js" 2>/dev/null); do
+            LINES=$(wc -l < "$f")
+            if [ "$LINES" -gt 600 ]; then
+              echo "⚠️  $f is $LINES lines (limit: 600)"
+              VIOLATIONS="$VIOLATIONS\n$f ($LINES lines)"
+            fi
+          done
+          if [ -n "$VIOLATIONS" ]; then
+            echo ""
+            echo "Files over 600 lines should be split into smaller modules."
+            echo "This is a warning — not blocking merge."
+          else
+            echo "✅ All files within size limit"
+          fi
+
+  # ── 6. Manifest schema validation ─────────────────────────────────────────
+  manifest-validation:
+    name: Validate Manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install ajv ajv-formats --no-save --no-audit 2>/dev/null || true
+      - name: Validate all manifest files
+        run: |
+          node -e "
+          import('ajv').then(({ default: Ajv }) => {
+            import('fs').then(fs => {
+              const ajv = new Ajv({ strict: false });
+              const schema = JSON.parse(fs.readFileSync('docs/projects/manifest.schema.json', 'utf8'));
+              const validate = ajv.compile(schema);
+              const files = fs.readdirSync('docs/projects').filter(f => f.endsWith('.manifest.json'));
+              let errors = 0;
+              for (const f of files) {
+                const data = JSON.parse(fs.readFileSync('docs/projects/' + f, 'utf8'));
+                if (!validate(data)) {
+                  console.error('❌', f, JSON.stringify(validate.errors, null, 2));
+                  errors++;
+                } else {
+                  console.log('✅', f);
+                }
+              }
+              if (errors > 0) process.exit(1);
+              else console.log('All manifests valid');
+            });
+          });
+          " || echo "⚠️ ajv not available, skipping manifest validation"

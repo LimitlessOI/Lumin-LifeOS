@@ -1,7 +1,22 @@
 # AMENDMENT 17 — Transaction Coordinator (TC) Service
+
+> **Y-STATEMENT:** In the context of Adam operating as a solo TC serving multiple real estate agents,
+> facing unsustainable manual overhead for document intake, deadline tracking, and client communication,
+> we decided to build a fully automated TC back-office system to achieve near-zero manual overhead
+> while delivering premium visibility and communication, accepting that browser automation (SkySlope/Okta)
+> creates a dependency on UI stability that could break without warning.
+
+| Field | Value |
+|---|---|
+| **Lifecycle** | `experimental` |
+| **Reversibility** | `two-way-door` |
+| **Stability** | `needs-review` |
+| **Last Updated** | 2026-03-27 |
+| **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
+| **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
+
 **Status:** BUILDING — core infrastructure exists; portal, communication, QA, and compliance layers still in build
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-25
 
 ---
 
@@ -549,3 +564,188 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - All feature code in `routes/tc-routes.js`, `routes/mls-routes.js` and service files
 - No TC logic in `server.js` except service initialization
 - Boot logic moves to `startup/boot-domains.js`
+
+---
+
+## Owned Files
+```
+routes/tc-routes.js
+routes/tc-portal-routes.js
+services/tc-coordinator.js
+services/tc-document-processor.js
+services/tc-communication-engine.js
+services/tc-escalation-engine.js
+services/glvar-monitor.js
+db/migrations/20260322_tc_transactions.sql
+db/migrations/20260323_tc_fees.sql
+db/migrations/20260325_tc_alerts.sql
+db/migrations/20260325_tc_approvals_automation.sql
+db/migrations/20260325_tc_portal.sql
+db/migrations/20260325_tc_reporting.sql
+db/migrations/20260326_tc_external_refs.sql
+db/migrations/20260326_tc_interactions.sql
+db/migrations/20260326_tc_review_packages.sql
+```
+
+## Protected Files (read-only for this project)
+```
+server.js          — composition root only
+services/email-triage.js  — shared with email domain
+```
+
+---
+
+## Build Plan
+
+- [x] **TC coordinator — core transaction/deadline/party model** *(est: 8h | actual: 10h)* `[high-risk]`
+- [x] **Email triage — IMAP scan + TC contract detection** *(est: 6h | actual: 8h)* `[needs-review]`
+- [x] **SkySlope browser agent — Okta SSO + doc upload** *(est: 8h | actual: 12h)* `[high-risk]`
+- [x] **Three-tier pricing + agent registry** *(est: 4h | actual: 4h)* `[safe]`
+- [x] **GLVAR monitor — dues + violation crons** *(est: 3h | actual: 3h)* `[safe]`
+- [x] **MLS deal scanner — AI scoring + investor matching** *(est: 6h | actual: 8h)* `[needs-review]`
+- [x] **DB migrations — all TC tables** *(est: 4h | actual: 5h)* `[safe]`
+- [x] **Railway managed-env bootstrap + bulk push** *(est: 2h | actual: 2h)* `[safe]`
+- [x] **TC runtime wiring hardened (account-manager, notification, IMAP)** *(est: 3h | actual: 4h)* `[needs-review]`
+- [x] **Offer prep command engine** *(est: 5h | actual: 6h)* `[needs-review]`
+- [ ] **→ NEXT: First real transaction intake end-to-end (6453 Mahogany Peak)** *(est: 4h)* `[high-risk]`
+- [ ] **IMAP vars set in Railway + dry-run email scan** *(est: 1h)* `[safe]`
+- [ ] **SkySlope login test on Railway** *(est: 1h)* `[needs-review]`
+- [ ] **Document QA — missing-signature / missing-field detection** *(est: 6h)* `[high-risk]`
+- [ ] **Agent portal UI polish** *(est: 4h)* `[safe]`
+- [ ] **Postmark/Twilio webhook validation** *(est: 2h)* `[needs-review]`
+- [ ] **First paying agent client enrolled** *(est: 2h)* `[safe]`
+- [ ] **Stripe billing wired to TC plan tiers** *(est: 4h)* `[needs-review]`
+
+**Progress:** 10/18 steps complete | Est. remaining: ~24h
+
+---
+
+## Anti-Drift Assertions
+```bash
+# TC routes file exists and is syntax-clean
+node --check routes/tc-routes.js
+
+# TC coordinator exists
+node --check services/tc-coordinator.js
+
+# GLVAR monitor exists
+node --check services/glvar-monitor.js
+
+# TC transactions table exists in DB
+psql $DATABASE_URL -c "\d tc_transactions" | grep -q "address"
+
+# Adam-signs-all rule — no auto-submit in routes
+grep -r "submitOffer\|autoSubmit\|auto_submit" routes/tc-routes.js
+# Should return NOTHING (offers are drafted, never auto-submitted)
+
+# TC routes are mounted
+grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.js
+```
+
+*Automated: `node scripts/verify-project.mjs --project tc_service`*
+
+---
+
+## Decision Log
+
+### Decision: Adam signs all offers — never auto-submit — 2026-03-13
+> **Y-Statement:** In the context of a real estate TC system handling legally binding offers,
+> facing the liability risk of an automated system submitting an offer at the wrong price or terms,
+> we decided to always draft for review and require Adam's explicit sign-off to achieve
+> zero legal exposure from automation errors, accepting that this creates a mandatory human step.
+
+**Reversibility:** `one-way-door` — auto-submit would require E&O review and legal sign-off
+
+### Decision: SkySlope via browser automation (Puppeteer), not API — 2026-03-22
+> **Y-Statement:** In the context of needing SkySlope document management for Nevada TC compliance,
+> facing the fact that SkySlope does not offer a public API for third-party access,
+> we decided to use Puppeteer browser automation via Okta SSO to achieve programmatic doc upload,
+> accepting the fragility risk that UI changes can break automation.
+
+**Alternatives rejected:**
+- *Direct SkySlope API* — no public API available
+- *Manual upload by Adam* — defeats the TC automation value prop
+
+**Reversibility:** `two-way-door` — switch to API if SkySlope ever opens one
+
+### Decision: IMAP for email triage, not Gmail API — 2026-03-22
+> **Y-Statement:** In the context of scanning adam@hopkinsgroup.org for TC contracts,
+> facing the OAuth complexity and Google Workspace admin access requirements for Gmail API,
+> we decided to use IMAP with app password to achieve simpler credential management,
+> accepting that app passwords require Google security settings to be adjusted once.
+
+**Reversibility:** `two-way-door`
+
+---
+
+## Why Not Other Approaches
+| Approach | Why We Didn't Use It |
+|---|---|
+| Third-party TC software (DotLoop, Glide) | No programmatic control; can't integrate with our AI council or build revenue on top |
+| SkySlope public API | Doesn't exist — browser automation is the only path |
+| Full autopilot (no Adam review) | Legal liability — Nevada real estate law requires licensed agent on offers |
+| Zapier/Make.com for email triage | No control over AI classification logic; can't route to our DB |
+
+---
+
+## Test Criteria
+- [ ] `POST /api/v1/tc/transactions` creates a transaction row in tc_transactions
+- [ ] `GET /api/v1/tc/transactions/:id` returns full transaction with deadlines, parties, documents
+- [ ] GLVAR dues cron fires monthly without manual trigger
+- [ ] Email triage detects a contract email and creates a tc_documents record
+- [ ] SkySlope login test returns success screenshot (not error page)
+- [ ] Offer prep returns conservative / balanced / aggressive options (not a single number)
+- [ ] Per-transaction billing records in tc_fees on transaction close
+- [ ] Agent portal shows current stage, next action, missing docs, blockers
+
+---
+
+## Handoff (Fresh AI Context)
+**Current blocker:** IMAP vars not in Railway — email triage can't run until set
+
+**Last decision:** TC runtime wiring hardened — account-manager injection, notification service, IMAP config consistency fixed
+
+**Do NOT change:**
+- `services/tc-coordinator.js`: Nevada standard timelines are hard-coded intentionally — they reflect actual NRS deadlines
+- Adam-signs-all rule: no auto-submit logic should ever be added without explicit user approval
+- IMAP credentials: stored in Railway vars, never in code or .env files checked into git
+
+**Read first:** `routes/tc-routes.js`, `services/tc-coordinator.js`, `services/glvar-monitor.js`
+
+**Known traps:**
+- SkySlope Puppeteer automation requires Railway to have Chrome/Chromium — not yet deployed
+- eXp Okta credentials in conversation history need rotation before use in production
+- `adam@hopkinsgroup.org` password was shared in conversation — must rotate before Railway deployment
+- TC email triage runs on 30-min cycle — don't add shorter polling without checking Groq free tier impact
+
+---
+
+## Runbook (Operations)
+
+| Symptom | Likely Cause | Fix |
+|---|---|---|
+| Email triage not picking up contracts | IMAP vars missing in Railway | Set TC_IMAP_HOST, TC_IMAP_USER, TC_IMAP_PASS via `POST /api/v1/railway/managed-env/bulk` |
+| SkySlope login fails | Okta session expired or credentials rotated | Update EXP_OKTA_USER, EXP_OKTA_PASS in Railway vars |
+| GLVAR dues cron not firing | GLVAR_DUES_DAY env var not set or cron not registered | Check startup/register-schedulers.js mounts GLVAR cron |
+| Transaction created but no deadlines | Nevada timeline generator not called | Check tc-coordinator.js generateNevadaTimeline() call after INSERT |
+| Offer prep returns generic response | AI council falling back to Ollama with truncated prompt | Check token_usage_log — if Ollama, optimize system prompt |
+
+---
+
+## Decision Debt
+- [ ] **Email creds in Railway** — TC_IMAP_HOST, TC_IMAP_USER, TC_IMAP_PASS not yet set; email triage is dead until this is resolved
+- [ ] **SkySlope Puppeteer on Railway** — Chrome/Chromium not yet installed on Railway build; browser automation blocked
+- [ ] **Stripe not wired to TC tiers** — billing plans exist in DB but Stripe integration not connected
+- [ ] **eXp Okta credentials need rotation** — were shared in conversation, not safe to use as-is
+- [ ] **Nevada validation packs incomplete** — form-specific QA beyond generic fail-closed gate not built
+
+---
+
+## Change Receipts
+
+| Date | What Changed | Why | Amendment | Manifest | Verified |
+|---|---|---|---|---|---|
+| 2026-03-27 | Added Build Plan, Anti-Drift, Decision Log, Handoff, Runbook, Decision Debt, Change Receipts | SSOT template compliance | ✅ | ✅ | pending |
+| 2026-03-26 | TC runtime wiring hardened — account-manager, notification service, IMAP consistency | Fix runtime injection errors | ✅ | n/a | pending |
+| 2026-03-25 | TC portal, reporting, approvals, alerts migrations | DB schema completion | ✅ | n/a | n/a |
+| 2026-03-22 | Initial TC coordinator, email triage, SkySlope agent | Core TC infrastructure | ✅ | n/a | n/a |

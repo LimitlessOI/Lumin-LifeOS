@@ -1,5 +1,5 @@
 # PROJECT AMENDMENTS INDEX
-**Last Updated:** 2026-03-26
+**Last Updated:** 2026-03-27
 **Parent:** SSOT North Star Constitution (`docs/SSOT_NORTH_STAR.md`)
 **Authority:** All amendments subordinate to the North Star Constitution
 
@@ -34,7 +34,8 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 15 | [Business Tools Suite](AMENDMENT_15_BUSINESS_TOOLS.md) | LIVE (various) | Supporting | High |
 | 16 | [Word Keeper & Integrity Engine](AMENDMENT_16_WORD_KEEPER.md) | LIVE | Accountability | Low |
 | 17 | [TC Service — Transaction Coordinator](AMENDMENT_17_TC_SERVICE.md) | BUILDING | **#1 Active Revenue** | High |
-| 18 | [ClientCare Billing Recovery](AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md) | BUILDING | **#1 Active Recovery** | High |
+| 18 | [SSOT Project Governance System](AMENDMENT_18_PROJECT_GOVERNANCE.md) | LIVE | Infrastructure | High |
+| 19 | [ClientCare Billing Recovery](AMENDMENT_19_CLIENTCARE_BILLING_RECOVERY.md) | BUILDING | **#1 Active Recovery** | High |
 
 ---
 

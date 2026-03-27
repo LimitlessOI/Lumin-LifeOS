@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lifeos.hopkinsgroup.org/schemas/project-manifest.json",
+  "title": "LifeOS Project Manifest",
+  "description": "Machine-readable project manifest. Pair with the human-readable AMENDMENT_XX_NAME.md. Used by verify-project.mjs, CI, and the C&C dashboard.",
+  "type": "object",
+  "required": ["project_id", "name", "amendment_path", "lifecycle", "status", "phase", "next_task"],
+  "additionalProperties": false,
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Unique snake_case identifier. Matches the slug column in the projects DB table.",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "examples": ["command_center", "tc_service", "ai_council"]
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable project name.",
+      "examples": ["Command & Control Center"]
+    },
+    "amendment_path": {
+      "type": "string",
+      "description": "Relative path from repo root to the amendment markdown file.",
+      "pattern": "^docs/projects/AMENDMENT_.+\\.md$"
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": ["experimental", "production", "deprecated"],
+      "description": "experimental=in active development, production=live and stable, deprecated=being phased out"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "paused", "complete", "archived"]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["critical", "high", "normal", "low"],
+      "default": "normal"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Who owns this project. 'adam' for user-owned, team name for shared.",
+      "default": "adam"
+    },
+    "phase": {
+      "type": "string",
+      "description": "Current phase of the project (free text, e.g. 'stabilization', 'mvp', 'polish')."
+    },
+    "next_task": {
+      "type": "string",
+      "description": "Exactly one current next task. Everything else is pending. If blocked, prefix with [BLOCKED]: reason."
+    },
+    "stability_class": {
+      "type": "string",
+      "enum": ["safe", "needs-review", "high-risk"],
+      "description": "How cautiously AI should approach this project right now."
+    },
+    "current_focus": {
+      "type": "string",
+      "description": "One-liner of what is actively being worked on. Shown in C&C hover tooltip."
+    },
+    "required_files": {
+      "type": "array",
+      "description": "Files that must exist for this project to be considered intact.",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "protected_files": {
+      "type": "array",
+      "description": "Files this project may read but must not casually rewrite. Requires explicit review.",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "owned_files": {
+      "type": "array",
+      "description": "Files this project exclusively owns. Other projects must not touch them.",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "required_routes": {
+      "type": "array",
+      "description": "HTTP routes that must exist and return expected status codes.",
+      "items": {
+        "type": "object",
+        "required": ["method", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"] },
+          "path": { "type": "string", "pattern": "^/" },
+          "expected_status": { "type": "integer", "default": 200 },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "required_tables": {
+      "type": "array",
+      "description": "Database tables this project requires.",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "required_columns": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "required_env": {
+      "type": "array",
+      "description": "Environment variables that must be present for this project to function.",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "assertions": {
+      "type": "array",
+      "description": "Additional executable assertions beyond the standard checks.",
+      "items": {
+        "type": "object",
+        "required": ["type", "check"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["env", "file_exists", "route", "table_exists", "table_columns", "no_circular_deps", "node_check", "required_files"]
+          },
+          "check": {},
+          "expect": {},
+          "label": { "type": "string" }
+        }
+      }
+    },
+    "completion_checks": {
+      "type": "array",
+      "description": "Human-readable criteria that define when this project is complete.",
+      "items": { "type": "string" }
+    },
+    "last_verified_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO timestamp of last successful verifier run. Written by verify-project.mjs."
+    },
+    "verification_passed": {
+      "type": ["boolean", "null"],
+      "description": "Result of last verifier run. Written by verify-project.mjs."
+    },
+    "anti_drift_notes": {
+      "type": "string",
+      "description": "Free text notes for AI sessions — things that look wrong but are intentional."
+    },
+    "decision_debt": {
+      "type": "array",
+      "description": "Shortcuts taken deliberately that must be resolved before production.",
+      "items": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "description": { "type": "string" },
+          "resolved": { "type": "boolean", "default": false }
+        }
+      }
+    }
+  }
+}

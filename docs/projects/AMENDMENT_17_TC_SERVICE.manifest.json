@@ -1,0 +1,75 @@
+{
+  "project_id": "tc_service",
+  "name": "Transaction Coordinator Service",
+  "amendment_path": "docs/projects/AMENDMENT_17_TC_SERVICE.md",
+  "lifecycle": "experimental",
+  "status": "active",
+  "priority": "high",
+  "owner": "adam",
+  "phase": "core-infrastructure",
+  "next_task": "Access email for 6453 Mahogany Peak (Pam Patterson) to pull contract documents into TC system",
+  "stability_class": "needs-review",
+  "current_focus": "Transaction intake for 6453 Mahogany Peak — first real client transaction",
+  "owned_files": [
+    "routes/tc-routes.js",
+    "routes/tc-portal-routes.js",
+    "services/tc-coordinator.js",
+    "services/tc-document-processor.js",
+    "services/tc-communication-engine.js",
+    "services/tc-escalation-engine.js",
+    "services/glvar-monitor.js",
+    "db/migrations/20260322_tc_transactions.sql",
+    "db/migrations/20260323_tc_fees.sql",
+    "db/migrations/20260325_tc_alerts.sql",
+    "db/migrations/20260325_tc_approvals_automation.sql",
+    "db/migrations/20260325_tc_portal.sql",
+    "db/migrations/20260325_tc_reporting.sql",
+    "db/migrations/20260326_tc_external_refs.sql",
+    "db/migrations/20260326_tc_interactions.sql",
+    "db/migrations/20260326_tc_review_packages.sql"
+  ],
+  "protected_files": [
+    "server.js",
+    "services/email-triage.js"
+  ],
+  "required_files": [
+    "routes/tc-routes.js",
+    "services/tc-coordinator.js",
+    "services/glvar-monitor.js"
+  ],
+  "required_routes": [
+    { "method": "GET", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "List transactions" },
+    { "method": "POST", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "Create transaction" }
+  ],
+  "required_tables": [
+    { "name": "tc_transactions", "required_columns": ["id", "address", "status", "agent_name"] },
+    { "name": "tc_deadlines", "required_columns": ["id", "transaction_id", "deadline_type", "due_date"] },
+    { "name": "tc_documents", "required_columns": ["id", "transaction_id", "doc_type", "status"] },
+    { "name": "tc_communications", "required_columns": ["id", "transaction_id", "channel", "sent_at"] }
+  ],
+  "required_env": [
+    "DATABASE_URL",
+    "COMMAND_CENTER_KEY"
+  ],
+  "assertions": [
+    { "type": "node_check", "check": "routes/tc-routes.js", "label": "tc-routes syntax" },
+    { "type": "node_check", "check": "services/tc-coordinator.js", "label": "tc-coordinator syntax" },
+    { "type": "table_exists", "check": "tc_transactions", "label": "tc_transactions table exists" }
+  ],
+  "completion_checks": [
+    "First live transaction (6453 Mahogany Peak) created and tracked in DB",
+    "Email triage picks up TC-related emails and routes to correct transaction",
+    "Deadline tracker fires reminders at correct intervals",
+    "Agent portal accessible and shows transaction status",
+    "GLVAR dues check runs monthly without manual intervention",
+    "Billing tracks per-transaction and subscription revenue"
+  ],
+  "anti_drift_notes": "TC coordinator uses SkySlope for document management via Okta SSO browser automation. The Gmail credentials for TC email access are stored as Railway variables (email address as key, password as value). SkySlope automation requires Puppeteer on Railway — not yet deployed.",
+  "decision_debt": [
+    { "description": "Email access for TC requires Gmail app password — not yet configured in Railway", "resolved": false },
+    { "description": "SkySlope browser automation (Puppeteer) not yet deployed on Railway", "resolved": false },
+    { "description": "Billing/Stripe integration not wired to TC plan tiers yet", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

@@ -1,0 +1,50 @@
+# CODEOWNERS — LifeOS/LimitlessOS
+# Maps file patterns to amendment owners for drift enforcement.
+# Adam Hopkins (@adamhopkins) is the sole owner of this repo.
+# These entries are also the canonical "who to alert" when an amendment is stale.
+
+# Default: Adam owns everything
+* @adamhopkins
+
+# ── AI Council (AMENDMENT_01) ──────────────────────────────────────────────
+/services/council-service.js         @adamhopkins
+/services/token-optimizer.js         @adamhopkins
+/services/free-tier-governor.js      @adamhopkins
+/services/savings-ledger.js          @adamhopkins
+/services/ai-model-selector.js       @adamhopkins
+/services/ai-guard.js                @adamhopkins
+/config/council-members.js           @adamhopkins
+
+# ── TC Service (AMENDMENT_17) ──────────────────────────────────────────────
+/routes/tc-routes.js                 @adamhopkins
+/routes/tc-portal-routes.js          @adamhopkins
+/services/tc-coordinator.js          @adamhopkins
+/services/tc-document-processor.js   @adamhopkins
+/services/tc-communication-engine.js @adamhopkins
+/services/tc-escalation-engine.js    @adamhopkins
+/services/glvar-monitor.js           @adamhopkins
+/routes/mls-routes.js                @adamhopkins
+
+# ── Command Center (AMENDMENT_12) ─────────────────────────────────────────
+/routes/command-center-routes.js     @adamhopkins
+/public/overlay/command-center.html  @adamhopkins
+/public/overlay/command-center.js    @adamhopkins
+/public/overlay/index.html           @adamhopkins
+
+# ── Project Governance (AMENDMENT_18) ─────────────────────────────────────
+/routes/project-governance-routes.js @adamhopkins
+/scripts/verify-project.mjs          @adamhopkins
+/scripts/ssot-staleness-check.mjs    @adamhopkins
+/scripts/check-coupling.mjs          @adamhopkins
+/db/migrations/*project_governance*  @adamhopkins
+/policy/ssot-coupling.rego           @adamhopkins
+
+# ── Composition Root (PROTECTED — requires extra caution) ─────────────────
+/server.js                           @adamhopkins
+/startup/register-runtime-routes.js  @adamhopkins
+/startup/boot-domains.js             @adamhopkins
+
+# ── SSOT Documents ─────────────────────────────────────────────────────────
+/docs/projects/*.md                  @adamhopkins
+/docs/projects/*.manifest.json       @adamhopkins
+/CLAUDE.md                           @adamhopkins
