@@ -43,6 +43,8 @@ db/migrations/20260327_project_governance.sql
 docs/projects/manifest.schema.json
 docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
 docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json
+docs/projects/AMENDMENT_READINESS_CHECKLIST.md
+routes/builder-supervisor-routes.js
 scripts/verify-project.mjs
 scripts/check-coupling.mjs
 scripts/ssot-staleness-check.mjs
@@ -74,16 +76,27 @@ docs/projects/INDEX.md
 - `GET /api/v1/projects/:id/segments`
 - `POST /api/v1/projects/:id/segments/:sid`
 - `POST /api/v1/projects/:id/verify`
+- `POST /api/v1/projects/:id/readiness/mark-ready`
+- `POST /api/v1/projects/:id/readiness/unmark`
+- `GET /api/v1/projects/readiness/queue`
 - `GET /api/v1/pending-adam`
 - `POST /api/v1/pending-adam`
 - `POST /api/v1/pending-adam/:id/resolve`
 - `GET /api/v1/estimation/accuracy`
+- `POST /api/v1/builder/run`
+- `POST /api/v1/builder/run-sync`
+- `GET /api/v1/builder/status`
+- `GET /api/v1/builder/queue`
+- `POST /api/v1/builder/pause`
+- `POST /api/v1/builder/resume`
 
 ### Verification loop
 1. Amendment explains intent
 2. Manifest encodes machine-checkable truth
 3. Verifier runs assertions
 4. Coupling/staleness scripts enforce discipline in CI
+5. Readiness gates determine when a project is mature enough to enter the builder queue
+6. Builder supervisor only executes projects that are both `build_ready` and safe enough to automate
 
 ---
 
@@ -99,9 +112,11 @@ docs/projects/INDEX.md
 - [x] **Mount governance routes in runtime composition** *(est: 0.5h | actual: 0.5h)* `[safe]`
 - [x] **Add a seeded project bootstrap script** *(est: 2h | actual: 2h)* `[safe]`
 - [x] **Run the seed bootstrap against the real DB and verify live governance endpoints** *(est: 1h | actual: 1h)* `[safe]`
-- [ ] **→ NEXT: wire estimation accuracy and governance drill-down into the Command Center overlay** *(est: 3h)* `[needs-review]`
+- [x] **Add build-readiness checklist and readiness queue routes** *(est: 2h | actual: 2h)* `[needs-review]`
+- [x] **Mount builder supervisor routes into runtime composition** *(est: 0.5h | actual: 0.5h)* `[safe]`
+- [ ] **→ NEXT: wire estimation accuracy, readiness queue, and governance drill-down into the Command Center overlay** *(est: 4h)* `[needs-review]`
 
-**Progress:** 10/11 steps complete | Est. remaining: ~3h
+**Progress:** 12/13 steps complete | Est. remaining: ~4h
 
 ---
 
@@ -118,16 +133,19 @@ Required runtime truths:
 - `GET /api/v1/projects` exists
 - `GET /api/v1/pending-adam` exists
 - `GET /api/v1/estimation/accuracy` exists
+- `GET /api/v1/projects/readiness/queue` exists
+- `GET /api/v1/builder/status` exists
 - `projects`, `project_segments`, `estimation_log`, and `pending_adam` tables exist after migration
 
 ---
 
 ## Context Handoff
-- Current blocker: governance data is now seeded and live endpoints verify, but the Command Center still needs a first-class governance panel for estimation accuracy and deeper drill-downs.
+- Current blocker: governance data, readiness gates, and builder-supervisor routes are live, but the Command Center still needs a first-class governance panel for estimation accuracy, readiness queue, and deeper drill-downs.
 - Last decision: mount governance routes once at `/api/v1` so route paths stay canonical and do not double-prefix.
 - Do not move project governance back into `server.js`; keep runtime composition in startup modules.
 - Read first:
   - `routes/project-governance-routes.js`
+  - `routes/builder-supervisor-routes.js`
   - `scripts/verify-project.mjs`
   - `docs/projects/manifest.schema.json`
 
@@ -138,6 +156,8 @@ Required runtime truths:
 - Verifier reads manifests and runs assertions without syntax errors
 - CI workflow can validate manifests and run coupling/staleness checks
 - Route mount does not double-prefix project-governance endpoints
+- Builder supervisor routes mount under `/api/v1/builder/*`
+- Readiness queue distinguishes build-ready projects from not-ready projects
 
 ---
 
@@ -147,3 +167,4 @@ Required runtime truths:
 |---|---|---|---|---|---|
 | 2026-03-27 | Added governance schema, routes, manifests, verifier, coupling/staleness scripts, and CI workflow | Make SSOT discipline executable instead of aspirational | ✅ | ✅ | pending |
 | 2026-03-27 | Seeded projects/segments into the real DB and verified live governance endpoints | Make the governance lane operational instead of API-only | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added readiness-gate routes, readiness queue, checklist doc, and builder supervisor route composition | Make pre-build maturity explicit and give governed projects a safe automation entry point | ✅ | pending | pending |

@@ -7,7 +7,7 @@
   "priority": "high",
   "owner": "adam",
   "phase": "core-infrastructure",
-  "next_task": "Wire estimation accuracy and governance drill-down into the Command Center overlay",
+  "next_task": "Wire estimation accuracy, readiness queue, and governance drill-down into the Command Center overlay",
   "stability_class": "needs-review",
   "current_focus": "Governance data is seeded and live; next step is surfacing estimation accuracy, timing truth, and drill-downs in the Command Center",
   "owned_files": [
@@ -16,6 +16,8 @@
     "docs/projects/manifest.schema.json",
     "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
     "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json",
+    "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
+    "routes/builder-supervisor-routes.js",
     "scripts/verify-project.mjs",
     "scripts/check-coupling.mjs",
     "scripts/ssot-staleness-check.mjs",
@@ -31,6 +33,8 @@
     "routes/project-governance-routes.js",
     "db/migrations/20260327_project_governance.sql",
     "docs/projects/manifest.schema.json",
+    "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",
+    "routes/builder-supervisor-routes.js",
     "scripts/verify-project.mjs",
     "scripts/check-coupling.mjs",
     "scripts/ssot-staleness-check.mjs",
@@ -39,7 +43,9 @@
   "required_routes": [
     { "method": "GET", "path": "/api/v1/projects", "expected_status": 200, "description": "Project list" },
     { "method": "GET", "path": "/api/v1/pending-adam", "expected_status": 200, "description": "Pending Adam list" },
-    { "method": "GET", "path": "/api/v1/estimation/accuracy", "expected_status": 200, "description": "Estimation accuracy report" }
+    { "method": "GET", "path": "/api/v1/estimation/accuracy", "expected_status": 200, "description": "Estimation accuracy report" },
+    { "method": "GET", "path": "/api/v1/projects/readiness/queue", "expected_status": 200, "description": "Build readiness queue" },
+    { "method": "GET", "path": "/api/v1/builder/status", "expected_status": 200, "description": "Builder supervisor status" }
   ],
   "required_tables": [
     { "name": "projects", "required_columns": ["id", "slug", "name", "status", "lifecycle"] },
@@ -56,7 +62,8 @@
     { "type": "node_check", "check": "scripts/verify-project.mjs", "label": "verify-project syntax" },
     { "type": "node_check", "check": "scripts/check-coupling.mjs", "label": "check-coupling syntax" },
     { "type": "node_check", "check": "scripts/ssot-staleness-check.mjs", "label": "staleness script syntax" },
-    { "type": "node_check", "check": "scripts/seed-projects.mjs", "label": "seed-projects syntax" }
+    { "type": "node_check", "check": "scripts/seed-projects.mjs", "label": "seed-projects syntax" },
+    { "type": "node_check", "check": "routes/builder-supervisor-routes.js", "label": "builder-supervisor-routes syntax" }
   ],
   "completion_checks": [
     "Governance routes mount once at /api/v1 without path duplication",
@@ -65,12 +72,15 @@
     "Coupling and staleness scripts run in CI",
     "Seed script can populate projects and segments from amendment build plans",
     "Projects dashboard can read seeded governance data from DB",
+    "Readiness queue differentiates build-ready and not-ready projects",
+    "Builder supervisor routes are mounted and report queue/run status",
     "Governance captures estimate vs actual timing so forecast accuracy can improve over time"
   ],
   "anti_drift_notes": "Governance routes are mounted once at /api/v1. Do not mount the same router separately at /api/v1/projects and /api/v1/pending-adam or every path will double-prefix. This lane exists to keep project state truthful, not to implement feature-specific behavior.",
   "decision_debt": [
     { "description": "Seed script was run and live endpoints were verified on 2026-03-27", "resolved": true },
     { "description": "Governance data is live in the API but Command Center still needs estimation/drill-down panels", "resolved": false },
+    { "description": "Readiness gates and builder supervisor routes exist but still need a first-class Command Center surface", "resolved": false },
     { "description": "Timing truth should become a first-class habit across all amendments so estimate accuracy improves instead of staying anecdotal", "resolved": false }
   ],
   "last_verified_at": null,

@@ -15,6 +15,7 @@ import { createWordKeeperRoutes } from "../routes/word-keeper-routes.js";
 import { createAutonomyRoutes } from "../routes/autonomy-routes.js";
 import { createRailwayManagedEnvRoutes } from "../routes/railway-managed-env-routes.js";
 import { createProjectGovernanceRoutes } from "../routes/project-governance-routes.js";
+import { createBuilderSupervisorRoutes } from "../routes/builder-supervisor-routes.js";
 import { createAccountManagerRoutes } from "../routes/account-manager-routes.js";
 import { createTCRoutes } from "../routes/tc-routes.js";
 import { createMLSRoutes } from "../routes/mls-routes.js";
@@ -94,6 +95,9 @@ export function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1", createProjectGovernanceRoutes({ requireKey, pool }));
   logger.info("✅ [PROJECT-GOVERNANCE] Routes mounted at /api/v1/projects, /api/v1/pending-adam, /api/v1/estimation/accuracy");
+
+  app.use("/api/v1/builder", createBuilderSupervisorRoutes({ requireKey, pool }));
+  logger.info("✅ [BUILDER-SUPERVISOR] Routes mounted at /api/v1/builder/{run,status,queue,pause,resume}");
 
   const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
   createTCRoutes(app, {

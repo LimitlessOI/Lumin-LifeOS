@@ -325,6 +325,96 @@ export function createProjectGovernanceRoutes({ requireKey, pool }) {
     }
   });
 
+  // ── POST /api/v1/projects/:id/readiness/mark-ready ───────────────────────
+  // Mark a project as build_ready = TRUE after completing the 5-gate checklist.
+  // See docs/projects/AMENDMENT_READINESS_CHECKLIST.md
+  router.post('/projects/:id/readiness/mark-ready', requireKey, async (req, res) => {
+    try {
+      const { rows: [project] } = await pool.query(
+        `SELECT id, slug FROM projects WHERE slug = $1 OR id::text = $1`, [req.params.id]
+      );
+      if (!project) return res.status(404).json({ ok: false, error: 'Project not found' });
+
+      const {
+        adaptability_score,
+        notes,
+        competitor_analysis,
+        checked_by = 'adam',
+      } = req.body;
+
+      const { rows: [updated] } = await pool.query(`
+        UPDATE projects SET
+          build_ready = TRUE,
+          readiness_checked_at = NOW(),
+          readiness_checked_by = $1,
+          readiness_notes = $2,
+          competitor_analysis = $3,
+          adaptability_score = $4
+        WHERE id = $5
+        RETURNING slug, build_ready, readiness_checked_at, adaptability_score
+      `, [
+        checked_by,
+        notes || null,
+        competitor_analysis ? JSON.stringify(competitor_analysis) : null,
+        adaptability_score ?? null,
+        project.id,
+      ]);
+
+      res.json({
+        ok: true,
+        project: updated,
+        message: `${project.slug} is now BUILD_READY — builder supervisor will pick up safe pending segments on next run`,
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── POST /api/v1/projects/:id/readiness/unmark ────────────────────────────
+  // Pull a project back out of build_ready (e.g. scope changed significantly)
+  router.post('/projects/:id/readiness/unmark', requireKey, async (req, res) => {
+    try {
+      const { rows: [project] } = await pool.query(
+        `SELECT id, slug FROM projects WHERE slug = $1 OR id::text = $1`, [req.params.id]
+      );
+      if (!project) return res.status(404).json({ ok: false, error: 'Project not found' });
+
+      await pool.query(`UPDATE projects SET build_ready = FALSE WHERE id = $1`, [project.id]);
+      res.json({ ok: true, message: `${project.slug} removed from build queue` });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── GET /api/v1/projects/readiness/queue ─────────────────────────────────
+  // What's build_ready vs not — the "is it ready to build?" dashboard view
+  router.get('/projects/readiness/queue', requireKey, async (req, res) => {
+    try {
+      const { rows } = await pool.query(`
+        SELECT
+          p.id, p.slug, p.name, p.priority, p.lifecycle,
+          p.build_ready, p.readiness_checked_at, p.adaptability_score,
+          p.readiness_notes, p.amendment_path,
+          COUNT(CASE WHEN ps.status = 'pending' AND ps.stability_class = 'safe' THEN 1 END) AS safe_pending,
+          COUNT(CASE WHEN ps.status = 'pending' AND ps.stability_class = 'needs-review' THEN 1 END) AS review_pending,
+          COUNT(CASE WHEN ps.status = 'pending' AND ps.stability_class = 'high-risk' THEN 1 END) AS highrisk_pending
+        FROM projects p
+        LEFT JOIN project_segments ps ON ps.project_id = p.id
+        WHERE p.status = 'active'
+        GROUP BY p.id
+        ORDER BY p.build_ready DESC,
+          CASE p.priority WHEN 'critical' THEN 1 WHEN 'high' THEN 2 WHEN 'normal' THEN 3 ELSE 4 END
+      `);
+
+      const ready    = rows.filter(r => r.build_ready);
+      const notReady = rows.filter(r => !r.build_ready);
+
+      res.json({ ok: true, ready, notReady, checklist_doc: 'docs/projects/AMENDMENT_READINESS_CHECKLIST.md' });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // ── GET /api/v1/estimation/accuracy ──────────────────────────────────────
   router.get('/estimation/accuracy', requireKey, async (req, res) => {
     try {
