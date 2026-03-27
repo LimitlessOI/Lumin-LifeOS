@@ -30,6 +30,44 @@ Only escalate to Adam when a **decision** is needed — approvals, credentials t
 
 ---
 
+## ZERO WASTE AI CALL RULE — READ BEFORE WRITING ANY SCHEDULED TASK
+
+**Every AI call must be useful work. No exceptions.**
+
+Before any code that calls `callCouncilMember`, `callCouncilWithFailover`, or any AI provider:
+1. Is it triggered by a direct user action? → Allowed.
+2. Is it a scheduled/background task? → It MUST go through `createUsefulWorkGuard()` in `services/useful-work-guard.js`.
+
+`createUsefulWorkGuard()` requires you to declare:
+- **prerequisites** — what env vars / credentials must exist (e.g. IMAP not configured = no email triage)
+- **workCheck** — a DB query proving real work exists (e.g. no active transactions = no deadline cron)
+- **purpose** — what actionable output this call produces
+
+If prerequisites fail or work check returns 0 → skip entirely. No AI call. No tokens burned.
+
+**Pattern for every new scheduled AI task:**
+```js
+import { createUsefulWorkGuard, requireEnvVars, requireTableRows } from '../services/useful-work-guard.js';
+
+const guarded = createUsefulWorkGuard({
+  taskName: 'My Task',
+  purpose: 'What useful thing this produces for Adam',
+  prerequisites: requireEnvVars('REQUIRED_VAR'),
+  workCheck: requireTableRows(pool, 'SELECT COUNT(*) FROM my_table WHERE active = true'),
+  execute: async () => { /* only runs if above pass */ },
+  logger,
+});
+setInterval(guarded, INTERVAL_MS);
+```
+
+**Never do this:**
+```js
+// ❌ WRONG — fires regardless of whether there's work to do
+setInterval(() => callCouncilMember(...), 30 * 60 * 1000);
+```
+
+---
+
 ## HARD RULES (Always Apply)
 
 ### Priority
