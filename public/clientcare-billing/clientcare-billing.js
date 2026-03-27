@@ -7,9 +7,14 @@
   let lastAccountReport = null;
   let selectedAccountIndex = 0;
   let lastReimbursementIntelligence = null;
+  let lastBrowserResult = null;
+  let lastViewState = null;
   let fullQueueHydrated = false;
   let fullQueueLoading = false;
   let assistantSessionId = localStorage.getItem('clientcare_assistant_session_id') || '';
+  let accountFilter = localStorage.getItem('clientcare_account_filter') || 'all';
+  let assistantPinned = localStorage.getItem('clientcare_assistant_pinned') !== 'false';
+  let assistantOpen = localStorage.getItem('clientcare_assistant_open') !== 'false';
 
   function getApiKey() {
     return localStorage.getItem('COMMAND_CENTER_KEY') || localStorage.getItem('lifeos_cmd_key') || localStorage.getItem('x_api_key') || '';
@@ -24,6 +29,40 @@
   function setAssistantSessionId(value) {
     assistantSessionId = value || '';
     if (assistantSessionId) localStorage.setItem('clientcare_assistant_session_id', assistantSessionId);
+  }
+
+  function setAccountFilter(value) {
+    accountFilter = value || 'all';
+    localStorage.setItem('clientcare_account_filter', accountFilter);
+  }
+
+  function setAssistantPinned(value) {
+    assistantPinned = Boolean(value);
+    localStorage.setItem('clientcare_assistant_pinned', String(assistantPinned));
+  }
+
+  function setAssistantOpen(value) {
+    assistantOpen = Boolean(value);
+    localStorage.setItem('clientcare_assistant_open', String(assistantOpen));
+  }
+
+  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence) {
+    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence };
+  }
+
+  function rerender() {
+    if (!lastViewState) return;
+    render(
+      lastViewState.root,
+      lastViewState.dashboard,
+      lastViewState.readiness,
+      lastViewState.templateFields,
+      lastViewState.claims,
+      lastViewState.actions,
+      lastViewState.reconciliation,
+      lastViewState.intelligence,
+    );
+    void ensureAssistantSession();
   }
 
   function escapeHtml(value) {
@@ -81,21 +120,83 @@
     return { label: 'Ready for submission review', percent: 85 };
   }
 
+  function getFilteredItems() {
+    const items = lastAccountReport?.items || [];
+    const sorted = [...items].sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+    switch (accountFilter) {
+      case 'strong':
+        return sorted.filter((item) => ['strong', 'possible'].includes(String(item.recoveryBand?.band || '')));
+      case 'insurance':
+        return sorted.filter((item) => String(item.diagnosis?.status || '') === 'insurance_setup_issue');
+      case 'missing':
+        return sorted.filter((item) => !(item.accountSummary?.insurers || []).length);
+      case 'client_match':
+        return sorted.filter((item) => String(item.diagnosis?.status || '') === 'client_match_issue');
+      case 'oldest':
+        return sorted;
+      default:
+        return items;
+    }
+  }
+
+  function renderFilterBar() {
+    const filters = [
+      ['all', 'All'],
+      ['strong', 'Strong Chance'],
+      ['insurance', 'Insurance Setup'],
+      ['missing', 'Missing Insurance'],
+      ['client_match', 'Client Match'],
+      ['oldest', 'Oldest'],
+    ];
+    return `
+      <div class="filter-bar">
+        ${filters.map(([value, label]) => `
+          <button class="${accountFilter === value ? '' : 'ghost'}" data-account-filter="${value}">${escapeHtml(label)}</button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function renderTodaysFocus() {
+    const items = [...(lastAccountReport?.items || [])]
+      .sort((a, b) => {
+        const ar = ['strong', 'possible', 'slim', 'review', 'unlikely'].indexOf(String(a.recoveryBand?.band || 'review'));
+        const br = ['strong', 'possible', 'slim', 'review', 'unlikely'].indexOf(String(b.recoveryBand?.band || 'review'));
+        if (ar !== br) return ar - br;
+        return String(a.date || '').localeCompare(String(b.date || ''));
+      })
+      .slice(0, 5);
+    return items.length ? `
+      <table>
+        <thead><tr><th>Client</th><th>Recovery</th><th>Next action</th></tr></thead>
+        <tbody>
+          ${items.map((item) => `
+            <tr>
+              <td>${escapeHtml(item.client || '')}</td>
+              <td>${escapeHtml(item.recoveryBand?.label || 'Needs review')}</td>
+              <td>${escapeHtml(item.diagnosis?.needed?.[0] || 'Manual review')}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    ` : '<p class="muted">No focus list yet.</p>';
+  }
+
   function renderAccountBoard() {
     const container = document.getElementById('account-board');
     const detail = document.getElementById('account-detail');
     if (!container || !detail) return;
 
-    const report = lastAccountReport;
-    if (!report || !Array.isArray(report.items) || !report.items.length) {
+    const items = getFilteredItems();
+    if (!items.length) {
       container.innerHTML = '<p class="muted">Loading live billing accounts…</p>';
       detail.innerHTML = '<p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p>';
       return;
     }
 
-    if (selectedAccountIndex >= report.items.length) selectedAccountIndex = 0;
+    if (selectedAccountIndex >= items.length) selectedAccountIndex = 0;
 
-    container.innerHTML = report.items.map((item, index) => {
+    container.innerHTML = renderFilterBar() + items.map((item, index) => {
       const stage = deriveAccountStage(item);
       const selected = index === selectedAccountIndex;
       return `
@@ -121,7 +222,7 @@
       `;
     }).join('');
 
-    const item = report.items[selectedAccountIndex];
+    const item = items[selectedAccountIndex];
     detail.innerHTML = `
       <div class="stack">
         <div class="account-detail-header">
@@ -182,11 +283,17 @@
         await inspectSelectedAccount();
       });
     });
+    container.querySelectorAll('[data-account-filter]').forEach((button) => {
+      button.addEventListener('click', () => {
+        setAccountFilter(button.getAttribute('data-account-filter'));
+        selectedAccountIndex = 0;
+        renderAccountBoard();
+      });
+    });
   }
 
   async function inspectSelectedAccount() {
-    const report = lastAccountReport;
-    const item = report?.items?.[selectedAccountIndex];
+    const item = getFilteredItems()?.[selectedAccountIndex];
     if (!item || item._inspected || !item.raw?.billingHref) return;
     try {
       const result = await api('/api/v1/clientcare-billing/browser/inspect-client-account', {
@@ -598,7 +705,9 @@
   }
 
   function setBrowserOutput(result) {
-    document.getElementById('browser-output').innerHTML = renderBrowserOutput(result);
+    lastBrowserResult = result || null;
+    const node = document.getElementById('browser-output');
+    if (node) node.innerHTML = renderBrowserOutput(result);
   }
 
   async function api(url, options) {
@@ -764,7 +873,7 @@
       lastAccountReport = result;
       selectedAccountIndex = 0;
       setBrowserOutput(result);
-      renderAccountBoard();
+      rerender();
       alert(`Loaded ${result.items?.length || 0} account rescue rows.`);
     } catch (error) {
       alert(error.message);
@@ -794,9 +903,7 @@
       }
       selectedAccountIndex = 0;
       setBrowserOutput(result);
-      renderAccountBoard();
-      const workflowNode = document.getElementById('workflow-playbooks');
-      if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
+      rerender();
       if (!silent) alert(`Loaded ${result.accounts?.length || 0} accounts from the full billing queue.`);
     } catch (error) {
       if (!silent) alert(error.message);
@@ -821,9 +928,7 @@
       };
       fullQueueHydrated = true;
       setBrowserOutput(result);
-      renderAccountBoard();
-      const workflowNode = document.getElementById('workflow-playbooks');
-      if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
+      rerender();
       if (!silent) alert(`Loaded ${result.accounts?.length || 0} backlog accounts.`);
     } catch (error) {
       if (!silent) alert(error.message);
@@ -862,6 +967,33 @@
         ${message.metadata?.intent ? `<div class="muted small" style="margin-top:8px;">Intent: ${escapeHtml(message.metadata.intent)} · Scope: ${escapeHtml(message.metadata.scope || 'unclear')}</div>` : ''}
       </div>
     `).join('') : '<p class="muted">Start a conversation.</p>';
+  }
+
+  function renderAssistantShell() {
+    const pinnedLabel = assistantPinned ? 'Unpin chat' : 'Pin chat';
+    const collapseLabel = assistantOpen ? 'Collapse' : 'Open';
+    return `
+      <div class="assistant-shell ${assistantPinned ? 'pinned' : 'floating'} ${assistantOpen ? 'open' : 'closed'}">
+        <div class="card assistant-card">
+          <div class="account-card-top">
+            <div>
+              <h2>Operations Assistant</h2>
+              <p class="muted">Direct system connection with running history.</p>
+            </div>
+            <div class="row-actions">
+              <button id="assistant-pin-toggle" class="ghost">${escapeHtml(pinnedLabel)}</button>
+              <button id="assistant-open-toggle" class="ghost">${escapeHtml(collapseLabel)}</button>
+            </div>
+          </div>
+          <div id="assistant-panel" style="${assistantOpen ? '' : 'display:none;'}">
+            <div id="assistant-meta" class="row-actions" style="margin:10px 0"></div>
+            <div id="assistant-history" class="stack assistant-history"></div>
+            <textarea id="assistant-input" placeholder="Type a question, command, or requested system change here"></textarea>
+            <div style="margin-top:10px"><button id="assistant-send">Send</button></div>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   async function sendAssistantMessage() {
@@ -939,19 +1071,23 @@
   }
 
   function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence) {
+    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence);
     const summary = dashboard.summary || {};
     const liveSummary = lastAccountReport?.summary || null;
-    const topCards = liveSummary ? [
-      { label: 'Live accounts', value: liveSummary.totalAccounts || 0 },
-      { label: 'Billing notes', value: liveSummary.totalQueueItems || 0 },
-      { label: 'Strong/possible', value: (liveSummary.recoveryBandCounts?.strong || 0) + (liveSummary.recoveryBandCounts?.possible || 0) },
-      { label: 'Unlikely', value: liveSummary.recoveryBandCounts?.unlikely || 0 },
-    ] : [
-      { label: 'Total claims', value: summary.total_claims || 0 },
-      { label: 'Outstanding total', value: summary.outstanding_total || 0 },
-      { label: 'Submit now', value: summary.submit_now_count || 0 },
-      { label: 'Correct/resubmit', value: summary.correct_and_resubmit_count || 0 },
+    const forecastBuckets = intelligence?.collection_forecast?.timing_buckets || [];
+    const bucket30 = forecastBuckets.find((b) => b.label === '0-30 days');
+    const bucket60 = forecastBuckets.find((b) => b.label === '31-60 days');
+    const topCards = [
+      { label: 'Live accounts', value: liveSummary ? (liveSummary.totalAccounts || 0) : 'Loading…' },
+      { label: 'Billing notes', value: liveSummary ? (liveSummary.totalQueueItems || 0) : 'Loading…' },
+      { label: 'Projected 30d', value: liveSummary ? money(bucket30?.amount || 0) : 'Loading…' },
+      { label: 'Projected 60d', value: liveSummary ? money(bucket60?.amount || 0) : 'Loading…' },
+      { label: 'Strong/possible', value: liveSummary ? ((liveSummary.recoveryBandCounts?.strong || 0) + (liveSummary.recoveryBandCounts?.possible || 0)) : 'Loading…' },
+      { label: 'Insurance setup', value: liveSummary ? (liveSummary.diagnosisCounts?.insurance_setup_issue || 0) : 'Loading…' },
+      { label: 'Missing insurance', value: liveSummary ? (liveSummary.missingInsurer || 0) : 'Loading…' },
+      { label: 'Oldest account age', value: liveSummary ? (liveSummary.oldestAccounts?.[0]?.oldestNoteDate || '—') : 'Loading…' },
     ];
+
     const claimRows = claims.map((claim) => `
       <tr>
         <td>${escapeHtml(claim.patient_name || '')}</td>
@@ -993,128 +1129,124 @@
         </div>
       </div>
 
-      <div class="grid four">
+      <div class="grid four kpi-grid">
         ${topCards.map((card) => `
           <div class="card stat"><span>${escapeHtml(card.label)}</span><strong>${escapeHtml(card.value)}</strong></div>
         `).join('')}
       </div>
 
-      <div class="grid two">
-        <div class="card">
-          <h2>Browser fallback readiness</h2>
-          <p style="margin:10px 0"><span class="badge ${badgeClass(readiness.ready ? 'ready' : 'warn')}">${readiness.ready ? 'ready' : 'not ready'}</span></p>
-          ${renderReadiness(readiness)}
-        </div>
-        <div class="card">
-          <h2>Import backlog</h2>
-          <p class="hint" style="margin:10px 0">Paste CSV from ClientCare exports. Required/expected fields are listed below.</p>
-          ${renderImportTemplate(templateFields)}
-          <textarea id="csv-input" placeholder="Paste claim export CSV here"></textarea>
-          <div style="margin-top:10px"><button id="import-csv">Import CSV</button></div>
-        </div>
-      </div>
-
-      <div class="grid two">
-        <div class="card">
-          <h2>Snapshot import</h2>
-          <p class="hint" style="margin:10px 0">Paste copied ClientCare table HTML or tab/comma-delimited text. This is the no-export fallback.</p>
-          <textarea id="snapshot-input" placeholder="Paste copied table HTML or delimited text here"></textarea>
-          <div style="margin-top:10px"><button id="import-snapshot">Import Snapshot</button></div>
-        </div>
-        <div class="card">
-          <h2>Reconciliation</h2>
-          ${renderReconciliation(reconciliation)}
-        </div>
-      </div>
-
-      <div class="grid two">
-        <div class="card">
-          <h2>Reimbursement intelligence</h2>
-          <p class="hint" style="margin:10px 0">This gets better as paid claims, ERAs, and remits are imported. It shows what payers actually paid, where leakage exists, and where to tighten workflow.</p>
-          <div id="reimbursement-intelligence">${renderReimbursementIntelligence(intelligence)}</div>
-        </div>
-        <div class="card">
-          <h2>Insurance intake rule</h2>
-          <p class="muted">Use benefits verification to decide whether to take the client, then use payout history to estimate what should be collectible. Exact reimbursement is not assumed without actual remit history.</p>
-        </div>
-      </div>
-
-      <div class="grid two">
-        <div class="card">
-          <h2>Browser automation</h2>
-          <p class="hint" style="margin:10px 0">Uses the Railway ClientCare credentials to log in, inspect billing pages, and preview claim tables.</p>
-          <div class="row-actions">
-            <button id="browser-login-test">Login Test</button>
-            <button id="browser-overview" class="ghost">Billing Overview</button>
-            <button id="browser-scan-billing-notes" class="ghost">Scan Billing Notes</button>
-            <button id="browser-discover" class="ghost">Discover</button>
-            <button id="browser-extract" class="ghost">Extract Preview</button>
-            <button id="browser-extract-import">Extract + Import</button>
-          </div>
-          <div class="row-actions" style="margin-top:10px">
-            <input id="browser-scan-limit" type="number" min="1" max="25" value="5" style="max-width:90px">
-            <input id="browser-scan-offset" type="number" min="0" value="0" style="max-width:90px">
-            <button id="browser-scan-accounts" class="ghost">Scan Accounts</button>
-            <button id="browser-account-report" class="ghost">Account Report</button>
-            <button id="browser-full-account-report" class="ghost">Full Queue Report</button>
-          </div>
-        </div>
-        <div class="card">
-          <h2>Browser output</h2>
-          <div id="browser-output"><p class="muted">No browser run yet.</p></div>
-        </div>
-      </div>
-
-      <div class="grid two">
-        <div class="card">
-          <h2>Account status board</h2>
-          <p class="hint" style="margin:10px 0">Each account shows where it is stuck. Hover for a quick overview. Click for full details.</p>
-          <div id="account-board" class="account-board"><p class="muted">Run Account Report to load live billing accounts.</p></div>
-        </div>
-        <div class="card">
-          <h2>Account details</h2>
-          <div id="account-detail"><p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>Batch workflows</h2>
-        <p class="hint" style="margin:10px 0">Work the backlog by common blocker instead of one account at a time.</p>
-        <div id="workflow-playbooks">${renderWorkflowPlaybooks(lastAccountReport?.summary || {})}</div>
-      </div>
-
-      <div class="card">
-        <h2>Operations Assistant</h2>
-        <p class="hint" style="margin:10px 0">Ask questions, request workflow changes, or describe what needs to be built. History stays live here and older messages roll into archive.</p>
-        <div id="assistant-meta" class="row-actions" style="margin-bottom:10px"></div>
-        <div id="assistant-history" class="stack" style="max-height:420px; overflow:auto; margin-bottom:12px"></div>
-        <textarea id="assistant-input" placeholder="Type a question, command, or requested system change here"></textarea>
-        <div style="margin-top:10px"><button id="assistant-send">Send</button></div>
-      </div>
-
-      <div class="split">
-        <div class="stack">
-          <div class="card">
-            <h2>Claims</h2>
-            <table>
-              <thead><tr><th>Patient</th><th>Payer</th><th>DOS</th><th>Status</th><th>Bucket</th><th>Priority</th><th>Balance</th><th>Actions</th></tr></thead>
-              <tbody>${claimRows}</tbody>
-            </table>
+      <div class="workspace ${assistantPinned ? 'assistant-pinned' : 'assistant-floating'}">
+        <div class="main-workspace">
+          <div class="grid two">
+            <div class="card">
+              <h2>Today’s Focus</h2>
+              <p class="hint" style="margin:10px 0">Start here. Highest-value accounts first.</p>
+              ${renderTodaysFocus()}
+            </div>
+            <div class="card">
+              <h2>Batch Workflows</h2>
+              <p class="hint" style="margin:10px 0">Work the backlog by blocker instead of one account at a time.</p>
+              <div id="workflow-playbooks">${renderWorkflowPlaybooks(lastAccountReport?.summary || {})}</div>
+            </div>
           </div>
 
-          <div class="card">
-            <h2>Open actions</h2>
-            <table>
-              <thead><tr><th>Patient</th><th>Action</th><th>Priority</th><th>Status</th><th>Evidence</th><th></th></tr></thead>
-              <tbody>${actionRows}</tbody>
-            </table>
+          <div class="grid two">
+            <div class="card">
+              <h2>Accounts Needing Action</h2>
+              <p class="hint" style="margin:10px 0">Hover for a summary. Click for full detail.</p>
+              <div id="account-board" class="account-board"><p class="muted">Loading live billing accounts…</p></div>
+            </div>
+            <div class="card">
+              <h2>Account Recovery Detail</h2>
+              <div id="account-detail"><p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p></div>
+            </div>
+          </div>
+
+          <details class="card tools-card">
+            <summary>Tools</summary>
+            <div class="stack" style="margin-top:16px;">
+              <div class="grid two">
+                <div class="card">
+                  <h2>Browser fallback readiness</h2>
+                  <p style="margin:10px 0"><span class="badge ${badgeClass(readiness.ready ? 'ready' : 'warn')}">${readiness.ready ? 'ready' : 'not ready'}</span></p>
+                  ${renderReadiness(readiness)}
+                </div>
+                <div class="card">
+                  <h2>Browser automation</h2>
+                  <p class="hint" style="margin:10px 0">Diagnostics and extraction tools.</p>
+                  <div class="row-actions">
+                    <button id="browser-login-test">Login Test</button>
+                    <button id="browser-overview" class="ghost">Billing Overview</button>
+                    <button id="browser-scan-billing-notes" class="ghost">Scan Billing Notes</button>
+                    <button id="browser-discover" class="ghost">Discover</button>
+                    <button id="browser-extract" class="ghost">Extract Preview</button>
+                    <button id="browser-extract-import">Extract + Import</button>
+                  </div>
+                  <div class="row-actions" style="margin-top:10px">
+                    <input id="browser-scan-limit" type="number" min="1" max="25" value="5" style="max-width:90px">
+                    <input id="browser-scan-offset" type="number" min="0" value="0" style="max-width:90px">
+                    <button id="browser-scan-accounts" class="ghost">Scan Accounts</button>
+                    <button id="browser-account-report" class="ghost">Account Report</button>
+                    <button id="browser-full-account-report" class="ghost">Full Queue Report</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid two">
+                <div class="card">
+                  <h2>Imports</h2>
+                  <p class="hint" style="margin:10px 0">Paste CSV from ClientCare exports or snapshot text as fallback.</p>
+                  ${renderImportTemplate(templateFields)}
+                  <textarea id="csv-input" placeholder="Paste claim export CSV here"></textarea>
+                  <div style="margin-top:10px"><button id="import-csv">Import CSV</button></div>
+                  <hr style="border-color:#27304a; margin:16px 0;">
+                  <textarea id="snapshot-input" placeholder="Paste copied table HTML or delimited text here"></textarea>
+                  <div style="margin-top:10px"><button id="import-snapshot">Import Snapshot</button></div>
+                </div>
+                <div class="card">
+                  <h2>Browser Output</h2>
+                  <div id="browser-output"><p class="muted">No browser run yet.</p></div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <div class="grid two">
+            <div class="card">
+              <h2>Collections Forecast</h2>
+              <p class="hint" style="margin:10px 0">Projection improves as paid claims, ERAs, and remits are imported.</p>
+              <div id="reimbursement-intelligence">${renderReimbursementIntelligence(intelligence)}</div>
+            </div>
+            <div class="card">
+              <h2>Claims Ledger</h2>
+              <div class="stack">
+                <div class="card">
+                  <h3>Reconciliation</h3>
+                  ${renderReconciliation(reconciliation)}
+                </div>
+                <div class="card">
+                  <h3>Claims</h3>
+                  <table>
+                    <thead><tr><th>Patient</th><th>Payer</th><th>DOS</th><th>Status</th><th>Bucket</th><th>Priority</th><th>Balance</th><th>Actions</th></tr></thead>
+                    <tbody>${claimRows}</tbody>
+                  </table>
+                </div>
+                <div class="card">
+                  <h3>Open actions</h3>
+                  <table>
+                    <thead><tr><th>Patient</th><th>Action</th><th>Priority</th><th>Status</th><th>Evidence</th><th></th></tr></thead>
+                    <tbody>${actionRows}</tbody>
+                  </table>
+                </div>
+                <div class="card" id="claim-plan">
+                  <h3>Claim plan</h3>
+                  <p class="muted">Select a claim to inspect its filing rule, rescue bucket, and recommended actions.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div class="card" id="claim-plan">
-          <h2>Claim plan</h2>
-          <p class="muted">Select a claim to inspect its filing rule, rescue bucket, and recommended actions.</p>
-        </div>
+        ${renderAssistantShell()}
       </div>
     `;
 
@@ -1134,6 +1266,16 @@
     document.getElementById('browser-account-report').addEventListener('click', browserAccountReport);
     document.getElementById('browser-full-account-report').addEventListener('click', browserFullAccountReport);
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
+    document.getElementById('assistant-pin-toggle').addEventListener('click', () => {
+      setAssistantPinned(!assistantPinned);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence);
+      ensureAssistantSession();
+    });
+    document.getElementById('assistant-open-toggle').addEventListener('click', () => {
+      setAssistantOpen(!assistantOpen);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence);
+      ensureAssistantSession();
+    });
     document.getElementById('assistant-input').addEventListener('keydown', (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') sendAssistantMessage();
     });
@@ -1141,6 +1283,7 @@
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));
     renderAccountBoard();
+    if (lastBrowserResult) setBrowserOutput(lastBrowserResult);
     const workflowNode = document.getElementById('workflow-playbooks');
     if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
   }

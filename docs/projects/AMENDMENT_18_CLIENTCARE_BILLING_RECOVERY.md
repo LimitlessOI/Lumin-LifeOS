@@ -204,6 +204,9 @@ Operational inputs needed regardless of integration path:
 - The operator overlay should automatically hydrate the live ClientCare backlog when credentials and app key are present so the visible account board and summary counts do not depend on a manual extra button press.
 - The reimbursement intelligence view must include a collections forecast: projected collectible amount, projected timing buckets, and top expected collections, improving as paid-claim history is imported.
 - The overlay must expose an operator chat tied directly to LifeOS AI with running history and archive behavior for older turns; it should classify requests as personal vs shared system improvements.
+- The operator chat should be named `Operations Assistant`, support pinned and unpinned layouts, and stay out of the main workstream when collapsed.
+- The overlay should present the live ClientCare backlog as the primary KPI strip so at-a-glance counts show live accounts, billing notes, recovery opportunity, and timing forecasts instead of empty local-ledger placeholders.
+- The overlay should be organized into overview, accounts needing action, account recovery detail, and collapsible tools so Sherry can work the queue without scanning low-value diagnostics first.
 - The overlay should load a fast backlog summary first, then inspect account details lazily, so the board fills quickly instead of waiting for every billing page to be opened.
 - The browser path may include transport diagnostics for ClientCare billing-note loading when queue pagination or lazy loading prevents full backlog extraction.
 - Rescue queue exists and scores claims by urgency/recoverability.
