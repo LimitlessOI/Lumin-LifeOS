@@ -26,6 +26,8 @@
 - ClientCare overlay now also has an account status board with hover summaries and click-through details so Sherry can see where each account is stuck at a glance.
 - ClientCare billing now also has a reimbursement-intelligence foundation so payout projections can be learned from historical paid claims/remits, and the browser path is being extended toward full billing-queue traversal rather than just the first visible batch.
 - ClientCare billing now also has transport diagnostics for the billing-notes queue because the UI advertises 88 notes while the current headless traversal only sees 15 rendered rows.
+- ClientCare billing-notes traversal now uses the actual `GetMidwifeNotesList` transport instead of rendered-page scraping, so the system can pull the full 88-note backlog and collapse it into account-level rescue work.
+- ClientCare overlay now also summarizes the full backlog in operator terms: diagnosis counts, recovery-likelihood bands, oldest accounts first, and the most common next-action buckets, with raw payloads kept secondary.
 
 ## Update 2026-03-26 #1
 - Priority shifted temporarily from TC to ClientCare billing recovery because there is already earned revenue trapped in unpaid / unbilled / rejected / denied claims.

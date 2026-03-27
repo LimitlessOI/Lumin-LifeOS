@@ -124,9 +124,11 @@
           <span class="badge ${badgeClass(item.diagnosis?.status || 'review')}">${escapeHtml(item.diagnosis?.status || 'review')}</span>
         </div>
         ${renderKeyValueTable([
+          { label: 'Recovery chance', value: item.recoveryBand?.label || 'Needs review' },
           { label: 'Payment status', value: item.accountSummary?.paymentStatus || 'unknown' },
           { label: 'Client billing status', value: item.accountSummary?.clientBillingStatus || 'blank' },
           { label: 'Bill provider type', value: item.accountSummary?.billProviderType || 'blank' },
+          { label: 'Billing notes', value: item.raw?.noteCount || 1 },
           { label: 'Insurers', value: (item.accountSummary?.insurers || []).join(', ') || 'none visible' },
           { label: 'Flags', value: (item.accountSummary?.flags || []).join(', ') || 'none' },
         ])}
@@ -287,8 +289,82 @@
     `;
   }
 
+  function renderSummaryBadges(summary = {}) {
+    const diagnosis = summary.diagnosisCounts || {};
+    const recovery = summary.recoveryBandCounts || {};
+    return `
+      <div class="grid four" style="margin-bottom:0">
+        <div class="card stat"><span>Total queue notes</span><strong>${escapeHtml(summary.totalQueueItems || 0)}</strong></div>
+        <div class="card stat"><span>Unique accounts</span><strong>${escapeHtml(summary.totalAccounts || 0)}</strong></div>
+        <div class="card stat"><span>Strong/possible</span><strong>${escapeHtml((recovery.strong || 0) + (recovery.possible || 0))}</strong></div>
+        <div class="card stat"><span>Unlikely</span><strong>${escapeHtml(recovery.unlikely || 0)}</strong></div>
+        <div class="card stat"><span>Insurance setup</span><strong>${escapeHtml(diagnosis.insurance_setup_issue || 0)}</strong></div>
+        <div class="card stat"><span>Config issues</span><strong>${escapeHtml(diagnosis.billing_configuration_issue || 0)}</strong></div>
+        <div class="card stat"><span>Missing insurer</span><strong>${escapeHtml(summary.missingInsurer || 0)}</strong></div>
+        <div class="card stat"><span>Payment not started</span><strong>${escapeHtml(summary.paymentNotStarted || 0)}</strong></div>
+      </div>
+    `;
+  }
+
+  function renderActionSummary(summary = {}) {
+    const actions = summary.topActions || [];
+    return `
+      <div class="stack">
+        <strong>Most common next actions</strong>
+        <table>
+          <thead><tr><th>Action</th><th>Accounts</th><th>Examples</th></tr></thead>
+          <tbody>
+            ${actions.length ? actions.map((action) => `
+              <tr>
+                <td>${escapeHtml(action.action || '')}</td>
+                <td>${escapeHtml(action.count || 0)}</td>
+                <td>${escapeHtml((action.clients || []).join(', ') || '')}</td>
+              </tr>
+            `).join('') : '<tr><td colspan="3">No action summary yet.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   function renderBrowserOutput(result) {
     if (!result) return '<p class="muted">No browser run yet.</p>';
+
+    if (Array.isArray(result.accounts) && result.summary) {
+      const summary = result.summary || {};
+      const oldestAccounts = summary.oldestAccounts || [];
+      return `
+        <div class="stack">
+          ${renderSummaryBadges(summary)}
+          ${renderKeyValueTable([
+            { label: 'Billing notes visible in ClientCare', value: result.dashboardCounts?.newBillingNotes || 0 },
+            { label: 'Billing status blank', value: summary.billingStatusBlank || 0 },
+            { label: 'Provider type blank', value: summary.providerTypeBlank || 0 },
+            { label: 'Generated', value: summary.generatedAt || '' },
+          ])}
+          ${renderActionSummary(summary)}
+          <div>
+            <strong>Oldest accounts to work first</strong>
+            <table>
+              <thead><tr><th>Client</th><th>Oldest note</th><th>Status</th><th>Recovery</th><th>Insurer</th><th>Next action</th></tr></thead>
+              <tbody>
+                ${oldestAccounts.length ? oldestAccounts.map((item) => `
+                  <tr>
+                    <td>${escapeHtml(item.client || '')}</td>
+                    <td>${escapeHtml(item.oldestNoteDate || '')}</td>
+                    <td><span class="badge ${badgeClass(item.status || 'review')}">${escapeHtml(item.status || 'review')}</span></td>
+                    <td>${escapeHtml(item.recoveryBand || '')}</td>
+                    <td>${escapeHtml((item.insurers || []).join(', ') || 'none visible')}</td>
+                    <td>${escapeHtml(item.nextAction || '')}</td>
+                  </tr>
+                `).join('') : '<tr><td colspan="6">No oldest-account summary yet.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+          <details><summary>Raw details</summary><pre>${escapeHtml(JSON.stringify(result, null, 2))}</pre></details>
+        </div>
+      `;
+    }
 
     if (Array.isArray(result.items)) {
       return `
@@ -582,15 +658,17 @@
 
   async function browserFullAccountReport() {
     try {
-      const result = await api('/api/v1/clientcare-billing/browser/full-account-report?max_pages=8&page_timeout_ms=12000&account_limit=100');
+      const result = await api('/api/v1/clientcare-billing/browser/full-account-report?max_pages=12&page_timeout_ms=12000&account_limit=200');
       lastAccountReport = {
+        summary: result.summary || null,
         items: (result.accounts || []).map((item) => ({
           client: item.client,
           notePreview: (item.notePreviews || [])[0] || '',
-          date: (item.noteDates || [])[0] || '',
+          date: item.oldestNoteDate || (item.noteDates || [])[0] || '',
           insurancePreview: item.insurancePreview || [],
           accountSummary: item.accountSummary || {},
           diagnosis: item.diagnosis || {},
+          recoveryBand: item.recoveryBand || {},
           raw: item,
         })),
       };

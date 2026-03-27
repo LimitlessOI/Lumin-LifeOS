@@ -626,6 +626,114 @@ function diagnoseBillingIssue(queueItem = {}, account = {}) {
   };
 }
 
+function daysSince(dateText) {
+  if (!dateText) return null;
+  const parsed = new Date(dateText);
+  if (Number.isNaN(parsed.getTime())) return null;
+  const diffMs = Date.now() - parsed.getTime();
+  return Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+}
+
+function inferRecoveryBand(account = {}) {
+  const status = String(account.diagnosis?.status || '').toLowerCase();
+  const ageDays = daysSince(account.oldestNoteDate || account.date);
+  const hasInsurer = Array.isArray(account.accountSummary?.insurers) && account.accountSummary.insurers.length > 0;
+
+  if (ageDays == null) {
+    return { band: 'review', label: 'Needs review', rank: 3 };
+  }
+
+  if (ageDays <= 180) {
+    return { band: 'strong', label: 'Strong chance', rank: 1 };
+  }
+
+  if (ageDays <= 365) {
+    if (status === 'insurance_setup_issue' || status === 'billing_configuration_issue') {
+      return { band: 'possible', label: 'Still possible', rank: 2 };
+    }
+    return { band: 'review', label: 'Needs review', rank: 3 };
+  }
+
+  if (ageDays <= 730) {
+    if (hasInsurer && status !== 'client_match_issue') {
+      return { band: 'slim', label: 'Slim chance', rank: 4 };
+    }
+    return { band: 'unlikely', label: 'Unlikely', rank: 5 };
+  }
+
+  return { band: 'unlikely', label: 'Unlikely', rank: 5 };
+}
+
+function buildActionQueueSummary(accounts = []) {
+  const bucketMap = new Map();
+  for (const account of accounts) {
+    const actions = Array.isArray(account.diagnosis?.needed) ? account.diagnosis.needed : ['Manual review'];
+    for (const action of actions) {
+      const key = String(action || 'Manual review').trim();
+      if (!bucketMap.has(key)) {
+        bucketMap.set(key, { action: key, count: 0, clients: [] });
+      }
+      const bucket = bucketMap.get(key);
+      bucket.count += 1;
+      if (account.client && bucket.clients.length < 8) bucket.clients.push(account.client);
+    }
+  }
+  return Array.from(bucketMap.values())
+    .sort((a, b) => b.count - a.count || a.action.localeCompare(b.action))
+    .slice(0, 8);
+}
+
+function buildFullReportSummary(accounts = [], queueItems = []) {
+  const diagnosisCounts = {};
+  const recoveryBandCounts = {};
+  let paymentNotStarted = 0;
+  let billingStatusBlank = 0;
+  let providerTypeBlank = 0;
+  let missingInsurer = 0;
+
+  for (const account of accounts) {
+    const status = account.diagnosis?.status || 'needs_review';
+    diagnosisCounts[status] = (diagnosisCounts[status] || 0) + 1;
+
+    const recovery = account.recoveryBand?.band || 'review';
+    recoveryBandCounts[recovery] = (recoveryBandCounts[recovery] || 0) + 1;
+
+    const flags = Array.isArray(account.accountSummary?.flags) ? account.accountSummary.flags : [];
+    if (flags.includes('payment_not_started')) paymentNotStarted += 1;
+    if (flags.includes('billing_status_blank')) billingStatusBlank += 1;
+    if (flags.includes('bill_provider_type_blank')) providerTypeBlank += 1;
+    if (!Array.isArray(account.accountSummary?.insurers) || !account.accountSummary.insurers.length) missingInsurer += 1;
+  }
+
+  const oldestAccounts = [...accounts]
+    .sort((a, b) => String(a.oldestNoteDate || '').localeCompare(String(b.oldestNoteDate || '')))
+    .slice(0, 12)
+    .map((account) => ({
+      client: account.client,
+      oldestNoteDate: account.oldestNoteDate || '',
+      latestNoteDate: account.latestNoteDate || '',
+      noteCount: account.noteCount || 0,
+      insurers: account.accountSummary?.insurers || [],
+      status: account.diagnosis?.status || 'needs_review',
+      recoveryBand: account.recoveryBand?.label || 'Needs review',
+      nextAction: account.diagnosis?.needed?.[0] || 'Manual review',
+    }));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    totalQueueItems: queueItems.length,
+    totalAccounts: accounts.length,
+    diagnosisCounts,
+    recoveryBandCounts,
+    paymentNotStarted,
+    billingStatusBlank,
+    providerTypeBlank,
+    missingInsurer,
+    oldestAccounts,
+    topActions: buildActionQueueSummary(accounts),
+  };
+}
+
 function extractBillingQueueLinks(summary = {}, { offset = 0, limit = 10 } = {}) {
   const links = Array.isArray(summary.allLinks) ? summary.allLinks : [];
   const queue = [];
@@ -1172,8 +1280,17 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         if (item.forUser) group.forUsers.add(item.forUser);
       }
 
+      const groups = Array.from(grouped.values())
+        .map((group) => ({
+          ...group,
+          oldestNoteDate: [...group.noteDates].sort()[0] || '',
+          latestNoteDate: [...group.noteDates].sort().slice(-1)[0] || '',
+        }))
+        .sort((a, b) => String(a.oldestNoteDate || '').localeCompare(String(b.oldestNoteDate || '')))
+        .slice(0, Math.max(1, Number(accountLimit) || 100));
+
       const accounts = [];
-      for (const group of Array.from(grouped.values()).slice(0, Math.max(1, Number(accountLimit) || 100))) {
+      for (const group of groups) {
         let account = {
           billingFields: [],
           insurancePreview: [],
@@ -1208,10 +1325,18 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           date: group.noteDates[0] || '',
         };
         const diagnosis = diagnoseBillingIssue(mergedQueueItem, account);
+        const recoveryBand = inferRecoveryBand({
+          ...account,
+          diagnosis,
+          oldestNoteDate: group.oldestNoteDate,
+          date: mergedQueueItem.date,
+        });
         accounts.push({
           client: group.client,
           billingHref: group.billingHref,
           noteCount: group.noteCount,
+          oldestNoteDate: group.oldestNoteDate,
+          latestNoteDate: group.latestNoteDate,
           noteDates: group.noteDates,
           notePreviews: Array.from(new Set(group.notePreviews)),
           noteAuthors: Array.from(group.noteAuthors),
@@ -1220,8 +1345,11 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           insurancePreview: account.insurancePreview,
           accountSummary: account.accountSummary,
           diagnosis,
+          recoveryBand,
         });
       }
+
+      const summaryReport = buildFullReportSummary(accounts, queueItems);
 
       return {
         ok: true,
@@ -1229,6 +1357,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         dashboardCounts: extractDashboardCounts(summary),
         totalQueueItems: queueItems.length,
         totalAccounts: accounts.length,
+        summary: summaryReport,
         accounts,
       };
     } finally {
