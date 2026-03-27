@@ -108,6 +108,7 @@ Every claim lands in one of these buckets:
 - `GET /api/v1/clientcare-billing/ops/capability-requests`
 - `PATCH /api/v1/clientcare-billing/ops/capability-requests/:id`
 - `POST /api/v1/clientcare-billing/ops/run-workflow`
+- `POST /api/v1/clientcare-billing/ops/repair-account`
 - `POST /api/v1/clientcare-billing/insurance/verification-preview`
 - `GET /api/v1/clientcare-billing/patient-ar/summary`
 - `POST /api/v1/clientcare-billing/browser/login-test`
@@ -197,6 +198,7 @@ Operational inputs needed regardless of integration path:
 - Claim exports have not yet been ingested.
 - Paid claims / ERA / remit history has not been imported, so payout/date forecasting is still low-confidence.
 - Browser selectors for read paths are working; writeback workflows still need controlled rollout and approval gates.
+- Controlled writeback now covers billing status, provider type, and payment-status changes, but insurer-entry and payer-order changes still require payer-specific/manual handling.
 
 ---
 
@@ -232,6 +234,7 @@ Operational inputs needed regardless of integration path:
 - Operator overlay exists for queue review and CSV import.
 - Operations layer must expose an optimization checklist, patient AR summary, insurance-intake preview, and capability queue instead of leaving those as chat-only concepts.
 - `Operations Assistant` should use the ops layer first for actionable commands (workflow, AR, eligibility, setup) and only fall back to general AI when needed.
+- Account Recovery Detail must support preview/apply repair actions for billing status, provider type, and payment-status updates with clear before/after feedback.
 - The system must support provider-directed patient AR follow-up and payment-plan monitoring, but debt-collection style workflows remain compliance-gated until legal/licensing review is complete.
 - The system should learn expected payer reimbursement and collection timing from paid claims / ERAs / remits so projected amount and projected date tighten over time instead of staying rescue-bucket-only.
 - The system should evolve toward underpayment detection, payer playbooks, eligibility verification, and appeals packet preparation because those are core differentiators versus generic billing dashboards.

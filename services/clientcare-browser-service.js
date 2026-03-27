@@ -272,6 +272,15 @@ async function extractBillingFieldPairs(page) {
         name,
         id,
         value: String(value || '').trim(),
+        fieldType: el.tagName === 'SELECT' ? 'select' : (type || el.tagName.toLowerCase()),
+        options: el.tagName === 'SELECT'
+          ? Array.from(el.options || [])
+            .map((option) => ({
+              value: String(option.value || '').trim(),
+              text: String(option.textContent || '').replace(/\s+/g, ' ').trim(),
+            }))
+            .filter((option) => option.text)
+          : [],
       });
     }
 
@@ -286,6 +295,223 @@ async function extractBillingFieldPairs(page) {
     }
     return unique;
   });
+}
+
+function buildAccountRepairPlan(account = {}, requestedUpdates = {}) {
+  const billingFields = Array.isArray(account.billingFields) ? account.billingFields : [];
+  const accountSummary = account.accountSummary || {};
+  const diagnosis = account.diagnosis || {};
+
+  const fieldByLabel = (pattern) => billingFields.find((field) => pattern.test(String(field.label || '')));
+  const billingStatusField = fieldByLabel(/client billing status/i);
+  const providerTypeField = fieldByLabel(/bill provider type/i);
+
+  const supported = [];
+  const unsupported = [];
+  const needed = [];
+
+  if (requestedUpdates.client_billing_status) {
+    supported.push({
+      field: 'client_billing_status',
+      label: 'Client Billing Status',
+      current: accountSummary.clientBillingStatus || '',
+      target: requestedUpdates.client_billing_status,
+      options: billingStatusField?.options || [],
+    });
+  } else if (!accountSummary.clientBillingStatus) {
+    needed.push({
+      field: 'client_billing_status',
+      label: 'Client Billing Status',
+      current: accountSummary.clientBillingStatus || '',
+      options: billingStatusField?.options || [],
+      reason: 'Client billing status is blank.',
+    });
+  }
+
+  if (requestedUpdates.bill_provider_type) {
+    supported.push({
+      field: 'bill_provider_type',
+      label: 'Bill Provider Type',
+      current: accountSummary.billProviderType || '',
+      target: requestedUpdates.bill_provider_type,
+      options: providerTypeField?.options || [],
+    });
+  } else if (!accountSummary.billProviderType) {
+    needed.push({
+      field: 'bill_provider_type',
+      label: 'Bill Provider Type',
+      current: accountSummary.billProviderType || '',
+      options: providerTypeField?.options || [],
+      reason: 'Bill provider type is blank.',
+    });
+  }
+
+  if (requestedUpdates.payment_status) {
+    supported.push({
+      field: 'payment_status',
+      label: 'Payment Status',
+      current: accountSummary.paymentStatus || '',
+      target: requestedUpdates.payment_status,
+      options: ['yes', 'no'],
+    });
+  } else if (accountSummary.paymentStatus === 'no') {
+    needed.push({
+      field: 'payment_status',
+      label: 'Payment Status',
+      current: accountSummary.paymentStatus || '',
+      options: ['yes', 'no'],
+      reason: 'Payment status is still marked no / not started.',
+    });
+  }
+
+  if (!Array.isArray(account.insurancePreview) || !account.insurancePreview.length) {
+    unsupported.push({
+      field: 'insurance_details',
+      label: 'Insurance details',
+      reason: 'No insurer details are visible. Insurer/member entry still needs manual review or a payer-specific writeback path.',
+    });
+  }
+
+  if ((account.insurancePreview || []).length > 1) {
+    unsupported.push({
+      field: 'payer_order',
+      label: 'Payer order',
+      reason: 'Multiple coverages are visible. Primary/secondary payer order still needs manual confirmation before automation can change it safely.',
+    });
+  }
+
+  if (/client_match_issue/i.test(String(diagnosis.status || ''))) {
+    unsupported.push({
+      field: 'client_match',
+      label: 'Client match',
+      reason: 'Client matching issues still require manual identity verification before writeback.',
+    });
+  }
+
+  return {
+    supported,
+    needed,
+    unsupported,
+  };
+}
+
+async function applyBillingFieldUpdates(page, updates = {}) {
+  return page.evaluate((requestedUpdates) => {
+    const visible = (el) => {
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden') return false;
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    };
+
+    const normalize = (value) => String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    const controls = Array.from(document.querySelectorAll('input, select, textarea')).filter(visible);
+    const describe = (el) => {
+      const id = el.id || '';
+      const labelByFor = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`) : null;
+      const nearestLabel = el.closest('label');
+      const containerText = el.closest('tr, .form-group, .field, td, li, div')?.innerText || '';
+      return (labelByFor?.innerText || nearestLabel?.innerText || containerText || el.name || el.id || '').replace(/\s+/g, ' ').trim();
+    };
+    const dispatch = (el) => {
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    };
+    const findControl = (matcher) => controls.find((el) => matcher.test(`${describe(el)} ${el.name || ''} ${el.id || ''}`));
+
+    const setControlValue = (matcher, desiredValue, kind) => {
+      const control = findControl(matcher);
+      if (!control) {
+        return { kind, applied: false, reason: 'Control not found' };
+      }
+
+      const normalizedDesired = normalize(desiredValue);
+      if (control.tagName === 'SELECT') {
+        const option = Array.from(control.options || []).find((item) => {
+          return normalize(item.textContent) === normalizedDesired
+            || normalize(item.value) === normalizedDesired
+            || normalize(item.textContent).includes(normalizedDesired)
+            || normalizedDesired.includes(normalize(item.textContent));
+        });
+        if (!option) {
+          return {
+            kind,
+            applied: false,
+            reason: 'Option not found',
+            availableOptions: Array.from(control.options || []).map((item) => (item.textContent || '').trim()).filter(Boolean),
+          };
+        }
+        control.value = option.value;
+        dispatch(control);
+        return { kind, applied: true, target: option.textContent || option.value || desiredValue };
+      }
+
+      const type = normalize(control.getAttribute('type'));
+      if (type === 'radio' || type === 'checkbox') {
+        const groupName = control.name || null;
+        const group = groupName
+          ? controls.filter((item) => (item.name || '') === groupName)
+          : controls.filter((item) => matcher.test(`${describe(item)} ${item.name || ''} ${item.id || ''}`));
+        const candidate = group.find((item) => {
+          const haystack = `${describe(item)} ${item.name || ''} ${item.id || ''} ${item.value || ''}`;
+          return normalize(haystack).includes(normalizedDesired)
+            || (normalizedDesired === 'yes' && /yes|true|started/i.test(haystack))
+            || (normalizedDesired === 'no' && /no|false|not started/i.test(haystack));
+        });
+        if (!candidate) {
+          return { kind, applied: false, reason: 'Matching radio/checkbox option not found' };
+        }
+        candidate.checked = true;
+        candidate.click?.();
+        dispatch(candidate);
+        return { kind, applied: true, target: desiredValue };
+      }
+
+      control.focus();
+      control.value = desiredValue;
+      dispatch(control);
+      return { kind, applied: true, target: desiredValue };
+    };
+
+    const operations = [];
+    if (requestedUpdates.client_billing_status) {
+      operations.push(setControlValue(/client billing status/i, requestedUpdates.client_billing_status, 'client_billing_status'));
+    }
+    if (requestedUpdates.bill_provider_type) {
+      operations.push(setControlValue(/bill provider type/i, requestedUpdates.bill_provider_type, 'bill_provider_type'));
+    }
+    if (requestedUpdates.payment_status) {
+      operations.push(setControlValue(/payment status|paymentstatus/i, requestedUpdates.payment_status, 'payment_status'));
+    }
+
+    return { operations };
+  }, updates);
+}
+
+async function attemptBillingSave(page) {
+  const clicked = await page.evaluate(() => {
+    const visible = (el) => {
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden') return false;
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    };
+    const candidates = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"], a'))
+      .filter(visible)
+      .map((el) => ({
+        el,
+        text: (el.textContent || el.value || '').replace(/\s+/g, ' ').trim(),
+      }));
+    const target = candidates.find((item) => /save|update|apply|submit/i.test(item.text));
+    if (!target) return null;
+    if (typeof target.el.click === 'function') target.el.click();
+    return target.text || 'save';
+  });
+  if (!clicked) return { attempted: false, label: null };
+  await sleep(1500);
+  return { attempted: true, label: clicked };
 }
 
 async function waitForBillingHome(page, timeoutMs = 10000) {
@@ -1132,6 +1358,25 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         page: summary,
         billingFields,
         insurancePreview,
+        repairPlan: buildAccountRepairPlan({
+          clientHref,
+          billingFields,
+          insurancePreview,
+          accountSummary: {
+            ...summarizeBillingAccount(billingFields),
+            insuranceCount: insurancePreview.length,
+            insurers: insurancePreview.map((item) => item.insuranceName).filter(Boolean),
+          },
+          diagnosis: diagnoseBillingIssue({ notePreview: '' }, {
+            billingFields,
+            insurancePreview,
+            accountSummary: {
+              ...summarizeBillingAccount(billingFields),
+              insuranceCount: insurancePreview.length,
+              insurers: insurancePreview.map((item) => item.insuranceName).filter(Boolean),
+            },
+          }),
+        }),
         accountSummary: {
           ...summarizeBillingAccount(billingFields),
           insuranceCount: insurancePreview.length,
@@ -1141,6 +1386,84 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           hasBillingTab: Boolean(billingTab),
           billingFieldCount: billingFields.length,
         },
+        screenshots,
+        screenshot: shot,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  async function repairBillingAccount({ billingHref, account = null, updates = {}, dryRun = true, pageTimeoutMs = 15000, includeScreenshots = false } = {}) {
+    if (!billingHref) throw new Error('billingHref required');
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    try {
+      const nav = await gotoWithBudget(session.page, billingHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+      if (!nav.ok) return { ok: false, billingHref, error: nav.error, screenshots };
+
+      const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+      if (billingTab) {
+        await billingTab.click().catch(() => {});
+        await sleep(1000);
+      }
+
+      const beforeSummary = await collectPageSummary(session.page);
+      const beforeFields = await extractBillingFieldPairs(session.page);
+      const beforeInsurancePreview = extractInsurancePreview(beforeSummary);
+      const beforeAccount = {
+        ...(account || {}),
+        billingHref,
+        billingFields: beforeFields,
+        insurancePreview: beforeInsurancePreview,
+        accountSummary: {
+          ...summarizeBillingAccount(beforeFields),
+          insuranceCount: beforeInsurancePreview.length,
+          insurers: beforeInsurancePreview.map((item) => item.insuranceName).filter(Boolean),
+        },
+      };
+      const repairPlan = buildAccountRepairPlan(beforeAccount, updates);
+
+      let operations = [];
+      let saveResult = { attempted: false, label: null };
+      if (!dryRun) {
+        const applyResult = await applyBillingFieldUpdates(session.page, updates);
+        operations = applyResult.operations || [];
+        saveResult = await attemptBillingSave(session.page);
+      }
+
+      const afterSummary = dryRun ? beforeSummary : await collectPageSummary(session.page);
+      const afterFields = dryRun ? beforeFields : await extractBillingFieldPairs(session.page);
+      const afterInsurancePreview = dryRun ? beforeInsurancePreview : extractInsurancePreview(afterSummary);
+
+      let shot = null;
+      if (includeScreenshots) {
+        shot = await screenshotPath(dryRun ? 'clientcare-repair-preview' : 'clientcare-repair-applied');
+        await safeScreenshot(session.page, shot);
+        screenshots.push(shot);
+      }
+
+      return {
+        ok: true,
+        billingHref,
+        dryRun,
+        repairPlan,
+        before: {
+          accountSummary: beforeAccount.accountSummary,
+          billingFields: beforeFields,
+          insurancePreview: beforeInsurancePreview,
+        },
+        after: {
+          accountSummary: {
+            ...summarizeBillingAccount(afterFields),
+            insuranceCount: afterInsurancePreview.length,
+            insurers: afterInsurancePreview.map((item) => item.insuranceName).filter(Boolean),
+          },
+          billingFields: afterFields,
+          insurancePreview: afterInsurancePreview,
+        },
+        operations,
+        saveResult,
         screenshots,
         screenshot: shot,
       };
@@ -1701,5 +2024,6 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     buildFullAccountRescueReport,
     buildBacklogSummary,
     extractClaimTables,
+    repairBillingAccount,
   };
 }

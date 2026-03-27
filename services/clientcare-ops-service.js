@@ -47,6 +47,14 @@ function findWorkflow(workflowId, summary = {}) {
   return (summary.workflowPlaybooks || []).find((item) => item.id === workflowId) || null;
 }
 
+function normalizeRepairUpdates(input = {}) {
+  const updates = {};
+  if (input.client_billing_status) updates.client_billing_status = String(input.client_billing_status).trim();
+  if (input.bill_provider_type) updates.bill_provider_type = String(input.bill_provider_type).trim();
+  if (input.payment_status) updates.payment_status = String(input.payment_status).trim().toLowerCase();
+  return updates;
+}
+
 function buildInsuranceDecision({ coverageActive, inNetwork, authRequired, memberId, payerName, billedAmount, payerStats, deductibleRemaining, copay, coinsurance }) {
   const reasons = [];
   const missing = [];
@@ -372,6 +380,28 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     };
   }
 
+  async function repairAccount({ billingHref, account = null, updates = {}, dryRun = true, requestedBy = 'operations_assistant' } = {}) {
+    const normalizedUpdates = normalizeRepairUpdates(updates);
+    const result = await browserService.repairBillingAccount({
+      billingHref,
+      account,
+      updates: normalizedUpdates,
+      dryRun,
+      includeScreenshots: !dryRun,
+    });
+
+    return {
+      ...result,
+      requested_by: requestedBy,
+      updates: normalizedUpdates,
+      reply: result.ok
+        ? dryRun
+          ? 'Repair preview prepared. Review the planned field changes before applying them.'
+          : 'Repair applied in ClientCare. Review the post-save account summary and screenshot.'
+        : `Repair failed: ${result.error || 'unknown error'}`,
+    };
+  }
+
   async function runWorkflow(workflowId, { requestedBy = 'operations_assistant' } = {}) {
     const backlog = await browserService.buildBacklogSummary({ maxPages: 12, pageTimeoutMs: 12000, accountLimit: 200 });
     const workflow = findWorkflow(workflowId, backlog.summary || {});
@@ -518,6 +548,19 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       };
     }
 
+    if (/repair account|fix account|apply repair|preview repair|set billing status|set provider type/.test(text)) {
+      return {
+        ok: true,
+        type: 'repair_guidance',
+        reply: 'Use the Account Recovery Detail panel to preview or apply billing-status, provider-type, and payment-status repairs for the selected account.',
+        suggested_actions: [
+          'Select an account from Accounts Needing Action.',
+          'Choose the desired billing status, provider type, or payment status.',
+          'Run Preview Repair first, then Apply Repair once the changes look correct.',
+        ],
+      };
+    }
+
     if (callCouncilMember) {
       try {
         const dashboard = await billingService.getDashboard();
@@ -563,6 +606,7 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     getOptimizationChecklist,
     getPatientArSummary,
     listCapabilityRequests,
+    repairAccount,
     runWorkflow,
     updateCapabilityRequest,
   };

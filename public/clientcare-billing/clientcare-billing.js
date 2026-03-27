@@ -7,6 +7,7 @@
   let lastAccountReport = null;
   let selectedAccountIndex = 0;
   let lastInsurancePreview = null;
+  let lastRepairResult = null;
   let lastReimbursementIntelligence = null;
   let lastOpsOverview = null;
   let lastBrowserResult = null;
@@ -160,6 +161,103 @@
     `;
   }
 
+  function fieldOptionsFor(item, pattern) {
+    return ((item?.billingFields || []).find((field) => pattern.test(String(field.label || '')))?.options || [])
+      .filter((option) => option && option.text)
+      .map((option) => option.text);
+  }
+
+  function renderRepairControl({ id, label, currentValue, options = [], placeholder }) {
+    if (options.length) {
+      return `
+        <label class="stack">
+          <span class="muted">${escapeHtml(label)}</span>
+          <select id="${escapeHtml(id)}">
+            <option value="">Leave unchanged</option>
+            ${options.map((option) => `
+              <option value="${escapeHtml(option)}" ${String(option) === String(currentValue || '') ? 'selected' : ''}>${escapeHtml(option)}</option>
+            `).join('')}
+          </select>
+        </label>
+      `;
+    }
+    return `
+      <label class="stack">
+        <span class="muted">${escapeHtml(label)}</span>
+        <input id="${escapeHtml(id)}" value="${escapeHtml(currentValue || '')}" placeholder="${escapeHtml(placeholder || '')}">
+      </label>
+    `;
+  }
+
+  function renderRepairResult(item) {
+    const billingHref = item.billingHref || item.raw?.billingHref || '';
+    if (!lastRepairResult || lastRepairResult.billingHref !== billingHref) {
+      return '<p class="muted">Preview or apply a repair to see the exact field changes and save result.</p>';
+    }
+
+    const operations = lastRepairResult.operations || [];
+    const unsupported = lastRepairResult.repairPlan?.unsupported || [];
+    return `
+      <div class="stack">
+        ${renderKeyValueTable([
+          { label: 'Mode', value: lastRepairResult.dryRun ? 'Preview only' : 'Applied' },
+          { label: 'Save attempted', value: lastRepairResult.saveResult?.attempted ? `Yes (${lastRepairResult.saveResult?.label || 'save'})` : 'No' },
+          { label: 'Reply', value: lastRepairResult.reply || 'No reply' },
+        ])}
+        <div>
+          <strong>Field operations</strong>
+          <ul class="detail-list">
+            ${operations.length ? operations.map((operation) => `<li>${escapeHtml(`${operation.kind}: ${operation.applied ? `applied (${operation.target || 'updated'})` : `not applied (${operation.reason || 'unknown'})`}`)}</li>`).join('') : '<li>No direct field operations ran.</li>'}
+          </ul>
+        </div>
+        <div>
+          <strong>Unsupported items</strong>
+          <ul class="detail-list">
+            ${unsupported.length ? unsupported.map((entry) => `<li>${escapeHtml(entry.reason || '')}</li>`).join('') : '<li>No unsupported items returned.</li>'}
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRepairPanel(item) {
+    const billingStatusOptions = fieldOptionsFor(item, /client billing status/i);
+    const providerTypeOptions = fieldOptionsFor(item, /bill provider type/i);
+    return `
+      <div class="stack">
+        <div class="grid three">
+          ${renderRepairControl({
+            id: 'repair-client-billing-status',
+            label: 'Client Billing Status',
+            currentValue: item.accountSummary?.clientBillingStatus || '',
+            options: billingStatusOptions,
+            placeholder: 'e.g. Ready to bill',
+          })}
+          ${renderRepairControl({
+            id: 'repair-bill-provider-type',
+            label: 'Bill Provider Type',
+            currentValue: item.accountSummary?.billProviderType || '',
+            options: providerTypeOptions,
+            placeholder: 'e.g. Midwife / Provider type',
+          })}
+          <label class="stack">
+            <span class="muted">Payment Status</span>
+            <select id="repair-payment-status">
+              <option value="">Leave unchanged</option>
+              <option value="yes" ${item.accountSummary?.paymentStatus === 'yes' ? 'selected' : ''}>Yes / started</option>
+              <option value="no" ${item.accountSummary?.paymentStatus === 'no' ? 'selected' : ''}>No / not started</option>
+            </select>
+          </label>
+        </div>
+        <div class="row-actions">
+          <button id="repair-preview-run">Preview Repair</button>
+          <button id="repair-apply-run" class="ghost">Apply Repair</button>
+        </div>
+        <div id="repair-result">${renderRepairResult(item)}</div>
+      </div>
+    `;
+  }
+
   function renderTodaysFocus() {
     const items = [...(lastAccountReport?.items || [])]
       .sort((a, b) => {
@@ -255,6 +353,10 @@
           <ul class="detail-list">
             ${(item.diagnosis?.needed || ['Review billing page']).map((entry) => `<li>${escapeHtml(entry)}</li>`).join('')}
           </ul>
+        </div>
+        <div>
+          <strong>Repair account</strong>
+          ${renderRepairPanel(item)}
         </div>
         <div>
           <strong>Insurance preview</strong>
@@ -1012,6 +1114,7 @@
         summary: result.summary || null,
         items: (result.accounts || []).map((item) => ({
           client: item.client,
+          billingHref: item.billingHref || '',
           notePreview: (item.notePreviews || [])[0] || '',
           date: item.oldestNoteDate || (item.noteDates || [])[0] || '',
           insurancePreview: item.insurancePreview || [],
@@ -1042,6 +1145,7 @@
         summary: result.summary || null,
         items: (result.accounts || []).map((item) => ({
           client: item.client,
+          billingHref: item.billingHref || '',
           notePreview: (item.notePreviews || [])[0] || '',
           date: item.oldestNoteDate || (item.noteDates || [])[0] || '',
           insurancePreview: item.insurancePreview || [],
@@ -1215,6 +1319,49 @@
       ].filter(Boolean);
       alert(lines.join('\n'));
       await browserBacklogSummary({ silent: true });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function runAccountRepair(apply) {
+    const item = getFilteredItems()?.[selectedAccountIndex];
+    const billingHref = item?.billingHref || item?.raw?.billingHref || '';
+    if (!billingHref) {
+      alert('No billing account selected.');
+      return;
+    }
+
+    const updates = {};
+    const billingStatus = document.getElementById('repair-client-billing-status')?.value?.trim();
+    const providerType = document.getElementById('repair-bill-provider-type')?.value?.trim();
+    const paymentStatus = document.getElementById('repair-payment-status')?.value?.trim();
+    if (billingStatus) updates.client_billing_status = billingStatus;
+    if (providerType) updates.bill_provider_type = providerType;
+    if (paymentStatus) updates.payment_status = paymentStatus;
+
+    if (!Object.keys(updates).length) {
+      alert('Choose at least one repair field before previewing or applying.');
+      return;
+    }
+
+    try {
+      const result = await api('/api/v1/clientcare-billing/ops/repair-account', {
+        method: 'POST',
+        body: JSON.stringify({
+          billing_href: billingHref,
+          account: item,
+          updates,
+          dry_run: !apply,
+          requested_by: 'overlay',
+        }),
+      });
+      lastRepairResult = result;
+      if (apply) {
+        await browserBacklogSummary({ silent: true });
+      } else {
+        renderAccountBoard();
+      }
     } catch (error) {
       alert(error.message);
     }
@@ -1461,6 +1608,10 @@
     });
     const insurancePreviewButton = document.getElementById('insurance-preview-run');
     if (insurancePreviewButton) insurancePreviewButton.addEventListener('click', runInsurancePreview);
+    const repairPreviewButton = document.getElementById('repair-preview-run');
+    if (repairPreviewButton) repairPreviewButton.addEventListener('click', () => runAccountRepair(false));
+    const repairApplyButton = document.getElementById('repair-apply-run');
+    if (repairApplyButton) repairApplyButton.addEventListener('click', () => runAccountRepair(true));
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));

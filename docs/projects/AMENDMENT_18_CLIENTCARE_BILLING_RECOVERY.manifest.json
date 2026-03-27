@@ -6,10 +6,10 @@
   "status": "active",
   "priority": "critical",
   "owner": "adam",
-  "phase": "execution-layer",
-  "next_task": "Turn workflow playbooks into controlled writeback actions for insurance setup, billing status, provider type, and payer-order repair in ClientCare",
+  "phase": "payment-learning",
+  "next_task": "Import paid claims / ERAs / remits and add underpayment detection so collections amount/date forecasts learn from real payment history",
   "stability_class": "needs-review",
-  "current_focus": "The Collections Control Center now has live backlog visibility, actionable ops overview, insurance verification preview, patient AR summary, and assistant routing; next step is safe writeback automation and payment-history ingestion.",
+  "current_focus": "The Collections Control Center now has live backlog visibility, actionable ops overview, insurance verification preview, patient AR summary, assistant routing, and controlled writeback for billing-status/provider-type/payment-status repair; next step is payment-history ingestion and underpayment intelligence.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -74,12 +74,13 @@
     "Insurance verification preview returns take/review/do-not-schedule guidance",
     "Patient AR summary shows aging buckets and top balances",
     "Workflow playbooks can be invoked from the overlay and return actionable steps",
+    "Account Recovery Detail can preview/apply billing-status, provider-type, and payment-status repairs with save feedback",
     "Forecasting improves from imported paid claims / ERAs / remits instead of rescue buckets alone"
   ],
   "anti_drift_notes": "This product has two data layers: the live ClientCare browser backlog and the local claim ledger. Do not assume the claim ledger reflects the live backlog unless imports have run. Keep the overlay fast by loading backlog summary first and account details lazily. Do not enable autonomous collections behavior; all outreach and writeback remains provider-directed and compliance-gated.",
   "decision_debt": [
     { "description": "Forecast amount/date remains low-confidence until paid claims, ERAs, and remits are imported", "resolved": false },
-    { "description": "ClientCare read paths are live, but controlled writeback workflows still need approval-gated rollout", "resolved": false },
+    { "description": "ClientCare read paths are live, and controlled writeback now covers billing status, provider type, and payment status; insurer entry and payer-order changes still need payer-specific/manual handling", "resolved": false },
     { "description": "Capability queue exists to capture missing assistant behaviors until they are implemented natively", "resolved": false }
   ],
   "last_verified_at": null,

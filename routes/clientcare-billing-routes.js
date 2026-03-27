@@ -105,6 +105,25 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/ops/repair-account', async (req, res) => {
+    try {
+      const billingHref = String(req.body?.billing_href || '').trim();
+      if (!billingHref) return res.status(400).json({ ok: false, error: 'billing_href required' });
+      const result = await opsService.repairAccount({
+        billingHref,
+        account: req.body?.account || null,
+        updates: req.body?.updates || {},
+        dryRun: req.body?.dry_run !== false,
+        requestedBy: String(req.body?.requested_by || 'overlay'),
+      });
+      if (!result.ok) return res.status(500).json(result);
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] repair account failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/insurance/verification-preview', async (req, res) => {
     try {
       const preview = await opsService.getInsuranceVerificationPreview(req.body || {});
