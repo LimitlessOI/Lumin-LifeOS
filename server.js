@@ -58,7 +58,6 @@ import TCOSalesAgent from "./core/tco-sales-agent.js";
 import initTCOAgentRoutes from "./routes/tco-agent-routes.js";
 import { applyMiddleware } from "./middleware/apply-middleware.js";
 import { registerPublicRoutes } from "./routes/public-routes.js";
-import { registerWebsiteAuditRoutes } from "./routes/website-audit-routes.js";
 import { registerApiV1CoreRoutes } from "./routes/api-v1-core.js";
 import { createDbPool } from "./services/db.js";
 import resourceGovernor from "./lib/resource-governor.js";
@@ -108,14 +107,12 @@ import { createGameRoutes } from './routes/game-routes.js';
 import { createVideoRoutes } from './routes/video-routes.js';
 import { createAgentRecruitmentRoutes } from './routes/agent-recruitment-routes.js';
 import { createBoldTrailRoutes } from './routes/boldtrail-routes.js';
-import { createApiCostSavingsRoutes } from './routes/api-cost-savings-routes.js';
 import { createWebIntelligenceRoutes } from './routes/web-intelligence-routes.js';
 import { createAutoBuilderRoutes } from './routes/auto-builder-routes.js';
 import { createLifeCoachingRoutes } from './routes/life-coaching-routes.js';
 import { createTwoTierCouncilRoutes } from './routes/two-tier-council-routes.js';
 import { createOutreachCrmRoutes } from './routes/outreach-crm-routes.js';
 import { createBillingRoutes } from './routes/billing-routes.js';
-import { createClientCareBillingRoutes } from './routes/clientcare-billing-routes.js';
 import { createKnowledgeRoutes } from './routes/knowledge-routes.js';
 import { createConversationRoutes } from './routes/conversation-routes.js';
 import { createCommandCenterRoutes } from './routes/command-center-routes.js';
@@ -150,12 +147,7 @@ import {
 } from './services/response-cache.js';
 import { createRailwayManagedEnvService } from "./services/railway-managed-env-service.js";
 import { COUNCIL_ALIAS_MAP, createCouncilMembers } from "./config/council-members.js";
-import { createRailwayManagedEnvRoutes } from "./routes/railway-managed-env-routes.js";
 import { createAccountManager } from "./services/account-manager.js";
-import { createAccountManagerRoutes } from "./routes/account-manager-routes.js";
-import { createTCCoordinator, startTCDeadlineCron } from "./services/tc-coordinator.js";
-import { createTCRoutes } from "./routes/tc-routes.js";
-import { createMLSRoutes } from "./routes/mls-routes.js";
 import { createEventBus } from "./core/event-bus.js";
 import { createPodManager } from "./core/pod-manager.js";
 import { createTelemetry } from "./services/telemetry.js";
@@ -174,6 +166,7 @@ import {
 } from "./startup/environment.js";
 import { createLatestRunManager } from "./startup/latest-run.js";
 import { registerServerRoutes } from "./startup/routes/server-routes.js";
+import { registerRuntimeRoutes } from "./startup/register-runtime-routes.js";
 import { createAutonomyScheduler } from "./startup/schedulers.js";
 import { initDatabase, ensureTcoAgentTables } from "./startup/database.js";
 import { createUserPreferenceGuesser } from "./startup/user-preferences.js";
@@ -182,26 +175,16 @@ import { createSnapshotManager } from "./startup/snapshots.js";
 import { loadROIFromDatabase, updateROI } from "./startup/roi.js";
 import { createMemoryHandlers } from "./startup/memory.js";
 import { createLossTracker } from "./startup/loss.js";
+import { bootAllDomains } from "./startup/boot-domains.js";
 
 // Enhanced Council Features
-import { registerEnhancedCouncilRoutes } from "./routes/enhanced-council-routes.js";
 import { initializeTwoTierSystem } from "./core/two-tier-system-init.js";
-// Idea Queue — human-approval gate for self-building pipeline
-import { createIdeaQueueRoutes } from "./routes/idea-queue-routes.js";
-// Digital Twin, Outcomes, Continuous Improvement
-import { createTwinRoutes } from "./routes/twin-routes.js";
 import { createAdamLogger, EVENTS } from "./services/adam-logger.js";
 import { createContinuousImprovement } from "./services/continuous-improvement.js";
-// Conversation history
-import { createConversationHistoryRoutes } from "./routes/conversation-history-routes.js";
 import { createConversationStore } from "./services/conversation-store.js";
-// Word Keeper & Integrity Engine (Amendment 16)
-import { createWordKeeperRoutes } from "./routes/word-keeper-routes.js";
 import { startReminderCron } from "./services/reminder-cron.js";
-import { createIntegrityEngine as createWKIntegrityEngine } from "./services/integrity-engine.js";
 // Autonomy Orchestrator — self-programming without bottlenecks (Amendment 17)
 import { createAutonomyOrchestrator } from "./services/autonomy-orchestrator.js";
-import { createAutonomyRoutes } from "./routes/autonomy-routes.js";
 import { registerTwilioWebhook } from "./services/twilio-webhook-registrar.js";
 
 // Modular two-tier council system (loaded dynamically in startup)
@@ -996,6 +979,24 @@ registerServerRoutes(app, {
   podManager,
 });
 
+const { tcCoordinator, wkIntegrityEngine } = registerRuntimeRoutes(app, {
+  pool,
+  requireKey,
+  logger,
+  callCouncilMember,
+  callCouncilWithFailover,
+  apiCostSavingsRevenue,
+  getStripeClient,
+  publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN,
+  autonomyOrchestrator,
+  railwayManagedEnvService,
+  accountManager,
+  notificationService,
+  sendSMS,
+  sendAlertSms,
+  sendAlertCall,
+});
+
 // ==================== AI COUNCIL CONSENSUS MODE ====================
 // Functions extracted to services/consensus-service.js (createGetCouncilConsensus, compareResponses, selectBestResponse)
 const getCouncilConsensus = createGetCouncilConsensus({ callCouncilMember, COUNCIL_MEMBERS, OLLAMA_ENDPOINT });
@@ -1049,51 +1050,8 @@ autoBuilder.overrideBuildHelpers({
   },
 });
 
-registerWebsiteAuditRoutes(app, {
-  requireKey,
-  callCouncilWithFailover,
-});
-
-registerEnhancedCouncilRoutes(app, pool, callCouncilMember, requireKey);
-
-// ==================== API COST SAVINGS ROUTES ====================
-// Imported but was never mounted — gap found by TCO audit 2026-03-21
-createApiCostSavingsRoutes(app, {
-  pool,
-  requireKey,
-  apiCostSavingsRevenue,
-  getStripeClient,
-  RAILWAY_PUBLIC_DOMAIN: process.env.RAILWAY_PUBLIC_DOMAIN,
-});
-logger.info('✅ [API-COST-SAVINGS] Routes mounted at /api/v1/cost-savings + /api/v1/revenue/api-cost-savings');
-
-// ==================== IDEA QUEUE ====================
-app.use('/api/v1/ideas', createIdeaQueueRoutes({ pool, requireKey, callCouncilMember }));
-logger.info('✅ [IDEA-QUEUE] Routes mounted at /api/v1/ideas');
-
-// ==================== DIGITAL TWIN + OUTCOMES + CI ====================
-app.use('/api/v1/twin', createTwinRoutes({ pool, requireKey, callCouncilMember }));
-logger.info('✅ [TWIN] Routes mounted at /api/v1/twin');
-
-// ==================== CONVERSATION HISTORY ====================
-app.use('/api/v1/history', createConversationHistoryRoutes({ pool, requireKey, callCouncilMember }));
-logger.info('✅ [HISTORY] Routes mounted at /api/v1/history');
-
-app.use('/api/v1/clientcare-billing', createClientCareBillingRoutes({ pool, requireKey, logger, callCouncilMember }));
-logger.info('✅ [CLIENTCARE-BILLING] Routes mounted at /api/v1/clientcare-billing');
-
-// ==================== WORD KEEPER & INTEGRITY ENGINE (Amendment 16) ====================
-// Thin adapter: word-keeper services call councilService.ask(prompt, opts)
-const wordKeeperCouncil = {
-  ask: (prompt, opts = {}) => callCouncilMember(opts.model || 'claude', prompt, opts.systemPrompt || '', opts),
-};
-app.use('/api/v1/word-keeper', createWordKeeperRoutes({ pool, councilService: wordKeeperCouncil, twilioService: null }));
-logger.info('✅ [WORD-KEEPER] Routes mounted at /api/v1/word-keeper');
-
 // ── Word Keeper reminder cron — check every 60s, send SMS, weekly coaching ──
-const wkIntegrityEngine = createWKIntegrityEngine(pool, wordKeeperCouncil);
 startReminderCron(pool, async (to, msg) => {
-  // Use Twilio sendSMS if configured, otherwise log
   try {
     const { createTwilioService } = await import('./services/twilio-service.js');
     const twilio = createTwilioService({
@@ -1103,74 +1061,23 @@ startReminderCron(pool, async (to, msg) => {
       alertState: { inProgress: false },
     });
     return twilio.sendSMS(to, msg);
-  } catch { return { success: false }; }
+  } catch {
+    return { success: false };
+  }
 }, {
   userPhone: process.env.ALERT_PHONE || process.env.ADMIN_PHONE,
   integrityEngine: wkIntegrityEngine,
 });
 logger.info('✅ [WORD-KEEPER] Reminder cron started');
 
-// ==================== AUTONOMY ORCHESTRATOR (Amendment 17) ====================
-// Created before initializeTwoTierSystem so routeCtx can include it.
-// autonomyOrchestrator is defined earlier in this file (above runInitializeTwoTierSystem).
-if (process.env.LIFEOS_DIRECTED_MODE === 'false') {
-  autonomyOrchestrator.start();
-  logger.info('✅ [AUTONOMY] Orchestrator started + routes mounted at /api/v1/autonomy');
-} else {
-  logger.info('🛑 [AUTONOMY] Directed mode active — orchestrator not auto-started');
-}
-app.use('/api/v1/autonomy', createAutonomyRoutes({ pool, requireKey, orchestrator: autonomyOrchestrator }));
-
-app.use('/api/v1/railway/managed-env', createRailwayManagedEnvRoutes({
-  requireKey,
-  managedEnvService: railwayManagedEnvService,
-}));
-logger.info('✅ [RAILWAY-MANAGED-ENV] Routes mounted at /api/v1/railway/managed-env');
-
-app.use('/api/v1/accounts', createAccountManagerRoutes({ requireKey, accountManager, pool, logger }));
-logger.info('✅ [ACCOUNT-MANAGER] Routes mounted at /api/v1/accounts');
-
-const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
-createTCRoutes(app, {
+bootAllDomains({
   pool,
-  requireKey,
-  coordinator: tcCoordinator,
   logger,
-  accountManager,
   notificationService,
   callCouncilMember,
-  sendSMS,
-  sendAlertSms,
-  sendAlertCall,
-  startAlertLoop: true,
+  accountManager,
+  tcCoordinator,
 });
-startTCDeadlineCron(pool, tcCoordinator);
-createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
-
-// GLVAR dues (monthly) + violations (4× daily email scan)
-(async () => {
-  try {
-    const { createGLVARMonitor } = await import('./services/glvar-monitor.js');
-    const { createTCBrowserAgent } = await import('./services/tc-browser-agent.js');
-    const tcBrowser = createTCBrowserAgent({ accountManager, logger });
-    const glvarMonitor = createGLVARMonitor({ pool, tcBrowser, accountManager, notificationService, logger });
-    glvarMonitor.startDuesCron();
-    glvarMonitor.startViolationsCron();
-  } catch (err) {
-    logger.warn?.({ err: err.message }, '[GLVAR-MONITOR] Failed to start');
-  }
-})();
-
-// Email triage — scans inbox every 30 min, daily digest at 7am
-(async () => {
-  try {
-    const { createEmailTriage } = await import('./services/email-triage.js');
-    const emailTriage = createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger });
-    emailTriage.startTriageCron();
-  } catch (err) {
-    logger.warn?.({ err: err.message }, '[EMAIL-TRIAGE] Failed to start');
-  }
-})();
 
 // Self-register Twilio SMS webhook — no manual Twilio console action needed
 // Warm response cache L1 from DB — picks up where last deploy left off

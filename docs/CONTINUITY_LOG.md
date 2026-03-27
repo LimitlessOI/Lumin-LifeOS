@@ -69,6 +69,7 @@
 - TC Asana sync now also carries unsent communications and analyzed interactions into the ops surface so human follow-up work does not drift out of canonical state.
 - ClientCare Collections Control Center now auto-hydrates the live backlog into the KPI strip and account board, instead of leaving the top row tied to the empty local claim ledger.
 - ClientCare operator chat is now explicitly `Operations Assistant` with pinned/unpinned behavior, and the overlay layout is split into overview, accounts needing action, account recovery detail, and collapsible tools.
+- `server.js` route composition has been reduced again: runtime route wiring now lives in `startup/register-runtime-routes.js`, and domain startup calls now go through `startup/boot-domains.js` instead of inline IIFEs.
 
 ## Update 2026-01-30 #1
 - Hardware: MacBook Pro M2 Max, 32 GB RAM, 2 TB SSD running server-only mode; machine doubles as development host but being stripped down for LifeOS server.
