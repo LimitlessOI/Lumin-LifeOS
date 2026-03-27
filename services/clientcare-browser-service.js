@@ -363,6 +363,77 @@ async function extractBillingQueueItems(page) {
   });
 }
 
+async function clickBillingNotesNextPage(page) {
+  return page.evaluate(() => {
+    const tables = Array.from(document.querySelectorAll('table'));
+    const noteTable = tables.find((table) => {
+      const headerCells = Array.from(table.querySelectorAll('tr:first-child th, tr:first-child td')).map((cell) => (cell.textContent || '').trim().toLowerCase());
+      return headerCells.includes('client') && headerCells.some((cell) => cell.includes('note'));
+    });
+    if (!noteTable) return { clicked: false, reason: 'note_table_not_found' };
+
+    let container = noteTable.parentElement;
+    while (container && container !== document.body) {
+      const nextControl = container.querySelector(
+        '[title*="next page" i], [aria-label*="next page" i], .k-pager-nav.k-pager-next, .paginate_button.next, a[onclick*="next"], button[onclick*="next"]'
+      );
+      if (nextControl) {
+        const classes = nextControl.className || '';
+        const disabled = nextControl.getAttribute('aria-disabled') === 'true'
+          || /\bdisabled\b/i.test(classes)
+          || /\bk-state-disabled\b/i.test(classes);
+        if (disabled) return { clicked: false, reason: 'next_disabled' };
+        nextControl.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        return { clicked: true };
+      }
+      container = container.parentElement;
+    }
+
+    const globalNext = Array.from(document.querySelectorAll('[title*="next page" i], [aria-label*="next page" i], .k-pager-nav.k-pager-next, .paginate_button.next'))
+      .find((el) => {
+        const classes = el.className || '';
+        return !(/\bdisabled\b/i.test(classes) || /\bk-state-disabled\b/i.test(classes) || el.getAttribute('aria-disabled') === 'true');
+      });
+    if (!globalNext) return { clicked: false, reason: 'next_not_found' };
+    globalNext.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    return { clicked: true };
+  });
+}
+
+async function extractAllBillingQueueItems(page, { maxPages = 8, pageTimeoutMs = 15000 } = {}) {
+  const allItems = [];
+  const seenRows = new Set();
+  const seenPages = new Set();
+
+  for (let pageIndex = 0; pageIndex < Math.max(1, Number(maxPages) || 8); pageIndex += 1) {
+    await waitForBillingHome(page, Math.max(5000, Number(pageTimeoutMs) || 15000));
+    const pageItems = await extractBillingQueueItems(page);
+    const pageSignature = JSON.stringify(pageItems.map((item) => `${item.date}|${item.client}|${item.notePreview}|${item.billingHref}`));
+    if (!pageItems.length || seenPages.has(pageSignature)) break;
+    seenPages.add(pageSignature);
+
+    for (const item of pageItems) {
+      const key = `${item.date}|${item.client}|${item.notePreview}|${item.billingHref}|${item.noteHref}`;
+      if (seenRows.has(key)) continue;
+      seenRows.add(key);
+      allItems.push(item);
+    }
+
+    const beforeFirstKey = pageItems[0] ? `${pageItems[0].date}|${pageItems[0].client}|${pageItems[0].notePreview}` : '';
+    const next = await clickBillingNotesNextPage(page);
+    if (!next.clicked) break;
+
+    await waitForCondition(async () => {
+      const freshItems = await extractBillingQueueItems(page);
+      if (!freshItems.length) return false;
+      const freshFirstKey = `${freshItems[0].date}|${freshItems[0].client}|${freshItems[0].notePreview}`;
+      return freshFirstKey !== beforeFirstKey;
+    }, { timeoutMs: Math.max(5000, Number(pageTimeoutMs) || 15000), intervalMs: 750 }).catch(() => {});
+  }
+
+  return allItems;
+}
+
 function summarizeBillingAccount(billingFields = []) {
   const map = Object.fromEntries(
     billingFields.map((field) => [String(field.label || field.name || '').toLowerCase(), field.value || ''])
@@ -943,6 +1014,102 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
+  async function buildFullAccountRescueReport({ maxPages = 8, pageTimeoutMs = 15000, accountLimit = 100 } = {}) {
+    const result = await login({ dryRun: false });
+    const { session } = result;
+    try {
+      const billingHome = new URL('/Home/BillingPartial', session.currentUrl()).toString();
+      const nav = await gotoWithBudget(session.page, billingHome, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+      if (!nav.ok) return { ok: false, error: nav.error };
+      await waitForBillingHome(session.page, Math.max(5000, Number(pageTimeoutMs) || 15000));
+      const summary = await collectPageSummary(session.page);
+      const queueItems = await extractAllBillingQueueItems(session.page, { maxPages, pageTimeoutMs });
+
+      const grouped = new Map();
+      for (const item of queueItems) {
+        const key = item.billingHref || item.client || item.noteHref;
+        if (!grouped.has(key)) {
+          grouped.set(key, {
+            client: item.client,
+            billingHref: item.billingHref,
+            noteCount: 0,
+            noteDates: [],
+            notePreviews: [],
+            noteAuthors: new Set(),
+            forUsers: new Set(),
+          });
+        }
+        const group = grouped.get(key);
+        group.noteCount += 1;
+        if (item.date) group.noteDates.push(item.date);
+        if (item.notePreview) group.notePreviews.push(item.notePreview);
+        if (item.by) group.noteAuthors.add(item.by);
+        if (item.forUser) group.forUsers.add(item.forUser);
+      }
+
+      const accounts = [];
+      for (const group of Array.from(grouped.values()).slice(0, Math.max(1, Number(accountLimit) || 100))) {
+        let account = {
+          billingFields: [],
+          insurancePreview: [],
+          accountSummary: { paymentStatus: 'unknown', clientBillingStatus: '', billProviderType: '', flags: [], needsReview: true, insuranceCount: 0, insurers: [] },
+        };
+        if (group.billingHref) {
+          const accountNav = await gotoWithBudget(session.page, group.billingHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+          if (accountNav.ok) {
+            const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+            if (billingTab) {
+              await billingTab.click().catch(() => {});
+              await sleep(1000);
+            }
+            const pageSummary = await collectPageSummary(session.page);
+            const billingFields = await extractBillingFieldPairs(session.page);
+            const insurancePreview = extractInsurancePreview(pageSummary);
+            account = {
+              billingFields,
+              insurancePreview,
+              accountSummary: {
+                ...summarizeBillingAccount(billingFields),
+                insuranceCount: insurancePreview.length,
+                insurers: insurancePreview.map((item) => item.insuranceName).filter(Boolean),
+              },
+            };
+          }
+        }
+
+        const mergedQueueItem = {
+          client: group.client,
+          notePreview: group.notePreviews[0] || '',
+          date: group.noteDates[0] || '',
+        };
+        const diagnosis = diagnoseBillingIssue(mergedQueueItem, account);
+        accounts.push({
+          client: group.client,
+          billingHref: group.billingHref,
+          noteCount: group.noteCount,
+          noteDates: group.noteDates,
+          notePreviews: Array.from(new Set(group.notePreviews)),
+          noteAuthors: Array.from(group.noteAuthors),
+          forUsers: Array.from(group.forUsers),
+          billingFields: account.billingFields,
+          insurancePreview: account.insurancePreview,
+          accountSummary: account.accountSummary,
+          diagnosis,
+        });
+      }
+
+      return {
+        ok: true,
+        dashboardCounts: extractDashboardCounts(summary),
+        totalQueueItems: queueItems.length,
+        totalAccounts: accounts.length,
+        accounts,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   async function buildBillingOverview({ includeScreenshots = false, pageTimeoutMs = 15000 } = {}) {
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
@@ -1041,6 +1208,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     scanClientBillingAccounts,
     scanBillingNotes,
     buildAccountRescueReport,
+    buildFullAccountRescueReport,
     extractClaimTables,
   };
 }

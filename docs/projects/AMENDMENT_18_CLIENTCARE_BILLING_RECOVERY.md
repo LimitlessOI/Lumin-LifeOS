@@ -197,6 +197,8 @@ Operational inputs needed regardless of integration path:
 - The browser path must produce a live account rescue report from the billing-notes queue, including per-account status, likely root cause, and the next action needed.
 - The operator overlay must expose the account rescue report directly so staff can review account status and next actions without reading raw payloads.
 - The operator overlay must visualize each account's current billing state with a simple progress/status board, hover summary, and click-through detail pane.
+- The operator overlay must expose reimbursement intelligence from historical paid claims/ERAs/remits so payout projections improve over time and underpayment/leakage patterns can be acted on.
+- The browser path must be able to traverse the full billing-notes queue, aggregate duplicate notes per account, and produce a full rescue list of unpaid insurance accounts visible in ClientCare.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.
 - Browser path readiness endpoint exists and lists required secrets/workflows.

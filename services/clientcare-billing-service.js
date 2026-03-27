@@ -301,6 +301,13 @@ function mapClaimRow(row) {
   };
 }
 
+function ratio(numerator, denominator) {
+  const a = Number(numerator || 0);
+  const b = Number(denominator || 0);
+  if (!Number.isFinite(a) || !Number.isFinite(b) || b === 0) return null;
+  return Number((a / b).toFixed(4));
+}
+
 export function createClientCareBillingService({ pool, logger = console, now = () => new Date() }) {
   async function ensureClaimActions(claimId, actions = []) {
     await pool.query(`DELETE FROM clientcare_claim_actions WHERE claim_id=$1 AND status='open'`, [claimId]);
@@ -566,6 +573,85 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     return { claim, classification, actions };
   }
 
+  async function getReimbursementIntelligence() {
+    const { rows: summaryRows } = await pool.query(
+      `SELECT
+         COUNT(*) FILTER (WHERE COALESCE(paid_amount, 0) > 0)::int AS paid_claims,
+         COUNT(*) FILTER (WHERE COALESCE(insurance_balance, 0) > 0)::int AS unpaid_claims,
+         COUNT(*) FILTER (WHERE rescue_bucket IN ('submit_now','correct_and_resubmit','proof_of_timely_filing','timely_filing_exception','payer_followup'))::int AS recoverable_claims,
+         COALESCE(SUM(paid_amount) FILTER (WHERE COALESCE(paid_amount, 0) > 0), 0)::numeric AS total_paid,
+         COALESCE(SUM(allowed_amount) FILTER (WHERE COALESCE(allowed_amount, 0) > 0), 0)::numeric AS total_allowed,
+         COALESCE(SUM(billed_amount) FILTER (WHERE COALESCE(billed_amount, 0) > 0), 0)::numeric AS total_billed,
+         COALESCE(SUM(insurance_balance) FILTER (WHERE COALESCE(insurance_balance, 0) > 0), 0)::numeric AS total_unpaid_balance
+       FROM clientcare_claims`
+    );
+
+    const { rows: payerRows } = await pool.query(
+      `SELECT
+         payer_name,
+         COUNT(*)::int AS total_claims,
+         COUNT(*) FILTER (WHERE COALESCE(paid_amount, 0) > 0)::int AS paid_claims,
+         COALESCE(AVG(NULLIF(billed_amount, 0)), 0)::numeric AS avg_billed,
+         COALESCE(AVG(NULLIF(allowed_amount, 0)), 0)::numeric AS avg_allowed,
+         COALESCE(AVG(NULLIF(paid_amount, 0)), 0)::numeric AS avg_paid,
+         COALESCE(SUM(insurance_balance) FILTER (WHERE COALESCE(insurance_balance, 0) > 0), 0)::numeric AS unpaid_balance,
+         COALESCE(SUM(paid_amount), 0)::numeric AS paid_total
+       FROM clientcare_claims
+       WHERE payer_name IS NOT NULL AND payer_name <> ''
+       GROUP BY payer_name
+       ORDER BY paid_total DESC, unpaid_balance DESC
+       LIMIT 12`
+    );
+
+    const { rows: denialRows } = await pool.query(
+      `SELECT
+         COALESCE(NULLIF(denial_reason, ''), NULLIF(denial_code, ''), 'Unknown') AS reason,
+         COUNT(*)::int AS count
+       FROM clientcare_claims
+       WHERE COALESCE(denial_reason, '') <> '' OR COALESCE(denial_code, '') <> ''
+       GROUP BY 1
+       ORDER BY count DESC
+       LIMIT 10`
+    );
+
+    const summary = summaryRows[0] || {};
+    const collectionRate = ratio(summary.total_paid, summary.total_billed);
+    const allowedRate = ratio(summary.total_allowed, summary.total_billed);
+    const paidToAllowedRate = ratio(summary.total_paid, summary.total_allowed);
+    const hasHistory = Number(summary.paid_claims || 0) > 0;
+
+    const recommendations = [];
+    if (!hasHistory) {
+      recommendations.push('Import paid claims, ERAs, or remits so payout estimates can learn from actual history.');
+    }
+    if (Number(summary.unpaid_claims || 0) > 0) {
+      recommendations.push('Work unpaid insurance balances before they age further; these balances are still the fastest path to cash recovery.');
+    }
+    if ((denialRows[0]?.count || 0) > 0) {
+      recommendations.push(`Top denial pattern right now is "${denialRows[0].reason}". Build a payer-specific fix playbook for it.`);
+    }
+    if (collectionRate !== null && collectionRate < 0.5) {
+      recommendations.push('Historical paid-to-billed ratio is weak. Review fee schedules, payer order, auth, modifiers, and underpayment follow-up.');
+    }
+
+    return {
+      summary: {
+        ...summary,
+        collection_rate: collectionRate,
+        allowed_rate: allowedRate,
+        paid_to_allowed_rate: paidToAllowedRate,
+        has_history: hasHistory,
+      },
+      payers: payerRows.map((payer) => ({
+        ...payer,
+        collection_rate: ratio(payer.paid_total, Number(payer.avg_billed || 0) * Number(payer.paid_claims || 0)),
+        paid_to_allowed_rate: ratio(Number(payer.avg_paid || 0), Number(payer.avg_allowed || 0)),
+      })),
+      denials: denialRows,
+      recommendations,
+    };
+  }
+
   return {
     importClaims,
     upsertClaim,
@@ -576,6 +662,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     updateAction,
     getDashboard,
     buildClaimPlan,
+    getReimbursementIntelligence,
     parseClaimsCsv,
     getImportTemplate: () => IMPORT_TEMPLATE_FIELDS,
   };

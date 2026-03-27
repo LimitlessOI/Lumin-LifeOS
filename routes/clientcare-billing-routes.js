@@ -31,6 +31,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     res.json({ ok: true, readiness: browserService.getReadiness() });
   });
 
+  router.get('/reimbursement-intelligence', async (_req, res) => {
+    try {
+      const intelligence = await billingService.getReimbursementIntelligence();
+      res.json({ ok: true, intelligence });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] reimbursement intelligence failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/login-test', async (_req, res) => {
     try {
       const result = await browserService.login({ dryRun: false });
@@ -138,6 +148,20 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] account report failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/browser/full-account-report', async (req, res) => {
+    try {
+      const result = await browserService.buildFullAccountRescueReport({
+        maxPages: req.query?.max_pages,
+        pageTimeoutMs: req.query?.page_timeout_ms,
+        accountLimit: req.query?.account_limit,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] full account report failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });

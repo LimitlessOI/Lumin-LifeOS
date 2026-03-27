@@ -6,6 +6,7 @@
 (function () {
   let lastAccountReport = null;
   let selectedAccountIndex = 0;
+  let lastReimbursementIntelligence = null;
 
   function getApiKey() {
     return localStorage.getItem('COMMAND_CENTER_KEY') || localStorage.getItem('lifeos_cmd_key') || localStorage.getItem('x_api_key') || '';
@@ -214,6 +215,63 @@
     `;
   }
 
+  function renderReimbursementIntelligence(intelligence) {
+    if (!intelligence) {
+      return '<p class="muted">Load reimbursement intelligence after importing paid claims or remits.</p>';
+    }
+    const summary = intelligence.summary || {};
+    const recommendations = intelligence.recommendations || [];
+    const payers = intelligence.payers || [];
+    const denials = intelligence.denials || [];
+    return `
+      <div class="stack">
+        <div class="grid four" style="margin-bottom:0">
+          <div class="card stat"><span>Paid claims</span><strong>${escapeHtml(summary.paid_claims || 0)}</strong></div>
+          <div class="card stat"><span>Recoverable claims</span><strong>${escapeHtml(summary.recoverable_claims || 0)}</strong></div>
+          <div class="card stat"><span>Total paid</span><strong>${escapeHtml(money(summary.total_paid || 0))}</strong></div>
+          <div class="card stat"><span>Unpaid balance</span><strong>${escapeHtml(money(summary.total_unpaid_balance || 0))}</strong></div>
+        </div>
+        ${renderKeyValueTable([
+          { label: 'Collection rate', value: summary.collection_rate != null ? `${(summary.collection_rate * 100).toFixed(1)}%` : 'No history yet' },
+          { label: 'Allowed vs billed', value: summary.allowed_rate != null ? `${(summary.allowed_rate * 100).toFixed(1)}%` : 'No history yet' },
+          { label: 'Paid vs allowed', value: summary.paid_to_allowed_rate != null ? `${(summary.paid_to_allowed_rate * 100).toFixed(1)}%` : 'No history yet' },
+        ])}
+        <div>
+          <strong>What improves payout</strong>
+          <ul class="detail-list">
+            ${recommendations.length ? recommendations.map((item) => `<li>${escapeHtml(item)}</li>`).join('') : '<li>No recommendations yet.</li>'}
+          </ul>
+        </div>
+        <div>
+          <strong>Top payers by paid history</strong>
+          <table>
+            <thead><tr><th>Payer</th><th>Paid claims</th><th>Avg paid</th><th>Avg allowed</th><th>Unpaid balance</th></tr></thead>
+            <tbody>
+              ${payers.length ? payers.map((payer) => `
+                <tr>
+                  <td>${escapeHtml(payer.payer_name || '')}</td>
+                  <td>${escapeHtml(payer.paid_claims || 0)}</td>
+                  <td>${escapeHtml(money(payer.avg_paid || 0))}</td>
+                  <td>${escapeHtml(money(payer.avg_allowed || 0))}</td>
+                  <td>${escapeHtml(money(payer.unpaid_balance || 0))}</td>
+                </tr>
+              `).join('') : '<tr><td colspan="5">No paid history imported yet.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <strong>Top denial patterns</strong>
+          <table>
+            <thead><tr><th>Reason</th><th>Count</th></tr></thead>
+            <tbody>
+              ${denials.length ? denials.map((item) => `<tr><td>${escapeHtml(item.reason || '')}</td><td>${escapeHtml(item.count || 0)}</td></tr>`).join('') : '<tr><td colspan="2">No denial history imported yet.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
   function renderReconciliation(reconciliation) {
     return `
       <div class="grid four" style="margin-bottom:0">
@@ -377,15 +435,17 @@
     const root = document.getElementById('app');
     try {
       const query = new URLSearchParams(filters).toString();
-      const [dashboard, readiness, template, claims, actions, reconciliation] = await Promise.all([
+      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence] = await Promise.all([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
         api('/api/v1/clientcare-billing/claims/import-template'),
         api(`/api/v1/clientcare-billing/claims${query ? `?${query}` : ''}`),
         api('/api/v1/clientcare-billing/actions'),
         api('/api/v1/clientcare-billing/reconciliation'),
+        api('/api/v1/clientcare-billing/reimbursement-intelligence'),
       ]);
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {});
+      lastReimbursementIntelligence = intelligence.intelligence || null;
+      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence);
     } catch (error) {
       root.innerHTML = `<div class="card"><h2>Load failed</h2><p>${escapeHtml(error.message)}</p></div>`;
     }
@@ -520,6 +580,29 @@
     }
   }
 
+  async function browserFullAccountReport() {
+    try {
+      const result = await api('/api/v1/clientcare-billing/browser/full-account-report?max_pages=8&page_timeout_ms=12000&account_limit=100');
+      lastAccountReport = {
+        items: (result.accounts || []).map((item) => ({
+          client: item.client,
+          notePreview: (item.notePreviews || [])[0] || '',
+          date: (item.noteDates || [])[0] || '',
+          insurancePreview: item.insurancePreview || [],
+          accountSummary: item.accountSummary || {},
+          diagnosis: item.diagnosis || {},
+          raw: item,
+        })),
+      };
+      selectedAccountIndex = 0;
+      setBrowserOutput(result);
+      renderAccountBoard();
+      alert(`Loaded ${result.accounts?.length || 0} accounts from the full billing queue.`);
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function browserExtract(importIntoQueue = false) {
     try {
       const result = await api('/api/v1/clientcare-billing/browser/extract-claims', {
@@ -575,7 +658,7 @@
     }
   }
 
-  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation) {
+  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence) {
     const summary = dashboard.summary || {};
     const claimRows = claims.map((claim) => `
       <tr>
@@ -655,6 +738,18 @@
 
       <div class="grid two">
         <div class="card">
+          <h2>Reimbursement intelligence</h2>
+          <p class="hint" style="margin:10px 0">This gets better as paid claims, ERAs, and remits are imported. It shows what payers actually paid, where leakage exists, and where to tighten workflow.</p>
+          <div id="reimbursement-intelligence">${renderReimbursementIntelligence(intelligence)}</div>
+        </div>
+        <div class="card">
+          <h2>Insurance intake rule</h2>
+          <p class="muted">Use benefits verification to decide whether to take the client, then use payout history to estimate what should be collectible. Exact reimbursement is not assumed without actual remit history.</p>
+        </div>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
           <h2>Browser automation</h2>
           <p class="hint" style="margin:10px 0">Uses the Railway ClientCare credentials to log in, inspect billing pages, and preview claim tables.</p>
           <div class="row-actions">
@@ -670,6 +765,7 @@
             <input id="browser-scan-offset" type="number" min="0" value="0" style="max-width:90px">
             <button id="browser-scan-accounts" class="ghost">Scan Accounts</button>
             <button id="browser-account-report" class="ghost">Account Report</button>
+            <button id="browser-full-account-report" class="ghost">Full Queue Report</button>
           </div>
         </div>
         <div class="card">
@@ -730,6 +826,7 @@
     document.getElementById('browser-extract-import').addEventListener('click', () => browserExtract(true));
     document.getElementById('browser-scan-accounts').addEventListener('click', browserScanAccounts);
     document.getElementById('browser-account-report').addEventListener('click', browserAccountReport);
+    document.getElementById('browser-full-account-report').addEventListener('click', browserFullAccountReport);
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));
