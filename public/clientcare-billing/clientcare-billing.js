@@ -10,6 +10,7 @@
   let lastRepairResult = null;
   let lastReimbursementIntelligence = null;
   let lastUnderpayments = null;
+  let lastAppeals = null;
   let lastOpsOverview = null;
   let lastBrowserResult = null;
   let lastViewState = null;
@@ -50,8 +51,8 @@
     localStorage.setItem('clientcare_assistant_open', String(assistantOpen));
   }
 
-  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments) {
-    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments };
+  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals) {
+    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals };
   }
 
   function rerender() {
@@ -67,6 +68,7 @@
       lastViewState.intelligence,
       lastViewState.opsOverview,
       lastViewState.underpayments,
+      lastViewState.appeals,
     );
     void ensureAssistantSession();
   }
@@ -797,6 +799,34 @@
     `;
   }
 
+  function renderAppealsQueue(appeals) {
+    const summary = appeals?.summary || {};
+    const items = appeals?.items || [];
+    return `
+      <div class="stack">
+        <div class="grid three">
+          <div class="card stat"><span>Claims</span><strong>${escapeHtml(summary.total_claims || 0)}</strong></div>
+          <div class="card stat"><span>Top playbooks</span><strong>${escapeHtml((summary.by_playbook || []).length || 0)}</strong></div>
+          <div class="card stat"><span>Top denial path</span><strong>${escapeHtml(summary.top_denial_reason || '—')}</strong></div>
+        </div>
+        <table>
+          <thead><tr><th>Patient</th><th>Payer</th><th>Playbook</th><th>Outstanding</th><th>Path</th></tr></thead>
+          <tbody>
+            ${items.length ? items.slice(0, 12).map((item) => `
+              <tr>
+                <td>${escapeHtml(item.patient_name || '')}</td>
+                <td>${escapeHtml(item.payer_name || '')}</td>
+                <td>${escapeHtml(item.playbook?.title || '')}</td>
+                <td>${escapeHtml(money(item.outstanding_amount || 0))}</td>
+                <td>${escapeHtml(item.playbook?.likely_path || '')}</td>
+              </tr>
+            `).join('') : '<tr><td colspan="5">No appeals queue yet.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   function renderBrowserOutput(result) {
     if (!result) return '<p class="muted">No browser run yet.</p>';
 
@@ -984,7 +1014,7 @@
     const root = document.getElementById('app');
     try {
       const query = new URLSearchParams(filters).toString();
-      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, opsOverview, underpayments] = await Promise.all([
+      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals] = await Promise.all([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
         api('/api/v1/clientcare-billing/claims/import-template'),
@@ -994,11 +1024,13 @@
         api('/api/v1/clientcare-billing/reimbursement-intelligence'),
         api('/api/v1/clientcare-billing/ops/overview'),
         api('/api/v1/clientcare-billing/underpayments?limit=100'),
+        api('/api/v1/clientcare-billing/appeals/queue?limit=100'),
       ]);
       lastReimbursementIntelligence = intelligence.intelligence || null;
       lastOpsOverview = opsOverview.overview || null;
       lastUnderpayments = underpayments || null;
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastOpsOverview, lastUnderpayments);
+      lastAppeals = appeals || null;
+      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastOpsOverview, lastUnderpayments, lastAppeals);
       await ensureAssistantSession();
       if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
@@ -1433,8 +1465,8 @@
     }
   }
 
-  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments) {
-    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments);
+  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals) {
+    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals);
     const summary = dashboard.summary || {};
     const liveSummary = lastAccountReport?.summary || null;
     const patientArSummary = opsOverview?.patient_ar?.summary || {};
@@ -1624,6 +1656,10 @@
                   <h3>Underpayment Queue</h3>
                   <div id="underpayment-queue">${renderUnderpaymentQueue(underpayments)}</div>
                 </div>
+                <div class="card">
+                  <h3>Appeals Queue</h3>
+                  <div id="appeals-queue">${renderAppealsQueue(appeals)}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1651,12 +1687,12 @@
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
     document.getElementById('assistant-pin-toggle').addEventListener('click', () => {
       setAssistantPinned(!assistantPinned);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals);
       ensureAssistantSession();
     });
     document.getElementById('assistant-open-toggle').addEventListener('click', () => {
       setAssistantOpen(!assistantOpen);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals);
       ensureAssistantSession();
     });
     document.getElementById('assistant-input').addEventListener('keydown', (event) => {

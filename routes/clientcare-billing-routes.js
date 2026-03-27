@@ -56,6 +56,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/appeals/queue', async (req, res) => {
+    try {
+      const appeals = await billingService.getAppealsQueue({ limit: req.query?.limit });
+      res.json({ ok: true, ...appeals });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] appeals queue failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/ops/overview', async (_req, res) => {
     try {
       const overview = await opsService.buildOperationsOverview();
@@ -521,6 +531,17 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, ...plan });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] get claim failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/appeals/:claimId/packet', async (req, res) => {
+    try {
+      const packet = await billingService.buildAppealPacketPreview(req.params.claimId);
+      if (!packet) return res.status(404).json({ ok: false, error: 'Claim not found' });
+      res.json({ ok: true, ...packet });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] appeal packet failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });

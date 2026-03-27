@@ -467,6 +467,17 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       };
     }
 
+    if (/appeal|appeals|denial queue|denied claims/.test(text)) {
+      const appeals = await billingService.getAppealsQueue({ limit: 50 });
+      return {
+        ok: true,
+        type: 'appeals',
+        reply: 'Here is the current appeals and denial queue, grouped by the likely recovery playbook.',
+        data: appeals,
+        suggested_actions: appeals.items?.slice(0, 5).map((item) => `${item.patient_name || 'Claim'}: ${item.playbook?.title || 'Manual review'}`) || [],
+      };
+    }
+
     if (/era|remit|835|paid claims import|payment history import/.test(text)) {
       return {
         ok: true,

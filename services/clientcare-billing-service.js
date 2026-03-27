@@ -393,6 +393,107 @@ function getCollectionTimingProfile(rescueBucket = 'payer_followup') {
   return profiles[rescueBucket] || profiles.payer_followup;
 }
 
+function classifyAppealPlaybook(claim = {}) {
+  const payerType = inferPayerType(claim.payer_name, claim.payer_type);
+  const text = `${claim.denial_code || ''} ${claim.denial_reason || ''} ${claim.claim_status || ''}`.toLowerCase();
+  const timely = hasTimelyFilingDenial(claim);
+  const correctable = hasCorrectableDenial(claim);
+
+  const packet = {
+    playbook_id: 'manual_review',
+    title: 'Manual denial review',
+    rationale: 'Claim needs manual review before deciding whether to appeal, correct, or close.',
+    likely_path: 'review',
+    evidence: ['claim form', 'payer response', 'clinical note'],
+    confidence: 'low',
+    notes: ['Verify payer-specific appeal or reconsideration window before submitting anything.'],
+  };
+
+  if (timely) {
+    return {
+      ...packet,
+      playbook_id: 'timely_filing',
+      title: 'Timely filing / prior submission proof',
+      rationale: 'Denial text points to timely filing or late submission issues.',
+      likely_path: hasSubmissionProofCandidate(claim) ? 'appeal_with_proof' : 'exception_review',
+      evidence: ['original submission date', 'clearinghouse acceptance', 'payer acknowledgement', 'claim form'],
+      confidence: hasSubmissionProofCandidate(claim) ? 'medium' : 'low',
+      notes: payerType === 'nevada_medicaid'
+        ? ['Nevada Medicaid exceptions may exist for agency/system delays; verify the exact reconsideration path.']
+        : ['Pure timely-filing denials are weak unless you have proof of prior submission or a payer exception path.'],
+    };
+  }
+
+  if (/auth|authorization|precert|pre-cert|pre cert/.test(text)) {
+    return {
+      ...packet,
+      playbook_id: 'authorization',
+      title: 'Authorization denial packet',
+      rationale: 'Denial appears tied to missing or invalid authorization/precertification.',
+      likely_path: 'correct_or_appeal',
+      evidence: ['authorization record', 'referral/order', 'clinical support', 'submission timeline'],
+      confidence: 'medium',
+      notes: ['Check whether the denial is technical/correctable before sending a formal appeal.'],
+    };
+  }
+
+  if (/medical necessity|not medically necessary|necessity/.test(text)) {
+    return {
+      ...packet,
+      playbook_id: 'medical_necessity',
+      title: 'Medical necessity appeal packet',
+      rationale: 'Denial appears tied to medical necessity or level-of-care support.',
+      likely_path: 'formal_appeal',
+      evidence: ['clinical documentation', 'plan of care', 'provider letter', 'supporting records'],
+      confidence: 'medium',
+      notes: payerType === 'nevada_medicaid'
+        ? ['Nevada Medicaid reconsideration is a written provider request and generally needs additional supporting information.']
+        : ['Expect payer-specific medical necessity criteria; attach documentation that directly addresses the denial reason.'],
+    };
+  }
+
+  if (/member|subscriber|eligibility|coverage|dob|date of birth/.test(text)) {
+    return {
+      ...packet,
+      playbook_id: 'eligibility_identity',
+      title: 'Eligibility / member data correction',
+      rationale: 'Denial appears tied to member identity, coverage, or eligibility data.',
+      likely_path: 'correct_and_resubmit',
+      evidence: ['eligibility verification', 'member ID copy', 'coverage dates', 'payer verification note'],
+      confidence: 'high',
+      notes: ['These are often faster to correct and resubmit than to formally appeal.'],
+    };
+  }
+
+  if (/provider|npi|taxonomy|credential|network|out of network/.test(text)) {
+    return {
+      ...packet,
+      playbook_id: 'provider_enrollment',
+      title: 'Provider enrollment / network issue',
+      rationale: 'Denial appears tied to provider identity, credentialing, taxonomy, or network status.',
+      likely_path: 'review_enrollment_then_rebill',
+      evidence: ['provider enrollment status', 'NPI/taxonomy confirmation', 'payer credentialing status'],
+      confidence: 'medium',
+      notes: ['Check whether retro credentialing or enrollment correction is possible before escalating.'],
+    };
+  }
+
+  if (correctable) {
+    return {
+      ...packet,
+      playbook_id: 'coding_correction',
+      title: 'Coding / data correction packet',
+      rationale: 'Denial appears correctable based on code, modifier, or form data issues.',
+      likely_path: 'correct_and_resubmit',
+      evidence: ['claim form', 'coding review', 'modifier review', 'clinical note if needed'],
+      confidence: 'high',
+      notes: ['These are usually correction/resubmission work, not formal appeal-first work.'],
+    };
+  }
+
+  return packet;
+}
+
 export function createClientCareBillingService({ pool, logger = console, now = () => new Date() }) {
   async function ensureClaimActions(claimId, actions = []) {
     await pool.query(`DELETE FROM clientcare_claim_actions WHERE claim_id=$1 AND status='open'`, [claimId]);
@@ -872,6 +973,84 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     return { summary, items };
   }
 
+  async function getAppealsQueue({ limit = 100 } = {}) {
+    const { rows } = await pool.query(
+      `SELECT
+         id,
+         patient_name,
+         payer_name,
+         payer_type,
+         claim_number,
+         date_of_service,
+         latest_submitted_at,
+         claim_status,
+         denial_code,
+         denial_reason,
+         billed_amount,
+         allowed_amount,
+         paid_amount,
+         patient_balance,
+         insurance_balance,
+         rescue_bucket
+       FROM clientcare_claims
+       WHERE (
+         COALESCE(denial_code, '') <> ''
+         OR COALESCE(denial_reason, '') <> ''
+         OR claim_status ILIKE '%denied%'
+         OR rescue_bucket IN ('proof_of_timely_filing', 'timely_filing_exception', 'payer_followup', 'correct_and_resubmit')
+       )
+       ORDER BY priority_score DESC NULLS LAST, latest_submitted_at ASC NULLS LAST
+       LIMIT $1`,
+      [Math.max(1, Math.min(Number(limit || 100), 250))]
+    );
+
+    const items = rows.map((row) => {
+      const playbook = classifyAppealPlaybook(row);
+      return {
+        ...row,
+        outstanding_amount: Number(Math.max(money(row.insurance_balance), money(row.allowed_amount) - money(row.paid_amount) - money(row.patient_balance), 0).toFixed(2)),
+        playbook,
+      };
+    });
+
+    const summary = {
+      total_claims: items.length,
+      by_playbook: Array.from(items.reduce((map, item) => {
+        const key = item.playbook.playbook_id;
+        const current = map.get(key) || { playbook_id: key, title: item.playbook.title, claims: 0, outstanding_amount: 0 };
+        current.claims += 1;
+        current.outstanding_amount += money(item.outstanding_amount);
+        map.set(key, current);
+        return map;
+      }, new Map()).values())
+        .sort((a, b) => b.outstanding_amount - a.outstanding_amount)
+        .map((item) => ({ ...item, outstanding_amount: Number(item.outstanding_amount.toFixed(2)) })),
+      top_denial_reason: items[0]?.playbook?.title || null,
+    };
+
+    return { summary, items };
+  }
+
+  async function buildAppealPacketPreview(claimId) {
+    const claim = await getClaimById(claimId);
+    if (!claim) return null;
+    const playbook = classifyAppealPlaybook(claim);
+    const outstandingAmount = Number(Math.max(money(claim.insurance_balance), money(claim.allowed_amount) - money(claim.paid_amount) - money(claim.patient_balance), 0).toFixed(2));
+    return {
+      claim,
+      outstanding_amount: outstandingAmount,
+      playbook,
+      packet_sections: [
+        'Claim summary',
+        'Denial reason and payer response',
+        'Requested correction or reconsideration',
+        'Evidence checklist',
+        'Submission / follow-up log',
+      ],
+      next_action: playbook.likely_path,
+    };
+  }
+
   return {
     importClaims,
     importPaymentHistoryCsv,
@@ -885,6 +1064,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     buildClaimPlan,
     getReimbursementIntelligence,
     getUnderpaymentQueue,
+    getAppealsQueue,
+    buildAppealPacketPreview,
     parseClaimsCsv,
     getImportTemplate: () => IMPORT_TEMPLATE_FIELDS,
   };
