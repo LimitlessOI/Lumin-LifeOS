@@ -1,0 +1,87 @@
+{
+  "project_id": "clientcare_billing_recovery",
+  "name": "ClientCare Billing Recovery",
+  "amendment_path": "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+  "lifecycle": "experimental",
+  "status": "active",
+  "priority": "critical",
+  "owner": "adam",
+  "phase": "execution-layer",
+  "next_task": "Turn workflow playbooks into controlled writeback actions for insurance setup, billing status, provider type, and payer-order repair in ClientCare",
+  "stability_class": "needs-review",
+  "current_focus": "The Collections Control Center now has live backlog visibility, actionable ops overview, insurance verification preview, patient AR summary, and assistant routing; next step is safe writeback automation and payment-history ingestion.",
+  "owned_files": [
+    "services/clientcare-billing-service.js",
+    "services/clientcare-browser-service.js",
+    "services/clientcare-sync-service.js",
+    "services/clientcare-ops-service.js",
+    "routes/clientcare-billing-routes.js",
+    "public/clientcare-billing/overlay.html",
+    "public/clientcare-billing/clientcare-billing.js",
+    "db/migrations/20260326_clientcare_billing.sql",
+    "db/migrations/20260326_clientcare_ops.sql",
+    "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
+    "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json"
+  ],
+  "protected_files": [
+    "server.js",
+    "routes/public-routes.js",
+    "docs/SSOT_COMPANION.md"
+  ],
+  "required_files": [
+    "services/clientcare-billing-service.js",
+    "services/clientcare-browser-service.js",
+    "services/clientcare-sync-service.js",
+    "services/clientcare-ops-service.js",
+    "routes/clientcare-billing-routes.js",
+    "public/clientcare-billing/overlay.html",
+    "public/clientcare-billing/clientcare-billing.js",
+    "db/migrations/20260326_clientcare_billing.sql",
+    "db/migrations/20260326_clientcare_ops.sql"
+  ],
+  "required_routes": [
+    { "method": "GET", "path": "/api/v1/clientcare-billing/dashboard", "expected_status": 200, "description": "Billing dashboard summary" },
+    { "method": "GET", "path": "/api/v1/clientcare-billing/browser/full-account-report", "expected_status": 200, "description": "Live ClientCare backlog summary" },
+    { "method": "GET", "path": "/api/v1/clientcare-billing/ops/overview", "expected_status": 200, "description": "Ops overview for overlay" },
+    { "method": "POST", "path": "/api/v1/clientcare-billing/insurance/verification-preview", "expected_status": 200, "description": "Insurance intake preview" },
+    { "method": "POST", "path": "/api/v1/clientcare-billing/assistant/message", "expected_status": 200, "description": "Operations Assistant message handling" }
+  ],
+  "required_tables": [
+    { "name": "clientcare_claims", "required_columns": ["id", "patient_name", "payer_name", "date_of_service", "status", "bucket", "billed_amount", "paid_amount", "patient_balance"] },
+    { "name": "clientcare_claim_actions", "required_columns": ["id", "claim_id", "action_type", "status", "priority"] },
+    { "name": "clientcare_capability_requests", "required_columns": ["id", "request_text", "priority", "status", "requested_by", "created_at"] },
+    { "name": "conversation_sessions", "required_columns": ["id", "conversation_type", "messages", "updated_at"] }
+  ],
+  "required_env": [
+    "DATABASE_URL",
+    "COMMAND_CENTER_KEY",
+    "CLIENTCARE_BASE_URL",
+    "CLIENTCARE_USERNAME",
+    "CLIENTCARE_PASSWORD"
+  ],
+  "assertions": [
+    { "type": "node_check", "check": "services/clientcare-billing-service.js", "label": "clientcare-billing-service syntax" },
+    { "type": "node_check", "check": "services/clientcare-browser-service.js", "label": "clientcare-browser-service syntax" },
+    { "type": "node_check", "check": "services/clientcare-sync-service.js", "label": "clientcare-sync-service syntax" },
+    { "type": "node_check", "check": "services/clientcare-ops-service.js", "label": "clientcare-ops-service syntax" },
+    { "type": "node_check", "check": "routes/clientcare-billing-routes.js", "label": "clientcare-billing-routes syntax" },
+    { "type": "node_check", "check": "public/clientcare-billing/clientcare-billing.js", "label": "clientcare-billing overlay syntax" }
+  ],
+  "completion_checks": [
+    "Collections Control Center auto-loads the live ClientCare backlog and KPI strip",
+    "Accounts Needing Action is filterable and account detail loads on click",
+    "Operations Assistant keeps running session history with archive behavior",
+    "Insurance verification preview returns take/review/do-not-schedule guidance",
+    "Patient AR summary shows aging buckets and top balances",
+    "Workflow playbooks can be invoked from the overlay and return actionable steps",
+    "Forecasting improves from imported paid claims / ERAs / remits instead of rescue buckets alone"
+  ],
+  "anti_drift_notes": "This product has two data layers: the live ClientCare browser backlog and the local claim ledger. Do not assume the claim ledger reflects the live backlog unless imports have run. Keep the overlay fast by loading backlog summary first and account details lazily. Do not enable autonomous collections behavior; all outreach and writeback remains provider-directed and compliance-gated.",
+  "decision_debt": [
+    { "description": "Forecast amount/date remains low-confidence until paid claims, ERAs, and remits are imported", "resolved": false },
+    { "description": "ClientCare read paths are live, but controlled writeback workflows still need approval-gated rollout", "resolved": false },
+    { "description": "Capability queue exists to capture missing assistant behaviors until they are implemented natively", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}
