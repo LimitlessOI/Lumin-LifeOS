@@ -47,6 +47,11 @@ function findWorkflow(workflowId, summary = {}) {
   return (summary.workflowPlaybooks || []).find((item) => item.id === workflowId) || null;
 }
 
+function extractClaimId(text = '') {
+  const match = String(text || '').match(/\bclaim\s*#?\s*(\d+)\b/i) || String(text || '').match(/\b(\d{2,})\b/);
+  return match ? match[1] : null;
+}
+
 function normalizeRepairUpdates(input = {}) {
   const updates = {};
   if (input.client_billing_status) updates.client_billing_status = String(input.client_billing_status).trim();
@@ -457,6 +462,21 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     }
 
     if (/underpayment|short pay|short-paid|paid less than expected/.test(text)) {
+      if (/queue|follow up|follow-up|work|open action/.test(text)) {
+        const claimId = extractClaimId(text);
+        if (claimId) {
+          const result = await billingService.queueUnderpaymentAction(claimId, { owner: requestedBy });
+          if (result?.action) {
+            return {
+              ok: true,
+              type: 'underpayment_action',
+              reply: `Queued underpayment review for claim ${claimId}.`,
+              data: result,
+              suggested_actions: ['Open the action queue and review the evidence checklist.', 'Compare the ERA/EOB against expected patient responsibility before payer escalation.'],
+            };
+          }
+        }
+      }
       const underpayments = await billingService.getUnderpaymentQueue({ limit: 50 });
       return {
         ok: true,
@@ -468,6 +488,24 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     }
 
     if (/appeal|appeals|denial queue|denied claims/.test(text)) {
+      if (/queue|follow up|follow-up|packet|work|open action/.test(text)) {
+        const claimId = extractClaimId(text);
+        if (claimId) {
+          const result = await billingService.queueAppealAction(claimId, {
+            owner: requestedBy,
+            actionType: /packet/.test(text) ? 'appeal_packet' : 'appeal_followup',
+          });
+          if (result?.action) {
+            return {
+              ok: true,
+              type: 'appeal_action',
+              reply: `Queued ${/packet/.test(text) ? 'appeal packet prep' : 'appeal follow-up'} for claim ${claimId}.`,
+              data: result,
+              suggested_actions: ['Open the action queue and packet preview.', 'Validate the payer path and evidence list before sending.'],
+            };
+          }
+        }
+      }
       const appeals = await billingService.getAppealsQueue({ limit: 50 });
       return {
         ok: true,

@@ -494,6 +494,33 @@ function classifyAppealPlaybook(claim = {}) {
   return packet;
 }
 
+function buildAppealLetter(packet = {}, claim = {}, outstandingAmount = 0) {
+  const patient = claim.patient_name || 'Unknown patient';
+  const payer = claim.payer_name || 'Unknown payer';
+  const claimNumber = claim.claim_number || 'Unknown claim';
+  const dos = claim.date_of_service || 'Unknown DOS';
+  return [
+    `RE: ${patient} / Claim ${claimNumber}`,
+    `Payer: ${payer}`,
+    `Date of Service: ${dos}`,
+    `Outstanding Amount: $${Number(outstandingAmount || 0).toFixed(2)}`,
+    '',
+    `Request Type: ${packet.title || 'Appeal / reconsideration review'}`,
+    '',
+    'Summary:',
+    packet.rationale || 'Claim requires payer review.',
+    '',
+    'Requested Resolution:',
+    packet.likely_path || 'review',
+    '',
+    'Attach the following:',
+    ...(packet.evidence || []).map((item) => `- ${item}`),
+    '',
+    'Notes:',
+    ...((packet.notes || []).map((item) => `- ${item}`)),
+  ].join('\n');
+}
+
 export function createClientCareBillingService({ pool, logger = console, now = () => new Date() }) {
   async function ensureClaimActions(claimId, actions = []) {
     await pool.query(`DELETE FROM clientcare_claim_actions WHERE claim_id=$1 AND status='open'`, [claimId]);
@@ -1040,6 +1067,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       claim,
       outstanding_amount: outstandingAmount,
       playbook,
+      draft_letter: buildAppealLetter(playbook, claim, outstandingAmount),
       packet_sections: [
         'Claim summary',
         'Denial reason and payer response',
@@ -1048,6 +1076,106 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         'Submission / follow-up log',
       ],
       next_action: playbook.likely_path,
+    };
+  }
+
+  async function queueAppealAction(claimId, { owner = null, actionType = 'appeal_followup' } = {}) {
+    const packet = await buildAppealPacketPreview(claimId);
+    if (!packet) return null;
+
+    const { claim, playbook, draft_letter: draftLetter, outstanding_amount: outstandingAmount } = packet;
+    const summary = actionType === 'appeal_packet'
+      ? `Prepare appeal packet — ${playbook.title}`
+      : `Payer follow-up — ${playbook.title}`;
+    const details = [
+      `Claim ${claim.claim_number || claim.id} for ${claim.patient_name || 'Unknown patient'}`,
+      `Outstanding: $${Number(outstandingAmount || 0).toFixed(2)}`,
+      `Path: ${playbook.likely_path || 'review'}`,
+      '',
+      draftLetter,
+    ].join('\n');
+    const evidenceRequired = playbook.evidence || [];
+
+    const { rows } = await pool.query(
+      `INSERT INTO clientcare_claim_actions (claim_id, action_type, priority, owner, summary, details, evidence_required)
+       VALUES ($1,$2,$3,$4,$5,$6,$7)
+       RETURNING *`,
+      [
+        claimId,
+        actionType,
+        playbook.confidence === 'high' ? 'high' : 'normal',
+        owner,
+        summary,
+        details,
+        JSON.stringify(evidenceRequired),
+      ]
+    );
+
+    return {
+      action: rows[0],
+      packet,
+    };
+  }
+
+  async function queueUnderpaymentAction(claimId, { owner = null, actionType = 'underpayment_review' } = {}) {
+    const claim = await getClaimById(claimId);
+    if (!claim) return null;
+
+    const expectedInsurerPayment = Math.max(money(claim.allowed_amount) - money(claim.patient_balance), 0);
+    const shortPaidAmount = Number(Math.max(expectedInsurerPayment - money(claim.paid_amount), 0).toFixed(2));
+
+    if (shortPaidAmount < 10) {
+      return {
+        action: null,
+        claim,
+        expected_insurer_payment: Number(expectedInsurerPayment.toFixed(2)),
+        short_paid_amount: shortPaidAmount,
+        skipped: true,
+        reason: 'Claim does not currently qualify as a meaningful underpayment candidate.',
+      };
+    }
+
+    const summary = 'Review potential payer underpayment';
+    const details = [
+      `Claim ${claim.claim_number || claim.id} for ${claim.patient_name || 'Unknown patient'}`,
+      `Expected insurer payment: $${expectedInsurerPayment.toFixed(2)}`,
+      `Actual paid amount: $${money(claim.paid_amount).toFixed(2)}`,
+      `Short-paid amount: $${shortPaidAmount.toFixed(2)}`,
+      '',
+      'Review ERA/EOB, patient responsibility, and payer contract before escalating as an underpayment.',
+    ].join('\n');
+
+    const evidenceRequired = [
+      'ERA/EOB showing the actual allowed and paid amounts',
+      'Patient-responsibility calculation and any copay/coinsurance support',
+      'Fee schedule, contract terms, or payer policy support if available',
+    ];
+
+    const { rows } = await pool.query(
+      `INSERT INTO clientcare_claim_actions (claim_id, action_type, priority, owner, summary, details, evidence_required, metadata)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+       RETURNING *`,
+      [
+        claimId,
+        actionType,
+        shortPaidAmount >= 50 ? 'high' : 'normal',
+        owner,
+        summary,
+        details,
+        JSON.stringify(evidenceRequired),
+        JSON.stringify({
+          expected_insurer_payment: Number(expectedInsurerPayment.toFixed(2)),
+          short_paid_amount: shortPaidAmount,
+          source: 'underpayment_queue',
+        }),
+      ]
+    );
+
+    return {
+      action: rows[0],
+      claim,
+      expected_insurer_payment: Number(expectedInsurerPayment.toFixed(2)),
+      short_paid_amount: shortPaidAmount,
     };
   }
 
@@ -1066,6 +1194,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     getUnderpaymentQueue,
     getAppealsQueue,
     buildAppealPacketPreview,
+    queueAppealAction,
+    queueUnderpaymentAction,
     parseClaimsCsv,
     getImportTemplate: () => IMPORT_TEMPLATE_FIELDS,
   };

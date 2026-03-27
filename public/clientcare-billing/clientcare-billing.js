@@ -781,7 +781,7 @@
           <div class="card stat"><span>Avg short-pay</span><strong>${escapeHtml(money(summary.average_short_paid || 0))}</strong></div>
         </div>
         <table>
-          <thead><tr><th>Patient</th><th>Payer</th><th>Expected</th><th>Paid</th><th>Short-pay</th><th>Next action</th></tr></thead>
+          <thead><tr><th>Patient</th><th>Payer</th><th>Expected</th><th>Paid</th><th>Short-pay</th><th>Next action</th><th></th></tr></thead>
           <tbody>
             ${items.length ? items.slice(0, 12).map((item) => `
               <tr>
@@ -791,8 +791,9 @@
                 <td>${escapeHtml(money(item.paid_amount || 0))}</td>
                 <td>${escapeHtml(money(item.short_paid_amount || 0))}</td>
                 <td>${escapeHtml(item.next_action || '')}</td>
+                <td><button data-underpayment-queue="${item.id}" class="ghost">Queue review</button></td>
               </tr>
-            `).join('') : '<tr><td colspan="6">No underpayment candidates yet.</td></tr>'}
+            `).join('') : '<tr><td colspan="7">No underpayment candidates yet.</td></tr>'}
           </tbody>
         </table>
       </div>
@@ -810,7 +811,7 @@
           <div class="card stat"><span>Top denial path</span><strong>${escapeHtml(summary.top_denial_reason || '—')}</strong></div>
         </div>
         <table>
-          <thead><tr><th>Patient</th><th>Payer</th><th>Playbook</th><th>Outstanding</th><th>Path</th></tr></thead>
+          <thead><tr><th>Patient</th><th>Payer</th><th>Playbook</th><th>Outstanding</th><th>Path</th><th></th></tr></thead>
           <tbody>
             ${items.length ? items.slice(0, 12).map((item) => `
               <tr>
@@ -819,8 +820,12 @@
                 <td>${escapeHtml(item.playbook?.title || '')}</td>
                 <td>${escapeHtml(money(item.outstanding_amount || 0))}</td>
                 <td>${escapeHtml(item.playbook?.likely_path || '')}</td>
+                <td class="row-actions">
+                  <button data-appeal-packet="${item.id}" class="ghost">Packet</button>
+                  <button data-appeal-queue="${item.id}" class="ghost">Queue follow-up</button>
+                </td>
               </tr>
-            `).join('') : '<tr><td colspan="5">No appeals queue yet.</td></tr>'}
+            `).join('') : '<tr><td colspan="6">No appeals queue yet.</td></tr>'}
           </tbody>
         </table>
       </div>
@@ -1465,6 +1470,91 @@
     }
   }
 
+  async function showAppealPacket(id) {
+    try {
+      const packet = await api(`/api/v1/clientcare-billing/appeals/${id}/packet`);
+      document.getElementById('claim-plan').innerHTML = `
+        <h3>${escapeHtml(packet.claim.patient_name || packet.claim.claim_number || `Claim ${id}`)}</h3>
+        <p class="muted">${escapeHtml(packet.claim.payer_name || '')} · DOS ${escapeHtml(packet.claim.date_of_service || '')}</p>
+        <p style="margin-top:10px"><span class="badge ${badgeClass(packet.playbook?.playbook_id || 'review')}">${escapeHtml(packet.playbook?.title || 'Appeal review')}</span></p>
+        <div class="stack" style="margin-top:12px">
+          ${renderKeyValueTable([
+            { label: 'Outstanding', value: money(packet.outstanding_amount || 0) },
+            { label: 'Likely path', value: packet.playbook?.likely_path || 'Review' },
+            { label: 'Confidence', value: packet.playbook?.confidence || 'low' },
+          ])}
+          <div><strong>Evidence checklist</strong><pre>${escapeHtml((packet.playbook?.evidence || []).map((item) => `- ${item}`).join('\n') || 'None')}</pre></div>
+          <div><strong>Draft letter</strong><pre>${escapeHtml(packet.draft_letter || 'No draft letter generated.')}</pre></div>
+          <div class="row-actions">
+            <button data-appeal-packet-queue="${packet.claim.id}">Queue packet prep</button>
+            <button data-appeal-followup-queue="${packet.claim.id}" class="ghost">Queue follow-up</button>
+          </div>
+        </div>
+      `;
+      document.querySelector('[data-appeal-packet-queue]')?.addEventListener('click', () => queueAppealAction(id, 'appeal_packet'));
+      document.querySelector('[data-appeal-followup-queue]')?.addEventListener('click', () => queueAppealAction(id, 'appeal_followup'));
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function queueAppealAction(id, actionType = 'appeal_followup') {
+    try {
+      const result = await api(`/api/v1/clientcare-billing/appeals/${id}/queue-action`, {
+        method: 'POST',
+        body: JSON.stringify({
+          owner: 'overlay',
+          action_type: actionType,
+        }),
+      });
+      alert(`Queued ${actionType === 'appeal_packet' ? 'appeal packet prep' : 'appeal follow-up'} for claim ${id}.`);
+      if (result?.packet) {
+        document.getElementById('claim-plan').innerHTML = `
+          <h3>${escapeHtml(result.packet.claim.patient_name || result.packet.claim.claim_number || `Claim ${id}`)}</h3>
+          <p class="muted">Action queued successfully.</p>
+          ${renderKeyValueTable([
+            { label: 'Action', value: result.action?.summary || '' },
+            { label: 'Priority', value: result.action?.priority || '' },
+            { label: 'Status', value: result.action?.status || '' },
+          ])}
+          <div><strong>Draft letter</strong><pre>${escapeHtml(result.packet.draft_letter || 'No draft letter generated.')}</pre></div>
+        `;
+      }
+      await loadDashboard();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function queueUnderpaymentAction(id) {
+    try {
+      const result = await api(`/api/v1/clientcare-billing/underpayments/${id}/queue-action`, {
+        method: 'POST',
+        body: JSON.stringify({
+          owner: 'overlay',
+          action_type: 'underpayment_review',
+        }),
+      });
+      if (result.skipped) {
+        alert(result.reason || 'This claim does not need an underpayment action.');
+        return;
+      }
+      document.getElementById('claim-plan').innerHTML = `
+        <h3>${escapeHtml(result.claim.patient_name || result.claim.claim_number || `Claim ${id}`)}</h3>
+        <p class="muted">Underpayment review queued successfully.</p>
+        ${renderKeyValueTable([
+          { label: 'Expected insurer payment', value: money(result.expected_insurer_payment || 0) },
+          { label: 'Short-paid amount', value: money(result.short_paid_amount || 0) },
+          { label: 'Action', value: result.action?.summary || '' },
+        ])}
+        <div><strong>Next step</strong><pre>${escapeHtml(result.action?.details || 'No details available.')}</pre></div>
+      `;
+      await loadDashboard();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals) {
     saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments, appeals);
     const summary = dashboard.summary || {};
@@ -1707,6 +1797,9 @@
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));
+    root.querySelectorAll('[data-underpayment-queue]').forEach((button) => button.addEventListener('click', () => queueUnderpaymentAction(button.getAttribute('data-underpayment-queue'))));
+    root.querySelectorAll('[data-appeal-packet]').forEach((button) => button.addEventListener('click', () => showAppealPacket(button.getAttribute('data-appeal-packet'))));
+    root.querySelectorAll('[data-appeal-queue]').forEach((button) => button.addEventListener('click', () => queueAppealAction(button.getAttribute('data-appeal-queue'), 'appeal_followup')));
     renderAccountBoard();
     if (lastBrowserResult) setBrowserOutput(lastBrowserResult);
     const workflowNode = document.getElementById('workflow-playbooks');

@@ -546,6 +546,34 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/appeals/:claimId/queue-action', async (req, res) => {
+    try {
+      const result = await billingService.queueAppealAction(req.params.claimId, {
+        owner: req.body?.owner || null,
+        actionType: req.body?.action_type || 'appeal_followup',
+      });
+      if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
+      res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] queue appeal action failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/underpayments/:claimId/queue-action', async (req, res) => {
+    try {
+      const result = await billingService.queueUnderpaymentAction(req.params.claimId, {
+        owner: req.body?.owner || null,
+        actionType: req.body?.action_type || 'underpayment_review',
+      });
+      if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
+      res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] queue underpayment action failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/claims/:claimId/reclassify', async (req, res) => {
     try {
       const result = await billingService.reclassifyClaim(req.params.claimId);

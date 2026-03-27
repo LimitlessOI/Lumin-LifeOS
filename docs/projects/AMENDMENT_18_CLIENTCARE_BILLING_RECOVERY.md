@@ -112,9 +112,11 @@ Every claim lands in one of these buckets:
 - `POST /api/v1/clientcare-billing/insurance/verification-preview`
 - `GET /api/v1/clientcare-billing/patient-ar/summary`
 - `GET /api/v1/clientcare-billing/underpayments`
+- `POST /api/v1/clientcare-billing/underpayments/:claimId/queue-action`
 - `POST /api/v1/clientcare-billing/history/import-csv`
 - `GET /api/v1/clientcare-billing/appeals/queue`
 - `GET /api/v1/clientcare-billing/appeals/:claimId/packet`
+- `POST /api/v1/clientcare-billing/appeals/:claimId/queue-action`
 - `POST /api/v1/clientcare-billing/browser/login-test`
 - `POST /api/v1/clientcare-billing/browser/discover`
 - `POST /api/v1/clientcare-billing/browser/extract-claims`
@@ -245,4 +247,5 @@ Operational inputs needed regardless of integration path:
 - The system should evolve toward underpayment detection, payer playbooks, eligibility verification, and appeals packet preparation because those are core differentiators versus generic billing dashboards.
 - The claims ledger must surface a real underpayment queue so short-paid claims can be reviewed against allowed amount, patient responsibility, and payer payment variance.
 - The claims ledger must also surface an appeals queue and claim-level appeal packet preview so denied or follow-up claims can be worked by playbook instead of ad hoc memory.
+- The underpayment queue and appeals queue must support controlled action queueing so likely recovery work can be turned into tracked follow-up instead of staying dashboard-only.
 - Amendment and continuity stay current as the system changes.
