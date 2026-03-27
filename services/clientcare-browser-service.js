@@ -434,6 +434,54 @@ async function extractAllBillingQueueItems(page, { maxPages = 8, pageTimeoutMs =
   return allItems;
 }
 
+async function extractBillingNotesDiagnostics(page) {
+  return page.evaluate(() => {
+    const tables = Array.from(document.querySelectorAll('table'));
+    const noteTable = tables.find((table) => {
+      const headerCells = Array.from(table.querySelectorAll('tr:first-child th, tr:first-child td')).map((cell) => (cell.textContent || '').trim().toLowerCase());
+      return headerCells.includes('client') && headerCells.some((cell) => cell.includes('note'));
+    });
+    if (!noteTable) return { pagerControls: [], scripts: [], hiddenFields: [] };
+
+    let container = noteTable.parentElement;
+    while (container && container !== document.body) {
+      const hasPager = container.querySelector('[title*="page" i], [aria-label*="page" i], .k-pager-wrap, .paginate_button');
+      if (hasPager) break;
+      container = container.parentElement;
+    }
+    const root = container || noteTable.parentElement || document.body;
+    const pagerControls = Array.from(root.querySelectorAll('a,button,span,div'))
+      .map((el) => ({
+        text: (el.textContent || '').replace(/\s+/g, ' ').trim(),
+        title: el.getAttribute('title') || '',
+        ariaLabel: el.getAttribute('aria-label') || '',
+        className: el.className || '',
+        href: el.href || '',
+        onclick: el.getAttribute('onclick') || '',
+        dataPage: el.getAttribute('data-page') || '',
+      }))
+      .filter((item) => /page|«|»|←|→|\bnext\b|\bprev\b/i.test(`${item.text} ${item.title} ${item.ariaLabel} ${item.className} ${item.onclick}`))
+      .slice(0, 50);
+
+    const scripts = Array.from(document.querySelectorAll('script'))
+      .map((script) => script.textContent || '')
+      .filter((text) => /BillingClientNote|BillingPartial|kendo|pager|grid/i.test(text))
+      .slice(0, 10)
+      .map((text) => text.slice(0, 1200));
+
+    const hiddenFields = Array.from(document.querySelectorAll('input[type="hidden"]'))
+      .map((input) => ({
+        name: input.name || '',
+        id: input.id || '',
+        value: input.value || '',
+      }))
+      .filter((item) => /billing|note|grid|page/i.test(`${item.name} ${item.id} ${item.value}`))
+      .slice(0, 30);
+
+    return { pagerControls, scripts, hiddenFields };
+  });
+}
+
 function summarizeBillingAccount(billingFields = []) {
   const map = Object.fromEntries(
     billingFields.map((field) => [String(field.label || field.name || '').toLowerCase(), field.value || ''])
@@ -1158,6 +1206,63 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
+  async function inspectBillingNotesTransport({ pageTimeoutMs = 15000 } = {}) {
+    const result = await login({ dryRun: false });
+    const { session } = result;
+    const responses = [];
+    const seen = new Set();
+    const handler = async (response) => {
+      try {
+        const request = response.request();
+        const type = request.resourceType();
+        const url = response.url();
+        if (!/clientcarewest\.net/i.test(url)) return;
+        if (!['xhr', 'fetch', 'document', 'script'].includes(type)) return;
+        const key = `${type}|${url}`;
+        if (seen.has(key)) return;
+        seen.add(key);
+        const contentType = response.headers()['content-type'] || '';
+        let snippet = '';
+        if (/json|javascript|html|text/i.test(contentType)) {
+          try {
+            snippet = (await response.text()).slice(0, 500);
+          } catch (_) {
+            // ignore body read issues
+          }
+        }
+        responses.push({
+          url,
+          status: response.status(),
+          type,
+          contentType,
+          snippet,
+        });
+      } catch (_) {
+        // ignore diagnostic capture issues
+      }
+    };
+
+    session.page.on('response', handler);
+    try {
+      const billingHome = new URL('/Home/BillingPartial', session.currentUrl()).toString();
+      const nav = await gotoWithBudget(session.page, billingHome, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+      if (!nav.ok) return { ok: false, error: nav.error };
+      await waitForBillingHome(session.page, Math.max(5000, Number(pageTimeoutMs) || 15000));
+      await sleep(1500);
+      const summary = await collectPageSummary(session.page);
+      const diagnostics = await extractBillingNotesDiagnostics(session.page);
+      return {
+        ok: true,
+        page: summary,
+        diagnostics,
+        responses,
+      };
+    } finally {
+      session.page.off('response', handler);
+      await session.close().catch(() => {});
+    }
+  }
+
   async function extractClaimTables({ importIntoQueue = false, maxCandidates = 2, includeScreenshots = false, pageTimeoutMs = 20000 } = {}) {
     if (!syncService) throw new Error('ClientCare sync service not configured');
     const discovery = await discoverBillingSurface({ maxCandidates, includeScreenshots, pageTimeoutMs });
@@ -1204,6 +1309,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     discoverBillingSurface,
     inspectPage,
     buildBillingOverview,
+    inspectBillingNotesTransport,
     inspectClientBillingAccount,
     scanClientBillingAccounts,
     scanBillingNotes,

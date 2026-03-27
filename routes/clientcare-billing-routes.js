@@ -98,6 +98,18 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/browser/billing-notes-transport', async (req, res) => {
+    try {
+      const result = await browserService.inspectBillingNotesTransport({
+        pageTimeoutMs: req.query?.page_timeout_ms,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] billing notes transport failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/inspect-client-account', async (req, res) => {
     try {
       const result = await browserService.inspectClientBillingAccount({
