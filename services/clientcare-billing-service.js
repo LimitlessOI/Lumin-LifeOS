@@ -34,6 +34,35 @@ const IMPORT_TEMPLATE_FIELDS = [
   'notes',
 ];
 
+const CLAIM_IMPORT_ALIASES = {
+  external_claim_id: ['external_claim_id', 'external id', 'claim_id', 'claim id'],
+  patient_id: ['patient_id', 'patient id', 'client_id', 'client id'],
+  patient_name: ['patient_name', 'patient', 'client_name', 'client'],
+  payer_name: ['payer_name', 'payer', 'insurance_name', 'insurance'],
+  payer_type: ['payer_type', 'payer type'],
+  provider_state: ['provider_state', 'provider state'],
+  member_id: ['member_id', 'member id', 'subscriber_id', 'subscriber id'],
+  claim_number: ['claim_number', 'claim number'],
+  account_number: ['account_number', 'account number'],
+  date_of_service: ['date_of_service', 'date of service', 'dos'],
+  service_end_date: ['service_end_date', 'service end date', 'dos_to'],
+  original_submitted_at: ['original_submitted_at', 'original submitted at', 'submitted_at', 'submission_date'],
+  latest_submitted_at: ['latest_submitted_at', 'latest submitted at', 'last_submitted_at', 'paid_date', 'remit_date'],
+  claim_status: ['claim_status', 'claim status', 'status'],
+  submission_status: ['submission_status', 'submission status'],
+  denial_code: ['denial_code', 'denial code', 'carc_code', 'reason_code'],
+  denial_reason: ['denial_reason', 'denial reason', 'reason', 'remark'],
+  billed_amount: ['billed_amount', 'billed amount', 'charge_amount', 'charge amount', 'submitted_amount'],
+  allowed_amount: ['allowed_amount', 'allowed amount', 'allowed'],
+  paid_amount: ['paid_amount', 'paid amount', 'insurance_paid', 'payment_amount', 'check_amount'],
+  patient_balance: ['patient_balance', 'patient balance', 'patient_responsibility', 'member_responsibility'],
+  insurance_balance: ['insurance_balance', 'insurance balance', 'remaining_insurance_balance'],
+  cpt_codes: ['cpt_codes', 'cpt codes', 'cpt', 'procedure_codes'],
+  icd_codes: ['icd_codes', 'icd codes', 'icd', 'diagnosis_codes'],
+  modifiers: ['modifiers', 'modifier', 'modifier_codes'],
+  notes: ['notes', 'note', 'description'],
+};
+
 function parseCsvLine(line = '') {
   const values = [];
   let current = '';
@@ -78,6 +107,18 @@ function parseClaimsCsv(text = '') {
   });
 }
 
+function findAliasValue(input = {}, aliases = []) {
+  const entries = Object.entries(input || {});
+  for (const alias of aliases) {
+    const exact = entries.find(([key]) => key === alias);
+    if (exact && exact[1] != null && String(exact[1]).trim() !== '') return exact[1];
+    const normalized = alias.toLowerCase();
+    const matched = entries.find(([key]) => String(key || '').toLowerCase().trim() === normalized);
+    if (matched && matched[1] != null && String(matched[1]).trim() !== '') return matched[1];
+  }
+  return null;
+}
+
 function toDateOnly(value) {
   if (!value) return null;
   const date = new Date(value);
@@ -114,6 +155,37 @@ function normalizeArray(value) {
     return value.split(/[|,;]/).map((v) => v.trim()).filter(Boolean);
   }
   return [];
+}
+
+function normalizeImportedClaim(input = {}) {
+  const out = { ...input };
+  for (const [target, aliases] of Object.entries(CLAIM_IMPORT_ALIASES)) {
+    if (out[target] != null && String(out[target]).trim() !== '') continue;
+    const value = findAliasValue(input, aliases);
+    if (value != null && String(value).trim() !== '') out[target] = value;
+  }
+
+  const billed = money(out.billed_amount);
+  const allowed = money(out.allowed_amount);
+  const paid = money(out.paid_amount);
+  const patientBalance = money(out.patient_balance);
+
+  if ((!out.insurance_balance || money(out.insurance_balance) === 0) && allowed > 0) {
+    out.insurance_balance = Number(Math.max(allowed - paid - patientBalance, 0).toFixed(2));
+  }
+
+  if ((!out.patient_balance || money(out.patient_balance) === 0) && billed > 0 && allowed > 0 && paid >= 0) {
+    const fallbackPatient = Math.max(billed - allowed, 0);
+    if (fallbackPatient > 0) out.patient_balance = Number(fallbackPatient.toFixed(2));
+  }
+
+  if (!out.claim_status && paid > 0) out.claim_status = 'paid';
+  if (!out.submission_status && paid > 0) out.submission_status = 'paid';
+  if (!out.latest_submitted_at && paid > 0) {
+    out.latest_submitted_at = out.paid_date || out.remit_date || out.original_submitted_at || null;
+  }
+
+  return out;
 }
 
 function inferPayerType(name = '', explicit = null) {
@@ -338,35 +410,36 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   }
 
   async function upsertClaim(input = {}) {
+    const normalized = normalizeImportedClaim(input);
     const claim = {
-      external_claim_id: input.external_claim_id || null,
-      patient_id: input.patient_id || null,
-      patient_name: input.patient_name || null,
-      payer_name: input.payer_name || 'Unknown',
-      payer_type: input.payer_type || inferPayerType(input.payer_name, input.payer_type),
-      provider_state: input.provider_state || null,
-      member_id: input.member_id || null,
-      claim_number: input.claim_number || null,
-      account_number: input.account_number || null,
-      date_of_service: input.date_of_service,
-      service_end_date: input.service_end_date || null,
-      original_submitted_at: input.original_submitted_at || null,
-      latest_submitted_at: input.latest_submitted_at || input.original_submitted_at || null,
-      claim_status: input.claim_status || 'imported',
-      submission_status: input.submission_status || null,
-      denial_code: input.denial_code || null,
-      denial_reason: input.denial_reason || null,
-      billed_amount: money(input.billed_amount),
-      allowed_amount: money(input.allowed_amount),
-      paid_amount: money(input.paid_amount),
-      patient_balance: money(input.patient_balance),
-      insurance_balance: money(input.insurance_balance),
-      cpt_codes: normalizeArray(input.cpt_codes),
-      icd_codes: normalizeArray(input.icd_codes),
-      modifiers: normalizeArray(input.modifiers),
-      source: input.source || 'manual_import',
-      notes: input.notes || null,
-      metadata: input.metadata || {},
+      external_claim_id: normalized.external_claim_id || null,
+      patient_id: normalized.patient_id || null,
+      patient_name: normalized.patient_name || null,
+      payer_name: normalized.payer_name || 'Unknown',
+      payer_type: normalized.payer_type || inferPayerType(normalized.payer_name, normalized.payer_type),
+      provider_state: normalized.provider_state || null,
+      member_id: normalized.member_id || null,
+      claim_number: normalized.claim_number || null,
+      account_number: normalized.account_number || null,
+      date_of_service: normalized.date_of_service,
+      service_end_date: normalized.service_end_date || null,
+      original_submitted_at: normalized.original_submitted_at || null,
+      latest_submitted_at: normalized.latest_submitted_at || normalized.original_submitted_at || null,
+      claim_status: normalized.claim_status || 'imported',
+      submission_status: normalized.submission_status || null,
+      denial_code: normalized.denial_code || null,
+      denial_reason: normalized.denial_reason || null,
+      billed_amount: money(normalized.billed_amount),
+      allowed_amount: money(normalized.allowed_amount),
+      paid_amount: money(normalized.paid_amount),
+      patient_balance: money(normalized.patient_balance),
+      insurance_balance: money(normalized.insurance_balance),
+      cpt_codes: normalizeArray(normalized.cpt_codes),
+      icd_codes: normalizeArray(normalized.icd_codes),
+      modifiers: normalizeArray(normalized.modifiers),
+      source: normalized.source || 'manual_import',
+      notes: normalized.notes || null,
+      metadata: normalized.metadata || {},
     };
     const classification = classifyClientCareClaim(claim, now());
 
@@ -471,6 +544,18 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       }
     }
     return results;
+  }
+
+  async function importPaymentHistoryCsv(csv = '', { source = 'payment_history_import' } = {}) {
+    const claims = parseClaimsCsv(csv).map((row) => normalizeImportedClaim(row));
+    if (!claims.length) return { parsed: 0, imported: 0, failed: 0, results: [] };
+    const results = await importClaims(claims, { source });
+    return {
+      parsed: claims.length,
+      imported: results.filter((item) => !item.error).length,
+      failed: results.filter((item) => item.error).length,
+      results,
+    };
   }
 
   async function getClaimById(claimId) {
@@ -725,8 +810,71 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     };
   }
 
+  async function getUnderpaymentQueue({ limit = 100 } = {}) {
+    const { rows } = await pool.query(
+      `SELECT
+         id,
+         patient_name,
+         payer_name,
+         claim_number,
+         date_of_service,
+         claim_status,
+         denial_code,
+         denial_reason,
+         billed_amount,
+         allowed_amount,
+         paid_amount,
+         patient_balance,
+         insurance_balance,
+         latest_submitted_at,
+         rescue_bucket,
+         GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0)::numeric AS short_paid_amount
+       FROM clientcare_claims
+       WHERE COALESCE(allowed_amount, 0) > 0
+         AND COALESCE(paid_amount, 0) > 0
+         AND GREATEST(COALESCE(allowed_amount, 0) - COALESCE(patient_balance, 0) - COALESCE(paid_amount, 0), 0) >= 10
+       ORDER BY short_paid_amount DESC, latest_submitted_at ASC NULLS LAST
+       LIMIT $1`,
+      [Math.max(1, Math.min(Number(limit || 100), 250))]
+    );
+
+    const items = rows.map((row) => {
+      const expectedInsurerPayment = Math.max(money(row.allowed_amount) - money(row.patient_balance), 0);
+      const shortPaidAmount = Math.max(expectedInsurerPayment - money(row.paid_amount), 0);
+      return {
+        ...row,
+        expected_insurer_payment: Number(expectedInsurerPayment.toFixed(2)),
+        short_paid_amount: Number(shortPaidAmount.toFixed(2)),
+        likely_underpaid: shortPaidAmount >= 10,
+        next_action: shortPaidAmount >= 10
+          ? 'Review ERA/EOB and payer contract; escalate as potential underpayment if patient responsibility is already correct.'
+          : 'No underpayment action recommended.',
+      };
+    });
+
+    const summary = {
+      total_claims: items.length,
+      total_short_paid: Number(items.reduce((sum, item) => sum + money(item.short_paid_amount), 0).toFixed(2)),
+      average_short_paid: Number((items.length ? items.reduce((sum, item) => sum + money(item.short_paid_amount), 0) / items.length : 0).toFixed(2)),
+      top_payers: Array.from(items.reduce((map, item) => {
+        const key = item.payer_name || 'Unknown';
+        const current = map.get(key) || { payer_name: key, claims: 0, short_paid_total: 0 };
+        current.claims += 1;
+        current.short_paid_total += money(item.short_paid_amount);
+        map.set(key, current);
+        return map;
+      }, new Map()).values())
+        .sort((a, b) => b.short_paid_total - a.short_paid_total)
+        .slice(0, 8)
+        .map((row) => ({ ...row, short_paid_total: Number(row.short_paid_total.toFixed(2)) })),
+    };
+
+    return { summary, items };
+  }
+
   return {
     importClaims,
+    importPaymentHistoryCsv,
     upsertClaim,
     getClaimById,
     reclassifyClaim,
@@ -736,6 +884,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     getDashboard,
     buildClaimPlan,
     getReimbursementIntelligence,
+    getUnderpaymentQueue,
     parseClaimsCsv,
     getImportTemplate: () => IMPORT_TEMPLATE_FIELDS,
   };

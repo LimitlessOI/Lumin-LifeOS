@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "payment-learning",
-  "next_task": "Import paid claims / ERAs / remits and add underpayment detection so collections amount/date forecasts learn from real payment history",
+  "next_task": "Add payer-specific playbooks and appeal/underpayment follow-up workflows on top of the new payment-history import and underpayment queue",
   "stability_class": "needs-review",
-  "current_focus": "The Collections Control Center now has live backlog visibility, actionable ops overview, insurance verification preview, patient AR summary, assistant routing, and controlled writeback for billing-status/provider-type/payment-status repair; next step is payment-history ingestion and underpayment intelligence.",
+  "current_focus": "The Collections Control Center now has live backlog visibility, actionable ops overview, insurance verification preview, patient AR summary, assistant routing, controlled writeback for billing-status/provider-type/payment-status repair, and payment-history/underpayment surfaces; next step is payer-specific follow-up and appeals intelligence.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -43,6 +43,8 @@
     { "method": "GET", "path": "/api/v1/clientcare-billing/dashboard", "expected_status": 200, "description": "Billing dashboard summary" },
     { "method": "GET", "path": "/api/v1/clientcare-billing/browser/full-account-report", "expected_status": 200, "description": "Live ClientCare backlog summary" },
     { "method": "GET", "path": "/api/v1/clientcare-billing/ops/overview", "expected_status": 200, "description": "Ops overview for overlay" },
+    { "method": "GET", "path": "/api/v1/clientcare-billing/underpayments", "expected_status": 200, "description": "Underpayment queue" },
+    { "method": "POST", "path": "/api/v1/clientcare-billing/history/import-csv", "expected_status": 200, "description": "Payment history import" },
     { "method": "POST", "path": "/api/v1/clientcare-billing/insurance/verification-preview", "expected_status": 200, "description": "Insurance intake preview" },
     { "method": "POST", "path": "/api/v1/clientcare-billing/assistant/message", "expected_status": 200, "description": "Operations Assistant message handling" }
   ],
@@ -75,13 +77,16 @@
     "Patient AR summary shows aging buckets and top balances",
     "Workflow playbooks can be invoked from the overlay and return actionable steps",
     "Account Recovery Detail can preview/apply billing-status, provider-type, and payment-status repairs with save feedback",
+    "Payment-history import accepts paid claims / ERA / remit CSV and feeds reimbursement learning",
+    "Claims Ledger exposes an underpayment queue with short-pay amount and next action guidance",
     "Forecasting improves from imported paid claims / ERAs / remits instead of rescue buckets alone"
   ],
   "anti_drift_notes": "This product has two data layers: the live ClientCare browser backlog and the local claim ledger. Do not assume the claim ledger reflects the live backlog unless imports have run. Keep the overlay fast by loading backlog summary first and account details lazily. Do not enable autonomous collections behavior; all outreach and writeback remains provider-directed and compliance-gated.",
   "decision_debt": [
     { "description": "Forecast amount/date remains low-confidence until paid claims, ERAs, and remits are imported", "resolved": false },
     { "description": "ClientCare read paths are live, and controlled writeback now covers billing status, provider type, and payment status; insurer entry and payer-order changes still need payer-specific/manual handling", "resolved": false },
-    { "description": "Capability queue exists to capture missing assistant behaviors until they are implemented natively", "resolved": false }
+    { "description": "Capability queue exists to capture missing assistant behaviors until they are implemented natively", "resolved": false },
+    { "description": "Underpayment detection now exists, but payer-specific appeal packets and playbooks still need to be built", "resolved": false }
   ],
   "last_verified_at": null,
   "verification_passed": null

@@ -46,6 +46,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/underpayments', async (req, res) => {
+    try {
+      const underpayments = await billingService.getUnderpaymentQueue({ limit: req.query?.limit });
+      res.json({ ok: true, ...underpayments });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] underpayment queue failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/ops/overview', async (_req, res) => {
     try {
       const overview = await opsService.buildOperationsOverview();
@@ -487,6 +497,19 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, parsed: claims.length, imported, failed, results });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] csv import failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/history/import-csv', async (req, res) => {
+    try {
+      const csv = String(req.body?.csv || '');
+      if (!csv.trim()) return res.status(400).json({ ok: false, error: 'csv required' });
+      const result = await billingService.importPaymentHistoryCsv(csv, { source: req.body?.source || 'payment_history_csv' });
+      if (!result.parsed) return res.status(400).json({ ok: false, error: 'No payment-history rows parsed from csv' });
+      res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] payment history csv import failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });

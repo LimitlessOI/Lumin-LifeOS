@@ -9,6 +9,7 @@
   let lastInsurancePreview = null;
   let lastRepairResult = null;
   let lastReimbursementIntelligence = null;
+  let lastUnderpayments = null;
   let lastOpsOverview = null;
   let lastBrowserResult = null;
   let lastViewState = null;
@@ -49,8 +50,8 @@
     localStorage.setItem('clientcare_assistant_open', String(assistantOpen));
   }
 
-  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview) {
-    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview };
+  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments) {
+    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments };
   }
 
   function rerender() {
@@ -65,6 +66,7 @@
       lastViewState.reconciliation,
       lastViewState.intelligence,
       lastViewState.opsOverview,
+      lastViewState.underpayments,
     );
     void ensureAssistantSession();
   }
@@ -766,6 +768,35 @@
     `;
   }
 
+  function renderUnderpaymentQueue(underpayments) {
+    const summary = underpayments?.summary || {};
+    const items = underpayments?.items || [];
+    return `
+      <div class="stack">
+        <div class="grid three">
+          <div class="card stat"><span>Claims</span><strong>${escapeHtml(summary.total_claims || 0)}</strong></div>
+          <div class="card stat"><span>Short-paid total</span><strong>${escapeHtml(money(summary.total_short_paid || 0))}</strong></div>
+          <div class="card stat"><span>Avg short-pay</span><strong>${escapeHtml(money(summary.average_short_paid || 0))}</strong></div>
+        </div>
+        <table>
+          <thead><tr><th>Patient</th><th>Payer</th><th>Expected</th><th>Paid</th><th>Short-pay</th><th>Next action</th></tr></thead>
+          <tbody>
+            ${items.length ? items.slice(0, 12).map((item) => `
+              <tr>
+                <td>${escapeHtml(item.patient_name || '')}</td>
+                <td>${escapeHtml(item.payer_name || '')}</td>
+                <td>${escapeHtml(money(item.expected_insurer_payment || 0))}</td>
+                <td>${escapeHtml(money(item.paid_amount || 0))}</td>
+                <td>${escapeHtml(money(item.short_paid_amount || 0))}</td>
+                <td>${escapeHtml(item.next_action || '')}</td>
+              </tr>
+            `).join('') : '<tr><td colspan="6">No underpayment candidates yet.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   function renderBrowserOutput(result) {
     if (!result) return '<p class="muted">No browser run yet.</p>';
 
@@ -953,7 +984,7 @@
     const root = document.getElementById('app');
     try {
       const query = new URLSearchParams(filters).toString();
-      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, opsOverview] = await Promise.all([
+      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, opsOverview, underpayments] = await Promise.all([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
         api('/api/v1/clientcare-billing/claims/import-template'),
@@ -962,10 +993,12 @@
         api('/api/v1/clientcare-billing/reconciliation'),
         api('/api/v1/clientcare-billing/reimbursement-intelligence'),
         api('/api/v1/clientcare-billing/ops/overview'),
+        api('/api/v1/clientcare-billing/underpayments?limit=100'),
       ]);
       lastReimbursementIntelligence = intelligence.intelligence || null;
       lastOpsOverview = opsOverview.overview || null;
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastOpsOverview);
+      lastUnderpayments = underpayments || null;
+      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastOpsOverview, lastUnderpayments);
       await ensureAssistantSession();
       if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
@@ -988,6 +1021,21 @@
       });
       alert('CSV imported.');
       await loadDashboard();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function importPaymentHistoryCsv() {
+    const csv = document.getElementById('payment-history-input')?.value || '';
+    if (!csv.trim()) return alert('Paste payment history / ERA CSV first.');
+    try {
+      const result = await api('/api/v1/clientcare-billing/history/import-csv', {
+        method: 'POST',
+        body: JSON.stringify({ csv, source: 'overlay_payment_history_import' }),
+      });
+      alert(`Imported ${result.imported || 0} payment-history rows.`);
+      await loadDashboard({}, { skipAutoFullQueue: true });
     } catch (error) {
       alert(error.message);
     }
@@ -1385,8 +1433,8 @@
     }
   }
 
-  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview) {
-    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview);
+  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments) {
+    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments);
     const summary = dashboard.summary || {};
     const liveSummary = lastAccountReport?.summary || null;
     const patientArSummary = opsOverview?.patient_ar?.summary || {};
@@ -1516,6 +1564,9 @@
                   <textarea id="csv-input" placeholder="Paste claim export CSV here"></textarea>
                   <div style="margin-top:10px"><button id="import-csv">Import CSV</button></div>
                   <hr style="border-color:#27304a; margin:16px 0;">
+                  <textarea id="payment-history-input" placeholder="Paste paid claims / ERA / remit CSV here"></textarea>
+                  <div style="margin-top:10px"><button id="import-payment-history">Import Payment History</button></div>
+                  <hr style="border-color:#27304a; margin:16px 0;">
                   <textarea id="snapshot-input" placeholder="Paste copied table HTML or delimited text here"></textarea>
                   <div style="margin-top:10px"><button id="import-snapshot">Import Snapshot</button></div>
                 </div>
@@ -1569,6 +1620,10 @@
                   <h3>Capability Queue</h3>
                   <div id="capability-queue">${renderCapabilityQueue(opsOverview)}</div>
                 </div>
+                <div class="card">
+                  <h3>Underpayment Queue</h3>
+                  <div id="underpayment-queue">${renderUnderpaymentQueue(underpayments)}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -1582,6 +1637,7 @@
       await loadDashboard();
     });
     document.getElementById('import-csv').addEventListener('click', importCsv);
+    document.getElementById('import-payment-history').addEventListener('click', importPaymentHistoryCsv);
     document.getElementById('import-snapshot').addEventListener('click', importSnapshot);
     document.getElementById('browser-login-test').addEventListener('click', browserLoginTest);
     document.getElementById('browser-overview').addEventListener('click', browserOverview);
@@ -1595,12 +1651,12 @@
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
     document.getElementById('assistant-pin-toggle').addEventListener('click', () => {
       setAssistantPinned(!assistantPinned);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments);
       ensureAssistantSession();
     });
     document.getElementById('assistant-open-toggle').addEventListener('click', () => {
       setAssistantOpen(!assistantOpen);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, opsOverview, underpayments);
       ensureAssistantSession();
     });
     document.getElementById('assistant-input').addEventListener('keydown', (event) => {

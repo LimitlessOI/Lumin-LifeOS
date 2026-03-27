@@ -456,6 +456,30 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       };
     }
 
+    if (/underpayment|short pay|short-paid|paid less than expected/.test(text)) {
+      const underpayments = await billingService.getUnderpaymentQueue({ limit: 50 });
+      return {
+        ok: true,
+        type: 'underpayments',
+        reply: 'Here is the current underpayment queue based on allowed amount, patient responsibility, and insurer payment variance.',
+        data: underpayments,
+        suggested_actions: underpayments.items?.slice(0, 5).map((item) => item.next_action) || [],
+      };
+    }
+
+    if (/era|remit|835|paid claims import|payment history import/.test(text)) {
+      return {
+        ok: true,
+        type: 'payment_history_import',
+        reply: 'Use the payment-history import in Tools to load paid claims, ERA, or remit CSV. That is the next step to tighten payout and collection-date forecasts.',
+        suggested_actions: [
+          'Export paid claims, ERA, or remit CSV from ClientCare or the clearinghouse.',
+          'Paste it into Import Payment History.',
+          'Reload reimbursement intelligence and underpayment queue.',
+        ],
+      };
+    }
+
     if (/verify insurance|benefits|eligibility|can we take this client/.test(text)) {
       return {
         ok: true,

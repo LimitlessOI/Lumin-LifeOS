@@ -111,6 +111,8 @@ Every claim lands in one of these buckets:
 - `POST /api/v1/clientcare-billing/ops/repair-account`
 - `POST /api/v1/clientcare-billing/insurance/verification-preview`
 - `GET /api/v1/clientcare-billing/patient-ar/summary`
+- `GET /api/v1/clientcare-billing/underpayments`
+- `POST /api/v1/clientcare-billing/history/import-csv`
 - `POST /api/v1/clientcare-billing/browser/login-test`
 - `POST /api/v1/clientcare-billing/browser/discover`
 - `POST /api/v1/clientcare-billing/browser/extract-claims`
@@ -222,6 +224,7 @@ Operational inputs needed regardless of integration path:
 - The operator overlay must convert common blockers into batch workflows/playbooks so staff can work accounts by category instead of one account at a time.
 - The operator overlay should automatically hydrate the live ClientCare backlog when credentials and app key are present so the visible account board and summary counts do not depend on a manual extra button press.
 - The reimbursement intelligence view must include a collections forecast: projected collectible amount, projected timing buckets, and top expected collections, improving as paid-claim history is imported.
+- The overlay must support direct payment-history import for paid claims / ERA / remit CSV so reimbursement learning is not blocked on perfect exports.
 - The overlay must expose an operator chat tied directly to LifeOS AI with running history and archive behavior for older turns; it should classify requests as personal vs shared system improvements.
 - The operator chat should be named `Operations Assistant`, support pinned and unpinned layouts, and stay out of the main workstream when collapsed.
 - The overlay should present the live ClientCare backlog as the primary KPI strip so at-a-glance counts show live accounts, billing notes, recovery opportunity, and timing forecasts instead of empty local-ledger placeholders.
@@ -238,4 +241,5 @@ Operational inputs needed regardless of integration path:
 - The system must support provider-directed patient AR follow-up and payment-plan monitoring, but debt-collection style workflows remain compliance-gated until legal/licensing review is complete.
 - The system should learn expected payer reimbursement and collection timing from paid claims / ERAs / remits so projected amount and projected date tighten over time instead of staying rescue-bucket-only.
 - The system should evolve toward underpayment detection, payer playbooks, eligibility verification, and appeals packet preparation because those are core differentiators versus generic billing dashboards.
+- The claims ledger must surface a real underpayment queue so short-paid claims can be reviewed against allowed amount, patient responsibility, and payer payment variance.
 - Amendment and continuity stay current as the system changes.
