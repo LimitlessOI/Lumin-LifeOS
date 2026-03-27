@@ -5,15 +5,18 @@
  */
 
 import express from 'express';
+import { randomUUID } from 'crypto';
 import { createClientCareBillingService } from '../services/clientcare-billing-service.js';
 import { createClientCareBrowserService } from '../services/clientcare-browser-service.js';
 import { createClientCareSyncService } from '../services/clientcare-sync-service.js';
+import { createConversationStore } from '../services/conversation-store.js';
 
-export function createClientCareBillingRoutes({ pool, requireKey, logger = console }) {
+export function createClientCareBillingRoutes({ pool, requireKey, logger = console, callCouncilMember }) {
   const router = express.Router();
   const billingService = createClientCareBillingService({ pool, logger });
   const syncService = createClientCareSyncService({ billingService, logger });
   const browserService = createClientCareBrowserService({ logger, syncService });
+  const conversationStore = createConversationStore(pool);
 
   router.use(express.json({ limit: '5mb' }));
   router.use(requireKey);
@@ -178,6 +181,20 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/browser/backlog-summary', async (req, res) => {
+    try {
+      const result = await browserService.buildBacklogSummary({
+        maxPages: req.query?.max_pages,
+        pageTimeoutMs: req.query?.page_timeout_ms,
+        accountLimit: req.query?.account_limit,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] backlog summary failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/extract-claims', async (req, res) => {
     try {
       const result = await browserService.extractClaimTables({
@@ -189,6 +206,136 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] browser extract failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/assistant/session', async (_req, res) => {
+    const sessionId = `clientcare-${randomUUID()}`;
+    const metadata = {
+      channel: 'clientcare_billing_overlay',
+      created_at: new Date().toISOString(),
+      archived_count: 0,
+    };
+    await conversationStore.save({
+      sessionId,
+      source: 'clientcare_overlay',
+      project: 'clientcare_billing',
+      messages: [],
+      metadata,
+      startedAt: new Date(),
+    });
+    res.status(201).json({ ok: true, session_id: sessionId, metadata });
+  });
+
+  router.get('/assistant/session/:sessionId', async (req, res) => {
+    try {
+      const conv = await conversationStore.get(req.params.sessionId);
+      if (!conv) return res.status(404).json({ ok: false, error: 'Session not found' });
+      const messages = Array.isArray(conv.messages) ? conv.messages : [];
+      const recentWindow = 16;
+      const archivedCount = Math.max(0, messages.length - recentWindow);
+      const archived = messages.slice(0, archivedCount);
+      const recent = messages.slice(archivedCount);
+      const archive_preview = archived
+        .filter((m) => m.role === 'user')
+        .slice(-8)
+        .map((m) => String(m.content || '').slice(0, 160))
+        .join(' | ');
+      res.json({
+        ok: true,
+        session_id: conv.session_id,
+        archived_count: archivedCount,
+        archive_preview,
+        recent_messages: recent,
+        metadata: conv.metadata || {},
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] get assistant session failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/assistant/message', async (req, res) => {
+    try {
+      const sessionId = String(req.body?.session_id || '').trim();
+      const message = String(req.body?.message || '').trim();
+      if (!sessionId) return res.status(400).json({ ok: false, error: 'session_id required' });
+      if (!message) return res.status(400).json({ ok: false, error: 'message required' });
+      if (!callCouncilMember) return res.status(503).json({ ok: false, error: 'AI not available' });
+
+      const existing = await conversationStore.get(sessionId);
+      if (!existing) return res.status(404).json({ ok: false, error: 'Session not found' });
+
+      const priorMessages = Array.isArray(existing.messages) ? existing.messages : [];
+      const transcript = priorMessages
+        .slice(-16)
+        .map((m) => `${String(m.role || '').toUpperCase()}: ${String(m.content || '').slice(0, 800)}`)
+        .join('\n\n');
+
+      const prompt = `You are the ClientCare billing operations assistant for LifeOS.\n\nYou help Sherry operate billing, collections, insurance verification, and system customization requests. If a request is only useful for one user, scope it as personal. If it should improve the whole system, scope it as shared. Do not claim a system change was applied unless it was actually executed. Give direct, operational answers.\n\nReturn strict JSON:\n{\n  \"reply\": \"plain-language response for Sherry\",\n  \"intent\": \"question|workflow_change|system_change|customization|report_request\",\n  \"scope\": \"personal|shared|unclear\",\n  \"should_apply_systemwide\": true,\n  \"suggested_actions\": [\"step 1\"],\n  \"notes\": [\"short note\"]\n}\n\nRecent context:\n${transcript || 'No prior context.'}\n\nUser message:\n${message}`;
+
+      const raw = await callCouncilMember('claude', prompt, {
+        taskType: 'json',
+        skipKnowledge: true,
+        maxTokens: 700,
+        allowModelDowngrade: true,
+      });
+      const text = typeof raw === 'string' ? raw : raw?.content || JSON.stringify(raw);
+      let parsed;
+      try {
+        const match = text.match(/\{[\s\S]*\}/);
+        parsed = match ? JSON.parse(match[0]) : null;
+      } catch {
+        parsed = null;
+      }
+      if (!parsed) {
+        parsed = {
+          reply: text,
+          intent: 'question',
+          scope: 'unclear',
+          should_apply_systemwide: false,
+          suggested_actions: [],
+          notes: [],
+        };
+      }
+
+      const messages = [
+        ...priorMessages.map((m) => ({
+          role: m.role,
+          content: m.content,
+          timestamp: m.timestamp,
+          metadata: m.metadata,
+        })),
+        { role: 'user', content: message, timestamp: new Date().toISOString(), metadata: { channel: 'clientcare_billing_overlay' } },
+        { role: 'assistant', content: parsed.reply, timestamp: new Date().toISOString(), metadata: { intent: parsed.intent, scope: parsed.scope, should_apply_systemwide: parsed.should_apply_systemwide, suggested_actions: parsed.suggested_actions || [], notes: parsed.notes || [] } },
+      ];
+
+      const archivedCount = Math.max(0, messages.length - 16);
+      await conversationStore.save({
+        sessionId,
+        source: 'clientcare_overlay',
+        project: 'clientcare_billing',
+        messages,
+        metadata: {
+          ...(existing.metadata || {}),
+          archived_count: archivedCount,
+          last_intent: parsed.intent,
+          last_scope: parsed.scope,
+          last_should_apply_systemwide: Boolean(parsed.should_apply_systemwide),
+        },
+        startedAt: existing.started_at,
+        endedAt: new Date(),
+      });
+
+      res.json({
+        ok: true,
+        session_id: sessionId,
+        assistant: parsed,
+        archived_count: archivedCount,
+      });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] assistant message failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });

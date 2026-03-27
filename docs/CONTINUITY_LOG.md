@@ -31,6 +31,8 @@
 - ClientCare overlay now also derives batch workflow playbooks from the full rescue report so the backlog can be worked by blocker type: insurance verification, billing setup, demographics, client match, and missing insurer data.
 - ClientCare overlay now auto-loads the live full billing queue when the app key and ClientCare credentials are present, and the visible top stats switch from the empty local ledger to the live ClientCare backlog summary.
 - ClientCare reimbursement intelligence now also includes a collections forecast with projected timing buckets and top expected collections; it starts low-confidence and improves as paid claims/ERAs/remits are imported.
+- ClientCare overlay now uses a fast backlog-summary path to populate the board quickly, then lazily inspects account details when an operator clicks into a specific account.
+- ClientCare overlay now also has an AI operations assistant with running conversation history and archive behavior, so Sherry can ask questions or request system changes directly from the portal.
 
 ## Update 2026-03-26 #1
 - Priority shifted temporarily from TC to ClientCare billing recovery because there is already earned revenue trapped in unpaid / unbilled / rejected / denied claims.

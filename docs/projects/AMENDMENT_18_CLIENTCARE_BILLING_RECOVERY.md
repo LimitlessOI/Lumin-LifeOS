@@ -203,6 +203,8 @@ Operational inputs needed regardless of integration path:
 - The operator overlay must convert common blockers into batch workflows/playbooks so staff can work accounts by category instead of one account at a time.
 - The operator overlay should automatically hydrate the live ClientCare backlog when credentials and app key are present so the visible account board and summary counts do not depend on a manual extra button press.
 - The reimbursement intelligence view must include a collections forecast: projected collectible amount, projected timing buckets, and top expected collections, improving as paid-claim history is imported.
+- The overlay must expose an operator chat tied directly to LifeOS AI with running history and archive behavior for older turns; it should classify requests as personal vs shared system improvements.
+- The overlay should load a fast backlog summary first, then inspect account details lazily, so the board fills quickly instead of waiting for every billing page to be opened.
 - The browser path may include transport diagnostics for ClientCare billing-note loading when queue pagination or lazy loading prevents full backlog extraction.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.

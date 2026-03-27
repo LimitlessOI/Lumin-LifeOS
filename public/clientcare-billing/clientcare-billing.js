@@ -9,6 +9,7 @@
   let lastReimbursementIntelligence = null;
   let fullQueueHydrated = false;
   let fullQueueLoading = false;
+  let assistantSessionId = localStorage.getItem('clientcare_assistant_session_id') || '';
 
   function getApiKey() {
     return localStorage.getItem('COMMAND_CENTER_KEY') || localStorage.getItem('lifeos_cmd_key') || localStorage.getItem('x_api_key') || '';
@@ -18,6 +19,11 @@
     localStorage.setItem('COMMAND_CENTER_KEY', value);
     localStorage.setItem('lifeos_cmd_key', value);
     localStorage.setItem('x_api_key', value);
+  }
+
+  function setAssistantSessionId(value) {
+    assistantSessionId = value || '';
+    if (assistantSessionId) localStorage.setItem('clientcare_assistant_session_id', assistantSessionId);
   }
 
   function escapeHtml(value) {
@@ -82,7 +88,7 @@
 
     const report = lastAccountReport;
     if (!report || !Array.isArray(report.items) || !report.items.length) {
-      container.innerHTML = '<p class="muted">Run Account Report to load live billing accounts.</p>';
+      container.innerHTML = '<p class="muted">Loading live billing accounts…</p>';
       detail.innerHTML = '<p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p>';
       return;
     }
@@ -170,11 +176,39 @@
     `;
 
     container.querySelectorAll('[data-account-index]').forEach((button) => {
-      button.addEventListener('click', () => {
+      button.addEventListener('click', async () => {
         selectedAccountIndex = Number(button.getAttribute('data-account-index') || 0);
         renderAccountBoard();
+        await inspectSelectedAccount();
       });
     });
+  }
+
+  async function inspectSelectedAccount() {
+    const report = lastAccountReport;
+    const item = report?.items?.[selectedAccountIndex];
+    if (!item || item._inspected || !item.raw?.billingHref) return;
+    try {
+      const result = await api('/api/v1/clientcare-billing/browser/inspect-client-account', {
+        method: 'POST',
+        body: JSON.stringify({
+          client_href: item.raw.billingHref,
+          page_timeout_ms: 12000,
+        }),
+      });
+      item.insurancePreview = result.insurancePreview || [];
+      item.accountSummary = result.accountSummary || item.accountSummary || {};
+      item.raw = {
+        ...item.raw,
+        billingFields: result.billingFields || [],
+        insurancePreview: result.insurancePreview || [],
+        accountSummary: result.accountSummary || item.accountSummary || {},
+      };
+      item._inspected = true;
+      renderAccountBoard();
+    } catch (_) {
+      item._inspected = true;
+    }
   }
 
   function renderKeyValueTable(rows) {
@@ -596,9 +630,10 @@
       ]);
       lastReimbursementIntelligence = intelligence.intelligence || null;
       render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence);
+      await ensureAssistantSession();
       if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
-        browserFullAccountReport({ silent: true, refreshDashboard: true }).finally(() => {
+        browserBacklogSummary({ silent: true }).finally(() => {
           fullQueueLoading = false;
         });
       }
@@ -768,6 +803,86 @@
     }
   }
 
+  async function browserBacklogSummary({ silent = false } = {}) {
+    try {
+      const result = await api('/api/v1/clientcare-billing/browser/backlog-summary?max_pages=12&page_timeout_ms=12000&account_limit=200');
+      lastAccountReport = {
+        summary: result.summary || null,
+        items: (result.accounts || []).map((item) => ({
+          client: item.client,
+          notePreview: (item.notePreviews || [])[0] || '',
+          date: item.oldestNoteDate || (item.noteDates || [])[0] || '',
+          insurancePreview: item.insurancePreview || [],
+          accountSummary: item.accountSummary || {},
+          diagnosis: item.diagnosis || {},
+          recoveryBand: item.recoveryBand || {},
+          raw: item,
+        })),
+      };
+      fullQueueHydrated = true;
+      setBrowserOutput(result);
+      renderAccountBoard();
+      const workflowNode = document.getElementById('workflow-playbooks');
+      if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
+      if (!silent) alert(`Loaded ${result.accounts?.length || 0} backlog accounts.`);
+    } catch (error) {
+      if (!silent) alert(error.message);
+    }
+  }
+
+  async function ensureAssistantSession() {
+    const container = document.getElementById('assistant-history');
+    if (!assistantSessionId) {
+      const created = await api('/api/v1/clientcare-billing/assistant/session', {
+        method: 'POST',
+        body: JSON.stringify({}),
+      });
+      setAssistantSessionId(created.session_id);
+    }
+    const session = await api(`/api/v1/clientcare-billing/assistant/session/${encodeURIComponent(assistantSessionId)}`);
+    renderAssistant(session);
+  }
+
+  function renderAssistant(session) {
+    const historyNode = document.getElementById('assistant-history');
+    const metaNode = document.getElementById('assistant-meta');
+    if (!historyNode || !metaNode) return;
+    metaNode.innerHTML = `
+      <span class="badge ${badgeClass('ok')}">${escapeHtml(session.archived_count || 0)} archived</span>
+      <span class="muted small">${escapeHtml(session.archive_preview || 'Direct connection to the system assistant')}</span>
+    `;
+    const messages = session.recent_messages || [];
+    historyNode.innerHTML = messages.length ? messages.map((message) => `
+      <div class="card" style="padding:12px; background:${message.role === 'assistant' ? '#121a31' : '#0f1528'};">
+        <div class="account-card-top">
+          <strong>${escapeHtml(String(message.role || '').toUpperCase())}</strong>
+          <span class="muted small">${escapeHtml(message.timestamp || '')}</span>
+        </div>
+        <div style="margin-top:8px; white-space:pre-wrap;">${escapeHtml(message.content || '')}</div>
+        ${message.metadata?.intent ? `<div class="muted small" style="margin-top:8px;">Intent: ${escapeHtml(message.metadata.intent)} · Scope: ${escapeHtml(message.metadata.scope || 'unclear')}</div>` : ''}
+      </div>
+    `).join('') : '<p class="muted">Start a conversation.</p>';
+  }
+
+  async function sendAssistantMessage() {
+    const input = document.getElementById('assistant-input');
+    const message = String(input?.value || '').trim();
+    if (!message) return;
+    input.value = '';
+    try {
+      await api('/api/v1/clientcare-billing/assistant/message', {
+        method: 'POST',
+        body: JSON.stringify({
+          session_id: assistantSessionId,
+          message,
+        }),
+      });
+      await ensureAssistantSession();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function browserExtract(importIntoQueue = false) {
     try {
       const result = await api('/api/v1/clientcare-billing/browser/extract-claims', {
@@ -868,8 +983,8 @@
       <div class="hero">
         <div>
           <div class="eyebrow">ClientCare West</div>
-          <h1>Billing Rescue Overlay</h1>
-          <p class="muted">Claims rescue queue, browser fallback readiness, and claim action tracking.</p>
+          <h1>Collections Control Center</h1>
+          <p class="muted">Live billing backlog, collections forecasting, and operator controls.</p>
         </div>
         <div class="card" style="min-width:320px;">
           <label for="api-key">Command key</label>
@@ -968,6 +1083,15 @@
         <div id="workflow-playbooks">${renderWorkflowPlaybooks(lastAccountReport?.summary || {})}</div>
       </div>
 
+      <div class="card">
+        <h2>Operations Assistant</h2>
+        <p class="hint" style="margin:10px 0">Ask questions, request workflow changes, or describe what needs to be built. History stays live here and older messages roll into archive.</p>
+        <div id="assistant-meta" class="row-actions" style="margin-bottom:10px"></div>
+        <div id="assistant-history" class="stack" style="max-height:420px; overflow:auto; margin-bottom:12px"></div>
+        <textarea id="assistant-input" placeholder="Type a question, command, or requested system change here"></textarea>
+        <div style="margin-top:10px"><button id="assistant-send">Send</button></div>
+      </div>
+
       <div class="split">
         <div class="stack">
           <div class="card">
@@ -1009,6 +1133,10 @@
     document.getElementById('browser-scan-accounts').addEventListener('click', browserScanAccounts);
     document.getElementById('browser-account-report').addEventListener('click', browserAccountReport);
     document.getElementById('browser-full-account-report').addEventListener('click', browserFullAccountReport);
+    document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
+    document.getElementById('assistant-input').addEventListener('keydown', (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') sendAssistantMessage();
+    });
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));

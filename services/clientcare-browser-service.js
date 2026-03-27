@@ -1447,6 +1447,101 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
+  async function buildBacklogSummary({ maxPages = 12, pageTimeoutMs = 15000, accountLimit = 200 } = {}) {
+    const result = await login({ dryRun: false });
+    const { session } = result;
+    try {
+      const apiConfig = await captureBillingNotesApiConfig(session.page, { pageTimeoutMs });
+      if (!apiConfig?.url) {
+        return { ok: false, error: 'Could not capture ClientCare billing notes transport' };
+      }
+      const summary = await collectPageSummary(session.page);
+      const queueItems = await fetchBillingNotesViaApi(session.page, apiConfig.url, { maxPages });
+      if (!queueItems.length) {
+        return { ok: false, error: 'Billing notes transport returned no records', transport: apiConfig.url };
+      }
+
+      const grouped = new Map();
+      for (const item of queueItems) {
+        const key = item.billingHref || item.client || item.noteHref;
+        if (!grouped.has(key)) {
+          grouped.set(key, {
+            client: item.client,
+            billingHref: item.billingHref,
+            noteCount: 0,
+            noteDates: [],
+            notePreviews: [],
+            noteAuthors: new Set(),
+            forUsers: new Set(),
+          });
+        }
+        const group = grouped.get(key);
+        group.noteCount += 1;
+        if (item.date) group.noteDates.push(item.date);
+        if (item.notePreview) group.notePreviews.push(item.notePreview);
+        if (item.by) group.noteAuthors.add(item.by);
+        if (item.forUser) group.forUsers.add(item.forUser);
+      }
+
+      const accounts = Array.from(grouped.values())
+        .map((group) => {
+          const oldestNoteDate = [...group.noteDates].sort()[0] || '';
+          const latestNoteDate = [...group.noteDates].sort().slice(-1)[0] || '';
+          const mergedQueueItem = {
+            client: group.client,
+            notePreview: group.notePreviews[0] || '',
+            date: oldestNoteDate || '',
+          };
+          const accountSummary = {
+            paymentStatus: 'unknown',
+            clientBillingStatus: '',
+            billProviderType: '',
+            flags: [],
+            needsReview: true,
+            insuranceCount: 0,
+            insurers: [],
+          };
+          const diagnosis = diagnoseBillingIssue(mergedQueueItem, { accountSummary, insurancePreview: [] });
+          const recoveryBand = inferRecoveryBand({
+            accountSummary,
+            diagnosis,
+            oldestNoteDate,
+            date: mergedQueueItem.date,
+          });
+          return {
+            client: group.client,
+            billingHref: group.billingHref,
+            noteCount: group.noteCount,
+            oldestNoteDate,
+            latestNoteDate,
+            noteDates: group.noteDates,
+            notePreviews: Array.from(new Set(group.notePreviews)),
+            noteAuthors: Array.from(group.noteAuthors),
+            forUsers: Array.from(group.forUsers),
+            billingFields: [],
+            insurancePreview: [],
+            accountSummary,
+            diagnosis,
+            recoveryBand,
+          };
+        })
+        .sort((a, b) => String(a.oldestNoteDate || '').localeCompare(String(b.oldestNoteDate || '')))
+        .slice(0, Math.max(1, Number(accountLimit) || 200));
+
+      return {
+        ok: true,
+        transport: apiConfig.url,
+        dashboardCounts: extractDashboardCounts(summary),
+        totalQueueItems: queueItems.length,
+        totalAccounts: accounts.length,
+        summary: buildFullReportSummary(accounts, queueItems),
+        accounts,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   async function buildBillingOverview({ includeScreenshots = false, pageTimeoutMs = 15000 } = {}) {
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
@@ -1604,6 +1699,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     scanBillingNotes,
     buildAccountRescueReport,
     buildFullAccountRescueReport,
+    buildBacklogSummary,
     extractClaimTables,
   };
 }

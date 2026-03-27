@@ -1079,7 +1079,7 @@ logger.info('✅ [TWIN] Routes mounted at /api/v1/twin');
 app.use('/api/v1/history', createConversationHistoryRoutes({ pool, requireKey, callCouncilMember }));
 logger.info('✅ [HISTORY] Routes mounted at /api/v1/history');
 
-app.use('/api/v1/clientcare-billing', createClientCareBillingRoutes({ pool, requireKey, logger }));
+app.use('/api/v1/clientcare-billing', createClientCareBillingRoutes({ pool, requireKey, logger, callCouncilMember }));
 logger.info('✅ [CLIENTCARE-BILLING] Routes mounted at /api/v1/clientcare-billing');
 
 // ==================== WORD KEEPER & INTEGRITY ENGINE (Amendment 16) ====================
