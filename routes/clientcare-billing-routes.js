@@ -56,6 +56,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/era-insights', async (req, res) => {
+    try {
+      const insights = await billingService.getEraInsights({ limit: req.query?.limit });
+      res.json({ ok: true, ...insights });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] era insights failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/underpayments', async (req, res) => {
     try {
       const underpayments = await billingService.getUnderpaymentQueue({ limit: req.query?.limit });

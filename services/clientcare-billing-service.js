@@ -428,6 +428,18 @@ function getCollectionTimingProfile(rescueBucket = 'payer_followup') {
   return profiles[rescueBucket] || profiles.payer_followup;
 }
 
+function calibrateCollectionProfile(profile, payerStats = null) {
+  if (!payerStats) return profile;
+  const calibrated = { ...profile };
+  if (payerStats.avg_days_to_pay != null && Number.isFinite(Number(payerStats.avg_days_to_pay))) {
+    calibrated.days = Math.max(7, Math.round((profile.days + Number(payerStats.avg_days_to_pay)) / 2));
+  }
+  if (payerStats.paid_to_allowed_rate != null) {
+    calibrated.multiplier = Number(Math.max(0.05, Math.min(0.98, (profile.multiplier + Number(payerStats.paid_to_allowed_rate)) / 2)).toFixed(4));
+  }
+  return calibrated;
+}
+
 function classifyAppealPlaybook(claim = {}) {
   const payerType = inferPayerType(claim.payer_name, claim.payer_type);
   const text = `${claim.denial_code || ''} ${claim.denial_reason || ''} ${claim.claim_status || ''}`.toLowerCase();
@@ -894,6 +906,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
          COALESCE(AVG(NULLIF(billed_amount, 0)), 0)::numeric AS avg_billed,
          COALESCE(AVG(NULLIF(allowed_amount, 0)), 0)::numeric AS avg_allowed,
          COALESCE(AVG(NULLIF(paid_amount, 0)), 0)::numeric AS avg_paid,
+         COALESCE(AVG(EXTRACT(EPOCH FROM (latest_submitted_at - original_submitted_at)) / 86400)
+           FILTER (WHERE original_submitted_at IS NOT NULL AND latest_submitted_at IS NOT NULL AND COALESCE(paid_amount, 0) > 0), 0)::numeric AS avg_days_to_pay,
          COALESCE(SUM(insurance_balance) FILTER (WHERE COALESCE(insurance_balance, 0) > 0), 0)::numeric AS unpaid_balance,
          COALESCE(SUM(paid_amount), 0)::numeric AS paid_total
        FROM clientcare_claims
@@ -919,6 +933,17 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     const allowedRate = ratio(summary.total_allowed, summary.total_billed);
     const paidToAllowedRate = ratio(summary.total_paid, summary.total_allowed);
     const hasHistory = Number(summary.paid_claims || 0) > 0;
+    const payerProfiles = new Map(
+      payerRows.map((payer) => ([
+        payer.payer_name,
+        {
+          ...payer,
+          avg_days_to_pay: payer.avg_days_to_pay ? Number(Number(payer.avg_days_to_pay).toFixed(1)) : null,
+          collection_rate: ratio(payer.paid_total, Number(payer.avg_billed || 0) * Number(payer.paid_claims || 0)),
+          paid_to_allowed_rate: ratio(Number(payer.avg_paid || 0), Number(payer.avg_allowed || 0)),
+        },
+      ]))
+    );
 
     const recommendations = [];
     if (!hasHistory) {
@@ -958,7 +983,9 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       ['90+ days', { label: '90+ days', amount: 0, claims: 0 }],
     ]);
     const forecastClaims = forecastRows.map((claim) => {
-      const profile = getCollectionTimingProfile(claim.rescue_bucket);
+      const payerProfile = payerProfiles.get(claim.payer_name) || null;
+      const baseProfile = getCollectionTimingProfile(claim.rescue_bucket);
+      const profile = calibrateCollectionProfile(baseProfile, payerProfile);
       const expectedDate = addDays(now(), profile.days);
       const probability = Number(claim.recovery_probability || 0) * profile.multiplier;
       const expectedAmount = Number((money(claim.outstanding) * probability).toFixed(2));
@@ -976,6 +1003,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         expected_amount: expectedAmount,
         projected_date: isoDate(expectedDate),
         timing_bucket: profile.label,
+        calibration_basis: payerProfile?.avg_days_to_pay != null ? `payer_history_${claim.payer_name}` : 'rescue_bucket_only',
       };
     });
 
@@ -983,7 +1011,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       has_claim_data: forecastClaims.length > 0,
       confidence: hasHistory ? 'medium' : 'low',
       assumptions: hasHistory
-        ? 'Forecast uses current rescue buckets and observed payment history baseline.'
+        ? 'Forecast uses current rescue buckets calibrated by observed payer payment lag and paid-to-allowed history where available.'
         : 'Forecast uses current rescue buckets only. Import paid claims or ERAs to improve amount and timing accuracy.',
       projected_total: Number(forecastClaims.reduce((sum, claim) => sum + Number(claim.expected_amount || 0), 0).toFixed(2)),
       timing_buckets: Array.from(buckets.values()).map((bucket) => ({
@@ -1002,13 +1030,75 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         has_history: hasHistory,
       },
       payers: payerRows.map((payer) => ({
-        ...payer,
-        collection_rate: ratio(payer.paid_total, Number(payer.avg_billed || 0) * Number(payer.paid_claims || 0)),
-        paid_to_allowed_rate: ratio(Number(payer.avg_paid || 0), Number(payer.avg_allowed || 0)),
+        ...payerProfiles.get(payer.payer_name),
       })),
       denials: denialRows,
       recommendations,
       collection_forecast: forecast,
+    };
+  }
+
+  async function getEraInsights({ limit = 20 } = {}) {
+    const { rows: summaryRows } = await pool.query(
+      `SELECT
+         COUNT(*) FILTER (WHERE COALESCE(metadata->>'payment_reference', '') <> '')::int AS traced_payments,
+         COUNT(*) FILTER (WHERE jsonb_array_length(COALESCE(metadata->'carc_codes', '[]'::jsonb)) > 0)::int AS carc_tagged_claims,
+         COUNT(*) FILTER (WHERE jsonb_array_length(COALESCE(metadata->'rarc_codes', '[]'::jsonb)) > 0)::int AS rarc_tagged_claims,
+         COUNT(*) FILTER (WHERE COALESCE(metadata->>'payment_method', '') <> '')::int AS payment_method_tagged
+       FROM clientcare_claims`
+    );
+
+    const { rows: carcRows } = await pool.query(
+      `SELECT
+         code,
+         COUNT(*)::int AS count
+       FROM (
+         SELECT jsonb_array_elements_text(COALESCE(metadata->'carc_codes', '[]'::jsonb)) AS code
+         FROM clientcare_claims
+       ) codes
+       WHERE COALESCE(code, '') <> ''
+       GROUP BY code
+       ORDER BY count DESC, code ASC
+       LIMIT $1`,
+      [Math.max(1, Math.min(Number(limit || 20), 100))]
+    );
+
+    const { rows: rarcRows } = await pool.query(
+      `SELECT
+         code,
+         COUNT(*)::int AS count
+       FROM (
+         SELECT jsonb_array_elements_text(COALESCE(metadata->'rarc_codes', '[]'::jsonb)) AS code
+         FROM clientcare_claims
+       ) codes
+       WHERE COALESCE(code, '') <> ''
+       GROUP BY code
+       ORDER BY count DESC, code ASC
+       LIMIT $1`,
+      [Math.max(1, Math.min(Number(limit || 20), 100))]
+    );
+
+    const { rows: paymentMethodRows } = await pool.query(
+      `SELECT
+         metadata->>'payment_method' AS payment_method,
+         COUNT(*)::int AS count,
+         COALESCE(SUM(paid_amount), 0)::numeric AS total_paid
+       FROM clientcare_claims
+       WHERE COALESCE(metadata->>'payment_method', '') <> ''
+       GROUP BY metadata->>'payment_method'
+       ORDER BY count DESC, total_paid DESC
+       LIMIT 10`
+    );
+
+    return {
+      summary: summaryRows[0] || {},
+      carc_codes: carcRows.map((row) => ({ code: row.code, count: Number(row.count || 0) })),
+      rarc_codes: rarcRows.map((row) => ({ code: row.code, count: Number(row.count || 0) })),
+      payment_methods: paymentMethodRows.map((row) => ({
+        payment_method: row.payment_method,
+        count: Number(row.count || 0),
+        total_paid: Number(row.total_paid || 0),
+      })),
     };
   }
 
@@ -1345,6 +1435,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     getDashboard,
     buildClaimPlan,
     getReimbursementIntelligence,
+    getEraInsights,
     getPayerPlaybooks,
     getUnderpaymentQueue,
     getAppealsQueue,

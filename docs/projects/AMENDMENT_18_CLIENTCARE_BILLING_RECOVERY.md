@@ -112,6 +112,7 @@ Every claim lands in one of these buckets:
 - `POST /api/v1/clientcare-billing/insurance/verification-preview`
 - `GET /api/v1/clientcare-billing/patient-ar/summary`
 - `GET /api/v1/clientcare-billing/payer-playbooks`
+- `GET /api/v1/clientcare-billing/era-insights`
 - `GET /api/v1/clientcare-billing/underpayments`
 - `POST /api/v1/clientcare-billing/underpayments/:claimId/queue-action`
 - `POST /api/v1/clientcare-billing/history/import-csv`
@@ -229,6 +230,7 @@ Operational inputs needed regardless of integration path:
 - The operator overlay must convert common blockers into batch workflows/playbooks so staff can work accounts by category instead of one account at a time.
 - The operator overlay should automatically hydrate the live ClientCare backlog when credentials and app key are present so the visible account board and summary counts do not depend on a manual extra button press.
 - The reimbursement intelligence view must include a collections forecast: projected collectible amount, projected timing buckets, and top expected collections, improving as paid-claim history is imported.
+- The collections forecast should calibrate against observed payer payment lag and paid-to-allowed history when those signals exist, rather than relying on rescue buckets alone.
 - The overlay must support direct payment-history import for paid claims / ERA / remit CSV so reimbursement learning is not blocked on perfect exports.
 - The overlay must expose an operator chat tied directly to LifeOS AI with running history and archive behavior for older turns; it should classify requests as personal vs shared system improvements.
 - The operator chat should be named `Operations Assistant`, support pinned and unpinned layouts, and stay out of the main workstream when collapsed.
@@ -251,4 +253,74 @@ Operational inputs needed regardless of integration path:
 - The claims ledger must also surface an appeals queue and claim-level appeal packet preview so denied or follow-up claims can be worked by playbook instead of ad hoc memory.
 - The underpayment queue and appeals queue must support controlled action queueing so likely recovery work can be turned into tracked follow-up instead of staying dashboard-only.
 - The system must expose payer playbooks derived from actual imported denial/payment history so commercial-plan follow-up is not driven by generic rules alone.
+- The system must expose ERA/remit insight summaries so CARC/RARC patterns and payment-method signals can feed payer playbooks and forecast calibration.
 - Amendment and continuity stay current as the system changes.
+
+---
+
+## Build Plan
+
+- [x] **Live ClientCare backlog discovery and rescue board** *(est: 10h | actual: 11h)* `[needs-review]`
+- [x] **Collections Control Center overlay and Operations Assistant shell** *(est: 8h | actual: 9h)* `[safe]`
+- [x] **Controlled account repair for billing status/provider type/payment status** *(est: 6h | actual: 6h)* `[needs-review]`
+- [x] **Payment-history import and underpayment queue** *(est: 6h | actual: 7h)* `[needs-review]`
+- [x] **Appeals queue, packet preview, and action queueing** *(est: 6h | actual: 7h)* `[needs-review]`
+- [x] **Payer playbooks plus ERA/remit insight layer** *(est: 7h | actual: 7h)* `[needs-review]`
+- [ ] **→ NEXT: insurer-entry and payer-order repair workflows** *(est: 8h)* `[needs-review]`
+- [ ] **Patient AR escalation ladder and provider policy controls** *(est: 8h)* `[needs-review]`
+- [ ] **Sellable packaging: permissions, audit hardening, tenant boundaries, onboarding** *(est: 12h)* `[high-risk]`
+
+**Progress:** 6/9 steps complete | Est. remaining: ~28h
+
+---
+
+## Change Receipts
+
+| Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
+|---|---|---:|---:|---|---|---|---|
+| 2026-03-27 | Added payment-history import and underpayment queue | 6h | 7h | +1h from CSV alias normalization and queue polish | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added appeals queue, packet preview, and recovery action queueing | 6h | 7h | +1h from route/UI/action wiring across queue and claim pane | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added payer playbooks, ERA/remit insights, and forecast calibration hooks | 7h | 7h | none | ✅ | ✅ | ✅ |
+
+---
+
+## Pre-Build Readiness
+
+**Status:** NOT_READY
+**Adaptability Score:** 67/100
+**Last Updated:** 2026-03-27
+
+### Gate 1 — Implementation Detail
+- [x] Both execution paths documented (API path and no-API browser fallback)
+- [x] Canonical claims rescue queue buckets defined (7 buckets with clear labels)
+- [x] All 9 service/route/UI files listed with purposes
+- [x] All API endpoints documented (28 endpoints)
+- [x] Default payer rules documented (Medicare FFS, Nevada Medicaid, Commercial/unknown)
+- [x] Definition of Done (Phase 1) fully specified with 24 concrete acceptance criteria
+- [ ] Payer list for the actual 90 claims not yet in-repo — confirmed blocker
+- [ ] Claim exports from ClientCare not yet ingested — no real data to validate against
+- [ ] ERA/remit history not imported — payout forecasting remains low-confidence
+- [ ] ClientCare API access not yet confirmed — browser path remains the real execution path
+- [ ] Controlled writeback for insurer-entry and payer-order changes not yet implemented
+
+### Gate 2 — Competitor Landscape
+| Competitor | Strengths | Weaknesses | Our Edge |
+|---|---|---|---|
+| AdvancedMD | Full EHR + billing, large market, ~$600/mo | Generic across all specialties — no ClientCare-specific integration, no AI rescue queue prioritization, no browser automation fallback | We are built around the client's actual system (ClientCare) with a no-API fallback that works today, not after a 6-month integration project |
+| Kareo/Tebra | Popular with small practices, billing services included | Same as AdvancedMD — generic, no ClientCare integration, no AI-generated appeal packets | Our payer playbooks are derived from this practice's actual historical denial data, not generic templates |
+| RXNT | Affordable ($65/mo), cloud-based billing | No AI, no denial pattern analysis, no underpayment detection, no appeals queue | We surface underpayment vs contract rates and generate appeal packet drafts — RXNT has no equivalent |
+| Manual billing coordinator (human) | Knows the payers, can make judgment calls | $25–$45/hr, only works during business hours, no pattern analysis across all claims simultaneously | We work the entire backlog simultaneously, rank by urgency/recoverability, and surface the highest-value next actions first |
+
+### Gate 3 — Future Risks
+| Risk | Probability | Impact | Position |
+|---|---|---|---|
+| ClientCare changes their UI/DOM structure — browser selectors break | HIGH | High — browser path is the primary execution path today | Mitigate: browser selectors must be in config, not hardcoded; add visual regression test before any automated writeback |
+| Timely filing windows expire during the build period for the 90 open claims | HIGH (already aging) | HIGH — irreversible revenue loss | Mitigate: prioritize claims sort by date of service immediately; surface submit_now bucket before any other work |
+| Patient AR outreach triggers FDCPA compliance issue (debt collection without license) | Medium | HIGH — legal liability | Mitigate: provider-directed patient communication (not third-party debt collection) stays compliance-gated; no automated patient contact without legal review |
+| Payer denies based on eligibility issue not detectable until ERA arrives | Medium | Medium — revenue delayed, not necessarily lost | Mitigate: eligibility verification preview endpoint exists; surface eligibility flags before claim submission |
+
+### Gate 4 — Adaptability Strategy
+The claim classification engine reads rules from the payer playbook table — adding a new payer rule requires a DB row, not a code change. If ClientCare gains a private API later, we add an API path service adapter and the rest of the pipeline (classification, rescue queue, dashboard) remains unchanged. The appeal packet generator is a prompt template per denial reason code — adding new CARC/RARC codes is a data entry task. Score: 67/100 — the dual-path architecture (API/no-API) and data-driven payer rules are highly adaptable; the score is held back by the confirmed blockers (no real claim data, no payer list, no confirmed API access) that must resolve before the adaptability of the architecture can be validated in production.
+
+### Gate 5 — How We Beat Them
+Every billing software shows you what's unpaid; LifeOS tells you exactly which of the 90 claims can still be rescued today, in what order to work them, what document to pull for each one, and drafts the appeal letter — turning a billing backlog from a spreadsheet problem into a ranked action queue that a non-biller can execute.

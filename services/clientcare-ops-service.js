@@ -527,6 +527,20 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       };
     }
 
+    if (/era insight|remit insight|carc|rarc|835 insight|remittance pattern/.test(text)) {
+      const insights = await billingService.getEraInsights({ limit: 25 });
+      return {
+        ok: true,
+        type: 'era_insights',
+        reply: 'Here are the current ERA/remit code patterns and payment-method signals from imported history.',
+        data: insights,
+        suggested_actions: [
+          'Review the top CARC and RARC codes first.',
+          'Use those patterns to refine payer playbooks and appeal packets.',
+        ],
+      };
+    }
+
     if (/era|remit|835|paid claims import|payment history import/.test(text)) {
       return {
         ok: true,
