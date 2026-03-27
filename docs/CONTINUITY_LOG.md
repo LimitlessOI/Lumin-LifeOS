@@ -28,6 +28,8 @@
 - ClientCare billing now also has transport diagnostics for the billing-notes queue because the UI advertises 88 notes while the current headless traversal only sees 15 rendered rows.
 - ClientCare billing-notes traversal now uses the actual `GetMidwifeNotesList` transport instead of rendered-page scraping, so the system can pull the full 88-note backlog and collapse it into account-level rescue work.
 - ClientCare overlay now also summarizes the full backlog in operator terms: diagnosis counts, recovery-likelihood bands, oldest accounts first, and the most common next-action buckets, with raw payloads kept secondary.
+- ClientCare overlay now also derives batch workflow playbooks from the full rescue report so the backlog can be worked by blocker type: insurance verification, billing setup, demographics, client match, and missing insurer data.
+- ClientCare overlay now auto-loads the live full billing queue when the app key and ClientCare credentials are present, and the visible top stats switch from the empty local ledger to the live ClientCare backlog summary.
 
 ## Update 2026-03-26 #1
 - Priority shifted temporarily from TC to ClientCare billing recovery because there is already earned revenue trapped in unpaid / unbilled / rejected / denied claims.

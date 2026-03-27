@@ -200,6 +200,8 @@ Operational inputs needed regardless of integration path:
 - The operator overlay must expose reimbursement intelligence from historical paid claims/ERAs/remits so payout projections improve over time and underpayment/leakage patterns can be acted on.
 - The browser path must be able to traverse the full billing-notes queue, aggregate duplicate notes per account, and produce a full rescue list of unpaid insurance accounts visible in ClientCare.
 - The full rescue report must include an operator summary for the whole backlog: diagnosis breakdown, recovery-likelihood bands, oldest accounts first, and the most common next-action buckets.
+- The operator overlay must convert common blockers into batch workflows/playbooks so staff can work accounts by category instead of one account at a time.
+- The operator overlay should automatically hydrate the live ClientCare backlog when credentials and app key are present so the visible account board and summary counts do not depend on a manual extra button press.
 - The browser path may include transport diagnostics for ClientCare billing-note loading when queue pagination or lazy loading prevents full backlog extraction.
 - Rescue queue exists and scores claims by urgency/recoverability.
 - Dashboard shows where money is stuck.

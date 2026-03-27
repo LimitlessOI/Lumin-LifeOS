@@ -7,6 +7,8 @@
   let lastAccountReport = null;
   let selectedAccountIndex = 0;
   let lastReimbursementIntelligence = null;
+  let fullQueueHydrated = false;
+  let fullQueueLoading = false;
 
   function getApiKey() {
     return localStorage.getItem('COMMAND_CENTER_KEY') || localStorage.getItem('lifeos_cmd_key') || localStorage.getItem('x_api_key') || '';
@@ -327,6 +329,39 @@
     `;
   }
 
+  function renderWorkflowPlaybooks(summary = {}) {
+    const playbooks = summary.workflowPlaybooks || [];
+    return `
+      <div class="stack">
+        ${playbooks.length ? playbooks.map((playbook) => `
+          <div class="card" style="padding:12px; background:#0f1528;">
+            <div class="account-card-top">
+              <strong>${escapeHtml(playbook.title || '')}</strong>
+              <span class="badge ${badgeClass(playbook.count > 10 ? 'warn' : 'ok')}">${escapeHtml(`${playbook.count} accounts`)}</span>
+            </div>
+            <ol class="detail-list" style="margin-left:18px;">
+              ${(playbook.steps || []).map((step) => `<li>${escapeHtml(step)}</li>`).join('')}
+            </ol>
+            <table>
+              <thead><tr><th>Client</th><th>Oldest note</th><th>Status</th><th>Recovery</th><th>Insurer</th></tr></thead>
+              <tbody>
+                ${(playbook.accounts || []).map((account) => `
+                  <tr>
+                    <td>${escapeHtml(account.client || '')}</td>
+                    <td>${escapeHtml(account.oldestNoteDate || '')}</td>
+                    <td>${escapeHtml(account.status || '')}</td>
+                    <td>${escapeHtml(account.recoveryBand || '')}</td>
+                    <td>${escapeHtml((account.insurers || []).join(', ') || 'none visible')}</td>
+                  </tr>
+                `).join('') || '<tr><td colspan="5">No accounts in this workflow.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        `).join('') : '<p class="muted">Run Full Queue Report to build workflow groups.</p>'}
+      </div>
+    `;
+  }
+
   function renderBrowserOutput(result) {
     if (!result) return '<p class="muted">No browser run yet.</p>';
 
@@ -343,6 +378,7 @@
             { label: 'Generated', value: summary.generatedAt || '' },
           ])}
           ${renderActionSummary(summary)}
+          ${renderWorkflowPlaybooks(summary)}
           <div>
             <strong>Oldest accounts to work first</strong>
             <table>
@@ -507,7 +543,7 @@
     return data;
   }
 
-  async function loadDashboard(filters = {}) {
+  async function loadDashboard(filters = {}, options = {}) {
     const root = document.getElementById('app');
     try {
       const query = new URLSearchParams(filters).toString();
@@ -522,6 +558,12 @@
       ]);
       lastReimbursementIntelligence = intelligence.intelligence || null;
       render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence);
+      if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
+        fullQueueLoading = true;
+        browserFullAccountReport({ silent: true, refreshDashboard: true }).finally(() => {
+          fullQueueLoading = false;
+        });
+      }
     } catch (error) {
       root.innerHTML = `<div class="card"><h2>Load failed</h2><p>${escapeHtml(error.message)}</p></div>`;
     }
@@ -656,7 +698,7 @@
     }
   }
 
-  async function browserFullAccountReport() {
+  async function browserFullAccountReport({ silent = false, refreshDashboard = false } = {}) {
     try {
       const result = await api('/api/v1/clientcare-billing/browser/full-account-report?max_pages=12&page_timeout_ms=12000&account_limit=200');
       lastAccountReport = {
@@ -672,12 +714,19 @@
           raw: item,
         })),
       };
+      fullQueueHydrated = true;
+      if (refreshDashboard) {
+        await loadDashboard({}, { skipAutoFullQueue: true });
+        return;
+      }
       selectedAccountIndex = 0;
       setBrowserOutput(result);
       renderAccountBoard();
-      alert(`Loaded ${result.accounts?.length || 0} accounts from the full billing queue.`);
+      const workflowNode = document.getElementById('workflow-playbooks');
+      if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
+      if (!silent) alert(`Loaded ${result.accounts?.length || 0} accounts from the full billing queue.`);
     } catch (error) {
-      alert(error.message);
+      if (!silent) alert(error.message);
     }
   }
 
@@ -738,6 +787,18 @@
 
   function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence) {
     const summary = dashboard.summary || {};
+    const liveSummary = lastAccountReport?.summary || null;
+    const topCards = liveSummary ? [
+      { label: 'Live accounts', value: liveSummary.totalAccounts || 0 },
+      { label: 'Billing notes', value: liveSummary.totalQueueItems || 0 },
+      { label: 'Strong/possible', value: (liveSummary.recoveryBandCounts?.strong || 0) + (liveSummary.recoveryBandCounts?.possible || 0) },
+      { label: 'Unlikely', value: liveSummary.recoveryBandCounts?.unlikely || 0 },
+    ] : [
+      { label: 'Total claims', value: summary.total_claims || 0 },
+      { label: 'Outstanding total', value: summary.outstanding_total || 0 },
+      { label: 'Submit now', value: summary.submit_now_count || 0 },
+      { label: 'Correct/resubmit', value: summary.correct_and_resubmit_count || 0 },
+    ];
     const claimRows = claims.map((claim) => `
       <tr>
         <td>${escapeHtml(claim.patient_name || '')}</td>
@@ -780,10 +841,9 @@
       </div>
 
       <div class="grid four">
-        <div class="card stat"><span>Total claims</span><strong>${escapeHtml(summary.total_claims || 0)}</strong></div>
-        <div class="card stat"><span>Outstanding total</span><strong>${escapeHtml(summary.outstanding_total || 0)}</strong></div>
-        <div class="card stat"><span>Submit now</span><strong>${escapeHtml(summary.submit_now_count || 0)}</strong></div>
-        <div class="card stat"><span>Correct/resubmit</span><strong>${escapeHtml(summary.correct_and_resubmit_count || 0)}</strong></div>
+        ${topCards.map((card) => `
+          <div class="card stat"><span>${escapeHtml(card.label)}</span><strong>${escapeHtml(card.value)}</strong></div>
+        `).join('')}
       </div>
 
       <div class="grid two">
@@ -864,6 +924,12 @@
         </div>
       </div>
 
+      <div class="card">
+        <h2>Batch workflows</h2>
+        <p class="hint" style="margin:10px 0">Work the backlog by common blocker instead of one account at a time.</p>
+        <div id="workflow-playbooks">${renderWorkflowPlaybooks(lastAccountReport?.summary || {})}</div>
+      </div>
+
       <div class="split">
         <div class="stack">
           <div class="card">
@@ -909,6 +975,8 @@
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));
     renderAccountBoard();
+    const workflowNode = document.getElementById('workflow-playbooks');
+    if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
   }
 
   loadDashboard();

@@ -683,6 +683,87 @@ function buildActionQueueSummary(accounts = []) {
     .slice(0, 8);
 }
 
+function buildWorkflowPlaybooks(accounts = []) {
+  const playbookDefs = [
+    {
+      id: 'verify-insurance',
+      title: 'Verify insurance and effective date',
+      matches: (account) => String(account.diagnosis?.status || '') === 'insurance_setup_issue',
+      steps: [
+        'Confirm the plan was active on the date of service.',
+        'Confirm the correct payer is attached and member data is complete.',
+        'If dual coverage exists, verify primary vs secondary order.',
+        'Update the ClientCare billing page so billing can move forward.',
+      ],
+    },
+    {
+      id: 'complete-billing-setup',
+      title: 'Complete missing billing setup fields',
+      matches: (account) => {
+        const flags = Array.isArray(account.accountSummary?.flags) ? account.accountSummary.flags : [];
+        return flags.includes('billing_status_blank') || flags.includes('bill_provider_type_blank');
+      },
+      steps: [
+        'Set Client Billing Status.',
+        'Set Bill Provider Type.',
+        'Confirm payment workflow is started once the account is ready.',
+        'Recheck that the account leaves the billing-note queue.',
+      ],
+    },
+    {
+      id: 'fix-demographics',
+      title: 'Fix missing demographics or address data',
+      matches: (account) => String(account.diagnosis?.status || '') === 'missing_demographics',
+      steps: [
+        'Open the client record and fill in the missing demographic field.',
+        'Reopen the billing page and confirm the payer can be billed.',
+        'Advance the account out of the note queue.',
+      ],
+    },
+    {
+      id: 'resolve-client-match',
+      title: 'Resolve client match issues',
+      matches: (account) => String(account.diagnosis?.status || '') === 'client_match_issue',
+      steps: [
+        'Match the billing note to the correct client record.',
+        'Verify identifiers before updating billing.',
+        'Then complete payer and billing setup fields.',
+      ],
+    },
+    {
+      id: 'enter-insurer',
+      title: 'Enter or repair insurer details',
+      matches: (account) => !Array.isArray(account.accountSummary?.insurers) || account.accountSummary.insurers.length === 0,
+      steps: [
+        'Enter or verify insurer name, member ID, subscriber, and payor ID.',
+        'Confirm insurance priority and payer order.',
+        'Return to billing setup and continue claim preparation.',
+      ],
+    },
+  ];
+
+  return playbookDefs
+    .map((playbook) => {
+      const matchedAccounts = accounts.filter((account) => playbook.matches(account));
+      return {
+        id: playbook.id,
+        title: playbook.title,
+        count: matchedAccounts.length,
+        steps: playbook.steps,
+        accounts: matchedAccounts.slice(0, 15).map((account) => ({
+          client: account.client,
+          oldestNoteDate: account.oldestNoteDate || '',
+          status: account.diagnosis?.status || 'needs_review',
+          recoveryBand: account.recoveryBand?.label || 'Needs review',
+          insurers: account.accountSummary?.insurers || [],
+          nextAction: account.diagnosis?.needed?.[0] || 'Manual review',
+        })),
+      };
+    })
+    .filter((playbook) => playbook.count > 0)
+    .sort((a, b) => b.count - a.count || a.title.localeCompare(b.title));
+}
+
 function buildFullReportSummary(accounts = [], queueItems = []) {
   const diagnosisCounts = {};
   const recoveryBandCounts = {};
@@ -731,6 +812,7 @@ function buildFullReportSummary(accounts = [], queueItems = []) {
     missingInsurer,
     oldestAccounts,
     topActions: buildActionQueueSummary(accounts),
+    workflowPlaybooks: buildWorkflowPlaybooks(accounts),
   };
 }
 
