@@ -308,6 +308,19 @@ function ratio(numerator, denominator) {
   return Number((a / b).toFixed(4));
 }
 
+function getCollectionTimingProfile(rescueBucket = 'payer_followup') {
+  const profiles = {
+    submit_now: { label: '0-30 days', days: 21, multiplier: 0.85 },
+    correct_and_resubmit: { label: '31-60 days', days: 45, multiplier: 0.75 },
+    proof_of_timely_filing: { label: '61-90 days', days: 75, multiplier: 0.55 },
+    timely_filing_exception: { label: '90+ days', days: 105, multiplier: 0.3 },
+    payer_followup: { label: '31-60 days', days: 40, multiplier: 0.6 },
+    likely_uncollectible: { label: '90+ days', days: 120, multiplier: 0.08 },
+    resolved: { label: 'Closed', days: 0, multiplier: 1 },
+  };
+  return profiles[rescueBucket] || profiles.payer_followup;
+}
+
 export function createClientCareBillingService({ pool, logger = console, now = () => new Date() }) {
   async function ensureClaimActions(claimId, actions = []) {
     await pool.query(`DELETE FROM clientcare_claim_actions WHERE claim_id=$1 AND status='open'`, [claimId]);
@@ -634,6 +647,65 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       recommendations.push('Historical paid-to-billed ratio is weak. Review fee schedules, payer order, auth, modifiers, and underpayment follow-up.');
     }
 
+    const { rows: forecastRows } = await pool.query(
+      `SELECT
+         id,
+         patient_name,
+         payer_name,
+         rescue_bucket,
+         recovery_probability,
+         COALESCE(insurance_balance, GREATEST(COALESCE(billed_amount,0) - COALESCE(paid_amount,0), 0))::numeric AS outstanding,
+         date_of_service,
+         latest_submitted_at
+       FROM clientcare_claims
+       WHERE COALESCE(insurance_balance, GREATEST(COALESCE(billed_amount,0) - COALESCE(paid_amount,0), 0)) > 0
+         AND rescue_bucket <> 'resolved'
+       ORDER BY priority_score DESC NULLS LAST, date_of_service ASC
+       LIMIT 500`
+    );
+
+    const buckets = new Map([
+      ['0-30 days', { label: '0-30 days', amount: 0, claims: 0 }],
+      ['31-60 days', { label: '31-60 days', amount: 0, claims: 0 }],
+      ['61-90 days', { label: '61-90 days', amount: 0, claims: 0 }],
+      ['90+ days', { label: '90+ days', amount: 0, claims: 0 }],
+    ]);
+    const forecastClaims = forecastRows.map((claim) => {
+      const profile = getCollectionTimingProfile(claim.rescue_bucket);
+      const expectedDate = addDays(now(), profile.days);
+      const probability = Number(claim.recovery_probability || 0) * profile.multiplier;
+      const expectedAmount = Number((money(claim.outstanding) * probability).toFixed(2));
+      const bucket = buckets.get(profile.label);
+      if (bucket) {
+        bucket.amount += expectedAmount;
+        bucket.claims += 1;
+      }
+      return {
+        id: claim.id,
+        patient_name: claim.patient_name,
+        payer_name: claim.payer_name,
+        rescue_bucket: claim.rescue_bucket,
+        outstanding: money(claim.outstanding),
+        expected_amount: expectedAmount,
+        projected_date: isoDate(expectedDate),
+        timing_bucket: profile.label,
+      };
+    });
+
+    const forecast = {
+      has_claim_data: forecastClaims.length > 0,
+      confidence: hasHistory ? 'medium' : 'low',
+      assumptions: hasHistory
+        ? 'Forecast uses current rescue buckets and observed payment history baseline.'
+        : 'Forecast uses current rescue buckets only. Import paid claims or ERAs to improve amount and timing accuracy.',
+      projected_total: Number(forecastClaims.reduce((sum, claim) => sum + Number(claim.expected_amount || 0), 0).toFixed(2)),
+      timing_buckets: Array.from(buckets.values()).map((bucket) => ({
+        ...bucket,
+        amount: Number(bucket.amount.toFixed(2)),
+      })),
+      top_claims: forecastClaims.slice(0, 12),
+    };
+
     return {
       summary: {
         ...summary,
@@ -649,6 +721,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       })),
       denials: denialRows,
       recommendations,
+      collection_forecast: forecast,
     };
   }
 

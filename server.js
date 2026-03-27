@@ -1833,17 +1833,25 @@ async function start() {
       );
     }
 
+      const railwayOllamaDisabled = Boolean(
+        process.env.RAILWAY_ENVIRONMENT &&
+        (!OLLAMA_ENDPOINT || /localhost|127\.0\.0\.1|PASTE_YOUR|disabled|none/i.test(String(OLLAMA_ENDPOINT)))
+      );
       // Initialize Ollama Installer (auto-install Ollama if needed)
-      try {
-        const ollamaInstallerModule = await import("./core/ollama-installer.js");
-        const ollamaInstaller = new ollamaInstallerModule.OllamaInstaller(pool, callCouncilMember);
-        // Auto-configure in background (don't block startup)
-        ollamaInstaller.autoConfigure().catch(err => {
-          logger.warn('⚠️ Ollama auto-configuration failed:', { error: err.message });
-        });
-        logger.info("✅ Ollama Installer initialized - will auto-configure Ollama if possible");
-      } catch (error) {
-        logger.warn("⚠️ Ollama Installer not available:", { error: error.message });
+      if (railwayOllamaDisabled) {
+        logger.info("🛑 [OLLAMA] Disabled in Railway until an external Ollama service is configured");
+      } else {
+        try {
+          const ollamaInstallerModule = await import("./core/ollama-installer.js");
+          const ollamaInstaller = new ollamaInstallerModule.OllamaInstaller(pool, callCouncilMember);
+          // Auto-configure in background (don't block startup)
+          ollamaInstaller.autoConfigure().catch(err => {
+            logger.warn('⚠️ Ollama auto-configuration failed:', { error: err.message });
+          });
+          logger.info("✅ Ollama Installer initialized - will auto-configure Ollama if possible");
+        } catch (error) {
+          logger.warn("⚠️ Ollama Installer not available:", { error: error.message });
+        }
       }
 
       // Initialize Idea-to-Implementation Pipeline (after taskTracker is available)

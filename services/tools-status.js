@@ -53,7 +53,9 @@ const _OLLAMA_WARN_COOLDOWN = 30 * 60 * 1000;
 export async function fetchOllamaModels(endpoint) {
   // Skip entirely if not configured or explicitly disabled
   const ep = endpoint || process.env.OLLAMA_ENDPOINT;
-  if (!ep || ep === 'disabled' || ep === 'none') {
+  const disabled = !ep || ep === 'disabled' || ep === 'none' ||
+    (process.env.RAILWAY_ENVIRONMENT && /localhost|127\.0\.0\.1|PASTE_YOUR/i.test(String(ep)));
+  if (disabled) {
     return { endpoint: null, available: false, models: [] };
   }
 

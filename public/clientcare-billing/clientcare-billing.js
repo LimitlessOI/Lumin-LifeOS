@@ -227,6 +227,7 @@
     const recommendations = intelligence.recommendations || [];
     const payers = intelligence.payers || [];
     const denials = intelligence.denials || [];
+    const forecast = intelligence.collection_forecast || {};
     return `
       <div class="stack">
         <div class="grid four" style="margin-bottom:0">
@@ -245,6 +246,43 @@
           <ul class="detail-list">
             ${recommendations.length ? recommendations.map((item) => `<li>${escapeHtml(item)}</li>`).join('') : '<li>No recommendations yet.</li>'}
           </ul>
+        </div>
+        <div>
+          <strong>Collection forecast</strong>
+          <p class="hint" style="margin:6px 0 10px 0">${escapeHtml(forecast.assumptions || 'No forecast yet.')}</p>
+          <table>
+            <thead><tr><th>Window</th><th>Projected amount</th><th>Claims</th></tr></thead>
+            <tbody>
+              ${(forecast.timing_buckets || []).length ? forecast.timing_buckets.map((bucket) => `
+                <tr>
+                  <td>${escapeHtml(bucket.label || '')}</td>
+                  <td>${escapeHtml(money(bucket.amount || 0))}</td>
+                  <td>${escapeHtml(bucket.claims || 0)}</td>
+                </tr>
+              `).join('') : '<tr><td colspan="3">No claim balances imported yet.</td></tr>'}
+            </tbody>
+          </table>
+          <div class="grid four" style="margin-top:10px; margin-bottom:0">
+            <div class="card stat"><span>Projected total</span><strong>${escapeHtml(money(forecast.projected_total || 0))}</strong></div>
+            <div class="card stat"><span>Forecast confidence</span><strong>${escapeHtml(forecast.confidence || 'low')}</strong></div>
+          </div>
+        </div>
+        <div>
+          <strong>Top projected collections</strong>
+          <table>
+            <thead><tr><th>Patient</th><th>Payer</th><th>Bucket</th><th>Projected date</th><th>Expected amount</th></tr></thead>
+            <tbody>
+              ${(forecast.top_claims || []).length ? forecast.top_claims.map((claim) => `
+                <tr>
+                  <td>${escapeHtml(claim.patient_name || '')}</td>
+                  <td>${escapeHtml(claim.payer_name || '')}</td>
+                  <td>${escapeHtml(claim.timing_bucket || '')}</td>
+                  <td>${escapeHtml(claim.projected_date || '')}</td>
+                  <td>${escapeHtml(money(claim.expected_amount || 0))}</td>
+                </tr>
+              `).join('') : '<tr><td colspan="5">No top projected claims yet.</td></tr>'}
+            </tbody>
+          </table>
         </div>
         <div>
           <strong>Top payers by paid history</strong>

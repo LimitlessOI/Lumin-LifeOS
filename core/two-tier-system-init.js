@@ -269,11 +269,18 @@ export async function initializeTwoTierSystem(deps) {
     logger.info("   - FSAR Severity Gate (Likelihood × Damage × Reversibility)");
 
     const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
+    const ollamaDisabled = !OLLAMA_ENDPOINT || /localhost|127\.0\.0\.1|PASTE_YOUR|disabled|none/i.test(String(OLLAMA_ENDPOINT));
     console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
     console.log("║ ✅ [OPEN SOURCE COUNCIL] INITIALIZED                                              ║");
-    console.log("║    Status: Ready to route tasks to local Ollama models                           ║");
-    console.log("║    Activation: Cost shutdown OR explicit opt-in (useOpenSourceCouncil: true)    ║");
-    console.log(`║    Models: Connected to Ollama at ${ollamaEndpoint.padEnd(47)}║`);
+    if (ollamaDisabled) {
+      console.log("║    Status: Local Ollama routing disabled in this deployment                      ║");
+      console.log("║    Activation: Provide a real OLLAMA_ENDPOINT to enable local models            ║");
+      console.log("║    Models: Cloud/shared fallbacks only                                          ║");
+    } else {
+      console.log("║    Status: Ready to route tasks to local Ollama models                           ║");
+      console.log("║    Activation: Cost shutdown OR explicit opt-in (useOpenSourceCouncil: true)    ║");
+      console.log(`║    Models: Connected to Ollama at ${ollamaEndpoint.padEnd(47)}║`);
+    }
     console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
 
     // Initialize NotificationService (Email/SMS abstractions)

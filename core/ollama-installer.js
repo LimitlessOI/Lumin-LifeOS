@@ -12,6 +12,14 @@ import path from 'path';
 
 const execAsync = promisify(exec);
 
+function isOllamaDisabledByEnv(env = process.env) {
+  const endpoint = String(env.OLLAMA_ENDPOINT || '').trim();
+  if (!endpoint || endpoint === 'disabled' || endpoint === 'none') return true;
+  const isRailway = !!env.RAILWAY_ENVIRONMENT;
+  if (!isRailway) return false;
+  return /localhost|127\.0\.0\.1|PASTE_YOUR/i.test(endpoint);
+}
+
 export class OllamaInstaller {
   constructor(pool, callCouncilMember) {
     this.pool = pool;
@@ -24,6 +32,9 @@ export class OllamaInstaller {
    * Check if Ollama is available
    */
   async checkOllamaAvailable() {
+    if (isOllamaDisabledByEnv()) {
+      return { available: false, endpoint: null, disabled: true };
+    }
     try {
       const response = await fetch(`${this.ollamaEndpoint}/api/tags`, {
         method: 'GET',
@@ -44,6 +55,9 @@ export class OllamaInstaller {
    * Attempt to install Ollama (if on Railway/local)
    */
   async attemptInstall() {
+    if (isOllamaDisabledByEnv()) {
+      return { installed: false, reason: 'Ollama disabled in this environment', disabled: true };
+    }
     if (this.installAttempted) {
       return { installed: false, reason: 'Already attempted installation' };
     }
@@ -123,6 +137,9 @@ export class OllamaInstaller {
    * Auto-detect and configure Ollama
    */
   async autoConfigure() {
+    if (isOllamaDisabledByEnv()) {
+      return { configured: false, disabled: true, reason: 'Ollama disabled in this environment' };
+    }
     // First check if Ollama is already available
     const check = await this.checkOllamaAvailable();
     if (check.available) {

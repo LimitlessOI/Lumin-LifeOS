@@ -74,11 +74,16 @@ export function createCouncilService({
     timeZone: process.env.TZ || "America/Los_Angeles",
   });
 
+  const ollamaDisabled = !OLLAMA_ENDPOINT ||
+    OLLAMA_ENDPOINT === 'disabled' ||
+    OLLAMA_ENDPOINT === 'none' ||
+    (RAILWAY_ENVIRONMENT && /localhost|127\.0\.0\.1|PASTE_YOUR/i.test(String(OLLAMA_ENDPOINT)));
+
   // Startup Ollama ping — skip entirely if OLLAMA_ENDPOINT is not set or disabled
   const _exhaustedProviders = new Set();
   (async () => {
     const endpoint = OLLAMA_ENDPOINT;
-    if (!endpoint || endpoint === 'disabled' || endpoint === 'none') {
+    if (ollamaDisabled) {
       _exhaustedProviders.add('ollama');
       return; // silent — no Ollama configured
     }
