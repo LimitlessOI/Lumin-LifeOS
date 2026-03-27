@@ -91,6 +91,7 @@ config/council-members.js          — shared config
 
 > **Rule:** Exactly ONE item marked `→ NEXT`. Everything else is pending.
 > Stability classes: `[safe]` `[needs-review]` `[high-risk]`
+> Every item gets an estimate before implementation. When finished, fill in the actual time. If actual materially differs from estimate, explain why in the change receipt so future estimates improve.
 
 - [x] **Step 1** — Description *(est: Xh \| actual: Yh)* `[safe]`
 - [x] **Step 2** — Description *(est: Xh \| actual: Yh)* `[safe]`
@@ -204,3 +205,8 @@ test -f routes/example-routes.js || echo "MISSING: routes/example-routes.js"
 | Date | What Changed | Why | Amendment Updated | Manifest Updated | Verified |
 |---|---|---|---|---|---|
 | YYYY-MM-DD | [description] | [reason] | ✅ | ✅ | ✅ |
+
+Timing detail should be recorded when useful:
+- estimate vs actual for the completed work
+- cause of variance when actual differed materially
+- note if the work exposed a faster repeatable path for future implementation

@@ -9,7 +9,7 @@
   "phase": "core-infrastructure",
   "next_task": "Wire estimation accuracy and governance drill-down into the Command Center overlay",
   "stability_class": "needs-review",
-  "current_focus": "Governance data is seeded and live; next step is surfacing estimation accuracy and drill-downs in the Command Center",
+  "current_focus": "Governance data is seeded and live; next step is surfacing estimation accuracy, timing truth, and drill-downs in the Command Center",
   "owned_files": [
     "routes/project-governance-routes.js",
     "db/migrations/20260327_project_governance.sql",
@@ -64,12 +64,14 @@
     "Verifier can evaluate a single project or all manifests",
     "Coupling and staleness scripts run in CI",
     "Seed script can populate projects and segments from amendment build plans",
-    "Projects dashboard can read seeded governance data from DB"
+    "Projects dashboard can read seeded governance data from DB",
+    "Governance captures estimate vs actual timing so forecast accuracy can improve over time"
   ],
   "anti_drift_notes": "Governance routes are mounted once at /api/v1. Do not mount the same router separately at /api/v1/projects and /api/v1/pending-adam or every path will double-prefix. This lane exists to keep project state truthful, not to implement feature-specific behavior.",
   "decision_debt": [
     { "description": "Seed script was run and live endpoints were verified on 2026-03-27", "resolved": true },
-    { "description": "Governance data is live in the API but Command Center still needs estimation/drill-down panels", "resolved": false }
+    { "description": "Governance data is live in the API but Command Center still needs estimation/drill-down panels", "resolved": false },
+    { "description": "Timing truth should become a first-class habit across all amendments so estimate accuracy improves instead of staying anecdotal", "resolved": false }
   ],
   "last_verified_at": null,
   "verification_passed": null

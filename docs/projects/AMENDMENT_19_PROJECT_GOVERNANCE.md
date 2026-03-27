@@ -66,6 +66,7 @@ docs/projects/INDEX.md
 - `project_segments` is the ordered build plan
 - `estimation_log` calibrates estimates vs actual work
 - `pending_adam` records anything blocked on the user
+- Timing truth is mandatory: every meaningful build segment should have an estimate before work and an actual after completion so estimate accuracy can improve over time.
 
 ### Control surfaces
 - `GET /api/v1/projects`

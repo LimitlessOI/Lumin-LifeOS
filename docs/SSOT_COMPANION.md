@@ -66,6 +66,9 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - If a change affects shared platform behavior, also update this Companion and, when relevant, `docs/projects/INDEX.md` and `docs/CONTINUITY_LOG.md`.
 - If an idea grows into its own product/subsystem with its own mission, revenue path, technical surface, or non-negotiables, create a new amendment instead of burying it in chat history.
 - Brainstorms, raw notes, and conversation dumps are not authoritative until promoted into the relevant amendment.
+- Every build-plan item must carry an estimate before work starts and an actual once work finishes.
+- Every meaningful implementation session should record timing strongly enough that we can improve estimate accuracy over time and identify where the build loop can be made faster.
+- “Done” now includes timing truth: the amendment/manifest/change receipt should make it clear what was estimated, what actually happened, and where the time went if the estimate was materially wrong.
 
 ## 0.6 Directed Mode Rule (NEW)
 - Default operating posture is now directed mode: the system does not autonomously build, research, self-improve, market, or spend unless explicitly instructed or explicitly re-enabled.
