@@ -625,6 +625,7 @@ services/email-triage.js  — shared with email domain
 - [x] **Link triaged emails directly to existing transactions from the intake workspace** *(est: 3h | actual: 2h)* `[needs-review]`
 - [x] **Expose recent intake routing activity in the workspace** *(est: 2h | actual: 1h)* `[safe]`
 - [x] **Expose manual document QA and dry-run upload controls in the workspace** *(est: 2h | actual: 2h)* `[safe]`
+- [x] **Expose dry-run intake execution in the workspace** *(est: 2h | actual: 1h)* `[safe]`
 - [ ] **→ NEXT: First real transaction intake end-to-end (6453 Mahogany Peak)** *(est: 4h)* `[high-risk]`
 - [ ] **IMAP vars set in Railway + dry-run email scan** *(est: 1h)* `[safe]`
 - [ ] **SkySlope login test on Railway** *(est: 1h)* `[needs-review]`
@@ -634,7 +635,7 @@ services/email-triage.js  — shared with email domain
 - [ ] **First paying agent client enrolled** *(est: 2h)* `[safe]`
 - [ ] **Stripe billing wired to TC plan tiers** *(est: 4h)* `[needs-review]`
 
-**Progress:** 17/25 steps complete | Est. remaining: ~18h
+**Progress:** 18/26 steps complete | Est. remaining: ~17h
 
 ---
 
@@ -770,7 +771,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 | 2026-03-27 | Added agent intake workspace with access setup form, dry-run GLVAR/SkySlope checks, inbox triage queue, and suggested transaction matching | Give the operator a single place to enter secrets, verify access, monitor readiness, and route paperwork before live filing | ✅ | ✅ | pending |
 | 2026-03-27 | Added triage preview-text enrichment, message-id capture, and stronger workspace matching signals | Improve inbox classification quality and make intake routing more useful before live filing credentials are entered | ✅ | ✅ | pending |
 | 2026-03-27 | Added triage-to-transaction creation so contract emails can create placeholder TC files directly from the intake workspace | Reduce manual setup friction before full live filing access is available | ✅ | ✅ | pending |
-| 2026-03-28 | Added triage-to-existing-transaction linking from the intake workspace, with transaction event logging, recent intake activity visibility, source-email backfill when missing, and manual document QA / dry-run upload controls | Let the operator route important paperwork into the correct TC file without creating duplicate placeholder transactions and validate documents from the same workspace before live filing | ✅ | ✅ | pending |
+| 2026-03-28 | Added triage-to-existing-transaction linking from the intake workspace, with transaction event logging, recent intake activity visibility, source-email backfill when missing, manual document QA / dry-run upload controls, and a dry-run intake launcher | Let the operator route important paperwork into the correct TC file without creating duplicate placeholder transactions, validate documents from the same workspace, and rehearse the first live intake before real filing | ✅ | ✅ | pending |
 | 2026-03-26 | TC runtime wiring hardened — account-manager, notification service, IMAP consistency | Fix runtime injection errors | ✅ | n/a | pending |
 | 2026-03-25 | TC portal, reporting, approvals, alerts migrations | DB schema completion | ✅ | n/a | n/a |
 | 2026-03-22 | Initial TC coordinator, email triage, SkySlope agent | Core TC infrastructure | ✅ | n/a | n/a |

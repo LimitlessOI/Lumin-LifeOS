@@ -1,6 +1,7 @@
 (function () {
   let lastWorkspaceTests = null;
   let lastWorkspaceValidation = null;
+  let lastWorkspaceIntakeRun = null;
 
   function getApiKey() {
     return (
@@ -232,6 +233,25 @@
     if (node) node.innerHTML = renderWorkspaceValidation(lastWorkspaceValidation);
   }
 
+  async function runWorkspaceIntake() {
+    const payload = {
+      address: document.getElementById('workspace-intake-address')?.value || '',
+      days: Number(document.getElementById('workspace-intake-days')?.value || 90),
+      dry_run: true,
+    };
+    const result = await api('/api/v1/tc/intake/run', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    lastWorkspaceIntakeRun = {
+      checked_at: new Date().toISOString(),
+      payload,
+      result,
+    };
+    const node = document.getElementById('workspace-intake-results');
+    if (node) node.innerHTML = renderWorkspaceIntakeRun(lastWorkspaceIntakeRun);
+  }
+
   function renderWorkspaceTests(results) {
     const entries = Object.entries(results || {});
     if (!entries.length) return '<p>No access tests run yet.</p>';
@@ -272,6 +292,37 @@
               <td>${escapeHtml(item.reason || '')}</td>
             </tr>
           `).join('') || '<tr><td colspan="3">No validation checks returned.</td></tr>'}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function renderWorkspaceIntakeRun(state) {
+    if (!state?.result) return '<p>No intake run yet.</p>';
+    const result = state.result || {};
+    const matches = result.matches || result.emails || [];
+    return `
+      <div style="margin-bottom:10px">
+        <strong>Dry-run intake</strong>
+        <span class="badge ${badgeClass(result.ok ? 'healthy' : 'red')}">${escapeHtml(result.ok ? 'ok' : 'failed')}</span>
+        <span style="margin-left:8px;color:#98a5c3">${escapeHtml(state.checked_at || '')}</span>
+      </div>
+      <div class="mini-grid" style="margin-bottom:12px">
+        <div><span>Address</span><strong>${escapeHtml(state.payload?.address || 'any')}</strong></div>
+        <div><span>Days</span><strong>${escapeHtml(String(state.payload?.days || 90))}</strong></div>
+        <div><span>Matches</span><strong>${escapeHtml(String(matches.length || 0))}</strong></div>
+        <div><span>Blocked</span><strong>${escapeHtml(String(Boolean(result.blocked)))}</strong></div>
+      </div>
+      <table>
+        <thead><tr><th>Subject / File</th><th>From / Type</th><th>Status</th></tr></thead>
+        <tbody>
+          ${matches.slice(0, 10).map((item) => `
+            <tr>
+              <td>${escapeHtml(item.subject || item.filename || item.address || '')}</td>
+              <td>${escapeHtml(item.from || item.docType || '')}</td>
+              <td>${escapeHtml(item.message || item.status || (item.files ? `${item.files.length} file(s)` : 'matched'))}</td>
+            </tr>
+          `).join('') || '<tr><td colspan="3">No intake matches returned.</td></tr>'}
         </tbody>
       </table>
     `;
@@ -472,6 +523,24 @@
       </div>
 
       <div class="card">
+        <h2>Dry-Run Intake</h2>
+        <div class="grid two">
+          <div>
+            <label>Target property address</label>
+            <input id="workspace-intake-address" placeholder="6453 Mahogany Peak Ave, Las Vegas, NV" />
+          </div>
+          <div>
+            <label>Lookback days</label>
+            <input id="workspace-intake-days" type="number" min="1" max="365" value="90" />
+          </div>
+        </div>
+        <div class="row-actions" style="margin-top:12px">
+          <button id="workspace-run-intake">Run dry intake</button>
+        </div>
+        <div id="workspace-intake-results">${renderWorkspaceIntakeRun(lastWorkspaceIntakeRun)}</div>
+      </div>
+
+      <div class="card">
         <h2>Inbox Intake Queue</h2>
         <table><thead><tr><th>Received</th><th>Subject</th><th>Category</th><th>Suggested transaction</th><th>Next step</th><th>Action</th></tr></thead><tbody>${queueRows}</tbody></table>
       </div>
@@ -537,6 +606,13 @@
     document.getElementById('workspace-dry-upload')?.addEventListener('click', async () => {
       try {
         await runWorkspaceDocumentAction('upload');
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    document.getElementById('workspace-run-intake')?.addEventListener('click', async () => {
+      try {
+        await runWorkspaceIntake();
       } catch (err) {
         alert(err.message);
       }
