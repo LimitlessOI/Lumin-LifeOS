@@ -112,6 +112,7 @@ Every claim lands in one of these buckets:
 - `GET /api/v1/clientcare-billing/ops/checklist`
 - `GET /api/v1/clientcare-billing/packaging/overview`
 - `GET /api/v1/clientcare-billing/packaging/readiness-report`
+- `POST /api/v1/clientcare-billing/packaging/validate`
 - `GET /api/v1/clientcare-billing/tenants`
 - `POST /api/v1/clientcare-billing/tenants`
 - `GET /api/v1/clientcare-billing/tenants/:tenantId/onboarding`
@@ -307,9 +308,9 @@ Operational inputs needed regardless of integration path:
 - [x] **Commercial payer rule overrides plus multi-coverage slot-targeted insurer repair** *(est: 8h | actual: 7h)* `[needs-review]`
 - [x] **Deeper commercial payer rules plus readiness/export packaging polish** *(est: 8h | actual: 7h)* `[needs-review]`
 - [x] **Coverage-safe multi-layout insurer repair targeting** *(est: 5h | actual: 4h)* `[needs-review]`
-- [ ] **→ NEXT: final external rollout polish and live-tenant validation** *(est: 2h)* `[high-risk]`
+- [x] **Final external rollout polish and live-tenant validation** *(est: 2h | actual: 2h)* `[needs-review]`
 
-**Progress:** 11/12 steps complete | Internal operational completeness reached; Est. remaining: ~2h to sellable v1
+**Progress:** 12/12 steps complete | Internal operational completeness reached; Sellable v1 complete
 
 ---
 
@@ -326,6 +327,7 @@ Operational inputs needed regardless of integration path:
 | 2026-03-27 | Added tenant-scoped operator-access enforcement headers and write-action gating for sellable packaging / recovery actions | 5h | 4h | -1h because the tenant and operator packaging tables were already live | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added deeper commercial payer override fields, readiness scoring, and exportable audit/readiness reports | 8h | 7h | -1h because existing packaging and payer-rule surfaces handled most of the route/UI wiring cleanly | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added selected-coverage persistence in the repair UI and value-hinted field targeting for multi-coverage browser writeback | 5h | 4h | -1h because the visible-slot targeting path already existed and only needed UI/state + browser matching hardening | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added live rollout validation checks and in-overlay go-live validation runner for tenant launch readiness | 2h | 2h | none | ✅ | ✅ | ✅ |
 
 ---
 

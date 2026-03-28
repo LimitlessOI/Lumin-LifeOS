@@ -54,6 +54,14 @@ function computeOnboardingReadiness({ tenant = {}, onboarding = {}, operators = 
   return { score, status, checks, blockers, next_actions: nextActions };
 }
 
+function summarizeValidationChecks(checks = []) {
+  const completed = checks.filter((item) => item.pass).length;
+  const score = Math.round((completed / Math.max(checks.length, 1)) * 100);
+  const blockers = checks.filter((item) => !item.pass).map((item) => item.label);
+  const status = score >= 90 ? 'validated' : score >= 70 ? 'nearly_ready' : score >= 40 ? 'partial' : 'blocked';
+  return { score, status, blockers };
+}
+
 export function createClientCareSellableService({ pool, logger = console }) {
   async function logAudit({
     tenantId = null,
@@ -321,7 +329,42 @@ export function createClientCareSellableService({ pool, logger = console }) {
     return `${rows.map((row) => row.map(csvEscape).join(',')).join('\n')}\n`;
   }
 
+  async function buildLiveValidation({
+    tenantId = null,
+    browserReadiness = null,
+    dashboard = null,
+    reimbursement = null,
+  } = {}) {
+    const overview = await getPackagingOverview({ tenantId, auditLimit: 50 });
+    const checks = [
+      { key: 'browser_ready', label: 'Browser automation credentials are ready', pass: Boolean(browserReadiness?.ready) },
+      { key: 'tenant_contact', label: 'Tenant contact information is set', pass: Boolean(String(overview.active_tenant?.contact_email || '').trim()) && Boolean(String(overview.active_tenant?.contact_name || '').trim()) },
+      { key: 'collections_fee', label: 'Collections fee is configured', pass: Number(overview.active_tenant?.collections_fee_pct || 0) > 0 },
+      { key: 'operator_access', label: 'At least one operator is active', pass: (overview.operators || []).some((entry) => entry.active) },
+      { key: 'audit_receipts', label: 'Audit receipts exist', pass: (overview.audit || []).length > 0 },
+      { key: 'claim_ledger', label: 'Claim ledger has imported claims', pass: Number(dashboard?.summary?.total_claims || 0) > 0 },
+      { key: 'payment_history', label: 'Payment history exists for forecast calibration', pass: Boolean(reimbursement?.summary?.has_history) },
+      { key: 'onboarding_review', label: 'Onboarding review is completed', pass: Boolean(overview.onboarding?.review_completed) },
+    ];
+    const summary = summarizeValidationChecks(checks);
+    return {
+      generated_at: new Date().toISOString(),
+      tenant: overview.active_tenant || DEFAULT_TENANT,
+      checks,
+      summary,
+      next_actions: summary.blockers.slice(0, 5),
+      detail: {
+        browser_ready: browserReadiness?.ready || false,
+        claim_count: Number(dashboard?.summary?.total_claims || 0),
+        has_payment_history: Boolean(reimbursement?.summary?.has_history),
+        operator_count: (overview.operators || []).length,
+        audit_events: (overview.audit || []).length,
+      },
+    };
+  }
+
   return {
+    buildLiveValidation,
     exportAuditLogCsv,
     getPackagingOverview,
     getReadinessReport,

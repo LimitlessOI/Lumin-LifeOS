@@ -18,6 +18,7 @@
   let lastAppeals = null;
   let lastOpsOverview = null;
   let lastPackagingOverview = null;
+  let lastPackagingValidation = null;
   let lastBrowserResult = null;
   let lastViewState = null;
   const repairSlotByHref = new Map();
@@ -92,8 +93,8 @@
     repairSlotByHref.set(key, Math.max(0, Math.floor(Number(slot) || 0)));
   }
 
-  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview) {
-    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview };
+  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation) {
+    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation };
   }
 
   function rerender() {
@@ -116,6 +117,7 @@
       lastViewState.underpayments,
       lastViewState.appeals,
       lastViewState.packagingOverview,
+      lastViewState.packagingValidation,
     );
     void ensureAssistantSession();
   }
@@ -1220,6 +1222,34 @@
     `;
   }
 
+  function renderPackagingValidation(validation) {
+    const report = validation?.report || validation || null;
+    if (!report) return '<p class="muted">No live validation run yet.</p>';
+    const summary = report.summary || {};
+    const checks = report.checks || [];
+    return `
+      <div class="stack">
+        <div class="grid three">
+          <div class="card stat"><span>Validation score</span><strong>${escapeHtml(`${Number(summary.score || 0)}%`)}</strong></div>
+          <div class="card stat"><span>Status</span><strong>${escapeHtml(String(summary.status || 'blocked').replace(/_/g, ' '))}</strong></div>
+          <div class="card stat"><span>Blockers</span><strong>${escapeHtml((summary.blockers || []).length)}</strong></div>
+        </div>
+        <table>
+          <thead><tr><th>Check</th><th>Status</th></tr></thead>
+          <tbody>
+            ${checks.length ? checks.map((check) => `<tr><td>${escapeHtml(check.label || '')}</td><td>${escapeHtml(check.pass ? 'Pass' : 'Open')}</td></tr>`).join('') : '<tr><td colspan="2">No validation checks yet.</td></tr>'}
+          </tbody>
+        </table>
+        <div>
+          <strong>Next actions</strong>
+          <ul class="detail-list">
+            ${(report.next_actions || []).length ? report.next_actions.map((item) => `<li>${escapeHtml(item)}</li>`).join('') : '<li>No open rollout blockers.</li>'}
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
   function renderBrowserOutput(result) {
     if (!result) return '<p class="muted">No browser run yet.</p>';
 
@@ -1439,7 +1469,7 @@
       lastAppeals = appeals || null;
       lastPackagingOverview = packagingOverview || null;
       if (!selectedTenantId && packagingOverview?.overview?.summary?.active_tenant_id) setSelectedTenantId(packagingOverview.overview.summary.active_tenant_id);
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastPayerRules, lastEraInsights, lastPatientArPolicy, lastPatientArEscalation, lastOpsOverview, lastUnderpayments, lastAppeals, lastPackagingOverview);
+      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastPayerRules, lastEraInsights, lastPatientArPolicy, lastPatientArEscalation, lastOpsOverview, lastUnderpayments, lastAppeals, lastPackagingOverview, lastPackagingValidation);
       await ensureAssistantSession();
       if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
@@ -1951,6 +1981,21 @@
     }
   }
 
+  async function runPackagingValidation() {
+    try {
+      lastPackagingValidation = await api('/api/v1/clientcare-billing/packaging/validate', {
+        method: 'POST',
+        body: JSON.stringify({
+          tenant_id: selectedTenantId || null,
+          actor: 'overlay',
+        }),
+      });
+      rerender();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function browserExtract(importIntoQueue = false) {
     try {
       const result = await api('/api/v1/clientcare-billing/browser/extract-claims', {
@@ -2201,8 +2246,8 @@
     }
   }
 
-  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview) {
-    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview);
+  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation) {
+    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation);
     const summary = dashboard.summary || {};
     const liveSummary = lastAccountReport?.summary || null;
     const patientArSummary = opsOverview?.patient_ar?.summary || {};
@@ -2300,6 +2345,13 @@
             <h2>Sellable Packaging</h2>
             <p class="hint" style="margin:10px 0">Tenant setup, onboarding, operator access, and audit trail.</p>
             <div id="packaging-overview">${renderPackagingOverview(packagingOverview)}</div>
+          </div>
+
+          <div class="card">
+            <h2>Live Rollout Validation</h2>
+            <p class="hint" style="margin:10px 0">Cross-check actual browser readiness, claim history, operator access, and audit receipts before go-live.</p>
+            <div class="row-actions" style="margin-bottom:10px"><button id="packaging-validate">Run validation</button></div>
+            <div id="packaging-validation">${renderPackagingValidation(packagingValidation)}</div>
           </div>
 
           <details class="card tools-card">
@@ -2444,12 +2496,12 @@
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
     document.getElementById('assistant-pin-toggle').addEventListener('click', () => {
       setAssistantPinned(!assistantPinned);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, lastPackagingValidation);
       ensureAssistantSession();
     });
     document.getElementById('assistant-open-toggle').addEventListener('click', () => {
       setAssistantOpen(!assistantOpen);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, lastPackagingValidation);
       ensureAssistantSession();
     });
     document.getElementById('assistant-input').addEventListener('keydown', (event) => {
@@ -2474,6 +2526,8 @@
     if (onboardingSaveButton) onboardingSaveButton.addEventListener('click', saveTenantOnboarding);
     const readinessExportButton = document.getElementById('readiness-export');
     if (readinessExportButton) readinessExportButton.addEventListener('click', exportReadinessReport);
+    const packagingValidateButton = document.getElementById('packaging-validate');
+    if (packagingValidateButton) packagingValidateButton.addEventListener('click', runPackagingValidation);
     const operatorSaveButton = document.getElementById('operator-save');
     if (operatorSaveButton) operatorSaveButton.addEventListener('click', saveOperatorAccess);
     const auditExportButton = document.getElementById('audit-export');

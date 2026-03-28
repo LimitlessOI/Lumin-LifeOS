@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "sellable-v1-hardening",
-  "next_task": "Finish sellable-v1 with final external rollout polish and live-tenant validation.",
+  "next_task": "Sellable v1 is complete. Next work is optional post-v1 validation on real tenant data and future product expansion.",
   "stability_class": "needs-review",
-  "current_focus": "Internal operational completeness is in place. Commercial payer override depth, packaging readiness/report exports, and coverage-safe multi-layout repair targeting are now live; the remaining sellable-v1 work is final rollout polish and live-tenant validation.",
+  "current_focus": "Internal operational completeness and sellable v1 completeness are now in place. Remaining work is post-v1 validation on real tenant data and future product expansion rather than core build completion.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -157,6 +157,12 @@
       "path": "/api/v1/clientcare-billing/packaging/readiness-report",
       "expected_status": 200,
       "description": "Tenant readiness report"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/packaging/validate",
+      "expected_status": 200,
+      "description": "Run live rollout validation"
     },
     {
       "method": "GET",
@@ -381,9 +387,10 @@
     "Sellable packaging overview supports tenant profile, onboarding state, operator access, and tenant-scoped audit history",
     "Packaging overview exposes readiness score, blockers, and next actions for external rollout",
     "Packaging can export readiness JSON and audit CSV without leaving the overlay",
+    "Packaging can run live rollout validation against browser readiness, claim history, operators, and audit receipts",
     "Commercial payer overrides can store denial lane, follow-up cadence, escalation timing, and expected lag/reimbursement baselines",
     "Packaging overview can switch tenants without leaving the overlay",
-    "Internal operational completeness reached; remaining work is sellable-v1 hardening and commercial/polish depth",
+    "Internal operational completeness and sellable v1 completeness are both reached",
     "Tenant-scoped operator access gates write actions when operators are configured for that tenant"
   ],
   "anti_drift_notes": "This product has two data layers: the live ClientCare browser backlog and the local claim ledger. Do not assume the claim ledger reflects the live backlog unless imports have run. Keep the overlay fast by loading backlog summary first and account details lazily. Do not enable autonomous collections behavior; all outreach and writeback remains provider-directed and compliance-gated.",
@@ -413,8 +420,8 @@
       "resolved": false
     },
     {
-      "description": "Tenant-scoped operator access now gates write actions, but external onboarding UX still needs polish for low-friction rollout",
-      "resolved": false
+      "description": "Tenant-scoped operator access now gates write actions, and live rollout validation exists; what remains is real-tenant operational learning rather than core packaging gaps",
+      "resolved": true
     }
   ],
   "last_verified_at": null,

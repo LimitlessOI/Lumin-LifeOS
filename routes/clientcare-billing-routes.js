@@ -175,6 +175,30 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.post('/packaging/validate', async (req, res) => {
+    try {
+      const tenantId = req.body?.tenant_id || req.query?.tenant_id || null;
+      const report = await sellableService.buildLiveValidation({
+        tenantId,
+        browserReadiness: browserService.getReadiness(),
+        dashboard: await billingService.getDashboard(),
+        reimbursement: await billingService.getReimbursementIntelligence(),
+      });
+      await sellableService.logAudit({
+        tenantId: tenantId || report.tenant?.id || null,
+        actor: String(req.body?.actor || 'overlay'),
+        actionType: 'packaging_validate',
+        entityType: 'tenant',
+        entityId: String(report.tenant?.id || report.tenant?.slug || ''),
+        details: report.summary,
+      });
+      res.json({ ok: true, report });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] packaging validation failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/tenants', async (_req, res) => {
     try {
       const tenants = await sellableService.listTenants();
