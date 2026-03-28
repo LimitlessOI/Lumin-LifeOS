@@ -7,15 +7,16 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "stabilization",
-  "next_task": "Make the overlay mobile-responsive and add role-based access controls",
+  "next_task": "Make the overlay mobile-responsive, add role-based access controls, and continue expanding governance/env-awareness drill-downs",
   "stability_class": "needs-review",
-  "current_focus": "Governance panels are live and Operator Chat now has browser voice input/spoken replies; next step is mobile responsiveness and access control",
+  "current_focus": "Governance panels are live, Operator Chat now has browser voice input/spoken replies, and Secrets Vault now exposes env-registry health so builders/operators can verify env presence without exposing secret values; next step is mobile responsiveness and access control",
   "owned_files": [
     "routes/command-center-routes.js",
     "public/overlay/command-center.html",
     "public/overlay/command-center.js",
     "public/overlay/index.html",
-    "public/shared/lifeos-voice-chat.js"
+    "public/shared/lifeos-voice-chat.js",
+    "docs/ENV_REGISTRY.md"
   ],
   "protected_files": [
     "server.js",
@@ -28,7 +29,8 @@
     "public/overlay/command-center.js",
     "services/ai-guard.js",
     "src/server/auth/requireKey.js",
-    "public/shared/lifeos-voice-chat.js"
+    "public/shared/lifeos-voice-chat.js",
+    "docs/ENV_REGISTRY.md"
   ],
   "required_routes": [
     {
@@ -134,7 +136,8 @@
     "Pending Adam panel shows unresolved items",
     "AI Safety Controls toggle works",
     "Reality snapshot endpoint works",
-    "Operator Chat supports browser voice input and optional spoken replies"
+    "Operator Chat supports browser voice input and optional spoken replies",
+    "Secrets Vault shows env-registry health, including missing critical and revenue-blocking vars without exposing secret values"
   ],
   "anti_drift_notes": "The ai-guard.js ensureExpectedRealityHash() must NOT be called in configureAiGuard() \u2014 only lazily on first request. This was the cause of the REALITY_MISMATCH 409 bug. Do not revert this. The requireKey middleware checks x-command-key, x-api-key, x-lifeos-key headers against COMMAND_CENTER_KEY env var.",
   "decision_debt": [

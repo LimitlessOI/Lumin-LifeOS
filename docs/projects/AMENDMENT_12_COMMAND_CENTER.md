@@ -240,6 +240,7 @@ node --check public/overlay/command-center.js
 | 2026-03-27 | Projects Dashboard + Pending Adam panels added | SSOT governance build | ✅ | ✅ | pending |
 | 2026-03-27 | Builder Control Panel added to command-center.html | Surface builder supervisor state, controls, Adam accuracy | ✅ | ✅ | pending |
 | 2026-03-28 | Added shared browser voice controls to Operator Chat | Give C&C hands-free dictation and optional spoken replies without changing chat routing | ✅ | ✅ | pending |
+| 2026-03-28 | Added env-registry health panel to Secrets Vault | Make build-time env awareness visible in Command Center so builders/operators can see what exists, what is missing, and what blocks revenue without exposing secret values | ✅ | pending | pending |
 | 2026-03-13 | Initial extraction from server.js | server.js refactor | ✅ | n/a | n/a |
 
 ---

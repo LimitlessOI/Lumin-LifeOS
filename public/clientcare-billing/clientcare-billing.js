@@ -1484,6 +1484,23 @@
   async function loadDashboard(filters = {}, options = {}) {
     const root = document.getElementById('app');
     try {
+      const hasApiKey = Boolean(getApiKey().trim());
+      if (!hasApiKey) {
+        lastReimbursementIntelligence = null;
+        lastPayerPlaybooks = null;
+        lastPayerRules = null;
+        lastEraInsights = null;
+        lastPatientArPolicy = null;
+        lastPatientArEscalation = null;
+        lastOpsOverview = null;
+        lastUnderpayments = null;
+        lastAppeals = null;
+        lastPackagingOverview = null;
+        lastPackagingValidationHistory = null;
+        render(root, {}, { ready: false, checks: [], missing: ['COMMAND_CENTER_KEY'] }, [], [], [], {}, null, null, null, null, null, null, null, null, null, null, null, null);
+        return;
+      }
+
       const query = new URLSearchParams(filters).toString();
       const packagingPath = `/api/v1/clientcare-billing/packaging/overview${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
       const validationHistoryPath = `/api/v1/clientcare-billing/packaging/validation-history${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
@@ -2361,8 +2378,17 @@
   }
 
   function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation, packagingValidationHistory) {
+    dashboard = dashboard || {};
+    readiness = readiness || { ready: false, checks: [], missing: [] };
+    templateFields = Array.isArray(templateFields) ? templateFields : [];
+    claims = Array.isArray(claims) ? claims : [];
+    actions = Array.isArray(actions) ? actions : [];
+    reconciliation = reconciliation || {};
+    packagingOverview = packagingOverview || null;
+    packagingValidation = packagingValidation || null;
+    packagingValidationHistory = packagingValidationHistory || null;
     saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation, packagingValidationHistory);
-    const summary = dashboard.summary || {};
+    const summary = dashboard?.summary || {};
     const liveSummary = lastAccountReport?.summary || null;
     const patientArSummary = opsOverview?.patient_ar?.summary || {};
     const forecastBuckets = intelligence?.collection_forecast?.timing_buckets || [];
@@ -2412,6 +2438,7 @@
           <div class="eyebrow">ClientCare West</div>
           <h1>Collections Control Center</h1>
           <p class="muted">Live billing backlog, collections forecasting, and operator controls.</p>
+          ${getApiKey().trim() ? '' : '<div class="card" style="margin-top:14px;background:#4a1f28;border-color:#ef476f;"><strong style="color:#ffb4c1">Access needed</strong><p class="muted" style="margin-top:8px;color:#ffd5dd">Save the command key below to unlock live billing data. The overlay now opens safely without crashing when protected endpoints return 401.</p></div>'}
         </div>
         <div class="card" style="min-width:320px;">
           <label for="api-key">Command key</label>

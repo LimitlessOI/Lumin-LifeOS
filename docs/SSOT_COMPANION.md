@@ -69,6 +69,7 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - Every build-plan item must carry an estimate before work starts and an actual once work finishes.
 - Every meaningful implementation session should record timing strongly enough that we can improve estimate accuracy over time and identify where the build loop can be made faster.
 - “Done” now includes timing truth: the amendment/manifest/change receipt should make it clear what was estimated, what actually happened, and where the time went if the estimate was materially wrong.
+- Before any build lane assumes runtime capability, it must check live env awareness against `docs/ENV_REGISTRY.md` and `/api/v1/railway/managed-env/registry`. Builders may reason from presence/non-presence and category health there, but must never expose secret values.
 
 ## 0.6 Directed Mode Rule (NEW)
 - Default operating posture is now directed mode: the system does not autonomously build, research, self-improve, market, or spend unless explicitly instructed or explicitly re-enabled.
