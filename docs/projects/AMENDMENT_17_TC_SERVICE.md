@@ -762,7 +762,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 |---|---|---|---|---|---|
 | 2026-03-27 | Added Build Plan, Anti-Drift, Decision Log, Handoff, Runbook, Decision Debt, Change Receipts | SSOT template compliance | ✅ | ✅ | pending |
 | 2026-03-27 | Added TC access readiness/bootstrap routes and corrected startup guards to use real env/vault readiness checks | Unblock first live email intake and browser access setup | ✅ | ✅ | pending |
-| 2026-03-27 | Added agent intake workspace with access setup form, inbox triage queue, and suggested transaction matching | Give the operator a single place to enter secrets, monitor readiness, and route paperwork before live filing | ✅ | ✅ | pending |
+| 2026-03-27 | Added agent intake workspace with access setup form, dry-run GLVAR/SkySlope checks, inbox triage queue, and suggested transaction matching | Give the operator a single place to enter secrets, verify access, monitor readiness, and route paperwork before live filing | ✅ | ✅ | pending |
 | 2026-03-27 | Added triage preview-text enrichment, message-id capture, and stronger workspace matching signals | Improve inbox classification quality and make intake routing more useful before live filing credentials are entered | ✅ | ✅ | pending |
 | 2026-03-26 | TC runtime wiring hardened — account-manager, notification service, IMAP consistency | Fix runtime injection errors | ✅ | n/a | pending |
 | 2026-03-25 | TC portal, reporting, approvals, alerts migrations | DB schema completion | ✅ | n/a | n/a |

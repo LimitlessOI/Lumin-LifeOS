@@ -1,4 +1,6 @@
 (function () {
+  let lastWorkspaceTests = null;
+
   function getApiKey() {
     return (
       localStorage.getItem('COMMAND_CENTER_KEY') ||
@@ -146,12 +148,52 @@
     await load();
   }
 
+  async function runAccessTest(kind) {
+    const path = kind === 'glvar'
+      ? '/api/v1/tc/test-glvar-login'
+      : '/api/v1/tc/test-skyslope-login';
+    const result = await api(path, {
+      method: 'POST',
+      body: JSON.stringify({ dryRun: true }),
+    });
+    lastWorkspaceTests = {
+      ...(lastWorkspaceTests || {}),
+      [kind]: {
+        checked_at: new Date().toISOString(),
+        ok: Boolean(result.ok),
+        screenshots: result.screenshots || [],
+      },
+    };
+    const node = document.getElementById('access-test-results');
+    if (node) node.innerHTML = renderWorkspaceTests(lastWorkspaceTests);
+  }
+
   async function markTriageHandled(id) {
     await api(`/api/v1/tc/email/triage/${id}/action`, {
       method: 'POST',
       body: JSON.stringify({ notes: 'Handled from TC intake workspace' }),
     });
     await load();
+  }
+
+  function renderWorkspaceTests(results) {
+    const entries = Object.entries(results || {});
+    if (!entries.length) return '<p>No access tests run yet.</p>';
+    return `
+      <table>
+        <thead><tr><th>Check</th><th>Status</th><th>Checked</th><th>Screenshots</th></tr></thead>
+        <tbody>
+          ${entries.map(([key, value]) => `
+            <tr>
+              <td>${escapeHtml(key)}</td>
+              <td><span class="badge ${badgeClass(value.ok ? 'healthy' : 'red')}">${escapeHtml(value.ok ? 'ok' : 'failed')}</span></td>
+              <td>${escapeHtml(value.checked_at || '')}</td>
+              <td>${escapeHtml(String((value.screenshots || []).length))}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
   }
 
   function renderWorkspace(data) {
@@ -280,6 +322,11 @@
 
         <div class="card">
           <h2>Readiness Details</h2>
+          <div class="row-actions" style="margin-bottom:12px">
+            <button id="test-glvar" class="ghost">Test GLVAR</button>
+            <button id="test-skyslope" class="ghost">Test SkySlope</button>
+          </div>
+          <div id="access-test-results">${renderWorkspaceTests(lastWorkspaceTests)}</div>
           <table><thead><tr><th>Env</th><th>Purpose</th><th>Status</th></tr></thead><tbody>${envRows}</tbody></table>
           <h2 style="margin-top:16px">Vault Credentials</h2>
           <table><thead><tr><th>Service</th><th>Key</th><th>Status</th></tr></thead><tbody>${vaultRows}</tbody></table>
@@ -319,6 +366,20 @@
     document.getElementById('search-agreements')?.addEventListener('click', async () => {
       try {
         await runExecutedAgreementSearch();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    document.getElementById('test-glvar')?.addEventListener('click', async () => {
+      try {
+        await runAccessTest('glvar');
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    document.getElementById('test-skyslope')?.addEventListener('click', async () => {
+      try {
+        await runAccessTest('skyslope');
       } catch (err) {
         alert(err.message);
       }
