@@ -4,6 +4,16 @@ export function registerPublicRoutes(app, {
   __dirname,
   COMMAND_CENTER_KEY,
 }) {
+  function sendPublicFileNoCache(res, filePath) {
+    res.set({
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      Pragma: "no-cache",
+      Expires: "0",
+      "Surrogate-Control": "no-store",
+    });
+    return res.sendFile(filePath);
+  }
+
   // ==================== COMMAND CENTER ROUTES (FIRST - Before all middleware) ====================
   // These MUST be defined before static middleware to work correctly
   app.get("/activate", (req, res) => {
@@ -28,7 +38,7 @@ export function registerPublicRoutes(app, {
       "command-center.html"
     );
     if (fs.existsSync(filePath)) {
-      return res.sendFile(filePath);
+      return sendPublicFileNoCache(res, filePath);
     }
     return res
       .status(404)
@@ -37,19 +47,19 @@ export function registerPublicRoutes(app, {
 
   app.get("/tc", (req, res) => {
     const filePath = path.join(__dirname, "public", "tc", "agent-portal.html");
-    if (fs.existsSync(filePath)) return res.sendFile(filePath);
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
     return res.status(404).send("TC agent portal not found.");
   });
 
   app.get("/tc/client", (req, res) => {
     const filePath = path.join(__dirname, "public", "tc", "client-portal.html");
-    if (fs.existsSync(filePath)) return res.sendFile(filePath);
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
     return res.status(404).send("TC client portal not found.");
   });
 
   app.get("/clientcare-billing", (req, res) => {
     const filePath = path.join(__dirname, "public", "clientcare-billing", "overlay.html");
-    if (fs.existsSync(filePath)) return res.sendFile(filePath);
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
     return res.status(404).send("ClientCare billing overlay not found.");
   });
 
@@ -61,7 +71,7 @@ export function registerPublicRoutes(app, {
     if (key && key === COMMAND_CENTER_KEY) {
       const filePath = path.join(__dirname, "public", "overlay", "boldtrail.html");
       if (fs.existsSync(filePath)) {
-        return res.sendFile(filePath);
+        return sendPublicFileNoCache(res, filePath);
       } else {
         return res.status(404).send("BoldTrail overlay not found.");
       }
@@ -79,7 +89,7 @@ export function registerPublicRoutes(app, {
       "website-audit.html"
     );
     if (fs.existsSync(filePath)) {
-      return res.sendFile(filePath);
+      return sendPublicFileNoCache(res, filePath);
     }
     res.status(404).send("Website audit overlay not found.");
   });
@@ -92,7 +102,7 @@ export function registerPublicRoutes(app, {
       "website-audit.html"
     );
     if (fs.existsSync(filePath)) {
-      return res.sendFile(filePath);
+      return sendPublicFileNoCache(res, filePath);
     }
     res.status(404).send("Website audit overlay not found.");
   });

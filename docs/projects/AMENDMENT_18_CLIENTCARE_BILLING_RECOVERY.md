@@ -335,6 +335,7 @@ Operational inputs needed regardless of integration path:
 | 2026-03-28 | Fixed overlay resilience — switched Promise.all -> Promise.allSettled in loadDashboard so a single failing endpoint no longer blanks the whole page; failed endpoints shown as named warning banner | 1h | 0.5h | was blocking all dashboard loads when any one of 17 endpoints errored | ✅ | ✅ | ✅ |
 | 2026-03-28 | Added shared browser voice controls to the Operations Assistant with optional spoken replies | 2h | 2h | none | ✅ | ✅ | ✅ |
 | 2026-03-28 | Fixed billing overlay render guards and added no-key setup fallback so protected-endpoint 401s no longer crash the page | 1h | 1h | none | ✅ | pending | pending |
+| 2026-03-28 | Added no-cache public overlay delivery and versioned overlay scripts | 0.5h | 0.5h | none | ✅ | pending | pending |
 
 ---
 
