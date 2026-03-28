@@ -330,6 +330,14 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
     return rows;
   }
 
+  async function getTriagedEmail(id) {
+    const { rows } = await pool.query(
+      `SELECT * FROM email_triage_log WHERE id=$1 LIMIT 1`,
+      [id]
+    ).catch(() => ({ rows: [] }));
+    return rows[0] || null;
+  }
+
   /**
    * Mark an email as actioned (handled).
    */
@@ -345,6 +353,7 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
     scanInbox,
     sendDailyDigest,
     startTriageCron,
+    getTriagedEmail,
     getTriagedEmails,
     markActioned,
   };

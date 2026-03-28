@@ -1618,6 +1618,32 @@ export function createTCRoutes(
     }
   });
 
+  router.post('/email/triage/:id/create-transaction', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const triage = createEmailTriage({ pool, logger });
+      const item = await triage.getTriagedEmail(parseInt(req.params.id, 10));
+      if (!item) return res.status(404).json({ ok: false, error: 'Email not found' });
+      if (item.category !== 'tc_contract') {
+        return res.status(400).json({ ok: false, error: 'Only tc_contract emails can create a transaction' });
+      }
+
+      const emailText = [
+        `Subject: ${item.subject || ''}`,
+        `From: ${item.from_address || ''}`,
+        `Preview: ${item.preview_text || ''}`,
+        `Notes: ${item.notes || ''}`,
+      ].join('\n');
+
+      const result = await coordinator.processNewContract(emailText, item.message_id || item.uid || null);
+      await triage.markActioned(item.id, `Transaction created from triage email → #${result.transactionId}`);
+      res.json({ ok: true, item: await triage.getTriagedEmail(item.id), result });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] triage create transaction error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // POST /api/v1/tc/test-glvar-mls — login to GLVAR then navigate to MLS
   router.post('/test-glvar-mls', requireKey, async (req, res) => {
     try {

@@ -176,6 +176,14 @@
     await load();
   }
 
+  async function createTransactionFromTriage(id) {
+    await api(`/api/v1/tc/email/triage/${id}/create-transaction`, {
+      method: 'POST',
+      body: JSON.stringify({}),
+    });
+    await load();
+  }
+
   function renderWorkspaceTests(results) {
     const entries = Object.entries(results || {});
     if (!entries.length) return '<p>No access tests run yet.</p>';
@@ -233,7 +241,12 @@
         <td><span class="badge ${badgeClass(item.category)}">${escapeHtml(item.category || '')}</span></td>
         <td>${item.suggested_transaction ? `<a href="/tc/agent-portal.html?tx=${encodeURIComponent(item.suggested_transaction.transaction_id)}">${escapeHtml(item.suggested_transaction.address)}</a> <span class="badge ${badgeClass(item.suggested_transaction.confidence)}">${escapeHtml(item.suggested_transaction.confidence)}</span>` : '—'}</td>
         <td>${escapeHtml(item.next_step || '')}${item.preview_text ? `<div style="margin-top:6px;color:#98a5c3;font-size:12px">${escapeHtml(item.preview_text)}</div>` : ''}</td>
-        <td><button data-triage-handle="${item.id}" class="ghost">${item.actioned_at ? 'Handled' : 'Mark handled'}</button></td>
+        <td>
+          <div class="row-actions">
+            ${item.category === 'tc_contract' && !item.suggested_transaction ? `<button data-triage-create="${item.id}">Create transaction</button>` : ''}
+            <button data-triage-handle="${item.id}" class="ghost">${item.actioned_at ? 'Handled' : 'Mark handled'}</button>
+          </div>
+        </td>
       </tr>
     `).join('') || '<tr><td colspan="6">No actionable triage items.</td></tr>';
 
@@ -389,6 +402,15 @@
         if (button.textContent === 'Handled') return;
         try {
           await markTriageHandled(button.dataset.triageHandle);
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+    });
+    root.querySelectorAll('[data-triage-create]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        try {
+          await createTransactionFromTriage(button.dataset.triageCreate);
         } catch (err) {
           alert(err.message);
         }

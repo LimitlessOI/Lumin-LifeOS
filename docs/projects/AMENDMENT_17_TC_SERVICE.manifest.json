@@ -46,7 +46,8 @@
     { "method": "POST", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "Create transaction" },
     { "method": "GET", "path": "/api/v1/tc/access/readiness", "expected_status": 200, "description": "TC access readiness status" },
     { "method": "POST", "path": "/api/v1/tc/access/bootstrap", "expected_status": 200, "description": "TC access bootstrap" },
-    { "method": "GET", "path": "/api/v1/tc/intake/workspace", "expected_status": 200, "description": "TC intake workspace summary" }
+    { "method": "GET", "path": "/api/v1/tc/intake/workspace", "expected_status": 200, "description": "TC intake workspace summary" },
+    { "method": "POST", "path": "/api/v1/tc/email/triage/:id/create-transaction", "expected_status": 200, "description": "Create placeholder transaction from triaged contract email" }
   ],
   "required_tables": [
     { "name": "tc_transactions", "required_columns": ["id", "address", "status", "agent_name"] },
@@ -70,6 +71,7 @@
     "TC access readiness route accurately reports missing/present IMAP and vault-backed browser credentials",
     "Agent portal without a transaction id shows the intake workspace with readiness, triage, and suggested transaction matches",
     "Email triage stores preview text and message identity when enrichment columns are available, improving workspace routing quality",
+    "The intake workspace can create a placeholder transaction directly from a triaged contract email",
     "First live transaction (6453 Mahogany Peak) created and tracked in DB",
     "Email triage picks up TC-related emails and routes to correct transaction",
     "Deadline tracker fires reminders at correct intervals",
