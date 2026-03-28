@@ -9,6 +9,7 @@ import { randomUUID } from 'crypto';
 import { createClientCareBillingService } from '../services/clientcare-billing-service.js';
 import { createClientCareBrowserService } from '../services/clientcare-browser-service.js';
 import { createClientCareOpsService } from '../services/clientcare-ops-service.js';
+import { createClientCareSellableService } from '../services/clientcare-sellable-service.js';
 import { createClientCareSyncService } from '../services/clientcare-sync-service.js';
 import { createConversationStore } from '../services/conversation-store.js';
 
@@ -18,6 +19,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   const syncService = createClientCareSyncService({ billingService, logger });
   const browserService = createClientCareBrowserService({ logger, syncService });
   const opsService = createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember, logger });
+  const sellableService = createClientCareSellableService({ pool, logger });
   const conversationStore = createConversationStore(pool);
 
   router.use(express.json({ limit: '5mb' }));
@@ -52,6 +54,33 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, ...playbooks });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] payer playbooks failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/payer-rules', async (_req, res) => {
+    try {
+      const rules = await billingService.listPayerRuleOverrides();
+      res.json({ ok: true, rules });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] payer rules failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/payer-rules', async (req, res) => {
+    try {
+      const rule = await billingService.savePayerRuleOverride(req.body || {});
+      await sellableService.logAudit({
+        actor: String(req.body?.updated_by || 'overlay'),
+        actionType: 'payer_rule_save',
+        entityType: 'payer_rule',
+        entityId: String(rule.payer_name || ''),
+        details: rule,
+      });
+      res.json({ ok: true, rule });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] save payer rule failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });
@@ -102,6 +131,116 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, checklist });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] ops checklist failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/packaging/overview', async (req, res) => {
+    try {
+      const overview = await sellableService.getPackagingOverview({
+        tenantId: req.query?.tenant_id || null,
+        auditLimit: req.query?.audit_limit || 20,
+      });
+      res.json({ ok: true, overview });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] packaging overview failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/tenants', async (_req, res) => {
+    try {
+      const tenants = await sellableService.listTenants();
+      res.json({ ok: true, tenants });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] list tenants failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/tenants', async (req, res) => {
+    try {
+      const tenant = await sellableService.saveTenant(req.body || {});
+      await sellableService.logAudit({
+        tenantId: tenant.id || null,
+        actor: String(req.body?.actor || 'overlay'),
+        actionType: 'tenant_save',
+        entityType: 'tenant',
+        entityId: String(tenant.id || tenant.slug || ''),
+        details: tenant,
+      });
+      res.json({ ok: true, tenant });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] save tenant failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/tenants/:tenantId/onboarding', async (req, res) => {
+    try {
+      const onboarding = await sellableService.getOnboarding(req.params.tenantId);
+      res.json({ ok: true, onboarding });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] onboarding fetch failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/tenants/:tenantId/onboarding', async (req, res) => {
+    try {
+      const onboarding = await sellableService.saveOnboarding(req.params.tenantId, req.body || {});
+      await sellableService.logAudit({
+        tenantId: req.params.tenantId,
+        actor: String(req.body?.actor || 'overlay'),
+        actionType: 'onboarding_save',
+        entityType: 'onboarding',
+        entityId: String(req.params.tenantId),
+        details: onboarding,
+      });
+      res.json({ ok: true, onboarding });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] onboarding save failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/tenants/:tenantId/operators', async (req, res) => {
+    try {
+      const operators = await sellableService.listOperatorAccess(req.params.tenantId);
+      res.json({ ok: true, operators });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] operator list failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/tenants/:tenantId/operators', async (req, res) => {
+    try {
+      const operator = await sellableService.saveOperatorAccess(req.params.tenantId, req.body || {});
+      await sellableService.logAudit({
+        tenantId: req.params.tenantId,
+        actor: String(req.body?.actor || 'overlay'),
+        actionType: 'operator_access_save',
+        entityType: 'operator_access',
+        entityId: String(operator.id || operator.operator_email || ''),
+        details: operator,
+      });
+      res.json({ ok: true, operator });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] operator save failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/audit-log', async (req, res) => {
+    try {
+      const audit = await sellableService.listAuditLog({
+        tenantId: req.query?.tenant_id || null,
+        limit: req.query?.limit || 50,
+      });
+      res.json({ ok: true, audit });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] audit log failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });
@@ -157,6 +296,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         requestedBy: String(req.body?.requested_by || 'overlay'),
       });
       if (!result.ok) return res.status(500).json(result);
+      await sellableService.logAudit({
+        actor: String(req.body?.requested_by || 'overlay'),
+        actionType: result.dryRun ? 'repair_preview' : 'repair_apply',
+        entityType: 'billing_account',
+        entityId: String(billingHref),
+        details: { updates: req.body?.updates || {}, dry_run: req.body?.dry_run !== false },
+      });
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] repair account failed');
@@ -199,6 +345,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const policy = await opsService.savePatientArPolicy(req.body || {}, {
         updatedBy: String(req.body?.updated_by || 'overlay'),
       });
+      await sellableService.logAudit({
+        actor: String(req.body?.updated_by || 'overlay'),
+        actionType: 'patient_ar_policy_save',
+        entityType: 'patient_ar_policy',
+        entityId: 'default',
+        details: policy,
+      });
       res.json({ ok: true, policy });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] save patient AR policy failed');
@@ -223,6 +376,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         actionType: req.body?.action_type || 'patient_ar_followup',
       });
       if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
+      await sellableService.logAudit({
+        actor: String(req.body?.owner || 'overlay'),
+        actionType: req.body?.action_type || 'patient_ar_followup',
+        entityType: 'claim_action',
+        entityId: String(result.action?.id || req.params.claimId),
+        details: result,
+      });
       res.json({ ok: true, ...result });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] patient AR queue action failed');
@@ -619,6 +779,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         actionType: req.body?.action_type || 'appeal_followup',
       });
       if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
+      await sellableService.logAudit({
+        actor: String(req.body?.owner || 'overlay'),
+        actionType: req.body?.action_type || 'appeal_followup',
+        entityType: 'claim_action',
+        entityId: String(result.action?.id || req.params.claimId),
+        details: result,
+      });
       res.json({ ok: true, ...result });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] queue appeal action failed');
@@ -633,6 +800,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         actionType: req.body?.action_type || 'underpayment_review',
       });
       if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
+      await sellableService.logAudit({
+        actor: String(req.body?.owner || 'overlay'),
+        actionType: req.body?.action_type || 'underpayment_review',
+        entityType: 'claim_action',
+        entityId: String(result.action?.id || req.params.claimId),
+        details: result,
+      });
       res.json({ ok: true, ...result });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] queue underpayment action failed');

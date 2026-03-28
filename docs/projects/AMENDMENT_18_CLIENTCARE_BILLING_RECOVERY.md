@@ -94,18 +94,29 @@ Every claim lands in one of these buckets:
 | `services/clientcare-browser-service.js` | No-API browser-readiness contract, login automation, and page discovery |
 | `services/clientcare-ops-service.js` | Operations checklist, assistant execution layer, insurance-intake preview, patient AR summary |
 | `services/clientcare-sync-service.js` | Snapshot parsing, fallback import, and reconciliation logic |
+| `services/clientcare-sellable-service.js` | Tenant boundaries, onboarding, operator access, and audit helpers |
 | `routes/clientcare-billing-routes.js` | Operational API for imports, classification, rescue queue, browser readiness |
 | `public/clientcare-billing/overlay.html` | Operator overlay page for claims rescue |
 | `public/clientcare-billing/clientcare-billing.js` | Overlay UI logic for import, queue review, and claim planning |
 | `db/migrations/20260326_clientcare_billing.sql` | Claims + action tables |
 | `db/migrations/20260326_clientcare_ops.sql` | Capability queue for requested billing/system improvements |
 | `db/migrations/20260327_clientcare_patient_ar_controls.sql` | Provider-directed patient AR policy controls |
+| `db/migrations/20260327_clientcare_sellable_controls.sql` | Tenant, onboarding, operator-access, and audit tables |
+| `db/migrations/20260327_clientcare_payer_rule_overrides.sql` | Operator-defined commercial payer rule overrides |
 
 ### Endpoints
 - `GET /api/v1/clientcare-billing/dashboard`
 - `GET /api/v1/clientcare-billing/clientcare/readiness`
 - `GET /api/v1/clientcare-billing/ops/overview`
 - `GET /api/v1/clientcare-billing/ops/checklist`
+- `GET /api/v1/clientcare-billing/packaging/overview`
+- `GET /api/v1/clientcare-billing/tenants`
+- `POST /api/v1/clientcare-billing/tenants`
+- `GET /api/v1/clientcare-billing/tenants/:tenantId/onboarding`
+- `POST /api/v1/clientcare-billing/tenants/:tenantId/onboarding`
+- `GET /api/v1/clientcare-billing/tenants/:tenantId/operators`
+- `POST /api/v1/clientcare-billing/tenants/:tenantId/operators`
+- `GET /api/v1/clientcare-billing/audit-log`
 - `GET /api/v1/clientcare-billing/ops/capability-requests`
 - `PATCH /api/v1/clientcare-billing/ops/capability-requests/:id`
 - `POST /api/v1/clientcare-billing/ops/run-workflow`
@@ -117,6 +128,8 @@ Every claim lands in one of these buckets:
 - `GET /api/v1/clientcare-billing/patient-ar/escalation-queue`
 - `POST /api/v1/clientcare-billing/patient-ar/:claimId/queue-action`
 - `GET /api/v1/clientcare-billing/payer-playbooks`
+- `GET /api/v1/clientcare-billing/payer-rules`
+- `POST /api/v1/clientcare-billing/payer-rules`
 - `GET /api/v1/clientcare-billing/era-insights`
 - `GET /api/v1/clientcare-billing/underpayments`
 - `POST /api/v1/clientcare-billing/underpayments/:claimId/queue-action`
@@ -152,6 +165,12 @@ Queue of requested assistant/system capabilities that are not yet fully automate
 
 #### `clientcare_patient_ar_policy`
 Provider-directed thresholds and controls for reminder cadence, escalation timing, payment-plan grace periods, and hardship/settlement policy.
+
+#### `clientcare_tenants` / `clientcare_operator_access` / `clientcare_onboarding` / `clientcare_audit_log`
+Sellable packaging controls for practice boundaries, operator roles, onboarding completion, and action receipts.
+
+#### `clientcare_payer_rule_overrides`
+Operator-defined commercial payer filing, appeal, and follow-up rules used to tighten claim classification and payer playbooks.
 
 ---
 
@@ -214,7 +233,7 @@ Operational inputs needed regardless of integration path:
 - Claim exports have not yet been ingested.
 - Paid claims / ERA / remit history has not been imported, so payout/date forecasting is still low-confidence.
 - Browser selectors for read paths are working; writeback workflows still need controlled rollout and approval gates.
-- Controlled writeback now covers billing status, provider type, payment status, and visible insurer/member/subscriber/payor/priority fields, but multi-coverage payer-order changes still require manual confirmation.
+- Controlled writeback now covers billing status, provider type, payment status, and visible insurer/member/subscriber/payor/priority fields, including slot-targeted edits when multiple visible coverages exist, but broader layout hardening is still needed before payer-order automation is considered universally safe.
 
 ---
 
@@ -262,8 +281,10 @@ Operational inputs needed regardless of integration path:
 - The claims ledger must also surface an appeals queue and claim-level appeal packet preview so denied or follow-up claims can be worked by playbook instead of ad hoc memory.
 - The underpayment queue and appeals queue must support controlled action queueing so likely recovery work can be turned into tracked follow-up instead of staying dashboard-only.
 - The system must expose payer playbooks derived from actual imported denial/payment history so commercial-plan follow-up is not driven by generic rules alone.
+- The system should support operator-defined commercial payer overrides so filing windows, appeal windows, and auth-review notes can be tightened without code changes.
 - The system must expose ERA/remit insight summaries so CARC/RARC patterns and payment-method signals can feed payer playbooks and forecast calibration.
 - Amendment and continuity stay current as the system changes.
+- Multi-coverage insurer repair should support visible-slot targeting so operators can explicitly choose which visible coverage row to edit before applying payer-order-related changes.
 
 ---
 
@@ -276,9 +297,11 @@ Operational inputs needed regardless of integration path:
 - [x] **Appeals queue, packet preview, and action queueing** *(est: 6h | actual: 7h)* `[needs-review]`
 - [x] **Payer playbooks plus ERA/remit insight layer** *(est: 7h | actual: 7h)* `[needs-review]`
 - [x] **Insurer-entry repair for visible coverage plus patient AR escalation ladder/policy controls** *(est: 8h | actual: 9h)* `[needs-review]`
-- [ ] **→ NEXT: sellable packaging: permissions, audit hardening, tenant boundaries, onboarding** *(est: 12h)* `[high-risk]`
+- [x] **Sellable packaging: permissions, audit hardening, tenant boundaries, onboarding** *(est: 12h | actual: 10h)* `[needs-review]`
+- [x] **Commercial payer rule overrides plus multi-coverage slot-targeted insurer repair** *(est: 8h | actual: 7h)* `[needs-review]`
+- [ ] **→ NEXT: sellable v1 hardening: deeper commercial rules, broader layout safety, and onboarding polish** *(est: 10h)* `[high-risk]`
 
-**Progress:** 7/8 steps complete | Est. remaining: ~12h
+**Progress:** 9/10 steps complete | Internal operational completeness reached; Est. remaining: ~10h to sellable v1
 
 ---
 
@@ -290,6 +313,8 @@ Operational inputs needed regardless of integration path:
 | 2026-03-27 | Added appeals queue, packet preview, and recovery action queueing | 6h | 7h | +1h from route/UI/action wiring across queue and claim pane | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added payer playbooks, ERA/remit insights, and forecast calibration hooks | 7h | 7h | none | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added insurer-field repair controls plus patient AR policy/escalation queue | 8h | 9h | +1h from route/UI/policy persistence wiring | ✅ | ✅ | pending |
+| 2026-03-27 | Added sellable packaging controls, tenant/onboarding/operator UI, audit logging, and tenant-aware packaging overview | 12h | 10h | -2h because the packaging service and routes were already partially scaffolded before the UI and SSOT pass | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added commercial payer rule overrides plus multi-coverage slot-targeted insurer repair | 8h | 7h | -1h because the payer-playbook/history groundwork was already in place and the slot-targeted repair reused the controlled writeback path | ✅ | ✅ | ✅ |
 
 ---
 
@@ -310,7 +335,7 @@ Operational inputs needed regardless of integration path:
 - [ ] Claim exports from ClientCare not yet ingested — no real data to validate against
 - [ ] ERA/remit history not imported — payout forecasting remains low-confidence
 - [ ] ClientCare API access not yet confirmed — browser path remains the real execution path
-- [ ] Multi-coverage payer-order changes still require a coverage-specific selector before safe automation
+- [ ] Multi-coverage payer-order changes still need final field-targeting hardening across all ClientCare layouts before broad safe automation
 
 ### Gate 2 — Competitor Landscape
 | Competitor | Strengths | Weaknesses | Our Edge |
@@ -333,3 +358,6 @@ The claim classification engine reads rules from the payer playbook table — ad
 
 ### Gate 5 — How We Beat Them
 Every billing software shows you what's unpaid; LifeOS tells you exactly which of the 90 claims can still be rescued today, in what order to work them, what document to pull for each one, and drafts the appeal letter — turning a billing backlog from a spreadsheet problem into a ranked action queue that a non-biller can execute.
+
+- Sellable packaging controls must exist in the operator overlay so a practice can be configured with tenant profile, onboarding state, operator access, and audit receipts without leaving the Collections Control Center.
+- Packaging endpoints must support tenant-aware overview and filtered audit retrieval so the same product can be sold to more than one practice without mixing state.

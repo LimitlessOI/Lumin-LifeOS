@@ -6,10 +6,10 @@
   "status": "active",
   "priority": "critical",
   "owner": "adam",
-  "phase": "sellable-packaging",
-  "next_task": "Add sellable packaging: permissions, audit hardening, tenant boundaries, and onboarding flow on top of the now-live insurer repair, ERA insights, and patient AR policy controls",
+  "phase": "sellable-v1-hardening",
+  "next_task": "Polish sellable v1: deepen commercial payer rules, harden broader multi-coverage layouts, and tighten onboarding/operator packaging for repeatable external deployment.",
   "stability_class": "needs-review",
-  "current_focus": "The Collections Control Center now has live backlog visibility, actionable ops overview, insurance verification preview, patient AR summary, assistant routing, controlled writeback for billing-status/provider-type/payment-status repair, insurer-field repair for the visible coverage, payment-history import, underpayment queue, appeals queue, packet preview, queued follow-up actions, payer playbooks, ERA/remit insights, forecast calibration against payer payment lag, and patient AR policy/escalation controls; next step is sellable packaging and hardening.",
+  "current_focus": "Internal operational completeness is now in place: live backlog visibility, repair workflows, payment learning, underpayments, appeals, payer playbooks, ERA insights, patient AR controls, sellable packaging, and operator-defined payer rule overrides. Next step is sellable-v1 hardening and polish.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -22,7 +22,10 @@
     "db/migrations/20260326_clientcare_ops.sql",
     "db/migrations/20260327_clientcare_patient_ar_controls.sql",
     "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md",
-    "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json"
+    "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json",
+    "services/clientcare-sellable-service.js",
+    "db/migrations/20260327_clientcare_sellable_controls.sql",
+    "db/migrations/20260327_clientcare_payer_rule_overrides.sql"
   ],
   "protected_files": [
     "server.js",
@@ -39,32 +42,267 @@
     "public/clientcare-billing/clientcare-billing.js",
     "db/migrations/20260326_clientcare_billing.sql",
     "db/migrations/20260326_clientcare_ops.sql",
-    "db/migrations/20260327_clientcare_patient_ar_controls.sql"
+    "db/migrations/20260327_clientcare_patient_ar_controls.sql",
+    "services/clientcare-sellable-service.js",
+    "db/migrations/20260327_clientcare_sellable_controls.sql",
+    "db/migrations/20260327_clientcare_payer_rule_overrides.sql"
   ],
   "required_routes": [
-    { "method": "GET", "path": "/api/v1/clientcare-billing/dashboard", "expected_status": 200, "description": "Billing dashboard summary" },
-    { "method": "GET", "path": "/api/v1/clientcare-billing/browser/full-account-report", "expected_status": 200, "description": "Live ClientCare backlog summary" },
-    { "method": "GET", "path": "/api/v1/clientcare-billing/ops/overview", "expected_status": 200, "description": "Ops overview for overlay" },
-    { "method": "GET", "path": "/api/v1/clientcare-billing/patient-ar/policy", "expected_status": 200, "description": "Patient AR policy controls" },
-    { "method": "POST", "path": "/api/v1/clientcare-billing/patient-ar/policy", "expected_status": 200, "description": "Save patient AR policy controls" },
-    { "method": "GET", "path": "/api/v1/clientcare-billing/patient-ar/escalation-queue", "expected_status": 200, "description": "Patient AR escalation queue" },
-    { "method": "POST", "path": "/api/v1/clientcare-billing/patient-ar/:claimId/queue-action", "expected_status": 200, "description": "Queue patient AR follow-up action" },
-    { "method": "GET", "path": "/api/v1/clientcare-billing/payer-playbooks", "expected_status": 200, "description": "Payer-specific recovery playbooks" },
-    { "method": "GET", "path": "/api/v1/clientcare-billing/era-insights", "expected_status": 200, "description": "ERA/remit insight summaries" },
-    { "method": "GET", "path": "/api/v1/clientcare-billing/underpayments", "expected_status": 200, "description": "Underpayment queue" },
-    { "method": "GET", "path": "/api/v1/clientcare-billing/appeals/queue", "expected_status": 200, "description": "Appeals queue" },
-    { "method": "POST", "path": "/api/v1/clientcare-billing/appeals/:claimId/queue-action", "expected_status": 200, "description": "Queue appeal action" },
-    { "method": "POST", "path": "/api/v1/clientcare-billing/underpayments/:claimId/queue-action", "expected_status": 200, "description": "Queue underpayment action" },
-    { "method": "POST", "path": "/api/v1/clientcare-billing/history/import-csv", "expected_status": 200, "description": "Payment history import" },
-    { "method": "POST", "path": "/api/v1/clientcare-billing/insurance/verification-preview", "expected_status": 200, "description": "Insurance intake preview" },
-    { "method": "POST", "path": "/api/v1/clientcare-billing/assistant/message", "expected_status": 200, "description": "Operations Assistant message handling" }
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/dashboard",
+      "expected_status": 200,
+      "description": "Billing dashboard summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/browser/full-account-report",
+      "expected_status": 200,
+      "description": "Live ClientCare backlog summary"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/ops/overview",
+      "expected_status": 200,
+      "description": "Ops overview for overlay"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/patient-ar/policy",
+      "expected_status": 200,
+      "description": "Patient AR policy controls"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/patient-ar/policy",
+      "expected_status": 200,
+      "description": "Save patient AR policy controls"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/patient-ar/escalation-queue",
+      "expected_status": 200,
+      "description": "Patient AR escalation queue"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/patient-ar/:claimId/queue-action",
+      "expected_status": 200,
+      "description": "Queue patient AR follow-up action"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/payer-playbooks",
+      "expected_status": 200,
+      "description": "Payer-specific recovery playbooks"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/era-insights",
+      "expected_status": 200,
+      "description": "ERA/remit insight summaries"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/underpayments",
+      "expected_status": 200,
+      "description": "Underpayment queue"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/appeals/queue",
+      "expected_status": 200,
+      "description": "Appeals queue"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/appeals/:claimId/queue-action",
+      "expected_status": 200,
+      "description": "Queue appeal action"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/underpayments/:claimId/queue-action",
+      "expected_status": 200,
+      "description": "Queue underpayment action"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/history/import-csv",
+      "expected_status": 200,
+      "description": "Payment history import"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/insurance/verification-preview",
+      "expected_status": 200,
+      "description": "Insurance intake preview"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/assistant/message",
+      "expected_status": 200,
+      "description": "Operations Assistant message handling"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/packaging/overview",
+      "expected_status": 200,
+      "description": "Sellable packaging overview"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/tenants",
+      "expected_status": 200,
+      "description": "Tenant list"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/tenants",
+      "expected_status": 200,
+      "description": "Save tenant profile"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/tenants/:tenantId/onboarding",
+      "expected_status": 200,
+      "description": "Save tenant onboarding state"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/tenants/:tenantId/operators",
+      "expected_status": 200,
+      "description": "Save operator access"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/audit-log",
+      "expected_status": 200,
+      "description": "Tenant audit log"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/payer-rules",
+      "expected_status": 200,
+      "description": "Operator payer-rule overrides"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clientcare-billing/payer-rules",
+      "expected_status": 200,
+      "description": "Save operator payer-rule override"
+    }
   ],
   "required_tables": [
-    { "name": "clientcare_claims", "required_columns": ["id", "patient_name", "payer_name", "date_of_service", "status", "bucket", "billed_amount", "paid_amount", "patient_balance"] },
-    { "name": "clientcare_claim_actions", "required_columns": ["id", "claim_id", "action_type", "status", "priority"] },
-    { "name": "clientcare_capability_requests", "required_columns": ["id", "request_text", "priority", "status", "requested_by", "created_at"] },
-    { "name": "conversation_sessions", "required_columns": ["id", "conversation_type", "messages", "updated_at"] },
-    { "name": "clientcare_patient_ar_policy", "required_columns": ["scope_key", "reminder_day_1", "provider_escalation_day", "allow_payment_plans", "updated_at"] }
+    {
+      "name": "clientcare_claims",
+      "required_columns": [
+        "id",
+        "patient_name",
+        "payer_name",
+        "date_of_service",
+        "status",
+        "bucket",
+        "billed_amount",
+        "paid_amount",
+        "patient_balance"
+      ]
+    },
+    {
+      "name": "clientcare_claim_actions",
+      "required_columns": [
+        "id",
+        "claim_id",
+        "action_type",
+        "status",
+        "priority"
+      ]
+    },
+    {
+      "name": "clientcare_capability_requests",
+      "required_columns": [
+        "id",
+        "request_text",
+        "priority",
+        "status",
+        "requested_by",
+        "created_at"
+      ]
+    },
+    {
+      "name": "conversation_sessions",
+      "required_columns": [
+        "id",
+        "conversation_type",
+        "messages",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "clientcare_patient_ar_policy",
+      "required_columns": [
+        "scope_key",
+        "reminder_day_1",
+        "provider_escalation_day",
+        "allow_payment_plans",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "clientcare_tenants",
+      "required_columns": [
+        "id",
+        "slug",
+        "name",
+        "status",
+        "collections_fee_pct",
+        "created_at"
+      ]
+    },
+    {
+      "name": "clientcare_operator_access",
+      "required_columns": [
+        "id",
+        "tenant_id",
+        "operator_email",
+        "role",
+        "active",
+        "created_at"
+      ]
+    },
+    {
+      "name": "clientcare_onboarding",
+      "required_columns": [
+        "tenant_id",
+        "browser_ready",
+        "payment_history_imported",
+        "backlog_loaded",
+        "review_completed",
+        "updated_at"
+      ]
+    },
+    {
+      "name": "clientcare_audit_log",
+      "required_columns": [
+        "id",
+        "tenant_id",
+        "actor",
+        "action_type",
+        "entity_type",
+        "entity_id",
+        "created_at"
+      ]
+    },
+    {
+      "name": "clientcare_payer_rule_overrides",
+      "required_columns": [
+        "payer_name",
+        "filing_window_days",
+        "appeal_window_days",
+        "requires_auth_review",
+        "updated_at"
+      ]
+    }
   ],
   "required_env": [
     "DATABASE_URL",
@@ -74,12 +312,41 @@
     "CLIENTCARE_PASSWORD"
   ],
   "assertions": [
-    { "type": "node_check", "check": "services/clientcare-billing-service.js", "label": "clientcare-billing-service syntax" },
-    { "type": "node_check", "check": "services/clientcare-browser-service.js", "label": "clientcare-browser-service syntax" },
-    { "type": "node_check", "check": "services/clientcare-sync-service.js", "label": "clientcare-sync-service syntax" },
-    { "type": "node_check", "check": "services/clientcare-ops-service.js", "label": "clientcare-ops-service syntax" },
-    { "type": "node_check", "check": "routes/clientcare-billing-routes.js", "label": "clientcare-billing-routes syntax" },
-    { "type": "node_check", "check": "public/clientcare-billing/clientcare-billing.js", "label": "clientcare-billing overlay syntax" }
+    {
+      "type": "node_check",
+      "check": "services/clientcare-billing-service.js",
+      "label": "clientcare-billing-service syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "services/clientcare-browser-service.js",
+      "label": "clientcare-browser-service syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "services/clientcare-sync-service.js",
+      "label": "clientcare-sync-service syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "services/clientcare-ops-service.js",
+      "label": "clientcare-ops-service syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/clientcare-billing-routes.js",
+      "label": "clientcare-billing-routes syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "public/clientcare-billing/clientcare-billing.js",
+      "label": "clientcare-billing overlay syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "services/clientcare-sellable-service.js",
+      "label": "clientcare-sellable-service syntax"
+    }
   ],
   "completion_checks": [
     "Collections Control Center auto-loads the live ClientCare backlog and KPI strip",
@@ -96,14 +363,41 @@
     "Payer playbooks expose payer-specific denial patterns, average payment lag, and recommended next actions from imported history",
     "ERA/remit insights expose CARC/RARC and payment-method patterns from imported metadata",
     "Patient AR policy controls and escalation queue are editable and actionable from the overlay",
-    "Forecasting improves from imported paid claims / ERAs / remits instead of rescue buckets alone"
+    "Forecasting improves from imported paid claims / ERAs / remits instead of rescue buckets alone",
+    "Sellable packaging overview supports tenant profile, onboarding state, operator access, and tenant-scoped audit history",
+    "Packaging overview can switch tenants without leaving the overlay",
+    "Internal operational completeness reached; remaining work is sellable-v1 hardening and commercial/polish depth"
   ],
   "anti_drift_notes": "This product has two data layers: the live ClientCare browser backlog and the local claim ledger. Do not assume the claim ledger reflects the live backlog unless imports have run. Keep the overlay fast by loading backlog summary first and account details lazily. Do not enable autonomous collections behavior; all outreach and writeback remains provider-directed and compliance-gated.",
   "decision_debt": [
-    { "description": "Forecast amount/date now uses payer payment lag when history exists, but remains low-confidence until enough paid claims, ERAs, and remits are imported", "resolved": false },
-    { "description": "ClientCare read paths are live, and controlled writeback now covers billing status, provider type, payment status, and visible insurer/member/subscriber/payor/priority fields; multi-coverage payer-order changes still need a safer coverage-specific selector", "resolved": false },
-    { "description": "Capability queue exists to capture missing assistant behaviors until they are implemented natively", "resolved": false },
-    { "description": "Appeals queue and packet preview now exist, action queueing is live, patient AR policy controls are live, and payer playbooks/ERA insights now derive from imported history, but deeper commercial-plan rules and sellable packaging are still needed", "resolved": false }
+    {
+      "description": "Forecast amount/date now uses payer payment lag when history exists, but remains low-confidence until enough paid claims, ERAs, and remits are imported",
+      "resolved": false
+    },
+    {
+      "description": "ClientCare read paths are live, and controlled writeback now covers billing status, provider type, payment status, and visible insurer/member/subscriber/payor/priority fields; multi-coverage payer-order changes still need a safer coverage-specific selector",
+      "resolved": false
+    },
+    {
+      "description": "Capability queue exists to capture missing assistant behaviors until they are implemented natively",
+      "resolved": false
+    },
+    {
+      "description": "Appeals queue and packet preview now exist, action queueing is live, patient AR policy controls are live, and payer playbooks/ERA insights now derive from imported history, but deeper commercial-plan rules and sellable packaging are still needed",
+      "resolved": true
+    },
+    {
+      "description": "Commercial payer rules are still derived from imported history and generic heuristics; operator-defined overrides are the next sellable-v1 hardening step",
+      "resolved": true
+    },
+    {
+      "description": "Multi-coverage payer-order changes now support visible-slot targeting, but still need broader layout hardening before they are considered universally safe",
+      "resolved": false
+    },
+    {
+      "description": "Broader multi-coverage layout hardening is still pending even though visible-slot targeting now exists for insurer repair",
+      "resolved": false
+    }
   ],
   "last_verified_at": null,
   "verification_passed": null

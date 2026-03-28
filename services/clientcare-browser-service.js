@@ -302,7 +302,8 @@ function buildAccountRepairPlan(account = {}, requestedUpdates = {}) {
   const accountSummary = account.accountSummary || {};
   const diagnosis = account.diagnosis || {};
   const insurancePreview = Array.isArray(account.insurancePreview) ? account.insurancePreview : [];
-  const primaryCoverage = insurancePreview[0] || {};
+  const selectedCoverageIndex = Number.isFinite(Number(requestedUpdates.insurance_slot)) ? Math.max(0, Math.floor(Number(requestedUpdates.insurance_slot))) : 0;
+  const primaryCoverage = insurancePreview[selectedCoverageIndex] || insurancePreview[0] || {};
 
   const fieldByLabel = (pattern) => billingFields.find((field) => pattern.test(String(field.label || '')));
   const billingStatusField = fieldByLabel(/client billing status/i);
@@ -453,19 +454,19 @@ function buildAccountRepairPlan(account = {}, requestedUpdates = {}) {
     });
   }
 
-  if (insurancePreview.length > 1 && requestedUpdates.insurance_priority) {
+  if (insurancePreview.length > 1 && requestedUpdates.insurance_priority && requestedUpdates.insurance_slot == null) {
     unsupported.push({
       field: 'insurance_priority_multi',
       label: 'Insurance priority',
-      reason: 'Multiple coverages are visible. Automatic payer-order changes remain blocked until a specific coverage selector is implemented.',
+      reason: 'Multiple coverages are visible. Choose a specific coverage slot before changing payer order or priority.',
     });
   }
 
-  if (insurancePreview.length > 1) {
+  if (insurancePreview.length > 1 && requestedUpdates.insurance_slot == null) {
     unsupported.push({
       field: 'payer_order',
       label: 'Payer order',
-      reason: 'Multiple coverages are visible. Primary/secondary payer order still needs manual confirmation before automation can change it safely.',
+      reason: 'Multiple coverages are visible. Select the exact visible coverage before automation changes payer details safely.',
     });
   }
 
@@ -507,12 +508,13 @@ async function applyBillingFieldUpdates(page, updates = {}) {
       el.dispatchEvent(new Event('input', { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
     };
-    const findControl = (matcher) => controls.find((el) => matcher.test(`${describe(el)} ${el.name || ''} ${el.id || ''}`));
+    const findControls = (matcher) => controls.filter((el) => matcher.test(`${describe(el)} ${el.name || ''} ${el.id || ''}`));
 
-    const setControlValue = (matcher, desiredValue, kind) => {
-      const control = findControl(matcher);
+    const setControlValue = (matcher, desiredValue, kind, options = {}) => {
+      const matches = findControls(matcher);
+      const control = matches[Math.max(0, Math.min(Number(options.matchIndex || 0), Math.max(matches.length - 1, 0)))];
       if (!control) {
-        return { kind, applied: false, reason: 'Control not found' };
+        return { kind, applied: false, reason: 'Control not found', matchIndex: Number(options.matchIndex || 0) };
       }
 
       const normalizedDesired = normalize(desiredValue);
@@ -574,19 +576,19 @@ async function applyBillingFieldUpdates(page, updates = {}) {
       operations.push(setControlValue(/payment status|paymentstatus/i, requestedUpdates.payment_status, 'payment_status'));
     }
     if (requestedUpdates.insurance_name) {
-      operations.push(setControlValue(/insurance name|carrier|payer name/i, requestedUpdates.insurance_name, 'insurance_name'));
+      operations.push(setControlValue(/insurance name|carrier|payer name/i, requestedUpdates.insurance_name, 'insurance_name', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
     }
     if (requestedUpdates.member_id) {
-      operations.push(setControlValue(/member id|subscriber id|policy number/i, requestedUpdates.member_id, 'member_id'));
+      operations.push(setControlValue(/member id|subscriber id|policy number/i, requestedUpdates.member_id, 'member_id', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
     }
     if (requestedUpdates.subscriber_name) {
-      operations.push(setControlValue(/subscriber name/i, requestedUpdates.subscriber_name, 'subscriber_name'));
+      operations.push(setControlValue(/subscriber name/i, requestedUpdates.subscriber_name, 'subscriber_name', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
     }
     if (requestedUpdates.payor_id) {
-      operations.push(setControlValue(/payor id|payer id/i, requestedUpdates.payor_id, 'payor_id'));
+      operations.push(setControlValue(/payor id|payer id/i, requestedUpdates.payor_id, 'payor_id', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
     }
     if (requestedUpdates.insurance_priority) {
-      operations.push(setControlValue(/insurance priority|priority/i, requestedUpdates.insurance_priority, 'insurance_priority'));
+      operations.push(setControlValue(/insurance priority|priority/i, requestedUpdates.insurance_priority, 'insurance_priority', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
     }
 
     return { operations };

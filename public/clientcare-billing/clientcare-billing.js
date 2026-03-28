@@ -10,18 +10,21 @@
   let lastRepairResult = null;
   let lastReimbursementIntelligence = null;
   let lastPayerPlaybooks = null;
+  let lastPayerRules = null;
   let lastEraInsights = null;
   let lastPatientArPolicy = null;
   let lastPatientArEscalation = null;
   let lastUnderpayments = null;
   let lastAppeals = null;
   let lastOpsOverview = null;
+  let lastPackagingOverview = null;
   let lastBrowserResult = null;
   let lastViewState = null;
   let fullQueueHydrated = false;
   let fullQueueLoading = false;
   let assistantSessionId = localStorage.getItem('clientcare_assistant_session_id') || '';
   let accountFilter = localStorage.getItem('clientcare_account_filter') || 'all';
+  let selectedTenantId = localStorage.getItem('clientcare_selected_tenant_id') || '';
   let assistantPinned = localStorage.getItem('clientcare_assistant_pinned') !== 'false';
   let assistantOpen = localStorage.getItem('clientcare_assistant_open') !== 'false';
 
@@ -55,8 +58,14 @@
     localStorage.setItem('clientcare_assistant_open', String(assistantOpen));
   }
 
-  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals) {
-    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals };
+  function setSelectedTenantId(value) {
+    selectedTenantId = String(value || '');
+    if (selectedTenantId) localStorage.setItem('clientcare_selected_tenant_id', selectedTenantId);
+    else localStorage.removeItem('clientcare_selected_tenant_id');
+  }
+
+  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview) {
+    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview };
   }
 
   function rerender() {
@@ -71,12 +80,14 @@
       lastViewState.reconciliation,
       lastViewState.intelligence,
       lastViewState.payerPlaybooks,
+      lastViewState.payerRules,
       lastViewState.eraInsights,
       lastViewState.patientArPolicy,
       lastViewState.patientArEscalation,
       lastViewState.opsOverview,
       lastViewState.underpayments,
       lastViewState.appeals,
+      lastViewState.packagingOverview,
     );
     void ensureAssistantSession();
   }
@@ -237,9 +248,18 @@
     const providerTypeOptions = fieldOptionsFor(item, /bill provider type/i);
     const insuranceNameOptions = fieldOptionsFor(item, /insurance name|carrier|payer name/i);
     const insurancePriorityOptions = fieldOptionsFor(item, /insurance priority|priority/i);
-    const primaryInsurance = (item.insurancePreview || [])[0] || {};
+    const insuranceOptions = item.insurancePreview || [];
+    const selectedInsurance = insuranceOptions[0] || {};
     return `
       <div class="stack">
+        ${insuranceOptions.length > 1 ? `
+          <label class="stack">
+            <span class="muted">Coverage to edit</span>
+            <select id="repair-insurance-slot">
+              ${insuranceOptions.map((insurance, index) => `<option value="${index}">${escapeHtml(`${index + 1}. ${insurance.insuranceName || 'Coverage'} ${insurance.priority ? `(${insurance.priority})` : ''}`.trim())}</option>`).join('')}
+            </select>
+          </label>
+        ` : ''}
         <div class="grid three">
           ${renderRepairControl({
             id: 'repair-client-billing-status',
@@ -268,20 +288,20 @@
           ${renderRepairControl({
             id: 'repair-insurance-name',
             label: 'Insurance Name',
-            currentValue: primaryInsurance.insuranceName || '',
+            currentValue: selectedInsurance.insuranceName || '',
             options: insuranceNameOptions,
             placeholder: 'Carrier / payer name',
           })}
           ${renderRepairControl({
             id: 'repair-member-id',
             label: 'Member ID',
-            currentValue: primaryInsurance.memberId || '',
+            currentValue: selectedInsurance.memberId || '',
             placeholder: 'Member or subscriber ID',
           })}
           ${renderRepairControl({
             id: 'repair-subscriber-name',
             label: 'Subscriber Name',
-            currentValue: primaryInsurance.subscriberName || '',
+            currentValue: selectedInsurance.subscriberName || '',
             placeholder: 'Subscriber name',
           })}
         </div>
@@ -289,13 +309,13 @@
           ${renderRepairControl({
             id: 'repair-payor-id',
             label: 'Payor ID',
-            currentValue: primaryInsurance.payorId || '',
+            currentValue: selectedInsurance.payorId || '',
             placeholder: 'Payor ID',
           })}
           ${renderRepairControl({
             id: 'repair-insurance-priority',
             label: 'Insurance Priority',
-            currentValue: primaryInsurance.priority || '',
+            currentValue: selectedInsurance.priority || '',
             options: insurancePriorityOptions,
             placeholder: 'Primary / secondary',
           })}
@@ -925,6 +945,40 @@
     `;
   }
 
+  function renderPayerRules(rules) {
+    const items = rules?.rules || [];
+    return `
+      <div class="stack">
+        <table>
+          <thead><tr><th>Payer</th><th>Filing days</th><th>Appeal days</th><th>Auth review</th><th>Notes</th></tr></thead>
+          <tbody>
+            ${items.length ? items.map((item) => `
+              <tr>
+                <td>${escapeHtml(item.payer_name || '')}</td>
+                <td>${escapeHtml(item.filing_window_days ?? '—')}</td>
+                <td>${escapeHtml(item.appeal_window_days ?? '—')}</td>
+                <td>${escapeHtml(item.requires_auth_review ? 'Yes' : 'No')}</td>
+                <td>${escapeHtml(item.followup_notes || item.notes || '')}</td>
+              </tr>
+            `).join('') : '<tr><td colspan="5">No payer overrides yet.</td></tr>'}
+          </tbody>
+        </table>
+        <div class="grid three">
+          <input id="payer-rule-name" placeholder="Payer name">
+          <input id="payer-rule-filing" type="number" min="0" placeholder="Filing days">
+          <input id="payer-rule-appeal" type="number" min="0" placeholder="Appeal days">
+        </div>
+        <div class="grid two">
+          <input id="payer-rule-source" placeholder="Rule source or contract note">
+          <input id="payer-rule-followup" placeholder="Follow-up note">
+        </div>
+        <label><input id="payer-rule-auth" type="checkbox"> Requires auth review</label>
+        <label class="stack"><span class="muted">Notes</span><textarea id="payer-rule-notes" placeholder="Operational notes"></textarea></label>
+        <div class="row-actions"><button id="payer-rule-save">Save payer rule</button></div>
+      </div>
+    `;
+  }
+
   function renderPayerPlaybooks(playbooks) {
     const summary = playbooks?.summary || {};
     const items = playbooks?.items || [];
@@ -994,6 +1048,89 @@
               ${paymentMethods.length ? paymentMethods.map((item) => `<tr><td>${escapeHtml(item.payment_method || '')}</td><td>${escapeHtml(item.count || 0)}</td><td>${escapeHtml(money(item.total_paid || 0))}</td></tr>`).join('') : '<tr><td colspan="3">No payment-method data yet.</td></tr>'}
             </tbody>
           </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderPackagingOverview(packagingOverview) {
+    const overview = packagingOverview?.overview || packagingOverview || null;
+    const summary = overview?.summary || {};
+    const tenants = overview?.tenants || [];
+    const activeTenant = overview?.active_tenant || {};
+    const onboarding = overview?.onboarding || {};
+    const operators = overview?.operators || [];
+    const audit = overview?.audit || [];
+
+    return `
+      <div class="stack">
+        <div class="grid four">
+          <div class="card stat"><span>Tenants</span><strong>${escapeHtml(summary.tenants || 0)}</strong></div>
+          <div class="card stat"><span>Active tenant</span><strong>${escapeHtml(summary.active_tenant || 'Default Practice')}</strong></div>
+          <div class="card stat"><span>Fee %</span><strong>${escapeHtml(`${Number(summary.collections_fee_pct || 0).toFixed(2)}%`)}</strong></div>
+          <div class="card stat"><span>Operators</span><strong>${escapeHtml(summary.operators || 0)}</strong></div>
+        </div>
+        <div class="grid two">
+          <div class="card">
+            <h3>Tenant profile</h3>
+            <div class="grid two">
+              <label class="stack"><span class="muted">Tenant</span>
+                <select id="tenant-select">
+                  ${tenants.map((tenant) => `<option value="${escapeHtml(tenant.id || '')}" ${String(tenant.id || '') === String(selectedTenantId || summary.active_tenant_id || '') ? 'selected' : ''}>${escapeHtml(tenant.name || tenant.slug || '')}</option>`).join('')}
+                </select>
+              </label>
+              <label class="stack"><span class="muted">Status</span><input id="tenant-status" value="${escapeHtml(activeTenant.status || 'internal')}" placeholder="internal"></label>
+              <label class="stack"><span class="muted">Name</span><input id="tenant-name" value="${escapeHtml(activeTenant.name || '')}" placeholder="Practice name"></label>
+              <label class="stack"><span class="muted">Slug</span><input id="tenant-slug" value="${escapeHtml(activeTenant.slug || '')}" placeholder="practice-slug"></label>
+              <label class="stack"><span class="muted">Collections fee %</span><input id="tenant-fee" type="number" min="0" max="100" step="0.01" value="${escapeHtml(activeTenant.collections_fee_pct || 5)}"></label>
+              <label class="stack"><span class="muted">Contact email</span><input id="tenant-contact-email" value="${escapeHtml(activeTenant.contact_email || '')}" placeholder="billing@practice.com"></label>
+              <label class="stack"><span class="muted">Contact name</span><input id="tenant-contact-name" value="${escapeHtml(activeTenant.contact_name || '')}" placeholder="Owner or manager"></label>
+            </div>
+            <div class="row-actions" style="margin-top:10px"><button id="tenant-save">Save tenant</button></div>
+          </div>
+          <div class="card">
+            <h3>Onboarding</h3>
+            <div class="grid two">
+              <label><input id="onboarding-browser-ready" type="checkbox" ${onboarding.browser_ready ? 'checked' : ''}> Browser ready</label>
+              <label><input id="onboarding-history-imported" type="checkbox" ${onboarding.payment_history_imported ? 'checked' : ''}> Payment history imported</label>
+              <label><input id="onboarding-backlog-loaded" type="checkbox" ${onboarding.backlog_loaded ? 'checked' : ''}> Backlog loaded</label>
+              <label><input id="onboarding-policy-configured" type="checkbox" ${onboarding.policy_configured ? 'checked' : ''}> Policy configured</label>
+              <label><input id="onboarding-operator-access" type="checkbox" ${onboarding.operator_access_configured ? 'checked' : ''}> Operator access configured</label>
+              <label><input id="onboarding-review-completed" type="checkbox" ${onboarding.review_completed ? 'checked' : ''}> Review completed</label>
+            </div>
+            <label class="stack" style="margin-top:10px"><span class="muted">Notes</span><textarea id="onboarding-notes" placeholder="Setup notes">${escapeHtml(onboarding.notes || '')}</textarea></label>
+            <div class="row-actions" style="margin-top:10px"><button id="onboarding-save">Save onboarding</button></div>
+          </div>
+        </div>
+        <div class="grid two">
+          <div class="card">
+            <h3>Operator access</h3>
+            <table>
+              <thead><tr><th>Email</th><th>Role</th><th>Active</th></tr></thead>
+              <tbody>
+                ${operators.length ? operators.map((operator) => `<tr><td>${escapeHtml(operator.operator_email || '')}</td><td>${escapeHtml(operator.role || '')}</td><td>${escapeHtml(operator.active ? 'Yes' : 'No')}</td></tr>`).join('') : '<tr><td colspan="3">No operators configured yet.</td></tr>'}
+              </tbody>
+            </table>
+            <div class="grid three" style="margin-top:10px;">
+              <input id="operator-email" placeholder="operator@practice.com">
+              <select id="operator-role">
+                <option value="operator">Operator</option>
+                <option value="manager">Manager</option>
+                <option value="reviewer">Reviewer</option>
+              </select>
+              <label><input id="operator-active" type="checkbox" checked> Active</label>
+            </div>
+            <div class="row-actions" style="margin-top:10px"><button id="operator-save">Save operator</button></div>
+          </div>
+          <div class="card">
+            <h3>Audit log</h3>
+            <table>
+              <thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Entity</th></tr></thead>
+              <tbody>
+                ${audit.length ? audit.map((entry) => `<tr><td>${escapeHtml(entry.created_at || '')}</td><td>${escapeHtml(entry.actor || '')}</td><td>${escapeHtml(entry.action_type || '')}</td><td>${escapeHtml(`${entry.entity_type || ''} ${entry.entity_id || ''}`.trim())}</td></tr>`).join('') : '<tr><td colspan="4">No audit events yet.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     `;
@@ -1186,7 +1323,8 @@
     const root = document.getElementById('app');
     try {
       const query = new URLSearchParams(filters).toString();
-      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals] = await Promise.all([
+      const packagingPath = `/api/v1/clientcare-billing/packaging/overview${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
+      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview] = await Promise.all([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
         api('/api/v1/clientcare-billing/claims/import-template'),
@@ -1195,22 +1333,27 @@
         api('/api/v1/clientcare-billing/reconciliation'),
         api('/api/v1/clientcare-billing/reimbursement-intelligence'),
         api('/api/v1/clientcare-billing/payer-playbooks?limit=25'),
+        api('/api/v1/clientcare-billing/payer-rules'),
         api('/api/v1/clientcare-billing/era-insights?limit=25'),
         api('/api/v1/clientcare-billing/patient-ar/policy'),
         api('/api/v1/clientcare-billing/patient-ar/escalation-queue?limit=50'),
         api('/api/v1/clientcare-billing/ops/overview'),
         api('/api/v1/clientcare-billing/underpayments?limit=100'),
         api('/api/v1/clientcare-billing/appeals/queue?limit=100'),
+        api(packagingPath),
       ]);
       lastReimbursementIntelligence = intelligence.intelligence || null;
       lastPayerPlaybooks = payerPlaybooks || null;
+      lastPayerRules = payerRules || null;
       lastEraInsights = eraInsights || null;
       lastPatientArPolicy = patientArPolicy || null;
       lastPatientArEscalation = patientArEscalation || null;
       lastOpsOverview = opsOverview.overview || null;
       lastUnderpayments = underpayments || null;
       lastAppeals = appeals || null;
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastEraInsights, lastPatientArPolicy, lastPatientArEscalation, lastOpsOverview, lastUnderpayments, lastAppeals);
+      lastPackagingOverview = packagingOverview || null;
+      if (!selectedTenantId && packagingOverview?.overview?.summary?.active_tenant_id) setSelectedTenantId(packagingOverview.overview.summary.active_tenant_id);
+      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastPayerRules, lastEraInsights, lastPatientArPolicy, lastPatientArEscalation, lastOpsOverview, lastUnderpayments, lastAppeals, lastPackagingOverview);
       await ensureAssistantSession();
       if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
@@ -1556,6 +1699,125 @@
     }
   }
 
+  async function refreshPackagingOverview({ silent = true } = {}) {
+    try {
+      const path = `/api/v1/clientcare-billing/packaging/overview${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
+      lastPackagingOverview = await api(path);
+      if (!selectedTenantId && lastPackagingOverview?.overview?.summary?.active_tenant_id) {
+        setSelectedTenantId(lastPackagingOverview.overview.summary.active_tenant_id);
+      }
+      rerender();
+    } catch (error) {
+      if (!silent) alert(error.message);
+    }
+  }
+
+  async function saveTenantProfile() {
+    try {
+      const payload = {
+        actor: 'overlay',
+        slug: document.getElementById('tenant-slug')?.value || '',
+        name: document.getElementById('tenant-name')?.value || '',
+        status: document.getElementById('tenant-status')?.value || 'internal',
+        collections_fee_pct: Number(document.getElementById('tenant-fee')?.value || 5),
+        contact_name: document.getElementById('tenant-contact-name')?.value || '',
+        contact_email: document.getElementById('tenant-contact-email')?.value || '',
+      };
+      const result = await api('/api/v1/clientcare-billing/tenants', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      setSelectedTenantId(result.tenant?.id || selectedTenantId);
+      await loadDashboard({}, { skipAutoFullQueue: true });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function saveTenantOnboarding() {
+    if (!selectedTenantId) {
+      alert('Save a tenant first.');
+      return;
+    }
+    try {
+      await api(`/api/v1/clientcare-billing/tenants/${encodeURIComponent(selectedTenantId)}/onboarding`, {
+        method: 'POST',
+        body: JSON.stringify({
+          actor: 'overlay',
+          browser_ready: Boolean(document.getElementById('onboarding-browser-ready')?.checked),
+          payment_history_imported: Boolean(document.getElementById('onboarding-history-imported')?.checked),
+          backlog_loaded: Boolean(document.getElementById('onboarding-backlog-loaded')?.checked),
+          policy_configured: Boolean(document.getElementById('onboarding-policy-configured')?.checked),
+          operator_access_configured: Boolean(document.getElementById('onboarding-operator-access')?.checked),
+          review_completed: Boolean(document.getElementById('onboarding-review-completed')?.checked),
+          notes: document.getElementById('onboarding-notes')?.value || '',
+        }),
+      });
+      await refreshPackagingOverview({ silent: false });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function saveOperatorAccess() {
+    if (!selectedTenantId) {
+      alert('Save a tenant first.');
+      return;
+    }
+    const operatorEmail = String(document.getElementById('operator-email')?.value || '').trim();
+    if (!operatorEmail) {
+      alert('Operator email required.');
+      return;
+    }
+    try {
+      await api(`/api/v1/clientcare-billing/tenants/${encodeURIComponent(selectedTenantId)}/operators`, {
+        method: 'POST',
+        body: JSON.stringify({
+          actor: 'overlay',
+          operator_email: operatorEmail,
+          role: document.getElementById('operator-role')?.value || 'operator',
+          active: Boolean(document.getElementById('operator-active')?.checked),
+        }),
+      });
+      document.getElementById('operator-email').value = '';
+      await refreshPackagingOverview({ silent: false });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function savePayerRuleOverride() {
+    const payerName = String(document.getElementById('payer-rule-name')?.value || '').trim();
+    if (!payerName) {
+      alert('Payer name required.');
+      return;
+    }
+    try {
+      await api('/api/v1/clientcare-billing/payer-rules', {
+        method: 'POST',
+        body: JSON.stringify({
+          updated_by: 'overlay',
+          payer_name: payerName,
+          filing_window_days: Number(document.getElementById('payer-rule-filing')?.value || 0) || null,
+          appeal_window_days: Number(document.getElementById('payer-rule-appeal')?.value || 0) || null,
+          timely_filing_source: document.getElementById('payer-rule-source')?.value || '',
+          followup_notes: document.getElementById('payer-rule-followup')?.value || '',
+          notes: document.getElementById('payer-rule-notes')?.value || '',
+          requires_auth_review: Boolean(document.getElementById('payer-rule-auth')?.checked),
+        }),
+      });
+      ['payer-rule-name','payer-rule-filing','payer-rule-appeal','payer-rule-source','payer-rule-followup','payer-rule-notes'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const authEl = document.getElementById('payer-rule-auth');
+      if (authEl) authEl.checked = false;
+      await loadDashboard({}, { skipAutoFullQueue: true });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   async function browserExtract(importIntoQueue = false) {
     try {
       const result = await api('/api/v1/clientcare-billing/browser/extract-claims', {
@@ -1648,6 +1910,7 @@
     const billingStatus = document.getElementById('repair-client-billing-status')?.value?.trim();
     const providerType = document.getElementById('repair-bill-provider-type')?.value?.trim();
     const paymentStatus = document.getElementById('repair-payment-status')?.value?.trim();
+    const insuranceSlot = Number(document.getElementById('repair-insurance-slot')?.value || 0);
     const insuranceName = document.getElementById('repair-insurance-name')?.value?.trim();
     const memberId = document.getElementById('repair-member-id')?.value?.trim();
     const subscriberName = document.getElementById('repair-subscriber-name')?.value?.trim();
@@ -1656,6 +1919,7 @@
     if (billingStatus) updates.client_billing_status = billingStatus;
     if (providerType) updates.bill_provider_type = providerType;
     if (paymentStatus) updates.payment_status = paymentStatus;
+    if (Number.isFinite(insuranceSlot) && (item.insurancePreview || []).length > 1) updates.insurance_slot = insuranceSlot;
     if (insuranceName) updates.insurance_name = insuranceName;
     if (memberId) updates.member_id = memberId;
     if (subscriberName) updates.subscriber_name = subscriberName;
@@ -1792,8 +2056,8 @@
     }
   }
 
-  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals) {
-    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals);
+  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview) {
+    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview);
     const summary = dashboard.summary || {};
     const liveSummary = lastAccountReport?.summary || null;
     const patientArSummary = opsOverview?.patient_ar?.summary || {};
@@ -1883,6 +2147,12 @@
               <h2>Account Recovery Detail</h2>
               <div id="account-detail"><p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p></div>
             </div>
+          </div>
+
+          <div class="card">
+            <h2>Sellable Packaging</h2>
+            <p class="hint" style="margin:10px 0">Tenant setup, onboarding, operator access, and audit trail.</p>
+            <div id="packaging-overview">${renderPackagingOverview(packagingOverview)}</div>
           </div>
 
           <details class="card tools-card">
@@ -1992,6 +2262,10 @@
                   <div id="payer-playbooks">${renderPayerPlaybooks(payerPlaybooks)}</div>
                 </div>
                 <div class="card">
+                  <h3>Payer Rule Overrides</h3>
+                  <div id="payer-rules">${renderPayerRules(payerRules)}</div>
+                </div>
+                <div class="card">
                   <h3>ERA / Remit Insights</h3>
                   <div id="era-insights">${renderEraInsights(eraInsights)}</div>
                 </div>
@@ -2022,12 +2296,12 @@
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
     document.getElementById('assistant-pin-toggle').addEventListener('click', () => {
       setAssistantPinned(!assistantPinned);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview);
       ensureAssistantSession();
     });
     document.getElementById('assistant-open-toggle').addEventListener('click', () => {
       setAssistantOpen(!assistantOpen);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview);
       ensureAssistantSession();
     });
     document.getElementById('assistant-input').addEventListener('keydown', (event) => {
@@ -2041,6 +2315,19 @@
     if (repairApplyButton) repairApplyButton.addEventListener('click', () => runAccountRepair(true));
     const patientArSaveButton = document.getElementById('patient-ar-save-policy');
     if (patientArSaveButton) patientArSaveButton.addEventListener('click', savePatientArPolicy);
+    const tenantSelect = document.getElementById('tenant-select');
+    if (tenantSelect) tenantSelect.addEventListener('change', async (event) => {
+      setSelectedTenantId(event.target.value || '');
+      await loadDashboard({}, { skipAutoFullQueue: true });
+    });
+    const tenantSaveButton = document.getElementById('tenant-save');
+    if (tenantSaveButton) tenantSaveButton.addEventListener('click', saveTenantProfile);
+    const onboardingSaveButton = document.getElementById('onboarding-save');
+    if (onboardingSaveButton) onboardingSaveButton.addEventListener('click', saveTenantOnboarding);
+    const operatorSaveButton = document.getElementById('operator-save');
+    if (operatorSaveButton) operatorSaveButton.addEventListener('click', saveOperatorAccess);
+    const payerRuleSaveButton = document.getElementById('payer-rule-save');
+    if (payerRuleSaveButton) payerRuleSaveButton.addEventListener('click', savePayerRuleOverride);
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));

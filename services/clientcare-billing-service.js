@@ -233,6 +233,16 @@ function inferPayerType(name = '', explicit = null) {
   return 'unknown';
 }
 
+function normalizePayerKey(value = '') {
+  return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function findPayerRuleOverride(overrides = new Map(), payerName = '') {
+  const key = normalizePayerKey(payerName);
+  if (!key) return null;
+  return overrides.get(key) || null;
+}
+
 function hasTimelyFilingDenial(claim = {}) {
   const text = `${claim.denial_code || ''} ${claim.denial_reason || ''}`.toLowerCase();
   return /timely|late filing|filing deadline|dos exceed timely filing/.test(text);
@@ -248,10 +258,11 @@ function hasSubmissionProofCandidate(claim = {}) {
   return Boolean(claim.original_submitted_at) || /clearinghouse|proof|acceptance|277|999|ack/i.test(metadataText);
 }
 
-function resolveTimelyRule(claim = {}) {
+function resolveTimelyRule(claim = {}, options = {}) {
   const payerType = inferPayerType(claim.payer_name, claim.payer_type);
   const providerState = String(claim.provider_state || '').toUpperCase();
   const metadata = claim.metadata || {};
+  const payerOverride = findPayerRuleOverride(options.payerRuleOverrides, claim.payer_name);
 
   if (payerType === 'medicare') {
     return {
@@ -283,6 +294,18 @@ function resolveTimelyRule(claim = {}) {
     };
   }
 
+  if (payerOverride) {
+    return {
+      payerType,
+      filingWindowDays: Number.isFinite(Number(payerOverride.filing_window_days)) ? Number(payerOverride.filing_window_days) : null,
+      source: payerOverride.timely_filing_source || `Operator override for ${claim.payer_name || 'payer'}`,
+      appealWindowDays: Number.isFinite(Number(payerOverride.appeal_window_days)) ? Number(payerOverride.appeal_window_days) : null,
+      requiresAuthReview: Boolean(payerOverride.requires_auth_review),
+      notes: [payerOverride.notes, payerOverride.followup_notes].filter(Boolean),
+      override: payerOverride,
+    };
+  }
+
   return {
     payerType,
     filingWindowDays: null,
@@ -295,8 +318,8 @@ function action(actionType, priority, summary, details, evidenceRequired = []) {
   return { actionType, priority, summary, details, evidenceRequired };
 }
 
-export function classifyClientCareClaim(claim = {}, now = new Date()) {
-  const payerRule = resolveTimelyRule(claim);
+export function classifyClientCareClaim(claim = {}, now = new Date(), options = {}) {
+  const payerRule = resolveTimelyRule(claim, options);
   const dos = toDateOnly(claim.date_of_service);
   const deadline = payerRule.filingWindowDays ? addDays(dos, payerRule.filingWindowDays) : null;
   const daysOld = daysBetween(dos, now);
@@ -312,6 +335,10 @@ export function classifyClientCareClaim(claim = {}, now = new Date()) {
   let recoveryProbability = 0.45;
   let priorityScore = outstanding;
   const actions = [];
+
+  if (payerRule.requiresAuthReview) {
+    actions.push(action('auth_contract_review', 'normal', 'Review payer-specific auth rule', 'This payer override requires auth/contract review before standard follow-up.', ['payer contract', 'authorization record']));
+  }
 
   if (/paid|closed/.test(status) || outstanding <= 0) {
     rescueBucket = 'resolved';
@@ -623,6 +650,57 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     return created;
   }
 
+  async function listPayerRuleOverrides() {
+    try {
+      const { rows } = await pool.query(`SELECT * FROM clientcare_payer_rule_overrides ORDER BY payer_name ASC`);
+      return rows;
+    } catch (error) {
+      if (isMissingRelation(error)) return [];
+      throw error;
+    }
+  }
+
+  async function getPayerRuleOverridesMap() {
+    const rows = await listPayerRuleOverrides();
+    return new Map(rows.map((row) => [normalizePayerKey(row.payer_name), row]));
+  }
+
+  async function savePayerRuleOverride(input = {}) {
+    const payerName = String(input.payer_name || '').trim();
+    if (!payerName) throw new Error('payer_name required');
+    const payload = {
+      payer_name: payerName,
+      filing_window_days: Number.isFinite(Number(input.filing_window_days)) ? Number(input.filing_window_days) : null,
+      appeal_window_days: Number.isFinite(Number(input.appeal_window_days)) ? Number(input.appeal_window_days) : null,
+      timely_filing_source: String(input.timely_filing_source || '').trim() || null,
+      notes: String(input.notes || '').trim() || null,
+      followup_notes: String(input.followup_notes || '').trim() || null,
+      requires_auth_review: Boolean(input.requires_auth_review),
+      updated_by: String(input.updated_by || 'overlay').trim(),
+    };
+    try {
+      const { rows } = await pool.query(
+        `INSERT INTO clientcare_payer_rule_overrides (payer_name, filing_window_days, appeal_window_days, timely_filing_source, notes, followup_notes, requires_auth_review, updated_by)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+         ON CONFLICT (payer_name) DO UPDATE SET
+           filing_window_days=EXCLUDED.filing_window_days,
+           appeal_window_days=EXCLUDED.appeal_window_days,
+           timely_filing_source=EXCLUDED.timely_filing_source,
+           notes=EXCLUDED.notes,
+           followup_notes=EXCLUDED.followup_notes,
+           requires_auth_review=EXCLUDED.requires_auth_review,
+           updated_by=EXCLUDED.updated_by,
+           updated_at=NOW()
+         RETURNING *`,
+        [payload.payer_name, payload.filing_window_days, payload.appeal_window_days, payload.timely_filing_source, payload.notes, payload.followup_notes, payload.requires_auth_review, payload.updated_by]
+      );
+      return rows[0] || payload;
+    } catch (error) {
+      if (isMissingRelation(error)) return payload;
+      throw error;
+    }
+  }
+
   async function upsertClaim(input = {}) {
     const normalized = normalizeImportedClaim(input);
     const claim = {
@@ -655,7 +733,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       notes: normalized.notes || null,
       metadata: normalized.metadata || {},
     };
-    const classification = classifyClientCareClaim(claim, now());
+    const payerRuleOverrides = await getPayerRuleOverridesMap();
+    const classification = classifyClientCareClaim(claim, now(), { payerRuleOverrides });
 
     let rows;
     if (claim.external_claim_id) {
@@ -780,7 +859,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   async function reclassifyClaim(claimId) {
     const claim = await getClaimById(claimId);
     if (!claim) return null;
-    const classification = classifyClientCareClaim(claim, now());
+    const classification = classifyClientCareClaim(claim, now(), { payerRuleOverrides: await getPayerRuleOverridesMap() });
     const { rows } = await pool.query(
       `UPDATE clientcare_claims
        SET payer_type=$2, timely_filing_deadline=$3, timely_filing_source=$4, rescue_bucket=$5,
@@ -880,7 +959,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   async function buildClaimPlan(claimId) {
     const claim = await getClaimById(claimId);
     if (!claim) return null;
-    const classification = classifyClientCareClaim(claim, now());
+    const classification = classifyClientCareClaim(claim, now(), { payerRuleOverrides: await getPayerRuleOverridesMap() });
     const actions = await listActions(claimId);
     return { claim, classification, actions };
   }
@@ -1103,6 +1182,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   }
 
   async function getPayerPlaybooks({ limit = 25 } = {}) {
+    const payerRuleOverrides = await getPayerRuleOverridesMap();
     const { rows } = await pool.query(
       `SELECT
          payer_name,
@@ -1149,6 +1229,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
 
       const topDenial = normalizedDenials[0] || null;
       const topCategory = topDenial?.category || 'unknown';
+      const payerOverride = findPayerRuleOverride(payerRuleOverrides, row.payer_name);
       playbooks.push({
         payer_name: row.payer_name,
         payer_type: row.payer_type,
@@ -1160,13 +1241,18 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         avg_days_to_pay: row.avg_days_to_pay ? Number(Number(row.avg_days_to_pay).toFixed(1)) : null,
         top_denial_category: topCategory,
         top_denials: normalizedDenials,
+        rule_override: payerOverride || null,
         recommendations: buildPayerRecommendations({
           payerName: row.payer_name,
           payerType: row.payer_type,
           topDenialCategory: topCategory,
           paidClaims: Number(row.paid_claims || 0),
           avgDaysToPay: row.avg_days_to_pay ? Number(Number(row.avg_days_to_pay).toFixed(1)) : null,
-        }),
+        }).concat(payerOverride ? [
+          payerOverride.filing_window_days ? `Use operator filing window override: ${payerOverride.filing_window_days} days.` : null,
+          payerOverride.appeal_window_days ? `Target appeals within ${payerOverride.appeal_window_days} days when denials hit.` : null,
+          payerOverride.followup_notes || payerOverride.notes || null,
+        ].filter(Boolean) : []),
       });
     }
 
@@ -1437,6 +1523,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     getReimbursementIntelligence,
     getEraInsights,
     getPayerPlaybooks,
+    listPayerRuleOverrides,
+    savePayerRuleOverride,
     getUnderpaymentQueue,
     getAppealsQueue,
     buildAppealPacketPreview,

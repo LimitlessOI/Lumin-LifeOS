@@ -54,6 +54,8 @@ function extractClaimId(text = '') {
 
 function normalizeRepairUpdates(input = {}) {
   const updates = {};
+  const insuranceSlot = Number(input.insurance_slot);
+  if (Number.isFinite(insuranceSlot) && insuranceSlot >= 0) updates.insurance_slot = Math.floor(insuranceSlot);
   if (input.client_billing_status) updates.client_billing_status = String(input.client_billing_status).trim();
   if (input.bill_provider_type) updates.bill_provider_type = String(input.bill_provider_type).trim();
   if (input.payment_status) updates.payment_status = String(input.payment_status).trim().toLowerCase();
