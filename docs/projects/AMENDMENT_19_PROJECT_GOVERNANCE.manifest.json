@@ -12,6 +12,8 @@
   "current_focus": "Governance data is seeded and live; next step is surfacing estimation accuracy, timing truth, and drill-downs in the Command Center",
   "owned_files": [
     "routes/project-governance-routes.js",
+    "startup/register-runtime-routes.js",
+    "startup/boot-domains.js",
     "db/migrations/20260327_project_governance.sql",
     "docs/projects/manifest.schema.json",
     "docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md",
@@ -31,6 +33,8 @@
   ],
   "required_files": [
     "routes/project-governance-routes.js",
+    "startup/register-runtime-routes.js",
+    "startup/boot-domains.js",
     "db/migrations/20260327_project_governance.sql",
     "docs/projects/manifest.schema.json",
     "docs/projects/AMENDMENT_READINESS_CHECKLIST.md",

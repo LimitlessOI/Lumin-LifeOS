@@ -9,17 +9,23 @@
  * This is the ONLY place async IIFE startup blocks should live.
  * Do NOT put domain boot logic in server.js — add it here instead.
  *
- * @ssot docs/projects/AMENDMENT_18_PROJECT_GOVERNANCE.md
+ * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  */
 
-import { createUsefulWorkGuard, requireEnvVars, requireTableRows } from '../services/useful-work-guard.js';
+import { createUsefulWorkGuard, requireTableRows } from '../services/useful-work-guard.js';
 
 // ── GLVAR Monitor (dues + violations) ────────────────────────────────────────
 async function bootGLVARMonitor(deps) {
   const { pool, logger, notificationService, accountManager } = deps;
 
-  // Prerequisite: GLVAR credentials must be configured
-  const prereq = requireEnvVars('GLVAR_USERNAME', 'GLVAR_PASSWORD');
+  // Prerequisite: GLVAR credentials must be stored in the credential vault
+  const prereq = async () => {
+    const account = await accountManager?.getAccount?.('glvar_mls', '232953');
+    if (!account?.password || !(account?.username || account?.emailUsed)) {
+      return { ok: false, reason: 'GLVAR vault credentials missing (service glvar_mls / key 232953)' };
+    }
+    return { ok: true };
+  };
 
   // Work check: only run if there are active agent clients enrolled
   const workCheck = requireTableRows(
@@ -53,8 +59,12 @@ async function bootGLVARMonitor(deps) {
 async function bootEmailTriage(deps) {
   const { pool, logger, notificationService, callCouncilMember, accountManager } = deps;
 
-  // Prerequisite: IMAP must be fully configured with real credentials
-  const prereq = requireEnvVars('TC_IMAP_HOST', 'TC_IMAP_USER', 'TC_IMAP_PASS');
+  // Prerequisite: IMAP must resolve from env or the credential vault
+  const prereq = async () => {
+    const { isTCImapConfigured } = await import('../services/tc-imap-config.js');
+    const ok = await isTCImapConfigured({ accountManager, logger });
+    return ok ? { ok: true } : { ok: false, reason: 'TC IMAP config missing from env/vault' };
+  };
 
   // Work check: only run if there are active TC transactions to triage emails for
   const workCheck = requireTableRows(

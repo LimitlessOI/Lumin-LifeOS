@@ -1,5 +1,5 @@
 /**
- * @ssot docs/SSOT_COMPANION.md
+ * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  *
  * Runtime route composition for the main Express app.
  * This keeps server.js as a composition root instead of a second implementation file.
@@ -16,6 +16,8 @@ import { createAutonomyRoutes } from "../routes/autonomy-routes.js";
 import { createRailwayManagedEnvRoutes } from "../routes/railway-managed-env-routes.js";
 import { createProjectGovernanceRoutes } from "../routes/project-governance-routes.js";
 import { createBuilderSupervisorRoutes } from "../routes/builder-supervisor-routes.js";
+import { createCapabilityMapRouter } from "../routes/capability-map-routes.js";
+import { createModelPerformanceRouter } from "../routes/model-performance-routes.js";
 import { createAccountManagerRoutes } from "../routes/account-manager-routes.js";
 import { createTCRoutes } from "../routes/tc-routes.js";
 import { createMLSRoutes } from "../routes/mls-routes.js";
@@ -99,6 +101,12 @@ export function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/builder", createBuilderSupervisorRoutes({ requireKey, pool }));
   logger.info("✅ [BUILDER-SUPERVISOR] Routes mounted at /api/v1/builder/{run,status,queue,pause,resume}");
 
+  app.use("/api/v1/capability-map", requireKey, createCapabilityMapRouter(pool));
+  logger.info("✅ [CAPABILITY-MAP] Routes mounted at /api/v1/capability-map/{analyze,list,act}");
+
+  app.use("/api/v1/model-performance", requireKey, createModelPerformanceRouter(pool));
+  logger.info("✅ [MODEL-PERFORMANCE] Routes mounted at /api/v1/model-performance/{leaderboard,winners,lens/:lens,score-outcome}");
+
   const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
   createTCRoutes(app, {
     pool,
@@ -112,6 +120,7 @@ export function registerRuntimeRoutes(app, deps) {
     sendAlertSms,
     sendAlertCall,
     startAlertLoop: true,
+    managedEnvService: railwayManagedEnvService,
   });
   createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
 

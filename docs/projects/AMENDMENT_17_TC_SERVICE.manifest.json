@@ -6,10 +6,10 @@
   "status": "active",
   "priority": "high",
   "owner": "adam",
-  "phase": "core-infrastructure",
-  "next_task": "Access email for 6453 Mahogany Peak (Pam Patterson) to pull contract documents into TC system",
+  "phase": "first-live-intake",
+  "next_task": "Enter live IMAP, GLVAR, and eXp Okta secrets via the new TC access bootstrap/readiness flow, then run the first real intake for 6453 Mahogany Peak (Pam Patterson)",
   "stability_class": "needs-review",
-  "current_focus": "Transaction intake for 6453 Mahogany Peak — first real client transaction",
+  "current_focus": "TC access readiness and bootstrap now exist; the next move is entering live secrets and running the first real email-driven intake for 6453 Mahogany Peak",
   "owned_files": [
     "routes/tc-routes.js",
     "routes/tc-portal-routes.js",
@@ -17,6 +17,7 @@
     "services/tc-document-processor.js",
     "services/tc-communication-engine.js",
     "services/tc-escalation-engine.js",
+    "services/tc-access-service.js",
     "services/glvar-monitor.js",
     "db/migrations/20260322_tc_transactions.sql",
     "db/migrations/20260323_tc_fees.sql",
@@ -39,7 +40,9 @@
   ],
   "required_routes": [
     { "method": "GET", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "List transactions" },
-    { "method": "POST", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "Create transaction" }
+    { "method": "POST", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "Create transaction" },
+    { "method": "GET", "path": "/api/v1/tc/access/readiness", "expected_status": 200, "description": "TC access readiness status" },
+    { "method": "POST", "path": "/api/v1/tc/access/bootstrap", "expected_status": 200, "description": "TC access bootstrap" }
   ],
   "required_tables": [
     { "name": "tc_transactions", "required_columns": ["id", "address", "status", "agent_name"] },
@@ -49,7 +52,10 @@
   ],
   "required_env": [
     "DATABASE_URL",
-    "COMMAND_CENTER_KEY"
+    "COMMAND_CENTER_KEY",
+    "TC_IMAP_HOST",
+    "TC_IMAP_PORT",
+    "TC_IMAP_USER"
   ],
   "assertions": [
     { "type": "node_check", "check": "routes/tc-routes.js", "label": "tc-routes syntax" },
@@ -57,6 +63,7 @@
     { "type": "table_exists", "check": "tc_transactions", "label": "tc_transactions table exists" }
   ],
   "completion_checks": [
+    "TC access readiness route accurately reports missing/present IMAP and vault-backed browser credentials",
     "First live transaction (6453 Mahogany Peak) created and tracked in DB",
     "Email triage picks up TC-related emails and routes to correct transaction",
     "Deadline tracker fires reminders at correct intervals",
@@ -66,7 +73,7 @@
   ],
   "anti_drift_notes": "TC coordinator uses SkySlope for document management via Okta SSO browser automation. The Gmail credentials for TC email access are stored as Railway variables (email address as key, password as value). SkySlope automation requires Puppeteer on Railway — not yet deployed.",
   "decision_debt": [
-    { "description": "Email access for TC requires Gmail app password — not yet configured in Railway", "resolved": false },
+    { "description": "TC access bootstrap and readiness now exist, but live IMAP password plus GLVAR and eXp Okta credentials still need to be entered before first real intake", "resolved": false },
     { "description": "SkySlope browser automation (Puppeteer) not yet deployed on Railway", "resolved": false },
     { "description": "Billing/Stripe integration not wired to TC plan tiers yet", "resolved": false }
   ],

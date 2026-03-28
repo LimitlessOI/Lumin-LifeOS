@@ -83,6 +83,16 @@ export const ENV_REGISTRY = [
   { name: "EMAIL_FROM",          status: "NEEDED",     category: "email",    purpose: "Sender address (e.g. adam@yourdomain.com)", revenueBlocking: true },
   { name: "POSTMARK_SERVER_TOKEN",status: "NEEDED",    category: "email",    purpose: "Postmark API token for transactional email", revenueBlocking: true },
   { name: "EMAIL_WEBHOOK_SECRET",status: "OPTIONAL",   category: "email",    purpose: "Validates inbound Postmark webhook events" },
+  { name: "WORK_EMAIL",          status: "SET",        category: "email",    purpose: "Primary work inbox for alerts and TC fallback identity" },
+  { name: "WORK_EMAIL_APP_PASSWORD", status: "OPTIONAL", category: "email",  purpose: "App password for primary work inbox IMAP access" },
+  { name: "TC_IMAP_HOST",        status: "NEEDED",     category: "email",    purpose: "TC mailbox IMAP host", revenueBlocking: true },
+  { name: "TC_IMAP_PORT",        status: "NEEDED",     category: "email",    purpose: "TC mailbox IMAP port", revenueBlocking: true },
+  { name: "TC_IMAP_USER",        status: "NEEDED",     category: "email",    purpose: "TC mailbox address used for IMAP reads", revenueBlocking: true },
+  { name: "TC_IMAP_APP_PASSWORD",status: "NEEDED",     category: "email",    purpose: "App password for TC mailbox IMAP access", revenueBlocking: true },
+  { name: "TC_EMAIL_FROM",       status: "OPTIONAL",   category: "email",    purpose: "From-address for TC communications" },
+  { name: "TC_AGENT_NAME",       status: "OPTIONAL",   category: "email",    purpose: "Agent/TC name used in prepared communications" },
+  { name: "TC_AGENT_PHONE",      status: "OPTIONAL",   category: "email",    purpose: "Agent/TC phone used in prepared communications" },
+  { name: "TWILIO_WEBHOOK_SECRET", status: "OPTIONAL", category: "email",    purpose: "Validates inbound Twilio callbacks for TC comms" },
 
   // ── ElevenLabs ────────────────────────────────────────────────────────────────
   { name: "ELEVENLABS_API_KEY",  status: "SET",        category: "elevenlabs", purpose: "ElevenLabs text-to-speech" },

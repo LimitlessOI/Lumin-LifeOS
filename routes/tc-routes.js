@@ -24,6 +24,8 @@ import { createTCInteractionService } from '../services/tc-interaction-service.j
 import { createTCCommunicationCallbackService } from '../services/tc-communication-callback-service.js';
 import { createTCMobileLinkService } from '../services/tc-mobile-link-service.js';
 import { createTCFeedIngestService } from '../services/tc-feed-ingest-service.js';
+import { createTCInspectionService } from '../services/tc-inspection-service.js';
+import { createTCAccessService } from '../services/tc-access-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
@@ -42,6 +44,7 @@ export function createTCRoutes(
     sendAlertSms = null,
     sendAlertCall = null,
     startAlertLoop = false,
+    managedEnvService = null,
   } = {}
 ) {
   const router = express.Router();
@@ -62,10 +65,19 @@ export function createTCRoutes(
   const asanaSyncService = createTCAsanaSyncService({ pool, coordinator, portalService, logger });
   const workflowService = createTCWorkflowService({ portalService, logger });
   const offerPrepService = createTCOfferPrepService({ logger, callCouncilMember });
+  const inspectionService = createTCInspectionService({ pool, coordinator, alertService, logger });
   const interactionService = createTCInteractionService({ pool, coordinator, callCouncilMember, logger });
   const callbackService = createTCCommunicationCallbackService({ pool, portalService, reportService, coordinator, logger });
   const mobileLinkService = createTCMobileLinkService({});
   const feedIngestService = createTCFeedIngestService({ coordinator, reportService, pool, logger });
+  const accessService = createTCAccessService({
+    accountManager: {
+      getAccount: async (...args) => (await getAccountManager()).getAccount(...args),
+      upsertAccount: async (...args) => (await getAccountManager()).upsertAccount(...args),
+    },
+    managedEnvService,
+    logger,
+  });
   let accountManagerPromise = null;
   let notificationServicePromise = null;
 
@@ -86,6 +98,42 @@ export function createTCRoutes(
     }
     return notificationServicePromise;
   }
+
+  router.get('/access/readiness', requireKey, async (_req, res) => {
+    try {
+      const readiness = await accessService.getAccessReadiness();
+      res.json({ ok: true, readiness });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[TC-ROUTES] access readiness failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/access/bootstrap', requireKey, async (req, res) => {
+    try {
+      const result = await accessService.bootstrapAccess({
+        actor: req.body?.actor || 'tc_overlay',
+        workEmail: req.body?.work_email || '',
+        tcImapUser: req.body?.tc_imap_user || '',
+        tcAgentName: req.body?.tc_agent_name || '',
+        tcAgentPhone: req.body?.tc_agent_phone || '',
+        tcEmailFrom: req.body?.tc_email_from || '',
+        emailWebhookSecret: req.body?.email_webhook_secret || '',
+        twilioWebhookSecret: req.body?.twilio_webhook_secret || '',
+        imapPassword: req.body?.imap_password || '',
+        glvarUsername: req.body?.glvar_username || '',
+        glvarPassword: req.body?.glvar_password || '',
+        expOktaUsername: req.body?.exp_okta_username || '',
+        expOktaPassword: req.body?.exp_okta_password || '',
+        asanaAccessToken: req.body?.asana_access_token || '',
+        asanaProjectGid: req.body?.asana_tc_project_gid || '',
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[TC-ROUTES] access bootstrap failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
 
   async function queueCommunicationApprovals(transactionId, communications, {
     titlePrefix = 'Review prepared communication',
@@ -1571,6 +1619,97 @@ export function createTCRoutes(
       const navResult = await tcBrowser.navigateToMLS(loginResult.session);
       await loginResult.session?.close?.();
       res.json({ ok: true, mlsUrl: navResult.url, screenshots: [...loginResult.screenshots, ...navResult.screenshots] });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Inspection routes ─────────────────────────────────────────────────────
+  // GET  /api/v1/tc/transactions/:id/inspection          — current state + contingency countdown
+  // POST /api/v1/tc/transactions/:id/inspection/schedule — record inspector + scheduled date
+  // POST /api/v1/tc/transactions/:id/inspection/report   — mark report received + findings
+  // POST /api/v1/tc/transactions/:id/inspection/decision — accept_as_is | repair_request | reject_and_cancel
+  // POST /api/v1/tc/transactions/:id/inspection/repair-response — seller responds to repair request
+  // POST /api/v1/tc/transactions/:id/inspection/send-cancellation — mark cancellation notice sent
+
+  router.get('/transactions/:id/inspection', requireKey, async (req, res) => {
+    try {
+      const status = await inspectionService.getStatus(req.params.id);
+      res.json({ ok: true, ...status });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transactions/:id/inspection/schedule', requireKey, async (req, res) => {
+    const { inspector_name, inspector_company, inspector_phone, inspector_email, scheduled_at } = req.body;
+    if (!inspector_name || !scheduled_at) {
+      return res.status(400).json({ ok: false, error: 'inspector_name and scheduled_at are required' });
+    }
+    try {
+      const row = await inspectionService.schedule(req.params.id, {
+        inspectorName: inspector_name,
+        inspectorCompany: inspector_company,
+        inspectorPhone: inspector_phone,
+        inspectorEmail: inspector_email,
+        scheduledAt: scheduled_at,
+      });
+      res.json({ ok: true, inspection: row });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transactions/:id/inspection/report', requireKey, async (req, res) => {
+    const { completed_at, report_url, findings_summary, findings_items } = req.body;
+    try {
+      const row = await inspectionService.receiveReport(req.params.id, {
+        completedAt: completed_at,
+        reportUrl: report_url,
+        findingsSummary: findings_summary,
+        findingsItems: findings_items || [],
+      });
+      res.json({ ok: true, inspection: row });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transactions/:id/inspection/decision', requireKey, async (req, res) => {
+    const { decision, decision_notes, repair_request_items, repair_response_deadline } = req.body;
+    if (!decision) return res.status(400).json({ ok: false, error: 'decision is required' });
+    try {
+      const row = await inspectionService.decide(req.params.id, {
+        decision,
+        decisionNotes: decision_notes,
+        repairRequestItems: repair_request_items || [],
+        repairResponseDeadline: repair_response_deadline,
+      });
+      res.json({ ok: true, inspection: row });
+    } catch (err) {
+      res.status(err.message.includes('Invalid decision') ? 400 : 500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transactions/:id/inspection/repair-response', requireKey, async (req, res) => {
+    const { response, counter_offer, response_notes } = req.body;
+    if (!response) return res.status(400).json({ ok: false, error: 'response is required' });
+    try {
+      const row = await inspectionService.recordRepairResponse(req.params.id, {
+        response,
+        counterOffer: counter_offer,
+        responseNotes: response_notes,
+      });
+      res.json({ ok: true, inspection: row });
+    } catch (err) {
+      res.status(err.message.includes('Invalid') ? 400 : 500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/transactions/:id/inspection/send-cancellation', requireKey, async (req, res) => {
+    try {
+      const row = await inspectionService.markCancellationNoticeSent(req.params.id);
+      res.json({ ok: true, inspection: row, cancellation_notice: row.cancellation_notice_text });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

@@ -5,7 +5,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-27 |
+| **Last Updated** | 2026-03-27 (governance spec upgrade) |
 | **Verification Command** | `node scripts/verify-project.mjs --project project_governance` |
 | **Manifest** | `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json` |
 
@@ -40,6 +40,7 @@ Truth over convenience. No AI or human should work from stale assumptions when t
 ```
 routes/project-governance-routes.js
 db/migrations/20260327_project_governance.sql
+db/migrations/20260327_governance_spec.sql
 docs/projects/manifest.schema.json
 docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
 docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json
@@ -114,9 +115,10 @@ docs/projects/INDEX.md
 - [x] **Run the seed bootstrap against the real DB and verify live governance endpoints** *(est: 1h | actual: 1h)* `[safe]`
 - [x] **Add build-readiness checklist and readiness queue routes** *(est: 2h | actual: 2h)* `[needs-review]`
 - [x] **Mount builder supervisor routes into runtime composition** *(est: 0.5h | actual: 0.5h)* `[safe]`
+- [x] **Wire adam_decision_profile learning loop into pending-adam resolve route** *(est: 1h | actual: 1h)* `[safe]` — resolve captures `actual_choice` → updates `adam_decision_profile.actual_choice + was_correct`; `actual_choice = 'override_stop'` resets segment to pending
 - [ ] **→ NEXT: wire estimation accuracy, readiness queue, and governance drill-down into the Command Center overlay** *(est: 4h)* `[needs-review]`
 
-**Progress:** 12/13 steps complete | Est. remaining: ~4h
+**Progress:** 13/14 steps complete | Est. remaining: ~4h
 
 ---
 
@@ -136,16 +138,20 @@ Required runtime truths:
 - `GET /api/v1/projects/readiness/queue` exists
 - `GET /api/v1/builder/status` exists
 - `projects`, `project_segments`, `estimation_log`, and `pending_adam` tables exist after migration
+- `project_segments` has `review_tier`, `allowed_files`, `exact_outcome`, `required_checks`, `rollback_note` columns (from `20260327_governance_spec.sql`)
+- `projects` has `market_sensitive` column (from `20260327_governance_spec.sql`)
+- `build_outcomes` table exists for post-merge outcome scoring
 
 ---
 
 ## Context Handoff
-- Current blocker: governance data, readiness gates, and builder-supervisor routes are live, but the Command Center still needs a first-class governance panel for estimation accuracy, readiness queue, and deeper drill-downs.
-- Last decision: mount governance routes once at `/api/v1` so route paths stay canonical and do not double-prefix.
+- Current blocker: governance data, readiness gates, and builder-supervisor routes are live. Adam decision profile learning loop is wired. Command Center still needs a first-class governance panel for estimation accuracy, readiness queue, and deeper drill-downs.
+- Last decision: startup guards now check real TC env/vault readiness instead of stale hard-coded env names, and runtime route composition now passes managed-env control into the TC lane so access bootstrap can be done through governed routes.
 - Do not move project governance back into `server.js`; keep runtime composition in startup modules.
 - Read first:
   - `routes/project-governance-routes.js`
   - `routes/builder-supervisor-routes.js`
+  - `services/builder-council-review.js`
   - `scripts/verify-project.mjs`
   - `docs/projects/manifest.schema.json`
 
@@ -168,3 +174,6 @@ Required runtime truths:
 | 2026-03-27 | Added governance schema, routes, manifests, verifier, coupling/staleness scripts, and CI workflow | Make SSOT discipline executable instead of aspirational | ✅ | ✅ | pending |
 | 2026-03-27 | Seeded projects/segments into the real DB and verified live governance endpoints | Make the governance lane operational instead of API-only | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added readiness-gate routes, readiness queue, checklist doc, and builder supervisor route composition | Make pre-build maturity explicit and give governed projects a safe automation entry point | ✅ | pending | pending |
+| 2026-03-27 | Adam decision profile learning loop in pending-adam resolve route | Capture actual choices vs predicted; track accuracy over time in adam_prediction_accuracy view | ✅ | pending | pending |
+| 2026-03-27 | Governance spec upgrade: segment spec fields (review_tier, allowed_files, exact_outcome, required_checks, rollback_note), market_sensitive on projects, build_outcomes table, manifest schema segments array, build_ready/council_persona/segment_schema_version fields | Make builder execution contracts machine-enforceable: no segment built without exact_outcome + allowed_files; file boundary enforcement; post-build verification gate; 4-tier review routing | ✅ | ✅ | pending |
+| 2026-03-27 | Corrected domain boot guards to use actual TC env/vault readiness and passed managed-env control into TC route composition | Keep startup truth aligned with real credential sources and allow governed access bootstrap from the TC lane | ✅ | ✅ | pending |
