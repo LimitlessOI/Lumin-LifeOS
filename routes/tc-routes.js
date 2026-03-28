@@ -142,6 +142,23 @@ export function createTCRoutes(
     }
   });
 
+  router.post('/access/seed-defaults', requireKey, async (req, res) => {
+    try {
+      const result = await accessService.seedKnownEnvDefaults({
+        actor: req.body?.actor || 'tc_overlay',
+        workEmail: req.body?.work_email || '',
+        tcImapUser: req.body?.tc_imap_user || '',
+        tcAgentName: req.body?.tc_agent_name || '',
+        tcAgentPhone: req.body?.tc_agent_phone || '',
+        tcEmailFrom: req.body?.tc_email_from || '',
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[TC-ROUTES] access seed defaults failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/intake/workspace', requireKey, async (_req, res) => {
     try {
       const workspace = await intakeWorkspaceService.getWorkspace();

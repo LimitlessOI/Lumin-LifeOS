@@ -627,6 +627,7 @@ services/email-triage.js  — shared with email domain
 - [x] **Expose manual document QA and dry-run upload controls in the workspace** *(est: 2h | actual: 2h)* `[safe]`
 - [x] **Expose dry-run intake execution in the workspace** *(est: 2h | actual: 1h)* `[safe]`
 - [x] **Create document requests directly from failed workspace QA checks** *(est: 2h | actual: 1h)* `[safe]`
+- [x] **Seed known TC env defaults automatically while leaving secrets blank for manual entry** *(est: 2h | actual: 2h)* `[safe]`
 - [ ] **→ NEXT: First real transaction intake end-to-end (6453 Mahogany Peak)** *(est: 4h)* `[high-risk]`
 - [ ] **IMAP vars set in Railway + dry-run email scan** *(est: 1h)* `[safe]`
 - [ ] **SkySlope login test on Railway** *(est: 1h)* `[needs-review]`
@@ -636,7 +637,7 @@ services/email-triage.js  — shared with email domain
 - [ ] **First paying agent client enrolled** *(est: 2h)* `[safe]`
 - [ ] **Stripe billing wired to TC plan tiers** *(est: 4h)* `[needs-review]`
 
-**Progress:** 19/27 steps complete | Est. remaining: ~16h
+**Progress:** 20/28 steps complete | Est. remaining: ~14h
 
 ---
 
@@ -721,7 +722,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 ---
 
 ## Handoff (Fresh AI Context)
-**Current blocker:** Live secrets still need to be entered — the workspace can now create new placeholder transactions or link triaged emails to existing ones, but IMAP password plus GLVAR and eXp Okta credentials must be stored before first real intake can run end-to-end
+**Current blocker:** Live secrets still need to be entered — the workspace can now seed the known TC env defaults automatically and leave secret slots blank, but IMAP password plus GLVAR and eXp Okta credentials must still be stored before first real intake can run end-to-end
 
 **Last decision:** TC access should use managed env for defaults and the credential vault for secrets; startup guards now check real readiness instead of stale hard-coded env names
 
@@ -772,7 +773,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 | 2026-03-27 | Added agent intake workspace with access setup form, dry-run GLVAR/SkySlope checks, inbox triage queue, and suggested transaction matching | Give the operator a single place to enter secrets, verify access, monitor readiness, and route paperwork before live filing | ✅ | ✅ | pending |
 | 2026-03-27 | Added triage preview-text enrichment, message-id capture, and stronger workspace matching signals | Improve inbox classification quality and make intake routing more useful before live filing credentials are entered | ✅ | ✅ | pending |
 | 2026-03-27 | Added triage-to-transaction creation so contract emails can create placeholder TC files directly from the intake workspace | Reduce manual setup friction before full live filing access is available | ✅ | ✅ | pending |
-| 2026-03-28 | Added triage-to-existing-transaction linking from the intake workspace, with transaction event logging, recent intake activity visibility, source-email backfill when missing, manual document QA / dry-run upload controls, a dry-run intake launcher, and document-request creation from failed QA checks | Let the operator route important paperwork into the correct TC file without creating duplicate placeholder transactions, validate documents from the same workspace, rehearse the first live intake, and immediately request whatever signatures or fields are still missing | ✅ | ✅ | pending |
+| 2026-03-28 | Added triage-to-existing-transaction linking from the intake workspace, with transaction event logging, recent intake activity visibility, source-email backfill when missing, manual document QA / dry-run upload controls, a dry-run intake launcher, document-request creation from failed QA checks, and automatic seeding of known TC env defaults while leaving secrets blank | Let the operator route important paperwork into the correct TC file without creating duplicate placeholder transactions, validate documents from the same workspace, rehearse the first live intake, request whatever signatures or fields are still missing, and have the system fill in the non-secret TC env layer automatically | ✅ | ✅ | pending |
 | 2026-03-26 | TC runtime wiring hardened — account-manager, notification service, IMAP consistency | Fix runtime injection errors | ✅ | n/a | pending |
 | 2026-03-25 | TC portal, reporting, approvals, alerts migrations | DB schema completion | ✅ | n/a | n/a |
 | 2026-03-22 | Initial TC coordinator, email triage, SkySlope agent | Core TC infrastructure | ✅ | n/a | n/a |

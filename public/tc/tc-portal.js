@@ -154,6 +154,21 @@
     await load();
   }
 
+  async function seedKnownEnvDefaultsFromForm() {
+    const payload = {
+      work_email: document.getElementById('work-email')?.value || '',
+      tc_imap_user: document.getElementById('tc-imap-user')?.value || '',
+      tc_agent_name: document.getElementById('tc-agent-name')?.value || '',
+      tc_agent_phone: document.getElementById('tc-agent-phone')?.value || '',
+      tc_email_from: document.getElementById('tc-email-from')?.value || '',
+    };
+    await api('/api/v1/tc/access/seed-defaults', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    await load();
+  }
+
   async function runInboxScan() {
     await api('/api/v1/tc/email/scan', { method: 'POST', body: JSON.stringify({}) });
     await load();
@@ -360,6 +375,7 @@
     const root = document.getElementById('app');
     const readiness = data.readiness || {};
     const readinessSummary = readiness.readiness || {};
+    const envTemplate = readiness.env_template || [];
     const intakeQueue = data.intake_queue || [];
     const transactions = data.active_transactions || [];
     const recentActivity = data.recent_activity || [];
@@ -390,6 +406,15 @@
         <td><span class="badge ${badgeClass(item.present ? 'healthy' : 'red')}">${escapeHtml(item.present ? 'stored' : 'missing')}</span></td>
       </tr>
     `).join('') || '<tr><td colspan="3">No vault credentials tracked yet.</td></tr>';
+
+    const templateRows = envTemplate.map((item) => `
+      <tr>
+        <td>${escapeHtml(item.name)}</td>
+        <td>${escapeHtml(item.description || '')}</td>
+        <td>${item.secret ? '<em>leave blank until you enter it</em>' : escapeHtml(item.value || '')}</td>
+        <td><span class="badge ${badgeClass(item.known ? 'healthy' : 'review')}">${escapeHtml(item.known ? 'known' : item.secret ? 'needs secret' : 'needs value')}</span></td>
+      </tr>
+    `).join('') || '<tr><td colspan="4">No env template available.</td></tr>';
 
     const queueRows = intakeQueue.map((item) => {
       const matchCandidates = item.match_candidates || [];
@@ -509,6 +534,7 @@
             </div>
           </div>
           <div class="row-actions" style="margin-top:12px">
+            <button id="seed-known-envs" class="ghost">Seed known envs</button>
             <button id="bootstrap-access">Save access</button>
           </div>
           <p><strong>Next actions:</strong> ${(data.next_actions || []).map((item) => escapeHtml(item)).join(' | ') || 'None'}</p>
@@ -522,6 +548,8 @@
           </div>
           <div id="access-test-results">${renderWorkspaceTests(lastWorkspaceTests)}</div>
           <table><thead><tr><th>Env</th><th>Purpose</th><th>Status</th></tr></thead><tbody>${envRows}</tbody></table>
+          <h2 style="margin-top:16px">Env Template</h2>
+          <table><thead><tr><th>Name</th><th>Purpose</th><th>Value to seed</th><th>Status</th></tr></thead><tbody>${templateRows}</tbody></table>
           <h2 style="margin-top:16px">Vault Credentials</h2>
           <table><thead><tr><th>Service</th><th>Key</th><th>Status</th></tr></thead><tbody>${vaultRows}</tbody></table>
         </div>
@@ -597,6 +625,14 @@
       try {
         await bootstrapAccessFromForm();
         alert('TC access saved.');
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    document.getElementById('seed-known-envs')?.addEventListener('click', async () => {
+      try {
+        await seedKnownEnvDefaultsFromForm();
+        alert('Known TC env defaults seeded. Secret values remain for manual entry.');
       } catch (err) {
         alert(err.message);
       }
