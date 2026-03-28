@@ -7,9 +7,9 @@
   "priority": "high",
   "owner": "adam",
   "phase": "first-live-intake",
-  "next_task": "Enter live IMAP, GLVAR, and eXp Okta secrets via the new TC access bootstrap/readiness flow, then run the first real intake for 6453 Mahogany Peak (Pam Patterson)",
+  "next_task": "Enter live IMAP, GLVAR, and eXp Okta secrets via the agent intake workspace or TC access bootstrap flow, then run the first real intake for 6453 Mahogany Peak (Pam Patterson)",
   "stability_class": "needs-review",
-  "current_focus": "TC access readiness and bootstrap now exist; the next move is entering live secrets and running the first real email-driven intake for 6453 Mahogany Peak",
+  "current_focus": "TC access readiness/bootstrap and the intake workspace now exist; the next move is entering live secrets and running the first real email-driven intake for 6453 Mahogany Peak",
   "owned_files": [
     "routes/tc-routes.js",
     "routes/tc-portal-routes.js",
@@ -18,6 +18,7 @@
     "services/tc-communication-engine.js",
     "services/tc-escalation-engine.js",
     "services/tc-access-service.js",
+    "services/tc-intake-workspace-service.js",
     "services/glvar-monitor.js",
     "db/migrations/20260322_tc_transactions.sql",
     "db/migrations/20260323_tc_fees.sql",
@@ -43,6 +44,7 @@
     { "method": "POST", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "Create transaction" },
     { "method": "GET", "path": "/api/v1/tc/access/readiness", "expected_status": 200, "description": "TC access readiness status" },
     { "method": "POST", "path": "/api/v1/tc/access/bootstrap", "expected_status": 200, "description": "TC access bootstrap" }
+    ,{ "method": "GET", "path": "/api/v1/tc/intake/workspace", "expected_status": 200, "description": "TC intake workspace summary" }
   ],
   "required_tables": [
     { "name": "tc_transactions", "required_columns": ["id", "address", "status", "agent_name"] },
@@ -64,6 +66,7 @@
   ],
   "completion_checks": [
     "TC access readiness route accurately reports missing/present IMAP and vault-backed browser credentials",
+    "Agent portal without a transaction id shows the intake workspace with readiness, triage, and suggested transaction matches",
     "First live transaction (6453 Mahogany Peak) created and tracked in DB",
     "Email triage picks up TC-related emails and routes to correct transaction",
     "Deadline tracker fires reminders at correct intervals",

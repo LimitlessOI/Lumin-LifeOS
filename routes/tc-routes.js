@@ -26,6 +26,7 @@ import { createTCMobileLinkService } from '../services/tc-mobile-link-service.js
 import { createTCFeedIngestService } from '../services/tc-feed-ingest-service.js';
 import { createTCInspectionService } from '../services/tc-inspection-service.js';
 import { createTCAccessService } from '../services/tc-access-service.js';
+import { createTCIntakeWorkspaceService } from '../services/tc-intake-workspace-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
@@ -76,6 +77,12 @@ export function createTCRoutes(
       upsertAccount: async (...args) => (await getAccountManager()).upsertAccount(...args),
     },
     managedEnvService,
+    logger,
+  });
+  const intakeWorkspaceService = createTCIntakeWorkspaceService({
+    pool,
+    coordinator,
+    accessService,
     logger,
   });
   let accountManagerPromise = null;
@@ -131,6 +138,16 @@ export function createTCRoutes(
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[TC-ROUTES] access bootstrap failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/intake/workspace', requireKey, async (_req, res) => {
+    try {
+      const workspace = await intakeWorkspaceService.getWorkspace();
+      res.json({ ok: true, workspace });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[TC-ROUTES] intake workspace failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });

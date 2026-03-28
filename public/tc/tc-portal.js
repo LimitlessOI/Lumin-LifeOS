@@ -8,6 +8,12 @@
     );
   }
 
+  function setApiKey(value) {
+    localStorage.setItem('COMMAND_CENTER_KEY', value);
+    localStorage.setItem('lifeos_cmd_key', value);
+    localStorage.setItem('x_api_key', value);
+  }
+
   function qs(name) {
     return new URLSearchParams(window.location.search).get(name);
   }
@@ -48,6 +54,15 @@
     const txId = qs('tx');
     const view = document.body.dataset.view || 'agent';
     if (!txId) {
+      if (view === 'agent') {
+        try {
+          const workspace = await api('/api/v1/tc/intake/workspace');
+          renderWorkspace(workspace.workspace || workspace);
+        } catch (err) {
+          document.getElementById('app').innerHTML = `<div class="card error"><h2>Workspace load failed</h2><p>${escapeHtml(err.message)}</p></div>`;
+        }
+        return;
+      }
       document.getElementById('app').innerHTML = '<div class="card"><h2>Missing transaction id</h2><p>Add <code>?tx=123</code> to the URL.</p></div>';
       return;
     }
@@ -94,6 +109,230 @@
       return;
     }
     alert(url || 'Link generated');
+  }
+
+  async function bootstrapAccessFromForm() {
+    const payload = {
+      work_email: document.getElementById('work-email')?.value || '',
+      tc_imap_user: document.getElementById('tc-imap-user')?.value || '',
+      tc_agent_name: document.getElementById('tc-agent-name')?.value || '',
+      tc_agent_phone: document.getElementById('tc-agent-phone')?.value || '',
+      tc_email_from: document.getElementById('tc-email-from')?.value || '',
+      imap_password: document.getElementById('imap-password')?.value || '',
+      glvar_username: document.getElementById('glvar-username')?.value || '',
+      glvar_password: document.getElementById('glvar-password')?.value || '',
+      exp_okta_username: document.getElementById('exp-okta-username')?.value || '',
+      exp_okta_password: document.getElementById('exp-okta-password')?.value || '',
+    };
+    await api('/api/v1/tc/access/bootstrap', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    ['imap-password', 'glvar-password', 'exp-okta-password'].forEach((id) => {
+      const input = document.getElementById(id);
+      if (input) input.value = '';
+    });
+    await load();
+  }
+
+  async function runInboxScan() {
+    await api('/api/v1/tc/email/scan', { method: 'POST', body: JSON.stringify({}) });
+    await load();
+  }
+
+  async function runExecutedAgreementSearch() {
+    const result = await api('/api/v1/tc/intake/email-search', { method: 'POST', body: JSON.stringify({ days: 90 }) });
+    alert(`Found ${result.found || 0} relevant email(s) in the inbox search.`);
+    await load();
+  }
+
+  async function markTriageHandled(id) {
+    await api(`/api/v1/tc/email/triage/${id}/action`, {
+      method: 'POST',
+      body: JSON.stringify({ notes: 'Handled from TC intake workspace' }),
+    });
+    await load();
+  }
+
+  function renderWorkspace(data) {
+    const root = document.getElementById('app');
+    const readiness = data.readiness || {};
+    const readinessSummary = readiness.readiness || {};
+    const intakeQueue = data.intake_queue || [];
+    const transactions = data.active_transactions || [];
+
+    const readinessCards = [
+      { label: 'IMAP', value: readinessSummary.imap_ready ? 'Ready' : 'Missing', status: readinessSummary.imap_ready ? 'ok' : 'bad' },
+      { label: 'GLVAR / TransactionDesk', value: readinessSummary.glvar_ready ? 'Ready' : 'Missing', status: readinessSummary.glvar_ready ? 'ok' : 'bad' },
+      { label: 'SkySlope', value: readinessSummary.skyslope_ready ? 'Ready' : 'Missing', status: readinessSummary.skyslope_ready ? 'ok' : 'bad' },
+      { label: 'Actionable emails', value: data.summary?.actionable_emails || 0, status: (data.summary?.actionable_emails || 0) > 0 ? 'warn' : 'ok' },
+    ];
+
+    const envRows = (readiness.env || []).map((item) => `
+      <tr>
+        <td>${escapeHtml(item.name)}</td>
+        <td>${escapeHtml(item.description)}</td>
+        <td><span class="badge ${badgeClass(item.present ? 'healthy' : 'red')}">${escapeHtml(item.present ? 'set' : 'missing')}</span></td>
+      </tr>
+    `).join('') || '<tr><td colspan="3">No env info available.</td></tr>';
+
+    const vaultRows = (readiness.vault || []).map((item) => `
+      <tr>
+        <td>${escapeHtml(item.service)}</td>
+        <td>${escapeHtml(item.key || '')}</td>
+        <td><span class="badge ${badgeClass(item.present ? 'healthy' : 'red')}">${escapeHtml(item.present ? 'stored' : 'missing')}</span></td>
+      </tr>
+    `).join('') || '<tr><td colspan="3">No vault credentials tracked yet.</td></tr>';
+
+    const queueRows = intakeQueue.map((item) => `
+      <tr>
+        <td>${escapeHtml(item.received_at || '')}</td>
+        <td>${escapeHtml(item.subject || '')}</td>
+        <td><span class="badge ${badgeClass(item.category)}">${escapeHtml(item.category || '')}</span></td>
+        <td>${item.suggested_transaction ? `<a href="/tc/agent-portal.html?tx=${encodeURIComponent(item.suggested_transaction.transaction_id)}">${escapeHtml(item.suggested_transaction.address)}</a> <span class="badge ${badgeClass(item.suggested_transaction.confidence)}">${escapeHtml(item.suggested_transaction.confidence)}</span>` : '—'}</td>
+        <td>${escapeHtml(item.next_step || '')}</td>
+        <td><button data-triage-handle="${item.id}" class="ghost">${item.actioned_at ? 'Handled' : 'Mark handled'}</button></td>
+      </tr>
+    `).join('') || '<tr><td colspan="6">No actionable triage items.</td></tr>';
+
+    const txRows = transactions.map((item) => `
+      <tr>
+        <td><a href="/tc/agent-portal.html?tx=${encodeURIComponent(item.id)}">${escapeHtml(item.address || '')}</a></td>
+        <td><span class="badge ${badgeClass(item.health_status)}">${escapeHtml(item.health_status || '')}</span></td>
+        <td>${escapeHtml(item.stage || '')}</td>
+        <td>${escapeHtml(item.next_action || '')}</td>
+        <td>${escapeHtml(item.transaction_desk_id || 'pending')}</td>
+      </tr>
+    `).join('') || '<tr><td colspan="5">No active transactions yet.</td></tr>';
+
+    root.innerHTML = `
+      <div class="hero">
+        <div>
+          <div class="eyebrow">TC Intake Workspace</div>
+          <h1>Transaction Intake Control</h1>
+          <p>Readiness, inbox triage, and first-file routing before live filing runs.</p>
+        </div>
+        <div class="card">
+          <label>Command key</label>
+          <input id="api-key" type="password" value="${escapeHtml(getApiKey())}" placeholder="x-api-key">
+          <div class="row-actions" style="margin-top:10px">
+            <button id="save-api-key">Save key</button>
+            <button id="scan-inbox" class="ghost">Run inbox scan</button>
+            <button id="search-agreements" class="ghost">Search agreements</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid four">
+        ${readinessCards.map((item) => `<div class="card stat"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong><span class="badge ${badgeClass(item.status)}">${escapeHtml(item.status)}</span></div>`).join('')}
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <h2>Access Setup</h2>
+          <div class="grid two">
+            <div>
+              <label>Work email</label>
+              <input id="work-email" value="${escapeHtml(readiness.bootstrap_defaults?.TC_EMAIL_FROM || '')}" placeholder="adam@hopkinsgroup.org">
+            </div>
+            <div>
+              <label>TC IMAP user</label>
+              <input id="tc-imap-user" value="${escapeHtml(readiness.bootstrap_defaults?.TC_EMAIL_FROM || '')}" placeholder="adam@hopkinsgroup.org">
+            </div>
+            <div>
+              <label>TC agent name</label>
+              <input id="tc-agent-name" value="${escapeHtml(readiness.bootstrap_defaults?.TC_AGENT_NAME || '')}" placeholder="Adam Hopkins">
+            </div>
+            <div>
+              <label>TC agent phone</label>
+              <input id="tc-agent-phone" value="" placeholder="702-555-1212">
+            </div>
+            <div>
+              <label>TC email from</label>
+              <input id="tc-email-from" value="${escapeHtml(readiness.bootstrap_defaults?.TC_EMAIL_FROM || '')}" placeholder="adam@hopkinsgroup.org">
+            </div>
+            <div>
+              <label>IMAP app password</label>
+              <input id="imap-password" type="password" placeholder="App password">
+            </div>
+            <div>
+              <label>GLVAR username</label>
+              <input id="glvar-username" placeholder="GLVAR login">
+            </div>
+            <div>
+              <label>GLVAR password</label>
+              <input id="glvar-password" type="password" placeholder="GLVAR password">
+            </div>
+            <div>
+              <label>eXp Okta username</label>
+              <input id="exp-okta-username" placeholder="adam.hopkins@exprealty.com">
+            </div>
+            <div>
+              <label>eXp Okta password</label>
+              <input id="exp-okta-password" type="password" placeholder="Okta password">
+            </div>
+          </div>
+          <div class="row-actions" style="margin-top:12px">
+            <button id="bootstrap-access">Save access</button>
+          </div>
+          <p><strong>Next actions:</strong> ${(data.next_actions || []).map((item) => escapeHtml(item)).join(' | ') || 'None'}</p>
+        </div>
+
+        <div class="card">
+          <h2>Readiness Details</h2>
+          <table><thead><tr><th>Env</th><th>Purpose</th><th>Status</th></tr></thead><tbody>${envRows}</tbody></table>
+          <h2 style="margin-top:16px">Vault Credentials</h2>
+          <table><thead><tr><th>Service</th><th>Key</th><th>Status</th></tr></thead><tbody>${vaultRows}</tbody></table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Inbox Intake Queue</h2>
+        <table><thead><tr><th>Received</th><th>Subject</th><th>Category</th><th>Suggested transaction</th><th>Next step</th><th>Action</th></tr></thead><tbody>${queueRows}</tbody></table>
+      </div>
+
+      <div class="card">
+        <h2>Active Transactions</h2>
+        <table><thead><tr><th>Address</th><th>Health</th><th>Stage</th><th>Next action</th><th>TransactionDesk</th></tr></thead><tbody>${txRows}</tbody></table>
+      </div>
+    `;
+
+    document.getElementById('save-api-key')?.addEventListener('click', () => {
+      setApiKey(document.getElementById('api-key')?.value || '');
+      alert('Command key saved.');
+    });
+    document.getElementById('bootstrap-access')?.addEventListener('click', async () => {
+      try {
+        await bootstrapAccessFromForm();
+        alert('TC access saved.');
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    document.getElementById('scan-inbox')?.addEventListener('click', async () => {
+      try {
+        await runInboxScan();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    document.getElementById('search-agreements')?.addEventListener('click', async () => {
+      try {
+        await runExecutedAgreementSearch();
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    root.querySelectorAll('[data-triage-handle]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        if (button.textContent === 'Handled') return;
+        try {
+          await markTriageHandled(button.dataset.triageHandle);
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+    });
   }
 
   function renderOverview(data, reports, approvals, interactions) {

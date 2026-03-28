@@ -91,6 +91,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-offer-prep-service.js` | Client/property/comp-based offer recommendation engine for review-only offer prep |
 | `services/tc-interaction-service.js` | Lawful interaction capture, disclosed/visible recording gate, commitment extraction, client-memory suggestions, and coaching review |
 | `services/tc-access-service.js` | Access readiness and bootstrap for IMAP, GLVAR, TransactionDesk, and SkySlope prerequisites |
+| `services/tc-intake-workspace-service.js` | Workspace summary for TC readiness, inbox triage, and transaction matching before filing |
 | `services/tc-inspection-service.js` | **NEW** Inspection workflow: schedule → report → decision (accept/repair/reject); rejection fast path drafts cancellation notice, fires CRITICAL alert, cancels transaction |
 | `db/migrations/20260327_tc_inspections.sql` | **NEW** tc_inspections table: inspector info, scheduling, report receipt, findings, buyer decision, repair request/response, cancellation notice, earnest money tracking |
 | `routes/tc-routes.js` | All TC API endpoints |
@@ -461,6 +462,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | GET | `/fees/revenue` | MRR, ARR, outstanding fees |
 | POST | `/intake/run` | Full email→SkySlope intake run |
 | POST | `/intake/email-search` | Dry-run email scan |
+| GET | `/intake/workspace` | Agent intake workspace for readiness, triage queue, and suggested transaction matches |
 | POST | `/intake/upload` | Manual doc upload → SkySlope |
 | GET | `/access/readiness` | Show which email/browser prerequisites are configured vs still missing |
 | POST | `/access/bootstrap` | Store non-secret defaults and optional secret access inputs for TC |
@@ -615,6 +617,7 @@ services/email-triage.js  — shared with email domain
 - [x] **TC runtime wiring hardened (account-manager, notification, IMAP)** *(est: 3h | actual: 4h)* `[needs-review]`
 - [x] **Offer prep command engine** *(est: 5h | actual: 6h)* `[needs-review]`
 - [x] **TC access readiness + bootstrap for email / GLVAR / SkySlope prerequisites** *(est: 3h | actual: 3h)* `[needs-review]`
+- [x] **TC intake workspace in the agent portal for readiness, triage queue, and suggested transaction matching** *(est: 4h | actual: 4h)* `[needs-review]`
 - [ ] **→ NEXT: First real transaction intake end-to-end (6453 Mahogany Peak)** *(est: 4h)* `[high-risk]`
 - [ ] **IMAP vars set in Railway + dry-run email scan** *(est: 1h)* `[safe]`
 - [ ] **SkySlope login test on Railway** *(est: 1h)* `[needs-review]`
@@ -624,7 +627,7 @@ services/email-triage.js  — shared with email domain
 - [ ] **First paying agent client enrolled** *(est: 2h)* `[safe]`
 - [ ] **Stripe billing wired to TC plan tiers** *(est: 4h)* `[needs-review]`
 
-**Progress:** 11/19 steps complete | Est. remaining: ~24h
+**Progress:** 12/20 steps complete | Est. remaining: ~24h
 
 ---
 
@@ -709,7 +712,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 ---
 
 ## Handoff (Fresh AI Context)
-**Current blocker:** Secret access inputs still need live values — IMAP password plus GLVAR and eXp Okta credentials must be stored before first real intake can run end-to-end
+**Current blocker:** Live secrets still need to be entered — the workspace and bootstrap flow are in place, but IMAP password plus GLVAR and eXp Okta credentials must be stored before first real intake can run end-to-end
 
 **Last decision:** TC access should use managed env for defaults and the credential vault for secrets; startup guards now check real readiness instead of stale hard-coded env names
 
@@ -717,6 +720,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 - `services/tc-coordinator.js`: Nevada standard timelines are hard-coded intentionally — they reflect actual NRS deadlines
 - Adam-signs-all rule: no auto-submit logic should ever be added without explicit user approval
 - IMAP credentials: stored in Railway managed env or the encrypted credential vault, never in code or .env files checked into git
+- Agent portal without `?tx=` should remain the intake workspace, not a blank error page
 
 **Read first:** `routes/tc-routes.js`, `services/tc-coordinator.js`, `services/glvar-monitor.js`
 
@@ -733,6 +737,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 | Symptom | Likely Cause | Fix |
 |---|---|---|
 | Email triage not picking up contracts | IMAP config missing from env/vault | Check `GET /api/v1/tc/access/readiness`, then bootstrap via `POST /api/v1/tc/access/bootstrap` or store `email_imap` via `POST /api/v1/accounts/store` |
+| Agent portal opens with no transaction context | No `?tx=` parameter was supplied | Use the intake workspace that now loads by default and run setup/scan from there |
 | SkySlope login fails | Okta session expired or credentials missing from vault | Store/rotate `exp_okta` via `POST /api/v1/accounts/store`, then re-run readiness |
 | GLVAR dues cron not firing | GLVAR_DUES_DAY env var not set or cron not registered | Check startup/register-schedulers.js mounts GLVAR cron |
 | Transaction created but no deadlines | Nevada timeline generator not called | Check tc-coordinator.js generateNevadaTimeline() call after INSERT |
@@ -755,6 +760,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 |---|---|---|---|---|---|
 | 2026-03-27 | Added Build Plan, Anti-Drift, Decision Log, Handoff, Runbook, Decision Debt, Change Receipts | SSOT template compliance | ✅ | ✅ | pending |
 | 2026-03-27 | Added TC access readiness/bootstrap routes and corrected startup guards to use real env/vault readiness checks | Unblock first live email intake and browser access setup | ✅ | ✅ | pending |
+| 2026-03-27 | Added agent intake workspace with access setup form, inbox triage queue, and suggested transaction matching | Give the operator a single place to enter secrets, monitor readiness, and route paperwork before live filing | ✅ | ✅ | pending |
 | 2026-03-26 | TC runtime wiring hardened — account-manager, notification service, IMAP consistency | Fix runtime injection errors | ✅ | n/a | pending |
 | 2026-03-25 | TC portal, reporting, approvals, alerts migrations | DB schema completion | ✅ | n/a | n/a |
 | 2026-03-22 | Initial TC coordinator, email triage, SkySlope agent | Core TC infrastructure | ✅ | n/a | n/a |
