@@ -7,9 +7,9 @@
   "priority": "high",
   "owner": "adam",
   "phase": "first-live-intake",
-  "next_task": "Enter live IMAP, GLVAR, and eXp Okta secrets via the agent intake workspace or TC access bootstrap flow, then run the first real intake for 6453 Mahogany Peak (Pam Patterson)",
+  "next_task": "Enter live IMAP, GLVAR, and eXp Okta secrets via the agent intake workspace or TC access bootstrap flow, then run the first real intake for 6453 Mahogany Peak (Pam Patterson) using the new create-or-link triage actions",
   "stability_class": "needs-review",
-  "current_focus": "TC access readiness/bootstrap and the intake workspace now exist; the next move is entering live secrets and running the first real email-driven intake for 6453 Mahogany Peak",
+  "current_focus": "TC intake workspace now supports both create-new and link-existing triage actions; the next move is entering live secrets and running the first real email-driven intake for 6453 Mahogany Peak",
   "owned_files": [
     "routes/tc-routes.js",
     "routes/tc-portal-routes.js",
@@ -47,7 +47,8 @@
     { "method": "GET", "path": "/api/v1/tc/access/readiness", "expected_status": 200, "description": "TC access readiness status" },
     { "method": "POST", "path": "/api/v1/tc/access/bootstrap", "expected_status": 200, "description": "TC access bootstrap" },
     { "method": "GET", "path": "/api/v1/tc/intake/workspace", "expected_status": 200, "description": "TC intake workspace summary" },
-    { "method": "POST", "path": "/api/v1/tc/email/triage/:id/create-transaction", "expected_status": 200, "description": "Create placeholder transaction from triaged contract email" }
+    { "method": "POST", "path": "/api/v1/tc/email/triage/:id/create-transaction", "expected_status": 200, "description": "Create placeholder transaction from triaged contract email" },
+    { "method": "POST", "path": "/api/v1/tc/email/triage/:id/link-transaction", "expected_status": 200, "description": "Link triaged email to an existing transaction" }
   ],
   "required_tables": [
     { "name": "tc_transactions", "required_columns": ["id", "address", "status", "agent_name"] },
@@ -72,6 +73,9 @@
     "Agent portal without a transaction id shows the intake workspace with readiness, triage, and suggested transaction matches",
     "Email triage stores preview text and message identity when enrichment columns are available, improving workspace routing quality",
     "The intake workspace can create a placeholder transaction directly from a triaged contract email",
+    "The intake workspace can link a triaged email to an existing transaction and record the routing event",
+    "The intake workspace shows recent intake activity so the operator can audit routing work without leaving the portal",
+    "The intake workspace exposes manual document validation and dry-run upload controls before live filing",
     "First live transaction (6453 Mahogany Peak) created and tracked in DB",
     "Email triage picks up TC-related emails and routes to correct transaction",
     "Deadline tracker fires reminders at correct intervals",

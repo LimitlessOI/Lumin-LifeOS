@@ -88,6 +88,26 @@ export function createTCIntakeWorkspaceService({ pool, coordinator, accessServic
     return rows;
   }
 
+  async function listRecentIntakeActivity(limit = 20) {
+    const { rows } = await pool.query(
+      `SELECT e.created_at, e.event_type, e.payload, t.id AS transaction_id, t.address
+       FROM tc_transaction_events e
+       JOIN tc_transactions t ON t.id = e.transaction_id
+       WHERE e.event_type IN ('created', 'triage_email_linked', 'td_created', 'td_create_failed', 'party_intro_sent')
+       ORDER BY e.created_at DESC
+       LIMIT $1`,
+      [limit]
+    ).catch(() => ({ rows: [] }));
+
+    return rows.map((row) => ({
+      created_at: row.created_at,
+      event_type: row.event_type,
+      transaction_id: row.transaction_id,
+      address: row.address,
+      payload: row.payload || {},
+    }));
+  }
+
   function buildQueue(emails, transactions) {
     return emails.map((email) => {
       const matches = transactions
@@ -118,16 +138,18 @@ export function createTCIntakeWorkspaceService({ pool, coordinator, accessServic
         notes: email.notes,
         preview_text: email.preview_text || '',
         suggested_transaction: best,
+        match_candidates: matches.slice(0, 3),
         next_step: nextStep,
       };
     });
   }
 
   async function getWorkspace() {
-    const [readiness, transactions, triageEmails] = await Promise.all([
+    const [readiness, transactions, triageEmails, recentActivity] = await Promise.all([
       accessService.getAccessReadiness(),
       listActiveTransactions(),
       listActionableEmails(),
+      listRecentIntakeActivity(),
     ]);
 
     const intakeQueue = buildQueue(triageEmails, transactions);
@@ -154,6 +176,7 @@ export function createTCIntakeWorkspaceService({ pool, coordinator, accessServic
       readiness,
       active_transactions: transactions,
       intake_queue: intakeQueue,
+      recent_activity: recentActivity,
       next_actions: nextActions,
     };
   }

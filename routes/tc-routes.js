@@ -1636,10 +1636,64 @@ export function createTCRoutes(
       ].join('\n');
 
       const result = await coordinator.processNewContract(emailText, item.message_id || item.uid || null);
-      await triage.markActioned(item.id, `Transaction created from triage email → #${result.transactionId}`);
+      await triage.markActioned(
+        item.id,
+        [item.notes, `Transaction created from triage email -> #${result.transactionId}`].filter(Boolean).join(' | ')
+      );
       res.json({ ok: true, item: await triage.getTriagedEmail(item.id), result });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] triage create transaction error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/email/triage/:id/link-transaction', requireKey, async (req, res) => {
+    try {
+      const triageId = parseInt(req.params.id, 10);
+      const transactionId = parseInt(req.body?.transaction_id, 10);
+      if (!Number.isInteger(transactionId)) {
+        return res.status(400).json({ ok: false, error: 'transaction_id is required' });
+      }
+
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const triage = createEmailTriage({ pool, logger });
+      const item = await triage.getTriagedEmail(triageId);
+      if (!item) return res.status(404).json({ ok: false, error: 'Email not found' });
+
+      const transaction = await coordinator.getTransaction(transactionId);
+      if (!transaction) {
+        return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      }
+
+      const sourceEmailId = item.message_id || item.uid || null;
+      if (sourceEmailId && !transaction.source_email_id) {
+        await pool.query(
+          `UPDATE tc_transactions SET source_email_id=$1, updated_at=NOW() WHERE id=$2`,
+          [sourceEmailId, transactionId]
+        );
+      }
+
+      await coordinator.logEvent(transactionId, 'triage_email_linked', {
+        triage_id: item.id,
+        category: item.category,
+        subject: item.subject,
+        from_address: item.from_address,
+        preview_text: item.preview_text || '',
+        message_id: item.message_id || null,
+        uid: item.uid || null,
+        linked_by: req.body?.actor || 'tc_intake_workspace',
+      });
+
+      const note = `Triaged email linked to transaction #${transactionId}`;
+      await triage.markActioned(item.id, [item.notes, note].filter(Boolean).join(' | '));
+
+      res.json({
+        ok: true,
+        item: await triage.getTriagedEmail(item.id),
+        transaction: await coordinator.getTransaction(transactionId),
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] triage link transaction error');
       res.status(500).json({ ok: false, error: err.message });
     }
   });

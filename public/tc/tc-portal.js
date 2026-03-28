@@ -1,5 +1,6 @@
 (function () {
   let lastWorkspaceTests = null;
+  let lastWorkspaceValidation = null;
 
   function getApiKey() {
     return (
@@ -43,6 +44,21 @@
         'content-type': 'application/json',
         'x-api-key': getApiKey(),
         ...(options && options.headers ? options.headers : {}),
+      },
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.ok === false) {
+      throw new Error(data.error || `Request failed (${res.status})`);
+    }
+    return data;
+  }
+
+  async function multipartApi(url, formData) {
+    const res = await fetch(url, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'x-api-key': getApiKey(),
       },
     });
     const data = await res.json().catch(() => ({}));
@@ -184,6 +200,38 @@
     await load();
   }
 
+  async function linkTransactionFromTriage(id, transactionId) {
+    if (!transactionId) throw new Error('Select a transaction first');
+    await api(`/api/v1/tc/email/triage/${id}/link-transaction`, {
+      method: 'POST',
+      body: JSON.stringify({ transaction_id: Number(transactionId), actor: 'agent_portal' }),
+    });
+    await load();
+  }
+
+  async function runWorkspaceDocumentAction(mode) {
+    const fileInput = document.getElementById('workspace-document');
+    const file = fileInput?.files?.[0];
+    if (!file) throw new Error('Choose a document first');
+
+    const form = new FormData();
+    form.append('document', file);
+    form.append('doc_type', document.getElementById('workspace-doc-type')?.value || 'Transaction Document');
+    form.append('address', document.getElementById('workspace-doc-address')?.value || '');
+    if (mode === 'upload') form.append('dry_run', 'true');
+
+    const path = mode === 'upload' ? '/api/v1/tc/intake/upload' : '/api/v1/tc/intake/validate';
+    const result = await multipartApi(path, form);
+    lastWorkspaceValidation = {
+      mode,
+      file_name: file.name,
+      checked_at: new Date().toISOString(),
+      result,
+    };
+    const node = document.getElementById('workspace-validation-results');
+    if (node) node.innerHTML = renderWorkspaceValidation(lastWorkspaceValidation);
+  }
+
   function renderWorkspaceTests(results) {
     const entries = Object.entries(results || {});
     if (!entries.length) return '<p>No access tests run yet.</p>';
@@ -204,12 +252,42 @@
     `;
   }
 
+  function renderWorkspaceValidation(state) {
+    if (!state?.result) return '<p>No validation run yet.</p>';
+    const validation = state.result.validation || {};
+    const checks = validation.checks || [];
+    return `
+      <div style="margin-bottom:10px">
+        <strong>${escapeHtml(state.file_name || '')}</strong>
+        <span class="badge ${badgeClass(validation.blocks_upload ? 'bad' : 'healthy')}">${escapeHtml(validation.blocks_upload ? 'blocked' : 'pass')}</span>
+        <span style="margin-left:8px;color:#98a5c3">${escapeHtml(state.mode === 'upload' ? 'dry-run upload' : 'validate only')} · ${escapeHtml(state.checked_at || '')}</span>
+      </div>
+      <table>
+        <thead><tr><th>Check</th><th>Status</th><th>Why</th></tr></thead>
+        <tbody>
+          ${checks.map((item) => `
+            <tr>
+              <td>${escapeHtml(item.label || item.id || '')}</td>
+              <td><span class="badge ${badgeClass(item.passed ? 'healthy' : 'red')}">${escapeHtml(item.passed ? 'pass' : 'missing')}</span></td>
+              <td>${escapeHtml(item.reason || '')}</td>
+            </tr>
+          `).join('') || '<tr><td colspan="3">No validation checks returned.</td></tr>'}
+        </tbody>
+      </table>
+    `;
+  }
+
   function renderWorkspace(data) {
     const root = document.getElementById('app');
     const readiness = data.readiness || {};
     const readinessSummary = readiness.readiness || {};
     const intakeQueue = data.intake_queue || [];
     const transactions = data.active_transactions || [];
+    const recentActivity = data.recent_activity || [];
+    const txOptions = transactions.map((item) => ({
+      id: item.id,
+      label: `${item.address || `Transaction #${item.id}`} (${item.stage || item.status || 'pending'})`,
+    }));
 
     const readinessCards = [
       { label: 'IMAP', value: readinessSummary.imap_ready ? 'Ready' : 'Missing', status: readinessSummary.imap_ready ? 'ok' : 'bad' },
@@ -234,21 +312,36 @@
       </tr>
     `).join('') || '<tr><td colspan="3">No vault credentials tracked yet.</td></tr>';
 
-    const queueRows = intakeQueue.map((item) => `
+    const queueRows = intakeQueue.map((item) => {
+      const matchCandidates = item.match_candidates || [];
+      const defaultTransactionId = item.suggested_transaction?.transaction_id || '';
+      const selectOptions = [
+        { id: '', label: 'Select transaction' },
+        ...txOptions,
+      ];
+      const candidateSummary = matchCandidates.length > 1
+        ? `<div style="margin-top:6px;color:#98a5c3;font-size:12px">Also matches: ${matchCandidates.slice(1).map((candidate) => `${escapeHtml(candidate.address)} (${escapeHtml(candidate.confidence)})`).join(', ')}</div>`
+        : '';
+      return `
       <tr>
         <td>${escapeHtml(item.received_at || '')}</td>
         <td>${escapeHtml(item.subject || '')}</td>
         <td><span class="badge ${badgeClass(item.category)}">${escapeHtml(item.category || '')}</span></td>
-        <td>${item.suggested_transaction ? `<a href="/tc/agent-portal.html?tx=${encodeURIComponent(item.suggested_transaction.transaction_id)}">${escapeHtml(item.suggested_transaction.address)}</a> <span class="badge ${badgeClass(item.suggested_transaction.confidence)}">${escapeHtml(item.suggested_transaction.confidence)}</span>` : '—'}</td>
+        <td>${item.suggested_transaction ? `<a href="/tc/agent-portal.html?tx=${encodeURIComponent(item.suggested_transaction.transaction_id)}">${escapeHtml(item.suggested_transaction.address)}</a> <span class="badge ${badgeClass(item.suggested_transaction.confidence)}">${escapeHtml(item.suggested_transaction.confidence)}</span>${candidateSummary}` : '—'}</td>
         <td>${escapeHtml(item.next_step || '')}${item.preview_text ? `<div style="margin-top:6px;color:#98a5c3;font-size:12px">${escapeHtml(item.preview_text)}</div>` : ''}</td>
         <td>
           <div class="row-actions">
+            <select data-triage-select="${item.id}">
+              ${selectOptions.map((option) => `<option value="${escapeHtml(option.id)}" ${String(option.id) === String(defaultTransactionId) ? 'selected' : ''}>${escapeHtml(option.label)}</option>`).join('')}
+            </select>
+            <button data-triage-link="${item.id}" class="ghost">Link selected</button>
             ${item.category === 'tc_contract' && !item.suggested_transaction ? `<button data-triage-create="${item.id}">Create transaction</button>` : ''}
             <button data-triage-handle="${item.id}" class="ghost">${item.actioned_at ? 'Handled' : 'Mark handled'}</button>
           </div>
         </td>
       </tr>
-    `).join('') || '<tr><td colspan="6">No actionable triage items.</td></tr>';
+    `;
+    }).join('') || '<tr><td colspan="6">No actionable triage items.</td></tr>';
 
     const txRows = transactions.map((item) => `
       <tr>
@@ -259,6 +352,15 @@
         <td>${escapeHtml(item.transaction_desk_id || 'pending')}</td>
       </tr>
     `).join('') || '<tr><td colspan="5">No active transactions yet.</td></tr>';
+
+    const activityRows = recentActivity.map((item) => `
+      <tr>
+        <td>${escapeHtml(item.created_at || '')}</td>
+        <td>${escapeHtml(item.event_type || '')}</td>
+        <td><a href="/tc/agent-portal.html?tx=${encodeURIComponent(item.transaction_id)}">${escapeHtml(item.address || '')}</a></td>
+        <td>${escapeHtml(item.payload?.subject || item.payload?.transactionDeskId || item.payload?.error || '')}</td>
+      </tr>
+    `).join('') || '<tr><td colspan="4">No intake activity yet.</td></tr>';
 
     root.innerHTML = `
       <div class="hero">
@@ -347,6 +449,29 @@
       </div>
 
       <div class="card">
+        <h2>Manual Document QA</h2>
+        <div class="grid two">
+          <div>
+            <label>Document</label>
+            <input id="workspace-document" type="file" />
+          </div>
+          <div>
+            <label>Document type</label>
+            <input id="workspace-doc-type" value="Executed RPA" placeholder="Executed RPA">
+          </div>
+          <div>
+            <label>Expected property address</label>
+            <input id="workspace-doc-address" placeholder="6453 Mahogany Peak Ave, Las Vegas, NV" />
+          </div>
+        </div>
+        <div class="row-actions" style="margin-top:12px">
+          <button id="workspace-validate-doc">Validate document</button>
+          <button id="workspace-dry-upload" class="ghost">Dry-run upload</button>
+        </div>
+        <div id="workspace-validation-results">${renderWorkspaceValidation(lastWorkspaceValidation)}</div>
+      </div>
+
+      <div class="card">
         <h2>Inbox Intake Queue</h2>
         <table><thead><tr><th>Received</th><th>Subject</th><th>Category</th><th>Suggested transaction</th><th>Next step</th><th>Action</th></tr></thead><tbody>${queueRows}</tbody></table>
       </div>
@@ -354,6 +479,11 @@
       <div class="card">
         <h2>Active Transactions</h2>
         <table><thead><tr><th>Address</th><th>Health</th><th>Stage</th><th>Next action</th><th>TransactionDesk</th></tr></thead><tbody>${txRows}</tbody></table>
+      </div>
+
+      <div class="card">
+        <h2>Recent Intake Activity</h2>
+        <table><thead><tr><th>When</th><th>Event</th><th>Transaction</th><th>Detail</th></tr></thead><tbody>${activityRows}</tbody></table>
       </div>
     `;
 
@@ -397,6 +527,20 @@
         alert(err.message);
       }
     });
+    document.getElementById('workspace-validate-doc')?.addEventListener('click', async () => {
+      try {
+        await runWorkspaceDocumentAction('validate');
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    document.getElementById('workspace-dry-upload')?.addEventListener('click', async () => {
+      try {
+        await runWorkspaceDocumentAction('upload');
+      } catch (err) {
+        alert(err.message);
+      }
+    });
     root.querySelectorAll('[data-triage-handle]').forEach((button) => {
       button.addEventListener('click', async () => {
         if (button.textContent === 'Handled') return;
@@ -411,6 +555,16 @@
       button.addEventListener('click', async () => {
         try {
           await createTransactionFromTriage(button.dataset.triageCreate);
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+    });
+    root.querySelectorAll('[data-triage-link]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        try {
+          const select = root.querySelector(`[data-triage-select="${button.dataset.triageLink}"]`);
+          await linkTransactionFromTriage(button.dataset.triageLink, select?.value || '');
         } catch (err) {
           alert(err.message);
         }
