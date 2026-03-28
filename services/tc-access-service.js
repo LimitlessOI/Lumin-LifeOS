@@ -41,18 +41,23 @@ function buildEnvTemplate({
   const resolvedAgentName = tcAgentName || process.env.TC_AGENT_NAME || 'Adam Hopkins';
   const resolvedAgentPhone = tcAgentPhone || process.env.TC_AGENT_PHONE || '';
 
+  const imapPasswordPresent = Boolean(process.env.TC_IMAP_APP_PASSWORD || process.env.WORK_EMAIL_APP_PASSWORD || process.env.IMAP_PASS);
+  const emailWebhookPresent = Boolean(process.env.EMAIL_WEBHOOK_SECRET);
+  const twilioWebhookPresent = Boolean(process.env.TWILIO_WEBHOOK_SECRET);
+  const asanaTokenPresent = Boolean(process.env.ASANA_ACCESS_TOKEN);
+
   return [
     { name: 'TC_IMAP_HOST', value: process.env.TC_IMAP_HOST || process.env.IMAP_HOST || 'imap.gmail.com', known: true, secret: false, description: 'IMAP host for the TC mailbox' },
     { name: 'TC_IMAP_PORT', value: process.env.TC_IMAP_PORT || process.env.IMAP_PORT || '993', known: true, secret: false, description: 'IMAP port for the TC mailbox' },
     { name: 'TC_IMAP_USER', value: resolvedImapUser, known: Boolean(resolvedImapUser), secret: false, description: 'Mailbox address the TC scanner reads' },
-    { name: 'TC_IMAP_APP_PASSWORD', value: '', known: false, secret: true, description: 'IMAP app password for the mailbox' },
+    { name: 'TC_IMAP_APP_PASSWORD', value: '', known: imapPasswordPresent, secret: true, description: 'IMAP app password for the mailbox' },
     { name: 'WORK_EMAIL', value: resolvedWorkEmail, known: Boolean(resolvedWorkEmail), secret: false, description: 'Primary work inbox for alerts and fallback identity' },
     { name: 'TC_EMAIL_FROM', value: resolvedEmailFrom, known: Boolean(resolvedEmailFrom), secret: false, description: 'From-address for TC communications' },
     { name: 'TC_AGENT_NAME', value: resolvedAgentName, known: Boolean(resolvedAgentName), secret: false, description: 'Agent or TC display name' },
     { name: 'TC_AGENT_PHONE', value: resolvedAgentPhone, known: Boolean(resolvedAgentPhone), secret: false, description: 'Outbound TC contact phone' },
-    { name: 'EMAIL_WEBHOOK_SECRET', value: '', known: false, secret: true, description: 'Inbound email webhook secret' },
-    { name: 'TWILIO_WEBHOOK_SECRET', value: '', known: false, secret: true, description: 'Inbound Twilio webhook secret' },
-    { name: 'ASANA_ACCESS_TOKEN', value: '', known: false, secret: true, description: 'Optional Asana sync token' },
+    { name: 'EMAIL_WEBHOOK_SECRET', value: '', known: emailWebhookPresent, secret: true, description: 'Inbound email webhook secret' },
+    { name: 'TWILIO_WEBHOOK_SECRET', value: '', known: twilioWebhookPresent, secret: true, description: 'Inbound Twilio webhook secret' },
+    { name: 'ASANA_ACCESS_TOKEN', value: '', known: asanaTokenPresent, secret: true, description: 'Optional Asana sync token' },
     { name: 'ASANA_TC_PROJECT_GID', value: process.env.ASANA_TC_PROJECT_GID || '', known: Boolean(process.env.ASANA_TC_PROJECT_GID), secret: false, description: 'Optional Asana TC project id' },
   ];
 }

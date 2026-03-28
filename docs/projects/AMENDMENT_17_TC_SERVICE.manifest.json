@@ -79,6 +79,7 @@
     "The intake workspace can launch a dry-run intake for a target address before live filing credentials are used",
     "Failed workspace QA checks can be converted into transaction-scoped document requests without leaving the portal",
     "The intake workspace can seed the known TC env defaults automatically while leaving secret values for manual entry",
+    "The intake workspace detects when secret envs already exist and does not falsely present them as missing",
     "First live transaction (6453 Mahogany Peak) created and tracked in DB",
     "Email triage picks up TC-related emails and routes to correct transaction",
     "Deadline tracker fires reminders at correct intervals",

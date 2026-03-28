@@ -411,7 +411,7 @@
       <tr>
         <td>${escapeHtml(item.name)}</td>
         <td>${escapeHtml(item.description || '')}</td>
-        <td>${item.secret ? '<em>leave blank until you enter it</em>' : escapeHtml(item.value || '')}</td>
+        <td>${item.secret ? (item.known ? '<em>already set in environment</em>' : '<em>leave blank until you enter it</em>') : escapeHtml(item.value || '')}</td>
         <td><span class="badge ${badgeClass(item.known ? 'healthy' : 'review')}">${escapeHtml(item.known ? 'known' : item.secret ? 'needs secret' : 'needs value')}</span></td>
       </tr>
     `).join('') || '<tr><td colspan="4">No env template available.</td></tr>';
