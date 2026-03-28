@@ -103,6 +103,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `db/migrations/20260323_tc_fees.sql` | tc_agent_clients, tc_pricing_config, fee columns |
 | `db/migrations/20260323_glvar_dues.sql` | glvar_dues_log, glvar_violations_log |
 | `db/migrations/20260323_email_triage.sql` | email_triage_log |
+| `db/migrations/20260327_email_triage_enrichment.sql` | Adds message_id + preview_text to triage log for better intake routing |
 | `db/migrations/20260323_mls_investors.sql` | mls_investors, mls_deal_matches |
 | `db/migrations/20260325_tc_portal.sql` | tc_document_requests, tc_communications for portal/service tracking |
 | `db/migrations/20260325_tc_reporting.sql` | tc_showings, feedback, market snapshots, and weekly reports |
@@ -618,6 +619,7 @@ services/email-triage.js  — shared with email domain
 - [x] **Offer prep command engine** *(est: 5h | actual: 6h)* `[needs-review]`
 - [x] **TC access readiness + bootstrap for email / GLVAR / SkySlope prerequisites** *(est: 3h | actual: 3h)* `[needs-review]`
 - [x] **TC intake workspace in the agent portal for readiness, triage queue, and suggested transaction matching** *(est: 4h | actual: 4h)* `[needs-review]`
+- [x] **Email triage enrichment with preview text and stronger workspace matching** *(est: 3h | actual: 3h)* `[needs-review]`
 - [ ] **→ NEXT: First real transaction intake end-to-end (6453 Mahogany Peak)** *(est: 4h)* `[high-risk]`
 - [ ] **IMAP vars set in Railway + dry-run email scan** *(est: 1h)* `[safe]`
 - [ ] **SkySlope login test on Railway** *(est: 1h)* `[needs-review]`
@@ -627,7 +629,7 @@ services/email-triage.js  — shared with email domain
 - [ ] **First paying agent client enrolled** *(est: 2h)* `[safe]`
 - [ ] **Stripe billing wired to TC plan tiers** *(est: 4h)* `[needs-review]`
 
-**Progress:** 12/20 steps complete | Est. remaining: ~24h
+**Progress:** 13/21 steps complete | Est. remaining: ~24h
 
 ---
 
@@ -761,6 +763,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 | 2026-03-27 | Added Build Plan, Anti-Drift, Decision Log, Handoff, Runbook, Decision Debt, Change Receipts | SSOT template compliance | ✅ | ✅ | pending |
 | 2026-03-27 | Added TC access readiness/bootstrap routes and corrected startup guards to use real env/vault readiness checks | Unblock first live email intake and browser access setup | ✅ | ✅ | pending |
 | 2026-03-27 | Added agent intake workspace with access setup form, inbox triage queue, and suggested transaction matching | Give the operator a single place to enter secrets, monitor readiness, and route paperwork before live filing | ✅ | ✅ | pending |
+| 2026-03-27 | Added triage preview-text enrichment, message-id capture, and stronger workspace matching signals | Improve inbox classification quality and make intake routing more useful before live filing credentials are entered | ✅ | ✅ | pending |
 | 2026-03-26 | TC runtime wiring hardened — account-manager, notification service, IMAP consistency | Fix runtime injection errors | ✅ | n/a | pending |
 | 2026-03-25 | TC portal, reporting, approvals, alerts migrations | DB schema completion | ✅ | n/a | n/a |
 | 2026-03-22 | Initial TC coordinator, email triage, SkySlope agent | Core TC infrastructure | ✅ | n/a | n/a |

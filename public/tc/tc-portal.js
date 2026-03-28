@@ -190,7 +190,7 @@
         <td>${escapeHtml(item.subject || '')}</td>
         <td><span class="badge ${badgeClass(item.category)}">${escapeHtml(item.category || '')}</span></td>
         <td>${item.suggested_transaction ? `<a href="/tc/agent-portal.html?tx=${encodeURIComponent(item.suggested_transaction.transaction_id)}">${escapeHtml(item.suggested_transaction.address)}</a> <span class="badge ${badgeClass(item.suggested_transaction.confidence)}">${escapeHtml(item.suggested_transaction.confidence)}</span>` : '—'}</td>
-        <td>${escapeHtml(item.next_step || '')}</td>
+        <td>${escapeHtml(item.next_step || '')}${item.preview_text ? `<div style="margin-top:6px;color:#98a5c3;font-size:12px">${escapeHtml(item.preview_text)}</div>` : ''}</td>
         <td><button data-triage-handle="${item.id}" class="ghost">${item.actioned_at ? 'Handled' : 'Mark handled'}</button></td>
       </tr>
     `).join('') || '<tr><td colspan="6">No actionable triage items.</td></tr>';

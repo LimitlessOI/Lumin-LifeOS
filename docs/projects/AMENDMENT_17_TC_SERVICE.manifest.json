@@ -14,6 +14,7 @@
     "routes/tc-routes.js",
     "routes/tc-portal-routes.js",
     "services/tc-coordinator.js",
+    "services/email-triage.js",
     "services/tc-document-processor.js",
     "services/tc-communication-engine.js",
     "services/tc-escalation-engine.js",
@@ -28,23 +29,24 @@
     "db/migrations/20260325_tc_reporting.sql",
     "db/migrations/20260326_tc_external_refs.sql",
     "db/migrations/20260326_tc_interactions.sql",
-    "db/migrations/20260326_tc_review_packages.sql"
+    "db/migrations/20260326_tc_review_packages.sql",
+    "db/migrations/20260327_email_triage_enrichment.sql"
   ],
   "protected_files": [
-    "server.js",
-    "services/email-triage.js"
+    "server.js"
   ],
   "required_files": [
     "routes/tc-routes.js",
     "services/tc-coordinator.js",
+    "services/email-triage.js",
     "services/glvar-monitor.js"
   ],
   "required_routes": [
     { "method": "GET", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "List transactions" },
     { "method": "POST", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "Create transaction" },
     { "method": "GET", "path": "/api/v1/tc/access/readiness", "expected_status": 200, "description": "TC access readiness status" },
-    { "method": "POST", "path": "/api/v1/tc/access/bootstrap", "expected_status": 200, "description": "TC access bootstrap" }
-    ,{ "method": "GET", "path": "/api/v1/tc/intake/workspace", "expected_status": 200, "description": "TC intake workspace summary" }
+    { "method": "POST", "path": "/api/v1/tc/access/bootstrap", "expected_status": 200, "description": "TC access bootstrap" },
+    { "method": "GET", "path": "/api/v1/tc/intake/workspace", "expected_status": 200, "description": "TC intake workspace summary" }
   ],
   "required_tables": [
     { "name": "tc_transactions", "required_columns": ["id", "address", "status", "agent_name"] },
@@ -67,6 +69,7 @@
   "completion_checks": [
     "TC access readiness route accurately reports missing/present IMAP and vault-backed browser credentials",
     "Agent portal without a transaction id shows the intake workspace with readiness, triage, and suggested transaction matches",
+    "Email triage stores preview text and message identity when enrichment columns are available, improving workspace routing quality",
     "First live transaction (6453 Mahogany Peak) created and tracked in DB",
     "Email triage picks up TC-related emails and routes to correct transaction",
     "Deadline tracker fires reminders at correct intervals",

@@ -45,6 +45,60 @@ const RULES = [
 const ALERT_CATEGORIES = new Set([CATEGORIES.TC_CONTRACT, CATEGORIES.TC_DEADLINE, CATEGORIES.TIME_SENSITIVE, CATEGORIES.GLVAR]);
 
 export function createEmailTriage({ pool, notificationService, callCouncilMember, accountManager, logger = console }) {
+  let enrichmentColumnsSupported = null;
+
+  function extractPreview(source) {
+    const raw = Buffer.isBuffer(source) ? source.toString('utf8') : String(source || '');
+    const body = raw.split(/\r?\n\r?\n/).slice(1).join('\n');
+    return body
+      .replace(/=\r?\n/g, '')
+      .replace(/https?:\/\/\S+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 400);
+  }
+
+  async function supportsEnrichmentColumns() {
+    if (enrichmentColumnsSupported !== null) return enrichmentColumnsSupported;
+    try {
+      const { rows } = await pool.query(
+        `SELECT column_name
+         FROM information_schema.columns
+         WHERE table_name = 'email_triage_log'
+           AND column_name IN ('message_id', 'preview_text')`
+      );
+      const names = new Set(rows.map((row) => row.column_name));
+      enrichmentColumnsSupported = names.has('message_id') && names.has('preview_text');
+    } catch {
+      enrichmentColumnsSupported = false;
+    }
+    return enrichmentColumnsSupported;
+  }
+
+  async function insertTriageItem({ uid, date, from, subject, category, actionRequired, messageId, previewText }) {
+    const canEnrich = await supportsEnrichmentColumns();
+    if (canEnrich) {
+      const { rows } = await pool.query(
+        `INSERT INTO email_triage_log
+           (uid, received_at, from_address, subject, category, action_required, message_id, preview_text)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+         ON CONFLICT (uid) DO NOTHING
+         RETURNING *`,
+        [uid, date, from, subject, category, actionRequired, messageId || null, previewText || null]
+      ).catch(() => ({ rows: [] }));
+      if (rows[0]) return rows[0];
+    }
+
+    const { rows } = await pool.query(
+      `INSERT INTO email_triage_log
+         (uid, received_at, from_address, subject, category, action_required)
+       VALUES ($1,$2,$3,$4,$5,$6)
+       ON CONFLICT (uid) DO NOTHING
+       RETURNING *`,
+      [uid, date, from, subject, category, actionRequired]
+    ).catch(() => ({ rows: [] }));
+    return rows[0] || null;
+  }
 
   // Fast rule-based classification
   function classifyByRules(subject = '', from = '', snippet = '') {
@@ -98,12 +152,14 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
 
       for await (const msg of client.fetch(
         { since, seen: false },
-        { envelope: true, bodyStructure: true }
+        { envelope: true, bodyStructure: true, source: true }
       )) {
         const subject = msg.envelope?.subject || '(no subject)';
         const from    = msg.envelope?.from?.[0]?.address || '';
         const uid     = String(msg.uid);
         const date    = msg.envelope?.date || new Date();
+        const messageId = msg.envelope?.messageId || null;
+        const previewText = extractPreview(msg.source);
 
         // Dedup — skip if already triaged
         const { rows: existing } = await pool.query(
@@ -112,35 +168,37 @@ export function createEmailTriage({ pool, notificationService, callCouncilMember
         if (existing.length) continue;
 
         // Classify
-        let category = classifyByRules(subject, from, '');
+        let category = classifyByRules(subject, from, previewText);
         if (!category) {
-          category = await classifyWithAI(subject, from, '');
+          category = await classifyWithAI(subject, from, previewText);
         }
 
         const actionRequired = ALERT_CATEGORIES.has(category);
 
         // Store
-        const { rows } = await pool.query(
-          `INSERT INTO email_triage_log
-             (uid, received_at, from_address, subject, category, action_required)
-           VALUES ($1,$2,$3,$4,$5,$6)
-           ON CONFLICT (uid) DO NOTHING
-           RETURNING *`,
-          [uid, date, from, subject, category, actionRequired]
-        ).catch(() => ({ rows: [] }));
+        const row = await insertTriageItem({
+          uid,
+          date,
+          from,
+          subject,
+          category,
+          actionRequired,
+          messageId,
+          previewText,
+        });
 
-        if (!rows[0]) continue;
-        newItems.push(rows[0]);
+        if (!row) continue;
+        newItems.push(row);
 
         // Immediate alert for urgent categories
         if (actionRequired) {
-          await _sendImmediateAlert(rows[0]);
+          await _sendImmediateAlert(row);
 
           // If it's a contract email, also kick off TC pipeline
           if (category === CATEGORIES.TC_CONTRACT) {
             logger.info?.({ uid, subject }, '[EMAIL-TRIAGE] Contract email detected — flagged for TC processing');
             await pool.query(
-              `UPDATE email_triage_log SET notes='Flagged for TC processing' WHERE id=$1`, [rows[0].id]
+              `UPDATE email_triage_log SET notes='Flagged for TC processing' WHERE id=$1`, [row.id]
             ).catch(() => {});
           }
         }

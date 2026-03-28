@@ -21,7 +21,7 @@ function pickImportantTokens(address = '') {
 }
 
 function scoreEmailToTransaction(email, transaction) {
-  const emailText = `${email.subject || ''} ${email.from_address || ''} ${email.notes || ''}`.toLowerCase();
+  const emailText = `${email.subject || ''} ${email.from_address || ''} ${email.preview_text || ''} ${email.notes || ''}`.toLowerCase();
   const addressTokens = pickImportantTokens(transaction.address || '');
   const partyTokens = Object.values(transaction.parties || {})
     .flatMap((party) => tokenize(typeof party === 'object' ? Object.values(party).join(' ') : party));
@@ -116,6 +116,7 @@ export function createTCIntakeWorkspaceService({ pool, coordinator, accessServic
         action_required: email.action_required,
         actioned_at: email.actioned_at,
         notes: email.notes,
+        preview_text: email.preview_text || '',
         suggested_transaction: best,
         next_step: nextStep,
       };

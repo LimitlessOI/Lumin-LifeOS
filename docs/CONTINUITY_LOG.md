@@ -2,6 +2,7 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ## Update 2026-03-27 #1
+- TC email triage now captures preview text and message identity when the enrichment migration is present, which improves classification quality and gives the intake workspace better transaction-matching signals.
 - TC agent portal now opens into an intake workspace when no transaction id is supplied, showing access readiness, secret-entry/bootstrap controls, the actionable inbox triage queue, and suggested matches to active transactions.
 - TC now has access-readiness and bootstrap endpoints for email, GLVAR, TransactionDesk, and SkySlope prerequisites, and the startup guards now check real env/vault readiness instead of stale hard-coded env names.
 - ClientCare rollout validation now has history/trend summaries in the overlay, so repeated blockers and validation-score movement are visible without exporting audit data.
