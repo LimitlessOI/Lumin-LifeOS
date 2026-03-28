@@ -57,6 +57,11 @@ function normalizeRepairUpdates(input = {}) {
   if (input.client_billing_status) updates.client_billing_status = String(input.client_billing_status).trim();
   if (input.bill_provider_type) updates.bill_provider_type = String(input.bill_provider_type).trim();
   if (input.payment_status) updates.payment_status = String(input.payment_status).trim().toLowerCase();
+  if (input.insurance_name) updates.insurance_name = String(input.insurance_name).trim();
+  if (input.member_id) updates.member_id = String(input.member_id).trim();
+  if (input.subscriber_name) updates.subscriber_name = String(input.subscriber_name).trim();
+  if (input.payor_id) updates.payor_id = String(input.payor_id).trim();
+  if (input.insurance_priority) updates.insurance_priority = String(input.insurance_priority).trim();
   return updates;
 }
 
@@ -124,8 +129,196 @@ function buildInsuranceDecision({ coverageActive, inNetwork, authRequired, membe
   };
 }
 
+const DEFAULT_PATIENT_AR_POLICY = {
+  scope_key: 'default',
+  reminder_day_1: 15,
+  reminder_day_2: 30,
+  provider_escalation_day: 45,
+  final_notice_day: 60,
+  payment_plan_grace_days: 7,
+  autopay_retry_days: 3,
+  allow_payment_plans: true,
+  allow_hardship_review: true,
+  allow_settlements: false,
+  allow_referral_credit: false,
+  notes: 'Provider-directed only. Do not turn this into third-party debt collection without legal review.',
+  source: 'default',
+};
+
+function normalizePatientArPolicy(input = {}) {
+  return {
+    reminder_day_1: Math.max(1, Number(input.reminder_day_1 ?? DEFAULT_PATIENT_AR_POLICY.reminder_day_1)),
+    reminder_day_2: Math.max(1, Number(input.reminder_day_2 ?? DEFAULT_PATIENT_AR_POLICY.reminder_day_2)),
+    provider_escalation_day: Math.max(1, Number(input.provider_escalation_day ?? DEFAULT_PATIENT_AR_POLICY.provider_escalation_day)),
+    final_notice_day: Math.max(1, Number(input.final_notice_day ?? DEFAULT_PATIENT_AR_POLICY.final_notice_day)),
+    payment_plan_grace_days: Math.max(1, Number(input.payment_plan_grace_days ?? DEFAULT_PATIENT_AR_POLICY.payment_plan_grace_days)),
+    autopay_retry_days: Math.max(1, Number(input.autopay_retry_days ?? DEFAULT_PATIENT_AR_POLICY.autopay_retry_days)),
+    allow_payment_plans: input.allow_payment_plans !== undefined ? Boolean(input.allow_payment_plans) : DEFAULT_PATIENT_AR_POLICY.allow_payment_plans,
+    allow_hardship_review: input.allow_hardship_review !== undefined ? Boolean(input.allow_hardship_review) : DEFAULT_PATIENT_AR_POLICY.allow_hardship_review,
+    allow_settlements: input.allow_settlements !== undefined ? Boolean(input.allow_settlements) : DEFAULT_PATIENT_AR_POLICY.allow_settlements,
+    allow_referral_credit: input.allow_referral_credit !== undefined ? Boolean(input.allow_referral_credit) : DEFAULT_PATIENT_AR_POLICY.allow_referral_credit,
+    notes: String(input.notes ?? DEFAULT_PATIENT_AR_POLICY.notes ?? '').trim(),
+  };
+}
+
+function derivePatientArStage(ageDays, policy) {
+  if (ageDays >= policy.final_notice_day) return { stage: 'final_notice', next_action: 'Final provider-approved notice or decision review', priority: 'high' };
+  if (ageDays >= policy.provider_escalation_day) return { stage: 'provider_escalation', next_action: 'Escalate to provider for direct decision on outreach or payment-plan offer', priority: 'high' };
+  if (ageDays >= policy.reminder_day_2) return { stage: 'reminder_2', next_action: 'Second reminder and payment-plan check', priority: 'normal' };
+  if (ageDays >= policy.reminder_day_1) return { stage: 'reminder_1', next_action: 'First reminder and courtesy balance review', priority: 'normal' };
+  return { stage: 'current', next_action: 'Monitor; no outreach yet', priority: 'low' };
+}
+
 export function createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember = null, logger = console }) {
+  async function getPatientArPolicy() {
+    try {
+      const { rows } = await pool.query(`SELECT * FROM clientcare_patient_ar_policy WHERE scope_key='default' LIMIT 1`);
+      if (!rows[0]) return { ...DEFAULT_PATIENT_AR_POLICY };
+      return { ...DEFAULT_PATIENT_AR_POLICY, ...rows[0], source: 'db' };
+    } catch (error) {
+      if (isMissingRelation(error)) return { ...DEFAULT_PATIENT_AR_POLICY };
+      throw error;
+    }
+  }
+
+  async function savePatientArPolicy(input = {}, { updatedBy = 'overlay' } = {}) {
+    const policy = normalizePatientArPolicy(input);
+    try {
+      const { rows } = await pool.query(
+        `INSERT INTO clientcare_patient_ar_policy (
+          scope_key, reminder_day_1, reminder_day_2, provider_escalation_day, final_notice_day,
+          payment_plan_grace_days, autopay_retry_days, allow_payment_plans, allow_hardship_review,
+          allow_settlements, allow_referral_credit, notes, updated_by
+        ) VALUES (
+          'default',$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12
+        )
+        ON CONFLICT (scope_key) DO UPDATE SET
+          reminder_day_1=EXCLUDED.reminder_day_1,
+          reminder_day_2=EXCLUDED.reminder_day_2,
+          provider_escalation_day=EXCLUDED.provider_escalation_day,
+          final_notice_day=EXCLUDED.final_notice_day,
+          payment_plan_grace_days=EXCLUDED.payment_plan_grace_days,
+          autopay_retry_days=EXCLUDED.autopay_retry_days,
+          allow_payment_plans=EXCLUDED.allow_payment_plans,
+          allow_hardship_review=EXCLUDED.allow_hardship_review,
+          allow_settlements=EXCLUDED.allow_settlements,
+          allow_referral_credit=EXCLUDED.allow_referral_credit,
+          notes=EXCLUDED.notes,
+          updated_by=EXCLUDED.updated_by,
+          updated_at=NOW()
+        RETURNING *`,
+        [
+          policy.reminder_day_1,
+          policy.reminder_day_2,
+          policy.provider_escalation_day,
+          policy.final_notice_day,
+          policy.payment_plan_grace_days,
+          policy.autopay_retry_days,
+          policy.allow_payment_plans,
+          policy.allow_hardship_review,
+          policy.allow_settlements,
+          policy.allow_referral_credit,
+          policy.notes,
+          updatedBy,
+        ]
+      );
+      return { ...DEFAULT_PATIENT_AR_POLICY, ...rows[0], source: 'db' };
+    } catch (error) {
+      if (isMissingRelation(error)) {
+        return { ...DEFAULT_PATIENT_AR_POLICY, ...policy, source: 'fallback_unpersisted', updated_by: updatedBy };
+      }
+      throw error;
+    }
+  }
+
+  async function getPatientArEscalationQueue({ limit = 50 } = {}) {
+    const policy = await getPatientArPolicy();
+    const { rows } = await pool.query(
+      `SELECT
+         id,
+         patient_name,
+         payer_name,
+         date_of_service,
+         COALESCE(patient_balance, 0)::numeric AS patient_balance,
+         (NOW()::date - COALESCE(date_of_service::date, NOW()::date))::int AS age_days
+       FROM clientcare_claims
+       WHERE COALESCE(patient_balance, 0) > 0
+       ORDER BY patient_balance DESC, age_days DESC
+       LIMIT $1`,
+      [Math.max(1, Math.min(Number(limit || 50), 250))]
+    );
+
+    const items = rows.map((row) => {
+      const stage = derivePatientArStage(Number(row.age_days || 0), policy);
+      return {
+        ...row,
+        age_bucket: bucketByAge(row.age_days),
+        stage: stage.stage,
+        next_action: stage.next_action,
+        priority: stage.priority,
+        provider_approval_required: ['provider_escalation', 'final_notice'].includes(stage.stage),
+      };
+    });
+
+    return {
+      policy,
+      summary: {
+        total_accounts: items.length,
+        total_balance: Number(items.reduce((sum, item) => sum + money(item.patient_balance), 0).toFixed(2)),
+        provider_escalation_count: items.filter((item) => item.stage === 'provider_escalation').length,
+        final_notice_count: items.filter((item) => item.stage === 'final_notice').length,
+      },
+      items,
+    };
+  }
+
+  async function queuePatientArAction(claimId, { owner = 'overlay', actionType = 'patient_ar_followup' } = {}) {
+    const policy = await getPatientArPolicy();
+    const { rows } = await pool.query(
+      `SELECT
+         id,
+         patient_name,
+         payer_name,
+         date_of_service,
+         COALESCE(patient_balance, 0)::numeric AS patient_balance,
+         (NOW()::date - COALESCE(date_of_service::date, NOW()::date))::int AS age_days
+       FROM clientcare_claims
+       WHERE id = $1`,
+      [claimId]
+    );
+    const claim = rows[0];
+    if (!claim) return null;
+    const stage = derivePatientArStage(Number(claim.age_days || 0), policy);
+    const { rows: actionRows } = await pool.query(
+      `INSERT INTO clientcare_claim_actions (claim_id, action_type, priority, owner, summary, details, metadata)
+       VALUES ($1,$2,$3,$4,$5,$6,$7)
+       RETURNING *`,
+      [
+        claimId,
+        actionType,
+        stage.priority === 'high' ? 'high' : 'normal',
+        owner,
+        `Patient AR ${stage.stage.replace(/_/g, ' ')}`,
+        [
+          `Patient: ${claim.patient_name || 'Unknown patient'}`,
+          `Balance: $${money(claim.patient_balance).toFixed(2)}`,
+          `Age days: ${claim.age_days}`,
+          `Next action: ${stage.next_action}`,
+          stage.provider_approval_required ? 'Provider approval is required before outreach.' : 'Provider-directed outreach is allowed within current policy.',
+        ].join('\n'),
+        JSON.stringify({
+          patient_balance: money(claim.patient_balance),
+          age_days: Number(claim.age_days || 0),
+          stage: stage.stage,
+          provider_approval_required: stage.provider_approval_required,
+        }),
+      ]
+    );
+    return { policy, claim, stage, action: actionRows[0] };
+  }
+
   async function getPatientArSummary() {
+    const policy = await getPatientArPolicy();
     const { rows: [summary] } = await pool.query(`
       WITH aged AS (
         SELECT
@@ -176,6 +369,7 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     }
 
     return {
+      policy,
       summary: summary || {},
       top_accounts: topAccounts.map((row) => ({
         ...row,
@@ -461,6 +655,21 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       };
     }
 
+    if (/patient ar policy|patient ar rules|reminder cadence|provider escalation day|hardship policy|settlement policy/.test(text)) {
+      const policy = await getPatientArPolicy();
+      const queue = await getPatientArEscalationQueue({ limit: 25 });
+      return {
+        ok: true,
+        type: 'patient_ar_policy',
+        reply: 'Here is the current patient AR policy and escalation queue.',
+        data: { policy, queue },
+        suggested_actions: [
+          'Adjust reminder and escalation days in the overlay if the provider wants a different cadence.',
+          'Queue provider-directed follow-up only after reviewing the current stage.',
+        ],
+      };
+    }
+
     if (/underpayment|short pay|short-paid|paid less than expected/.test(text)) {
       if (/queue|follow up|follow-up|work|open action/.test(text)) {
         const claimId = extractClaimId(text);
@@ -646,14 +855,14 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       };
     }
 
-    if (/repair account|fix account|apply repair|preview repair|set billing status|set provider type/.test(text)) {
+    if (/repair account|fix account|apply repair|preview repair|set billing status|set provider type|payer order|insurance priority|member id|subscriber|payor id|enter insurer/.test(text)) {
       return {
         ok: true,
         type: 'repair_guidance',
-        reply: 'Use the Account Recovery Detail panel to preview or apply billing-status, provider-type, and payment-status repairs for the selected account.',
+        reply: 'Use the Account Recovery Detail panel to preview or apply billing setup and insurer-field repairs for the selected account. Payer-order changes across multiple coverages still need manual confirmation.',
         suggested_actions: [
           'Select an account from Accounts Needing Action.',
-          'Choose the desired billing status, provider type, or payment status.',
+          'Choose the desired billing status, provider type, insurer fields, or insurance priority.',
           'Run Preview Repair first, then Apply Repair once the changes look correct.',
         ],
       };
@@ -702,10 +911,14 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     createCapabilityRequest,
     getInsuranceVerificationPreview,
     getOptimizationChecklist,
+    getPatientArEscalationQueue,
+    getPatientArPolicy,
     getPatientArSummary,
     listCapabilityRequests,
     repairAccount,
     runWorkflow,
+    savePatientArPolicy,
+    queuePatientArAction,
     updateCapabilityRequest,
   };
 }

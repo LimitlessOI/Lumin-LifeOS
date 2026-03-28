@@ -11,6 +11,8 @@
   let lastReimbursementIntelligence = null;
   let lastPayerPlaybooks = null;
   let lastEraInsights = null;
+  let lastPatientArPolicy = null;
+  let lastPatientArEscalation = null;
   let lastUnderpayments = null;
   let lastAppeals = null;
   let lastOpsOverview = null;
@@ -53,8 +55,8 @@
     localStorage.setItem('clientcare_assistant_open', String(assistantOpen));
   }
 
-  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, opsOverview, underpayments, appeals) {
-    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, opsOverview, underpayments, appeals };
+  function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals) {
+    lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals };
   }
 
   function rerender() {
@@ -70,6 +72,8 @@
       lastViewState.intelligence,
       lastViewState.payerPlaybooks,
       lastViewState.eraInsights,
+      lastViewState.patientArPolicy,
+      lastViewState.patientArEscalation,
       lastViewState.opsOverview,
       lastViewState.underpayments,
       lastViewState.appeals,
@@ -231,6 +235,9 @@
   function renderRepairPanel(item) {
     const billingStatusOptions = fieldOptionsFor(item, /client billing status/i);
     const providerTypeOptions = fieldOptionsFor(item, /bill provider type/i);
+    const insuranceNameOptions = fieldOptionsFor(item, /insurance name|carrier|payer name/i);
+    const insurancePriorityOptions = fieldOptionsFor(item, /insurance priority|priority/i);
+    const primaryInsurance = (item.insurancePreview || [])[0] || {};
     return `
       <div class="stack">
         <div class="grid three">
@@ -256,6 +263,46 @@
               <option value="no" ${item.accountSummary?.paymentStatus === 'no' ? 'selected' : ''}>No / not started</option>
             </select>
           </label>
+        </div>
+        <div class="grid three">
+          ${renderRepairControl({
+            id: 'repair-insurance-name',
+            label: 'Insurance Name',
+            currentValue: primaryInsurance.insuranceName || '',
+            options: insuranceNameOptions,
+            placeholder: 'Carrier / payer name',
+          })}
+          ${renderRepairControl({
+            id: 'repair-member-id',
+            label: 'Member ID',
+            currentValue: primaryInsurance.memberId || '',
+            placeholder: 'Member or subscriber ID',
+          })}
+          ${renderRepairControl({
+            id: 'repair-subscriber-name',
+            label: 'Subscriber Name',
+            currentValue: primaryInsurance.subscriberName || '',
+            placeholder: 'Subscriber name',
+          })}
+        </div>
+        <div class="grid three">
+          ${renderRepairControl({
+            id: 'repair-payor-id',
+            label: 'Payor ID',
+            currentValue: primaryInsurance.payorId || '',
+            placeholder: 'Payor ID',
+          })}
+          ${renderRepairControl({
+            id: 'repair-insurance-priority',
+            label: 'Insurance Priority',
+            currentValue: primaryInsurance.priority || '',
+            options: insurancePriorityOptions,
+            placeholder: 'Primary / secondary',
+          })}
+          <div class="card" style="padding:12px;background:#0f1528;">
+            <div class="muted">Payer order safety</div>
+            <div style="margin-top:6px">${escapeHtml((item.insurancePreview || []).length > 1 ? 'Multiple coverages visible. Priority changes remain guarded.' : 'Single visible coverage. Priority can be repaired.')}</div>
+          </div>
         </div>
         <div class="row-actions">
           <button id="repair-preview-run">Preview Repair</button>
@@ -717,10 +764,13 @@
     `;
   }
 
-  function renderPatientArSummary(opsOverview) {
+  function renderPatientArSummary(opsOverview, patientArPolicy, patientArEscalation) {
     const patientAr = opsOverview?.patient_ar || null;
     const summary = patientAr?.summary || {};
     const topAccounts = patientAr?.top_accounts || [];
+    const policy = patientArPolicy?.policy || patientAr?.policy || {};
+    const escalation = patientArEscalation || {};
+    const escalationItems = escalation.items || [];
     return `
       <div class="stack">
         <div class="grid four" style="margin-bottom:0">
@@ -750,6 +800,45 @@
           <ul class="detail-list">
             ${(patientAr?.recommendations || ['No patient AR recommendations yet.']).map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
           </ul>
+        </div>
+        <div>
+          <strong>Policy controls</strong>
+          <div class="grid three">
+            <label class="stack"><span class="muted">Reminder day 1</span><input id="patient-ar-reminder-1" type="number" min="1" value="${escapeHtml(policy.reminder_day_1 || 15)}"></label>
+            <label class="stack"><span class="muted">Reminder day 2</span><input id="patient-ar-reminder-2" type="number" min="1" value="${escapeHtml(policy.reminder_day_2 || 30)}"></label>
+            <label class="stack"><span class="muted">Provider escalation day</span><input id="patient-ar-provider-escalation" type="number" min="1" value="${escapeHtml(policy.provider_escalation_day || 45)}"></label>
+            <label class="stack"><span class="muted">Final notice day</span><input id="patient-ar-final-notice" type="number" min="1" value="${escapeHtml(policy.final_notice_day || 60)}"></label>
+            <label class="stack"><span class="muted">Payment-plan grace days</span><input id="patient-ar-plan-grace" type="number" min="1" value="${escapeHtml(policy.payment_plan_grace_days || 7)}"></label>
+            <label class="stack"><span class="muted">Autopay retry days</span><input id="patient-ar-autopay-retry" type="number" min="1" value="${escapeHtml(policy.autopay_retry_days || 3)}"></label>
+          </div>
+          <div class="grid two" style="margin-top:12px;">
+            <label class="stack"><span class="muted">Notes</span><textarea id="patient-ar-policy-notes" placeholder="Provider policy notes">${escapeHtml(policy.notes || '')}</textarea></label>
+            <div class="stack">
+              <label><input id="patient-ar-allow-plans" type="checkbox" ${policy.allow_payment_plans ? 'checked' : ''}> Allow payment plans</label>
+              <label><input id="patient-ar-allow-hardship" type="checkbox" ${policy.allow_hardship_review ? 'checked' : ''}> Allow hardship review</label>
+              <label><input id="patient-ar-allow-settlements" type="checkbox" ${policy.allow_settlements ? 'checked' : ''}> Allow settlements</label>
+              <label><input id="patient-ar-allow-referral-credit" type="checkbox" ${policy.allow_referral_credit ? 'checked' : ''}> Allow referral-credit ideas</label>
+              <div class="row-actions" style="margin-top:8px;"><button id="patient-ar-save-policy">Save patient AR policy</button></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <strong>Escalation ladder</strong>
+          <table>
+            <thead><tr><th>Patient</th><th>Age</th><th>Balance</th><th>Stage</th><th>Next action</th><th></th></tr></thead>
+            <tbody>
+              ${escalationItems.length ? escalationItems.slice(0, 12).map((item) => `
+                <tr>
+                  <td>${escapeHtml(item.patient_name || '')}</td>
+                  <td>${escapeHtml(item.age_bucket || '')}</td>
+                  <td>${escapeHtml(money(item.patient_balance || 0))}</td>
+                  <td>${escapeHtml(item.stage || '')}</td>
+                  <td>${escapeHtml(item.next_action || '')}</td>
+                  <td><button data-patient-ar-queue="${item.id}" class="ghost">Queue</button></td>
+                </tr>
+              `).join('') : '<tr><td colspan="6">No patient AR escalation items yet.</td></tr>'}
+            </tbody>
+          </table>
         </div>
       </div>
     `;
@@ -1097,7 +1186,7 @@
     const root = document.getElementById('app');
     try {
       const query = new URLSearchParams(filters).toString();
-      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, opsOverview, underpayments, appeals] = await Promise.all([
+      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals] = await Promise.all([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
         api('/api/v1/clientcare-billing/claims/import-template'),
@@ -1107,6 +1196,8 @@
         api('/api/v1/clientcare-billing/reimbursement-intelligence'),
         api('/api/v1/clientcare-billing/payer-playbooks?limit=25'),
         api('/api/v1/clientcare-billing/era-insights?limit=25'),
+        api('/api/v1/clientcare-billing/patient-ar/policy'),
+        api('/api/v1/clientcare-billing/patient-ar/escalation-queue?limit=50'),
         api('/api/v1/clientcare-billing/ops/overview'),
         api('/api/v1/clientcare-billing/underpayments?limit=100'),
         api('/api/v1/clientcare-billing/appeals/queue?limit=100'),
@@ -1114,10 +1205,12 @@
       lastReimbursementIntelligence = intelligence.intelligence || null;
       lastPayerPlaybooks = payerPlaybooks || null;
       lastEraInsights = eraInsights || null;
+      lastPatientArPolicy = patientArPolicy || null;
+      lastPatientArEscalation = patientArEscalation || null;
       lastOpsOverview = opsOverview.overview || null;
       lastUnderpayments = underpayments || null;
       lastAppeals = appeals || null;
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastEraInsights, lastOpsOverview, lastUnderpayments, lastAppeals);
+      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastEraInsights, lastPatientArPolicy, lastPatientArEscalation, lastOpsOverview, lastUnderpayments, lastAppeals);
       await ensureAssistantSession();
       if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
@@ -1154,6 +1247,58 @@
         body: JSON.stringify({ csv, source: 'overlay_payment_history_import' }),
       });
       alert(`Imported ${result.imported || 0} payment-history rows.`);
+      await loadDashboard({}, { skipAutoFullQueue: true });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function savePatientArPolicy() {
+    try {
+      const payload = {
+        reminder_day_1: Number(document.getElementById('patient-ar-reminder-1')?.value || 15),
+        reminder_day_2: Number(document.getElementById('patient-ar-reminder-2')?.value || 30),
+        provider_escalation_day: Number(document.getElementById('patient-ar-provider-escalation')?.value || 45),
+        final_notice_day: Number(document.getElementById('patient-ar-final-notice')?.value || 60),
+        payment_plan_grace_days: Number(document.getElementById('patient-ar-plan-grace')?.value || 7),
+        autopay_retry_days: Number(document.getElementById('patient-ar-autopay-retry')?.value || 3),
+        allow_payment_plans: Boolean(document.getElementById('patient-ar-allow-plans')?.checked),
+        allow_hardship_review: Boolean(document.getElementById('patient-ar-allow-hardship')?.checked),
+        allow_settlements: Boolean(document.getElementById('patient-ar-allow-settlements')?.checked),
+        allow_referral_credit: Boolean(document.getElementById('patient-ar-allow-referral-credit')?.checked),
+        notes: document.getElementById('patient-ar-policy-notes')?.value || '',
+        updated_by: 'overlay',
+      };
+      const result = await api('/api/v1/clientcare-billing/patient-ar/policy', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      lastPatientArPolicy = result;
+      await loadDashboard({}, { skipAutoFullQueue: true });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function queuePatientArAction(id) {
+    try {
+      const result = await api(`/api/v1/clientcare-billing/patient-ar/${id}/queue-action`, {
+        method: 'POST',
+        body: JSON.stringify({
+          owner: 'overlay',
+          action_type: 'patient_ar_followup',
+        }),
+      });
+      document.getElementById('claim-plan').innerHTML = `
+        <h3>${escapeHtml(result.claim.patient_name || `Claim ${id}`)}</h3>
+        <p class="muted">Patient AR action queued successfully.</p>
+        ${renderKeyValueTable([
+          { label: 'Stage', value: result.stage?.stage || '' },
+          { label: 'Balance', value: money(result.claim.patient_balance || 0) },
+          { label: 'Action', value: result.action?.summary || '' },
+        ])}
+        <div><strong>Next step</strong><pre>${escapeHtml(result.action?.details || 'No details available.')}</pre></div>
+      `;
       await loadDashboard({}, { skipAutoFullQueue: true });
     } catch (error) {
       alert(error.message);
@@ -1503,9 +1648,19 @@
     const billingStatus = document.getElementById('repair-client-billing-status')?.value?.trim();
     const providerType = document.getElementById('repair-bill-provider-type')?.value?.trim();
     const paymentStatus = document.getElementById('repair-payment-status')?.value?.trim();
+    const insuranceName = document.getElementById('repair-insurance-name')?.value?.trim();
+    const memberId = document.getElementById('repair-member-id')?.value?.trim();
+    const subscriberName = document.getElementById('repair-subscriber-name')?.value?.trim();
+    const payorId = document.getElementById('repair-payor-id')?.value?.trim();
+    const insurancePriority = document.getElementById('repair-insurance-priority')?.value?.trim();
     if (billingStatus) updates.client_billing_status = billingStatus;
     if (providerType) updates.bill_provider_type = providerType;
     if (paymentStatus) updates.payment_status = paymentStatus;
+    if (insuranceName) updates.insurance_name = insuranceName;
+    if (memberId) updates.member_id = memberId;
+    if (subscriberName) updates.subscriber_name = subscriberName;
+    if (payorId) updates.payor_id = payorId;
+    if (insurancePriority) updates.insurance_priority = insurancePriority;
 
     if (!Object.keys(updates).length) {
       alert('Choose at least one repair field before previewing or applying.');
@@ -1637,8 +1792,8 @@
     }
   }
 
-  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, opsOverview, underpayments, appeals) {
-    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, opsOverview, underpayments, appeals);
+  function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals) {
+    saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals);
     const summary = dashboard.summary || {};
     const liveSummary = lastAccountReport?.summary || null;
     const patientArSummary = opsOverview?.patient_ar?.summary || {};
@@ -1789,7 +1944,7 @@
               <div id="reimbursement-intelligence">${renderReimbursementIntelligence(intelligence)}</div>
               <hr style="border-color:#27304a; margin:16px 0;">
               <h3>Patient AR</h3>
-              <div id="patient-ar-summary">${renderPatientArSummary(opsOverview)}</div>
+              <div id="patient-ar-summary">${renderPatientArSummary(opsOverview, patientArPolicy, patientArEscalation)}</div>
             </div>
             <div class="card">
               <h2>Claims Ledger</h2>
@@ -1867,12 +2022,12 @@
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
     document.getElementById('assistant-pin-toggle').addEventListener('click', () => {
       setAssistantPinned(!assistantPinned);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, opsOverview, underpayments, appeals);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals);
       ensureAssistantSession();
     });
     document.getElementById('assistant-open-toggle').addEventListener('click', () => {
       setAssistantOpen(!assistantOpen);
-      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, opsOverview, underpayments, appeals);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals);
       ensureAssistantSession();
     });
     document.getElementById('assistant-input').addEventListener('keydown', (event) => {
@@ -1884,9 +2039,12 @@
     if (repairPreviewButton) repairPreviewButton.addEventListener('click', () => runAccountRepair(false));
     const repairApplyButton = document.getElementById('repair-apply-run');
     if (repairApplyButton) repairApplyButton.addEventListener('click', () => runAccountRepair(true));
+    const patientArSaveButton = document.getElementById('patient-ar-save-policy');
+    if (patientArSaveButton) patientArSaveButton.addEventListener('click', savePatientArPolicy);
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));
     root.querySelectorAll('[data-claim-reclassify]').forEach((button) => button.addEventListener('click', () => reclassify(button.getAttribute('data-claim-reclassify'))));
     root.querySelectorAll('[data-action-complete]').forEach((button) => button.addEventListener('click', () => completeAction(button.getAttribute('data-action-complete'))));
+    root.querySelectorAll('[data-patient-ar-queue]').forEach((button) => button.addEventListener('click', () => queuePatientArAction(button.getAttribute('data-patient-ar-queue'))));
     root.querySelectorAll('[data-underpayment-queue]').forEach((button) => button.addEventListener('click', () => queueUnderpaymentAction(button.getAttribute('data-underpayment-queue'))));
     root.querySelectorAll('[data-appeal-packet]').forEach((button) => button.addEventListener('click', () => showAppealPacket(button.getAttribute('data-appeal-packet'))));
     root.querySelectorAll('[data-appeal-queue]').forEach((button) => button.addEventListener('click', () => queueAppealAction(button.getAttribute('data-appeal-queue'), 'appeal_followup')));

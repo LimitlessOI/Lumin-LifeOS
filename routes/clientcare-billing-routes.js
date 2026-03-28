@@ -184,6 +184,52 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/patient-ar/policy', async (_req, res) => {
+    try {
+      const policy = await opsService.getPatientArPolicy();
+      res.json({ ok: true, policy });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] patient AR policy failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/patient-ar/policy', async (req, res) => {
+    try {
+      const policy = await opsService.savePatientArPolicy(req.body || {}, {
+        updatedBy: String(req.body?.updated_by || 'overlay'),
+      });
+      res.json({ ok: true, policy });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] save patient AR policy failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/patient-ar/escalation-queue', async (req, res) => {
+    try {
+      const queue = await opsService.getPatientArEscalationQueue({ limit: req.query?.limit });
+      res.json({ ok: true, ...queue });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] patient AR escalation queue failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/patient-ar/:claimId/queue-action', async (req, res) => {
+    try {
+      const result = await opsService.queuePatientArAction(req.params.claimId, {
+        owner: req.body?.owner || 'overlay',
+        actionType: req.body?.action_type || 'patient_ar_followup',
+      });
+      if (!result) return res.status(404).json({ ok: false, error: 'Claim not found' });
+      res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] patient AR queue action failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/login-test', async (_req, res) => {
     try {
       const result = await browserService.login({ dryRun: false });

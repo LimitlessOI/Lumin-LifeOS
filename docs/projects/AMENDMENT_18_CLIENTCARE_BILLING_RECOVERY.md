@@ -99,6 +99,7 @@ Every claim lands in one of these buckets:
 | `public/clientcare-billing/clientcare-billing.js` | Overlay UI logic for import, queue review, and claim planning |
 | `db/migrations/20260326_clientcare_billing.sql` | Claims + action tables |
 | `db/migrations/20260326_clientcare_ops.sql` | Capability queue for requested billing/system improvements |
+| `db/migrations/20260327_clientcare_patient_ar_controls.sql` | Provider-directed patient AR policy controls |
 
 ### Endpoints
 - `GET /api/v1/clientcare-billing/dashboard`
@@ -111,6 +112,10 @@ Every claim lands in one of these buckets:
 - `POST /api/v1/clientcare-billing/ops/repair-account`
 - `POST /api/v1/clientcare-billing/insurance/verification-preview`
 - `GET /api/v1/clientcare-billing/patient-ar/summary`
+- `GET /api/v1/clientcare-billing/patient-ar/policy`
+- `POST /api/v1/clientcare-billing/patient-ar/policy`
+- `GET /api/v1/clientcare-billing/patient-ar/escalation-queue`
+- `POST /api/v1/clientcare-billing/patient-ar/:claimId/queue-action`
 - `GET /api/v1/clientcare-billing/payer-playbooks`
 - `GET /api/v1/clientcare-billing/era-insights`
 - `GET /api/v1/clientcare-billing/underpayments`
@@ -144,6 +149,9 @@ Per-claim action queue: submit, resubmit, call payer, request proof, appeal, etc
 
 #### `clientcare_capability_requests`
 Queue of requested assistant/system capabilities that are not yet fully automated.
+
+#### `clientcare_patient_ar_policy`
+Provider-directed thresholds and controls for reminder cadence, escalation timing, payment-plan grace periods, and hardship/settlement policy.
 
 ---
 
@@ -206,7 +214,7 @@ Operational inputs needed regardless of integration path:
 - Claim exports have not yet been ingested.
 - Paid claims / ERA / remit history has not been imported, so payout/date forecasting is still low-confidence.
 - Browser selectors for read paths are working; writeback workflows still need controlled rollout and approval gates.
-- Controlled writeback now covers billing status, provider type, and payment-status changes, but insurer-entry and payer-order changes still require payer-specific/manual handling.
+- Controlled writeback now covers billing status, provider type, payment status, and visible insurer/member/subscriber/payor/priority fields, but multi-coverage payer-order changes still require manual confirmation.
 
 ---
 
@@ -246,6 +254,7 @@ Operational inputs needed regardless of integration path:
 - `Operations Assistant` should use the ops layer first for actionable commands (workflow, AR, eligibility, setup) and only fall back to general AI when needed.
 - Account Recovery Detail must support preview/apply repair actions for billing status, provider type, and payment-status updates with clear before/after feedback.
 - The system must support provider-directed patient AR follow-up and payment-plan monitoring, but debt-collection style workflows remain compliance-gated until legal/licensing review is complete.
+- Patient AR policy controls must be operator-editable so reminder cadence, provider-escalation timing, payment-plan grace windows, and hardship/settlement flags are explicit instead of ad hoc.
 - The system should learn expected payer reimbursement and collection timing from paid claims / ERAs / remits so projected amount and projected date tighten over time instead of staying rescue-bucket-only.
 - Payment-history import should capture ERA/remit metadata such as CARC/RARC, trace/check reference, and paid date so payer learning and denial playbooks are grounded in remittance data rather than only free-text denial reasons.
 - The system should evolve toward underpayment detection, payer playbooks, eligibility verification, and appeals packet preparation because those are core differentiators versus generic billing dashboards.
@@ -266,11 +275,10 @@ Operational inputs needed regardless of integration path:
 - [x] **Payment-history import and underpayment queue** *(est: 6h | actual: 7h)* `[needs-review]`
 - [x] **Appeals queue, packet preview, and action queueing** *(est: 6h | actual: 7h)* `[needs-review]`
 - [x] **Payer playbooks plus ERA/remit insight layer** *(est: 7h | actual: 7h)* `[needs-review]`
-- [ ] **→ NEXT: insurer-entry and payer-order repair workflows** *(est: 8h)* `[needs-review]`
-- [ ] **Patient AR escalation ladder and provider policy controls** *(est: 8h)* `[needs-review]`
-- [ ] **Sellable packaging: permissions, audit hardening, tenant boundaries, onboarding** *(est: 12h)* `[high-risk]`
+- [x] **Insurer-entry repair for visible coverage plus patient AR escalation ladder/policy controls** *(est: 8h | actual: 9h)* `[needs-review]`
+- [ ] **→ NEXT: sellable packaging: permissions, audit hardening, tenant boundaries, onboarding** *(est: 12h)* `[high-risk]`
 
-**Progress:** 6/9 steps complete | Est. remaining: ~28h
+**Progress:** 7/8 steps complete | Est. remaining: ~12h
 
 ---
 
@@ -281,6 +289,7 @@ Operational inputs needed regardless of integration path:
 | 2026-03-27 | Added payment-history import and underpayment queue | 6h | 7h | +1h from CSV alias normalization and queue polish | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added appeals queue, packet preview, and recovery action queueing | 6h | 7h | +1h from route/UI/action wiring across queue and claim pane | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added payer playbooks, ERA/remit insights, and forecast calibration hooks | 7h | 7h | none | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added insurer-field repair controls plus patient AR policy/escalation queue | 8h | 9h | +1h from route/UI/policy persistence wiring | ✅ | ✅ | pending |
 
 ---
 
@@ -294,14 +303,14 @@ Operational inputs needed regardless of integration path:
 - [x] Both execution paths documented (API path and no-API browser fallback)
 - [x] Canonical claims rescue queue buckets defined (7 buckets with clear labels)
 - [x] All 9 service/route/UI files listed with purposes
-- [x] All API endpoints documented (28 endpoints)
+- [x] All API endpoints documented (33 endpoints)
 - [x] Default payer rules documented (Medicare FFS, Nevada Medicaid, Commercial/unknown)
 - [x] Definition of Done (Phase 1) fully specified with 24 concrete acceptance criteria
 - [ ] Payer list for the actual 90 claims not yet in-repo — confirmed blocker
 - [ ] Claim exports from ClientCare not yet ingested — no real data to validate against
 - [ ] ERA/remit history not imported — payout forecasting remains low-confidence
 - [ ] ClientCare API access not yet confirmed — browser path remains the real execution path
-- [ ] Controlled writeback for insurer-entry and payer-order changes not yet implemented
+- [ ] Multi-coverage payer-order changes still require a coverage-specific selector before safe automation
 
 ### Gate 2 — Competitor Landscape
 | Competitor | Strengths | Weaknesses | Our Edge |

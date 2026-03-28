@@ -301,10 +301,17 @@ function buildAccountRepairPlan(account = {}, requestedUpdates = {}) {
   const billingFields = Array.isArray(account.billingFields) ? account.billingFields : [];
   const accountSummary = account.accountSummary || {};
   const diagnosis = account.diagnosis || {};
+  const insurancePreview = Array.isArray(account.insurancePreview) ? account.insurancePreview : [];
+  const primaryCoverage = insurancePreview[0] || {};
 
   const fieldByLabel = (pattern) => billingFields.find((field) => pattern.test(String(field.label || '')));
   const billingStatusField = fieldByLabel(/client billing status/i);
   const providerTypeField = fieldByLabel(/bill provider type/i);
+  const insuranceNameField = fieldByLabel(/insurance name|carrier|payer name/i);
+  const memberIdField = fieldByLabel(/member id|subscriber id|policy number/i);
+  const subscriberField = fieldByLabel(/subscriber name/i);
+  const payorIdField = fieldByLabel(/payor id|payer id/i);
+  const priorityField = fieldByLabel(/insurance priority|priority/i);
 
   const supported = [];
   const unsupported = [];
@@ -364,7 +371,81 @@ function buildAccountRepairPlan(account = {}, requestedUpdates = {}) {
     });
   }
 
-  if (!Array.isArray(account.insurancePreview) || !account.insurancePreview.length) {
+  if (requestedUpdates.insurance_name) {
+    supported.push({
+      field: 'insurance_name',
+      label: 'Insurance Name',
+      current: primaryCoverage.insuranceName || '',
+      target: requestedUpdates.insurance_name,
+      options: insuranceNameField?.options || [],
+    });
+  } else if (!primaryCoverage.insuranceName) {
+    needed.push({
+      field: 'insurance_name',
+      label: 'Insurance Name',
+      current: '',
+      options: insuranceNameField?.options || [],
+      reason: 'Insurance name is blank or not visible.',
+    });
+  }
+
+  if (requestedUpdates.member_id) {
+    supported.push({
+      field: 'member_id',
+      label: 'Member ID',
+      current: primaryCoverage.memberId || '',
+      target: requestedUpdates.member_id,
+      options: memberIdField?.options || [],
+    });
+  } else if (!primaryCoverage.memberId) {
+    needed.push({
+      field: 'member_id',
+      label: 'Member ID',
+      current: '',
+      options: memberIdField?.options || [],
+      reason: 'Member ID is blank or not visible.',
+    });
+  }
+
+  if (requestedUpdates.subscriber_name) {
+    supported.push({
+      field: 'subscriber_name',
+      label: 'Subscriber Name',
+      current: primaryCoverage.subscriberName || '',
+      target: requestedUpdates.subscriber_name,
+      options: subscriberField?.options || [],
+    });
+  }
+
+  if (requestedUpdates.payor_id) {
+    supported.push({
+      field: 'payor_id',
+      label: 'Payor ID',
+      current: primaryCoverage.payorId || '',
+      target: requestedUpdates.payor_id,
+      options: payorIdField?.options || [],
+    });
+  }
+
+  if (requestedUpdates.insurance_priority) {
+    supported.push({
+      field: 'insurance_priority',
+      label: 'Insurance Priority',
+      current: primaryCoverage.priority || '',
+      target: requestedUpdates.insurance_priority,
+      options: priorityField?.options || [],
+    });
+  } else if (!primaryCoverage.priority && insurancePreview.length === 1) {
+    needed.push({
+      field: 'insurance_priority',
+      label: 'Insurance Priority',
+      current: '',
+      options: priorityField?.options || [],
+      reason: 'Insurance priority is blank.',
+    });
+  }
+
+  if (!insurancePreview.length) {
     unsupported.push({
       field: 'insurance_details',
       label: 'Insurance details',
@@ -372,7 +453,15 @@ function buildAccountRepairPlan(account = {}, requestedUpdates = {}) {
     });
   }
 
-  if ((account.insurancePreview || []).length > 1) {
+  if (insurancePreview.length > 1 && requestedUpdates.insurance_priority) {
+    unsupported.push({
+      field: 'insurance_priority_multi',
+      label: 'Insurance priority',
+      reason: 'Multiple coverages are visible. Automatic payer-order changes remain blocked until a specific coverage selector is implemented.',
+    });
+  }
+
+  if (insurancePreview.length > 1) {
     unsupported.push({
       field: 'payer_order',
       label: 'Payer order',
@@ -483,6 +572,21 @@ async function applyBillingFieldUpdates(page, updates = {}) {
     }
     if (requestedUpdates.payment_status) {
       operations.push(setControlValue(/payment status|paymentstatus/i, requestedUpdates.payment_status, 'payment_status'));
+    }
+    if (requestedUpdates.insurance_name) {
+      operations.push(setControlValue(/insurance name|carrier|payer name/i, requestedUpdates.insurance_name, 'insurance_name'));
+    }
+    if (requestedUpdates.member_id) {
+      operations.push(setControlValue(/member id|subscriber id|policy number/i, requestedUpdates.member_id, 'member_id'));
+    }
+    if (requestedUpdates.subscriber_name) {
+      operations.push(setControlValue(/subscriber name/i, requestedUpdates.subscriber_name, 'subscriber_name'));
+    }
+    if (requestedUpdates.payor_id) {
+      operations.push(setControlValue(/payor id|payer id/i, requestedUpdates.payor_id, 'payor_id'));
+    }
+    if (requestedUpdates.insurance_priority) {
+      operations.push(setControlValue(/insurance priority|priority/i, requestedUpdates.insurance_priority, 'insurance_priority'));
     }
 
     return { operations };
