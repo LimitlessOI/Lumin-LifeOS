@@ -6,6 +6,7 @@
 - ClientCare packaging now supports tenant-aware overview queries and filtered audit retrieval, so the same product can be configured for more than one practice without mixing state.
 - ClientCare repair flow now supports multi-coverage slot targeting for visible insurer fields, reducing the manual blocker around payer-order edits on accounts with more than one visible coverage; broader layout hardening is still pending.
 - ClientCare billing now also supports operator-defined payer rule overrides for commercial plans, so filing windows, appeal windows, auth-review flags, and follow-up notes can be tuned without code changes and flow directly into payer playbooks/classification.
+- ClientCare sellable packaging now also enforces tenant-scoped operator access on write routes when operators are configured, using overlay-supplied operator identity plus tenant headers without blocking bootstrap before access rows exist.
 
 ## Update 2026-03-26 #2
 - Trust reset applied: directed mode is now the default operating posture. Autonomous AI/build/research/improvement loops are being disabled unless explicitly re-enabled.

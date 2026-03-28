@@ -315,6 +315,7 @@ Operational inputs needed regardless of integration path:
 | 2026-03-27 | Added insurer-field repair controls plus patient AR policy/escalation queue | 8h | 9h | +1h from route/UI/policy persistence wiring | ✅ | ✅ | pending |
 | 2026-03-27 | Added sellable packaging controls, tenant/onboarding/operator UI, audit logging, and tenant-aware packaging overview | 12h | 10h | -2h because the packaging service and routes were already partially scaffolded before the UI and SSOT pass | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added commercial payer rule overrides plus multi-coverage slot-targeted insurer repair | 8h | 7h | -1h because the payer-playbook/history groundwork was already in place and the slot-targeted repair reused the controlled writeback path | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added tenant-scoped operator-access enforcement headers and write-action gating for sellable packaging / recovery actions | 5h | 4h | -1h because the tenant and operator packaging tables were already live | ✅ | ✅ | ✅ |
 
 ---
 
@@ -361,3 +362,4 @@ Every billing software shows you what's unpaid; LifeOS tells you exactly which o
 
 - Sellable packaging controls must exist in the operator overlay so a practice can be configured with tenant profile, onboarding state, operator access, and audit receipts without leaving the Collections Control Center.
 - Packaging endpoints must support tenant-aware overview and filtered audit retrieval so the same product can be sold to more than one practice without mixing state.
+- Sellable packaging controls must respect tenant-scoped operator access when a tenant has configured operators, while remaining permissive during bootstrap before operator rows exist.

@@ -203,6 +203,34 @@ export function createClientCareSellableService({ pool, logger = console }) {
     }
   }
 
+
+  async function resolveOperatorAccess({ tenantId = null, operatorEmail = '' } = {}) {
+    const normalizedEmail = String(operatorEmail || '').trim().toLowerCase();
+    const operators = tenantId ? await listOperatorAccess(tenantId) : [];
+    if (!operators.length) {
+      return { enforced: false, allowed: true, operator: null, operators: [] };
+    }
+    const operator = operators.find((entry) => String(entry.operator_email || '').trim().toLowerCase() === normalizedEmail) || null;
+    return {
+      enforced: true,
+      allowed: Boolean(operator?.active),
+      operator: operator || null,
+      operators,
+    };
+  }
+
+  async function assertOperatorAccess({ tenantId = null, operatorEmail = '', roles = [] } = {}) {
+    const result = await resolveOperatorAccess({ tenantId, operatorEmail });
+    if (!result.enforced) return { ...result, tenantId, operatorEmail };
+    if (!result.allowed) {
+      throw new Error('Active operator access required for this tenant action');
+    }
+    if (roles.length && !roles.includes(String(result.operator?.role || '').toLowerCase())) {
+      throw new Error(`Operator role must be one of: ${roles.join(', ')}`);
+    }
+    return { ...result, tenantId, operatorEmail };
+  }
+
   async function getPackagingOverview({ tenantId = null, auditLimit = 20 } = {}) {
     const tenants = await listTenants();
     const activeTenant = tenants.find((tenant) => String(tenant.id) === String(tenantId || '')) || tenants[0] || DEFAULT_TENANT;

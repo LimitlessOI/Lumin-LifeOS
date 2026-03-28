@@ -9,7 +9,7 @@
   "phase": "sellable-v1-hardening",
   "next_task": "Polish sellable v1: deepen commercial payer rules, harden broader multi-coverage layouts, and tighten onboarding/operator packaging for repeatable external deployment.",
   "stability_class": "needs-review",
-  "current_focus": "Internal operational completeness is now in place: live backlog visibility, repair workflows, payment learning, underpayments, appeals, payer playbooks, ERA insights, patient AR controls, sellable packaging, and operator-defined payer rule overrides. Next step is sellable-v1 hardening and polish.",
+  "current_focus": "Internal operational completeness is now in place with tenant packaging and tenant-scoped operator gating on write actions. Next step is sellable-v1 polish: deeper commercial rules, broader multi-coverage layout safety, and onboarding polish.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -366,7 +366,8 @@
     "Forecasting improves from imported paid claims / ERAs / remits instead of rescue buckets alone",
     "Sellable packaging overview supports tenant profile, onboarding state, operator access, and tenant-scoped audit history",
     "Packaging overview can switch tenants without leaving the overlay",
-    "Internal operational completeness reached; remaining work is sellable-v1 hardening and commercial/polish depth"
+    "Internal operational completeness reached; remaining work is sellable-v1 hardening and commercial/polish depth",
+    "Tenant-scoped operator access gates write actions when operators are configured for that tenant"
   ],
   "anti_drift_notes": "This product has two data layers: the live ClientCare browser backlog and the local claim ledger. Do not assume the claim ledger reflects the live backlog unless imports have run. Keep the overlay fast by loading backlog summary first and account details lazily. Do not enable autonomous collections behavior; all outreach and writeback remains provider-directed and compliance-gated.",
   "decision_debt": [
@@ -396,6 +397,10 @@
     },
     {
       "description": "Broader multi-coverage layout hardening is still pending even though visible-slot targeting now exists for insurer repair",
+      "resolved": false
+    },
+    {
+      "description": "Tenant-scoped operator access now gates write actions, but external onboarding UX still needs polish for low-friction rollout",
       "resolved": false
     }
   ],

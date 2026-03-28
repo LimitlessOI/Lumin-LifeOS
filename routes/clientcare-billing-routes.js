@@ -22,6 +22,20 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   const sellableService = createClientCareSellableService({ pool, logger });
   const conversationStore = createConversationStore(pool);
 
+  function getTenantId(req) {
+    return req.headers['x-clientcare-tenant-id'] || req.body?.tenant_id || req.query?.tenant_id || null;
+  }
+
+  function getOperatorEmail(req) {
+    return req.headers['x-operator-email'] || req.body?.operator_email || req.body?.updated_by || req.body?.requested_by || req.body?.owner || null;
+  }
+
+  async function enforceOperatorAccess(req, roles = []) {
+    const tenantId = getTenantId(req);
+    const operatorEmail = getOperatorEmail(req);
+    return sellableService.assertOperatorAccess({ tenantId, operatorEmail, roles });
+  }
+
   router.use(express.json({ limit: '5mb' }));
   router.use(requireKey);
 
@@ -70,6 +84,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/payer-rules', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
       const rule = await billingService.savePayerRuleOverride(req.body || {});
       await sellableService.logAudit({
         actor: String(req.body?.updated_by || 'overlay'),
@@ -160,6 +175,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/tenants', async (req, res) => {
     try {
+      if (req.body?.id || req.body?.tenant_id) await enforceOperatorAccess(req, ['manager']);
       const tenant = await sellableService.saveTenant(req.body || {});
       await sellableService.logAudit({
         tenantId: tenant.id || null,
@@ -188,6 +204,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/tenants/:tenantId/onboarding', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['manager']);
       const onboarding = await sellableService.saveOnboarding(req.params.tenantId, req.body || {});
       await sellableService.logAudit({
         tenantId: req.params.tenantId,
@@ -216,6 +233,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/tenants/:tenantId/operators', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['manager']);
       const operator = await sellableService.saveOperatorAccess(req.params.tenantId, req.body || {});
       await sellableService.logAudit({
         tenantId: req.params.tenantId,
@@ -271,6 +289,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/ops/run-workflow', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
       const workflowId = String(req.body?.workflow_id || '').trim();
       if (!workflowId) return res.status(400).json({ ok: false, error: 'workflow_id required' });
       const result = await opsService.runWorkflow(workflowId, {
@@ -286,6 +305,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/ops/repair-account', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
       const billingHref = String(req.body?.billing_href || '').trim();
       if (!billingHref) return res.status(400).json({ ok: false, error: 'billing_href required' });
       const result = await opsService.repairAccount({
@@ -342,6 +362,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/patient-ar/policy', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['manager']);
       const policy = await opsService.savePatientArPolicy(req.body || {}, {
         updatedBy: String(req.body?.updated_by || 'overlay'),
       });
@@ -371,6 +392,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/patient-ar/:claimId/queue-action', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
       const result = await opsService.queuePatientArAction(req.params.claimId, {
         owner: req.body?.owner || 'overlay',
         actionType: req.body?.action_type || 'patient_ar_followup',
@@ -774,6 +796,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/appeals/:claimId/queue-action', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
       const result = await billingService.queueAppealAction(req.params.claimId, {
         owner: req.body?.owner || null,
         actionType: req.body?.action_type || 'appeal_followup',
@@ -795,6 +818,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.post('/underpayments/:claimId/queue-action', async (req, res) => {
     try {
+      await enforceOperatorAccess(req, ['operator', 'manager']);
       const result = await billingService.queueUnderpaymentAction(req.params.claimId, {
         owner: req.body?.owner || null,
         actionType: req.body?.action_type || 'underpayment_review',

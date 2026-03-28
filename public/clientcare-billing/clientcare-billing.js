@@ -38,6 +38,16 @@
     localStorage.setItem('x_api_key', value);
   }
 
+  function getOperatorEmail() {
+    return localStorage.getItem('clientcare_operator_email') || '';
+  }
+
+  function setOperatorEmail(value) {
+    const email = String(value || '').trim().toLowerCase();
+    if (email) localStorage.setItem('clientcare_operator_email', email);
+    else localStorage.removeItem('clientcare_operator_email');
+  }
+
   function setAssistantSessionId(value) {
     assistantSessionId = value || '';
     if (assistantSessionId) localStorage.setItem('clientcare_assistant_session_id', assistantSessionId);
@@ -1311,6 +1321,8 @@
       headers: {
         'content-type': 'application/json',
         'x-api-key': getApiKey(),
+        ...(getOperatorEmail() ? { 'x-operator-email': getOperatorEmail() } : {}),
+        ...(selectedTenantId ? { 'x-clientcare-tenant-id': selectedTenantId } : {}),
         ...(options && options.headers ? options.headers : {}),
       },
     });
@@ -2112,7 +2124,9 @@
         <div class="card" style="min-width:320px;">
           <label for="api-key">Command key</label>
           <input id="api-key" type="password" value="${escapeHtml(getApiKey())}" placeholder="x-api-key">
-          <div style="margin-top:10px"><button id="save-key">Save key</button></div>
+          <label for="operator-email" style="margin-top:10px">Operator email</label>
+          <input id="operator-email-header" type="email" value="${escapeHtml(getOperatorEmail())}" placeholder="operator@practice.com">
+          <div style="margin-top:10px"><button id="save-key">Save access</button></div>
         </div>
       </div>
 
@@ -2279,6 +2293,7 @@
 
     document.getElementById('save-key').addEventListener('click', async () => {
       setApiKey(document.getElementById('api-key').value);
+      setOperatorEmail(document.getElementById('operator-email-header').value);
       await loadDashboard();
     });
     document.getElementById('import-csv').addEventListener('click', importCsv);
