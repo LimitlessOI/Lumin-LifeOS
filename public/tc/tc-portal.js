@@ -376,6 +376,7 @@
     const readiness = data.readiness || {};
     const readinessSummary = readiness.readiness || {};
     const envTemplate = readiness.env_template || [];
+    const managedEnvPlan = readiness.managed_env?.plan || [];
     const intakeQueue = data.intake_queue || [];
     const transactions = data.active_transactions || [];
     const recentActivity = data.recent_activity || [];
@@ -415,6 +416,15 @@
         <td><span class="badge ${badgeClass(item.known ? 'healthy' : 'review')}">${escapeHtml(item.known ? 'known' : item.secret ? 'needs secret' : 'needs value')}</span></td>
       </tr>
     `).join('') || '<tr><td colspan="4">No env template available.</td></tr>';
+
+    const managedEnvRows = managedEnvPlan.map((item) => `
+      <tr>
+        <td>${escapeHtml(item.envName)}</td>
+        <td>${escapeHtml(item.currentPresent ? 'present' : 'missing')}</td>
+        <td>${escapeHtml(item.same ? 'in sync' : item.action || 'review')}</td>
+        <td>${escapeHtml(item.maskedCurrent || item.maskedDesired || '')}</td>
+      </tr>
+    `).join('') || '<tr><td colspan="4">No managed env snapshot available.</td></tr>';
 
     const queueRows = intakeQueue.map((item) => {
       const matchCandidates = item.match_candidates || [];
@@ -550,6 +560,8 @@
           <table><thead><tr><th>Env</th><th>Purpose</th><th>Status</th></tr></thead><tbody>${envRows}</tbody></table>
           <h2 style="margin-top:16px">Env Template</h2>
           <table><thead><tr><th>Name</th><th>Purpose</th><th>Value to seed</th><th>Status</th></tr></thead><tbody>${templateRows}</tbody></table>
+          <h2 style="margin-top:16px">Managed Env Snapshot</h2>
+          <table><thead><tr><th>Name</th><th>Runtime</th><th>Sync</th><th>Masked value</th></tr></thead><tbody>${managedEnvRows}</tbody></table>
           <h2 style="margin-top:16px">Vault Credentials</h2>
           <table><thead><tr><th>Service</th><th>Key</th><th>Status</th></tr></thead><tbody>${vaultRows}</tbody></table>
         </div>

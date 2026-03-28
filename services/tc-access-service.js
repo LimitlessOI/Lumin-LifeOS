@@ -34,6 +34,7 @@ function buildEnvTemplate({
   tcAgentName = '',
   tcAgentPhone = '',
   tcEmailFrom = '',
+  presenceMap = {},
 } = {}) {
   const resolvedWorkEmail = workEmail || process.env.WORK_EMAIL || process.env.TC_EMAIL_FROM || '';
   const resolvedImapUser = tcImapUser || resolvedWorkEmail || process.env.TC_IMAP_USER || '';
@@ -41,10 +42,10 @@ function buildEnvTemplate({
   const resolvedAgentName = tcAgentName || process.env.TC_AGENT_NAME || 'Adam Hopkins';
   const resolvedAgentPhone = tcAgentPhone || process.env.TC_AGENT_PHONE || '';
 
-  const imapPasswordPresent = Boolean(process.env.TC_IMAP_APP_PASSWORD || process.env.WORK_EMAIL_APP_PASSWORD || process.env.IMAP_PASS);
-  const emailWebhookPresent = Boolean(process.env.EMAIL_WEBHOOK_SECRET);
-  const twilioWebhookPresent = Boolean(process.env.TWILIO_WEBHOOK_SECRET);
-  const asanaTokenPresent = Boolean(process.env.ASANA_ACCESS_TOKEN);
+  const imapPasswordPresent = Boolean(presenceMap.TC_IMAP_APP_PASSWORD || process.env.TC_IMAP_APP_PASSWORD || process.env.WORK_EMAIL_APP_PASSWORD || process.env.IMAP_PASS);
+  const emailWebhookPresent = Boolean(presenceMap.EMAIL_WEBHOOK_SECRET || process.env.EMAIL_WEBHOOK_SECRET);
+  const twilioWebhookPresent = Boolean(presenceMap.TWILIO_WEBHOOK_SECRET || process.env.TWILIO_WEBHOOK_SECRET);
+  const asanaTokenPresent = Boolean(presenceMap.ASANA_ACCESS_TOKEN || process.env.ASANA_ACCESS_TOKEN);
 
   return [
     { name: 'TC_IMAP_HOST', value: process.env.TC_IMAP_HOST || process.env.IMAP_HOST || 'imap.gmail.com', known: true, secret: false, description: 'IMAP host for the TC mailbox' },
@@ -67,10 +68,50 @@ export function createTCAccessService({
   managedEnvService = null,
   logger = console,
 } = {}) {
+  const TC_MANAGED_ENV_NAMES = [
+    'TC_IMAP_HOST',
+    'TC_IMAP_PORT',
+    'TC_IMAP_USER',
+    'TC_IMAP_APP_PASSWORD',
+    'WORK_EMAIL',
+    'TC_EMAIL_FROM',
+    'TC_AGENT_NAME',
+    'TC_AGENT_PHONE',
+    'EMAIL_WEBHOOK_SECRET',
+    'TWILIO_WEBHOOK_SECRET',
+    'ASANA_ACCESS_TOKEN',
+    'ASANA_TC_PROJECT_GID',
+  ];
+
+  async function getManagedEnvSnapshot() {
+    if (!managedEnvService?.getSyncPlan) return null;
+    try {
+      const plan = await managedEnvService.getSyncPlan({ names: TC_MANAGED_ENV_NAMES });
+      const presenceMap = Object.fromEntries(
+        (plan.plan || []).map((item) => [item.envName, Boolean(item.currentPresent || item.maskedDesired)])
+      );
+      return {
+        enabled: true,
+        ok: (plan.plan || []).every((item) => item.same || item.action === 'skip'),
+        plan: plan.plan || [],
+        presenceMap,
+      };
+    } catch (error) {
+      return {
+        enabled: true,
+        ok: false,
+        error: error.message,
+        plan: [],
+        presenceMap: {},
+      };
+    }
+  }
+
   async function getAccessReadiness() {
     const imapConfig = await resolveTCImapConfig({ accountManager, logger });
     const glvar = await accountManager?.getAccount?.('glvar_mls', GLVAR_ACCOUNT_ID);
     const expOkta = await accountManager?.getAccount?.('exp_okta', DEFAULT_EXP_EMAIL);
+    const managedEnv = await getManagedEnvSnapshot();
 
     const env = [
       normalizeEnvEntry('TC_IMAP_HOST', process.env.TC_IMAP_HOST || process.env.IMAP_HOST || '', 'IMAP host for TC mailbox'),
@@ -127,7 +168,8 @@ export function createTCAccessService({
         TC_AGENT_NAME: process.env.TC_AGENT_NAME || 'Adam Hopkins',
         TC_EMAIL_FROM: process.env.TC_EMAIL_FROM || process.env.WORK_EMAIL || '',
       },
-      env_template: buildEnvTemplate(),
+      env_template: buildEnvTemplate({ presenceMap: managedEnv?.presenceMap || {} }),
+      managed_env: managedEnv,
       remaining_blockers: [
         ...(!readiness.imap_ready ? ['TC email access is not fully configured'] : []),
         ...(!readiness.glvar_ready ? ['GLVAR Clareity credentials are not stored in the vault'] : []),
@@ -229,18 +271,26 @@ export function createTCAccessService({
     tcAgentPhone = '',
     tcEmailFrom = '',
   } = {}) {
-    const template = buildEnvTemplate({ workEmail, tcImapUser, tcAgentName, tcAgentPhone, tcEmailFrom });
+    const managedEnvSnapshot = await getManagedEnvSnapshot();
+    const template = buildEnvTemplate({
+      workEmail,
+      tcImapUser,
+      tcAgentName,
+      tcAgentPhone,
+      tcEmailFrom,
+      presenceMap: managedEnvSnapshot?.presenceMap || {},
+    });
     const varsToStore = Object.fromEntries(
       template
         .filter((item) => item.known && !item.secret && String(item.value || '').trim())
         .map((item) => [item.name, item.value])
     );
 
-    let managedEnv = null;
+    let managedEnvResult = null;
     if (managedEnvService && Object.keys(varsToStore).length) {
       const stored = await managedEnvService.upsertDesiredVars(varsToStore, actor);
       const sync = await managedEnvService.syncDesiredVars({ actor, names: Object.keys(varsToStore) }).catch((error) => ({ ok: false, error: error.message }));
-      managedEnv = { stored, sync };
+      managedEnvResult = { stored, sync };
     }
 
     return {
@@ -248,7 +298,10 @@ export function createTCAccessService({
       seeded_names: Object.keys(varsToStore),
       pending_secret_names: template.filter((item) => item.secret && !item.known).map((item) => item.name),
       env_template: template,
-      managed_env: managedEnv,
+      managed_env: {
+        snapshot: managedEnvSnapshot,
+        seed_result: managedEnvResult,
+      },
       readiness: await getAccessReadiness(),
     };
   }

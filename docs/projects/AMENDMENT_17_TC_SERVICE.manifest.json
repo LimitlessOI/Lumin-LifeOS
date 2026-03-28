@@ -80,6 +80,7 @@
     "Failed workspace QA checks can be converted into transaction-scoped document requests without leaving the portal",
     "The intake workspace can seed the known TC env defaults automatically while leaving secret values for manual entry",
     "The intake workspace detects when secret envs already exist and does not falsely present them as missing",
+    "The intake workspace shows a managed-env snapshot so runtime env presence and sync state are visible together",
     "First live transaction (6453 Mahogany Peak) created and tracked in DB",
     "Email triage picks up TC-related emails and routes to correct transaction",
     "Deadline tracker fires reminders at correct intervals",
