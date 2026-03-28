@@ -290,6 +290,7 @@ Operational inputs needed regardless of integration path:
 - Multi-coverage insurer repair should support visible-slot targeting so operators can explicitly choose which visible coverage row to edit before applying payer-order-related changes.
 - Sellable packaging should expose go-live readiness scoring, blockers, and exportable audit/readiness reports so an external rollout can be assessed without reading raw tables.
 - Commercial payer overrides should support operator-defined denial lane, follow-up cadence, escalation timing, and expected lag/reimbursement baselines so forecasts and follow-up plans can be tuned without code changes.
+- Multi-coverage repair UI and browser writeback should preserve the selected visible coverage and use current-value hints when matching fields, so automation does not drift to the wrong coverage row on denser ClientCare layouts.
 
 ---
 
@@ -305,9 +306,10 @@ Operational inputs needed regardless of integration path:
 - [x] **Sellable packaging: permissions, audit hardening, tenant boundaries, onboarding** *(est: 12h | actual: 10h)* `[needs-review]`
 - [x] **Commercial payer rule overrides plus multi-coverage slot-targeted insurer repair** *(est: 8h | actual: 7h)* `[needs-review]`
 - [x] **Deeper commercial payer rules plus readiness/export packaging polish** *(est: 8h | actual: 7h)* `[needs-review]`
-- [ ] **→ NEXT: broader multi-coverage layout safety and external rollout polish** *(est: 6h)* `[high-risk]`
+- [x] **Coverage-safe multi-layout insurer repair targeting** *(est: 5h | actual: 4h)* `[needs-review]`
+- [ ] **→ NEXT: final external rollout polish and live-tenant validation** *(est: 2h)* `[high-risk]`
 
-**Progress:** 10/11 steps complete | Internal operational completeness reached; Est. remaining: ~6h to sellable v1
+**Progress:** 11/12 steps complete | Internal operational completeness reached; Est. remaining: ~2h to sellable v1
 
 ---
 
@@ -323,6 +325,7 @@ Operational inputs needed regardless of integration path:
 | 2026-03-27 | Added commercial payer rule overrides plus multi-coverage slot-targeted insurer repair | 8h | 7h | -1h because the payer-playbook/history groundwork was already in place and the slot-targeted repair reused the controlled writeback path | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added tenant-scoped operator-access enforcement headers and write-action gating for sellable packaging / recovery actions | 5h | 4h | -1h because the tenant and operator packaging tables were already live | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added deeper commercial payer override fields, readiness scoring, and exportable audit/readiness reports | 8h | 7h | -1h because existing packaging and payer-rule surfaces handled most of the route/UI wiring cleanly | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added selected-coverage persistence in the repair UI and value-hinted field targeting for multi-coverage browser writeback | 5h | 4h | -1h because the visible-slot targeting path already existed and only needed UI/state + browser matching hardening | ✅ | ✅ | ✅ |
 
 ---
 

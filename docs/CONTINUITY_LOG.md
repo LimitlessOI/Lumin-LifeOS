@@ -2,6 +2,7 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ## Update 2026-03-27 #1
+- ClientCare account repair now preserves the selected visible coverage in the overlay and uses current-value hints during browser writeback, which materially lowers the risk of editing the wrong coverage row on denser multi-coverage layouts.
 - ClientCare sellable packaging now exposes a go-live readiness score, checklist, blockers, and next actions directly in the Collections Control Center so rollout status is visible at a glance.
 - ClientCare packaging can now export tenant readiness as JSON and tenant audit history as CSV without leaving the overlay, which closes a major external-rollout reporting gap.
 - Commercial payer overrides now support denial-lane overrides, follow-up cadence, escalation timing, expected lag, and expected paid-to-allowed baselines; those values now flow into payer playbooks, appeal guidance, and forecast calibration.

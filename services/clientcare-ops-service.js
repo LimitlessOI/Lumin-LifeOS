@@ -64,6 +64,15 @@ function normalizeRepairUpdates(input = {}) {
   if (input.subscriber_name) updates.subscriber_name = String(input.subscriber_name).trim();
   if (input.payor_id) updates.payor_id = String(input.payor_id).trim();
   if (input.insurance_priority) updates.insurance_priority = String(input.insurance_priority).trim();
+  if (input.insurance_match_hints && typeof input.insurance_match_hints === 'object') {
+    updates.insurance_match_hints = {
+      insurance_name: String(input.insurance_match_hints.insurance_name || '').trim(),
+      member_id: String(input.insurance_match_hints.member_id || '').trim(),
+      subscriber_name: String(input.insurance_match_hints.subscriber_name || '').trim(),
+      payor_id: String(input.insurance_match_hints.payor_id || '').trim(),
+      insurance_priority: String(input.insurance_match_hints.insurance_priority || '').trim(),
+    };
+  }
   return updates;
 }
 

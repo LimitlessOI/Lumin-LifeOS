@@ -20,6 +20,7 @@
   let lastPackagingOverview = null;
   let lastBrowserResult = null;
   let lastViewState = null;
+  const repairSlotByHref = new Map();
   let fullQueueHydrated = false;
   let fullQueueLoading = false;
   let assistantSessionId = localStorage.getItem('clientcare_assistant_session_id') || '';
@@ -72,6 +73,23 @@
     selectedTenantId = String(value || '');
     if (selectedTenantId) localStorage.setItem('clientcare_selected_tenant_id', selectedTenantId);
     else localStorage.removeItem('clientcare_selected_tenant_id');
+  }
+
+  function getRepairKey(item = {}) {
+    return item?.billingHref || item?.raw?.billingHref || item?.client || '';
+  }
+
+  function getSelectedRepairSlot(item = {}) {
+    const key = getRepairKey(item);
+    if (!key) return 0;
+    const stored = repairSlotByHref.get(key);
+    return Number.isFinite(stored) ? stored : 0;
+  }
+
+  function setSelectedRepairSlot(item = {}, slot = 0) {
+    const key = getRepairKey(item);
+    if (!key) return;
+    repairSlotByHref.set(key, Math.max(0, Math.floor(Number(slot) || 0)));
   }
 
   function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview) {
@@ -259,14 +277,15 @@
     const insuranceNameOptions = fieldOptionsFor(item, /insurance name|carrier|payer name/i);
     const insurancePriorityOptions = fieldOptionsFor(item, /insurance priority|priority/i);
     const insuranceOptions = item.insurancePreview || [];
-    const selectedInsurance = insuranceOptions[0] || {};
+    const selectedInsuranceSlot = Math.max(0, Math.min(getSelectedRepairSlot(item), Math.max(insuranceOptions.length - 1, 0)));
+    const selectedInsurance = insuranceOptions[selectedInsuranceSlot] || insuranceOptions[0] || {};
     return `
       <div class="stack">
         ${insuranceOptions.length > 1 ? `
           <label class="stack">
             <span class="muted">Coverage to edit</span>
             <select id="repair-insurance-slot">
-              ${insuranceOptions.map((insurance, index) => `<option value="${index}">${escapeHtml(`${index + 1}. ${insurance.insuranceName || 'Coverage'} ${insurance.priority ? `(${insurance.priority})` : ''}`.trim())}</option>`).join('')}
+              ${insuranceOptions.map((insurance, index) => `<option value="${index}" ${index === selectedInsuranceSlot ? 'selected' : ''}>${escapeHtml(`${index + 1}. ${insurance.insuranceName || 'Coverage'} ${insurance.priority ? `(${insurance.priority})` : ''}`.trim())}</option>`).join('')}
             </select>
           </label>
         ` : ''}
@@ -331,7 +350,7 @@
           })}
           <div class="card" style="padding:12px;background:#0f1528;">
             <div class="muted">Payer order safety</div>
-            <div style="margin-top:6px">${escapeHtml((item.insurancePreview || []).length > 1 ? 'Multiple coverages visible. Priority changes remain guarded.' : 'Single visible coverage. Priority can be repaired.')}</div>
+            <div style="margin-top:6px">${escapeHtml((item.insurancePreview || []).length > 1 ? `Editing visible coverage ${selectedInsuranceSlot + 1}. Priority changes remain guarded and are matched against current coverage values before save.` : 'Single visible coverage. Priority can be repaired.')}</div>
           </div>
         </div>
         <div class="row-actions">
@@ -480,6 +499,14 @@
         renderAccountBoard();
       });
     });
+
+    const repairSlotSelect = document.getElementById('repair-insurance-slot');
+    if (repairSlotSelect) {
+      repairSlotSelect.addEventListener('change', (event) => {
+        setSelectedRepairSlot(item, event.target.value || 0);
+        renderAccountBoard();
+      });
+    }
   }
 
   async function inspectSelectedAccount() {
@@ -2016,7 +2043,8 @@
     const billingStatus = document.getElementById('repair-client-billing-status')?.value?.trim();
     const providerType = document.getElementById('repair-bill-provider-type')?.value?.trim();
     const paymentStatus = document.getElementById('repair-payment-status')?.value?.trim();
-    const insuranceSlot = Number(document.getElementById('repair-insurance-slot')?.value || 0);
+    const insuranceSlot = Number(document.getElementById('repair-insurance-slot')?.value || getSelectedRepairSlot(item));
+    const selectedInsurance = (item.insurancePreview || [])[Math.max(0, insuranceSlot)] || {};
     const insuranceName = document.getElementById('repair-insurance-name')?.value?.trim();
     const memberId = document.getElementById('repair-member-id')?.value?.trim();
     const subscriberName = document.getElementById('repair-subscriber-name')?.value?.trim();
@@ -2031,6 +2059,15 @@
     if (subscriberName) updates.subscriber_name = subscriberName;
     if (payorId) updates.payor_id = payorId;
     if (insurancePriority) updates.insurance_priority = insurancePriority;
+    if ((item.insurancePreview || []).length > 1) {
+      updates.insurance_match_hints = {
+        insurance_name: selectedInsurance.insuranceName || '',
+        member_id: selectedInsurance.memberId || '',
+        subscriber_name: selectedInsurance.subscriberName || '',
+        payor_id: selectedInsurance.payorId || '',
+        insurance_priority: selectedInsurance.priority || '',
+      };
+    }
 
     if (!Object.keys(updates).length) {
       alert('Choose at least one repair field before previewing or applying.');

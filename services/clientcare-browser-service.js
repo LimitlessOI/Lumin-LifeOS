@@ -510,9 +510,29 @@ async function applyBillingFieldUpdates(page, updates = {}) {
     };
     const findControls = (matcher) => controls.filter((el) => matcher.test(`${describe(el)} ${el.name || ''} ${el.id || ''}`));
 
+    const scoreControl = (control, hint = '') => {
+      if (!hint) return 0;
+      const currentValue = control.tagName === 'SELECT'
+        ? (control.options?.[control.selectedIndex]?.text || control.value || '')
+        : (control.value || '');
+      const haystack = normalize(`${describe(control)} ${currentValue}`);
+      const normalizedHint = normalize(hint);
+      if (!normalizedHint) return 0;
+      if (haystack === normalizedHint) return 4;
+      if (haystack.includes(normalizedHint)) return 3;
+      if (normalizedHint.includes(haystack) && haystack) return 2;
+      return 0;
+    };
+
     const setControlValue = (matcher, desiredValue, kind, options = {}) => {
       const matches = findControls(matcher);
-      const control = matches[Math.max(0, Math.min(Number(options.matchIndex || 0), Math.max(matches.length - 1, 0)))];
+      const hint = options.matchHint || '';
+      const sortedMatches = hint
+        ? matches
+          .map((control, index) => ({ control, index, score: scoreControl(control, hint) }))
+          .sort((a, b) => (b.score - a.score) || (a.index - b.index))
+        : matches.map((control, index) => ({ control, index, score: 0 }));
+      const control = (sortedMatches.find((item) => item.score > 0) || sortedMatches[Math.max(0, Math.min(Number(options.matchIndex || 0), Math.max(sortedMatches.length - 1, 0)))])?.control;
       if (!control) {
         return { kind, applied: false, reason: 'Control not found', matchIndex: Number(options.matchIndex || 0) };
       }
@@ -576,19 +596,19 @@ async function applyBillingFieldUpdates(page, updates = {}) {
       operations.push(setControlValue(/payment status|paymentstatus/i, requestedUpdates.payment_status, 'payment_status'));
     }
     if (requestedUpdates.insurance_name) {
-      operations.push(setControlValue(/insurance name|carrier|payer name/i, requestedUpdates.insurance_name, 'insurance_name', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
+      operations.push(setControlValue(/insurance name|carrier|payer name/i, requestedUpdates.insurance_name, 'insurance_name', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.insurance_name || '' }));
     }
     if (requestedUpdates.member_id) {
-      operations.push(setControlValue(/member id|subscriber id|policy number/i, requestedUpdates.member_id, 'member_id', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
+      operations.push(setControlValue(/member id|subscriber id|policy number/i, requestedUpdates.member_id, 'member_id', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.member_id || '' }));
     }
     if (requestedUpdates.subscriber_name) {
-      operations.push(setControlValue(/subscriber name/i, requestedUpdates.subscriber_name, 'subscriber_name', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
+      operations.push(setControlValue(/subscriber name/i, requestedUpdates.subscriber_name, 'subscriber_name', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.subscriber_name || '' }));
     }
     if (requestedUpdates.payor_id) {
-      operations.push(setControlValue(/payor id|payer id/i, requestedUpdates.payor_id, 'payor_id', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
+      operations.push(setControlValue(/payor id|payer id/i, requestedUpdates.payor_id, 'payor_id', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.payor_id || '' }));
     }
     if (requestedUpdates.insurance_priority) {
-      operations.push(setControlValue(/insurance priority|priority/i, requestedUpdates.insurance_priority, 'insurance_priority', { matchIndex: Number(requestedUpdates.insurance_slot || 0) }));
+      operations.push(setControlValue(/insurance priority|priority/i, requestedUpdates.insurance_priority, 'insurance_priority', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.insurance_priority || '' }));
     }
 
     return { operations };

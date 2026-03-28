@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "sellable-v1-hardening",
-  "next_task": "Finish sellable-v1 hardening by broadening multi-coverage layout safety and tightening external rollout polish around onboarding/readiness.",
+  "next_task": "Finish sellable-v1 with final external rollout polish and live-tenant validation.",
   "stability_class": "needs-review",
-  "current_focus": "Internal operational completeness is in place. Commercial payer override depth and packaging readiness/report exports are now live; the remaining sellable-v1 work is broader multi-coverage layout safety and final external rollout polish.",
+  "current_focus": "Internal operational completeness is in place. Commercial payer override depth, packaging readiness/report exports, and coverage-safe multi-layout repair targeting are now live; the remaining sellable-v1 work is final rollout polish and live-tenant validation.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -393,7 +393,7 @@
       "resolved": false
     },
     {
-      "description": "ClientCare read paths are live, and controlled writeback now covers billing status, provider type, payment status, and visible insurer/member/subscriber/payor/priority fields; multi-coverage payer-order changes still need a safer coverage-specific selector",
+      "description": "ClientCare read paths are live, and controlled writeback now covers billing status, provider type, payment status, and visible insurer/member/subscriber/payor/priority fields with selected-coverage persistence and current-value hints; broad live-tenant validation is still pending before calling the coverage path fully hardened",
       "resolved": false
     },
     {
@@ -409,11 +409,7 @@
       "resolved": true
     },
     {
-      "description": "Multi-coverage payer-order changes now support visible-slot targeting, but still need broader layout hardening before they are considered universally safe",
-      "resolved": false
-    },
-    {
-      "description": "Broader multi-coverage layout hardening is still pending even though visible-slot targeting now exists for insurer repair",
+      "description": "Multi-coverage payer-order changes now support visible-slot targeting plus current-value hints; remaining work is live-tenant validation across more ClientCare layouts rather than core selector design",
       "resolved": false
     },
     {
