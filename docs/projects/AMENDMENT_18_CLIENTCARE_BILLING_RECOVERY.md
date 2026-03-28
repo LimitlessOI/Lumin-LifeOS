@@ -103,6 +103,7 @@ Every claim lands in one of these buckets:
 | `db/migrations/20260327_clientcare_patient_ar_controls.sql` | Provider-directed patient AR policy controls |
 | `db/migrations/20260327_clientcare_sellable_controls.sql` | Tenant, onboarding, operator-access, and audit tables |
 | `db/migrations/20260327_clientcare_payer_rule_overrides.sql` | Operator-defined commercial payer rule overrides |
+| `db/migrations/20260327_clientcare_sellable_v1_hardening.sql` | Additional payer override depth for sellable-v1 hardening |
 
 ### Endpoints
 - `GET /api/v1/clientcare-billing/dashboard`
@@ -110,6 +111,7 @@ Every claim lands in one of these buckets:
 - `GET /api/v1/clientcare-billing/ops/overview`
 - `GET /api/v1/clientcare-billing/ops/checklist`
 - `GET /api/v1/clientcare-billing/packaging/overview`
+- `GET /api/v1/clientcare-billing/packaging/readiness-report`
 - `GET /api/v1/clientcare-billing/tenants`
 - `POST /api/v1/clientcare-billing/tenants`
 - `GET /api/v1/clientcare-billing/tenants/:tenantId/onboarding`
@@ -117,6 +119,7 @@ Every claim lands in one of these buckets:
 - `GET /api/v1/clientcare-billing/tenants/:tenantId/operators`
 - `POST /api/v1/clientcare-billing/tenants/:tenantId/operators`
 - `GET /api/v1/clientcare-billing/audit-log`
+- `GET /api/v1/clientcare-billing/audit-log/export`
 - `GET /api/v1/clientcare-billing/ops/capability-requests`
 - `PATCH /api/v1/clientcare-billing/ops/capability-requests/:id`
 - `POST /api/v1/clientcare-billing/ops/run-workflow`
@@ -285,6 +288,8 @@ Operational inputs needed regardless of integration path:
 - The system must expose ERA/remit insight summaries so CARC/RARC patterns and payment-method signals can feed payer playbooks and forecast calibration.
 - Amendment and continuity stay current as the system changes.
 - Multi-coverage insurer repair should support visible-slot targeting so operators can explicitly choose which visible coverage row to edit before applying payer-order-related changes.
+- Sellable packaging should expose go-live readiness scoring, blockers, and exportable audit/readiness reports so an external rollout can be assessed without reading raw tables.
+- Commercial payer overrides should support operator-defined denial lane, follow-up cadence, escalation timing, and expected lag/reimbursement baselines so forecasts and follow-up plans can be tuned without code changes.
 
 ---
 
@@ -299,9 +304,10 @@ Operational inputs needed regardless of integration path:
 - [x] **Insurer-entry repair for visible coverage plus patient AR escalation ladder/policy controls** *(est: 8h | actual: 9h)* `[needs-review]`
 - [x] **Sellable packaging: permissions, audit hardening, tenant boundaries, onboarding** *(est: 12h | actual: 10h)* `[needs-review]`
 - [x] **Commercial payer rule overrides plus multi-coverage slot-targeted insurer repair** *(est: 8h | actual: 7h)* `[needs-review]`
-- [ ] **→ NEXT: sellable v1 hardening: deeper commercial rules, broader layout safety, and onboarding polish** *(est: 10h)* `[high-risk]`
+- [x] **Deeper commercial payer rules plus readiness/export packaging polish** *(est: 8h | actual: 7h)* `[needs-review]`
+- [ ] **→ NEXT: broader multi-coverage layout safety and external rollout polish** *(est: 6h)* `[high-risk]`
 
-**Progress:** 9/10 steps complete | Internal operational completeness reached; Est. remaining: ~10h to sellable v1
+**Progress:** 10/11 steps complete | Internal operational completeness reached; Est. remaining: ~6h to sellable v1
 
 ---
 
@@ -316,6 +322,7 @@ Operational inputs needed regardless of integration path:
 | 2026-03-27 | Added sellable packaging controls, tenant/onboarding/operator UI, audit logging, and tenant-aware packaging overview | 12h | 10h | -2h because the packaging service and routes were already partially scaffolded before the UI and SSOT pass | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added commercial payer rule overrides plus multi-coverage slot-targeted insurer repair | 8h | 7h | -1h because the payer-playbook/history groundwork was already in place and the slot-targeted repair reused the controlled writeback path | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added tenant-scoped operator-access enforcement headers and write-action gating for sellable packaging / recovery actions | 5h | 4h | -1h because the tenant and operator packaging tables were already live | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added deeper commercial payer override fields, readiness scoring, and exportable audit/readiness reports | 8h | 7h | -1h because existing packaging and payer-rule surfaces handled most of the route/UI wiring cleanly | ✅ | ✅ | ✅ |
 
 ---
 

@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "sellable-v1-hardening",
-  "next_task": "Polish sellable v1: deepen commercial payer rules, harden broader multi-coverage layouts, and tighten onboarding/operator packaging for repeatable external deployment.",
+  "next_task": "Finish sellable-v1 hardening by broadening multi-coverage layout safety and tightening external rollout polish around onboarding/readiness.",
   "stability_class": "needs-review",
-  "current_focus": "Internal operational completeness is now in place with tenant packaging and tenant-scoped operator gating on write actions. Next step is sellable-v1 polish: deeper commercial rules, broader multi-coverage layout safety, and onboarding polish.",
+  "current_focus": "Internal operational completeness is in place. Commercial payer override depth and packaging readiness/report exports are now live; the remaining sellable-v1 work is broader multi-coverage layout safety and final external rollout polish.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -25,7 +25,8 @@
     "docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json",
     "services/clientcare-sellable-service.js",
     "db/migrations/20260327_clientcare_sellable_controls.sql",
-    "db/migrations/20260327_clientcare_payer_rule_overrides.sql"
+    "db/migrations/20260327_clientcare_payer_rule_overrides.sql",
+    "db/migrations/20260327_clientcare_sellable_v1_hardening.sql"
   ],
   "protected_files": [
     "server.js",
@@ -45,7 +46,8 @@
     "db/migrations/20260327_clientcare_patient_ar_controls.sql",
     "services/clientcare-sellable-service.js",
     "db/migrations/20260327_clientcare_sellable_controls.sql",
-    "db/migrations/20260327_clientcare_payer_rule_overrides.sql"
+    "db/migrations/20260327_clientcare_payer_rule_overrides.sql",
+    "db/migrations/20260327_clientcare_sellable_v1_hardening.sql"
   ],
   "required_routes": [
     {
@@ -152,6 +154,12 @@
     },
     {
       "method": "GET",
+      "path": "/api/v1/clientcare-billing/packaging/readiness-report",
+      "expected_status": 200,
+      "description": "Tenant readiness report"
+    },
+    {
+      "method": "GET",
       "path": "/api/v1/clientcare-billing/tenants",
       "expected_status": 200,
       "description": "Tenant list"
@@ -179,6 +187,12 @@
       "path": "/api/v1/clientcare-billing/audit-log",
       "expected_status": 200,
       "description": "Tenant audit log"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/audit-log/export",
+      "expected_status": 200,
+      "description": "Tenant audit export"
     },
     {
       "method": "GET",
@@ -365,6 +379,9 @@
     "Patient AR policy controls and escalation queue are editable and actionable from the overlay",
     "Forecasting improves from imported paid claims / ERAs / remits instead of rescue buckets alone",
     "Sellable packaging overview supports tenant profile, onboarding state, operator access, and tenant-scoped audit history",
+    "Packaging overview exposes readiness score, blockers, and next actions for external rollout",
+    "Packaging can export readiness JSON and audit CSV without leaving the overlay",
+    "Commercial payer overrides can store denial lane, follow-up cadence, escalation timing, and expected lag/reimbursement baselines",
     "Packaging overview can switch tenants without leaving the overlay",
     "Internal operational completeness reached; remaining work is sellable-v1 hardening and commercial/polish depth",
     "Tenant-scoped operator access gates write actions when operators are configured for that tenant"

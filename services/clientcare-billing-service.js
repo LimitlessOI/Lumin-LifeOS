@@ -458,8 +458,14 @@ function getCollectionTimingProfile(rescueBucket = 'payer_followup') {
 function calibrateCollectionProfile(profile, payerStats = null) {
   if (!payerStats) return profile;
   const calibrated = { ...profile };
+  if (payerStats.expected_days_to_pay != null && Number.isFinite(Number(payerStats.expected_days_to_pay))) {
+    calibrated.days = Math.max(7, Math.round((profile.days + Number(payerStats.expected_days_to_pay)) / 2));
+  }
   if (payerStats.avg_days_to_pay != null && Number.isFinite(Number(payerStats.avg_days_to_pay))) {
     calibrated.days = Math.max(7, Math.round((profile.days + Number(payerStats.avg_days_to_pay)) / 2));
+  }
+  if (payerStats.expected_paid_to_allowed_rate != null) {
+    calibrated.multiplier = Number(Math.max(0.05, Math.min(0.98, (profile.multiplier + Number(payerStats.expected_paid_to_allowed_rate)) / 2)).toFixed(4));
   }
   if (payerStats.paid_to_allowed_rate != null) {
     calibrated.multiplier = Number(Math.max(0.05, Math.min(0.98, (profile.multiplier + Number(payerStats.paid_to_allowed_rate)) / 2)).toFixed(4));
@@ -607,6 +613,19 @@ function buildPayerRecommendations({ payerName, payerType, topDenialCategory, pa
   return recommendations;
 }
 
+function buildPayerOverrideRecommendations(payerOverride = {}) {
+  const recommendations = [];
+  if (!payerOverride) return recommendations;
+  if (payerOverride.followup_cadence_days) recommendations.push(`Work this payer every ${payerOverride.followup_cadence_days} days until resolution or escalation.`);
+  if (payerOverride.escalation_after_days) recommendations.push(`Escalate internally after ${payerOverride.escalation_after_days} days without movement.`);
+  if (payerOverride.expected_days_to_pay) recommendations.push(`Use ${payerOverride.expected_days_to_pay} days as the operator-approved payment lag baseline.`);
+  if (payerOverride.expected_paid_to_allowed_rate != null) recommendations.push(`Use ${(Number(payerOverride.expected_paid_to_allowed_rate) * 100).toFixed(1)}% as the operator-approved paid-to-allowed baseline.`);
+  if (payerOverride.denial_category_override) recommendations.push(`Treat the dominant denial lane as ${String(payerOverride.denial_category_override).replace(/_/g, ' ')} until current history proves otherwise.`);
+  if (payerOverride.followup_notes) recommendations.push(payerOverride.followup_notes);
+  if (payerOverride.notes) recommendations.push(payerOverride.notes);
+  return recommendations;
+}
+
 function buildAppealLetter(packet = {}, claim = {}, outstandingAmount = 0) {
   const patient = claim.patient_name || 'Unknown patient';
   const payer = claim.payer_name || 'Unknown payer';
@@ -675,24 +694,52 @@ export function createClientCareBillingService({ pool, logger = console, now = (
       timely_filing_source: String(input.timely_filing_source || '').trim() || null,
       notes: String(input.notes || '').trim() || null,
       followup_notes: String(input.followup_notes || '').trim() || null,
+      denial_category_override: String(input.denial_category_override || '').trim() || null,
+      followup_cadence_days: Number.isFinite(Number(input.followup_cadence_days)) ? Number(input.followup_cadence_days) : null,
+      escalation_after_days: Number.isFinite(Number(input.escalation_after_days)) ? Number(input.escalation_after_days) : null,
+      expected_days_to_pay: Number.isFinite(Number(input.expected_days_to_pay)) ? Number(input.expected_days_to_pay) : null,
+      expected_paid_to_allowed_rate: Number.isFinite(Number(input.expected_paid_to_allowed_rate)) ? Number(input.expected_paid_to_allowed_rate) : null,
       requires_auth_review: Boolean(input.requires_auth_review),
       updated_by: String(input.updated_by || 'overlay').trim(),
     };
     try {
       const { rows } = await pool.query(
-        `INSERT INTO clientcare_payer_rule_overrides (payer_name, filing_window_days, appeal_window_days, timely_filing_source, notes, followup_notes, requires_auth_review, updated_by)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+        `INSERT INTO clientcare_payer_rule_overrides (
+          payer_name, filing_window_days, appeal_window_days, timely_filing_source, notes, followup_notes,
+          denial_category_override, followup_cadence_days, escalation_after_days, expected_days_to_pay,
+          expected_paid_to_allowed_rate, requires_auth_review, updated_by
+        )
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
          ON CONFLICT (payer_name) DO UPDATE SET
            filing_window_days=EXCLUDED.filing_window_days,
            appeal_window_days=EXCLUDED.appeal_window_days,
            timely_filing_source=EXCLUDED.timely_filing_source,
            notes=EXCLUDED.notes,
            followup_notes=EXCLUDED.followup_notes,
+           denial_category_override=EXCLUDED.denial_category_override,
+           followup_cadence_days=EXCLUDED.followup_cadence_days,
+           escalation_after_days=EXCLUDED.escalation_after_days,
+           expected_days_to_pay=EXCLUDED.expected_days_to_pay,
+           expected_paid_to_allowed_rate=EXCLUDED.expected_paid_to_allowed_rate,
            requires_auth_review=EXCLUDED.requires_auth_review,
            updated_by=EXCLUDED.updated_by,
            updated_at=NOW()
          RETURNING *`,
-        [payload.payer_name, payload.filing_window_days, payload.appeal_window_days, payload.timely_filing_source, payload.notes, payload.followup_notes, payload.requires_auth_review, payload.updated_by]
+        [
+          payload.payer_name,
+          payload.filing_window_days,
+          payload.appeal_window_days,
+          payload.timely_filing_source,
+          payload.notes,
+          payload.followup_notes,
+          payload.denial_category_override,
+          payload.followup_cadence_days,
+          payload.escalation_after_days,
+          payload.expected_days_to_pay,
+          payload.expected_paid_to_allowed_rate,
+          payload.requires_auth_review,
+          payload.updated_by,
+        ]
       );
       return rows[0] || payload;
     } catch (error) {
@@ -965,6 +1012,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   }
 
   async function getReimbursementIntelligence() {
+    const payerRuleOverrides = await getPayerRuleOverridesMap();
     const { rows: summaryRows } = await pool.query(
       `SELECT
          COUNT(*) FILTER (WHERE COALESCE(paid_amount, 0) > 0)::int AS paid_claims,
@@ -1013,15 +1061,20 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     const paidToAllowedRate = ratio(summary.total_paid, summary.total_allowed);
     const hasHistory = Number(summary.paid_claims || 0) > 0;
     const payerProfiles = new Map(
-      payerRows.map((payer) => ([
-        payer.payer_name,
-        {
+      payerRows.map((payer) => {
+        const payerOverride = findPayerRuleOverride(payerRuleOverrides, payer.payer_name);
+        return ([
+          payer.payer_name,
+          {
           ...payer,
           avg_days_to_pay: payer.avg_days_to_pay ? Number(Number(payer.avg_days_to_pay).toFixed(1)) : null,
           collection_rate: ratio(payer.paid_total, Number(payer.avg_billed || 0) * Number(payer.paid_claims || 0)),
           paid_to_allowed_rate: ratio(Number(payer.avg_paid || 0), Number(payer.avg_allowed || 0)),
+          expected_days_to_pay: payerOverride?.expected_days_to_pay != null ? Number(payerOverride.expected_days_to_pay) : null,
+          expected_paid_to_allowed_rate: payerOverride?.expected_paid_to_allowed_rate != null ? Number(payerOverride.expected_paid_to_allowed_rate) : null,
         },
-      ]))
+      ]);
+      })
     );
 
     const recommendations = [];
@@ -1082,7 +1135,11 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         expected_amount: expectedAmount,
         projected_date: isoDate(expectedDate),
         timing_bucket: profile.label,
-        calibration_basis: payerProfile?.avg_days_to_pay != null ? `payer_history_${claim.payer_name}` : 'rescue_bucket_only',
+        calibration_basis: payerProfile?.expected_days_to_pay != null
+          ? `payer_override_${claim.payer_name}`
+          : payerProfile?.avg_days_to_pay != null
+            ? `payer_history_${claim.payer_name}`
+            : 'rescue_bucket_only',
       };
     });
 
@@ -1227,9 +1284,9 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         category: classifyDenialCategory(entry),
       }));
 
-      const topDenial = normalizedDenials[0] || null;
-      const topCategory = topDenial?.category || 'unknown';
       const payerOverride = findPayerRuleOverride(payerRuleOverrides, row.payer_name);
+      const topDenial = normalizedDenials[0] || null;
+      const topCategory = payerOverride?.denial_category_override || topDenial?.category || 'unknown';
       playbooks.push({
         payer_name: row.payer_name,
         payer_type: row.payer_type,
@@ -1239,6 +1296,8 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         avg_allowed: Number(row.avg_allowed || 0),
         avg_paid: Number(row.avg_paid || 0),
         avg_days_to_pay: row.avg_days_to_pay ? Number(Number(row.avg_days_to_pay).toFixed(1)) : null,
+        expected_days_to_pay: payerOverride?.expected_days_to_pay != null ? Number(payerOverride.expected_days_to_pay) : null,
+        expected_paid_to_allowed_rate: payerOverride?.expected_paid_to_allowed_rate != null ? Number(payerOverride.expected_paid_to_allowed_rate) : null,
         top_denial_category: topCategory,
         top_denials: normalizedDenials,
         rule_override: payerOverride || null,
@@ -1251,7 +1310,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         }).concat(payerOverride ? [
           payerOverride.filing_window_days ? `Use operator filing window override: ${payerOverride.filing_window_days} days.` : null,
           payerOverride.appeal_window_days ? `Target appeals within ${payerOverride.appeal_window_days} days when denials hit.` : null,
-          payerOverride.followup_notes || payerOverride.notes || null,
+          ...buildPayerOverrideRecommendations(payerOverride),
         ].filter(Boolean) : []),
       });
     }
@@ -1331,6 +1390,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   }
 
   async function getAppealsQueue({ limit = 100 } = {}) {
+    const payerRuleOverrides = await getPayerRuleOverridesMap();
     const { rows } = await pool.query(
       `SELECT
          id,
@@ -1362,10 +1422,14 @@ export function createClientCareBillingService({ pool, logger = console, now = (
     );
 
     const items = rows.map((row) => {
+      const payerOverride = findPayerRuleOverride(payerRuleOverrides, row.payer_name);
       const playbook = classifyAppealPlaybook(row);
       return {
         ...row,
         outstanding_amount: Number(Math.max(money(row.insurance_balance), money(row.allowed_amount) - money(row.paid_amount) - money(row.patient_balance), 0).toFixed(2)),
+        payer_rule_override: payerOverride || null,
+        followup_cadence_days: payerOverride?.followup_cadence_days || null,
+        escalation_after_days: payerOverride?.escalation_after_days || null,
         playbook,
       };
     });
@@ -1391,12 +1455,14 @@ export function createClientCareBillingService({ pool, logger = console, now = (
   async function buildAppealPacketPreview(claimId) {
     const claim = await getClaimById(claimId);
     if (!claim) return null;
+    const payerRuleOverride = findPayerRuleOverride(await getPayerRuleOverridesMap(), claim.payer_name);
     const playbook = classifyAppealPlaybook(claim);
     const outstandingAmount = Number(Math.max(money(claim.insurance_balance), money(claim.allowed_amount) - money(claim.paid_amount) - money(claim.patient_balance), 0).toFixed(2));
     return {
       claim,
       outstanding_amount: outstandingAmount,
       playbook,
+      payer_rule_override: payerRuleOverride || null,
       draft_letter: buildAppealLetter(playbook, claim, outstandingAmount),
       packet_sections: [
         'Claim summary',
@@ -1406,6 +1472,7 @@ export function createClientCareBillingService({ pool, logger = console, now = (
         'Submission / follow-up log',
       ],
       next_action: playbook.likely_path,
+      followup_guidance: buildPayerOverrideRecommendations(payerRuleOverride),
     };
   }
 

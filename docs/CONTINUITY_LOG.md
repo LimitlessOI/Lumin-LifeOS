@@ -2,6 +2,9 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ## Update 2026-03-27 #1
+- ClientCare sellable packaging now exposes a go-live readiness score, checklist, blockers, and next actions directly in the Collections Control Center so rollout status is visible at a glance.
+- ClientCare packaging can now export tenant readiness as JSON and tenant audit history as CSV without leaving the overlay, which closes a major external-rollout reporting gap.
+- Commercial payer overrides now support denial-lane overrides, follow-up cadence, escalation timing, expected lag, and expected paid-to-allowed baselines; those values now flow into payer playbooks, appeal guidance, and forecast calibration.
 - ClientCare billing now has sellable packaging controls in the Collections Control Center: tenant profile, onboarding state, operator access, and tenant-scoped audit history are visible and editable without leaving the overlay.
 - ClientCare packaging now supports tenant-aware overview queries and filtered audit retrieval, so the same product can be configured for more than one practice without mixing state.
 - ClientCare repair flow now supports multi-coverage slot targeting for visible insurer fields, reducing the manual blocker around payer-order edits on accounts with more than one visible coverage; broader layout hardening is still pending.

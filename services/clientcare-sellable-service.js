@@ -28,6 +28,32 @@ const DEFAULT_ONBOARDING = {
   notes: '',
 };
 
+function csvEscape(value) {
+  const text = value == null ? '' : String(value);
+  return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+}
+
+function computeOnboardingReadiness({ tenant = {}, onboarding = {}, operators = [], audit = [] } = {}) {
+  const checks = [
+    { key: 'tenant_name', label: 'Tenant name configured', done: Boolean(String(tenant.name || '').trim()) },
+    { key: 'tenant_contact_email', label: 'Tenant contact email configured', done: Boolean(String(tenant.contact_email || '').trim()) },
+    { key: 'fee_pct', label: 'Collections fee configured', done: Number(tenant.collections_fee_pct || 0) > 0 },
+    { key: 'browser_ready', label: 'Browser access ready', done: Boolean(onboarding.browser_ready) },
+    { key: 'history_imported', label: 'Payment history imported', done: Boolean(onboarding.payment_history_imported) },
+    { key: 'backlog_loaded', label: 'Backlog loaded', done: Boolean(onboarding.backlog_loaded) },
+    { key: 'policy_configured', label: 'Patient AR policy configured', done: Boolean(onboarding.policy_configured) },
+    { key: 'operator_access', label: 'Operator access configured', done: Boolean(onboarding.operator_access_configured) && operators.length > 0 },
+    { key: 'review_completed', label: 'Go-live review completed', done: Boolean(onboarding.review_completed) },
+    { key: 'audit_receipts', label: 'Audit receipts captured', done: audit.length > 0 },
+  ];
+  const completed = checks.filter((item) => item.done).length;
+  const score = Math.round((completed / checks.length) * 100);
+  const blockers = checks.filter((item) => !item.done).map((item) => item.label);
+  const status = score >= 90 ? 'go_live_ready' : score >= 70 ? 'pilot_ready' : score >= 40 ? 'setup_in_progress' : 'not_ready';
+  const nextActions = blockers.slice(0, 5);
+  return { score, status, checks, blockers, next_actions: nextActions };
+}
+
 export function createClientCareSellableService({ pool, logger = console }) {
   async function logAudit({
     tenantId = null,
@@ -238,6 +264,13 @@ export function createClientCareSellableService({ pool, logger = console }) {
     const operators = activeTenant?.id ? await listOperatorAccess(activeTenant.id) : [];
     const audit = await listAuditLog({ tenantId: activeTenant?.id || null, limit: auditLimit });
 
+    const readiness = computeOnboardingReadiness({
+      tenant: activeTenant,
+      onboarding,
+      operators,
+      audit,
+    });
+
     return {
       summary: {
         tenants: tenants.length,
@@ -247,17 +280,51 @@ export function createClientCareSellableService({ pool, logger = console }) {
         operators: operators.length,
         onboarding_complete: Boolean(onboarding.review_completed),
         audit_events: audit.length,
+        readiness_score: readiness.score,
+        readiness_status: readiness.status,
       },
       tenants,
       active_tenant: activeTenant,
       onboarding,
       operators,
       audit,
+      readiness,
     };
   }
 
+  async function getReadinessReport({ tenantId = null } = {}) {
+    const overview = await getPackagingOverview({ tenantId, auditLimit: 50 });
+    const readiness = overview.readiness || computeOnboardingReadiness({});
+    return {
+      generated_at: new Date().toISOString(),
+      tenant: overview.active_tenant || DEFAULT_TENANT,
+      readiness,
+      onboarding: overview.onboarding || { ...DEFAULT_ONBOARDING },
+      operator_count: (overview.operators || []).length,
+      recent_audit_events: (overview.audit || []).slice(0, 10),
+    };
+  }
+
+  function exportAuditLogCsv(entries = []) {
+    const rows = [['created_at', 'tenant_id', 'actor', 'action_type', 'entity_type', 'entity_id', 'details']];
+    for (const entry of entries) {
+      rows.push([
+        entry.created_at,
+        entry.tenant_id,
+        entry.actor,
+        entry.action_type,
+        entry.entity_type,
+        entry.entity_id,
+        JSON.stringify(entry.details || {}),
+      ]);
+    }
+    return `${rows.map((row) => row.map(csvEscape).join(',')).join('\n')}\n`;
+  }
+
   return {
+    exportAuditLogCsv,
     getPackagingOverview,
+    getReadinessReport,
     listAuditLog,
     getOnboarding,
     listOperatorAccess,

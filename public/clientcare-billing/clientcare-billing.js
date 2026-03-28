@@ -960,17 +960,19 @@
     return `
       <div class="stack">
         <table>
-          <thead><tr><th>Payer</th><th>Filing days</th><th>Appeal days</th><th>Auth review</th><th>Notes</th></tr></thead>
+          <thead><tr><th>Payer</th><th>Filing days</th><th>Appeal days</th><th>Cadence</th><th>Expected pay</th><th>Auth review</th><th>Notes</th></tr></thead>
           <tbody>
             ${items.length ? items.map((item) => `
               <tr>
                 <td>${escapeHtml(item.payer_name || '')}</td>
                 <td>${escapeHtml(item.filing_window_days ?? '—')}</td>
                 <td>${escapeHtml(item.appeal_window_days ?? '—')}</td>
+                <td>${escapeHtml(item.followup_cadence_days ?? '—')}</td>
+                <td>${escapeHtml(item.expected_days_to_pay != null ? `${item.expected_days_to_pay}d / ${((Number(item.expected_paid_to_allowed_rate || 0)) * 100).toFixed(0)}%` : '—')}</td>
                 <td>${escapeHtml(item.requires_auth_review ? 'Yes' : 'No')}</td>
                 <td>${escapeHtml(item.followup_notes || item.notes || '')}</td>
               </tr>
-            `).join('') : '<tr><td colspan="5">No payer overrides yet.</td></tr>'}
+            `).join('') : '<tr><td colspan="7">No payer overrides yet.</td></tr>'}
           </tbody>
         </table>
         <div class="grid three">
@@ -978,11 +980,29 @@
           <input id="payer-rule-filing" type="number" min="0" placeholder="Filing days">
           <input id="payer-rule-appeal" type="number" min="0" placeholder="Appeal days">
         </div>
+        <div class="grid three">
+          <input id="payer-rule-followup-cadence" type="number" min="0" placeholder="Follow-up cadence days">
+          <input id="payer-rule-escalation" type="number" min="0" placeholder="Escalate after days">
+          <input id="payer-rule-expected-days" type="number" min="0" placeholder="Expected days to pay">
+        </div>
+        <div class="grid three">
+          <input id="payer-rule-expected-rate" type="number" min="0" max="100" step="0.1" placeholder="Expected paid-to-allowed %">
+          <select id="payer-rule-category">
+            <option value="">Dominant denial category</option>
+            <option value="timely_filing">Timely filing</option>
+            <option value="authorization">Authorization</option>
+            <option value="medical_necessity">Medical necessity</option>
+            <option value="eligibility">Eligibility</option>
+            <option value="provider_enrollment">Provider enrollment</option>
+            <option value="coding">Coding</option>
+            <option value="other">Other</option>
+          </select>
+          <label><input id="payer-rule-auth" type="checkbox"> Requires auth review</label>
+        </div>
         <div class="grid two">
           <input id="payer-rule-source" placeholder="Rule source or contract note">
           <input id="payer-rule-followup" placeholder="Follow-up note">
         </div>
-        <label><input id="payer-rule-auth" type="checkbox"> Requires auth review</label>
         <label class="stack"><span class="muted">Notes</span><textarea id="payer-rule-notes" placeholder="Operational notes"></textarea></label>
         <div class="row-actions"><button id="payer-rule-save">Save payer rule</button></div>
       </div>
@@ -1001,12 +1021,12 @@
           <div class="card stat"><span>Tracked unpaid</span><strong>${escapeHtml(money(summary.total_unpaid_balance || 0))}</strong></div>
         </div>
         <table>
-          <thead><tr><th>Payer</th><th>Avg days</th><th>Top denial</th><th>Recommendation</th></tr></thead>
+          <thead><tr><th>Payer</th><th>Avg / target days</th><th>Top denial</th><th>Recommendation</th></tr></thead>
           <tbody>
             ${items.length ? items.slice(0, 10).map((item) => `
               <tr>
                 <td>${escapeHtml(item.payer_name || '')}</td>
-                <td>${escapeHtml(item.avg_days_to_pay ?? '—')}</td>
+                <td>${escapeHtml(item.expected_days_to_pay != null ? `${item.avg_days_to_pay ?? '—'} / ${item.expected_days_to_pay}` : (item.avg_days_to_pay ?? '—'))}</td>
                 <td>${escapeHtml(item.top_denial_category || 'unknown')}</td>
                 <td>${escapeHtml(item.recommendations?.[0] || 'Review payer history')}</td>
               </tr>
@@ -1071,6 +1091,8 @@
     const onboarding = overview?.onboarding || {};
     const operators = overview?.operators || [];
     const audit = overview?.audit || [];
+    const readiness = overview?.readiness || {};
+    const checks = readiness.checks || [];
 
     return `
       <div class="stack">
@@ -1079,6 +1101,11 @@
           <div class="card stat"><span>Active tenant</span><strong>${escapeHtml(summary.active_tenant || 'Default Practice')}</strong></div>
           <div class="card stat"><span>Fee %</span><strong>${escapeHtml(`${Number(summary.collections_fee_pct || 0).toFixed(2)}%`)}</strong></div>
           <div class="card stat"><span>Operators</span><strong>${escapeHtml(summary.operators || 0)}</strong></div>
+        </div>
+        <div class="grid three">
+          <div class="card stat"><span>Readiness score</span><strong>${escapeHtml(`${Number(summary.readiness_score || 0)}%`)}</strong></div>
+          <div class="card stat"><span>Status</span><strong>${escapeHtml(String(summary.readiness_status || 'not_ready').replace(/_/g, ' '))}</strong></div>
+          <div class="card stat"><span>Open blockers</span><strong>${escapeHtml((readiness.blockers || []).length)}</strong></div>
         </div>
         <div class="grid two">
           <div class="card">
@@ -1100,6 +1127,7 @@
           </div>
           <div class="card">
             <h3>Onboarding</h3>
+            <p class="muted">Go-live readiness is scored from setup completeness, operator access, history import, and audit receipts.</p>
             <div class="grid two">
               <label><input id="onboarding-browser-ready" type="checkbox" ${onboarding.browser_ready ? 'checked' : ''}> Browser ready</label>
               <label><input id="onboarding-history-imported" type="checkbox" ${onboarding.payment_history_imported ? 'checked' : ''}> Payment history imported</label>
@@ -1109,7 +1137,25 @@
               <label><input id="onboarding-review-completed" type="checkbox" ${onboarding.review_completed ? 'checked' : ''}> Review completed</label>
             </div>
             <label class="stack" style="margin-top:10px"><span class="muted">Notes</span><textarea id="onboarding-notes" placeholder="Setup notes">${escapeHtml(onboarding.notes || '')}</textarea></label>
-            <div class="row-actions" style="margin-top:10px"><button id="onboarding-save">Save onboarding</button></div>
+            <div class="row-actions" style="margin-top:10px">
+              <button id="onboarding-save">Save onboarding</button>
+              <button id="readiness-export" class="ghost">Export readiness</button>
+            </div>
+            <div style="margin-top:12px">
+              <strong>Readiness checklist</strong>
+              <table>
+                <thead><tr><th>Check</th><th>Status</th></tr></thead>
+                <tbody>
+                  ${checks.length ? checks.map((check) => `<tr><td>${escapeHtml(check.label || '')}</td><td>${escapeHtml(check.done ? 'Done' : 'Open')}</td></tr>`).join('') : '<tr><td colspan="2">No readiness checks yet.</td></tr>'}
+                </tbody>
+              </table>
+            </div>
+            <div style="margin-top:12px">
+              <strong>Next actions</strong>
+              <ul class="detail-list">
+                ${(readiness.next_actions || []).length ? readiness.next_actions.map((item) => `<li>${escapeHtml(item)}</li>`).join('') : '<li>No open readiness actions.</li>'}
+              </ul>
+            </div>
           </div>
         </div>
         <div class="grid two">
@@ -1134,6 +1180,7 @@
           </div>
           <div class="card">
             <h3>Audit log</h3>
+            <div class="row-actions" style="margin-bottom:10px"><button id="audit-export" class="ghost">Export audit CSV</button></div>
             <table>
               <thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Entity</th></tr></thead>
               <tbody>
@@ -1812,19 +1859,66 @@
           payer_name: payerName,
           filing_window_days: Number(document.getElementById('payer-rule-filing')?.value || 0) || null,
           appeal_window_days: Number(document.getElementById('payer-rule-appeal')?.value || 0) || null,
+          followup_cadence_days: Number(document.getElementById('payer-rule-followup-cadence')?.value || 0) || null,
+          escalation_after_days: Number(document.getElementById('payer-rule-escalation')?.value || 0) || null,
+          expected_days_to_pay: Number(document.getElementById('payer-rule-expected-days')?.value || 0) || null,
+          expected_paid_to_allowed_rate: (() => {
+            const raw = Number(document.getElementById('payer-rule-expected-rate')?.value || 0);
+            return raw ? raw / 100 : null;
+          })(),
+          denial_category_override: document.getElementById('payer-rule-category')?.value || '',
           timely_filing_source: document.getElementById('payer-rule-source')?.value || '',
           followup_notes: document.getElementById('payer-rule-followup')?.value || '',
           notes: document.getElementById('payer-rule-notes')?.value || '',
           requires_auth_review: Boolean(document.getElementById('payer-rule-auth')?.checked),
         }),
       });
-      ['payer-rule-name','payer-rule-filing','payer-rule-appeal','payer-rule-source','payer-rule-followup','payer-rule-notes'].forEach((id) => {
+      ['payer-rule-name','payer-rule-filing','payer-rule-appeal','payer-rule-followup-cadence','payer-rule-escalation','payer-rule-expected-days','payer-rule-expected-rate','payer-rule-source','payer-rule-followup','payer-rule-notes'].forEach((id) => {
         const el = document.getElementById(id);
         if (el) el.value = '';
       });
       const authEl = document.getElementById('payer-rule-auth');
       if (authEl) authEl.checked = false;
+      const categoryEl = document.getElementById('payer-rule-category');
+      if (categoryEl) categoryEl.value = '';
       await loadDashboard({}, { skipAutoFullQueue: true });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  function downloadText(filename, text, type = 'text/plain;charset=utf-8') {
+    const blob = new Blob([text], { type });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  async function exportReadinessReport() {
+    try {
+      const path = `/api/v1/clientcare-billing/packaging/readiness-report${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
+      const result = await api(path);
+      downloadText(`clientcare-readiness-${selectedTenantId || 'default'}.json`, JSON.stringify(result.report || result, null, 2), 'application/json;charset=utf-8');
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  async function exportAuditCsv() {
+    try {
+      const path = `/api/v1/clientcare-billing/audit-log/export${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
+      const response = await fetch(path, {
+        headers: {
+          ...(window.commandKey ? { 'x-api-key': window.commandKey } : {}),
+          ...(getOperatorEmail() ? { 'x-operator-email': getOperatorEmail() } : {}),
+          ...(selectedTenantId ? { 'x-clientcare-tenant-id': selectedTenantId } : {}),
+        },
+      });
+      if (!response.ok) throw new Error((await response.text()) || `HTTP ${response.status}`);
+      downloadText(`clientcare-audit-${selectedTenantId || 'default'}.csv`, await response.text(), 'text/csv;charset=utf-8');
     } catch (error) {
       alert(error.message);
     }
@@ -1997,6 +2091,7 @@
             { label: 'Confidence', value: packet.playbook?.confidence || 'low' },
           ])}
           <div><strong>Evidence checklist</strong><pre>${escapeHtml((packet.playbook?.evidence || []).map((item) => `- ${item}`).join('\n') || 'None')}</pre></div>
+          <div><strong>Follow-up guidance</strong><pre>${escapeHtml((packet.followup_guidance || []).map((item) => `- ${item}`).join('\n') || 'None')}</pre></div>
           <div><strong>Draft letter</strong><pre>${escapeHtml(packet.draft_letter || 'No draft letter generated.')}</pre></div>
           <div class="row-actions">
             <button data-appeal-packet-queue="${packet.claim.id}">Queue packet prep</button>
@@ -2030,6 +2125,7 @@
             { label: 'Priority', value: result.action?.priority || '' },
             { label: 'Status', value: result.action?.status || '' },
           ])}
+          <div><strong>Follow-up guidance</strong><pre>${escapeHtml((result.packet.followup_guidance || []).map((item) => `- ${item}`).join('\n') || 'None')}</pre></div>
           <div><strong>Draft letter</strong><pre>${escapeHtml(result.packet.draft_letter || 'No draft letter generated.')}</pre></div>
         `;
       }
@@ -2339,8 +2435,12 @@
     if (tenantSaveButton) tenantSaveButton.addEventListener('click', saveTenantProfile);
     const onboardingSaveButton = document.getElementById('onboarding-save');
     if (onboardingSaveButton) onboardingSaveButton.addEventListener('click', saveTenantOnboarding);
+    const readinessExportButton = document.getElementById('readiness-export');
+    if (readinessExportButton) readinessExportButton.addEventListener('click', exportReadinessReport);
     const operatorSaveButton = document.getElementById('operator-save');
     if (operatorSaveButton) operatorSaveButton.addEventListener('click', saveOperatorAccess);
+    const auditExportButton = document.getElementById('audit-export');
+    if (auditExportButton) auditExportButton.addEventListener('click', exportAuditCsv);
     const payerRuleSaveButton = document.getElementById('payer-rule-save');
     if (payerRuleSaveButton) payerRuleSaveButton.addEventListener('click', savePayerRuleOverride);
     root.querySelectorAll('[data-claim-view]').forEach((button) => button.addEventListener('click', () => showClaim(button.getAttribute('data-claim-view'))));

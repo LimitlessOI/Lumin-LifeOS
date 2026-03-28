@@ -163,6 +163,18 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/packaging/readiness-report', async (req, res) => {
+    try {
+      const report = await sellableService.getReadinessReport({
+        tenantId: req.query?.tenant_id || null,
+      });
+      res.json({ ok: true, report });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] readiness report failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/tenants', async (_req, res) => {
     try {
       const tenants = await sellableService.listTenants();
@@ -259,6 +271,22 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, audit });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] audit log failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/audit-log/export', async (req, res) => {
+    try {
+      const audit = await sellableService.listAuditLog({
+        tenantId: req.query?.tenant_id || null,
+        limit: req.query?.limit || 200,
+      });
+      const csv = sellableService.exportAuditLogCsv(audit);
+      res.setHeader('content-type', 'text/csv; charset=utf-8');
+      res.setHeader('content-disposition', 'attachment; filename="clientcare-audit-log.csv"');
+      res.status(200).send(csv);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] audit export failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });
