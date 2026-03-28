@@ -252,6 +252,33 @@
     if (node) node.innerHTML = renderWorkspaceIntakeRun(lastWorkspaceIntakeRun);
   }
 
+  async function createDocRequestsFromValidation(transactionId) {
+    if (!transactionId) throw new Error('Select a transaction first');
+    const validation = lastWorkspaceValidation?.result?.validation;
+    if (!validation) throw new Error('Run document validation first');
+    const missingItems = validation.missing_items || [];
+    if (!missingItems.length) throw new Error('No missing items to request');
+
+    for (const item of missingItems) {
+      await api(`/api/v1/tc/transactions/${transactionId}/document-requests`, {
+        method: 'POST',
+        body: JSON.stringify({
+          title: `${validation.doc_type || 'Document'}: ${item}`,
+          description: `Requested from workspace QA after validating ${validation.file_name || lastWorkspaceValidation?.file_name || 'document'}.`,
+          requested_from: 'client',
+          metadata: {
+            source: 'workspace_validation',
+            file_name: validation.file_name || lastWorkspaceValidation?.file_name || null,
+            doc_type: validation.doc_type || null,
+            missing_item: item,
+          },
+        }),
+      });
+    }
+
+    await load();
+  }
+
   function renderWorkspaceTests(results) {
     const entries = Object.entries(results || {});
     if (!entries.length) return '<p>No access tests run yet.</p>';
@@ -282,6 +309,7 @@
         <span class="badge ${badgeClass(validation.blocks_upload ? 'bad' : 'healthy')}">${escapeHtml(validation.blocks_upload ? 'blocked' : 'pass')}</span>
         <span style="margin-left:8px;color:#98a5c3">${escapeHtml(state.mode === 'upload' ? 'dry-run upload' : 'validate only')} · ${escapeHtml(state.checked_at || '')}</span>
       </div>
+      <p>${escapeHtml(validation.recommendation || '')}</p>
       <table>
         <thead><tr><th>Check</th><th>Status</th><th>Why</th></tr></thead>
         <tbody>
@@ -518,6 +546,11 @@
         <div class="row-actions" style="margin-top:12px">
           <button id="workspace-validate-doc">Validate document</button>
           <button id="workspace-dry-upload" class="ghost">Dry-run upload</button>
+          <select id="workspace-validation-transaction">
+            <option value="">Select transaction for doc requests</option>
+            ${txOptions.map((option) => `<option value="${escapeHtml(option.id)}">${escapeHtml(option.label)}</option>`).join('')}
+          </select>
+          <button id="workspace-create-doc-requests" class="ghost">Create doc requests</button>
         </div>
         <div id="workspace-validation-results">${renderWorkspaceValidation(lastWorkspaceValidation)}</div>
       </div>
@@ -606,6 +639,14 @@
     document.getElementById('workspace-dry-upload')?.addEventListener('click', async () => {
       try {
         await runWorkspaceDocumentAction('upload');
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    document.getElementById('workspace-create-doc-requests')?.addEventListener('click', async () => {
+      try {
+        const transactionId = document.getElementById('workspace-validation-transaction')?.value || '';
+        await createDocRequestsFromValidation(transactionId);
       } catch (err) {
         alert(err.message);
       }

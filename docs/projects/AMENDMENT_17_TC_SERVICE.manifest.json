@@ -77,6 +77,7 @@
     "The intake workspace shows recent intake activity so the operator can audit routing work without leaving the portal",
     "The intake workspace exposes manual document validation and dry-run upload controls before live filing",
     "The intake workspace can launch a dry-run intake for a target address before live filing credentials are used",
+    "Failed workspace QA checks can be converted into transaction-scoped document requests without leaving the portal",
     "First live transaction (6453 Mahogany Peak) created and tracked in DB",
     "Email triage picks up TC-related emails and routes to correct transaction",
     "Deadline tracker fires reminders at correct intervals",
