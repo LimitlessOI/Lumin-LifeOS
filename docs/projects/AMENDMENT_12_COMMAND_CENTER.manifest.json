@@ -9,9 +9,10 @@
   "phase": "stabilization",
   "next_task": "Make the overlay mobile-responsive, add role-based access controls, and continue expanding governance/env-awareness drill-downs",
   "stability_class": "needs-review",
-  "current_focus": "Governance panels are live, Operator Chat now has browser voice input/spoken replies, and Secrets Vault now exposes env-registry health so builders/operators can verify env presence without exposing secret values; next step is mobile responsiveness and access control",
+  "current_focus": "Governance panels are live, Operator Chat now has browser voice input/spoken replies, Secrets Vault now exposes env-registry health, and public overlay HTML now ships no-cache with versioned scripts so browsers stop serving stale broken builds; next step is mobile responsiveness and access control",
   "owned_files": [
     "routes/command-center-routes.js",
+    "routes/public-routes.js",
     "public/overlay/command-center.html",
     "public/overlay/command-center.js",
     "public/overlay/index.html",
@@ -25,6 +26,7 @@
   ],
   "required_files": [
     "routes/command-center-routes.js",
+    "routes/public-routes.js",
     "public/overlay/command-center.html",
     "public/overlay/command-center.js",
     "services/ai-guard.js",
