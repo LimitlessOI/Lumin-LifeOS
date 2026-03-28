@@ -6,10 +6,10 @@
   "status": "active",
   "priority": "critical",
   "owner": "adam",
-  "phase": "sellable-v1-hardening",
-  "next_task": "Sellable v1 is complete. Next work is optional post-v1 validation on real tenant data and future product expansion.",
+  "phase": "sellable-v1-complete",
+  "next_task": "Sellable v1 is complete. Next work is optional post-v1 tenant learning, readiness trend monitoring, and future product expansion.",
   "stability_class": "needs-review",
-  "current_focus": "Internal operational completeness and sellable v1 completeness are now in place. Remaining work is post-v1 validation on real tenant data and future product expansion rather than core build completion.",
+  "current_focus": "Internal operational completeness and sellable v1 completeness are now in place. The overlay now exposes readiness history/trend monitoring, so remaining work is post-v1 tenant learning and future product expansion rather than core build completion.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -163,6 +163,12 @@
       "path": "/api/v1/clientcare-billing/packaging/validate",
       "expected_status": 200,
       "description": "Run live rollout validation"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clientcare-billing/packaging/validation-history",
+      "expected_status": 200,
+      "description": "View rollout validation history and trend blockers"
     },
     {
       "method": "GET",
@@ -388,6 +394,7 @@
     "Packaging overview exposes readiness score, blockers, and next actions for external rollout",
     "Packaging can export readiness JSON and audit CSV without leaving the overlay",
     "Packaging can run live rollout validation against browser readiness, claim history, operators, and audit receipts",
+    "Packaging can summarize validation history so rollout-score trends and recurring blockers are visible at a glance",
     "Commercial payer overrides can store denial lane, follow-up cadence, escalation timing, and expected lag/reimbursement baselines",
     "Packaging overview can switch tenants without leaving the overlay",
     "Internal operational completeness and sellable v1 completeness are both reached",
@@ -416,8 +423,8 @@
       "resolved": true
     },
     {
-      "description": "Multi-coverage payer-order changes now support visible-slot targeting plus current-value hints; remaining work is live-tenant validation across more ClientCare layouts rather than core selector design",
-      "resolved": false
+      "description": "Multi-coverage payer-order changes now support visible-slot targeting plus current-value hints, and packaging exposes validation-history trends; remaining work is live-tenant operational learning rather than core selector design",
+      "resolved": true
     },
     {
       "description": "Tenant-scoped operator access now gates write actions, and live rollout validation exists; what remains is real-tenant operational learning rather than core packaging gaps",

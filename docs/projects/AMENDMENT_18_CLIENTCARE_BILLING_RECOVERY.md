@@ -113,6 +113,7 @@ Every claim lands in one of these buckets:
 - `GET /api/v1/clientcare-billing/packaging/overview`
 - `GET /api/v1/clientcare-billing/packaging/readiness-report`
 - `POST /api/v1/clientcare-billing/packaging/validate`
+- `GET /api/v1/clientcare-billing/packaging/validation-history`
 - `GET /api/v1/clientcare-billing/tenants`
 - `POST /api/v1/clientcare-billing/tenants`
 - `GET /api/v1/clientcare-billing/tenants/:tenantId/onboarding`
@@ -328,6 +329,7 @@ Operational inputs needed regardless of integration path:
 | 2026-03-27 | Added deeper commercial payer override fields, readiness scoring, and exportable audit/readiness reports | 8h | 7h | -1h because existing packaging and payer-rule surfaces handled most of the route/UI wiring cleanly | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added selected-coverage persistence in the repair UI and value-hinted field targeting for multi-coverage browser writeback | 5h | 4h | -1h because the visible-slot targeting path already existed and only needed UI/state + browser matching hardening | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added live rollout validation checks and in-overlay go-live validation runner for tenant launch readiness | 2h | 2h | none | ✅ | ✅ | ✅ |
+| 2026-03-27 | Added validation-history summaries and trend visibility for rollout runs so operators can see repeated blockers and readiness improvement over time | 2h | 2h | none | ✅ | ✅ | ✅ |
 
 ---
 

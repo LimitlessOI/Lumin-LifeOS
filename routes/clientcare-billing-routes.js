@@ -199,6 +199,19 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/packaging/validation-history', async (req, res) => {
+    try {
+      const history = await sellableService.getValidationHistory({
+        tenantId: req.query?.tenant_id || null,
+        limit: req.query?.limit || 20,
+      });
+      res.json({ ok: true, history });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] packaging validation history failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.get('/tenants', async (_req, res) => {
     try {
       const tenants = await sellableService.listTenants();

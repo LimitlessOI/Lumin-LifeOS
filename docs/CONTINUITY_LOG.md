@@ -2,6 +2,7 @@
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
 ## Update 2026-03-27 #1
+- ClientCare rollout validation now has history/trend summaries in the overlay, so repeated blockers and validation-score movement are visible without exporting audit data.
 - ClientCare sellable packaging now includes a live rollout validation runner that checks actual browser readiness, claim-history presence, operator access, audit receipts, and onboarding state before go-live.
 - ClientCare account repair now preserves the selected visible coverage in the overlay and uses current-value hints during browser writeback, which materially lowers the risk of editing the wrong coverage row on denser multi-coverage layouts.
 - ClientCare sellable packaging now exposes a go-live readiness score, checklist, blockers, and next actions directly in the Collections Control Center so rollout status is visible at a glance.

@@ -62,6 +62,17 @@ function summarizeValidationChecks(checks = []) {
   return { score, status, blockers };
 }
 
+function normalizeValidationEntry(entry = {}) {
+  const details = entry?.details && typeof entry.details === 'object' ? entry.details : {};
+  return {
+    created_at: entry.created_at || null,
+    actor: entry.actor || 'system',
+    score: Number(details.score || 0),
+    status: String(details.status || 'unknown'),
+    blockers: Array.isArray(details.blockers) ? details.blockers : [],
+  };
+}
+
 export function createClientCareSellableService({ pool, logger = console }) {
   async function logAudit({
     tenantId = null,
@@ -363,11 +374,46 @@ export function createClientCareSellableService({ pool, logger = console }) {
     };
   }
 
+  async function getValidationHistory({ tenantId = null, limit = 20 } = {}) {
+    const audit = await listAuditLog({ tenantId, limit: Math.max(Number(limit || 20) * 3, 30) });
+    const validations = audit
+      .filter((entry) => String(entry.action_type || '') === 'packaging_validate')
+      .slice(0, Math.max(1, Math.min(Number(limit || 20), 50)))
+      .map(normalizeValidationEntry);
+    const summary = {
+      runs: validations.length,
+      latest_score: validations[0]?.score ?? null,
+      latest_status: validations[0]?.status ?? 'none',
+      average_score: validations.length
+        ? Math.round(validations.reduce((sum, item) => sum + Number(item.score || 0), 0) / validations.length)
+        : null,
+      blocked_runs: validations.filter((item) => item.status === 'blocked').length,
+      validated_runs: validations.filter((item) => item.status === 'validated').length,
+      common_blockers: Array.from(
+        validations.reduce((map, item) => {
+          for (const blocker of item.blockers || []) {
+            map.set(blocker, (map.get(blocker) || 0) + 1);
+          }
+          return map;
+        }, new Map()).entries()
+      )
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([label, count]) => ({ label, count })),
+    };
+    return {
+      generated_at: new Date().toISOString(),
+      summary,
+      validations,
+    };
+  }
+
   return {
     buildLiveValidation,
     exportAuditLogCsv,
     getPackagingOverview,
     getReadinessReport,
+    getValidationHistory,
     listAuditLog,
     getOnboarding,
     listOperatorAccess,
