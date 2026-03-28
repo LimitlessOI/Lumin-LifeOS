@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-27
+**Last Updated:** 2026-03-28
 
 ---
 
@@ -97,7 +97,8 @@ Every claim lands in one of these buckets:
 | `services/clientcare-sellable-service.js` | Tenant boundaries, onboarding, operator access, and audit helpers |
 | `routes/clientcare-billing-routes.js` | Operational API for imports, classification, rescue queue, browser readiness |
 | `public/clientcare-billing/overlay.html` | Operator overlay page for claims rescue |
-| `public/clientcare-billing/clientcare-billing.js` | Overlay UI logic for import, queue review, and claim planning |
+| `public/clientcare-billing/clientcare-billing.js` | Overlay UI logic for import, queue review, claim planning, and voice-enabled assistant |
+| `public/shared/lifeos-voice-chat.js` | Shared browser voice input/output controls used by the operator assistant and other chat surfaces |
 | `db/migrations/20260326_clientcare_billing.sql` | Claims + action tables |
 | `db/migrations/20260326_clientcare_ops.sql` | Capability queue for requested billing/system improvements |
 | `db/migrations/20260327_clientcare_patient_ar_controls.sql` | Provider-directed patient AR policy controls |
@@ -264,7 +265,7 @@ Operational inputs needed regardless of integration path:
 - The reimbursement intelligence view must include a collections forecast: projected collectible amount, projected timing buckets, and top expected collections, improving as paid-claim history is imported.
 - The collections forecast should calibrate against observed payer payment lag and paid-to-allowed history when those signals exist, rather than relying on rescue buckets alone.
 - The overlay must support direct payment-history import for paid claims / ERA / remit CSV so reimbursement learning is not blocked on perfect exports.
-- The overlay must expose an operator chat tied directly to LifeOS AI with running history and archive behavior for older turns; it should classify requests as personal vs shared system improvements.
+- The overlay must expose an operator chat tied directly to LifeOS AI with running history, archive behavior for older turns, browser voice input, and optional spoken replies; it should classify requests as personal vs shared system improvements.
 - The operator chat should be named `Operations Assistant`, support pinned and unpinned layouts, and stay out of the main workstream when collapsed.
 - The overlay should present the live ClientCare backlog as the primary KPI strip so at-a-glance counts show live accounts, billing notes, recovery opportunity, and timing forecasts instead of empty local-ledger placeholders.
 - The overlay should be organized into overview, accounts needing action, account recovery detail, and collapsible tools so Sherry can work the queue without scanning low-value diagnostics first.
@@ -310,8 +311,9 @@ Operational inputs needed regardless of integration path:
 - [x] **Deeper commercial payer rules plus readiness/export packaging polish** *(est: 8h | actual: 7h)* `[needs-review]`
 - [x] **Coverage-safe multi-layout insurer repair targeting** *(est: 5h | actual: 4h)* `[needs-review]`
 - [x] **Final external rollout polish and live-tenant validation** *(est: 2h | actual: 2h)* `[needs-review]`
+- [x] **Voice-enabled Operations Assistant** *(est: 2h | actual: 2h)* `[safe]`
 
-**Progress:** 12/12 steps complete | Internal operational completeness reached; Sellable v1 complete
+**Progress:** 13/13 steps complete | Internal operational completeness reached; Sellable v1 complete
 
 ---
 

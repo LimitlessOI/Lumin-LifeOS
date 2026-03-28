@@ -3,6 +3,7 @@
  */
 
 const workItems = [];
+let chatVoiceController = null;
 const conversationKey = 'commandCenterConversations';
 const chatModes = [
   {
@@ -816,6 +817,21 @@ function initChatMembers() {
   renderCouncilMembers();
 }
 
+function initChatVoice() {
+  if (chatVoiceController && typeof chatVoiceController.destroy === 'function') {
+    chatVoiceController.destroy();
+  }
+  if (!window.LifeOSVoiceChat) return;
+  chatVoiceController = window.LifeOSVoiceChat.attach({
+    inputId: 'chatInput',
+    buttonId: 'chatVoiceButton',
+    statusId: 'chatVoiceStatus',
+    speakToggleId: 'chatSpeakReplies',
+    storageKey: 'command_center_chat',
+    idleText: 'Voice ready for operator chat',
+  });
+}
+
 function submitChat() {
   const input = document.getElementById('chatInput');
   const prompt = input.value.trim();
@@ -878,6 +894,7 @@ function submitChat() {
 
     saveConversationLog();
     renderConversationLog();
+    if (chatVoiceController) chatVoiceController.speak(entry.response);
     showRateLimit('');
   };
 
@@ -1024,6 +1041,7 @@ window.addEventListener('DOMContentLoaded', () => {
   renderConversationLog();
   initChatModes();
   initChatMembers();
+  initChatVoice();
   updateCommandKeyStatus();
   refresh();
   refreshSafetyStatus();

@@ -30,6 +30,9 @@
   let selectedTenantId = localStorage.getItem('clientcare_selected_tenant_id') || '';
   let assistantPinned = localStorage.getItem('clientcare_assistant_pinned') !== 'false';
   let assistantOpen = localStorage.getItem('clientcare_assistant_open') !== 'false';
+  let assistantVoiceController = null;
+  let lastAssistantVoiceKey = '';
+  let assistantVoiceReady = false;
 
   function getApiKey() {
     return localStorage.getItem('COMMAND_CENTER_KEY') || localStorage.getItem('lifeos_cmd_key') || localStorage.getItem('x_api_key') || '';
@@ -1803,6 +1806,7 @@
       <span class="muted small">${escapeHtml(session.archive_preview || 'Direct connection to the system assistant')}</span>
     `;
     const messages = session.recent_messages || [];
+    const latestAssistantMessage = [...messages].reverse().find((message) => message.role === 'assistant' && message.content);
     historyNode.innerHTML = messages.length ? messages.map((message) => `
       <div class="card" style="padding:12px; background:${message.role === 'assistant' ? '#121a31' : '#0f1528'};">
         <div class="account-card-top">
@@ -1813,6 +1817,31 @@
         ${message.metadata?.intent ? `<div class="muted small" style="margin-top:8px;">Intent: ${escapeHtml(message.metadata.intent)} · Scope: ${escapeHtml(message.metadata.scope || 'unclear')}</div>` : ''}
       </div>
     `).join('') : '<p class="muted">Start a conversation.</p>';
+    const latestAssistantKey = latestAssistantMessage ? `${latestAssistantMessage.timestamp || ''}:${latestAssistantMessage.content || ''}` : '';
+    if (latestAssistantKey) {
+      if (!assistantVoiceReady) {
+        assistantVoiceReady = true;
+        lastAssistantVoiceKey = latestAssistantKey;
+      } else if (latestAssistantKey !== lastAssistantVoiceKey) {
+        lastAssistantVoiceKey = latestAssistantKey;
+        if (assistantVoiceController) assistantVoiceController.speak(latestAssistantMessage.content || '');
+      }
+    }
+  }
+
+  function initAssistantVoice() {
+    if (assistantVoiceController && typeof assistantVoiceController.destroy === 'function') {
+      assistantVoiceController.destroy();
+    }
+    if (!window.LifeOSVoiceChat) return;
+    assistantVoiceController = window.LifeOSVoiceChat.attach({
+      inputId: 'assistant-input',
+      buttonId: 'assistant-voice-toggle',
+      statusId: 'assistant-voice-status',
+      speakToggleId: 'assistant-speak-replies',
+      storageKey: 'clientcare_assistant',
+      idleText: 'Voice ready for Operations Assistant',
+    });
   }
 
   function renderAssistantShell() {
@@ -1835,6 +1864,11 @@
             <div id="assistant-meta" class="row-actions" style="margin:10px 0"></div>
             <div id="assistant-history" class="stack assistant-history"></div>
             <textarea id="assistant-input" placeholder="Type a question, command, or requested system change here"></textarea>
+            <div class="row-actions" style="margin-top:10px">
+              <button id="assistant-voice-toggle" class="ghost" type="button">Start voice</button>
+              <label class="muted small" style="display:inline-flex; gap:6px; align-items:center;"><input id="assistant-speak-replies" type="checkbox"> Speak replies</label>
+              <span id="assistant-voice-status" class="muted small">Voice ready</span>
+            </div>
             <div style="margin-top:10px"><button id="assistant-send">Send</button></div>
           </div>
         </div>
@@ -2561,6 +2595,7 @@
     document.getElementById('assistant-input').addEventListener('keydown', (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') sendAssistantMessage();
     });
+    initAssistantVoice();
     const insurancePreviewButton = document.getElementById('insurance-preview-run');
     if (insurancePreviewButton) insurancePreviewButton.addEventListener('click', runInsurancePreview);
     const repairPreviewButton = document.getElementById('repair-preview-run');

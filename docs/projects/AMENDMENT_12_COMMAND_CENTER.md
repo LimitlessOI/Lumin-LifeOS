@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-27 |
+| **Last Updated** | 2026-03-28 |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -47,6 +47,7 @@ routes/command-center-routes.js
 public/overlay/command-center.html
 public/overlay/command-center.js
 public/overlay/index.html
+public/shared/lifeos-voice-chat.js
 ```
 
 ## Protected Files (read-only for this project)
@@ -81,16 +82,17 @@ are owned by AMENDMENT_18 and read by this project's dashboard panels.
 | POST | `/api/v1/pending-adam/:id/resolve` | requireKey | Resolve pending item |
 
 ### UI Surface
-- **Chat panel** — multi-mode AI chat with council member selection
+- **Chat panel** — multi-mode AI chat with council member selection, browser voice input, and optional spoken replies
 - **System Health panel** — live status, uptime, AI enabled state
 - **Ideas Queue panel** — pending/approved/building ideas
 - **AI Safety Controls panel** — kill switch, HAB status
 - **Conversation History panel** — searchable past sessions
 - **Improvement Proposals panel** — AI-generated suggestions
 - **Tools Status panel** — which providers are live
-- **Projects Dashboard panel** ← NEW — active projects with hover + click
-- **Pending Adam panel** ← NEW — items blocked on Adam
+- **Projects Dashboard panel** — active projects with hover + click
+- **Pending Adam panel** — items blocked on Adam
 - **Free Cloud Providers panel** — free tier usage status
+- **Builder Control Panel** ← NEW — running/paused state badge; Run Now / Dry Run / Pause / Resume buttons; 4 stat cards (Safe & Ready, In Progress, Needs Review, Blocked); last run results; queue detail table; Adam Decision Accuracy section
 
 ### External Dependencies
 | Dependency | Env Var | Required? |

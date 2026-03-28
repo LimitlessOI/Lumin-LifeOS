@@ -9,7 +9,7 @@
   "phase": "sellable-v1-complete",
   "next_task": "Sellable v1 is complete. Next work is optional post-v1 tenant learning, readiness trend monitoring, and future product expansion.",
   "stability_class": "needs-review",
-  "current_focus": "Internal operational completeness and sellable v1 completeness are now in place. The overlay now exposes readiness history/trend monitoring, so remaining work is post-v1 tenant learning and future product expansion rather than core build completion.",
+  "current_focus": "Internal operational completeness and sellable v1 completeness are now in place. The overlay now exposes voice-enabled assistant controls plus readiness history/trend monitoring, so remaining work is post-v1 tenant learning and future product expansion rather than core build completion.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -26,7 +26,8 @@
     "services/clientcare-sellable-service.js",
     "db/migrations/20260327_clientcare_sellable_controls.sql",
     "db/migrations/20260327_clientcare_payer_rule_overrides.sql",
-    "db/migrations/20260327_clientcare_sellable_v1_hardening.sql"
+    "db/migrations/20260327_clientcare_sellable_v1_hardening.sql",
+    "public/shared/lifeos-voice-chat.js"
   ],
   "protected_files": [
     "server.js",
@@ -47,7 +48,8 @@
     "services/clientcare-sellable-service.js",
     "db/migrations/20260327_clientcare_sellable_controls.sql",
     "db/migrations/20260327_clientcare_payer_rule_overrides.sql",
-    "db/migrations/20260327_clientcare_sellable_v1_hardening.sql"
+    "db/migrations/20260327_clientcare_sellable_v1_hardening.sql",
+    "public/shared/lifeos-voice-chat.js"
   ],
   "required_routes": [
     {
@@ -398,7 +400,8 @@
     "Commercial payer overrides can store denial lane, follow-up cadence, escalation timing, and expected lag/reimbursement baselines",
     "Packaging overview can switch tenants without leaving the overlay",
     "Internal operational completeness and sellable v1 completeness are both reached",
-    "Tenant-scoped operator access gates write actions when operators are configured for that tenant"
+    "Tenant-scoped operator access gates write actions when operators are configured for that tenant",
+    "Operations Assistant supports browser voice input and optional spoken replies"
   ],
   "anti_drift_notes": "This product has two data layers: the live ClientCare browser backlog and the local claim ledger. Do not assume the claim ledger reflects the live backlog unless imports have run. Keep the overlay fast by loading backlog summary first and account details lazily. Do not enable autonomous collections behavior; all outreach and writeback remains provider-directed and compliance-gated.",
   "decision_debt": [

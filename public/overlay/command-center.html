@@ -302,6 +302,26 @@
       margin-top: 10px;
       resize: vertical;
     }
+    .voice-chat-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .voice-chat-row label {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 13px;
+      color: #a6c5d6;
+    }
+    .voice-chat-status {
+      font-size: 12px;
+      color: #8ea0b5;
+    }
+    button.listening {
+      background: #c62828;
+    }
     .chat-controls {
       display: flex;
       flex-direction: column;
@@ -831,6 +851,11 @@
         </div>
         <div class="pill-row" id="chatMemberPills"></div>
         <textarea id="chatInput" rows="3" placeholder="Enter prompt..."></textarea>
+        <div class="voice-chat-row">
+          <button id="chatVoiceButton" type="button">Start voice</button>
+          <label><input id="chatSpeakReplies" type="checkbox"> Speak replies</label>
+          <span id="chatVoiceStatus" class="voice-chat-status">Voice ready</span>
+        </div>
         <button id="chatSendButton" onclick="submitChat()">Send</button>
       </div>
       <div class="chat-log" id="chatLog">
@@ -880,6 +905,7 @@
     </div>
   </div>
 
+  <script src="/shared/lifeos-voice-chat.js"></script>
   <script src="command-center.js"></script>
   <script>
     // Initialize on page load
