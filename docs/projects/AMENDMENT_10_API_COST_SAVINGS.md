@@ -164,3 +164,42 @@ Response OUT
 - Savings reporting must match actual DB records — no synthetic metrics.
 - If compression causes quality regression → auto-revert that rule, never suppress the signal.
 - Protected spans: never compress code, URLs, IDs, SQL, JSON keys used by parsers, user quotes.
+
+---
+
+## Pre-Build Readiness
+
+**Status:** NOT_READY
+**Adaptability Score:** 85/100
+**Last Updated:** 2026-03-27
+
+### Gate 1 — Implementation Detail
+- [x] 5-layer architecture fully specified (IR Compiler → Token Optimizer → Delta Context → Provider Router → Savings Ledger)
+- [x] Component status table with file names and build status for each component
+- [x] "Protected spans" policy defined (code, URLs, IDs, SQL, JSON keys, user quotes — never compressed)
+- [ ] Savings ledger DB schema in `db/migrations/20260321_token_usage_log.sql` — written but not yet confirmed in Neon production
+- [ ] `TCO-C01` (critical-fields whitelist) and `TCO-C02` (meaning checksum) are PLANNED with no implementation spec
+- [ ] Client-facing dashboard endpoint not yet built — no Neon table to back the dashboard data
+- [ ] Pricing/billing for the B2B product (how clients pay us) not yet wired to Stripe
+
+### Gate 2 — Competitor Landscape
+| Competitor | Strengths | Weaknesses | Our Edge |
+|---|---|---|---|
+| LangChain + prompt compression libraries | Open-source, flexible, developer-loved | No hosted product, no savings ledger, no quality regression detection, client must integrate themselves | We are a hosted proxy with a signed savings receipt — clients pay us after the fact based on proven savings |
+| PortKey.ai | Multi-model gateway, cost tracking, caching | No prompt compression, no Chain of Draft, no free-tier cascade, no quality regression circuit breaker | Our 5-layer stack achieves 60–90% savings vs PortKey's 10–30% from routing alone |
+| Helicone | Beautiful LLM observability, cost dashboard | Observability only — zero optimization; they show the problem, we solve it | We reduce the bill, they report it |
+| OpenRouter | Free model routing, large model catalog | No compression, no caching, no savings ledger, quality is client's problem | We add compression + caching on top of routing and prove the savings with a per-request receipt |
+
+### Gate 3 — Future Risks
+| Risk | Probability | Impact | Position |
+|---|---|---|---|
+| AI API prices drop 90% industry-wide in 18 months (historical trend: GPT-4 2023 vs 2025) | HIGH | High — savings become small in dollar terms | Mitigate: pivot positioning to quality routing and reliability, not just cost; the ledger becomes a quality SLA |
+| Client quality regression during compression goes undetected (TCO-C01/C02 not yet built) | HIGH (those components are PLANNED) | High — client loses trust, churns | Mitigate: build meaning checksum before acquiring any paying clients; this is Gate 1 blocker |
+| A large cloud provider (AWS, Azure) bundles prompt optimization natively | Medium | High — commoditizes our core feature | Mitigate: the savings ledger (signed proof) and multi-provider cascade are not easily bundled by single-cloud vendors |
+| Compression technique invalidation (e.g., TOON doesn't work with GPT-5 tokenizer) | Medium | Medium — one compression layer loses effectiveness | Mitigate: each compression layer is a separate service; disable one without affecting others; monitor compression ratio per model |
+
+### Gate 4 — Adaptability Strategy
+The 5-layer stack is designed as independent services that chain together — any layer can be upgraded, replaced, or disabled without touching the others. Adding a new compression technique is a new function in `services/token-optimizer.js` and a feature flag in config. Adding a new AI provider to the cascade is a new entry in the provider routing table. If a competitor ships a better phrase dictionary, we update the substitution table in the DB — zero code changes. Score: 85/100 — excellent architectural isolation; the score is held back only by the two PLANNED components (TCO-C01/C02) which are critical for quality protection.
+
+### Gate 5 — How We Beat Them
+Every competitor either shows you your AI costs (observability) or routes to cheaper models (routing); LifeOS is the only system that compresses the prompt before it's sent, caches the response after it's received, and hands you a cryptographically signed receipt proving exactly how many tokens — and dollars — were saved on every single request.

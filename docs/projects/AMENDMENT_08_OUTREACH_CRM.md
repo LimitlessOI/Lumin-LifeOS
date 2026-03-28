@@ -89,3 +89,42 @@ Automated multi-channel outreach (email, SMS, call) with a lightweight CRM for t
 - Bounced/complained emails must auto-add to suppression list
 - Never send more than 3 follow-up emails per prospect in any 30-day window
 - All sent messages logged to `crm_messages` — full audit trail required
+
+---
+
+## Pre-Build Readiness
+
+**Status:** NOT_READY
+**Adaptability Score:** 74/100
+**Last Updated:** 2026-03-27
+
+### Gate 1 — Implementation Detail
+- [x] Consent model fully documented — fail-closed, 5-step gate before any outbound message
+- [x] DB schema complete — 9 tables covering contacts, sequences, messages, consent, suppression
+- [x] Required env vars listed (Twilio, Postmark/SendGrid)
+- [ ] BoldTrail endpoints (server.js lines 6155–6572) not yet extracted to `routes/boldtrail-routes.js`
+- [ ] Day-3 and day-7 auto follow-up cron for Site Builder not yet built — documented as next refactor task
+- [ ] Email service startup check not yet built — server starts successfully even with no email provider configured
+- [ ] Consent import tool (batch CSV upload) not yet specified to implementation level
+
+### Gate 2 — Competitor Landscape
+| Competitor | Strengths | Weaknesses | Our Edge |
+|---|---|---|---|
+| Mailchimp | Industry-leading email, huge template library, brand trust | No SMS, no calls, no CRM sequences, no real estate integration, no AI personalization | We are multi-channel (email + SMS + call) with AI-personalized content and consent gating in one system |
+| ActiveCampaign | Strong automation sequences, CRM + email | Expensive ($149+/mo), complex setup, no real estate-specific workflows | Our sequences are AI-generated per-prospect based on scraped context, not template drip campaigns |
+| BoldTrail (kvCORE) | Purpose-built for real estate agents, strong market share | Email-only outreach, no wellness/multi-vertical, $500+/mo | We integrate BoldTrail as a data source while adding SMS, calls, and multi-vertical prospect pipelines |
+| Instantly.ai | Cold email at scale, good deliverability tooling | Email-only, no CRM, no consent tracking, legally risky (CAN-SPAM edge cases) | Our consent-first model is the legal moat — Instantly users are one lawsuit away from a problem |
+
+### Gate 3 — Future Risks
+| Risk | Probability | Impact | Position |
+|---|---|---|---|
+| CAN-SPAM or TCPA enforcement action against cold email/SMS campaigns | Medium | HIGH — fines up to $1,500/SMS under TCPA | Mitigate: `outbound_consent` table is the technical control; 3-email cap is already in non-negotiables; document consent acquisition path for every use case |
+| Twilio price increase or account suspension for flagged outreach | Medium | High — SMS/calls disabled | Mitigate: design for provider swap; abstract Twilio behind `services/sms-service.js` so Vonage/Bandwidth can replace it |
+| Email deliverability collapses (Gmail blocks our domain) | Medium | High — all cold email pipeline broken | Mitigate: separate sending domain from main domain; warm the domain; monitor bounce rate; SPF/DKIM/DMARC required before launch |
+| BoldTrail API changes or access revoked | Low | Medium — real estate outreach loses data sync | Monitor: keep BoldTrail integration as import layer, not primary data store |
+
+### Gate 4 — Adaptability Strategy
+Channel providers (Twilio, Postmark, SendGrid) are referenced only in notification service — swapping providers is a config change. If a new channel (WhatsApp, iMessage business) becomes viable, we add a `consent_whatsapp` column to `outbound_consent` and a new provider adapter — no sequence logic changes. The drip sequence engine is data-driven (DB rows), so adding a new sequence type requires a DB row, not a code change. Score: 74/100 — consent model and sequence engine are well-designed; BoldTrail extraction and email startup validation are the open gaps.
+
+### Gate 5 — How We Beat Them
+Every outreach tool requires the user to build lists and design sequences manually; LifeOS generates the prospect list from a Google Maps search, writes AI-personalized outreach based on the prospect's scraped website, enforces consent at the DB layer, and self-sequences follow-ups — the only human input is a business category and a city.

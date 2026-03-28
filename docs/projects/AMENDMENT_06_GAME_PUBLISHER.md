@@ -84,3 +84,42 @@ Forces AI to output a single complete HTML file:
 - No external resources except Phaser CDN (no user-uploaded assets in generated code)
 - Game code is sandboxed in browser — cannot access server APIs
 - Game titles and content must not include offensive material
+
+---
+
+## Pre-Build Readiness
+
+**Status:** NOT_READY
+**Adaptability Score:** 76/100
+**Last Updated:** 2026-03-27
+
+### Gate 1 — Implementation Detail
+- [x] Core pipeline is built (`services/game-publisher.js`) and wired
+- [x] "Closed World" prompt pattern fully specified — headless AI can implement games with no ambiguity
+- [x] Validation checks defined (Phaser reference, scene methods, balanced braces)
+- [ ] Game endpoints not yet extracted from server.js → `routes/game-routes.js`
+- [ ] DB table for game persistence not yet created — games only exist as `meta.json` files
+- [ ] Revenue model segments (game-as-a-service, educational packs) not defined to billing/endpoint level
+- [ ] Play count tracking endpoint not specified
+
+### Gate 2 — Competitor Landscape
+| Competitor | Strengths | Weaknesses | Our Edge |
+|---|---|---|---|
+| GameMaker (YoYo Games) | Industry-standard, large community, export to multiple platforms | Requires human expertise, hours to days to build a game, $99/mo | We go from text description to playable game in under 2 minutes, zero game-dev knowledge required |
+| Construct 3 | Visual no-code game builder, browser-based | Still requires manual design work, not AI-generative, $129/yr | Full AI generation from a sentence — no drag-and-drop, no templates |
+| ChatGPT Code Interpreter | Can generate HTML/JS games on request | No deployment, no gallery, no validation, no Phaser scaffolding | We validate, repair, deploy, and serve — a complete pipeline, not a code snippet |
+| Rosebud AI | AI game generation for Phaser | Early product, limited game types, no white-label or business integration | Our pipeline is embedded in a full business OS — games are a revenue feature, not a standalone product |
+
+### Gate 3 — Future Risks
+| Risk | Probability | Impact | Position |
+|---|---|---|---|
+| LLM token limits mean complex games get truncated at 4096 tokens (confirmed THINK) | HIGH | Medium — validation catches truncation, but repair loop may loop infinitely | Mitigate: increase max_tokens to 8192 for game generation calls; add loop limit to repair |
+| Phaser.js CDN goes down or changes URL | Low | High — all games break on load | Mitigate: pin Phaser version in CDN URL; add fallback to self-hosted Phaser copy |
+| Browser game piracy — someone scrapes our generated games and republishes them | Medium | Low — games are demos, not our primary product | Accept: games have no DRM by design; the generation capability is the moat |
+| AI-generated game content violates IP (character names, art style) | Medium | Medium — DMCA risk | Mitigate: prompt instructs AI not to reference copyrighted characters; add content review flag |
+
+### Gate 4 — Adaptability Strategy
+The game generation prompt is a string — swapping Phaser for a different game engine requires one prompt edit and one validation function update. If a competitor demonstrates a new game type (e.g., isometric), we add it to the `GAME_TYPES` list and update the prompt. The "Closed World" constraint pattern is engine-agnostic and can be reused for any future single-file output target. Score: 76/100 — the pipeline architecture is sound; the main gap is the missing DB table and routes extraction.
+
+### Gate 5 — How We Beat Them
+While other tools require game developers to use them, LifeOS game generation is positioned for business owners — a yoga studio gets a branded quiz game for their website, a real estate agent gets a neighborhood guessing game for lead capture, without either of them knowing what Phaser is.

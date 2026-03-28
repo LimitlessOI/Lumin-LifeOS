@@ -280,3 +280,44 @@ Weekly summary (every Monday morning, SMS):
   - `public/overlay/word-keeper-panel.js` — overlay chip + dropdown with quick actions
   - `server.js` — routes mounted at `/api/v1/word-keeper`, council adapter wired
   - Confirmed defaults: Google Calendar, wife mutual consent model, both-party storage consent
+
+---
+
+## Pre-Build Readiness
+
+**Status:** BUILD_READY
+**Adaptability Score:** 88/100
+**Last Updated:** 2026-03-27
+
+### Gate 1 — Implementation Detail
+- [x] All 7 files built and wired — routes, services, DB migration, web app, overlay panel
+- [x] DB schema fully specified — 6 tables with purpose documented
+- [x] API surface complete — 11 endpoints with methods, paths, and purposes
+- [x] AI council role assignments documented per model (Claude, Gemini, DeepSeek, Grok, Groq)
+- [x] Legal foundation documented (Nevada NRS 200.620 one-party consent, phone two-party auto-pause)
+- [x] Integrity score events, point values, and score bands fully specified
+- [x] Commitment detection trigger language documented (high/medium/never-flag categories)
+- [ ] Google Calendar integration not yet built — documented as default, no OAuth flow specified
+- [ ] 24h transcript auto-purge cron not yet confirmed as implemented
+
+### Gate 2 — Competitor Landscape
+| Competitor | Strengths | Weaknesses | Our Edge |
+|---|---|---|---|
+| Beeminder | Commitment tracking with real financial stakes, proven behavior change | Manual entry only — you type your commitments; no ambient capture; no integrity coaching | We detect commitments from natural speech without requiring any data entry |
+| Strides | Clean habit/goal tracking, iOS native | No commitment language detection, no integrity score, no mediator | We track commitments made in real conversation, not goals the user typed into an app |
+| Way of Life (habit tracker) | Simple, streak-based, mobile-first | Same as above — user-entered only; no speech; no coaching narrative | Our weekly integrity coaching summary identifies patterns the user cannot see themselves |
+| Replika (AI companion) | Remembers what you say, emotionally intelligent | No commitment tracking, no scoring, no honourable exit coaching, raises therapy-line concerns | We are explicitly accountability-focused, not companionship — a cleaner ethical boundary and stronger business use case |
+
+### Gate 3 — Future Risks
+| Risk | Probability | Impact | Position |
+|---|---|---|---|
+| Whisper API transcription cost becomes prohibitive at 60-second chunks × 16 hours/day | Medium | High — continuous ambient recording is expensive at scale | Mitigate: transcribe only when voice activity detected (VAD); pause transcription during non-speech silence |
+| Phone call auto-pause fails — system records phone call without two-party consent | Low | HIGH — TCPA/wiretapping violation | Mitigate: auto-pause is the default and must be tested on Twilio call detection before any production use |
+| User disables recording consent but audio buffer continues in background | Low | HIGH — privacy violation | Mitigate: MediaRecorder must be explicitly stopped (not just paused) when consent is withdrawn; test this path |
+| Apple/Google ships native commitment detection in OS (Siri Shortcuts, Android routines) | Low (3–5 years) | Medium — reduces differentiation | Monitor: our scoring system and honourable exit coaching are the moat, not just the detection |
+
+### Gate 4 — Adaptability Strategy
+AI model assignments are in config — if Gemini is outperformed in empathy by a new model, the mediator service config changes, not the mediator logic. The integrity scoring formula is implemented in `services/integrity-engine.js` as a set of named score events — adding a new event type (e.g., "same-day renegotiation" = +5) is one line in the event table. The commitment detection regex list is a data structure that a headless AI can extend without touching routing logic. Score: 88/100 — the architecture is highly adaptable; the two missing pieces (Google Calendar OAuth flow and VAD for cost control) are the primary gaps.
+
+### Gate 5 — How We Beat Them
+Every commitment app requires you to type what you promised; Word Keeper listens to your actual conversations, detects the moment you give your word, confirms it was intentional, tracks it against your deadline, and when you can't keep it, writes the honourable message to send — turning commitment accountability from a discipline into a system.

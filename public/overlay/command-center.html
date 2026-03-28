@@ -790,6 +790,61 @@
       </div>
     </div>
 
+    <!-- ══ BUILDER CONTROL PANEL ══ -->
+    <div class="section" id="builderSection" style="border-color:#7c3aed;">
+      <h2>🤖 Builder Supervisor
+        <span id="builderRunningBadge" style="display:none;background:#7c3aed;color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:8px;animation:pulse 1.5s infinite;">● RUNNING</span>
+        <span id="builderPausedBadge" style="display:none;background:#b45309;color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:8px;">⏸ PAUSED</span>
+      </h2>
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
+        <button onclick="triggerBuilderRun()" style="background:#7c3aed;padding:6px 16px;border-radius:6px;font-size:13px;" id="builderRunBtn">▶ Run Now</button>
+        <button onclick="triggerBuilderDryRun()" style="background:#1e3a5f;padding:6px 14px;border-radius:6px;font-size:13px;">🔍 Dry Run</button>
+        <button onclick="pauseBuilder()" style="background:#b45309;padding:6px 14px;border-radius:6px;font-size:13px;" id="builderPauseBtn">⏸ Pause</button>
+        <button onclick="resumeBuilder()" style="display:none;background:#2e7d32;padding:6px 14px;border-radius:6px;font-size:13px;" id="builderResumeBtn">▶ Resume</button>
+        <button onclick="loadBuilderStatus()" style="background:#1a1f3a;border:1px solid #2a3f5f;padding:6px 12px;border-radius:6px;font-size:13px;">🔄 Refresh</button>
+        <span id="builderStatusMsg" style="color:#888;font-size:12px;"></span>
+      </div>
+
+      <!-- Queue overview -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px;">
+        <div style="background:#0a0e27;border:1px solid #2a3f5f;border-radius:8px;padding:12px;text-align:center;">
+          <div id="bldSafePending" style="font-size:28px;font-weight:700;color:#4ade80;">—</div>
+          <div style="font-size:11px;color:#888;margin-top:2px;">Safe &amp; Ready</div>
+        </div>
+        <div style="background:#0a0e27;border:1px solid #2a3f5f;border-radius:8px;padding:12px;text-align:center;">
+          <div id="bldInProgress" style="font-size:28px;font-weight:700;color:#7c3aed;">—</div>
+          <div style="font-size:11px;color:#888;margin-top:2px;">In Progress</div>
+        </div>
+        <div style="background:#0a0e27;border:1px solid #2a3f5f;border-radius:8px;padding:12px;text-align:center;">
+          <div id="bldReview" style="font-size:28px;font-weight:700;color:#f59e0b;">—</div>
+          <div style="font-size:11px;color:#888;margin-top:2px;">Needs Review</div>
+        </div>
+        <div style="background:#0a0e27;border:1px solid #2a3f5f;border-radius:8px;padding:12px;text-align:center;">
+          <div id="bldBlocked" style="font-size:28px;font-weight:700;color:#e57373;">—</div>
+          <div style="font-size:11px;color:#888;margin-top:2px;">Blocked</div>
+        </div>
+      </div>
+
+      <!-- Last run result -->
+      <div id="builderLastRun" style="background:#0a0e27;border:1px solid #2a3f5f;border-radius:8px;padding:12px;margin-bottom:14px;font-size:13px;">
+        <span style="color:#888;">No runs yet — click Run Now to start.</span>
+      </div>
+
+      <!-- Ready queue (build_ready projects) -->
+      <details style="margin-bottom:10px;">
+        <summary style="cursor:pointer;color:#a78bfa;font-size:13px;padding:6px;background:#0a0e27;border-radius:6px;">📋 View Build Queue (safe &amp; ready)</summary>
+        <div id="builderQueue" style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+          <p style="color:#888;font-size:13px;">Loading…</p>
+        </div>
+      </details>
+
+      <!-- Adam prediction accuracy -->
+      <details>
+        <summary style="cursor:pointer;color:#a78bfa;font-size:13px;padding:6px;background:#0a0e27;border-radius:6px;">🧠 Adam Decision Profile accuracy</summary>
+        <div id="adamAccuracy" style="margin-top:10px;font-size:13px;color:#888;">Loading…</div>
+      </details>
+    </div>
+
     <!-- ══ PROJECTS DASHBOARD ══ -->
     <div class="section" id="projectsSection">
       <h2>📋 Active Projects</h2>
@@ -1516,6 +1571,129 @@
       } catch(e) { alert(e.message); }
     }
 
+    // ══ BUILDER SUPERVISOR ═════════════════════════════════════════════════════
+
+    async function loadBuilderStatus() {
+      try {
+        const data = await api('GET', '/api/v1/builder/status');
+        const s = data.supervisor || {};
+
+        // Badges
+        document.getElementById('builderRunningBadge').style.display = s.running ? 'inline' : 'none';
+        document.getElementById('builderPausedBadge').style.display  = s.paused  ? 'inline' : 'none';
+        document.getElementById('builderPauseBtn').style.display  = s.paused ? 'none' : 'inline-block';
+        document.getElementById('builderResumeBtn').style.display = s.paused ? 'inline-block' : 'none';
+        document.getElementById('builderRunBtn').disabled = s.running || s.paused;
+
+        // Counters
+        document.getElementById('bldSafePending').textContent = data.pendingSafeSegments ?? '—';
+        document.getElementById('bldInProgress').textContent  = (data.currentlyInProgress || []).length;
+        document.getElementById('bldReview').textContent      = '—';
+        document.getElementById('bldBlocked').textContent     = (data.pendingAdamFromBuilder || []).length;
+
+        // Last run
+        const lr = data.lastRun;
+        const lrEl = document.getElementById('builderLastRun');
+        if (lr) {
+          const ts = new Date(lr.runAt).toLocaleString();
+          const doneClr = lr.done > 0 ? '#4ade80' : '#888';
+          const blockedClr = lr.blocked > 0 ? '#f59e0b' : '#888';
+          const failedClr  = lr.failed > 0  ? '#e57373' : '#888';
+          lrEl.innerHTML = `<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+            <span style="color:#888;font-size:12px;">Last run: ${ts}${lr.dryRun ? ' <em>(dry run)</em>' : ''}</span>
+            <span style="color:${doneClr};font-weight:600;">✓ ${lr.done} done</span>
+            <span style="color:${blockedClr};">⚠ ${lr.blocked} blocked</span>
+            <span style="color:${failedClr};">✗ ${lr.failed} failed</span>
+          </div>
+          ${(lr.results||[]).map(r => `<div style="font-size:12px;color:#888;margin-top:4px;">
+            seg-${r.segmentId}: <span style="color:${r.status==='done'?'#4ade80':r.status==='council_stop'?'#e57373':'#f59e0b'};">${r.status}</span>
+            ${r.prUrl ? `<a href="${r.prUrl}" target="_blank" style="color:#7c3aed;margin-left:8px;font-size:11px;">↗ PR</a>` : ''}
+            ${r.guidance ? `<span style="color:#f59e0b;margin-left:6px;" title="${r.guidance.replace(/"/g,'&quot;')}">💡</span>` : ''}
+          </div>`).join('')}`;
+        } else {
+          lrEl.innerHTML = '<span style="color:#888;">No runs yet — click Run Now to start.</span>';
+        }
+
+        // Load queue
+        loadBuilderQueue();
+        loadAdamAccuracy();
+
+      } catch(e) {
+        document.getElementById('builderStatusMsg').textContent = `Error: ${e.message}`;
+      }
+    }
+
+    async function loadBuilderQueue() {
+      try {
+        const data = await api('GET', '/api/v1/builder/queue');
+        const q = data.queue || {};
+        const el = document.getElementById('builderQueue');
+        const safe = q.safe || [];
+        const active = q.active || [];
+        const blocked = q.blocked || [];
+        const review = q.review || [];
+        document.getElementById('bldReview').textContent = review.length;
+        if (safe.length + active.length + blocked.length === 0) {
+          el.innerHTML = '<p style="color:#888;font-size:13px;">No segments in queue. Mark a project build_ready to populate.</p>';
+          return;
+        }
+        el.innerHTML = [
+          ...active.map(s  => `<div style="background:#1a0a3a;border:1px solid #7c3aed;border-radius:6px;padding:8px 12px;font-size:12px;display:flex;gap:10px;align-items:center;"><span style="color:#7c3aed;">● LIVE</span> <span style="color:#e0e0e0;">${s.project_slug} → ${s.title}</span></div>`),
+          ...safe.map(s    => `<div style="background:#0a0e27;border:1px solid #4ade80;border-radius:6px;padding:8px 12px;font-size:12px;display:flex;gap:10px;align-items:center;justify-content:space-between;"><span><span style="color:#4ade80;">✓ safe</span> <span style="color:#e0e0e0;margin-left:8px;">${s.project_slug} → ${s.title}</span></span><span style="color:#888;">${s.estimated_hours ? s.estimated_hours+'h' : ''}</span></div>`),
+          ...blocked.map(s => `<div style="background:#0a0e27;border:1px solid #e57373;border-radius:6px;padding:8px 12px;font-size:12px;display:flex;gap:10px;align-items:center;"><span style="color:#e57373;">⛔ blocked</span> <span style="color:#888;margin-left:8px;">${s.project_slug} → ${s.title}</span></div>`),
+        ].join('');
+      } catch(e) {
+        document.getElementById('builderQueue').innerHTML = `<p style="color:#e57373;font-size:13px;">Error: ${e.message}</p>`;
+      }
+    }
+
+    async function loadAdamAccuracy() {
+      try {
+        // Query the adam_prediction_accuracy view via a project endpoint (proxy)
+        // For now show a placeholder — will populate once decisions are logged
+        document.getElementById('adamAccuracy').innerHTML = `
+          <p style="color:#888;">Tracking Adam's decision patterns. As you resolve council-flagged items, prediction accuracy improves.</p>
+          <p style="color:#888;margin-top:6px;font-size:12px;">Options when resolving: <code style="color:#a78bfa;">approve</code> · <code style="color:#a78bfa;">reject</code> · <code style="color:#a78bfa;">modify</code> · <code style="color:#f59e0b;">override_stop</code></p>
+        `;
+      } catch(_) {}
+    }
+
+    async function triggerBuilderRun() {
+      const btn = document.getElementById('builderRunBtn');
+      const msg = document.getElementById('builderStatusMsg');
+      btn.disabled = true;
+      msg.textContent = 'Starting…';
+      try {
+        const data = await api('POST', '/api/v1/builder/run', {});
+        msg.textContent = data.ok ? `✓ Started (PID ${data.pid})` : `Error: ${data.error}`;
+        if (data.ok) {
+          document.getElementById('builderRunningBadge').style.display = 'inline';
+          setTimeout(loadBuilderStatus, 3000);
+        }
+      } catch(e) { msg.textContent = `Error: ${e.message}`; btn.disabled = false; }
+    }
+
+    async function triggerBuilderDryRun() {
+      const msg = document.getElementById('builderStatusMsg');
+      msg.textContent = 'Running dry run…';
+      try {
+        const data = await api('POST', '/api/v1/builder/run-sync', { dry_run: true });
+        const lr = data.lastRun;
+        msg.textContent = lr ? `Dry run: ${lr.totalSegments} segment(s) would run` : 'Dry run complete';
+        loadBuilderStatus();
+      } catch(e) { msg.textContent = `Error: ${e.message}`; }
+    }
+
+    async function pauseBuilder() {
+      await api('POST', '/api/v1/builder/pause', {});
+      loadBuilderStatus();
+    }
+
+    async function resumeBuilder() {
+      await api('POST', '/api/v1/builder/resume', {});
+      loadBuilderStatus();
+    }
+
     // Allow Enter key in single-var inputs
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('vaultValueInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') saveVaultVar(); });
@@ -1524,7 +1702,7 @@
     // Load all new sections on startup
     window.addEventListener('DOMContentLoaded', () => {
       // Slight delay so auth key loads first
-      setTimeout(() => { loadIdeas(); loadConversations(); loadProposals(); loadMissingVars(); loadProjects(); loadPendingAdam(); }, 800);
+      setTimeout(() => { loadIdeas(); loadConversations(); loadProposals(); loadMissingVars(); loadProjects(); loadPendingAdam(); loadBuilderStatus(); }, 800);
     });
   </script>
 </body>

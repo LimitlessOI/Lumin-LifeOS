@@ -96,3 +96,43 @@ A collection of AI-powered business tools that don't belong to other projects: b
 - Agent recruitment must comply with employment/contractor laws — no discriminatory screening
 - Make.com generators must never create scenarios that send messages without user consent
 - Virtual real estate class content must be reviewed for accuracy — AI can hallucinate regulations
+
+---
+
+## Pre-Build Readiness
+
+**Status:** NOT_READY
+**Adaptability Score:** 60/100
+**Last Updated:** 2026-03-27
+
+### Gate 1 — Implementation Detail
+- [ ] All sub-features are in server.js — none extracted to individual route files yet
+- [ ] Make.com generator output format (JSON schema for Make.com scenario import) not fully documented
+- [ ] Virtual real estate class curriculum structure not specified — what are the modules, what is the DB schema per student?
+- [ ] Trial system has `user_trials` table noted but schema not documented in this amendment
+- [ ] Billing/entitlements `project_entitlements` table exists (from Amendment 03) but how entitlements gate features per-request is not specified
+- [ ] Controversial approval system timeout (48h auto-reject) not yet implemented — non-negotiable but no code exists
+- [x] All sub-features are identified and located in server.js with line numbers
+- [x] Revenue model defined per sub-feature
+
+### Gate 2 — Competitor Landscape
+| Competitor | Strengths | Weaknesses | Our Edge |
+|---|---|---|---|
+| Make.com (itself) | Leading no-code automation platform, 1,500+ integrations | Requires user to build scenarios manually; steep learning curve; $9–$29/mo | We generate a complete importable Make.com scenario from a plain-English description — zero scenario-building required |
+| Zapier | Simpler than Make.com, 6,000+ integrations, huge user base | AI generation is limited to Zap suggestions, not full multi-step workflows | We generate complex multi-step scenarios with webhooks, conditionals, and CRM steps in one AI call |
+| CE Shop / Real Estate Express | Accredited real estate pre-licensing courses | Static curriculum, no AI coaching, no objection handling simulation | Our virtual class includes AI role-play for objection handling — interactive, not passive video-watching |
+| Greenhouse / Workable (recruiting) | Enterprise ATS, broad HR integrations | No real estate specialization, no AI screening for agent skills | Our agent recruitment is purpose-built for brokerages — screens for real estate aptitude, not generic job skills |
+
+### Gate 3 — Future Risks
+| Risk | Probability | Impact | Position |
+|---|---|---|---|
+| Make.com changes import schema format | Medium | Medium — generated scenarios fail to import | Mitigate: store the Make.com schema version in the generator config; test import monthly |
+| Virtual real estate class gives legally incorrect information (e.g., wrong contract law) | HIGH (AI hallucination) | HIGH — user acts on bad legal/licensing advice | Mitigate: add "consult your state's real estate commission" disclaimer to every regulatory claim; flag content for periodic human review |
+| Trial system is bypassed by API clients who omit auth headers | Medium | Medium — revenue leakage | Mitigate: entitlement check must be middleware, not inline in route handlers; apply globally |
+| Real estate training market consolidates around one platform (e.g., Keller Williams buys a competitor) | Low | Medium — reduces our addressable market for virtual class | Monitor: pivot to selling the training platform to brokerages as white-label |
+
+### Gate 4 — Adaptability Strategy
+The Make.com generator is a prompt string — if Make.com ships new module types, we update the prompt to include them. The curriculum for the virtual real estate class is AI-generated per session, so updating curriculum content requires a prompt update, not a content management system. The controversial approval system is generic by design — new approval use cases attach as new `action_type` values. Score: 60/100 — the conceptual flexibility is good but the score is held back by the near-total lack of extracted code; everything is still in server.js, making it hard to assess true adaptability of the implementation.
+
+### Gate 5 — How We Beat Them
+While Make.com requires hours of manual scenario building, LifeOS generates a complete, importable multi-step automation from a single English sentence — "when a new prospect fills out my site form, add them to my CRM, send a welcome text, and schedule a follow-up email in 3 days" becomes a working Make.com scenario in 30 seconds, with consent gates built in.

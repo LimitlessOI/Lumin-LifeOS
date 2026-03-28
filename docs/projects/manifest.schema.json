@@ -160,6 +160,69 @@
           "resolved": { "type": "boolean", "default": false }
         }
       }
+    },
+    "build_ready": {
+      "type": "boolean",
+      "description": "Whether this project is ready for autonomous builder runs. Mirrors the DB column.",
+      "default": false
+    },
+    "market_sensitive": {
+      "type": "boolean",
+      "description": "When true, Trend Scout lens runs on every segment instead of only tier_2+.",
+      "default": false
+    },
+    "council_persona": {
+      "type": "string",
+      "enum": ["edison", "tesla", "musk", "jobs"],
+      "description": "Which Great Minds persona to use for the council review lens.",
+      "default": "musk"
+    },
+    "segment_schema_version": {
+      "type": "string",
+      "description": "Version of the segment spec schema this manifest was written against.",
+      "default": "1.0"
+    },
+    "segments": {
+      "type": "array",
+      "description": "Ordered build plan. Each segment is an execution contract. Builder skips any segment missing exact_outcome or allowed_files.",
+      "items": {
+        "type": "object",
+        "required": ["title", "stability_class", "review_tier"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string", "description": "Segment title, matches project_segments.title" },
+          "stability_class": {
+            "type": "string",
+            "enum": ["safe", "needs-review", "high-risk"],
+            "description": "Builder only auto-executes safe segments."
+          },
+          "review_tier": {
+            "type": "string",
+            "enum": ["tier_0", "tier_1", "tier_2", "tier_3"],
+            "description": "tier_0=skip council, tier_1=consequences+Adam, tier_2=full, tier_3=full+human"
+          },
+          "allowed_files": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Exact file paths the builder may write. Required for builder to proceed."
+          },
+          "exact_outcome": {
+            "type": "string",
+            "description": "What done looks like. Injected into the builder prompt as the success criterion. Required."
+          },
+          "required_checks": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Shell commands that must pass after build. Default: [\"node --check <file>\"]",
+            "default": ["node --check"]
+          },
+          "rollback_note": {
+            "type": "string",
+            "description": "How to undo this segment if it needs to be reverted."
+          },
+          "estimated_hours": { "type": "number" }
+        }
+      }
     }
   }
 }

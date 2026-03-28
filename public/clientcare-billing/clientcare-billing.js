@@ -1487,7 +1487,9 @@
       const query = new URLSearchParams(filters).toString();
       const packagingPath = `/api/v1/clientcare-billing/packaging/overview${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
       const validationHistoryPath = `/api/v1/clientcare-billing/packaging/validation-history${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
-      const [dashboard, readiness, template, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidationHistory] = await Promise.all([
+
+      const endpointNames = ['dashboard','readiness','template','claims','actions','reconciliation','intelligence','payerPlaybooks','payerRules','eraInsights','patientArPolicy','patientArEscalation','opsOverview','underpayments','appeals','packagingOverview','packagingValidationHistory'];
+      const settled = await Promise.allSettled([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
         api('/api/v1/clientcare-billing/claims/import-template'),
@@ -1506,21 +1508,51 @@
         api(packagingPath),
         api(validationHistoryPath),
       ]);
-      lastReimbursementIntelligence = intelligence.intelligence || null;
+
+      const failures = settled.map((r, i) => r.status === 'rejected' ? `${endpointNames[i]}: ${r.reason?.message}` : null).filter(Boolean);
+      if (failures.length) console.warn('[ClientCare] Partial load — failed endpoints:', failures);
+
+      const val = (i, fallback = {}) => settled[i].status === 'fulfilled' ? settled[i].value : fallback;
+      const dashboard = val(0);
+      const readiness = val(1);
+      const template = val(2);
+      const claims = val(3);
+      const actions = val(4);
+      const reconciliation = val(5);
+      const intelligence = val(6);
+      const payerPlaybooks = val(7, null);
+      const payerRules = val(8, null);
+      const eraInsights = val(9, null);
+      const patientArPolicy = val(10, null);
+      const patientArEscalation = val(11, null);
+      const opsOverview = val(12);
+      const underpayments = val(13, null);
+      const appeals = val(14, null);
+      const packagingOverview = val(15, null);
+      const packagingValidationHistory = val(16, null);
+
+      lastReimbursementIntelligence = intelligence?.intelligence || null;
       lastPayerPlaybooks = payerPlaybooks || null;
       lastPayerRules = payerRules || null;
       lastEraInsights = eraInsights || null;
       lastPatientArPolicy = patientArPolicy || null;
       lastPatientArEscalation = patientArEscalation || null;
-      lastOpsOverview = opsOverview.overview || null;
+      lastOpsOverview = opsOverview?.overview || null;
       lastUnderpayments = underpayments || null;
       lastAppeals = appeals || null;
       lastPackagingOverview = packagingOverview || null;
       lastPackagingValidationHistory = packagingValidationHistory || null;
       if (!selectedTenantId && packagingOverview?.overview?.summary?.active_tenant_id) setSelectedTenantId(packagingOverview.overview.summary.active_tenant_id);
-      render(root, dashboard.dashboard, readiness.readiness, template.fields || [], claims.claims || [], actions.actions || [], reconciliation.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastPayerRules, lastEraInsights, lastPatientArPolicy, lastPatientArEscalation, lastOpsOverview, lastUnderpayments, lastAppeals, lastPackagingOverview, lastPackagingValidation, lastPackagingValidationHistory);
+      render(root, dashboard?.dashboard, readiness?.readiness, template?.fields || [], claims?.claims || [], actions?.actions || [], reconciliation?.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastPayerRules, lastEraInsights, lastPatientArPolicy, lastPatientArEscalation, lastOpsOverview, lastUnderpayments, lastAppeals, lastPackagingOverview, lastPackagingValidation, lastPackagingValidationHistory);
+      if (failures.length) {
+        const banner = document.createElement('div');
+        banner.className = 'card';
+        banner.style.cssText = 'background:#4a1f28;border-color:#ef476f;margin-bottom:16px';
+        banner.innerHTML = `<strong style="color:#ff9db0">⚠ ${failures.length} endpoint(s) failed to load</strong><ul style="margin:8px 0 0 18px;font-size:12px;color:#ff9db0">${failures.map((f) => `<li>${escapeHtml(f)}</li>`).join('')}</ul>`;
+        root.insertBefore(banner, root.firstChild);
+      }
       await ensureAssistantSession();
-      if (!options.skipAutoFullQueue && getApiKey() && readiness.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
+      if (!options.skipAutoFullQueue && getApiKey() && readiness?.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
         browserBacklogSummary({ silent: true }).finally(() => {
           fullQueueLoading = false;

@@ -76,3 +76,44 @@ Deep integration with BoldTrail (real estate CRM platform). Automates lead follo
 - Agent tone/brand must be preserved — never override agent's voice with generic AI copy
 - Lead data is private to each agent — never expose one agent's leads to another
 - Comply with real estate commission rules — no AI can solicit clients without agent oversight
+
+---
+
+## Pre-Build Readiness
+
+**Status:** BUILD_READY (core CRM + email automation — gates 1-5 complete)
+**Adaptability Score:** 78/100
+**Council Persona:** jobs (is this beautiful and inevitable? would an agent love it or just use it?)
+**Last Updated:** 2026-03-27
+
+### Gate 1 — Implementation Detail
+- [x] Lead scoring, email drafts, showing follow-ups have specific segment descriptions
+- [x] DB schema complete (boldtrail_agents, boldtrail_showings, boldtrail_email_drafts)
+- [x] Agent approval gate defined — no auto-send without review
+- [ ] Lead scoring algorithm needs explicit scoring rubric in segment description before builder touches it
+
+### Gate 2 — Competitor Landscape
+| Competitor | Strengths | Weaknesses | Our Edge |
+|---|---|---|---|
+| BoldTrail (kvCORE) | Industry standard, huge RE market share | Generic AI, no agent voice preservation, expensive | AI learns each agent's tone — drafts sound like them, not like a chatbot |
+| Follow Up Boss | Clean UI, good pipeline management | No AI drafting, no showing automation | We draft the email, agent approves in one tap — FUB requires writing every email |
+| Sierra Interactive | SEO-focused, lead gen built in | Automation is rule-based, not AI | Our AI reads conversation history and crafts contextually relevant follow-ups |
+| Lofty (Chime) | All-in-one, affordable | AI is surface-level, no voice matching | We tune to agent personality and RE niche (luxury vs first-time buyers vs investors) |
+| LionDesk | Affordable, good drip campaigns | No AI, no voice, 2000s UX | We generate drip content dynamically from actual conversation — not canned sequences |
+
+### Gate 3 — Future Risks
+| Risk | Probability | Impact | Position |
+|---|---|---|---|
+| BoldTrail/kvCORE ships GPT-4o email drafting | High (12 months) | Medium | Our edge is voice preservation + tone learning, not just GPT — they'll have generic |
+| Zillow Flex eats agent lead supply | Medium | High | We make agents dramatically more responsive — increases conversion on whatever leads exist |
+| AI email spam regulations tighten | Medium | Medium | All drafts require human approval — we're already compliant by design |
+| Agent churns, their data locked in our system | Low | Medium | Data export built into agent portal from day one |
+
+### Gate 4 — Adaptability Strategy
+New CRM platforms plug into the same agent abstraction layer — add an API adapter per platform without touching email drafting or lead scoring. Score: 78/100.
+- New CRM API: add `services/[platform]-sync.js` adapter, no other changes
+- New AI email providers: council failover handles this automatically
+- If competitor ships voice matching: we add a "calibration session" feature where agent rates 10 drafts to refine their profile
+
+### Gate 5 — How We Beat Them
+Every competing CRM sends the same sequence to every lead; we read the actual conversation history, identify the specific objection or interest signal, and draft a reply in the agent's exact voice that addresses it directly — turning cold leads warm without the agent lifting a finger.

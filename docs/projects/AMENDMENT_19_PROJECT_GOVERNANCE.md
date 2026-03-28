@@ -5,7 +5,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-27 (governance spec upgrade) |
+| **Last Updated** | 2026-03-28 (builder-supervisor-routes, builder-council-review, project-governance-routes staged with model performance + council upgrades) |
 | **Verification Command** | `node scripts/verify-project.mjs --project project_governance` |
 | **Manifest** | `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json` |
 

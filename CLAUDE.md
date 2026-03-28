@@ -208,15 +208,20 @@ If no target file exists, create it. Do not use server.js as a fallback.
 
 ---
 
-## SSOT MAINTENANCE — MANDATORY BEFORE EVERY TASK IS DONE
+## SSOT MAINTENANCE — ATOMIC, PER-FILE, NON-NEGOTIABLE
 
 Every source file has a `@ssot` tag in its JSDoc header pointing to its amendment.
 
-**Rule: Before marking any task complete, you MUST:**
-1. Check every file you created or modified for a `@ssot` tag
-2. Open that amendment file and update its `Last Updated` date and relevant sections
-3. If you created a new file with no `@ssot` tag — add one pointing to the correct amendment (or create a new amendment if this is a new domain)
-4. If no amendment exists for what you built — create one using the format in `docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md` as a template
+**Rule: IMMEDIATELY after writing or editing each file — before moving to the next file — you MUST:**
+1. Check that the file has a `@ssot` tag. If missing, add it now.
+2. Open the amendment it points to and update `Last Updated` date + the relevant sections (Current State, Build Plan checked-off items, Change Receipts row).
+3. Do NOT batch this up. Do NOT do it "at the end of the session." Do it file-by-file, in order.
+4. If you created a new file with no `@ssot` tag — add one pointing to the correct amendment (or create a new amendment if this is a new domain).
+5. If no amendment exists for what you built — create one using the format in `docs/projects/AMENDMENT_11_BOLDTRAIL_REALESTATE.md` as a template.
+
+**This is enforced by the pre-commit hook** — commits are blocked if any staged .js file's amendment was not also updated in the same diff.
+
+**Why this rule exists:** In long sessions, batch SSOT updates at the end get forgotten or incomplete. The only reliable pattern is atomic: one file written → one amendment updated → then move on.
 
 **@ssot tag format** (goes in the JSDoc header of every .js file):
 ```

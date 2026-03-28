@@ -1,6 +1,7 @@
 /**
  * Autonomy scheduler: registers all scheduleAutonomyLoop / scheduleAutonomyOnce tasks.
  * getDeps() returns current refs (pool, crmSequenceRunner, logMonitor, etc.) so server.js only wires once at startup.
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import path from "path";
 import { pathToFileURL } from "url";
@@ -257,6 +258,70 @@ export function startAutonomySchedulers(scheduleAutonomyLoop, scheduleAutonomyOn
       }
     }, 60 * 60 * 1000);
   }
+
+  // ── Digital Twin Auto-Ingest (every 30min) ───────────────────────────────────
+  // Every conversation Adam has with the system is automatically ingested into
+  // his digital twin. No manual logging. The twin grows forever.
+  // Profile is rebuilt automatically every REBUILD_THRESHOLD (25) new decisions.
+  scheduleAutonomyLoop("TWIN_INGEST", 30 * 60 * 1000, async () => {
+    const { pool, callCouncilWithFailover } = d();
+    if (!pool) return;
+
+    try {
+      const { createTwinAutoIngest } = await import('./twin-auto-ingest.js');
+      const callAI = callCouncilWithFailover
+        ? (prompt) => callCouncilWithFailover(prompt, 'claude')
+        : null;
+      const ingest = createTwinAutoIngest({ pool, callAI });
+      const result = await ingest.run();
+      if (result.ingested > 0) {
+        console.log(`🧠 [TWIN] Ingested ${result.ingested} messages${result.rebuilt ? ' | Profile rebuilt' : ''}`);
+      }
+    } catch (err) {
+      console.warn('[TWIN] Ingest error (non-fatal):', err.message);
+    }
+  }, 2 * 60 * 1000); // first run 2min after boot
+
+  // ── Builder Supervisor (every 6h, first run after 15min) ─────────────────────
+  // Spawns the headless multi-agent builder as a child process.
+  // Runs 4-lens council review first, then Claude Code per safe segment.
+  // Only fires if build_ready=TRUE projects exist — the script self-checks.
+  const BUILDER_INTERVAL = parseInt(process.env.BUILDER_INTERVAL_MS || String(6 * 60 * 60 * 1000), 10);
+  scheduleAutonomyLoop("BUILDER_SUPERVISOR", BUILDER_INTERVAL, async () => {
+    const { projectRoot, pool } = d();
+    if (!projectRoot || !pool) return;
+
+    // Quick pre-check: any build_ready projects with safe pending segments?
+    try {
+      const { rows: [{ count }] } = await pool.query(`
+        SELECT COUNT(*) FROM project_segments ps
+        JOIN projects p ON ps.project_id = p.id
+        WHERE ps.status = 'pending' AND ps.stability_class = 'safe'
+          AND p.status = 'active' AND p.build_ready = TRUE
+      `);
+      if (parseInt(count, 10) === 0) {
+        console.log('⏭️  [BUILDER] No build_ready safe segments — skipping run');
+        return;
+      }
+    } catch (e) {
+      console.warn('[BUILDER] Pre-check failed:', e.message);
+      return;
+    }
+
+    console.log('🤖 [BUILDER] Starting supervised build run...');
+    const { spawn } = await import('node:child_process');
+    const supervisorScript = path.join(projectRoot, 'scripts', 'autonomy', 'builder-supervisor.js');
+    const child = spawn(process.execPath, [supervisorScript], {
+      cwd: projectRoot,
+      env: process.env,
+      stdio: 'inherit',
+      detached: false,
+    });
+    await new Promise(resolve => child.on('close', (code) => {
+      console.log(`🤖 [BUILDER] Run complete (exit ${code})`);
+      resolve();
+    }));
+  }, 15 * 60 * 1000); // first run 15min after boot
 
   console.log("✅ [AUTONOMY] All schedulers started");
 }

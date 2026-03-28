@@ -80,3 +80,41 @@ This IS revenue infrastructure. Without it:
 - Financial ledger is append-only — no deletes, only reversal entries
 - All Stripe webhook events must be idempotent (check `event_id` before processing)
 - Human approval required for any transaction > $100 (North Star Article 3.1)
+
+---
+
+## Pre-Build Readiness
+
+**Status:** NOT_READY
+**Adaptability Score:** 68/100
+**Last Updated:** 2026-03-27
+
+### Gate 1 — Implementation Detail
+- [x] DB schema documented — `financial_ledger`, `daily_spend`, `roi_tracker`, `stripe_webhook_events` all defined
+- [x] API surface defined — four endpoints documented
+- [ ] ROI tracker persistence not yet specified — currently in-memory, no migration written for DB-backed version
+- [ ] Income drone scheduler not extracted — `DISABLE_INCOME_DRONES = true` in server.js with no documented re-enable path
+- [ ] Revenue goal tracking ($500/day target) has no schema or endpoint defined yet
+- [ ] Daily revenue report (SMS/email) not yet documented to implementation level
+
+### Gate 2 — Competitor Landscape
+| Competitor | Strengths | Weaknesses | Our Edge |
+|---|---|---|---|
+| QuickBooks + Stripe | Trusted, accountant-approved, broad integrations | Zero AI cost awareness — no concept of "ROI per task" or "AI spend vs revenue" | We track ROI per AI task, not just revenue/expense; we gate AI spend based on revenue position |
+| Pilot.com | CFO-grade reporting, human bookkeepers | No real-time AI cost tracking, no autonomous spend gating, expensive (~$599/mo) | We are fully automated and real-time; we ship the ledger as an operational control layer, not a reporting tool |
+| Stripe Revenue Recognition | Accurate GAAP revenue reporting | Only Stripe data — blind to AI costs, ROI, or multi-source revenue | Our ledger is multi-source (Stripe + manual + affiliate + cost savings) in one view |
+| Baremetrics | Beautiful SaaS metrics dashboards | Stripe-only, no expense side, no AI cost model | We integrate revenue + AI cost + per-task ROI — the full picture for an AI-powered business |
+
+### Gate 3 — Future Risks
+| Risk | Probability | Impact | Position |
+|---|---|---|---|
+| Stripe changes webhook payload format | Medium | Medium — idempotency checks break | Mitigate: version-check webhook events; test against Stripe CLI |
+| Income drones run autonomously and generate revenue that triggers tax events without proper categorization | Medium | High — tax liability, compliance gap | Mitigate: all ledger entries require `category` tag before enabling drones; quarterly review gate |
+| ROI tracker in-memory resets cause AI overspend during server restarts | HIGH (confirmed bug) | High — could burn budget silently | Mitigate: persisting ROI tracker to DB is Gate 1 requirement before re-enabling any spend gating |
+| AI cost per call drops 90% industry-wide (commoditization) | Medium | Low — reduces the importance of cost gating, but our savings product still captures margin | Accept: pivot savings product to quality routing rather than cost savings alone |
+
+### Gate 4 — Adaptability Strategy
+The financial ledger is schema-defined and append-only, which means adding new revenue streams is a new entry type, not a code change. Adding new AI providers to cost tracking requires only a new row in `daily_spend` — no schema change. If a competitor offers multi-currency ROI tracking, we can add a `currency` column and FX rate lookup service without touching the ledger logic. Score: 68/100 — the append-only ledger design is excellent for adaptability, but the ROI tracker being in-memory today is a structural gap that reduces the score until migrated.
+
+### Gate 5 — How We Beat Them
+Every other financial tool tracks what you earned and spent after the fact; LifeOS tracks ROI per AI task in real time and uses that data to gate further AI spending — so the system pays for itself or it stops spending, automatically.

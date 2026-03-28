@@ -174,3 +174,41 @@ This is the next code task — not yet built.
 - Site build must not include competitor brand names or misleading claims
 - All generated testimonials must be clearly labeled as illustrative examples until replaced with real ones
 - POS recommendations must disclose affiliate relationship in client-facing materials
+
+---
+
+## Pre-Build Readiness
+
+**Status:** BUILD_READY
+**Adaptability Score:** 82/100
+**Last Updated:** 2026-03-27
+
+### Gate 1 — Implementation Detail
+- [x] All segments have specific-enough descriptions for a headless AI — 14-section click funnel structure is fully specified
+- [x] DB schema documented and confirmed in Neon production (`prospect_sites`, `email_suppressions`, `outreach_log`)
+- [x] API surface fully defined — 9 endpoints with methods, paths, and purposes
+- [x] Generated site tech stack specified (Tailwind CDN, Alpine.js, Schema.org JSON-LD)
+- [x] POS affiliate env var names specified (`AFFILIATE_JANE_APP_URL`, etc.)
+- [ ] Auto follow-up cron (day 3, day 7) not yet built — documented in NEXT ACTIONS Step 5
+
+### Gate 2 — Competitor Landscape
+| Competitor | Strengths | Weaknesses | Our Edge |
+|---|---|---|---|
+| Duda | Beautiful templates, white-label for agencies, fast | Manual process — agency still has to build the site; no cold outreach built in | We find the prospect, build their site, and email them the link in one automated pipeline |
+| Squarespace | Consumer brand trust, easy editing | No outreach capability, no AI generation, no POS affiliate integration | We generate a site from their existing URL in 2 minutes and pitch it via cold email automatically |
+| Wix ADI | AI-assisted site building (Wix ADI) | Requires user to sign up first — you can't build their site without them | We build a preview before they ever know we exist — the site is the sales pitch |
+| GoDaddy Website Builder | Low price, hosting bundle | Generic output, zero personalization, no cold prospecting workflow | We scrape the prospect's existing site and generate a domain-specific click funnel, not a template |
+
+### Gate 3 — Future Risks
+| Risk | Probability | Impact | Position |
+|---|---|---|---|
+| Postmark/email provider flags our cold outreach as spam at scale | HIGH | High — kills the pipeline | Mitigate: suppression list, 3-email cap per 30 days, warm sending domain, SPF/DKIM required before launch |
+| AI-generated sites become legally problematic (fake testimonials = FTC violation) | Medium | High — fine/liability | Mitigate: testimonials already flagged as "illustrative" in non-negotiables; add visible disclaimer in generated HTML |
+| Puppeteer scraping breaks on JS-heavy sites (SPA) | HIGH | Medium — fallback to AI-only generation already exists | Accept: AI-only path produces acceptable output; document fallback in ops runbook |
+| Wellness businesses get their own AI site tools (e.g., Jane App ships AI site builder) | Medium | Medium — reduces our differentiation vs the niche | Monitor: our outreach pipeline is the moat, not the site quality alone; pivot to outreach-as-a-service if needed |
+
+### Gate 4 — Adaptability Strategy
+The site generation template is a string in `services/site-builder.js` — if a competitor ships a better section layout, we update one prompt string. The POS partner list reads from env vars, so adding a new affiliate partner requires zero code changes. If we need to support a new email provider (e.g., AWS SES), only `core/notification-service.js` changes. If Puppeteer scraping needs to be swapped for a third-party scraper API, only the scraping function changes — the rest of the pipeline is unaffected. Score: 82/100.
+
+### Gate 5 — How We Beat Them
+Every website agency requires the prospect to raise their hand first; LifeOS inverts the funnel — we identify businesses with weak sites, build their dream site automatically, and put the preview link in their inbox before they ever asked for it, turning cold outreach into a product demo.

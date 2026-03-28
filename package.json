@@ -29,6 +29,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@anthropic-ai/claude-code": "^2.1.86",
     "acorn": "^8.15.0",
     "bullmq": "^5.71.0",
     "commander": "^11.1.0",
