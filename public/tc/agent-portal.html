@@ -42,7 +42,23 @@
     .tx-card[data-state="red"]::before { background:#da4453; }
     .tx-card-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
     .tx-address { margin:0; font-size:20px; line-height:1.2; }
+    .tx-address-block { margin:0; }
+    .tx-address-row { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:0; }
+    .tx-street-num { font-size:30px; font-weight:800; color:#e8eeff; letter-spacing:-0.03em; line-height:1; font-variant-numeric: tabular-nums; }
+    .tx-street-name { font-size:19px; font-weight:650; line-height:1.25; color:#f1f5ff; max-width: min(100%, 14em); }
+    .tx-city-line { color:#98a5c3; font-size:13px; margin-top:6px; line-height:1.35; }
     .tx-subline { color:#98a5c3; font-size:13px; margin-top:6px; }
+    .tx-chips { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+    .tx-chip { font-size:11px; font-weight:600; padding:4px 9px; border-radius:999px; background:#151d33; border:1px solid #2d3b5f; color:#c8d4f0; text-transform:uppercase; letter-spacing:.04em; }
+    .tx-chip.warn { border-color:#8a6a24; color:#ffd666; background:#241c0a; }
+    .tx-chip.bad { border-color:#8b3140; color:#ff9db0; background:#240f14; }
+    .tx-contact-line { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+    .tx-contact-sep { color:#5a698f; font-weight:500; }
+    .hero-addr { margin:0; font-size:26px; font-weight:700; line-height:1.2; }
+    .hero-addr-row { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+    .hero-addr-num { font-size:32px; font-weight:800; letter-spacing:-0.03em; color:#e8eeff; font-variant-numeric: tabular-nums; }
+    .hero-addr-street { font-size:22px; font-weight:650; color:#f1f5ff; }
+    .hero-addr-city { color:#98a5c3; font-size:14px; margin-top:6px; font-weight:500; }
     .tx-ring { flex:0 0 auto; width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; text-align:center; padding:6px; background:#0b1020; border:4px solid #2d6cdf; color:#cbd5ff; }
     .tx-ring.green { border-color:#1ea76c; color:#7ef0b8; }
     .tx-ring.yellow { border-color:#e2a82f; color:#ffd666; }
@@ -50,6 +66,7 @@
     .tx-contact { margin:14px 0 0; display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
     .tx-contact-name { font-size:16px; font-weight:600; }
     .tx-contact-phone { color:#cbd5ff; font-size:14px; text-decoration:none; }
+    .tx-contact-phone.dim { color:#5a698f; cursor:default; pointer-events:none; }
     .tx-meta-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
     .tx-meta-item span { display:block; color:#98a5c3; font-size:12px; margin-bottom:4px; }
     .tx-meta-item strong { display:block; font-size:14px; line-height:1.35; }

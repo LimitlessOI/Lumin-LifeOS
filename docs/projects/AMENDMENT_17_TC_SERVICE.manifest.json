@@ -9,7 +9,7 @@
   "phase": "first-live-intake",
   "next_task": "Use the intake workspace visual transaction board to open the 6453 Mahogany Peak file, verify the real Adam mailbox credentials are working, then run the first real SRPD/photo package search and send from the portal.",
   "stability_class": "needs-review",
-  "current_focus": "TC intake workspace now uses a red/yellow/green transaction board, click-through action routing, and portal-first SRPD/photo package sending, and is waiting on live Adam mailbox plus GLVAR/eXp Okta execution to complete the first real file.",
+  "current_focus": "TC intake workspace cards now emphasize street number + street name + city line, inline client/phone, and chips for sign-offs/alerts/missing docs; detail hero matches. Next: live mailbox + Okta/GLVAR execution and SkySlope filing on real files.",
   "owned_files": [
     "routes/tc-routes.js",
     "routes/mls-routes.js",

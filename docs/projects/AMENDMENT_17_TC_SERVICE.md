@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 (portal ring semantics + approval counts from DB + hover/approval editor) |
+| **Last Updated** | 2026-03-30 (workspace cards: street number/name split, chips, inline client+phone; detail hero address) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -819,6 +819,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | Workspace transaction cards: split **street number** + **street name** + city line, **client name · phone** on one line, **chips** for pending sign-offs / operator alerts / missing docs; transaction detail **hero** uses the same address layout; legend text updated | Match “see the house number and street at a glance” and surface approval/alert/doc gaps without hovering | ✅ | ✅ | pending |
 | 2026-03-30 | Replaced the flat active-transactions table with a visual card board that shows address, client, phone, stage, and a red/yellow/green action ring, added hover summaries for what is happening on each file, added visible due-diligence / close-date countdown banners plus a who-needs-to-act todo list, added a detail-page action board that jumps directly to approvals, alerts, or document review, and added a one-click 'deal in morning' alert snooze path | Make the portal readable at a glance, keep time-sensitive contingency windows visible, show exactly who needs to act on each file, make clicking a file land on the exact work surface instead of a generic detail dump, and let Adam defer an escalation until morning without losing the follow-up | ✅ | ✅ | pending |
 | 2026-03-30 | Added urgent email-attachment package delivery plus a dedicated intake-workspace card, corrected the workspace defaults so TC/work email fields prefer the real transaction mailbox instead of the LifeOS system mailbox when Adam inbox credentials are present, replaced the raw readiness dump with a click-to-fix missing-items panel that only surfaces actionable setup gaps, auto-filled buyer-agent recipient data from the selected transaction, added an SRPD preset, and filtered non-TC queue noise out of the intake queue | Unblock real-world cases like SRPD/photo delivery without waiting for terminal commands or manual recombination outside the system, stop steering TC setup toward the wrong inbox, make setup actionable instead of exposing low-signal env noise, and keep the portal focused on actual TC work instead of unrelated alert mail | ✅ | ✅ | pending |
 | 2026-03-30 | Added alias-aware credential resolution for TC/system mailboxes and browser logins, so the runtime can consume the current Railway vars without forcing manual renames first | Unblock production use of the existing `TC_IMAP_APP_Adam_PASSWORD`, `SystemEmail_IMAP_APP_LifeOS_PASSWORD`, `GLVAR_mls_*`, and `exp_okta_*` envs while preserving canonical env support | ✅ | ✅ | pending |

@@ -496,11 +496,74 @@
     return next.toISOString();
   }
 
-  function formatAddressHeadline(address) {
-    const text = String(address || '').trim();
-    if (!text) return 'Address pending';
-    const [street] = text.split(',');
-    return street || text;
+  function parseAddressDisplay(raw) {
+    const text = String(raw || '').trim();
+    if (!text) {
+      return { number: '', street: '', cityLine: '', hasParts: false };
+    }
+    const segments = text.split(',').map((s) => s.trim()).filter(Boolean);
+    const firstSegment = segments[0] || '';
+    const cityLine = segments.slice(1).join(', ');
+    const m = firstSegment.match(/^(\d+[A-Za-z\-]*)\s+(.+)$/);
+    if (m) {
+      return { number: m[1], street: m[2], cityLine, hasParts: true };
+    }
+    return { number: '', street: firstSegment || text, cityLine, hasParts: false };
+  }
+
+  function renderAddressBlock(address) {
+    const p = parseAddressDisplay(address);
+    if (p.hasParts && p.number) {
+      return `
+        <div class="tx-address-block">
+          <div class="tx-address-row">
+            <span class="tx-street-num">${escapeHtml(p.number)}</span>
+            <span class="tx-street-name">${escapeHtml(p.street)}</span>
+          </div>
+          ${p.cityLine ? `<div class="tx-city-line">${escapeHtml(p.cityLine)}</div>` : ''}
+        </div>`;
+    }
+    const head = p.street || 'Address pending';
+    return `
+      <div class="tx-address-block">
+        <h3 class="tx-address">${escapeHtml(head)}</h3>
+        ${p.cityLine ? `<div class="tx-city-line">${escapeHtml(p.cityLine)}</div>` : ''}
+      </div>`;
+  }
+
+  function renderHeroAddress(address) {
+    const p = parseAddressDisplay(address);
+    if (p.hasParts && p.number) {
+      return `
+        <h1 class="hero-addr">
+          <span class="hero-addr-row">
+            <span class="hero-addr-num">${escapeHtml(p.number)}</span>
+            <span class="hero-addr-street">${escapeHtml(p.street)}</span>
+          </span>
+          ${p.cityLine ? `<div class="hero-addr-city">${escapeHtml(p.cityLine)}</div>` : ''}
+        </h1>`;
+    }
+    const head = p.street || address || 'Transaction';
+    return `
+      <h1 class="hero-addr">
+        ${escapeHtml(head)}
+        ${p.cityLine ? `<div class="hero-addr-city">${escapeHtml(p.cityLine)}</div>` : ''}
+      </h1>`;
+  }
+
+  function renderWorkspaceCardChips(item, state) {
+    const chips = [];
+    const pa = Number(item.pending_approvals || 0);
+    const oa = Number(item.open_operator_alerts || 0);
+    const md = Number(item.missing_doc_count || 0);
+    if (pa > 0) chips.push(`<span class="tx-chip bad">${pa} sign-off</span>`);
+    if (oa > 0) chips.push(`<span class="tx-chip bad">${oa} alert${oa === 1 ? '' : 's'}</span>`);
+    if (md > 0) chips.push(`<span class="tx-chip warn">${md} missing doc${md === 1 ? '' : 's'}</span>`);
+    if (state.state === 'yellow' && !chips.length) {
+      chips.push('<span class="tx-chip warn">Watch</span>');
+    }
+    if (!chips.length) return '';
+    return `<div class="tx-chips">${chips.join('')}</div>`;
   }
 
   function deriveWorkspaceCardState(transaction) {
@@ -587,7 +650,7 @@
       const nearestContingency = (item.contingencies || []).find((contingency) => contingency.daysRemaining != null);
       const phoneMarkup = primaryPhone
         ? `<a class="tx-contact-phone" href="tel:${escapeHtml(String(primaryPhone).replace(/[^\d+]/g, ''))}">${escapeHtml(formatPhone(primaryPhone))}</a>`
-        : `<span class="tx-contact-phone">${escapeHtml(formatPhone(primaryPhone))}</span>`;
+        : `<span class="tx-contact-phone dim">${escapeHtml(formatPhone(primaryPhone))}</span>`;
       return `
         <div
           class="tx-card"
@@ -601,17 +664,20 @@
         >
           <div class="tx-card-head">
             <div>
-              <h3 class="tx-address">${escapeHtml(formatAddressHeadline(item.address))}</h3>
-              <div class="tx-subline">${escapeHtml(item.address || '')}</div>
+              ${renderAddressBlock(item.address)}
+              ${renderWorkspaceCardChips(item, state)}
             </div>
             <div class="tx-ring ${escapeHtml(state.state)}">${escapeHtml(state.ringLabel)}</div>
           </div>
           <div class="tx-contact">
-            <div>
-              <div class="tx-contact-name">${escapeHtml(client?.name || 'Client name missing')}</div>
+            <div style="flex:1;min-width:0">
+              <div class="tx-contact-line">
+                <span class="tx-contact-name">${escapeHtml(client?.name || 'Client name missing')}</span>
+                <span class="tx-contact-sep" aria-hidden="true">·</span>
+                ${phoneMarkup}
+              </div>
               <div class="tx-subline">${escapeHtml(counterparty?.name ? `Other side: ${counterparty.name}` : 'Counterparty not on file')}</div>
             </div>
-            ${phoneMarkup}
           </div>
           <div class="tx-meta-grid">
             <div class="tx-meta-item"><span>Stage</span><strong>${escapeHtml(stage)}</strong></div>
@@ -1064,7 +1130,7 @@
 
       <div class="card">
         <h2>Active Transactions</h2>
-        <p><strong>Red ring</strong> = you (TC) must act (approval, alert, or internal next step). <strong>Yellow</strong> = watch—other party, missing items elsewhere, or automation. <strong>Green</strong> = no TC action right now. Hover a card for the quick brief; click to open the right section.</p>
+        <p><strong>Red ring</strong> = you (TC) must act (approval, alert, or internal next step). <strong>Yellow</strong> = watch—other party, missing items, or non-blocking follow-ups. <strong>Green</strong> = nothing queued for you. Cards show street number, street name, city line, client and phone on one line, and chips for sign-offs/alerts/missing docs. Hover for the brief; click to open the file on approvals, alerts, or status.</p>
         ${renderTransactionCards(transactions)}
       </div>
 
@@ -1561,7 +1627,7 @@
       <div class="hero">
         <div>
           <div class="eyebrow">${isClient ? 'Client Portal' : 'Agent Portal'}</div>
-          <h1>${escapeHtml(tx.address || 'Transaction')}</h1>
+          ${renderHeroAddress(tx.address)}
           <p>${escapeHtml(tx.status || '')} ${tx.agent_role ? '· ' + escapeHtml(tx.agent_role) : ''}</p>
         </div>
         <div class="hero-actions">
