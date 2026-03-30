@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TC Voice Assistant</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; margin: 0; background:#0b1020; color:#edf2f7; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 24px; }
+    .eyebrow { color:#8aa4ff; text-transform:uppercase; letter-spacing:.08em; font-size:12px; }
+    h1 { margin:0 0 8px; font-size:22px; }
+    .sub { color:#98a5c3; margin:0 0 20px; font-size:14px; line-height:1.45; }
+    .card { background:#131a2e; border:1px solid #27304a; border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.18); margin-bottom:16px; }
+    label { display:block; color:#98a5c3; font-size:12px; margin-bottom:6px; }
+    input, textarea { width:100%; box-sizing:border-box; background:#0b1020; border:1px solid #27304a; color:#edf2f7; border-radius:10px; padding:10px 12px; font:inherit; }
+    textarea { min-height:100px; resize:vertical; }
+    .row-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+    button { background:#3559d8; color:#fff; border:0; border-radius:10px; padding:8px 12px; cursor:pointer; font:inherit; }
+    button.ghost { background:#27304a; color:#cbd5ff; }
+    button:disabled { opacity:.6; cursor:wait; }
+    button.listening { background:#1ea76c; }
+    .chat-log { max-height:320px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; padding:4px 2px; }
+    .bubble { border-radius:12px; padding:12px 14px; line-height:1.45; font-size:14px; white-space:pre-wrap; }
+    .bubble.user { align-self:flex-end; background:#2a3f7a; border:1px solid #425784; }
+    .bubble.asst { align-self:stretch; background:#101726; border:1px solid #27304a; }
+    .bubble .meta { font-size:11px; color:#98a5c3; margin-top:8px; }
+    .checks { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-top:8px; }
+    .checks label { display:flex; align-items:center; gap:8px; margin:0; cursor:pointer; color:#c8d4f0; font-size:13px; }
+    .checks input[type="checkbox"] { width:auto; }
+    #voice-status { font-size:12px; color:#98a5c3; min-height:18px; margin-top:6px; }
+    a.back { color:#8aa4ff; text-decoration:none; font-size:14px; }
+    a.back:hover { text-decoration:underline; }
+    code { color:#cbd5ff; font-size:13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow">Transaction Coordinator</p>
+    <h1>Voice assistant</h1>
+    <p class="sub">Ask about readiness, list files, workspace, or a file ID. Use the mic to dictate, or turn on <strong>Dialog mode</strong> for spoken replies and back-and-forth (Chrome / Edge).</p>
+
+    <div class="card">
+      <label for="api-key">Command key</label>
+      <input id="api-key" type="password" autocomplete="off" placeholder="Same key as TC portal (x-api-key)">
+      <div class="row-actions">
+        <button type="button" id="save-key">Save key</button>
+        <a class="back" href="/tc">← TC portal</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <label for="default-tx">Default file ID (optional)</label>
+      <input id="default-tx" type="text" inputmode="numeric" placeholder="e.g. 42 — used when you don’t say a number">
+      <div class="checks">
+        <label><input type="checkbox" id="speak-replies"> Speak replies (when not in dialog mode)</label>
+        <label><input type="checkbox" id="dialog-mode"> Dialog mode (speak answer, then listen again)</label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div id="chat-log" class="chat-log" aria-live="polite"></div>
+      <label for="chat-input" style="margin-top:12px">Message</label>
+      <textarea id="chat-input" placeholder="Type or dictate… Try: readiness, list files, file 12"></textarea>
+      <div class="row-actions">
+        <button type="button" id="send-btn">Send</button>
+        <button type="button" id="voice-btn" class="ghost">Start voice</button>
+      </div>
+      <div id="voice-status">Voice ready</div>
+    </div>
+  </div>
+
+  <script src="/shared/lifeos-voice-chat.js"></script>
+  <script>
+(function () {
+  const CHAT_KEY = 'tc_assistant';
+
+  function qs(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  function getApiKey() {
+    return (
+      localStorage.getItem('COMMAND_CENTER_KEY') ||
+      localStorage.getItem('lifeos_cmd_key') ||
+      localStorage.getItem('x_api_key') ||
+      ''
+    );
+  }
+
+  function setApiKey(value) {
+    localStorage.setItem('COMMAND_CENTER_KEY', value);
+    localStorage.setItem('lifeos_cmd_key', value);
+    localStorage.setItem('x_api_key', value);
+  }
+
+  function escapeHtml(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /** Very light formatting: **bold** → <strong> */
+  function formatReply(text) {
+    const escaped = escapeHtml(text);
+    return escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  }
+
+  const apiKeyInput = document.getElementById('api-key');
+  const saveKeyBtn = document.getElementById('save-key');
+  const defaultTxInput = document.getElementById('default-tx');
+  const chatLog = document.getElementById('chat-log');
+  const chatInput = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('send-btn');
+  const dialogModeEl = document.getElementById('dialog-mode');
+  const speakRepliesEl = document.getElementById('speak-replies');
+
+  apiKeyInput.value = getApiKey();
+  const txQ = qs('tx');
+  if (txQ) defaultTxInput.value = txQ;
+
+  saveKeyBtn.addEventListener('click', function () {
+    setApiKey(apiKeyInput.value.trim());
+    appendSystem('Key saved locally.');
+  });
+
+  function appendSystem(text) {
+    const div = document.createElement('div');
+    div.className = 'bubble asst';
+    div.innerHTML = escapeHtml(text) + '<div class="meta">system</div>';
+    chatLog.appendChild(div);
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }
+
+  function appendBubble(role, text, meta) {
+    const div = document.createElement('div');
+    div.className = 'bubble ' + (role === 'user' ? 'user' : 'asst');
+    div.innerHTML = (role === 'user' ? escapeHtml(text) : formatReply(text)) +
+      (meta ? '<div class="meta">' + escapeHtml(meta) + '</div>' : '');
+    chatLog.appendChild(div);
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }
+
+  let voiceController = null;
+  if (window.LifeOSVoiceChat && LifeOSVoiceChat.attach) {
+    voiceController = LifeOSVoiceChat.attach({
+      inputId: 'chat-input',
+      buttonId: 'voice-btn',
+      statusId: 'voice-status',
+      speakToggleId: 'speak-replies',
+      storageKey: CHAT_KEY,
+      mode: 'append',
+      lang: 'en-US',
+      idleText: 'Voice ready — tap Start voice to dictate',
+      speakRepliesDefault: false,
+    });
+
+    dialogModeEl.addEventListener('change', function () {
+      if (dialogModeEl.checked) {
+        speakRepliesEl.checked = true;
+        speakRepliesEl.dispatchEvent(new Event('change'));
+      }
+    });
+  } else {
+    document.getElementById('voice-btn').disabled = true;
+    document.getElementById('voice-status').textContent = 'Voice module failed to load';
+  }
+
+  async function sendMessage() {
+    const key = getApiKey().trim();
+    if (!key) {
+      appendSystem('Set your command key first.');
+      return;
+    }
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    const defaultTx = defaultTxInput.value.trim();
+    const transactionId =
+      defaultTx && /^\d+$/.test(defaultTx) ? parseInt(defaultTx, 10) : null;
+
+    if (voiceController) {
+      voiceController.stopMic();
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+
+    appendBubble('user', text);
+    chatInput.value = '';
+    sendBtn.disabled = true;
+
+    try {
+      const res = await fetch('/api/v1/tc/assistant/chat', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-api-key': key,
+        },
+        body: JSON.stringify({
+          message: text,
+          transaction_id: transactionId,
+          use_ai: true,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) {
+        throw new Error(data.error || 'Request failed (' + res.status + ')');
+      }
+      const reply = data.reply || '';
+      const meta = data.source ? 'source: ' + data.source : '';
+      appendBubble('assistant', reply, meta);
+
+      if (dialogModeEl.checked && window.LifeOSVoiceChat) {
+        LifeOSVoiceChat.speakText(reply, {
+          onEnd: function () {
+            if (dialogModeEl.checked && voiceController) {
+              voiceController.startMic();
+            }
+          },
+        });
+      } else if (voiceController && speakRepliesEl.checked) {
+        voiceController.speak(reply);
+      }
+    } catch (err) {
+      appendBubble('assistant', err.message || String(err), 'error');
+    } finally {
+      sendBtn.disabled = false;
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  if (!LifeOSVoiceChat || !LifeOSVoiceChat.isRecognitionSupported || !LifeOSVoiceChat.isRecognitionSupported()) {
+    appendSystem('Speech recognition may be unavailable in this browser. Dictation and dialog mode need a supported browser (e.g. Chrome desktop).');
+  }
+})();
+  </script>
+</body>
+</html>

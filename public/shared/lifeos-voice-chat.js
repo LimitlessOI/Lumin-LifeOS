@@ -42,13 +42,32 @@
     };
   }
 
-  function speakText(text) {
+  function speakText(text, options) {
+    const opts = typeof options === 'function' ? { onEnd: options } : options || {};
     const cleaned = normalizeText(text);
-    if (!cleaned || !synth) return;
+    if (!cleaned || !synth) {
+      if (typeof opts.onEnd === 'function') {
+        try {
+          opts.onEnd();
+        } catch (_) {
+          // Ignore callback failures.
+        }
+      }
+      return;
+    }
     const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 2000));
     if (cachedVoice) utterance.voice = cachedVoice;
     utterance.rate = 0.97;
     utterance.pitch = 1;
+    if (typeof opts.onEnd === 'function') {
+      utterance.onend = function onUtteranceEnd() {
+        try {
+          opts.onEnd();
+        } catch (_) {
+          // Ignore callback failures.
+        }
+      };
+    }
     synth.cancel();
     synth.speak(utterance);
   }
@@ -209,6 +228,12 @@
       speak(text) {
         if (!state.speakingEnabled) return;
         speakText(text);
+      },
+      startMic() {
+        startListening();
+      },
+      stopMic() {
+        stopListening();
       },
       stop() {
         stopListening();

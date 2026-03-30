@@ -29,6 +29,7 @@ import { createTCInspectionService } from '../services/tc-inspection-service.js'
 import { createTCAccessService } from '../services/tc-access-service.js';
 import { createTCIntakeWorkspaceService } from '../services/tc-intake-workspace-service.js';
 import { createTCEmailDocumentService } from '../services/tc-email-document-service.js';
+import { createTCAssistantService } from '../services/tc-assistant-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
@@ -112,6 +113,12 @@ export function createTCRoutes(
     },
     getNotificationService,
     portalService,
+    logger,
+  });
+  const tcAssistant = createTCAssistantService({
+    coordinator,
+    getWorkspace: () => intakeWorkspaceService.getWorkspace(),
+    callCouncilMember,
     logger,
   });
   let accountManagerPromise = null;
@@ -225,6 +232,22 @@ export function createTCRoutes(
       res.json({ ok: true, workspace });
     } catch (error) {
       logger.error?.({ err: error.message }, '[TC-ROUTES] intake workspace failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  // POST /api/v1/tc/assistant/chat — TC-aware chat (workspace + files + optional council)
+  router.post('/assistant/chat', requireKey, express.json(), async (req, res) => {
+    try {
+      const { message, transaction_id, use_ai } = req.body || {};
+      const result = await tcAssistant.answer({
+        message,
+        transaction_id: transaction_id != null && transaction_id !== '' ? transaction_id : null,
+        use_ai: use_ai !== false,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[TC-ROUTES] assistant chat failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });

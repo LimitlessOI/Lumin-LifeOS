@@ -1090,6 +1090,7 @@
             <button id="scan-inbox" class="ghost">Run inbox scan</button>
             <button id="search-agreements" class="ghost">Search agreements</button>
             <a class="ghost" href="/api/v1/tc/status" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:8px 10px;border-radius:10px;text-decoration:none;color:#cbd5ff;border:1px solid #27304a">TC status</a>
+            <a class="ghost" href="/tc/assistant" style="display:inline-flex;align-items:center;padding:8px 10px;border-radius:10px;text-decoration:none;color:#cbd5ff;border:1px solid #27304a">Voice assistant</a>
           </div>
           ${apiBanner}
         </div>
@@ -1830,6 +1831,7 @@
           <p>${escapeHtml(tx.status || '')} ${tx.agent_role ? '· ' + escapeHtml(tx.agent_role) : ''}</p>
         </div>
         <div class="hero-actions">
+          <a class="ghost" href="/tc/assistant?tx=${encodeURIComponent(tx.id || '')}" style="display:inline-flex;align-items:center;padding:8px 10px;border-radius:10px;text-decoration:none;color:#cbd5ff;border:1px solid #27304a;margin-right:8px">Voice assistant</a>
           <span class="badge ${badgeClass(status.health_status)}">${escapeHtml(status.health_status || 'unknown')}</span>
           <span class="badge ${badgeClass(status.stage)}">${escapeHtml(status.stage || 'unknown')}</span>
         </div>

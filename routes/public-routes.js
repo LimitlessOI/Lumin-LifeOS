@@ -61,6 +61,12 @@ export function registerPublicRoutes(app, {
     return res.status(404).send("TC client portal not found.");
   });
 
+  app.get("/tc/assistant", (req, res) => {
+    const filePath = path.join(__dirname, "public", "tc", "tc-assistant.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("TC assistant not found.");
+  });
+
   app.get("/clientcare-billing", (req, res) => {
     const filePath = path.join(__dirname, "public", "clientcare-billing", "overlay.html");
     if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);

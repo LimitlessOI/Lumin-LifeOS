@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 (commit credential-aliases.js for deploy) |
+| **Last Updated** | 2026-03-30 (TC voice assistant + chat API) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -92,6 +92,8 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | `services/tc-interaction-service.js` | Lawful interaction capture, disclosed/visible recording gate, commitment extraction, client-memory suggestions, and coaching review |
 | `services/tc-access-service.js` | Access readiness and bootstrap for IMAP, GLVAR, TransactionDesk, and SkySlope prerequisites |
 | `services/tc-intake-workspace-service.js` | Workspace summary for TC readiness, inbox triage, and transaction matching before filing |
+| `services/tc-assistant-service.js` | TC-aware chat answers over workspace + file status; optional Groq council for open questions |
+| `public/tc/tc-assistant.html` | Voice/dictation TC assistant UI at `/tc/assistant` |
 | `services/tc-inspection-service.js` | **NEW** Inspection workflow: schedule → report → decision (accept/repair/reject); rejection fast path drafts cancellation notice, fires CRITICAL alert, cancels transaction |
 | `db/migrations/20260327_tc_inspections.sql` | **NEW** tc_inspections table: inspector info, scheduling, report receipt, findings, buyer decision, repair request/response, cancellation notice, earnest money tracking |
 | `routes/tc-routes.js` | All TC API endpoints |
@@ -115,6 +117,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 ### Portal Access
 | Portal | URL | Purpose |
 |--------|-----|---------|
+| TC voice assistant (same deployment) | `/tc/assistant` | Chat + mic dictation + dialog mode against TC workspace APIs |
 | eXp Realty Okta | exprealty.okta.com | SSO for SkySlope + BoldTrail |
 | GLVAR Clareity IAM | glvar.clareityiam.net | MLS + TransactionDesk + dues |
 | SkySlope | Via eXp Okta tile | Transaction file management, doc upload |
@@ -822,6 +825,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | **TC voice assistant:** `services/tc-assistant-service.js`, `POST /api/v1/tc/assistant/chat`, `public/tc/tc-assistant.html` at `/tc/assistant` — dictation via shared voice helper, dialog mode (TTS then listen again), portal links from intake + file detail | Hands-free TC Q&A against real workspace data | ✅ | ✅ | pending |
 | 2026-03-30 | **Ops:** committed `services/credential-aliases.js` (untracked; required by `tc-browser-agent` / TC access / IMAP — fixed Railway ERR_MODULE_NOT_FOUND) | Restore production boot | ✅ | ✅ | pending |
 | 2026-03-30 | **Ops:** committed `services/tc-email-document-service.js` (was untracked while `tc-routes` imported it — fixed Railway ERR_MODULE_NOT_FOUND) | Restore production boot | ✅ | ✅ | pending |
 | 2026-03-30 | `GET /api/v1/tc/status` (no API key): DB ping + auth flags + hints; portal pings status before workspace, shows banner and richer 401/DB failure HTML + link to status JSON | Faster “is production up” and clearer key mismatch recovery | ✅ | ✅ | pending |

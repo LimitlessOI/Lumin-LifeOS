@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-28 |
+| **Last Updated** | 2026-03-30 |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -236,6 +236,9 @@ node --check public/overlay/command-center.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | `public/shared/lifeos-voice-chat.js`: optional `onEnd` on `speakText`; `startMic` / `stopMic` on attach controller. `routes/public-routes.js`: `GET /tc/assistant` → TC voice assistant page | Enable TC dialog mode (speak reply then resume listening) | ✅ | ✅ | pending |
+| 2026-03-29 | Command Center verification now respects the safe default for `LIFEOS_DIRECTED_MODE` instead of failing just because the env var is omitted | The overlay should reflect the actual runtime safety posture, and directed mode defaults closed even when the env is not set explicitly | ✅ | ✅ | pending |
+| 2026-03-29 | Command Center verification no longer hard-requires Anthropic and now accepts any configured AI provider key | Operator chat and system surfaces depend on a working AI path, not on one vendor specifically; the manifest now reflects the free-tier-first reality | ✅ | ✅ | pending |
 | 2026-03-27 | Lazy reality hash, health auth fix, ideas COALESCE | Fix chat 409, health red X, empty ideas list | ✅ | ✅ | pending |
 | 2026-03-27 | Projects Dashboard + Pending Adam panels added | SSOT governance build | ✅ | ✅ | pending |
 | 2026-03-27 | Builder Control Panel added to command-center.html | Surface builder supervisor state, controls, Adam accuracy | ✅ | ✅ | pending |
@@ -250,7 +253,7 @@ node --check public/overlay/command-center.js
 
 **Status:** BUILD_READY
 **Adaptability Score:** 80/100
-**Last Updated:** 2026-03-28
+**Last Updated:** 2026-03-30
 
 ### Gate 1 — Implementation Detail
 - [x] All panels documented with specific UI descriptions
