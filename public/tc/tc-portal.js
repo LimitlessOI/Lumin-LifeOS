@@ -581,6 +581,133 @@
     return `${days} days left`;
   }
 
+  function formatMoneyAmt(value) {
+    if (value == null || value === '') return '';
+    const n = Number(value);
+    if (Number.isNaN(n)) return '';
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+  }
+
+  function formatDateShort(iso) {
+    if (!iso) return '';
+    const raw = String(iso);
+    const d = raw.length <= 10 ? new Date(`${raw}T12:00:00`) : new Date(raw);
+    if (Number.isNaN(d.getTime())) return raw;
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function transactionRolePill(role) {
+    const r = String(role || '').toLowerCase();
+    if (r === 'listing') return 'Listing';
+    if (r === 'dual') return 'Dual';
+    return 'Buyer';
+  }
+
+  function milestonePresentation(contingency) {
+    const key = String(contingency.name || '').toLowerCase();
+    const labelHay = String(contingency.label || '').toLowerCase();
+    const rows = [
+      { test: (k, h) => /inspection|due_diligence|^dd$|due diligence/.test(k) || /inspection|due diligence/.test(h), emoji: '🔍', short: 'DD' },
+      { test: (k, h) => /appraisal/.test(k) || /appraisal/.test(h), emoji: '📋', short: 'Appr' },
+      { test: (k, h) => /loan|financ/.test(k) || /loan|financ/.test(h), emoji: '🏦', short: 'Loan' },
+      { test: (k, h) => /^coe$/.test(k) || /close of escrow|escrow close/.test(h), emoji: '🔑', short: 'COE' },
+      { test: (k, h) => /title/.test(k), emoji: '📑', short: 'Title' },
+      { test: (k, h) => /insurance|hazard/.test(k) || /insurance/.test(h), emoji: '🛡️', short: 'Ins' },
+    ];
+    for (const row of rows) {
+      if (row.test(key, labelHay)) return { emoji: row.emoji, short: row.short };
+    }
+    const words = formatStageLabel(contingency.label || contingency.name || 'Milestone');
+    const short = words.length > 12 ? `${words.slice(0, 11)}…` : words;
+    return { emoji: '📌', short };
+  }
+
+  function buildMilestoneStrip(item) {
+    const hasClose = Boolean(item.close_date);
+    const upcoming = (item.contingencies || []).filter((c) => {
+      if (c.daysRemaining == null || c.status === 'unknown') return false;
+      if (c.daysRemaining < 0) return false;
+      if (hasClose && String(c.name || '').toLowerCase() === 'coe') return false;
+      return true;
+    });
+    const sorted = [...upcoming].sort((a, b) => (a.daysRemaining || 0) - (b.daysRemaining || 0));
+    const chips = [];
+    for (const c of sorted) {
+      const { emoji, short } = milestonePresentation(c);
+      const days = c.daysRemaining;
+      const urgent = days <= 2 ? ' urgent' : '';
+      const dayText = days === 0 ? 'today' : `${days}d`;
+      const tip = `${formatStageLabel(c.label || c.name)} — ${formatDaysRemaining(days)} (${formatDateShort(c.date)})`;
+      chips.push(
+        `<span class="tx-ms${urgent}" title="${escapeHtml(tip)}"><span class="tx-ms-emoji" aria-hidden="true">${emoji}</span><span class="tx-ms-lab">${escapeHtml(short)}</span><span class="tx-ms-d">${escapeHtml(dayText)}</span></span>`
+      );
+    }
+    if (item.close_date) {
+      const dtc = item.days_to_close;
+      const n = dtc != null ? Number(dtc) : NaN;
+      const closeText = !Number.isNaN(n) && n === 0 ? 'today' : !Number.isNaN(n) && n > 0 ? `${n}d` : '';
+      const urgent = !Number.isNaN(n) && n >= 0 && n <= 3 ? ' urgent' : '';
+      const tip = `Close ${formatDateShort(item.close_date)}` + (!Number.isNaN(n) ? ` · ${formatDaysRemaining(n)}` : '');
+      chips.push(
+        `<span class="tx-ms tx-ms-close${urgent}" title="${escapeHtml(tip)}"><span class="tx-ms-emoji" aria-hidden="true">📅</span><span class="tx-ms-lab">Close</span>${closeText ? `<span class="tx-ms-d">${escapeHtml(closeText)}</span>` : ''}</span>`
+      );
+    }
+    if (!chips.length) {
+      return '<div class="tx-milestones"><span class="tx-ms-empty">Add key dates on the file to see DD, appraisal, loan, and close countdowns.</span></div>';
+    }
+    return `<div class="tx-milestones">${chips.join('')}</div>`;
+  }
+
+  function feeSummaryParts(item, { html = true } = {}) {
+    const parts = [];
+    const strong = (s) => (html ? `<strong>${s}</strong>` : s);
+    if (item.purchase_price != null && String(item.purchase_price).trim() !== '') {
+      const m = formatMoneyAmt(item.purchase_price);
+      if (m) parts.push(`Contract ${strong(m)}`);
+    }
+    const fee = item.closing_fee != null ? Number(item.closing_fee) : null;
+    if (fee != null && !Number.isNaN(fee) && fee > 0) {
+      if (item.fee_collected) {
+        const got =
+          item.fee_collected_amt != null && String(item.fee_collected_amt).trim() !== ''
+            ? formatMoneyAmt(item.fee_collected_amt)
+            : formatMoneyAmt(fee);
+        parts.push(`TC closing fee ${strong(formatMoneyAmt(fee))} · collected ${got}`);
+      } else {
+        parts.push(`TC closing fee ${strong(formatMoneyAmt(fee))} (not collected)`);
+      }
+    }
+    const setup = item.setup_fee != null ? Number(item.setup_fee) : null;
+    if (setup != null && !Number.isNaN(setup) && setup > 0 && !item.fee_collected) {
+      parts.push(`Setup ${strong(formatMoneyAmt(setup))}`);
+    }
+    if (item.closing_fee_note && String(item.closing_fee_note).trim()) {
+      const note = String(item.closing_fee_note).trim();
+      parts.push(html ? escapeHtml(note) : note);
+    }
+    return parts;
+  }
+
+  function renderFeeAtAGlance(item) {
+    const parts = feeSummaryParts(item, { html: true });
+    if (!parts.length) {
+      return '<div class="tx-fee-strip">No price or fee on file yet — set purchase and TC fee when you know them.</div>';
+    }
+    return `<div class="tx-fee-strip">${parts.join(' · ')}</div>`;
+  }
+
+  function healthEmojiForState(state) {
+    if (state === 'red') return '🔴';
+    if (state === 'yellow') return '🟡';
+    return '🟢';
+  }
+
+  function onTrackSummary(state) {
+    if (state.state === 'red') return 'Not fully on track — TC action required before the file is green.';
+    if (state.state === 'yellow') return 'Watch — waiting on others or time-sensitive items; review milestones.';
+    return 'On track from the TC desk — no immediate operator action.';
+  }
+
   function nextMorningIso() {
     const next = new Date();
     next.setDate(next.getDate() + 1);
@@ -739,28 +866,43 @@
       const nextAction = item.next_action || (state.state === 'green' ? 'No immediate action needed.' : 'Review this file.');
       const syncStatus = item.portal_sync_status?.transactionDesk || (item.transaction_desk_id ? 'linked' : 'pending');
       const primaryPhone = client?.phone || counterparty?.phone || '';
-      const nearestContingency = (item.contingencies || []).find((contingency) => contingency.daysRemaining != null);
       const phoneMarkup = primaryPhone
         ? `<a class="tx-contact-phone" href="tel:${escapeHtml(String(primaryPhone).replace(/[^\d+]/g, ''))}">${escapeHtml(formatPhone(primaryPhone))}</a>`
         : `<span class="tx-contact-phone dim">${escapeHtml(formatPhone(primaryPhone))}</span>`;
+      const waitingLabel = item.waiting_on ? formatStageLabel(item.waiting_on) : '—';
+      const closeDateText = item.close_date ? formatDateShort(item.close_date) : '—';
+      const closeCount =
+        item.days_to_close != null && !Number.isNaN(Number(item.days_to_close))
+          ? formatDaysRemaining(Number(item.days_to_close))
+          : '';
+      const feeHover = feeSummaryParts(item, { html: false }).join(' · ') || 'Not set on file.';
+      const healthIco = healthEmojiForState(state.state);
+      const track = onTrackSummary(state);
       return `
         <div
           class="tx-card"
           data-open-tx="${escapeHtml(item.id)}"
           data-open-section="${escapeHtml(deriveWorkspaceJumpSection(item, state))}"
-          title="${escapeHtml(hoverSummary)}"
           data-state="${escapeHtml(state.state)}"
           tabindex="0"
           role="button"
           aria-label="${escapeHtml(`Open ${item.address || `transaction ${item.id}`}: ${hoverSummary}`)}"
         >
+          <div class="tx-card-ribbon">
+            <span class="tx-role-pill">${escapeHtml(transactionRolePill(item.agent_role))}</span>
+            <div style="display:flex;align-items:center;gap:10px;margin-left:auto">
+              <span class="tx-health-ico" title="${escapeHtml(track)}" aria-hidden="true">${healthIco}</span>
+              <div class="tx-ring ${escapeHtml(state.state)}">${escapeHtml(state.ringLabel)}</div>
+            </div>
+          </div>
           <div class="tx-card-head">
-            <div>
+            <div style="flex:1;min-width:0">
               ${renderAddressBlock(item.address)}
               ${renderWorkspaceCardChips(item, state)}
             </div>
-            <div class="tx-ring ${escapeHtml(state.state)}">${escapeHtml(state.ringLabel)}</div>
           </div>
+          ${buildMilestoneStrip(item)}
+          ${renderFeeAtAGlance(item)}
           <div class="tx-contact">
             <div style="flex:1;min-width:0">
               <div class="tx-contact-line">
@@ -773,17 +915,29 @@
           </div>
           <div class="tx-meta-grid">
             <div class="tx-meta-item"><span>Stage</span><strong>${escapeHtml(stage)}</strong></div>
-            <div class="tx-meta-item"><span>Needs</span><strong>${escapeHtml(item.waiting_on ? formatStageLabel(item.waiting_on) : state.ringLabel)}</strong></div>
-            <div class="tx-meta-item"><span>TransactionDesk</span><strong>${escapeHtml(formatStageLabel(syncStatus))}</strong></div>
-            <div class="tx-meta-item"><span>${escapeHtml(nearestContingency?.label || 'Missing docs')}</span><strong>${escapeHtml(nearestContingency ? formatDaysRemaining(nearestContingency.daysRemaining) : String(item.missing_doc_count || 0))}</strong></div>
+            <div class="tx-meta-item"><span>Waiting on</span><strong>${escapeHtml(waitingLabel)}</strong></div>
+            <div class="tx-meta-item"><span>File in TD</span><strong>${escapeHtml(formatStageLabel(syncStatus))}</strong></div>
+            <div class="tx-meta-item"><span>COE date</span><strong>${escapeHtml(closeDateText)}</strong>${closeCount ? `<span style="display:block;font-size:12px;color:#98a5c3;margin-top:4px">${escapeHtml(closeCount)}</span>` : ''}</div>
           </div>
           <div class="tx-summary">
             <span>What is happening now</span>
             <strong>${escapeHtml(nextAction)}</strong>
           </div>
           <div class="tx-hover">
-            <strong style="display:block;margin-bottom:6px">${escapeHtml(state.state === 'red' ? 'Your move (TC)' : state.state === 'yellow' ? 'Watch / in progress' : 'All clear for you')}</strong>
-            ${escapeHtml(hoverSummary)}
+            <dl>
+              <dt>On track?</dt>
+              <dd>${escapeHtml(track)}</dd>
+              <dt>Waiting on</dt>
+              <dd>${escapeHtml(waitingLabel)}</dd>
+              <dt>Situation</dt>
+              <dd>${escapeHtml(hoverSummary)}</dd>
+              <dt>Close of escrow</dt>
+              <dd>${escapeHtml(closeDateText)}${closeCount ? ` · ${escapeHtml(closeCount)}` : ''}</dd>
+              <dt>Next TC step</dt>
+              <dd>${escapeHtml(nextAction)}</dd>
+              <dt>Your economics</dt>
+              <dd>${escapeHtml(feeHover)}</dd>
+            </dl>
           </div>
           <div class="tx-actions">
             <span class="tx-open">${escapeHtml(buildTransactionActionLabel(item, state))}</span>
