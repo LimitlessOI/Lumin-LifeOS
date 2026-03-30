@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 (workspace cards: street number/name split, chips, inline client+phone; detail hero address) |
+| **Last Updated** | 2026-03-30 (TD listing agreement → SkySlope browser pipeline + portal job UI) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -468,6 +468,8 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | POST | `/intake/email-search` | Dry-run email scan |
 | GET | `/intake/workspace` | Agent intake workspace for readiness, triage queue, and suggested transaction matches |
 | POST | `/intake/upload` | Manual doc upload → SkySlope |
+| POST | `/transactions/:id/browser/listing-to-skyslope` | Async job: GLVAR→TransactionDesk search→download executed listing agreement→SkySlope (default `dry_run:true`) |
+| GET | `/browser-jobs/:jobId` | Poll listing→SkySlope job steps and status |
 | POST | `/email/send-attachment-package` | Find a matching email, combine photo attachments into one PDF, and email the package out immediately |
 | GET | `/access/readiness` | Show which email/browser prerequisites are configured vs still missing |
 | POST | `/access/bootstrap` | Store non-secret defaults and optional secret access inputs for TC |
@@ -819,6 +821,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | **Listing agreement → SkySlope:** browser steps in `tc-browser-agent` (Transaction Launch, TD search/open, CDP download) + orchestrator `tc-listing-skyslope-sync` + async `POST /transactions/:id/browser/listing-to-skyslope` (default dry-run) and `GET /browser-jobs/:jobId`; portal intake card with rehearsal vs live + step log; each step also written to `tc_transaction_events` as `listing_td_skyslope_sync` | Automate GLVAR → TransactionDesk executed listing pull and SkySlope filing with visible progress | ✅ | ✅ | pending |
 | 2026-03-30 | Workspace transaction cards: split **street number** + **street name** + city line, **client name · phone** on one line, **chips** for pending sign-offs / operator alerts / missing docs; transaction detail **hero** uses the same address layout; legend text updated | Match “see the house number and street at a glance” and surface approval/alert/doc gaps without hovering | ✅ | ✅ | pending |
 | 2026-03-30 | Replaced the flat active-transactions table with a visual card board that shows address, client, phone, stage, and a red/yellow/green action ring, added hover summaries for what is happening on each file, added visible due-diligence / close-date countdown banners plus a who-needs-to-act todo list, added a detail-page action board that jumps directly to approvals, alerts, or document review, and added a one-click 'deal in morning' alert snooze path | Make the portal readable at a glance, keep time-sensitive contingency windows visible, show exactly who needs to act on each file, make clicking a file land on the exact work surface instead of a generic detail dump, and let Adam defer an escalation until morning without losing the follow-up | ✅ | ✅ | pending |
 | 2026-03-30 | Added urgent email-attachment package delivery plus a dedicated intake-workspace card, corrected the workspace defaults so TC/work email fields prefer the real transaction mailbox instead of the LifeOS system mailbox when Adam inbox credentials are present, replaced the raw readiness dump with a click-to-fix missing-items panel that only surfaces actionable setup gaps, auto-filled buyer-agent recipient data from the selected transaction, added an SRPD preset, and filtered non-TC queue noise out of the intake queue | Unblock real-world cases like SRPD/photo delivery without waiting for terminal commands or manual recombination outside the system, stop steering TC setup toward the wrong inbox, make setup actionable instead of exposing low-signal env noise, and keep the portal focused on actual TC work instead of unrelated alert mail | ✅ | ✅ | pending |

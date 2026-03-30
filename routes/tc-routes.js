@@ -11,6 +11,7 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs/promises';
+import crypto from 'crypto';
 import { createTCStatusEngine } from '../services/tc-status-engine.js';
 import { createTCPortalService } from '../services/tc-portal-service.js';
 import { createTCReportService } from '../services/tc-report-service.js';
@@ -27,9 +28,29 @@ import { createTCFeedIngestService } from '../services/tc-feed-ingest-service.js
 import { createTCInspectionService } from '../services/tc-inspection-service.js';
 import { createTCAccessService } from '../services/tc-access-service.js';
 import { createTCIntakeWorkspaceService } from '../services/tc-intake-workspace-service.js';
+import { createTCEmailDocumentService } from '../services/tc-email-document-service.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
+
+/** In-memory status for async TD → SkySlope listing sync (browser automation can exceed HTTP timeouts). */
+const listingTdSkyslopeJobs = new Map();
+const LISTING_SYNC_JOB_TTL_MS = 2 * 60 * 60 * 1000;
+
+function pruneListingSyncJobs() {
+  const now = Date.now();
+  for (const [id, job] of listingTdSkyslopeJobs) {
+    const t = new Date(job.created_at || 0).getTime();
+    if (now - t > LISTING_SYNC_JOB_TTL_MS) listingTdSkyslopeJobs.delete(id);
+  }
+  if (listingTdSkyslopeJobs.size <= 100) return;
+  const sorted = [...listingTdSkyslopeJobs.entries()].sort(
+    (a, b) => new Date(a[1].created_at).getTime() - new Date(b[1].created_at).getTime()
+  );
+  while (sorted.length > 80) {
+    listingTdSkyslopeJobs.delete(sorted.shift()[0]);
+  }
+}
 
 export function createTCRoutes(
   app,
@@ -83,6 +104,14 @@ export function createTCRoutes(
     pool,
     coordinator,
     accessService,
+    logger,
+  });
+  const emailDocumentService = createTCEmailDocumentService({
+    accountManager: {
+      getAccount: async (...args) => (await getAccountManager()).getAccount(...args),
+    },
+    getNotificationService,
+    portalService,
     logger,
   });
   let accountManagerPromise = null;
@@ -1304,6 +1333,93 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/transactions/:id/browser/listing-to-skyslope — TD executed listing → SkySlope (async job)
+  router.post('/transactions/:id/browser/listing-to-skyslope', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id, 10);
+      if (Number.isNaN(txId)) return res.status(400).json({ ok: false, error: 'Invalid transaction id' });
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+
+      const addressSearch =
+        req.body?.address_search ||
+        req.body?.addressSearch ||
+        req.body?.search ||
+        '';
+      const dryRun = req.body?.dry_run !== false && req.body?.dryRun !== false; // default true
+      const forceUpload =
+        String(req.body?.force_upload || req.body?.forceUpload || '').toLowerCase() === 'true';
+      const filenameHints = Array.isArray(req.body?.filename_hints) ? req.body.filename_hints : null;
+
+      pruneListingSyncJobs();
+      const jobId = crypto.randomUUID();
+      const job = {
+        id: jobId,
+        transaction_id: txId,
+        status: 'queued',
+        steps: [],
+        error: null,
+        result: null,
+        created_at: new Date().toISOString(),
+        dry_run: dryRun,
+      };
+      listingTdSkyslopeJobs.set(jobId, job);
+
+      res.status(202).json({
+        ok: true,
+        job_id: jobId,
+        transaction_id: txId,
+        dry_run: dryRun,
+        poll_url: `/api/v1/tc/browser-jobs/${jobId}`,
+        message: dryRun
+          ? 'Dry run queued: opens TransactionDesk and matched file only.'
+          : 'Live run queued: downloads executed listing agreement and uploads to SkySlope.',
+      });
+
+      (async () => {
+        const j = listingTdSkyslopeJobs.get(jobId);
+        if (!j) return;
+        j.status = 'running';
+        const accountManager = await getAccountManager();
+        const { createTCListingSkyslopeSync } = await import('../services/tc-listing-skyslope-sync.js');
+        const sync = createTCListingSkyslopeSync({ pool, coordinator, accountManager, logger });
+        try {
+          const result = await sync.run({
+            transactionId: txId,
+            addressSearch,
+            filenameHints,
+            dryRun,
+            forceUpload,
+            onStep: (step) => {
+              j.steps.push(step);
+            },
+          });
+          j.status = 'completed';
+          j.result = result;
+        } catch (err) {
+          j.status = 'failed';
+          j.error = err.message;
+          logger.warn?.({ err: err.message, jobId }, '[TC-ROUTES] listing-to-skyslope job failed');
+          j.steps.push({
+            at: new Date().toISOString(),
+            label: 'job_failed',
+            error: err.message,
+          });
+        }
+      })();
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] listing-to-skyslope enqueue error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/browser-jobs/:jobId — poll listing TD → SkySlope job
+  router.get('/browser-jobs/:jobId', requireKey, async (req, res) => {
+    const job = listingTdSkyslopeJobs.get(req.params.jobId);
+    if (!job) return res.status(404).json({ ok: false, error: 'Job not found or expired' });
+    res.json({ ok: true, job });
+  });
+
   // ── TC Fees + Agent Clients ───────────────────────────────────────────────
 
   async function getPricing() {
@@ -1711,6 +1827,44 @@ export function createTCRoutes(
       });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] triage link transaction error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/email/send-attachment-package
+  // Finds a matching email, combines photo attachments into one PDF, and emails it out.
+  router.post('/email/send-attachment-package', requireKey, async (req, res) => {
+    try {
+      const {
+        transaction_id = null,
+        recipient_email,
+        recipient_name = '',
+        subject,
+        body,
+        search = {},
+        combine_photos = true,
+        attach_originals = false,
+        dry_run = false,
+      } = req.body || {};
+
+      const result = await emailDocumentService.sendAttachmentPackage({
+        transactionId: transaction_id ? parseInt(transaction_id, 10) : null,
+        recipientEmail: recipient_email,
+        recipientName: recipient_name,
+        subject,
+        body,
+        search,
+        combinePhotos: combine_photos !== false,
+        attachOriginals: !!attach_originals,
+        dryRun: !!dry_run,
+      });
+
+      if (!result.ok) {
+        return res.status(400).json(result);
+      }
+      res.json(result);
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] email/send-attachment-package error');
       res.status(500).json({ ok: false, error: err.message });
     }
   });

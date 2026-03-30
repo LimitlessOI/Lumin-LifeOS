@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * tc-browser-agent.js
  * Browser automation for TC workflows:
  *   - GLVAR MLS → TransactionDesk (via Clareity IAM SSO)
@@ -11,6 +12,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import { createSession } from './browser-agent.js';
+import { getExpOktaCredentialsFromEnv, getGLVARCredentialsFromEnv } from './credential-aliases.js';
 
 const GLVAR_LOGIN_URL = 'https://glvar.clareityiam.net/idp/login';
 const EXP_OKTA_URL   = 'https://exprealty.okta.com';
@@ -40,8 +42,14 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
    */
   async function getGLVARCredentials() {
     const account = await accountManager.getAccount('glvar_mls', '232953');
-    if (!account) throw new Error('GLVAR credentials not found in vault — store via POST /api/v1/accounts/store');
-    return { username: account.username || account.emailUsed, password: account.password };
+    if (account?.password && (account.username || account.emailUsed)) {
+      return { username: account.username || account.emailUsed, password: account.password };
+    }
+    const envCreds = getGLVARCredentialsFromEnv();
+    if (envCreds.present) {
+      return { username: envCreds.username, password: envCreds.password };
+    }
+    throw new Error('GLVAR credentials not found in vault or env aliases — store via POST /api/v1/accounts/store or set GLVAR_mls_Username/GLVAR_mls_Password');
   }
 
   /**
@@ -49,8 +57,14 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
    */
   async function getExpCredentials() {
     const account = await accountManager.getAccount('exp_okta', 'adam.hopkins@exprealty.com');
-    if (!account) throw new Error('eXp Okta credentials not found in vault');
-    return { username: account.username || account.emailUsed, password: account.password };
+    if (account?.password && (account.username || account.emailUsed)) {
+      return { username: account.username || account.emailUsed, password: account.password };
+    }
+    const envCreds = getExpOktaCredentialsFromEnv();
+    if (envCreds.present) {
+      return { username: envCreds.username, password: envCreds.password };
+    }
+    throw new Error('eXp Okta credentials not found in vault or env aliases');
   }
 
   /**
@@ -62,7 +76,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     const session = await createSession();
 
     try {
-      await session.navigate(EXP_OKTA_URL);
+      await session.navigate(getExpOktaCredentialsFromEnv().url || EXP_OKTA_URL);
       const sp = await screenshotPath('exp-okta-login-page');
       await session.page.screenshot({ path: sp });
       logger.info?.({ screenshot: sp }, '[TC-BROWSER] eXp Okta login page loaded');
@@ -258,6 +272,211 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] Navigated to TransactionDesk');
 
     return { ok: true, url, screenshots: [sp] };
+  }
+
+  /**
+   * Click GLVAR "Transaction Launch" (or similar) if present — often opens TransactionDesk SSO.
+   */
+  async function clickTransactionLaunchIfPresent(session) {
+    const clicked = await session.page.evaluate(() => {
+      const candidates = Array.from(
+        document.querySelectorAll('a, button, [role="button"], input[type="button"], input[type="submit"]')
+      );
+      const el = candidates.find((e) => {
+        const t = `${e.textContent || ''} ${e.getAttribute?.('value') || ''} ${e.getAttribute?.('title') || ''}`;
+        return /transaction\s*launch|launch\s*transaction|open\s*transaction\s*desk|transaction\s*desk\s*launch|zipform\s*launch/i.test(
+          t
+        );
+      });
+      if (el) {
+        el.click();
+        return true;
+      }
+      return false;
+    });
+    if (clicked) {
+      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+      await session.page.waitForTimeout(2000);
+    }
+    const sp = await screenshotPath('glvar-after-transaction-launch');
+    await session.page.screenshot({ path: sp, fullPage: true }).catch(() => {});
+    return { clicked, url: session.page.url(), screenshot: sp };
+  }
+
+  function _urlLooksLikeTransactionDesk(url) {
+    return /transactiondesk|ziplogix|zipform|lonewolf|tdnavigator/i.test(url || '');
+  }
+
+  /**
+   * Prefer Transaction Launch on GLVAR; fall back to SSO link navigation.
+   */
+  async function ensureOnTransactionDesk(session) {
+    const screenshots = [];
+    const launch = await clickTransactionLaunchIfPresent(session);
+    screenshots.push(launch.screenshot);
+    let url = session.page.url();
+    if (_urlLooksLikeTransactionDesk(url)) {
+      return { ok: true, via: launch.clicked ? 'transaction_launch' : 'already_in_td', url, screenshots };
+    }
+    const nav = await navigateToTransactionDesk(session);
+    screenshots.push(...(nav.screenshots || []));
+    url = session.page.url();
+    return { ok: true, via: 'portal_link', url, screenshots };
+  }
+
+  /**
+   * Search TransactionDesk / Zipform for a property or file (e.g. "Mahogany") and open the first matching row.
+   */
+  async function transactionDeskSearchAndOpenTransaction(session, searchText) {
+    const raw = String(searchText || '').trim();
+    const token =
+      raw.split(/[\s,]+/).find((t) => t.length >= 3) || raw || '';
+    if (!token) throw new Error('address_search / search text is empty');
+
+    const filled = await session.page.evaluate((text) => {
+      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"])'));
+      const searchInput =
+        inputs.find((i) => {
+          const ph = (i.placeholder || '').toLowerCase();
+          const nm = (i.name || '').toLowerCase();
+          const id = (i.id || '').toLowerCase();
+          return /search|find|filter|address|property|transaction|listing|file/i.test(ph + nm + id);
+        }) || inputs.find((i) => i.type === 'search');
+      if (!searchInput) return false;
+      searchInput.focus();
+      searchInput.value = text;
+      searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+      searchInput.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    }, token);
+
+    if (!filled) {
+      const sp = await screenshotPath('td-search-input-missing');
+      await session.page.screenshot({ path: sp, fullPage: true });
+      throw new Error(`TransactionDesk search field not found. Screenshot: ${sp}`);
+    }
+
+    await session.page.keyboard.press('Enter');
+    await session.page.waitForTimeout(2800);
+
+    const opened = await session.page.evaluate((text) => {
+      const needle = text.toLowerCase();
+      const rows = Array.from(
+        document.querySelectorAll('tr, [role="row"], li, .ag-row, [class*="result"], [class*="transaction"]')
+      );
+      for (const row of rows) {
+        const t = (row.textContent || '').toLowerCase();
+        if (t.includes(needle) && t.length < 8000) {
+          row.click();
+          return { ok: true, kind: 'row' };
+        }
+      }
+      const links = Array.from(document.querySelectorAll('a'));
+      const link = links.find((l) => (l.textContent || '').toLowerCase().includes(needle));
+      if (link) {
+        link.click();
+        return { ok: true, kind: 'link' };
+      }
+      return { ok: false };
+    }, token);
+
+    if (!opened.ok) {
+      const sp = await screenshotPath('td-no-match');
+      await session.page.screenshot({ path: sp, fullPage: true });
+      throw new Error(`No TransactionDesk row matched "${token}". Screenshot: ${sp}`);
+    }
+
+    await session.page.waitForTimeout(1500);
+    await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+
+    const sp = await screenshotPath('td-transaction-opened');
+    await session.page.screenshot({ path: sp, fullPage: true });
+    return { ok: true, token, screenshot: sp };
+  }
+
+  async function configurePuppeteerDownloads(session, dir) {
+    await fs.mkdir(dir, { recursive: true });
+    const page = session.page;
+    const client =
+      typeof page.createCDPSession === 'function'
+        ? await page.createCDPSession()
+        : await page.target().createCDPSession();
+    await client.send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: dir });
+  }
+
+  async function waitForNewDownload(dir, beforeNames, timeoutMs = 120000) {
+    const before = beforeNames instanceof Set ? beforeNames : new Set(beforeNames);
+    const deadline = Date.now() + timeoutMs;
+    while (Date.now() < deadline) {
+      const names = await fs.readdir(dir).catch(() => []);
+      const ready = names.filter((f) => !before.has(f) && !f.endsWith('.crdownload'));
+      if (ready.length) {
+        const candidate = path.join(dir, ready[0]);
+        try {
+          const st = await fs.stat(candidate);
+          if (st.size > 80) return candidate;
+        } catch {
+          /* keep waiting */
+        }
+      }
+      await new Promise((r) => setTimeout(r, 450));
+    }
+    throw new Error(`No new file appeared in ${dir} within ${timeoutMs}ms`);
+  }
+
+  /**
+   * Find a listing-agreement document in the current TD file and download it (PDF/DOC).
+   * Uses Chrome download behavior + heuristic row/link matching.
+   */
+  async function downloadExecutedListingAgreementFromTD(session, { downloadDir, filenameHints } = {}) {
+    const hints = filenameHints?.length ? filenameHints : ['listing', 'agreement'];
+    const dir = downloadDir || path.join(SCREENSHOT_DIR, `td-download-${Date.now()}`);
+    await configurePuppeteerDownloads(session, dir);
+    const before = new Set(await fs.readdir(dir).catch(() => []));
+
+    const pick = await session.page.evaluate((hintList) => {
+      const hintRe = new RegExp(hintList.join('|'), 'i');
+      const rows = Array.from(
+        document.querySelectorAll('tr, [role="row"], .document-row, li, [class*="Document"], [class*="document"]')
+      );
+      const scored = [];
+      for (const row of rows) {
+        const t = row.textContent || '';
+        if (!hintRe.test(t)) continue;
+        let score = 10;
+        if (/listing/i.test(t)) score += 5;
+        if (/agreement/i.test(t)) score += 5;
+        if (/executed|fully\s*executed|signed/i.test(t)) score += 8;
+        if (/draft/i.test(t)) score -= 6;
+        scored.push({ row, score, text: t.slice(0, 200) });
+      }
+      scored.sort((a, b) => b.score - a.score);
+      const best = scored[0];
+      if (!best || best.score < 8) return { ok: false, reason: 'no_row' };
+
+      const row = best.row;
+      const dl =
+        row.querySelector('a[download], a[href*="download" i], a[href*=".pdf" i]') ||
+        row.querySelector('button[title*="download" i], [aria-label*="download" i]');
+      if (dl) {
+        dl.click();
+        return { ok: true, via: 'control', preview: best.text };
+      }
+      row.click();
+      return { ok: true, via: 'row_click', preview: best.text };
+    }, hints);
+
+    if (!pick.ok) {
+      const sp = await screenshotPath('td-listing-doc-not-found');
+      await session.page.screenshot({ path: sp, fullPage: true });
+      throw new Error(
+        `Could not find listing agreement document row (hints: ${hints.join(', ')}). Screenshot: ${sp}`
+      );
+    }
+
+    const filePath = await waitForNewDownload(dir, before, 120000);
+    logger.info?.({ filePath, pick }, '[TC-BROWSER] Listing agreement downloaded from TransactionDesk');
+    return { ok: true, filePath, pick, downloadDir: dir };
   }
 
   /**
@@ -581,6 +800,10 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   return {
     loginToGLVAR,
     navigateToTransactionDesk,
+    ensureOnTransactionDesk,
+    clickTransactionLaunchIfPresent,
+    transactionDeskSearchAndOpenTransaction,
+    downloadExecutedListingAgreementFromTD,
     navigateToMLS,
     checkGLVARDues,
     navigateToBoldTrail,

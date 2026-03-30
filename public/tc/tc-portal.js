@@ -299,6 +299,60 @@
     if (node) node.innerHTML = renderPhotoPackageResult(lastPhotoPackageSend);
   }
 
+  let listingSyncPollTimer = null;
+
+  function formatListingSyncStepLine(s) {
+    const bits = [s.at, s.label];
+    if (s.message) bits.push(s.message);
+    if (s.url) bits.push(s.url);
+    if (s.via) bits.push(`via:${s.via}`);
+    if (s.error) bits.push(`ERROR:${s.error}`);
+    if (s.path) bits.push(s.path);
+    return bits.filter(Boolean).join(' | ');
+  }
+
+  async function pollListingSyncJob(jobId, preEl) {
+    const data = await api(`/api/v1/tc/browser-jobs/${jobId}`);
+    const job = data.job;
+    const text = (job.steps || []).map(formatListingSyncStepLine).join('\n');
+    preEl.textContent = `${text}\n--- ${job.status} ---${job.error ? `\n${job.error}` : ''}`;
+    if (job.status === 'completed' || job.status === 'failed') {
+      if (listingSyncPollTimer) {
+        clearInterval(listingSyncPollTimer);
+        listingSyncPollTimer = null;
+      }
+    }
+    return job;
+  }
+
+  async function startListingSyncJob(live) {
+    const txId = document.getElementById('listing-sync-transaction')?.value || '';
+    const search = document.getElementById('listing-sync-search')?.value?.trim() || '';
+    const pre = document.getElementById('listing-sync-log');
+    if (!txId) throw new Error('Select a transaction');
+    if (!pre) return;
+    pre.textContent = 'Starting…';
+    const res = await api(`/api/v1/tc/transactions/${encodeURIComponent(txId)}/browser/listing-to-skyslope`, {
+      method: 'POST',
+      body: JSON.stringify({
+        address_search: search,
+        dry_run: !live,
+        force_upload: false,
+      }),
+    });
+    const jobId = res.job_id;
+    if (listingSyncPollTimer) {
+      clearInterval(listingSyncPollTimer);
+      listingSyncPollTimer = null;
+    }
+    listingSyncPollTimer = setInterval(() => {
+      pollListingSyncJob(jobId, pre).catch((e) => {
+        pre.textContent += `\n${e.message}`;
+      });
+    }, 2000);
+    await pollListingSyncJob(jobId, pre);
+  }
+
   async function createDocRequestsFromValidation(transactionId) {
     if (!transactionId) throw new Error('Select a transaction first');
     const validation = lastWorkspaceValidation?.result?.validation;
@@ -1124,6 +1178,30 @@
       </div>
 
       <div class="card">
+        <h2>Listing agreement → SkySlope (via TransactionDesk)</h2>
+        <p>Logs into <strong>GLVAR</strong>, opens <strong>TransactionDesk</strong> (Transaction Launch or portal link), searches for your property, opens the file, downloads the executed listing agreement, then <strong>eXp Okta → SkySlope</strong> to upload. Progress is logged here and on the transaction’s <strong>Recent Events</strong> as <code>listing_td_skyslope_sync</code>. Default run is <strong>rehearsal only</strong>—no download or SkySlope until you use the live button.</p>
+        <div class="grid two">
+          <div>
+            <label>Transaction</label>
+            <select id="listing-sync-transaction">
+              <option value="">Select transaction</option>
+              ${txOptions.map((option) => `<option value="${escapeHtml(option.id)}">${escapeHtml(option.label)}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label>Search in TransactionDesk (e.g. Mahogany, street number)</label>
+            <input id="listing-sync-search" placeholder="Mahogany Peak, 6453, …" />
+          </div>
+        </div>
+        <div class="row-actions" style="margin-top:12px">
+          <button id="listing-sync-rehearse" class="ghost">Rehearse (dry run)</button>
+          <button id="listing-sync-live">Run live (download + SkySlope)</button>
+        </div>
+        <label style="display:block;margin-top:12px">Progress</label>
+        <pre id="listing-sync-log" style="margin:0;padding:12px;background:#0b1020;border:1px solid #27304a;border-radius:10px;font-size:12px;max-height:280px;overflow:auto;white-space:pre-wrap">No job yet.</pre>
+      </div>
+
+      <div class="card">
         <h2>Inbox Intake Queue</h2>
         <table><thead><tr><th>Received</th><th>Subject</th><th>Category</th><th>Suggested transaction</th><th>Next step</th><th>Action</th></tr></thead><tbody>${queueRows}</tbody></table>
       </div>
@@ -1269,6 +1347,28 @@
           'Thank you,',
           'Adam Hopkins',
         ].join('\n');
+      }
+    });
+    document.getElementById('listing-sync-transaction')?.addEventListener('change', () => {
+      const tx = transactionMap[String(document.getElementById('listing-sync-transaction')?.value || '')];
+      const search = document.getElementById('listing-sync-search');
+      if (tx?.address && search && !search.value) {
+        search.value = tx.address.split(',')[0].trim();
+      }
+    });
+    document.getElementById('listing-sync-rehearse')?.addEventListener('click', async () => {
+      try {
+        await startListingSyncJob(false);
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+    document.getElementById('listing-sync-live')?.addEventListener('click', async () => {
+      if (!confirm('Live run: download listing agreement from TransactionDesk and upload to SkySlope. Continue?')) return;
+      try {
+        await startListingSyncJob(true);
+      } catch (err) {
+        alert(err.message);
       }
     });
     root.querySelectorAll('[data-missing-setup]').forEach((button, idx) => {
