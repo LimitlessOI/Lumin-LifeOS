@@ -50,9 +50,46 @@
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || data.ok === false) {
-      throw new Error(data.error || `Request failed (${res.status})`);
+      const err = new Error(data.error || `Request failed (${res.status})`);
+      err.status = res.status;
+      err.body = data;
+      throw err;
     }
     return data;
+  }
+
+  async function pingTcService() {
+    try {
+      const res = await fetch('/api/v1/tc/status');
+      const data = await res.json().catch(() => ({}));
+      return { ok: res.ok && data.ok === true, status: res.status, data };
+    } catch {
+      return { ok: false, status: 0, data: null };
+    }
+  }
+
+  function renderWorkspaceLoadFailure(err, ping) {
+    const is401 = err?.status === 401 || /unauthorized/i.test(err?.message || '');
+    const dbBad = ping?.data?.db === 'error';
+    return `
+      <div class="wrap">
+        <div class="card error">
+          <h2>Workspace load failed</h2>
+          <p>${escapeHtml(err?.message || 'Unknown error')}</p>
+          ${dbBad ? '<p><strong>Database</strong> check failed on <code>/api/v1/tc/status</code>. Confirm <code>DATABASE_URL</code> on Railway and redeploy.</p>' : ''}
+          ${is401 ? `
+            <div style="margin-top:14px;padding:14px;background:#141c31;border-radius:12px;border:1px solid #2d3b5f">
+              <p><strong>Unauthorized</strong> usually means the command key in this browser does not match Railway.</p>
+              <ol style="margin:8px 0 0 18px;line-height:1.5">
+                <li>Open <a href="https://docs.railway.app/develop/variables" target="_blank" rel="noopener">Railway → your service → Variables</a>.</li>
+                <li>Copy <code>COMMAND_CENTER_KEY</code> (or <code>API_KEY</code> / <code>LIFEOS_KEY</code> if that is what you set).</li>
+                <li>Paste into <strong>Command key</strong> at the top of this page (after reload) and click Save.</li>
+              </ol>
+            </div>` : ''}
+          <p style="margin-top:16px"><a href="/tc/agent-portal.html">Reload portal</a>
+            · <a href="/api/v1/tc/status" target="_blank" rel="noopener">Open TC status JSON</a> (no key required)</p>
+        </div>
+      </div>`;
   }
 
   async function multipartApi(url, formData) {
@@ -75,11 +112,12 @@
     const view = document.body.dataset.view || 'agent';
     if (!txId) {
       if (view === 'agent') {
+        const ping = await pingTcService();
         try {
           const workspace = await api('/api/v1/tc/intake/workspace');
-          renderWorkspace(workspace.workspace || workspace);
+          renderWorkspace(workspace.workspace || workspace, ping);
         } catch (err) {
-          document.getElementById('app').innerHTML = `<div class="card error"><h2>Workspace load failed</h2><p>${escapeHtml(err.message)}</p></div>`;
+          document.getElementById('app').innerHTML = renderWorkspaceLoadFailure(err, ping);
         }
         return;
       }
@@ -921,9 +959,17 @@
     `;
   }
 
-  function renderWorkspace(data) {
+  function renderWorkspace(data, ping = null) {
     const root = document.getElementById('app');
     const readiness = data.readiness || {};
+    const apiBanner =
+      ping?.ok === false
+        ? '<p class="badge bad" style="margin:0 0 10px">API status unreachable — open the site from the same host as the API (or check deploy).</p>'
+        : ping?.data?.db === 'error'
+          ? '<p class="badge bad" style="margin:0 0 10px">Database check failed — verify DATABASE_URL on Railway.</p>'
+          : ping?.ok
+            ? `<p class="badge ok" style="margin:0 0 10px">API up · DB ${escapeHtml(ping.data?.db || '—')}${ping.data?.auth?.required ? ' · auth required' : ' · auth open'}</p>`
+            : '';
     const readinessSummary = readiness.readiness || {};
     const envTemplate = readiness.env_template || [];
     const managedEnvPlan = readiness.managed_env?.plan || [];
@@ -1043,7 +1089,9 @@
             <button id="save-api-key">Save key</button>
             <button id="scan-inbox" class="ghost">Run inbox scan</button>
             <button id="search-agreements" class="ghost">Search agreements</button>
+            <a class="ghost" href="/api/v1/tc/status" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:8px 10px;border-radius:10px;text-decoration:none;color:#cbd5ff;border:1px solid #27304a">TC status</a>
           </div>
+          ${apiBanner}
         </div>
       </div>
 

@@ -135,6 +135,37 @@ export function createTCRoutes(
     return notificationServicePromise;
   }
 
+  // GET /api/v1/tc/status — no API key (deploy smoke: load balancer + Node + DB)
+  router.get('/status', async (_req, res) => {
+    let db = 'unknown';
+    try {
+      await pool.query('SELECT 1');
+      db = 'ok';
+    } catch (err) {
+      db = 'error';
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] status DB check failed');
+    }
+    const authConfigured = Boolean(
+      process.env.API_KEY || process.env.LIFEOS_KEY || process.env.COMMAND_CENTER_KEY
+    );
+    res.json({
+      ok: true,
+      service: 'transaction_coordinator',
+      time: new Date().toISOString(),
+      db,
+      auth: {
+        required: authConfigured && process.env.LIFEOS_OPEN_ACCESS !== 'true',
+        configured: authConfigured,
+        open_access: process.env.LIFEOS_OPEN_ACCESS === 'true',
+      },
+      hints: {
+        portal: '/tc/agent-portal.html',
+        workspace_api: '/api/v1/tc/intake/workspace (requires x-api-key when auth configured)',
+        docs_railway_vars: 'https://docs.railway.app/develop/variables',
+      },
+    });
+  });
+
   router.get('/access/readiness', requireKey, async (_req, res) => {
     try {
       const readiness = await accessService.getAccessReadiness();
