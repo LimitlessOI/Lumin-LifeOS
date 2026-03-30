@@ -11,6 +11,7 @@
   "stability_class": "needs-review",
   "current_focus": "Governance panels are live, Operator Chat now has browser voice input/spoken replies, Secrets Vault now exposes env-registry health, and public overlay HTML now ships no-cache with versioned scripts so browsers stop serving stale broken builds; next step is mobile responsiveness and access control",
   "owned_files": [
+    "middleware/apply-middleware.js",
     "routes/command-center-routes.js",
     "routes/public-routes.js",
     "public/overlay/command-center.html",
@@ -109,10 +110,14 @@
   ],
   "required_env": [
     "COMMAND_CENTER_KEY",
-    "DATABASE_URL",
-    "ANTHROPIC_API_KEY"
+    "DATABASE_URL"
   ],
   "assertions": [
+    {
+      "type": "env_any",
+      "check": ["ANTHROPIC_API_KEY", "GOOGLE_AI_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY"],
+      "label": "at least one AI provider key is configured"
+    },
     {
       "type": "node_check",
       "check": "routes/command-center-routes.js",
@@ -124,9 +129,10 @@
       "label": "command-center.js syntax"
     },
     {
-      "type": "env",
+      "type": "env_with_default",
       "check": "LIFEOS_DIRECTED_MODE",
       "expect": "true",
+      "default": "true",
       "label": "directed mode is on"
     }
   ],

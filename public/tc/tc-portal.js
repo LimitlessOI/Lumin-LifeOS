@@ -1254,6 +1254,12 @@
         ${readinessCards.map((item) => `<div class="card stat"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong><span class="badge ${badgeClass(item.status)}">${escapeHtml(item.status)}</span></div>`).join('')}
       </div>
 
+      <div class="card tx-pipeline-card">
+        <h2>Active transactions — at a glance</h2>
+        <p><strong>Border</strong> = green / yellow / red health. <strong>Emoji row</strong> = upcoming milestones (DD 🔍, appraisal 📋, loan 🏦) with days left — expired items drop off. <strong>📅 Close</strong> is COE from the file. Fee strip = purchase + your TC fee. Hover any card for waiting-on, on-track, and next step. Click to open.</p>
+        ${renderTransactionCards(transactions)}
+      </div>
+
       ${renderSetupPlaybook(readiness.setup_playbook)}
 
       <div class="grid two">
@@ -1458,12 +1464,6 @@
       <div class="card">
         <h2>Inbox Intake Queue</h2>
         <table><thead><tr><th>Received</th><th>Subject</th><th>Category</th><th>Suggested transaction</th><th>Next step</th><th>Action</th></tr></thead><tbody>${queueRows}</tbody></table>
-      </div>
-
-      <div class="card">
-        <h2>Active Transactions</h2>
-        <p><strong>Red ring</strong> = you (TC) must act (approval, alert, or internal next step). <strong>Yellow</strong> = watch—other party, missing items, or non-blocking follow-ups. <strong>Green</strong> = nothing queued for you. Cards show street number, street name, city line, client and phone on one line, and chips for sign-offs/alerts/missing docs. Hover for the brief; click to open the file on approvals, alerts, or status.</p>
-        ${renderTransactionCards(transactions)}
       </div>
 
       <div class="card">

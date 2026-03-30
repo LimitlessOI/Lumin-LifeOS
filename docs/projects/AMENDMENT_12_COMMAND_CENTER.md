@@ -236,6 +236,7 @@ node --check public/overlay/command-center.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | `middleware/apply-middleware.js`: serve `public/tc` at `/tc` with `no-store` on `.js`/`.html` so TC portal scripts are not cached above the global no-cache layer | Fix stale `tc-portal.js` after deploys | ✅ | ✅ | pending |
 | 2026-03-30 | `public/shared/lifeos-voice-chat.js`: optional `onEnd` on `speakText`; `startMic` / `stopMic` on attach controller. `routes/public-routes.js`: `GET /tc/assistant` → TC voice assistant page | Enable TC dialog mode (speak reply then resume listening) | ✅ | ✅ | pending |
 | 2026-03-29 | Command Center verification now respects the safe default for `LIFEOS_DIRECTED_MODE` instead of failing just because the env var is omitted | The overlay should reflect the actual runtime safety posture, and directed mode defaults closed even when the env is not set explicitly | ✅ | ✅ | pending |
 | 2026-03-29 | Command Center verification no longer hard-requires Anthropic and now accepts any configured AI provider key | Operator chat and system surfaces depend on a working AI path, not on one vendor specifically; the manifest now reflects the free-tier-first reality | ✅ | ✅ | pending |

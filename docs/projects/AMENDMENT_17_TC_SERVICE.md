@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 (TC portal at-a-glance cards) |
+| **Last Updated** | 2026-03-30 (TC portal pipeline placement + cache fix) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -825,6 +825,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | TC portal: move **Active transactions** card directly under readiness stats (above setup forms); version query on `tc-portal.js` in HTML; rely on Express `/tc` static `no-store` for fresh JS | User sees new board without scrolling past long forms; avoid browser cache of portal script | ✅ | ✅ | pending |
 | 2026-03-30 | TC intake board: workspace list exposes `close_date`, `purchase_price`, fee fields; portal cards use green/yellow/red borders, role pill + pulse emoji strip (`buildMilestoneStrip`) for upcoming contingencies only (DD 🔍, appraisal 📋, loan 🏦, etc.), COE chip from `close_date`, fee strip, richer hover DL; milestone keys come from `key_dates` JSON | At-a-glance pipeline: deadlines, economics, and track status without opening each file | ✅ | ✅ | pending |
 | 2026-03-30 | **TC voice assistant:** `services/tc-assistant-service.js`, `POST /api/v1/tc/assistant/chat`, `public/tc/tc-assistant.html` at `/tc/assistant` — dictation via shared voice helper, dialog mode (TTS then listen again), portal links from intake + file detail | Hands-free TC Q&A against real workspace data | ✅ | ✅ | pending |
 | 2026-03-30 | **Ops:** committed `services/credential-aliases.js` (untracked; required by `tc-browser-agent` / TC access / IMAP — fixed Railway ERR_MODULE_NOT_FOUND) | Restore production boot | ✅ | ✅ | pending |
