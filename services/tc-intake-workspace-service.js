@@ -56,6 +56,37 @@ export function createTCIntakeWorkspaceService({ pool, coordinator, accessServic
       [limit]
     );
 
+    const ids = rows.map((r) => r.id);
+    let approvalCounts = new Map();
+    let alertCounts = new Map();
+    if (ids.length) {
+      try {
+        const [approvalsRes, alertsRes] = await Promise.all([
+          pool.query(
+            `SELECT transaction_id, COUNT(*)::int AS c
+             FROM tc_approval_items
+             WHERE transaction_id = ANY($1::bigint[])
+               AND status IN ('pending','awaiting_review')
+             GROUP BY transaction_id`,
+            [ids]
+          ),
+          pool.query(
+            `SELECT transaction_id, COUNT(*)::int AS c
+             FROM tc_alerts
+             WHERE transaction_id = ANY($1::bigint[])
+               AND status = 'open'
+               AND severity IN ('action_required','urgent','critical')
+             GROUP BY transaction_id`,
+            [ids]
+          ),
+        ]);
+        approvalCounts = new Map(approvalsRes.rows.map((r) => [Number(r.transaction_id), r.c]));
+        alertCounts = new Map(alertsRes.rows.map((r) => [Number(r.transaction_id), r.c]));
+      } catch (err) {
+        logger.warn?.({ err: err.message }, '[tc-workspace] approval/alert counts skipped');
+      }
+    }
+
     return Promise.all(rows.map(async (transaction) => {
       const events = await coordinator.getTransactionEvents(transaction.id, 20).catch(() => []);
       const status = statusEngine.deriveTransactionState({ transaction, events });
@@ -63,15 +94,28 @@ export function createTCIntakeWorkspaceService({ pool, coordinator, accessServic
         id: transaction.id,
         address: transaction.address,
         status: transaction.status,
+        agent_role: transaction.agent_role,
         mls_number: transaction.mls_number,
         source_email_id: transaction.source_email_id,
         transaction_desk_id: transaction.transaction_desk_id,
         stage: status.stage,
         health_status: status.health_status,
         next_action: status.next_action,
+        next_action_owner: status.next_action_owner,
+        waiting_on: status.waiting_on,
         missing_doc_count: status.missing_doc_count,
+        missing_docs: status.missing_docs,
         blocker_count: status.blocker_count,
+        blockers: status.blockers,
+        risk_flags: status.risk_flags,
+        days_to_close: status.days_to_close,
+        last_client_update_at: status.last_client_update_at,
+        next_client_update_due_at: status.next_client_update_due_at,
+        portal_sync_status: status.portal_sync_status,
+        contingencies: status.contingencies,
         parties: transaction.parties || {},
+        pending_approvals: approvalCounts.get(Number(transaction.id)) || 0,
+        open_operator_alerts: alertCounts.get(Number(transaction.id)) || 0,
       };
     }));
   }
@@ -81,6 +125,7 @@ export function createTCIntakeWorkspaceService({ pool, coordinator, accessServic
       `SELECT *
        FROM email_triage_log
        WHERE action_required = true
+         AND category IN ('tc_contract', 'tc_deadline', 'client')
        ORDER BY actioned_at NULLS FIRST, received_at DESC
        LIMIT $1`,
       [limit]
