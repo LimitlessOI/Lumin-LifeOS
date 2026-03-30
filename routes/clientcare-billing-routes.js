@@ -644,21 +644,26 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   });
 
   router.post('/assistant/session', async (_req, res) => {
-    const sessionId = `clientcare-${randomUUID()}`;
-    const metadata = {
-      channel: 'clientcare_billing_overlay',
-      created_at: new Date().toISOString(),
-      archived_count: 0,
-    };
-    await conversationStore.save({
-      sessionId,
-      source: 'clientcare_overlay',
-      project: 'clientcare_billing',
-      messages: [],
-      metadata,
-      startedAt: new Date(),
-    });
-    res.status(201).json({ ok: true, session_id: sessionId, metadata });
+    try {
+      const sessionId = `clientcare-${randomUUID()}`;
+      const metadata = {
+        channel: 'clientcare_billing_overlay',
+        created_at: new Date().toISOString(),
+        archived_count: 0,
+      };
+      await conversationStore.save({
+        sessionId,
+        source: 'clientcare_overlay',
+        project: 'clientcare_billing',
+        messages: [],
+        metadata,
+        startedAt: new Date(),
+      });
+      res.status(201).json({ ok: true, session_id: sessionId, metadata });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] create assistant session failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
   });
 
   router.get('/assistant/session/:sessionId', async (req, res) => {

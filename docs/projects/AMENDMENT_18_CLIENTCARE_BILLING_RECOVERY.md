@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-28
+**Last Updated:** 2026-03-30
 
 ---
 
@@ -321,6 +321,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-03-29 | Realigned billing verification to the shipped schema (`claim_status` / `rescue_bucket`, shared `conversations` + `conversation_messages`) instead of stale `status` / `bucket` and legacy `conversation_sessions` assumptions | Stop false verifier failures and keep SSOT aligned with the live claim ledger and assistant transcript storage model | 0.5h | 0.5h | none | ✅ | ✅ | pending |
 | 2026-03-27 | Added payment-history import and underpayment queue | 6h | 7h | +1h from CSV alias normalization and queue polish | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added appeals queue, packet preview, and recovery action queueing | 6h | 7h | +1h from route/UI/action wiring across queue and claim pane | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added payer playbooks, ERA/remit insights, and forecast calibration hooks | 7h | 7h | none | ✅ | ✅ | ✅ |

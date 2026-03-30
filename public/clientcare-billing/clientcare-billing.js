@@ -781,7 +781,7 @@
         ])}
         <div class="card" style="padding:12px; background:#0f1528;">
           <strong>Preview endpoint</strong>
-          <p class="muted" style="margin-top:8px">Use `/api/v1/clientcare-billing/insurance/verification-preview` to check take/review/do-not-schedule decisions before accepting insurance clients.</p>
+          <p class="muted" style="margin-top:8px">Use <code>/api/v1/clientcare-billing/insurance/verification-preview</code> to check take/review/do-not-schedule decisions before accepting insurance clients.</p>
         </div>
         <div class="card" style="padding:12px; background:#0f1528;">
           <strong>Verification preview</strong>
@@ -1568,7 +1568,7 @@
         banner.innerHTML = `<strong style="color:#ff9db0">⚠ ${failures.length} endpoint(s) failed to load</strong><ul style="margin:8px 0 0 18px;font-size:12px;color:#ff9db0">${failures.map((f) => `<li>${escapeHtml(f)}</li>`).join('')}</ul>`;
         root.insertBefore(banner, root.firstChild);
       }
-      await ensureAssistantSession();
+      await ensureAssistantSession().catch((err) => console.warn('[ClientCare] assistant session init failed:', err.message));
       if (!options.skipAutoFullQueue && getApiKey() && readiness?.readiness?.ready && !fullQueueHydrated && !fullQueueLoading) {
         fullQueueLoading = true;
         browserBacklogSummary({ silent: true }).finally(() => {
