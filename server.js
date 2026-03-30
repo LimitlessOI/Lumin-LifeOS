@@ -305,6 +305,7 @@ const {
   GITHUB_TOKEN,
   GITHUB_REPO,
   OLLAMA_ENDPOINT,
+  COUNCIL_OLLAMA_MODE,
   DEEPSEEK_LOCAL_ENDPOINT,
   DEEPSEEK_BRIDGE_ENABLED,
   ALLOWED_ORIGINS,
@@ -550,6 +551,7 @@ const {
   COUNCIL_MEMBERS,
   COUNCIL_ALIAS_MAP,
   OLLAMA_ENDPOINT,
+  COUNCIL_OLLAMA_MODE,
   MAX_DAILY_SPEND,
   COST_SHUTDOWN_THRESHOLD,
   NODE_ENV,
@@ -1006,31 +1008,34 @@ const getCouncilConsensus = createGetCouncilConsensus({ callCouncilMember, COUNC
 // council (OpenAI / DeepSeek / Groq) when Ollama is unreachable (e.g. Railway prod).
 autoBuilder.overrideBuildHelpers({
   routeTask: async (task, prompt) => {
-    const ollamaEndpoint = OLLAMA_ENDPOINT || 'http://localhost:11434';
+    const ollamaEndpoint = String(OLLAMA_ENDPOINT || '').trim();
+    const tryOllama =
+      Boolean(ollamaEndpoint) && COUNCIL_OLLAMA_MODE !== 'off';
     const modelName = task === 'code_generation' ? 'deepseek-coder-v2:latest' : 'qwen2.5:32b';
 
-    // Try Ollama first (free, local)
-    try {
-      const res = await fetch(`${ollamaEndpoint}/api/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: modelName,
-          prompt,
-          stream: false,
-          options: { temperature: 0.2, num_predict: 8192 },
-        }),
-        signal: AbortSignal.timeout(60000),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.response && data.response.length > 50) {
-          logger.info(`[AUTO-BUILDER] Ollama OK: ${data.response.length} chars (${modelName})`);
-          return data.response;
+    if (tryOllama) {
+      try {
+        const res = await fetch(`${ollamaEndpoint}/api/generate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: modelName,
+            prompt,
+            stream: false,
+            options: { temperature: 0.2, num_predict: 8192 },
+          }),
+          signal: AbortSignal.timeout(60000),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.response && data.response.length > 50) {
+            logger.info(`[AUTO-BUILDER] Ollama OK: ${data.response.length} chars (${modelName})`);
+            return data.response;
+          }
         }
+      } catch (ollamaErr) {
+        logger.warn(`[AUTO-BUILDER] Ollama unavailable (${ollamaErr.message}) — falling back to council`);
       }
-    } catch (ollamaErr) {
-      logger.warn(`[AUTO-BUILDER] Ollama unavailable (${ollamaErr.message}) — falling back to council`);
     }
 
     // Cloud fallback: pick first free-tier model with an API key
@@ -1741,8 +1746,9 @@ async function start() {
     }
 
       const railwayOllamaDisabled = Boolean(
-        process.env.RAILWAY_ENVIRONMENT &&
-        (!OLLAMA_ENDPOINT || /localhost|127\.0\.0\.1|PASTE_YOUR|disabled|none/i.test(String(OLLAMA_ENDPOINT)))
+        COUNCIL_OLLAMA_MODE === 'off' ||
+        (process.env.RAILWAY_ENVIRONMENT &&
+          (!OLLAMA_ENDPOINT || /localhost|127\.0\.0\.1|PASTE_YOUR|disabled|none/i.test(String(OLLAMA_ENDPOINT))))
       );
       // Initialize Ollama Installer (auto-install Ollama if needed)
       if (railwayOllamaDisabled) {

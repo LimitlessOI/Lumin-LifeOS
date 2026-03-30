@@ -49,6 +49,7 @@ export function createCouncilService({
   COUNCIL_MEMBERS,
   COUNCIL_ALIAS_MAP,
   OLLAMA_ENDPOINT,
+  COUNCIL_OLLAMA_MODE = "last_resort",
   MAX_DAILY_SPEND,
   COST_SHUTDOWN_THRESHOLD,
   NODE_ENV,
@@ -68,24 +69,33 @@ export function createCouncilService({
 }) {
   // Both backed by Neon — stats survive Railway deploys
   const tokenOptimizer = createTokenOptimizer(pool);
-  const freeTierGovernor = createFreeTierGovernor({ pool });
+  const freeTierGovernor = createFreeTierGovernor({
+    pool,
+    ollamaMode: COUNCIL_OLLAMA_MODE,
+  });
   const rulesEngine = createRulesEngine({
     COUNCIL_MEMBERS,
     timeZone: process.env.TZ || "America/Los_Angeles",
   });
 
-  const ollamaDisabled = !OLLAMA_ENDPOINT ||
-    OLLAMA_ENDPOINT === 'disabled' ||
-    OLLAMA_ENDPOINT === 'none' ||
+  const ollamaCouncilOff = COUNCIL_OLLAMA_MODE === "off";
+  const ollamaDisabled = ollamaCouncilOff ||
+    !OLLAMA_ENDPOINT ||
+    OLLAMA_ENDPOINT === "disabled" ||
+    OLLAMA_ENDPOINT === "none" ||
     (RAILWAY_ENVIRONMENT && /localhost|127\.0\.0\.1|PASTE_YOUR/i.test(String(OLLAMA_ENDPOINT)));
 
-  // Startup Ollama ping — skip entirely if OLLAMA_ENDPOINT is not set or disabled
   const _exhaustedProviders = new Set();
+  if (ollamaCouncilOff) {
+    _exhaustedProviders.add("ollama");
+  }
+
+  // Startup Ollama ping — skip when council mode is off or endpoint unusable
   (async () => {
     const endpoint = OLLAMA_ENDPOINT;
     if (ollamaDisabled) {
-      _exhaustedProviders.add('ollama');
-      return; // silent — no Ollama configured
+      if (!ollamaCouncilOff) _exhaustedProviders.add("ollama");
+      return;
     }
     try {
       const ctrl = new AbortController();
@@ -99,6 +109,12 @@ export function createCouncilService({
       console.log(`🔌 [COUNCIL] Ollama not available — excluded from routing`);
     }
   })();
+
+  console.log(
+    `🔌 [COUNCIL] Ollama policy: ${COUNCIL_OLLAMA_MODE}${
+      ollamaCouncilOff ? " (local Ollama excluded — free cloud APIs only)" : ""
+    }`
+  );
 
   // ==================== LCTP v3 COMPRESSION HELPERS ====================
 
@@ -766,6 +782,11 @@ export function createCouncilService({
     // cascade through every free provider until one is available.
     if (MAX_DAILY_SPEND === 0 && isPaid) {
       const nextProvider = await freeTierGovernor.getNextAvailable();
+      if (!nextProvider) {
+        throw new Error(
+          `💰 [COST SHUTDOWN] Blocked ${member} — no free providers available (Ollama off: set COUNCIL_OLLAMA_MODE=last_resort for local fallback after caps).`
+        );
+      }
       const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
       for (const fallbackMember of fallbackMembers) {
         if (COUNCIL_MEMBERS[fallbackMember]) {
@@ -778,6 +799,11 @@ export function createCouncilService({
 
     if (spend >= COST_SHUTDOWN_THRESHOLD && isPaid) {
       const nextProvider = await freeTierGovernor.getNextAvailable();
+      if (!nextProvider) {
+        throw new Error(
+          `💰 [SPEND LIMIT] $${spend.toFixed(2)}/$${COST_SHUTDOWN_THRESHOLD} — no free providers (Ollama off: set COUNCIL_OLLAMA_MODE=last_resort for local fallback).`
+        );
+      }
       const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
       for (const fallbackMember of fallbackMembers) {
         if (COUNCIL_MEMBERS[fallbackMember]) {
@@ -997,6 +1023,7 @@ export function createCouncilService({
     // ── Compact system prompt — knowledge context baked in for cacheability ───
     const systemPromptBase = `You are ${config.name} (${config.role}) in LifeOS AI Council on Railway.
 Specialties: ${config.specialties.join(', ')}.${options.checkBlindSpots ? ' Check blind spots.' : ''}${options.guessUserPreference ? ' Use user preferences.' : ''}${options.webSearch ? '\nWEB SEARCH: Include links, code, actionable solutions.' : ''}
+Core framing: never moralize or judge. The only question is "does this work for the user, or does it not?" Frame everything in terms of outcomes and fit — never "right/wrong", never "should/shouldn't". The user is the authority on their own life.
 Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
     // ── Token optimization — 5-layer compression stack ───────────────────────
@@ -1474,6 +1501,7 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         const exhaustedProvider = freeTierGovernor.resolveProvider(member);
         _markProviderExhausted(exhaustedProvider); // keep selectOptimalModel from re-picking it
         const nextProvider = await freeTierGovernor.getNextAvailable([exhaustedProvider]);
+        if (!nextProvider) throw error;
         const fallbackMembers = freeTierGovernor.PROVIDER_LIMITS[nextProvider]?.councilMembers || ['cerebras_llama'];
         for (const fallbackMember of fallbackMembers) {
           if (COUNCIL_MEMBERS[fallbackMember]) {

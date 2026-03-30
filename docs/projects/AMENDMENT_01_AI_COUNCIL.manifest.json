@@ -19,7 +19,8 @@
     "services/consensus-service.js",
     "services/response-cache.js",
     "services/ai-guard.js",
-    "config/council-members.js"
+    "config/council-members.js",
+    "config/runtime-env.js"
   ],
   "protected_files": [
     "server.js",
@@ -41,19 +42,16 @@
     { "name": "free_tier_usage", "required_columns": ["provider_key", "requests", "tokens", "exhausted_at"] }
   ],
   "required_env": [
-    "DATABASE_URL",
-    "ANTHROPIC_API_KEY",
-    "LIFEOS_DIRECTED_MODE",
-    "PAUSE_AUTONOMY",
-    "LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER",
-    "HAB_DAILY_LIMIT"
+    "DATABASE_URL"
   ],
   "assertions": [
+    { "type": "env_any", "check": ["ANTHROPIC_API_KEY", "GOOGLE_AI_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY"], "label": "at least one AI provider key is configured" },
     { "type": "node_check", "check": "services/council-service.js", "label": "council-service syntax" },
     { "type": "node_check", "check": "services/token-optimizer.js", "label": "token-optimizer syntax" },
-    { "type": "env", "check": "LIFEOS_DIRECTED_MODE", "expect": "true", "label": "directed mode ON (no autonomous AI)" },
-    { "type": "env", "check": "PAUSE_AUTONOMY", "expect": "1", "label": "autonomy paused" },
-    { "type": "env", "check": "LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER", "expect": "false", "label": "auto-builder OFF" }
+    { "type": "env_with_default", "check": "LIFEOS_DIRECTED_MODE", "expect": "true", "default": "true", "label": "directed mode ON (no autonomous AI)" },
+    { "type": "env_with_default", "check": "PAUSE_AUTONOMY", "expect": "1", "default": "1", "label": "autonomy paused" },
+    { "type": "env_with_default", "check": "LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER", "expect": "false", "default": "false", "label": "auto-builder OFF" },
+    { "type": "env_with_default", "check": "HAB_DAILY_LIMIT", "expect": "100", "default": "100", "label": "HAB daily limit is 100" }
   ],
   "completion_checks": [
     "All AI calls routed to free providers first (Groq → Gemini → Cerebras → Ollama)",

@@ -1,3 +1,4 @@
+/** @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md — council/env overlap (Ollama policy, spend caps) */
 export function loadRuntimeEnv() {
   const {
     DATABASE_URL,
@@ -20,17 +21,6 @@ export function loadRuntimeEnv() {
     RAILWAY_PROJECT_ID,
     RAILWAY_SERVICE_ID,
     RAILWAY_ENVIRONMENT_ID,
-    OLLAMA_ENDPOINT =
-      process.env.OLLAMA_ENDPOINT ||
-      process.env.OLLAMA_BASE_URL ||
-      process.env.OLLAMA_URL ||
-      process.env.OLLAMA_API_BASE ||
-      (process.env.OLLAMA_HOST ? `http://${process.env.OLLAMA_HOST}` : "") ||
-      ((process.env.RAILWAY_PROJECT_ID ||
-        process.env.RAILWAY_SERVICE_ID ||
-        process.env.RAILWAY_ENVIRONMENT)
-        ? "http://ollama.railway.internal:11434"
-        : "http://localhost:11434"),
     DEEPSEEK_LOCAL_ENDPOINT = "",
     DEEPSEEK_BRIDGE_ENABLED = "false",
     ALLOWED_ORIGINS = "",
@@ -70,6 +60,42 @@ export function loadRuntimeEnv() {
 
   const CURRENT_DEEPSEEK_ENDPOINT = (process.env.DEEPSEEK_LOCAL_ENDPOINT || "")
     .trim() || null;
+
+  const isRailwayDeploy = !!(
+    RAILWAY_ENVIRONMENT ||
+    RAILWAY_PROJECT_ID ||
+    RAILWAY_SERVICE_ID ||
+    RAILWAY_ENVIRONMENT_ID
+  );
+
+  const _ollamaExplicit =
+    (
+      process.env.OLLAMA_ENDPOINT ||
+      process.env.OLLAMA_BASE_URL ||
+      process.env.OLLAMA_URL ||
+      process.env.OLLAMA_API_BASE ||
+      (process.env.OLLAMA_HOST ? `http://${process.env.OLLAMA_HOST}` : "") ||
+      ""
+    ).trim();
+
+  /** Explicit only on Railway — avoids boot pings to ollama.railway.internal or a tunnel to your Mac. */
+  const OLLAMA_ENDPOINT =
+    _ollamaExplicit || (!isRailwayDeploy ? "http://localhost:11434" : "");
+
+  /**
+   * off — never use Ollama in council routing (free cloud APIs only). Default on Railway.
+   * last_resort — Ollama only after other free providers hit daily limits.
+   * on — same as last_resort for now.
+   */
+  const rawCouncilOllama = String(process.env.COUNCIL_OLLAMA_MODE || "")
+    .toLowerCase()
+    .trim();
+  let COUNCIL_OLLAMA_MODE = "last_resort";
+  if (["off", "last_resort", "on"].includes(rawCouncilOllama)) {
+    COUNCIL_OLLAMA_MODE = rawCouncilOllama;
+  } else if (isRailwayDeploy) {
+    COUNCIL_OLLAMA_MODE = "off";
+  }
 
   // ==================== DATABASE ENVIRONMENT VALIDATION ====================
   /**
@@ -238,6 +264,7 @@ export function loadRuntimeEnv() {
     RAILWAY_SERVICE_ID,
     RAILWAY_ENVIRONMENT_ID,
     OLLAMA_ENDPOINT,
+    COUNCIL_OLLAMA_MODE,
     DEEPSEEK_LOCAL_ENDPOINT,
     DEEPSEEK_BRIDGE_ENABLED,
     ALLOWED_ORIGINS,

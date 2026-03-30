@@ -11,7 +11,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-27 |
+| **Last Updated** | 2026-03-30 |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json` |
 
@@ -94,7 +94,8 @@ server.js           — composition root only
 | `LIFEOS_DIRECTED_MODE` | `true` | Disables all autonomous AI schedulers |
 | `PAUSE_AUTONOMY` | `1` | Secondary kill switch |
 | `LIFEOS_ENABLE_AUTO_BUILDER_SCHEDULER` | `false` | Auto-builder off |
-| `OLLAMA_ENDPOINT` | n/a | If set to Railway internal URL, set to `disabled` to silence logs |
+| `OLLAMA_ENDPOINT` | empty on Railway unless set | Explicit URL only — no default `ollama.railway.internal` (avoids boot pings) |
+| `COUNCIL_OLLAMA_MODE` | `off` on Railway, else `last_resort` | `off` = never use local Ollama; `last_resort` / `on` = after free cloud caps |
 
 ### DB Tables
 | Table | Purpose |
@@ -222,7 +223,7 @@ grep "0\.97" services/free-tier-governor.js
 |---|---|---|
 | All calls failing with 503 | Groq + Gemini both exhausted | Check free_tier_usage table; wait for midnight UTC reset |
 | savings_pct = 0 in DB | savings-ledger.js not called | Check council-service.js calls ledger.record() |
-| Ollama spam every request | OLLAMA_ENDPOINT set to wrong URL | Set OLLAMA_ENDPOINT=disabled in Railway |
+| Ollama ping / routing on Railway | Implicit Ollama URL or Mac tunnel | Default is `COUNCIL_OLLAMA_MODE=off`; set `COUNCIL_OLLAMA_MODE=last_resort` only when you want Ollama after cloud caps |
 | Chat returns 409 REALITY_MISMATCH | ensureExpectedRealityHash called too early | Check ai-guard.js configureAiGuard — lazy init must be preserved |
 
 ---
@@ -238,6 +239,9 @@ grep "0\.97" services/free-tier-governor.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | `COUNCIL_OLLAMA_MODE` (`off` \| `last_resort` \| `on`): Railway default **off** — no Ollama ping, excluded from free-tier cascade; `last_resort` enables Ollama only after other free providers exhausted. Removed implicit `OLLAMA_ENDPOINT` default to `ollama.railway.internal`. | Free cloud APIs first; local Ollama opt-in so Mac tunnel does not slow work | ✅ | ✅ | pending |
+| 2026-03-29 | Centralized autonomy runtime defaults in `services/runtime-modes.js`, raised `HAB_DAILY_LIMIT` code default to 100, and made verification respect defaulted safe-mode values instead of requiring every kill-switch env to be explicitly present | Runtime safety semantics had drifted: some code treated missing flags as safe defaults while other checks treated them as unset/misconfigured | ✅ | ✅ | pending |
+| 2026-03-29 | Verifier/manifest semantics changed so AI Council now accepts any configured provider key instead of hard-requiring Anthropic | Free-tier-first routing is constitutional here; verification should not fail just because Claude is absent when Groq/Gemini/Cerebras are available | ✅ | ✅ | pending |
 | 2026-03-27 | Added `startup/register-runtime-routes.js`, moved route composition out of `server.js`, and switched domain boots to `startup/boot-domains.js` | Reduce server.js drift and keep composition root boundaries real | ✅ | ✅ | pending |
 | 2026-03-27 | TOON enabled for codegen, savings_pct fix, buffer 3%, HAB 100 | Token savings optimization | ✅ | ✅ | pending |
 | 2026-03-27 | Lazy reality hash in ai-guard.js | Fix REALITY_MISMATCH 409 | ✅ | ✅ | pending |
@@ -250,7 +254,7 @@ grep "0\.97" services/free-tier-governor.js
 **Status:** BUILD_READY (token optimization + free-tier routing — core is live)
 **Adaptability Score:** 95/100
 **Council Persona:** tesla (think 50 years ahead — what's the theoretical ideal AI routing system?)
-**Last Updated:** 2026-03-27
+**Last Updated:** 2026-03-30
 
 ### Gate 1 — Implementation Detail
 - [x] Token optimizer, free-tier governor, savings ledger all have specific segment descriptions

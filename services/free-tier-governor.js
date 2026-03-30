@@ -2,23 +2,17 @@
  * services/free-tier-governor.js
  * Governs usage of free-tier AI providers so we never go over limits.
  *
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ *
  * Priority chain (all free, in order):
- *   1. Groq           — 14,400 req/day, 30 RPM
- *   2. Gemini Flash   — 1,500 req/day, 15 RPM, 1M tokens/day
- *   3. Cerebras       — 1,000 req/day (conservative), 30 RPM
- *   4. OpenRouter     — 200 req/day (free models only, conservative)
- *   5. Mistral        — 500 req/day (conservative)
- *   6. Together       — 900 req/day (conservative)
- *   7. Ollama         — unlimited (local, always last)
+ *   1. Groq … 6. Together — see PROVIDER_PRIORITY
+ *   7. Ollama — only when `ollamaMode !== 'off'`; last in chain (local / slow)
  *
  * Rules:
  *  - Track daily requests + tokens per provider (resets at midnight UTC)
- *  - On 429 from any provider → mark it exhausted for the rest of the day
- *  - When daily cap is 90% used → skip to next provider (safety buffer)
- *  - Ollama is always the final fallback — unlimited but slowest
- *  - State stored in Neon (free_tier_usage table) — survives Railway deploys
+ *  - On 429 → mark exhausted; `getNextAvailable` may return null if Ollama is policy-off
  *
- * Exports: createFreeTierGovernor({ pool? }) → { canUse, record, markExhausted, getStatus, ... }
+ * Exports: createFreeTierGovernor({ pool?, ollamaMode? }) → { … }
  */
 
 // Daily limits — set 3% below actual free limit as safety buffer (down from 10%)
@@ -95,7 +89,12 @@ function emptyProviderState() {
   return { requests: 0, tokens: 0, exhaustedAt: null, last429At: null };
 }
 
-export function createFreeTierGovernor({ pool = null } = {}) {
+export function createFreeTierGovernor({
+  pool = null,
+  /** off | last_resort | on — when off, Ollama is never chosen after cloud providers. */
+  ollamaMode = "last_resort",
+} = {}) {
+  const ollamaDisabled = ollamaMode === "off";
   // In-memory cache of today's state — refreshed from Neon on day change
   let cachedDate = null;
   let cachedState = null; // { [providerKey]: { requests, tokens, exhaustedAt, last429At } }
@@ -235,7 +234,10 @@ export function createFreeTierGovernor({ pool = null } = {}) {
   async function canUse(providerKey) {
     const limits = PROVIDER_LIMITS[providerKey];
     if (!limits) return false;
-    if (providerKey === 'ollama') return true; // always available
+    if (providerKey === "ollama") {
+      if (ollamaDisabled) return false;
+      return true;
+    }
 
     const s = await getState();
     const usage = s[providerKey];
@@ -319,7 +321,8 @@ export function createFreeTierGovernor({ pool = null } = {}) {
       if (excludeProviders.includes(providerKey)) continue;
       if (await canUse(providerKey)) return providerKey;
     }
-    return 'ollama';
+    if (ollamaDisabled) return null;
+    return "ollama";
   }
 
   async function checkAndRecord(councilMemberName, tokensUsed = 0) {
