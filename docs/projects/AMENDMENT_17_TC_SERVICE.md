@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 (TD listing agreement → SkySlope browser pipeline + portal job UI) |
+| **Last Updated** | 2026-03-30 (TC setup playbook + env help links in API/portal) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -821,6 +821,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | TC access: `TC_ENV_HELP` + `setup_playbook` on readiness; env template includes GLVAR/Okta/COMMAND_CENTER_KEY rows with help metadata; managed-env name list extended; portal renders checklist + “Where / links” column on Env Template | Reduce setup friction; document that Cursor “Provider Error” is editor-side | ✅ | ✅ | pending |
 | 2026-03-30 | **Listing agreement → SkySlope:** browser steps in `tc-browser-agent` (Transaction Launch, TD search/open, CDP download) + orchestrator `tc-listing-skyslope-sync` + async `POST /transactions/:id/browser/listing-to-skyslope` (default dry-run) and `GET /browser-jobs/:jobId`; portal intake card with rehearsal vs live + step log; each step also written to `tc_transaction_events` as `listing_td_skyslope_sync` | Automate GLVAR → TransactionDesk executed listing pull and SkySlope filing with visible progress | ✅ | ✅ | pending |
 | 2026-03-30 | Workspace transaction cards: split **street number** + **street name** + city line, **client name · phone** on one line, **chips** for pending sign-offs / operator alerts / missing docs; transaction detail **hero** uses the same address layout; legend text updated | Match “see the house number and street at a glance” and surface approval/alert/doc gaps without hovering | ✅ | ✅ | pending |
 | 2026-03-30 | Replaced the flat active-transactions table with a visual card board that shows address, client, phone, stage, and a red/yellow/green action ring, added hover summaries for what is happening on each file, added visible due-diligence / close-date countdown banners plus a who-needs-to-act todo list, added a detail-page action board that jumps directly to approvals, alerts, or document review, and added a one-click 'deal in morning' alert snooze path | Make the portal readable at a glance, keep time-sensitive contingency windows visible, show exactly who needs to act on each file, make clicking a file land on the exact work surface instead of a generic detail dump, and let Adam defer an escalation until morning without losing the follow-up | ✅ | ✅ | pending |

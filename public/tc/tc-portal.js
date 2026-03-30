@@ -854,6 +854,45 @@
     return items;
   }
 
+  function renderEnvHelpLinks(help) {
+    if (!help?.links?.length) return '—';
+    return help.links
+      .map(
+        (l) =>
+          `<a href="${escapeHtml(l.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(l.label)}</a>`
+      )
+      .join(' · ');
+  }
+
+  function renderSetupPlaybook(playbook) {
+    const steps = Array.isArray(playbook) ? playbook : [];
+    if (!steps.length) return '';
+    return `
+      <div class="card" style="margin-bottom:16px">
+        <h2>Setup checklist (step-by-step + links)</h2>
+        <p style="color:#98a5c3;font-size:14px;margin:0 0 12px">From the API <code>readiness.setup_playbook</code>. If you saw a <strong>Provider Error</strong> in Cursor, that is Cursor’s connection to the AI service—not a problem with LifeOS or Railway.</p>
+        <ol style="margin:0;padding-left:20px;color:#c8d4f0;line-height:1.55">
+          ${steps
+            .map(
+              (p) => `
+            <li style="margin-bottom:12px">
+              <strong>${escapeHtml(p.title || '')}</strong>
+              <div style="font-size:13px;color:#98a5c3;margin-top:4px">${escapeHtml(p.detail || '')}</div>
+              <div style="margin-top:6px">
+                ${(p.links || [])
+                  .map(
+                    (l) =>
+                      `<a href="${escapeHtml(l.href)}" target="_blank" rel="noopener noreferrer" style="margin-right:12px">${escapeHtml(l.label)}</a>`
+                  )
+                  .join('')}
+              </div>
+            </li>`
+            )
+            .join('')}
+        </ol>
+      </div>`;
+  }
+
   function renderMissingSetupItems(items) {
     if (!items.length) {
       return '<p>No required setup items are missing. Raw env/vault details stay hidden unless you ask for them.</p>';
@@ -922,14 +961,24 @@
       </tr>
     `).join('') || '<tr><td colspan="3">No vault credentials tracked yet.</td></tr>';
 
-    const templateRows = envTemplate.map((item) => `
+    const templateRows =
+      envTemplate
+        .map((item) => {
+          const help = item.help;
+          const helpText = help?.summary
+            ? `<div style="font-size:12px;color:#98a5c3;margin-top:4px">${escapeHtml(help.summary)}</div>`
+            : '';
+          const helpLinks = `<div style="margin-top:6px">${renderEnvHelpLinks(help)}</div>`;
+          return `
       <tr>
         <td>${escapeHtml(item.name)}</td>
-        <td>${escapeHtml(item.description || '')}</td>
-        <td>${item.secret ? (item.known ? '<em>already set in environment</em>' : '<em>leave blank until you enter it</em>') : escapeHtml(item.value || '')}</td>
+        <td>${escapeHtml(item.description || '')}${helpText}</td>
+        <td>${item.secret ? (item.known ? '<em>already set in environment</em>' : '<em>leave blank in exports—paste only in Railway or the form below</em>') : escapeHtml(item.value || '')}</td>
+        <td>${helpLinks}</td>
         <td><span class="badge ${badgeClass(item.known ? 'healthy' : 'review')}">${escapeHtml(item.known ? 'known' : item.secret ? 'needs secret' : 'needs value')}</span></td>
-      </tr>
-    `).join('') || '<tr><td colspan="4">No env template available.</td></tr>';
+      </tr>`;
+        })
+        .join('') || '<tr><td colspan="5">No env template available.</td></tr>';
 
     const managedEnvRows = managedEnvPlan.map((item) => `
       <tr>
@@ -1002,6 +1051,8 @@
         ${readinessCards.map((item) => `<div class="card stat"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong><span class="badge ${badgeClass(item.status)}">${escapeHtml(item.status)}</span></div>`).join('')}
       </div>
 
+      ${renderSetupPlaybook(readiness.setup_playbook)}
+
       <div class="grid two">
         <div class="card">
           <h2>Access Setup</h2>
@@ -1068,7 +1119,7 @@
             <div style="margin-top:12px">
               <table><thead><tr><th>Env</th><th>Purpose</th><th>Status</th></tr></thead><tbody>${envRows}</tbody></table>
               <h2 style="margin-top:16px">Env Template</h2>
-              <table><thead><tr><th>Name</th><th>Purpose</th><th>Value to seed</th><th>Status</th></tr></thead><tbody>${templateRows}</tbody></table>
+              <table><thead><tr><th>Name</th><th>Purpose</th><th>Value to seed</th><th>Where / links</th><th>Status</th></tr></thead><tbody>${templateRows}</tbody></table>
               <h2 style="margin-top:16px">Managed Env Snapshot</h2>
               <table><thead><tr><th>Name</th><th>Runtime</th><th>Sync</th><th>Masked value</th></tr></thead><tbody>${managedEnvRows}</tbody></table>
               <h2 style="margin-top:16px">Vault Credentials</h2>
