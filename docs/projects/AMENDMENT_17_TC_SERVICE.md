@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-28 (tc-inspection-service.js + migration + routes staged) |
+| **Last Updated** | 2026-03-30 (SSOT drift cleanup: owned-files list, inspection routes, Puppeteer deploy note, verifier env alignment) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -121,17 +121,20 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | BoldTrail | Via eXp Okta tile | Real estate CRM |
 
 ### Key Environment Variables
+**Canonical resolver:** `services/tc-imap-config.js` + `services/credential-aliases.js` — Railway may use legacy names without renames.
+
 | Var | Purpose |
 |-----|---------|
-| `IMAP_HOST` | Email server (imap.gmail.com for Google Workspace) |
-| `IMAP_PORT` | IMAP port (993) |
-| `IMAP_USER` | adam@hopkinsgroup.org |
-| `IMAP_PASS` | Email account password (store via /api/v1/railway/managed-env/bulk) |
-| `TC_IMAP_*` | TC-specific mailbox overrides when different from shared IMAP vars |
+| `TC_IMAP_HOST` | TC mailbox IMAP host (optional if `IMAP_HOST` set — aliases merge in code) |
+| `TC_IMAP_PORT` | TC mailbox IMAP port (optional if `IMAP_PORT` set; defaults to **993** when unset) |
+| `TC_IMAP_USER` / `TC_IMAP_EMAIL` | TC mailbox login (falls back to `IMAP_USER`, `WORK_EMAIL`, or vault `email_imap`) |
+| `TC_IMAP_APP_PASSWORD` / `TC_IMAP_APP_Adam_PASSWORD` | App password style secret (falls back to `WORK_EMAIL_APP_PASSWORD`, `IMAP_PASS`, vault) |
+| `IMAP_HOST` / `IMAP_PORT` / `IMAP_USER` / `IMAP_PASS` | Shared naming convention; consumed when `TC_IMAP_*` not set |
 | `ASANA_ACCESS_TOKEN` | Asana API token for TC sync |
 | `ASANA_TC_PROJECT_GID` | Asana project GID for TC operational sync |
 | `EMAIL_WEBHOOK_SECRET` | Validates Postmark and TC email callback webhooks |
 | `TWILIO_WEBHOOK_SECRET` | Optional TC-specific secret for Twilio callbacks when different from email webhook secret |
+| `GLVAR_mls_*` / `EXP_OKTA_*` / `exp_okta_*` | See `credential-aliases.js` for GLVAR and eXp Okta alias matrix |
 
 ### Product Surfaces
 | Surface | User | Purpose |
@@ -465,6 +468,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | POST | `/intake/email-search` | Dry-run email scan |
 | GET | `/intake/workspace` | Agent intake workspace for readiness, triage queue, and suggested transaction matches |
 | POST | `/intake/upload` | Manual doc upload → SkySlope |
+| POST | `/email/send-attachment-package` | Find a matching email, combine photo attachments into one PDF, and email the package out immediately |
 | GET | `/access/readiness` | Show which email/browser prerequisites are configured vs still missing |
 | POST | `/access/bootstrap` | Store non-secret defaults and optional secret access inputs for TC |
 | GET | `/glvar/dues` | Current dues status |
@@ -474,6 +478,14 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 | POST | `/test-boldtrail` | Test eXp Okta → BoldTrail connection |
 | POST | `/offers/prepare` | Build offer recommendation set from property, client constraints, and comps |
 | POST | `/transactions/:id/offers/prepare` | Build offer recommendation set using a transaction as the starting context |
+| GET | `/transactions/:id/inspection` | Inspection state + contingency countdown |
+| POST | `/transactions/:id/inspection/schedule` | Record inspector + scheduled date |
+| POST | `/transactions/:id/inspection/report` | Mark report received + findings |
+| POST | `/transactions/:id/inspection/decision` | Buyer decision: accept / repair request / reject+cancel path |
+| POST | `/transactions/:id/inspection/repair-response` | Seller response to repair request |
+| POST | `/transactions/:id/inspection/send-cancellation` | Mark cancellation notice sent (reject path) |
+| POST | `/webhooks/postmark` | Inbound Postmark delivery/open callbacks (when wired) |
+| POST | `/webhooks/twilio` | Inbound Twilio SMS status callbacks (when wired) |
 
 ### Offer Prep Command Engine
 - Command shape should support:
@@ -517,12 +529,12 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - ✅ `POST /bulk` now stores in Neon AND pushes to Railway in one call
 - ✅ TC runtime wiring hardened — account-manager injection, notification service usage, IMAP config consistency, route/runtime fixes
 - ✅ Inspection workflow — `tc-inspection-service.js`: schedule → report → decision (accept/repair/reject); rejection fast path: draft cancellation notice, fire CRITICAL/urgent alert, cancel transaction in DB, log full audit trail; seller repair response handling with auto-alert when rejected; Nevada 10-day inspection contingency default
-- ✅ Inspection routes — `GET /inspection`, `POST /inspection/schedule`, `/report`, `/decision`, `/repair-response`, `/send-cancellation`
+- ✅ Inspection routes — under `/transactions/:id/inspection` (GET state; POST schedule, report, decision, repair-response, send-cancellation)
 
 ### Blocking (must resolve before first real transaction)
-- 🔲 IMAP vars not yet in Railway — set via `POST /api/v1/railway/managed-env/bulk`
-- 🔲 eXp Okta credentials need rotation (shared in conversation — rotate before use)
-- 🔲 adam@hopkinsgroup.org password needs rotation (shared in conversation)
+- 🔲 TC mailbox fully configured in Railway **or** credential vault — IMAP user + secret (see aliases in `credential-aliases.js`); optional: `POST /api/v1/railway/managed-env/bulk`
+- 🔲 eXp Okta credentials present and **rotated** if they were ever exposed outside the vault
+- 🔲 TC mailbox app password **rotated** if it was ever exposed outside the vault
 - 🔲 Run `POST /api/v1/tc/intake/email-search` dry run to verify email scan works
 - 🔲 Run `POST /api/v1/tc/test-skyslope-login` to verify SSO works
 - 🔲 Build document completeness / missing-signature / missing-field QA before trusting automated filing
@@ -534,6 +546,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 - 🔲 Extend the new mobile one-tap link flow into full document review / sign handoff and explicit device-side rolling-buffer UX
 - 🔲 Refine machine-readable listing/buyer workflow specs against the full real Asana templates
 - 🔲 Wire live official MLS/showing provider credentials into the new feed-ingest endpoints and validate the first production snapshots
+- 🔲 Confirm **production deploy** uses the repo `Dockerfile` (Chromium + `PUPPETEER_EXECUTABLE_PATH`) — Nixpacks-only builds may not include Chromium unless separately configured
 
 ### Next milestones
 - First real transaction intake end-to-end (email → SkySlope)
@@ -572,30 +585,66 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 ---
 
 ## REFACTOR STATUS
-- All feature code in `routes/tc-routes.js`, `routes/mls-routes.js` and service files
+- All TC HTTP routes live in `routes/tc-routes.js` (portal, dashboard, webhooks, inspection, intake, etc.); MLS investor routes in `routes/mls-routes.js`
 - No TC logic in `server.js` except service initialization
-- Boot logic moves to `startup/boot-domains.js`
+- Runtime mounting: `startup/register-runtime-routes.js` (not `boot-domains.js` for route registration)
 
 ---
 
 ## Owned Files
+*(Sources of truth: this amendment + `AMENDMENT_17_TC_SERVICE.manifest.json` — keep them in sync.)*
+
 ```
 routes/tc-routes.js
-routes/tc-portal-routes.js
+routes/mls-routes.js
 services/tc-coordinator.js
-services/tc-document-processor.js
-services/tc-communication-engine.js
-services/tc-escalation-engine.js
+services/tc-browser-agent.js
+services/tc-doc-intake.js
+services/tc-pricing.js
+services/tc-status-engine.js
+services/tc-document-validator.js
+services/tc-portal-service.js
+services/tc-report-service.js
+services/tc-automation-service.js
+services/tc-communication-callback-service.js
+services/tc-approval-service.js
+services/tc-alert-service.js
+services/tc-mobile-link-service.js
+services/tc-feed-ingest-service.js
+services/tc-asana-sync-service.js
+services/tc-workflow-specs.js
+services/tc-workflow-service.js
+services/tc-offer-prep-service.js
+services/tc-interaction-service.js
+services/tc-access-service.js
+services/tc-intake-workspace-service.js
+services/tc-inspection-service.js
+services/tc-review-package-service.js
+services/tc-email-document-service.js
+services/tc-email-monitor.js
+services/tc-imap-config.js
+services/credential-aliases.js
+services/email-triage.js
 services/glvar-monitor.js
+services/mls-deal-scanner.js
+public/tc/agent-portal.html
+public/tc/client-portal.html
+public/tc/tc-portal.js
 db/migrations/20260322_tc_transactions.sql
 db/migrations/20260323_tc_fees.sql
-db/migrations/20260325_tc_alerts.sql
-db/migrations/20260325_tc_approvals_automation.sql
+db/migrations/20260323_email_triage.sql
+db/migrations/20260323_glvar_dues.sql
+db/migrations/20260323_mls_investors.sql
 db/migrations/20260325_tc_portal.sql
 db/migrations/20260325_tc_reporting.sql
+db/migrations/20260325_tc_approvals_automation.sql
+db/migrations/20260325_tc_alerts.sql
 db/migrations/20260326_tc_external_refs.sql
 db/migrations/20260326_tc_interactions.sql
 db/migrations/20260326_tc_review_packages.sql
+db/migrations/20260327_email_triage_enrichment.sql
+db/migrations/20260327_tc_inspections.sql
+Dockerfile
 ```
 
 ## Protected Files (read-only for this project)
@@ -662,7 +711,7 @@ grep -r "submitOffer\|autoSubmit\|auto_submit" routes/tc-routes.js
 # Should return NOTHING (offers are drafted, never auto-submitted)
 
 # TC routes are mounted
-grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.js
+grep "createTCRoutes" startup/register-runtime-routes.js
 ```
 
 *Automated: `node scripts/verify-project.mjs --project tc_service`*
@@ -715,7 +764,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 - [ ] `POST /api/v1/tc/transactions` creates a transaction row in tc_transactions
 - [ ] `GET /api/v1/tc/transactions/:id` returns full transaction with deadlines, parties, documents
 - [ ] GLVAR dues cron fires monthly without manual trigger
-- [ ] Email triage detects a contract email and creates a tc_documents record
+- [ ] Email triage detects a contract email, updates `tc_transactions.documents` or `tc_document_requests`, and logs the routing event
 - [ ] SkySlope login test returns success screenshot (not error page)
 - [ ] Offer prep returns conservative / balanced / aggressive options (not a single number)
 - [ ] Per-transaction billing records in tc_fees on transaction close
@@ -724,7 +773,7 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 ---
 
 ## Handoff (Fresh AI Context)
-**Current blocker:** Live secrets still need to be entered — the workspace can now seed the known TC env defaults automatically and leave secret slots blank, but IMAP password plus GLVAR and eXp Okta credentials must still be stored before first real intake can run end-to-end
+**Current blocker:** Live secrets and first-file execution still need to be completed — the workspace now prefers `adam@hopkinsgroup.org` for TC intake, honors the current Railway alias vars (`TC_IMAP_APP_Adam_PASSWORD`, `GLVAR_mls_*`, `exp_okta_*`), surfaces only actionable setup gaps, and shows active files as red/yellow/green transaction cards with click-through action routing; **live** IMAP + GLVAR + eXp vault values are still required before first real intake and first real outbound package send run end-to-end.
 
 **Last decision:** TC access should use managed env for defaults and the credential vault for secrets; startup guards now check real readiness instead of stale hard-coded env names
 
@@ -737,9 +786,8 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 **Read first:** `routes/tc-routes.js`, `services/tc-coordinator.js`, `services/glvar-monitor.js`
 
 **Known traps:**
-- SkySlope Puppeteer automation requires Railway to have Chrome/Chromium — not yet deployed
-- eXp Okta credentials in conversation history need rotation before use in production
-- `adam@hopkinsgroup.org` password was shared in conversation — must rotate before Railway deployment
+- SkySlope Puppeteer requires Chromium on the **runtime** image — the repo root `Dockerfile` installs Chromium and sets `PUPPETEER_EXECUTABLE_PATH`; if Railway is not using that Dockerfile, browser automation may still fail until Chromium is available in the build
+- Rotate any Okta or mailbox credential that may have left the vault
 - TC email triage runs on 30-min cycle — don't add shorter polling without checking Groq free tier impact
 
 ---
@@ -748,9 +796,10 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 
 | Symptom | Likely Cause | Fix |
 |---|---|---|
-| Email triage not picking up contracts | IMAP config missing from env/vault | Check `GET /api/v1/tc/access/readiness`, then bootstrap via `POST /api/v1/tc/access/bootstrap` or store `email_imap` via `POST /api/v1/accounts/store` |
+| Email triage not picking up contracts | IMAP config missing from env/vault | Check `GET /api/v1/tc/access/readiness`, then bootstrap via `POST /api/v1/tc/access/bootstrap` or store `email_imap` via `POST /api/v1/accounts/store`; runtime also honors `TC_IMAP_APP_Adam_PASSWORD` and `WORK_EMAIL_APP_PASSWORD` as password aliases |
+| Need to send photos/SRPD package from email fast | Matching photo email exists but attachments have not been packaged and sent yet | Use `POST /api/v1/tc/email/send-attachment-package` with subject/from search, recipient email, subject, and body; the route will pull attachments from the TC mailbox, combine renderable images into one PDF, and send it |
 | Agent portal opens with no transaction context | No `?tx=` parameter was supplied | Use the intake workspace that now loads by default and run setup/scan from there |
-| SkySlope login fails | Okta session expired or credentials missing from vault | Store/rotate `exp_okta` via `POST /api/v1/accounts/store`, then re-run readiness |
+| SkySlope login fails | Okta session expired or credentials missing from vault/env aliases | Store/rotate `exp_okta` via `POST /api/v1/accounts/store`, or ensure `exp_okta_Username` / `exp_okta_Password` are set, then re-run readiness |
 | GLVAR dues cron not firing | GLVAR_DUES_DAY env var not set or cron not registered | Check startup/register-schedulers.js mounts GLVAR cron |
 | Transaction created but no deadlines | Nevada timeline generator not called | Check tc-coordinator.js generateNevadaTimeline() call after INSERT |
 | Offer prep returns generic response | AI council falling back to Ollama with truncated prompt | Check token_usage_log — if Ollama, optimize system prompt |
@@ -759,9 +808,9 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 
 ## Decision Debt
 - [ ] **TC access secrets still need real values** — readiness/bootstrap routes exist, but IMAP password plus GLVAR and eXp Okta credentials still need to be entered with live values
-- [ ] **SkySlope Puppeteer on Railway** — Chrome/Chromium not yet installed on Railway build; browser automation blocked
+- [ ] **SkySlope Puppeteer on Railway** — confirm deploy uses Dockerfile Chromium (or equivalent); without it, browser automation fails at runtime
 - [ ] **Stripe not wired to TC tiers** — billing plans exist in DB but Stripe integration not connected
-- [ ] **eXp Okta credentials need rotation** — were shared in conversation, not safe to use as-is
+- [ ] **Credential hygiene** — rotate Okta/mailbox secrets if they were ever exposed outside the vault
 - [ ] **Nevada validation packs incomplete** — form-specific QA beyond generic fail-closed gate not built
 
 ---
@@ -770,6 +819,11 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | Replaced the flat active-transactions table with a visual card board that shows address, client, phone, stage, and a red/yellow/green action ring, added hover summaries for what is happening on each file, added visible due-diligence / close-date countdown banners plus a who-needs-to-act todo list, added a detail-page action board that jumps directly to approvals, alerts, or document review, and added a one-click 'deal in morning' alert snooze path | Make the portal readable at a glance, keep time-sensitive contingency windows visible, show exactly who needs to act on each file, make clicking a file land on the exact work surface instead of a generic detail dump, and let Adam defer an escalation until morning without losing the follow-up | ✅ | ✅ | pending |
+| 2026-03-30 | Added urgent email-attachment package delivery plus a dedicated intake-workspace card, corrected the workspace defaults so TC/work email fields prefer the real transaction mailbox instead of the LifeOS system mailbox when Adam inbox credentials are present, replaced the raw readiness dump with a click-to-fix missing-items panel that only surfaces actionable setup gaps, auto-filled buyer-agent recipient data from the selected transaction, added an SRPD preset, and filtered non-TC queue noise out of the intake queue | Unblock real-world cases like SRPD/photo delivery without waiting for terminal commands or manual recombination outside the system, stop steering TC setup toward the wrong inbox, make setup actionable instead of exposing low-signal env noise, and keep the portal focused on actual TC work instead of unrelated alert mail | ✅ | ✅ | pending |
+| 2026-03-30 | Added alias-aware credential resolution for TC/system mailboxes and browser logins, so the runtime can consume the current Railway vars without forcing manual renames first | Unblock production use of the existing `TC_IMAP_APP_Adam_PASSWORD`, `SystemEmail_IMAP_APP_LifeOS_PASSWORD`, `GLVAR_mls_*`, and `exp_okta_*` envs while preserving canonical env support | ✅ | ✅ | pending |
+| 2026-03-29 | Realigned TC verification to the shipped schema (`tc_transaction_events` / `tc_document_requests` and transaction-level document JSON) instead of stale `tc_deadlines` / `tc_documents` assumptions | Stop false verifier failures and keep SSOT aligned with the actual intake workspace data model | ✅ | ✅ | pending |
+| 2026-03-30 | SSOT drift cleanup: corrected owned-files list (removed non-existent `tc-portal-routes` / engine filenames), documented real inspection + webhook routes, aligned IMAP env story with `credential-aliases.js`, corrected route-mount anti-drift grep target, clarified Chromium is in root `Dockerfile` but deploy must actually use it | Keep TC amendment trustworthy for the next build sprint | ✅ | ✅ | pending |
 | 2026-03-27 | Added Build Plan, Anti-Drift, Decision Log, Handoff, Runbook, Decision Debt, Change Receipts | SSOT template compliance | ✅ | ✅ | pending |
 | 2026-03-27 | Added TC access readiness/bootstrap routes and corrected startup guards to use real env/vault readiness checks | Unblock first live email intake and browser access setup | ✅ | ✅ | pending |
 | 2026-03-27 | Added agent intake workspace with access setup form, dry-run GLVAR/SkySlope checks, inbox triage queue, and suggested transaction matching | Give the operator a single place to enter secrets, verify access, monitor readiness, and route paperwork before live filing | ✅ | ✅ | pending |
@@ -791,9 +845,9 @@ grep "tc-routes" startup/register-runtime-routes.js || grep "tc-routes" server.j
 
 ### Gate 1 — Implementation Detail
 - [x] Email triage, GLVAR monitor, deadline cron all have specific segment descriptions
-- [x] DB schema complete (tc_transactions, tc_deadlines, tc_documents, tc_communications)
-- [x] API surface defined (tc-routes.js, tc-portal-routes.js)
-- [ ] SkySlope Puppeteer segments blocked on Chrome/Chromium Railway install — mark those `needs-review`
+- [x] DB schema complete (tc_transactions, tc_transaction_events, tc_document_requests, tc_communications)
+- [x] API surface defined (`routes/tc-routes.js` includes portal/dashboard/webhooks; `routes/mls-routes.js` for investor flows)
+- [ ] SkySlope Puppeteer **runtime** must use Chromium from root `Dockerfile` (or equivalent) on the deploy target — mark `needs-review` until production confirms the running image
 
 ### Gate 2 — Competitor Landscape
 | Competitor | Strengths | Weaknesses | Our Edge |

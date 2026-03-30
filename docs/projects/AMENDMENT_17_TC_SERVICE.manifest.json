@@ -7,22 +7,50 @@
   "priority": "high",
   "owner": "adam",
   "phase": "first-live-intake",
-  "next_task": "Use the agent intake workspace to seed known TC env defaults, then enter live IMAP, GLVAR, and eXp Okta secrets and run the first real intake for 6453 Mahogany Peak (Pam Patterson) using the create-or-link triage actions",
+  "next_task": "Use the intake workspace visual transaction board to open the 6453 Mahogany Peak file, verify the real Adam mailbox credentials are working, then run the first real SRPD/photo package search and send from the portal.",
   "stability_class": "needs-review",
-  "current_focus": "TC intake workspace now seeds known env defaults, supports both create-new and link-existing triage actions, and is waiting on live secrets for the first real email-driven intake",
+  "current_focus": "TC intake workspace now uses a red/yellow/green transaction board, click-through action routing, and portal-first SRPD/photo package sending, and is waiting on live Adam mailbox plus GLVAR/eXp Okta execution to complete the first real file.",
   "owned_files": [
     "routes/tc-routes.js",
-    "routes/tc-portal-routes.js",
+    "routes/mls-routes.js",
     "services/tc-coordinator.js",
-    "services/email-triage.js",
-    "services/tc-document-processor.js",
-    "services/tc-communication-engine.js",
-    "services/tc-escalation-engine.js",
+    "services/tc-browser-agent.js",
+    "services/tc-doc-intake.js",
+    "services/tc-pricing.js",
+    "services/tc-status-engine.js",
+    "services/tc-document-validator.js",
+    "services/tc-portal-service.js",
+    "services/tc-report-service.js",
+    "services/tc-automation-service.js",
+    "services/tc-communication-callback-service.js",
+    "services/tc-approval-service.js",
+    "services/tc-alert-service.js",
+    "services/tc-mobile-link-service.js",
+    "services/tc-feed-ingest-service.js",
+    "services/tc-asana-sync-service.js",
+    "services/tc-workflow-specs.js",
+    "services/tc-workflow-service.js",
+    "services/tc-offer-prep-service.js",
+    "services/tc-interaction-service.js",
     "services/tc-access-service.js",
     "services/tc-intake-workspace-service.js",
+    "services/tc-inspection-service.js",
+    "services/tc-review-package-service.js",
+    "services/tc-email-document-service.js",
+    "services/tc-email-monitor.js",
+    "services/tc-imap-config.js",
+    "services/credential-aliases.js",
+    "services/email-triage.js",
     "services/glvar-monitor.js",
+    "services/mls-deal-scanner.js",
+    "public/tc/agent-portal.html",
+    "public/tc/client-portal.html",
+    "public/tc/tc-portal.js",
     "db/migrations/20260322_tc_transactions.sql",
     "db/migrations/20260323_tc_fees.sql",
+    "db/migrations/20260323_email_triage.sql",
+    "db/migrations/20260323_glvar_dues.sql",
+    "db/migrations/20260323_mls_investors.sql",
     "db/migrations/20260325_tc_alerts.sql",
     "db/migrations/20260325_tc_approvals_automation.sql",
     "db/migrations/20260325_tc_portal.sql",
@@ -30,7 +58,9 @@
     "db/migrations/20260326_tc_external_refs.sql",
     "db/migrations/20260326_tc_interactions.sql",
     "db/migrations/20260326_tc_review_packages.sql",
-    "db/migrations/20260327_email_triage_enrichment.sql"
+    "db/migrations/20260327_email_triage_enrichment.sql",
+    "db/migrations/20260327_tc_inspections.sql",
+    "Dockerfile"
   ],
   "protected_files": [
     "server.js"
@@ -42,31 +72,115 @@
     "services/glvar-monitor.js"
   ],
   "required_routes": [
-    { "method": "GET", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "List transactions" },
-    { "method": "POST", "path": "/api/v1/tc/transactions", "expected_status": 200, "description": "Create transaction" },
-    { "method": "GET", "path": "/api/v1/tc/access/readiness", "expected_status": 200, "description": "TC access readiness status" },
-    { "method": "POST", "path": "/api/v1/tc/access/bootstrap", "expected_status": 200, "description": "TC access bootstrap" },
-    { "method": "GET", "path": "/api/v1/tc/intake/workspace", "expected_status": 200, "description": "TC intake workspace summary" },
-    { "method": "POST", "path": "/api/v1/tc/email/triage/:id/create-transaction", "expected_status": 200, "description": "Create placeholder transaction from triaged contract email" },
-    { "method": "POST", "path": "/api/v1/tc/email/triage/:id/link-transaction", "expected_status": 200, "description": "Link triaged email to an existing transaction" }
+    {
+      "method": "GET",
+      "path": "/api/v1/tc/transactions",
+      "expected_status": 200,
+      "description": "List transactions"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/transactions",
+      "expected_status": 200,
+      "description": "Create transaction"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tc/access/readiness",
+      "expected_status": 200,
+      "description": "TC access readiness status"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/access/bootstrap",
+      "expected_status": 200,
+      "description": "TC access bootstrap"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tc/intake/workspace",
+      "expected_status": 200,
+      "description": "TC intake workspace summary"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/email/triage/:id/create-transaction",
+      "expected_status": 200,
+      "description": "Create placeholder transaction from triaged contract email"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/email/triage/:id/link-transaction",
+      "expected_status": 200,
+      "description": "Link triaged email to an existing transaction"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tc/email/send-attachment-package",
+      "expected_status": 200,
+      "description": "Find attachment email, combine photos, and send package"
+    }
   ],
   "required_tables": [
-    { "name": "tc_transactions", "required_columns": ["id", "address", "status", "agent_name"] },
-    { "name": "tc_deadlines", "required_columns": ["id", "transaction_id", "deadline_type", "due_date"] },
-    { "name": "tc_documents", "required_columns": ["id", "transaction_id", "doc_type", "status"] },
-    { "name": "tc_communications", "required_columns": ["id", "transaction_id", "channel", "sent_at"] }
+    {
+      "name": "tc_transactions",
+      "required_columns": [
+        "id",
+        "address",
+        "status",
+        "parties",
+        "documents",
+        "source_email_id"
+      ]
+    },
+    {
+      "name": "tc_transaction_events",
+      "required_columns": [
+        "id",
+        "transaction_id",
+        "event_type",
+        "created_at"
+      ]
+    },
+    {
+      "name": "tc_document_requests",
+      "required_columns": [
+        "id",
+        "transaction_id",
+        "title",
+        "status"
+      ]
+    },
+    {
+      "name": "tc_communications",
+      "required_columns": [
+        "id",
+        "transaction_id",
+        "channel",
+        "sent_at"
+      ]
+    }
   ],
   "required_env": [
     "DATABASE_URL",
-    "COMMAND_CENTER_KEY",
-    "TC_IMAP_HOST",
-    "TC_IMAP_PORT",
-    "TC_IMAP_USER"
+    "COMMAND_CENTER_KEY"
   ],
   "assertions": [
-    { "type": "node_check", "check": "routes/tc-routes.js", "label": "tc-routes syntax" },
-    { "type": "node_check", "check": "services/tc-coordinator.js", "label": "tc-coordinator syntax" },
-    { "type": "table_exists", "check": "tc_transactions", "label": "tc_transactions table exists" }
+    {
+      "type": "node_check",
+      "check": "routes/tc-routes.js",
+      "label": "tc-routes syntax"
+    },
+    {
+      "type": "node_check",
+      "check": "services/tc-coordinator.js",
+      "label": "tc-coordinator syntax"
+    },
+    {
+      "type": "table_exists",
+      "check": "tc_transactions",
+      "label": "tc_transactions table exists"
+    }
   ],
   "completion_checks": [
     "TC access readiness route accurately reports missing/present IMAP and vault-backed browser credentials",
@@ -86,13 +200,28 @@
     "Deadline tracker fires reminders at correct intervals",
     "Agent portal accessible and shows transaction status",
     "GLVAR dues check runs monthly without manual intervention",
-    "Billing tracks per-transaction and subscription revenue"
+    "Billing tracks per-transaction and subscription revenue",
+    "The intake workspace shows active files as red/yellow/green transaction cards with client/contact context and hover summaries of what is happening",
+    "Clicking a workspace transaction opens the exact action surface, and the transaction detail page provides direct jump targets for approvals, alerts, and document review",
+    "The intake workspace can find an email, combine photo attachments into one PDF, and send the package from the portal without curl",
+    "The transaction detail page shows a visible due-diligence / contingency countdown when a file is under time pressure",
+    "The transaction detail page shows a todo list with owner tags so Adam can see what the system is handling versus what needs his action",
+    "The alert surface supports a one-click handle-in-the-morning snooze that keeps escalation follow-up alive"
   ],
-  "anti_drift_notes": "TC coordinator uses SkySlope for document management via Okta SSO browser automation. The Gmail credentials for TC email access are stored as Railway variables (email address as key, password as value). SkySlope automation requires Puppeteer on Railway — not yet deployed.",
+  "anti_drift_notes": "TC coordinator uses SkySlope via Okta SSO browser automation (Puppeteer). IMAP credentials are resolved through TC_* and shared IMAP_* env aliases plus vault lookups (see services/credential-aliases.js and services/tc-imap-config.js). Root Dockerfile installs Chromium and sets PUPPETEER_EXECUTABLE_PATH; Railway must use that image (or otherwise provide Chromium) or browser automation will fail at runtime.",
   "decision_debt": [
-    { "description": "TC access bootstrap and readiness now exist, but live IMAP password plus GLVAR and eXp Okta credentials still need to be entered before first real intake", "resolved": false },
-    { "description": "SkySlope browser automation (Puppeteer) not yet deployed on Railway", "resolved": false },
-    { "description": "Billing/Stripe integration not wired to TC plan tiers yet", "resolved": false }
+    {
+      "description": "TC access bootstrap and readiness now exist, but live IMAP password plus GLVAR and eXp Okta credentials still need to be entered before first real intake",
+      "resolved": false
+    },
+    {
+      "description": "Confirm Railway deploy uses Dockerfile Chromium (or equivalent) for SkySlope Puppeteer",
+      "resolved": false
+    },
+    {
+      "description": "Billing/Stripe integration not wired to TC plan tiers yet",
+      "resolved": false
+    }
   ],
   "last_verified_at": null,
   "verification_passed": null
