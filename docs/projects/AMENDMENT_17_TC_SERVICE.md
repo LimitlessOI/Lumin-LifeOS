@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 (GET /tc/status unauthenticated + portal connection banner) |
+| **Last Updated** | 2026-03-30 (commit missing tc-email-document-service for deploy) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -822,6 +822,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | **Ops:** committed `services/tc-email-document-service.js` (was untracked while `tc-routes` imported it — fixed Railway ERR_MODULE_NOT_FOUND) | Restore production boot | ✅ | ✅ | pending |
 | 2026-03-30 | `GET /api/v1/tc/status` (no API key): DB ping + auth flags + hints; portal pings status before workspace, shows banner and richer 401/DB failure HTML + link to status JSON | Faster “is production up” and clearer key mismatch recovery | ✅ | ✅ | pending |
 | 2026-03-30 | TC access: `TC_ENV_HELP` + `setup_playbook` on readiness; env template includes GLVAR/Okta/COMMAND_CENTER_KEY rows with help metadata; managed-env name list extended; portal renders checklist + “Where / links” column on Env Template | Reduce setup friction; document that Cursor “Provider Error” is editor-side | ✅ | ✅ | pending |
 | 2026-03-30 | **Listing agreement → SkySlope:** browser steps in `tc-browser-agent` (Transaction Launch, TD search/open, CDP download) + orchestrator `tc-listing-skyslope-sync` + async `POST /transactions/:id/browser/listing-to-skyslope` (default dry-run) and `GET /browser-jobs/:jobId`; portal intake card with rehearsal vs live + step log; each step also written to `tc_transaction_events` as `listing_td_skyslope_sync` | Automate GLVAR → TransactionDesk executed listing pull and SkySlope filing with visible progress | ✅ | ✅ | pending |
