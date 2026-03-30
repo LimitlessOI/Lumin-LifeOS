@@ -785,6 +785,7 @@ async function runInitializeTwoTierSystem() {
     getTwilioClient,
     providerCooldowns,
     OLLAMA_ENDPOINT,
+    COUNCIL_OLLAMA_MODE,
     PORT,
     RAILWAY_PUBLIC_DOMAIN,
     requireKey,

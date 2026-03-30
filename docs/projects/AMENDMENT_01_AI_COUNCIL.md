@@ -239,6 +239,7 @@ grep "0\.97" services/free-tier-governor.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | Open Source Council startup banner in `core/two-tier-system-init.js` aligned with `COUNCIL_OLLAMA_MODE` + Railway endpoint rules (no longer implies enabling is only `OLLAMA_ENDPOINT`) | Startup logs match council policy | ✅ | pending | pending |
 | 2026-03-30 | `COUNCIL_OLLAMA_MODE` (`off` \| `last_resort` \| `on`): Railway default **off** — no Ollama ping, excluded from free-tier cascade; `last_resort` enables Ollama only after other free providers exhausted. Removed implicit `OLLAMA_ENDPOINT` default to `ollama.railway.internal`. | Free cloud APIs first; local Ollama opt-in so Mac tunnel does not slow work | ✅ | ✅ | pending |
 | 2026-03-29 | Centralized autonomy runtime defaults in `services/runtime-modes.js`, raised `HAB_DAILY_LIMIT` code default to 100, and made verification respect defaulted safe-mode values instead of requiring every kill-switch env to be explicitly present | Runtime safety semantics had drifted: some code treated missing flags as safe defaults while other checks treated them as unset/misconfigured | ✅ | ✅ | pending |
 | 2026-03-29 | Verifier/manifest semantics changed so AI Council now accepts any configured provider key instead of hard-requiring Anthropic | Free-tier-first routing is constitutional here; verification should not fail just because Claude is absent when Groq/Gemini/Cerebras are available | ✅ | ✅ | pending |

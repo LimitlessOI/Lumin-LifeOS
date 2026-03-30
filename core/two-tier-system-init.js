@@ -45,6 +45,7 @@ export async function initializeTwoTierSystem(deps) {
     getTwilioClient,
     providerCooldowns,
     OLLAMA_ENDPOINT,
+    COUNCIL_OLLAMA_MODE,
     PORT,
     RAILWAY_PUBLIC_DOMAIN,
     requireKey,
@@ -268,18 +269,38 @@ export async function initializeTwoTierSystem(deps) {
     logger.info("   - Decision Filters (7 wisdom lenses)");
     logger.info("   - FSAR Severity Gate (Likelihood × Damage × Reversibility)");
 
-    const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
-    const ollamaDisabled = !OLLAMA_ENDPOINT || /localhost|127\.0\.0\.1|PASTE_YOUR|disabled|none/i.test(String(OLLAMA_ENDPOINT));
+    const ep = String(OLLAMA_ENDPOINT || "").trim();
+    const railway = !!(
+      process.env.RAILWAY_ENVIRONMENT ||
+      process.env.RAILWAY_SERVICE_ID ||
+      process.env.RAILWAY_PROJECT_ID
+    );
+    const rawMode = String(COUNCIL_OLLAMA_MODE || process.env.COUNCIL_OLLAMA_MODE || "")
+      .toLowerCase()
+      .trim();
+    let ollamaMode = "last_resort";
+    if (["off", "last_resort", "on"].includes(rawMode)) ollamaMode = rawMode;
+    else if (railway) ollamaMode = "off";
+    const endpointBlocked =
+      !ep ||
+      /localhost|127\.0\.0\.1|PASTE_YOUR|disabled|none/i.test(ep);
+    const hasReachableOllama = Boolean(ep) && !(railway && endpointBlocked);
+    const ollamaBannerOff = ollamaMode === "off" || !hasReachableOllama;
+    const ollamaEndpoint = ep || "http://localhost:11434";
     console.log("\n╔══════════════════════════════════════════════════════════════════════════════════╗");
     console.log("║ ✅ [OPEN SOURCE COUNCIL] INITIALIZED                                              ║");
-    if (ollamaDisabled) {
-      console.log("║    Status: Local Ollama routing disabled in this deployment                      ║");
-      console.log("║    Activation: Provide a real OLLAMA_ENDPOINT to enable local models            ║");
+    if (ollamaBannerOff) {
+      console.log("║    Status: Local Ollama not used in this deployment (policy or endpoint)        ║");
+      if (ollamaMode === "off") {
+        console.log("║    Later: COUNCIL_OLLAMA_MODE=last_resort + reachable OLLAMA_ENDPOINT          ║");
+      } else {
+        console.log("║    Later: Set OLLAMA_ENDPOINT to your Ollama URL (non-local on Railway)        ║");
+      }
       console.log("║    Models: Cloud/shared fallbacks only                                          ║");
     } else {
-      console.log("║    Status: Ready to route tasks to local Ollama models                           ║");
+      console.log("║    Status: Ollama available for last-resort / cost-shutdown routing             ║");
       console.log("║    Activation: Cost shutdown OR explicit opt-in (useOpenSourceCouncil: true)    ║");
-      console.log(`║    Models: Connected to Ollama at ${ollamaEndpoint.padEnd(47)}║`);
+      console.log(`║    Endpoint: ${ollamaEndpoint.slice(0, 52).padEnd(52)}            ║`);
     }
     console.log("╚══════════════════════════════════════════════════════════════════════════════════╝\n");
 
