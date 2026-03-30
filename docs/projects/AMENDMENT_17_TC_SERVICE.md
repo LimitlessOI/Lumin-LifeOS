@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 (commit missing tc-email-document-service for deploy) |
+| **Last Updated** | 2026-03-30 (commit credential-aliases.js for deploy) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -822,6 +822,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | **Ops:** committed `services/credential-aliases.js` (untracked; required by `tc-browser-agent` / TC access / IMAP — fixed Railway ERR_MODULE_NOT_FOUND) | Restore production boot | ✅ | ✅ | pending |
 | 2026-03-30 | **Ops:** committed `services/tc-email-document-service.js` (was untracked while `tc-routes` imported it — fixed Railway ERR_MODULE_NOT_FOUND) | Restore production boot | ✅ | ✅ | pending |
 | 2026-03-30 | `GET /api/v1/tc/status` (no API key): DB ping + auth flags + hints; portal pings status before workspace, shows banner and richer 401/DB failure HTML + link to status JSON | Faster “is production up” and clearer key mismatch recovery | ✅ | ✅ | pending |
 | 2026-03-30 | TC access: `TC_ENV_HELP` + `setup_playbook` on readiness; env template includes GLVAR/Okta/COMMAND_CENTER_KEY rows with help metadata; managed-env name list extended; portal renders checklist + “Where / links” column on Env Template | Reduce setup friction; document that Cursor “Provider Error” is editor-side | ✅ | ✅ | pending |
