@@ -566,12 +566,44 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     return Number.isFinite(n) && n >= 500 ? n : 3500;
   }
 
+  /** Non-detached Puppeteer frames (ZipForm/TD often embeds the document manager in iframes). */
+  function _tdListFrames(page) {
+    try {
+      return page.frames().filter((f) => {
+        try {
+          return f !== page.mainFrame();
+        } catch {
+          return true;
+        }
+      });
+    } catch {
+      return [];
+    }
+  }
+
+  function _tdAllFrameContexts(page) {
+    const out = [page];
+    for (const f of _tdListFrames(page)) {
+      try {
+        out.push(f);
+      } catch {
+        /* skip */
+      }
+    }
+    return out;
+  }
+
   /**
-   * Open the Documents / Files area (Puppeteer has no jQuery `:contains`; use text/heuristic match).
+   * Open the Documents / Files area — runs in main page + iframes (async).
    */
   async function clickTransactionDeskDocumentsTab(session) {
-    return session.page.evaluate(() => {
+    const tabEval = () => {
       const tryClick = (el) => {
+        try {
+          el.scrollIntoView?.({ block: 'center', inline: 'nearest' });
+        } catch {
+          /* ignore */
+        }
         try {
           el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
           return true;
@@ -585,35 +617,63 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
         }
       };
 
+      const tabLabelMatches = (raw) => {
+        const t = String(raw || '')
+          .replace(/\s+/g, ' ')
+          .trim();
+        if (!t || t.length > 72) return false;
+        if (/history|audit|expiration|document\s*#|log\b/i.test(t) && !/document\s*library/i.test(t)) return false;
+        if (/^(documents?|files?|docs?|attachments?|paperwork|library)$/i.test(t)) return true;
+        if (/\b(documents?|attachments?|paperwork|file\s*library|document\s*library)\b/i.test(t) && t.length < 64)
+          return true;
+        return false;
+      };
+
       const tabs = Array.from(
-        document.querySelectorAll('a, button, [role="tab"], [role="button"], div[tabindex="0"], span')
+        document.querySelectorAll('a, button, [role="tab"], [role="button"], div[tabindex="0"], span, li')
       );
       for (const el of tabs) {
         const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
-        if (!t || t.length > 48) continue;
-        if (/^documents$/i.test(t) || /^files$/i.test(t) || /^docs$/i.test(t)) {
-          if (tryClick(el)) return { clicked: true, label: t };
-        }
+        if (!tabLabelMatches(t)) continue;
+        if (tryClick(el)) return { clicked: true, label: t };
       }
       for (const a of Array.from(document.querySelectorAll('a[href]'))) {
         const h = (a.getAttribute('href') || '').toLowerCase();
-        if (h.includes('document') || h.includes('/files') || h.includes('/doc')) {
+        if (h.includes('document') || h.includes('/files') || h.includes('/doc') || h.includes('paperwork')) {
           if (tryClick(a)) return { clicked: true, via: 'href', href: h.slice(0, 80) };
         }
       }
+      const labelled = Array.from(document.querySelectorAll('[aria-label], [title]')).find((el) => {
+        const al = `${el.getAttribute('aria-label') || ''} ${el.getAttribute('title') || ''}`.toLowerCase();
+        return al.includes('document') || al.includes('file') || al.includes('attachment');
+      });
+      if (labelled && tryClick(labelled)) return { clicked: true, via: 'aria-label' };
       const dataTab = document.querySelector(
         '[data-tab="documents" i], [data-testid*="document" i], [aria-label*="documents" i], [id*="Documents" i]'
       );
       if (dataTab && tryClick(dataTab)) return { clicked: true, via: 'data-attr' };
       return { clicked: false };
-    });
+    };
+
+    const ctxs = _tdAllFrameContexts(session.page);
+    for (let i = 0; i < ctxs.length; i += 1) {
+      try {
+        const r = await ctxs[i].evaluate(tabEval);
+        if (r?.clicked) {
+          return { ...r, contextIndex: i, isMainFrame: i === 0 };
+        }
+      } catch {
+        /* frame may be cross-origin or closed */
+      }
+    }
+    return { clicked: false };
   }
 
-  /** Optional description/title field after choosing a file. */
+  /** Optional description/title field after choosing a file (main + iframes). */
   async function fillTransactionDeskDocMetadata(session, docType) {
     const label = String(docType || '').trim();
     if (!label) return false;
-    return session.page.evaluate((text) => {
+    const fillEval = (text) => {
       const maxLen = 500;
       const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]), textarea'));
       const pick = inputs.find((i) => {
@@ -626,7 +686,158 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       pick.dispatchEvent(new Event('input', { bubbles: true }));
       pick.dispatchEvent(new Event('change', { bubbles: true }));
       return true;
-    }, label);
+    };
+    for (const ctx of _tdAllFrameContexts(session.page)) {
+      try {
+        if (await ctx.evaluate(fillEval, label)) return true;
+      } catch {
+        /* */
+      }
+    }
+    return false;
+  }
+
+  async function _tdTryUploadFileAllFrames(page, absPath) {
+    for (const ctx of _tdAllFrameContexts(page)) {
+      let inputs = [];
+      try {
+        inputs = await ctx.$$('input[type="file"]');
+      } catch {
+        inputs = [];
+      }
+      for (const h of inputs) {
+        try {
+          await h.uploadFile(absPath);
+          let frameUrl = '';
+          try {
+            frameUrl = ctx === page ? page.url() : ctx.url();
+          } catch {
+            frameUrl = '';
+          }
+          return { ok: true, frameUrl };
+        } catch {
+          /* next handle */
+        }
+      }
+    }
+    return { ok: false };
+  }
+
+  /** Trigger hidden/shadow file inputs by clicking inside each frame (opens FileChooser on page). */
+  async function _tdTriggerFileChooserFromFrames(session, absPath) {
+    const page = session.page;
+    const clickFirstFileOrUpload = () => {
+      const fileInputs = [];
+      const walk = (node) => {
+        if (!node) return;
+        if (node.nodeType === 11 || node.nodeType === 9) {
+          for (const kid of node.childNodes || []) walk(kid);
+          return;
+        }
+        if (node.nodeType === 1) {
+          if (node.tagName === 'INPUT' && node.type === 'file') fileInputs.push(node);
+          if (node.shadowRoot) walk(node.shadowRoot);
+          for (const kid of node.children || []) walk(kid);
+        }
+      };
+      walk(document.documentElement);
+      if (fileInputs[0]) {
+        try {
+          fileInputs[0].click();
+          return 'shadow-or-direct-file';
+        } catch {
+          return null;
+        }
+      }
+      const inp = document.querySelector('input[type="file"]');
+      if (inp) {
+        inp.click();
+        return 'input-file';
+      }
+      const btn = Array.from(document.querySelectorAll('button, a, [role="button"]')).find((b) =>
+        /upload|add\s+document|choose\s+file|browse|attach|new\s+upload/i.test(b.textContent || '')
+      );
+      if (btn) {
+        btn.click();
+        return 'upload-btn';
+      }
+      return null;
+    };
+
+    for (const ctx of _tdAllFrameContexts(page)) {
+      try {
+        const [fc] = await Promise.all([
+          page.waitForFileChooser({ timeout: 14_000 }),
+          ctx.evaluate(clickFirstFileOrUpload),
+        ]);
+        await fc.accept([absPath]);
+        return { ok: true };
+      } catch {
+        /* try next context */
+      }
+    }
+    return { ok: false };
+  }
+
+  async function _tdConfirmUploadDialogs(session) {
+    const page = session.page;
+    const confirmEval = () => {
+      const candidates = Array.from(
+        document.querySelectorAll('button, [role="button"], a, input[type="submit"]')
+      );
+      const reShort = /^(save|done|ok|apply|upload|submit|next|continue|add|close)$/i;
+      for (const el of candidates) {
+        const t = (el.textContent || el.value || '').replace(/\s+/g, ' ').trim();
+        if (!t || t.length > 48) continue;
+        if (/cancel|discard|delete|remove file|abort/i.test(t)) continue;
+        if (
+          reShort.test(t) ||
+          (t.length < 40 && /save|upload|confirm|done|complete|finish|apply/i.test(t))
+        ) {
+          try {
+            el.scrollIntoView({ block: 'center' });
+          } catch {
+            /* */
+          }
+          el.click();
+          return true;
+        }
+      }
+      return false;
+    };
+
+    for (let pass = 0; pass < 5; pass += 1) {
+      let clickedAny = false;
+      for (const ctx of _tdAllFrameContexts(page)) {
+        try {
+          if (await ctx.evaluate(confirmEval)) clickedAny = true;
+        } catch {
+          /* */
+        }
+      }
+      if (!clickedAny) break;
+      await page.waitForTimeout(1000);
+    }
+  }
+
+  async function _tdVerifyFilenameVisible(session, baseName, stem) {
+    const evalVerify = (full, short) => {
+      const text = document.body?.innerText || '';
+      if (text.includes(full)) return true;
+      if (short && short.length > 4 && text.includes(short)) return true;
+      return !!Array.from(document.querySelectorAll('td, span, a, div[title], li')).some((n) => {
+        const t = n.textContent || n.getAttribute?.('title') || '';
+        return t.includes(full) || (short && short.length > 4 && t.includes(short));
+      });
+    };
+    for (const ctx of _tdAllFrameContexts(session.page)) {
+      try {
+        if (await ctx.evaluate(evalVerify, baseName, stem)) return true;
+      } catch {
+        /* */
+      }
+    }
+    return false;
   }
 
   /**
@@ -637,75 +848,74 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     const id = String(transactionDeskId || '').trim();
     const absPath = path.resolve(filePath);
     const baseName = path.basename(absPath);
-
-    try {
-      await openTransactionDeskFile(session, { transactionDeskId: id });
-    } catch (e) {
-      logger.warn?.({ err: e.message }, '[TC-BROWSER] uploadDocument: openTransactionDeskFile warning');
-    }
-    await session.page.waitForTimeout(2000);
-
-    const tabResult = await clickTransactionDeskDocumentsTab(session);
-    if (!tabResult.clicked) {
-      const spMiss = await screenshotPath('td-documents-tab-not-found');
-      await session.page.screenshot({ path: spMiss, fullPage: true });
-      screenshots.push(spMiss);
-      logger.warn?.({ transactionDeskId: id }, '[TC-BROWSER] Documents tab not found');
-      return {
-        ok: false,
-        error: 'Could not find or click a Documents/Files tab in TransactionDesk',
-        tabResult,
-        screenshots,
-      };
-    }
-    await session.page.waitForTimeout(2000);
-
-    const sp0 = await screenshotPath('td-documents-tab');
-    await session.page.screenshot({ path: sp0, fullPage: true });
-    screenshots.push(sp0);
-
-    let uploaded = false;
+    const stem = baseName.replace(/\.[^.]+$/, '');
     let lastErr = null;
+    let tabResult = { clicked: false };
+    let uploaded = false;
 
-    const fileInputs = await session.page.$$('input[type="file"]');
-    if (fileInputs.length) {
-      try {
-        for (const h of fileInputs) {
-          try {
-            await h.uploadFile(absPath);
-            uploaded = true;
-            break;
-          } catch {
-            /* try next input */
-          }
+    for (let attempt = 0; attempt < 3 && !uploaded; attempt += 1) {
+      if (attempt > 0) {
+        await session.page.waitForTimeout(1000);
+        try {
+          await openTransactionDeskFile(session, { transactionDeskId: id });
+        } catch {
+          /* */
         }
-      } catch (e) {
-        lastErr = e.message;
+        await session.page.waitForTimeout(1200);
+      } else {
+        try {
+          await openTransactionDeskFile(session, { transactionDeskId: id });
+        } catch (e) {
+          logger.warn?.({ err: e.message }, '[TC-BROWSER] uploadDocument: openTransactionDeskFile warning');
+        }
+        await session.page.waitForTimeout(1800);
       }
-    }
 
-    if (!uploaded) {
-      await session.page
-        .evaluate(() => {
-          const btn = Array.from(document.querySelectorAll('button, a, [role="button"]')).find((b) =>
-            /upload|add\s+document|choose\s+file|browse/i.test(b.textContent || '')
-          );
-          if (btn) btn.click();
-        })
-        .catch(() => {});
+      tabResult = await clickTransactionDeskDocumentsTab(session);
+      if (!tabResult.clicked) {
+        const spMiss = await screenshotPath(`td-documents-tab-miss-a${attempt}`);
+        await session.page.screenshot({ path: spMiss, fullPage: true });
+        screenshots.push(spMiss);
+        if (attempt === 2) {
+          logger.warn?.({ transactionDeskId: id }, '[TC-BROWSER] Documents tab not found (all tries)');
+          return {
+            ok: false,
+            error:
+              'Could not find or click a Documents/Files tab in TransactionDesk (main page + iframes, 3 tries)',
+            tabResult,
+            screenshots,
+          };
+        }
+        continue;
+      }
 
-      await session.page.waitForTimeout(1200);
+      await session.page.waitForTimeout(2000);
+      const sp0 = await screenshotPath(`td-documents-tab-a${attempt}`);
+      await session.page.screenshot({ path: sp0, fullPage: true });
+      screenshots.push(sp0);
+
+      const direct = await _tdTryUploadFileAllFrames(session.page, absPath);
+      if (direct.ok) {
+        uploaded = true;
+        break;
+      }
+
+      const chooser1 = await _tdTriggerFileChooserFromFrames(session, absPath);
+      if (chooser1.ok) {
+        uploaded = true;
+        break;
+      }
 
       try {
         const [fileChooser] = await Promise.all([
-          session.page.waitForFileChooser({ timeout: 18_000 }),
+          session.page.waitForFileChooser({ timeout: 12_000 }),
           session.page
             .evaluate(() => {
               const inp = document.querySelector('input[type="file"]');
               if (inp) inp.click();
               else {
                 const btn = Array.from(document.querySelectorAll('button, a')).find((b) =>
-                  /upload|add\s+document|browse/i.test(b.textContent || '')
+                  /upload|add\s+document|browse|attach/i.test(b.textContent || '')
                 );
                 if (btn) btn.click();
               }
@@ -714,6 +924,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
         ]);
         await fileChooser.accept([absPath]);
         uploaded = true;
+        break;
       } catch (e) {
         lastErr = e.message;
       }
@@ -721,26 +932,17 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
 
     await session.page.waitForTimeout(_tdUploadSettleMs());
     await fillTransactionDeskDocMetadata(session, docType).catch(() => {});
-    await session.page.waitForTimeout(2000);
+    await _tdConfirmUploadDialogs(session);
+    await session.page.waitForTimeout(1800);
+    await fillTransactionDeskDocMetadata(session, docType).catch(() => {});
+    await _tdConfirmUploadDialogs(session);
+    await session.page.waitForTimeout(1500);
 
     const sp1 = await screenshotPath('td-doc-after-upload');
     await session.page.screenshot({ path: sp1, fullPage: true });
     screenshots.push(sp1);
 
-    const stem = baseName.replace(/\.[^.]+$/, '');
-    const verified = await session.page.evaluate(
-      (full, short) => {
-        const text = document.body?.innerText || '';
-        if (text.includes(full)) return true;
-        if (short && short.length > 4 && text.includes(short)) return true;
-        return !!Array.from(document.querySelectorAll('td, span, a, div[title], li')).some((n) => {
-          const t = n.textContent || n.getAttribute?.('title') || '';
-          return t.includes(full) || (short && short.length > 4 && t.includes(short));
-        });
-      },
-      baseName,
-      stem
-    );
+    const verified = await _tdVerifyFilenameVisible(session, baseName, stem);
 
     const ok = uploaded;
     if (!ok) {
@@ -768,7 +970,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
         uploaded && !verified
           ? 'File was sent to the browser; filename not detected in DOM yet (grid may refresh later) — confirm in TD.'
           : !uploaded
-            ? lastErr || 'No file input / file chooser path succeeded'
+            ? lastErr || 'No file input / file chooser path succeeded across frames'
             : null,
     };
   }
@@ -827,12 +1029,20 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     if (id) {
       const clicked = await session.page
         .evaluate((tid) => {
-          const links = Array.from(document.querySelectorAll('a[href]'));
-          for (const a of links) {
+          const nodes = Array.from(
+            document.querySelectorAll('a[href], button[data-href], [role="link"], tr[data-id], tr[data-transaction-id]')
+          );
+          for (const el of nodes) {
             try {
-              if (a.href.includes(tid)) {
-                a.click();
-                return a.href;
+              const href = el.href || el.getAttribute('href') || el.getAttribute('data-href') || '';
+              const ds =
+                el.getAttribute('data-transaction-id') ||
+                el.getAttribute('data-transactionid') ||
+                el.getAttribute('data-id') ||
+                '';
+              if (href.includes(tid) || ds === tid) {
+                el.click();
+                return href || ds || 'row-click';
               }
             } catch {
               /* continue */
@@ -862,8 +1072,15 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
           `/transaction/${id}`,
           `/transactions/${id}`,
           `/Transaction/Index/${id}`,
+          `/Transactions/Forms/Transaction/${id}`,
+          `/TransactionDesk/Transaction/${id}`,
+          `/td/transaction/${id}`,
           `/app/transactions/${id}`,
           `/#/transaction/${id}`,
+          `/#/transactions/${id}`,
+          `/transaction/details/${id}`,
+          `?transactionId=${id}`,
+          `?id=${id}`,
         ];
         for (const p of paths) {
           const target = `${origin}${p}`;
