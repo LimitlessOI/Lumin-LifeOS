@@ -561,62 +561,216 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     return { ok: true, transactionDeskId, screenshots };
   }
 
+  function _tdUploadSettleMs() {
+    const n = Number(process.env.TD_UPLOAD_SETTLE_MS);
+    return Number.isFinite(n) && n >= 500 ? n : 3500;
+  }
+
+  /**
+   * Open the Documents / Files area (Puppeteer has no jQuery `:contains`; use text/heuristic match).
+   */
+  async function clickTransactionDeskDocumentsTab(session) {
+    return session.page.evaluate(() => {
+      const tryClick = (el) => {
+        try {
+          el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+          return true;
+        } catch {
+          try {
+            el.click();
+            return true;
+          } catch {
+            return false;
+          }
+        }
+      };
+
+      const tabs = Array.from(
+        document.querySelectorAll('a, button, [role="tab"], [role="button"], div[tabindex="0"], span')
+      );
+      for (const el of tabs) {
+        const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!t || t.length > 48) continue;
+        if (/^documents$/i.test(t) || /^files$/i.test(t) || /^docs$/i.test(t)) {
+          if (tryClick(el)) return { clicked: true, label: t };
+        }
+      }
+      for (const a of Array.from(document.querySelectorAll('a[href]'))) {
+        const h = (a.getAttribute('href') || '').toLowerCase();
+        if (h.includes('document') || h.includes('/files') || h.includes('/doc')) {
+          if (tryClick(a)) return { clicked: true, via: 'href', href: h.slice(0, 80) };
+        }
+      }
+      const dataTab = document.querySelector(
+        '[data-tab="documents" i], [data-testid*="document" i], [aria-label*="documents" i], [id*="Documents" i]'
+      );
+      if (dataTab && tryClick(dataTab)) return { clicked: true, via: 'data-attr' };
+      return { clicked: false };
+    });
+  }
+
+  /** Optional description/title field after choosing a file. */
+  async function fillTransactionDeskDocMetadata(session, docType) {
+    const label = String(docType || '').trim();
+    if (!label) return false;
+    return session.page.evaluate((text) => {
+      const maxLen = 500;
+      const inputs = Array.from(document.querySelectorAll('input:not([type="hidden"]), textarea'));
+      const pick = inputs.find((i) => {
+        const ph = `${i.placeholder || ''} ${i.name || ''} ${i.id || ''}`.toLowerCase();
+        return /description|document\s*name|title|type|label|name/i.test(ph);
+      });
+      if (!pick || pick.disabled || pick.readOnly) return false;
+      pick.focus();
+      pick.value = text.slice(0, maxLen);
+      pick.dispatchEvent(new Event('input', { bubbles: true }));
+      pick.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    }, label);
+  }
+
   /**
    * Upload a document to a transaction in TransactionDesk.
    */
   async function uploadDocument(session, transactionDeskId, filePath, docType) {
     const screenshots = [];
+    const id = String(transactionDeskId || '').trim();
+    const absPath = path.resolve(filePath);
+    const baseName = path.basename(absPath);
 
-    // Navigate to the transaction
-    await session.page.evaluate((id) => {
-      const links = Array.from(document.querySelectorAll('a'));
-      const tx = links.find(l => l.href.includes(id));
-      if (tx) tx.click();
-    }, transactionDeskId).catch(() => {});
-
+    try {
+      await openTransactionDeskFile(session, { transactionDeskId: id });
+    } catch (e) {
+      logger.warn?.({ err: e.message }, '[TC-BROWSER] uploadDocument: openTransactionDeskFile warning');
+    }
     await session.page.waitForTimeout(2000);
 
-    // Click Documents tab
-    const docTab = await session.page.$('a[href*="document" i], button:contains("Documents"), [data-tab="documents"]');
-    if (docTab) await docTab.click();
-    await session.page.waitForTimeout(1500);
+    const tabResult = await clickTransactionDeskDocumentsTab(session);
+    if (!tabResult.clicked) {
+      const spMiss = await screenshotPath('td-documents-tab-not-found');
+      await session.page.screenshot({ path: spMiss, fullPage: true });
+      screenshots.push(spMiss);
+      logger.warn?.({ transactionDeskId: id }, '[TC-BROWSER] Documents tab not found');
+      return {
+        ok: false,
+        error: 'Could not find or click a Documents/Files tab in TransactionDesk',
+        tabResult,
+        screenshots,
+      };
+    }
+    await session.page.waitForTimeout(2000);
 
     const sp0 = await screenshotPath('td-documents-tab');
-    await session.page.screenshot({ path: sp0 });
+    await session.page.screenshot({ path: sp0, fullPage: true });
     screenshots.push(sp0);
 
-    // Click upload button
-    const uploadBtn = await session.page.$('input[type="file"]');
-    if (!uploadBtn) {
-      // Try clicking an "Upload" button first to reveal the file input
-      await session.page.evaluate(() => {
-        const btns = Array.from(document.querySelectorAll('button, a'));
-        const btn = btns.find(b => /upload/i.test(b.textContent));
-        if (btn) btn.click();
-      }).catch(() => {});
-      await session.page.waitForTimeout(1000);
+    let uploaded = false;
+    let lastErr = null;
+
+    const fileInputs = await session.page.$$('input[type="file"]');
+    if (fileInputs.length) {
+      try {
+        for (const h of fileInputs) {
+          try {
+            await h.uploadFile(absPath);
+            uploaded = true;
+            break;
+          } catch {
+            /* try next input */
+          }
+        }
+      } catch (e) {
+        lastErr = e.message;
+      }
     }
 
-    // Use file chooser
-    const [fileChooser] = await Promise.all([
-      session.page.waitForFileChooser({ timeout: 10000 }),
-      session.page.click('input[type="file"], button[title*="upload" i]').catch(() =>
-        session.page.evaluate(() => {
-          const input = document.querySelector('input[type="file"]');
-          if (input) input.click();
+    if (!uploaded) {
+      await session.page
+        .evaluate(() => {
+          const btn = Array.from(document.querySelectorAll('button, a, [role="button"]')).find((b) =>
+            /upload|add\s+document|choose\s+file|browse/i.test(b.textContent || '')
+          );
+          if (btn) btn.click();
         })
-      ),
-    ]);
+        .catch(() => {});
 
-    await fileChooser.accept([filePath]);
-    await session.page.waitForTimeout(3000);
+      await session.page.waitForTimeout(1200);
 
-    const sp1 = await screenshotPath('td-doc-uploaded');
-    await session.page.screenshot({ path: sp1 });
+      try {
+        const [fileChooser] = await Promise.all([
+          session.page.waitForFileChooser({ timeout: 18_000 }),
+          session.page
+            .evaluate(() => {
+              const inp = document.querySelector('input[type="file"]');
+              if (inp) inp.click();
+              else {
+                const btn = Array.from(document.querySelectorAll('button, a')).find((b) =>
+                  /upload|add\s+document|browse/i.test(b.textContent || '')
+                );
+                if (btn) btn.click();
+              }
+            })
+            .catch(() => {}),
+        ]);
+        await fileChooser.accept([absPath]);
+        uploaded = true;
+      } catch (e) {
+        lastErr = e.message;
+      }
+    }
+
+    await session.page.waitForTimeout(_tdUploadSettleMs());
+    await fillTransactionDeskDocMetadata(session, docType).catch(() => {});
+    await session.page.waitForTimeout(2000);
+
+    const sp1 = await screenshotPath('td-doc-after-upload');
+    await session.page.screenshot({ path: sp1, fullPage: true });
     screenshots.push(sp1);
 
-    logger.info?.({ filePath, docType, screenshots }, '[TC-BROWSER] Document uploaded');
-    return { ok: true, screenshots };
+    const stem = baseName.replace(/\.[^.]+$/, '');
+    const verified = await session.page.evaluate(
+      (full, short) => {
+        const text = document.body?.innerText || '';
+        if (text.includes(full)) return true;
+        if (short && short.length > 4 && text.includes(short)) return true;
+        return !!Array.from(document.querySelectorAll('td, span, a, div[title], li')).some((n) => {
+          const t = n.textContent || n.getAttribute?.('title') || '';
+          return t.includes(full) || (short && short.length > 4 && t.includes(short));
+        });
+      },
+      baseName,
+      stem
+    );
+
+    const ok = uploaded;
+    if (!ok) {
+      logger.warn?.(
+        { filePath: absPath, uploaded, verified, lastErr },
+        '[TC-BROWSER] Document upload failed (no file path succeeded)'
+      );
+    } else if (!verified) {
+      logger.warn?.(
+        { filePath: absPath },
+        '[TC-BROWSER] File submitted to TD UI but filename not yet visible — confirm in TD'
+      );
+    } else {
+      logger.info?.({ filePath: absPath, docType, screenshots }, '[TC-BROWSER] Document uploaded');
+    }
+
+    return {
+      ok,
+      uploaded,
+      verified,
+      lastError: lastErr || null,
+      tabResult,
+      screenshots,
+      warning:
+        uploaded && !verified
+          ? 'File was sent to the browser; filename not detected in DOM yet (grid may refresh later) — confirm in TD.'
+          : !uploaded
+            ? lastErr || 'No file input / file chooser path succeeded'
+            : null,
+    };
   }
 
   function _normalizeTdPartyScrape(raw) {

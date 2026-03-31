@@ -144,7 +144,7 @@ export function createTCInspectionForwardService({
     const session = login.session;
     const results = [];
     try {
-      await tcBrowser.navigateToTransactionDesk(session);
+      await tcBrowser.ensureOnTransactionDesk(session);
       for (const file of files) {
         const docType = `${docTypePrefix} — ${file.filename}`;
         const validation = await validator.validateFile({

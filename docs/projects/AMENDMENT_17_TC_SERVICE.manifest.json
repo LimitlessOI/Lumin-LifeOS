@@ -9,7 +9,7 @@
   "phase": "first-live-intake",
   "next_task": "Use the intake workspace visual transaction board to open the 6453 Mahogany Peak file, verify the real Adam mailbox credentials are working, then run the first real SRPD/photo package search and send from the portal.",
   "stability_class": "needs-review",
-  "current_focus": "R4R: `npm run tc:r4r-railway -- --address=Mahogany --record-seller-reject` after `railway login`; TD link-by-address + seller summary PDF on deploy.",
+  "current_focus": "TD uploadDocument fixed (Documents tab Heuristics, uploadFile); redeploy and re-run R4R scan — confirm docs in TransactionDesk.",
   "owned_files": [
     "routes/tc-routes.js",
     "routes/mls-routes.js",

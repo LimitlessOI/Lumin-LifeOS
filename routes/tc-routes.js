@@ -1386,7 +1386,7 @@ export function createTCRoutes(
       }
 
       const { session } = await tcBrowser.loginToGLVAR();
-      await tcBrowser.navigateToTransactionDesk(session);
+      await tcBrowser.ensureOnTransactionDesk(session);
       const result = await tcBrowser.uploadDocument(session, tx.transaction_desk_id, tmpPath, docType);
       await session.close?.();
 
@@ -2669,7 +2669,7 @@ export function createTCRoutes(
 
       const login = await tcBrowser.loginToGLVAR();
       session = login.session;
-      await tcBrowser.navigateToTransactionDesk(session);
+      await tcBrowser.ensureOnTransactionDesk(session);
 
       const results = [];
       for (const file of files) {
@@ -2774,7 +2774,7 @@ export function createTCRoutes(
         } else {
           const login = await tcBrowser.loginToGLVAR(false);
           session = login.session;
-          await tcBrowser.navigateToTransactionDesk(session);
+          await tcBrowser.ensureOnTransactionDesk(session);
 
           let deskId = tx.transaction_desk_id ? String(tx.transaction_desk_id).trim() : '';
           if (!deskId && String(tx.address || '').trim()) {
