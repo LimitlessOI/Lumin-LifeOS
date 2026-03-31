@@ -60,6 +60,36 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
     return rows[0] || null;
   }
 
+  /**
+   * Shallow-merge known party keys onto tc_transactions.parties (JSONB).
+   * Fills missing email/name unless overwrite=true.
+   */
+  async function mergeTransactionParties(transactionId, patch = {}, { overwrite = false, source = 'merge' } = {}) {
+    const tx = await getTransaction(transactionId);
+    if (!tx) return null;
+    const cur = typeof tx.parties === 'object' && tx.parties && !Array.isArray(tx.parties) ? { ...tx.parties } : {};
+    const roles = ['seller', 'buyer', 'listing_agent', 'buyer_agent', 'escrow', 'lender', 'title'];
+    for (const role of roles) {
+      if (patch[role] == null || typeof patch[role] !== 'object') continue;
+      const incoming = patch[role];
+      const base = typeof cur[role] === 'object' && cur[role] ? { ...cur[role] } : {};
+      for (const k of ['email', 'name', 'full_name', 'display_name', 'phone', 'company']) {
+        const v = incoming[k];
+        if (v == null || String(v).trim() === '') continue;
+        if (overwrite || base[k] == null || String(base[k]).trim() === '') {
+          base[k] = String(v).trim();
+        }
+      }
+      cur[role] = base;
+    }
+    await pool.query(`UPDATE tc_transactions SET parties=$1, updated_at=NOW() WHERE id=$2`, [
+      JSON.stringify(cur),
+      transactionId,
+    ]);
+    await logEvent(transactionId, 'parties_merged', { source, overwrite: !!overwrite });
+    return getTransaction(transactionId);
+  }
+
   async function getActiveTransactions() {
     const { rows } = await pool.query(
       `SELECT * FROM tc_transactions WHERE status IN ('active','pending') ORDER BY close_date ASC`
@@ -239,6 +269,7 @@ export function createTCCoordinator({ pool, accountManager, notificationService,
     getTransactionEvents,
     insertTransaction,
     getTransaction,
+    mergeTransactionParties,
     logEvent,
   };
 }

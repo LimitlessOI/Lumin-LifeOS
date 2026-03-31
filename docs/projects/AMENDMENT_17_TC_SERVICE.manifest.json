@@ -39,6 +39,13 @@
     "services/tc-inspection-service.js",
     "services/tc-review-package-service.js",
     "services/tc-email-document-service.js",
+    "services/tc-inspection-forward-service.js",
+    "services/tc-pdf-signature-stamp.js",
+    "services/tc-td-party-sync.js",
+    "services/tc-td-workflow-runner.js",
+    "services/tc-td-form-knowledge-service.js",
+    "services/tc-r4r-attachment-classify.js",
+    "scripts/tc-r4r-do-upload.mjs",
     "services/tc-email-monitor.js",
     "services/tc-imap-config.js",
     "services/credential-aliases.js",
@@ -63,6 +70,7 @@
     "db/migrations/20260326_tc_review_packages.sql",
     "db/migrations/20260327_email_triage_enrichment.sql",
     "db/migrations/20260327_tc_inspections.sql",
+    "db/migrations/20260408_tc_td_form_knowledge.sql",
     "Dockerfile"
   ],
   "protected_files": [

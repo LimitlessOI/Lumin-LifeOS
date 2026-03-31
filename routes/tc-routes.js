@@ -28,8 +28,16 @@ import { createTCFeedIngestService } from '../services/tc-feed-ingest-service.js
 import { createTCInspectionService } from '../services/tc-inspection-service.js';
 import { createTCAccessService } from '../services/tc-access-service.js';
 import { createTCIntakeWorkspaceService } from '../services/tc-intake-workspace-service.js';
-import { createTCEmailDocumentService } from '../services/tc-email-document-service.js';
+import {
+  createTCEmailDocumentService,
+  deriveMailboxSearchFromTransactionAddress,
+} from '../services/tc-email-document-service.js';
+import { createTCInspectionForwardService } from '../services/tc-inspection-forward-service.js';
+import runTransactionDeskPartySync from '../services/tc-td-party-sync.js';
+import { createTDTDWorkflowRunner } from '../services/tc-td-workflow-runner.js';
+import { createTDTDFormKnowledgeService } from '../services/tc-td-form-knowledge-service.js';
 import { createTCAssistantService } from '../services/tc-assistant-service.js';
+import { classifyR4RAttachment } from '../services/tc-r4r-attachment-classify.js';
 
 const upload = multer({ dest: '/tmp/tc-uploads/' });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
@@ -37,6 +45,22 @@ const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize
 /** In-memory status for async TD → SkySlope listing sync (browser automation can exceed HTTP timeouts). */
 const listingTdSkyslopeJobs = new Map();
 const LISTING_SYNC_JOB_TTL_MS = 2 * 60 * 60 * 1000;
+
+/** Async TD-only workflow jobs (party sync, UI chains). */
+const tdWorkflowJobs = new Map();
+
+function pruneTdWorkflowJobs() {
+  const now = Date.now();
+  for (const [id, job] of tdWorkflowJobs) {
+    const t = new Date(job.created_at || 0).getTime();
+    if (now - t > LISTING_SYNC_JOB_TTL_MS) tdWorkflowJobs.delete(id);
+  }
+  if (tdWorkflowJobs.size <= 100) return;
+  const sorted = [...tdWorkflowJobs.entries()].sort(
+    (a, b) => new Date(a[1].created_at).getTime() - new Date(b[1].created_at).getTime()
+  );
+  while (sorted.length > 80) tdWorkflowJobs.delete(sorted.shift()[0]);
+}
 
 function pruneListingSyncJobs() {
   const now = Date.now();
@@ -51,6 +75,124 @@ function pruneListingSyncJobs() {
   while (sorted.length > 80) {
     listingTdSkyslopeJobs.delete(sorted.shift()[0]);
   }
+}
+
+const DEFAULT_BUYER_POSITION_BLURB =
+  'The buyer is not requesting seller repairs or closing credits based on the inspection findings. Confirm applicable state law, brokerage policy, and the contract for the exact forms and timelines—this notice is for transaction coordination only, not legal advice.';
+
+function buildInspectionMailboxSearch(tx, body = {}) {
+  const derived = deriveMailboxSearchFromTransactionAddress(tx.address);
+  const maxRaw = parseInt(body.max_results, 10);
+  const max_results = Number.isFinite(maxRaw) ? Math.max(1, Math.min(50, maxRaw)) : 20;
+  const daysRaw = parseInt(body.days, 10);
+  const days = Number.isFinite(daysRaw) ? Math.max(1, Math.min(365, daysRaw)) : 60;
+  return {
+    days,
+    subject_contains:
+      body.subject_contains !== undefined && body.subject_contains !== null
+        ? String(body.subject_contains)
+        : derived.subject_contains,
+    filename_contains:
+      body.filename_contains !== undefined && body.filename_contains !== null
+        ? String(body.filename_contains)
+        : derived.filename_contains,
+    from_contains: body.from_contains != null ? String(body.from_contains) : '',
+    latest_only: false,
+    max_results,
+  };
+}
+
+function buildInspectionForwardEmailBody({ recipientName, narrative, buyerPositionSummary, transaction }) {
+  const greet = recipientName?.trim() ? `Hi ${recipientName.trim()},` : 'Hi,';
+  const parts = [greet, '', `Property: ${transaction.address || '—'}`];
+  if (narrative?.trim()) parts.push('', narrative.trim());
+  parts.push('', (buyerPositionSummary && String(buyerPositionSummary).trim()) || DEFAULT_BUYER_POSITION_BLURB);
+  parts.push('', 'Attached: inspection-related PDFs gathered from the TC mailbox.');
+  parts.push('', '—');
+  return parts.join('\n');
+}
+
+/** Substrings; subject must include at least one (buyer “response to repairs”, inspection report, BINSR, etc.). */
+const DEFAULT_R4R_SUBJECT_ANY = [
+  'repair',
+  'repairs',
+  'inspection',
+  'inspect',
+  'response',
+  'request',
+  'binsr',
+  'birr',
+  'b-insr',
+  'buyer',
+  'notice',
+  'credit',
+  'responding',
+  'counter',
+  'deficiency',
+  'home inspection',
+];
+
+function buildR4RMailboxSearch(tx, body = {}) {
+  const derived = deriveMailboxSearchFromTransactionAddress(tx.address);
+  const maxRaw = parseInt(body.max_results, 10);
+  const max_results = Number.isFinite(maxRaw) ? Math.max(1, Math.min(50, maxRaw)) : 30;
+  const daysRaw = parseInt(body.days, 10);
+  const days = Number.isFinite(daysRaw) ? Math.max(1, Math.min(365, daysRaw)) : 90;
+
+  const rawSubject =
+    body.subject_contains != null && body.subject_contains !== ''
+      ? String(body.subject_contains).trim()
+      : derived.subject_contains || '';
+
+  const subject_tokens =
+    body.subject_tokens != null
+      ? Array.isArray(body.subject_tokens)
+        ? body.subject_tokens.map((t) => String(t).trim()).filter(Boolean)
+        : String(body.subject_tokens)
+            .split(/[\s,]+/)
+            .map((s) => s.trim())
+            .filter(Boolean)
+      : rawSubject
+          .split(/\s+/)
+          .map((s) => s.trim())
+          .filter(Boolean);
+
+  const subject_any_contains =
+    body.subject_any_contains != null
+      ? Array.isArray(body.subject_any_contains)
+        ? body.subject_any_contains.map((s) => String(s).trim().toLowerCase()).filter(Boolean)
+        : String(body.subject_any_contains)
+            .split(/[\s,]+/)
+            .map((s) => s.trim().toLowerCase())
+            .filter(Boolean)
+      : DEFAULT_R4R_SUBJECT_ANY;
+
+  const filename_contains =
+    body.filename_contains != null ? String(body.filename_contains) : '';
+  return {
+    days,
+    subject_contains: subject_tokens.join(' ').trim(),
+    subject_tokens,
+    subject_any_contains,
+    filename_contains,
+    from_contains: body.from_contains != null ? String(body.from_contains) : '',
+    latest_only: false,
+    max_results,
+  };
+}
+
+function tdInspectionForwardPlaybook(recipientName) {
+  const who = recipientName?.trim() || 'your seller client';
+  return {
+    disclaimer:
+      'LifeOS can search the mailbox, attach PDFs, optionally add your listing-agent acknowledgment page to PDFs after you approve, and push files into TransactionDesk. TransactionDesk e-sign for the client and coop-side distribution are still operator steps where your broker requires them.',
+    steps: [
+      'Open the TransactionDesk file for this property.',
+      'Confirm inspection report and any buyer repair-request / response paperwork is correct for Nevada and your broker.',
+      `Send or route signing to ${who} when those documents require client signature.`,
+      'After any required client signatures, deliver the executed package to the cooperating agent per brokerage policy.',
+    ],
+  };
 }
 
 export function createTCRoutes(
@@ -83,7 +225,6 @@ export function createTCRoutes(
     getNotificationService,
     sendSMS,
   });
-  const approvalService = createTCApprovalService({ pool, coordinator, automationService, logger });
   const alertService = createTCAlertService({ pool, coordinator, logger, sendSMS, sendAlertSms, sendAlertCall });
   const asanaSyncService = createTCAsanaSyncService({ pool, coordinator, portalService, logger });
   const workflowService = createTCWorkflowService({ portalService, logger });
@@ -114,6 +255,29 @@ export function createTCRoutes(
     getNotificationService,
     portalService,
     logger,
+  });
+  const inspectionForwardService = createTCInspectionForwardService({
+    coordinator,
+    emailDocumentService,
+    logger,
+    getAccountManager,
+  });
+  const approvalService = createTCApprovalService({
+    pool,
+    coordinator,
+    automationService,
+    logger,
+    customApprovalHandlers: {
+      forward_inspection_docs: (approvalRow, prepared, ctx) =>
+        inspectionForwardService.executeApprovedForward(approvalRow, prepared, ctx),
+    },
+  });
+  const tdFormKnowledgeService = createTDTDFormKnowledgeService({ pool, coordinator, logger });
+  const tdWorkflowRunner = createTDTDWorkflowRunner({
+    coordinator,
+    logger,
+    getAccountManager,
+    formKnowledgeService: tdFormKnowledgeService,
   });
   const tcAssistant = createTCAssistantService({
     coordinator,
@@ -1198,6 +1362,158 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/transactions/:id/browser/td-sync-parties — scrape TD → merge parties JSONB
+  router.post('/transactions/:id/browser/td-sync-parties', requireKey, async (req, res) => {
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      const body = req.body || {};
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const accountManager = await getAccountManager();
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+      const result = await runTransactionDeskPartySync({
+        coordinator,
+        tcBrowser,
+        logger,
+        transactionId,
+        dryRun: body.dry_run === true,
+        overwriteParties: body.overwrite_parties === true,
+        addressSearch: body.address_search || null,
+      });
+      if (!result.ok) return res.status(400).json(result);
+      res.json({
+        ...result,
+        operator_note:
+          'Scrape quality depends on ZipForm/TransactionDesk UI. Verify seller/buyer emails in the response; re-run with dry_run:false omitted and overwrite_parties:true only if you intend to replace existing party fields.',
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] td-sync-parties error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/browser/td-ui-plan — best-effort Forms / e-sign navigation + screenshots
+  router.post('/transactions/:id/browser/td-ui-plan', requireKey, async (req, res) => {
+    let session = null;
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      const tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const plan = String(req.body?.plan || 'inspection_seller_signing_prep').trim();
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const accountManager = await getAccountManager();
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+      const login = await tcBrowser.loginToGLVAR(false);
+      session = login.session;
+      await tcBrowser.ensureOnTransactionDesk(session);
+      await tcBrowser.openTransactionDeskFile(session, {
+        transactionDeskId: tx.transaction_desk_id,
+        addressSearch: req.body?.address_search || tx.address,
+      });
+      const exec = await tcBrowser.applyTransactionDeskUiPlan(session, plan);
+      await coordinator.logEvent(transactionId, 'td_ui_plan_executed', { plan, steps: exec.steps?.length });
+      res.json({
+        ok: true,
+        plan,
+        ...exec,
+        disclaimer:
+          'This does not complete e-sign or Nevada forms automatically. Use screenshots to confirm UI state; finish signing and coop distribution in TransactionDesk where required.',
+        known_plans: Object.keys(tcBrowser.TD_UI_PLANS || {}),
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] td-ui-plan error');
+      res.status(500).json({ ok: false, error: err.message });
+    } finally {
+      await session?.close?.();
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/browser/td-workflow — async job (default) or sync: named TD bundles
+  router.post('/transactions/:id/browser/td-workflow', requireKey, async (req, res) => {
+    try {
+      const txId = parseInt(req.params.id, 10);
+      if (Number.isNaN(txId)) return res.status(400).json({ ok: false, error: 'Invalid transaction id' });
+      const tx = await coordinator.getTransaction(txId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const body = req.body || {};
+      const workflow = String(body.workflow || '').trim();
+      if (!workflow) {
+        return res.status(400).json({
+          ok: false,
+          error: 'workflow is required',
+          catalog: tdWorkflowRunner.TD_WORKFLOW_CATALOG,
+        });
+      }
+
+      if (body.async === false) {
+        const steps = [];
+        try {
+          const result = await tdWorkflowRunner.runWorkflow(txId, workflow, body, (s) => steps.push(s));
+          const failed = result.ok === false;
+          return res.status(failed ? 400 : 200).json({
+            ok: !failed,
+            async: false,
+            workflow,
+            steps,
+            result,
+          });
+        } catch (err) {
+          return res.status(500).json({ ok: false, error: err.message, workflow, steps });
+        }
+      }
+
+      pruneTdWorkflowJobs();
+      const jobId = crypto.randomUUID();
+      const job = {
+        id: jobId,
+        type: 'td_workflow',
+        transaction_id: txId,
+        workflow,
+        status: 'queued',
+        steps: [],
+        error: null,
+        result: null,
+        created_at: new Date().toISOString(),
+      };
+      tdWorkflowJobs.set(jobId, job);
+
+      res.status(202).json({
+        ok: true,
+        job_id: jobId,
+        transaction_id: txId,
+        workflow,
+        poll_url: `/api/v1/tc/browser-jobs/${jobId}`,
+        catalog_url: '/api/v1/tc/td-workflows/catalog',
+      });
+
+      (async () => {
+        const j = tdWorkflowJobs.get(jobId);
+        if (!j) return;
+        j.status = 'running';
+        try {
+          const result = await tdWorkflowRunner.runWorkflow(txId, workflow, body, (step) => j.steps.push(step));
+          const failed = result.ok === false;
+          j.status = failed ? 'failed' : 'completed';
+          j.result = result;
+          if (failed) {
+            j.error =
+              result.result?.error ||
+              result.sync?.error ||
+              (result.sync && !result.sync.ok && 'party sync failed') ||
+              'workflow failed';
+          }
+        } catch (err) {
+          j.status = 'failed';
+          j.error = err.message;
+          j.steps.push({ at: new Date().toISOString(), label: 'job_failed', error: err.message });
+          logger.warn?.({ err: err.message, jobId, workflow }, '[TC-ROUTES] td-workflow job failed');
+        }
+      })();
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] td-workflow enqueue error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // POST /api/v1/tc/test-boldtrail — eXp Okta login → BoldTrail tile (same portal as SkySlope)
   router.post('/test-boldtrail', requireKey, async (req, res) => {
     try {
@@ -1467,11 +1783,86 @@ export function createTCRoutes(
     }
   });
 
-  // GET /api/v1/tc/browser-jobs/:jobId — poll listing TD → SkySlope job
+  // GET /api/v1/tc/browser-jobs/:jobId — poll listing TD → SkySlope or TD workflow job
   router.get('/browser-jobs/:jobId', requireKey, async (req, res) => {
-    const job = listingTdSkyslopeJobs.get(req.params.jobId);
+    const job = listingTdSkyslopeJobs.get(req.params.jobId) || tdWorkflowJobs.get(req.params.jobId);
     if (!job) return res.status(404).json({ ok: false, error: 'Job not found or expired' });
     res.json({ ok: true, job });
+  });
+
+  // GET /api/v1/tc/td-workflows/catalog — named TransactionDesk automation bundles
+  router.get('/td-workflows/catalog', requireKey, async (_req, res) => {
+    res.json({ ok: true, workflows: tdWorkflowRunner.TD_WORKFLOW_CATALOG });
+  });
+
+  // GET /api/v1/tc/td/forms-knowledge — persisted TD form inventory + handling playbooks
+  router.get('/td/forms-knowledge', requireKey, async (req, res) => {
+    try {
+      const txId = req.query.transaction_id ? parseInt(req.query.transaction_id, 10) : null;
+      const limit = req.query.limit ? parseInt(req.query.limit, 10) : 300;
+      const items = await tdFormKnowledgeService.listKnowledge({
+        transactionId: Number.isFinite(txId) ? txId : null,
+        limit,
+      });
+      res.json({ ok: true, count: items.length, items });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] td/forms-knowledge list error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/td/forms-knowledge/generate-playbooks — infer handling playbooks from machine schema
+  router.post('/td/forms-knowledge/generate-playbooks', requireKey, async (req, res) => {
+    try {
+      const txId = req.body?.transaction_id != null ? parseInt(req.body.transaction_id, 10) : null;
+      const limit = req.body?.limit != null ? parseInt(req.body.limit, 10) : 300;
+      const overwrite = req.body?.overwrite === true;
+      const result = await tdFormKnowledgeService.generatePlaybooks({
+        transactionId: Number.isFinite(txId) ? txId : null,
+        limit,
+        overwrite,
+      });
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] td/forms-knowledge generate-playbooks error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/td/forms-knowledge/:id/resolve-plan — apply template defaults + intent + per-case overrides
+  router.post('/td/forms-knowledge/:id/resolve-plan', requireKey, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (!Number.isFinite(id)) return res.status(400).json({ ok: false, error: 'Invalid id' });
+      const result = await tdFormKnowledgeService.resolveExecutionPlan(id, {
+        intent: req.body?.intent || 'standard',
+        overrides: req.body?.overrides || {},
+      });
+      if (!result) return res.status(404).json({ ok: false, error: 'Form knowledge row not found' });
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] td/forms-knowledge resolve-plan error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PATCH /api/v1/tc/td/forms-knowledge/:id — store how this form is handled in your workflow
+  router.patch('/td/forms-knowledge/:id', requireKey, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (!Number.isFinite(id)) return res.status(400).json({ ok: false, error: 'Invalid id' });
+      const item = await tdFormKnowledgeService.updatePlaybook(
+        id,
+        req.body?.handling_playbook || {},
+        req.body?.confidence,
+        req.body?.machine_schema || null
+      );
+      if (!item) return res.status(404).json({ ok: false, error: 'Form knowledge row not found' });
+      res.json({ ok: true, item });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] td/forms-knowledge patch error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
   });
 
   // ── TC Fees + Agent Clients ───────────────────────────────────────────────
@@ -1919,6 +2310,730 @@ export function createTCRoutes(
       res.json(result);
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] email/send-attachment-package error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/email/preview-inspection-mailbox — IMAP search only (no downloads)
+  router.post('/transactions/:id/email/preview-inspection-mailbox', requireKey, async (req, res) => {
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      const tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const search = buildInspectionMailboxSearch(tx, req.body || {});
+      const derived_hints = deriveMailboxSearchFromTransactionAddress(tx.address);
+      const emails = await emailDocumentService.findAttachmentEmails(search);
+      res.json({
+        ok: true,
+        transaction_id: transactionId,
+        address: tx.address,
+        search,
+        derived_hints,
+        matches: emails.map((e) => ({
+          uid: e.uid,
+          subject: e.subject,
+          from: e.from,
+          date: e.date,
+          part_count: (e.parts || []).length,
+        })),
+        count: emails.length,
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] preview-inspection-mailbox error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/email/gather-inspection-attachments — download PDFs from all matching messages
+  router.post('/transactions/:id/email/gather-inspection-attachments', requireKey, async (req, res) => {
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      const tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const search = buildInspectionMailboxSearch(tx, req.body || {});
+      const onlyPdf = req.body?.only_pdf !== false;
+      const { emails, files } = await emailDocumentService.gatherAttachmentsForSearch(search, { onlyPdf });
+      res.json({
+        ok: true,
+        transaction_id: transactionId,
+        search,
+        emails_scanned: emails.length,
+        attachment_count: files.length,
+        files: files.map((f) => ({
+          filename: f.filename,
+          size: f.size,
+          source_uid: f.source_uid,
+          source_subject: f.source_subject,
+          source_from: f.source_from,
+          filePath: f.filePath,
+        })),
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] gather-inspection-attachments error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/email/prepare-inspection-forward-approval — queue approval (review → approve to send)
+  router.post('/transactions/:id/email/prepare-inspection-forward-approval', requireKey, async (req, res) => {
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      let tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const body = req.body || {};
+
+      let td_party_sync = null;
+      if (body.sync_td_parties_first === true && (tx.transaction_desk_id || tx.address)) {
+        const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+        const accountManager = await getAccountManager();
+        const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+        td_party_sync = await runTransactionDeskPartySync({
+          coordinator,
+          tcBrowser,
+          logger,
+          transactionId,
+          dryRun: body.td_party_sync_dry_run === true,
+          overwriteParties: body.overwrite_td_parties === true,
+          addressSearch: body.td_address_search || null,
+        });
+        if (td_party_sync.ok) {
+          tx = await coordinator.getTransaction(transactionId);
+        }
+      }
+
+      const resolved = await inspectionForwardService.resolveSellerRecipient(tx, body);
+      if (!resolved.email) {
+        return res.status(400).json({
+          ok: false,
+          error: 'Could not resolve seller / client email',
+          resolution: resolved,
+        });
+      }
+
+      const search = buildInspectionMailboxSearch(tx, body);
+      const emails = await emailDocumentService.findAttachmentEmails(search);
+      const preview_attachments = [];
+      for (const e of emails) {
+        for (const p of e.parts || []) {
+          preview_attachments.push({ filename: p.filename, source_subject: e.subject, uid: e.uid });
+        }
+      }
+
+      const recipient_name = body.recipient_name || resolved.name || '';
+      const subjectLine =
+        body.subject ||
+        `${(tx.address || 'Property').replace(/\s+/g, ' ').trim()} — Inspection documents (seller client copy)`;
+      const forwardBody = buildInspectionForwardEmailBody({
+        recipientName: recipient_name,
+        narrative: body.narrative || '',
+        buyerPositionSummary: body.buyer_position_summary,
+        transaction: tx,
+      });
+
+      const requires_listing_agent_signature = body.requires_listing_agent_signature === true;
+      const prepared_action = {
+        kind: 'forward_inspection_docs',
+        search,
+        only_pdf: body.only_pdf !== false,
+        recipient_email: resolved.email,
+        recipient_name,
+        subject: subjectLine,
+        body: forwardBody,
+        requires_listing_agent_signature,
+        upload_to_td: body.upload_to_td === true,
+        force_upload: String(body.force_upload || '').toLowerCase() === 'true',
+        doc_type_prefix: String(body.doc_type_prefix || 'Inspection (mailbox)').trim() || 'Inspection (mailbox)',
+      };
+
+      const approval = await approvalService.createApproval(transactionId, {
+        category: 'document',
+        title: `Review & send inspection package — ${tx.address}`,
+        summary: `To ${recipient_name || resolved.email} <${resolved.email}> · ${preview_attachments.length} attachment(s) across ${emails.length} message(s)${
+          requires_listing_agent_signature
+            ? ' · on approve: append listing-agent acknowledgment pages to PDFs (see env TC_LISTING_AGENT_*)'
+            : ''
+        }`,
+        priority: body.priority || 'urgent',
+        prepared_action,
+        metadata: {
+          recipient_resolution: resolved,
+          preview_messages: emails.map((e) => ({
+            uid: e.uid,
+            subject: e.subject,
+            attachment_filenames: (e.parts || []).map((part) => part.filename),
+          })),
+          preview_attachment_count: preview_attachments.length,
+        },
+      });
+
+      const playbook = tdInspectionForwardPlaybook(recipient_name);
+      await coordinator.logEvent(transactionId, 'inspection_forward_prepared', { approval_id: approval.id });
+
+      res.json({
+        ok: true,
+        approval,
+        recipient: resolved,
+        preview: {
+          message_count: emails.length,
+          attachment_count: preview_attachments.length,
+          attachments: preview_attachments,
+        },
+        prepared_action,
+        subject: subjectLine,
+        body_preview: forwardBody,
+        transaction_desk_playbook: playbook,
+        sign_off_hint:
+          'Edit drafts via PATCH /api/v1/tc/approvals/:id (prepared_action). When ready, PATCH with { "action": "approve", "actor": "your_name" } to gather fresh attachments, stamp PDFs if requested, send email, and optionally upload to TD.',
+        td_party_sync,
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] prepare-inspection-forward-approval error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/email/forward-inspection-docs — multi-email PDF package (direct send; optional auto-resolve seller email)
+  router.post('/transactions/:id/email/forward-inspection-docs', requireKey, async (req, res) => {
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      let tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+
+      const body = req.body || {};
+      if (body.sync_td_parties_first === true && (tx.transaction_desk_id || tx.address)) {
+        const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+        const accountManager = await getAccountManager();
+        const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+        const sync = await runTransactionDeskPartySync({
+          coordinator,
+          tcBrowser,
+          logger,
+          transactionId,
+          dryRun: body.td_party_sync_dry_run === true,
+          overwriteParties: body.overwrite_td_parties === true,
+          addressSearch: body.td_address_search || null,
+        });
+        if (sync.ok) tx = await coordinator.getTransaction(transactionId);
+      }
+      let recipient_email = body.recipient_email;
+      let recipient_name = body.recipient_name || '';
+      let resolution = null;
+      if (!recipient_email) {
+        resolution = await inspectionForwardService.resolveSellerRecipient(tx, body);
+        if (resolution.email) {
+          recipient_email = resolution.email;
+          recipient_name = recipient_name || resolution.name || '';
+        }
+      }
+
+      const {
+        narrative = '',
+        buyer_position_summary,
+        subject,
+        dry_run = true,
+      } = body;
+
+      if (!recipient_email) {
+        return res.status(400).json({
+          ok: false,
+          error: 'recipient_email is required (or resolvable seller via parties.seller.email / Sent-mail search)',
+          resolution,
+        });
+      }
+
+      const search = buildInspectionMailboxSearch(tx, req.body || {});
+      const onlyPdf = req.body?.only_pdf !== false;
+      const subjectLine =
+        subject ||
+        `${(tx.address || 'Property').replace(/\s+/g, ' ').trim()} — Inspection documents & buyer direction`;
+
+      const emailBody = buildInspectionForwardEmailBody({
+        recipientName: recipient_name,
+        narrative,
+        buyerPositionSummary: buyer_position_summary,
+        transaction: tx,
+      });
+
+      const playbook = tdInspectionForwardPlaybook(recipient_name);
+
+      const result = await emailDocumentService.sendGatheredAttachmentPackage({
+        transactionId,
+        recipientEmail: recipient_email,
+        recipientName: recipient_name,
+        subject: subjectLine,
+        body: emailBody,
+        search,
+        onlyPdf,
+        dryRun: dry_run !== false,
+      });
+
+      await coordinator.logEvent(transactionId, 'inspection_mailbox_forward', {
+        dry_run: dry_run !== false,
+        recipient_email,
+        search,
+        attachment_count: result.attachment_count ?? result.metadata?.attachments?.length,
+        ok: result.ok,
+        error: result.error || null,
+      });
+
+      if (!result.ok) {
+        return res.status(400).json({
+          ...result,
+          transaction_desk_playbook: playbook,
+          subject: subjectLine,
+          recipient_resolution: resolution,
+        });
+      }
+
+      res.json({
+        ...result,
+        transaction_desk_playbook: playbook,
+        subject: subjectLine,
+        recipient_resolution: resolution,
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] forward-inspection-docs error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/email/upload-gathered-to-td — gather mailbox PDFs and upload each to TD
+  router.post('/transactions/:id/email/upload-gathered-to-td', requireKey, async (req, res) => {
+    const transactionId = parseInt(req.params.id, 10);
+    let session = null;
+    try {
+      const tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      if (!tx.transaction_desk_id) {
+        return res.status(400).json({ ok: false, error: 'Transaction not yet linked to TransactionDesk' });
+      }
+
+      const search = buildInspectionMailboxSearch(tx, req.body || {});
+      const onlyPdf = req.body?.only_pdf !== false;
+      const forceUpload =
+        String(req.body?.force_upload || req.body?.forceUpload || 'false').toLowerCase() === 'true';
+      const docTypePrefix = String(req.body?.doc_type_prefix || 'Inspection (mailbox)').trim() || 'Inspection (mailbox)';
+
+      const { emails, files } = await emailDocumentService.gatherAttachmentsForSearch(search, { onlyPdf });
+      if (!files.length) {
+        return res.status(400).json({
+          ok: false,
+          error: 'No attachments matched the search',
+          emails_scanned: emails.length,
+          search,
+        });
+      }
+
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const { createTCDocumentValidator } = await import('../services/tc-document-validator.js');
+      const accountManager = await getAccountManager();
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+      const validator = createTCDocumentValidator({ logger });
+
+      const login = await tcBrowser.loginToGLVAR();
+      session = login.session;
+      await tcBrowser.navigateToTransactionDesk(session);
+
+      const results = [];
+      for (const file of files) {
+        const docType = `${docTypePrefix} — ${file.filename}`;
+        const validation = await validator.validateFile({
+          filePath: file.filePath,
+          fileName: file.filename,
+          docType,
+          expectedAddress: tx.address || null,
+        });
+        if (validation.blocks_upload && !forceUpload) {
+          results.push({ filename: file.filename, skipped: true, validation });
+          continue;
+        }
+        const up = await tcBrowser.uploadDocument(session, tx.transaction_desk_id, file.filePath, docType);
+        results.push({ filename: file.filename, ok: up.ok, validation, upload: up });
+        await coordinator.logEvent(tx.id, 'doc_uploaded_mailbox', {
+          filename: file.filename,
+          docType,
+          ok: up.ok,
+          validation,
+        });
+      }
+
+      await session?.close?.();
+      session = null;
+
+      const playbook = tdInspectionForwardPlaybook();
+
+      res.json({
+        ok: true,
+        transaction_id: transactionId,
+        search,
+        emails_scanned: emails.length,
+        uploaded: results.filter((r) => r.ok).length,
+        results,
+        transaction_desk_playbook: playbook,
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] upload-gathered-to-td error');
+      await session?.close?.();
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+
+  // POST /api/v1/tc/transactions/:id/r4r/scan — find inspection report + repair request files in mailbox
+  router.post('/transactions/:id/r4r/scan', requireKey, async (req, res) => {
+    let session = null;
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      const tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+
+      const search = buildR4RMailboxSearch(tx, req.body || {});
+      const onlyPdf = req.body?.only_pdf !== false;
+      const { emails, files } = await emailDocumentService.gatherAttachmentsForSearch(search, { onlyPdf });
+      const classified = files.map((f) => ({
+        ...f,
+        r4r_role: classifyR4RAttachment(f.filename),
+      }));
+      const hasRepairRequest = classified.some((f) => f.r4r_role === 'repair_request');
+      const hasInspectionReport = classified.some((f) => f.r4r_role === 'inspection_report');
+
+      let td_upload = null;
+      if (req.body?.upload_to_td === true) {
+        if (!tx.transaction_desk_id) {
+          td_upload = { ok: false, skipped: true, error: 'Transaction not yet linked to TransactionDesk' };
+        } else {
+          const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+          const { createTCDocumentValidator } = await import('../services/tc-document-validator.js');
+          const accountManager = await getAccountManager();
+          const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+          const validator = createTCDocumentValidator({ logger });
+          const forceUpload =
+            String(req.body?.force_upload || req.body?.forceUpload || 'false').toLowerCase() === 'true';
+          const docTypePrefix = String(req.body?.doc_type_prefix || 'R4R package').trim() || 'R4R package';
+          const dryRunUpload = req.body?.dry_run_upload === true;
+
+          if (!dryRunUpload) {
+            const login = await tcBrowser.loginToGLVAR(false);
+            session = login.session;
+            await tcBrowser.navigateToTransactionDesk(session);
+          }
+
+          const results = [];
+          for (const file of classified) {
+            const docType = `${docTypePrefix} — ${file.r4r_role} — ${file.filename}`;
+            const validation = await validator.validateFile({
+              filePath: file.filePath,
+              fileName: file.filename,
+              docType,
+              expectedAddress: tx.address || null,
+            });
+            if (validation.blocks_upload && !forceUpload) {
+              results.push({ filename: file.filename, r4r_role: file.r4r_role, skipped: true, validation });
+              continue;
+            }
+            if (dryRunUpload) {
+              results.push({ filename: file.filename, r4r_role: file.r4r_role, ok: true, dry_run_upload: true, validation });
+              continue;
+            }
+            const up = await tcBrowser.uploadDocument(session, tx.transaction_desk_id, file.filePath, docType);
+            results.push({ filename: file.filename, r4r_role: file.r4r_role, ok: up.ok, validation, upload: up });
+          }
+          td_upload = {
+            ok: true,
+            dry_run_upload: dryRunUpload,
+            uploaded: results.filter((r) => r.ok && !r.dry_run_upload).length,
+            results,
+          };
+        }
+      }
+
+      await coordinator.logEvent(transactionId, 'r4r_scan', {
+        search,
+        emails_scanned: emails.length,
+        attachments: classified.length,
+        has_repair_request: hasRepairRequest,
+        has_inspection_report: hasInspectionReport,
+        upload_to_td: req.body?.upload_to_td === true,
+      });
+
+      res.json({
+        ok: true,
+        transaction_id: transactionId,
+        search,
+        emails_scanned: emails.length,
+        attachment_count: classified.length,
+        has_repair_request: hasRepairRequest,
+        has_inspection_report: hasInspectionReport,
+        files: classified.map((f) => ({
+          filename: f.filename,
+          size: f.size,
+          r4r_role: f.r4r_role,
+          source_uid: f.source_uid,
+          source_subject: f.source_subject,
+          source_from: f.source_from,
+          filePath: f.filePath,
+        })),
+        td_upload,
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] r4r/scan error');
+      res.status(500).json({ ok: false, error: err.message });
+    } finally {
+      await session?.close?.();
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/r4r/send-seller-review — queue seller review package with call script
+  router.post('/transactions/:id/r4r/send-seller-review', requireKey, async (req, res) => {
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      const tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+
+      const body = req.body || {};
+      const narrative = body.narrative ||
+        'Please review the attached inspection report and repair request. Read through what the buyers are asking for, then call me and we will go over your response options together (accept, reject, or counter).';
+
+      const proxyBody = {
+        ...body,
+        narrative,
+        subject:
+          body.subject ||
+          `${(tx.address || 'Property').replace(/\s+/g, ' ').trim()} — Seller review: inspection + repair request`,
+        sync_td_parties_first: body.sync_td_parties_first !== false,
+      };
+
+      const search = buildR4RMailboxSearch(tx, proxyBody);
+      const resolved = await inspectionForwardService.resolveSellerRecipient(tx, proxyBody);
+      if (!resolved.email) {
+        return res.status(400).json({ ok: false, error: 'Could not resolve seller email', resolution: resolved });
+      }
+
+      const recipient_name = proxyBody.recipient_name || resolved.name || '';
+      const forwardBody = buildInspectionForwardEmailBody({
+        recipientName: recipient_name,
+        narrative: proxyBody.narrative,
+        buyerPositionSummary:
+          proxyBody.buyer_position_summary ||
+          'This package contains the buyer inspection report and repair request. Please review and we will discuss your preferred response (accept, reject, or counter).',
+        transaction: tx,
+      });
+
+      const approval = await approvalService.createApproval(transactionId, {
+        category: 'document',
+        title: `R4R seller review send — ${tx.address}`,
+        summary: `Send inspection + repair request package to seller ${recipient_name || resolved.email} and request a call before response drafting.`,
+        priority: proxyBody.priority || 'urgent',
+        prepared_action: {
+          kind: 'forward_inspection_docs',
+          search,
+          only_pdf: proxyBody.only_pdf !== false,
+          recipient_email: resolved.email,
+          recipient_name,
+          subject: proxyBody.subject,
+          body: forwardBody,
+          requires_listing_agent_signature: proxyBody.requires_listing_agent_signature === true,
+          upload_to_td: proxyBody.upload_to_td === true,
+          force_upload: String(proxyBody.force_upload || '').toLowerCase() === 'true',
+          doc_type_prefix: String(proxyBody.doc_type_prefix || 'R4R package').trim() || 'R4R package',
+        },
+        metadata: {
+          flow: 'r4r_seller_review',
+          seller_email_source: resolved.source,
+        },
+      });
+
+      res.json({
+        ok: true,
+        approval,
+        recipient: resolved,
+        sign_off_hint:
+          'Approve this item via PATCH /api/v1/tc/approvals/:id with {"action":"approve"} to send to seller. Then capture seller decision via POST /api/v1/tc/transactions/:id/r4r/record-seller-choice.',
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] r4r/send-seller-review error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/r4r/record-seller-choice — accept | reject | counter
+  router.post('/transactions/:id/r4r/record-seller-choice', requireKey, async (req, res) => {
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      const tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+
+      const { choice, notes = null, counter_offer = null, source_channel = 'manual' } = req.body || {};
+      const map = { accept: 'accepted', accepted: 'accepted', reject: 'rejected', rejected: 'rejected', counter: 'counter', proposal: 'counter' };
+      const response = map[String(choice || '').toLowerCase()];
+      if (!response) {
+        return res.status(400).json({
+          ok: false,
+          error: 'choice is required: accept | reject | counter',
+        });
+      }
+
+      const inspection = await inspectionService.recordRepairResponse(transactionId, {
+        response,
+        counterOffer: counter_offer,
+        responseNotes: notes,
+      });
+
+      const reviewApproval = await approvalService.createApproval(transactionId, {
+        category: 'communication',
+        title: `R4R response review — ${tx.address}`,
+        summary:
+          response === 'counter'
+            ? 'Seller proposed a counter on repair response. Review with buyer side and finalize send.'
+            : response === 'accepted'
+              ? 'Seller accepted repair request terms. Review and finalize buyer-side communication.'
+              : 'Seller rejected repair request. Review buyer options (accept as-is or cancel) and finalize communication.',
+        priority: 'urgent',
+        metadata: {
+          flow: 'r4r_response_review',
+          seller_choice: response,
+          source_channel,
+          notes,
+        },
+      });
+
+      await coordinator.logEvent(transactionId, 'r4r_seller_choice_recorded', {
+        choice: response,
+        source_channel,
+      });
+
+      res.json({
+        ok: true,
+        inspection,
+        review_approval: reviewApproval,
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] r4r/record-seller-choice error');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/transactions/:id/r4r/test-reject-all — first test flow with template override
+  router.post('/transactions/:id/r4r/test-reject-all', requireKey, async (req, res) => {
+    try {
+      const transactionId = parseInt(req.params.id, 10);
+      const tx = await coordinator.getTransaction(transactionId);
+      if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
+      const body = req.body || {};
+
+      const search = buildR4RMailboxSearch(tx, body);
+      const onlyPdf = body.only_pdf !== false;
+      const { emails, files } = await emailDocumentService.gatherAttachmentsForSearch(search, { onlyPdf });
+      const classified = files.map((f) => ({ ...f, r4r_role: classifyR4RAttachment(f.filename) }));
+      const hasRepairRequest = classified.some((f) => f.r4r_role === 'repair_request');
+      const hasInspectionReport = classified.some((f) => f.r4r_role === 'inspection_report');
+      const strictRoles = body.strict_attachment_roles !== false;
+
+      if (strictRoles && (!hasRepairRequest || !hasInspectionReport)) {
+        return res.status(400).json({
+          ok: false,
+          error: 'R4R test requires both repair request and inspection report attachments (set strict_attachment_roles:false to stage approval with whatever PDFs matched)',
+          has_repair_request: hasRepairRequest,
+          has_inspection_report: hasInspectionReport,
+          attachment_count: classified.length,
+        });
+      }
+      if (!strictRoles && classified.length === 0) {
+        return res.status(400).json({
+          ok: false,
+          error: 'No PDF attachments matched the mailbox search; widen days/subject_contains or fix IMAP',
+          search,
+        });
+      }
+
+      const knowledgeRows = await tdFormKnowledgeService.listKnowledge({ transactionId, limit: 500 });
+      let templateRow =
+        body.template_form_id != null
+          ? knowledgeRows.find((k) => k.id === Number(body.template_form_id))
+          : null;
+      if (!templateRow) {
+        templateRow = knowledgeRows.find((k) => {
+          const n = String(k.form_name || '').toLowerCase();
+          return /repair|r4r|inspection.*response|counter|request.*repair/.test(n);
+        }) || null;
+      }
+
+      let resolvedTemplate = null;
+      if (templateRow) {
+        resolvedTemplate = await tdFormKnowledgeService.resolveExecutionPlan(templateRow.id, {
+          intent: 'reject_all_repairs',
+          overrides: body.template_overrides || {
+            decision_mode: 'reject_all_repairs',
+            template_defaults: {
+              send_mode: 'approval_required',
+              doc_type_prefix: 'R4R response package',
+            },
+            response_copy:
+              'Seller declines all requested repairs and credits at this time. We are ready to continue under the current contract terms unless buyer elects otherwise.',
+          },
+        });
+      }
+
+      const notes =
+        body.notes ||
+        'Seller elected to reject all requested repairs for this test scenario. Prepare buyer-facing response package for review before release.';
+      const relaxedWarning =
+        !strictRoles && (!hasRepairRequest || !hasInspectionReport)
+          ? 'strict_attachment_roles was false: missing repair_request or inspection_report filename hints—verify PDFs manually before buyer send.'
+          : null;
+      const reviewApproval = await approvalService.createApproval(transactionId, {
+        category: 'document',
+        title: `R4R reject-all test plan — ${tx.address}`,
+        summary:
+          'R4R attachments identified and template override resolved. Review package + copy, then approve buyer-side response routing.' +
+          (relaxedWarning ? ` ${relaxedWarning}` : ''),
+        priority: 'urgent',
+        metadata: {
+          flow: 'r4r_reject_all_test',
+          strict_attachment_roles: strictRoles,
+          attachment_roles_warning: relaxedWarning,
+          attachments_found: classified.length,
+          has_repair_request: hasRepairRequest,
+          has_inspection_report: hasInspectionReport,
+          source_messages: emails.map((e) => ({ uid: e.uid, subject: e.subject })),
+          template_form_id: templateRow?.id || null,
+          template_plan: resolvedTemplate?.plan || null,
+          notes,
+        },
+      });
+
+      await coordinator.logEvent(transactionId, 'r4r_reject_all_test_prepared', {
+        approval_id: reviewApproval.id,
+        template_form_id: templateRow?.id || null,
+      });
+
+      res.json({
+        ok: true,
+        transaction_id: transactionId,
+        search,
+        emails_scanned: emails.length,
+        attachment_count: classified.length,
+        files: classified.map((f) => ({
+          filename: f.filename,
+          r4r_role: f.r4r_role,
+          source_subject: f.source_subject,
+          filePath: f.filePath,
+        })),
+        template_form: templateRow
+          ? {
+              id: templateRow.id,
+              form_name: templateRow.form_name,
+            }
+          : null,
+        template_plan: resolvedTemplate?.plan || null,
+        strict_attachment_roles: strictRoles,
+        attachment_roles_warning: relaxedWarning,
+        review_approval: reviewApproval,
+        next_step:
+          'After review, record seller decision via POST /api/v1/tc/transactions/:id/r4r/record-seller-choice with { "choice":"reject", "notes":"..." } then run buyer-side response approval/send.',
+      });
+    } catch (err) {
+      logger.warn?.({ err: err.message }, '[TC-ROUTES] r4r/test-reject-all error');
       res.status(500).json({ ok: false, error: err.message });
     }
   });

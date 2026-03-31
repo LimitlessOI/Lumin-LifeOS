@@ -51,13 +51,33 @@ function normalizeAttachmentParts(structure, parts = [], partNum = '') {
   return parts;
 }
 
-function emailMatches(message, search = {}) {
+/**
+ * Subject rules (all optional):
+ * - subject_tokens OR subject_contains split on whitespace: every token must appear in subject (AND).
+ * - subject_any_contains: array of substrings; at least one must appear (OR). Omit or empty = skip.
+ */
+export function emailMatches(message, search = {}) {
   const subject = String(message.subject || '').toLowerCase();
   const from = String(message.from || '').toLowerCase();
-  const subjectNeedle = String(search.subject_contains || '').trim().toLowerCase();
   const fromNeedle = String(search.from_contains || '').trim().toLowerCase();
-  if (subjectNeedle && !subject.includes(subjectNeedle)) return false;
   if (fromNeedle && !from.includes(fromNeedle)) return false;
+
+  let tokens = [];
+  if (Array.isArray(search.subject_tokens) && search.subject_tokens.length) {
+    tokens = search.subject_tokens.map((t) => String(t).trim().toLowerCase()).filter(Boolean);
+  } else {
+    const raw = String(search.subject_contains || '').trim().toLowerCase();
+    if (raw) tokens = raw.split(/\s+/).filter(Boolean);
+  }
+  for (const t of tokens) {
+    if (!subject.includes(t)) return false;
+  }
+
+  const anyList = Array.isArray(search.subject_any_contains)
+    ? search.subject_any_contains.map((s) => String(s).trim().toLowerCase()).filter(Boolean)
+    : [];
+  if (anyList.length && !anyList.some((needle) => subject.includes(needle))) return false;
+
   return true;
 }
 
@@ -131,19 +151,34 @@ async function buildPhotoPdf(files, { title = 'Photo package' } = {}) {
   }
 }
 
+/** Suggest IMAP search hints from an on-file property address (e.g. 6453 Mahogany Peak Ave). */
+export function deriveMailboxSearchFromTransactionAddress(address) {
+  const a = String(address || '').trim();
+  const numMatch = a.match(/\b(\d{3,6})\b/);
+  const firstSeg = (a.split(',')[0] || a).trim();
+  const withoutNum = firstSeg.replace(/^\d+[A-Za-z\-]*\s+/, '').trim();
+  const keyword = (withoutNum.split(/\s+/).find((w) => w.length > 2) || '').trim();
+  const subject_contains = [numMatch?.[1], keyword].filter(Boolean).join(' ').trim();
+  return {
+    subject_contains: subject_contains || keyword || '',
+    filename_contains: '',
+  };
+}
+
 export function createTCEmailDocumentService({
   accountManager,
   getNotificationService,
   portalService = null,
   logger = console,
 }) {
-  async function findAttachmentEmails({
-    days = 14,
-    subject_contains = '',
-    from_contains = '',
-    filename_contains = '',
-    latest_only = true,
-  } = {}) {
+  async function findAttachmentEmails(search = {}) {
+    const {
+      days = 14,
+      from_contains = '',
+      filename_contains = '',
+      latest_only = true,
+      max_results = 25,
+    } = search;
     await ensureWorkDir();
     const cfg = await resolveTCImapConfig({ accountManager, logger });
     if (!cfg?.auth?.pass) throw new Error('TC IMAP credentials not configured');
@@ -162,7 +197,7 @@ export function createTCEmailDocumentService({
           from: msg.envelope?.from?.[0]?.address || '',
           date: msg.envelope?.date || new Date(),
         };
-        if (!emailMatches(candidate, { subject_contains, from_contains })) continue;
+        if (!emailMatches(candidate, search)) continue;
         const parts = normalizeAttachmentParts(msg.bodyStructure).filter((part) =>
           attachmentMatches(part.filename, { filename_contains })
         );
@@ -176,7 +211,226 @@ export function createTCEmailDocumentService({
     }
 
     matched.sort((a, b) => new Date(b.date) - new Date(a.date));
-    return latest_only ? matched.slice(0, 1) : matched;
+    const cap = Math.max(1, Math.min(50, Number(max_results) || 25));
+    return latest_only ? matched.slice(0, 1) : matched.slice(0, cap);
+  }
+
+  async function pickSentMailboxPath(client) {
+    const custom = process.env.TC_IMAP_SENT_MAILBOX;
+    if (custom) return custom;
+    const list = await client.list();
+    const paths = (list || []).map((b) => b.path).filter(Boolean);
+    const gmailSent = paths.find((p) => /\[gmail\]\/sent mail/i.test(p));
+    if (gmailSent) return gmailSent;
+    const generic = paths.find((p) => /sent/i.test(p) && !/draft/i.test(p));
+    if (generic) return generic;
+    return 'Sent';
+  }
+
+  /**
+ Search Sent mail for messages whose subject matches (optional) and whose To line matches name hints (optional).
+   Returns recent hits with email + display name for resolving seller/client addresses.
+   */
+  async function findSentContactsMatching({
+    days = 120,
+    subject_contains = '',
+    name_hints = [],
+    max_results = 40,
+  } = {}) {
+    await ensureWorkDir();
+    const cfg = await resolveTCImapConfig({ accountManager, logger });
+    if (!cfg?.auth?.pass) throw new Error('TC IMAP credentials not configured');
+
+    const client = new ImapFlow(cfg);
+    const matched = [];
+    try {
+      await client.connect();
+      const sentPath = await pickSentMailboxPath(client);
+      await client.mailboxOpen(sentPath);
+      const since = new Date(Date.now() - days * 86_400_000);
+      const hints = (name_hints || []).map((h) => String(h).trim().toLowerCase()).filter(Boolean);
+      const subNeedle = String(subject_contains || '').trim().toLowerCase();
+
+      for await (const msg of client.fetch({ since }, { envelope: true, internalDate: true })) {
+        const env = msg.envelope;
+        const subject = String(env?.subject || '');
+        if (subNeedle && !subject.toLowerCase().includes(subNeedle)) continue;
+        const date = env?.date || msg.internalDate || new Date();
+        const toList = env?.to || [];
+        for (const addr of toList) {
+          const blob = `${addr?.name || ''} ${addr?.address || ''}`.toLowerCase();
+          if (hints.length && !hints.some((h) => blob.includes(h))) continue;
+          if (addr?.address) {
+            matched.push({
+              email: addr.address,
+              name: addr.name || '',
+              subject,
+              date,
+            });
+          }
+        }
+      }
+      await client.logout();
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[TC-EMAIL-DOCS] sent-mail search failed');
+      throw error;
+    }
+
+    matched.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const cap = Math.max(1, Math.min(80, Number(max_results) || 40));
+    return matched.slice(0, cap);
+  }
+
+  async function gatherAttachmentsForSearch(search = {}, { onlyPdf = false, dedupe = true } = {}) {
+    const emails = await findAttachmentEmails({
+      ...search,
+      latest_only: false,
+    });
+    const seen = new Set();
+    const files = [];
+    for (const email of emails) {
+      const downloaded = await downloadAttachmentsForEmail(email);
+      for (const f of downloaded) {
+        if (onlyPdf && !/\.pdf$/i.test(String(f.filename || ''))) continue;
+        const key = `${f.filename}::${f.size}`;
+        if (dedupe && seen.has(key)) continue;
+        seen.add(key);
+        files.push({
+          ...f,
+          source_uid: email.uid,
+          source_subject: email.subject,
+          source_from: email.from,
+        });
+      }
+    }
+    return { emails, files };
+  }
+
+  /** Send an already-materialized attachment list (e.g. after PDF stamp) without re-querying IMAP. */
+  async function sendPreparedAttachmentPackage({
+    transactionId = null,
+    recipientEmail,
+    recipientName = '',
+    subject,
+    body,
+    files = [],
+    source_messages = [],
+    dryRun = false,
+  } = {}) {
+    if (!recipientEmail) throw new Error('recipientEmail is required');
+    if (!subject) throw new Error('subject is required');
+    if (!body) throw new Error('body is required');
+    if (!files?.length) {
+      return { ok: false, error: 'No files supplied' };
+    }
+
+    const attachments = files.map((item) => ({
+      filename: item.filename,
+      filePath: item.filePath,
+      contentType: item.contentType || mimeTypeForFile(item.filename),
+    }));
+
+    const metadata = {
+      to: recipientEmail,
+      recipient_name: recipientName || null,
+      attachments: attachments.map((item) => ({
+        filename: item.filename,
+        filePath: item.filePath,
+        contentType: item.contentType,
+      })),
+      source_messages: source_messages || [],
+    };
+
+    if (dryRun) {
+      return {
+        ok: true,
+        dryRun: true,
+        attachment_count: files.length,
+        attachments: metadata.attachments,
+        metadata,
+      };
+    }
+
+    let communication = null;
+    if (transactionId && portalService?.createCommunication) {
+      communication = await portalService.createCommunication(transactionId, {
+        channel: 'email',
+        audience: 'agent',
+        subject,
+        body,
+        status: 'draft',
+        metadata,
+      });
+    }
+
+    const notificationService = await getNotificationService();
+    const delivery = await notificationService.sendEmail({
+      to: recipientEmail,
+      subject,
+      text: body,
+      metadata,
+      attachments: metadata.attachments,
+    });
+
+    if (communication && portalService?.updateCommunication) {
+      await portalService.updateCommunication(communication.id, {
+        status: delivery.success ? 'sent' : 'failed',
+        sent_at: delivery.success ? new Date().toISOString() : null,
+        metadata: { ...metadata, delivery },
+      });
+    }
+
+    return {
+      ok: !!delivery.success,
+      communication,
+      delivery,
+      attachment_count: files.length,
+    };
+  }
+
+  async function sendGatheredAttachmentPackage({
+    transactionId = null,
+    recipientEmail,
+    recipientName = '',
+    subject,
+    body,
+    search = {},
+    onlyPdf = true,
+    dryRun = false,
+  } = {}) {
+    if (!recipientEmail) throw new Error('recipientEmail is required');
+    if (!subject) throw new Error('subject is required');
+    if (!body) throw new Error('body is required');
+
+    const { emails, files } = await gatherAttachmentsForSearch(search, { onlyPdf });
+    if (!files.length) {
+      return {
+        ok: false,
+        error: 'No matching messages with attachments',
+        search,
+        emails_scanned: emails.length,
+      };
+    }
+
+    const sent = await sendPreparedAttachmentPackage({
+      transactionId,
+      recipientEmail,
+      recipientName,
+      subject,
+      body,
+      files,
+      source_messages: emails.map((e) => ({
+        uid: e.uid,
+        subject: e.subject,
+        from: e.from,
+      })),
+      dryRun,
+    });
+
+    return {
+      ...sent,
+      emails_scanned: emails.length,
+    };
   }
 
   async function downloadAttachmentsForEmail(email) {
@@ -328,7 +582,11 @@ export function createTCEmailDocumentService({
 
   return {
     findAttachmentEmails,
+    findSentContactsMatching,
     downloadAttachmentsForEmail,
+    gatherAttachmentsForSearch,
+    sendPreparedAttachmentPackage,
+    sendGatheredAttachmentPackage,
     sendAttachmentPackage,
   };
 }

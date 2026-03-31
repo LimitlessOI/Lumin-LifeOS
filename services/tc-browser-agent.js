@@ -619,6 +619,285 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     return { ok: true, screenshots };
   }
 
+  function _normalizeTdPartyScrape(raw) {
+    if (!raw || typeof raw !== 'object') return {};
+    const patch = {};
+    const byRole = {
+      seller: [],
+      buyer: [],
+      listing_agent: [],
+      buyer_agent: [],
+      escrow: [],
+      other: [],
+    };
+    const push = (role, email, name) => {
+      const r = byRole[role] ? role : 'other';
+      const e = String(email || '').trim();
+      if (!e) return;
+      byRole[r].push({ email: e, name: String(name || '').trim() });
+    };
+    for (const m of raw.mailtos || []) {
+      const role = m.roleHint || 'other';
+      push(role, m.email, m.nameGuess || '');
+    }
+    for (const row of raw.labeled_rows || []) {
+      const role = row.roleHint || 'other';
+      for (const e of row.emails || []) push(role, e, row.nameGuess || '');
+    }
+    const pick = (role) => {
+      const arr = byRole[role];
+      if (!arr?.length) return null;
+      const top = arr[0];
+      return { email: top.email, name: top.name || undefined };
+    };
+    const s = pick('seller');
+    const b = pick('buyer');
+    const la = pick('listing_agent');
+    const ba = pick('buyer_agent');
+    const es = pick('escrow');
+    if (s) patch.seller = s;
+    if (b) patch.buyer = b;
+    if (la) patch.listing_agent = la;
+    if (ba) patch.buyer_agent = ba;
+    if (es) patch.escrow = es;
+    return patch;
+  }
+
+  /**
+   * Open a TransactionDesk / ZipForm file by numeric desk id, link click, or address search fallback.
+   */
+  async function openTransactionDeskFile(session, { transactionDeskId = null, addressSearch = null } = {}) {
+    const id = String(transactionDeskId || '').trim();
+    const screenshots = [];
+
+    if (id) {
+      const clicked = await session.page
+        .evaluate((tid) => {
+          const links = Array.from(document.querySelectorAll('a[href]'));
+          for (const a of links) {
+            try {
+              if (a.href.includes(tid)) {
+                a.click();
+                return a.href;
+              }
+            } catch {
+              /* continue */
+            }
+          }
+          return null;
+        }, id)
+        .catch(() => null);
+
+      if (clicked) {
+        await session.page.waitForTimeout(2500);
+        await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+        const sp = await screenshotPath('td-opened-via-link');
+        await session.page.screenshot({ path: sp, fullPage: true }).catch(() => {});
+        screenshots.push(sp);
+        return { ok: true, via: 'link_href', url: session.page.url(), screenshots };
+      }
+
+      let origin;
+      try {
+        origin = new URL(session.page.url()).origin;
+      } catch {
+        origin = null;
+      }
+      if (origin) {
+        const paths = [
+          `/transaction/${id}`,
+          `/transactions/${id}`,
+          `/Transaction/Index/${id}`,
+          `/app/transactions/${id}`,
+          `/#/transaction/${id}`,
+        ];
+        for (const p of paths) {
+          const target = `${origin}${p}`;
+          try {
+            await session.page.goto(target, { waitUntil: 'networkidle2', timeout: 28_000 });
+            const title = await session.page.title();
+            if (!/sign\s*in|log\s*in|error|not found/i.test(title)) {
+              const sp = await screenshotPath('td-opened-via-goto');
+              await session.page.screenshot({ path: sp, fullPage: true }).catch(() => {});
+              screenshots.push(sp);
+              return { ok: true, via: 'goto', url: session.page.url(), tried: target, screenshots };
+            }
+          } catch {
+            /* next path */
+          }
+        }
+      }
+    }
+
+    const search = String(addressSearch || '').trim();
+    if (search) {
+      const r = await transactionDeskSearchAndOpenTransaction(session, search);
+      return { ok: true, via: 'search', ...r, screenshots: [...screenshots, ...(r.screenshot ? [r.screenshot] : [])] };
+    }
+
+    const sp = await screenshotPath('td-open-failed');
+    await session.page.screenshot({ path: sp, fullPage: true });
+    throw new Error(
+      `Could not open TransactionDesk file (id=${id || '—'}). Set transaction_desk_id and/or pass addressSearch. Screenshot: ${sp}`
+    );
+  }
+
+  /**
+   * Best-effort scrape of contacts (mailto + labeled rows). Lone Wolf / ZipForm UIs vary — normalize downstream.
+   */
+  async function scrapeTransactionDeskParties(session) {
+    const sp = await screenshotPath('td-parties-scrape');
+    await session.page.screenshot({ path: sp, fullPage: true }).catch(() => {});
+
+    const raw = await session.page.evaluate(() => {
+      const EMAIL = /([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,})/gi;
+      function roleHint(text) {
+        const t = (text || '').toLowerCase();
+        if (/listing\s*agent|list\s*agent|seller'?s?\s*(listing\s*)?agent/i.test(t)) return 'listing_agent';
+        if (/buyer'?s?\s*agent|selling\s*agent|co-?op(?:erating)?\s*agent|co-?op/i.test(t)) return 'buyer_agent';
+        if (/\bseller\b(?!\s*agent)/i.test(t)) return 'seller';
+        if (/\bbuyer\b(?!\s*agent)/i.test(t)) return 'buyer';
+        if (/\bescrow\b|\btitle\b|\bclosing\b/.test(t)) return 'escrow';
+        return 'other';
+      }
+      function nameGuess(blob, email) {
+        const lines = (blob || '')
+          .split(/\n/)
+          .map((l) => l.trim())
+          .filter(Boolean);
+        const hit = lines.find((l) => l && !l.includes(email) && l.length < 80 && l.length > 2);
+        return hit || '';
+      }
+
+      const mailtos = [];
+      document.querySelectorAll('a[href^="mailto:"]').forEach((a) => {
+        const email = (a.getAttribute('href') || '').replace(/^mailto:/i, '').split('?')[0].trim();
+        let ctx = '';
+        let el = a;
+        for (let i = 0; i < 8 && el; i++) {
+          ctx = `${el.innerText || ''} ${ctx}`;
+          el = el.parentElement;
+        }
+        mailtos.push({
+          email,
+          roleHint: roleHint(ctx),
+          nameGuess: nameGuess(ctx, email),
+          context: ctx.slice(0, 500),
+        });
+      });
+
+      const labeled_rows = [];
+      document.querySelectorAll('tr, [role="row"], [class*="party"], [class*="contact"], [class*="participant"]').forEach((row) => {
+        const t = row.textContent || '';
+        const ms = t.match(EMAIL);
+        if (!ms) return;
+        const emails = [...new Set(ms.map((x) => x.toLowerCase()))];
+        if (!emails.length) return;
+        labeled_rows.push({
+          roleHint: roleHint(t),
+          nameGuess: nameGuess(t, emails[0]),
+          emails,
+          snippet: t.replace(/\s+/g, ' ').trim().slice(0, 400),
+        });
+      });
+
+      return {
+        mailtos,
+        labeled_rows,
+        title: document.title,
+        url: location.href,
+      };
+    });
+
+    const normalized = _normalizeTdPartyScrape(raw);
+    return { ok: true, raw, normalized, screenshot: sp };
+  }
+
+  /** UI plans: best-effort clicks for Forms / e-sign entry points. Operator may still need to finish in TD. */
+  const TD_UI_PLANS = {
+    open_esign: [
+      { action: 'wait', ms: 1200 },
+      {
+        action: 'click_text',
+        re: '(e-?sign|esign|signature|signing|send\\s+for\\s+sign|sign\\s+request|recipients)',
+      },
+      { action: 'screenshot', label: 'td-after-esign' },
+    ],
+    open_forms: [
+      { action: 'wait', ms: 1000 },
+      { action: 'click_text', re: '(^forms?$|form\\s*library|add\\s+a?\\s*form|templates?|form\\s*central)' },
+      { action: 'screenshot', label: 'td-after-forms' },
+    ],
+    open_documents: [
+      { action: 'wait', ms: 800 },
+      { action: 'click_text', re: '(documents?|files?|library|paperwork)' },
+      { action: 'screenshot', label: 'td-after-documents' },
+    ],
+    /** Chain commonly useful for inspection / repair-response / seller signing prep (still operator-assisted). */
+    inspection_seller_signing_prep: [
+      { action: 'screenshot', label: 'td-workflow-0' },
+      { action: 'wait', ms: 800 },
+      { action: 'click_text', re: '(documents?|files?)' },
+      { action: 'wait', ms: 1500 },
+      { action: 'screenshot', label: 'td-workflow-1-documents' },
+      { action: 'click_text', re: '(^forms?$|form\\s*library|add\\s+a?\\s*form|templates?)' },
+      { action: 'wait', ms: 1500 },
+      { action: 'screenshot', label: 'td-workflow-2-forms' },
+      { action: 'click_text', re: '(e-?sign|signature|signing|send\\s+for\\s+sign)' },
+      { action: 'wait', ms: 1500 },
+      { action: 'screenshot', label: 'td-workflow-3-esign' },
+    ],
+  };
+
+  async function applyTransactionDeskUiPlan(session, planKey) {
+    const plan = TD_UI_PLANS[planKey];
+    if (!plan) {
+      throw new Error(`Unknown TD UI plan "${planKey}". Known: ${Object.keys(TD_UI_PLANS).join(', ')}`);
+    }
+    const steps_out = [];
+    for (const step of plan) {
+      if (step.action === 'wait') {
+        await session.page.waitForTimeout(step.ms || 500);
+        steps_out.push({ step: 'wait', ms: step.ms });
+        continue;
+      }
+      if (step.action === 'screenshot') {
+        const sp = await screenshotPath(`td-plan-${step.label || planKey}`);
+        await session.page.screenshot({ path: sp, fullPage: true }).catch(() => {});
+        steps_out.push({ step: 'screenshot', label: step.label, screenshot: sp });
+        continue;
+      }
+      if (step.action === 'click_text') {
+        const reStr = step.re;
+        const clicked = await session.page.evaluate((patternStr) => {
+          let pattern;
+          try {
+            pattern = new RegExp(patternStr, 'i');
+          } catch {
+            return { ok: false, error: 'invalid_regex' };
+          }
+          const els = Array.from(
+            document.querySelectorAll('a, button, [role="button"], [role="tab"], [role="link"], span[onclick]')
+          );
+          for (const el of els) {
+            const t = (el.innerText || el.textContent || '').trim().replace(/\s+/g, ' ');
+            if (t.length < 2 || t.length > 160) continue;
+            if (pattern.test(t)) {
+              el.click();
+              return { ok: true, matched: t.slice(0, 120) };
+            }
+          }
+          return { ok: false, matched: null };
+        }, reStr);
+        steps_out.push({ step: 'click_text', re: reStr, ...clicked });
+        continue;
+      }
+    }
+    const finalShot = await screenshotPath(`td-plan-${planKey}-final`);
+    await session.page.screenshot({ path: finalShot, fullPage: true }).catch(() => {});
+    return { ok: true, planKey, steps: steps_out, final_screenshot: finalShot, url: session.page.url() };
+  }
+
   /**
    * Scrape current transaction checklist/status from TransactionDesk.
    */
@@ -797,12 +1076,191 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     return { ok: true, url, dueItems, summaryText, screenshots };
   }
 
+  /**
+   * Best-effort scrape of visible TD form library rows/cards after opening Forms.
+   * Captures form names and lightweight metadata for workflow knowledge.
+   */
+  async function scrapeTransactionDeskFormsCatalog(session, { maxRows = 500 } = {}) {
+    await applyTransactionDeskUiPlan(session, 'open_forms').catch(() => {});
+    await session.page.waitForTimeout(1400);
+    const screenshot = await screenshotPath('td-forms-catalog');
+    await session.page.screenshot({ path: screenshot, fullPage: true }).catch(() => {});
+
+    const forms = await session.page.evaluate((limit) => {
+      const normalize = (s) => String(s || '').replace(/\s+/g, ' ').trim();
+      const seen = new Set();
+      const out = [];
+      const roleHint = (txt) => {
+        const t = txt.toLowerCase();
+        if (/buyer/i.test(t)) return 'buyer';
+        if (/seller|listing/i.test(t)) return 'seller';
+        if (/both|all parties|all signers/i.test(t)) return 'both';
+        return 'unknown';
+      };
+
+      const rowCandidates = Array.from(
+        document.querySelectorAll('tr, [role="row"], li, .form-row, .form-item, .template-row, .template-item, .card, .tile')
+      );
+
+      for (const row of rowCandidates) {
+        if (out.length >= limit) break;
+        const text = normalize(row.textContent || '');
+        if (!text || text.length < 4) continue;
+        if (!/form|addendum|request|inspection|disclosure|counter|amendment|response|notice|repair|contingency/i.test(text)) {
+          continue;
+        }
+        const nameEl =
+          row.querySelector('h1,h2,h3,h4,.title,.name,.form-name,.template-name,strong,b,td:first-child') || row;
+        const name = normalize(nameEl.textContent || '').slice(0, 220);
+        if (!name) continue;
+        const key = name.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push({
+          name,
+          role_hint: roleHint(text),
+          source_text: text.slice(0, 600),
+        });
+      }
+
+      const linkCandidates = Array.from(document.querySelectorAll('a,button,[role="button"]'));
+      for (const el of linkCandidates) {
+        if (out.length >= limit) break;
+        const text = normalize(el.textContent || '');
+        if (!text || text.length < 6 || text.length > 220) continue;
+        if (!/form|addendum|request|inspection|disclosure|counter|amendment|response|notice|repair|contingency/i.test(text)) {
+          continue;
+        }
+        const key = text.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push({
+          name: text,
+          role_hint: roleHint(text),
+          source_text: text,
+        });
+      }
+
+      return out.slice(0, limit);
+    }, Math.max(50, Math.min(1500, Number(maxRows) || 500)));
+
+    return {
+      ok: true,
+      screenshot,
+      forms,
+      count: forms.length,
+      url: session.page.url(),
+    };
+  }
+
+  /**
+   * Try opening a form by visible name, then scrape machine-readable field schema.
+   * Returns the controls currently present in DOM (input/select/textarea/contenteditable).
+   */
+  async function scrapeTransactionDeskFormFieldSchema(session, { formName, maxFields = 300 } = {}) {
+    const name = String(formName || '').trim();
+    if (!name) throw new Error('formName is required');
+
+    const open = await session.page.evaluate((target) => {
+      const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      const needle = norm(target);
+      const candidates = Array.from(
+        document.querySelectorAll('a, button, [role="button"], [role="link"], tr, li, .form-item, .template-item, .card')
+      );
+      for (const el of candidates) {
+        const t = norm(el.textContent || '');
+        if (!t) continue;
+        if (t.includes(needle)) {
+          el.click();
+          return { ok: true, matched: t.slice(0, 180) };
+        }
+      }
+      return { ok: false, matched: null };
+    }, name);
+
+    await session.page.waitForTimeout(open.ok ? 1300 : 700);
+    const screenshot = await screenshotPath(`td-form-schema-${Date.now()}`);
+    await session.page.screenshot({ path: screenshot, fullPage: true }).catch(() => {});
+
+    const schema = await session.page.evaluate((limit) => {
+      const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
+      const labelFor = new Map();
+      document.querySelectorAll('label[for]').forEach((l) => {
+        const key = l.getAttribute('for');
+        if (key) labelFor.set(key, norm(l.textContent || ''));
+      });
+
+      const fields = [];
+      const controls = Array.from(
+        document.querySelectorAll('input, select, textarea, [contenteditable="true"], [role="textbox"]')
+      );
+
+      for (const el of controls) {
+        if (fields.length >= limit) break;
+        const tag = (el.tagName || '').toLowerCase();
+        const id = el.id || null;
+        const name = el.getAttribute?.('name') || null;
+        const type = el.getAttribute?.('type') || (tag === 'textarea' ? 'textarea' : tag);
+        const placeholder = el.getAttribute?.('placeholder') || null;
+        const required = !!(el.required || el.getAttribute?.('aria-required') === 'true' || el.getAttribute?.('required') != null);
+        const disabled = !!(el.disabled || el.getAttribute?.('aria-disabled') === 'true');
+        const readOnly = !!(el.readOnly || el.getAttribute?.('readonly') != null);
+        const options =
+          tag === 'select'
+            ? Array.from(el.querySelectorAll('option'))
+                .map((o) => norm(o.textContent || o.value || ''))
+                .filter(Boolean)
+                .slice(0, 80)
+            : [];
+        let label = (id && labelFor.get(id)) || null;
+        if (!label) {
+          const holder = el.closest('label, .field, .form-group, .control, .row, td, li, div');
+          if (holder) {
+            const txt = norm(holder.textContent || '');
+            if (txt && txt.length < 220) label = txt;
+          }
+        }
+        fields.push({
+          id,
+          name,
+          type,
+          tag,
+          label: label || null,
+          placeholder,
+          required,
+          disabled,
+          read_only: readOnly,
+          options,
+        });
+      }
+      return {
+        title: document.title,
+        url: location.href,
+        field_count: fields.length,
+        fields,
+      };
+    }, Math.max(20, Math.min(1200, Number(maxFields) || 300)));
+
+    return {
+      ok: true,
+      open,
+      screenshot,
+      schema,
+    };
+  }
+
   return {
     loginToGLVAR,
     navigateToTransactionDesk,
     ensureOnTransactionDesk,
     clickTransactionLaunchIfPresent,
     transactionDeskSearchAndOpenTransaction,
+    openTransactionDeskFile,
+    scrapeTransactionDeskParties,
+    scrapeTransactionDeskFormsCatalog,
+    scrapeTransactionDeskFormFieldSchema,
+    applyTransactionDeskUiPlan,
+    TD_UI_PLANS,
     downloadExecutedListingAgreementFromTD,
     navigateToMLS,
     checkGLVARDues,

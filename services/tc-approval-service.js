@@ -4,7 +4,13 @@
  * Approval cockpit state for review / approve / reject / snooze flows.
  */
 
-export function createTCApprovalService({ pool, coordinator, automationService, logger = console }) {
+export function createTCApprovalService({
+  pool,
+  coordinator,
+  automationService,
+  logger = console,
+  customApprovalHandlers = {},
+}) {
   async function listApprovals({ transactionId = null, status = null, limit = 50 } = {}) {
     const where = [];
     const values = [];
@@ -125,7 +131,15 @@ export function createTCApprovalService({ pool, coordinator, automationService, 
 
     let execution = { ok: true, skipped: true };
     const prepared = current.prepared_action || {};
-    if (prepared.kind === 'send_communication' && prepared.communication_id) {
+    const custom = customApprovalHandlers[prepared.kind];
+    if (typeof custom === 'function') {
+      try {
+        execution = await custom(current, prepared, { actor, notes });
+      } catch (err) {
+        logger.warn?.({ err: err.message, kind: prepared.kind }, '[TC-APPROVAL] custom handler failed');
+        execution = { ok: false, error: err.message };
+      }
+    } else if (prepared.kind === 'send_communication' && prepared.communication_id) {
       execution = await automationService.sendCommunicationById(prepared.communication_id);
     } else if (prepared.kind === 'send_document_request' && prepared.request_id) {
       execution = await automationService.sendDocumentRequest(prepared.request_id, { channels: prepared.channels || ['email'], sendNow: true });
