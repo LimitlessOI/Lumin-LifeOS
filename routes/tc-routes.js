@@ -2641,9 +2641,7 @@ export function createTCRoutes(
     try {
       const tx = await coordinator.getTransaction(transactionId);
       if (!tx) return res.status(404).json({ ok: false, error: 'Transaction not found' });
-      if (!tx.transaction_desk_id) {
-        return res.status(400).json({ ok: false, error: 'Transaction not yet linked to TransactionDesk' });
-      }
+      // Allow null transaction_desk_id — browser agent will open by address search and backfill it
 
       const search = buildInspectionMailboxSearch(tx, req.body || {});
       const onlyPdf = req.body?.only_pdf !== false;
@@ -2671,6 +2669,30 @@ export function createTCRoutes(
       session = login.session;
       await tcBrowser.ensureOnTransactionDesk(session);
 
+      // Resolve transaction_desk_id via address search if not already linked
+      let deskId = tx.transaction_desk_id ? String(tx.transaction_desk_id).trim() : '';
+      if (!deskId && String(tx.address || '').trim()) {
+        try {
+          await tcBrowser.openTransactionDeskFile(session, { addressSearch: String(tx.address).trim() });
+          const url = session.page.url();
+          const tdIdMatch = url.match(/transaction[s]?\/(\d+)/i) || url.match(/[?&#]id=(\d+)/i);
+          const found = tdIdMatch?.[1] || null;
+          if (found) {
+            deskId = found;
+            await pool.query('UPDATE tc_transactions SET transaction_desk_id=$1, updated_at=NOW() WHERE id=$2', [deskId, transactionId]);
+            await coordinator.logEvent(transactionId, 'transaction_desk_linked', { transaction_desk_id: deskId, source: 'upload_gathered_address_open' });
+          }
+        } catch (e) {
+          logger.warn?.({ err: e.message }, '[TC-ROUTES] upload-gathered-to-td TD open by address failed');
+        }
+      } else if (deskId) {
+        await tcBrowser.openTransactionDeskFile(session, { transactionDeskId: deskId });
+      }
+      if (!deskId) {
+        await session?.close?.();
+        return res.status(400).json({ ok: false, error: 'Could not resolve TransactionDesk file — address search returned no match. Check that the transaction exists in TD.' });
+      }
+
       const results = [];
       for (const file of files) {
         const docType = `${docTypePrefix} — ${file.filename}`;
@@ -2684,7 +2706,7 @@ export function createTCRoutes(
           results.push({ filename: file.filename, skipped: true, validation });
           continue;
         }
-        const up = await tcBrowser.uploadDocument(session, tx.transaction_desk_id, file.filePath, docType);
+        const up = await tcBrowser.uploadDocument(session, deskId, file.filePath, docType);
         results.push({ filename: file.filename, ok: up.ok, validation, upload: up });
         await coordinator.logEvent(tx.id, 'doc_uploaded_mailbox', {
           filename: file.filename,

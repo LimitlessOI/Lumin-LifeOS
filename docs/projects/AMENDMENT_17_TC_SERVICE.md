@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-31 (`browser-agent` **click()**: fixed `page.$x()` → `page.$$('xpath/...')` for Puppeteer 22+ — `$x` removed in v22, crashing all TD browser flows) |
+| **Last Updated** | 2026-03-31 (`upload-gathered-to-td`: address search fallback when `transaction_desk_id` is null — opens TD by address, backfills id, then uploads; removes hard-fail gate) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
