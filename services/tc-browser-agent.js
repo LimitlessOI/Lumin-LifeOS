@@ -245,11 +245,49 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   /**
    * After GLVAR login, navigate to TransactionDesk via SSO.
    * Must use the same session returned by loginToGLVAR.
+   *
+   * Strategy (in order):
+   *  1. Direct SP-initiated SSO URL — works from any active Clareity session
+   *  2. Scan portal page for TD link/tile (fallback if SSO URL changes)
    */
   async function navigateToTransactionDesk(session) {
-    // Look for TransactionDesk link in MLS nav
+    // Strategy 1: SP-initiated SSO — the canonical Clareity→TransactionDesk entry point for GLVAR.
+    // After Clareity login the session cookie authenticates this redirect automatically.
+    const GLVAR_TD_SSO_URL =
+      'https://pr.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.ashx?MLS=GLVAR';
+
+    logger.info?.('[TC-BROWSER] Attempting direct SSO to TransactionDesk via SP-initiated URL');
+    try {
+      await session.navigate(GLVAR_TD_SSO_URL);
+      await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: NAV_TIMEOUT_MS }).catch(() => {});
+      await session.page.waitForTimeout(2000);
+
+      const urlAfterSso = session.page.url();
+      if (_urlLooksLikeTransactionDesk(urlAfterSso)) {
+        const sp = await screenshotPath('transactiondesk-loaded-via-sso');
+        await session.page.screenshot({ path: sp });
+        logger.info?.({ url: urlAfterSso, screenshot: sp }, '[TC-BROWSER] TransactionDesk loaded via direct SSO URL');
+        return { ok: true, url: urlAfterSso, screenshots: [sp], via: 'direct_sso' };
+      }
+      // Might have landed on a TD login page — check if we're on pr.transactiondesk.com
+      if (urlAfterSso.includes('transactiondesk.com') || urlAfterSso.includes('lonewolf')) {
+        const sp = await screenshotPath('transactiondesk-loaded-via-sso');
+        await session.page.screenshot({ path: sp });
+        logger.info?.({ url: urlAfterSso, screenshot: sp }, '[TC-BROWSER] TransactionDesk domain reached via direct SSO');
+        return { ok: true, url: urlAfterSso, screenshots: [sp], via: 'direct_sso' };
+      }
+      logger.warn?.({ urlAfterSso }, '[TC-BROWSER] Direct SSO URL did not land on TD — falling back to portal scan');
+    } catch (ssoErr) {
+      logger.warn?.({ err: ssoErr.message }, '[TC-BROWSER] Direct SSO navigation threw — falling back to portal scan');
+    }
+
+    // Strategy 2: Scan portal page for TD link/tile
+    // First give the page a moment to fully render any dynamic JS tiles
+    await session.page.waitForTimeout(2500);
+
     const tdSelectors = [
       'a[href*="transactiondesk"]',
+      'a[href*="pr.transactiondesk"]',
       'a[href*="ziplogix"]',
       'a[href*="tdnavigator"]',
       'a[href*="lonewolf"]',
@@ -266,10 +304,14 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     }
 
     if (!clicked) {
-      // Try text-based link search
+      // Text/title-based tile search (Clareity dashboard uses app tiles, not plain <a> tags)
       const linkFound = await session.page.evaluate(() => {
-        const links = Array.from(document.querySelectorAll('a'));
-        const td = links.find(l => /transactiondesk|transaction desk/i.test(l.textContent));
+        const candidates = Array.from(document.querySelectorAll('a, button, [role="button"], [role="link"], [class*="tile"], [class*="app"], [class*="icon"]'));
+        const td = candidates.find(l =>
+          /transactiondesk|transaction desk|lone\s*wolf\s*transactions/i.test(
+            `${l.textContent || ''} ${l.getAttribute?.('title') || ''} ${l.getAttribute?.('aria-label') || ''}`
+          )
+        );
         if (td) { td.click(); return true; }
         return false;
       });
@@ -287,9 +329,9 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
     const url = session.page.url();
     const sp = await screenshotPath('transactiondesk-loaded');
     await session.page.screenshot({ path: sp });
-    logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] Navigated to TransactionDesk');
+    logger.info?.({ url, screenshot: sp }, '[TC-BROWSER] Navigated to TransactionDesk via portal link');
 
-    return { ok: true, url, screenshots: [sp] };
+    return { ok: true, url, screenshots: [sp], via: 'portal_link' };
   }
 
   /**
@@ -322,7 +364,7 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
   }
 
   function _urlLooksLikeTransactionDesk(url) {
-    return /transactiondesk|ziplogix|zipform|lonewolf|tdnavigator/i.test(url || '');
+    return /transactiondesk|ziplogix|zipform|lonewolf|tdnavigator|pr\.transactiondesk/i.test(url || '');
   }
 
   /**
