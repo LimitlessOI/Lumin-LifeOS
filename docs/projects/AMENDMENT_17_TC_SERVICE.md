@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-31 (`loginToGLVAR`: robust submit — tries 7 button selectors then Enter-key fallback instead of single compound selector that failed on Clareity IAM; `upload-gathered-to-td` address search fallback) |
+| **Last Updated** | 2026-03-31 (`tc-imap-config`: picks up `TC_IMAP_APP_Adam_PASSWORD` + `SMTP_PASS` fallbacks — Railway uses non-standard name; `credential-aliases`: reads `exp_okta_Password` with trailing-space variant) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 

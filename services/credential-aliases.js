@@ -84,6 +84,7 @@ export function getExpOktaCredentialsFromEnv() {
   );
   const password = firstNonEmpty(
     process.env.exp_okta_Password,
+    process.env['exp_okta_Password '], // Railway env has trailing space — reads both
     process.env.EXP_OKTA_PASSWORD,
     process.env.EXP_OKTA_PASS
   );

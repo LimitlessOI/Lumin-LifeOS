@@ -22,6 +22,8 @@ export async function resolveTCImapConfig({ accountManager, logger = console } =
 
   let pass =
     process.env.TC_IMAP_APP_PASSWORD ||
+    process.env.TC_IMAP_APP_Adam_PASSWORD ||   // legacy name used in Railway
+    process.env.SMTP_PASS ||                   // same app password used for SMTP
     process.env.WORK_EMAIL_APP_PASSWORD ||
     process.env.IMAP_PASS ||
     null;
