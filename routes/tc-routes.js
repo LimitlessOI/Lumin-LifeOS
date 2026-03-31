@@ -2777,7 +2777,19 @@ export function createTCRoutes(
       });
     } catch (err) {
       logger.warn?.({ err: err.message }, '[TC-ROUTES] r4r/scan error');
-      res.status(500).json({ ok: false, error: err.message });
+      res.status(500).json({
+        ok: false,
+        error: err.message,
+        self_service_apis: {
+          tc_access_readiness: 'GET /api/v1/tc/access/readiness',
+          railway_env_mask: 'GET /api/v1/railway/env',
+          railway_env_bulk: 'POST /api/v1/railway/env/bulk',
+          managed_env_sync: 'POST /api/v1/railway/managed-env/sync',
+          railway_redeploy: 'POST /api/v1/railway/deploy',
+        },
+        note:
+          'Use the same command key as other TC APIs — automation can read/set env and redeploy without the Railway web UI.',
+      });
     } finally {
       await session?.close?.();
     }

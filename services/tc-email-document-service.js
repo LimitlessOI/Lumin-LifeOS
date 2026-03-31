@@ -25,6 +25,19 @@ function escapeHtml(text = '') {
     .replace(/'/g, '&#39;');
 }
 
+/** Surface ImapFlow chained errors (avoids opaque "Command failed" in API responses). */
+function formatImapFailure(err) {
+  if (!err) return 'Unknown IMAP error';
+  const chain = [];
+  let e = err;
+  for (let i = 0; i < 6 && e; i += 1) {
+    const m = e.message || (typeof e === 'string' ? e : '');
+    if (m && !chain.includes(m)) chain.push(m);
+    e = e.cause;
+  }
+  return chain.length ? chain.join(' — ') : String(err);
+}
+
 function mimeTypeForFile(filename = '') {
   const lower = filename.toLowerCase();
   if (lower.endsWith('.pdf')) return 'application/pdf';
@@ -187,27 +200,31 @@ export function createTCEmailDocumentService({
     const matched = [];
     try {
       await client.connect();
-      await client.mailboxOpen('INBOX');
-      const since = new Date(Date.now() - days * 86_400_000);
-      for await (const msg of client.fetch({ since }, { envelope: true, bodyStructure: true })) {
-        const candidate = {
-          uid: String(msg.uid),
-          seq: msg.seq,
-          subject: msg.envelope?.subject || '',
-          from: msg.envelope?.from?.[0]?.address || '',
-          date: msg.envelope?.date || new Date(),
-        };
-        if (!emailMatches(candidate, search)) continue;
-        const parts = normalizeAttachmentParts(msg.bodyStructure).filter((part) =>
-          attachmentMatches(part.filename, { filename_contains })
-        );
-        if (!parts.length) continue;
-        matched.push({ ...candidate, parts });
+      const lock = await client.getMailboxLock('INBOX');
+      try {
+        const since = new Date(Date.now() - days * 86_400_000);
+        for await (const msg of client.fetch({ since }, { envelope: true, bodyStructure: true })) {
+          const candidate = {
+            uid: String(msg.uid),
+            seq: msg.seq,
+            subject: msg.envelope?.subject || '',
+            from: msg.envelope?.from?.[0]?.address || '',
+            date: msg.envelope?.date || new Date(),
+          };
+          if (!emailMatches(candidate, search)) continue;
+          const parts = normalizeAttachmentParts(msg.bodyStructure).filter((part) =>
+            attachmentMatches(part.filename, { filename_contains })
+          );
+          if (!parts.length) continue;
+          matched.push({ ...candidate, parts });
+        }
+      } finally {
+        lock.release();
       }
       await client.logout();
     } catch (error) {
       logger.error?.({ err: error.message }, '[TC-EMAIL-DOCS] attachment search failed');
-      throw error;
+      throw new Error(formatImapFailure(error));
     }
 
     matched.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -246,34 +263,38 @@ export function createTCEmailDocumentService({
     try {
       await client.connect();
       const sentPath = await pickSentMailboxPath(client);
-      await client.mailboxOpen(sentPath);
-      const since = new Date(Date.now() - days * 86_400_000);
-      const hints = (name_hints || []).map((h) => String(h).trim().toLowerCase()).filter(Boolean);
-      const subNeedle = String(subject_contains || '').trim().toLowerCase();
+      const lock = await client.getMailboxLock(sentPath);
+      try {
+        const since = new Date(Date.now() - days * 86_400_000);
+        const hints = (name_hints || []).map((h) => String(h).trim().toLowerCase()).filter(Boolean);
+        const subNeedle = String(subject_contains || '').trim().toLowerCase();
 
-      for await (const msg of client.fetch({ since }, { envelope: true, internalDate: true })) {
-        const env = msg.envelope;
-        const subject = String(env?.subject || '');
-        if (subNeedle && !subject.toLowerCase().includes(subNeedle)) continue;
-        const date = env?.date || msg.internalDate || new Date();
-        const toList = env?.to || [];
-        for (const addr of toList) {
-          const blob = `${addr?.name || ''} ${addr?.address || ''}`.toLowerCase();
-          if (hints.length && !hints.some((h) => blob.includes(h))) continue;
-          if (addr?.address) {
-            matched.push({
-              email: addr.address,
-              name: addr.name || '',
-              subject,
-              date,
-            });
+        for await (const msg of client.fetch({ since }, { envelope: true, internalDate: true })) {
+          const env = msg.envelope;
+          const subject = String(env?.subject || '');
+          if (subNeedle && !subject.toLowerCase().includes(subNeedle)) continue;
+          const date = env?.date || msg.internalDate || new Date();
+          const toList = env?.to || [];
+          for (const addr of toList) {
+            const blob = `${addr?.name || ''} ${addr?.address || ''}`.toLowerCase();
+            if (hints.length && !hints.some((h) => blob.includes(h))) continue;
+            if (addr?.address) {
+              matched.push({
+                email: addr.address,
+                name: addr.name || '',
+                subject,
+                date,
+              });
+            }
           }
         }
+      } finally {
+        lock.release();
       }
       await client.logout();
     } catch (error) {
       logger.error?.({ err: error.message }, '[TC-EMAIL-DOCS] sent-mail search failed');
-      throw error;
+      throw new Error(formatImapFailure(error));
     }
 
     matched.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -439,25 +460,34 @@ export function createTCEmailDocumentService({
     const client = new ImapFlow(cfg);
     const files = [];
 
+    const uidNum = Number.parseInt(String(email.uid), 10);
+    if (!Number.isFinite(uidNum)) {
+      throw new Error('Invalid message uid for IMAP download');
+    }
+
     try {
       await client.connect();
-      await client.mailboxOpen('INBOX');
-      for (const part of email.parts || []) {
-        const safeName = String(part.filename || 'attachment').replace(/[^a-zA-Z0-9._-]/g, '_');
-        const filePath = path.join(WORK_DIR, `${email.uid}_${Date.now()}_${safeName}`);
-        const partData = await client.download(email.seq, part.part);
-        const size = await writeStreamToFile(partData.content, filePath);
-        files.push({
-          filename: part.filename,
-          filePath,
-          contentType: mimeTypeForFile(part.filename),
-          size,
-        });
+      const lock = await client.getMailboxLock('INBOX');
+      try {
+        for (const part of email.parts || []) {
+          const safeName = String(part.filename || 'attachment').replace(/[^a-zA-Z0-9._-]/g, '_');
+          const filePath = path.join(WORK_DIR, `${email.uid}_${Date.now()}_${safeName}`);
+          const partData = await client.download(uidNum, part.part, { uid: true });
+          const size = await writeStreamToFile(partData.content, filePath);
+          files.push({
+            filename: part.filename,
+            filePath,
+            contentType: mimeTypeForFile(part.filename),
+            size,
+          });
+        }
+      } finally {
+        lock.release();
       }
       await client.logout();
     } catch (error) {
       logger.error?.({ err: error.message }, '[TC-EMAIL-DOCS] attachment download failed');
-      throw error;
+      throw new Error(formatImapFailure(error));
     }
 
     return files;
