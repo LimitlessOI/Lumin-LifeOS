@@ -223,8 +223,14 @@ export function createTCEmailDocumentService({
       }
       await client.logout();
     } catch (error) {
-      logger.error?.({ err: error.message }, '[TC-EMAIL-DOCS] attachment search failed');
-      throw new Error(formatImapFailure(error));
+      const detail = [
+        error.message,
+        error.responseText,
+        error.cause?.message,
+        error.cause?.responseText,
+      ].filter(Boolean).join(' — ');
+      logger.error?.({ err: detail }, '[TC-EMAIL-DOCS] attachment search failed');
+      throw new Error(detail || formatImapFailure(error));
     }
 
     matched.sort((a, b) => new Date(b.date) - new Date(a.date));

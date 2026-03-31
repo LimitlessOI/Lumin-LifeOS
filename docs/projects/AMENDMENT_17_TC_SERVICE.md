@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-31 (`tc-imap-config`: picks up `TC_IMAP_APP_Adam_PASSWORD` + `SMTP_PASS` fallbacks — Railway uses non-standard name; `credential-aliases`: reads `exp_okta_Password` with trailing-space variant) |
+| **Last Updated** | 2026-03-31 (`tc-email-document-service`: surface ImapFlow responseText in error — was hiding real auth failure behind opaque "Command failed") |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
