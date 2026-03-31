@@ -9,7 +9,7 @@
   "phase": "first-live-intake",
   "next_task": "Use the intake workspace visual transaction board to open the 6453 Mahogany Peak file, verify the real Adam mailbox credentials are working, then run the first real SRPD/photo package search and send from the portal.",
   "stability_class": "needs-review",
-  "current_focus": "TD→SkySlope listing sync API + portal job log shipped; exercise rehearsal then live run on Railway with Chromium + real Clareity/Okta creds. UI selectors may need tuning after first real TD session.",
+  "current_focus": "R4R mailbox gather: ImapFlow uses mailbox lock + UID downloads; re-test POST .../r4r/scan on Railway after deploy. TD→SkySlope listing sync: exercise rehearsal then live with Chromium + Okta. UI selectors may need tuning after first real TD session.",
   "owned_files": [
     "routes/tc-routes.js",
     "routes/mls-routes.js",
