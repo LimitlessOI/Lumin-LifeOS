@@ -1,4 +1,6 @@
 /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
+ *
  * browser-agent.js
  * Puppeteer-based headless browser for autonomous web interactions.
  * Used by signup-agent.js to fill forms, submit, and click verification links.
@@ -122,11 +124,10 @@ export async function createSession({ headless = true, logger = console } = {}) 
       await el.click();
       return;
     }
-    // Try XPath text match
-    const [byText] = await page.$x(
-      `//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),` +
-      `'${selectorOrText.toLowerCase()}')]`
-    );
+    // Try XPath text match (Puppeteer 22+ uses page.$$('xpath/...') instead of page.$x)
+    const xpathExpr = `//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),` +
+      `'${selectorOrText.toLowerCase()}')]`;
+    const [byText] = await page.$$(`xpath/${xpathExpr}`);
     if (byText) {
       await byText.click();
       return;

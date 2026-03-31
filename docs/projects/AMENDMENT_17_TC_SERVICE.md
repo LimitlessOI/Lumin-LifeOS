@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 (`tc-browser-agent` **uploadDocument**: multi-frame + shadow-root file input walk; retry loop; **Save/Done** confirm Heuristics; broader Documents tab + **openTransactionDeskFile** link/goto patterns) |
+| **Last Updated** | 2026-03-31 (`browser-agent` **click()**: fixed `page.$x()` → `page.$$('xpath/...')` for Puppeteer 22+ — `$x` removed in v22, crashing all TD browser flows) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -910,7 +910,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 **Status:** BUILD_READY (TC coordination core — gates 1-5 complete)
 **Adaptability Score:** 82/100
 **Council Persona:** edison (iterate fast, test every assumption, protect the core deadline logic)
-**Last Updated:** 2026-03-30
+**Last Updated:** 2026-03-31
 
 ### Gate 1 — Implementation Detail
 - [x] Email triage, GLVAR monitor, deadline cron all have specific segment descriptions
