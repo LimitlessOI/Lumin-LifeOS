@@ -200,7 +200,25 @@ export function createTCBrowserAgent({ accountManager, logger = console }) {
       const submitSp = await screenshotPath('glvar-pre-submit');
       await session.page.screenshot({ path: submitSp });
 
-      await session.click('button[type="submit"], input[type="submit"]');
+      // Try submit button selectors in priority order, fall back to Enter key on password field
+      const submitSelectors = [
+        'button[type="submit"]',
+        'input[type="submit"]',
+        'button.btn-signin',
+        'button.signin-button',
+        '#login-btn',
+        '#signin-btn',
+        'button',
+      ];
+      let submitted = false;
+      for (const sel of submitSelectors) {
+        const el = await session.page.$(sel).catch(() => null);
+        if (el) { await el.click(); submitted = true; break; }
+      }
+      if (!submitted) {
+        // Last resort: press Enter on the password field to submit
+        await session.page.$('input[type="password"]').then(el => el?.press('Enter')).catch(() => {});
+      }
       await session.page.waitForNavigation({ waitUntil: 'networkidle2', timeout: LOGIN_TIMEOUT_MS }).catch(() => {});
 
       const url = session.page.url();
