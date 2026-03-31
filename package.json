@@ -20,6 +20,7 @@
     "artifacts:preflight": "node scripts/programming-artifacts-preflight.js",
     "web:intake": "node scripts/web-intake.js",
     "tc:r4r-upload": "node scripts/tc-r4r-do-upload.mjs",
+    "tc:r4r-railway": "node scripts/tc-r4r-from-railway.mjs",
     "pm2:start": "pm2 start ecosystem.config.js",
     "pm2:restart": "pm2 restart lifeos",
     "pm2:logs": "pm2 logs lifeos --lines 200",

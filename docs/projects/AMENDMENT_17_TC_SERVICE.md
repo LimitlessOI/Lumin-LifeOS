@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 (`r4r/scan` upload_to_td: TD id from address search + seller rejection summary PDF; `tc-r4r-do-upload` `--record-seller-reject`) |
+| **Last Updated** | 2026-03-30 (`tc-r4r-from-railway.mjs` + npm **`tc:r4r-railway`** — pull COMMAND_CENTER_KEY via Railway CLI, then R4R upload) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -860,6 +860,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-03-30 | **`scripts/tc-r4r-from-railway.mjs`** + **`npm run tc:r4r-railway`** — runs **`railway variables --json`** in **`RAILWAY_VARS_PROJECT_DIR`** (default `~/lumin-railway` if present) to set **`TC_API_KEY`**, then delegates to **`tc-r4r-do-upload.mjs`**. Requires interactive **`railway login`** | Unblocks prod TC calls when local `.env` still has `local-dev-key-*` — no manual key copy | ✅ | ✅ | pending |
 | 2026-03-30 | **`r4r/scan` + `upload_to_td`:** If `transaction_desk_id` is null, open TD by **`addressSearch`** from the TC address, parse URL → **`UPDATE tc_transactions.transaction_desk_id`**, then upload. After mailbox PDFs, uploads **`seller_response`** summary PDF (“Seller REJECTED repair request (LifeOS summary)”) unless `upload_seller_rejection_pdf:false`. **`tc-r4r-do-upload.mjs`:** **`--record-seller-reject`** → **`POST .../r4r/record-seller-choice`** `{ choice:'reject' }` after scan | Mahogany-style files missing TD id: still file to correct desk; TD shows explicit rejection doc; LifeOS DB can record seller reject after upload | ✅ | ✅ | pending |
 | 2026-03-30 | **`tc-email-document-service`:** `getMailboxLock` for INBOX + Sent fetches; attachment **`download(uid, part, { uid: true })`** (seq was wrong for gathered mail); **`formatImapFailure`** for clearer errors. **`r4r/scan`:** 500 JSON includes **`self_service_apis`** (readiness / Railway env / redeploy via command key) | Fix ImapFlow 500s (`Command failed`); operators resolve env/deploy through APIs, not dashboard prose | ✅ | ✅ | pending |
 | 2026-03-31 | **Deploy bundle to `main`:** R4R routes (`r4r/scan`, seller review, TD helpers), `tc_td_form_knowledge` migration, mailbox **`subject_any_contains`**, inspection forward + PDF stamp, browser/approval/coordinator hooks — fixes production **`Cannot POST /r4r/scan`** (deploy lag) | Railway `robust-magic` was serving an older build without R4R endpoints | ✅ | ✅ | pending |
