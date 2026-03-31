@@ -10,6 +10,10 @@
  *   TC_API_KEY='(paste from Railway Variables)' \
  *   node scripts/tc-r4r-do-upload.mjs --address=Mahogany
  *
+ * After a successful TD upload, record seller choice as reject in LifeOS (needs inspection row in repair_request state):
+ *
+ *   node scripts/tc-r4r-do-upload.mjs --address=Mahogany --record-seller-reject
+ *
  * Or fix `.env` COMMAND_CENTER_KEY to match Railway, then:
  *
  *   node scripts/tc-r4r-do-upload.mjs --tx-id=42
@@ -21,7 +25,13 @@ import process from 'node:process';
 const insecureAgent = new https.Agent({ rejectUnauthorized: false });
 
 function parseArgs() {
-  const out = { address: null, txId: null, dryRunUpload: false, days: 120 };
+  const out = {
+    address: null,
+    txId: null,
+    dryRunUpload: false,
+    days: 120,
+    recordSellerReject: false,
+  };
   for (let i = 2; i < process.argv.length; i++) {
     const a = process.argv[i];
     if (a === '--address') out.address = process.argv[++i];
@@ -29,6 +39,7 @@ function parseArgs() {
     else if (a === '--tx-id') out.txId = process.argv[++i];
     else if (a.startsWith('--tx-id=')) [, out.txId] = a.split('=');
     else if (a === '--dry-run-upload') out.dryRunUpload = true;
+    else if (a === '--record-seller-reject') out.recordSellerReject = true;
     else if (a.startsWith('--days=')) out.days = Number(a.split('=')[1]) || 120;
   }
   return out;
@@ -147,6 +158,20 @@ async function main() {
       'TD upload skipped: set transaction_desk_id on this TC file (TransactionDesk link) or fix td_upload.error in the JSON above.'
     );
     process.exit(1);
+  }
+
+  if (args.recordSellerReject && !args.dryRunUpload) {
+    const rej = await httpJson(base, `/api/v1/tc/transactions/${txId}/r4r/record-seller-choice`, {
+      method: 'POST',
+      apiKey,
+      body: {
+        choice: 'reject',
+        notes: 'Recorded via scripts/tc-r4r-do-upload.mjs --record-seller-reject',
+        source_channel: 'lifeos_script',
+      },
+    });
+    console.log(JSON.stringify({ seller_reject_http: rej.status, ...rej.data }, null, 2));
+    if (rej.status !== 200 || !rej.data?.ok) process.exit(1);
   }
 }
 
