@@ -2198,15 +2198,64 @@ export function createTCRoutes(
     try {
       const { createEmailTriage } = await import('../services/email-triage.js');
       const triage = createEmailTriage({ pool, logger });
-      const { category, action_required, limit, since } = req.query;
+      const { category, action_required, limit, since, min_urgency } = req.query;
       const items = await triage.getTriagedEmails({
         category,
         actionRequired: action_required === 'true' ? true : action_required === 'false' ? false : undefined,
         limit: parseInt(limit) || 50,
         since,
+        minUrgency: min_urgency ? parseInt(min_urgency) : undefined,
       });
       const unactioned = items.filter(i => i.action_required && !i.actioned_at);
       res.json({ ok: true, count: items.length, unactioned: unactioned.length, items });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/email/attention — emails only Adam can handle, sorted by urgency
+  router.get('/email/attention', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const triage = createEmailTriage({ pool, logger });
+      const items = await triage.getAttentionQueue({ limit: parseInt(req.query.limit) || 20 });
+      res.json({ ok: true, count: items.length, items });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/tc/email/spam-senders — blocked sender list
+  router.get('/email/spam-senders', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const triage = createEmailTriage({ pool, logger });
+      const senders = await triage.getSpamSenders();
+      res.json({ ok: true, count: senders.length, senders });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // DELETE /api/v1/tc/email/spam-senders/:address — unblock a sender
+  router.delete('/email/spam-senders/:address', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const triage = createEmailTriage({ pool, logger });
+      await triage.unblockSender(decodeURIComponent(req.params.address));
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // POST /api/v1/tc/email/spam-senders — manually block a sender
+  router.post('/email/spam-senders', requireKey, async (req, res) => {
+    try {
+      const { createEmailTriage } = await import('../services/email-triage.js');
+      const triage = createEmailTriage({ pool, logger });
+      await triage.blockSender(req.body?.address, req.body?.reason || 'manual block');
+      res.json({ ok: true });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
