@@ -16,6 +16,10 @@
  */
 
 import nodemailer from 'nodemailer';
+import dns from 'dns';
+
+// Railway containers can't route outbound IPv6 — force IPv4 for all DNS resolution
+dns.setDefaultResultOrder('ipv4first');
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));

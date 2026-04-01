@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-01 (`notification-service`: force IPv4 (family:4) — Railway containers can't reach Google SMTP via IPv6; adds @ssot tag) |
+| **Last Updated** | 2026-04-01 (`notification-service`: dns.setDefaultResultOrder(ipv4first) — Railway IPv6 SMTP ENETUNREACH fix; family:4 alone insufficient, process-level DNS ordering required) |
 | **Last Updated** | 2026-04-01 (`email-triage`: full inbox intelligence — spam detection + IMAP delete, urgency 1-10 scoring, brief + why_adam per email, negotiation intel alerts, TC auto-queue, FYI mark-read, block list. `tc-routes`: attention queue, spam management endpoints. Migration: email_triage_intelligence columns + spam_senders table) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
