@@ -3326,6 +3326,52 @@ export function createTCRoutes(
     }
   });
 
+  // POST /api/v1/tc/browser/debug-portal — login to GLVAR and return page URL + HTML snippet + links
+  // Lets us see what the Clareity portal actually looks like after login without a visible browser.
+  router.post('/browser/debug-portal', requireKey, async (req, res) => {
+    let session = null;
+    try {
+      const { createTCBrowserAgent } = await import('../services/tc-browser-agent.js');
+      const accountManager = await getAccountManager();
+      const tcBrowser = createTCBrowserAgent({ accountManager, logger });
+      const login = await tcBrowser.loginToGLVAR();
+      session = login.session;
+
+      // Give the portal a moment to fully render dynamic tiles
+      await session.page.waitForTimeout(3000);
+
+      const url = session.page.url();
+      const title = await session.page.title();
+
+      // Extract all links with their text, href, and id
+      const links = await session.page.evaluate(() => {
+        return Array.from(document.querySelectorAll('a, button, [role="button"], [role="link"]'))
+          .slice(0, 150)
+          .map(el => ({
+            tag: el.tagName,
+            text: (el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 100),
+            href: el.getAttribute('href') || '',
+            id: el.id || '',
+            class: (el.className || '').toString().slice(0, 60),
+            onclick: (el.getAttribute('onclick') || '').slice(0, 80),
+          }));
+      });
+
+      // Grab a snippet of the HTML body (first 4000 chars) to see the structure
+      const bodySnippet = await session.page.evaluate(() =>
+        (document.body?.innerHTML || '').slice(0, 4000)
+      );
+
+      await session.close();
+      session = null;
+
+      res.json({ ok: true, url, title, links_count: links.length, links, body_snippet: bodySnippet });
+    } catch (err) {
+      await session?.close?.().catch(() => {});
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   app.use('/api/v1/tc', router);
   logger.info?.('✅ [TC-ROUTES] Mounted at /api/v1/tc');
 }
