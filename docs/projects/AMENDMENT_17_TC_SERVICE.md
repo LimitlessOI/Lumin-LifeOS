@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-31 (`tc-browser-agent`: fix TransactionDesk navigation — replace portal link scan with direct SP-initiated SSO URL `pr.transactiondesk.com/external/Clareity_SSOSpRequestIssuer.ashx?MLS=GLVAR`; portal scan retained as fallback) |
+| **Last Updated** | 2026-03-31 (`tc-email-document-service`: search [Gmail]/All Mail instead of INBOX so emails sorted by Gmail into Promotions/Updates tabs are found; `tc-browser-agent`: direct SP-initiated SSO URL for TransactionDesk) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 

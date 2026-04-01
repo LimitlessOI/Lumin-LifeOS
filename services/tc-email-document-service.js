@@ -200,7 +200,11 @@ export function createTCEmailDocumentService({
     const matched = [];
     try {
       await client.connect();
-      const lock = await client.getMailboxLock('INBOX');
+      // Use [Gmail]/All Mail when available — it's a superset of INBOX + Promotions + Updates + etc.
+      // Gmail auto-sorts many emails out of INBOX; searching only INBOX misses them.
+      const inboxPath = await pickAllMailboxPath(client);
+      logger.debug?.({ inboxPath }, '[TC-EMAIL-DOCS] using mailbox for attachment search');
+      const lock = await client.getMailboxLock(inboxPath);
       try {
         const since = new Date(Date.now() - days * 86_400_000);
         for await (const msg of client.fetch({ since }, { envelope: true, bodyStructure: true })) {
@@ -236,6 +240,26 @@ export function createTCEmailDocumentService({
     matched.sort((a, b) => new Date(b.date) - new Date(a.date));
     const cap = Math.max(1, Math.min(50, Number(max_results) || 25));
     return latest_only ? matched.slice(0, 1) : matched.slice(0, cap);
+  }
+
+  /**
+   * Resolve the best "all mail" inbox path for a connected ImapFlow client.
+   * Gmail's [Gmail]/All Mail is a superset of all folders (INBOX + Promotions + Updates etc).
+   * Returns 'INBOX' as fallback if no all-mail folder is found.
+   */
+  async function pickAllMailboxPath(client) {
+    const custom = process.env.TC_IMAP_INBOX_MAILBOX;
+    if (custom) return custom;
+    try {
+      const list = await client.list();
+      const paths = (list || []).map((b) => b.path).filter(Boolean);
+      const gmailAll = paths.find((p) => /\[gmail\]\/all mail/i.test(p));
+      if (gmailAll) return gmailAll;
+      // Workspace / G Suite variant
+      const workspaceAll = paths.find((p) => /all mail/i.test(p));
+      if (workspaceAll) return workspaceAll;
+    } catch (_) { /* fall through */ }
+    return 'INBOX';
   }
 
   async function pickSentMailboxPath(client) {
