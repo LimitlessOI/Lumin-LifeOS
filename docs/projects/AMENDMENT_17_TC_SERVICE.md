@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-31 (`tc-email-document-service`: search [Gmail]/All Mail instead of INBOX so emails sorted by Gmail into Promotions/Updates tabs are found; `tc-browser-agent`: direct SP-initiated SSO URL for TransactionDesk) |
+| **Last Updated** | 2026-04-01 (`tc-email-document-service`: `extractFilename` helper fixes ImapFlow bodyStructure filename detection — `dispositionParameters.filename`/`parameters.name` instead of non-existent `structure.filename`; inline <5KB images filtered as signature logos; reverted mailbox to INBOX to avoid UID mismatch) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -865,6 +865,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 | 2026-03-30 | **`scripts/tc-r4r-from-railway.mjs`** + **`npm run tc:r4r-railway`** — runs **`railway variables --json`** in **`RAILWAY_VARS_PROJECT_DIR`** (default `~/lumin-railway` if present) to set **`TC_API_KEY`**, then delegates to **`tc-r4r-do-upload.mjs`**. Requires interactive **`railway login`** | Unblocks prod TC calls when local `.env` still has `local-dev-key-*` — no manual key copy | ✅ | ✅ | pending |
 | 2026-03-30 | **`r4r/scan` + `upload_to_td`:** If `transaction_desk_id` is null, open TD by **`addressSearch`** from the TC address, parse URL → **`UPDATE tc_transactions.transaction_desk_id`**, then upload. After mailbox PDFs, uploads **`seller_response`** summary PDF (“Seller REJECTED repair request (LifeOS summary)”) unless `upload_seller_rejection_pdf:false`. **`tc-r4r-do-upload.mjs`:** **`--record-seller-reject`** → **`POST .../r4r/record-seller-choice`** `{ choice:'reject' }` after scan | Mahogany-style files missing TD id: still file to correct desk; TD shows explicit rejection doc; LifeOS DB can record seller reject after upload | ✅ | ✅ | pending |
 | 2026-03-30 | **`tc-email-document-service`:** `getMailboxLock` for INBOX + Sent fetches; attachment **`download(uid, part, { uid: true })`** (seq was wrong for gathered mail); **`formatImapFailure`** for clearer errors. **`r4r/scan`:** 500 JSON includes **`self_service_apis`** (readiness / Railway env / redeploy via command key) | Fix ImapFlow 500s (`Command failed`); operators resolve env/deploy through APIs, not dashboard prose | ✅ | ✅ | pending |
+| 2026-04-01 | **`tc-email-document-service` `extractFilename` fix:** Added `extractFilename(structure)` helper that reads ImapFlow bodyStructure via `dispositionParameters?.filename`, `dispositionParameters?.name`, `parameters?.name`, `parameters?.filename` (ImapFlow does NOT expose `structure.filename` directly — the old code always fell back to `attachment_1` which failed `RELEVANT_EXT_RE`, causing `emails_scanned: 0`). Updated `normalizeAttachmentParts` to use it; inline parts <5KB are filtered as signature logos. Mailbox reverted to INBOX (not [Gmail]/All Mail) to keep UIDs consistent with `downloadAttachmentsForEmail`. | Root cause of 0 attachments found in all email scans | ✅ | ✅ | pending |
 | 2026-03-31 | **Deploy bundle to `main`:** R4R routes (`r4r/scan`, seller review, TD helpers), `tc_td_form_knowledge` migration, mailbox **`subject_any_contains`**, inspection forward + PDF stamp, browser/approval/coordinator hooks — fixes production **`Cannot POST /r4r/scan`** (deploy lag) | Railway `robust-magic` was serving an older build without R4R endpoints | ✅ | ✅ | pending |
 | 2026-03-31 | **`scripts/tc-r4r-do-upload.mjs`** + npm **`tc:r4r-upload`** — resolve tx by `--address`, call **`POST .../r4r/scan`** with **`upload_to_td:true`**; documents Railway **`COMMAND_CENTER_KEY`** must match shell **`TC_API_KEY`** (local `.env` often differs) | Unblock “find attachments + push to TD” without portal debugging when the only issue is key drift | ✅ | ✅ | pending |
 | 2026-03-30 | **`tc-email-document-service`:** `emailMatches` uses token-AND on `subject_contains` / `subject_tokens`, plus optional **`subject_any_contains`** (OR). **`buildR4RMailboxSearch`** defaults: address-derived tokens + broad repair/inspection/response keywords — real subjects rarely say “R4R”. **`tests/tc-mailbox-subject.test.js`** | Match buyer “response to repairs” and inspection report threads when the address is in the subject | ✅ | ✅ | pending |
@@ -910,7 +911,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 **Status:** BUILD_READY (TC coordination core — gates 1-5 complete)
 **Adaptability Score:** 82/100
 **Council Persona:** edison (iterate fast, test every assumption, protect the core deadline logic)
-**Last Updated:** 2026-03-31
+**Last Updated:** 2026-04-01
 
 ### Gate 1 — Implementation Detail
 - [x] Email triage, GLVAR monitor, deadline cron all have specific segment descriptions

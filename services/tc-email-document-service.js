@@ -47,6 +47,24 @@ function mimeTypeForFile(filename = '') {
   return 'image/jpeg';
 }
 
+/**
+ * Extract filename from an ImapFlow bodyStructure node.
+ * ImapFlow stores filenames in dispositionParameters.filename or parameters.name,
+ * NOT in a top-level `filename` property. The `filename` field does not exist on
+ * the ImapFlow MessageStructureObject — always use this helper.
+ */
+function extractFilename(structure) {
+  // Most common: Content-Disposition: attachment; filename="..."
+  const disp = structure.dispositionParameters?.filename || structure.dispositionParameters?.name;
+  if (disp) return disp;
+  // Fallback: Content-Type parameters (e.g. name="...")
+  const param = structure.parameters?.name || structure.parameters?.filename;
+  if (param) return param;
+  // Some clients encode in the MIME type itself
+  if (structure.filename) return structure.filename; // older imapflow versions
+  return null;
+}
+
 function normalizeAttachmentParts(structure, parts = [], partNum = '') {
   if (!structure) return parts;
   if (Array.isArray(structure.childNodes) && structure.childNodes.length) {
@@ -55,10 +73,19 @@ function normalizeAttachmentParts(structure, parts = [], partNum = '') {
     });
     return parts;
   }
-  if (structure.disposition === 'attachment' || structure.filename) {
-    const filename = structure.filename || `attachment_${partNum || '1'}`;
-    if (RELEVANT_EXT_RE.test(filename)) {
-      parts.push({ part: partNum || '1', filename });
+  const filename = extractFilename(structure);
+  const isAttachment = structure.disposition === 'attachment';
+  const isInlineWithName = structure.disposition === 'inline' && filename;
+
+  // Include if explicitly attached, or inline with a recognized filename
+  if (isAttachment || filename) {
+    const name = filename || `attachment_${partNum || '1'}`;
+    if (RELEVANT_EXT_RE.test(name)) {
+      // Skip small inline images — these are signature logos, not TC documents.
+      // Size 0 means unknown; allow those through.
+      const sizeKb = (structure.size || 0) / 1024;
+      if (isInlineWithName && sizeKb > 0 && sizeKb < 5) return parts; // <5KB inline = logo
+      parts.push({ part: partNum || '1', filename: name });
     }
   }
   return parts;
@@ -200,11 +227,7 @@ export function createTCEmailDocumentService({
     const matched = [];
     try {
       await client.connect();
-      // Use [Gmail]/All Mail when available — it's a superset of INBOX + Promotions + Updates + etc.
-      // Gmail auto-sorts many emails out of INBOX; searching only INBOX misses them.
-      const inboxPath = await pickAllMailboxPath(client);
-      logger.debug?.({ inboxPath }, '[TC-EMAIL-DOCS] using mailbox for attachment search');
-      const lock = await client.getMailboxLock(inboxPath);
+      const lock = await client.getMailboxLock('INBOX');
       try {
         const since = new Date(Date.now() - days * 86_400_000);
         for await (const msg of client.fetch({ since }, { envelope: true, bodyStructure: true })) {
