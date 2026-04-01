@@ -86,6 +86,10 @@ function buildInspectionMailboxSearch(tx, body = {}) {
   const max_results = Number.isFinite(maxRaw) ? Math.max(1, Math.min(50, maxRaw)) : 20;
   const daysRaw = parseInt(body.days, 10);
   const days = Number.isFinite(daysRaw) ? Math.max(1, Math.min(365, daysRaw)) : 60;
+  // include_sent defaults true — TC docs are often in Adam's Sent folder (R4Rs, inspection responses)
+  const include_sent = body.include_sent !== false;
+  // address_hint lets the IMAP server pre-filter messages containing the property address
+  const address_hint = body.address_hint != null ? String(body.address_hint) : (tx.address || '');
   return {
     days,
     subject_contains:
@@ -99,6 +103,8 @@ function buildInspectionMailboxSearch(tx, body = {}) {
     from_contains: body.from_contains != null ? String(body.from_contains) : '',
     latest_only: false,
     max_results,
+    include_sent,
+    address_hint,
   };
 }
 

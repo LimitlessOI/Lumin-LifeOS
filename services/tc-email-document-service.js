@@ -218,6 +218,10 @@ export function createTCEmailDocumentService({
       filename_contains = '',
       latest_only = true,
       max_results = 25,
+      include_sent = false,
+      // address_hint: if set, IMAP server pre-filters to messages containing this string in body/headers.
+      // Use the most specific address token (e.g. street number) to reduce bandwidth.
+      address_hint = '',
     } = search;
     await ensureWorkDir();
     const cfg = await resolveTCImapConfig({ accountManager, logger });
@@ -227,27 +231,48 @@ export function createTCEmailDocumentService({
     const matched = [];
     try {
       await client.connect();
-      const lock = await client.getMailboxLock('INBOX');
-      try {
-        const since = new Date(Date.now() - days * 86_400_000);
-        for await (const msg of client.fetch({ since }, { envelope: true, bodyStructure: true })) {
-          const candidate = {
-            uid: String(msg.uid),
-            seq: msg.seq,
-            subject: msg.envelope?.subject || '',
-            from: msg.envelope?.from?.[0]?.address || '',
-            date: msg.envelope?.date || new Date(),
-          };
-          if (!emailMatches(candidate, search)) continue;
-          const parts = normalizeAttachmentParts(msg.bodyStructure).filter((part) =>
-            attachmentMatches(part.filename, { filename_contains })
-          );
-          if (!parts.length) continue;
-          matched.push({ ...candidate, parts });
-        }
-      } finally {
-        lock.release();
+
+      // Build the list of mailboxes to search
+      const mailboxPaths = ['INBOX'];
+      if (include_sent) {
+        try {
+          const sentPath = await pickSentMailboxPath(client);
+          mailboxPaths.push(sentPath);
+        } catch (_) { /* skip Sent if list fails */ }
       }
+
+      // IMAP search criteria — server-side TEXT filter when address_hint is provided
+      const since = new Date(Date.now() - days * 86_400_000);
+      const addrToken = String(address_hint || '')
+        .trim()
+        .split(/[\s,]+/)
+        .find((w) => w.length > 3) || '';
+      const criteria = addrToken ? { since, text: addrToken } : { since };
+
+      for (const mailboxPath of mailboxPaths) {
+        const lock = await client.getMailboxLock(mailboxPath);
+        try {
+          for await (const msg of client.fetch(criteria, { envelope: true, bodyStructure: true })) {
+            const candidate = {
+              uid: String(msg.uid),
+              seq: msg.seq,
+              subject: msg.envelope?.subject || '',
+              from: msg.envelope?.from?.[0]?.address || '',
+              date: msg.envelope?.date || new Date(),
+              mailbox: mailboxPath,
+            };
+            if (!emailMatches(candidate, search)) continue;
+            const parts = normalizeAttachmentParts(msg.bodyStructure).filter((part) =>
+              attachmentMatches(part.filename, { filename_contains })
+            );
+            if (!parts.length) continue;
+            matched.push({ ...candidate, parts });
+          }
+        } finally {
+          lock.release();
+        }
+      }
+
       await client.logout();
     } catch (error) {
       const detail = [
@@ -520,7 +545,7 @@ export function createTCEmailDocumentService({
 
     try {
       await client.connect();
-      const lock = await client.getMailboxLock('INBOX');
+      const lock = await client.getMailboxLock(email.mailbox || 'INBOX');
       try {
         for (const part of email.parts || []) {
           const safeName = String(part.filename || 'attachment').replace(/[^a-zA-Z0-9._-]/g, '_');
