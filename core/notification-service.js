@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/projects/AMENDMENT_17_TC_SERVICE.md
  * NotificationService
  * - Email via SMTP (Gmail/Workspace) or Postmark, with suppression + event logging
  * - Intended as the single abstraction for outbound comms
@@ -52,6 +53,7 @@ export class NotificationService {
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: Number(process.env.SMTP_PORT || 587),
       secure: false, // STARTTLS
+      family: 4,    // Force IPv4 — Railway containers don't support outbound IPv6
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
