@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-01 (`notification-service`: dynamic secure flag — port 465 uses SSL, port 587 uses STARTTLS; allows switching to port 465 if Railway blocks 587) |
+| **Last Updated** | 2026-04-01 (`tc-routes`: async_send=true on forward-inspection-docs responds immediately with job_id, processes delivery in background — avoids Railway 60s proxy timeout) |
 | **Last Updated** | 2026-04-01 (`email-triage`: full inbox intelligence — spam detection + IMAP delete, urgency 1-10 scoring, brief + why_adam per email, negotiation intel alerts, TC auto-queue, FYI mark-read, block list. `tc-routes`: attention queue, spam management endpoints. Migration: email_triage_intelligence columns + spam_senders table) |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |

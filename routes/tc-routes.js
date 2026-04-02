@@ -2648,6 +2648,41 @@ export function createTCRoutes(
 
       const playbook = tdInspectionForwardPlaybook(recipient_name);
 
+      const asyncSend = body.async_send === true;
+
+      // async_send: respond immediately, process in background (avoids Railway 60s proxy timeout)
+      if (asyncSend) {
+        const jobId = crypto.randomUUID();
+        res.json({ ok: true, queued: true, job_id: jobId, subject: subjectLine, recipient_email });
+
+        // Fire and forget — errors logged but don't crash
+        (async () => {
+          try {
+            const result = await emailDocumentService.sendGatheredAttachmentPackage({
+              transactionId,
+              recipientEmail: recipient_email,
+              recipientName: recipient_name,
+              subject: subjectLine,
+              body: emailBody,
+              search,
+              onlyPdf,
+              dryRun: dry_run !== false,
+            });
+            await coordinator.logEvent(transactionId, 'inspection_mailbox_forward_async', {
+              job_id: jobId,
+              dry_run: dry_run !== false,
+              recipient_email,
+              ok: result.ok,
+              error: result.error || null,
+              attachment_count: result.attachment_count,
+            });
+          } catch (e) {
+            logger.warn?.({ err: e.message }, '[TC-ROUTES] async forward-inspection-docs error');
+          }
+        })();
+        return;
+      }
+
       const result = await emailDocumentService.sendGatheredAttachmentPackage({
         transactionId,
         recipientEmail: recipient_email,
