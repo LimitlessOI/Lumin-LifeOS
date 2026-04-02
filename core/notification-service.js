@@ -53,10 +53,11 @@ export class NotificationService {
 
   _getSmtpTransporter() {
     if (this._smtpTransporter) return this._smtpTransporter;
+    const smtpPort = Number(process.env.SMTP_PORT || 587);
     this._smtpTransporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: false, // STARTTLS
+      port: smtpPort,
+      secure: smtpPort === 465, // SSL on 465, STARTTLS on 587
       family: 4,    // Force IPv4 — Railway containers don't support outbound IPv6
       auth: {
         user: process.env.SMTP_USER,
