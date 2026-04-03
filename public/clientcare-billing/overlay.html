@@ -50,7 +50,10 @@
     pre { white-space:pre-wrap; word-break:break-word; background:#0f1528; border:1px solid #27304a; border-radius:10px; padding:12px; }
     .small { font-size:12px; }
     .account-board { display:grid; gap:10px; max-height:700px; overflow:auto; }
-    .account-card { width:100%; text-align:left; background:#0f1528; border:1px solid #27304a; border-radius:12px; padding:12px; display:grid; gap:10px; }
+    .account-card { position:relative; width:100%; text-align:left; background:#0f1528; border:1px solid #27304a; border-radius:12px; padding:12px 12px 14px 52px; display:grid; gap:10px; overflow:hidden; }
+    .account-card[data-state="red"] { border-color:#ef476f; }
+    .account-card[data-state="yellow"] { border-color:#f0b429; }
+    .account-card[data-state="green"] { border-color:#26c281; }
     .account-card.selected { border-color:#5c7cff; box-shadow:0 0 0 1px #5c7cff inset; }
     .account-card-top, .progress-label, .account-detail-header { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
     .progress-track { width:100%; height:10px; background:#1a223a; border-radius:999px; overflow:hidden; }
@@ -59,7 +62,18 @@
     .progress-fill.warn { background:#f0b429; }
     .progress-fill.bad { background:#ef476f; }
     .account-meta { font-size:12px; color:#98a5c3; }
+    .account-actions-inline { display:flex; gap:6px; flex-wrap:wrap; }
+    .account-ring { position:absolute; left:12px; top:12px; width:30px; height:30px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; border:2px solid currentColor; }
+    .account-ring.red { color:#ff9db0; background:#4a1f28; }
+    .account-ring.yellow { color:#ffd666; background:#4a3a12; }
+    .account-ring.green { color:#7ef0b8; background:#113b2d; }
+    .account-hover-card { display:none; position:absolute; left:12px; right:12px; bottom:12px; background:rgba(11,16,32,.96); border:1px solid #2d3b5f; border-radius:12px; padding:12px; color:#edf2f7; box-shadow:0 12px 28px rgba(0,0,0,.3); }
+    .account-card:hover .account-hover-card, .account-card:focus-visible .account-hover-card { display:block; }
     .detail-list { margin:8px 0 0 18px; padding:0; display:grid; gap:6px; }
+    .todo-item { background:#101726; border:1px solid #27304a; border-radius:14px; padding:14px; }
+    .todo-item[data-urgency="red"] { border-color:#6b2430; }
+    .todo-item[data-urgency="yellow"] { border-color:#6b5420; }
+    .todo-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:8px; }
     @media (max-width: 1180px) {
       .workspace.assistant-pinned { grid-template-columns: 1fr; }
       .assistant-shell.pinned { position:static; }
@@ -69,6 +83,49 @@
       .hero { flex-direction:column; }
       .assistant-shell.floating { left:16px; right:16px; bottom:16px; width:auto; }
     }
+
+    /* ── Tooltip system ───────────────────────────────────────────── */
+    [data-tip] { position: relative; }
+    [data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e2d50;
+      color: #edf2f7;
+      font-size: 12px;
+      line-height: 1.5;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #3a4f7a;
+      white-space: normal;
+      width: max-content;
+      max-width: 280px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.4);
+      z-index: 100;
+      pointer-events: none;
+      text-transform: none;
+      font-weight: normal;
+      letter-spacing: 0;
+    }
+    [data-tip]:hover::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 3px);
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #3a4f7a;
+      z-index: 101;
+      pointer-events: none;
+    }
+    /* keep tooltips on-screen at edges */
+    [data-tip-left]:hover::after { left: 0; transform: none; }
+    [data-tip-right]:hover::after { left: auto; right: 0; transform: none; }
+    h2[data-tip], h3[data-tip] { cursor: help; display: inline-flex; align-items: center; gap: 6px; }
+    h2[data-tip]::before, h3[data-tip]::before { content: none; }
+    h2[data-tip]:hover::before, h3[data-tip]:hover::before { content: ''; }
   </style>
 </head>
 <body>

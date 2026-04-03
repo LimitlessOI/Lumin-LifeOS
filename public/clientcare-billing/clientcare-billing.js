@@ -1044,8 +1044,8 @@
           <div class="card stat"><span>Current decision</span><strong>${escapeHtml(lastInsurancePreview?.decision || 'Not run')}</strong></div>
         </div>
         <div class="row-actions" style="margin-bottom:12px">
-          <button id="use-selected-account-vob" class="ghost">Use selected account</button>
-          <button id="insurance-preview-run">Run VOB</button>
+          <button id="use-selected-account-vob" class="ghost" data-tip="Pre-fills the insurance fields below using the account you clicked in the Accounts Needing Action board">Use selected account</button>
+          <button id="insurance-preview-run" data-tip="Runs the insurance info through the system to get a decision: Take (schedule), Review (check details first), or Do Not Schedule">Run VOB</button>
         </div>
         <div class="grid two" style="margin-top:12px;">
           <input id="insurance-payer-name" value="${escapeHtml(lastInsuranceDraft.payer_name || '')}" placeholder="Payer name">
@@ -2657,14 +2657,14 @@
     const bucket30 = forecastBuckets.find((b) => b.label === '0-30 days');
     const bucket60 = forecastBuckets.find((b) => b.label === '31-60 days');
     const topCards = [
-      { label: 'Live accounts', value: liveSummary ? (liveSummary.totalAccounts || 0) : 'Loading…' },
-      { label: 'Billing notes', value: liveSummary ? (liveSummary.totalQueueItems || 0) : 'Loading…' },
-      { label: 'Projected 30d', value: liveSummary ? money(bucket30?.amount || 0) : 'Loading…' },
-      { label: 'Projected 60d', value: liveSummary ? money(bucket60?.amount || 0) : 'Loading…' },
-      { label: 'Strong/possible', value: liveSummary ? ((liveSummary.recoveryBandCounts?.strong || 0) + (liveSummary.recoveryBandCounts?.possible || 0)) : 'Loading…' },
-      { label: 'Insurance setup', value: liveSummary ? (liveSummary.diagnosisCounts?.insurance_setup_issue || 0) : 'Loading…' },
-      { label: 'Patient AR', value: escapeHtml(money(patientArSummary.total_balance || 0)) },
-      { label: '90+ patient AR', value: escapeHtml(money(patientArSummary.balance_90_plus || 0)) },
+      { label: 'Live accounts', value: liveSummary ? (liveSummary.totalAccounts || 0) : 'Loading…', tip: 'Total patient accounts currently in ClientCare with open billing activity' },
+      { label: 'Billing notes', value: liveSummary ? (liveSummary.totalQueueItems || 0) : 'Loading…', tip: 'Open billing notes or action items that need to be worked — your daily task count' },
+      { label: 'Projected 30d', value: liveSummary ? money(bucket30?.amount || 0) : 'Loading…', tip: 'Expected insurance payments collectible in the next 30 days based on current claim status' },
+      { label: 'Projected 60d', value: liveSummary ? money(bucket60?.amount || 0) : 'Loading…', tip: 'Expected collections in the 31–60 day window — claims that need follow-up now to hit this' },
+      { label: 'Strong/possible', value: liveSummary ? ((liveSummary.recoveryBandCounts?.strong || 0) + (liveSummary.recoveryBandCounts?.possible || 0)) : 'Loading…', tip: 'Accounts classified as strong or possible recovery — these are your best ROI targets' },
+      { label: 'Insurance setup', value: liveSummary ? (liveSummary.diagnosisCounts?.insurance_setup_issue || 0) : 'Loading…', tip: 'Accounts with insurance configuration problems — wrong payer, missing auth, bad member ID — these block all billing until fixed' },
+      { label: 'Patient AR', value: escapeHtml(money(patientArSummary.total_balance || 0)), tip: 'Total patient-responsibility balance owed across all accounts — money patients owe after insurance pays' },
+      { label: '90+ patient AR', value: escapeHtml(money(patientArSummary.balance_90_plus || 0)), tip: 'Patient balances over 90 days old — highest risk of going uncollected, needs outreach or write-off decision now' },
     ];
 
     const claimRows = claims.map((claim) => `
@@ -2713,7 +2713,7 @@
 
       <div class="grid four kpi-grid">
         ${topCards.map((card) => `
-          <div class="card stat"><span>${escapeHtml(card.label)}</span><strong>${escapeHtml(card.value)}</strong></div>
+          <div class="card stat" ${card.tip ? `data-tip="${escapeHtml(card.tip)}"` : ''}><span>${escapeHtml(card.label)}</span><strong>${escapeHtml(card.value)}</strong></div>
         `).join('')}
       </div>
 
@@ -2723,12 +2723,12 @@
 
           <div class="grid two">
             <div class="card">
-              <h2>Today's Focus</h2>
+              <h2 data-tip="Your highest-priority accounts right now — ranked by dollar value and urgency. Work top to bottom.">Today's Focus</h2>
               <p class="hint" style="margin:10px 0">Start here. Highest-value accounts first.</p>
               ${renderTodaysFocus()}
             </div>
             <div class="card">
-              <h2>Batch Workflows</h2>
+              <h2 data-tip="Instead of opening accounts one by one, these workflows let you fix the same type of problem across many accounts at once — much faster.">Batch Workflows</h2>
               <p class="hint" style="margin:10px 0">Work the backlog by blocker instead of one account at a time.</p>
               <div id="workflow-playbooks">${renderWorkflowPlaybooks(lastAccountReport?.summary || {})}</div>
             </div>
@@ -2736,12 +2736,12 @@
 
           <div class="grid two">
             <div class="card">
-              <h2>Accounts Needing Action</h2>
+              <h2 data-tip="All accounts with open billing issues pulled from ClientCare. Color ring = urgency (red = critical, yellow = needs attention, green = on track). Hover an account for a quick summary, click to open the full recovery detail.">Accounts Needing Action</h2>
               <p class="hint" style="margin:10px 0">Hover for a summary. Click for full detail.</p>
               <div id="account-board" class="account-board"><p class="muted">Loading live billing accounts…</p></div>
             </div>
             <div class="card">
-              <h2>Account Recovery Detail</h2>
+              <h2 data-tip="Full breakdown for the account you clicked — what is blocking the claim, what the system recommends doing next, and any repair options.">Account Recovery Detail</h2>
               <div id="account-detail"><p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p></div>
             </div>
           </div>
@@ -2778,19 +2778,19 @@
                   <h2>Browser automation</h2>
                   <p class="hint" style="margin:10px 0">Diagnostics and extraction tools.</p>
                   <div class="row-actions">
-                    <button id="browser-login-test">Login Test</button>
-                    <button id="browser-overview" class="ghost">Billing Overview</button>
-                    <button id="browser-scan-billing-notes" class="ghost">Scan Billing Notes</button>
-                    <button id="browser-discover" class="ghost">Discover</button>
-                    <button id="browser-extract" class="ghost">Extract Preview</button>
-                    <button id="browser-extract-import">Extract + Import</button>
+                    <button id="browser-login-test" data-tip="Tests whether your ClientCare credentials (CC_USER / CC_PASS env vars) are configured correctly and can log in. Run this first.">Login Test</button>
+                    <button id="browser-overview" class="ghost" data-tip="Pulls the top-level billing dashboard summary from ClientCare — totals, outstanding balances, claim counts.">Billing Overview</button>
+                    <button id="browser-scan-billing-notes" class="ghost" data-tip="Scans the most recent billing notes in ClientCare and extracts action items. Use the limit field to control how many to scan.">Scan Billing Notes</button>
+                    <button id="browser-discover" class="ghost" data-tip="Explores what billing pages and data are accessible in your ClientCare account — run this once to map out what is available.">Discover</button>
+                    <button id="browser-extract" class="ghost" data-tip="Downloads account data from ClientCare and shows a preview — does NOT save to the system yet. Use this to verify the data looks right before importing.">Extract Preview</button>
+                    <button id="browser-extract-import" data-tip="Downloads account data from ClientCare AND saves it to the system immediately. This populates the Accounts board and queues.">Extract + Import</button>
                   </div>
                   <div class="row-actions" style="margin-top:10px">
-                    <input id="browser-scan-limit" type="number" min="1" max="25" value="5" style="max-width:90px">
-                    <input id="browser-scan-offset" type="number" min="0" value="0" style="max-width:90px">
-                    <button id="browser-scan-accounts" class="ghost">Scan Accounts</button>
-                    <button id="browser-account-report" class="ghost">Account Report</button>
-                    <button id="browser-full-account-report" class="ghost">Full Queue Report</button>
+                    <input id="browser-scan-limit" type="number" min="1" max="25" value="5" style="max-width:90px" data-tip="How many accounts to scan at once (1–25). Start with 5.">
+                    <input id="browser-scan-offset" type="number" min="0" value="0" style="max-width:90px" data-tip="Skip this many accounts before starting the scan — use to page through the full list (e.g. 0, 5, 10…)">
+                    <button id="browser-scan-accounts" class="ghost" data-tip="Scans the specified number of accounts from ClientCare and shows their billing status, blockers, and recovery band.">Scan Accounts</button>
+                    <button id="browser-account-report" class="ghost" data-tip="Generates a full report for all scanned accounts — priority ranking, recovery forecast, and next actions per account.">Account Report</button>
+                    <button id="browser-full-account-report" class="ghost" data-tip="Runs the complete queue — scans all accounts and builds the full prioritized work list. This is the main button to populate the dashboard.">Full Queue Report</button>
                   </div>
                 </div>
               </div>
@@ -2800,14 +2800,14 @@
                   <h2>Imports</h2>
                   <p class="hint" style="margin:10px 0">Paste CSV from ClientCare exports or snapshot text as fallback.</p>
                   ${renderImportTemplate(templateFields)}
-                  <textarea id="csv-input" placeholder="Paste claim export CSV here"></textarea>
-                  <div style="margin-top:10px"><button id="import-csv">Import CSV</button></div>
+                  <textarea id="csv-input" placeholder="Paste claim export CSV here" data-tip="In ClientCare: go to Reports → Claims → export to CSV, then paste the entire CSV here and click Import CSV"></textarea>
+                  <div style="margin-top:10px"><button id="import-csv" data-tip="Imports the pasted claims CSV — classifies each claim by rescue bucket (submit now, correct and resubmit, appeal, etc.) and adds them to the claims ledger">Import CSV</button></div>
                   <hr style="border-color:#27304a; margin:16px 0;">
-                  <textarea id="payment-history-input" placeholder="Paste paid claims / ERA / remit CSV here"></textarea>
-                  <div style="margin-top:10px"><button id="import-payment-history">Import Payment History</button></div>
+                  <textarea id="payment-history-input" placeholder="Paste paid claims / ERA / remit CSV here" data-tip="Paste your ERA (Explanation of Remittance) or paid claims export here — this teaches the system what each payer actually pays so the collections forecast gets more accurate"></textarea>
+                  <div style="margin-top:10px"><button id="import-payment-history" data-tip="Imports paid claims and ERA data — improves the collections forecast and identifies underpayments where the payer paid less than they should have">Import Payment History</button></div>
                   <hr style="border-color:#27304a; margin:16px 0;">
-                  <textarea id="snapshot-input" placeholder="Paste copied table HTML or delimited text here"></textarea>
-                  <div style="margin-top:10px"><button id="import-snapshot">Import Snapshot</button></div>
+                  <textarea id="snapshot-input" placeholder="Paste copied table HTML or delimited text here" data-tip="If you can not export a CSV, just select and copy the table directly from ClientCare and paste here — the system will parse whatever format it can"></textarea>
+                  <div style="margin-top:10px"><button id="import-snapshot" data-tip="Parses a raw copied table or any delimited text — a fallback when no CSV export is available">Import Snapshot</button></div>
                 </div>
                 <div class="card">
                   <h2>Browser Output</h2>
@@ -2819,7 +2819,7 @@
 
           <div class="grid two">
             <div class="card">
-              <h2>Collections Forecast</h2>
+              <h2 data-tip="Predicted cash inflow from insurance over the next 30, 60, and 90 days — based on claim status and historical payer payment patterns. More accurate the more paid claims you import.">Collections Forecast</h2>
               <p class="hint" style="margin:10px 0">Projection improves as paid claims, ERAs, and remits are imported.</p>
               <div id="reimbursement-intelligence">${renderReimbursementIntelligence(intelligence)}</div>
               <hr style="border-color:#27304a; margin:16px 0;">
@@ -2830,11 +2830,11 @@
               <h2>Claims Ledger</h2>
               <div class="stack">
                 <div class="card">
-                  <h3>Insurance Intake Rule</h3>
+                  <h3 data-tip="The current rule the system uses to decide whether to accept a new insurance patient — based on payer history, auth requirements, and collection rates">Insurance Intake Rule</h3>
                   <div id="insurance-intake-rule">${renderInsuranceIntakeRule(opsOverview)}</div>
                 </div>
                 <div class="card">
-                  <h3>Reconciliation</h3>
+                  <h3 data-tip="Matches what was submitted vs what was paid vs what is still outstanding — shows where money is leaking">Reconciliation</h3>
                   ${renderReconciliation(reconciliation)}
                 </div>
                 <div class="card">
@@ -2860,15 +2860,15 @@
                   <div id="capability-queue">${renderCapabilityQueue(opsOverview)}</div>
                 </div>
                 <div class="card">
-                  <h3>Underpayment Queue</h3>
+                  <h3 data-tip="Claims where the insurance paid less than the contracted rate — these can be disputed and recovered. Review and appeal each one.">Underpayment Queue</h3>
                   <div id="underpayment-queue">${renderUnderpaymentQueue(underpayments)}</div>
                 </div>
                 <div class="card">
-                  <h3>Appeals Queue</h3>
+                  <h3 data-tip="Denied claims that have been flagged for appeal — each one shows the denial reason and the recommended argument to use when resubmitting">Appeals Queue</h3>
                   <div id="appeals-queue">${renderAppealsQueue(appeals)}</div>
                 </div>
                 <div class="card">
-                  <h3>Payer Playbooks</h3>
+                  <h3 data-tip="Payer-specific rules and tactics — what each insurance company requires, how long they take, what they deny most, and how to get paid faster">Payer Playbooks</h3>
                   <div id="payer-playbooks">${renderPayerPlaybooks(payerPlaybooks)}</div>
                 </div>
                 <div class="card">
@@ -2876,7 +2876,7 @@
                   <div id="payer-rules">${renderPayerRules(payerRules)}</div>
                 </div>
                 <div class="card">
-                  <h3>ERA / Remit Insights</h3>
+                  <h3 data-tip="Patterns found in your Explanation of Remittance files — which denial codes appear most, which payers are slowest to pay, and where to focus appeal effort">ERA / Remit Insights</h3>
                   <div id="era-insights">${renderEraInsights(eraInsights)}</div>
                 </div>
               </div>
