@@ -22,11 +22,23 @@
   let lastPackagingValidationHistory = null;
   let lastBrowserResult = null;
   let lastViewState = null;
+  let lastInsuranceDraft = {
+    payer_name: '',
+    member_id: '',
+    billed_amount: '',
+    copay: '',
+    deductible_remaining: '',
+    coinsurance_pct: '',
+    coverage_active: '',
+    in_network: '',
+    auth_required: '',
+    source_label: '',
+  };
   const repairSlotByHref = new Map();
   let fullQueueHydrated = false;
   let fullQueueLoading = false;
   let assistantSessionId = localStorage.getItem('clientcare_assistant_session_id') || '';
-  let accountFilter = localStorage.getItem('clientcare_account_filter') || 'all';
+  let accountFilter = localStorage.getItem('clientcare_account_filter') || 'operator';
   let selectedTenantId = localStorage.getItem('clientcare_selected_tenant_id') || '';
   let assistantPinned = localStorage.getItem('clientcare_assistant_pinned') !== 'false';
   let assistantOpen = localStorage.getItem('clientcare_assistant_open') !== 'false';
@@ -97,6 +109,10 @@
     repairSlotByHref.set(key, Math.max(0, Math.floor(Number(slot) || 0)));
   }
 
+  function getSelectedAccountItem() {
+    return getFilteredItems()?.[selectedAccountIndex] || null;
+  }
+
   function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation, packagingValidationHistory) {
     lastViewState = { root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation, packagingValidationHistory };
   }
@@ -138,8 +154,8 @@
 
   function badgeClass(value) {
     const v = String(value || '').toLowerCase();
-    if (/ready|resolved|submit_now|correct_and_resubmit|proof_of_timely_filing|ok/.test(v)) return 'ok';
-    if (/timely_filing_exception|payer_followup|normal|review|warn/.test(v)) return 'warn';
+    if (/ready|resolved|submit_now|correct_and_resubmit|proof_of_timely_filing|ok|green|healthy/.test(v)) return 'ok';
+    if (/timely_filing_exception|payer_followup|normal|review|warn|yellow|watch/.test(v)) return 'warn';
     return 'bad';
   }
 
@@ -159,6 +175,10 @@
     if (wrong.length) lines.push(`Issue: ${wrong[0]}`);
     if (needed.length) lines.push(`Next: ${needed[0]}`);
     return lines.join('\n');
+  }
+
+  function normalizeFlagList(item) {
+    return (item.accountSummary?.flags || []).map((flag) => String(flag || '').toLowerCase());
   }
 
   function deriveAccountStage(item) {
@@ -182,10 +202,155 @@
     return { label: 'Ready for submission review', percent: 85 };
   }
 
+  function deriveAccountVisualState(item) {
+    const status = String(item.diagnosis?.status || 'review').toLowerCase();
+    const flags = normalizeFlagList(item);
+    const needed = item.diagnosis?.needed || [];
+    const wrong = item.diagnosis?.whatWentWrong || [];
+    const missingInsurer = !(item.accountSummary?.insurers || []).length;
+    const needsOperatorRepair =
+      missingInsurer ||
+      flags.includes('billing_status_blank') ||
+      flags.includes('bill_provider_type_blank') ||
+      ['client_match_issue', 'insurance_setup_issue', 'billing_configuration_issue'].includes(status);
+
+    if (needsOperatorRepair) {
+      return {
+        state: 'red',
+        ringLabel: 'You',
+        owner: 'You',
+        summary: needed[0] || wrong[0] || 'Operator repair is required before this account can move cleanly.',
+      };
+    }
+
+    const systemWatch =
+      status === 'review' ||
+      item.accountSummary?.paymentStatus === 'no' ||
+      ['strong', 'possible', 'slim'].includes(String(item.recoveryBand?.band || '').toLowerCase());
+
+    if (systemWatch) {
+      return {
+        state: 'yellow',
+        ringLabel: 'Watch',
+        owner: 'System',
+        summary: needed[0] || wrong[0] || 'The system is tracking this account, but it is not blocked on you right now.',
+      };
+    }
+
+    return {
+      state: 'green',
+      ringLabel: 'OK',
+      owner: 'Healthy',
+      summary: 'No operator action is currently needed on this account.',
+    };
+  }
+
+  function buildAccountTodoItems(item) {
+    const visual = deriveAccountVisualState(item);
+    const needed = item.diagnosis?.needed || [];
+    const wrong = item.diagnosis?.whatWentWrong || [];
+    const items = [];
+
+    if (visual.state === 'red') {
+      (needed.length ? needed : [wrong[0] || 'Review the live billing page and apply the repair.'])
+        .slice(0, 3)
+        .forEach((entry, index) => {
+          items.push({
+            id: `repair-${index}`,
+            owner: 'You',
+            urgency: 'red',
+            label: entry,
+            button: 'Fix now',
+            action: 'repair',
+          });
+        });
+      return items;
+    }
+
+    if (visual.state === 'yellow') {
+      return [{
+        id: 'watch',
+        owner: 'System',
+        urgency: 'yellow',
+        label: needed[0] || wrong[0] || 'Keep the account moving and verify the next billing step.',
+        button: 'Inspect status',
+        action: 'inspect',
+      }];
+    }
+
+    return [{
+      id: 'healthy',
+      owner: 'Healthy',
+      urgency: 'green',
+      label: 'No immediate billing repair is required.',
+      button: 'Inspect anyway',
+      action: 'inspect',
+    }];
+  }
+
+  function buildInsuranceDraftFromAccount(item = {}) {
+    const selectedInsurance = (item.insurancePreview || [])[getSelectedRepairSlot(item)] || (item.insurancePreview || [])[0] || {};
+    return {
+      payer_name: selectedInsurance.insuranceName || '',
+      member_id: selectedInsurance.memberId || '',
+      billed_amount: item.accountSummary?.balance || '',
+      copay: '',
+      deductible_remaining: '',
+      coinsurance_pct: '',
+      coverage_active: '',
+      in_network: '',
+      auth_required: '',
+      source_label: item.client || '',
+    };
+  }
+
+  function ensureInsuranceDraftSeed() {
+    const hasManualValue = ['payer_name', 'member_id', 'billed_amount'].some((key) => String(lastInsuranceDraft?.[key] || '').trim());
+    if (hasManualValue) return;
+    const item = getSelectedAccountItem();
+    if (!item) return;
+    lastInsuranceDraft = { ...lastInsuranceDraft, ...buildInsuranceDraftFromAccount(item) };
+  }
+
+  function syncInsuranceDraftFromDom() {
+    const read = (id) => document.getElementById(id)?.value || '';
+    if (!document.getElementById('insurance-payer-name')) return lastInsuranceDraft;
+    lastInsuranceDraft = {
+      payer_name: read('insurance-payer-name').trim(),
+      member_id: read('insurance-member-id').trim(),
+      billed_amount: read('insurance-billed-amount').trim(),
+      copay: read('insurance-copay').trim(),
+      deductible_remaining: read('insurance-deductible').trim(),
+      coinsurance_pct: read('insurance-coinsurance').trim(),
+      coverage_active: read('insurance-coverage-active'),
+      in_network: read('insurance-in-network'),
+      auth_required: read('insurance-auth-required'),
+      source_label: lastInsuranceDraft.source_label || '',
+    };
+    return lastInsuranceDraft;
+  }
+
+  function useSelectedAccountInVob() {
+    const item = getSelectedAccountItem();
+    if (!item) return;
+    lastInsuranceDraft = {
+      ...lastInsuranceDraft,
+      ...buildInsuranceDraftFromAccount(item),
+    };
+    rerender();
+    document.getElementById('verification-of-benefits')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   function getFilteredItems() {
     const items = lastAccountReport?.items || [];
     const sorted = [...items].sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
     switch (accountFilter) {
+      case 'operator':
+        return sorted.filter((item) => deriveAccountVisualState(item).state === 'red');
+      case 'watch':
+        return sorted.filter((item) => deriveAccountVisualState(item).state === 'yellow');
+      case 'healthy':
+        return sorted.filter((item) => deriveAccountVisualState(item).state === 'green');
       case 'strong':
         return sorted.filter((item) => ['strong', 'possible'].includes(String(item.recoveryBand?.band || '')));
       case 'insurance':
@@ -197,12 +362,15 @@
       case 'oldest':
         return sorted;
       default:
-        return items;
+        return sorted;
     }
   }
 
   function renderFilterBar() {
     const filters = [
+      ['operator', 'Needs Me'],
+      ['watch', 'Watching'],
+      ['healthy', 'Healthy'],
       ['all', 'All'],
       ['strong', 'Strong Chance'],
       ['insurance', 'Insurance Setup'],
@@ -372,6 +540,9 @@
   function renderTodaysFocus() {
     const items = [...(lastAccountReport?.items || [])]
       .sort((a, b) => {
+        const av = ['red', 'yellow', 'green'].indexOf(deriveAccountVisualState(a).state);
+        const bv = ['red', 'yellow', 'green'].indexOf(deriveAccountVisualState(b).state);
+        if (av !== bv) return av - bv;
         const ar = ['strong', 'possible', 'slim', 'review', 'unlikely'].indexOf(String(a.recoveryBand?.band || 'review'));
         const br = ['strong', 'possible', 'slim', 'review', 'unlikely'].indexOf(String(b.recoveryBand?.band || 'review'));
         if (ar !== br) return ar - br;
@@ -384,7 +555,7 @@
         <tbody>
           ${items.map((item) => `
             <tr>
-              <td>${escapeHtml(item.client || '')}</td>
+              <td>${escapeHtml(item.client || '')}<div class="small muted">${escapeHtml(deriveAccountVisualState(item).owner)}</div></td>
               <td>${escapeHtml(item.recoveryBand?.label || 'Needs review')}</td>
               <td>${escapeHtml(item.diagnosis?.needed?.[0] || 'Manual review')}</td>
             </tr>
@@ -401,8 +572,8 @@
 
     const items = getFilteredItems();
     if (!items.length) {
-      container.innerHTML = '<p class="muted">Loading live billing accounts…</p>';
-      detail.innerHTML = '<p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p>';
+      container.innerHTML = `${renderFilterBar()}<p class="muted">No accounts match this view right now.</p>`;
+      detail.innerHTML = '<p class="muted">Choose another filter or wait for live billing data to refresh.</p>';
       return;
     }
 
@@ -410,31 +581,48 @@
 
     container.innerHTML = renderFilterBar() + items.map((item, index) => {
       const stage = deriveAccountStage(item);
+      const visual = deriveAccountVisualState(item);
+      const todos = buildAccountTodoItems(item);
       const selected = index === selectedAccountIndex;
       return `
         <button
           class="account-card${selected ? ' selected' : ''}"
           data-account-index="${index}"
+          data-state="${escapeHtml(visual.state)}"
           title="${escapeHtml(summarizeHoverText(item))}"
         >
+          <div class="account-ring ${escapeHtml(visual.state)}">${escapeHtml(visual.ringLabel)}</div>
           <div class="account-card-top">
-            <strong>${escapeHtml(item.client || 'Unknown client')}</strong>
-            <span class="badge ${badgeClass(item.diagnosis?.status || 'review')}">${escapeHtml(item.diagnosis?.status || 'review')}</span>
+            <div>
+              <strong>${escapeHtml(item.client || 'Unknown client')}</strong>
+              <div class="muted small">${escapeHtml(visual.owner)}</div>
+            </div>
+            <span class="badge ${badgeClass(visual.state)}">${escapeHtml(visual.state)}</span>
           </div>
-          <div class="muted small">${escapeHtml(item.notePreview || 'No note preview')}</div>
+          <div class="muted small">${escapeHtml(visual.summary)}</div>
           <div class="progress-label">
             <span>${escapeHtml(stage.label)}</span>
             <span>${escapeHtml(`${stage.percent}%`)}</span>
           </div>
-          <div class="progress-track"><div class="progress-fill ${badgeClass(item.diagnosis?.status || 'review')}" style="width:${stage.percent}%"></div></div>
+          <div class="progress-track"><div class="progress-fill ${badgeClass(visual.state)}" style="width:${stage.percent}%"></div></div>
           <div class="account-meta">
             <span>${escapeHtml((item.accountSummary?.insurers || []).join(', ') || 'No insurer visible')}</span>
+          </div>
+          <div class="account-actions-inline">
+            ${todos.slice(0, 2).map((todo) => `<span class="badge ${badgeClass(todo.urgency)}">${escapeHtml(todo.label)}</span>`).join('')}
+          </div>
+          <div class="account-hover-card">
+            <strong>What needs doing</strong>
+            <div>${escapeHtml(visual.summary)}</div>
+            <div style="margin-top:8px;color:#98a5c3">${escapeHtml(todos[0]?.label || 'Open the file for detail.')}</div>
           </div>
         </button>
       `;
     }).join('');
 
     const item = items[selectedAccountIndex];
+    const visual = deriveAccountVisualState(item);
+    const todoItems = buildAccountTodoItems(item);
     detail.innerHTML = `
       <div class="stack">
         <div class="account-detail-header">
@@ -442,7 +630,34 @@
             <h3>${escapeHtml(item.client || 'Unknown client')}</h3>
             <p class="muted">${escapeHtml(item.date || '')} · ${escapeHtml(item.notePreview || '')}</p>
           </div>
-          <span class="badge ${badgeClass(item.diagnosis?.status || 'review')}">${escapeHtml(item.diagnosis?.status || 'review')}</span>
+          <span class="badge ${badgeClass(visual.state)}">${escapeHtml(visual.state)}</span>
+        </div>
+        <div class="grid three">
+          <div class="card stat"><span>Owner</span><strong>${escapeHtml(visual.owner)}</strong></div>
+          <div class="card stat"><span>What needs doing</span><strong>${escapeHtml(visual.summary)}</strong></div>
+          <div class="card stat"><span>Recovery stage</span><strong>${escapeHtml(deriveAccountStage(item).label)}</strong></div>
+        </div>
+        <div class="row-actions">
+          <button type="button" data-account-action="vob" class="ghost">Use this account in VOB</button>
+        </div>
+        <div class="card">
+          <strong>Action list</strong>
+          <div class="stack" style="margin-top:10px">
+            ${todoItems.map((todo) => `
+              <div class="todo-item" data-urgency="${escapeHtml(todo.urgency)}">
+                <div class="todo-head">
+                  <div>
+                    <strong>${escapeHtml(todo.label)}</strong>
+                    <div style="margin-top:6px;color:#98a5c3">${escapeHtml(`Owner: ${todo.owner}`)}</div>
+                  </div>
+                  <span class="badge ${badgeClass(todo.urgency)}">${escapeHtml(todo.urgency)}</span>
+                </div>
+                <div class="row-actions">
+                  <button type="button" data-account-action="${escapeHtml(todo.action)}">${escapeHtml(todo.button)}</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
         </div>
         ${renderKeyValueTable([
           { label: 'Recovery chance', value: item.recoveryBand?.label || 'Needs review' },
@@ -465,7 +680,7 @@
             ${(item.diagnosis?.needed || ['Review billing page']).map((entry) => `<li>${escapeHtml(entry)}</li>`).join('')}
           </ul>
         </div>
-        <div>
+        <div id="repair-account-panel">
           <strong>Repair account</strong>
           ${renderRepairPanel(item)}
         </div>
@@ -514,6 +729,30 @@
         renderAccountBoard();
       });
     }
+    detail.querySelectorAll('[data-account-action]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const action = button.getAttribute('data-account-action');
+        if (action === 'repair') {
+          document.getElementById('repair-account-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const focusTarget =
+            document.getElementById('repair-client-billing-status')
+            || document.getElementById('repair-bill-provider-type')
+            || document.getElementById('repair-insurance-name')
+            || document.getElementById('repair-member-id')
+            || document.getElementById('repair-payment-status');
+          focusTarget?.focus?.();
+          return;
+        }
+        if (action === 'inspect') {
+          await inspectSelectedAccount();
+          return;
+        }
+        if (action === 'vob') {
+          await inspectSelectedAccount();
+          useSelectedAccountInVob();
+        }
+      });
+    });
   }
 
   async function inspectSelectedAccount() {
@@ -783,46 +1022,68 @@
           <strong>Preview endpoint</strong>
           <p class="muted" style="margin-top:8px">Use <code>/api/v1/clientcare-billing/insurance/verification-preview</code> to check take/review/do-not-schedule decisions before accepting insurance clients.</p>
         </div>
-        <div class="card" style="padding:12px; background:#0f1528;">
-          <strong>Verification preview</strong>
-          <div class="grid two" style="margin-top:12px;">
-            <input id="insurance-payer-name" placeholder="Payer name">
-            <input id="insurance-member-id" placeholder="Member ID">
-            <input id="insurance-billed-amount" type="number" min="0" step="0.01" placeholder="Billed amount">
-            <input id="insurance-copay" type="number" min="0" step="0.01" placeholder="Copay">
-            <input id="insurance-deductible" type="number" min="0" step="0.01" placeholder="Deductible remaining">
-            <input id="insurance-coinsurance" type="number" min="0" step="1" placeholder="Coinsurance %">
-            <select id="insurance-coverage-active">
-              <option value="">Coverage status</option>
-              <option value="true">Active</option>
-              <option value="false">Inactive</option>
-            </select>
-            <select id="insurance-in-network">
-              <option value="">Network status</option>
-              <option value="true">In network</option>
-              <option value="false">Out of network</option>
-            </select>
-            <select id="insurance-auth-required">
-              <option value="">Authorization</option>
-              <option value="true">Required</option>
-              <option value="false">Not required</option>
-            </select>
-          </div>
-          <div style="margin-top:10px"><button id="insurance-preview-run">Run preview</button></div>
-          <div id="insurance-preview-output" style="margin-top:12px;">
-            ${lastInsurancePreview ? `
-              <div class="stack">
-                ${renderKeyValueTable([
-                  { label: 'Decision', value: lastInsurancePreview.decision || 'review' },
-                  { label: 'Confidence', value: lastInsurancePreview.confidence || 'low' },
-                  { label: 'Estimated insurer payment', value: money(lastInsurancePreview.estimated_insurance_payment || 0) },
-                  { label: 'Estimated patient responsibility', value: money(lastInsurancePreview.estimated_patient_responsibility || 0) },
-                ])}
-                <div><strong>Reasons</strong><ul class="detail-list">${(lastInsurancePreview.reasons || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>No reasons returned.</li>'}</ul></div>
-                <div><strong>Missing</strong><ul class="detail-list">${(lastInsurancePreview.missing || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>No missing fields.</li>'}</ul></div>
-              </div>
-            ` : '<p class="muted">Run a preview to see take/review/do-not-schedule guidance.</p>'}
-          </div>
+      </div>
+    `;
+  }
+
+  function renderVerificationOfBenefitsCard() {
+    ensureInsuranceDraftSeed();
+    const selectedAccount = getSelectedAccountItem();
+    const selectedLabel = selectedAccount?.client
+      ? `${selectedAccount.client}${selectedAccount.accountSummary?.insurers?.[0] ? ` · ${selectedAccount.accountSummary.insurers[0]}` : ''}`
+      : 'No account selected';
+
+    return `
+      <div class="card" id="verification-of-benefits">
+        <h2>Verification of Benefits (VOB)</h2>
+        <p class="hint" style="margin:10px 0">Use this before taking an insurance client or moving a claim forward. It is the operator-facing VOB surface, not just a raw preview endpoint.</p>
+        <div class="grid four" style="margin-bottom:12px">
+          <div class="card stat"><span>Selected account</span><strong>${escapeHtml(selectedLabel)}</strong></div>
+          <div class="card stat"><span>Payer</span><strong>${escapeHtml(lastInsuranceDraft.payer_name || 'Not entered')}</strong></div>
+          <div class="card stat"><span>Member ID</span><strong>${escapeHtml(lastInsuranceDraft.member_id || 'Not entered')}</strong></div>
+          <div class="card stat"><span>Current decision</span><strong>${escapeHtml(lastInsurancePreview?.decision || 'Not run')}</strong></div>
+        </div>
+        <div class="row-actions" style="margin-bottom:12px">
+          <button id="use-selected-account-vob" class="ghost">Use selected account</button>
+          <button id="insurance-preview-run">Run VOB</button>
+        </div>
+        <div class="grid two" style="margin-top:12px;">
+          <input id="insurance-payer-name" value="${escapeHtml(lastInsuranceDraft.payer_name || '')}" placeholder="Payer name">
+          <input id="insurance-member-id" value="${escapeHtml(lastInsuranceDraft.member_id || '')}" placeholder="Member ID">
+          <input id="insurance-billed-amount" value="${escapeHtml(lastInsuranceDraft.billed_amount || '')}" type="number" min="0" step="0.01" placeholder="Billed amount">
+          <input id="insurance-copay" value="${escapeHtml(lastInsuranceDraft.copay || '')}" type="number" min="0" step="0.01" placeholder="Copay">
+          <input id="insurance-deductible" value="${escapeHtml(lastInsuranceDraft.deductible_remaining || '')}" type="number" min="0" step="0.01" placeholder="Deductible remaining">
+          <input id="insurance-coinsurance" value="${escapeHtml(lastInsuranceDraft.coinsurance_pct || '')}" type="number" min="0" step="1" placeholder="Coinsurance %">
+          <select id="insurance-coverage-active">
+            <option value="" ${!String(lastInsuranceDraft.coverage_active || '').trim() ? 'selected' : ''}>Coverage status</option>
+            <option value="true" ${String(lastInsuranceDraft.coverage_active) === 'true' ? 'selected' : ''}>Active</option>
+            <option value="false" ${String(lastInsuranceDraft.coverage_active) === 'false' ? 'selected' : ''}>Inactive</option>
+          </select>
+          <select id="insurance-in-network">
+            <option value="" ${!String(lastInsuranceDraft.in_network || '').trim() ? 'selected' : ''}>Network status</option>
+            <option value="true" ${String(lastInsuranceDraft.in_network) === 'true' ? 'selected' : ''}>In network</option>
+            <option value="false" ${String(lastInsuranceDraft.in_network) === 'false' ? 'selected' : ''}>Out of network</option>
+          </select>
+          <select id="insurance-auth-required">
+            <option value="" ${!String(lastInsuranceDraft.auth_required || '').trim() ? 'selected' : ''}>Authorization</option>
+            <option value="true" ${String(lastInsuranceDraft.auth_required) === 'true' ? 'selected' : ''}>Required</option>
+            <option value="false" ${String(lastInsuranceDraft.auth_required) === 'false' ? 'selected' : ''}>Not required</option>
+          </select>
+        </div>
+        <div id="insurance-preview-output" style="margin-top:12px;">
+          ${lastInsurancePreview ? `
+            <div class="stack">
+              ${renderKeyValueTable([
+                { label: 'Decision', value: lastInsurancePreview.decision || 'review' },
+                { label: 'Confidence', value: lastInsurancePreview.confidence || 'low' },
+                { label: 'Estimated insurer payment', value: money(lastInsurancePreview.estimated_insurance_payment || 0) },
+                { label: 'Estimated patient responsibility', value: money(lastInsurancePreview.estimated_patient_responsibility || 0) },
+                { label: 'Estimation basis', value: lastInsurancePreview.estimation_basis || 'No basis returned' },
+              ])}
+              <div><strong>Reasons</strong><ul class="detail-list">${(lastInsurancePreview.reasons || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>No reasons returned.</li>'}</ul></div>
+              <div><strong>Missing</strong><ul class="detail-list">${(lastInsurancePreview.missing || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>No missing fields.</li>'}</ul></div>
+            </div>
+          ` : '<p class="muted">Run VOB to see take/review/do-not-schedule guidance.</p>'}
         </div>
       </div>
     `;
@@ -2167,16 +2428,17 @@
   async function runInsurancePreview() {
     try {
       const parseBool = (value) => value === 'true' ? true : value === 'false' ? false : null;
+      const draft = syncInsuranceDraftFromDom();
       const payload = {
-        payer_name: document.getElementById('insurance-payer-name')?.value || '',
-        member_id: document.getElementById('insurance-member-id')?.value || '',
-        billed_amount: Number(document.getElementById('insurance-billed-amount')?.value || 0) || null,
-        copay: Number(document.getElementById('insurance-copay')?.value || 0) || null,
-        deductible_remaining: Number(document.getElementById('insurance-deductible')?.value || 0) || null,
-        coinsurance_pct: Number(document.getElementById('insurance-coinsurance')?.value || 0) || null,
-        coverage_active: parseBool(document.getElementById('insurance-coverage-active')?.value || ''),
-        in_network: parseBool(document.getElementById('insurance-in-network')?.value || ''),
-        auth_required: parseBool(document.getElementById('insurance-auth-required')?.value || ''),
+        payer_name: draft.payer_name || '',
+        member_id: draft.member_id || '',
+        billed_amount: Number(draft.billed_amount || 0) || null,
+        copay: Number(draft.copay || 0) || null,
+        deductible_remaining: Number(draft.deductible_remaining || 0) || null,
+        coinsurance_pct: Number(draft.coinsurance_pct || 0) || null,
+        coverage_active: parseBool(draft.coverage_active || ''),
+        in_network: parseBool(draft.in_network || ''),
+        auth_required: parseBool(draft.auth_required || ''),
       };
       const result = await api('/api/v1/clientcare-billing/insurance/verification-preview', {
         method: 'POST',
@@ -2457,9 +2719,11 @@
 
       <div class="workspace ${assistantPinned ? 'assistant-pinned' : 'assistant-floating'}">
         <div class="main-workspace">
+          ${renderVerificationOfBenefitsCard()}
+
           <div class="grid two">
             <div class="card">
-              <h2>Today’s Focus</h2>
+              <h2>Today's Focus</h2>
               <p class="hint" style="margin:10px 0">Start here. Highest-value accounts first.</p>
               ${renderTodaysFocus()}
             </div>
@@ -2655,6 +2919,13 @@
       if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') sendAssistantMessage();
     });
     initAssistantVoice();
+    const useSelectedAccountVobButton = document.getElementById('use-selected-account-vob');
+    if (useSelectedAccountVobButton) {
+      useSelectedAccountVobButton.addEventListener('click', async () => {
+        await inspectSelectedAccount();
+        useSelectedAccountInVob();
+      });
+    }
     const insurancePreviewButton = document.getElementById('insurance-preview-run');
     if (insurancePreviewButton) insurancePreviewButton.addEventListener('click', runInsurancePreview);
     const repairPreviewButton = document.getElementById('repair-preview-run');
