@@ -46,6 +46,61 @@
   let lastAssistantVoiceKey = '';
   let assistantVoiceReady = false;
 
+  // ── Toast notifications (replaces alert()) ──────────────────────────────
+  let toastContainer = null;
+  function toast(message, type = 'info') {
+    if (!toastContainer) {
+      toastContainer = document.createElement('div');
+      toastContainer.style.cssText = 'position:fixed;top:20px;right:20px;z-index:9999;display:grid;gap:10px;max-width:360px;';
+      document.body.appendChild(toastContainer);
+    }
+    const el = document.createElement('div');
+    const colors = { info: '#1e3a5f', success: '#113b2d', warn: '#4a3a12', error: '#4a1f28' };
+    const borders = { info: '#3a5f8f', success: '#26c281', warn: '#f0b429', error: '#ef476f' };
+    el.style.cssText = `background:${colors[type]||colors.info};border:1px solid ${borders[type]||borders.info};border-radius:12px;padding:12px 16px;color:#edf2f7;font-size:14px;line-height:1.5;box-shadow:0 8px 24px rgba(0,0,0,.4);cursor:pointer;`;
+    el.textContent = message;
+    el.addEventListener('click', () => el.remove());
+    toastContainer.appendChild(el);
+    setTimeout(() => el.remove(), type === 'error' ? 8000 : 5000);
+  }
+
+  // ── Setup status helpers ─────────────────────────────────────────────────
+  function getSetupSteps() {
+    const hasKey = Boolean(getApiKey().trim());
+    const hasData = Boolean(lastAccountReport?.items?.length);
+    const browserReady = Boolean(window._ccBrowserReady);
+    return [
+      { id: 'key', done: hasKey, label: 'API key saved', action: 'Enter your Command key in the field above and click Save access', actionLabel: null },
+      { id: 'browser', done: browserReady, label: 'ClientCare connected', action: 'Open Tools below → click Login Test. If it fails, set CC_USER and CC_PASS in Railway env vars first.', actionLabel: 'Open Tools' },
+      { id: 'data', done: hasData, label: 'Account data loaded', action: 'Open Tools below → click Full Queue Report to pull all accounts from ClientCare into the dashboard.', actionLabel: 'Open Tools' },
+    ];
+  }
+
+  function renderSetupStrip() {
+    const steps = getSetupSteps();
+    const allDone = steps.every((s) => s.done);
+    if (allDone) return '';
+    return `
+      <div style="background:#131a2e;border:1px solid #3a4f7a;border-radius:14px;padding:16px;margin-bottom:4px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <strong style="color:#8aa4ff;font-size:12px;text-transform:uppercase;letter-spacing:.08em;">Setup checklist</strong>
+          <span class="muted small">Complete these 3 steps to populate the dashboard</span>
+        </div>
+        <div style="display:grid;gap:10px;">
+          ${steps.map((step, i) => `
+            <div style="display:flex;gap:12px;align-items:flex-start;">
+              <div style="width:24px;height:24px;border-radius:999px;border:2px solid ${step.done ? '#26c281' : '#3a4f7a'};background:${step.done ? '#113b2d' : 'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;color:${step.done ? '#7ef0b8' : '#98a5c3'};">${step.done ? '✓' : i + 1}</div>
+              <div>
+                <div style="font-weight:600;color:${step.done ? '#7ef0b8' : '#edf2f7'}">${escapeHtml(step.label)}${step.done ? '' : ''}</div>
+                ${!step.done ? `<div class="muted small" style="margin-top:4px;">${escapeHtml(step.action)}</div>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
   function getApiKey() {
     return localStorage.getItem('COMMAND_CENTER_KEY') || localStorage.getItem('lifeos_cmd_key') || localStorage.getItem('x_api_key') || '';
   }
@@ -368,20 +423,20 @@
 
   function renderFilterBar() {
     const filters = [
-      ['operator', 'Needs Me'],
-      ['watch', 'Watching'],
-      ['healthy', 'Healthy'],
-      ['all', 'All'],
-      ['strong', 'Strong Chance'],
-      ['insurance', 'Insurance Setup'],
-      ['missing', 'Missing Insurance'],
-      ['client_match', 'Client Match'],
-      ['oldest', 'Oldest'],
+      ['operator', 'Needs Me', 'Accounts where the billing coordinator must take action right now — red status, blocked, or overdue'],
+      ['watch', 'Watching', 'Yellow-status accounts — no immediate action required but need to be monitored closely'],
+      ['healthy', 'Healthy', 'Green accounts — claims are progressing normally, nothing blocking'],
+      ['all', 'All', 'Show every account regardless of status'],
+      ['strong', 'Strong Chance', 'Accounts most likely to be collected — prioritize these when working the backlog'],
+      ['insurance', 'Insurance Setup', 'Accounts with insurance configuration problems that are blocking billing entirely'],
+      ['missing', 'Missing Insurance', 'Accounts with no insurance on file at all — cannot bill until insurance is added'],
+      ['client_match', 'Client Match', 'Accounts where the patient name or DOB in ClientCare does not match the insurance record'],
+      ['oldest', 'Oldest', 'All accounts sorted by oldest first — useful for finding claims approaching timely-filing deadlines'],
     ];
     return `
       <div class="filter-bar">
-        ${filters.map(([value, label]) => `
-          <button class="${accountFilter === value ? '' : 'ghost'}" data-account-filter="${value}">${escapeHtml(label)}</button>
+        ${filters.map(([value, label, tip]) => `
+          <button class="${accountFilter === value ? '' : 'ghost'}" data-account-filter="${value}" data-tip="${escapeHtml(tip)}">${escapeHtml(label)}</button>
         `).join('')}
       </div>
     `;
@@ -562,7 +617,13 @@
           `).join('')}
         </tbody>
       </table>
-    ` : '<p class="muted">No focus list yet.</p>';
+    ` : `
+      <div style="text-align:center;padding:20px 0;">
+        <p class="muted" style="margin-bottom:12px;">No accounts loaded yet.</p>
+        <p class="muted small" style="margin-bottom:16px;">Open <strong style="color:#edf2f7">Tools</strong> below → click <strong style="color:#edf2f7">Full Queue Report</strong> to pull accounts from ClientCare.</p>
+        <button class="ghost" onclick="document.querySelector('.tools-card')?.setAttribute('open',''); document.querySelector('.tools-card')?.scrollIntoView({behavior:'smooth'})">Open Tools ↓</button>
+      </div>
+    `;
   }
 
   function renderAccountBoard() {
@@ -572,8 +633,18 @@
 
     const items = getFilteredItems();
     if (!items.length) {
-      container.innerHTML = `${renderFilterBar()}<p class="muted">No accounts match this view right now.</p>`;
-      detail.innerHTML = '<p class="muted">Choose another filter or wait for live billing data to refresh.</p>';
+      const noData = !(lastAccountReport?.items?.length);
+      container.innerHTML = `${renderFilterBar()}
+        <div style="text-align:center;padding:24px 0;">
+          ${noData
+            ? `<p class="muted" style="margin-bottom:12px;">No account data loaded yet.</p>
+               <p class="muted small" style="margin-bottom:16px;">Open Tools below → <strong style="color:#edf2f7">Full Queue Report</strong> to pull all ClientCare accounts.</p>
+               <button class="ghost" onclick="document.querySelector('.tools-card')?.setAttribute('open',''); document.querySelector('.tools-card')?.scrollIntoView({behavior:'smooth'})">Open Tools ↓</button>`
+            : `<p class="muted">No accounts match the current filter.</p>
+               <p class="muted small" style="margin-top:8px;">Try <strong style="color:#edf2f7">All</strong> to see everything.</p>`
+          }
+        </div>`;
+      detail.innerHTML = '';
       return;
     }
 
@@ -1035,7 +1106,7 @@
 
     return `
       <div class="card" id="verification-of-benefits">
-        <h2>Verification of Benefits (VOB)</h2>
+        <h2 data-tip="Before scheduling an insurance patient, fill in their plan details and click Run VOB. The system analyzes coverage, network status, and authorization requirements to give you a Take / Review / Do Not Schedule decision with estimated payment amounts.">Verification of Benefits (VOB)</h2>
         <p class="hint" style="margin:10px 0">Use this before taking an insurance client or moving a claim forward. It is the operator-facing VOB surface, not just a raw preview endpoint.</p>
         <div class="grid four" style="margin-bottom:12px">
           <div class="card stat"><span>Selected account</span><strong>${escapeHtml(selectedLabel)}</strong></div>
@@ -1071,19 +1142,48 @@
           </select>
         </div>
         <div id="insurance-preview-output" style="margin-top:12px;">
-          ${lastInsurancePreview ? `
-            <div class="stack">
-              ${renderKeyValueTable([
-                { label: 'Decision', value: lastInsurancePreview.decision || 'review' },
-                { label: 'Confidence', value: lastInsurancePreview.confidence || 'low' },
-                { label: 'Estimated insurer payment', value: money(lastInsurancePreview.estimated_insurance_payment || 0) },
-                { label: 'Estimated patient responsibility', value: money(lastInsurancePreview.estimated_patient_responsibility || 0) },
-                { label: 'Estimation basis', value: lastInsurancePreview.estimation_basis || 'No basis returned' },
-              ])}
-              <div><strong>Reasons</strong><ul class="detail-list">${(lastInsurancePreview.reasons || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>No reasons returned.</li>'}</ul></div>
-              <div><strong>Missing</strong><ul class="detail-list">${(lastInsurancePreview.missing || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('') || '<li>No missing fields.</li>'}</ul></div>
-            </div>
-          ` : '<p class="muted">Run VOB to see take/review/do-not-schedule guidance.</p>'}
+          ${lastInsurancePreview ? (() => {
+            const dec = (lastInsurancePreview.decision || 'review').toLowerCase();
+            const isTake = dec === 'take' || dec === 'accept';
+            const isDNS = dec.includes('not') || dec === 'deny' || dec === 'decline';
+            const bg = isTake ? '#0d2e1f' : isDNS ? '#2a0f15' : '#2a2010';
+            const border = isTake ? '#26c281' : isDNS ? '#ef476f' : '#f0b429';
+            const iconColor = isTake ? '#7ef0b8' : isDNS ? '#ff9db0' : '#ffd666';
+            const icon = isTake ? '✓' : isDNS ? '✗' : '!';
+            const label = isTake ? 'TAKE' : isDNS ? 'DO NOT SCHEDULE' : 'REVIEW REQUIRED';
+            const conf = (lastInsurancePreview.confidence || 'low').toUpperCase();
+            const confColor = conf === 'HIGH' ? '#7ef0b8' : conf === 'MEDIUM' ? '#ffd666' : '#ff9db0';
+            return `
+            <div style="background:${bg};border:2px solid ${border};border-radius:14px;padding:16px;display:grid;gap:12px;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:44px;height:44px;border-radius:50%;background:${border}22;border:2px solid ${border};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:${iconColor};flex-shrink:0;">${icon}</div>
+                <div>
+                  <div style="font-size:22px;font-weight:800;color:${iconColor};letter-spacing:.03em;">${label}</div>
+                  <div style="font-size:12px;color:#98a5c3;margin-top:2px;">Confidence: <span style="color:${confColor};font-weight:600;">${conf}</span> &nbsp;·&nbsp; Basis: ${escapeHtml(lastInsurancePreview.estimation_basis || 'Not provided')}</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div style="background:#0f1528;border:1px solid #27304a;border-radius:10px;padding:12px;" data-tip="Estimated amount the insurance carrier will pay based on the plan details you entered">
+                  <div style="font-size:11px;color:#98a5c3;margin-bottom:4px;">Insurer pays</div>
+                  <div style="font-size:20px;font-weight:700;color:#edf2f7;">${escapeHtml(money(lastInsurancePreview.estimated_insurance_payment || 0))}</div>
+                </div>
+                <div style="background:#0f1528;border:1px solid #27304a;border-radius:10px;padding:12px;" data-tip="Estimated out-of-pocket amount the patient owes after insurance">
+                  <div style="font-size:11px;color:#98a5c3;margin-bottom:4px;">Patient owes</div>
+                  <div style="font-size:20px;font-weight:700;color:#edf2f7;">${escapeHtml(money(lastInsurancePreview.estimated_patient_responsibility || 0))}</div>
+                </div>
+              </div>
+              ${(lastInsurancePreview.reasons || []).length ? `
+              <div>
+                <div style="font-size:11px;font-weight:600;color:#98a5c3;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Reasons</div>
+                <ul class="detail-list" style="margin:0;">${(lastInsurancePreview.reasons || []).map((r) => `<li style="color:#edf2f7;">${escapeHtml(r)}</li>`).join('')}</ul>
+              </div>` : ''}
+              ${(lastInsurancePreview.missing || []).length ? `
+              <div style="background:#2a2010;border:1px solid #f0b42966;border-radius:10px;padding:12px;">
+                <div style="font-size:11px;font-weight:600;color:#ffd666;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">⚠ Missing info — get these before scheduling</div>
+                <ul class="detail-list" style="margin:0;">${(lastInsurancePreview.missing || []).map((m) => `<li style="color:#ffd666;">${escapeHtml(m)}</li>`).join('')}</ul>
+              </div>` : ''}
+            </div>`;
+          })() : '<p class="muted small" style="padding:12px 0;">Run a VOB check above to see an AI-powered take/review/do-not-schedule decision with estimated payment amounts.</p>'}
         </div>
       </div>
     `;
@@ -1843,31 +1943,31 @@
 
   async function importCsv() {
     const csv = document.getElementById('csv-input').value;
-    if (!csv.trim()) return alert('Paste CSV first.');
+    if (!csv.trim()) return toast('Paste CSV first.', "error");
     try {
       await api('/api/v1/clientcare-billing/claims/import-csv', {
         method: 'POST',
         body: JSON.stringify({ csv, source: 'overlay_csv_import' }),
       });
-      alert('CSV imported.');
+      toast('CSV imported.', "success");
       await loadDashboard();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
   async function importPaymentHistoryCsv() {
     const csv = document.getElementById('payment-history-input')?.value || '';
-    if (!csv.trim()) return alert('Paste payment history / ERA CSV first.');
+    if (!csv.trim()) return toast('Paste payment history / ERA CSV first.', "error");
     try {
       const result = await api('/api/v1/clientcare-billing/history/import-csv', {
         method: 'POST',
         body: JSON.stringify({ csv, source: 'overlay_payment_history_import' }),
       });
-      alert(`Imported ${result.imported || 0} payment-history rows.`);
+      toast(`Imported ${result.imported || 0} payment-history rows.`, "success");
       await loadDashboard({}, { skipAutoFullQueue: true });
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -1894,7 +1994,7 @@
       lastPatientArPolicy = result;
       await loadDashboard({}, { skipAutoFullQueue: true });
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -1919,13 +2019,13 @@
       `;
       await loadDashboard({}, { skipAutoFullQueue: true });
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
   async function importSnapshot() {
     const text = document.getElementById('snapshot-input').value;
-    if (!text.trim()) return alert('Paste snapshot text or HTML first.');
+    if (!text.trim()) return toast('Paste snapshot text or HTML first.', "error");
     const payload = {
       source: 'overlay_snapshot_import',
       html: /<table|<tr|<td|<th/i.test(text) ? text : '',
@@ -1936,15 +2036,15 @@
         method: 'POST',
         body: JSON.stringify(payload),
       });
-      if (!preview.parsed) return alert('No rows parsed from snapshot.');
+      if (!preview.parsed) return toast('No rows parsed from snapshot.', "warn");
       await api('/api/v1/clientcare-billing/snapshots/import', {
         method: 'POST',
         body: JSON.stringify(payload),
       });
-      alert(`Imported ${preview.parsed} rows from snapshot.`);
+      toast(`Imported ${preview.parsed} rows from snapshot.`, "success");
       await loadDashboard();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -1955,9 +2055,9 @@
         body: JSON.stringify({}),
       });
       setBrowserOutput(result);
-      alert('Browser login test completed.');
+      toast('Browser login test completed.', "success");
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -1972,9 +2072,9 @@
         }),
       });
       setBrowserOutput(result);
-      alert('Browser discovery completed.');
+      toast('Browser discovery completed.', "success");
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -1982,9 +2082,9 @@
     try {
       const result = await api('/api/v1/clientcare-billing/browser/billing-overview?page_timeout_ms=12000');
       setBrowserOutput(result);
-      alert('Billing overview loaded.');
+      toast('Billing overview loaded.', "info");
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -1992,9 +2092,9 @@
     try {
       const result = await api('/api/v1/clientcare-billing/browser/scan-billing-notes?page_timeout_ms=12000');
       setBrowserOutput(result);
-      alert('Billing notes scan completed.');
+      toast('Billing notes scan completed.', "success");
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2011,9 +2111,9 @@
         }),
       });
       setBrowserOutput(result);
-      alert(`Scanned ${result.totalScanned || 0} client billing accounts.`);
+      toast(`Scanned ${result.totalScanned || 0} client billing accounts.`, "success");
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2031,9 +2131,9 @@
       selectedAccountIndex = 0;
       setBrowserOutput(result);
       rerender();
-      alert(`Loaded ${result.items?.length || 0} account rescue rows.`);
+      toast(`Loaded ${result.items?.length || 0} account rescue rows.`, "success");
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2062,9 +2162,9 @@
       selectedAccountIndex = 0;
       setBrowserOutput(result);
       rerender();
-      if (!silent) alert(`Loaded ${result.accounts?.length || 0} accounts from the full billing queue.`);
+      if (!silent) toast(`Loaded ${result.accounts?.length || 0} accounts from the full billing queue.`, "success");
     } catch (error) {
-      if (!silent) alert(error.message);
+      if (!silent) toast(error.message, "error");
     }
   }
 
@@ -2088,9 +2188,9 @@
       fullQueueHydrated = true;
       setBrowserOutput(result);
       rerender();
-      if (!silent) alert(`Loaded ${result.accounts?.length || 0} backlog accounts.`);
+      if (!silent) toast(`Loaded ${result.accounts?.length || 0} backlog accounts.`, "success");
     } catch (error) {
-      if (!silent) alert(error.message);
+      if (!silent) toast(error.message, "error");
     }
   }
 
@@ -2162,8 +2262,8 @@
         <div class="card assistant-card">
           <div class="account-card-top">
             <div>
-              <h2>Operations Assistant</h2>
-              <p class="muted">Direct system connection with running history.</p>
+              <h2 data-tip="Ask anything about the billing data in plain English — 'which accounts need auth before I can submit?', 'what should I work first today?', 'explain this denial reason'. It has full context of all loaded accounts.">Operations Assistant</h2>
+              <p class="muted">Ask questions about accounts, denials, or next actions in plain English.</p>
             </div>
             <div class="row-actions">
               <button id="assistant-pin-toggle" class="ghost">${escapeHtml(pinnedLabel)}</button>
@@ -2201,7 +2301,7 @@
       });
       await ensureAssistantSession();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2214,7 +2314,7 @@
       }
       rerender();
     } catch (error) {
-      if (!silent) alert(error.message);
+      if (!silent) toast(error.message, "error");
     }
   }
 
@@ -2236,13 +2336,13 @@
       setSelectedTenantId(result.tenant?.id || selectedTenantId);
       await loadDashboard({}, { skipAutoFullQueue: true });
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
   async function saveTenantOnboarding() {
     if (!selectedTenantId) {
-      alert('Save a tenant first.');
+      toast('Save a tenant first.', "error");
       return;
     }
     try {
@@ -2261,18 +2361,18 @@
       });
       await refreshPackagingOverview({ silent: false });
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
   async function saveOperatorAccess() {
     if (!selectedTenantId) {
-      alert('Save a tenant first.');
+      toast('Save a tenant first.', "error");
       return;
     }
     const operatorEmail = String(document.getElementById('operator-email')?.value || '').trim();
     if (!operatorEmail) {
-      alert('Operator email required.');
+      toast('Operator email required.', "error");
       return;
     }
     try {
@@ -2288,14 +2388,14 @@
       document.getElementById('operator-email').value = '';
       await refreshPackagingOverview({ silent: false });
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
   async function savePayerRuleOverride() {
     const payerName = String(document.getElementById('payer-rule-name')?.value || '').trim();
     if (!payerName) {
-      alert('Payer name required.');
+      toast('Payer name required.', "error");
       return;
     }
     try {
@@ -2330,7 +2430,7 @@
       if (categoryEl) categoryEl.value = '';
       await loadDashboard({}, { skipAutoFullQueue: true });
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2350,7 +2450,7 @@
       const result = await api(path);
       downloadText(`clientcare-readiness-${selectedTenantId || 'default'}.json`, JSON.stringify(result.report || result, null, 2), 'application/json;charset=utf-8');
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2367,7 +2467,7 @@
       if (!response.ok) throw new Error((await response.text()) || `HTTP ${response.status}`);
       downloadText(`clientcare-audit-${selectedTenantId || 'default'}.csv`, await response.text(), 'text/csv;charset=utf-8');
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2384,7 +2484,7 @@
       lastPackagingValidationHistory = await api(historyPath);
       rerender();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2400,10 +2500,10 @@
         }),
       });
       setBrowserOutput(result);
-      alert(importIntoQueue ? 'Browser extraction and import completed.' : 'Browser extraction preview completed.');
+      toast(importIntoQueue ? 'Browser extraction and import completed.' : 'Browser extraction preview completed.', "success");
       await loadDashboard();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2412,7 +2512,7 @@
       await api(`/api/v1/clientcare-billing/claims/${id}/reclassify`, { method: 'POST', body: JSON.stringify({ actor: 'overlay' }) });
       await loadDashboard();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2421,7 +2521,7 @@
       await api(`/api/v1/clientcare-billing/actions/${id}`, { method: 'PATCH', body: JSON.stringify({ status: 'completed' }) });
       await loadDashboard();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2447,7 +2547,7 @@
       lastInsurancePreview = result.preview || null;
       rerender();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2462,10 +2562,10 @@
         '',
         ...(result.workflow?.steps || []),
       ].filter(Boolean);
-      alert(lines.join('\n'));
+      toast(lines.join('\n', "info"));
       await browserBacklogSummary({ silent: true });
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2473,7 +2573,7 @@
     const item = getFilteredItems()?.[selectedAccountIndex];
     const billingHref = item?.billingHref || item?.raw?.billingHref || '';
     if (!billingHref) {
-      alert('No billing account selected.');
+      toast('No billing account selected.', "error");
       return;
     }
 
@@ -2508,7 +2608,7 @@
     }
 
     if (!Object.keys(updates).length) {
-      alert('Choose at least one repair field before previewing or applying.');
+      toast('Choose at least one repair field before previewing or applying.', "error");
       return;
     }
 
@@ -2530,7 +2630,7 @@
         renderAccountBoard();
       }
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2548,7 +2648,7 @@
         </div>
       `;
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2577,7 +2677,7 @@
       document.querySelector('[data-appeal-packet-queue]')?.addEventListener('click', () => queueAppealAction(id, 'appeal_packet'));
       document.querySelector('[data-appeal-followup-queue]')?.addEventListener('click', () => queueAppealAction(id, 'appeal_followup'));
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2590,7 +2690,7 @@
           action_type: actionType,
         }),
       });
-      alert(`Queued ${actionType === 'appeal_packet' ? 'appeal packet prep' : 'appeal follow-up'} for claim ${id}.`);
+      toast(`Queued ${actionType === 'appeal_packet' ? 'appeal packet prep' : 'appeal follow-up'} for claim ${id}.`, "success");
       if (result?.packet) {
         document.getElementById('claim-plan').innerHTML = `
           <h3>${escapeHtml(result.packet.claim.patient_name || result.packet.claim.claim_number || `Claim ${id}`)}</h3>
@@ -2606,7 +2706,7 @@
       }
       await loadDashboard();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2620,7 +2720,7 @@
         }),
       });
       if (result.skipped) {
-        alert(result.reason || 'This claim does not need an underpayment action.');
+        toast(result.reason || 'This claim does not need an underpayment action.', "info");
         return;
       }
       document.getElementById('claim-plan').innerHTML = `
@@ -2635,7 +2735,7 @@
       `;
       await loadDashboard();
     } catch (error) {
-      alert(error.message);
+      toast(error.message, "error");
     }
   }
 
@@ -2695,6 +2795,7 @@
     `).join('') || '<tr><td colspan="6">No open actions.</td></tr>';
 
     root.innerHTML = `
+      ${renderSetupStrip()}
       <div class="hero">
         <div>
           <div class="eyebrow">ClientCare West</div>
@@ -2747,36 +2848,36 @@
           </div>
 
           <div class="card">
-            <h2>Sellable Packaging</h2>
+            <h2 data-tip="Everything needed to hand this billing system to a new tenant — credentials, onboarding steps, operator access, and audit trail. Run this checklist before going live with a new practice.">Sellable Packaging</h2>
             <p class="hint" style="margin:10px 0">Tenant setup, onboarding, operator access, and audit trail.</p>
             <div id="packaging-overview">${renderPackagingOverview(packagingOverview)}</div>
           </div>
 
           <div class="card">
-            <h2>Live Rollout Validation</h2>
+            <h2 data-tip="Run this before going live with a new practice. It checks browser login, claim history, operator access, and audit logs to confirm everything is working. Fails loudly if something is missing.">Live Rollout Validation</h2>
             <p class="hint" style="margin:10px 0">Cross-check actual browser readiness, claim history, operator access, and audit receipts before go-live.</p>
             <div class="row-actions" style="margin-bottom:10px"><button id="packaging-validate">Run validation</button></div>
             <div id="packaging-validation">${renderPackagingValidation(packagingValidation)}</div>
           </div>
 
           <div class="card">
-            <h2>Validation Trends</h2>
+            <h2 data-tip="Tracks validation run history — shows which blockers keep appearing and whether readiness is improving over time. Useful for catching systemic setup problems.">Validation Trends</h2>
             <p class="hint" style="margin:10px 0">See repeated rollout blockers and whether readiness is improving across runs.</p>
             <div id="packaging-validation-history">${renderPackagingValidationHistory(packagingValidationHistory)}</div>
           </div>
 
           <details class="card tools-card">
-            <summary>Tools</summary>
+            <summary data-tip="Expand to access browser automation, data imports, validation, payer rules, underpayments, and appeals queues. Start with Browser automation → Full Queue Report to populate the dashboard.">Tools &amp; Data Sources ▸</summary>
             <div class="stack" style="margin-top:16px;">
               <div class="grid two">
                 <div class="card">
-                  <h2>Browser fallback readiness</h2>
+                  <h2 data-tip="Checks whether the server has credentials to log into ClientCare via browser automation. All checks must pass before the extraction buttons will work.">Browser fallback readiness</h2>
                   <p style="margin:10px 0"><span class="badge ${badgeClass(readiness.ready ? 'ready' : 'warn')}">${readiness.ready ? 'ready' : 'not ready'}</span></p>
                   ${renderReadiness(readiness)}
                 </div>
                 <div class="card">
-                  <h2>Browser automation</h2>
-                  <p class="hint" style="margin:10px 0">Diagnostics and extraction tools.</p>
+                  <h2 data-tip="Headless browser tools that log into ClientCare on your behalf and extract billing data. Requires CC_USER and CC_PASS to be set in Railway env vars. Start with Login Test to verify credentials, then Full Queue Report to populate the dashboard.">Browser automation</h2>
+                  <p class="hint" style="margin:10px 0">Start with Login Test, then Full Queue Report to populate the dashboard.</p>
                   <div class="row-actions">
                     <button id="browser-login-test" data-tip="Tests whether your ClientCare credentials (CC_USER / CC_PASS env vars) are configured correctly and can log in. Run this first.">Login Test</button>
                     <button id="browser-overview" class="ghost" data-tip="Pulls the top-level billing dashboard summary from ClientCare — totals, outstanding balances, claim counts.">Billing Overview</button>
@@ -2797,8 +2898,8 @@
 
               <div class="grid two">
                 <div class="card">
-                  <h2>Imports</h2>
-                  <p class="hint" style="margin:10px 0">Paste CSV from ClientCare exports or snapshot text as fallback.</p>
+                  <h2 data-tip="Manually import claims data when browser automation is not available. Export a CSV from ClientCare Reports, paste it below, and click Import CSV. ERA/remittance data can also be imported to improve the collections forecast.">Imports</h2>
+                  <p class="hint" style="margin:10px 0">Paste a CSV from ClientCare exports — or copy a table directly as a fallback.</p>
                   ${renderImportTemplate(templateFields)}
                   <textarea id="csv-input" placeholder="Paste claim export CSV here" data-tip="In ClientCare: go to Reports → Claims → export to CSV, then paste the entire CSV here and click Import CSV"></textarea>
                   <div style="margin-top:10px"><button id="import-csv" data-tip="Imports the pasted claims CSV — classifies each claim by rescue bucket (submit now, correct and resubmit, appeal, etc.) and adds them to the claims ledger">Import CSV</button></div>
@@ -2810,8 +2911,8 @@
                   <div style="margin-top:10px"><button id="import-snapshot" data-tip="Parses a raw copied table or any delimited text — a fallback when no CSV export is available">Import Snapshot</button></div>
                 </div>
                 <div class="card">
-                  <h2>Browser Output</h2>
-                  <div id="browser-output"><p class="muted">No browser run yet.</p></div>
+                  <h2 data-tip="Raw output from the last browser automation run — shows exactly what was extracted or what went wrong. Useful for debugging when a run produces unexpected results.">Browser Output</h2>
+                  <div id="browser-output"><p class="muted small">No browser run yet — click any automation button to see output here.</p></div>
                 </div>
               </div>
             </div>
@@ -2827,7 +2928,7 @@
               <div id="patient-ar-summary">${renderPatientArSummary(opsOverview, patientArPolicy, patientArEscalation)}</div>
             </div>
             <div class="card">
-              <h2>Claims Ledger</h2>
+              <h2 data-tip="All claims imported into the system — classified by rescue bucket (submit now, correct and resubmit, appeal, write off) with priority scores. Import claims via CSV or browser extraction above.">Claims Ledger</h2>
               <div class="stack">
                 <div class="card">
                   <h3 data-tip="The current rule the system uses to decide whether to accept a new insurance patient — based on payer history, auth requirements, and collection rates">Insurance Intake Rule</h3>
@@ -2852,11 +2953,11 @@
                   </table>
                 </div>
                 <div class="card" id="claim-plan">
-                  <h3>Claim plan</h3>
-                  <p class="muted">Select a claim to inspect its filing rule, rescue bucket, and recommended actions.</p>
+                  <h3 data-tip="Click any row in the Claims table above to see the detailed filing plan — which rescue bucket it is in, what action to take, and what evidence is needed to get it paid">Claim plan</h3>
+                  <p class="muted small">Click a claim row above to inspect its filing rule, rescue bucket, and recommended next action.</p>
                 </div>
                 <div class="card">
-                  <h3>Capability Queue</h3>
+                  <h3 data-tip="System capabilities that are not yet active — things the billing system could do once additional credentials or integrations are set up. Shows what is unlocked vs what requires more setup.">Capability Queue</h3>
                   <div id="capability-queue">${renderCapabilityQueue(opsOverview)}</div>
                 </div>
                 <div class="card">
@@ -2872,7 +2973,7 @@
                   <div id="payer-playbooks">${renderPayerPlaybooks(payerPlaybooks)}</div>
                 </div>
                 <div class="card">
-                  <h3>Payer Rule Overrides</h3>
+                  <h3 data-tip="Custom rules you have set for specific payers — overrides the default behavior. For example: always require auth for Aetna, or skip secondary billing for this payer.">Payer Rule Overrides</h3>
                   <div id="payer-rules">${renderPayerRules(payerRules)}</div>
                 </div>
                 <div class="card">
