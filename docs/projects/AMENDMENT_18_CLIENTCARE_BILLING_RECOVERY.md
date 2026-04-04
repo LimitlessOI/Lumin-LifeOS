@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-02 (VOB decision card, full tooltip coverage, toast system, setup strip)
+**Last Updated:** 2026-04-03 (managed work queue, resizable utilities sidebar, existing-client/prospect VOB flow)
 
 ---
 
@@ -324,6 +324,10 @@ Operational inputs needed regardless of integration path:
 | 2026-04-02 | VOB result replaced with color-coded decision card (TAKE/REVIEW/DO NOT SCHEDULE) with payment estimate mini-cards, reasons list, and missing-info warning block. Full tooltip coverage added to every h2/h3 and all major buttons — plain-English hover instructions throughout. Toast notification system replaces all alert() calls. Setup checklist strip guides new users through 3 required steps. All section headings updated with contextual guidance. | 3h | 3h | none | ✅ | ✅ | pending |
 | 2026-04-02 | Added a dedicated `Verification of Benefits (VOB)` workspace near the top of the billing overlay, with selected-account prefills, one-click “Use selected account,” and direct take/review/do-not-schedule output instead of leaving VOB buried as a low-signal technical preview panel | 2h | 2h | none | ✅ | ✅ | pending |
 | 2026-04-02 | Reworked the billing account board into an operator-first red/yellow/green surface with a default `Needs Me` filter, explicit ownership summaries, hover “what needs doing” guidance, and a detail-pane action list that jumps straight into repair or live inspect work | 3h | 3h | none | ✅ | ✅ | pending |
+| 2026-04-03 | Reworked the billing landing page around a system-managed work queue, moved VOB and the assistant into a resizable utility sidebar, added existing-client autocomplete plus prospect VOB mode, let missing-info follow-up route through assistant-driven text/email prompts, and collapsed advanced forecasting/ledger/rollout sections behind drill-down panels with an explicit “How to work this page” guide and system-status summary | 8h | 8h | none | ✅ | ✅ | pending |
+| 2026-04-03 | Added persistent account search across the managed queue and account board, plus explicit `System is doing next` / `You need to do next` summaries so Sherry can find any file quickly and understand exactly what the system owns versus what still needs operator judgment | 2h | 2h | none | ✅ | ✅ | pending |
+| 2026-04-03 | Added direct detail-pane workflow controls for `Refresh from ClientCare`, `Request missing info by text`, and `Request missing info by email`, plus a `Data completeness` block that makes missing payer/member/setup fields visible before Sherry decides whether to act | 2h | 2h | none | ✅ | ✅ | pending |
+| 2026-04-03 | Routed the billing chat box toward the system AI Council path for open questions (with deterministic billing workflows still answering direct operational asks first), and corrected setup guidance to the real `CLIENTCARE_BASE_URL` / `CLIENTCARE_USERNAME` / `CLIENTCARE_PASSWORD` env names | 1h | 1h | none | ✅ | ✅ | pending |
 | 2026-03-29 | Realigned billing verification to the shipped schema (`claim_status` / `rescue_bucket`, shared `conversations` + `conversation_messages`) instead of stale `status` / `bucket` and legacy `conversation_sessions` assumptions | Stop false verifier failures and keep SSOT aligned with the live claim ledger and assistant transcript storage model | 0.5h | 0.5h | none | ✅ | ✅ | pending |
 | 2026-03-27 | Added payment-history import and underpayment queue | 6h | 7h | +1h from CSV alias normalization and queue polish | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added appeals queue, packet preview, and recovery action queueing | 6h | 7h | +1h from route/UI/action wiring across queue and claim pane | ✅ | ✅ | ✅ |
@@ -347,7 +351,7 @@ Operational inputs needed regardless of integration path:
 
 **Status:** NOT_READY
 **Adaptability Score:** 67/100
-**Last Updated:** 2026-03-27
+**Last Updated:** 2026-04-03
 
 ### Gate 1 — Implementation Detail
 - [x] Both execution paths documented (API path and no-API browser fallback)

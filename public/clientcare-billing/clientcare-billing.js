@@ -22,6 +22,15 @@
   let lastPackagingValidationHistory = null;
   let lastBrowserResult = null;
   let lastViewState = null;
+  let lastVobSearch = localStorage.getItem('clientcare_vob_search') || '';
+  let lastAccountSearch = localStorage.getItem('clientcare_account_search') || '';
+  let vobMode = localStorage.getItem('clientcare_vob_mode') || 'existing';
+  let utilitySidebarCollapsed = localStorage.getItem('clientcare_utility_sidebar_collapsed') === 'true';
+  let lastProspectDraft = {
+    full_name: '',
+    phone: '',
+    email: '',
+  };
   let lastInsuranceDraft = {
     payer_name: '',
     member_id: '',
@@ -71,7 +80,7 @@
     const browserReady = Boolean(window._ccBrowserReady);
     return [
       { id: 'key', done: hasKey, label: 'API key saved', action: 'Enter your Command key in the field above and click Save access', actionLabel: null },
-      { id: 'browser', done: browserReady, label: 'ClientCare connected', action: 'Open Tools below → click Login Test. If it fails, set CC_USER and CC_PASS in Railway env vars first.', actionLabel: 'Open Tools' },
+      { id: 'browser', done: browserReady, label: 'ClientCare connected', action: 'Open Tools below → click Login Test. If it fails, set CLIENTCARE_BASE_URL, CLIENTCARE_USERNAME, and CLIENTCARE_PASSWORD in Railway env vars first.', actionLabel: 'Open Tools' },
       { id: 'data', done: hasData, label: 'Account data loaded', action: 'Open Tools below → click Full Queue Report to pull all accounts from ClientCare into the dashboard.', actionLabel: 'Open Tools' },
     ];
   }
@@ -131,6 +140,12 @@
     localStorage.setItem('clientcare_account_filter', accountFilter);
   }
 
+  function setAccountSearch(value) {
+    lastAccountSearch = String(value || '');
+    if (lastAccountSearch) localStorage.setItem('clientcare_account_search', lastAccountSearch);
+    else localStorage.removeItem('clientcare_account_search');
+  }
+
   function setAssistantPinned(value) {
     assistantPinned = Boolean(value);
     localStorage.setItem('clientcare_assistant_pinned', String(assistantPinned));
@@ -145,6 +160,21 @@
     selectedTenantId = String(value || '');
     if (selectedTenantId) localStorage.setItem('clientcare_selected_tenant_id', selectedTenantId);
     else localStorage.removeItem('clientcare_selected_tenant_id');
+  }
+
+  function setVobMode(value) {
+    vobMode = value === 'prospect' ? 'prospect' : 'existing';
+    localStorage.setItem('clientcare_vob_mode', vobMode);
+  }
+
+  function setVobSearch(value) {
+    lastVobSearch = String(value || '');
+    localStorage.setItem('clientcare_vob_search', lastVobSearch);
+  }
+
+  function setUtilitySidebarCollapsed(value) {
+    utilitySidebarCollapsed = Boolean(value);
+    localStorage.setItem('clientcare_utility_sidebar_collapsed', String(utilitySidebarCollapsed));
   }
 
   function getRepairKey(item = {}) {
@@ -166,6 +196,22 @@
 
   function getSelectedAccountItem() {
     return getFilteredItems()?.[selectedAccountIndex] || null;
+  }
+
+  function getAllAccountItems() {
+    return [...(lastAccountReport?.items || [])].sort((a, b) => String(a.client || '').localeCompare(String(b.client || '')));
+  }
+
+  function getVobMatches() {
+    const query = String(lastVobSearch || '').trim().toLowerCase();
+    if (!query) return [];
+    return getAllAccountItems()
+      .filter((item) => {
+        const payer = item.accountSummary?.insurers?.[0] || item.insurancePreview?.[0]?.insuranceName || '';
+        const memberId = item.insurancePreview?.[0]?.memberId || '';
+        return [item.client, payer, memberId].some((value) => String(value || '').toLowerCase().includes(query));
+      })
+      .slice(0, 8);
   }
 
   function saveViewState(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation, packagingValidationHistory) {
@@ -220,6 +266,7 @@
   }
 
   function summarizeHoverText(item) {
+    const execution = buildExecutionSummary(item);
     const lines = [
       item.client || 'Unknown client',
       `Status: ${item.diagnosis?.status || 'review'}`,
@@ -229,6 +276,8 @@
     const needed = item.diagnosis?.needed || [];
     if (wrong.length) lines.push(`Issue: ${wrong[0]}`);
     if (needed.length) lines.push(`Next: ${needed[0]}`);
+    if (execution.systemNext) lines.push(`System: ${execution.systemNext}`);
+    if (execution.youNext) lines.push(`You: ${execution.youNext}`);
     return lines.join('\n');
   }
 
@@ -343,6 +392,94 @@
     }];
   }
 
+  function buildExecutionSummary(item) {
+    const visual = deriveAccountVisualState(item);
+    const status = String(item.diagnosis?.status || '').toLowerCase();
+    const flags = normalizeFlagList(item);
+    const missingInsurer = !(item.accountSummary?.insurers || []).length;
+    const needed = item.diagnosis?.needed || [];
+    const wrong = item.diagnosis?.whatWentWrong || [];
+
+    let systemNext = 'Keep monitoring the account and update the queue when status changes.';
+    let youNext = 'No operator action is required right now.';
+
+    if (missingInsurer) {
+      systemNext = 'Recheck ClientCare for insurance, then request it from the client if it is still missing.';
+      youNext = 'Review the request only if the system still cannot find insurance after outreach.';
+    } else if (status === 'client_match_issue') {
+      systemNext = 'Keep the account parked until the patient and insurance record match.';
+      youNext = needed[0] || 'Confirm the correct client record before billing continues.';
+    } else if (status === 'insurance_setup_issue') {
+      systemNext = 'Pull the latest insurance data, then prepare VOB and client outreach if fields are still missing.';
+      youNext = needed[0] || 'Review the insurance setup and confirm benefits before claim work continues.';
+    } else if (status === 'billing_configuration_issue' || flags.includes('billing_status_blank') || flags.includes('bill_provider_type_blank')) {
+      systemNext = 'Hold billing submission until the account setup fields are corrected.';
+      youNext = needed[0] || 'Repair the missing billing configuration fields.';
+    } else if (visual.state === 'yellow') {
+      systemNext = needed[0] || wrong[0] || 'Track the claim and keep the next billing step moving.';
+      youNext = 'Only step in if the account turns red or a payer/client reply needs judgment.';
+    } else if (visual.state === 'green') {
+      systemNext = 'Keep the file healthy and surface any new blocker automatically.';
+      youNext = 'No action unless the system escalates the file back to you.';
+    }
+
+    return {
+      systemNext,
+      youNext,
+      blocker: wrong[0] || needed[0] || visual.summary,
+    };
+  }
+
+  function buildAccountOutreachPrompt(item, channel) {
+    const selectedInsurance = (item.insurancePreview || [])[0] || {};
+    const missing = [
+      !(item.accountSummary?.insurers || []).length && 'insurance carrier',
+      !String(selectedInsurance.memberId || '').trim() && 'member ID',
+      !String(selectedInsurance.subscriberName || '').trim() && 'subscriber name',
+      String(item.diagnosis?.status || '') === 'client_match_issue' && 'client identity match details',
+      String(item.diagnosis?.status || '') === 'insurance_setup_issue' && 'coverage effective/benefit details',
+    ].filter(Boolean);
+
+    return [
+      `Prepare and queue a ${channel} outreach for ${item.client || 'this client'}.`,
+      `Goal: unblock billing work for the selected ClientCare account.`,
+      `Current blocker: ${buildExecutionSummary(item).blocker}.`,
+      `Missing or unverified information: ${missing.length ? missing.join(', ') : 'confirm current insurance and billing details already on file'}.`,
+      `Use the client contact information already stored in ClientCare if available, then return a short outreach draft and the next system action after the reply.`,
+    ].join(' ');
+  }
+
+  function renderDataCompletenessCard(item) {
+    const selectedInsurance = (item.insurancePreview || [])[0] || {};
+    const rows = [
+      { label: 'Client name', value: item.client || '', state: item.client ? 'ok' : 'bad' },
+      { label: 'Payer', value: (item.accountSummary?.insurers || [])[0] || selectedInsurance.insuranceName || '', state: ((item.accountSummary?.insurers || [])[0] || selectedInsurance.insuranceName) ? 'ok' : 'bad' },
+      { label: 'Member ID', value: selectedInsurance.memberId || '', state: selectedInsurance.memberId ? 'ok' : 'bad' },
+      { label: 'Subscriber', value: selectedInsurance.subscriberName || '', state: selectedInsurance.subscriberName ? 'ok' : 'warn' },
+      { label: 'Billing status', value: item.accountSummary?.clientBillingStatus || '', state: item.accountSummary?.clientBillingStatus ? 'ok' : 'bad' },
+      { label: 'Provider type', value: item.accountSummary?.billProviderType || '', state: item.accountSummary?.billProviderType ? 'ok' : 'bad' },
+      { label: 'Payment status', value: item.accountSummary?.paymentStatus || '', state: item.accountSummary?.paymentStatus ? 'ok' : 'warn' },
+    ];
+    return `
+      <div class="card">
+        <strong>Data completeness</strong>
+        <div class="small muted" style="margin:8px 0 12px;">System pull first. Only request or type what could not be found in ClientCare.</div>
+        <table>
+          <thead><tr><th>Field</th><th>Current value</th><th>Status</th></tr></thead>
+          <tbody>
+            ${rows.map((row) => `
+              <tr>
+                <td>${escapeHtml(row.label)}</td>
+                <td>${escapeHtml(row.value || 'Missing')}</td>
+                <td><span class="badge ${badgeClass(row.state)}">${escapeHtml(row.value ? 'found' : (row.state === 'warn' ? 'review' : 'missing'))}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
   function buildInsuranceDraftFromAccount(item = {}) {
     const selectedInsurance = (item.insurancePreview || [])[getSelectedRepairSlot(item)] || (item.insurancePreview || [])[0] || {};
     return {
@@ -357,6 +494,22 @@
       auth_required: '',
       source_label: item.client || '',
     };
+  }
+
+  function selectAccountForVob(item) {
+    if (!item) return;
+    setAccountFilter('all');
+    const allItems = getFilteredItems();
+    const nextIndex = allItems.findIndex((entry) => entry === item || getRepairKey(entry) === getRepairKey(item));
+    if (nextIndex >= 0) selectedAccountIndex = nextIndex;
+    setVobMode('existing');
+    setVobSearch(item.client || '');
+    lastInsuranceDraft = {
+      ...lastInsuranceDraft,
+      ...buildInsuranceDraftFromAccount(item),
+      source_label: item.client || '',
+    };
+    rerender();
   }
 
   function ensureInsuranceDraftSeed() {
@@ -388,6 +541,8 @@
   function useSelectedAccountInVob() {
     const item = getSelectedAccountItem();
     if (!item) return;
+    setVobMode('existing');
+    setVobSearch(item.client || '');
     lastInsuranceDraft = {
       ...lastInsuranceDraft,
       ...buildInsuranceDraftFromAccount(item),
@@ -399,26 +554,48 @@
   function getFilteredItems() {
     const items = lastAccountReport?.items || [];
     const sorted = [...items].sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+    let filtered;
     switch (accountFilter) {
       case 'operator':
-        return sorted.filter((item) => deriveAccountVisualState(item).state === 'red');
+        filtered = sorted.filter((item) => deriveAccountVisualState(item).state === 'red');
+        break;
       case 'watch':
-        return sorted.filter((item) => deriveAccountVisualState(item).state === 'yellow');
+        filtered = sorted.filter((item) => deriveAccountVisualState(item).state === 'yellow');
+        break;
       case 'healthy':
-        return sorted.filter((item) => deriveAccountVisualState(item).state === 'green');
+        filtered = sorted.filter((item) => deriveAccountVisualState(item).state === 'green');
+        break;
       case 'strong':
-        return sorted.filter((item) => ['strong', 'possible'].includes(String(item.recoveryBand?.band || '')));
+        filtered = sorted.filter((item) => ['strong', 'possible'].includes(String(item.recoveryBand?.band || '')));
+        break;
       case 'insurance':
-        return sorted.filter((item) => String(item.diagnosis?.status || '') === 'insurance_setup_issue');
+        filtered = sorted.filter((item) => String(item.diagnosis?.status || '') === 'insurance_setup_issue');
+        break;
       case 'missing':
-        return sorted.filter((item) => !(item.accountSummary?.insurers || []).length);
+        filtered = sorted.filter((item) => !(item.accountSummary?.insurers || []).length);
+        break;
       case 'client_match':
-        return sorted.filter((item) => String(item.diagnosis?.status || '') === 'client_match_issue');
+        filtered = sorted.filter((item) => String(item.diagnosis?.status || '') === 'client_match_issue');
+        break;
       case 'oldest':
-        return sorted;
+        filtered = sorted;
+        break;
       default:
-        return sorted;
+        filtered = sorted;
+        break;
     }
+
+    const query = String(lastAccountSearch || '').trim().toLowerCase();
+    if (!query) return filtered;
+
+    return filtered.filter((item) => {
+      const insurer = (item.accountSummary?.insurers || []).join(' ');
+      const memberIds = (item.insurancePreview || []).map((insurance) => insurance.memberId || '').join(' ');
+      const note = item.notePreview || '';
+      const needed = (item.diagnosis?.needed || []).join(' ');
+      const wrong = (item.diagnosis?.whatWentWrong || []).join(' ');
+      return [item.client, insurer, memberIds, note, needed, wrong].some((value) => String(value || '').toLowerCase().includes(query));
+    });
   }
 
   function renderFilterBar() {
@@ -438,6 +615,30 @@
         ${filters.map(([value, label, tip]) => `
           <button class="${accountFilter === value ? '' : 'ghost'}" data-account-filter="${value}" data-tip="${escapeHtml(tip)}">${escapeHtml(label)}</button>
         `).join('')}
+      </div>
+    `;
+  }
+
+  function renderAccountSearchBar() {
+    const total = lastAccountReport?.items?.length || 0;
+    const visible = getFilteredItems().length;
+    return `
+      <div class="card">
+        <div class="grid two" style="align-items:end;">
+          <label class="stack">
+            <span class="muted">Find an account</span>
+            <input
+              id="account-search"
+              value="${escapeHtml(lastAccountSearch)}"
+              placeholder="Search client, payer, member ID, note, or blocker"
+              data-tip="Type any part of the client name, payer, member ID, or blocker. The queue and account board will shrink as you type."
+            >
+          </label>
+          <div class="row-actions" style="justify-content:flex-end;">
+            <div class="small muted" style="margin-right:8px;">Showing ${escapeHtml(visible)} of ${escapeHtml(total)} accounts</div>
+            <button id="account-search-clear" class="ghost">Clear search</button>
+          </div>
+        </div>
       </div>
     `;
   }
@@ -626,6 +827,103 @@
     `;
   }
 
+  function renderManagedWorkQueue() {
+    const items = [...getFilteredItems()];
+    const queue = items
+      .map((item) => {
+        const visual = deriveAccountVisualState(item);
+        const todo = buildAccountTodoItems(item)[0] || null;
+        return {
+          item,
+          visual,
+          todo,
+          stage: deriveAccountStage(item),
+        };
+      })
+      .sort((a, b) => {
+        const av = ['red', 'yellow', 'green'].indexOf(a.visual.state);
+        const bv = ['red', 'yellow', 'green'].indexOf(b.visual.state);
+        if (av !== bv) return av - bv;
+        return String(a.item.client || '').localeCompare(String(b.item.client || ''));
+      });
+
+    const counts = queue.reduce((acc, entry) => {
+      acc[entry.visual.state] = (acc[entry.visual.state] || 0) + 1;
+      return acc;
+    }, { red: 0, yellow: 0, green: 0 });
+
+    const rows = queue.slice(0, 8).map(({ item, visual, todo, stage }, index) => {
+      const execution = buildExecutionSummary(item);
+      return `
+      <tr>
+        <td>
+          <strong>${escapeHtml(item.client || 'Unknown client')}</strong>
+          <div class="small muted">${escapeHtml(item.accountSummary?.insurers?.[0] || 'Payer not visible')}</div>
+        </td>
+        <td><span class="badge ${badgeClass(visual.state)}">${escapeHtml(visual.owner)}</span></td>
+        <td>${escapeHtml(todo?.label || visual.summary)}</td>
+        <td class="small muted">${escapeHtml(execution.systemNext)}</td>
+        <td>${escapeHtml(stage.label)}</td>
+        <td><button data-work-queue-index="${index}" class="ghost">Open</button></td>
+      </tr>
+    `;
+    }).join('');
+
+    return `
+      <div class="card">
+        <h2 data-tip="This is the operator starting point. Red means you need to act. Yellow means the system is monitoring or waiting. Green means no immediate action is needed.">Managed Work Queue</h2>
+        <p class="hint" style="margin:10px 0">Start here. The system manages the work and shows where you are needed.</p>
+        <div class="grid four" style="margin-bottom:12px;">
+          <div class="card stat"><span>Needs me</span><strong>${escapeHtml(counts.red || 0)}</strong></div>
+          <div class="card stat"><span>System watching</span><strong>${escapeHtml(counts.yellow || 0)}</strong></div>
+          <div class="card stat"><span>Healthy</span><strong>${escapeHtml(counts.green || 0)}</strong></div>
+          <div class="card stat"><span>Total active</span><strong>${escapeHtml(queue.length)}</strong></div>
+        </div>
+        <table>
+          <thead><tr><th>Account</th><th>Owner</th><th>Your next step</th><th>System is doing</th><th>Stage</th><th></th></tr></thead>
+          <tbody>
+            ${rows || '<tr><td colspan="6">No billing accounts loaded yet.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function renderOperatorGuide() {
+    return `
+      <div class="card">
+        <h2 data-tip="This is the shortest path for a billing coordinator: start in the managed queue, open the red items first, let the system pull data from ClientCare, and only type information when it could not be found or requested automatically.">How to work this page</h2>
+        <div class="grid four" style="margin-top:12px; margin-bottom:0;">
+          <div class="card stat"><span>1. Start here</span><strong>Managed queue</strong><div class="small muted" style="margin-top:6px;">Red = you act. Yellow = system watches. Green = healthy.</div></div>
+          <div class="card stat"><span>2. Open file</span><strong>Review next action</strong><div class="small muted" style="margin-top:6px;">Each account tells you what is wrong and what happens next.</div></div>
+          <div class="card stat"><span>3. Let system pull</span><strong>ClientCare first</strong><div class="small muted" style="margin-top:6px;">Use VOB search or refresh from ClientCare before typing anything.</div></div>
+          <div class="card stat"><span>4. Escalate gaps</span><strong>Request by text/email</strong><div class="small muted" style="margin-top:6px;">If data is missing, ask the system to request it from the client.</div></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSystemStatusSummary() {
+    const items = lastAccountReport?.items || [];
+    const red = items.filter((item) => deriveAccountVisualState(item).state === 'red').length;
+    const yellow = items.filter((item) => deriveAccountVisualState(item).state === 'yellow').length;
+    const green = items.filter((item) => deriveAccountVisualState(item).state === 'green').length;
+    const setupIssues = items.filter((item) => String(item.diagnosis?.status || '') === 'insurance_setup_issue').length;
+    const clientMatch = items.filter((item) => String(item.diagnosis?.status || '') === 'client_match_issue').length;
+    return `
+      <div class="card">
+        <h2 data-tip="This tells Sherry how the system is doing overall without making her read the raw ledger. It separates work she owns from work the system is already tracking.">System status</h2>
+        <div class="grid four" style="margin-top:12px; margin-bottom:0;">
+          <div class="card stat"><span>Needs operator</span><strong>${escapeHtml(red)}</strong></div>
+          <div class="card stat"><span>System monitoring</span><strong>${escapeHtml(yellow)}</strong></div>
+          <div class="card stat"><span>Healthy files</span><strong>${escapeHtml(green)}</strong></div>
+          <div class="card stat"><span>Missing/setup blockers</span><strong>${escapeHtml(setupIssues + clientMatch)}</strong></div>
+        </div>
+        <div class="small muted" style="margin-top:12px;">Goal: keep operator-owned work low, move monitor-only work to the system, and only surface red when Sherry actually needs to act.</div>
+      </div>
+    `;
+  }
+
   function renderAccountBoard() {
     const container = document.getElementById('account-board');
     const detail = document.getElementById('account-detail');
@@ -654,6 +952,7 @@
       const stage = deriveAccountStage(item);
       const visual = deriveAccountVisualState(item);
       const todos = buildAccountTodoItems(item);
+      const execution = buildExecutionSummary(item);
       const selected = index === selectedAccountIndex;
       return `
         <button
@@ -671,6 +970,7 @@
             <span class="badge ${badgeClass(visual.state)}">${escapeHtml(visual.state)}</span>
           </div>
           <div class="muted small">${escapeHtml(visual.summary)}</div>
+          <div class="muted small" style="margin-top:6px;">System: ${escapeHtml(execution.systemNext)}</div>
           <div class="progress-label">
             <span>${escapeHtml(stage.label)}</span>
             <span>${escapeHtml(`${stage.percent}%`)}</span>
@@ -694,6 +994,7 @@
     const item = items[selectedAccountIndex];
     const visual = deriveAccountVisualState(item);
     const todoItems = buildAccountTodoItems(item);
+    const execution = buildExecutionSummary(item);
     detail.innerHTML = `
       <div class="stack">
         <div class="account-detail-header">
@@ -708,9 +1009,25 @@
           <div class="card stat"><span>What needs doing</span><strong>${escapeHtml(visual.summary)}</strong></div>
           <div class="card stat"><span>Recovery stage</span><strong>${escapeHtml(deriveAccountStage(item).label)}</strong></div>
         </div>
+        <div class="grid two">
+          <div class="card">
+            <div class="muted">System is doing next</div>
+            <strong style="display:block;margin-top:8px;">${escapeHtml(execution.systemNext)}</strong>
+            <div class="small muted" style="margin-top:8px;">The portal should keep this moving without asking Sherry to retype data.</div>
+          </div>
+          <div class="card">
+            <div class="muted">You need to do next</div>
+            <strong style="display:block;margin-top:8px;">${escapeHtml(execution.youNext)}</strong>
+            <div class="small muted" style="margin-top:8px;">Only act here if the file is blocked on judgment, approval, or a missing repair the system could not finish.</div>
+          </div>
+        </div>
         <div class="row-actions">
           <button type="button" data-account-action="vob" class="ghost">Use this account in VOB</button>
+          <button type="button" data-account-action="refresh" class="ghost">Refresh from ClientCare</button>
+          <button type="button" data-account-action="request_text" class="ghost">Request missing info by text</button>
+          <button type="button" data-account-action="request_email" class="ghost">Request missing info by email</button>
         </div>
+        ${renderDataCompletenessCard(item)}
         <div class="card">
           <strong>Action list</strong>
           <div class="stack" style="margin-top:10px">
@@ -821,6 +1138,30 @@
         if (action === 'vob') {
           await inspectSelectedAccount();
           useSelectedAccountInVob();
+          return;
+        }
+        if (action === 'refresh') {
+          item._inspected = false;
+          await inspectSelectedAccount();
+          toast('Refreshed the selected account from ClientCare.', 'success');
+          return;
+        }
+        if (action === 'request_text') {
+          try {
+            await sendAssistantPrompt(buildAccountOutreachPrompt(item, 'text message'));
+            toast('Queued a client text request from the selected account.', 'success');
+          } catch (error) {
+            toast(error.message, 'error');
+          }
+          return;
+        }
+        if (action === 'request_email') {
+          try {
+            await sendAssistantPrompt(buildAccountOutreachPrompt(item, 'email'));
+            toast('Queued a client email request from the selected account.', 'success');
+          } catch (error) {
+            toast(error.message, 'error');
+          }
         }
       });
     });
@@ -850,6 +1191,30 @@
     } catch (_) {
       item._inspected = true;
     }
+  }
+
+  function buildVobOutreachPrompt(channel) {
+    const selectedAccount = getSelectedAccountItem();
+    const missing = [
+      !String(lastInsuranceDraft.payer_name || '').trim() && 'payer name',
+      !String(lastInsuranceDraft.member_id || '').trim() && 'member ID',
+      !String(lastInsuranceDraft.coverage_active || '').trim() && 'coverage status',
+      !String(lastInsuranceDraft.in_network || '').trim() && 'network status',
+      !String(lastInsuranceDraft.auth_required || '').trim() && 'authorization status',
+    ].filter(Boolean);
+    const subject = vobMode === 'prospect'
+      ? (lastProspectDraft.full_name || 'New prospect')
+      : (selectedAccount?.client || 'Selected client');
+    const contactLine = vobMode === 'prospect'
+      ? `Prospect contact: phone=${lastProspectDraft.phone || 'unknown'}, email=${lastProspectDraft.email || 'unknown'}.`
+      : `Use the client contact information already on file in ClientCare.`;
+    return [
+      `Prepare and queue a ${channel} outreach for ${subject}.`,
+      `Goal: collect the missing information needed to finish Verification of Benefits.`,
+      `Missing information: ${missing.length ? missing.join(', ') : 'none listed; confirm coverage details and summarize the VOB result.'}.`,
+      contactLine,
+      `Return a concise outreach draft and the next system action after the client replies.`,
+    ].join(' ');
   }
 
   function renderKeyValueTable(rows) {
@@ -1098,49 +1463,142 @@
   }
 
   function renderVerificationOfBenefitsCard() {
-    ensureInsuranceDraftSeed();
-    const selectedAccount = getSelectedAccountItem();
-    const selectedLabel = selectedAccount?.client
-      ? `${selectedAccount.client}${selectedAccount.accountSummary?.insurers?.[0] ? ` · ${selectedAccount.accountSummary.insurers[0]}` : ''}`
-      : 'No account selected';
+    if (vobMode === 'existing') ensureInsuranceDraftSeed();
+    const selectedAccount = vobMode === 'existing' ? getSelectedAccountItem() : null;
+    const selectedLabel = vobMode === 'prospect'
+      ? (lastProspectDraft.full_name || 'New prospect VOB')
+      : selectedAccount?.client
+        ? `${selectedAccount.client}${selectedAccount.accountSummary?.insurers?.[0] ? ` · ${selectedAccount.accountSummary.insurers[0]}` : ''}`
+        : 'No account selected';
+    const matches = vobMode === 'existing' ? getVobMatches() : [];
+    const requiredMissing = [
+      !String(lastInsuranceDraft.payer_name || '').trim() && 'payer name',
+      !String(lastInsuranceDraft.member_id || '').trim() && 'member ID',
+      !String(lastInsuranceDraft.coverage_active || '').trim() && 'coverage status',
+      !String(lastInsuranceDraft.in_network || '').trim() && 'network status',
+      !String(lastInsuranceDraft.auth_required || '').trim() && 'authorization status',
+    ].filter(Boolean);
 
     return `
       <div class="card" id="verification-of-benefits">
-        <h2 data-tip="Before scheduling an insurance patient, fill in their plan details and click Run VOB. The system analyzes coverage, network status, and authorization requirements to give you a Take / Review / Do Not Schedule decision with estimated payment amounts.">Verification of Benefits (VOB)</h2>
-        <p class="hint" style="margin:10px 0">Use this before taking an insurance client or moving a claim forward. It is the operator-facing VOB surface, not just a raw preview endpoint.</p>
+        <h2 data-tip="Use VOB in two modes: existing client search for patients already in ClientCare, or prospect mode for someone asking about coverage before becoming a client.">Verification of Benefits (VOB)</h2>
+        <p class="hint" style="margin:10px 0">The system should fill from ClientCare first. Manual entry is for prospects or true exceptions.</p>
+
+        <div class="filter-bar" style="margin-bottom:12px;">
+          <button id="vob-mode-existing" class="${vobMode === 'existing' ? '' : 'ghost'}" data-tip="Search ClientCare and auto-fill everything the system already knows.">Existing client</button>
+          <button id="vob-mode-prospect" class="${vobMode === 'prospect' ? '' : 'ghost'}" data-tip="Use this when someone is not a client yet and wants an insurance estimate before committing.">Prospect / first-time inquiry</button>
+        </div>
+
+        ${vobMode === 'existing' ? `
+          <div class="stack" style="margin-bottom:12px;">
+            <label class="stack">
+              <span class="muted">Search existing client</span>
+              <input id="vob-client-search" value="${escapeHtml(lastVobSearch)}" placeholder="Start typing a client name, payer, or member ID">
+            </label>
+            ${matches.length ? `
+              <div class="stack vob-match-list">
+                ${matches.map((item, index) => `
+                  <button type="button" class="ghost vob-match-option" data-vob-match-index="${index}" style="text-align:left;">
+                    <strong>${escapeHtml(item.client || 'Unknown client')}</strong>
+                    <div class="small muted">${escapeHtml(item.accountSummary?.insurers?.[0] || 'Payer not visible')}${item.insurancePreview?.[0]?.memberId ? ` · ${escapeHtml(item.insurancePreview[0].memberId)}` : ''}</div>
+                  </button>
+                `).join('')}
+              </div>
+            ` : (lastVobSearch.trim() ? '<div class="muted small">No ClientCare match yet. Switch to prospect mode if this is a new inquiry.</div>' : '<div class="muted small">Start typing and the system will narrow the client list automatically.</div>')}
+          </div>
+        ` : `
+          <div class="grid two" style="margin-bottom:12px;">
+            <label class="stack"><span class="muted">Prospect full name</span><input id="vob-prospect-name" value="${escapeHtml(lastProspectDraft.full_name || '')}" placeholder="Client name"></label>
+            <label class="stack"><span class="muted">Prospect phone</span><input id="vob-prospect-phone" value="${escapeHtml(lastProspectDraft.phone || '')}" placeholder="Phone number"></label>
+            <label class="stack"><span class="muted">Prospect email</span><input id="vob-prospect-email" value="${escapeHtml(lastProspectDraft.email || '')}" placeholder="Email"></label>
+          </div>
+        `}
+
         <div class="grid four" style="margin-bottom:12px">
-          <div class="card stat"><span>Selected account</span><strong>${escapeHtml(selectedLabel)}</strong></div>
-          <div class="card stat"><span>Payer</span><strong>${escapeHtml(lastInsuranceDraft.payer_name || 'Not entered')}</strong></div>
-          <div class="card stat"><span>Member ID</span><strong>${escapeHtml(lastInsuranceDraft.member_id || 'Not entered')}</strong></div>
-          <div class="card stat"><span>Current decision</span><strong>${escapeHtml(lastInsurancePreview?.decision || 'Not run')}</strong></div>
+          <div class="card stat" data-tip="The person or account this VOB is tied to. Existing clients should come from ClientCare. Prospects stay lightweight until they commit."><span>${vobMode === 'prospect' ? 'Prospect' : 'Selected account'}</span><strong>${escapeHtml(selectedLabel)}</strong></div>
+          <div class="card stat" data-tip="Insurance company name — from ClientCare if available, otherwise from the insurance card or caller."><span>Payer</span><strong>${escapeHtml(lastInsuranceDraft.payer_name || 'Missing')}</strong></div>
+          <div class="card stat" data-tip="Member/subscriber ID — from ClientCare first, otherwise from the insurance card."><span>Member ID</span><strong>${escapeHtml(lastInsuranceDraft.member_id || 'Missing')}</strong></div>
+          <div class="card stat" data-tip="The last decision from running VOB — green = safe to schedule, yellow = verify first, red = do not take"><span>Last decision</span><strong style="color:${lastInsurancePreview ? (lastInsurancePreview.decision?.includes('take') ? '#7ef0b8' : lastInsurancePreview.decision?.includes('not') ? '#ff9db0' : '#ffd666') : '#98a5c3'}">${escapeHtml(lastInsurancePreview?.decision || 'Not run yet')}</strong></div>
         </div>
-        <div class="row-actions" style="margin-bottom:12px">
-          <button id="use-selected-account-vob" class="ghost" data-tip="Pre-fills the insurance fields below using the account you clicked in the Accounts Needing Action board">Use selected account</button>
-          <button id="insurance-preview-run" data-tip="Runs the insurance info through the system to get a decision: Take (schedule), Review (check details first), or Do Not Schedule">Run VOB</button>
+
+        <div class="card" style="margin-bottom:12px;background:#0f1528;">
+          <strong>System-managed status</strong>
+          <div class="small muted" style="margin-top:6px;">${requiredMissing.length ? `The system still needs ${requiredMissing.join(', ')} before it can give a complete answer.` : 'ClientCare provided enough information to run the decision path.'}</div>
+          <div class="row-actions" style="margin-top:10px;">
+            ${vobMode === 'existing' ? '<button id="use-selected-account-vob" class="ghost">Refresh from ClientCare</button>' : ''}
+            <button id="vob-request-text" class="ghost" data-tip="Ask the system assistant to draft and queue a client text asking for the missing insurance information.">Request by text</button>
+            <button id="vob-request-email" class="ghost" data-tip="Ask the system assistant to draft and queue an email asking for the missing insurance information.">Request by email</button>
+          </div>
         </div>
-        <div class="grid two" style="margin-top:12px;">
-          <input id="insurance-payer-name" value="${escapeHtml(lastInsuranceDraft.payer_name || '')}" placeholder="Payer name">
-          <input id="insurance-member-id" value="${escapeHtml(lastInsuranceDraft.member_id || '')}" placeholder="Member ID">
-          <input id="insurance-billed-amount" value="${escapeHtml(lastInsuranceDraft.billed_amount || '')}" type="number" min="0" step="0.01" placeholder="Billed amount">
-          <input id="insurance-copay" value="${escapeHtml(lastInsuranceDraft.copay || '')}" type="number" min="0" step="0.01" placeholder="Copay">
-          <input id="insurance-deductible" value="${escapeHtml(lastInsuranceDraft.deductible_remaining || '')}" type="number" min="0" step="0.01" placeholder="Deductible remaining">
-          <input id="insurance-coinsurance" value="${escapeHtml(lastInsuranceDraft.coinsurance_pct || '')}" type="number" min="0" step="1" placeholder="Coinsurance %">
-          <select id="insurance-coverage-active">
-            <option value="" ${!String(lastInsuranceDraft.coverage_active || '').trim() ? 'selected' : ''}>Coverage status</option>
-            <option value="true" ${String(lastInsuranceDraft.coverage_active) === 'true' ? 'selected' : ''}>Active</option>
-            <option value="false" ${String(lastInsuranceDraft.coverage_active) === 'false' ? 'selected' : ''}>Inactive</option>
-          </select>
-          <select id="insurance-in-network">
-            <option value="" ${!String(lastInsuranceDraft.in_network || '').trim() ? 'selected' : ''}>Network status</option>
-            <option value="true" ${String(lastInsuranceDraft.in_network) === 'true' ? 'selected' : ''}>In network</option>
-            <option value="false" ${String(lastInsuranceDraft.in_network) === 'false' ? 'selected' : ''}>Out of network</option>
-          </select>
-          <select id="insurance-auth-required">
-            <option value="" ${!String(lastInsuranceDraft.auth_required || '').trim() ? 'selected' : ''}>Authorization</option>
-            <option value="true" ${String(lastInsuranceDraft.auth_required) === 'true' ? 'selected' : ''}>Required</option>
-            <option value="false" ${String(lastInsuranceDraft.auth_required) === 'false' ? 'selected' : ''}>Not required</option>
-          </select>
+
+        <div class="row-actions" style="margin-bottom:16px">
+          <button id="insurance-preview-run" data-tip="Run the VOB check — you only need the 5 fields below filled. Payment estimate improves if you also fill the optional fields.">Run VOB ↗</button>
         </div>
+
+        <div style="background:#0a1020;border:1px solid #27304a;border-radius:12px;padding:14px;margin-bottom:12px;">
+          <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Required — needed for take/review/decline decision</div>
+          <div class="grid two">
+            <div data-tip="Insurance company name — exactly as it appears on the patient's card (e.g. 'Aetna', 'Blue Cross Blue Shield', 'United Healthcare')">
+              <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Payer name <span style="color:#ef476f">*</span></label>
+              <input id="insurance-payer-name" value="${escapeHtml(lastInsuranceDraft.payer_name || '')}" placeholder="e.g. Aetna, Blue Cross, United" style="width:100%;box-sizing:border-box;">
+            </div>
+            <div data-tip="The member or subscriber ID — printed on the front of the patient's insurance card, usually labeled 'Member ID' or 'ID#'">
+              <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Member ID <span style="color:#ef476f">*</span></label>
+              <input id="insurance-member-id" value="${escapeHtml(lastInsuranceDraft.member_id || '')}" placeholder="From front of insurance card" style="width:100%;box-sizing:border-box;">
+            </div>
+            <div data-tip="Is their insurance currently active? Check the coverage dates on the card — or call the provider line on the back of the card to verify">
+              <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Coverage status <span style="color:#ef476f">*</span></label>
+              <select id="insurance-coverage-active" style="width:100%;box-sizing:border-box;">
+                <option value="" ${!String(lastInsuranceDraft.coverage_active || '').trim() ? 'selected' : ''}>Select coverage status…</option>
+                <option value="true" ${String(lastInsuranceDraft.coverage_active) === 'true' ? 'selected' : ''}>Active — coverage confirmed</option>
+                <option value="false" ${String(lastInsuranceDraft.coverage_active) === 'false' ? 'selected' : ''}>Inactive — coverage lapsed</option>
+              </select>
+            </div>
+            <div data-tip="Are you in-network with this payer? Check your contract list or look up your NPI on the payer's provider directory">
+              <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Network status <span style="color:#ef476f">*</span></label>
+              <select id="insurance-in-network" style="width:100%;box-sizing:border-box;">
+                <option value="" ${!String(lastInsuranceDraft.in_network || '').trim() ? 'selected' : ''}>Select network status…</option>
+                <option value="true" ${String(lastInsuranceDraft.in_network) === 'true' ? 'selected' : ''}>In network — contracted</option>
+                <option value="false" ${String(lastInsuranceDraft.in_network) === 'false' ? 'selected' : ''}>Out of network</option>
+              </select>
+            </div>
+            <div data-tip="Does this payer require prior authorization before you can bill? Check the back of the card for a provider line, or ask your biller — some payers require auth for behavioral health">
+              <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Authorization <span style="color:#ef476f">*</span></label>
+              <select id="insurance-auth-required" style="width:100%;box-sizing:border-box;">
+                <option value="" ${!String(lastInsuranceDraft.auth_required || '').trim() ? 'selected' : ''}>Select authorization status…</option>
+                <option value="false" ${String(lastInsuranceDraft.auth_required) === 'false' ? 'selected' : ''}>Not required — can bill directly</option>
+                <option value="true" ${String(lastInsuranceDraft.auth_required) === 'true' ? 'selected' : ''}>Required — must get auth first</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <details style="margin-bottom:12px;">
+          <summary style="cursor:pointer;font-size:12px;color:#8aa4ff;font-weight:600;padding:8px 0;" data-tip="These fields are not required to get a decision — but filling them in gives you an accurate dollar estimate of what the insurer will pay vs what the patient owes">
+            Optional — fills in the payment estimate ▸
+          </summary>
+          <div style="background:#0a1020;border:1px solid #27304a;border-radius:12px;padding:14px;margin-top:8px;">
+            <p class="muted small" style="margin-bottom:10px;">These come from the patient's insurance card or a quick call to the provider line on the back of the card. Leave blank if you do not have them — the decision still runs.</p>
+            <div class="grid two">
+              <div data-tip="Your fee for the service (e.g. $150 per session). This is what you bill the insurer — not what you expect to get paid">
+                <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Your billed amount ($)</label>
+                <input id="insurance-billed-amount" value="${escapeHtml(lastInsuranceDraft.billed_amount || '')}" type="number" min="0" step="0.01" placeholder="e.g. 150" style="width:100%;box-sizing:border-box;">
+              </div>
+              <div data-tip="Fixed dollar amount the patient pays per visit — printed on the front of the card, usually labeled 'Copay' or 'Co-pay'. Common amounts: $10–$50">
+                <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Copay ($) <span style="font-size:10px;color:#5a6a8a">— front of insurance card</span></label>
+                <input id="insurance-copay" value="${escapeHtml(lastInsuranceDraft.copay || '')}" type="number" min="0" step="0.01" placeholder="e.g. 20" style="width:100%;box-sizing:border-box;">
+              </div>
+              <div data-tip="How much of the patient's annual deductible they still owe this year. You have to call the provider line (number on back of card) to get this — it resets every January">
+                <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Deductible remaining ($) <span style="font-size:10px;color:#5a6a8a">— call provider line</span></label>
+                <input id="insurance-deductible" value="${escapeHtml(lastInsuranceDraft.deductible_remaining || '')}" type="number" min="0" step="0.01" placeholder="e.g. 500" style="width:100%;box-sizing:border-box;">
+              </div>
+              <div data-tip="After deductible is met, the patient pays this % of the allowed amount. Common: 20% or 30%. Found on the insurance card or the Summary of Benefits document">
+                <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Coinsurance (%) <span style="font-size:10px;color:#5a6a8a">— insurance card or SOB</span></label>
+                <input id="insurance-coinsurance" value="${escapeHtml(lastInsuranceDraft.coinsurance_pct || '')}" type="number" min="0" step="1" placeholder="e.g. 20" style="width:100%;box-sizing:border-box;">
+              </div>
+            </div>
+          </div>
+        </details>
         <div id="insurance-preview-output" style="margin-top:12px;">
           ${lastInsurancePreview ? (() => {
             const dec = (lastInsurancePreview.decision || 'review').toLowerCase();
@@ -2255,35 +2713,45 @@
   }
 
   function renderAssistantShell() {
-    const pinnedLabel = assistantPinned ? 'Unpin chat' : 'Pin chat';
     const collapseLabel = assistantOpen ? 'Collapse' : 'Open';
     return `
-      <div class="assistant-shell ${assistantPinned ? 'pinned' : 'floating'} ${assistantOpen ? 'open' : 'closed'}">
-        <div class="card assistant-card">
-          <div class="account-card-top">
-            <div>
-              <h2 data-tip="Ask anything about the billing data in plain English — 'which accounts need auth before I can submit?', 'what should I work first today?', 'explain this denial reason'. It has full context of all loaded accounts.">Operations Assistant</h2>
-              <p class="muted">Ask questions about accounts, denials, or next actions in plain English.</p>
-            </div>
-            <div class="row-actions">
-              <button id="assistant-pin-toggle" class="ghost">${escapeHtml(pinnedLabel)}</button>
-              <button id="assistant-open-toggle" class="ghost">${escapeHtml(collapseLabel)}</button>
-            </div>
+      <div class="card assistant-card">
+        <div class="account-card-top">
+          <div>
+            <h2 data-tip="This routes billing questions into the system AI Council after the built-in billing workflows check whether the request already has a direct answer. Ask in plain English: 'which accounts need auth before I can submit?', 'what should I work first today?', 'explain this denial reason'.">Operations Assistant / AI Council</h2>
+            <p class="muted">Ask questions about accounts, denials, next actions, or system changes in plain English.</p>
           </div>
-          <div id="assistant-panel" style="${assistantOpen ? '' : 'display:none;'}">
-            <div id="assistant-meta" class="row-actions" style="margin:10px 0"></div>
-            <div id="assistant-history" class="stack assistant-history"></div>
-            <textarea id="assistant-input" placeholder="Type a question, command, or requested system change here"></textarea>
-            <div class="row-actions" style="margin-top:10px">
-              <button id="assistant-voice-toggle" class="ghost" type="button">Start voice</button>
-              <label class="muted small" style="display:inline-flex; gap:6px; align-items:center;"><input id="assistant-speak-replies" type="checkbox"> Speak replies</label>
-              <span id="assistant-voice-status" class="muted small">Voice ready</span>
-            </div>
-            <div style="margin-top:10px"><button id="assistant-send">Send</button></div>
+          <div class="row-actions">
+            <button id="assistant-open-toggle" class="ghost">${escapeHtml(collapseLabel)}</button>
           </div>
+        </div>
+        <div id="assistant-panel" style="${assistantOpen ? '' : 'display:none;'}">
+          <div id="assistant-meta" class="row-actions" style="margin:10px 0"></div>
+          <div id="assistant-history" class="stack assistant-history"></div>
+          <textarea id="assistant-input" placeholder="Type a question, command, or requested system change here"></textarea>
+          <div class="row-actions" style="margin-top:10px">
+            <button id="assistant-voice-toggle" class="ghost" type="button">Start voice</button>
+            <label class="muted small" style="display:inline-flex; gap:6px; align-items:center;"><input id="assistant-speak-replies" type="checkbox"> Speak replies</label>
+            <span id="assistant-voice-status" class="muted small">Voice ready</span>
+          </div>
+          <div style="margin-top:10px"><button id="assistant-send">Send</button></div>
         </div>
       </div>
     `;
+  }
+
+  async function sendAssistantPrompt(message) {
+    const content = String(message || '').trim();
+    if (!content) return;
+    if (!assistantSessionId) await ensureAssistantSession();
+    await api('/api/v1/clientcare-billing/assistant/message', {
+      method: 'POST',
+      body: JSON.stringify({
+        session_id: assistantSessionId,
+        message: content,
+      }),
+    });
+    await ensureAssistantSession();
   }
 
   async function sendAssistantMessage() {
@@ -2292,14 +2760,7 @@
     if (!message) return;
     input.value = '';
     try {
-      await api('/api/v1/clientcare-billing/assistant/message', {
-        method: 'POST',
-        body: JSON.stringify({
-          session_id: assistantSessionId,
-          message,
-        }),
-      });
-      await ensureAssistantSession();
+      await sendAssistantPrompt(message);
     } catch (error) {
       toast(error.message, "error");
     }
@@ -2818,9 +3279,12 @@
         `).join('')}
       </div>
 
-      <div class="workspace ${assistantPinned ? 'assistant-pinned' : 'assistant-floating'}">
+      <div class="workspace with-utilities">
         <div class="main-workspace">
-          ${renderVerificationOfBenefitsCard()}
+          ${renderOperatorGuide()}
+          ${renderSystemStatusSummary()}
+          ${renderAccountSearchBar()}
+          ${renderManagedWorkQueue()}
 
           <div class="grid two">
             <div class="card">
@@ -2847,24 +3311,29 @@
             </div>
           </div>
 
-          <div class="card">
-            <h2 data-tip="Everything needed to hand this billing system to a new tenant — credentials, onboarding steps, operator access, and audit trail. Run this checklist before going live with a new practice.">Sellable Packaging</h2>
-            <p class="hint" style="margin:10px 0">Tenant setup, onboarding, operator access, and audit trail.</p>
-            <div id="packaging-overview">${renderPackagingOverview(packagingOverview)}</div>
-          </div>
+          <details class="card">
+            <summary data-tip="Secondary rollout controls. Keep this collapsed during daily billing work and open it when you need packaging, go-live validation, or trend review.">Rollout, Packaging &amp; Trends ▸</summary>
+            <div class="stack" style="margin-top:16px;">
+              <div class="card">
+                <h2 data-tip="Everything needed to hand this billing system to a new tenant — credentials, onboarding steps, operator access, and audit trail. Run this checklist before going live with a new practice.">Sellable Packaging</h2>
+                <p class="hint" style="margin:10px 0">Tenant setup, onboarding, operator access, and audit trail.</p>
+                <div id="packaging-overview">${renderPackagingOverview(packagingOverview)}</div>
+              </div>
 
-          <div class="card">
-            <h2 data-tip="Run this before going live with a new practice. It checks browser login, claim history, operator access, and audit logs to confirm everything is working. Fails loudly if something is missing.">Live Rollout Validation</h2>
-            <p class="hint" style="margin:10px 0">Cross-check actual browser readiness, claim history, operator access, and audit receipts before go-live.</p>
-            <div class="row-actions" style="margin-bottom:10px"><button id="packaging-validate">Run validation</button></div>
-            <div id="packaging-validation">${renderPackagingValidation(packagingValidation)}</div>
-          </div>
+              <div class="card">
+                <h2 data-tip="Run this before going live with a new practice. It checks browser login, claim history, operator access, and audit logs to confirm everything is working. Fails loudly if something is missing.">Live Rollout Validation</h2>
+                <p class="hint" style="margin:10px 0">Cross-check actual browser readiness, claim history, operator access, and audit receipts before go-live.</p>
+                <div class="row-actions" style="margin-bottom:10px"><button id="packaging-validate">Run validation</button></div>
+                <div id="packaging-validation">${renderPackagingValidation(packagingValidation)}</div>
+              </div>
 
-          <div class="card">
-            <h2 data-tip="Tracks validation run history — shows which blockers keep appearing and whether readiness is improving over time. Useful for catching systemic setup problems.">Validation Trends</h2>
-            <p class="hint" style="margin:10px 0">See repeated rollout blockers and whether readiness is improving across runs.</p>
-            <div id="packaging-validation-history">${renderPackagingValidationHistory(packagingValidationHistory)}</div>
-          </div>
+              <div class="card">
+                <h2 data-tip="Tracks validation run history — shows which blockers keep appearing and whether readiness is improving over time. Useful for catching systemic setup problems.">Validation Trends</h2>
+                <p class="hint" style="margin:10px 0">See repeated rollout blockers and whether readiness is improving across runs.</p>
+                <div id="packaging-validation-history">${renderPackagingValidationHistory(packagingValidationHistory)}</div>
+              </div>
+            </div>
+          </details>
 
           <details class="card tools-card">
             <summary data-tip="Expand to access browser automation, data imports, validation, payer rules, underpayments, and appeals queues. Start with Browser automation → Full Queue Report to populate the dashboard.">Tools &amp; Data Sources ▸</summary>
@@ -2918,73 +3387,98 @@
             </div>
           </details>
 
-          <div class="grid two">
-            <div class="card">
-              <h2 data-tip="Predicted cash inflow from insurance over the next 30, 60, and 90 days — based on claim status and historical payer payment patterns. More accurate the more paid claims you import.">Collections Forecast</h2>
-              <p class="hint" style="margin:10px 0">Projection improves as paid claims, ERAs, and remits are imported.</p>
-              <div id="reimbursement-intelligence">${renderReimbursementIntelligence(intelligence)}</div>
-              <hr style="border-color:#27304a; margin:16px 0;">
-              <h3>Patient AR</h3>
-              <div id="patient-ar-summary">${renderPatientArSummary(opsOverview, patientArPolicy, patientArEscalation)}</div>
-            </div>
-            <div class="card">
-              <h2 data-tip="All claims imported into the system — classified by rescue bucket (submit now, correct and resubmit, appeal, write off) with priority scores. Import claims via CSV or browser extraction above.">Claims Ledger</h2>
-              <div class="stack">
-                <div class="card">
-                  <h3 data-tip="The current rule the system uses to decide whether to accept a new insurance patient — based on payer history, auth requirements, and collection rates">Insurance Intake Rule</h3>
-                  <div id="insurance-intake-rule">${renderInsuranceIntakeRule(opsOverview)}</div>
-                </div>
-                <div class="card">
-                  <h3 data-tip="Matches what was submitted vs what was paid vs what is still outstanding — shows where money is leaking">Reconciliation</h3>
-                  ${renderReconciliation(reconciliation)}
-                </div>
-                <div class="card">
-                  <h3>Claims</h3>
-                  <table>
-                    <thead><tr><th>Patient</th><th>Payer</th><th>DOS</th><th>Status</th><th>Bucket</th><th>Priority</th><th>Balance</th><th>Actions</th></tr></thead>
-                    <tbody>${claimRows}</tbody>
-                  </table>
-                </div>
-                <div class="card">
-                  <h3>Open actions</h3>
-                  <table>
-                    <thead><tr><th>Patient</th><th>Action</th><th>Priority</th><th>Status</th><th>Evidence</th><th></th></tr></thead>
-                    <tbody>${actionRows}</tbody>
-                  </table>
-                </div>
-                <div class="card" id="claim-plan">
-                  <h3 data-tip="Click any row in the Claims table above to see the detailed filing plan — which rescue bucket it is in, what action to take, and what evidence is needed to get it paid">Claim plan</h3>
-                  <p class="muted small">Click a claim row above to inspect its filing rule, rescue bucket, and recommended next action.</p>
-                </div>
-                <div class="card">
-                  <h3 data-tip="System capabilities that are not yet active — things the billing system could do once additional credentials or integrations are set up. Shows what is unlocked vs what requires more setup.">Capability Queue</h3>
-                  <div id="capability-queue">${renderCapabilityQueue(opsOverview)}</div>
-                </div>
-                <div class="card">
-                  <h3 data-tip="Claims where the insurance paid less than the contracted rate — these can be disputed and recovered. Review and appeal each one.">Underpayment Queue</h3>
-                  <div id="underpayment-queue">${renderUnderpaymentQueue(underpayments)}</div>
-                </div>
-                <div class="card">
-                  <h3 data-tip="Denied claims that have been flagged for appeal — each one shows the denial reason and the recommended argument to use when resubmitting">Appeals Queue</h3>
-                  <div id="appeals-queue">${renderAppealsQueue(appeals)}</div>
-                </div>
-                <div class="card">
-                  <h3 data-tip="Payer-specific rules and tactics — what each insurance company requires, how long they take, what they deny most, and how to get paid faster">Payer Playbooks</h3>
-                  <div id="payer-playbooks">${renderPayerPlaybooks(payerPlaybooks)}</div>
-                </div>
-                <div class="card">
-                  <h3 data-tip="Custom rules you have set for specific payers — overrides the default behavior. For example: always require auth for Aetna, or skip secondary billing for this payer.">Payer Rule Overrides</h3>
-                  <div id="payer-rules">${renderPayerRules(payerRules)}</div>
-                </div>
-                <div class="card">
-                  <h3 data-tip="Patterns found in your Explanation of Remittance files — which denial codes appear most, which payers are slowest to pay, and where to focus appeal effort">ERA / Remit Insights</h3>
-                  <div id="era-insights">${renderEraInsights(eraInsights)}</div>
+          <details class="card">
+            <summary data-tip="Advanced billing analysis and long-form claim lists. Keep this closed during day-to-day work; open it when you need forecasting, reconciliation, denials, underpayments, or payer strategy detail.">Claims, Forecasting &amp; Analysis ▸</summary>
+            <div class="grid two" style="margin-top:16px;">
+              <div class="card">
+                <h2 data-tip="Predicted cash inflow from insurance over the next 30, 60, and 90 days — based on claim status and historical payer payment patterns. More accurate the more paid claims you import.">Collections Forecast</h2>
+                <p class="hint" style="margin:10px 0">Projection improves as paid claims, ERAs, and remits are imported.</p>
+                <div id="reimbursement-intelligence">${renderReimbursementIntelligence(intelligence)}</div>
+                <hr style="border-color:#27304a; margin:16px 0;">
+                <h3>Patient AR</h3>
+                <div id="patient-ar-summary">${renderPatientArSummary(opsOverview, patientArPolicy, patientArEscalation)}</div>
+              </div>
+              <div class="card">
+                <h2 data-tip="All claims imported into the system — classified by rescue bucket (submit now, correct and resubmit, appeal, write off) with priority scores. Import claims via CSV or browser extraction above.">Claims Ledger</h2>
+                <div class="stack">
+                  <div class="card">
+                    <h3 data-tip="The current rule the system uses to decide whether to accept a new insurance patient — based on payer history, auth requirements, and collection rates">Insurance Intake Rule</h3>
+                    <div id="insurance-intake-rule">${renderInsuranceIntakeRule(opsOverview)}</div>
+                  </div>
+                  <div class="card">
+                    <h3 data-tip="Matches what was submitted vs what was paid vs what is still outstanding — shows where money is leaking">Reconciliation</h3>
+                    ${renderReconciliation(reconciliation)}
+                  </div>
+                  <details class="card">
+                    <summary>Claims &amp; Open Actions ▸</summary>
+                    <div class="stack" style="margin-top:12px;">
+                      <div class="card">
+                        <h3>Claims</h3>
+                        <table>
+                          <thead><tr><th>Patient</th><th>Payer</th><th>DOS</th><th>Status</th><th>Bucket</th><th>Priority</th><th>Balance</th><th>Actions</th></tr></thead>
+                          <tbody>${claimRows}</tbody>
+                        </table>
+                      </div>
+                      <div class="card">
+                        <h3>Open actions</h3>
+                        <table>
+                          <thead><tr><th>Patient</th><th>Action</th><th>Priority</th><th>Status</th><th>Evidence</th><th></th></tr></thead>
+                          <tbody>${actionRows}</tbody>
+                        </table>
+                      </div>
+                      <div class="card" id="claim-plan">
+                        <h3 data-tip="Click any row in the Claims table above to see the detailed filing plan — which rescue bucket it is in, what action to take, and what evidence is needed to get it paid">Claim plan</h3>
+                        <p class="muted small">Click a claim row above to inspect its filing rule, rescue bucket, and recommended next action.</p>
+                      </div>
+                    </div>
+                  </details>
+                  <details class="card">
+                    <summary>Denials, Underpayments &amp; Payer Strategy ▸</summary>
+                    <div class="stack" style="margin-top:12px;">
+                      <div class="card">
+                        <h3 data-tip="System capabilities that are not yet active — things the billing system could do once additional credentials or integrations are set up. Shows what is unlocked vs what requires more setup.">Capability Queue</h3>
+                        <div id="capability-queue">${renderCapabilityQueue(opsOverview)}</div>
+                      </div>
+                      <div class="card">
+                        <h3 data-tip="Claims where the insurance paid less than the contracted rate — these can be disputed and recovered. Review and appeal each one.">Underpayment Queue</h3>
+                        <div id="underpayment-queue">${renderUnderpaymentQueue(underpayments)}</div>
+                      </div>
+                      <div class="card">
+                        <h3 data-tip="Denied claims that have been flagged for appeal — each one shows the denial reason and the recommended argument to use when resubmitting">Appeals Queue</h3>
+                        <div id="appeals-queue">${renderAppealsQueue(appeals)}</div>
+                      </div>
+                      <div class="card">
+                        <h3 data-tip="Payer-specific rules and tactics — what each insurance company requires, how long they take, what they deny most, and how to get paid faster">Payer Playbooks</h3>
+                        <div id="payer-playbooks">${renderPayerPlaybooks(payerPlaybooks)}</div>
+                      </div>
+                      <div class="card">
+                        <h3 data-tip="Custom rules you have set for specific payers — overrides the default behavior. For example: always require auth for Aetna, or skip secondary billing for this payer.">Payer Rule Overrides</h3>
+                        <div id="payer-rules">${renderPayerRules(payerRules)}</div>
+                      </div>
+                      <div class="card">
+                        <h3 data-tip="Patterns found in your Explanation of Remittance files — which denial codes appear most, which payers are slowest to pay, and where to focus appeal effort">ERA / Remit Insights</h3>
+                        <div id="era-insights">${renderEraInsights(eraInsights)}</div>
+                      </div>
+                    </div>
+                  </details>
                 </div>
               </div>
             </div>
-          </div>
+          </details>
         </div>
-        ${renderAssistantShell()}
+        <aside class="utility-sidebar ${utilitySidebarCollapsed ? 'collapsed' : ''}">
+          <div class="card utility-sidebar-head">
+            <div>
+              <div class="eyebrow">Utilities</div>
+              <strong>${utilitySidebarCollapsed ? 'Open utilities' : 'Working tools'}</strong>
+            </div>
+            <button id="utility-sidebar-toggle" class="ghost">${utilitySidebarCollapsed ? 'Open' : 'Collapse'}</button>
+          </div>
+          <div class="utility-sidebar-body" style="${utilitySidebarCollapsed ? 'display:none;' : ''}">
+            ${renderVerificationOfBenefitsCard()}
+            ${renderAssistantShell()}
+          </div>
+        </aside>
       </div>
     `;
 
@@ -3006,8 +3500,32 @@
     document.getElementById('browser-account-report').addEventListener('click', browserAccountReport);
     document.getElementById('browser-full-account-report').addEventListener('click', browserFullAccountReport);
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
-    document.getElementById('assistant-pin-toggle').addEventListener('click', () => {
-      setAssistantPinned(!assistantPinned);
+    const accountSearch = document.getElementById('account-search');
+    if (accountSearch) {
+      accountSearch.addEventListener('input', (event) => {
+        const nextValue = event.target.value || '';
+        setAccountSearch(nextValue);
+        selectedAccountIndex = 0;
+        rerender();
+        requestAnimationFrame(() => {
+          const input = document.getElementById('account-search');
+          if (!input) return;
+          input.focus();
+          input.setSelectionRange(nextValue.length, nextValue.length);
+        });
+      });
+    }
+    const accountSearchClear = document.getElementById('account-search-clear');
+    if (accountSearchClear) {
+      accountSearchClear.addEventListener('click', () => {
+        setAccountSearch('');
+        selectedAccountIndex = 0;
+        rerender();
+      });
+    }
+    const utilitySidebarToggle = document.getElementById('utility-sidebar-toggle');
+    if (utilitySidebarToggle) utilitySidebarToggle.addEventListener('click', () => {
+      setUtilitySidebarCollapsed(!utilitySidebarCollapsed);
       render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, lastPackagingValidation, lastPackagingValidationHistory);
       ensureAssistantSession();
     });
@@ -3027,6 +3545,63 @@
         useSelectedAccountInVob();
       });
     }
+    const vobModeExisting = document.getElementById('vob-mode-existing');
+    if (vobModeExisting) vobModeExisting.addEventListener('click', () => {
+      setVobMode('existing');
+      rerender();
+    });
+    const vobModeProspect = document.getElementById('vob-mode-prospect');
+    if (vobModeProspect) vobModeProspect.addEventListener('click', () => {
+      setVobMode('prospect');
+      rerender();
+    });
+    const vobSearch = document.getElementById('vob-client-search');
+    if (vobSearch) vobSearch.addEventListener('input', (event) => {
+      const nextValue = event.target.value || '';
+      setVobSearch(nextValue);
+      rerender();
+      requestAnimationFrame(() => {
+        const input = document.getElementById('vob-client-search');
+        if (!input) return;
+        input.focus();
+        input.setSelectionRange(nextValue.length, nextValue.length);
+      });
+    });
+    root.querySelectorAll('[data-vob-match-index]').forEach((button) => button.addEventListener('click', () => {
+      const match = getVobMatches()[Number(button.getAttribute('data-vob-match-index') || 0)];
+      if (match) selectAccountForVob(match);
+    }));
+    const prospectName = document.getElementById('vob-prospect-name');
+    if (prospectName) prospectName.addEventListener('input', (event) => {
+      lastProspectDraft.full_name = event.target.value || '';
+      lastInsuranceDraft.source_label = lastProspectDraft.full_name || '';
+    });
+    const prospectPhone = document.getElementById('vob-prospect-phone');
+    if (prospectPhone) prospectPhone.addEventListener('input', (event) => {
+      lastProspectDraft.phone = event.target.value || '';
+    });
+    const prospectEmail = document.getElementById('vob-prospect-email');
+    if (prospectEmail) prospectEmail.addEventListener('input', (event) => {
+      lastProspectDraft.email = event.target.value || '';
+    });
+    const vobRequestText = document.getElementById('vob-request-text');
+    if (vobRequestText) vobRequestText.addEventListener('click', async () => {
+      try {
+        await sendAssistantPrompt(buildVobOutreachPrompt('text message'));
+        toast('Queued a client text request in the assistant.', 'success');
+      } catch (error) {
+        toast(error.message, 'error');
+      }
+    });
+    const vobRequestEmail = document.getElementById('vob-request-email');
+    if (vobRequestEmail) vobRequestEmail.addEventListener('click', async () => {
+      try {
+        await sendAssistantPrompt(buildVobOutreachPrompt('email'));
+        toast('Queued a client email request in the assistant.', 'success');
+      } catch (error) {
+        toast(error.message, 'error');
+      }
+    });
     const insurancePreviewButton = document.getElementById('insurance-preview-run');
     if (insurancePreviewButton) insurancePreviewButton.addEventListener('click', runInsurancePreview);
     const repairPreviewButton = document.getElementById('repair-preview-run');
@@ -3061,6 +3636,25 @@
     root.querySelectorAll('[data-underpayment-queue]').forEach((button) => button.addEventListener('click', () => queueUnderpaymentAction(button.getAttribute('data-underpayment-queue'))));
     root.querySelectorAll('[data-appeal-packet]').forEach((button) => button.addEventListener('click', () => showAppealPacket(button.getAttribute('data-appeal-packet'))));
     root.querySelectorAll('[data-appeal-queue]').forEach((button) => button.addEventListener('click', () => queueAppealAction(button.getAttribute('data-appeal-queue'), 'appeal_followup')));
+    root.querySelectorAll('[data-work-queue-index]').forEach((button) => button.addEventListener('click', async () => {
+      const queue = [...getFilteredItems()]
+        .map((item) => ({ item, visual: deriveAccountVisualState(item) }))
+        .sort((a, b) => {
+          const av = ['red', 'yellow', 'green'].indexOf(a.visual.state);
+          const bv = ['red', 'yellow', 'green'].indexOf(b.visual.state);
+          if (av !== bv) return av - bv;
+          return String(a.item.client || '').localeCompare(String(b.item.client || ''));
+        })
+        .map((entry) => entry.item);
+      const target = queue[Number(button.getAttribute('data-work-queue-index') || 0)];
+      if (!target) return;
+      selectAccountForVob(target);
+      document.getElementById('account-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      await inspectSelectedAccount();
+      if (String(target.diagnosis?.status || '') === 'insurance_setup_issue') {
+        document.getElementById('verification-of-benefits')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }));
     renderAccountBoard();
     if (lastBrowserResult) setBrowserOutput(lastBrowserResult);
     const workflowNode = document.getElementById('workflow-playbooks');
