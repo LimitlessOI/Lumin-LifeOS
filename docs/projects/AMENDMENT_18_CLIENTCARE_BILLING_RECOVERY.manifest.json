@@ -9,7 +9,7 @@
   "phase": "sellable-v1-complete",
   "next_task": "Sellable v1 is complete. Next work is optional post-v1 tenant learning, readiness trend monitoring, future product expansion, and continued runtime hardening only if real usage reveals issues.",
   "stability_class": "needs-review",
-  "current_focus": "Internal operational completeness and sellable v1 completeness are in place. The overlay now exposes voice-enabled assistant controls plus readiness history/trend monitoring, degrades safely to an access/setup state when the command key is missing, and now ships versioned scripts/no-cache HTML so browsers stop serving stale broken builds.",
+  "current_focus": "VOB form redesigned with required vs optional split, source labels on every field, and collapsed optional section. VOB result shows as color-coded decision card. Full tooltip coverage across all sections. Toast notifications replace alert(). Setup checklist strip for new users.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",

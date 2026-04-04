@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-03 (managed work queue, resizable utilities sidebar, existing-client/prospect VOB flow)
+**Last Updated:** 2026-04-03 (VOB form required/optional split, source labels, decision card, full tooltip coverage)
 
 ---
 
