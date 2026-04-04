@@ -1,0 +1,56 @@
+{
+  "project_id": "personal_finance_os",
+  "name": "Personal Finance OS",
+  "amendment_path": "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md",
+  "lifecycle": "planning",
+  "status": "pre-build",
+  "priority": "high",
+  "owner": "adam",
+  "phase": "concept-definition",
+  "next_task": "Attorney review of IPS module for RIA trigger risk. LifeOS Core Layer 12 schema must be designed before build starts.",
+  "stability_class": "high-risk",
+  "current_focus": "Mirror-first financial clarity tool. No investment advice ever. Life-linked goals, values-aligned spending, household privacy architecture.",
+  "build_ready": false,
+  "parent_module": "AMENDMENT_21_LIFEOS_CORE.md Layer 12",
+  "owned_files": [
+    "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md",
+    "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.manifest.json"
+  ],
+  "protected_files": [
+    "server.js",
+    "services/sovereignty-check.js",
+    "docs/SSOT_COMPANION.md"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md",
+    "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.manifest.json"
+  ],
+  "required_routes": [],
+  "required_tables": [
+    "cashflow_records",
+    "budget_modes",
+    "debt_accounts",
+    "savings_goals",
+    "financial_checkins"
+  ],
+  "required_env": [],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_26_PERSONAL_FINANCE_OS.manifest.json" }
+  ],
+  "completion_checks": [
+    "IPS module reviewed by attorney — no RIA trigger",
+    "Past-performance disclosure language approved for any simulation UI",
+    "Terms of service financial disclaimer drafted and reviewed",
+    "Plaid vs CSV-only decision made for MVP bank connection",
+    "LifeOS Core Layer 12 DB schema migrated"
+  ],
+  "anti_drift_notes": "NEVER provide personalized investment advice, tax, or legal recommendations. The IPS module is user-authored only — the system reflects the user's own stated policy, never prescribes one. This constraint is non-negotiable and must be architecturally enforced.",
+  "decision_debt": [
+    { "description": "Attorney review of IPS module required before build", "resolved": false },
+    { "description": "Plaid integration vs CSV-only — live bank connections require NACHA compliance", "resolved": false },
+    { "description": "State-level financial planning law review needed before public launch", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

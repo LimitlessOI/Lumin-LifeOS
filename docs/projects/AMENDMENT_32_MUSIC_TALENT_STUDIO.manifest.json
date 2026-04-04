@@ -1,0 +1,78 @@
+{
+  "project_id": "AMENDMENT_32_MUSIC_TALENT_STUDIO",
+  "name": "Music Talent Studio",
+  "lifecycle": "candidate",
+  "status": "specification",
+  "priority": "high",
+  "build_ready": false,
+  "revenue_immediate": false,
+  "revenue_timeframe_weeks": 20,
+  "category": "Education / Creator Economy / Talent Discovery",
+  "owned_files": [
+    "routes/music-talent-studio-routes.js",
+    "services/music-practice-analyzer.js",
+    "services/music-talent-evaluator.js",
+    "services/music-lesson-planner.js",
+    "services/music-development-planner.js",
+    "db/migrations/*_music_talent_studio_schema.sql"
+  ],
+  "required_tables": [
+    "music_students",
+    "music_teachers",
+    "music_practice_sessions",
+    "music_talent_evaluations",
+    "music_development_plans",
+    "music_opportunities"
+  ],
+  "required_env": [
+    "STRIPE_SECRET_KEY",
+    "CLOUDINARY_URL"
+  ],
+  "required_routes": [
+    "POST /api/v1/music/practice-sessions",
+    "GET  /api/v1/music/students/:id/analysis",
+    "POST /api/v1/music/talent/evaluate",
+    "GET  /api/v1/music/talent/leaderboard",
+    "POST /api/v1/music/development-plans/:studentId",
+    "GET  /api/v1/music/opportunities"
+  ],
+  "gate_blockers": [
+    "Audio analysis approach not confirmed (third-party API vs. custom model)",
+    "5 music teacher interviews needed",
+    "Copyright strategy for song-based learning",
+    "Talent assessment framing — must not harm students emotionally",
+    "Industry professional network needed for mentor matching layer"
+  ],
+  "assertions": [
+    "Song-first learning increases student retention vs. theory-first approaches",
+    "Rate of improvement is more predictive of potential than current ability level",
+    "No existing platform bridges instruction + AI analysis + talent discovery + industry pipeline"
+  ],
+  "completion_checks": [
+    "node --check routes/music-talent-studio-routes.js",
+    "node --check services/music-practice-analyzer.js",
+    "node --check services/music-talent-evaluator.js"
+  ],
+  "anti_drift_notes": [
+    "Talent assessment must be framed as 'development stage' not 'gifted/not gifted'",
+    "Teachers are partners not disruption targets — positioning is critical",
+    "Do not reproduce copyrighted songs — analysis and technique extraction only",
+    "Recording consent and data retention policy required before audio features launch",
+    "Rate of improvement metric is a core differentiator — protect in all feature decisions"
+  ],
+  "decision_debt": [
+    "Audio analysis tech stack — Whisper alone or music-specific model?",
+    "Copyright strategy for song-based learning — need legal review",
+    "Industry scouting launch strategy — chicken/egg: need artists before scouts, scouts before artists",
+    "Teacher monetization model — platform fee vs. Stripe Connect passthrough",
+    "Talent evaluation pricing — per submission vs. subscription"
+  ],
+  "candidate_concepts": [
+    "Songwriting and composition coaching",
+    "Band/ensemble coordination tools",
+    "Recording studio booking and session workflow",
+    "Performance preparation (audition prep, stage fright coaching)",
+    "Music theory gamification layer",
+    "Artist brand and social presence builder"
+  ]
+}

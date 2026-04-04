@@ -5,7 +5,7 @@
 | **Lifecycle** | `founding-document` |
 | **Reversibility** | `one-way-door` |
 | **Stability** | `constitutional` |
-| **Last Updated** | 2026-04-03 (GitHub memory importer — fetches all AI dump files from Lumin-Memory/00_INBOX/raw via GitHub API, chunks them, extracts insights/decisions/commitments via AI, stores in DB) |
+| **Last Updated** | 2026-04-04 (Built: self-sabotage-monitor.js, emergency-repair.js, live-copilot.js; lifeos-copilot-routes.js; sabotage endpoints added to lifeos-emotional-routes.js; DB migration 20260404_lifeos_copilot_sabotage.sql; routes wired in register-runtime-routes.js) |
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
@@ -130,11 +130,15 @@ The body is not a collection of isolated symptoms. It is one system.
 - **Emergency detection** — abnormal HR, fall/passout detection, alert chain (Sherry first, then escalation)
 - **Pre-disease detection** — pattern shifts before symptoms appear; system flags early and explains why
 - **Medical context generator** — before any doctor visit, generates a full-body context summary the doctor actually needs but would never get from a 15-minute appointment
+- **Relapse detection** — monitors behavioral and health signals for patterns consistent with addiction relapse or regression into previous destructive cycles; notifies the user and optionally their support person (never without explicit consent)
+- **Overdose risk alerts** — integrates with wearable HR/SpO2 abnormality patterns to flag potential overdose situations; triggers emergency alert chain immediately; designed for users in recovery or with at-risk household members
+- **Therapist integration** — structured hand-off protocol when AI coaching reaches the boundary of what it should handle; system identifies the signal (grief spike, crisis language, pattern severity), surfaces it clearly, and facilitates connection to the user's designated therapist or crisis line; AI does not attempt to replace clinical intervention
 
 ### Layer 4 — Family OS
 Initially: Adam + Sherry. Designed to extend.
 
 - **Shared commitments** — what each person committed to the other; tracked; celebrated when kept
+- **Emergency Repair Button** — instant access to the repair protocol during or immediately after a conflict; bypasses all navigation; surfaces the debrief, empathy map, and repair sentence starters in one tap; designed for high-emotion moments when executive function is low
 - **Sync layer** — both lives in one view when useful; separate when appropriate
 - **Relationship health score** — not surveillance; a shared mirror; what's working, what needs attention
 - **Communication debrief** — after a hard conversation, the system debriefs: what was said, what was underneath it, what each person was actually needing; AI-supported understanding, not AI-substituted understanding
@@ -150,6 +154,8 @@ The interior life is not separate from performance. It is upstream of everything
 - **Inner work tracker** — what practices is the person doing? What's producing results?
 - **Victory Vault** — capture real moments of courage, integrity, repair, discipline, and breakthrough; replay the actual proof when doubt spikes instead of offering generic encouragement
 - **Therapy effectiveness** — for users in therapy, what approaches correlate with actual behavior change?
+- **Self-Sabotage Monitor** — detects repeating behavioral patterns that contradict the user's stated goals; not shame-based, just observed; surfaces specific recurring sabotage signatures (e.g. "you start every new project with high energy for 11 days then disengage") with the user's own data as evidence
+- **Emotional Wealth Engine** — measures and builds emotional capital as a parallel to financial wealth; tracks emotional reserves (resilience, connection depth, inner stability) over time; flags depletion before it becomes crisis; shows compounding effect of emotional investment (relationships repaired, practices maintained, hard truths absorbed)
 
 ### Layer 6 — Parenting Module
 Hard parenting moments are information. They deserve a debrief, not shame.
@@ -157,6 +163,7 @@ Hard parenting moments are information. They deserve a debrief, not shame.
 - **After-the-moment coaching** — not during; not in front of the child; when the parent is ready to learn
 - **Repair paths** — concrete, age-appropriate ways to repair with a child after a rupture
 - **Pattern interruption** — the system identifies generational patterns (what was modeled for you that you're now modeling for them) and offers specific alternatives
+- **Generational pattern tracking** — long-arc analysis of inherited behavioral, emotional, and relational patterns across generations; helps the user see which family patterns they are consciously or unconsciously perpetuating, and tracks progress in breaking them
 - **Developmental context** — what is the child actually capable of at this age? What does this behavior mean developmentally?
 - **Progress tracking** — not grades on parenting; real observation of what's working with this specific child
 
@@ -187,6 +194,7 @@ Find what you're built for. Then build a life around it.
 - **Monetization map** — for each purpose pattern identified, what are the real economic paths? Not generic advice — specific, researched, connected to actual market demand
 - **Automation plan** — what parts of the person's purpose work can be automated? Where should they protect their presence?
 - **Identity reinforcement** — once found, the system helps the person inhabit the identity. Not fake it. Build it through small, specific actions that accumulate into belief.
+- **Live CoPilot sessions** — real-time AI session with a designated CoPilot persona (configured by user); for moments when the person needs a thought partner right now, not later; session generates a summary + behavior observation after; distinct from scheduled check-ins
 
 ### Layer 10 — Human Flourishing Data Layer
 The byproduct of helping millions of people is the world's most honest dataset on human flourishing.
@@ -218,6 +226,7 @@ Money is not separate from identity, stress, marriage, or purpose — it is one 
 - **Allocation vs target** — read-only or CSV/import holdings snapshots; drift alerts; rebalance *reminders* only, execution always explicit
 - **Fee & drag literacy** — expense ratios, advisory fees, tax-cost awareness (educational framing; not tax advice)
 - **DCA / discipline hooks** — optional scheduled nudges aligned to user-declared plan; never FOMO language
+- **Purchase prediction (impulse prevention)** — detects pre-purchase behavioral patterns (stress signals, time-of-day, prior impulse sequences) and offers a configurable pause before executing; user-defined: amount threshold, categories to monitor, pause duration; never blocks — always the user's choice; surfaces the pattern without judgment
 - **Research sandbox (internal)** — scripts such as `attention-momentum-backtest.mjs` / `strategy-benchmark-suite.mjs` are **historical simulations** for operator learning; any UI surfacing must label **past performance ≠ future results** and **not investment advice**
 - **Consent & security** — finance connectors (e.g. aggregation APIs) off by default; consent ledger entries per connection; minimal retention of credentials; aligns with Data Sovereignty section
 
@@ -226,6 +235,8 @@ Money is not separate from identity, stress, marriage, or purpose — it is one 
 ## Product Enhancement Backlog — Flourishing Mechanics
 
 Captured product ideas to implement over time (prioritize against Build Priority). None of this overrides sovereignty, honesty, or fail-closed rules. Items are **not** promised in a single release.
+
+**Storage hook (v1):** merge arbitrary keys into `lifeos_users.flourishing_prefs` via `PATCH /api/v1/lifeos/users/:handle/flourishing-prefs` (e.g. `ambivalence_until`, `quiet_until`, `depletion_tags`, `failure_museum_opt_in`). Product behaviors still ship incrementally.
 
 1. **Ambivalence mode** — hold “I don’t know yet” without daily nudges; resurface on user-chosen date or event.
 2. **Relationship-to-the-tool check-ins** — “Is LifeOS helping, hovering, or hijacking?”
@@ -506,15 +517,24 @@ Trust is the product. Commerce is the byproduct of trust.
 - [x] lifeos-coach.html — added "I'm in a conflict right now / I need clarity" choice card (first in grid, distinct blue tint); clarity entry flow: emotional state chips (calm/stirred/heated/flooded) + free-text feeling + situation textarea + Start Clarity Session button; impartiality banner in active session (shown only for individual_clarity type, muted style); Get Pre-Conversation Prep button (appears at 4+ exchanges, clarity sessions only); prep card renders with labeled sections (Core Need / How to Open / What to Avoid / How They're Probably Feeling / One Question to Sit With); flooding banner in active session (shown when detect endpoint returns flooding:true on user's message); escalation/flooding check box in Recordings tab with flooding-specific banner text and break suggestion
 
 ### Phase 16: Personal Finance & Investment OS (Planned)
-- [ ] DB migration — finance accounts, categories, budgets, transactions, savings goals, IPS text, optional holdings snapshots (no broker execution in v1)
+- [x] DB migration — `20260408_lifeos_finance_and_prefs.sql` (accounts, categories, transactions, goals, IPS; `flourishing_prefs` JSONB on `lifeos_users`)
 - [ ] CSV / manual entry first; aggregation connectors (read-only) behind explicit consent + consent-registry entries
-- [ ] `services/lifeos-finance.js` (or split: budget, cashflow, investment-policy) + `routes/lifeos-finance-routes.js` + `public/overlay/lifeos-finance.html` (Mirror-adjacent entry)
+- [x] `services/lifeos-finance.js` + `routes/lifeos-finance-routes.js` mounted at `/api/v1/lifeos/finance` (overlay HTML still optional)
+- [ ] `public/overlay/lifeos-finance.html` (Mirror-adjacent entry)
 - [ ] Link money decisions to Decision Intelligence (log major money moves with context; second opinion on large irreversible choices)
 - [ ] Household: reuse `household_links` patterns for shared category visibility scopes
 - [ ] Any surfacing of `scripts/attention-momentum-backtest.mjs` / `strategy-benchmark-suite.mjs` in product UI: mandatory disclaimers; education-only; no auto-trading
 
 ### Phase 17: Flourishing Mechanics Backlog (Prioritized Subsets)
-- [ ] Implement Product Enhancement Backlog items in priority order after Mirror + Finance v1 prove daily use; each ships with sovereignty check + optional consent
+- [x] API hook: `PATCH /api/v1/lifeos/users/:handle/flourishing-prefs` merges JSON keys (ambivalence_until, quiet_until, etc.); full UI/workflows still backlog
+- [ ] Implement remaining Product Enhancement Backlog items in priority order after Mirror + Finance v1 prove daily use; each ships with sovereignty check + optional consent
+
+### Cross-Cutting: LifeOS scheduled jobs (no AI)
+- [x] `services/lifeos-scheduled-jobs.js` — commitment prods + outreach `processQueue`; **opt-in** via `LIFEOS_ENABLE_SCHEDULED_JOBS=1` (optional `LIFEOS_COMMITMENT_PROD_MS`, `LIFEOS_OUTREACH_PROCESS_MS`)
+- [x] `startup/boot-domains.js` — calls scheduler on boot (no-op until env set)
+
+### Cross-Cutting: LifeOS runtime health
+- [x] `GET /api/v1/lifeos/status` — table probes + finance migration probe + scheduler env flag
 
 ---
 
@@ -607,6 +627,10 @@ db/migrations/20260329_lifeos_healing.sql
 services/memory-healing.js
 routes/lifeos-healing-routes.js
 public/overlay/lifeos-healing.html
+db/migrations/20260408_lifeos_finance_and_prefs.sql
+services/lifeos-finance.js
+services/lifeos-scheduled-jobs.js
+routes/lifeos-finance-routes.js
 ```
 
 ## Protected Files
@@ -717,6 +741,8 @@ Read first for Phase 1 build:
 | 2026-04-01 | Layer 12 — Personal Finance & Investment OS; Scope + Out of Scope; Product Enhancement Backlog (25 mechanics + finance extensions); Twin + Phase 16/17 plan | User asked to add budgeting/finance/investment and capture all suggested flourishing features in SSOT; finance is mirror-first and non-advisory by default | ✅ | pending |
 | 2026-04-01 | `startup/register-runtime-routes.js` — mount all LifeOS routers (`/api/v1/lifeos`, `/engine`, `/health`, `/family`, `/ethics`, growth/decision/vision/etc.) | LifeOS code existed on disk but was not attached to Express; server now exposes the API surface for overlays and clients | ✅ | pending |
 | 2026-04-01 | `scripts/lifeos-verify.mjs` — require `lifeos-healing-routes.js`, `lifeos-legacy-routes.js` | Align verify list with shipped route set | ✅ | pending |
+| 2026-04-01 | Finance v1 + flourishing prefs + scheduler + status: `20260408_lifeos_finance_and_prefs.sql`, `lifeos-finance.js`, `lifeos-finance-routes.js`, `lifeos-scheduled-jobs.js`, `boot-domains` hook, `GET /api/v1/lifeos/status`, `PATCH .../flourishing-prefs`, core logger/SMS wiring | Layer 16/17 foundations; `LIFEOS_ENABLE_SCHEDULED_JOBS=1` for commitment prods + outreach processing; verify script lists real LifeOS services | ✅ | pending |
+| 2026-04-04 | Layer 5 extension — Self-Sabotage Monitor, Emergency Repair Button, Live CoPilot: services/self-sabotage-monitor.js (5 pattern types: commitment_dropout, proximity_retreat, joy_crash_before_win, cycle_recurrence, sudden_chaos_creation); services/emergency-repair.js (crisis routing, triage classification, repair tools); services/live-copilot.js (6 session types: negotiation, hard_conversation, decision, presentation, interview, other); routes/lifeos-copilot-routes.js; sabotage routes added to lifeos-emotional-routes.js; db/migrations/20260404_lifeos_copilot_sabotage.sql (4 tables: self_sabotage_log, emergency_repairs, copilot_sessions, copilot_messages); wired into startup/register-runtime-routes.js at /api/v1/lifeos/copilot | Layer 5 features specified in amendment were defined but not built; built now per Amendment 21 spec | ✅ | pending |
 | 2026-04-04 | Phase 8 Data Ethics built: 20260404_lifeos_data_ethics.sql, data-sovereignty.js, consent-registry.js, constitutional-lock.js, research-aggregator.js, lifeos-ethics-routes.js, sovereignty-check.js, multi-person-sync.js, scripts/lifeos-verify.mjs | Constitutional data ethics infrastructure: deletion cascade, consent registry (append-only), constitutional lock with coercion detection, privacy-safe research aggregation with Laplace noise, sovereignty check middleware | ✅ | pending |
 | 2026-03-28 | Rewrote lifeos-emotional-routes.js and lifeos-ethics-routes.js to match spec | New route set: emotional routes add GET/POST /parenting, GET/POST /inner-work; ethics routes add POST /erase (confirm_hash guard), GET /lock-status, POST /sovereignty/check, GET/POST /research/* — all mapped to correct service method signatures | ✅ | pending |
 | 2026-04-04 | All 8 phases complete — all routes mounted, outreach boot loop wired | Phases 2-3 (Engine, Health), 4-5 (Family, Emotional), 6-7 (Purpose, Children), 8 (Data Ethics) all built and mounted in register-runtime-routes.js; outreach 5m retry loop added to boot-domains.js; lifeos-verify.mjs confirms 10/10 migrations, 15/15 services, 8/8 routes | ✅ | pending |

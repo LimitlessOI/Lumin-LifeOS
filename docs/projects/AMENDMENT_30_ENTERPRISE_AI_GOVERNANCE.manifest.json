@@ -1,0 +1,53 @@
+{
+  "project_id": "enterprise_ai_governance",
+  "name": "Enterprise AI Governance",
+  "amendment_path": "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md",
+  "lifecycle": "planning",
+  "status": "pre-build",
+  "priority": "medium",
+  "owner": "adam",
+  "phase": "concept-definition",
+  "next_task": "Identify 3 warm contacts with AI compliance concerns. Draft Policy Pack templates (1-2 days). Create Risk Assessment Sprint offer sheet.",
+  "stability_class": "medium-risk",
+  "current_focus": "B2B enterprise AI security layer. LLM Egress Proxy, Policy Pack, Risk Assessment Sprint. ICP: 50-500 employee companies using AI tools with compliance requirements.",
+  "build_ready": false,
+  "owned_files": [
+    "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md",
+    "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.manifest.json"
+  ],
+  "protected_files": [
+    "server.js",
+    "docs/SSOT_COMPANION.md"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md",
+    "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.manifest.json"
+  ],
+  "required_routes": [],
+  "required_tables": [
+    "enterprise_clients",
+    "ai_audit_logs",
+    "governance_risk_register"
+  ],
+  "required_env": [],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.manifest.json" }
+  ],
+  "completion_checks": [
+    "Policy Pack templates written and reviewed",
+    "Risk Assessment Sprint offer sheet created",
+    "Vendor Runbooks (OpenAI/Anthropic/Gemini/xAI) written",
+    "First Risk Assessment Sprint booked",
+    "LLM Egress Proxy architecture designed and approved",
+    "DPA and ToS templates created for managed proxy service"
+  ],
+  "anti_drift_notes": "Start with sellable documents and service engagements (Policy Pack, Risk Sprint) before building any technical infrastructure. First revenue comes from consulting, not software. Technical products (proxy, eval harness) are Phase 2.",
+  "decision_debt": [
+    { "description": "PII/secret detection library selection: spaCy vs Presidio vs custom regex", "resolved": false },
+    { "description": "LLM Egress Proxy hosting: Cloudflare Worker vs Nginx on Railway vs dedicated VPS", "resolved": false },
+    { "description": "HIPAA BAA required for healthcare clients — attorney review needed before healthcare ICP", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

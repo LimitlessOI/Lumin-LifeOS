@@ -1,0 +1,70 @@
+{
+  "project_id": "ai_receptionist",
+  "name": "AI Receptionist",
+  "amendment_path": "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md",
+  "lifecycle": "planning",
+  "status": "near-ready",
+  "priority": "high",
+  "owner": "adam",
+  "phase": "pre-build",
+  "next_task": "Create Vapi account, set VAPI_API_KEY in Railway, create Stripe price IDs, build landing page.",
+  "stability_class": "medium-risk",
+  "current_focus": "$99/mo AI phone receptionist. Self-serve checkout. Vapi voice agent + call routing + BoldTrail CRM sync. First vertical: real estate agents.",
+  "build_ready": false,
+  "revenue_immediate": true,
+  "owned_files": [
+    "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md",
+    "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.manifest.json",
+    "routes/receptionist-routes.js",
+    "services/receptionist-service.js",
+    "public/ai-receptionist.html",
+    "public/checkout-success.html"
+  ],
+  "protected_files": [
+    "server.js",
+    "routes/billing-routes.js",
+    "routes/stripe-routes.js",
+    "routes/boldtrail-routes.js",
+    "services/twilio-service.js"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md",
+    "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.manifest.json"
+  ],
+  "required_routes": [
+    "POST /api/v1/receptionist/provision",
+    "POST /api/v1/receptionist/webhook/call",
+    "GET /api/v1/receptionist/calls",
+    "POST /api/v1/receptionist/webhook/stripe"
+  ],
+  "required_tables": [
+    "receptionist_configs",
+    "call_logs"
+  ],
+  "required_env": [
+    "VAPI_API_KEY",
+    "STRIPE_PRICE_ID_RECEPTIONIST_STARTER",
+    "STRIPE_PRICE_ID_RECEPTIONIST_PRO",
+    "STRIPE_PRICE_ID_RECEPTIONIST_AGENCY"
+  ],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_29_AI_RECEPTIONIST.manifest.json" }
+  ],
+  "completion_checks": [
+    "Landing page renders at /ai-receptionist",
+    "Stripe checkout opens and completes successfully",
+    "Post-checkout webhook provisions Vapi agent automatically",
+    "Call to provisioned number is answered by AI",
+    "Call summary appears in Command Center within 60 seconds",
+    "Qualified lead syncs to BoldTrail CRM"
+  ],
+  "anti_drift_notes": "Inbound answering is safe for TCPA. Outbound AI calling requires strict compliance review before build. Voice cloning (Phase 2) requires explicit consent architecture from voice owner. Do not build outbound or voice cloning until first 10 paying customers.",
+  "decision_debt": [
+    { "description": "Vapi vs Twilio Voice vs Bland.ai — pick primary voice AI vendor", "resolved": false },
+    { "description": "Dedicated phone number vs shared number with routing — MVP decision", "resolved": false },
+    { "description": "Typeform vs Google Form vs custom intake for onboarding brief", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

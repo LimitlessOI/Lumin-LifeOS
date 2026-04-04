@@ -1,0 +1,58 @@
+{
+  "project_id": "wellness_studio",
+  "name": "Wellness Studio",
+  "amendment_path": "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md",
+  "lifecycle": "planning",
+  "status": "pre-build",
+  "priority": "high",
+  "owner": "adam",
+  "phase": "concept-definition",
+  "next_task": "LifeOS Core Phase 1-8 must deploy and stabilize first. Wellness Studio extends existing LifeOS tables — schema conflicts must be verified before any build starts.",
+  "stability_class": "high-risk",
+  "current_focus": "Clinical and recovery extension of LifeOS. Serves addiction recovery, special needs parenting, caregiver support, therapist integration, conflict repair, boundary mastery, partner sync.",
+  "build_ready": false,
+  "parent_module": "AMENDMENT_21_LIFEOS_CORE.md",
+  "owned_files": [
+    "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md",
+    "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.manifest.json"
+  ],
+  "protected_files": [
+    "server.js",
+    "services/sovereignty-check.js",
+    "docs/SSOT_COMPANION.md"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md",
+    "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.manifest.json"
+  ],
+  "required_routes": [],
+  "required_tables": [
+    "recovery_baselines",
+    "recovery_milestones",
+    "therapist_profiles",
+    "session_briefs",
+    "boundary_inventory",
+    "partner_sync_sessions"
+  ],
+  "required_env": [],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_28_WELLNESS_STUDIO.manifest.json" }
+  ],
+  "completion_checks": [
+    "LifeOS Core Phase 1-8 deployed and stable",
+    "No schema conflicts with existing joy_checkins, integrity_score_log, wearable_data, emotional_patterns tables",
+    "HIPAA implications reviewed before therapist dashboard feature is built",
+    "Overdose detection false-positive calibration defined before build",
+    "Crisis routing tested — must be instant and unambiguous before any recovery feature ships"
+  ],
+  "anti_drift_notes": "This module does not replace therapists, addiction counselors, or psychiatrists. It serves the gap between appointments. When system detects signals beyond AI coaching scope (suicidal ideation, acute trauma, psychiatric emergency), it immediately surfaces professional resources — never attempts to coach through clinical crisis.",
+  "decision_debt": [
+    { "description": "HIPAA compliance review for therapist dashboard feature before build", "resolved": false },
+    { "description": "Overdose detection threshold calibration — too many false alerts = feature abandoned", "resolved": false },
+    { "description": "Recovery data encryption architecture — extra controls required", "resolved": false },
+    { "description": "Apple Watch HealthKit integration spec not yet defined", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

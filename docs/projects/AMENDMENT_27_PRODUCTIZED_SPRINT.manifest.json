@@ -1,0 +1,50 @@
+{
+  "project_id": "productized_sprint",
+  "name": "Productized Sprint Offers",
+  "amendment_path": "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md",
+  "lifecycle": "planning",
+  "status": "ready-to-launch",
+  "priority": "immediate",
+  "owner": "adam",
+  "phase": "delivery-setup",
+  "next_task": "Create Stripe payment links for all three tiers. Build intake form (Google Form or Typeform). Write and test AI pre-analysis prompt against 3 real briefs.",
+  "stability_class": "low-risk",
+  "current_focus": "Three productized service offers: Speed Fix ($250/24h), Build My Thing ($997/3-5 days), Mini-OS ($2,500-$5,000/7-14 days). No platform required — generates revenue immediately.",
+  "build_ready": true,
+  "revenue_immediate": true,
+  "owned_files": [
+    "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md",
+    "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.manifest.json"
+  ],
+  "protected_files": [
+    "server.js"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md",
+    "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.manifest.json"
+  ],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [
+    "STRIPE_SECRET_KEY"
+  ],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_27_PRODUCTIZED_SPRINT.manifest.json" }
+  ],
+  "completion_checks": [
+    "Stripe payment links created for Speed Fix ($250), Build My Thing ($997), Mini-OS deposit ($250)",
+    "Intake form built (one per offer)",
+    "AI pre-analysis prompt tested against 3 real briefs",
+    "One-pager sales page live at /sprint",
+    "LinkedIn profile updated to reference sprint offers",
+    "First 5 target customers identified from network"
+  ],
+  "anti_drift_notes": "No platform required for first revenue. Stripe + intake form + Adam = operational. Platform integration (Command Center panel, auto-routing) is Phase 2 only.",
+  "decision_debt": [
+    { "description": "Intake form platform choice: Google Form vs Typeform vs custom", "resolved": false },
+    { "description": "Sprint Queue: Notion board as interim vs Command Center panel", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

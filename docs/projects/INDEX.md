@@ -1,5 +1,5 @@
 # PROJECT AMENDMENTS INDEX
-**Last Updated:** 2026-03-27
+**Last Updated:** 2026-04-04 (amendments 29-32 added; candidate concepts from conversation dump mining documented; amendments 31-32 from original user concepts not found in dumps)
 **Parent:** SSOT North Star Constitution (`docs/SSOT_NORTH_STAR.md`)
 **Authority:** All amendments subordinate to the North Star Constitution
 
@@ -36,6 +36,19 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 17 | [TC Service — Transaction Coordinator](AMENDMENT_17_TC_SERVICE.md) | BUILDING | **#1 Active Revenue** | High |
 | 18 | [ClientCare Billing Recovery](AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.md) | BUILDING | **#1 Active Recovery** | High |
 | 19 | [Project Governance](AMENDMENT_19_PROJECT_GOVERNANCE.md) | BUILDING | Infrastructure | High |
+| 20 | [Capability Map](AMENDMENT_20_CAPABILITY_MAP.md) | experimental | Governance / intake | Medium |
+| 21 | [LifeOS Core](AMENDMENT_21_LIFEOS_CORE.md) | founding | Personal OS + planned finance layer | High |
+| 22 | [Story Studio](AMENDMENT_22_STORY_STUDIO.md) | experimental | Creator / family IP | Medium |
+| 23 | [Creator Media OS](AMENDMENT_23_CREATOR_MEDIA_OS.md) | experimental | Video / channel scale | Medium |
+| 24 | [Faith Studio](AMENDMENT_24_FAITH_STUDIO.md) | experimental | Sacred content | Medium |
+| 25 | [Conflict Arbitrator](AMENDMENT_25_CONFLICT_ARBITRATOR.md) | planning | **HIGH — $2B market, overlay architecture** | Low (pre-build) |
+| 26 | [Personal Finance OS](AMENDMENT_26_PERSONAL_FINANCE_OS.md) | planning | HIGH — LifeOS Core extension, subscription upsell | Low (pre-build) |
+| 27 | [Productized Sprint Offers](AMENDMENT_27_PRODUCTIZED_SPRINT.md) | planning | **IMMEDIATE — first revenue before platform ships** | None (service delivery) |
+| 28 | [Wellness Studio](AMENDMENT_28_WELLNESS_STUDIO.md) | planning | HIGH — recovery, special needs, therapist integration | Low (post LifeOS Core) |
+| 29 | [AI Receptionist](AMENDMENT_29_AI_RECEPTIONIST.md) | planning | **HIGH — $99/mo SaaS, self-serve, near-ready** | Medium |
+| 30 | [Enterprise AI Governance](AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md) | planning | HIGH — B2B $5K–$25K/yr, consulting-first | Low (pre-build) |
+| 31 | [Teacher OS](AMENDMENT_31_TEACHER_OS.md) | candidate | HIGH — recurring SaaS, mission-aligned, $29–$49/mo | Low (pre-build) |
+| 32 | [Music Talent Studio](AMENDMENT_32_MUSIC_TALENT_STUDIO.md) | candidate | HIGH — instruction + talent discovery, multi-revenue | Low (pre-build) |
 
 ---
 
@@ -140,3 +153,21 @@ Server.js is thinner than the historical monolith but still a composition-root h
 - Current candidate concepts that should stay nested for now:
   - TC recording / commitment / coaching features remain inside Amendment 17 and cross-link to Amendment 16 and Amendment 09.
   - Agent portal / client portal remains inside Amendment 17 until it becomes a shared cross-product portal.
+
+### Candidate Concepts (from conversation dump mining — not yet elevated to amendments)
+These ideas were found in GPT/Gemini/Grok/LifeOS conversation dumps. Not ready for full amendments — keep here until they have their own revenue path, technical surface, or non-negotiables.
+
+| Concept | Source | Nest Under / Notes |
+|---|---|---|
+| Billing-as-a-Service for Therapists & Rehab Clinics | LifeOS dump 002 | Distinct from Amendment 18 (ClientCare targets PT/behavioral); EMR billing automation for therapy/rehab clinics. Elevate when ClientCare is live. |
+| Wellness Product & Supplement Recommender | LifeOS dump 002 | Nest under Amendment 28 (Wellness Studio) as Module 8 |
+| Emotional Media / Entertainment Recommender | LifeOS dump 002 | Nest under Amendment 21 (LifeOS Core Layer 5 / Emotional Intelligence) |
+| Self-Sabotage Coaching System | LifeOS dump 002 | Already added to Amendment 21 Layer 5 |
+| Emotional AI Dating / Compatibility Engine | LifeOS dump 002 | Long-term standalone product; elevate when LifeOS Core has 6+ months of emotional pattern data |
+| ASH Ranch Lifestyle Resort / Timeshare Model | LifeOS dump 002 | Physical venture, not software; separate business entity if pursued |
+| LifeOS Ecosystem ("Trusted Amazon" Marketplace | LifeOS dump 002 | Long-term ecosystem feature; requires established user base |
+| Legal Document Automation (trusts, wills, contracts) | Miscellaneous dump | Elevate if attorney partnership secured; high regulatory complexity |
+| RAG Hardening Sprint / AI Truth Verification Service | LifeOS dump 002 | Nest under Amendment 30 (Enterprise AI Governance) as a specialized service offering |
+| Zoom AI Receptionist (voice-only overlay variant) | LifeOS dump 002, GPT dump 01 | Fully captured in Amendment 29 |
+| Capsule Marketplace (idea sharing / reuse economy) | Grok dump 001 | Interesting long-term platform play; nest under Amendment 02 (Memory System) for now |
+| Programmatic SEO Engine | GPT dump 02 | Nest under Amendment 05 (Site Builder) — SEO page generation is a natural extension |

@@ -1,0 +1,51 @@
+{
+  "project_id": "conflict_arbitrator",
+  "name": "Conflict Arbitrator",
+  "amendment_path": "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md",
+  "lifecycle": "planning",
+  "status": "pre-build",
+  "priority": "high",
+  "owner": "adam",
+  "phase": "concept-definition",
+  "next_task": "Architecture design for overlay PWA + legal/liability review required before any build starts.",
+  "stability_class": "high-risk",
+  "current_focus": "AI-powered mediation overlay that works across any communication platform. Multi-model consensus for fairness. Local-first privacy architecture.",
+  "build_ready": false,
+  "original_idea_score": 9.2,
+  "market_size": "$2B+ global mediation market",
+  "owned_files": [
+    "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md",
+    "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.manifest.json"
+  ],
+  "protected_files": [
+    "server.js",
+    "services/sovereignty-check.js",
+    "docs/SSOT_COMPANION.md"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md",
+    "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.manifest.json"
+  ],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_25_CONFLICT_ARBITRATOR.manifest.json" }
+  ],
+  "completion_checks": [
+    "Overlay PWA designed and architecture approved",
+    "Legal review of 'mediation' terminology completed — must be labeled 'AI-assisted conflict resolution'",
+    "Two-party consent architecture hardened before any voice recording feature ships",
+    "Abuse detection safety protocols defined before public launch"
+  ],
+  "anti_drift_notes": "This is NOT a therapy replacement. The overlay must never position itself as a replacement for licensed mediators. Crisis routing to professional resources must be instant and unambiguous.",
+  "decision_debt": [
+    { "description": "Legal review of 'mediation' terminology in different jurisdictions required", "resolved": false },
+    { "description": "Two-party consent laws (California + others) must be addressed in architecture", "resolved": false },
+    { "description": "Abusive relationship safety protocols not yet specified", "resolved": false },
+    { "description": "Voice recording legal requirements not yet mapped per state/country", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

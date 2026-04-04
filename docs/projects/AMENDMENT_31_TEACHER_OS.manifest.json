@@ -1,0 +1,71 @@
+{
+  "project_id": "AMENDMENT_31_TEACHER_OS",
+  "name": "Teacher OS",
+  "lifecycle": "candidate",
+  "status": "specification",
+  "priority": "high",
+  "build_ready": false,
+  "revenue_immediate": false,
+  "revenue_timeframe_weeks": 16,
+  "category": "Education / Vertical SaaS",
+  "owned_files": [
+    "routes/teacher-os-routes.js",
+    "services/teacher-os-paperwork.js",
+    "services/teacher-os-student-profiler.js",
+    "services/teacher-os-class-planner.js",
+    "services/teacher-os-briefing.js",
+    "db/migrations/*_teacher_os_schema.sql"
+  ],
+  "required_tables": [
+    "teacher_os_teachers",
+    "teacher_os_schools",
+    "teacher_os_students",
+    "teacher_os_student_progress",
+    "teacher_os_documents",
+    "teacher_os_curricula"
+  ],
+  "required_env": [
+    "STRIPE_SECRET_KEY"
+  ],
+  "required_routes": [
+    "POST /api/v1/teacher-os/documents/generate",
+    "GET  /api/v1/teacher-os/briefing/:teacherId",
+    "POST /api/v1/teacher-os/students/:id/profile",
+    "GET  /api/v1/teacher-os/students/:id/plan",
+    "POST /api/v1/teacher-os/curriculum/plan"
+  ],
+  "gate_blockers": [
+    "FERPA compliance review required before storing student data",
+    "5 teacher interviews needed to validate feature priority",
+    "Data processing agreement template needed for school contracts",
+    "Audio/AI strategy for student data anonymization"
+  ],
+  "assertions": [
+    "Teachers spend 40-50% of time on non-student work",
+    "Individualized instruction is mandated but practically impossible at 30:1",
+    "Song-first learning increases student retention"
+  ],
+  "completion_checks": [
+    "node --check routes/teacher-os-routes.js",
+    "node --check services/teacher-os-paperwork.js",
+    "node --check services/teacher-os-student-profiler.js"
+  ],
+  "anti_drift_notes": [
+    "Teacher is always the decision-maker — AI drafts, teacher approves",
+    "Never store student real names in AI prompts — use teacher-assigned display names",
+    "IEP support is advisory only — no clinical positioning",
+    "Do not automate parent communications — require teacher approval"
+  ],
+  "decision_debt": [
+    "FERPA data processing agreement — need legal template",
+    "Student data anonymization strategy — pseudonymization vs. synthetic IDs",
+    "School vs. individual pricing model — validate with teachers first",
+    "Audio analysis for practice sessions — in-house vs. third-party API"
+  ],
+  "candidate_concepts": [
+    "After-school program management",
+    "Substitute teacher handoff system",
+    "PTA/parent engagement layer",
+    "Special education compliance tools"
+  ]
+}
