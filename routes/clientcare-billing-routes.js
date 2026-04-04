@@ -13,12 +13,12 @@ import { createClientCareSellableService } from '../services/clientcare-sellable
 import { createClientCareSyncService } from '../services/clientcare-sync-service.js';
 import { createConversationStore } from '../services/conversation-store.js';
 
-export function createClientCareBillingRoutes({ pool, requireKey, logger = console, callCouncilMember }) {
+export function createClientCareBillingRoutes({ pool, requireKey, logger = console, callCouncilMember, callCouncilWithFailover = null }) {
   const router = express.Router();
   const billingService = createClientCareBillingService({ pool, logger });
   const syncService = createClientCareSyncService({ billingService, logger });
   const browserService = createClientCareBrowserService({ logger, syncService });
-  const opsService = createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember, logger });
+  const opsService = createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember, callCouncilWithFailover, logger });
   const sellableService = createClientCareSellableService({ pool, logger });
   const conversationStore = createConversationStore(pool);
 

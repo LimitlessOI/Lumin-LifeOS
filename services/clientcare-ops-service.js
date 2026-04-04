@@ -180,7 +180,7 @@ function derivePatientArStage(ageDays, policy) {
   return { stage: 'current', next_action: 'Monitor; no outreach yet', priority: 'low' };
 }
 
-export function createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember = null, logger = console }) {
+export function createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember = null, callCouncilWithFailover = null, logger = console }) {
   async function getPatientArPolicy() {
     try {
       const { rows } = await pool.query(`SELECT * FROM clientcare_patient_ar_policy WHERE scope_key='default' LIMIT 1`);
@@ -879,20 +879,34 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       };
     }
 
-    if (callCouncilMember) {
+    if (callCouncilWithFailover || callCouncilMember) {
       try {
         const dashboard = await billingService.getDashboard();
         const readiness = browserService.getReadiness();
         const reconciliation = await syncService.buildReconciliationSummary({ limit: 100 });
         const prompt = [
-          'You are the ClientCare billing operations copilot.',
-          'Return strict JSON with keys: reply, recommended_action, confidence, should_queue_capability_request, priority.',
+          'You are the ClientCare billing operations copilot speaking for the LifeOS AI Council.',
+          'Return strict JSON with keys: reply, recommended_action, confidence, should_queue_capability_request, priority, council_scope.',
           `User request: ${message}`,
           `Dashboard summary: ${JSON.stringify(dashboard.summary || {})}`,
           `Readiness: ${JSON.stringify(readiness)}`,
           `Reconciliation summary: ${JSON.stringify(reconciliation.summary || {})}`,
         ].join('\n');
-        const response = await callCouncilMember('claude', prompt, '', { responseFormat: 'json', maxTokens: 500, taskType: 'json', skipKnowledge: true });
+        const response = callCouncilWithFailover
+          ? await callCouncilWithFailover(prompt, 'chatgpt', false, {
+            responseFormat: 'json',
+            maxTokens: 600,
+            taskType: 'json',
+            complexity: 'complex',
+            requireConsensus: true,
+            skipKnowledge: true,
+          })
+          : await callCouncilMember('claude', prompt, '', {
+            responseFormat: 'json',
+            maxTokens: 500,
+            taskType: 'json',
+            skipKnowledge: true,
+          });
         let parsed = null;
         try { parsed = typeof response === 'string' ? JSON.parse(response) : response; } catch {}
         if (parsed) {
@@ -900,7 +914,7 @@ export function createClientCareOpsService({ pool, billingService, browserServic
             const request = await createCapabilityRequest(message, { requestedBy, priority: parsed.priority || 'normal', normalizedIntent: text, metadata: { recommended_action: parsed.recommended_action } });
             parsed.capability_request = request;
           }
-          return { ok: true, type: 'assistant', ...parsed };
+          return { ok: true, type: 'assistant', scope: parsed.council_scope || 'ai_council', ...parsed };
         }
       } catch (error) {
         logger.warn?.({ err: error.message }, '[CLIENTCARE-OPS] council assist failed');

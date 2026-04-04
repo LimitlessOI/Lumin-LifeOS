@@ -321,6 +321,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-04-03 | Added `callCouncilWithFailover` param to `createClientCareBillingRoutes` and `createClientCareOpsService` for AI failover support in the assistant path | 0.5h | 0.5h | none | ✅ | ✅ | pending |
 | 2026-04-02 | VOB result replaced with color-coded decision card (TAKE/REVIEW/DO NOT SCHEDULE) with payment estimate mini-cards, reasons list, and missing-info warning block. Full tooltip coverage added to every h2/h3 and all major buttons — plain-English hover instructions throughout. Toast notification system replaces all alert() calls. Setup checklist strip guides new users through 3 required steps. All section headings updated with contextual guidance. | 3h | 3h | none | ✅ | ✅ | pending |
 | 2026-04-02 | Added a dedicated `Verification of Benefits (VOB)` workspace near the top of the billing overlay, with selected-account prefills, one-click “Use selected account,” and direct take/review/do-not-schedule output instead of leaving VOB buried as a low-signal technical preview panel | 2h | 2h | none | ✅ | ✅ | pending |
 | 2026-04-02 | Reworked the billing account board into an operator-first red/yellow/green surface with a default `Needs Me` filter, explicit ownership summaries, hover “what needs doing” guidance, and a detail-pane action list that jumps straight into repair or live inspect work | 3h | 3h | none | ✅ | ✅ | pending |
