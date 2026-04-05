@@ -1,7 +1,7 @@
 # AMENDMENT_34: Kids OS
 
-**Status:** Candidate — Specification Phase
-**Last Updated:** 2026-04-04
+**Status:** In Progress — Foundation Build Complete
+**Last Updated:** 2026-04-05
 **Priority:** High (mission-foundational, long-arc subscription, graduates into adult LifeOS)
 **Category:** Education / Personal Development / Constitutional Mission
 **Parent Documents:**
@@ -402,14 +402,14 @@ CREATE TABLE kids_os_welfare_flags (
 );
 ```
 
-### Key Services
-- `services/kids-os-profile.js` — child profile builder, learning profile, Irlen screening
-- `services/kids-os-confidence-engine.js` — win logging, confidence architecture, belonging guarantee
-- `services/kids-os-future-self.js` — velocity calculation, projection generation
-- `services/kids-os-integrity-tracker.js` — integrity score, ethical persuasion curriculum
-- `services/kids-os-welfare-monitor.js` — abuse/welfare flag detection and routing
-- `services/kids-os-session-manager.js` — session logging, curiosity signal tracking
-- `routes/kids-os-routes.js` — all endpoints
+### Key Services (Built)
+- `services/kids-os-core.js` — enrollment, win log, integrity score, session tracking, belonging guarantee, love of learning score, misidentification flag reader, dashboard
+- `services/kids-os-screener.js` — misidentification screener (visual stress, gifted-as-ADHD, 2E, auditory processing, anxiety-as-behavior); never diagnoses; free intervention first
+- `routes/kids-os-routes.js` — 11 API endpoints at /api/v1/kids
+
+### Key Services (Planned — Phase 2+)
+- `services/kids-os-future-self.js` — velocity calculation, Future Self Simulator projections
+- `services/kids-os-welfare-monitor.js` — deeper abuse pattern detection and routing
 
 ### AI Usage Pattern
 - Session analysis + curiosity signal detection: Claude Haiku (fast, frequent, low-cost)
@@ -510,3 +510,4 @@ CREATE TABLE kids_os_welfare_flags (
 | Date | Change |
 |---|---|
 | 2026-04-04 | Amendment created — Kids OS defined as standalone product. Core philosophy, 8 features, graduation path, hardship protocol, abuse detection, cultural change mission, DB schema (6 tables), business model, GTM strategy, pre-build readiness gates |
+| 2026-04-05 | Foundation build complete. DB migration applied (7 tables: kids_os_children, kids_os_wins, kids_os_learning_profile, kids_os_sessions, kids_os_integrity_log, kids_os_welfare_flags, kids_future_projections). services/kids-os-core.js: enrollment, win log, belonging guarantee, integrity score, session log, learning love score, misidentification flags, welfare check, dashboard. services/kids-os-screener.js: 5-pattern screener (visual_stress, gifted_as_adhd, twice_exceptional, auditory_processing, anxiety_as_behavior), never diagnoses, free intervention first, Irlen guidance always included. routes/kids-os-routes.js: 11 endpoints at /api/v1/kids. Wired into register-runtime-routes.js. |

@@ -40,7 +40,10 @@ import { createLifeOSMediationRoutes } from "../routes/lifeos-mediation-routes.j
 import { createLifeOSPurposeRoutes } from "../routes/lifeos-purpose-routes.js";
 import { createLifeOSVisionRoutes } from "../routes/lifeos-vision-routes.js";
 import { createLifeOSFinanceRoutes }  from "../routes/lifeos-finance-routes.js";
-import { createLifeOSCopilotRoutes }  from "../routes/lifeos-copilot-routes.js";
+import { createLifeOSCopilotRoutes }   from "../routes/lifeos-copilot-routes.js";
+import { createLifeOSSimulatorRoutes } from "../routes/lifeos-simulator-routes.js";
+import { createLifeOSWorkshopRoutes }  from "../routes/lifeos-workshop-routes.js";
+import { createKidsOSRoutes }          from "../routes/kids-os-routes.js";
 
 export function registerRuntimeRoutes(app, deps) {
   const {
@@ -148,9 +151,15 @@ export function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/lifeos/healing", createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember, logger }));
   app.use("/api/v1/lifeos/legacy", createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, logger }));
   app.use("/api/v1/lifeos/finance",  createLifeOSFinanceRoutes({ pool, requireKey, logger }));
-  app.use("/api/v1/lifeos/copilot", createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember }));
+  app.use("/api/v1/lifeos/copilot",    createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember }));
+  app.use("/api/v1/lifeos/simulator",  createLifeOSSimulatorRoutes({ pool, requireKey, callCouncilMember }));
+  app.use("/api/v1/lifeos/workshop",   createLifeOSWorkshopRoutes({ pool, requireKey, callCouncilMember }));
+
+  app.use("/api/v1/kids", createKidsOSRoutes({ pool, requireKey, callCouncilMember }));
+  logger.info("✅ [KIDS-OS] Routes mounted at /api/v1/kids");
+
   logger.info(
-    "✅ [LIFEOS] Routes mounted at /api/v1/lifeos, /engine, /finance, /health, /family, /ethics, /vision, /decisions, /identity, /growth, /mediation, /conflict, /healing, /legacy, /copilot …",
+    "✅ [LIFEOS] Routes mounted at /api/v1/lifeos, /engine, /finance, /health, /family, /ethics, /vision, /decisions, /identity, /growth, /mediation, /conflict, /healing, /legacy, /copilot, /simulator, /workshop …",
   );
 
   const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });

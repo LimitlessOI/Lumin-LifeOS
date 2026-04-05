@@ -57,6 +57,7 @@ import { createChatGPTImport }             from '../services/chatgpt-import.js';
 import { createLuminMemoryFetcher }        from '../services/lumin-memory-fetcher.js';
 import { createLifeOSTwinBridge }          from '../core/lifeos-twin-bridge.js';
 import { createLifeOSNotificationRouter }  from '../services/lifeos-notification-router.js';
+import { createCommitmentSimulator }       from '../services/commitment-simulator.js';
 
 function isNumericId(v) {
   if (v == null || v === '') return false;
@@ -75,6 +76,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     : null;
 
   const commitments  = createCommitmentTracker(pool, callAI);
+  const commitSim    = createCommitmentSimulator({ pool, callAI });
   const integrity    = createIntegrityScore(pool);
   const joy          = createJoyScore(pool);
   const truthSvc     = createTruthDelivery({ pool, callAI });
@@ -286,6 +288,56 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
         const extracted = await commitments.extractCommitments(text, userId);
         res.json({ ok: true, extracted, count: extracted.length });
       }
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── COMMITMENT SIMULATOR ─────────────────────────────────────────────────
+  // POST /api/v1/lifeos/commitments/simulate — see the full cost before committing
+  // Body: { user?, title, description?, estimatedMinutesPerDay, estimatedDaysPerWeek?, durationWeeks? }
+  router.post('/commitments/simulate', requireKey, async (req, res) => {
+    try {
+      const {
+        user = 'adam',
+        title,
+        description,
+        estimatedMinutesPerDay,
+        estimatedDaysPerWeek = 7,
+        durationWeeks = 12,
+      } = req.body || {};
+
+      if (!title?.trim()) return res.status(400).json({ ok: false, error: 'title is required' });
+      if (estimatedMinutesPerDay == null) {
+        return res.status(400).json({ ok: false, error: 'estimatedMinutesPerDay is required' });
+      }
+
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+
+      const result = await commitSim.simulate(userId, {
+        title,
+        description,
+        estimatedMinutesPerDay: parseInt(estimatedMinutesPerDay),
+        estimatedDaysPerWeek:   parseInt(estimatedDaysPerWeek),
+        durationWeeks:          parseInt(durationWeeks),
+      });
+
+      res.json({ ok: true, simulation: result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /api/v1/lifeos/commitments/load — current commitment load summary
+  router.get('/commitments/load', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+
+      const summary = await commitSim.getLoadSummary(userId);
+      res.json({ ok: true, ...summary });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

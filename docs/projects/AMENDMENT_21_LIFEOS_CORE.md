@@ -5,9 +5,11 @@
 | **Lifecycle** | `founding-document` |
 | **Reversibility** | `one-way-door` |
 | **Stability** | `constitutional` |
-| **Last Updated** | 2026-04-04 (Built: self-sabotage-monitor.js, emergency-repair.js, live-copilot.js; lifeos-copilot-routes.js; sabotage endpoints added to lifeos-emotional-routes.js; DB migration 20260404_lifeos_copilot_sabotage.sql; routes wired in register-runtime-routes.js; lifeos-core-routes.js and lumin-memory-fetcher.js staged alongside education/healing mission SSOT commit) |
+| **Last Updated** | 2026-04-05 (Built: future-self-simulator.js, commitment-simulator.js, workshop-of-mind.js; lifeos-simulator-routes.js, lifeos-workshop-routes.js; commitment simulator endpoints added to lifeos-core-routes.js; DB migration 20260405_future_self_simulator.sql; routes wired in register-runtime-routes.js at /simulator and /workshop) |
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
+
+**Last Updated:** 2026-04-05
 
 ---
 
@@ -525,6 +527,16 @@ Trust is the product. Commerce is the byproduct of trust.
 - [ ] Household: reuse `household_links` patterns for shared category visibility scopes
 - [ ] Any surfacing of `scripts/attention-momentum-backtest.mjs` / `strategy-benchmark-suite.mjs` in product UI: mandatory disclaimers; education-only; no auto-trading
 
+### Phase 18: Core Simulators (Future Self + Commitment + Workshop)
+- [x] DB migration — future_self_projections, practice_sessions, workshop_sessions tables with indexes (20260405_future_self_simulator.sql)
+- [x] services/future-self-simulator.js — createFutureSimulator({ pool, callAI }); project() (single horizon, AI narrative + milestones + comparisonLevels, persists to DB); projectMultiple() (parallel projections); compareCommitmentLevels() (side-by-side commitment level comparison); logPracticeSession() (quality-weighted velocity tracking); getVelocity() (28-day rolling, trend detection: accelerating/decelerating/steady); getProjectionHistory()
+- [x] routes/lifeos-simulator-routes.js — 6 endpoints at /api/v1/lifeos/simulator: POST /project, /project/multiple, /project/compare, /sessions; GET /velocity/:domain, /history/:domain
+- [x] services/commitment-simulator.js — createCommitmentSimulator({ pool, callAI }); simulate() (fetches current load, detects collision points, AI feasibility analysis with honest_cost/risks/recommendation/alternatives); createCommitment() (commitment with simulation snapshot in metadata); getLoadSummary() (full inventory, utilization %, top 5 by load); checkBeforeAdding() (quick capacity gate)
+- [x] lifeos-core-routes.js — added POST /commitments/simulate, GET /commitments/load (wired to commitment-simulator.js)
+- [x] services/workshop-of-mind.js — createWorkshopOfMind({ pool, callAI }); startSession() (6 types, calming entry + first prompt from type-specific openers); sendResponse() (full message history → AI facilitator response with guidance+nextPrompt+complete flag); closeSession() (AI generates insight + anchorPhrase + integration, persists to DB); getSessionHistory(); getAnchorPhrases(); full SYSTEM_PROMPT for facilitator AI persona
+- [x] routes/lifeos-workshop-routes.js — 5 endpoints at /api/v1/lifeos/workshop: POST /sessions, /sessions/:id/respond, /sessions/:id/close; GET /sessions, /anchors
+- [x] Wired in startup/register-runtime-routes.js at /api/v1/lifeos/simulator and /api/v1/lifeos/workshop
+
 ### Phase 17: Flourishing Mechanics Backlog (Prioritized Subsets)
 - [x] API hook: `PATCH /api/v1/lifeos/users/:handle/flourishing-prefs` merges JSON keys (ambivalence_until, quiet_until, etc.); full UI/workflows still backlog
 - [ ] Implement remaining Product Enhancement Backlog items in priority order after Mirror + Finance v1 prove daily use; each ships with sovereignty check + optional consent
@@ -631,6 +643,12 @@ db/migrations/20260408_lifeos_finance_and_prefs.sql
 services/lifeos-finance.js
 services/lifeos-scheduled-jobs.js
 routes/lifeos-finance-routes.js
+db/migrations/20260405_future_self_simulator.sql
+services/future-self-simulator.js
+routes/lifeos-simulator-routes.js
+services/commitment-simulator.js
+services/workshop-of-mind.js
+routes/lifeos-workshop-routes.js
 ```
 
 ## Protected Files
