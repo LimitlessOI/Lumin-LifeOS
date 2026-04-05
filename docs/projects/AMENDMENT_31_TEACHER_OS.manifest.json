@@ -1,39 +1,39 @@
 {
   "project_id": "AMENDMENT_31_TEACHER_OS",
   "name": "Teacher OS",
-  "lifecycle": "candidate",
-  "status": "specification",
+  "lifecycle": "in_progress",
+  "status": "foundation_built",
   "priority": "high",
-  "build_ready": false,
+  "build_ready": true,
   "revenue_immediate": false,
   "revenue_timeframe_weeks": 16,
   "category": "Education / Vertical SaaS",
   "owned_files": [
     "routes/teacher-os-routes.js",
     "services/teacher-os-paperwork.js",
-    "services/teacher-os-student-profiler.js",
-    "services/teacher-os-class-planner.js",
-    "services/teacher-os-briefing.js",
-    "db/migrations/*_teacher_os_schema.sql"
+    "services/teacher-os-students.js",
+    "services/teacher-os-selfcare.js",
+    "db/migrations/20260405_teacher_os.sql"
   ],
-  "last_updated": "2026-04-04",
+  "last_updated": "2026-04-05",
   "required_tables": [
     "teacher_os_teachers",
-    "teacher_os_schools",
     "teacher_os_students",
-    "teacher_os_student_progress",
     "teacher_os_documents",
-    "teacher_os_curricula"
+    "teacher_os_win_log",
+    "teacher_os_wellbeing"
   ],
   "required_env": [
     "STRIPE_SECRET_KEY"
   ],
   "required_routes": [
-    "POST /api/v1/teacher-os/documents/generate",
-    "GET  /api/v1/teacher-os/briefing/:teacherId",
-    "POST /api/v1/teacher-os/students/:id/profile",
-    "GET  /api/v1/teacher-os/students/:id/plan",
-    "POST /api/v1/teacher-os/curriculum/plan"
+    "POST /api/v1/teacher/teachers",
+    "GET  /api/v1/teacher/teachers/:id/dashboard",
+    "POST /api/v1/teacher/teachers/:id/students",
+    "GET  /api/v1/teacher/teachers/:id/belonging",
+    "POST /api/v1/teacher/teachers/:id/students/:studentId/entry-points",
+    "POST /api/v1/teacher/teachers/:id/documents",
+    "GET  /api/v1/teacher/teachers/:id/impact"
   ],
   "gate_blockers": [
     "FERPA compliance review required before storing student data",
@@ -49,7 +49,8 @@
   "completion_checks": [
     "node --check routes/teacher-os-routes.js",
     "node --check services/teacher-os-paperwork.js",
-    "node --check services/teacher-os-student-profiler.js"
+    "node --check services/teacher-os-students.js",
+    "node --check services/teacher-os-selfcare.js"
   ],
   "anti_drift_notes": [
     "Teacher is always the decision-maker — AI drafts, teacher approves",
@@ -70,6 +71,7 @@
     "Special education compliance tools"
   ],
   "change_notes": [
-    "2026-04-04: Added Teacher Self-Care, New Teacher Survival Layer, Peer Community, Homeschool Version, Laws of Success / Integrity Score / Ethical Persuasion"
+    "2026-04-04: Added Teacher Self-Care, New Teacher Survival Layer, Peer Community, Homeschool Version, Laws of Success / Integrity Score / Ethical Persuasion",
+    "2026-04-05: Foundation built — 5 DB tables, 3 services, 25-endpoint route file, wired at /api/v1/teacher"
   ]
 }
