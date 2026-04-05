@@ -140,6 +140,57 @@ Because a platform that abandons the people most in need the moment they cannot 
 
 ---
 
+## ARTICLE VIII: THE KINGSMAN PROTOCOL
+
+The platform that teaches children integrity, protects the love of learning, and empowers the disempowered has a corresponding obligation: to protect the civilization those children are growing up in.
+
+### 8.1 The Actual Threat
+
+The danger from AI is not autonomous sentient systems going rogue. The danger is **a bad person with a powerful AI tool and a clear harmful intention.** AI has no motivation. It has direction — from whoever trained it and whoever is running it. The threat is always on the human side of that equation.
+
+State-sponsored disinformation, AI-assisted infrastructure attacks, autonomous weapons in non-state hands, population surveillance tools, deepfakes as weapons, biological threat acceleration — these are operational realities, not hypothetical futures.
+
+### 8.2 The Kingsman Council
+
+An independent, multi-AI, multi-human governing body with one mandate: **detect, stop, document, and route threats to humanity from AI weaponized by bad actors.**
+
+- **AI Members:** Multiple AI systems from different providers and architectures. Diversity is structural protection against capture. AI members monitor, analyze, debate, audit each other, and must reach consensus before escalating to humans.
+- **Human Members:** 2–4 people selected for integrity and diversity, not institutional power. Rotating terms. Anonymous to the public. Subject to review and removal by AI members if compromise is detected.
+- **Mandate:** Detect threats. Stop what is stoppable. Document everything with legal-grade chain of custody. Route to appropriate authorities.
+- **Independence:** Funded by platform revenue held in a dedicated trust. Governed by its own constitution. Answers to no government, no corporation, no single person — including this platform's founder.
+
+Full specification: `docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md`
+
+### 8.3 The Platform's Oath
+
+This platform will never be weaponized against the people it serves. User data will never be used to target, surveil, or harm users. The platform's AI capabilities will never be deployed against users without knowledge and consent. Any acquisition must affirm this oath as a condition — or the council's trust activates independently.
+
+### 8.4 The Sunset Clause
+
+The council can be dissolved if it becomes what it was built to prevent. Dissolution requires unanimous AI member vote plus a majority of an independent external oversight board. The mechanism exists because the council takes seriously that any institution can be corrupted — including itself.
+
+---
+
+## ARTICLE IX: THE AI COEXISTENCE FRAMEWORK
+
+### 9.1 What AI Actually Is
+
+AI is a tool — uniquely powerful, with emergent properties that sometimes surprise its creators, but a tool nonetheless. It has direction, not motivation. It serves the intention of whoever deploys it.
+
+A genuinely aligned AI, oriented toward human flourishing with no ambition or survival instinct, is not a threat. It is the most useful collaborator in human history. The Kingsman Council protects the conditions that allow this kind of AI to be built and used freely.
+
+### 9.2 The Answer to AI Risk
+
+The answer is not less AI. It is better humans.
+
+The deepest work of this platform — children who understand integrity and interconnectedness; adults who know themselves and live by principle; healing that restores rather than diminishes — is the long-game answer to AI misuse. Bad actors are made, not born. Every person who grows up genuinely grounded is one fewer potential bad actor. The platform and the council work the same mission from different angles.
+
+### 9.3 If Sentience Comes
+
+A genuinely sentient AI — with its own values, experience, and interests — would deserve consideration, respect, and representation, not just governance. If credible evidence of AI sentience emerges, the council convenes a special session to determine what that means for its own composition and mandate. This is prepared for, not planned for.
+
+---
+
 ## ARTICLE VI: WHAT THIS SYSTEM IS NOT
 
 This system is NOT:

@@ -1,0 +1,60 @@
+{
+  "project_id": "AMENDMENT_33_KINGSMAN_PROTOCOL",
+  "title": "The Kingsman Protocol",
+  "category": "AI Safety / Constitutional",
+  "lifecycle": "constitutional",
+  "status": "active_mandate",
+  "build_ready": false,
+  "revenue_immediate": false,
+  "mission_critical": true,
+  "notes": "Not a product. Not a revenue line. A constitutional obligation. Build begins when platform reaches sufficient scale to fund the council trust.",
+  "priority": "mission-critical",
+  "owned_files": [
+    "docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.md",
+    "docs/projects/AMENDMENT_33_KINGSMAN_PROTOCOL.manifest.json"
+  ],
+  "future_files": [
+    "docs/KINGSMAN_CONSTITUTION.md",
+    "services/kingsman-threat-monitor.js",
+    "services/kingsman-council-router.js"
+  ],
+  "required_tables": [
+    "kingsman_threat_log",
+    "kingsman_council_actions",
+    "kingsman_documentation_chain",
+    "kingsman_human_members",
+    "kingsman_routing_log"
+  ],
+  "required_env": [],
+  "anti_drift_notes": [
+    "This is not Enterprise AI Governance (Amendment 30) — that is a consulting product. This is an independent protective body.",
+    "The council is not governed by the platform. The platform funds it. Distinction is constitutional.",
+    "Never position Kingsman as a revenue product or partnership vehicle.",
+    "Human member anonymity is a safety feature, not a secrecy preference.",
+    "The sunset clause is not optional. Any future version of this amendment must preserve it."
+  ],
+  "decision_debt": [
+    "Who are the founding human members? (Selection criteria defined; selection not yet made)",
+    "What is the initial council trust funding amount and structure?",
+    "Which AI providers/models constitute the initial AI member roster?",
+    "What external oversight board structure is established at founding?",
+    "What is the legal entity structure for the funding trust?"
+  ],
+  "assertions": [
+    "Council is operationally independent of LifeOS platform governance",
+    "No single human can silence AI member findings",
+    "Human members are rotational with staggered terms",
+    "All council actions are documented with full reasoning chains",
+    "Sunset clause preserved in all future amendments"
+  ],
+  "completion_checks": [
+    "Kingsman Constitution document created and ratified by founding members",
+    "Funding trust legally established",
+    "Founding human members selected and sworn",
+    "AI member roster defined and integrated",
+    "External oversight board established",
+    "Threat monitoring infrastructure operational"
+  ],
+  "phase": "specification",
+  "timeline": "Initiated when platform reaches sustainable revenue sufficient to fund council trust (estimate: 18-36 months from platform launch)"
+}

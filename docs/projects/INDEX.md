@@ -1,5 +1,5 @@
 # PROJECT AMENDMENTS INDEX
-**Last Updated:** 2026-04-04 (amendments 29-32 added; candidate concepts from conversation dump mining documented; amendments 31-32 from original user concepts not found in dumps)
+**Last Updated:** 2026-04-04 (amendments 29-33 added; Amendment 33 = Kingsman Protocol, constitutional AI safety council)
 **Parent:** SSOT North Star Constitution (`docs/SSOT_NORTH_STAR.md`)
 **Authority:** All amendments subordinate to the North Star Constitution
 
@@ -49,6 +49,7 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 30 | [Enterprise AI Governance](AMENDMENT_30_ENTERPRISE_AI_GOVERNANCE.md) | planning | HIGH — B2B $5K–$25K/yr, consulting-first | Low (pre-build) |
 | 31 | [Teacher OS](AMENDMENT_31_TEACHER_OS.md) | candidate | HIGH — recurring SaaS, mission-aligned, $29–$49/mo | Low (pre-build) |
 | 32 | [Music Talent Studio](AMENDMENT_32_MUSIC_TALENT_STUDIO.md) | candidate | HIGH — instruction + talent discovery, multi-revenue | Low (pre-build) |
+| 33 | [Kingsman Protocol](AMENDMENT_33_KINGSMAN_PROTOCOL.md) | constitutional | Non-revenue — mission obligation, funded by platform trust | Specification phase |
 
 ---
 
