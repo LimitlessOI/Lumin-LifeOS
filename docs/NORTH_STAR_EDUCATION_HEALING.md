@@ -1,7 +1,8 @@
 # NORTH STAR — EDUCATION AND HEALING MISSION
 **Version:** 2026-04-04
 **Status:** FOUNDATIONAL PHILOSOPHY — Not a product spec. The WHY behind everything.
-**Scope:** Teacher OS, Kids OS, Music Talent Studio, Future Self Simulator, Accredited University, The Healing Mission
+**Scope:** Teacher OS (Amendment 31), Kids OS (Amendment 34), Music Talent Studio (Amendment 32), Future Self Simulator, Lumin University (Amendment 35), The Healing Mission, Kingsman Protocol (Amendment 33)
+**Updated:** 2026-04-04 — Teacher self-care as core feature; homeschool version; Adam's personal story as product requirement; Sherry's full story; named products added to sections
 
 ---
 
@@ -36,6 +37,25 @@ Teacher OS exists to give back the hours. Not to optimize the teacher. To free t
 
 **Paperwork elimination is not a productivity feature. It is a love-of-learning protection feature.** Every hour returned to a teacher is an hour available to notice the kid in the back row who stopped raising their hand.
 
+### Teacher Self-Care Is a Core Feature, Not an Add-On
+
+50% of teachers leave the profession within 5 years. Burnout is the cause. Burnout is not a wellness problem — it is a structural problem. A depleted teacher cannot protect the love of learning in their students. The chain is direct and causal.
+
+Teacher self-care is therefore not a wellness module bolted onto Teacher OS. It is a core feature of the platform, as fundamental as lesson planning. The platform tracks workload signals, emotional load signals, and surfaces direct evidence of the teacher's impact back to them — because teachers almost never receive that feedback, and the absence of it compounds depletion.
+
+The new teacher survival layer is part of this: 50% of teachers quit within 5 years, and the primary cause is isolation. Teacher OS is a veteran teacher's accumulated wisdom available to every first-year teacher from day one.
+
+### The Homeschool Version
+
+Homeschooling is not a niche. It is one of the fastest-growing educational models in the country. The homeschool context is fundamentally different from classroom teaching: 1-6 students instead of 30, deeper individualization possible, different structure challenges, different documentation requirements, different social needs.
+
+Teacher OS includes a dedicated homeschool product line with:
+- Deeper 1:1 individualization (the system can go much further with 3 students than with 30)
+- Daily schedule generation that honors each child's learning rhythms
+- Curriculum flexibility (not locked to grade-level standards; moves at the child's pace)
+- The co-op layer (multiple homeschool families connecting their children's profiles; group activities across learning levels)
+- Documentation that generates progress portfolios for state requirements and skeptical family members
+
 ### The Misidentification Crisis
 
 This is the most urgent and invisible crisis in education today.
@@ -68,6 +88,26 @@ The Love of Learning.
 Any feature, any intervention, any measurement approach that can be shown to damage a child's intrinsic motivation to learn — regardless of its short-term academic results — is rejected. This is non-negotiable. A child who performs but has lost the hunger to know is a failure case, not a success case. A child who struggles but still wants to understand is on the right path.
 
 All product metrics flow from this.
+
+### The Personal Stories That Are Product Requirements
+
+These are not background. They are the specification documents from which the platform's most important features are derived.
+
+**Adam's story — accepted limitations as identity protection:**
+Adam knew he was smart. He had evidence of it. But in certain domains — mathematics, perhaps, or others that felt foreign — he encountered early difficulty and made a decision that millions of children make: "I'm not good at this." He accepted a limited identity in that domain rather than endure the threat of continued failure. He avoided those areas to protect his self-worth.
+
+This is not a character flaw. It is a rational response to a system that ties self-worth to performance. When failing at something feels like being something — a failure, a limited person, someone who doesn't have "it" — avoidance is the only self-protective move available.
+
+Kids OS is designed to catch this exact moment and redirect it. The moment when a child encounters genuine difficulty and begins to construct an identity around that difficulty — "I'm not a math person," "writing isn't for me," "I'm just not creative" — the platform recognizes the pattern and intervenes. Not by insisting the child try harder. By systematically separating the struggle from the identity. "You're struggling with this right now. That says nothing about who you are. Here's what we're going to do next."
+
+**Sherry's story — social survival, perfectionism, and the programs that persist:**
+Sherry was bright, capable, and read the social environment of her childhood with accuracy. She understood — as children do, with remarkable precision — that a certain kind of child was popular and a certain kind of child was not, and that the cost of being in the second category was high. She made the calculation. She chose the social survival path.
+
+This was not cruelty. It was not weakness. It was the intelligent response of a child in a specific context making the most rational choice available to her. The child who would have been her friend deserved better — and Sherry would acknowledge that. But the platform does not use this story to judge her. It uses it to understand a dynamic that repeats in every school, every year, everywhere.
+
+The second thread: Sherry's father installed a perfectionism program. The standard was impossibly high. The distance between "good" and "good enough to be loved" was never fully closed. This voice — the one that says what you did was not quite enough, that another pass might fix it, that the risk of showing it as it is might expose inadequacy — this voice still runs today. It ran through her career. It runs through her experience of the platform being built.
+
+The platform is not therapy. But it is designed to recognize the patterns of perfectionism installation in children — because a parent who was perfectionism-installed will often install it in their children without knowing they're doing it. The system catches the pattern, names it without shaming it, and offers the child a different mirror.
 
 ---
 
@@ -266,15 +306,19 @@ Every product in this platform is the answer to a real pain that was paid by a r
 
 ---
 
-## XII. THE ACCREDITED UNIVERSITY VISION
+## XII. LUMIN UNIVERSITY — THE ACCREDITED UNIVERSITY VISION
 
-The platform's education trajectory ends here: a fully accredited university where life is the curriculum and your phone or computer is the campus.
+The platform's education trajectory ends here: **Lumin University** — a fully accredited institution (eventual goal) where life is the curriculum and your phone or computer is the campus.
 
-Built on the foundation of Kids OS. The student who grew up with this system arrives at the university already knowing themselves — their learning patterns, their strengths, their areas of growth, their goals. The university does not start from scratch. It continues a conversation that has been going for years.
+Built on the foundation of Kids OS. The student who grew up with this system arrives at Lumin University already knowing themselves — their learning patterns, their strengths, their areas of growth, their goals. The university does not start from scratch. It continues a conversation that has been going for years.
 
 No classroom. No campus. No debt trap. Learning that happens in the context of living, with the rigor of genuine academic challenge and the flexibility of a life that doesn't pause for school.
 
+**Competency-based, not time-based.** Credit is earned by demonstrating actual capability, not by sitting in a class for 16 weeks. You earn credit for knowing, not for attending.
+
 The accreditation process is a long game. It begins with the track record the K-12 system builds. It is funded by the platform's success. It is the capstone of the mission to prove that education does not require the institutions we have assumed it requires.
+
+*See `docs/projects/AMENDMENT_35_LUMIN_UNIVERSITY.md` for full specification.*
 
 ---
 
@@ -295,7 +339,26 @@ When a child discovers something they genuinely want to know, they do not need i
 
 ---
 
-## XIV. LIVING DOCUMENT NOTICE
+## XIV. NAMED PRODUCTS IN THE EDUCATION DOMAIN
+
+This section provides a map from philosophy sections in this document to the named products that implement them.
+
+| Product | Amendment | Philosophy Sections |
+|---------|-----------|---------------------|
+| **Teacher OS** | AMENDMENT_31 | Section II (Teacher philosophy), Section XIII (Cultural change) |
+| **Kids OS** | AMENDMENT_34 | Section III (Kids OS philosophy), Section V (Future Self), Section VII (Workshop of Mind), Section VIII (Bullying), Section IX (Abuse detection), Section X (Hardship), Section XIII (Cultural change) |
+| **Music Talent Studio** | AMENDMENT_32 | Section IV (Music philosophy), Section V (Future Self for music) |
+| **Lumin University** | AMENDMENT_35 | Section XII (Accredited University), Section V (Compounding) |
+| **Kingsman Protocol** | AMENDMENT_33 | Separate constitutional document — parallel mission |
+
+**The education product lineage:**
+Kids OS (ages 4-17) → Lumin University (18+) → Adult LifeOS (lifelong)
+
+Every product in this lineage knows the person who passes through it. The history is continuous. The conversation never starts from scratch.
+
+---
+
+## XV. LIVING DOCUMENT NOTICE
 
 This document captures the philosophical foundation as articulated in a session on 2026-04-04. It is a living document. When new product areas are developed, when new philosophical insights emerge, when the mission deepens — this document should be updated to reflect that.
 

@@ -1,0 +1,86 @@
+{
+  "project_id": "AMENDMENT_34_KIDS_OS",
+  "name": "Kids OS",
+  "lifecycle": "candidate",
+  "status": "specification",
+  "priority": "high",
+  "build_ready": false,
+  "revenue_immediate": false,
+  "revenue_timeframe_weeks": 20,
+  "category": "Education / Personal Development / Constitutional Mission",
+  "owned_files": [
+    "routes/kids-os-routes.js",
+    "services/kids-os-profile.js",
+    "services/kids-os-confidence-engine.js",
+    "services/kids-os-future-self.js",
+    "services/kids-os-integrity-tracker.js",
+    "services/kids-os-welfare-monitor.js",
+    "services/kids-os-session-manager.js",
+    "db/migrations/*_kids_os_schema.sql"
+  ],
+  "required_tables": [
+    "kids_os_children",
+    "kids_os_wins",
+    "kids_os_learning_profile",
+    "kids_os_sessions",
+    "kids_os_integrity_log",
+    "kids_os_future_self_projections",
+    "kids_os_welfare_flags"
+  ],
+  "required_env": [
+    "STRIPE_SECRET_KEY"
+  ],
+  "required_routes": [
+    "POST /api/v1/kids-os/children",
+    "GET  /api/v1/kids-os/children/:id/profile",
+    "POST /api/v1/kids-os/children/:id/wins",
+    "GET  /api/v1/kids-os/children/:id/future-self",
+    "POST /api/v1/kids-os/children/:id/sessions",
+    "GET  /api/v1/kids-os/children/:id/integrity-score",
+    "POST /api/v1/kids-os/screening/irlen"
+  ],
+  "gate_blockers": [
+    "COPPA compliance review required before any child data collection",
+    "Age-appropriate UX flows not yet specified (ages 4-7, 8-12, 13-17 are very different)",
+    "10 parent interviews needed to validate feature priority",
+    "Welfare flagging routing must be reviewed by a child safety professional",
+    "Misidentification screening framing requires legal and clinical review",
+    "Irlen screening tool UX not yet specified"
+  ],
+  "assertions": [
+    "Love of learning declines when self-worth is tied to performance",
+    "Evidence-based confidence (win logging) is more durable than praise-based confidence",
+    "Children who know their own learning patterns enter adulthood with a significant advantage",
+    "50% of misdiagnosed learning/attention issues have simpler explanations that can be screened for free"
+  ],
+  "completion_checks": [
+    "node --check routes/kids-os-routes.js",
+    "node --check services/kids-os-confidence-engine.js",
+    "node --check services/kids-os-welfare-monitor.js"
+  ],
+  "anti_drift_notes": [
+    "Love of learning is the #1 metric — never let grades or performance scores override this",
+    "Self-worth is NEVER tied to performance — this is a hard design constraint",
+    "Welfare flags must NEVER route to parents who may be the source of harm",
+    "Hardship protocol is constitutional — children never lose access for financial reasons",
+    "Future Self Simulator uses child's own velocity, not population averages",
+    "Irlen screening and misidentification review are informational tools, not diagnostic — always refer to professionals after",
+    "Integrity Score is a mirror, not a judge — never punitive",
+    "Double points for catching yourself manipulating — this earns the highest recognition"
+  ],
+  "decision_debt": [
+    "Age segmentation UX — the 4-year-old and 15-year-old experience need completely different interfaces",
+    "Welfare flagging legal review — what is the platform's liability exposure for detecting but not acting?",
+    "Teacher OS integration model — how do teacher and parent permissions intersect?",
+    "Lumin University bridge — technical handoff of the full history record",
+    "Irlen screening implementation — digital overlay trial is novel; needs usability validation",
+    "Graduation diploma — what certifying body, what standards? Pre-accreditation path."
+  ],
+  "candidate_concepts": [
+    "Peer connection matching (supervised, mission-aligned social layer)",
+    "Co-op family groups (multiple Kids OS families coordinating curriculum)",
+    "After-school program version (teacher-administered, school-approved)",
+    "Special education adapter (IDEA-aligned features, IEP tracking)",
+    "Language learning track (natural acquisition approach, not grammar-first)"
+  ]
+}

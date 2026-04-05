@@ -230,8 +230,135 @@ CREATE TABLE teacher_os_curricula (
 
 ---
 
+## Teacher Self-Care
+
+### This Is Not an Add-On
+
+50% of teachers leave the profession within 5 years. Burnout is not a wellness problem — it is a structural problem that the platform is uniquely positioned to address. Teacher self-care is a **core feature of Teacher OS**, not a separate wellness module. It is the mechanism by which the platform protects its own core mission: teachers who are depleted cannot protect the love of learning in their students.
+
+### What the System Tracks
+
+**Workload signals:**
+- Documentation load above sustainable thresholds → system flags and offers to shift work onto the queue rather than the teacher's shoulders
+- Week-over-week administrative task volume tracked; when it exceeds baseline by more than 20%, the system proactively reduces what it's asking of the teacher
+
+**Emotional load signals:**
+- Certain classroom compositions carry heavier weight — students in crisis, high-needs IEP load, class behavioral complexity
+- When a teacher is carrying a disproportionate emotional load, the system recognizes it and prompts a reset: a 3-minute decompression between the most demanding periods of the day
+- Signals are never clinical diagnoses — they are workload and pattern observations offered as reflections, not labels
+
+**Celebration of impact:**
+- The system surfaces direct evidence that the teacher changed something: "Emma hadn't had a success moment in 8 days. After your intervention Tuesday, she's had four in a row."
+- Teachers almost never receive concrete feedback that their effort mattered. This system delivers that feedback in real time, drawn from the same data it already tracks.
+
+**The decompression brief:**
+- End of day: what went well, what was hard, what to set down
+- A 2-minute structured reflection that helps teachers leave work at school — not because they don't care, but because caring too much without a reset burns them out
+
+### The New Teacher Survival Layer
+
+50% of teachers quit within 5 years. The leading cause is not low pay — it is isolation. A first-year teacher is handed 30 students, a classroom, and a curriculum and largely left to figure it out. Veterans hold enormous accumulated wisdom that is siloed, unshared, and lost when they retire.
+
+Teacher OS is a veteran teacher's wisdom available to every first-year teacher from day one:
+- "What do I do when a student completely shuts down?" — the system surfaces what has worked for this age group, this subject, this behavioral pattern
+- Lesson design intuition that normally takes 5 years to develop → available in year one
+- First-year teachers who use the platform survive. That is the outcome target.
+
+### Peer Community
+
+Not commiserating — genuine professional peer support. Other Teacher OS users dealing with similar challenges:
+- "Three of my students are processing family disruption this month — has anyone else navigated this in math class?"
+- Matched to teachers in similar contexts (grade level, school type, class composition) — not random connections
+- Community interactions are structured to produce actionable insights, not vent sessions (though venting has its place)
+
+---
+
+## Homeschool Version
+
+### A Dedicated Product Line Within Teacher OS
+
+Homeschooling is not a niche. It is one of the fastest-growing educational models in the country, and it has a fundamentally different set of challenges than classroom teaching. The platform serves both — with the same core engine and a distinct product experience for each.
+
+### What Changes in Homeschool Mode
+
+**Deeper individualization:**
+- A classroom teacher manages 30 students. A homeschool parent manages 1 to 6.
+- The AI can go much deeper on each child's profile — not because it has better data but because it has fewer children to distribute attention across.
+- Every learning plan is genuinely 1:1, not differentiated from a group.
+
+**The misidentification screening (core to this product line):**
+Adam's daughter was misdiagnosed with ADD. She was put on Adderall. She cried all day. The actual problem was Irlen Syndrome — a visual processing disorder where the brain cannot correctly interpret text on a page. A colored overlay costing $2 fixed everything. The $400 clinical test and the medication were never needed.
+
+This experience is the direct product requirement for the misidentification screening feature. The platform includes:
+- A free visual stress screening built into onboarding
+- A guided colored overlay trial (digital, in-app) before any recommendation to spend money
+- A structured alternative-explanation review before any child is tracked toward a clinical evaluation
+- Referral to clinical tools only after free interventions have been tried and documented
+
+This feature exists because of this story. It will help thousands of families who will never know Adam's daughter's name.
+
+**Daily schedule generator:**
+- Homeschool parents consistently cite structure as their biggest challenge — not content, but pacing and sequence
+- The system generates a daily schedule that honors each child's learning rhythms (not a generic school day template)
+- Respects co-curricular time (music, sports, community activities) and integrates them as part of the learning design
+
+**Curriculum flexibility:**
+- Not locked to grade-level standards
+- Moves at the child's pace — faster in areas of strength, slower where genuine consolidation is needed
+- Can operate in standards-aligned mode (for families who want it) or open-exploration mode (for families doing project-based learning)
+
+**The co-op layer:**
+- Multiple homeschool families can connect their children's profiles
+- The system generates group activities designed for children across different learning levels — so a 9-year-old advanced reader and a 7-year-old beginning reader can participate in the same literature unit at their respective levels
+- Socialization infrastructure: community connections for field trips, co-op classes, group projects
+
+**Documentation layer:**
+- Generates progress portfolios for state requirements (requirements vary significantly by state — the system knows each state's specific requirements)
+- Generates "evidence portfolios" for skeptical family members — grandparents, extended family who question homeschooling
+- Annual transcript generation for students who will eventually enter traditional educational settings
+
+---
+
+## Laws of Success / Integrity Score / Ethical Persuasion
+
+### The "Why" Child and What It Points To
+
+Children who ask "why" repeatedly are doing what every great thinker, scientist, inventor, and builder does. The system does not teach children to stop asking why. It teaches them **what asking "why" is for**.
+
+This distinction becomes the foundation of the ethical persuasion and integrity curriculum, which runs through both Teacher OS (as a classroom life-skills layer) and Kids OS (as a core development track).
+
+### The Framework
+
+**Genuine curiosity:**
+"I want to understand" → ask why → absorb the answer → ask another why → build real comprehension. This is celebrated unconditionally. The child who pursues tangents, who stays engaged past task completion, who brings outside information in — this is the love of learning in action.
+
+**Ethical persuasion:**
+"I want to change someone's mind or behavior" → understand their position first → find the ground where both people benefit → make your case → respect their right to say no. Persuasion that respects the other person's sovereignty. Asking for what you want without overriding their judgment.
+
+**Manipulation:**
+"I want to change someone's behavior against their interests or without their full information" → this is identified by name, shown for what it is, and refused. The child learns to recognize it — in others and, most importantly, in themselves. Catching yourself doing it and choosing differently is the highest integrity act.
+
+**The PSI / Laws of Success philosophy:**
+- "Results are often harsh but always fair." — Thomas Willhite
+- Laws of success are proven by results. Sacred cows either produce results or they don't. If a belief isn't generating the outcomes claimed for it, the belief deserves examination.
+- "No" means "not yet with these arguments in this context" — rejection as information, not as verdict on the person.
+
+### The Integrity Score
+
+Not a punishment mechanism. A mirror.
+
+The Integrity Score is gamified for students (age-appropriate implementation) and visible to the student and optionally to parents:
+
+- **+** Integrity points for: asking clearly and directly for what you want; accepting "no" with grace; keeping commitments to yourself and others; telling the truth when lying would be easier; choosing curiosity over defensiveness when challenged
+- **++** Double points for: catching yourself in a manipulation and choosing differently. This earns the highest recognition because it requires the most self-awareness and courage.
+
+The score is not about judging past behavior. It is about training the student to notice their own patterns in real time. Over months, the student develops what amounts to an internal integrity sensor — not because the platform told them to, but because they watched the evidence accumulate in their own record.
+
+---
+
 ## Change Receipts
 
 | Date | Change |
 |---|---|
 | 2026-04-04 | Amendment created from user-described concept (not found in conversation dumps) |
+| 2026-04-04 | Added: Teacher Self-Care (core feature, not add-on), New Teacher Survival Layer, Peer Community, Homeschool Version (full product line, misidentification screening, co-op layer, documentation), Laws of Success / Integrity Score / Ethical Persuasion |

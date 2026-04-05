@@ -1,0 +1,79 @@
+{
+  "project_id": "AMENDMENT_35_LUMIN_UNIVERSITY",
+  "name": "Lumin University",
+  "lifecycle": "candidate",
+  "status": "long-range-specification",
+  "priority": "high",
+  "build_ready": false,
+  "revenue_immediate": false,
+  "revenue_timeframe_weeks": 52,
+  "category": "Education / Accredited Institution / Constitutional Mission",
+  "owned_files": [
+    "routes/lumin-university-routes.js",
+    "services/lumin-university-enrollment.js",
+    "services/lumin-university-credits.js",
+    "services/lumin-university-cohort-matcher.js",
+    "services/lumin-university-credentials.js",
+    "db/migrations/*_lumin_university_schema.sql"
+  ],
+  "required_tables": [
+    "lumin_university_students",
+    "lumin_university_credits",
+    "lumin_university_cohorts",
+    "lumin_university_credentials",
+    "lumin_university_mentors"
+  ],
+  "required_env": [
+    "STRIPE_SECRET_KEY"
+  ],
+  "required_routes": [
+    "POST /api/v1/lumin-university/enroll",
+    "GET  /api/v1/lumin-university/students/:id/profile",
+    "POST /api/v1/lumin-university/students/:id/credits",
+    "GET  /api/v1/lumin-university/students/:id/transcript",
+    "POST /api/v1/lumin-university/credentials/:studentId/issue",
+    "GET  /api/v1/lumin-university/credentials/verify/:hash"
+  ],
+  "gate_blockers": [
+    "Legal review required — using 'university' without accreditation has state-specific legal implications",
+    "Competency standards per domain not yet defined",
+    "Evaluator/mentor qualification criteria not specified",
+    "Credential verification technology not selected (blockchain vs. cryptographic hash vs. third-party)",
+    "Accreditation body preliminary consultation needed",
+    "Conflict of interest management (platform as educator AND evaluator) needs structural solution"
+  ],
+  "assertions": [
+    "Students who know how they learn outperform students who don't, regardless of raw ability",
+    "Competency-based credentials are more meaningful to employers than time-based degrees",
+    "The most durable learning happens in the context of real stakes, not simulated ones",
+    "Kids OS graduates will enter higher education with measurably better self-knowledge than traditional students"
+  ],
+  "completion_checks": [
+    "node --check routes/lumin-university-routes.js",
+    "node --check services/lumin-university-enrollment.js",
+    "node --check services/lumin-university-credits.js"
+  ],
+  "anti_drift_notes": [
+    "Competency-based means NO seat time credit — you demonstrate or you don't have the credit",
+    "Hardship Protocol applies here exactly as in Kids OS — access is never suspended",
+    "Life as the curriculum is not a metaphor — actual life decisions ARE the coursework",
+    "Pre-accreditation credentials must be transparently labeled as such",
+    "Platform cannot be both educator and sole evaluator without conflict-of-interest management",
+    "Peer network is curated for complementarity, not affinity — diversity of perspective is a feature"
+  ],
+  "decision_debt": [
+    "Legal name — 'Lumin University' may require accreditation in some states before use",
+    "Accrediting body selection — regional vs. national vs. specialized accreditor",
+    "Credential verification technology — tamper-proof issuance system",
+    "Evaluator independence — how to manage platform's dual role as educator and evaluator",
+    "Transfer credit policy — how does work done elsewhere map to Lumin competencies?",
+    "Employer partnership model — how do employers recognize Lumin credentials before accreditation?"
+  ],
+  "candidate_concepts": [
+    "Corporate training track (employer-funded, workforce competency credentialing)",
+    "International cohorts (students from different countries, cross-cultural learning design)",
+    "Alumni network (post-graduation community with ongoing platform access)",
+    "Research arm (outcome tracking that generates publishable evidence for accreditation case)",
+    "Graduate-level tracks (master's-equivalent competency programs in specific domains)"
+  ]
+}
