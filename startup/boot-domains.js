@@ -127,6 +127,18 @@ async function bootTCDeadlineCron(deps) {
   await guardedBoot();
 }
 
+// ── LifeOS scheduled jobs (commitment prods + outreach) — opt-in, no AI ──────
+async function bootLifeOSScheduled(deps) {
+  const { pool, logger, sendSMS, notificationService } = deps;
+  try {
+    const { startLifeOSScheduledJobs } = await import('../services/lifeos-scheduled-jobs.js');
+    startLifeOSScheduledJobs({ pool, sendSMS, notificationService, logger });
+    logger.info?.('[BOOT] LifeOS scheduler initialized (active only if LIFEOS_ENABLE_SCHEDULED_JOBS=1)');
+  } catch (err) {
+    logger.warn?.(`[BOOT] LifeOS scheduler failed to load: ${err.message}`);
+  }
+}
+
 /**
  * bootAllDomains — call this once from server.js after app is ready.
  *
@@ -138,10 +150,48 @@ async function bootTCDeadlineCron(deps) {
  *   5. Add bootMyDomain(deps) to the Promise.allSettled list below
  *   6. NEVER skip the guard. No exceptions.
  */
+// ── Twin Auto-Ingest (conversation → adam_decisions → adam_profile) ───────────
+async function bootTwinAutoIngest(deps) {
+  const { pool, logger, callAI } = deps;
+
+  const guardedIngest = createUsefulWorkGuard({
+    taskName: 'Twin Auto-Ingest',
+    purpose: 'Ingest new Adam conversation messages into adam_decisions and rebuild profile when threshold reached',
+    prerequisites: async () => {
+      const { rows } = await pool.query(
+        `SELECT COUNT(*) FROM information_schema.tables WHERE table_name='twin_ingest_control'`
+      );
+      if (parseInt(rows[0].count, 10) === 0) {
+        return { ok: false, reason: 'twin_ingest_control table not yet migrated' };
+      }
+      return { ok: true };
+    },
+    workCheck: requireTableRows(
+      pool,
+      `SELECT COUNT(*) FROM conversation_messages WHERE role='user'`,
+      [],
+      'user conversation messages'
+    ),
+    execute: async () => {
+      const { createTwinAutoIngest } = await import('../services/twin-auto-ingest.js');
+      const ingest = createTwinAutoIngest({ pool, callAI });
+      await ingest.run();
+      logger.info?.('[BOOT] Twin auto-ingest run complete');
+    },
+    logger,
+  });
+
+  // Run once at boot, then every 30 minutes
+  await guardedIngest();
+  setInterval(guardedIngest, 30 * 60 * 1000);
+}
+
 export async function bootAllDomains(deps) {
   await Promise.allSettled([
     bootGLVARMonitor(deps),
     bootEmailTriage(deps),
     bootTCDeadlineCron(deps),
+    bootLifeOSScheduled(deps),
+    bootTwinAutoIngest(deps),
   ]);
 }

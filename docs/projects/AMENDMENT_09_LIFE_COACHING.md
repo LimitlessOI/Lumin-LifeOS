@@ -118,7 +118,12 @@ The personal operating system layer. Goal tracking, activity logging, calendar m
 
 **Status:** NOT_READY
 **Adaptability Score:** 65/100
-**Last Updated:** 2026-03-27
+**Last Updated:** 2026-04-04
+
+### Change Receipts (Digital Twin)
+| Date | Change |
+|---|---|
+| 2026-04-04 | Applied twin_ingest_control migration. Built scripts/import-dumps-to-twin.js — imports all 448 memory dump chunks + 377 conversation messages into adam_decisions (544 total). Wired twin-auto-ingest into bootAllDomains (runs at boot + every 30 min). Adam filter now has full historical record as source material for profile build. |
 
 ### Gate 1 — Implementation Detail
 - [ ] All sub-features are identified but none are extracted from server.js — 900 lines of endpoint code still inline
