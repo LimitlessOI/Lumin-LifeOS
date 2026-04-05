@@ -17,7 +17,8 @@
 
 const REPO          = process.env.GITHUB_REPO || 'LimitlessOI/Lumin-LifeOS';
 const BRANCH        = process.env.GITHUB_BRANCH || 'main';
-const DUMP_PATH     = '\u2022 Lumin-Memory/00_INBOX/raw'; // bullet • encoded
+// Folder name is bullet + TAB + "Lumin-Memory" — use tree API to avoid path encoding issues
+const DUMP_FOLDER_MARKER = 'Lumin-Memory/00_INBOX/raw'; // match by suffix in tree
 const CHUNK_WORDS   = 2000;   // words per chunk sent to AI
 const MAX_CHUNKS_PER_FILE = 30; // safety cap per file
 
@@ -64,51 +65,51 @@ function chunkText(text, chunkWords = CHUNK_WORDS) {
 export function createLuminMemoryFetcher({ pool, callAI, logger = console }) {
 
   // ── GitHub API helpers ─────────────────────────────────────────────────────
+  // Uses the git tree API (recursive) to list files — avoids all path encoding
+  // issues with special characters (bullet, tab, spaces) in folder names.
 
-  async function listFiles() {
-    const encodedPath = encodeURIComponent(DUMP_PATH).replace(/%2F/g, '/');
-    const url = `https://api.github.com/repos/${REPO}/contents/${encodedPath}?ref=${BRANCH}`;
-    const resp = await fetch(url, { headers: githubHeaders() });
-    if (!resp.ok) {
-      const body = await resp.text();
-      throw new Error(`GitHub API error listing files: ${resp.status} — ${body.substring(0, 200)}`);
-    }
-    const items = await resp.json();
-    return (Array.isArray(items) ? items : []).filter(i => i.type === 'file');
+  async function fetchFileList() {
+    // Step 1: get main branch HEAD SHA
+    const refResp = await fetch(
+      `https://api.github.com/repos/${REPO}/git/ref/heads/${BRANCH}`,
+      { headers: githubHeaders() }
+    );
+    if (!refResp.ok) throw new Error(`GitHub ref fetch failed: ${refResp.status}`);
+    const refData = await refResp.json();
+    const treeSha = refData?.object?.sha;
+    if (!treeSha) throw new Error('Could not get HEAD SHA');
+
+    // Step 2: get recursive tree
+    const treeResp = await fetch(
+      `https://api.github.com/repos/${REPO}/git/trees/${treeSha}?recursive=1`,
+      { headers: githubHeaders() }
+    );
+    if (!treeResp.ok) throw new Error(`GitHub tree fetch failed: ${treeResp.status}`);
+    const treeData = await treeResp.json();
+
+    // Step 3: filter to files in our dump folder (match by path suffix, ignore bullet/tab encoding)
+    return (treeData.tree || []).filter(item =>
+      item.type === 'blob' &&
+      item.path.replace(/^[^a-zA-Z]+/, '').startsWith('Lumin-Memory/00_INBOX/raw/') &&
+      !item.path.includes('/00_INBOX/raw/00_INBOX/') && // skip the broken duplicate subtree
+      item.size > 100  // skip placeholder 14-byte "404: Not Found" files
+    ).map(item => ({
+      name: item.path.split('/').pop(),
+      sha: item.sha,
+      size: item.size,
+    }));
   }
 
   async function fetchFileContent(item) {
-    // For files <= 1MB, content is base64 in the contents API response
-    if (item.size <= 1_000_000 && item.content) {
-      const decoded = Buffer.from(item.content.replace(/\n/g, ''), 'base64').toString('utf-8');
-      return decoded;
-    }
-
-    // Large files: fetch via the blob SHA directly
-    if (!item.sha) throw new Error(`No SHA for file ${item.name}`);
+    // All these files are large (>1MB) — fetch via raw blob API using SHA
     const url = `https://api.github.com/repos/${REPO}/git/blobs/${item.sha}`;
     const resp = await fetch(url, {
       headers: { ...githubHeaders(), Accept: 'application/vnd.github.raw+json' },
     });
     if (!resp.ok) {
-      throw new Error(`GitHub blob fetch error for ${item.name}: ${resp.status}`);
+      throw new Error(`GitHub blob fetch failed for ${item.name}: ${resp.status}`);
     }
-    // raw+json returns plain text directly
     return await resp.text();
-  }
-
-  async function fetchFileList() {
-    // We need the full item list including sha + size. The contents API
-    // returns this for directory listings.
-    const encodedPath = encodeURIComponent(DUMP_PATH).replace(/%2F/g, '/');
-    const url = `https://api.github.com/repos/${REPO}/contents/${encodedPath}?ref=${BRANCH}`;
-    const resp = await fetch(url, { headers: githubHeaders() });
-    if (!resp.ok) {
-      const body = await resp.text();
-      throw new Error(`GitHub API listing failed: ${resp.status} — ${body.substring(0, 300)}`);
-    }
-    const items = await resp.json();
-    return (Array.isArray(items) ? items : []).filter(i => i.type === 'file');
   }
 
   // ── AI extraction ──────────────────────────────────────────────────────────

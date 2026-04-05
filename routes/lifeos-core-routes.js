@@ -40,6 +40,10 @@
  *   GET  /api/v1/lifeos/users                   — list LifeOS users
  *   GET  /api/v1/lifeos/users/:handle           — user profile
  *   PUT  /api/v1/lifeos/users/:handle           — update Be-Do-Have + truth_style
+ *   PATCH /api/v1/lifeos/users/:handle/flourishing-prefs — merge JSON prefs (backlog mechanics)
+ *
+ * STATUS
+ *   GET  /api/v1/lifeos/status                  — DB probes + finance + scheduler config (ops)
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
@@ -54,8 +58,14 @@ import { createLuminMemoryFetcher }        from '../services/lumin-memory-fetche
 import { createLifeOSTwinBridge }          from '../core/lifeos-twin-bridge.js';
 import { createLifeOSNotificationRouter }  from '../services/lifeos-notification-router.js';
 
-export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember }) {
+function isNumericId(v) {
+  if (v == null || v === '') return false;
+  return /^\d+$/.test(String(v).trim());
+}
+
+export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, logger, sendSMS }) {
   const router = express.Router();
+  const log = logger || console;
 
   const callAI = callCouncilMember
     ? async (prompt) => {
@@ -68,20 +78,58 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember }) 
   const integrity    = createIntegrityScore(pool);
   const joy          = createJoyScore(pool);
   const truthSvc     = createTruthDelivery({ pool, callAI });
-  const chatgptSvc   = createChatGPTImport({ pool, callAI, logger: console });
-  const memFetcher   = createLuminMemoryFetcher({ pool, callAI, logger: console });
-  const twinBridge   = createLifeOSTwinBridge({ pool, callAI, logger: console });
-  const notifier     = createLifeOSNotificationRouter({ pool, sendSMS: null, logger: console });
+  const chatgptSvc   = createChatGPTImport({ pool, callAI, logger: log });
+  const memFetcher   = createLuminMemoryFetcher({ pool, callAI, logger: log });
+  const twinBridge   = createLifeOSTwinBridge({ pool, callAI, logger: log });
+  const notifier     = createLifeOSNotificationRouter({ pool, sendSMS: sendSMS ?? null, logger: log });
 
   // Helper: resolve user_id from handle or id
   async function resolveUserId(handleOrId) {
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [handleOrId]);
-      return rows[0]?.id || null;
+    if (isNumericId(handleOrId)) {
+      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [String(handleOrId).trim()]);
+      return rows[0]?.id ?? null;
     }
     const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id || null;
+    return rows[0]?.id ?? null;
   }
+
+  // ── STATUS (ops / overlays) ───────────────────────────────────────────────
+  router.get('/status', requireKey, async (_req, res) => {
+    try {
+      const probes = ['lifeos_users', 'commitments', 'daily_mirror_log'];
+      const table_counts = {};
+      for (const t of probes) {
+        try {
+          const { rows } = await pool.query(`SELECT COUNT(*)::int AS c FROM ${t}`);
+          table_counts[t] = rows[0]?.c ?? 0;
+        } catch {
+          table_counts[t] = null;
+        }
+      }
+      let finance_ok = null;
+      try {
+        const { rows } = await pool.query(`SELECT COUNT(*)::int AS c FROM lifeos_finance_transactions`);
+        finance_ok = rows[0]?.c ?? 0;
+      } catch {
+        finance_ok = null;
+      }
+      res.json({
+        ok: true,
+        api: 'lifeos',
+        scheduled_jobs_enabled:
+          process.env.LIFEOS_ENABLE_SCHEDULED_JOBS === '1' || process.env.LIFEOS_ENABLE_SCHEDULED_JOBS === 'true',
+        table_counts,
+        finance_transactions_count: finance_ok,
+        backlog_hints: {
+          flourishing_prefs_keys:
+            'ambivalence_until, quiet_until, depletion_tags, accountability_onepager_url (merge via PATCH .../flourishing-prefs)',
+          finance: '/api/v1/lifeos/finance/disclaimer',
+        },
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
 
   // ── USERS ─────────────────────────────────────────────────────────────────
 
@@ -125,6 +173,27 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember }) 
         WHERE user_handle = $1
         RETURNING *
       `, [req.params.handle, be_statement, do_statement, have_vision, truth_style, display_name, timezone]);
+      if (!rows[0]) return res.status(404).json({ ok: false, error: 'User not found' });
+      res.json({ ok: true, user: rows[0] });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.patch('/users/:handle/flourishing-prefs', requireKey, async (req, res) => {
+    try {
+      const patch = req.body;
+      if (!patch || typeof patch !== 'object' || Array.isArray(patch)) {
+        return res.status(400).json({ ok: false, error: 'JSON object body required' });
+      }
+      const { rows } = await pool.query(
+        `UPDATE lifeos_users
+         SET flourishing_prefs = COALESCE(flourishing_prefs, '{}'::jsonb) || $2::jsonb,
+             updated_at = NOW()
+         WHERE user_handle = $1
+         RETURNING id, user_handle, flourishing_prefs`,
+        [req.params.handle, JSON.stringify(patch)],
+      );
       if (!rows[0]) return res.status(404).json({ ok: false, error: 'User not found' });
       res.json({ ok: true, user: rows[0] });
     } catch (err) {

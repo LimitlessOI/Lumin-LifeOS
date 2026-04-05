@@ -5,7 +5,7 @@
 | **Lifecycle** | `founding-document` |
 | **Reversibility** | `one-way-door` |
 | **Stability** | `constitutional` |
-| **Last Updated** | 2026-04-04 (Built: self-sabotage-monitor.js, emergency-repair.js, live-copilot.js; lifeos-copilot-routes.js; sabotage endpoints added to lifeos-emotional-routes.js; DB migration 20260404_lifeos_copilot_sabotage.sql; routes wired in register-runtime-routes.js) |
+| **Last Updated** | 2026-04-04 (Built: self-sabotage-monitor.js, emergency-repair.js, live-copilot.js; lifeos-copilot-routes.js; sabotage endpoints added to lifeos-emotional-routes.js; DB migration 20260404_lifeos_copilot_sabotage.sql; routes wired in register-runtime-routes.js; lifeos-core-routes.js and lumin-memory-fetcher.js staged alongside education/healing mission SSOT commit) |
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
