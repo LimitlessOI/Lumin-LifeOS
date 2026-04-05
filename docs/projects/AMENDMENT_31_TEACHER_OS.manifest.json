@@ -16,6 +16,7 @@
     "services/teacher-os-briefing.js",
     "db/migrations/*_teacher_os_schema.sql"
   ],
+  "last_updated": "2026-04-04",
   "required_tables": [
     "teacher_os_teachers",
     "teacher_os_schools",
@@ -67,5 +68,8 @@
     "Substitute teacher handoff system",
     "PTA/parent engagement layer",
     "Special education compliance tools"
+  ],
+  "change_notes": [
+    "2026-04-04: Added Teacher Self-Care, New Teacher Survival Layer, Peer Community, Homeschool Version, Laws of Success / Integrity Score / Ethical Persuasion"
   ]
 }
