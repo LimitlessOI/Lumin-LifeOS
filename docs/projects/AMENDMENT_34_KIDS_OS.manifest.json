@@ -1,22 +1,19 @@
 {
   "project_id": "AMENDMENT_34_KIDS_OS",
   "name": "Kids OS",
-  "lifecycle": "candidate",
-  "status": "specification",
+  "lifecycle": "active",
+  "status": "foundation_built",
+  "last_updated": "2026-04-05",
   "priority": "high",
-  "build_ready": false,
+  "build_ready": true,
   "revenue_immediate": false,
   "revenue_timeframe_weeks": 20,
   "category": "Education / Personal Development / Constitutional Mission",
   "owned_files": [
     "routes/kids-os-routes.js",
-    "services/kids-os-profile.js",
-    "services/kids-os-confidence-engine.js",
-    "services/kids-os-future-self.js",
-    "services/kids-os-integrity-tracker.js",
-    "services/kids-os-welfare-monitor.js",
-    "services/kids-os-session-manager.js",
-    "db/migrations/*_kids_os_schema.sql"
+    "services/kids-os-core.js",
+    "services/kids-os-screener.js",
+    "db/migrations/20260405_kids_os.sql"
   ],
   "required_tables": [
     "kids_os_children",
@@ -24,20 +21,24 @@
     "kids_os_learning_profile",
     "kids_os_sessions",
     "kids_os_integrity_log",
-    "kids_os_future_self_projections",
-    "kids_os_welfare_flags"
+    "kids_os_welfare_flags",
+    "kids_future_projections"
   ],
   "required_env": [
     "STRIPE_SECRET_KEY"
   ],
   "required_routes": [
-    "POST /api/v1/kids-os/children",
-    "GET  /api/v1/kids-os/children/:id/profile",
-    "POST /api/v1/kids-os/children/:id/wins",
-    "GET  /api/v1/kids-os/children/:id/future-self",
-    "POST /api/v1/kids-os/children/:id/sessions",
-    "GET  /api/v1/kids-os/children/:id/integrity-score",
-    "POST /api/v1/kids-os/screening/irlen"
+    "POST /api/v1/kids/children",
+    "GET  /api/v1/kids/children/:id",
+    "GET  /api/v1/kids/children/:id/dashboard",
+    "POST /api/v1/kids/children/:id/wins",
+    "POST /api/v1/kids/children/:id/integrity",
+    "GET  /api/v1/kids/children/:id/integrity",
+    "POST /api/v1/kids/children/:id/sessions",
+    "POST /api/v1/kids/children/:id/screen",
+    "GET  /api/v1/kids/children/:id/screening",
+    "POST /api/v1/kids/children/:id/belonging-check",
+    "GET  /api/v1/kids/children/:id/welfare"
   ],
   "gate_blockers": [
     "COPPA compliance review required before any child data collection",
@@ -55,8 +56,8 @@
   ],
   "completion_checks": [
     "node --check routes/kids-os-routes.js",
-    "node --check services/kids-os-confidence-engine.js",
-    "node --check services/kids-os-welfare-monitor.js"
+    "node --check services/kids-os-core.js",
+    "node --check services/kids-os-screener.js"
   ],
   "anti_drift_notes": [
     "Love of learning is the #1 metric — never let grades or performance scores override this",
