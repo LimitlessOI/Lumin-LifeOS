@@ -44,6 +44,7 @@ import { createLifeOSCopilotRoutes }   from "../routes/lifeos-copilot-routes.js"
 import { createLifeOSSimulatorRoutes } from "../routes/lifeos-simulator-routes.js";
 import { createLifeOSWorkshopRoutes }  from "../routes/lifeos-workshop-routes.js";
 import { createKidsOSRoutes }          from "../routes/kids-os-routes.js";
+import { createTeacherOSRoutes }      from "../routes/teacher-os-routes.js";
 
 export function registerRuntimeRoutes(app, deps) {
   const {
@@ -157,6 +158,9 @@ export function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/kids", createKidsOSRoutes({ pool, requireKey, callCouncilMember }));
   logger.info("✅ [KIDS-OS] Routes mounted at /api/v1/kids");
+
+  app.use("/api/v1/teacher", createTeacherOSRoutes({ pool, requireKey, callCouncilMember }));
+  logger.info("✅ [TEACHER-OS] Routes mounted at /api/v1/teacher");
 
   logger.info(
     "✅ [LIFEOS] Routes mounted at /api/v1/lifeos, /engine, /finance, /health, /family, /ethics, /vision, /decisions, /identity, /growth, /mediation, /conflict, /healing, /legacy, /copilot, /simulator, /workshop …",

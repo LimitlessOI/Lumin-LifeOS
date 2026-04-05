@@ -1,7 +1,7 @@
 # AMENDMENT_31: Teacher OS
 
-**Status:** Candidate — Specification Phase
-**Last Updated:** 2026-04-04
+**Status:** In Progress — Foundation Built
+**Last Updated:** 2026-04-05
 **Priority:** High (mission-aligned, recurring SaaS)
 **Category:** Education / Vertical SaaS
 
@@ -204,7 +204,7 @@ CREATE TABLE teacher_os_curricula (
 - [x] GTM strategy outlined
 - [x] Regulatory risks identified
 - [x] DB schema drafted
-- [ ] Detailed API specification
+- [x] Detailed API specification (routes/teacher-os-routes.js — all endpoints documented)
 - [ ] Wireframes / UX flow
 
 ### Gate 2 — Market Validation
@@ -362,3 +362,4 @@ The score is not about judging past behavior. It is about training the student t
 |---|---|
 | 2026-04-04 | Amendment created from user-described concept (not found in conversation dumps) |
 | 2026-04-04 | Added: Teacher Self-Care (core feature, not add-on), New Teacher Survival Layer, Peer Community, Homeschool Version (full product line, misidentification screening, co-op layer, documentation), Laws of Success / Integrity Score / Ethical Persuasion |
+| 2026-04-05 | Foundation built: db/migrations/20260405_teacher_os.sql (5 tables, 5 indexes applied to sandbox), services/teacher-os-paperwork.js (9 doc types, full paperwork eliminator), services/teacher-os-students.js (Class Coherence Engine, Belonging Guarantee, misidentification screening), services/teacher-os-selfcare.js (core self-care, impact celebration, new teacher guidance), routes/teacher-os-routes.js (25 endpoints), wired into register-runtime-routes.js at /api/v1/teacher |
