@@ -32,6 +32,10 @@
     phone: '',
     email: '',
   };
+  let lastVobCardFile = null;
+  let lastVobCardState = 'idle';
+  let lastVobCardSummary = null;
+  let lastVobCardError = '';
   let lastInsuranceDraft = {
     payer_name: '',
     member_id: '',
@@ -128,10 +132,58 @@
   /** Card file for ClientCare pipeline / reconcile — inline VOB zone first, then reconcile panel. */
   function getReconcileCardFile() {
     return (
-      document.getElementById('vob-inline-file')?.files?.[0]
+      lastVobCardFile
+      || document.getElementById('vob-inline-file')?.files?.[0]
       || document.getElementById('reconcile-card-file')?.files?.[0]
       || null
     );
+  }
+
+  function renderVobCardStatus() {
+    if (lastVobCardState === 'reading' && lastVobCardFile?.name) {
+      return `<span style="color:#8aa4ff;">Reading card… <em>${escapeHtml(lastVobCardFile.name)}</em></span>`;
+    }
+    if (lastVobCardState === 'error' && lastVobCardError) {
+      return `<span style="color:#ff9db0;">Card read failed: ${escapeHtml(lastVobCardError)}</span>`;
+    }
+    if (lastVobCardSummary) {
+      const matched = lastVobCardSummary.matchedClientName
+        ? ` · matched: <strong>${escapeHtml(lastVobCardSummary.matchedClientName)}</strong>`
+        : '';
+      const payer = lastVobCardSummary.payer_name
+        ? `<strong>${escapeHtml(lastVobCardSummary.payer_name)}</strong>`
+        : '<span class="muted">payer unknown</span>';
+      const mid = lastVobCardSummary.member_id
+        ? ` · ID <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${escapeHtml(lastVobCardSummary.member_id)}</code>`
+        : '';
+      const grp = lastVobCardSummary.group_number
+        ? ` · Grp <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${escapeHtml(lastVobCardSummary.group_number)}</code>`
+        : '';
+      return `
+        <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
+        &nbsp;—&nbsp;${payer}${mid}${grp}${matched}
+        &nbsp;<button type="button" id="vob-inline-clear"
+          style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
+      `;
+    }
+    return '';
+  }
+
+  function getVobCardZoneStyle() {
+    if (lastVobCardState === 'ready' && lastVobCardFile) {
+      return 'border:2px dashed #7ef0b8;border-radius:10px;padding:14px 16px;text-align:center;background:#0d2e1f22;cursor:pointer;margin-bottom:6px;';
+    }
+    if (lastVobCardState === 'error') {
+      return 'border:2px dashed #ef476f;border-radius:10px;padding:14px 16px;text-align:center;background:#2a0f1522;cursor:pointer;margin-bottom:6px;';
+    }
+    return 'border:2px dashed #5b8fd4;border-radius:10px;padding:14px 16px;text-align:center;background:#0a0f1a;cursor:pointer;margin-bottom:6px;';
+  }
+
+  function getVobCardZoneLabel() {
+    if (lastVobCardFile?.name && lastVobCardState === 'ready') return `✓ ${lastVobCardFile.name}`;
+    if (lastVobCardFile?.name && lastVobCardState === 'reading') return `Reading ${lastVobCardFile.name}…`;
+    if (lastVobCardFile?.name) return lastVobCardFile.name;
+    return 'Drop insurance card here — or click to browse';
   }
 
   /**
@@ -144,14 +196,17 @@
     if (!zone || !input) return;
 
     const resetBorder = () => {
-      zone.style.borderColor = '#5b8fd4';
-      zone.style.background = '#0a0f1a';
+      zone.style.borderColor = lastVobCardState === 'ready' ? '#7ef0b8' : lastVobCardState === 'error' ? '#ef476f' : '#5b8fd4';
+      zone.style.background = lastVobCardState === 'ready' ? '#0d2e1f22' : lastVobCardState === 'error' ? '#2a0f1522' : '#0a0f1a';
     };
 
     async function autoOcrCard(file) {
       if (!file) return;
-      const status = document.getElementById('vob-inline-status');
-      if (status) status.innerHTML = `<span style="color:#8aa4ff;">Reading card… <em>${escapeHtml(file.name)}</em></span>`;
+      lastVobCardFile = file;
+      lastVobCardState = 'reading';
+      lastVobCardSummary = null;
+      lastVobCardError = '';
+      rerender();
       try {
         const form = new FormData();
         form.append('card', file);
@@ -179,34 +234,18 @@
           lastSavedVobProspects = [result.saved, ...lastSavedVobProspects.filter((e) => e.id !== result.saved.id)];
         }
         const ex = result.extracted || {};
-        const matched = result.matched_client?.patient_name ? ` · matched: <strong>${escapeHtml(result.matched_client.patient_name)}</strong>` : '';
-        const payer = ex.payer_name ? `<strong>${escapeHtml(ex.payer_name)}</strong>` : '<span class="muted">payer unknown</span>';
-        const mid = ex.member_id ? ` · ID <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${escapeHtml(ex.member_id)}</code>` : '';
-        const grp = ex.group_number ? ` · Grp <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${escapeHtml(ex.group_number)}</code>` : '';
-        if (status) {
-          status.innerHTML = `
-            <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
-            &nbsp;—&nbsp;${payer}${mid}${grp}${matched}
-            &nbsp;<button type="button" id="vob-inline-clear"
-              style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
-          `;
-          document.getElementById('vob-inline-clear')?.addEventListener('click', () => {
-            input.value = '';
-            zone.style.borderColor = '#5b8fd4';
-            zone.style.background = '#0a0f1a';
-            zone.querySelector('[data-zone-label]').textContent = 'Drop insurance card here — or click to browse';
-            status.innerHTML = '';
-          });
-        }
-        zone.style.borderColor = '#7ef0b8';
-        zone.style.background = '#0d2e1f22';
-        const label = zone.querySelector('[data-zone-label]');
-        if (label) label.textContent = `✓ ${file.name}`;
+        lastVobCardSummary = {
+          ...ex,
+          matchedClientName: result.matched_client?.patient_name || '',
+        };
+        lastVobCardState = 'ready';
+        lastVobCardError = '';
         rerender();
       } catch (err) {
-        const status = document.getElementById('vob-inline-status');
-        if (status) status.innerHTML = `<span style="color:#ff9db0;">Card read failed: ${escapeHtml(err.message)}</span>`;
+        lastVobCardState = 'error';
+        lastVobCardError = err.message || 'Unknown OCR error';
         toast(`Card OCR failed: ${err.message}`, 'error');
+        rerender();
       }
     }
 
@@ -1751,12 +1790,12 @@
         <div style="background:#0a1020;border:1px solid #27304a;border-radius:12px;padding:14px;margin-bottom:12px;">
           <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Run VOB — required fields</div>
           <div id="vob-inline-dropzone" data-tip="Drop a photo of the insurance card — payer name, member ID, and group number are read automatically and fill the fields below"
-            style="border:2px dashed #5b8fd4;border-radius:10px;padding:14px 16px;text-align:center;background:#0a0f1a;cursor:pointer;margin-bottom:6px;">
-            <div style="font-size:13px;font-weight:600;color:#c5d4f0;margin-bottom:3px;" data-zone-label>Drop insurance card here — or click to browse</div>
+            style="${getVobCardZoneStyle()}">
+            <div style="font-size:13px;font-weight:600;color:#c5d4f0;margin-bottom:3px;" data-zone-label>${escapeHtml(getVobCardZoneLabel())}</div>
             <div style="font-size:11px;color:#98a5c3;">Fills payer, member ID &amp; group automatically · JPG, PNG, WEBP</div>
             <input id="vob-inline-file" type="file" accept="image/*,.png,.jpg,.jpeg,.webp" style="display:none;">
           </div>
-          <div id="vob-inline-status" style="min-height:18px;font-size:12px;line-height:1.5;margin-bottom:10px;"></div>
+          <div id="vob-inline-status" style="min-height:18px;font-size:12px;line-height:1.5;margin-bottom:10px;">${renderVobCardStatus()}</div>
           ${vobMode === 'prospect' ? `
           <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #27304a;">
             <div class="row-actions" style="flex-wrap:wrap;gap:8px;">
@@ -1800,7 +1839,7 @@
             </div>
           </div>
           <div class="row-actions" style="margin-top:14px;margin-bottom:0;">
-            <button id="insurance-preview-run" data-tip="Run the VOB check using the fields above (and optional section if expanded). Card images attach in the Insurance card strip at the top of the page for OCR and the full ClientCare pipeline.">Run VOB ↗</button>
+            <button id="insurance-preview-run" data-tip="Run the VOB check using the fields above. Drop the insurance card in this VOB panel to OCR payer, member ID, and group before running.">Run VOB ↗</button>
           </div>
         </div>
 
@@ -1897,7 +1936,7 @@
           <label class="stack"><span class="muted small">Coverage slot (0 = primary)</span>
             <input id="reconcile-insurance-slot" type="number" min="0" step="1" value="0" style="width:120px;"></label>
           <div class="row-actions" style="align-items:center;flex-wrap:wrap;gap:10px;">
-            <span class="muted small">Insurance card (optional — or use the sticky strip at the top of the page)</span>
+            <span class="muted small">Insurance card (optional — reuse the card already attached in the VOB panel or add another file here)</span>
             <input id="reconcile-card-file" type="file" accept="image/*,.png,.jpg,.jpeg,.webp">
           </div>
           <label class="row-actions" style="gap:8px;align-items:center;">
@@ -3330,10 +3369,10 @@
   async function uploadInsuranceCard() {
     try {
       const file =
-        document.getElementById('vob-overlay-card-file')?.files?.[0]
-        || document.getElementById('vob-insurance-card')?.files?.[0];
+        document.getElementById('vob-inline-file')?.files?.[0]
+        || document.getElementById('reconcile-card-file')?.files?.[0];
       if (!file) {
-        throw new Error('Attach an insurance card image first — use the green “Insurance card” strip at the top of this page.');
+        throw new Error('Attach an insurance card image in the VOB panel first.');
       }
       const form = new FormData();
       form.append('card', file);
@@ -3346,14 +3385,16 @@
         method: 'POST',
         body: form,
       });
-      if (result.extracted) {
-        lastInsuranceDraft = {
-          ...lastInsuranceDraft,
-          payer_name: result.extracted.payer_name || lastInsuranceDraft.payer_name,
-          member_id: result.extracted.member_id || lastInsuranceDraft.member_id,
-          source_label: lastProspectDraft.full_name || '',
-        };
-      }
+        if (result.extracted) {
+          lastInsuranceDraft = {
+            ...lastInsuranceDraft,
+            payer_name: result.extracted.payer_name || lastInsuranceDraft.payer_name,
+            member_id: result.extracted.member_id || lastInsuranceDraft.member_id,
+            group_number: result.extracted.group_number || lastInsuranceDraft.group_number,
+            subscriber_name: result.extracted.subscriber_name || lastInsuranceDraft.subscriber_name,
+            source_label: lastProspectDraft.full_name || '',
+          };
+        }
       lastInsurancePreview = result.preview || null;
       if (result.saved) {
         lastSavedVobProspects = [result.saved, ...lastSavedVobProspects.filter((entry) => entry.id !== result.saved.id)];
@@ -4102,6 +4143,14 @@
     });
     const vobCardUpload = document.getElementById('vob-card-upload');
     if (vobCardUpload) vobCardUpload.addEventListener('click', uploadInsuranceCard);
+    const vobInlineClear = document.getElementById('vob-inline-clear');
+    if (vobInlineClear) vobInlineClear.addEventListener('click', () => {
+      lastVobCardFile = null;
+      lastVobCardState = 'idle';
+      lastVobCardSummary = null;
+      lastVobCardError = '';
+      rerender();
+    });
     const vobSaveProspect = document.getElementById('vob-save-prospect');
     if (vobSaveProspect) vobSaveProspect.addEventListener('click', saveProspectVob);
     root.querySelectorAll('[data-vob-history-use]').forEach((button) => button.addEventListener('click', () => {

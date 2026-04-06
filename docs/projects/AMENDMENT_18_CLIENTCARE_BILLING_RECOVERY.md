@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-06 (VOB pipeline live end-to-end: auto-OCR → ClientCare field fill → VOB click → billing note auto-post; routes wired with multer + outreach engine; card-intake + clientcare-pipeline endpoints)
+**Last Updated:** 2026-04-06 (VOB card upload now truly lives in-panel and persists across rerender/pipeline runs; auto-OCR → ClientCare field fill → VOB click → billing note auto-post; routes wired with multer + outreach engine; card-intake + clientcare-pipeline endpoints)
 
 ---
 
@@ -323,6 +323,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-04-06 | Fixed the inline VOB insurance-card flow so it actually works after rerender: removed stale references to the old sticky-strip DOM ids, persist the chosen card file in JS state, reuse that same file for **Read card + save prospect** and **Run full ClientCare flow**, and keep OCR success/error feedback visible inside the VOB panel instead of losing it on rerender | 0.5h | 0.5h | none | ✅ | pending | pending |
 | 2026-04-06 | **Billing note auto-post**: `addBillingNote(page, noteText)` added to `clientcare-browser-service.js` (reveal Add Note button → find textarea → type → click Save); session-managed wrapper exported as `browserService.addBillingNote(href, noteText)`; wired into `runFullClientcareCardVobPipeline` after VOB repair (apply=true only, non-fatal); pipeline result panel in overlay now shows client, card extraction, fields filled, VOB status, note posted/copy-paste fallback — no raw JSON dump on success | 1h | 1h | none | ✅ | pending | pending |
 | 2026-04-06 | **Auto-OCR on card drop**: `wireOverlayCardStripOnce()` fires `autoOcrCard()` immediately on drop or browse-select; `#vob-strip-status` div added to `overlay.html`; version bumped to `?v=20260406g`; `tryImageOCR` fixed for Tesseract.js v4 API (`createWorker('eng',1,opts)` — was using v2 `loadLanguage`/`initialize` which silently returned empty string); `insurance-card-parse.js` subscriber name improved: `Name: <name>` handled as first-class pattern, nameLine fallback strips leading "Name " prefix | 1h | 1h | none | ✅ | pending | pending |
 | 2026-04-06 | **Sticky insurance card strip** in `public/clientcare-billing/overlay.html` (outside `#app`) so upload is visible even when `clientcare-billing.js` is cached; `getReconcileCardFile()` + prospect card intake read `vob-overlay-card-file`; `middleware/apply-middleware.js` serves `/clientcare-billing` assets with `no-store` on JS/HTML (same pattern as `/tc`) | 0.5h | 0.5h | none | ✅ | pending | pending |
