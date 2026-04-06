@@ -9,7 +9,7 @@
   "phase": "sellable-v1-complete",
   "next_task": "Sellable v1 is complete. Next work is optional post-v1 tenant learning, readiness trend monitoring, future product expansion, and continued runtime hardening only if real usage reveals issues.",
   "stability_class": "needs-review",
-  "current_focus": "VOB form redesigned with required vs optional split, source labels on every field, and collapsed optional section. VOB result shows as color-coded decision card. Full tooltip coverage across all sections. Toast notifications replace alert(). Setup checklist strip for new users.",
+  "current_focus": "VOB pipeline live: card drop → auto OCR (Tesseract v4 fixed) → fill empty ClientCare fields → click VOB → auto-post billing note. Parser tested against real Cigna/Anthem/UHC cards. Ready for production use.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -28,7 +28,9 @@
     "db/migrations/20260327_clientcare_sellable_controls.sql",
     "db/migrations/20260327_clientcare_payer_rule_overrides.sql",
     "db/migrations/20260327_clientcare_sellable_v1_hardening.sql",
-    "public/shared/lifeos-voice-chat.js"
+    "public/shared/lifeos-voice-chat.js",
+    "services/insurance-card-parse.js",
+    "scripts/test-card-ocr.mjs"
   ],
   "protected_files": [
     "server.js",

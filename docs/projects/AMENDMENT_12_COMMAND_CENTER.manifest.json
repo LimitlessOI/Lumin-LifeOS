@@ -115,7 +115,13 @@
   "assertions": [
     {
       "type": "env_any",
-      "check": ["ANTHROPIC_API_KEY", "GOOGLE_AI_KEY", "GEMINI_API_KEY", "GROQ_API_KEY", "CEREBRAS_API_KEY"],
+      "check": [
+        "ANTHROPIC_API_KEY",
+        "GOOGLE_AI_KEY",
+        "GEMINI_API_KEY",
+        "GROQ_API_KEY",
+        "CEREBRAS_API_KEY"
+      ],
       "label": "at least one AI provider key is configured"
     },
     {
@@ -137,7 +143,7 @@
     }
   ],
   "completion_checks": [
-    "Chat works end-to-end from browser \u2192 Railway \u2192 AI \u2192 response",
+    "Chat works end-to-end from browser → Railway → AI → response",
     "System Health shows green checkmark",
     "Ideas Queue shows real data from DB",
     "Projects Dashboard panel shows active projects with hover + click",
@@ -147,17 +153,17 @@
     "Operator Chat supports browser voice input and optional spoken replies",
     "Secrets Vault shows env-registry health, including missing critical and revenue-blocking vars without exposing secret values"
   ],
-  "anti_drift_notes": "The ai-guard.js ensureExpectedRealityHash() must NOT be called in configureAiGuard() \u2014 only lazily on first request. This was the cause of the REALITY_MISMATCH 409 bug. Do not revert this. The requireKey middleware checks x-command-key, x-api-key, x-lifeos-key headers against COMMAND_CENTER_KEY env var.",
+  "anti_drift_notes": "The ai-guard.js ensureExpectedRealityHash() must NOT be called in configureAiGuard() — only lazily on first request. This was the cause of the REALITY_MISMATCH 409 bug. Do not revert this. The requireKey middleware checks x-command-key, x-api-key, x-lifeos-key headers against COMMAND_CENTER_KEY env var.",
   "decision_debt": [
     {
-      "description": "LIFEOS_OPEN_ACCESS was set for testing \u2014 must remain removed from Railway",
+      "description": "LIFEOS_OPEN_ACCESS was set for testing — must remain removed from Railway",
       "resolved": true
     },
     {
-      "description": "Health endpoint /api/health currently requires no auth \u2014 intentional for uptime monitors",
+      "description": "Health endpoint /api/health currently requires no auth — intentional for uptime monitors",
       "resolved": true
     }
   ],
-  "last_verified_at": null,
+  "last_verified_at": "2026-04-06",
   "verification_passed": null
 }

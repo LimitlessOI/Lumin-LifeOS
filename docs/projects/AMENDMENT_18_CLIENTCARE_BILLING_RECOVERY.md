@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-06 (auto-OCR on drop, Tesseract v4 fix, auto-post billing note, human-readable pipeline result panel)
+**Last Updated:** 2026-04-06 (auto-OCR on drop, Tesseract v4 fix, auto-post billing note, human-readable pipeline result panel; routes: multer memoryStorage, outreach engine wired, card-intake + clientcare-pipeline endpoints)
 
 ---
 
