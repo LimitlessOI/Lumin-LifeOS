@@ -6,21 +6,25 @@
 
 import express from 'express';
 import { randomUUID } from 'crypto';
+import multer from 'multer';
 import { createClientCareBillingService } from '../services/clientcare-billing-service.js';
 import { createClientCareBrowserService } from '../services/clientcare-browser-service.js';
 import { createClientCareOpsService } from '../services/clientcare-ops-service.js';
 import { createClientCareSellableService } from '../services/clientcare-sellable-service.js';
 import { createClientCareSyncService } from '../services/clientcare-sync-service.js';
 import { createConversationStore } from '../services/conversation-store.js';
+import { createOutreachEngine } from '../services/outreach-engine.js';
 
-export function createClientCareBillingRoutes({ pool, requireKey, logger = console, callCouncilMember, callCouncilWithFailover = null }) {
+export function createClientCareBillingRoutes({ pool, requireKey, logger = console, callCouncilMember, callCouncilWithFailover = null, notificationService = null, sendSMS = null }) {
   const router = express.Router();
+  const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 12 * 1024 * 1024 } });
   const billingService = createClientCareBillingService({ pool, logger });
   const syncService = createClientCareSyncService({ billingService, logger });
   const browserService = createClientCareBrowserService({ logger, syncService });
   const opsService = createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember, callCouncilWithFailover, logger });
   const sellableService = createClientCareSellableService({ pool, logger });
   const conversationStore = createConversationStore(pool);
+  const outreach = createOutreachEngine({ pool, notificationService, sendSMS, logger });
 
   function getTenantId(req) {
     return req.headers['x-clientcare-tenant-id'] || req.body?.tenant_id || req.query?.tenant_id || null;
@@ -28,6 +32,16 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   function getOperatorEmail(req) {
     return req.headers['x-operator-email'] || req.body?.operator_email || req.body?.updated_by || req.body?.requested_by || req.body?.owner || null;
+  }
+
+  async function resolveLifeOSUserId(handleOrId = 'adam') {
+    if (!handleOrId) return null;
+    if (!Number.isNaN(Number(handleOrId))) {
+      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1 LIMIT 1', [Number(handleOrId)]);
+      return rows[0]?.id || null;
+    }
+    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1 LIMIT 1', [String(handleOrId)]);
+    return rows[0]?.id || null;
   }
 
   async function enforceOperatorAccess(req, roles = []) {
@@ -401,6 +415,190 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       res.json({ ok: true, preview });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] insurance verification preview failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/insurance/card-intake', upload.single('card'), async (req, res) => {
+    try {
+      if (!req.file?.buffer?.length) return res.status(400).json({ ok: false, error: 'insurance card image required' });
+      const result = await opsService.intakeInsuranceCard({
+        fileBuffer: req.file.buffer,
+        fileName: req.file.originalname || 'insurance-card',
+        prospect: req.body || {},
+        requestedBy: String(req.body?.requested_by || 'overlay'),
+      });
+      res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] insurance card intake failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/insurance/clientcare-pipeline', upload.single('card'), async (req, res) => {
+    try {
+      const clientHref = String(req.body?.client_href || '').trim();
+      if (!clientHref) {
+        return res.status(400).json({ ok: false, error: 'client_href required — select a client on the board or paste the billing URL' });
+      }
+      const apply = String(req.body?.apply || 'true').toLowerCase() !== 'false';
+      if (apply) await enforceOperatorAccess(req, ['operator', 'manager']);
+      const result = await opsService.runFullClientcareCardVobPipeline({
+        clientHref,
+        fileBuffer: req.file?.buffer?.length ? req.file.buffer : null,
+        fileName: req.file?.originalname || null,
+        supplementalNotes: String(req.body?.supplemental_notes || ''),
+        insuranceSlot: Number(req.body?.insurance_slot || 0) || 0,
+        apply,
+        requestedBy: String(req.body?.requested_by || 'overlay'),
+      });
+      if (!result.ok) {
+        const status = result.step === 'inspect_clientcare' || result.step === 'reinspect_after_vob' ? 502 : 400;
+        return res.status(status).json(result);
+      }
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] ClientCare pipeline failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/insurance/reconcile-clientcare', upload.single('card'), async (req, res) => {
+    try {
+      const clientHref = String(req.body?.client_href || '').trim();
+      if (!clientHref) {
+        return res.status(400).json({
+          ok: false,
+          error: 'client_href required — paste the client billing URL from ClientCare (e.g. …/Pregnancy/Billing/…)',
+        });
+      }
+      const apply = String(req.body?.apply || 'false').toLowerCase() === 'true';
+      if (apply) await enforceOperatorAccess(req, ['operator', 'manager']);
+      const result = await opsService.reconcileInsuranceWithClientcare({
+        clientHref,
+        fileBuffer: req.file?.buffer?.length ? req.file.buffer : null,
+        fileName: req.file?.originalname || null,
+        supplementalNotes: String(req.body?.supplemental_notes || ''),
+        insuranceSlot: Number(req.body?.insurance_slot || 0) || 0,
+        apply,
+        requestedBy: String(req.body?.requested_by || 'overlay'),
+      });
+      if (!result.ok) {
+        const status = result.step === 'inspect_clientcare' ? 502 : 400;
+        return res.status(status).json(result);
+      }
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] reconcile ClientCare failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.get('/insurance/prospects', async (req, res) => {
+    try {
+      const items = await opsService.listSavedVobProspects({ limit: Number(req.query.limit) || 25 });
+      res.json({ ok: true, items });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] list saved VOB prospects failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/insurance/prospects', async (req, res) => {
+    try {
+      const body = req.body || {};
+      const preview = await opsService.getInsuranceVerificationPreview(body);
+      const formSnapshot = {
+        coverage_active: body.coverage_active,
+        in_network: body.in_network,
+        auth_required: body.auth_required,
+        billed_amount: body.billed_amount,
+        copay: body.copay,
+        deductible_remaining: body.deductible_remaining,
+        coinsurance_pct: body.coinsurance_pct,
+      };
+      const previewForStore = { ...preview, _form_snapshot: formSnapshot };
+      const matchedClient = await opsService.findExistingClientMatch?.({
+        fullName: String(body.full_name || '').trim(),
+        memberId: String(body.member_id || '').trim(),
+      });
+      const saved = await opsService.saveVobProspect({
+        sourceType: matchedClient ? 'matched_existing_client' : 'prospect_manual',
+        fullName: String(body.full_name || '').trim(),
+        phone: String(body.phone || '').trim(),
+        email: String(body.email || '').trim(),
+        payerName: String(body.payer_name || '').trim(),
+        memberId: String(body.member_id || '').trim(),
+        groupNumber: String(body.group_number || '').trim(),
+        subscriberName: String(body.subscriber_name || '').trim(),
+        supportPhone: String(body.support_phone || '').trim(),
+        preview: previewForStore,
+        extractedText: '',
+        matchedClient,
+        requestedBy: String(body.requested_by || 'overlay'),
+        fileMeta: { source: 'manual_vob_save' },
+      });
+      if (!saved) {
+        return res.status(503).json({
+          ok: false,
+          error: 'Could not save VOB to history. Confirm migration db/migrations/20260403_clientcare_vob_prospects.sql is applied on the server.',
+          preview,
+          matched_client: matchedClient || null,
+        });
+      }
+      res.json({ ok: true, preview, saved, matched_client: matchedClient || null });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] save VOB prospect failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/insurance/prospects/:id/promote', async (req, res) => {
+    try {
+      const result = await opsService.promoteSavedVobProspect(req.params.id, {
+        requestedBy: String(req.body?.requested_by || 'overlay'),
+      });
+      res.json({ ok: true, ...result });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] promote saved VOB prospect failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  router.post('/ops/outreach-request', async (req, res) => {
+    try {
+      const channel = String(req.body?.channel || '').trim().toLowerCase();
+      const body = String(req.body?.body || '').trim();
+      const subject = String(req.body?.subject || '').trim();
+      const recipientName = String(req.body?.recipient_name || '').trim();
+      const recipientEmail = String(req.body?.recipient_email || '').trim();
+      const recipientPhone = String(req.body?.recipient_phone || '').trim();
+      const sourceRef = String(req.body?.source_ref || 'clientcare_vob').trim();
+      const requestedBy = String(req.body?.requested_by || 'overlay');
+      if (!['sms', 'email'].includes(channel)) return res.status(400).json({ ok: false, error: 'channel must be sms or email' });
+      if (!body) return res.status(400).json({ ok: false, error: 'body is required' });
+      if (channel === 'sms' && !recipientPhone) return res.status(400).json({ ok: false, error: 'recipient_phone is required for sms' });
+      if (channel === 'email' && !recipientEmail) return res.status(400).json({ ok: false, error: 'recipient_email is required for email' });
+
+      const userId = await resolveLifeOSUserId('adam');
+      if (!userId) return res.status(500).json({ ok: false, error: 'Could not resolve LifeOS user for outreach logging' });
+
+      const task = await outreach.createTask({
+        userId,
+        channel,
+        recipientName,
+        recipientEmail: recipientEmail || null,
+        recipientPhone: recipientPhone || null,
+        subject: subject || null,
+        body,
+        source: 'clientcare_billing',
+        sourceRef,
+        approved: true,
+      });
+      const execution = await outreach.executeTask(task);
+      res.status(201).json({ ok: true, task, execution });
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] outreach request failed');
       res.status(500).json({ ok: false, error: error.message });
     }
   });
