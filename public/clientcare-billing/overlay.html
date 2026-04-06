@@ -124,26 +124,11 @@
     h2[data-tip], h3[data-tip] { cursor: help; display: inline-flex; align-items: center; gap: 6px; }
     h2[data-tip]::before, h3[data-tip]::before { content: none; }
     h2[data-tip]:hover::before, h3[data-tip]:hover::before { content: ''; }
-    #vob-card-upload-strip { box-sizing: border-box; }
-    #vob-card-upload-strip .muted { color: #98a5c3; font-size: 12px; }
   </style>
 </head>
 <body>
-  <!-- Always in HTML (not dependent on JS bundle cache): card file for VOB + ClientCare pipeline -->
-  <div class="wrap" id="vob-card-upload-strip" style="position:sticky;top:0;z-index:40;background:#0b1020;padding-top:12px;padding-bottom:10px;margin:0 auto;max-width:1440px;border-bottom:1px solid #27304a;">
-    <div style="background:#0f1528;border:2px solid #26c281;border-radius:12px;padding:14px;">
-      <div style="font-size:12px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Insurance card — drop or upload</div>
-      <p class="muted" style="margin:0 0 10px;line-height:1.4;">Use this for <strong>Run VOB</strong>, <strong>Read card + save prospect</strong>, and <strong>Run full ClientCare flow</strong>. Scroll down to the VOB form after attaching.</p>
-      <div id="vob-overlay-card-dropzone" style="border:2px dashed #5b8fd4;border-radius:12px;padding:18px;text-align:center;background:#0a0f1a;cursor:pointer;margin-bottom:10px;">
-        <span style="color:#c5d4f0;font-size:14px;">Drop card image here</span>
-        <span class="muted" style="display:block;margin-top:6px;">or click this area to browse</span>
-      </div>
-      <input id="vob-overlay-card-file" type="file" accept="image/*,.png,.jpg,.jpeg,.webp,.gif" style="width:100%;max-width:480px;box-sizing:border-box;">
-      <div id="vob-strip-status" style="margin-top:8px;min-height:20px;font-size:13px;line-height:1.4;"></div>
-    </div>
-  </div>
   <div class="wrap" id="app"><div class="card"><p>Loading billing overlay…</p></div></div>
   <script src="/shared/lifeos-voice-chat.js?v=20260330"></script>
-  <script src="/clientcare-billing/clientcare-billing.js?v=20260406h"></script>
+  <script src="/clientcare-billing/clientcare-billing.js?v=20260406i"></script>
 </body>
 </html>

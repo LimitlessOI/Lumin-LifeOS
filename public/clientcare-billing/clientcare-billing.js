@@ -125,37 +125,33 @@
     return localStorage.getItem('clientcare_operator_email') || '';
   }
 
-  /** Card file for ClientCare pipeline / reconcile — green box, then sticky overlay strip, then legacy VOB inputs. */
+  /** Card file for ClientCare pipeline / reconcile — inline VOB zone first, then reconcile panel. */
   function getReconcileCardFile() {
     return (
-      document.getElementById('reconcile-card-file')?.files?.[0]
-      || document.getElementById('vob-overlay-card-file')?.files?.[0]
-      || document.getElementById('vob-existing-card-file')?.files?.[0]
+      document.getElementById('vob-inline-file')?.files?.[0]
+      || document.getElementById('reconcile-card-file')?.files?.[0]
       || null
     );
   }
 
-  /** Sticky strip in overlay.html — always present even if main bundle is cached; wire once. */
-  function wireOverlayCardStripOnce() {
-    const zone = document.getElementById('vob-overlay-card-dropzone');
-    const input = document.getElementById('vob-overlay-card-file');
-    if (!zone || !input || zone.dataset.wired === '1') return;
-    zone.dataset.wired = '1';
+  /**
+   * Wire the inline card drop zone that lives inside the VOB panel.
+   * Called after every render() since the VOB panel HTML is recreated on rerender.
+   */
+  function wireVobCardZone() {
+    const zone = document.getElementById('vob-inline-dropzone');
+    const input = document.getElementById('vob-inline-file');
+    if (!zone || !input) return;
 
     const resetBorder = () => {
-      zone.style.borderColor = '';
-      zone.style.background = '';
+      zone.style.borderColor = '#5b8fd4';
+      zone.style.background = '#0a0f1a';
     };
 
-    // ── Auto-OCR when file is selected ────────────────────────────────────
-    // As soon as a card lands (drop or browse), immediately fire OCR and
-    // show the extracted data right in the sticky strip — no button hunting.
     async function autoOcrCard(file) {
       if (!file) return;
-      const status = document.getElementById('vob-strip-status');
-      if (status) {
-        status.innerHTML = `<span style="color:#8aa4ff;">Reading card… <em>${file.name}</em></span>`;
-      }
+      const status = document.getElementById('vob-inline-status');
+      if (status) status.innerHTML = `<span style="color:#8aa4ff;">Reading card… <em>${escapeHtml(file.name)}</em></span>`;
       try {
         const form = new FormData();
         form.append('card', file);
@@ -168,7 +164,6 @@
           method: 'POST',
           body: form,
         });
-        // Merge extracted fields into drafts so pipeline picks them up
         if (result.extracted) {
           lastInsuranceDraft = {
             ...lastInsuranceDraft,
@@ -183,34 +178,40 @@
         if (result.saved) {
           lastSavedVobProspects = [result.saved, ...lastSavedVobProspects.filter((e) => e.id !== result.saved.id)];
         }
-        // Show extraction summary right in the strip
+        const ex = result.extracted || {};
+        const matched = result.matched_client?.patient_name ? ` · matched: <strong>${escapeHtml(result.matched_client.patient_name)}</strong>` : '';
+        const payer = ex.payer_name ? `<strong>${escapeHtml(ex.payer_name)}</strong>` : '<span class="muted">payer unknown</span>';
+        const mid = ex.member_id ? ` · ID <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${escapeHtml(ex.member_id)}</code>` : '';
+        const grp = ex.group_number ? ` · Grp <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${escapeHtml(ex.group_number)}</code>` : '';
         if (status) {
-          const ex = result.extracted || {};
-          const matched = result.matched_client?.patient_name ? ` · matched: <strong>${result.matched_client.patient_name}</strong>` : '';
-          const payer = ex.payer_name ? `<strong>${ex.payer_name}</strong>` : '<span class="muted">payer unknown</span>';
-          const mid = ex.member_id ? ` · ID <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${ex.member_id}</code>` : '';
-          const grp = ex.group_number ? ` · Grp <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${ex.group_number}</code>` : '';
           status.innerHTML = `
             <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
             &nbsp;—&nbsp;${payer}${mid}${grp}${matched}
-            &nbsp;·&nbsp;
-            <button type="button" onclick="document.getElementById('vob-overlay-card-file').value='';document.getElementById('vob-strip-status').textContent='';document.getElementById('vob-overlay-card-dropzone').querySelector('span').textContent='Drop card image here';"
-              style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0;text-decoration:underline;">clear</button>
+            &nbsp;<button type="button" id="vob-inline-clear"
+              style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
           `;
-          zone.style.borderColor = '#7ef0b8';
-          // Update the drop zone label
-          const label = zone.querySelector('span');
-          if (label) label.textContent = `✓ ${file.name}`;
+          document.getElementById('vob-inline-clear')?.addEventListener('click', () => {
+            input.value = '';
+            zone.style.borderColor = '#5b8fd4';
+            zone.style.background = '#0a0f1a';
+            zone.querySelector('[data-zone-label]').textContent = 'Drop insurance card here — or click to browse';
+            status.innerHTML = '';
+          });
         }
+        zone.style.borderColor = '#7ef0b8';
+        zone.style.background = '#0d2e1f22';
+        const label = zone.querySelector('[data-zone-label]');
+        if (label) label.textContent = `✓ ${file.name}`;
         rerender();
       } catch (err) {
-        if (status) status.innerHTML = `<span style="color:#ff9db0;">Card read failed: ${err.message}</span>`;
+        const status = document.getElementById('vob-inline-status');
+        if (status) status.innerHTML = `<span style="color:#ff9db0;">Card read failed: ${escapeHtml(err.message)}</span>`;
         toast(`Card OCR failed: ${err.message}`, 'error');
       }
     }
 
     zone.addEventListener('click', (e) => {
-      if (e.target === input) return;
+      if (e.target === input || e.target.closest('button')) return;
       e.preventDefault();
       input.click();
     });
@@ -228,16 +229,15 @@
         autoOcrCard(e.dataTransfer.files[0]);
       }
     });
-    // Also fire on browse-select
     input.addEventListener('change', () => {
       if (input.files?.[0]) autoOcrCard(input.files[0]);
     });
   }
 
-  function wireInsuranceCardDropzones(_container) {
-    // Sticky strip `#vob-overlay-card-*` is wired in wireOverlayCardStripOnce (overlay.html).
-    // Reconcile panel uses a plain file input without a drop zone.
-  }
+  // No-op kept for backward compat — wiring is now done inline inside render().
+  function wireOverlayCardStripOnce() {}
+
+  function wireInsuranceCardDropzones(_container) {}
 
   function setOperatorEmail(value) {
     const email = String(value || '').trim().toLowerCase();
@@ -1750,7 +1750,13 @@
 
         <div style="background:#0a1020;border:1px solid #27304a;border-radius:12px;padding:14px;margin-bottom:12px;">
           <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Run VOB — required fields</div>
-          <p class="muted small" style="margin:0 0 12px;line-height:1.45;">Insurance card images: use the <strong>Insurance card — drop or upload</strong> strip at the <strong>top of this page</strong> (always visible). It feeds <strong>Run full ClientCare flow</strong>, <strong>Read card + save prospect</strong>, and OCR merge.</p>
+          <div id="vob-inline-dropzone" data-tip="Drop a photo of the insurance card — payer name, member ID, and group number are read automatically and fill the fields below"
+            style="border:2px dashed #5b8fd4;border-radius:10px;padding:14px 16px;text-align:center;background:#0a0f1a;cursor:pointer;margin-bottom:6px;">
+            <div style="font-size:13px;font-weight:600;color:#c5d4f0;margin-bottom:3px;" data-zone-label>Drop insurance card here — or click to browse</div>
+            <div style="font-size:11px;color:#98a5c3;">Fills payer, member ID &amp; group automatically · JPG, PNG, WEBP</div>
+            <input id="vob-inline-file" type="file" accept="image/*,.png,.jpg,.jpeg,.webp" style="display:none;">
+          </div>
+          <div id="vob-inline-status" style="min-height:18px;font-size:12px;line-height:1.5;margin-bottom:10px;"></div>
           ${vobMode === 'prospect' ? `
           <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #27304a;">
             <div class="row-actions" style="flex-wrap:wrap;gap:8px;">
@@ -4213,6 +4219,7 @@
     const workflowNode = document.getElementById('workflow-playbooks');
     if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
     root.querySelectorAll('[data-run-workflow]').forEach((button) => button.addEventListener('click', () => runWorkflow(button.getAttribute('data-run-workflow'))));
+    wireVobCardZone();
   }
 
   wireOverlayCardStripOnce();
