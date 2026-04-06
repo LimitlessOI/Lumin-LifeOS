@@ -4,6 +4,11 @@
  * Actionable operations layer for ClientCare billing recovery.
  */
 
+import fs from 'fs/promises';
+import os from 'os';
+import path from 'path';
+import { parseInsuranceCardText, cleanExtractedValue } from './insurance-card-parse.js';
+
 function normalizeIntent(text = '') {
   return String(text || '').toLowerCase().trim();
 }
@@ -52,6 +57,110 @@ function extractClaimId(text = '') {
   return match ? match[1] : null;
 }
 
+/** Human-readable summary posted to ClientCare billing notes by runFullClientcareCardVobPipeline (and available as fallback copy-paste text). */
+function buildClientcareNoteSuggestion({
+  flow = 'pipeline',
+  clientHref = '',
+  clientLabel = '',
+  apply = false,
+  vobFlow = null,
+  proposedCard = {},
+  cardRepair = null,
+  vobProposed = {},
+  vobRepair = null,
+} = {}) {
+  const lines = [];
+  lines.push(`LifeOS billing — ${new Date().toISOString().slice(0, 19).replace('T', ' ')} UTC`);
+  if (clientLabel) lines.push(`Client: ${clientLabel}`);
+  if (clientHref) lines.push(`Billing URL: ${clientHref}`);
+  lines.push('');
+  lines.push(
+    flow === 'pipeline'
+      ? 'Flow: Full ClientCare run — optional card OCR → fill empty insurance fields → click VOB/eligibility → re-read page → fill remaining empty fields from VOB text.'
+      : 'Flow: Reconcile — inspect portal, merge card image + pasted notes into empty fields only.',
+  );
+  lines.push(`Wrote changes in ClientCare UI: ${apply ? 'yes (apply was on)' : 'no — preview / dry run only'}`);
+  lines.push('');
+
+  if (flow === 'pipeline' && vobFlow) {
+    if (vobFlow.vob_retry_rounds && vobFlow.vob_retry_rounds > 1) {
+      lines.push(
+        `VOB runs: ${vobFlow.vob_retry_rounds} full browser session(s) (retries until a response is detected or the configured limit).`,
+      );
+    }
+    lines.push(
+      vobFlow.vob_received
+        ? 'VOB / eligibility: A response was detected on the billing page after the automated click sequence.'
+        : 'VOB / eligibility: No automated confirmation that a response loaded — please verify benefits/eligibility manually in ClientCare.',
+    );
+    if (vobFlow.error) lines.push(`Browser step message: ${String(vobFlow.error)}`);
+    lines.push('');
+  }
+
+  const cardKeys = Object.keys(proposedCard || {}).filter((k) => k !== 'insurance_match_hints');
+  if (cardKeys.length) {
+    lines.push(`Empty fields we attempted to fill from card/notes: ${cardKeys.join(', ')}.`);
+  }
+  if (cardRepair?.ok && apply && !cardRepair?.dryRun) {
+    lines.push('Card-merge save: attempted in ClientCare.');
+  } else if (cardKeys.length && !apply) {
+    lines.push('Card-merge: not saved (dry run).');
+  }
+
+  const vobKeys = Object.keys(vobProposed || {}).filter((k) => k !== 'insurance_match_hints');
+  if (vobKeys.length) {
+    lines.push(`Empty fields we attempted to fill from VOB page text: ${vobKeys.join(', ')}.`);
+  }
+  if (vobRepair?.ok && apply && !vobRepair?.dryRun) {
+    lines.push('VOB text save: attempted in ClientCare.');
+  } else if (vobKeys.length && !apply) {
+    lines.push('VOB text merge: not saved (dry run).');
+  }
+
+  lines.push('');
+  lines.push(
+    'System log: A snapshot is also stored in Neon (clientcare_vob_prospects) when the table exists — not the same as this ClientCare note field.',
+  );
+  return lines.join('\n');
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** Outer rounds × inner click attempts — tune with CLIENTCARE_VOB_RETRY_ROUNDS / CLIENTCARE_VOB_INNER_ATTEMPTS (Railway). */
+function readClientcareVobRetryEnv() {
+  const rounds = Math.min(25, Math.max(1, Number(process.env.CLIENTCARE_VOB_RETRY_ROUNDS) || 7));
+  const inner = Math.min(12, Math.max(2, Number(process.env.CLIENTCARE_VOB_INNER_ATTEMPTS) || 5));
+  return { rounds, inner };
+}
+
+function mergeVobFlowAttempts(attempts = []) {
+  const successful = attempts.filter((a) => a && a.ok && a.vob_received);
+  const lastOk = [...attempts].reverse().find((a) => a && a.ok);
+  const base = successful.length ? successful[successful.length - 1] : lastOk || attempts[attempts.length - 1];
+  if (!base) {
+    return {
+      vob_received: false,
+      vob_retry_rounds: attempts.length,
+      vob_exhausted_retries: true,
+      vob_attempts_summary: [],
+    };
+  }
+  return {
+    ...base,
+    vob_received: successful.length > 0,
+    vob_retry_rounds: attempts.length,
+    vob_exhausted_retries: successful.length === 0 && attempts.length > 0,
+    vob_attempts_summary: attempts.map((a, idx) => ({
+      round: idx + 1,
+      ok: Boolean(a?.ok),
+      vob_received: Boolean(a?.vob_received),
+      error: a?.error || null,
+    })),
+  };
+}
+
 function normalizeRepairUpdates(input = {}) {
   const updates = {};
   const insuranceSlot = Number(input.insurance_slot);
@@ -64,6 +173,10 @@ function normalizeRepairUpdates(input = {}) {
   if (input.subscriber_name) updates.subscriber_name = String(input.subscriber_name).trim();
   if (input.payor_id) updates.payor_id = String(input.payor_id).trim();
   if (input.insurance_priority) updates.insurance_priority = String(input.insurance_priority).trim();
+  if (input.relationship_to_insured) updates.relationship_to_insured = String(input.relationship_to_insured).trim();
+  if (input.group_number) updates.group_number = String(input.group_number).trim();
+  if (input.copay_amount) updates.copay_amount = String(input.copay_amount).trim();
+  if (input.deductible_remaining_amount) updates.deductible_remaining_amount = String(input.deductible_remaining_amount).trim();
   if (input.insurance_match_hints && typeof input.insurance_match_hints === 'object') {
     updates.insurance_match_hints = {
       insurance_name: String(input.insurance_match_hints.insurance_name || '').trim(),
@@ -71,9 +184,211 @@ function normalizeRepairUpdates(input = {}) {
       subscriber_name: String(input.insurance_match_hints.subscriber_name || '').trim(),
       payor_id: String(input.insurance_match_hints.payor_id || '').trim(),
       insurance_priority: String(input.insurance_match_hints.insurance_priority || '').trim(),
+      group_number: String(input.insurance_match_hints.group_number || '').trim(),
+      relationship: String(input.insurance_match_hints.relationship || '').trim(),
     };
   }
   return updates;
+}
+
+function normalizePersonName(n) {
+  return String(n || '')
+    .toLowerCase()
+    .replace(/[^a-z\s']/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function extractClientLabelFromInspect(inspect) {
+  const headings = inspect?.page?.headings || [];
+  const direct = headings.find((h) => h && !/billing|insurance|claim|payment|tab/i.test(String(h)));
+  if (direct) return String(direct).trim().slice(0, 200);
+  const tp = inspect?.page?.textPreview || '';
+  const m = tp.match(/(?:client|patient)\s*[:\-]\s*([^\n]+)/i);
+  if (m) return m[1].trim().slice(0, 200);
+  return '';
+}
+
+function mergeCardAndNotesExtractions(cardExtracted, notesText) {
+  const fromNotes = String(notesText || '').trim() ? parseInsuranceCardText(String(notesText)) : null;
+  const c = cardExtracted && typeof cardExtracted === 'object' ? cardExtracted : {};
+  const n = fromNotes || {};
+  const take = (key) => {
+    const a = String(c[key] || '').trim();
+    const b = String(n[key] || '').trim();
+    if (a) return { value: a, source: 'card' };
+    if (b) return { value: b, source: 'notes' };
+    return { value: '', source: null };
+  };
+  const keys = [
+    'payer_name',
+    'member_id',
+    'group_number',
+    'subscriber_name',
+    'support_phone',
+    'effective_date',
+    'plan_name',
+    'deductible_inn',
+    'coinsurance_specialist_pct',
+    'coinsurance_inn_pct',
+    'payer_id',
+  ];
+  const merged = {};
+  const sources = {};
+  for (const k of keys) {
+    const { value, source } = take(k);
+    merged[k] = value;
+    if (source) sources[k] = source;
+  }
+  return { merged, notesRawExtracted: fromNotes, sources };
+}
+
+function assessDependentCoverage({ clientLabel, primaryCoverage, merged }) {
+  const relationship = String(primaryCoverage?.relationship || '').trim();
+  const relLower = relationship.toLowerCase();
+  const subscriber = String(primaryCoverage?.subscriberName || merged?.subscriber_name || '').trim();
+  const clientNorm = normalizePersonName(clientLabel);
+  const subNorm = normalizePersonName(subscriber);
+
+  let role = 'unknown';
+  const notes = [];
+
+  if (/dependent|child|son|daughter|minor|\bstudent\b|under\s*26/.test(relLower)) {
+    role = 'dependent_coverage';
+    notes.push('ClientCare relationship reads as dependent-type coverage.');
+  } else if (/\bself\b/i.test(relLower) || /^self$/i.test(relationship)) {
+    role = 'subscriber_self';
+    notes.push('ClientCare relationship reads as self/subscriber.');
+  }
+
+  if (role === 'unknown' && subscriber && clientNorm && subNorm && clientNorm !== subNorm && clientNorm.length > 2) {
+    role = 'likely_parent_plan';
+    notes.push('Subscriber name differs from the client heading — review for parent/guardian policy (common for dependents through age 26).');
+  }
+
+  let suggested_relationship = '';
+  if (role === 'likely_parent_plan' && !relationship) {
+    suggested_relationship = 'Child';
+  }
+
+  return {
+    role,
+    relationship_in_portal: relationship || null,
+    subscriber_name: subscriber || null,
+    client_label: clientLabel || null,
+    notes,
+    suggested_relationship,
+  };
+}
+
+function buildFillOnlyUpdates({ primaryCoverage, merged, assessment, insuranceSlot, insurancePreviewLength }) {
+  const proposed = {};
+  const gaps = [];
+  const slot = Math.max(0, Number(insuranceSlot) || 0);
+
+  const addIfMissing = (field, currentVal, targetVal, sourceTag) => {
+    const t = String(targetVal || '').trim();
+    if (!t) return;
+    const c = String(currentVal || '').trim();
+    if (c) return;
+    proposed[field] = t;
+    gaps.push({ field, source: sourceTag });
+  };
+
+  addIfMissing('insurance_name', primaryCoverage?.insuranceName, merged.payer_name, 'card_or_notes');
+  addIfMissing('member_id', primaryCoverage?.memberId, merged.member_id, 'card_or_notes');
+  addIfMissing('subscriber_name', primaryCoverage?.subscriberName, merged.subscriber_name, 'card_or_notes');
+  addIfMissing('group_number', primaryCoverage?.groupNumber, merged.group_number, 'card_or_notes');
+
+  if (assessment.suggested_relationship && !String(primaryCoverage?.relationship || '').trim()) {
+    proposed.relationship_to_insured = assessment.suggested_relationship;
+    gaps.push({ field: 'relationship_to_insured', source: 'inference' });
+  }
+
+  if (!Object.keys(proposed).length) {
+    return { proposed: {}, gaps: [] };
+  }
+
+  proposed.insurance_match_hints = {
+    insurance_name: primaryCoverage?.insuranceName || '',
+    member_id: primaryCoverage?.memberId || '',
+    subscriber_name: primaryCoverage?.subscriberName || '',
+    payor_id: primaryCoverage?.payorId || '',
+    insurance_priority: primaryCoverage?.priority || '',
+    group_number: primaryCoverage?.groupNumber || '',
+    relationship: primaryCoverage?.relationship || '',
+  };
+
+  if (insurancePreviewLength > 1) {
+    proposed.insurance_slot = slot;
+  }
+
+  return { proposed, gaps };
+}
+
+function billingFieldHasValue(billingFields, pattern) {
+  const f = (billingFields || []).find((row) => pattern.test(String(row.label || '')));
+  return Boolean(String(f?.value || '').trim());
+}
+
+/** Map parsed ClientCare VOB/eligibility text + current empty fields → repair patch (fill gaps only). */
+function buildVobRepairProposal({
+  vobExtraction = {},
+  primaryCoverage = {},
+  billingFields = [],
+  insuranceSlot = 0,
+  insurancePreviewLength = 1,
+}) {
+  const proposed = {};
+  const ins = (k) => String(primaryCoverage?.[k] || '').trim();
+
+  if (!ins('insuranceName') && (vobExtraction.plan_name || vobExtraction.insurance_name)) {
+    proposed.insurance_name = String(vobExtraction.plan_name || vobExtraction.insurance_name).trim();
+  }
+  if (!ins('memberId') && vobExtraction.member_id) {
+    proposed.member_id = String(vobExtraction.member_id).trim();
+  }
+  if (!ins('groupNumber') && vobExtraction.group_number) {
+    proposed.group_number = String(vobExtraction.group_number).trim();
+  }
+
+  if (!billingFieldHasValue(billingFields, /\bcopay\b/i) && vobExtraction.copay) {
+    proposed.copay_amount = String(vobExtraction.copay).trim();
+  }
+  if (!billingFieldHasValue(billingFields, /deductible/i) && vobExtraction.deductible_remaining) {
+    proposed.deductible_remaining_amount = String(vobExtraction.deductible_remaining).trim();
+  }
+
+  if (!Object.keys(proposed).length) return {};
+
+  proposed.insurance_match_hints = {
+    insurance_name: primaryCoverage?.insuranceName || '',
+    member_id: primaryCoverage?.memberId || '',
+    subscriber_name: primaryCoverage?.subscriberName || '',
+    payor_id: primaryCoverage?.payorId || '',
+    insurance_priority: primaryCoverage?.priority || '',
+    group_number: primaryCoverage?.groupNumber || '',
+    relationship: primaryCoverage?.relationship || '',
+  };
+  if (insurancePreviewLength > 1) proposed.insurance_slot = insuranceSlot;
+  return proposed;
+}
+
+async function tryImageOCR(filePath, logger = console) {
+  try {
+    // tesseract.js v4.1.x in this build requires explicit loadLanguage + initialize
+    // (createWorker('eng') shorthand does not auto-init in this package version)
+    const { createWorker } = await import('tesseract.js');
+    const worker = await createWorker();
+    await worker.loadLanguage('eng');
+    await worker.initialize('eng');
+    const result = await worker.recognize(filePath);
+    await worker.terminate();
+    return cleanExtractedValue(result?.data?.text || '');
+  } catch (error) {
+    logger.warn?.({ err: error.message, filePath }, '[CLIENTCARE-OPS] insurance card OCR failed');
+    return '';
+  }
 }
 
 function buildInsuranceDecision({ coverageActive, inNetwork, authRequired, memberId, payerName, billedAmount, payerStats, deductibleRemaining, copay, coinsurance }) {
@@ -181,6 +496,42 @@ function derivePatientArStage(ageDays, policy) {
 }
 
 export function createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember = null, callCouncilWithFailover = null, logger = console }) {
+  /**
+   * Re-run the full ClientCare VOB browser session until a response is detected or outer rounds are exhausted.
+   * Each round is a fresh login + billing tab + inner click attempts (see CLIENTCARE_VOB_INNER_ATTEMPTS).
+   */
+  async function runClientcareVobFlowUntilReceived(href) {
+    const { rounds, inner } = readClientcareVobRetryEnv();
+    const attempts = [];
+    for (let i = 0; i < rounds; i++) {
+      const vobFlow = await browserService.runClientcareVobFlow({
+        clientHref: href,
+        pageTimeoutMs: 42000,
+        maxAttempts: inner,
+      });
+      attempts.push(vobFlow);
+      if (vobFlow.ok && vobFlow.vob_received) {
+        return { ok: true, vob_flow: mergeVobFlowAttempts(attempts) };
+      }
+      if (!vobFlow.ok) {
+        logger.warn?.({ err: vobFlow.error, round: i + 1, rounds }, '[CLIENTCARE-OPS] VOB browser session failed');
+        if (i < rounds - 1) {
+          await sleep(2500 + i * 1500);
+          continue;
+        }
+        return { ok: false, error: vobFlow.error, vob_flow: mergeVobFlowAttempts(attempts) };
+      }
+      if (i < rounds - 1) {
+        logger.warn?.(
+          { round: i + 1, rounds },
+          '[CLIENTCARE-OPS] VOB/eligibility response not detected — retrying with a fresh browser session',
+        );
+        await sleep(2500 + i * 1500);
+      }
+    }
+    return { ok: true, vob_flow: mergeVobFlowAttempts(attempts) };
+  }
+
   async function getPatientArPolicy() {
     try {
       const { rows } = await pool.query(`SELECT * FROM clientcare_patient_ar_policy WHERE scope_key='default' LIMIT 1`);
@@ -532,6 +883,553 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       if (isMissingRelation(error)) return null;
       throw error;
     }
+  }
+
+  async function listSavedVobProspects({ limit = 25 } = {}) {
+    try {
+      const { rows } = await pool.query(
+        `SELECT * FROM clientcare_vob_prospects
+         ORDER BY created_at DESC
+         LIMIT $1`,
+        [Math.max(1, Math.min(Number(limit) || 25, 100))],
+      );
+      return rows;
+    } catch (error) {
+      if (isMissingRelation(error)) return [];
+      throw error;
+    }
+  }
+
+  async function saveVobProspect({
+    sourceType = 'prospect',
+    fullName = '',
+    phone = '',
+    email = '',
+    payerName = '',
+    memberId = '',
+    groupNumber = '',
+    subscriberName = '',
+    supportPhone = '',
+    preview = null,
+    extractedText = '',
+    matchedClient = null,
+    requestedBy = 'overlay',
+    fileMeta = null,
+  } = {}) {
+    try {
+      const { rows } = await pool.query(
+        `INSERT INTO clientcare_vob_prospects (
+           source_type, full_name, phone, email, payer_name, member_id, group_number,
+           subscriber_name, support_phone, preview_result, extracted_text,
+           matched_client_name, matched_client_member_id, status, file_meta, requested_by
+         ) VALUES (
+           $1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12,$13,$14,$15::jsonb,$16
+         )
+         RETURNING *`,
+        [
+          sourceType,
+          fullName || null,
+          phone || null,
+          email || null,
+          payerName || null,
+          memberId || null,
+          groupNumber || null,
+          subscriberName || null,
+          supportPhone || null,
+          JSON.stringify(preview || {}),
+          extractedText || null,
+          matchedClient?.patient_name || matchedClient?.full_name || null,
+          matchedClient?.member_id || null,
+          matchedClient ? 'matched_existing_client' : 'prospect_saved',
+          JSON.stringify(fileMeta || {}),
+          requestedBy || null,
+        ],
+      );
+      return rows[0] || null;
+    } catch (error) {
+      if (isMissingRelation(error)) return null;
+      throw error;
+    }
+  }
+
+  async function findExistingClientMatch({ fullName = '', memberId = '' } = {}) {
+    try {
+      if (!fullName && !memberId) return null;
+      const clauses = [];
+      const values = [];
+      if (fullName) {
+        values.push(`%${fullName}%`);
+        clauses.push(`patient_name ILIKE $${values.length}`);
+      }
+      if (memberId) {
+        values.push(memberId);
+        clauses.push(`member_id = $${values.length}`);
+      }
+      if (!clauses.length) return null;
+      const { rows } = await pool.query(
+        `SELECT patient_name, member_id, payer_name
+         FROM clientcare_claims
+         WHERE ${clauses.join(' OR ')}
+         ORDER BY updated_at DESC NULLS LAST, created_at DESC NULLS LAST
+         LIMIT 1`,
+        values,
+      );
+      return rows[0] || null;
+    } catch (error) {
+      if (isMissingRelation(error)) return null;
+      throw error;
+    }
+  }
+
+  async function intakeInsuranceCard({ fileBuffer, fileName = 'insurance-card', prospect = {}, requestedBy = 'overlay' } = {}) {
+    const tmpPath = path.join(os.tmpdir(), `clientcare-insurance-card-${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(fileName) || '.png'}`);
+    try {
+      await fs.writeFile(tmpPath, fileBuffer);
+      const extractedText = await tryImageOCR(tmpPath, logger);
+      const extracted = parseInsuranceCardText(extractedText);
+      const fullName = String(prospect.full_name || '').trim();
+      const phone = String(prospect.phone || '').trim();
+      const email = String(prospect.email || '').trim();
+      const matchedClient = await findExistingClientMatch({ fullName, memberId: extracted.member_id });
+      const billedAmount = Number(prospect.billed_amount || 0) || null;
+      const previewBase = await getInsuranceVerificationPreview({
+        payer_name: extracted.payer_name,
+        member_id: extracted.member_id,
+        billed_amount: billedAmount,
+        coverage_active: null,
+        in_network: null,
+        auth_required: null,
+      });
+      const preview = {
+        ...previewBase,
+        _form_snapshot: {
+          billed_amount: billedAmount,
+          copay: null,
+          deductible_remaining: null,
+          coinsurance_pct: null,
+          coverage_active: null,
+          in_network: null,
+          auth_required: null,
+          payer_name: extracted.payer_name,
+          member_id: extracted.member_id,
+          group_number: extracted.group_number,
+          source: 'insurance_card_ocr',
+        },
+      };
+      const saved = await saveVobProspect({
+        sourceType: matchedClient ? 'matched_client_card' : 'prospect_card',
+        fullName,
+        phone,
+        email,
+        payerName: extracted.payer_name,
+        memberId: extracted.member_id,
+        groupNumber: extracted.group_number,
+        subscriberName: extracted.subscriber_name,
+        supportPhone: extracted.support_phone,
+        preview,
+        extractedText,
+        matchedClient,
+        requestedBy,
+        fileMeta: { original_name: fileName, extracted_confidence: extracted.confidence },
+      });
+      return {
+        extracted,
+        matched_client: matchedClient,
+        preview,
+        saved,
+      };
+    } finally {
+      await fs.unlink(tmpPath).catch(() => {});
+    }
+  }
+
+  async function promoteSavedVobProspect(id, { requestedBy = 'overlay' } = {}) {
+    let saved = null;
+    try {
+      const { rows } = await pool.query(`SELECT * FROM clientcare_vob_prospects WHERE id = $1 LIMIT 1`, [id]);
+      saved = rows[0] || null;
+    } catch (error) {
+      if (isMissingRelation(error)) return { saved: null, capability_request: null };
+      throw error;
+    }
+    if (!saved) return { saved: null, capability_request: null };
+    const request = await createCapabilityRequest(
+      `Create or update a ClientCare client file from saved VOB prospect ${saved.full_name || saved.id}.`,
+      {
+        requestedBy,
+        priority: 'high',
+        normalizedIntent: 'convert_vob_prospect_to_clientcare_client',
+        metadata: {
+          prospect_id: saved.id,
+          full_name: saved.full_name,
+          phone: saved.phone,
+          email: saved.email,
+          payer_name: saved.payer_name,
+          member_id: saved.member_id,
+          group_number: saved.group_number,
+          subscriber_name: saved.subscriber_name,
+          preview_result: saved.preview_result,
+          matched_client_name: saved.matched_client_name,
+        },
+      },
+    );
+    try {
+      const { rows } = await pool.query(
+        `UPDATE clientcare_vob_prospects
+         SET status = 'ready_to_convert',
+             promoted_at = NOW(),
+             promoted_request_id = $2,
+             updated_at = NOW()
+         WHERE id = $1
+         RETURNING *`,
+        [id, request?.id || null],
+      );
+      saved = rows[0] || saved;
+    } catch (error) {
+      if (!isMissingRelation(error)) throw error;
+    }
+    return { saved, capability_request: request };
+  }
+
+  /**
+   * ClientCare-first reconcile: live portal inspect + optional card OCR + pasted call notes.
+   * Proposes fillings only for fields that are empty in ClientCare; optional apply uses browser repair.
+   */
+  async function reconcileInsuranceWithClientcare({
+    clientHref,
+    fileBuffer = null,
+    fileName = 'insurance-card',
+    supplementalNotes = '',
+    insuranceSlot = 0,
+    apply = false,
+    requestedBy = 'overlay',
+  } = {}) {
+    const href = String(clientHref || '').trim();
+    if (!href) {
+      return { ok: false, step: 'validate', error: 'client_href required' };
+    }
+
+    const inspect = await browserService.inspectClientBillingAccount({
+      clientHref: href,
+      pageTimeoutMs: 22000,
+    });
+    if (!inspect.ok) {
+      return { ok: false, step: 'inspect_clientcare', error: inspect.error || 'ClientCare inspect failed', inspect };
+    }
+
+    let cardExtracted = null;
+    if (fileBuffer?.length) {
+      const tmpPath = path.join(os.tmpdir(), `cc-reconcile-${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(fileName) || '.png'}`);
+      try {
+        await fs.writeFile(tmpPath, fileBuffer);
+        const text = await tryImageOCR(tmpPath, logger);
+        cardExtracted = parseInsuranceCardText(text);
+      } finally {
+        await fs.unlink(tmpPath).catch(() => {});
+      }
+    }
+
+    const { merged, notesRawExtracted, sources } = mergeCardAndNotesExtractions(cardExtracted, supplementalNotes);
+    const clientLabel = extractClientLabelFromInspect(inspect);
+    const slot = Math.max(0, Number(insuranceSlot) || 0);
+    const insurancePreview = inspect.insurancePreview || [];
+    const primary = insurancePreview[slot] || insurancePreview[0] || {};
+
+    const dependentAssessment = assessDependentCoverage({
+      clientLabel,
+      primaryCoverage: primary,
+      merged,
+    });
+
+    const { proposed, gaps } = buildFillOnlyUpdates({
+      primaryCoverage: primary,
+      merged,
+      assessment: dependentAssessment,
+      insuranceSlot: slot,
+      insurancePreviewLength: insurancePreview.length,
+    });
+
+    const accountPayload = {
+      billingHref: href,
+      billingFields: inspect.billingFields,
+      insurancePreview: inspect.insurancePreview,
+      accountSummary: inspect.accountSummary,
+    };
+
+    let repair_preview = null;
+    let repair_applied = null;
+
+    if (Object.keys(proposed).length) {
+      repair_preview = await repairAccount({
+        billingHref: href,
+        account: accountPayload,
+        updates: proposed,
+        dryRun: true,
+        requestedBy,
+      });
+    }
+
+    if (apply && Object.keys(proposed).length) {
+      repair_applied = await repairAccount({
+        billingHref: href,
+        account: accountPayload,
+        updates: proposed,
+        dryRun: false,
+        requestedBy,
+      });
+    }
+
+    const report = {
+      ok: true,
+      clientHref: href,
+      client_label_guess: clientLabel,
+      clientcare_primary_coverage: primary,
+      billing_notes_preview: inspect.billingNotesPreview || [],
+      card_extracted: cardExtracted,
+      notes_parsed: notesRawExtracted,
+      merge_sources: sources,
+      merged_candidates: merged,
+      dependent_assessment: dependentAssessment,
+      gaps_filled_proposal: gaps,
+      proposed_updates: proposed,
+      repair_preview,
+      repair_applied,
+      policy: 'Only empty ClientCare fields are filled from card/notes; values already in the portal are left unchanged.',
+      clientcare_note_suggestion: buildClientcareNoteSuggestion({
+        flow: 'reconcile',
+        clientHref: href,
+        clientLabel: clientLabel,
+        apply,
+        vobFlow: null,
+        proposedCard: proposed,
+        cardRepair: repair_applied || repair_preview,
+        vobProposed: {},
+        vobRepair: null,
+      }),
+    };
+
+    try {
+      await saveVobProspect({
+        sourceType: 'clientcare_reconcile',
+        fullName: clientLabel || 'ClientCare reconcile',
+        phone: '',
+        email: '',
+        payerName: primary.insuranceName || merged.payer_name || '',
+        memberId: primary.memberId || merged.member_id || '',
+        groupNumber: primary.groupNumber || merged.group_number || '',
+        subscriberName: primary.subscriberName || merged.subscriber_name || '',
+        supportPhone: merged.support_phone || '',
+        preview: report,
+        extractedText: supplementalNotes ? String(supplementalNotes).slice(0, 8000) : '',
+        matchedClient: null,
+        requestedBy,
+        fileMeta: {
+          client_href: href,
+          apply_executed: Boolean(apply && repair_applied?.ok),
+          original_card: fileName || null,
+        },
+      });
+    } catch (error) {
+      logger.warn?.({ err: error.message }, '[CLIENTCARE-OPS] reconcile snapshot not persisted');
+    }
+
+    return report;
+  }
+
+  /**
+   * One pipeline for the practice: optional card OCR → fill empty ClientCare fields → run ClientCare’s own VOB/eligibility
+   * control → re-read page → push parsed VOB text into any fields still empty (incl. copay/deductible when visible).
+   */
+  async function runFullClientcareCardVobPipeline({
+    clientHref,
+    fileBuffer = null,
+    fileName = 'insurance-card.png',
+    supplementalNotes = '',
+    insuranceSlot = 0,
+    apply = true,
+    requestedBy = 'overlay',
+  } = {}) {
+    const href = String(clientHref || '').trim();
+    if (!href) return { ok: false, step: 'validate', error: 'client_href required' };
+
+    let cardExtracted = null;
+    if (fileBuffer?.length) {
+      const tmpPath = path.join(os.tmpdir(), `cc-pipeline-${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(fileName) || '.png'}`);
+      try {
+        await fs.writeFile(tmpPath, fileBuffer);
+        const text = await tryImageOCR(tmpPath, logger);
+        cardExtracted = parseInsuranceCardText(text);
+      } finally {
+        await fs.unlink(tmpPath).catch(() => {});
+      }
+    }
+
+    const inspect = await browserService.inspectClientBillingAccount({ clientHref: href, pageTimeoutMs: 24000 });
+    if (!inspect.ok) {
+      return { ok: false, step: 'inspect_clientcare', error: inspect.error || 'inspect failed', inspect };
+    }
+
+    const slot = Math.max(0, Number(insuranceSlot) || 0);
+    const { merged } = mergeCardAndNotesExtractions(cardExtracted, supplementalNotes);
+    const clientLabel = extractClientLabelFromInspect(inspect);
+    const insurancePreview = inspect.insurancePreview || [];
+    const primary = insurancePreview[slot] || insurancePreview[0] || {};
+
+    const dependentAssessment = assessDependentCoverage({
+      clientLabel,
+      primaryCoverage: primary,
+      merged,
+    });
+
+    const { proposed: proposedCard } = buildFillOnlyUpdates({
+      primaryCoverage: primary,
+      merged,
+      assessment: dependentAssessment,
+      insuranceSlot: slot,
+      insurancePreviewLength: insurancePreview.length,
+    });
+
+    const accountPayload = {
+      billingHref: href,
+      billingFields: inspect.billingFields,
+      insurancePreview: inspect.insurancePreview,
+      accountSummary: inspect.accountSummary,
+    };
+
+    let card_repair = null;
+    if (Object.keys(proposedCard).length) {
+      card_repair = await repairAccount({
+        billingHref: href,
+        account: accountPayload,
+        updates: proposedCard,
+        dryRun: !apply,
+        requestedBy,
+      });
+    }
+
+    const vobResult = await runClientcareVobFlowUntilReceived(href);
+    if (!vobResult.ok) {
+      return {
+        ok: false,
+        step: 'clientcare_vob_flow',
+        error: vobResult.error,
+        clientHref: href,
+        card_extracted: cardExtracted,
+        card_fill_proposed: proposedCard,
+        card_repair,
+        vob_flow: vobResult.vob_flow,
+      };
+    }
+    const vobFlow = vobResult.vob_flow;
+    if (!vobFlow.vob_received) {
+      logger.warn?.(
+        '[CLIENTCARE-OPS] VOB/eligibility response not detected after all retry rounds — sync uses page text only. Set CLIENTCARE_VOB_BUTTON_HINT or check vob_attempts_summary in the saved report.',
+      );
+    }
+
+    const reInspect = await browserService.inspectClientBillingAccount({ clientHref: href, pageTimeoutMs: 24000 });
+    if (!reInspect.ok) {
+      return {
+        ok: false,
+        step: 'reinspect_after_vob',
+        error: reInspect.error,
+        vob_flow: vobFlow,
+        card_repair,
+      };
+    }
+
+    const primaryAfter = (reInspect.insurancePreview || [])[slot] || (reInspect.insurancePreview || [])[0] || {};
+    const vobProposed = buildVobRepairProposal({
+      vobExtraction: vobFlow.vob_extraction || {},
+      primaryCoverage: primaryAfter,
+      billingFields: reInspect.billingFields || [],
+      insuranceSlot: slot,
+      insurancePreviewLength: (reInspect.insurancePreview || []).length,
+    });
+
+    const ap2 = {
+      billingHref: href,
+      billingFields: reInspect.billingFields,
+      insurancePreview: reInspect.insurancePreview,
+      accountSummary: reInspect.accountSummary,
+    };
+
+    let vob_repair = null;
+    if (Object.keys(vobProposed).length) {
+      vob_repair = await repairAccount({
+        billingHref: href,
+        account: ap2,
+        updates: vobProposed,
+        dryRun: !apply,
+        requestedBy,
+      });
+    }
+
+    // Build the note text first so we can attempt to post it
+    const noteText = buildClientcareNoteSuggestion({
+      flow: 'pipeline',
+      clientHref: href,
+      clientLabel: clientLabel,
+      apply,
+      vobFlow,
+      proposedCard,
+      cardRepair: card_repair,
+      vobProposed,
+      vobRepair: vob_repair,
+    });
+
+    // Attempt to post the note to ClientCare billing notes (best-effort — non-fatal)
+    let note_posted = null;
+    if (apply) {
+      try {
+        note_posted = await browserService.addBillingNote(href, noteText);
+      } catch (noteErr) {
+        logger.warn?.({ err: noteErr.message }, '[CLIENTCARE-OPS] billing note post failed');
+        note_posted = { ok: false, reason: noteErr.message };
+      }
+    }
+
+    const report = {
+      ok: true,
+      summary:
+        'Merged card into empty fields where needed, ran ClientCare VOB/eligibility action (with retries until response or limit), then synced parsed VOB values into fields still empty, and posted billing note.',
+      vob_retry_config: readClientcareVobRetryEnv(),
+      clientHref: href,
+      client_label_guess: clientLabel,
+      card_extracted: cardExtracted,
+      card_fill_proposed: proposedCard,
+      card_repair,
+      vob_flow: vobFlow,
+      vob_fill_proposed: vobProposed,
+      vob_repair,
+      insurance_after_vob: primaryAfter,
+      apply,
+      note_posted,
+      clientcare_note_suggestion: noteText,
+    };
+
+    try {
+      await saveVobProspect({
+        sourceType: 'clientcare_full_pipeline',
+        fullName: clientLabel || 'ClientCare pipeline',
+        phone: '',
+        email: '',
+        payerName: primaryAfter.insuranceName || merged.payer_name || '',
+        memberId: primaryAfter.memberId || merged.member_id || '',
+        groupNumber: primaryAfter.groupNumber || merged.group_number || '',
+        subscriberName: primaryAfter.subscriberName || merged.subscriber_name || '',
+        supportPhone: merged.support_phone || '',
+        preview: report,
+        extractedText: JSON.stringify(vobFlow.vob_extraction || {}).slice(0, 8000),
+        matchedClient: null,
+        requestedBy,
+        fileMeta: { client_href: href, pipeline: true },
+      });
+    } catch (error) {
+      logger.warn?.({ err: error.message }, '[CLIENTCARE-OPS] pipeline snapshot not persisted');
+    }
+
+    return report;
   }
 
   async function getInsuranceVerificationPreview(input = {}) {
@@ -933,6 +1831,12 @@ export function createClientCareOpsService({ pool, billingService, browserServic
   return {
     ask,
     buildOperationsOverview,
+    findExistingClientMatch,
+    intakeInsuranceCard,
+    listSavedVobProspects,
+    saveVobProspect,
+    reconcileInsuranceWithClientcare,
+    runFullClientcareCardVobPipeline,
     createCapabilityRequest,
     getInsuranceVerificationPreview,
     getOptimizationChecklist,
@@ -944,6 +1848,7 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     runWorkflow,
     savePatientArPolicy,
     queuePatientArAction,
+    promoteSavedVobProspect,
     updateCapabilityRequest,
   };
 }

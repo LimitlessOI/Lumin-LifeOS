@@ -20,6 +20,7 @@
   let lastPackagingOverview = null;
   let lastPackagingValidation = null;
   let lastPackagingValidationHistory = null;
+  let lastSavedVobProspects = [];
   let lastBrowserResult = null;
   let lastViewState = null;
   let lastVobSearch = localStorage.getItem('clientcare_vob_search') || '';
@@ -124,6 +125,120 @@
     return localStorage.getItem('clientcare_operator_email') || '';
   }
 
+  /** Card file for ClientCare pipeline / reconcile — green box, then sticky overlay strip, then legacy VOB inputs. */
+  function getReconcileCardFile() {
+    return (
+      document.getElementById('reconcile-card-file')?.files?.[0]
+      || document.getElementById('vob-overlay-card-file')?.files?.[0]
+      || document.getElementById('vob-existing-card-file')?.files?.[0]
+      || null
+    );
+  }
+
+  /** Sticky strip in overlay.html — always present even if main bundle is cached; wire once. */
+  function wireOverlayCardStripOnce() {
+    const zone = document.getElementById('vob-overlay-card-dropzone');
+    const input = document.getElementById('vob-overlay-card-file');
+    if (!zone || !input || zone.dataset.wired === '1') return;
+    zone.dataset.wired = '1';
+
+    const resetBorder = () => {
+      zone.style.borderColor = '';
+      zone.style.background = '';
+    };
+
+    // ── Auto-OCR when file is selected ────────────────────────────────────
+    // As soon as a card lands (drop or browse), immediately fire OCR and
+    // show the extracted data right in the sticky strip — no button hunting.
+    async function autoOcrCard(file) {
+      if (!file) return;
+      const status = document.getElementById('vob-strip-status');
+      if (status) {
+        status.innerHTML = `<span style="color:#8aa4ff;">Reading card… <em>${file.name}</em></span>`;
+      }
+      try {
+        const form = new FormData();
+        form.append('card', file);
+        form.append('full_name', lastProspectDraft.full_name || '');
+        form.append('phone', lastProspectDraft.phone || '');
+        form.append('email', lastProspectDraft.email || '');
+        form.append('billed_amount', String(lastInsuranceDraft.billed_amount || ''));
+        form.append('requested_by', 'overlay_auto');
+        const result = await api('/api/v1/clientcare-billing/insurance/card-intake', {
+          method: 'POST',
+          body: form,
+        });
+        // Merge extracted fields into drafts so pipeline picks them up
+        if (result.extracted) {
+          lastInsuranceDraft = {
+            ...lastInsuranceDraft,
+            payer_name: result.extracted.payer_name || lastInsuranceDraft.payer_name,
+            member_id: result.extracted.member_id || lastInsuranceDraft.member_id,
+            group_number: result.extracted.group_number || lastInsuranceDraft.group_number,
+            subscriber_name: result.extracted.subscriber_name || lastInsuranceDraft.subscriber_name,
+            source_label: lastProspectDraft.full_name || '',
+          };
+        }
+        lastInsurancePreview = result.preview || null;
+        if (result.saved) {
+          lastSavedVobProspects = [result.saved, ...lastSavedVobProspects.filter((e) => e.id !== result.saved.id)];
+        }
+        // Show extraction summary right in the strip
+        if (status) {
+          const ex = result.extracted || {};
+          const matched = result.matched_client?.patient_name ? ` · matched: <strong>${result.matched_client.patient_name}</strong>` : '';
+          const payer = ex.payer_name ? `<strong>${ex.payer_name}</strong>` : '<span class="muted">payer unknown</span>';
+          const mid = ex.member_id ? ` · ID <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${ex.member_id}</code>` : '';
+          const grp = ex.group_number ? ` · Grp <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${ex.group_number}</code>` : '';
+          status.innerHTML = `
+            <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
+            &nbsp;—&nbsp;${payer}${mid}${grp}${matched}
+            &nbsp;·&nbsp;
+            <button type="button" onclick="document.getElementById('vob-overlay-card-file').value='';document.getElementById('vob-strip-status').textContent='';document.getElementById('vob-overlay-card-dropzone').querySelector('span').textContent='Drop card image here';"
+              style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0;text-decoration:underline;">clear</button>
+          `;
+          zone.style.borderColor = '#7ef0b8';
+          // Update the drop zone label
+          const label = zone.querySelector('span');
+          if (label) label.textContent = `✓ ${file.name}`;
+        }
+        rerender();
+      } catch (err) {
+        if (status) status.innerHTML = `<span style="color:#ff9db0;">Card read failed: ${err.message}</span>`;
+        toast(`Card OCR failed: ${err.message}`, 'error');
+      }
+    }
+
+    zone.addEventListener('click', (e) => {
+      if (e.target === input) return;
+      e.preventDefault();
+      input.click();
+    });
+    zone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      zone.style.borderColor = '#7ef0b8';
+      zone.style.background = '#0d2e1f44';
+    });
+    zone.addEventListener('dragleave', resetBorder);
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      resetBorder();
+      if (e.dataTransfer?.files?.length) {
+        input.files = e.dataTransfer.files;
+        autoOcrCard(e.dataTransfer.files[0]);
+      }
+    });
+    // Also fire on browse-select
+    input.addEventListener('change', () => {
+      if (input.files?.[0]) autoOcrCard(input.files[0]);
+    });
+  }
+
+  function wireInsuranceCardDropzones(_container) {
+    // Sticky strip `#vob-overlay-card-*` is wired in wireOverlayCardStripOnce (overlay.html).
+    // Reconcile panel uses a plain file input without a drop zone.
+  }
+
   function setOperatorEmail(value) {
     const email = String(value || '').trim().toLowerCase();
     if (email) localStorage.setItem('clientcare_operator_email', email);
@@ -175,6 +290,37 @@
   function setUtilitySidebarCollapsed(value) {
     utilitySidebarCollapsed = Boolean(value);
     localStorage.setItem('clientcare_utility_sidebar_collapsed', String(utilitySidebarCollapsed));
+  }
+
+  function triStateToSelect(value) {
+    if (value === true || value === 'true') return 'true';
+    if (value === false || value === 'false') return 'false';
+    return '';
+  }
+
+  function hydrateVobFromSavedProspect(entry) {
+    if (!entry) return;
+    setVobMode('prospect');
+    lastProspectDraft = {
+      full_name: entry.full_name || '',
+      phone: entry.phone || '',
+      email: entry.email || '',
+    };
+    const snap = entry.preview_result && typeof entry.preview_result === 'object' ? entry.preview_result._form_snapshot : null;
+    lastInsuranceDraft = {
+      ...lastInsuranceDraft,
+      payer_name: entry.payer_name || '',
+      member_id: entry.member_id || '',
+      billed_amount: snap && snap.billed_amount != null && snap.billed_amount !== '' ? String(snap.billed_amount) : '',
+      copay: snap && snap.copay != null && snap.copay !== '' ? String(snap.copay) : '',
+      deductible_remaining: snap && snap.deductible_remaining != null && snap.deductible_remaining !== '' ? String(snap.deductible_remaining) : '',
+      coinsurance_pct: snap && snap.coinsurance_pct != null && snap.coinsurance_pct !== '' ? String(snap.coinsurance_pct) : '',
+      coverage_active: snap ? triStateToSelect(snap.coverage_active) : '',
+      in_network: snap ? triStateToSelect(snap.in_network) : '',
+      auth_required: snap ? triStateToSelect(snap.auth_required) : '',
+      source_label: entry.full_name || '',
+    };
+    lastInsurancePreview = entry.preview_result || null;
   }
 
   function getRepairKey(item = {}) {
@@ -1217,6 +1363,47 @@
     ].join(' ');
   }
 
+  /** Patient-facing copy for SMS/email (not for the assistant). */
+  function buildVobClientFacingBody() {
+    const missing = [
+      !String(lastInsuranceDraft.payer_name || '').trim() && 'payer/plan name',
+      !String(lastInsuranceDraft.member_id || '').trim() && 'member ID',
+      !String(lastInsuranceDraft.coverage_active || '').trim() && 'active coverage (yes/no)',
+      !String(lastInsuranceDraft.in_network || '').trim() && 'in-network status',
+      !String(lastInsuranceDraft.auth_required || '').trim() && 'whether prior auth is required',
+    ].filter(Boolean);
+    const first = (lastProspectDraft.full_name || 'there').trim().split(/\s+/)[0] || 'there';
+    const need = missing.length
+      ? `We still need: ${missing.join(', ')}.`
+      : 'Please confirm your insurance details or send a photo of your card.';
+    const sms = `Hi ${first}, this is ClientCare West billing. ${need} Reply when you can. Thank you!`;
+    return sms.length > 300 ? `${sms.slice(0, 297)}...` : sms;
+  }
+
+  function buildVobClientFacingEmail() {
+    const missing = [
+      !String(lastInsuranceDraft.payer_name || '').trim() && 'payer/plan name',
+      !String(lastInsuranceDraft.member_id || '').trim() && 'member ID',
+      !String(lastInsuranceDraft.coverage_active || '').trim() && 'active coverage',
+      !String(lastInsuranceDraft.in_network || '').trim() && 'in-network status',
+      !String(lastInsuranceDraft.auth_required || '').trim() && 'prior authorization requirement',
+    ].filter(Boolean);
+    const name = lastProspectDraft.full_name || 'there';
+    const need = missing.length
+      ? `We still need the following to finish your verification of benefits: ${missing.join(', ')}.`
+      : 'Please confirm your current insurance information or attach a photo of your insurance card.';
+    return [
+      `Hi ${name},`,
+      '',
+      need,
+      '',
+      'Reply to this email with the details or attach a photo of your card.',
+      '',
+      'Thank you,',
+      'ClientCare West — Billing',
+    ].join('\n');
+  }
+
   function renderKeyValueTable(rows) {
     if (!rows.length) return '<p class="muted">No data.</p>';
     return `
@@ -1462,6 +1649,36 @@
     `;
   }
 
+  function renderSavedVobProspects() {
+    const items = lastSavedVobProspects || [];
+    return `
+      <div class="card" style="margin-top:12px;background:#0f1528;">
+        <strong>Saved VOB history</strong>
+        <div class="small muted" style="margin:6px 0 12px;">Prospects and card-based VOBs stay here until they decide to move forward. Reopen them later or push them into the client-creation queue.</div>
+        ${items.length ? `
+          <div class="stack">
+            ${items.slice(0, 8).map((entry, index) => `
+              <div class="card" style="padding:12px;background:#0a1020;">
+                <div class="account-card-top">
+                  <div>
+                    <strong>${escapeHtml(entry.full_name || entry.matched_client_name || 'Saved VOB')}</strong>
+                    <div class="small muted">${escapeHtml(entry.payer_name || 'Payer missing')}${entry.member_id ? ` · ${escapeHtml(entry.member_id)}` : ''}</div>
+                  </div>
+                  <span class="badge ${badgeClass(entry.status === 'ready_to_convert' ? 'warn' : entry.matched_client_name ? 'ok' : 'review')}">${escapeHtml(String(entry.status || 'saved').replace(/_/g, ' '))}</span>
+                </div>
+                <div class="small muted" style="margin-top:8px;">Decision: ${escapeHtml(entry.preview_result?.decision || 'not run')} · Created ${escapeHtml(String(entry.created_at || '').slice(0, 10) || 'unknown')}</div>
+                <div class="row-actions" style="margin-top:10px;">
+                  <button type="button" class="ghost" data-vob-history-use="${index}">Use again</button>
+                  <button type="button" data-vob-history-promote="${index}">Promote to client file</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        ` : '<div class="small muted">No saved VOB history yet.</div>'}
+      </div>
+    `;
+  }
+
   function renderVerificationOfBenefitsCard() {
     if (vobMode === 'existing') ensureInsuranceDraftSeed();
     const selectedAccount = vobMode === 'existing' ? getSelectedAccountItem() : null;
@@ -1531,12 +1748,17 @@
           </div>
         </div>
 
-        <div class="row-actions" style="margin-bottom:16px">
-          <button id="insurance-preview-run" data-tip="Run the VOB check — you only need the 5 fields below filled. Payment estimate improves if you also fill the optional fields.">Run VOB ↗</button>
-        </div>
-
         <div style="background:#0a1020;border:1px solid #27304a;border-radius:12px;padding:14px;margin-bottom:12px;">
-          <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Required — needed for take/review/decline decision</div>
+          <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Run VOB — required fields</div>
+          <p class="muted small" style="margin:0 0 12px;line-height:1.45;">Insurance card images: use the <strong>Insurance card — drop or upload</strong> strip at the <strong>top of this page</strong> (always visible). It feeds <strong>Run full ClientCare flow</strong>, <strong>Read card + save prospect</strong>, and OCR merge.</p>
+          ${vobMode === 'prospect' ? `
+          <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #27304a;">
+            <div class="row-actions" style="flex-wrap:wrap;gap:8px;">
+              <button type="button" id="vob-card-upload">Read card + save prospect</button>
+              <button type="button" id="vob-save-prospect" class="ghost">Save prospect VOB</button>
+            </div>
+          </div>
+          ` : ''}
           <div class="grid two">
             <div data-tip="Insurance company name — exactly as it appears on the patient's card (e.g. 'Aetna', 'Blue Cross Blue Shield', 'United Healthcare')">
               <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Payer name <span style="color:#ef476f">*</span></label>
@@ -1570,6 +1792,9 @@
                 <option value="true" ${String(lastInsuranceDraft.auth_required) === 'true' ? 'selected' : ''}>Required — must get auth first</option>
               </select>
             </div>
+          </div>
+          <div class="row-actions" style="margin-top:14px;margin-bottom:0;">
+            <button id="insurance-preview-run" data-tip="Run the VOB check using the fields above (and optional section if expanded). Card images attach in the Insurance card strip at the top of the page for OCR and the full ClientCare pipeline.">Run VOB ↗</button>
           </div>
         </div>
 
@@ -1642,6 +1867,52 @@
               </div>` : ''}
             </div>`;
           })() : '<p class="muted small" style="padding:12px 0;">Run a VOB check above to see an AI-powered take/review/do-not-schedule decision with estimated payment amounts.</p>'}
+        </div>
+        ${renderSavedVobProspects()}
+        ${renderClientcareReconcilePanel()}
+      </div>
+    `;
+  }
+
+  function getSelectedClientBillingHref() {
+    const item = getSelectedAccountItem();
+    return String(item?.raw?.billingHref || item?.billingHref || '').trim();
+  }
+
+  function renderClientcareReconcilePanel() {
+    const href = getSelectedClientBillingHref();
+    return `
+      <div class="card" style="margin-top:14px;background:#0c1a30;border-color:#26c281;">
+        <h3 style="margin:0 0 8px;font-size:15px;">ClientCare — one run: card → fill gaps → VOB → sync</h3>
+        <p class="small muted" style="margin:0 0 12px;">Uses the server&rsquo;s ClientCare login. Uploads the card (optional but recommended), fills <strong>only empty</strong> fields from the card, clicks ClientCare&rsquo;s own eligibility/VOB action, then copies any VOB details still missing into the form.</p>
+        <div class="stack">
+          <label class="stack"><span class="muted small">Billing page URL</span>
+            <input id="reconcile-client-href" value="${escapeHtml(href)}" placeholder="Select a client on the board or paste /Pregnancy/Billing/..."></label>
+          <label class="stack"><span class="muted small">Coverage slot (0 = primary)</span>
+            <input id="reconcile-insurance-slot" type="number" min="0" step="1" value="0" style="width:120px;"></label>
+          <div class="row-actions" style="align-items:center;flex-wrap:wrap;gap:10px;">
+            <span class="muted small">Insurance card (optional — or use the sticky strip at the top of the page)</span>
+            <input id="reconcile-card-file" type="file" accept="image/*,.png,.jpg,.jpeg,.webp">
+          </div>
+          <label class="row-actions" style="gap:8px;align-items:center;">
+            <input type="checkbox" id="reconcile-dry-run-only">
+            <span class="small muted">Dry run only (preview; no writes)</span>
+          </label>
+          <div class="row-actions">
+            <button type="button" id="clientcare-pipeline-run">Run full ClientCare flow</button>
+          </div>
+          <pre id="reconcile-output" class="small muted" style="max-height:280px;overflow:auto;margin:0;padding:10px;background:#0f1528;border-radius:10px;border:1px solid #27304a;">Select a client or paste URL, attach card image, then click Run.</pre>
+          <details style="margin-top:6px;">
+            <summary style="cursor:pointer;font-size:12px;color:#8aa4ff;">Advanced: paste call notes only (no VOB automation)</summary>
+            <div class="stack" style="margin-top:10px;">
+              <label class="stack"><span class="muted small">Extra notes</span>
+                <textarea id="reconcile-supplemental-notes" rows="3" placeholder="Only if you need to merge text without running the full pipeline"></textarea></label>
+              <div class="row-actions">
+                <button type="button" id="reconcile-preview" class="ghost">Preview reconcile</button>
+                <button type="button" id="reconcile-apply" class="ghost">Apply reconcile</button>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
     `;
@@ -2285,10 +2556,11 @@
   }
 
   async function api(url, options) {
+    const isFormData = options?.body instanceof FormData;
     const res = await fetch(url, {
       ...options,
       headers: {
-        'content-type': 'application/json',
+        ...(!isFormData ? { 'content-type': 'application/json' } : {}),
         'x-api-key': getApiKey(),
         ...(getOperatorEmail() ? { 'x-operator-email': getOperatorEmail() } : {}),
         ...(selectedTenantId ? { 'x-clientcare-tenant-id': selectedTenantId } : {}),
@@ -2324,7 +2596,7 @@
       const packagingPath = `/api/v1/clientcare-billing/packaging/overview${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
       const validationHistoryPath = `/api/v1/clientcare-billing/packaging/validation-history${selectedTenantId ? `?tenant_id=${encodeURIComponent(selectedTenantId)}` : ''}`;
 
-      const endpointNames = ['dashboard','readiness','template','claims','actions','reconciliation','intelligence','payerPlaybooks','payerRules','eraInsights','patientArPolicy','patientArEscalation','opsOverview','underpayments','appeals','packagingOverview','packagingValidationHistory'];
+      const endpointNames = ['dashboard','readiness','template','claims','actions','reconciliation','intelligence','payerPlaybooks','payerRules','eraInsights','patientArPolicy','patientArEscalation','opsOverview','underpayments','appeals','packagingOverview','packagingValidationHistory','vobHistory'];
       const settled = await Promise.allSettled([
         api('/api/v1/clientcare-billing/dashboard'),
         api('/api/v1/clientcare-billing/clientcare/readiness'),
@@ -2343,6 +2615,7 @@
         api('/api/v1/clientcare-billing/appeals/queue?limit=100'),
         api(packagingPath),
         api(validationHistoryPath),
+        api('/api/v1/clientcare-billing/insurance/prospects?limit=25'),
       ]);
 
       const failures = settled.map((r, i) => r.status === 'rejected' ? `${endpointNames[i]}: ${r.reason?.message}` : null).filter(Boolean);
@@ -2366,6 +2639,7 @@
       const appeals = val(14, null);
       const packagingOverview = val(15, null);
       const packagingValidationHistory = val(16, null);
+      const vobHistory = val(17, null);
 
       lastReimbursementIntelligence = intelligence?.intelligence || null;
       lastPayerPlaybooks = payerPlaybooks || null;
@@ -2378,6 +2652,7 @@
       lastAppeals = appeals || null;
       lastPackagingOverview = packagingOverview || null;
       lastPackagingValidationHistory = packagingValidationHistory || null;
+      lastSavedVobProspects = vobHistory?.items || [];
       if (!selectedTenantId && packagingOverview?.overview?.summary?.active_tenant_id) setSelectedTenantId(packagingOverview.overview.summary.active_tenant_id);
       render(root, dashboard?.dashboard, readiness?.readiness, template?.fields || [], claims?.claims || [], actions?.actions || [], reconciliation?.summary || {}, lastReimbursementIntelligence, lastPayerPlaybooks, lastPayerRules, lastEraInsights, lastPatientArPolicy, lastPatientArEscalation, lastOpsOverview, lastUnderpayments, lastAppeals, lastPackagingOverview, lastPackagingValidation, lastPackagingValidationHistory);
       if (failures.length) {
@@ -3012,6 +3287,241 @@
     }
   }
 
+  async function saveProspectVob() {
+    try {
+      const draft = syncInsuranceDraftFromDom();
+      const result = await api('/api/v1/clientcare-billing/insurance/prospects', {
+        method: 'POST',
+        body: JSON.stringify({
+          full_name: lastProspectDraft.full_name || '',
+          phone: lastProspectDraft.phone || '',
+          email: lastProspectDraft.email || '',
+          payer_name: draft.payer_name || '',
+          member_id: draft.member_id || '',
+          group_number: '',
+          subscriber_name: '',
+          support_phone: '',
+          billed_amount: Number(draft.billed_amount || 0) || null,
+          coverage_active: draft.coverage_active === 'true' ? true : draft.coverage_active === 'false' ? false : null,
+          in_network: draft.in_network === 'true' ? true : draft.in_network === 'false' ? false : null,
+          auth_required: draft.auth_required === 'true' ? true : draft.auth_required === 'false' ? false : null,
+          requested_by: 'overlay',
+        }),
+      });
+      lastInsurancePreview = result.preview || lastInsurancePreview;
+      if (result.saved) {
+        lastSavedVobProspects = [result.saved, ...lastSavedVobProspects.filter((entry) => entry.id !== result.saved.id)];
+        toast('Saved this prospect VOB to history.', 'success');
+      } else {
+        toast('VOB preview ran but was not saved—check that the database migration for VOB history is applied on the server.', 'error');
+      }
+      rerender();
+    } catch (error) {
+      toast(error.message, 'error');
+    }
+  }
+
+  async function uploadInsuranceCard() {
+    try {
+      const file =
+        document.getElementById('vob-overlay-card-file')?.files?.[0]
+        || document.getElementById('vob-insurance-card')?.files?.[0];
+      if (!file) {
+        throw new Error('Attach an insurance card image first — use the green “Insurance card” strip at the top of this page.');
+      }
+      const form = new FormData();
+      form.append('card', file);
+      form.append('full_name', lastProspectDraft.full_name || '');
+      form.append('phone', lastProspectDraft.phone || '');
+      form.append('email', lastProspectDraft.email || '');
+      form.append('billed_amount', String(lastInsuranceDraft.billed_amount || ''));
+      form.append('requested_by', 'overlay');
+      const result = await api('/api/v1/clientcare-billing/insurance/card-intake', {
+        method: 'POST',
+        body: form,
+      });
+      if (result.extracted) {
+        lastInsuranceDraft = {
+          ...lastInsuranceDraft,
+          payer_name: result.extracted.payer_name || lastInsuranceDraft.payer_name,
+          member_id: result.extracted.member_id || lastInsuranceDraft.member_id,
+          source_label: lastProspectDraft.full_name || '',
+        };
+      }
+      lastInsurancePreview = result.preview || null;
+      if (result.saved) {
+        lastSavedVobProspects = [result.saved, ...lastSavedVobProspects.filter((entry) => entry.id !== result.saved.id)];
+      }
+      if (result.matched_client?.patient_name) {
+        toast(
+          `Matched existing client: ${result.matched_client.patient_name}${result.saved ? '' : ' — VOB not saved; check DB migration clientcare_vob_prospects.'}`,
+          result.saved ? 'success' : 'warn',
+        );
+      } else if (result.saved) {
+        toast('Insurance card read and saved to VOB history.', 'success');
+      } else if (result.extracted && Object.keys(result.extracted).length) {
+        toast('Card read completed, but VOB was not saved to history—check server migration clientcare_vob_prospects.', 'warn');
+      }
+      rerender();
+    } catch (error) {
+      toast(error.message, 'error');
+    }
+  }
+
+  async function executeSystemOutreach({ channel, recipientName, recipientPhone = '', recipientEmail = '', subject = '', body, sourceRef }) {
+    const result = await api('/api/v1/clientcare-billing/ops/outreach-request', {
+      method: 'POST',
+      body: JSON.stringify({
+        channel,
+        recipient_name: recipientName || '',
+        recipient_phone: recipientPhone || '',
+        recipient_email: recipientEmail || '',
+        subject: subject || '',
+        body,
+        source_ref: sourceRef || 'clientcare_vob',
+        requested_by: 'overlay',
+      }),
+    });
+    return result;
+  }
+
+  async function runFullClientcarePipeline() {
+    const out = document.getElementById('reconcile-output');
+    const href = (document.getElementById('reconcile-client-href')?.value || '').trim() || getSelectedClientBillingHref();
+    if (!href) {
+      toast('Select a client on the board or paste the ClientCare billing URL.', 'error');
+      return;
+    }
+    const dryRun = Boolean(document.getElementById('reconcile-dry-run-only')?.checked);
+    const form = new FormData();
+    form.append('client_href', href);
+    form.append('insurance_slot', String(Number(document.getElementById('reconcile-insurance-slot')?.value || 0) || 0));
+    form.append('apply', dryRun ? 'false' : 'true');
+    form.append('requested_by', 'overlay');
+    const file = getReconcileCardFile();
+    if (file) form.append('card', file);
+    const notesExtra = (document.getElementById('reconcile-supplemental-notes')?.value || '').trim();
+    if (notesExtra) form.append('supplemental_notes', notesExtra);
+    try {
+      if (out) out.innerHTML = dryRun
+        ? '<span style="color:#8aa4ff;">Running pipeline (dry run — no writes)…</span>'
+        : '<span style="color:#8aa4ff;">Running full pipeline — card → ClientCare fields → VOB → sync → billing note…</span>';
+      const data = await api('/api/v1/clientcare-billing/insurance/clientcare-pipeline', { method: 'POST', body: form });
+
+      // Build a human-readable result panel
+      const rows = [];
+
+      // Client
+      if (data.client_label_guess) rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Client</td><td style="padding:4px 0;"><strong>${data.client_label_guess}</strong></td></tr>`);
+
+      // Card extraction summary
+      const ex = data.card_extracted || {};
+      if (ex.payer_name || ex.member_id) {
+        rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Card read</td><td style="padding:4px 0;">${[ex.payer_name, ex.member_id ? 'ID ' + ex.member_id : '', ex.group_number ? 'Grp ' + ex.group_number : '', ex.subscriber_name].filter(Boolean).join(' · ')}</td></tr>`);
+      }
+
+      // Fields filled
+      const filled = Object.keys(data.card_fill_proposed || {}).filter((k) => k !== 'insurance_match_hints' && k !== 'insurance_slot');
+      if (filled.length) {
+        rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Fields filled</td><td style="padding:4px 0;"><span style="color:#7ef0b8;">${filled.join(', ')}</span></td></tr>`);
+      } else {
+        rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Fields filled</td><td style="padding:4px 0;color:#98a5c3;">Fields already populated in ClientCare — nothing overwritten</td></tr>`);
+      }
+
+      // VOB status
+      const vob = data.vob_flow || {};
+      const vobStatus = vob.vob_received
+        ? '<span style="color:#7ef0b8;">✓ VOB response received</span>'
+        : '<span style="color:#f0b429;">VOB clicked — verify in ClientCare that eligibility loaded</span>';
+      rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">VOB</td><td style="padding:4px 0;">${vobStatus}${vob.vob_retry_rounds > 1 ? ` (${vob.vob_retry_rounds} attempts)` : ''}</td></tr>`);
+
+      // VOB fields synced back
+      const vobFilled = Object.keys(data.vob_fill_proposed || {}).filter((k) => k !== 'insurance_match_hints' && k !== 'insurance_slot');
+      if (vobFilled.length) {
+        rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">VOB data synced</td><td style="padding:4px 0;"><span style="color:#7ef0b8;">${vobFilled.join(', ')}</span></td></tr>`);
+      }
+
+      // Note status
+      const np = data.note_posted;
+      let noteRow = '';
+      if (dryRun) {
+        noteRow = '<span style="color:#98a5c3;">Dry run — note not posted</span>';
+      } else if (np?.ok) {
+        noteRow = `<span style="color:#7ef0b8;">✓ Billing note posted to ClientCare</span>`;
+      } else {
+        const noteText = data.clientcare_note_suggestion || '';
+        const escaped = noteText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        noteRow = `<span style="color:#f0b429;">Auto-post failed (${np?.reason || 'unknown'}) — copy below:</span><br>
+          <pre style="margin:8px 0 4px;font-size:11px;max-height:160px;overflow:auto;">${escaped}</pre>
+          <button type="button" onclick="navigator.clipboard.writeText(${JSON.stringify(noteText)}).then(()=>this.textContent='Copied!').catch(()=>{})"
+            style="background:#27304a;border:none;border-radius:8px;padding:6px 12px;color:#edf2f7;cursor:pointer;font-size:12px;">Copy note</button>`;
+      }
+      rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;vertical-align:top;">Billing note</td><td style="padding:4px 0;">${noteRow}</td></tr>`);
+
+      const dryBadge = dryRun ? '<span style="background:#4a3a12;color:#ffd666;padding:2px 8px;border-radius:6px;font-size:11px;margin-left:8px;">DRY RUN</span>' : '';
+      if (out) out.innerHTML = `
+        <div style="margin-bottom:8px;font-weight:700;color:#edf2f7;">Pipeline complete${dryBadge}</div>
+        <table style="font-size:13px;width:100%;border-collapse:collapse;">${rows.join('')}</table>
+        <details style="margin-top:12px;"><summary style="cursor:pointer;color:#98a5c3;font-size:12px;">Full JSON</summary><pre style="margin-top:8px;font-size:11px;">${JSON.stringify(data, null, 2).replace(/</g, '&lt;')}</pre></details>
+      `;
+
+      const rounds = data?.vob_retry_config?.rounds;
+      const vobNote = !dryRun && Number.isFinite(Number(rounds)) && rounds > 1
+        ? ` (VOB ran up to ${rounds} sessions)`
+        : '';
+      toast(dryRun ? 'Dry run complete.' : `Pipeline finished${vobNote} — fields filled, VOB run, note ${np?.ok ? 'posted' : 'needs manual copy'}.`, dryRun ? 'info' : 'success');
+      await loadDashboard({}, { skipAutoFullQueue: true });
+    } catch (error) {
+      if (out) out.textContent = error.message;
+      toast(error.message, 'error');
+    }
+  }
+
+  async function runClientcareReconcile(apply) {
+    const out = document.getElementById('reconcile-output');
+    const href = (document.getElementById('reconcile-client-href')?.value || '').trim() || getSelectedClientBillingHref();
+    if (!href) {
+      toast('Paste the ClientCare billing URL or select an account from the queue.', 'error');
+      return;
+    }
+    const form = new FormData();
+    form.append('client_href', href);
+    form.append('supplemental_notes', document.getElementById('reconcile-supplemental-notes')?.value || '');
+    form.append('insurance_slot', String(Number(document.getElementById('reconcile-insurance-slot')?.value || 0) || 0));
+    form.append('apply', apply ? 'true' : 'false');
+    form.append('requested_by', 'overlay');
+    const file = getReconcileCardFile();
+    if (file) form.append('card', file);
+    try {
+      if (out) out.textContent = apply ? 'Writing to ClientCare (browser repair)…' : 'Inspecting ClientCare and merging card/notes…';
+      const data = await api('/api/v1/clientcare-billing/insurance/reconcile-clientcare', { method: 'POST', body: form });
+      if (out) out.textContent = JSON.stringify(data, null, 2);
+      toast(apply ? 'Apply finished — check JSON for save operations.' : 'Reconcile preview ready below.', apply ? 'success' : 'info');
+      await loadDashboard({}, { skipAutoFullQueue: true });
+    } catch (error) {
+      if (out) out.textContent = error.message;
+      toast(error.message, 'error');
+    }
+  }
+
+  async function promoteSavedVobHistory(index) {
+    const entry = (lastSavedVobProspects || [])[Number(index)];
+    if (!entry?.id) return;
+    try {
+      const result = await api(`/api/v1/clientcare-billing/insurance/prospects/${encodeURIComponent(entry.id)}/promote`, {
+        method: 'POST',
+        body: JSON.stringify({ requested_by: 'overlay' }),
+      });
+      if (result.saved) {
+        lastSavedVobProspects = lastSavedVobProspects.map((item) => item.id === result.saved.id ? result.saved : item);
+      }
+      toast('Queued this saved VOB for client-file creation.', 'success');
+      rerender();
+    } catch (error) {
+      toast(error.message, 'error');
+    }
+  }
+
   async function runWorkflow(workflowId) {
     try {
       const result = await api('/api/v1/clientcare-billing/ops/run-workflow', {
@@ -3584,11 +4094,35 @@
     if (prospectEmail) prospectEmail.addEventListener('input', (event) => {
       lastProspectDraft.email = event.target.value || '';
     });
+    const vobCardUpload = document.getElementById('vob-card-upload');
+    if (vobCardUpload) vobCardUpload.addEventListener('click', uploadInsuranceCard);
+    const vobSaveProspect = document.getElementById('vob-save-prospect');
+    if (vobSaveProspect) vobSaveProspect.addEventListener('click', saveProspectVob);
+    root.querySelectorAll('[data-vob-history-use]').forEach((button) => button.addEventListener('click', () => {
+      const entry = (lastSavedVobProspects || [])[Number(button.getAttribute('data-vob-history-use') || 0)];
+      if (!entry) return;
+      hydrateVobFromSavedProspect(entry);
+      rerender();
+    }));
+    root.querySelectorAll('[data-vob-history-promote]').forEach((button) => button.addEventListener('click', () => {
+      promoteSavedVobHistory(Number(button.getAttribute('data-vob-history-promote') || 0));
+    }));
     const vobRequestText = document.getElementById('vob-request-text');
     if (vobRequestText) vobRequestText.addEventListener('click', async () => {
       try {
-        await sendAssistantPrompt(buildVobOutreachPrompt('text message'));
-        toast('Queued a client text request in the assistant.', 'success');
+        if (vobMode === 'prospect' && lastProspectDraft.phone) {
+          await executeSystemOutreach({
+            channel: 'sms',
+            recipientName: lastProspectDraft.full_name || 'Prospect',
+            recipientPhone: lastProspectDraft.phone,
+            body: buildVobClientFacingBody(),
+            sourceRef: `clientcare_vob_prospect:${lastProspectDraft.full_name || 'unknown'}`,
+          });
+          toast('Sent the client text through the system and logged the outreach task.', 'success');
+        } else {
+          await sendAssistantPrompt(buildVobOutreachPrompt('text message'));
+          toast('Queued a client text request in the assistant.', 'success');
+        }
       } catch (error) {
         toast(error.message, 'error');
       }
@@ -3596,14 +4130,33 @@
     const vobRequestEmail = document.getElementById('vob-request-email');
     if (vobRequestEmail) vobRequestEmail.addEventListener('click', async () => {
       try {
-        await sendAssistantPrompt(buildVobOutreachPrompt('email'));
-        toast('Queued a client email request in the assistant.', 'success');
+        if (vobMode === 'prospect' && lastProspectDraft.email) {
+          await executeSystemOutreach({
+            channel: 'email',
+            recipientName: lastProspectDraft.full_name || 'Prospect',
+            recipientEmail: lastProspectDraft.email,
+            subject: `Insurance information needed for ${lastProspectDraft.full_name || 'your benefits review'}`,
+            body: buildVobClientFacingEmail(),
+            sourceRef: `clientcare_vob_prospect:${lastProspectDraft.full_name || 'unknown'}`,
+          });
+          toast('Sent the client email through the system and logged the outreach task.', 'success');
+        } else {
+          await sendAssistantPrompt(buildVobOutreachPrompt('email'));
+          toast('Queued a client email request in the assistant.', 'success');
+        }
       } catch (error) {
         toast(error.message, 'error');
       }
     });
     const insurancePreviewButton = document.getElementById('insurance-preview-run');
     if (insurancePreviewButton) insurancePreviewButton.addEventListener('click', runInsurancePreview);
+    const clientcarePipelineRun = document.getElementById('clientcare-pipeline-run');
+    if (clientcarePipelineRun) clientcarePipelineRun.addEventListener('click', () => runFullClientcarePipeline());
+    wireInsuranceCardDropzones(root);
+    const reconcilePreviewBtn = document.getElementById('reconcile-preview');
+    if (reconcilePreviewBtn) reconcilePreviewBtn.addEventListener('click', () => runClientcareReconcile(false));
+    const reconcileApplyBtn = document.getElementById('reconcile-apply');
+    if (reconcileApplyBtn) reconcileApplyBtn.addEventListener('click', () => runClientcareReconcile(true));
     const repairPreviewButton = document.getElementById('repair-preview-run');
     if (repairPreviewButton) repairPreviewButton.addEventListener('click', () => runAccountRepair(false));
     const repairApplyButton = document.getElementById('repair-apply-run');
@@ -3662,5 +4215,6 @@
     root.querySelectorAll('[data-run-workflow]').forEach((button) => button.addEventListener('click', () => runWorkflow(button.getAttribute('data-run-workflow'))));
   }
 
+  wireOverlayCardStripOnce();
   loadDashboard();
 })();

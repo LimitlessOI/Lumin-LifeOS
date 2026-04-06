@@ -17,6 +17,9 @@ const REQUIRED_BROWSER_SECRETS = [
 const OPTIONAL_BROWSER_SECRETS = [
   'CLIENTCARE_MFA_MODE',
   'CLIENTCARE_MFA_SECRET',
+  'CLIENTCARE_VOB_BUTTON_HINT',
+  'CLIENTCARE_VOB_INNER_ATTEMPTS',
+  'CLIENTCARE_VOB_RETRY_ROUNDS',
 ];
 const WORKFLOW_TEMPLATES = [
   {
@@ -313,6 +316,8 @@ function buildAccountRepairPlan(account = {}, requestedUpdates = {}) {
   const subscriberField = fieldByLabel(/subscriber name/i);
   const payorIdField = fieldByLabel(/payor id|payer id/i);
   const priorityField = fieldByLabel(/insurance priority|priority/i);
+  const relationshipField = fieldByLabel(/relationship to insured/i);
+  const groupNumberField = fieldByLabel(/group\s*#|group number|^group$/i);
 
   const supported = [];
   const unsupported = [];
@@ -425,6 +430,26 @@ function buildAccountRepairPlan(account = {}, requestedUpdates = {}) {
       current: primaryCoverage.payorId || '',
       target: requestedUpdates.payor_id,
       options: payorIdField?.options || [],
+    });
+  }
+
+  if (requestedUpdates.relationship_to_insured) {
+    supported.push({
+      field: 'relationship_to_insured',
+      label: 'Relationship to Insured',
+      current: primaryCoverage.relationship || '',
+      target: requestedUpdates.relationship_to_insured,
+      options: relationshipField?.options || [],
+    });
+  }
+
+  if (requestedUpdates.group_number) {
+    supported.push({
+      field: 'group_number',
+      label: 'Group Number',
+      current: primaryCoverage.groupNumber || '',
+      target: requestedUpdates.group_number,
+      options: groupNumberField?.options || [],
     });
   }
 
@@ -604,11 +629,23 @@ async function applyBillingFieldUpdates(page, updates = {}) {
     if (requestedUpdates.subscriber_name) {
       operations.push(setControlValue(/subscriber name/i, requestedUpdates.subscriber_name, 'subscriber_name', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.subscriber_name || '' }));
     }
+    if (requestedUpdates.group_number) {
+      operations.push(setControlValue(/group\s*#|group number|^group$/i, requestedUpdates.group_number, 'group_number', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.group_number || '' }));
+    }
+    if (requestedUpdates.relationship_to_insured) {
+      operations.push(setControlValue(/relationship to insured|relationship\s*to\s*the\s*insured|insured\s*relationship/i, requestedUpdates.relationship_to_insured, 'relationship_to_insured', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.relationship || '' }));
+    }
     if (requestedUpdates.payor_id) {
       operations.push(setControlValue(/payor id|payer id/i, requestedUpdates.payor_id, 'payor_id', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.payor_id || '' }));
     }
     if (requestedUpdates.insurance_priority) {
       operations.push(setControlValue(/insurance priority|priority/i, requestedUpdates.insurance_priority, 'insurance_priority', { matchIndex: Number(requestedUpdates.insurance_slot || 0), matchHint: requestedUpdates.insurance_match_hints?.insurance_priority || '' }));
+    }
+    if (requestedUpdates.copay_amount) {
+      operations.push(setControlValue(/\bcopay\b/i, requestedUpdates.copay_amount, 'copay'));
+    }
+    if (requestedUpdates.deductible_remaining_amount) {
+      operations.push(setControlValue(/deductible/i, requestedUpdates.deductible_remaining_amount, 'deductible'));
     }
 
     return { operations };
@@ -638,6 +675,102 @@ async function attemptBillingSave(page) {
   if (!clicked) return { attempted: false, label: null };
   await sleep(1500);
   return { attempted: true, label: clicked };
+}
+
+/**
+ * Post a billing note to ClientCare on the current billing page.
+ * Strategy:
+ *   1. Look for an "Add Note" / "New Note" / "Add Billing Note" button — click it to reveal the form.
+ *   2. Find the first visible textarea (or text input labelled "note") and type the text.
+ *   3. Click the closest "Save" / "Add" / "Submit" button that appears near the textarea.
+ * Returns { ok, strategy, reason } — non-fatal if it fails; caller logs and continues.
+ */
+async function addBillingNote(page, noteText) {
+  if (!noteText) return { ok: false, reason: 'no note text' };
+
+  // Step 1 — try to click an "Add Note" reveal button
+  const revealed = await page.evaluate(() => {
+    const visible = (el) => {
+      if (!el) return false;
+      const s = window.getComputedStyle(el);
+      if (s.display === 'none' || s.visibility === 'hidden') return false;
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.height > 0;
+    };
+    const btn = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], a'))
+      .filter(visible)
+      .find((el) => /add\s*(billing\s*)?note|new\s*note|add\s*comment/i.test((el.textContent || el.value || '').trim()));
+    if (btn) { btn.click(); return true; }
+    return false;
+  });
+  if (revealed) await sleep(800);
+
+  // Step 2 — find a visible textarea (or note-labelled text input)
+  const typed = await page.evaluate((text) => {
+    const visible = (el) => {
+      if (!el) return false;
+      const s = window.getComputedStyle(el);
+      if (s.display === 'none' || s.visibility === 'hidden') return false;
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.height > 0;
+    };
+    const contextText = (el) => {
+      const id = el.id || '';
+      const lbl = id ? document.querySelector(`label[for="${CSS.escape(id)}"]`) : null;
+      const container = el.closest('tr, .form-group, .field, td, li, div');
+      return (lbl?.textContent || container?.innerText || el.name || el.id || '').replace(/\s+/g, ' ').trim();
+    };
+
+    // Prefer textareas labelled "note" or "comment"
+    const textareas = Array.from(document.querySelectorAll('textarea')).filter(visible);
+    const noteArea = textareas.find((el) => /note|comment|message/i.test(contextText(el))) || textareas[0];
+    if (noteArea) {
+      noteArea.focus();
+      noteArea.value = text;
+      noteArea.dispatchEvent(new Event('input', { bubbles: true }));
+      noteArea.dispatchEvent(new Event('change', { bubbles: true }));
+      return { found: true, tag: 'textarea', context: contextText(noteArea) };
+    }
+
+    // Fallback: text input
+    const inputs = Array.from(document.querySelectorAll('input[type="text"]')).filter(visible);
+    const noteInput = inputs.find((el) => /note|comment|message/i.test(contextText(el)));
+    if (noteInput) {
+      noteInput.focus();
+      noteInput.value = text;
+      noteInput.dispatchEvent(new Event('input', { bubbles: true }));
+      noteInput.dispatchEvent(new Event('change', { bubbles: true }));
+      return { found: true, tag: 'input', context: contextText(noteInput) };
+    }
+
+    return { found: false };
+  }, noteText);
+
+  if (!typed.found) {
+    return { ok: false, reason: 'no note textarea found on page', revealed };
+  }
+
+  await sleep(400);
+
+  // Step 3 — click the save/submit button closest to where we typed
+  const saved = await page.evaluate(() => {
+    const visible = (el) => {
+      const s = window.getComputedStyle(el);
+      if (s.display === 'none' || s.visibility === 'hidden') return false;
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.height > 0;
+    };
+    const btn = Array.from(document.querySelectorAll('button, input[type="submit"], input[type="button"]'))
+      .filter(visible)
+      .find((el) => /save|add|submit|post/i.test((el.textContent || el.value || '').trim()));
+    if (btn) { btn.click(); return (btn.textContent || btn.value || 'save').trim(); }
+    return null;
+  });
+
+  if (!saved) return { ok: false, reason: 'note typed but save button not found', typed };
+
+  await sleep(1200);
+  return { ok: true, strategy: revealed ? 'reveal_then_type' : 'direct_type', saved_via: saved, context: typed.context };
 }
 
 async function waitForBillingHome(page, timeoutMs = 10000) {
@@ -1235,6 +1368,224 @@ function extractInsurancePreview(summary = {}) {
   return insuranceEntries;
 }
 
+/** Parse ClientCare page / modal text after an eligibility or VOB action (best-effort; UI varies). */
+function extractVobStructuredFieldsFromText(text = '') {
+  const t = String(text || '').replace(/\r/g, '');
+  const pick = (re) => {
+    const m = t.match(re);
+    return m ? String(m[1] || m[2] || '').replace(/,/g, '').trim() : '';
+  };
+  return {
+    plan_name: pick(/plan\s*name[:\s]+([^\n]+)/i) || pick(/payer\s*name[:\s]+([^\n]+)/i),
+    insurance_name: pick(/insurance\s*name[:\s]+([^\n]+)/i),
+    member_id: pick(/member\s*(?:id|#|number)[:\s]+([A-Z0-9][A-Z0-9\- ]{4,})/i)
+      || pick(/subscriber\s*(?:id|#)[:\s]+([A-Z0-9][A-Z0-9\- ]{4,})/i),
+    group_number: pick(/group\s*#?[:\s]+([A-Z0-9][A-Z0-9\-]{2,})/i),
+    copay: pick(/copay[^:\n$]*[:\s]+\$?\s*([\d.]+)/i),
+    deductible_remaining: pick(/deductible[^:\n$]*(?:remaining|met)?[:\s]+\$?\s*([\d.]+)/i),
+    coinsurance: pick(/coinsurance[:\s]+([\d.]+%?)/i),
+    oop_remaining: pick(/out[\s-]*of[\s-]*pocket[^:\n$]*[:\s]+\$?\s*([\d.]+)/i),
+    network_status: /\bout[\s-]*of[\s-]*network\b/i.test(t) ? 'out_of_network' : (/\bin[\s-]*network\b/i.test(t) ? 'in_network' : ''),
+    raw_snippet: t.slice(0, 12000),
+  };
+}
+
+/** Phases: tighter patterns first, then broader recovery (button moved / relabeled). */
+const VOB_CLICK_PATTERN_STRINGS_PRIMARY = [
+  '\\bverify\\s+(?:benefits|eligibility)\\b',
+  '\\bbenefits?\\s+verification\\b',
+  '\\beligibility\\s*(?:check|verification|inquiry)?\\b',
+  '\\bcheck\\s+(?:coverage|eligibility)\\b',
+  '\\bvob\\b',
+  '\\brte\\b',
+  '\\breal[\\s-]*time\\b.*\\belig',
+  '\\bget\\s+(?:eligibility|benefits)\\b',
+  '\\bview\\s+(?:eligibility|benefits|coverage)\\b',
+];
+
+const VOB_CLICK_PATTERN_STRINGS_RECOVERY = [
+  '\\belig(?:ibility|ible)?\\b',
+  '\\bbenefits?\\b',
+  '\\bcoverage\\s*(?:details|verification)\\b',
+  '\\bpayer\\s*(?:portal|lookup|response)\\b',
+  '\\bavaility\\b',
+  '\\bevicore\\b',
+  '\\bauth(?:orization)?\\s*(?:required|status)\\b',
+];
+
+function escapeRegexChars(s) {
+  return String(s || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Heuristic: did the page show something that looks like a VOB/eligibility response?
+ */
+function analyzeVobResponseReceived({
+  beforeText = '',
+  afterText = '',
+  beforeInsurance = [],
+  afterInsurance = [],
+  vobExtraction = {},
+} = {}) {
+  const ext = vobExtraction || {};
+  const hasParsed = Boolean(
+    ext.copay || ext.deductible_remaining || ext.member_id || ext.plan_name || ext.insurance_name || ext.group_number || ext.coinsurance || ext.oop_remaining,
+  );
+  const benefitRe = /eligible|ineligible|copay|coinsurance|deductible|benefit|authorization|auth\s+required|active\s+coverage|plan\s+pays|patient\s+respons|accumulator|o\s*o\s*p|out[\s-]*of[\s-]*pocket|remaining\s+deduct/i;
+  const beforeT = String(beforeText || '');
+  const afterT = String(afterText || '');
+  const lenDelta = afterT.length - beforeT.length;
+  const keywordGain = benefitRe.test(afterT) && (!benefitRe.test(beforeT) || afterT.length > beforeT.length + 200);
+
+  const flat = (arr) => JSON.stringify(arr || []);
+  const insuranceChanged = flat(beforeInsurance) !== flat(afterInsurance);
+
+  let received = hasParsed || insuranceChanged || (lenDelta > 350 && benefitRe.test(afterT)) || keywordGain;
+  let reason = 'no_vob_signals';
+  if (hasParsed) reason = 'parsed_financial_or_id_fields';
+  else if (insuranceChanged) reason = 'insurance_block_changed';
+  else if (lenDelta > 350 && benefitRe.test(afterT)) reason = 'large_text_increase_with_benefit_language';
+  else if (keywordGain) reason = 'new_benefit_keywords_visible';
+
+  const portalBlocked = /unable to (?:complete|verify|retrieve)|session (?:has expired|timed out)|please sign in|login required|authentication failed/i.test(afterT);
+  if (portalBlocked && !hasParsed) {
+    received = false;
+    reason = 'portal_error_or_auth';
+  } else if (!received && /error|unable to|failed|try again|session expired/i.test(afterT)) {
+    reason = 'possible_error_or_session_state';
+  }
+
+  return {
+    received,
+    reason,
+    hasParsed,
+    lenDelta,
+    insuranceChanged,
+  };
+}
+
+async function listVobClickCandidates(page) {
+  return page.evaluate(() => {
+    const visible = (el) => {
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden') return false;
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    };
+    const nodes = Array.from(document.querySelectorAll('button, a[href], [role="button"], input[type="button"], input[type="submit"]')).filter(visible);
+    return nodes
+      .map((el) => {
+        const t = `${el.textContent || ''} ${el.value || ''}`.replace(/\s+/g, ' ').trim();
+        return { text: t.slice(0, 160), tag: el.tagName, id: el.id || '' };
+      })
+      .filter((item) => item.text && item.text.length < 200);
+  });
+}
+
+async function clickFirstMatchingButton(page, patternStrings, { phase = 'unknown', excludeNegative = true } = {}) {
+  return page.evaluate(
+    ({ patterns, excludeNegative: excl }) => {
+      const visible = (el) => {
+        if (!el) return false;
+        const style = window.getComputedStyle(el);
+        if (style.display === 'none' || style.visibility === 'hidden') return false;
+        const rect = el.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      };
+      const regexes = patterns.map((s) => {
+        try {
+          return new RegExp(s, 'i');
+        } catch {
+          return null;
+        }
+      }).filter(Boolean);
+      const neg = /\b(log\s*out|sign\s*out|delete\s+client|cancel\s+order)\b/i;
+      const candidates = Array.from(document.querySelectorAll('button, a[href], [role="button"], input[type="button"], input[type="submit"]')).filter(visible);
+      for (const el of candidates) {
+        const t = `${el.textContent || ''} ${el.value || ''}`.replace(/\s+/g, ' ').trim();
+        if (!t || t.length > 180) continue;
+        if (excl && neg.test(t)) continue;
+        if (regexes.some((re) => re.test(t))) {
+          try {
+            el.click();
+            return { clicked: true, label: t, phase };
+          } catch (e) {
+            return { clicked: false, error: e?.message || 'click failed', phase };
+          }
+        }
+      }
+      return { clicked: false, label: null, phase };
+    },
+    { patterns: patternStrings, excludeNegative },
+  );
+}
+
+async function clickSecondaryModalConfirm(page) {
+  return page.evaluate(() => {
+    const visible = (el) => {
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden') return false;
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    };
+    const nodes = Array.from(document.querySelectorAll('button, a, input[type="submit"], input[type="button"]')).filter(visible);
+    const run = nodes.find((el) => {
+      const t = `${el.textContent || ''} ${el.value || ''}`;
+      return /\b(run|submit|ok|check|continue|view\s+results|get\s+elig|confirm)\b/i.test(t) && t.length < 120;
+    });
+    if (run) {
+      try {
+        run.click();
+        return { clicked: true, label: `${run.textContent || ''}`.trim() };
+      } catch {
+        return { clicked: false };
+      }
+    }
+    return { clicked: false };
+  });
+}
+
+/** Highest-scoring billing-ish control when patterns fail (button moved / renamed). */
+async function clickBestScoredFallback(page) {
+  return page.evaluate(() => {
+    const visible = (el) => {
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden') return false;
+      const rect = el.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    };
+    const neg = /\b(log\s*out|sign\s*out|delete|cancel\s+order|remove)\b/i;
+    const candidates = Array.from(document.querySelectorAll('button, a[href], [role="button"], input[type="button"], input[type="submit"]')).filter(visible);
+    let best = null;
+    let bestScore = -1;
+    for (const el of candidates) {
+      const t = `${el.textContent || ''} ${el.value || ''}`.replace(/\s+/g, ' ').trim();
+      if (!t || t.length > 140 || neg.test(t)) continue;
+      let score = 0;
+      const low = t.toLowerCase();
+      if (/elig|benefit|vob|coverage|payer|verify|check|auth|rte|plan|deduct|copay|claim/i.test(low)) score += 15;
+      if (/insurance|insured|subscriber|member/i.test(low)) score += 8;
+      if (t.length < 60) score += 2;
+      if (score > bestScore) {
+        bestScore = score;
+        best = { el, t, score };
+      }
+    }
+    if (best && best.score >= 12) {
+      try {
+        best.el.click();
+        return { clicked: true, label: best.t, score: best.score, phase: 'scored_fallback' };
+      } catch (e) {
+        return { clicked: false, error: e?.message };
+      }
+    }
+    return { clicked: false, phase: 'scored_fallback', bestCandidate: best?.t || null, bestScore: best?.score ?? null };
+  });
+}
+
 function extractDashboardCounts(summary = {}) {
   const text = `${summary.textPreview || ''}`;
   const count = (pattern) => {
@@ -1471,6 +1822,13 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       const summary = await collectPageSummary(session.page);
       const billingFields = await extractBillingFieldPairs(session.page);
       const insurancePreview = extractInsurancePreview(summary);
+      let billingNotesPreview = [];
+      try {
+        const noteData = await extractBillingNotesFromPage(session.page);
+        billingNotesPreview = Array.isArray(noteData?.billingNotes) ? noteData.billingNotes.slice(0, 25) : [];
+      } catch {
+        billingNotesPreview = [];
+      }
       let shot = null;
       if (includeScreenshots) {
         shot = await screenshotPath('clientcare-client-billing');
@@ -1484,6 +1842,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         page: summary,
         billingFields,
         insurancePreview,
+        billingNotesPreview,
         repairPlan: buildAccountRepairPlan({
           clientHref,
           billingFields,
@@ -1592,6 +1951,160 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         saveResult,
         screenshots,
         screenshot: shot,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
+  /**
+   * Runs ClientCare VOB/eligibility with retries: primary patterns → recovery patterns → scored fallback.
+   * Detects whether a response arrived; logs steps for operators when UI changes.
+   */
+  function resolveVobInnerAttempts(requested) {
+    if (Number.isFinite(Number(requested)) && Number(requested) >= 1) {
+      return Math.min(12, Math.max(1, Math.floor(Number(requested))));
+    }
+    const fromEnv = Number(env.CLIENTCARE_VOB_INNER_ATTEMPTS);
+    if (Number.isFinite(fromEnv) && fromEnv >= 1) {
+      return Math.min(12, Math.max(2, Math.floor(fromEnv)));
+    }
+    return 5;
+  }
+
+  async function runClientcareVobFlow({ clientHref, pageTimeoutMs = 38000, maxAttempts: maxAttemptsArg } = {}) {
+    if (!clientHref) throw new Error('clientHref required');
+    const maxAttempts = resolveVobInnerAttempts(maxAttemptsArg);
+    const hint = String(env.CLIENTCARE_VOB_BUTTON_HINT || '').trim();
+    const primaryPatterns = [
+      ...(hint ? [`.*${escapeRegexChars(hint)}.*`] : []),
+      ...VOB_CLICK_PATTERN_STRINGS_PRIMARY,
+    ];
+
+    const result = await login({ dryRun: false });
+    const { session, screenshots } = result;
+    const steps = [];
+    try {
+      const nav = await gotoWithBudget(session.page, clientHref, { timeout: Math.max(5000, Number(pageTimeoutMs) || 15000) });
+      if (!nav.ok) {
+        return { ok: false, clientHref, error: nav.error, screenshots };
+      }
+
+      const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+      if (billingTab) {
+        await billingTab.click().catch(() => {});
+        await sleep(1200);
+      }
+
+      const beforeSummary = await collectPageSummary(session.page);
+      const beforeInsurance = extractInsurancePreview(beforeSummary);
+      const beforeText = beforeSummary.textPreview || '';
+
+      let lastSummary = beforeSummary;
+      let lastInsurance = beforeInsurance;
+      let lastClick = { clicked: false };
+      let vobReceived = false;
+      let analysis = { received: false, reason: 'not_attempted' };
+
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        let patterns = primaryPatterns;
+        let phase = 'primary';
+        if (attempt === 1) {
+          patterns = [...VOB_CLICK_PATTERN_STRINGS_RECOVERY];
+          phase = 'recovery_broad';
+        } else if (attempt === 2) {
+          phase = 'scored_fallback';
+        }
+
+        if (attempt < 2) {
+          lastClick = await clickFirstMatchingButton(session.page, patterns, { phase });
+        } else {
+          lastClick = await clickBestScoredFallback(session.page);
+        }
+
+        steps.push({
+          attempt: attempt + 1,
+          phase,
+          click: lastClick,
+        });
+
+        if (lastClick?.clicked) {
+          await sleep(4500);
+          const confirm = await clickSecondaryModalConfirm(session.page);
+          if (confirm?.clicked) {
+            steps[steps.length - 1].modal_confirm = confirm;
+            await sleep(3500);
+          } else {
+            await sleep(2000);
+          }
+        }
+
+        lastSummary = await collectPageSummary(session.page);
+        lastInsurance = extractInsurancePreview(lastSummary);
+        const bodyText = `${lastSummary.textPreview || ''}`;
+        const vobExtraction = extractVobStructuredFieldsFromText(bodyText);
+        analysis = analyzeVobResponseReceived({
+          beforeText,
+          afterText: bodyText,
+          beforeInsurance,
+          afterInsurance: lastInsurance,
+          vobExtraction,
+        });
+
+        vobReceived = Boolean(analysis.received);
+        if (vobReceived) {
+          logger?.info?.(
+            { clientHref, phase, reason: analysis.reason }, '[CLIENTCARE-BROWSER] VOB response detected',
+          );
+          break;
+        }
+
+        logger?.warn?.(
+          {
+            clientHref,
+            attempt: attempt + 1,
+            phase,
+            clicked: lastClick?.clicked,
+            analysis,
+          },
+          '[CLIENTCARE-BROWSER] VOB response not detected — retrying',
+        );
+
+        if (attempt < maxAttempts - 1) {
+          await sleep(1200);
+        }
+      }
+
+      const buttonCatalog = await listVobClickCandidates(session.page);
+      const finalText = `${lastSummary.textPreview || ''}`;
+      const vobExtractionFinal = extractVobStructuredFieldsFromText(finalText);
+
+      if (!vobReceived) {
+        logger?.warn?.(
+          {
+            clientHref,
+            hint: hint || '(set CLIENTCARE_VOB_BUTTON_HINT to match your portal label)',
+            steps,
+            analysis,
+            sample_buttons: (buttonCatalog || []).slice(0, 25),
+          },
+          '[CLIENTCARE-BROWSER] VOB response still not detected after recovery — check button labels or portal state',
+        );
+      }
+
+      return {
+        ok: true,
+        clientHref,
+        vob_received: vobReceived,
+        vob_analysis: analysis,
+        recovery_steps: steps,
+        vob_button: lastClick,
+        beforeInsurance,
+        afterInsurance: lastInsurance,
+        vob_extraction: vobExtractionFinal,
+        page_text_sample: finalText.slice(0, 15000),
+        button_catalog_sample: (buttonCatalog || []).slice(0, 40),
+        env_hint_configured: Boolean(hint),
       };
     } finally {
       await session.close().catch(() => {});
@@ -2151,5 +2664,24 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     buildBacklogSummary,
     extractClaimTables,
     repairBillingAccount,
+    runClientcareVobFlow,
+    /** Post a billing note to ClientCare. billingHref is the client billing page URL. */
+    async addBillingNote(billingHref, noteText) {
+      if (!billingHref || !noteText) return { ok: false, reason: 'billingHref and noteText required' };
+      const result = await login({ dryRun: false });
+      const { session } = result;
+      try {
+        const nav = await gotoWithBudget(session.page, billingHref, { timeout: 18000 });
+        if (!nav.ok) return { ok: false, reason: nav.error || 'navigation failed' };
+        const billingTab = await session.page.$('a[href*="#tabs-billing"]');
+        if (billingTab) {
+          await billingTab.click().catch(() => {});
+          await sleep(1000);
+        }
+        return await addBillingNote(session.page, noteText);
+      } finally {
+        await session.close().catch(() => {});
+      }
+    },
   };
 }
