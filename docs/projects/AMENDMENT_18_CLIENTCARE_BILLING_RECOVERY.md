@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-06 (card is source of truth in pipeline: buildCardAuthorityUpdates fills/overwrites all card fields in CC; subscriber name used for CC match; multi-file OCR merged before parse)
+**Last Updated:** 2026-04-06 (card subscriber-name matching; payer candidate picker from loaded backlog; lastVobClientHref feeds getSelectedClientBillingHref)
 
 ---
 

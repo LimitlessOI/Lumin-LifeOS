@@ -41,6 +41,7 @@
   let lastVobCardState = 'idle';
   let lastVobCardSummary = null;
   let lastVobCardError = '';
+  let lastVobClientHref = '';
   let lastInsuranceDraft = {
     payer_name: '',
     member_id: '',
@@ -144,6 +145,22 @@
     );
   }
 
+  /**
+   * Find accounts in the loaded backlog that share the same payer as the card.
+   * Used when member ID doesn't directly match a known client — insurance can be under
+   * a subscriber with a different name (spouse, parent, employer plan).
+   */
+  function findPayerCandidates(payerName = '') {
+    if (!payerName || !lastAccountReport?.items?.length) return [];
+    const needle = payerName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return lastAccountReport.items
+      .filter((item) => {
+        const hay = String(item.payer_name || item.payer || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        return hay && (hay.includes(needle) || needle.includes(hay));
+      })
+      .slice(0, 5);
+  }
+
   function renderVobCardStatus() {
     if (lastVobCardState === 'reading' && lastVobCardFile?.name) {
       return `<span style="color:#8aa4ff;">Reading card… <em>${escapeHtml(lastVobCardFile.name)}</em></span>`;
@@ -152,9 +169,6 @@
       return `<span style="color:#ff9db0;">Card read failed: ${escapeHtml(lastVobCardError)}</span>`;
     }
     if (lastVobCardSummary) {
-      const matched = lastVobCardSummary.matchedClientName
-        ? ` · matched: <strong>${escapeHtml(lastVobCardSummary.matchedClientName)}</strong>`
-        : '';
       const payer = lastVobCardSummary.payer_name
         ? `<strong>${escapeHtml(lastVobCardSummary.payer_name)}</strong>`
         : '<span class="muted">payer unknown</span>';
@@ -164,11 +178,52 @@
       const grp = lastVobCardSummary.group_number
         ? ` · Grp <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${escapeHtml(lastVobCardSummary.group_number)}</code>`
         : '';
+
+      // If the card matched a known client directly, show that
+      if (lastVobCardSummary.matchedClientName) {
+        return `
+          <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
+          &nbsp;—&nbsp;${payer}${mid}${grp}
+          &nbsp;·&nbsp;matched: <strong>${escapeHtml(lastVobCardSummary.matchedClientName)}</strong>
+          &nbsp;<button type="button" id="vob-inline-clear"
+            style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
+        `;
+      }
+
+      // No direct match — insurance may be under a different name.
+      // Show accounts from the loaded backlog that share this payer so the user can pick.
+      const candidates = findPayerCandidates(lastVobCardSummary.payer_name);
+      const candidateHtml = candidates.length
+        ? `
+          <div style="margin-top:8px;padding:10px;background:#0f1a30;border:1px solid #2d3b5f;border-radius:8px;">
+            <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">
+              Insurance may be under a different name — pick the right client:
+            </div>
+            <div style="display:grid;gap:6px;">
+              ${candidates.map((item) => `
+                <button type="button" data-card-candidate-href="${escapeHtml(item.billingHref || item.href || '')}"
+                  style="text-align:left;background:#131a2e;border:1px solid #27304a;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px;">
+                  <span style="color:#edf2f7;font-weight:600;">${escapeHtml(item.client || item.name || 'Unknown')}</span>
+                  <span style="color:#98a5c3;font-size:11px;margin-left:8px;">${escapeHtml(item.payer_name || item.payer || '')}</span>
+                </button>
+              `).join('')}
+            </div>
+            <div style="font-size:11px;color:#98a5c3;margin-top:8px;">
+              Not in this list? Select the account from the billing board and use "Use this account in VOB".
+            </div>
+          </div>
+        `
+        : `<div style="margin-top:6px;font-size:12px;color:#98a5c3;">
+            No ${escapeHtml(lastVobCardSummary.payer_name || 'matching')} accounts in the loaded backlog.
+            Select the client from the billing board and use "Use this account in VOB".
+           </div>`;
+
       return `
         <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
-        &nbsp;—&nbsp;${payer}${mid}${grp}${matched}
+        &nbsp;—&nbsp;${payer}${mid}${grp}
         &nbsp;<button type="button" id="vob-inline-clear"
           style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
+        ${candidateHtml}
       `;
     }
     return '';
@@ -1937,7 +1992,7 @@
 
   function getSelectedClientBillingHref() {
     const item = getSelectedAccountItem();
-    return String(item?.raw?.billingHref || item?.billingHref || '').trim();
+    return String(item?.raw?.billingHref || item?.billingHref || lastVobClientHref || '').trim();
   }
 
   function renderClientcareReconcilePanel() {
@@ -4296,6 +4351,37 @@
     if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
     root.querySelectorAll('[data-run-workflow]').forEach((button) => button.addEventListener('click', () => runWorkflow(button.getAttribute('data-run-workflow'))));
     wireVobCardZone();
+
+    // Wire candidate account buttons shown after card OCR when no direct name match
+    root.querySelectorAll('[data-card-candidate-href]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const href = btn.getAttribute('data-card-candidate-href');
+        if (!href) return;
+        const match = lastAccountReport?.items?.find((item) =>
+          (item.billingHref || item.href || '') === href,
+        );
+        if (match) {
+          selectAccountForVob(match);
+          // Pre-fill card-extracted fields into the VOB form
+          if (lastVobCardSummary) {
+            lastInsuranceDraft = {
+              ...lastInsuranceDraft,
+              payer_name: lastVobCardSummary.payer_name || lastInsuranceDraft.payer_name,
+              member_id: lastVobCardSummary.member_id || lastInsuranceDraft.member_id,
+              group_number: lastVobCardSummary.group_number || lastInsuranceDraft.group_number,
+            };
+          }
+          rerender();
+          document.getElementById('verification-of-benefits')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          toast(`Selected ${escapeHtml(match.client || 'account')} — fill in coverage/network status and run VOB.`, 'success');
+        } else {
+          // Account not in local cache — set the href directly as the vob client href
+          lastVobClientHref = href;
+          toast('Account selected — run VOB to pull live data from ClientCare.', 'success');
+          rerender();
+        }
+      });
+    });
   }
 
   wireOverlayCardStripOnce();
