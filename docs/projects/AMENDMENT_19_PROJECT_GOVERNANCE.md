@@ -5,7 +5,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-28 (builder-supervisor-routes, builder-council-review, project-governance-routes staged with model performance + council upgrades) |
+| **Last Updated** | 2026-04-06 (runtime route registration no longer hard-fails when optional experimental modules are absent from the deployed repo) |
 | **Verification Command** | `node scripts/verify-project.mjs --project project_governance` |
 | **Manifest** | `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json` |
 
@@ -99,6 +99,35 @@ docs/projects/INDEX.md
 5. Readiness gates determine when a project is mature enough to enter the builder queue
 6. Builder supervisor only executes projects that are both `build_ready` and safe enough to automate
 
+### AI Evaluation Governance Loop
+All autonomous or semi-autonomous AI work must be recorded as a governed evaluation run:
+1. `proposal` — what the model said should be done
+2. `execution` — what code or workflow it actually changed
+3. `verification` — what checks were run and whether they passed
+4. `review` — whether the touched files and architecture fit were correct
+5. `repair` — what was changed after failure
+6. `score` — separate grades for planning quality, implementation quality, and debug quality
+
+Minimum governance requirements:
+- Proposal and execution must be distinguishable in logs/receipts.
+- Verification must be explicit and reproducible.
+- A failed first attempt that is later repaired still counts as a failed first attempt in scoring.
+- Confidence must be stored and compared against actual outcome.
+- Runs that collapse planner/executor/verifier into one role must be labeled as reduced-separation runs.
+
+### Required Evaluation Artifacts
+Every governed AI run should preserve:
+- input task / prompt summary
+- proposal payload
+- files changed
+- checks run
+- failures encountered
+- repair attempts
+- final receipt
+- scorecard
+
+This is the evidence base for deciding which models can safely self-program and where they still need supervision.
+
 ---
 
 ## Build Plan
@@ -171,6 +200,10 @@ Required runtime truths:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-06 | `startup/register-runtime-routes.js` now loads LifeOS/Kids/Teacher route modules lazily and skips them with a warning if the module or one of its dependencies is absent; `server.js` now awaits runtime route registration | Prevent production startup from crashing on `ERR_MODULE_NOT_FOUND` when optional experimental modules exist locally but are not part of the deployed repo; keep ClientCare billing deployable even when optional modules drift | ✅ | pending | pending |
+| 2026-04-01 | `startup/register-runtime-routes.js` — mount full LifeOS API surface under `/api/v1/lifeos/*` + `/finance` | Unblock LifeOS overlays and integrations: routes were implemented but not registered on the Express app | ✅ | pending | pending |
+| 2026-04-01 | `startup/boot-domains.js` — `bootLifeOSScheduled` calls `lifeos-scheduled-jobs` (opt-in `LIFEOS_ENABLE_SCHEDULED_JOBS`) | Commitment prods + outreach queue without AI; respects operator kill-switch until env set | ✅ | pending | pending |
+| 2026-04-01 | Added the governed AI evaluation loop (proposal → execution → verification → review → repair → score) and required evidence artifacts for autonomous runs | Make self-programming measurable and auditable instead of anecdotal, and force all models into the same evaluation format | ✅ | pending | pending |
 | 2026-03-27 | Added governance schema, routes, manifests, verifier, coupling/staleness scripts, and CI workflow | Make SSOT discipline executable instead of aspirational | ✅ | ✅ | pending |
 | 2026-03-27 | Seeded projects/segments into the real DB and verified live governance endpoints | Make the governance lane operational instead of API-only | ✅ | ✅ | ✅ |
 | 2026-03-27 | Added readiness-gate routes, readiness queue, checklist doc, and builder supervisor route composition | Make pre-build maturity explicit and give governed projects a safe automation entry point | ✅ | pending | pending |

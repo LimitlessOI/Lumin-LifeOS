@@ -23,30 +23,8 @@ import { createTCRoutes } from "../routes/tc-routes.js";
 import { createMLSRoutes } from "../routes/mls-routes.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
-import { createLifeOSChildrenRoutes } from "../routes/lifeos-children-routes.js";
-import { createLifeOSConflictRoutes } from "../routes/lifeos-conflict-routes.js";
-import { createLifeOSCoreRoutes } from "../routes/lifeos-core-routes.js";
-import { createLifeOSDecisionsRoutes } from "../routes/lifeos-decisions-routes.js";
-import { createLifeOSEmotionalRoutes } from "../routes/lifeos-emotional-routes.js";
-import { createLifeOSEngineRoutes, createLifeOSGatewayRoutes } from "../routes/lifeos-engine-routes.js";
-import { createLifeOSEthicsRoutes } from "../routes/lifeos-ethics-routes.js";
-import { createLifeOSFamilyRoutes } from "../routes/lifeos-family-routes.js";
-import { createLifeOSGrowthRoutes } from "../routes/lifeos-growth-routes.js";
-import { createLifeOSHealingRoutes } from "../routes/lifeos-healing-routes.js";
-import { createLifeOSHealthRoutes } from "../routes/lifeos-health-routes.js";
-import { createLifeOSIdentityRoutes } from "../routes/lifeos-identity-routes.js";
-import { createLifeOSLegacyRoutes } from "../routes/lifeos-legacy-routes.js";
-import { createLifeOSMediationRoutes } from "../routes/lifeos-mediation-routes.js";
-import { createLifeOSPurposeRoutes } from "../routes/lifeos-purpose-routes.js";
-import { createLifeOSVisionRoutes } from "../routes/lifeos-vision-routes.js";
-import { createLifeOSFinanceRoutes }  from "../routes/lifeos-finance-routes.js";
-import { createLifeOSCopilotRoutes }   from "../routes/lifeos-copilot-routes.js";
-import { createLifeOSSimulatorRoutes } from "../routes/lifeos-simulator-routes.js";
-import { createLifeOSWorkshopRoutes }  from "../routes/lifeos-workshop-routes.js";
-import { createKidsOSRoutes }          from "../routes/kids-os-routes.js";
-import { createTeacherOSRoutes }      from "../routes/teacher-os-routes.js";
 
-export function registerRuntimeRoutes(app, deps) {
+export async function registerRuntimeRoutes(app, deps) {
   const {
     pool,
     requireKey,
@@ -129,42 +107,58 @@ export function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/model-performance", requireKey, createModelPerformanceRouter(pool));
   logger.info("✅ [MODEL-PERFORMANCE] Routes mounted at /api/v1/model-performance/{leaderboard,winners,lens/:lens,score-outcome}");
 
-  // LifeOS — mirror, engine, gateway webhooks, health, family, ethics, and extensions (Amendment 21)
+  // Optional LifeOS / Kids / Teacher modules. These must not block billing startup
+  // when experimental route files are present locally but not deployed.
+  async function importOptionalRoute(modulePath, exportName) {
+    try {
+      const mod = await import(modulePath);
+      const factory = mod?.[exportName];
+      if (typeof factory !== "function") {
+        throw new Error(`Missing export ${exportName}`);
+      }
+      return factory;
+    } catch (error) {
+      logger.warn?.({ modulePath, exportName, err: error.message }, "[RUNTIME-ROUTES] Optional route skipped");
+      return null;
+    }
+  }
+
   const lifeosOpts = { pool, requireKey, callCouncilMember, logger, notificationService, sendSMS };
-  app.use("/api/v1/lifeos", createLifeOSCoreRoutes(lifeosOpts));
-  app.use("/api/v1/lifeos", createLifeOSGatewayRoutes({ pool, sendSMS, callCouncilMember, logger }));
-  app.use(
-    "/api/v1/lifeos/engine",
-    createLifeOSEngineRoutes({ pool, requireKey, notificationService, sendSMS, callCouncilMember, logger }),
-  );
-  app.use("/api/v1/lifeos/health", createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, sendSMS, logger }));
-  app.use("/api/v1/lifeos/family", createLifeOSFamilyRoutes({ pool, requireKey, callCouncilMember }));
-  app.use("/api/v1/lifeos/emotional", createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMember }));
-  app.use("/api/v1/lifeos/purpose", createLifeOSPurposeRoutes({ pool, requireKey, callCouncilMember }));
-  app.use("/api/v1/lifeos/children", createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember }));
-  app.use("/api/v1/lifeos/ethics", createLifeOSEthicsRoutes({ pool, requireKey, callCouncilMember, logger }));
-  app.use("/api/v1/lifeos/vision", createLifeOSVisionRoutes({ pool, requireKey, callCouncilMember, logger }));
-  app.use("/api/v1/lifeos/decisions", createLifeOSDecisionsRoutes({ pool, requireKey, callCouncilMember, logger }));
-  app.use("/api/v1/lifeos/identity", createLifeOSIdentityRoutes({ pool, requireKey, callCouncilMember, logger }));
-  app.use("/api/v1/lifeos/growth", createLifeOSGrowthRoutes({ pool, requireKey, callCouncilMember, logger }));
-  app.use("/api/v1/lifeos/mediation", createLifeOSMediationRoutes({ pool, requireKey, callCouncilMember, logger }));
-  app.use("/api/v1/lifeos/conflict", createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember, logger }));
-  app.use("/api/v1/lifeos/healing", createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember, logger }));
-  app.use("/api/v1/lifeos/legacy", createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, logger }));
-  app.use("/api/v1/lifeos/finance",  createLifeOSFinanceRoutes({ pool, requireKey, logger }));
-  app.use("/api/v1/lifeos/copilot",    createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember }));
-  app.use("/api/v1/lifeos/simulator",  createLifeOSSimulatorRoutes({ pool, requireKey, callCouncilMember }));
-  app.use("/api/v1/lifeos/workshop",   createLifeOSWorkshopRoutes({ pool, requireKey, callCouncilMember }));
+  const optionalRoutes = [
+    { modulePath: "../routes/lifeos-core-routes.js", exportName: "createLifeOSCoreRoutes", mountPath: "/api/v1/lifeos", args: [lifeosOpts], label: "[LIFEOS-CORE]" },
+    { modulePath: "../routes/lifeos-engine-routes.js", exportName: "createLifeOSGatewayRoutes", mountPath: "/api/v1/lifeos", args: [{ pool, sendSMS, callCouncilMember, logger }], label: "[LIFEOS-GATEWAY]" },
+    { modulePath: "../routes/lifeos-engine-routes.js", exportName: "createLifeOSEngineRoutes", mountPath: "/api/v1/lifeos/engine", args: [{ pool, requireKey, notificationService, sendSMS, callCouncilMember, logger }], label: "[LIFEOS-ENGINE]" },
+    { modulePath: "../routes/lifeos-health-routes.js", exportName: "createLifeOSHealthRoutes", mountPath: "/api/v1/lifeos/health", args: [{ pool, requireKey, callCouncilMember, sendSMS, logger }], label: "[LIFEOS-HEALTH]" },
+    { modulePath: "../routes/lifeos-family-routes.js", exportName: "createLifeOSFamilyRoutes", mountPath: "/api/v1/lifeos/family", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-FAMILY]" },
+    { modulePath: "../routes/lifeos-emotional-routes.js", exportName: "createLifeOSEmotionalRoutes", mountPath: "/api/v1/lifeos/emotional", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-EMOTIONAL]" },
+    { modulePath: "../routes/lifeos-purpose-routes.js", exportName: "createLifeOSPurposeRoutes", mountPath: "/api/v1/lifeos/purpose", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-PURPOSE]" },
+    { modulePath: "../routes/lifeos-children-routes.js", exportName: "createLifeOSChildrenRoutes", mountPath: "/api/v1/lifeos/children", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-CHILDREN]" },
+    { modulePath: "../routes/lifeos-ethics-routes.js", exportName: "createLifeOSEthicsRoutes", mountPath: "/api/v1/lifeos/ethics", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-ETHICS]" },
+    { modulePath: "../routes/lifeos-vision-routes.js", exportName: "createLifeOSVisionRoutes", mountPath: "/api/v1/lifeos/vision", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-VISION]" },
+    { modulePath: "../routes/lifeos-decisions-routes.js", exportName: "createLifeOSDecisionsRoutes", mountPath: "/api/v1/lifeos/decisions", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-DECISIONS]" },
+    { modulePath: "../routes/lifeos-identity-routes.js", exportName: "createLifeOSIdentityRoutes", mountPath: "/api/v1/lifeos/identity", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-IDENTITY]" },
+    { modulePath: "../routes/lifeos-growth-routes.js", exportName: "createLifeOSGrowthRoutes", mountPath: "/api/v1/lifeos/growth", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-GROWTH]" },
+    { modulePath: "../routes/lifeos-mediation-routes.js", exportName: "createLifeOSMediationRoutes", mountPath: "/api/v1/lifeos/mediation", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-MEDIATION]" },
+    { modulePath: "../routes/lifeos-conflict-routes.js", exportName: "createLifeOSConflictRoutes", mountPath: "/api/v1/lifeos/conflict", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-CONFLICT]" },
+    { modulePath: "../routes/lifeos-healing-routes.js", exportName: "createLifeOSHealingRoutes", mountPath: "/api/v1/lifeos/healing", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-HEALING]" },
+    { modulePath: "../routes/lifeos-legacy-routes.js", exportName: "createLifeOSLegacyRoutes", mountPath: "/api/v1/lifeos/legacy", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-LEGACY]" },
+    { modulePath: "../routes/lifeos-finance-routes.js", exportName: "createLifeOSFinanceRoutes", mountPath: "/api/v1/lifeos/finance", args: [{ pool, requireKey, logger }], label: "[LIFEOS-FINANCE]" },
+    { modulePath: "../routes/lifeos-copilot-routes.js", exportName: "createLifeOSCopilotRoutes", mountPath: "/api/v1/lifeos/copilot", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-COPILOT]" },
+    { modulePath: "../routes/lifeos-simulator-routes.js", exportName: "createLifeOSSimulatorRoutes", mountPath: "/api/v1/lifeos/simulator", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-SIMULATOR]" },
+    { modulePath: "../routes/lifeos-workshop-routes.js", exportName: "createLifeOSWorkshopRoutes", mountPath: "/api/v1/lifeos/workshop", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-WORKSHOP]" },
+    { modulePath: "../routes/kids-os-routes.js", exportName: "createKidsOSRoutes", mountPath: "/api/v1/kids", args: [{ pool, requireKey, callCouncilMember }], label: "[KIDS-OS]" },
+    { modulePath: "../routes/teacher-os-routes.js", exportName: "createTeacherOSRoutes", mountPath: "/api/v1/teacher", args: [{ pool, requireKey, callCouncilMember }], label: "[TEACHER-OS]" },
+  ];
 
-  app.use("/api/v1/kids", createKidsOSRoutes({ pool, requireKey, callCouncilMember }));
-  logger.info("✅ [KIDS-OS] Routes mounted at /api/v1/kids");
-
-  app.use("/api/v1/teacher", createTeacherOSRoutes({ pool, requireKey, callCouncilMember }));
-  logger.info("✅ [TEACHER-OS] Routes mounted at /api/v1/teacher");
-
-  logger.info(
-    "✅ [LIFEOS] Routes mounted at /api/v1/lifeos, /engine, /finance, /health, /family, /ethics, /vision, /decisions, /identity, /growth, /mediation, /conflict, /healing, /legacy, /copilot, /simulator, /workshop …",
-  );
+  let mountedOptionalCount = 0;
+  for (const routeDef of optionalRoutes) {
+    const factory = await importOptionalRoute(routeDef.modulePath, routeDef.exportName);
+    if (!factory) continue;
+    app.use(routeDef.mountPath, factory(...routeDef.args));
+    mountedOptionalCount += 1;
+    logger.info(`✅ ${routeDef.label} Routes mounted at ${routeDef.mountPath}`);
+  }
+  logger.info(`✅ [LIFEOS-OPTIONAL] Mounted ${mountedOptionalCount}/${optionalRoutes.length} optional routes`);
 
   const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
   createTCRoutes(app, {

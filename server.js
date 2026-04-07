@@ -982,7 +982,7 @@ registerServerRoutes(app, {
   podManager,
 });
 
-const { tcCoordinator, wkIntegrityEngine } = registerRuntimeRoutes(app, {
+const { tcCoordinator, wkIntegrityEngine } = await registerRuntimeRoutes(app, {
   pool,
   requireKey,
   logger,
