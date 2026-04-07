@@ -205,6 +205,11 @@
     return results.sort((a, b) => b.score - a.score).slice(0, 5);
   }
 
+  function getDeterministicSubscriberCandidate(candidates = []) {
+    if (!Array.isArray(candidates) || candidates.length !== 1) return null;
+    return Number(candidates[0]?.score || 0) >= 3 ? candidates[0].item : null;
+  }
+
   /**
    * Find accounts in the loaded backlog that share the same payer as the card.
    * Used as fallback when no subscriber name match found.
@@ -526,14 +531,8 @@
         const subscriberName = ex.subscriber_name || '';
         let boardCandidates = findSubscriberCandidates(subscriberName);
 
-        let pickedItem = null;
-        if (boardCandidates.length === 1 && boardCandidates[0].score >= 2) {
-          pickedItem = boardCandidates[0].item;
-          boardCandidates = [];
-        } else if (boardCandidates.length && boardCandidates[0].score >= 3) {
-          pickedItem = boardCandidates[0].item;
-          boardCandidates = [];
-        }
+        const pickedItem = getDeterministicSubscriberCandidate(boardCandidates);
+        if (pickedItem) boardCandidates = [];
 
         lastVobCardSummary = {
           ...ex,
@@ -556,8 +555,9 @@
           const directoryCandidates = subscriberName
             ? await searchClientCareDirectoryCandidates(subscriberName)
             : [];
-          const exactDirectory = directoryCandidates.find((item) => Number(item.score || 0) >= 100)
-            || (directoryCandidates.length === 1 && Number(directoryCandidates[0].score || 0) >= 70 ? directoryCandidates[0] : null);
+          const exactDirectory = directoryCandidates.length === 1 && Number(directoryCandidates[0].score || 0) >= 100
+            ? directoryCandidates[0]
+            : null;
           if (exactDirectory) {
             lastVobCardSummary = {
               ...(lastVobCardSummary || ex),
