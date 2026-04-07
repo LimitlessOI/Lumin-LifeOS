@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-07 (fixed the actual `phase is not defined` production error: `clickFirstMatchingButton()` returned `phase` from inside `page.evaluate()` without passing it into the browser context; the real ClientCare VOB path now passes `phaseLabel` explicitly so click bookkeeping stops throwing mid-run; previous ClientCare VOB fixes remain in place)
+**Last Updated:** 2026-04-07 (fixed the actual `phase is not defined` production error: `clickFirstMatchingButton()` returned `phase` from inside `page.evaluate()` without passing it into the browser context; the real ClientCare VOB path now passes `phaseLabel` explicitly so click bookkeeping stops throwing mid-run; asset URL bumped again to `20260407h` so production visibly rolls onto the backend fix; previous ClientCare VOB fixes remain in place)
 
 ---
 
@@ -323,6 +323,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-04-07 | **Forced a fresh asset URL for the backend VOB fix**: bumped the overlay bundle to `clientcare-billing.js?v=20260407h` so the production deploy carrying the browser-context `phaseLabel` fix is easy to verify from page source and browsers are forced onto the latest operator bundle | 0.05h | 0.05h | none | ✅ | pending | pending |
 | 2026-04-07 | **Fixed the actual production `phase is not defined` error in browser context**: `clickFirstMatchingButton()` was running inside `page.evaluate()` and returning a bare `phase` variable that was never passed into the page context. The real ClientCare VOB click helper now receives `phaseLabel` as an explicit evaluate arg and returns that value in its click result, so the run no longer throws before VOB detection | 0.1h | 0.1h | none | ✅ | pending | pending |
 | 2026-04-07 | **Removed `phase` identifier from the live VOB loop entirely**: even after the earlier fix, production still surfaced `phase is not defined`. Refactored the ClientCare VOB retry loop so it no longer uses a local variable named `phase` at all; retry bookkeeping now uses `attemptPhase`, and the asset URL is bumped to `clientcare-billing.js?v=20260407g` to force a clean reload and redeploy | 0.1h | 0.1h | none | ✅ | pending | pending |
 | 2026-04-07 | **Hardened Chromium launch for Railway**: centralized Puppeteer launch options in `browser-agent.js` and added container-safe flags (`pipe`, `--renderer-process-limit=1`, `--disable-breakpad`, reduced background/process features, single-process/no-zygote/no-sandbox) to lower thread/resource pressure in Railway. Reused the same hardened launch options for the PDF screenshot fallback in `clientcare-ops-service.js` so both browser paths stop failing for the same reason | 0.25h | 0.25h | none | ✅ | pending | pending |
