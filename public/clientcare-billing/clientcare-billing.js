@@ -23,6 +23,7 @@
   let lastSavedVobProspects = [];
   let lastBrowserResult = null;
   let lastViewState = null;
+  let selectedVobAccountHref = '';
   let lastVobSearch = localStorage.getItem('clientcare_vob_search') || '';
   let lastAccountSearch = localStorage.getItem('clientcare_account_search') || '';
   let vobMode = localStorage.getItem('clientcare_vob_mode') || 'existing';
@@ -273,6 +274,7 @@
     if (cachedMatch) {
       selectAccountForVob(cachedMatch);
     } else if (billingHref) {
+      selectedVobAccountHref = billingHref;
       lastVobClientHref = billingHref;
       setVobMode('existing');
       setVobSearch(target.client || target.name || '');
@@ -412,7 +414,7 @@
     if (vobMode !== 'existing' || !lastVobCardSummary?.subscriber_name) return null;
     const subscriber = String(lastVobCardSummary.subscriber_name || '').trim();
     if (!subscriber) return null;
-    const selected = getSelectedAccountItem();
+    const selected = getSelectedVobAccountItem();
     if (!selected) return null;
     const candidates = findSubscriberCandidates(subscriber);
     if (!candidates.length) return null;
@@ -422,7 +424,7 @@
   }
 
   function getRealClientcareVobBlocker() {
-    if (!getSelectedClientBillingHref()) return 'Select a client on the board or paste the ClientCare billing URL.';
+    if (!getSelectedClientBillingHref()) return 'Select the correct client in VOB first.';
     if (lastVobCardSummary?.directorySearchState === 'searching') {
       return 'ClientCare subscriber search is still running. Wait for that to finish first.';
     }
@@ -548,6 +550,8 @@
           applyCardMatchedClient(pickedItem, { silent: true });
           toast(`Selected ${escapeHtml(pickedItem.client)} — subscriber name on card matched this account.`, 'success');
         } else {
+          selectedVobAccountHref = '';
+          lastVobClientHref = '';
           rerender();
           const directoryCandidates = subscriberName
             ? await searchClientCareDirectoryCandidates(subscriberName)
@@ -738,6 +742,12 @@
 
   function getSelectedAccountItem() {
     return getFilteredItems()?.[selectedAccountIndex] || null;
+  }
+
+  function getSelectedVobAccountItem() {
+    if (!selectedVobAccountHref) return null;
+    const allItems = lastAccountReport?.items || [];
+    return allItems.find((item) => String(item?.raw?.billingHref || item?.billingHref || '') === selectedVobAccountHref) || null;
   }
 
   function getAllAccountItems() {
@@ -1068,6 +1078,8 @@
     const nextIndex = allItems.findIndex((entry) => entry === item || getRepairKey(entry) === getRepairKey(item));
     if (nextIndex >= 0) selectedAccountIndex = nextIndex;
     else toast('Could not focus that account in the current board — try clearing filters or account search.', 'warn');
+    selectedVobAccountHref = String(item?.raw?.billingHref || item?.billingHref || '');
+    lastVobClientHref = selectedVobAccountHref;
     setVobMode('existing');
     setVobSearch(item.client || '');
     lastInsuranceDraft = {
@@ -1094,7 +1106,7 @@
   function ensureInsuranceDraftSeed() {
     const hasManualValue = ['payer_name', 'member_id', 'billed_amount'].some((key) => String(lastInsuranceDraft?.[key] || '').trim());
     if (hasManualValue) return;
-    const item = getSelectedAccountItem();
+    const item = getSelectedVobAccountItem();
     if (!item) return;
     lastInsuranceDraft = { ...lastInsuranceDraft, ...buildInsuranceDraftFromAccount(item) };
   }
@@ -1121,6 +1133,8 @@
   function useSelectedAccountInVob() {
     const item = getSelectedAccountItem();
     if (!item) return;
+    selectedVobAccountHref = String(item?.raw?.billingHref || item?.billingHref || '');
+    lastVobClientHref = selectedVobAccountHref;
     setVobMode('existing');
     setVobSearch(item.client || '');
     lastInsuranceDraft = {
@@ -2106,7 +2120,7 @@
 
   function renderVerificationOfBenefitsCard() {
     if (vobMode === 'existing') ensureInsuranceDraftSeed();
-    const selectedAccount = vobMode === 'existing' ? getSelectedAccountItem() : null;
+    const selectedAccount = vobMode === 'existing' ? getSelectedVobAccountItem() : null;
     const selectedLabel = vobMode === 'prospect'
       ? (lastProspectDraft.full_name || 'New prospect VOB')
       : selectedAccount?.client
@@ -2214,7 +2228,7 @@
   }
 
   function getSelectedClientBillingHref() {
-    const item = getSelectedAccountItem();
+    const item = getSelectedVobAccountItem();
     return String(item?.raw?.billingHref || item?.billingHref || lastVobClientHref || '').trim();
   }
 
@@ -4451,6 +4465,8 @@
         selectAccountForVob(exactMatches[0]);
         return;
       }
+      selectedVobAccountHref = '';
+      lastVobClientHref = '';
       rerender();
       requestAnimationFrame(() => {
         const input = document.getElementById('vob-client-search');
