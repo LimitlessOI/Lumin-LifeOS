@@ -248,6 +248,51 @@
            </div>`;
   }
 
+  async function searchClientCareDirectoryCandidates(subscriberName = '') {
+    const query = String(subscriberName || '').trim();
+    if (!query || !getApiKey()) return [];
+    try {
+      const params = new URLSearchParams({
+        query,
+        limit: '5',
+        page_timeout_ms: '12000',
+        max_directory_items: '250',
+      });
+      const result = await api(`/api/v1/clientcare-billing/browser/client-directory-search?${params.toString()}`);
+      return Array.isArray(result?.candidates) ? result.candidates : [];
+    } catch (error) {
+      console.warn('[ClientCare] client directory search failed:', error.message);
+      return [];
+    }
+  }
+
+  function applyCardMatchedClient(target = {}, options = {}) {
+    const billingHref = String(target.billingHref || target.href || '').trim();
+    const cachedMatch = lastAccountReport?.items?.find((item) =>
+      (item.billingHref || item.href || '') === billingHref,
+    );
+    if (cachedMatch) {
+      selectAccountForVob(cachedMatch);
+    } else if (billingHref) {
+      lastVobClientHref = billingHref;
+      setVobMode('existing');
+      setVobSearch(target.client || target.name || '');
+      lastInsuranceDraft = {
+        ...lastInsuranceDraft,
+        payer_name: lastVobCardSummary?.payer_name || lastInsuranceDraft.payer_name,
+        member_id: lastVobCardSummary?.member_id || lastInsuranceDraft.member_id,
+        group_number: lastVobCardSummary?.group_number || lastInsuranceDraft.group_number,
+        subscriber_name: lastVobCardSummary?.subscriber_name || lastInsuranceDraft.subscriber_name,
+        source_label: target.client || target.name || lastInsuranceDraft.source_label,
+      };
+    }
+    rerender();
+    document.getElementById('verification-of-benefits')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!options.silent) {
+      toast(`Selected ${escapeHtml(target.client || target.name || 'client')} from ClientCare.`, 'success');
+    }
+  }
+
   function renderVobCardStatus() {
     if (lastVobCardState === 'reading' && lastVobCardFile?.name) {
       return `<span style="color:#8aa4ff;">Reading card… <em>${escapeHtml(lastVobCardFile.name)}</em></span>`;
@@ -285,6 +330,19 @@
         return headLine + buildVobCandidatePickerHtml(rawCandidates, subscriberLabel, plainSub);
       }
 
+      if (lastVobCardSummary.directorySearchState === 'searching') {
+        return `${headLine}
+          <div style="margin-top:8px;padding:10px;background:#0f1a30;border:1px solid #2d3b5f;border-radius:8px;font-size:12px;color:#98a5c3;">
+            Searching ClientCare for subscriber <strong style="color:#edf2f7;">${escapeHtml(String(lastVobCardSummary.subscriber_name || '').trim())}</strong>…
+          </div>`;
+      }
+
+      const dirCandidates = lastVobCardSummary.directoryCandidates || [];
+      if (dirCandidates.length > 0) {
+        const plainSub = String(lastVobCardSummary.subscriber_name || '').trim();
+        return headLine + buildVobCandidatePickerHtml(dirCandidates, subscriberLabel, plainSub);
+      }
+
       if (lastVobCardSummary.matchedClientName && lastVobCardSummary.matchConfirmed) {
         return `
         <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
@@ -319,6 +377,12 @@
 
       const rawCandidates = findPayerCandidates(lastVobCardSummary.payer_name);
       const plainSub = String(lastVobCardSummary.subscriber_name || '').trim();
+      if (lastVobCardSummary.directorySearchState === 'done' && !rawCandidates.length) {
+        return `${headLine}
+          <div style="margin-top:8px;padding:10px;background:#0f1a30;border:1px solid #2d3b5f;border-radius:8px;font-size:12px;color:#98a5c3;">
+            Searched ClientCare and the loaded billing backlog for subscriber <strong style="color:#edf2f7;">${escapeHtml(plainSub || 'unknown')}</strong> but did not find a reliable match yet. Save the card to history and run a broader ClientCare search from the tools panel if needed.
+          </div>`;
+      }
       return headLine + buildVobCandidatePickerHtml(rawCandidates, subscriberLabel, plainSub);
     }
     return '';
@@ -456,14 +520,39 @@
           matchedClientName: matchedClient?.patient_name || '',
           matchConfirmed: matchedClient?.confirmed === true,
           boardCandidates,
+          directoryCandidates: [],
+          directorySearchState: !pickedItem && subscriberName ? 'searching' : 'idle',
         };
         lastVobCardState = 'ready';
         lastVobCardError = '';
 
         if (pickedItem) {
-          selectAccountForVob(pickedItem);
-          toast(`Selected ${escapeHtml(pickedItem.client)} — name on card matched this account (clearing board search if it was hiding them).`, 'success');
+          applyCardMatchedClient(pickedItem, { silent: true });
+          toast(`Selected ${escapeHtml(pickedItem.client)} — subscriber name on card matched this account.`, 'success');
         } else {
+          rerender();
+          const directoryCandidates = subscriberName
+            ? await searchClientCareDirectoryCandidates(subscriberName)
+            : [];
+          const exactDirectory = directoryCandidates.find((item) => Number(item.score || 0) >= 100)
+            || (directoryCandidates.length === 1 && Number(directoryCandidates[0].score || 0) >= 70 ? directoryCandidates[0] : null);
+          if (exactDirectory) {
+            lastVobCardSummary = {
+              ...(lastVobCardSummary || ex),
+              ...ex,
+              directoryCandidates: [],
+              directorySearchState: 'done',
+            };
+            applyCardMatchedClient(exactDirectory, { silent: true });
+            toast(`Selected ${escapeHtml(exactDirectory.client || 'client')} from ClientCare using the card subscriber name.`, 'success');
+            return;
+          }
+          lastVobCardSummary = {
+            ...(lastVobCardSummary || ex),
+            ...ex,
+            directoryCandidates,
+            directorySearchState: 'done',
+          };
           rerender();
         }
       } catch (err) {
@@ -4561,29 +4650,10 @@
       btn.addEventListener('click', () => {
         const href = btn.getAttribute('data-card-candidate-href');
         if (!href) return;
-        const match = lastAccountReport?.items?.find((item) =>
-          (item.billingHref || item.href || '') === href,
-        );
-        if (match) {
-          selectAccountForVob(match);
-          // Pre-fill card-extracted fields into the VOB form
-          if (lastVobCardSummary) {
-            lastInsuranceDraft = {
-              ...lastInsuranceDraft,
-              payer_name: lastVobCardSummary.payer_name || lastInsuranceDraft.payer_name,
-              member_id: lastVobCardSummary.member_id || lastInsuranceDraft.member_id,
-              group_number: lastVobCardSummary.group_number || lastInsuranceDraft.group_number,
-            };
-          }
-          rerender();
-          document.getElementById('verification-of-benefits')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          toast(`Selected ${escapeHtml(match.client || 'account')} — fill in coverage/network status and run VOB.`, 'success');
-        } else {
-          // Account not in local cache — set the href directly as the vob client href
-          lastVobClientHref = href;
-          toast('Account selected — run VOB to pull live data from ClientCare.', 'success');
-          rerender();
-        }
+        const match = lastAccountReport?.items?.find((item) => (item.billingHref || item.href || '') === href)
+          || (lastVobCardSummary?.directoryCandidates || []).find((item) => (item.billingHref || item.href || '') === href)
+          || { billingHref: href, client: btn.textContent || 'client' };
+        applyCardMatchedClient(match);
       });
     });
   }

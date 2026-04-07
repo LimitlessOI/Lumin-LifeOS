@@ -915,6 +915,21 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  router.get('/browser/client-directory-search', async (req, res) => {
+    try {
+      const result = await browserService.searchClientDirectory({
+        query: req.query?.query,
+        limit: req.query?.limit,
+        pageTimeoutMs: req.query?.page_timeout_ms,
+        maxDirectoryItems: req.query?.max_directory_items,
+      });
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] client directory search failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/browser/extract-claims', async (req, res) => {
     try {
       const result = await browserService.extractClaimTables({

@@ -240,6 +240,41 @@ async function extractClientDirectory(page, limit = 10) {
   }, Math.max(1, Math.min(Number(limit) || 10, 25)));
 }
 
+function normalizeDirectoryName(value = '') {
+  return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function scoreDirectoryClientMatch(query = '', candidate = '') {
+  const q = String(query || '').trim().toLowerCase();
+  const c = String(candidate || '').trim().toLowerCase();
+  if (!q || !c) return 0;
+  const nq = normalizeDirectoryName(q);
+  const nc = normalizeDirectoryName(c);
+  if (!nq || !nc) return 0;
+  if (nq === nc) return 100;
+  if (nc.includes(nq) || nq.includes(nc)) return 80;
+  const qParts = q.split(/\s+/).filter((part) => part.length >= 2);
+  if (!qParts.length) return 0;
+  const matches = qParts.filter((part) => c.includes(part)).length;
+  if (matches === qParts.length && qParts.length >= 2) return 70;
+  if (matches >= 2) return 55;
+  if (matches === 1 && qParts.length === 1) return 40;
+  return 0;
+}
+
+function deriveBillingHrefFromClientHref(clientHref = '') {
+  const href = String(clientHref || '').trim();
+  if (!href) return '';
+  const idMatch = href.match(/\/Pregnancy\/ShowDefaultClientScreen\/([^/?#]+)/i);
+  if (!idMatch?.[1]) return '';
+  try {
+    const url = new URL(href);
+    return `${url.origin}/Pregnancy/Billing/${idMatch[1]}`;
+  } catch {
+    return `https://clientcarewest.net/Pregnancy/Billing/${idMatch[1]}`;
+  }
+}
+
 async function extractBillingFieldPairs(page) {
   return page.evaluate(() => {
     const isVisible = (el) => {
@@ -2504,6 +2539,46 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     }
   }
 
+  async function searchClientDirectory({ query = '', limit = 10, pageTimeoutMs = 15000, maxDirectoryItems = 250 } = {}) {
+    const searchText = String(query || '').trim();
+    if (!searchText) return { ok: false, error: 'query required', candidates: [] };
+    const result = await login({ dryRun: false });
+    const { session } = result;
+    try {
+      const directoryNav = await gotoWithBudget(session.page, new URL('/Pregnancy?donotRedirect=Y', session.currentUrl()).toString(), {
+        timeout: Math.max(5000, Number(pageTimeoutMs) || 15000),
+      });
+      if (!directoryNav.ok) {
+        return { ok: false, error: directoryNav.error || 'directory navigation failed', candidates: [] };
+      }
+      const directory = await extractClientDirectory(session.page, Math.max(25, Math.min(Number(maxDirectoryItems) || 250, 500)));
+      const candidates = directory
+        .map((item) => {
+          const score = scoreDirectoryClientMatch(searchText, item.name);
+          return {
+            client: item.name,
+            href: item.href,
+            billingHref: deriveBillingHrefFromClientHref(item.href),
+            mrn: item.mrn,
+            source: 'client_directory_search',
+            score,
+            exactNameMatch: score >= 100,
+          };
+        })
+        .filter((item) => item.score > 0)
+        .sort((a, b) => b.score - a.score || String(a.client || '').localeCompare(String(b.client || '')))
+        .slice(0, Math.max(1, Math.min(Number(limit) || 10, 15)));
+
+      return {
+        ok: true,
+        query: searchText,
+        candidates,
+      };
+    } finally {
+      await session.close().catch(() => {});
+    }
+  }
+
   async function buildBillingOverview({ includeScreenshots = false, pageTimeoutMs = 15000 } = {}) {
     const result = await login({ dryRun: false });
     const { session, screenshots } = result;
@@ -2662,6 +2737,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
     buildAccountRescueReport,
     buildFullAccountRescueReport,
     buildBacklogSummary,
+    searchClientDirectory,
     extractClaimTables,
     repairBillingAccount,
     runClientcareVobFlow,
