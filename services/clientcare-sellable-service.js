@@ -409,6 +409,7 @@ export function createClientCareSellableService({ pool, logger = console }) {
   }
 
   return {
+    assertOperatorAccess,
     buildLiveValidation,
     exportAuditLogCsv,
     getPackagingOverview,
@@ -419,6 +420,7 @@ export function createClientCareSellableService({ pool, logger = console }) {
     listOperatorAccess,
     listTenants,
     logAudit,
+    resolveOperatorAccess,
     saveOnboarding,
     saveOperatorAccess,
     saveTenant,
