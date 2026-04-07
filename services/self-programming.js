@@ -1,9 +1,15 @@
 /**
  * Self-programming service: handleSelfProgramming (internal) and HTTP handler.
- * All dependencies are provided via getDeps() so server.js can wire and mutate over time.
+ * All dependencies are provided via getDeps() so the composition root can wire and mutate over time.
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import path from "path";
 import { pathToFileURL } from "url";
+
+const PROTECTED_COMPOSITION_ROOT = "server.js";
+const ROUTE_REGISTRAR_FILE = "startup/register-routes.js";
+const BOOT_DOMAINS_FILE = "startup/boot-domains.js";
+const SCHEDULER_REGISTRAR_FILE = "startup/register-schedulers.js";
 
 function normalizeSelfProgramPayload(payload = {}) {
   const instructionCandidate =
@@ -28,6 +34,150 @@ function normalizeSelfProgramPayload(payload = {}) {
   }
 
   return { instruction: null, generatedFrom: null };
+}
+
+function slugifyFeatureName(input = "") {
+  const cleaned = String(input)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  const tokens = cleaned
+    .split("-")
+    .filter(Boolean)
+    .filter((token) => ![
+      "add", "create", "build", "implement", "new", "feature", "endpoint",
+      "route", "api", "service", "for", "the", "a", "an", "to", "of", "and",
+      "with", "using", "that", "called",
+    ].includes(token));
+
+  return tokens.slice(0, 4).join("-") || "generated-feature";
+}
+
+function inferInstructionTargetPath(instruction = "") {
+  const lower = String(instruction || "").toLowerCase();
+  const slug = slugifyFeatureName(instruction);
+
+  if (/(cron|scheduler|interval|background job|reminder)/.test(lower)) {
+    return SCHEDULER_REGISTRAR_FILE;
+  }
+
+  if (/(boot|startup|initialize|initialise|on startup)/.test(lower)) {
+    return BOOT_DOMAINS_FILE;
+  }
+
+  if (/(endpoint|api|route)/.test(lower)) {
+    return `routes/${slug}-routes.js`;
+  }
+
+  return `services/${slug}.js`;
+}
+
+function buildRoutingGuide(instruction = "") {
+  const inferredRouteFile = inferInstructionTargetPath(instruction);
+  return `ARCHITECTURE RULES:
+- NEVER modify ${PROTECTED_COMPOSITION_ROOT}.
+- New HTTP endpoints must go in routes/<feature>-routes.js.
+- New service logic must go in services/<feature>.js.
+- New boot/startup logic must go in ${BOOT_DOMAINS_FILE}.
+- New cron/scheduler logic must go in ${SCHEDULER_REGISTRAR_FILE}.
+- If a new route must be mounted, update ${ROUTE_REGISTRAR_FILE}, not ${PROTECTED_COMPOSITION_ROOT}.
+- If you are adding an endpoint for this instruction, default route file: ${inferredRouteFile}.
+`;
+}
+
+function normalizeGeneratedPath(filePath = "") {
+  return String(filePath || "")
+    .trim()
+    .replace(/\\/g, "/")
+    .replace(/^\.\//, "");
+}
+
+function isProtectedCompositionRoot(filePath = "") {
+  return normalizeGeneratedPath(filePath) === PROTECTED_COMPOSITION_ROOT;
+}
+
+function isLoadBearingFile(filePath = "") {
+  const normalized = normalizeGeneratedPath(filePath);
+  return (
+    normalized === PROTECTED_COMPOSITION_ROOT
+    || normalized === "package.json"
+    || normalized.startsWith("core/")
+    || normalized.startsWith("startup/")
+  );
+}
+
+async function extractStructuredFileChanges(codeResponse, rootDir, instruction) {
+  let fileChanges = await extractFileChanges(codeResponse, rootDir);
+  if (fileChanges.length === 0) {
+    const altRegex = /FILE:\s*([^\n]+)\n([\s\S]*?)(?=FILE:|END|$)/g;
+    let match;
+    while ((match = altRegex.exec(codeResponse)) !== null) {
+      fileChanges.push({ filePath: match[1].trim(), content: match[2].trim() });
+    }
+  }
+
+  if (fileChanges.length === 0) {
+    const codeBlockRegex = /```(?:javascript|js|typescript|ts)?\n([\s\S]*?)```/g;
+    const pathRegex = /(?:file|path|create|modify)[:\s]+([^\n]+)/i;
+    const pathMatch = codeResponse.match(pathRegex);
+    let codeMatch;
+    while ((codeMatch = codeBlockRegex.exec(codeResponse)) !== null) {
+      fileChanges.push({
+        filePath: pathMatch ? pathMatch[1].trim() : inferInstructionTargetPath(instruction),
+        content: codeMatch[1].trim(),
+      });
+    }
+  }
+
+  if (fileChanges.length === 0) {
+    const instructionWords = instruction.toLowerCase();
+    let inferredPath = inferInstructionTargetPath(instruction);
+    if (instructionWords.includes("overlay") || instructionWords.includes("ui")) {
+      inferredPath = "public/overlay/index.html";
+    }
+    fileChanges.push({ filePath: inferredPath, content: codeResponse });
+    console.warn(`⚠️ [SELF-PROGRAM] Could not parse file format, using entire response as ${inferredPath}`);
+  }
+
+  return fileChanges.map((change) => ({
+    ...change,
+    filePath: normalizeGeneratedPath(change.filePath),
+  }));
+}
+
+async function regenerateWithoutServerRoot({
+  instruction,
+  analysis,
+  blindSpots,
+  rootDir,
+  councilFailover,
+  maxTokens = 8000,
+  extraContext = "",
+}) {
+  const correctedPrompt = `You targeted ${PROTECTED_COMPOSITION_ROOT}, which is forbidden.
+
+${buildRoutingGuide(instruction)}
+
+Instruction: ${instruction}
+
+Analysis: ${analysis}
+
+Blind spots: ${blindSpots.slice(0, 5).join(", ")}${extraContext}
+
+CRITICAL OUTPUT FORMAT:
+===FILE:path/to/file.js===
+[COMPLETE file content]
+===END===
+
+Return COMPLETE files only. Include route files, service files, and ${ROUTE_REGISTRAR_FILE} updates as needed.`;
+
+  const correctedResponse = await councilFailover(correctedPrompt, "chatgpt", {
+    maxTokens,
+    temperature: 0.2,
+  });
+
+  return extractStructuredFileChanges(correctedResponse, rootDir, instruction);
 }
 
 async function extractFileChanges(codeResponse, __dirname) {
@@ -154,6 +304,8 @@ export function createSelfProgrammingService(getDeps) {
 
 "${instruction}"
 
+${buildRoutingGuide(instruction)}
+
 Provide:
 1. Which files need modification
 2. Exact code changes needed
@@ -195,6 +347,8 @@ Analysis: ${analysis}
 
 Blind spots to avoid: ${blindSpots.slice(0, 5).join(", ")}${contextSection}
 
+${buildRoutingGuide(instruction)}
+
 CRITICAL FORMAT REQUIREMENTS:
 1. For EACH file, use EXACTLY this format (no variations):
 ===FILE:path/to/file.js===
@@ -205,6 +359,8 @@ CRITICAL FORMAT REQUIREMENTS:
 3. Include ALL necessary imports at the top
 4. NO placeholders like "// add code here"
 5. Just write the COMPLETE, WORKING code
+6. If adding endpoints, include the route module and the required change to ${ROUTE_REGISTRAR_FILE}
+7. Do not write to ${PROTECTED_COMPOSITION_ROOT}
 
 Write the code now:`;
 
@@ -239,33 +395,23 @@ Write the code now:`;
         }
       }
 
-      let fileChanges = await extractFileChanges(codeResponse, rootDir);
-      if (fileChanges.length === 0) {
-        const altRegex = /FILE:\s*([^\n]+)\n([\s\S]*?)(?=FILE:|END|$)/g;
-        let match;
-        while ((match = altRegex.exec(codeResponse)) !== null) {
-          fileChanges.push({ filePath: match[1].trim(), content: match[2].trim() });
-        }
+      let fileChanges = await extractStructuredFileChanges(codeResponse, rootDir, instruction);
+      if (fileChanges.some((change) => isProtectedCompositionRoot(change.filePath))) {
+        fileChanges = await regenerateWithoutServerRoot({
+          instruction,
+          analysis,
+          blindSpots,
+          rootDir,
+          councilFailover: councilFailover,
+          extraContext: contextSection,
+        });
       }
-      if (fileChanges.length === 0) {
-        const codeBlockRegex = /```(?:javascript|js|typescript|ts)?\n([\s\S]*?)```/g;
-        const pathRegex = /(?:file|path|create|modify)[:\s]+([^\n]+)/i;
-        const pathMatch = codeResponse.match(pathRegex);
-        let codeMatch;
-        while ((codeMatch = codeBlockRegex.exec(codeResponse)) !== null) {
-          fileChanges.push({
-            filePath: pathMatch ? pathMatch[1].trim() : `new_file_${Date.now()}.js`,
-            content: codeMatch[1].trim(),
-          });
-        }
-      }
-      if (fileChanges.length === 0) {
-        const instructionWords = instruction.toLowerCase();
-        let inferredPath = "new_feature.js";
-        if (instructionWords.includes("endpoint") || instructionWords.includes("api")) inferredPath = "server.js";
-        else if (instructionWords.includes("overlay") || instructionWords.includes("ui")) inferredPath = "public/overlay/index.html";
-        fileChanges.push({ filePath: inferredPath, content: codeResponse });
-        console.warn(`⚠️ [SELF-PROGRAM] Could not parse file format, using entire response as ${inferredPath}`);
+
+      if (fileChanges.some((change) => isProtectedCompositionRoot(change.filePath))) {
+        return {
+          ok: false,
+          error: `Protected composition root violation: generated changes still target ${PROTECTED_COMPOSITION_ROOT}`,
+        };
       }
 
       const results = [];
@@ -284,11 +430,16 @@ Write the code now:`;
             const fullPath = pathMod.join(rootDir, change.filePath);
             const isNewFile = !fs.existsSync(fullPath);
             const isJsFile = change.filePath.endsWith(".js");
-            const shouldSandbox = !isNewFile && isJsFile && (
-              change.filePath.includes("server.js") ||
-              change.filePath.includes("core/") ||
-              change.filePath.includes("package.json")
-            );
+            if (isProtectedCompositionRoot(change.filePath)) {
+              writeResults.push({
+                filePath: change.filePath,
+                success: false,
+                error: `${PROTECTED_COMPOSITION_ROOT} is a protected composition root`,
+              });
+              continue;
+            }
+
+            const shouldSandbox = !isNewFile && isJsFile && isLoadBearingFile(change.filePath);
 
             if (shouldSandbox) {
               const sandboxResult = await sandboxTestFn(change.content, `Test: ${change.filePath}`);
@@ -509,6 +660,8 @@ Write the code now:`;
 
 "${instruction}"
 
+${buildRoutingGuide(instruction)}
+
 Provide:
 1. Which files need modification
 2. Exact code changes needed
@@ -527,10 +680,15 @@ Analysis: ${analysis}
 
 Blind spots: ${blindSpots.slice(0, 5).join(", ")}
 
+${buildRoutingGuide(instruction)}
+
 CRITICAL: Write COMPLETE files using EXACT format:
 ===FILE:path/to/file.js===
 [COMPLETE file - ALL imports, ALL functions, ALL code - no placeholders]
 ===END===
+
+If you add endpoints, include the route module and the update to ${ROUTE_REGISTRAR_FILE}.
+Do not write to ${PROTECTED_COMPOSITION_ROOT}.
 
 Write the complete working code now:`;
 
@@ -544,29 +702,20 @@ Write the complete working code now:`;
         codeResponse = await councilFailover(codePrompt, "chatgpt", { maxTokens: 8000, temperature: 0.3 });
       }
 
-      let fileChanges = await extractFileChanges(codeResponse, rootDir);
-      if (fileChanges.length === 0) {
-        const altRegex = /FILE:\s*([^\n]+)\n([\s\S]*?)(?=FILE:|END|$)/g;
-        let match;
-        while ((match = altRegex.exec(codeResponse)) !== null) {
-          fileChanges.push({ filePath: match[1].trim(), content: match[2].trim() });
-        }
+      let fileChanges = await extractStructuredFileChanges(codeResponse, rootDir, instruction);
+      if (fileChanges.some((change) => isProtectedCompositionRoot(change.filePath))) {
+        fileChanges = await regenerateWithoutServerRoot({
+          instruction,
+          analysis,
+          blindSpots,
+          rootDir,
+          councilFailover,
+        });
       }
-      if (fileChanges.length === 0) {
-        const codeBlockRegex = /```(?:javascript|js)?\n([\s\S]*?)```/g;
-        const pathMatch = codeResponse.match(/(?:file|path)[:\s]+([^\n]+)/i);
-        let codeMatch;
-        while ((codeMatch = codeBlockRegex.exec(codeResponse)) !== null) {
-          fileChanges.push({
-            filePath: pathMatch ? pathMatch[1].trim() : `new_file_${Date.now()}.js`,
-            content: codeMatch[1].trim(),
-          });
-        }
-      }
-      if (fileChanges.length === 0) {
+      if (fileChanges.some((change) => isProtectedCompositionRoot(change.filePath))) {
         return res.status(400).json({
           ok: false,
-          error: "Could not extract file changes from AI response",
+          error: `Protected composition root violation: generated changes still target ${PROTECTED_COMPOSITION_ROOT}`,
           instruction: instruction.substring(0, 100),
           responsePreview: codeResponse.substring(0, 500),
           hint: "AI must use format: ===FILE:path/to/file.js===\\n[complete code]\\n===END===",
@@ -585,7 +734,16 @@ Write the complete working code now:`;
           const fullPath = pathMod.join(rootDir, change.filePath);
           const isNewFile = !fs.existsSync(fullPath);
           const isJsFile = change.filePath.endsWith(".js");
-          const isCritical = change.filePath.includes("server.js") || change.filePath.includes("core/");
+          if (isProtectedCompositionRoot(change.filePath)) {
+            results.push({
+              success: false,
+              filePath: change.filePath,
+              error: `${PROTECTED_COMPOSITION_ROOT} is a protected composition root`,
+            });
+            continue;
+          }
+
+          const isCritical = isLoadBearingFile(change.filePath);
 
           if (!isNewFile && isCritical) {
             const sandboxResult = await sandboxTestFn(change.content, `Test: ${change.filePath}`);

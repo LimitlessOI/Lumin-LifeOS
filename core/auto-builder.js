@@ -1,6 +1,7 @@
 /**
  * AUTO-BUILDER - Anti-Hallucination Edition
  * ONE product at a time. Validate everything. Never deploy garbage.
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 
 import fs from 'fs/promises';
@@ -33,6 +34,10 @@ const __dirname = path.dirname(__filename);
 const OUTPUT_ROOT = path.join(process.cwd(), 'docs', 'THREAD_REALITY', 'outputs');
 const LATEST_RUN_DOC = path.join(process.cwd(), 'docs', 'THREAD_REALITY', 'latest-run.json');
 const LATEST_RUN_ROOT = path.join(process.cwd(), 'latest-run.json');
+const PROTECTED_COMPOSITION_ROOT = 'server.js';
+const ROUTE_REGISTRAR_FILE = 'startup/register-routes.js';
+const BOOT_DOMAINS_FILE = 'startup/boot-domains.js';
+const SCHEDULER_REGISTRAR_FILE = 'startup/register-schedulers.js';
 
 let validatedDatabaseUrl;
 let DB_SSL_REJECT_UNAUTHORIZED;
@@ -188,12 +193,91 @@ const router = express.Router();`
   }
 ];
 
+function slugifyFeatureName(...inputs) {
+  const cleaned = inputs
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const tokens = cleaned
+    .split('-')
+    .filter(Boolean)
+    .filter((token) => ![
+      'add', 'create', 'build', 'new', 'feature', 'endpoint', 'route', 'api',
+      'service', 'for', 'the', 'a', 'an', 'to', 'of', 'and', 'with', 'called',
+    ].includes(token));
+
+  return tokens.slice(0, 4).join('-') || 'generated-feature';
+}
+
+function normalizeGeneratedPath(filePath = '') {
+  return String(filePath || '').trim().replace(/\\/g, '/').replace(/^\.\//, '');
+}
+
+function inferComponentTargetPath(component, product) {
+  const currentPath = normalizeGeneratedPath(component.file);
+  if (currentPath && currentPath !== PROTECTED_COMPOSITION_ROOT) {
+    return currentPath;
+  }
+
+  const slug = slugifyFeatureName(
+    component.name,
+    product?.name,
+    product?.id,
+    component.prompt,
+  );
+  const promptText = `${component.name || ''} ${component.prompt || ''}`.toLowerCase();
+
+  if (/(cron|scheduler|interval|background job|reminder)/.test(promptText)) {
+    return SCHEDULER_REGISTRAR_FILE;
+  }
+
+  if (/(boot|startup|initialize|initialise|on startup)/.test(promptText)) {
+    return BOOT_DOMAINS_FILE;
+  }
+
+  if (/(endpoint|api|route)/.test(promptText)) {
+    return `routes/${slug}-routes.js`;
+  }
+
+  return `services/${slug}.js`;
+}
+
+function normalizeComponent(component, product) {
+  const targetPath = inferComponentTargetPath(component, product);
+  if (targetPath !== normalizeGeneratedPath(component.file)) {
+    console.log(`⚠️ [AUTO-BUILDER] Rerouting protected target ${component.file} -> ${targetPath}`);
+  }
+
+  return {
+    ...component,
+    file: targetPath,
+  };
+}
+
+function normalizeProductDefinition(definition) {
+  return {
+    ...definition,
+    components: definition.components.map((component) => normalizeComponent(component, definition)),
+  };
+}
+
+function buildArchitecturePrompt(component) {
+  return `\n\nARCHITECTURE RULES:
+- NEVER write to ${PROTECTED_COMPOSITION_ROOT}.
+- New HTTP endpoints must go in routes/<feature>-routes.js.
+- New service logic must go in services/<feature>.js.
+- New boot/startup logic must go in ${BOOT_DOMAINS_FILE}.
+- New cron/scheduler logic must go in ${SCHEDULER_REGISTRAR_FILE}.
+- If a route must be mounted, update ${ROUTE_REGISTRAR_FILE} instead of ${PROTECTED_COMPOSITION_ROOT}.
+- Target file for this component: ${normalizeGeneratedPath(component.file)}\n`;
+}
+
 function cloneProductDefinitions() {
   return PRODUCT_DEFINITIONS.map((product) => ({
-    ...product,
-    components: product.components.map((component) => ({
-      ...component,
-    })),
+    ...normalizeProductDefinition(product),
   }));
 }
 
@@ -268,9 +352,10 @@ export async function loadPersistedQueue(pool) {
         lastError: null,
       }));
 
-      const alreadyQueued = PRODUCT_QUEUE.some(p => p.id === def.id);
+      const normalizedDefinition = normalizeProductDefinition(def);
+      const alreadyQueued = PRODUCT_QUEUE.some(p => p.id === normalizedDefinition.id);
       if (!alreadyQueued) {
-        PRODUCT_QUEUE.push(def);
+        PRODUCT_QUEUE.push(normalizedDefinition);
         loaded++;
       }
     }
@@ -308,14 +393,14 @@ export function addProductToQueue(definition) {
     return false;
   }
 
-  const product = {
+  const product = normalizeProductDefinition({
     ...definition,
     components: definition.components.map(c => ({
       ...c,
       status: c.status || 'pending',
       lastError: null,
     })),
-  };
+  });
 
   PRODUCT_QUEUE.push(product);
   console.log(`✅ [AUTO-BUILDER] Queued product: ${product.name} (${product.components.length} components)`);
@@ -515,7 +600,8 @@ async function buildComponent(component, maxRetries = 3, product = null) {
     ? `\n\n## VISION\nTarget audience: ${product.vision.target_audience || 'general users'}\nDesign notes: ${product.vision.design_notes || 'none'}\nReference: ${product.vision.reference_url || 'none'}\nAcceptance criteria: ${product.vision.acceptance_criteria || 'none'}\n`
     : '';
 
-  const enrichedBasePrompt = `${component.prompt}${brandBlock}${prefBlock}${researchBlock}${visionBlock}`;
+  const routingBlock = buildArchitecturePrompt(component);
+  const enrichedBasePrompt = `${component.prompt}${routingBlock}${brandBlock}${prefBlock}${researchBlock}${visionBlock}`;
 
   // Quality gate (for visual components only)
   // Use a different model for critique to avoid "grading its own homework"
@@ -626,11 +712,16 @@ async function buildComponent(component, maxRetries = 3, product = null) {
 }
 
 async function saveFile(filepath, content) {
-  const fullPath = path.join(process.cwd(), filepath);
+  const normalizedPath = normalizeGeneratedPath(filepath);
+  if (normalizedPath === PROTECTED_COMPOSITION_ROOT) {
+    throw new Error(`Refusing to write to protected composition root: ${PROTECTED_COMPOSITION_ROOT}`);
+  }
+
+  const fullPath = path.join(process.cwd(), normalizedPath);
   await fs.mkdir(path.dirname(fullPath), { recursive: true });
   await fs.writeFile(fullPath, content, 'utf8');
-  console.log(`💾 Saved: ${filepath}`);
-  await commitBuiltFile(filepath, content);
+  console.log(`💾 Saved: ${normalizedPath}`);
+  await commitBuiltFile(normalizedPath, content);
 }
 
 async function commitBuiltFile(filepath, content) {
