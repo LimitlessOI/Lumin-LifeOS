@@ -2040,6 +2040,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
       let lastClick = { clicked: false };
       let vobReceived = false;
       let analysis = { received: false, reason: 'not_attempted' };
+      let currentPhase = 'primary';
 
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
         let patterns = primaryPatterns;
@@ -2050,6 +2051,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         } else if (attempt === 2) {
           phase = 'scored_fallback';
         }
+        currentPhase = phase;
 
         if (attempt < 2) {
           lastClick = await clickFirstMatchingButton(session.page, patterns, { phase });
@@ -2089,7 +2091,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
         vobReceived = Boolean(analysis.received);
         if (vobReceived) {
           logger?.info?.(
-            { clientHref, phase, reason: analysis.reason }, '[CLIENTCARE-BROWSER] VOB response detected',
+            { clientHref, phase: currentPhase, reason: analysis.reason }, '[CLIENTCARE-BROWSER] VOB response detected',
           );
           break;
         }
