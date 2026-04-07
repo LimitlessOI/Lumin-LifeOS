@@ -152,17 +152,12 @@
     if (lastVobCardFile) return [lastVobCardFile];
     const inline = document.getElementById('vob-inline-file')?.files;
     if (inline?.length) return Array.from(inline);
-    const rec = document.getElementById('reconcile-card-file')?.files?.[0];
-    return rec ? [rec] : [];
+    return [];
   }
 
-  /** Card files for the real ClientCare VOB path — prefer the VOB panel files, then any extra files in the real-flow panel. */
+  /** Card files for the real ClientCare VOB path — single source of truth is the VOB panel drop zone. */
   function getReconcileCardFiles() {
-    const vobFiles = getVobCardFilesForUpload();
-    if (vobFiles.length) return vobFiles;
-    const reconcileFiles = document.getElementById('reconcile-card-file')?.files;
-    if (reconcileFiles?.length) return Array.from(reconcileFiles);
-    return [];
+    return getVobCardFilesForUpload();
   }
 
   function hasReadableCardDraft() {
@@ -2287,10 +2282,7 @@
             <input id="reconcile-client-href" value="${escapeHtml(href)}" placeholder="Select a client on the board or paste /Pregnancy/Billing/..."></label>
           <label class="stack"><span class="muted small">Coverage slot (0 = primary)</span>
             <input id="reconcile-insurance-slot" type="number" min="0" step="1" value="0" style="width:120px;"></label>
-          <div class="row-actions" style="align-items:center;flex-wrap:wrap;gap:10px;">
-            <span class="muted small">Insurance card images for this one patient only — front, back, and extra pages are all allowed. The system reuses whatever is already attached in the VOB panel or you can add more files here.</span>
-            <input id="reconcile-card-file" type="file" multiple accept="image/*,.pdf,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tif,.tiff,.heic,.heif">
-          </div>
+          <div class="muted small">Card images come from the single VOB upload zone above. Drop all front/back/extra pages there, then run the real ClientCare VOB here.</div>
           <label class="row-actions" style="gap:8px;align-items:center;">
             <input type="checkbox" id="reconcile-dry-run-only">
             <span class="small muted">Dry run only (preview; no writes)</span>
