@@ -142,16 +142,6 @@
     return localStorage.getItem('clientcare_operator_email') || '';
   }
 
-  /** Card file for ClientCare pipeline / reconcile — inline VOB zone first, then reconcile panel. */
-  function getReconcileCardFile() {
-    return (
-      lastVobCardFile
-      || document.getElementById('vob-inline-file')?.files?.[0]
-      || document.getElementById('reconcile-card-file')?.files?.[0]
-      || null
-    );
-  }
-
   /** All card files for uploads — keeps working after OCR (in-memory) when the hidden file input is empty. */
   function getVobCardFilesForUpload() {
     if (lastVobCardFiles?.length) return [...lastVobCardFiles];
@@ -160,6 +150,15 @@
     if (inline?.length) return Array.from(inline);
     const rec = document.getElementById('reconcile-card-file')?.files?.[0];
     return rec ? [rec] : [];
+  }
+
+  /** Card files for the real ClientCare VOB path — prefer the VOB panel files, then any extra files in the real-flow panel. */
+  function getReconcileCardFiles() {
+    const vobFiles = getVobCardFilesForUpload();
+    if (vobFiles.length) return vobFiles;
+    const reconcileFiles = document.getElementById('reconcile-card-file')?.files;
+    if (reconcileFiles?.length) return Array.from(reconcileFiles);
+    return [];
   }
 
   function hasReadableCardDraft() {
@@ -2139,7 +2138,7 @@
           <div class="card stat" data-tip="The person or account this VOB is tied to. Existing clients should come from ClientCare. Prospects stay lightweight until they commit."><span>${vobMode === 'prospect' ? 'Prospect' : 'Selected account'}</span><strong>${escapeHtml(selectedLabel)}</strong></div>
           <div class="card stat" data-tip="Insurance company name — from ClientCare if available, otherwise from the insurance card or caller."><span>Payer</span><strong>${escapeHtml(lastInsuranceDraft.payer_name || 'Missing')}</strong></div>
           <div class="card stat" data-tip="Member/subscriber ID — from ClientCare first, otherwise from the insurance card."><span>Member ID</span><strong>${escapeHtml(lastInsuranceDraft.member_id || 'Missing')}</strong></div>
-          <div class="card stat" data-tip="The last decision from running VOB — green = safe to schedule, yellow = verify first, red = do not take"><span>Last decision</span><strong style="color:${lastInsurancePreview ? (lastInsurancePreview.decision?.includes('take') ? '#7ef0b8' : lastInsurancePreview.decision?.includes('not') ? '#ff9db0' : '#ffd666') : '#98a5c3'}">${escapeHtml(lastInsurancePreview?.decision || 'Not run yet')}</strong></div>
+          <div class="card stat" data-tip="The only workflow that matters here is the real ClientCare VOB. Once the right client is selected, run the live ClientCare flow below."><span>Live VOB</span><strong style="color:${getSelectedClientBillingHref() ? '#7ef0b8' : '#ffd666'}">${escapeHtml(getSelectedClientBillingHref() ? 'Ready to run' : 'Needs client file')}</strong></div>
         </div>
 
         ${renderVobCardAccountMismatchBanner()}
@@ -2155,7 +2154,7 @@
         </div>
 
         <div style="background:#0a1020;border:1px solid #27304a;border-radius:12px;padding:14px;margin-bottom:12px;">
-          <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Run VOB — required fields</div>
+          <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Real ClientCare VOB — card and client match</div>
           <div id="vob-inline-dropzone" data-tip="Drop front and back of the insurance card — all files are merged into one OCR pass. Fills payer, member ID &amp; group automatically."
             style="${getVobCardZoneStyle()}">
             <div style="font-size:13px;font-weight:600;color:#c5d4f0;margin-bottom:3px;" data-zone-label>${escapeHtml(getVobCardZoneLabel())}</div>
@@ -2188,88 +2187,9 @@
               </select>
             </div>
           </div>
-          <div class="row-actions" style="margin-top:14px;margin-bottom:0;">
-            <button id="insurance-preview-run" data-tip="Fast AI estimate from payer history — not live eligibility. For active coverage and real copay, use Run full ClientCare flow below.">Run VOB ↗</button>
-          </div>
-          <p class="small muted" style="margin:12px 0 0;line-height:1.55;border-top:1px solid #27304a;padding-top:10px;">
-            <strong style="color:#8aa4ff">Need real eligibility?</strong>
-            After the correct client is selected, use <strong style="color:#7ef0b8">Run full ClientCare flow</strong> in the green panel below — it logs into ClientCare and runs their VOB/eligibility so you get active/inactive, copay, and covered benefits.
-            The <strong>Run VOB ↗</strong> button is only a quick screening estimate.
-          </p>
-        </div>
-
-        <details style="margin-bottom:12px;">
-          <summary style="cursor:pointer;font-size:12px;color:#8aa4ff;font-weight:600;padding:8px 0;" data-tip="These fields are not required to get a decision — but filling them in gives you an accurate dollar estimate of what the insurer will pay vs what the patient owes">
-            Optional — fills in the payment estimate ▸
-          </summary>
-          <div style="background:#0a1020;border:1px solid #27304a;border-radius:12px;padding:14px;margin-top:8px;">
-            <p class="muted small" style="margin-bottom:10px;">These come from the patient's insurance card or a quick call to the provider line on the back of the card. Leave blank if you do not have them — the decision still runs.</p>
-            <div class="grid two">
-              <div data-tip="Your fee for the service (e.g. $150 per session). This is what you bill the insurer — not what you expect to get paid">
-                <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Your billed amount ($)</label>
-                <input id="insurance-billed-amount" value="${escapeHtml(lastInsuranceDraft.billed_amount || '')}" type="number" min="0" step="0.01" placeholder="e.g. 150" style="width:100%;box-sizing:border-box;">
-              </div>
-              <div data-tip="Fixed dollar amount the patient pays per visit — printed on the front of the card, usually labeled 'Copay' or 'Co-pay'. Common amounts: $10–$50">
-                <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Copay ($) <span style="font-size:10px;color:#5a6a8a">— front of insurance card</span></label>
-                <input id="insurance-copay" value="${escapeHtml(lastInsuranceDraft.copay || '')}" type="number" min="0" step="0.01" placeholder="e.g. 20" style="width:100%;box-sizing:border-box;">
-              </div>
-              <div data-tip="How much of the patient's annual deductible they still owe this year. You have to call the provider line (number on back of card) to get this — it resets every January">
-                <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Deductible remaining ($) <span style="font-size:10px;color:#5a6a8a">— call provider line</span></label>
-                <input id="insurance-deductible" value="${escapeHtml(lastInsuranceDraft.deductible_remaining || '')}" type="number" min="0" step="0.01" placeholder="e.g. 500" style="width:100%;box-sizing:border-box;">
-              </div>
-              <div data-tip="After deductible is met, the patient pays this % of the allowed amount. Common: 20% or 30%. Found on the insurance card or the Summary of Benefits document">
-                <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Coinsurance (%) <span style="font-size:10px;color:#5a6a8a">— insurance card or SOB</span></label>
-                <input id="insurance-coinsurance" value="${escapeHtml(lastInsuranceDraft.coinsurance_pct || '')}" type="number" min="0" step="1" placeholder="e.g. 20" style="width:100%;box-sizing:border-box;">
-              </div>
-            </div>
-          </div>
-        </details>
-        <div id="insurance-preview-output" style="margin-top:12px;">
-          ${lastInsurancePreview ? (() => {
-            const dec = (lastInsurancePreview.decision || 'review').toLowerCase();
-            const isTake = dec === 'take' || dec === 'accept';
-            const isDNS = dec.includes('not') || dec === 'deny' || dec === 'decline';
-            const bg = isTake ? '#0d2e1f' : isDNS ? '#2a0f15' : '#2a2010';
-            const border = isTake ? '#26c281' : isDNS ? '#ef476f' : '#f0b429';
-            const iconColor = isTake ? '#7ef0b8' : isDNS ? '#ff9db0' : '#ffd666';
-            const icon = isTake ? '✓' : isDNS ? '✗' : '!';
-            const label = isTake ? 'TAKE' : isDNS ? 'DO NOT SCHEDULE' : 'REVIEW REQUIRED';
-            const conf = (lastInsurancePreview.confidence || 'low').toUpperCase();
-            const confColor = conf === 'HIGH' ? '#7ef0b8' : conf === 'MEDIUM' ? '#ffd666' : '#ff9db0';
-            return `
-            <div style="background:${bg};border:2px solid ${border};border-radius:14px;padding:16px;display:grid;gap:12px;">
-              <div style="display:flex;align-items:center;gap:12px;">
-                <div style="width:44px;height:44px;border-radius:50%;background:${border}22;border:2px solid ${border};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:${iconColor};flex-shrink:0;">${icon}</div>
-                <div>
-                  <div style="font-size:22px;font-weight:800;color:${iconColor};letter-spacing:.03em;">${label}</div>
-                  <div style="font-size:12px;color:#98a5c3;margin-top:2px;">Confidence: <span style="color:${confColor};font-weight:600;">${conf}</span> &nbsp;·&nbsp; Basis: ${escapeHtml(lastInsurancePreview.estimation_basis || 'Not provided')}</div>
-                </div>
-              </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                <div style="background:#0f1528;border:1px solid #27304a;border-radius:10px;padding:12px;" data-tip="Estimated amount the insurance carrier will pay based on the plan details you entered">
-                  <div style="font-size:11px;color:#98a5c3;margin-bottom:4px;">Insurer pays</div>
-                  <div style="font-size:20px;font-weight:700;color:#edf2f7;">${escapeHtml(money(lastInsurancePreview.estimated_insurance_payment || 0))}</div>
-                </div>
-                <div style="background:#0f1528;border:1px solid #27304a;border-radius:10px;padding:12px;" data-tip="Estimated out-of-pocket amount the patient owes after insurance">
-                  <div style="font-size:11px;color:#98a5c3;margin-bottom:4px;">Patient owes</div>
-                  <div style="font-size:20px;font-weight:700;color:#edf2f7;">${escapeHtml(money(lastInsurancePreview.estimated_patient_responsibility || 0))}</div>
-                </div>
-              </div>
-              ${(lastInsurancePreview.reasons || []).length ? `
-              <div>
-                <div style="font-size:11px;font-weight:600;color:#98a5c3;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Reasons</div>
-                <ul class="detail-list" style="margin:0;">${(lastInsurancePreview.reasons || []).map((r) => `<li style="color:#edf2f7;">${escapeHtml(r)}</li>`).join('')}</ul>
-              </div>` : ''}
-              ${(lastInsurancePreview.missing || []).length ? `
-              <div style="background:#2a2010;border:1px solid #f0b42966;border-radius:10px;padding:12px;">
-                <div style="font-size:11px;font-weight:600;color:#ffd666;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">⚠ Missing info — get these before scheduling</div>
-                <ul class="detail-list" style="margin:0;">${(lastInsurancePreview.missing || []).map((m) => `<li style="color:#ffd666;">${escapeHtml(m)}</li>`).join('')}</ul>
-              </div>` : ''}
-            </div>`;
-          })() : '<p class="muted small" style="padding:12px 0;">Run a VOB check above to see an AI-powered take/review/do-not-schedule decision with estimated payment amounts.</p>'}
+          ${renderClientcareReconcilePanel({ inline: true })}
         </div>
         ${renderSavedVobProspects()}
-        ${renderClientcareReconcilePanel()}
       </div>
     `;
   }
@@ -2279,31 +2199,31 @@
     return String(item?.raw?.billingHref || item?.billingHref || lastVobClientHref || '').trim();
   }
 
-  function renderClientcareReconcilePanel() {
+  function renderClientcareReconcilePanel({ inline = false } = {}) {
     const href = getSelectedClientBillingHref();
     return `
-      <div class="card" style="margin-top:14px;background:#0c1a30;border-color:#26c281;">
-        <h3 style="margin:0 0 8px;font-size:15px;">ClientCare — one run: card → fill gaps → VOB → sync</h3>
-        <p class="small muted" style="margin:0 0 12px;">Uses the server&rsquo;s ClientCare login. Uploads the card (optional but recommended), fills <strong>only empty</strong> fields from the card, clicks ClientCare&rsquo;s own eligibility/VOB action, then copies any VOB details still missing into the form.</p>
+      <div class="${inline ? '' : 'card'}" style="${inline ? 'margin-top:14px;padding-top:14px;border-top:1px solid #27304a;' : 'margin-top:14px;background:#0c1a30;border-color:#26c281;'}">
+        <h3 style="margin:0 0 8px;font-size:15px;color:#7ef0b8;">Real ClientCare VOB</h3>
+        <p class="small muted" style="margin:0 0 12px;">This is the real path. It logs into ClientCare, writes the card data into the billing file, clicks ClientCare&rsquo;s own VOB/eligibility action, then reads back the live result.</p>
         <div class="stack">
           <label class="stack"><span class="muted small">Billing page URL</span>
             <input id="reconcile-client-href" value="${escapeHtml(href)}" placeholder="Select a client on the board or paste /Pregnancy/Billing/..."></label>
           <label class="stack"><span class="muted small">Coverage slot (0 = primary)</span>
             <input id="reconcile-insurance-slot" type="number" min="0" step="1" value="0" style="width:120px;"></label>
           <div class="row-actions" style="align-items:center;flex-wrap:wrap;gap:10px;">
-            <span class="muted small">Insurance card (optional — reuse the card already attached in the VOB panel or add another file here)</span>
-            <input id="reconcile-card-file" type="file" accept="image/*,.pdf,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tif,.tiff,.heic,.heif">
+            <span class="muted small">Insurance card images for this one patient only — front, back, and extra pages are all allowed. The system reuses whatever is already attached in the VOB panel or you can add more files here.</span>
+            <input id="reconcile-card-file" type="file" multiple accept="image/*,.pdf,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tif,.tiff,.heic,.heif">
           </div>
           <label class="row-actions" style="gap:8px;align-items:center;">
             <input type="checkbox" id="reconcile-dry-run-only">
             <span class="small muted">Dry run only (preview; no writes)</span>
           </label>
           <div class="row-actions">
-            <button type="button" id="clientcare-pipeline-run">Run full ClientCare flow</button>
+            <button type="button" id="clientcare-pipeline-run">Run real ClientCare VOB</button>
           </div>
-          <pre id="reconcile-output" class="small muted" style="max-height:280px;overflow:auto;margin:0;padding:10px;background:#0f1528;border-radius:10px;border:1px solid #27304a;">Select a client or paste URL, attach card image, then click Run.</pre>
+          <pre id="reconcile-output" class="small muted" style="max-height:280px;overflow:auto;margin:0;padding:10px;background:#0f1528;border-radius:10px;border:1px solid #27304a;">Select or auto-match the client, attach the card images for that same patient, then run the real ClientCare VOB.</pre>
           <details style="margin-top:6px;">
-            <summary style="cursor:pointer;font-size:12px;color:#8aa4ff;">Advanced: paste call notes only (no VOB automation)</summary>
+            <summary style="cursor:pointer;font-size:12px;color:#8aa4ff;">Advanced repair tools</summary>
             <div class="stack" style="margin-top:10px;">
               <label class="stack"><span class="muted small">Extra notes</span>
                 <textarea id="reconcile-supplemental-notes" rows="3" placeholder="Only if you need to merge text without running the full pipeline"></textarea></label>
@@ -3806,14 +3726,14 @@
     form.append('insurance_slot', String(Number(document.getElementById('reconcile-insurance-slot')?.value || 0) || 0));
     form.append('apply', dryRun ? 'false' : 'true');
     form.append('requested_by', 'overlay');
-    const file = getReconcileCardFile();
-    if (file) form.append('card', file);
+    const files = getReconcileCardFiles();
+    files.forEach((file) => form.append('card', file));
     const notesExtra = (document.getElementById('reconcile-supplemental-notes')?.value || '').trim();
     if (notesExtra) form.append('supplemental_notes', notesExtra);
     try {
       if (out) out.innerHTML = dryRun
-        ? '<span style="color:#8aa4ff;">Running pipeline (dry run — no writes)…</span>'
-        : '<span style="color:#8aa4ff;">Running full pipeline — card → ClientCare fields → VOB → sync → billing note…</span>';
+        ? '<span style="color:#8aa4ff;">Running real ClientCare VOB (dry run — no writes)…</span>'
+        : '<span style="color:#8aa4ff;">Running real ClientCare VOB — card → ClientCare fields → VOB → sync → billing note…</span>';
       const data = await api('/api/v1/clientcare-billing/insurance/clientcare-pipeline', { method: 'POST', body: form });
 
       // Build a human-readable result panel
@@ -3877,7 +3797,7 @@
       const vobNote = !dryRun && Number.isFinite(Number(rounds)) && rounds > 1
         ? ` (VOB ran up to ${rounds} sessions)`
         : '';
-      toast(dryRun ? 'Dry run complete.' : `Pipeline finished${vobNote} — fields filled, VOB run, note ${np?.ok ? 'posted' : 'needs manual copy'}.`, dryRun ? 'info' : 'success');
+      toast(dryRun ? 'Dry run complete.' : `Real ClientCare VOB finished${vobNote} — fields filled, VOB run, note ${np?.ok ? 'posted' : 'needs manual copy'}.`, dryRun ? 'info' : 'success');
       await loadDashboard({}, { skipAutoFullQueue: true });
     } catch (error) {
       if (out) out.textContent = error.message;
@@ -3898,8 +3818,8 @@
     form.append('insurance_slot', String(Number(document.getElementById('reconcile-insurance-slot')?.value || 0) || 0));
     form.append('apply', apply ? 'true' : 'false');
     form.append('requested_by', 'overlay');
-    const file = getReconcileCardFile();
-    if (file) form.append('card', file);
+    const files = getReconcileCardFiles();
+    files.forEach((file) => form.append('card', file));
     try {
       if (out) out.textContent = apply ? 'Writing to ClientCare (browser repair)…' : 'Inspecting ClientCare and merging card/notes…';
       const data = await api('/api/v1/clientcare-billing/insurance/reconcile-clientcare', { method: 'POST', body: form });

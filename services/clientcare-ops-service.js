@@ -1399,8 +1399,7 @@ export function createClientCareOpsService({ pool, billingService, browserServic
    */
   async function runFullClientcareCardVobPipeline({
     clientHref,
-    fileBuffer = null,
-    fileName = 'insurance-card.png',
+    files = [],
     supplementalNotes = '',
     insuranceSlot = 0,
     apply = true,
@@ -1410,8 +1409,11 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     if (!href) return { ok: false, step: 'validate', error: 'client_href required' };
 
     let cardExtracted = null;
-    if (fileBuffer?.length) {
-      const text = await extractInsuranceCardText({ fileBuffer, fileName, logger });
+    const fileList = Array.isArray(files) ? files.filter((item) => item?.fileBuffer?.length) : [];
+    if (fileList.length) {
+      const text = fileList.length === 1
+        ? await extractInsuranceCardText({ fileBuffer: fileList[0].fileBuffer, fileName: fileList[0].fileName, logger })
+        : await extractInsuranceCardTextMulti(fileList, logger);
       cardExtracted = parseInsuranceCardText(text);
     }
 

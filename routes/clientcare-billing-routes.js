@@ -501,7 +501,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
-  router.post('/insurance/card-intake', upload.array('card', 4), async (req, res) => {
+  router.post('/insurance/card-intake', upload.array('card', 16), async (req, res) => {
     try {
       const uploadedFiles = Array.isArray(req.files) ? req.files : (req.file ? [req.file] : []);
       if (!uploadedFiles.length) return res.status(400).json({ ok: false, error: 'insurance card image required' });
@@ -518,7 +518,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
-  router.post('/insurance/clientcare-pipeline', upload.single('card'), async (req, res) => {
+  router.post('/insurance/clientcare-pipeline', upload.array('card', 16), async (req, res) => {
     try {
       const clientHref = String(req.body?.client_href || '').trim();
       if (!clientHref) {
@@ -526,10 +526,10 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       }
       const apply = String(req.body?.apply || 'true').toLowerCase() !== 'false';
       if (apply) await enforceOperatorAccess(req, ['operator', 'manager']);
+      const uploadedFiles = Array.isArray(req.files) ? req.files : (req.file ? [req.file] : []);
       const result = await opsService.runFullClientcareCardVobPipeline({
         clientHref,
-        fileBuffer: req.file?.buffer?.length ? req.file.buffer : null,
-        fileName: req.file?.originalname || null,
+        files: uploadedFiles.map((f) => ({ fileBuffer: f.buffer, fileName: f.originalname || 'insurance-card' })),
         supplementalNotes: String(req.body?.supplemental_notes || ''),
         insuranceSlot: Number(req.body?.insurance_slot || 0) || 0,
         apply,
