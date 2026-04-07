@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Collections Control Center</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; margin: 0; background: #0b1020; color: #edf2f7; }
-    .wrap { max-width: 1440px; margin: 0 auto; padding: 24px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; margin: 0; background: #0b1020; color: #edf2f7; overflow-x: hidden; }
+    .wrap { max-width: min(1600px, 100vw); margin: 0 auto; padding: 24px; box-sizing: border-box; }
     .hero { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:20px; }
     .eyebrow { color:#8aa4ff; text-transform:uppercase; letter-spacing:.08em; font-size:12px; }
     h1, h2, h3, p { margin: 0; }
     .grid { display:grid; gap:16px; margin-bottom:16px; }
     .grid.four { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    .grid.two { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
+    .grid.two { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
     .card { background:#131a2e; border:1px solid #27304a; border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.18); }
     .stat span, label, .hint { color:#98a5c3; font-size:12px; }
     .stat strong { display:block; margin-top:8px; font-size:20px; }
@@ -22,7 +22,7 @@
     .badge.bad { background:#4a1f28; color:#ff9db0; }
     .toolbar { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
     .toolbar > div { display:flex; flex-direction:column; gap:6px; }
-    input, textarea, select { background:#0f1528; color:#edf2f7; border:1px solid #27304a; border-radius:10px; padding:10px 12px; min-width:180px; }
+    input, textarea, select { background:#0f1528; color:#edf2f7; border:1px solid #27304a; border-radius:10px; padding:10px 12px; min-width:0; width:100%; box-sizing:border-box; }
     textarea { min-height:140px; width:100%; resize:vertical; }
     button { background:#3559d8; color:#fff; border:0; border-radius:10px; padding:10px 12px; cursor:pointer; }
     button.ghost { background:#27304a; }
@@ -33,13 +33,19 @@
     @media (max-width: 980px) { .split { grid-template-columns: 1fr; } }
     .stack { display:grid; gap:10px; }
     .muted { color:#98a5c3; }
+    .workspace, .main-workspace, .grid, .card, .stack, .utility-sidebar, .utility-sidebar-body { min-width: 0; }
     .workspace { display:grid; gap:16px; align-items:start; }
-    .workspace.with-utilities { grid-template-columns: minmax(0, 1fr) minmax(340px, 420px); }
+    .workspace.with-utilities { grid-template-columns: minmax(0, 1fr) minmax(300px, 380px); }
+    .workspace.with-utilities.utilities-bottom { grid-template-columns: 1fr; }
     .main-workspace { min-width: 0; display:grid; gap:16px; }
-    .utility-sidebar { min-width: 340px; width: 380px; max-width: 560px; resize: horizontal; overflow: auto; justify-self: end; position: sticky; top: 24px; display:grid; gap:16px; }
+    .utility-sidebar { min-width: 300px; width: min(34vw, 380px); max-width: 420px; resize: horizontal; overflow: auto; justify-self: end; position: sticky; top: 24px; display:grid; gap:16px; }
     .utility-sidebar.collapsed { width: 220px; min-width: 220px; resize: none; }
+    .workspace.with-utilities.utilities-bottom .utility-sidebar { position: static; width: auto; min-width: 0; max-width: none; resize: none; justify-self: stretch; }
     .utility-sidebar-head { padding:12px 16px; }
     .utility-sidebar-body { display:grid; gap:16px; }
+    .utility-sidebar .grid.two, .utility-sidebar .split { grid-template-columns: 1fr; }
+    .utility-sidebar .grid.four { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+    .utility-sidebar .card, .utility-sidebar input, .utility-sidebar textarea, .utility-sidebar select { min-width: 0; max-width: 100%; }
     .assistant-card { display:grid; gap:12px; }
     .assistant-history { max-height:380px; overflow:auto; }
     .row-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
@@ -73,7 +79,7 @@
     .todo-item[data-urgency="red"] { border-color:#6b2430; }
     .todo-item[data-urgency="yellow"] { border-color:#6b5420; }
     .todo-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:8px; }
-    @media (max-width: 1180px) {
+    @media (max-width: 1520px) {
       .workspace.with-utilities { grid-template-columns: 1fr; }
       .utility-sidebar { position:static; width:auto; min-width:0; max-width:none; resize:none; }
     }
@@ -129,6 +135,6 @@
 <body>
   <div class="wrap" id="app"><div class="card"><p>Loading billing overlay…</p></div></div>
   <script src="/shared/lifeos-voice-chat.js?v=20260330"></script>
-  <script src="/clientcare-billing/clientcare-billing.js?v=20260406i"></script>
+  <script src="/clientcare-billing/clientcare-billing.js?v=20260406j"></script>
 </body>
 </html>

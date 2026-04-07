@@ -27,6 +27,10 @@
   let lastAccountSearch = localStorage.getItem('clientcare_account_search') || '';
   let vobMode = localStorage.getItem('clientcare_vob_mode') || 'existing';
   let utilitySidebarCollapsed = localStorage.getItem('clientcare_utility_sidebar_collapsed') === 'true';
+  const savedUtilityDock = localStorage.getItem('clientcare_utility_sidebar_docked_bottom');
+  let utilitySidebarDockedBottom = savedUtilityDock == null
+    ? (typeof window !== 'undefined' && window.innerWidth < 1700)
+    : savedUtilityDock === 'true';
   let lastProspectDraft = {
     full_name: '',
     phone: '',
@@ -329,6 +333,11 @@
   function setUtilitySidebarCollapsed(value) {
     utilitySidebarCollapsed = Boolean(value);
     localStorage.setItem('clientcare_utility_sidebar_collapsed', String(utilitySidebarCollapsed));
+  }
+
+  function setUtilitySidebarDockedBottom(value) {
+    utilitySidebarDockedBottom = Boolean(value);
+    localStorage.setItem('clientcare_utility_sidebar_docked_bottom', String(utilitySidebarDockedBottom));
   }
 
   function triStateToSelect(value) {
@@ -3836,7 +3845,7 @@
         `).join('')}
       </div>
 
-      <div class="workspace with-utilities">
+      <div class="workspace with-utilities ${utilitySidebarDockedBottom ? 'utilities-bottom' : ''}">
         <div class="main-workspace">
           ${renderOperatorGuide()}
           ${renderSystemStatusSummary()}
@@ -4025,11 +4034,16 @@
         </div>
         <aside class="utility-sidebar ${utilitySidebarCollapsed ? 'collapsed' : ''}">
           <div class="card utility-sidebar-head">
-            <div>
-              <div class="eyebrow">Utilities</div>
-              <strong>${utilitySidebarCollapsed ? 'Open utilities' : 'Working tools'}</strong>
+            <div class="row-actions" style="justify-content:space-between;align-items:flex-start;">
+              <div>
+                <div class="eyebrow">Utilities</div>
+                <strong>${utilitySidebarCollapsed ? 'Open utilities' : 'Working tools'}</strong>
+              </div>
+              <div class="row-actions" style="justify-content:flex-end;">
+                <button id="utility-sidebar-dock-toggle" class="ghost">${utilitySidebarDockedBottom ? 'Dock right' : 'Dock below'}</button>
+                <button id="utility-sidebar-toggle" class="ghost">${utilitySidebarCollapsed ? 'Open' : 'Collapse'}</button>
+              </div>
             </div>
-            <button id="utility-sidebar-toggle" class="ghost">${utilitySidebarCollapsed ? 'Open' : 'Collapse'}</button>
           </div>
           <div class="utility-sidebar-body" style="${utilitySidebarCollapsed ? 'display:none;' : ''}">
             ${renderVerificationOfBenefitsCard()}
@@ -4083,6 +4097,12 @@
     const utilitySidebarToggle = document.getElementById('utility-sidebar-toggle');
     if (utilitySidebarToggle) utilitySidebarToggle.addEventListener('click', () => {
       setUtilitySidebarCollapsed(!utilitySidebarCollapsed);
+      render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, lastPackagingValidation, lastPackagingValidationHistory);
+      ensureAssistantSession();
+    });
+    const utilitySidebarDockToggle = document.getElementById('utility-sidebar-dock-toggle');
+    if (utilitySidebarDockToggle) utilitySidebarDockToggle.addEventListener('click', () => {
+      setUtilitySidebarDockedBottom(!utilitySidebarDockedBottom);
       render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, lastPackagingValidation, lastPackagingValidationHistory);
       ensureAssistantSession();
     });
