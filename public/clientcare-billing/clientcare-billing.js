@@ -42,6 +42,10 @@
   let lastVobCardSummary = null;
   let lastVobCardError = '';
   let lastVobClientHref = '';
+  let lastClientcarePipelineState = 'idle';
+  let lastClientcarePipelineResult = null;
+  let lastClientcarePipelineError = '';
+  let lastClientcarePipelineDryRun = false;
   /** Blue Shield / Blue Cross = in-network. Everything else = out of network (default). */
   function inferNetworkStatus(payerName = '') {
     return /blue\s*(shield|cross)/i.test(String(payerName || '')) ? 'true' : 'false';
@@ -2199,6 +2203,79 @@
     return String(item?.raw?.billingHref || item?.billingHref || lastVobClientHref || '').trim();
   }
 
+  function buildClientcarePipelineResultHtml(data, { dryRun = false } = {}) {
+    const rows = [];
+    if (data.client_label_guess) rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Client</td><td style="padding:4px 0;"><strong>${escapeHtml(data.client_label_guess)}</strong></td></tr>`);
+
+    const ex = data.card_extracted || {};
+    if (ex.payer_name || ex.member_id) {
+      rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Card read</td><td style="padding:4px 0;">${escapeHtml([ex.payer_name, ex.member_id ? `ID ${ex.member_id}` : '', ex.group_number ? `Grp ${ex.group_number}` : '', ex.subscriber_name].filter(Boolean).join(' · '))}</td></tr>`);
+    }
+
+    const filled = Object.keys(data.card_fill_proposed || {}).filter((k) => k !== 'insurance_match_hints' && k !== 'insurance_slot');
+    rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Fields written</td><td style="padding:4px 0;">${
+      filled.length
+        ? `<span style="color:#7ef0b8;">${escapeHtml(filled.join(', '))}</span>`
+        : '<span style="color:#98a5c3;">Nothing new needed in ClientCare</span>'
+    }</td></tr>`);
+
+    const vob = data.vob_flow || {};
+    const vobStatus = vob.vob_received
+      ? '<span style="color:#7ef0b8;">Live VOB response received</span>'
+      : '<span style="color:#f0b429;">VOB click completed but no response was automatically confirmed</span>';
+    rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">VOB status</td><td style="padding:4px 0;">${vobStatus}${vob.vob_retry_rounds > 1 ? ` (${escapeHtml(String(vob.vob_retry_rounds))} attempts)` : ''}</td></tr>`);
+
+    const vobFilled = Object.keys(data.vob_fill_proposed || {}).filter((k) => k !== 'insurance_match_hints' && k !== 'insurance_slot');
+    if (vobFilled.length) {
+      rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Benefits synced back</td><td style="padding:4px 0;"><span style="color:#7ef0b8;">${escapeHtml(vobFilled.join(', '))}</span></td></tr>`);
+    }
+
+    const vobExtracted = data.vob_extracted || {};
+    const benefitBits = [];
+    if (vobExtracted.coverage_active != null) benefitBits.push(`Coverage ${vobExtracted.coverage_active ? 'active' : 'inactive'}`);
+    if (vobExtracted.copay) benefitBits.push(`Copay ${vobExtracted.copay}`);
+    if (vobExtracted.deductible_remaining) benefitBits.push(`Deductible ${vobExtracted.deductible_remaining}`);
+    if (vobExtracted.coinsurance) benefitBits.push(`Coinsurance ${vobExtracted.coinsurance}`);
+    if (benefitBits.length) {
+      rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Benefits found</td><td style="padding:4px 0;">${escapeHtml(benefitBits.join(' · '))}</td></tr>`);
+    }
+
+    const np = data.note_posted;
+    let noteRow = '';
+    if (dryRun) {
+      noteRow = '<span style="color:#98a5c3;">Dry run only — note not posted</span>';
+    } else if (np?.ok) {
+      noteRow = '<span style="color:#7ef0b8;">Billing note posted to ClientCare</span>';
+    } else {
+      const noteText = data.clientcare_note_suggestion || '';
+      const escaped = escapeHtml(noteText);
+      noteRow = `<span style="color:#f0b429;">Auto-post failed (${escapeHtml(np?.reason || 'unknown')})</span>${noteText ? `<pre style="margin:8px 0 4px;font-size:11px;max-height:160px;overflow:auto;">${escaped}</pre><button type="button" onclick="navigator.clipboard.writeText(${JSON.stringify(noteText)}).then(()=>this.textContent='Copied!').catch(()=>{})" style="background:#27304a;border:none;border-radius:8px;padding:6px 12px;color:#edf2f7;cursor:pointer;font-size:12px;">Copy note</button>` : ''}`;
+    }
+    rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;vertical-align:top;">Billing note</td><td style="padding:4px 0;">${noteRow}</td></tr>`);
+
+    const dryBadge = dryRun ? '<span style="background:#4a3a12;color:#ffd666;padding:2px 8px;border-radius:6px;font-size:11px;margin-left:8px;">DRY RUN</span>' : '';
+    return `
+      <div style="margin-bottom:8px;font-weight:700;color:#edf2f7;">Real ClientCare VOB complete${dryBadge}</div>
+      <table style="font-size:13px;width:100%;border-collapse:collapse;">${rows.join('')}</table>
+      <details style="margin-top:12px;"><summary style="cursor:pointer;color:#98a5c3;font-size:12px;">Full JSON</summary><pre style="margin-top:8px;font-size:11px;">${escapeHtml(JSON.stringify(data, null, 2))}</pre></details>
+    `;
+  }
+
+  function renderClientcarePipelineOutput() {
+    if (lastClientcarePipelineState === 'running') {
+      return lastClientcarePipelineDryRun
+        ? '<span style="color:#8aa4ff;">Running real ClientCare VOB (dry run — no writes)…</span>'
+        : '<span style="color:#8aa4ff;">Running real ClientCare VOB — card → ClientCare fields → VOB → sync → billing note…</span>';
+    }
+    if (lastClientcarePipelineState === 'done' && lastClientcarePipelineResult) {
+      return buildClientcarePipelineResultHtml(lastClientcarePipelineResult, { dryRun: lastClientcarePipelineDryRun });
+    }
+    if (lastClientcarePipelineState === 'error' && lastClientcarePipelineError) {
+      return `<span style="color:#ff9db0;">${escapeHtml(lastClientcarePipelineError)}</span>`;
+    }
+    return 'Select or auto-match the client, attach the card images for that same patient, then run the real ClientCare VOB.';
+  }
+
   function renderClientcareReconcilePanel({ inline = false } = {}) {
     const href = getSelectedClientBillingHref();
     return `
@@ -2221,7 +2298,7 @@
           <div class="row-actions">
             <button type="button" id="clientcare-pipeline-run">Run real ClientCare VOB</button>
           </div>
-          <pre id="reconcile-output" class="small muted" style="max-height:280px;overflow:auto;margin:0;padding:10px;background:#0f1528;border-radius:10px;border:1px solid #27304a;">Select or auto-match the client, attach the card images for that same patient, then run the real ClientCare VOB.</pre>
+          <div id="reconcile-output" class="small muted" style="max-height:320px;overflow:auto;margin:0;padding:10px;background:#0f1528;border-radius:10px;border:1px solid #27304a;">${renderClientcarePipelineOutput()}</div>
           <details style="margin-top:6px;">
             <summary style="cursor:pointer;font-size:12px;color:#8aa4ff;">Advanced repair tools</summary>
             <div class="stack" style="margin-top:10px;">
@@ -3731,76 +3808,29 @@
     const notesExtra = (document.getElementById('reconcile-supplemental-notes')?.value || '').trim();
     if (notesExtra) form.append('supplemental_notes', notesExtra);
     try {
-      if (out) out.innerHTML = dryRun
-        ? '<span style="color:#8aa4ff;">Running real ClientCare VOB (dry run — no writes)…</span>'
-        : '<span style="color:#8aa4ff;">Running real ClientCare VOB — card → ClientCare fields → VOB → sync → billing note…</span>';
+      lastClientcarePipelineState = 'running';
+      lastClientcarePipelineResult = null;
+      lastClientcarePipelineError = '';
+      lastClientcarePipelineDryRun = dryRun;
+      if (out) out.innerHTML = renderClientcarePipelineOutput();
       const data = await api('/api/v1/clientcare-billing/insurance/clientcare-pipeline', { method: 'POST', body: form });
-
-      // Build a human-readable result panel
-      const rows = [];
-
-      // Client
-      if (data.client_label_guess) rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Client</td><td style="padding:4px 0;"><strong>${data.client_label_guess}</strong></td></tr>`);
-
-      // Card extraction summary
-      const ex = data.card_extracted || {};
-      if (ex.payer_name || ex.member_id) {
-        rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Card read</td><td style="padding:4px 0;">${[ex.payer_name, ex.member_id ? 'ID ' + ex.member_id : '', ex.group_number ? 'Grp ' + ex.group_number : '', ex.subscriber_name].filter(Boolean).join(' · ')}</td></tr>`);
-      }
-
-      // Fields filled
-      const filled = Object.keys(data.card_fill_proposed || {}).filter((k) => k !== 'insurance_match_hints' && k !== 'insurance_slot');
-      if (filled.length) {
-        rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Fields filled</td><td style="padding:4px 0;"><span style="color:#7ef0b8;">${filled.join(', ')}</span></td></tr>`);
-      } else {
-        rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">Fields filled</td><td style="padding:4px 0;color:#98a5c3;">Fields already populated in ClientCare — nothing overwritten</td></tr>`);
-      }
-
-      // VOB status
-      const vob = data.vob_flow || {};
-      const vobStatus = vob.vob_received
-        ? '<span style="color:#7ef0b8;">✓ VOB response received</span>'
-        : '<span style="color:#f0b429;">VOB clicked — verify in ClientCare that eligibility loaded</span>';
-      rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">VOB</td><td style="padding:4px 0;">${vobStatus}${vob.vob_retry_rounds > 1 ? ` (${vob.vob_retry_rounds} attempts)` : ''}</td></tr>`);
-
-      // VOB fields synced back
-      const vobFilled = Object.keys(data.vob_fill_proposed || {}).filter((k) => k !== 'insurance_match_hints' && k !== 'insurance_slot');
-      if (vobFilled.length) {
-        rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;">VOB data synced</td><td style="padding:4px 0;"><span style="color:#7ef0b8;">${vobFilled.join(', ')}</span></td></tr>`);
-      }
-
-      // Note status
-      const np = data.note_posted;
-      let noteRow = '';
-      if (dryRun) {
-        noteRow = '<span style="color:#98a5c3;">Dry run — note not posted</span>';
-      } else if (np?.ok) {
-        noteRow = `<span style="color:#7ef0b8;">✓ Billing note posted to ClientCare</span>`;
-      } else {
-        const noteText = data.clientcare_note_suggestion || '';
-        const escaped = noteText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        noteRow = `<span style="color:#f0b429;">Auto-post failed (${np?.reason || 'unknown'}) — copy below:</span><br>
-          <pre style="margin:8px 0 4px;font-size:11px;max-height:160px;overflow:auto;">${escaped}</pre>
-          <button type="button" onclick="navigator.clipboard.writeText(${JSON.stringify(noteText)}).then(()=>this.textContent='Copied!').catch(()=>{})"
-            style="background:#27304a;border:none;border-radius:8px;padding:6px 12px;color:#edf2f7;cursor:pointer;font-size:12px;">Copy note</button>`;
-      }
-      rows.push(`<tr><td style="color:#98a5c3;padding:4px 8px 4px 0;vertical-align:top;">Billing note</td><td style="padding:4px 0;">${noteRow}</td></tr>`);
-
-      const dryBadge = dryRun ? '<span style="background:#4a3a12;color:#ffd666;padding:2px 8px;border-radius:6px;font-size:11px;margin-left:8px;">DRY RUN</span>' : '';
-      if (out) out.innerHTML = `
-        <div style="margin-bottom:8px;font-weight:700;color:#edf2f7;">Pipeline complete${dryBadge}</div>
-        <table style="font-size:13px;width:100%;border-collapse:collapse;">${rows.join('')}</table>
-        <details style="margin-top:12px;"><summary style="cursor:pointer;color:#98a5c3;font-size:12px;">Full JSON</summary><pre style="margin-top:8px;font-size:11px;">${JSON.stringify(data, null, 2).replace(/</g, '&lt;')}</pre></details>
-      `;
+      lastClientcarePipelineState = 'done';
+      lastClientcarePipelineResult = data;
+      lastClientcarePipelineError = '';
+      if (out) out.innerHTML = renderClientcarePipelineOutput();
 
       const rounds = data?.vob_retry_config?.rounds;
       const vobNote = !dryRun && Number.isFinite(Number(rounds)) && rounds > 1
         ? ` (VOB ran up to ${rounds} sessions)`
         : '';
+      const np = data.note_posted;
       toast(dryRun ? 'Dry run complete.' : `Real ClientCare VOB finished${vobNote} — fields filled, VOB run, note ${np?.ok ? 'posted' : 'needs manual copy'}.`, dryRun ? 'info' : 'success');
       await loadDashboard({}, { skipAutoFullQueue: true });
     } catch (error) {
-      if (out) out.textContent = error.message;
+      lastClientcarePipelineState = 'error';
+      lastClientcarePipelineResult = null;
+      lastClientcarePipelineError = error.message;
+      if (out) out.innerHTML = renderClientcarePipelineOutput();
       toast(error.message, 'error');
     }
   }
