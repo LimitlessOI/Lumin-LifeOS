@@ -9,6 +9,8 @@ import os from 'os';
 import path from 'path';
 import { parseInsuranceCardText, cleanExtractedValue } from './insurance-card-parse.js';
 
+const OCR_IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp', '.tif', '.tiff', '.heic', '.heif']);
+
 function normalizeIntent(text = '') {
   return String(text || '').toLowerCase().trim();
 }
@@ -388,6 +390,91 @@ async function tryImageOCR(filePath, logger = console) {
   } catch (error) {
     logger.warn?.({ err: error.message, filePath }, '[CLIENTCARE-OPS] insurance card OCR failed');
     return '';
+  }
+}
+
+function detectCardUploadKind(fileBuffer, fileName = '') {
+  const ext = String(path.extname(fileName || '') || '').toLowerCase();
+  if (fileBuffer?.subarray?.(0, 4)?.toString?.() === '%PDF') {
+    return { kind: 'pdf', ext: '.pdf' };
+  }
+  if (OCR_IMAGE_EXTS.has(ext)) {
+    return { kind: 'image', ext };
+  }
+  return { kind: 'image', ext: ext || '.png' };
+}
+
+async function normalizeImageBufferForOCR(fileBuffer, logger = console) {
+  try {
+    const sharpModule = await import('sharp');
+    const sharp = sharpModule.default || sharpModule;
+    return await sharp(fileBuffer, { animated: true, pages: 1 })
+      .rotate()
+      .flatten({ background: '#ffffff' })
+      .png()
+      .toBuffer();
+  } catch (error) {
+    logger.warn?.({ err: error.message }, '[CLIENTCARE-OPS] image normalization skipped');
+    return fileBuffer;
+  }
+}
+
+async function extractTextFromPdfBuffer(fileBuffer, logger = console) {
+  let parsedText = '';
+  try {
+    const pdfParseModule = await import('pdf-parse');
+    const pdfParse = pdfParseModule.default || pdfParseModule;
+    const parsed = await pdfParse(fileBuffer);
+    parsedText = cleanExtractedValue(parsed?.text || '');
+    if (parsedText.length >= 24) return parsedText;
+  } catch (error) {
+    logger.warn?.({ err: error.message }, '[CLIENTCARE-OPS] pdf text extraction failed');
+  }
+
+  try {
+    const puppeteerModule = await import('puppeteer');
+    const puppeteer = puppeteerModule.default || puppeteerModule;
+    const tmpPdfPath = path.join(os.tmpdir(), `clientcare-insurance-card-pdf-${Date.now()}-${Math.random().toString(36).slice(2)}.pdf`);
+    const tmpPngPath = path.join(os.tmpdir(), `clientcare-insurance-card-pdf-${Date.now()}-${Math.random().toString(36).slice(2)}.png`);
+    let browser = null;
+    try {
+      await fs.writeFile(tmpPdfPath, fileBuffer);
+      browser = await puppeteer.launch({
+        headless: 'new',
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      });
+      const page = await browser.newPage();
+      await page.setViewport({ width: 1600, height: 2200, deviceScaleFactor: 1.5 });
+      await page.goto(`file://${tmpPdfPath}`, { waitUntil: 'networkidle0', timeout: 20000 });
+      await page.screenshot({ path: tmpPngPath, type: 'png', fullPage: true });
+      const ocrText = await tryImageOCR(tmpPngPath, logger);
+      if (ocrText) return ocrText;
+    } finally {
+      await browser?.close?.().catch(() => {});
+      await fs.unlink(tmpPdfPath).catch(() => {});
+      await fs.unlink(tmpPngPath).catch(() => {});
+    }
+  } catch (error) {
+    logger.warn?.({ err: error.message }, '[CLIENTCARE-OPS] pdf screenshot fallback failed');
+  }
+
+  if (parsedText) return parsedText;
+  throw new Error('PDF upload could not be read. Try a JPEG, PNG, HEIC, WEBP, TIFF, or a text-based PDF.');
+}
+
+async function extractInsuranceCardText({ fileBuffer, fileName = 'insurance-card', logger = console } = {}) {
+  const detected = detectCardUploadKind(fileBuffer, fileName);
+  if (detected.kind === 'pdf') {
+    return extractTextFromPdfBuffer(fileBuffer, logger);
+  }
+
+  const normalizedBuffer = await normalizeImageBufferForOCR(fileBuffer, logger);
+  const tmpPath = path.join(os.tmpdir(), `clientcare-insurance-card-${Date.now()}-${Math.random().toString(36).slice(2)}.png`);
+  try {
+    await fs.writeFile(tmpPath, normalizedBuffer);
+    return await tryImageOCR(tmpPath, logger);
+  } finally {
+    await fs.unlink(tmpPath).catch(() => {});
   }
 }
 
@@ -982,10 +1069,8 @@ export function createClientCareOpsService({ pool, billingService, browserServic
   }
 
   async function intakeInsuranceCard({ fileBuffer, fileName = 'insurance-card', prospect = {}, requestedBy = 'overlay' } = {}) {
-    const tmpPath = path.join(os.tmpdir(), `clientcare-insurance-card-${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(fileName) || '.png'}`);
     try {
-      await fs.writeFile(tmpPath, fileBuffer);
-      const extractedText = await tryImageOCR(tmpPath, logger);
+      const extractedText = await extractInsuranceCardText({ fileBuffer, fileName, logger });
       const extracted = parseInsuranceCardText(extractedText);
       const fullName = String(prospect.full_name || '').trim();
       const phone = String(prospect.phone || '').trim();
@@ -1038,8 +1123,8 @@ export function createClientCareOpsService({ pool, billingService, browserServic
         preview,
         saved,
       };
-    } finally {
-      await fs.unlink(tmpPath).catch(() => {});
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -1119,14 +1204,8 @@ export function createClientCareOpsService({ pool, billingService, browserServic
 
     let cardExtracted = null;
     if (fileBuffer?.length) {
-      const tmpPath = path.join(os.tmpdir(), `cc-reconcile-${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(fileName) || '.png'}`);
-      try {
-        await fs.writeFile(tmpPath, fileBuffer);
-        const text = await tryImageOCR(tmpPath, logger);
-        cardExtracted = parseInsuranceCardText(text);
-      } finally {
-        await fs.unlink(tmpPath).catch(() => {});
-      }
+      const text = await extractInsuranceCardText({ fileBuffer, fileName, logger });
+      cardExtracted = parseInsuranceCardText(text);
     }
 
     const { merged, notesRawExtracted, sources } = mergeCardAndNotesExtractions(cardExtracted, supplementalNotes);
@@ -1254,14 +1333,8 @@ export function createClientCareOpsService({ pool, billingService, browserServic
 
     let cardExtracted = null;
     if (fileBuffer?.length) {
-      const tmpPath = path.join(os.tmpdir(), `cc-pipeline-${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(fileName) || '.png'}`);
-      try {
-        await fs.writeFile(tmpPath, fileBuffer);
-        const text = await tryImageOCR(tmpPath, logger);
-        cardExtracted = parseInsuranceCardText(text);
-      } finally {
-        await fs.unlink(tmpPath).catch(() => {});
-      }
+      const text = await extractInsuranceCardText({ fileBuffer, fileName, logger });
+      cardExtracted = parseInsuranceCardText(text);
     }
 
     const inspect = await browserService.inspectClientBillingAccount({ clientHref: href, pageTimeoutMs: 24000 });

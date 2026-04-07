@@ -1792,8 +1792,8 @@
           <div id="vob-inline-dropzone" data-tip="Drop a photo of the insurance card — payer name, member ID, and group number are read automatically and fill the fields below"
             style="${getVobCardZoneStyle()}">
             <div style="font-size:13px;font-weight:600;color:#c5d4f0;margin-bottom:3px;" data-zone-label>${escapeHtml(getVobCardZoneLabel())}</div>
-            <div style="font-size:11px;color:#98a5c3;">Fills payer, member ID &amp; group automatically · JPG, PNG, WEBP</div>
-            <input id="vob-inline-file" type="file" accept="image/*,.png,.jpg,.jpeg,.webp" style="display:none;">
+            <div style="font-size:11px;color:#98a5c3;">Fills payer, member ID &amp; group automatically · photos, HEIC, TIFF, PDF, JPG, PNG, WEBP</div>
+            <input id="vob-inline-file" type="file" accept="image/*,.pdf,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tif,.tiff,.heic,.heif" style="display:none;">
           </div>
           <div id="vob-inline-status" style="min-height:18px;font-size:12px;line-height:1.5;margin-bottom:10px;">${renderVobCardStatus()}</div>
           ${vobMode === 'prospect' ? `
@@ -1937,7 +1937,7 @@
             <input id="reconcile-insurance-slot" type="number" min="0" step="1" value="0" style="width:120px;"></label>
           <div class="row-actions" style="align-items:center;flex-wrap:wrap;gap:10px;">
             <span class="muted small">Insurance card (optional — reuse the card already attached in the VOB panel or add another file here)</span>
-            <input id="reconcile-card-file" type="file" accept="image/*,.png,.jpg,.jpeg,.webp">
+            <input id="reconcile-card-file" type="file" accept="image/*,.pdf,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tif,.tiff,.heic,.heif">
           </div>
           <label class="row-actions" style="gap:8px;align-items:center;">
             <input type="checkbox" id="reconcile-dry-run-only">

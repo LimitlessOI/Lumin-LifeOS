@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-06 (VOB card upload now truly lives in-panel and persists across rerender/pipeline runs; ClientCare sellable service now exports operator access checks used by billing routes; ClientCare routes no longer hard-import the local-only outreach engine; auto-OCR → ClientCare field fill → VOB click → billing note auto-post; card-intake + clientcare-pipeline endpoints)
+**Last Updated:** 2026-04-06 (card intake now accepts broad image formats plus PDFs; VOB card upload lives in-panel and persists across rerender/pipeline runs; ClientCare sellable service now exports operator access checks used by billing routes; ClientCare routes no longer hard-import the local-only outreach engine; auto-OCR → ClientCare field fill → VOB click → billing note auto-post; card-intake + clientcare-pipeline endpoints)
 
 ---
 
@@ -323,6 +323,7 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-04-06 | Broadened insurance-card intake to handle more formats: UI file pickers now accept PDF, HEIC/HEIF, TIFF, GIF, BMP, JPG/JPEG, PNG, and WEBP; backend normalizes image uploads through `sharp` before OCR and tries `pdf-parse` first for PDFs, then first-page raster OCR fallback when possible | 0.5h | 0.5h | `sharp`, `pdf-parse` | ✅ | pending | pending |
 | 2026-04-06 | Exported `assertOperatorAccess` and `resolveOperatorAccess` from `services/clientcare-sellable-service.js` so the live billing routes can enforce operator permissions without crashing on `sellableService.assertOperatorAccess is not a function` | 0.1h | 0.1h | none | ✅ | pending | pending |
 | 2026-04-06 | Removed the hard import of `services/outreach-engine.js` from `routes/clientcare-billing-routes.js`; the route now uses an inline outreach adapter built from `notificationService` + `sendSMS`, with best-effort DB logging to `lifeos_outreach_tasks` when that table exists | 0.25h | 0.25h | none | ✅ | pending | pending |
 | 2026-04-06 | Fixed the inline VOB insurance-card flow so it actually works after rerender: removed stale references to the old sticky-strip DOM ids, persist the chosen card file in JS state, reuse that same file for **Read card + save prospect** and **Run full ClientCare flow**, and keep OCR success/error feedback visible inside the VOB panel instead of losing it on rerender | 0.5h | 0.5h | none | ✅ | pending | pending |
