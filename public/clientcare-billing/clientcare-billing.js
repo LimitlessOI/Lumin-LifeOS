@@ -2052,8 +2052,8 @@
           { label: 'Required fields', value: (rule.required_fields || []).join(', ') || 'none' },
         ])}
         <div class="card" style="padding:12px; background:#0f1528;">
-          <strong>Preview endpoint</strong>
-          <p class="muted" style="margin-top:8px">Use <code>/api/v1/clientcare-billing/insurance/verification-preview</code> to check take/review/do-not-schedule decisions before accepting insurance clients.</p>
+          <strong>Historical intake rule only</strong>
+          <p class="muted" style="margin-top:8px">This is not a live VOB. Use the real ClientCare VOB workflow above for actual eligibility, active coverage, copay, deductible, and benefits.</p>
         </div>
       </div>
     `;
@@ -2149,7 +2149,7 @@
 
         <div class="card" style="margin-bottom:12px;background:#0f1528;">
           <strong>System-managed status</strong>
-          <div class="small muted" style="margin-top:6px;">${requiredMissing.length ? `The system still needs ${requiredMissing.join(', ')} before it can give a complete answer.` : 'ClientCare provided enough information to run the decision path.'}</div>
+          <div class="small muted" style="margin-top:6px;">${requiredMissing.length ? `The system still needs ${requiredMissing.join(', ')} before it can run the real ClientCare VOB.` : 'ClientCare provided enough information to run the real ClientCare VOB.'}</div>
           <div class="row-actions" style="margin-top:10px;">
             ${vobMode === 'existing' ? '<button id="use-selected-account-vob" class="ghost">Refresh from ClientCare</button>' : ''}
             <button id="vob-request-text" class="ghost" data-tip="Ask the system assistant to draft and queue a client text asking for the missing insurance information.">Request by text</button>
@@ -3658,32 +3658,6 @@
     }
   }
 
-  async function runInsurancePreview() {
-    try {
-      const parseBool = (value) => value === 'true' ? true : value === 'false' ? false : null;
-      const draft = syncInsuranceDraftFromDom();
-      const payload = {
-        payer_name: draft.payer_name || '',
-        member_id: draft.member_id || '',
-        billed_amount: Number(draft.billed_amount || 0) || null,
-        copay: Number(draft.copay || 0) || null,
-        deductible_remaining: Number(draft.deductible_remaining || 0) || null,
-        coinsurance_pct: Number(draft.coinsurance_pct || 0) || null,
-        coverage_active: parseBool(draft.coverage_active || ''),
-        in_network: parseBool(draft.in_network || ''),
-        auth_required: parseBool(draft.auth_required || ''),
-      };
-      const result = await api('/api/v1/clientcare-billing/insurance/verification-preview', {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
-      lastInsurancePreview = result.preview || null;
-      rerender();
-    } catch (error) {
-      toast(error.message, "error");
-    }
-  }
-
   async function saveProspectVob() {
     try {
       const draft = syncInsuranceDraftFromDom();
@@ -4528,8 +4502,6 @@
         toast(error.message, 'error');
       }
     });
-    const insurancePreviewButton = document.getElementById('insurance-preview-run');
-    if (insurancePreviewButton) insurancePreviewButton.addEventListener('click', runInsurancePreview);
     const clientcarePipelineRun = document.getElementById('clientcare-pipeline-run');
     if (clientcarePipelineRun) clientcarePipelineRun.addEventListener('click', () => runFullClientcarePipeline());
     wireInsuranceCardDropzones(root);
