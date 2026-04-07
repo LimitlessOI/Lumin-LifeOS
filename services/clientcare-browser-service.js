@@ -2044,24 +2044,24 @@ export function createClientCareBrowserService({ env = process.env, logger = con
 
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
         let patterns = primaryPatterns;
-        let phase = 'primary';
+        let attemptPhase = 'primary';
         if (attempt === 1) {
           patterns = [...VOB_CLICK_PATTERN_STRINGS_RECOVERY];
-          phase = 'recovery_broad';
+          attemptPhase = 'recovery_broad';
         } else if (attempt === 2) {
-          phase = 'scored_fallback';
+          attemptPhase = 'scored_fallback';
         }
-        currentPhase = phase;
+        currentPhase = attemptPhase;
 
         if (attempt < 2) {
-          lastClick = await clickFirstMatchingButton(session.page, patterns, { phase });
+          lastClick = await clickFirstMatchingButton(session.page, patterns, { phase: attemptPhase });
         } else {
           lastClick = await clickBestScoredFallback(session.page);
         }
 
         steps.push({
           attempt: attempt + 1,
-          phase,
+          phase: attemptPhase,
           click: lastClick,
         });
 
@@ -2100,7 +2100,7 @@ export function createClientCareBrowserService({ env = process.env, logger = con
           {
             clientHref,
             attempt: attempt + 1,
-            phase,
+            phase: attemptPhase,
             clicked: lastClick?.clicked,
             analysis,
           },
