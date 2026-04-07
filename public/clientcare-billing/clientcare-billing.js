@@ -1431,8 +1431,8 @@
     }).join('');
 
     return `
-      <div class="card">
-        <h2 data-tip="This is the operator starting point. Red means you need to act. Yellow means the system is monitoring or waiting. Green means no immediate action is needed.">Managed Work Queue</h2>
+      <details class="card" open>
+        <summary data-tip="This is the operator starting point. Red means you need to act. Yellow means the system is monitoring or waiting. Green means no immediate action is needed.">Managed Work Queue</summary>
         <p class="hint" style="margin:10px 0">Start here. The system manages the work and shows where you are needed.</p>
         <div class="grid four" style="margin-bottom:12px;">
           <div class="card stat"><span>Needs me</span><strong>${escapeHtml(counts.red || 0)}</strong></div>
@@ -1446,21 +1446,21 @@
             ${rows || '<tr><td colspan="6">No billing accounts loaded yet.</td></tr>'}
           </tbody>
         </table>
-      </div>
+      </details>
     `;
   }
 
   function renderOperatorGuide() {
     return `
-      <div class="card">
-        <h2 data-tip="This is the shortest path for a billing coordinator: start in the managed queue, open the red items first, let the system pull data from ClientCare, and only type information when it could not be found or requested automatically.">How to work this page</h2>
+      <details class="card" open>
+        <summary data-tip="This is the shortest path for a billing coordinator: start in the managed queue, open the red items first, let the system pull data from ClientCare, and only type information when it could not be found or requested automatically.">How to work this page</summary>
         <div class="grid four" style="margin-top:12px; margin-bottom:0;">
           <div class="card stat"><span>1. Start here</span><strong>Managed queue</strong><div class="small muted" style="margin-top:6px;">Red = you act. Yellow = system watches. Green = healthy.</div></div>
           <div class="card stat"><span>2. Open file</span><strong>Review next action</strong><div class="small muted" style="margin-top:6px;">Each account tells you what is wrong and what happens next.</div></div>
           <div class="card stat"><span>3. Let system pull</span><strong>ClientCare first</strong><div class="small muted" style="margin-top:6px;">Use VOB search or refresh from ClientCare before typing anything.</div></div>
           <div class="card stat"><span>4. Escalate gaps</span><strong>Request by text/email</strong><div class="small muted" style="margin-top:6px;">If data is missing, ask the system to request it from the client.</div></div>
         </div>
-      </div>
+      </details>
     `;
   }
 
@@ -1472,8 +1472,8 @@
     const setupIssues = items.filter((item) => String(item.diagnosis?.status || '') === 'insurance_setup_issue').length;
     const clientMatch = items.filter((item) => String(item.diagnosis?.status || '') === 'client_match_issue').length;
     return `
-      <div class="card">
-        <h2 data-tip="This tells Sherry how the system is doing overall without making her read the raw ledger. It separates work she owns from work the system is already tracking.">System status</h2>
+      <details class="card" open>
+        <summary data-tip="This tells Sherry how the system is doing overall without making her read the raw ledger. It separates work she owns from work the system is already tracking.">System status</summary>
         <div class="grid four" style="margin-top:12px; margin-bottom:0;">
           <div class="card stat"><span>Needs operator</span><strong>${escapeHtml(red)}</strong></div>
           <div class="card stat"><span>System monitoring</span><strong>${escapeHtml(yellow)}</strong></div>
@@ -1481,7 +1481,7 @@
           <div class="card stat"><span>Missing/setup blockers</span><strong>${escapeHtml(setupIssues + clientMatch)}</strong></div>
         </div>
         <div class="small muted" style="margin-top:12px;">Goal: keep operator-owned work low, move monitor-only work to the system, and only surface red when Sherry actually needs to act.</div>
-      </div>
+      </details>
     `;
   }
 
@@ -2100,9 +2100,9 @@
     ].filter(Boolean);
 
     return `
-      <div class="card" id="verification-of-benefits">
-        <h2 data-tip="Use VOB in two modes: existing client search for patients already in ClientCare, or prospect mode for someone asking about coverage before becoming a client.">Verification of Benefits (VOB)</h2>
-        <p class="hint" style="margin:10px 0">The system should fill from ClientCare first. Manual entry is for prospects or true exceptions.</p>
+      <details class="card" id="verification-of-benefits" open>
+        <summary data-tip="This is the real ClientCare VOB workflow. Drop the card, let the system identify the client file, then run the live ClientCare eligibility action.">Verification of Benefits (VOB)</summary>
+        <p class="hint" style="margin:10px 0">This belongs in the main workflow. The system should pull from ClientCare first, match the right file, then run the real ClientCare VOB.</p>
 
         <div class="filter-bar" style="margin-bottom:12px;">
           <button id="vob-mode-existing" class="${vobMode === 'existing' ? '' : 'ghost'}" data-tip="Search ClientCare and auto-fill everything the system already knows.">Existing client</button>
@@ -2190,7 +2190,7 @@
           ${renderClientcareReconcilePanel({ inline: true })}
         </div>
         ${renderSavedVobProspects()}
-      </div>
+      </details>
     `;
   }
 
@@ -4122,31 +4122,32 @@
           ${renderOperatorGuide()}
           ${renderSystemStatusSummary()}
           ${renderAccountSearchBar()}
+          ${renderVerificationOfBenefitsCard()}
           ${renderManagedWorkQueue()}
 
           <div class="grid two">
-            <div class="card">
-              <h2 data-tip="Your highest-priority accounts right now — ranked by dollar value and urgency. Work top to bottom.">Today's Focus</h2>
+            <details class="card" open>
+              <summary data-tip="Your highest-priority accounts right now — ranked by dollar value and urgency. Work top to bottom.">Today's Focus</summary>
               <p class="hint" style="margin:10px 0">Start here. Highest-value accounts first.</p>
               ${renderTodaysFocus()}
-            </div>
-            <div class="card">
-              <h2 data-tip="Instead of opening accounts one by one, these workflows let you fix the same type of problem across many accounts at once — much faster.">Batch Workflows</h2>
+            </details>
+            <details class="card" open>
+              <summary data-tip="Instead of opening accounts one by one, these workflows let you fix the same type of problem across many accounts at once — much faster.">Batch Workflows</summary>
               <p class="hint" style="margin:10px 0">Work the backlog by blocker instead of one account at a time.</p>
               <div id="workflow-playbooks">${renderWorkflowPlaybooks(lastAccountReport?.summary || {})}</div>
-            </div>
+            </details>
           </div>
 
           <div class="grid two">
-            <div class="card">
-              <h2 data-tip="All accounts with open billing issues pulled from ClientCare. Color ring = urgency (red = critical, yellow = needs attention, green = on track). Hover an account for a quick summary, click to open the full recovery detail.">Accounts Needing Action</h2>
+            <details class="card" open>
+              <summary data-tip="All accounts with open billing issues pulled from ClientCare. Color ring = urgency (red = critical, yellow = needs attention, green = on track). Hover an account for a quick summary, click to open the full recovery detail.">Accounts Needing Action</summary>
               <p class="hint" style="margin:10px 0">Hover for a summary. Click for full detail.</p>
               <div id="account-board" class="account-board"><p class="muted">Loading live billing accounts…</p></div>
-            </div>
-            <div class="card">
-              <h2 data-tip="Full breakdown for the account you clicked — what is blocking the claim, what the system recommends doing next, and any repair options.">Account Recovery Detail</h2>
+            </details>
+            <details class="card" open>
+              <summary data-tip="Full breakdown for the account you clicked — what is blocking the claim, what the system recommends doing next, and any repair options.">Account Recovery Detail</summary>
               <div id="account-detail"><p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p></div>
-            </div>
+            </details>
           </div>
 
           <details class="card">
@@ -4309,7 +4310,7 @@
             <div class="row-actions" style="justify-content:space-between;align-items:flex-start;">
               <div>
                 <div class="eyebrow">Utilities</div>
-                <strong>${utilitySidebarCollapsed ? 'Open utilities' : 'Working tools'}</strong>
+                <strong>${utilitySidebarCollapsed ? 'Open utilities' : 'Assistant'}</strong>
               </div>
               <div class="row-actions" style="justify-content:flex-end;">
                 <button id="utility-sidebar-dock-toggle" class="ghost">${utilitySidebarDockedBottom ? 'Dock right' : 'Dock below'}</button>
@@ -4318,7 +4319,6 @@
             </div>
           </div>
           <div class="utility-sidebar-body" style="${utilitySidebarCollapsed ? 'display:none;' : ''}">
-            ${renderVerificationOfBenefitsCard()}
             ${renderAssistantShell()}
           </div>
         </aside>

@@ -51,6 +51,11 @@
     .row-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
     .filter-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
     .tools-card summary { cursor:pointer; font-weight:600; }
+    details.card > summary { cursor:pointer; font-weight:700; list-style:none; }
+    details.card > summary::-webkit-details-marker { display:none; }
+    details.card > summary::after { content:'Collapse'; margin-left:8px; color:#98a5c3; font-size:12px; font-weight:500; }
+    details.card:not([open]) > summary::after { content:'Expand'; }
+    details.card > summary + * { margin-top:12px; }
     .kpi-grid .card { min-height:92px; }
     pre { white-space:pre-wrap; word-break:break-word; background:#0f1528; border:1px solid #27304a; border-radius:10px; padding:12px; }
     .small { font-size:12px; }
