@@ -478,6 +478,17 @@ async function extractInsuranceCardText({ fileBuffer, fileName = 'insurance-card
   }
 }
 
+/** OCR all supplied files and concatenate their text — front + back merged before parsing. */
+async function extractInsuranceCardTextMulti(files = [], logger = console) {
+  if (!files.length) return '';
+  const texts = await Promise.all(
+    files.map(({ fileBuffer, fileName }) =>
+      extractInsuranceCardText({ fileBuffer, fileName, logger }).catch(() => ''),
+    ),
+  );
+  return texts.filter(Boolean).join('\n');
+}
+
 function buildInsuranceDecision({ coverageActive, inNetwork, authRequired, memberId, payerName, billedAmount, payerStats, deductibleRemaining, copay, coinsurance }) {
   const reasons = [];
   const missing = [];
@@ -1068,9 +1079,16 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     }
   }
 
-  async function intakeInsuranceCard({ fileBuffer, fileName = 'insurance-card', prospect = {}, requestedBy = 'overlay' } = {}) {
+  async function intakeInsuranceCard({ fileBuffer, fileName = 'insurance-card', files = null, prospect = {}, requestedBy = 'overlay' } = {}) {
     try {
-      const extractedText = await extractInsuranceCardText({ fileBuffer, fileName, logger });
+      // Support multi-file (front + back): `files` is [{fileBuffer, fileName}, ...]
+      // Falls back to single fileBuffer/fileName for backward compat.
+      const fileList = Array.isArray(files) && files.length
+        ? files
+        : (fileBuffer ? [{ fileBuffer, fileName }] : []);
+      const extractedText = fileList.length
+        ? await extractInsuranceCardTextMulti(fileList, logger)
+        : '';
       const extracted = parseInsuranceCardText(extractedText);
       const fullName = String(prospect.full_name || '').trim();
       const phone = String(prospect.phone || '').trim();

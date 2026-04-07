@@ -501,12 +501,13 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
-  router.post('/insurance/card-intake', upload.single('card'), async (req, res) => {
+  router.post('/insurance/card-intake', upload.array('card', 4), async (req, res) => {
     try {
-      if (!req.file?.buffer?.length) return res.status(400).json({ ok: false, error: 'insurance card image required' });
+      const uploadedFiles = Array.isArray(req.files) ? req.files : (req.file ? [req.file] : []);
+      if (!uploadedFiles.length) return res.status(400).json({ ok: false, error: 'insurance card image required' });
+      const files = uploadedFiles.map((f) => ({ fileBuffer: f.buffer, fileName: f.originalname || 'insurance-card' }));
       const result = await opsService.intakeInsuranceCard({
-        fileBuffer: req.file.buffer,
-        fileName: req.file.originalname || 'insurance-card',
+        files,
         prospect: req.body || {},
         requestedBy: String(req.body?.requested_by || 'overlay'),
       });

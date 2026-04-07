@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-06 (responsive layout fix: utilities can dock below, VOB sidebar stacks cleanly on narrower screens, and the billing overlay no longer pushes key controls off-screen; card intake now accepts broad image formats plus PDFs; VOB card upload lives in-panel and persists across rerender/pipeline runs; ClientCare sellable service now exports operator access checks used by billing routes; ClientCare routes no longer hard-import the local-only outreach engine; auto-OCR → ClientCare field fill → VOB click → billing note auto-post; card-intake + clientcare-pipeline endpoints)
+**Last Updated:** 2026-04-06 (multi-file front+back card upload; OCR merged via extractInsuranceCardTextMulti; upload.array; lastVobCardFiles state; zone label shows front+back merged)
 
 ---
 

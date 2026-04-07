@@ -37,6 +37,7 @@
     email: '',
   };
   let lastVobCardFile = null;
+  let lastVobCardFiles = [];
   let lastVobCardState = 'idle';
   let lastVobCardSummary = null;
   let lastVobCardError = '';
@@ -184,10 +185,13 @@
   }
 
   function getVobCardZoneLabel() {
+    const count = lastVobCardFiles.length;
+    if (count >= 2 && lastVobCardState === 'ready') return `✓ ${count} files — front + back merged`;
+    if (count >= 2 && lastVobCardState === 'reading') return `Reading ${count} files…`;
     if (lastVobCardFile?.name && lastVobCardState === 'ready') return `✓ ${lastVobCardFile.name}`;
     if (lastVobCardFile?.name && lastVobCardState === 'reading') return `Reading ${lastVobCardFile.name}…`;
     if (lastVobCardFile?.name) return lastVobCardFile.name;
-    return 'Drop insurance card here — or click to browse';
+    return 'Drop front + back here — or click to browse';
   }
 
   /**
@@ -204,16 +208,20 @@
       zone.style.background = lastVobCardState === 'ready' ? '#0d2e1f22' : lastVobCardState === 'error' ? '#2a0f1522' : '#0a0f1a';
     };
 
-    async function autoOcrCard(file) {
-      if (!file) return;
-      lastVobCardFile = file;
+    async function autoOcrCard(fileOrList) {
+      const fileList = fileOrList instanceof FileList
+        ? Array.from(fileOrList)
+        : (Array.isArray(fileOrList) ? fileOrList : (fileOrList ? [fileOrList] : []));
+      if (!fileList.length) return;
+      lastVobCardFile = fileList[0];
+      lastVobCardFiles = fileList;
       lastVobCardState = 'reading';
       lastVobCardSummary = null;
       lastVobCardError = '';
       rerender();
       try {
         const form = new FormData();
-        form.append('card', file);
+        fileList.forEach((f) => form.append('card', f));
         form.append('full_name', lastProspectDraft.full_name || '');
         form.append('phone', lastProspectDraft.phone || '');
         form.append('email', lastProspectDraft.email || '');
@@ -268,12 +276,11 @@
       e.preventDefault();
       resetBorder();
       if (e.dataTransfer?.files?.length) {
-        input.files = e.dataTransfer.files;
-        autoOcrCard(e.dataTransfer.files[0]);
+        autoOcrCard(e.dataTransfer.files);
       }
     });
     input.addEventListener('change', () => {
-      if (input.files?.[0]) autoOcrCard(input.files[0]);
+      if (input.files?.length) autoOcrCard(input.files);
     });
   }
 
@@ -1798,11 +1805,11 @@
 
         <div style="background:#0a1020;border:1px solid #27304a;border-radius:12px;padding:14px;margin-bottom:12px;">
           <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Run VOB — required fields</div>
-          <div id="vob-inline-dropzone" data-tip="Drop a photo of the insurance card — payer name, member ID, and group number are read automatically and fill the fields below"
+          <div id="vob-inline-dropzone" data-tip="Drop front and back of the insurance card — all files are merged into one OCR pass. Fills payer, member ID &amp; group automatically."
             style="${getVobCardZoneStyle()}">
             <div style="font-size:13px;font-weight:600;color:#c5d4f0;margin-bottom:3px;" data-zone-label>${escapeHtml(getVobCardZoneLabel())}</div>
-            <div style="font-size:11px;color:#98a5c3;">Fills payer, member ID &amp; group automatically · photos, HEIC, TIFF, PDF, JPG, PNG, WEBP</div>
-            <input id="vob-inline-file" type="file" accept="image/*,.pdf,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tif,.tiff,.heic,.heif" style="display:none;">
+            <div style="font-size:11px;color:#98a5c3;">Front + back at the same time — photos, HEIC, TIFF, PDF, JPG, PNG, WEBP</div>
+            <input id="vob-inline-file" type="file" multiple accept="image/*,.pdf,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tif,.tiff,.heic,.heif" style="display:none;">
           </div>
           <div id="vob-inline-status" style="min-height:18px;font-size:12px;line-height:1.5;margin-bottom:10px;">${renderVobCardStatus()}</div>
           ${vobMode === 'prospect' ? `
