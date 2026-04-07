@@ -24,6 +24,20 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   const sellableService = createClientCareSellableService({ pool, logger });
   const conversationStore = createConversationStore(pool);
 
+  async function withDeadline(task, ms, label = 'request') {
+    let timer = null;
+    try {
+      return await Promise.race([
+        Promise.resolve().then(task),
+        new Promise((_, reject) => {
+          timer = setTimeout(() => reject(new Error(`${label} timed out after ${Math.round(ms / 1000)}s`)), ms);
+        }),
+      ]);
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
+  }
+
   async function createOutreachTask({
     userId,
     channel,
@@ -527,14 +541,14 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const apply = String(req.body?.apply || 'true').toLowerCase() !== 'false';
       if (apply) await enforceOperatorAccess(req, ['operator', 'manager']);
       const uploadedFiles = Array.isArray(req.files) ? req.files : (req.file ? [req.file] : []);
-      const result = await opsService.runFullClientcareCardVobPipeline({
+      const result = await withDeadline(() => opsService.runFullClientcareCardVobPipeline({
         clientHref,
         files: uploadedFiles.map((f) => ({ fileBuffer: f.buffer, fileName: f.originalname || 'insurance-card' })),
         supplementalNotes: String(req.body?.supplemental_notes || ''),
         insuranceSlot: Number(req.body?.insurance_slot || 0) || 0,
         apply,
         requestedBy: String(req.body?.requested_by || 'overlay'),
-      });
+      }), 210000, 'Real ClientCare VOB');
       if (!result.ok) {
         const status = result.step === 'inspect_clientcare' || result.step === 'reinspect_after_vob' ? 502 : 400;
         return res.status(status).json(result);
@@ -917,12 +931,12 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
 
   router.get('/browser/client-directory-search', async (req, res) => {
     try {
-      const result = await browserService.searchClientDirectory({
+      const result = await withDeadline(() => browserService.searchClientDirectory({
         query: req.query?.query,
         limit: req.query?.limit,
         pageTimeoutMs: req.query?.page_timeout_ms,
         maxDirectoryItems: req.query?.max_directory_items,
-      });
+      }), 20000, 'ClientCare directory search');
       res.json(result);
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] client directory search failed');

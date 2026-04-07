@@ -256,9 +256,10 @@
         page_timeout_ms: '12000',
         max_directory_items: '250',
       });
-      const result = await api(`/api/v1/clientcare-billing/browser/client-directory-search?${params.toString()}`);
+      const result = await api(`/api/v1/clientcare-billing/browser/client-directory-search?${params.toString()}`, { timeoutMs: 20000 });
       return Array.isArray(result?.candidates) ? result.candidates : [];
     } catch (error) {
+      toast(`ClientCare search failed: ${error.message}`, 'warn');
       console.warn('[ClientCare] client directory search failed:', error.message);
       return [];
     }
@@ -2946,16 +2947,28 @@
 
   async function api(url, options) {
     const isFormData = options?.body instanceof FormData;
-    const res = await fetch(url, {
-      ...options,
-      headers: {
-        ...(!isFormData ? { 'content-type': 'application/json' } : {}),
-        'x-api-key': getApiKey(),
-        ...(getOperatorEmail() ? { 'x-operator-email': getOperatorEmail() } : {}),
-        ...(selectedTenantId ? { 'x-clientcare-tenant-id': selectedTenantId } : {}),
-        ...(options && options.headers ? options.headers : {}),
-      },
-    });
+    const timeoutMs = Number(options?.timeoutMs || 45000);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(new Error(`Request timed out after ${Math.round(timeoutMs / 1000)}s`)), timeoutMs);
+    let res;
+    try {
+      res = await fetch(url, {
+        ...options,
+        signal: options?.signal || controller.signal,
+        headers: {
+          ...(!isFormData ? { 'content-type': 'application/json' } : {}),
+          'x-api-key': getApiKey(),
+          ...(getOperatorEmail() ? { 'x-operator-email': getOperatorEmail() } : {}),
+          ...(selectedTenantId ? { 'x-clientcare-tenant-id': selectedTenantId } : {}),
+          ...(options && options.headers ? options.headers : {}),
+        },
+      });
+    } catch (error) {
+      clearTimeout(timer);
+      if (error?.name === 'AbortError') throw new Error(`Request timed out after ${Math.round(timeoutMs / 1000)}s`);
+      throw error;
+    }
+    clearTimeout(timer);
     const data = await res.json().catch(() => ({}));
     if (!res.ok || data.ok === false) throw new Error(data.error || `Request failed (${res.status})`);
     return data;
@@ -3779,7 +3792,7 @@
       lastClientcarePipelineError = '';
       lastClientcarePipelineDryRun = dryRun;
       if (out) out.innerHTML = renderClientcarePipelineOutput();
-      const data = await api('/api/v1/clientcare-billing/insurance/clientcare-pipeline', { method: 'POST', body: form });
+      const data = await api('/api/v1/clientcare-billing/insurance/clientcare-pipeline', { method: 'POST', body: form, timeoutMs: 210000 });
       lastClientcarePipelineState = 'done';
       lastClientcarePipelineResult = data;
       lastClientcarePipelineError = '';
