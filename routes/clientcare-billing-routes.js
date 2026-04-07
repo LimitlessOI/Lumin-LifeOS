@@ -13,7 +13,6 @@ import { createClientCareOpsService } from '../services/clientcare-ops-service.j
 import { createClientCareSellableService } from '../services/clientcare-sellable-service.js';
 import { createClientCareSyncService } from '../services/clientcare-sync-service.js';
 import { createConversationStore } from '../services/conversation-store.js';
-import { createOutreachEngine } from '../services/outreach-engine.js';
 
 export function createClientCareBillingRoutes({ pool, requireKey, logger = console, callCouncilMember, callCouncilWithFailover = null, notificationService = null, sendSMS = null }) {
   const router = express.Router();
@@ -24,7 +23,90 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
   const opsService = createClientCareOpsService({ pool, billingService, browserService, syncService, callCouncilMember, callCouncilWithFailover, logger });
   const sellableService = createClientCareSellableService({ pool, logger });
   const conversationStore = createConversationStore(pool);
-  const outreach = createOutreachEngine({ pool, notificationService, sendSMS, logger });
+
+  async function createOutreachTask({
+    userId,
+    channel,
+    recipientName,
+    recipientEmail,
+    recipientPhone,
+    subject,
+    body,
+    source,
+    sourceRef,
+  }) {
+    try {
+      const { rows } = await pool.query(`
+        INSERT INTO lifeos_outreach_tasks
+          (user_id, channel, recipient_name, recipient_email, recipient_phone, subject, body, source, source_ref, approved)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,TRUE)
+        RETURNING *
+      `, [
+        userId,
+        channel,
+        recipientName || null,
+        recipientEmail || null,
+        recipientPhone || null,
+        subject || null,
+        body,
+        source || 'clientcare_billing',
+        sourceRef || null,
+      ]);
+      return rows[0] || null;
+    } catch (error) {
+      logger.warn?.({ err: error.message }, '[CLIENTCARE-BILLING] outreach task insert skipped');
+      return null;
+    }
+  }
+
+  async function executeOutreachTask(task) {
+    const delivery = {
+      ok: false,
+      channel: task.channel,
+      recipient_email: task.recipient_email || null,
+      recipient_phone: task.recipient_phone || null,
+    };
+
+    if (task.channel === 'email') {
+      if (!notificationService?.sendEmail) {
+        throw new Error('Email delivery is not configured');
+      }
+      const result = await notificationService.sendEmail({
+        to: task.recipient_email,
+        subject: task.subject || 'Following up',
+        html: task.body,
+        text: task.body,
+      });
+      delivery.ok = true;
+      delivery.provider = 'notificationService';
+      delivery.result = result || null;
+    } else if (task.channel === 'sms') {
+      if (!sendSMS) {
+        throw new Error('SMS delivery is not configured');
+      }
+      const result = await sendSMS(task.recipient_phone, task.body);
+      delivery.ok = true;
+      delivery.provider = 'sendSMS';
+      delivery.result = result || null;
+    } else {
+      throw new Error(`Unsupported outreach channel: ${task.channel}`);
+    }
+
+    if (task.id) {
+      try {
+        await pool.query(
+          `UPDATE lifeos_outreach_tasks
+           SET status = 'awaiting_response', attempts = COALESCE(attempts, 0) + 1, last_attempt_at = NOW(), updated_at = NOW()
+           WHERE id = $1`,
+          [task.id],
+        );
+      } catch (error) {
+        logger.warn?.({ err: error.message, taskId: task.id }, '[CLIENTCARE-BILLING] outreach task status update skipped');
+      }
+    }
+
+    return delivery;
+  }
 
   function getTenantId(req) {
     return req.headers['x-clientcare-tenant-id'] || req.body?.tenant_id || req.query?.tenant_id || null;
@@ -583,7 +665,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const userId = await resolveLifeOSUserId('adam');
       if (!userId) return res.status(500).json({ ok: false, error: 'Could not resolve LifeOS user for outreach logging' });
 
-      const task = await outreach.createTask({
+      const task = await createOutreachTask({
         userId,
         channel,
         recipientName,
@@ -593,9 +675,15 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         body,
         source: 'clientcare_billing',
         sourceRef,
-        approved: true,
       });
-      const execution = await outreach.executeTask(task);
+      const execution = await executeOutreachTask(task || {
+        channel,
+        recipient_name: recipientName,
+        recipient_email: recipientEmail || null,
+        recipient_phone: recipientPhone || null,
+        subject: subject || null,
+        body,
+      });
       res.status(201).json({ ok: true, task, execution });
     } catch (error) {
       logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] outreach request failed');
