@@ -179,14 +179,43 @@
         ? ` · Grp <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${escapeHtml(lastVobCardSummary.group_number)}</code>`
         : '';
 
-      // If the card matched a known client directly, show that
-      if (lastVobCardSummary.matchedClientName) {
+      // Confirmed match = member ID matched exactly — safe to show
+      if (lastVobCardSummary.matchedClientName && lastVobCardSummary.matchConfirmed) {
         return `
           <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
           &nbsp;—&nbsp;${payer}${mid}${grp}
           &nbsp;·&nbsp;matched: <strong>${escapeHtml(lastVobCardSummary.matchedClientName)}</strong>
           &nbsp;<button type="button" id="vob-inline-clear"
             style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
+        `;
+      }
+
+      // Unconfirmed name-only match — ask user to confirm before using it
+      if (lastVobCardSummary.matchedClientName && !lastVobCardSummary.matchConfirmed) {
+        return `
+          <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
+          &nbsp;—&nbsp;${payer}${mid}${grp}
+          &nbsp;<button type="button" id="vob-inline-clear"
+            style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
+          <div style="margin-top:8px;padding:10px;background:#1a2a10;border:1px solid #4a7a20;border-radius:8px;">
+            <div style="font-size:12px;color:#ffd666;font-weight:600;margin-bottom:6px;">
+              ⚠ Name-only match — is this the right client?
+            </div>
+            <div style="font-size:13px;color:#edf2f7;margin-bottom:8px;">
+              Found <strong>${escapeHtml(lastVobCardSummary.matchedClientName)}</strong> in your system —
+              but insurance is often under a spouse or parent, so verify before using.
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button type="button" id="vob-match-confirm"
+                style="background:#26c281;border:none;border-radius:6px;padding:6px 14px;color:#000;font-weight:700;cursor:pointer;font-size:12px;">
+                Yes, that's the right client
+              </button>
+              <button type="button" id="vob-match-reject"
+                style="background:#27304a;border:none;border-radius:6px;padding:6px 14px;color:#edf2f7;cursor:pointer;font-size:12px;">
+                No, different person
+              </button>
+            </div>
+          </div>
         `;
       }
 
@@ -301,9 +330,12 @@
           lastSavedVobProspects = [result.saved, ...lastSavedVobProspects.filter((e) => e.id !== result.saved.id)];
         }
         const ex = result.extracted || {};
+        const matchedClient = result.matched_client || null;
         lastVobCardSummary = {
           ...ex,
-          matchedClientName: result.matched_client?.patient_name || '',
+          matchedClientName: matchedClient?.patient_name || '',
+          // Only treat as confirmed if the server matched on member_id (not name alone)
+          matchConfirmed: matchedClient?.confirmed === true,
         };
         lastVobCardState = 'ready';
         lastVobCardError = '';
@@ -337,6 +369,27 @@
     input.addEventListener('change', () => {
       if (input.files?.length) autoOcrCard(input.files);
     });
+
+    // Confirm/reject buttons for name-only matches
+    const confirmBtn = document.getElementById('vob-match-confirm');
+    const rejectBtn = document.getElementById('vob-match-reject');
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', () => {
+        if (lastVobCardSummary) {
+          lastVobCardSummary = { ...lastVobCardSummary, matchConfirmed: true };
+          rerender();
+        }
+      });
+    }
+    if (rejectBtn) {
+      rejectBtn.addEventListener('click', () => {
+        if (lastVobCardSummary) {
+          // Clear the suggested match — user will pick manually from the board
+          lastVobCardSummary = { ...lastVobCardSummary, matchedClientName: '', matchConfirmed: false };
+          rerender();
+        }
+      });
+    }
   }
 
   // No-op kept for backward compat — wiring is now done inline inside render().

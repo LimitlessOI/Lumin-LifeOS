@@ -1101,27 +1101,34 @@ export function createClientCareOpsService({ pool, billingService, browserServic
 
   async function findExistingClientMatch({ fullName = '', memberId = '' } = {}) {
     try {
-      if (!fullName && !memberId) return null;
-      const clauses = [];
-      const values = [];
-      if (fullName) {
-        values.push(`%${fullName}%`);
-        clauses.push(`patient_name ILIKE $${values.length}`);
-      }
+      // Member ID is the only reliable link — name alone is too loose and causes false matches
+      // (insurance is often under a spouse, parent, or employer, not the patient).
+      // If we have a member ID, match on that only.
+      // Name-only matches are returned as low-confidence suggestions, never auto-confirmed.
+      if (!memberId && !fullName) return null;
+
       if (memberId) {
-        values.push(memberId);
-        clauses.push(`member_id = $${values.length}`);
+        const { rows } = await pool.query(
+          `SELECT patient_name, member_id, payer_name, 'member_id' AS match_basis
+           FROM clientcare_claims WHERE member_id = $1
+           ORDER BY updated_at DESC NULLS LAST LIMIT 1`,
+          [memberId],
+        );
+        if (rows[0]) return { ...rows[0], confirmed: true };
       }
-      if (!clauses.length) return null;
-      const { rows } = await pool.query(
-        `SELECT patient_name, member_id, payer_name
-         FROM clientcare_claims
-         WHERE ${clauses.join(' OR ')}
-         ORDER BY updated_at DESC NULLS LAST, created_at DESC NULLS LAST
-         LIMIT 1`,
-        values,
-      );
-      return rows[0] || null;
+
+      // Name-only: return as unconfirmed suggestion so UI can ask user to confirm
+      if (fullName) {
+        const { rows } = await pool.query(
+          `SELECT patient_name, member_id, payer_name, 'name' AS match_basis
+           FROM clientcare_claims WHERE patient_name ILIKE $1
+           ORDER BY updated_at DESC NULLS LAST LIMIT 1`,
+          [`%${fullName}%`],
+        );
+        if (rows[0]) return { ...rows[0], confirmed: false };
+      }
+
+      return null;
     } catch (error) {
       if (isMissingRelation(error)) return null;
       throw error;

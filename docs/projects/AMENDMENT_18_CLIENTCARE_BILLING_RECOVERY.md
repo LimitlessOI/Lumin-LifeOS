@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-06 (card subscriber-name matching; payer candidate picker from loaded backlog; lastVobClientHref feeds getSelectedClientBillingHref)
+**Last Updated:** 2026-04-06 (member-ID-only auto-match; name-only match shows confirm/reject prompt; matchConfirmed flag; no false auto-population)
 
 ---
 
