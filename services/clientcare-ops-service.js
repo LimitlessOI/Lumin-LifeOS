@@ -328,6 +328,55 @@ function buildFillOnlyUpdates({ primaryCoverage, merged, assessment, insuranceSl
   return { proposed, gaps };
 }
 
+/**
+ * Card is the source of truth — write all fields the card has regardless of what ClientCare currently shows.
+ * Used by the full pipeline where the card is authoritative (not the manual reconcile flow).
+ */
+function buildCardAuthorityUpdates({ primaryCoverage, merged, assessment, insuranceSlot, insurancePreviewLength }) {
+  const proposed = {};
+  const gaps = [];
+  const slot = Math.max(0, Number(insuranceSlot) || 0);
+
+  const addFromCard = (field, currentVal, targetVal, sourceTag) => {
+    const t = String(targetVal || '').trim();
+    if (!t) return; // nothing on the card — skip
+    const c = String(currentVal || '').trim();
+    proposed[field] = t;
+    gaps.push({ field, source: sourceTag, was: c || '(empty)', now: t });
+  };
+
+  addFromCard('insurance_name', primaryCoverage?.insuranceName, merged.payer_name, 'card');
+  addFromCard('member_id', primaryCoverage?.memberId, merged.member_id, 'card');
+  addFromCard('subscriber_name', primaryCoverage?.subscriberName, merged.subscriber_name, 'card');
+  addFromCard('group_number', primaryCoverage?.groupNumber, merged.group_number, 'card');
+
+  // Relationship: infer if card doesn't specify
+  if (assessment?.suggested_relationship) {
+    proposed.relationship_to_insured = assessment.suggested_relationship;
+    gaps.push({ field: 'relationship_to_insured', source: 'inference' });
+  }
+
+  if (!Object.keys(proposed).length) {
+    return { proposed: {}, gaps: [] };
+  }
+
+  proposed.insurance_match_hints = {
+    insurance_name: primaryCoverage?.insuranceName || '',
+    member_id: primaryCoverage?.memberId || '',
+    subscriber_name: primaryCoverage?.subscriberName || '',
+    payor_id: primaryCoverage?.payorId || '',
+    insurance_priority: primaryCoverage?.priority || '',
+    group_number: primaryCoverage?.groupNumber || '',
+    relationship: primaryCoverage?.relationship || '',
+  };
+
+  if (insurancePreviewLength > 1) {
+    proposed.insurance_slot = slot;
+  }
+
+  return { proposed, gaps };
+}
+
 function billingFieldHasValue(billingFields, pattern) {
   const f = (billingFields || []).find((row) => pattern.test(String(row.label || '')));
   return Boolean(String(f?.value || '').trim());
@@ -1093,7 +1142,11 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       const fullName = String(prospect.full_name || '').trim();
       const phone = String(prospect.phone || '').trim();
       const email = String(prospect.email || '').trim();
-      const matchedClient = await findExistingClientMatch({ fullName, memberId: extracted.member_id });
+      // Match on prospect name, OR subscriber name from card, OR member ID — whichever we have
+      const matchedClient = await findExistingClientMatch({
+        fullName: fullName || extracted.subscriber_name || '',
+        memberId: extracted.member_id,
+      });
       const billedAmount = Number(prospect.billed_amount || 0) || null;
       const previewBase = await getInsuranceVerificationPreview({
         payer_name: extracted.payer_name,
@@ -1372,7 +1425,8 @@ export function createClientCareOpsService({ pool, billingService, browserServic
       merged,
     });
 
-    const { proposed: proposedCard } = buildFillOnlyUpdates({
+    // Card is the source of truth in the full pipeline — write all card fields, not just empty ones.
+    const { proposed: proposedCard, gaps: cardGaps } = buildCardAuthorityUpdates({
       primaryCoverage: primary,
       merged,
       assessment: dependentAssessment,
