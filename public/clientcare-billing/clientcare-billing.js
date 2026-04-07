@@ -150,17 +150,48 @@
     );
   }
 
+  /** Normalize a name for fuzzy comparison — lowercase, letters/numbers only. */
+  function normalizeName(s = '') {
+    return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  }
+
+  /**
+   * Match subscriber name from card against loaded backlog clients.
+   * Returns {item, score} sorted best-first. Score 2 = strong, 1 = partial.
+   */
+  function findSubscriberCandidates(subscriberName = '') {
+    if (!subscriberName || !lastAccountReport?.items?.length) return [];
+    const needle = normalizeName(subscriberName);
+    if (needle.length < 3) return [];
+    const needleParts = subscriberName.trim().toLowerCase().split(/\s+/).filter((p) => p.length > 1);
+    const results = [];
+    for (const item of lastAccountReport.items) {
+      const hay = normalizeName(item.client || item.name || '');
+      if (!hay) continue;
+      // Exact normalized match
+      if (hay === needle) { results.push({ item, score: 3 }); continue; }
+      // Needle contained in hay or hay contained in needle
+      if (hay.includes(needle) || needle.includes(hay)) { results.push({ item, score: 2 }); continue; }
+      // Count how many name parts match
+      const hayRaw = String(item.client || '').toLowerCase();
+      const matched = needleParts.filter((p) => hayRaw.includes(p)).length;
+      if (matched >= 2 || (matched === 1 && needleParts.length === 1)) {
+        results.push({ item, score: matched });
+      }
+    }
+    return results.sort((a, b) => b.score - a.score).slice(0, 5);
+  }
+
   /**
    * Find accounts in the loaded backlog that share the same payer as the card.
-   * Used when member ID doesn't directly match a known client — insurance can be under
-   * a subscriber with a different name (spouse, parent, employer plan).
+   * Used as fallback when no subscriber name match found.
    */
   function findPayerCandidates(payerName = '') {
     if (!payerName || !lastAccountReport?.items?.length) return [];
-    const needle = payerName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const needle = normalizeName(payerName);
     return lastAccountReport.items
       .filter((item) => {
-        const hay = String(item.payer_name || item.payer || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const hay = normalizeName(item.payer_name || item.payer || '');
         return hay && (hay.includes(needle) || needle.includes(hay));
       })
       .slice(0, 5);
@@ -224,32 +255,37 @@
         `;
       }
 
-      // No direct match — insurance may be under a different name.
-      // Show accounts from the loaded backlog that share this payer so the user can pick.
-      const candidates = findPayerCandidates(lastVobCardSummary.payer_name);
-      const candidateHtml = candidates.length
+      // Use subscriber-name candidates first, fall back to payer candidates
+      const rawCandidates = (lastVobCardSummary.boardCandidates || []).length
+        ? lastVobCardSummary.boardCandidates.map((c) => c.item)
+        : findPayerCandidates(lastVobCardSummary.payer_name);
+
+      const subscriberLabel = lastVobCardSummary.subscriber_name
+        ? ` for subscriber <strong>${escapeHtml(lastVobCardSummary.subscriber_name)}</strong>` : '';
+
+      const candidateHtml = rawCandidates.length
         ? `
           <div style="margin-top:8px;padding:10px;background:#0f1a30;border:1px solid #2d3b5f;border-radius:8px;">
             <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">
-              Insurance may be under a different name — pick the right client:
+              Who does this card belong to?${subscriberLabel}
             </div>
             <div style="display:grid;gap:6px;">
-              ${candidates.map((item) => `
+              ${rawCandidates.map((item) => `
                 <button type="button" data-card-candidate-href="${escapeHtml(item.billingHref || item.href || '')}"
                   style="text-align:left;background:#131a2e;border:1px solid #27304a;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px;">
-                  <span style="color:#edf2f7;font-weight:600;">${escapeHtml(item.client || item.name || 'Unknown')}</span>
+                  <strong style="color:#edf2f7;">${escapeHtml(item.client || item.name || 'Unknown')}</strong>
                   <span style="color:#98a5c3;font-size:11px;margin-left:8px;">${escapeHtml(item.payer_name || item.payer || '')}</span>
                 </button>
               `).join('')}
             </div>
             <div style="font-size:11px;color:#98a5c3;margin-top:8px;">
-              Not in this list? Select the account from the billing board and use "Use this account in VOB".
+              Not listed? Pick from the billing board on the left.
             </div>
           </div>
         `
-        : `<div style="margin-top:6px;font-size:12px;color:#98a5c3;">
-            No ${escapeHtml(lastVobCardSummary.payer_name || 'matching')} accounts in the loaded backlog.
-            Select the client from the billing board and use "Use this account in VOB".
+        : `<div style="margin-top:6px;padding:8px;background:#0f1a30;border:1px solid #2d3b5f;border-radius:8px;font-size:12px;color:#98a5c3;">
+            ${subscriberLabel ? `Subscriber name on card: <strong style="color:#edf2f7;">${escapeHtml(lastVobCardSummary.subscriber_name)}</strong><br>` : ''}
+            No match found in loaded backlog. Pick the client from the billing board on the left.
            </div>`;
 
       return `
@@ -340,11 +376,23 @@
         }
         const ex = result.extracted || {};
         const matchedClient = result.matched_client || null;
+
+        // Try to auto-match subscriber name from card against loaded billing board
+        const subscriberName = ex.subscriber_name || '';
+        let boardCandidates = findSubscriberCandidates(subscriberName);
+
+        // Strong match (score 3 = exact) → auto-select, no prompt needed
+        if (boardCandidates.length && boardCandidates[0].score >= 3) {
+          selectAccountForVob(boardCandidates[0].item);
+          toast(`Auto-matched ${escapeHtml(boardCandidates[0].item.client)} from card subscriber name.`, 'success');
+          boardCandidates = []; // already selected, don't show picker
+        }
+
         lastVobCardSummary = {
           ...ex,
           matchedClientName: matchedClient?.patient_name || '',
-          // Only treat as confirmed if the server matched on member_id (not name alone)
           matchConfirmed: matchedClient?.confirmed === true,
+          boardCandidates, // partial matches shown as picker
         };
         lastVobCardState = 'ready';
         lastVobCardError = '';
