@@ -50,6 +50,8 @@
   let lastInsuranceDraft = {
     payer_name: '',
     member_id: '',
+    group_number: '',
+    subscriber_name: '',
     billed_amount: '',
     copay: '',
     deductible_remaining: '',
@@ -150,6 +152,22 @@
     );
   }
 
+  /** All card files for uploads — keeps working after OCR (in-memory) when the hidden file input is empty. */
+  function getVobCardFilesForUpload() {
+    if (lastVobCardFiles?.length) return [...lastVobCardFiles];
+    if (lastVobCardFile) return [lastVobCardFile];
+    const inline = document.getElementById('vob-inline-file')?.files;
+    if (inline?.length) return Array.from(inline);
+    const rec = document.getElementById('reconcile-card-file')?.files?.[0];
+    return rec ? [rec] : [];
+  }
+
+  function hasReadableCardDraft() {
+    return lastVobCardState === 'ready'
+      && Boolean(String(lastInsuranceDraft.payer_name || '').trim())
+      && Boolean(String(lastInsuranceDraft.member_id || '').trim());
+  }
+
   /** Normalize a name for fuzzy comparison — lowercase, letters/numbers only. */
   function normalizeName(s = '') {
     return String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -164,6 +182,7 @@
     const needle = normalizeName(subscriberName);
     if (needle.length < 3) return [];
     const needleParts = subscriberName.trim().toLowerCase().split(/\s+/).filter((p) => p.length > 1);
+    const significantParts = needleParts.filter((p) => p.length >= 3);
     const results = [];
     for (const item of lastAccountReport.items) {
       const hay = normalizeName(item.client || item.name || '');
@@ -177,6 +196,11 @@
       const matched = needleParts.filter((p) => hayRaw.includes(p)).length;
       if (matched >= 2 || (matched === 1 && needleParts.length === 1)) {
         results.push({ item, score: matched });
+        continue;
+      }
+      // Last, first ordering: e.g. "Leyva, Yanhari" vs "Yanhari Leyva Pedraza"
+      if (significantParts.length >= 2 && significantParts.every((p) => hayRaw.includes(p))) {
+        results.push({ item, score: 2 });
       }
     }
     return results.sort((a, b) => b.score - a.score).slice(0, 5);
@@ -197,6 +221,33 @@
       .slice(0, 5);
   }
 
+  function buildVobCandidatePickerHtml(rawCandidates, subscriberLabelHtml, subscriberPlain = '') {
+    return rawCandidates.length
+      ? `
+          <div style="margin-top:8px;padding:10px;background:#0f1a30;border:1px solid #2d3b5f;border-radius:8px;">
+            <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">
+              Who does this card belong to?${subscriberLabelHtml}
+            </div>
+            <div style="display:grid;gap:6px;">
+              ${rawCandidates.map((item) => `
+                <button type="button" data-card-candidate-href="${escapeHtml(item.billingHref || item.href || '')}"
+                  style="text-align:left;background:#131a2e;border:1px solid #27304a;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px;">
+                  <strong style="color:#edf2f7;">${escapeHtml(item.client || item.name || 'Unknown')}</strong>
+                  <span style="color:#98a5c3;font-size:11px;margin-left:8px;">${escapeHtml(item.payer_name || item.payer || '')}</span>
+                </button>
+              `).join('')}
+            </div>
+            <div style="font-size:11px;color:#98a5c3;margin-top:8px;">
+              Not listed? Clear the account search box on the left if someone is hidden by a text filter.
+            </div>
+          </div>
+        `
+      : `<div style="margin-top:6px;padding:8px;background:#0f1a30;border:1px solid #2d3b5f;border-radius:8px;font-size:12px;color:#98a5c3;">
+            ${subscriberPlain ? `Subscriber on card: <strong style="color:#edf2f7;">${escapeHtml(subscriberPlain)}</strong><br>` : ''}
+            No match found in loaded backlog. Pick the client from the billing board or run Full Queue Report.
+           </div>`;
+  }
+
   function renderVobCardStatus() {
     if (lastVobCardState === 'reading' && lastVobCardFile?.name) {
       return `<span style="color:#8aa4ff;">Reading card… <em>${escapeHtml(lastVobCardFile.name)}</em></span>`;
@@ -215,31 +266,42 @@
         ? ` · Grp <code style="background:#1a2540;padding:1px 5px;border-radius:4px;">${escapeHtml(lastVobCardSummary.group_number)}</code>`
         : '';
 
-      // Confirmed match = member ID matched exactly — safe to show
-      if (lastVobCardSummary.matchedClientName && lastVobCardSummary.matchConfirmed) {
-        return `
-          <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
-          &nbsp;—&nbsp;${payer}${mid}${grp}
-          &nbsp;·&nbsp;matched: <strong>${escapeHtml(lastVobCardSummary.matchedClientName)}</strong>
-          &nbsp;<button type="button" id="vob-inline-clear"
-            style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
-        `;
+      const clearBtn = `&nbsp;<button type="button" id="vob-inline-clear"
+            style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>`;
+
+      const headLine = `
+        <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
+        &nbsp;—&nbsp;${payer}${mid}${grp}
+        ${clearBtn}`;
+
+      const subscriberLabel = lastVobCardSummary.subscriber_name
+        ? ` for subscriber <strong>${escapeHtml(lastVobCardSummary.subscriber_name)}</strong>` : '';
+
+      // Billing-board matches from OCR subscriber name beat portal API "matched_client" (often wrong patient).
+      const subBoard = lastVobCardSummary.boardCandidates || [];
+      if (subBoard.length > 0) {
+        const rawCandidates = subBoard.map((c) => c.item);
+        const plainSub = String(lastVobCardSummary.subscriber_name || '').trim();
+        return headLine + buildVobCandidatePickerHtml(rawCandidates, subscriberLabel, plainSub);
       }
 
-      // Unconfirmed name-only match — ask user to confirm before using it
+      if (lastVobCardSummary.matchedClientName && lastVobCardSummary.matchConfirmed) {
+        return `
+        <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
+        &nbsp;—&nbsp;${payer}${mid}${grp}
+        &nbsp;·&nbsp;matched: <strong>${escapeHtml(lastVobCardSummary.matchedClientName)}</strong>
+        ${clearBtn}`;
+      }
+
       if (lastVobCardSummary.matchedClientName && !lastVobCardSummary.matchConfirmed) {
         return `
-          <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
-          &nbsp;—&nbsp;${payer}${mid}${grp}
-          &nbsp;<button type="button" id="vob-inline-clear"
-            style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
+          ${headLine}
           <div style="margin-top:8px;padding:10px;background:#1a2a10;border:1px solid #4a7a20;border-radius:8px;">
             <div style="font-size:12px;color:#ffd666;font-weight:600;margin-bottom:6px;">
-              ⚠ Name-only match — is this the right client?
+              ⚠ Portal suggested a client — confirm before trusting
             </div>
             <div style="font-size:13px;color:#edf2f7;margin-bottom:8px;">
-              Found <strong>${escapeHtml(lastVobCardSummary.matchedClientName)}</strong> in your system —
-              but insurance is often under a spouse or parent, so verify before using.
+              Found <strong>${escapeHtml(lastVobCardSummary.matchedClientName)}</strong> — insurance is often under a different household member.
             </div>
             <div style="display:flex;gap:8px;">
               <button type="button" id="vob-match-confirm"
@@ -255,48 +317,38 @@
         `;
       }
 
-      // Use subscriber-name candidates first, fall back to payer candidates
-      const rawCandidates = (lastVobCardSummary.boardCandidates || []).length
-        ? lastVobCardSummary.boardCandidates.map((c) => c.item)
-        : findPayerCandidates(lastVobCardSummary.payer_name);
-
-      const subscriberLabel = lastVobCardSummary.subscriber_name
-        ? ` for subscriber <strong>${escapeHtml(lastVobCardSummary.subscriber_name)}</strong>` : '';
-
-      const candidateHtml = rawCandidates.length
-        ? `
-          <div style="margin-top:8px;padding:10px;background:#0f1a30;border:1px solid #2d3b5f;border-radius:8px;">
-            <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">
-              Who does this card belong to?${subscriberLabel}
-            </div>
-            <div style="display:grid;gap:6px;">
-              ${rawCandidates.map((item) => `
-                <button type="button" data-card-candidate-href="${escapeHtml(item.billingHref || item.href || '')}"
-                  style="text-align:left;background:#131a2e;border:1px solid #27304a;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:13px;">
-                  <strong style="color:#edf2f7;">${escapeHtml(item.client || item.name || 'Unknown')}</strong>
-                  <span style="color:#98a5c3;font-size:11px;margin-left:8px;">${escapeHtml(item.payer_name || item.payer || '')}</span>
-                </button>
-              `).join('')}
-            </div>
-            <div style="font-size:11px;color:#98a5c3;margin-top:8px;">
-              Not listed? Pick from the billing board on the left.
-            </div>
-          </div>
-        `
-        : `<div style="margin-top:6px;padding:8px;background:#0f1a30;border:1px solid #2d3b5f;border-radius:8px;font-size:12px;color:#98a5c3;">
-            ${subscriberLabel ? `Subscriber name on card: <strong style="color:#edf2f7;">${escapeHtml(lastVobCardSummary.subscriber_name)}</strong><br>` : ''}
-            No match found in loaded backlog. Pick the client from the billing board on the left.
-           </div>`;
-
-      return `
-        <span style="color:#7ef0b8;font-weight:700;">✓ Card read</span>
-        &nbsp;—&nbsp;${payer}${mid}${grp}
-        &nbsp;<button type="button" id="vob-inline-clear"
-          style="background:none;border:none;color:#98a5c3;cursor:pointer;font-size:12px;padding:0 0 0 6px;text-decoration:underline;">clear</button>
-        ${candidateHtml}
-      `;
+      const rawCandidates = findPayerCandidates(lastVobCardSummary.payer_name);
+      const plainSub = String(lastVobCardSummary.subscriber_name || '').trim();
+      return headLine + buildVobCandidatePickerHtml(rawCandidates, subscriberLabel, plainSub);
     }
     return '';
+  }
+
+  /** When card OCR subscriber does not match the account row selected on the board, prompt one-click switch. */
+  function renderVobCardAccountMismatchBanner() {
+    if (vobMode !== 'existing' || !lastVobCardSummary?.subscriber_name) return '';
+    const sub = String(lastVobCardSummary.subscriber_name || '').trim();
+    if (!sub) return '';
+    const sel = getSelectedAccountItem();
+    if (!sel) return '';
+    const cands = findSubscriberCandidates(sub);
+    if (!cands.length) return '';
+    const best = cands[0].item;
+    if (getRepairKey(best) === getRepairKey(sel)) return '';
+    return `
+        <div class="card" style="margin-bottom:12px;background:#3b1520;border:1px solid #ef476f;">
+          <strong style="color:#ffb4c1">Account mismatch</strong>
+          <p class="small" style="margin:8px 0 10px;color:#ffd5dd;line-height:1.45;">
+            Selected: <strong>${escapeHtml(sel.client || '')}</strong>.
+            Card subscriber: <strong>${escapeHtml(sub)}</strong>.
+            Best match in your queue: <strong>${escapeHtml(best.client || '')}</strong>.
+            Data completeness on the left is for the <em>selected</em> account — switch below so the card lines up with the file you are working.
+          </p>
+          <button type="button" data-card-candidate-href="${escapeHtml(best.billingHref || best.href || '')}"
+            style="background:#26c281;border:none;border-radius:8px;padding:8px 14px;color:#000;font-weight:700;cursor:pointer;font-size:13px;">
+            Switch to ${escapeHtml(best.client || 'matched client')}
+          </button>
+        </div>`;
   }
 
   function getVobCardZoneStyle() {
@@ -334,10 +386,21 @@
     };
 
     async function autoOcrCard(fileOrList) {
-      const fileList = fileOrList instanceof FileList
+      const raw = fileOrList instanceof FileList
         ? Array.from(fileOrList)
         : (Array.isArray(fileOrList) ? fileOrList : (fileOrList ? [fileOrList] : []));
-      if (!fileList.length) return;
+      if (!raw.length) return;
+      // Clone into fresh File objects — live FileList / input.files can be cleared when we rerender()
+      // and replace the whole #app DOM (browser-dependent). Keeps "Read card + save" working.
+      let fileList = raw;
+      try {
+        fileList = await Promise.all(raw.map(async (f) => {
+          const buf = await f.arrayBuffer();
+          return new File([buf], f.name || 'insurance-card', { type: f.type || 'application/octet-stream' });
+        }));
+      } catch {
+        fileList = raw;
+      }
       lastVobCardFile = fileList[0];
       lastVobCardFiles = fileList;
       lastVobCardState = 'reading';
@@ -376,27 +439,33 @@
         }
         const ex = result.extracted || {};
         const matchedClient = result.matched_client || null;
-
-        // Try to auto-match subscriber name from card against loaded billing board
         const subscriberName = ex.subscriber_name || '';
         let boardCandidates = findSubscriberCandidates(subscriberName);
 
-        // Strong match (score 3 = exact) → auto-select, no prompt needed
-        if (boardCandidates.length && boardCandidates[0].score >= 3) {
-          selectAccountForVob(boardCandidates[0].item);
-          toast(`Auto-matched ${escapeHtml(boardCandidates[0].item.client)} from card subscriber name.`, 'success');
-          boardCandidates = []; // already selected, don't show picker
+        let pickedItem = null;
+        if (boardCandidates.length === 1 && boardCandidates[0].score >= 2) {
+          pickedItem = boardCandidates[0].item;
+          boardCandidates = [];
+        } else if (boardCandidates.length && boardCandidates[0].score >= 3) {
+          pickedItem = boardCandidates[0].item;
+          boardCandidates = [];
         }
 
         lastVobCardSummary = {
           ...ex,
           matchedClientName: matchedClient?.patient_name || '',
           matchConfirmed: matchedClient?.confirmed === true,
-          boardCandidates, // partial matches shown as picker
+          boardCandidates,
         };
         lastVobCardState = 'ready';
         lastVobCardError = '';
-        rerender();
+
+        if (pickedItem) {
+          selectAccountForVob(pickedItem);
+          toast(`Selected ${escapeHtml(pickedItem.client)} — name on card matched this account (clearing board search if it was hiding them).`, 'success');
+        } else {
+          rerender();
+        }
       } catch (err) {
         lastVobCardState = 'error';
         lastVobCardError = err.message || 'Unknown OCR error';
@@ -817,11 +886,29 @@
 
   function renderDataCompletenessCard(item) {
     const selectedInsurance = (item.insurancePreview || [])[0] || {};
+    const boardSel = getSelectedAccountItem();
+    const sameAccount = boardSel && item && getRepairKey(boardSel) === getRepairKey(item);
+    const subOnCard = String(lastVobCardSummary?.subscriber_name || lastInsuranceDraft.subscriber_name || '').trim();
+    let ocrMerge = false;
+    if (sameAccount && lastVobCardState === 'ready' && String(lastInsuranceDraft.payer_name || '').trim()) {
+      if (!subOnCard) ocrMerge = true;
+      else {
+        const cands = findSubscriberCandidates(subOnCard);
+        const best = cands[0]?.item;
+        ocrMerge = !best || getRepairKey(best) === getRepairKey(item);
+      }
+    }
+    const ccPayer = (item.accountSummary?.insurers || [])[0] || selectedInsurance.insuranceName || '';
+    const ccMember = selectedInsurance.memberId || '';
+    const ccSub = selectedInsurance.subscriberName || '';
+    const payerVal = ccPayer || (ocrMerge ? String(lastInsuranceDraft.payer_name || '').trim() : '');
+    const memberVal = ccMember || (ocrMerge ? String(lastInsuranceDraft.member_id || '').trim() : '');
+    const subVal = ccSub || (ocrMerge ? subOnCard : '');
     const rows = [
       { label: 'Client name', value: item.client || '', state: item.client ? 'ok' : 'bad' },
-      { label: 'Payer', value: (item.accountSummary?.insurers || [])[0] || selectedInsurance.insuranceName || '', state: ((item.accountSummary?.insurers || [])[0] || selectedInsurance.insuranceName) ? 'ok' : 'bad' },
-      { label: 'Member ID', value: selectedInsurance.memberId || '', state: selectedInsurance.memberId ? 'ok' : 'bad' },
-      { label: 'Subscriber', value: selectedInsurance.subscriberName || '', state: selectedInsurance.subscriberName ? 'ok' : 'warn' },
+      { label: 'Payer', value: payerVal + (!ccPayer && payerVal && ocrMerge ? ' (card OCR)' : ''), state: payerVal ? 'ok' : 'bad' },
+      { label: 'Member ID', value: memberVal + (!ccMember && memberVal && ocrMerge ? ' (card OCR)' : ''), state: memberVal ? 'ok' : 'bad' },
+      { label: 'Subscriber', value: subVal, state: subVal ? 'ok' : 'warn' },
       { label: 'Billing status', value: item.accountSummary?.clientBillingStatus || '', state: item.accountSummary?.clientBillingStatus ? 'ok' : 'bad' },
       { label: 'Provider type', value: item.accountSummary?.billProviderType || '', state: item.accountSummary?.billProviderType ? 'ok' : 'bad' },
       { label: 'Payment status', value: item.accountSummary?.paymentStatus || '', state: item.accountSummary?.paymentStatus ? 'ok' : 'warn' },
@@ -829,7 +916,7 @@
     return `
       <div class="card">
         <strong>Data completeness</strong>
-        <div class="small muted" style="margin:8px 0 12px;">System pull first. Only request or type what could not be found in ClientCare.</div>
+        <div class="small muted" style="margin:8px 0 12px;">System pull first. Only request or type what could not be found in ClientCare.${ocrMerge ? ' Card OCR is merged here when it matches this client.' : ''}</div>
         <table>
           <thead><tr><th>Field</th><th>Current value</th><th>Status</th></tr></thead>
           <tbody>
@@ -851,6 +938,8 @@
     return {
       payer_name: selectedInsurance.insuranceName || '',
       member_id: selectedInsurance.memberId || '',
+      group_number: selectedInsurance.groupNumber || selectedInsurance.group_number || '',
+      subscriber_name: selectedInsurance.subscriberName || selectedInsurance.subscriber_name || '',
       billed_amount: item.accountSummary?.balance || '',
       copay: '',
       deductible_remaining: '',
@@ -865,15 +954,32 @@
   function selectAccountForVob(item) {
     if (!item) return;
     setAccountFilter('all');
+    setAccountSearch('');
+    const prev = { ...lastInsuranceDraft };
+    const acct = buildInsuranceDraftFromAccount(item);
     const allItems = getFilteredItems();
     const nextIndex = allItems.findIndex((entry) => entry === item || getRepairKey(entry) === getRepairKey(item));
     if (nextIndex >= 0) selectedAccountIndex = nextIndex;
+    else toast('Could not focus that account in the current board — try clearing filters or account search.', 'warn');
     setVobMode('existing');
     setVobSearch(item.client || '');
     lastInsuranceDraft = {
-      ...lastInsuranceDraft,
-      ...buildInsuranceDraftFromAccount(item),
-      source_label: item.client || '',
+      ...prev,
+      ...acct,
+      payer_name: String(acct.payer_name || '').trim() || prev.payer_name,
+      member_id: String(acct.member_id || '').trim() || prev.member_id,
+      group_number: String(acct.group_number || '').trim() || prev.group_number,
+      subscriber_name: String(acct.subscriber_name || '').trim() || prev.subscriber_name,
+      billed_amount: String(acct.billed_amount || '').trim() || prev.billed_amount,
+      copay: String(acct.copay || '').trim() || prev.copay,
+      deductible_remaining: String(acct.deductible_remaining || '').trim() || prev.deductible_remaining,
+      coinsurance_pct: String(acct.coinsurance_pct || '').trim() || prev.coinsurance_pct,
+      coverage_active: String(acct.coverage_active || '').trim() || prev.coverage_active,
+      in_network: String(acct.in_network || '').trim() !== ''
+        ? acct.in_network
+        : prev.in_network,
+      auth_required: String(acct.auth_required || '').trim() || prev.auth_required,
+      source_label: item.client || prev.source_label,
     };
     rerender();
   }
@@ -890,6 +996,7 @@
     const read = (id) => document.getElementById(id)?.value || '';
     if (!document.getElementById('insurance-payer-name')) return lastInsuranceDraft;
     lastInsuranceDraft = {
+      ...lastInsuranceDraft,
       payer_name: read('insurance-payer-name').trim(),
       member_id: read('insurance-member-id').trim(),
       billed_amount: read('insurance-billed-amount').trim(),
@@ -1946,6 +2053,8 @@
           <div class="card stat" data-tip="The last decision from running VOB — green = safe to schedule, yellow = verify first, red = do not take"><span>Last decision</span><strong style="color:${lastInsurancePreview ? (lastInsurancePreview.decision?.includes('take') ? '#7ef0b8' : lastInsurancePreview.decision?.includes('not') ? '#ff9db0' : '#ffd666') : '#98a5c3'}">${escapeHtml(lastInsurancePreview?.decision || 'Not run yet')}</strong></div>
         </div>
 
+        ${renderVobCardAccountMismatchBanner()}
+
         <div class="card" style="margin-bottom:12px;background:#0f1528;">
           <strong>System-managed status</strong>
           <div class="small muted" style="margin-top:6px;">${requiredMissing.length ? `The system still needs ${requiredMissing.join(', ')} before it can give a complete answer.` : 'ClientCare provided enough information to run the decision path.'}</div>
@@ -1968,7 +2077,7 @@
           ${vobMode === 'prospect' ? `
           <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #27304a;">
             <div class="row-actions" style="flex-wrap:wrap;gap:8px;">
-              <button type="button" id="vob-card-upload">Read card + save prospect</button>
+              <button type="button" id="vob-card-upload">${hasReadableCardDraft() ? 'Save card to history' : 'Read card + save prospect'}</button>
               <button type="button" id="vob-save-prospect" class="ghost">Save prospect VOB</button>
             </div>
           </div>
@@ -1991,8 +2100,13 @@
             </div>
           </div>
           <div class="row-actions" style="margin-top:14px;margin-bottom:0;">
-            <button id="insurance-preview-run" data-tip="Run the VOB check using the fields above. Drop the insurance card in this VOB panel to OCR payer, member ID, and group before running.">Run VOB ↗</button>
+            <button id="insurance-preview-run" data-tip="Fast AI estimate from payer history — not live eligibility. For active coverage and real copay, use Run full ClientCare flow below.">Run VOB ↗</button>
           </div>
+          <p class="small muted" style="margin:12px 0 0;line-height:1.55;border-top:1px solid #27304a;padding-top:10px;">
+            <strong style="color:#8aa4ff">Need real eligibility?</strong>
+            After the correct client is selected, use <strong style="color:#7ef0b8">Run full ClientCare flow</strong> in the green panel below — it logs into ClientCare and runs their VOB/eligibility so you get active/inactive, copay, and covered benefits.
+            The <strong>Run VOB ↗</strong> button is only a quick screening estimate.
+          </p>
         </div>
 
         <details style="margin-bottom:12px;">
@@ -3495,8 +3609,8 @@
           email: lastProspectDraft.email || '',
           payer_name: draft.payer_name || '',
           member_id: draft.member_id || '',
-          group_number: '',
-          subscriber_name: '',
+          group_number: draft.group_number || '',
+          subscriber_name: draft.subscriber_name || '',
           support_phone: '',
           billed_amount: Number(draft.billed_amount || 0) || null,
           coverage_active: draft.coverage_active === 'true' ? true : draft.coverage_active === 'false' ? false : null,
@@ -3520,14 +3634,16 @@
 
   async function uploadInsuranceCard() {
     try {
-      const file =
-        document.getElementById('vob-inline-file')?.files?.[0]
-        || document.getElementById('reconcile-card-file')?.files?.[0];
-      if (!file) {
+      const files = getVobCardFilesForUpload();
+      if (!files.length) {
+        if (hasReadableCardDraft()) {
+          await saveProspectVob();
+          return;
+        }
         throw new Error('Attach an insurance card image in the VOB panel first.');
       }
       const form = new FormData();
-      form.append('card', file);
+      files.forEach((f) => form.append('card', f));
       form.append('full_name', lastProspectDraft.full_name || '');
       form.append('phone', lastProspectDraft.phone || '');
       form.append('email', lastProspectDraft.email || '');
@@ -4313,6 +4429,9 @@
     const vobInlineClear = document.getElementById('vob-inline-clear');
     if (vobInlineClear) vobInlineClear.addEventListener('click', () => {
       lastVobCardFile = null;
+      lastVobCardFiles = [];
+      const fin = document.getElementById('vob-inline-file');
+      if (fin) fin.value = '';
       lastVobCardState = 'idle';
       lastVobCardSummary = null;
       lastVobCardError = '';

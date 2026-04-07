@@ -13,7 +13,7 @@
     .grid { display:grid; gap:16px; margin-bottom:16px; }
     .grid.four { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
     .grid.two { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-    .card { background:#131a2e; border:1px solid #27304a; border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.18); }
+    .card { background:#131a2e; border:1px solid #27304a; border-radius:14px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.18); overflow-wrap: anywhere; word-break: break-word; }
     .stat span, label, .hint { color:#98a5c3; font-size:12px; }
     .stat strong { display:block; margin-top:8px; font-size:20px; }
     .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
@@ -127,6 +127,18 @@
     /* keep tooltips on-screen at edges */
     [data-tip-left]:hover::after { left: 0; transform: none; }
     [data-tip-right]:hover::after { left: auto; right: 0; transform: none; }
+    /* Working tools rail is narrow; centered ::after tooltips clip on the left — align to the right inside the sidebar */
+    .utility-sidebar [data-tip]:not([data-tip-left]):hover::after {
+      left: auto;
+      right: 0;
+      transform: none;
+      max-width: min(300px, calc(100vw - 24px));
+    }
+    .utility-sidebar [data-tip]:not([data-tip-left]):hover::before {
+      left: auto;
+      right: 14px;
+      transform: none;
+    }
     h2[data-tip], h3[data-tip] { cursor: help; display: inline-flex; align-items: center; gap: 6px; }
     h2[data-tip]::before, h3[data-tip]::before { content: none; }
     h2[data-tip]:hover::before, h3[data-tip]:hover::before { content: ''; }
@@ -135,6 +147,6 @@
 <body>
   <div class="wrap" id="app"><div class="card"><p>Loading billing overlay…</p></div></div>
   <script src="/shared/lifeos-voice-chat.js?v=20260330"></script>
-  <script src="/clientcare-billing/clientcare-billing.js?v=20260406j"></script>
+  <script src="/clientcare-billing/clientcare-billing.js?v=20260407b"></script>
 </body>
 </html>
