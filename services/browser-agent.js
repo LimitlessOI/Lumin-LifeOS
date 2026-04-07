@@ -19,24 +19,45 @@ const DEFAULT_NAV_TIMEOUT = 60_000;
 
 try { fs.mkdirSync(SCREENSHOT_DIR, { recursive: true }); } catch (_) {}
 
-/**
- * Create a browser session. Returns a context with helper methods.
- * Always call session.close() when done.
- */
-export async function createSession({ headless = true, logger = console } = {}) {
-  const browser = await puppeteer.launch({
-    headless,
+export function getChromiumLaunchOptions({ headless = true } = {}) {
+  const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_BIN || undefined;
+  return {
+    headless: headless === true ? "new" : headless,
+    executablePath,
+    pipe: true,
+    protocolTimeout: 120_000,
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
       "--disable-dev-shm-usage",
       "--disable-accelerated-2d-canvas",
+      "--disable-background-networking",
+      "--disable-background-timer-throttling",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-breakpad",
+      "--disable-component-update",
+      "--disable-default-apps",
+      "--disable-extensions",
+      "--disable-features=AudioServiceOutOfProcess,IsolateOrigins,site-per-process,Translate,BackForwardCache,AcceptCHFrame,MediaRouter",
+      "--disable-gpu",
+      "--disable-renderer-backgrounding",
+      "--disable-software-rasterizer",
+      "--metrics-recording-only",
+      "--mute-audio",
       "--no-first-run",
       "--no-zygote",
+      "--renderer-process-limit=1",
       "--single-process",
-      "--disable-gpu",
     ],
-  });
+  };
+}
+
+/**
+ * Create a browser session. Returns a context with helper methods.
+ * Always call session.close() when done.
+ */
+export async function createSession({ headless = true, logger = console } = {}) {
+  const browser = await puppeteer.launch(getChromiumLaunchOptions({ headless }));
 
   const page = await browser.newPage();
 

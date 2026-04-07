@@ -7,6 +7,7 @@
 import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
+import { getChromiumLaunchOptions } from './browser-agent.js';
 import { parseInsuranceCardText, cleanExtractedValue } from './insurance-card-parse.js';
 
 const OCR_IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp', '.tif', '.tiff', '.heic', '.heif']);
@@ -488,10 +489,7 @@ async function extractTextFromPdfBuffer(fileBuffer, logger = console) {
     let browser = null;
     try {
       await fs.writeFile(tmpPdfPath, fileBuffer);
-      browser = await puppeteer.launch({
-        headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      });
+      browser = await puppeteer.launch(getChromiumLaunchOptions({ headless: true }));
       const page = await browser.newPage();
       await page.setViewport({ width: 1600, height: 2200, deviceScaleFactor: 1.5 });
       await page.goto(`file://${tmpPdfPath}`, { waitUntil: 'networkidle0', timeout: 20000 });
