@@ -1520,7 +1520,7 @@ async function listVobClickCandidates(page) {
 
 async function clickFirstMatchingButton(page, patternStrings, { phase = 'unknown', excludeNegative = true } = {}) {
   return page.evaluate(
-    ({ patterns, excludeNegative: excl }) => {
+    ({ patterns, excludeNegative: excl, phaseLabel }) => {
       const visible = (el) => {
         if (!el) return false;
         const style = window.getComputedStyle(el);
@@ -1544,15 +1544,15 @@ async function clickFirstMatchingButton(page, patternStrings, { phase = 'unknown
         if (regexes.some((re) => re.test(t))) {
           try {
             el.click();
-            return { clicked: true, label: t, phase };
+            return { clicked: true, label: t, phase: phaseLabel };
           } catch (e) {
-            return { clicked: false, error: e?.message || 'click failed', phase };
+            return { clicked: false, error: e?.message || 'click failed', phase: phaseLabel };
           }
         }
       }
-      return { clicked: false, label: null, phase };
+      return { clicked: false, label: null, phase: phaseLabel };
     },
-    { patterns: patternStrings, excludeNegative },
+    { patterns: patternStrings, excludeNegative, phaseLabel: phase },
   );
 }
 
