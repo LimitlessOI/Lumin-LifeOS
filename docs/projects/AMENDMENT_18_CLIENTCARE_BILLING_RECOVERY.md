@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-06 (member-ID-only auto-match; name-only match shows confirm/reject prompt; matchConfirmed flag; no false auto-population)
+**Last Updated:** 2026-04-06 (coverage/auth removed as required fields; network defaults to out-of-network; Blue Shield/Cross auto-sets in-network; missing list trimmed to payer+member only)
 
 ---
 

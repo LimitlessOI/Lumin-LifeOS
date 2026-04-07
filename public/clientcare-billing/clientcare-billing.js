@@ -42,6 +42,11 @@
   let lastVobCardSummary = null;
   let lastVobCardError = '';
   let lastVobClientHref = '';
+  /** Blue Shield / Blue Cross = in-network. Everything else = out of network (default). */
+  function inferNetworkStatus(payerName = '') {
+    return /blue\s*(shield|cross)/i.test(String(payerName || '')) ? 'true' : 'false';
+  }
+
   let lastInsuranceDraft = {
     payer_name: '',
     member_id: '',
@@ -50,7 +55,7 @@
     deductible_remaining: '',
     coinsurance_pct: '',
     coverage_active: '',
-    in_network: '',
+    in_network: 'false', // default out of network
     auth_required: '',
     source_label: '',
   };
@@ -316,12 +321,16 @@
           body: form,
         });
         if (result.extracted) {
+          const newPayer = result.extracted.payer_name || lastInsuranceDraft.payer_name;
           lastInsuranceDraft = {
             ...lastInsuranceDraft,
-            payer_name: result.extracted.payer_name || lastInsuranceDraft.payer_name,
+            payer_name: newPayer,
             member_id: result.extracted.member_id || lastInsuranceDraft.member_id,
             group_number: result.extracted.group_number || lastInsuranceDraft.group_number,
             subscriber_name: result.extracted.subscriber_name || lastInsuranceDraft.subscriber_name,
+            in_network: inferNetworkStatus(newPayer),
+            coverage_active: '',
+            auth_required: '',
             source_label: lastProspectDraft.full_name || '',
           };
         }
@@ -1507,9 +1516,6 @@
     const missing = [
       !String(lastInsuranceDraft.payer_name || '').trim() && 'payer name',
       !String(lastInsuranceDraft.member_id || '').trim() && 'member ID',
-      !String(lastInsuranceDraft.coverage_active || '').trim() && 'coverage status',
-      !String(lastInsuranceDraft.in_network || '').trim() && 'network status',
-      !String(lastInsuranceDraft.auth_required || '').trim() && 'authorization status',
     ].filter(Boolean);
     const subject = vobMode === 'prospect'
       ? (lastProspectDraft.full_name || 'New prospect')
@@ -1529,11 +1535,8 @@
   /** Patient-facing copy for SMS/email (not for the assistant). */
   function buildVobClientFacingBody() {
     const missing = [
-      !String(lastInsuranceDraft.payer_name || '').trim() && 'payer/plan name',
-      !String(lastInsuranceDraft.member_id || '').trim() && 'member ID',
-      !String(lastInsuranceDraft.coverage_active || '').trim() && 'active coverage (yes/no)',
-      !String(lastInsuranceDraft.in_network || '').trim() && 'in-network status',
-      !String(lastInsuranceDraft.auth_required || '').trim() && 'whether prior auth is required',
+      !String(lastInsuranceDraft.payer_name || '').trim() && 'insurance company name',
+      !String(lastInsuranceDraft.member_id || '').trim() && 'member ID (from front of card)',
     ].filter(Boolean);
     const first = (lastProspectDraft.full_name || 'there').trim().split(/\s+/)[0] || 'there';
     const need = missing.length
@@ -1545,11 +1548,8 @@
 
   function buildVobClientFacingEmail() {
     const missing = [
-      !String(lastInsuranceDraft.payer_name || '').trim() && 'payer/plan name',
-      !String(lastInsuranceDraft.member_id || '').trim() && 'member ID',
-      !String(lastInsuranceDraft.coverage_active || '').trim() && 'active coverage',
-      !String(lastInsuranceDraft.in_network || '').trim() && 'in-network status',
-      !String(lastInsuranceDraft.auth_required || '').trim() && 'prior authorization requirement',
+      !String(lastInsuranceDraft.payer_name || '').trim() && 'insurance company name',
+      !String(lastInsuranceDraft.member_id || '').trim() && 'member ID (front of card)',
     ].filter(Boolean);
     const name = lastProspectDraft.full_name || 'there';
     const need = missing.length
@@ -1854,9 +1854,6 @@
     const requiredMissing = [
       !String(lastInsuranceDraft.payer_name || '').trim() && 'payer name',
       !String(lastInsuranceDraft.member_id || '').trim() && 'member ID',
-      !String(lastInsuranceDraft.coverage_active || '').trim() && 'coverage status',
-      !String(lastInsuranceDraft.in_network || '').trim() && 'network status',
-      !String(lastInsuranceDraft.auth_required || '').trim() && 'authorization status',
     ].filter(Boolean);
 
     return `
@@ -1937,28 +1934,11 @@
               <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Member ID <span style="color:#ef476f">*</span></label>
               <input id="insurance-member-id" value="${escapeHtml(lastInsuranceDraft.member_id || '')}" placeholder="From front of insurance card" style="width:100%;box-sizing:border-box;">
             </div>
-            <div data-tip="Is their insurance currently active? Check the coverage dates on the card — or call the provider line on the back of the card to verify">
-              <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Coverage status <span style="color:#ef476f">*</span></label>
-              <select id="insurance-coverage-active" style="width:100%;box-sizing:border-box;">
-                <option value="" ${!String(lastInsuranceDraft.coverage_active || '').trim() ? 'selected' : ''}>Select coverage status…</option>
-                <option value="true" ${String(lastInsuranceDraft.coverage_active) === 'true' ? 'selected' : ''}>Active — coverage confirmed</option>
-                <option value="false" ${String(lastInsuranceDraft.coverage_active) === 'false' ? 'selected' : ''}>Inactive — coverage lapsed</option>
-              </select>
-            </div>
-            <div data-tip="Are you in-network with this payer? Check your contract list or look up your NPI on the payer's provider directory">
-              <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Network status <span style="color:#ef476f">*</span></label>
+            <div data-tip="Blue Shield / Blue Cross = in-network (contracted). All other payers default to out of network. Change only if you have a specific contract with this payer.">
+              <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Network status</label>
               <select id="insurance-in-network" style="width:100%;box-sizing:border-box;">
-                <option value="" ${!String(lastInsuranceDraft.in_network || '').trim() ? 'selected' : ''}>Select network status…</option>
-                <option value="true" ${String(lastInsuranceDraft.in_network) === 'true' ? 'selected' : ''}>In network — contracted</option>
-                <option value="false" ${String(lastInsuranceDraft.in_network) === 'false' ? 'selected' : ''}>Out of network</option>
-              </select>
-            </div>
-            <div data-tip="Does this payer require prior authorization before you can bill? Check the back of the card for a provider line, or ask your biller — some payers require auth for behavioral health">
-              <label style="font-size:11px;color:#98a5c3;display:block;margin-bottom:4px;">Authorization <span style="color:#ef476f">*</span></label>
-              <select id="insurance-auth-required" style="width:100%;box-sizing:border-box;">
-                <option value="" ${!String(lastInsuranceDraft.auth_required || '').trim() ? 'selected' : ''}>Select authorization status…</option>
-                <option value="false" ${String(lastInsuranceDraft.auth_required) === 'false' ? 'selected' : ''}>Not required — can bill directly</option>
-                <option value="true" ${String(lastInsuranceDraft.auth_required) === 'true' ? 'selected' : ''}>Required — must get auth first</option>
+                <option value="false" ${String(lastInsuranceDraft.in_network) !== 'true' ? 'selected' : ''}>Out of network (default)</option>
+                <option value="true" ${String(lastInsuranceDraft.in_network) === 'true' ? 'selected' : ''}>In network — Blue Shield / Blue Cross</option>
               </select>
             </div>
           </div>
@@ -3510,12 +3490,16 @@
         body: form,
       });
         if (result.extracted) {
+          const newPayer = result.extracted.payer_name || lastInsuranceDraft.payer_name;
           lastInsuranceDraft = {
             ...lastInsuranceDraft,
-            payer_name: result.extracted.payer_name || lastInsuranceDraft.payer_name,
+            payer_name: newPayer,
             member_id: result.extracted.member_id || lastInsuranceDraft.member_id,
             group_number: result.extracted.group_number || lastInsuranceDraft.group_number,
             subscriber_name: result.extracted.subscriber_name || lastInsuranceDraft.subscriber_name,
+            in_network: inferNetworkStatus(newPayer),
+            coverage_active: '',
+            auth_required: '',
             source_label: lastProspectDraft.full_name || '',
           };
         }
