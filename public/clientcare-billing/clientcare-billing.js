@@ -389,15 +389,9 @@
 
   /** When card OCR subscriber does not match the account row selected on the board, prompt one-click switch. */
   function renderVobCardAccountMismatchBanner() {
-    if (vobMode !== 'existing' || !lastVobCardSummary?.subscriber_name) return '';
-    const sub = String(lastVobCardSummary.subscriber_name || '').trim();
-    if (!sub) return '';
-    const sel = getSelectedAccountItem();
-    if (!sel) return '';
-    const cands = findSubscriberCandidates(sub);
-    if (!cands.length) return '';
-    const best = cands[0].item;
-    if (getRepairKey(best) === getRepairKey(sel)) return '';
+    const mismatch = getVobCardAccountMismatch();
+    if (!mismatch) return '';
+    const { selected: sel, subscriber: sub, best } = mismatch;
     return `
         <div class="card" style="margin-bottom:12px;background:#3b1520;border:1px solid #ef476f;">
           <strong style="color:#ffb4c1">Account mismatch</strong>
@@ -412,6 +406,31 @@
             Switch to ${escapeHtml(best.client || 'matched client')}
           </button>
         </div>`;
+  }
+
+  function getVobCardAccountMismatch() {
+    if (vobMode !== 'existing' || !lastVobCardSummary?.subscriber_name) return null;
+    const subscriber = String(lastVobCardSummary.subscriber_name || '').trim();
+    if (!subscriber) return null;
+    const selected = getSelectedAccountItem();
+    if (!selected) return null;
+    const candidates = findSubscriberCandidates(subscriber);
+    if (!candidates.length) return null;
+    const best = candidates[0].item;
+    if (!best || getRepairKey(best) === getRepairKey(selected)) return null;
+    return { subscriber, selected, best };
+  }
+
+  function getRealClientcareVobBlocker() {
+    if (!getSelectedClientBillingHref()) return 'Select a client on the board or paste the ClientCare billing URL.';
+    if (lastVobCardSummary?.directorySearchState === 'searching') {
+      return 'ClientCare subscriber search is still running. Wait for that to finish first.';
+    }
+    const mismatch = getVobCardAccountMismatch();
+    if (mismatch) {
+      return `Card subscriber ${mismatch.subscriber} does not match the selected account ${mismatch.selected.client || 'client'}. Switch to ${mismatch.best.client || 'the matched client'} first.`;
+    }
+    return '';
   }
 
   function getVobCardZoneStyle() {
@@ -2274,6 +2293,7 @@
 
   function renderClientcareReconcilePanel({ inline = false } = {}) {
     const href = getSelectedClientBillingHref();
+    const runBlocker = getRealClientcareVobBlocker();
     return `
       <div class="${inline ? '' : 'card'}" style="${inline ? 'margin-top:14px;padding-top:14px;border-top:1px solid #27304a;' : 'margin-top:14px;background:#0c1a30;border-color:#26c281;'}">
         <h3 style="margin:0 0 8px;font-size:15px;color:#7ef0b8;">Real ClientCare VOB</h3>
@@ -2289,8 +2309,9 @@
             <span class="small muted">Dry run only (preview; no writes)</span>
           </label>
           <div class="row-actions">
-            <button type="button" id="clientcare-pipeline-run">Run real ClientCare VOB</button>
+            <button type="button" id="clientcare-pipeline-run" ${runBlocker ? 'disabled' : ''} style="${runBlocker ? 'opacity:.55;cursor:not-allowed;' : ''}">Run real ClientCare VOB</button>
           </div>
+          ${runBlocker ? `<div class="small" style="color:#ffb4c1;margin-top:-4px;">${escapeHtml(runBlocker)}</div>` : ''}
           <div id="reconcile-output" class="small muted" style="max-height:320px;overflow:auto;margin:0;padding:10px;background:#0f1528;border-radius:10px;border:1px solid #27304a;">${renderClientcarePipelineOutput()}</div>
           <details style="margin-top:6px;">
             <summary style="cursor:pointer;font-size:12px;color:#8aa4ff;">Advanced repair tools</summary>
@@ -3776,6 +3797,11 @@
       toast('Select a client on the board or paste the ClientCare billing URL.', 'error');
       return;
     }
+    const blocker = getRealClientcareVobBlocker();
+    if (blocker) {
+      toast(blocker, 'error');
+      return;
+    }
     const dryRun = Boolean(document.getElementById('reconcile-dry-run-only')?.checked);
     const form = new FormData();
     form.append('client_href', href);
@@ -4417,6 +4443,14 @@
     if (vobSearch) vobSearch.addEventListener('input', (event) => {
       const nextValue = event.target.value || '';
       setVobSearch(nextValue);
+      const normalizedQuery = normalizeName(nextValue);
+      const exactMatches = normalizedQuery
+        ? getVobMatches().filter((item) => normalizeName(item.client || item.name || '') === normalizedQuery)
+        : [];
+      if (exactMatches.length === 1) {
+        selectAccountForVob(exactMatches[0]);
+        return;
+      }
       rerender();
       requestAnimationFrame(() => {
         const input = document.getElementById('vob-client-search');
