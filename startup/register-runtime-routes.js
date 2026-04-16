@@ -36,6 +36,8 @@ import { createLifeOSHealingRoutes } from "../routes/lifeos-healing-routes.js";
 import { createLifeOSLegacyRoutes } from "../routes/lifeos-legacy-routes.js";
 import { createLifeOSEmotionalRoutes } from "../routes/lifeos-emotional-routes.js";
 import { createLifeOSEthicsRoutes } from "../routes/lifeos-ethics-routes.js";
+import { createLifeOSConflictRoutes } from "../routes/lifeos-conflict-routes.js";
+import { createLifeOSFinanceRoutes } from "../routes/lifeos-finance-routes.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
 
@@ -156,6 +158,10 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [LIFEOS-EMOTIONAL] Routes mounted at /api/v1/lifeos/emotional");
   app.use("/api/v1/lifeos/ethics", createLifeOSEthicsRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-ETHICS] Routes mounted at /api/v1/lifeos/ethics");
+  app.use("/api/v1/lifeos/conflict", createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-CONFLICT] Routes mounted at /api/v1/lifeos/conflict");
+  app.use("/api/v1/lifeos/finance", createLifeOSFinanceRoutes({ pool, requireKey, logger }));
+  logger.info("✅ [LIFEOS-FINANCE] Routes mounted at /api/v1/lifeos/finance");
 
   // Optional LifeOS / Kids / Teacher modules remain degradable.
   async function importOptionalRoute(modulePath, exportName) {
@@ -173,8 +179,6 @@ export async function registerRuntimeRoutes(app, deps) {
   }
 
   const optionalRoutes = [
-    { modulePath: "../routes/lifeos-conflict-routes.js", exportName: "createLifeOSConflictRoutes", mountPath: "/api/v1/lifeos/conflict", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-CONFLICT]" },
-    { modulePath: "../routes/lifeos-finance-routes.js", exportName: "createLifeOSFinanceRoutes", mountPath: "/api/v1/lifeos/finance", args: [{ pool, requireKey, logger }], label: "[LIFEOS-FINANCE]" },
     { modulePath: "../routes/lifeos-copilot-routes.js", exportName: "createLifeOSCopilotRoutes", mountPath: "/api/v1/lifeos/copilot", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-COPILOT]" },
     { modulePath: "../routes/lifeos-simulator-routes.js", exportName: "createLifeOSSimulatorRoutes", mountPath: "/api/v1/lifeos/simulator", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-SIMULATOR]" },
     { modulePath: "../routes/lifeos-workshop-routes.js", exportName: "createLifeOSWorkshopRoutes", mountPath: "/api/v1/lifeos/workshop", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-WORKSHOP]" },

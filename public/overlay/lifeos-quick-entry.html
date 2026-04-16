@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>LifeOS Quick Entry</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; padding-bottom: 40px; }
+
+    .header { padding: 18px 20px 12px; border-bottom: 1px solid #1e1e2e; }
+    .header h1 { font-size: 15px; font-weight: 600; color: #d8d8e8; }
+    .header .sub { font-size: 11px; color: #444; margin-top: 2px; }
+
+    /* Big tap buttons */
+    .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px; }
+    .type-btn {
+      background: #111118; border: 1px solid #1e1e2e; border-radius: 12px;
+      padding: 16px 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      min-height: 72px; justify-content: center;
+    }
+    .type-btn.active { border-color: #5b6af5; background: #13131e; }
+    .type-btn .icon { font-size: 22px; }
+    .type-btn .label { font-size: 12px; color: #888; text-align: center; line-height: 1.3; }
+    .type-btn.active .label { color: #a0aaff; }
+
+    /* Inline forms */
+    .form-panel { display: none; margin: 0 16px 8px; background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 18px 16px; animation: fadeIn 0.2s ease; }
+    .form-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+    .form-field { margin-bottom: 14px; }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 10px 12px; font-size: 14px; outline: none;
+      font-family: inherit; -webkit-appearance: none;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #5b6af5; }
+    .form-field textarea { resize: none; }
+
+    /* Emoji chips */
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .chip {
+      padding: 8px 12px; border-radius: 20px; border: 1px solid #2a2a3a;
+      background: #0d0d1a; cursor: pointer; font-size: 20px; transition: border-color 0.15s, background 0.15s;
+    }
+    .chip.selected { border-color: #5b6af5; background: #1a1a35; }
+    .text-chip {
+      padding: 7px 14px; border-radius: 20px; border: 1px solid #2a2a3a;
+      background: #0d0d1a; cursor: pointer; font-size: 12px; color: #777; transition: border-color 0.15s, background 0.15s;
+    }
+    .text-chip.selected { border-color: #5b6af5; background: #1a1a35; color: #a0aaff; }
+
+    /* Slider */
+    .slider-row { margin-bottom: 14px; }
+    .slider-row label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 8px; }
+    .slider-wrap { display: flex; align-items: center; gap: 12px; }
+    input[type=range] {
+      -webkit-appearance: none; flex: 1; height: 4px; background: #2a2a3a; border-radius: 2px; outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 18px; height: 18px; background: #5b6af5; border-radius: 50%; cursor: pointer;
+    }
+    .slider-val { font-size: 14px; font-weight: 600; color: #a0aaff; min-width: 20px; text-align: right; }
+
+    /* Submit */
+    .btn-submit { width: 100%; padding: 13px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 10px; color: #a0aaff; font-size: 14px; cursor: pointer; transition: background 0.15s; font-family: inherit; margin-top: 4px; }
+    .btn-submit:active { background: #262880; }
+
+    .spinner { width:14px; height:14px; border:2px solid #2a2a3a; border-top-color:#5b6af5; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; vertical-align:middle; margin-right:6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(10px); background:#1e2060; border:1px solid #5b6af5; border-radius:8px; padding:11px 20px; font-size:13px; color:#a0aaff; opacity:0; transition:all .25s; z-index:1000; white-space: nowrap; }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>LifeOS Quick Entry</h1>
+  <div class="sub">Tap a type, log it, move on.</div>
+</div>
+
+<!-- Type selector -->
+<div class="type-grid">
+  <button class="type-btn" id="btn-commitment" onclick="toggle('commitment')">
+    <span class="icon">🎯</span>
+    <span class="label">Commitment</span>
+  </button>
+  <button class="type-btn" id="btn-joy" onclick="toggle('joy')">
+    <span class="icon">😊</span>
+    <span class="label">Joy Check-In</span>
+  </button>
+  <button class="type-btn" id="btn-coaching" onclick="toggle('coaching')">
+    <span class="icon">💬</span>
+    <span class="label">Coaching</span>
+  </button>
+  <button class="type-btn" id="btn-outreach" onclick="toggle('outreach')">
+    <span class="icon">⚡</span>
+    <span class="label">Outreach Task</span>
+  </button>
+</div>
+
+<!-- Commitment form -->
+<div class="form-panel" id="panel-commitment">
+  <div class="form-field">
+    <label>What did you commit to?</label>
+    <input id="c-text" placeholder="e.g. Call my dad by Friday" autocomplete="off" />
+  </div>
+  <div class="form-field">
+    <label>By when? (optional)</label>
+    <input id="c-due" type="datetime-local" />
+  </div>
+  <button class="btn-submit" onclick="submitCommitment()">Add Commitment</button>
+</div>
+
+<!-- Joy Check-In form -->
+<div class="form-panel" id="panel-joy">
+  <div class="form-field">
+    <label>How are you feeling?</label>
+    <div class="chip-row" id="joy-emojis">
+      <span class="chip" data-v="1" onclick="selectEmoji(this)">😔</span>
+      <span class="chip" data-v="2" onclick="selectEmoji(this)">😐</span>
+      <span class="chip" data-v="3" onclick="selectEmoji(this)">🙂</span>
+      <span class="chip" data-v="4" onclick="selectEmoji(this)">😊</span>
+      <span class="chip" data-v="5" onclick="selectEmoji(this)">🌟</span>
+    </div>
+  </div>
+  <div class="slider-row">
+    <label>Wellbeing score — <span id="joy-score-label">5</span> / 10</label>
+    <div class="slider-wrap">
+      <span style="font-size:11px;color:#444">1</span>
+      <input type="range" id="j-score" min="1" max="10" value="5" oninput="document.getElementById('joy-score-label').textContent=this.value" />
+      <span style="font-size:11px;color:#444">10</span>
+    </div>
+  </div>
+  <div class="form-field">
+    <label>One thing today (optional)</label>
+    <input id="j-note" placeholder="Something that happened, something noticed..." autocomplete="off" />
+  </div>
+  <button class="btn-submit" onclick="submitJoy()">Save Check-In</button>
+</div>
+
+<!-- Coaching form -->
+<div class="form-panel" id="panel-coaching">
+  <div class="form-field">
+    <label>What do you want to work through?</label>
+    <textarea id="co-text" rows="4" placeholder="Describe what's on your mind. Be as specific as you can."></textarea>
+  </div>
+  <div class="form-field">
+    <label>Emotional state</label>
+    <div class="chip-row" id="state-chips">
+      <span class="text-chip" data-v="calm" onclick="selectState(this)">Calm</span>
+      <span class="text-chip" data-v="stirred" onclick="selectState(this)">Stirred</span>
+      <span class="text-chip" data-v="heated" onclick="selectState(this)">Heated</span>
+      <span class="text-chip" data-v="flooded" onclick="selectState(this)">Flooded</span>
+    </div>
+  </div>
+  <button class="btn-submit" onclick="submitCoaching()">Start Session</button>
+</div>
+
+<!-- Outreach Task form -->
+<div class="form-panel" id="panel-outreach">
+  <div class="form-field">
+    <label>Who</label>
+    <input id="o-name" placeholder="Name" autocomplete="off" />
+  </div>
+  <div class="form-field">
+    <label>Channel</label>
+    <select id="o-channel">
+      <option value="email">Email</option>
+      <option value="sms">SMS</option>
+      <option value="note">Note (no send)</option>
+    </select>
+  </div>
+  <div class="form-field">
+    <label>Message</label>
+    <textarea id="o-msg" rows="3" placeholder="What do you want to send?"></textarea>
+  </div>
+  <button class="btn-submit" onclick="submitOutreach()">Queue It</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API  = '';
+  const KEY  = localStorage.getItem('commandKey') || '';
+  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
+  const USER = new URLSearchParams(location.search).get('user')
+             || localStorage.getItem('lifeos_user')
+             || 'adam';
+
+  let activePanel = null;
+
+  function toggle(name) {
+    const panel = document.getElementById(`panel-${name}`);
+    const btn   = document.getElementById(`btn-${name}`);
+
+    if (activePanel === name) {
+      // Collapse
+      panel.classList.remove('active');
+      btn.classList.remove('active');
+      activePanel = null;
+      return;
+    }
+
+    // Collapse any open panel first
+    if (activePanel) {
+      document.getElementById(`panel-${activePanel}`).classList.remove('active');
+      document.getElementById(`btn-${activePanel}`).classList.remove('active');
+    }
+
+    panel.classList.add('active');
+    btn.classList.add('active');
+    activePanel = name;
+
+    // Scroll so form is visible
+    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  }
+
+  // Emoji selection
+  let selectedEmoji = null;
+  function selectEmoji(el) {
+    document.querySelectorAll('#joy-emojis .chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedEmoji = parseInt(el.dataset.v, 10);
+  }
+
+  // Emotional state selection
+  let selectedState = null;
+  function selectState(el) {
+    document.querySelectorAll('#state-chips .text-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedState = el.dataset.v;
+  }
+
+  // -------- Submit handlers --------
+
+  async function submitCommitment() {
+    const text = document.getElementById('c-text').value.trim();
+    const due  = document.getElementById('c-due').value || null;
+    if (!text) { toast('Please describe your commitment'); return; }
+    await post('/api/v1/lifeos/commitments', { user: USER, text, due_date: due });
+    document.getElementById('c-text').value = '';
+    document.getElementById('c-due').value  = '';
+    collapse();
+  }
+
+  async function submitJoy() {
+    const score = parseInt(document.getElementById('j-score').value, 10);
+    const note  = document.getElementById('j-note').value.trim() || null;
+    const emoji = selectedEmoji;
+    if (!emoji) { toast('Pick an emoji first'); return; }
+    await post('/api/v1/lifeos/joy/checkin', { user: USER, score, emoji_score: emoji, note });
+    document.getElementById('j-score').value = '5';
+    document.getElementById('joy-score-label').textContent = '5';
+    document.querySelectorAll('#joy-emojis .chip').forEach(c => c.classList.remove('selected'));
+    document.getElementById('j-note').value = '';
+    selectedEmoji = null;
+    collapse();
+  }
+
+  async function submitCoaching() {
+    const text  = document.getElementById('co-text').value.trim();
+    const state = selectedState || 'calm';
+    if (!text) { toast('Describe what you want to work through'); return; }
+    const btn = document.querySelector('#panel-coaching .btn-submit');
+    btn.innerHTML = '<span class="spinner"></span> Starting...';
+    btn.disabled = true;
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/conflict/coaching/clarity`, {
+        method: 'POST', headers: H,
+        body: JSON.stringify({ user: USER, situation: text, emotional_state: state }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Session failed');
+      toast('Session started — opening coach...');
+      setTimeout(() => {
+        location.href = `/overlay/lifeos-coach.html?user=${encodeURIComponent(USER)}&session=${encodeURIComponent(data.session_id || data.id || '')}`;
+      }, 800);
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+      btn.innerHTML = 'Start Session';
+      btn.disabled = false;
+    }
+  }
+
+  async function submitOutreach() {
+    const name    = document.getElementById('o-name').value.trim();
+    const channel = document.getElementById('o-channel').value;
+    const msg     = document.getElementById('o-msg').value.trim();
+    if (!msg) { toast('Message is required'); return; }
+    await post('/api/v1/lifeos/engine/outreach', { user: USER, recipient_name: name, channel, body: msg });
+    document.getElementById('o-name').value = '';
+    document.getElementById('o-msg').value  = '';
+    collapse();
+  }
+
+  // -------- Helpers --------
+
+  async function post(path, body) {
+    try {
+      const res  = await fetch(`${API}${path}`, { method: 'POST', headers: H, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (data.ok) toast('Saved');
+      else toast(`Error: ${esc(data.error || 'Unknown error')}`);
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+    }
+  }
+
+  function collapse() {
+    if (activePanel) {
+      document.getElementById(`panel-${activePanel}`).classList.remove('active');
+      document.getElementById(`btn-${activePanel}`).classList.remove('active');
+      activePanel = null;
+    }
+  }
+
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function toast(msg) { const e=document.getElementById('toast'); e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2500); }
+
+  if (!KEY) {
+    const k = prompt('Enter your command key:');
+    if (k) { localStorage.setItem('commandKey', k); location.reload(); }
+  }
+</script>
+</body>
+</html>

@@ -12,6 +12,10 @@
  *
  * Learning Engine:
  *   POST /explore                  — explore a topic with the learning engine
+ *   GET  /parent-summary           — parent dashboard summary
+ *   GET  /learning                 — parent-visible learning activity feed
+ *   GET  /checkins                 — parent-visible child check-in feed
+ *   GET  /dreams                   — parent-visible dreams list
  *   GET  /sessions/:child_id       — session history
  *   GET  /threads/:child_id        — curiosity threads
  *
@@ -60,6 +64,29 @@ export function createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember
       [childId, parentId]
     );
     return rows.length > 0;
+  }
+
+  async function listParentChildren(parentId, childFilter = 'all') {
+    const normalized = String(childFilter || 'all').trim();
+    if (!normalized || normalized === 'all') {
+      const { rows } = await pool.query(
+        'SELECT * FROM child_profiles WHERE parent_user_id = $1 AND active = TRUE ORDER BY name',
+        [parentId]
+      );
+      return rows;
+    }
+    if (/^\d+$/.test(normalized)) {
+      const { rows } = await pool.query(
+        'SELECT * FROM child_profiles WHERE parent_user_id = $1 AND id = $2 AND active = TRUE ORDER BY name',
+        [parentId, parseInt(normalized, 10)]
+      );
+      return rows;
+    }
+    const { rows } = await pool.query(
+      'SELECT * FROM child_profiles WHERE parent_user_id = $1 AND LOWER(name) = LOWER($2) AND active = TRUE ORDER BY name',
+      [parentId, normalized]
+    );
+    return rows;
   }
 
   // ── CHILD PROFILES ─────────────────────────────────────────────────────────
@@ -136,6 +163,124 @@ export function createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember
 
   // ── LEARNING ENGINE ────────────────────────────────────────────────────────
 
+  router.get('/parent-summary', requireKey, async (req, res) => {
+    try {
+      const parentId = await resolveParentId(req.query.user || req.query.parent_user);
+      if (!parentId) return res.status(404).json({ ok: false, error: 'Parent user not found' });
+      const children = await listParentChildren(parentId, req.query.child || 'all');
+      if (!children.length) return res.json({ ok: true, summaries: [] });
+
+      const summaries = await Promise.all(children.map(async (child) => {
+        const [sessionsRows, dreamsRows, threadsRows] = await Promise.all([
+          pool.query(
+            `SELECT session_date, created_at
+               FROM child_sessions
+              WHERE child_id = $1
+              ORDER BY session_date DESC, created_at DESC`,
+            [child.id]
+          ).then((r) => r.rows),
+          pool.query(
+            `SELECT *
+               FROM child_dreams
+              WHERE child_id = $1
+              ORDER BY created_at DESC`,
+            [child.id]
+          ).then((r) => r.rows),
+          pool.query(
+            `SELECT topic
+               FROM curiosity_threads
+              WHERE child_id = $1
+              ORDER BY last_explored DESC NULLS LAST, depth_level DESC
+              LIMIT 1`,
+            [child.id]
+          ).then((r) => r.rows),
+        ]);
+
+        const lastActive = [sessionsRows[0]?.created_at, dreamsRows[0]?.created_at]
+          .filter(Boolean)
+          .sort((a, b) => new Date(b) - new Date(a))[0] || null;
+
+        return {
+          child_id: child.id,
+          name: child.name,
+          last_active: lastActive,
+          adventures_count: sessionsRows.length,
+          dreams_count: dreamsRows.length,
+          current_learning_focus: threadsRows[0]?.topic || null,
+        };
+      }));
+
+      res.json({ ok: true, summaries });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/learning', requireKey, async (req, res) => {
+    try {
+      const parentId = await resolveParentId(req.query.user || req.query.parent_user);
+      if (!parentId) return res.status(404).json({ ok: false, error: 'Parent user not found' });
+      const children = await listParentChildren(parentId, req.query.child || 'all');
+      if (!children.length) return res.json({ ok: true, items: [] });
+
+      const childIds = children.map((child) => child.id);
+      const { rows } = await pool.query(
+        `SELECT s.*, c.name AS child_name
+           FROM child_sessions s
+           JOIN child_profiles c ON c.id = s.child_id
+          WHERE s.child_id = ANY($1::bigint[]) AND s.parent_visible = TRUE
+          ORDER BY s.session_date DESC, s.created_at DESC
+          LIMIT 100`,
+        [childIds]
+      );
+
+      const items = rows.map((row) => ({
+        child_id: row.child_id,
+        child_name: row.child_name,
+        subject: row.topic || row.activity_type || 'General',
+        lesson: row.summary || null,
+        discovery: row.summary || null,
+        created_at: row.created_at,
+        date: row.session_date,
+      }));
+      res.json({ ok: true, items });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/checkins', requireKey, async (req, res) => {
+    try {
+      const parentId = await resolveParentId(req.query.user || req.query.parent_user);
+      if (!parentId) return res.status(404).json({ ok: false, error: 'Parent user not found' });
+      const children = await listParentChildren(parentId, req.query.child || 'all');
+      if (!children.length) return res.json({ ok: true, checkins: [] });
+
+      const childIds = children.map((child) => child.id);
+      const { rows } = await pool.query(
+        `SELECT s.*, c.name AS child_name
+           FROM child_sessions s
+           JOIN child_profiles c ON c.id = s.child_id
+          WHERE s.child_id = ANY($1::bigint[]) AND s.parent_visible = TRUE
+          ORDER BY s.session_date DESC, s.created_at DESC
+          LIMIT 100`,
+        [childIds]
+      );
+
+      const checkins = rows.map((row) => ({
+        child_id: row.child_id,
+        child_name: row.child_name,
+        date: row.session_date,
+        created_at: row.created_at,
+        mood_score: 7,
+        highlight: row.summary || row.topic || 'Learning session logged',
+      }));
+      res.json({ ok: true, checkins });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.post('/explore', requireKey, async (req, res) => {
     try {
       const { child_id, topic, question } = req.body;
@@ -175,6 +320,35 @@ export function createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember
   });
 
   // ── CHILD DREAMS ───────────────────────────────────────────────────────────
+
+  router.get('/dreams', requireKey, async (req, res) => {
+    try {
+      const parentId = await resolveParentId(req.query.user || req.query.parent_user);
+      if (!parentId) return res.status(404).json({ ok: false, error: 'Parent user not found' });
+      const children = await listParentChildren(parentId, req.query.child || 'all');
+      if (!children.length) return res.json({ ok: true, dreams: [] });
+
+      const childIds = children.map((child) => child.id);
+      const { rows } = await pool.query(
+        `SELECT d.*, c.name AS child_name
+           FROM child_dreams d
+           JOIN child_profiles c ON c.id = d.child_id
+          WHERE d.child_id = ANY($1::bigint[])
+          ORDER BY d.created_at DESC`,
+        [childIds]
+      );
+
+      const dreams = rows.map((row) => ({
+        ...row,
+        child_name: row.child_name,
+        steps_completed: Array.isArray(row.progress_notes) ? row.progress_notes.length : 0,
+        steps_total: Array.isArray(row.progress_notes) && row.progress_notes.length > 0 ? row.progress_notes.length : 0,
+      }));
+      res.json({ ok: true, dreams, items: dreams });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
 
   router.post('/dreams', requireKey, async (req, res) => {
     try {

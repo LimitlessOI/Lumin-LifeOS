@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Parent View — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #555; margin-bottom: 32px; }
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 4px; margin-bottom: 28px; border-bottom: 1px solid #1e1e2e; }
+    .tab { padding: 10px 18px; font-size: 13px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab.active { color: #a0aaff; border-bottom-color: #5b6af5; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    /* ── Cards ── */
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .card-header .title { font-size: 14px; color: #d8d8e8; font-weight: 600; }
+    .card-header .meta  { font-size: 11px; color: #555; }
+    .card-body { padding: 14px 18px; font-size: 13px; color: #888; line-height: 1.6; }
+    /* ── Summary cards ── */
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .summary-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 18px; }
+    .summary-card .child-name { font-size: 15px; font-weight: 600; color: #d8d8e8; margin-bottom: 8px; }
+    .summary-card .last-active { font-size: 11px; color: #555; margin-bottom: 12px; }
+    .stats-row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-val { font-size: 22px; font-weight: 700; color: #a0aaff; }
+    .stat-label { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+    .focus-chip { display: inline-block; margin-top: 10px; padding: 3px 10px; border-radius: 8px; font-size: 11px; background: #1a1a30; color: #7c85ff; border: 1px solid #2a2a4a; }
+    /* ── Subject group ── */
+    .subject-group { margin-bottom: 20px; }
+    .subject-heading { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #5b6af5; font-weight: 600; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #1e1e2e; }
+    .discovery-item { padding: 8px 0; border-bottom: 1px solid #111; font-size: 13px; color: #888; line-height: 1.5; }
+    .discovery-item:last-child { border-bottom: none; }
+    .discovery-item .lesson { color: #d8d8e8; font-weight: 500; margin-bottom: 2px; }
+    .discovery-item .discovery { font-size: 12px; color: #888; }
+    .discovery-item .disc-date { font-size: 10px; color: #444; margin-top: 3px; }
+    /* ── Dream progress ── */
+    .dream-title { font-size: 14px; font-weight: 600; color: #d8d8e8; margin-bottom: 6px; }
+    .progress-bar-wrap { height: 6px; background: #1e1e2e; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+    .progress-bar-fill { height: 6px; border-radius: 3px; background: linear-gradient(90deg, #5b6af5, #a0aaff); transition: width 0.4s; }
+    .progress-label { font-size: 11px; color: #555; }
+    /* ── Check-ins ── */
+    .checkin-row { display: flex; align-items: center; gap: 14px; padding: 10px 18px; border-bottom: 1px solid #111; }
+    .checkin-row:last-child { border-bottom: none; }
+    .checkin-date { font-size: 11px; color: #555; width: 80px; flex-shrink: 0; }
+    .mood-score { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .mood-high   { background: #0a2018; color: #34d399; }
+    .mood-mid    { background: #1a1830; color: #7c85ff; }
+    .mood-low    { background: #2a0a0a; color: #e05555; }
+    .checkin-highlight { font-size: 13px; color: #888; line-height: 1.5; flex: 1; }
+    /* ── Child filter ── */
+    .filter-bar { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-bar label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; }
+    .filter-bar select { background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 6px; color: #e8e8f0; padding: 6px 10px; font-size: 13px; outline: none; cursor: pointer; }
+    .filter-bar select:focus { border-color: #5b6af5; }
+    /* ── Empty + spinner ── */
+    .empty { padding: 40px; text-align: center; color: #444; font-size: 14px; }
+    .spinner { width:16px; height:16px; border:2px solid #2a2a3a; border-top-color:#5b6af5; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    /* ── Toast ── */
+    .toast { position:fixed; bottom:24px; right:24px; background:#1e2060; border:1px solid #5b6af5; border-radius:8px; padding:12px 18px; font-size:13px; color:#a0aaff; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; }
+    .toast.show { opacity:1; transform:translateY(0); }
+  </style>
+</head>
+<body>
+<div class="root">
+  <h1>Parent View</h1>
+  <p class="sub">Your child's world at a glance.</p>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('overview')">Overview</div>
+    <div class="tab" onclick="showTab('learning')">Learning</div>
+    <div class="tab" onclick="showTab('dreams')">Dreams</div>
+    <div class="tab" onclick="showTab('checkins')">Check-ins</div>
+  </div>
+
+  <!-- Overview -->
+  <div class="panel active" id="panel-overview">
+    <div class="filter-bar">
+      <label>Child</label>
+      <select id="ov-child" onchange="loadOverview()">
+        <option value="all">All children</option>
+      </select>
+    </div>
+    <div id="overview-content"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+
+  <!-- Learning -->
+  <div class="panel" id="panel-learning">
+    <div class="filter-bar">
+      <label>Child</label>
+      <select id="lrn-child" onchange="loadLearning()">
+        <option value="all">All children</option>
+      </select>
+    </div>
+    <div id="learning-content"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+
+  <!-- Dreams -->
+  <div class="panel" id="panel-dreams">
+    <div class="filter-bar">
+      <label>Child</label>
+      <select id="drm-child" onchange="loadDreams()">
+        <option value="all">All children</option>
+      </select>
+    </div>
+    <div id="dreams-content"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+
+  <!-- Check-ins -->
+  <div class="panel" id="panel-checkins">
+    <div class="filter-bar">
+      <label>Child</label>
+      <select id="chk-child" onchange="loadCheckins()">
+        <option value="all">All children</option>
+      </select>
+    </div>
+    <div id="checkins-content"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  const API  = '';
+  const KEY  = localStorage.getItem('commandKey') || '';
+  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
+  const USER = new URLSearchParams(location.search).get('user')
+            || localStorage.getItem('lifeos_user')
+            || localStorage.getItem('lifeosUser')
+            || 'adam';
+
+  const TABS = ['overview', 'learning', 'dreams', 'checkins'];
+
+  function showTab(name) {
+    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', TABS[i] === name));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(`panel-${name}`).classList.add('active');
+    if (name === 'overview') loadOverview();
+    if (name === 'learning') loadLearning();
+    if (name === 'dreams')   loadDreams();
+    if (name === 'checkins') loadCheckins();
+  }
+
+  // Populate child dropdowns from overview summary on first load
+  let childCache = [];
+  async function populateChildSelects(summaries) {
+    if (!summaries || !summaries.length) return;
+    childCache = summaries;
+    const opts = ['<option value="all">All children</option>',
+      ...summaries.map(s => `<option value="${esc(s.child_id || s.name)}">${esc(s.name)}</option>`)
+    ].join('');
+    ['ov-child', 'lrn-child', 'drm-child', 'chk-child'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = opts;
+    });
+  }
+
+  // ── Overview ────────────────────────────────────────────────────────────────
+
+  async function loadOverview() {
+    const el    = document.getElementById('overview-content');
+    const child = document.getElementById('ov-child').value;
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const url  = `${API}/api/v1/lifeos/children/parent-summary?user=${USER}&child=${encodeURIComponent(child)}`;
+      const res  = await fetch(url, { headers: H });
+      const data = await res.json();
+      if (!data.ok || !data.summaries || !data.summaries.length) {
+        el.innerHTML = '<div class="empty">No children found. Set up profiles in the child view.</div>';
+        return;
+      }
+      populateChildSelects(data.summaries);
+      el.innerHTML = `<div class="summary-grid">${data.summaries.map(s => `
+        <div class="summary-card">
+          <div class="child-name">${esc(s.name)}</div>
+          <div class="last-active">${s.last_active ? 'Last active ' + new Date(s.last_active).toLocaleDateString() : 'No recent activity'}</div>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="stat-val">${s.adventures_count ?? '—'}</div>
+              <div class="stat-label">Adventures</div>
+            </div>
+            <div class="stat">
+              <div class="stat-val">${s.dreams_count ?? '—'}</div>
+              <div class="stat-label">Dreams</div>
+            </div>
+          </div>
+          ${s.current_learning_focus ? `<span class="focus-chip">${esc(s.current_learning_focus)}</span>` : ''}
+        </div>`).join('')}</div>`;
+    } catch (e) {
+      el.innerHTML = '<div class="empty">Failed to load summary.</div>';
+    }
+  }
+
+  // ── Learning ────────────────────────────────────────────────────────────────
+
+  async function loadLearning() {
+    const el    = document.getElementById('learning-content');
+    const child = document.getElementById('lrn-child').value;
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const url  = `${API}/api/v1/lifeos/children/learning?user=${USER}${child !== 'all' ? '&child=' + encodeURIComponent(child) : ''}`;
+      const res  = await fetch(url, { headers: H });
+      const data = await res.json();
+      const items = data.items || data.learning || [];
+      if (!data.ok || !items.length) {
+        el.innerHTML = '<div class="empty">No learning logged yet.</div>';
+        return;
+      }
+      // Group by subject
+      const groups = {};
+      items.forEach(item => {
+        const subj = item.subject || 'General';
+        if (!groups[subj]) groups[subj] = [];
+        groups[subj].push(item);
+      });
+      el.innerHTML = Object.entries(groups).map(([subject, rows]) => `
+        <div class="subject-group">
+          <div class="subject-heading">${esc(subject)}</div>
+          ${rows.map(r => `
+            <div class="discovery-item">
+              ${r.lesson ? `<div class="lesson">${esc(r.lesson)}</div>` : ''}
+              ${r.discovery ? `<div class="discovery">💡 ${esc(r.discovery)}</div>` : ''}
+              <div class="disc-date">${r.created_at ? new Date(r.created_at).toLocaleDateString() : r.date || ''}</div>
+            </div>`).join('')}
+        </div>`).join('');
+    } catch (e) {
+      el.innerHTML = '<div class="empty">Failed to load learning.</div>';
+    }
+  }
+
+  // ── Dreams ──────────────────────────────────────────────────────────────────
+
+  async function loadDreams() {
+    const el    = document.getElementById('dreams-content');
+    const child = document.getElementById('drm-child').value;
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const url  = `${API}/api/v1/lifeos/children/dreams?user=${USER}${child !== 'all' ? '&child=' + encodeURIComponent(child) : ''}`;
+      const res  = await fetch(url, { headers: H });
+      const data = await res.json();
+      const items = data.dreams || data.items || [];
+      if (!data.ok || !items.length) {
+        el.innerHTML = '<div class="empty">No dreams logged yet.</div>';
+        return;
+      }
+      el.innerHTML = items.map(d => {
+        const completed = d.steps_completed ?? 0;
+        const total     = d.steps_total || d.steps_count || 0;
+        const pct       = total > 0 ? Math.round((completed / total) * 100) : 0;
+        return `
+          <div class="card">
+            <div class="card-header">
+              <span class="title">⭐ ${esc(d.title)}</span>
+              ${d.child_name ? `<span class="meta">${esc(d.child_name)}</span>` : ''}
+            </div>
+            <div class="card-body">
+              ${d.why_it_matters || d.description ? `<div style="margin-bottom:10px;color:#888;">${esc(d.why_it_matters || d.description)}</div>` : ''}
+              ${total > 0 ? `
+                <div class="progress-bar-wrap">
+                  <div class="progress-bar-fill" style="width:${pct}%"></div>
+                </div>
+                <div class="progress-label">${completed} of ${total} steps · ${pct}%</div>
+              ` : total === 0 && completed === 0 ? '<div class="progress-label" style="color:#555">No steps tracked yet</div>' : ''}
+            </div>
+          </div>`;
+      }).join('');
+    } catch (e) {
+      el.innerHTML = '<div class="empty">Failed to load dreams.</div>';
+    }
+  }
+
+  // ── Check-ins ───────────────────────────────────────────────────────────────
+
+  async function loadCheckins() {
+    const el    = document.getElementById('checkins-content');
+    const child = document.getElementById('chk-child').value;
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const url  = `${API}/api/v1/lifeos/children/checkins?user=${USER}${child !== 'all' ? '&child=' + encodeURIComponent(child) : ''}`;
+      const res  = await fetch(url, { headers: H });
+      const data = await res.json();
+      const items = data.checkins || data.items || [];
+      if (!data.ok || !items.length) {
+        el.innerHTML = '<div class="empty">No check-ins yet.</div>';
+        return;
+      }
+      const rows = items.map(c => {
+        const score = c.mood_score || 0;
+        const moodClass = score >= 7 ? 'mood-high' : score >= 4 ? 'mood-mid' : 'mood-low';
+        return `
+          <div class="checkin-row">
+            <div class="checkin-date">${c.date ? new Date(c.date).toLocaleDateString() : c.created_at ? new Date(c.created_at).toLocaleDateString() : '—'}</div>
+            <div class="mood-score ${moodClass}">${score}</div>
+            <div class="checkin-highlight">${esc(c.highlight || c.highlight_of_the_day || '')}</div>
+          </div>`;
+      }).join('');
+      el.innerHTML = `<div class="card">${rows}</div>`;
+    } catch (e) {
+      el.innerHTML = '<div class="empty">Failed to load check-ins.</div>';
+    }
+  }
+
+  function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function toast(msg) { const e = document.getElementById('toast'); e.textContent = msg; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 2500); }
+
+  if (!KEY) { const k = prompt('Enter your command key:'); if (k) { localStorage.setItem('commandKey', k); location.reload(); } }
+  else loadOverview();
+</script>
+</body>
+</html>

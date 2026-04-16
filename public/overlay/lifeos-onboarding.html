@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Welcome — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .root { max-width: 600px; width: 100%; padding: 40px 24px 80px; }
+
+    /* Progress dots */
+    .progress { display: flex; justify-content: center; gap: 10px; margin-bottom: 52px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #2a2a3a; transition: background 0.3s; }
+    .dot.active { background: #5b6af5; }
+    .dot.done   { background: #34d399; }
+
+    /* Steps */
+    .step { display: none; animation: fadeIn 0.25s ease; }
+    .step.active { display: block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+    .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; margin-bottom: 16px; }
+    h1 { font-size: 28px; font-weight: 700; line-height: 1.25; margin-bottom: 14px; }
+    .lead { font-size: 15px; color: #888; line-height: 1.65; margin-bottom: 36px; }
+    .note { font-size: 12px; color: #444; margin-top: 10px; line-height: 1.5; }
+
+    /* Fields */
+    .form-field { margin-bottom: 18px; }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 7px; }
+    .form-field input, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 10px 13px; font-size: 13px; outline: none;
+      font-family: inherit;
+    }
+    .form-field input:focus, .form-field textarea:focus { border-color: #5b6af5; }
+    .form-field textarea { resize: none; }
+
+    /* Identity block with BE/DO/HAVE labels */
+    .identity-label { font-size: 13px; font-weight: 600; color: #5b6af5; margin-bottom: 6px; }
+
+    /* Option cards */
+    .option-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .option-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 18px 20px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: border-color 0.15s, background 0.15s; }
+    .option-card:hover { border-color: #5b6af5; background: #13131e; }
+    .option-card .icon { font-size: 22px; }
+    .option-card .label { font-size: 14px; color: #d8d8e8; }
+    .option-card .caption { font-size: 11px; color: #555; margin-top: 2px; }
+
+    /* Summary */
+    .summary-block { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 20px; margin-bottom: 28px; }
+    .summary-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #191920; }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #5b6af5; min-width: 50px; padding-top: 1px; }
+    .summary-val { font-size: 13px; color: #d8d8e8; line-height: 1.5; }
+
+    /* Buttons */
+    .btn-primary { display: inline-block; padding: 12px 28px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; color: #a0aaff; font-size: 14px; cursor: pointer; transition: background 0.15s; }
+    .btn-primary:hover { background: #262880; }
+    .btn-link { display: inline-block; padding: 12px 16px; color: #444; font-size: 13px; cursor: pointer; }
+    .btn-link:hover { color: #666; }
+
+    .spinner { width:16px; height:16px; border:2px solid #2a2a3a; border-top-color:#5b6af5; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; vertical-align: middle; margin-right: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .toast { position:fixed; bottom:24px; right:24px; background:#1e2060; border:1px solid #5b6af5; border-radius:8px; padding:12px 18px; font-size:13px; color:#a0aaff; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; }
+    .toast.show { opacity:1; transform:translateY(0); }
+  </style>
+</head>
+<body>
+<div class="root">
+
+  <!-- Progress dots -->
+  <div class="progress">
+    <div class="dot active" id="dot-1"></div>
+    <div class="dot" id="dot-2"></div>
+    <div class="dot" id="dot-3"></div>
+    <div class="dot" id="dot-4"></div>
+    <div class="dot" id="dot-5"></div>
+  </div>
+
+  <!-- Step 1: Welcome -->
+  <div class="step active" id="step-1">
+    <div class="eyebrow">Step 1 of 5</div>
+    <h1>Your personal operating system.</h1>
+    <p class="lead">LifeOS helps you become who you said you want to be — not who we think you should be. It works at identity level, not task level.</p>
+    <button class="btn-primary" onclick="goTo(2)">Begin →</button>
+  </div>
+
+  <!-- Step 2: Identity -->
+  <div class="step" id="step-2">
+    <div class="eyebrow">Step 2 of 5</div>
+    <h1>Who do you want to become?</h1>
+    <p class="lead">Before anything else, tell us who you want to become.</p>
+
+    <div class="form-field">
+      <div class="identity-label">BE</div>
+      <label>I am...</label>
+      <textarea id="f-be" rows="2" placeholder="a person of deep integrity who shows up fully for my family"></textarea>
+    </div>
+    <div class="form-field">
+      <div class="identity-label">DO</div>
+      <label>Which means I...</label>
+      <textarea id="f-do" rows="2" placeholder="keep my word, protect my time, invest in my health daily"></textarea>
+    </div>
+    <div class="form-field">
+      <div class="identity-label">HAVE</div>
+      <label>Which creates...</label>
+      <textarea id="f-have" rows="2" placeholder="a life I'm proud of, a marriage that thrives, a body that works"></textarea>
+    </div>
+    <p class="note">You can update this anytime. This is your compass, not a contract.</p>
+    <br>
+    <button class="btn-primary" onclick="submitIdentity()">Continue →</button>
+  </div>
+
+  <!-- Step 3: First commitment -->
+  <div class="step" id="step-3">
+    <div class="eyebrow">Step 3 of 5</div>
+    <h1>Your first commitment.</h1>
+    <p class="lead">What's one thing you've been meaning to do but keep putting off?</p>
+    <div class="form-field">
+      <label>One thing</label>
+      <input id="f-commitment" placeholder="Call my dad, finish the proposal, start exercising..." />
+    </div>
+    <p class="note">Just one. We'll build from here.</p>
+    <br>
+    <button class="btn-primary" onclick="submitCommitment()">Add it →</button>
+  </div>
+
+  <!-- Step 4: Health -->
+  <div class="step" id="step-4">
+    <div class="eyebrow">Step 4 of 5</div>
+    <h1>Connect your health.</h1>
+    <p class="lead">LifeOS gets smarter when it knows how your body is doing.</p>
+    <div class="option-cards">
+      <div class="option-card" onclick="connectHealth()">
+        <span class="icon">🍎</span>
+        <div>
+          <div class="label">Connect Apple Health</div>
+          <div class="caption">Via iOS Shortcuts — we'll show you how</div>
+        </div>
+      </div>
+      <div class="option-card" onclick="skipHealth()">
+        <span class="icon">→</span>
+        <div>
+          <div class="label">Skip for now</div>
+          <div class="caption">You can connect later from settings</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: Ready -->
+  <div class="step" id="step-5">
+    <div class="eyebrow">Step 5 of 5</div>
+    <h1>Here's your mirror.</h1>
+    <p class="lead">Every morning, open LifeOS. You'll see exactly where you are and what matters.</p>
+
+    <div class="summary-block" id="summary-block">
+      <div class="summary-row">
+        <span class="summary-tag">BE</span>
+        <span class="summary-val" id="sum-be">—</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-tag">DO</span>
+        <span class="summary-val" id="sum-do">—</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-tag">HAVE</span>
+        <span class="summary-val" id="sum-have">—</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-tag">First</span>
+        <span class="summary-val" id="sum-commitment">—</span>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="btn-open" onclick="finish()">Open My Mirror →</button>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  const API  = '';
+  const KEY  = localStorage.getItem('commandKey') || '';
+  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
+  const USER = new URLSearchParams(location.search).get('user')
+             || localStorage.getItem('lifeos_user')
+             || 'adam';
+
+  let state = { be: '', do: '', have: '', commitment: '' };
+  let currentStep = 1;
+
+  function goTo(n) {
+    document.getElementById(`step-${currentStep}`).classList.remove('active');
+    for (let i = 1; i <= 5; i++) {
+      const d = document.getElementById(`dot-${i}`);
+      d.classList.remove('active', 'done');
+      if (i < n) d.classList.add('done');
+      else if (i === n) d.classList.add('active');
+    }
+    currentStep = n;
+    document.getElementById(`step-${n}`).classList.add('active');
+  }
+
+  function submitIdentity() {
+    const be   = document.getElementById('f-be').value.trim();
+    const doT  = document.getElementById('f-do').value.trim();
+    const have = document.getElementById('f-have').value.trim();
+    if (!be || !doT || !have) { toast('Please fill in all three fields'); return; }
+    state.be   = be;
+    state.do   = doT;
+    state.have = have;
+    goTo(3);
+  }
+
+  function submitCommitment() {
+    const c = document.getElementById('f-commitment').value.trim();
+    if (!c) { toast('Please enter your commitment'); return; }
+    state.commitment = c;
+    goTo(4);
+  }
+
+  function connectHealth() {
+    // Show instructions; for now just advance
+    toast('We\'ll guide you through Apple Health setup in Today.');
+    goTo(5);
+    populateSummary();
+  }
+
+  function skipHealth() {
+    goTo(5);
+    populateSummary();
+  }
+
+  function populateSummary() {
+    document.getElementById('sum-be').textContent         = state.be;
+    document.getElementById('sum-do').textContent         = state.do;
+    document.getElementById('sum-have').textContent       = state.have;
+    document.getElementById('sum-commitment').textContent = state.commitment;
+  }
+
+  async function finish() {
+    const btn = document.getElementById('btn-open');
+    btn.innerHTML = '<span class="spinner"></span> Saving...';
+    btn.disabled = true;
+
+    try {
+      // Create/update user identity
+      const uRes = await fetch(`${API}/api/v1/lifeos/users`, {
+        method: 'POST', headers: H,
+        body: JSON.stringify({
+          user: USER,
+          be_statement:   state.be,
+          do_statement:   state.do,
+          have_statement: state.have,
+        }),
+      });
+      const uData = await uRes.json();
+      if (!uData.ok) throw new Error(uData.error || 'User save failed');
+
+      // Save first commitment
+      if (state.commitment) {
+        const cRes = await fetch(`${API}/api/v1/lifeos/commitments`, {
+          method: 'POST', headers: H,
+          body: JSON.stringify({ user: USER, text: state.commitment }),
+        });
+        const cData = await cRes.json();
+        if (!cData.ok) throw new Error(cData.error || 'Commitment save failed');
+      }
+
+      localStorage.setItem('lifeos_user', USER);
+      localStorage.setItem('lifeos_onboarded', '1');
+      toast('You\'re all set. Opening your mirror...');
+      setTimeout(() => {
+        location.href = `/overlay/lifeos-today.html?user=${encodeURIComponent(USER)}`;
+      }, 1200);
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+      btn.innerHTML = 'Open My Mirror →';
+      btn.disabled = false;
+    }
+  }
+
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function toast(msg) { const e=document.getElementById('toast'); e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2800); }
+
+  if (!KEY) {
+    const k = prompt('Enter your command key:');
+    if (k) { localStorage.setItem('commandKey', k); location.reload(); }
+  }
+</script>
+</body>
+</html>

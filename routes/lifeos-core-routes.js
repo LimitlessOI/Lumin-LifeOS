@@ -159,6 +159,40 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     }
   });
 
+  router.post('/users', requireKey, async (req, res) => {
+    try {
+      const handleRaw = String(req.body.user || req.body.user_handle || '').trim().toLowerCase();
+      if (!handleRaw) return res.status(400).json({ ok: false, error: 'user or user_handle is required' });
+
+      const displayName = String(req.body.display_name || handleRaw).trim() || handleRaw;
+      const beStatement = req.body.be_statement ?? null;
+      const doStatement = req.body.do_statement ?? null;
+      const haveVision = req.body.have_vision ?? req.body.have_statement ?? null;
+      const truthStyle = req.body.truth_style ?? 'direct';
+      const timezone = req.body.timezone ?? 'America/Los_Angeles';
+
+      const { rows } = await pool.query(
+        `INSERT INTO lifeos_users
+           (user_handle, display_name, timezone, be_statement, do_statement, have_vision, truth_style)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         ON CONFLICT (user_handle) DO UPDATE SET
+           display_name = EXCLUDED.display_name,
+           timezone = EXCLUDED.timezone,
+           be_statement = COALESCE(EXCLUDED.be_statement, lifeos_users.be_statement),
+           do_statement = COALESCE(EXCLUDED.do_statement, lifeos_users.do_statement),
+           have_vision = COALESCE(EXCLUDED.have_vision, lifeos_users.have_vision),
+           truth_style = COALESCE(EXCLUDED.truth_style, lifeos_users.truth_style),
+           active = TRUE,
+           updated_at = NOW()
+         RETURNING *`,
+        [handleRaw, displayName, timezone, beStatement, doStatement, haveVision, truthStyle]
+      );
+      res.status(201).json({ ok: true, user: rows[0] });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.put('/users/:handle', requireKey, async (req, res) => {
     try {
       const { be_statement, do_statement, have_vision, truth_style, display_name, timezone } = req.body;

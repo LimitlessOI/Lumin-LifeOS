@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Notifications — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 700px; margin: 0 auto; padding: 32px 20px 80px; }
+
+    /* Header row */
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    h1 { font-size: 22px; font-weight: 600; }
+    .ack-all-btn { padding: 7px 16px; background: transparent; border: 1px solid #2a2a3a; border-radius: 6px; color: #666; font-size: 12px; cursor: pointer; transition: all 0.15s; }
+    .ack-all-btn:hover { background: #1a1a2a; color: #aaa; border-color: #3a3a4a; }
+    .ack-all-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .sub { font-size: 13px; color: #555; margin-bottom: 28px; }
+
+    /* Group sections */
+    .group { margin-bottom: 28px; }
+    .group-title {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+      color: #555; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+    }
+    .group-title .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .dot-urgent      { background: #e05555; }
+    .dot-commitments { background: #f5c56a; }
+    .dot-engine      { background: #5b6af5; }
+    .dot-insights    { background: #888; }
+
+    /* Notification cards */
+    .notif-card {
+      background: #111118; border: 1px solid #1e1e2e; border-radius: 10px;
+      margin-bottom: 10px; overflow: hidden; transition: border-color 0.15s;
+    }
+    .notif-card.unread { border-left: 3px solid #5b6af5; }
+    .notif-card.urgent { border-left: 3px solid #e05555; }
+    .notif-card.acknowledged { opacity: 0.45; }
+
+    .notif-inner { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; }
+    .notif-icon { font-size: 18px; flex-shrink: 0; padding-top: 1px; }
+    .notif-body { flex: 1; min-width: 0; }
+    .notif-msg  { font-size: 13px; color: #d8d8e8; line-height: 1.5; word-break: break-word; }
+    .notif-time { font-size: 11px; color: #444; margin-top: 5px; }
+    .notif-actions { flex-shrink: 0; }
+    .btn-ack { padding: 5px 12px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #555; font-size: 11px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .btn-ack:hover { background: #1a1a2a; color: #aaa; }
+    .btn-ack:disabled { opacity: 0.4; cursor: default; }
+
+    /* States */
+    .empty { padding: 60px 20px; text-align: center; color: #333; font-size: 14px; }
+    .empty .icon { font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
+    .empty .msg  { color: #444; }
+    .spinner { width:18px; height:18px; border:2px solid #2a2a3a; border-top-color:#5b6af5; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading { padding: 60px; text-align: center; }
+
+    /* Refresh indicator */
+    .refresh-bar { font-size: 11px; color: #333; text-align: right; margin-bottom: 16px; }
+
+    .toast { position:fixed; bottom:24px; right:24px; background:#1e2060; border:1px solid #5b6af5; border-radius:8px; padding:12px 18px; font-size:13px; color:#a0aaff; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; }
+    .toast.show { opacity:1; transform:translateY(0); }
+  </style>
+</head>
+<body>
+<div class="root">
+
+  <div class="page-header">
+    <h1>Notifications</h1>
+    <button class="ack-all-btn" id="btn-ack-all" onclick="acknowledgeAll()" disabled>Acknowledge All</button>
+  </div>
+  <p class="sub" id="sub-line">Loading...</p>
+  <div class="refresh-bar" id="refresh-bar"></div>
+
+  <div id="notif-container">
+    <div class="loading"><span class="spinner"></span></div>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  const API  = '';
+  const KEY  = localStorage.getItem('commandKey') || '';
+  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
+  const USER = new URLSearchParams(location.search).get('user')
+             || localStorage.getItem('lifeos_user')
+             || 'adam';
+
+  // -------- Notification type config --------
+  const TYPE_CONFIG = {
+    urgent:      { label: 'Urgent',      icon: '🔴', dotClass: 'dot-urgent',      cardClass: 'urgent' },
+    commitments: { label: 'Commitments', icon: '🟡', dotClass: 'dot-commitments', cardClass: 'unread' },
+    engine:      { label: 'Engine',      icon: '🔵', dotClass: 'dot-engine',       cardClass: 'unread' },
+    insights:    { label: 'Insights',    icon: '⚪', dotClass: 'dot-insights',     cardClass: '' },
+  };
+
+  const TYPE_ORDER = ['urgent', 'commitments', 'engine', 'insights'];
+
+  // -------- State --------
+  let allNotifs = [];
+  let refreshInterval = null;
+  let lastRefresh = null;
+
+  // -------- Load --------
+  async function load() {
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/notifications?user=${encodeURIComponent(USER)}`, { headers: H });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Failed to load');
+      allNotifs = data.notifications || [];
+      render();
+      updateTitle();
+      lastRefresh = new Date();
+      updateRefreshBar();
+    } catch (err) {
+      document.getElementById('notif-container').innerHTML =
+        `<div class="empty"><div class="msg">Could not load notifications: ${esc(err.message)}</div></div>`;
+      document.getElementById('sub-line').textContent = 'Error loading';
+    }
+  }
+
+  // -------- Render --------
+  function render() {
+    const container = document.getElementById('notif-container');
+    const unread    = allNotifs.filter(n => !n.acknowledged_at);
+
+    document.getElementById('sub-line').textContent =
+      unread.length === 0 ? 'All clear.' : `${unread.length} pending`;
+    document.getElementById('btn-ack-all').disabled = unread.length === 0;
+
+    if (allNotifs.length === 0) {
+      container.innerHTML = `
+        <div class="empty">
+          <div class="icon">✓</div>
+          <div class="msg">You're clear. Nothing pending.</div>
+        </div>`;
+      return;
+    }
+
+    // Group by type
+    const groups = {};
+    for (const t of TYPE_ORDER) groups[t] = [];
+    for (const n of allNotifs) {
+      const key = normalizeType(n.type || n.notification_type || 'insights');
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(n);
+    }
+
+    let html = '';
+    for (const type of TYPE_ORDER) {
+      const items = groups[type];
+      if (!items.length) continue;
+      const cfg = TYPE_CONFIG[type];
+      html += `
+        <div class="group">
+          <div class="group-title">
+            <span class="dot ${cfg.dotClass}"></span>
+            ${cfg.icon} ${esc(cfg.label)}
+          </div>
+          ${items.map(n => renderNotif(n, cfg)).join('')}
+        </div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  function renderNotif(n, cfg) {
+    const isAcked   = !!n.acknowledged_at;
+    const cardExtra = isAcked ? 'acknowledged' : (cfg.cardClass || 'unread');
+    const timeStr   = relativeTime(n.created_at || n.timestamp);
+    const msg       = esc(n.message || n.body || n.text || '');
+
+    return `
+      <div class="notif-card ${cardExtra}" id="notif-${n.id}">
+        <div class="notif-inner">
+          <span class="notif-icon">${cfg.icon}</span>
+          <div class="notif-body">
+            <div class="notif-msg">${msg}</div>
+            <div class="notif-time">${timeStr}</div>
+          </div>
+          <div class="notif-actions">
+            <button class="btn-ack" id="ack-btn-${n.id}"
+              onclick="acknowledge(${n.id})"
+              ${isAcked ? 'disabled' : ''}>
+              ${isAcked ? 'Done' : 'Acknowledge'}
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  // -------- Acknowledge single --------
+  async function acknowledge(id) {
+    const btn = document.getElementById(`ack-btn-${id}`);
+    if (btn) { btn.disabled = true; btn.textContent = '...'; }
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/notifications/${id}/acknowledge`, { method: 'POST', headers: H });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Failed');
+      // Update local state
+      const n = allNotifs.find(x => x.id === id);
+      if (n) n.acknowledged_at = new Date().toISOString();
+      render();
+      updateTitle();
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+      if (btn) { btn.disabled = false; btn.textContent = 'Acknowledge'; }
+    }
+  }
+
+  // -------- Acknowledge all --------
+  async function acknowledgeAll() {
+    const unread = allNotifs.filter(n => !n.acknowledged_at);
+    if (!unread.length) return;
+    document.getElementById('btn-ack-all').disabled = true;
+    const results = await Promise.allSettled(
+      unread.map(n =>
+        fetch(`${API}/api/v1/lifeos/notifications/${n.id}/acknowledge`, { method: 'POST', headers: H })
+          .then(r => r.json())
+      )
+    );
+    const failed = results.filter(r => r.status === 'rejected' || !r.value?.ok).length;
+    if (failed) toast(`${failed} failed to acknowledge`);
+    else toast('All acknowledged');
+    await load();
+  }
+
+  // -------- Title badge --------
+  function updateTitle() {
+    const unread = allNotifs.filter(n => !n.acknowledged_at).length;
+    document.title = unread > 0 ? `(${unread}) Notifications — LifeOS` : 'Notifications — LifeOS';
+  }
+
+  // -------- Helpers --------
+  function normalizeType(t) {
+    t = (t || '').toLowerCase();
+    if (t.includes('urgent') || t.includes('emergency') || t.includes('high')) return 'urgent';
+    if (t.includes('commit') || t.includes('reminder') || t.includes('prod'))  return 'commitments';
+    if (t.includes('engine') || t.includes('outreach') || t.includes('response')) return 'engine';
+    return 'insights';
+  }
+
+  function relativeTime(ts) {
+    if (!ts) return '';
+    const diff = Date.now() - new Date(ts).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1)  return 'just now';
+    if (mins < 60) return `${mins} minute${mins===1?'':'s'} ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24)  return `${hrs} hour${hrs===1?'':'s'} ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days} day${days===1?'':'s'} ago`;
+  }
+
+  function updateRefreshBar() {
+    if (!lastRefresh) return;
+    document.getElementById('refresh-bar').textContent =
+      `Last refreshed ${relativeTime(lastRefresh.toISOString())}`;
+  }
+
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function toast(msg) { const e=document.getElementById('toast'); e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2500); }
+
+  // -------- Boot --------
+  if (!KEY) {
+    const k = prompt('Enter your command key:');
+    if (k) { localStorage.setItem('commandKey', k); location.reload(); }
+  } else {
+    load();
+    // Auto-refresh every 60 seconds
+    refreshInterval = setInterval(() => {
+      load();
+    }, 60000);
+    // Update the "last refreshed" label every 15s without a full reload
+    setInterval(updateRefreshBar, 15000);
+  }
+</script>
+</body>
+</html>
