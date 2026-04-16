@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Ethics & Privacy - LifeOS</title>
+  <style>
+    body { background:#0b1020; color:#e5e7eb; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+    .root { max-width: 960px; margin: 0 auto; padding: 28px 18px 72px; }
+    .grid { display:grid; gap:16px; }
+    .card { background:#111827; border:1px solid #243047; border-radius:14px; padding:16px; }
+    h1 { font-size:24px; margin:0 0 6px; }
+    .sub { color:#9ca3af; margin:0 0 20px; }
+    .row { display:grid; gap:12px; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); }
+    label { display:block; font-size:12px; color:#9ca3af; margin:0 0 6px; }
+    input, select, textarea { width:100%; box-sizing:border-box; background:#0f172a; color:#e5e7eb; border:1px solid #334155; border-radius:10px; padding:10px 12px; }
+    button { background:#2563eb; color:#fff; border:0; border-radius:10px; padding:10px 14px; cursor:pointer; }
+    button.secondary { background:#334155; }
+    button.danger { background:#991b1b; }
+    .muted { color:#9ca3af; }
+    .pill { display:inline-block; padding:3px 8px; border-radius:999px; font-size:12px; margin-right:6px; }
+    .ok { background:#052e1b; color:#86efac; }
+    .warn { background:#3f2d05; color:#fcd34d; }
+    .bad { background:#3f0d12; color:#fca5a5; }
+    .list { display:grid; gap:10px; }
+    .item { border:1px solid #243047; border-radius:10px; padding:12px; background:#0f172a; }
+    pre { white-space:pre-wrap; word-break:break-word; font-size:12px; color:#cbd5e1; }
+    .toast { position:fixed; right:18px; bottom:18px; background:#111827; color:#fff; border:1px solid #2563eb; border-radius:10px; padding:10px 12px; opacity:0; transform:translateY(8px); transition:all .2s; }
+    .toast.show { opacity:1; transform:translateY(0); }
+  </style>
+</head>
+<body>
+  <div class="root grid">
+    <div>
+      <h1>Ethics & Privacy</h1>
+      <p class="sub">Consent, constitutional locks, research contribution, and sovereignty checks.</p>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label>User</label>
+          <input id="user" placeholder="adam">
+        </div>
+        <div>
+          <label>Feature</label>
+          <input id="feature" placeholder="research_aggregate">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+        <button onclick="loadAll()">Refresh</button>
+        <button class="secondary" onclick="grantConsent()">Grant consent</button>
+        <button class="secondary" onclick="revokeConsent()">Revoke consent</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h3 style="margin:0 0 12px;">Consent</h3>
+        <div id="consent-list" class="list muted">Loading…</div>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 12px;">Constitutional Locks</h3>
+        <div id="locks-list" class="list muted">Loading…</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 12px;">Sovereignty Check</h3>
+      <div class="row">
+        <div>
+          <label>Action</label>
+          <input id="action" placeholder="share_health_pattern_summary">
+        </div>
+        <div>
+          <label>Target</label>
+          <input id="target" placeholder="partner">
+        </div>
+      </div>
+      <div style="margin-top:12px;"><button onclick="runSovereigntyCheck()">Check</button></div>
+      <pre id="sovereignty-out" style="margin-top:12px;">No check run yet.</pre>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 12px;">Research Summary</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+        <button onclick="loadResearch()">Refresh research summary</button>
+        <button class="secondary" onclick="contributeResearch()">Contribute current consented data</button>
+      </div>
+      <pre id="research-out">Loading…</pre>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:0 0 12px;">Danger Zone</h3>
+      <p class="muted" style="margin:0 0 10px;">Full erase requires the explicit confirm hash.</p>
+      <div class="row">
+        <div>
+          <label>Confirm hash</label>
+          <input id="erase-confirm" value="ERASE_ALL_MY_DATA">
+        </div>
+      </div>
+      <div style="margin-top:12px;"><button class="danger" onclick="eraseAll()">Erase all LifeOS data for this user</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const API = '/api/v1/lifeos/ethics';
+    const KEY = localStorage.getItem('commandKey') || prompt('Enter your command key:') || '';
+    if (KEY) localStorage.setItem('commandKey', KEY);
+    const USER = new URLSearchParams(location.search).get('user')
+      || localStorage.getItem('lifeos_user')
+      || localStorage.getItem('lifeosUser')
+      || 'adam';
+    if (USER) localStorage.setItem('lifeos_user', USER);
+    document.getElementById('user').value = USER;
+
+    const headers = () => ({ 'Content-Type': 'application/json', 'x-command-key': KEY });
+    const currentUser = () => document.getElementById('user').value.trim() || USER;
+    const currentFeature = () => document.getElementById('feature').value.trim();
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2400);
+    }
+
+    async function api(method, path, body) {
+      const res = await fetch(`${API}${path}`, {
+        method,
+        headers: headers(),
+        body: body ? JSON.stringify(body) : undefined,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `${method} ${path} failed`);
+      return data;
+    }
+
+    function consentStatePill(active) {
+      return `<span class="pill ${active ? 'ok' : 'bad'}">${active ? 'active' : 'revoked'}</span>`;
+    }
+
+    async function loadConsent() {
+      const box = document.getElementById('consent-list');
+      box.textContent = 'Loading…';
+      try {
+        const data = await api('GET', `/consent?user=${encodeURIComponent(currentUser())}`);
+        const entries = Object.entries(data.consent || {});
+        if (!entries.length) {
+          box.innerHTML = '<div class="muted">No consent records yet.</div>';
+          return;
+        }
+        box.innerHTML = entries.map(([feature, row]) => `
+          <div class="item">
+            <div><strong>${feature}</strong> ${consentStatePill(Boolean(row.active))}</div>
+            <div class="muted">Updated: ${row.updated_at || row.created_at || 'n/a'}</div>
+          </div>
+        `).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="bad pill">${err.message}</div>`;
+      }
+    }
+
+    async function loadLocks() {
+      const box = document.getElementById('locks-list');
+      box.textContent = 'Loading…';
+      try {
+        const data = await api('GET', `/lock-status?user=${encodeURIComponent(currentUser())}`);
+        const items = data.locks || data.status || [];
+        if (!items.length) {
+          box.innerHTML = '<div class="muted">No constitutional locks returned.</div>';
+          return;
+        }
+        box.innerHTML = items.map(item => `
+          <div class="item">
+            <div><strong>${item.feature || item.lock_key || 'lock'}</strong> <span class="pill ${item.locked ? 'bad' : 'ok'}">${item.locked ? 'locked' : 'clear'}</span></div>
+            <div class="muted">${item.reason || item.explanation || 'No note'}</div>
+          </div>
+        `).join('');
+      } catch (err) {
+        box.innerHTML = `<div class="bad pill">${err.message}</div>`;
+      }
+    }
+
+    async function loadResearch() {
+      const box = document.getElementById('research-out');
+      box.textContent = 'Loading…';
+      try {
+        const data = await api('GET', `/research/summary?user=${encodeURIComponent(currentUser())}`);
+        box.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        box.textContent = err.message;
+      }
+    }
+
+    async function loadAll() {
+      await Promise.all([loadConsent(), loadLocks(), loadResearch()]);
+    }
+
+    async function grantConsent() {
+      const feature = currentFeature();
+      if (!feature) return toast('Feature required');
+      await api('POST', '/consent', { user: currentUser(), feature });
+      toast('Consent granted');
+      loadConsent();
+    }
+
+    async function revokeConsent() {
+      const feature = currentFeature();
+      if (!feature) return toast('Feature required');
+      await api('POST', '/consent/revoke', { user: currentUser(), feature });
+      toast('Consent revoked');
+      loadConsent();
+    }
+
+    async function contributeResearch() {
+      await api('POST', '/research/contribute', { user: currentUser() });
+      toast('Research contribution recorded');
+      loadResearch();
+    }
+
+    async function runSovereigntyCheck() {
+      const action = document.getElementById('action').value.trim();
+      const target = document.getElementById('target').value.trim();
+      const out = document.getElementById('sovereignty-out');
+      if (!action) { out.textContent = 'Action required.'; return; }
+      try {
+        const data = await api('POST', '/sovereignty/check', { user: currentUser(), action, target });
+        out.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        out.textContent = err.message;
+      }
+    }
+
+    async function eraseAll() {
+      const confirm_hash = document.getElementById('erase-confirm').value.trim();
+      if (!confirm_hash) return toast('Confirm hash required');
+      try {
+        await api('POST', '/erase', { user: currentUser(), confirm_hash });
+        toast('Erase request completed');
+      } catch (err) {
+        toast(err.message);
+      }
+    }
+
+    loadAll();
+  </script>
+</body>
+</html>

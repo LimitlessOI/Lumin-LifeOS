@@ -34,6 +34,8 @@ import { createLifeOSGrowthRoutes } from "../routes/lifeos-growth-routes.js";
 import { createLifeOSMediationRoutes } from "../routes/lifeos-mediation-routes.js";
 import { createLifeOSHealingRoutes } from "../routes/lifeos-healing-routes.js";
 import { createLifeOSLegacyRoutes } from "../routes/lifeos-legacy-routes.js";
+import { createLifeOSEmotionalRoutes } from "../routes/lifeos-emotional-routes.js";
+import { createLifeOSEthicsRoutes } from "../routes/lifeos-ethics-routes.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
 
@@ -150,6 +152,10 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [LIFEOS-HEALING] Routes mounted at /api/v1/lifeos/healing");
   app.use("/api/v1/lifeos/legacy", createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-LEGACY] Routes mounted at /api/v1/lifeos/legacy");
+  app.use("/api/v1/lifeos/emotional", createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMember }));
+  logger.info("✅ [LIFEOS-EMOTIONAL] Routes mounted at /api/v1/lifeos/emotional");
+  app.use("/api/v1/lifeos/ethics", createLifeOSEthicsRoutes({ pool, requireKey, callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-ETHICS] Routes mounted at /api/v1/lifeos/ethics");
 
   // Optional LifeOS / Kids / Teacher modules remain degradable.
   async function importOptionalRoute(modulePath, exportName) {
@@ -167,8 +173,6 @@ export async function registerRuntimeRoutes(app, deps) {
   }
 
   const optionalRoutes = [
-    { modulePath: "../routes/lifeos-emotional-routes.js", exportName: "createLifeOSEmotionalRoutes", mountPath: "/api/v1/lifeos/emotional", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-EMOTIONAL]" },
-    { modulePath: "../routes/lifeos-ethics-routes.js", exportName: "createLifeOSEthicsRoutes", mountPath: "/api/v1/lifeos/ethics", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-ETHICS]" },
     { modulePath: "../routes/lifeos-conflict-routes.js", exportName: "createLifeOSConflictRoutes", mountPath: "/api/v1/lifeos/conflict", args: [{ pool, requireKey, callCouncilMember, logger }], label: "[LIFEOS-CONFLICT]" },
     { modulePath: "../routes/lifeos-finance-routes.js", exportName: "createLifeOSFinanceRoutes", mountPath: "/api/v1/lifeos/finance", args: [{ pool, requireKey, logger }], label: "[LIFEOS-FINANCE]" },
     { modulePath: "../routes/lifeos-copilot-routes.js", exportName: "createLifeOSCopilotRoutes", mountPath: "/api/v1/lifeos/copilot", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-COPILOT]" },
