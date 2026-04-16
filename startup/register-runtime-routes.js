@@ -21,6 +21,10 @@ import { createModelPerformanceRouter } from "../routes/model-performance-routes
 import { createAccountManagerRoutes } from "../routes/account-manager-routes.js";
 import { createTCRoutes } from "../routes/tc-routes.js";
 import { createMLSRoutes } from "../routes/mls-routes.js";
+import { createLifeOSCoreRoutes } from "../routes/lifeos-core-routes.js";
+import { createLifeOSGatewayRoutes, createLifeOSEngineRoutes } from "../routes/lifeos-engine-routes.js";
+import { createLifeOSHealthRoutes } from "../routes/lifeos-health-routes.js";
+import { createLifeOSFamilyRoutes } from "../routes/lifeos-family-routes.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
 
@@ -107,8 +111,20 @@ export async function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/model-performance", requireKey, createModelPerformanceRouter(pool));
   logger.info("✅ [MODEL-PERFORMANCE] Routes mounted at /api/v1/model-performance/{leaderboard,winners,lens/:lens,score-outcome}");
 
-  // Optional LifeOS / Kids / Teacher modules. These must not block billing startup
-  // when experimental route files are present locally but not deployed.
+  // Core LifeOS routes are required for the product to function.
+  const lifeosOpts = { pool, requireKey, callCouncilMember, logger, notificationService, sendSMS };
+  app.use("/api/v1/lifeos", createLifeOSCoreRoutes(lifeosOpts));
+  logger.info("✅ [LIFEOS-CORE] Routes mounted at /api/v1/lifeos");
+  app.use("/api/v1/lifeos", createLifeOSGatewayRoutes({ pool, sendSMS, callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-GATEWAY] Routes mounted at /api/v1/lifeos");
+  app.use("/api/v1/lifeos/engine", createLifeOSEngineRoutes({ pool, requireKey, notificationService, sendSMS, callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-ENGINE] Routes mounted at /api/v1/lifeos/engine");
+  app.use("/api/v1/lifeos/health", createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, sendSMS, logger }));
+  logger.info("✅ [LIFEOS-HEALTH] Routes mounted at /api/v1/lifeos/health");
+  app.use("/api/v1/lifeos/family", createLifeOSFamilyRoutes({ pool, requireKey, callCouncilMember }));
+  logger.info("✅ [LIFEOS-FAMILY] Routes mounted at /api/v1/lifeos/family");
+
+  // Optional LifeOS / Kids / Teacher modules remain degradable.
   async function importOptionalRoute(modulePath, exportName) {
     try {
       const mod = await import(modulePath);
@@ -123,13 +139,7 @@ export async function registerRuntimeRoutes(app, deps) {
     }
   }
 
-  const lifeosOpts = { pool, requireKey, callCouncilMember, logger, notificationService, sendSMS };
   const optionalRoutes = [
-    { modulePath: "../routes/lifeos-core-routes.js", exportName: "createLifeOSCoreRoutes", mountPath: "/api/v1/lifeos", args: [lifeosOpts], label: "[LIFEOS-CORE]" },
-    { modulePath: "../routes/lifeos-engine-routes.js", exportName: "createLifeOSGatewayRoutes", mountPath: "/api/v1/lifeos", args: [{ pool, sendSMS, callCouncilMember, logger }], label: "[LIFEOS-GATEWAY]" },
-    { modulePath: "../routes/lifeos-engine-routes.js", exportName: "createLifeOSEngineRoutes", mountPath: "/api/v1/lifeos/engine", args: [{ pool, requireKey, notificationService, sendSMS, callCouncilMember, logger }], label: "[LIFEOS-ENGINE]" },
-    { modulePath: "../routes/lifeos-health-routes.js", exportName: "createLifeOSHealthRoutes", mountPath: "/api/v1/lifeos/health", args: [{ pool, requireKey, callCouncilMember, sendSMS, logger }], label: "[LIFEOS-HEALTH]" },
-    { modulePath: "../routes/lifeos-family-routes.js", exportName: "createLifeOSFamilyRoutes", mountPath: "/api/v1/lifeos/family", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-FAMILY]" },
     { modulePath: "../routes/lifeos-emotional-routes.js", exportName: "createLifeOSEmotionalRoutes", mountPath: "/api/v1/lifeos/emotional", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-EMOTIONAL]" },
     { modulePath: "../routes/lifeos-purpose-routes.js", exportName: "createLifeOSPurposeRoutes", mountPath: "/api/v1/lifeos/purpose", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-PURPOSE]" },
     { modulePath: "../routes/lifeos-children-routes.js", exportName: "createLifeOSChildrenRoutes", mountPath: "/api/v1/lifeos/children", args: [{ pool, requireKey, callCouncilMember }], label: "[LIFEOS-CHILDREN]" },

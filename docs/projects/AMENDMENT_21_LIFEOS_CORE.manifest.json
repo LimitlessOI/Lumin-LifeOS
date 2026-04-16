@@ -1,0 +1,387 @@
+{
+  "project": "lifeos_core",
+  "project_id": "lifeos_core",
+  "amendment": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+  "status": "founding",
+  "build_ready": true,
+  "council_persona": "purpose-first personal OS \u2014 sovereignty is constitutional",
+  "segment_schema_version": 1,
+  "owned_files": [
+    "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+    "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json",
+    "routes/lifeos-core-routes.js",
+    "routes/lifeos-ethics-routes.js",
+    "services/integrity-score.js",
+    "services/joy-score.js",
+    "services/commitment-tracker.js",
+    "services/purpose-discovery.js",
+    "services/health-intelligence.js",
+    "services/emergency-detection.js",
+    "services/dream-funding.js",
+    "services/truth-delivery.js",
+    "services/data-sovereignty.js",
+    "services/consent-registry.js",
+    "services/constitutional-lock.js",
+    "services/research-aggregator.js",
+    "services/sovereignty-check.js",
+    "services/multi-person-sync.js",
+    "db/migrations/20260328_lifeos_core.sql",
+    "db/migrations/20260404_lifeos_data_ethics.sql",
+    "scripts/lifeos-verify.mjs",
+    "public/overlay/lifeos-mirror/",
+    "routes/lifeos-family-routes.js",
+    "routes/lifeos-emotional-routes.js",
+    "routes/lifeos-purpose-routes.js",
+    "routes/lifeos-children-routes.js",
+    "routes/lifeos-mediation-routes.js",
+    "routes/lifeos-conflict-routes.js",
+    "routes/lifeos-growth-routes.js",
+    "routes/lifeos-vision-routes.js",
+    "routes/lifeos-identity-routes.js",
+    "routes/lifeos-decisions-routes.js",
+    "services/emotional-pattern-engine.js",
+    "services/inner-work-effectiveness.js",
+    "services/mediation-engine.js",
+    "services/conflict-intelligence.js",
+    "services/communication-coach.js",
+    "services/response-variety.js",
+    "services/communication-profile.js",
+    "services/future-vision.js",
+    "services/video-production.js",
+    "services/contradiction-engine.js",
+    "services/decision-intelligence.js",
+    "services/mastery-tracker.js",
+    "services/relationship-intelligence.js",
+    "services/community-growth.js",
+    "db/migrations/20260329_lifeos_decisions.sql",
+    "db/migrations/20260329_lifeos_growth.sql",
+    "db/migrations/20260329_lifeos_identity.sql",
+    "db/migrations/20260329_lifeos_vision.sql",
+    "db/migrations/20260405_lifeos_mediation.sql",
+    "db/migrations/20260406_lifeos_conflict.sql",
+    "db/migrations/20260406b_lifeos_conflict_clarity.sql",
+    "db/migrations/20260407_communication_profile.sql",
+    "db/migrations/20260407_response_variety.sql",
+    "public/overlay/lifeos-family.html",
+    "public/overlay/lifeos-inner.html",
+    "public/overlay/lifeos-purpose.html",
+    "public/overlay/lifeos-child.html",
+    "public/overlay/lifeos-parent-view.html",
+    "public/overlay/lifeos-mediation.html",
+    "public/overlay/lifeos-coach.html",
+    "public/overlay/lifeos-growth.html",
+    "public/overlay/lifeos-vision.html",
+    "public/overlay/lifeos-identity.html",
+    "public/overlay/lifeos-decisions.html",
+    "db/migrations/20260329_lifeos_community.sql",
+    "services/victory-vault.js",
+    "db/migrations/20260330_lifeos_victory_vault.sql",
+    "db/migrations/20260408_lifeos_finance_and_prefs.sql",
+    "services/lifeos-finance.js",
+    "services/lifeos-scheduled-jobs.js",
+    "routes/lifeos-finance-routes.js"
+  ],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "docs/projects/AMENDMENT_21_LIFEOS_CORE.md"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-ethics-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/data-sovereignty.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/consent-registry.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/constitutional-lock.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/research-aggregator.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/sovereignty-check.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/multi-person-sync.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260404_lifeos_data_ethics.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-ethics-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/data-sovereignty.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/consent-registry.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/constitutional-lock.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/research-aggregator.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/sovereignty-check.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/multi-person-sync.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-growth-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-vision-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/community-growth.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260329_lifeos_growth.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-engine-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-growth-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-vision-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/community-growth.js"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/lifeos-verify.mjs"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260329_lifeos_community.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/communication-coach.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/contradiction-engine.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/video-production.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/victory-vault.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260330_lifeos_victory_vault.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/victory-vault.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260408_lifeos_finance_and_prefs.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-finance.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-finance.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-scheduled-jobs.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-scheduled-jobs.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-finance-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-finance-routes.js"
+    }
+  ],
+  "phases": [
+    {
+      "id": "phase_1_mirror",
+      "name": "The Mirror",
+      "description": "Daily dashboard: Be-Do-Have snapshot, open commitments, Integrity Score, Joy Score, one hard truth",
+      "status": "building",
+      "segments": [
+        {
+          "id": "seg_integrity_score_v1",
+          "name": "Integrity Score v1",
+          "status": "building",
+          "review_tier": "needs-review"
+        },
+        {
+          "id": "seg_joy_score_v1",
+          "name": "Joy Score v1",
+          "status": "building",
+          "review_tier": "needs-review"
+        },
+        {
+          "id": "seg_commitment_tracker",
+          "name": "Commitment tracker + prod engine",
+          "status": "building",
+          "review_tier": "needs-review"
+        },
+        {
+          "id": "seg_daily_mirror_ui",
+          "name": "Daily Mirror UI",
+          "status": "building",
+          "review_tier": "needs-review"
+        },
+        {
+          "id": "seg_truth_delivery",
+          "name": "Truth delivery calibration",
+          "status": "building",
+          "review_tier": "needs-review"
+        }
+      ]
+    },
+    {
+      "id": "phase_2_engine",
+      "name": "The Engine",
+      "description": "Automation: Twilio gateway, outreach on behalf, calendar protection",
+      "status": "building",
+      "segments": []
+    },
+    {
+      "id": "phase_3_health",
+      "name": "Health Intelligence",
+      "description": "Apple Watch + CGM + sleep correlation + emergency detection",
+      "status": "building",
+      "segments": []
+    },
+    {
+      "id": "phase_4_family",
+      "name": "Family OS",
+      "description": "Sherry onboarding, shared commitments, relationship debrief, tone intelligence",
+      "status": "building",
+      "segments": []
+    },
+    {
+      "id": "phase_8_data_ethics",
+      "name": "Data Ethics Infrastructure",
+      "description": "Deletion cascade, consent registry, constitutional lock, research aggregation, sovereignty check",
+      "status": "complete",
+      "segments": [
+        {
+          "id": "seg_data_sovereignty",
+          "name": "Data deletion cascade",
+          "status": "complete",
+          "review_tier": "approved"
+        },
+        {
+          "id": "seg_consent_registry",
+          "name": "Append-only consent registry",
+          "status": "complete",
+          "review_tier": "approved"
+        },
+        {
+          "id": "seg_constitutional_lock",
+          "name": "Constitutional lock + coercion detection",
+          "status": "complete",
+          "review_tier": "approved"
+        },
+        {
+          "id": "seg_research_aggregator",
+          "name": "Privacy-safe research aggregation (Laplace DP)",
+          "status": "complete",
+          "review_tier": "approved"
+        },
+        {
+          "id": "seg_sovereignty_check",
+          "name": "Sovereignty check middleware",
+          "status": "complete",
+          "review_tier": "approved"
+        },
+        {
+          "id": "seg_multi_person_sync",
+          "name": "Multi-person sync with explicit opt-in sharing",
+          "status": "complete",
+          "review_tier": "approved"
+        }
+      ]
+    },
+    {
+      "id": "phase_16_personal_finance",
+      "name": "Personal Finance & Investment OS",
+      "description": "Budgeting, cashflow, goals, IPS, holdings snapshots, read-only aggregation; Decision Intelligence link; simulation UI disclaimers",
+      "status": "building",
+      "segments": [
+        {
+          "id": "seg_finance_migration",
+          "name": "DB migration — accounts, budgets, transactions, IPS",
+          "status": "complete",
+          "review_tier": "needs-review"
+        },
+        {
+          "id": "seg_finance_service_routes_ui",
+          "name": "lifeos-finance service + routes + overlay",
+          "status": "building",
+          "review_tier": "needs-review"
+        },
+        {
+          "id": "seg_finance_decision_link",
+          "name": "Money decisions wired to Decision Intelligence",
+          "status": "not_started",
+          "review_tier": "needs-review"
+        }
+      ]
+    },
+    {
+      "id": "phase_17_flourishing_backlog",
+      "name": "Flourishing mechanics backlog",
+      "description": "25+ enhancement items from Amendment 21 backlog section; ship in prioritized subsets with sovereignty + consent",
+      "status": "building",
+      "segments": [
+        {
+          "id": "seg_flourishing_prefs_api",
+          "name": "PATCH /users/:handle/flourishing-prefs JSON merge",
+          "status": "complete",
+          "review_tier": "needs-review"
+        }
+      ]
+    }
+  ]
+}

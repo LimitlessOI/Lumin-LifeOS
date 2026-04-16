@@ -455,6 +455,31 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     }
   });
 
+  // Legacy alias kept for existing overlay pages that still request /health/latest.
+  router.get('/health/latest', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const { rows } = await pool.query(
+        `SELECT *,
+                CASE
+                  WHEN resting_hr >= 120 OR mood_score <= 2 OR energy_score <= 2
+                    THEN 'Check body state today'
+                  ELSE NULL
+                END AS emergency_alert
+           FROM health_checkins
+           WHERE user_id = $1
+           ORDER BY checkin_date DESC, created_at DESC
+           LIMIT 1`,
+        [userId]
+      );
+      res.json({ ok: true, ...(rows[0] || {}) });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.post('/health/checkin', requireKey, async (req, res) => {
     try {
       const { user = 'adam', sleep_hours, sleep_quality, resting_hr, hrv, weight_lbs, water_oz, alcohol_drinks, foods_logged, energy_score, mood_score, medications_taken, notes, glucose_notes } = req.body;

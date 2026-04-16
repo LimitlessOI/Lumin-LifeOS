@@ -87,7 +87,8 @@ async function loadManifest(manifestPath) {
 
 // ── Assertion runners ──────────────────────────────────────────────────────────
 async function runAssertion(assertion, manifest) {
-  const { type, check, expect } = assertion;
+  const { type, check, expect, path: assertionPath } = assertion;
+  const target = check ?? assertionPath;
 
   switch (type) {
     case 'env': {
@@ -98,10 +99,10 @@ async function runAssertion(assertion, manifest) {
 
     case 'file_exists': {
       try {
-        await fs.access(path.join(ROOT, check));
-        return { ok: true, detail: `${check} exists` };
+        await fs.access(path.join(ROOT, target));
+        return { ok: true, detail: `${target} exists` };
       } catch {
-        return { ok: false, detail: `${check} does not exist` };
+        return { ok: false, detail: `${target} does not exist` };
       }
     }
 
@@ -172,7 +173,7 @@ async function runAssertion(assertion, manifest) {
     }
 
     case 'required_files': {
-      const files = Array.isArray(check) ? check : [check];
+      const files = Array.isArray(target) ? target : [target];
       const missing = [];
       for (const f of files) {
         try { await fs.access(path.join(ROOT, f)); } catch { missing.push(f); }
@@ -198,9 +199,10 @@ async function verifyProject(manifestPath) {
     return { passed: false, total: 0, failed: 1, skipped: 0 };
   }
 
-  const { project_id, name, assertions = [], required_env = [], required_files = [], required_tables = [] } = manifest;
+  const projectId = manifest.project_id || manifest.project;
+  const { name, assertions = [], required_env = [], required_files = [], required_tables = [] } = manifest;
 
-  log(`\n${C.bold}${C.cyan}▶ ${name || project_id}${C.reset} ${C.dim}(${project_id})${C.reset}`);
+  log(`\n${C.bold}${C.cyan}▶ ${name || projectId}${C.reset} ${C.dim}(${projectId})${C.reset}`);
   log(`${C.dim}  manifest: ${path.relative(ROOT, manifestPath)}${C.reset}`);
 
   // Build full assertion list from manifest fields + explicit assertions
@@ -231,7 +233,7 @@ async function verifyProject(manifestPath) {
 
   // Explicit assertions from manifest
   for (const a of assertions) {
-    allAssertions.push({ ...a, label: a.label || `${a.type}: ${a.check}` });
+    allAssertions.push({ ...a, label: a.label || `${a.type}: ${a.check ?? a.path}` });
   }
 
   let passed = 0, failed = 0, skipped = 0;
@@ -239,7 +241,7 @@ async function verifyProject(manifestPath) {
 
   for (const assertion of allAssertions) {
     const result = await runAssertion(assertion, manifest);
-    const label = assertion.label || `${assertion.type}: ${assertion.check}`;
+    const label = assertion.label || `${assertion.type}: ${assertion.check ?? assertion.path}`;
 
     if (result.skipped || result.ok === null) {
       log(`  ${warn} ${label} ${C.dim}(${result.detail})${C.reset}`);
@@ -271,12 +273,12 @@ async function verifyProject(manifestPath) {
           UPDATE projects
           SET last_verified_at = NOW(), verification_passed = $1
           WHERE slug = $2
-        `, [allPassed, project_id]);
+        `, [allPassed, projectId]);
       } catch { /* table may not exist yet in this environment */ }
     }
   }
 
-  return { passed, failed, skipped, allPassed, project_id, name };
+  return { passed, failed, skipped, allPassed, project_id: projectId, name };
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -296,7 +298,7 @@ if (runAll) {
   for (const m of all) {
     try {
       const data = JSON.parse(await fs.readFile(m, 'utf8'));
-      if (data.project_id === projectArg) { manifests = [m]; break; }
+      if (data.project_id === projectArg || data.project === projectArg) { manifests = [m]; break; }
     } catch { continue; }
   }
   if (manifests.length === 0) {
