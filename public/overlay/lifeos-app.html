@@ -1047,6 +1047,26 @@
       <span class="settings-link" onclick="loadPage('lifeos-ethics.html','Ethics &amp; Privacy','--c-healing'); closeSettings()">View policy →</span>
     </div>
     <div class="settings-divider"></div>
+    <div class="settings-section">
+      <div class="settings-section-title">Testing Surfaces</div>
+      <div class="settings-row">
+        <div class="settings-label">Onboarding</div>
+        <span class="settings-link" onclick="loadPage('lifeos-onboarding.html','Onboarding','--c-purpose'); closeSettings()">Open →</span>
+      </div>
+      <div class="settings-row">
+        <div class="settings-label">Quick Entry</div>
+        <span class="settings-link" onclick="loadPage('lifeos-quick-entry.html','Quick Entry','--c-engine'); closeSettings()">Open →</span>
+      </div>
+      <div class="settings-row">
+        <div class="settings-label">Notifications</div>
+        <span class="settings-link" onclick="loadPage('lifeos-notifications.html','Notifications','--c-mirror'); closeSettings()">Open →</span>
+      </div>
+      <div class="settings-row">
+        <div class="settings-label">Parent View</div>
+        <span class="settings-link" onclick="loadPage('lifeos-parent-view.html','Parent View','--c-children'); closeSettings()">Open →</span>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
     <button class="settings-save-btn" onclick="saveSettings()">Save Changes</button>
   </div>
 </div>
@@ -1081,6 +1101,10 @@ const PAGE_META = {
   'lifeos-legacy.html':    { title: 'Legacy',     icon: '🏛️',  color: '--c-legacy'    },
   'lifeos-healing.html':   { title: 'Healing',    icon: '🌸',  color: '--c-healing'   },
   'lifeos-ethics.html':    { title: 'Ethics & Privacy', icon: '🔒', color: '--c-mirror' },
+  'lifeos-onboarding.html': { title: 'Onboarding', icon: '🧱', color: '--c-purpose' },
+  'lifeos-quick-entry.html': { title: 'Quick Entry', icon: '✍️', color: '--c-engine' },
+  'lifeos-notifications.html': { title: 'Notifications', icon: '🔔', color: '--c-mirror' },
+  'lifeos-parent-view.html': { title: 'Parent View', icon: '👨‍👩‍👧', color: '--c-children' },
 };
 
 /* ── Boot ────────────────────────────────────────────────────── */
