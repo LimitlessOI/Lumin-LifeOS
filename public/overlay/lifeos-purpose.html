@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Purpose &amp; Dreams — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0f;
+      color: #e8e8f0;
+      min-height: 100vh;
+    }
+
+    .page-root {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+    }
+    .page-header h1 { font-size: 24px; font-weight: 700; color: #e8e8f0; }
+    .page-header .subtitle { font-size: 13px; color: #666; margin-top: 4px; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid #1e1e2e;
+      margin-bottom: 28px;
+    }
+    .tab-btn {
+      padding: 8px 18px;
+      border: none;
+      background: transparent;
+      color: #555;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.15s;
+    }
+    .tab-btn.active {
+      color: #a0aaff;
+      border-bottom-color: #5b6af5;
+    }
+    .tab-btn:hover:not(.active) { color: #888; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Cards ── */
+    .card {
+      background: #111118;
+      border: 1px solid #1e1e2e;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Purpose statement ── */
+    .purpose-statement {
+      background: linear-gradient(135deg, #1a1a2e, #16162a);
+      border: 1px solid #2e2e4e;
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+    }
+    .purpose-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #5b6af5;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .purpose-text {
+      font-size: 22px;
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.4;
+    }
+
+    /* ── Two-column grid ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── Tags ── */
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .tag-green  { background: #052e16; color: #4ade80; border: 1px solid #16a34a33; }
+    .tag-red    { background: #2d0a0a; color: #f87171; border: 1px solid #dc262633; }
+    .tag-purple { background: #1a1a2e; color: #a0aaff; border: 1px solid #5b6af533; }
+
+    /* ── Strengths list ── */
+    .strength-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #131320;
+      font-size: 14px;
+      color: #c8c8d8;
+    }
+    .strength-item:last-child { border-bottom: none; }
+    .strength-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: #5b6af5;
+      min-width: 20px;
+      margin-top: 2px;
+    }
+
+    /* ── Economic path cards ── */
+    .path-card {
+      background: #16161f;
+      border: 1px solid #1e1e2e;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+    .path-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #e8e8f0;
+      margin-bottom: 6px;
+    }
+    .path-desc {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .path-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #2e2e4e;
+      color: #888;
+      background: #111118;
+    }
+    .badge-demand { border-color: #1d4ed833; color: #60a5fa; background: #0a1628; }
+    .badge-effort { border-color: #92400e33; color: #fbbf24; background: #1a1200; }
+    .badge-revenue{ border-color: #14532d33; color: #4ade80; background: #0a1a0a; }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: #555;
+    }
+    .empty-state p { font-size: 15px; margin-bottom: 20px; }
+    .empty-state .hint { font-size: 13px; color: #444; max-width: 400px; margin: 0 auto 24px; line-height: 1.6; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid #5b6af5;
+      background: #1a1a2e;
+      color: #a0aaff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn:hover { background: #23233a; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-subtle {
+      border-color: #2e2e3e;
+      background: transparent;
+      color: #666;
+      font-size: 12px;
+    }
+    .btn-subtle:hover { background: #111118; color: #aaa; }
+    .btn-danger { border-color: #f87171; background: #1f1515; color: #f87171; }
+    .btn-danger:hover { background: #2a1a1a; }
+    .btn-success { border-color: #4ade80; background: #0a1a0a; color: #4ade80; }
+    .btn-success:hover { background: #0f2a0f; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+    /* ── Inline form ── */
+    .inline-form {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #1e1e2e;
+    }
+    input[type=text], input[type=number], input[type=date], select, textarea {
+      background: #0a0a0f;
+      border: 1px solid #2e2e3e;
+      border-radius: 7px;
+      color: #c8c8d8;
+      font-size: 13px;
+      padding: 7px 12px;
+      font-family: inherit;
+    }
+    input[type=text]:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #5b6af5;
+    }
+    input[type=text].wide { flex: 1; min-width: 160px; }
+    textarea.wide { width: 100%; min-height: 80px; resize: vertical; }
+    label { font-size: 12px; color: #666; }
+
+    /* ── Dream card ── */
+    .dream-card {
+      background: #111118;
+      border: 1px solid #1e1e2e;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .dream-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .dream-title { font-size: 16px; font-weight: 600; color: #e8e8f0; }
+    .dream-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+    .status-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-active      { background: #1a1a2e; color: #a0aaff; }
+    .status-funded      { background: #052e16; color: #4ade80; }
+    .status-completed   { background: #1a1200; color: #fbbf24; }
+    .status-in_progress { background: #1a0e00; color: #fb923c; }
+    .status-paused      { background: #111118; color: #555; }
+    .category-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #1e1e2e;
+      color: #666;
+    }
+
+    /* ── Progress bar ── */
+    .progress-wrap {
+      height: 6px;
+      background: #1e1e2e;
+      border-radius: 3px;
+      margin: 10px 0;
+    }
+    .progress-fill {
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #5b6af5, #a0aaff);
+      transition: width 0.3s;
+    }
+    .progress-label { font-size: 12px; color: #666; margin-bottom: 12px; }
+
+    /* ── Pay-forward banner ── */
+    .pay-forward-banner {
+      background: linear-gradient(135deg, #1a1200, #1a0e00);
+      border: 1px solid #ca8a04;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .pay-forward-title { font-size: 13px; font-weight: 600; color: #fbbf24; }
+    .pay-forward-sub   { font-size: 12px; color: #92400e; }
+
+    /* ── Dream actions ── */
+    .dream-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+    /* ── Fulfillment ── */
+    .fulfillment-explainer {
+      background: #111118;
+      border: 1px solid #1e1e2e;
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #888;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .order-card {
+      background: #111118;
+      border: 1px solid #1e1e2e;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .order-name  { font-size: 15px; font-weight: 600; color: #e8e8f0; }
+    .order-price { font-size: 15px; font-weight: 600; color: #4ade80; }
+    .order-reason { font-size: 13px; color: #888; line-height: 1.5; margin-bottom: 12px; }
+    .order-actions { display: flex; gap: 8px; }
+    .fulfillment-footer {
+      font-size: 11px;
+      color: #444;
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #1e1e2e;
+    }
+
+    /* ── Section divider ── */
+    .section-divider {
+      font-size: 11px;
+      font-weight: 600;
+      color: #444;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin: 24px 0 12px;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid #333;
+      border-top-color: #5b6af5;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { color: #555; font-size: 13px; }
+    .error-text   { color: #f87171; font-size: 13px; }
+    .success-text { color: #4ade80; font-size: 13px; }
+  </style>
+</head>
+<body>
+<div class="page-root">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Purpose &amp; Dreams</h1>
+      <div class="subtitle" id="userLabel">Loading...</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <span id="statusMsg" class="loading-text"></span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="purpose">Purpose Profile</button>
+    <button class="tab-btn"        data-tab="dreams">Dreams</button>
+    <button class="tab-btn"        data-tab="fulfillment">Fulfillment</button>
+  </div>
+
+  <!-- ── PURPOSE PROFILE TAB ── -->
+  <div class="tab-panel active" id="tab-purpose">
+    <div id="purposeLoading" class="loading-text"><span class="spinner"></span>Loading profile...</div>
+    <div id="purposeEmpty"   style="display:none">
+      <div class="empty-state">
+        <p>No purpose profile yet.</p>
+        <p class="hint">The system synthesizes your purpose profile from your energy observations, joy check-ins, and twin profile data. Log a few energy observations below to get started.</p>
+        <button class="btn" id="btnSynthesize" onclick="runSynthesis()">Synthesize My Purpose Profile</button>
+      </div>
+    </div>
+    <div id="purposeContent" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span class="error-text" id="synthError"></span>
+        <button class="btn btn-subtle" onclick="runSynthesis()" id="btnResyntheszie">Re-synthesize</button>
+      </div>
+      <div class="purpose-statement">
+        <div class="purpose-label">My Purpose</div>
+        <div class="purpose-text" id="purposeStatement">—</div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-title">Energy Sources</div>
+          <div class="tags" id="energySources"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Energy Drains</div>
+          <div class="tags" id="energyDrains"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Core Strengths</div>
+        <div id="coreStrengths"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Growth Edges</div>
+        <div id="growthEdges"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Economic Paths</div>
+        <div id="economicPaths"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Log Energy Observation</div>
+        <div class="inline-form">
+          <input type="text"   id="energyActivity"   class="wide" placeholder="What were you doing?">
+          <select id="energyEffect">
+            <option value="high_energy">High energy</option>
+            <option value="neutral">Neutral</option>
+            <option value="low_energy">Low energy</option>
+          </select>
+          <label><input type="checkbox" id="flowState"> In flow</label>
+          <button class="btn btn-sm" onclick="logEnergy()">Log</button>
+        </div>
+        <div id="energyLogMsg" style="margin-top:8px;font-size:12px;"></div>
+      </div>
+    </div>
+    <!-- Show synthesis button even without profile -->
+    <div id="purposeNoData" style="display:none">
+      <div class="card">
+        <div class="card-title">Log Energy Observation</div>
+        <div class="inline-form">
+          <input type="text"   id="energyActivity2"   class="wide" placeholder="What were you doing?">
+          <select id="energyEffect2">
+            <option value="high_energy">High energy</option>
+            <option value="neutral">Neutral</option>
+            <option value="low_energy">Low energy</option>
+          </select>
+          <label><input type="checkbox" id="flowState2"> In flow</label>
+          <button class="btn btn-sm" onclick="logEnergy2()">Log</button>
+        </div>
+        <div id="energyLogMsg2" style="margin-top:8px;font-size:12px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DREAMS TAB ── -->
+  <div class="tab-panel" id="tab-dreams">
+    <div id="dreamsLoading" class="loading-text"><span class="spinner"></span>Loading dreams...</div>
+    <div id="dreamsList"></div>
+    <div class="card" style="margin-top:24px;">
+      <div class="card-title">Add a Dream</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <input type="text"  id="dreamTitle"  class="wide" placeholder="Dream title (required)">
+        <textarea id="dreamDesc" class="wide" placeholder="Description (optional)"></textarea>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <select id="dreamCategory">
+            <option value="">Category...</option>
+            <option value="adventure">Adventure</option>
+            <option value="creation">Creation</option>
+            <option value="service">Service</option>
+            <option value="learning">Learning</option>
+            <option value="family">Family</option>
+            <option value="health">Health</option>
+            <option value="financial">Financial</option>
+            <option value="other">Other</option>
+          </select>
+          <input type="number" id="dreamAmount" style="width:140px;" placeholder="Target $">
+          <input type="date"   id="dreamDate"   style="width:150px;">
+        </div>
+        <button class="btn" style="align-self:flex-start" onclick="createDream()">Add Dream</button>
+        <div id="dreamAddMsg" style="font-size:12px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FULFILLMENT TAB ── -->
+  <div class="tab-panel" id="tab-fulfillment">
+    <div class="fulfillment-explainer">
+      The system may suggest products it observes you regularly need. <strong style="color:#c8c8d8;">You always approve before anything is ordered.</strong> Proposals are surfaced here — nothing is purchased until you click Approve.
+    </div>
+    <div id="fulfillmentLoading" class="loading-text"><span class="spinner"></span>Loading...</div>
+    <div class="section-divider">Pending Proposals</div>
+    <div id="proposalsList"></div>
+    <div id="proposalsEmpty" style="display:none;" class="empty-state" style="padding:24px 0;">
+      <p style="font-size:13px;color:#555;">No pending proposals.</p>
+    </div>
+    <div id="ordersHistory"></div>
+    <div class="fulfillment-footer">No brand pays for placement. All suggestions come from observed need only.</div>
+  </div>
+
+</div>
+
+<script>
+  const BASE = '/api/v1/lifeos/purpose';
+  const KEY  = localStorage.getItem('commandKey') || '';
+  const params = new URLSearchParams(location.search);
+  const USER   = params.get('user') || 'adam';
+
+  function h(headers = {}) {
+    return { 'Content-Type': 'application/json', 'x-command-key': KEY, ...headers };
+  }
+
+  // ── Tab switching ──────────────────────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  document.getElementById('userLabel').textContent = 'User: ' + USER;
+
+  async function init() {
+    await Promise.allSettled([loadProfile(), loadDreams(), loadFulfillment()]);
+  }
+
+  // ── PURPOSE PROFILE ────────────────────────────────────────────────────────
+  async function loadProfile() {
+    try {
+      const r = await fetch(`${BASE}/profile?user=${encodeURIComponent(USER)}`, { headers: h() });
+      const d = await r.json();
+      document.getElementById('purposeLoading').style.display = 'none';
+      if (!d.ok || !d.profile) {
+        document.getElementById('purposeEmpty').style.display = 'block';
+        document.getElementById('purposeNoData').style.display = 'block';
+      } else {
+        renderProfile(d.profile);
+      }
+    } catch (e) {
+      document.getElementById('purposeLoading').textContent = 'Error: ' + e.message;
+    }
+  }
+
+  function renderProfile(p) {
+    document.getElementById('purposeEmpty').style.display   = 'none';
+    document.getElementById('purposeContent').style.display = 'block';
+    document.getElementById('purposeNoData').style.display  = 'none';
+
+    document.getElementById('purposeStatement').textContent = p.purpose_statement || '—';
+
+    const srcEl = document.getElementById('energySources');
+    srcEl.innerHTML = '';
+    (p.energy_sources || []).forEach(s => {
+      const t = document.createElement('span');
+      t.className = 'tag tag-green';
+      t.textContent = s;
+      srcEl.appendChild(t);
+    });
+
+    const drainEl = document.getElementById('energyDrains');
+    drainEl.innerHTML = '';
+    (p.energy_drains || []).forEach(d => {
+      const t = document.createElement('span');
+      t.className = 'tag tag-red';
+      t.textContent = d;
+      drainEl.appendChild(t);
+    });
+
+    const strEl = document.getElementById('coreStrengths');
+    strEl.innerHTML = '';
+    (p.core_strengths || []).forEach((s, i) => {
+      strEl.innerHTML += `<div class="strength-item"><span class="strength-num">${i + 1}</span><span>${s}</span></div>`;
+    });
+
+    const growthEl = document.getElementById('growthEdges');
+    growthEl.innerHTML = '';
+    (p.growth_edges || []).forEach((g, i) => {
+      growthEl.innerHTML += `<div class="strength-item"><span class="strength-num">${i + 1}</span><span>${g}</span></div>`;
+    });
+
+    const pathsEl = document.getElementById('economicPaths');
+    pathsEl.innerHTML = '';
+    const paths = typeof p.economic_paths === 'string' ? JSON.parse(p.economic_paths) : (p.economic_paths || []);
+    paths.forEach(pt => {
+      pathsEl.innerHTML += `
+        <div class="path-card">
+          <div class="path-title">${esc(pt.title)}</div>
+          <div class="path-desc">${esc(pt.description)}</div>
+          <div class="path-badges">
+            <span class="badge badge-demand">Demand: ${esc(pt.market_demand)}</span>
+            <span class="badge badge-effort">Effort: ${esc(pt.effort)}</span>
+            <span class="badge badge-revenue">${esc(pt.revenue_potential)}</span>
+          </div>
+        </div>`;
+    });
+  }
+
+  async function runSynthesis() {
+    const btn = document.getElementById('btnSynthesize') || document.getElementById('btnResyntheszie');
+    if (btn) btn.disabled = true;
+    document.getElementById('purposeLoading').style.display = 'block';
+    document.getElementById('purposeLoading').innerHTML = '<span class="spinner"></span>Synthesizing purpose profile — this takes 15-30s...';
+    try {
+      const r = await fetch(`${BASE}/synthesize`, {
+        method: 'POST',
+        headers: h(),
+        body: JSON.stringify({ user: USER }),
+      });
+      const d = await r.json();
+      document.getElementById('purposeLoading').style.display = 'none';
+      if (!d.ok) throw new Error(d.error);
+      renderProfile(d.profile);
+    } catch (e) {
+      document.getElementById('purposeLoading').style.display = 'none';
+      const errEl = document.getElementById('synthError');
+      if (errEl) errEl.textContent = 'Synthesis failed: ' + e.message;
+      else alert('Synthesis failed: ' + e.message);
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  async function logEnergy() {
+    const activity = document.getElementById('energyActivity').value.trim();
+    const effect   = document.getElementById('energyEffect').value;
+    const flow     = document.getElementById('flowState').checked;
+    if (!activity) return;
+    try {
+      const r = await fetch(`${BASE}/energy`, {
+        method: 'POST',
+        headers: h(),
+        body: JSON.stringify({ user: USER, activity, energy_effect: effect, flow_state: flow }),
+      });
+      const d = await r.json();
+      const msg = document.getElementById('energyLogMsg');
+      msg.className = d.ok ? 'success-text' : 'error-text';
+      msg.textContent = d.ok ? 'Logged.' : (d.error || 'Error');
+      if (d.ok) document.getElementById('energyActivity').value = '';
+    } catch (e) {
+      document.getElementById('energyLogMsg').textContent = e.message;
+    }
+  }
+
+  async function logEnergy2() {
+    const activity = document.getElementById('energyActivity2').value.trim();
+    const effect   = document.getElementById('energyEffect2').value;
+    const flow     = document.getElementById('flowState2').checked;
+    if (!activity) return;
+    try {
+      const r = await fetch(`${BASE}/energy`, {
+        method: 'POST',
+        headers: h(),
+        body: JSON.stringify({ user: USER, activity, energy_effect: effect, flow_state: flow }),
+      });
+      const d = await r.json();
+      const msg = document.getElementById('energyLogMsg2');
+      msg.className = d.ok ? 'success-text' : 'error-text';
+      msg.textContent = d.ok ? 'Logged.' : (d.error || 'Error');
+      if (d.ok) document.getElementById('energyActivity2').value = '';
+    } catch (e) {
+      document.getElementById('energyLogMsg2').textContent = e.message;
+    }
+  }
+
+  // ── DREAMS ─────────────────────────────────────────────────────────────────
+  let dreamsData = [];
+
+  async function loadDreams() {
+    try {
+      const r = await fetch(`${BASE}/dreams?user=${encodeURIComponent(USER)}`, { headers: h() });
+      const d = await r.json();
+      document.getElementById('dreamsLoading').style.display = 'none';
+      if (!d.ok) throw new Error(d.error);
+      dreamsData = d.dreams || [];
+      renderDreams();
+    } catch (e) {
+      document.getElementById('dreamsLoading').textContent = 'Error: ' + e.message;
+    }
+  }
+
+  function renderDreams() {
+    const el = document.getElementById('dreamsList');
+    if (!dreamsData.length) {
+      el.innerHTML = '<div class="empty-state"><p>No dreams yet. Add your first dream below.</p></div>';
+      return;
+    }
+    el.innerHTML = dreamsData.map(dr => {
+      const pct = dr.target_amount
+        ? Math.min(100, Math.round((parseFloat(dr.funded_amount) / parseFloat(dr.target_amount)) * 100))
+        : null;
+      const funded90 = pct !== null && pct >= 90 && !dr.pay_forward_done;
+      const statusCls = 'status-' + (dr.status || 'active');
+      return `
+        <div class="dream-card" id="dream-${dr.id}">
+          <div class="dream-header">
+            <div class="dream-title">${esc(dr.title)}</div>
+          </div>
+          <div class="dream-meta">
+            <span class="status-badge ${statusCls}">${dr.status || 'active'}</span>
+            ${dr.category ? `<span class="category-badge">${esc(dr.category)}</span>` : ''}
+            ${dr.target_date ? `<span style="font-size:12px;color:#666;">Target: ${dr.target_date}</span>` : ''}
+          </div>
+          ${dr.description ? `<div style="font-size:13px;color:#888;margin-bottom:10px;">${esc(dr.description)}</div>` : ''}
+          ${pct !== null ? `
+            <div class="progress-label">$${fmtNum(dr.funded_amount)} funded of $${fmtNum(dr.target_amount)} (${pct}%)</div>
+            <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%"></div></div>
+          ` : ''}
+          ${funded90 ? `
+            <div class="pay-forward-banner">
+              <div class="pay-forward-title">This dream is funded — 10% pay-forward due</div>
+              <div class="pay-forward-sub">$${fmtNum(parseFloat(dr.target_amount) * 0.1)} to pass forward to someone else</div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <input type="text" id="pfRecipient-${dr.id}" placeholder="Recipient" style="flex:1;min-width:140px;">
+                <input type="number" id="pfAmount-${dr.id}" value="${(parseFloat(dr.target_amount) * 0.1).toFixed(2)}" style="width:100px;">
+                <button class="btn btn-sm" onclick="recordPayForward(${dr.id})">Record Pay-Forward</button>
+              </div>
+            </div>
+          ` : ''}
+          <div class="dream-actions">
+            <span style="display:flex;gap:6px;align-items:center;">
+              <input type="number" id="fundAmt-${dr.id}" placeholder="$" style="width:80px;" min="0" step="0.01">
+              <button class="btn btn-sm" onclick="addFunding(${dr.id})">Add Funding</button>
+            </span>
+            ${dr.status !== 'completed' ? `<button class="btn btn-sm btn-subtle" onclick="completeDream(${dr.id})">Mark Complete</button>` : ''}
+          </div>
+          <div id="dreamMsg-${dr.id}" style="margin-top:6px;font-size:12px;"></div>
+        </div>`;
+    }).join('');
+  }
+
+  async function createDream() {
+    const title  = document.getElementById('dreamTitle').value.trim();
+    const desc   = document.getElementById('dreamDesc').value.trim();
+    const cat    = document.getElementById('dreamCategory').value;
+    const amount = document.getElementById('dreamAmount').value;
+    const date   = document.getElementById('dreamDate').value;
+    if (!title) return;
+    try {
+      const r = await fetch(`${BASE}/dreams`, {
+        method: 'POST',
+        headers: h(),
+        body: JSON.stringify({
+          user: USER, title, description: desc || undefined,
+          category: cat || undefined,
+          target_amount: amount ? parseFloat(amount) : undefined,
+          target_date: date || undefined,
+        }),
+      });
+      const d = await r.json();
+      const msg = document.getElementById('dreamAddMsg');
+      msg.className = d.ok ? 'success-text' : 'error-text';
+      msg.textContent = d.ok ? 'Dream added!' : (d.error || 'Error');
+      if (d.ok) {
+        document.getElementById('dreamTitle').value  = '';
+        document.getElementById('dreamDesc').value   = '';
+        document.getElementById('dreamAmount').value = '';
+        document.getElementById('dreamDate').value   = '';
+        await loadDreams();
+      }
+    } catch (e) {
+      document.getElementById('dreamAddMsg').textContent = e.message;
+    }
+  }
+
+  async function addFunding(id) {
+    const amt = parseFloat(document.getElementById('fundAmt-' + id)?.value);
+    if (!amt || isNaN(amt)) return;
+    try {
+      const r = await fetch(`${BASE}/dreams/${id}/fund`, {
+        method: 'POST', headers: h(), body: JSON.stringify({ amount: amt }),
+      });
+      const d = await r.json();
+      const msg = document.getElementById('dreamMsg-' + id);
+      msg.className = d.ok ? 'success-text' : 'error-text';
+      msg.textContent = d.ok
+        ? (d.funded ? `Funded! Pay-forward due: $${fmtNum(d.pay_forward_due)}` : 'Funding added.')
+        : (d.error || 'Error');
+      if (d.ok) await loadDreams();
+    } catch (e) {
+      document.getElementById('dreamMsg-' + id).textContent = e.message;
+    }
+  }
+
+  async function recordPayForward(id) {
+    const amount    = document.getElementById('pfAmount-' + id)?.value;
+    const recipient = document.getElementById('pfRecipient-' + id)?.value.trim();
+    if (!amount || !recipient) return;
+    try {
+      const r = await fetch(`${BASE}/dreams/${id}/pay-forward`, {
+        method: 'POST', headers: h(),
+        body: JSON.stringify({ amount: parseFloat(amount), recipient }),
+      });
+      const d = await r.json();
+      if (d.ok) await loadDreams();
+      else alert(d.error);
+    } catch (e) { alert(e.message); }
+  }
+
+  async function completeDream(id) {
+    if (!confirm('Mark this dream as complete?')) return;
+    try {
+      const r = await fetch(`${BASE}/dreams/${id}/complete`, { method: 'POST', headers: h() });
+      const d = await r.json();
+      if (d.ok) await loadDreams();
+      else alert(d.error);
+    } catch (e) { alert(e.message); }
+  }
+
+  // ── FULFILLMENT ────────────────────────────────────────────────────────────
+  async function loadFulfillment() {
+    try {
+      const r = await fetch(`${BASE}/fulfillment?user=${encodeURIComponent(USER)}`, { headers: h() });
+      const d = await r.json();
+      document.getElementById('fulfillmentLoading').style.display = 'none';
+      if (!d.ok) throw new Error(d.error);
+      renderProposals(d.proposals || []);
+    } catch (e) {
+      document.getElementById('fulfillmentLoading').textContent = 'Error: ' + e.message;
+    }
+  }
+
+  function renderProposals(proposals) {
+    const el = document.getElementById('proposalsList');
+    const em = document.getElementById('proposalsEmpty');
+    if (!proposals.length) {
+      el.innerHTML = '';
+      em.style.display = 'block';
+      return;
+    }
+    em.style.display = 'none';
+    el.innerHTML = proposals.map(o => `
+      <div class="order-card">
+        <div class="order-header">
+          <div class="order-name">${esc(o.product_name)}</div>
+          ${o.estimated_price ? `<div class="order-price">$${fmtNum(o.estimated_price)}</div>` : ''}
+        </div>
+        <div class="order-reason">${esc(o.reason)}</div>
+        ${o.affiliate_source ? `<div style="font-size:11px;color:#555;margin-bottom:8px;">Source: ${esc(o.affiliate_source)}</div>` : ''}
+        <div class="order-actions">
+          <button class="btn btn-sm btn-success" onclick="approveOrder(${o.id})">Approve</button>
+          <button class="btn btn-sm btn-danger"  onclick="cancelOrder(${o.id})">Cancel</button>
+        </div>
+      </div>`).join('');
+  }
+
+  async function approveOrder(id) {
+    if (!confirm('Approve this order? This gives consent for it to proceed.')) return;
+    try {
+      const r = await fetch(`${BASE}/fulfillment/${id}/approve`, { method: 'POST', headers: h() });
+      const d = await r.json();
+      if (d.ok) await loadFulfillment();
+      else alert(d.error);
+    } catch (e) { alert(e.message); }
+  }
+
+  async function cancelOrder(id) {
+    try {
+      const r = await fetch(`${BASE}/fulfillment/${id}/cancel`, { method: 'POST', headers: h() });
+      const d = await r.json();
+      if (d.ok) await loadFulfillment();
+      else alert(d.error);
+    } catch (e) { alert(e.message); }
+  }
+
+  // ── Utils ──────────────────────────────────────────────────────────────────
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function fmtNum(n) {
+    return parseFloat(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  init();
+</script>
+</body>
+</html>

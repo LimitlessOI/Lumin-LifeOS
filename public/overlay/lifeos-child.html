@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>My Journey — LifeOS Kids</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+    .sub { font-size: 14px; color: #888; margin-bottom: 32px; }
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 4px; margin-bottom: 28px; border-bottom: 1px solid #1e1e2e; }
+    .tab { padding: 10px 18px; font-size: 13px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab.active { color: #f5a623; border-bottom-color: #f5a623; }
+    .tab:hover:not(.active) { color: #ccc; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    /* ── Cards ── */
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .card-header .title { font-size: 15px; color: #e8e8f0; font-weight: 600; }
+    .card-header .meta  { font-size: 12px; color: #555; }
+    .card-body { padding: 14px 18px; font-size: 13px; color: #888; line-height: 1.6; }
+    /* ── Adventure cards ── */
+    .adv-emoji { font-size: 28px; margin-right: 12px; flex-shrink: 0; }
+    .adv-row { display: flex; align-items: flex-start; }
+    .adv-content .adv-title { font-size: 15px; font-weight: 600; color: #e8e8f0; margin-bottom: 4px; }
+    .adv-content .adv-desc  { font-size: 13px; color: #888; line-height: 1.5; }
+    .adv-date { font-size: 11px; color: #555; margin-top: 6px; }
+    /* ── Dream cards ── */
+    .dream-star { font-size: 20px; margin-right: 8px; }
+    .dream-title { font-size: 15px; font-weight: 600; color: #e8e8f0; }
+    .dream-why { font-size: 13px; color: #888; margin-top: 4px; line-height: 1.5; }
+    .steps-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; background: #1a2018; color: #34d399; }
+    /* ── Learning cards ── */
+    .learn-subject { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #f5a623; font-weight: 600; margin-bottom: 4px; }
+    .learn-lesson { font-size: 14px; color: #d8d8e8; font-weight: 500; margin-bottom: 6px; }
+    .learn-discovery { font-size: 13px; color: #888; line-height: 1.5; }
+    .learn-discovery::before { content: '💡 '; }
+    /* ── Section header ── */
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-header h2 { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+    /* ── Forms ── */
+    .form-block { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .form-block-title { font-size: 13px; font-weight: 600; color: #f5a623; margin-bottom: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; display: block; margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 9px 12px; font-size: 13px; outline: none;
+      font-family: inherit;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #f5a623; }
+    .form-field.full { grid-column: 1/-1; }
+    .btn-add { padding: 10px 24px; background: #1a1200; border: 1px solid #f5a623; border-radius: 8px; color: #f5a623; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn-add:hover { background: #261a00; }
+    .btn-add.green { background: #0a1a0a; border-color: #34d399; color: #34d399; }
+    .btn-add.green:hover { background: #0f2410; }
+    /* ── Empty + spinner ── */
+    .empty { padding: 40px; text-align: center; color: #444; font-size: 14px; }
+    .spinner { width:16px; height:16px; border:2px solid #2a2a3a; border-top-color:#f5a623; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    /* ── Toast ── */
+    .toast { position:fixed; bottom:24px; right:24px; background:#1a1200; border:1px solid #f5a623; border-radius:8px; padding:12px 18px; font-size:13px; color:#f5a623; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; }
+    .toast.show { opacity:1; transform:translateY(0); }
+  </style>
+</head>
+<body>
+<div class="root">
+  <h1>My Journey</h1>
+  <p class="sub">Adventures, dreams, and things I'm learning.</p>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('adventures')">My Adventures</div>
+    <div class="tab" onclick="showTab('dreams')">My Dreams</div>
+    <div class="tab" onclick="showTab('learning')">What I'm Learning</div>
+  </div>
+
+  <!-- My Adventures -->
+  <div class="panel active" id="panel-adventures">
+    <div class="form-block">
+      <div class="form-block-title">Add an Adventure</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Emoji</label>
+          <input id="a-emoji" placeholder="🚀" maxlength="8" />
+        </div>
+        <div class="form-field">
+          <label>Title</label>
+          <input id="a-title" placeholder="What did you do?" />
+        </div>
+        <div class="form-field full">
+          <label>Description</label>
+          <textarea id="a-desc" rows="2" placeholder="Tell me more about it..."></textarea>
+        </div>
+      </div>
+      <button class="btn-add" onclick="addAdventure()">Add Adventure</button>
+    </div>
+    <div class="section-header">
+      <h2>Recent Adventures</h2>
+    </div>
+    <div id="adventures-list"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+
+  <!-- My Dreams -->
+  <div class="panel" id="panel-dreams">
+    <div class="form-block">
+      <div class="form-block-title">Add a Dream</div>
+      <div class="form-row">
+        <div class="form-field full">
+          <label>Dream Title</label>
+          <input id="d-title" placeholder="What do you dream of doing or becoming?" />
+        </div>
+        <div class="form-field full">
+          <label>Why does it matter to you?</label>
+          <textarea id="d-why" rows="2" placeholder="What excites you about this dream?"></textarea>
+        </div>
+      </div>
+      <button class="btn-add green" onclick="addDream()">Add Dream</button>
+    </div>
+    <div class="section-header">
+      <h2>My Dreams</h2>
+    </div>
+    <div id="dreams-list"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+
+  <!-- What I'm Learning -->
+  <div class="panel" id="panel-learning">
+    <div id="learning-list"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  const API  = '';
+  const KEY  = localStorage.getItem('commandKey') || '';
+  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
+  const USER = new URLSearchParams(location.search).get('user') || 'adam';
+
+  const TABS = ['adventures', 'dreams', 'learning'];
+
+  function showTab(name) {
+    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', TABS[i] === name));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(`panel-${name}`).classList.add('active');
+    if (name === 'adventures') loadAdventures();
+    if (name === 'dreams')     loadDreams();
+    if (name === 'learning')   loadLearning();
+  }
+
+  // ── Adventures ──────────────────────────────────────────────────────────────
+
+  async function loadAdventures() {
+    const el = document.getElementById('adventures-list');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/children/adventures?user=${USER}`, { headers: H });
+      const data = await res.json();
+      if (!data.ok || !data.adventures || !data.adventures.length) {
+        el.innerHTML = '<div class="empty">No adventures yet. Add one above!</div>';
+        return;
+      }
+      el.innerHTML = data.adventures.map(a => `
+        <div class="card">
+          <div class="card-body">
+            <div class="adv-row">
+              <span class="adv-emoji">${esc(a.emoji || '🌟')}</span>
+              <div class="adv-content">
+                <div class="adv-title">${esc(a.title)}</div>
+                ${a.description ? `<div class="adv-desc">${esc(a.description)}</div>` : ''}
+                <div class="adv-date">${a.created_at ? new Date(a.created_at).toLocaleDateString() : a.date || ''}</div>
+              </div>
+            </div>
+          </div>
+        </div>`).join('');
+    } catch (e) {
+      el.innerHTML = '<div class="empty">Failed to load adventures.</div>';
+    }
+  }
+
+  async function addAdventure() {
+    const body = {
+      user:        USER,
+      emoji:       document.getElementById('a-emoji').value.trim() || '🌟',
+      title:       document.getElementById('a-title').value.trim(),
+      description: document.getElementById('a-desc').value.trim(),
+    };
+    if (!body.title) { toast('Give your adventure a title!'); return; }
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/children/adventures`, { method: 'POST', headers: H, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (data.ok) {
+        toast('Adventure added!');
+        ['a-emoji', 'a-title', 'a-desc'].forEach(id => document.getElementById(id).value = '');
+        loadAdventures();
+      } else toast(`Error: ${data.error || 'unknown'}`);
+    } catch (e) {
+      toast('Request failed');
+    }
+  }
+
+  // ── Dreams ──────────────────────────────────────────────────────────────────
+
+  async function loadDreams() {
+    const el = document.getElementById('dreams-list');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/children/dreams?user=${USER}`, { headers: H });
+      const data = await res.json();
+      if (!data.ok || !data.dreams || !data.dreams.length) {
+        el.innerHTML = '<div class="empty">No dreams yet. What do you dream about?</div>';
+        return;
+      }
+      el.innerHTML = data.dreams.map(d => `
+        <div class="card">
+          <div class="card-header">
+            <span class="title"><span class="dream-star">⭐</span>${esc(d.title)}</span>
+            ${d.steps_count != null ? `<span class="steps-badge">${d.steps_count} step${d.steps_count !== 1 ? 's' : ''}</span>` : ''}
+          </div>
+          ${d.why_it_matters ? `<div class="card-body"><div class="dream-why">${esc(d.why_it_matters)}</div></div>` : ''}
+        </div>`).join('');
+    } catch (e) {
+      el.innerHTML = '<div class="empty">Failed to load dreams.</div>';
+    }
+  }
+
+  async function addDream() {
+    const body = {
+      user:           USER,
+      title:          document.getElementById('d-title').value.trim(),
+      why_it_matters: document.getElementById('d-why').value.trim(),
+    };
+    if (!body.title) { toast('What is your dream?'); return; }
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/children/dreams`, { method: 'POST', headers: H, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (data.ok) {
+        toast('Dream added!');
+        ['d-title', 'd-why'].forEach(id => document.getElementById(id).value = '');
+        loadDreams();
+      } else toast(`Error: ${data.error || 'unknown'}`);
+    } catch (e) {
+      toast('Request failed');
+    }
+  }
+
+  // ── Learning ─────────────────────────────────────────────────────────────────
+
+  async function loadLearning() {
+    const el = document.getElementById('learning-list');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/children/learning?user=${USER}`, { headers: H });
+      const data = await res.json();
+      if (!data.ok || !data.items || !data.items.length) {
+        el.innerHTML = '<div class="empty">Nothing logged yet. Keep exploring!</div>';
+        return;
+      }
+      el.innerHTML = data.items.map(item => `
+        <div class="card">
+          <div class="card-header">
+            <span class="title">${esc(item.lesson || item.topic || 'Lesson')}</span>
+            <span class="meta">${item.created_at ? new Date(item.created_at).toLocaleDateString() : item.date || ''}</span>
+          </div>
+          <div class="card-body">
+            ${item.subject ? `<div class="learn-subject">${esc(item.subject)}</div>` : ''}
+            ${item.lesson  ? `<div class="learn-lesson">${esc(item.lesson)}</div>`  : ''}
+            ${item.discovery ? `<div class="learn-discovery">${esc(item.discovery)}</div>` : ''}
+          </div>
+        </div>`).join('');
+    } catch (e) {
+      el.innerHTML = '<div class="empty">Failed to load learning log.</div>';
+    }
+  }
+
+  function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function toast(msg) { const e = document.getElementById('toast'); e.textContent = msg; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 2500); }
+
+  if (!KEY) { const k = prompt('Enter your command key:'); if (k) { localStorage.setItem('commandKey', k); location.reload(); } }
+  else loadAdventures();
+</script>
+</body>
+</html>

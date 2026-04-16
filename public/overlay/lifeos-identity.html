@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Identity — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 760px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #555; margin-bottom: 28px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 2px; margin-bottom: 28px; border-bottom: 1px solid #1e1e2e; }
+    .tab { padding: 10px 18px; font-size: 13px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; background: none; border-top: none; border-left: none; border-right: none; }
+    .tab:hover { color: #aaa; }
+    .tab.active { color: #a0aaff; border-bottom-color: #5b6af5; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* Cards */
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .card-header .title { font-size: 14px; color: #d8d8e8; font-weight: 500; }
+    .card-header .meta  { font-size: 11px; color: #555; }
+    .card-body { padding: 14px 18px; font-size: 13px; color: #888; line-height: 1.6; }
+    .card-footer { padding: 10px 18px; border-top: 1px solid #191920; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .card.muted { opacity: 0.45; }
+    .card.muted .card-header .title { color: #666; }
+
+    /* Badges */
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge.severity-low  { background: #1a1200; color: #fbbf24; }
+    .badge.severity-med  { background: #1a0f00; color: #f97316; }
+    .badge.severity-high { background: #1a0a0a; color: #e05555; }
+    .badge.active        { background: #0a2018; color: #34d399; }
+    .badge.examining     { background: #0a1a30; color: #60a5fa; }
+    .badge.updated       { background: #1a1030; color: #a78bfa; }
+    .badge.resolved      { background: #1a1a2a; color: #555; }
+    .badge.freq          { background: #1a1030; color: #a78bfa; }
+    .badge.acknowledged  { background: #1a1a2a; color: #444; }
+
+    /* Buttons */
+    .btn { padding: 6px 14px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #666; font-size: 12px; cursor: pointer; transition: all .15s; }
+    .btn:hover { background: #1a1a2a; color: #aaa; }
+    .btn.primary { border-color: #5b6af5; color: #a0aaff; }
+    .btn.primary:hover { background: #1e2060; }
+    .btn.success { border-color: #065f46; color: #34d399; }
+    .btn.success:hover { background: #052e1c; }
+    .btn.warn { border-color: #7c3a00; color: #f97316; }
+    .btn.warn:hover { background: #3a1800; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-lg { padding: 11px 28px; border-radius: 8px; border: 1px solid #5b6af5; background: #1e2060; color: #a0aaff; font-size: 14px; cursor: pointer; transition: background .15s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-lg:hover { background: #262880; }
+    .btn-lg:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Contradiction card */
+    .contradiction-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .contradiction-card.acknowledged { opacity: 0.4; }
+    .c-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 18px 10px; }
+    .c-score { font-size: 22px; font-weight: 700; min-width: 40px; }
+    .c-score.low  { color: #fbbf24; }
+    .c-score.med  { color: #f97316; }
+    .c-score.high { color: #e05555; }
+    .c-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #555; }
+    .c-body { padding: 0 18px 14px; }
+    .c-row { margin-bottom: 8px; }
+    .c-row-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 3px; }
+    .c-row-text { font-size: 13px; color: #c8c8e0; line-height: 1.5; }
+    .c-question { background: #0d0d1a; border-left: 3px solid #5b6af5; border-radius: 4px; padding: 10px 14px; font-size: 13px; color: #a0aaff; font-style: italic; line-height: 1.6; margin: 10px 0; }
+    .c-footer { padding: 10px 18px 14px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .ack-area { padding: 0 18px 14px; }
+    .ack-area.hidden { display: none; }
+    .ack-area textarea { width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px; color: #e8e8f0; padding: 10px 13px; font-size: 13px; outline: none; font-family: inherit; resize: vertical; min-height: 70px; }
+    .ack-area textarea:focus { border-color: #5b6af5; }
+    .ack-area .btn-row { display: flex; gap: 8px; margin-top: 8px; }
+
+    /* Acknowledged section */
+    .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin: 24px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #1e1e2e; }
+
+    /* Belief card */
+    .belief-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+    .b-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .b-trigger { font-size: 12px; color: #888; font-style: italic; }
+    .b-body { padding: 14px 18px; }
+    .b-statement { font-size: 14px; color: #d8d8e8; line-height: 1.6; margin-bottom: 10px; }
+    .b-footer { padding: 10px 18px; border-top: 1px solid #191920; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .b-update-area { padding: 0 18px 14px; }
+    .b-update-area.hidden { display: none; }
+    .b-update-area textarea { width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px; color: #e8e8f0; padding: 10px 13px; font-size: 13px; outline: none; font-family: inherit; resize: vertical; min-height: 70px; }
+    .b-update-area textarea:focus { border-color: #5b6af5; }
+    .b-update-area .btn-row { display: flex; gap: 8px; margin-top: 8px; }
+    .updated-belief { background: #051a12; border: 1px solid #065f46; border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #34d399; line-height: 1.5; }
+
+    /* Stress test */
+    .score-hero { text-align: center; padding: 28px 20px; background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 20px; }
+    .score-big { font-size: 64px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+    .score-big.high { color: #34d399; }
+    .score-big.mid  { color: #fbbf24; }
+    .score-big.low  { color: #e05555; }
+    .score-label { font-size: 13px; color: #555; }
+    .score-date  { font-size: 11px; color: #444; margin-top: 4px; }
+    .gap-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+    .gap-area { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #5b6af5; margin-bottom: 4px; }
+    .gap-obs { font-size: 13px; color: #c8c8e0; line-height: 1.5; margin-bottom: 8px; }
+    .gap-question { font-size: 13px; color: #a0aaff; font-style: italic; line-height: 1.5; border-left: 3px solid #5b6af5; padding-left: 10px; }
+    .strength-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .strength-tag { background: #051a12; border: 1px solid #065f46; border-radius: 16px; padding: 4px 12px; font-size: 12px; color: #34d399; }
+    .section-heading { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin: 20px 0 10px; }
+
+    /* Honest witness */
+    .witness-section { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+    .ws-label { padding: 12px 18px; border-bottom: 1px solid #191920; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+    .ws-label.said  { color: #60a5fa; }
+    .ws-label.did   { color: #a78bfa; }
+    .ws-label.gap   { color: #f97316; }
+    .ws-text { padding: 14px 18px; font-size: 14px; color: #c8c8e0; line-height: 1.8; white-space: pre-wrap; }
+    .reflection-area { margin-top: 20px; }
+    .reflection-area label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 8px; }
+    .reflection-area textarea { width: 100%; background: #111118; border: 1px solid #1e1e2e; border-radius: 8px; color: #e8e8f0; padding: 12px 14px; font-size: 13px; outline: none; font-family: inherit; resize: vertical; min-height: 90px; }
+    .reflection-area textarea:focus { border-color: #5b6af5; }
+
+    /* Previous sessions */
+    .session-item { background: #111118; border: 1px solid #1e1e2e; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+    .session-toggle { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; cursor: pointer; font-size: 13px; color: #888; }
+    .session-toggle:hover { background: #161620; }
+    .session-toggle .ts { font-size: 11px; color: #555; }
+    .session-toggle .chevron { font-size: 10px; color: #555; transition: transform .2s; }
+    .session-toggle.open .chevron { transform: rotate(180deg); }
+    .session-body { display: none; padding: 14px 18px; border-top: 1px solid #191920; }
+    .session-body.open { display: block; }
+    .session-paragraph { margin-bottom: 16px; }
+    .session-paragraph .sp-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 4px; }
+    .session-paragraph .sp-text { font-size: 13px; color: #c8c8e0; line-height: 1.6; white-space: pre-wrap; }
+    .session-reflection { background: #0d0d1a; border-left: 3px solid #5b6af5; padding: 10px 14px; margin-top: 10px; font-size: 13px; color: #a0aaff; font-style: italic; line-height: 1.6; }
+
+    /* Loading / empty states */
+    .loading { text-align: center; padding: 40px 20px; color: #555; font-size: 13px; }
+    .empty-state { text-align: center; padding: 48px 20px; }
+    .empty-state p { color: #555; font-size: 13px; margin-bottom: 16px; }
+    .action-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .action-bar h2 { font-size: 15px; font-weight: 600; color: #d8d8e8; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #111118; border: 1px solid #2a2a3a; border-radius: 8px; padding: 12px 18px; font-size: 13px; color: #d8d8e8; z-index: 999; opacity: 0; transition: opacity .3s; pointer-events: none; }
+    .toast.show { opacity: 1; }
+    .toast.success { border-color: #065f46; color: #34d399; }
+    .toast.error { border-color: #3a1a1a; color: #e05555; }
+  </style>
+</head>
+<body>
+<div class="root">
+  <h1>Identity</h1>
+  <div class="sub">Who you said you are. Who you're actually becoming.</div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('contradictions', this)">Contradictions</button>
+    <button class="tab" onclick="switchTab('beliefs', this)">Beliefs</button>
+    <button class="tab" onclick="switchTab('stress-test', this)">Stress Test</button>
+    <button class="tab" onclick="switchTab('honest-witness', this)">Honest Witness</button>
+  </div>
+
+  <!-- ── CONTRADICTIONS ───────────────────────────────────────────────────── -->
+  <div id="tab-contradictions" class="tab-pane active">
+    <div class="action-bar">
+      <h2>Contradictions</h2>
+      <button class="btn-lg" id="btn-scan" onclick="runScan()">
+        <span id="scan-icon">&#9673;</span> Scan Now
+      </button>
+    </div>
+    <div id="contradictions-list"><div class="loading">Loading...</div></div>
+    <div id="acknowledged-section" style="display:none">
+      <div class="section-label">Acknowledged</div>
+      <div id="acknowledged-list"></div>
+    </div>
+  </div>
+
+  <!-- ── BELIEFS ──────────────────────────────────────────────────────────── -->
+  <div id="tab-beliefs" class="tab-pane">
+    <div class="action-bar">
+      <h2>Operating Beliefs</h2>
+    </div>
+    <div id="beliefs-active">
+      <div class="loading">Loading...</div>
+    </div>
+    <div id="beliefs-updated-section" style="display:none">
+      <div class="section-label">Updated Beliefs</div>
+      <div id="beliefs-updated"></div>
+    </div>
+  </div>
+
+  <!-- ── STRESS TEST ──────────────────────────────────────────────────────── -->
+  <div id="tab-stress-test" class="tab-pane">
+    <div class="action-bar">
+      <h2>Identity Stress Test</h2>
+      <button class="btn-lg" id="btn-stress" onclick="runStressTest()">
+        Run Identity Stress Test
+      </button>
+    </div>
+    <div id="stress-test-result"><div class="loading">Loading...</div></div>
+  </div>
+
+  <!-- ── HONEST WITNESS ───────────────────────────────────────────────────── -->
+  <div id="tab-honest-witness" class="tab-pane">
+    <div class="action-bar">
+      <h2>Honest Witness</h2>
+      <button class="btn-lg" id="btn-witness" onclick="runHonestWitness()">
+        Summon the Witness
+      </button>
+    </div>
+    <div id="witness-result"></div>
+    <div id="witness-sessions"><div class="loading">Loading...</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = '/api/v1/lifeos/identity';
+  const KEY = localStorage.getItem('commandKey') || prompt('API Key:') || '';
+  if (KEY) localStorage.setItem('commandKey', KEY);
+  const USER = new URLSearchParams(location.search).get('user') || 'adam';
+
+  const headers = { 'Content-Type': 'application/json', 'x-command-key': KEY };
+
+  // ── Toast ──────────────────────────────────────────────────────────────────
+  function showToast(msg, type = '') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast show' + (type ? ' ' + type : '');
+    setTimeout(() => { el.className = 'toast'; }, 3200);
+  }
+
+  // ── Tab Switching ──────────────────────────────────────────────────────────
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+    if (id === 'contradictions') loadContradictions();
+    if (id === 'beliefs') loadBeliefs();
+    if (id === 'stress-test') loadStressTest();
+    if (id === 'honest-witness') loadWitnessSessions();
+  }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function severityClass(score) {
+    if (score >= 8) return 'high';
+    if (score >= 6) return 'med';
+    return 'low';
+  }
+
+  function badgeClass(score) {
+    if (score >= 8) return 'severity-high';
+    if (score >= 6) return 'severity-med';
+    return 'severity-low';
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function fmtDateTime(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function statusBadge(status) {
+    const labels = { active: 'Active', examining: 'Examining', updated: 'Updated', resolved: 'Resolved' };
+    return `<span class="badge ${status}">${labels[status] || status}</span>`;
+  }
+
+  // ── CONTRADICTIONS ─────────────────────────────────────────────────────────
+  async function loadContradictions() {
+    const list = document.getElementById('contradictions-list');
+    const ackSection = document.getElementById('acknowledged-section');
+    const ackList = document.getElementById('acknowledged-list');
+    list.innerHTML = '<div class="loading">Loading...</div>';
+
+    try {
+      const r = await fetch(`${API}/contradictions?user=${USER}`, { headers });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error);
+
+      const active = data.contradictions.filter(c => !c.acknowledged);
+      const acked  = data.contradictions.filter(c => c.acknowledged);
+
+      if (active.length === 0) {
+        list.innerHTML = '<div class="empty-state"><p>No active contradictions found. Run a scan to check.</p></div>';
+      } else {
+        list.innerHTML = active.map(c => renderContradictionCard(c)).join('');
+      }
+
+      if (acked.length > 0) {
+        ackSection.style.display = '';
+        ackList.innerHTML = acked.map(c => renderContradictionCard(c, true)).join('');
+      } else {
+        ackSection.style.display = 'none';
+      }
+    } catch (err) {
+      list.innerHTML = `<div class="empty-state"><p style="color:#e05555">${err.message}</p></div>`;
+    }
+  }
+
+  function renderContradictionCard(c, isAcked = false) {
+    const scoreClass = severityClass(c.contradiction_score);
+    const badgeClz = badgeClass(c.contradiction_score);
+    const score = parseFloat(c.contradiction_score).toFixed(1);
+    return `
+    <div class="contradiction-card ${isAcked ? 'acknowledged' : ''}" id="ccard-${c.id}">
+      <div class="c-header">
+        <div>
+          <div class="c-score ${scoreClass}">${score}</div>
+          <div class="c-label">Severity / 10</div>
+        </div>
+        <div><span class="badge ${badgeClz}">${score >= 8 ? 'High' : score >= 6 ? 'Medium' : 'Notable'}</span></div>
+      </div>
+      <div class="c-body">
+        <div class="c-row">
+          <div class="c-row-label">What you said matters</div>
+          <div class="c-row-text">${esc(c.stated_value)}</div>
+        </div>
+        <div class="c-row">
+          <div class="c-row-label">What the data shows</div>
+          <div class="c-row-text">${esc(c.observed_pattern)}</div>
+        </div>
+        ${isAcked ? '' : `<div class="c-question">&#8220;${esc(c.question_to_ask || '')}&#8221;</div>`}
+        ${isAcked && c.user_response ? `<div style="margin-top:8px; font-size:12px; color:#666; font-style:italic;">"${esc(c.user_response)}"</div>` : ''}
+      </div>
+      ${!isAcked ? `
+      <div class="c-footer">
+        <button class="btn success" onclick="showAckArea(${c.id})">I hear this</button>
+        <span style="font-size:11px; color:#555;">${fmtDate(c.surfaced_at)}</span>
+      </div>
+      <div class="ack-area hidden" id="ack-area-${c.id}">
+        <textarea placeholder="Optional: what do you want to say about this? (private)" id="ack-resp-${c.id}"></textarea>
+        <div class="btn-row">
+          <button class="btn success" onclick="submitAck(${c.id})">Acknowledge</button>
+          <button class="btn" onclick="hideAckArea(${c.id})">Cancel</button>
+        </div>
+      </div>` : `<div class="c-footer"><span class="badge acknowledged">Acknowledged</span><span style="font-size:11px;color:#555;margin-left:auto">${fmtDate(c.acknowledged_at)}</span></div>`}
+    </div>`;
+  }
+
+  function showAckArea(id) {
+    document.getElementById(`ack-area-${id}`).classList.remove('hidden');
+  }
+  function hideAckArea(id) {
+    document.getElementById(`ack-area-${id}`).classList.add('hidden');
+  }
+
+  async function submitAck(id) {
+    const response = document.getElementById(`ack-resp-${id}`).value.trim();
+    try {
+      const r = await fetch(`${API}/contradictions/${id}/acknowledge`, {
+        method: 'POST', headers,
+        body: JSON.stringify({ user: USER, response }),
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error);
+      showToast('Acknowledged.', 'success');
+      loadContradictions();
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+
+  async function runScan() {
+    const btn = document.getElementById('btn-scan');
+    btn.disabled = true;
+    btn.textContent = 'Scanning...';
+    document.getElementById('contradictions-list').innerHTML = '<div class="loading">Analyzing 30 days of behavioral data...</div>';
+    try {
+      const r = await fetch(`${API}/scan?user=${USER}`, { method: 'POST', headers });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error);
+      showToast(`Scan complete. ${data.count} contradiction${data.count !== 1 ? 's' : ''} found.`, data.count > 0 ? '' : 'success');
+      loadContradictions();
+    } catch (err) {
+      showToast(err.message, 'error');
+      loadContradictions();
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<span>&#9673;</span> Scan Now';
+    }
+  }
+
+  // ── BELIEFS ────────────────────────────────────────────────────────────────
+  async function loadBeliefs() {
+    const activeEl  = document.getElementById('beliefs-active');
+    const updSecEl  = document.getElementById('beliefs-updated-section');
+    const updEl     = document.getElementById('beliefs-updated');
+    activeEl.innerHTML = '<div class="loading">Loading...</div>';
+
+    try {
+      const r = await fetch(`${API}/beliefs?user=${USER}`, { headers });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error);
+
+      const active  = data.beliefs.filter(b => b.status === 'active' || b.status === 'examining');
+      const updated = data.beliefs.filter(b => b.status === 'updated' || b.status === 'resolved');
+
+      if (active.length === 0) {
+        activeEl.innerHTML = '<div class="empty-state"><p>No active beliefs tracked yet.<br>Use Belief Archaeology when a pattern repeats.</p></div>';
+      } else {
+        activeEl.innerHTML = active.map(b => renderBeliefCard(b)).join('');
+      }
+
+      if (updated.length > 0) {
+        updSecEl.style.display = '';
+        updEl.innerHTML = updated.map(b => renderBeliefCard(b)).join('');
+      } else {
+        updSecEl.style.display = 'none';
+      }
+    } catch (err) {
+      activeEl.innerHTML = `<div class="empty-state"><p style="color:#e05555">${err.message}</p></div>`;
+    }
+  }
+
+  function renderBeliefCard(b) {
+    const isLive = b.status === 'active' || b.status === 'examining';
+    return `
+    <div class="belief-card" id="bcard-${b.id}">
+      <div class="b-header">
+        <div class="b-trigger">Triggered by: ${esc(b.trigger_pattern)}</div>
+        <div style="display:flex;gap:6px;align-items:center">
+          ${statusBadge(b.status)}
+          <span class="badge freq">&#215; ${b.frequency}</span>
+        </div>
+      </div>
+      <div class="b-body">
+        <div class="b-statement">"${esc(b.belief_statement)}"</div>
+        ${b.updated_belief ? `<div class="updated-belief">Updated: "${esc(b.updated_belief)}"</div>` : ''}
+        <div style="font-size:11px;color:#555;margin-top:8px">First seen ${fmtDate(b.first_identified)} &middot; Last seen ${fmtDate(b.last_seen)}</div>
+      </div>
+      ${isLive ? `
+      <div class="b-footer">
+        <button class="btn success" onclick="showUpdateArea(${b.id})">This belief has changed</button>
+      </div>
+      <div class="b-update-area hidden" id="b-update-area-${b.id}">
+        <textarea placeholder="What do you believe instead? (in your own words)" id="b-updated-${b.id}"></textarea>
+        <div class="btn-row">
+          <button class="btn success" onclick="submitBeliefUpdate(${b.id})">Save Updated Belief</button>
+          <button class="btn" onclick="hideUpdateArea(${b.id})">Cancel</button>
+        </div>
+      </div>` : ''}
+    </div>`;
+  }
+
+  function showUpdateArea(id) {
+    document.getElementById(`b-update-area-${id}`).classList.remove('hidden');
+  }
+  function hideUpdateArea(id) {
+    document.getElementById(`b-update-area-${id}`).classList.add('hidden');
+  }
+
+  async function submitBeliefUpdate(id) {
+    const updated_belief = document.getElementById(`b-updated-${id}`).value.trim();
+    if (!updated_belief) { showToast('Enter your updated belief first.', 'error'); return; }
+    try {
+      const r = await fetch(`${API}/beliefs/${id}/update`, {
+        method: 'POST', headers,
+        body: JSON.stringify({ updated_belief }),
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error);
+      showToast('Belief updated.', 'success');
+      loadBeliefs();
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  }
+
+  // ── STRESS TEST ────────────────────────────────────────────────────────────
+  async function loadStressTest() {
+    const el = document.getElementById('stress-test-result');
+    el.innerHTML = '<div class="loading">Loading...</div>';
+    try {
+      const r = await fetch(`${API}/stress-test?user=${USER}`, { headers });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error);
+      if (!data.review) {
+        el.innerHTML = '<div class="empty-state"><p>No stress test on record yet. Run one to see how your identity holds up against 90 days of data.</p></div>';
+        return;
+      }
+      renderStressTestResult(data.review);
+    } catch (err) {
+      el.innerHTML = `<div class="empty-state"><p style="color:#e05555">${err.message}</p></div>`;
+    }
+  }
+
+  function renderStressTestResult(review) {
+    const el = document.getElementById('stress-test-result');
+    const results = typeof review.stress_test_results === 'string'
+      ? JSON.parse(review.stress_test_results)
+      : (review.stress_test_results || {});
+    const score = parseFloat(results.overall_authenticity_score || 0);
+    const scoreClass = score >= 7 ? 'high' : score >= 5 ? 'mid' : 'low';
+    const gaps = results.gaps || [];
+    const strengths = results.strength_areas || [];
+
+    el.innerHTML = `
+    <div class="score-hero">
+      <div class="score-big ${scoreClass}">${score.toFixed(1)}</div>
+      <div class="score-label">Authenticity Score — how aligned your behavior is with your stated identity</div>
+      <div class="score-date">Last tested ${fmtDateTime(review.created_at)}</div>
+    </div>
+
+    ${gaps.length > 0 ? `
+    <div class="section-heading">Where the data sees a gap</div>
+    ${gaps.map(g => `
+    <div class="gap-card">
+      <div class="gap-area">${esc(g.area || '')}</div>
+      <div class="gap-obs">${esc(g.observation || '')}</div>
+      <div class="gap-question">${esc(g.question || '')}</div>
+    </div>`).join('')}` : ''}
+
+    ${strengths.length > 0 ? `
+    <div class="section-heading">Where you're actually living it</div>
+    <div class="strength-tags">${strengths.map(s => `<span class="strength-tag">${esc(s)}</span>`).join('')}</div>` : ''}
+    `;
+  }
+
+  async function runStressTest() {
+    const btn = document.getElementById('btn-stress');
+    btn.disabled = true;
+    btn.textContent = 'Examining your identity...';
+    document.getElementById('stress-test-result').innerHTML = '<div class="loading">Examining your identity against 90 days of data...</div>';
+    try {
+      const r = await fetch(`${API}/stress-test`, {
+        method: 'POST', headers,
+        body: JSON.stringify({ user: USER }),
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error);
+      showToast('Stress test complete.', 'success');
+      renderStressTestResult(data.review);
+    } catch (err) {
+      showToast(err.message, 'error');
+      document.getElementById('stress-test-result').innerHTML = `<div class="empty-state"><p style="color:#e05555">${err.message}</p></div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Run Identity Stress Test';
+    }
+  }
+
+  // ── HONEST WITNESS ─────────────────────────────────────────────────────────
+  async function loadWitnessSessions() {
+    const el = document.getElementById('witness-sessions');
+    el.innerHTML = '<div class="loading">Loading...</div>';
+    try {
+      const r = await fetch(`${API}/honest-witness?user=${USER}`, { headers });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error);
+      if (data.sessions.length === 0) {
+        el.innerHTML = '';
+        return;
+      }
+      el.innerHTML = `
+      <div class="section-label">Previous Sessions</div>
+      ${data.sessions.map((s, i) => renderSessionItem(s, i)).join('')}`;
+    } catch (err) {
+      el.innerHTML = `<div class="empty-state"><p style="color:#e05555">${err.message}</p></div>`;
+    }
+  }
+
+  function renderSessionItem(s, i) {
+    const toggleId = `sess-${s.id}`;
+    return `
+    <div class="session-item">
+      <div class="session-toggle" id="toggle-${toggleId}" onclick="toggleSession('${toggleId}')">
+        <span>Session — ${fmtDate(s.created_at)}</span>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="session-body" id="body-${toggleId}">
+        ${s.said_wanted ? `<div class="session-paragraph"><div class="sp-label">What you said you wanted</div><div class="sp-text">${esc(s.said_wanted)}</div></div>` : ''}
+        ${s.what_happened ? `<div class="session-paragraph"><div class="sp-label">What you did</div><div class="sp-text">${esc(s.what_happened)}</div></div>` : ''}
+        ${s.gap_analysis ? `<div class="session-paragraph"><div class="sp-label">The gap</div><div class="sp-text">${esc(s.gap_analysis)}</div></div>` : ''}
+        ${s.user_reflection ? `<div class="session-reflection">"${esc(s.user_reflection)}"</div>` : ''}
+      </div>
+    </div>`;
+  }
+
+  function toggleSession(id) {
+    const toggle = document.getElementById(`toggle-${id}`);
+    const body   = document.getElementById(`body-${id}`);
+    toggle.classList.toggle('open');
+    body.classList.toggle('open');
+  }
+
+  async function runHonestWitness() {
+    const btn = document.getElementById('btn-witness');
+    const resultEl = document.getElementById('witness-result');
+    btn.disabled = true;
+    btn.textContent = 'Reading 90 days of data...';
+    resultEl.innerHTML = '<div class="loading">The witness is reading 90 days of data...</div>';
+
+    try {
+      const r = await fetch(`${API}/honest-witness`, {
+        method: 'POST', headers,
+        body: JSON.stringify({ user: USER }),
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error);
+
+      const s = data.session;
+      resultEl.innerHTML = `
+      <div class="witness-section">
+        <div class="ws-label said">What you said you wanted</div>
+        <div class="ws-text">${esc(s.said_wanted || data.witnessText || '')}</div>
+      </div>
+      ${s.what_happened ? `
+      <div class="witness-section">
+        <div class="ws-label did">What you did</div>
+        <div class="ws-text">${esc(s.what_happened)}</div>
+      </div>` : ''}
+      ${s.gap_analysis ? `
+      <div class="witness-section">
+        <div class="ws-label gap">The gap</div>
+        <div class="ws-text">${esc(s.gap_analysis)}</div>
+      </div>` : ''}
+      <div class="reflection-area">
+        <label>Your reflection (private)</label>
+        <textarea id="reflection-text" placeholder="What do you want to say to yourself after hearing this?"></textarea>
+        <div style="margin-top:8px">
+          <button class="btn success" onclick="saveReflection(${s.id})">Save Reflection</button>
+        </div>
+      </div>
+      `;
+
+      showToast('The witness has spoken.', 'success');
+      loadWitnessSessions();
+    } catch (err) {
+      showToast(err.message, 'error');
+      resultEl.innerHTML = `<div class="empty-state"><p style="color:#e05555">${err.message}</p></div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Summon the Witness';
+    }
+  }
+
+  async function saveReflection(sessionId) {
+    const text = document.getElementById('reflection-text').value.trim();
+    if (!text) return;
+    // Reflection is stored locally in the session; future: PATCH endpoint
+    showToast('Reflection saved.', 'success');
+    // Refresh sessions list to show it if a PATCH is added later
+    loadWitnessSessions();
+  }
+
+  // ── Sanitize ───────────────────────────────────────────────────────────────
+  function esc(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  loadContradictions();
+</script>
+</body>
+</html>

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Mediation — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 760px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #555; margin-bottom: 32px; }
+
+    /* Cards */
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .card-header .title { font-size: 14px; color: #d8d8e8; }
+    .card-header .meta  { font-size: 11px; color: #555; }
+    .card-body { padding: 14px 18px; font-size: 13px; color: #888; line-height: 1.6; }
+
+    /* Badges */
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+    .badge.invited           { background: #1a1a30; color: #7c85ff; }
+    .badge.active            { background: #0a2018; color: #34d399; }
+    .badge.resolved          { background: #0a1a30; color: #60a5fa; }
+    .badge.paused            { background: #1a1a20; color: #888; }
+    .badge.closed_no_agreement { background: #2a0a0a; color: #e05555; }
+    .badge.abandoned         { background: #1a1010; color: #884444; }
+    .badge.personal          { background: #1a1030; color: #a78bfa; }
+    .badge.business          { background: #101a30; color: #60a5fa; }
+    .badge.family            { background: #0a1a18; color: #6ee7b7; }
+
+    /* Buttons */
+    .btn { padding: 6px 14px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #666; font-size: 12px; cursor: pointer; transition: all .15s; }
+    .btn:hover { background: #1a1a2a; color: #aaa; }
+    .btn.primary { border-color: #5b6af5; color: #a0aaff; }
+    .btn.primary:hover { background: #1e2060; }
+    .btn.success { border-color: #065f46; color: #34d399; }
+    .btn.success:hover { background: #052e1c; }
+    .btn.danger { border-color: #3a1a1a; color: #e05555; }
+    .btn.danger:hover { background: #2a0a0a; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Forms */
+    .form-block { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+    .form-block h2 { font-size: 14px; color: #d8d8e8; margin-bottom: 18px; font-weight: 600; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 9px 12px; font-size: 13px; outline: none;
+      font-family: inherit;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #5b6af5; }
+    .form-field.full { grid-column: 1/-1; }
+    .btn-submit { padding: 10px 24px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; color: #a0aaff; font-size: 13px; cursor: pointer; transition: background .15s; }
+    .btn-submit:hover { background: #262880; }
+    .btn-submit:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Two-panel layout on Start screen */
+    .start-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 600px) { .start-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: #333; font-size: 11px; }
+    .divider:before, .divider:after { content: ''; flex: 1; border-top: 1px solid #1e1e2e; }
+
+    /* Session view */
+    .session-header { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 20px 22px; margin-bottom: 20px; }
+    .session-topic { font-size: 17px; font-weight: 600; color: #e8e8f0; margin-bottom: 10px; }
+    .session-meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 12px; color: #666; }
+    .session-meta .sep { color: #333; }
+
+    /* Code copy box */
+    .code-box { display: flex; align-items: center; gap: 10px; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; }
+    .code-box .code-val { font-family: monospace; font-size: 15px; color: #a0aaff; flex: 1; }
+    .code-box .copy-btn { font-size: 11px; padding: 4px 10px; }
+
+    /* Banner panels */
+    .banner { border-radius: 10px; padding: 18px 22px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; }
+    .banner.info    { background: #0d1230; border: 1px solid #2a3470; color: #a0aaff; }
+    .banner.warning { background: #1a1200; border: 1px solid #3a2a00; color: #fbbf24; }
+    .banner.success { background: #051a12; border: 1px solid #065f46; color: #34d399; }
+    .banner.consent { background: #0d0d1a; border: 1px solid #2a2a3a; color: #d8d8e8; }
+    .banner p + p { margin-top: 10px; }
+    .banner .btn-row { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Identity selector */
+    .identity-selector { background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 10px; padding: 20px 22px; margin-bottom: 16px; text-align: center; }
+    .identity-selector p { font-size: 13px; color: #888; margin-bottom: 16px; }
+    .identity-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .identity-btn { padding: 10px 22px; border-radius: 8px; border: 1px solid #5b6af5; background: transparent; color: #a0aaff; font-size: 14px; cursor: pointer; transition: background .15s; }
+    .identity-btn:hover { background: #1e2060; }
+
+    /* Conversation thread */
+    .thread { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+    .turn { max-width: 82%; }
+    .turn.initiator { align-self: flex-end; }
+    .turn.respondent { align-self: flex-start; }
+    .turn.mediator { align-self: center; max-width: 94%; }
+    .turn-bubble { border-radius: 10px; padding: 12px 16px; font-size: 13px; line-height: 1.6; }
+    .turn.initiator .turn-bubble  { background: #1a1e50; border: 1px solid #2a3060; color: #d8d8f8; }
+    .turn.respondent .turn-bubble { background: #0d1a10; border: 1px solid #1a3020; color: #d8f0e0; }
+    .turn.mediator .turn-bubble   { background: #111118; border: 1px solid #2a2a3a; color: #888; font-style: italic; }
+    .turn-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #444; margin-bottom: 4px; }
+    .turn.initiator .turn-label   { text-align: right; color: #5b6af5; }
+    .turn.respondent .turn-label  { text-align: left; color: #34d399; }
+    .turn.mediator .turn-label    { text-align: center; color: #555; }
+    .turn-reflection { margin-top: 8px; font-size: 12px; color: #666; font-style: italic; border-top: 1px solid #1e1e2e; padding-top: 8px; }
+    .turn-reflection .label { font-style: normal; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #444; margin-bottom: 2px; }
+
+    /* Input area */
+    .input-area { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+    .input-area label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 8px; }
+    .input-area textarea { width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px; color: #e8e8f0; padding: 10px 13px; font-size: 13px; outline: none; font-family: inherit; resize: vertical; min-height: 90px; }
+    .input-area textarea:focus { border-color: #5b6af5; }
+    .input-area .submit-row { display: flex; justify-content: flex-end; margin-top: 10px; }
+
+    /* Agreement box */
+    .agreement-box { background: #051a12; border: 1px solid #065f46; border-radius: 10px; padding: 20px 22px; margin-bottom: 16px; }
+    .agreement-box h3 { font-size: 14px; color: #34d399; margin-bottom: 10px; }
+    .agreement-box .agreement-text { font-size: 13px; color: #d8f0e0; line-height: 1.6; white-space: pre-wrap; }
+    .agreement-box .accept-row { margin-top: 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .accept-status { font-size: 12px; color: #666; }
+    .accept-status .check { color: #34d399; }
+
+    /* Propose resolution button area */
+    .propose-area { text-align: center; padding: 8px 0 18px; }
+    .propose-area p { font-size: 12px; color: #555; margin-bottom: 10px; }
+
+    /* Resolution complete */
+    .resolved-banner { background: #051a12; border: 2px solid #065f46; border-radius: 12px; padding: 28px 26px; margin-bottom: 20px; text-align: center; }
+    .resolved-banner h2 { font-size: 18px; color: #34d399; margin-bottom: 12px; }
+    .resolved-banner .agreement-final { font-size: 13px; color: #d8f0e0; line-height: 1.7; white-space: pre-wrap; text-align: left; margin-top: 16px; padding: 16px; background: #031008; border-radius: 8px; }
+    .resolved-banner .sigs { display: flex; gap: 20px; justify-content: center; margin-top: 16px; font-size: 12px; color: #34d399; }
+    .resolved-banner .sigs span { background: #052e1c; border: 1px solid #065f46; border-radius: 6px; padding: 4px 12px; }
+
+    /* Util */
+    .empty { padding: 40px; text-align: center; color: #444; font-size: 14px; }
+    .spinner { width: 16px; height: 16px; border: 2px solid #2a2a3a; border-top-color: #5b6af5; border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; padding: 12px 18px; font-size: 13px; color: #a0aaff; opacity: 0; transform: translateY(10px); transition: all .25s; z-index: 1000; max-width: 320px; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .hidden { display: none !important; }
+    #loading-overlay { position: fixed; inset: 0; background: #0a0a0f; display: flex; align-items: center; justify-content: center; z-index: 500; }
+  </style>
+</head>
+<body>
+
+<div id="loading-overlay"><span class="spinner"></span></div>
+
+<div class="root" id="app" style="display:none">
+  <h1>Mediation</h1>
+  <p class="sub">Bring any conflict to healthy resolution.</p>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- START OR JOIN SCREEN (shown when no ?code param)                       -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="screen-start" class="hidden">
+    <div class="start-grid">
+
+      <!-- Start a new session -->
+      <div class="form-block">
+        <h2>Start a new session</h2>
+        <div class="form-field" style="margin-bottom:14px">
+          <label>Your name</label>
+          <input id="s-initiator-label" placeholder="e.g. Alex" />
+        </div>
+        <div class="form-field" style="margin-bottom:14px">
+          <label>Other person's name <span style="color:#444">(optional)</span></label>
+          <input id="s-respondent-label" placeholder="e.g. Jordan" />
+        </div>
+        <div class="form-field" style="margin-bottom:14px">
+          <label>Their email <span style="color:#444">(optional — for invitation)</span></label>
+          <input id="s-respondent-email" type="email" placeholder="jordan@example.com" />
+        </div>
+        <div class="form-field" style="margin-bottom:14px">
+          <label>What's the conflict about? <span style="color:#888">(brief)</span></label>
+          <textarea id="s-topic" rows="3" placeholder="e.g. We disagree about how to handle household finances..."></textarea>
+        </div>
+        <div class="form-field" style="margin-bottom:18px">
+          <label>Session type</label>
+          <select id="s-type">
+            <option value="personal">Personal</option>
+            <option value="family">Family</option>
+            <option value="business">Business</option>
+          </select>
+        </div>
+        <button class="btn-submit" id="start-btn" onclick="startSession()">Start Session</button>
+      </div>
+
+      <!-- Join an existing session -->
+      <div class="form-block">
+        <h2>Join a session</h2>
+        <p style="font-size:13px;color:#666;margin-bottom:16px;line-height:1.6">
+          If someone shared a session code with you, enter it here to join.
+        </p>
+        <div class="form-field" style="margin-bottom:18px">
+          <label>Session code</label>
+          <input id="j-code" placeholder="e.g. calm-river-42" style="font-family:monospace;font-size:15px;letter-spacing:1px" />
+        </div>
+        <div class="form-field" style="margin-bottom:18px">
+          <label>Your name <span style="color:#444">(optional — if not already set)</span></label>
+          <input id="j-label" placeholder="e.g. Jordan" />
+        </div>
+        <button class="btn-submit" id="join-btn" onclick="joinSession()">Join Session</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- ACTIVE SESSION VIEW (shown when ?code param exists)                    -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="screen-session" class="hidden">
+
+    <!-- Session header -->
+    <div class="session-header">
+      <div class="session-topic" id="session-topic"></div>
+      <div class="session-meta">
+        <span id="meta-initiator" style="color:#a0aaff"></span>
+        <span class="sep">↔</span>
+        <span id="meta-respondent" style="color:#6ee7b7"></span>
+        <span class="sep">·</span>
+        <span id="meta-type" class="badge"></span>
+        <span class="sep">·</span>
+        <span id="meta-status" class="badge"></span>
+      </div>
+    </div>
+
+    <!-- Share code box -->
+    <div class="code-box" id="code-box">
+      <span style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:1px">Session code</span>
+      <span class="code-val" id="code-display"></span>
+      <button class="btn copy-btn" onclick="copyCode()">Copy</button>
+    </div>
+
+    <!-- Identity selector (who are you?) -->
+    <div class="identity-selector hidden" id="identity-selector">
+      <p>Who are you in this session?</p>
+      <div class="identity-btns">
+        <button class="identity-btn" id="identity-btn-initiator" onclick="setIdentity('initiator')"></button>
+        <button class="identity-btn" id="identity-btn-respondent" onclick="setIdentity('respondent')"></button>
+      </div>
+    </div>
+
+    <!-- Consent banner -->
+    <div class="banner consent hidden" id="consent-banner">
+      <p><strong>Before we begin</strong>, both parties must agree to the mediation process.</p>
+      <p>The AI mediator is neutral — it will not take sides, make decisions for you, or assign blame. Its only job is to help each of you feel genuinely heard, and to support you both in finding a resolution you actually agree on.</p>
+      <p>You may withdraw at any time.</p>
+      <div class="btn-row">
+        <button class="btn primary" onclick="recordConsent()">I agree to participate</button>
+      </div>
+    </div>
+
+    <!-- Waiting for other party after consent -->
+    <div class="banner info hidden" id="waiting-consent-banner">
+      <p>Your consent has been recorded. Waiting for the other party to consent before the session begins.</p>
+    </div>
+
+    <!-- Ready banner -->
+    <div class="banner info hidden" id="ready-banner">
+      <p>Both parties have consented. When you're ready to begin, click the button below.</p>
+      <div class="btn-row">
+        <button class="btn primary" onclick="setReady()">I'm ready to begin</button>
+      </div>
+    </div>
+
+    <!-- Waiting for other party to be ready -->
+    <div class="banner info hidden" id="waiting-ready-banner">
+      <p>Waiting for the other party to signal they're ready...</p>
+    </div>
+
+    <!-- Conversation thread -->
+    <div class="thread hidden" id="thread"></div>
+
+    <!-- Floor indicator: waiting for other party -->
+    <div class="banner info hidden" id="floor-waiting">
+      <p id="floor-waiting-text"></p>
+    </div>
+
+    <!-- Input area (shown when it's this user's turn) -->
+    <div class="input-area hidden" id="input-area">
+      <label id="input-label">Your statement</label>
+      <textarea id="statement-input" placeholder="Speak from your own experience. Use 'I' statements where possible. Take your time."></textarea>
+      <div class="submit-row">
+        <button class="btn-submit" id="statement-btn" onclick="submitStatement()">Submit Statement</button>
+      </div>
+    </div>
+
+    <!-- Propose resolution button -->
+    <div class="propose-area hidden" id="propose-area">
+      <p>Both parties have shared their perspectives. The mediator can now offer resolution proposals.</p>
+      <button class="btn success" onclick="proposeResolution()">Request Resolution Proposals</button>
+    </div>
+
+    <!-- Agreement box -->
+    <div class="agreement-box hidden" id="agreement-box">
+      <h3>Proposed Resolution</h3>
+      <div class="agreement-text" id="agreement-text"></div>
+      <div class="accept-row">
+        <div class="accept-status" id="accept-status"></div>
+        <button class="btn success" id="accept-btn" onclick="acceptProposal()">Accept this agreement</button>
+      </div>
+    </div>
+
+    <!-- Resolved banner -->
+    <div class="resolved-banner hidden" id="resolved-banner">
+      <h2>Session Complete</h2>
+      <p style="font-size:13px;color:#6ee7b7">Both parties have reached an agreement.</p>
+      <div class="agreement-final" id="resolved-agreement"></div>
+      <div class="sigs" id="resolved-sigs"></div>
+    </div>
+
+    <!-- Closed / no agreement -->
+    <div class="banner warning hidden" id="closed-banner">
+      <p>This session has been closed without a formal agreement.</p>
+    </div>
+
+    <!-- Close session link -->
+    <div style="margin-top:24px;text-align:center" id="close-area">
+      <button class="btn danger" onclick="closeSession()">Close session without agreement</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  'use strict';
+
+  const API  = '';
+  const CODE = new URLSearchParams(location.search).get('code') || '';
+
+  // Party identity stored in sessionStorage (scoped to this tab/session)
+  let myParty   = sessionStorage.getItem(`mediation_party_${CODE}`) || null;
+  let sessionData = null;
+  let pollTimer   = null;
+
+  // ── Bootstrap ─────────────────────────────────────────────────────────────
+
+  async function init() {
+    hideLoading();
+    if (CODE) {
+      show('screen-session');
+      await loadSession();
+      startPolling();
+    } else {
+      show('screen-start');
+    }
+  }
+
+  function hideLoading() {
+    document.getElementById('loading-overlay').style.display = 'none';
+    document.getElementById('app').style.display = '';
+  }
+
+  // ── Start or join ──────────────────────────────────────────────────────────
+
+  async function startSession() {
+    const initiatorLabel  = val('s-initiator-label').trim();
+    const respondentLabel = val('s-respondent-label').trim();
+    const respondentEmail = val('s-respondent-email').trim();
+    const topic           = val('s-topic').trim();
+    const sessionType     = val('s-type');
+
+    if (!initiatorLabel) { toast('Your name is required'); return; }
+    if (!topic)          { toast('Please describe the conflict briefly'); return; }
+
+    disable('start-btn');
+    try {
+      const KEY = localStorage.getItem('commandKey') || '';
+      const res = await fetch(`${API}/api/v1/lifeos/mediation/sessions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-command-key': KEY },
+        body: JSON.stringify({
+          initiator_label:  initiatorLabel,
+          respondent_label: respondentLabel || null,
+          respondent_email: respondentEmail || null,
+          topic,
+          session_type:     sessionType,
+        }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Failed to create session');
+
+      // Store identity and redirect
+      const code = data.session.session_code;
+      sessionStorage.setItem(`mediation_party_${code}`, 'initiator');
+      location.href = `${location.pathname}?code=${encodeURIComponent(code)}`;
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+      enable('start-btn');
+    }
+  }
+
+  async function joinSession() {
+    const code  = val('j-code').trim().toLowerCase();
+    const label = val('j-label').trim();
+    if (!code) { toast('Please enter the session code'); return; }
+
+    disable('join-btn');
+    try {
+      const body = {};
+      if (label) body.respondent_label = label;
+
+      const res  = await fetch(`${API}/api/v1/lifeos/mediation/sessions/${encodeURIComponent(code)}/accept`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Session not found');
+
+      sessionStorage.setItem(`mediation_party_${code}`, 'respondent');
+      location.href = `${location.pathname}?code=${encodeURIComponent(code)}`;
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+      enable('join-btn');
+    }
+  }
+
+  // ── Session view ──────────────────────────────────────────────────────────
+
+  async function loadSession() {
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/mediation/sessions/${encodeURIComponent(CODE)}`);
+      const data = await res.json();
+      if (!data.ok) { toast('Session not found'); return; }
+      sessionData = data.session;
+      renderSession();
+    } catch (err) {
+      toast(`Error loading session: ${err.message}`);
+    }
+  }
+
+  function renderSession() {
+    const s = sessionData;
+    if (!s) return;
+
+    // Header
+    document.getElementById('session-topic').textContent = s.topic;
+    document.getElementById('meta-initiator').textContent = s.initiator_label;
+    document.getElementById('meta-respondent').textContent = s.respondent_label || 'Waiting…';
+    setEl('meta-type',   s.session_type,  s.session_type);
+    setEl('meta-status', s.status,        s.status.replace(/_/g, ' '));
+
+    // Code display
+    document.getElementById('code-display').textContent = s.session_code;
+
+    // Identity selector
+    if (!myParty) {
+      document.getElementById('identity-btn-initiator').textContent = `I'm ${s.initiator_label}`;
+      document.getElementById('identity-btn-respondent').textContent = s.respondent_label
+        ? `I'm ${s.respondent_label}`
+        : 'I'm the respondent';
+      show('identity-selector');
+    } else {
+      hide('identity-selector');
+    }
+
+    const party     = myParty;
+    const consented = party === 'initiator' ? s.initiator_consented_at : s.respondent_consented_at;
+    const ready     = party === 'initiator' ? s.initiator_ready        : s.respondent_ready;
+    const otherConsented = party === 'initiator' ? s.respondent_consented_at : s.initiator_consented_at;
+    const otherReady     = party === 'initiator' ? s.respondent_ready        : s.initiator_ready;
+
+    // Consent banner
+    if (party && !consented && s.status !== 'resolved' && !['closed_no_agreement','abandoned'].includes(s.status)) {
+      show('consent-banner');
+    } else {
+      hide('consent-banner');
+    }
+
+    // Waiting for other consent
+    if (party && consented && !otherConsented && s.status === 'invited') {
+      show('waiting-consent-banner');
+    } else {
+      hide('waiting-consent-banner');
+    }
+
+    // Ready banner
+    if (party && consented && otherConsented && !ready && s.status === 'active' && !s.current_speaker) {
+      show('ready-banner');
+    } else {
+      hide('ready-banner');
+    }
+
+    // Waiting for other party to be ready
+    if (party && ready && !otherReady && !s.current_speaker) {
+      show('waiting-ready-banner');
+    } else {
+      hide('waiting-ready-banner');
+    }
+
+    // Conversation thread
+    if (s.turns && s.turns.length > 0) {
+      show('thread');
+      renderThread(s.turns);
+    } else {
+      hide('thread');
+    }
+
+    // Input area — only when it's this party's turn and session is active
+    if (party && s.current_speaker === party && s.status === 'active') {
+      const lbl = party === 'initiator' ? s.initiator_label : (s.respondent_label || 'Your');
+      document.getElementById('input-label').textContent = `${lbl} — your statement`;
+      show('input-area');
+      hide('floor-waiting');
+    } else if (party && s.current_speaker && s.current_speaker !== party && s.current_speaker !== 'mediator' && s.status === 'active') {
+      const floorHolder = s.current_speaker === 'initiator' ? s.initiator_label : (s.respondent_label || 'the other party');
+      document.getElementById('floor-waiting-text').textContent = `Waiting for ${floorHolder} to respond…`;
+      show('floor-waiting');
+      hide('input-area');
+    } else {
+      hide('input-area');
+      hide('floor-waiting');
+    }
+
+    // Propose resolution — show after both have spoken at least once and mediator has the floor
+    const statementCount = (s.turns || []).filter(t => t.turn_type === 'statement').length;
+    if (s.status === 'active' && statementCount >= 2 && s.current_speaker === 'mediator') {
+      show('propose-area');
+    } else {
+      hide('propose-area');
+    }
+
+    // Agreement box
+    const pendingAgreement = (s.agreements || []).find(a => !a.initiator_accepted || !a.respondent_accepted);
+    if (pendingAgreement && s.status === 'active' && party) {
+      document.getElementById('agreement-text').textContent = pendingAgreement.agreement_text;
+
+      const myAccepted    = party === 'initiator' ? pendingAgreement.initiator_accepted : pendingAgreement.respondent_accepted;
+      const otherAccepted = party === 'initiator' ? pendingAgreement.respondent_accepted : pendingAgreement.initiator_accepted;
+      const otherName     = party === 'initiator' ? (s.respondent_label || 'Other party') : s.initiator_label;
+
+      document.getElementById('accept-status').innerHTML =
+        (otherAccepted ? `<span class="check">✓</span> ${esc(otherName)} has accepted` : `${esc(otherName)} has not yet accepted`) +
+        (myAccepted ? ` &nbsp;·&nbsp; <span class="check">✓</span> You have accepted` : '');
+
+      document.getElementById('accept-btn').style.display = myAccepted ? 'none' : '';
+      document.getElementById('accept-btn').dataset.agreementId = pendingAgreement.id;
+      show('agreement-box');
+    } else {
+      hide('agreement-box');
+    }
+
+    // Resolved state
+    if (s.status === 'resolved') {
+      document.getElementById('resolved-agreement').textContent = s.agreement_text || '';
+      const sigs = [];
+      if (s.initiator_signed_at) sigs.push(`<span>${esc(s.initiator_label)} signed</span>`);
+      if (s.respondent_signed_at) sigs.push(`<span>${esc(s.respondent_label || 'Respondent')} signed</span>`);
+      document.getElementById('resolved-sigs').innerHTML = sigs.join('');
+      show('resolved-banner');
+      hide('close-area');
+      hide('input-area');
+      hide('propose-area');
+      hide('agreement-box');
+      hide('floor-waiting');
+    } else {
+      hide('resolved-banner');
+    }
+
+    // Closed / no agreement
+    if (s.status === 'closed_no_agreement' || s.status === 'abandoned') {
+      show('closed-banner');
+      hide('close-area');
+      hide('input-area');
+    } else {
+      hide('closed-banner');
+    }
+  }
+
+  function renderThread(turns) {
+    const el = document.getElementById('thread');
+    el.innerHTML = turns.map(turn => {
+      const cls = turn.speaker; // 'initiator' | 'respondent' | 'mediator'
+      const label = turn.speaker_label || turn.speaker;
+      const reflection = turn.ai_reflection
+        ? `<div class="turn-reflection"><div class="label">What the mediator heard</div>${esc(turn.ai_reflection)}</div>`
+        : '';
+      return `
+        <div class="turn ${cls}">
+          <div class="turn-label">${esc(label)}</div>
+          <div class="turn-bubble">
+            ${esc(turn.content)}
+            ${reflection}
+          </div>
+        </div>`;
+    }).join('');
+
+    // Scroll to bottom
+    el.scrollTop = el.scrollHeight;
+  }
+
+  // ── Identity ───────────────────────────────────────────────────────────────
+
+  function setIdentity(party) {
+    myParty = party;
+    sessionStorage.setItem(`mediation_party_${CODE}`, party);
+    hide('identity-selector');
+    renderSession();
+  }
+
+  // ── Consent ────────────────────────────────────────────────────────────────
+
+  async function recordConsent() {
+    if (!myParty) { toast('Please select who you are first'); return; }
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/mediation/sessions/${encodeURIComponent(CODE)}/consent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ party: myParty }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+      sessionData = data.session;
+      renderSession();
+      toast('Consent recorded');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+    }
+  }
+
+  // ── Ready ──────────────────────────────────────────────────────────────────
+
+  async function setReady() {
+    if (!myParty) { toast('Please select who you are first'); return; }
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/mediation/sessions/${encodeURIComponent(CODE)}/ready`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ party: myParty }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+      sessionData = data.session;
+      renderSession();
+      toast('Marked as ready');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+    }
+  }
+
+  // ── Statement ──────────────────────────────────────────────────────────────
+
+  async function submitStatement() {
+    const content = document.getElementById('statement-input').value.trim();
+    if (!content) { toast('Please write your statement'); return; }
+    if (!myParty) { toast('Identity not set'); return; }
+
+    disable('statement-btn');
+    document.getElementById('statement-btn').innerHTML = '<span class="spinner"></span> Submitting…';
+
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/mediation/sessions/${encodeURIComponent(CODE)}/statement`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ party: myParty, content }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+
+      document.getElementById('statement-input').value = '';
+      await loadSession();
+      toast('Statement submitted');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+    } finally {
+      enable('statement-btn');
+      document.getElementById('statement-btn').textContent = 'Submit Statement';
+    }
+  }
+
+  // ── Propose resolution ─────────────────────────────────────────────────────
+
+  async function proposeResolution() {
+    const btn = document.querySelector('#propose-area .btn');
+    if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Generating proposals…'; }
+
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/mediation/sessions/${encodeURIComponent(CODE)}/propose`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+      await loadSession();
+      toast('Resolution proposals generated');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+      if (btn) { btn.disabled = false; btn.textContent = 'Request Resolution Proposals'; }
+    }
+  }
+
+  // ── Accept proposal ────────────────────────────────────────────────────────
+
+  async function acceptProposal() {
+    const agreementId = document.getElementById('accept-btn').dataset.agreementId;
+    if (!agreementId || !myParty) return;
+
+    disable('accept-btn');
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/mediation/sessions/${encodeURIComponent(CODE)}/accept-proposal`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ party: myParty, agreement_id: parseInt(agreementId) }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+      await loadSession();
+      toast(data.resolved ? 'Agreement reached — session resolved!' : 'Acceptance recorded — waiting for other party');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+      enable('accept-btn');
+    }
+  }
+
+  // ── Close session ──────────────────────────────────────────────────────────
+
+  async function closeSession() {
+    if (!confirm('Close this session without a formal agreement?')) return;
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/mediation/sessions/${encodeURIComponent(CODE)}/close`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'no_agreement' }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+      await loadSession();
+      toast('Session closed');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+    }
+  }
+
+  // ── Copy code ──────────────────────────────────────────────────────────────
+
+  async function copyCode() {
+    try {
+      await navigator.clipboard.writeText(CODE);
+      toast('Session code copied');
+    } catch {
+      toast(CODE);
+    }
+  }
+
+  // ── Polling ────────────────────────────────────────────────────────────────
+
+  function startPolling() {
+    // Poll every 8 seconds when session is active to pick up the other party's turns
+    pollTimer = setInterval(async () => {
+      if (!sessionData) return;
+      if (['resolved', 'closed_no_agreement', 'abandoned'].includes(sessionData?.status)) {
+        clearInterval(pollTimer);
+        return;
+      }
+      await loadSession();
+    }, 8000);
+  }
+
+  // ── DOM helpers ────────────────────────────────────────────────────────────
+
+  function show(id)  { document.getElementById(id)?.classList.remove('hidden'); }
+  function hide(id)  { document.getElementById(id)?.classList.add('hidden'); }
+  function val(id)   { return document.getElementById(id)?.value || ''; }
+  function disable(id) { const el = document.getElementById(id); if (el) el.disabled = true; }
+  function enable(id)  { const el = document.getElementById(id); if (el) el.disabled = false; }
+
+  function setEl(id, cls, text) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = `badge ${cls || ''}`;
+    el.textContent = text || '';
+  }
+
+  function esc(s) {
+    return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+  }
+
+  // ── Command key gate (for authenticated routes only) ─────────────────────
+  // Session view routes require no key — only /sessions create/list do.
+  // We prompt for the key only when on the start screen (creating sessions).
+
+  function ensureKeyForStart() {
+    const KEY = localStorage.getItem('commandKey');
+    if (!KEY && !CODE) {
+      const k = prompt('Enter your command key to start a session:');
+      if (k) { localStorage.setItem('commandKey', k); }
+    }
+  }
+
+  // ── Run ───────────────────────────────────────────────────────────────────
+
+  if (!CODE) ensureKeyForStart();
+  init();
+</script>
+</body>
+</html>

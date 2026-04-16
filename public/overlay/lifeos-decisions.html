@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Decision Intelligence — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #555; margin-bottom: 32px; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 28px; border-bottom: 1px solid #1e1e2e; flex-wrap: wrap; }
+    .tab { padding: 10px 18px; font-size: 13px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab.active { color: #a0aaff; border-bottom-color: #5b6af5; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* Cards */
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 18px; border-bottom: 1px solid #191920; gap: 10px; }
+    .card-header .title { font-size: 14px; color: #d8d8e8; flex: 1; }
+    .card-header .meta  { font-size: 11px; color: #555; }
+    .card-body { padding: 14px 18px; font-size: 13px; color: #888; line-height: 1.6; }
+    .card-footer { padding: 12px 18px; border-top: 1px solid #111; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    /* Badges */
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-integrity { background: #1a1a30; color: #7c85ff; }
+    .badge-joy       { background: #1a2818; color: #5adb8a; }
+    .badge-sleep     { background: #1a1a25; color: #9988ff; }
+    .badge-hour      { background: #1a1818; color: #dd8844; }
+    .badge-state     { background: #201818; color: #cc6666; }
+    .badge-calm      { background: #0d2010; color: #44cc77; }
+    .badge-stirred   { background: #1a1a0a; color: #ccbb44; }
+    .badge-heated    { background: #1a0f0a; color: #dd8844; }
+    .badge-flooded   { background: #1a0808; color: #dd4444; }
+    .badge-cat       { background: #14141a; color: #7c85ff; }
+    .badge-outcome-good   { background: #0a2018; color: #34d399; }
+    .badge-outcome-mid    { background: #201a0a; color: #f59e0b; }
+    .badge-outcome-poor   { background: #2a0a0a; color: #e05555; }
+    .badge-bias-confirmation { background: #1a1030; color: #aa88ff; }
+    .badge-bias-sunk_cost    { background: #1a1020; color: #8877ee; }
+    .badge-bias-optimism     { background: #101a18; color: #44cc99; }
+    .badge-bias-anchoring    { background: #1a1818; color: #dd9944; }
+    .badge-bias-availability { background: #181020; color: #cc77dd; }
+    .badge-bias-status_quo   { background: #141420; color: #7788cc; }
+    .badge-bias-recency      { background: #1a1010; color: #dd5566; }
+    .badge-energy-peak     { background: #0a1a12; color: #34d399; }
+    .badge-energy-good     { background: #0a1220; color: #60a5fa; }
+    .badge-energy-neutral  { background: #141418; color: #888; }
+    .badge-energy-low      { background: #1a1200; color: #f59e0b; }
+    .badge-energy-reactive { background: #1a0808; color: #e05555; }
+
+    /* Buttons */
+    .btn { padding: 6px 14px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #666; font-size: 11px; cursor: pointer; font-family: inherit; }
+    .btn:hover { background: #1a1a2a; color: #aaa; }
+    .btn.primary { border-color: #5b6af5; color: #a0aaff; }
+    .btn.primary:hover { background: #1e2060; }
+    .btn.small { padding: 4px 10px; }
+    .btn-submit { padding: 10px 24px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; color: #a0aaff; font-size: 13px; cursor: pointer; font-family: inherit; }
+    .btn-submit:hover { background: #262880; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Forms */
+    .form-block { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 9px 12px; font-size: 13px; outline: none;
+      font-family: inherit;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #5b6af5; }
+    .form-field.full { grid-column: 1/-1; }
+
+    /* Chip selector (emotional state) */
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .chip { padding: 6px 14px; border-radius: 20px; border: 1px solid #2a2a3a; background: transparent; color: #666; font-size: 12px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .chip:hover { border-color: #5b6af5; color: #a0aaff; }
+    .chip.selected-calm    { border-color: #44cc77; color: #44cc77; background: #0d2010; }
+    .chip.selected-stirred { border-color: #ccbb44; color: #ccbb44; background: #1a1a0a; }
+    .chip.selected-heated  { border-color: #dd8844; color: #dd8844; background: #1a0f0a; }
+    .chip.selected-flooded { border-color: #dd4444; color: #dd4444; background: #1a0808; }
+
+    /* Outcome inline form */
+    .outcome-form { background: #0d0d14; border: 1px solid #222230; border-radius: 8px; padding: 14px; margin-top: 10px; }
+    .outcome-form textarea { margin-bottom: 10px; }
+    .rating-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .rating-row label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+    .rating-row input[type=range] { flex: 1; accent-color: #5b6af5; }
+    .rating-display { font-size: 14px; font-weight: 600; color: #a0aaff; min-width: 24px; text-align: center; }
+
+    /* Analysis / result cards */
+    .result-card { background: #0d0d18; border: 1px solid #252535; border-radius: 10px; padding: 20px; margin-top: 16px; font-size: 13px; color: #aaa; line-height: 1.7; white-space: pre-wrap; }
+    .result-section { margin-bottom: 16px; }
+    .result-section h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 8px; }
+    .result-section p { font-size: 13px; color: #c0c0d4; line-height: 1.7; }
+    .result-section ol, .result-section ul { padding-left: 20px; }
+    .result-section li { margin-bottom: 6px; color: #c0c0d4; font-size: 13px; line-height: 1.6; }
+    .questions-list { list-style: none; padding: 0; }
+    .questions-list li { padding: 12px 16px; border-left: 2px solid #5b6af5; margin-bottom: 10px; background: #0a0a14; border-radius: 0 6px 6px 0; font-size: 14px; color: #d0d0e8; line-height: 1.5; }
+
+    /* Energy calendar */
+    .energy-grid { display: grid; grid-template-columns: 60px 1fr 70px 80px; gap: 4px; align-items: center; margin-bottom: 4px; }
+    .energy-grid.header { margin-bottom: 10px; }
+    .energy-grid.header span { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #444; }
+    .hour-label { font-size: 11px; color: #555; text-align: right; padding-right: 10px; }
+    .energy-bar-wrap { height: 14px; background: #111118; border-radius: 4px; overflow: hidden; }
+    .energy-bar { height: 100%; border-radius: 4px; transition: width 0.3s; }
+    .energy-bar.peak     { background: #34d399; }
+    .energy-bar.good     { background: #60a5fa; }
+    .energy-bar.neutral  { background: #555; }
+    .energy-bar.low      { background: #f59e0b; }
+    .energy-bar.reactive { background: #e05555; }
+    .energy-quality  { font-size: 11px; color: #666; text-align: center; }
+    .energy-samples  { font-size: 10px; color: #444; text-align: right; }
+    .energy-summary  { background: #0d0d18; border: 1px solid #1e1e2e; border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+    .energy-summary p { font-size: 13px; color: #aaa; line-height: 1.7; }
+    .energy-summary strong { color: #d8d8e8; }
+
+    /* Misc */
+    .empty { padding: 40px; text-align: center; color: #444; font-size: 14px; }
+    .spinner { width: 16px; height: 16px; border: 2px solid #2a2a3a; border-top-color: #5b6af5; border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; padding: 12px 18px; font-size: 13px; color: #a0aaff; opacity: 0; transform: translateY(10px); transition: all .25s; z-index: 1000; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .section-header h2 { font-size: 14px; font-weight: 500; color: #888; }
+    .collapsed { opacity: 0.5; }
+    .divider { border: none; border-top: 1px solid #1a1a28; margin: 20px 0; }
+    .ack-label { font-size: 11px; color: #444; }
+  </style>
+</head>
+<body>
+<div class="root">
+  <h1>Decision Intelligence</h1>
+  <p class="sub">Make decisions from your best self, not your worst moment.</p>
+
+  <div class="tabs">
+    <div class="tab active"    onclick="showTab('log')">Log Decision</div>
+    <div class="tab"           onclick="showTab('opinion')">Second Opinion</div>
+    <div class="tab"           onclick="showTab('biases')">My Biases</div>
+    <div class="tab"           onclick="showTab('energy')">Energy Profile</div>
+  </div>
+
+  <!-- ── Log Decision ──────────────────────────────────────────────────────── -->
+  <div class="panel active" id="panel-log">
+    <div class="form-block">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Decision title</label>
+          <input id="d-title" placeholder="What are you deciding?" />
+        </div>
+        <div class="form-field">
+          <label>Category</label>
+          <select id="d-category">
+            <option value="">— select —</option>
+            <option value="financial">Financial</option>
+            <option value="career">Career</option>
+            <option value="relationship">Relationship</option>
+            <option value="health">Health</option>
+            <option value="family">Family</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-field full">
+          <label>What did you decide?</label>
+          <textarea id="d-made" rows="2" placeholder="Describe what you chose to do..."></textarea>
+        </div>
+        <div class="form-field full">
+          <label>Alternatives considered (comma-separated)</label>
+          <input id="d-alts" placeholder="Option A, Option B, do nothing..." />
+        </div>
+        <div class="form-field full">
+          <label>Emotional state right now</label>
+          <div class="chip-row">
+            <button class="chip" onclick="selectState('calm')"    id="chip-calm">Calm</button>
+            <button class="chip" onclick="selectState('stirred')" id="chip-stirred">Stirred</button>
+            <button class="chip" onclick="selectState('heated')"  id="chip-heated">Heated</button>
+            <button class="chip" onclick="selectState('flooded')" id="chip-flooded">Flooded</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="logDecision()">Log It</button>
+    </div>
+
+    <div class="section-header">
+      <h2>Recent decisions</h2>
+      <button class="btn primary small" onclick="loadDecisions()">Refresh</button>
+    </div>
+    <div id="decisions-list"><div class="empty"><span class="spinner"></span></div></div>
+
+    <hr class="divider">
+    <div class="section-header" style="margin-top:20px">
+      <h2>Pattern analysis</h2>
+      <button class="btn primary small" onclick="analyzePatterns()">Analyze My Patterns</button>
+    </div>
+    <div id="analysis-result"></div>
+  </div>
+
+  <!-- ── Second Opinion ───────────────────────────────────────────────────── -->
+  <div class="panel" id="panel-opinion">
+    <div class="form-block">
+      <div class="form-field full" style="margin-bottom:14px">
+        <label>What are you considering?</label>
+        <textarea id="so-desc" rows="4" placeholder="Describe the decision you're facing in as much detail as you want..."></textarea>
+      </div>
+      <div class="form-field full" style="margin-bottom:18px">
+        <label>Link to a logged decision (optional)</label>
+        <select id="so-decision-link">
+          <option value="">— none —</option>
+        </select>
+      </div>
+      <button class="btn-submit" onclick="getSecondOpinion()" id="so-btn">Get Honest Second Opinion</button>
+    </div>
+    <div id="so-result"></div>
+  </div>
+
+  <!-- ── My Biases ─────────────────────────────────────────────────────────── -->
+  <div class="panel" id="panel-biases">
+    <div style="display:flex;gap:12px;margin-bottom:20px">
+      <button class="btn-submit" onclick="detectBiases()" id="bias-btn">Detect My Biases</button>
+      <button class="btn primary" onclick="loadBiases()" style="padding:10px 20px">Refresh Report</button>
+    </div>
+    <div id="biases-list"><div class="empty">Run a bias detection first, or refresh to see stored biases.</div></div>
+  </div>
+
+  <!-- ── Energy Profile ───────────────────────────────────────────────────── -->
+  <div class="panel" id="panel-energy">
+    <div style="margin-bottom:20px">
+      <button class="btn-submit" onclick="loadEnergy()">Refresh Energy Profile</button>
+    </div>
+    <div id="energy-result"><div class="empty">Loading energy profile...</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API  = '';
+  const KEY  = localStorage.getItem('commandKey') || '';
+  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
+  const USER = new URLSearchParams(location.search).get('user') || 'adam';
+
+  let selectedEmotionalState = '';
+  let outcomeExpanded = {};
+
+  // ── Tab navigation ─────────────────────────────────────────────────────────
+  function showTab(name) {
+    const tabNames = ['log','opinion','biases','energy'];
+    document.querySelectorAll('.tab').forEach((t, i) =>
+      t.classList.toggle('active', tabNames[i] === name));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(`panel-${name}`).classList.add('active');
+    if (name === 'log')     { loadDecisions(); loadDecisionSelectOptions(); }
+    if (name === 'opinion') loadDecisionSelectOptions();
+    if (name === 'biases')  loadBiases();
+    if (name === 'energy')  loadEnergy();
+  }
+
+  // ── Emotional state chips ──────────────────────────────────────────────────
+  function selectState(state) {
+    selectedEmotionalState = (selectedEmotionalState === state) ? '' : state;
+    ['calm','stirred','heated','flooded'].forEach(s => {
+      const chip = document.getElementById(`chip-${s}`);
+      chip.className = 'chip' + (selectedEmotionalState === s ? ` selected-${s}` : '');
+    });
+  }
+
+  // ── Load decisions ─────────────────────────────────────────────────────────
+  async function loadDecisions() {
+    const el = document.getElementById('decisions-list');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/?user=${USER}&limit=10`, { headers: H });
+      const data = await res.json();
+      if (!data.ok || data.count === 0) {
+        el.innerHTML = '<div class="empty">No decisions logged yet. Log your first decision above.</div>';
+        return;
+      }
+      el.innerHTML = data.decisions.map(d => renderDecisionCard(d)).join('');
+    } catch (e) {
+      el.innerHTML = `<div class="empty">Error loading decisions: ${esc(e.message)}</div>`;
+    }
+  }
+
+  function renderDecisionCard(d) {
+    const ctx    = d.context_at_time || {};
+    const badges = buildContextBadges(ctx);
+    const hasOutcome = !!d.outcome;
+    const outcomeHtml = hasOutcome
+      ? `<div style="margin-top:8px;font-size:12px;">
+           <span style="color:#666">Outcome:</span> <span style="color:#c0c0d4">${esc(d.outcome)}</span>
+           ${d.outcome_rating ? outcomeBadge(d.outcome_rating) : ''}
+         </div>`
+      : `<div id="outcome-section-${d.id}">
+           <button class="btn small" onclick="toggleOutcomeForm(${d.id})" style="margin-top:8px">Record Outcome</button>
+           <div id="outcome-form-${d.id}" style="display:none">
+             <div class="outcome-form">
+               <textarea id="oc-text-${d.id}" rows="2" class="form-field" placeholder="How did this turn out?"
+                 style="width:100%;background:#0d0d1a;border:1px solid #2a2a3a;border-radius:8px;color:#e8e8f0;padding:9px 12px;font-size:13px;outline:none;margin-bottom:10px;font-family:inherit;"></textarea>
+               <div class="rating-row">
+                 <label>Rating</label>
+                 <input type="range" min="1" max="10" value="5" id="oc-rating-${d.id}" oninput="document.getElementById('oc-rval-${d.id}').textContent=this.value">
+                 <span class="rating-display" id="oc-rval-${d.id}">5</span>
+               </div>
+               <button class="btn primary small" onclick="submitOutcome(${d.id})">Save Outcome</button>
+             </div>
+           </div>
+         </div>`;
+    const catBadge = d.category ? `<span class="badge badge-cat">${esc(d.category)}</span> ` : '';
+    return `<div class="card" id="decision-card-${d.id}">
+      <div class="card-header">
+        <span class="title">${catBadge}${esc(d.title)}</span>
+        <span class="meta">${timeAgo(d.created_at)}</span>
+      </div>
+      <div class="card-body">
+        ${d.decision_made ? `<div style="margin-bottom:8px;color:#c0c0d4">${esc(d.decision_made)}</div>` : ''}
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">${badges}</div>
+        ${outcomeHtml}
+      </div>
+    </div>`;
+  }
+
+  function buildContextBadges(ctx) {
+    const parts = [];
+    if (ctx.integrity_score != null) parts.push(`<span class="badge badge-integrity">Integrity ${Math.round(ctx.integrity_score)}</span>`);
+    if (ctx.joy_score       != null) parts.push(`<span class="badge badge-joy">Joy ${Number(ctx.joy_score).toFixed(1)}</span>`);
+    if (ctx.sleep_minutes   != null) parts.push(`<span class="badge badge-sleep">Sleep ${Math.round(ctx.sleep_minutes / 60)}h</span>`);
+    if (ctx.hour_of_day     != null) parts.push(`<span class="badge badge-hour">${formatHour(ctx.hour_of_day)}</span>`);
+    if (ctx.emotional_state)         parts.push(`<span class="badge badge-state badge-${ctx.emotional_state}">${esc(ctx.emotional_state)}</span>`);
+    return parts.join('');
+  }
+
+  function outcomeBadge(rating) {
+    const cls = rating > 7 ? 'badge-outcome-good' : rating >= 4 ? 'badge-outcome-mid' : 'badge-outcome-poor';
+    return `<span class="badge ${cls}">${rating}/10</span>`;
+  }
+
+  function toggleOutcomeForm(id) {
+    const el = document.getElementById(`outcome-form-${id}`);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+
+  async function submitOutcome(id) {
+    const outcome = document.getElementById(`oc-text-${id}`)?.value?.trim();
+    const rating  = document.getElementById(`oc-rating-${id}`)?.value;
+    if (!outcome) { toast('Describe the outcome first'); return; }
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/${id}/outcome`, {
+        method: 'POST', headers: H,
+        body: JSON.stringify({ user: USER, outcome, outcome_rating: parseInt(rating) }),
+      });
+      const data = await res.json();
+      if (data.ok) { toast('Outcome saved'); loadDecisions(); }
+      else toast(`Error: ${esc(data.error)}`);
+    } catch (e) { toast(`Error: ${esc(e.message)}`); }
+  }
+
+  // ── Log decision ───────────────────────────────────────────────────────────
+  async function logDecision() {
+    const title = document.getElementById('d-title').value.trim();
+    if (!title) { toast('Decision title is required'); return; }
+    const body = {
+      user:                    USER,
+      title,
+      category:                document.getElementById('d-category').value || undefined,
+      decision_made:           document.getElementById('d-made').value.trim() || undefined,
+      alternatives_considered: document.getElementById('d-alts').value.trim() || undefined,
+      emotional_state:         selectedEmotionalState || undefined,
+    };
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/log`, { method: 'POST', headers: H, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (data.ok) {
+        toast('Decision logged');
+        // Clear form
+        document.getElementById('d-title').value = '';
+        document.getElementById('d-made').value  = '';
+        document.getElementById('d-alts').value  = '';
+        document.getElementById('d-category').value = '';
+        selectState(''); // Clear chips
+        loadDecisions();
+      } else {
+        toast(`Error: ${esc(data.error)}`);
+      }
+    } catch (e) { toast(`Error: ${esc(e.message)}`); }
+  }
+
+  // ── Analyze patterns ───────────────────────────────────────────────────────
+  async function analyzePatterns() {
+    const el = document.getElementById('analysis-result');
+    el.innerHTML = '<div style="padding:20px;text-align:center"><span class="spinner"></span> <span style="color:#555;font-size:13px;margin-left:8px">Analyzing your decision history...</span></div>';
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/analyze`, {
+        method: 'POST', headers: H, body: JSON.stringify({ user: USER }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        el.innerHTML = `<div class="result-card">${esc(data.analysis)}</div>`;
+      } else {
+        el.innerHTML = `<div class="result-card" style="color:#e05555">${esc(data.error)}</div>`;
+      }
+    } catch (e) { el.innerHTML = `<div class="result-card" style="color:#e05555">${esc(e.message)}</div>`; }
+  }
+
+  // ── Load decision options for second-opinion select ────────────────────────
+  async function loadDecisionSelectOptions() {
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/?user=${USER}&limit=20`, { headers: H });
+      const data = await res.json();
+      const sel  = document.getElementById('so-decision-link');
+      if (!sel) return;
+      sel.innerHTML = '<option value="">— none —</option>';
+      if (data.ok && data.decisions) {
+        data.decisions.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d.id;
+          opt.textContent = `${d.title} (${timeAgo(d.created_at)})`;
+          sel.appendChild(opt);
+        });
+      }
+    } catch { /* non-fatal */ }
+  }
+
+  // ── Second opinion ─────────────────────────────────────────────────────────
+  async function getSecondOpinion() {
+    const desc = document.getElementById('so-desc').value.trim();
+    if (!desc) { toast('Describe what you are considering'); return; }
+    const decisionId = document.getElementById('so-decision-link').value || undefined;
+
+    const btn = document.getElementById('so-btn');
+    btn.disabled = true;
+    btn.textContent = 'Steelmanning the other side...';
+
+    const el = document.getElementById('so-result');
+    el.innerHTML = '<div style="padding:20px;text-align:center"><span class="spinner"></span> <span style="color:#555;font-size:13px;margin-left:8px">Steelmanning the other side...</span></div>';
+
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/second-opinion`, {
+        method: 'POST', headers: H,
+        body: JSON.stringify({ user: USER, decision_description: desc, decision_id: decisionId }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        const soId = data.id;
+        const args = data.steelmanAgainst || data.steelman_against || '';
+        const qs   = Array.isArray(data.questionsSitWith) ? data.questionsSitWith : (data.questions_to_sit_with || []);
+        const risks = Array.isArray(data.risksNotConsidered) ? data.risksNotConsidered : (data.risks_not_considered || []);
+
+        el.innerHTML = `
+          <div class="card" style="margin-top:4px">
+            <div class="card-body">
+              <div class="result-section">
+                <h3>Strongest arguments against</h3>
+                <p>${esc(args)}</p>
+              </div>
+              ${risks.length ? `<div class="result-section">
+                <h3>Risks you may not have fully considered</h3>
+                <ul>${risks.map(r => `<li>${esc(r)}</li>`).join('')}</ul>
+              </div>` : ''}
+              ${qs.length ? `<div class="result-section">
+                <h3>Three questions worth sitting with</h3>
+                <ul class="questions-list">${qs.map(q => `<li>${esc(q)}</li>`).join('')}</ul>
+              </div>` : ''}
+              <div style="margin-top:16px;padding-top:14px;border-top:1px solid #1e1e2e">
+                <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:#666">
+                  <input type="checkbox" id="proceed-check-${soId}" onchange="markProceeding(${soId}, this.checked)"
+                    style="accent-color:#5b6af5;width:14px;height:14px">
+                  I considered this and I'm still proceeding
+                </label>
+              </div>
+            </div>
+          </div>`;
+      } else {
+        el.innerHTML = `<div class="result-card" style="color:#e05555">${esc(data.error)}</div>`;
+      }
+    } catch (e) {
+      el.innerHTML = `<div class="result-card" style="color:#e05555">${esc(e.message)}</div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Get Honest Second Opinion';
+    }
+  }
+
+  async function markProceeding(soId, checked) {
+    if (!checked) return;
+    try {
+      await fetch(`${API}/api/v1/lifeos/decisions/second-opinions/${soId}/proceed`, {
+        method: 'POST', headers: H, body: JSON.stringify({ user: USER }),
+      });
+      toast('Noted — proceeding with clear eyes.');
+    } catch { /* non-fatal */ }
+  }
+
+  // ── Biases ─────────────────────────────────────────────────────────────────
+  async function detectBiases() {
+    const btn = document.getElementById('bias-btn');
+    btn.disabled = true;
+    btn.textContent = 'Reviewing your decision history...';
+    const el = document.getElementById('biases-list');
+    el.innerHTML = '<div style="padding:20px;text-align:center"><span class="spinner"></span> <span style="color:#555;font-size:13px;margin-left:8px">Reviewing your decision history...</span></div>';
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/detect-biases`, {
+        method: 'POST', headers: H, body: JSON.stringify({ user: USER }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        if (data.count === 0) {
+          el.innerHTML = '<div class="empty">No recurring biases detected yet. Log more decisions with outcomes to enable pattern detection.</div>';
+        } else {
+          toast(`${data.count} bias pattern${data.count > 1 ? 's' : ''} detected`);
+          renderBiases(data.biases, el);
+        }
+      } else {
+        el.innerHTML = `<div class="empty" style="color:#e05555">${esc(data.error)}</div>`;
+      }
+    } catch (e) {
+      el.innerHTML = `<div class="empty" style="color:#e05555">${esc(e.message)}</div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Detect My Biases';
+    }
+  }
+
+  async function loadBiases() {
+    const el = document.getElementById('biases-list');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/biases?user=${USER}`, { headers: H });
+      const data = await res.json();
+      if (!data.ok || data.count === 0) {
+        el.innerHTML = '<div class="empty">No biases detected yet. Click "Detect My Biases" to run an analysis.</div>';
+        return;
+      }
+      renderBiases(data.biases, el);
+    } catch (e) {
+      el.innerHTML = `<div class="empty" style="color:#e05555">${esc(e.message)}</div>`;
+    }
+  }
+
+  function renderBiases(biases, el) {
+    const active = biases.filter(b => !b.acknowledged);
+    const acked  = biases.filter(b => b.acknowledged);
+    let html = '';
+    if (active.length === 0 && acked.length === 0) {
+      el.innerHTML = '<div class="empty">No biases on record.</div>';
+      return;
+    }
+    active.forEach(b => { html += renderBiasCard(b, false); });
+    if (acked.length > 0) {
+      html += `<div style="margin:20px 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#333">Acknowledged</div>`;
+      acked.forEach(b => { html += renderBiasCard(b, true); });
+    }
+    el.innerHTML = html;
+  }
+
+  function renderBiasCard(b, acked) {
+    const label = b.bias_type.replace('_', ' ');
+    const ids   = Array.isArray(b.decision_ids) && b.decision_ids.length
+      ? `<span style="font-size:11px;color:#444">appeared in ${b.decision_ids.length} decision${b.decision_ids.length > 1 ? 's' : ''}</span>`
+      : '';
+    return `<div class="card${acked ? ' collapsed' : ''}" id="bias-card-${b.id}">
+      <div class="card-header">
+        <span class="title"><span class="badge badge-bias-${b.bias_type}">${esc(label)}</span></span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="badge" style="background:#1a1a25;color:#666">appeared ${b.frequency}×</span>
+          ${!acked ? `<button class="btn small" onclick="acknowledgeBias(${b.id})">Acknowledge</button>` : '<span class="ack-label">acknowledged</span>'}
+        </div>
+      </div>
+      <div class="card-body">
+        <p style="color:#c0c0d4;margin-bottom:6px">${esc(b.description)}</p>
+        ${ids}
+      </div>
+    </div>`;
+  }
+
+  async function acknowledgeBias(biasId) {
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/biases/${biasId}/acknowledge`, {
+        method: 'POST', headers: H, body: JSON.stringify({ user: USER }),
+      });
+      const data = await res.json();
+      if (data.ok) { toast('Bias acknowledged'); loadBiases(); }
+      else toast(`Error: ${esc(data.error)}`);
+    } catch (e) { toast(`Error: ${esc(e.message)}`); }
+  }
+
+  // ── Energy profile ─────────────────────────────────────────────────────────
+  async function loadEnergy() {
+    const el = document.getElementById('energy-result');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/decisions/energy?user=${USER}`, { headers: H });
+      const data = await res.json();
+      if (!data.ok) { el.innerHTML = `<div class="empty" style="color:#e05555">${esc(data.error)}</div>`; return; }
+
+      const { patterns, summary } = data;
+      const totalSamples = summary.total_decisions_tracked || 0;
+      const timespanDays = summary.timespan_days;
+
+      const peakStr = summary.peak_hours?.length
+        ? summary.peak_hours.map(h => formatHour(h)).join(', ')
+        : 'not yet determined';
+      const lowStr  = summary.low_hours?.length
+        ? summary.low_hours.map(h => formatHour(h)).join(', ')
+        : 'not yet determined';
+
+      let summaryHtml = `<div class="energy-summary">
+        <p><strong>Your peak decision hours:</strong> ${esc(peakStr)}</p>
+        <p><strong>Lower-quality decision hours:</strong> ${esc(lowStr)}</p>
+        <p style="margin-top:8px;color:#555;font-size:12px">Based on ${totalSamples} decision${totalSamples !== 1 ? 's' : ''} tracked${timespanDays ? ` over ${timespanDays} days` : ''}.</p>
+        ${totalSamples < 5 ? '<p style="margin-top:8px;color:#555;font-size:12px">Log outcomes for more decisions to build a complete energy profile.</p>' : ''}
+      </div>`;
+
+      if (patterns.length === 0) {
+        el.innerHTML = summaryHtml + '<div class="empty">No energy patterns yet. Log decisions and record outcomes to build your profile.</div>';
+        return;
+      }
+
+      // Build 24-hour grid — fill gaps with empty rows
+      const patternMap = {};
+      patterns.forEach(p => { patternMap[p.hour_of_day] = p; });
+
+      let gridHtml = `<div class="energy-grid header">
+        <span>Hour</span><span>Quality</span><span>Avg</span><span>Samples</span>
+      </div>`;
+
+      for (let h = 0; h < 24; h++) {
+        const p     = patternMap[h];
+        const state = p?.cognitive_state || 'neutral';
+        const qual  = p?.avg_decision_quality ? parseFloat(p.avg_decision_quality) : 0;
+        const pct   = p ? Math.max(8, Math.round((qual / 10) * 100)) : 4;
+        const sc    = p?.sample_count || 0;
+        gridHtml += `<div class="energy-grid">
+          <span class="hour-label">${formatHour(h)}</span>
+          <div class="energy-bar-wrap"><div class="energy-bar ${state}" style="width:${pct}%"></div></div>
+          <span class="energy-quality">${p && sc > 0 ? qual.toFixed(1) : '—'}</span>
+          <span class="energy-samples">${sc > 0 ? sc + (sc === 1 ? ' decision' : ' decisions') : ''}</span>
+        </div>`;
+      }
+
+      // Legend
+      const legend = ['peak','good','neutral','low','reactive'].map(s =>
+        `<span class="badge badge-energy-${s}" style="margin-right:6px">${s}</span>`
+      ).join('');
+
+      el.innerHTML = summaryHtml + gridHtml +
+        `<div style="margin-top:16px;padding-top:12px;border-top:1px solid #1a1a28;font-size:12px;color:#555">Legend: ${legend}</div>`;
+
+    } catch (e) {
+      el.innerHTML = `<div class="empty" style="color:#e05555">${esc(e.message)}</div>`;
+    }
+  }
+
+  // ── Utility ────────────────────────────────────────────────────────────────
+  function esc(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function toast(msg) {
+    const e = document.getElementById('toast');
+    e.textContent = msg;
+    e.classList.add('show');
+    setTimeout(() => e.classList.remove('show'), 2800);
+  }
+
+  function timeAgo(isoStr) {
+    if (!isoStr) return '';
+    const d    = new Date(isoStr);
+    const diff = Date.now() - d.getTime();
+    const min  = Math.floor(diff / 60000);
+    if (min < 1)   return 'just now';
+    if (min < 60)  return `${min}m ago`;
+    const hr = Math.floor(min / 60);
+    if (hr < 24)   return `${hr}h ago`;
+    const days = Math.floor(hr / 24);
+    if (days < 7)  return `${days}d ago`;
+    return d.toLocaleDateString();
+  }
+
+  function formatHour(h) {
+    if (h === 0)  return '12am';
+    if (h < 12)   return `${h}am`;
+    if (h === 12) return '12pm';
+    return `${h - 12}pm`;
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  if (!KEY) {
+    const k = prompt('Enter your command key:');
+    if (k) { localStorage.setItem('commandKey', k); location.reload(); }
+  } else {
+    loadDecisions();
+    loadDecisionSelectOptions();
+  }
+</script>
+</body>
+</html>
