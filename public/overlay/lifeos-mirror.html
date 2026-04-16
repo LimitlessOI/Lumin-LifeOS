@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>The Mirror — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0f;
+      color: #e8e8f0;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    .mirror-root {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    /* ── Header ── */
+    .mirror-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+    }
+    .mirror-header .date-block .date {
+      font-size: 13px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .mirror-header .date-block .greeting {
+      font-size: 22px;
+      font-weight: 600;
+      color: #e8e8f0;
+      margin-top: 4px;
+    }
+    .user-switcher {
+      display: flex;
+      gap: 8px;
+    }
+    .user-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #333;
+      background: transparent;
+      color: #888;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .user-btn.active {
+      background: #1a1a2e;
+      border-color: #5b6af5;
+      color: #a0aaff;
+    }
+
+    /* ── Hard Truth ── */
+    .hard-truth {
+      background: linear-gradient(135deg, #1a0a0a, #1a1020);
+      border: 1px solid #4a1a2a;
+      border-left: 3px solid #e05555;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .hard-truth .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #e05555;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .hard-truth .text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #e8d8d8;
+    }
+    .hard-truth.empty .text { color: #555; font-style: italic; }
+
+    /* ── Scores row ── */
+    .scores-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .scores-row { grid-template-columns: 1fr; } }
+
+    .score-card {
+      background: #111118;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .score-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .score-card.integrity::before { background: linear-gradient(90deg, #5b6af5, #8b5cf6); }
+    .score-card.joy::before        { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+
+    .score-card .sc-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #555;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .score-card .sc-number {
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .score-card.integrity .sc-number { color: #7c85ff; }
+    .score-card.joy .sc-number       { color: #fbbf24; }
+    .score-card .sc-number.no-data   { font-size: 28px; color: #444; }
+
+    .score-card .sc-trend {
+      font-size: 12px;
+      color: #555;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .trend-rising  { color: #34d399; }
+    .trend-falling { color: #f87171; }
+    .trend-flat    { color: #888; }
+    .trend-building{ color: #888; }
+
+    .sc-components {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .sc-component-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #555;
+    }
+    .sc-component-row .bar-wrap {
+      width: 60%;
+      height: 3px;
+      background: #1e1e2e;
+      border-radius: 2px;
+      align-self: center;
+    }
+    .sc-component-row .bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: #5b6af5;
+    }
+
+    /* ── Intention ── */
+    .intention-block {
+      background: #111118;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .intention-block .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #555;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .intention-display {
+      font-size: 18px;
+      color: #c0c8ff;
+      line-height: 1.5;
+      min-height: 28px;
+    }
+    .intention-display.placeholder { color: #333; font-style: italic; font-size: 14px; }
+    .intention-input-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .intention-input {
+      flex: 1;
+      background: #0d0d1a;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
+      color: #e8e8f0;
+      padding: 10px 14px;
+      font-size: 14px;
+      outline: none;
+    }
+    .intention-input:focus { border-color: #5b6af5; }
+    .btn-save-intention {
+      padding: 10px 18px;
+      background: #1e2060;
+      border: 1px solid #5b6af5;
+      border-radius: 8px;
+      color: #a0aaff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-save-intention:hover { background: #262880; }
+
+    /* ── Commitments ── */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #555;
+      font-weight: 600;
+    }
+    .section-count {
+      font-size: 12px;
+      color: #444;
+    }
+    .section-count.alert { color: #e05555; }
+
+    .commitments-list {
+      background: #111118;
+      border: 1px solid #222;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .commitment-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 1px solid #191920;
+      transition: background 0.1s;
+    }
+    .commitment-item:last-child { border-bottom: none; }
+    .commitment-item:hover { background: #141420; }
+    .commitment-item.overdue { border-left: 2px solid #e05555; }
+
+    .commitment-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid #333;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .commitment-check:hover { border-color: #34d399; background: #0a1a12; }
+
+    .commitment-body { flex: 1; min-width: 0; }
+    .commitment-title { font-size: 14px; color: #d8d8e8; }
+    .commitment-meta  { font-size: 11px; color: #555; margin-top: 3px; }
+    .commitment-meta .overdue-tag { color: #e05555; }
+
+    .commitment-actions {
+      display: flex;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .commitment-item:hover .commitment-actions { opacity: 1; }
+    .btn-action {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 5px;
+      border: 1px solid #2a2a3a;
+      background: transparent;
+      color: #666;
+      cursor: pointer;
+    }
+    .btn-action:hover { background: #1a1a2a; color: #aaa; }
+    .btn-action.keep  { border-color: #1a3a2a; color: #34d399; }
+    .btn-action.keep:hover { background: #0a2018; }
+    .btn-action.snooze { color: #888; }
+
+    .commitments-empty {
+      padding: 30px;
+      text-align: center;
+      color: #444;
+      font-size: 14px;
+    }
+
+    /* ── Health snapshot ── */
+    .health-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 600px) { .health-row { grid-template-columns: 1fr 1fr; } }
+
+    .health-chip {
+      background: #111118;
+      border: 1px solid #222;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+    .health-chip .hc-value {
+      font-size: 22px;
+      font-weight: 600;
+      color: #7c85ff;
+    }
+    .health-chip .hc-value.no-data { color: #333; font-size: 16px; }
+    .health-chip .hc-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #444;
+      margin-top: 4px;
+    }
+
+    /* ── Joy check-in ── */
+    .joy-checkin-block {
+      background: #111118;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .joy-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .joy-slider-label {
+      font-size: 12px;
+      color: #666;
+      width: 60px;
+      flex-shrink: 0;
+    }
+    .joy-slider {
+      flex: 1;
+      accent-color: #f59e0b;
+    }
+    .joy-slider-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fbbf24;
+      width: 24px;
+      text-align: right;
+    }
+    .joy-tags-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .joy-tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid #2a2a3a;
+      color: #666;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.1s;
+    }
+    .joy-tag.source.selected { background: #1a2a1a; border-color: #34d399; color: #34d399; }
+    .joy-tag.drain.selected  { background: #2a1a1a; border-color: #e05555; color: #e05555; }
+    .btn-save-joy {
+      width: 100%;
+      padding: 11px;
+      background: #1e1a10;
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      color: #fbbf24;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+    .btn-save-joy:hover { background: #2a2410; }
+
+    /* ── Be-Do-Have onboarding modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 500;
+    }
+    .modal-box {
+      background: #111118;
+      border: 1px solid #2a2a3a;
+      border-radius: 14px;
+      padding: 32px;
+      max-width: 560px;
+      width: 90%;
+    }
+    .modal-box h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+    .modal-box p  { font-size: 13px; color: #666; margin-bottom: 24px; line-height: 1.6; }
+    .modal-field  { margin-bottom: 18px; }
+    .modal-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .modal-field input { width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px; color: #e8e8f0; padding: 10px 14px; font-size: 14px; outline: none; }
+    .modal-field input:focus { border-color: #5b6af5; }
+    .modal-hint { font-size: 11px; color: #444; margin-top: 4px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+    .btn-primary { padding: 10px 22px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; color: #a0aaff; font-size: 13px; cursor: pointer; }
+    .btn-primary:hover { background: #262880; }
+    .btn-secondary { padding: 10px 18px; background: transparent; border: 1px solid #2a2a3a; border-radius: 8px; color: #555; font-size: 13px; cursor: pointer; }
+
+    /* ── Notifications badge ── */
+    .notif-badge {
+      display: inline-block;
+      background: #e05555;
+      color: white;
+      border-radius: 10px;
+      font-size: 10px;
+      padding: 1px 6px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── ChatGPT import block ── */
+    .import-block {
+      background: #111118;
+      border: 1px dashed #2a2a3a;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .import-block p { font-size: 13px; color: #555; margin-bottom: 14px; }
+    .btn-import { padding: 9px 20px; background: transparent; border: 1px solid #333; border-radius: 8px; color: #666; font-size: 12px; cursor: pointer; }
+    .btn-import:hover { border-color: #5b6af5; color: #a0aaff; }
+
+    /* ── Loading / error ── */
+    .loading-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 300px;
+      color: #444;
+      font-size: 14px;
+      gap: 12px;
+    }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid #2a2a3a;
+      border-top-color: #5b6af5;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: #1e2060;
+      border: 1px solid #5b6af5;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 13px;
+      color: #a0aaff;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.25s;
+      z-index: 1000;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+<div class="mirror-root" id="app">
+  <div class="loading-state"><div class="spinner"></div> Loading your mirror…</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = '';  // same origin
+  const KEY = localStorage.getItem('commandKey') || '';
+  const headers = { 'Content-Type': 'application/json', 'x-command-key': KEY };
+
+  let currentUser = 'adam';
+  let mirrorData = null;
+
+  // ── Source / Drain tag options ────────────────────────────────────────────
+  const SOURCE_TAGS = ['creative_work','deep_conversation','exercise','nature','music','prayer','reading','family_time','alone_time','helping_someone','flow_state','learning'];
+  const DRAIN_TAGS  = ['email_overload','conflict','poor_sleep','rushed','distracted','comparison','social_media','unclear_priorities','physical_pain'];
+
+  // ── Selected joy tags ─────────────────────────────────────────────────────
+  let selectedSources = new Set();
+  let selectedDrains  = new Set();
+  let joyVal = 7, peaceVal = 7, energyVal = 7;
+
+  // ── Load ──────────────────────────────────────────────────────────────────
+  async function loadMirror(user) {
+    document.getElementById('app').innerHTML = '<div class="loading-state"><div class="spinner"></div> Loading your mirror…</div>';
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/mirror?user=${user}`, { headers });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+      mirrorData = data.mirror;
+      render();
+    } catch (e) {
+      document.getElementById('app').innerHTML = `<div class="loading-state" style="color:#e05555">${e.message}</div>`;
+    }
+    return mirrorData;
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  function render() {
+    const m = mirrorData;
+    const today = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+    const name  = m.user?.name || 'Adam';
+    const hour  = new Date().getHours();
+    const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+    // Integrity
+    const iScore = m.integrity?.score;
+    const iTrend = m.integrity?.trend || 'building';
+    const iComps = m.integrity?.components;
+
+    // Joy
+    const jScore = m.joy?.score_7d;
+    const jTrend = m.joy?.trend || 'building';
+    const jToday = m.joy?.today;
+
+    // Commitments
+    const open    = m.commitments?.open || [];
+    const overdue = m.commitments?.overdue || [];
+
+    // Health
+    const health = m.health;
+
+    document.getElementById('app').innerHTML = `
+      <!-- Header -->
+      <div class="mirror-header">
+        <div class="date-block">
+          <div class="date">${today}</div>
+          <div class="greeting">${greet}, ${name}.</div>
+        </div>
+        <div class="user-switcher" id="userSwitcher">
+          <button class="user-btn ${currentUser==='adam'?'active':''}" onclick="switchUser('adam')">Adam</button>
+          <button class="user-btn ${currentUser==='sherry'?'active':''}" onclick="switchUser('sherry')">Sherry</button>
+        </div>
+      </div>
+
+      <!-- Hard Truth -->
+      <div class="hard-truth${m.hard_truth?'':' empty'}">
+        <div class="label">One Hard Truth</div>
+        <div class="text">${m.hard_truth || 'Start logging commitments and check-ins — the mirror will have something to say.'}</div>
+      </div>
+
+      <!-- Scores -->
+      <div class="scores-row">
+        <!-- Integrity -->
+        <div class="score-card integrity">
+          <div class="sc-label">Integrity Score</div>
+          ${iScore != null
+            ? `<div class="sc-number">${Math.round(iScore)}</div>`
+            : `<div class="sc-number no-data">—</div>`}
+          <div class="sc-trend">
+            <span class="trend-${iTrend}">${trendIcon(iTrend)}</span>
+            <span>${trendLabel(iTrend)}</span>
+          </div>
+          ${iComps ? `
+          <div class="sc-components">
+            ${compRow('commitments', iComps.commitments)}
+            ${compRow('health', iComps.health)}
+            ${compRow('inner work', iComps.inner_work)}
+          </div>` : ''}
+        </div>
+
+        <!-- Joy -->
+        <div class="score-card joy">
+          <div class="sc-label">Joy Score <span style="color:#444;font-weight:400">(7-day avg)</span></div>
+          ${jScore != null
+            ? `<div class="sc-number">${jScore.toFixed(1)}</div>`
+            : `<div class="sc-number no-data">—</div>`}
+          <div class="sc-trend">
+            <span class="trend-${jTrend}">${trendIcon(jTrend)}</span>
+            <span>${trendLabel(jTrend)}</span>
+          </div>
+          ${jToday ? `
+          <div style="margin-top:14px;display:flex;gap:14px">
+            ${miniScore('Joy', jToday.joy, '#fbbf24')}
+            ${miniScore('Peace', jToday.peace, '#a78bfa')}
+            ${miniScore('Energy', jToday.energy, '#34d399')}
+          </div>` : `<div style="margin-top:14px;font-size:12px;color:#444">No check-in today yet</div>`}
+        </div>
+      </div>
+
+      <!-- Intention -->
+      <div class="intention-block">
+        <div class="label">Today's Intention</div>
+        <div class="intention-display ${m.intention?'':'placeholder'}" id="intentionDisplay">
+          ${m.intention || 'Set your intention for today…'}
+        </div>
+        <div class="intention-input-row">
+          <input class="intention-input" id="intentionInput"
+            placeholder="Today I am someone who…"
+            value="${m.intention || ''}" />
+          <button class="btn-save-intention" onclick="saveIntention()">Set</button>
+        </div>
+      </div>
+
+      <!-- Health -->
+      <div class="section-header">
+        <span class="section-title">Body</span>
+        ${health ? '<span class="section-count">logged today</span>' : '<span class="section-count">not logged today</span>'}
+      </div>
+      <div class="health-row">
+        ${healthChip(health?.sleep_hours, 'hrs', 'Sleep')}
+        ${healthChip(health?.sleep_quality, '/5', 'Quality')}
+        ${healthChip(health?.energy_score, '/10', 'Energy')}
+        ${healthChip(health?.mood_score, '/10', 'Mood')}
+      </div>
+
+      <!-- Commitments -->
+      <div class="section-header">
+        <span class="section-title">Commitments</span>
+        <span class="section-count${overdue.length>0?' alert':''}">
+          ${overdue.length > 0 ? `${overdue.length} overdue · ` : ''}${open.length} open
+        </span>
+      </div>
+      <div class="commitments-list" id="commitmentsList">
+        ${renderCommitments([...overdue.map(c=>({...c,_overdue:true})), ...open.filter(c=>!overdue.find(o=>o.id===c.id))])}
+      </div>
+      <div style="text-align:center;margin-bottom:24px">
+        <button class="btn-action" onclick="showAddCommitment()" style="opacity:1;padding:8px 20px;font-size:12px;border-radius:8px">+ Add Commitment</button>
+      </div>
+
+      <!-- Joy check-in (if not done today) -->
+      ${!jToday ? renderJoyCheckin() : ''}
+
+      <!-- ChatGPT import (shown if no commitments yet) -->
+      ${open.length === 0 && overdue.length === 0 ? `
+      <div class="import-block">
+        <p>Have prior ChatGPT conversations about your life, goals, or commitments? Import them to give the Mirror historical context.</p>
+        <button class="btn-import" onclick="showImportModal()">Import ChatGPT history</button>
+      </div>` : ''}
+    `;
+  }
+
+  function renderCommitments(list) {
+    if (!list.length) return '<div class="commitments-empty">No open commitments — clean slate.</div>';
+    return list.map(c => `
+      <div class="commitment-item${c._overdue?' overdue':''}" id="commit-${c.id}">
+        <div class="commitment-check" onclick="keepCommitment(${c.id})" title="Mark kept">✓</div>
+        <div class="commitment-body">
+          <div class="commitment-title">${escHtml(c.title)}</div>
+          <div class="commitment-meta">
+            ${c.committed_to && c.committed_to !== 'self' ? `to ${escHtml(c.committed_to)} · ` : ''}
+            ${c._overdue ? `<span class="overdue-tag">Overdue${c.due_at ? ' · due '+fmtDate(c.due_at) : ''}</span>` : (c.due_at ? 'Due '+fmtDate(c.due_at) : 'No deadline')}
+          </div>
+        </div>
+        <div class="commitment-actions">
+          <button class="btn-action keep" onclick="keepCommitment(${c.id})">Kept ✓</button>
+          <button class="btn-action snooze" onclick="snoozeCommitment(${c.id})">Snooze</button>
+          <button class="btn-action" onclick="breakCommitment(${c.id})">Broken</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderJoyCheckin() {
+    return `
+      <div class="section-header"><span class="section-title">Joy Check-in</span></div>
+      <div class="joy-checkin-block">
+        ${joySlider('Joy', 'joy', joyVal, '#fbbf24')}
+        ${joySlider('Peace', 'peace', peaceVal, '#a78bfa')}
+        ${joySlider('Energy', 'energy', energyVal, '#34d399')}
+        <div style="font-size:11px;color:#444;margin-top:14px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">What created joy today?</div>
+        <div class="joy-tags-row" id="sourceTags">
+          ${SOURCE_TAGS.map(t => `<div class="joy-tag source" onclick="toggleTag(this,'source','${t}')">${t.replace(/_/g,' ')}</div>`).join('')}
+        </div>
+        <div style="font-size:11px;color:#444;margin-top:12px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">What drained it?</div>
+        <div class="joy-tags-row" id="drainTags">
+          ${DRAIN_TAGS.map(t => `<div class="joy-tag drain" onclick="toggleTag(this,'drain','${t}')">${t.replace(/_/g,' ')}</div>`).join('')}
+        </div>
+        <button class="btn-save-joy" onclick="saveJoyCheckin()">Save check-in</button>
+      </div>
+    `;
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function compRow(label, val) {
+    const pct = val != null ? Math.round(val) : 0;
+    return `<div class="sc-component-row">
+      <span>${label}</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <span>${val != null ? pct : '—'}</span>
+    </div>`;
+  }
+
+  function miniScore(label, val, color) {
+    return `<div style="text-align:center">
+      <div style="font-size:16px;font-weight:600;color:${color}">${val ?? '—'}</div>
+      <div style="font-size:10px;color:#555">${label}</div>
+    </div>`;
+  }
+
+  function healthChip(val, unit, label) {
+    return `<div class="health-chip">
+      <div class="hc-value${val==null?' no-data':''}">${val!=null ? val+unit : '—'}</div>
+      <div class="hc-label">${label}</div>
+    </div>`;
+  }
+
+  function joySlider(label, key, defaultVal, color) {
+    return `<div class="joy-slider-row">
+      <span class="joy-slider-label">${label}</span>
+      <input type="range" class="joy-slider" min="1" max="10" value="${defaultVal}"
+        style="accent-color:${color}"
+        id="slider-${key}"
+        oninput="document.getElementById('val-${key}').textContent=this.value">
+      <span class="joy-slider-value" id="val-${key}">${defaultVal}</span>
+    </div>`;
+  }
+
+  function trendIcon(t) { return {rising:'↑',falling:'↓',flat:'→',building:'·'}[t]||'·'; }
+  function trendLabel(t) { return {rising:'Rising',falling:'Falling',flat:'Holding steady',building:'Building baseline'}[t]||''; }
+  function fmtDate(d) { return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+  function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // ── Actions ───────────────────────────────────────────────────────────────
+  function switchUser(handle) {
+    currentUser = handle;
+    loadMirror(handle);
+  }
+
+  async function saveIntention() {
+    const val = document.getElementById('intentionInput')?.value?.trim();
+    if (!val) return;
+    await fetch(`${API}/api/v1/lifeos/mirror/intention`, {
+      method: 'POST', headers,
+      body: JSON.stringify({ user: currentUser, intention: val }),
+    });
+    document.getElementById('intentionDisplay').textContent = val;
+    document.getElementById('intentionDisplay').classList.remove('placeholder');
+    toast('Intention set');
+  }
+
+  async function keepCommitment(id) {
+    const el = document.getElementById(`commit-${id}`);
+    if (el) { el.style.opacity = '0.4'; el.style.pointerEvents = 'none'; }
+    await fetch(`${API}/api/v1/lifeos/commitments/${id}/keep`, { method:'POST', headers });
+    toast('Commitment marked kept ✓');
+    setTimeout(() => loadMirror(currentUser), 800);
+  }
+
+  async function snoozeCommitment(id) {
+    await fetch(`${API}/api/v1/lifeos/commitments/${id}/snooze`, { method:'POST', headers });
+    toast('Snoozed for 4 hours');
+    setTimeout(() => loadMirror(currentUser), 400);
+  }
+
+  async function breakCommitment(id) {
+    const reason = prompt('What happened? (optional)') || '';
+    await fetch(`${API}/api/v1/lifeos/commitments/${id}/break`, {
+      method:'POST', headers, body: JSON.stringify({ reason }),
+    });
+    toast('Logged as broken');
+    setTimeout(() => loadMirror(currentUser), 400);
+  }
+
+  async function showAddCommitment() {
+    const title = prompt('What did you commit to?');
+    if (!title?.trim()) return;
+    const dueInput = prompt('Due by? (e.g. "tomorrow 5pm", leave blank for none)');
+    await fetch(`${API}/api/v1/lifeos/commitments`, {
+      method: 'POST', headers,
+      body: JSON.stringify({
+        user: currentUser,
+        title,
+        due_at: dueInput ? parseDue(dueInput) : null,
+      }),
+    });
+    toast('Commitment logged');
+    loadMirror(currentUser);
+  }
+
+  function toggleTag(el, type, tag) {
+    const set = type === 'source' ? selectedSources : selectedDrains;
+    if (set.has(tag)) { set.delete(tag); el.classList.remove('selected'); }
+    else              { set.add(tag);    el.classList.add('selected'); }
+  }
+
+  async function saveJoyCheckin() {
+    const jv = parseInt(document.getElementById('slider-joy')?.value || 7);
+    const pv = parseInt(document.getElementById('slider-peace')?.value || 7);
+    const ev = parseInt(document.getElementById('slider-energy')?.value || 7);
+    await fetch(`${API}/api/v1/lifeos/joy/checkin`, {
+      method: 'POST', headers,
+      body: JSON.stringify({
+        user: currentUser,
+        joy_score: jv, peace_score: pv, energy_score: ev,
+        joy_sources: [...selectedSources],
+        joy_drains:  [...selectedDrains],
+      }),
+    });
+    toast('Joy check-in saved');
+    loadMirror(currentUser);
+  }
+
+  function parseDue(str) {
+    // Simple parsing — full NLP in Phase 2
+    if (!str?.trim()) return null;
+    const d = new Date(str);
+    return isNaN(d.getTime()) ? null : d.toISOString();
+  }
+
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  // ── Be-Do-Have onboarding ─────────────────────────────────────────────────
+  function showOnboarding(user) {
+    const existing = document.getElementById('onboarding-modal');
+    if (existing) existing.remove();
+    const modal = document.createElement('div');
+    modal.id = 'onboarding-modal';
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal-box">
+        <h2>Set Your Identity</h2>
+        <p>The Mirror works at the identity layer — who you're <em>being</em>, not just what you're doing. These three statements are the foundation everything else builds on.</p>
+        <div class="modal-field">
+          <label>Be — I am someone who…</label>
+          <input id="ob-be" placeholder="I am someone who keeps his word and leads with integrity" />
+          <div class="modal-hint">Who you are at your best. Identity, not behavior.</div>
+        </div>
+        <div class="modal-field">
+          <label>Do — I consistently…</label>
+          <input id="ob-do" placeholder="I consistently show up, follow through, and protect what matters most" />
+          <div class="modal-hint">What that person naturally does every day.</div>
+        </div>
+        <div class="modal-field">
+          <label>Have — My life is…</label>
+          <input id="ob-have" placeholder="My life is deeply connected, purposeful, and financially free" />
+          <div class="modal-hint">What results naturally follow from being that person.</div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="document.getElementById('onboarding-modal').remove()">Skip for now</button>
+          <button class="btn-primary" onclick="saveOnboarding('${user}')">Save Identity</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+  }
+
+  async function saveOnboarding(user) {
+    const be   = document.getElementById('ob-be')?.value?.trim();
+    const doS  = document.getElementById('ob-do')?.value?.trim();
+    const have = document.getElementById('ob-have')?.value?.trim();
+    if (!be) { toast('Set your Be statement first'); return; }
+    await fetch(`${API}/api/v1/lifeos/users/${user}`, {
+      method: 'PUT', headers,
+      body: JSON.stringify({ be_statement: be, do_statement: doS, have_vision: have }),
+    });
+    document.getElementById('onboarding-modal')?.remove();
+    toast('Identity set — your mirror is now calibrated');
+    loadMirror(currentUser);
+  }
+
+  // ── Notifications poll ────────────────────────────────────────────────────
+  async function checkNotifications() {
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/notifications?user=${currentUser}`, { headers });
+      const data = await res.json();
+      if (data.ok && data.count > 0) {
+        // Show badge in header if any pending
+        const badge = document.getElementById('notif-badge');
+        if (badge) badge.textContent = data.count;
+        else {
+          const header = document.querySelector('.mirror-header');
+          if (header) {
+            const b = document.createElement('span');
+            b.id = 'notif-badge';
+            b.className = 'notif-badge';
+            b.textContent = data.count;
+            b.title = 'Pending notifications';
+            header.appendChild(b);
+          }
+        }
+        // Surface top commitment prod if any
+        const prod = data.notifications.find(n => n.type === 'commitment_prod');
+        if (prod && !sessionStorage.getItem(`notif-shown-${prod.id}`)) {
+          sessionStorage.setItem(`notif-shown-${prod.id}`, '1');
+          toast(`⏰ ${prod.message}`);
+          await fetch(`${API}/api/v1/lifeos/notifications/${prod.id}/acknowledge`, { method: 'POST', headers });
+        }
+      }
+    } catch { /* non-fatal */ }
+  }
+
+  // ── ChatGPT import ────────────────────────────────────────────────────────
+  function showImportModal() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      toast('Reading export file…');
+      try {
+        const text = await file.text();
+        const conversations = JSON.parse(text);
+        toast('Importing… this may take a minute');
+        const res = await fetch(`${API}/api/v1/lifeos/import/chatgpt`, {
+          method: 'POST', headers,
+          body: JSON.stringify({ user: currentUser, conversations, max_conversations: 200 }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          toast(`✓ Imported: ${data.results.commitments_logged} commitments, ${data.results.purpose_signals} purpose signals`);
+          setTimeout(() => loadMirror(currentUser), 1500);
+        } else {
+          toast(`Import error: ${data.error}`);
+        }
+      } catch (err) {
+        toast(`Failed: ${err.message}`);
+      }
+    };
+    input.click();
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  if (!KEY) {
+    const k = prompt('Enter your command key:');
+    if (k) { localStorage.setItem('commandKey', k); location.reload(); }
+  } else {
+    loadMirror(currentUser).then(async () => {
+      // Show onboarding if no Be statement set yet
+      if (mirrorData && !mirrorData.user?.be_statement) {
+        setTimeout(() => showOnboarding(currentUser), 800);
+      }
+      // Poll notifications every 5 minutes
+      checkNotifications();
+      setInterval(checkNotifications, 5 * 60 * 1000);
+    });
+  }
+</script>
+</body>
+</html>

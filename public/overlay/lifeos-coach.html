@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Communication Coach — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 760px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #555; margin-bottom: 28px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 2px; margin-bottom: 28px; border-bottom: 1px solid #1e1e2e; }
+    .tab { padding: 10px 18px; font-size: 13px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; background: none; border-top: none; border-left: none; border-right: none; }
+    .tab:hover { color: #aaa; }
+    .tab.active { color: #a0aaff; border-bottom-color: #5b6af5; }
+
+    /* Cards */
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .card-header .title { font-size: 14px; color: #d8d8e8; }
+    .card-header .meta  { font-size: 11px; color: #555; }
+    .card-body { padding: 14px 18px; font-size: 13px; color: #888; line-height: 1.6; }
+
+    /* Badges */
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+    .badge.recording           { background: #1a0a0a; color: #e05555; }
+    .badge.captured            { background: #1a1200; color: #fbbf24; }
+    .badge.processing_together { background: #0a1a30; color: #60a5fa; }
+    .badge.processing_separately { background: #1a0a30; color: #a78bfa; }
+    .badge.complete            { background: #0a2018; color: #34d399; }
+    .badge.active              { background: #0a2018; color: #34d399; }
+    .badge.completed           { background: #0a1a30; color: #60a5fa; }
+    .badge.post_conflict       { background: #1a1030; color: #a78bfa; }
+    .badge.pattern_review      { background: #101a30; color: #60a5fa; }
+    .badge.proactive           { background: #0a1a18; color: #6ee7b7; }
+    .badge.live_interrupt      { background: #2a0a00; color: #f97316; }
+    .badge.individual_clarity  { background: #0a1a2a; color: #67c6ff; }
+    .badge.trigger             { background: #2a0a0a; color: #e05555; }
+    .badge.escalator           { background: #2a1a00; color: #f97316; }
+    .badge.de_escalator        { background: #0a2018; color: #34d399; }
+    .badge.strength            { background: #1a1030; color: #a78bfa; }
+    .badge.growth_area         { background: #1a1200; color: #fbbf24; }
+
+    /* Buttons */
+    .btn { padding: 6px 14px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #666; font-size: 12px; cursor: pointer; transition: all .15s; }
+    .btn:hover { background: #1a1a2a; color: #aaa; }
+    .btn.primary { border-color: #5b6af5; color: #a0aaff; }
+    .btn.primary:hover { background: #1e2060; }
+    .btn.success { border-color: #065f46; color: #34d399; }
+    .btn.success:hover { background: #052e1c; }
+    .btn.danger { border-color: #3a1a1a; color: #e05555; }
+    .btn.danger:hover { background: #2a0a0a; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-submit { padding: 10px 24px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; color: #a0aaff; font-size: 13px; cursor: pointer; transition: background .15s; }
+    .btn-submit:hover { background: #262880; }
+    .btn-submit:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Session choice cards */
+    .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    @media (max-width: 600px) { .choice-grid { grid-template-columns: 1fr; } }
+    .choice-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 20px; cursor: pointer; transition: border-color .15s, background .15s; }
+    .choice-card:hover { border-color: #5b6af5; background: #111128; }
+    .choice-card h3 { font-size: 14px; color: #d8d8e8; margin-bottom: 8px; font-weight: 600; }
+    .choice-card p { font-size: 12px; color: #666; line-height: 1.5; }
+
+    /* Chat interface */
+    .chat-thread { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
+    .chat-msg { max-width: 82%; display: flex; flex-direction: column; }
+    .chat-msg.coach { align-self: flex-start; }
+    .chat-msg.user  { align-self: flex-end; }
+    .chat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .chat-msg.coach .chat-label { color: #5b6af5; }
+    .chat-msg.user  .chat-label { color: #34d399; text-align: right; }
+    .chat-bubble { border-radius: 10px; padding: 12px 16px; font-size: 13px; line-height: 1.7; white-space: pre-wrap; }
+    .chat-msg.coach .chat-bubble { background: #111118; border: 1px solid #2a2a3a; color: #c8c8e0; font-style: italic; }
+    .chat-msg.user  .chat-bubble { background: #1a1e50; border: 1px solid #2a3060; color: #d8d8f8; }
+
+    /* Input area */
+    .input-area { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+    .input-area label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 8px; }
+    .input-area textarea { width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px; color: #e8e8f0; padding: 10px 13px; font-size: 13px; outline: none; font-family: inherit; resize: vertical; min-height: 80px; }
+    .input-area textarea:focus { border-color: #5b6af5; }
+    .input-area .btn-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; flex-wrap: wrap; gap: 8px; }
+
+    /* Insights panel */
+    .insights-panel { background: #051a12; border: 1px solid #065f46; border-radius: 10px; padding: 20px 22px; margin-bottom: 20px; }
+    .insights-panel h3 { font-size: 14px; color: #34d399; margin-bottom: 16px; font-weight: 600; }
+    .insights-section { margin-bottom: 14px; }
+    .insights-section h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 8px; }
+    .insights-item { font-size: 13px; color: #d8f0e0; line-height: 1.5; padding: 6px 10px; background: #031008; border-radius: 6px; margin-bottom: 6px; }
+
+    /* Recordings tab */
+    .recording-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+    .recording-card .rc-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .recording-card .rc-code { font-family: monospace; font-size: 13px; color: #a0aaff; }
+    .recording-card .rc-body { padding: 14px 18px; font-size: 13px; color: #888; }
+    .recording-card .rc-actions { padding: 12px 18px; display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid #191920; }
+
+    /* Form block for new recording */
+    .form-block { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+    .form-block h2 { font-size: 14px; color: #d8d8e8; margin-bottom: 18px; font-weight: 600; }
+    .form-field { margin-bottom: 14px; }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 9px 12px; font-size: 13px; outline: none;
+      font-family: inherit;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #5b6af5; }
+    .collapsible-form { display: none; }
+    .collapsible-form.open { display: block; }
+
+    /* Patterns tab */
+    .pattern-group { margin-bottom: 24px; }
+    .pattern-group-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .pattern-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 8px; padding: 14px 16px; margin-bottom: 8px; }
+    .pattern-card .p-desc { font-size: 13px; color: #d8d8e8; line-height: 1.5; margin-bottom: 8px; }
+    .pattern-card .p-meta { font-size: 11px; color: #555; display: flex; gap: 12px; flex-wrap: wrap; }
+    .pattern-card .p-example { font-size: 12px; color: #666; font-style: italic; margin-top: 8px; border-top: 1px solid #1e1e2e; padding-top: 8px; }
+
+    /* Growth tab */
+    .growth-hero { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 24px 26px; margin-bottom: 24px; }
+    .growth-hero p { font-size: 15px; color: #d8d8e8; line-height: 1.8; }
+    .growth-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 8px; padding: 16px; text-align: center; }
+    .stat-card .stat-num { font-size: 24px; font-weight: 700; color: #a0aaff; margin-bottom: 4px; }
+    .stat-card .stat-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Banner */
+    .banner { border-radius: 10px; padding: 18px 22px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; }
+    .banner.info    { background: #0d1230; border: 1px solid #2a3470; color: #a0aaff; }
+    .banner.success { background: #051a12; border: 1px solid #065f46; color: #34d399; }
+    .banner.warning { background: #1a1200; border: 1px solid #3a2a00; color: #fbbf24; }
+
+    /* Clarity session — entry flow */
+    .state-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .state-chip { padding: 7px 16px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 1px solid #2a2a3a; color: #666; background: transparent; transition: all .15s; }
+    .state-chip:hover { border-color: #5b6af5; color: #a0aaff; background: #111128; }
+    .state-chip.selected { border-color: #5b6af5; color: #a0aaff; background: #1e2060; }
+    .state-chip[data-state="calm"]    { --accent: #34d399; }
+    .state-chip[data-state="stirred"] { --accent: #fbbf24; }
+    .state-chip[data-state="heated"]  { --accent: #f97316; }
+    .state-chip[data-state="flooded"] { --accent: #e05555; }
+    .state-chip.selected { border-color: var(--accent, #5b6af5); color: var(--accent, #a0aaff); background: #111118; }
+
+    /* Clarity session — in-session banner */
+    .impartiality-banner { background: #0d0f18; border: 1px solid #2a2a3a; border-radius: 8px; padding: 10px 16px; font-size: 12px; color: #5a5a7a; line-height: 1.6; margin-bottom: 16px; font-style: italic; }
+
+    /* Pre-conversation prep card */
+    .prep-card { background: #0d1628; border: 1px solid #1e3060; border-radius: 10px; padding: 22px 24px; margin-top: 16px; }
+    .prep-card h3 { font-size: 14px; color: #67c6ff; margin-bottom: 18px; font-weight: 600; }
+    .prep-section { margin-bottom: 16px; }
+    .prep-section h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #4a5a7a; margin-bottom: 6px; }
+    .prep-section p { font-size: 13px; color: #c0d0e8; line-height: 1.6; }
+    .prep-section ul { margin: 0; padding-left: 18px; }
+    .prep-section ul li { font-size: 13px; color: #c0d0e8; line-height: 1.7; }
+    .prep-quote { font-size: 14px; color: #a0c8f8; font-style: italic; background: #0a1222; border-left: 3px solid #2a5090; padding: 10px 14px; border-radius: 0 6px 6px 0; margin-top: 4px; }
+
+    /* Flooding banner */
+    .flooding-banner { background: #1a0d0d; border: 1px solid #3a1a1a; border-radius: 8px; padding: 14px 18px; font-size: 13px; color: #f87171; line-height: 1.6; margin-bottom: 12px; }
+
+    /* Util */
+    .empty { padding: 40px; text-align: center; color: #444; font-size: 14px; }
+    .spinner { width: 16px; height: 16px; border: 2px solid #2a2a3a; border-top-color: #5b6af5; border-radius: 50%; animation: spin .8s linear infinite; display: inline-block; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; padding: 12px 18px; font-size: 13px; color: #a0aaff; opacity: 0; transform: translateY(10px); transition: all .25s; z-index: 1000; max-width: 320px; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .hidden { display: none !important; }
+    #loading-overlay { position: fixed; inset: 0; background: #0a0a0f; display: flex; align-items: center; justify-content: center; z-index: 500; }
+  </style>
+</head>
+<body>
+
+<div id="loading-overlay"><span class="spinner"></span></div>
+
+<div class="root" id="app" style="display:none">
+  <h1>Communication Coach</h1>
+  <p class="sub">Get what you need. Without hurting the people you love.</p>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('coach')">Coach</button>
+    <button class="tab" onclick="switchTab('recordings')">Recordings</button>
+    <button class="tab" onclick="switchTab('patterns')">My Patterns</button>
+    <button class="tab" onclick="switchTab('growth')">Growth</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- TAB: COACH                                                              -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-coach">
+
+    <!-- No active session: choice cards -->
+    <div id="choice-screen">
+      <div class="banner info" style="margin-bottom:20px">
+        <strong>This is a communication coach, not therapy.</strong> I help you understand what you actually needed and how to express it in a way that can be heard. For serious mental health concerns, please reach out to a licensed professional.
+      </div>
+
+      <div class="choice-grid">
+        <div class="choice-card" style="border-color:#1e3060" onclick="beginClarityFlow()">
+          <h3 style="color:#67c6ff">I'm in a conflict right now / I need clarity</h3>
+          <p>One person + AI. Before or during a conflict. Get clear on what you actually need — and how to say it in a way that can be heard.</p>
+        </div>
+        <div class="choice-card" onclick="beginSession('post_conflict')">
+          <h3>Work through something that just happened</h3>
+          <p>Process a difficult conversation or conflict. What did I actually need? How did I express it? What could I do differently?</p>
+        </div>
+        <div class="choice-card" onclick="showRecordingPicker()">
+          <h3>Review a recording</h3>
+          <p>A conflict was recorded. Walk through it with the coach privately — your perspective only.</p>
+        </div>
+        <div class="choice-card" onclick="beginSession('pattern_review')">
+          <h3>Work on my communication patterns</h3>
+          <p>No specific conflict. Just me and the coach, exploring what I keep doing and why.</p>
+        </div>
+        <div class="choice-card" onclick="beginSession('proactive')">
+          <h3>I just want to talk</h3>
+          <p>Open conversation with the coach. No agenda. Sometimes that's what's needed.</p>
+        </div>
+      </div>
+
+      <!-- Recording picker (hidden by default) -->
+      <div id="recording-picker" class="hidden">
+        <div class="form-block">
+          <h2>Choose a recording to review</h2>
+          <div id="picker-recordings">
+            <div class="empty"><span class="spinner"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clarity entry form (hidden by default) -->
+      <div id="clarity-entry" class="hidden">
+        <div class="form-block">
+          <h2 style="color:#67c6ff">Get clarity before the conversation</h2>
+          <p style="font-size:12px;color:#555;margin-bottom:20px;line-height:1.6">I have no history with anyone in this situation. No loyalty. No side. My only job is to help you see this clearly.</p>
+          <div class="form-field">
+            <label>How are you feeling right now?</label>
+            <div class="state-chips" id="state-chips">
+              <button class="state-chip" data-state="calm"    onclick="selectState('calm')">Calm</button>
+              <button class="state-chip" data-state="stirred" onclick="selectState('stirred')">Stirred</button>
+              <button class="state-chip" data-state="heated"  onclick="selectState('heated')">Heated</button>
+              <button class="state-chip" data-state="flooded" onclick="selectState('flooded')">Flooded</button>
+            </div>
+            <textarea id="clarity-feeling" placeholder="Or describe in your own words — how are you feeling right now?" style="margin-top:10px;min-height:60px"></textarea>
+          </div>
+          <div class="form-field">
+            <label>Briefly describe the situation <span style="color:#444">(optional — skip if you're too flooded to think)</span></label>
+            <textarea id="clarity-situation" placeholder="What's going on?" style="min-height:80px"></textarea>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;margin-top:4px">
+            <button class="btn-submit" id="clarity-submit" onclick="submitClaritySession()">Start Clarity Session</button>
+            <button class="btn" onclick="hideClarityFlow()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active session: chat interface -->
+    <div id="session-screen" class="hidden">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+        <div style="font-size:12px; color:#555" id="session-meta"></div>
+        <button class="btn danger" onclick="endSession()">End this session</button>
+      </div>
+
+      <!-- Impartiality banner — shown only for individual_clarity sessions -->
+      <div id="impartiality-banner" class="impartiality-banner hidden">
+        I have no history with anyone in this situation. No loyalty. No side.
+      </div>
+
+      <div class="chat-thread" id="chat-thread"></div>
+
+      <div id="thinking-indicator" class="hidden" style="padding:8px 0 12px; font-size:12px; color:#555; font-style:italic;">
+        <span class="spinner"></span> Coach is thinking...
+      </div>
+
+      <!-- Flooding warning banner (shown when flooding is detected) -->
+      <div id="flooding-banner" class="flooding-banner hidden">
+        This sounds like a flooding moment. The best move right now might be a 20-minute break before continuing. Would you like to process this on your own first?
+      </div>
+
+      <!-- Input area -->
+      <div class="input-area" id="chat-input-area">
+        <label>Your message</label>
+        <textarea id="msg-input" placeholder="Speak freely. This is a private conversation." onkeydown="handleKey(event)"></textarea>
+        <div class="btn-row">
+          <div style="font-size:11px; color:#444" id="exchange-count"></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <button class="btn hidden" id="prep-btn" style="border-color:#1e3060;color:#67c6ff" onclick="generatePrep()">Get Pre-Conversation Prep</button>
+            <button class="btn success hidden" id="finish-btn" onclick="finishSession()">Finish Session &amp; Get Insights</button>
+            <button class="btn-submit" id="send-btn" onclick="sendMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prep panel (shown after generatePrep() for clarity sessions) -->
+      <div id="prep-panel" class="hidden">
+        <div class="prep-card">
+          <h3>Pre-Conversation Prep</h3>
+          <div id="prep-content"></div>
+        </div>
+        <div style="text-align:center; margin-top:12px;">
+          <button class="btn primary" onclick="resetToChoiceScreen()">Start Another Session</button>
+        </div>
+      </div>
+
+      <!-- Insights panel (shown after completion) -->
+      <div id="insights-panel" class="hidden">
+        <div class="insights-panel">
+          <h3>Session Insights</h3>
+          <div id="insights-content"></div>
+        </div>
+        <div style="text-align:center; margin-top:12px;">
+          <button class="btn primary" onclick="resetToChoiceScreen()">Start Another Session</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- TAB: RECORDINGS                                                         -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-recordings" class="hidden">
+
+    <!-- Escalation / flooding detector -->
+    <div class="form-block" style="margin-bottom:20px">
+      <h2 style="margin-bottom:10px">Check a message for escalation</h2>
+      <p style="font-size:12px;color:#555;margin-bottom:14px;line-height:1.5">Paste something that was said to check for escalation or flooding signals before adding it to a recording.</p>
+      <div class="form-field">
+        <textarea id="detect-text" placeholder="Paste or type the message here..." style="min-height:64px"></textarea>
+      </div>
+      <button class="btn primary" onclick="detectEscalation()">Check for Escalation</button>
+      <div id="detect-result" style="margin-top:12px"></div>
+    </div>
+
+    <!-- Start recording button -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:8px;">
+      <div style="font-size:13px; color:#555">Your conflict recordings</div>
+      <button class="btn primary" onclick="toggleNewRecordingForm()">+ Start Recording</button>
+    </div>
+
+    <!-- New recording form (collapsible) -->
+    <div id="new-recording-form" class="collapsible-form">
+      <div class="form-block">
+        <h2>Start a new recording</h2>
+        <p style="font-size:12px; color:#666; margin-bottom:18px; line-height:1.5">Both parties must have consented to recording before starting. The session code is shared with both of you — keep it private.</p>
+        <div class="form-field">
+          <label>Your name / label</label>
+          <input id="nr-my-label" placeholder="e.g. Adam" />
+        </div>
+        <div class="form-field">
+          <label>Partner's name / label</label>
+          <input id="nr-partner-label" placeholder="e.g. Sherry" />
+        </div>
+        <div class="form-field">
+          <label>Topic <span style="color:#444">(optional)</span></label>
+          <input id="nr-topic" placeholder="e.g. How we talk about finances" />
+        </div>
+        <button class="btn-submit" id="nr-submit" onclick="createRecording()">Start Recording</button>
+      </div>
+    </div>
+
+    <!-- Recording list -->
+    <div id="recordings-list">
+      <div class="empty"><span class="spinner"></span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- TAB: MY PATTERNS                                                        -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-patterns" class="hidden">
+    <div id="patterns-content">
+      <div class="empty"><span class="spinner"></span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- TAB: GROWTH                                                             -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-growth" class="hidden">
+    <div id="growth-content">
+      <div class="empty"><span class="spinner"></span></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  'use strict';
+
+  const API = '';
+  const KEY = localStorage.getItem('commandKey') || prompt('Enter your command key:') || '';
+  if (KEY) localStorage.setItem('commandKey', KEY);
+  const USER = localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
+  if (USER) localStorage.setItem('lifeos_user', USER);
+
+  let activeSessionId   = null;
+  let activeSessionType = null;
+  let exchangeCount     = 0;  // number of full user/coach exchanges
+  let selectedRecordingId = null;
+  let currentTab        = 'coach';
+  let selectedStateChip = null;  // for clarity entry flow
+
+  // ── Utility ───────────────────────────────────────────────────────────────
+
+  function esc(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function val(id) { return document.getElementById(id)?.value || ''; }
+  function show(id) { document.getElementById(id)?.classList.remove('hidden'); }
+  function hide(id) { document.getElementById(id)?.classList.add('hidden'); }
+  function disable(id) { const el = document.getElementById(id); if (el) el.disabled = true; }
+  function enable(id)  { const el = document.getElementById(id); if (el) el.disabled = false; }
+
+  let toastTimer = null;
+  function toast(msg, duration = 3200) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), duration);
+  }
+
+  function H(method, path, body) {
+    const opts = {
+      method,
+      headers: { 'Content-Type': 'application/json', 'x-command-key': KEY },
+    };
+    if (body) opts.body = JSON.stringify(body);
+    return fetch(API + path, opts).then(r => r.json());
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+
+  async function init() {
+    document.getElementById('loading-overlay').style.display = 'none';
+    document.getElementById('app').style.display = '';
+  }
+
+  // ── Tab switching ─────────────────────────────────────────────────────────
+
+  function switchTab(tab) {
+    currentTab = tab;
+    const tabs = ['coach', 'recordings', 'patterns', 'growth'];
+    tabs.forEach(t => {
+      const el = document.getElementById(`tab-${t}`);
+      if (el) el.classList.toggle('hidden', t !== tab);
+    });
+    document.querySelectorAll('.tab').forEach((btn, i) => {
+      btn.classList.toggle('active', tabs[i] === tab);
+    });
+
+    // Lazy-load data on tab switch
+    if (tab === 'recordings') loadRecordings();
+    if (tab === 'patterns')   loadPatterns();
+    if (tab === 'growth')     loadGrowth();
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TAB: COACH
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  async function beginSession(sessionType, recordingId) {
+    activeSessionType   = sessionType;
+    selectedRecordingId = recordingId || null;
+
+    hide('choice-screen');
+    show('session-screen');
+
+    const metaLabel = {
+      post_conflict:      'Post-conflict coaching',
+      pattern_review:     'Pattern review',
+      proactive:          'Open coaching',
+      live_interrupt:     'Live session',
+      individual_clarity: 'Clarity session',
+    }[sessionType] || sessionType;
+
+    document.getElementById('session-meta').textContent = metaLabel + (recordingId ? ' (with recording)' : '');
+    document.getElementById('chat-thread').innerHTML = '';
+    exchangeCount = 0;
+    hide('finish-btn');
+    hide('prep-btn');
+    hide('insights-panel');
+    hide('prep-panel');
+    hide('flooding-banner');
+    // Impartiality banner only for clarity sessions
+    if (sessionType === 'individual_clarity') {
+      show('impartiality-banner');
+    } else {
+      hide('impartiality-banner');
+    }
+    show('chat-input-area');
+    disable('send-btn');
+
+    try {
+      const data = await H('POST', '/api/v1/lifeos/conflict/coaching', {
+        user:         USER,
+        session_type: sessionType,
+        recording_id: recordingId || undefined,
+        perspective:  'individual',
+      });
+      if (!data.ok) throw new Error(data.error || 'Failed to start session');
+
+      activeSessionId = data.session.id;
+      appendCoachMessage(data.openingMessage);
+      enable('send-btn');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+      resetToChoiceScreen();
+    }
+  }
+
+  function showRecordingPicker() {
+    show('recording-picker');
+    loadPickerRecordings();
+  }
+
+  async function loadPickerRecordings() {
+    const el = document.getElementById('picker-recordings');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const data = await H('GET', `/api/v1/lifeos/conflict/recordings?user=${encodeURIComponent(USER)}`);
+      if (!data.ok || !data.recordings?.length) {
+        el.innerHTML = '<div class="empty">No recordings found. Start one from the Recordings tab.</div>';
+        return;
+      }
+      el.innerHTML = data.recordings.map(r => `
+        <div class="card" style="cursor:pointer;margin-bottom:10px" onclick="selectRecording(${r.id}, '${esc(r.session_code)}')">
+          <div class="card-header">
+            <span class="title">${esc(r.topic || 'Unnamed conflict')}</span>
+            <span class="badge ${esc(r.status)}">${esc(r.status)}</span>
+          </div>
+          <div class="card-body">${esc(r.initiator_label)} ↔ ${esc(r.partner_label)} · ${formatDate(r.created_at)}</div>
+        </div>
+      `).join('');
+    } catch (err) {
+      el.innerHTML = `<div class="empty">Error loading recordings: ${esc(err.message)}</div>`;
+    }
+  }
+
+  function selectRecording(id, code) {
+    hide('recording-picker');
+    beginSession('post_conflict', id);
+  }
+
+  function appendCoachMessage(content) {
+    const el = document.getElementById('chat-thread');
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg coach';
+    msg.innerHTML = `
+      <div class="chat-label">Coach</div>
+      <div class="chat-bubble">${esc(content)}</div>
+    `;
+    el.appendChild(msg);
+    el.scrollIntoView ? msg.scrollIntoView({ behavior: 'smooth', block: 'end' }) : null;
+  }
+
+  function appendUserMessage(content) {
+    const el = document.getElementById('chat-thread');
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg user';
+    msg.innerHTML = `
+      <div class="chat-label">You</div>
+      <div class="chat-bubble">${esc(content)}</div>
+    `;
+    el.appendChild(msg);
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      sendMessage();
+    }
+  }
+
+  // ── Clarity session entry flow ────────────────────────────────────────────
+
+  function beginClarityFlow() {
+    hide('recording-picker');
+    selectedStateChip = null;
+    document.getElementById('clarity-feeling').value   = '';
+    document.getElementById('clarity-situation').value = '';
+    document.querySelectorAll('.state-chip').forEach(c => c.classList.remove('selected'));
+    show('clarity-entry');
+  }
+
+  function hideClarityFlow() {
+    hide('clarity-entry');
+  }
+
+  function selectState(state) {
+    selectedStateChip = state;
+    document.querySelectorAll('.state-chip').forEach(c => {
+      c.classList.toggle('selected', c.dataset.state === state);
+    });
+  }
+
+  async function submitClaritySession() {
+    const selfReport  = (val('clarity-feeling') || '').trim() || selectedStateChip || '';
+    const situation   = val('clarity-situation').trim();
+
+    disable('clarity-submit');
+
+    hide('clarity-entry');
+    hide('choice-screen');
+    show('session-screen');
+
+    document.getElementById('session-meta').textContent = 'Clarity session';
+    document.getElementById('chat-thread').innerHTML = '';
+    exchangeCount = 0;
+    hide('finish-btn');
+    hide('prep-btn');
+    hide('insights-panel');
+    hide('prep-panel');
+    hide('flooding-banner');
+    show('chat-input-area');
+    disable('send-btn');
+    show('impartiality-banner');
+
+    try {
+      const data = await H('POST', '/api/v1/lifeos/conflict/coaching/clarity', {
+        user:                 USER,
+        situation_description: situation || undefined,
+        self_report:          selfReport || undefined,
+      });
+      if (!data.ok) throw new Error(data.error || 'Failed to start clarity session');
+
+      activeSessionId   = data.session.id;
+      activeSessionType = 'individual_clarity';
+      appendCoachMessage(data.openingMessage);
+      enable('send-btn');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+      resetToChoiceScreen();
+    }
+
+    enable('clarity-submit');
+  }
+
+  // ── Pre-conversation prep ─────────────────────────────────────────────────
+
+  async function generatePrep() {
+    if (!activeSessionId) return;
+    disable('prep-btn');
+    toast('Generating your pre-conversation prep...', 5000);
+
+    try {
+      const data = await H('POST', `/api/v1/lifeos/conflict/coaching/${activeSessionId}/prep`, {
+        user: USER,
+      });
+      if (!data.ok) throw new Error(data.error || 'Failed to generate prep');
+
+      hide('chat-input-area');
+      hide('prep-btn');
+      renderPrep(data.prep);
+      show('prep-panel');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+      enable('prep-btn');
+    }
+  }
+
+  function renderPrep(prep) {
+    const el = document.getElementById('prep-content');
+    if (!prep) {
+      el.innerHTML = '<div style="font-size:13px;color:#666;">Prep could not be generated. Continue the session for more context.</div>';
+      return;
+    }
+
+    const avoidItems = Array.isArray(prep.avoid)
+      ? prep.avoid.map(a => `<li>${esc(a)}</li>`).join('')
+      : '';
+
+    el.innerHTML = `
+      ${prep.core_need ? `
+        <div class="prep-section">
+          <h4>Core Need</h4>
+          <p>${esc(prep.core_need)}</p>
+        </div>
+      ` : ''}
+      ${prep.opening_line ? `
+        <div class="prep-section">
+          <h4>How to Open</h4>
+          <div class="prep-quote">"${esc(prep.opening_line)}"</div>
+        </div>
+      ` : ''}
+      ${avoidItems ? `
+        <div class="prep-section">
+          <h4>What to Avoid</h4>
+          <ul>${avoidItems}</ul>
+        </div>
+      ` : ''}
+      ${prep.empathy_map ? `
+        <div class="prep-section">
+          <h4>How They're Probably Feeling</h4>
+          <p>${esc(prep.empathy_map)}</p>
+        </div>
+      ` : ''}
+      ${prep.truth_check ? `
+        <div class="prep-section">
+          <h4>One Question to Sit With</h4>
+          <p style="font-style:italic;color:#a0b8d8">${esc(prep.truth_check)}</p>
+        </div>
+      ` : ''}
+    `;
+  }
+
+  // ── Escalation / flooding detection (Recordings tab) ─────────────────────
+
+  async function detectEscalation() {
+    const text = val('detect-text').trim();
+    const el   = document.getElementById('detect-result');
+    if (!text) { el.innerHTML = '<div style="font-size:12px;color:#555">Enter some text first.</div>'; return; }
+
+    el.innerHTML = '<span class="spinner"></span>';
+
+    try {
+      const data = await fetch(API + '/api/v1/lifeos/conflict/detect', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ text }),
+      }).then(r => r.json());
+
+      if (!data.ok && data.ok !== undefined) throw new Error(data.error || 'Detection failed');
+
+      if (data.flooding) {
+        el.innerHTML = `
+          <div class="flooding-banner">
+            This sounds like a flooding moment. The best move right now might be a 20-minute break before continuing. Would you like to process this on your own first?
+          </div>
+          <div style="font-size:12px;color:#888;margin-top:6px">Signals: ${esc((data.signals || []).join(', ') || 'none')}</div>
+        `;
+      } else if (data.escalating) {
+        el.innerHTML = `
+          <div class="banner warning">
+            Escalation signals detected: ${esc((data.signals || []).join(', ') || 'none')}
+          </div>
+        `;
+      } else {
+        el.innerHTML = `<div class="banner success">No escalation signals detected.</div>`;
+      }
+    } catch (err) {
+      el.innerHTML = `<div class="empty">Error: ${esc(err.message)}</div>`;
+    }
+  }
+
+  async function sendMessage() {
+    const content = document.getElementById('msg-input').value.trim();
+    if (!content) return;
+    if (!activeSessionId) return;
+
+    disable('send-btn');
+    document.getElementById('msg-input').value = '';
+
+    appendUserMessage(content);
+    show('thinking-indicator');
+    hide('flooding-banner');
+
+    // Run escalation / flooding detection on the user's message (fire-and-forget)
+    fetch(API + '/api/v1/lifeos/conflict/detect', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ text: content }),
+    }).then(r => r.json()).then(d => {
+      if (d.flooding) show('flooding-banner');
+    }).catch(() => { /* non-fatal */ });
+
+    try {
+      const data = await H('POST', `/api/v1/lifeos/conflict/coaching/${activeSessionId}/message`, {
+        user:    USER,
+        content,
+      });
+      if (!data.ok) throw new Error(data.error || 'Failed to send message');
+
+      hide('thinking-indicator');
+      appendCoachMessage(data.coachResponse);
+
+      exchangeCount++;
+      document.getElementById('exchange-count').textContent = `${exchangeCount} exchange${exchangeCount !== 1 ? 's' : ''}`;
+
+      // Show finish button after 3+ exchanges
+      if (exchangeCount >= 3) show('finish-btn');
+
+      // Show prep button after 4+ exchanges for individual_clarity sessions
+      if (exchangeCount >= 4 && activeSessionType === 'individual_clarity') show('prep-btn');
+    } catch (err) {
+      hide('thinking-indicator');
+      toast(`Error: ${err.message}`);
+    }
+
+    enable('send-btn');
+    document.getElementById('msg-input').focus();
+  }
+
+  async function finishSession() {
+    if (!activeSessionId) return;
+    disable('finish-btn');
+    disable('send-btn');
+
+    toast('Extracting insights from your session...', 5000);
+
+    try {
+      const data = await H('POST', `/api/v1/lifeos/conflict/coaching/${activeSessionId}/complete`, {
+        user: USER,
+      });
+      if (!data.ok) throw new Error(data.error || 'Failed to complete session');
+
+      hide('chat-input-area');
+      renderInsights(data.session?.insights);
+      show('insights-panel');
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+      enable('finish-btn');
+      enable('send-btn');
+    }
+  }
+
+  function endSession() {
+    if (exchangeCount > 0 && !confirm('End this session? You can finish later from the coaching history.')) return;
+    resetToChoiceScreen();
+  }
+
+  function resetToChoiceScreen() {
+    activeSessionId     = null;
+    activeSessionType   = null;
+    selectedRecordingId = null;
+    selectedStateChip   = null;
+    exchangeCount       = 0;
+    hide('session-screen');
+    hide('recording-picker');
+    hide('clarity-entry');
+    hide('impartiality-banner');
+    hide('flooding-banner');
+    hide('prep-panel');
+    show('choice-screen');
+  }
+
+  function renderInsights(insights) {
+    const el = document.getElementById('insights-content');
+    if (!insights) {
+      el.innerHTML = '<div style="font-size:13px;color:#666;">No insights could be extracted from this session.</div>';
+      return;
+    }
+
+    const sections = [
+      { key: 'strengths',    label: 'Strengths',    empty: 'None identified' },
+      { key: 'growth_areas', label: 'Growth Areas', empty: 'None identified' },
+      { key: 'triggers',     label: 'Triggers',     empty: 'None identified' },
+      { key: 'patterns',     label: 'Patterns',     empty: 'None identified' },
+      { key: 'nvc_moments',  label: 'NVC Moments',  empty: 'None identified' },
+    ];
+
+    el.innerHTML = sections.map(s => {
+      const items = Array.isArray(insights[s.key]) ? insights[s.key] : [];
+      if (!items.length) return '';
+      return `
+        <div class="insights-section">
+          <h4>${esc(s.label)}</h4>
+          ${items.map(i => `<div class="insights-item">${esc(i)}</div>`).join('')}
+        </div>
+      `;
+    }).join('');
+
+    if (!el.innerHTML.trim()) {
+      el.innerHTML = '<div style="font-size:13px;color:#666;">Session complete. Start another session to build your growth profile.</div>';
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TAB: RECORDINGS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  async function loadRecordings() {
+    const el = document.getElementById('recordings-list');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const data = await H('GET', `/api/v1/lifeos/conflict/recordings?user=${encodeURIComponent(USER)}`);
+      if (!data.ok) throw new Error(data.error);
+
+      if (!data.recordings?.length) {
+        el.innerHTML = '<div class="empty">No recordings yet. Use "Start Recording" to capture a conflict.</div>';
+        return;
+      }
+
+      el.innerHTML = data.recordings.map(r => renderRecordingCard(r)).join('');
+    } catch (err) {
+      el.innerHTML = `<div class="empty">Error: ${esc(err.message)}</div>`;
+    }
+  }
+
+  function renderRecordingCard(r) {
+    const turns = Array.isArray(r.transcript) ? r.transcript.length : 0;
+
+    let actions = '';
+    if (r.status === 'captured') {
+      actions = `
+        <button class="btn success" onclick="setMode('${esc(r.session_code)}', 'together')">Process Together</button>
+        <button class="btn primary" onclick="setMode('${esc(r.session_code)}', 'separate')">Process Separately</button>
+      `;
+    } else if (r.processing_mode) {
+      actions = `<span style="font-size:12px;color:#555">Mode: ${esc(r.processing_mode)} · ${esc(r.status)}</span>`;
+    } else if (r.status === 'recording') {
+      actions = `<button class="btn" onclick="markCaptured('${esc(r.session_code)}')">Mark as Captured</button>`;
+    }
+
+    return `
+      <div class="recording-card">
+        <div class="rc-header">
+          <span class="rc-code">${esc(r.session_code)}</span>
+          <span class="badge ${esc(r.status)}">${esc(r.status)}</span>
+        </div>
+        <div class="rc-body">
+          <strong>${esc(r.initiator_label)} ↔ ${esc(r.partner_label)}</strong>
+          ${r.topic ? ` · ${esc(r.topic)}` : ''}
+          <br>
+          <span style="font-size:11px;color:#555">${turns} turn${turns !== 1 ? 's' : ''} · ${formatDate(r.created_at)}</span>
+        </div>
+        ${actions ? `<div class="rc-actions">${actions}</div>` : ''}
+      </div>
+    `;
+  }
+
+  function toggleNewRecordingForm() {
+    const el = document.getElementById('new-recording-form');
+    el.classList.toggle('open');
+  }
+
+  async function createRecording() {
+    const myLabel      = val('nr-my-label').trim();
+    const partnerLabel = val('nr-partner-label').trim();
+    const topic        = val('nr-topic').trim();
+
+    if (!myLabel)      { toast('Your label is required'); return; }
+    if (!partnerLabel) { toast('Partner label is required'); return; }
+
+    disable('nr-submit');
+    try {
+      const data = await H('POST', '/api/v1/lifeos/conflict/recordings', {
+        user:           USER,
+        initiator_label: myLabel,
+        partner_label:   partnerLabel,
+        topic:           topic || undefined,
+      });
+      if (!data.ok) throw new Error(data.error || 'Failed to start recording');
+
+      toast(`Recording started: ${data.recording.session_code}`);
+      document.getElementById('new-recording-form').classList.remove('open');
+      document.getElementById('nr-my-label').value = '';
+      document.getElementById('nr-partner-label').value = '';
+      document.getElementById('nr-topic').value = '';
+      loadRecordings();
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+    }
+    enable('nr-submit');
+  }
+
+  async function setMode(code, mode) {
+    try {
+      const data = await H('POST', `/api/v1/lifeos/conflict/recordings/${encodeURIComponent(code)}/mode`, {
+        user: USER,
+        mode,
+      });
+      if (!data.ok) throw new Error(data.error || 'Failed to set mode');
+      toast(`Processing mode set: ${mode}`);
+      loadRecordings();
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+    }
+  }
+
+  async function markCaptured(code) {
+    try {
+      const data = await H('POST', `/api/v1/lifeos/conflict/recordings/${encodeURIComponent(code)}/complete`, {});
+      if (!data.ok) throw new Error(data.error || 'Failed to mark captured');
+      toast('Recording marked as captured');
+      loadRecordings();
+    } catch (err) {
+      toast(`Error: ${err.message}`);
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TAB: MY PATTERNS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  async function loadPatterns() {
+    const el = document.getElementById('patterns-content');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const data = await H('GET', `/api/v1/lifeos/conflict/coaching/patterns?user=${encodeURIComponent(USER)}`);
+      if (!data.ok) throw new Error(data.error);
+
+      if (!data.patterns?.length) {
+        el.innerHTML = '<div class="empty">No patterns recorded yet. Complete coaching sessions to start building your pattern profile.</div>';
+        return;
+      }
+
+      const groups = {
+        trigger:     { label: 'Triggers',        patterns: [] },
+        escalator:   { label: 'Escalators',      patterns: [] },
+        de_escalator:{ label: 'De-escalators',   patterns: [] },
+        strength:    { label: 'Strengths',        patterns: [] },
+        growth_area: { label: 'Growth Areas',     patterns: [] },
+      };
+
+      for (const p of data.patterns) {
+        if (groups[p.pattern_type]) groups[p.pattern_type].patterns.push(p);
+      }
+
+      const order = ['strength', 'de_escalator', 'trigger', 'escalator', 'growth_area'];
+
+      el.innerHTML = order
+        .filter(k => groups[k].patterns.length > 0)
+        .map(k => {
+          const g = groups[k];
+          return `
+            <div class="pattern-group">
+              <div class="pattern-group-title">
+                <span class="badge ${k}">${esc(k)}</span>
+                ${esc(g.label)} (${g.patterns.length})
+              </div>
+              ${g.patterns.map(p => `
+                <div class="pattern-card">
+                  <div class="p-desc">${esc(p.description)}</div>
+                  <div class="p-meta">
+                    <span>seen ${p.frequency}x</span>
+                    <span>last: ${formatDate(p.last_seen)}</span>
+                  </div>
+                  ${p.example ? `<div class="p-example">"${esc(p.example)}"</div>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }).join('');
+    } catch (err) {
+      el.innerHTML = `<div class="empty">Error: ${esc(err.message)}</div>`;
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TAB: GROWTH
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  async function loadGrowth() {
+    const el = document.getElementById('growth-content');
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const data = await H('GET', `/api/v1/lifeos/conflict/coaching/growth?user=${encodeURIComponent(USER)}`);
+      if (!data.ok) throw new Error(data.error);
+
+      const patterns = data.patterns || [];
+
+      // Count by type
+      const counts = { trigger: 0, escalator: 0, de_escalator: 0, strength: 0, growth_area: 0 };
+      for (const p of patterns) {
+        if (counts[p.pattern_type] !== undefined) counts[p.pattern_type]++;
+      }
+
+      el.innerHTML = `
+        <div class="growth-hero">
+          <p>${esc(data.summary)}</p>
+        </div>
+
+        <div class="growth-stats">
+          <div class="stat-card">
+            <div class="stat-num" style="color:#a78bfa">${counts.strength}</div>
+            <div class="stat-label">Strengths</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color:#34d399">${counts.de_escalator}</div>
+            <div class="stat-label">De-escalators</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color:#fbbf24">${counts.growth_area}</div>
+            <div class="stat-label">Growth Areas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color:#e05555">${counts.trigger}</div>
+            <div class="stat-label">Triggers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" style="color:#f97316">${counts.escalator}</div>
+            <div class="stat-label">Escalators</div>
+          </div>
+        </div>
+
+        <div style="text-align:center">
+          <button class="btn-submit" onclick="switchTab('coach')">Start a coaching session</button>
+        </div>
+      `;
+    } catch (err) {
+      el.innerHTML = `<div class="empty">Error: ${esc(err.message)}</div>`;
+    }
+  }
+
+  // ── Bootstrap ─────────────────────────────────────────────────────────────
+
+  init();
+</script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Legacy & Community — LifeOS</title>
+<style>
+  :root {
+    --bg: #0f0f13; --surface: #17171f; --surface2: #1e1e28;
+    --border: rgba(255,255,255,0.07); --text: #e8e8f0; --muted: #8888aa;
+    --legacy: #fb923c; --healing: #c084fc; --mentor: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  .page { max-width: 820px; margin: 0 auto; padding: 24px 16px 80px; }
+  .page-header { margin-bottom: 28px; }
+  .page-header h1 { font-size: 1.4rem; font-weight: 600; color: var(--legacy); }
+  .page-header p { font-size: 0.88rem; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 24px; overflow-x: auto; }
+  .tab { padding: 8px 14px; font-size: 0.82rem; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
+  .tab.active { color: var(--legacy); border-bottom-color: var(--legacy); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
+  label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; }
+  input, textarea, select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 9px 12px; font-size: 0.88rem; font-family: inherit; outline: none; }
+  input:focus, textarea:focus { border-color: var(--legacy); }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
+  .form-group { margin-bottom: 12px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 500; cursor: pointer; border: none; transition: opacity 0.15s; }
+  .btn-primary { background: var(--legacy); color: #0f0f13; }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .list-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+  .list-item h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+  .list-item p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+  .mentor-block { background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.2); border-left: 3px solid var(--mentor); border-radius: 0 12px 12px 0; padding: 20px 22px; margin-bottom: 16px; }
+  .mentor-block .label { font-size: 0.72rem; color: var(--mentor); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .mentor-block p { font-size: 0.9rem; line-height: 1.8; color: var(--text); }
+
+  .milestone-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .milestone-row:last-child { border-bottom: none; }
+  .milestone-row input[type=checkbox] { width: auto; }
+  .milestone-row span { flex: 1; font-size: 0.85rem; }
+  .milestone-row span.done { text-decoration: line-through; color: var(--muted); }
+
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; margin: 8px 0 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--legacy); border-radius: 2px; transition: width 0.3s; }
+
+  .empty { text-align: center; padding: 40px 24px; color: var(--muted); font-size: 0.88rem; }
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 10px; font-size: 0.85rem; z-index: 1000; opacity: 0; transform: translateY(8px); transition: all 0.25s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-header">
+    <h1>Legacy & Community</h1>
+    <p>What you're building that outlasts you. Who you're building it with.</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('mentor')">Sovereign Mentor</div>
+    <div class="tab" onclick="switchTab('legacy')">Legacy Projects</div>
+    <div class="tab" onclick="switchTab('review')">Life Review</div>
+    <div class="tab" onclick="switchTab('health')">Health Intel</div>
+    <div class="tab" onclick="switchTab('monetize')">Monetize Purpose</div>
+    <div class="tab" onclick="switchTab('death')">Death Meditation</div>
+    <div class="tab" onclick="switchTab('community')">Community</div>
+  </div>
+
+  <!-- SOVEREIGN MENTOR -->
+  <div id="tab-mentor" class="panel active">
+    <div id="mentor-past"></div>
+    <div class="card">
+      <h3>Run a Sovereign Mentor session</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:14px;line-height:1.6;">The AI has read everything you've tracked. This is what it sees — with no agenda beyond your flourishing.</p>
+      <button class="btn btn-primary" onclick="runMentor()" id="mentor-btn">Ask what it sees</button>
+    </div>
+  </div>
+
+  <!-- LEGACY PROJECTS -->
+  <div id="tab-legacy" class="panel">
+    <div class="card">
+      <h3>New legacy project</h3>
+      <div class="form-group"><label>Title</label><input id="lp-title" placeholder="e.g. Write the book, Build the school"></div>
+      <div class="form-group"><label>Why it matters</label><textarea id="lp-why" rows="2" placeholder="What does this project mean?"></textarea></div>
+      <div class="form-group"><label>Impact vision</label><textarea id="lp-vision" rows="2" placeholder="If this project succeeds, what changes?"></textarea></div>
+      <button class="btn btn-primary" onclick="createLegacyProject()">Create project</button>
+    </div>
+    <div id="legacy-list"></div>
+  </div>
+
+  <!-- LIFE REVIEW -->
+  <div id="tab-review" class="panel">
+    <div class="card">
+      <h3>Quarterly life review</h3>
+      <div class="form-group">
+        <label>Quarter (e.g. 2026-Q1)</label>
+        <input id="review-quarter" placeholder="2026-Q2">
+      </div>
+      <button class="btn btn-primary" onclick="startReview()">Begin review</button>
+    </div>
+    <div id="review-session" style="display:none" class="card">
+      <div id="review-question" style="font-size:0.95rem;line-height:1.7;margin-bottom:16px;color:var(--text);"></div>
+      <textarea id="review-answer" rows="4" placeholder="Take your time..."></textarea>
+      <button class="btn btn-primary" style="margin-top:10px;" onclick="submitReviewAnswer()">Continue</button>
+    </div>
+    <div id="review-complete" style="display:none" class="card">
+      <h3>Review complete</h3>
+      <div id="review-summary" style="font-size:0.88rem;color:var(--muted);line-height:1.7;"></div>
+    </div>
+    <div id="past-reviews"></div>
+  </div>
+
+  <!-- HEALTH INTEL -->
+  <div id="tab-health" class="panel">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+      <button class="btn btn-primary" onclick="runFoodAnalysis()">Analyze food patterns</button>
+      <button class="btn btn-ghost" onclick="runPreDisease()">Pre-disease check</button>
+    </div>
+    <div id="health-result"></div>
+    <div id="food-insights"></div>
+    <div id="health-warnings"></div>
+  </div>
+
+  <!-- MONETIZE PURPOSE -->
+  <div id="tab-monetize" class="panel">
+    <button class="btn btn-primary" onclick="runMonetization()" id="mon-btn">Map my monetization paths</button>
+    <div id="mon-result" style="margin-top:16px;"></div>
+  </div>
+
+  <!-- DEATH MEDITATION -->
+  <div id="tab-death" class="panel">
+    <div class="card">
+      <h3>Death meditation</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:14px;line-height:1.6;">Not morbid — clarifying. Cutting through noise to reveal what actually matters.</p>
+      <button class="btn btn-primary" onclick="getDeathPrompts()" id="death-btn">Get prompts</button>
+    </div>
+    <div id="death-prompts" style="display:none" class="card">
+      <div id="death-prompt-text" style="font-size:0.9rem;line-height:1.9;margin-bottom:16px;"></div>
+      <div class="form-group"><label>Your reflection</label><textarea id="death-reflection" rows="5" placeholder="Write whatever comes..."></textarea></div>
+      <button class="btn btn-primary" onclick="submitDeathReflection()">Submit reflection</button>
+    </div>
+    <div id="death-result" style="display:none" class="card">
+      <h3>What you found</h3>
+      <div id="death-commitments" style="font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:8px;"></div>
+      <div id="death-what-said" style="font-size:0.9rem;color:var(--legacy);font-style:italic;"></div>
+    </div>
+  </div>
+
+  <!-- COMMUNITY -->
+  <div id="tab-community" class="panel">
+    <div class="card">
+      <h3>Flourishing network</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:12px;line-height:1.5;">Opt in to contribute anonymised data. See patterns from others on a similar journey.</p>
+      <button class="btn btn-primary btn-sm" onclick="grantFlourishingConsent()" style="margin-bottom:12px;">Opt in</button>
+      <button class="btn btn-ghost btn-sm" onclick="getFlourishingInsights()">View network insights</button>
+      <div id="flourishing-result" style="margin-top:12px;"></div>
+    </div>
+    <div class="card">
+      <h3>Group coaching room</h3>
+      <div class="form-row" style="margin-bottom:10px;">
+        <div class="form-group"><label>Room name</label><input id="room-name" placeholder="My growth group"></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" onclick="createGroupRoom()">Create room</button>
+        <span style="font-size:0.8rem;color:var(--muted);align-self:center;">or</span>
+        <input id="room-join-code" style="width:160px;" placeholder="Room code">
+        <button class="btn btn-ghost btn-sm" onclick="joinGroupRoom()">Join</button>
+      </div>
+      <div id="room-result" style="margin-top:10px;font-size:0.82rem;color:var(--muted);"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api/v1/lifeos/legacy';
+const KEY = localStorage.getItem('commandKey') || prompt('Enter your command key:') || '';
+if (KEY) localStorage.setItem('commandKey', KEY);
+const USER = localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
+if (USER) localStorage.setItem('lifeos_user', USER);
+const hdrs = () => ({ 'Content-Type': 'application/json', 'x-command-key': KEY });
+
+function toast(m) {
+  const t = document.getElementById('toast');
+  t.textContent = m; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const names = ['mentor','legacy','review','health','monetize','death','community'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  if (name === 'legacy') loadLegacyProjects();
+  if (name === 'review') loadPastReviews();
+  if (name === 'mentor') loadMentorSessions();
+  if (name === 'health') loadHealthData();
+}
+
+// ── Sovereign Mentor ──────────────────────────────────────────────────────
+async function runMentor() {
+  const btn = document.getElementById('mentor-btn');
+  btn.disabled = true; btn.textContent = 'Reading your data...';
+  try {
+    const r = await fetch(`${API}/sovereign-mentor?user=${USER}`, { method:'POST', headers: hdrs(), body: JSON.stringify({}) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    document.getElementById('mentor-past').innerHTML = `
+      <div class="mentor-block">
+        <div class="label">What it sees — ${new Date().toLocaleDateString()}</div>
+        <p>${(d.message || d.session?.what_they_see || '').replace(/\n/g,'<br>')}</p>
+      </div>`;
+  } catch(e) { toast('Error: ' + e.message); }
+  finally { btn.disabled = false; btn.textContent = 'Ask what it sees again'; }
+}
+async function loadMentorSessions() {
+  try {
+    const r = await fetch(`${API}/sovereign-mentor?user=${USER}`, { headers: hdrs() });
+    const d = await r.json();
+    const past = document.getElementById('mentor-past');
+    if (!d.sessions?.length) { past.innerHTML = ''; return; }
+    const latest = d.sessions[0];
+    past.innerHTML = `<div class="mentor-block"><div class="label">Last session — ${new Date(latest.created_at).toLocaleDateString()}</div><p>${(latest.what_they_see||'').replace(/\n/g,'<br>')}</p></div>`;
+  } catch {}
+}
+
+// ── Legacy projects ───────────────────────────────────────────────────────
+async function createLegacyProject() {
+  const title = document.getElementById('lp-title').value.trim();
+  if (!title) return toast('Title required');
+  try {
+    const r = await fetch(`${API}/legacy-projects?user=${USER}`, {
+      method:'POST', headers: hdrs(),
+      body: JSON.stringify({ title, whyItMatters: document.getElementById('lp-why').value, impactVision: document.getElementById('lp-vision').value })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    toast('Project created'); loadLegacyProjects();
+    document.getElementById('lp-title').value = '';
+    document.getElementById('lp-why').value = '';
+    document.getElementById('lp-vision').value = '';
+  } catch(e) { toast('Error: ' + e.message); }
+}
+async function loadLegacyProjects() {
+  try {
+    const r = await fetch(`${API}/legacy-projects?user=${USER}`, { headers: hdrs() });
+    const d = await r.json();
+    const el = document.getElementById('legacy-list');
+    if (!d.projects?.length) { el.innerHTML = '<div class="empty">No legacy projects yet.</div>'; return; }
+    el.innerHTML = d.projects.map(p => `
+      <div class="list-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <h4>${p.title}</h4>
+          <span style="font-size:0.75rem;color:var(--legacy)">${p.progress_pct}%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${p.progress_pct}%"></div></div>
+        ${p.why_it_matters ? `<p>${p.why_it_matters}</p>` : ''}
+        ${p.milestones?.length ? `<div style="margin-top:10px;">${p.milestones.map(m=>`<div class="milestone-row"><input type="checkbox" ${m.completed?'checked':''}><span class="${m.completed?'done':''}">${m.text}</span></div>`).join('')}</div>` : ''}
+      </div>`).join('');
+  } catch {}
+}
+
+// ── Life review ───────────────────────────────────────────────────────────
+let activeReviewId = null;
+async function startReview() {
+  const quarter = document.getElementById('review-quarter').value.trim();
+  if (!quarter) return toast('Quarter required (e.g. 2026-Q2)');
+  try {
+    const r = await fetch(`${API}/life-review?user=${USER}`, { method:'POST', headers:hdrs(), body: JSON.stringify({ quarter }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    activeReviewId = d.review.id;
+    if (d.openingQuestion) {
+      document.getElementById('review-session').style.display = 'block';
+      document.getElementById('review-question').textContent = d.openingQuestion;
+    } else {
+      toast('Review already started for this quarter');
+    }
+  } catch(e) { toast('Error: ' + e.message); }
+}
+async function submitReviewAnswer() {
+  const answer = document.getElementById('review-answer').value.trim();
+  if (!answer || !activeReviewId) return;
+  try {
+    const r = await fetch(`${API}/life-review/${activeReviewId}/answer?user=${USER}`, { method:'POST', headers:hdrs(), body: JSON.stringify({ answer }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    document.getElementById('review-answer').value = '';
+    if (d.complete) {
+      document.getElementById('review-session').style.display = 'none';
+      document.getElementById('review-complete').style.display = 'block';
+      document.getElementById('review-summary').textContent = d.review.who_i_became || 'Review saved.';
+    } else {
+      document.getElementById('review-question').textContent = d.nextQuestion;
+    }
+  } catch(e) { toast('Error: ' + e.message); }
+}
+async function loadPastReviews() {
+  try {
+    const r = await fetch(`${API}/life-review?user=${USER}`, { headers: hdrs() });
+    const d = await r.json();
+    const el = document.getElementById('past-reviews');
+    if (!d.reviews?.length) { el.innerHTML = ''; return; }
+    el.innerHTML = d.reviews.map(rv => `
+      <div class="list-item">
+        <h4>${rv.quarter}</h4>
+        ${rv.who_i_became ? `<p>${rv.who_i_became.slice(0,120)}...</p>` : ''}
+        <p style="font-size:0.75rem;color:var(--legacy);margin-top:4px;">${new Date(rv.created_at).toLocaleDateString()}</p>
+      </div>`).join('');
+  } catch {}
+}
+
+// ── Health intel ──────────────────────────────────────────────────────────
+async function runFoodAnalysis() {
+  const el = document.getElementById('food-insights');
+  el.innerHTML = '<div class="empty">Analyzing 90-day biometric data...</div>';
+  try {
+    const r = await fetch(`${API}/food-analysis?user=${USER}`, { method:'POST', headers:hdrs(), body:'{}' });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    if (!d.insights?.length) { el.innerHTML = '<div class="empty">Not enough data yet to generate insights.</div>'; return; }
+    el.innerHTML = d.insights.map(i => `<div class="list-item"><h4>${i.food_pattern}</h4><p>${i.recommendation}</p><p style="font-size:0.75rem;color:var(--legacy);margin-top:4px;">${i.evidence_quality}</p></div>`).join('');
+  } catch(e) { el.innerHTML = `<div class="empty">Error: ${e.message}</div>`; }
+}
+async function runPreDisease() {
+  const el = document.getElementById('health-result');
+  el.innerHTML = '<div class="empty">Running pattern check...</div>';
+  try {
+    const r = await fetch(`${API}/pre-disease-check?user=${USER}`, { method:'POST', headers:hdrs(), body:'{}' });
+    const d = await r.json();
+    el.innerHTML = d.warning
+      ? `<div class="list-item" style="border-color:rgba(248,113,113,0.3)"><h4>⚠ Pattern detected</h4><p>${d.message}</p>${d.warningRecord ? `<p style="font-size:0.75rem;color:#f87171;margin-top:4px;">Urgency: ${d.warningRecord.urgency}</p>` : ''}</div>`
+      : `<div class="list-item"><h4>No concerning patterns</h4><p>${d.message || 'Current data looks clean.'}</p></div>`;
+  } catch(e) { el.innerHTML = `<div class="empty">Error: ${e.message}</div>`; }
+}
+async function loadHealthData() {
+  try {
+    const r = await fetch(`${API}/health-warnings?user=${USER}`, { headers: hdrs() });
+    const d = await r.json();
+    const el = document.getElementById('health-warnings');
+    if (!d.warnings?.length) { el.innerHTML = ''; return; }
+    el.innerHTML = d.warnings.map(w => `<div class="list-item" style="border-color:rgba(248,113,113,0.25)"><h4>${w.warning_type || 'Health warning'}</h4><p>${w.pattern_description}</p></div>`).join('');
+  } catch {}
+}
+
+// ── Monetize ──────────────────────────────────────────────────────────────
+async function runMonetization() {
+  const btn = document.getElementById('mon-btn');
+  btn.disabled = true; btn.textContent = 'Mapping paths...';
+  try {
+    const r = await fetch(`${API}/monetization-map?user=${USER}`, { method:'POST', headers:hdrs(), body:'{}' });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    document.getElementById('mon-result').innerHTML = d.paths?.length
+      ? d.paths.map(p => `<div class="list-item"><h4>${p.path_title}</h4><p>${p.description}</p><p style="font-size:0.75rem;color:var(--legacy);margin-top:6px;">${p.estimated_monthly_income} · ${p.confidence} confidence</p></div>`).join('')
+      : '<div class="empty">No paths generated. Build out your purpose profile first.</div>';
+  } catch(e) { toast('Error: ' + e.message); }
+  finally { btn.disabled = false; btn.textContent = 'Map my monetization paths'; }
+}
+
+// ── Death meditation ──────────────────────────────────────────────────────
+async function getDeathPrompts() {
+  const btn = document.getElementById('death-btn');
+  btn.disabled = true; btn.textContent = 'Getting prompts...';
+  try {
+    const r = await fetch(`${API}/death-meditation?user=${USER}`, { method:'POST', headers:hdrs(), body:'{}' });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    document.getElementById('death-prompt-text').innerHTML = (d.prompts || '').replace(/\n/g,'<br>');
+    document.getElementById('death-prompts').style.display = 'block';
+  } catch(e) { toast('Error: ' + e.message); }
+  finally { btn.disabled = false; btn.textContent = 'Get prompts'; }
+}
+async function submitDeathReflection() {
+  const reflection = document.getElementById('death-reflection').value.trim();
+  if (!reflection) return toast('Write your reflection first');
+  try {
+    const r = await fetch(`${API}/death-meditation?user=${USER}`, { method:'POST', headers:hdrs(), body: JSON.stringify({ reflection }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    if (d.session) {
+      document.getElementById('death-prompts').style.display = 'none';
+      document.getElementById('death-result').style.display = 'block';
+      document.getElementById('death-commitments').textContent = (d.session.commitments_that_matter||[]).join(', ');
+      document.getElementById('death-what-said').textContent = d.session.what_would_be_said ? `"${d.session.what_would_be_said}"` : '';
+    }
+  } catch(e) { toast('Error: ' + e.message); }
+}
+
+// ── Community ─────────────────────────────────────────────────────────────
+async function grantFlourishingConsent() {
+  try {
+    await fetch(`${API}/flourishing/consent?user=${USER}`, { method:'POST', headers:hdrs(), body:'{}' });
+    toast('Opted in to flourishing network');
+  } catch(e) { toast('Error: ' + e.message); }
+}
+async function getFlourishingInsights() {
+  try {
+    const r = await fetch(`${API}/flourishing/insights?user=${USER}`, { headers: hdrs() });
+    const d = await r.json();
+    const el = document.getElementById('flourishing-result');
+    if (!d.consented) { el.innerHTML = '<p style="font-size:0.8rem;color:var(--muted);">Opt in first to see network insights.</p>'; return; }
+    const i = d.insights;
+    el.innerHTML = `<p style="font-size:0.82rem;color:var(--muted);">Network: ${i.network_size} contributors · Avg integrity: ${i.avg_integrity_score||'n/a'} · Top practices: ${(i.top_practices||[]).slice(0,3).map(p=>p.practice).join(', ')||'none yet'}</p>`;
+  } catch(e) { toast('Error: ' + e.message); }
+}
+async function createGroupRoom() {
+  const name = document.getElementById('room-name').value.trim();
+  if (!name) return toast('Room name required');
+  try {
+    const r = await fetch(`${API}/group-rooms?user=${USER}`, { method:'POST', headers:hdrs(), body: JSON.stringify({ name, createdByUserId: USER }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    document.getElementById('room-result').innerHTML = `Room created! Code: <strong style="color:var(--legacy)">${d.room.room_code}</strong> — share this code with members.`;
+  } catch(e) { toast('Error: ' + e.message); }
+}
+async function joinGroupRoom() {
+  const roomCode = document.getElementById('room-join-code').value.trim();
+  if (!roomCode) return toast('Enter a room code');
+  try {
+    const r = await fetch(`${API}/group-rooms/join?user=${USER}`, { method:'POST', headers:hdrs(), body: JSON.stringify({ roomCode }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    document.getElementById('room-result').innerHTML = `Joined room: <strong>${d.room.name}</strong>`;
+  } catch(e) { toast('Error: ' + e.message); }
+}
+
+if (!KEY) {
+  const k = prompt('Command key:');
+  if (k) localStorage.setItem('commandKey', k);
+  location.reload();
+}
+loadMentorSessions();
+</script>
+</body>
+</html>

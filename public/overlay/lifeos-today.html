@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Today — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-today:    #5b6af5;
+      --color-mirror:   #7c3aed;
+      --color-engine:   #3b82f6;
+      --color-health:   #10b981;
+      --color-inner:    #f59e0b;
+      --color-family:   #f43f5e;
+      --color-purpose:  #8b5cf6;
+      --color-children: #f5a623;
+      --color-mediation:#14b8a6;
+      --color-coach:    #5b6af5;
+      --bg:             #0a0a0f;
+      --card-bg:        #111118;
+      --border:         #1e1e2e;
+      --text:           #e8e8f0;
+      --text-muted:     #555;
+      --text-dim:       #888;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .root {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px 100px;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 36px;
+    }
+    .page-header .greeting {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .page-header .dateline {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+    .page-header .settings-btn {
+      background: none;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
+      color: var(--text-muted);
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+      transition: all .15s;
+    }
+    .page-header .settings-btn:hover { border-color: #444; color: #aaa; }
+
+    /* ── Section wrapper ── */
+    .section {
+      margin-bottom: 32px;
+      border-left: 3px solid transparent;
+      padding-left: 16px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+    }
+    .section-count {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: #1a1a2a;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .section-link {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .section-link:hover { color: #aaa; }
+
+    /* Section accent colors */
+    .sec-scores    { border-color: var(--color-today); }
+    .sec-scores .section-title { color: var(--color-today); }
+
+    .sec-commitments { border-color: var(--color-today); }
+    .sec-commitments .section-title { color: var(--color-today); }
+
+    .sec-engine    { border-color: var(--color-engine); }
+    .sec-engine .section-title { color: var(--color-engine); }
+
+    .sec-health    { border-color: var(--color-health); }
+    .sec-health .section-title { color: var(--color-health); }
+
+    .sec-truth     { border-color: var(--color-mirror); }
+    .sec-truth .section-title { color: var(--color-mirror); }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card-body {
+      padding: 18px;
+    }
+
+    /* ── Score cards ── */
+    .scores-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 560px) { .scores-row { grid-template-columns: 1fr; } }
+
+    .score-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .score-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .score-big {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .score-trend {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+    }
+    .score-trend .arrow { margin-right: 4px; }
+    .score-trend .up    { color: #34d399; }
+    .score-trend .down  { color: #e05555; }
+    .score-trend .flat  { color: #888; }
+    .progress-bar {
+      height: 4px;
+      background: #1e1e2e;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width .6s ease;
+    }
+    .score-sub {
+      font-size: 11px;
+      color: #444;
+      line-height: 1.5;
+    }
+    .score-checkin-btn {
+      margin-top: 12px;
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--color-mirror);
+      background: transparent;
+      color: #a78bfa;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .score-checkin-btn:hover { background: #1a1030; }
+
+    /* ── Commitment items ── */
+    .commitment-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid #111;
+    }
+    .commitment-item:last-child { border-bottom: none; }
+    .commit-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .commit-dot.today    { background: var(--color-today); }
+    .commit-dot.overdue  { background: #e05555; }
+    .commit-dot.upcoming { background: #444; }
+    .commit-body { flex: 1; min-width: 0; }
+    .commit-title { font-size: 13px; color: #d8d8e8; line-height: 1.4; }
+    .commit-status {
+      font-size: 11px;
+      margin-top: 3px;
+    }
+    .commit-status.today    { color: var(--color-today); }
+    .commit-status.overdue  { color: #e05555; }
+    .commit-status.upcoming { color: #555; }
+
+    /* ── Outreach items ── */
+    .outreach-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border-bottom: 1px solid #111;
+    }
+    .outreach-item:last-child { border-bottom: none; }
+    .outreach-body { flex: 1; min-width: 0; }
+    .outreach-who  { font-size: 13px; color: #d8d8e8; }
+    .outreach-msg  { font-size: 11px; color: #555; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .badge.sent     { background: #0a2018; color: #34d399; }
+    .badge.awaiting { background: #1a1a20; color: #888; }
+    .badge.pending  { background: #1a1a30; color: #7c85ff; }
+    .badge.executed { background: #0a2018; color: #34d399; }
+    .badge.failed   { background: #2a0a0a; color: #e05555; }
+
+    /* ── Health row ── */
+    .health-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 560px) { .health-row { grid-template-columns: 1fr; } }
+
+    .health-metric {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .health-metric .h-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .health-metric .h-value {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .health-metric .h-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .health-metric.green .h-value { color: #34d399; }
+    .health-metric.amber .h-value { color: #fbbf24; }
+    .health-metric.red   .h-value { color: #e05555; }
+
+    .emergency-banner {
+      background: #2a0a0a;
+      border: 1px solid #5a1a1a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: #e05555;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    /* ── Truth section ── */
+    .truth-text {
+      font-size: 16px;
+      font-style: italic;
+      line-height: 1.7;
+      color: #c8c0e0;
+      padding: 20px 22px;
+    }
+    .truth-actions {
+      padding: 0 22px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-heard {
+      padding: 6px 16px;
+      border-radius: 6px;
+      border: 1px solid #4a2a6a;
+      background: transparent;
+      color: #a78bfa;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .btn-heard:hover { background: #1a1030; }
+    .truth-ack {
+      font-size: 13px;
+      color: #34d399;
+    }
+
+    /* ── Quick actions ── */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 560px) { .quick-actions { grid-template-columns: 1fr 1fr; } }
+
+    .qa-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .15s;
+      color: var(--text-dim);
+      font-size: 13px;
+      font-family: inherit;
+    }
+    .qa-btn:hover { border-color: #3a3a5a; background: #131320; color: var(--text); }
+    .qa-btn .qa-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+    .qa-btn a { color: inherit; text-decoration: none; display: block; }
+
+    /* ── Inline modals ── */
+    .inline-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .inline-modal {
+      background: #111118;
+      border: 1px solid #2a2a3a;
+      border-radius: 14px;
+      padding: 28px;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+    }
+    .inline-modal h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: #555;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .emoji-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+    .emoji-chip {
+      font-size: 28px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all .15s;
+      background: #1a1a2a;
+    }
+    .emoji-chip:hover, .emoji-chip.selected { border-color: var(--color-mirror); background: #1a1030; }
+    .joy-slider {
+      width: 100%;
+      margin: 12px 0 6px;
+      accent-color: var(--color-mirror);
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #555;
+      margin-bottom: 16px;
+    }
+    .modal-input {
+      width: 100%;
+      background: #0d0d1a;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
+      color: var(--text);
+      padding: 10px 13px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 16px;
+    }
+    .modal-input:focus { border-color: var(--color-mirror); }
+    .btn-save {
+      width: 100%;
+      padding: 12px;
+      background: #1e1050;
+      border: 1px solid var(--color-mirror);
+      border-radius: 8px;
+      color: #a78bfa;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .15s;
+    }
+    .btn-save:hover { background: #251460; }
+
+    /* Commitment quick-add */
+    .commit-inline {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .commit-inline input {
+      flex: 1;
+      background: #0d0d1a;
+      border: 1px solid #2a2a3a;
+      border-radius: 8px;
+      color: var(--text);
+      padding: 9px 12px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+    }
+    .commit-inline input:focus { border-color: var(--color-today); }
+    .commit-inline button {
+      padding: 9px 16px;
+      background: #1e2060;
+      border: 1px solid var(--color-today);
+      border-radius: 8px;
+      color: #a0aaff;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* ── Bottom nav ── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0d0d14;
+      border-top: 1px solid #1e1e2e;
+      display: flex;
+      overflow-x: auto;
+      z-index: 100;
+    }
+    .bottom-nav::-webkit-scrollbar { display: none; }
+    .nav-item {
+      flex: 1;
+      min-width: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 4px 8px;
+      text-decoration: none;
+      gap: 4px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .nav-item:hover { background: #111118; }
+    .nav-item.active { background: #111118; }
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .nav-label {
+      font-size: 10px;
+      color: #444;
+      white-space: nowrap;
+    }
+    .nav-item.active .nav-label { color: #aaa; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 72px;
+      right: 20px;
+      background: #1e2060;
+      border: 1px solid #5b6af5;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 13px;
+      color: #a0aaff;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .25s;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #2a2a3a;
+      border-top-color: #5b6af5;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .placeholder { color: #333; font-style: italic; font-size: 13px; }
+    .empty-state { text-align: center; padding: 28px; color: #444; font-size: 13px; }
+
+    /* Section add btn */
+    .btn-add {
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid #2a2a3a;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .btn-add:hover { border-color: var(--color-today); color: #a0aaff; }
+  </style>
+</head>
+<body>
+<div class="root">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <div class="greeting" id="greeting">Good morning, <span id="user-name">Adam</span>.</div>
+      <div class="dateline" id="dateline"></div>
+    </div>
+    <button class="settings-btn" onclick="alert('Settings available in the app shell (lifeos-app.html)')">⚙</button>
+  </div>
+
+  <!-- Section 1: Scores -->
+  <div class="section sec-scores">
+    <div class="section-header">
+      <span class="section-title">Your State</span>
+    </div>
+    <div class="scores-row">
+      <!-- Integrity Score -->
+      <div class="score-card">
+        <div class="score-label">Integrity Score</div>
+        <div class="score-big" id="integrity-num" style="color:#5b6af5">—</div>
+        <div class="score-trend" id="integrity-trend"><span class="flat">→</span> Loading…</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="integrity-bar" style="background:#5b6af5;width:0%"></div>
+        </div>
+        <div class="score-sub">Commitments · Health · Inner Work · Generosity · Repair</div>
+      </div>
+      <!-- Joy Score -->
+      <div class="score-card">
+        <div class="score-label">Joy Score</div>
+        <div class="score-big" id="joy-num" style="color:#7c3aed">—</div>
+        <div class="score-trend" id="joy-trend"><span class="flat">→</span> 7-day average</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="joy-bar" style="background:#7c3aed;width:0%"></div>
+        </div>
+        <button class="score-checkin-btn" id="checkin-btn" onclick="openCheckin()">Check In Today</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Commitments -->
+  <div class="section sec-commitments">
+    <div class="section-header">
+      <span>
+        <span class="section-title">Your Word</span>
+        <span class="section-count" id="commit-count">…</span>
+      </span>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn-add" onclick="toggleCommitAdd()">+ Add</button>
+        <a class="section-link" href="lifeos-engine.html">See All →</a>
+      </div>
+    </div>
+    <div class="card">
+      <div id="commitments-list"><div class="empty-state"><span class="spinner"></span></div></div>
+      <div id="commit-add-row" style="display:none;padding:10px 18px 14px">
+        <div class="commit-inline">
+          <input id="commit-input" placeholder="Call contractor tomorrow morning…" onkeydown="if(event.key==='Enter')addCommitment()" />
+          <button onclick="addCommitment()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: The Engine -->
+  <div class="section sec-engine">
+    <div class="section-header">
+      <span class="section-title">Working for You</span>
+      <a class="section-link" href="lifeos-engine.html">View Engine →</a>
+    </div>
+    <div class="card">
+      <div id="engine-list"><div class="empty-state"><span class="spinner"></span></div></div>
+    </div>
+  </div>
+
+  <!-- Section 4: Health Pulse -->
+  <div class="section sec-health">
+    <div class="section-header">
+      <span class="section-title">Health Pulse</span>
+      <a class="section-link" href="lifeos-health.html">View Health →</a>
+    </div>
+    <div id="emergency-banner-wrap"></div>
+    <div class="health-row">
+      <div class="health-metric" id="sleep-card">
+        <div class="h-label">Sleep Last Night</div>
+        <div class="h-value" id="sleep-val">—</div>
+        <div class="h-sub" id="sleep-sub">loading…</div>
+      </div>
+      <div class="health-metric" id="hrv-card">
+        <div class="h-label">HRV</div>
+        <div class="h-value" id="hrv-val">—</div>
+        <div class="h-sub" id="hrv-sub">loading…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Today's Truth -->
+  <div class="section sec-truth">
+    <div class="section-header">
+      <span class="section-title">Worth Noticing</span>
+    </div>
+    <div class="card" id="truth-card">
+      <div class="truth-text" id="truth-text"><span class="spinner"></span></div>
+      <div class="truth-actions" id="truth-actions" style="display:none">
+        <button class="btn-heard" onclick="ackTruth()">Heard it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6: Quick Actions -->
+  <div class="quick-actions">
+    <button class="qa-btn" onclick="openCheckin()">
+      <span class="qa-icon">✨</span>
+      Check In
+    </button>
+    <button class="qa-btn" onclick="toggleCommitAdd();document.getElementById('commit-input').focus()">
+      <span class="qa-icon">＋</span>
+      Add Commitment
+    </button>
+    <button class="qa-btn" onclick="window.location.href='lifeos-coach.html?session=clarity'">
+      <span class="qa-icon">🧠</span>
+      Need Help
+    </button>
+    <button class="qa-btn" onclick="window.location.href='lifeos-engine.html'">
+      <span class="qa-icon">⚡</span>
+      Talk to Engine
+    </button>
+  </div>
+
+</div>
+
+<!-- Bottom Nav -->
+<nav class="bottom-nav">
+  <a class="nav-item active" href="lifeos-today.html">
+    <div class="nav-dot" style="background:var(--color-today)"></div>
+    <span class="nav-label">Today</span>
+  </a>
+  <a class="nav-item" href="lifeos-mirror.html">
+    <div class="nav-dot" style="background:var(--color-mirror)"></div>
+    <span class="nav-label">Mirror</span>
+  </a>
+  <a class="nav-item" href="lifeos-engine.html">
+    <div class="nav-dot" style="background:var(--color-engine)"></div>
+    <span class="nav-label">Engine</span>
+  </a>
+  <a class="nav-item" href="lifeos-health.html">
+    <div class="nav-dot" style="background:var(--color-health)"></div>
+    <span class="nav-label">Health</span>
+  </a>
+  <a class="nav-item" href="lifeos-inner.html">
+    <div class="nav-dot" style="background:var(--color-inner)"></div>
+    <span class="nav-label">Inner</span>
+  </a>
+  <a class="nav-item" href="lifeos-family.html">
+    <div class="nav-dot" style="background:var(--color-family)"></div>
+    <span class="nav-label">Family</span>
+  </a>
+  <a class="nav-item" href="lifeos-purpose.html">
+    <div class="nav-dot" style="background:var(--color-purpose)"></div>
+    <span class="nav-label">Purpose</span>
+  </a>
+  <a class="nav-item" href="lifeos-child.html">
+    <div class="nav-dot" style="background:var(--color-children)"></div>
+    <span class="nav-label">Kids</span>
+  </a>
+  <a class="nav-item" href="lifeos-mediation.html">
+    <div class="nav-dot" style="background:var(--color-mediation)"></div>
+    <span class="nav-label">Mediation</span>
+  </a>
+</nav>
+
+<!-- Joy Check-In Modal -->
+<div class="inline-modal-overlay" id="checkin-modal" style="display:none">
+  <div class="inline-modal">
+    <button class="modal-close" onclick="closeCheckin()">✕</button>
+    <h3>How are you right now?</h3>
+    <div class="emoji-row">
+      <span class="emoji-chip" data-val="1" onclick="selectEmoji(this)">😔</span>
+      <span class="emoji-chip" data-val="3" onclick="selectEmoji(this)">😐</span>
+      <span class="emoji-chip" data-val="5" onclick="selectEmoji(this)">🙂</span>
+      <span class="emoji-chip" data-val="7" onclick="selectEmoji(this)">😊</span>
+      <span class="emoji-chip" data-val="10" onclick="selectEmoji(this)">🌟</span>
+    </div>
+    <input type="range" class="joy-slider" id="joy-slider" min="1" max="10" value="5" oninput="syncSlider(this.value)">
+    <div class="slider-labels"><span>1</span><span id="slider-display">5</span><span>10</span></div>
+    <input class="modal-input" id="joy-note" placeholder="What's one thing today? (optional)" />
+    <button class="btn-save" onclick="saveCheckin()">Save Check-In</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── Constants ── */
+  const API  = '';
+  let KEY    = localStorage.getItem('commandKey') || '';
+  const USER = new URLSearchParams(location.search).get('user')
+               || localStorage.getItem('lifeos_user')
+               || 'adam';
+
+  const H = () => ({ 'Content-Type': 'application/json', 'x-command-key': KEY });
+
+  /* ── Init ── */
+  if (!KEY) {
+    const k = prompt('Enter your command key:');
+    if (k) { localStorage.setItem('commandKey', k); KEY = k; }
+  }
+
+  // Header
+  (function initHeader() {
+    const now  = new Date();
+    const hr   = now.getHours();
+    const greeting = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('greeting').innerHTML =
+      `${greeting}, <span id="user-name">${esc(USER.charAt(0).toUpperCase() + USER.slice(1))}</span>.`;
+    document.getElementById('dateline').textContent =
+      now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' }).toUpperCase();
+  })();
+
+  /* ── Load all in parallel ── */
+  Promise.allSettled([
+    loadScores(),
+    loadCommitments(),
+    loadEngine(),
+    loadHealth(),
+    loadTruth(),
+  ]);
+
+  /* ── Scores ── */
+  async function loadScores() {
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/mirror?user=${USER}`, { headers: H() });
+      const data = await res.json();
+      if (!data.ok) return;
+
+      const integrity = data.integrity_score ?? data.scores?.integrity ?? null;
+      const joy       = data.joy_score       ?? data.scores?.joy       ?? null;
+
+      if (integrity !== null) {
+        document.getElementById('integrity-num').textContent = integrity;
+        document.getElementById('integrity-bar').style.width = Math.min(integrity, 100) + '%';
+        const d = data.integrity_delta ?? 0;
+        setTrend('integrity-trend', d, `${d >= 0 ? '+ ' : ''}${d} this week`);
+      } else {
+        document.getElementById('integrity-num').textContent = '—';
+        document.getElementById('integrity-trend').innerHTML = '<span class="placeholder">No data yet</span>';
+      }
+
+      if (joy !== null) {
+        document.getElementById('joy-num').textContent = joy;
+        document.getElementById('joy-bar').style.width = (joy / 10 * 100) + '%';
+        const d = data.joy_delta ?? 0;
+        setTrend('joy-trend', d, `7-day average · ${d >= 0 ? '+' : ''}${d} this week`);
+        // Hide check-in button if already checked in today
+        if (data.checked_in_today) {
+          document.getElementById('checkin-btn').style.display = 'none';
+        }
+      } else {
+        document.getElementById('joy-num').textContent = '—';
+        document.getElementById('joy-trend').innerHTML = '<span class="placeholder">No check-ins yet</span>';
+      }
+    } catch (_) {
+      document.getElementById('integrity-num').textContent = '—';
+      document.getElementById('joy-num').textContent = '—';
+    }
+  }
+
+  function setTrend(elId, delta, label) {
+    const el  = document.getElementById(elId);
+    const cls = delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat';
+    const arr = delta > 0 ? '↑' : delta < 0 ? '↓' : '→';
+    el.innerHTML = `<span class="arrow ${cls}">${arr}</span> ${esc(label)}`;
+  }
+
+  /* ── Commitments ── */
+  async function loadCommitments() {
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/commitments?user=${USER}&status=open&limit=3`, { headers: H() });
+      const data = await res.json();
+      const el   = document.getElementById('commitments-list');
+      const badge = document.getElementById('commit-count');
+
+      if (!data.ok || !data.commitments?.length) {
+        el.innerHTML = '<div class="empty-state">No open commitments. All clear.</div>';
+        badge.textContent = '0';
+        return;
+      }
+
+      badge.textContent = data.total ?? data.commitments.length;
+      el.innerHTML = data.commitments.map(c => {
+        const { cls, label } = commitStatus(c);
+        return `
+          <div class="commitment-item">
+            <div class="commit-dot ${cls}"></div>
+            <div class="commit-body">
+              <div class="commit-title">${esc(c.title)}</div>
+              <div class="commit-status ${cls}">${label}</div>
+            </div>
+          </div>`;
+      }).join('');
+    } catch (_) {
+      document.getElementById('commitments-list').innerHTML =
+        '<div class="empty-state placeholder">Could not load commitments.</div>';
+    }
+  }
+
+  function commitStatus(c) {
+    if (!c.due_date) return { cls: 'upcoming', label: 'No due date' };
+    const due   = new Date(c.due_date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    due.setHours(0, 0, 0, 0);
+    const diff = (due - today) / 86400000;
+    if (diff < 0)  return { cls: 'overdue',  label: `Overdue ⚠` };
+    if (diff === 0) return { cls: 'today',   label: 'Due today' };
+    return { cls: 'upcoming', label: `Due in ${Math.round(diff)}d` };
+  }
+
+  function toggleCommitAdd() {
+    const row = document.getElementById('commit-add-row');
+    row.style.display = row.style.display === 'none' ? 'block' : 'none';
+  }
+
+  async function addCommitment() {
+    const inp = document.getElementById('commit-input');
+    const val = inp.value.trim();
+    if (!val) return;
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/commitments`, {
+        method: 'POST',
+        headers: H(),
+        body: JSON.stringify({ user: USER, title: val }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        toast('Commitment added');
+        inp.value = '';
+        document.getElementById('commit-add-row').style.display = 'none';
+        loadCommitments();
+      } else {
+        toast('Error: ' + (data.error || 'Unknown'));
+      }
+    } catch (_) {
+      toast('Could not save — no connection');
+    }
+  }
+
+  /* ── Engine ── */
+  async function loadEngine() {
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/engine/outreach?user=${USER}&limit=3`, { headers: H() });
+      const data = await res.json();
+      const el   = document.getElementById('engine-list');
+      if (!data.ok || !data.tasks?.length) {
+        el.innerHTML = '<div class="empty-state">No active outreach tasks.</div>';
+        return;
+      }
+      el.innerHTML = data.tasks.map(t => `
+        <div class="outreach-item">
+          <div class="outreach-body">
+            <div class="outreach-who">${esc(t.recipient_name || t.recipient_email || 'Contact')}</div>
+            <div class="outreach-msg">${esc((t.subject || t.body || '').substring(0, 80))}</div>
+          </div>
+          <span class="badge ${t.status}">${t.status === 'executed' ? 'sent ✓' : t.status}</span>
+        </div>`).join('');
+    } catch (_) {
+      document.getElementById('engine-list').innerHTML =
+        '<div class="empty-state placeholder">Could not load engine status.</div>';
+    }
+  }
+
+  /* ── Health ── */
+  async function loadHealth() {
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/health/latest?user=${USER}`, { headers: H() });
+      const data = await res.json();
+      if (!data.ok) return;
+
+      // Emergency banner
+      if (data.emergency_alert) {
+        document.getElementById('emergency-banner-wrap').innerHTML =
+          `<div class="emergency-banner">⚠ ${esc(data.emergency_alert)}</div>`;
+      }
+
+      // Sleep
+      const sleepHrs = data.sleep_hours;
+      if (sleepHrs != null) {
+        const card = document.getElementById('sleep-card');
+        const cls  = sleepHrs >= 7 ? 'green' : sleepHrs >= 6 ? 'amber' : 'red';
+        card.className = `health-metric ${cls}`;
+        document.getElementById('sleep-val').textContent = sleepHrs + 'h';
+        document.getElementById('sleep-sub').textContent = data.sleep_quality || 'Last night';
+      } else {
+        document.getElementById('sleep-val').textContent = '—';
+        document.getElementById('sleep-sub').textContent = 'No data';
+      }
+
+      // HRV
+      const hrv = data.hrv;
+      if (hrv != null) {
+        document.getElementById('hrv-val').textContent = hrv;
+        document.getElementById('hrv-sub').textContent = (data.hrv_trend ? data.hrv_trend + ' trend' : 'ms rmssd');
+      } else {
+        document.getElementById('hrv-val').textContent = '—';
+        document.getElementById('hrv-sub').textContent = 'No data';
+      }
+    } catch (_) {
+      document.getElementById('sleep-val').textContent = '—';
+      document.getElementById('hrv-val').textContent = '—';
+    }
+  }
+
+  /* ── Truth ── */
+  let truthId = null;
+  async function loadTruth() {
+    const textEl    = document.getElementById('truth-text');
+    const actionsEl = document.getElementById('truth-actions');
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/mirror?user=${USER}`, { headers: H() });
+      const data = await res.json();
+
+      const truth = data.unacknowledged_truth || data.daily_truth || data.be_statement || null;
+      if (!truth) {
+        textEl.textContent = 'No new truths pending. You\'re up to date.';
+        return;
+      }
+
+      textEl.textContent = truth.text || truth;
+      truthId = truth.id || null;
+      if (truthId) actionsEl.style.display = 'flex';
+      else actionsEl.style.display = 'none';
+    } catch (_) {
+      textEl.innerHTML = '<span class="placeholder">Could not load insight.</span>';
+    }
+  }
+
+  async function ackTruth() {
+    const card = document.getElementById('truth-card');
+    if (truthId) {
+      try {
+        await fetch(`${API}/api/v1/lifeos/truth/${truthId}/acknowledge`, {
+          method: 'POST', headers: H(),
+        });
+      } catch (_) {}
+    }
+    document.getElementById('truth-text').textContent = '✓  Acknowledged.';
+    document.getElementById('truth-actions').style.display = 'none';
+    card.style.opacity = '.5';
+    setTimeout(() => { card.style.transition = 'opacity .4s'; card.style.opacity = '1'; }, 1200);
+  }
+
+  /* ── Joy Check-In ── */
+  let selectedJoy = 5;
+
+  function openCheckin() {
+    document.getElementById('checkin-modal').style.display = 'flex';
+  }
+  function closeCheckin() {
+    document.getElementById('checkin-modal').style.display = 'none';
+  }
+  function selectEmoji(el) {
+    document.querySelectorAll('.emoji-chip').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedJoy = parseInt(el.dataset.val);
+    document.getElementById('joy-slider').value = selectedJoy;
+    document.getElementById('slider-display').textContent = selectedJoy;
+  }
+  function syncSlider(val) {
+    selectedJoy = parseInt(val);
+    document.getElementById('slider-display').textContent = val;
+    document.querySelectorAll('.emoji-chip').forEach(e => e.classList.remove('selected'));
+  }
+  async function saveCheckin() {
+    const note = document.getElementById('joy-note').value.trim();
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/joy/checkin`, {
+        method: 'POST',
+        headers: H(),
+        body: JSON.stringify({ user: USER, score: selectedJoy, note }),
+      });
+      const data = await res.json();
+      if (data.ok || res.ok) {
+        toast('Saved ✓');
+        closeCheckin();
+        document.getElementById('checkin-btn').style.display = 'none';
+        document.getElementById('joy-num').textContent = selectedJoy;
+        document.getElementById('joy-bar').style.width = (selectedJoy / 10 * 100) + '%';
+      } else {
+        toast('Error: ' + (data.error || 'Could not save'));
+      }
+    } catch (_) {
+      toast('Could not save — no connection');
+      closeCheckin();
+    }
+  }
+
+  /* ── Utilities ── */
+  function esc(s) {
+    return (s || '').toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+  function toast(msg) {
+    const e = document.getElementById('toast');
+    e.textContent = msg;
+    e.classList.add('show');
+    setTimeout(() => e.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>

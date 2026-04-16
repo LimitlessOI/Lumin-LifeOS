@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Memory & Healing — LifeOS</title>
+<style>
+  :root {
+    --bg:         #0f0f13;
+    --surface:    #17171f;
+    --surface2:   #1e1e28;
+    --border:     rgba(255,255,255,0.07);
+    --text:       #e8e8f0;
+    --muted:      #8888aa;
+    --healing:    #c084fc;   /* warm purple */
+    --grief:      #60a5fa;   /* soft blue */
+    --regression: #a78bfa;   /* violet */
+    --memory:     #f59e0b;   /* amber */
+    --completion: #f472b6;   /* rose */
+    --inner:      #34d399;   /* emerald */
+    --memorial:   #e2e8f0;   /* silver */
+    --danger:     #f87171;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .page { max-width: 820px; margin: 0 auto; padding: 24px 16px 80px; }
+
+  .page-header { margin-bottom: 32px; }
+  .page-header h1 { font-size: 1.5rem; font-weight: 600; color: var(--healing); }
+  .page-header p { font-size: 0.9rem; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+
+  /* ── Session type cards ── */
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .type-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .type-card:hover { border-color: var(--healing); }
+  .type-card.active { border-color: var(--healing); background: rgba(192,132,252,0.08); }
+  .type-card .accent { width: 3px; height: 100%; position: absolute; left: 0; top: 0; border-radius: 2px 0 0 2px; }
+  .type-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; padding-left: 4px; }
+  .type-card p  { font-size: 0.78rem; color: var(--muted); line-height: 1.5; padding-left: 4px; }
+
+  /* ── Tabs ── */
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .tab  { padding: 8px 16px; font-size: 0.85rem; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+  .tab.active { color: var(--healing); border-bottom-color: var(--healing); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
+  .card-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; }
+
+  /* ── Form elements ── */
+  label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; }
+  input, textarea, select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--healing); }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+  .form-group { margin-bottom: 14px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px; border-radius: 8px; font-size: 0.85rem;
+    font-weight: 500; cursor: pointer; border: none; transition: all 0.15s;
+  }
+  .btn-primary { background: var(--healing); color: #0f0f13; }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+  .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+  .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ── Consent framing banner ── */
+  .framing-banner {
+    background: rgba(192,132,252,0.06);
+    border: 1px solid rgba(192,132,252,0.25);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .framing-banner h3 { font-size: 0.95rem; color: var(--healing); margin-bottom: 12px; }
+  .framing-banner p  { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 8px; }
+  .framing-banner strong { color: var(--text); }
+  .consent-row { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+  .consent-row input[type=checkbox] { width: auto; }
+  .consent-row label { font-size: 0.85rem; color: var(--text); cursor: pointer; margin: 0; }
+
+  /* ── Chat interface ── */
+  .chat-wrapper { display: flex; flex-direction: column; height: 520px; }
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 0 16px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .msg { display: flex; gap: 10px; }
+  .msg.user { flex-direction: row-reverse; }
+  .msg-bubble {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .msg.user .msg-bubble {
+    background: rgba(192,132,252,0.15);
+    border: 1px solid rgba(192,132,252,0.2);
+    border-radius: 14px 4px 14px 14px;
+  }
+  .msg.ai .msg-bubble {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px 14px 14px 14px;
+  }
+  .msg-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .msg.user .msg-avatar { background: rgba(192,132,252,0.2); color: var(--healing); }
+  .msg.ai   .msg-avatar { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); }
+  .typing-dot { display: inline-block; animation: pulse 1.2s ease-in-out infinite; }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse { 0%,80%,100% { opacity:0.3 } 40% { opacity:1 } }
+  .chat-input-row { display: flex; gap: 10px; margin-top: 12px; }
+  .chat-input-row textarea { min-height: 48px; max-height: 120px; }
+
+  /* ── Session list ── */
+  .session-list { display: flex; flex-direction: column; gap: 10px; }
+  .session-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .session-item:hover { border-color: var(--healing); }
+  .session-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .session-meta { flex: 1; }
+  .session-meta h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 2px; }
+  .session-meta p  { font-size: 0.78rem; color: var(--muted); }
+  .badge {
+    padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: 500;
+    background: rgba(255,255,255,0.07); color: var(--muted);
+  }
+  .badge.open { background: rgba(52,211,153,0.1); color: #34d399; }
+  .badge.complete { background: rgba(192,132,252,0.1); color: var(--healing); }
+
+  /* ── Completion conversation ── */
+  .ai-voice-block {
+    background: rgba(192,132,252,0.05);
+    border: 1px solid rgba(192,132,252,0.2);
+    border-left: 3px solid var(--healing);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+  .ai-voice-block .label { font-size: 0.72rem; color: var(--healing); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .ai-voice-block p { font-size: 0.9rem; line-height: 1.8; color: var(--text); }
+  .ai-voice-block .disclaimer { font-size: 0.75rem; color: var(--muted); margin-top: 10px; font-style: italic; }
+
+  /* ── Memory palace ── */
+  .memory-timeline { display: flex; flex-direction: column; gap: 0; }
+  .memory-item {
+    display: flex; gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .memory-item:last-child { border-bottom: none; }
+  .memory-age {
+    flex-shrink: 0; width: 48px; height: 48px;
+    background: var(--surface2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; color: var(--memory); font-weight: 600;
+  }
+  .memory-content h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+  .memory-content p  { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .memory-place { font-size: 0.75rem; color: var(--memory); margin-bottom: 4px; }
+
+  /* ── Video cards ── */
+  .video-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .video-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+  .video-card .ethical { font-size: 0.75rem; color: var(--muted); font-style: italic; margin-top: 10px; line-height: 1.5; border-top: 1px solid var(--border); padding-top: 8px; }
+  video { width: 100%; border-radius: 8px; margin-top: 10px; }
+
+  /* ── Empty states ── */
+  .empty { text-align: center; padding: 48px 24px; color: var(--muted); }
+  .empty svg { margin-bottom: 12px; opacity: 0.3; }
+  .empty p { font-size: 0.88rem; line-height: 1.6; }
+
+  /* ── Notification ── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); padding: 12px 18px; border-radius: 10px;
+    font-size: 0.85rem; z-index: 1000;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.25s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .type-grid { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .msg-bubble { max-width: 88%; }
+    .chat-wrapper { height: 420px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="page-header">
+    <h1>Memory & Healing</h1>
+    <p>A quiet space for grief, regression, memory walks, and inner child work. Take your time.</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('new')">Begin</div>
+    <div class="tab" onclick="switchTab('sessions')">My Sessions</div>
+    <div class="tab" onclick="switchTab('completion')">Completion</div>
+    <div class="tab" onclick="switchTab('memories')">Memory Palace</div>
+    <div class="tab" onclick="switchTab('videos')">Healing Videos</div>
+  </div>
+
+  <!-- ── BEGIN ── -->
+  <div id="tab-new" class="panel active">
+
+    <div class="type-grid">
+      <div class="type-card" onclick="selectType('grief')" id="card-grief">
+        <div class="accent" style="background: var(--grief)"></div>
+        <h3>Grief Support</h3>
+        <p>Space to process loss, at your own pace, without anyone trying to fix it.</p>
+      </div>
+      <div class="type-card" onclick="selectType('regression')" id="card-regression">
+        <div class="accent" style="background: var(--regression)"></div>
+        <h3>Guided Regression</h3>
+        <p>Revisit a past experience with adult perspective and distance.</p>
+      </div>
+      <div class="type-card" onclick="selectType('memory_walk')" id="card-memory_walk">
+        <div class="accent" style="background: var(--memory)"></div>
+        <h3>Memory Walk</h3>
+        <p>Walk through a meaningful place — childhood home, a lost world — in rich sensory detail.</p>
+      </div>
+      <div class="type-card" onclick="selectType('completion')" id="card-completion">
+        <div class="accent" style="background: var(--completion)"></div>
+        <h3>Completion</h3>
+        <p>Say what was never said to someone who has passed.</p>
+      </div>
+      <div class="type-card" onclick="selectType('inner_child')" id="card-inner_child">
+        <div class="accent" style="background: var(--inner)"></div>
+        <h3>Inner Child</h3>
+        <p>Connect with and care for a younger version of yourself.</p>
+      </div>
+      <div class="type-card" onclick="selectType('memorial')" id="card-memorial">
+        <div class="accent" style="background: var(--memorial)"></div>
+        <h3>Memorial</h3>
+        <p>Build a living memorial — a portrait of who someone was, told through stories.</p>
+      </div>
+    </div>
+
+    <div id="start-form" style="display:none">
+      <div class="framing-banner">
+        <h3>A note before we begin</h3>
+        <p>This space is here to <strong>support</strong> your healing work — not to replace professional support.</p>
+        <p>If you're working through something significant, consider doing this alongside a licensed therapist, grief counselor, or mental health professional. This system can go deep alongside that work.</p>
+        <p>If you're in crisis right now: <strong>call or text 988</strong> (US Suicide & Crisis Lifeline) or your country's equivalent.</p>
+        <div class="consent-row">
+          <input type="checkbox" id="consent-check">
+          <label for="consent-check">I understand this supports but doesn't replace professional care, and I want to begin.</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label>Session title (optional)</label>
+          <input id="session-title" type="text" placeholder="e.g. Grieving Mom, My childhood home, Letter to Dad...">
+        </div>
+        <div class="form-group" id="subject-group">
+          <label id="subject-label">What or who are we working with?</label>
+          <input id="session-subject" type="text" placeholder="e.g. the loss of my mother, my childhood home, Dad">
+        </div>
+        <button class="btn btn-primary" onclick="startSession()" id="start-btn">Begin</button>
+      </div>
+    </div>
+
+    <!-- Active session chat -->
+    <div id="active-session" style="display:none">
+      <div class="card" style="margin-bottom:0; border-bottom-left-radius:0; border-bottom-right-radius:0; border-bottom:none;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+          <div>
+            <div id="active-session-title" style="font-weight:600; font-size:0.95rem;"></div>
+            <div id="active-session-type" style="font-size:0.75rem; color:var(--muted);"></div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="completeSession()">Complete session</button>
+        </div>
+        <div class="chat-wrapper">
+          <div class="chat-messages" id="chat-messages"></div>
+          <div class="chat-input-row">
+            <textarea id="chat-input" placeholder="Take your time..." onkeydown="chatKeydown(event)" rows="2"></textarea>
+            <button class="btn btn-primary" onclick="sendMessage()" id="send-btn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session complete summary -->
+    <div id="session-complete" style="display:none">
+      <div class="card">
+        <h3>Session complete</h3>
+        <div id="complete-summary" style="font-size:0.9rem; line-height:1.7; color:var(--muted); margin-bottom:16px;"></div>
+        <div id="complete-insight" style="font-size:0.88rem; color:var(--healing); font-style:italic; margin-bottom:16px;"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="resetToNew()">Begin another session</button>
+          <button class="btn btn-ghost" onclick="switchTab('sessions')">View all sessions</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── SESSIONS ── -->
+  <div id="tab-sessions" class="panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div style="font-size:0.85rem; color:var(--muted);">Your healing sessions</div>
+      <select id="type-filter" style="width:auto;" onchange="loadSessions()">
+        <option value="">All types</option>
+        <option value="grief">Grief</option>
+        <option value="regression">Regression</option>
+        <option value="memory_walk">Memory Walk</option>
+        <option value="completion">Completion</option>
+        <option value="inner_child">Inner Child</option>
+        <option value="memorial">Memorial</option>
+      </select>
+    </div>
+    <div id="sessions-list" class="session-list">
+      <div class="empty"><p>Loading...</p></div>
+    </div>
+  </div>
+
+  <!-- ── COMPLETION ── -->
+  <div id="tab-completion" class="panel">
+    <div class="card">
+      <h3>Say what was never said</h3>
+      <p style="font-size:0.82rem; color:var(--muted); margin-bottom:16px; line-height:1.6;">
+        A completion conversation gives you the chance to say what you never got to say to someone who has passed.
+        The AI will write a response in their voice — clearly labeled as AI, not actual communication — based entirely on what you share about who they were.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Their name</label>
+          <input id="comp-name" type="text" placeholder="e.g. Mom, David, Grandma Rose">
+        </div>
+        <div class="form-group">
+          <label>Your relationship</label>
+          <input id="comp-rel" type="text" placeholder="e.g. mother, friend, mentor">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>What happened (brief context)</label>
+        <textarea id="comp-context" rows="2" placeholder="e.g. She passed 3 years ago. We left things unresolved after a long argument."></textarea>
+      </div>
+      <div class="form-group">
+        <label>What you want to say</label>
+        <textarea id="comp-unsaid" rows="4" placeholder="Say it here. Take your time. No one else will read this."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="createCompletion()" id="comp-btn">Create completion conversation</button>
+    </div>
+
+    <div id="comp-result" style="display:none">
+      <div class="ai-voice-block">
+        <div class="label">What they might have wanted you to know</div>
+        <p id="comp-ai-response"></p>
+        <div class="disclaimer" id="comp-disclaimer"></div>
+      </div>
+      <div class="card">
+        <h3>Your reply (optional)</h3>
+        <textarea id="comp-reply" rows="3" placeholder="Write back if you want to..."></textarea>
+        <div style="display:flex; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="submitCompletionReply()">Submit reply</button>
+          <label style="display:flex; align-items:center; gap:6px; font-size:0.82rem; cursor:pointer; margin:0;">
+            <input type="checkbox" id="comp-felt-complete" style="width:auto;">
+            This felt complete
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MEMORY PALACE ── -->
+  <div id="tab-memories" class="panel">
+    <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="showAddMemory()">+ Add memory</button>
+    </div>
+
+    <div id="add-memory-form" style="display:none" class="card">
+      <h3>Anchor a memory</h3>
+      <div class="form-group">
+        <label>Memory title</label>
+        <input id="mem-title" type="text" placeholder="e.g. Sunday mornings at Grandma's house">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Place</label>
+          <input id="mem-place" type="text" placeholder="e.g. Grandma's kitchen">
+        </div>
+        <div class="form-group">
+          <label>Approximate age</label>
+          <input id="mem-age" type="number" placeholder="7">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>The memory</label>
+        <textarea id="mem-text" rows="3" placeholder="Describe it..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>What you felt / why it matters</label>
+        <input id="mem-significance" type="text" placeholder="e.g. The safest I ever felt">
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary btn-sm" onclick="saveMemory()">Save</button>
+        <button class="btn btn-ghost btn-sm" onclick="hideAddMemory()">Cancel</button>
+      </div>
+    </div>
+
+    <div id="memories-list" class="memory-timeline">
+      <div class="empty"><p>Loading...</p></div>
+    </div>
+  </div>
+
+  <!-- ── VIDEOS ── -->
+  <div id="tab-videos" class="panel">
+    <div class="card">
+      <h3>Queue a healing video</h3>
+      <p style="font-size:0.82rem; color:var(--muted); margin-bottom:14px; line-height:1.6;">
+        AI-generated visuals for grief, memorial, memory reconstruction, or inner healing work.
+        All videos carry an ethical framing — they are clearly AI-generated, not recordings.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Video type</label>
+          <select id="vid-type">
+            <option value="memorial">Memorial</option>
+            <option value="memory_reconstruction">Memory Reconstruction</option>
+            <option value="inner_child">Inner Child</option>
+            <option value="regression">Regression</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input id="vid-subject" type="text" placeholder="e.g. My mother, My childhood home">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Additional context (helps AI build the prompt)</label>
+        <textarea id="vid-context" rows="2" placeholder="e.g. She always wore yellow. The house had a red door and a big oak tree out front."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="queueVideo()" id="vid-btn">Queue video</button>
+    </div>
+
+    <div id="videos-list"></div>
+  </div>
+
+</div><!-- /page -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api/v1/lifeos/healing';
+const KEY = localStorage.getItem('commandKey') || prompt('Enter your command key:') || '';
+if (KEY) localStorage.setItem('commandKey', KEY);
+const USER = localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
+if (USER) localStorage.setItem('lifeos_user', USER);
+
+function headers() {
+  return { 'Content-Type': 'application/json', 'x-command-key': KEY };
+}
+
+function toast(msg, dur = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    const names = ['new','sessions','completion','memories','videos'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  if (name === 'sessions') loadSessions();
+  if (name === 'memories') loadMemories();
+  if (name === 'videos')   loadVideos();
+}
+
+// ── Session type selection ────────────────────────────────────────────────
+let selectedType = null;
+const TYPE_LABELS = {
+  grief: 'Grief Support', regression: 'Guided Regression',
+  memory_walk: 'Memory Walk', completion: 'Completion',
+  inner_child: 'Inner Child Work', memorial: 'Memorial',
+};
+const SUBJECT_LABELS = {
+  grief: 'Who or what did you lose?',
+  regression: 'What experience are we revisiting?',
+  memory_walk: 'Where are we going? (e.g. my childhood home, Grandma\'s house)',
+  completion: 'Who do you want to speak to?',
+  inner_child: 'What age or experience do you want to connect with?',
+  memorial: 'Who are we honoring?',
+};
+
+function selectType(type) {
+  selectedType = type;
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('active'));
+  document.getElementById(`card-${type}`).classList.add('active');
+  document.getElementById('subject-label').textContent = SUBJECT_LABELS[type] || 'What or who are we working with?';
+  document.getElementById('start-form').style.display = 'block';
+  document.getElementById('start-form').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── Start session ─────────────────────────────────────────────────────────
+let activeSessionId = null;
+
+async function startSession() {
+  if (!selectedType) return toast('Pick a session type first');
+  if (!document.getElementById('consent-check').checked) return toast('Please read and accept the note above');
+
+  const title = document.getElementById('session-title').value.trim();
+  const subject = document.getElementById('session-subject').value.trim();
+
+  const btn = document.getElementById('start-btn');
+  btn.disabled = true; btn.textContent = 'Opening space...';
+
+  try {
+    const res = await fetch(`${API}/sessions?user=${USER}`, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ sessionType: selectedType, title, subject, personName: subject, consent: true }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    activeSessionId = data.session.id;
+    document.getElementById('start-form').style.display = 'none';
+    document.getElementById('active-session').style.display = 'block';
+    document.getElementById('active-session-title').textContent = data.session.title;
+    document.getElementById('active-session-type').textContent = TYPE_LABELS[selectedType];
+
+    appendMessage('ai', data.openingMessage);
+  } catch (err) {
+    toast('Error: ' + err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Begin';
+  }
+}
+
+// ── Chat ──────────────────────────────────────────────────────────────────
+function appendMessage(role, text) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `
+    <div class="msg-avatar">${role === 'user' ? 'You' : '♡'}</div>
+    <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function appendTyping() {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg ai'; div.id = 'typing-indicator';
+  div.innerHTML = `<div class="msg-avatar">♡</div><div class="msg-bubble"><span class="typing-dot">•</span> <span class="typing-dot">•</span> <span class="typing-dot">•</span></div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping() {
+  document.getElementById('typing-indicator')?.remove();
+}
+
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const message = input.value.trim();
+  if (!message || !activeSessionId) return;
+
+  input.value = '';
+  appendMessage('user', message);
+  appendTyping();
+
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API}/sessions/${activeSessionId}/message?user=${USER}`, {
+      method: 'POST', headers: headers(),
+      body: JSON.stringify({ message }),
+    });
+    const data = await res.json();
+    removeTyping();
+    if (!res.ok) throw new Error(data.error);
+    appendMessage('ai', data.response);
+  } catch (err) {
+    removeTyping();
+    appendMessage('ai', 'I\'m here. Take your time.');
+  } finally {
+    btn.disabled = false;
+    input.focus();
+  }
+}
+
+async function completeSession() {
+  if (!activeSessionId) return;
+  try {
+    const res = await fetch(`${API}/sessions/${activeSessionId}/complete?user=${USER}`, {
+      method: 'POST', headers: headers(), body: JSON.stringify({}),
+    });
+    const data = await res.json();
+    document.getElementById('active-session').style.display = 'none';
+    document.getElementById('session-complete').style.display = 'block';
+    document.getElementById('complete-summary').textContent = data.summary || 'Session complete.';
+    document.getElementById('complete-insight').textContent = data.insights?.key_insight ? `"${data.insights.key_insight}"` : '';
+    activeSessionId = null;
+  } catch (err) {
+    toast('Error: ' + err.message);
+  }
+}
+
+function resetToNew() {
+  document.getElementById('session-complete').style.display = 'none';
+  document.getElementById('active-session').style.display = 'none';
+  document.getElementById('chat-messages').innerHTML = '';
+  document.getElementById('session-title').value = '';
+  document.getElementById('session-subject').value = '';
+  document.getElementById('consent-check').checked = false;
+  selectedType = null;
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('start-form').style.display = 'none';
+}
+
+// ── Sessions list ─────────────────────────────────────────────────────────
+const TYPE_COLORS = {
+  grief: 'var(--grief)', regression: 'var(--regression)', memory_walk: 'var(--memory)',
+  completion: 'var(--completion)', inner_child: 'var(--inner)', memorial: 'var(--memorial)',
+};
+
+async function loadSessions() {
+  const filter = document.getElementById('type-filter')?.value ?? '';
+  const url = `${API}/sessions?user=${USER}${filter ? '&type=' + filter : ''}`;
+  const container = document.getElementById('sessions-list');
+  container.innerHTML = '<div class="empty"><p>Loading...</p></div>';
+
+  try {
+    const res = await fetch(url, { headers: headers() });
+    const data = await res.json();
+    if (!data.sessions?.length) {
+      container.innerHTML = '<div class="empty"><p>No sessions yet. Begin one in the "Begin" tab.</p></div>';
+      return;
+    }
+    container.innerHTML = data.sessions.map(s => `
+      <div class="session-item" onclick="openSession(${s.id})">
+        <div class="session-dot" style="background: ${TYPE_COLORS[s.session_type] || 'var(--healing)'}"></div>
+        <div class="session-meta">
+          <h4>${s.title || TYPE_LABELS[s.session_type] || s.session_type}</h4>
+          <p>${s.summary ? s.summary.slice(0, 90) + (s.summary.length > 90 ? '...' : '') : new Date(s.created_at).toLocaleDateString()}</p>
+        </div>
+        <span class="badge ${s.status}">${s.status}</span>
+      </div>
+    `).join('');
+  } catch (err) {
+    container.innerHTML = `<div class="empty"><p>Error: ${err.message}</p></div>`;
+  }
+}
+
+function openSession(id) {
+  activeSessionId = id;
+  switchTab('new');
+  document.getElementById('start-form').style.display = 'none';
+  document.getElementById('session-complete').style.display = 'none';
+  const chat = document.getElementById('active-session');
+  chat.style.display = 'block';
+  document.getElementById('chat-messages').innerHTML = '';
+  document.getElementById('active-session-title').textContent = 'Resuming session...';
+  document.getElementById('active-session-type').textContent = '';
+
+  fetch(`${API}/sessions/${id}?user=${USER}`, { headers: headers() })
+    .then(r => r.json())
+    .then(data => {
+      const s = data.session;
+      document.getElementById('active-session-title').textContent = s.title || 'Session';
+      document.getElementById('active-session-type').textContent = TYPE_LABELS[s.session_type] || '';
+      (s.conversation || []).forEach(t => appendMessage(t.role === 'user' ? 'user' : 'ai', t.content));
+    });
+}
+
+// ── Completion ────────────────────────────────────────────────────────────
+let completionId = null;
+
+async function createCompletion() {
+  const personName = document.getElementById('comp-name').value.trim();
+  const relationship = document.getElementById('comp-rel').value.trim();
+  const whatHappened = document.getElementById('comp-context').value.trim();
+  const unsaidThings = document.getElementById('comp-unsaid').value.trim();
+  if (!personName || !unsaidThings) return toast('Name and what you want to say are required');
+
+  const btn = document.getElementById('comp-btn');
+  btn.disabled = true; btn.textContent = 'Creating...';
+
+  try {
+    const res = await fetch(`${API}/completion?user=${USER}`, {
+      method: 'POST', headers: headers(),
+      body: JSON.stringify({ personName, relationship, whatHappened, unsaidThings }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    completionId = data.conversation.id;
+    document.getElementById('comp-result').style.display = 'block';
+    document.getElementById('comp-ai-response').textContent = data.conversation.ai_response ?? '';
+    document.getElementById('comp-disclaimer').textContent = '';
+    document.getElementById('comp-result').scrollIntoView({ behavior: 'smooth' });
+  } catch (err) {
+    toast('Error: ' + err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Create completion conversation';
+  }
+}
+
+async function submitCompletionReply() {
+  if (!completionId) return;
+  const reply = document.getElementById('comp-reply').value.trim();
+  const feltComplete = document.getElementById('comp-felt-complete').checked;
+  if (!reply) return toast('Write a reply first');
+
+  try {
+    await fetch(`${API}/completion/${completionId}/reply?user=${USER}`, {
+      method: 'POST', headers: headers(),
+      body: JSON.stringify({ reply, feltComplete }),
+    });
+    toast(feltComplete ? 'Marked as complete. Take care of yourself.' : 'Reply saved.');
+  } catch (err) {
+    toast('Error: ' + err.message);
+  }
+}
+
+// ── Memory palace ─────────────────────────────────────────────────────────
+function showAddMemory() { document.getElementById('add-memory-form').style.display = 'block'; }
+function hideAddMemory() { document.getElementById('add-memory-form').style.display = 'none'; }
+
+async function saveMemory() {
+  const memoryTitle = document.getElementById('mem-title').value.trim();
+  if (!memoryTitle) return toast('Memory title required');
+
+  try {
+    const res = await fetch(`${API}/memories?user=${USER}`, {
+      method: 'POST', headers: headers(),
+      body: JSON.stringify({
+        memoryTitle,
+        place: document.getElementById('mem-place').value.trim() || undefined,
+        approximateAge: parseInt(document.getElementById('mem-age').value) || undefined,
+        memoryText: document.getElementById('mem-text').value.trim() || undefined,
+        significance: document.getElementById('mem-significance').value.trim() || undefined,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    toast('Memory saved');
+    hideAddMemory();
+    loadMemories();
+  } catch (err) {
+    toast('Error: ' + err.message);
+  }
+}
+
+async function loadMemories() {
+  const container = document.getElementById('memories-list');
+  container.innerHTML = '<div class="empty"><p>Loading...</p></div>';
+  try {
+    const res = await fetch(`${API}/memories?user=${USER}`, { headers: headers() });
+    const data = await res.json();
+    if (!data.memories?.length) {
+      container.innerHTML = '<div class="empty"><p>Your memory palace is empty. Add a first memory above.</p></div>';
+      return;
+    }
+    container.innerHTML = data.memories.map(m => `
+      <div class="memory-item">
+        <div class="memory-age">${m.approximate_age ? 'Age ' + m.approximate_age : '?'}</div>
+        <div class="memory-content">
+          ${m.place ? `<div class="memory-place">${m.place}</div>` : ''}
+          <h4>${m.memory_title}</h4>
+          ${m.memory_text ? `<p>${m.memory_text}</p>` : ''}
+          ${m.significance ? `<p style="color:var(--healing); font-style:italic; font-size:0.8rem; margin-top:4px;">"${m.significance}"</p>` : ''}
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    container.innerHTML = `<div class="empty"><p>Error: ${err.message}</p></div>`;
+  }
+}
+
+// ── Healing videos ────────────────────────────────────────────────────────
+async function queueVideo() {
+  const videoType = document.getElementById('vid-type').value;
+  const subject = document.getElementById('vid-subject').value.trim();
+  const additionalContext = document.getElementById('vid-context').value.trim();
+  if (!subject) return toast('Subject required');
+
+  const btn = document.getElementById('vid-btn');
+  btn.disabled = true; btn.textContent = 'Queueing...';
+
+  try {
+    const res = await fetch(`${API}/videos?user=${USER}`, {
+      method: 'POST', headers: headers(),
+      body: JSON.stringify({ videoType, subject, additionalContext }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    toast('Video queued. Check the Videos tab for status.');
+    loadVideos();
+  } catch (err) {
+    toast('Error: ' + err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Queue video';
+  }
+}
+
+const VID_STATUS_LABELS = { queued: 'Queued', processing: 'Generating...', completed: 'Ready', failed: 'Failed' };
+const VID_TYPE_LABELS = { memorial: 'Memorial', memory_reconstruction: 'Memory Reconstruction', inner_child: 'Inner Child', regression: 'Regression' };
+
+async function loadVideos() {
+  const container = document.getElementById('videos-list');
+  container.innerHTML = '<div class="empty"><p>Loading...</p></div>';
+  try {
+    const res = await fetch(`${API}/videos?user=${USER}`, { headers: headers() });
+    const data = await res.json();
+    if (!data.videos?.length) {
+      container.innerHTML = '<div class="empty"><p>No healing videos yet.</p></div>';
+      return;
+    }
+    container.innerHTML = data.videos.map(v => `
+      <div class="video-card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h4>${VID_TYPE_LABELS[v.video_type] || v.video_type}</h4>
+          <span class="badge">${VID_STATUS_LABELS[v.status] || v.status}</span>
+        </div>
+        ${v.script ? `<p style="font-size:0.8rem; color:var(--muted); margin-top:6px; line-height:1.6;">${v.script.slice(0, 120)}...</p>` : ''}
+        ${v.video_url ? `<video controls src="${v.video_url}"></video>` : ''}
+        ${v.ethical_framing ? `<div class="ethical">${v.ethical_framing}</div>` : ''}
+      </div>
+    `).join('');
+  } catch (err) {
+    container.innerHTML = `<div class="empty"><p>Error: ${err.message}</p></div>`;
+  }
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────
+if (!KEY) {
+  const k = prompt('Command key:');
+  if (k) localStorage.setItem('commandKey', k);
+  location.reload();
+}
+</script>
+</body>
+</html>

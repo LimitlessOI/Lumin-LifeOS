@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Health Intelligence — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0f;
+      color: #e8e8f0;
+      min-height: 100vh;
+    }
+
+    .page-root {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+    }
+    .page-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #e8e8f0;
+    }
+    .page-header .subtitle {
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+    }
+    .user-switcher {
+      display: flex;
+      gap: 8px;
+    }
+    .user-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #333;
+      background: transparent;
+      color: #888;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .user-btn.active {
+      background: #1a1a2e;
+      border-color: #5b6af5;
+      color: #a0aaff;
+    }
+    .user-btn:hover:not(.active) {
+      border-color: #555;
+      color: #ccc;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #111118;
+      border: 1px solid #1e1e2e;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #333;
+      border-top-color: #5b6af5;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text {
+      color: #555;
+      font-size: 14px;
+    }
+
+    /* ── Error state ── */
+    .section-error {
+      color: #ff6b6b;
+      font-size: 13px;
+      padding: 10px 0;
+    }
+
+    /* ── Today's snapshot chips ── */
+    .snapshot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .snapshot-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .metric-chip {
+      background: #16161f;
+      border: 1px solid #1e1e2e;
+      border-radius: 10px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .metric-chip .chip-label {
+      font-size: 11px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 6px;
+    }
+    .metric-chip .chip-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: #a0aaff;
+    }
+    .metric-chip .chip-unit {
+      font-size: 11px;
+      color: #555;
+      margin-top: 2px;
+    }
+    .chip-value.no-data {
+      font-size: 18px;
+      color: #444;
+    }
+
+    /* ── Correlations ── */
+    .correlation-card {
+      background: #16161f;
+      border: 1px solid #1e1e2e;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .correlation-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .factor-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a0aaff;
+      background: #1a1a2e;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .direction-arrow {
+      font-size: 16px;
+    }
+    .direction-arrow.positive { color: #4ade80; }
+    .direction-arrow.negative { color: #f87171; }
+    .direction-arrow.none     { color: #666; }
+    .strength-bar-wrap {
+      height: 4px;
+      background: #1e1e2e;
+      border-radius: 2px;
+      margin: 8px 0;
+    }
+    .strength-bar-fill {
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #5b6af5, #a0aaff);
+    }
+    .correlation-observation {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.5;
+    }
+    .empty-state {
+      color: #555;
+      font-size: 13px;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    /* ── Timeline table ── */
+    .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .timeline-table th {
+      text-align: left;
+      color: #555;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 0 8px 10px;
+      border-bottom: 1px solid #1e1e2e;
+    }
+    .timeline-table td {
+      padding: 8px;
+      color: #c8c8d8;
+      border-bottom: 1px solid #131320;
+    }
+    .timeline-table tr:last-child td {
+      border-bottom: none;
+    }
+    .timeline-table td.na {
+      color: #444;
+    }
+
+    /* ── Medical brief ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid #5b6af5;
+      background: #1a1a2e;
+      color: #a0aaff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn:hover {
+      background: #23233a;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-danger {
+      border-color: #f87171;
+      background: #1f1515;
+      color: #f87171;
+    }
+    .btn-danger:hover {
+      background: #2a1a1a;
+    }
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    /* ── Modal ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal {
+      background: #111118;
+      border: 1px solid #1e1e2e;
+      border-radius: 14px;
+      padding: 28px;
+      max-width: 680px;
+      width: calc(100% - 40px);
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e8e8f0;
+    }
+    .modal-textarea {
+      background: #0a0a0f;
+      border: 1px solid #1e1e2e;
+      border-radius: 8px;
+      color: #c8c8d8;
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 14px;
+      flex: 1;
+      min-height: 300px;
+      resize: vertical;
+      font-family: inherit;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    /* ── Emergency contacts ── */
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #131320;
+    }
+    .contact-row:last-child {
+      border-bottom: none;
+    }
+    .contact-info {
+      flex: 1;
+    }
+    .contact-name {
+      font-size: 14px;
+      color: #e8e8f0;
+      font-weight: 500;
+    }
+    .contact-details {
+      font-size: 12px;
+      color: #666;
+      margin-top: 2px;
+    }
+    .contact-priority {
+      font-size: 11px;
+      color: #5b6af5;
+      background: #1a1a2e;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* ── Add contact form ── */
+    .add-form {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #1e1e2e;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .form-field label {
+      font-size: 11px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input {
+      background: #0a0a0f;
+      border: 1px solid #1e1e2e;
+      border-radius: 6px;
+      color: #e8e8f0;
+      padding: 7px 10px;
+      font-size: 13px;
+      font-family: inherit;
+      min-width: 120px;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #5b6af5;
+    }
+    select.form-input {
+      cursor: pointer;
+    }
+
+    /* ── Active events banner ── */
+    .event-banner {
+      background: #1f1515;
+      border: 1px solid #f87171;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .event-banner-info .event-type {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f87171;
+    }
+    .event-banner-info .event-detail {
+      font-size: 12px;
+      color: #888;
+      margin-top: 3px;
+    }
+  </style>
+</head>
+<body>
+<div class="page-root">
+
+  <!-- ── Header ── -->
+  <div class="page-header">
+    <div>
+      <h1>Health Intelligence</h1>
+      <div class="subtitle" id="lastRefreshed">Loading…</div>
+    </div>
+    <div class="user-switcher">
+      <button class="user-btn active" id="btn-adam" onclick="switchUser('adam')">Adam</button>
+      <button class="user-btn" id="btn-sherry" onclick="switchUser('sherry')">Sherry</button>
+    </div>
+  </div>
+
+  <!-- ── Today's Snapshot ── -->
+  <div class="card">
+    <div class="card-title">Today's Snapshot</div>
+    <div id="snapshotContainer">
+      <div class="loading-text"><span class="spinner"></span>Loading metrics…</div>
+    </div>
+  </div>
+
+  <!-- ── Active Emergency Events ── -->
+  <div class="card" id="emergencyCard" style="display:none">
+    <div class="card-title">Active Alerts</div>
+    <div id="emergencyContainer"></div>
+  </div>
+
+  <!-- ── Health Correlations ── -->
+  <div class="card">
+    <div class="card-title">Health Correlations</div>
+    <div id="correlationsContainer">
+      <div class="loading-text"><span class="spinner"></span>Loading patterns…</div>
+    </div>
+    <div style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button class="btn btn-sm" onclick="analyzePatterns()">Run Analysis Now</button>
+    </div>
+  </div>
+
+  <!-- ── 7-Day Timeline ── -->
+  <div class="card">
+    <div class="card-title">7-Day Timeline</div>
+    <div id="timelineContainer">
+      <div class="loading-text"><span class="spinner"></span>Loading timeline…</div>
+    </div>
+  </div>
+
+  <!-- ── Medical Brief ── -->
+  <div class="card">
+    <div class="card-title">Pre-Appointment Brief</div>
+    <p style="font-size:13px;color:#777;margin-bottom:14px;">Generate a one-page summary to share with your doctor, including sleep, cardiovascular, medications, and key patterns from the last 90 days.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <select class="form-input" id="appointmentType" style="min-width:160px;">
+        <option value="general">General Checkup</option>
+        <option value="cardiology">Cardiology</option>
+        <option value="sleep">Sleep Specialist</option>
+        <option value="endocrinology">Endocrinology</option>
+        <option value="mental_health">Mental Health</option>
+        <option value="other">Other</option>
+      </select>
+      <button class="btn" id="briefBtn" onclick="generateBrief()">Generate pre-appointment brief</button>
+    </div>
+  </div>
+
+  <!-- ── Emergency Contacts ── -->
+  <div class="card">
+    <div class="card-title">Emergency Contacts</div>
+    <div id="contactsContainer">
+      <div class="loading-text"><span class="spinner"></span>Loading contacts…</div>
+    </div>
+    <!-- Add contact form -->
+    <div class="add-form">
+      <div class="form-field">
+        <label>Name</label>
+        <input class="form-input" id="contactName" placeholder="Jane Smith" />
+      </div>
+      <div class="form-field">
+        <label>Phone</label>
+        <input class="form-input" id="contactPhone" placeholder="+1 555 0100" />
+      </div>
+      <div class="form-field">
+        <label>Relationship</label>
+        <select class="form-input" id="contactRelationship">
+          <option value="spouse">Spouse</option>
+          <option value="family">Family</option>
+          <option value="friend">Friend</option>
+          <option value="medical">Medical</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Priority</label>
+        <input class="form-input" id="contactPriority" type="number" min="1" max="10" value="1" style="width:70px;" />
+      </div>
+      <button class="btn btn-sm" onclick="addContact()" style="align-self:flex-end;">Add Contact</button>
+    </div>
+  </div>
+
+</div><!-- /page-root -->
+
+<!-- ── Medical Brief Modal ── -->
+<div class="modal-backdrop" id="briefModal">
+  <div class="modal">
+    <div class="modal-title">Pre-Appointment Medical Brief</div>
+    <textarea class="modal-textarea" id="briefText" readonly placeholder="Generating brief…"></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-sm" onclick="copyBrief()">Copy to clipboard</button>
+      <button class="btn btn-sm btn-danger" onclick="closeBriefModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Config ───────────────────────────────────────────────────────────────────
+  const API = '/api/v1/lifeos/health';
+  let currentUser = 'adam';
+
+  function getKey() {
+    return localStorage.getItem('commandKey') ?? '';
+  }
+
+  function authHeaders() {
+    return { 'Content-Type': 'application/json', 'x-command-key': getKey() };
+  }
+
+  // ── User switcher ─────────────────────────────────────────────────────────────
+  function switchUser(user) {
+    currentUser = user;
+    document.getElementById('btn-adam').classList.toggle('active', user === 'adam');
+    document.getElementById('btn-sherry').classList.toggle('active', user === 'sherry');
+    loadAll();
+  }
+
+  // ── Load all panels ───────────────────────────────────────────────────────────
+  async function loadAll() {
+    document.getElementById('lastRefreshed').textContent = 'Refreshing…';
+
+    const [snapshotRes, correlationsRes, timelineRes, contactsRes, emergencyRes] = await Promise.allSettled([
+      fetchSnapshot(),
+      fetchCorrelations(),
+      fetchTimeline(),
+      fetchContacts(),
+      fetchEmergency(),
+    ]);
+
+    document.getElementById('lastRefreshed').textContent =
+      'Last updated: ' + new Date().toLocaleTimeString();
+  }
+
+  // ── Snapshot ─────────────────────────────────────────────────────────────────
+  async function fetchSnapshot() {
+    const el = document.getElementById('snapshotContainer');
+    try {
+      const resp = await fetch(
+        `${API}/wearable/latest?user=${currentUser}&metrics=heart_rate,hrv,sleep_hours,energy_score&days=1`,
+        { headers: authHeaders() }
+      );
+      const json = await resp.json();
+      if (!json.ok) throw new Error(json.error ?? 'API error');
+      renderSnapshot(json.data);
+    } catch (err) {
+      el.innerHTML = `<div class="section-error">Failed to load snapshot: ${err.message}</div>`;
+    }
+  }
+
+  function renderSnapshot(data) {
+    const metrics = [
+      { key: 'heart_rate', label: 'Heart Rate', unit: 'bpm' },
+      { key: 'hrv', label: 'HRV', unit: 'ms' },
+      { key: 'sleep_hours', label: 'Sleep', unit: 'hrs' },
+      { key: 'energy_score', label: 'Energy', unit: '/10' },
+    ];
+
+    const el = document.getElementById('snapshotContainer');
+    el.innerHTML = `<div class="snapshot-grid">${metrics.map(m => {
+      const d = data[m.key];
+      const val = d ? Number(d.value).toFixed(m.key === 'hrv' ? 0 : 1) : null;
+      return `<div class="metric-chip">
+        <div class="chip-label">${m.label}</div>
+        <div class="chip-value${val ? '' : ' no-data'}">${val ?? '—'}</div>
+        <div class="chip-unit">${m.unit}</div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  // ── Correlations ─────────────────────────────────────────────────────────────
+  async function fetchCorrelations() {
+    const el = document.getElementById('correlationsContainer');
+    try {
+      const resp = await fetch(`${API}/patterns?user=${currentUser}`, { headers: authHeaders() });
+      const json = await resp.json();
+      if (!json.ok) throw new Error(json.error ?? 'API error');
+      renderCorrelations(json.correlations);
+    } catch (err) {
+      el.innerHTML = `<div class="section-error">Failed to load correlations: ${err.message}</div>`;
+    }
+  }
+
+  function renderCorrelations(correlations) {
+    const el = document.getElementById('correlationsContainer');
+    if (!correlations || correlations.length === 0) {
+      el.innerHTML = `<div class="empty-state">No correlation data yet. Click "Run Analysis Now" to compute patterns from your health data.</div>`;
+      return;
+    }
+    el.innerHTML = correlations.map(c => {
+      const dirClass = c.direction === 'positive' ? 'positive' : c.direction === 'negative' ? 'negative' : 'none';
+      const dirArrow = c.direction === 'positive' ? '↑' : c.direction === 'negative' ? '↓' : '→';
+      const strengthPct = Math.round((parseFloat(c.strength) || 0) * 100);
+      return `<div class="correlation-card">
+        <div class="correlation-header">
+          <span class="factor-tag">${esc(c.factor_a)}</span>
+          <span class="direction-arrow ${dirClass}">${dirArrow}</span>
+          <span class="factor-tag">${esc(c.factor_b)}</span>
+          <span style="margin-left:auto;font-size:11px;color:#555;">${strengthPct}% strength</span>
+        </div>
+        <div class="strength-bar-wrap"><div class="strength-bar-fill" style="width:${strengthPct}%"></div></div>
+        <div class="correlation-observation">${esc(c.observation ?? '')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  async function analyzePatterns() {
+    const resp = await fetch(`${API}/patterns/analyze`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ user: currentUser }),
+    });
+    const json = await resp.json();
+    if (json.ok) {
+      alert('Analysis running in background. Refresh in ~30 seconds to see results.');
+    } else {
+      alert('Error: ' + (json.error ?? 'Unknown'));
+    }
+  }
+
+  // ── Timeline ─────────────────────────────────────────────────────────────────
+  async function fetchTimeline() {
+    const el = document.getElementById('timelineContainer');
+    try {
+      // Fetch sleep_hours, hrv, heart_rate time series in parallel
+      const [sleepRes, hrvRes, hrRes] = await Promise.allSettled([
+        fetch(`${API}/wearable/series/sleep_hours?user=${currentUser}&days=7`, { headers: authHeaders() }).then(r => r.json()),
+        fetch(`${API}/wearable/series/hrv?user=${currentUser}&days=7`, { headers: authHeaders() }).then(r => r.json()),
+        fetch(`${API}/wearable/series/heart_rate?user=${currentUser}&days=7`, { headers: authHeaders() }).then(r => r.json()),
+      ]);
+
+      const toMap = res => {
+        if (res.status !== 'fulfilled' || !res.value.ok) return {};
+        const m = {};
+        for (const pt of res.value.series ?? []) {
+          const day = pt.recorded_at.slice(0, 10);
+          m[day] = Number(pt.value).toFixed(1);
+        }
+        return m;
+      };
+
+      const sleepMap = toMap(sleepRes);
+      const hrvMap   = toMap(hrvRes);
+      const hrMap    = toMap(hrRes);
+
+      // Build last 7 days
+      const days = [];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(Date.now() - i * 86400000);
+        days.push(d.toISOString().slice(0, 10));
+      }
+
+      const cell = (val, unit = '') => val
+        ? `<td>${val}${unit}</td>`
+        : `<td class="na">—</td>`;
+
+      el.innerHTML = `<table class="timeline-table">
+        <thead><tr>
+          <th>Date</th>
+          <th>Sleep</th>
+          <th>HRV</th>
+          <th>Resting HR</th>
+        </tr></thead>
+        <tbody>
+          ${days.map(day => `<tr>
+            <td>${day.slice(5)}</td>
+            ${cell(sleepMap[day], ' hrs')}
+            ${cell(hrvMap[day], ' ms')}
+            ${cell(hrMap[day], ' bpm')}
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+    } catch (err) {
+      el.innerHTML = `<div class="section-error">Failed to load timeline: ${err.message}</div>`;
+    }
+  }
+
+  // ── Emergency events ──────────────────────────────────────────────────────────
+  async function fetchEmergency() {
+    try {
+      const resp = await fetch(`${API}/emergency/status?user=${currentUser}`, { headers: authHeaders() });
+      const json = await resp.json();
+      if (!json.ok) throw new Error(json.error ?? 'API error');
+      renderEmergency(json.events ?? []);
+    } catch (err) {
+      // silently log — emergency card stays hidden
+      console.warn('Emergency fetch error:', err.message);
+    }
+  }
+
+  function renderEmergency(events) {
+    const card = document.getElementById('emergencyCard');
+    const el   = document.getElementById('emergencyContainer');
+    if (events.length === 0) {
+      card.style.display = 'none';
+      return;
+    }
+    card.style.display = '';
+    el.innerHTML = events.map(ev => `
+      <div class="event-banner">
+        <div class="event-banner-info">
+          <div class="event-type">${esc(ev.type.replace(/_/g, ' ').toUpperCase())}</div>
+          <div class="event-detail">${esc(ev.triggered_by ?? '')} — ${esc(ev.severity)} severity</div>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="resolveEvent(${ev.id})">Resolve</button>
+      </div>`).join('');
+  }
+
+  async function resolveEvent(id) {
+    const note = prompt('Resolution note (optional):') ?? '';
+    const resp = await fetch(`${API}/emergency/resolve/${id}`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ note }),
+    });
+    const json = await resp.json();
+    if (json.ok) fetchEmergency();
+    else alert('Error: ' + (json.error ?? 'Unknown'));
+  }
+
+  // ── Emergency contacts ────────────────────────────────────────────────────────
+  async function fetchContacts() {
+    const el = document.getElementById('contactsContainer');
+    try {
+      const resp = await fetch(`${API}/emergency/contacts?user=${currentUser}`, { headers: authHeaders() });
+      const json = await resp.json();
+      if (!json.ok) throw new Error(json.error ?? 'API error');
+      renderContacts(json.contacts ?? []);
+    } catch (err) {
+      el.innerHTML = `<div class="section-error">Failed to load contacts: ${err.message}</div>`;
+    }
+  }
+
+  function renderContacts(contacts) {
+    const el = document.getElementById('contactsContainer');
+    if (contacts.length === 0) {
+      el.innerHTML = `<div class="empty-state">No emergency contacts. Add one below.</div>`;
+      return;
+    }
+    el.innerHTML = contacts.map(c => `
+      <div class="contact-row">
+        <div class="contact-info">
+          <div class="contact-name">${esc(c.name)}</div>
+          <div class="contact-details">${esc(c.phone)} · ${esc(c.relationship ?? 'contact')}</div>
+        </div>
+        <span class="contact-priority">Priority ${c.priority}</span>
+        <button class="btn btn-sm btn-danger" onclick="deleteContact(${c.id})">Remove</button>
+      </div>`).join('');
+  }
+
+  async function addContact() {
+    const name         = document.getElementById('contactName').value.trim();
+    const phone        = document.getElementById('contactPhone').value.trim();
+    const relationship = document.getElementById('contactRelationship').value;
+    const priority     = parseInt(document.getElementById('contactPriority').value) || 1;
+
+    if (!name || !phone) { alert('Name and phone are required.'); return; }
+
+    const resp = await fetch(`${API}/emergency/contacts`, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ user: currentUser, name, phone, relationship, priority }),
+    });
+    const json = await resp.json();
+    if (json.ok) {
+      document.getElementById('contactName').value  = '';
+      document.getElementById('contactPhone').value = '';
+      fetchContacts();
+    } else {
+      alert('Error: ' + (json.error ?? 'Unknown'));
+    }
+  }
+
+  async function deleteContact(id) {
+    if (!confirm('Remove this emergency contact?')) return;
+    const resp = await fetch(`${API}/emergency/contacts/${id}`, {
+      method: 'DELETE',
+      headers: authHeaders(),
+    });
+    const json = await resp.json();
+    if (json.ok) fetchContacts();
+    else alert('Error: ' + (json.error ?? 'Unknown'));
+  }
+
+  // ── Medical brief ─────────────────────────────────────────────────────────────
+  async function generateBrief() {
+    const btn = document.getElementById('briefBtn');
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+
+    openBriefModal('');
+    document.getElementById('briefText').value = 'Generating your medical context brief (this takes ~15s)…';
+
+    try {
+      const appointmentType = document.getElementById('appointmentType').value;
+      const resp = await fetch(`${API}/medical-brief`, {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ user: currentUser, appointment_type: appointmentType, focus_areas: [] }),
+      });
+      const json = await resp.json();
+      if (!json.ok) throw new Error(json.error ?? 'API error');
+      document.getElementById('briefText').value = json.brief ?? 'No brief returned.';
+    } catch (err) {
+      document.getElementById('briefText').value = 'Error generating brief: ' + err.message;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate pre-appointment brief';
+    }
+  }
+
+  function openBriefModal(text) {
+    document.getElementById('briefText').value = text;
+    document.getElementById('briefModal').classList.add('open');
+  }
+
+  function closeBriefModal() {
+    document.getElementById('briefModal').classList.remove('open');
+  }
+
+  function copyBrief() {
+    const text = document.getElementById('briefText').value;
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Copied to clipboard.');
+    }).catch(() => {
+      alert('Copy failed — please select and copy manually.');
+    });
+  }
+
+  // ── Utility ───────────────────────────────────────────────────────────────────
+  function esc(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // ── Boot ──────────────────────────────────────────────────────────────────────
+  loadAll();
+</script>
+</body>
+</html>

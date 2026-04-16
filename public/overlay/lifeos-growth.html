@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Growth — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 920px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #555; margin-bottom: 32px; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 28px; border-bottom: 1px solid #1e1e2e; flex-wrap: wrap; }
+    .tab { padding: 10px 18px; font-size: 13px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab.active { color: #a0aaff; border-bottom-color: #5b6af5; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .card-header .title { font-size: 14px; color: #d8d8e8; font-weight: 500; }
+    .card-header .meta  { font-size: 11px; color: #555; }
+    .card-body { padding: 14px 18px; font-size: 13px; color: #888; line-height: 1.6; }
+    .card-body p { margin-bottom: 8px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+    .badge.foundation   { background: #1a1220; color: #c084fc; }
+    .badge.building     { background: #0d1f2d; color: #38bdf8; }
+    .badge.plateau      { background: #2a1a00; color: #f59e0b; }
+    .badge.breakthrough { background: #0a200d; color: #34d399; }
+    .badge.mastery      { background: #1a1500; color: #facc15; }
+    .badge.high_energy  { background: #0a200d; color: #34d399; }
+    .badge.moderate     { background: #1a1a30; color: #7c85ff; }
+    .badge.low_energy   { background: #2a1a00; color: #f59e0b; }
+    .badge.reactive     { background: #2a0a0a; color: #e05555; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn { padding: 6px 14px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #666; font-size: 11px; cursor: pointer; transition: all .15s; }
+    .btn:hover { background: #1a1a2a; color: #aaa; }
+    .btn.primary { border-color: #5b6af5; color: #a0aaff; }
+    .btn.primary:hover { background: #1e2060; }
+    .btn.active-select { border-color: #34d399; color: #34d399; background: #0a200d; }
+    .btn.warning { border-color: #5a3a00; color: #f59e0b; }
+    .btn.warning:hover { background: #2a1a00; }
+    .btn-submit { padding: 10px 24px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; color: #a0aaff; font-size: 13px; cursor: pointer; }
+    .btn-submit:hover { background: #262880; }
+    .empty { padding: 40px; text-align: center; color: #444; font-size: 14px; }
+    .form-block { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 24px; margin-bottom: 20px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 9px 12px; font-size: 13px; outline: none; font-family: inherit;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #5b6af5; }
+    .form-field.full { grid-column: 1/-1; }
+    .inline-form { background: #0e0e1a; border: 1px solid #1e1e2e; border-radius: 8px; padding: 16px; margin-top: 12px; }
+    .inline-form .form-row { margin-bottom: 10px; }
+    .spinner { width:16px; height:16px; border:2px solid #2a2a3a; border-top-color:#5b6af5; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; vertical-align:middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .toast { position:fixed; bottom:24px; right:24px; background:#1e2060; border:1px solid #5b6af5; border-radius:8px; padding:12px 18px; font-size:13px; color:#a0aaff; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; pointer-events:none; }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .plateau-banner { background: #2a1a00; border: 1px solid #5a3a00; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #f59e0b; margin-top: 10px; }
+    .metric-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .metric-card { background: #0e0e1a; border: 1px solid #1e1e2e; border-radius: 8px; padding: 14px; text-align: center; }
+    .metric-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 6px; }
+    .metric-value { font-size: 20px; font-weight: 600; color: #e8e8f0; }
+    .metric-value.good  { color: #34d399; }
+    .metric-value.warn  { color: #f59e0b; }
+    .metric-value.bad   { color: #e05555; }
+    .gauge-bar { height: 6px; background: #1a1a2a; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+    .gauge-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
+    .wisdom-principle { font-size: 15px; color: #d8d8e8; font-weight: 500; margin-bottom: 8px; line-height: 1.5; }
+    .wisdom-context { font-size: 12px; color: #555; margin-bottom: 10px; line-height: 1.5; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { background: #1a1a30; color: #7c85ff; font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+    .tag.situation { background: #0a200d; color: #34d399; }
+    .coaching-text { white-space: pre-wrap; font-size: 13px; color: #c8c8d8; line-height: 1.7; }
+    .capacity-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; }
+    @media (max-width: 680px) { .capacity-cards { grid-template-columns: 1fr; } .metric-row { grid-template-columns: 1fr 1fr; } .form-row { grid-template-columns: 1fr; } }
+    .capacity-card { background: #0e0e1a; border: 1px solid #1e1e2e; border-radius: 8px; padding: 14px; }
+    .capacity-name { font-size: 12px; font-weight: 600; color: #a0aaff; margin-bottom: 8px; }
+    .capacity-detail { font-size: 12px; color: #888; line-height: 1.5; }
+    .capacity-detail strong { color: #c8c8d8; }
+    .week-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .week-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .week-title { font-size: 13px; font-weight: 500; color: #d8d8e8; }
+    .week-dates { font-size: 11px; color: #555; }
+    .week-reasons { margin-top: 8px; }
+    .week-reasons li { font-size: 12px; color: #888; list-style: none; padding-left: 14px; position: relative; line-height: 1.5; }
+    .week-reasons li::before { content: '•'; position: absolute; left: 0; color: #444; }
+    .week-recs { margin-top: 10px; border-top: 1px solid #191920; padding-top: 10px; }
+    .week-recs-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 6px; }
+    .week-recs li { font-size: 12px; color: #7c85ff; list-style: none; padding-left: 14px; position: relative; }
+    .week-recs li::before { content: '→'; position: absolute; left: 0; color: #5b6af5; }
+    .component-check { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #888; }
+    .component-check .check-icon { width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+    .check-icon.pass { background: #0a200d; color: #34d399; }
+    .check-icon.fail { background: #2a0a0a; color: #e05555; }
+    .apology-text { font-size: 13px; color: #d8d8e8; line-height: 1.7; background: #0e0e1a; border: 1px solid #1e1e2e; border-radius: 8px; padding: 14px; white-space: pre-wrap; }
+    .quality-score-display { font-size: 32px; font-weight: 700; }
+    .section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 14px; margin-top: 24px; }
+    .confidence-bar { height: 4px; background: #1a1a2a; border-radius: 2px; margin-top: 4px; }
+    .confidence-fill { height: 100%; border-radius: 2px; background: #5b6af5; }
+    .value-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+    .value-name { font-size: 15px; font-weight: 600; color: #d8d8e8; margin-bottom: 6px; }
+    .value-desc { font-size: 12px; color: #555; margin-bottom: 8px; }
+    .value-how { font-size: 12px; color: #888; font-style: italic; }
+    .family-narrative { font-size: 13px; color: #c8c8d8; line-height: 1.7; white-space: pre-wrap; background: #0e0e1a; border: 1px solid #1e1e2e; border-radius: 8px; padding: 16px; margin-top: 16px; }
+    .slider-container { display: flex; align-items: center; gap: 12px; }
+    .slider-container input[type=range] { flex: 1; }
+    .slider-value { font-size: 13px; color: #a0aaff; min-width: 30px; text-align: right; }
+    input[type=range] { accent-color: #5b6af5; }
+    .evidence-proof { font-size: 13px; color: #c8c8d8; margin-top: 10px; line-height: 1.6; }
+    .moment-meta { font-size: 11px; color: #555; margin-top: 6px; }
+    .moment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .reel-script { white-space: pre-wrap; font-size: 13px; color: #d8d8e8; line-height: 1.7; background: #0e0e1a; border: 1px solid #1e1e2e; border-radius: 8px; padding: 14px; }
+    .scene-plan { margin-top: 12px; display: grid; gap: 10px; }
+    .scene-item { background: #0e0e1a; border: 1px solid #1e1e2e; border-radius: 8px; padding: 12px; }
+    .scene-item strong { color: #d8d8e8; }
+    .link { color: #7c85ff; text-decoration: none; }
+    .link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="root">
+  <h1>Growth</h1>
+  <p class="sub">Mastery. Wisdom. The relationships that matter.</p>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('skills', this)">Skills &amp; Mastery</div>
+    <div class="tab" onclick="showTab('wisdom', this)">Wisdom Library</div>
+    <div class="tab" onclick="showTab('victories', this)">Victory Vault</div>
+    <div class="tab" onclick="showTab('relationships', this)">Relationships</div>
+    <div class="tab" onclick="showTab('weather', this)">Weather</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- SKILLS & MASTERY                                                        -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="panel active" id="panel-skills">
+
+    <div class="actions" style="margin-bottom:20px;">
+      <button class="btn primary" onclick="toggleNewSkillForm()">+ New Skill</button>
+      <button class="btn primary" onclick="toggleProtocolForm()">Design Practice Protocol</button>
+    </div>
+
+    <!-- New Skill Form -->
+    <div class="inline-form" id="new-skill-form" style="display:none; margin-bottom:20px;">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Skill Name</label>
+          <input id="ns-name" placeholder="e.g. Public Speaking" />
+        </div>
+        <div class="form-field">
+          <label>Goal</label>
+          <input id="ns-goal" placeholder="e.g. Keynote at a 500-person event" />
+        </div>
+      </div>
+      <button class="btn-submit" onclick="createSkill()">Create Skill Track</button>
+    </div>
+
+    <!-- Practice Protocol Form -->
+    <div class="inline-form" id="protocol-form" style="display:none; margin-bottom:20px;">
+      <div class="form-field full" style="margin-bottom:12px;">
+        <label>What do you want to become?</label>
+        <textarea id="pp-goal" rows="2" placeholder="e.g. A world-class closer in B2B sales"></textarea>
+      </div>
+      <button class="btn-submit" onclick="designProtocol()">Design My Practice Protocol</button>
+      <div id="protocol-result" style="margin-top:16px;"></div>
+    </div>
+
+    <div id="skills-list"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- WISDOM LIBRARY                                                          -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-wisdom">
+
+    <div class="form-block">
+      <div class="section-title">Extract Wisdom from an Experience</div>
+      <div class="form-field full" style="margin-bottom:14px;">
+        <label>Describe the experience</label>
+        <textarea id="exp-text" rows="4" placeholder="What happened? What was hard about it? What did you learn?"></textarea>
+      </div>
+      <button class="btn-submit" onclick="extractWisdom()">Extract Wisdom</button>
+    </div>
+
+    <div class="form-block" style="margin-bottom:24px;">
+      <div class="section-title">Search My Wisdom</div>
+      <div class="form-field full" style="margin-bottom:14px;">
+        <label>Describe your current situation</label>
+        <input id="wisdom-search-text" placeholder="e.g. I'm facing a difficult conversation with a business partner..." />
+      </div>
+      <button class="btn-submit" onclick="searchWisdom()">Find Relevant Wisdom</button>
+      <div id="wisdom-search-result" style="margin-top:16px;"></div>
+    </div>
+
+    <div class="section-title">Your Wisdom Library</div>
+    <div id="wisdom-list"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- VICTORY VAULT                                                           -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-victories">
+
+    <div class="actions" style="margin-bottom:20px;">
+      <button class="btn primary" onclick="toggleVictoryForm()">+ Capture Moment</button>
+      <button class="btn primary" onclick="buildVictoryReel()">Build Winning Reel</button>
+      <span id="victory-selection-status" style="font-size:12px; color:#555; align-self:center;">No moments selected — latest proof will be used.</span>
+    </div>
+
+    <div class="inline-form" id="victory-form" style="display:none; margin-bottom:20px;">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Moment title</label>
+          <input id="vv-title" placeholder="e.g. I made the hard call anyway" />
+        </div>
+        <div class="form-field">
+          <label>Moment type</label>
+          <select id="vv-type">
+            <option value="courage">Courage</option>
+            <option value="discipline">Discipline</option>
+            <option value="repair">Repair</option>
+            <option value="breakthrough">Breakthrough</option>
+            <option value="goal">Goal</option>
+            <option value="integrity">Integrity</option>
+            <option value="health">Health</option>
+            <option value="parenting">Parenting</option>
+            <option value="business">Business</option>
+            <option value="faith">Faith</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field full" style="margin-bottom:12px;">
+        <label>What was hard</label>
+        <textarea id="vv-hard" rows="2" placeholder="What did you not want to do, or what resistance did you face?"></textarea>
+      </div>
+      <div class="form-field full" style="margin-bottom:12px;">
+        <label>What you did</label>
+        <textarea id="vv-did" rows="2" placeholder="What did you do anyway?"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>What it proves</label>
+          <input id="vv-proves" placeholder="e.g. I keep my word even when it costs me" />
+        </div>
+        <div class="form-field">
+          <label>Outcome</label>
+          <input id="vv-outcome" placeholder="e.g. Closed the deal / repaired the conflict / stayed sober" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Emotion before</label>
+          <input id="vv-before" placeholder="e.g. anxious, tired, avoidant" />
+        </div>
+        <div class="form-field">
+          <label>Emotion after</label>
+          <input id="vv-after" placeholder="e.g. relieved, proud, calm" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Media type</label>
+          <select id="vv-media-type">
+            <option value="audio">Audio</option>
+            <option value="video">Video</option>
+            <option value="text" selected>Text</option>
+            <option value="image">Image</option>
+            <option value="mixed">Mixed</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Media URL</label>
+          <input id="vv-media-url" placeholder="Optional: audio/video/image URL" />
+        </div>
+      </div>
+      <div class="form-field full" style="margin-bottom:12px;">
+        <label>Transcript or note</label>
+        <textarea id="vv-transcript" rows="3" placeholder="Optional: transcript of the audio/video or your note from the moment"></textarea>
+      </div>
+      <button class="btn-submit" onclick="saveVictoryMoment()">Save proof</button>
+    </div>
+
+    <div class="form-block" style="margin-bottom:24px;">
+      <div class="section-title">Build an evidence reel</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Reel title</label>
+          <input id="vr-title" placeholder="e.g. Watch yourself keep going" />
+        </div>
+        <div class="form-field">
+          <label>Purpose</label>
+          <input id="vr-purpose" placeholder="e.g. before hard conversations or when self-doubt spikes" />
+        </div>
+      </div>
+      <p style="font-size:12px; color:#555; margin-top:4px;">Select moments below, or leave them unselected and the strongest recent proof will be used automatically.</p>
+    </div>
+
+    <div class="section-title">Victory moments</div>
+    <div id="victory-list"><div class="empty"><span class="spinner"></span></div></div>
+
+    <div class="section-title">Replay reels</div>
+    <div id="victory-reels"><div class="empty">No replay reels built yet.</div></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- RELATIONSHIPS                                                           -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-relationships">
+
+    <!-- Relationship Health -->
+    <div class="form-block">
+      <div class="section-title">Relationship Health</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Relationship</label>
+          <input id="rh-label" placeholder="e.g. Sherry, Dad, business partner" />
+        </div>
+        <div class="form-field">
+          <label>Period (days)</label>
+          <input id="rh-days" type="number" value="30" min="7" max="365" />
+        </div>
+      </div>
+      <button class="btn-submit" onclick="checkHealth()">Check Health</button>
+      <div id="health-result" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- Apology Engine -->
+    <div class="form-block">
+      <div class="section-title">Craft an Apology</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>To (relationship)</label>
+          <input id="apo-label" placeholder="e.g. Sherry" />
+        </div>
+      </div>
+      <div class="form-field full" style="margin-bottom:14px;">
+        <label>What happened</label>
+        <textarea id="apo-incident" rows="3" placeholder="Describe the incident honestly — what you did and why it caused harm"></textarea>
+      </div>
+      <button class="btn-submit" onclick="craftApology()">Craft Genuine Apology</button>
+      <div id="apology-result" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- Family Values -->
+    <div class="section-title">Family Values</div>
+    <div id="family-values-list"><div class="empty"><span class="spinner"></span></div></div>
+
+    <div class="form-block" style="margin-top:16px;">
+      <div class="section-title">+ Add a Family Value</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Value Name</label>
+          <input id="fv-name" placeholder="e.g. Presence" />
+        </div>
+        <div class="form-field full" style="margin-top:14px;">
+          <label>Description</label>
+          <input id="fv-desc" placeholder="What does this value mean to us?" />
+        </div>
+      </div>
+      <div class="form-field full" style="margin-bottom:14px;">
+        <label>How we live this</label>
+        <textarea id="fv-how" rows="2" placeholder="What does this look like in practice day-to-day?"></textarea>
+      </div>
+      <button class="btn-submit" onclick="addFamilyValue()">Add Value</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- WEATHER                                                                 -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="panel" id="panel-weather">
+    <div class="actions" style="margin-bottom:20px;">
+      <button class="btn primary" onclick="generateForecast()">Generate 8-Week Forecast</button>
+    </div>
+    <p style="font-size:12px; color:#444; margin-bottom:20px;">
+      Based on your historical joy scores, integrity data, and health signals — forecast is generated from patterns, not guesses. The more data you have, the more accurate it becomes.
+    </p>
+    <div id="forecast-list"><div class="empty" id="forecast-empty">No forecast yet. Generate one above.</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_KEY = localStorage.getItem('commandKey') || localStorage.getItem('lifeos_key') || prompt('Enter your command key:') || '';
+if (API_KEY) {
+  localStorage.setItem('commandKey', API_KEY);
+  localStorage.setItem('lifeos_key', API_KEY);
+}
+const BASE = '/api/v1/lifeos/growth';
+const USER = localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
+if (USER) localStorage.setItem('lifeos_user', USER);
+const victorySelection = new Set();
+
+const headers = {
+  'Content-Type': 'application/json',
+  'x-command-key': API_KEY,
+};
+
+function showTab(name, tabEl) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  if (tabEl) tabEl.classList.add('active');
+  if (name === 'skills')         loadSkills();
+  if (name === 'wisdom')         loadWisdom();
+  if (name === 'victories')      loadVictories();
+  if (name === 'relationships')  loadFamilyValues();
+  if (name === 'weather')        loadCurrentForecast();
+}
+
+function toast(msg, dur = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function phaseColor(phase) {
+  const map = { foundation:'#c084fc', building:'#38bdf8', plateau:'#f59e0b', breakthrough:'#34d399', mastery:'#facc15' };
+  return map[phase] || '#888';
+}
+
+function stateClass(state) {
+  return state || 'moderate';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SKILLS
+// ─────────────────────────────────────────────────────────────────────────────
+
+function toggleNewSkillForm() {
+  const f = document.getElementById('new-skill-form');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleProtocolForm() {
+  const f = document.getElementById('protocol-form');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+async function loadSkills() {
+  const el = document.getElementById('skills-list');
+  el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+  const r = await fetch(`${BASE}/skills?user=${USER}`, { headers });
+  const d = await r.json();
+  if (!d.ok || !d.skills?.length) {
+    el.innerHTML = '<div class="empty">No skills tracked yet. Add your first one above.</div>';
+    return;
+  }
+  el.innerHTML = d.skills.map(s => renderSkillCard(s)).join('');
+}
+
+function renderSkillCard(s) {
+  const lastDate = s.last_session
+    ? new Date(s.last_session.date).toLocaleDateString()
+    : 'No sessions yet';
+  const plateauBanner = s.plateau_detected
+    ? `<div class="plateau-banner">Plateau detected — tap Get Coaching for a breakthrough plan.</div>`
+    : '';
+  return `
+<div class="card" id="skill-${s.id}">
+  <div class="card-header">
+    <div>
+      <div class="title">${esc(s.skill_name)}</div>
+      <div class="meta">${s.session_count} sessions · ${parseFloat(s.total_hours).toFixed(1)} hours · last: ${lastDate}</div>
+    </div>
+    <div class="actions">
+      <span class="badge ${s.current_phase}">${s.current_phase}</span>
+      <button class="btn primary" onclick="toggleSessionForm(${s.id})">Log Session</button>
+      <button class="btn" onclick="getCoaching(${s.id})">Get Coaching</button>
+    </div>
+  </div>
+  <div class="card-body">
+    ${s.goal ? `<p style="color:#c8c8d8">${esc(s.goal)}</p>` : ''}
+    ${plateauBanner}
+    <div id="session-form-${s.id}" style="display:none;" class="inline-form" style="margin-top:12px;">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Duration (minutes)</label>
+          <div class="slider-container">
+            <input type="range" min="5" max="180" step="5" value="30" id="sf-dur-${s.id}" oninput="document.getElementById('sf-dur-val-${s.id}').textContent = this.value + 'min'" />
+            <span class="slider-value" id="sf-dur-val-${s.id}">30min</span>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Quality (1-10)</label>
+          <div class="slider-container">
+            <input type="range" min="1" max="10" value="7" id="sf-qual-${s.id}" oninput="document.getElementById('sf-qual-val-${s.id}').textContent = this.value" />
+            <span class="slider-value" id="sf-qual-val-${s.id}">7</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-field full" style="margin-bottom:12px;">
+        <label>Notes</label>
+        <input id="sf-notes-${s.id}" placeholder="What did you work on? What clicked? What's still hard?" />
+      </div>
+      <button class="btn-submit" onclick="logSession(${s.id})">Log Session</button>
+    </div>
+    <div id="coaching-${s.id}" style="display:none; margin-top:12px;" class="inline-form"></div>
+  </div>
+</div>`;
+}
+
+function toggleSessionForm(id) {
+  const f = document.getElementById(`session-form-${id}`);
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+async function createSkill() {
+  const name = document.getElementById('ns-name').value.trim();
+  const goal = document.getElementById('ns-goal').value.trim();
+  if (!name) return toast('Skill name is required');
+  const r = await fetch(`${BASE}/skills`, { method: 'POST', headers, body: JSON.stringify({ user: USER, skill_name: name, goal }) });
+  const d = await r.json();
+  if (d.ok) { toast('Skill created'); document.getElementById('new-skill-form').style.display = 'none'; loadSkills(); }
+  else toast('Error: ' + d.error);
+}
+
+async function logSession(skillId) {
+  const dur  = +document.getElementById(`sf-dur-${skillId}`).value;
+  const qual = +document.getElementById(`sf-qual-${skillId}`).value;
+  const notes = document.getElementById(`sf-notes-${skillId}`).value.trim();
+  const r = await fetch(`${BASE}/skills/${skillId}/session`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ user: USER, duration_minutes: dur, quality_rating: qual, notes }),
+  });
+  const d = await r.json();
+  if (d.ok) {
+    toast(d.plateauDetected ? 'Session logged — plateau detected!' : 'Session logged');
+    document.getElementById(`session-form-${skillId}`).style.display = 'none';
+    loadSkills();
+  } else toast('Error: ' + d.error);
+}
+
+async function getCoaching(skillId) {
+  const el = document.getElementById(`coaching-${skillId}`);
+  el.style.display = 'block';
+  el.innerHTML = '<span class="spinner"></span> Getting coaching...';
+  const r = await fetch(`${BASE}/skills/${skillId}/coaching?user=${USER}`, { headers });
+  const d = await r.json();
+  if (d.ok) {
+    el.innerHTML = `<div class="coaching-text">${esc(d.coaching)}</div>`;
+  } else {
+    el.innerHTML = `<span style="color:#e05555">Error: ${esc(d.error)}</span>`;
+  }
+}
+
+async function designProtocol() {
+  const goal = document.getElementById('pp-goal').value.trim();
+  if (!goal) return toast('Describe your goal first');
+  const el = document.getElementById('protocol-result');
+  el.innerHTML = '<span class="spinner"></span> Designing your practice protocol...';
+  const r = await fetch(`${BASE}/practice-protocol`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ user: USER, goal }),
+  });
+  const d = await r.json();
+  if (!d.ok) { el.innerHTML = `<span style="color:#e05555">Error: ${esc(d.error)}</span>`; return; }
+  const protocol = d.protocol;
+  const caps = (protocol.capacities || []).map(c => `
+    <div class="capacity-card">
+      <div class="capacity-name">${esc(c.capacity)}</div>
+      <div class="capacity-detail">
+        <strong>Practice:</strong> ${esc(c.practice_design)}<br><br>
+        <strong>Measure:</strong> ${esc(c.measurement)}<br><br>
+        <strong>Frequency:</strong> ${c.frequency_per_week}x / week
+      </div>
+    </div>
+  `).join('');
+  el.innerHTML = `
+    <div style="font-size:13px; color:#d8d8e8; margin-bottom:12px;">${esc(protocol.goal || goal)}</div>
+    <div class="capacity-cards">${caps}</div>
+  `;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WISDOM
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function loadWisdom() {
+  const el = document.getElementById('wisdom-list');
+  el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+  const r = await fetch(`${BASE}/wisdom?user=${USER}`, { headers });
+  const d = await r.json();
+  if (!d.ok || !d.entries?.length) {
+    el.innerHTML = '<div class="empty">No wisdom entries yet. Extract your first one above.</div>';
+    return;
+  }
+  el.innerHTML = d.entries.map(w => renderWisdomCard(w)).join('');
+}
+
+function renderWisdomCard(w) {
+  const tags     = (w.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('');
+  const sitas    = (w.applicable_situations || []).map(t => `<span class="tag situation">${esc(t)}</span>`).join('');
+  return `
+<div class="card">
+  <div class="card-header">
+    <div class="title">${esc(w.title)}</div>
+    <div class="meta">surfaced ${w.times_surfaced}x · ${new Date(w.created_at).toLocaleDateString()}</div>
+  </div>
+  <div class="card-body">
+    <div class="wisdom-principle">${esc(w.principle)}</div>
+    ${w.context ? `<div class="wisdom-context">${esc(w.context)}</div>` : ''}
+    ${tags || sitas ? `<div class="tag-list">${tags}${sitas}</div>` : ''}
+  </div>
+</div>`;
+}
+
+async function extractWisdom() {
+  const text = document.getElementById('exp-text').value.trim();
+  if (!text) return toast('Describe the experience first');
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Extracting...';
+  const r = await fetch(`${BASE}/wisdom`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ user: USER, experience_description: text }),
+  });
+  const d = await r.json();
+  btn.disabled = false;
+  btn.textContent = 'Extract Wisdom';
+  if (d.ok) {
+    toast('Wisdom extracted and saved');
+    document.getElementById('exp-text').value = '';
+    loadWisdom();
+  } else toast('Error: ' + d.error);
+}
+
+async function searchWisdom() {
+  const situation = document.getElementById('wisdom-search-text').value.trim();
+  if (!situation) return toast('Describe your current situation first');
+  const el = document.getElementById('wisdom-search-result');
+  el.innerHTML = '<span class="spinner"></span> Searching...';
+  const r = await fetch(`${BASE}/wisdom/search`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ user: USER, situation }),
+  });
+  const d = await r.json();
+  if (!d.ok) { el.innerHTML = `<span style="color:#e05555">Error: ${esc(d.error)}</span>`; return; }
+  const all = d.all || [];
+  if (!all.length) {
+    el.innerHTML = '<div style="font-size:12px; color:#555; margin-top:8px;">No relevant wisdom found for this situation yet.</div>';
+    return;
+  }
+  el.innerHTML = `
+    <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#555; margin-bottom:10px;">${all.length} relevant ${all.length === 1 ? 'entry' : 'entries'} found</div>
+    ${all.map(w => renderWisdomCard(w)).join('')}
+  `;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// VICTORY VAULT
+// ─────────────────────────────────────────────────────────────────────────────
+
+function toggleVictoryForm() {
+  const f = document.getElementById('victory-form');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+function updateVictorySelectionStatus() {
+  const el = document.getElementById('victory-selection-status');
+  if (!el) return;
+  el.textContent = victorySelection.size
+    ? `${victorySelection.size} moment${victorySelection.size === 1 ? '' : 's'} selected for the next reel.`
+    : 'No moments selected — latest proof will be used.';
+}
+
+function toggleVictorySelection(id) {
+  if (victorySelection.has(id)) victorySelection.delete(id);
+  else victorySelection.add(id);
+  loadVictories();
+}
+
+async function loadVictories() {
+  const listEl = document.getElementById('victory-list');
+  const reelsEl = document.getElementById('victory-reels');
+  listEl.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+  reelsEl.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+
+  const [momentsRes, reelsRes] = await Promise.all([
+    fetch(`${BASE}/victories?user=${USER}`, { headers }),
+    fetch(`${BASE}/victories/reels?user=${USER}`, { headers }),
+  ]);
+  const momentsData = await momentsRes.json();
+  const reelsData = await reelsRes.json();
+
+  if (!momentsData.ok || !momentsData.moments?.length) {
+    listEl.innerHTML = '<div class="empty">No proof captured yet. Save the first moment above.</div>';
+  } else {
+    listEl.innerHTML = momentsData.moments.map(renderVictoryMomentCard).join('');
+  }
+
+  if (!reelsData.ok || !reelsData.reels?.length) {
+    reelsEl.innerHTML = '<div class="empty">No replay reels built yet.</div>';
+  } else {
+    reelsEl.innerHTML = reelsData.reels.map(renderVictoryReelCard).join('');
+  }
+
+  updateVictorySelectionStatus();
+}
+
+function renderVictoryMomentCard(moment) {
+  const selected = victorySelection.has(moment.id);
+  const proof = moment.what_it_proves || moment.outcome_summary || moment.what_you_did;
+  const mediaLink = moment.media_url
+    ? `<a class="link" href="${esc(moment.media_url)}" target="_blank" rel="noopener noreferrer">Open ${esc(moment.media_type || 'media')}</a>`
+    : '';
+  const transcript = moment.transcript
+    ? `<div style="margin-top:10px; font-size:12px; color:#888; line-height:1.6;">${esc(moment.transcript)}</div>`
+    : '';
+  return `
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="title">${esc(moment.title)}</div>
+      <div class="meta">${fmtDate(moment.created_at)} · ${esc(moment.moment_type)}${moment.goal_link ? ` · ${esc(moment.goal_link)}` : ''}</div>
+    </div>
+    <div class="actions">
+      <button class="btn ${selected ? 'active-select' : ''}" onclick="toggleVictorySelection(${moment.id})">${selected ? 'Selected' : 'Use in reel'}</button>
+    </div>
+  </div>
+  <div class="card-body">
+    ${moment.what_was_hard ? `<p><strong style="color:#d8d8e8;">What was hard:</strong> ${esc(moment.what_was_hard)}</p>` : ''}
+    <p><strong style="color:#d8d8e8;">What you did:</strong> ${esc(moment.what_you_did)}</p>
+    <div class="evidence-proof">${esc(proof)}</div>
+    <div class="moment-meta">Before: ${esc(moment.emotional_before || '—')} · After: ${esc(moment.emotional_after || '—')} ${mediaLink ? `· ${mediaLink}` : ''}</div>
+    ${transcript}
+  </div>
+</div>`;
+}
+
+function renderVictoryReelCard(reel) {
+  let scenes = [];
+  try {
+    scenes = Array.isArray(reel.scene_plan) ? reel.scene_plan : JSON.parse(reel.scene_plan || '[]');
+  } catch {
+    scenes = [];
+  }
+  return `
+<div class="card">
+  <div class="card-header">
+    <div>
+      <div class="title">${esc(reel.title)}</div>
+      <div class="meta">${fmtDate(reel.created_at)} · ${esc(reel.status || 'draft')}</div>
+    </div>
+  </div>
+  <div class="card-body">
+    ${reel.purpose ? `<p style="color:#888; margin-bottom:10px;">${esc(reel.purpose)}</p>` : ''}
+    <div class="reel-script">${esc(reel.narration_script || 'No narration script yet.')}</div>
+    ${scenes.length ? `<div class="scene-plan">${scenes.map((scene) => `<div class="scene-item"><strong>${esc(scene.scene || `Scene ${scene.order || ''}`)}</strong><div style="font-size:12px; color:#888; margin-top:6px;">${esc(scene.visual || '')}</div><div style="font-size:12px; color:#c8c8d8; margin-top:8px;">${esc(scene.voiceover || '')}</div></div>`).join('')}</div>` : ''}
+  </div>
+</div>`;
+}
+
+async function saveVictoryMoment() {
+  const title = document.getElementById('vv-title').value.trim();
+  const whatYouDid = document.getElementById('vv-did').value.trim();
+  if (!title || !whatYouDid) return toast('Title and what you did are required');
+
+  const payload = {
+    user: USER,
+    title,
+    moment_type: document.getElementById('vv-type').value,
+    what_was_hard: document.getElementById('vv-hard').value.trim(),
+    what_you_did: whatYouDid,
+    what_it_proves: document.getElementById('vv-proves').value.trim(),
+    outcome_summary: document.getElementById('vv-outcome').value.trim(),
+    emotional_before: document.getElementById('vv-before').value.trim(),
+    emotional_after: document.getElementById('vv-after').value.trim(),
+    media_type: document.getElementById('vv-media-type').value,
+    media_url: document.getElementById('vv-media-url').value.trim(),
+    transcript: document.getElementById('vv-transcript').value.trim(),
+  };
+
+  const r = await fetch(`${BASE}/victories`, {
+    method: 'POST', headers,
+    body: JSON.stringify(payload),
+  });
+  const d = await r.json();
+  if (!d.ok) return toast('Error: ' + d.error);
+
+  ['vv-title', 'vv-hard', 'vv-did', 'vv-proves', 'vv-outcome', 'vv-before', 'vv-after', 'vv-media-url', 'vv-transcript'].forEach((id) => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('vv-type').value = 'courage';
+  document.getElementById('vv-media-type').value = 'text';
+  document.getElementById('victory-form').style.display = 'none';
+  toast('Proof saved');
+  loadVictories();
+}
+
+async function buildVictoryReel() {
+  const payload = {
+    user: USER,
+    title: document.getElementById('vr-title').value.trim(),
+    purpose: document.getElementById('vr-purpose').value.trim(),
+    moment_ids: Array.from(victorySelection),
+  };
+  const reelsEl = document.getElementById('victory-reels');
+  reelsEl.innerHTML = '<div class="empty"><span class="spinner"></span> Building replay reel...</div>';
+  const r = await fetch(`${BASE}/victories/reels`, {
+    method: 'POST', headers,
+    body: JSON.stringify(payload),
+  });
+  const d = await r.json();
+  if (!d.ok) {
+    reelsEl.innerHTML = `<div class="empty" style="color:#e05555">Error: ${esc(d.error)}</div>`;
+    return;
+  }
+  victorySelection.clear();
+  updateVictorySelectionStatus();
+  toast('Replay reel built');
+  loadVictories();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RELATIONSHIPS
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function checkHealth() {
+  const label = document.getElementById('rh-label').value.trim();
+  const days  = +document.getElementById('rh-days').value || 30;
+  if (!label) return toast('Enter a relationship name first');
+  const el = document.getElementById('health-result');
+  el.innerHTML = '<span class="spinner"></span> Analyzing...';
+  const r = await fetch(`${BASE}/relationship-health`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ user: USER, relationship_label: label, period_days: days }),
+  });
+  const d = await r.json();
+  if (!d.ok) { el.innerHTML = `<span style="color:#e05555">Error: ${esc(d.error)}</span>`; return; }
+  const rec = d.record;
+
+  function metric(val, label, format, goodDir) {
+    if (val == null) return `<div class="metric-card"><div class="metric-label">${label}</div><div class="metric-value" style="font-size:16px;color:#444">—</div></div>`;
+    const num = parseFloat(val);
+    let cls = 'good';
+    if (label === 'Initiation Ratio') { cls = num >= 0.7 && num <= 1.5 ? 'good' : 'warn'; }
+    else if (label === 'Repair Speed') { cls = num < 24 ? 'good' : num < 72 ? 'warn' : 'bad'; }
+    else if (label === 'Follow-Through') { cls = num >= 0.8 ? 'good' : num >= 0.5 ? 'warn' : 'bad'; }
+    else if (label === 'Dep / Wth') { cls = num >= 3 ? 'good' : num >= 2 ? 'warn' : 'bad'; }
+    const fillPct = label === 'Repair Speed' ? Math.max(0, 100 - (num / 168 * 100)) : Math.min(100, num / (label === 'Follow-Through' ? 1 : label === 'Initiation Ratio' ? 2 : label === 'Dep / Wth' ? 5 : 10) * 100);
+    return `<div class="metric-card">
+      <div class="metric-label">${label}</div>
+      <div class="metric-value ${cls}">${format(num)}</div>
+      <div class="gauge-bar"><div class="gauge-fill" style="width:${fillPct}%; background:${cls==='good'?'#34d399':cls==='warn'?'#f59e0b':'#e05555'}"></div></div>
+    </div>`;
+  }
+
+  const hscore = parseFloat(rec.health_score || 5);
+  const hcls   = hscore >= 7 ? 'good' : hscore >= 4 ? 'warn' : 'bad';
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div class="title">${esc(label)}</div>
+        <div class="actions"><span style="font-size:22px; font-weight:700; color:${hcls==='good'?'#34d399':hcls==='warn'?'#f59e0b':'#e05555'}">${hscore.toFixed(1)}</span><span style="font-size:11px; color:#555; margin-left:4px;">/10</span></div>
+      </div>
+      <div class="card-body">
+        <div class="metric-row">
+          ${metric(rec.initiation_ratio,         'Initiation Ratio', v => v.toFixed(1) + ':1', 'balanced')}
+          ${metric(rec.repair_speed_hours,        'Repair Speed',     v => v < 1 ? '<1h' : v.toFixed(0) + 'h', 'low')}
+          ${metric(rec.commitment_followthrough,  'Follow-Through',   v => (v * 100).toFixed(0) + '%', 'high')}
+          ${metric(rec.deposit_withdrawal_ratio,  'Dep / Wth',        v => v.toFixed(1) + ':1', 'high')}
+        </div>
+        ${rec.notes ? `<div style="margin-top:12px; font-size:12px; color:#888; font-style:italic;">${esc(rec.notes)}</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+async function craftApology() {
+  const label    = document.getElementById('apo-label').value.trim();
+  const incident = document.getElementById('apo-incident').value.trim();
+  if (!label || !incident) return toast('Both relationship and incident are required');
+  const el = document.getElementById('apology-result');
+  el.innerHTML = '<span class="spinner"></span> Crafting a genuine apology...';
+  const r = await fetch(`${BASE}/apology`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ user: USER, relationship_label: label, incident_description: incident }),
+  });
+  const d = await r.json();
+  if (!d.ok) { el.innerHTML = `<span style="color:#e05555">Error: ${esc(d.error)}</span>`; return; }
+
+  const comp   = d.components || {};
+  const qscore = parseFloat(d.qualityScore || d.quality_score || 0);
+  const qcls   = qscore >= 8 ? 'good' : qscore >= 5 ? 'warn' : 'bad';
+
+  function compRow(label, val) {
+    const ok = val === true;
+    return `<div class="component-check">
+      <div class="check-icon ${ok ? 'pass' : 'fail'}">${ok ? '✓' : '✗'}</div>
+      <span>${label}</span>
+    </div>`;
+  }
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div class="title">Apology to ${esc(label)}</div>
+        <div class="actions">
+          <span class="quality-score-display" style="color:${qcls==='good'?'#34d399':qcls==='warn'?'#f59e0b':'#e05555'}">${qscore.toFixed(0)}</span>
+          <span style="font-size:11px; color:#555;">/10</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="apology-text">${esc(d.apologyText || d.apology_text || '')}</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:14px;">
+          ${compRow('Impact acknowledged', comp.impact_acknowledged)}
+          ${compRow('No "but"', comp.no_but)}
+          ${compRow('Understanding stated', comp.understanding_stated)}
+          ${compRow('Change committed', comp.change_committed)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function loadFamilyValues() {
+  const el = document.getElementById('family-values-list');
+  el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+  const r = await fetch(`${BASE}/family-values?user=${USER}`, { headers });
+  const d = await r.json();
+  if (!d.ok || !d.values?.length) {
+    el.innerHTML = '<div class="empty">No family values defined yet. Add your first one below.</div>';
+    return;
+  }
+  const narrative = d.familyStateNarrative;
+  let html = '';
+  if (narrative) {
+    html += `<div class="family-narrative">${esc(narrative)}</div>`;
+  }
+  html += d.values.map(v => {
+    const hs = parseFloat(v.health_score || 5);
+    const hcls = hs >= 7 ? '#34d399' : hs >= 4 ? '#f59e0b' : '#e05555';
+    return `<div class="value-card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+        <div class="value-name">${esc(v.value_name)}</div>
+        <span style="font-size:16px; font-weight:700; color:${hcls}">${hs.toFixed(1)}</span>
+      </div>
+      ${v.description ? `<div class="value-desc">${esc(v.description)}</div>` : ''}
+      ${v.how_we_live_this ? `<div class="value-how">"${esc(v.how_we_live_this)}"</div>` : ''}
+    </div>`;
+  }).join('');
+  el.innerHTML = html;
+}
+
+async function addFamilyValue() {
+  const name = document.getElementById('fv-name').value.trim();
+  const desc = document.getElementById('fv-desc').value.trim();
+  const how  = document.getElementById('fv-how').value.trim();
+  if (!name) return toast('Value name is required');
+  const r = await fetch(`${BASE}/family-values`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ user: USER, value_name: name, description: desc, how_we_live_this: how }),
+  });
+  const d = await r.json();
+  if (d.ok) {
+    toast('Family value added');
+    document.getElementById('fv-name').value = '';
+    document.getElementById('fv-desc').value = '';
+    document.getElementById('fv-how').value  = '';
+    loadFamilyValues();
+  } else toast('Error: ' + d.error);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WEATHER
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function loadCurrentForecast() {
+  const el = document.getElementById('forecast-list');
+  const r  = await fetch(`${BASE}/forecast?user=${USER}`, { headers });
+  const d  = await r.json();
+  if (!d.ok || !d.forecasts?.length) return;
+  renderForecasts(d.forecasts, el);
+}
+
+async function generateForecast() {
+  const el = document.getElementById('forecast-list');
+  el.innerHTML = '<div class="empty"><span class="spinner"></span> Analyzing 18 months of your patterns...</div>';
+  const r = await fetch(`${BASE}/forecast/generate`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ user: USER, weeks_ahead: 8 }),
+  });
+  const d = await r.json();
+  if (!d.ok) { el.innerHTML = `<div class="empty" style="color:#e05555">Error: ${esc(d.error)}</div>`; return; }
+  renderForecasts(d.forecasts, el);
+  toast('Forecast generated');
+}
+
+function renderForecasts(forecasts, el) {
+  const stateLabel = { high_energy: 'High Energy', moderate: 'Moderate', low_energy: 'Low Energy', reactive: 'Reactive' };
+  const stateNote  = {
+    high_energy: 'Push on hard projects, schedule important conversations, tackle what you\'ve been avoiding.',
+    moderate:    'Normal pace. No need to push or protect.',
+    low_energy:  'Protect your calendar. Minimize draining tasks. Lean on routines.',
+    reactive:    'Extra caution. Delay difficult conversations if possible. Prioritize recovery.',
+  };
+  el.innerHTML = forecasts.map(f => {
+    const start = f.forecast_period_start || f.start;
+    const end   = f.forecast_period_end   || f.end;
+    const state = f.predicted_state || 'moderate';
+    const conf  = parseFloat(f.confidence || 0.5);
+    const reasons = f.reasons || [];
+    const recs    = f.recommendations || [];
+    return `<div class="week-card">
+      <div class="week-header">
+        <div>
+          <div class="week-title"><span class="badge ${stateClass(state)}">${stateLabel[state] || state}</span></div>
+          <div class="week-dates" style="margin-top:4px;">${fmtDate(start)} — ${fmtDate(end)}</div>
+          <div class="confidence-bar" style="width:80px; margin-top:6px;"><div class="confidence-fill" style="width:${(conf*100).toFixed(0)}%"></div></div>
+          <div style="font-size:10px; color:#444; margin-top:2px;">${(conf*100).toFixed(0)}% confidence</div>
+        </div>
+      </div>
+      <p style="font-size:12px; color:#555; margin-bottom:8px; font-style:italic;">${stateNote[state] || ''}</p>
+      ${reasons.length ? `<ul class="week-reasons">${reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}
+      ${recs.length ? `<div class="week-recs"><div class="week-recs-title">Recommendations</div><ul>${recs.map(r => `<li>${esc(r)}</li>`).join('')}</ul></div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  return isNaN(dt) ? d : dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Init
+// ─────────────────────────────────────────────────────────────────────────────
+loadSkills();
+</script>
+</body>
+</html>

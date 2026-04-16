@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>The Engine — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #555; margin-bottom: 32px; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 28px; border-bottom: 1px solid #1e1e2e; }
+    .tab { padding: 10px 18px; font-size: 13px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab.active { color: #a0aaff; border-bottom-color: #5b6af5; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .card-header .title { font-size: 14px; color: #d8d8e8; }
+    .card-header .meta  { font-size: 11px; color: #555; }
+    .card-body { padding: 14px 18px; font-size: 13px; color: #888; line-height: 1.6; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+    .badge.pending  { background: #1a1a30; color: #7c85ff; }
+    .badge.executed { background: #0a2018; color: #34d399; }
+    .badge.failed   { background: #2a0a0a; color: #e05555; }
+    .badge.awaiting { background: #1a1a20; color: #888; }
+    .actions { display: flex; gap: 8px; }
+    .btn { padding: 6px 14px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #666; font-size: 11px; cursor: pointer; }
+    .btn:hover { background: #1a1a2a; color: #aaa; }
+    .btn.primary { border-color: #5b6af5; color: #a0aaff; }
+    .btn.primary:hover { background: #1e2060; }
+    .btn.danger { border-color: #3a1a1a; color: #e05555; }
+    .empty { padding: 40px; text-align: center; color: #444; font-size: 14px; }
+    .form-block { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 9px 12px; font-size: 13px; outline: none;
+      font-family: inherit;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #5b6af5; }
+    .form-field.full { grid-column: 1/-1; }
+    .btn-submit { padding: 10px 24px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; color: #a0aaff; font-size: 13px; cursor: pointer; }
+    .btn-submit:hover { background: #262880; }
+    .comms-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 18px; border-bottom: 1px solid #111; }
+    .comms-item:last-child { border-bottom: none; }
+    .comms-dir { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+    .comms-dir.inbound  { background: #0a2018; color: #34d399; }
+    .comms-dir.outbound { background: #1a1a30; color: #7c85ff; }
+    .comms-body .from { font-size: 12px; color: #888; }
+    .comms-body .msg  { font-size: 13px; color: #d8d8e8; margin-top: 2px; }
+    .comms-body .time { font-size: 10px; color: #444; margin-top: 4px; }
+    .spinner { width:16px; height:16px; border:2px solid #2a2a3a; border-top-color:#5b6af5; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .toast { position:fixed; bottom:24px; right:24px; background:#1e2060; border:1px solid #5b6af5; border-radius:8px; padding:12px 18px; font-size:13px; color:#a0aaff; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; }
+    .toast.show { opacity:1; transform:translateY(0); }
+  </style>
+</head>
+<body>
+<div class="root">
+  <h1>The Engine</h1>
+  <p class="sub">Outreach that happens on your behalf. Communication routed to you.</p>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('outreach')">Outreach Queue</div>
+    <div class="tab" onclick="showTab('new')">New Task</div>
+    <div class="tab" onclick="showTab('comms')">Communication Log</div>
+    <div class="tab" onclick="showTab('rules')">Calendar Rules</div>
+  </div>
+
+  <!-- Outreach Queue -->
+  <div class="panel active" id="panel-outreach">
+    <div id="outreach-list"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+
+  <!-- New Task -->
+  <div class="panel" id="panel-new">
+    <div class="form-block">
+      <div class="form-row">
+        <div class="form-field">
+          <label>Channel</label>
+          <select id="f-channel">
+            <option value="email">Email</option>
+            <option value="sms">SMS</option>
+            <option value="note">Note (no send)</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Contact name (optional)</label>
+          <input id="f-name" placeholder="John Smith" />
+        </div>
+        <div class="form-field">
+          <label>Email</label>
+          <input id="f-email" type="email" placeholder="contact@example.com" />
+        </div>
+        <div class="form-field">
+          <label>Phone</label>
+          <input id="f-phone" placeholder="+1 555 000 0000" />
+        </div>
+        <div class="form-field">
+          <label>Subject (email only)</label>
+          <input id="f-subject" placeholder="Following up on..." />
+        </div>
+        <div class="form-field">
+          <label>Send after (optional)</label>
+          <input id="f-after" type="datetime-local" />
+        </div>
+        <div class="form-field full">
+          <label>Message</label>
+          <textarea id="f-body" rows="5" placeholder="Write the message to send on your behalf..."></textarea>
+        </div>
+      </div>
+      <button class="btn-submit" onclick="createTask()">Queue Task</button>
+    </div>
+  </div>
+
+  <!-- Communication Log -->
+  <div class="panel" id="panel-comms">
+    <div class="card" id="comms-list"><div class="empty"><span class="spinner"></span></div></div>
+  </div>
+
+  <!-- Calendar Rules -->
+  <div class="panel" id="panel-rules">
+    <div id="rules-list"><div class="empty"><span class="spinner"></span></div></div>
+    <div class="form-block" style="margin-top:16px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#555;margin-bottom:14px">Add Rule</div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Rule type</label>
+          <select id="r-type">
+            <option value="protect_block">Protect time block</option>
+            <option value="decline_category">Decline category</option>
+            <option value="require_buffer">Require buffer</option>
+            <option value="no_back_to_back">No back-to-back</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Name</label>
+          <input id="r-name" placeholder="e.g. Morning deep work" />
+        </div>
+        <div class="form-field">
+          <label>Time start</label>
+          <input id="r-start" type="time" value="08:00" />
+        </div>
+        <div class="form-field">
+          <label>Time end</label>
+          <input id="r-end" type="time" value="10:00" />
+        </div>
+      </div>
+      <button class="btn-submit" onclick="addRule()">Add Rule</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = '';
+  const KEY = localStorage.getItem('commandKey') || '';
+  const H   = { 'Content-Type': 'application/json', 'x-command-key': KEY };
+  const USER = new URLSearchParams(location.search).get('user') || 'adam';
+
+  function showTab(name) {
+    document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['outreach','new','comms','rules'][i]===name));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(`panel-${name}`).classList.add('active');
+    if (name==='outreach') loadOutreach();
+    if (name==='comms') loadComms();
+    if (name==='rules') loadRules();
+  }
+
+  async function loadOutreach() {
+    const res  = await fetch(`${API}/api/v1/lifeos/engine/outreach?user=${USER}`, {headers:H});
+    const data = await res.json();
+    const el   = document.getElementById('outreach-list');
+    if (!data.ok || data.count===0) { el.innerHTML='<div class="empty">No outreach tasks. Delegate something.</div>'; return; }
+    el.innerHTML = data.tasks.map(t => `
+      <div class="card">
+        <div class="card-header">
+          <span class="title">${esc(t.recipient_name||t.recipient_email||t.recipient_phone||'Contact')}</span>
+          <div class="actions">
+            <span class="badge ${t.status}">${t.status}</span>
+            ${t.status==='pending'?`<button class="btn danger" onclick="cancelTask(${t.id})">Cancel</button>`:''}
+          </div>
+        </div>
+        <div class="card-body">
+          <strong>${esc(t.channel.toUpperCase())}</strong>${t.subject?' · '+esc(t.subject):''}<br>
+          ${esc(t.body.substring(0,200))}${t.body.length>200?'…':''}
+          ${t.response?`<br><em>Response: ${esc(t.response)}</em>`:''}
+        </div>
+      </div>`).join('');
+  }
+
+  async function createTask() {
+    const body = {
+      user: USER,
+      channel:          document.getElementById('f-channel').value,
+      recipient_name:   document.getElementById('f-name').value,
+      recipient_email:  document.getElementById('f-email').value,
+      recipient_phone:  document.getElementById('f-phone').value,
+      subject:          document.getElementById('f-subject').value,
+      body:             document.getElementById('f-body').value,
+      execute_after:    document.getElementById('f-after').value || null,
+    };
+    if (!body.body.trim()) { toast('Message is required'); return; }
+    const res  = await fetch(`${API}/api/v1/lifeos/engine/outreach`, {method:'POST',headers:H,body:JSON.stringify(body)});
+    const data = await res.json();
+    if (data.ok) { toast('Task queued'); showTab('outreach'); }
+    else toast(`Error: ${data.error}`);
+  }
+
+  async function cancelTask(id) {
+    await fetch(`${API}/api/v1/lifeos/engine/outreach/${id}/cancel`, {method:'POST',headers:H});
+    toast('Task cancelled');
+    loadOutreach();
+  }
+
+  async function loadComms() {
+    const res  = await fetch(`${API}/api/v1/lifeos/engine/comms?user=${USER}&days=14`, {headers:H});
+    const data = await res.json();
+    const el   = document.getElementById('comms-list');
+    if (!data.ok || data.count===0) { el.innerHTML='<div class="empty">No communications logged.</div>'; return; }
+    el.innerHTML = data.log.map(c => `
+      <div class="comms-item">
+        <span class="comms-dir ${c.direction}">${c.direction}</span>
+        <div class="comms-body">
+          <div class="from">${esc(c.channel.toUpperCase())} · ${esc(c.from_party||'unknown')}</div>
+          <div class="msg">${esc((c.ai_summary||c.body||'').substring(0,150))}</div>
+          <div class="time">${new Date(c.created_at).toLocaleString()}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  async function loadRules() {
+    const res  = await fetch(`${API}/api/v1/lifeos/engine/calendar-rules?user=${USER}`, {headers:H});
+    const data = await res.json();
+    const el   = document.getElementById('rules-list');
+    if (!data.ok || data.rules.length===0) { el.innerHTML='<div class="empty">No calendar rules set.</div>'; return; }
+    el.innerHTML = data.rules.map(r => `
+      <div class="card">
+        <div class="card-header">
+          <span class="title">${esc(r.name)}</span>
+          <div class="actions">
+            <span class="badge pending">${esc(r.rule_type)}</span>
+            <button class="btn danger" onclick="deleteRule(${r.id})">Remove</button>
+          </div>
+        </div>
+        ${r.time_start?`<div class="card-body">${r.time_start} — ${r.time_end} · Action: ${r.action}</div>`:''}
+      </div>`).join('');
+  }
+
+  async function addRule() {
+    const body = {
+      user: USER,
+      rule_type: document.getElementById('r-type').value,
+      name:      document.getElementById('r-name').value,
+      time_start:document.getElementById('r-start').value,
+      time_end:  document.getElementById('r-end').value,
+    };
+    if (!body.name.trim()) { toast('Name is required'); return; }
+    const res = await fetch(`${API}/api/v1/lifeos/engine/calendar-rules`, {method:'POST',headers:H,body:JSON.stringify(body)});
+    const data = await res.json();
+    if (data.ok) { toast('Rule added'); loadRules(); }
+    else toast(`Error: ${data.error}`);
+  }
+
+  async function deleteRule(id) {
+    await fetch(`${API}/api/v1/lifeos/engine/calendar-rules/${id}`, {method:'DELETE',headers:H});
+    toast('Rule removed'); loadRules();
+  }
+
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function toast(msg) { const e=document.getElementById('toast'); e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2500); }
+
+  if (!KEY) { const k=prompt('Enter your command key:'); if(k){localStorage.setItem('commandKey',k);location.reload();} }
+  else loadOutreach();
+</script>
+</body>
+</html>
