@@ -8,10 +8,19 @@ export function registerPublicRoutes(app, {
   __dirname,
   COMMAND_CENTER_KEY,
 }) {
-  function resolveOverlayHtml(file) {
+  function resolveOverlayFile(file, allowedExtensions = []) {
     const safeFile = String(file || "").trim();
-    if (!/^[a-z0-9._-]+\.html$/i.test(safeFile)) return null;
+    if (!/^[a-z0-9._-]+\.[a-z0-9]+$/i.test(safeFile)) return null;
+    const ext = safeFile.split(".").pop().toLowerCase();
+    if (allowedExtensions.length && !allowedExtensions.includes(ext)) return null;
     const filePath = path.join(__dirname, "public", "overlay", safeFile);
+    return fs.existsSync(filePath) ? filePath : null;
+  }
+
+  function resolveOverlayIcon(file) {
+    const safeFile = String(file || "").trim();
+    if (!/^[a-z0-9._-]+\.(png|svg)$/i.test(safeFile)) return null;
+    const filePath = path.join(__dirname, "public", "overlay", "icons", safeFile);
     return fs.existsSync(filePath) ? filePath : null;
   }
 
@@ -127,7 +136,13 @@ export function registerPublicRoutes(app, {
   // Generic overlay HTML route for tracked shell pages such as LifeOS.
   // This avoids depending on static middleware ordering for operator overlays.
   app.get("/overlay/:file", (req, res, next) => {
-    const filePath = resolveOverlayHtml(req.params.file);
+    const filePath = resolveOverlayFile(req.params.file, ["html", "css", "js", "webmanifest"]);
+    if (filePath) return sendPublicFileNoCache(res, filePath);
+    return next();
+  });
+
+  app.get("/overlay/icons/:file", (req, res, next) => {
+    const filePath = resolveOverlayIcon(req.params.file);
     if (filePath) return sendPublicFileNoCache(res, filePath);
     return next();
   });
@@ -136,13 +151,13 @@ export function registerPublicRoutes(app, {
   app.get("/lifeos-:slug.html", (req, res, next) => {
     const slug = String(req.params.slug || "").trim();
     if (!/^[a-z0-9-]+$/i.test(slug)) return next();
-    const filePath = resolveOverlayHtml(`lifeos-${slug}.html`);
+    const filePath = resolveOverlayFile(`lifeos-${slug}.html`, ["html"]);
     if (filePath) return sendPublicFileNoCache(res, filePath);
     return next();
   });
 
   app.get("/lifeos", (req, res) => {
-    const filePath = resolveOverlayHtml("lifeos-app.html");
+    const filePath = resolveOverlayFile("lifeos-app.html", ["html"]);
     if (filePath) return sendPublicFileNoCache(res, filePath);
     return res.status(404).send("LifeOS shell not found.");
   });
