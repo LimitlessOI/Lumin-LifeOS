@@ -87,7 +87,8 @@
     "routes/lifeos-engine-routes.js",
     "public/overlay/lifeos-engine.html",
     "services/lifeos-calendar.js",
-    "db/migrations/20260417_lifeos_calendar.sql"
+    "db/migrations/20260417_lifeos_calendar.sql",
+    "routes/lifeos-health-routes.js"
   ],
   "assertions": [
     {
@@ -265,6 +266,10 @@
     {
       "type": "node_check",
       "check": "services/lifeos-calendar.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-health-routes.js"
     }
   ],
   "phases": [

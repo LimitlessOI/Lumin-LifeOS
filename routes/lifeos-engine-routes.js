@@ -278,9 +278,10 @@ export function createLifeOSEngineRoutes({ pool, requireKey, notificationService
       const user = String(req.query.state || 'adam').trim() || 'adam';
       if (!code) return res.status(400).send('Missing Google OAuth code.');
       await calendar.handleGoogleCallback(code, user);
-      const target = `${String(process.env.RAILWAY_PUBLIC_DOMAIN || process.env.PUBLIC_BASE_URL || '').trim().replace(/\/$/, '') || ''}/lifeos-engine.html?calendar=connected`;
-      if (/^https?:\/\//i.test(target)) return res.redirect(target);
-      return res.redirect('/lifeos-engine.html?calendar=connected');
+      const base = String(process.env.RAILWAY_PUBLIC_DOMAIN || process.env.PUBLIC_BASE_URL || '').trim().replace(/\/$/, '');
+      const path = `/lifeos?page=lifeos-engine.html&calendar=connected&user=${encodeURIComponent(user)}`;
+      if (/^https?:\/\//i.test(base)) return res.redirect(`${base}${path}`);
+      return res.redirect(path);
     } catch (err) {
       logger?.error?.(`[LIFEOS/CALENDAR/CALLBACK] ${err.message}`);
       res.status(500).send(`Google Calendar connection failed: ${err.message}`);

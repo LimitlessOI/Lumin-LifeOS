@@ -245,7 +245,11 @@
   const API  = '';
   const KEY  = localStorage.getItem('commandKey') || '';
   const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
-  const USER = new URLSearchParams(location.search).get('user') || 'adam';
+  const USER = new URLSearchParams(location.search).get('user')
+    || localStorage.getItem('lifeos_user')
+    || localStorage.getItem('lifeosUser')
+    || 'adam';
+  if (USER) localStorage.setItem('lifeos_user', USER);
 
   let selectedEmotionalState = '';
   let outcomeExpanded = {};

@@ -440,7 +440,11 @@
   // ── Config ─────────────────────────────────────────────────────────────
   const API = '/api/v1/lifeos/family';
   let KEY  = localStorage.getItem('commandKey') || localStorage.getItem('command_key') || '';
-  let USER = new URLSearchParams(location.search).get('user') || 'adam';
+  let USER = new URLSearchParams(location.search).get('user')
+    || localStorage.getItem('lifeos_user')
+    || localStorage.getItem('lifeosUser')
+    || 'adam';
+  if (USER) localStorage.setItem('lifeos_user', USER);
 
   function headers() { return { 'Content-Type': 'application/json', 'x-command-key': KEY }; }
 

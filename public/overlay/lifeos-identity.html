@@ -221,9 +221,13 @@
 
 <script>
   const API = '/api/v1/lifeos/identity';
-  const KEY = localStorage.getItem('commandKey') || prompt('API Key:') || '';
+  const KEY = localStorage.getItem('commandKey') || prompt('Enter your command key:') || '';
   if (KEY) localStorage.setItem('commandKey', KEY);
-  const USER = new URLSearchParams(location.search).get('user') || 'adam';
+  const USER = new URLSearchParams(location.search).get('user')
+    || localStorage.getItem('lifeos_user')
+    || localStorage.getItem('lifeosUser')
+    || 'adam';
+  if (USER) localStorage.setItem('lifeos_user', USER);
 
   const headers = { 'Content-Type': 'application/json', 'x-command-key': KEY };
 

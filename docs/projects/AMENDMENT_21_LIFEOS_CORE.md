@@ -5,7 +5,7 @@
 | **Lifecycle** | `founding-document` |
 | **Reversibility** | `one-way-door` |
 | **Stability** | `constitutional` |
-| **Last Updated** | 2026-04-17 (added native LifeOS calendar tables and Google Calendar sync, exposed calendar status/events/connect/sync APIs in the Engine, and wired the Engine overlay to manage events and Google connection alongside the existing calendar rules) |
+| **Last Updated** | 2026-04-17 (added native LifeOS calendar tables and Google Calendar sync; fixed Health route user resolution against `lifeos_users.user_handle`; normalized key user-facing overlays to respect `lifeos_user` instead of silently defaulting to Adam when loaded inside the shell) |
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
@@ -734,6 +734,7 @@ Read first for Phase 1 build:
 
 | Date | What Changed | Why | Amendment | Verified |
 |---|---|---|---|---|
+| 2026-04-17 | Fix LifeOS cross-surface user context and Health route resolution: Health now resolves against `lifeos_users.user_handle`; Engine, Family, Identity, Decisions, and Children overlays now inherit `lifeos_user` instead of defaulting to Adam when opened from the shell | Stop silent cross-user drift and broken health lookups that made the shell appear to “work” while loading the wrong person's state or failing to resolve valid users | ✅ | pending |
 | 2026-04-17 | Add LifeOS calendar core: `20260417_lifeos_calendar.sql`, `services/lifeos-calendar.js`, `/api/v1/lifeos/engine/calendar/*` status/events/connect/sync APIs, and Engine overlay support for Google connection + event management | Turn calendar from rule-only scaffolding into a native LifeOS domain with local events first and Google Calendar as the initial sync adapter | ✅ | pending |
 | 2026-04-17 | Add LifeOS attention/privacy core: `20260416_lifeos_focus_privacy.sql`, `services/lifeos-focus-privacy.js`, new `/focus/*`, `/privacy/*`, and `/commands/interpret` APIs; wire Today + Quick Entry to focus/privacy controls; fix commitment + joy payload drift in shipped overlays | Turn focus tracking, privacy windows, retroactive dumps, and voice-style commands into first-class LifeOS capabilities instead of undocumented future ideas, while also removing payload drift that would have broken quick-entry commitment and joy logging | ✅ | pending |
 | 2026-03-28 | Founding document written | Establish the full LifeOS constitutional vision before building Phase 1 | ✅ | pending |

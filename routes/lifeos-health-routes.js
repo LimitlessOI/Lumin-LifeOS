@@ -40,10 +40,13 @@ export function createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, 
     if (!handleOrId) return null;
     const str = String(handleOrId).trim().toLowerCase();
     // If it's numeric, use directly
-    if (/^\d+$/.test(str)) return parseInt(str, 10);
-    // Otherwise look up by username / handle
+    if (/^\d+$/.test(str)) {
+      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1 LIMIT 1', [parseInt(str, 10)]);
+      return rows[0]?.id ?? null;
+    }
+    // Otherwise look up by the actual LifeOS user handle
     const { rows } = await pool.query(
-      `SELECT id FROM lifeos_users WHERE LOWER(username) = $1 OR LOWER(handle) = $1 LIMIT 1`,
+      `SELECT id FROM lifeos_users WHERE LOWER(user_handle) = $1 LIMIT 1`,
       [str]
     );
     return rows[0]?.id ?? null;
