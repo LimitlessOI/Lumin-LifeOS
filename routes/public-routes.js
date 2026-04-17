@@ -8,6 +8,13 @@ export function registerPublicRoutes(app, {
   __dirname,
   COMMAND_CENTER_KEY,
 }) {
+  function resolveOverlayHtml(file) {
+    const safeFile = String(file || "").trim();
+    if (!/^[a-z0-9._-]+\.html$/i.test(safeFile)) return null;
+    const filePath = path.join(__dirname, "public", "overlay", safeFile);
+    return fs.existsSync(filePath) ? filePath : null;
+  }
+
   function sendPublicFileNoCache(res, filePath) {
     res.set({
       "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
@@ -120,19 +127,23 @@ export function registerPublicRoutes(app, {
   // Generic overlay HTML route for tracked shell pages such as LifeOS.
   // This avoids depending on static middleware ordering for operator overlays.
   app.get("/overlay/:file", (req, res, next) => {
-    const file = String(req.params.file || "").trim();
-    if (!/^[a-z0-9._-]+\.html$/i.test(file)) return next();
+    const filePath = resolveOverlayHtml(req.params.file);
+    if (filePath) return sendPublicFileNoCache(res, filePath);
+    return next();
+  });
 
-    const filePath = path.join(__dirname, "public", "overlay", file);
-    if (fs.existsSync(filePath)) {
-      return sendPublicFileNoCache(res, filePath);
-    }
+  // Convenience aliases so LifeOS shell subpages also work when loaded from /lifeos.
+  app.get("/lifeos-:slug.html", (req, res, next) => {
+    const slug = String(req.params.slug || "").trim();
+    if (!/^[a-z0-9-]+$/i.test(slug)) return next();
+    const filePath = resolveOverlayHtml(`lifeos-${slug}.html`);
+    if (filePath) return sendPublicFileNoCache(res, filePath);
     return next();
   });
 
   app.get("/lifeos", (req, res) => {
-    const filePath = path.join(__dirname, "public", "overlay", "lifeos-app.html");
-    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    const filePath = resolveOverlayHtml("lifeos-app.html");
+    if (filePath) return sendPublicFileNoCache(res, filePath);
     return res.status(404).send("LifeOS shell not found.");
   });
 

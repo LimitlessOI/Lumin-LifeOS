@@ -912,7 +912,7 @@
 
     <!-- Content iframe -->
     <iframe class="content-frame" id="content-frame"
-      src="lifeos-today.html"
+      src="/overlay/lifeos-today.html"
       title="LifeOS content"
       allow="clipboard-write">
     </iframe>
@@ -1081,6 +1081,7 @@ let NAME  = localStorage.getItem('lifeos_name') || (USER.charAt(0).toUpperCase()
 let sidebarMini  = false;
 let currentPage  = 'lifeos-today.html';
 let currentTitle = 'Today';
+function overlayUrl(page) { return `/overlay/${page}`; }
 
 /* Page metadata */
 const PAGE_META = {
@@ -1176,7 +1177,7 @@ function loadPage(page) {
   const meta = PAGE_META[page];
   if (!meta) return;
 
-  document.getElementById('content-frame').src = page;
+  document.getElementById('content-frame').src = overlayUrl(page);
   currentPage  = page;
   currentTitle = meta.title;
 
