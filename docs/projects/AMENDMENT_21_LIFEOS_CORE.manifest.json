@@ -79,7 +79,11 @@
     "db/migrations/20260408_lifeos_finance_and_prefs.sql",
     "services/lifeos-finance.js",
     "services/lifeos-scheduled-jobs.js",
-    "routes/lifeos-finance-routes.js"
+    "routes/lifeos-finance-routes.js",
+    "public/overlay/lifeos-today.html",
+    "public/overlay/lifeos-quick-entry.html",
+    "services/lifeos-focus-privacy.js",
+    "db/migrations/20260416_lifeos_focus_privacy.sql"
   ],
   "assertions": [
     {
@@ -237,6 +241,14 @@
     {
       "type": "node_check",
       "check": "routes/lifeos-finance-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-focus-privacy.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260416_lifeos_focus_privacy.sql"
     }
   ],
   "phases": [
@@ -351,7 +363,7 @@
       "segments": [
         {
           "id": "seg_finance_migration",
-          "name": "DB migration — accounts, budgets, transactions, IPS",
+          "name": "DB migration \u2014 accounts, budgets, transactions, IPS",
           "status": "complete",
           "review_tier": "needs-review"
         },

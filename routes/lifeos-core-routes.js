@@ -58,6 +58,7 @@ import { createLuminMemoryFetcher }        from '../services/lumin-memory-fetche
 import { createLifeOSTwinBridge }          from '../core/lifeos-twin-bridge.js';
 import { createLifeOSNotificationRouter }  from '../services/lifeos-notification-router.js';
 import { createCommitmentSimulator }       from '../services/commitment-simulator.js';
+import { createLifeOSFocusPrivacyService } from '../services/lifeos-focus-privacy.js';
 
 function isNumericId(v) {
   if (v == null || v === '') return false;
@@ -84,6 +85,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
   const memFetcher   = createLuminMemoryFetcher({ pool, callAI, logger: log });
   const twinBridge   = createLifeOSTwinBridge({ pool, callAI, logger: log });
   const notifier     = createLifeOSNotificationRouter({ pool, sendSMS: sendSMS ?? null, logger: log });
+  const focusPrivacy = createLifeOSFocusPrivacyService(pool);
 
   // Helper: resolve user_id from handle or id
   async function resolveUserId(handleOrId) {
@@ -544,6 +546,167 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
           water_oz, alcohol_drinks || 0, foods_logged || [], energy_score, mood_score,
           medications_taken || [], notes, glucose_notes]);
       res.status(201).json({ ok: true, checkin: rows[0] });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── FOCUS + PRIVACY ──────────────────────────────────────────────────────
+
+  router.get('/focus/active', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const session = await focusPrivacy.getActiveFocusSession(userId);
+      res.json({ ok: true, session });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/focus/today', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const summary = await focusPrivacy.getTodayFocusSummary(userId);
+      res.json({ ok: true, ...summary });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/focus/start', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', intention, planned_minutes = 60, source = 'manual', notes = null } = req.body || {};
+      if (!String(intention || '').trim()) return res.status(400).json({ ok: false, error: 'intention is required' });
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const session = await focusPrivacy.startFocusSession({ userId, intention: String(intention).trim(), plannedMinutes: planned_minutes, source, notes });
+      res.status(201).json({ ok: true, session });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/focus/stop', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', session_id = null, status = 'completed', notes = null } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const active = session_id ? null : await focusPrivacy.getActiveFocusSession(userId);
+      const targetId = session_id || active?.id;
+      if (!targetId) return res.status(404).json({ ok: false, error: 'No active focus session' });
+      const session = await focusPrivacy.endFocusSession({ sessionId: targetId, userId, status, notes });
+      res.json({ ok: true, session });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/focus/intervene', requireKey, async (req, res) => {
+    try {
+      const {
+        user = 'adam',
+        session_id = null,
+        kind = 'nudge',
+        message = null,
+        effectiveness = null,
+        recovered_focus = null,
+      } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const active = session_id ? null : await focusPrivacy.getActiveFocusSession(userId);
+      const targetId = session_id || active?.id;
+      if (!targetId) return res.status(404).json({ ok: false, error: 'No active focus session' });
+      const intervention = await focusPrivacy.logIntervention({
+        sessionId: targetId,
+        userId,
+        kind,
+        message,
+        effectiveness,
+        recoveredFocus: recovered_focus,
+      });
+      res.status(201).json({ ok: true, intervention });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/privacy/active', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const window = await focusPrivacy.getActivePrivacyWindow(userId);
+      res.json({ ok: true, window });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/privacy/windows', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', days = 7 } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const windows = await focusPrivacy.listPrivacyWindows(userId, { days });
+      res.json({ ok: true, windows });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/privacy/start', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', duration_minutes = 120, reason = null, source = 'manual' } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const window = await focusPrivacy.startPrivacyWindow({ userId, durationMinutes: duration_minutes, reason, source });
+      res.status(201).json({ ok: true, window, spoken_confirmation: `Privacy mode on for ${window.duration_minutes} minutes.` });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/privacy/stop', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', window_id = null, reason = null } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const window = await focusPrivacy.stopPrivacyWindow({ userId, windowId: window_id, reason });
+      if (!window) return res.status(404).json({ ok: false, error: 'No active privacy window' });
+      res.json({ ok: true, window, spoken_confirmation: 'Privacy mode off.' });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/privacy/redact', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', hours = null, minutes = null, start_at = null, end_at = null, reason = null } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const durationMinutes = minutes != null ? parseInt(minutes, 10) : hours != null ? parseInt(hours, 10) * 60 : 120;
+      const endAt = end_at ? new Date(end_at) : new Date();
+      const startAt = start_at ? new Date(start_at) : new Date(endAt.getTime() - durationMinutes * 60 * 1000);
+      const result = await focusPrivacy.queueRedactionJob({ userId, startAt, endAt, reason: reason || `Retro privacy dump for ${durationMinutes} minutes`, source: 'manual' });
+      res.status(201).json({ ok: true, ...result, spoken_confirmation: `Queued a privacy dump for the last ${durationMinutes} minutes.` });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/commands/interpret', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', text } = req.body || {};
+      if (!String(text || '').trim()) return res.status(400).json({ ok: false, error: 'text is required' });
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const result = await focusPrivacy.executeCommand({ userId, text: String(text).trim() });
+      if (!result.ok) return res.status(400).json(result);
+      res.json({ ok: true, ...result });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

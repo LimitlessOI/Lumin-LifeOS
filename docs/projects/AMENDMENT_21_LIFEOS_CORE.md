@@ -5,11 +5,11 @@
 | **Lifecycle** | `founding-document` |
 | **Reversibility** | `one-way-door` |
 | **Stability** | `constitutional` |
-| **Last Updated** | 2026-04-16 (Promoted conflict + finance into the required LifeOS runtime; added parent-summary / learning / checkins / dreams compatibility for children; added onboarding / notifications / quick-entry / parent-view into the tracked test surface; added POST /api/v1/lifeos/users for onboarding bootstrap; exposed test surfaces from the shell settings panel; fixed `/lifeos` and direct `lifeos-*.html` routing and normalized shell page loading to absolute overlay URLs; fixed the `memory-healing` startup crash caused by referencing `UTILITY_FRAMING` before initialization; added a dedicated LifeOS web manifest, app icons, service worker cache entries, and explicit overlay asset routes for installable app behavior; added persistent light/dark theme support across the LifeOS shell and shipped pages) |
+| **Last Updated** | 2026-04-17 (added focus sessions, privacy windows, retroactive privacy dump jobs, and command-driven focus/privacy controls; wired Today + Quick Entry to the new LifeOS attention/privacy APIs; corrected Quick Entry and Today payload drift for commitments and joy check-ins) |
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-04-16
+**Last Updated:** 2026-04-17
 
 ---
 
@@ -734,6 +734,7 @@ Read first for Phase 1 build:
 
 | Date | What Changed | Why | Amendment | Verified |
 |---|---|---|---|---|
+| 2026-04-17 | Add LifeOS attention/privacy core: `20260416_lifeos_focus_privacy.sql`, `services/lifeos-focus-privacy.js`, new `/focus/*`, `/privacy/*`, and `/commands/interpret` APIs; wire Today + Quick Entry to focus/privacy controls; fix commitment + joy payload drift in shipped overlays | Turn focus tracking, privacy windows, retroactive dumps, and voice-style commands into first-class LifeOS capabilities instead of undocumented future ideas, while also removing payload drift that would have broken quick-entry commitment and joy logging | ✅ | pending |
 | 2026-03-28 | Founding document written | Establish the full LifeOS constitutional vision before building Phase 1 | ✅ | pending |
 | 2026-03-28 | Added Data Sovereignty & Ethics + Fulfillment & Commerce sections | Data belongs to users; never sell for marketing; consent-first reorder model with affiliate then direct fulfillment | ✅ | pending |
 | 2026-04-05 | Phase 9: Mediation Engine — 4 files (migration, service, routes, UI) | Consent-first AI facilitation for couples, families, and business disputes; AI is strictly neutral, never decides, only reflects and proposes | ✅ | pending |

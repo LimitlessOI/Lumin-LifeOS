@@ -105,6 +105,18 @@
     <span class="icon">⚡</span>
     <span class="label">Outreach Task</span>
   </button>
+  <button class="type-btn" id="btn-focus" onclick="toggle('focus')">
+    <span class="icon">🧠</span>
+    <span class="label">Focus Block</span>
+  </button>
+  <button class="type-btn" id="btn-privacy" onclick="toggle('privacy')">
+    <span class="icon">🔒</span>
+    <span class="label">Privacy Mode</span>
+  </button>
+  <button class="type-btn" id="btn-command" onclick="toggle('command')">
+    <span class="icon">🎙️</span>
+    <span class="label">Command</span>
+  </button>
 </div>
 
 <!-- Commitment form -->
@@ -186,6 +198,47 @@
   <button class="btn-submit" onclick="submitOutreach()">Queue It</button>
 </div>
 
+<div class="form-panel" id="panel-focus">
+  <div class="form-field">
+    <label>Focus intention</label>
+    <input id="f-intention" placeholder="e.g. Finish outreach review" autocomplete="off" />
+  </div>
+  <div class="slider-row">
+    <label>Duration — <span id="f-minutes-label">60</span> minutes</label>
+    <div class="slider-wrap">
+      <span style="font-size:11px;color:#444">15</span>
+      <input type="range" id="f-minutes" min="15" max="180" step="15" value="60" oninput="document.getElementById('f-minutes-label').textContent=this.value" />
+      <span style="font-size:11px;color:#444">180</span>
+    </div>
+  </div>
+  <button class="btn-submit" onclick="submitFocus()">Start Focus</button>
+</div>
+
+<div class="form-panel" id="panel-privacy">
+  <div class="form-field">
+    <label>Privacy duration</label>
+    <div class="chip-row" id="privacy-chips">
+      <span class="text-chip selected" data-v="60" onclick="selectPrivacy(this)">1 hour</span>
+      <span class="text-chip" data-v="120" onclick="selectPrivacy(this)">2 hours</span>
+      <span class="text-chip" data-v="180" onclick="selectPrivacy(this)">3 hours</span>
+    </div>
+  </div>
+  <div class="form-field">
+    <label>Reason (optional)</label>
+    <input id="p-reason" placeholder="Private time / family time / no capture" autocomplete="off" />
+  </div>
+  <button class="btn-submit" onclick="submitPrivacy()">Enable Privacy</button>
+  <button class="btn-submit" style="margin-top:10px;background:#2a0f1b;border-color:#ef5b87;color:#ffc7d5" onclick="submitRedaction()">Dump last window</button>
+</div>
+
+<div class="form-panel" id="panel-command">
+  <div class="form-field">
+    <label>Voice-style command</label>
+    <textarea id="cmd-text" rows="3" placeholder="privacy mode for 2 hours&#10;dump the last 2 hours&#10;start focus for 90 minutes on admin"></textarea>
+  </div>
+  <button class="btn-submit" onclick="submitCommand()">Run Command</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -234,10 +287,17 @@
 
   // Emotional state selection
   let selectedState = null;
+  let selectedPrivacyMinutes = 60;
   function selectState(el) {
     document.querySelectorAll('#state-chips .text-chip').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
     selectedState = el.dataset.v;
+  }
+
+  function selectPrivacy(el) {
+    document.querySelectorAll('#privacy-chips .text-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPrivacyMinutes = parseInt(el.dataset.v, 10) || 60;
   }
 
   // -------- Submit handlers --------
@@ -246,7 +306,7 @@
     const text = document.getElementById('c-text').value.trim();
     const due  = document.getElementById('c-due').value || null;
     if (!text) { toast('Please describe your commitment'); return; }
-    await post('/api/v1/lifeos/commitments', { user: USER, text, due_date: due });
+    await post('/api/v1/lifeos/commitments', { user: USER, title: text, due_at: due });
     document.getElementById('c-text').value = '';
     document.getElementById('c-due').value  = '';
     collapse();
@@ -257,7 +317,7 @@
     const note  = document.getElementById('j-note').value.trim() || null;
     const emoji = selectedEmoji;
     if (!emoji) { toast('Pick an emoji first'); return; }
-    await post('/api/v1/lifeos/joy/checkin', { user: USER, score, emoji_score: emoji, note });
+    await post('/api/v1/lifeos/joy/checkin', { user: USER, joy_score: score, notes: note });
     document.getElementById('j-score').value = '5';
     document.getElementById('joy-score-label').textContent = '5';
     document.querySelectorAll('#joy-emojis .chip').forEach(c => c.classList.remove('selected'));
@@ -300,6 +360,44 @@
     document.getElementById('o-name').value = '';
     document.getElementById('o-msg').value  = '';
     collapse();
+  }
+
+  async function submitFocus() {
+    const intention = document.getElementById('f-intention').value.trim();
+    const plannedMinutes = parseInt(document.getElementById('f-minutes').value, 10) || 60;
+    if (!intention) { toast('Focus intention is required'); return; }
+    await post('/api/v1/lifeos/focus/start', { user: USER, intention, planned_minutes: plannedMinutes });
+    document.getElementById('f-intention').value = '';
+    document.getElementById('f-minutes').value = '60';
+    document.getElementById('f-minutes-label').textContent = '60';
+    collapse();
+  }
+
+  async function submitPrivacy() {
+    const reason = document.getElementById('p-reason').value.trim() || null;
+    await post('/api/v1/lifeos/privacy/start', { user: USER, duration_minutes: selectedPrivacyMinutes, reason });
+    document.getElementById('p-reason').value = '';
+    collapse();
+  }
+
+  async function submitRedaction() {
+    await post('/api/v1/lifeos/privacy/redact', { user: USER, minutes: selectedPrivacyMinutes, reason: `Retro privacy dump for ${selectedPrivacyMinutes} minutes` });
+    collapse();
+  }
+
+  async function submitCommand() {
+    const text = document.getElementById('cmd-text').value.trim();
+    if (!text) { toast('Command text is required'); return; }
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/commands/interpret`, { method: 'POST', headers: H, body: JSON.stringify({ user: USER, text }) });
+      const data = await res.json();
+      if (!data.ok) { toast(`Error: ${esc(data.error || 'Unknown error')}`); return; }
+      toast(data.spoken_confirmation || 'Command applied');
+      document.getElementById('cmd-text').value = '';
+      collapse();
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+    }
   }
 
   // -------- Helpers --------

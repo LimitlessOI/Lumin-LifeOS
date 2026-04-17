@@ -201,6 +201,37 @@
     }
     .score-checkin-btn:hover { background: #1a1030; }
 
+    .mini-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 10px;
+      gap: 12px;
+    }
+    .mini-stat strong { color: var(--text); font-weight: 600; }
+    .focus-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .mini-btn {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid #2a2a3a;
+      background: #0d0d1a;
+      color: #cfd4ff;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+    }
+    .mini-btn.primary { border-color: #5b6af5; background: #1d214f; color: #d9ddff; }
+    .mini-btn.danger { border-color: #6a2a3a; color: #ffb8c4; }
+    .mini-btn:disabled { opacity: .55; cursor: not-allowed; }
+    .card-note { font-size: 11px; color: var(--text-muted); margin-top: 10px; line-height: 1.5; }
+
     /* ── Commitment items ── */
     .commitment-item {
       display: flex;
@@ -606,6 +637,45 @@
     </div>
   </div>
 
+  <!-- Section 1b: Focus + Privacy -->
+  <div class="section sec-engine">
+    <div class="section-header">
+      <span class="section-title">Attention Loop</span>
+    </div>
+    <div class="scores-row">
+      <div class="score-card">
+        <div class="score-label">Focus Block</div>
+        <div class="score-big" id="focus-minutes" style="color:#3b82f6">—</div>
+        <div class="score-trend" id="focus-status"><span class="flat">→</span> No active focus block</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="focus-bar" style="background:#3b82f6;width:0%"></div>
+        </div>
+        <div class="mini-stat"><span>On-task today</span><strong id="focus-ratio">—</strong></div>
+        <div class="mini-stat"><span>Interventions tried</span><strong id="focus-interventions">0</strong></div>
+        <div class="focus-actions">
+          <button class="mini-btn primary" id="focus-start-btn" onclick="openFocusModal()">Start focus</button>
+          <button class="mini-btn" id="focus-stop-btn" onclick="stopFocus()">End focus</button>
+          <button class="mini-btn" id="focus-nudge-btn" onclick="logFocusIntervention()">Log nudge</button>
+        </div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Privacy Mode</div>
+        <div class="score-big" id="privacy-status" style="color:#f59e0b">Off</div>
+        <div class="score-trend" id="privacy-window"><span class="flat">→</span> Capture is active</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="privacy-bar" style="background:#f59e0b;width:0%"></div>
+        </div>
+        <div class="mini-stat"><span>Last dump request</span><strong id="privacy-last">None</strong></div>
+        <div class="focus-actions">
+          <button class="mini-btn primary" onclick="startPrivacy(60)">Privacy 1h</button>
+          <button class="mini-btn primary" onclick="startPrivacy(120)">Privacy 2h</button>
+          <button class="mini-btn danger" onclick="stopPrivacy()">Privacy off</button>
+        </div>
+        <div class="card-note">Voice/text command support: “privacy mode for 2 hours”, “dump the last 2 hours”, “start focus for 90 minutes on admin work”.</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Section 2: Commitments -->
   <div class="section sec-commitments">
     <div class="section-header">
@@ -757,6 +827,23 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="inline-modal-overlay" id="focus-modal" style="display:none">
+  <div class="inline-modal">
+    <button class="modal-close" onclick="closeFocusModal()">✕</button>
+    <h3>Start focus block</h3>
+    <input class="modal-input" id="focus-intention" placeholder="What are you focusing on?" />
+    <div class="slider-row">
+      <label>Duration — <span id="focus-duration-label">60</span> minutes</label>
+      <div class="slider-wrap">
+        <span style="font-size:11px;color:#444">15</span>
+        <input type="range" id="focus-duration" min="15" max="180" step="15" value="60" oninput="document.getElementById('focus-duration-label').textContent=this.value" />
+        <span style="font-size:11px;color:#444">180</span>
+      </div>
+    </div>
+    <button class="btn-save" onclick="saveFocusBlock()">Start focus</button>
+  </div>
+</div>
+
 <script>
   /* ── Constants ── */
   const API  = '';
@@ -787,6 +874,7 @@
   /* ── Load all in parallel ── */
   Promise.allSettled([
     loadScores(),
+    loadFocusPrivacy(),
     loadCommitments(),
     loadEngine(),
     loadHealth(),
@@ -871,9 +959,161 @@
     }
   }
 
+  /* ── Focus + Privacy ── */
+  let activeFocusSession = null;
+  let activePrivacyWindow = null;
+
+  async function loadFocusPrivacy() {
+    try {
+      const [focusRes, privacyRes, privacyHistoryRes] = await Promise.all([
+        fetch(`${API}/api/v1/lifeos/focus/today?user=${USER}`, { headers: H() }),
+        fetch(`${API}/api/v1/lifeos/privacy/active?user=${USER}`, { headers: H() }),
+        fetch(`${API}/api/v1/lifeos/privacy/windows?user=${USER}&days=3`, { headers: H() }),
+      ]);
+      const focusData = await focusRes.json();
+      const privacyData = await privacyRes.json();
+      const privacyHistory = await privacyHistoryRes.json();
+
+      if (focusData.ok) {
+        activeFocusSession = focusData.active_session || null;
+        const activeMinutes = activeFocusSession
+          ? Math.max(0, Math.round((Date.now() - new Date(activeFocusSession.started_at).getTime()) / 60000))
+          : 0;
+        const planned = activeFocusSession?.planned_minutes || focusData.planned_minutes || 0;
+        const ratio = focusData.on_task_ratio == null ? '—' : `${Math.round(focusData.on_task_ratio * 100)}%`;
+        document.getElementById('focus-minutes').textContent = activeFocusSession ? `${activeMinutes}m` : `${focusData.actual_minutes || 0}m`;
+        document.getElementById('focus-status').innerHTML = activeFocusSession
+          ? `<span class="up">↑</span> ${esc(activeFocusSession.intention)}`
+          : '<span class="flat">→</span> No active focus block';
+        document.getElementById('focus-bar').style.width = planned > 0 ? `${Math.min(100, Math.round(((activeFocusSession ? activeMinutes : focusData.actual_minutes || 0) / planned) * 100))}%` : '0%';
+        document.getElementById('focus-ratio').textContent = ratio;
+        document.getElementById('focus-interventions').textContent = String(focusData.interventions_count || 0);
+        document.getElementById('focus-stop-btn').disabled = !activeFocusSession;
+        document.getElementById('focus-nudge-btn').disabled = !activeFocusSession;
+      }
+
+      if (privacyData.ok) {
+        activePrivacyWindow = privacyData.window || null;
+        if (activePrivacyWindow) {
+          const minsLeft = activePrivacyWindow.ends_at
+            ? Math.max(0, Math.round((new Date(activePrivacyWindow.ends_at).getTime() - Date.now()) / 60000))
+            : null;
+          document.getElementById('privacy-status').textContent = 'On';
+          document.getElementById('privacy-window').innerHTML = `<span class="up">↑</span> ${minsLeft == null ? 'Manual window active' : `${minsLeft} minutes remaining`}`;
+          const total = Number(activePrivacyWindow.duration_minutes || 0);
+          document.getElementById('privacy-bar').style.width = total > 0 && minsLeft != null ? `${Math.max(5, Math.min(100, Math.round(((total - minsLeft) / total) * 100)))}%` : '100%';
+        } else {
+          document.getElementById('privacy-status').textContent = 'Off';
+          document.getElementById('privacy-window').innerHTML = '<span class="flat">→</span> Capture is active';
+          document.getElementById('privacy-bar').style.width = '0%';
+        }
+      }
+
+      if (privacyHistory.ok) {
+        const latestDump = (privacyHistory.windows || []).find((row) => row.mode === 'redact_window');
+        document.getElementById('privacy-last').textContent = latestDump
+          ? new Date(latestDump.started_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+          : 'None';
+      }
+    } catch (_) {}
+  }
+
+  function openFocusModal() {
+    document.getElementById('focus-modal').style.display = 'flex';
+  }
+
+  function closeFocusModal() {
+    document.getElementById('focus-modal').style.display = 'none';
+  }
+
+  async function saveFocusBlock() {
+    const intention = document.getElementById('focus-intention').value.trim();
+    const plannedMinutes = parseInt(document.getElementById('focus-duration').value, 10) || 60;
+    if (!intention) return toast('Add a focus intention first');
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/focus/start`, {
+        method: 'POST',
+        headers: H(),
+        body: JSON.stringify({ user: USER, intention, planned_minutes: plannedMinutes }),
+      });
+      const data = await res.json();
+      if (!data.ok) return toast(`Error: ${data.error || 'Could not start focus'}`);
+      document.getElementById('focus-intention').value = '';
+      closeFocusModal();
+      toast('Focus block started');
+      loadFocusPrivacy();
+    } catch (_) {
+      toast('Could not start focus');
+    }
+  }
+
+  async function stopFocus() {
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/focus/stop`, {
+        method: 'POST',
+        headers: H(),
+        body: JSON.stringify({ user: USER }),
+      });
+      const data = await res.json();
+      if (!data.ok) return toast(`Error: ${data.error || 'Could not end focus'}`);
+      toast('Focus block ended');
+      loadFocusPrivacy();
+    } catch (_) {
+      toast('Could not end focus');
+    }
+  }
+
+  async function logFocusIntervention() {
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/focus/intervene`, {
+        method: 'POST',
+        headers: H(),
+        body: JSON.stringify({ user: USER, kind: 'nudge', message: 'Manual check-in from Today page' }),
+      });
+      const data = await res.json();
+      if (!data.ok) return toast(`Error: ${data.error || 'Could not log nudge'}`);
+      toast('Nudge logged');
+      loadFocusPrivacy();
+    } catch (_) {
+      toast('Could not log nudge');
+    }
+  }
+
+  async function startPrivacy(minutes) {
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/privacy/start`, {
+        method: 'POST',
+        headers: H(),
+        body: JSON.stringify({ user: USER, duration_minutes: minutes, reason: `Quick privacy window for ${minutes} minutes` }),
+      });
+      const data = await res.json();
+      if (!data.ok) return toast(`Error: ${data.error || 'Could not start privacy mode'}`);
+      toast(data.spoken_confirmation || 'Privacy mode on');
+      loadFocusPrivacy();
+    } catch (_) {
+      toast('Could not start privacy mode');
+    }
+  }
+
+  async function stopPrivacy() {
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/privacy/stop`, {
+        method: 'POST',
+        headers: H(),
+        body: JSON.stringify({ user: USER, reason: 'Ended from Today page' }),
+      });
+      const data = await res.json();
+      if (!data.ok) return toast(`Error: ${data.error || 'Could not stop privacy mode'}`);
+      toast(data.spoken_confirmation || 'Privacy mode off');
+      loadFocusPrivacy();
+    } catch (_) {
+      toast('Could not stop privacy mode');
+    }
+  }
+
   function commitStatus(c) {
-    if (!c.due_date) return { cls: 'upcoming', label: 'No due date' };
-    const due   = new Date(c.due_date);
+    if (!c.due_at) return { cls: 'upcoming', label: 'No due date' };
+    const due   = new Date(c.due_at);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     due.setHours(0, 0, 0, 0);
@@ -1043,7 +1283,7 @@
       const res  = await fetch(`${API}/api/v1/lifeos/joy/checkin`, {
         method: 'POST',
         headers: H(),
-        body: JSON.stringify({ user: USER, score: selectedJoy, note }),
+        body: JSON.stringify({ user: USER, joy_score: selectedJoy, notes: note }),
       });
       const data = await res.json();
       if (data.ok || res.ok) {
