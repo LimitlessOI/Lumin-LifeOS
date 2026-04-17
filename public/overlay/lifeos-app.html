@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <script src="/overlay/lifeos-theme.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -62,6 +63,20 @@
       --radius-md:  10px;
       --radius-lg:  14px;
       --transition: 0.2s ease;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg-base:      #f6f7fb;
+      --bg-raised:    #ffffff;
+      --bg-surface:   #ffffff;
+      --bg-surface2:  #f3f5fb;
+      --bg-overlay:   #ffffff;
+      --border:       rgba(15,23,42,0.12);
+      --border-focus: rgba(91,106,245,0.32);
+      --text-primary: #111827;
+      --text-secondary:#475569;
+      --text-muted:   #64748b;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -654,6 +669,18 @@
     .settings-save-btn:hover { opacity: 0.88; }
     .settings-link { color: var(--c-today); text-decoration: none; font-size: 13px; cursor: pointer; }
     .settings-link:hover { text-decoration: underline; }
+    .theme-toggle-btn {
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-surface2);
+      color: var(--text-primary);
+      font-size: 13px;
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .theme-toggle-btn:hover { border-color: var(--border-focus); }
 
     /* ═══════════════════════════════════════════════════════
        TOAST
@@ -768,6 +795,7 @@
       .sidebar.mini { width: var(--sidebar-w-mini); }
     }
   </style>
+  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
 </head>
 <body>
 
@@ -896,6 +924,7 @@
       <span class="topbar-title" id="topbar-title">Today</span>
       <div class="topbar-actions">
         <button class="topbar-btn" onclick="openQuickCapture()" title="Quick capture">✦</button>
+        <button class="topbar-btn" id="theme-toggle-topbar" onclick="cycleTheme()" title="Toggle theme">☀︎</button>
         <button class="topbar-btn" onclick="openSettings()" title="Settings">⚙</button>
       </div>
     </div>
@@ -907,6 +936,7 @@
         <div class="mobile-logo-icon">◎</div>
         <span class="mobile-section-name" id="mobile-section-name">Today</span>
       </div>
+      <button class="topbar-btn" id="theme-toggle-mobile" onclick="cycleTheme()" title="Toggle theme" style="min-width:44px;min-height:44px;">☀︎</button>
       <button class="topbar-btn" onclick="openSettings()" title="Settings" style="min-width:44px;min-height:44px;">⚙</button>
     </div>
 
@@ -1040,7 +1070,7 @@
     <div class="settings-divider"></div>
     <div class="settings-row">
       <div class="settings-label">Theme</div>
-      <div class="settings-value" style="color:var(--c-today)">Dark (system default)</div>
+      <button class="theme-toggle-btn" id="theme-toggle-settings" onclick="cycleTheme()">Dark</button>
     </div>
     <div class="settings-row">
       <div class="settings-label">Data &amp; Privacy</div>
@@ -1081,6 +1111,7 @@ let NAME  = localStorage.getItem('lifeos_name') || (USER.charAt(0).toUpperCase()
 let sidebarMini  = false;
 let currentPage  = 'lifeos-today.html';
 let currentTitle = 'Today';
+let THEME = (window.__lifeosTheme && window.__lifeosTheme.get()) || localStorage.getItem('lifeos_theme') || 'dark';
 function overlayUrl(page) { return `/overlay/${page}`; }
 
 /* Page metadata */
@@ -1122,6 +1153,7 @@ const PAGE_META = {
   document.getElementById('st-handle').textContent          = '@' + USER;
   document.getElementById('st-key').value                   = KEY;
   document.getElementById('st-name').value                  = NAME;
+  applyThemeUi(THEME);
 
   // Restore last page
   const last = sessionStorage.getItem('lifeos_page');
@@ -1142,6 +1174,13 @@ const PAGE_META = {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+
+  const frame = document.getElementById('content-frame');
+  if (frame) {
+    frame.addEventListener('load', () => {
+      try { frame.contentWindow.postMessage({ type: 'lifeos-theme', theme: THEME }, '*'); } catch {}
     });
   }
 
@@ -1204,6 +1243,41 @@ function loadPage(page) {
 
   sessionStorage.setItem('lifeos_page', page);
 }
+
+function applyThemeUi(theme) {
+  THEME = theme === 'light' ? 'light' : 'dark';
+  const label = THEME === 'light' ? 'Light' : 'Dark';
+  const icon = THEME === 'light' ? '☀︎' : '☾';
+  const title = THEME === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+  const settingsBtn = document.getElementById('theme-toggle-settings');
+  const topbarBtn = document.getElementById('theme-toggle-topbar');
+  const mobileBtn = document.getElementById('theme-toggle-mobile');
+  if (settingsBtn) settingsBtn.textContent = `${label} theme`;
+  if (topbarBtn) { topbarBtn.textContent = icon; topbarBtn.title = title; }
+  if (mobileBtn) { mobileBtn.textContent = icon; mobileBtn.title = title; }
+  try {
+    document.getElementById('content-frame')?.contentWindow?.postMessage({ type: 'lifeos-theme', theme: THEME }, '*');
+  } catch {}
+}
+
+function setTheme(theme) {
+  const nextTheme = theme === 'light' ? 'light' : 'dark';
+  if (window.__lifeosTheme && typeof window.__lifeosTheme.set === 'function') {
+    window.__lifeosTheme.set(nextTheme);
+  } else {
+    document.documentElement.dataset.theme = nextTheme;
+    localStorage.setItem('lifeos_theme', nextTheme);
+  }
+  applyThemeUi(nextTheme);
+}
+
+function cycleTheme() {
+  setTheme(THEME === 'light' ? 'dark' : 'light');
+}
+
+window.addEventListener('storage', (event) => {
+  if (event.key === 'lifeos_theme') applyThemeUi(event.newValue || 'dark');
+});
 
 function navigate(el) {
   if (!el.dataset.page) return;
