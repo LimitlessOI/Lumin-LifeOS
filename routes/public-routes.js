@@ -117,6 +117,25 @@ export function registerPublicRoutes(app, {
     res.status(404).send("Website audit overlay not found.");
   });
 
+  // Generic overlay HTML route for tracked shell pages such as LifeOS.
+  // This avoids depending on static middleware ordering for operator overlays.
+  app.get("/overlay/:file", (req, res, next) => {
+    const file = String(req.params.file || "").trim();
+    if (!/^[a-z0-9._-]+\.html$/i.test(file)) return next();
+
+    const filePath = path.join(__dirname, "public", "overlay", file);
+    if (fs.existsSync(filePath)) {
+      return sendPublicFileNoCache(res, filePath);
+    }
+    return next();
+  });
+
+  app.get("/lifeos", (req, res) => {
+    const filePath = path.join(__dirname, "public", "overlay", "lifeos-app.html");
+    if (fs.existsSync(filePath)) return sendPublicFileNoCache(res, filePath);
+    return res.status(404).send("LifeOS shell not found.");
+  });
+
   // ==================== ROOT ROUTE - API COST SAVINGS LANDING PAGE ====================
   // Must be defined BEFORE static middleware to take precedence
   app.get("/", (req, res) => {
