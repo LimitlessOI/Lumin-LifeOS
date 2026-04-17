@@ -5,7 +5,7 @@
 | **Lifecycle** | `founding-document` |
 | **Reversibility** | `one-way-door` |
 | **Stability** | `constitutional` |
-| **Last Updated** | 2026-04-17 (added focus sessions, privacy windows, retroactive privacy dump jobs, and command-driven focus/privacy controls; wired Today + Quick Entry to the new LifeOS attention/privacy APIs; corrected Quick Entry and Today payload drift for commitments and joy check-ins) |
+| **Last Updated** | 2026-04-17 (added native LifeOS calendar tables and Google Calendar sync, exposed calendar status/events/connect/sync APIs in the Engine, and wired the Engine overlay to manage events and Google connection alongside the existing calendar rules) |
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
@@ -734,6 +734,7 @@ Read first for Phase 1 build:
 
 | Date | What Changed | Why | Amendment | Verified |
 |---|---|---|---|---|
+| 2026-04-17 | Add LifeOS calendar core: `20260417_lifeos_calendar.sql`, `services/lifeos-calendar.js`, `/api/v1/lifeos/engine/calendar/*` status/events/connect/sync APIs, and Engine overlay support for Google connection + event management | Turn calendar from rule-only scaffolding into a native LifeOS domain with local events first and Google Calendar as the initial sync adapter | ✅ | pending |
 | 2026-04-17 | Add LifeOS attention/privacy core: `20260416_lifeos_focus_privacy.sql`, `services/lifeos-focus-privacy.js`, new `/focus/*`, `/privacy/*`, and `/commands/interpret` APIs; wire Today + Quick Entry to focus/privacy controls; fix commitment + joy payload drift in shipped overlays | Turn focus tracking, privacy windows, retroactive dumps, and voice-style commands into first-class LifeOS capabilities instead of undocumented future ideas, while also removing payload drift that would have broken quick-entry commitment and joy logging | ✅ | pending |
 | 2026-03-28 | Founding document written | Establish the full LifeOS constitutional vision before building Phase 1 | ✅ | pending |
 | 2026-03-28 | Added Data Sovereignty & Ethics + Fulfillment & Commerce sections | Data belongs to users; never sell for marketing; consent-first reorder model with affiliate then direct fulfillment | ✅ | pending |

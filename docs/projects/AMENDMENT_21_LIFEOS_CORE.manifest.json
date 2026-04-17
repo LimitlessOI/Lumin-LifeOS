@@ -83,7 +83,11 @@
     "public/overlay/lifeos-today.html",
     "public/overlay/lifeos-quick-entry.html",
     "services/lifeos-focus-privacy.js",
-    "db/migrations/20260416_lifeos_focus_privacy.sql"
+    "db/migrations/20260416_lifeos_focus_privacy.sql",
+    "routes/lifeos-engine-routes.js",
+    "public/overlay/lifeos-engine.html",
+    "services/lifeos-calendar.js",
+    "db/migrations/20260417_lifeos_calendar.sql"
   ],
   "assertions": [
     {
@@ -249,6 +253,18 @@
     {
       "type": "file_exists",
       "path": "db/migrations/20260416_lifeos_focus_privacy.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-calendar.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260417_lifeos_calendar.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-calendar.js"
     }
   ],
   "phases": [

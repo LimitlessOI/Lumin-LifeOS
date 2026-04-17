@@ -29,6 +29,7 @@
 import express from 'express';
 import { createOutreachEngine } from '../services/outreach-engine.js';
 import { createCommunicationGateway } from '../services/communication-gateway.js';
+import { createLifeOSCalendarService } from '../services/lifeos-calendar.js';
 
 function createLifeOSEngineContext({ pool, notificationService, sendSMS, callCouncilMember, logger }) {
   const callAI = callCouncilMember
@@ -76,6 +77,7 @@ export function createLifeOSEngineRoutes({ pool, requireKey, notificationService
     callCouncilMember,
     logger,
   });
+  const calendar = createLifeOSCalendarService(pool);
 
   // ── OUTREACH ──────────────────────────────────────────────────────────────
 
@@ -188,6 +190,110 @@ export function createLifeOSEngineRoutes({ pool, requireKey, notificationService
     try {
       await pool.query('UPDATE lifeos_calendar_rules SET active=false WHERE id=$1', [req.params.id]);
       res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── CALENDAR DOMAIN ───────────────────────────────────────────────────────
+
+  router.get('/calendar/status', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const [google, calendars] = await Promise.all([
+        calendar.getGoogleStatus(String(user), userId),
+        calendar.listCalendars(userId),
+      ]);
+      res.json({ ok: true, google, calendars });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/calendar/events', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', from, to, lane = '', limit = 100 } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const events = await calendar.listEvents(userId, { from, to, lane, limit });
+      res.json({ ok: true, events, count: events.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/calendar/events', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', ...payload } = req.body;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const event = await calendar.createEvent(userId, payload);
+      res.status(201).json({ ok: true, event });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.patch('/calendar/events/:id', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', ...payload } = req.body;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const event = await calendar.updateEvent(userId, req.params.id, payload);
+      if (!event) return res.status(404).json({ ok: false, error: 'Event not found' });
+      res.json({ ok: true, event });
+    } catch (err) {
+      res.status(400).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.delete('/calendar/events/:id', requireKey, async (req, res) => {
+    try {
+      const user = req.query.user || req.body?.user || 'adam';
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const deleted = await calendar.deleteEvent(userId, req.params.id);
+      if (!deleted) return res.status(404).json({ ok: false, error: 'Event not found' });
+      res.json({ ok: true, deleted: true });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/calendar/google/connect', requireKey, async (req, res) => {
+    try {
+      const user = String(req.query.user || 'adam');
+      const result = await calendar.getGoogleConnectUrl(user);
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/calendar/google/callback', async (req, res) => {
+    try {
+      const code = String(req.query.code || '').trim();
+      const user = String(req.query.state || 'adam').trim() || 'adam';
+      if (!code) return res.status(400).send('Missing Google OAuth code.');
+      await calendar.handleGoogleCallback(code, user);
+      const target = `${String(process.env.RAILWAY_PUBLIC_DOMAIN || process.env.PUBLIC_BASE_URL || '').trim().replace(/\/$/, '') || ''}/lifeos-engine.html?calendar=connected`;
+      if (/^https?:\/\//i.test(target)) return res.redirect(target);
+      return res.redirect('/lifeos-engine.html?calendar=connected');
+    } catch (err) {
+      logger?.error?.(`[LIFEOS/CALENDAR/CALLBACK] ${err.message}`);
+      res.status(500).send(`Google Calendar connection failed: ${err.message}`);
+    }
+  });
+
+  router.post('/calendar/google/sync', requireKey, async (req, res) => {
+    try {
+      const user = String(req.body?.user || req.query.user || 'adam');
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const result = await calendar.syncGooglePrimaryCalendar(userId, user);
+      res.json({ ok: true, ...result });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
