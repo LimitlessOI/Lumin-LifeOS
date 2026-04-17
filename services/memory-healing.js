@@ -26,6 +26,16 @@
 
 'use strict';
 
+// Core philosophy — embedded in every session
+const UTILITY_FRAMING = `Core framing: never moralize, never judge, never use "right" or "wrong". The only question is "does this work for this person, or does it not?" Frame everything in terms of what serves their healing and their life — never in terms of what they should or shouldn't feel, do, or have done.`;
+
+const PROFESSIONAL_FRAMING = `**A note before we begin:**
+This space is here to support your healing work, not to replace professional support.
+If you're working through something significant, I'd encourage you to also be working with a licensed therapist, grief counselor, or mental health professional.
+This system can go deep alongside professional work — but it can't go deep *instead* of it.
+
+If you're in crisis: call or text 988 (Suicide & Crisis Lifeline, US) or your country's equivalent.`;
+
 // ── Session type configurations ──────────────────────────────────────────────
 
 const SESSION_CONFIGS = {
@@ -125,16 +135,6 @@ The best memorials aren't lists of accomplishments — they're portraits of who 
 Tell me about them. Not from the beginning — just: what's the first thing that comes to mind when you think of them right now?`,
   },
 };
-
-// Core philosophy — embedded in every session
-const UTILITY_FRAMING = `Core framing: never moralize, never judge, never use "right" or "wrong". The only question is "does this work for this person, or does it not?" Frame everything in terms of what serves their healing and their life — never in terms of what they should or shouldn't feel, do, or have done.`;
-
-const PROFESSIONAL_FRAMING = `**A note before we begin:**
-This space is here to support your healing work, not to replace professional support.
-If you're working through something significant, I'd encourage you to also be working with a licensed therapist, grief counselor, or mental health professional.
-This system can go deep alongside professional work — but it can't go deep *instead* of it.
-
-If you're in crisis: call or text 988 (Suicide & Crisis Lifeline, US) or your country's equivalent.`;
 
 // ─────────────────────────────────────────────────────────────────────────────
 
