@@ -34,6 +34,28 @@ function normalizeDateValue(value) {
 }
 
 export function createLifeOSEventStreamService({ pool, callAI = null, commitments, calendar, focusPrivacy, logger = console }) {
+  async function getIngestStatus(userId) {
+    const { rows } = await pool.query(
+      `SELECT user_id, last_conversation_message_id, updated_at
+         FROM lifeos_event_ingest_control
+        WHERE user_id = $1
+        LIMIT 1`,
+      [userId],
+    ).catch(() => ({ rows: [] }));
+    return rows[0] || { user_id: userId, last_conversation_message_id: 0, updated_at: null };
+  }
+
+  async function setIngestWatermark(userId, messageId) {
+    await pool.query(
+      `INSERT INTO lifeos_event_ingest_control (user_id, last_conversation_message_id, updated_at)
+       VALUES ($1, $2, NOW())
+       ON CONFLICT (user_id)
+       DO UPDATE SET last_conversation_message_id = EXCLUDED.last_conversation_message_id,
+                     updated_at = NOW()`,
+      [userId, messageId],
+    );
+  }
+
   async function listEvents(userId, { limit = 30 } = {}) {
     const { rows: events } = await pool.query(
       `SELECT *
@@ -271,9 +293,77 @@ ${text}`;
     };
   }
 
+  async function ingestConversationMessages({ userId, limit = 50, autoApply = false } = {}) {
+    const status = await getIngestStatus(userId);
+    const watermark = Number(status.last_conversation_message_id || 0);
+    const safeLimit = Math.max(1, Math.min(200, parseInt(limit, 10) || 50));
+    const { rows: messages } = await pool.query(
+      `SELECT cm.id,
+              cm.content,
+              cm.timestamp,
+              cm.session_id,
+              cm.conversation_id,
+              c.source,
+              c.project,
+              c.summary AS conversation_summary
+         FROM conversation_messages cm
+         LEFT JOIN conversations c ON c.id = cm.conversation_id
+        WHERE cm.role = 'user'
+          AND cm.id > $2
+          AND cm.content IS NOT NULL
+          AND length(trim(cm.content)) > 20
+        ORDER BY cm.id ASC
+        LIMIT $1`,
+      [safeLimit, watermark],
+    );
+
+    if (!messages.length) {
+      return {
+        ingested_count: 0,
+        last_message_id: watermark,
+        events: [],
+      };
+    }
+
+    const events = [];
+    let newWatermark = watermark;
+    for (const msg of messages) {
+      const captured = await captureEvent({
+        userId,
+        text: msg.content,
+        source: 'conversation',
+        channel: msg.source || 'conversation',
+        metadata: {
+          conversation_message_id: msg.id,
+          conversation_id: msg.conversation_id,
+          session_id: msg.session_id,
+          conversation_source: msg.source || null,
+          conversation_project: msg.project || null,
+          conversation_summary: msg.conversation_summary || null,
+          timestamp: msg.timestamp || null,
+        },
+        autoApply,
+      });
+      events.push(captured);
+      newWatermark = Math.max(newWatermark, Number(msg.id || 0));
+    }
+
+    if (newWatermark > watermark) {
+      await setIngestWatermark(userId, newWatermark);
+    }
+
+    return {
+      ingested_count: messages.length,
+      last_message_id: newWatermark,
+      events,
+    };
+  }
+
   return {
     listEvents,
     captureEvent,
     applyEvent,
+    ingestConversationMessages,
+    getIngestStatus,
   };
 }

@@ -77,6 +77,18 @@
 
     .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(10px); background:#1e2060; border:1px solid #5b6af5; border-radius:8px; padding:11px 20px; font-size:13px; color:#a0aaff; opacity:0; transition:all .25s; z-index:1000; white-space: nowrap; }
     .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+    .result-card { margin: 0 16px 16px; background:#111118; border:1px solid #1e1e2e; border-radius:12px; padding:16px; }
+    .result-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .result-head h2 { font-size:13px; font-weight:600; color:#d8d8e8; }
+    .btn-small { padding:8px 10px; border-radius:8px; border:1px solid #2a2a3a; background:#0d0d1a; color:#aaa; cursor:pointer; font-size:12px; }
+    .stream-list { display:flex; flex-direction:column; gap:10px; }
+    .stream-item { background:#0d0d1a; border:1px solid #2a2a3a; border-radius:10px; padding:12px; }
+    .stream-item .meta { font-size:11px; color:#777; margin-bottom:6px; }
+    .stream-item .body { font-size:13px; color:#d8d8e8; line-height:1.45; margin-bottom:8px; white-space:pre-wrap; }
+    .stream-actions { display:flex; flex-wrap:wrap; gap:6px; }
+    .stream-pill { padding:4px 8px; border-radius:999px; border:1px solid #2a2a3a; font-size:10px; letter-spacing:.04em; text-transform:uppercase; color:#aaa; }
+    .stream-pill.applied { color:#5bd5a0; border-color:#214735; }
+    .stream-pill.error { color:#ff9aa9; border-color:#5a2731; }
   </style>
   <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
 </head>
@@ -261,6 +273,19 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<div class="result-card">
+  <div class="result-head">
+    <h2>Capture Inbox</h2>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <button class="btn-small" onclick="ingestRecentConversations()">Ingest recent conversations</button>
+      <button class="btn-small" onclick="loadEventInbox()">Refresh</button>
+    </div>
+  </div>
+  <div id="event-inbox" class="stream-list">
+    <div style="font-size:12px;color:#777;">Loading capture inbox…</div>
+  </div>
+</div>
 
 <script>
   const API  = '';
@@ -471,6 +496,7 @@
       resultBox.style.display = 'block';
       toast(bdAutoApply ? 'Applied' : 'Captured');
       document.getElementById('bd-text').value = '';
+      await loadEventInbox();
     } catch (err) {
       toast(`Error: ${esc(err.message)}`);
     } finally {
@@ -487,6 +513,84 @@
       const data = await res.json();
       if (data.ok) toast('Saved');
       else toast(`Error: ${esc(data.error || 'Unknown error')}`);
+      return data;
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+      return { ok:false, error: err.message };
+    }
+  }
+
+  async function ingestRecentConversations() {
+    const btn = Array.from(document.querySelectorAll('.btn-small')).find((el) => el.textContent.includes('Ingest recent'));
+    const original = btn?.innerHTML;
+    if (btn) { btn.disabled = true; btn.textContent = 'Ingesting…'; }
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/events/ingest-conversations`, {
+        method: 'POST',
+        headers: H,
+        body: JSON.stringify({ user: USER, limit: 50, auto_apply: false }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Ingest failed');
+      toast(data.ingested_count ? `Ingested ${data.ingested_count} conversation messages` : 'No new conversations to ingest');
+      await loadEventInbox();
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+    } finally {
+      if (btn) { btn.disabled = false; btn.innerHTML = original; }
+    }
+  }
+
+  async function loadEventInbox() {
+    const el = document.getElementById('event-inbox');
+    el.innerHTML = '<div style="font-size:12px;color:#777;">Loading capture inbox…</div>';
+    try {
+      const [eventsRes, statusRes] = await Promise.all([
+        fetch(`${API}/api/v1/lifeos/events?user=${encodeURIComponent(USER)}&limit=12`, { headers: H }),
+        fetch(`${API}/api/v1/lifeos/events/ingest-status?user=${encodeURIComponent(USER)}`, { headers: H }),
+      ]);
+      const eventsData = await eventsRes.json();
+      const statusData = await statusRes.json();
+      if (!eventsData.ok) throw new Error(eventsData.error || 'Could not load events');
+      const rows = Array.isArray(eventsData.events) ? eventsData.events : [];
+      if (!rows.length) {
+        el.innerHTML = `<div style="font-size:12px;color:#777;">No captured events yet.${statusData?.status?.last_conversation_message_id ? ` Last ingested message: ${esc(String(statusData.status.last_conversation_message_id))}` : ''}</div>`;
+        return;
+      }
+      el.innerHTML = rows.map((event) => {
+        const actions = Array.isArray(event.actions) ? event.actions : [];
+        const actionHtml = actions.length
+          ? actions.map((action) => `
+              <span class="stream-pill ${esc(action.status || '')}">
+                ${esc(action.action_type || 'action')} · ${esc(action.status || 'suggested')}
+              </span>`).join('')
+          : '<span class="stream-pill">no actions</span>';
+        const applyBtn = actions.some((a) => a.status === 'suggested')
+          ? `<button class="btn-small" onclick="applyEvent(${Number(event.id)})">Apply suggested actions</button>`
+          : '';
+        return `
+          <div class="stream-item">
+            <div class="meta">${esc(event.source || 'manual')} · ${new Date(event.created_at).toLocaleString()}</div>
+            <div class="body">${esc(event.text_content || '')}</div>
+            <div class="stream-actions">${actionHtml}${applyBtn}</div>
+          </div>`;
+      }).join('');
+    } catch (err) {
+      el.innerHTML = `<div style="font-size:12px;color:#ff9aa9;">${esc(err.message)}</div>`;
+    }
+  }
+
+  async function applyEvent(id) {
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/events/${id}/apply`, {
+        method: 'POST',
+        headers: H,
+        body: JSON.stringify({ user: USER }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Could not apply event');
+      toast(`Applied ${data.applied_count || 0} action${Number(data.applied_count || 0) === 1 ? '' : 's'}`);
+      await loadEventInbox();
     } catch (err) {
       toast(`Error: ${esc(err.message)}`);
     }
@@ -507,6 +611,7 @@
     const k = prompt('Enter your command key:');
     if (k) { localStorage.setItem('commandKey', k); location.reload(); }
   }
+  loadEventInbox();
 </script>
 </body>
 </html>

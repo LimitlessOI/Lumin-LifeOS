@@ -127,12 +127,12 @@ async function bootTCDeadlineCron(deps) {
   await guardedBoot();
 }
 
-// ── LifeOS scheduled jobs (commitment prods + outreach) — opt-in, no AI ──────
+// ── LifeOS scheduled jobs (commitment prods + event ingest + outreach) ───────
 async function bootLifeOSScheduled(deps) {
-  const { pool, logger, sendSMS, notificationService } = deps;
+  const { pool, logger, sendSMS, notificationService, callAI } = deps;
   try {
     const { startLifeOSScheduledJobs } = await import('../services/lifeos-scheduled-jobs.js');
-    startLifeOSScheduledJobs({ pool, sendSMS, notificationService, logger });
+    startLifeOSScheduledJobs({ pool, sendSMS, notificationService, logger, callAI });
     logger.info?.('[BOOT] LifeOS scheduler initialized (active only if LIFEOS_ENABLE_SCHEDULED_JOBS=1)');
   } catch (err) {
     logger.warn?.(`[BOOT] LifeOS scheduler failed to load: ${err.message}`);

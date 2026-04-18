@@ -734,6 +734,18 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     }
   });
 
+  router.get('/events/ingest-status', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const status = await eventStream.getIngestStatus(userId);
+      res.json({ ok: true, status });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   router.post('/events/capture', requireKey, async (req, res) => {
     try {
       const { user = 'adam', text, source = 'manual', channel = 'text', metadata = {}, auto_apply = false } = req.body || {};
@@ -749,6 +761,22 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
         autoApply: Boolean(auto_apply),
       });
       res.status(201).json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/events/ingest-conversations', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', limit = 50, auto_apply = false } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const result = await eventStream.ingestConversationMessages({
+        userId,
+        limit,
+        autoApply: Boolean(auto_apply),
+      });
+      res.json({ ok: true, ...result });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

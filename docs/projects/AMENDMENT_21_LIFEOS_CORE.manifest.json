@@ -95,7 +95,9 @@
     "public/overlay/lifeos-finance.html",
     "services/lifeos-notification-router.js",
     "public/overlay/lifeos-notifications.html",
-    "db/migrations/20260417_lifeos_notification_escalation.sql"
+    "db/migrations/20260417_lifeos_notification_escalation.sql",
+    "db/migrations/20260417_lifeos_event_ingest_control.sql",
+    "startup/boot-domains.js"
   ],
   "assertions": [
     {
@@ -297,6 +299,14 @@
     {
       "type": "node_check",
       "check": "services/lifeos-notification-router.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260417_lifeos_event_ingest_control.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "startup/boot-domains.js"
     }
   ],
   "phases": [
