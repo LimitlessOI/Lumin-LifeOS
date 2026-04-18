@@ -99,6 +99,7 @@
     "db/migrations/20260417_lifeos_event_ingest_control.sql",
     "startup/boot-domains.js",
     "services/lifeos-scoreboard.js",
+    "scripts/lifeos-smoke.mjs",
     "public/overlay/lifeos-app.html",
     "public/overlay/lifeos-feature.html",
     "public/overlay/lifeos-feature-data.js",
@@ -338,12 +339,20 @@
       "path": "public/overlay/lifeos-control-help.js"
     },
     {
+      "type": "file_exists",
+      "path": "scripts/lifeos-smoke.mjs"
+    },
+    {
       "type": "node_check",
       "check": "public/overlay/lifeos-feature-data.js"
     },
     {
       "type": "node_check",
       "check": "public/overlay/lifeos-control-help.js"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/lifeos-smoke.mjs"
     }
   ],
   "phases": [
