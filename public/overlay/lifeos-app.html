@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-feature-data.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -308,24 +309,75 @@
     .sidebar.mini .nav-item.active { border-left-color: transparent; }
 
     /* Tooltip on mini sidebar */
-    .sidebar.mini .nav-item::after {
-      content: attr(data-label);
-      position: absolute;
-      left: calc(var(--sidebar-w-mini) + 6px);
+    .sidebar.mini .nav-item::after { display: none; }
+
+    .feature-help-popover {
+      position: fixed;
+      width: 320px;
+      max-width: calc(100vw - 24px);
       background: var(--bg-overlay);
       border: 1px solid var(--border-focus);
-      border-radius: var(--radius-md);
-      padding: 5px 10px;
-      font-size: 12px;
-      color: var(--text-primary);
-      white-space: nowrap;
-      pointer-events: none;
+      border-radius: 14px;
+      padding: 14px;
+      z-index: 950;
+      box-shadow: 0 18px 36px rgba(0,0,0,0.45);
       opacity: 0;
-      z-index: 300;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      transition: opacity var(--transition);
+      transform: translateY(4px);
+      pointer-events: none;
+      transition: opacity var(--transition), transform var(--transition);
     }
-    .sidebar.mini .nav-item:hover::after { opacity: 1; }
+    .feature-help-popover.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .feature-help-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .feature-help-summary {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+    .feature-help-list {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .feature-help-list div {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text-primary);
+      padding: 8px 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .feature-help-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-focus);
+      color: var(--text-primary);
+      background: var(--bg-surface2);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .feature-help-link:hover {
+      background: var(--bg-surface);
+    }
+    @media (max-width: 999px) {
+      .feature-help-popover { display: none; }
+    }
 
     /* ═══════════════════════════════════════════════════════
        MAIN AREA
@@ -995,59 +1047,66 @@
   <div class="more-sheet-handle"></div>
   <div class="more-sheet-title">All Sections</div>
   <div class="more-grid">
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-mirror.html','Mirror','--c-mirror')">
+    <div class="more-item" data-page="lifeos-mirror.html" data-label="Mirror" onclick="mobileNavFromMore('lifeos-mirror.html','Mirror','--c-mirror')">
       <span class="more-item-icon">🔮</span>
       <span class="more-item-label">Mirror</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-engine.html','Engine','--c-engine')">
+    <div class="more-item" data-page="lifeos-engine.html" data-label="Engine" onclick="mobileNavFromMore('lifeos-engine.html','Engine','--c-engine')">
       <span class="more-item-icon">⚡</span>
       <span class="more-item-label">Engine</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-family.html','Family','--c-family')">
+    <div class="more-item" data-page="lifeos-family.html" data-label="Family" onclick="mobileNavFromMore('lifeos-family.html','Family','--c-family')">
       <span class="more-item-icon">🏡</span>
       <span class="more-item-label">Family</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-purpose.html','Purpose','--c-purpose')">
+    <div class="more-item" data-page="lifeos-purpose.html" data-label="Purpose" onclick="mobileNavFromMore('lifeos-purpose.html','Purpose','--c-purpose')">
       <span class="more-item-icon">🎯</span>
       <span class="more-item-label">Purpose</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-child.html','Children','--c-children')">
+    <div class="more-item" data-page="lifeos-child.html" data-label="Children" onclick="mobileNavFromMore('lifeos-child.html','Children','--c-children')">
       <span class="more-item-icon">⭐</span>
       <span class="more-item-label">Kids</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-mediation.html','Mediation','--c-mediation')">
+    <div class="more-item" data-page="lifeos-mediation.html" data-label="Mediation" onclick="mobileNavFromMore('lifeos-mediation.html','Mediation','--c-mediation')">
       <span class="more-item-icon">⚖️</span>
       <span class="more-item-label">Mediation</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-coach.html','Coach','--c-coach')">
+    <div class="more-item" data-page="lifeos-coach.html" data-label="Coach" onclick="mobileNavFromMore('lifeos-coach.html','Coach','--c-coach')">
       <span class="more-item-icon">💬</span>
       <span class="more-item-label">Coach</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-identity.html','Identity','--c-identity')">
+    <div class="more-item" data-page="lifeos-identity.html" data-label="Identity" onclick="mobileNavFromMore('lifeos-identity.html','Identity','--c-identity')">
       <span class="more-item-icon">🔑</span>
       <span class="more-item-label">Identity</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-decisions.html','Decisions','--c-decisions')">
+    <div class="more-item" data-page="lifeos-decisions.html" data-label="Decisions" onclick="mobileNavFromMore('lifeos-decisions.html','Decisions','--c-decisions')">
       <span class="more-item-icon">🧭</span>
       <span class="more-item-label">Decisions</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-growth.html','Growth','--c-growth')">
+    <div class="more-item" data-page="lifeos-growth.html" data-label="Growth" onclick="mobileNavFromMore('lifeos-growth.html','Growth','--c-growth')">
       <span class="more-item-icon">🌱</span>
       <span class="more-item-label">Growth</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-finance.html','Finance','--c-finance')">
+    <div class="more-item" data-page="lifeos-finance.html" data-label="Finance" onclick="mobileNavFromMore('lifeos-finance.html','Finance','--c-finance')">
       <span class="more-item-icon">💰</span>
       <span class="more-item-label">Finance</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-vision.html','Vision','--c-vision')">
+    <div class="more-item" data-page="lifeos-vision.html" data-label="Vision" onclick="mobileNavFromMore('lifeos-vision.html','Vision','--c-vision')">
       <span class="more-item-icon">🔭</span>
       <span class="more-item-label">Vision</span>
     </div>
-    <div class="more-item" onclick="mobileNavFromMore('lifeos-legacy.html','Legacy','--c-legacy')">
+    <div class="more-item" data-page="lifeos-legacy.html" data-label="Legacy" onclick="mobileNavFromMore('lifeos-legacy.html','Legacy','--c-legacy')">
       <span class="more-item-icon">🏛️</span>
       <span class="more-item-label">Legacy</span>
     </div>
   </div>
+</div>
+
+<div class="feature-help-popover" id="feature-help-popover" aria-hidden="true">
+  <div class="feature-help-title" id="feature-help-title">Feature</div>
+  <div class="feature-help-summary" id="feature-help-summary">Loading…</div>
+  <div class="feature-help-list" id="feature-help-list"></div>
+  <a class="feature-help-link" id="feature-help-link" href="#">Open guide</a>
 </div>
 
 <!-- Settings panel -->
@@ -1147,7 +1206,10 @@ const PAGE_META = {
   'lifeos-quick-entry.html': { title: 'Quick Entry', icon: '✍️', color: '--c-engine' },
   'lifeos-notifications.html': { title: 'Notifications', icon: '🔔', color: '--c-mirror' },
   'lifeos-parent-view.html': { title: 'Parent View', icon: '👨‍👩‍👧', color: '--c-children' },
+  'lifeos-feature.html': { title: 'Feature Guide', icon: 'ℹ️', color: '--c-purpose' },
 };
+const FEATURE_GUIDES = window.LIFEOS_FEATURE_GUIDES || {};
+let helpHideTimer = null;
 
 /* ── Boot ────────────────────────────────────────────────────── */
 (function init() {
@@ -1179,6 +1241,7 @@ const PAGE_META = {
   // URL shortcut (manifest shortcuts)
   const launchPage = new URLSearchParams(location.search).get('page');
   if (launchPage && PAGE_META[launchPage]) loadPage(launchPage);
+  initFeatureHelp();
 
   // PWA: service worker
   if ('serviceWorker' in navigator) {
@@ -1311,6 +1374,91 @@ function mobileNavFromMore(page, title, colorVar) {
   // Deactivate bottom tabs (we're in "more")
   document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('mob-more').classList.add('active');
+}
+
+function openFeatureGuide(page) {
+  const target = `/overlay/lifeos-feature.html?feature=${encodeURIComponent(page)}`;
+  document.getElementById('content-frame').src = target;
+  currentPage = 'lifeos-feature.html';
+  currentTitle = 'Feature Guide';
+  document.documentElement.style.setProperty('--section-color', 'var(--c-purpose)');
+  document.getElementById('topbar-icon').textContent = 'ℹ️';
+  document.getElementById('topbar-title').textContent = 'Feature Guide';
+  document.getElementById('mobile-section-name').textContent = 'Feature Guide';
+  hideFeatureHelp();
+}
+
+function initFeatureHelp() {
+  const targets = document.querySelectorAll('.nav-item[data-page], .more-item[data-page]');
+  targets.forEach((el) => {
+    el.addEventListener('mouseenter', () => queueFeatureHelp(el));
+    el.addEventListener('mouseleave', hideFeatureHelpSoon);
+    el.addEventListener('focusin', () => queueFeatureHelp(el));
+    el.addEventListener('focusout', hideFeatureHelpSoon);
+  });
+  const pop = document.getElementById('feature-help-popover');
+  pop.addEventListener('mouseenter', cancelFeatureHelpHide);
+  pop.addEventListener('mouseleave', hideFeatureHelpSoon);
+  window.addEventListener('scroll', hideFeatureHelp, true);
+  window.addEventListener('resize', hideFeatureHelp);
+}
+
+function queueFeatureHelp(el) {
+  cancelFeatureHelpHide();
+  showFeatureHelp(el);
+}
+
+function cancelFeatureHelpHide() {
+  if (helpHideTimer) {
+    clearTimeout(helpHideTimer);
+    helpHideTimer = null;
+  }
+}
+
+function hideFeatureHelpSoon() {
+  cancelFeatureHelpHide();
+  helpHideTimer = setTimeout(() => hideFeatureHelp(), 120);
+}
+
+function hideFeatureHelp() {
+  const pop = document.getElementById('feature-help-popover');
+  pop.classList.remove('show');
+  pop.setAttribute('aria-hidden', 'true');
+}
+
+function showFeatureHelp(el) {
+  if (window.innerWidth < 1000) return;
+  const page = el.dataset.page;
+  const guide = FEATURE_GUIDES[page];
+  if (!page || !guide) return;
+  const pop = document.getElementById('feature-help-popover');
+  document.getElementById('feature-help-title').textContent = guide.title || el.dataset.label || 'Feature';
+  document.getElementById('feature-help-summary').textContent = guide.short || 'No guide written yet.';
+  document.getElementById('feature-help-list').innerHTML = (guide.bullets || []).slice(0, 2).map((item) => `<div>${escapeHtml(item)}</div>`).join('');
+  const link = document.getElementById('feature-help-link');
+  link.onclick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    openFeatureGuide(page);
+  };
+  const rect = el.getBoundingClientRect();
+  const popW = Math.min(320, window.innerWidth - 24);
+  const left = Math.min(window.innerWidth - popW - 12, rect.right + 10);
+  const top = Math.max(12, Math.min(window.innerHeight - 220, rect.top));
+  pop.style.width = `${popW}px`;
+  pop.style.left = `${left}px`;
+  pop.style.top = `${top}px`;
+  pop.classList.add('show');
+  pop.setAttribute('aria-hidden', 'false');
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 /* ── Sidebar collapse ────────────────────────────────────────── */

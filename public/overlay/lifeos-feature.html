@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
+  <title>LifeOS Feature Guide</title>
+  <style>
+    body { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background: var(--bg-base,#0a0a0f); color: var(--text-primary,#e8e8f0); margin: 0; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 96px; }
+    .hero { display:flex; justify-content:space-between; align-items:flex-start; gap:20px; margin-bottom: 24px; }
+    .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 1.4px; color: var(--text-muted,#888); margin-bottom: 10px; }
+    h1 { font-size: 34px; line-height: 1.1; margin: 0 0 10px; }
+    .summary { font-size: 16px; line-height: 1.55; color: var(--text-secondary,#aaa); max-width: 760px; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; min-height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--border,rgba(255,255,255,.1)); background: var(--bg-surface,#111118); color: var(--text-primary,#e8e8f0); text-decoration:none; font-size: 14px; cursor:pointer; }
+    .btn.primary { background: var(--section-color,#5b6af5); color: white; border-color: transparent; }
+    .grid { display:grid; grid-template-columns: 1.15fr .85fr; gap: 18px; margin-bottom: 18px; }
+    @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } .hero { flex-direction: column; } }
+    .card { background: var(--bg-surface,#111118); border: 1px solid var(--border,rgba(255,255,255,.1)); border-radius: 16px; padding: 20px; }
+    h2 { font-size: 14px; letter-spacing: 1.3px; text-transform: uppercase; color: var(--section-color,#5b6af5); margin: 0 0 14px; }
+    .list { display:grid; gap: 10px; }
+    .item { background: var(--bg-overlay,#1b1b25); border: 1px solid var(--border,rgba(255,255,255,.08)); border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.5; }
+    .diagram { width: 100%; height: auto; display:block; background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border: 1px solid var(--border,rgba(255,255,255,.08)); border-radius: 14px; }
+    .note { font-size: 13px; line-height: 1.55; color: var(--text-secondary,#aaa); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">LifeOS feature guide</div>
+        <h1 id="title">Feature</h1>
+        <div class="summary" id="summary">Loading…</div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" id="open-feature" href="#">Open feature</a>
+        <a class="btn" href="/lifeos">Back to LifeOS</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>What it does</h2>
+        <div class="list" id="bullets"></div>
+      </div>
+      <div class="card">
+        <h2>How to use it</h2>
+        <div class="list" id="details"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 id="visual-title">How it works</h2>
+      <svg class="diagram" id="diagram" viewBox="0 0 920 260" role="img" aria-label="Feature workflow diagram"></svg>
+      <div class="note" style="margin-top:12px">This diagram is an operating view. It shows the intended loop for the feature so the user understands where the input, processing, and outcome fit together.</div>
+    </div>
+  </div>
+  <script src="/overlay/lifeos-feature-data.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const feature = params.get('feature') || 'lifeos-today.html';
+    const guides = window.LIFEOS_FEATURE_GUIDES || {};
+    const guide = guides[feature] || {
+      title: 'Feature',
+      short: 'No guide has been written for this feature yet.',
+      bullets: ['Open the feature and inspect the live surface.'],
+      details: ['This guide needs to be expanded.'],
+      visualTitle: 'Feature flow',
+      visualSteps: ['Input', 'System work', 'Outcome']
+    };
+
+    document.title = `${guide.title} — LifeOS Guide`;
+    document.documentElement.style.setProperty('--section-color', '#5b6af5');
+    document.getElementById('title').textContent = guide.title;
+    document.getElementById('summary').textContent = guide.short;
+    document.getElementById('visual-title').textContent = guide.visualTitle || 'How it works';
+    document.getElementById('open-feature').href = `/overlay/${feature}`;
+    document.getElementById('bullets').innerHTML = (guide.bullets || []).map((item) => `<div class="item">${escapeHtml(item)}</div>`).join('');
+    document.getElementById('details').innerHTML = (guide.details || []).map((item) => `<div class="item">${escapeHtml(item)}</div>`).join('');
+    renderDiagram(guide.visualSteps || []);
+
+    function renderDiagram(steps) {
+      const svg = document.getElementById('diagram');
+      const ns = 'http://www.w3.org/2000/svg';
+      const clean = steps.slice(0, 5);
+      const width = 920;
+      const boxW = 160;
+      const boxH = 72;
+      const y = 92;
+      const gap = clean.length > 1 ? (width - 80 - (boxW * clean.length)) / (clean.length - 1) : 0;
+      svg.innerHTML = '';
+      const bg = document.createElementNS(ns, 'rect');
+      bg.setAttribute('x', '0'); bg.setAttribute('y', '0'); bg.setAttribute('width', '920'); bg.setAttribute('height', '260');
+      bg.setAttribute('rx', '14'); bg.setAttribute('fill', 'transparent');
+      svg.appendChild(bg);
+      clean.forEach((label, idx) => {
+        const x = 40 + (boxW + gap) * idx;
+        if (idx < clean.length - 1) {
+          const line = document.createElementNS(ns, 'line');
+          line.setAttribute('x1', String(x + boxW));
+          line.setAttribute('y1', String(y + boxH / 2));
+          line.setAttribute('x2', String(x + boxW + gap - 18));
+          line.setAttribute('y2', String(y + boxH / 2));
+          line.setAttribute('stroke', '#5b6af5');
+          line.setAttribute('stroke-width', '3');
+          line.setAttribute('stroke-linecap', 'round');
+          svg.appendChild(line);
+          const arrow = document.createElementNS(ns, 'path');
+          const ax = x + boxW + gap - 18;
+          const ay = y + boxH / 2;
+          arrow.setAttribute('d', `M ${ax} ${ay} l -10 -8 m 10 8 l -10 8`);
+          arrow.setAttribute('fill', 'none');
+          arrow.setAttribute('stroke', '#5b6af5');
+          arrow.setAttribute('stroke-width', '3');
+          arrow.setAttribute('stroke-linecap', 'round');
+          arrow.setAttribute('stroke-linejoin', 'round');
+          svg.appendChild(arrow);
+        }
+        const rect = document.createElementNS(ns, 'rect');
+        rect.setAttribute('x', String(x)); rect.setAttribute('y', String(y));
+        rect.setAttribute('width', String(boxW)); rect.setAttribute('height', String(boxH));
+        rect.setAttribute('rx', '14');
+        rect.setAttribute('fill', idx === 0 ? 'rgba(91,106,245,.18)' : 'rgba(255,255,255,.03)');
+        rect.setAttribute('stroke', idx === clean.length - 1 ? '#34d399' : '#5b6af5');
+        rect.setAttribute('stroke-width', '2');
+        svg.appendChild(rect);
+        const t = document.createElementNS(ns, 'text');
+        t.setAttribute('x', String(x + boxW / 2));
+        t.setAttribute('y', String(y + boxH / 2 - 6));
+        t.setAttribute('text-anchor', 'middle');
+        t.setAttribute('fill', '#e8e8f0');
+        t.setAttribute('font-size', '14');
+        t.setAttribute('font-family', '-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif');
+        wrapText(svg, t, label, x + boxW / 2, y + boxH / 2 - 6, 18);
+      });
+    }
+
+    function wrapText(svg, textEl, text, x, y, lineHeight) {
+      const words = String(text).split(/\s+/);
+      let line = '';
+      let lines = [];
+      const max = 18;
+      words.forEach((word) => {
+        const next = line ? `${line} ${word}` : word;
+        if (next.length > max) {
+          if (line) lines.push(line);
+          line = word;
+        } else {
+          line = next;
+        }
+      });
+      if (line) lines.push(line);
+      lines.slice(0, 3).forEach((lineText, idx) => {
+        const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+        tspan.setAttribute('x', String(x));
+        tspan.setAttribute('dy', idx === 0 ? '0' : String(lineHeight));
+        tspan.textContent = lineText;
+        textEl.appendChild(tspan);
+      });
+      svg.appendChild(textEl);
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+  </script>
+</body>
+</html>
