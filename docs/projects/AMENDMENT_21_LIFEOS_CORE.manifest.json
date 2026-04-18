@@ -101,7 +101,8 @@
     "services/lifeos-scoreboard.js",
     "public/overlay/lifeos-app.html",
     "public/overlay/lifeos-feature.html",
-    "public/overlay/lifeos-feature-data.js"
+    "public/overlay/lifeos-feature-data.js",
+    "public/overlay/lifeos-control-help.js"
   ],
   "assertions": [
     {
@@ -333,8 +334,16 @@
       "path": "public/overlay/lifeos-feature-data.js"
     },
     {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-control-help.js"
+    },
+    {
       "type": "node_check",
       "check": "public/overlay/lifeos-feature-data.js"
+    },
+    {
+      "type": "node_check",
+      "check": "public/overlay/lifeos-control-help.js"
     }
   ],
   "phases": [

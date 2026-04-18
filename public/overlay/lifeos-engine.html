@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-feature-data.js"></script>
+  <script src="/overlay/lifeos-control-help.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>The Engine — LifeOS</title>
   <style>
@@ -115,7 +117,7 @@
           <textarea id="f-body" rows="5" placeholder="Write the message to send on your behalf..."></textarea>
         </div>
       </div>
-      <button class="btn-submit" onclick="createTask()">Queue Task</button>
+      <button class="btn-submit" data-help-key="queue-task" onclick="createTask()">Queue Task</button>
     </div>
   </div>
 
@@ -158,7 +160,7 @@
           <textarea id="c-description" rows="3" placeholder="Optional notes"></textarea>
         </div>
       </div>
-      <button class="btn-submit" onclick="createCalendarEvent()">Save Event</button>
+      <button class="btn-submit" data-help-key="save-event" onclick="createCalendarEvent()">Save Event</button>
     </div>
   </div>
 
@@ -190,7 +192,7 @@
           <input id="r-end" type="time" value="10:00" />
         </div>
       </div>
-      <button class="btn-submit" onclick="addRule()">Add Rule</button>
+      <button class="btn-submit" data-help-key="add-rule" onclick="addRule()">Add Rule</button>
     </div>
   </div>
 </div>
@@ -315,8 +317,8 @@
         <div class="card-header">
           <span class="title">Calendar Status</span>
           <div class="actions">
-            <button class="btn" onclick="syncGoogleCalendar()">Sync Google</button>
-            <button class="btn primary" onclick="startGoogleCalendarConnect()">${google.connected ? 'Reconnect Google' : 'Connect Google'}</button>
+            <button class="btn" data-help-key="sync-google" onclick="syncGoogleCalendar()">Sync Google</button>
+            <button class="btn primary" data-help-key="connect-google" onclick="startGoogleCalendarConnect()">${google.connected ? 'Reconnect Google' : 'Connect Google'}</button>
           </div>
         </div>
         <div class="card-body">

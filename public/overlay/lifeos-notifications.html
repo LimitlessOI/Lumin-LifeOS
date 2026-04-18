@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-feature-data.js"></script>
+  <script src="/overlay/lifeos-control-help.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Notifications — LifeOS</title>
   <style>
@@ -87,7 +89,7 @@
 
   <div class="page-header">
     <h1>Notifications</h1>
-    <button class="ack-all-btn" id="btn-ack-all" onclick="acknowledgeAll()" disabled>Acknowledge All</button>
+    <button class="ack-all-btn" id="btn-ack-all" data-help-key="ack-all" onclick="acknowledgeAll()" disabled>Acknowledge All</button>
   </div>
   <p class="sub" id="sub-line">Loading...</p>
   <div class="refresh-bar" id="refresh-bar"></div>
@@ -103,20 +105,20 @@
     <div class="settings-grid">
       <div>
         <label for="sms-delay">SMS delay (min)</label>
-        <input id="sms-delay" type="number" min="0" step="1" value="5">
+        <input id="sms-delay" data-help-key="sms-delay" type="number" min="0" step="1" value="5">
       </div>
       <div>
         <label for="alarm-delay">Alarm delay (min)</label>
-        <input id="alarm-delay" type="number" min="0" step="1" value="15">
+        <input id="alarm-delay" data-help-key="alarm-delay" type="number" min="0" step="1" value="15">
       </div>
       <div>
         <label for="call-delay">Call delay (min)</label>
-        <input id="call-delay" type="number" min="0" step="1" value="30">
+        <input id="call-delay" data-help-key="call-delay" type="number" min="0" step="1" value="30">
       </div>
     </div>
     <div class="settings-actions">
-      <button class="btn-primary" onclick="savePolicy()">Save escalation settings</button>
-      <button class="btn-secondary" onclick="sendTestEscalation()">Send test escalation</button>
+      <button class="btn-primary" data-help-key="save-escalation" onclick="savePolicy()">Save escalation settings</button>
+      <button class="btn-secondary" data-help-key="test-escalation" onclick="sendTestEscalation()">Send test escalation</button>
     </div>
   </div>
 

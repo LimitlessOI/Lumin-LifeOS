@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-feature-data.js"></script>
+  <script src="/overlay/lifeos-control-help.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Today — LifeOS</title>
   <style>
@@ -750,7 +752,7 @@
         <div class="progress-bar">
           <div class="progress-fill" id="joy-bar" style="background:#7c3aed;width:0%"></div>
         </div>
-        <button class="score-checkin-btn" id="checkin-btn" onclick="openCheckin()">Check In Today</button>
+        <button class="score-checkin-btn" id="checkin-btn" data-help-key="checkin" onclick="openCheckin()">Check In Today</button>
       </div>
     </div>
   </div>
@@ -771,9 +773,9 @@
         <div class="mini-stat"><span>On-task today</span><strong id="focus-ratio">—</strong></div>
         <div class="mini-stat"><span>Interventions tried</span><strong id="focus-interventions">0</strong></div>
         <div class="focus-actions">
-          <button class="mini-btn primary" id="focus-start-btn" onclick="openFocusModal()">Start focus</button>
-          <button class="mini-btn" id="focus-stop-btn" onclick="stopFocus()">End focus</button>
-          <button class="mini-btn" id="focus-nudge-btn" onclick="logFocusIntervention()">Log nudge</button>
+          <button class="mini-btn primary" id="focus-start-btn" data-help-key="focus-start" onclick="openFocusModal()">Start focus</button>
+          <button class="mini-btn" id="focus-stop-btn" data-help-key="focus-stop" onclick="stopFocus()">End focus</button>
+          <button class="mini-btn" id="focus-nudge-btn" data-help-key="focus-nudge" onclick="logFocusIntervention()">Log nudge</button>
         </div>
       </div>
       <div class="score-card">
@@ -785,9 +787,9 @@
         </div>
         <div class="mini-stat"><span>Last dump request</span><strong id="privacy-last">None</strong></div>
         <div class="focus-actions">
-          <button class="mini-btn primary" onclick="startPrivacy(60)">Privacy 1h</button>
-          <button class="mini-btn primary" onclick="startPrivacy(120)">Privacy 2h</button>
-          <button class="mini-btn danger" onclick="stopPrivacy()">Privacy off</button>
+          <button class="mini-btn primary" data-help-key="privacy-1h" onclick="startPrivacy(60)">Privacy 1h</button>
+          <button class="mini-btn primary" data-help-key="privacy-2h" onclick="startPrivacy(120)">Privacy 2h</button>
+          <button class="mini-btn danger" data-help-key="privacy-off" onclick="stopPrivacy()">Privacy off</button>
         </div>
         <div class="card-note">Voice/text command support: “privacy mode for 2 hours”, “dump the last 2 hours”, “start focus for 90 minutes on admin work”.</div>
       </div>
@@ -802,7 +804,7 @@
         <span class="section-count" id="commit-count">…</span>
       </span>
       <div style="display:flex;gap:10px;align-items:center">
-        <button class="btn-add" onclick="toggleCommitAdd()">+ Add</button>
+        <button class="btn-add" data-help-key="commit-add" onclick="toggleCommitAdd()">+ Add</button>
         <a class="section-link" href="lifeos-engine.html">See All →</a>
       </div>
     </div>

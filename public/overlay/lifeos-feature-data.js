@@ -5,7 +5,57 @@ window.LIFEOS_FEATURE_GUIDES = {
     bullets: ['See if you are on track or drifting', 'Review blockers, wins, and the next right move'],
     details: ['Today pulls together your integrity, joy, focus, health, commitments, engine tasks, and the new compound-effect scoreboard.', 'Use it as the first screen in the morning and the reset screen when you drift off track during the day.'],
     visualTitle: 'How Today works',
-    visualSteps: ['Read your current state', 'Check compound-effect score', 'Handle blockers first', 'Protect the next focus block']
+    visualSteps: ['Read your current state', 'Check compound-effect score', 'Handle blockers first', 'Protect the next focus block'],
+    controls: {
+      'checkin': {
+        title: 'Check In Today',
+        short: 'Logs a joy/wellbeing snapshot so Today can measure how you are actually doing instead of assuming.',
+        details: ['Use this when you have not yet logged today’s emotional state or when your state has shifted hard enough that Today should react to it.'],
+        visualSteps: ['Notice current state', 'Log the check-in', 'Update joy score', 'Adjust today accordingly']
+      },
+      'focus-start': {
+        title: 'Start Focus',
+        short: 'Starts a timed focus block tied to a specific intention so LifeOS can measure whether you stayed on task.',
+        details: ['Use this before deep work, admin, outreach, or any block you want scored later as on-track or drifting.'],
+        visualSteps: ['State intention', 'Start timer', 'Protect the block', 'Review adherence']
+      },
+      'focus-stop': {
+        title: 'End Focus',
+        short: 'Closes the current focus block and records how much of it you actually protected.',
+        details: ['Use this as soon as the block ends so Today can score your follow-through accurately.'],
+        visualSteps: ['Stop block', 'Lock time used', 'Update adherence', 'Reflect on drift']
+      },
+      'focus-nudge': {
+        title: 'Log Nudge',
+        short: 'Records that LifeOS had to intervene to get you back on track during the current focus block.',
+        details: ['This is part of the attention loop. It measures whether the system is helping and how often you drift.'],
+        visualSteps: ['Notice drift', 'Record intervention', 'Track recovery', 'Improve future focus']
+      },
+      'privacy-1h': {
+        title: 'Privacy 1 Hour',
+        short: 'Turns on privacy mode for one hour so detailed capture pauses during that window.',
+        details: ['Use this when you want a short block of reduced capture without leaving privacy mode on indefinitely.'],
+        visualSteps: ['Start privacy window', 'Pause detailed capture', 'Protect the time block', 'Resume automatically']
+      },
+      'privacy-2h': {
+        title: 'Privacy 2 Hours',
+        short: 'Turns on privacy mode for two hours with the same protections as the shorter window.',
+        details: ['Use this for longer family, recovery, or sensitive blocks where you want LifeOS quiet.'],
+        visualSteps: ['Start longer privacy window', 'Pause detailed capture', 'Keep the window bounded', 'Resume automatically']
+      },
+      'privacy-off': {
+        title: 'Privacy Off',
+        short: 'Ends the active privacy window and resumes normal capture rules.',
+        details: ['Use this when you want LifeOS to start paying attention again before the timer expires.'],
+        visualSteps: ['End privacy window', 'Resume capture', 'Restore normal automation']
+      },
+      'commit-add': {
+        title: 'Add Commitment',
+        short: 'Creates a new explicit promise so Today and Mirror can hold it visible later.',
+        details: ['Use this for anything you are actually putting your word on, not for vague wishes.'],
+        visualSteps: ['State the commitment', 'Store it', 'Surface it daily', 'Mark it kept or broken']
+      }
+    }
   },
   'lifeos-mirror.html': {
     title: 'Mirror',
@@ -21,7 +71,39 @@ window.LIFEOS_FEATURE_GUIDES = {
     bullets: ['Manage follow-ups and calendar events', 'Let LifeOS work tasks on your behalf'],
     details: ['Engine is where operational work gets organized: outreach tasks, communication queues, calendar events, and business execution.', 'Use it when Today shows that business follow-through is slipping.'],
     visualTitle: 'Engine flow',
-    visualSteps: ['Capture a task', 'Queue the follow-up', 'Schedule it on the calendar', 'Mark it done or waiting']
+    visualSteps: ['Capture a task', 'Queue the follow-up', 'Schedule it on the calendar', 'Mark it done or waiting'],
+    controls: {
+      'queue-task': {
+        title: 'Queue Task',
+        short: 'Creates a new outreach or follow-through task for the Engine to manage.',
+        details: ['Use this when something should be sent, scheduled, or tracked instead of living only in your head.'],
+        visualSteps: ['Capture the task', 'Queue it', 'Track status', 'Close the loop']
+      },
+      'save-event': {
+        title: 'Save Event',
+        short: 'Creates a LifeOS calendar event in the selected lane.',
+        details: ['Use this for personal, family, work, social, or health time blocks you want inside the native LifeOS calendar.'],
+        visualSteps: ['Define event', 'Choose lane', 'Save it', 'Review alongside the rest of life']
+      },
+      'sync-google': {
+        title: 'Sync Google',
+        short: 'Pulls the latest Google Calendar state into the native LifeOS calendar domain.',
+        details: ['Use this after connecting Google or when outside changes need to appear inside LifeOS.'],
+        visualSteps: ['Request sync', 'Pull calendar data', 'Merge into LifeOS', 'Review changes']
+      },
+      'connect-google': {
+        title: 'Connect Google',
+        short: 'Starts the Google Calendar authorization flow so LifeOS can sync your calendar.',
+        details: ['Use this once per account, then reconnect only if access expires or settings change.'],
+        visualSteps: ['Open auth flow', 'Grant access', 'Store token', 'Enable sync']
+      },
+      'add-rule': {
+        title: 'Add Rule',
+        short: 'Adds a calendar protection rule so LifeOS can preserve time according to your operating preferences.',
+        details: ['Use this for protected focus blocks, no back-to-back rules, or category declines you want enforced repeatedly.'],
+        visualSteps: ['Define rule', 'Save it', 'Apply it to scheduling', 'Protect time automatically']
+      }
+    }
   },
   'lifeos-health.html': {
     title: 'Health',
@@ -157,7 +239,51 @@ window.LIFEOS_FEATURE_GUIDES = {
     bullets: ['Capture before you forget', 'Convert raw thought into structured actions'],
     details: ['Quick Entry is the inbox for fast reality capture.', 'It should reduce friction so important things get into the system instead of evaporating.'],
     visualTitle: 'Capture path',
-    visualSteps: ['Capture raw input', 'Classify it', 'Extract actions or commitments', 'Review and apply']
+    visualSteps: ['Capture raw input', 'Classify it', 'Extract actions or commitments', 'Review and apply'],
+    controls: {
+      'type-commitment': {
+        title: 'Commitment',
+        short: 'Opens the commitment capture form for promises you want LifeOS to hold visible.',
+        details: ['Use this when you are making a concrete commitment, especially one with a due date.'],
+        visualSteps: ['Open commitment form', 'State the promise', 'Save it', 'Track follow-through']
+      },
+      'type-joy': {
+        title: 'Joy Check-In',
+        short: 'Opens the daily wellbeing check-in so the system can adjust to your actual state.',
+        details: ['Use this when your emotional state matters to how hard you should push today.'],
+        visualSteps: ['Open joy check-in', 'Log score', 'Save note', 'Update Today']
+      },
+      'type-focus': {
+        title: 'Focus Block',
+        short: 'Opens the focus block form to start a tracked work session from Quick Entry.',
+        details: ['Use this when you want to launch a focus block immediately without going through Today first.'],
+        visualSteps: ['Open focus form', 'Set intention', 'Start block', 'Track adherence']
+      },
+      'type-privacy': {
+        title: 'Privacy Mode',
+        short: 'Opens privacy controls so you can pause detailed capture for a set duration.',
+        details: ['Use this when you need immediate privacy from the fast-capture surface.'],
+        visualSteps: ['Choose duration', 'Start privacy window', 'Pause capture', 'Resume later']
+      },
+      'type-command': {
+        title: 'Command',
+        short: 'Opens the natural-language command runner for focus, privacy, and other LifeOS actions.',
+        details: ['Use this when it is faster to tell LifeOS what to do than to tap through forms.'],
+        visualSteps: ['Write command', 'Interpret intent', 'Apply action', 'Confirm result']
+      },
+      'type-braindump': {
+        title: 'Brain Dump',
+        short: 'Opens the freeform inbox that extracts commitments, commands, and follow-up actions from messy input.',
+        details: ['Use this when you have a lot on your mind and need LifeOS to sort it into structured next actions.'],
+        visualSteps: ['Dump everything', 'Extract actions', 'Review suggestions', 'Apply what matters']
+      },
+      'capture-inbox': {
+        title: 'Capture Inbox',
+        short: 'Shows recently captured events and lets you ingest or apply suggested actions from them.',
+        details: ['Use this to review what the event stream has already captured from conversations and quick input.'],
+        visualSteps: ['Refresh inbox', 'Review captured items', 'Apply suggestions', 'Keep the stream clean']
+      }
+    }
   },
   'lifeos-notifications.html': {
     title: 'Notifications',
@@ -165,7 +291,45 @@ window.LIFEOS_FEATURE_GUIDES = {
     bullets: ['Escalate from overlay to SMS, alarm, or call', 'Tune how hard LifeOS should try to reach you'],
     details: ['Notifications is where the system decides how important something is and how far it should go to get your attention.', 'This should serve you, not harass you.'],
     visualTitle: 'Escalation ladder',
-    visualSteps: ['Raise reminder', 'Try overlay first', 'Escalate if missed', 'Stop when acknowledged']
+    visualSteps: ['Raise reminder', 'Try overlay first', 'Escalate if missed', 'Stop when acknowledged'],
+    controls: {
+      'ack-all': {
+        title: 'Acknowledge All',
+        short: 'Marks all current notifications as seen so the escalation ladder can stop for those items.',
+        details: ['Use this when you have processed the visible notifications and want the system quiet again.'],
+        visualSteps: ['Review notifications', 'Acknowledge them', 'Stop escalation', 'Reset the queue']
+      },
+      'sms-delay': {
+        title: 'SMS Delay',
+        short: 'Sets how many minutes LifeOS waits before escalating a missed item to SMS.',
+        details: ['Lower values make the system more aggressive. Higher values make it more patient.'],
+        visualSteps: ['Set delay', 'Save policy', 'Wait for missed notice', 'Escalate to SMS']
+      },
+      'alarm-delay': {
+        title: 'Alarm Delay',
+        short: 'Sets how many minutes LifeOS waits before escalating a missed item to an alarm.',
+        details: ['Use this when overlay and SMS are not enough to reliably get your attention.'],
+        visualSteps: ['Set delay', 'Save policy', 'Miss earlier stage', 'Trigger alarm']
+      },
+      'call-delay': {
+        title: 'Call Delay',
+        short: 'Sets how many minutes LifeOS waits before escalating a missed item to a call.',
+        details: ['This is the highest-friction escalation and should be reserved for things that truly matter.'],
+        visualSteps: ['Set delay', 'Save policy', 'Miss earlier stages', 'Trigger call']
+      },
+      'save-escalation': {
+        title: 'Save Escalation Settings',
+        short: 'Saves the current escalation ladder delays for the active user.',
+        details: ['Use this after tuning your escalation thresholds so LifeOS remembers them.'],
+        visualSteps: ['Adjust delays', 'Save policy', 'Use new ladder going forward']
+      },
+      'test-escalation': {
+        title: 'Send Test Escalation',
+        short: 'Triggers a test notification so you can verify the ladder works before relying on it.',
+        details: ['Use this after changing escalation settings or when you want to confirm the system can still reach you.'],
+        visualSteps: ['Trigger test', 'Watch overlay', 'Verify escalation path', 'Adjust if needed']
+      }
+    }
   },
   'lifeos-parent-view.html': {
     title: 'Parent View',

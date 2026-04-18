@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-feature-data.js"></script>
+  <script src="/overlay/lifeos-control-help.js"></script>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>LifeOS Quick Entry</title>
@@ -101,11 +103,11 @@
 
 <!-- Type selector -->
 <div class="type-grid">
-  <button class="type-btn" id="btn-commitment" onclick="toggle('commitment')">
+  <button class="type-btn" id="btn-commitment" data-help-key="type-commitment" onclick="toggle('commitment')">
     <span class="icon">🎯</span>
     <span class="label">Commitment</span>
   </button>
-  <button class="type-btn" id="btn-joy" onclick="toggle('joy')">
+  <button class="type-btn" id="btn-joy" data-help-key="type-joy" onclick="toggle('joy')">
     <span class="icon">😊</span>
     <span class="label">Joy Check-In</span>
   </button>
@@ -117,19 +119,19 @@
     <span class="icon">⚡</span>
     <span class="label">Outreach Task</span>
   </button>
-  <button class="type-btn" id="btn-focus" onclick="toggle('focus')">
+  <button class="type-btn" id="btn-focus" data-help-key="type-focus" onclick="toggle('focus')">
     <span class="icon">🧠</span>
     <span class="label">Focus Block</span>
   </button>
-  <button class="type-btn" id="btn-privacy" onclick="toggle('privacy')">
+  <button class="type-btn" id="btn-privacy" data-help-key="type-privacy" onclick="toggle('privacy')">
     <span class="icon">🔒</span>
     <span class="label">Privacy Mode</span>
   </button>
-  <button class="type-btn" id="btn-command" onclick="toggle('command')">
+  <button class="type-btn" id="btn-command" data-help-key="type-command" onclick="toggle('command')">
     <span class="icon">🎙️</span>
     <span class="label">Command</span>
   </button>
-  <button class="type-btn" id="btn-braindump" onclick="toggle('braindump')">
+  <button class="type-btn" id="btn-braindump" data-help-key="type-braindump" onclick="toggle('braindump')">
     <span class="icon">🧺</span>
     <span class="label">Brain Dump</span>
   </button>
@@ -278,8 +280,8 @@
   <div class="result-head">
     <h2>Capture Inbox</h2>
     <div style="display:flex; gap:8px; flex-wrap:wrap;">
-      <button class="btn-small" onclick="ingestRecentConversations()">Ingest recent conversations</button>
-      <button class="btn-small" onclick="loadEventInbox()">Refresh</button>
+      <button class="btn-small" data-help-key="capture-inbox" onclick="ingestRecentConversations()">Ingest recent conversations</button>
+      <button class="btn-small" data-help-key="capture-inbox" onclick="loadEventInbox()">Refresh</button>
     </div>
   </div>
   <div id="event-inbox" class="stream-list">

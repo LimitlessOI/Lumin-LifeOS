@@ -62,8 +62,9 @@
   <script>
     const params = new URLSearchParams(location.search);
     const feature = params.get('feature') || 'lifeos-today.html';
+    const control = params.get('control') || '';
     const guides = window.LIFEOS_FEATURE_GUIDES || {};
-    const guide = guides[feature] || {
+    const baseGuide = guides[feature] || {
       title: 'Feature',
       short: 'No guide has been written for this feature yet.',
       bullets: ['Open the feature and inspect the live surface.'],
@@ -71,6 +72,15 @@
       visualTitle: 'Feature flow',
       visualSteps: ['Input', 'System work', 'Outcome']
     };
+    const controlGuide = control ? (baseGuide.controls || {})[control] : null;
+    const guide = controlGuide ? {
+      title: `${baseGuide.title} — ${controlGuide.title || 'Control'}`,
+      short: controlGuide.short || baseGuide.short,
+      bullets: controlGuide.bullets || [`This control belongs to ${baseGuide.title}.`],
+      details: controlGuide.details || baseGuide.details,
+      visualTitle: controlGuide.visualTitle || `${controlGuide.title || 'Control'} flow`,
+      visualSteps: controlGuide.visualSteps || baseGuide.visualSteps
+    } : baseGuide;
 
     document.title = `${guide.title} — LifeOS Guide`;
     document.documentElement.style.setProperty('--section-color', '#5b6af5');
