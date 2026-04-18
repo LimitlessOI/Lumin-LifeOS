@@ -26,6 +26,7 @@ import { createEmotionalPatternEngine } from '../services/emotional-pattern-engi
 import { createParentingCoach }         from '../services/parenting-coach.js';
 import { createInnerWorkEffectiveness } from '../services/inner-work-effectiveness.js';
 import { createSelfSabotageMonitor }    from '../services/self-sabotage-monitor.js';
+import { makeLifeOSUserResolver }       from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
@@ -44,16 +45,8 @@ export function createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMembe
   const innerWork         = createInnerWorkEffectiveness({ pool, callAI });
   const sabotageMonitor   = createSelfSabotageMonitor({ pool, callAI });
 
-  // ── Helper: resolve user_id from handle or numeric id ────────────────────
-  async function resolveUserId(handleOrId) {
-    if (!handleOrId) return null;
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [+handleOrId]);
-      return rows[0]?.id || null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id || null;
-  }
+  // ── Helper: resolve user_id from handle or numeric id (shared, case-insensitive) ──
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   // ── GET /patterns ─────────────────────────────────────────────────────────
   // Returns all known emotional patterns for the user, ordered by frequency.

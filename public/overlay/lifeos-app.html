@@ -40,6 +40,7 @@
       --c-identity:   #a78bfa;
       --c-decisions:  #f59e0b;
       --c-growth:     #34d399;
+      --c-finance:    #22d3ee;
       --c-vision:     #38bdf8;
       --c-legacy:     #fb923c;
       --c-healing:    #c084fc;
@@ -893,6 +894,10 @@
         <span class="nav-icon">🌱</span>
         <span class="nav-label">Growth</span>
       </a>
+      <a class="nav-item" id="nav-finance"   data-page="lifeos-finance.html"   data-label="Finance"    onclick="navigate(this)" href="#">
+        <span class="nav-icon">💰</span>
+        <span class="nav-label">Finance</span>
+      </a>
 
       <div class="nav-divider"></div>
       <div class="nav-group-label">Legacy</div>
@@ -1030,6 +1035,10 @@
       <span class="more-item-icon">🌱</span>
       <span class="more-item-label">Growth</span>
     </div>
+    <div class="more-item" onclick="mobileNavFromMore('lifeos-finance.html','Finance','--c-finance')">
+      <span class="more-item-icon">💰</span>
+      <span class="more-item-label">Finance</span>
+    </div>
     <div class="more-item" onclick="mobileNavFromMore('lifeos-vision.html','Vision','--c-vision')">
       <span class="more-item-icon">🔭</span>
       <span class="more-item-label">Vision</span>
@@ -1129,6 +1138,7 @@ const PAGE_META = {
   'lifeos-identity.html':  { title: 'Identity',   icon: '🔑',  color: '--c-identity'  },
   'lifeos-decisions.html': { title: 'Decisions',  icon: '🧭',  color: '--c-decisions' },
   'lifeos-growth.html':    { title: 'Growth',     icon: '🌱',  color: '--c-growth'    },
+  'lifeos-finance.html':   { title: 'Finance',    icon: '💰',  color: '--c-finance'   },
   'lifeos-vision.html':    { title: 'Vision',     icon: '🔭',  color: '--c-vision'    },
   'lifeos-legacy.html':    { title: 'Legacy',     icon: '🏛️',  color: '--c-legacy'    },
   'lifeos-healing.html':   { title: 'Healing',    icon: '🌸',  color: '--c-healing'   },

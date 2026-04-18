@@ -26,6 +26,7 @@
 import express from 'express';
 import { createFutureVision }    from '../services/future-vision.js';
 import { createVideoProduction } from '../services/video-production.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSVisionRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = express.Router();
@@ -41,16 +42,9 @@ export function createLifeOSVisionRoutes({ pool, requireKey, callCouncilMember, 
   const vision          = createFutureVision({ pool, callAI, logger });
   const videoProduction = createVideoProduction({ pool, callAI, logger });
 
-  // ── Helper: resolve user ID from handle or numeric ID ──────────────────
-  async function resolveUserId(handleOrId) {
-    if (!handleOrId) return null;
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [handleOrId]);
-      return rows[0]?.id || null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id || null;
-  }
+  // Helper: resolve user_id (shared, case-insensitive)
+  const resolveUserId = makeLifeOSUserResolver(pool);
+
 
   // ── VISION SESSIONS ─────────────────────────────────────────────────────
 

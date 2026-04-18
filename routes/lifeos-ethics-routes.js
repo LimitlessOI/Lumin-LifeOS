@@ -25,6 +25,7 @@ import { createConsentRegistry }    from '../services/consent-registry.js';
 import { createConstitutionalLock } from '../services/constitutional-lock.js';
 import { createSovereigntyCheck }   from '../services/sovereignty-check.js';
 import { createResearchAggregator } from '../services/research-aggregator.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 const ERASE_CONFIRM_LITERAL = 'ERASE_ALL_MY_DATA';
 
@@ -39,16 +40,9 @@ export function createLifeOSEthicsRoutes({ pool, requireKey, callCouncilMember, 
   const sovereigntyCheck = createSovereigntyCheck({ pool });
   const researchAggregator = createResearchAggregator({ pool, logger: log });
 
-  // ── Helper: resolve user_id from handle or numeric id ────────────────────
-  async function resolveUserId(handleOrId) {
-    if (!handleOrId) return null;
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [+handleOrId]);
-      return rows[0]?.id || null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id || null;
-  }
+  // Helper: resolve user_id (shared, case-insensitive)
+  const resolveUserId = makeLifeOSUserResolver(pool);
+
 
   // ── GET /consent ──────────────────────────────────────────────────────────
   // Returns the current consent state for all features for the user.

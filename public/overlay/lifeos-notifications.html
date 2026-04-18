@@ -19,6 +19,17 @@
     .ack-all-btn:disabled { opacity: 0.4; cursor: default; }
 
     .sub { font-size: 13px; color: #555; margin-bottom: 28px; }
+    .settings-card {
+      background: #111118; border: 1px solid #1e1e2e; border-radius: 10px;
+      padding: 14px 16px; margin-bottom: 20px;
+    }
+    .settings-grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-top: 12px; }
+    .settings-grid label { display:block; font-size:11px; color:#777; text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; }
+    .settings-grid input { width:100%; background:#0d0d1a; border:1px solid #2a2a3a; color:#d8d8e8; border-radius:8px; padding:8px 10px; }
+    .settings-actions { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+    .btn-secondary { padding:8px 12px; border:1px solid #2a2a3a; border-radius:8px; background:transparent; color:#aaa; font-size:12px; cursor:pointer; }
+    .btn-primary { padding:8px 12px; border:1px solid #5b6af5; border-radius:8px; background:#1e2060; color:#a0aaff; font-size:12px; cursor:pointer; }
+    .policy-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; color:#aaa; font-size:12px; }
 
     /* Group sections */
     .group { margin-bottom: 28px; }
@@ -47,6 +58,10 @@
     .notif-msg  { font-size: 13px; color: #d8d8e8; line-height: 1.5; word-break: break-word; }
     .notif-time { font-size: 11px; color: #444; margin-top: 5px; }
     .notif-actions { flex-shrink: 0; }
+    .channel-badge { display:inline-flex; align-items:center; gap:6px; padding:3px 8px; border-radius:999px; border:1px solid #2a2a3a; font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:#aaa; margin-bottom:8px; }
+    .channel-badge.alarm { border-color:#ef5b87; color:#ffc7d5; }
+    .channel-badge.call { border-color:#f59e0b; color:#fde68a; }
+    .channel-badge.sms { border-color:#5b6af5; color:#a0aaff; }
     .btn-ack { padding: 5px 12px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #555; font-size: 11px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
     .btn-ack:hover { background: #1a1a2a; color: #aaa; }
     .btn-ack:disabled { opacity: 0.4; cursor: default; }
@@ -77,6 +92,34 @@
   <p class="sub" id="sub-line">Loading...</p>
   <div class="refresh-bar" id="refresh-bar"></div>
 
+  <div class="settings-card">
+    <strong>Escalation ladder</strong>
+    <div class="policy-row">
+      <span>Overlay now</span>
+      <span>SMS after configured delay</span>
+      <span>Alarm after configured delay</span>
+      <span>Call after configured delay</span>
+    </div>
+    <div class="settings-grid">
+      <div>
+        <label for="sms-delay">SMS delay (min)</label>
+        <input id="sms-delay" type="number" min="0" step="1" value="5">
+      </div>
+      <div>
+        <label for="alarm-delay">Alarm delay (min)</label>
+        <input id="alarm-delay" type="number" min="0" step="1" value="15">
+      </div>
+      <div>
+        <label for="call-delay">Call delay (min)</label>
+        <input id="call-delay" type="number" min="0" step="1" value="30">
+      </div>
+    </div>
+    <div class="settings-actions">
+      <button class="btn-primary" onclick="savePolicy()">Save escalation settings</button>
+      <button class="btn-secondary" onclick="sendTestEscalation()">Send test escalation</button>
+    </div>
+  </div>
+
   <div id="notif-container">
     <div class="loading"><span class="spinner"></span></div>
   </div>
@@ -106,18 +149,25 @@
   let allNotifs = [];
   let refreshInterval = null;
   let lastRefresh = null;
+  let playedAlarmIds = new Set();
 
   // -------- Load --------
   async function load() {
     try {
-      const res  = await fetch(`${API}/api/v1/lifeos/notifications?user=${encodeURIComponent(USER)}`, { headers: H });
-      const data = await res.json();
+      const [notifRes, policyRes] = await Promise.all([
+        fetch(`${API}/api/v1/lifeos/notifications?user=${encodeURIComponent(USER)}`, { headers: H }),
+        fetch(`${API}/api/v1/lifeos/notifications/escalation?user=${encodeURIComponent(USER)}`, { headers: H }),
+      ]);
+      const data = await notifRes.json();
+      const policyData = await policyRes.json();
       if (!data.ok) throw new Error(data.error || 'Failed to load');
       allNotifs = data.notifications || [];
+      if (policyData.ok && policyData.policy) hydratePolicy(policyData.policy);
       render();
       updateTitle();
       lastRefresh = new Date();
       updateRefreshBar();
+      maybePlayAlarm();
     } catch (err) {
       document.getElementById('notif-container').innerHTML =
         `<div class="empty"><div class="msg">Could not load notifications: ${esc(err.message)}</div></div>`;
@@ -180,6 +230,7 @@
         <div class="notif-inner">
           <span class="notif-icon">${cfg.icon}</span>
           <div class="notif-body">
+            <div class="channel-badge ${esc((n.channel || '').toLowerCase())}">${esc(n.channel || 'overlay')}</div>
             <div class="notif-msg">${msg}</div>
             <div class="notif-time">${timeStr}</div>
           </div>
@@ -261,6 +312,76 @@
     if (!lastRefresh) return;
     document.getElementById('refresh-bar').textContent =
       `Last refreshed ${relativeTime(lastRefresh.toISOString())}`;
+  }
+
+  function hydratePolicy(policy) {
+    document.getElementById('sms-delay').value = policy.sms_delay_min ?? 5;
+    document.getElementById('alarm-delay').value = policy.alarm_delay_min ?? 15;
+    document.getElementById('call-delay').value = policy.call_delay_min ?? 30;
+  }
+
+  async function savePolicy() {
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/notifications/escalation`, {
+        method: 'PUT',
+        headers: H,
+        body: JSON.stringify({
+          user: USER,
+          sms_delay_min: Number(document.getElementById('sms-delay').value || 5),
+          alarm_delay_min: Number(document.getElementById('alarm-delay').value || 15),
+          call_delay_min: Number(document.getElementById('call-delay').value || 30),
+        }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Could not save policy');
+      toast('Escalation settings saved');
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+    }
+  }
+
+  async function sendTestEscalation() {
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/notifications/escalate-test`, {
+        method: 'POST',
+        headers: H,
+        body: JSON.stringify({ user: USER, message: 'LifeOS escalation test — confirm text, alarm, and call ladder.' }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Could not queue test');
+      toast('Test escalation queued');
+      await load();
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+    }
+  }
+
+  function maybePlayAlarm() {
+    const alarms = allNotifs.filter((n) => !n.acknowledged_at && (n.channel === 'alarm' || n.type === 'emergency'));
+    const fresh = alarms.filter((n) => !playedAlarmIds.has(n.id));
+    if (!fresh.length) return;
+    fresh.forEach((n) => playedAlarmIds.add(n.id));
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const scheduleBeep = (offset) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = 880;
+        gain.gain.setValueAtTime(0.0001, ctx.currentTime + offset);
+        gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + offset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + offset + 0.25);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + offset);
+        osc.stop(ctx.currentTime + offset + 0.28);
+      };
+      scheduleBeep(0);
+      scheduleBeep(0.35);
+      scheduleBeep(0.7);
+    } catch {}
   }
 
   function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }

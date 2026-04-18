@@ -7,22 +7,15 @@
 
 import express from 'express';
 import { createLifeOSFinance } from '../services/lifeos-finance.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSFinanceRoutes({ pool, requireKey, logger }) {
   const router = express.Router();
   const log = logger || console;
   const finance = createLifeOSFinance({ pool });
 
-  async function resolveUserId(handleOrId) {
-    if (handleOrId == null || handleOrId === '') return null;
-    const s = String(handleOrId).trim();
-    if (/^\d+$/.test(s)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [s]);
-      return rows[0]?.id ?? null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [s]);
-    return rows[0]?.id ?? null;
-  }
+  // Helper: resolve user_id (shared, case-insensitive)
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   router.get('/disclaimer', (_req, res) => {
     res.json({

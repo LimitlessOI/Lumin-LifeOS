@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<!--
+  LifeOS Finance Overlay
+  Phase 16 — Personal Finance & Investment OS (Mirror-adjacent)
+
+  Responsibility:
+    Thin client over /api/v1/lifeos/finance/*. Non-advisory mirror layer:
+    accounts, categories, transactions, month summary, goals, IPS.
+
+  Sovereignty notes:
+    - Education and self-reflection only. Not tax, legal, or investment advice.
+    - Data entry is manual / CSV; aggregator connectors require explicit consent
+      before they can be wired up (see AMENDMENT_21 Phase 16).
+
+  @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>LifeOS · Finance</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; padding-bottom: 60px; }
+
+    .header { padding: 20px 22px 14px; border-bottom: 1px solid #1e1e2e; display: flex; flex-direction: column; gap: 4px; }
+    .header h1 { font-size: 17px; font-weight: 600; color: #e2e2f0; }
+    .header .sub { font-size: 11px; color: #666; letter-spacing: 0.3px; }
+    .disclaimer { font-size: 10.5px; color: #6a6a88; margin-top: 4px; line-height: 1.5; }
+
+    .tabs { display: flex; gap: 0; padding: 8px 14px 0; border-bottom: 1px solid #1e1e2e; overflow-x: auto; }
+    .tab { padding: 10px 14px; font-size: 12px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; user-select: none; }
+    .tab.active { color: #a0aaff; border-bottom-color: #5b6af5; }
+
+    .panel { display: none; padding: 18px 18px 24px; }
+    .panel.active { display: block; }
+
+    .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: #555; margin: 6px 0 10px; }
+
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 14px 14px; margin-bottom: 10px; }
+    .card .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .card .title { font-size: 14px; color: #e4e4f0; font-weight: 600; }
+    .card .meta { font-size: 11px; color: #777; margin-top: 4px; line-height: 1.5; }
+    .badge { padding: 3px 8px; border-radius: 999px; background: #1a1a2e; color: #9a9ac8; font-size: 10.5px; font-weight: 600; }
+    .amount-pos { color: #6bd98a; font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; }
+    .amount-neg { color: #ff8088; font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; }
+    .amount-zero { color: #888; font-weight: 600; font-size: 14px; font-variant-numeric: tabular-nums; }
+
+    .hero { background: linear-gradient(180deg,#111128 0%, #0d0d18 100%); border: 1px solid #2a2a44; border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+    .hero .big { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 6px; }
+    .hero .label { font-size: 11px; color: #7a7ab0; text-transform: uppercase; letter-spacing: 1.4px; }
+
+    .form-field { margin-bottom: 12px; }
+    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 10px 12px; font-size: 13.5px; outline: none;
+      font-family: inherit;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #5b6af5; }
+    .form-field textarea { resize: vertical; min-height: 64px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .btn { background: #2a2a44; border: 1px solid #3a3a5a; color: #e8e8f0; padding: 9px 14px; border-radius: 8px; cursor: pointer; font-size: 12.5px; font-weight: 600; }
+    .btn-primary { background: #4050e6; border-color: #4050e6; }
+    .btn-primary:hover { background: #5160f0; }
+    .btn-ghost { background: transparent; border: 1px solid #2a2a3a; color: #a0aaff; }
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .progress { position: relative; height: 6px; background: #1a1a2a; border-radius: 3px; margin-top: 8px; overflow: hidden; }
+    .progress > div { position: absolute; left:0; top:0; bottom:0; background: linear-gradient(90deg,#4050e6,#6070ff); border-radius: 3px; }
+
+    .empty { color: #555; font-size: 12.5px; padding: 18px 8px; text-align: center; font-style: italic; }
+    .error { color: #ff7070; font-size: 12px; padding: 8px 0; }
+
+    .cap-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #1e1e2e; font-size: 12.5px; }
+    .cap-row:last-child { border-bottom: none; }
+    .cap-name { color: #ccc; }
+    .cap-limit { color: #888; font-variant-numeric: tabular-nums; }
+
+    .txn { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #181828; }
+    .txn:last-child { border-bottom: none; }
+    .txn-left { flex: 1; min-width: 0; }
+    .txn-memo { font-size: 13px; color: #ddd; }
+    .txn-meta { font-size: 10.5px; color: #666; margin-top: 2px; letter-spacing: 0.3px; }
+
+    .disclaimer-footer { margin: 28px 18px 0; padding: 12px 14px; border: 1px solid #2a2a3a; border-radius: 8px; background: #0d0d18; font-size: 10.5px; color: #6a6a88; line-height: 1.55; }
+  </style>
+</head>
+<body>
+<div class="header">
+  <h1 id="greeting">Finance — mirror layer</h1>
+  <div class="sub" id="dateline">LOADING…</div>
+  <div class="disclaimer">Education and self-reflection only. Not tax, legal, or investment advice.</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="summary" onclick="switchTab('summary')">Summary</div>
+  <div class="tab" data-tab="txns" onclick="switchTab('txns')">Transactions</div>
+  <div class="tab" data-tab="budget" onclick="switchTab('budget')">Budget</div>
+  <div class="tab" data-tab="goals" onclick="switchTab('goals')">Goals</div>
+  <div class="tab" data-tab="ips" onclick="switchTab('ips')">IPS</div>
+</div>
+
+<!-- ── SUMMARY ───────────────────────────────────────────── -->
+<div class="panel active" id="panel-summary">
+  <div class="hero">
+    <div class="label">This month · spend</div>
+    <div class="big" id="month-spend">—</div>
+    <div class="meta" id="month-range" style="font-size:11px;color:#7a7ab0;margin-top:6px;letter-spacing:0.4px;"></div>
+  </div>
+
+  <div class="section-title">Category caps</div>
+  <div class="card" id="caps-card">
+    <div class="empty" id="caps-empty">No caps defined yet. Add one under Budget.</div>
+  </div>
+
+  <div class="section-title" style="margin-top:18px;">Accounts</div>
+  <div class="card" id="accounts-card">
+    <div class="empty" id="accounts-empty">No accounts yet.</div>
+  </div>
+
+  <div class="btn-row" style="margin-top:14px;">
+    <button class="btn btn-ghost" onclick="openAccountForm()">+ Account</button>
+    <button class="btn btn-ghost" onclick="switchTab('txns')">Log transaction</button>
+  </div>
+
+  <div id="account-form-wrap" style="display:none;margin-top:14px;">
+    <div class="card">
+      <div class="section-title">New account</div>
+      <div class="form-field">
+        <label>Name</label>
+        <input id="acct-name" placeholder="e.g. Joint Checking" maxlength="80" />
+      </div>
+      <div class="grid2">
+        <div class="form-field">
+          <label>Type</label>
+          <select id="acct-type">
+            <option value="checking">Checking</option>
+            <option value="savings">Savings</option>
+            <option value="credit">Credit card</option>
+            <option value="investment">Investment</option>
+            <option value="loan">Loan</option>
+            <option value="cash">Cash</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Currency</label>
+          <input id="acct-currency" value="USD" maxlength="3" />
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveAccount()">Save</button>
+        <button class="btn" onclick="closeAccountForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TRANSACTIONS ──────────────────────────────────────── -->
+<div class="panel" id="panel-txns">
+  <div class="card">
+    <div class="section-title">Log a transaction</div>
+    <div class="form-field">
+      <label>Amount (negative = outflow)</label>
+      <input id="txn-amount" type="number" step="0.01" placeholder="-42.50" inputmode="decimal" />
+    </div>
+    <div class="grid2">
+      <div class="form-field">
+        <label>Date</label>
+        <input id="txn-date" type="date" />
+      </div>
+      <div class="form-field">
+        <label>Category</label>
+        <select id="txn-category"><option value="">— none —</option></select>
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Account</label>
+      <select id="txn-account"><option value="">— none —</option></select>
+    </div>
+    <div class="form-field">
+      <label>Memo</label>
+      <input id="txn-memo" placeholder="Groceries, gas, …" maxlength="200" />
+    </div>
+    <button class="btn btn-primary" onclick="saveTxn()">Log transaction</button>
+    <div class="error" id="txn-error"></div>
+  </div>
+
+  <div class="section-title" style="margin-top:18px;">Recent</div>
+  <div class="card" id="txn-list">
+    <div class="empty">Loading…</div>
+  </div>
+</div>
+
+<!-- ── BUDGET / CATEGORIES ──────────────────────────────── -->
+<div class="panel" id="panel-budget">
+  <div class="card">
+    <div class="section-title">New category</div>
+    <div class="form-field">
+      <label>Name</label>
+      <input id="cat-name" placeholder="e.g. Groceries" maxlength="60" />
+    </div>
+    <div class="grid2">
+      <div class="form-field">
+        <label>Values tag (optional)</label>
+        <input id="cat-values" placeholder="e.g. nourishment, growth" maxlength="60" />
+      </div>
+      <div class="form-field">
+        <label>Monthly cap ($)</label>
+        <input id="cat-cap" type="number" step="1" min="0" inputmode="numeric" />
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="saveCategory()">Add category</button>
+  </div>
+
+  <div class="section-title" style="margin-top:18px;">All categories</div>
+  <div class="card" id="cat-list">
+    <div class="empty">Loading…</div>
+  </div>
+</div>
+
+<!-- ── GOALS ──────────────────────────────────────────────── -->
+<div class="panel" id="panel-goals">
+  <div class="card">
+    <div class="section-title">New goal</div>
+    <div class="form-field">
+      <label>Name</label>
+      <input id="goal-name" placeholder="e.g. Emergency fund" maxlength="80" />
+    </div>
+    <div class="grid2">
+      <div class="form-field">
+        <label>Target amount</label>
+        <input id="goal-target" type="number" step="0.01" inputmode="decimal" />
+      </div>
+      <div class="form-field">
+        <label>Already saved</label>
+        <input id="goal-current" type="number" step="0.01" inputmode="decimal" value="0" />
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Target date (optional)</label>
+      <input id="goal-date" type="date" />
+    </div>
+    <div class="form-field">
+      <label>Notes (why this matters)</label>
+      <textarea id="goal-notes" placeholder="Anchor it to a dream, a value, or a date that matters."></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="saveGoal()">Add goal</button>
+  </div>
+
+  <div class="section-title" style="margin-top:18px;">Goals</div>
+  <div id="goals-list">
+    <div class="empty">Loading…</div>
+  </div>
+</div>
+
+<!-- ── IPS ────────────────────────────────────────────────── -->
+<div class="panel" id="panel-ips">
+  <div class="card">
+    <div class="section-title">Investment policy statement</div>
+    <div class="form-field">
+      <label>Statement — why, how, guardrails</label>
+      <textarea id="ips-statement" placeholder="Plain language. What this money is for. What I will not do under pressure. How often I review. Who I call before acting."></textarea>
+    </div>
+    <div class="form-field">
+      <label>Risks I have named</label>
+      <textarea id="ips-risks" placeholder="Drawdowns I can stomach. Liquidity I need. Emotional triggers (FOMO, panic, boredom trading)."></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="saveIps()">Save IPS</button>
+    <div class="meta" id="ips-updated" style="font-size:10.5px;color:#666;margin-top:8px;"></div>
+  </div>
+
+  <div class="disclaimer-footer">
+    This IPS is for self-accountability only. LifeOS is not a licensed investment advisor and does not produce portfolio recommendations, trade signals, or allocation advice. Any simulation data is education-only. Past performance does not predict future results.
+  </div>
+</div>
+
+<script>
+/* ───────────────────────────── bootstrap ───────────────────────────── */
+const API  = '';
+let   KEY  = localStorage.getItem('commandKey') || '';
+const USER = new URLSearchParams(location.search).get('user')
+             || localStorage.getItem('lifeos_user')
+             || 'adam';
+const H    = () => ({ 'Content-Type': 'application/json', 'x-command-key': KEY });
+
+if (!KEY) {
+  const k = prompt('Enter your command key:');
+  if (k) { localStorage.setItem('commandKey', k); KEY = k; }
+}
+
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+})[c]);
+
+const fmt$ = (n) => {
+  const num = Number(n);
+  if (!Number.isFinite(num)) return '—';
+  return num.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+};
+
+const fmtDate = (d) => {
+  if (!d) return '';
+  const dt = new Date(d);
+  if (Number.isNaN(dt.getTime())) return '';
+  return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+};
+
+/* ───────────────────────────── tabs ───────────────────────────── */
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach((el) => el.classList.toggle('active', el.dataset.tab === id));
+  document.querySelectorAll('.panel').forEach((el) => el.classList.toggle('active', el.id === `panel-${id}`));
+}
+
+/* ───────────────────────────── header ───────────────────────────── */
+(function initHeader() {
+  const now = new Date();
+  document.getElementById('greeting').textContent =
+    `Finance — ${USER.charAt(0).toUpperCase() + USER.slice(1)}`;
+  document.getElementById('dateline').textContent =
+    now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase();
+})();
+
+/* ───────────────────────────── API helpers ───────────────────────────── */
+async function apiGet(path) {
+  const res = await fetch(`${API}${path}${path.includes('?') ? '&' : '?'}user=${encodeURIComponent(USER)}`, {
+    headers: H(),
+  });
+  if (!res.ok) throw new Error((await res.text()) || `GET ${path} failed`);
+  return res.json();
+}
+
+async function apiSend(method, path, body) {
+  const res = await fetch(`${API}${path}`, {
+    method,
+    headers: H(),
+    body: JSON.stringify({ user: USER, ...(body || {}) }),
+  });
+  if (!res.ok) throw new Error((await res.text()) || `${method} ${path} failed`);
+  return res.json();
+}
+
+/* ───────────────────────────── summary ───────────────────────────── */
+async function loadSummary() {
+  try {
+    const { summary } = await apiGet('/api/v1/lifeos/finance/summary');
+    const spent = Number(summary?.net_cents_agnostic ?? 0);
+    document.getElementById('month-spend').textContent = fmt$(spent);
+    const start = summary?.month_start ? new Date(summary.month_start) : null;
+    if (start) {
+      const label = start.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase();
+      document.getElementById('month-range').textContent = label;
+    }
+
+    const caps = Array.isArray(summary?.categories_with_cap) ? summary.categories_with_cap : [];
+    const capsCard = document.getElementById('caps-card');
+    if (!caps.length) {
+      capsCard.innerHTML = '<div class="empty">No caps defined yet. Add one under Budget.</div>';
+    } else {
+      capsCard.innerHTML = caps.map((c) => `
+        <div class="cap-row">
+          <span class="cap-name">${esc(c.name)}</span>
+          <span class="cap-limit">${fmt$(c.monthly_cap)} / mo</span>
+        </div>
+      `).join('');
+    }
+  } catch (err) {
+    document.getElementById('month-spend').textContent = '—';
+    document.getElementById('caps-card').innerHTML = `<div class="error">${esc(err.message)}</div>`;
+  }
+}
+
+/* ───────────────────────────── accounts ───────────────────────────── */
+let accountsCache = [];
+
+async function loadAccounts() {
+  try {
+    const { accounts } = await apiGet('/api/v1/lifeos/finance/accounts');
+    accountsCache = Array.isArray(accounts) ? accounts : [];
+    const wrap = document.getElementById('accounts-card');
+    if (!accountsCache.length) {
+      wrap.innerHTML = '<div class="empty" id="accounts-empty">No accounts yet.</div>';
+    } else {
+      wrap.innerHTML = accountsCache.map((a) => `
+        <div class="cap-row">
+          <span class="cap-name">${esc(a.name)}</span>
+          <span class="cap-limit">${esc(a.account_type || 'other')} · ${esc(a.currency || 'USD')}</span>
+        </div>
+      `).join('');
+    }
+    const sel = document.getElementById('txn-account');
+    sel.innerHTML = '<option value="">— none —</option>' +
+      accountsCache.map((a) => `<option value="${a.id}">${esc(a.name)}</option>`).join('');
+  } catch (err) {
+    document.getElementById('accounts-card').innerHTML = `<div class="error">${esc(err.message)}</div>`;
+  }
+}
+
+function openAccountForm() { document.getElementById('account-form-wrap').style.display = 'block'; }
+function closeAccountForm() {
+  document.getElementById('account-form-wrap').style.display = 'none';
+  document.getElementById('acct-name').value = '';
+}
+
+async function saveAccount() {
+  const name = document.getElementById('acct-name').value.trim();
+  if (!name) return;
+  try {
+    await apiSend('POST', '/api/v1/lifeos/finance/accounts', {
+      name,
+      account_type: document.getElementById('acct-type').value,
+      currency: (document.getElementById('acct-currency').value || 'USD').toUpperCase(),
+    });
+    closeAccountForm();
+    await loadAccounts();
+  } catch (err) {
+    alert(`Could not save account: ${err.message}`);
+  }
+}
+
+/* ───────────────────────────── transactions ───────────────────────────── */
+async function loadTxns() {
+  try {
+    const { transactions } = await apiGet('/api/v1/lifeos/finance/transactions?limit=50');
+    const list = Array.isArray(transactions) ? transactions : [];
+    const el = document.getElementById('txn-list');
+    if (!list.length) {
+      el.innerHTML = '<div class="empty">No transactions logged yet.</div>';
+      return;
+    }
+    el.innerHTML = list.map((t) => {
+      const amt = Number(t.amount);
+      const cls = amt < 0 ? 'amount-neg' : amt > 0 ? 'amount-pos' : 'amount-zero';
+      return `
+        <div class="txn">
+          <div class="txn-left">
+            <div class="txn-memo">${esc(t.memo || t.category_name || 'Transaction')}</div>
+            <div class="txn-meta">${esc(fmtDate(t.txn_date))}${t.category_name ? ` · ${esc(t.category_name)}` : ''}${t.source ? ` · ${esc(t.source)}` : ''}</div>
+          </div>
+          <div class="${cls}">${amt >= 0 ? '+' : ''}${fmt$(amt)}</div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    document.getElementById('txn-list').innerHTML = `<div class="error">${esc(err.message)}</div>`;
+  }
+}
+
+async function saveTxn() {
+  const errEl = document.getElementById('txn-error');
+  errEl.textContent = '';
+  const raw = document.getElementById('txn-amount').value;
+  const amount = Number(raw);
+  if (!raw || !Number.isFinite(amount)) {
+    errEl.textContent = 'Amount is required (use negative for outflow).';
+    return;
+  }
+  try {
+    await apiSend('POST', '/api/v1/lifeos/finance/transactions', {
+      amount,
+      txn_date: document.getElementById('txn-date').value || undefined,
+      memo: document.getElementById('txn-memo').value.trim() || undefined,
+      category_id: document.getElementById('txn-category').value || undefined,
+      account_id: document.getElementById('txn-account').value || undefined,
+      source: 'manual',
+    });
+    document.getElementById('txn-amount').value = '';
+    document.getElementById('txn-memo').value = '';
+    await Promise.all([loadTxns(), loadSummary()]);
+  } catch (err) {
+    errEl.textContent = err.message;
+  }
+}
+
+/* ───────────────────────────── categories ───────────────────────────── */
+let categoriesCache = [];
+
+async function loadCategories() {
+  try {
+    const { categories } = await apiGet('/api/v1/lifeos/finance/categories');
+    categoriesCache = Array.isArray(categories) ? categories : [];
+    const list = document.getElementById('cat-list');
+    if (!categoriesCache.length) {
+      list.innerHTML = '<div class="empty">No categories yet.</div>';
+    } else {
+      list.innerHTML = categoriesCache.map((c) => `
+        <div class="cap-row">
+          <span class="cap-name">
+            ${esc(c.name)}
+            ${c.values_tag ? `<span class="badge" style="margin-left:6px;">${esc(c.values_tag)}</span>` : ''}
+          </span>
+          <span class="cap-limit">${c.monthly_cap != null ? `${fmt$(c.monthly_cap)} cap` : 'no cap'}</span>
+        </div>
+      `).join('');
+    }
+    const sel = document.getElementById('txn-category');
+    sel.innerHTML = '<option value="">— none —</option>' +
+      categoriesCache.map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  } catch (err) {
+    document.getElementById('cat-list').innerHTML = `<div class="error">${esc(err.message)}</div>`;
+  }
+}
+
+async function saveCategory() {
+  const name = document.getElementById('cat-name').value.trim();
+  if (!name) return;
+  const capRaw = document.getElementById('cat-cap').value;
+  const monthly_cap = capRaw === '' ? null : Number(capRaw);
+  try {
+    await apiSend('POST', '/api/v1/lifeos/finance/categories', {
+      name,
+      values_tag: document.getElementById('cat-values').value.trim() || null,
+      monthly_cap: Number.isFinite(monthly_cap) ? monthly_cap : null,
+    });
+    document.getElementById('cat-name').value = '';
+    document.getElementById('cat-values').value = '';
+    document.getElementById('cat-cap').value = '';
+    await Promise.all([loadCategories(), loadSummary()]);
+  } catch (err) {
+    alert(`Could not save category: ${err.message}`);
+  }
+}
+
+/* ───────────────────────────── goals ───────────────────────────── */
+async function loadGoals() {
+  try {
+    const { goals } = await apiGet('/api/v1/lifeos/finance/goals');
+    const list = Array.isArray(goals) ? goals : [];
+    const el = document.getElementById('goals-list');
+    if (!list.length) {
+      el.innerHTML = '<div class="empty">No goals yet.</div>';
+      return;
+    }
+    el.innerHTML = list.map((g) => {
+      const target = Number(g.target_amount ?? 0);
+      const current = Number(g.current_amount ?? 0);
+      const pct = target > 0 ? Math.max(0, Math.min(100, (current / target) * 100)) : 0;
+      return `
+        <div class="card">
+          <div class="row">
+            <div>
+              <div class="title">${esc(g.name)}</div>
+              <div class="meta">${fmt$(current)} of ${fmt$(target)} · ${pct.toFixed(0)}% ${g.target_date ? `· by ${esc(fmtDate(g.target_date))}` : ''}</div>
+              ${g.notes ? `<div class="meta" style="color:#888;margin-top:6px;">${esc(g.notes)}</div>` : ''}
+            </div>
+            <button class="btn btn-ghost" onclick="addGoalContribution(${g.id}, ${current}, ${target})">+ $</button>
+          </div>
+          <div class="progress"><div style="width:${pct}%"></div></div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    document.getElementById('goals-list').innerHTML = `<div class="error">${esc(err.message)}</div>`;
+  }
+}
+
+async function addGoalContribution(id, current, target) {
+  const raw = prompt('Add to this goal ($):');
+  if (!raw) return;
+  const delta = Number(raw);
+  if (!Number.isFinite(delta) || delta <= 0) return;
+  try {
+    await apiSend('POST', '/api/v1/lifeos/finance/goals', {
+      id,
+      current_amount: Number(current) + delta,
+    });
+    await loadGoals();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+async function saveGoal() {
+  const name = document.getElementById('goal-name').value.trim();
+  if (!name) return;
+  const target = Number(document.getElementById('goal-target').value);
+  const current = Number(document.getElementById('goal-current').value || 0);
+  try {
+    await apiSend('POST', '/api/v1/lifeos/finance/goals', {
+      name,
+      target_amount: Number.isFinite(target) ? target : null,
+      current_amount: Number.isFinite(current) ? current : 0,
+      target_date: document.getElementById('goal-date').value || null,
+      notes: document.getElementById('goal-notes').value.trim() || null,
+    });
+    ['goal-name', 'goal-target', 'goal-date', 'goal-notes'].forEach((id) => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('goal-current').value = '0';
+    await loadGoals();
+  } catch (err) {
+    alert(`Could not save goal: ${err.message}`);
+  }
+}
+
+/* ───────────────────────────── IPS ───────────────────────────── */
+async function loadIps() {
+  try {
+    const { ips } = await apiGet('/api/v1/lifeos/finance/ips');
+    document.getElementById('ips-statement').value = ips?.statement_text || '';
+    document.getElementById('ips-risks').value = ips?.risk_notes || '';
+    if (ips?.updated_at) {
+      document.getElementById('ips-updated').textContent = `Last updated ${fmtDate(ips.updated_at)}`;
+    } else {
+      document.getElementById('ips-updated').textContent = '';
+    }
+  } catch (err) {
+    document.getElementById('ips-updated').textContent = err.message;
+  }
+}
+
+async function saveIps() {
+  try {
+    await fetch(`${API}/api/v1/lifeos/finance/ips`, {
+      method: 'PUT',
+      headers: H(),
+      body: JSON.stringify({
+        user: USER,
+        statement_text: document.getElementById('ips-statement').value.trim(),
+        risk_notes: document.getElementById('ips-risks').value.trim(),
+      }),
+    }).then(async (res) => {
+      if (!res.ok) throw new Error(await res.text() || 'save failed');
+    });
+    await loadIps();
+  } catch (err) {
+    alert(`Could not save IPS: ${err.message}`);
+  }
+}
+
+/* ───────────────────────────── init ───────────────────────────── */
+(function init() {
+  const today = new Date().toISOString().slice(0, 10);
+  const dEl = document.getElementById('txn-date');
+  if (dEl) dEl.value = today;
+  Promise.all([loadSummary(), loadAccounts(), loadCategories(), loadTxns(), loadGoals(), loadIps()]);
+})();
+</script>
+</body>
+</html>

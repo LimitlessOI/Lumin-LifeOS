@@ -22,6 +22,7 @@
 
 import express from 'express';
 import { createDecisionIntelligence } from '../services/decision-intelligence.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSDecisionsRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = express.Router();
@@ -37,16 +38,9 @@ export function createLifeOSDecisionsRoutes({ pool, requireKey, callCouncilMembe
 
   const svc = createDecisionIntelligence({ pool, callAI, logger: log });
 
-  // Helper: resolve user_id from handle or numeric id
-  async function resolveUserId(handleOrId) {
-    if (!handleOrId) return null;
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [handleOrId]);
-      return rows[0]?.id || null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id || null;
-  }
+  // Helper: resolve user_id (shared, case-insensitive)
+  const resolveUserId = makeLifeOSUserResolver(pool);
+
 
   // ── POST /log ──────────────────────────────────────────────────────────────
 

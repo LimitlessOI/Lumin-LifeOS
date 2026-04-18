@@ -30,6 +30,7 @@ import express from 'express';
 import { createPurposeDiscovery } from '../services/purpose-discovery.js';
 import { createDreamFunding }     from '../services/dream-funding.js';
 import { createFulfillmentEngine } from '../services/fulfillment-engine.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSPurposeRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
@@ -46,16 +47,9 @@ export function createLifeOSPurposeRoutes({ pool, requireKey, callCouncilMember 
   const dreams      = createDreamFunding({ pool });
   const fulfillment = createFulfillmentEngine({ pool });
 
-  // ── Helper: resolve user ID from handle or numeric ID ──────────────────────
-  async function resolveUserId(handleOrId) {
-    if (!handleOrId) return null;
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [handleOrId]);
-      return rows[0]?.id || null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id || null;
-  }
+  // Helper: resolve user_id (shared, case-insensitive)
+  const resolveUserId = makeLifeOSUserResolver(pool);
+
 
   // ── PURPOSE PROFILE ────────────────────────────────────────────────────────
 

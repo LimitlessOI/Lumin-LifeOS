@@ -53,7 +53,10 @@ export function createLifeOSFinance({ pool }) {
       p.push(to);
       sql += ` AND t.txn_date <= $${p.length}`;
     }
-    sql += ` ORDER BY t.txn_date DESC, t.id DESC LIMIT ${Math.min(500, Math.max(1, limit))}`;
+    // Clamp limit to a positive integer; protects against NaN / non-numeric input.
+    const parsed = Number.parseInt(limit, 10);
+    const safeLimit = Number.isFinite(parsed) ? Math.min(500, Math.max(1, parsed)) : 100;
+    sql += ` ORDER BY t.txn_date DESC, t.id DESC LIMIT ${safeLimit}`;
     const { rows } = await pool.query(sql, p);
     return rows;
   }

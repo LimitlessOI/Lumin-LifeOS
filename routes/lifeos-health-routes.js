@@ -12,6 +12,7 @@ import { createHealthKitBridge } from '../services/healthkit-bridge.js';
 import { createHealthPatternEngine } from '../services/health-pattern-engine.js';
 import { createEmergencyDetection } from '../services/emergency-detection.js';
 import { createMedicalContextGenerator } from '../services/medical-context-generator.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 /**
  * @param {{
@@ -33,24 +34,10 @@ export function createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, 
   /**
    * Resolve a user_id from a handle ('adam','sherry') or numeric string.
    * Returns null if the handle doesn't map to a known user.
-   * @param {string|number} handleOrId
-   * @returns {Promise<number|null>}
+   * Shared helper: case-insensitive + trim.
+   * @type {(handleOrId: string|number) => Promise<number|null>}
    */
-  async function resolveUserId(handleOrId) {
-    if (!handleOrId) return null;
-    const str = String(handleOrId).trim().toLowerCase();
-    // If it's numeric, use directly
-    if (/^\d+$/.test(str)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1 LIMIT 1', [parseInt(str, 10)]);
-      return rows[0]?.id ?? null;
-    }
-    // Otherwise look up by the actual LifeOS user handle
-    const { rows } = await pool.query(
-      `SELECT id FROM lifeos_users WHERE LOWER(user_handle) = $1 LIMIT 1`,
-      [str]
-    );
-    return rows[0]?.id ?? null;
-  }
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   /**
    * Validate the HealthKit webhook token via query param.

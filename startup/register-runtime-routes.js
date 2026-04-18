@@ -58,6 +58,7 @@ export async function registerRuntimeRoutes(app, deps) {
     sendSMS,
     sendAlertSms,
     sendAlertCall,
+    makePhoneCall,
   } = deps;
 
   registerWebsiteAuditRoutes(app, {
@@ -125,7 +126,7 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [MODEL-PERFORMANCE] Routes mounted at /api/v1/model-performance/{leaderboard,winners,lens/:lens,score-outcome}");
 
   // Core LifeOS routes are required for the product to function.
-  const lifeosOpts = { pool, requireKey, callCouncilMember, logger, notificationService, sendSMS };
+  const lifeosOpts = { pool, requireKey, callCouncilMember, logger, notificationService, sendSMS, sendAlertCall, makePhoneCall };
   app.use("/api/v1/lifeos", createLifeOSCoreRoutes(lifeosOpts));
   logger.info("✅ [LIFEOS-CORE] Routes mounted at /api/v1/lifeos");
   app.use("/api/v1/lifeos", createLifeOSGatewayRoutes({ pool, sendSMS, callCouncilMember, logger }));

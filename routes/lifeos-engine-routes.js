@@ -30,6 +30,7 @@ import express from 'express';
 import { createOutreachEngine } from '../services/outreach-engine.js';
 import { createCommunicationGateway } from '../services/communication-gateway.js';
 import { createLifeOSCalendarService } from '../services/lifeos-calendar.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 function createLifeOSEngineContext({ pool, notificationService, sendSMS, callCouncilMember, logger }) {
   const callAI = callCouncilMember
@@ -42,15 +43,7 @@ function createLifeOSEngineContext({ pool, notificationService, sendSMS, callCou
   const outreach = createOutreachEngine({ pool, notificationService, sendSMS, logger });
   const gateway = createCommunicationGateway({ pool, sendSMS, callAI, logger });
 
-  async function resolveUserId(handleOrId) {
-    if (!handleOrId) return null;
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id=$1', [handleOrId]);
-      return rows[0]?.id || null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle=$1', [handleOrId]);
-    return rows[0]?.id || null;
-  }
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   async function resolveUserByPhone(phone) {
     if (!phone) return null;

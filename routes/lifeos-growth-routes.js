@@ -41,6 +41,7 @@ import express from 'express';
 import { createMasteryTracker }           from '../services/mastery-tracker.js';
 import { createRelationshipIntelligence } from '../services/relationship-intelligence.js';
 import { createVictoryVault }             from '../services/victory-vault.js';
+import { makeLifeOSUserResolver }         from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSGrowthRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = express.Router();
@@ -78,16 +79,8 @@ export function createLifeOSGrowthRoutes({ pool, requireKey, callCouncilMember, 
   const relSvc      = createRelationshipIntelligence({ pool, callAI, logger });
   const victorySvc  = createVictoryVault({ pool, callAI, logger });
 
-  // ── resolveUserId ──────────────────────────────────────────────────────────
-  async function resolveUserId(handleOrId) {
-    if (!handleOrId) return null;
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [+handleOrId]);
-      return rows[0]?.id || null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id || null;
-  }
+  // ── resolveUserId (shared, case-insensitive) ──────────────────────────────
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // MASTERY

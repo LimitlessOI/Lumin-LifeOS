@@ -31,6 +31,7 @@
 import express from 'express';
 import { createChildLearningEngine } from '../services/child-learning-engine.js';
 import { createChildDreamBuilder }   from '../services/dream-builder-child.js';
+import { makeLifeOSUserResolver }    from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
@@ -46,16 +47,8 @@ export function createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember
   const learningEngine = createChildLearningEngine({ pool, callAI });
   const dreamBuilder   = createChildDreamBuilder({ pool });
 
-  // ── Helper: resolve parent user ID ─────────────────────────────────────────
-  async function resolveParentId(handleOrId) {
-    if (!handleOrId) return null;
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [handleOrId]);
-      return rows[0]?.id || null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id || null;
-  }
+  // ── Helper: resolve parent user ID (shared, case-insensitive) ──────────────
+  const resolveParentId = makeLifeOSUserResolver(pool);
 
   // ── Helper: verify parent owns child ───────────────────────────────────────
   async function verifyParentOwnsChild(parentId, childId) {

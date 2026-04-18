@@ -117,6 +117,10 @@
     <span class="icon">🎙️</span>
     <span class="label">Command</span>
   </button>
+  <button class="type-btn" id="btn-braindump" onclick="toggle('braindump')">
+    <span class="icon">🧺</span>
+    <span class="label">Brain Dump</span>
+  </button>
 </div>
 
 <!-- Commitment form -->
@@ -237,6 +241,23 @@
     <textarea id="cmd-text" rows="3" placeholder="privacy mode for 2 hours&#10;dump the last 2 hours&#10;start focus for 90 minutes on admin"></textarea>
   </div>
   <button class="btn-submit" onclick="submitCommand()">Run Command</button>
+</div>
+
+<!-- Brain Dump — unified freeform capture. Extracts commitments / calendar / commands. -->
+<div class="form-panel" id="panel-braindump">
+  <div class="form-field">
+    <label>Dump everything on your mind</label>
+    <textarea id="bd-text" rows="6" placeholder="I need to call Mom tomorrow at 3pm, pick up dry cleaning Friday, follow up with Josh about the contract, and start a 90 minute focus block on the site launch…"></textarea>
+  </div>
+  <div class="form-field">
+    <label>Auto-apply extracted actions</label>
+    <div class="chip-row" id="bd-apply-chips">
+      <span class="text-chip selected" data-v="0" onclick="selectBdApply(this)">Review first</span>
+      <span class="text-chip" data-v="1" onclick="selectBdApply(this)">Auto-apply now</span>
+    </div>
+  </div>
+  <button class="btn-submit" onclick="submitBrainDump()">Capture</button>
+  <div id="bd-result" style="display:none; margin-top:14px; padding:12px; background:#0d0d1a; border:1px solid #2a2a3a; border-radius:8px; font-size:12px; color:#a0aaff; line-height:1.5;"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -397,6 +418,64 @@
       collapse();
     } catch (err) {
       toast(`Error: ${esc(err.message)}`);
+    }
+  }
+
+  // Brain Dump — unified capture. Routes freeform text through /events/capture
+  // which extracts commitments, calendar events, and voice commands.
+  let bdAutoApply = 0;
+  function selectBdApply(el) {
+    document.querySelectorAll('#bd-apply-chips .text-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    bdAutoApply = parseInt(el.dataset.v, 10) || 0;
+  }
+
+  async function submitBrainDump() {
+    const text = document.getElementById('bd-text').value.trim();
+    if (!text) { toast('Type something to capture'); return; }
+    const btn = document.querySelector('#panel-braindump .btn-submit');
+    const resultBox = document.getElementById('bd-result');
+    const original = btn.innerHTML;
+    btn.innerHTML = '<span class="spinner"></span> Capturing...';
+    btn.disabled = true;
+    resultBox.style.display = 'none';
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/events/capture`, {
+        method: 'POST', headers: H,
+        body: JSON.stringify({
+          user: USER,
+          text,
+          source: 'brain-dump',
+          channel: 'text',
+          auto_apply: Boolean(bdAutoApply),
+        }),
+      });
+      const data = await res.json();
+      if (!data.ok) { toast(`Error: ${esc(data.error || 'Capture failed')}`); return; }
+
+      const actions = Array.isArray(data.actions) ? data.actions : [];
+      if (actions.length === 0) {
+        resultBox.innerHTML = 'Captured. No actionable items detected.';
+      } else {
+        const lines = actions.map(a => {
+          const kind = esc(a.action_type || a.kind || a.type || 'action');
+          const title = esc(a.title || a.description || a.summary || '');
+          const applied = a.applied_at ? ' <span style="color:#5bd5a0">✓ applied</span>' : '';
+          return `<div style="padding:4px 0;border-bottom:1px solid #1e1e2e">• <strong>${kind}</strong> — ${title}${applied}</div>`;
+        });
+        const header = bdAutoApply
+          ? `<div style="color:#5bd5a0;margin-bottom:6px">Captured + applied ${actions.length} action${actions.length === 1 ? '' : 's'}:</div>`
+          : `<div style="margin-bottom:6px">Captured. Found ${actions.length} action${actions.length === 1 ? '' : 's'} (review in event stream):</div>`;
+        resultBox.innerHTML = header + lines.join('');
+      }
+      resultBox.style.display = 'block';
+      toast(bdAutoApply ? 'Applied' : 'Captured');
+      document.getElementById('bd-text').value = '';
+    } catch (err) {
+      toast(`Error: ${esc(err.message)}`);
+    } finally {
+      btn.innerHTML = original;
+      btn.disabled = false;
     }
   }
 

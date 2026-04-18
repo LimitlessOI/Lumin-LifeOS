@@ -24,6 +24,7 @@ import express from 'express';
 import { createHouseholdSync }       from '../services/household-sync.js';
 import { createRelationshipDebrief } from '../services/relationship-debrief.js';
 import { createToneIntelligence }    from '../services/tone-intelligence.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSFamilyRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
@@ -41,16 +42,9 @@ export function createLifeOSFamilyRoutes({ pool, requireKey, callCouncilMember }
   const debriefSvc   = createRelationshipDebrief({ pool, callAI });
   const toneSvc      = createToneIntelligence({ callAI });
 
-  // ── Helper: resolve user_id from handle or numeric id ────────────────────
-  async function resolveUserId(handleOrId) {
-    if (!handleOrId) return null;
-    if (!isNaN(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [+handleOrId]);
-      return rows[0]?.id || null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id || null;
-  }
+  // Helper: resolve user_id (shared, case-insensitive)
+  const resolveUserId = makeLifeOSUserResolver(pool);
+
 
   // ── POST /link ────────────────────────────────────────────────────────────
   router.post('/link', requireKey, async (req, res) => {

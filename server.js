@@ -998,6 +998,7 @@ const { tcCoordinator, wkIntegrityEngine } = await registerRuntimeRoutes(app, {
   sendSMS,
   sendAlertSms,
   sendAlertCall,
+  makePhoneCall,
 });
 
 // ==================== AI COUNCIL CONSENSUS MODE ====================

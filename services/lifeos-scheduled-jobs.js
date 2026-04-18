@@ -1,5 +1,5 @@
 /**
- * LifeOS background ticks: commitment prods + outreach queue processing.
+ * LifeOS background ticks: commitment prods + notification delivery + outreach queue processing.
  * No AI calls. Opt-in via LIFEOS_ENABLE_SCHEDULED_JOBS=1 (or true).
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
@@ -10,6 +10,7 @@ import { createLifeOSNotificationRouter } from './lifeos-notification-router.js'
 import { createOutreachEngine } from './outreach-engine.js';
 
 const COMMITMENT_INTERVAL_MS = parseInt(process.env.LIFEOS_COMMITMENT_PROD_MS || '', 10) || 15 * 60 * 1000;
+const NOTIFICATION_INTERVAL_MS = parseInt(process.env.LIFEOS_NOTIFICATION_PROCESS_MS || '', 10) || 60 * 1000;
 const OUTREACH_INTERVAL_MS = parseInt(process.env.LIFEOS_OUTREACH_PROCESS_MS || '', 10) || 5 * 60 * 1000;
 
 function shouldStart() {
@@ -29,7 +30,7 @@ export function startLifeOSScheduledJobs(deps) {
   };
 
   if (!shouldStart()) {
-    log.info('[LIFEOS-SCHED] Scheduled jobs disabled — set LIFEOS_ENABLE_SCHEDULED_JOBS=1 to enable commitment prods + outreach processing');
+    log.info('[LIFEOS-SCHED] Scheduled jobs disabled — set LIFEOS_ENABLE_SCHEDULED_JOBS=1 to enable commitment prods + notification delivery + outreach processing');
     return { started: false };
   }
 
@@ -91,11 +92,35 @@ export function startLifeOSScheduledJobs(deps) {
     }
   };
 
+  const notificationTick = async () => {
+    try {
+      const notifier = createLifeOSNotificationRouter({ pool, sendSMS, logger });
+      const { rows } = await pool.query(
+        `SELECT id
+           FROM lifeos_notification_queue
+          WHERE status = 'pending'
+            AND scheduled_at <= NOW()
+          ORDER BY priority ASC, scheduled_at ASC
+          LIMIT 25`
+      );
+      for (const row of rows) {
+        await notifier.deliver(row.id);
+      }
+      if (rows.length) {
+        log.info(`[LIFEOS-SCHED] Notifications delivered: ${rows.length}`);
+      }
+    } catch (err) {
+      log.warn(`[LIFEOS-SCHED] notificationTick: ${err.message}`);
+    }
+  };
+
   timers.push(setInterval(commitmentTick, COMMITMENT_INTERVAL_MS));
+  timers.push(setInterval(notificationTick, NOTIFICATION_INTERVAL_MS));
   timers.push(setInterval(outreachTick, OUTREACH_INTERVAL_MS));
   commitmentTick();
+  notificationTick();
   outreachTick();
 
-  log.info(`[LIFEOS-SCHED] Started (commitment every ${COMMITMENT_INTERVAL_MS}ms, outreach every ${OUTREACH_INTERVAL_MS}ms)`);
+  log.info(`[LIFEOS-SCHED] Started (commitment every ${COMMITMENT_INTERVAL_MS}ms, notification every ${NOTIFICATION_INTERVAL_MS}ms, outreach every ${OUTREACH_INTERVAL_MS}ms)`);
   return { started: true, timers };
 }

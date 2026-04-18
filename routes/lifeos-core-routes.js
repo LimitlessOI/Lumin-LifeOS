@@ -59,13 +59,11 @@ import { createLifeOSTwinBridge }          from '../core/lifeos-twin-bridge.js';
 import { createLifeOSNotificationRouter }  from '../services/lifeos-notification-router.js';
 import { createCommitmentSimulator }       from '../services/commitment-simulator.js';
 import { createLifeOSFocusPrivacyService } from '../services/lifeos-focus-privacy.js';
+import { createLifeOSCalendarService }     from '../services/lifeos-calendar.js';
+import { createLifeOSEventStreamService }  from '../services/lifeos-event-stream.js';
+import { makeLifeOSUserResolver }          from '../services/lifeos-user-resolver.js';
 
-function isNumericId(v) {
-  if (v == null || v === '') return false;
-  return /^\d+$/.test(String(v).trim());
-}
-
-export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, logger, sendSMS }) {
+export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, logger, sendSMS, sendAlertCall = null, makePhoneCall = null }) {
   const router = express.Router();
   const log = logger || console;
 
@@ -84,18 +82,26 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
   const chatgptSvc   = createChatGPTImport({ pool, callAI, logger: log });
   const memFetcher   = createLuminMemoryFetcher({ pool, callAI, logger: log });
   const twinBridge   = createLifeOSTwinBridge({ pool, callAI, logger: log });
-  const notifier     = createLifeOSNotificationRouter({ pool, sendSMS: sendSMS ?? null, logger: log });
+  const notifier     = createLifeOSNotificationRouter({
+    pool,
+    sendSMS: sendSMS ?? null,
+    sendAlertCall,
+    makePhoneCall,
+    logger: log,
+  });
   const focusPrivacy = createLifeOSFocusPrivacyService(pool);
+  const calendar     = createLifeOSCalendarService(pool);
+  const eventStream  = createLifeOSEventStreamService({
+    pool,
+    callAI,
+    commitments,
+    calendar,
+    focusPrivacy,
+    logger: log,
+  });
 
-  // Helper: resolve user_id from handle or id
-  async function resolveUserId(handleOrId) {
-    if (isNumericId(handleOrId)) {
-      const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE id = $1', [String(handleOrId).trim()]);
-      return rows[0]?.id ?? null;
-    }
-    const { rows } = await pool.query('SELECT id FROM lifeos_users WHERE user_handle = $1', [handleOrId]);
-    return rows[0]?.id ?? null;
-  }
+  // Helper: resolve user_id from handle or id (shared + case-insensitive)
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   // ── STATUS (ops / overlays) ───────────────────────────────────────────────
   router.get('/status', requireKey, async (_req, res) => {
@@ -151,7 +157,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
   router.get('/users/:handle', requireKey, async (req, res) => {
     try {
       const { rows } = await pool.query(
-        'SELECT * FROM lifeos_users WHERE user_handle = $1',
+        'SELECT * FROM lifeos_users WHERE LOWER(user_handle) = LOWER($1)',
         [req.params.handle]
       );
       if (!rows[0]) return res.status(404).json({ ok: false, error: 'User not found' });
@@ -208,7 +214,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
           display_name  = COALESCE($6, display_name),
           timezone      = COALESCE($7, timezone),
           updated_at    = NOW()
-        WHERE user_handle = $1
+        WHERE LOWER(user_handle) = LOWER($1)
         RETURNING *
       `, [req.params.handle, be_statement, do_statement, have_vision, truth_style, display_name, timezone]);
       if (!rows[0]) return res.status(404).json({ ok: false, error: 'User not found' });
@@ -228,7 +234,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
         `UPDATE lifeos_users
          SET flourishing_prefs = COALESCE(flourishing_prefs, '{}'::jsonb) || $2::jsonb,
              updated_at = NOW()
-         WHERE user_handle = $1
+         WHERE LOWER(user_handle) = LOWER($1)
          RETURNING id, user_handle, flourishing_prefs`,
         [req.params.handle, JSON.stringify(patch)],
       );
@@ -246,7 +252,9 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       const { user = 'adam', limit = 50 } = req.query;
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      const open = await commitments.getOpen(userId, { limit: parseInt(limit) });
+      const parsedLimit = Number.parseInt(limit, 10);
+      const safeLimit = Number.isFinite(parsedLimit) ? Math.min(200, Math.max(1, parsedLimit)) : 50;
+      const open = await commitments.getOpen(userId, { limit: safeLimit });
       res.json({ ok: true, commitments: open, count: open.length });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
@@ -712,6 +720,53 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     }
   });
 
+  // ── EVENT STREAM / CAPTURE ───────────────────────────────────────────────
+
+  router.get('/events', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', limit = 30 } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const events = await eventStream.listEvents(userId, { limit });
+      res.json({ ok: true, events, count: events.length });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/events/capture', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', text, source = 'manual', channel = 'text', metadata = {}, auto_apply = false } = req.body || {};
+      if (!String(text || '').trim()) return res.status(400).json({ ok: false, error: 'text is required' });
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const result = await eventStream.captureEvent({
+        userId,
+        text,
+        source,
+        channel,
+        metadata,
+        autoApply: Boolean(auto_apply),
+      });
+      res.status(201).json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/events/:id/apply', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const result = await eventStream.applyEvent(userId, req.params.id);
+      if (!result) return res.status(404).json({ ok: false, error: 'Event not found' });
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // ── INNER WORK ────────────────────────────────────────────────────────────
 
   router.post('/inner-work', requireKey, async (req, res) => {
@@ -852,6 +907,48 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     try {
       await notifier.acknowledge(req.params.id);
       res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/notifications/escalation', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const policy = await notifier.getEscalationPolicy(userId);
+      res.json({ ok: true, policy });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.put('/notifications/escalation', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', ...policy } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const saved = await notifier.setEscalationPolicy(userId, policy);
+      res.json({ ok: true, policy: saved });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/notifications/escalate-test', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', message = 'LifeOS escalation test', priority = 2 } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const result = await notifier.queueEscalationChain({
+        userId,
+        type: 'attention_test',
+        message,
+        priority,
+        metadata: { source: 'manual_test' },
+      });
+      res.status(201).json({ ok: true, ...result });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
