@@ -97,7 +97,8 @@
     "public/overlay/lifeos-notifications.html",
     "db/migrations/20260417_lifeos_notification_escalation.sql",
     "db/migrations/20260417_lifeos_event_ingest_control.sql",
-    "startup/boot-domains.js"
+    "startup/boot-domains.js",
+    "services/lifeos-scoreboard.js"
   ],
   "assertions": [
     {
@@ -307,6 +308,14 @@
     {
       "type": "node_check",
       "check": "startup/boot-domains.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-scoreboard.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-scoreboard.js"
     }
   ],
   "phases": [

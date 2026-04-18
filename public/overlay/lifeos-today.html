@@ -111,6 +111,9 @@
     .sec-scores    { border-color: var(--color-today); }
     .sec-scores .section-title { color: var(--color-today); }
 
+    .sec-scoreboard { border-color: var(--color-purpose); }
+    .sec-scoreboard .section-title { color: var(--color-purpose); }
+
     .sec-commitments { border-color: var(--color-today); }
     .sec-commitments .section-title { color: var(--color-today); }
 
@@ -231,6 +234,57 @@
     .mini-btn.danger { border-color: #6a2a3a; color: #ffb8c4; }
     .mini-btn:disabled { opacity: .55; cursor: not-allowed; }
     .card-note { font-size: 11px; color: var(--text-muted); margin-top: 10px; line-height: 1.5; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #151525;
+      color: var(--text-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+    .status-pill.strong { color: #34d399; border-color: rgba(52,211,153,.35); }
+    .status-pill.on_track { color: #60a5fa; border-color: rgba(96,165,250,.35); }
+    .status-pill.watch { color: #f59e0b; border-color: rgba(245,158,11,.35); }
+    .status-pill.off_track { color: #f87171; border-color: rgba(248,113,113,.35); }
+    .status-pill.building { color: #a78bfa; border-color: rgba(167,139,250,.35); }
+    .score-grid-3 {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 760px) { .score-grid-3 { grid-template-columns: 1fr; } }
+    .score-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .score-list .mini-stat {
+      margin-top: 0;
+      padding-top: 0;
+    }
+    .score-note-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .score-note-item {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text);
+      padding: 10px 12px;
+      background: #151525;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .score-note-item.bad { border-color: rgba(248,113,113,.22); }
+    .score-note-item.good { border-color: rgba(52,211,153,.22); }
 
     /* ── Commitment items ── */
     .commitment-item {
@@ -608,6 +662,70 @@
     <button class="settings-btn" onclick="alert('Settings available in the app shell (lifeos-app.html)')">⚙</button>
   </div>
 
+
+  <!-- Section 0: Compound Effect -->
+  <div class="section sec-scoreboard">
+    <div class="section-header">
+      <span class="section-title">Compound Effect</span>
+      <span class="status-pill building" id="overall-status">Building</span>
+    </div>
+    <div class="score-grid-3">
+      <div class="score-card">
+        <div class="score-label">Overall Track</div>
+        <div class="score-big" id="overall-score" style="color:var(--color-purpose)">—</div>
+        <div class="score-trend" id="overall-trend"><span class="flat">→</span> Building baseline…</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="overall-bar" style="background:var(--color-purpose);width:0%"></div>
+        </div>
+        <div class="score-list">
+          <div class="mini-stat"><span>Personal lane</span><strong id="personal-score-inline">—</strong></div>
+          <div class="mini-stat"><span>Business lane</span><strong id="business-score-inline">—</strong></div>
+          <div class="mini-stat"><span>Focus recovery</span><strong id="focus-score-inline">—</strong></div>
+        </div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Personal</div>
+        <div class="score-big" id="personal-score" style="color:var(--color-health)">—</div>
+        <div class="score-trend" id="personal-trend"><span class="flat">→</span> Building baseline…</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="personal-bar" style="background:var(--color-health);width:0%"></div>
+        </div>
+        <div class="score-list">
+          <div class="mini-stat"><span>Integrity</span><strong id="metric-integrity">—</strong></div>
+          <div class="mini-stat"><span>Joy</span><strong id="metric-joy">—</strong></div>
+          <div class="mini-stat"><span>Health</span><strong id="metric-health">—</strong></div>
+        </div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Business</div>
+        <div class="score-big" id="business-score" style="color:var(--color-engine)">—</div>
+        <div class="score-trend" id="business-trend"><span class="flat">→</span> Building baseline…</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="business-bar" style="background:var(--color-engine);width:0%"></div>
+        </div>
+        <div class="score-list">
+          <div class="mini-stat"><span>Executed 7d</span><strong id="metric-executed">—</strong></div>
+          <div class="mini-stat"><span>Pending now</span><strong id="metric-pending">—</strong></div>
+          <div class="mini-stat"><span>Work events 7d</span><strong id="metric-work-events">—</strong></div>
+        </div>
+      </div>
+    </div>
+    <div class="scores-row" style="margin-top:16px">
+      <div class="score-card">
+        <div class="score-label">Needs Attention</div>
+        <div class="score-note-list" id="blockers-list">
+          <div class="score-note-item">Loading blockers…</div>
+        </div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Working</div>
+        <div class="score-note-list" id="wins-list">
+          <div class="score-note-item">Loading wins…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Section 1: Scores -->
   <div class="section sec-scores">
     <div class="section-header">
@@ -873,6 +991,7 @@
 
   /* ── Load all in parallel ── */
   Promise.allSettled([
+    loadScoreboard(),
     loadScores(),
     loadFocusPrivacy(),
     loadCommitments(),
@@ -880,6 +999,73 @@
     loadHealth(),
     loadTruth(),
   ]);
+
+
+  function formatScore(value, suffix = '') {
+    return Number.isFinite(Number(value)) ? `${Math.round(Number(value))}${suffix}` : '—';
+  }
+
+  function statusLabel(status) {
+    return String(status || 'building').replace(/_/g, ' ');
+  }
+
+  async function loadScoreboard() {
+    try {
+      const res = await fetch(`${API}/api/v1/lifeos/dashboard/scoreboard?user=${USER}`, { headers: H() });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || 'Could not load scoreboard');
+
+      const overall = Number(data.overall?.score);
+      const personal = Number(data.lanes?.personal?.score);
+      const business = Number(data.lanes?.business?.score);
+      const focus = Number(data.metrics?.focus?.score);
+      const overallStatus = String(data.overall?.status || 'building');
+
+      document.getElementById('overall-score').textContent = formatScore(overall);
+      document.getElementById('overall-bar').style.width = `${Math.max(0, Math.min(100, Number.isFinite(overall) ? overall : 0))}%`;
+      document.getElementById('overall-status').textContent = statusLabel(overallStatus);
+      document.getElementById('overall-status').className = `status-pill ${overallStatus}`;
+      document.getElementById('overall-trend').innerHTML = `<span class="flat">→</span> ${esc(statusLabel(overallStatus))} overall`;
+
+      document.getElementById('personal-score').textContent = formatScore(personal);
+      document.getElementById('personal-bar').style.width = `${Math.max(0, Math.min(100, Number.isFinite(personal) ? personal : 0))}%`;
+      document.getElementById('personal-trend').innerHTML = trendHtml(data.lanes?.personal?.trend, `${statusLabel(data.lanes?.personal?.status || 'building')} personal lane`);
+
+      document.getElementById('business-score').textContent = formatScore(business);
+      document.getElementById('business-bar').style.width = `${Math.max(0, Math.min(100, Number.isFinite(business) ? business : 0))}%`;
+      document.getElementById('business-trend').innerHTML = trendHtml(data.lanes?.business?.trend, `${statusLabel(data.lanes?.business?.status || 'building')} business lane`);
+
+      document.getElementById('personal-score-inline').textContent = formatScore(personal);
+      document.getElementById('business-score-inline').textContent = formatScore(business);
+      document.getElementById('focus-score-inline').textContent = formatScore(focus, '%');
+
+      document.getElementById('metric-integrity').textContent = formatScore(data.metrics?.integrity?.score);
+      document.getElementById('metric-joy').textContent = formatScore(data.metrics?.joy?.score);
+      document.getElementById('metric-health').textContent = formatScore(data.metrics?.health?.score);
+      document.getElementById('metric-executed').textContent = formatScore(data.metrics?.business?.summary?.executed_7d);
+      document.getElementById('metric-pending').textContent = formatScore(data.metrics?.business?.summary?.pending_now);
+      document.getElementById('metric-work-events').textContent = formatScore(data.metrics?.business?.summary?.work_events_7d);
+
+      renderScoreNotes('blockers-list', data.blockers, 'bad', 'No blockers are standing out right now.');
+      renderScoreNotes('wins-list', data.wins, 'good', 'No clear wins have been logged yet.');
+    } catch (_) {
+      renderScoreNotes('blockers-list', ['Could not load the scoreboard yet.'], 'bad');
+      renderScoreNotes('wins-list', ['Waiting for enough data to score the day.'], 'good');
+    }
+  }
+
+  function trendHtml(trend, label) {
+    const t = String(trend || 'flat');
+    const cls = t === 'rising' ? 'up' : t === 'falling' || t === 'watch' ? 'down' : 'flat';
+    const arr = t === 'rising' ? '↑' : t === 'falling' ? '↓' : t === 'watch' ? '!' : '→';
+    return `<span class="${cls}">${arr}</span> ${esc(label)}`;
+  }
+
+  function renderScoreNotes(elId, items, cls, empty) {
+    const el = document.getElementById(elId);
+    const rows = Array.isArray(items) && items.length ? items : [empty || 'Nothing to show.'];
+    el.innerHTML = rows.map((item) => `<div class="score-note-item ${cls}">${esc(item)}</div>`).join('');
+  }
 
   /* ── Scores ── */
   async function loadScores() {

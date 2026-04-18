@@ -62,6 +62,7 @@ import { createLifeOSFocusPrivacyService } from '../services/lifeos-focus-privac
 import { createLifeOSCalendarService }     from '../services/lifeos-calendar.js';
 import { createLifeOSEventStreamService }  from '../services/lifeos-event-stream.js';
 import { makeLifeOSUserResolver }          from '../services/lifeos-user-resolver.js';
+import { createLifeOSScoreboardService }   from '../services/lifeos-scoreboard.js';
 
 export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, logger, sendSMS, sendAlertCall = null, makePhoneCall = null }) {
   const router = express.Router();
@@ -99,6 +100,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     focusPrivacy,
     logger: log,
   });
+  const scoreboard   = createLifeOSScoreboardService({ pool, integrity, joy, focusPrivacy });
 
   // Helper: resolve user_id from handle or id (shared + case-insensitive)
   const resolveUserId = makeLifeOSUserResolver(pool);
@@ -580,6 +582,18 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
       const summary = await focusPrivacy.getTodayFocusSummary(userId);
       res.json({ ok: true, ...summary });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/dashboard/scoreboard', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const data = await scoreboard.getScoreboard(userId);
+      res.json({ ok: true, ...data });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
