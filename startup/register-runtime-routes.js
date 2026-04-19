@@ -38,6 +38,11 @@ import { createLifeOSEmotionalRoutes } from "../routes/lifeos-emotional-routes.j
 import { createLifeOSEthicsRoutes } from "../routes/lifeos-ethics-routes.js";
 import { createLifeOSConflictRoutes } from "../routes/lifeos-conflict-routes.js";
 import { createLifeOSFinanceRoutes } from "../routes/lifeos-finance-routes.js";
+import { createLifeOSBacktestRoutes } from "../routes/lifeos-backtest-routes.js";
+import { createLifeOSWeeklyReviewRoutes } from "../routes/lifeos-weekly-review-routes.js";
+import { createLifeOSScorecardRoutes } from "../routes/lifeos-scorecard-routes.js";
+import { createLifeOSChatRoutes } from "../routes/lifeos-chat-routes.js";
+import { createLifeOSAuthRoutes } from "../routes/lifeos-auth-routes.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
 
@@ -125,6 +130,10 @@ export async function registerRuntimeRoutes(app, deps) {
   app.use("/api/v1/model-performance", requireKey, createModelPerformanceRouter(pool));
   logger.info("✅ [MODEL-PERFORMANCE] Routes mounted at /api/v1/model-performance/{leaderboard,winners,lens/:lens,score-outcome}");
 
+  // LifeOS Auth — must be mounted before core routes; no requireKey needed (it IS the auth)
+  app.use("/api/v1/lifeos/auth", createLifeOSAuthRoutes({ pool, logger }));
+  logger.info("✅ [LIFEOS-AUTH] Routes mounted at /api/v1/lifeos/auth");
+
   // Core LifeOS routes are required for the product to function.
   const lifeosOpts = { pool, requireKey, callCouncilMember, logger, notificationService, sendSMS, sendAlertCall, makePhoneCall };
   app.use("/api/v1/lifeos", createLifeOSCoreRoutes(lifeosOpts));
@@ -161,8 +170,16 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [LIFEOS-ETHICS] Routes mounted at /api/v1/lifeos/ethics");
   app.use("/api/v1/lifeos/conflict", createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-CONFLICT] Routes mounted at /api/v1/lifeos/conflict");
-  app.use("/api/v1/lifeos/finance", createLifeOSFinanceRoutes({ pool, requireKey, logger }));
+  app.use("/api/v1/lifeos/finance", createLifeOSFinanceRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-FINANCE] Routes mounted at /api/v1/lifeos/finance");
+  app.use("/api/v1/lifeos/backtest", createLifeOSBacktestRoutes({ requireKey }));
+  logger.info("✅ [LIFEOS-BACKTEST] Education-only routes mounted at /api/v1/lifeos/backtest");
+  app.use("/api/v1/lifeos/weekly-review", createLifeOSWeeklyReviewRoutes({ pool, requireKey, callAI: callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-WEEKLY-REVIEW] Routes mounted at /api/v1/lifeos/weekly-review");
+  app.use("/api/v1/lifeos/scorecard", createLifeOSScorecardRoutes({ pool, requireKey, callAI: callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-SCORECARD] Routes mounted at /api/v1/lifeos/scorecard");
+  app.use("/api/v1/lifeos/chat", createLifeOSChatRoutes({ pool, requireKey, callAI: callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-CHAT] Routes mounted at /api/v1/lifeos/chat");
 
   // Optional LifeOS / Kids / Teacher modules remain degradable.
   async function importOptionalRoute(modulePath, exportName) {

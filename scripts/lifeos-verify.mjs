@@ -75,6 +75,10 @@ const REQUIRED_MIGRATIONS = [
   '20260407_communication_profile.sql',
   '20260407_response_variety.sql',
   '20260408_lifeos_finance_and_prefs.sql',
+  '20260418_truth_delivery_calibration.sql',
+  '20260418_lifeos_character.sql',
+  '20260418_lifeos_monetization.sql',
+  '20260418_lifeos_finance_share_scopes.sql',
 ];
 
 const REQUIRED_SERVICES = [
@@ -107,6 +111,8 @@ const REQUIRED_SERVICES = [
   'services/joy-score.js',
   'services/lifeos-finance.js',
   'services/lifeos-notification-router.js',
+  'services/lifeos-money-decision-bridge.js',
+  'services/lifeos-request-helpers.js',
   'services/lifeos-scheduled-jobs.js',
   'services/lumin-memory-fetcher.js',
   'services/mastery-tracker.js',

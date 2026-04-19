@@ -13,6 +13,7 @@ import { createHealthPatternEngine } from '../services/health-pattern-engine.js'
 import { createEmergencyDetection } from '../services/emergency-detection.js';
 import { createMedicalContextGenerator } from '../services/medical-context-generator.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+import { safeDays }               from '../services/lifeos-request-helpers.js';
 
 /**
  * @param {{
@@ -91,7 +92,7 @@ export function createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, 
       if (!userId) return res.status(400).json({ error: 'Unknown user' });
 
       const metrics = metricsParam ? String(metricsParam).split(',').map(s => s.trim()) : [];
-      const data = await hkBridge.getLatest(userId, { metrics, days: days ? parseInt(days) : 7 });
+      const data = await hkBridge.getLatest(userId, { metrics, days: safeDays(days, { fallback: 7 }) });
       res.json({ ok: true, data });
     } catch (err) {
       logger.error({ err }, 'GET /wearable/latest error');
@@ -111,7 +112,7 @@ export function createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, 
       const userId = await resolveUserId(user);
       if (!userId) return res.status(400).json({ error: 'Unknown user' });
 
-      const series = await hkBridge.getTimeSeries(userId, metric, { days: days ? parseInt(days) : 30 });
+      const series = await hkBridge.getTimeSeries(userId, metric, { days: safeDays(days, { fallback: 30 }) });
       res.json({ ok: true, metric, series });
     } catch (err) {
       logger.error({ err }, 'GET /wearable/series error');

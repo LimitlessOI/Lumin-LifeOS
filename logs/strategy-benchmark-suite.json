@@ -1,0 +1,156 @@
+{
+  "ts": 1775087222238,
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "BNBUSDT"
+  ],
+  "capitalPerSymbol": 500,
+  "warmBars": 120,
+  "rankedBy": "portfolioMult / (1 + avgMaxDrawdown)",
+  "maxAvgDdCap": 0.2,
+  "wfFolds": 4,
+  "rows": [
+    {
+      "id": "attention_momentum",
+      "label": "Attention-momentum (DEFAULT_FORMULA, simLeverage=1)",
+      "portfolioMult": 1.0917880571311067,
+      "avgMaxDrawdown": 0.057787946506438224,
+      "reliabilityScore": 1.0321426527282342,
+      "tradeEvents": 60,
+      "paretoOptimal": true
+    },
+    {
+      "id": "sma_24_72",
+      "label": "SMA cross 24/72 long-only",
+      "portfolioMult": 0.9707804446049606,
+      "avgMaxDrawdown": 0.16733125825411893,
+      "reliabilityScore": 0.8316237895118793,
+      "tradeEvents": 44,
+      "paretoOptimal": false
+    },
+    {
+      "id": "momentum_roc",
+      "label": "ROC(6)>0 & close>SMA20 long, exit ROC<0",
+      "portfolioMult": 0.9511329341926376,
+      "avgMaxDrawdown": 0.14658927694768875,
+      "reliabilityScore": 0.8295323820964282,
+      "tradeEvents": 273,
+      "paretoOptimal": false
+    },
+    {
+      "id": "donchian_20_10",
+      "label": "Donchian break 20 high / exit below 10 low",
+      "portfolioMult": 0.8855036190732267,
+      "avgMaxDrawdown": 0.2311372380655984,
+      "reliabilityScore": 0.7192566285011067,
+      "tradeEvents": 68,
+      "paretoOptimal": false
+    },
+    {
+      "id": "sma_12_48",
+      "label": "SMA cross 12/48 long-only",
+      "portfolioMult": 0.8262507288446796,
+      "avgMaxDrawdown": 0.25653218559815,
+      "reliabilityScore": 0.6575643173448499,
+      "tradeEvents": 71,
+      "paretoOptimal": false
+    },
+    {
+      "id": "rsi_14_mr",
+      "label": "RSI(14) mean reversion long <34 exit >52",
+      "portfolioMult": 0.8446307178546415,
+      "avgMaxDrawdown": 0.3113821283511119,
+      "reliabilityScore": 0.6440767336951982,
+      "tradeEvents": 112,
+      "paretoOptimal": false
+    },
+    {
+      "id": "buy_hold",
+      "label": "Buy & hold (enter once after warm)",
+      "portfolioMult": 0.7133344842092383,
+      "avgMaxDrawdown": 0.4122097460025929,
+      "reliabilityScore": 0.505119360794957,
+      "tradeEvents": 4,
+      "paretoOptimal": false
+    }
+  ],
+  "paretoOptimalIds": [
+    "attention_momentum"
+  ],
+  "bestUnderDdCap": {
+    "id": "attention_momentum",
+    "label": "Attention-momentum (DEFAULT_FORMULA, simLeverage=1)",
+    "portfolioMult": 1.0917880571311067,
+    "avgMaxDrawdown": 0.057787946506438224,
+    "reliabilityScore": 1.0321426527282342,
+    "tradeEvents": 60,
+    "paretoOptimal": true
+  },
+  "walkForward": [
+    {
+      "id": "attention_momentum",
+      "label": "Attention-momentum",
+      "wfFolds": 16,
+      "medianFoldMult": 1.0282727280090853,
+      "worstFoldMult": 0.9278891655167588,
+      "bestFoldMult": 1.102534659176813,
+      "pctFoldsNonLoss": 0.75
+    },
+    {
+      "id": "rsi_14_mr",
+      "label": "RSI(14) mean reversion long <34 exit >52",
+      "wfFolds": 16,
+      "medianFoldMult": 1.0126158399347758,
+      "worstFoldMult": 0.7081787545197836,
+      "bestFoldMult": 1.149810770582999,
+      "pctFoldsNonLoss": 0.625
+    },
+    {
+      "id": "sma_24_72",
+      "label": "SMA cross 24/72 long-only",
+      "wfFolds": 16,
+      "medianFoldMult": 1,
+      "worstFoldMult": 0.9036841148670025,
+      "bestFoldMult": 1.1473097705675992,
+      "pctFoldsNonLoss": 0.6875
+    },
+    {
+      "id": "buy_hold",
+      "label": "Buy & hold (enter once after warm)",
+      "wfFolds": 16,
+      "medianFoldMult": 0.9870787134868642,
+      "worstFoldMult": 0.5803077143467346,
+      "bestFoldMult": 1.1385306576054546,
+      "pctFoldsNonLoss": 0.375
+    },
+    {
+      "id": "momentum_roc",
+      "label": "ROC(6)>0 & close>SMA20 long, exit ROC<0",
+      "wfFolds": 16,
+      "medianFoldMult": 0.9796412532080638,
+      "worstFoldMult": 0.9286659626166277,
+      "bestFoldMult": 1.09339350821534,
+      "pctFoldsNonLoss": 0.3125
+    },
+    {
+      "id": "sma_12_48",
+      "label": "SMA cross 12/48 long-only",
+      "wfFolds": 16,
+      "medianFoldMult": 0.967074671158202,
+      "worstFoldMult": 0.7905460020379773,
+      "bestFoldMult": 1.0865186064603078,
+      "pctFoldsNonLoss": 0.375
+    },
+    {
+      "id": "donchian_20_10",
+      "label": "Donchian break 20 high / exit below 10 low",
+      "wfFolds": 16,
+      "medianFoldMult": 0.9667450740506787,
+      "worstFoldMult": 0.8318783764408839,
+      "bestFoldMult": 1.1163551821660014,
+      "pctFoldsNonLoss": 0.4375
+    }
+  ]
+}

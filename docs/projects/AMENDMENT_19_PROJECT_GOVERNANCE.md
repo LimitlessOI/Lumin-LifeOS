@@ -1,6 +1,6 @@
 # AMENDMENT 19 — Project Governance
 
-**Last Updated:** 2026-04-06 (runtime route registration no longer hard-fails when optional experimental modules are absent from the deployed repo)
+**Last Updated:** 2026-04-06 (runtime route registration no longer hard-fails when optional experimental modules are absent from the deployed repo; startup now lazy-loads optional route packs)
 
 | Field | Value |
 |---|---|

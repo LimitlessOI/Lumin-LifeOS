@@ -1,0 +1,29 @@
+{
+  "ts": 1775085693308,
+  "warning": "IN_SAMPLE_ONLY_SIM_LEVERAGE_IS_NOT_SPOT",
+  "targetMult": 4,
+  "mult": 4.194949104194434,
+  "trades": 38,
+  "simLeverage": 26,
+  "formula": {
+    "volThreshold": 1.594,
+    "atrMult": 1.319,
+    "smaFast": 6,
+    "smaSlow": 49,
+    "volLookback": 24,
+    "atrLen": 28,
+    "moveFrac1": 0.72,
+    "moveFrac2": 0.96,
+    "partialFrac1": 0.631,
+    "partialFrac2": 0.451,
+    "stopAtrMult": 2.573,
+    "trailAtrMult": 0.854,
+    "impulseLowRatio": 1.024,
+    "impulseLookback": 8,
+    "regimeLookback": 17,
+    "regimeBull": 0.0537,
+    "regimeBear": -0.0647,
+    "smaSlowEps": 0.9905,
+    "simLeverage": 26
+  }
+}

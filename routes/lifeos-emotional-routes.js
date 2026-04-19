@@ -17,6 +17,10 @@
  *   GET  /sabotage/history                — pattern history for user
  *   POST /sabotage/:id/acknowledge        — mark a detected pattern as acknowledged
  *   GET  /sabotage/patterns               — list all known pattern definitions
+ *   POST /daily                           — upsert today's emotional check-in (weather/intensity/valence/tags)
+ *   GET  /daily/today                     — get today's check-in (or null if none)
+ *   GET  /daily/recent                    — last N daily check-ins
+ *   GET  /daily/trend                     — 14-day emotional trend summary (no AI)
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
@@ -27,6 +31,7 @@ import { createParentingCoach }         from '../services/parenting-coach.js';
 import { createInnerWorkEffectiveness } from '../services/inner-work-effectiveness.js';
 import { createSelfSabotageMonitor }    from '../services/self-sabotage-monitor.js';
 import { makeLifeOSUserResolver }       from '../services/lifeos-user-resolver.js';
+import { safeInt, safeLimit, safeDays, safeId } from '../services/lifeos-request-helpers.js';
 
 export function createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
@@ -215,7 +220,7 @@ export function createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMembe
       const userId = await resolveUserId(req.query.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const limit = parseInt(req.query.limit) || 20;
+      const limit = safeLimit(req.query.limit, { fallback: 20, max: 200 });
       const history = await sabotageMonitor.getPatternHistory(userId, limit);
       res.json({ ok: true, history });
     } catch (err) {
@@ -230,11 +235,107 @@ export function createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMembe
       const userId = await resolveUserId(req.body?.user || req.query.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const logId = parseInt(req.params.id);
+      const logId = safeId(req.params.id);
+      if (!logId) return res.status(400).json({ ok: false, error: 'invalid pattern log id' });
       const acknowledged = await sabotageMonitor.acknowledgePattern(userId, logId);
 
       if (!acknowledged) return res.status(404).json({ ok: false, error: 'Pattern log not found' });
       res.json({ ok: true, acknowledged: true });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Daily emotional check-in (Amendment 21 Layer 5 — "name the weather")
+  // These endpoints are the capture/retrieval surface for the single most
+  // important daily ritual in LifeOS: ONE weather word + ONE intensity number.
+  // They are also the primary data source for the emotional-pattern-engine,
+  // early-warning notifications, joy score, and truth-delivery calibration.
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // ── POST /daily ───────────────────────────────────────────────────────────
+  // Upsert today's emotional check-in for the user.
+  // Body: { user?, weather, intensity, valence?, depletion_tags?, note?, somatic_note?, source? }
+  router.post('/daily', requireKey, async (req, res) => {
+    try {
+      const body = req.body || {};
+      const userId = await resolveUserId(body.user || req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+
+      const weather = typeof body.weather === 'string' ? body.weather.trim() : '';
+      if (!weather) return res.status(400).json({ ok: false, error: 'weather is required' });
+
+      const intensity = safeInt(body.intensity, { fallback: null, min: 1, max: 10 });
+      if (intensity == null) {
+        return res.status(400).json({ ok: false, error: 'intensity must be an integer 1..10' });
+      }
+
+      const valence = body.valence == null || body.valence === ''
+        ? null
+        : safeInt(body.valence, { fallback: null, min: -5, max: 5 });
+
+      const depletionTags = Array.isArray(body.depletion_tags)
+        ? body.depletion_tags
+        : (typeof body.depletion_tags === 'string' && body.depletion_tags.length
+          ? body.depletion_tags.split(',')
+          : []);
+
+      const checkin = await emotionalEngine.logDailyCheckin({
+        userId,
+        weather,
+        intensity,
+        valence,
+        depletionTags,
+        note:        body.note        || null,
+        somaticNote: body.somatic_note || null,
+        source:      typeof body.source === 'string' ? body.source : 'overlay',
+      });
+
+      res.status(201).json({ ok: true, checkin });
+    } catch (err) {
+      const status = /required|integer|weather/.test(err.message) ? 400 : 500;
+      res.status(status).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── GET /daily/today ──────────────────────────────────────────────────────
+  // Returns today's check-in, or { checkin: null } if the user hasn't logged yet.
+  router.get('/daily/today', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const checkin = await emotionalEngine.getTodayCheckin(userId);
+      res.json({ ok: true, checkin });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── GET /daily/recent ─────────────────────────────────────────────────────
+  // Returns the last N daily check-ins (default 14, max 90) over the last
+  // ?days (default 30, max 365).
+  router.get('/daily/recent', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const limit = safeLimit(req.query.limit, { fallback: 14, max: 90 });
+      const days  = safeDays(req.query.days,  { fallback: 30, max: 365 });
+      const checkins = await emotionalEngine.getRecentCheckins(userId, { limit, days });
+      res.json({ ok: true, checkins });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── GET /daily/trend ──────────────────────────────────────────────────────
+  // Returns 14-day rolling emotional trend summary (no AI, SQL aggregation only).
+  router.get('/daily/trend', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const trend = await emotionalEngine.getTrend(userId);
+      res.json({ ok: true, trend });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

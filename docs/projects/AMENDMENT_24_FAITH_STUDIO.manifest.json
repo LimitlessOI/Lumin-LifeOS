@@ -1,0 +1,47 @@
+{
+  "project_id": "faith_studio",
+  "name": "Faith Studio",
+  "amendment_path": "docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+  "lifecycle": "experimental",
+  "status": "discovery",
+  "priority": "medium",
+  "owner": "adam",
+  "phase": "concept-definition",
+  "next_task": "Formalize tradition profiles, reverence guardrails, and source/tradition/interpretation labeling before any implementation starts.",
+  "stability_class": "high-risk",
+  "current_focus": "Concept captured from conversation history: sacred-content creation with tradition-aware interpretation, private witness mode, and stricter public publishing controls.",
+  "build_ready": false,
+  "owned_files": [
+    "docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+    "docs/projects/AMENDMENT_24_FAITH_STUDIO.manifest.json"
+  ],
+  "protected_files": [
+    "server.js",
+    "services/sovereignty-check.js",
+    "services/video-pipeline.js",
+    "docs/SSOT_COMPANION.md"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_24_FAITH_STUDIO.md",
+    "docs/projects/AMENDMENT_24_FAITH_STUDIO.manifest.json"
+  ],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_24_FAITH_STUDIO.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_24_FAITH_STUDIO.manifest.json" }
+  ],
+  "completion_checks": [
+    "Source vs tradition vs interpretation are distinct and visible",
+    "Private witness mode is defined separately from public sacred publishing",
+    "Tradition-specific rendering is explicit rather than hidden in prompts"
+  ],
+  "anti_drift_notes": "Do not treat sacred content like ordinary entertainment prompts. Public sacred publishing requires stricter controls than private devotional viewing.",
+  "decision_debt": [
+    { "description": "Tradition profiles need advisory validation before build", "resolved": false },
+    { "description": "Public sacred publishing review flow is not yet specified deeply enough", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

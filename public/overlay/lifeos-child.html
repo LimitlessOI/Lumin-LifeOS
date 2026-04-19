@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>My Journey — LifeOS Kids</title>
   <style>
@@ -136,13 +137,11 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const API  = '';
-  const KEY  = localStorage.getItem('commandKey') || '';
-  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
-  const USER = new URLSearchParams(location.search).get('user')
-    || localStorage.getItem('lifeos_user')
-    || localStorage.getItem('lifeosUser')
-    || 'adam';
+  const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+  const API  = CTX.API;
+  const KEY  = CTX.KEY;
+  const H    = CTX.headers();
+  const USER = CTX.USER;
   if (USER) localStorage.setItem('lifeos_user', USER);
 
   const TABS = ['adventures', 'dreams', 'learning'];
@@ -284,7 +283,7 @@
   function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function toast(msg) { const e = document.getElementById('toast'); e.textContent = msg; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 2500); }
 
-  if (!KEY) { const k = prompt('Enter your command key:'); if (k) { localStorage.setItem('commandKey', k); location.reload(); } }
+  if (!KEY) location.reload();
   else loadAdventures();
 </script>
 </body>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <script src="/overlay/lifeos-control-help.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
@@ -757,6 +758,60 @@
     </div>
   </div>
 
+  <!-- Section 1a: Daily Emotional Weather (name the weather, don't fix it) -->
+  <div class="section sec-scores">
+    <div class="section-header">
+      <span class="section-title">Emotional Weather</span>
+      <span class="section-count" id="daily-checkin-status">No reading yet today</span>
+    </div>
+    <div class="card" id="daily-checkin-card" style="padding:18px 20px 16px">
+      <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;justify-content:space-between">
+        <div style="flex:1 1 260px;min-width:240px">
+          <div style="font-size:12px;letter-spacing:.08em;color:#888;text-transform:uppercase;margin-bottom:6px">Today's weather</div>
+          <div id="daily-weather-display" style="font-size:26px;font-weight:600;color:#1f2937">—</div>
+          <div id="daily-weather-sub" style="font-size:12px;color:#666;margin-top:4px">Name the feeling. One word. One number. That's all.</div>
+        </div>
+        <div style="flex:1 1 220px;min-width:200px">
+          <div style="font-size:12px;letter-spacing:.08em;color:#888;text-transform:uppercase;margin-bottom:6px">14-day trend</div>
+          <div id="daily-trend-display" style="font-size:18px;font-weight:500;color:#334">Loading…</div>
+          <div id="daily-trend-sub" style="font-size:12px;color:#666;margin-top:4px">—</div>
+        </div>
+        <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:8px;align-items:flex-end;min-width:160px">
+          <button class="score-checkin-btn" id="daily-checkin-btn" onclick="openDailyCheckin()" style="min-width:160px">Check the weather</button>
+          <a class="section-link" href="lifeos-emotional.html" style="font-size:12px">See patterns →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 1c: Truth Delivery Calibration (what the system learned about how you receive truth) -->
+  <div class="section sec-scores">
+    <div class="section-header">
+      <span class="section-title">Truth Calibration</span>
+      <span class="section-count" id="truth-cal-count">Still learning</span>
+    </div>
+    <div class="card" id="truth-cal-card" style="padding:16px 20px 14px">
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start">
+        <div style="flex:1 1 220px;min-width:200px">
+          <div style="font-size:12px;letter-spacing:.08em;color:#888;text-transform:uppercase;margin-bottom:4px">Best style</div>
+          <div id="truth-cal-style" style="font-size:18px;font-weight:600;color:#1f2937">—</div>
+          <div id="truth-cal-style-sub" style="font-size:12px;color:#666;margin-top:2px">—</div>
+        </div>
+        <div style="flex:1 1 220px;min-width:200px">
+          <div style="font-size:12px;letter-spacing:.08em;color:#888;text-transform:uppercase;margin-bottom:4px">Best hour</div>
+          <div id="truth-cal-hour" style="font-size:18px;font-weight:600;color:#1f2937">—</div>
+          <div id="truth-cal-hour-sub" style="font-size:12px;color:#666;margin-top:2px">—</div>
+        </div>
+        <div style="flex:1 1 220px;min-width:200px">
+          <div style="font-size:12px;letter-spacing:.08em;color:#888;text-transform:uppercase;margin-bottom:4px">Best emotional state</div>
+          <div id="truth-cal-state" style="font-size:18px;font-weight:600;color:#1f2937">—</div>
+          <div id="truth-cal-state-sub" style="font-size:12px;color:#666;margin-top:2px">—</div>
+        </div>
+      </div>
+      <div id="truth-cal-hint" style="font-size:12px;color:#666;margin-top:10px">The system is building its map of when hard truths land best for you. This sharpens automatically.</div>
+    </div>
+  </div>
+
   <!-- Section 1b: Focus + Privacy -->
   <div class="section sec-engine">
     <div class="section-header">
@@ -945,6 +1000,49 @@
   </div>
 </div>
 
+<!-- Daily Emotional Weather Check-in Modal -->
+<div class="inline-modal-overlay" id="daily-checkin-modal" style="display:none">
+  <div class="inline-modal">
+    <button class="modal-close" onclick="closeDailyCheckin()">✕</button>
+    <h3>Name today's weather</h3>
+    <div style="font-size:12px;color:#666;margin:-4px 0 10px">Not to fix it. To name it.</div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px">
+      <span class="emoji-chip daily-weather-chip" data-w="clear"    onclick="selectWeather(this)">☀️ clear</span>
+      <span class="emoji-chip daily-weather-chip" data-w="partly"   onclick="selectWeather(this)">⛅ partly</span>
+      <span class="emoji-chip daily-weather-chip" data-w="cloudy"   onclick="selectWeather(this)">☁️ cloudy</span>
+      <span class="emoji-chip daily-weather-chip" data-w="foggy"    onclick="selectWeather(this)">🌫️ foggy</span>
+      <span class="emoji-chip daily-weather-chip" data-w="stormy"   onclick="selectWeather(this)">⛈️ stormy</span>
+      <span class="emoji-chip daily-weather-chip" data-w="heavy"    onclick="selectWeather(this)">🌧️ heavy</span>
+      <span class="emoji-chip daily-weather-chip" data-w="charged"  onclick="selectWeather(this)">⚡ charged</span>
+      <span class="emoji-chip daily-weather-chip" data-w="numb"     onclick="selectWeather(this)">🕳️ numb</span>
+    </div>
+    <input class="modal-input" id="daily-weather-input" placeholder="…or type your own word" maxlength="40" />
+
+    <div style="margin-top:12px;font-size:12px;color:#888;letter-spacing:.06em;text-transform:uppercase">Intensity (1 low · 10 high)</div>
+    <input type="range" class="joy-slider" id="daily-intensity-slider" min="1" max="10" value="5" oninput="document.getElementById('daily-intensity-display').textContent=this.value">
+    <div class="slider-labels"><span>1</span><span id="daily-intensity-display">5</span><span>10</span></div>
+
+    <div style="margin-top:10px;font-size:12px;color:#888;letter-spacing:.06em;text-transform:uppercase">Valence (−5 heavy · +5 light)</div>
+    <input type="range" class="joy-slider" id="daily-valence-slider" min="-5" max="5" value="0" oninput="document.getElementById('daily-valence-display').textContent=this.value">
+    <div class="slider-labels"><span>−5</span><span id="daily-valence-display">0</span><span>+5</span></div>
+
+    <div style="margin-top:10px;font-size:12px;color:#888;letter-spacing:.06em;text-transform:uppercase">What's draining today? (optional, multi-select)</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px">
+      <span class="emoji-chip daily-tag-chip" data-t="people"  onclick="toggleDailyTag(this)">people</span>
+      <span class="emoji-chip daily-tag-chip" data-t="pace"    onclick="toggleDailyTag(this)">pace</span>
+      <span class="emoji-chip daily-tag-chip" data-t="meaning" onclick="toggleDailyTag(this)">meaning</span>
+      <span class="emoji-chip daily-tag-chip" data-t="body"    onclick="toggleDailyTag(this)">body</span>
+      <span class="emoji-chip daily-tag-chip" data-t="money"   onclick="toggleDailyTag(this)">money</span>
+      <span class="emoji-chip daily-tag-chip" data-t="other"   onclick="toggleDailyTag(this)">other</span>
+    </div>
+
+    <input class="modal-input" id="daily-note-input" placeholder="Anything else to name? (optional)" maxlength="400" />
+
+    <button class="btn-save" onclick="saveDailyCheckin()">Save reading</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <div class="inline-modal-overlay" id="focus-modal" style="display:none">
@@ -966,18 +1064,16 @@
 
 <script>
   /* ── Constants ── */
-  const API  = '';
-  let KEY    = localStorage.getItem('commandKey') || '';
-  const USER = new URLSearchParams(location.search).get('user')
-               || localStorage.getItem('lifeos_user')
-               || 'adam';
+  const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+  const API  = CTX.API;
+  let KEY    = CTX.KEY;
+  const USER = CTX.USER;
 
-  const H = () => ({ 'Content-Type': 'application/json', 'x-command-key': KEY });
+  const H = () => CTX.headers();
 
   /* ── Init ── */
   if (!KEY) {
-    const k = prompt('Enter your command key:');
-    if (k) { localStorage.setItem('commandKey', k); KEY = k; }
+    location.reload();
   }
 
   // Header
@@ -995,6 +1091,8 @@
   Promise.allSettled([
     loadScoreboard(),
     loadScores(),
+    loadDailyWeather(),
+    loadTruthCalibration(),
     loadFocusPrivacy(),
     loadCommitments(),
     loadEngine(),
@@ -1486,6 +1584,166 @@
     } catch (_) {
       toast('Could not save — no connection');
       closeCheckin();
+    }
+  }
+
+  /* ── Daily Emotional Weather ── */
+  const DAILY_WEATHER_EMOJI = {
+    clear:'☀️', partly:'⛅', cloudy:'☁️', foggy:'🌫️',
+    stormy:'⛈️', heavy:'🌧️', charged:'⚡', numb:'🕳️',
+  };
+  let dailyWeatherSel = '';
+  let dailyTagSel     = new Set();
+
+  async function loadDailyWeather() {
+    try {
+      const [todayRes, trendRes] = await Promise.allSettled([
+        fetch(`${API}/api/v1/lifeos/emotional/daily/today?user=${USER}`, { headers: H() }),
+        fetch(`${API}/api/v1/lifeos/emotional/daily/trend?user=${USER}`, { headers: H() }),
+      ]);
+
+      if (todayRes.status === 'fulfilled') {
+        const data = await todayRes.value.json().catch(() => ({}));
+        const c    = data?.checkin;
+        if (c) {
+          const emoji = DAILY_WEATHER_EMOJI[(c.weather || '').toLowerCase()] || '•';
+          document.getElementById('daily-weather-display').textContent  = `${emoji}  ${c.weather}  ·  ${c.intensity}/10`;
+          document.getElementById('daily-weather-sub').textContent      = c.note ? esc(c.note).slice(0, 100) : 'Named. That counts.';
+          document.getElementById('daily-checkin-status').textContent   = 'Named today';
+          document.getElementById('daily-checkin-btn').textContent      = 'Update reading';
+        } else {
+          document.getElementById('daily-weather-display').textContent  = 'Not yet today';
+          document.getElementById('daily-weather-sub').textContent      = 'Name the feeling. One word. One number. That\u2019s all.';
+          document.getElementById('daily-checkin-status').textContent   = 'No reading yet today';
+          document.getElementById('daily-checkin-btn').textContent      = 'Check the weather';
+        }
+      }
+
+      if (trendRes.status === 'fulfilled') {
+        const data  = await trendRes.value.json().catch(() => ({}));
+        const t     = data?.trend || {};
+        const arrow = t.trend === 'up' ? '↑' : t.trend === 'down' ? '↓' : t.trend === 'flat' ? '→' : '·';
+        const headline = t.days_logged
+          ? `${arrow}  ${t.trend || 'flat'}  ·  ${t.days_logged}d logged`
+          : 'Not enough data yet';
+        document.getElementById('daily-trend-display').textContent = headline;
+
+        const bits = [];
+        if (t.most_common_weather) bits.push(`most: ${t.most_common_weather}`);
+        if (t.top_depletion_tag)   bits.push(`drain: ${t.top_depletion_tag}`);
+        if (Number.isFinite(Number(t.avg_valence))) bits.push(`avg valence ${Number(t.avg_valence).toFixed(1)}`);
+        document.getElementById('daily-trend-sub').textContent = bits.join(' · ') || '—';
+      }
+    } catch (err) {
+      document.getElementById('daily-trend-display').textContent = '—';
+    }
+  }
+
+  /* ── Truth Delivery Calibration ── */
+  async function loadTruthCalibration() {
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/truth/calibration?user=${USER}&days=90`, { headers: H() });
+      const data = await res.json().catch(() => ({}));
+      if (!data?.ok) return;
+
+      const $ = (id) => document.getElementById(id);
+      $('truth-cal-count').textContent =
+        data.total_deliveries === 0
+          ? 'No truths delivered yet'
+          : `${data.total_deliveries} delivered · ${data.window_days}d`;
+
+      if (data.best?.style) {
+        $('truth-cal-style').textContent     = data.best.style.style_used;
+        $('truth-cal-style-sub').textContent = `${data.best.style.ack_rate ?? '–'}% landed (n=${data.best.style.deliveries})`;
+      } else {
+        $('truth-cal-style').textContent     = 'Still learning';
+        $('truth-cal-style-sub').textContent = 'Needs ≥5 deliveries per style.';
+      }
+
+      if (data.best?.hour) {
+        const h  = Number(data.best.hour.hour_of_day);
+        const hr = ((h + 11) % 12) + 1;
+        const ap = h < 12 ? 'am' : 'pm';
+        $('truth-cal-hour').textContent     = `${hr}${ap}`;
+        $('truth-cal-hour-sub').textContent = `${data.best.hour.ack_rate ?? '–'}% landed at this hour`;
+      } else {
+        $('truth-cal-hour').textContent     = '—';
+        $('truth-cal-hour-sub').textContent = 'Needs more delivery-hour variety.';
+      }
+
+      if (data.best?.state) {
+        $('truth-cal-state').textContent     = data.best.state.emotional_state;
+        $('truth-cal-state-sub').textContent = `${data.best.state.ack_rate ?? '–'}% landed while ${data.best.state.emotional_state}`;
+      } else {
+        $('truth-cal-state').textContent     = '—';
+        $('truth-cal-state-sub').textContent = 'Needs more check-ins to correlate state.';
+      }
+
+      if (data.confident) {
+        $('truth-cal-hint').textContent =
+          'Confident enough: the system will prefer these windows for hard truths.';
+      }
+    } catch (_) { /* silent */ }
+  }
+
+  function openDailyCheckin() {
+    dailyWeatherSel = '';
+    dailyTagSel     = new Set();
+    document.querySelectorAll('.daily-weather-chip').forEach(e => e.classList.remove('selected'));
+    document.querySelectorAll('.daily-tag-chip').forEach(e => e.classList.remove('selected'));
+    document.getElementById('daily-weather-input').value      = '';
+    document.getElementById('daily-intensity-slider').value   = 5;
+    document.getElementById('daily-intensity-display').textContent = '5';
+    document.getElementById('daily-valence-slider').value     = 0;
+    document.getElementById('daily-valence-display').textContent = '0';
+    document.getElementById('daily-note-input').value         = '';
+    document.getElementById('daily-checkin-modal').style.display = 'flex';
+  }
+  function closeDailyCheckin() {
+    document.getElementById('daily-checkin-modal').style.display = 'none';
+  }
+  function selectWeather(el) {
+    document.querySelectorAll('.daily-weather-chip').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+    dailyWeatherSel = el.dataset.w;
+    document.getElementById('daily-weather-input').value = el.dataset.w;
+  }
+  function toggleDailyTag(el) {
+    const t = el.dataset.t;
+    if (dailyTagSel.has(t)) { dailyTagSel.delete(t); el.classList.remove('selected'); }
+    else                    { dailyTagSel.add(t);    el.classList.add('selected');    }
+  }
+  async function saveDailyCheckin() {
+    const typed   = document.getElementById('daily-weather-input').value.trim();
+    const weather = typed || dailyWeatherSel;
+    if (!weather) { toast('Pick or type a weather word first'); return; }
+
+    const payload = {
+      user:      USER,
+      weather,
+      intensity: parseInt(document.getElementById('daily-intensity-slider').value, 10) || 5,
+      valence:   parseInt(document.getElementById('daily-valence-slider').value, 10) || 0,
+      depletion_tags: Array.from(dailyTagSel),
+      note:      document.getElementById('daily-note-input').value.trim() || null,
+    };
+
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/emotional/daily`, {
+        method: 'POST',
+        headers: H(),
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (data.ok || res.ok) {
+        toast('Named ✓');
+        closeDailyCheckin();
+        loadDailyWeather();
+      } else {
+        toast('Error: ' + (data.error || 'Could not save'));
+      }
+    } catch (_) {
+      toast('Could not save — no connection');
+      closeDailyCheckin();
     }
   }
 

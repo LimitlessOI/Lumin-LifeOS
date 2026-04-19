@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Parent View — LifeOS</title>
   <style>
@@ -81,6 +82,7 @@
     <div class="tab" onclick="showTab('learning')">Learning</div>
     <div class="tab" onclick="showTab('dreams')">Dreams</div>
     <div class="tab" onclick="showTab('checkins')">Check-ins</div>
+    <div class="tab" onclick="showTab('character')">Character</div>
   </div>
 
   <!-- Overview -->
@@ -126,28 +128,68 @@
     </div>
     <div id="checkins-content"><div class="empty"><span class="spinner"></span></div></div>
   </div>
+
+  <!-- Character -->
+  <div class="panel" id="panel-character">
+    <div class="filter-bar">
+      <label>Child</label>
+      <select id="chr-child" onchange="loadCharacter()">
+        <option value="">—</option>
+      </select>
+      <label style="margin-left:12px">Trait</label>
+      <select id="chr-trait">
+        <option value="">random</option>
+        <option value="integrity">integrity</option>
+        <option value="generosity">generosity</option>
+        <option value="courage">courage</option>
+      </select>
+      <label style="margin-left:12px">Age group</label>
+      <select id="chr-age">
+        <option value="4-5">4–5</option>
+        <option value="6-9" selected>6–9</option>
+        <option value="10-12">10–12</option>
+        <option value="13+">13+</option>
+      </select>
+      <button class="btn-add" style="margin-left:12px;padding:8px 16px;background:#1a1a30;border:1px solid #5b6af5;border-radius:8px;color:#a0aaff;font-size:12px;cursor:pointer" onclick="generateStory()">New story</button>
+    </div>
+    <div id="character-content"><div class="empty">Pick a child to see their character journey.</div></div>
+
+    <!-- Log a real-world moment -->
+    <div id="moment-block" class="card" style="display:none;margin-top:20px;padding:18px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#5b6af5;font-weight:600;margin-bottom:10px">Log a real-world character moment</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px">
+        <select id="mom-trait" style="background:#0d0d1a;border:1px solid #2a2a3a;border-radius:6px;color:#e8e8f0;padding:8px;font-size:13px">
+          <option value="integrity">integrity</option>
+          <option value="generosity">generosity</option>
+          <option value="courage">courage</option>
+        </select>
+        <input id="mom-title" placeholder="Title — e.g. 'Told the truth even when it was hard'" style="grid-column:span 2;background:#0d0d1a;border:1px solid #2a2a3a;border-radius:6px;color:#e8e8f0;padding:8px;font-size:13px"/>
+      </div>
+      <textarea id="mom-desc" rows="2" placeholder="What happened (optional)" style="width:100%;background:#0d0d1a;border:1px solid #2a2a3a;border-radius:6px;color:#e8e8f0;padding:8px;font-size:13px;margin-bottom:10px"></textarea>
+      <button style="padding:8px 18px;background:#0a2018;border:1px solid #34d399;border-radius:8px;color:#34d399;font-size:12px;cursor:pointer;font-weight:600" onclick="logMoment()">Log moment (+5 pts)</button>
+    </div>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-  const API  = '';
-  const KEY  = localStorage.getItem('commandKey') || '';
-  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
-  const USER = new URLSearchParams(location.search).get('user')
-            || localStorage.getItem('lifeos_user')
-            || localStorage.getItem('lifeosUser')
-            || 'adam';
+  const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+  const API  = CTX.API;
+  const KEY  = CTX.KEY;
+  const H    = CTX.headers();
+  const USER = CTX.USER;
 
-  const TABS = ['overview', 'learning', 'dreams', 'checkins'];
+  const TABS = ['overview', 'learning', 'dreams', 'checkins', 'character'];
 
   function showTab(name) {
     document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', TABS[i] === name));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.getElementById(`panel-${name}`).classList.add('active');
-    if (name === 'overview') loadOverview();
-    if (name === 'learning') loadLearning();
-    if (name === 'dreams')   loadDreams();
-    if (name === 'checkins') loadCheckins();
+    if (name === 'overview')  loadOverview();
+    if (name === 'learning')  loadLearning();
+    if (name === 'dreams')    loadDreams();
+    if (name === 'checkins')  loadCheckins();
+    if (name === 'character') loadCharacter();
   }
 
   // Populate child dropdowns from overview summary on first load
@@ -162,6 +204,13 @@
       const el = document.getElementById(id);
       if (el) el.innerHTML = opts;
     });
+    // Character tab needs a REAL child_id (not 'all'); populate without the All option
+    const chrSel = document.getElementById('chr-child');
+    if (chrSel) {
+      chrSel.innerHTML = ['<option value="">—</option>',
+        ...summaries.map(s => `<option value="${esc(s.child_id || '')}">${esc(s.name)}</option>`)
+      ].join('');
+    }
   }
 
   // ── Overview ────────────────────────────────────────────────────────────────
@@ -309,10 +358,169 @@
     }
   }
 
+  // ── Character ───────────────────────────────────────────────────────────────
+
+  function getChrChildId() {
+    const v = document.getElementById('chr-child')?.value;
+    return v && /^\d+$/.test(v) ? v : '';
+  }
+
+  async function loadCharacter() {
+    const el       = document.getElementById('character-content');
+    const momEl    = document.getElementById('moment-block');
+    const childId  = getChrChildId();
+    if (!childId) {
+      el.innerHTML   = '<div class="empty">Pick a child above to see their character profile.</div>';
+      momEl.style.display = 'none';
+      return;
+    }
+    momEl.style.display = 'block';
+    el.innerHTML = '<div class="empty"><span class="spinner"></span></div>';
+    try {
+      const [profileR, momentsR, storiesR] = await Promise.all([
+        fetch(`${API}/api/v1/lifeos/children/character/${childId}`, { headers: H }).then(r=>r.json()).catch(()=>({})),
+        fetch(`${API}/api/v1/lifeos/children/character/${childId}/moments`, { headers: H }).then(r=>r.json()).catch(()=>({})),
+        fetch(`${API}/api/v1/lifeos/children/character/${childId}/stories`, { headers: H }).then(r=>r.json()).catch(()=>({})),
+      ]);
+      const p = profileR.profile || profileR;
+      const moments = momentsR.moments || [];
+      const stories = storiesR.stories || [];
+
+      const traitBars = ['integrity','generosity','courage'].map(t => {
+        const pts = Number(p[`${t}_pts`] || 0);
+        const pct = Math.min(100, Math.round((pts / 200) * 100));
+        const color = t === 'integrity' ? '#5b6af5' : t === 'generosity' ? '#34d399' : '#f59e0b';
+        return `
+          <div style="margin-bottom:10px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:4px">
+              <span style="text-transform:uppercase;letter-spacing:1px;color:${color};font-weight:600">${t}</span>
+              <span>${pts} pts</span>
+            </div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+          </div>`;
+      }).join('');
+
+      const storiesHtml = stories.length
+        ? stories.map(s => `
+            <div class="card">
+              <div class="card-header">
+                <span class="title">${esc(s.title)}</span>
+                <span class="meta">${esc(s.trait)} · ${esc(s.age_group || '')}</span>
+              </div>
+              <div class="card-body">
+                <div style="color:#d8d8e8;font-size:13px;line-height:1.6;white-space:pre-wrap">${esc(s.story_text)}</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+                  <button onclick="respondStory(${s.id}, 'a')" style="padding:10px;background:#0d0d1a;border:1px solid #2a2a3a;border-radius:8px;color:#e8e8f0;font-size:12px;text-align:left;cursor:pointer;line-height:1.4">A · ${esc(s.choice_a)}</button>
+                  <button onclick="respondStory(${s.id}, 'b')" style="padding:10px;background:#0d0d1a;border:1px solid #2a2a3a;border-radius:8px;color:#e8e8f0;font-size:12px;text-align:left;cursor:pointer;line-height:1.4">B · ${esc(s.choice_b)}</button>
+                </div>
+                ${s.choice ? `<div style="margin-top:10px;font-size:12px;color:${s.choice === s.good_choice ? '#34d399' : '#888'}">Chose ${s.choice.toUpperCase()} · ${s.pts_earned ?? 0} pts</div>` : ''}
+                ${s.reflection ? `<div style="margin-top:6px;font-size:12px;color:#888;font-style:italic">"${esc(s.reflection)}"</div>` : ''}
+              </div>
+            </div>`).join('')
+        : '<div class="empty">No stories yet. Click "New story" above.</div>';
+
+      const momentsHtml = moments.length
+        ? moments.map(m => `
+            <div class="card" style="margin-bottom:10px">
+              <div class="card-header">
+                <span class="title">${esc(m.trait)} · ${esc(m.title)}</span>
+                <span class="meta">${m.created_at ? new Date(m.created_at).toLocaleDateString() : ''} · ${m.pts_awarded} pts</span>
+              </div>
+              ${m.description ? `<div class="card-body">${esc(m.description)}</div>` : ''}
+              <div style="padding:8px 18px;border-top:1px solid #191920">
+                ${m.celebrated ? '<span style="color:#34d399;font-size:11px">✓ Celebrated</span>'
+                              : `<button onclick="celebrateMoment(${m.id})" style="padding:6px 12px;background:#0a2018;border:1px solid #34d399;border-radius:6px;color:#34d399;font-size:11px;cursor:pointer">Celebrate (+10)</button>`}
+              </div>
+            </div>`).join('')
+        : '<div class="empty">No real-world moments logged yet.</div>';
+
+      el.innerHTML = `
+        <div class="card" style="padding:18px;margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+            <div style="font-size:15px;font-weight:600;color:#d8d8e8">${esc(p.display_name || 'Character')}'s character</div>
+            <div style="font-size:14px;color:#a0aaff">Level ${p.level ?? 1} · ${p.total_pts ?? 0} total pts</div>
+          </div>
+          ${traitBars}
+        </div>
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#5b6af5;font-weight:600;margin:20px 0 10px">Stories</div>
+        ${storiesHtml}
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#5b6af5;font-weight:600;margin:24px 0 10px">Real-world moments (evidence base)</div>
+        ${momentsHtml}
+      `;
+    } catch (e) {
+      el.innerHTML = '<div class="empty">Failed to load character profile.</div>';
+    }
+  }
+
+  async function generateStory() {
+    const childId = getChrChildId();
+    if (!childId) { toast('Pick a child first'); return; }
+    const trait     = document.getElementById('chr-trait').value || null;
+    const age_group = document.getElementById('chr-age').value || '6-9';
+    toast('Generating story…');
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/children/character/${childId}/story`, {
+        method: 'POST', headers: H, body: JSON.stringify({ trait, age_group }),
+      });
+      const data = await res.json();
+      if (data.ok || res.ok) { toast('Story ready'); loadCharacter(); }
+      else toast('Error: ' + (data.error || 'could not generate'));
+    } catch (_) { toast('Request failed'); }
+  }
+
+  async function respondStory(storyId, choice) {
+    const childId = getChrChildId();
+    if (!childId) return;
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/children/character/${childId}/respond`, {
+        method: 'POST', headers: H, body: JSON.stringify({ story_id: storyId, storyId, choice }),
+      });
+      const data = await res.json();
+      if (data.ok || res.ok) {
+        toast(data.correct ? `+${data.pts_earned} pts` : 'Choice recorded');
+        loadCharacter();
+      } else toast('Error: ' + (data.error || 'could not record'));
+    } catch (_) { toast('Request failed'); }
+  }
+
+  async function logMoment() {
+    const childId = getChrChildId();
+    if (!childId) { toast('Pick a child first'); return; }
+    const trait       = document.getElementById('mom-trait').value;
+    const title       = document.getElementById('mom-title').value.trim();
+    const description = document.getElementById('mom-desc').value.trim();
+    if (!title) { toast('Give it a title'); return; }
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/children/character/${childId}/moment`, {
+        method: 'POST', headers: H, body: JSON.stringify({ trait, title, description }),
+      });
+      const data = await res.json();
+      if (data.ok || res.ok) {
+        toast('Moment logged (+5)');
+        document.getElementById('mom-title').value = '';
+        document.getElementById('mom-desc').value  = '';
+        loadCharacter();
+      } else toast('Error: ' + (data.error || 'could not log'));
+    } catch (_) { toast('Request failed'); }
+  }
+
+  async function celebrateMoment(momentId) {
+    const childId = getChrChildId();
+    if (!childId) return;
+    try {
+      const res  = await fetch(`${API}/api/v1/lifeos/children/character/${childId}/celebrate/${momentId}`, {
+        method: 'POST', headers: H,
+      });
+      const data = await res.json();
+      if (data.ok || res.ok) { toast('Celebrated'); loadCharacter(); }
+      else toast('Error: ' + (data.error || 'could not celebrate'));
+    } catch (_) { toast('Request failed'); }
+  }
+
   function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function toast(msg) { const e = document.getElementById('toast'); e.textContent = msg; e.classList.add('show'); setTimeout(() => e.classList.remove('show'), 2500); }
 
-  if (!KEY) { const k = prompt('Enter your command key:'); if (k) { localStorage.setItem('commandKey', k); location.reload(); } }
+  if (!KEY) location.reload();
   else loadOverview();
 </script>
 </body>

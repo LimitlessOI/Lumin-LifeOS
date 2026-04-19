@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <script src="/overlay/lifeos-control-help.js"></script>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -290,12 +291,11 @@
 </div>
 
 <script>
-  const API  = '';
-  const KEY  = localStorage.getItem('commandKey') || '';
-  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
-  const USER = new URLSearchParams(location.search).get('user')
-             || localStorage.getItem('lifeos_user')
-             || 'adam';
+  const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+  const API  = CTX.API;
+  const KEY  = CTX.KEY;
+  const H    = CTX.headers();
+  const USER = CTX.USER;
 
   let activePanel = null;
 
@@ -610,8 +610,7 @@
   function toast(msg) { const e=document.getElementById('toast'); e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2500); }
 
   if (!KEY) {
-    const k = prompt('Enter your command key:');
-    if (k) { localStorage.setItem('commandKey', k); location.reload(); }
+    location.reload();
   }
   loadEventInbox();
 </script>

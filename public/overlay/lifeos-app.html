@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <script src="/overlay/lifeos-theme.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <meta name="mobile-web-app-capable" content="yes">
@@ -1173,8 +1174,9 @@
 
 <script>
 /* ── State ──────────────────────────────────────────────────── */
-let KEY   = localStorage.getItem('commandKey')  || '';
-let USER  = localStorage.getItem('lifeos_user') || new URLSearchParams(location.search).get('user') || 'adam';
+const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+let KEY   = CTX.KEY;
+let USER  = CTX.USER;
 let NAME  = localStorage.getItem('lifeos_name') || (USER.charAt(0).toUpperCase() + USER.slice(1));
 let sidebarMini  = false;
 let currentPage  = 'lifeos-today.html';
@@ -1213,11 +1215,6 @@ let helpHideTimer = null;
 
 /* ── Boot ────────────────────────────────────────────────────── */
 (function init() {
-  if (!KEY) {
-    const k = prompt('Enter your LifeOS command key:');
-    if (k) { localStorage.setItem('commandKey', k); KEY = k; }
-  }
-
   const initials = NAME.charAt(0).toUpperCase();
   document.getElementById('user-avatar').textContent        = initials;
   document.getElementById('sidebar-user-name').textContent  = NAME;
@@ -1525,7 +1522,7 @@ function closeSettings() {
 function saveSettings() {
   const key  = document.getElementById('st-key').value.trim();
   const name = document.getElementById('st-name').value.trim();
-  if (key)  { localStorage.setItem('commandKey',  key);  KEY  = key; }
+  if (key)  { KEY = CTX.setKey(key); }
   if (name) { localStorage.setItem('lifeos_name', name); NAME = name; }
   document.getElementById('sidebar-user-name').textContent = name || NAME;
   document.getElementById('user-avatar').textContent       = (name || NAME).charAt(0).toUpperCase();
@@ -1550,7 +1547,10 @@ function signOut(e) {
   e && e.stopPropagation();
   if (confirm('Sign out? You will need to re-enter your command key.')) {
     localStorage.removeItem('commandKey');
+    localStorage.removeItem('command_key');
+    localStorage.removeItem('lifeos_key');
     localStorage.removeItem('lifeos_user');
+    localStorage.removeItem('lifeosUser');
     localStorage.removeItem('lifeos_name');
     location.reload();
   }
@@ -1562,6 +1562,16 @@ function toast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2800);
+}
+</script>
+
+<script>
+// ── PWA service worker registration ─────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/overlay/sw.js', { scope: '/overlay/' })
+      .catch((err) => console.warn('[LifeOS SW] Registration failed:', err));
+  });
 }
 </script>
 

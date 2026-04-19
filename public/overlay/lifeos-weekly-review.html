@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Review — LifeOS</title>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0a0a0f;
+      --bg-raised:   #0d0d15;
+      --bg-surface:  #111118;
+      --bg-overlay:  #1e1e28;
+      --border:      rgba(255,255,255,0.07);
+      --accent:      #6c63ff;
+      --accent-dim:  rgba(108,99,255,0.15);
+      --text:        #e8e8f0;
+      --text-muted:  #9999bb;
+      --text-dim:    #555566;
+      --radius:      12px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+    .week-label { font-size: 13px; color: var(--text-muted); }
+    .header-actions { display: flex; gap: 8px; }
+
+    btn-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s;
+    }
+    button.btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    button.btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+    button.btn-accent {
+      background: var(--accent);
+      color: #fff;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+    }
+    button.btn-accent:hover { opacity: 0.85; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Main layout: letter | chat ── */
+    .main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      gap: 0;
+    }
+    @media (max-width: 720px) {
+      .main { grid-template-columns: 1fr; }
+      .letter-pane { display: none; }
+      .letter-pane.mobile-show { display: flex; }
+    }
+
+    /* ── Letter pane ── */
+    .letter-pane {
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .pane-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .letter-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 28px 40px;
+    }
+    .letter-text {
+      font-size: 15.5px;
+      line-height: 1.85;
+      color: var(--text);
+      white-space: pre-wrap;
+      max-width: 580px;
+    }
+
+    /* ── History bar ── */
+    .history-bar {
+      display: flex;
+      gap: 6px;
+      padding: 10px 20px;
+      border-top: 1px solid var(--border);
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    .history-chip {
+      flex-shrink: 0;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .history-chip.active, .history-chip:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      background: var(--accent-dim);
+    }
+
+    /* ── Chat pane ── */
+    .chat-pane {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg-raised);
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .msg {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 88%;
+    }
+    .msg.user { align-self: flex-end; align-items: flex-end; }
+    .msg.assistant { align-self: flex-start; align-items: flex-start; }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14.5px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    .msg.user .msg-bubble {
+      background: var(--accent);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .msg.assistant .msg-bubble {
+      background: var(--bg-overlay);
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg-time {
+      font-size: 11px;
+      color: var(--text-dim);
+      padding: 0 4px;
+    }
+
+    /* ── Actions toast ── */
+    .actions-toast {
+      display: none;
+      margin: 0 20px 12px;
+      padding: 12px 16px;
+      background: rgba(108,99,255,0.12);
+      border: 1px solid rgba(108,99,255,0.3);
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+    .actions-toast.show { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .actions-toast strong { color: var(--accent); }
+
+    /* ── Empty state ── */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: var(--text-dim);
+      padding: 40px;
+      text-align: center;
+    }
+    .empty-icon { font-size: 40px; }
+    .empty-state h3 { font-size: 16px; color: var(--text-muted); }
+    .empty-state p { font-size: 13px; max-width: 320px; }
+
+    /* ── Chat input ── */
+    .chat-input-bar {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+    .chat-input-bar textarea {
+      flex: 1;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      resize: none;
+      max-height: 140px;
+      min-height: 44px;
+      line-height: 1.5;
+      overflow-y: auto;
+    }
+    .chat-input-bar textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .chat-input-bar textarea::placeholder { color: var(--text-dim); }
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .send-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+    /* ── No review ── */
+    .generate-prompt {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 40px;
+      text-align: center;
+    }
+    .generate-prompt .icon { font-size: 48px; }
+    .generate-prompt h2 { font-size: 20px; }
+    .generate-prompt p { font-size: 14px; color: var(--text-muted); max-width: 380px; }
+
+    /* ── Typing indicator ── */
+    .typing {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+      background: var(--bg-overlay);
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      width: fit-content;
+    }
+    .typing span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--text-dim);
+      animation: bounce 1.2s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); background: var(--accent); }
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div>
+      <h1>Weekly Review</h1>
+      <div class="week-label" id="week-label">Loading...</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="btn-ghost" id="btn-apply" style="display:none" onclick="applyPendingActions()">Apply changes</button>
+    <button class="btn-ghost" id="btn-generate" onclick="generateReview()">Generate this week</button>
+  </div>
+</div>
+
+<div class="main" id="main-layout">
+  <!-- Letter pane -->
+  <div class="letter-pane">
+    <div class="pane-header">
+      <span>Your Week</span>
+      <span id="review-status" style="font-weight:400; text-transform:none; letter-spacing:0;"></span>
+    </div>
+    <div class="letter-scroll">
+      <div class="letter-text" id="letter-text">
+        <div class="generate-prompt">
+          <div class="icon">📋</div>
+          <h2>No review yet</h2>
+          <p>The system generates your weekly letter every Sunday evening. You can also trigger it manually.</p>
+          <button class="btn-accent" onclick="generateReview()">Generate now</button>
+        </div>
+      </div>
+    </div>
+    <div class="history-bar" id="history-bar"></div>
+  </div>
+
+  <!-- Chat pane -->
+  <div class="chat-pane">
+    <div class="pane-header">
+      <span>Talk About It</span>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <div class="empty-state" id="chat-empty">
+        <div class="empty-icon">💬</div>
+        <h3>Open the conversation</h3>
+        <p>Once your review is loaded, click "Start conversation" to dig into it — ask questions, push back, make commitments.</p>
+      </div>
+    </div>
+
+    <div class="actions-toast" id="actions-toast">
+      <span><strong id="actions-count">0</strong> action(s) from this conversation are ready to apply to LifeOS.</span>
+      <button class="btn-accent" onclick="applyPendingActions()" style="flex-shrink:0">Apply now</button>
+    </div>
+
+    <div class="chat-input-bar" id="chat-input-bar" style="display:none">
+      <textarea id="chat-input" placeholder="Ask a question, push back, or make a commitment..." rows="1"
+        onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const { TOKEN, USER, headers: lifeoHeaders, requireAuth } = getLifeOSContext();
+requireAuth('/overlay/lifeos-login.html');
+
+const BASE = '/api/v1/lifeos/weekly-review';
+const h    = lifeoHeaders();
+
+let currentReviewId  = null;
+let currentSessionId = null;
+let pendingActionCount = 0;
+
+// ── Boot ─────────────────────────────────────────────────────────────────────
+async function boot() {
+  await loadHistory();
+  await loadLatestReview();
+}
+
+async function loadHistory() {
+  try {
+    const res = await fetch(`${BASE}/history?user=${encodeURIComponent(USER || 'adam')}`, { headers: h });
+    const data = await res.json();
+    if (!data.ok || !data.reviews.length) return;
+    const bar = document.getElementById('history-bar');
+    bar.innerHTML = data.reviews.map(r =>
+      `<div class="history-chip" data-id="${r.id}" data-week="${r.week_start}" onclick="loadReview('${r.week_start}', this)">
+        ${fmtWeek(r.week_start)}
+      </div>`
+    ).join('');
+  } catch {}
+}
+
+async function loadLatestReview() {
+  try {
+    const res  = await fetch(`${BASE}/latest?user=${encodeURIComponent(USER || 'adam')}`, { headers: h });
+    const data = await res.json();
+    if (!data.ok || !data.review) return;
+    renderReview(data.review);
+    markHistoryChip(data.review.week_start);
+  } catch {}
+}
+
+async function loadReview(weekStart, chipEl) {
+  try {
+    const res  = await fetch(`${BASE}/week/${weekStart}?user=${encodeURIComponent(USER || 'adam')}`, { headers: h });
+    const data = await res.json();
+    if (!data.ok) return;
+    renderReview(data.review);
+    // Clear chat — different week
+    resetChat();
+    markHistoryChip(weekStart, chipEl);
+  } catch {}
+}
+
+// ── Render review ─────────────────────────────────────────────────────────────
+function renderReview(review) {
+  currentReviewId = review.id;
+  document.getElementById('week-label').textContent = fmtWeek(review.week_start) + ' – ' + fmtWeek(review.week_end);
+  document.getElementById('review-status').textContent = review.status === 'reviewed' ? 'Reviewed' : 'Delivered';
+  document.getElementById('letter-text').textContent = review.narrative_text;
+  showChatReady();
+}
+
+function showChatReady() {
+  const empty = document.getElementById('chat-empty');
+  if (!currentSessionId) {
+    empty.innerHTML = `
+      <div class="empty-icon">💬</div>
+      <h3>Ready to talk about it?</h3>
+      <p>Ask questions, push back on observations, or make commitments right here in the conversation.</p>
+      <button class="btn-accent" onclick="startSession()">Start conversation</button>`;
+    empty.style.display = 'flex';
+  }
+}
+
+// ── Generate ──────────────────────────────────────────────────────────────────
+async function generateReview() {
+  const btn = document.getElementById('btn-generate');
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  try {
+    const res  = await fetch(`${BASE}/generate`, {
+      method: 'POST',
+      headers: { ...h, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: USER || 'adam' }),
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    renderReview(data.review);
+    await loadHistory();
+    markHistoryChip(data.review.week_start);
+  } catch (err) {
+    alert('Could not generate review: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate this week';
+  }
+}
+
+// ── Session ───────────────────────────────────────────────────────────────────
+async function startSession() {
+  if (!currentReviewId) return;
+  try {
+    const res  = await fetch(`${BASE}/${currentReviewId}/session`, {
+      method: 'POST',
+      headers: { ...h, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: USER || 'adam' }),
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    currentSessionId = data.session.id;
+    renderSession(data.messages);
+  } catch (err) {
+    alert('Could not open conversation: ' + err.message);
+  }
+}
+
+function renderSession(messages) {
+  const container = document.getElementById('chat-messages');
+  document.getElementById('chat-empty').style.display = 'none';
+  container.innerHTML = '';
+  for (const msg of messages) {
+    appendMessage(msg.role, msg.content);
+  }
+  document.getElementById('chat-input-bar').style.display = 'flex';
+  container.scrollTop = container.scrollHeight;
+}
+
+function appendMessage(role, content) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `
+    <div class="msg-bubble">${escapeHtml(content)}</div>
+    <div class="msg-time">${role === 'assistant' ? 'LifeOS' : 'You'} · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function showTyping() {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg assistant';
+  div.id = 'typing-indicator';
+  div.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping() {
+  document.getElementById('typing-indicator')?.remove();
+}
+
+// ── Send message ──────────────────────────────────────────────────────────────
+async function sendMessage() {
+  if (!currentSessionId) return;
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  autoResize(input);
+  appendMessage('user', msg);
+  showTyping();
+
+  document.getElementById('send-btn').disabled = true;
+
+  try {
+    const res  = await fetch(`${BASE}/session/${currentSessionId}/message`, {
+      method: 'POST',
+      headers: { ...h, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: USER || 'adam', message: msg }),
+    });
+    const data = await res.json();
+    removeTyping();
+    if (!data.ok) throw new Error(data.error);
+
+    appendMessage('assistant', data.reply);
+
+    // Update pending action count
+    if (data.actions_staged > 0) {
+      pendingActionCount += data.actions_staged;
+      showActionsToast();
+    }
+  } catch (err) {
+    removeTyping();
+    appendMessage('assistant', `Something went wrong: ${err.message}`);
+  } finally {
+    document.getElementById('send-btn').disabled = false;
+    input.focus();
+  }
+}
+
+function showActionsToast() {
+  const toast = document.getElementById('actions-toast');
+  document.getElementById('actions-count').textContent = pendingActionCount;
+  toast.classList.add('show');
+  document.getElementById('btn-apply').style.display = 'inline-flex';
+}
+
+async function applyPendingActions() {
+  if (!currentSessionId) return;
+  const btn = document.getElementById('btn-apply');
+  btn.disabled = true;
+  btn.textContent = 'Applying...';
+  try {
+    const res  = await fetch(`${BASE}/session/${currentSessionId}/apply`, {
+      method: 'POST',
+      headers: { ...h, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: USER || 'adam' }),
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+
+    const applied = data.results.filter(r => r.applied).length;
+    appendMessage('assistant',
+      `Done — ${applied} action${applied !== 1 ? 's' : ''} applied to LifeOS. ` +
+      data.results.map(r => `${r.action_type.replace(/_/g, ' ')}: ${JSON.stringify(r.payload)}`).join('; ')
+    );
+    pendingActionCount = 0;
+    document.getElementById('actions-toast').classList.remove('show');
+    btn.style.display = 'none';
+  } catch (err) {
+    alert('Could not apply actions: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Apply changes';
+  }
+}
+
+// ── Utils ─────────────────────────────────────────────────────────────────────
+function resetChat() {
+  currentSessionId = null;
+  pendingActionCount = 0;
+  document.getElementById('chat-messages').innerHTML = '';
+  document.getElementById('chat-input-bar').style.display = 'none';
+  document.getElementById('actions-toast').classList.remove('show');
+  document.getElementById('btn-apply').style.display = 'none';
+  showChatReady();
+}
+
+function markHistoryChip(weekStart, el = null) {
+  document.querySelectorAll('.history-chip').forEach(c => c.classList.remove('active'));
+  const chip = el || document.querySelector(`.history-chip[data-week="${weekStart}"]`);
+  chip?.classList.add('active');
+}
+
+function fmtWeek(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00Z');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+boot();
+</script>
+</body>
+</html>

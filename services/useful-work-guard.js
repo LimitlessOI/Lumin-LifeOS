@@ -13,7 +13,7 @@
  * If work check returns zero items → skip, log "nothing to do".
  * If either throws → skip, log error, never fall through to AI call.
  *
- * @ssot docs/projects/AMENDMENT_18_PROJECT_GOVERNANCE.md
+ * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  */
 
 /**

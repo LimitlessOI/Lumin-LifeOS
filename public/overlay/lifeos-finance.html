@@ -19,6 +19,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+<script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>LifeOS · Finance</title>
   <style>
@@ -186,8 +187,46 @@
       <label>Memo</label>
       <input id="txn-memo" placeholder="Groceries, gas, …" maxlength="200" />
     </div>
+
+    <!-- Money Decision bridge (Amendment 21 Layer 12) -->
+    <div class="form-field" style="border-top:1px solid #eee;padding-top:10px;margin-top:8px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:500">
+        <input type="checkbox" id="txn-is-decision" onchange="toggleDecisionFields()" />
+        Log as a money decision
+        <span style="font-size:11px;color:#888;font-weight:400">— triggers Second Opinion above threshold or if irreversible</span>
+      </label>
+    </div>
+    <div id="txn-decision-fields" style="display:none;border-left:3px solid #7c3aed;padding:8px 12px;margin:6px 0 12px">
+      <div class="form-field">
+        <label>Title (what is this decision about?)</label>
+        <input id="txn-decision-title" placeholder="e.g. New laptop for work" maxlength="140" />
+      </div>
+      <div class="grid2">
+        <div class="form-field">
+          <label>Alternatives considered (optional)</label>
+          <input id="txn-decision-alts" placeholder="option A; option B; wait 30 days" maxlength="400" />
+        </div>
+        <div class="form-field">
+          <label>Emotional state (optional)</label>
+          <input id="txn-decision-emotion" placeholder="excited / anxious / neutral" maxlength="120" />
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;margin-top:4px">
+        <input type="checkbox" id="txn-decision-irreversible" />
+        This is effectively irreversible (force Second Opinion)
+      </label>
+      <div id="txn-decision-threshold-hint" style="font-size:12px;color:#666;margin-top:6px">Your threshold: loading…</div>
+    </div>
+
     <button class="btn btn-primary" onclick="saveTxn()">Log transaction</button>
     <div class="error" id="txn-error"></div>
+  </div>
+
+  <!-- Second Opinion result card -->
+  <div class="card" id="second-opinion-card" style="display:none;margin-top:14px;border-left:3px solid #7c3aed">
+    <div class="section-title">Second Opinion <span id="second-opinion-meta" style="font-size:11px;color:#666;font-weight:400"></span></div>
+    <div id="second-opinion-body" style="white-space:pre-wrap;line-height:1.5;color:#222"></div>
+    <div style="margin-top:8px;font-size:11px;color:#888">Not a veto — a mirror. The decision remains yours.</div>
   </div>
 
   <div class="section-title" style="margin-top:18px;">Recent</div>
@@ -220,6 +259,16 @@
   <div class="section-title" style="margin-top:18px;">All categories</div>
   <div class="card" id="cat-list">
     <div class="empty">Loading…</div>
+  </div>
+
+  <div class="section-title" style="margin-top:18px;">Household sharing</div>
+  <div class="card" id="shares-card">
+    <div class="empty">Loading household links…</div>
+  </div>
+  <div class="card" id="shares-incoming-card" style="margin-top:10px;">
+    <div class="section-title" style="margin-bottom:10px;font-size:12px;color:#666;">Shared with you</div>
+    <div class="empty" id="shares-incoming-empty">Nothing shared with you yet.</div>
+    <div id="shares-incoming-list"></div>
   </div>
 </div>
 
@@ -281,17 +330,11 @@
 
 <script>
 /* ───────────────────────────── bootstrap ───────────────────────────── */
-const API  = '';
-let   KEY  = localStorage.getItem('commandKey') || '';
-const USER = new URLSearchParams(location.search).get('user')
-             || localStorage.getItem('lifeos_user')
-             || 'adam';
-const H    = () => ({ 'Content-Type': 'application/json', 'x-command-key': KEY });
-
-if (!KEY) {
-  const k = prompt('Enter your command key:');
-  if (k) { localStorage.setItem('commandKey', k); KEY = k; }
-}
+const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+const API  = CTX.API;
+let   KEY  = CTX.KEY;
+const USER = CTX.USER;
+const H    = () => CTX.headers();
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -459,8 +502,16 @@ async function saveTxn() {
     errEl.textContent = 'Amount is required (use negative for outflow).';
     return;
   }
+
+  const isDecision = document.getElementById('txn-is-decision')?.checked;
+  if (isDecision && !document.getElementById('txn-decision-title').value.trim()) {
+    errEl.textContent = 'Decision title is required when logging as a money decision.';
+    return;
+  }
+
   try {
-    await apiSend('POST', '/api/v1/lifeos/finance/transactions', {
+    // 1. Log the transaction first
+    const txnRes = await apiSend('POST', '/api/v1/lifeos/finance/transactions', {
       amount,
       txn_date: document.getElementById('txn-date').value || undefined,
       memo: document.getElementById('txn-memo').value.trim() || undefined,
@@ -468,12 +519,77 @@ async function saveTxn() {
       account_id: document.getElementById('txn-account').value || undefined,
       source: 'manual',
     });
+
+    // 2. If the user opted in, mirror it into Decision Intelligence
+    if (isDecision) {
+      const memo = document.getElementById('txn-memo').value.trim();
+      const decisionRes = await apiSend('POST', '/api/v1/lifeos/finance/decisions/log', {
+        title:               document.getElementById('txn-decision-title').value.trim(),
+        amount,
+        direction:           amount < 0 ? 'out' : 'in',
+        account:             document.getElementById('txn-account').selectedOptions[0]?.text || null,
+        category:            document.getElementById('txn-category').selectedOptions[0]?.text || null,
+        alternatives:        document.getElementById('txn-decision-alts').value.trim() || null,
+        emotional_state:     document.getElementById('txn-decision-emotion').value.trim() || null,
+        is_irreversible:     !!document.getElementById('txn-decision-irreversible').checked,
+        linked_transaction_id: txnRes?.transaction?.id || null,
+      });
+      renderSecondOpinion(decisionRes);
+    } else {
+      document.getElementById('second-opinion-card').style.display = 'none';
+    }
+
     document.getElementById('txn-amount').value = '';
     document.getElementById('txn-memo').value = '';
+    document.getElementById('txn-decision-title').value = '';
+    document.getElementById('txn-decision-alts').value = '';
+    document.getElementById('txn-decision-emotion').value = '';
+    document.getElementById('txn-decision-irreversible').checked = false;
     await Promise.all([loadTxns(), loadSummary()]);
   } catch (err) {
     errEl.textContent = err.message;
   }
+}
+
+function toggleDecisionFields() {
+  const on = document.getElementById('txn-is-decision').checked;
+  document.getElementById('txn-decision-fields').style.display = on ? 'block' : 'none';
+  if (on) loadMoneyDecisionThreshold();
+}
+
+async function loadMoneyDecisionThreshold() {
+  try {
+    const data = await apiGet('/api/v1/lifeos/finance/decisions/threshold');
+    const hint = document.getElementById('txn-decision-threshold-hint');
+    if (hint) {
+      hint.textContent = `Your threshold: $${Number(data.threshold).toFixed(2)} — any amount at or above this will auto-request a Second Opinion.`;
+    }
+  } catch (_) {
+    const hint = document.getElementById('txn-decision-threshold-hint');
+    if (hint) hint.textContent = 'Your threshold: $500.00 (default)';
+  }
+}
+
+function renderSecondOpinion(result) {
+  const card = document.getElementById('second-opinion-card');
+  const body = document.getElementById('second-opinion-body');
+  const meta = document.getElementById('second-opinion-meta');
+  if (!card || !body) return;
+  if (!result?.triggered_second_opinion) {
+    card.style.display = 'block';
+    body.textContent   = 'Below your threshold — decision logged. No Second Opinion requested.';
+    meta.textContent   = `threshold $${Number(result?.threshold_applied ?? 500).toFixed(2)}`;
+    return;
+  }
+  const so = result.second_opinion || {};
+  card.style.display = 'block';
+  meta.textContent   = `threshold $${Number(result.threshold_applied).toFixed(2)} · decision #${result?.decision?.id ?? '—'}`;
+  const parts = [];
+  if (so.steelman_against)  parts.push(`STEELMAN AGAINST:\n${so.steelman_against}`);
+  if (so.strongest_risks)   parts.push(`\nSTRONGEST RISKS:\n${Array.isArray(so.strongest_risks) ? so.strongest_risks.map(r => `• ${r}`).join('\n') : so.strongest_risks}`);
+  if (so.alternative_paths) parts.push(`\nALTERNATIVES:\n${Array.isArray(so.alternative_paths) ? so.alternative_paths.map(a => `• ${a}`).join('\n') : so.alternative_paths}`);
+  if (so.what_would_change_my_mind) parts.push(`\nWHAT WOULD CHANGE MY MIND:\n${so.what_would_change_my_mind}`);
+  body.textContent = parts.join('\n').trim() || (typeof so === 'string' ? so : JSON.stringify(so, null, 2));
 }
 
 /* ───────────────────────────── categories ───────────────────────────── */
@@ -632,12 +748,107 @@ async function saveIps() {
   }
 }
 
+/* ───────────────────────────── household sharing ───────────────────────────── */
+async function loadShares() {
+  const owned = document.getElementById('shares-card');
+  const incomingList  = document.getElementById('shares-incoming-list');
+  const incomingEmpty = document.getElementById('shares-incoming-empty');
+  try {
+    const data = await apiGet('/api/v1/lifeos/finance/shares');
+    const viewers  = Array.isArray(data.linked_viewers) ? data.linked_viewers : [];
+    const granted  = Array.isArray(data.granted)        ? data.granted        : [];
+    const incoming = Array.isArray(data.incoming)       ? data.incoming       : [];
+
+    if (!viewers.length) {
+      owned.innerHTML = '<div class="empty">No household links yet. Add one under Family (partner / parent / sibling) to enable per-category sharing.</div>';
+    } else if (!categoriesCache.length) {
+      owned.innerHTML = '<div class="empty">Add at least one category to share.</div>';
+    } else {
+      const rows = [];
+      rows.push(`
+        <div class="cap-row" style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.08em;">
+          <span class="cap-name">Category</span>
+          <span class="cap-limit">Shared with</span>
+        </div>
+      `);
+      for (const c of categoriesCache) {
+        const catShares = granted.filter(g => g.category_id === c.id);
+        const tags = catShares.map(g => `
+          <span class="badge" style="margin-right:6px;">
+            ${esc(g.viewer_username)}
+            <button class="btn-inline"
+                    style="margin-left:4px;background:none;border:none;color:#f87171;cursor:pointer;"
+                    title="Revoke"
+                    onclick="revokeShare(${g.id})">✕</button>
+          </span>`).join('');
+        const viewerOptions = viewers
+          .filter(v => !catShares.some(s => s.viewer_user_id === v.id))
+          .map(v => `<option value="${v.id}">${esc(v.username)}</option>`).join('');
+        rows.push(`
+          <div class="cap-row" style="align-items:center;">
+            <span class="cap-name">${esc(c.name)}</span>
+            <span class="cap-limit" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              ${tags}
+              ${viewerOptions
+                ? `<select data-cat="${c.id}" class="share-add-select" style="font-size:12px;">
+                     <option value="">+ add</option>${viewerOptions}
+                   </select>`
+                : (catShares.length ? '' : '<span style="color:#555;font-size:12px;">private</span>')}
+            </span>
+          </div>
+        `);
+      }
+      owned.innerHTML = rows.join('');
+      owned.querySelectorAll('.share-add-select').forEach(sel => {
+        sel.addEventListener('change', async (ev) => {
+          const viewer_user_id = Number(ev.target.value);
+          const category_id    = Number(ev.target.dataset.cat);
+          ev.target.value = '';
+          if (!viewer_user_id) return;
+          try {
+            await apiSend('POST', '/api/v1/lifeos/finance/shares', { viewer_user_id, category_id });
+            await loadShares();
+          } catch (err) {
+            alert(`Could not grant share: ${err.message}`);
+          }
+        });
+      });
+    }
+
+    if (!incoming.length) {
+      incomingEmpty.style.display = 'block';
+      incomingList.innerHTML = '';
+    } else {
+      incomingEmpty.style.display = 'none';
+      incomingList.innerHTML = incoming.map(i => `
+        <div class="cap-row">
+          <span class="cap-name">${esc(i.owner_username)} → ${esc(i.category_name)}</span>
+          <span class="cap-limit" style="font-size:12px;color:#666;">shared ${fmtDate(i.created_at)}</span>
+        </div>
+      `).join('');
+    }
+  } catch (err) {
+    owned.innerHTML = `<div class="error">${esc(err.message)}</div>`;
+  }
+}
+
+async function revokeShare(scopeId) {
+  if (!confirm('Revoke this share? The viewer will no longer see transactions in this category.')) return;
+  try {
+    await apiSend('POST', `/api/v1/lifeos/finance/shares/${scopeId}/revoke`, {});
+    await loadShares();
+  } catch (err) {
+    alert(`Could not revoke: ${err.message}`);
+  }
+}
+
 /* ───────────────────────────── init ───────────────────────────── */
 (function init() {
   const today = new Date().toISOString().slice(0, 10);
   const dEl = document.getElementById('txn-date');
   if (dEl) dEl.value = today;
-  Promise.all([loadSummary(), loadAccounts(), loadCategories(), loadTxns(), loadGoals(), loadIps()]);
+  Promise.all([loadSummary(), loadAccounts(), loadCategories(), loadTxns(), loadGoals(), loadIps()])
+    .then(() => loadShares());
 })();
 </script>
 </body>

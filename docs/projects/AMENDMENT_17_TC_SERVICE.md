@@ -810,7 +810,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 ---
 
 ## Handoff (Fresh AI Context)
-**Current blocker:** Live secrets and first-file execution still need to be completed — the workspace now prefers `adam@hopkinsgroup.org` for TC intake, honors the current Railway alias vars (`TC_IMAP_APP_Adam_PASSWORD`, `GLVAR_mls_*`, `exp_okta_*`), surfaces only actionable setup gaps, and shows active files as red/yellow/green transaction cards with click-through action routing; **live** IMAP + GLVAR + eXp vault values are still required before first real intake and first real outbound package send run end-to-end.
+**Current blocker:** Live secrets and first-file execution still need to be completed — both the workspace and the runtime IMAP resolver now prefer `adam@hopkinsgroup.org` for TC intake, honor the current Railway alias vars (`TC_IMAP_APP_Adam_PASSWORD`, `GLVAR_mls_*`, `exp_okta_*`), surface only actionable setup gaps, and show active files as red/yellow/green transaction cards with click-through action routing; **live** IMAP + GLVAR + eXp vault values are still required before first real intake and first real outbound package send run end-to-end.
 
 **Last decision:** TC access should use managed env for defaults and the credential vault for secrets; startup guards now check real readiness instead of stale hard-coded env names
 
@@ -861,6 +861,8 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-02 | Shared operator-surface parity note: ClientCare now uses the same click-to-act, operator-first workflow pattern for VOB work that the TC portal already uses for approvals / alerts / file actions. No TC runtime behavior changed in this batch. | Keep the cross-product operator model aligned so “red means I act, yellow means system/watch, green means healthy” remains consistent across internal tools. | ✅ | ✅ | pending |
+| 2026-04-02 | **`tc-imap-config` mailbox fix:** the live IMAP resolver now goes through `credential-aliases.js`, prefers the Adam TC mailbox aliases already present in Railway, and no longer falls back to the LifeOS system mailbox when the transaction inbox is the real source. Vault lookup order now follows the resolved TC mailbox first. | Fix the root-cause drift between the access workspace and the runtime IMAP reader so live email intake pulls from the actual transaction inbox instead of the system mailbox. | ✅ | ✅ | pending |
 | 2026-03-30 | **`tc-browser-agent` `uploadDocument` (v2):** Documents tab search runs in **main + each iframe**; file upload tries **`uploadFile`** on every **`input[type=file]`** in every frame; **`_tdTriggerFileChooserFromFrames`** walks **open shadow roots** to click file inputs; **3 attempts** with re-open file; **`_tdConfirmUploadDialogs`** clicks save/done/apply across frames; **`_tdVerifyFilenameVisible`** scans all frames. **`openTransactionDeskFile`:** richer link selectors + **`goto`** path list (`TransactionDesk`, query `transactionId`, etc.) | ZipForm/Lone Wolf often embeds document UI in iframes/shadow DOM — single-frame selectors missed uploads | ✅ | ✅ | pending |
 | 2026-03-30 | **`tc-browser-agent` `uploadDocument`:** removed invalid Puppeteer selector **`button:contains("Documents")`** (never matched). Added **`clickTransactionDeskDocumentsTab`** (text/tab/href Heuristics), **`openTransactionDeskFile`** before upload, **`input.uploadFile`** fallback to file chooser, optional metadata fill, **`verified`** DOM check. **`ok`** = browser upload succeeded. **`tc-routes`** (manual upload + mailbox batch) + **`tc-inspection-forward-service`:** **`ensureOnTransactionDesk`** instead of **`navigateToTransactionDesk`** | TD uploads were no-ops: Documents tab never opened; old code still returned **`ok: true`** | ✅ | ✅ | pending |
 | 2026-03-30 | **`scripts/tc-r4r-from-railway.mjs`** + **`npm run tc:r4r-railway`** — runs **`railway variables --json`** in **`RAILWAY_VARS_PROJECT_DIR`** (default `~/lumin-railway` if present) to set **`TC_API_KEY`**, then delegates to **`tc-r4r-do-upload.mjs`**. Requires interactive **`railway login`** | Unblocks prod TC calls when local `.env` still has `local-dev-key-*` — no manual key copy | ✅ | ✅ | pending |
@@ -916,7 +918,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 **Status:** BUILD_READY (TC coordination core — gates 1-5 complete)
 **Adaptability Score:** 82/100
 **Council Persona:** edison (iterate fast, test every assumption, protect the core deadline logic)
-**Last Updated:** 2026-04-01
+**Last Updated:** 2026-04-03
 
 ### Gate 1 — Implementation Detail
 - [x] Email triage, GLVAR monitor, deadline cron all have specific segment descriptions
@@ -951,3 +953,12 @@ New TC tools plug in via the `tc-coordinator.js` facade — swap the underlying 
 
 ### Gate 5 — How We Beat Them
 While SkySlope sends a reminder that a deadline is in 3 days, we read the email thread, identify the specific clause at risk, find the counterparty contact, draft the curative email, and have it waiting for Adam's one-click approval — before he even opens his inbox.
+
+## 2026-04-03 Cross-Lane UX Note
+
+- ClientCare now uses a system-managed work queue with a resizable utility sidebar, existing-client search before manual entry, and assistant-routed missing-info outreach.
+- ClientCare now also has a persistent account search and explicit `System is doing next` / `You need to do next` summaries in account detail. TC should mirror that same split: searchable work queue first, machine-owned next steps written plainly, and human action shown only when judgment or approval is still required.
+- ClientCare account detail now exposes direct machine-assisted actions (`Refresh from ClientCare`, `Request missing info by text`, `Request missing info by email`) plus a visible `Data completeness` block. TC should use the same pattern for document/filing gaps: refresh first, automated outreach second, human typing last.
+- ClientCare VOB now supports saved prospect history sourced from uploaded insurance-card OCR plus later promotion into a client-file creation queue. TC should mirror that persistence pattern for pre-file leads and unsigned document packages: capture once, resume later, and promote into the live system with one action when the client commits.
+- ClientCare prospect follow-up now uses the shared outbound engine to send real SMS/email and log receipts when contact data exists. TC should use that same execution pattern for document requests and milestone follow-up so the system’s outreach is measured by actual send/response receipts rather than draft text alone.
+- TC should follow the same operator standard: machine pull first, system-managed queue second, human exception handling last. Long secondary analytics or rollout sections should stay collapsed until explicitly needed.

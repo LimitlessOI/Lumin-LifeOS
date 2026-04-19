@@ -11,7 +11,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 |
+| **Last Updated** | 2026-04-01 |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json` |
 
@@ -35,6 +35,7 @@ Maximum Leverage — the council multiplies every feature's value by routing int
 - HAB (Human Attention Budget) enforcement
 - AI safety gate (REALITY_MISMATCH, AI kill switch)
 - Provider health monitoring and cooldown management
+- Proposal scoring and model-performance grading for council recommendations
 
 **Out of scope:**
 - What the AI actually says (that's the feature using the council)
@@ -102,6 +103,28 @@ server.js           — composition root only
 |---|---|
 | `token_usage_log` | Per-call savings receipt |
 | `free_tier_usage` | Provider daily usage tracking |
+
+### Council Evaluation Contract
+Every non-trivial council answer that is meant to drive code or workflow change must produce a structured proposal payload:
+- `problem`
+- `recommended_solution`
+- `risks`
+- `edge_cases`
+- `cheaper_or_faster_option`
+- `confidence`
+- `verification_plan`
+
+That proposal is scored independently from execution quality. The council is responsible for the planning half of the loop, not for declaring its own code successful.
+
+### Council Scoring Rubric
+Each proposal should be graded on:
+1. `correctness` — did it identify the real problem?
+2. `completeness` — did it include the important moving parts and edge cases?
+3. `practicality` — can the recommendation actually be implemented in this repo/runtime?
+4. `ssot_alignment` — does it fit the owning amendment, env rules, and non-negotiables?
+5. `missed_risks` — what material risks did it fail to name before execution?
+
+The council may recommend, but a separate verifier/reviewer must decide whether the final implementation succeeded.
 
 ---
 
@@ -239,6 +262,7 @@ grep "0\.97" services/free-tier-governor.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-01 | Added the formal council evaluation contract and scoring rubric so proposal quality is recorded separately from implementation/debug quality | Self-programming needs planner quality evidence, not just whether code eventually passed | ✅ | pending | pending |
 | 2026-03-30 | Open Source Council startup banner in `core/two-tier-system-init.js` aligned with `COUNCIL_OLLAMA_MODE` + Railway endpoint rules (no longer implies enabling is only `OLLAMA_ENDPOINT`) | Startup logs match council policy | ✅ | pending | pending |
 | 2026-03-30 | `COUNCIL_OLLAMA_MODE` (`off` \| `last_resort` \| `on`): Railway default **off** — no Ollama ping, excluded from free-tier cascade; `last_resort` enables Ollama only after other free providers exhausted. Removed implicit `OLLAMA_ENDPOINT` default to `ollama.railway.internal`. | Free cloud APIs first; local Ollama opt-in so Mac tunnel does not slow work | ✅ | ✅ | pending |
 | 2026-03-29 | Centralized autonomy runtime defaults in `services/runtime-modes.js`, raised `HAB_DAILY_LIMIT` code default to 100, and made verification respect defaulted safe-mode values instead of requiring every kill-switch env to be explicitly present | Runtime safety semantics had drifted: some code treated missing flags as safe defaults while other checks treated them as unset/misconfigured | ✅ | ✅ | pending |

@@ -103,7 +103,19 @@
     "public/overlay/lifeos-app.html",
     "public/overlay/lifeos-feature.html",
     "public/overlay/lifeos-feature-data.js",
-    "public/overlay/lifeos-control-help.js"
+    "public/overlay/lifeos-bootstrap.js",
+    "public/overlay/lifeos-control-help.js",
+    "services/lifeos-request-helpers.js",
+    "db/migrations/20260418_lifeos_daily_emotional_checkins.sql",
+    "services/lifeos-money-decision-bridge.js",
+    "db/migrations/20260418_truth_delivery_calibration.sql",
+    "db/migrations/20260418_lifeos_character.sql",
+    "services/character-builder.js",
+    "db/migrations/20260418_lifeos_monetization.sql",
+    "services/monetization-map.js",
+    "db/migrations/20260418_lifeos_finance_share_scopes.sql",
+    "routes/lifeos-backtest-routes.js",
+    "public/overlay/lifeos-backtest.html"
   ],
   "assertions": [
     {
@@ -336,6 +348,10 @@
     },
     {
       "type": "file_exists",
+      "path": "public/overlay/lifeos-bootstrap.js"
+    },
+    {
+      "type": "file_exists",
       "path": "public/overlay/lifeos-control-help.js"
     },
     {
@@ -348,11 +364,99 @@
     },
     {
       "type": "node_check",
+      "check": "public/overlay/lifeos-bootstrap.js"
+    },
+    {
+      "type": "node_check",
       "check": "public/overlay/lifeos-control-help.js"
     },
     {
       "type": "node_check",
       "check": "scripts/lifeos-smoke.mjs"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-request-helpers.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-request-helpers.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_daily_emotional_checkins.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-money-decision-bridge.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-money-decision-bridge.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_truth_delivery_calibration.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/truth-delivery.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_character.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/character-builder.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/character-builder.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-children-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_monetization.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/monetization-map.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/monetization-map.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-purpose-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_finance_share_scopes.sql"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-finance.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-finance-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-backtest-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-backtest.html"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-backtest-routes.js"
     }
   ],
   "phases": [

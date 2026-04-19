@@ -79,6 +79,7 @@ async function checkPublicRoutes(pages) {
       '/overlay/lifeos-app.html',
       '/overlay/lifeos-feature.html',
       '/overlay/lifeos-feature-data.js',
+      '/overlay/lifeos-bootstrap.js',
       '/overlay/lifeos-control-help.js',
       '/overlay/lifeos-theme.js',
       '/overlay/lifeos-theme-overrides.css',
@@ -165,6 +166,7 @@ async function main() {
     }
   }
   ok(`Shell references ${pages.length} LifeOS pages and all exist`);
+  assert(shellHtml.includes('/overlay/lifeos-bootstrap.js'), 'LifeOS shell missing shared bootstrap script');
 
   checkControlHelpWiring();
   ok('Control-help wiring exists on Today, Quick Entry, Notifications, and Engine');

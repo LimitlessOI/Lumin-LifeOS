@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-03-30 |
+| **Last Updated** | 2026-04-06 |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -236,6 +236,8 @@ node --check public/overlay/command-center.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-06 | `public/sw.js`: scope registered at `/` was **caching** `GET /clientcare-billing` and scripts via stale-while-revalidate; billing path now **bypasses** the service worker (network-only). Bump shell cache to `lifeos-shell-v2` | After deploy, operators still saw old overlay without the insurance card strip | ✅ | ✅ | pending |
+| 2026-04-06 | `middleware/apply-middleware.js`: serve `public/clientcare-billing` at `/clientcare-billing` with `no-store` on `.js`/`.html` (same as `/tc`) | Operators were seeing stale billing overlay JS; card upload UI appeared “missing” after deploys | ✅ | ✅ | pending |
 | 2026-03-30 | `middleware/apply-middleware.js`: serve `public/tc` at `/tc` with `no-store` on `.js`/`.html` so TC portal scripts are not cached above the global no-cache layer | Fix stale `tc-portal.js` after deploys | ✅ | ✅ | pending |
 | 2026-03-30 | `public/shared/lifeos-voice-chat.js`: optional `onEnd` on `speakText`; `startMic` / `stopMic` on attach controller. `routes/public-routes.js`: `GET /tc/assistant` → TC voice assistant page | Enable TC dialog mode (speak reply then resume listening) | ✅ | ✅ | pending |
 | 2026-03-29 | Command Center verification now respects the safe default for `LIFEOS_DIRECTED_MODE` instead of failing just because the env var is omitted | The overlay should reflect the actual runtime safety posture, and directed mode defaults closed even when the env is not set explicitly | ✅ | ✅ | pending |

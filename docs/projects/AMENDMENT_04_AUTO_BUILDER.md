@@ -1,7 +1,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-27 (model performance ledger + capability map)
+**Last Updated:** 2026-04-01 (self-programming evaluation loop)
 
 ---
 
@@ -72,6 +72,25 @@ The system that writes, tests, and deploys its own code. Takes an idea → gener
 - `GET /api/v1/builder/queue` — all segments grouped by safety class (safe/review/highRisk/active/blocked)
 - `POST /api/v1/builder/pause` + `POST /api/v1/builder/resume` — pause/resume the builder loop
 
+### Required Self-Programming Loop
+The builder is no longer allowed to behave like a single black-box coder. Every serious autonomous build must follow this format:
+1. **Proposal** — consume the council recommendation and produce a scoped build plan.
+2. **Execution** — change only the files and behavior covered by that scoped plan.
+3. **Verification** — run the declared checks and capture receipts.
+4. **Review** — inspect whether the diff touched the right files and matched the intended outcome.
+5. **Repair** — if verification or review fails, apply the smallest safe fix and retry.
+6. **Scoring** — compare proposal quality, code quality, verification result, and repair quality separately.
+
+The builder may implement code, but it does not get to self-certify success without receipts.
+
+### Separation Of Duties
+- **Council / planner** decides what should be built and names risks.
+- **Builder / executor** writes the code.
+- **Verifier / reviewer** checks behavior, touched files, and SSOT alignment.
+- **Repair worker** fixes the smallest failing surface when needed.
+
+One model may fill more than one role only when no safer alternative exists, and the run receipt must say that separation was collapsed.
+
 ---
 
 ## CURRENT STATE
@@ -134,6 +153,15 @@ The system that writes, tests, and deploys its own code. Takes an idea → gener
 - No self-modification of: server.js startup block, council-service.js, snapshot-service.js, this SSOT
 - Human Guardian veto on any production deployment (North Star 3.1)
 - All changes logged to `self_modifications` with what/when/why/who
+- Proposal score, execution result, verification result, and repair result must be logged separately; one green test run does not erase a bad proposal or a risky repair path
+
+---
+
+## Change Receipts
+
+| Date | What Changed | Why | Amendment | Manifest | Verified |
+|---|---|---|---|---|---|
+| 2026-04-01 | Added the required self-programming loop (proposal, execution, verification, review, repair, scoring) plus explicit separation-of-duties rules | The builder now has a documented operating contract for how autonomous code work must be evaluated instead of acting like a single black-box coder | ✅ | pending | pending |
 
 ---
 
@@ -142,7 +170,7 @@ The system that writes, tests, and deploys its own code. Takes an idea → gener
 **Status:** BUILD_READY (builder supervisor + council review — core loop complete)
 **Adaptability Score:** 88/100
 **Council Persona:** musk (first principles — what can we delete? is there a 10x simpler version?)
-**Last Updated:** 2026-03-27
+**Last Updated:** 2026-04-01
 
 ### Gate 1 — Implementation Detail
 - [x] Builder supervisor spawns Claude Code headlessly with --dangerously-skip-permissions

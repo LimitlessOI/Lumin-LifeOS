@@ -1,7 +1,7 @@
 # AMENDMENT 09 — Life Coaching / Personal OS + Digital Twin
 **Status:** LIVE (local use) | Digital Twin: OPERATIONAL
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-27
+**Last Updated:** 2026-04-18 (twin-auto-ingest.js tracked into repo alongside lifeos follow-up session)
 
 ---
 

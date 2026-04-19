@@ -16,6 +16,7 @@
 import express from 'express';
 import { createWorkshopOfMind } from '../services/workshop-of-mind.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+import { safeLimit, safeId }      from '../services/lifeos-request-helpers.js';
 
 export function createLifeOSWorkshopRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
@@ -82,8 +83,8 @@ export function createLifeOSWorkshopRoutes({ pool, requireKey, callCouncilMember
       const userId = await resolveUserId(user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const sessionId = parseInt(req.params.id);
-      if (isNaN(sessionId)) return res.status(400).json({ ok: false, error: 'Invalid session id' });
+      const sessionId = safeId(req.params.id);
+      if (!sessionId) return res.status(400).json({ ok: false, error: 'Invalid session id' });
 
       const result = await workshop.sendResponse(userId, sessionId, response);
       res.json({ ok: true, ...result });
@@ -105,8 +106,8 @@ export function createLifeOSWorkshopRoutes({ pool, requireKey, callCouncilMember
       const userId = await resolveUserId(user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const sessionId = parseInt(req.params.id);
-      if (isNaN(sessionId)) return res.status(400).json({ ok: false, error: 'Invalid session id' });
+      const sessionId = safeId(req.params.id);
+      if (!sessionId) return res.status(400).json({ ok: false, error: 'Invalid session id' });
 
       const result = await workshop.closeSession(userId, sessionId);
       res.json({ ok: true, ...result });
@@ -123,7 +124,7 @@ export function createLifeOSWorkshopRoutes({ pool, requireKey, callCouncilMember
       const userId = await resolveUserId(req.query.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const limit   = parseInt(req.query.limit) || 10;
+      const limit   = safeLimit(req.query.limit, { fallback: 10 });
       const sessions = await workshop.getSessionHistory(userId, limit);
       res.json({ ok: true, sessions, count: sessions.length });
     } catch (err) {

@@ -71,6 +71,24 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - “Done” now includes timing truth: the amendment/manifest/change receipt should make it clear what was estimated, what actually happened, and where the time went if the estimate was materially wrong.
 - Before any build lane assumes runtime capability, it must check live env awareness against `docs/ENV_REGISTRY.md` and `/api/v1/railway/managed-env/registry`. Builders may reason from presence/non-presence and category health there, but must never expose secret values.
 
+## 0.5A AI Self-Programming Format (NEW)
+All serious AI build work must follow the same six-part format so planning, coding, debugging, and scoring are comparable across models.
+
+Required loop:
+1. **Proposal** — state what should be built, why, risks, edge cases, and cheaper alternatives.
+2. **Score** — grade the proposal against a rubric: correctness, completeness, practicality, SSOT alignment, and missed-risk count.
+3. **Execute** — implement only the scoped change set; no free-form code sprawl.
+4. **Verify** — run syntax/tests/assertions/screenshots/route checks; verification is a separate step, never implied.
+5. **Repair** — if verification fails, produce the smallest safe fix and re-run verification.
+6. **Receipt** — record what was proposed, changed, verified, repaired, and whether the result matched the original confidence.
+
+Non-negotiables:
+- Do not let a single model fully propose, execute, verify, and grade itself without separation of roles or explicit review.
+- Proposal quality and code quality must be scored separately.
+- Confidence must be compared against actual outcome; overconfident wrong answers count as worse than low-confidence escalations.
+- A run is not complete until receipts and the owning SSOT are updated.
+- If the work touches production behavior, the evaluation loop must be reproducible from saved inputs and receipts.
+
 ## 0.6 Directed Mode Rule (NEW)
 - Default operating posture is now directed mode: the system does not autonomously build, research, self-improve, market, or spend unless explicitly instructed or explicitly re-enabled.
 - Hidden/self-starting timers in subsystems are not trusted by default and must remain off unless their behavior has been reviewed and explicitly approved.

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Mediation — LifeOS</title>
   <style>
@@ -372,7 +373,7 @@
 
     disable('start-btn');
     try {
-      const KEY = localStorage.getItem('commandKey') || '';
+      const KEY = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: false }).KEY;
       const res = await fetch(`${API}/api/v1/lifeos/mediation/sessions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-command-key': KEY },
@@ -795,11 +796,7 @@
   // We prompt for the key only when on the start screen (creating sessions).
 
   function ensureKeyForStart() {
-    const KEY = localStorage.getItem('commandKey');
-    if (!KEY && !CODE) {
-      const k = prompt('Enter your command key to start a session:');
-      if (k) { localStorage.setItem('commandKey', k); }
-    }
+    const KEY = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: !CODE }).KEY;
   }
 
   // ── Run ───────────────────────────────────────────────────────────────────

@@ -62,23 +62,60 @@ export function createTruthDelivery({ pool, callAI }) {
       await variety.logResponse({ userId, styles: varietyStyles, responsePreview: text.substring(0, 100), context: 'truth_delivery' });
     }
 
-    // Log the delivery attempt for calibration
-    const deliveryId = await logDelivery({ userId, style, topic, text });
+    // Capture calibration metadata at delivery time: hour-of-day and
+    // best-effort emotional state (from last daily check-in in the last 24h).
+    const hourOfDay = new Date().getHours();
+    const emotionalState = await inferEmotionalState(userId);
+    const joy7d = context?.jScore?.avg_joy_7d ?? null;
+    const integrity = context?.iScore?.total_score ?? null;
 
-    return { text, style, topic, deliveryId };
+    const deliveryId = await logDelivery({
+      userId, style, topic, text,
+      hourOfDay, emotionalState,
+      joy7d, integrity,
+    });
+
+    return { text, style, topic, deliveryId, hourOfDay, emotionalState };
   }
 
   // ── Log a delivery ────────────────────────────────────────────────────────
 
-  async function logDelivery({ userId, style, topic, text }) {
+  async function logDelivery({ userId, style, topic, text, hourOfDay = null, emotionalState = null, joy7d = null, integrity = null }) {
     try {
       const { rows } = await pool.query(`
-        INSERT INTO truth_delivery_log (user_id, style_used, topic, truth_text)
-        VALUES ($1,$2,$3,$4) RETURNING id
-      `, [userId, style, topic, text]);
+        INSERT INTO truth_delivery_log
+          (user_id, style_used, topic, truth_text,
+           hour_of_day, emotional_state, joy_7d_at_time, integrity_at_time)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id
+      `, [userId, style, topic, text, hourOfDay, emotionalState, joy7d, integrity]);
       return rows[0]?.id;
     } catch {
       return null;
+    }
+  }
+
+  // Best-effort: infer emotional state from the most recent daily check-in
+  // in the last 24h; returns 'unknown' when no signal is present.
+  async function inferEmotionalState(userId) {
+    try {
+      const { rows } = await pool.query(`
+        SELECT weather, intensity, valence
+        FROM daily_emotional_checkins
+        WHERE user_id = $1
+          AND created_at > NOW() - INTERVAL '24 hours'
+        ORDER BY created_at DESC
+        LIMIT 1
+      `, [userId]);
+      const row = rows[0];
+      if (!row) return 'unknown';
+      const intensity = Number(row.intensity ?? 0);
+      const valence = Number(row.valence ?? 0);
+      if (intensity >= 8 && valence <= -3) return 'flooded';
+      if (intensity >= 6 && valence < 0)   return 'heated';
+      if (valence < 0)                     return 'stirred';
+      return 'calm';
+    } catch {
+      return 'unknown';
     }
   }
 
@@ -111,6 +148,100 @@ export function createTruthDelivery({ pool, callAI }) {
         GROUP BY style_used
       `, [userId]);
       return rows;
+    } catch {
+      return [];
+    }
+  }
+
+  // ── Calibration report ───────────────────────────────────────────────────
+  // Human-readable snapshot of what the system has learned about how this
+  // specific user receives hard truths. Used by the /truth/calibration route
+  // and surfaced in the Mirror overlay so the learning loop is visible.
+  async function getCalibrationReport(userId, { days = 90 } = {}) {
+    const [styleRows, hourRows, stateRows, topicRows] = await Promise.all([
+      safeQuery(`
+        SELECT style_used,
+               COUNT(*)::int AS deliveries,
+               COUNT(*) FILTER (WHERE acknowledged = true)::int AS acknowledged,
+               ROUND(
+                 COUNT(*) FILTER (WHERE acknowledged = true)::numeric
+                 / NULLIF(COUNT(*),0) * 100, 1
+               ) AS ack_rate
+        FROM truth_delivery_log
+        WHERE user_id = $1
+          AND created_at > NOW() - ($2 || ' days')::INTERVAL
+        GROUP BY style_used
+        ORDER BY ack_rate DESC NULLS LAST
+      `, [userId, days]),
+      safeQuery(`
+        SELECT hour_of_day,
+               COUNT(*)::int AS deliveries,
+               ROUND(
+                 COUNT(*) FILTER (WHERE acknowledged = true)::numeric
+                 / NULLIF(COUNT(*),0) * 100, 1
+               ) AS ack_rate
+        FROM truth_delivery_log
+        WHERE user_id = $1
+          AND hour_of_day IS NOT NULL
+          AND created_at > NOW() - ($2 || ' days')::INTERVAL
+        GROUP BY hour_of_day
+        HAVING COUNT(*) >= 3
+        ORDER BY ack_rate DESC NULLS LAST, deliveries DESC
+      `, [userId, days]),
+      safeQuery(`
+        SELECT emotional_state,
+               COUNT(*)::int AS deliveries,
+               ROUND(
+                 COUNT(*) FILTER (WHERE acknowledged = true)::numeric
+                 / NULLIF(COUNT(*),0) * 100, 1
+               ) AS ack_rate
+        FROM truth_delivery_log
+        WHERE user_id = $1
+          AND emotional_state IS NOT NULL
+          AND created_at > NOW() - ($2 || ' days')::INTERVAL
+        GROUP BY emotional_state
+        HAVING COUNT(*) >= 3
+        ORDER BY ack_rate DESC NULLS LAST
+      `, [userId, days]),
+      safeQuery(`
+        SELECT topic,
+               COUNT(*)::int AS deliveries,
+               ROUND(
+                 COUNT(*) FILTER (WHERE acknowledged = true)::numeric
+                 / NULLIF(COUNT(*),0) * 100, 1
+               ) AS ack_rate
+        FROM truth_delivery_log
+        WHERE user_id = $1
+          AND created_at > NOW() - ($2 || ' days')::INTERVAL
+        GROUP BY topic
+        ORDER BY ack_rate DESC NULLS LAST
+      `, [userId, days]),
+    ]);
+
+    const totalDeliveries = styleRows.reduce((s, r) => s + Number(r.deliveries || 0), 0);
+    const best = {
+      style: styleRows.find(r => Number(r.deliveries) >= 5) || null,
+      hour:  hourRows[0] || null,
+      state: stateRows[0] || null,
+      topic: topicRows[0] || null,
+    };
+
+    return {
+      total_deliveries: totalDeliveries,
+      window_days: Number(days),
+      by_style: styleRows,
+      by_hour: hourRows,
+      by_emotional_state: stateRows,
+      by_topic: topicRows,
+      best,
+      confident: totalDeliveries >= 10,
+    };
+  }
+
+  async function safeQuery(sql, params) {
+    try {
+      const { rows } = await pool.query(sql, params);
+      return rows || [];
     } catch {
       return [];
     }
@@ -200,6 +331,7 @@ Rules:
     generate,
     recordAcknowledgment,
     getStyleEffectiveness,
+    getCalibrationReport,
     logDelivery,
   };
 }

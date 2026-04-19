@@ -23,6 +23,7 @@
 import express from 'express';
 import { createContradictionEngine } from '../services/contradiction-engine.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+import { safeId }                 from '../services/lifeos-request-helpers.js';
 
 export function createLifeOSIdentityRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = express.Router();
@@ -87,8 +88,10 @@ export function createLifeOSIdentityRoutes({ pool, requireKey, callCouncilMember
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
+      const contradictionId = safeId(req.params.id);
+      if (!contradictionId) return res.status(400).json({ ok: false, error: 'invalid contradiction id' });
       const row = await engine.acknowledgeContradiction({
-        contradictionId: parseInt(req.params.id),
+        contradictionId,
         userId,
         response: response || null,
       });
@@ -151,8 +154,10 @@ export function createLifeOSIdentityRoutes({ pool, requireKey, callCouncilMember
         return res.status(400).json({ ok: false, error: 'updated_belief is required' });
       }
 
+      const beliefId = safeId(req.params.id);
+      if (!beliefId) return res.status(400).json({ ok: false, error: 'invalid belief id' });
       const row = await engine.updateBelief({
-        beliefId: parseInt(req.params.id),
+        beliefId,
         updatedBelief: updated_belief,
       });
 

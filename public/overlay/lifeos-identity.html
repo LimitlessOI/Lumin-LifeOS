@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Identity — LifeOS</title>
   <style>
@@ -220,13 +221,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
   const API = '/api/v1/lifeos/identity';
-  const KEY = localStorage.getItem('commandKey') || prompt('Enter your command key:') || '';
-  if (KEY) localStorage.setItem('commandKey', KEY);
-  const USER = new URLSearchParams(location.search).get('user')
-    || localStorage.getItem('lifeos_user')
-    || localStorage.getItem('lifeosUser')
-    || 'adam';
+  const KEY = CTX.KEY;
+  const USER = CTX.USER;
   if (USER) localStorage.setItem('lifeos_user', USER);
 
   const headers = { 'Content-Type': 'application/json', 'x-command-key': KEY };

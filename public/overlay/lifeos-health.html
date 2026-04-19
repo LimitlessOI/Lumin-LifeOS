@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Health Intelligence — LifeOS</title>
   <style>
@@ -516,15 +517,16 @@
 
 <script>
   // ── Config ───────────────────────────────────────────────────────────────────
+  const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
   const API = '/api/v1/lifeos/health';
-  let currentUser = 'adam';
+  let currentUser = CTX.USER;
 
   function getKey() {
-    return localStorage.getItem('commandKey') ?? '';
+    return CTX.KEY;
   }
 
   function authHeaders() {
-    return { 'Content-Type': 'application/json', 'x-command-key': getKey() };
+    return CTX.headers();
   }
 
   // ── User switcher ─────────────────────────────────────────────────────────────

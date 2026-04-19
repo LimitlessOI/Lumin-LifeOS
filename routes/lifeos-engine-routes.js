@@ -31,6 +31,7 @@ import { createOutreachEngine } from '../services/outreach-engine.js';
 import { createCommunicationGateway } from '../services/communication-gateway.js';
 import { createLifeOSCalendarService } from '../services/lifeos-calendar.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+import { safeDays }               from '../services/lifeos-request-helpers.js';
 
 function createLifeOSEngineContext({ pool, notificationService, sendSMS, callCouncilMember, logger }) {
   const callAI = callCouncilMember
@@ -139,7 +140,7 @@ export function createLifeOSEngineRoutes({ pool, requireKey, notificationService
       const { user = 'adam', days = 7 } = req.query;
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      const log = await gateway.getLog(userId, { days: parseInt(days) });
+      const log = await gateway.getLog(userId, { days: safeDays(days, { fallback: 7 }) });
       res.json({ ok: true, log, count: log.length });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });

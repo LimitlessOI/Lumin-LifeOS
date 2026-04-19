@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<!--
+  LifeOS · Backtest Viewer (EDUCATION ONLY)
+
+  Responsibility:
+    Thin, read-only surface over /api/v1/lifeos/backtest/* that renders the
+    contents of logs/attention-momentum-backtest + logs/strategy-benchmark-suite.
+    Every panel has a permanent red disclaimer banner.
+
+  Sovereignty notes:
+    - Education and self-reflection only. NOT investment advice.
+    - No "buy" / "sell" / "place trade" actions exist in this UI.
+    - No live data is fetched. All numbers are simulations over archived candles.
+
+  @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>LifeOS · Backtest (Education)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; padding-bottom: 60px; }
+
+    .disclaimer-banner {
+      background: linear-gradient(90deg, #2d0a0a, #1f0a0a);
+      color: #fca5a5;
+      border: 1px solid #b91c1c;
+      border-radius: 0;
+      padding: 14px 22px;
+      font-size: 12.5px;
+      line-height: 1.55;
+      letter-spacing: 0.2px;
+    }
+    .disclaimer-banner strong { color: #f87171; letter-spacing: 0.5px; }
+
+    .header { padding: 20px 22px 14px; border-bottom: 1px solid #1e1e2e; display: flex; flex-direction: column; gap: 4px; }
+    .header h1 { font-size: 17px; font-weight: 600; color: #e2e2f0; }
+    .header .sub { font-size: 11px; color: #666; letter-spacing: 0.3px; }
+
+    .tabs { display: flex; gap: 0; padding: 8px 14px 0; border-bottom: 1px solid #1e1e2e; overflow-x: auto; }
+    .tab { padding: 10px 14px; font-size: 12px; color: #666; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; user-select: none; }
+    .tab.active { color: #a0aaff; border-bottom-color: #5b6af5; }
+
+    .panel { display: none; padding: 18px 18px 24px; }
+    .panel.active { display: block; }
+
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; }
+    .card h2 { font-size: 13px; color: #c0c0d0; margin-bottom: 10px; font-weight: 600; }
+    .mut { color: #666; font-size: 12px; }
+    .err { color: #f87171; font-size: 12px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #1e1e2e; }
+    th { color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; }
+    tr:last-child td { border-bottom: none; }
+
+    .tag {
+      display: inline-block;
+      font-size: 10.5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #1e1e2e;
+      color: #888;
+      margin-left: 6px;
+    }
+    .tag.good   { background: #052e16; color: #4ade80; border: 1px solid #16a34a33; }
+    .tag.warn   { background: #1a1200; color: #fbbf24; border: 1px solid #92400e33; }
+    .tag.bad    { background: #2d0a0a; color: #f87171; border: 1px solid #dc262633; }
+
+    pre.small { font-size: 11px; color: #888; background: #0a0a0f; border: 1px solid #1e1e2e; border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; }
+  </style>
+  <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
+</head>
+<body>
+
+<!-- Permanent disclaimer at the very top. Cannot be dismissed. -->
+<div class="disclaimer-banner" id="disclaimerBanner">
+  <strong>EDUCATION ONLY — NOT INVESTMENT ADVICE.</strong>
+  Loading…
+</div>
+
+<div class="header">
+  <h1>Backtest · Education Viewer</h1>
+  <div class="sub">Read-only window over simulated historical strategies. No live signals, no trade actions.</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="overview">Overview</div>
+  <div class="tab"        data-tab="benchmark">Strategy Benchmark</div>
+  <div class="tab"        data-tab="formula">Attention Formula</div>
+  <div class="tab"        data-tab="walkforward">Walk-Forward</div>
+  <div class="tab"        data-tab="trades">Trade Events</div>
+</div>
+
+<div class="panel active" id="panel-overview">
+  <div class="card" id="overviewCard"><div class="mut">Loading overview…</div></div>
+</div>
+
+<div class="panel" id="panel-benchmark">
+  <div class="card"><h2>Strategy Benchmark Suite</h2><div class="mut">Compares multiple mechanical strategies over the same symbols and windows, ranked by the chosen score.</div></div>
+  <div class="card" id="benchCard"><div class="mut">Loading benchmark…</div></div>
+</div>
+
+<div class="panel" id="panel-formula">
+  <div class="card"><h2>Attention-Momentum Formula (In-Sample)</h2><div class="err">This is in-sample curve fitting, not a live or walk-forward signal. It is included for transparency, not emulation.</div></div>
+  <div class="card" id="formulaCard"><div class="mut">Loading formula…</div></div>
+</div>
+
+<div class="panel" id="panel-walkforward">
+  <div class="card"><h2>Walk-Forward Folds</h2><div class="mut">Each fold refits on train data then evaluates on held-out test bars. Negative test results are expected in a real walk-forward and are shown as-is.</div></div>
+  <div class="card" id="wfCard"><div class="mut">Loading walk-forward…</div></div>
+</div>
+
+<div class="panel" id="panel-trades">
+  <div class="card"><h2>Simulated Trade Events</h2><div class="mut">Every row is a simulated entry/exit against archived candles. R-multiple is (exit − entry) / initial-risk. None of these are real trades.</div></div>
+  <div class="card" id="tradesSummaryCard"><div class="mut">Loading summary…</div></div>
+  <div class="card" id="tradesCard"><div class="mut">Loading events…</div></div>
+</div>
+
+<script>
+  const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+  const API  = '/api/v1/lifeos/backtest';
+  const KEY  = CTX.KEY;
+
+  function H() { return CTX.headers({ 'Content-Type': 'application/json' }); }
+  function esc(s) { if (s == null) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function fmtNum(n, d = 4) { if (n == null || Number.isNaN(Number(n))) return '—'; return Number(n).toFixed(d); }
+  function fmtPct(n) { if (n == null) return '—'; return (Number(n) * 100).toFixed(1) + '%'; }
+  function fmtUsd(n) { if (n == null) return '—'; return '$' + Number(n).toFixed(2); }
+
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  async function api(path) {
+    const r = await fetch(`${API}${path}`, { headers: H() });
+    if (!r.ok) throw new Error(`${path}: HTTP ${r.status}`);
+    return r.json();
+  }
+
+  function setBanner(text) {
+    const el = document.getElementById('disclaimerBanner');
+    el.innerHTML = '<strong>EDUCATION ONLY — NOT INVESTMENT ADVICE.</strong> ' + esc(text || '');
+  }
+
+  async function loadOverview() {
+    const card = document.getElementById('overviewCard');
+    try {
+      const d = await api('/overview');
+      setBanner(d.disclaimer);
+      const a = d.artifacts || {};
+      const bs = d.benchmark_snapshot;
+      const artifactRow = (k, v) => `<tr><td>${esc(k)}</td><td>${v ? '<span class="tag good">ON DISK</span>' : '<span class="tag">missing</span>'}</td></tr>`;
+      card.innerHTML = `
+        <h2>Artifacts</h2>
+        <table>${[
+          artifactRow('strategy-benchmark-suite.json',             a.strategy_benchmark_suite),
+          artifactRow('attention-formula-in-sample-best.json',     a.attention_formula_in_sample_best),
+          artifactRow('attention-backtest-trades.jsonl',           a.attention_backtest_trades),
+          artifactRow('attention-walk-forward.jsonl',              a.attention_walk_forward),
+        ].join('')}</table>
+        ${bs ? `
+          <h2 style="margin-top:14px;">Top ranked (simulated)</h2>
+          <div class="mut">ranked by: ${esc(bs.ranked_by || '—')} · wf folds: ${esc(bs.wf_folds || '—')} · symbols: ${esc((bs.symbols || []).join(', '))}</div>
+          <table style="margin-top:10px;">
+            <thead><tr><th>Strategy</th><th>Portfolio mult.</th><th>Avg max DD</th><th>Reliability</th><th>Trades</th><th>Pareto</th></tr></thead>
+            <tbody>${(bs.top || []).map(r => `
+              <tr>
+                <td>${esc(r.label || r.id)}</td>
+                <td>${fmtNum(r.portfolio_mult, 4)}</td>
+                <td>${fmtPct(r.avg_max_dd)}</td>
+                <td>${fmtNum(r.reliability, 3)}</td>
+                <td>${r.trades ?? '—'}</td>
+                <td>${r.pareto_optimal ? '<span class="tag good">yes</span>' : '<span class="tag">no</span>'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        ` : '<div class="mut" style="margin-top:10px;">No benchmark snapshot on disk yet.</div>'}
+      `;
+    } catch (e) {
+      card.innerHTML = `<div class="err">${esc(e.message)}</div>`;
+    }
+  }
+
+  async function loadBenchmark() {
+    const card = document.getElementById('benchCard');
+    try {
+      const d = await api('/benchmark');
+      setBanner(d.disclaimer);
+      if (!d.rows?.length) { card.innerHTML = '<div class="mut">No benchmark rows.</div>'; return; }
+      card.innerHTML = `
+        <div class="mut">${esc(d.warning || '')}</div>
+        <table style="margin-top:10px;">
+          <thead><tr><th>ID</th><th>Label</th><th>Portfolio mult.</th><th>Avg max DD</th><th>Reliability</th><th>Trades</th><th>Pareto</th></tr></thead>
+          <tbody>${d.rows.map(r => `
+            <tr>
+              <td>${esc(r.id)}</td>
+              <td>${esc(r.label)}</td>
+              <td>${fmtNum(r.portfolio_mult, 4)}</td>
+              <td>${fmtPct(r.avg_max_dd)}</td>
+              <td>${fmtNum(r.reliability, 3)}</td>
+              <td>${r.trades ?? '—'}</td>
+              <td>${r.pareto_optimal ? '<span class="tag good">yes</span>' : '<span class="tag">no</span>'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      `;
+    } catch (e) {
+      card.innerHTML = `<div class="err">${esc(e.message)}</div>`;
+    }
+  }
+
+  async function loadFormula() {
+    const card = document.getElementById('formulaCard');
+    try {
+      const d = await api('/attention-formula');
+      setBanner(d.disclaimer);
+      if (!d.formula) { card.innerHTML = '<div class="mut">No in-sample formula on disk.</div>'; return; }
+      const f = d.formula;
+      card.innerHTML = `
+        <div class="mut">${esc(d.warning || '')}</div>
+        <table style="margin-top:10px;">
+          <tbody>
+            <tr><td>target mult</td><td>${fmtNum(f.targetMult, 2)}</td></tr>
+            <tr><td>achieved mult</td><td>${fmtNum(f.mult, 4)}</td></tr>
+            <tr><td>trades</td><td>${f.trades ?? '—'}</td></tr>
+            <tr><td>sim leverage <span class="tag bad">NOT SPOT</span></td><td>${f.simLeverage ?? '—'}</td></tr>
+          </tbody>
+        </table>
+        <h2 style="margin-top:14px;">Formula parameters</h2>
+        <pre class="small">${esc(JSON.stringify(f.formula || {}, null, 2))}</pre>
+      `;
+    } catch (e) {
+      card.innerHTML = `<div class="err">${esc(e.message)}</div>`;
+    }
+  }
+
+  async function loadWalkForward() {
+    const card = document.getElementById('wfCard');
+    try {
+      const d = await api('/walk-forward');
+      setBanner(d.disclaimer);
+      const folds = d.folds || [];
+      if (!folds.length) { card.innerHTML = '<div class="mut">No walk-forward folds on disk.</div>'; return; }
+      card.innerHTML = `
+        <div class="mut">${esc(d.warning || '')} · ${folds.length} fold(s) loaded</div>
+        <table style="margin-top:10px;">
+          <thead><tr><th>Fold</th><th>Symbol</th><th>Train n</th><th>Test n</th><th>Test sumR</th><th>Test avgR</th><th>Test win%</th><th>Final cash</th></tr></thead>
+          <tbody>${folds.map(f => `
+            <tr>
+              <td>${f.fold ?? '—'}</td>
+              <td>${esc(f.symbol || '—')}</td>
+              <td>${f.train?.n ?? '—'}</td>
+              <td>${f.test?.n ?? '—'}</td>
+              <td>${fmtNum(f.test?.sumR, 3)}</td>
+              <td>${fmtNum(f.test?.avgR, 3)}</td>
+              <td>${fmtPct(f.test?.winRate)}</td>
+              <td>${fmtUsd(f.test?.finalCash)}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      `;
+    } catch (e) {
+      card.innerHTML = `<div class="err">${esc(e.message)}</div>`;
+    }
+  }
+
+  async function loadTrades() {
+    const summaryEl = document.getElementById('tradesSummaryCard');
+    const eventsEl  = document.getElementById('tradesCard');
+    try {
+      const d = await api('/trades?limit=500');
+      setBanner(d.disclaimer);
+      const summary = d.summary || [];
+      const events  = d.events  || [];
+
+      summaryEl.innerHTML = summary.length
+        ? `
+          <div class="mut">${esc(d.warning || '')}</div>
+          <table style="margin-top:10px;">
+            <thead><tr><th>Symbol</th><th>Trades</th><th>Wins / Losses</th><th>Avg R</th><th>Sum R</th><th>Sum PnL (sim)</th><th>Win rate</th></tr></thead>
+            <tbody>${summary.map(s => `
+              <tr>
+                <td>${esc(s.symbol)}</td>
+                <td>${s.trades}</td>
+                <td>${s.wins} / ${s.losses}</td>
+                <td>${fmtNum(s.avg_r, 3)}</td>
+                <td>${fmtNum(s.sum_r, 3)}</td>
+                <td>${fmtUsd(s.sum_pnl_usd)}</td>
+                <td>${fmtPct(s.win_rate)}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        `
+        : '<div class="mut">No simulated events on disk.</div>';
+
+      eventsEl.innerHTML = events.length
+        ? `
+          <div class="mut">Showing ${events.length} most recent simulated event(s).</div>
+          <table style="margin-top:10px;">
+            <thead><tr><th>Symbol</th><th>Entry bar</th><th>Exit bar</th><th>Reason</th><th>R</th><th>Sim PnL</th><th>Regime</th></tr></thead>
+            <tbody>${events.slice(-200).reverse().map(e => `
+              <tr>
+                <td>${esc(e.symbol)}</td>
+                <td>${e.entryBar ?? '—'}</td>
+                <td>${e.exitBar ?? '—'}</td>
+                <td>${esc(e.primaryReason || '—')}</td>
+                <td>${fmtNum(e.rMultiple, 3)}</td>
+                <td>${fmtUsd(e.pnlUsd)}</td>
+                <td>${esc(e.regimeAtEntry || '—')}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        `
+        : '<div class="mut">No events to display.</div>';
+    } catch (e) {
+      summaryEl.innerHTML = `<div class="err">${esc(e.message)}</div>`;
+      eventsEl.innerHTML  = '';
+    }
+  }
+
+  (function init() {
+    loadOverview();
+    loadBenchmark();
+    loadFormula();
+    loadWalkForward();
+    loadTrades();
+  })();
+</script>
+</body>
+</html>

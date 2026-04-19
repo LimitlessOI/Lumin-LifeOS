@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <script src="/overlay/lifeos-feature-data.js"></script>
   <script src="/overlay/lifeos-control-help.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
@@ -130,12 +131,11 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const API  = '';
-  const KEY  = localStorage.getItem('commandKey') || '';
-  const H    = { 'Content-Type': 'application/json', 'x-command-key': KEY };
-  const USER = new URLSearchParams(location.search).get('user')
-             || localStorage.getItem('lifeos_user')
-             || 'adam';
+  const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+  const API  = CTX.API;
+  const KEY  = CTX.KEY;
+  const H    = CTX.headers();
+  const USER = CTX.USER;
 
   // -------- Notification type config --------
   const TYPE_CONFIG = {
@@ -391,8 +391,7 @@
 
   // -------- Boot --------
   if (!KEY) {
-    const k = prompt('Enter your command key:');
-    if (k) { localStorage.setItem('commandKey', k); location.reload(); }
+    location.reload();
   } else {
     load();
     // Auto-refresh every 60 seconds

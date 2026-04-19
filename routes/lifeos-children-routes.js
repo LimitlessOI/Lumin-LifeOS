@@ -31,6 +31,7 @@
 import express from 'express';
 import { createChildLearningEngine } from '../services/child-learning-engine.js';
 import { createChildDreamBuilder }   from '../services/dream-builder-child.js';
+import { createCharacterBuilder }    from '../services/character-builder.js';
 import { makeLifeOSUserResolver }    from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember }) {
@@ -386,6 +387,95 @@ export function createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember
     try {
       const dream = await dreamBuilder.completeDream(parseInt(req.params.id, 10));
       res.json({ ok: true, dream });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // ── Character Building ───────────────────────────────────────────────────────
+  // GET  /character/:child_id           — character profile + levels
+  // POST /character/:child_id/story     — generate new story
+  // POST /character/:child_id/respond   — submit choice for a story
+  // POST /character/:child_id/moment    — parent logs real-world moment
+  // POST /character/:child_id/celebrate/:moment_id — celebrate a moment
+  // GET  /character/:child_id/moments   — real-world character moments
+  // GET  /character/:child_id/stories   — story history
+
+  const character = createCharacterBuilder({ pool, callAI, logger: null });
+
+  router.get('/character/:child_id', requireKey, async (req, res) => {
+    try {
+      const profile = await character.getProfile(parseInt(req.params.child_id, 10));
+      res.json({ ok: true, profile });
+    } catch (err) {
+      res.status(err.status || 500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/character/:child_id/story', requireKey, async (req, res) => {
+    try {
+      const { trait, age_group } = req.body;
+      const story = await character.generateStory(parseInt(req.params.child_id, 10), { trait, age_group });
+      res.json({ ok: true, story });
+    } catch (err) {
+      res.status(err.status || 500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/character/:child_id/respond', requireKey, async (req, res) => {
+    try {
+      const { story_id, choice, reflection } = req.body;
+      const result = await character.respondToStory(parseInt(req.params.child_id, 10), {
+        storyId: parseInt(story_id, 10),
+        choice,
+        reflection,
+      });
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(err.status || 500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/character/:child_id/moment', requireKey, async (req, res) => {
+    try {
+      const { trait, title, description, logged_by } = req.body;
+      const moment = await character.logMoment(parseInt(req.params.child_id, 10), {
+        loggedBy: logged_by ? parseInt(logged_by, 10) : null,
+        trait,
+        title,
+        description,
+      });
+      res.json({ ok: true, moment });
+    } catch (err) {
+      res.status(err.status || 500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.post('/character/:child_id/celebrate/:moment_id', requireKey, async (req, res) => {
+    try {
+      const result = await character.celebrateMoment(
+        parseInt(req.params.moment_id, 10),
+        parseInt(req.params.child_id, 10)
+      );
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      res.status(err.status || 500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/character/:child_id/moments', requireKey, async (req, res) => {
+    try {
+      const moments = await character.getMoments(parseInt(req.params.child_id, 10));
+      res.json({ ok: true, moments });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/character/:child_id/stories', requireKey, async (req, res) => {
+    try {
+      const stories = await character.getStoryHistory(parseInt(req.params.child_id, 10));
+      res.json({ ok: true, stories });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

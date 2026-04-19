@@ -63,6 +63,7 @@ import { createLifeOSCalendarService }     from '../services/lifeos-calendar.js'
 import { createLifeOSEventStreamService }  from '../services/lifeos-event-stream.js';
 import { makeLifeOSUserResolver }          from '../services/lifeos-user-resolver.js';
 import { createLifeOSScoreboardService }   from '../services/lifeos-scoreboard.js';
+import { safeDays, safeLimit, safeId }     from '../services/lifeos-request-helpers.js';
 
 export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, logger, sendSMS, sendAlertCall = null, makePhoneCall = null }) {
   const router = express.Router();
@@ -254,9 +255,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       const { user = 'adam', limit = 50 } = req.query;
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      const parsedLimit = Number.parseInt(limit, 10);
-      const safeLimit = Number.isFinite(parsedLimit) ? Math.min(200, Math.max(1, parsedLimit)) : 50;
-      const open = await commitments.getOpen(userId, { limit: safeLimit });
+      const open = await commitments.getOpen(userId, { limit: safeLimit(limit, { fallback: 50, max: 200 }) });
       res.json({ ok: true, commitments: open, count: open.length });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
@@ -411,7 +410,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       const { user = 'adam', days = 30 } = req.query;
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      const history = await integrity.getHistory(userId, { days: parseInt(days) });
+      const history = await integrity.getHistory(userId, { days: safeDays(days, { fallback: 30 }) });
       res.json({ ok: true, history });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
@@ -465,7 +464,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       const { user = 'adam', days = 30 } = req.query;
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      const history = await joy.getCheckinHistory(userId, { days: parseInt(days) });
+      const history = await joy.getCheckinHistory(userId, { days: safeDays(days, { fallback: 30 }) });
       res.json({ ok: true, history });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
@@ -477,7 +476,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       const { user = 'adam', days = 90 } = req.query;
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      const patterns = await joy.getJoyPatterns(userId, { days: parseInt(days) });
+      const patterns = await joy.getJoyPatterns(userId, { days: safeDays(days, { fallback: 90 }) });
       res.json({ ok: true, patterns });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
@@ -801,7 +800,9 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       const { user = 'adam' } = req.body || {};
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
-      const result = await eventStream.applyEvent(userId, req.params.id);
+      const eventId = safeId(req.params.id);
+      if (!eventId) return res.status(400).json({ ok: false, error: 'invalid event id' });
+      const result = await eventStream.applyEvent(userId, eventId);
       if (!result) return res.status(404).json({ ok: false, error: 'Event not found' });
       res.json({ ok: true, ...result });
     } catch (err) {
@@ -836,7 +837,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
         SELECT * FROM inner_work_log
         WHERE user_id = $1 AND work_date >= CURRENT_DATE - $2
         ORDER BY work_date DESC, created_at DESC
-      `, [userId, parseInt(days)]);
+      `, [userId, safeDays(days, { fallback: 14 })]);
       res.json({ ok: true, entries: rows });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
@@ -1015,6 +1016,22 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       const { engaged = true } = req.body;
       await truthSvc.recordAcknowledgment(req.params.deliveryId, { engaged });
       res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // Calibration report — shows the user what the system learned about how
+  // they receive hard truths: best style, best hour, best emotional state,
+  // best topic. This is the surface of the learning loop.
+  router.get('/truth/calibration', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const days = safeDays(req.query.days, { fallback: 90 });
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const report = await truthSvc.getCalibrationReport(userId, { days });
+      res.json({ ok: true, ...report });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Family OS — LifeOS</title>
   <style>
@@ -438,24 +439,12 @@
 
 <script>
   // ── Config ─────────────────────────────────────────────────────────────
+  const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
   const API = '/api/v1/lifeos/family';
-  let KEY  = localStorage.getItem('commandKey') || localStorage.getItem('command_key') || '';
-  let USER = new URLSearchParams(location.search).get('user')
-    || localStorage.getItem('lifeos_user')
-    || localStorage.getItem('lifeosUser')
-    || 'adam';
-  if (USER) localStorage.setItem('lifeos_user', USER);
+  let KEY  = CTX.KEY;
+  let USER = CTX.USER;
 
-  function headers() { return { 'Content-Type': 'application/json', 'x-command-key': KEY }; }
-
-  if (!KEY) {
-    const k = prompt('Enter your command key:');
-    if (k) {
-      localStorage.setItem('commandKey', k);
-      localStorage.setItem('command_key', k);
-      KEY = k;
-    }
-  }
+  function headers() { return CTX.headers(); }
 
   // ── Tab switching ──────────────────────────────────────────────────────
   function showTab(name) {

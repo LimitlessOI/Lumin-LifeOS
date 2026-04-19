@@ -1,6 +1,29 @@
 # Continuity Log
 > This file is the running continuity reference for every conversation and action. It is always checked before responding.
 
+## Update 2026-04-01 #1
+- `docs/SSOT_COMPANION.md` now defines a mandatory six-part AI self-programming format for serious work: proposal, score, execute, verify, repair, and receipt. This is now the cross-cutting operating rule for all models.
+- `AMENDMENT_01_AI_COUNCIL` now requires structured proposal payloads and a formal planning-quality rubric, so council answers can be measured independently from builder/test outcomes.
+- `AMENDMENT_04_AUTO_BUILDER` now requires the builder to follow a non-black-box self-programming loop with explicit separation of planner, executor, verifier, and repair roles where possible.
+- `AMENDMENT_19_PROJECT_GOVERNANCE` now defines the governed AI evaluation loop and required evidence artifacts for autonomous runs, so self-programming capability can be audited instead of guessed.
+
+## Update 2026-04-02 #1
+- TC IMAP runtime resolution no longer drifts to the LifeOS system mailbox: `services/tc-imap-config.js` now resolves through `credential-aliases.js`, prefers the Adam TC mailbox aliases already present in Railway, and follows that mailbox first for vault lookup. This closes the gap between what the TC workspace shows and what live inbox reads actually use.
+- ClientCare billing overlay now defaults to an operator-first `Needs Me` view and renders each account as a red/yellow/green action card with explicit ownership, hover “what needs doing” guidance, and a detail-pane action list that jumps directly to the repair form or live inspect pass.
+
+## Update 2026-04-02 #2
+- ClientCare billing now has a dedicated `Verification of Benefits (VOB)` card near the top of the operator workspace instead of burying that flow inside the Insurance Intake Rule reference panel. The VOB card can prefill from the selected account, run the existing verification-preview endpoint, and show the take/review/do-not-schedule result in one visible place for Sherry.
+
+## Update 2026-04-03 #1
+- ClientCare billing is now structured around a system-managed work queue instead of leading with raw forms. The landing page shows managed work first, moves VOB and the assistant into a resizable right-side utilities column, collapses secondary rollout sections, and adds existing-client autocomplete plus a separate prospect VOB path so Sherry can work from ClientCare data first and only fall back to manual/prospect entry when necessary.
+- Missing VOB information can now be routed into assistant-driven text/email outreach prompts instead of relying on Sherry to manually bridge data that the system should request itself.
+- The billing portal now also opens with a “How to work this page” guide and a compact system-status summary, while long forecasting/claims/payer-analysis sections are pushed behind drill-down panels so day-to-day work starts with the queue, not the ledger.
+- ClientCare now also keeps a persistent account search across the queue and board, and each account detail now splits `System is doing next` from `You need to do next` so operator judgment is clearly separated from machine-managed work.
+- ClientCare account detail now has direct `Refresh from ClientCare`, `Request missing info by text`, and `Request missing info by email` actions, plus a `Data completeness` table that shows which payer/member/setup fields were found versus still missing before any human typing happens.
+- ClientCare `Operations Assistant` is now explicitly the billing-to-AI-Council path for open questions after deterministic billing workflows check for a direct operational answer first, and the setup checklist now points to the real `CLIENTCARE_BASE_URL` / `CLIENTCARE_USERNAME` / `CLIENTCARE_PASSWORD` env names instead of stale aliases.
+- ClientCare VOB now supports insurance-card prospect intake: upload a card image, OCR the carrier/member fields, try to match an existing client, run a first-pass VOB, save the result in reusable history, and later push that saved VOB into a client-file creation queue when the prospect decides to move forward.
+- Prospect VOB outreach now uses the system’s outbound engine when a phone number or email is present: the portal can send the missing-info request as a real SMS/email and log the outreach task/receipt instead of only drafting text in the assistant.
+
 ## Update 2026-03-27 #1
 - TC intake workspace can now link a triaged email directly to an existing transaction, log the routing event on the file, backfill `source_email_id` when it was missing, show recent intake activity in the workspace itself, run manual document validation / dry-run upload from the same screen, launch a dry-run intake for a target address, turn failed QA checks into real document requests on a transaction, seed the known TC env defaults automatically while leaving secrets blank, detect which secret envs are already present at runtime, and show a managed-env snapshot, which reduces duplicate placeholder transactions during early intake and gives the operator an immediate audit trail plus fail-closed QA, rehearsal, missing-doc follow-through, and low-friction env setup before live filing without re-asking for secrets that already exist.
 - TC intake workspace can now create placeholder transactions directly from triaged contract emails, which reduces manual setup friction before full live filing credentials are available.

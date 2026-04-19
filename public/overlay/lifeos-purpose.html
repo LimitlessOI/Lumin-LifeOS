@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Purpose &amp; Dreams — LifeOS</title>
   <style>
@@ -389,6 +390,7 @@
   <div class="tabs">
     <button class="tab-btn active" data-tab="purpose">Purpose Profile</button>
     <button class="tab-btn"        data-tab="dreams">Dreams</button>
+    <button class="tab-btn"        data-tab="monetization">Monetization</button>
     <button class="tab-btn"        data-tab="fulfillment">Fulfillment</button>
   </div>
 
@@ -497,6 +499,23 @@
     </div>
   </div>
 
+  <!-- ── MONETIZATION TAB (opt-in only) ── -->
+  <div class="tab-panel" id="tab-monetization">
+    <div class="fulfillment-explainer">
+      These are the economic paths your purpose profile surfaced. <strong style="color:#c8c8d8;">Nothing happens until you opt in to a specific path</strong>, and even then every outreach draft stays a draft until you approve it.
+    </div>
+    <div id="monetizationLoading" class="loading-text"><span class="spinner"></span>Loading paths...</div>
+    <div id="monetizationEmpty" style="display:none" class="empty-state">
+      <p>No purpose profile yet.</p>
+      <p class="hint">Synthesize your purpose profile on the first tab to surface economic paths here.</p>
+    </div>
+    <div id="monetizationList"></div>
+    <div class="section-divider">Outreach drafts (approval required to send)</div>
+    <div id="outreachList"></div>
+    <div id="outreachEmpty" style="display:none;font-size:13px;color:#555;padding:12px 0;">No outreach drafts yet. Opt in to a path and click "Draft outreach".</div>
+    <div class="fulfillment-footer">Nothing here auto-sends. Every draft requires explicit approval to progress.</div>
+  </div>
+
   <!-- ── FULFILLMENT TAB ── -->
   <div class="tab-panel" id="tab-fulfillment">
     <div class="fulfillment-explainer">
@@ -515,13 +534,14 @@
 </div>
 
 <script>
+  const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
   const BASE = '/api/v1/lifeos/purpose';
-  const KEY  = localStorage.getItem('commandKey') || '';
-  const params = new URLSearchParams(location.search);
-  const USER   = params.get('user') || 'adam';
+  const KEY  = CTX.KEY;
+  const params = CTX.params;
+  const USER   = CTX.USER;
 
   function h(headers = {}) {
-    return { 'Content-Type': 'application/json', 'x-command-key': KEY, ...headers };
+    return CTX.headers(headers);
   }
 
   // ── Tab switching ──────────────────────────────────────────────────────────
@@ -531,6 +551,7 @@
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      if (btn.dataset.tab === 'monetization') loadMonetization();
     });
   });
 
@@ -876,6 +897,171 @@
       const d = await r.json();
       if (d.ok) await loadFulfillment();
       else alert(d.error);
+    } catch (e) { alert(e.message); }
+  }
+
+  // ── MONETIZATION MAP (opt-in only) ─────────────────────────────────────────
+  let monetizationData = { profile_exists: false, paths: [] };
+
+  async function loadMonetization() {
+    try {
+      const r = await fetch(`${BASE}/monetization?user=${encodeURIComponent(USER)}`, { headers: h() });
+      const d = await r.json();
+      document.getElementById('monetizationLoading').style.display = 'none';
+      if (!d.ok) throw new Error(d.error);
+      monetizationData = d;
+      if (!d.profile_exists) {
+        document.getElementById('monetizationEmpty').style.display = 'block';
+        document.getElementById('monetizationList').innerHTML = '';
+        document.getElementById('outreachList').innerHTML = '';
+        document.getElementById('outreachEmpty').style.display = 'block';
+        return;
+      }
+      document.getElementById('monetizationEmpty').style.display = 'none';
+      renderMonetization();
+      await loadOutreach();
+    } catch (e) {
+      document.getElementById('monetizationLoading').textContent = 'Error: ' + e.message;
+    }
+  }
+
+  function renderMonetization() {
+    const el = document.getElementById('monetizationList');
+    if (!monetizationData.paths.length) {
+      el.innerHTML = '<div class="empty-state"><p>No economic paths yet.</p><p class="hint">Re-synthesize your purpose profile to generate paths.</p></div>';
+      return;
+    }
+    el.innerHTML = monetizationData.paths.map(p => `
+      <div class="path-card" style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;">
+            <div class="path-title">${esc(p.title)}</div>
+            <div class="path-desc">${esc(p.description)}</div>
+          </div>
+          <div>
+            ${p.opt_in
+              ? `<span class="status-badge status-active">Opted In</span>`
+              : `<span class="status-badge status-paused">Not opted in</span>`
+            }
+          </div>
+        </div>
+        <div class="path-badges">
+          ${p.market_demand    ? `<span class="badge badge-demand">Demand: ${esc(p.market_demand)}</span>` : ''}
+          ${p.effort           ? `<span class="badge badge-effort">Effort: ${esc(p.effort)}</span>`         : ''}
+          ${p.revenue_potential? `<span class="badge badge-revenue">${esc(p.revenue_potential)}</span>`     : ''}
+          ${p.opt_in           ? `<span class="badge" style="color:#888;">${p.outreach_count} draft${p.outreach_count === 1 ? '' : 's'}</span>` : ''}
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${p.opt_in
+            ? `
+              <button class="btn btn-sm"        onclick="generateOutreach(${p.monetization_path_id})">Draft outreach</button>
+              <button class="btn btn-sm btn-subtle" onclick="optOutPath(${p.monetization_path_id})">Opt out</button>
+            `
+            : `
+              <button class="btn btn-sm btn-success" onclick="optInPath(${p.path_index})">Opt in to this path</button>
+            `
+          }
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function optInPath(pathIndex) {
+    if (!confirm('Opt in to this path? The system will be allowed to draft outreach for it — nothing sends without your approval.')) return;
+    try {
+      const r = await fetch(`${BASE}/monetization/opt-in`, {
+        method: 'POST',
+        headers: h(),
+        body: JSON.stringify({ user: USER, path_index: pathIndex }),
+      });
+      const d = await r.json();
+      if (!d.ok) return alert(d.error || 'Opt-in failed');
+      await loadMonetization();
+    } catch (e) { alert(e.message); }
+  }
+
+  async function optOutPath(monetizationPathId) {
+    if (!confirm('Opt out of this path? Existing drafts will be archived.')) return;
+    try {
+      const r = await fetch(`${BASE}/monetization/${monetizationPathId}/opt-out`, {
+        method: 'POST',
+        headers: h(),
+        body: JSON.stringify({ user: USER }),
+      });
+      const d = await r.json();
+      if (!d.ok) return alert(d.error || 'Opt-out failed');
+      await loadMonetization();
+    } catch (e) { alert(e.message); }
+  }
+
+  async function generateOutreach(monetizationPathId) {
+    const btns = Array.from(document.querySelectorAll('button'));
+    btns.forEach(b => { if (b.textContent.trim() === 'Draft outreach') b.disabled = true; });
+    try {
+      const r = await fetch(`${BASE}/monetization/${monetizationPathId}/generate-outreach`, {
+        method: 'POST',
+        headers: h(),
+        body: JSON.stringify({ user: USER, count: 3 }),
+      });
+      const d = await r.json();
+      if (!d.ok) return alert(d.error || 'Draft generation failed');
+      await loadMonetization();
+    } catch (e) {
+      alert(e.message);
+    } finally {
+      btns.forEach(b => { b.disabled = false; });
+    }
+  }
+
+  async function loadOutreach() {
+    try {
+      const r = await fetch(`${BASE}/monetization/outreach?user=${encodeURIComponent(USER)}`, { headers: h() });
+      const d = await r.json();
+      if (!d.ok) return;
+      renderOutreach(d.outreach || []);
+    } catch (_) { /* silent */ }
+  }
+
+  function renderOutreach(rows) {
+    const el = document.getElementById('outreachList');
+    const emptyEl = document.getElementById('outreachEmpty');
+    if (!rows.length) {
+      el.innerHTML = '';
+      emptyEl.style.display = 'block';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    el.innerHTML = rows.map(o => `
+      <div class="order-card">
+        <div class="order-header">
+          <div class="order-name">${esc(o.title)}</div>
+          <span class="status-badge status-${esc(o.status)}">${esc(o.status)}</span>
+        </div>
+        <div style="font-size:11px;color:#555;margin-bottom:8px;">Path: ${esc(o.path_title)} · Type: ${esc(o.task_type)}</div>
+        ${o.body      ? `<div class="order-reason">${esc(o.body)}</div>`                                      : ''}
+        ${o.rationale ? `<div style="font-size:12px;color:#666;margin-bottom:10px;"><em>${esc(o.rationale)}</em></div>` : ''}
+        <div class="order-actions">
+          ${o.status === 'draft'    ? `<button class="btn btn-sm btn-success" onclick="outreachStatus(${o.id}, 'approved')">Approve</button>` : ''}
+          ${o.status === 'approved' ? `<button class="btn btn-sm btn-success" onclick="outreachStatus(${o.id}, 'sent')">Mark sent</button>`    : ''}
+          ${o.status !== 'archived' && o.status !== 'declined' && o.status !== 'sent'
+            ? `<button class="btn btn-sm btn-danger" onclick="outreachStatus(${o.id}, 'declined')">Decline</button>` : ''}
+          <button class="btn btn-sm btn-subtle" onclick="outreachStatus(${o.id}, 'archived')">Archive</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function outreachStatus(id, status) {
+    try {
+      const r = await fetch(`${BASE}/monetization/outreach/${id}/status`, {
+        method: 'POST',
+        headers: h(),
+        body: JSON.stringify({ user: USER, status }),
+      });
+      const d = await r.json();
+      if (!d.ok) return alert(d.error || 'Status update failed');
+      await loadOutreach();
+      await loadMonetization();
     } catch (e) { alert(e.message); }
   }
 

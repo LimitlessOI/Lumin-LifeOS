@@ -43,6 +43,24 @@ export function applyMiddleware(app, {
     })
   );
 
+  // ClientCare billing overlay assets: explicit no-store so operators always get latest VOB UI (avoid stale JS hiding card upload).
+  app.use(
+    "/clientcare-billing",
+    express.static(path.join(publicDir, "clientcare-billing"), {
+      etag: true,
+      maxAge: 0,
+      setHeaders(res, filePath) {
+        if (/\.(js|html|css)$/i.test(filePath)) {
+          res.setHeader(
+            "Cache-Control",
+            "no-store, no-cache, must-revalidate, proxy-revalidate"
+          );
+          res.setHeader("Pragma", "no-cache");
+        }
+      },
+    })
+  );
+
   // Serve static files (after specific routes)
   app.use(express.static(publicDir));
 

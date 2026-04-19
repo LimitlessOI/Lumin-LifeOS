@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>The Mirror — LifeOS</title>
   <style>
@@ -487,11 +488,12 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
   const API = '';  // same origin
-  const KEY = localStorage.getItem('commandKey') || '';
+  const KEY = CTX.KEY;
   const headers = { 'Content-Type': 'application/json', 'x-command-key': KEY };
 
-  let currentUser = 'adam';
+  let currentUser = CTX.USER;
   let mirrorData = null;
 
   // ── Source / Drain tag options ────────────────────────────────────────────
@@ -940,8 +942,7 @@
 
   // ── Init ──────────────────────────────────────────────────────────────────
   if (!KEY) {
-    const k = prompt('Enter your command key:');
-    if (k) { localStorage.setItem('commandKey', k); location.reload(); }
+    location.reload();
   } else {
     loadMirror(currentUser).then(async () => {
       // Show onboarding if no Be statement set yet

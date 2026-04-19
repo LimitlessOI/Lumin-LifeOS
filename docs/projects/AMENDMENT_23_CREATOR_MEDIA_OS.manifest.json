@@ -1,0 +1,47 @@
+{
+  "project_id": "creator_media_os",
+  "name": "Creator Media OS",
+  "amendment_path": "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+  "lifecycle": "experimental",
+  "status": "discovery",
+  "priority": "medium",
+  "owner": "adam",
+  "phase": "concept-definition",
+  "next_task": "Formalize likeness-consent, revocation, and the record-once/generate-many channel workflow before implementation.",
+  "stability_class": "needs-review",
+  "current_focus": "Concept captured from conversation history: AI-assisted business/YouTube video production with script, scenes, likeness, editing, and SEO in one channel-memory system.",
+  "build_ready": false,
+  "owned_files": [
+    "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+    "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.manifest.json"
+  ],
+  "protected_files": [
+    "server.js",
+    "services/video-pipeline.js",
+    "config/council-members.js",
+    "docs/SSOT_COMPANION.md"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md",
+    "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.manifest.json"
+  ],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_23_CREATOR_MEDIA_OS.manifest.json" }
+  ],
+  "completion_checks": [
+    "Consent-first likeness workflow is explicit",
+    "Channel memory model is explicit",
+    "SEO + production pipeline are defined from one source asset set"
+  ],
+  "anti_drift_notes": "This is not Story Studio and not generic AI video. Do not collapse creator-media workflows into story/franchise workflows.",
+  "decision_debt": [
+    { "description": "Likeness and revocation contract model must exist before build", "resolved": false },
+    { "description": "Ad-revenue or payout logic is intentionally deferred", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

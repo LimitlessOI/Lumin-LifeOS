@@ -1,0 +1,47 @@
+{
+  "project_id": "story_studio",
+  "name": "Story Studio",
+  "amendment_path": "docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+  "lifecycle": "experimental",
+  "status": "discovery",
+  "priority": "medium",
+  "owner": "adam",
+  "phase": "concept-definition",
+  "next_task": "Finalize story bible data model, rights modes, and the MVP format ladder before any implementation starts.",
+  "stability_class": "needs-review",
+  "current_focus": "Concept captured from conversation history: self-insert story creation, persistent universes, multi-format publishing, collaboration controls, and future franchise/studio pathways.",
+  "build_ready": false,
+  "owned_files": [
+    "docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+    "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json"
+  ],
+  "protected_files": [
+    "server.js",
+    "services/video-pipeline.js",
+    "services/capability-map.js",
+    "docs/SSOT_COMPANION.md"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_22_STORY_STUDIO.md",
+    "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json"
+  ],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_22_STORY_STUDIO.manifest.json" }
+  ],
+  "completion_checks": [
+    "Story bible and canon model are explicit",
+    "Rights/privacy/collaboration modes are specified",
+    "MVP format ladder is chosen before build starts"
+  ],
+  "anti_drift_notes": "Do not start with cinematic-first build scope. The load-bearing strategy is reusable story-universe data plus a lower-cost format ladder.",
+  "decision_debt": [
+    { "description": "Rights tiers need legal-grade definition before implementation", "resolved": false },
+    { "description": "Community scoring and payout logic must stay separate until anti-fraud controls exist", "resolved": false }
+  ],
+  "last_verified_at": null,
+  "verification_passed": null
+}

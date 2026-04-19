@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Legacy & Community — LifeOS</title>
 <style>
@@ -189,11 +190,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
+const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
 const API = '/api/v1/lifeos/legacy';
-const KEY = localStorage.getItem('commandKey') || prompt('Enter your command key:') || '';
-if (KEY) localStorage.setItem('commandKey', KEY);
-const USER = localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
-if (USER) localStorage.setItem('lifeos_user', USER);
+const KEY = CTX.KEY;
+const USER = CTX.USER;
 const hdrs = () => ({ 'Content-Type': 'application/json', 'x-command-key': KEY });
 
 function toast(m) {
@@ -443,8 +443,6 @@ async function joinGroupRoom() {
 }
 
 if (!KEY) {
-  const k = prompt('Command key:');
-  if (k) localStorage.setItem('commandKey', k);
   location.reload();
 }
 loadMentorSessions();

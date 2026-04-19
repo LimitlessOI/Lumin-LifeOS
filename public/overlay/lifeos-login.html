@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LifeOS — Sign in</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #080810;
+      --surface: #0d0d1a;
+      --border:  #1e1e30;
+      --text:    #e8e8f0;
+      --muted:   #666;
+      --accent:  #5b6af5;
+      --success: #34d399;
+      --error:   #f87171;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 32px 40px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .logo-mark {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 800; color: #fff;
+    }
+    .logo-name { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+      gap: 0;
+    }
+    .tab {
+      flex: 1; text-align: center;
+      padding: 10px 0;
+      font-size: 13px; font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color .15s, border-color .15s;
+      margin-bottom: -1px;
+    }
+    .tab.active { color: var(--accent); border-color: var(--accent); }
+
+    .form-section { display: none; }
+    .form-section.active { display: block; }
+
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+    .field input {
+      width: 100%;
+      background: #0a0a14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 10px 13px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .15s;
+      font-family: inherit;
+    }
+    .field input:focus { border-color: var(--accent); }
+
+    .btn {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity .15s;
+    }
+    .btn:hover { opacity: .88; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    .notice {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.5;
+      display: none;
+    }
+    .notice.error   { background: #1a0a0a; border: 1px solid var(--error);   color: var(--error); }
+    .notice.success { background: #091a12; border: 1px solid var(--success); color: var(--success); }
+    .notice.show    { display: block; }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 20px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .divider {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      margin: 20px 0;
+      position: relative;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 38%;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider::before { left: 0; }
+    .divider::after  { right: 0; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-mark">L</div>
+    <div class="logo-name">LifeOS</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="login">Sign in</div>
+    <div class="tab" data-tab="register">Create account</div>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="form-section active" id="login-section">
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn" id="login-btn">Sign in</button>
+    <div class="notice" id="login-notice"></div>
+    <p class="hint">Your data is yours. We never sell it.</p>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="form-section" id="register-section">
+    <div class="field">
+      <label>Invite code</label>
+      <input type="text" id="reg-invite" placeholder="LOS-XXXXXX or SHERRY-LIFEOS-2026" autocomplete="off" style="letter-spacing:.06em;">
+    </div>
+    <div class="field">
+      <label>Your name</label>
+      <input type="text" id="reg-name" placeholder="First name or nickname">
+    </div>
+    <div class="field">
+      <label>Handle (username)</label>
+      <input type="text" id="reg-handle" placeholder="sherry" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Password (8+ characters)</label>
+      <input type="password" id="reg-password" placeholder="••••••••" autocomplete="new-password">
+    </div>
+    <button class="btn" id="register-btn">Create account</button>
+    <div class="notice" id="register-notice"></div>
+    <p class="hint">Need an invite? Ask Adam to generate one.</p>
+  </div>
+
+  <!-- SET PASSWORD (first-time admin bootstrap) -->
+  <div class="divider" id="admin-divider" style="display:none;">admin</div>
+  <div id="set-password-section" style="display:none;margin-top:8px;">
+    <div class="field">
+      <label>Handle</label>
+      <input type="text" id="sp-handle" value="adam">
+    </div>
+    <div class="field">
+      <label>New password</label>
+      <input type="password" id="sp-password" placeholder="Set your password">
+    </div>
+    <button class="btn" id="sp-btn" style="background:#374151;">Set password (first run only)</button>
+    <div class="notice" id="sp-notice"></div>
+  </div>
+</div>
+
+<script>
+  const API = '';
+
+  // ── Tab switching ────────────────────────────────────────────────────────────
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab + '-section').classList.add('active');
+      clearNotices();
+    });
+  });
+
+  function clearNotices() {
+    document.querySelectorAll('.notice').forEach(n => { n.className = 'notice'; n.textContent = ''; });
+  }
+
+  function showNotice(id, msg, type) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = `notice ${type} show`;
+  }
+
+  function setLoading(btn, loading) {
+    btn.disabled = loading;
+    btn.textContent = loading ? 'Please wait…' : btn.dataset.label;
+  }
+
+  // Store original labels
+  document.querySelectorAll('.btn').forEach(b => b.dataset.label = b.textContent);
+
+  // ── After auth: store tokens + redirect ──────────────────────────────────────
+  function handleAuthSuccess(data) {
+    if (data.access_token)  localStorage.setItem('lifeos_access_token', data.access_token);
+    if (data.refresh_token) localStorage.setItem('lifeos_refresh_token', data.refresh_token);
+    if (data.user) {
+      localStorage.setItem('lifeos_user', data.user.user_handle);
+      localStorage.setItem('lifeosUser',  data.user.user_handle);
+      localStorage.setItem('lifeos_name', data.user.display_name || data.user.user_handle);
+      localStorage.setItem('lifeos_tier', data.user.tier || 'free');
+      localStorage.setItem('lifeos_role', data.user.role || 'member');
+    }
+    // Redirect to the app (or wherever the user came from)
+    const redir = new URLSearchParams(location.search).get('next') || '/overlay/lifeos-app.html';
+    location.href = redir;
+  }
+
+  // ── Login ────────────────────────────────────────────────────────────────────
+  const loginBtn = document.getElementById('login-btn');
+  loginBtn.addEventListener('click', async () => {
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) return showNotice('login-notice', 'Email and password required', 'error');
+    setLoading(loginBtn, true);
+    try {
+      const r = await fetch(`${API}/api/v1/lifeos/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error || 'Login failed');
+      handleAuthSuccess(data);
+    } catch (e) {
+      showNotice('login-notice', e.message, 'error');
+      setLoading(loginBtn, false);
+    }
+  });
+
+  // Enter key on login fields
+  ['login-email', 'login-password'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter') loginBtn.click();
+    });
+  });
+
+  // ── Register ─────────────────────────────────────────────────────────────────
+  const registerBtn = document.getElementById('register-btn');
+  registerBtn.addEventListener('click', async () => {
+    const inviteCode  = document.getElementById('reg-invite').value.trim();
+    const displayName = document.getElementById('reg-name').value.trim();
+    const handle      = document.getElementById('reg-handle').value.trim();
+    const email       = document.getElementById('reg-email').value.trim();
+    const password    = document.getElementById('reg-password').value;
+    if (!inviteCode || !handle || !email || !password) {
+      return showNotice('register-notice', 'All fields are required', 'error');
+    }
+    setLoading(registerBtn, true);
+    try {
+      const r = await fetch(`${API}/api/v1/lifeos/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, handle, displayName, inviteCode }),
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error || 'Registration failed');
+      handleAuthSuccess(data);
+    } catch (e) {
+      showNotice('register-notice', e.message, 'error');
+      setLoading(registerBtn, false);
+    }
+  });
+
+  // ── Admin set-password (first run) ───────────────────────────────────────────
+  // Show if URL has ?setup=1
+  if (new URLSearchParams(location.search).has('setup')) {
+    document.getElementById('admin-divider').style.display = '';
+    document.getElementById('set-password-section').style.display = '';
+  }
+
+  document.getElementById('sp-btn').addEventListener('click', async () => {
+    const handle   = document.getElementById('sp-handle').value.trim();
+    const password = document.getElementById('sp-password').value;
+    if (!handle || !password) return showNotice('sp-notice', 'Handle and password required', 'error');
+    const spBtn = document.getElementById('sp-btn');
+    setLoading(spBtn, true);
+    try {
+      const r = await fetch(`${API}/api/v1/lifeos/auth/set-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ handle, newPassword: password }),
+      });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error || 'Failed');
+      showNotice('sp-notice', 'Password set — you can now log in above.', 'success');
+    } catch (e) {
+      showNotice('sp-notice', e.message, 'error');
+    }
+    setLoading(spBtn, false);
+  });
+
+  // ── Auto-populate invite from URL ────────────────────────────────────────────
+  const inviteParam = new URLSearchParams(location.search).get('invite');
+  if (inviteParam) {
+    document.getElementById('reg-invite').value = inviteParam;
+    // Switch to register tab
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+    document.querySelector('[data-tab="register"]').classList.add('active');
+    document.getElementById('register-section').classList.add('active');
+  }
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/overlay/sw.js', { scope: '/overlay/' })
+    .catch(() => {});
+}
+</script>
+</body>
+</html>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
   <link rel="stylesheet" href="/overlay/lifeos-ds.css">
   <title>Growth — LifeOS</title>
   <style>
@@ -388,14 +389,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const API_KEY = localStorage.getItem('commandKey') || localStorage.getItem('lifeos_key') || prompt('Enter your command key:') || '';
-if (API_KEY) {
-  localStorage.setItem('commandKey', API_KEY);
-  localStorage.setItem('lifeos_key', API_KEY);
-}
+const CTX = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+const API_KEY = CTX.KEY;
 const BASE = '/api/v1/lifeos/growth';
-const USER = localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
-if (USER) localStorage.setItem('lifeos_user', USER);
+const USER = CTX.USER;
 const victorySelection = new Set();
 
 const headers = {

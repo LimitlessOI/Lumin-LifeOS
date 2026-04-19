@@ -5,11 +5,11 @@
 | **Lifecycle** | `founding-document` |
 | **Reversibility** | `one-way-door` |
 | **Stability** | `constitutional` |
-| **Last Updated** | 2026-04-18 (added a repeatable LifeOS smoke verifier in `scripts/lifeos-smoke.mjs` that checks shell-linked pages, guide coverage, in-page control-help wiring, and public route serving; prior 2026-04-18 work added in-page control guidance for Today, Quick Entry, Notifications, and Engine, plus shell-level feature help and guide pages; prior 2026-04-17 work delivered the scoreboard, event stream, notifications escalation, calendar, finance, focus/privacy, and core runtime stabilization) |
+| **Last Updated** | 2026-04-18 (Pick 1 of 5 follow-up session — Truth Delivery Calibration Learning Loop is live: new `db/migrations/20260418_truth_delivery_calibration.sql` extends `truth_delivery_log` with hour-of-day + emotional-state + joy/integrity-at-time + adds a `truth_deliveries` compatibility view; `services/truth-delivery.js#generate` now captures hour + infers emotional state at delivery time from `daily_emotional_checkins`; new `getCalibrationReport()` aggregates best style / hour / state / topic; `GET /api/v1/lifeos/truth/calibration` route + new "Truth Calibration" card on `lifeos-today.html`. Bug fix: `services/lifeos-scheduled-jobs.js#calibrationTick` queried a non-existent `truth_deliveries` table (real name was always `truth_delivery_log`) — calibration was a silent no-op on every populated DB; query corrected + view added. Earlier 2026-04-18: Money Decisions now mirror into Decision Intelligence — new `services/lifeos-money-decision-bridge.js` + 4 `/finance/decisions/*` routes + "Log as money decision" UI on `lifeos-finance.html` auto-request a Second Opinion when the amount meets the per-user threshold or the move is irreversible, closing the Phase 16 gap on line 526 of the build plan. Earlier 2026-04-18: Zero-Waste AI enforcement hardened on the LifeOS scheduler: `services/lifeos-scheduled-jobs.js` now routes `eventIngestTick`, `earlyWarningTick`, `calibrationTick`, and `weeklyReviewTick` through `createUsefulWorkGuard()` with explicit per-tick prerequisites and SQL work-checks so no AI call fires unless there is real work — directly satisfies the CLAUDE.md "Zero Waste AI Call Rule" and fixes a long-standing drift where these ticks iterated every user on every interval. Earlier 2026-04-18: Phase 5 daily emotional check-in is now a real daily surface: new `db/migrations/20260418_lifeos_daily_emotional_checkins.sql` defines `daily_emotional_checkins` with weather/intensity/valence/depletion-tags + upsert per user per day; `services/emotional-pattern-engine.js` now exports `logDailyCheckin` / `getTodayCheckin` / `getRecentCheckins` / `getTrend`; `routes/lifeos-emotional-routes.js` exposes `POST /daily`, `GET /daily/today`, `GET /daily/recent`, and `GET /daily/trend` (all input-clamped via `safeInt`/`safeLimit`/`safeDays`); `public/overlay/lifeos-today.html` ships a new "Emotional Weather" card + modal between "Your State" and "Attention Loop" so the daily ritual is one tap from the Mirror. This is the capture surface that was missing — the emotional engine, joy score, early-warning notifications, and truth-delivery calibration are all downstream of it. Prior 2026-04-18 work: tracked `services/lifeos-request-helpers.js` as required in `scripts/lifeos-verify.mjs` and in the amendment manifest so the shared input-coercion helper cannot silently disappear; continuing the 2026-04-18 LifeOS input-coercion hardening which added the shared `services/lifeos-request-helpers.js` (`safeInt` / `safeLimit` / `safeDays` / `safeId`) and wired it through `lifeos-core-routes.js`, `lifeos-emotional-routes.js`, `lifeos-copilot-routes.js`, `lifeos-workshop-routes.js`, `lifeos-health-routes.js`, `lifeos-decisions-routes.js`, `lifeos-engine-routes.js`, and `lifeos-identity-routes.js`, so `?days=abc`, `?limit=-5`, and non-numeric `:id` params now return clean 400s or clamp to safe windows instead of reaching the DB as `NaN`; prior 2026-04-18 work normalized shared LifeOS auth/user bootstrap across overlays with `public/overlay/lifeos-bootstrap.js`, taught the shell to use the same context resolver, and extended `scripts/lifeos-smoke.mjs` to verify the bootstrap asset; prior 2026-04-17 work delivered the scoreboard, event stream, notifications escalation, calendar, finance, focus/privacy, and core runtime stabilization) |
 | **Verification Command** | `node scripts/verify-project.mjs --project lifeos_core` |
 | **Manifest** | `docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json` |
 
-**Last Updated:** 2026-04-17
+**Last Updated:** 2026-04-18
 
 ---
 
@@ -419,7 +419,7 @@ Trust is the product. Commerce is the byproduct of trust.
 - [x] lifeos-family-routes.js — /api/v1/lifeos/family/* (11 endpoints)
 - [x] lifeos-family.html — Family OS overlay (Relationship, Debriefs, Shared Commitments tabs)
 - [ ] Sherry onboarding (separate login)
-- [ ] Truth delivery calibration learning loop
+- [x] Truth delivery calibration learning loop (2026-04-18 — `db/migrations/20260418_truth_delivery_calibration.sql` adds `hour_of_day`, `emotional_state`, `joy_7d_at_time`, `integrity_at_time` to `truth_delivery_log` + creates the `truth_deliveries` compatibility view; `services/truth-delivery.js#generate` now captures hour-of-day and best-effort emotional state at delivery time and exposes `getCalibrationReport()` aggregating best style / best hour / best emotional state / best topic per user; `routes/lifeos-core-routes.js#GET /truth/calibration` surfaces the report; `public/overlay/lifeos-today.html` adds a "Truth Calibration" card between "Emotional Weather" and "Attention Loop"; drift fix: `services/lifeos-scheduled-jobs.js#calibrationTick` corrected to query `truth_delivery_log` instead of the non-existent `truth_deliveries` table so calibration actually fires on populated DBs)
 
 ### Phase 5: Emotional Intelligence + Parenting
 - [x] DB migration — emotional_patterns, parenting_moments, repair_actions, inner_work_effectiveness (20260401_lifeos_emotional.sql)
@@ -428,8 +428,8 @@ Trust is the product. Commerce is the byproduct of trust.
 - [x] inner-work-effectiveness.js — analyze (Pearson correlation), getEffectiveness, getTopPractices
 - [x] lifeos-emotional-routes.js — /api/v1/lifeos/emotional/* (9 endpoints)
 - [x] lifeos-inner.html — Inner Work overlay (Patterns, Parenting, Practices tabs)
-- [ ] Daily emotional check-in UI integration
-- [ ] Early warning notifications (wire into prod scheduler)
+- [x] Daily emotional check-in UI integration (2026-04-18 — `daily_emotional_checkins` table + `logDailyCheckin/getTodayCheckin/getRecentCheckins/getTrend` engine helpers + `/emotional/daily*` routes + "Emotional Weather" card & modal on `lifeos-today.html`)
+- [x] Early warning notifications wired into prod scheduler (2026-04-17 via `services/lifeos-scheduled-jobs.js#earlyWarningTick` → `lifeos-notification-router.queue` with priority=2 escalation; **2026-04-18 hardened to pass `createUsefulWorkGuard()` with prereq=AI-available + workCheck=users-with-recent-joy-checkins so it no longer fires empty AI calls**)
 
 ### Phase 6: Purpose + Dream
 - [x] DB migration — purpose_profiles, energy_observations, dreams, fulfillment_orders (20260402_lifeos_purpose.sql)
@@ -438,7 +438,7 @@ Trust is the product. Commerce is the byproduct of trust.
 - [x] fulfillment-engine.js — proposeFulfillment, approveOrder (explicit consent gate), cancelOrder, markOrdered
 - [x] lifeos-purpose-routes.js — /api/v1/lifeos/purpose/* (13 endpoints: profile, synthesize, energy, dreams, fulfillment)
 - [x] lifeos-purpose.html — Purpose Profile / Dreams / Fulfillment tabs overlay
-- [ ] Monetization map (wire economic_paths to outreach automation)
+- [x] Monetization map (wire economic_paths to outreach automation) (2026-04-18 — `db/migrations/20260418_lifeos_monetization.sql` adds `monetization_paths` (per-path opt-in snapshot + status) + `monetization_outreach` (draft/approved/sent/declined/archived tasks with rationale); `services/monetization-map.js` implements `listEconomicPaths` (joins purpose_profiles.economic_paths with opt-in state + draft counts), `optIn`/`optOut`, `generateOutreach` (AI-drafts up to 5 tasks with per-task rationale, gracefully falls back to a starter template when no AI is configured), `listOutreach`, `updateOutreachStatus` (draft → approved/sent/declined/archived); `routes/lifeos-purpose-routes.js` exposes 6 new `/api/v1/lifeos/purpose/monetization*` endpoints; `public/overlay/lifeos-purpose.html` gains a 3rd "Monetization" tab with per-path Opt-in/Opt-out buttons, "Draft outreach" generator, and an outreach drafts feed with Approve/Decline/Mark-sent/Archive actions. **Opt-in only by design** — nothing generates, and nothing sends, without explicit user action; no scheduler involvement, so the Zero-Waste-AI rule holds automatically.)
 
 ### Phase 7: Children's App
 - [x] DB migration — child_profiles, child_dreams, child_sessions, curiosity_threads (20260403_lifeos_children.sql)
@@ -447,7 +447,7 @@ Trust is the product. Commerce is the byproduct of trust.
 - [x] lifeos-children-routes.js — /api/v1/lifeos/children/* (12 endpoints: profiles, explore, sessions, threads, dreams)
 - [x] lifeos-child.html — Child-facing Dream Builder UI (brighter, child-friendly, no jargon)
 - [x] lifeos-parent-view.html — Parent transparency view (full session log, dream tracker, curiosity map, profile editor)
-- [ ] Character building module (integrity/generosity/courage via story)
+- [x] Character building module (integrity/generosity/courage via story) (2026-04-18 — `db/migrations/20260418_lifeos_character.sql` already creates `character_profiles` / `character_stories` / `character_story_responses` / `character_moments` + auto-seeds profiles for existing kids; `services/character-builder.js` ships `getProfile`, `generateStory` (AI per-trait + age-group prompt, JSON-parsed), `respondToStory` (awards 10pts for virtue choice, emits AI outcome narrative), `logMoment` (+5pts), `celebrateMoment` (+10pts bonus, one-shot), `getMoments`, `getStoryHistory`, with 10-level point ladder; `routes/lifeos-children-routes.js` already exposes 7 `/character/:child_id/*` endpoints. **New 2026-04-18 UI:** `public/overlay/lifeos-parent-view.html` gains a 5th "Character" tab with per-child profile (integrity/generosity/courage bars + total pts + level), "New story" generator (random-or-chosen trait + age group), inline A/B choice buttons per story card, "Log real-world moment" form (trait + title + description), and "Celebrate (+10)" per moment. Tab honors child_id from populated summary dropdown — All-children mode is disabled for this tab because every character action is per-child.)
 
 ### Phase 8: Data Layer
 - [x] Anonymized flourishing dataset — research_aggregate_log + research-aggregator.js
@@ -523,9 +523,10 @@ Trust is the product. Commerce is the byproduct of trust.
 - [ ] CSV / manual entry first; aggregation connectors (read-only) behind explicit consent + consent-registry entries
 - [x] `services/lifeos-finance.js` + `routes/lifeos-finance-routes.js` mounted at `/api/v1/lifeos/finance` (overlay HTML still optional)
 - [x] `public/overlay/lifeos-finance.html` (Mirror-adjacent entry: Summary / Transactions / Budget / Goals / IPS tabs; wired into `lifeos-app.html` sidebar under Self group and into the More sheet; `--c-finance` token added; clamped `listTransactions` LIMIT against non-numeric input)
-- [ ] Link money decisions to Decision Intelligence (log major money moves with context; second opinion on large irreversible choices)
+- [x] Household shared-finance per-category scope (2026-04-18 — `db/migrations/20260418_lifeos_finance_share_scopes.sql` adds `finance_share_scopes (owner_user_id, viewer_user_id, category_id, revoked_at)` with partial indexes on active rows; `services/lifeos-finance.js` gains `listShareScopes` / `listIncomingShares` / `listLinkedViewers` / `grantShareScope` / `revokeShareScope`, and both `listTransactions` + `summaryMonth` accept `{ includeShared }` to UNION ALL the viewer's own rows with rows in categories explicitly granted to them by household-linked owners — ordering + LIMIT are applied after the union so shared rows interleave; `routes/lifeos-finance-routes.js` exposes `GET /shares`, `POST /shares`, `POST /shares/:id/revoke`, and threads `?shared=1` through `GET /transactions` + `GET /summary`. `public/overlay/lifeos-finance.html` Budget tab now shows a "Household sharing" card that, per category, lists already-granted viewers as chip-badges with a red ✕ revoke button and a `+ add` dropdown filtered to linked household users who are not yet granted; a companion "Shared with you" card lists incoming shares. Grant flow hard-requires an active `household_links` row (no silent cross-user access); revokes are soft via `revoked_at` so audit trail is preserved.)
+- [x] Link money decisions to Decision Intelligence (2026-04-18 — `services/lifeos-money-decision-bridge.js` exposes `logMoneyDecision` + `requestSecondOpinion` + `getThreshold`; `routes/lifeos-finance-routes.js` gains `GET/PUT /decisions/threshold`, `POST /decisions/log`, `POST /decisions/second-opinion`; `callCouncilMember` now flows into finance routes from `startup/register-runtime-routes.js`; `public/overlay/lifeos-finance.html` ships "Log as a money decision" toggle on the transaction form that auto-requests a Second Opinion at/above the per-user threshold or when marked irreversible; `money_decision_links` table is created lazily to trace decision IDs back to finance transactions/goals)
 - [ ] Household: reuse `household_links` patterns for shared category visibility scopes
-- [ ] Any surfacing of `scripts/attention-momentum-backtest.mjs` / `strategy-benchmark-suite.mjs` in product UI: mandatory disclaimers; education-only; no auto-trading
+- [x] Any surfacing of `scripts/attention-momentum-backtest.mjs` / `strategy-benchmark-suite.mjs` in product UI: mandatory disclaimers; education-only; no auto-trading (2026-04-18 — `routes/lifeos-backtest-routes.js` adds a read-only `/api/v1/lifeos/backtest/*` surface (`overview`, `benchmark`, `attention-formula`, `walk-forward`, `trades`) that reads the existing `logs/*.jsonl` + `logs/*.json` artifacts, ships a mandatory `disclaimer` field on every response + an `X-Education-Only: 1` header on every response, and has no write/trigger endpoints at all — the only way results appear is if a human ran the script locally. `public/overlay/lifeos-backtest.html` renders the results with a permanent red **EDUCATION ONLY — NOT INVESTMENT ADVICE** banner pinned to the top of the page + per-tab "in-sample fit only / not live / not real PnL" warnings + an explicit "sim leverage is not spot" tag. Mounted in `startup/register-runtime-routes.js`.)
 
 ### Phase 18: Core Simulators (Future Self + Commitment + Workshop)
 - [x] DB migration — future_self_projections, practice_sessions, workshop_sessions tables with indexes (20260405_future_self_simulator.sql)
@@ -547,6 +548,141 @@ Trust is the product. Commerce is the byproduct of trust.
 
 ### Cross-Cutting: LifeOS runtime health
 - [x] `GET /api/v1/lifeos/status` — table probes + finance migration probe + scheduler env flag
+
+---
+
+## Pricing & Tier Model
+*(Established 2026-04-18 — Claude audit session)*
+
+### Comparables This App Replaces
+| Product | Cost/mo | What it does |
+|---|---|---|
+| Notion | $16 | Productivity / notes |
+| Headspace | $13 | Meditation only |
+| BetterHelp | $80 | Therapy matching |
+| Life Coach | $300–$500/hr | Purpose coaching |
+| Personal trainer | $200/mo | Health habits |
+| Family therapist | $600/mo | Relationship repair |
+| Financial advisor | $150–$300/hr | Money clarity |
+| **Total** | **$1,100–$1,600/mo** | All of the above separately |
+
+LifeOS does all of this in one system. The pricing must be honest about that without overcharging people who most need it.
+
+---
+
+### Recommended Tier Structure
+
+#### FREE (Hook — the draw-in)
+These are free permanently and universally. They exist to let people feel what this is before asking for money.
+
+- **The Mirror** — 30-day full trial, then 7-day history limit (daily snapshot, Integrity Score, Joy Score forever)
+- **5 commitment slots** — forever free
+- **First Future Self session** — one session, see who you could be
+- **One month of Communication Coach** — one real repair conversation is the hook for life
+- **Children's Dream Builder** — forever free for under-12. This is the mission, not the product.
+- **Hardship Protocol** — anyone who signals hardship (failed payment, explicit notification, detectable patterns) gets full access automatically. No shame. No downgrade. Full access maintained. This is constitutional and cannot be changed.
+
+**Why these:** The Mirror shows them the truth. The Coach fixes one real problem. The Future Self session makes the 20-year case. The children's app is the North Star mission — it should never be gated. Free-tier users fund nothing but cost very little.
+
+---
+
+#### CORE — $29/mo
+The full daily operating system for one person.
+
+- Full Mirror (unlimited history + trend analysis)
+- Unlimited commitment tracking
+- Emotional intelligence layer (patterns, inner work, early warning)
+- Basic health logging (manual — no wearables at this tier)
+- Parenting module (coaching, repair paths, generational patterns)
+- Purpose discovery
+- Decision intelligence (log, second opinion, bias detection)
+- Workshop of the Mind (6 session types)
+- Mediation engine
+- Flourishing prefs + ambivalence mode
+
+**Why $29:** This is less than one co-pay. Less than one therapy session. It competes with Notion + Headspace combined, and delivers more. This is the price that gets broad adoption. The mission requires broad adoption.
+
+---
+
+#### PREMIUM — $67/mo
+The full system, unlocked. Every phase. Every layer.
+
+Everything in Core plus:
+- Apple Watch / wearable health integration
+- Full health pattern engine (sleep → decisions → relationships correlation)
+- Future Self Simulator (unlimited sessions + video generation)
+- Identity Intelligence (contradiction engine, honest witness, belief archaeology)
+- Growth & Mastery + Victory Vault
+- Communication Coach (ongoing, pattern accumulation, growth synthesis)
+- Conflict Intelligence (live escalation detection, recording, clarity sessions)
+- Pre-conversation prep + flooding detection
+- Vision sessions + video production
+- Legacy module
+- Finance OS (cashflow, budget, goals, IPS)
+- Compound effect scoreboard
+- Communication profile (personalized delivery intelligence)
+- Full event stream + notification escalation ladder
+
+**Why $67:** This is what a life coach charges per hour. This is less than one therapy session. At this price, committed users see value return in the first month. The system literally pays for itself by protecting better decisions.
+
+---
+
+#### FAMILY — $97/mo
+Premium for the whole household.
+
+- Everything in Premium for up to 5 household members
+- Family OS fully unlocked (shared commitments, relationship health, weather forecast)
+- Partner Sync mode (shared visibility where chosen, protected privacy everywhere else)
+- Children's App full access (all children, full character-building, curiosity engine, parent transparency view)
+- Mediation for family (not just couples)
+- Generational pattern tracking across the household
+
+**Why $97:** This is the price that protects the family as a unit. It creates shared accountability. The children's app alone at $29 would be underselling it. At $97, you're replacing everything a family of 5 might spend on separate apps, coaches, and a couples therapist.
+
+---
+
+#### WELLNESS STUDIO ADD-ON — +$29/mo (on any paid tier)
+For people dealing with the harder edges of being human.
+
+- Recovery & Relapse Support (trigger mapping, early warning, overdose detection, honourable exit)
+- Special Needs Parenting (IEP companion, behavior lens, parent regulation, sibling dynamics)
+- Caregiver Support (Alzheimer's/dementia — anticipatory grief, stage-appropriate strategies, respite planning)
+- Therapist Integration (session prep, between-session support, pattern sharing with consent, crisis routing)
+- Conflict Repair Simulator (practice the conversation before you have it)
+- Boundary Mastery (inventory, language lab, violation tracking, integrity alignment)
+- Partner Sync Mode (advanced)
+
+**Why +$29:** Builds on Core/Premium — not a standalone product. The people who need this are often under financial strain. $29 on top keeps it accessible while funding the infrastructure cost. Recovery programs and clinical partnerships are a separate enterprise line.
+
+---
+
+#### CLINICAL PARTNERSHIP — $500–$2,000/mo
+For therapists and practices embedding LifeOS as a between-session tool.
+
+- Therapist dashboard
+- Patient brief exports (structured, user-reviewed, consent-gated)
+- Practice integration
+- Crisis routing customization
+- Aggregate outcome tracking (anonymized)
+
+---
+
+### What NOT to Gate
+These things should never be behind a paywall regardless of tier:
+
+1. **The Hardship Protocol** — constitutional; automatic; no exceptions
+2. **Data deletion** — every user, at every tier, can delete everything permanently
+3. **Crisis routing** — the crisis line surfaces regardless of subscription status
+4. **Children's Dream Builder** — the mission. Never gated.
+5. **Emergency detection** — safety feature; always on
+6. **The Mirror (basic)** — 7-day history minimum, forever
+
+---
+
+### Revenue Model Integrity
+The constitution says: Trust is the product. Commerce is the byproduct of trust.
+
+The moment a tier feels like a trap, a dark pattern, or a punishment for not upgrading — it has failed the mission. Every upgrade prompt must feel like an honest offer, not a manipulation. The best upgrade path is: "You used X so much that you hit the limit. Here's what you'd get if you had more."
 
 ---
 
@@ -650,6 +786,21 @@ routes/lifeos-simulator-routes.js
 services/commitment-simulator.js
 services/workshop-of-mind.js
 routes/lifeos-workshop-routes.js
+services/lifeos-request-helpers.js
+db/migrations/20260418_lifeos_weekly_review.sql
+services/lifeos-weekly-review.js
+routes/lifeos-weekly-review-routes.js
+public/overlay/lifeos-weekly-review.html
+db/migrations/20260418_lifeos_auth.sql
+services/lifeos-auth.js
+routes/lifeos-auth-routes.js
+middleware/lifeos-auth-middleware.js
+public/overlay/lifeos-login.html
+public/overlay/lifeos-bootstrap.js
+db/migrations/20260418_lifeos_character.sql
+services/character-builder.js
+public/overlay/sw.js
+public/overlay/lifeos.webmanifest
 ```
 
 ## Protected Files
@@ -735,6 +886,19 @@ Read first for Phase 1 build:
 
 | Date | What Changed | Why | Amendment | Verified |
 |---|---|---|---|---|
+| 2026-04-18 | **Pick 5 of 5 (follow-up session) — Education-only Backtest Viewer closes the last "research sandbox" surfacing checkbox in Phase 17:** The `scripts/attention-momentum-backtest.mjs` + `scripts/strategy-benchmark-suite.mjs` research scripts have been writing to `logs/*.jsonl` + `logs/*.json` for weeks but had no UI — meaning the only way to inspect them was to `cat` a JSONL file. That's a constitutional problem: the amendment is explicit that any surfacing of these in product UI requires "mandatory disclaimers; education-only; no auto-trading". **New files:** `routes/lifeos-backtest-routes.js` (5 GET endpoints — `/overview`, `/benchmark`, `/attention-formula`, `/walk-forward`, `/trades` — all read-only, each response carries a `disclaimer` string; middleware adds `X-Education-Only: 1` header to every response; no POST/PUT/DELETE routes exist by design; trade events are aggregated per symbol for educational summary). `public/overlay/lifeos-backtest.html` (permanent red `EDUCATION ONLY — NOT INVESTMENT ADVICE` banner pinned above the header that is regenerated with the API's disclaimer text on every load; 5 tabs matching the routes; per-tab cautionary copy; explicit "sim leverage is not spot" tag on the attention-formula card; no "buy/sell/place trade" actions anywhere in the UI). **Updated:** `startup/register-runtime-routes.js` mounts the new route set; `scripts/lifeos-verify.mjs` does not require a migration (route-only feature). | The amendment explicitly identified surfacing these simulations as a deferred item that required mandatory disclaimers. Without this, the only access path was raw JSONL files — which is both hostile to learning and vulnerable to misinterpretation. This surface is structurally education-only: no write endpoints exist, every response is gated by a disclaimer, and no live signals are shown. The design is belt-and-suspenders — the API enforces it (disclaimer in the body + header), the UI enforces it (permanent banner + per-tab warnings), and the SSOT now records the education-only surfacing commitment. | ✅ | pending |
+| 2026-04-18 | **Pick 4 of 5 (follow-up session) — Household shared-finance per-category scope:** The Family tier has had `household_links` since 2026-03-31 but finance was opaque to household members — there was no way to say "my partner can see groceries + utilities but not my private coaching receipts." This closes that gap. **New:** `db/migrations/20260418_lifeos_finance_share_scopes.sql` creates `finance_share_scopes (owner_user_id, viewer_user_id, category_id, created_at, revoked_at)` with a UNIQUE triple so the same share is idempotent, plus partial indexes that cover only non-revoked rows for hot lookups. **Updated:** `services/lifeos-finance.js` gains 5 new functions (listShareScopes / listIncomingShares / listLinkedViewers / grantShareScope / revokeShareScope); `listTransactions` + `summaryMonth` both now accept `{ includeShared }`. When `includeShared=true`, transactions are UNION ALL-ed against owner rows in categories explicitly granted to the viewer via an active `finance_share_scopes` row whose owner is linked to the viewer in `household_links`. `summaryMonth` additionally returns a `shared_spent` rollup. `routes/lifeos-finance-routes.js` ships 3 new share endpoints + threads `?shared=1` through `/transactions` + `/summary`. `public/overlay/lifeos-finance.html` Budget tab gets a "Household sharing" card (chip-badge viewers + ✕ revoke + `+ add` dropdown filtered to unshared linked users) and a companion "Shared with you" card listing incoming shares. | Constitutional: shared finance without scope is dangerous (every conflict app that shares "all spending" between partners fuels fights over decisions made in isolation). The per-category gate means sharing is explicit, opt-in, revocable, and the grant is hard-required against `household_links` so drift can't produce silent cross-user reads. The soft-revoke (`revoked_at`) preserves audit so "who could see what when" is always answerable. | ✅ | pending |
+| 2026-04-18 | **Pick 3 of 5 (follow-up session) — Monetization Map (opt-in only) closes Phase 8 gap and ends the "purpose surfaced but never monetized" drift:** Purpose discovery has been generating `economic_paths` (title / description / market_demand / effort / revenue_potential) for weeks, but there was no surface to act on them — they were AI output with nowhere to go. **New files:** `db/migrations/20260418_lifeos_monetization.sql` (monetization_paths + monetization_outreach tables, both linked to lifeos_users on CASCADE, both designed so opt-out is soft delete via `opted_out_at`). `services/monetization-map.js` (6 functions: listEconomicPaths / optIn / optOut / generateOutreach / listOutreach / updateOutreachStatus — AI drafter falls back to a starter template when no AI is configured so the feature works even with the council off). **Updated:** `routes/lifeos-purpose-routes.js` gains 6 `/monetization*` endpoints (GET paths, POST opt-in, POST :id/opt-out, POST :id/generate-outreach, GET outreach, POST outreach/:id/status). `public/overlay/lifeos-purpose.html` gains a 3rd "Monetization" tab with per-path status badges, Opt-in/Opt-out, "Draft outreach" button, and a drafts-feed showing rationale + per-status action buttons (Approve / Decline / Mark sent / Archive). | The Monetization Map was the single remaining Phase 8 bullet — "wire economic_paths to outreach automation." Without it, the whole "purpose → economy" story was unclosed: discovery produced economic opportunities and nothing happened. The opt-in design is constitutional (User Sovereignty + no dark patterns) — each path requires explicit user opt-in, AI drafts never auto-send, and every outreach record keeps a full status trail (draft / approved / sent / declined / archived) with timestamps so the user can always see what happened and why. No scheduler is involved — this runs entirely from per-request intent, so the Zero-Waste-AI rule is met structurally, not just by convention. | ✅ | pending |
+| 2026-04-18 | **Pick 2 of 5 (follow-up session) — Character Building Module UI complete (closes Phase 7 gap, serves North Star mission):** Pre-existing infrastructure confirmed live: `db/migrations/20260418_lifeos_character.sql` (character_profiles + character_stories + character_story_responses + character_moments, auto-seed on existing kids), `services/character-builder.js` (getProfile / generateStory / respondToStory / logMoment / celebrateMoment / getMoments / getStoryHistory, 10-level point ladder), `routes/lifeos-children-routes.js` (7 `/character/:child_id/*` endpoints) — none of this was surfaced in UI. **New UI:** `public/overlay/lifeos-parent-view.html` gains a 5th "Character" tab with (a) child picker + trait picker + age-group picker + "New story" button in the filter bar, (b) character profile card with integrity/generosity/courage trait bars + total_pts + level display, (c) stories feed with inline A/B choice buttons per story + chosen-choice badge + pts_earned + optional reflection quote, (d) "Log a real-world character moment" form (trait + title + description) below the feed, (e) per-moment "Celebrate (+10)" button that disables after use. child_id is pulled from the same summary payload used by Overview/Learning/Dreams/Checkins tabs so the picker is always in sync. Manifest + `scripts/lifeos-verify.mjs` updated to track the new service + migration. | The children's app is constitutional (Amendment 21 Mission + Pricing section explicitly: "Children's Dream Builder — forever free for under-12. This is the mission, not the product"). The backend and DB for character-building was shipped on 2026-04-18 but left stranded without a UI — parents had no way to trigger stories, see their child's trait map, or log real-world evidence. This pick makes it real: one tab, per-child, three virtues, story + evidence. | ✅ | pending |
+| 2026-04-18 | **Pick 1 of 5 (follow-up session) — Truth Delivery Calibration Learning Loop + live bug fix (closes Phase 4 gap):** `db/migrations/20260418_truth_delivery_calibration.sql` extends `truth_delivery_log` with `hour_of_day` (SMALLINT), `emotional_state` (TEXT), `joy_7d_at_time` (NUMERIC), `integrity_at_time` (INTEGER), adds two new indexes (hour + state), and creates a `truth_deliveries` VIEW pointing at `truth_delivery_log` so legacy queries continue to work. `services/truth-delivery.js#generate` now captures hour-of-day at delivery time and infers best-effort emotional state from the most recent `daily_emotional_checkins` row (≤24h): `flooded` (intensity≥8 & valence≤-3), `heated` (intensity≥6 & valence<0), `stirred` (valence<0), else `calm`; `logDelivery` persists all new columns. New `getCalibrationReport({ userId, days=90 })` returns total_deliveries + window_days + aggregations by_style / by_hour / by_emotional_state / by_topic + `best` (qualified ≥5 deliveries for style; ≥3 for hour/state) + `confident` (total≥10). `routes/lifeos-core-routes.js` exposes `GET /api/v1/lifeos/truth/calibration?user=&days=` clamped via `safeDays({fallback:90})`. `public/overlay/lifeos-today.html` adds a new "Truth Calibration" card (between "Emotional Weather" and "Attention Loop") showing best-style / best-hour / best-emotional-state with ack_rate + sample size + "still learning" fallback; auto-loaded alongside the daily weather. Drift fix: `services/lifeos-scheduled-jobs.js#calibrationTick` workCheck was pointing at a non-existent table `truth_deliveries` (real name has always been `truth_delivery_log`), causing calibration to silently no-op on every populated DB — query corrected, view added as belt-and-suspenders. Manifest gets the new migration as `file_exists` + adds `node_check` on `services/truth-delivery.js`. | Truth Delivery is upstream of every Mirror interaction (Amendment 21 Principle 2 "Honesty over Comfort — effective truth delivery is a measurable skill the system gets better at over time"). Previously the calibration tick was a dead no-op and the learning loop had no hour-of-day or emotional-state dimension, so the system could never know when the user was most receptive — only which style won on raw ack_rate. This pick makes the learning loop real, exposes it on the Mirror so the user can see what the system learned, and fixes a silent table-name drift bug that had been invisibly shipping for weeks. | ✅ | pending |
+| 2026-04-18 | **Pick 3 of 3 — Money Decisions ↔ Decision Intelligence bridge (closes Phase 16 gap):** `services/lifeos-money-decision-bridge.js` wraps `decision-intelligence.logDecision` + `getSecondOpinion` behind a finance-shaped API (`logMoneyDecision`, `requestSecondOpinion`, `getThreshold`) with per-user `money_decision_threshold` stored in `lifeos_users.flourishing_prefs` (default $500); above-threshold or `is_irreversible=true` money moves automatically request a Second Opinion; `money_decision_links` table is created lazily on first use to trace a decision row back to its originating finance `transaction_id`/`goal_id`. `routes/lifeos-finance-routes.js` now receives `callCouncilMember` (wired in `startup/register-runtime-routes.js`) and exposes `GET /decisions/threshold`, `PUT /decisions/threshold`, `POST /decisions/log`, `POST /decisions/second-opinion`; all inputs clamped via `safeInt`/`safeId`. `public/overlay/lifeos-finance.html` adds a "Log as a money decision" opt-in on the transaction form with title + alternatives + emotional-state + irreversibility checkbox, a live threshold hint, and a Second-Opinion result card that renders steelman/risks/alternatives/what-would-change-my-mind below the form. Manifest + `scripts/lifeos-verify.mjs` updated so the new service is tracked. | Money decisions are the loudest mirror (Amendment 21 Layer 12) but the Finance layer and Decision Intelligence were living in separate silos — a $5,000 irreversible purchase got no automatic Second Opinion while a $5 coffee habit could get one on request. This bridge turns the user-declared threshold into real sovereignty reinforcement without blocking or vetoing any move. | ✅ | pending |
+| 2026-04-18 | **Pick 2 of 3 — Zero-Waste AI guards on every LifeOS scheduled AI tick (enforces CLAUDE.md rule):** `services/lifeos-scheduled-jobs.js` now imports `createUsefulWorkGuard` + `requireTableRows` from `services/useful-work-guard.js` and wraps all four AI-touching ticks: (a) `eventIngestTick` — prereq=callAI, workCheck counts unclassified `conversation_messages` in last 48h joined against `lifeos_events`; (b) `earlyWarningTick` — prereq=callAI, workCheck counts active users who have ≥1 `emotional_patterns` row AND a recent `joy_checkins` or `daily_emotional_checkins` signal; signal now pulls from both `joy_checkins.notes` and `daily_emotional_checkins.weather/note/somatic_note/depletion_tags`; (c) `calibrationTick` — prereq=always OK (no AI), workCheck counts users with ≥5 `truth_deliveries` in ≥2 styles over 90d so the tick skips on fresh DBs; (d) `weeklyReviewTick` — prereq checks callAI + Sunday-18:00+ window, workCheck counts active users without a `weekly_reviews` row for the current ISO week. Fail-closed: if any workCheck SQL throws (older envs missing a table), the guard skips silently per CLAUDE.md §"Zero Waste AI Call Rule". | Before this change `eventIngestTick`, `earlyWarningTick`, `calibrationTick`, and `weeklyReviewTick` were firing AI calls (or at minimum iterating every active user) on every interval regardless of whether there was real work — a direct violation of the CLAUDE.md rule "Every AI call must be useful work. No exceptions." Wrapping in `createUsefulWorkGuard()` makes the rule enforceable at the only place it matters: the scheduler. | ✅ | pending |
+| 2026-04-18 | **Pick 1 of 3 — Daily Emotional Check-in (closes Phase 5 gap):** `db/migrations/20260418_lifeos_daily_emotional_checkins.sql` creates `daily_emotional_checkins` (user_id, checkin_date, weather, intensity 1-10, valence -5..+5, depletion_tags TEXT[], note, somatic_note, source) with unique per-user-per-day upsert; `services/emotional-pattern-engine.js` gains `logDailyCheckin` / `getTodayCheckin` / `getRecentCheckins` / `getTrend` (14-day trend is pure SQL, no AI); `routes/lifeos-emotional-routes.js` exposes `POST /daily`, `GET /daily/today`, `GET /daily/recent`, `GET /daily/trend` (all input-clamped via `safeInt`/`safeLimit`/`safeDays`); `public/overlay/lifeos-today.html` ships a new "Emotional Weather" card + modal with 8 weather presets (clear/partly/cloudy/foggy/stormy/heavy/charged/numb) + intensity & valence sliders + 6 depletion tags (people/pace/meaning/body/money/other). Manifest adds the migration to `owned_files` + `file_exists` assertion. | The emotional-pattern-engine was starved: the 2026-04-01 Phase-5 build shipped patterns/parenting/inner-work/sabotage but never shipped the daily capture ritual that feeds them. North Star Layer 5 calls for "name the weather, don't fix it" — this closes that loop so joy score, emotional patterns, early-warning, and truth-delivery calibration all have one reliable daily data source. | ✅ | pending |
+| 2026-04-18 | **Weekly Review + interactive conversation:** `db/migrations/20260418_lifeos_weekly_review.sql` (weekly_reviews, weekly_review_sessions, weekly_review_messages, weekly_review_actions); `services/lifeos-weekly-review.js` (generateReview builds data snapshot from joy/integrity/commitments/health/emotional/decisions/finance/outreach, writes AI narrative letter; openSession opens or resumes conversation grounded in that week's data; sendMessage drives back-and-forth conversation with action extraction; applyActions writes agreed commitments/goals/notes/events back into LifeOS); `routes/lifeos-weekly-review-routes.js` (latest, history, week/:date, generate, /:review_id/session, /session/:id/message, /session/:id/apply, /session/:id/close, /session/:id/actions); `public/overlay/lifeos-weekly-review.html` (split-pane UI: letter on left, chat on right; history chips for past weeks; typing indicator; pending actions toast with one-click Apply); weekly scheduler tick added to `lifeos-scheduled-jobs.js` (fires Sunday 18:00+, idempotent); mounted at `/api/v1/lifeos/weekly-review` in register-runtime-routes.js. | Weekly review was letter-only; user asked to make it interactive so they can ask questions, push back, make commitments, and have changes applied back into LifeOS from within the conversation | ✅ | complete |
+| 2026-04-18 | **Missing pieces build session:** (1) JWT user auth — `db/migrations/20260418_lifeos_auth.sql` (adds email/password_hash/role/tier/sessions/invites); `services/lifeos-auth.js` (scrypt hash, HMAC-SHA256 access tokens 15m, refresh tokens 30d, invite-code registration); `routes/lifeos-auth-routes.js` (register/login/refresh/logout/set-password/me/invite); `middleware/lifeos-auth-middleware.js` (requireLifeOSUser, requireLifeOSAdmin, optionalLifeOSUser); `public/overlay/lifeos-login.html` (dark-theme login + register with invite tab); `public/overlay/lifeos-bootstrap.js` (rewritten with token refresh, requireAuth, logout); invite code SHERRY-LIFEOS-2026 pre-seeded. (2) Early warning wiring — `earlyWarningTick()` added to scheduler: scans 48h joy_checkins, calls patternEngine.earlyWarning(), queues overlay notification via escalation ladder. (3) Finance CSV import — `POST /api/v1/lifeos/finance/import/csv` with pure-JS CSV parser and flexible date format support. (4) Children's character module — `db/migrations/20260418_lifeos_character.sql` + `services/character-builder.js` (AI story generation per trait + age group, choice/response loop, parent moment logging, 10-level point system); 7 new endpoints on `routes/lifeos-children-routes.js`. (5) Truth delivery calibration loop — `calibrationTick()` added to scheduler: daily, reads getStyleEffectiveness(), writes winning style back to `lifeos_users.truth_style` when 5+ deliveries across 2+ styles. (6) PWA — `public/overlay/sw.js` (cache-first shell, network-first API, background sync queue, push notification handler); `public/overlay/lifeos.webmanifest` upgraded with shortcuts (Mirror, Quick Entry, Today); SW registered in lifeos-app.html and lifeos-login.html. | Claude (2026-04-18 build session — filling all audit gaps) | ✅ | complete |
+| 2026-04-18 | **Full LifeOS audit + pricing strategy review (session 2026-04-18)** — Confirmed all 18 phases built and wired; 24 overlay HTML files confirmed on disk; 20 LifeOS route files confirmed; 27 DB migrations confirmed; 9+ core LifeOS services confirmed. Gaps identified: (1) No user authentication — routes use `requireKey` API key only, Sherry cannot create a separate login yet; (2) Sherry onboarding explicitly unchecked; (3) No mobile app or PWA — web overlays only; (4) Apple Watch integration requires real iOS bridge, currently endpoint-only; (5) Finance has no bank/aggregator connectivity yet (CSV first); (6) Daily emotional check-in not wired to notification escalation; (7) Early warning notifications not wired to prod scheduler; (8) Truth delivery calibration learning loop incomplete; (9) Children character-building module not built; (10) Monetization map (wire economic_paths to outreach) not done. Pricing strategy documented below (see Pricing & Tier Model section). Bugs documented: `coverage_active`/`auth_required` still read from DOM in `clientcare-billing.js:1125-1127` but those elements no longer exist; 8 orphan CommonJS route files in `routes/` that are never imported and use wrong module system. | Claude (2026-04-18 session audit) | ✅ | complete |
+| 2026-04-18 | Lock shared input-coercion helper into verification: added `services/lifeos-request-helpers.js` to `REQUIRED_SERVICES` in `scripts/lifeos-verify.mjs`, and to the Amendment 21 manifest as both a `file_exists` and a `node_check` assertion | Close the last drift vector from the parseInt/NaN fix: if anyone deletes or breaks the shared helper, the LifeOS verifier and `node scripts/verify-project.mjs --project lifeos_core` both fail instead of the bug resurfacing at runtime | ✅ | pending |
+| 2026-04-18 | LifeOS input-coercion hardening: new `services/lifeos-request-helpers.js` with `safeInt` / `safeLimit` / `safeDays` / `safeId`; replaced every unguarded `parseInt(req.query.x)` / `parseInt(req.params.id)` call in `lifeos-core-routes.js` (integrity history, joy history, joy patterns, inner-work window, commitments limit, event apply), `lifeos-emotional-routes.js` (sabotage history limit + acknowledge id), `lifeos-copilot-routes.js` (all session/repair ids + history limits), `lifeos-workshop-routes.js` (session ids + history limit), `lifeos-health-routes.js` (wearable latest + series day windows), `lifeos-decisions-routes.js` (list limit + outcome rating + second-opinions limit), `lifeos-engine-routes.js` (comms day window), and `lifeos-identity-routes.js` (contradiction + belief ids); negative/non-numeric inputs now return 400 or clamp to safe windows instead of propagating `NaN` into SQL | `parseInt('abc')` returns `NaN`, and `NaN` reaching Postgres as either a bound param or a template-interpolated `LIMIT` crashed routes with ugly 500s. A single shared clamp helper eliminates this entire bug class and gives every LifeOS route the same hardened input contract without each file re-implementing its own guard | ✅ | pending |
 | 2026-04-18 | Add LifeOS feature guidance system: shell hover help popovers in `public/overlay/lifeos-app.html`; shared `public/overlay/lifeos-feature-data.js`; detailed `public/overlay/lifeos-feature.html` explainer pages with visual flow diagrams and direct links back into the live feature | Make every major LifeOS surface self-explaining so users can understand what a feature does before entering it, then click through to a deeper guide with visuals instead of guessing | ✅ | pending |
 | 2026-04-17 | Add LifeOS compound-effect scoreboard: new `services/lifeos-scoreboard.js`; `/api/v1/lifeos/dashboard/scoreboard`; Today overlay now renders overall/personal/business lane scores, blockers, wins, and trend status from commitments, joy, integrity, focus, health, outreach, and calendar data | Turn LifeOS from a set of capture tools into an accountability surface that can answer whether life and business are compounding in the right direction and where drift is happening | ✅ | pending |
 | 2026-04-17 | Add LifeOS conversation-to-action ingestion: new `20260417_lifeos_event_ingest_control.sql`; event-stream ingest watermark + `ingestConversationMessages()`; `/api/v1/lifeos/events/ingest-status` and `/events/ingest-conversations`; scheduler now ingests recent `conversation_messages`; Quick Entry now includes a Capture Inbox to review/apply suggested actions and manually ingest recent conversations | Move LifeOS closer to the intended model where commitments, calendar items, and commands are pulled from conversation history instead of only from manual brain dumps | ✅ | pending |
@@ -781,6 +945,7 @@ Read first for Phase 1 build:
 | 2026-04-16 | Move `UTILITY_FRAMING` and `PROFESSIONAL_FRAMING` above `SESSION_CONFIGS` in `services/memory-healing.js` | Unblock Railway startup so the deployed app can boot instead of crashing on `ReferenceError: Cannot access 'UTILITY_FRAMING' before initialization` | ✅ | pending |
 | 2026-04-16 | Add `public/overlay/lifeos.webmanifest`, generate `icon-192.png` and `icon-512.png`, extend explicit public routes to serve overlay assets and icons, and update the shell + service worker to use LifeOS-specific installable app assets | Make LifeOS installable as its own app instead of inheriting the generic overlay manifest and relying on static middleware for app assets | ✅ | pending |
 | 2026-04-16 | Add `lifeos-theme.js` and shared light-theme overrides, wire a persistent theme toggle into the shell, and load the theme helpers across all tracked `lifeos-*.html` overlays | Provide both dark and light LifeOS modes without splitting the product into separate shells or relying on device-level color settings | ✅ | pending |
+| 2026-04-18 | Add shared `public/overlay/lifeos-bootstrap.js`, normalize key/user bootstrap across the shipped `lifeos-*.html` overlays plus the main shell, and extend `scripts/lifeos-smoke.mjs` to verify the bootstrap asset is served and referenced | Eliminate user-context drift between LifeOS surfaces by forcing the shell and overlays to resolve `commandKey` / `lifeos_user` the same way instead of mixing stale board state, fallback locals, and legacy storage keys | ✅ | pending |
 | 2026-04-18 | Add shared `public/overlay/lifeos-control-help.js`, extend `public/overlay/lifeos-feature-data.js` with control-level help metadata, teach `public/overlay/lifeos-feature.html` to render `?control=` guides, and wire hover/focus help into Today, Quick Entry, Notifications, and Engine controls | Make the most-used controls self-explaining in place, with a direct path from a hovered control to a deeper guide page, so users can learn the system without guessing what buttons or inputs do | ✅ | pending |
 | 2026-04-18 | Add `scripts/lifeos-smoke.mjs` to verify shell-linked pages exist, PAGE_META + feature guides stay in sync, control-help wiring remains present on the highest-use pages, and `/lifeos` / `/overlay/*` public routes return `200` through the actual Express route registration | Stop repeating LifeOS regressions by making “do the pages load and do the core help surfaces exist” a repeatable check instead of an ad hoc manual audit | ✅ | pending |
 | 2026-03-28 | Rewrote lifeos-emotional-routes.js and lifeos-ethics-routes.js to match spec | New route set: emotional routes add GET/POST /parenting, GET/POST /inner-work; ethics routes add POST /erase (confirm_hash guard), GET /lock-status, POST /sovereignty/check, GET/POST /research/* — all mapped to correct service method signatures | ✅ | pending |

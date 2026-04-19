@@ -23,6 +23,7 @@ import express from 'express';
 import { createEmergencyRepair } from '../services/emergency-repair.js';
 import { createLiveCopilot }     from '../services/live-copilot.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+import { safeLimit, safeId }      from '../services/lifeos-request-helpers.js';
 
 export function createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember }) {
   const router = express.Router();
@@ -77,7 +78,8 @@ export function createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember 
       const userId = await resolveUserId(user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const recordId = parseInt(req.params.id);
+      const recordId = safeId(req.params.id);
+      if (!recordId) return res.status(400).json({ ok: false, error: 'invalid repair id' });
       await emergencyRepair.logOutcome(userId, recordId, {
         resolved: resolved === true || resolved === 'true',
         notes: notes || null,
@@ -97,7 +99,7 @@ export function createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember 
       const userId = await resolveUserId(req.query.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const limit = parseInt(req.query.limit) || 20;
+      const limit = safeLimit(req.query.limit, { fallback: 20 });
       const history = await emergencyRepair.getHistory(userId, limit);
       res.json({ ok: true, history });
     } catch (err) {
@@ -148,7 +150,8 @@ export function createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember 
       const userId = await resolveUserId(user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const sessionId = parseInt(req.params.id);
+      const sessionId = safeId(req.params.id);
+      if (!sessionId) return res.status(400).json({ ok: false, error: 'invalid session id' });
       const result = await liveCopilot.sendMessage(userId, sessionId, message);
       res.json({ ok: true, ...result });
     } catch (err) {
@@ -166,7 +169,8 @@ export function createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember 
       const userId = await resolveUserId(user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const sessionId = parseInt(req.params.id);
+      const sessionId = safeId(req.params.id);
+      if (!sessionId) return res.status(400).json({ ok: false, error: 'invalid session id' });
       const result = await liveCopilot.closeSession(userId, sessionId, { outcome, notes });
       res.json({ ok: true, ...result });
     } catch (err) {
@@ -182,7 +186,7 @@ export function createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember 
       const userId = await resolveUserId(req.query.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const limit = parseInt(req.query.limit) || 20;
+      const limit = safeLimit(req.query.limit, { fallback: 20 });
       const sessions = await liveCopilot.getSessionHistory(userId, limit);
       res.json({ ok: true, sessions });
     } catch (err) {
@@ -197,7 +201,8 @@ export function createLifeOSCopilotRoutes({ pool, requireKey, callCouncilMember 
       const userId = await resolveUserId(req.query.user || 'adam');
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const sessionId = parseInt(req.params.id);
+      const sessionId = safeId(req.params.id);
+      if (!sessionId) return res.status(400).json({ ok: false, error: 'invalid session id' });
       const messages = await liveCopilot.getSessionMessages(userId, sessionId);
       res.json({ ok: true, messages });
     } catch (err) {

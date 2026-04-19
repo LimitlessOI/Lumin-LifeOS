@@ -7,34 +7,33 @@
  * Prefers TC-specific env vars, then shared IMAP vars, then a vault lookup.
  */
 
+import {
+  getTCImapHost,
+  getTCImapPassword,
+  getTCImapPort,
+  getTCImapUser,
+} from './credential-aliases.js';
+
+const DEFAULT_TC_MAILBOX = 'adam@hopkinsgroup.org';
+
 function parsePort(value, fallback = 993) {
   const port = Number.parseInt(String(value ?? fallback), 10);
   return Number.isFinite(port) ? port : fallback;
 }
 
 export async function resolveTCImapConfig({ accountManager, logger = console } = {}) {
-  const user =
-    process.env.TC_IMAP_USER ||
-    process.env.TC_IMAP_EMAIL ||
-    process.env.IMAP_USER ||
-    process.env.WORK_EMAIL ||
-    "LifeOS@hopkinsgroup.org";
+  const user = getTCImapUser() || DEFAULT_TC_MAILBOX;
 
-  let pass =
-    process.env.TC_IMAP_APP_PASSWORD ||
-    process.env.TC_IMAP_APP_Adam_PASSWORD ||   // legacy name used in Railway
-    process.env.SMTP_PASS ||                   // same app password used for SMTP
-    process.env.WORK_EMAIL_APP_PASSWORD ||
-    process.env.IMAP_PASS ||
-    null;
+  let pass = getTCImapPassword() || process.env.SMTP_PASS || null;
 
   if (!pass && accountManager?.getAccount) {
     const lookupKeys = [
       ["email_imap", user],
+      ["email_imap", getTCImapUser() || null],
       ["email_imap", process.env.IMAP_USER || null],
       ["email_imap", process.env.WORK_EMAIL || null],
-      ["email_imap", "adam@hopkinsgroup.org"],
-      ["email_imap", "LifeOS@hopkinsgroup.org"],
+      ["email_imap", DEFAULT_TC_MAILBOX],
+      ["email_imap", process.env.GMAIL_SIGNUP_EMAIL || null],
     ].filter(([, email]) => !!email);
 
     for (const [serviceName, emailUsed] of lookupKeys) {
@@ -52,8 +51,8 @@ export async function resolveTCImapConfig({ accountManager, logger = console } =
   }
 
   return {
-    host: process.env.TC_IMAP_HOST || process.env.IMAP_HOST || "imap.gmail.com",
-    port: parsePort(process.env.TC_IMAP_PORT || process.env.IMAP_PORT || 993),
+    host: getTCImapHost(),
+    port: parsePort(getTCImapPort(), 993),
     secure: true,
     auth: { user, pass },
     logger: false,

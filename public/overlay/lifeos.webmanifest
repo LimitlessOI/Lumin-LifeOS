@@ -1,13 +1,15 @@
 {
   "id": "/lifeos",
-  "name": "LifeOS",
+  "name": "LifeOS — LimitlessOS",
   "short_name": "LifeOS",
-  "description": "Personal operating system for daily life, reflection, health, family, and execution.",
-  "start_url": "/lifeos",
-  "scope": "/",
+  "description": "Your personal operating system. Commitments, clarity, growth, family, and truth — all in one place.",
+  "start_url": "/overlay/lifeos-app.html",
+  "scope": "/overlay/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0a0a0f",
-  "theme_color": "#0a0a0f",
+  "theme_color": "#6c63ff",
+  "categories": ["productivity", "lifestyle", "health"],
   "icons": [
     {
       "src": "/overlay/icons/icon-192.png",
@@ -21,5 +23,29 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Daily Mirror",
+      "short_name": "Mirror",
+      "description": "Open your daily mirror",
+      "url": "/overlay/lifeos-mirror.html",
+      "icons": [{ "src": "/overlay/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Quick Entry",
+      "short_name": "Entry",
+      "description": "Log a thought or commitment",
+      "url": "/overlay/lifeos-quick-entry.html",
+      "icons": [{ "src": "/overlay/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Today",
+      "short_name": "Today",
+      "description": "See what's on deck for today",
+      "url": "/overlay/lifeos-today.html",
+      "icons": [{ "src": "/overlay/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
 }

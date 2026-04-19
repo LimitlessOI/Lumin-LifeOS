@@ -39,26 +39,137 @@ export function createLifeOSFinance({ pool }) {
     return rows[0];
   }
 
-  async function listTransactions(userId, { limit = 100, from, to } = {}) {
-    let sql = `SELECT t.*, c.name AS category_name
-      FROM lifeos_finance_transactions t
-      LEFT JOIN lifeos_finance_categories c ON c.id = t.category_id
-      WHERE t.user_id=$1`;
-    const p = [userId];
-    if (from) {
-      p.push(from);
-      sql += ` AND t.txn_date >= $${p.length}`;
-    }
-    if (to) {
-      p.push(to);
-      sql += ` AND t.txn_date <= $${p.length}`;
-    }
+  async function listTransactions(userId, { limit = 100, from, to, includeShared = false } = {}) {
     // Clamp limit to a positive integer; protects against NaN / non-numeric input.
     const parsed = Number.parseInt(limit, 10);
     const safeLimit = Number.isFinite(parsed) ? Math.min(500, Math.max(1, parsed)) : 100;
-    sql += ` ORDER BY t.txn_date DESC, t.id DESC LIMIT ${safeLimit}`;
+
+    // Base: user's own transactions.
+    let sql = `SELECT t.*, c.name AS category_name,
+                      FALSE AS shared,
+                      NULL::text AS shared_from_username
+        FROM lifeos_finance_transactions t
+        LEFT JOIN lifeos_finance_categories c ON c.id = t.category_id
+       WHERE t.user_id = $1`;
+    const p = [userId];
+    if (from) { p.push(from); sql += ` AND t.txn_date >= $${p.length}`; }
+    if (to)   { p.push(to);   sql += ` AND t.txn_date <= $${p.length}`; }
+
+    if (includeShared) {
+      // Also include transactions in categories explicitly shared with this user.
+      sql += `
+        UNION ALL
+        SELECT t.*, c.name AS category_name,
+               TRUE  AS shared,
+               u.username AS shared_from_username
+          FROM lifeos_finance_transactions t
+          JOIN lifeos_finance_categories c ON c.id = t.category_id
+          JOIN finance_share_scopes s
+            ON s.category_id   = t.category_id
+           AND s.owner_user_id = t.user_id
+           AND s.viewer_user_id = $1
+           AND s.revoked_at IS NULL
+          JOIN lifeos_users u ON u.id = t.user_id
+         WHERE t.user_id <> $1`;
+      if (from) { sql += ` AND t.txn_date >= $2`; }
+      if (from && to) { sql += ` AND t.txn_date <= $3`; }
+      else if (!from && to) { sql += ` AND t.txn_date <= $2`; }
+    }
+
+    sql += ` ORDER BY txn_date DESC, id DESC LIMIT ${safeLimit}`;
     const { rows } = await pool.query(sql, p);
     return rows;
+  }
+
+  // ── Share scopes ─────────────────────────────────────────────────────────────
+  // Share a category: owner grants one linked user VIEW access to transactions
+  // in a specific category they own. Every share is explicit and revocable.
+  async function listShareScopes(ownerUserId) {
+    const { rows } = await pool.query(
+      `SELECT s.id, s.category_id, c.name AS category_name,
+              s.viewer_user_id, u.username AS viewer_username,
+              s.created_at, s.revoked_at
+         FROM finance_share_scopes s
+         JOIN lifeos_finance_categories c ON c.id = s.category_id
+         JOIN lifeos_users              u ON u.id = s.viewer_user_id
+        WHERE s.owner_user_id = $1 AND s.revoked_at IS NULL
+        ORDER BY c.name, u.username`,
+      [ownerUserId],
+    );
+    return rows;
+  }
+
+  async function listIncomingShares(viewerUserId) {
+    const { rows } = await pool.query(
+      `SELECT s.id, s.category_id, c.name AS category_name,
+              s.owner_user_id, u.username AS owner_username,
+              s.created_at
+         FROM finance_share_scopes s
+         JOIN lifeos_finance_categories c ON c.id = s.category_id
+         JOIN lifeos_users              u ON u.id = s.owner_user_id
+        WHERE s.viewer_user_id = $1 AND s.revoked_at IS NULL
+        ORDER BY u.username, c.name`,
+      [viewerUserId],
+    );
+    return rows;
+  }
+
+  async function listLinkedViewers(ownerUserId) {
+    // Returns users linked via household_links (active only), used as the UI
+    // pool of possible viewers. We intentionally do not leak every lifeos_user;
+    // shares are gated by an existing household link.
+    const { rows } = await pool.query(
+      `SELECT DISTINCT u.id, u.username
+         FROM household_links h
+         JOIN lifeos_users   u
+           ON u.id = CASE WHEN h.user_id_a = $1 THEN h.user_id_b ELSE h.user_id_a END
+        WHERE h.active = TRUE
+          AND (h.user_id_a = $1 OR h.user_id_b = $1)
+        ORDER BY u.username`,
+      [ownerUserId],
+    );
+    return rows;
+  }
+
+  async function grantShareScope(ownerUserId, { category_id, viewer_user_id }) {
+    if (!category_id || !viewer_user_id) {
+      throw new Error('category_id and viewer_user_id are required');
+    }
+    const { rows: catRows } = await pool.query(
+      `SELECT id FROM lifeos_finance_categories WHERE id = $1 AND user_id = $2`,
+      [category_id, ownerUserId],
+    );
+    if (!catRows.length) throw new Error('category not found for this owner');
+
+    const { rows: linkRows } = await pool.query(
+      `SELECT 1 FROM household_links
+        WHERE active = TRUE
+          AND ((user_id_a = $1 AND user_id_b = $2) OR (user_id_a = $2 AND user_id_b = $1))`,
+      [ownerUserId, viewer_user_id],
+    );
+    if (!linkRows.length) throw new Error('viewer is not linked in household_links');
+
+    const { rows } = await pool.query(
+      `INSERT INTO finance_share_scopes (owner_user_id, viewer_user_id, category_id)
+       VALUES ($1, $2, $3)
+       ON CONFLICT (owner_user_id, viewer_user_id, category_id)
+       DO UPDATE SET revoked_at = NULL
+       RETURNING *`,
+      [ownerUserId, viewer_user_id, category_id],
+    );
+    return rows[0];
+  }
+
+  async function revokeShareScope(ownerUserId, scopeId) {
+    const { rows } = await pool.query(
+      `UPDATE finance_share_scopes
+          SET revoked_at = NOW()
+        WHERE id = $1 AND owner_user_id = $2
+        RETURNING *`,
+      [scopeId, ownerUserId],
+    );
+    if (!rows.length) throw new Error('share scope not found for this owner');
+    return rows[0];
   }
 
   async function createTransaction(userId, { account_id, category_id, amount, txn_date, memo, source }) {
@@ -71,7 +182,7 @@ export function createLifeOSFinance({ pool }) {
     return rows[0];
   }
 
-  async function summaryMonth(userId, yyyymm) {
+  async function summaryMonth(userId, yyyymm, { includeShared = false } = {}) {
     let start;
     if (yyyymm && /^\d{4}-\d{2}$/.test(String(yyyymm))) {
       start = `${yyyymm}-01`;
@@ -85,11 +196,33 @@ export function createLifeOSFinance({ pool }) {
        WHERE user_id=$1 AND txn_date >= $2::date AND txn_date < ($2::date + INTERVAL '1 month')`,
       [userId, start],
     );
+    let shared_spent = 0;
+    if (includeShared) {
+      const { rows: sharedRows } = await pool.query(
+        `SELECT COALESCE(SUM(t.amount),0)::numeric AS spent
+           FROM lifeos_finance_transactions t
+           JOIN finance_share_scopes s
+             ON s.category_id   = t.category_id
+            AND s.owner_user_id = t.user_id
+            AND s.viewer_user_id = $1
+            AND s.revoked_at IS NULL
+          WHERE t.user_id <> $1
+            AND t.txn_date >= $2::date
+            AND t.txn_date < ($2::date + INTERVAL '1 month')`,
+        [userId, start],
+      );
+      shared_spent = sharedRows[0]?.spent ?? 0;
+    }
     const { rows: caps } = await pool.query(
       `SELECT name, monthly_cap FROM lifeos_finance_categories WHERE user_id=$1 AND monthly_cap IS NOT NULL`,
       [userId],
     );
-    return { month_start: start, net_cents_agnostic: spend[0]?.spent, categories_with_cap: caps };
+    return {
+      month_start: start,
+      net_cents_agnostic: spend[0]?.spent,
+      shared_spent,
+      categories_with_cap: caps,
+    };
   }
 
   async function listGoals(userId) {
@@ -151,5 +284,11 @@ export function createLifeOSFinance({ pool }) {
     upsertGoal,
     getIps,
     putIps,
+    // Household sharing
+    listShareScopes,
+    listIncomingShares,
+    listLinkedViewers,
+    grantShareScope,
+    revokeShareScope,
   };
 }

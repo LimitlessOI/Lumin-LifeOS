@@ -23,6 +23,7 @@
 import express from 'express';
 import { createDecisionIntelligence } from '../services/decision-intelligence.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
+import { safeLimit, safeInt }     from '../services/lifeos-request-helpers.js';
 
 export function createLifeOSDecisionsRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = express.Router();
@@ -91,7 +92,7 @@ export function createLifeOSDecisionsRoutes({ pool, requireKey, callCouncilMembe
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const decisions = await svc.getDecisions({ userId, category, limit: parseInt(limit) });
+      const decisions = await svc.getDecisions({ userId, category, limit: safeLimit(limit, { fallback: 20 }) });
       res.json({ ok: true, decisions, count: decisions.length });
     } catch (err) {
       log.error({ err }, 'lifeos-decisions GET /');
@@ -114,7 +115,7 @@ export function createLifeOSDecisionsRoutes({ pool, requireKey, callCouncilMembe
         decisionId:    req.params.id,
         userId,
         outcome,
-        outcomeRating: outcome_rating ? parseInt(outcome_rating) : null,
+        outcomeRating: safeInt(outcome_rating, { min: 1, max: 10, fallback: null }),
       });
 
       if (!updated) return res.status(404).json({ ok: false, error: 'Decision not found or not yours' });
@@ -177,7 +178,7 @@ export function createLifeOSDecisionsRoutes({ pool, requireKey, callCouncilMembe
       const userId = await resolveUserId(user);
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
 
-      const opinions = await svc.getSecondOpinions(userId, { limit: parseInt(limit) });
+      const opinions = await svc.getSecondOpinions(userId, { limit: safeLimit(limit, { fallback: 20 }) });
       res.json({ ok: true, opinions, count: opinions.length });
     } catch (err) {
       log.error({ err }, 'lifeos-decisions GET /second-opinions');
