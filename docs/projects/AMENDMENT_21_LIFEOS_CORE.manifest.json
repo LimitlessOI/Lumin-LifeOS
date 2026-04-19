@@ -28,7 +28,7 @@
     "db/migrations/20260328_lifeos_core.sql",
     "db/migrations/20260404_lifeos_data_ethics.sql",
     "scripts/lifeos-verify.mjs",
-    "public/overlay/lifeos-mirror/",
+    "public/overlay/lifeos-mirror.html",
     "routes/lifeos-family-routes.js",
     "routes/lifeos-emotional-routes.js",
     "routes/lifeos-purpose-routes.js",
@@ -115,7 +115,28 @@
     "services/monetization-map.js",
     "db/migrations/20260418_lifeos_finance_share_scopes.sql",
     "routes/lifeos-backtest-routes.js",
-    "public/overlay/lifeos-backtest.html"
+    "public/overlay/lifeos-backtest.html",
+    "startup/register-runtime-routes.js",
+    "routes/public-routes.js",
+    "public/overlay/lifeos-health.html",
+    "public/overlay/lifeos-healing.html",
+    "public/overlay/lifeos-ethics.html",
+    "public/overlay/lifeos-onboarding.html",
+    "public/overlay/lifeos-theme.js",
+    "public/overlay/lifeos-theme-overrides.css",
+    "public/overlay/lifeos.webmanifest",
+    "public/overlay/icons/icon-192.png",
+    "public/overlay/icons/icon-512.png",
+    "db/migrations/20260418_lifeos_auth.sql",
+    "services/lifeos-auth.js",
+    "routes/lifeos-auth-routes.js",
+    "middleware/lifeos-auth-middleware.js",
+    "public/overlay/lifeos-login.html",
+    "db/migrations/20260418_lifeos_weekly_review.sql",
+    "services/lifeos-weekly-review.js",
+    "routes/lifeos-weekly-review-routes.js",
+    "public/overlay/lifeos-weekly-review.html",
+    "public/overlay/sw.js"
   ],
   "assertions": [
     {
@@ -457,6 +478,114 @@
     {
       "type": "node_check",
       "check": "routes/lifeos-backtest-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/public-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-health.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-healing.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-ethics.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-onboarding.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-theme.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-theme-overrides.css"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos.webmanifest"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/icons/icon-192.png"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/icons/icon-512.png"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_auth.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-auth.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-auth-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "middleware/lifeos-auth-middleware.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-login.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260418_lifeos_weekly_review.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-weekly-review.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-weekly-review-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-weekly-review.html"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/sw.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/public-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-auth.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-auth-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "middleware/lifeos-auth-middleware.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/lifeos-weekly-review.js"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/lifeos-weekly-review-routes.js"
+    },
+    {
+      "type": "node_check",
+      "check": "public/overlay/lifeos-theme.js"
     }
   ],
   "phases": [

@@ -77,6 +77,7 @@ async function checkPublicRoutes(pages) {
     const urls = [
       '/lifeos',
       '/overlay/lifeos-app.html',
+      '/overlay/lifeos-login.html',
       '/overlay/lifeos-feature.html',
       '/overlay/lifeos-feature-data.js',
       '/overlay/lifeos-bootstrap.js',
@@ -84,6 +85,10 @@ async function checkPublicRoutes(pages) {
       '/overlay/lifeos-theme.js',
       '/overlay/lifeos-theme-overrides.css',
       '/overlay/lifeos-ds.css',
+      '/overlay/lifeos.webmanifest',
+      '/overlay/icons/icon-192.png',
+      '/overlay/icons/icon-512.png',
+      '/overlay/sw.js',
     ];
 
     for (const page of pages) {
