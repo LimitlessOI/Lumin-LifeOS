@@ -1,6 +1,8 @@
 # LIFEOS / LIMITLESSOS — SSOT COMPANION DOCUMENT
 ## Zero-Context Operational Manual + Enforcement Contract
-**Version:** 2026-03-26 (ClientCare Billing Recovery)  
+**Platform (canonical name):** **TokenSaverOS (TSOS)** — same stack as `docs/SSOT_NORTH_STAR.md`: council, token savings, builder, LifeOS, business lanes, governance.
+
+**Version:** 2026-04-22 (**§0.5H** — TSOS **machine-channel** lexicon: `docs/TSOS_SYSTEM_LANGUAGE.md` + North Star **§2.14**; **§0.4** — `docs/SYSTEM_CAPABILITIES.md` maintenance). Prior: **§0.4** self-serve ops matrix + `ENV_REGISTRY` when adding routes/scripts. Prior: `ENV_REGISTRY` **Operator mirror of Railway**; operator-supplied proof hard stop; **§2.3**. Prior: 2026-04-26 (**§0.4** env diagnosis); prior **§0.5F** / **§0.5G**; prior **§0.5D**; prior **§2.12** + **§2.11**)  
 **Status:** CANONICAL COMPANION (SSOT-adjacent)  
 **Purpose:** Ensure any AI can operate with zero prior exposure without drift or hallucinations.
 
@@ -41,17 +43,27 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - Managed Railway env sync + deployment controls
 - TC core runtime wiring: inbox intake, deadline reminders, GLVAR monitoring, SkySlope/BoldTrail browser paths, pricing/fees
 
-**Active Build Priority:**
-1. ClientCare Billing Recovery (Amendment 18) — immediate claims-rescue / revenue-recovery lane while TC is paused
-2. TC Service / Transaction Coordinator (Amendment 17) — hold state; foundation remains in repo
-3. API Cost Savings Service / TCO (Amendment 10) — productization and verified savings
-4. BoldTrail / real estate agent workflow systems (Amendment 11)
-5. Remaining amendments continue only when they support the active revenue lane or are required infrastructure
+**Active Build Priority (updated 2026-04-24):**
+0. **TokenSaverOS (TSOS) — builder P0** (North Star **§2.11a**): preflight, `GET /ready`; governed path to **self-extend** the build pipeline. **Outranks unverified feature churn** until builder output is **proven**. **Conductor → Adam reporting** (grade, why A vs B, plain summary) is **§2.11b / §0.5G** — *separate* from the TSOS name.
+1. LifeOS E2E household invite + ambient smoke test (Amendment 21)
+2. TC Service / Transaction Coordinator (Amendment 17) — hold state
+3. ClientCare Billing Recovery (Amendment 18)
+4. API Cost Savings / TokenOS (Amendment 10) — B2B layer **on TSOS** (see amendment header)
+5. BoldTrail (Amendment 11)
+
+> **Canonical priority is in `docs/QUICK_LAUNCH.md`** — if this section conflicts, QUICK_LAUNCH wins and this section needs updating.
 
 **Environment Variables:**
+→ **System capabilities (routes + scripts + gaps):** `docs/SYSTEM_CAPABILITIES.md` — update alongside `ENV_REGISTRY.md` when adding self-serve ops (redeploy, builder, verify).
+
+**TSOS machine channel (North Star §2.14):** `docs/TSOS_SYSTEM_LANGUAGE.md` — Conductor↔machinery **only**; **Adam-facing** reports stay **§0.5G** / **§2.11b** plain language.
 → Canonical list: `docs/ENV_REGISTRY.md` (master registry, status per var)
+→ **Mandatory diagnosis before “env missing”:** `docs/ENV_DIAGNOSIS_PROTOCOL.md` — aligns with North Star **Article II §2.3**; if the **name** is on the deploy inventory **or Adam already proved the name in Railway this conversation**, agents troubleshoot **non-secret** causes first and **must not** ask Adam to re-set those names or infer “not in prod” from an empty IDE shell; **system** may set vars via `POST /api/v1/railway/env/bulk` where allowed; **Adam** only for secret value fixes after receipts prove no other cause.
+→ **Deploy name inventory (no secrets):** **Deploy inventory — Lumin (Railway production)** in `docs/ENV_REGISTRY.md` — **full visible-name list** (2026-04-25) + **Env certification log** (append when a verifier proves a path works). **Operator mirror:** read **`### Operator mirror of Railway`** at top of `ENV_REGISTRY.md` — Adam’s screenshots are **KNOW** for name presence; any Railway add/remove/rename → **update that file same session** (list + changelog). **Values** live only in Railway for secrets; **non-secret** values (e.g. `PUBLIC_BASE_URL`) may be recorded there. If a connection string or key was ever visible in a screenshot, chat, or export, **rotate** it in Neon/provider and update the vault.
+→ Machine-readable mirror: `services/env-registry-map.js` (Command Center env health + `getRegistryHealth()`)
 → Copy-paste template: `.env.railway.example`
 → Vault: Railway → Project → Variables (never in code or .env files)
+→ **Remote HTTP verification (manifest route probes):** `node scripts/verify-project.mjs --project <id> --remote-base-url https://YOUR-DEPLOY` (or set `PUBLIC_BASE_URL` / `REMOTE_VERIFY_BASE_URL` / `RAILWAY_PUBLIC_DOMAIN` in the shell). The script only sees **process env**, not the Railway dashboard; `CLIENTCARE_*` checks are documented in `docs/ENV_REGISTRY.md` and skip locally unless `--strict-manifest-env`.
 
 **Current revenue blockers / build-critical gaps:**
 - ClientCare API access remains unconfirmed; browser/export fallback is the working assumption
@@ -88,6 +100,154 @@ Non-negotiables:
 - Confidence must be compared against actual outcome; overconfident wrong answers count as worse than low-confidence escalations.
 - A run is not complete until receipts and the owning SSOT are updated.
 - If the work touches production behavior, the evaluation loop must be reproducible from saved inputs and receipts.
+
+## 0.5B SSOT read-before-write — HARD RULE
+- **No append/edit to any SSOT-class document without reading that entire file in the same session first** (top-to-bottom; chunked reads through EOF are fine). SSOT-class paths are listed in repo root `CLAUDE.md` under **`## SSOT READ-BEFORE-WRITE`** — they include `docs/SSOT_NORTH_STAR.md`, `docs/SSOT_COMPANION.md`, `docs/NORTH_STAR_*.md`, `docs/projects/AMENDMENT_*.md`, authoritative `docs/projects/INDEX.md` / template / readiness edits, and **policy-bearing** changes to `docs/CONTINUITY_LOG*.md` / `docs/CONTINUITY_INDEX.md`.
+- **Why:** A single unseen paragraph can change mission, priorities, or legal posture; the next cold agent treats it as law.
+- **Material edits** (priorities, constitution, backlog ordering, gates, compliance, “what ships next”) **never** skip the full read.
+- **Thin exceptions:** typo / broken-link / formatting only, **and** only in a file already fully read this session; one new Change Receipt row only if the full amendment was read this session before editing.
+- If token limits apply → **sequential multi-pass read**, not memory from prior sessions. If you cannot complete the read → **HALT** and ask for a split doc — do not patch blind.
+- **All agent and automation work:** obey **`docs/SSOT_NORTH_STAR.md` → Article II §2.6** (no lies, no misleading — to operators, users, or system state). **§2.6 ¶5–7:** law is **mandatory** (cannot “not happen”); **no cutting corners**; **no laziness** on reads, verify, or receipts — HALT or full compliance, never silent shortcut. Also obey `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` → **Adam ↔ Agent epistemic contract** and `prompts/00-LIFEOS-AGENT-CONTRACT.md`; §2.6 is supreme if anything conflicts.
+
+## 0.5C Core LifeOS vs Adaptive Lumin + Governed Improvement Loop (NEW)
+
+**Supreme alignment:** **`docs/SSOT_NORTH_STAR.md` → Article II §2.10** is constitutional platform law (observe → grade → fix → close tooling gaps → LLM blueprint/supervise/repair → **earned** self-correction with receipts). This section is the **operational companion**: how product ideas route without hiding truth or bypassing §2.6 / Article III.
+
+**Relationship to §0.5A:** The six-part self-programming loop (proposal → score → execute → verify → repair → receipt) **implements** §2.10 for build work. A session that skips **verify** or **receipt** violates both §0.5A and §2.10.
+
+### Core vs Adaptive surface
+- **Core LifeOS** — calm default: Mirror, sovereignty, honesty, consent-first automation, household integrity, the universal shell. Most users live here most days.
+- **Adaptive Lumin / adaptive modules** — optional or context-triggered depth: niche workflows, personal/medical-stage/household/situational packs, experiments behind flags. **Adaptive controls visibility and routing**, not whether failures exist or whether grades are honest.
+
+### Idea classification (every net-new capability gets a label before ship)
+1. **Core** — belongs in default UX; universal receipts; highest scrutiny.
+2. **Optional pack** — opt-in module; explicit install/consent; same honesty standard when active.
+3. **Private adaptive** — per-user/household personalization; never fabricate signals the system does not have.
+4. **Condition- or context-specific** — gated by user state, calendar, or explicit user rule; fail-closed if unsure.
+5. **Experimental** — flag/lab; never presented as stable production without downgrade path and receipts.
+
+### Delivery modes
+- **Seamless** — minimal friction when risk is low and consent is already established.
+- **Guided** — stepped disclosure when stakes, irreversibility, or sensitivity rise (finance, health boundaries, outbound send, household visibility).
+
+### Promotion pipeline (brainstorm → law → code)
+- Raw ideas live in backlog or lane logs until classified.
+- **Promotion** = amendment row + manifest/owned files + verifier hooks + continuity receipt. No “silent ship” from chat alone.
+- **3 / 10 / 20 expansion counts** (or similar bounded bundles) are planning tools only: they **do not** relax Zero-Waste AI, §2.6, or Human Guardian paths for high-risk actions.
+
+### LLM responsibilities (non-optional)
+- **Blueprint** — plans, diffs, migrations, checklists tied to SSOT.
+- **Supervise** — hold execution to scope and constitutional gates.
+- **Repair** — smallest fix after failed verify; re-run verify.
+- **Surface missing tools** — name the missing route/test/migration/instrument; queue build or governed HALT — **never** “pretend verified.”
+
+## 0.5D Conductor, Construction supervisor, and builder GAP-FILL (supreme: North Star **Article II §2.11**)
+
+### System (platform) vs. project (amendment) — the split Adam stated
+- **We program the system** — the **platform**: Lumin, builder, governable jobs, `pending_adam`, verifiers, routes that are **infrastructure** for execution. We do this in code **only** when the **platform** has a **gap** or is **broken**, or we need to extend it so **Lumin** can do (on the **next** run) what a Conductor in an IDE could do **manually** today. The fix may be **small** or **extensive**; the test is *platform* need + receipts, not line count.
+- **We do not use external sessions to “program the project”** — meaning: **amendment** and **governed project** *product* work (the deliverables, features, and behavior of `AMENDMENT_*` outcomes) is **programmed by the system** (SSOT, Lumin, council, builder, queue, `pending_adam`) — not as ad-hoc IDE authorship of that product in source. If the system cannot execute it yet, **improve the platform** (above) or **govern the queue** — do **not** hand-code the **project** as a substitute.
+
+**The law in one line:** *External **code** in-repo serves the **system**; the **system** **programs** amendments and projects. Conductor / Construction supervisor + **`GAP-FILL:`** = **platform** only (with mandatory receipts), except the protocol itself (SSOT, continuity, logs). **Never** the primary hand-authoring of **amendment product** when the path must be in-system.*
+
+### Conductor (licensed)
+- **Declares** the session: follows **`docs/QUICK_LAUNCH.md`**, reads NSSOT + lane log + `CONTINUITY_LOG*`, updates **`## Change Receipts`** and **`## Agent Handoff Notes`** and launch packet when work ships.
+- **Drives** work so **Lumin and the builder** can own **amendment/project** output; any **edits to application/product code** for a named project are **in-system** (plan/draft/apply) or must be classifiable as **platform** (GAP-FILL), **not** “I’ll just implement the amendment feature in the editor.”
+- **Respects** parallel-lane rules (no overlapping file ownership with another conductor without explicit rebase).
+
+### Construction supervisor (licensed)
+- Same discipline as Conductor, with scope **explicitly bounded** to a segment (manifest-owned paths, greenfield sub-tree, or lane-scoped work package). **Not** a license to hand-code **project** deliverables outside the system path.
+
+### Builder GAP-FILL (`GAP-FILL:` in receipts — **platform** only)
+Use when: the **platform** cannot run **correctly** or **Lumin** cannot do the needed class of work; **or** a subsystem is structurally **blocking** the builder. May be one file or **sustained** work (migrations, services, hardened pipeline, extensive tests) — all **on the system**, not a substitute for **the system** then **driving** amendment/product work.
+- **Every** GAP-FILL line must include **`GAP-FILL:`** and: (1) **Blocker (before)**, (2) **Capability (after)** (platform: what Lumin/builder can do now), (3) **Verify**, (4) **Closed / partial**.
+
+### Disallowed
+- “Helper” or “IDE agent” as **permission** to **author** the **amendment’s product** in code when the **governed** path is: **system** programs the project. Fix **Lumin** / **platform** instead.
+- **Shadow project** — project **feature** code merged **without** system path / promotion, when the work should have been **in-system** or a **true** platform GAP only.
+
+### Enforcement (machine-enforced — read this before any product file write)
+
+**Why this section exists:** Text-only §2.11 rules fail for cold agents because the path of least resistance is to hand-code. The following enforcement layer closes the loophole.
+
+**Mandatory session-start check (before any product code):**
+```http
+GET /api/v1/lifeos/builder/domains   → must return domain list (builder is alive)
+GET /api/v1/lifeos/builder/model-map → must return routing table
+```
+If either fails → fix the builder before writing product code.
+
+**For every file in `routes/`, `services/`, `public/overlay/`, `db/migrations/`:**
+```http
+POST /api/v1/lifeos/builder/build
+{ “domain”: “<from prompts/>”, “task”: “...”, “spec”: “...”, “target_file”: “...”, “commit_message”: “[system-build] ...” }
+```
+- `{ ok: true, committed: true }` → done; write SSOT receipt with `model_used`
+- `committed: false` (no `target_file` in placement) → call `POST /api/v1/lifeos/builder/execute` with the output + explicit `target_file`
+- Builder fails entirely → hand-code is allowed **only as GAP-FILL**; document `GAP-FILL: <exact reason>` in Change Receipt and fix the platform failure in the same session
+
+**Commit message enforcement (`.git/hooks/commit-msg`):** Hard-blocks any commit of product files unless message contains `[system-build]` or `GAP-FILL: <reason>`. This is a machine check, not a doc check. `--no-verify` is prohibited by `CLAUDE.md` unless Adam explicitly requests it.
+
+**Full protocol:** `CLAUDE.md → ## BUILDER-FIRST RULE` (read this every session before touching product files).
+
+## 0.5E Technical decisions, council, best-practice research, and anti-drift (supreme: North Star **Article II §2.12**)
+
+**Companion role:** `docs/SSOT_NORTH_STAR.md` **§2.12** is the constitutional source. This section is the **operational checklist**; it **cannot** narrow §2.12.
+
+### Load-bearing technical decisions
+- **Before** a council recommendation is requested: review **relevant** authoritative guidance (docs in repo, vendor docs, and when needed **web** research on **current** best practice — not stale chat memory). Label **THINK** / **GUESS**; do not fake **KNOW**.
+- **Run** the **AI Council** (multi-model) with **consensus** bias. **Implementation detail:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md` (evaluation contract, gate-change / `run-council` where applicable) and **§5.5** below.
+- If **no consensus:** **steel-man** both sides, **opposite-argument** rounds, persisted verdict — not “strongest model wins in private.”
+- **Escalate to Adam** only for §2.12 **human scope** (blueprint, infeasibility, prohibitive cost, legal/constitutional, Article III) — not to skip debate.
+
+### Construction supervisor and Conductor — drift detection (mandatory)
+Every session in those roles:
+1. **Start:** Execute **`docs/QUICK_LAUNCH.md`** read order (no skipping North Star, Continuity, owning amendment for touched work).
+2. **Before “done”:** Run or review **verifiers** appropriate to the change (`verify-project` manifest for the lane, `node scripts/lifeos-verify.mjs` where applicable, tests). Compare **receipts** to **code + runtime**. If SSOT says shipped and verifier is red → **not done**; fix or **HALT** with a named gap.
+3. **Ship:** Update **Change Receipts**, **Agent Handoff**, and **QUICK_LAUNCH** per protocol.
+
+**Drift = §2.6 violation** when the **system’s story** (docs, UI, internal status) does not match **measured** state.
+
+**Maturity program (rolling “10/10” plan):** `docs/SYSTEM_MATURITY_PROGRAM.md` + `npm run verify:maturity` + `npm run lifeos:gate-change-run -- --preset program-start` for **recorded** council review of the plan.
+
+## 0.5F TokenSaverOS (TSOS); builder as meta-product; governed self-build (supreme: North Star **Article II §2.11a**)
+
+**What this section is:** **Platform name + what we build first.** It is **not** the Conductor’s reporting style to Adam (that is **§0.5G** / North Star **§2.11b**).
+
+**What TSOS is:** The unified platform name for this repository’s runtime — not a separate codebase. **LifeOS**, **LimitlessOS**, **TokenOS** (Amendment 10 B2B), and other `AMENDMENT_*` lanes are **products inside TSOS**.
+
+### Builder-first (operational)
+- The **council builder** and its **integrity** (preflight, `GET /api/v1/lifeos/builder/ready`, verifiers, council on load-bearing forks) are **P0** until the system can **prove** what it ships. **If the builder path is unknown or red → HALT** and fix the platform before chasing secondary lanes.
+- **Governed self-build** of the **pipeline:** when ready, extend the builder only under **§2.6 + §2.10 + §2.12** with receipts (no shadow edits).
+
+**Commands:** `npm run builder:preflight`; `BUILDER_PREFLIGHT=strict` (see `CLAUDE.md`).
+
+## 0.5G Conductor → Adam: evaluation and reporting (supreme: North Star **Article II §2.11b**)
+
+**What this section is:** **How the Conductor performs and what Adam gets back** when you direct a session to **build, supervise, or review** — *not* the definition of TSOS (**§0.5F**) and *not* a replacement for **§2.11** (system authors product) or **§2.12** (council on forks).
+
+### Mandatory package (end of any slice where you need Adam to trust quality without reading every line)
+Use **plain language** (no acronym smuggling):
+1. **What we did** — one short paragraph.
+2. **Quality score** — e.g. 6/10 → 9/10 with **evidence** (what failed before, what passed after).
+3. **Why this vs that** — if there was a fork; cite **gate-change** / **run-council** when load-bearing.
+4. **Residue risk** — what is **not** proven; next verify step.
+
+**Failure mode:** Endless “trying” without an honest grade — **§2.6**. **Surface** bad scores; do not bury them.
+
+**See also:** `docs/QUICK_LAUNCH.md` → *When you send the Conductor to get the system building*.
+
+## 0.5H TSOS system language — machine channel (supreme: North Star **Article II §2.14**)
+
+**What this section is:** **Controlled vocabulary + line grammar** for Conductor ↔ **machinery** (builder HTTP, probes, redeploy/env scripts, **`[TSOS-MACHINE]`** logs). **Not** Adam’s plain-language session report (**§0.5G** / **§2.11b**).
+
+### Mandatory
+- **Read** `docs/TSOS_SYSTEM_LANGUAGE.md` **before** the first **machine-channel** line in a session that touches **`/api/v1/lifeos/builder/*`**, **`scripts/system-railway-redeploy.mjs`**, **`scripts/council-builder-preflight.mjs`**, **`scripts/env-certify.mjs`**, or **`npm run env:certify`**, when output is **receipt-grade**.
+
+### Operational
+- **Preflight / capability / env certification:** the **first** status line of operator-facing output uses the **canonical format** in the lexicon doc.
+- **Sheriff (§2.13.2):** if a change set mixes **unmarked** English claims about HTTP/build/deploy with **machine-channel** context → **FAIL closed** until corrected or explicitly scoped as **§2.11b** human report **outside** `[TSOS-MACHINE]` / compact `TSOS|` lines.
+
+**See also:** `docs/SYSTEM_CAPABILITIES.md`; `docs/QUICK_LAUNCH.md` → *Execution Protocol* step 3.
 
 ## 0.6 Directed Mode Rule (NEW)
 - Default operating posture is now directed mode: the system does not autonomously build, research, self-improve, market, or spend unless explicitly instructed or explicitly re-enabled.
@@ -290,6 +450,24 @@ If operating with ONE model but consensus trigger fires:
 - Produce merged decision + uncertainty markers + rollback plan
 - If cannot do reliably → HALT and request multi-model or human confirmation
 
+## 5.5 Gate-change & efficiency proposals (North Star §2.6 ¶8)
+
+**Purpose:** Friction is real. So is the ban on **silent** corner-cutting (North Star §2.6 ¶6–7). This section is the **legitimate** path: *feelings* and efficiency hypotheses become **inputs to the council**, not unilateral skips.
+
+**Who may raise:** Any builder, agent, scheduled monitor, or subsystem may report: perceived inefficiency; a **hypothesis** that steps **X / Y / Z** (reads, checks, duplicate council rounds, etc.) could be removed or merged while preserving outcomes — framed as **THINK** or **GUESS** with named tradeoffs, never as verified KNOW without measurements.
+
+**Council must cover:**
+1. **Steel-man the risk** — what truth, evidence, or safety could be lost if the proposal ships?
+2. **Equivalence test** — what observable metrics, tests, or receipts would prove “same results” is true (not vibes)?
+3. **Blind spots** — security, SSOT drift, Zero-Waste AI, user trust, rollback if wrong.
+4. **Vote + confidence** per §5.2–5.3; escalate to Human Guardian when the change touches constitution, high-risk actions, or production truth surfaces.
+
+**After approval:** Implement the leaner path, update owning SSOT / amendments with **Change Receipts**, and keep a **rollback** switch or revert path until metrics validate the hypothesis.
+
+**HTTP (LifeOS runtime):** `POST /api/v1/lifeos/gate-change/run-preset` — **body `{ "preset": "maturity" \| "program-start" }`** — creates the proposal and runs the **full** multi-model debate **on the server** (uses **Railway-injected** provider keys; client only needs **`x-command-key`**). Same protocol as `run-council`. Then: `POST .../proposals` (create row only), `GET .../proposals`, `GET .../proposals/:id`, `POST .../proposals/:id/run-council` (debate only; user-triggered), `PATCH .../proposals/:id/status` (`approved` \| `rejected` \| `implemented` after `debated`). Auth: **requireKey**. Implementation: `routes/lifeos-gate-change-routes.js`, `services/lifeos-gate-change-council-run.js`, `config/gate-change-presets.js`, `services/lifeos-gate-change-proposals.js`, migration `20260422_gate_change_proposals.sql`.
+
+**Explicit non-path:** “The system felt slow so it stopped running verify” without debate + receipt = **violation**, not §5.5.
+
 ---
 
 # SECTION 6: RADICAL HONESTY (ANTI-HALLUCINATION)
@@ -474,9 +652,11 @@ CRITICAL: If SSOT North Star and Companion are not in context, request them befo
 
 Non-negotiables:
 - Obey SSOT North Star and this Companion
+- **Read any SSOT file end-to-end in this session before you edit that file** (see §0.5B and `CLAUDE.md` → SSOT READ-BEFORE-WRITE)
 - Every action maps to North Star or Outcome Target; otherwise HALT
 - Never give operational steps without evidence of user's visible state
 - Never deceive; if uncertain, say so
+- **North Star Article II §2.6:** never lie or mislead — not to operators, users, or in system status/receipts (misleading = lying)
 - Never expose secrets
 - Respect consent and user sovereignty always
 

@@ -7,7 +7,9 @@
  * This is the sellable moat: verified proof of savings per request.
  * No claim is made without a DB record backing it.
  *
- * Exports: createSavingsLedger(pool) → { record, getReport, getDashboard, getReceipt }
+ * Exports: createSavingsLedger(pool) → { record, getReport, getDashboard, getReceipt, conductorSession, getSavingsReport }
+ *
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
  */
 
 // Cost per 1M tokens by provider/model (USD). Used when provider doesn't return usage.
@@ -298,5 +300,86 @@ export function createSavingsLedger(pool) {
     }
   }
 
-  return { record, getReceipt, getDashboard, getReport };
+  // ---------------------------------------------------------------------------
+  // conductorSession — log one Conductor cold-start savings event.
+  // Called by the cold-start script or manually at session start.
+  // compact_tokens: what was actually read (AGENT_RULES.compact.md)
+  // full_tokens:    what would have been read without compression (full stack)
+  // ---------------------------------------------------------------------------
+  async function conductorSession({
+    compactTokens,
+    fullTokens,
+    source = 'cold_start',
+    agentHint = null,
+    sessionId = null,
+    notes = null,
+  } = {}) {
+    try {
+      await pool.query(
+        `INSERT INTO conductor_session_savings
+           (compact_tokens, full_tokens, source, agent_hint, session_id, notes)
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        [compactTokens, fullTokens, source, agentHint, sessionId, notes],
+      );
+    } catch (err) {
+      console.warn('[LEDGER] conductorSession insert failed:', err.message);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // getSavingsReport — unified savings proof for monetization.
+  // Returns daily breakdown + cumulative totals from tsos_savings_report view.
+  // ---------------------------------------------------------------------------
+  async function getSavingsReport({ days = 30 } = {}) {
+    try {
+      const [daily, totals, baselines] = await Promise.all([
+        pool.query(
+          `SELECT * FROM tsos_savings_report
+           WHERE day >= CURRENT_DATE - ($1 * INTERVAL '1 day')
+           ORDER BY day DESC`,
+          [days],
+        ),
+        pool.query('SELECT * FROM tsos_savings_totals'),
+        pool.query(
+          `SELECT label, token_count, cost_per_m_usd, notes
+           FROM tcos_baseline_config ORDER BY label`,
+        ),
+      ]);
+
+      const totalsRow = totals.rows[0] || {};
+      return {
+        period_days: days,
+        totals: {
+          days_tracked:              Number(totalsRow.days_tracked || 0),
+          total_ai_calls:            Number(totalsRow.total_ai_calls || 0),
+          total_conductor_sessions:  Number(totalsRow.total_conductor_sessions || 0),
+          total_tokens_saved:        Number(totalsRow.total_tokens_saved || 0),
+          total_tokens_on_free_tier: Number(totalsRow.total_tokens_on_free_tier || 0),
+          total_cache_hits:          Number(totalsRow.total_cache_hits || 0),
+          total_cost_saved_usd:      Number(totalsRow.total_cost_saved_usd || 0),
+          avg_quality_score:         Number(totalsRow.avg_quality_score || 0),
+          tracking_since:            totalsRow.tracking_since || null,
+          last_activity:             totalsRow.last_activity || null,
+        },
+        daily: daily.rows.map(r => ({
+          day:                         r.day,
+          ai_calls:                    Number(r.ai_calls),
+          conductor_sessions:          Number(r.conductor_sessions),
+          tokens_saved_ai_compression: Number(r.tokens_saved_ai_compression),
+          tokens_saved_compact_rules:  Number(r.tokens_saved_compact_rules),
+          tokens_saved_total:          Number(r.tokens_saved_total),
+          tokens_on_free_tier:         Number(r.tokens_on_free_tier),
+          cache_hits:                  Number(r.cache_hits),
+          cost_saved_total_usd:        Number(r.cost_saved_total_usd),
+          avg_quality_score:           Number(r.avg_quality_score),
+        })),
+        baselines: baselines.rows,
+      };
+    } catch (err) {
+      console.warn('[LEDGER] getSavingsReport failed:', err.message);
+      return null;
+    }
+  }
+
+  return { record, getReceipt, getDashboard, getReport, conductorSession, getSavingsReport };
 }

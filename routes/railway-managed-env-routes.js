@@ -1,5 +1,49 @@
+/**
+ * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
+ */
 import express from "express";
 import { getRegistryHealth } from "../services/env-registry-map.js";
+
+const RAILWAY_GQL = 'https://backboard.railway.app/graphql/v2';
+
+/**
+ * Internal Railway GraphQL helper — uses RAILWAY_TOKEN from process.env.
+ * Called by self-redeploy to avoid depending on command key auth.
+ */
+async function internalRailwayRedeploy() {
+  const token = process.env.RAILWAY_TOKEN;
+  const serviceId = process.env.RAILWAY_SERVICE_ID;
+  const environmentId = process.env.RAILWAY_ENVIRONMENT_ID;
+
+  if (!token) throw new Error('RAILWAY_TOKEN not set in environment');
+  if (!serviceId) throw new Error('RAILWAY_SERVICE_ID not set in environment');
+  if (!environmentId) throw new Error('RAILWAY_ENVIRONMENT_ID not set in environment');
+
+  const res = await fetch(RAILWAY_GQL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      query: `mutation Redeploy($serviceId: String!, $environmentId: String!) {
+        serviceInstanceRedeploy(serviceId: $serviceId, environmentId: $environmentId)
+      }`,
+      variables: { serviceId, environmentId },
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Railway API HTTP ${res.status}: ${text}`);
+  }
+
+  const json = await res.json();
+  if (json.errors?.length) {
+    throw new Error(`Railway GQL error: ${json.errors.map(e => e.message).join('; ')}`);
+  }
+  return json.data;
+}
 
 function getActor(req) {
   return req.get("x-actor") || req.body?.actor || req.query?.actor || "system";
@@ -168,6 +212,48 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       const result = await managedEnvService.deleteDesiredVar(req.params.name, getActor(req));
       res.json(result);
     } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /self-redeploy
+   * Triggers Railway to redeploy this service using its own vault credentials.
+   * Auth: x-railway-token header must match RAILWAY_TOKEN in process.env.
+   * This bypasses COMMAND_CENTER_KEY so the system can redeploy itself even
+   * when the operator's local key is out of sync with Railway vault.
+   * Also accepts the standard command key as fallback.
+   */
+  router.post("/self-redeploy", async (req, res) => {
+    try {
+      const railwayToken = req.headers['x-railway-token'];
+      const commandKey   = req.headers['x-command-key'] || req.headers['x-command-center-key'] ||
+                           req.headers['x-lifeos-key']  || req.headers['x-api-key'] ||
+                           req.query?.api_key;
+
+      const envToken      = process.env.RAILWAY_TOKEN;
+      const envCommandKey = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY ||
+                            process.env.API_KEY;
+
+      const authedViaRailwayToken = Boolean(envToken && railwayToken && railwayToken === envToken);
+      const authedViaCommandKey   = Boolean(envCommandKey && commandKey && commandKey === envCommandKey);
+
+      if (!authedViaRailwayToken && !authedViaCommandKey) {
+        return res.status(401).json({
+          ok: false,
+          error: 'Unauthorized — provide x-railway-token (RAILWAY_TOKEN value) or standard command key',
+        });
+      }
+
+      await internalRailwayRedeploy();
+      console.log('[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=REDEPLOY | self-redeploy triggered via managed-env route | NEXT=PROBE /ready in ~60s');
+      res.json({
+        ok: true,
+        message: 'Self-redeploy triggered on Railway',
+        tsos: '[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=REDEPLOY | self-redeploy queued | NEXT=PROBE /ready in ~60s',
+      });
+    } catch (error) {
+      console.error('[RAILWAY-SELF-REDEPLOY] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });

@@ -1,6 +1,7 @@
 /**
  * API Cost Savings Routes
  * Extracted from server.js
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
  */
 import logger from '../services/logger.js';
 
@@ -300,5 +301,79 @@ app.post("/api/v1/cost-savings/create-subscription", requireKey, async (req, res
   }
 });
 
+  // ---------------------------------------------------------------------------
+  // TSOS SAVINGS REPORT — unified proof of value for monetization
+  // GET  /api/v1/tsos/savings/report?days=30   — daily breakdown + totals
+  // POST /api/v1/tsos/savings/session          — log a conductor cold-start event
+  // GET  /api/v1/tsos/savings/baselines        — reference token counts (audit trail)
+  // ---------------------------------------------------------------------------
+
+  app.get('/api/v1/tsos/savings/report', requireKey, async (req, res) => {
+    try {
+      const days = Math.min(Math.max(parseInt(req.query.days) || 30, 1), 365);
+      const ledger = ctx.savingsLedger;
+      if (!ledger?.getSavingsReport) {
+        return res.status(503).json({ ok: false, error: 'savingsLedger not initialised' });
+      }
+      const report = await ledger.getSavingsReport({ days });
+      if (!report) return res.status(500).json({ ok: false, error: 'report query failed' });
+
+      const t = report.totals;
+      const summaryLine = t.total_tokens_saved > 0
+        ? `${Number(t.total_tokens_saved).toLocaleString()} tokens saved` +
+          ` | $${Number(t.total_cost_saved_usd).toFixed(4)} cost avoided` +
+          ` | ${t.total_conductor_sessions} conductor sessions` +
+          ` | ${t.total_ai_calls} AI calls` +
+          ` | tracking since ${t.tracking_since || 'N/A'}`
+        : 'No savings recorded yet — start logging conductor sessions to build the proof.';
+
+      res.json({ ok: true, summary: summaryLine, ...report });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  app.post('/api/v1/tsos/savings/session', requireKey, async (req, res) => {
+    try {
+      const { compact_tokens, full_tokens, source, agent_hint, session_id, notes } = req.body || {};
+      if (!compact_tokens || !full_tokens) {
+        return res.status(400).json({ ok: false, error: 'compact_tokens and full_tokens are required' });
+      }
+      const ledger = ctx.savingsLedger;
+      if (!ledger?.conductorSession) {
+        return res.status(503).json({ ok: false, error: 'savingsLedger not initialised' });
+      }
+      await ledger.conductorSession({
+        compactTokens: Number(compact_tokens),
+        fullTokens:    Number(full_tokens),
+        source:        source || 'cold_start',
+        agentHint:     agent_hint || null,
+        sessionId:     session_id || null,
+        notes:         notes || null,
+      });
+      const saved = Number(full_tokens) - Number(compact_tokens);
+      const pct   = Math.round((saved / Number(full_tokens)) * 100);
+      res.json({
+        ok: true,
+        saved_tokens:     saved,
+        savings_pct:      pct,
+        cost_avoided_usd: +(saved / 1000000 * 3.00).toFixed(6),
+        tsos_machine:     `[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=BUILD | conductor_session saved=${saved} tokens (${pct}%) | NEXT=RECEIPT SSOT row`,
+      });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  app.get('/api/v1/tsos/savings/baselines', requireKey, async (req, res) => {
+    try {
+      const result = await pool.query(
+        'SELECT label, token_count, cost_per_m_usd, notes, recorded_at FROM tcos_baseline_config ORDER BY label',
+      );
+      res.json({ ok: true, baselines: result.rows });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
 
 }
