@@ -35,17 +35,17 @@
 ## [FIX] Update 2026-04-25 #88 — **Auth aligned; builder codegen 413 isolated and patched**
 
 ### Files changed
-- `routes/lifeos-council-builder-routes.js` — builder `dispatchTask()` now passes `allowModelDowngrade:false` plus task type into `callCouncilMember`, so `/api/v1/lifeos/builder/build` honors `config/task-model-routing.js` (for chat codegen, `gemini_flash`) instead of silently auto-routing code prompts to a smaller-context provider.
+- `routes/lifeos-council-builder-routes.js` — builder `dispatchTask()` now passes `allowModelDowngrade:false` plus task type into `callCouncilMember`, so `/api/v1/lifeos/builder/build` honors `config/task-model-routing.js` (for chat codegen, `gemini_flash`) instead of silently auto-routing code prompts to a smaller-context provider. Added `validateGeneratedOutputForTarget()` in `/build` and `/execute` so `.html` commits are rejected if empty/truncated or missing document markers.
 - `scripts/system-rotate-command-key.mjs` — added `@ssot` and hid the generated/provided `COMMAND_CENTER_KEY` in stdout/stderr so the key-rotation recovery path does not leak secrets into logs.
 - `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` and `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — receipts updated with the exact 401/413 repair state.
 
 ### State after this session
 - Production auth is no longer the blocker when the local shell uses the documented command key: `/lifeos/builder/ready`, `/domains`, `/model-map`, `/gate-change/presets`, `/council/health`, and `/railway/env` all returned 200; `npm run tsos:doctor` scored **100/100 green** and `npm run builder:preflight` passed.
-- `npm run lifeos:builder:orchestrate` reached `/builder/build` but failed generation. Direct `/builder/task` with the same full Lumin chat request returned `detail:"HTTP 413"`; a tiny `/builder/task` plan succeeded on `gemini_flash`, and `/council/health` showed `gemini_flash` online. The root cause is builder codegen model auto-downgrade despite the configured route.
-- The source fix is local and needs deploy before the system build can be rerun against production.
+- `npm run lifeos:builder:orchestrate` reached `/builder/build`; after model pinning, it used `gemini_flash` and committed, but the generated output was only 14 bytes (`<!DOCTYPE html`). This was immediately repaired via `POST /api/v1/lifeos/builder/execute`, commit `daa28f66`, and verified from `origin/main` at 69,127 bytes with bootstrap/chat/build markers present.
+- The source guard is local and needs deploy before any future full-file HTML system build is allowed.
 
 ### Next agent: start here
-- Run `node --check routes/lifeos-council-builder-routes.js scripts/system-rotate-command-key.mjs`, commit with `GAP-FILL:` or `[system-build]` as appropriate, push/redeploy, then rerun `npm run tsos:doctor`, `npm run builder:preflight`, and `npm run lifeos:builder:orchestrate`.
+- Run `node --check routes/lifeos-council-builder-routes.js scripts/system-rotate-command-key.mjs`, commit/push the guard with `GAP-FILL:`, redeploy, then rerun `npm run tsos:doctor` and `npm run builder:preflight`. Do not rerun the full Lumin chat replacement until the builder prompt/output contract is tightened enough to prove complete HTML output before commit.
 
 ## [FIX] Update 2026-04-24 #87 — **TokenSaverOS doctor + build-system weak-point fixes**
 

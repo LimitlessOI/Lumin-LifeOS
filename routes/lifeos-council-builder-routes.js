@@ -104,6 +104,19 @@ function splitBuilderOutput(raw) {
   }
 }
 
+function validateGeneratedOutputForTarget(targetFile, output) {
+  const target = String(targetFile || '').toLowerCase();
+  const text = String(output || '').trim();
+  if (!text) return 'generated output is empty';
+  if (target.endsWith('.html')) {
+    if (text.length < 1000) return 'generated HTML is too short; refusing to commit likely truncated output';
+    if (!/<html[\s>]/i.test(text) || !/<\/html>/i.test(text)) {
+      return 'generated HTML is missing required <html> / </html> document markers';
+    }
+  }
+  return null;
+}
+
 function buildAutonomyInstructions({ autonomyMode, internetResearch }) {
   if (autonomyMode !== 'max') return '';
   const webLine = internetResearch
@@ -456,6 +469,11 @@ export function createLifeOSCouncilBuilderRoutes({
       return res.status(503).json({ ok: false, error: 'commitToGitHub not available — GITHUB_TOKEN may be missing' });
     }
 
+    const validationError = validateGeneratedOutputForTarget(target_file, output);
+    if (validationError) {
+      return res.status(422).json({ ok: false, error: validationError, committed: false, target_file });
+    }
+
     const msg = commit_message || `[system-build] ${target_file}`;
     try {
       await commitToGitHub(target_file, output, msg, branch || undefined);
@@ -524,6 +542,17 @@ export function createLifeOSCouncilBuilderRoutes({
     }
 
     // Step 3: Commit
+    const validationError = validateGeneratedOutputForTarget(resolvedTarget, generatedOutput);
+    if (validationError) {
+      return res.status(422).json({
+        ok: false,
+        error: validationError,
+        output: generatedOutput,
+        target_file: resolvedTarget,
+        committed: false,
+      });
+    }
+
     const msg = commit_message || `[system-build] ${resolvedTarget}`;
     try {
       await commitToGitHub(resolvedTarget, generatedOutput, msg, branch || undefined);
