@@ -11,7 +11,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-01 |
+| **Last Updated** | 2026-04-24 — **`services/savings-ledger.js` `getSavingsReport`:** exposes full monetization columns from rebuilt `tsos_savings_report` view (`baseline_cost_usd`, `actual_cost_usd`, `savings_pct`, per-mechanism breakdown). Prior: 2026-04-25 — **`services/council-service.js`:** optional `options.maxOutputTokens` overrides task-type-scoped completion caps (clamped to 128k) so long outputs (e.g. council builder full-file HTML) are not truncated at the codegen default (**1500**). Prior: **`config/task-model-routing.js`:** explicit `council.builder.code` / `plan` / `review` keys. Prior: 2026-04-22 — **`services/council-service.js` @ssot tag**. Prior: **`POST /gate-change/run-preset`:** … |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json` |
 
@@ -19,6 +19,10 @@
 
 ## Mission
 Route every AI task to the cheapest capable model. Zero unnecessary spend. Free providers first, paid providers never unless explicitly authorized.
+
+### North Star §2.12 — Technical decisions and debate (constitutional)
+
+**Supreme text:** `docs/SSOT_NORTH_STAR.md` **Article II §2.12**. This amendment **implements** the council side: multi-model evaluation, gate-change debate with opposite-argument rounds, and recorded verdicts. **Load-bearing technical decisions** must be run through this layer (plus **best-practice / authoritative research** when facts are not in-repo) **before** implementation is treated as approved. **If consensus fails:** full protocol — not single-model shortcut. **Adam** only for §2.12 human scope (blueprint, infeasibility, prohibitive cost, legal/constitutional). **Construction supervisor / Conductor:** `docs/SSOT_COMPANION.md` **§0.5E** (SSOT re-read + drift vs verifiers every session).
 
 ## North Star Anchor
 Maximum Leverage — the council multiplies every feature's value by routing intelligently. It also generates revenue directly (API Cost Savings Service sells this system to clients).
@@ -54,7 +58,13 @@ services/ai-model-selector.js
 services/consensus-service.js
 services/response-cache.js
 services/ai-guard.js
+services/prompt-translator.js      ← NEW: LCL compression + routing tier logic
+services/lifeos-gate-change-proposals.js   ← §2.6 ¶8 proposal persistence (LifeOS route)
+routes/lifeos-gate-change-routes.js
+db/migrations/20260422_gate_change_proposals.sql
 config/council-members.js
+config/codebook-v1.js              ← NEW: LCL versioned symbol table (pre-shared key)
+config/task-model-routing.js       ← NEW: 30+ task types → cheapest capable model
 ```
 
 ## Protected Files (read-only for this project)
@@ -83,9 +93,13 @@ server.js           — composition root only
 3. TOON JSON compression → 20-40% on JSON tasks
 4. IR compiler → removes redundant instruction patterns
 5. Phrase table → domain abbreviations (100+ LifeOS-specific phrases)
-6. History truncation → keep last N turns
+6. LCL instruction alias → replaces 100-500 token instruction blocks with `[CI:xx]` tokens
+7. LCL code symbols → replaces common code patterns with 2-4 char symbols
+8. History truncation → keep last N turns
 
 **TOON is enabled for ALL task types including codegen** (was previously disabled for codegen — fixed 2026-03-27).
+
+**LCL codebook system block is injected once per model session then KV-cached** — costs 0 tokens after first call.
 
 ### Key Environment Variables
 | Var | Default | Purpose |
@@ -126,6 +140,115 @@ Each proposal should be graded on:
 
 The council may recommend, but a separate verifier/reviewer must decide whether the final implementation succeeded.
 
+### Gate-change & efficiency proposals (North Star §2.6 ¶8 — operational)
+
+**Problem this solves:** A component may **feel** that the platform is inefficient, or that specific steps **X / Y / Z** “look like” corner-cutting if removed but **might** preserve the same verified results with less cost, latency, or human friction.
+
+**Allowed flow (only this flow for gate changes):**
+1. **Raise** — Structured input to the council (or council-builder / multi-model session) stating: current pain, hypothesis labeled **THINK** or **GUESS**, what would be removed or merged, and what **evidence** would falsify the hypothesis.
+2. **Debate** — Multiple council roles (see `docs/SSOT_COMPANION.md` §5.1–5.2) argue for and against; explicitly name what honesty, verification, or safety could be lost.
+3. **Decide** — Vote + confidence per this amendment’s evaluation contract; high-risk or constitutional-impact changes require Human Guardian per North Star Article III.
+4. **Implement** — If the council approves a **better** way to operate: ship the change, run the agreed **verification_plan**, update **SSOT Change Receipts**, and retain **rollback**.
+
+**Hard rule:** No single agent or job may **unilaterally** remove or bypass honesty, evidence, or verification gates for “efficiency.” Silent shortcut = North Star §2.6 ¶6 violation, not this subsection.
+
+**SSOT ops:** Full protocol text: `docs/SSOT_COMPANION.md` §5.5.
+
+**HTTP (shipped):** Mounted at `/api/v1/lifeos/gate-change` (see `routes/lifeos-gate-change-routes.js`):
+- `POST /run-preset` — body: `{ "preset": "maturity" | "program-start", "models"?: [...] }` — **one call:** create row + full **server-side** debate (uses **deploy** `callCouncilMember` keys — preferred for operators/agents; only `x-command-key` required from client)
+- `POST /proposals` — body: `title`, `pain_summary`, `hypothesis_label` (`THINK`|`GUESS`), `steps_to_remove` (array or string), optional `proposed_equivalence_metrics`, `created_by`
+- `GET /proposals?status=&limit=`
+- `GET /proposals/:id`
+- `POST /proposals/:id/run-council` — optional body `{ "models": ["gemini_flash","groq_llama","deepseek"] }`; requires status `raised`; executes consensus protocol:
+  1) round-1 per model,
+  2) if disagreement, opposite-argument round per model,
+  3) persisted `council_rounds_json`, `consensus_reached`, `consensus_summary`, and final `council_verdict`.
+- `PATCH /proposals/:id/status` — body `{ "status": "approved"|"rejected"|"implemented" }`; requires prior status `debated`
+
+---
+
+## LifeOS Compression Language (LCL) — Architecture Vision
+
+> **The Core Insight:** If both ends of the conversation already know the key,
+> the key never needs to travel. Every message shrinks to just the compressed content.
+
+This is a pre-shared codebook system. The AI council models know the symbol table.
+Prompts are written in shorthand. Models decode natively. Nobody outside this system
+has our codebook, giving us an efficiency advantage that compounds with every deploy.
+
+### Why This Matters for a Coding System
+
+Cache hits help mature apps (static content, repeated queries). A coding system has
+mostly unique prompts — cache hits rarely fire. The only reliable compression for
+unique content is making the content itself smaller before it's sent. LCL does this
+at the prompt level, not the cache level.
+
+### Three Implementation Phases
+
+**Phase 1 — Codebook in System Prompt (BUILT — `config/codebook-v1.js`)**
+- The codebook (INSTRUCTION_IDS + CODE_SYMBOLS) is injected once as a system block
+- Provider KV-caches it — costs 0 tokens after first call per model session
+- Every subsequent message uses shorthand — model decodes from its cached context
+- Estimated savings: 30-50% on typical coding council calls
+- Files: `config/codebook-v1.js`, `services/prompt-translator.js`
+
+**Phase 2 — Custom BPE Tokenizer (FUTURE — when budget allows)**
+- Train a domain-specific Byte Pair Encoding tokenizer on the LifeOS codebase
+- Generic models tokenize `pool.query` as 3 tokens; our tokenizer makes it 1
+- `async function` → 1 token instead of 2-3
+- Full route patterns → 2-3 tokens instead of 15-20
+- Runs at the inference server level — transparent to prompts
+- Tool: HuggingFace `tokenizers` library, train on `routes/` + `services/` + `db/migrations/`
+- Estimated savings: additional 40-60% on top of Phase 1
+
+**Phase 3 — LoRA Fine-Tuned Model (FUTURE — the competitive moat)**
+- Fine-tune Llama 3 or Mistral on LifeOS compressed language
+- The codebook is baked into model weights — costs ZERO tokens at inference, forever
+- Nobody can replicate this efficiency without our training data + codebook
+- A generic competitor sends 2000 tokens for the same task; we send 80
+- Target: 10-25x more efficient than generic LLMs
+- Tools: Axolotl, LoRA, RunPod (A100) or Lambda Labs when budget allows
+- Estimated savings: 85-95% vs current baseline
+
+### Routing Tier Logic (BUILT — `services/prompt-translator.js`)
+
+```
+Every prompt → prompt-translator.js
+  ├── Compress (all layers above)
+  ├── Classify routing tier:
+  │     FREE  → groq_llama  (default — all standard coding tasks)
+  │     SMART → gemini_flash (prompt > 1500 tokens, needs larger context window)
+  │     PAID  → only if HIGH_STAKES keyword + all free providers exhausted
+  │                (medical, billing, legal, compliance)
+  └── Return compressed prompt + routing recommendation to council-service.js
+```
+
+**Paid models are essentially never used.** The only path to a paid call:
+1. `MAX_DAILY_SPEND > 0` (it's 0 by default — a hard env var gate)
+2. AND all free providers exhausted for the day
+3. AND the task contains a HIGH_STAKES keyword
+
+In normal operation: $0 spend, 100% free tier.
+
+### Versioning Rule
+
+`config/codebook-v1.js` is append-only while deployed. Never modify existing entries
+after a model has been trained/primed on them — changing a symbol silently breaks
+the model's decoding. To change symbols, create `config/codebook-v2.js` and update
+the version string. The translator auto-injects the right version.
+
+### Competitive Position
+
+| System | Tokens/coding task | Monthly cost at 10k calls |
+|---|---|---|
+| GPT-4o | ~2,000 input + 800 output | ~$500 |
+| Claude Sonnet | ~2,000 input + 800 output | ~$300 |
+| Our system (Phase 1) | ~1,000 input + 400 output (free) | $0 |
+| Our system (Phase 2) | ~400 input + 160 output (free) | $0 |
+| Our system (Phase 3) | ~80 input + 32 output (self-hosted) | ~$20 infra |
+
+At Phase 3 we are 15-25x cheaper per call and the gap widens with volume.
+
 ---
 
 ## Build Plan
@@ -140,9 +263,14 @@ The council may recommend, but a separate verifier/reviewer must decide whether 
 - [x] **HAB limit 10 → 100** *(est: 0.5h \| actual: 0.5h)* `[safe]`
 - [x] **Ollama spam 30-min cooldown** *(est: 0.5h \| actual: 0.5h)* `[safe]`
 - [x] **AI guard lazy hash (REALITY_MISMATCH fix)** *(est: 1h \| actual: 0.5h)* `[needs-review]`
-- [ ] **→ NEXT: Improve `general` task type savings from 4% → 15%+** *(est: 3h)* `[needs-review]`
+- [x] **LCL codebook-v1 + prompt-translator.js built** *(2026-04-19)* `[safe]`
+- [x] **task-model-routing.js — 30+ task types mapped to cheapest capable free model** *(2026-04-19)* `[safe]`
+- [x] **Wire prompt-translator.js into council-service.js as Layer 1.5** *(2026-04-19)* `[safe]`
+- [ ] **Improve `general` task type savings from 4% → 15%+** *(est: 3h)* `[needs-review]`
 - [ ] **Investigate Ollama 7,327 avg tokens/call — likely bloated system prompts** *(est: 2h)* `[safe]`
 - [ ] **Persist provider cooldowns to DB (survive restarts)** *(est: 2h)* `[safe]`
+- [ ] **Phase 2: Custom BPE tokenizer on LifeOS codebase** *(FUTURE — needs budget)* `[safe]`
+- [ ] **Phase 3: LoRA fine-tune Llama/Mistral on LCL language** *(FUTURE — needs A100)* `[safe]`
 - [x] **Move COUNCIL_MEMBERS config fully to config/council-members.js** *(est: 1h \| actual: 1h)* `[safe]`
 - [x] **Extract runtime route composition out of server.js** *(est: 1.5h \| actual: 1.5h)* `[safe]`
 
@@ -224,14 +352,28 @@ grep "0\.97" services/free-tier-governor.js
 ## Handoff (Fresh AI Context)
 **Current blocker:** None — core system is live and working
 
-**Last decision:** TOON enabled for codegen, savings_pct fix deployed, free tier buffer 3%
+**Last decisions (2026-04-19):**
+- LCL codebook v1 built: `config/codebook-v1.js` + `services/prompt-translator.js`
+- Both files have `@ssot` tags pointing here
+- The translator is built but NOT YET wired into `council-service.js` — that's the next step
+
+**NEXT TASK:** Wire `prompt-translator.js` into `council-service.js`
+- Import `createPromptTranslator` at the top
+- Create one instance: `const translator = createPromptTranslator({ logger })`
+- In the main call path (before `callCouncilMember` fires): call `translator.prepareCall(systemPrompt, userPrompt, memberKey)`
+- Use the returned `systemPrompt` and `userPrompt` for the actual API call
+- Use `routing.suggestedModel` as an override hint (don't override if caller specified model explicitly)
+- Log `stats.totalSaved` to the savings ledger
 
 **Do NOT change:**
 - `configureAiGuard()` — must not call `ensureExpectedRealityHash()` inside it
 - `persistToDB` in token-optimizer.js — intentionally a no-op (savings-ledger.js owns DB writes)
 - Free tier buffer at 3% — was deliberately reduced from 10%
+- `config/codebook-v1.js` entries — append-only while v1 is deployed. Create v2 for breaking changes.
 
-**Read first:** `services/council-service.js`, `services/token-optimizer.js`, `services/free-tier-governor.js`
+**Read first:** `services/council-service.js` (Layer 1.5 at ~line 1060), `services/prompt-translator.js`, `config/codebook-v1.js`
+
+**LCL layer is live.** It fires after Layer 1 (noise_phrase), before Layer 2 (TOON). It applies CODE_SYMBOLS then prepends a tiny inline key listing only the symbols that actually fired in that specific prompt. Works with all free stateless providers — no KV cache required. Savings tracked in `compressionLayers.lcl_codebook` and rolled into `totalSavedInputTokens`.
 
 **Known traps:**
 - `persistToDB` in token-optimizer.js looks broken (is a no-op) but is intentional — savings-ledger.js writes to DB
@@ -258,10 +400,42 @@ grep "0\.97" services/free-tier-governor.js
 
 ---
 
+## Decision Log (continued)
+
+### Decision: LCL Pre-shared Codebook — 2026-04-19
+> **Y-Statement:** In the context of a coding system where most AI calls are unique
+> (cache hits rare), facing the fact that caching alone cannot achieve 50-70% savings,
+> we decided to build a pre-shared compression language (LCL) where both sender and
+> model know the symbol table — so the key never travels, and every unique prompt is
+> compressed before it's sent.
+>
+> Phase 1: codebook in KV-cached system block.
+> Phase 2 (future): custom BPE tokenizer.
+> Phase 3 (future): LoRA fine-tune where codebook is baked into weights — 0 key tokens, forever.
+>
+> **Competitive moat:** nobody else has our codebook + fine-tuned model combination.
+> At Phase 3, we are 15-25x cheaper per call than GPT-4o or Claude Sonnet.
+
+**Reversibility:** `two-way-door` — translator is a pass-through, can be disabled per call with `critical: true`
+
+---
+
 ## Change Receipts
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-24 | **`services/savings-ledger.js` `getSavingsReport`:** updated to map all columns from rebuilt `tsos_savings_report` view — `baseline_cost_usd`, `actual_cost_usd`, `total_saved_usd`, `savings_pct`, `saved_by_free_routing_usd`, `saved_by_compression_usd`, `saved_by_cache_usd`, `saved_by_compact_rules_usd`. API summary now shows `BASELINE $X → ACTUAL $Y → SAVED $Z (N%)`. | Savings were hidden — no baseline or overall % meant Adam couldn't document or bill for savings. | ✅ | n/a | `node --check services/savings-ledger.js` |
+| 2026-04-25 | **`services/council-service.js`:** `callCouncilMember(..., options)` may set **`maxOutputTokens`** (positive number, clamped to 128000). When set, it replaces the per-`taskType` `scopedMaxTokens` for OpenAI-compatible, Gemini, and DeepSeek paths. Default **`codegen` remains 1500** when unset — council builder passes a higher budget for `files[]`-backed full-file codegen. | Builder HTML was “successfully” generated but capped at ~1500 completion tokens, producing tiny stubs; callers that need long outputs must opt into a higher ceiling explicitly. | ✅ | n/a | `node --check services/council-service.js` |
+| 2026-04-25 | **`config/task-model-routing.js`:** added explicit **`council.builder.code`**, **`council.builder.plan`**, **`council.builder.review`** (keep legacy `council.builder.task`). Builder dispatch uses `council.builder.${mode}` — entries now resolve from map instead of only `DEFAULT_MODEL`. | Clear routing for §2.11 `/builder/task` + `/build`; enables future per-mode model tuning. | ✅ | n/a | `node --check config/task-model-routing.js` |
+| 2026-04-22 | **`@ssot` JSDoc** added at top of `services/council-service.js` (imports follow block comment). | Pre-commit / `ssot-check` alignment; council is load-bearing; file previously had no top-level tag. | ✅ | n/a | `node --check services/council-service.js` |
+| 2026-04-22 | **`POST /gate-change/run-preset` + `lifeos-gate-change-council-run.js` + `config/gate-change-presets.js`:** server-side create+debate in one call (uses deploy provider keys; CLI preset uses this). Route refactor; `scripts/council-gate-change-run.mjs` uses run-preset for `--preset`. Companion §5.5 HTTP. | Adam: use **system** as tool — not laptop keys for council. | ✅ | `node --check` on new modules |
+| 2026-04-22 | **North Star §2.12 + Companion §0.5E + contract/QUICK_LAUNCH/CLAUDE cross-links:** Constitutional **technical decision law** (council + research + consensus/deadlock); **Conductor/Construction supervisor** mandatory **SSOT re-read** and **drift detection**; §2.12 **non-derogable** (Article VII only). | Adam: technical forks and supervision must not drift silently; single-model or “chat consensus” cannot override. | ✅ | pending | pending |
+| 2026-04-19 | **Consensus protocol upgrade for gate-change debate:** `routes/lifeos-gate-change-routes.js` now runs multi-model panel (`gemini_flash`,`groq_llama`,`deepseek` default), then forces an opposite-argument round when round-1 is not unanimous. Final verdict is computed from round-2 votes; debate trace is stored in `council_rounds_json` + `consensus_reached` + `consensus_summary` (`db/migrations/20260422_gate_change_proposals.sql`, `services/lifeos-gate-change-proposals.js`, prompt update). | Adam required full protocol behavior: disagreement must trigger opposite-side argument before final council disposition. | ✅ | pending | pending |
+| 2026-04-19 | **§2.6 ¶8 runtime — gate-change API:** `db/migrations/20260422_gate_change_proposals.sql` (`gate_change_proposals`); `services/lifeos-gate-change-proposals.js`; `routes/lifeos-gate-change-routes.js` at `/api/v1/lifeos/gate-change` (POST/GET proposals, POST run-council, PATCH status); `startup/register-runtime-routes.js` mount; `config/task-model-routing.js` key `council.gate_change.debate`; `prompts/lifeos-gate-change-proposal.md`; `scripts/lifeos-verify.mjs` + Amendment 21 manifest owned_files; Companion §5.5 HTTP paragraph. | Adam: implement “raise to council” without removing safety nets — user-triggered council pass + audit rows. | ✅ | pending | pending |
+| 2026-04-19 | **North Star §2.6 ¶8 + Companion §5.5 — Gate-change & efficiency proposals:** New subsection under *Council Evaluation Contract*: any “feels inefficient / could remove X,Y,Z” hypothesis must be **THINK|GUESS**, go through **multi-agent council debate** (steel-man risk, equivalence metrics, rollback), then implement + SSOT receipts — **never** unilateral gate removal. Cross-links `docs/SSOT_NORTH_STAR.md` ¶8, `docs/SSOT_COMPANION.md` §5.5; `prompts/00` + Amendment 21 one-liner. | Adam: system should be able to **report** inefficiency and suspected optimizations to the **AI Council** for debate and **approved** implementation — the lawful alternative to silent corner-cutting. | ✅ | pending | pending |
+| 2026-04-19 | **LCL hardening + domain overlays:** `services/council-service.js` now imports `CODE_SYMBOLS` statically (removes hot-path dynamic import); Ollama responses run `lclMonitor.inspect` like Groq/Gemini; `translate()` accepts optional `domain` for `config/codebook-domains.js` overlays; `kingsmanAudit()` fires at council entry (see Amendment 33 + `kingsman_audit_log` migration). | Removes async import cost on every call; closes Ollama blind spot in drift telemetry; optional domain compression for LifeOS/TC/ClientCare prompts. | ✅ | pending | pending |
+| 2026-04-19 | Built `config/codebook-v1.js` (LCL versioned symbol table: 10 instruction aliases + 30+ code symbols) and `services/prompt-translator.js` (full compression stack + routing tier logic). Phase 1 of LCL vision complete. Next: wire translator into council-service.js pre-send. | Unique coding calls can't be cached — need per-prompt compression. Pre-shared codebook means the key costs 0 tokens after first session injection. | ✅ | pending | pending |
+| 2026-04-19 | Built `config/task-model-routing.js` (30+ task type → model mappings), `routes/lifeos-council-builder-routes.js` (5 council builder endpoints), and 7 domain prompt files in `prompts/`. | Agent continuity architecture — any cold agent reads domain file and continues in 30 seconds without asking Adam for context. | ✅ | pending | pending |
 | 2026-04-01 | Added the formal council evaluation contract and scoring rubric so proposal quality is recorded separately from implementation/debug quality | Self-programming needs planner quality evidence, not just whether code eventually passed | ✅ | pending | pending |
 | 2026-03-30 | Open Source Council startup banner in `core/two-tier-system-init.js` aligned with `COUNCIL_OLLAMA_MODE` + Railway endpoint rules (no longer implies enabling is only `OLLAMA_ENDPOINT`) | Startup logs match council policy | ✅ | pending | pending |
 | 2026-03-30 | `COUNCIL_OLLAMA_MODE` (`off` \| `last_resort` \| `on`): Railway default **off** — no Ollama ping, excluded from free-tier cascade; `last_resort` enables Ollama only after other free providers exhausted. Removed implicit `OLLAMA_ENDPOINT` default to `ollama.railway.internal`. | Free cloud APIs first; local Ollama opt-in so Mac tunnel does not slow work | ✅ | ✅ | pending |

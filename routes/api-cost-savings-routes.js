@@ -319,13 +319,19 @@ app.post("/api/v1/cost-savings/create-subscription", requireKey, async (req, res
       if (!report) return res.status(500).json({ ok: false, error: 'report query failed' });
 
       const t = report.totals;
-      const summaryLine = t.total_tokens_saved > 0
-        ? `${Number(t.total_tokens_saved).toLocaleString()} tokens saved` +
-          ` | $${Number(t.total_cost_saved_usd).toFixed(4)} cost avoided` +
-          ` | ${t.total_conductor_sessions} conductor sessions` +
-          ` | ${t.total_ai_calls} AI calls` +
+      // Build a monetization-ready summary: baseline vs actual vs savings%
+      const hasSavings = t.total_baseline_cost_usd > 0;
+      const summaryLine = hasSavings
+        ? `BASELINE $${Number(t.total_baseline_cost_usd).toFixed(4)}` +
+          ` → ACTUAL $${Number(t.total_actual_cost_usd).toFixed(4)}` +
+          ` → SAVED $${Number(t.total_saved_usd).toFixed(4)} (${t.overall_savings_pct}%)` +
+          ` | free_routing $${Number(t.saved_by_free_routing_usd).toFixed(4)}` +
+          ` | compression $${Number(t.saved_by_compression_usd).toFixed(4)}` +
+          ` | cache $${Number(t.saved_by_cache_usd).toFixed(4)}` +
+          ` | compact_rules $${Number(t.saved_by_compact_rules_usd).toFixed(4)}` +
+          ` | ${t.total_ai_calls} calls` +
           ` | tracking since ${t.tracking_since || 'N/A'}`
-        : 'No savings recorded yet — start logging conductor sessions to build the proof.';
+        : 'No savings recorded yet — AI calls will populate this automatically.';
 
       res.json({ ok: true, summary: summaryLine, ...report });
     } catch (err) {

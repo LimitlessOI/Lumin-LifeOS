@@ -329,6 +329,13 @@ export function createSavingsLedger(pool) {
   // ---------------------------------------------------------------------------
   // getSavingsReport — unified savings proof for monetization.
   // Returns daily breakdown + cumulative totals from tsos_savings_report view.
+  //
+  // Exposes FULL monetization math per day and in totals:
+  //   baseline_cost_usd     — what you would have paid at Anthropic Sonnet rates
+  //   actual_cost_usd       — what was actually paid
+  //   total_saved_usd       — total savings (all mechanisms combined)
+  //   savings_pct           — total_saved / baseline * 100
+  //   saved_by_*            — per-mechanism breakdown (free routing, compression, cache, compact rules)
   // ---------------------------------------------------------------------------
   async function getSavingsReport({ days = 30 } = {}) {
     try {
@@ -346,32 +353,60 @@ export function createSavingsLedger(pool) {
         ),
       ]);
 
-      const totalsRow = totals.rows[0] || {};
+      const t = totals.rows[0] || {};
       return {
         period_days: days,
         totals: {
-          days_tracked:              Number(totalsRow.days_tracked || 0),
-          total_ai_calls:            Number(totalsRow.total_ai_calls || 0),
-          total_conductor_sessions:  Number(totalsRow.total_conductor_sessions || 0),
-          total_tokens_saved:        Number(totalsRow.total_tokens_saved || 0),
-          total_tokens_on_free_tier: Number(totalsRow.total_tokens_on_free_tier || 0),
-          total_cache_hits:          Number(totalsRow.total_cache_hits || 0),
-          total_cost_saved_usd:      Number(totalsRow.total_cost_saved_usd || 0),
-          avg_quality_score:         Number(totalsRow.avg_quality_score || 0),
-          tracking_since:            totalsRow.tracking_since || null,
-          last_activity:             totalsRow.last_activity || null,
+          // ── Call counts ───────────────────────────────────────────────────
+          days_tracked:                 Number(t.days_tracked || 0),
+          total_ai_calls:               Number(t.total_ai_calls || 0),
+          total_conductor_sessions:     Number(t.total_conductor_sessions || 0),
+          total_cache_hits:             Number(t.total_cache_hits || 0),
+          total_free_provider_calls:    Number(t.total_free_provider_calls || 0),
+          // ── The headline numbers (baseline vs actual vs saved) ────────────
+          total_baseline_cost_usd:      Number(t.total_baseline_cost_usd || 0),
+          total_actual_cost_usd:        Number(t.total_actual_cost_usd || 0),
+          total_saved_usd:              Number(t.total_saved_usd || 0),
+          overall_savings_pct:          Number(t.overall_savings_pct || 0),
+          // ── Per-mechanism savings (these add up to total_saved_usd) ───────
+          saved_by_free_routing_usd:    Number(t.saved_by_free_routing_usd || 0),
+          saved_by_compression_usd:     Number(t.saved_by_compression_usd || 0),
+          saved_by_cache_usd:           Number(t.saved_by_cache_usd || 0),
+          saved_by_compact_rules_usd:   Number(t.saved_by_compact_rules_usd || 0),
+          // ── Token volume ──────────────────────────────────────────────────
+          total_tokens_baseline:        Number(t.total_tokens_baseline || 0),
+          total_tokens_sent:            Number(t.total_tokens_sent || 0),
+          total_tokens_saved_compression: Number(t.total_tokens_saved_compression || 0),
+          total_tokens_saved_compact:   Number(t.total_tokens_saved_compact || 0),
+          total_tokens_on_free_tier:    Number(t.total_tokens_on_free_tier || 0),
+          avg_quality_score:            Number(t.avg_quality_score || 0),
+          tracking_since:               t.tracking_since || null,
+          last_activity:                t.last_activity || null,
         },
         daily: daily.rows.map(r => ({
-          day:                         r.day,
-          ai_calls:                    Number(r.ai_calls),
-          conductor_sessions:          Number(r.conductor_sessions),
-          tokens_saved_ai_compression: Number(r.tokens_saved_ai_compression),
-          tokens_saved_compact_rules:  Number(r.tokens_saved_compact_rules),
-          tokens_saved_total:          Number(r.tokens_saved_total),
-          tokens_on_free_tier:         Number(r.tokens_on_free_tier),
-          cache_hits:                  Number(r.cache_hits),
-          cost_saved_total_usd:        Number(r.cost_saved_total_usd),
-          avg_quality_score:           Number(r.avg_quality_score),
+          day:                          r.day,
+          // ── Call counts ────────────────────────────────────────────────────
+          ai_calls:                     Number(r.ai_calls),
+          conductor_sessions:           Number(r.conductor_sessions),
+          free_provider_calls:          Number(r.free_provider_calls),
+          cache_hits:                   Number(r.cache_hits),
+          // ── Cost proof ─────────────────────────────────────────────────────
+          baseline_cost_usd:            Number(r.baseline_cost_usd),
+          actual_cost_usd:              Number(r.actual_cost_usd),
+          total_saved_usd:              Number(r.total_saved_usd),
+          savings_pct:                  Number(r.savings_pct),
+          // ── Per-mechanism ──────────────────────────────────────────────────
+          saved_by_free_routing_usd:    Number(r.saved_by_free_routing_usd),
+          saved_by_compression_usd:     Number(r.saved_by_compression_usd),
+          saved_by_cache_usd:           Number(r.saved_by_cache_usd),
+          saved_by_compact_rules_usd:   Number(r.saved_by_compact_rules_usd),
+          // ── Token volume ───────────────────────────────────────────────────
+          tokens_baseline:              Number(r.tokens_baseline),
+          tokens_sent:                  Number(r.tokens_sent),
+          tokens_saved_ai_compression:  Number(r.tokens_saved_ai_compression),
+          tokens_saved_compact_rules:   Number(r.tokens_saved_compact_rules),
+          tokens_on_free_tier:          Number(r.tokens_on_free_tier),
+          avg_quality_score:            Number(r.avg_quality_score),
         })),
         baselines: baselines.rows,
       };
