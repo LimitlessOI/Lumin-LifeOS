@@ -1002,6 +1002,7 @@ const { tcCoordinator, wkIntegrityEngine } = await registerRuntimeRoutes(app, {
   sendAlertCall,
   makePhoneCall,
   commitToGitHub,
+  savingsLedger,
 });
 
 // ==================== AI COUNCIL CONSENSUS MODE ====================

@@ -1,13 +1,13 @@
 # AMENDMENT 19 — Project Governance
 
-**Last Updated:** 2026-04-06 (runtime route registration no longer hard-fails when optional experimental modules are absent from the deployed repo; startup now lazy-loads optional route packs)
+**Last Updated:** 2026-04-25 — wire `savingsLedger` into `registerRuntimeRoutes` so TSOS savings API resolves. Prior: `scripts/ssot-check.js#checkChangedFiles` skips **paths missing on disk**.
 
 | Field | Value |
 |---|---|
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-06 (runtime route registration no longer hard-fails when optional experimental modules are absent from the deployed repo) |
+| **Last Updated** | 2026-04-22 — `ssot-check.js` `checkChangedFiles` skips non-existent paths (deleted files in diff). Prior: Lumin `pending_adam` bridge, `required_routes` method + 401 retry, remote verify. |
 | **Verification Command** | `node scripts/verify-project.mjs --project project_governance` |
 | **Manifest** | `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json` |
 
@@ -96,7 +96,7 @@ docs/projects/INDEX.md
 ### Verification loop
 1. Amendment explains intent
 2. Manifest encodes machine-checkable truth
-3. Verifier runs assertions
+3. Verifier runs assertions (DB, files, syntax; optional HTTP route probes when `PUBLIC_BASE_URL` / `RAILWAY_PUBLIC_DOMAIN` / `REMOTE_VERIFY_BASE_URL` is set, or when **`--remote-base-url https://…`** is passed — see `docs/ENV_REGISTRY.md` § Public URL & remote verification)
 4. Coupling/staleness scripts enforce discipline in CI
 5. Readiness gates determine when a project is mature enough to enter the builder queue
 6. Builder supervisor only executes projects that are both `build_ready` and safe enough to automate
@@ -202,6 +202,17 @@ Required runtime truths:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-25 | `startup/register-runtime-routes.js`: pass `savingsLedger: deps.savingsLedger` into `createApiCostSavingsRoutes`; `server.js`: add `savingsLedger` to `registerRuntimeRoutes` call | `GET /api/v1/tsos/savings/report` was returning 503 "savingsLedger not initialised" — the service was created but never threaded into the route context | ✅ node --check | pending | pending |
+| 2026-04-22 | **`scripts/ssot-check.js` — `checkChangedFiles`:** after path filters, **`if (!existsSync(ROOT+file)) continue`** so deleted `routes/…` / `services/…` in `git diff` do not produce bogus “missing @ssot” warnings (read failed → null tag). | Honest `ssot:validate` / system-maturity when orphan routes are removed. | ✅ | pending | `node --check scripts/ssot-check.js` |
+| 2026-04-21 | **Lumin → `pending_adam` bridge (composition):** `startup/register-runtime-routes.js` passes `callCouncilMember` into `createLifeOSChatRoutes`; `routes/lifeos-chat-routes.js` adds `POST /api/v1/lifeos/chat/build/pending-adam` (+ plan/draft/job poll routes) implemented in `services/lifeos-lumin-build.js` — inserts `pending_adam` with JSON `context` including `source: "lumin_programming"`, optional `job_id` / `thread_id` / `user_id`. | Adam asked to close Lumin gaps for governed self-programming; `pending_adam` is the existing governance rail for human/builder pickup. | ✅ | pending | `node --check` on touched route/service files |
+| 2026-04-21 | **`required_routes` HTTP method fix:** flattening manifest `required_routes` into `route` assertions now copies each row’s **`method`** (default `GET`). **401 auth retry:** after the first `x-command-key` attempt, if status is 401 and `LIFEOS_KEY` is a different string than `COMMAND_CENTER_KEY`/`API_KEY`/first key, probe again with `LIFEOS_KEY`. **Receipt correction:** the 2026-04-22 row below claimed “each assertion's HTTP method” for all manifest routes, but `required_routes` rows were still probed as GET until this change. | Prevent false-negative POST probes and reduce local/Railway key drift false 401s. | ✅ | pending | `node --check scripts/verify-project.mjs`; dry-run clientcare manifest shows `POST …` in failures when applicable |
+| 2026-04-22 | `scripts/verify-project.mjs` adds **`--remote-base-url <url>`** (and env **`REMOTE_VERIFY_BASE_URL`**) as the highest-precedence HTTP probe base; adds **`--strict-manifest-env`** so manifest `required_env` (including `CLIENTCARE_*`) must exist in local `process.env`; default remains skip for missing `CLIENTCARE_*` with explicit “cannot read Railway UI” text. SSOT: `docs/ENV_REGISTRY.md`, `services/env-registry-map.js`, `docs/SSOT_COMPANION.md` §0.4, `package.json` script `verify:clientcare-billing:remote`. | Operators and AIs need one non-ambiguous place for “what env exists” vs “what local shell can see”; remote probes must not require guessing Railway state. | ✅ | pending | pending |
+| 2026-04-22 | `scripts/verify-project.mjs` now resolves route base URL from `PUBLIC_BASE_URL` **or** `RAILWAY_PUBLIC_DOMAIN`, emits explicit env-source wording for env assertions, materializes parameterized paths (`:claimId` -> `1`) before probing, and uses HTTP method + JSON body for **explicit manifest `assertions[]` route rows** and (after 2026-04-21) for **`required_routes[]`** as well. | Remove false route/env failures and make verifier output accurately explain what environment source is being checked. | ✅ | pending | pending |
+| 2026-04-21 | `startup/register-runtime-routes.js` imports `createLifeOSAmbientRoutes` and mounts `/api/v1/lifeos/ambient` (LifeOS ambient snapshot API). | Runtime composition for Amendment 21 ambient-hints slice; no `server.js` edits. | ✅ | pending | pending |
+| 2026-04-19 | `startup/register-runtime-routes.js` imports `createLifeOSHabitsRoutes` and mounts `/api/v1/lifeos/habits`. | Ship P1 habit tracker lane without violating `server.js` composition-root boundary. | ✅ | pending | pending |
+| 2026-04-19 | `startup/register-runtime-routes.js` — mount `/api/v1/lifeos/gate-change` via `createLifeOSGateChangeRoutes` (North Star §2.6 ¶8 proposal persistence + user-triggered council review). | Runtime composition only; no `server.js` edits. | ✅ | pending | pending |
+| 2026-04-19 | `startup/boot-domains.js` — `bootLaneIntel` loads `createLaneIntelScheduledTicks` when `LANE_INTEL_ENABLE_SCHEDULED=1`; runs horizon + redteam useful-work guards on `LANE_INTEL_TICK_MS` (default 24h). | Amendment 36 operational lanes without adding cron to `server.js`. | ✅ | pending | pending |
+| 2026-04-19 | `startup/register-runtime-routes.js` imports `getCachedResponse` + `cacheResponse` from `services/response-cache.js` and passes them into `createLifeOSCouncilBuilderRoutes` so builder `POST /task` can dedupe identical prompts and conductor audit rows can distinguish cache hits. | Amendment 36 / builder handoff: second-layer cache at builder boundary + auditability without touching `server.js` composition rules beyond existing deps threading. | ✅ | pending | pending |
 | 2026-04-06 | `startup/register-runtime-routes.js` now loads LifeOS/Kids/Teacher route modules lazily and skips them with a warning if the module or one of its dependencies is absent; `server.js` now awaits runtime route registration | Prevent production startup from crashing on `ERR_MODULE_NOT_FOUND` when optional experimental modules exist locally but are not part of the deployed repo; keep ClientCare billing deployable even when optional modules drift | ✅ | pending | pending |
 | 2026-04-01 | `startup/register-runtime-routes.js` — mount full LifeOS API surface under `/api/v1/lifeos/*` + `/finance` | Unblock LifeOS overlays and integrations: routes were implemented but not registered on the Express app | ✅ | pending | pending |
 | 2026-04-01 | `startup/boot-domains.js` — `bootLifeOSScheduled` calls `lifeos-scheduled-jobs` (opt-in `LIFEOS_ENABLE_SCHEDULED_JOBS`) | Commitment prods + outreach queue without AI; respects operator kill-switch until env set | ✅ | pending | pending |

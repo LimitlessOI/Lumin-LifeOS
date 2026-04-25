@@ -101,6 +101,7 @@ export async function registerRuntimeRoutes(app, deps) {
     apiCostSavingsRevenue,
     getStripeClient,
     RAILWAY_PUBLIC_DOMAIN: publicDomain,
+    savingsLedger: deps.savingsLedger,
   });
   logger.info("✅ [API-COST-SAVINGS] Routes mounted at /api/v1/cost-savings + /api/v1/revenue/api-cost-savings");
 
