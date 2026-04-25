@@ -232,24 +232,30 @@ Every competitor either shows you your AI costs (observability) or routes to che
 
 ## Agent Handoff Notes (TokenOS lane)
 
-**Last updated:** 2026-04-22
+**Last updated:** 2026-04-24
 
-**Current state:**
+**Current state (VERIFIED):**
+- `tsos_savings_report` view fully rebuilt — `db/migrations/20260424_tsos_monetization_view.sql` pushed, auto-applies on Railway deploy
+  - Now includes: `baseline_cost_usd`, `actual_cost_usd`, `total_saved_usd`, `savings_pct`, `saved_by_free_routing_usd`, `saved_by_compression_usd`, `saved_by_cache_usd`, `saved_by_compact_rules_usd`
+  - `tsos_savings_totals` cumulative rollup includes `overall_savings_pct`, `total_baseline_cost_usd`, `total_actual_cost_usd`
+- `GET /api/v1/tsos/savings/report` now returns full monetization proof: `BASELINE $X → ACTUAL $Y → SAVED $Z (N%)` per-mechanism breakdown in summary line and per-day rows
+- `services/savings-ledger.js` `getSavingsReport` maps all new view columns
+- 15,374 AI calls logged in production with $56.16 cost avoided (KNOW — verified via API last session)
 - B2B product layer fully built: migration, quality-check service, core service, routes, landing page, dashboard
 - Routes mounted via `register-runtime-routes.js` — clean path, no server.js mutation needed
-- `tco_customers`, `tco_requests`, `tco_agent_interactions`, `tco_agent_negotiations` tables in migration (not yet confirmed applied to Neon — deploy triggers auto-apply)
 - TCO-C01 / TCO-C02 quality gate live in `services/tokenos-quality-check.js` — `runQualityGate()` is the entry point
-- Old `tco-routes.js` proxy still exists and wired via server.js null-globals path — it remains broken (tcoTracker never initialized) but is NOT the new path. New path is `routes/tokenos-routes.js` via register-runtime-routes.js
-- ⚠️ SCHEMA DIVERGENCE: `routes/tco-routes.js` uses column names `company_name`, `encrypted_openai_key`, `encrypted_anthropic_key`, `encrypted_google_key` that do NOT exist in the new `tco_customers` table (which uses `name`, `company`, `encrypted_keys` JSONB). If `tcoRoutes` ever gets initialized, `POST /api/tco/signup` will fail with a column error. **Resolution: retire the old path entirely** — the new `/api/v1/tokenos/*` surface supersedes it. See task #3 in next approved tasks.
-- Landing page: `/token-os` → `tokenos-landing.html`
-- Dashboard: `/token-os/dashboard` → `tokenos-dashboard.html` (auth via Bearer key in session)
+- ⚠️ CONDUCTOR SESSIONS = 0: `tokens_saved_compact_rules` always 0 — no cold-start hook logs to `conductor_session_savings`. Task #1 below.
+- ⚠️ SCHEMA DIVERGENCE: `routes/tco-routes.js` uses column names that do NOT exist in `tco_customers` table. It remains broken (tcoTracker never initialized). Do not initialize — retire it. See task #4.
+- ⚠️ GITHUB_TOKEN not set on Railway — builder `POST /build` will fail at commit step. Task #5 below.
+- Landing page: `/token-os` → `tokenos-landing.html`; Dashboard: `/token-os/dashboard` → `tokenos-dashboard.html`
 
 **Next approved tasks (in priority order):**
-1. **First customer acquisition** — register a test customer via `POST /api/v1/tokenos/register`, run a proxy call, verify `tco_requests` row created with real savings data
-2. **Stripe billing wiring** — `GET /api/v1/tokenos/invoice/:year/:month` returns data; add Stripe charge on invoice approval (Amendment 03 Stripe integration)
-3. **Retire the old `tco-routes.js` server.js path** — `tcoTracker`/`tcoRoutes` are declared null and never initialized; the old `/api/tco/proxy` endpoint is dead. Either initialize them via the same service or remove the dead code
-4. **Quality gate tuning** — QUALITY_THRESHOLD=72 is a heuristic. After 100+ real calls, analyze `quality_score` distribution and adjust
-5. **Public ticker** — `/token-os` landing page has animated placeholder ticker; wire it to `GET /api/v1/tokenos/admin/stats` with a read-only public key
+1. **Log conductor sessions at cold-start** — `POST /api/v1/tsos/savings/session` with `compact_tokens=1038, full_tokens=26105, source=cold_start` should be called by the CLAUDE.md session-start checklist or a hook. Without this, `saved_by_compact_rules_usd` stays 0 and the 96% per-session savings are invisible.
+2. **First B2B customer acquisition** — register a test customer via `POST /api/v1/tokenos/register`, run a proxy call, verify `tco_requests` row created with real savings data
+3. **Stripe billing wiring** — `GET /api/v1/tokenos/invoice/:year/:month` returns data; add Stripe charge on invoice approval (Amendment 03 Stripe integration)
+4. **Retire the old `tco-routes.js` server.js path** — tcoTracker/tcoRoutes are declared null and never initialized; old `/api/tco/proxy` is dead. Remove the dead declarations.
+5. **Set GITHUB_TOKEN in Railway** — builder preflight confirms it is absent; POST /build will generate code but fail to commit until this is set. Required for §2.11 builder-first compliance.
+6. **Quality gate tuning** — QUALITY_THRESHOLD=72 is a heuristic. After 100+ real calls, analyze `quality_score` distribution and adjust
 
 ---
 

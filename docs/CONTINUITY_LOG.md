@@ -32,6 +32,34 @@
 
 ---
 
+## [RESEARCH] Update 2026-04-25 #90 — **SSOT dual channel + amendment build-readiness audit**
+
+### Files changed
+- `docs/SSOT_DUAL_CHANNEL.md` — Channel A (agents: derived compact + launch + lanes) vs Channel B (system: NSSOT, Companion, INDEX, capabilities, amendments); maintenance cheatsheet (one canonical tree).
+- `docs/SSOT_AMENDMENT_BUILD_READINESS_AUDIT.md` — criteria for building from SSOT alone; KNOW gaps (INDEX vs `routes/`, council prompt SSOT, CI readiness, Docker docs).
+- `docs/projects/INDEX.md` — pointer under HOW THIS WORKS.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — receipt + handoff.
+
+### State after this session
+- No change to NSSOT/Companion text; avoids duplicate “two SSOTs” by formalizing **canonical vs derived** pattern already used by `generate-agent-rules.mjs`.
+
+### Next agent: start here
+- If Adam wants council/codegen to **always** see bounded NSSOT excerpts, spec that as a builder/council GAP-FILL with token budget; optionally extend `generate-cold-start.mjs` to link `SSOT_DUAL_CHANNEL.md`.
+
+## [FIX] Update 2026-04-25 #89 — **Builder: raise completion token cap + HTML contract**
+
+### Files changed
+- `services/council-service.js` — optional `options.maxOutputTokens` overrides task-type output caps (clamped to 128k); fixes codegen being stuck at 1500 completion tokens when callers need long files.
+- `routes/lifeos-council-builder-routes.js` — builder passes scaled `maxOutputTokens` from injected `files[]`; HTML-specific prompt hints; strip leading markdown fence before metadata; `/task` returns `files_injected` + `max_output_tokens_requested`; `/build` includes council `detail` on failure; stricter HTML validation (must start with `<`).
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/projects/AMENDMENT_01_AI_COUNCIL.md` — change receipts + handoff.
+
+### State after this session
+- Local: `node --check` clean on touched JS. Truncation class that produced 14-byte HTML should be addressed at the provider budget layer; validation still blocks bad commits.
+- **THINK:** If the routed model’s hard output limit is below full overlay size, generation may still truncate — then need chunked/delta build (not done here).
+
+### Next agent: start here
+- Deploy, rerun large HTML `/builder/task` or `/build`, confirm response includes `max_output_tokens_requested` and output length passes validation; if still truncated, record provider `usageMetadata` / finishReason and spec chunking.
+
 ## [FIX] Update 2026-04-25 #88 — **Auth aligned; builder codegen 413 isolated and patched**
 
 ### Files changed
@@ -1356,6 +1384,36 @@ Full-codebase audit pass completed:
 ### Next priority
 1. Run the new migration on the live Neon DB (happens automatically on next Railway deploy)
 2. Joint Mediation Chat — extend `lumin_threads` with `is_joint_session BOOLEAN` + `joint_user_ids BIGINT[]`; add `startJointSession()` to `mediation-engine.js`; add `/api/v1/lifeos/mediation/joint` route; overlay UI in `lifeos-mediation.html`
+
+## Update 2026-04-24 #1 — TSOS monetization view + CCK rotation system
+
+### What was done
+- Built CCK rotation system: `POST /api/v1/railway/managed-env/rotate-command-key` (generates new key, sets in Railway vault via GraphQL, triggers redeploy) and `GET /sync-command-key` (pulls Railway key to local without changing vault). Both use `x-railway-token` as escape-hatch auth so system can fix itself when CCK is out of sync.
+- Added `scripts/system-rotate-command-key.mjs` and `scripts/system-sync-command-key.mjs` as npm scripts (`system:rotate-command-key`, `system:sync-command-key`).
+- Fixed `savingsLedger` 503 error: `createSavingsLedger(pool)` was only inside the `createCouncilService({...})` config object, not assigned to a named variable. Fixed in `server.js`. Fixed `ctx` vs `deps` naming in `register-runtime-routes.js`.
+- Fixed `ssot-check.js` `--staged-only` param not propagating through to `getChangedFiles`. Rewrote pre-push hook to use `while read` loop with `--push-range remote_sha..local_sha`.
+- **Rebuilt TSOS savings report** (`db/migrations/20260424_tsos_monetization_view.sql`): new `tsos_savings_report` and `tsos_savings_totals` views expose `baseline_cost_usd`, `actual_cost_usd`, `total_saved_usd`, `savings_pct`, and per-mechanism breakdown (`saved_by_free_routing_usd`, `saved_by_compression_usd`, `saved_by_cache_usd`, `saved_by_compact_rules_usd`).
+- Updated `services/savings-ledger.js` `getSavingsReport` to expose all new columns. Updated `routes/api-cost-savings-routes.js` summary line: `BASELINE $X → ACTUAL $Y → SAVED $Z (N%)`.
+
+### Why
+Adam: "the view totals hide what's really happening — make sure it is never hidden that we know exactly what it is saving, how are we to document anything and charge for savings?" The old view had no baseline cost and no overall savings %, making it impossible to bill customers based on documented savings.
+
+### Verified state after this session
+- `GET /api/v1/tsos/savings/report` returns 200 with full monetization math (verified working locally, deployed to Railway)
+- Production: 15,374 AI calls, $56.16 cost avoided (KNOW — verified via API)
+- Migration `20260424_tsos_monetization_view.sql` pushed; auto-applies on Railway deploy
+
+### Known open items
+- Conductor sessions = 0 — `POST /api/v1/tsos/savings/session` not called at cold-start; 96% per-session savings invisible until wired
+- GITHUB_TOKEN not set on Railway — builder POST /build will generate but fail to commit
+- CCK was manually updated by Adam in Railway dashboard; rotation system now built for future rotations
+
+### Next priority
+1. Set GITHUB_TOKEN in Railway Variables (required for §2.11 builder compliance)
+2. Wire conductor session logging at agent cold-start (`POST /api/v1/tsos/savings/session` compact=1038, full=26105)
+3. First B2B customer registration via `POST /api/v1/tokenos/register`
+
+---
 
 ## Update 2026-04-21 #2 (bug fix pass 2)
 

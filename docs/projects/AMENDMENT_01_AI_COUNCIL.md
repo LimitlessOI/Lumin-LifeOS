@@ -350,20 +350,26 @@ grep "0\.97" services/free-tier-governor.js
 ---
 
 ## Handoff (Fresh AI Context)
-**Current blocker:** None — core system is live and working
+**Last updated:** 2026-04-24
 
-**Last decisions (2026-04-19):**
-- LCL codebook v1 built: `config/codebook-v1.js` + `services/prompt-translator.js`
-- Both files have `@ssot` tags pointing here
-- The translator is built but NOT YET wired into `council-service.js` — that's the next step
+**Current state (VERIFIED):**
+- 15,374+ AI calls in production; $56.16 cost avoided (KNOW — verified via Railway API)
+- `services/savings-ledger.js` `getSavingsReport` updated — now returns full monetization proof: `baseline_cost_usd`, `actual_cost_usd`, `total_saved_usd`, `savings_pct`, per-mechanism breakdown. View rebuilt via `db/migrations/20260424_tsos_monetization_view.sql`.
+- `services/council-service.js` — `callCouncilMember` accepts `options.maxOutputTokens` (clamped to 128k) to override per-taskType default (codegen default remains 1500 when unset)
+- LCL codebook v1 live: `config/codebook-v1.js` + `services/prompt-translator.js` — translator is built but NOT YET wired into `council-service.js`
+- GITHUB_TOKEN not set on Railway — builder POST /build fails at commit step (confirmed by preflight)
 
-**NEXT TASK:** Wire `prompt-translator.js` into `council-service.js`
+**⚠️ INCOMPLETE: prompt-translator.js not yet wired into council-service.js**
+When this is done:
 - Import `createPromptTranslator` at the top
 - Create one instance: `const translator = createPromptTranslator({ logger })`
 - In the main call path (before `callCouncilMember` fires): call `translator.prepareCall(systemPrompt, userPrompt, memberKey)`
-- Use the returned `systemPrompt` and `userPrompt` for the actual API call
-- Use `routing.suggestedModel` as an override hint (don't override if caller specified model explicitly)
-- Log `stats.totalSaved` to the savings ledger
+- Use returned `systemPrompt` and `userPrompt` for the actual API call; log `stats.totalSaved` to savings ledger
+
+**NEXT PRIORITY TASKS:**
+1. Set GITHUB_TOKEN in Railway Variables — builder blocks on this; required for §2.11 compliance
+2. Wire `prompt-translator.js` into `council-service.js` (described above)
+3. Log conductor sessions at cold-start — POST /api/v1/tsos/savings/session with compact_tokens=1038, full_tokens=26105
 
 **Do NOT change:**
 - `configureAiGuard()` — must not call `ensureExpectedRealityHash()` inside it
