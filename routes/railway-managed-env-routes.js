@@ -217,6 +217,35 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
   });
 
   /**
+   * GET /sync-command-key
+   * Returns the COMMAND_CENTER_KEY value that Railway is actually running with.
+   * Auth: x-railway-token must match RAILWAY_TOKEN in process.env.
+   * Used by npm run system:sync-command-key to pull Railway's live key into .env.local
+   * without touching Railway vault at all.
+   */
+  router.get("/sync-command-key", (req, res) => {
+    const railwayToken = req.headers['x-railway-token'];
+    const envToken = process.env.RAILWAY_TOKEN;
+
+    if (!envToken || !railwayToken || railwayToken !== envToken) {
+      return res.status(401).json({
+        ok: false,
+        error: 'Unauthorized — x-railway-token must match RAILWAY_TOKEN in vault',
+      });
+    }
+
+    const currentKey = process.env.COMMAND_CENTER_KEY ||
+                       process.env.LIFEOS_KEY ||
+                       process.env.API_KEY;
+
+    if (!currentKey) {
+      return res.status(500).json({ ok: false, error: 'No command key configured on Railway' });
+    }
+
+    res.json({ ok: true, command_center_key: currentKey });
+  });
+
+  /**
    * POST /rotate-command-key
    * Atomically rotates COMMAND_CENTER_KEY in Railway vault.
    * Auth: x-railway-token header must match RAILWAY_TOKEN in process.env.
