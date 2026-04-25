@@ -529,6 +529,9 @@ const {
 // Map<member, timestamp_ms_when_we_can_try_again>
 const providerCooldowns = new Map();
 
+// ==================== SAVINGS LEDGER ====================
+const savingsLedger = createSavingsLedger(pool);
+
 // ==================== COUNCIL SERVICE INITIALIZATION ====================
 const {
   compressPrompt,
@@ -568,7 +571,7 @@ const {
   updateROIWithTracker,
   trackAIPerformance,
   notifyCriticalIssue,
-  savingsLedger: createSavingsLedger(pool), // TCO-E01
+  savingsLedger, // TCO-E01 — created above as standalone var
 });
 
 // ==================== ENHANCED AI CALLING WITH AGGRESSIVE COST OPTIMIZATION ====================
