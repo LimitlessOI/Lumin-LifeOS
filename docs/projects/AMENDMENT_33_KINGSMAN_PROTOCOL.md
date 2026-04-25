@@ -1,7 +1,7 @@
 # AMENDMENT_33: The Kingsman Protocol
 
 **Status:** Constitutional — Active Mandate
-**Last Updated:** 2026-04-04
+**Last Updated:** 2026-04-19 — Runtime audit: `services/kingsman-gate.js` + `kingsman_audit_log` table (see `db/migrations/20260420_handoff_governance.sql`).
 **Priority:** Mission-Critical (not a product — a responsibility)
 **Category:** AI Safety / Humanity Protection
 **Parent Document:** `docs/SSOT_NORTH_STAR.md` — Article VIII
@@ -197,4 +197,5 @@ The coexistence framework:
 
 | Date | Change |
 |---|---|
+| 2026-04-19 | Phase-1 runtime hook: `kingsmanAudit()` inserts heuristic-scored rows into `kingsman_audit_log` on every `callCouncilMember` (non-blocking). |
 | 2026-04-04 | Amendment created — Kingsman Protocol defined, council composition, mandate, constitution framework, coexistence vision |

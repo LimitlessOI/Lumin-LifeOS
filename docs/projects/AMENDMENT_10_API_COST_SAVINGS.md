@@ -246,7 +246,7 @@ Every competitor either shows you your AI costs (observability) or routes to che
 - TCO-C01 / TCO-C02 quality gate live in `services/tokenos-quality-check.js` — `runQualityGate()` is the entry point
 - ⚠️ CONDUCTOR SESSIONS = 0: `tokens_saved_compact_rules` always 0 — no cold-start hook logs to `conductor_session_savings`. Task #1 below.
 - ⚠️ SCHEMA DIVERGENCE: `routes/tco-routes.js` uses column names that do NOT exist in `tco_customers` table. It remains broken (tcoTracker never initialized). Do not initialize — retire it. See task #4.
-- ⚠️ GITHUB_TOKEN not set on Railway — builder `POST /build` will fail at commit step. Task #5 below.
+- ⚠️ builder `/ready` reports `github_token: false` — THINK: deploy drift or wrong base URL; `GITHUB_TOKEN` is ✅ SET in Railway vault per ENV_REGISTRY.md + operator screenshots (2026-04-25). Diagnose before asking Adam to re-add.
 - Landing page: `/token-os` → `tokenos-landing.html`; Dashboard: `/token-os/dashboard` → `tokenos-dashboard.html`
 
 **Next approved tasks (in priority order):**
@@ -254,7 +254,7 @@ Every competitor either shows you your AI costs (observability) or routes to che
 2. **First B2B customer acquisition** — register a test customer via `POST /api/v1/tokenos/register`, run a proxy call, verify `tco_requests` row created with real savings data
 3. **Stripe billing wiring** — `GET /api/v1/tokenos/invoice/:year/:month` returns data; add Stripe charge on invoice approval (Amendment 03 Stripe integration)
 4. **Retire the old `tco-routes.js` server.js path** — tcoTracker/tcoRoutes are declared null and never initialized; old `/api/tco/proxy` is dead. Remove the dead declarations.
-5. **Set GITHUB_TOKEN in Railway** — builder preflight confirms it is absent; POST /build will generate code but fail to commit until this is set. Required for §2.11 builder-first compliance.
+5. **Diagnose why `/ready` reports `github_token: false`** — token IS in Railway vault (KNOW: ENV_REGISTRY.md + operator screenshots). Check: is `PUBLIC_BASE_URL` pointing at production? Is prod behind main (deploy drift)? Is there an env scope issue? Per `docs/ENV_DIAGNOSIS_PROTOCOL.md` — exhaust non-vault causes before any vault action.
 6. **Quality gate tuning** — QUALITY_THRESHOLD=72 is a heuristic. After 100+ real calls, analyze `quality_score` distribution and adjust
 
 ---

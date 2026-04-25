@@ -1,0 +1,40 @@
+{
+  "project_id": "zero_drift_handoff",
+  "name": "Zero-Drift Handoff Protocol (Amendment 36)",
+  "amendment_path": "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+  "lifecycle": "infrastructure",
+  "status": "active",
+  "priority": "high",
+  "owner": "adam",
+  "phase": "operational",
+  "next_task": "Diagnose github_token: false on /ready — confirm PUBLIC_BASE_URL points at prod, check deploy drift, env scope. Token IS in Railway vault.",
+  "stability_class": "stable",
+  "current_focus": "SSOT dual-channel (agent vs system); compact rules generation; cold-start packet; continuity lane logs",
+  "owned_files": [
+    "docs/AGENT_RULES.compact.md",
+    "docs/AI_COLD_START.md",
+    "docs/CONTINUITY_INDEX.md",
+    "docs/SSOT_DUAL_CHANNEL.md",
+    "docs/CONTINUITY_LOG.md",
+    "docs/CONTINUITY_LOG_LIFEOS.md",
+    "docs/CONTINUITY_LOG_COUNCIL.md",
+    "docs/CONTINUITY_LOG_TC.md",
+    "docs/CONTINUITY_LOG_HORIZON.md",
+    "docs/CONTINUITY_LOG_SECURITY.md",
+    "scripts/generate-agent-rules.mjs",
+    "scripts/generate-cold-start.mjs",
+    "scripts/handoff-self-test.mjs",
+    "prompts/00-LIFEOS-AGENT-CONTRACT.md",
+    "prompts/00-SSOT-READ-SEQUENCE.md",
+    "prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md"
+  ],
+  "required_env": [],
+  "completion_checks": [
+    "npm run handoff:self-test exits 0",
+    "npm run cold-start:gen regenerates docs/AI_COLD_START.md",
+    "npm run gen:rules regenerates AGENT_RULES.compact.md",
+    "AGENT_RULES.compact.md stays under .compact-rules-baseline token budget"
+  ],
+  "last_verified_at": "2026-04-24",
+  "verification_passed": null
+}

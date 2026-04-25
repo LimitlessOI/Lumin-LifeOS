@@ -32,6 +32,29 @@
 
 ---
 
+## [FIX] Update 2026-04-25 #92 — **Law: non-human = TSOS compression**
+
+### Files changed
+- `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `prompts/00-SSOT-READ-SEQUENCE.md` — machinery vs human language; §2.14 + council layers.
+- `scripts/generate-agent-rules.mjs` + regen `docs/AGENT_RULES.compact.md` — §2.14 row + net smaller packet.
+
+### Next agent
+- If Adam narrows “human” (e.g. in-app Lumin copy), extend contract examples only — law text stays in NSSOT §2.14.
+
+## [BUILD] Update 2026-04-25 #91 — **Prompts: SSOT read sequence + think vs execute**
+
+### Files changed
+- `prompts/00-SSOT-READ-SEQUENCE.md`, `prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md` — new mandatory prompt paths; linked from `00-LIFEOS-AGENT-CONTRACT.md`, `README.md`, `lifeos-council-builder.md`, `SSOT_DUAL_CHANNEL.md`.
+- `routes/lifeos-council-builder-routes.js` — `BUILDER_EPISTEMIC_LAWS`; `execution_only` + `council.builder.code_execute` routing; response `routing_key` / `execution_only`; `/next-task` snippets + read_order.
+- `config/task-model-routing.js` — `council.builder.code_execute` → `groq_llama`.
+- `scripts/generate-cold-start.mjs` — read order; regen `docs/AI_COLD_START.md` (also triggers `generate-agent-rules`).
+
+### State after this session
+- Default builder codegen stays **Gemini**; **Groq** only when **`execution_only: true`** and no `model` override — Conductor should use plan→code pattern for risky work.
+
+### Next agent: start here
+- If Adam dislikes Groq for execute tier, change map key or gate `execution_only` behind env in routing.
+
 ## [RESEARCH] Update 2026-04-25 #90 — **SSOT dual channel + amendment build-readiness audit**
 
 ### Files changed
@@ -1405,11 +1428,11 @@ Adam: "the view totals hide what's really happening — make sure it is never hi
 
 ### Known open items
 - Conductor sessions = 0 — `POST /api/v1/tsos/savings/session` not called at cold-start; 96% per-session savings invisible until wired
-- GITHUB_TOKEN not set on Railway — builder POST /build will generate but fail to commit
+- builder `/ready` reports `github_token: false` — THINK: deploy drift or env scope issue. `GITHUB_TOKEN` IS ✅ SET in vault (KNOW: ENV_REGISTRY.md deploy inventory + operator screenshots 2026-04-25). Per ENV_DIAGNOSIS_PROTOCOL: diagnose base URL / deploy drift / scope before any vault action. Do NOT ask Adam to re-add.
 - CCK was manually updated by Adam in Railway dashboard; rotation system now built for future rotations
 
 ### Next priority
-1. Set GITHUB_TOKEN in Railway Variables (required for §2.11 builder compliance)
+1. Diagnose `github_token: false` on `/ready` — confirm `PUBLIC_BASE_URL` → prod, check deploy drift, check env scope. Token is in vault.
 2. Wire conductor session logging at agent cold-start (`POST /api/v1/tsos/savings/session` compact=1038, full=26105)
 3. First B2B customer registration via `POST /api/v1/tokenos/register`
 

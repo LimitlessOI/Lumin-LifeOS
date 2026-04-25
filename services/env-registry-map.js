@@ -3,6 +3,8 @@
  * Machine-readable version of docs/ENV_REGISTRY.md
  * Single source of truth for every env var the system uses.
  *
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ *
  * Status values:
  *   SET      — confirmed present in Railway production
  *   NEEDED   — required for a feature; revenue blocked without it
@@ -32,7 +34,7 @@ export const ENV_REGISTRY = [
   { name: "GROQ_MODEL",          status: "OPTIONAL",   category: "ai",       purpose: "Groq model name (default: llama-3.1-70b-versatile)" },
   { name: "MISTRAL_API_KEY",     status: "OPTIONAL",   category: "ai",       purpose: "Mistral — additional council member" },
   { name: "MISTRAL_MODEL",       status: "OPTIONAL",   category: "ai",       purpose: "Mistral model name" },
-  { name: "CEREBRAS_API_KEY",    status: "OPTIONAL",   category: "ai",       purpose: "Cerebras — ultra-fast inference" },
+  { name: "CEREBRAS_API_KEY",    status: "SET",        category: "ai",       purpose: "Cerebras — ultra-fast inference" },
   { name: "CEREBRAS_MODEL",      status: "OPTIONAL",   category: "ai",       purpose: "Cerebras model name" },
   { name: "TOGETHER_API_KEY",    status: "OPTIONAL",   category: "ai",       purpose: "Together AI — open model inference" },
   { name: "TOGETHER_MODEL",      status: "OPTIONAL",   category: "ai",       purpose: "Together model name" },
@@ -44,7 +46,9 @@ export const ENV_REGISTRY = [
   { name: "GEMINI_MODEL",        status: "OPTIONAL",   category: "ai",       purpose: "Override Gemini model name" },
 
   // ── Database ─────────────────────────────────────────────────────────────────
-  { name: "DATABASE_URL",        status: "SET",        category: "database", purpose: "Neon PostgreSQL connection string" },
+  { name: "DATABASE_URL",        status: "SET",        category: "database", purpose: "Neon PostgreSQL connection string (primary)" },
+  { name: "DATABASE_URL_SANDBOX", status: "SET",        category: "database", purpose: "Neon DSN for non-production when NODE_ENV !== production (else DATABASE_URL)" },
+  { name: "DB_SSL_REJECT_UNAUTHORIZED", status: "OPTIONAL", category: "database", purpose: "true|false — pg Pool SSL rejectUnauthorized (default true)" },
   { name: "NEON_PG_CONNECTION_STRING", status: "DEPRECATED", category: "database", purpose: "Old alias for DATABASE_URL" },
 
   // ── Twilio ───────────────────────────────────────────────────────────────────
@@ -64,6 +68,11 @@ export const ENV_REGISTRY = [
   { name: "STRIPE_KEY",          status: "DEPRECATED", category: "stripe",   purpose: "Old alias" },
   { name: "STRIPE_SECRET",       status: "DEPRECATED", category: "stripe",   purpose: "Old alias" },
 
+  // ── Public URL / verification (not secrets) ─────────────────────────────────
+  { name: "PUBLIC_BASE_URL",         status: "OPTIONAL", category: "railway", purpose: "Canonical public origin for local scripts and route probes (e.g. https://lifeos.up.railway.app); on Railway prefer RAILWAY_PUBLIC_DOMAIN" },
+  { name: "REMOTE_VERIFY_BASE_URL",  status: "OPTIONAL", category: "railway", purpose: "Explicit base URL for node scripts/verify-project.mjs HTTP probes when PUBLIC_BASE_URL is unset" },
+  { name: "BASE_URL",                 status: "SET",     category: "railway",  purpose: "Public app origin fallback for links when RAILWAY_PUBLIC_DOMAIN / PUBLIC_BASE_URL unset" },
+
   // ── Railway ───────────────────────────────────────────────────────────────────
   { name: "RAILWAY_PUBLIC_DOMAIN",   status: "SET",    category: "railway",  purpose: "Full public URL — health checks, SMS links, webhooks" },
   { name: "RAILWAY_TOKEN",           status: "SET",    category: "railway",  purpose: "Railway API token — env var management via API" },
@@ -79,8 +88,8 @@ export const ENV_REGISTRY = [
   { name: "GITHUB_DEPLOY_BRANCH",status: "SET",        category: "github",   purpose: "Branch auto-builder commits to" },
 
   // ── Email ─────────────────────────────────────────────────────────────────────
-  { name: "EMAIL_PROVIDER",      status: "NEEDED",     category: "email",    purpose: "Email provider name: postmark", revenueBlocking: true },
-  { name: "EMAIL_FROM",          status: "NEEDED",     category: "email",    purpose: "Sender address (e.g. adam@yourdomain.com)", revenueBlocking: true },
+  { name: "EMAIL_PROVIDER",      status: "SET",        category: "email",    purpose: "Email provider name: postmark (or as configured)" },
+  { name: "EMAIL_FROM",          status: "SET",        category: "email",    purpose: "Sender address (e.g. adam@yourdomain.com)" },
   { name: "POSTMARK_SERVER_TOKEN",status: "NEEDED",    category: "email",    purpose: "Postmark API token for transactional email", revenueBlocking: true },
   { name: "EMAIL_WEBHOOK_SECRET",status: "OPTIONAL",   category: "email",    purpose: "Validates inbound Postmark webhook events" },
   { name: "WORK_EMAIL",          status: "SET",        category: "email",    purpose: "Primary work inbox for alerts and TC fallback identity" },
@@ -112,6 +121,23 @@ export const ENV_REGISTRY = [
   { name: "BOLDTRAIL_AI_ENABLED",status: "OPTIONAL",   category: "boldtrail", purpose: "Flag: enable AI-enhanced BoldTrail features" },
   { name: "KVCORE_API_TOKEN",    status: "DEPRECATED", category: "boldtrail", purpose: "Old KVCore token — use BOLDTRAIL_API_KEY" },
   { name: "KVCORE_API_PREFIX",   status: "DEPRECATED", category: "boldtrail", purpose: "Old KVCore prefix — use BOLDTRAIL_API_URL" },
+
+  // ── ClientCare billing (browser path — Amendment 18) ─────────────────────────
+  { name: "CLIENTCARE_BASE_URL",   status: "SET",        category: "clientcare", purpose: "ClientCare web app origin for Puppeteer (Railway vault)" },
+  { name: "CLIENTCARE_USERNAME",   status: "SET",        category: "clientcare", purpose: "ClientCare login username (Railway vault)" },
+  { name: "CLIENTCARE_PASSWORD",   status: "SET",        category: "clientcare", purpose: "ClientCare login password (Railway vault)" },
+  { name: "CLIENTCARE_MFA_MODE",   status: "OPTIONAL",   category: "clientcare", purpose: "MFA mode when ClientCare enforces second factor" },
+  { name: "CLIENTCARE_MFA_SECRET", status: "OPTIONAL",   category: "clientcare", purpose: "MFA secret or approved fallback material for automation" },
+
+  // ── eXp Okta (TC — credential-aliases) ────────────────────────────────────────
+  { name: "exp_okta_Username",   status: "OPTIONAL",   category: "tcex",     purpose: "eXp Okta username for TC / browser paths" },
+  { name: "exp_okta_Password",   status: "OPTIONAL",   category: "tcex",     purpose: "eXp Okta password (vault; legacy Railway naming)" },
+  { name: "exp_okta_URL",        status: "OPTIONAL",   category: "tcex",     purpose: "eXp Okta issuer URL (default exprealty.okta.com)" },
+  { name: "EXP_OKTA_USERNAME",   status: "OPTIONAL",   category: "tcex",     purpose: "Alias for exp_okta_Username" },
+  { name: "EXP_OKTA_USER",       status: "OPTIONAL",   category: "tcex",     purpose: "Alias for exp_okta_Username" },
+  { name: "EXP_OKTA_PASSWORD",   status: "OPTIONAL",   category: "tcex",     purpose: "Alias for exp_okta_Password" },
+  { name: "EXP_OKTA_PASS",       status: "OPTIONAL",   category: "tcex",     purpose: "Alias for exp_okta_Password" },
+  { name: "EXP_OKTA_URL",        status: "OPTIONAL",   category: "tcex",     purpose: "Alias for exp_okta_URL" },
 
   // ── Redis ─────────────────────────────────────────────────────────────────────
   { name: "UPSTASH_REDIS_URL",   status: "SET",        category: "redis",    purpose: "Upstash Redis — BullMQ job queue" },
@@ -154,6 +180,10 @@ export const ENV_REGISTRY = [
   { name: "SEARCH_ENABLED",      status: "OPTIONAL",   category: "runtime",  purpose: "Enable/disable web search globally" },
   { name: "COUNCIL_TIMEOUT_MS",  status: "OPTIONAL",   category: "runtime",  purpose: "Max ms to wait for a council member (default: 300000)" },
   { name: "COUNCIL_PING_TIMEOUT_MS",status: "OPTIONAL",category: "runtime",  purpose: "Ping timeout for council availability (default: 5000)" },
+  { name: "COST_SHUTDOWN_THRESHOLD", status: "SET",     category: "runtime",  purpose: "AI spend cap USD before paid council routes stop (config/runtime-env default 0)" },
+  { name: "COUNCIL_MODE_OVERRIDE", status: "OPTIONAL", category: "runtime",  purpose: "Reserved; in some Railway envs, not referenced in repo" },
+  { name: "DATA_DIR",            status: "OPTIONAL",   category: "runtime",  purpose: "Reserved; in some Railway envs, not referenced in repo" },
+  { name: "DEBUG_AI",            status: "OPTIONAL",   category: "runtime",  purpose: "Reserved; in some Railway envs, not referenced in repo" },
   { name: "QUIET_HOURS",         status: "OPTIONAL",   category: "runtime",  purpose: "JSON [{start,end}] — no SMS during these hours" },
 
   // ── Notion ────────────────────────────────────────────────────────────────────

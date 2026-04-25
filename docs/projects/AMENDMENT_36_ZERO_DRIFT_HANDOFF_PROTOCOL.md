@@ -5,7 +5,7 @@
 | **Lifecycle** | `infrastructure` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `operational` |
-| **Last Updated** | 2026-04-25 — `scripts/generate-agent-rules.mjs`: **§2.11c** supervisor row; §2.11b “system goal / where breaks”; **PROHIBITED** §2.11c. Regen `AGENT_RULES.compact.md`. Prior: 2026-04-22 **§2.15** + merged §2.14. Prior: **§2.14** + **ENDPOINTS**. Prior: SESSION **#5** + **Env gaslighting**. Prior: 2026-04-25 §2 platform + **`CLAUDE.md`**. Prior: **§2.11a** vs **§2.11b/§0.5G**. Prior: gate-change presets. Prior: real council vs IDE chat. |
+| **Last Updated** | 2026-04-25 — **Non-human → TSOS compression** law in **`prompts/00`** + **`generate-agent-rules.mjs`** (§2.14 row); **`SSOT_DUAL_CHANNEL`** bullet. Prior: **`00-SSOT-READ-SEQUENCE`** + **`00-MODEL-TIERS`**; cold-start; **`/next-task`**. Prior: **`SSOT_DUAL_CHANNEL`** + audit. Prior: **§2.11c**. Prior: 2026-04-22 **§2.15** + §2.14. |
 | **Manifest** | _(none — this amendment is documentation + scripts; machine hooks live in `package.json` and `.github/workflows`)_ |
 | **Verification** | `npm run handoff:self-test` → exit 0; `npm run cold-start:gen` regenerates `docs/AI_COLD_START.md` |
 
@@ -86,6 +86,9 @@ These are **separate lanes** (own continuity log + manifest when built), not ad-
 
 | Date | What Changed | Why |
 |------|--------------|-----|
+| 2026-04-25 | **`scripts/generate-agent-rules.mjs`:** supreme-law row **§2.14 TSOS (non-human)** — machinery uses lexicon + council compression; **human + §2.11b NL exempt**; trimmed duplicate §2.14 line under §2.11. Regen **`docs/AGENT_RULES.compact.md`** (token budget OK). **`prompts/00-LIFEOS-AGENT-CONTRACT.md`** + **`00-SSOT-READ-SEQUENCE.md`:** explicit law — **other than talking to a human**, outputs use **TSOS compression** / **§2.14** / **`TSOS_SYSTEM_LANGUAGE.md`**. | Adam: non-human channels must use TSOS; human-facing + §2.11b stay plain language. |
+| 2026-04-25 | **`prompts/00-SSOT-READ-SEQUENCE.md`**, **`prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md`** — agent/system read order + think vs execute model policy; **`scripts/generate-cold-start.mjs`** read order updated; builder **`GET /next-task`** includes snippets for those prompts. | Adam: explicit prompts + laws to reduce hallucination/drift; execute-tier routing for frozen specs. |
+| 2026-04-25 | **`docs/SSOT_DUAL_CHANNEL.md`** — defines Channel A (agents: compact + QUICK_LAUNCH + lanes) vs Channel B (system: NSSOT + Companion + INDEX + capabilities + amendments); **one canonical tree, derived agent packet** via `npm run gen:rules` (no duplicate constitutional prose). **`docs/SSOT_AMENDMENT_BUILD_READINESS_AUDIT.md`** — criteria for “build from SSOT alone”; KNOW gaps (INDEX route drift, council SSOT injection, CI readiness hardness, Docker docs). **`docs/projects/INDEX.md`** — “Two channels, one law” pointer. | Adam: split agent vs system SOT without maintaining two editable law files; audit whether amendments are flush enough for autonomous build. |
 | 2026-04-25 | **`scripts/generate-agent-rules.mjs`** — **§2.11c** supervisor row; **§2.11b** one-liner; **PROHIBITED** §2.11c; shorter supreme-law rows. Regen `docs/AGENT_RULES.compact.md`. | North Star **§2.11c**; Conductor = audit system, not default IDE product. |
 | 2026-04-22 | **`scripts/generate-agent-rules.mjs`** — **§2.15** supreme-law row; **§2.11b** + **INTENT DRIFT**; **PROHIBITED** (§2.15 silent substitute); merged §2.14 into §2.11b line; shorter §2.12. Regen `docs/AGENT_RULES.compact.md`. | Adam: operator instruction in compact; paper law honest limits. |
 | 2026-04-22 | **`scripts/generate-agent-rules.mjs`** — new **§2.14 MACHINE CHANNEL** block; supreme-laws row; **PROHIBITED**: §2.14 without TSOS lexicon; **ENDPOINTS** one-liner (replaces table) to save bytes under token budget. Regen `docs/AGENT_RULES.compact.md`. | Adam/CC: compact packet must enforce **North Star §2.14** + `docs/TSOS_SYSTEM_LANGUAGE.md` for machinery; stay under `.compact-rules-baseline`. |
@@ -228,6 +231,6 @@ Labels: **KNOW** = grounded in public direction; **THINK** = reasonable extrapol
 
 | Field | Value |
 |-------|--------|
-| **Next task** | **Do not** set `LANE_INTEL_ENABLED` until post-launch. **Claude Cowork:** see “Coworker competition,” **Cross-amendment map**, **Projection 2028**, and **API / idea theft** sections — next build is local runner / GitHub apply loop, not generic desktop agent. **SSOT:** `CLAUDE.md` + Companion **§0.5B** — full read of any SSOT file before editing it. |
+| **Next task** | **Do not** set `LANE_INTEL_ENABLED` until post-launch. **Claude Cowork:** see “Coworker competition,” **Cross-amendment map**, **Projection 2028**, and **API / idea theft** sections — next build is local runner / GitHub apply loop, not generic desktop agent. **SSOT routing:** read `docs/SSOT_DUAL_CHANNEL.md` (agent vs system); amend policy in NSSOT/Companion/amendments only — regen `AGENT_RULES.compact.md` via `npm run gen:rules`. **Amendment completeness:** `docs/SSOT_AMENDMENT_BUILD_READINESS_AUDIT.md`. **SSOT edits:** `CLAUDE.md` + Companion **§0.5B** — full read of any SSOT file before editing it. |
 | **Blockers** | None for intel (intel intentionally dormant). |
 | **⚠️ IN PROGRESS:** | None |

@@ -27,7 +27,7 @@
   ],
   "required_env": [],
   "anti_drift_notes": [
-    "This is not Enterprise AI Governance (Amendment 30) — that is a consulting product. This is an independent protective body.",
+    "This is not Enterprise AI Governance (Amendment 30) \u2014 that is a consulting product. This is an independent protective body.",
     "The council is not governed by the platform. The platform funds it. Distinction is constitutional.",
     "Never position Kingsman as a revenue product or partnership vehicle.",
     "Human member anonymity is a safety feature, not a secrecy preference.",
@@ -56,5 +56,6 @@
     "Threat monitoring infrastructure operational"
   ],
   "phase": "specification",
-  "timeline": "Initiated when platform reaches sustainable revenue sufficient to fund council trust (estimate: 18-36 months from platform launch)"
+  "timeline": "Initiated when platform reaches sustainable revenue sufficient to fund council trust (estimate: 18-36 months from platform launch)",
+  "last_verified_at": "2026-04-24"
 }

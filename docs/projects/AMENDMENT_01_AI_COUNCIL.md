@@ -11,7 +11,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-24 — **`services/savings-ledger.js` `getSavingsReport`:** exposes full monetization columns from rebuilt `tsos_savings_report` view (`baseline_cost_usd`, `actual_cost_usd`, `savings_pct`, per-mechanism breakdown). Prior: 2026-04-25 — **`services/council-service.js`:** optional `options.maxOutputTokens` overrides task-type-scoped completion caps (clamped to 128k) so long outputs (e.g. council builder full-file HTML) are not truncated at the codegen default (**1500**). Prior: **`config/task-model-routing.js`:** explicit `council.builder.code` / `plan` / `review` keys. Prior: 2026-04-22 — **`services/council-service.js` @ssot tag**. Prior: **`POST /gate-change/run-preset`:** … |
+| **Last Updated** | 2026-04-25 — **`council.builder.code_execute`** → **`groq_llama`** (builder **`execution_only: true`** + `mode: code`, no `model` override). Prior: 2026-04-24 — **`services/savings-ledger.js` `getSavingsReport`:** exposes full monetization columns from rebuilt `tsos_savings_report` view. Prior: **`maxOutputTokens`** in **`council-service.js`**. Prior: explicit **`council.builder.code` / `plan` / `review`**. Prior: **`@ssot`** council-service. Prior: **`POST /gate-change/run-preset`:** server-side debate. |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json` |
 
@@ -357,7 +357,7 @@ grep "0\.97" services/free-tier-governor.js
 - `services/savings-ledger.js` `getSavingsReport` updated — now returns full monetization proof: `baseline_cost_usd`, `actual_cost_usd`, `total_saved_usd`, `savings_pct`, per-mechanism breakdown. View rebuilt via `db/migrations/20260424_tsos_monetization_view.sql`.
 - `services/council-service.js` — `callCouncilMember` accepts `options.maxOutputTokens` (clamped to 128k) to override per-taskType default (codegen default remains 1500 when unset)
 - LCL codebook v1 live: `config/codebook-v1.js` + `services/prompt-translator.js` — translator is built but NOT YET wired into `council-service.js`
-- GITHUB_TOKEN not set on Railway — builder POST /build fails at commit step (confirmed by preflight)
+- ⚠️ builder `POST /build` reports `github_token: false` from `/ready` endpoint — THINK: deploy drift or wrong base URL; `GITHUB_TOKEN` is ✅ SET in Railway vault per ENV_REGISTRY.md deploy inventory + operator screenshots. Diagnose: confirm `PUBLIC_BASE_URL` points at production, redeploy if behind main, check env scope. Do NOT ask Adam to add it again.
 
 **⚠️ INCOMPLETE: prompt-translator.js not yet wired into council-service.js**
 When this is done:
@@ -367,7 +367,7 @@ When this is done:
 - Use returned `systemPrompt` and `userPrompt` for the actual API call; log `stats.totalSaved` to savings ledger
 
 **NEXT PRIORITY TASKS:**
-1. Set GITHUB_TOKEN in Railway Variables — builder blocks on this; required for §2.11 compliance
+1. Diagnose why `/ready` reports `github_token: false` — confirm `PUBLIC_BASE_URL` → production, redeploy if behind, check env scope. Token IS in vault (KNOW).
 2. Wire `prompt-translator.js` into `council-service.js` (described above)
 3. Log conductor sessions at cold-start — POST /api/v1/tsos/savings/session with compact_tokens=1038, full_tokens=26105
 
@@ -430,6 +430,7 @@ When this is done:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-25 | **`config/task-model-routing.js`:** **`council.builder.code_execute`** → **`groq_llama`** — used when builder **`mode: code`** + **`execution_only: true`** and no body **`model`** (frozen-spec literal codegen). Tier guide updated. **`prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md`** documents think vs execute. | Adam: stronger models for thinking; fast/cheap model for executing an already-thought-out spec — Conductor must not use execute tier on ambiguous scope. | ✅ | n/a | `node --check config/task-model-routing.js` |
 | 2026-04-24 | **`services/savings-ledger.js` `getSavingsReport`:** updated to map all columns from rebuilt `tsos_savings_report` view — `baseline_cost_usd`, `actual_cost_usd`, `total_saved_usd`, `savings_pct`, `saved_by_free_routing_usd`, `saved_by_compression_usd`, `saved_by_cache_usd`, `saved_by_compact_rules_usd`. API summary now shows `BASELINE $X → ACTUAL $Y → SAVED $Z (N%)`. | Savings were hidden — no baseline or overall % meant Adam couldn't document or bill for savings. | ✅ | n/a | `node --check services/savings-ledger.js` |
 | 2026-04-25 | **`services/council-service.js`:** `callCouncilMember(..., options)` may set **`maxOutputTokens`** (positive number, clamped to 128000). When set, it replaces the per-`taskType` `scopedMaxTokens` for OpenAI-compatible, Gemini, and DeepSeek paths. Default **`codegen` remains 1500** when unset — council builder passes a higher budget for `files[]`-backed full-file codegen. | Builder HTML was “successfully” generated but capped at ~1500 completion tokens, producing tiny stubs; callers that need long outputs must opt into a higher ceiling explicitly. | ✅ | n/a | `node --check services/council-service.js` |
 | 2026-04-25 | **`config/task-model-routing.js`:** added explicit **`council.builder.code`**, **`council.builder.plan`**, **`council.builder.review`** (keep legacy `council.builder.task`). Builder dispatch uses `council.builder.${mode}` — entries now resolve from map instead of only `DEFAULT_MODEL`. | Clear routing for §2.11 `/builder/task` + `/build`; enables future per-mode model tuning. | ✅ | n/a | `node --check config/task-model-routing.js` |

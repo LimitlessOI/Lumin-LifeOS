@@ -1,6 +1,6 @@
 {
   "project_id": "api_cost_savings",
-  "name": "TokenSaverOS (TSOS) — API Cost Savings Service",
+  "name": "TokenSaverOS (TSOS) \u2014 API Cost Savings Service",
   "amendment_path": "docs/projects/AMENDMENT_10_API_COST_SAVINGS.md",
   "lifecycle": "production",
   "status": "active",
@@ -9,7 +9,7 @@
   "phase": "monetization-ready",
   "next_task": "Log first conductor session (POST /api/v1/tsos/savings/session at agent cold-start). Then: first paying B2B customer via POST /api/v1/tokenos/register.",
   "stability_class": "stable",
-  "current_focus": "TSOS savings report fully monetization-ready — baseline/actual/savings% all exposed. Conductor session savings still 0 (need cold-start hook). B2B first customer not yet acquired.",
+  "current_focus": "TSOS savings report fully monetization-ready \u2014 baseline/actual/savings% all exposed. Conductor session savings still 0 (need cold-start hook). B2B first customer not yet acquired.",
   "owned_files": [
     "services/savings-ledger.js",
     "routes/api-cost-savings-routes.js",
@@ -31,7 +31,7 @@
       "method": "GET",
       "path": "/api/v1/tsos/savings/report",
       "expected_status": 200,
-      "description": "Unified savings proof — baseline, actual, savings%, per-mechanism breakdown"
+      "description": "Unified savings proof \u2014 baseline, actual, savings%, per-mechanism breakdown"
     },
     {
       "method": "POST",
@@ -49,15 +49,35 @@
   "required_tables": [
     {
       "name": "token_usage_log",
-      "required_columns": ["id", "provider", "cost_usd", "saved_cost_usd", "original_tokens", "compressed_tokens", "provider_was_free", "cache_hit"]
+      "required_columns": [
+        "id",
+        "provider",
+        "cost_usd",
+        "saved_cost_usd",
+        "original_tokens",
+        "compressed_tokens",
+        "provider_was_free",
+        "cache_hit"
+      ]
     },
     {
       "name": "conductor_session_savings",
-      "required_columns": ["id", "compact_tokens", "full_tokens", "saved_tokens", "savings_pct", "cost_avoided_usd"]
+      "required_columns": [
+        "id",
+        "compact_tokens",
+        "full_tokens",
+        "saved_tokens",
+        "savings_pct",
+        "cost_avoided_usd"
+      ]
     },
     {
       "name": "tcos_baseline_config",
-      "required_columns": ["label", "token_count", "cost_per_m_usd"]
+      "required_columns": [
+        "label",
+        "token_count",
+        "cost_per_m_usd"
+      ]
     }
   ],
   "required_views": [
