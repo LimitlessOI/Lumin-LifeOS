@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-06 |
+| **Last Updated** | 2026-04-24 |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -48,12 +48,13 @@ public/overlay/command-center.html
 public/overlay/command-center.js
 public/overlay/index.html
 public/shared/lifeos-voice-chat.js
+services/env-registry-map.js
 ```
 
 ## Protected Files (read-only for this project)
 ```
 server.js                        — composition root, import + mount only
-src/server/auth/requireKey.js    — security boundary, do not modify logic
+src/server/auth/requireKey.js    — security boundary: change only with receipt (bugfixes e.g. key trim / header parity OK)
 services/ai-guard.js             — AI safety layer, treat with care
 ```
 
@@ -236,6 +237,11 @@ node --check public/overlay/command-center.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-24 | **`src/server/auth/requireKey.js`:** trim `API_KEY` / `LIFEOS_KEY` / `COMMAND_CENTER_KEY` and request-provided key before compare (fixes 401 when Railway or `.env` has trailing newline/whitespace). Accept **`Authorization: Bearer <same key>`** in addition to `x-command-key` / `x-api-key` / query. `@ssot` in file. | Operators and builder scripts often matched keys “visually” but failed strict `===` after copy/paste or vault formatting. | ✅ | pending | `node --check src/server/auth/requireKey.js` |
+| 2026-04-22 | `docs/ENV_REGISTRY.md` + `services/env-registry-map.js` + `docs/SSOT_COMPANION.md` §0.4: **Lumin (Railway) deploy inventory** — variable **names** from production vault; expanded DB/runtime/eXp/EMAIL/CEREBRAS entries; **no values** in repo; rotation note if DSN was exposed | User asked to keep all envs documented in SSOT; vault remains Railway-only | ✅ | pending | pending |
+| 2026-04-22 | `services/env-registry-map.js`: added `@ssot` pointer to this amendment; registry entries for **`PUBLIC_BASE_URL`**, **`REMOTE_VERIFY_BASE_URL`**, and **ClientCare** (`CLIENTCARE_*`, MFA optional) so Command Center env health matches `docs/ENV_REGISTRY.md` | Eliminate “mystery missing env” for AIs: one machine list + one human registry | ✅ | pending | pending |
+| 2026-04-22 | `public/shared/lifeos-voice-chat.js`: `attach()` adds optional `onStart` / `onStop` callbacks (called around recognition sessions) in addition to wake-prefix stripping; enables one-button “talk then auto-run” workflows in downstream overlays | Reuse shared voice layer for deterministic post-stop actions without duplicating Web Speech state machines | ✅ | pending | pending |
+| 2026-04-21 | `public/shared/lifeos-voice-chat.js`: `attach()` accepts optional **`wakePrefixes`** array; when a SpeechRecognition session **ends**, leading wake phrase is stripped from the bound textarea (used by ClientCare billing **Lumin** chat for “Lumin, …” dictation) | Operator invoke name + cleaner transcripts without always-on wake engine | ✅ | pending | pending |
 | 2026-04-06 | `public/sw.js`: scope registered at `/` was **caching** `GET /clientcare-billing` and scripts via stale-while-revalidate; billing path now **bypasses** the service worker (network-only). Bump shell cache to `lifeos-shell-v2` | After deploy, operators still saw old overlay without the insurance card strip | ✅ | ✅ | pending |
 | 2026-04-06 | `middleware/apply-middleware.js`: serve `public/clientcare-billing` at `/clientcare-billing` with `no-store` on `.js`/`.html` (same as `/tc`) | Operators were seeing stale billing overlay JS; card upload UI appeared “missing” after deploys | ✅ | ✅ | pending |
 | 2026-03-30 | `middleware/apply-middleware.js`: serve `public/tc` at `/tc` with `no-store` on `.js`/`.html` so TC portal scripts are not cached above the global no-cache layer | Fix stale `tc-portal.js` after deploys | ✅ | ✅ | pending |

@@ -1,3 +1,14 @@
+/**
+ * Shared command-key gate for operator routes (builder, Railway env, etc.).
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
+ */
+
+/** Railway / shell / .env often include a trailing newline — without trim, `includes()` fails and clients see 401. */
+function normalizeKey(value) {
+  if (value == null) return "";
+  return String(value).trim();
+}
+
 export function createRequireKey(options = {}) {
   const header = options.header || "x-api-key";
   const envVar = options.envVar || "API_KEY";
@@ -21,7 +32,7 @@ export function createRequireKey(options = {}) {
       if (process.env.LIFEOS_OPEN_ACCESS === 'true') return next();
 
       const configuredValues = envVars
-        .map((name) => process.env[name])
+        .map((name) => normalizeKey(process.env[name]))
         .filter(Boolean);
 
       // If no key is configured, do not block requests (avoids breaking deploys).
@@ -36,7 +47,17 @@ export function createRequireKey(options = {}) {
       const providedQuery =
         (req && req.query && queryKeys.map(k => req.query[k]).find(Boolean)) || null;
 
-      const provided = providedHeader || providedQuery;
+      const authHeader =
+        (typeof req.get === "function" ? req.get("authorization") : null) ||
+        req?.headers?.authorization ||
+        "";
+      let bearerToken = "";
+      if (/^Bearer\s+/i.test(authHeader)) {
+        bearerToken = authHeader.replace(/^Bearer\s+/i, "").trim();
+      }
+
+      const raw = providedHeader || providedQuery || bearerToken;
+      const provided = normalizeKey(raw);
 
       if (provided && configuredValues.includes(provided)) return next();
       return res.status(401).json({ ok: false, error: "Unauthorized" });

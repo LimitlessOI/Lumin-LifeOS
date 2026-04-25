@@ -111,6 +111,8 @@ Tight, low-drift sends:
 - **Show env that matters** — for builder/council: `PUBLIC_BASE_URL` + `COMMAND_CENTER_KEY` in the shell; for DB-backed verify: `DATABASE_URL` when the task needs it. If missing, expect **HALT** or **honest GAP-FILL**, not shadow coding.
 - **Expect the machine path** — preflight → `POST /builder/build` (or GAP-FILL: reason) → verify. **“I couldn’t”** must name **why** (blocked key, red `/ready`, etc.).
 - **Expect a written close** per **§2.11b / §0.5G** — not cheerleading; if quality is **bad**, the report says **bad** and what was verified.
+- **Expect the ask to be followed** — North Star **§2.15** + Companion **§0.5I**: if your instruction is unambiguous, the Conductor **does that** or **HALT**s with a **named** blocker. **INTENT DRIFT** (they built something else) must appear in the **§2.11b** close, not only in file history. Paper law cannot “compile” a remote LLM — receipts make drift **visible**.
+- **Expect the Conductor to supervise the system, not replace it** — North Star **§2.11c** + Companion **§0.5D** *Supervisor mandate*: product slices go through **`POST /api/v1/lifeos/builder/build`** (after preflight), then **audit** + optional **council review**; **§2.11b** must say what the system was trying to do, where it would fail, and what **platform** GAP-FILL happened. **Not:** IDE-authoring the same feature because Cursor feels faster. **Registry:** `docs/ENV_REGISTRY.md` before “env missing” noise; **404 `/domains`** = **redeploy** / deploy drift, not a lecture at you.
 - **Parallel work** — two AIs: different files/lanes; one owner if overlap. See *Parallel Conductors* below.
 - **Decisions** — if the send is “you choose architecture,” that is a **council** moment (**§2.12**), not a silent pick.
 

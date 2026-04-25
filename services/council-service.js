@@ -1,3 +1,7 @@
+/**
+ * Council routing, token/LCL/savings, and model failover for platform AI calls.
+ * @ssot docs/projects/AMENDMENT_01_AI_COUNCIL.md
+ */
 import dayjs from "dayjs";
 import { injectKnowledgeContext, buildSystemContext } from "./knowledge-context.js";
 import { createFreeTierGovernor } from "./free-tier-governor.js";
@@ -7,6 +11,10 @@ import { injectChainOfDraft, compressPrompt as irCompressPrompt } from "./prompt
 import { createSavingsLedger } from "./savings-ledger.js";
 import { addTurn, getDelta, startSession } from "./delta-context.js";
 import { createRulesEngine } from "./rules-engine.js";
+import { createPromptTranslator } from "./prompt-translator.js";
+import { createLCLMonitor } from "./lcl-monitor.js";
+import { CODE_SYMBOLS } from "../config/codebook-v1.js";
+import { kingsmanAudit } from "./kingsman-gate.js";
 import { sanitizeJsonResponse } from "../core/json-sanitizer.js";
 import {
   getCachedResponse as _rcGet,
@@ -73,6 +81,14 @@ export function createCouncilService({
     pool,
     ollamaMode: COUNCIL_OLLAMA_MODE,
   });
+  // LCL prompt translator — applies codebook symbol compression before every API call.
+  // Works with all free stateless providers (Groq, Gemini) by injecting a tiny inline
+  // key containing only the symbols that fired in this specific prompt (~8-15 tokens
+  // overhead vs 20-200+ tokens saved in the body for LifeOS coding prompts).
+  const promptTranslator = createPromptTranslator({ logger: console });
+  // LCL drift monitor — watches every response for symbol leakage and quality regression.
+  // Auto-disables LCL for a (member, taskType) pair if drift rate exceeds 5%.
+  const lclMonitor = createLCLMonitor({ pool, logger: console });
   const rulesEngine = createRulesEngine({
     COUNCIL_MEMBERS,
     timeZone: process.env.TZ || "America/Los_Angeles",
@@ -891,6 +907,8 @@ export function createCouncilService({
       else taskType = 'general';
     }
 
+    kingsmanAudit({ pool, member, taskType, prompt }).catch(() => {});
+
     // ── Rules engine pre-flight — deterministic no-AI answers + lightweight routing ──
     const ruleDecision = rulesEngine.evaluate({
       prompt,
@@ -1054,6 +1072,41 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       compressionLayers.noise_phrase = { savedTokens: optimized.savedTokens, savedPct: optimized.savingsPct };
     }
 
+    // Layer 1.5 — LCL codebook symbol compression (instruction aliases + code patterns)
+    // Replaces LifeOS-specific long strings with short symbols, then prepends a tiny
+    // inline key listing only the symbols that actually fired in this prompt.
+    // Works with all free stateless providers — no KV cache required.
+    // Example savings: "CREATE TABLE IF NOT EXISTS" (6 tokens) → "*ct" (1 token).
+    // The drift monitor gates this layer — auto-skips if drift was detected for this pair.
+    let lclWasActive = false;
+    let lclSymbolsFired = [];   // raw symbol strings e.g. ['*pq', '*uid'] — used by drift monitor
+    if (!isCritical && !lclMonitor.shouldSkipLCL(member, taskType)) {
+      const lclResult = promptTranslator.translate(finalPrompt, {
+        taskType,
+        stripMd: false,
+        critical: false,
+        domain: options.lclDomain || undefined,
+      });
+      if (lclResult.savedTokens > 0) {
+        // Identify the exact symbols that appear in the compressed text
+        const firedEntries = CODE_SYMBOLS.filter(([, sym]) => lclResult.prompt.includes(sym));
+        lclSymbolsFired = firedEntries.map(([, sym]) => sym);  // e.g. ['*pq', '*uid']
+        const keyLine = firedEntries.map(([full, sym]) => `${sym}=${full}`).join(', ');
+        finalPrompt = keyLine
+          ? `[KEY:${keyLine}]\n${lclResult.prompt}`
+          : lclResult.prompt;
+        lclWasActive = true;
+        compressionLayers.lcl_codebook = {
+          savedTokens: lclResult.savedTokens,
+          savedPct: lclResult.savingsPct,
+          symbolsFired: lclSymbolsFired,
+          codebookVersion: lclResult.codebookVersion,
+        };
+      }
+    } else if (!isCritical && lclMonitor.shouldSkipLCL(member, taskType)) {
+      console.log(`🛑 [LCL-MONITOR] Skipping LCL for ${member}:${taskType} — drift rollback active`);
+    }
+
     // Layer 2 — TOON: compact any JSON blocks in the prompt
     let toonSavedTokens = 0;
     if (!isCritical) {
@@ -1124,13 +1177,15 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
     }
 
     const deltaSavedTokens = Math.ceil(deltaContextSaved / 4);
+    const lclSavedTokens = compressionLayers.lcl_codebook?.savedTokens || 0;
 
     // Accumulate savings from ALL layers (input tokens only; output handled separately)
     const totalSavedInputTokens = optimized.savedTokens
       + (optimizedSystemPrompt.savedTokens || 0)
       + toonSavedTokens
       + irSavedTokens
-      + deltaSavedTokens;
+      + deltaSavedTokens
+      + lclSavedTokens;
 
     if (totalSavedInputTokens > 0 || Object.keys(compressionLayers).length > 0) {
       console.log(`🗜️  [TOKEN-OPT] ${member}: ${totalSavedInputTokens} input tokens saved | layers: ${Object.keys(compressionLayers).join(', ')}`);
@@ -1267,6 +1322,9 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         await freeTierGovernor.record(provider, inputTokens + outputTokens).catch(() => {});
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
 
+        // LCL drift inspection — fire-and-forget, never blocks response
+        lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
+
         return text;
       }
 
@@ -1351,6 +1409,10 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
 
         await freeTierGovernor.record("gemini", inputTokens + outputTokens).catch(() => {});
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
+
+        // LCL drift inspection — fire-and-forget, never blocks response
+        lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
+
         return text;
       }
 
@@ -1412,6 +1474,8 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         }
 
         recordSessionTurns(effectiveSessionId, finalPrompt, text);
+
+        lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
 
         return text;
       }
@@ -1831,5 +1895,6 @@ Be specific and critical.`;
     callCouncilWithFailover,
     detectBlindSpots,
     tokenOptimizer, // exposed for monitoring dashboard
+    lclMonitor,     // exposed for /lcl-stats route and drift dashboard
   };
 }

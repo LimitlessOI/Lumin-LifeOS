@@ -32,6 +32,102 @@
 
 ---
 
+## [FIX] Update 2026-04-24 #87 — **TokenSaverOS doctor + build-system weak-point fixes**
+
+### Files changed
+- `scripts/tsos-doctor.mjs` — new read-only TokenSaverOS/build-system doctor. Probes `/healthz`, builder `/ready`, builder `/domains`, gate-change `/presets`, Railway env-name route, server `GITHUB_TOKEN`/`callCouncilMember`, local key presence, and local `RAILWAY_TOKEN`; prints readiness score + weakest blockers.
+- `package.json` — `npm run tsos:doctor` and `npm run system:doctor`.
+- `scripts/council-gate-change-run.mjs` — key aliases now match builder tooling (`COMMAND_CENTER_KEY`, `COMMAND_KEY`, `LIFEOS_KEY`, `API_KEY`).
+- `scripts/diagnose-builder-prod.mjs` — loads `.env`, honors `PUBLIC_BASE_URL`/`BUILDER_BASE_URL`, sends `x-command-key` when available, and reports gate-change route status as well as builder `/domains`.
+- `scripts/system-railway-redeploy.mjs` — after a successful redeploy trigger, polls `/healthz` + builder `/domains` until the live deploy is proven or times out; adds local `railway redeploy` fallback when HTTP auth and `RAILWAY_TOKEN` fallback are unavailable but the repo is linked.
+- `docs/SYSTEM_CAPABILITIES.md` — V4 doctor row + R1 live-verification note; gap updated to “server-side doctor endpoint” only.
+- `AMENDMENT_21` receipt.
+
+### State after this session
+- TokenSaverOS now has one operator-grade diagnostic command instead of scattered one-off probes.
+- Expected current result against stale production: **25/100 red**. Railway CLI is installed but repo is **not linked**, local `RAILWAY_TOKEN`/Railway IDs/GitHub token are missing, production builder/Core routes are 404, and production env/council health auth is 401.
+
+### Next agent: start here
+- Run `npm run tsos:doctor` against production after deploy. If readiness is still below 80, fix the top printed weakness before attempting `lifeos:builder:orchestrate`.
+
+---
+
+## [FIX] Update 2026-04-24 #86 — **Core/council reachability + TokenSaverOS capability check**
+
+### Files changed
+- `scripts/council-gate-change-run.mjs`, `scripts/system-railway-redeploy.mjs` — load `.env` via `dotenv/config` so council/redeploy scripts do not depend on shell-sourcing `.env` (which can fail on unquoted characters). `AMENDMENT_21` receipt.
+
+### State after this session
+- **Local current repo:** server started on `PORT=3000`; builder route mounted; `builder:preflight` reached `/ready` and reported `callCouncilMember=true`, `pool=true`, `commitToGitHub=true`, but `github_token=false`, so `/build` would fail at commit time locally.
+- **Core/council local:** `lifeos:gate-change-run` created proposal `id=1` and ran the protocol, but all models returned **UNKNOWN** because local model keys were unavailable (`gemini_flash`, `groq_llama`, `deepseek` no API key).
+- **Production:** gate-change route still 404; redeploy endpoint still 401 with current local command key; no `RAILWAY_TOKEN` fallback in this shell.
+- **Verification:** `node --check` on the two scripts, `npm test` passed (3 pass, 3 skipped), `npm run handoff:self-test` passed.
+
+### Next agent: start here
+- Finish production by redeploying or providing a working redeploy auth path (`RAILWAY_TOKEN` fallback or matching `COMMAND_CENTER_KEY`). Then rerun `lifeos:gate-change-run` against production and re-grade Core/TokenSaverOS from real model outputs.
+
+---
+
+## [FIX] Update 2026-04-24 #85 — **`requireKey` 401 (trim + Bearer)**
+
+### Files changed
+- `src/server/auth/requireKey.js` — normalize env + client key with **trim**; accept **`Authorization: Bearer <key>`**. `AMENDMENT_12` receipt + protected-file note.
+
+### State after this session
+- **401** when the key was correct but Railway/`.env` had trailing whitespace, or the client used **Bearer** instead of **x-command-key**, should be resolved after **redeploy** (or local restart) with this build.
+
+### Next agent: start here
+- If 401 persists: key truly wrong, `LIFEOS_OPEN_ACCESS` not the issue, or a route that does **not** use this middleware.
+
+---
+
+## [BUILD] Update 2026-04-24 #84 — **System builder: `.env` + `lifeos:builder:orchestrate`**
+
+### Files changed
+- `scripts/council-builder-preflight.mjs`, `scripts/lifeos-builder-build-chat.mjs` — `import 'dotenv/config'` (repo-root `.env` for base URL + command key). `package.json` — `npm run lifeos:builder:orchestrate` = preflight then `POST /api/v1/lifeos/builder/build` (Lumin chat path). `AMENDMENT_21` change receipt.
+
+### State after this session
+- **KNOW:** With `.env` present, preflight can see command-key source vars; a **reachable** app is still required: set `PUBLIC_BASE_URL` to Railway (or `BUILDER_BASE_URL` for local, e.g. `http://127.0.0.1:8080` if the server uses `PORT=8080` — preflight defaults to `http://127.0.0.1:3000`) and ensure `GET /api/v1/lifeos/builder/domains` is not 404.
+- This Cursor session did not complete a live `POST /build` (no server listening at the chosen base in this run).
+
+### Next agent: start here
+- Operator: `npm run lifeos:builder:orchestrate` after `PUBLIC_BASE_URL` points at a deploy with builder routes, or start the app locally and set `BUILDER_BASE_URL` to match `PORT`. If `/domains` returns 404, redeploy first (`docs/ops/BUILDER_PRODUCTION_FIX.md`).
+
+---
+
+## [BUILD] Update 2026-04-25 #83 — **Builder prod 404: diagnose + “Core” debate brief**
+
+### Files changed
+- `docs/ops/BUILDER_PRODUCTION_FIX.md` — KNOW evidence (`/healthz` 200, `/api/v1/lifeos/builder/domains` 404 = deploy drift), A/B/C Core-style debate, fix + verify. `scripts/diagnose-builder-prod.mjs`, `npm run builder:diagnose-prod`, `package.json` script; `docs/SYSTEM_CAPABILITIES.md` (B1 + gaps + changelog). `AMENDMENT_21` change receipt.
+
+### State after this session
+- **Root cause (KNOW):** production `robust-magic-production` is not running the same route table as the repo; builder is **in code** but **not on the live image** until **redeploy** from a branch that includes `createLifeOSCouncilBuilderRoutes` registration.
+
+### Next agent: start here
+- **Redeploy** that Railway service, then: `npm run builder:diagnose-prod` (expect 200 on `/domains` with key, or 401/403 = route exists). `npm run builder:preflight` → `lifeos:builder:build-chat` when green.
+
+## [BUILD] Update 2026-04-22 #81 — **§2.15** operator trust (instruction supremacy, anti-steering, **INTENT DRIFT**)
+
+### Files changed
+- `docs/SSOT_NORTH_STAR.md` **§2.15** + TL;DR + Version; `docs/SSOT_COMPANION.md` **§0.5I**; `docs/QUICK_LAUNCH.md`; `prompts/00-LIFEOS-AGENT-CONTRACT.md`; `CLAUDE.md` checklist **#7**; `docs/TSOS_SYSTEM_LANGUAGE.md` dual-channel table; `docs/projects/INDEX.md`; `scripts/generate-agent-rules.mjs` + `docs/AGENT_RULES.compact.md`; `AMENDMENT_21` / `AMENDMENT_36` receipts; **Handoff** Platform row.
+
+### State after this session
+- **Constitutional:** clear operator ask must be **obeyed or HALT**; **hiding** deviation is **§2.6**; **KNOW** stated that markdown **cannot** cryptographically compel a remote LLM — **receipts + §2.11b INTENT DRIFT** are the trust mechanism for narrative work; **verifiers** remain the hard proof for code/deploy.
+
+### Next agent: start here
+- If CC wants **stronger** enforcement: add optional **session** tag in `CONTINUITY_LOG` template (“Adam asked: … / Shipped: … / Drift: Y|N”).
+
+## [BUILD] Update 2026-04-25 #82 — **North Star §2.11c** (Conductor = supervisor; system codes at scale)
+
+### Files changed
+- `docs/SSOT_NORTH_STAR.md` **§2.11b** ¶4 + **§2.11c**; TL;DR + Version. `docs/SSOT_COMPANION.md` **§0.5D** *Supervisor mandate*. `CLAUDE.md`, `prompts/00`, `docs/QUICK_LAUNCH.md`, `docs/ENV_REGISTRY.md`, `scripts/generate-agent-rules.mjs` + `docs/AGENT_RULES.compact.md`, `docs/projects/INDEX.md`, `AMENDMENT_21` / `AMENDMENT_36` receipts.
+
+### State after this session
+- SSOT encodes: **supervise** builder/council output; **report** system intent, failure modes, platform GAP-FILL; **forbid** default IDE product authorship; **read** `ENV_REGISTRY` before “missing env”; **404 `/domains`** = **deploy drift**.
+
+### Next agent: start here
+- Redeploy until `GET /api/v1/lifeos/builder/domains` → **200**; then **`POST /build`** for product work.
+
 ## [BUILD] Update 2026-04-23 #80 — TSOS savings ledger + TSOS machine-channel emitter + Cursor agent naming
 
 ### Files changed

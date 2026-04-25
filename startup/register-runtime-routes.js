@@ -42,9 +42,19 @@ import { createLifeOSBacktestRoutes } from "../routes/lifeos-backtest-routes.js"
 import { createLifeOSWeeklyReviewRoutes } from "../routes/lifeos-weekly-review-routes.js";
 import { createLifeOSScorecardRoutes } from "../routes/lifeos-scorecard-routes.js";
 import { createLifeOSChatRoutes } from "../routes/lifeos-chat-routes.js";
+import { createLifeOSAmbientRoutes } from "../routes/lifeos-ambient-routes.js";
+import { createLifeOSHabitsRoutes } from "../routes/lifeos-habits-routes.js";
+import { createLifeOSCycleRoutes } from "../routes/lifeos-cycle-routes.js";
 import { createLifeOSAuthRoutes } from "../routes/lifeos-auth-routes.js";
+import { createLifeOSCouncilBuilderRoutes } from "../routes/lifeos-council-builder-routes.js";
+import { createLifeOSGateChangeRoutes } from "../routes/lifeos-gate-change-routes.js";
+import { createLaneIntelRoutes } from "../routes/lane-intel-routes.js";
+import { createLifeOSExtensionRoutes } from "../routes/lifeos-extension-routes.js";
+import { createTokenOSRoutes } from "../routes/tokenos-routes.js";
+import { getCachedResponse, cacheResponse } from "../services/response-cache.js";
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
+import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 
 export async function registerRuntimeRoutes(app, deps) {
   const {
@@ -53,6 +63,7 @@ export async function registerRuntimeRoutes(app, deps) {
     logger,
     callCouncilMember,
     callCouncilWithFailover,
+    lclMonitor,
     apiCostSavingsRevenue,
     getStripeClient,
     publicDomain,
@@ -64,7 +75,18 @@ export async function registerRuntimeRoutes(app, deps) {
     sendAlertSms,
     sendAlertCall,
     makePhoneCall,
+    commitToGitHub,
   } = deps;
+
+  const councilChatAI = callCouncilMember
+    ? createCouncilPromptAdapter(callCouncilMember, {
+        member:
+          process.env.LIFEOS_CHAT_COUNCIL_MEMBER ||
+          process.env.LUMIN_COUNCIL_MEMBER ||
+          "anthropic",
+        taskType: "general",
+      })
+    : null;
 
   registerWebsiteAuditRoutes(app, {
     requireKey,
@@ -142,7 +164,10 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [LIFEOS-GATEWAY] Routes mounted at /api/v1/lifeos");
   app.use("/api/v1/lifeos/engine", createLifeOSEngineRoutes({ pool, requireKey, notificationService, sendSMS, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-ENGINE] Routes mounted at /api/v1/lifeos/engine");
-  app.use("/api/v1/lifeos/health", createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, sendSMS, logger }));
+  app.use(
+    "/api/v1/lifeos/health",
+    createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, callAI: councilChatAI, sendSMS, logger })
+  );
   logger.info("✅ [LIFEOS-HEALTH] Routes mounted at /api/v1/lifeos/health");
   app.use("/api/v1/lifeos/family", createLifeOSFamilyRoutes({ pool, requireKey, callCouncilMember }));
   logger.info("✅ [LIFEOS-FAMILY] Routes mounted at /api/v1/lifeos/family");
@@ -174,12 +199,66 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [LIFEOS-FINANCE] Routes mounted at /api/v1/lifeos/finance");
   app.use("/api/v1/lifeos/backtest", createLifeOSBacktestRoutes({ requireKey }));
   logger.info("✅ [LIFEOS-BACKTEST] Education-only routes mounted at /api/v1/lifeos/backtest");
-  app.use("/api/v1/lifeos/weekly-review", createLifeOSWeeklyReviewRoutes({ pool, requireKey, callAI: callCouncilMember, logger }));
+  app.use(
+    "/api/v1/lifeos/weekly-review",
+    createLifeOSWeeklyReviewRoutes({ pool, requireKey, callAI: councilChatAI, logger })
+  );
   logger.info("✅ [LIFEOS-WEEKLY-REVIEW] Routes mounted at /api/v1/lifeos/weekly-review");
-  app.use("/api/v1/lifeos/scorecard", createLifeOSScorecardRoutes({ pool, requireKey, callAI: callCouncilMember, logger }));
+  app.use(
+    "/api/v1/lifeos/scorecard",
+    createLifeOSScorecardRoutes({ pool, requireKey, callAI: councilChatAI, logger })
+  );
   logger.info("✅ [LIFEOS-SCORECARD] Routes mounted at /api/v1/lifeos/scorecard");
-  app.use("/api/v1/lifeos/chat", createLifeOSChatRoutes({ pool, requireKey, callAI: callCouncilMember, logger }));
+  app.use(
+    "/api/v1/lifeos/chat",
+    createLifeOSChatRoutes({
+      pool,
+      requireKey,
+      callAI: councilChatAI,
+      callCouncilMember,
+      logger,
+    })
+  );
   logger.info("✅ [LIFEOS-CHAT] Routes mounted at /api/v1/lifeos/chat");
+  app.use("/api/v1/lifeos/ambient", createLifeOSAmbientRoutes({ pool, requireKey, logger }));
+  logger.info("✅ [LIFEOS-AMBIENT] Routes mounted at /api/v1/lifeos/ambient");
+  app.use("/api/v1/lifeos/habits", createLifeOSHabitsRoutes({ pool, requireKey, logger }));
+  logger.info("✅ [LIFEOS-HABITS] Routes mounted at /api/v1/lifeos/habits");
+  createLifeOSCycleRoutes({ pool, requireKey, logger })(app);
+
+
+  // Council builder — dispatches tasks to the system; council generates + commits code (§2.11)
+  createLifeOSCouncilBuilderRoutes({
+    pool,
+    requireKey,
+    callCouncilMember,
+    lclMonitor,
+    logger,
+    getCachedResponse,
+    cacheResponse,
+    commitToGitHub,
+  })(app);
+
+  app.use(
+    "/api/v1/lifeos/gate-change",
+    createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMember, logger })
+  );
+  logger.info("✅ [LIFEOS-GATE-CHANGE] Routes mounted at /api/v1/lifeos/gate-change");
+
+  app.use(
+    "/api/v1/lifeos/intel",
+    createLaneIntelRoutes({ pool, requireKey, callCouncilMember, logger })
+  );
+  logger.info("✅ [LIFEOS-INTEL] Horizon + red-team routes mounted at /api/v1/lifeos/intel");
+
+  app.use(
+    "/api/v1/extension",
+    createLifeOSExtensionRoutes({ pool, requireKey, callCouncilMember, logger })
+  );
+  logger.info("✅ [EXTENSION] Universal Overlay routes mounted at /api/v1/extension/{status,context,fill-form,chat}");
+
+  // TokenOS — B2B API token savings product
+  createTokenOSRoutes({ pool, requireKey, callCouncilMember, logger })(app);
 
   // Optional LifeOS / Kids / Teacher modules remain degradable.
   async function importOptionalRoute(modulePath, exportName) {

@@ -11,9 +11,10 @@
 | Channel | Law | Audience |
 |--------|-----|----------|
 | **Human report** | North Star **§2.11b**; Companion **§0.5G** | Adam / operator — **plain language**, grades, evidence, residue risk |
+| **Operator ask** | North Star **§2.15**; Companion **§0.5I** | Clear session instruction → **comply or HALT**; **no** silent substitute; **INTENT DRIFT** in **§2.11b** if deviated |
 | **Machine channel** | North Star **§2.14**; this doc | Conductor ↔ **runtime** (builder HTTP, probes, redeploy/env scripts, `[TSOS-MACHINE]` logs) |
 
-**Sheriff:** North Star **§2.13.2** — the Conductor **rejects** machine-channel artifacts that violate this doc (unmarked load-bearing claims, invented tokens, or casual English mixed into tagged machine lines).
+**Sheriff:** North Star **§2.13.2** — the Conductor **rejects** machine-channel artifacts that violate this doc (unmarked load-bearing claims, invented tokens, or casual English mixed into tagged machine lines). **Instruction drift** (§2.15) is a **§2.11b** / receipts problem, not a `[TSOS-MACHINE]` token.
 
 ---
 
@@ -129,4 +130,5 @@ Second and following lines may be human-readable **spec** for the council **insi
 
 | Date | Change |
 |------|--------|
+| 2026-04-22 | **§2.15** row in **Dual channel** (operator ask vs human report vs machine). |
 | 2026-04-22 | Initial ratification: lexicon + templates + checklist; North Star **§2.14** + Companion **§0.5H**. |

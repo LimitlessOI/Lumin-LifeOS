@@ -546,6 +546,7 @@ const {
   callCouncilWithFailover,
   detectBlindSpots,
   tokenOptimizer,
+  lclMonitor,
 } = createCouncilService({
   pool,
   COUNCIL_MEMBERS,
@@ -988,6 +989,7 @@ const { tcCoordinator, wkIntegrityEngine } = await registerRuntimeRoutes(app, {
   logger,
   callCouncilMember,
   callCouncilWithFailover,
+  lclMonitor,
   apiCostSavingsRevenue,
   getStripeClient,
   publicDomain: process.env.RAILWAY_PUBLIC_DOMAIN,
@@ -999,6 +1001,7 @@ const { tcCoordinator, wkIntegrityEngine } = await registerRuntimeRoutes(app, {
   sendAlertSms,
   sendAlertCall,
   makePhoneCall,
+  commitToGitHub,
 });
 
 // ==================== AI COUNCIL CONSENSUS MODE ====================
@@ -1084,6 +1087,15 @@ bootAllDomains({
   callCouncilMember,
   accountManager,
   tcCoordinator,
+  // callAI: routes LifeOS scheduled jobs to Gemini Flash (free, better than Groq
+  // for nuanced tasks like emotional pattern analysis, weekly review letters, etc.)
+  // Without this, LifeOS scheduled AI features silently skip on every interval.
+  callAI: async (prompt) => {
+    try {
+      const r = await callCouncilMember('gemini', prompt);
+      return typeof r === 'string' ? r : r?.content || r?.text || '';
+    } catch { return ''; }
+  },
 });
 
 // Self-register Twilio SMS webhook — no manual Twilio console action needed

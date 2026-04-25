@@ -16,8 +16,12 @@
  * Appends a JSON line to `data/builder-preflight-log.jsonl` (gitignored) on every exit — system-owned readiness note.
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ *
+ * If repo-root `.env` exists, it is loaded first (same pattern as `server.js` / other scripts) so
+ * `PUBLIC_BASE_URL`, `BUILDER_BASE_URL`, and `x-command-key` source vars work without manual `export`.
  */
 
+import 'dotenv/config';
 import { mkdir, appendFile } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';

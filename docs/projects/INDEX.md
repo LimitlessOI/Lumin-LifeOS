@@ -1,7 +1,9 @@
 # PROJECT AMENDMENTS INDEX
-**Last Updated:** 2026-04-04 (amendments 34-35 added; Kids OS and Lumin University; full education domain now specified through amendments 31-35)
+**Last Updated:** 2026-04-25 — **North Star §2.11c** (Conductor = supervisor; system `/build` at scale) + `SSOT_COMPANION` **§0.5D** *Supervisor mandate*. Prior: 2026-04-22 **§2.15** + **§0.5I**; **§2.14** + `docs/TSOS_SYSTEM_LANGUAGE.md`. Prior: **`docs/SYSTEM_CAPABILITIES.md`**. Prior: 2026-04-26 **Env law** §2.3. Prior: TSOS / **§2.11a** / **§2.11b**. Prior: Amendment 37.
 **Parent:** SSOT North Star Constitution (`docs/SSOT_NORTH_STAR.md`)
 **Authority:** All amendments subordinate to the North Star Constitution
+
+**Platform name (whole repo):** **TokenSaverOS (TSOS)** — short **TSOS**. LifeOS, LimitlessOS, TokenOS, TC, etc. are **lanes / products inside TSOS**.
 
 ---
 
@@ -10,6 +12,14 @@ Each file in this directory is a **SSOT Amendment** for one distinct project ins
 Amendments define: what the project is, its revenue model, technical spec, current state, refactor plan, and non-negotiables.
 
 They do NOT override the North Star — they add project-specific rules that operate within it.
+
+**Cross-cutting ops (not an amendment file):** `docs/SYSTEM_CAPABILITIES.md` — matrix of self-serve HTTP routes + npm scripts, **required Railway env per capability**, and **gaps**; maintain next to `docs/ENV_REGISTRY.md`.
+
+**TSOS machine channel (North Star §2.14):** `docs/TSOS_SYSTEM_LANGUAGE.md` — closed tokens + line grammar for Conductor ↔ **machinery**; **not** a substitute for **§2.11b** plain-language operator reports (`SSOT_COMPANION` §0.5G).
+
+**Operator instruction (North Star §2.15):** `docs/SSOT_COMPANION.md` **§0.5I** — clear session ask → comply or **HALT**; **INTENT DRIFT** in **§2.11b** if work ≠ ask. Does not cryptographically compel external LLMs; makes **violation visible** in receipts.
+
+**Conductor = supervisor (North Star §2.11c):** `docs/SSOT_COMPANION.md` **§0.5D** *Supervisor mandate* — **system** `POST /build` for product; Conductor **audits**, **council**-reviews, **reports**; IDE default **forbidden** when scale path is the builder; **`docs/ENV_REGISTRY.md`** before “missing env” noise.
 
 ---
 
@@ -52,6 +62,8 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 33 | [Kingsman Protocol](AMENDMENT_33_KINGSMAN_PROTOCOL.md) | constitutional | Non-revenue — mission obligation, funded by platform trust | Specification phase |
 | 34 | [Kids OS](AMENDMENT_34_KIDS_OS.md) | candidate | HIGH — family subscription $19-$29/mo, mission-foundational, graduates into Lumin University | Low (pre-build) |
 | 35 | [Lumin University](AMENDMENT_35_LUMIN_UNIVERSITY.md) | candidate | HIGH — long-arc competency-based institution, builds on Kids OS foundation | Long-range (post Kids OS) |
+| 36 | [Zero-Drift Handoff Protocol](AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md) | LIVE | Infrastructure — cold-start packets, per-lane continuity, builder next-task, audit logs | High (every agent session) |
+| 37 | [Universal Overlay Platform](AMENDMENT_37_UNIVERSAL_OVERLAY.md) | active-build | Infrastructure — browser extension, iframe overlay, form fill, real-time updates | High |
 
 ---
 
@@ -86,9 +98,34 @@ Server.js is thinner than the historical monolith but still a composition-root h
 - ✅ Game Publisher: `routes/game-routes.js`
 - ✅ Knowledge Base: `routes/knowledge-routes.js`
 - ✅ Life Coaching / Personal OS: `routes/life-coaching-routes.js`
+- ✅ LifeOS Auth: `routes/lifeos-auth-routes.js`
+- ✅ LifeOS Backtest (education-only): `routes/lifeos-backtest-routes.js`
+- ✅ LifeOS Chat (Lumin AI): `routes/lifeos-chat-routes.js`
+- ✅ LifeOS Children: `routes/lifeos-children-routes.js`
+- ✅ LifeOS Conflict: `routes/lifeos-conflict-routes.js`
+- ✅ LifeOS Copilot: `routes/lifeos-copilot-routes.js`
+- ✅ LifeOS Core (mirror, joy, integrity, commitments, truth): `routes/lifeos-core-routes.js`
+- ✅ LifeOS Decisions: `routes/lifeos-decisions-routes.js`
+- ✅ LifeOS Emotional: `routes/lifeos-emotional-routes.js`
+- ✅ LifeOS Engine (calendar, focus, privacy): `routes/lifeos-engine-routes.js`
+- ✅ LifeOS Ethics: `routes/lifeos-ethics-routes.js`
+- ✅ LifeOS Events (event stream, ingest): `routes/lifeos-events-routes.js`
+- ✅ LifeOS Family: `routes/lifeos-family-routes.js`
+- ✅ LifeOS Finance: `routes/lifeos-finance-routes.js`
+- ✅ LifeOS Growth: `routes/lifeos-growth-routes.js`
+- ✅ LifeOS Health: `routes/lifeos-health-routes.js`
+- ✅ LifeOS Healing: `routes/lifeos-healing-routes.js`
+- ✅ LifeOS Identity: `routes/lifeos-identity-routes.js`
+- ✅ LifeOS Mediation: `routes/lifeos-mediation-routes.js`
+- ✅ LifeOS Purpose: `routes/lifeos-purpose-routes.js`
+- ✅ LifeOS Scorecard (MITs + daily score): `routes/lifeos-scorecard-routes.js`
+- ✅ LifeOS Simulator: `routes/lifeos-simulator-routes.js`
+- ✅ LifeOS Vision: `routes/lifeos-vision-routes.js`
+- ✅ LifeOS Weekly Review: `routes/lifeos-weekly-review-routes.js`
+- ✅ LifeOS Workshop: `routes/lifeos-workshop-routes.js`
+- ✅ Universal Overlay (extension API): `routes/lifeos-extension-routes.js`
 - ✅ Memory System: `routes/memory-routes.js`
 - ✅ Outreach & CRM Sequences: `routes/outreach-crm-routes.js`
-- ✅ Outreach (legacy): `routes/outreach.js`
 - ✅ Site Builder + Prospect Pipeline: `routes/site-builder-routes.js`
 - ✅ Stripe Payments: `routes/stripe-routes.js`
 - ✅ Two-Tier AI Council: `routes/two-tier-council-routes.js`
@@ -96,7 +133,7 @@ Server.js is thinner than the historical monolith but still a composition-root h
 - ✅ Web Intelligence & Scraper: `routes/web-intelligence-routes.js`
 - ✅ Website Audit: `routes/website-audit-routes.js`
 
-### Service Modules (35 files in `services/`)
+### Service Modules (50+ files in `services/`)
 - ✅ AI Guard: `services/ai-guard.js`
 - ✅ AI Model Selector + Ollama bridge: `services/ai-model-selector.js`
 - ✅ AI Performance Tracker: `services/ai-performance-tracker.js`
@@ -120,6 +157,25 @@ Server.js is thinner than the historical monolith but still a composition-root h
 - ✅ Video Pipeline: `services/video-pipeline.js`
 - ✅ Web Search Integration: `services/web-search-integration.js`
 - ✅ WebSocket Handler: `services/websocket-handler.js`
+- ✅ LifeOS Auth: `services/lifeos-auth.js`
+- ✅ LifeOS Calendar: `services/lifeos-calendar.js`
+- ✅ LifeOS Character Builder: `services/character-builder.js`
+- ✅ LifeOS Communication Profile: `services/communication-profile.js`
+- ✅ LifeOS Conflict Intelligence: `services/conflict-intelligence.js`
+- ✅ LifeOS Daily Scorecard (MITs): `services/lifeos-daily-scorecard.js`
+- ✅ LifeOS Emotional Patterns: `services/emotional-pattern-engine.js`
+- ✅ LifeOS Finance: `services/lifeos-finance.js`
+- ✅ LifeOS Focus/Privacy: `services/lifeos-focus-privacy.js`
+- ✅ LifeOS Lumin AI: `services/lifeos-lumin.js`
+- ✅ LifeOS Money Decision Bridge: `services/lifeos-money-decision-bridge.js`
+- ✅ LifeOS Monetization Map: `services/monetization-map.js`
+- ✅ LifeOS Request Helpers (input coercion): `services/lifeos-request-helpers.js`
+- ✅ LifeOS Response Variety: `services/response-variety.js`
+- ✅ LifeOS Scheduled Jobs: `services/lifeos-scheduled-jobs.js`
+- ✅ LifeOS Scoreboard: `services/lifeos-scoreboard.js`
+- ✅ LifeOS Truth Delivery: `services/truth-delivery.js`
+- ✅ LifeOS User Resolver: `services/lifeos-user-resolver.js`
+- ✅ LifeOS Weekly Review: `services/lifeos-weekly-review.js`
 
 ### Core Modules (new files in `core/`)
 - ✅ Code Escalation: `core/code-escalation.js`
@@ -129,12 +185,18 @@ Server.js is thinner than the historical monolith but still a composition-root h
 - ✅ Self-Modification Engine: `core/self-modification-engine.js`
 - ✅ Two-Tier System Init: `core/two-tier-system-init.js`
 
-### DB Migrations
+### DB Migrations (key milestones — see `db/migrations/` for full list)
 - ✅ `db/migrations/20260313_core_schema.sql` — main platform schema
 - ✅ `db/migrations/20260313_site_builder_prospect_pipeline.sql` — prospect_sites, email_suppressions, outreach_log
+- ✅ `db/migrations/20260328_lifeos_core.sql` — LifeOS core tables (lifeos_users, commitments, joy_checkins, etc.)
+- ✅ 30+ additional LifeOS migrations through `db/migrations/20260408_lifeos_finance_and_prefs.sql`
+- ✅ `db/migrations/20260418_lifeos_auth.sql` — JWT auth tables
+- ✅ `db/migrations/20260418_lifeos_chat.sql` — Lumin AI threads + messages
+- ✅ `db/migrations/20260418_lifeos_daily_scorecard.sql` — MITs, daily scorecards, task deferrals
+- ✅ `db/migrations/20260418_lifeos_weekly_review.sql` — weekly reviews + interactive sessions
 
 ### Production Readiness Checklist
-- ✅ `node --check` passes on all 36 route + 35 service + 6 core files
+- ✅ `node --check` passes on all route + service + core files
 - ✅ 5 critical runtime bugs fixed (undefined variables, init order)
 - ✅ Env var validation at startup (`services/env-validator.js`)
 - ✅ Rate limiting on site builder endpoints
@@ -142,12 +204,17 @@ Server.js is thinner than the historical monolith but still a composition-root h
 - ✅ GitHub Actions smoke test (`.github/workflows/smoke-test.yml`)
 - ✅ NotificationService (Postmark) wired for cold email with suppression
 - ✅ POS affiliate URLs driven by env vars
-- ✅ DB migrations confirmed live in Neon production
-- 🔲 Replace remaining `console.*` with `logger.*` in server.js
-- 🔲 Extract `initializeTwoTierSystem()` to `core/two-tier-system-init.js`
+- ✅ LifeOS JWT auth live (register/login/refresh, Sherry invite pre-seeded)
+- ✅ PWA service worker + manifest + icons
+- ✅ Input coercion hardened on all LifeOS routes (no NaN reaches DB)
+- ✅ Zero-Waste AI guards on all LifeOS scheduled ticks
+- ✅ 8 orphan CJS route files deleted (routes/ is now ESM-consistent)
+- ✅ Response variety + communication profile wired into Lumin AI
+- 🔲 **callAI not passed to bootAllDomains** — LifeOS scheduled AI features (weekly review, early warning, event ingest) are silently skipping. Fix: add `callAI` to `bootAllDomains({...})` call in `server.js` line ~1080. Routes to `gemini_flash`.
 - 🔲 Set Railway env vars to go live (see Amendment 05)
 - 🔲 Register POS affiliate programs + set AFFILIATE_*_URL in Railway
 - 🔲 End-to-end test `POST /api/v1/sites/build` with real business URL
+- 🔲 Archive stale session reports in `docs/` (see Opus feedback 2026-04-19)
 
 ## AMENDMENT HYGIENE
 - Each major product/subsystem needs one owning amendment.
