@@ -11,7 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-24 |
+| **Last Updated** | 2026-04-25 |
 | **Verification Command** | `node scripts/verify-project.mjs --project command_center` |
 | **Manifest** | `docs/projects/AMENDMENT_12_COMMAND_CENTER.manifest.json` |
 
@@ -237,6 +237,7 @@ node --check public/overlay/command-center.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-25 | **`scripts/system-rotate-command-key.mjs`:** added `@ssot` and stopped printing the new `COMMAND_CENTER_KEY` value in stdout/stderr; output now confirms rotation while hiding the secret. | Remaining 401 repair path may require key rotation via `RAILWAY_TOKEN`; the tool must not leak the newly generated command key into terminal logs or transcripts. | ✅ | pending | `node --check scripts/system-rotate-command-key.mjs` |
 | 2026-04-24 | **`src/server/auth/requireKey.js`:** trim `API_KEY` / `LIFEOS_KEY` / `COMMAND_CENTER_KEY` and request-provided key before compare (fixes 401 when Railway or `.env` has trailing newline/whitespace). Accept **`Authorization: Bearer <same key>`** in addition to `x-command-key` / `x-api-key` / query. `@ssot` in file. | Operators and builder scripts often matched keys “visually” but failed strict `===` after copy/paste or vault formatting. | ✅ | pending | `node --check src/server/auth/requireKey.js` |
 | 2026-04-22 | `docs/ENV_REGISTRY.md` + `services/env-registry-map.js` + `docs/SSOT_COMPANION.md` §0.4: **Lumin (Railway) deploy inventory** — variable **names** from production vault; expanded DB/runtime/eXp/EMAIL/CEREBRAS entries; **no values** in repo; rotation note if DSN was exposed | User asked to keep all envs documented in SSOT; vault remains Railway-only | ✅ | pending | pending |
 | 2026-04-22 | `services/env-registry-map.js`: added `@ssot` pointer to this amendment; registry entries for **`PUBLIC_BASE_URL`**, **`REMOTE_VERIFY_BASE_URL`**, and **ClientCare** (`CLIENTCARE_*`, MFA optional) so Command Center env health matches `docs/ENV_REGISTRY.md` | Eliminate “mystery missing env” for AIs: one machine list + one human registry | ✅ | pending | pending |

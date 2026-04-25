@@ -32,6 +32,21 @@
 
 ---
 
+## [FIX] Update 2026-04-25 #88 — **Auth aligned; builder codegen 413 isolated and patched**
+
+### Files changed
+- `routes/lifeos-council-builder-routes.js` — builder `dispatchTask()` now passes `allowModelDowngrade:false` plus task type into `callCouncilMember`, so `/api/v1/lifeos/builder/build` honors `config/task-model-routing.js` (for chat codegen, `gemini_flash`) instead of silently auto-routing code prompts to a smaller-context provider.
+- `scripts/system-rotate-command-key.mjs` — added `@ssot` and hid the generated/provided `COMMAND_CENTER_KEY` in stdout/stderr so the key-rotation recovery path does not leak secrets into logs.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` and `docs/projects/AMENDMENT_12_COMMAND_CENTER.md` — receipts updated with the exact 401/413 repair state.
+
+### State after this session
+- Production auth is no longer the blocker when the local shell uses the documented command key: `/lifeos/builder/ready`, `/domains`, `/model-map`, `/gate-change/presets`, `/council/health`, and `/railway/env` all returned 200; `npm run tsos:doctor` scored **100/100 green** and `npm run builder:preflight` passed.
+- `npm run lifeos:builder:orchestrate` reached `/builder/build` but failed generation. Direct `/builder/task` with the same full Lumin chat request returned `detail:"HTTP 413"`; a tiny `/builder/task` plan succeeded on `gemini_flash`, and `/council/health` showed `gemini_flash` online. The root cause is builder codegen model auto-downgrade despite the configured route.
+- The source fix is local and needs deploy before the system build can be rerun against production.
+
+### Next agent: start here
+- Run `node --check routes/lifeos-council-builder-routes.js scripts/system-rotate-command-key.mjs`, commit with `GAP-FILL:` or `[system-build]` as appropriate, push/redeploy, then rerun `npm run tsos:doctor`, `npm run builder:preflight`, and `npm run lifeos:builder:orchestrate`.
+
 ## [FIX] Update 2026-04-24 #87 — **TokenSaverOS doctor + build-system weak-point fixes**
 
 ### Files changed

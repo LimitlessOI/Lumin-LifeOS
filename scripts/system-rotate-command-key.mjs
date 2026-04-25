@@ -17,6 +17,8 @@
  *   2. Railway app updates COMMAND_CENTER_KEY in its own vault via GraphQL
  *   3. This script rewrites COMMAND_CENTER_KEY in .env.local to match
  *   4. Triggers a redeploy so Railway picks up the new value
+ *
+ * @ssot docs/projects/AMENDMENT_12_COMMAND_CENTER.md
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
@@ -60,7 +62,7 @@ const providedKey = keyIdx >= 0 ? args[keyIdx + 1] : null;
 
 console.log(`\n🔑 TSOS Key Rotation`);
 console.log(`   Base URL:  ${BASE_URL}`);
-console.log(`   New key:   ${providedKey || '(auto-generate)'}\n`);
+console.log(`   New key:   ${providedKey ? '(provided, hidden)' : '(auto-generate)'}\n`);
 
 let newKey;
 try {
@@ -81,7 +83,7 @@ try {
 
   newKey = json.new_key;
   console.log(`✅ Railway vault updated`);
-  console.log(`   New CCK: ${newKey}\n`);
+  console.log('   New CCK: (hidden)\n');
 } catch (err) {
   console.error('❌ Network error calling rotate-command-key:', err.message);
   process.exit(1);
@@ -102,7 +104,7 @@ try {
   console.log(`✅ .env.local updated with new key`);
 } catch (err) {
   console.error('⚠️  Could not update .env.local:', err.message);
-  console.error(`   Manually set: COMMAND_CENTER_KEY=${newKey}`);
+  console.error('   Manually set COMMAND_CENTER_KEY to the generated key returned by the secure channel.');
 }
 
 // ── Trigger redeploy ──────────────────────────────────────────────────────────
@@ -125,5 +127,5 @@ try {
 }
 
 console.log('\n✅ Key rotation complete.');
-console.log(`   Both Railway vault and .env.local now have: COMMAND_CENTER_KEY=${newKey}`);
+console.log('   Both Railway vault and .env.local now have the same COMMAND_CENTER_KEY (value hidden).');
 console.log('   Wait ~60s for Railway to finish redeploying, then test.\n');

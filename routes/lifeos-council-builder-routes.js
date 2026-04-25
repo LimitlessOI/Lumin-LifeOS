@@ -368,7 +368,11 @@ export function createLifeOSCouncilBuilderRoutes({
         }
       }
 
-      const result = await callCouncilMember(memberKey, fullPrompt, { useCache: false });
+      const result = await callCouncilMember(memberKey, fullPrompt, {
+        useCache: false,
+        allowModelDowngrade: false,
+        taskType: mode === 'code' ? 'codegen' : mode,
+      });
       const raw = typeof result === 'string' ? result : result?.content || result?.text || '';
       const { output, placement } = splitBuilderOutput(raw);
 
