@@ -217,6 +217,88 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
   });
 
   /**
+   * POST /rotate-command-key
+   * Atomically rotates COMMAND_CENTER_KEY in Railway vault.
+   * Auth: x-railway-token header must match RAILWAY_TOKEN in process.env.
+   * This escape-hatch bypasses the command key so it can be reset even when
+   * local .env.local and Railway vault are out of sync.
+   *
+   * Body: { new_key?: string }  — omit to auto-generate a secure random key
+   * Returns: { ok, new_key, message }
+   */
+  router.post("/rotate-command-key", async (req, res) => {
+    try {
+      const railwayToken = req.headers['x-railway-token'];
+      const envToken = process.env.RAILWAY_TOKEN;
+
+      if (!envToken || !railwayToken || railwayToken !== envToken) {
+        return res.status(401).json({
+          ok: false,
+          error: 'Unauthorized — x-railway-token must match RAILWAY_TOKEN in vault',
+        });
+      }
+
+      const projectId     = process.env.RAILWAY_PROJECT_ID;
+      const serviceId     = process.env.RAILWAY_SERVICE_ID;
+      const environmentId = process.env.RAILWAY_ENVIRONMENT_ID;
+
+      if (!projectId || !serviceId || !environmentId) {
+        return res.status(500).json({
+          ok: false,
+          error: 'Missing RAILWAY_PROJECT_ID / RAILWAY_SERVICE_ID / RAILWAY_ENVIRONMENT_ID',
+        });
+      }
+
+      // Use provided key or generate a secure random one
+      const rawKey = req.body?.new_key && String(req.body.new_key).trim();
+      const newKey = rawKey || `CCK-${Date.now()}-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+
+      // Push to Railway vault via GraphQL
+      const gqlRes = await fetch(RAILWAY_GQL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${envToken}` },
+        body: JSON.stringify({
+          query: `mutation UpsertVars($input: VariableCollectionUpsertInput!) {
+            variableCollectionUpsert(input: $input)
+          }`,
+          variables: {
+            input: {
+              projectId,
+              serviceId,
+              environmentId,
+              variables: { COMMAND_CENTER_KEY: newKey },
+            },
+          },
+        }),
+      });
+
+      if (!gqlRes.ok) {
+        const text = await gqlRes.text();
+        return res.status(502).json({ ok: false, error: `Railway API HTTP ${gqlRes.status}: ${text}` });
+      }
+      const gqlJson = await gqlRes.json();
+      if (gqlJson.errors?.length) {
+        return res.status(502).json({ ok: false, error: `Railway GQL: ${gqlJson.errors.map(e => e.message).join('; ')}` });
+      }
+
+      console.log('[ROTATE-CCK] COMMAND_CENTER_KEY rotated in Railway vault');
+
+      res.json({
+        ok: true,
+        new_key: newKey,
+        message: 'COMMAND_CENTER_KEY updated in Railway vault. Update .env.local to match, then redeploy.',
+        next_steps: [
+          `Set COMMAND_CENTER_KEY=${newKey} in your .env.local`,
+          'Run: npm run system:railway:redeploy',
+        ],
+      });
+    } catch (error) {
+      console.error('[ROTATE-CCK] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
    * POST /self-redeploy
    * Triggers Railway to redeploy this service using its own vault credentials.
    * Auth: x-railway-token header must match RAILWAY_TOKEN in process.env.

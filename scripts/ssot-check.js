@@ -37,12 +37,21 @@ const c = (color, text) => `${COLORS[color]}${text}${COLORS.reset}`;
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-function getChangedFiles() {
+function getChangedFiles(pushRange, stagedOnly = false) {
   try {
-    // Files staged for commit
+    if (pushRange) {
+      // Pre-push mode: only check files in the commits being pushed.
+      // pushRange is "<remoteRef>..<localRef>" e.g. "origin/main..HEAD"
+      // Uses diff-tree to list files changed in those commits (not working tree).
+      const files = execSync(`git diff --name-only ${pushRange}`, { cwd: ROOT })
+        .toString().trim().split('\n').filter(Boolean);
+      return files;
+    }
+    // Pre-commit mode: staged only by default (avoids false-positives from
+    // unrelated unstaged working-tree changes across long multi-session work).
     const staged = execSync('git diff --cached --name-only', { cwd: ROOT })
       .toString().trim().split('\n').filter(Boolean);
-    // Files changed but not staged
+    if (stagedOnly) return staged;
     const unstaged = execSync('git diff --name-only', { cwd: ROOT })
       .toString().trim().split('\n').filter(Boolean);
     return [...new Set([...staged, ...unstaged])];
@@ -92,8 +101,8 @@ function getAmendmentLastUpdated(amendmentPath) {
 
 // ── Main modes ────────────────────────────────────────────────────────────────
 
-function checkChangedFiles() {
-  const changed = getChangedFiles();
+function checkChangedFiles(pushRange, stagedOnly = false) {
+  const changed = getChangedFiles(pushRange, stagedOnly);
   if (!changed.length) {
     console.log(c('green', '✅ No changed files to check.'));
     return 0;
@@ -108,6 +117,7 @@ function checkChangedFiles() {
     // Skip non-source files and the amendments themselves
     if (!file.match(/\.(js|ts)$/) || file.includes('docs/') || file.includes('scripts/')) continue;
     if (!file.match(/^(routes|services|core|startup)\//)) continue;
+    if (!existsSync(path.join(ROOT, file))) continue; // e.g. deleted in working tree; do not false-flag @ssot
 
     const ssotTag = extractSsotTag(file);
     if (!ssotTag) {
@@ -213,5 +223,13 @@ if (args.includes('--all')) {
 } else if (args.includes('--report')) {
   fullReport();
 } else {
-  process.exit(checkChangedFiles());
+  // Support --push-range <range> for pre-push hook use (avoids false-positives
+  // from unrelated working-tree changes by checking only the pushed commits).
+  const rangeIdx = args.indexOf('--push-range');
+  const pushRange = rangeIdx >= 0 ? args[rangeIdx + 1] : null;
+  // --staged-only: only check git-cached (staged) files, skip working-tree changes.
+  // The pre-commit hook passes this to avoid false-positives from unrelated
+  // unstaged modifications left over from prior sessions.
+  const stagedOnly = args.includes('--staged-only');
+  process.exit(checkChangedFiles(pushRange, stagedOnly));
 }

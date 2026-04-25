@@ -32,6 +32,7 @@
     "system:doctor": "node scripts/tsos-doctor.mjs",
     "env:certify": "node scripts/env-certify.mjs",
     "system:railway:redeploy": "node scripts/system-railway-redeploy.mjs",
+    "system:rotate-command-key": "node scripts/system-rotate-command-key.mjs",
     "lifeos:lumin-build-smoke": "node scripts/lumin-build-smoke.mjs",
     "lifeos:build-ops": "node scripts/lifeos-build-ops.mjs",
     "lifeos:lumin-plan": "node scripts/lumin-invoke-plan.mjs",

@@ -1,7 +1,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-23 (self-redeploy capability)
+**Last Updated:** 2026-04-25 (atomic key rotation)
 
 ---
 
@@ -163,6 +163,7 @@ One model may fill more than one role only when no safer alternative exists, and
 |---|---|---|---|---|---|
 | 2026-04-01 | Added the required self-programming loop (proposal, execution, verification, review, repair, scoring) plus explicit separation-of-duties rules | The builder now has a documented operating contract for how autonomous code work must be evaluated instead of acting like a single black-box coder | ✅ | pending | pending |
 | 2026-04-23 | GAP-FILL: Added `POST /api/v1/railway/managed-env/self-redeploy` to `routes/railway-managed-env-routes.js`; updated `scripts/system-railway-redeploy.mjs` with 2-path fallback (command-key → RAILWAY_TOKEN) | System needed ability to redeploy itself using its own Railway vault credentials when local COMMAND_CENTER_KEY is out of sync; previous `/api/v1/railway/deploy` required matching local key | ✅ node --check | pending | pending |
+| 2026-04-25 | Added `POST /api/v1/railway/managed-env/rotate-command-key` to `routes/railway-managed-env-routes.js`; added `scripts/system-rotate-command-key.mjs`; added `npm run system:rotate-command-key` | COMMAND_CENTER_KEY drifted between Railway vault and local .env.local — needed atomic rotation so both sides update together; uses x-railway-token escape-hatch auth so it works even when CCK is broken | ✅ node --check | pending | pending |
 
 ---
 
