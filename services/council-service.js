@@ -1557,6 +1557,84 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
         return text;
       }
 
+      if (config.provider === "anthropic") {
+        const anthropicKey = getApiKeyForProvider("anthropic");
+        if (!anthropicKey) throw new Error("ANTHROPIC_API_KEY not set");
+
+        response = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": anthropicKey,
+            "anthropic-version": "2023-06-01",
+          },
+          body: JSON.stringify({
+            model: config.model,
+            max_tokens: scopedMaxTokens,
+            system: systemPrompt,
+            messages: deltaMessages
+              ? deltaMessages
+              : [{ role: "user", content: finalPrompt }],
+          }),
+          signal: AbortSignal.timeout(COUNCIL_TIMEOUT_MS),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Anthropic HTTP ${response.status}: ${errorText.slice(0, 300)}`);
+        }
+
+        const json = await response.json();
+        if (json.error) throw new Error(json.error.message);
+
+        let text = json.content?.[0]?.text || "";
+        if (!text) throw new Error("Empty response from Anthropic");
+
+        text = decompressResponse(text, useCompression);
+
+        const inputTokens = json.usage?.input_tokens || estimateTokens(finalPrompt);
+        const outputTokens = json.usage?.output_tokens || estimateTokens(text);
+        const cost = calculateCost(json.usage, config.model);
+        if (cost > 0) await updateDailySpend(cost);
+
+        tokenOptimizer.trackUsage({
+          provider: "anthropic",
+          model: config.model || member,
+          taskType,
+          inputTokens,
+          outputTokens,
+          savedTokens: totalSavedInputTokens,
+          cacheHit: false,
+          costUSD: cost,
+          savedCostUSD: totalSavedInputTokens * 0.000003,
+        }).catch(() => {});
+
+        if (savingsLedger) {
+          savingsLedger.record({
+            provider: "anthropic",
+            model: config.model || member,
+            taskType,
+            originalTokens: inputTokens + totalSavedInputTokens,
+            compressedTokens: inputTokens,
+            outputTokens,
+            savedTokens: totalSavedInputTokens,
+            savedOutputPct: codSavedOutputPct,
+            costUSD: cost,
+            cacheHit: false,
+            compressionLayers: buildRecordedCompressionLayers(compressionLayers, outputTokens, codSavedOutputPct),
+          }).catch(() => {});
+        }
+
+        if (options.useCache !== false) {
+          await cacheResponse(prompt, member, cleanForCache(text), taskType);
+        }
+
+        recordSessionTurns(effectiveSessionId, finalPrompt, text);
+        lclMonitor.inspect(text, { member, taskType, symbolsFired: lclSymbolsFired, lclWasActive });
+
+        return text;
+      }
+
       throw new Error(
         `Provider ${config.provider} not yet wired in council-service`
       );

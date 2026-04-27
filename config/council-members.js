@@ -1,6 +1,6 @@
 export const COUNCIL_ALIAS_MAP = {
-  claude: "groq_llama",
-  anthropic: "groq_llama",
+  claude: "claude_sonnet",
+  anthropic: "claude_sonnet",
   chatgpt: "groq_llama",
   openai: "groq_llama",
   gemini: "gemini_flash",
@@ -12,6 +12,22 @@ export function createCouncilMembers({ OLLAMA_ENDPOINT, DEEPSEEK_BRIDGE_ENABLED 
   const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
 
   return {
+    // ── Anthropic Claude (paid, high-quality codegen) ──────────────────────
+    claude_sonnet: {
+      name: "Claude Sonnet 4.6 (Anthropic)",
+      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
+      provider: "anthropic",
+      role: "Primary Code Author & Builder",
+      focus: "production code generation, complex reasoning, ESM Node.js, long-form output",
+      maxTokens: 16000,
+      tier: "tier1",
+      costPer1M: 3.0,   // $3/M input, $15/M output (Sonnet pricing)
+      specialties: ["code", "code_generation", "reasoning", "production", "esm", "architecture"],
+      isFree: false,
+      isLocal: false,
+      priority: "highest",
+    },
+
     ollama_deepseek: {
       name: "DeepSeek Coder (Local)",
       model: "deepseek-coder:latest",

@@ -5,8 +5,9 @@
  * This file defines static preferences only. Runtime task authority from
  * the memory-intelligence layer may reorder or block these choices.
  *
- * Rule: use the CHEAPEST model that can do the job well.
- * All models listed here are free ($0/1M tokens on the production system).
+ * Rule: use the CHEAPEST model that can do the job CORRECTLY.
+ * Free models (Gemini Flash, Groq) for routing/classification/planning.
+ * claude_sonnet for any code generation — free models truncate and emit wrong syntax.
  *
  * Usage:
  *   import { getModelForTask } from './config/task-model-routing.js';
@@ -69,13 +70,13 @@ export const TASK_MODEL_MAP = {
   'lifeos.health.pattern_analysis':    'gemini_flash',
 
   // ── Council / Builder ────────────────────────────────────────────────────
-  'council.builder.task':             'gemini_flash',  // legacy dispatch label
-  'council.builder.code':             'gemini_flash',  // POST /builder/task|build mode=code (default)
-  'council.builder.code_execute':     'groq_llama',    // mode=code + execution_only — frozen spec, fast emit
-  'council.builder.plan':             'gemini_flash',
-  'council.builder.review':           'gemini_flash',
-  'council.builder.code_review':      'gemini_flash',
-  'council.gate_change.debate':       'gemini_flash',  // §2.6 ¶8 — single-pass rubric + VERDICT line
+  'council.builder.task':             'claude_sonnet', // legacy dispatch label
+  'council.builder.code':             'claude_sonnet', // POST /builder/task|build mode=code (default)
+  'council.builder.code_execute':     'claude_sonnet', // mode=code + execution_only — needs correct ESM output
+  'council.builder.plan':             'gemini_flash',  // planning is free-tier safe
+  'council.builder.review':           'claude_sonnet', // code review needs quality model
+  'council.builder.code_review':      'claude_sonnet',
+  'council.gate_change.debate':       'claude_sonnet', // §2.6 ¶8 — load-bearing constitutional debate
 
   // ── Email / Outreach ─────────────────────────────────────────────────────
   'outreach.email.draft':             'groq_llama',
