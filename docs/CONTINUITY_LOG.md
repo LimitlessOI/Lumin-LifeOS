@@ -32,6 +32,74 @@
 
 ---
 
+## [FIX] Update 2026-04-27 — **Railway boot: `createAssessmentBatteryRoutes` undefined**
+
+### Files changed
+- `startup/register-runtime-routes.js` — add missing import for `createAssessmentBatteryRoutes` (line ~197 already mounted the router).
+- `routes/lifeos-assessment-battery-routes.js` — auth via `middleware/lifeos-auth-middleware.js`; `req.lifeosUser.sub`; `saveResult({ userId, … })` matches service.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md` — receipts + Last Updated.
+
+### State
+- Production was crash-looping after route registration with `ReferenceError: createAssessmentBatteryRoutes is not defined` (Railway `/healthz` unavailable).
+
+### Next agent
+- Push `main` if not deployed; confirm `/healthz` green; optional: `POST …/railway/managed-env/self-redeploy` if auto-deploy lags.
+
+---
+
+## [RESEARCH] Update 2026-04-25 #118 — **Brainstorm catalog SSOT enrichment (nuances + streams A–L)**
+
+### Files changed
+- `docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md` — **§0** governance/infra tensions; full **stream map**; **Session A** (Stream A clusters); **B-bis** Grok 25; **G-bis** IMMEDIATE 10 + revolutionary 25; **Session H** = **J** ten-gap list; **Session I** includes **K**; **Mission (H)** + **21** merge grammar + **39** / `MEMORY_FRAMEWORK_DESIGN_BRIEF` pointers; expanded route hints.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Last Updated**; **Change Receipts** row.
+
+### State
+- Catalog is still **extracted**, not a byte-audit of dumps; verbatim remains in **`raw/`** + inbox.
+
+### Next agent
+- On new exports: extend **§12** + this catalog’s relevant session; re-run `idea-vault:catalog-keywords` if keyword defaults change.
+
+---
+
+## [BUILD] Update 2026-04-25 #117 — **Brainstorm sessions → `BRAINSTORM_SESSIONS_IDEAS_CATALOG.md`**
+
+### Files changed
+- `docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md` *(new)* — idea bullets from Streams **M–R**, **S** (L4-001), **O** (UCP 20), **Q** (governance clusters), **J/L** (L4 notes), **N**, **R**, **P** pointer.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§12.3** → catalog; §12.4 inbox; footer.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — canonical path row; **Last Updated**; **Change Receipts**.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `owned_files`, `current_focus`.
+- `docs/projects/INDEX.md` — HOW THIS WORKS (catalog link).
+
+### Honesty
+- Extracted from sampled regions — **not** every line of every dump; verbatim remains in **`•`+TAB+`raw/`**.
+
+---
+
+## [BUILD] Update 2026-04-25 #116 — **Idea Vault — `CONVERSATION_DUMP` §12 brainstorm inventory**
+
+### Files changed
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§12** (Streams **M–R** verbatim regions, L4 note, `rg` counts, inbox).
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Last Updated** + **Change Receipts**.
+
+### Next agent
+- Re-run **`rg -c -i brainstorm`** on `raw/` after new exports; extend §12 if new streams get **brainstorm-dense** hints in **38**.
+
+---
+
+## [BUILD] Update 2026-04-25 #115 — **Idea Vault — cloud-first posture (GitHub / Railway / Neon; no local Ollama default)**
+
+### Files changed
+- `docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md` — **Cloud-first** section; push = canonical.
+- `docs/conversation_dumps/README.md` — commit+push / no Ollama note.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — operator corpus intro; **§B**; **§C**; **Last Updated**; handoff; **Change Receipts**.
+- `scripts/operator-corpus-pipeline.mjs` — posture banner + JSDoc.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `next_task`, `current_focus`, `anti_drift_notes`.
+
+### State
+- Operator laptop: **edit + push** only when needed; **Neon** for twin ingest; **Railway** for council/builder — aligns with Adam shutting down **Ollama** until dedicated servers.
+
+---
+
 ## [BUILD] Update 2026-04-25 #114 — **Idea Vault — `OPERATOR_BRAINSTORM_INBOX` + stream brainstorm line hints**
 
 ### Files changed

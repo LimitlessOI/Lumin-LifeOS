@@ -1,13 +1,13 @@
 # AMENDMENT 19 — Project Governance
 
-**Last Updated:** 2026-04-26 — mount Memory Intelligence routes at /api/v1/memory. Prior: wire savingsLedger into registerRuntimeRoutes.
+**Last Updated:** 2026-04-27 — Railway boot fix: `register-runtime-routes.js` imports `createAssessmentBatteryRoutes` (was mounted but undefined). Prior: 2026-04-26 — mount Memory Intelligence routes at /api/v1/memory. Prior: wire savingsLedger into registerRuntimeRoutes.
 
 | Field | Value |
 |---|---|
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-22 — `ssot-check.js` `checkChangedFiles` skips non-existent paths (deleted files in diff). Prior: Lumin `pending_adam` bridge, `required_routes` method + 401 retry, remote verify. |
+| **Last Updated** | 2026-04-27 — `register-runtime-routes.js` assessment battery import restored (Railway boot). Prior: 2026-04-22 — `ssot-check.js` `checkChangedFiles` skips non-existent paths (deleted files in diff). Prior: Lumin `pending_adam` bridge, `required_routes` method + 401 retry, remote verify. |
 | **Verification Command** | `node scripts/verify-project.mjs --project project_governance` |
 | **Manifest** | `docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.manifest.json` |
 
@@ -202,6 +202,7 @@ Required runtime truths:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-27 | `startup/register-runtime-routes.js` — **GAP-FILL:** restore `import { createAssessmentBatteryRoutes } from "../routes/lifeos-assessment-battery-routes.js"`. Merge/receipt claimed the wire existed; production boot threw `ReferenceError: createAssessmentBatteryRoutes is not defined` at the existing `app.use("/api/v1/lifeos/identity/assessment", …)` line. | Railway `/healthz` failing — process never finished route registration. | ✅ | pending | `node --check startup/register-runtime-routes.js` |
 | 2026-04-26 | `startup/boot-domains.js`: add `autoSeedEpistemicFacts(pool, logger)` — checks epistemic_facts count on boot, seeds if empty via execSync, logs count if already seeded, never crashes boot | Memory Intelligence tables are empty until seeded; manual seed step should not be required | ✅ node --check | pending | pending |
 | 2026-04-26 | `startup/register-runtime-routes.js`: import + mount `createMemoryIntelligenceRoutes` at `/api/v1/memory` | Wire AMENDMENT_39 Memory Intelligence API surface into the running app | ✅ node --check | pending | pending |
 | 2026-04-25 | `startup/register-runtime-routes.js`: pass `savingsLedger: deps.savingsLedger` into `createApiCostSavingsRoutes`; `server.js`: add `savingsLedger` to `registerRuntimeRoutes` call | `GET /api/v1/tsos/savings/report` was returning 503 "savingsLedger not initialised" — the service was created but never threaded into the route context | ✅ node --check | pending | pending |

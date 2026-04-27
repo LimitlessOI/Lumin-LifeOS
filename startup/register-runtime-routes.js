@@ -29,6 +29,7 @@ import { createLifeOSChildrenRoutes } from "../routes/lifeos-children-routes.js"
 import { createLifeOSVisionRoutes } from "../routes/lifeos-vision-routes.js";
 import { createLifeOSDecisionsRoutes } from "../routes/lifeos-decisions-routes.js";
 import { createLifeOSIdentityRoutes } from "../routes/lifeos-identity-routes.js";
+import { createAssessmentBatteryRoutes } from "../routes/lifeos-assessment-battery-routes.js";
 import { createLifeOSVictoryVaultRoutes } from "../routes/lifeos-victory-vault-routes.js";
 import { createLifeOSGrowthRoutes } from "../routes/lifeos-growth-routes.js";
 import { createLifeOSMediationRoutes } from "../routes/lifeos-mediation-routes.js";

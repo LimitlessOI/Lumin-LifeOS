@@ -7,7 +7,7 @@
  */
 
 import express from "express";
-import { requireLifeOSUser } from "./lifeos-auth-helpers.js";
+import { requireLifeOSUser } from "../middleware/lifeos-auth-middleware.js";
 import { createAssessmentBatteryService } from "../services/lifeos-assessment-battery.js";
 
 /**
@@ -24,7 +24,7 @@ export function createAssessmentBatteryRoutes({ pool }) {
   router.post("/result", requireLifeOSUser, async (req, res, next) => {
     try {
       const { assessmentType, resultKey, resultLabel, score, rawAnswers, version } = req.body;
-      const userId = req.user.id;
+      const userId = req.lifeosUser.sub;
 
       if (!assessmentType || !resultKey || !resultLabel) {
         return res.status(400).json({ 
@@ -32,13 +32,14 @@ export function createAssessmentBatteryRoutes({ pool }) {
         });
       }
 
-      const result = await svc.saveResult(userId, {
+      const result = await svc.saveResult({
+        userId,
         assessmentType,
         resultKey,
         resultLabel,
         score,
         rawAnswers,
-        version
+        version,
       });
 
       res.status(201).json(result);
@@ -50,7 +51,7 @@ export function createAssessmentBatteryRoutes({ pool }) {
   // Get specific assessment result by type
   router.get("/result/:type", requireLifeOSUser, async (req, res, next) => {
     try {
-      const userId = req.user.id;
+      const userId = req.lifeosUser.sub;
       const assessmentType = req.params.type;
       const version = parseInt(req.query.version) || 1;
 
@@ -69,7 +70,7 @@ export function createAssessmentBatteryRoutes({ pool }) {
   // Get all assessment results for user
   router.get("/results", requireLifeOSUser, async (req, res, next) => {
     try {
-      const userId = req.user.id;
+      const userId = req.lifeosUser.sub;
       const results = await svc.getAllResults(userId);
       res.json(results);
     } catch (err) {
@@ -80,7 +81,7 @@ export function createAssessmentBatteryRoutes({ pool }) {
   // Get compatibility profile
   router.get("/profile", requireLifeOSUser, async (req, res, next) => {
     try {
-      const userId = req.user.id;
+      const userId = req.lifeosUser.sub;
       const profile = await svc.getCompatibilityProfile(userId);
       res.json(profile);
     } catch (err) {
@@ -91,7 +92,7 @@ export function createAssessmentBatteryRoutes({ pool }) {
   // Check battery completion status
   router.get("/complete", requireLifeOSUser, async (req, res, next) => {
     try {
-      const userId = req.user.id;
+      const userId = req.lifeosUser.sub;
       const complete = await svc.hasCompletedBattery(userId);
       res.json({ complete });
     } catch (err) {
