@@ -32,6 +32,20 @@
 
 ---
 
+## [BUILD] Update 2026-04-27 — **LifeOS shell nav — Dashboard, Chat, Weekly, Wins (builder blocked)**
+
+### Files changed
+- `public/overlay/lifeos-app.html` — sidebar + mobile **More** + **PAGE_META** + section color tokens for dashboard and victory vault.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipts (**GAP-FILL:** `POST …/builder/build` → council `fetch failed` from Railway).
+
+### Honesty
+- Intended path was **`POST /api/v1/lifeos/builder/build`** with `files: [lifeos-app.html]`; provider fetch from deploy failed — Conductor applied minimal shell edit and receipted.
+
+### Next agent
+- Re-run `/build` when council egress is healthy; or use `/task` for smaller deltas.
+
+---
+
 ## [FIX] Update 2026-04-27 — **Railway boot: `createAssessmentBatteryRoutes` undefined**
 
 ### Files changed

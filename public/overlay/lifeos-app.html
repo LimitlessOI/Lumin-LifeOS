@@ -48,6 +48,8 @@
       --c-vision:     #38bdf8;
       --c-legacy:     #fb923c;
       --c-healing:    #c084fc;
+      --c-dashboard:  #6366f1;
+      --c-victory:    #fbbf24;
 
       /* Layout */
       --sidebar-w:      240px;
@@ -1286,6 +1288,14 @@
         <span class="nav-icon">☀️</span>
         <span class="nav-label">Today</span>
       </a>
+      <a class="nav-item" id="nav-dashboard" data-page="lifeos-dashboard.html" data-label="Dashboard" onclick="navigate(this)" href="#">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a class="nav-item" id="nav-chat" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="navigate(this)" href="#">
+        <span class="nav-icon">💬</span>
+        <span class="nav-label">Chat</span>
+      </a>
       <a class="nav-item"        id="nav-mirror"    data-page="lifeos-mirror.html"    data-label="Mirror"     onclick="navigate(this)" href="#">
         <span class="nav-icon">🔮</span>
         <span class="nav-label">Mirror</span>
@@ -1356,6 +1366,14 @@
       <a class="nav-item" id="nav-cycle"     data-page="lifeos-cycle.html"     data-label="Cycle"      onclick="navigate(this)" href="#">
         <span class="nav-icon">🌑</span>
         <span class="nav-label">Cycle</span>
+      </a>
+      <a class="nav-item" id="nav-weekly" data-page="lifeos-weekly-review.html" data-label="Weekly Review" onclick="navigate(this)" href="#">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">Weekly</span>
+      </a>
+      <a class="nav-item" id="nav-victory" data-page="lifeos-victory-vault.html" data-label="Victory Vault" onclick="navigate(this)" href="#">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-label">Wins</span>
       </a>
       <a class="nav-item" id="nav-finance"   data-page="lifeos-finance.html"   data-label="Finance"    onclick="navigate(this)" href="#">
         <span class="nav-icon">💰</span>
@@ -1472,6 +1490,14 @@
   <div class="more-sheet-handle"></div>
   <div class="more-sheet-title">All Sections</div>
   <div class="more-grid">
+    <div class="more-item" data-page="lifeos-dashboard.html" data-label="Dashboard" onclick="mobileNavFromMore('lifeos-dashboard.html','Dashboard','--c-dashboard')">
+      <span class="more-item-icon">📊</span>
+      <span class="more-item-label">Dashboard</span>
+    </div>
+    <div class="more-item" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="mobileNavFromMore('lifeos-chat.html','Lumin Chat','--c-coach')">
+      <span class="more-item-icon">💬</span>
+      <span class="more-item-label">Chat</span>
+    </div>
     <div class="more-item" data-page="lifeos-mirror.html" data-label="Mirror" onclick="mobileNavFromMore('lifeos-mirror.html','Mirror','--c-mirror')">
       <span class="more-item-icon">🔮</span>
       <span class="more-item-label">Mirror</span>
@@ -1535,6 +1561,14 @@
     <div class="more-item" data-page="lifeos-legacy.html" data-label="Legacy" onclick="mobileNavFromMore('lifeos-legacy.html','Legacy','--c-legacy')">
       <span class="more-item-icon">🏛️</span>
       <span class="more-item-label">Legacy</span>
+    </div>
+    <div class="more-item" data-page="lifeos-weekly-review.html" data-label="Weekly Review" onclick="mobileNavFromMore('lifeos-weekly-review.html','Weekly Review','--c-mirror')">
+      <span class="more-item-icon">📋</span>
+      <span class="more-item-label">Weekly</span>
+    </div>
+    <div class="more-item" data-page="lifeos-victory-vault.html" data-label="Victory Vault" onclick="mobileNavFromMore('lifeos-victory-vault.html','Victory Vault','--c-victory')">
+      <span class="more-item-icon">🏆</span>
+      <span class="more-item-label">Wins</span>
     </div>
   </div>
 </div>
@@ -1688,6 +1722,7 @@ function overlayUrl(page) { return `/overlay/${page}`; }
 /* Page metadata */
 const PAGE_META = {
   'lifeos-today.html':     { title: 'Today',      icon: '☀️',  color: '--c-today'     },
+  'lifeos-dashboard.html': { title: 'Dashboard', icon: '📊',  color: '--c-dashboard' },
   'lifeos-mirror.html':    { title: 'Mirror',     icon: '🔮',  color: '--c-mirror'    },
   'lifeos-engine.html':    { title: 'Engine',     icon: '⚡',  color: '--c-engine'    },
   'lifeos-health.html':    { title: 'Health',     icon: '🌿',  color: '--c-health'    },
@@ -1715,6 +1750,7 @@ const PAGE_META = {
   'lifeos-parent-view.html': { title: 'Parent View', icon: '👨‍👩‍👧', color: '--c-children' },
   'lifeos-feature.html': { title: 'Feature Guide', icon: 'ℹ️', color: '--c-purpose' },
   'lifeos-chat.html':    { title: 'Lumin Chat',    icon: '💬', color: '--c-coach'   },
+  'lifeos-victory-vault.html': { title: 'Victory Vault', icon: '🏆', color: '--c-victory' },
   'lifeos-backtest.html': { title: 'Backtest',     icon: '📊', color: '--c-finance' },
   'lifeos-weekly-review.html': { title: 'Weekly Review', icon: '📋', color: '--c-mirror' },
 };
