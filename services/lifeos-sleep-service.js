@@ -78,11 +78,3 @@ export function createSleepService({ pool }) {
     }
   };
 }
----METADATA---
-```json
-{
-  "target_file": "services/lifeos-sleep-service.js",
-  "insert_after_line": null,
-  "confidence": 0.85
-}
-```

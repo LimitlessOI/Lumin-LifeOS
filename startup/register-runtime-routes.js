@@ -56,6 +56,7 @@ import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createMemoryIntelligenceRoutes } from "../routes/memory-intelligence-routes.js";
+import { mountSleepRoutes } from "../routes/lifeos-sleep-routes.js";
 
 export async function registerRuntimeRoutes(app, deps) {
   const {
@@ -311,6 +312,10 @@ export async function registerRuntimeRoutes(app, deps) {
     managedEnvService: railwayManagedEnvService,
   });
   createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
+
+  // Sleep tracking (AMENDMENT_21 — health module)
+  mountSleepRoutes(app, { pool });
+  logger.info('✅ [LIFEOS-SLEEP] Routes mounted at /api/v1/lifeos/sleep');
 
   // Memory Intelligence — epistemic facts, debates, lessons, agent performance, intent drift (AMENDMENT_39)
   app.use('/api/v1/memory', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
