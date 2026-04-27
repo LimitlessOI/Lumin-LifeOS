@@ -1,6 +1,6 @@
 export const COUNCIL_ALIAS_MAP = {
-  claude: "claude_sonnet",
-  anthropic: "claude_sonnet",
+  claude: "claude_via_openrouter",    // OPENROUTER_API_KEY is SET; direct ANTHROPIC_API_KEY not yet on Railway
+  anthropic: "claude_via_openrouter", // same — bridge until Adam adds ANTHROPIC_API_KEY to Railway vault
   chatgpt: "groq_llama",
   openai: "groq_llama",
   gemini: "gemini_flash",
@@ -12,9 +12,9 @@ export function createCouncilMembers({ OLLAMA_ENDPOINT, DEEPSEEK_BRIDGE_ENABLED 
   const ollamaEndpoint = OLLAMA_ENDPOINT || "http://localhost:11434";
 
   return {
-    // ── Anthropic Claude (paid, high-quality codegen) ──────────────────────
+    // ── Anthropic Claude via direct API (requires ANTHROPIC_API_KEY on Railway) ──
     claude_sonnet: {
-      name: "Claude Sonnet 4.6 (Anthropic)",
+      name: "Claude Sonnet 4.6 (Anthropic direct)",
       model: process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6",
       provider: "anthropic",
       role: "Primary Code Author & Builder",
@@ -22,6 +22,24 @@ export function createCouncilMembers({ OLLAMA_ENDPOINT, DEEPSEEK_BRIDGE_ENABLED 
       maxTokens: 16000,
       tier: "tier1",
       costPer1M: 3.0,   // $3/M input, $15/M output (Sonnet pricing)
+      specialties: ["code", "code_generation", "reasoning", "production", "esm", "architecture"],
+      isFree: false,
+      isLocal: false,
+      priority: "highest",
+    },
+
+    // ── Claude Sonnet via OpenRouter (OPENROUTER_API_KEY is SET on Railway) ───
+    // Use this when ANTHROPIC_API_KEY is not directly set on Railway.
+    // OpenRouter is OpenAI-compatible so it routes through the existing fetch handler.
+    claude_via_openrouter: {
+      name: "Claude Sonnet 4.5 (via OpenRouter)",
+      model: process.env.CLAUDE_OPENROUTER_MODEL || "anthropic/claude-sonnet-4-5",
+      provider: "openrouter",
+      role: "Primary Code Author & Builder (OpenRouter bridge)",
+      focus: "production code generation, complex reasoning, ESM Node.js, long-form output",
+      maxTokens: 16000,
+      tier: "tier1",
+      costPer1M: 3.0,   // Claude Sonnet 4.5 pricing through OpenRouter
       specialties: ["code", "code_generation", "reasoning", "production", "esm", "architecture"],
       isFree: false,
       isLocal: false,
