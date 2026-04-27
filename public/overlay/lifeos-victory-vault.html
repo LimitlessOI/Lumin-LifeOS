@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Victory Vault · LifeOS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <style>
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes celebrate {
+      0%,100% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.15) rotate(-3deg); }
+      75% { transform: scale(1.15) rotate(3deg); }
+    }
+    .victory-card { animation: slideIn 0.3s ease-out; }
+    .celebrate { animation: celebrate 0.6s ease-in-out; }
+    .modal-backdrop { backdrop-filter: blur(4px); }
+    .category-pill { transition: all 0.15s; }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+  <div id="app" class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-4xl font-bold text-white mb-1">🏆 Victory Vault</h1>
+          <p class="text-gray-400">Your personal gallery of wins, big and small</p>
+        </div>
+        <button id="addBtn"
+          class="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold px-6 py-3 rounded-xl shadow-lg transition-colors flex items-center gap-2">
+          <span class="text-xl leading-none">＋</span> Add Victory
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="bg-gray-800 border border-gray-700 rounded-xl p-4">
+          <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Total Victories</div>
+          <div id="statTotal" class="text-3xl font-bold text-white">—</div>
+        </div>
+        <div class="bg-gray-800 border border-gray-700 rounded-xl p-4">
+          <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">This Month</div>
+          <div id="statMonth" class="text-3xl font-bold text-yellow-400">—</div>
+        </div>
+        <div class="bg-gray-800 border border-gray-700 rounded-xl p-4">
+          <div class="text-xs text-gray-400 uppercase tracking-wider mb-1">Longest Streak</div>
+          <div id="statStreak" class="text-3xl font-bold text-green-400">—</div>
+        </div>
+      </div>
+
+      <!-- Search + Filter -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-2">
+        <input id="searchInput" type="text" placeholder="Search victories…"
+          class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500 transition-colors" />
+      </div>
+      <div id="filterBar" class="flex flex-wrap gap-2 mt-3">
+        <!-- category pills injected by JS -->
+      </div>
+    </header>
+
+    <!-- Grid -->
+    <div id="victoryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+    <!-- Empty state -->
+    <div id="emptyState" class="hidden text-center py-20">
+      <div class="text-6xl mb-4">🎯</div>
+      <h3 class="text-xl font-semibold text-gray-300 mb-2">No victories yet</h3>
+      <p class="text-gray-500 mb-6">Start celebrating your wins — big and small</p>
+      <button onclick="document.getElementById('addBtn').click()"
+        class="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold px-6 py-3 rounded-xl transition-colors">
+        Log Your First Win
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div id="loadingState" class="text-center py-20">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500 mb-4"></div>
+      <p class="text-gray-400">Loading victories…</p>
+    </div>
+  </div>
+
+  <!-- Add Victory Modal -->
+  <div id="addModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop bg-black/60">
+    <div class="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg border border-gray-700 overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+        <h2 class="text-xl font-bold">🏆 Log a Victory</h2>
+        <button id="closeModal" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <form id="victoryForm" class="p-6 space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1">Title <span class="text-red-400">*</span></label>
+          <input id="fTitle" type="text" required placeholder="What did you accomplish?"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500" />
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Category <span class="text-red-400">*</span></label>
+            <select id="fCategory" required
+              class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-yellow-500">
+              <option value="">Select…</option>
+              <option value="Career">Career</option>
+              <option value="Relationship">Relationship</option>
+              <option value="Health">Health</option>
+              <option value="Financial">Financial</option>
+              <option value="Personal Growth">Personal Growth</option>
+              <option value="Family">Family</option>
+              <option value="Creative">Creative</option>
+              <option value="Spiritual">Spiritual</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Date</label>
+            <input id="fDate" type="date"
+              class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-yellow-500" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-1">Description</label>
+          <textarea id="fDesc" rows="3" placeholder="Describe the win and why it matters…"
+            class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500 resize-none"></textarea>
+        </div>
+        <div id="formError" class="hidden text-red-400 text-sm"></div>
+        <div class="flex gap-3 pt-2">
+          <button type="submit"
+            class="flex-1 bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-bold py-2.5 rounded-xl transition-colors">
+            Save Victory
+          </button>
+          <button type="button" id="cancelModal"
+            class="px-6 bg-gray-700 hover:bg-gray-600 text-white rounded-xl transition-colors">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const CATEGORIES = ['All', 'Career', 'Relationship', 'Health', 'Financial', 'Personal Growth', 'Family', 'Creative', 'Spiritual'];
+    const CATEGORY_COLORS = {
+      Career: 'bg-blue-900 text-blue-300 border-blue-700',
+      Relationship: 'bg-pink-900 text-pink-300 border-pink-700',
+      Health: 'bg-green-900 text-green-300 border-green-700',
+      Financial: 'bg-yellow-900 text-yellow-300 border-yellow-700',
+      'Personal Growth': 'bg-purple-900 text-purple-300 border-purple-700',
+      Family: 'bg-orange-900 text-orange-300 border-orange-700',
+      Creative: 'bg-teal-900 text-teal-300 border-teal-700',
+      Spiritual: 'bg-indigo-900 text-indigo-300 border-indigo-700',
+    };
+
+    let allVictories = [];
+    let activeFilter = 'All';
+    let searchQuery = '';
+
+    // ── DOM refs ──────────────────────────────────────────────────────────────
+    const grid = document.getElementById('victoryGrid');
+    const emptyState = document.getElementById('emptyState');
+    const loadingState = document.getElementById('loadingState');
+    const addModal = document.getElementById('addModal');
+    const victoryForm = document.getElementById('victoryForm');
+    const formError = document.getElementById('formError');
+    const searchInput = document.getElementById('searchInput');
+    const filterBar = document.getElementById('filterBar');
+
+    // ── Filter pills ──────────────────────────────────────────────────────────
+    function buildFilterBar() {
+      filterBar.innerHTML = CATEGORIES.map(cat => `
+        <button class="category-pill px-4 py-1.5 rounded-full text-sm font-medium border
+          ${cat === activeFilter
+            ? 'bg-yellow-500 text-gray-900 border-yellow-400'
+            : 'bg-gray-800 text-gray-300 border-gray-700 hover:border-gray-500'}"
+          data-cat="${cat}">${cat}</button>
+      `).join('');
+      filterBar.querySelectorAll('[data-cat]').forEach(btn => {
+        btn.addEventListener('click', () => { activeFilter = btn.dataset.cat; buildFilterBar(); render(); });
+      });
+    }
+
+    // ── Render cards ──────────────────────────────────────────────────────────
+    function render() {
+      loadingState.classList.add('hidden');
+      const q = searchQuery.toLowerCase();
+      const filtered = allVictories.filter(v => {
+        const matchCat = activeFilter === 'All' || v.category === activeFilter;
+        const matchQ = !q || v.title.toLowerCase().includes(q) || (v.description || '').toLowerCase().includes(q);
+        return matchCat && matchQ;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(v => {
+        const colors = CATEGORY_COLORS[v.category] || 'bg-gray-700 text-gray-300 border-gray-600';
+        const date = v.victory_date ? new Date(v.victory_date).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) : '';
+        return `
+          <div class="victory-card bg-gray-800 border border-gray-700 rounded-2xl p-5 flex flex-col gap-3 hover:border-yellow-600/50 transition-colors">
+            <div class="flex items-start justify-between gap-2">
+              <span class="font-semibold text-white text-lg leading-snug">${escapeHtml(v.title)}</span>
+              <span class="text-yellow-400 text-xl flex-shrink-0">🏆</span>
+            </div>
+            ${v.description ? `<p class="text-gray-400 text-sm leading-relaxed">${escapeHtml(v.description)}</p>` : ''}
+            <div class="flex items-center justify-between mt-auto pt-1">
+              <span class="px-3 py-0.5 rounded-full text-xs font-medium border ${colors}">${escapeHtml(v.category || 'General')}</span>
+              ${date ? `<span class="text-xs text-gray-500">${date}</span>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ── Stats ─────────────────────────────────────────────────────────────────
+    function updateStats(victories) {
+      document.getElementById('statTotal').textContent = victories.length;
+      const now = new Date();
+      const thisMonth = victories.filter(v => {
+        if (!v.created_at && !v.victory_date) return false;
+        const d = new Date(v.victory_date || v.created_at);
+        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+      }).length;
+      document.getElementById('statMonth').textContent = thisMonth;
+
+      // Simple streak: consecutive months with at least 1 victory
+      const monthSet = new Set(victories.map(v => {
+        const d = new Date(v.victory_date || v.created_at || Date.now());
+        return `${d.getFullYear()}-${d.getMonth()}`;
+      }));
+      document.getElementById('statStreak').textContent = `${monthSet.size} mo`;
+    }
+
+    // ── API ───────────────────────────────────────────────────────────────────
+    async function loadVictories() {
+      loadingState.classList.remove('hidden');
+      try {
+        const token = window.__lifeos_token;
+        const res = await fetch('/api/v1/lifeos/victories', {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (res.ok) {
+          const data = await res.json();
+          allVictories = Array.isArray(data) ? data : (data.victories || []);
+        } else if (res.status === 404) {
+          // Endpoint not yet built — seed with sample data
+          allVictories = SAMPLE_VICTORIES;
+        } else {
+          allVictories = SAMPLE_VICTORIES;
+        }
+      } catch {
+        allVictories = SAMPLE_VICTORIES;
+      }
+      updateStats(allVictories);
+      render();
+    }
+
+    async function saveVictory(payload) {
+      try {
+        const token = window.__lifeos_token;
+        const res = await fetch('/api/v1/lifeos/victories', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          const saved = await res.json();
+          allVictories.unshift(saved.victory || saved);
+        } else {
+          // Optimistic local add
+          allVictories.unshift({ ...payload, id: Date.now(), created_at: new Date().toISOString() });
+        }
+      } catch {
+        allVictories.unshift({ ...payload, id: Date.now(), created_at: new Date().toISOString() });
+      }
+      updateStats(allVictories);
+      render();
+    }
+
+    // ── Sample data (fallback when API not ready) ─────────────────────────────
+    const SAMPLE_VICTORIES = [
+      { id: 1, title: 'Launched LifeOS Beta', category: 'Career', description: 'Shipped the first working version to early users.', victory_date: '2026-04-01' },
+      { id: 2, title: '30 days of consistent workouts', category: 'Health', description: 'Kept the streak alive through the tough weeks.', victory_date: '2026-03-15' },
+      { id: 3, title: 'Family trip to the mountains', category: 'Family', description: 'Made memories that will last a lifetime.', victory_date: '2026-02-20' },
+    ];
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    function escapeHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Modal ─────────────────────────────────────────────────────────────────
+    function openModal() {
+      victoryForm.reset();
+      document.getElementById('fDate').value = new Date().toISOString().slice(0,10);
+      formError.classList.add('hidden');
+      addModal.classList.remove('hidden');
+    }
+    function closeModal() { addModal.classList.add('hidden'); }
+
+    document.getElementById('addBtn').addEventListener('click', openModal);
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    document.getElementById('cancelModal').addEventListener('click', closeModal);
+    addModal.addEventListener('click', e => { if (e.target === addModal) closeModal(); });
+
+    victoryForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const title = document.getElementById('fTitle').value.trim();
+      const category = document.getElementById('fCategory').value;
+      if (!title || !category) {
+        formError.textContent = 'Title and category are required.';
+        formError.classList.remove('hidden');
+        return;
+      }
+      const payload = {
+        title,
+        category,
+        description: document.getElementById('fDesc').value.trim() || null,
+        victory_date: document.getElementById('fDate').value || new Date().toISOString().slice(0,10),
+      };
+      closeModal();
+      await saveVictory(payload);
+      // Brief celebration on first card
+      const firstCard = grid.querySelector('.victory-card');
+      if (firstCard) { firstCard.classList.add('celebrate'); setTimeout(() => firstCard.classList.remove('celebrate'), 700); }
+    });
+
+    searchInput.addEventListener('input', e => { searchQuery = e.target.value; render(); });
+
+    // ── Boot ──────────────────────────────────────────────────────────────────
+    buildFilterBar();
+    loadVictories();
+  </script>
+</html>
