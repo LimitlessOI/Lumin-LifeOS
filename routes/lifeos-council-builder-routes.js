@@ -503,12 +503,20 @@ export function createLifeOSCouncilBuilderRoutes({
         }
       }
 
-      const maxOutputTokens = mode === 'code' ? estimateBuilderMaxOutputTokens(filesInjectSummaries, filesContentBlock) : undefined;
+      // For code/chat modes the default task-type caps (800 for chat, 1500 for codegen)
+      // are too low for any real code generation. Builder tasks always need more room.
+      // Use estimateBuilderMaxOutputTokens for code mode (file-context aware); for chat
+      // mode targeting a source file, floor at 4096 so the model can complete functions.
+      const estimatedMax = mode === 'code'
+        ? estimateBuilderMaxOutputTokens(filesInjectSummaries, filesContentBlock)
+        : null;
+      const maxOutputTokens = estimatedMax ||
+        (bodyTargetFile || filesContentBlock ? 4096 : 2048);
       const result = await callCouncilMember(memberKey, fullPrompt, {
         useCache: false,
         allowModelDowngrade: false,
         taskType: mode === 'code' ? 'codegen' : mode,
-        ...(maxOutputTokens ? { maxOutputTokens } : {}),
+        maxOutputTokens,
       });
       const raw = typeof result === 'string' ? result : result?.content || result?.text || '';
       const { output, placement } = splitBuilderOutput(raw);
