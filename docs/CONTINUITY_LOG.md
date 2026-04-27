@@ -32,6 +32,18 @@
 
 ---
 
+## [BUILD] Update 2026-04-29 #104 — **Idea Vault — Streams O/Q (Gemini 003, DeepSeek 001, GPT 06)**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream O** (Gemini 003, dedupe **F**), **P** (DeepSeek 001, dedupe **C**), **Q** (GPT 06, Tier 0 / autonomous builder; duplicate AURO prefix noted); **§A** rows; **Last Updated**; **A–Q**; portfolio capsule note; Change Receipt.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§4H**, **§8** rows O–Q, **§7** snapshot date, next-queue refresh, footer.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+
+### Next agent
+Heading-pass **Gemini 004**; reconcile **Gemini 001** vs **F/O** in one capsule SSOT paragraph; optional deep TOC on **GPT dump 01**.
+
+---
+
 ## [BUILD] Update 2026-04-26 #101 — **Anti-corner-cutting enforcement + durable compact rules**
 
 ### Files changed
@@ -50,6 +62,30 @@
 1. Wire real verifier/CI/builder outcomes into `fact_evidence` and `agent_performance` automatically.
 2. Add focused tests for memory routing + protocol violation demotion behavior.
 3. Seed initial facts from SSOT receipts so routing and debate memory start with real operational weight.
+
+---
+
+## [BUILD] Update 2026-04-28 #103 — **Idea Vault — Streams L/N + §7.5**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream L** (`GPT dump 03`), **M** (`Gemini 002`), **N** (`LifeOS 003`); **§A** rows (cookbook, AASHA, Zapier glue); **A–N** references; receipt.
+- `scripts/catalog-dump-keywords.mjs` — **`Zapier`**, **`WebSocket`**, **`Stripe`**, **`AASHA`** in defaults.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§7** snapshot **2026-04-28**, **§7.5**, **§8** rows L–N, **§4G**.
+
+### Next agent
+Heading-pass **Gemini 003**, **DeepSeek 001**, **GPT 06**; update **§8** + optional new **Stream** letters; re-run `idea-vault:catalog-keywords` if adding keywords.
+
+---
+
+## [BUILD] Update 2026-04-27 #102 — **Idea Vault — Streams J/K + §7.4 + §8**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream J** (`GPT dump 04`): MICRO, API savings GTM, overlay triple, team/judge, 10-gap audit. **Stream K** (`GPT dump 05`): env canvas, LCTP curls, MicroProtocol phases, overlay self-heal. **§ Seed catalog §A** rows; **A–K** stream references; handoff + receipt.
+- `scripts/catalog-dump-keywords.mjs` — defaults + **`MICRO`**, **`Ollama`**, **`VAPI`**, **`Calendly`**, **`bookmarklet`**.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§7** snapshot date, **§7.4**, **§8** heading-pass table, **§4F**, **§5** step 7, **§6** regenerate line.
+
+### Next agent
+Heading-pass + Stream letter for **`GPT dump 03`**, **`Gemini Dump 002` or `003`**, or **`LifeOS_LimitlessOS dump 003`** per **§8** queue; then refresh **§7** counts if new keywords added.
 
 ---
 
@@ -1956,6 +1992,39 @@ Full spec in `AMENDMENT_21 → ## Approved Product Backlog → Conflict Intellig
 - **`package.json`:** Added `memory:seed`, `memory:ci-evidence`, `verify:ci` scripts.
 - **State:** Tables are empty until `npm run memory:seed` is run against Railway. The smoke-test CI workflow does NOT yet call `memory:ci-evidence` automatically — that wiring is next.
 - **Next:** (1) Run `memory:seed` against Railway to populate initial facts. (2) Wire `memory:ci-evidence` into `.github/workflows/smoke-test.yml`. (3) Add auto-seed on boot (check if `epistemic_facts` is empty). (4) SQL validation gate for `.sql` builder commits. (5) HTML validation gate.
+
+## Update 2026-04-27 #101 — B1-B6 LifeOS Feature Builds + Builder Platform Fixes (§2.11b Report)
+
+**What we did:** Completed the overnight LifeOS feature build queue (B1–B6), running all 6 builds through the council builder (`claude_via_openrouter` on Railway) with Conductor oversight. Also fixed 3 platform bugs discovered during the builds.
+
+**B1 — Sleep Tracking** (system-built): `db/migrations/20260427_lifeos_sleep_logs.sql`, `services/lifeos-sleep-service.js` (logSleep, getSleepHistory, getLastSleep, getSleepDebt 7-day avg with A-D grade), `routes/lifeos-sleep-routes.js`. Mounted at `/api/v1/lifeos/sleep`. Note: `---METADATA---` block leaked into the service file and was stripped manually (platform GAP-FILL).
+
+**B2 — Decision Review Queue** (system-built): `db/migrations/20260427_lifeos_decision_review_queue.sql`, `services/lifeos-decision-review.js` (scheduleReviews, getPendingReviews, completeReview, skipReview, getReviewHistory), `routes/lifeos-decision-review-routes.js`. Mounted at `/api/v1/lifeos/decisions/review`. Note: prior session summary incorrectly claimed these were already committed — they were not present in git.
+
+**B3 — Year in Pixels** (system-built, from prior session): `public/overlay/lifeos-year-in-pixels.html` — 365-day emotional weather grid, year navigation, stats bar. Already committed; verified in this session.
+
+**B4 — Victory Vault** (GAP-FILL — 4 builder attempts failed): Builder failed HTML validation 4 times due to: (1) validator rejecting HTML5 without `<html>` wrapper tags — fixed; (2) fence-strip function giving up when model omits closing ` ``` ` — fixed; (3) output token cap at 4096 causing mid-doc truncation — raised to 8192 for `.html` targets; (4) fixes not yet deployed when needed. Conductor hand-authored `public/overlay/lifeos-victory-vault.html` (17342 bytes) as §2.11 GAP-FILL exception. Quality: 7/10 — functional, complete, correct structure, sample data fallback when API stubs not built yet.
+
+**B5 — Conflict Interrupt System** (system-built): `db/migrations/20260427_lifeos_conflict_interrupts.sql`, `services/lifeos-conflict-interrupt.js` (triggerInterrupt, getActiveInterrupt, resolveInterrupt, escalateInterrupt, getInterruptHistory, getEscalationPattern), `routes/lifeos-conflict-interrupt-routes.js`. Mounted at `/api/v1/lifeos/conflict/interrupt`.
+
+**B6 — Assessment Battery** (system-built): `db/migrations/20260427_lifeos_assessment_battery.sql`, `services/lifeos-assessment-battery.js` (saveResult with UPSERT, getResult, getAllResults, getCompatibilityProfile, hasCompletedBattery), `routes/lifeos-assessment-battery-routes.js`. METADATA leak stripped from routes file. Mounted at `/api/v1/lifeos/identity/assessment`.
+
+**Platform fixes shipped (all pushed to Railway):**
+1. `validateGeneratedOutputForTarget()` — relaxed HTML validator to accept HTML5 `<!DOCTYPE html>` + `<head>` + `<body>` without requiring explicit `<html>` wrapper
+2. `stripLeadingMarkdownFenceBeforeMetadata()` — now strips opening ` ```lang ` fence even when model omits closing ` ``` `
+3. `maxOutputTokens` for new `.html` targets raised from 4096 → 8192
+
+**Quality scores (1-10):**
+- Builder system: 6→8 (3 platform bugs fixed this session; fence-strip was the highest-impact one)
+- B1 sleep service: 8 (clean, correct GENERATED ALWAYS duration_minutes in migration)
+- B2 decision review: 8 (UPSERT-style conflict handling, right schema)
+- B4 Victory Vault: 7 (functional but API stubs needed; `/api/v1/lifeos/victories` routes not yet built)
+- B5 conflict interrupt: 8 (6 route surfaces, escalation pattern analytics included)
+- B6 assessment battery: 8 (JSONB raw_answers, UPSERT on user+type+version, full profile endpoint)
+
+**What is NOT proven yet:** Victory Vault API stubs (`POST/GET /api/v1/lifeos/victories` routes don't exist yet — overlay falls back to sample data gracefully). All new migrations auto-apply on next Railway deploy.
+
+**Next priorities:** (1) Build `/api/v1/lifeos/victories` routes + `victory_logs` table to back the Victory Vault overlay. (2) Re-run a Victory Vault build with the fixed builder to verify the platform fixes work end-to-end. (3) Wire `memory:ci-evidence` into CI smoke test. (4) Continue with remaining LifeOS backlog items.
 
 ## Update 2026-01-30 #1
 - Hardware: MacBook Pro M2 Max, 32 GB RAM, 2 TB SSD running server-only mode; machine doubles as development host but being stripped down for LifeOS server.
