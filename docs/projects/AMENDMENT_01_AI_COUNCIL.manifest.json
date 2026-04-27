@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "optimization",
-  "next_task": "Run T5-T15 LifeOS feature builds via builder council (now using claude_sonnet for code generation)",
+  "next_task": "Run T5-T15 LifeOS feature builds via builder council (now using claude_via_openrouter)",
   "stability_class": "active",
-  "current_focus": "Claude Sonnet wired as builder code model — all council.builder.code tasks now route to anthropic/claude-sonnet-4-6 instead of Gemini Flash",
+  "current_focus": "Builder code tasks route to claude_via_openrouter (anthropic/claude-sonnet-4-5 via OpenRouter). Add ANTHROPIC_API_KEY to Railway to use direct claude_sonnet instead.",
   "owned_files": [
     "services/council-service.js",
     "services/token-optimizer.js",
