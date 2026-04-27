@@ -101,11 +101,3 @@ export function createAssessmentBatteryRoutes({ pool }) {
 
   return router;
 }
----METADATA---
-```json
-{
-  "target_file": "routes/lifeos-assessment-battery-routes.js",
-  "insert_after_line": null,
-  "confidence": 0.95
-}
-```

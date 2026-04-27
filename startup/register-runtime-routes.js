@@ -31,6 +31,7 @@ import { createLifeOSVisionRoutes } from "../routes/lifeos-vision-routes.js";
 import { createLifeOSDecisionsRoutes } from "../routes/lifeos-decisions-routes.js";
 import { createDecisionReviewRoutes } from "../routes/lifeos-decision-review-routes.js";
 import { createLifeOSIdentityRoutes } from "../routes/lifeos-identity-routes.js";
+import { createAssessmentBatteryRoutes } from "../routes/lifeos-assessment-battery-routes.js";
 import { createLifeOSGrowthRoutes } from "../routes/lifeos-growth-routes.js";
 import { createLifeOSMediationRoutes } from "../routes/lifeos-mediation-routes.js";
 import { createLifeOSHealingRoutes } from "../routes/lifeos-healing-routes.js";
@@ -188,6 +189,8 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [LIFEOS-DECISION-REVIEW] Routes mounted at /api/v1/lifeos/decisions/review");
   app.use("/api/v1/lifeos/identity", createLifeOSIdentityRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-IDENTITY] Routes mounted at /api/v1/lifeos/identity");
+  app.use("/api/v1/lifeos/identity/assessment", createAssessmentBatteryRoutes({ pool }));
+  logger.info("✅ [LIFEOS-ASSESSMENT] Routes mounted at /api/v1/lifeos/identity/assessment");
   app.use("/api/v1/lifeos/growth", createLifeOSGrowthRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-GROWTH] Routes mounted at /api/v1/lifeos/growth");
   app.use("/api/v1/lifeos/mediation", createLifeOSMediationRoutes({ pool, requireKey, callCouncilMember, logger }));
