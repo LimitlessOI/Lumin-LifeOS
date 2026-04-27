@@ -158,10 +158,13 @@ function builderTargetsHtml(files, targetFile) {
 
 function htmlFullFileCodegenHints() {
   return [
-    'HTML FULL FILE (critical): Emit a complete document from <!DOCTYPE html> or opening <html through closing </html>.',
-    'Do not emit a fragment, stub, or a single-line doctype only.',
-    'Do not wrap the HTML in markdown fences.',
-    'The first character of your code output must be "<" (start of <!DOCTYPE or <html).',
+    'HTML FULL FILE — STRICT OUTPUT CONTRACT:',
+    '1. Your ENTIRE response must be a complete HTML document. No analysis, no explanation, no markdown prose before or after.',
+    '2. Output starts with <!DOCTYPE html> or <html (never with # or text or ```)',
+    '3. Output ends with </html> (close the document fully — do not truncate mid-tag or mid-block)',
+    '4. Do NOT wrap in markdown fences (no ```html).',
+    '5. Do NOT write analysis, implementation notes, section headers, or prose of any kind.',
+    '6. Violating this contract makes the output unusable — the build system will reject it.',
   ].join('\n');
 }
 
