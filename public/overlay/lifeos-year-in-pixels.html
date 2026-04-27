@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Year in Pixels</title>
+  <style>
+    :root {
+      --c-surface: #E5E7EB;
+      --c-text: #333;
+      --c-accent: #F9D71C;
+      --c-border: #ddd;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--c-surface);
+      color: var(--c-text);
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(13, 1fr);
+      grid-gap: 2px;
+      padding: 10px;
+    }
+
+    .grid-cell {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: var(--c-surface);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .grid-cell:hover {
+      background-color: var(--c-accent);
+    }
+
+    .tooltip {
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 5px;
+      font-size: 12px;
+    }
+
+    .year-nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+
+    .stats-bar {
+      padding: 10px;
+      background-color: var(--c-accent);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Year in Pixels</h1>
+    <div class="year-nav">
+      <button id="prev-year">Prev Year</button>
+      <button id="next-year">Next Year</button>
+    </div>
+  </header>
+  <div class="grid-container" id="grid-container"></div>
+  <div class="stats-bar">
+    <p>Total days logged: <span id="total-days">0</span></p>
+    <p>Most common weather: <span id="most-common-weather"></span></p>
+    <p>Current streak: <span id="current-streak">0</span></p>
+  </div>
+  <script src="lifeos-bootstrap.js"></script>
+  <script>
+    const auth = initAuth();
+    const gridContainer = document.getElementById('grid-container');
+    const prevYearButton = document.getElementById('prev-year');
+    const nextYearButton = document.getElementById('next-year');
+    const totalDaysElement = document.getElementById('total-days');
+    const mostCommonWeatherElement = document.getElementById('most-common-weather');
+    const currentStreakElement = document.getElementById('current-streak');
+
+    fetch('/api/v1/lifeos/emotional/daily/recent?user=' + auth.userId + '&days=365')
+      .then(response => response.json())
+      .then(data => {
+        const checkins = data.checkins;
+        const gridCells = gridContainer.children;
+        const weatherColors = {
+          'clear': '#F9D71C',
+          'partly': '#A8D5E2',
+          'cloudy': '#6B7280',
+          'stormy': '#E05555',
+          'rainbow': '#8B5CF6',
+          'foggy': '#94A3B8',
+          'heavy': '#E5E7EB'
+        };
+
+        checkins.forEach(checkin => {
+          const gridCell = gridCells[checkin.date];
+          if (gridCell) {
+            gridCell.style.backgroundColor = weatherColors[checkin.weather];
+            gridCell.addEventListener('mouseover', () => {
+              const tooltip = document.createElement('div');
+              tooltip.classList.add('tooltip');
+              tooltip.textContent = `${checkin.date} - ${checkin.weather} (${checkin.intensity})`;
+              gridCell.appendChild(tooltip);
+            });
+            gridCell.addEventListener('mouseout', () => {
+              const tooltip = gridCell.querySelector('.tooltip');
+              if (tooltip) {
+                gridCell.removeChild(tooltip);
+              }
+            });
+          }
+        });
+
+        const mostCommonWeather = getMostCommonWeather(checkins);
+        mostCommonWeatherElement.textContent = mostCommonWeather;
+
+        const currentStreak = getCurrentStreak(checkins);
+        currentStreakElement.textContent = currentStreak;
+
+        totalDaysElement.textContent = checkins.length;
+
+        prevYearButton.addEventListener('click', () => {
+          fetch('/api/v1/lifeos/emotional/daily/recent?user=' + auth.userId + '&days=364')
+            .then(response => response.json())
+            .then(data => {
+              const checkins = data.checkins;
+              checkins.forEach(checkin => {
+                const gridCell = gridCells[checkin.date];
+                if (gridCell) {
+                  gridCell.style.backgroundColor = weatherColors[checkin.weather];
+                }
+              });
+            });
+        });
+
+        nextYearButton.addEventListener('click', () => {
+          fetch('/api/v1/lifeos/emotional/daily/recent?user=' + auth.userId + '&days=366')
+            .then(response => response.json())
+            .then(data => {
+              const checkins = data.checkins;
+              checkins.forEach(checkin => {
+                const gridCell = gridCells[checkin.date];
+                if (gridCell) {
+                  gridCell.style.backgroundColor = weatherColors[checkin.weather];
+                }
+              });
+            });
+        });
+      });
+
+    function getMostCommonWeather(checkins) {
+      const weatherCounts = {};
+      checkins.forEach(checkin => {
+        if (weatherCounts[checkin.weather]) {
+          weatherCounts[checkin.weather]++;
+        } else {
+          weatherCounts[checkin.weather] = 1;
+        }
+      });
+      const mostCommonWeather = Object.keys(weatherCounts).reduce((a, b) => weatherCounts[a] > weatherCounts[b] ? a : b);
+      return mostCommonWeather;
+    }
+
+    function getCurrentStreak(checkins) {
+      const checkinDates = checkins.map(checkin => checkin.date);
+      const currentStreak = checkinDates.filter(date => date === new Date().toISOString().split('T')[0]).length;
+      return currentStreak;
+    }
+  </script>
+</body>
+</html>
+```
+
+---
+
+```json
+{
+  "target_file": "public/overlay/lifeos-year-in-pixels.html",
+  "insert_after_line": null,
+  "confidence": 0.9
+}
