@@ -1,7 +1,7 @@
 # AMENDMENT 04 — Auto-Builder / Self-Programming System
 **Status:** LIVE (autonomous — builder supervisor operational)
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-25 (atomic key rotation)
+**Last Updated:** 2026-04-27 — `build-from-latest` endpoint added. Prior: 2026-04-25 (atomic key rotation)
 
 ---
 
@@ -162,6 +162,7 @@ One model may fill more than one role only when no safer alternative exists, and
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
 | 2026-04-01 | Added the required self-programming loop (proposal, execution, verification, review, repair, scoring) plus explicit separation-of-duties rules | The builder now has a documented operating contract for how autonomous code work must be evaluated instead of acting like a single black-box coder | ✅ | pending | pending |
+| 2026-04-27 | GAP-FILL: `routes/railway-managed-env-routes.js` — refactored to shared `railwayGql()` helper; added `internalRailwayBuildFromLatest()` using `serviceInstanceDeploy` mutation; added `POST /api/v1/railway/managed-env/build-from-latest` endpoint. Prior endpoint `self-redeploy` uses `serviceInstanceRedeploy` (restart only — doesn't pull new GitHub commits). New endpoint rebuilds from source. | Railway wasn't auto-deploying pushed commits; crash-loop on missing module meant `serviceInstanceRedeploy` kept restarting broken image. Need force-rebuild capability. | ✅ node --check | n/a | n/a |
 | 2026-04-23 | GAP-FILL: Added `POST /api/v1/railway/managed-env/self-redeploy` to `routes/railway-managed-env-routes.js`; updated `scripts/system-railway-redeploy.mjs` with 2-path fallback (command-key → RAILWAY_TOKEN) | System needed ability to redeploy itself using its own Railway vault credentials when local COMMAND_CENTER_KEY is out of sync; previous `/api/v1/railway/deploy` required matching local key | ✅ node --check | pending | pending |
 | 2026-04-25 | Added `POST /api/v1/railway/managed-env/rotate-command-key` + `GET /sync-command-key` to `routes/railway-managed-env-routes.js`; added `scripts/system-rotate-command-key.mjs` + `scripts/system-sync-command-key.mjs`; added `npm run system:rotate-command-key` + `npm run system:sync-command-key` | CCK drifted between Railway vault and local .env.local; rotate sets a new key in both; sync pulls Railway's live key into .env.local without changing vault; both use x-railway-token escape-hatch | ✅ node --check | pending | pending |
 

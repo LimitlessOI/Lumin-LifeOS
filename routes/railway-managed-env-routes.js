@@ -10,39 +10,51 @@ const RAILWAY_GQL = 'https://backboard.railway.app/graphql/v2';
  * Internal Railway GraphQL helper — uses RAILWAY_TOKEN from process.env.
  * Called by self-redeploy to avoid depending on command key auth.
  */
-async function internalRailwayRedeploy() {
+async function railwayGql(query, variables) {
   const token = process.env.RAILWAY_TOKEN;
-  const serviceId = process.env.RAILWAY_SERVICE_ID;
-  const environmentId = process.env.RAILWAY_ENVIRONMENT_ID;
-
   if (!token) throw new Error('RAILWAY_TOKEN not set in environment');
-  if (!serviceId) throw new Error('RAILWAY_SERVICE_ID not set in environment');
-  if (!environmentId) throw new Error('RAILWAY_ENVIRONMENT_ID not set in environment');
-
   const res = await fetch(RAILWAY_GQL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      query: `mutation Redeploy($serviceId: String!, $environmentId: String!) {
-        serviceInstanceRedeploy(serviceId: $serviceId, environmentId: $environmentId)
-      }`,
-      variables: { serviceId, environmentId },
-    }),
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ query, variables }),
   });
-
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`Railway API HTTP ${res.status}: ${text}`);
   }
-
   const json = await res.json();
-  if (json.errors?.length) {
-    throw new Error(`Railway GQL error: ${json.errors.map(e => e.message).join('; ')}`);
-  }
+  if (json.errors?.length) throw new Error(`Railway GQL error: ${json.errors.map(e => e.message).join('; ')}`);
   return json.data;
+}
+
+async function internalRailwayRedeploy() {
+  const serviceId = process.env.RAILWAY_SERVICE_ID;
+  const environmentId = process.env.RAILWAY_ENVIRONMENT_ID;
+  if (!serviceId) throw new Error('RAILWAY_SERVICE_ID not set in environment');
+  if (!environmentId) throw new Error('RAILWAY_ENVIRONMENT_ID not set in environment');
+  return railwayGql(
+    `mutation Redeploy($serviceId: String!, $environmentId: String!) {
+      serviceInstanceRedeploy(serviceId: $serviceId, environmentId: $environmentId)
+    }`,
+    { serviceId, environmentId }
+  );
+}
+
+/**
+ * Trigger a fresh build from the latest GitHub commit (not just a restart of the current image).
+ * Uses deploymentCreate which pulls the latest source and rebuilds.
+ */
+async function internalRailwayBuildFromLatest() {
+  const serviceId = process.env.RAILWAY_SERVICE_ID;
+  const environmentId = process.env.RAILWAY_ENVIRONMENT_ID;
+  if (!serviceId) throw new Error('RAILWAY_SERVICE_ID not set in environment');
+  if (!environmentId) throw new Error('RAILWAY_ENVIRONMENT_ID not set in environment');
+  return railwayGql(
+    `mutation BuildFromLatest($serviceId: String!, $environmentId: String!) {
+      serviceInstanceDeploy(serviceId: $serviceId, environmentId: $environmentId)
+    }`,
+    { serviceId, environmentId }
+  );
 }
 
 function getActor(req) {
@@ -365,6 +377,29 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
       });
     } catch (error) {
       console.error('[RAILWAY-SELF-REDEPLOY] Error:', error.message);
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * POST /build-from-latest
+   * Triggers Railway to build a NEW deployment from the latest GitHub commit.
+   * Different from self-redeploy: restarts current image. This rebuilds from source.
+   * Use when commits are pushed but Railway isn't auto-deploying them.
+   */
+  router.post('/build-from-latest', async (req, res) => {
+    try {
+      const commandKey = req.headers['x-command-key'] || req.headers['x-command-center-key'] ||
+                         req.headers['x-lifeos-key'] || req.headers['x-api-key'];
+      const envCommandKey = process.env.COMMAND_CENTER_KEY || process.env.LIFEOS_KEY || process.env.API_KEY;
+      if (!envCommandKey || commandKey !== envCommandKey) {
+        return res.status(401).json({ ok: false, error: 'Unauthorized' });
+      }
+      const data = await internalRailwayBuildFromLatest();
+      console.log('[TSOS-MACHINE] KNOW: STATE=RECEIPT VERB=BUILD_FROM_LATEST | triggered fresh Railway build | NEXT=PROBE /ready in ~120s');
+      res.json({ ok: true, message: 'Fresh Railway build from latest commit triggered', data });
+    } catch (error) {
+      console.error('[RAILWAY-BUILD-FROM-LATEST] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
     }
   });
