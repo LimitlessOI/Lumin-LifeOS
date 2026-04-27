@@ -117,8 +117,13 @@ function stripLeadingMarkdownFenceBeforeMetadata(text) {
   const firstNl = h.indexOf('\n');
   if (firstNl === -1) return s;
   const closeIdx = h.lastIndexOf('\n```');
-  if (closeIdx <= firstNl) return s;
-  h = h.slice(firstNl + 1, closeIdx).trim();
+  if (closeIdx > firstNl) {
+    // Has closing fence — strip both opening and closing
+    h = h.slice(firstNl + 1, closeIdx).trim();
+  } else {
+    // No closing fence (model omitted it) — strip only the opening fence line
+    h = h.slice(firstNl + 1).trim();
+  }
   return h + tail;
 }
 
@@ -513,8 +518,10 @@ export function createLifeOSCouncilBuilderRoutes({
       const estimatedMax = mode === 'code'
         ? estimateBuilderMaxOutputTokens(filesInjectSummaries, filesContentBlock)
         : null;
+      // HTML overlays need 8192+ tokens; JS services/routes need 4096; plans/chat 2048.
+      const isHtmlTarget = /\.html$/i.test(String(bodyTargetFile || ''));
       const maxOutputTokens = estimatedMax ||
-        (bodyTargetFile || filesContentBlock ? 4096 : 2048);
+        (isHtmlTarget ? 8192 : bodyTargetFile || filesContentBlock ? 4096 : 2048);
       const result = await callCouncilMember(memberKey, fullPrompt, {
         useCache: false,
         allowModelDowngrade: false,
