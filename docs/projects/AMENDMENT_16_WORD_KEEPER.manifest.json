@@ -1,0 +1,7 @@
+{
+  "project_id": "word_keeper",
+  "amendment_path": "docs/projects/AMENDMENT_16_WORD_KEEPER.md",
+  "status": "in_build",
+  "last_updated": "2026-04-27",
+  "ssot_receipt_tail": "reminder-cron: processDueReminders uses LifeOS commitments columns only (no c.to_person in SQL)"
+}

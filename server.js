@@ -1560,10 +1560,26 @@ async function start() {
         await memorySystem.initMemoryStore();
         logger.info('✅ [MEMORY] Memory System initialized');
 
-        // Load and store Source of Truth document as system fact
+        // Load and store Source of Truth document as system fact (docs/ or core/ mirror for Docker)
         try {
-          const sourceOfTruthPath = path.join(__dirname, 'docs', 'SOURCE_OF_TRUTH.md');
-          const sourceOfTruthContent = await fsPromises.readFile(sourceOfTruthPath, 'utf-8');
+          const sotCandidates = [
+            path.join(__dirname, 'docs', 'SOURCE_OF_TRUTH.md'),
+            path.join(__dirname, 'core', 'SOURCE_OF_TRUTH.md'),
+          ];
+          let sourceOfTruthContent = null;
+          let sourceOfTruthPath = null;
+          for (const p of sotCandidates) {
+            try {
+              sourceOfTruthContent = await fsPromises.readFile(p, 'utf-8');
+              sourceOfTruthPath = p;
+              break;
+            } catch {
+              /* try next */
+            }
+          }
+          if (!sourceOfTruthContent) {
+            throw new Error('SOURCE_OF_TRUTH.md not found under docs/ or core/');
+          }
 
           // Store as system fact with maximum confidence
           await memorySystem.storeMemory('facts', {
@@ -1577,7 +1593,7 @@ async function start() {
             userConfirmed: true
           });
 
-          logger.info('✅ [MEMORY] Source of Truth document stored as system fact');
+          logger.info('✅ [MEMORY] Source of Truth document stored as system fact', { path: sourceOfTruthPath });
         } catch (sotError) {
           logger.warn('⚠️ [MEMORY] Could not load Source of Truth document:', { error: sotError.message });
         }

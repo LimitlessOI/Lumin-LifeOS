@@ -824,5 +824,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-04-27"
+  "last_updated": "2026-04-27",
+  "ssot_receipt_tail": "railway-boot: core/SOURCE_OF_TRUTH + server SOT fallback + reminder-cron LifeOS-only SQL"
 }

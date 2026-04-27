@@ -55,17 +55,16 @@ export function startReminderCron(pool, twilioSendSMS, opts = {}) {
   async function processDueReminders() {
     try {
       // Fetch all pending reminders that are now due
+      // LifeOS `commitments` uses committed_to/title/description/due_at. Word Keeper uses to_person/…
+      // Do NOT reference c.to_person in SQL until that column exists — Postgres errors on missing columns
+      // even inside COALESCE(...). Migration 20260428 adds WK columns; this query works on LifeOS-only.
       const { rows: due } = await pool.query(`
         SELECT cr.*,
-               COALESCE(c.to_person, c.committed_to) AS to_person,
-               COALESCE(
-                 NULLIF(trim(c.normalized_text), ''),
-                 NULLIF(trim(c.description), ''),
-                 c.title
-               ) AS normalized_text,
-               COALESCE(c.raw_text, c.title) AS raw_text,
-               COALESCE(c.deadline, c.due_at) AS deadline,
-               COALESCE(c.remind_audible, false) AS remind_audible,
+               c.committed_to AS to_person,
+               COALESCE(NULLIF(trim(c.description), ''), c.title) AS normalized_text,
+               c.title AS raw_text,
+               c.due_at AS deadline,
+               false AS remind_audible,
                c.user_id
         FROM commitment_reminders cr
         JOIN commitments c ON c.id = cr.commitment_id

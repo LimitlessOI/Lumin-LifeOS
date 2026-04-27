@@ -32,6 +32,17 @@
 
 ---
 
+## [FIX] Update 2026-04-27 #2 — **SOT core mirror + reminder SQL without c.to_person**
+
+### Files changed
+- `core/SOURCE_OF_TRUTH.md` — mirror of docs copy for Docker; `server.js` tries `docs/` then `core/`.
+- `services/reminder-cron.js` — SELECT aliases **only** LifeOS columns (Postgres does not allow `COALESCE` on a missing column).
+
+### State
+- Prior fix’s `COALESCE(c.to_person, …)` still threw if `to_person` absent; `.dockerignore` `!` may not re-include on all builders.
+
+---
+
 ## [FIX] Update 2026-04-27 — **Railway startup: Source of Truth + reminder cron**
 
 ### Files changed

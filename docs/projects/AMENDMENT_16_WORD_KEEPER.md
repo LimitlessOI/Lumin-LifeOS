@@ -1,7 +1,7 @@
 # AMENDMENT 16 — Word Keeper & Integrity Engine
 **Status:** IN_BUILD
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-27 — `services/reminder-cron.js` SELECT aligned with LifeOS `commitments` columns via `COALESCE`; full bridge in `db/migrations/20260428_commitments_reminder_compat.sql`. Prior: 2026-03-21
+**Last Updated:** 2026-04-27 — `services/reminder-cron.js` `processDueReminders` SELECT uses **only** LifeOS column names (`committed_to`, `title`, `description`, `due_at`); Postgres errors on `c.to_person` even inside `COALESCE` if the column is absent. WK-style columns still added by `db/migrations/20260428_commitments_reminder_compat.sql` when applied. Prior: `COALESCE` bridge attempt (invalid pre-column). Prior: 2026-03-21
 **Parent Amendment:** Amendment 09 (Life Coaching / Personal OS)
 **Overlay Layer:** Amendment 12 (Command Center & Overlay)
 
