@@ -36,13 +36,16 @@
 import { Router } from 'express';
 import { createMemoryHealing } from '../services/memory-healing.js';
 import { createVideoProduction } from '../services/video-production.js';
-
-function resolveUser(req) {
-  return req.query.user ?? req.body?.user ?? req.body?.userId ?? null;
-}
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = Router();
+  const resolveUserId = makeLifeOSUserResolver(pool);
+
+  async function resolveUser(req) {
+    const raw = req.query.user ?? req.body?.user ?? req.body?.userId ?? null;
+    return resolveUserId(raw || 'adam');
+  }
 
   const callAI = (prompt, opts = {}) =>
     callCouncilMember(opts.model || 'claude', prompt, opts.systemPrompt || '', opts);
@@ -53,7 +56,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   // ── Sessions ──────────────────────────────────────────────────────────────
 
   router.post('/sessions', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     const { sessionType, title, subject, personName, consent } = req.body;
     if (!userId) return res.status(400).json({ error: 'user required' });
     if (!sessionType) return res.status(400).json({ error: 'sessionType required (grief|regression|memory_walk|completion|inner_child|memorial)' });
@@ -75,7 +78,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   });
 
   router.get('/sessions', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     if (!userId) return res.status(400).json({ error: 'user required' });
     const sessionType = req.query.type ?? null;
     try {
@@ -87,7 +90,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   });
 
   router.get('/sessions/:id', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     const sessionId = parseInt(req.params.id, 10);
     if (!userId) return res.status(400).json({ error: 'user required' });
     try {
@@ -99,7 +102,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   });
 
   router.post('/sessions/:id/message', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     const sessionId = parseInt(req.params.id, 10);
     const { message } = req.body;
     if (!userId || !message) return res.status(400).json({ error: 'user and message required' });
@@ -112,7 +115,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   });
 
   router.post('/sessions/:id/complete', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     const sessionId = parseInt(req.params.id, 10);
     if (!userId) return res.status(400).json({ error: 'user required' });
     try {
@@ -126,7 +129,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   // ── Completion conversations ──────────────────────────────────────────────
 
   router.post('/completion', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     const { personName, relationship, whatHappened, unsaidThings, sessionId } = req.body;
     if (!userId || !personName || !unsaidThings) {
       return res.status(400).json({ error: 'user, personName, and unsaidThings required' });
@@ -144,7 +147,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   });
 
   router.post('/completion/:id/reply', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     const conversationId = parseInt(req.params.id, 10);
     const { reply, feltComplete } = req.body;
     if (!userId || !reply) return res.status(400).json({ error: 'user and reply required' });
@@ -159,7 +162,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   // ── Artifacts ─────────────────────────────────────────────────────────────
 
   router.post('/artifacts', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     const { sessionId, artifactType, subject, description, url } = req.body;
     if (!userId || !artifactType) return res.status(400).json({ error: 'user and artifactType required' });
     try {
@@ -175,7 +178,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   });
 
   router.get('/artifacts', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     if (!userId) return res.status(400).json({ error: 'user required' });
     const sessionId = req.query.session ? parseInt(req.query.session, 10) : null;
     try {
@@ -189,7 +192,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   // ── Memory palace ─────────────────────────────────────────────────────────
 
   router.post('/memories', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     const { memoryTitle, place, approximateAge, memoryText, sensoryDetails, emotion, significance } = req.body;
     if (!userId || !memoryTitle) return res.status(400).json({ error: 'user and memoryTitle required' });
     try {
@@ -201,7 +204,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   });
 
   router.get('/memories', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     if (!userId) return res.status(400).json({ error: 'user required' });
     try {
       const memories = await healing.getMemoryPalace(userId);
@@ -214,7 +217,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   // ── Healing videos ────────────────────────────────────────────────────────
 
   router.post('/videos', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     const { sessionId, videoType, subject, additionalContext, artifactIds } = req.body;
     if (!userId || !videoType) return res.status(400).json({ error: 'user and videoType required (memorial|memory_reconstruction|inner_child|regression)' });
 
@@ -243,7 +246,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   });
 
   router.get('/videos', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     if (!userId) return res.status(400).json({ error: 'user required' });
     const sessionId = req.query.session ? parseInt(req.query.session, 10) : null;
     try {
@@ -257,7 +260,7 @@ export function createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember,
   // ── Data erasure ──────────────────────────────────────────────────────────
 
   router.delete('/erase', requireKey, async (req, res) => {
-    const userId = resolveUser(req);
+    const userId = await resolveUser(req);
     if (!userId) return res.status(400).json({ error: 'user required' });
     try {
       const result = await healing.eraseAllHealingData(userId);

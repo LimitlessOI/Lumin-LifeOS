@@ -3,10 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Collections Control Center</title>
+  <title>Billing assistant — ClientCare</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; margin: 0; background: #0b1020; color: #edf2f7; overflow-x: hidden; }
     .wrap { max-width: min(1600px, 100vw); margin: 0 auto; padding: 24px; box-sizing: border-box; }
+    .cc-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #8aa4ff; margin: 22px 0 10px; }
+    .main-workspace > .cc-section-label:first-of-type { margin-top: 0; }
+    .cc-assistant-panel { opacity: 0.98; }
+    .cc-primary-panel { border-color: #3559d8; }
+    .cc-kpi-essential .card.stat { min-height: 88px; }
+    .billing-council-chat-main { border-color: #3559d8; }
     .hero { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:20px; }
     .eyebrow { color:#8aa4ff; text-transform:uppercase; letter-spacing:.08em; font-size:12px; }
     h1, h2, h3, p { margin: 0; }
@@ -147,11 +153,22 @@
     h2[data-tip], h3[data-tip] { cursor: help; display: inline-flex; align-items: center; gap: 6px; }
     h2[data-tip]::before, h3[data-tip]::before { content: none; }
     h2[data-tip]:hover::before, h3[data-tip]:hover::before { content: ''; }
+    body.has-lifeos-companion .wrap { padding-bottom: 56px; box-sizing: border-box; }
+    body.has-lifeos-companion.lumin-strip-expanded .wrap { padding-bottom: min(220px, 36vh); }
+    #lifeos-companion-host { position: fixed; bottom: 0; left: 0; right: 0; z-index: 10050; }
+    .lifeos-companion-strip { background: #0b1020; border-top: 1px solid #3559d8; box-shadow: 0 -8px 28px rgba(0,0,0,.4); font-size: 13px; color: #edf2f7; }
+    .lifeos-companion-strip-inner { max-width: min(1600px, 100vw); margin: 0 auto; padding: 8px 14px 10px; }
+    .lifeos-companion-row1 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+    .lifeos-companion-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-left: auto; flex: 1; justify-content: flex-end; }
+    .lifeos-companion-chip { background: #131a2e; border: 1px solid #27304a; border-radius: 8px; padding: 4px 10px; font-size: 12px; color: #98a5c3; }
+    .lifeos-companion-chip strong { color: #edf2f7; margin-left: 6px; }
+    .lifeos-companion-expanded { margin-top: 10px; padding-top: 10px; border-top: 1px solid #27304a; display: grid; gap: 10px; }
   </style>
 </head>
 <body>
   <div class="wrap" id="app"><div class="card"><p>Loading billing overlay…</p></div></div>
-  <script src="/shared/lifeos-voice-chat.js?v=20260330"></script>
-  <script src="/clientcare-billing/clientcare-billing.js?v=20260407l"></script>
+  <div id="lifeos-companion-host" aria-live="polite"></div>
+  <script src="/shared/lifeos-voice-chat.js?v=20260422d"></script>
+  <script src="/clientcare-billing/clientcare-billing.js?v=20260423a"></script>
 </body>
 </html>

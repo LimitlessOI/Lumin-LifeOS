@@ -11,7 +11,7 @@
 | **Lifecycle** | `production` |
 | **Reversibility** | `one-way-door` — all features depend on this layer |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-25 — **`council.builder.code_execute`** → **`groq_llama`** (builder **`execution_only: true`** + `mode: code`, no `model` override). Prior: 2026-04-24 — **`services/savings-ledger.js` `getSavingsReport`:** exposes full monetization columns from rebuilt `tsos_savings_report` view. Prior: **`maxOutputTokens`** in **`council-service.js`**. Prior: explicit **`council.builder.code` / `plan` / `review`**. Prior: **`@ssot`** council-service. Prior: **`POST /gate-change/run-preset`:** server-side debate. |
+| **Last Updated** | 2026-04-26 — **future-back consensus artifact** required for gate-change debate; runtime authority from Memory Intelligence may override static model routing. Prior: 2026-04-25 — **`council.builder.code_execute`** → **`groq_llama`** (builder **`execution_only: true`** + `mode: code`, no `model` override). Prior: 2026-04-24 — **`services/savings-ledger.js` `getSavingsReport`:** exposes full monetization columns from rebuilt `tsos_savings_report` view. Prior: **`maxOutputTokens`** in **`council-service.js`**. Prior: explicit **`council.builder.code` / `plan` / `review`**. Prior: **`@ssot`** council-service. Prior: **`POST /gate-change/run-preset`:** server-side debate. |
 | **Verification Command** | `node scripts/verify-project.mjs --project ai_council` |
 | **Manifest** | `docs/projects/AMENDMENT_01_AI_COUNCIL.manifest.json` |
 
@@ -22,7 +22,7 @@ Route every AI task to the cheapest capable model. Zero unnecessary spend. Free 
 
 ### North Star §2.12 — Technical decisions and debate (constitutional)
 
-**Supreme text:** `docs/SSOT_NORTH_STAR.md` **Article II §2.12**. This amendment **implements** the council side: multi-model evaluation, gate-change debate with opposite-argument rounds, and recorded verdicts. **Load-bearing technical decisions** must be run through this layer (plus **best-practice / authoritative research** when facts are not in-repo) **before** implementation is treated as approved. **If consensus fails:** full protocol — not single-model shortcut. **Adam** only for §2.12 human scope (blueprint, infeasibility, prohibitive cost, legal/constitutional). **Construction supervisor / Conductor:** `docs/SSOT_COMPANION.md` **§0.5E** (SSOT re-read + drift vs verifiers every session).
+**Supreme text:** `docs/SSOT_NORTH_STAR.md` **Article II §2.12**. This amendment **implements** the council side: multi-model evaluation, gate-change debate with opposite-argument rounds, mandatory **future-back** review, and recorded verdicts. **Load-bearing technical decisions** must be run through this layer (plus **best-practice / authoritative research** when facts are not in-repo) **before** implementation is treated as approved. **If consensus fails:** full protocol — not single-model shortcut. **Adam** only for §2.12 human scope (blueprint, infeasibility, prohibitive cost, legal/constitutional). **Construction supervisor / Conductor:** `docs/SSOT_COMPANION.md` **§0.5E** (SSOT re-read + drift vs verifiers every session).
 
 ## North Star Anchor
 Maximum Leverage — the council multiplies every feature's value by routing intelligently. It also generates revenue directly (API Cost Savings Service sells this system to clients).
@@ -140,6 +140,9 @@ Each proposal should be graded on:
 
 The council may recommend, but a separate verifier/reviewer must decide whether the final implementation succeeded.
 
+### Runtime routing authority (cross-link: Amendment 39)
+Static task routing is a **preference**, not permission. Runtime task authority from the memory system may mark a model `watch` or `blocked` for a task type based on protocol violations, intent drift, skipped verification, or poor historical accuracy. When that happens, runtime authority overrides the static map.
+
 ### Gate-change & efficiency proposals (North Star §2.6 ¶8 — operational)
 
 **Problem this solves:** A component may **feel** that the platform is inefficient, or that specific steps **X / Y / Z** “look like” corner-cutting if removed but **might** preserve the same verified results with less cost, latency, or human friction.
@@ -147,8 +150,9 @@ The council may recommend, but a separate verifier/reviewer must decide whether 
 **Allowed flow (only this flow for gate changes):**
 1. **Raise** — Structured input to the council (or council-builder / multi-model session) stating: current pain, hypothesis labeled **THINK** or **GUESS**, what would be removed or merged, and what **evidence** would falsify the hypothesis.
 2. **Debate** — Multiple council roles (see `docs/SSOT_COMPANION.md` §5.1–5.2) argue for and against; explicitly name what honesty, verification, or safety could be lost.
-3. **Decide** — Vote + confidence per this amendment’s evaluation contract; high-risk or constitutional-impact changes require Human Guardian per North Star Article III.
-4. **Implement** — If the council approves a **better** way to operate: ship the change, run the agreed **verification_plan**, update **SSOT Change Receipts**, and retain **rollback**.
+3. **Future-back** — Assume the change shipped and it is now two years later. Record what worked, what broke down, what we wish we had known on day one, and what telemetry would have exposed that sooner.
+4. **Decide** — Vote + confidence per this amendment’s evaluation contract; high-risk or constitutional-impact changes require Human Guardian per North Star Article III.
+5. **Implement** — If the council approves a **better** way to operate: ship the change, run the agreed **verification_plan**, update **SSOT Change Receipts**, and retain **rollback**.
 
 **Hard rule:** No single agent or job may **unilaterally** remove or bypass honesty, evidence, or verification gates for “efficiency.” Silent shortcut = North Star §2.6 ¶6 violation, not this subsection.
 
@@ -162,7 +166,8 @@ The council may recommend, but a separate verifier/reviewer must decide whether 
 - `POST /proposals/:id/run-council` — optional body `{ "models": ["gemini_flash","groq_llama","deepseek"] }`; requires status `raised`; executes consensus protocol:
   1) round-1 per model,
   2) if disagreement, opposite-argument round per model,
-  3) persisted `council_rounds_json`, `consensus_reached`, `consensus_summary`, and final `council_verdict`.
+  3) mandatory future-back analysis in each model output,
+  4) persisted `council_rounds_json`, `consensus_reached`, `consensus_summary`, and final `council_verdict`.
 - `PATCH /proposals/:id/status` — body `{ "status": "approved"|"rejected"|"implemented" }`; requires prior status `debated`
 
 ---

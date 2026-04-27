@@ -45,10 +45,13 @@ async function main() {
 ## Read order (mandatory)
 
 1. \`docs/CONTINUITY_INDEX.md\` — pick your lane.
-2. This file (you are reading it).
-3. The lane log for your task (\`CONTINUITY_LOG_LIFEOS.md\` / \`CONTINUITY_LOG_COUNCIL.md\` / main log).
-4. Owning manifest JSON (e.g. \`AMENDMENT_21_LIFEOS_CORE.manifest.json\`) for structured next steps.
-5. \`prompts/<domain>.md\` when using the builder.
+2. \`prompts/00-LIFEOS-AGENT-CONTRACT.md\` — epistemic baseline (§2.6, §2.11, §2.15).
+3. \`prompts/00-SSOT-READ-SEQUENCE.md\` — ordered SSOT reads (anti-drift).
+4. \`prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md\` — think vs execute model policy.
+5. This file (you are reading it).
+6. The lane log for your task (\`CONTINUITY_LOG_LIFEOS.md\` / \`CONTINUITY_LOG_COUNCIL.md\` / main log).
+7. Owning manifest JSON (e.g. \`AMENDMENT_21_LIFEOS_CORE.manifest.json\`) for structured next steps.
+8. \`prompts/<domain>.md\` when using the builder.
 
 ## CONTINUITY_INDEX.md
 

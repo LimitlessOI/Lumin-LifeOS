@@ -15,8 +15,8 @@
  *   GET  /api/v1/lifeos/auth/me             — current user info
  *
  * Admin-only endpoints (requireLifeOSUser + role=admin):
- *   POST /api/v1/lifeos/auth/invite         — generate new invite code
- *   GET  /api/v1/lifeos/auth/invites        — list all invites
+ *   POST /api/v1/lifeos/auth/invite         — generate new invite code; response `invite.signup_url` when `PUBLIC_BASE_URL` or proxy Host is known
+ *   GET  /api/v1/lifeos/auth/invites        — list invites; each unused row includes `signup_url` (same origin rules)
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
@@ -24,6 +24,24 @@
 import express from 'express';
 import { createLifeOSAuth } from '../services/lifeos-auth.js';
 import { requireLifeOSUser, requireLifeOSAdmin } from '../middleware/lifeos-auth-middleware.js';
+
+/** Absolute web origin for invite links (Railway / prod). */
+function publicWebOrigin(req) {
+  const env = (process.env.PUBLIC_BASE_URL || '').trim().replace(/\/$/, '');
+  if (env) return env;
+  const xfProto = (req.get('x-forwarded-proto') || '').split(',')[0].trim();
+  const host = (req.get('x-forwarded-host') || req.get('host') || '').split(',')[0].trim();
+  const proto = xfProto || req.protocol || 'https';
+  if (!host) return '';
+  return `${proto}://${host}`;
+}
+
+function signupUrlForCode(req, code) {
+  if (!code) return '';
+  const path = `/overlay/lifeos-login.html?invite=${encodeURIComponent(code)}`;
+  const origin = publicWebOrigin(req);
+  return origin ? `${origin}${path}` : path;
+}
 
 export function createLifeOSAuthRoutes({ pool, logger }) {
   const router = express.Router();
@@ -135,8 +153,9 @@ export function createLifeOSAuthRoutes({ pool, logger }) {
         days: Math.min(Math.max(parseInt(days) || 30, 1), 365),
         createdBy: req.lifeosUser.sub,
       });
+      const signup_url = signupUrlForCode(req, invite.code);
       log.info({ code: invite.code }, '[LIFEOS-AUTH] invite created');
-      res.json({ ok: true, invite });
+      res.json({ ok: true, invite: { ...invite, signup_url } });
     } catch (e) {
       res.status(e.status || 500).json({ ok: false, error: e.message });
     }
@@ -153,7 +172,11 @@ export function createLifeOSAuthRoutes({ pool, logger }) {
          LEFT JOIN lifeos_users u ON u.id = i.used_by
          ORDER BY i.created_at DESC`
       );
-      res.json({ ok: true, invites: rows });
+      const invites = rows.map((row) => ({
+        ...row,
+        signup_url: row.used_at ? '' : signupUrlForCode(req, row.code),
+      }));
+      res.json({ ok: true, invites });
     } catch (e) {
       res.status(500).json({ ok: false, error: e.message });
     }

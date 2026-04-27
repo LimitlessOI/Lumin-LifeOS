@@ -76,6 +76,22 @@
     if (node) node.textContent = value;
   }
 
+  function stripLeadingWakePrefixes(text, prefixes) {
+    let t = String(text || '').trim();
+    if (!t || !prefixes || !prefixes.length) return t;
+    const lower = t.toLowerCase();
+    for (let i = 0; i < prefixes.length; i += 1) {
+      const raw = String(prefixes[i] || '').trim();
+      if (!raw) continue;
+      const pl = raw.toLowerCase();
+      if (lower === pl) return '';
+      if (lower.startsWith(pl + ' ') || lower.startsWith(pl + ',') || lower.startsWith(pl + '.')) {
+        return t.slice(raw.length).trim().replace(/^[,.\s]+/, '');
+      }
+    }
+    return t;
+  }
+
   function attach(options) {
     const settings = Object.assign({
       mode: 'append',
@@ -83,6 +99,10 @@
       idleText: 'Voice ready',
       storageKey: '',
       speakRepliesDefault: false,
+      /** If set, leading wake phrases (case-insensitive) are stripped from the textarea when a listen session ends. */
+      wakePrefixes: [],
+      onStart: null,
+      onStop: null,
     }, options || {});
 
     const input = document.getElementById(settings.inputId);
@@ -172,6 +192,9 @@
         state.listening = true;
         updateButton();
         updateStatus('Listening...');
+        if (typeof settings.onStart === 'function') {
+          try { settings.onStart({ inputValue: String(input?.value || '') }); } catch (_) {}
+        }
       };
       recognition.onerror = function onError(event) {
         const message = event && event.error ? 'Voice error: ' + event.error : 'Voice input failed';
@@ -195,8 +218,15 @@
       recognition.onend = function onEnd() {
         state.recognition = null;
         state.listening = false;
+        if (input && settings.wakePrefixes && settings.wakePrefixes.length) {
+          const next = stripLeadingWakePrefixes(input.value, settings.wakePrefixes);
+          if (next !== input.value) input.value = next;
+        }
         updateButton();
         updateStatus(settings.idleText);
+        if (typeof settings.onStop === 'function') {
+          try { settings.onStop({ inputValue: String(input?.value || '') }); } catch (_) {}
+        }
       };
       state.recognition = recognition;
       recognition.start();

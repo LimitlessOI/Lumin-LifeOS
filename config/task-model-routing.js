@@ -2,6 +2,8 @@
  * config/task-model-routing.js
  *
  * Maps task type strings to council member keys.
+ * This file defines static preferences only. Runtime task authority from
+ * the memory-intelligence layer may reorder or block these choices.
  *
  * Rule: use the CHEAPEST model that can do the job well.
  * All models listed here are free ($0/1M tokens on the production system).
@@ -20,8 +22,8 @@
  * Keys must match entries in config/council-members.js COUNCIL_MEMBERS object.
  *
  * Tier guide:
- *   groq_llama    — fast, cheap, great for classification + structured extraction
- *   gemini_flash  — better reasoning, still free, use for narratives + conversation
+ *   groq_llama    — fast, cheap, great for classification + structured extraction + **literal codegen** when spec is frozen (`council.builder.code_execute`)
+ *   gemini_flash  — better reasoning, still free, use for narratives + conversation + open-ended codegen
  *   ollama_deepseek_v3 — local, best reasoning, use only for complex on-demand tasks
  *   gemini_flash  — default fallback
  */
@@ -68,7 +70,8 @@ export const TASK_MODEL_MAP = {
 
   // ── Council / Builder ────────────────────────────────────────────────────
   'council.builder.task':             'gemini_flash',  // legacy dispatch label
-  'council.builder.code':             'gemini_flash',  // POST /builder/task|build mode=code
+  'council.builder.code':             'gemini_flash',  // POST /builder/task|build mode=code (default)
+  'council.builder.code_execute':     'groq_llama',    // mode=code + execution_only — frozen spec, fast emit
   'council.builder.plan':             'gemini_flash',
   'council.builder.review':           'gemini_flash',
   'council.builder.code_review':      'gemini_flash',
@@ -84,7 +87,13 @@ export const TASK_MODEL_MAP = {
 };
 
 /** Default model when task type is unknown */
-const DEFAULT_MODEL = 'gemini_flash';
+export const DEFAULT_MODEL = 'gemini_flash';
+export const TRUSTED_FALLBACK_MODELS = [
+  'gemini_flash',
+  'groq_llama',
+  'deepseek',
+  'ollama_deepseek_v3',
+];
 
 /**
  * Get the council member key for a given task type.
@@ -99,6 +108,23 @@ export function getModelForTask(taskType) {
     return TASK_MODEL_MAP[taskType]; // may be null (no AI needed)
   }
   return DEFAULT_MODEL;
+}
+
+/**
+ * Candidate models for a task, ordered by platform preference before runtime authority/performance filtering.
+ * The memory-intelligence layer may reorder or block these at runtime.
+ *
+ * @param {string} taskType
+ * @returns {string[]}
+ */
+export function getCandidateModelsForTask(taskType) {
+  const mapped = getModelForTask(taskType);
+  const ordered = [
+    mapped,
+    DEFAULT_MODEL,
+    ...TRUSTED_FALLBACK_MODELS,
+  ].filter(Boolean);
+  return [...new Set(ordered)];
 }
 
 /**

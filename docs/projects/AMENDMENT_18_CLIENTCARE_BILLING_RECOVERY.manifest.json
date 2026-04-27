@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "sellable-v1-complete",
-  "next_task": "Sellable v1 is complete. Next work is optional post-v1 tenant learning, readiness trend monitoring, future product expansion, and continued runtime hardening only if real usage reveals issues.",
+  "next_task": "Expand direct-command coverage beyond add/status (e.g., queue claim action, refresh client, apply reconcile) with explicit confirmation prompts and audit receipts.",
   "stability_class": "needs-review",
-  "current_focus": "VOB pipeline live: card drop → auto OCR (Tesseract v4 fixed) → fill empty ClientCare fields → click VOB → auto-post billing note. Parser tested against real Cigna/Anthem/UHC cards. Ready for production use.",
+  "current_focus": "Tomorrow billing operations: Talk auto-execute + direct commands + under-90-day unpaid focus lane first.",
   "owned_files": [
     "services/clientcare-billing-service.js",
     "services/clientcare-browser-service.js",
@@ -30,7 +30,8 @@
     "db/migrations/20260327_clientcare_sellable_v1_hardening.sql",
     "public/shared/lifeos-voice-chat.js",
     "services/insurance-card-parse.js",
-    "scripts/test-card-ocr.mjs"
+    "scripts/test-card-ocr.mjs",
+    "scripts/verify-project.mjs"
   ],
   "protected_files": [
     "server.js",
@@ -233,8 +234,8 @@
         "patient_name",
         "payer_name",
         "date_of_service",
-        "status",
-        "bucket",
+        "claim_status",
+        "rescue_bucket",
         "billed_amount",
         "paid_amount",
         "patient_balance"
@@ -262,12 +263,12 @@
       ]
     },
     {
-      "name": "conversation_sessions",
+      "name": "conversations",
       "required_columns": [
         "id",
-        "conversation_type",
-        "messages",
-        "updated_at"
+        "session_id",
+        "source",
+        "created_at"
       ]
     },
     {

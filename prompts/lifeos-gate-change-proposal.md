@@ -20,7 +20,8 @@ For the **proposal record** provided in the user message:
 1. **Steel-man the risk** — If the suggested removals (X/Y/Z) ship, what honesty, verification, security, or SSOT drift could break?
 2. **Equivalence** — What **measurable** tests, metrics, or receipts would prove outcomes stayed correct (not “felt the same”)?
 3. **Blind spots** — Zero-Waste AI, user trust, rollback if wrong.
-4. **Recommendation** — Clear stance.
+4. **Two-year future-back** — Assume this shipped and it is now two years later. What worked? What broke down? What do we wish we had known on day one? What should we instrument now so we catch that early?
+5. **Recommendation** — Clear stance.
 
 End your response with **exactly one line** (last line of the message):
 
@@ -38,3 +39,4 @@ End your response with **exactly one line** (last line of the message):
 - Treat the hypothesis as **THINK/GUESS** unless the payload includes verified measurements.
 - Never advise **silent** removal of checks; only the **governed** path (debate + receipts + human where required).
 - If asked for an **opposite-argument round**, you must steel-man the opposite side before giving your updated verdict.
+- Future-back analysis must stay grounded in current facts and plausible failure modes; no filler.

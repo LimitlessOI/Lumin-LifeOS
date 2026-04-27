@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Habits — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 820px; margin: 0 auto; padding: 28px 20px 100px; }
+
+    /* ── Page header ── */
+    .page-header { margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-start; }
+    .page-header h1 { font-size: 20px; font-weight: 600; color: #e8e8f0; }
+    .page-header p  { font-size: 13px; color: #555; margin-top: 4px; line-height: 1.5; }
+
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid #1e1e2e; margin-bottom: 28px; overflow-x: auto; }
+    .tab  { padding: 9px 16px; font-size: 13px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; }
+    .tab.active { color: #34d399; border-bottom-color: #34d399; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Stats bar ── */
+    .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 14px; text-align: center; }
+    .stat-card .num { font-size: 22px; font-weight: 600; color: #34d399; }
+    .stat-card .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #555; margin-top: 4px; }
+
+    /* ── Habit item ── */
+    .habit-item {
+      background: #111118; border: 1px solid #1e1e2e; border-radius: 10px;
+      padding: 16px 18px; margin-bottom: 10px;
+      display: flex; align-items: flex-start; gap: 14px; position: relative;
+      transition: border-color .2s;
+    }
+    .habit-item.done { border-color: rgba(52,211,153,0.25); background: rgba(52,211,153,0.03); }
+    .habit-item.struggling { border-color: rgba(245,158,11,0.2); }
+
+    .check-btn {
+      flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid #2a2a3a; background: transparent; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
+      transition: all .15s; margin-top: 2px;
+    }
+    .check-btn:hover { border-color: #34d399; }
+    .habit-item.done .check-btn { border-color: #34d399; background: #34d399; color: #0a0a0f; }
+
+    .habit-info { flex: 1; }
+    .habit-title { font-size: 14px; font-weight: 500; color: #e8e8f0; margin-bottom: 3px; }
+    .habit-identity { font-size: 12px; color: #555; margin-bottom: 6px; font-style: italic; }
+    .habit-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .streak-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+    }
+    .streak-badge.hot  { background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+    .streak-badge.cold { background: #1a1a2a; color: #555; border: 1px solid #2a2a3a; }
+    .freq-tag { font-size: 10px; color: #444; background: #1a1a2a; padding: 2px 7px; border-radius: 8px; }
+
+    .reflection-prompt {
+      background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.15);
+      border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0;
+      padding: 10px 12px; margin-top: 10px; font-size: 12px; color: #f59e0b; line-height: 1.6;
+    }
+
+    /* ── New habit form ── */
+    .new-form-toggle { margin-bottom: 16px; }
+    .form-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+    .form-card h3 { font-size: 14px; font-weight: 500; color: #d8d8e8; margin-bottom: 16px; }
+    .form-field { margin-bottom: 14px; }
+    .form-field label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 6px; }
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 9px 12px; font-size: 13px;
+      outline: none; font-family: inherit;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: #34d399; }
+    .form-field textarea { resize: vertical; min-height: 60px; }
+    .form-hint { font-size: 11px; color: #444; margin-top: 4px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* ── Buttons ── */
+    .btn { padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all .15s; }
+    .btn-primary { background: #34d399; color: #0a0a0f; }
+    .btn-primary:hover { background: #2bc787; }
+    .btn-ghost { background: transparent; border: 1px solid #2a2a3a; color: #666; }
+    .btn-ghost:hover { color: #aaa; border-color: #3a3a4a; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-row { display: flex; gap: 10px; align-items: center; }
+
+    /* ── Manage list ── */
+    .manage-item {
+      background: #111118; border: 1px solid #1e1e2e; border-radius: 10px;
+      padding: 14px 18px; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .manage-item .mi-info { flex: 1; }
+    .manage-item .mi-title { font-size: 14px; font-weight: 500; color: #e8e8f0; }
+    .manage-item .mi-sub   { font-size: 11px; color: #555; margin-top: 3px; }
+
+    /* ── Utility ── */
+    .empty { padding: 40px; text-align: center; color: #444; font-size: 14px; }
+    .toast { position:fixed; bottom:24px; right:24px; background:#0a2010; border:1px solid #34d399; border-radius:8px; padding:12px 18px; font-size:13px; color:#34d399; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; pointer-events:none; }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .spinner { width:16px; height:16px; border:2px solid #2a2a3a; border-top-color:#34d399; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; vertical-align:middle; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    @media (max-width: 600px) { .stats-bar { grid-template-columns: repeat(3, 1fr); } .form-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="root">
+
+  <div class="page-header">
+    <div>
+      <h1>Habits</h1>
+      <p>Identity-framed. Streak-tracked. No shame — just data.</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="today">Today</div>
+    <div class="tab" data-tab="manage">Manage</div>
+  </div>
+
+  <!-- TODAY TAB -->
+  <div id="panel-today" class="panel active">
+    <div id="today-loading" style="text-align:center;padding:40px;color:#555;">
+      <div class="spinner"></div>
+    </div>
+    <div id="today-content" style="display:none;"></div>
+  </div>
+
+  <!-- MANAGE TAB -->
+  <div id="panel-manage" class="panel">
+
+    <!-- New habit form -->
+    <div id="new-form-wrap">
+      <div class="new-form-toggle">
+        <button class="btn btn-primary" onclick="toggleNewForm()">+ New Habit</button>
+      </div>
+      <div class="form-card" id="new-form" style="display:none;">
+        <h3>Create a Habit</h3>
+        <div class="form-field">
+          <label>Habit Title <span style="color:#e05555">*</span></label>
+          <input type="text" id="new-title" placeholder="e.g. Morning run" maxlength="200">
+        </div>
+        <div class="form-field">
+          <label>Identity Statement <span style="color:#444">(optional but powerful)</span></label>
+          <textarea id="new-identity" placeholder="e.g. I am someone who starts every day with movement" rows="2" maxlength="500"></textarea>
+          <div class="form-hint">Frame it as who you are, not what you do. Identity beats motivation every time.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Frequency</label>
+            <select id="new-freq">
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="create-btn" onclick="createHabit()">Create Habit</button>
+          <button class="btn btn-ghost" onclick="toggleNewForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="manage-loading" style="text-align:center;padding:40px;color:#555;display:none;">
+      <div class="spinner"></div>
+    </div>
+    <div id="manage-content"></div>
+  </div>
+
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+// ── Bootstrap ──────────────────────────────────────────────────────────────────
+const CTX  = window.LifeOSBootstrap.getLifeOSContext({ defaultUser: 'adam' });
+const KEY  = CTX.KEY;
+const USER = CTX.USER;
+const API  = '/api/v1/lifeos/habits';
+
+if (!KEY) { document.body.innerHTML = '<div style="padding:40px;color:#e05555;">Command key required.</div>'; }
+
+const hdrs = () => ({ 'Content-Type': 'application/json', 'x-command-key': KEY });
+const hdrsGet = () => ({ 'x-command-key': KEY });
+
+// ── Tab switching ──────────────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === `panel-${id}`));
+  if (id === 'manage') loadManage();
+}
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg, ok = true) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderColor = ok ? '#34d399' : '#e05555';
+  el.style.color = ok ? '#34d399' : '#e05555';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+// ── Today tab ────────────────────────────────────────────────────────────────
+let summaryData = null; // cache for check-in updates
+
+async function loadToday() {
+  document.getElementById('today-loading').style.display = '';
+  document.getElementById('today-content').style.display = 'none';
+  try {
+    const r = await fetch(`${API}/summary?user=${USER}&days=7`, { headers: hdrsGet() });
+    const d = await r.json();
+    document.getElementById('today-loading').style.display = 'none';
+    if (!d.ok) { document.getElementById('today-content').innerHTML = `<div class="empty">${d.error}</div>`; document.getElementById('today-content').style.display = ''; return; }
+    summaryData = d;
+    renderToday(d);
+  } catch {
+    document.getElementById('today-loading').style.display = 'none';
+    document.getElementById('today-content').innerHTML = '<div class="empty">Failed to load habits.</div>';
+    document.getElementById('today-content').style.display = '';
+  }
+}
+
+const TODAY_KEY = new Date().toISOString().slice(0, 10);
+
+function renderToday(d) {
+  const { habits } = d;
+  const content = document.getElementById('today-content');
+
+  if (!habits.length) {
+    content.innerHTML = `
+      <div class="empty">
+        No habits yet.<br>
+        <button class="btn btn-primary" style="margin-top:14px" onclick="switchTab('manage')">+ Create your first habit</button>
+      </div>`;
+    content.style.display = '';
+    return;
+  }
+
+  // Stats
+  const completedToday = habits.filter(h => {
+    const completions = h.completions || [];
+    return completions.some(c => c.completion_date?.slice(0,10) === TODAY_KEY && c.completed);
+  }).length;
+  // Use streak from summary
+  const totalStreak = habits.reduce((s, h) => s + (h.streak || 0), 0);
+  const topStreak = Math.max(...habits.map(h => h.streak || 0));
+
+  // Rebuild from summary (habit has completed_count, streak, misses_in_7d, reflection_question)
+  let html = `
+    <div class="stats-bar">
+      <div class="stat-card"><div class="num">${habits.length}</div><div class="lbl">Active habits</div></div>
+      <div class="stat-card"><div class="num">${topStreak}</div><div class="lbl">Best streak</div></div>
+      <div class="stat-card"><div class="num">${habits.filter(h => h.streak > 0).length}</div><div class="lbl">On a streak</div></div>
+    </div>`;
+
+  habits.forEach(h => {
+    const habit = h.habit;
+    const isDone = h._done_today; // we'll set this on click; for fresh load unknown
+    const streak = h.streak || 0;
+    const missCount = h.misses_in_7d || 0;
+    const reflection = h.reflection_question;
+    const isStruggling = missCount >= 3;
+
+    html += `
+      <div class="habit-item${isStruggling ? ' struggling' : ''}" id="habit-item-${habit.id}">
+        <button class="check-btn" id="check-${habit.id}" onclick="checkIn(${habit.id})" title="Mark complete today">
+          <span id="check-icon-${habit.id}"></span>
+        </button>
+        <div class="habit-info">
+          <div class="habit-title">${escHtml(habit.title)}</div>
+          ${habit.identity_statement ? `<div class="habit-identity">"${escHtml(habit.identity_statement)}"</div>` : ''}
+          <div class="habit-meta">
+            <span class="streak-badge ${streak > 0 ? 'hot' : 'cold'}">
+              ${streak > 0 ? '🔥' : '○'} ${streak} day${streak !== 1 ? 's' : ''}
+            </span>
+            <span class="freq-tag">${habit.frequency}</span>
+            ${missCount > 0 ? `<span style="font-size:11px;color:#f59e0b">${missCount} miss${missCount !== 1 ? 'es' : ''} this week</span>` : ''}
+          </div>
+          ${reflection ? `<div class="reflection-prompt">${escHtml(reflection)}</div>` : ''}
+        </div>
+      </div>`;
+  });
+
+  content.innerHTML = html;
+  content.style.display = '';
+}
+
+async function checkIn(habitId) {
+  const btn = document.getElementById(`check-${habitId}`);
+  const item = document.getElementById(`habit-item-${habitId}`);
+  btn.disabled = true;
+  try {
+    const r = await fetch(`${API}/${habitId}/checkin`, {
+      method: 'POST',
+      headers: hdrs(),
+      body: JSON.stringify({ user: USER, date: TODAY_KEY, completed: true }),
+    });
+    const d = await r.json();
+    if (d.ok) {
+      // Mark visually done
+      item.classList.add('done');
+      document.getElementById(`check-icon-${habitId}`).textContent = '✓';
+      btn.disabled = false;
+      // Soft-reload for updated streaks without full spinner
+      setTimeout(loadToday, 500);
+    } else {
+      toast(d.error || 'Check-in failed', false);
+      btn.disabled = false;
+    }
+  } catch {
+    toast('Network error', false);
+    btn.disabled = false;
+  }
+}
+
+// ── Manage tab ────────────────────────────────────────────────────────────────
+async function loadManage() {
+  document.getElementById('manage-loading').style.display = '';
+  document.getElementById('manage-content').innerHTML = '';
+  try {
+    const r = await fetch(`${API}?user=${USER}`, { headers: hdrsGet() });
+    const d = await r.json();
+    document.getElementById('manage-loading').style.display = 'none';
+    if (!d.ok) { document.getElementById('manage-content').innerHTML = `<div class="empty">${d.error}</div>`; return; }
+
+    if (!d.habits.length) {
+      document.getElementById('manage-content').innerHTML = '<div class="empty">No habits yet. Create one above.</div>';
+      return;
+    }
+
+    document.getElementById('manage-content').innerHTML = d.habits.map(h => `
+      <div class="manage-item">
+        <div class="mi-info">
+          <div class="mi-title">${escHtml(h.title)}</div>
+          <div class="mi-sub">
+            ${h.identity_statement ? `"${escHtml(h.identity_statement)}" · ` : ''}
+            ${h.frequency} · added ${new Date(h.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } catch {
+    document.getElementById('manage-loading').style.display = 'none';
+    document.getElementById('manage-content').innerHTML = '<div class="empty">Failed to load.</div>';
+  }
+}
+
+// ── New habit form ────────────────────────────────────────────────────────────
+function toggleNewForm() {
+  const form = document.getElementById('new-form');
+  form.style.display = form.style.display === 'none' ? '' : 'none';
+  if (form.style.display !== 'none') document.getElementById('new-title').focus();
+}
+
+async function createHabit() {
+  const title    = document.getElementById('new-title').value.trim();
+  const identity = document.getElementById('new-identity').value.trim() || null;
+  const freq     = document.getElementById('new-freq').value;
+
+  if (!title) { toast('Title is required', false); return; }
+
+  const btn = document.getElementById('create-btn');
+  btn.disabled = true;
+  btn.textContent = 'Creating…';
+  try {
+    const r = await fetch(API, {
+      method: 'POST',
+      headers: hdrs(),
+      body: JSON.stringify({ user: USER, title, identity_statement: identity, frequency: freq }),
+    });
+    const d = await r.json();
+    if (d.ok) {
+      toast('Habit created');
+      document.getElementById('new-title').value    = '';
+      document.getElementById('new-identity').value = '';
+      document.getElementById('new-form').style.display = 'none';
+      loadManage();
+      // Reload today if it's visible
+      if (document.getElementById('panel-today').classList.contains('active')) loadToday();
+    } else {
+      toast(d.error || 'Failed to create', false);
+    }
+  } catch { toast('Network error', false); }
+  btn.disabled = false;
+  btn.textContent = 'Create Habit';
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadToday();
+</script>
+</body>
+</html>

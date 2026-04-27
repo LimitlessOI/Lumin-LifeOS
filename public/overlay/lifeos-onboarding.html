@@ -5,292 +5,802 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/overlay/lifeos-theme.js"></script>
   <script src="/overlay/lifeos-bootstrap.js"></script>
-  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <script src="/overlay/lifeos-voice.js"></script>
   <title>Welcome — LifeOS</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-    .root { max-width: 600px; width: 100%; padding: 40px 24px 80px; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Progress dots */
-    .progress { display: flex; justify-content: center; gap: 10px; margin-bottom: 52px; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: #2a2a3a; transition: background 0.3s; }
-    .dot.active { background: #5b6af5; }
-    .dot.done   { background: #34d399; }
-
-    /* Steps */
-    .step { display: none; animation: fadeIn 0.25s ease; }
-    .step.active { display: block; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-
-    .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #555; margin-bottom: 16px; }
-    h1 { font-size: 28px; font-weight: 700; line-height: 1.25; margin-bottom: 14px; }
-    .lead { font-size: 15px; color: #888; line-height: 1.65; margin-bottom: 36px; }
-    .note { font-size: 12px; color: #444; margin-top: 10px; line-height: 1.5; }
-
-    /* Fields */
-    .form-field { margin-bottom: 18px; }
-    .form-field label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 7px; }
-    .form-field input, .form-field textarea {
-      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
-      border-radius: 8px; color: #e8e8f0; padding: 10px 13px; font-size: 13px; outline: none;
-      font-family: inherit;
+    :root {
+      --bg:        #0a0a0f;
+      --bg-card:   #111118;
+      --bg-input:  #0d0d1a;
+      --border:    #2a2a3a;
+      --accent:    #5b6af5;
+      --accent-dim:rgba(91,106,245,0.12);
+      --text:      #e8e8f0;
+      --muted:     #888;
+      --dim:       #444;
+      --green:     #34d399;
     }
-    .form-field input:focus, .form-field textarea:focus { border-color: #5b6af5; }
-    .form-field textarea { resize: none; }
 
-    /* Identity block with BE/DO/HAVE labels */
-    .identity-label { font-size: 13px; font-weight: 600; color: #5b6af5; margin-bottom: 6px; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+    }
 
-    /* Option cards */
-    .option-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
-    .option-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 18px 20px; cursor: pointer; display: flex; align-items: center; gap: 14px; transition: border-color 0.15s, background 0.15s; }
-    .option-card:hover { border-color: #5b6af5; background: #13131e; }
-    .option-card .icon { font-size: 22px; }
-    .option-card .label { font-size: 14px; color: #d8d8e8; }
-    .option-card .caption { font-size: 11px; color: #555; margin-top: 2px; }
+    /* ── Screens ──────────────────────────────────────────── */
+    .screen { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 40px 24px 60px; }
+    .screen.active { display: flex; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Summary */
-    .summary-block { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 20px; margin-bottom: 28px; }
-    .summary-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #191920; }
-    .summary-row:last-child { border-bottom: none; }
-    .summary-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #5b6af5; min-width: 50px; padding-top: 1px; }
-    .summary-val { font-size: 13px; color: #d8d8e8; line-height: 1.5; }
+    /* ── Welcome screen ───────────────────────────────────── */
+    .welcome-icon { font-size: 52px; margin-bottom: 28px; }
+    .welcome-title { font-size: 30px; font-weight: 700; line-height: 1.2; text-align: center; margin-bottom: 14px; max-width: 420px; }
+    .welcome-sub { font-size: 15px; color: var(--muted); line-height: 1.7; text-align: center; max-width: 380px; margin-bottom: 40px; }
+    .btn-start { padding: 14px 36px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+    .btn-start:hover { opacity: 0.88; }
 
-    /* Buttons */
-    .btn-primary { display: inline-block; padding: 12px 28px; background: #1e2060; border: 1px solid #5b6af5; border-radius: 8px; color: #a0aaff; font-size: 14px; cursor: pointer; transition: background 0.15s; }
-    .btn-primary:hover { background: #262880; }
-    .btn-link { display: inline-block; padding: 12px 16px; color: #444; font-size: 13px; cursor: pointer; }
-    .btn-link:hover { color: #666; }
+    /* ── Conversation screen ──────────────────────────────── */
+    .convo-screen { flex: 1; display: none; flex-direction: column; max-height: 100svh; }
+    .convo-screen.active { display: flex; }
 
-    .spinner { width:16px; height:16px; border:2px solid #2a2a3a; border-top-color:#5b6af5; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; vertical-align: middle; margin-right: 8px; }
+    .convo-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      background: var(--bg-card);
+    }
+    .lumin-avatar-sm {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, #5b6af5, #7c3aed);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .convo-header-text { flex: 1; }
+    .convo-header-text strong { display: block; font-size: 14px; }
+    .convo-header-text span { font-size: 11px; color: var(--muted); }
+    .convo-progress {
+      font-size: 11px; color: var(--muted);
+      flex-shrink: 0;
+    }
+    .progress-dots {
+      display: flex; gap: 5px; margin-top: 4px; justify-content: flex-end;
+    }
+    .pdot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+    .pdot.done { background: var(--green); }
+    .pdot.active { background: var(--accent); }
+
+    .messages-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scrollbar-width: thin;
+    }
+
+    .bubble {
+      max-width: 82%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14.5px;
+      line-height: 1.6;
+      animation: fadeUp 0.2s ease;
+    }
+    .bubble.lumin {
+      align-self: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .bubble.user {
+      align-self: flex-end;
+      background: var(--accent);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .bubble.typing {
+      align-self: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      color: var(--muted);
+    }
+    .typing-dots { display: inline-flex; gap: 4px; align-items: center; }
+    .typing-dots span {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--muted);
+      animation: blink 1.2s infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink {
+      0%, 100% { opacity: 0.3; transform: translateY(0); }
+      50%       { opacity: 1;   transform: translateY(-3px); }
+    }
+
+    /* Suggestion chips */
+    .chip-row {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 4px 0;
+      animation: fadeUp 0.2s ease;
+    }
+    .chip {
+      padding: 8px 14px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(91,106,245,0.3);
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .chip:hover { background: rgba(91,106,245,0.22); border-color: var(--accent); }
+
+    /* Input bar */
+    .input-bar {
+      padding: 12px 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+      background: var(--bg);
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+    .input-wrap {
+      flex: 1;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: flex;
+      align-items: flex-end;
+      transition: border-color 0.15s;
+    }
+    .input-wrap:focus-within { border-color: var(--accent); }
+    .msg-input {
+      flex: 1; background: none; border: none; color: var(--text);
+      font-family: inherit; font-size: 14px;
+      padding: 10px 12px; resize: none; max-height: 100px;
+      overflow-y: auto; outline: none; line-height: 1.5;
+    }
+    .msg-input::placeholder { color: var(--dim); }
+    .mic-btn {
+      background: none; border: none; color: var(--muted);
+      font-size: 16px; cursor: pointer;
+      padding: 8px 10px 8px 0; flex-shrink: 0; line-height: 1;
+      transition: color 0.15s;
+    }
+    .mic-btn:hover { color: var(--text); }
+    .mic-btn.voice-active { color: #ef4444; animation: mic-pulse 0.8s infinite; }
+    @keyframes mic-pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+    .send-btn {
+      width: 40px; height: 40px;
+      border-radius: 10px; background: var(--accent);
+      border: none; color: #fff; font-size: 18px;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+      transition: opacity 0.15s;
+    }
+    .send-btn:hover { opacity: 0.85; }
+    .send-btn:disabled { opacity: 0.35; cursor: default; }
+
+    /* Voice indicator bar */
+    .voice-bar {
+      padding: 6px 16px;
+      font-size: 11px;
+      color: #ef4444;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .voice-bar.active { display: flex; }
+    .voice-bar-dot { width: 6px; height: 6px; border-radius: 50%; background: #ef4444; animation: mic-pulse 0.8s infinite; }
+
+    /* ── Health + Summary screens ─────────────────────────── */
+    .card-screen { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px 60px; }
+    .card-screen.active { display: flex; animation: fadeUp 0.3s ease; }
+
+    .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--dim); margin-bottom: 14px; }
+    h2 { font-size: 26px; font-weight: 700; margin-bottom: 12px; max-width: 420px; line-height: 1.3; text-align: center; }
+    .lead { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; text-align: center; max-width: 380px; }
+
+    .option-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; width: 100%; max-width: 440px; }
+    .opt-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px 20px;
+      cursor: pointer; display: flex; align-items: center;
+      gap: 14px; transition: border-color 0.15s, background 0.15s;
+    }
+    .opt-card:hover { border-color: var(--accent); background: #13131e; }
+    .opt-card .icon { font-size: 22px; }
+    .opt-card .label { font-size: 14px; color: #d8d8e8; }
+    .opt-card .caption { font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+    .summary-block {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px; margin-bottom: 28px;
+      width: 100%; max-width: 440px;
+    }
+    .sum-row { display: flex; gap: 12px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid #191920; }
+    .sum-row:last-child { border-bottom: none; }
+    .sum-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); min-width: 56px; padding-top: 2px; }
+    .sum-val { font-size: 13px; color: #d8d8e8; line-height: 1.5; }
+
+    .btn-primary {
+      padding: 13px 32px; background: var(--accent); border: none;
+      border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:disabled { opacity: 0.4; cursor: default; }
+
+    .spinner { width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; vertical-align:middle; margin-right:8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .toast { position:fixed; bottom:24px; right:24px; background:#1e2060; border:1px solid #5b6af5; border-radius:8px; padding:12px 18px; font-size:13px; color:#a0aaff; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; }
+
+    .toast { position:fixed; bottom:24px; right:24px; background:#1e2060; border:1px solid var(--accent); border-radius:8px; padding:12px 18px; font-size:13px; color:#a0aaff; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; max-width:280px; }
     .toast.show { opacity:1; transform:translateY(0); }
+
+    @media (min-width: 600px) {
+      .messages-area { max-width: 680px; margin: 0 auto; width: 100%; }
+      .input-bar { max-width: 680px; margin: 0 auto; width: 100%; }
+    }
   </style>
   <link rel="stylesheet" href="/overlay/lifeos-theme-overrides.css">
 </head>
 <body>
-<div class="root">
 
-  <!-- Progress dots -->
-  <div class="progress">
-    <div class="dot active" id="dot-1"></div>
-    <div class="dot" id="dot-2"></div>
-    <div class="dot" id="dot-3"></div>
-    <div class="dot" id="dot-4"></div>
-    <div class="dot" id="dot-5"></div>
-  </div>
-
-  <!-- Step 1: Welcome -->
-  <div class="step active" id="step-1">
-    <div class="eyebrow">Step 1 of 5</div>
-    <h1>Your personal operating system.</h1>
-    <p class="lead">LifeOS helps you become who you said you want to be — not who we think you should be. It works at identity level, not task level.</p>
-    <button class="btn-primary" onclick="goTo(2)">Begin →</button>
-  </div>
-
-  <!-- Step 2: Identity -->
-  <div class="step" id="step-2">
-    <div class="eyebrow">Step 2 of 5</div>
-    <h1>Who do you want to become?</h1>
-    <p class="lead">Before anything else, tell us who you want to become.</p>
-
-    <div class="form-field">
-      <div class="identity-label">BE</div>
-      <label>I am...</label>
-      <textarea id="f-be" rows="2" placeholder="a person of deep integrity who shows up fully for my family"></textarea>
-    </div>
-    <div class="form-field">
-      <div class="identity-label">DO</div>
-      <label>Which means I...</label>
-      <textarea id="f-do" rows="2" placeholder="keep my word, protect my time, invest in my health daily"></textarea>
-    </div>
-    <div class="form-field">
-      <div class="identity-label">HAVE</div>
-      <label>Which creates...</label>
-      <textarea id="f-have" rows="2" placeholder="a life I'm proud of, a marriage that thrives, a body that works"></textarea>
-    </div>
-    <p class="note">You can update this anytime. This is your compass, not a contract.</p>
-    <br>
-    <button class="btn-primary" onclick="submitIdentity()">Continue →</button>
-  </div>
-
-  <!-- Step 3: First commitment -->
-  <div class="step" id="step-3">
-    <div class="eyebrow">Step 3 of 5</div>
-    <h1>Your first commitment.</h1>
-    <p class="lead">What's one thing you've been meaning to do but keep putting off?</p>
-    <div class="form-field">
-      <label>One thing</label>
-      <input id="f-commitment" placeholder="Call my dad, finish the proposal, start exercising..." />
-    </div>
-    <p class="note">Just one. We'll build from here.</p>
-    <br>
-    <button class="btn-primary" onclick="submitCommitment()">Add it →</button>
-  </div>
-
-  <!-- Step 4: Health -->
-  <div class="step" id="step-4">
-    <div class="eyebrow">Step 4 of 5</div>
-    <h1>Connect your health.</h1>
-    <p class="lead">LifeOS gets smarter when it knows how your body is doing.</p>
-    <div class="option-cards">
-      <div class="option-card" onclick="connectHealth()">
-        <span class="icon">🍎</span>
-        <div>
-          <div class="label">Connect Apple Health</div>
-          <div class="caption">Via iOS Shortcuts — we'll show you how</div>
-        </div>
-      </div>
-      <div class="option-card" onclick="skipHealth()">
-        <span class="icon">→</span>
-        <div>
-          <div class="label">Skip for now</div>
-          <div class="caption">You can connect later from settings</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Step 5: Ready -->
-  <div class="step" id="step-5">
-    <div class="eyebrow">Step 5 of 5</div>
-    <h1>Here's your mirror.</h1>
-    <p class="lead">Every morning, open LifeOS. You'll see exactly where you are and what matters.</p>
-
-    <div class="summary-block" id="summary-block">
-      <div class="summary-row">
-        <span class="summary-tag">BE</span>
-        <span class="summary-val" id="sum-be">—</span>
-      </div>
-      <div class="summary-row">
-        <span class="summary-tag">DO</span>
-        <span class="summary-val" id="sum-do">—</span>
-      </div>
-      <div class="summary-row">
-        <span class="summary-tag">HAVE</span>
-        <span class="summary-val" id="sum-have">—</span>
-      </div>
-      <div class="summary-row">
-        <span class="summary-tag">First</span>
-        <span class="summary-val" id="sum-commitment">—</span>
-      </div>
-    </div>
-
-    <button class="btn-primary" id="btn-open" onclick="finish()">Open My Mirror →</button>
-  </div>
-
+<!-- ═══════════════════════════════════════════
+     SCREEN 1: Welcome
+════════════════════════════════════════════ -->
+<div class="screen active" id="screen-welcome">
+  <div class="welcome-icon">◎</div>
+  <h1 class="welcome-title">Your personal operating system.</h1>
+  <p class="welcome-sub">LifeOS helps you become who you said you want to be — not who we think you should be. It works at identity level, not task level.</p>
+  <button class="btn-start" onclick="startConversation()">Begin →</button>
 </div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2: Lumin Conversation
+════════════════════════════════════════════ -->
+<div class="convo-screen" id="screen-convo">
+  <div class="convo-header">
+    <div class="lumin-avatar-sm">◎</div>
+    <div class="convo-header-text">
+      <strong>Lumin</strong>
+      <span id="convo-stage-label">Setting up your mirror</span>
+    </div>
+    <div class="convo-progress">
+      <div style="text-align:right;font-size:10px;color:var(--dim)">Progress</div>
+      <div class="progress-dots">
+        <div class="pdot active" id="pd-1"></div>
+        <div class="pdot" id="pd-2"></div>
+        <div class="pdot" id="pd-3"></div>
+        <div class="pdot" id="pd-4"></div>
+        <div class="pdot" id="pd-5"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="messages-area" id="messages-area"></div>
+
+  <div class="voice-bar" id="voice-bar">
+    <div class="voice-bar-dot"></div>
+    <span id="voice-interim-text">Listening…</span>
+  </div>
+
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea
+        class="msg-input"
+        id="convo-input"
+        placeholder="Type or tap 🎙 to speak…"
+        rows="1"
+        onkeydown="handleConvoKey(event)"
+        oninput="autoResizeConvo(this)"></textarea>
+      <button class="mic-btn" id="convo-mic" onclick="convoVoice()" title="Voice input">🎙</button>
+    </div>
+    <button class="send-btn" id="convo-send" onclick="userSend()" title="Send">↑</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3: Health
+════════════════════════════════════════════ -->
+<div class="card-screen" id="screen-health">
+  <div class="eyebrow">Almost there</div>
+  <h2>Connect your health.</h2>
+  <p class="lead">LifeOS gets smarter when it knows how your body is doing. You can connect later too.</p>
+  <div class="option-cards">
+    <div class="opt-card" onclick="connectHealth()">
+      <span class="icon">🍎</span>
+      <div>
+        <div class="label">Connect Apple Health</div>
+        <div class="caption">Via iOS Shortcuts — we'll show you how</div>
+      </div>
+    </div>
+    <div class="opt-card" onclick="skipHealth()">
+      <span class="icon">→</span>
+      <div>
+        <div class="label">Skip for now</div>
+        <div class="caption">Connect anytime from settings</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4: Summary + Finish
+════════════════════════════════════════════ -->
+<div class="card-screen" id="screen-done">
+  <div class="eyebrow">Here's your mirror</div>
+  <h2>This is who you said you are.</h2>
+  <p class="lead">Every morning, open LifeOS. You'll see exactly where you are and what matters.</p>
+
+  <div class="summary-block">
+    <div class="sum-row">
+      <span class="sum-tag">BE</span>
+      <span class="sum-val" id="sum-be">—</span>
+    </div>
+    <div class="sum-row">
+      <span class="sum-tag">DO</span>
+      <span class="sum-val" id="sum-do">—</span>
+    </div>
+    <div class="sum-row">
+      <span class="sum-tag">HAVE</span>
+      <span class="sum-val" id="sum-have">—</span>
+    </div>
+    <div class="sum-row">
+      <span class="sum-tag">First</span>
+      <span class="sum-val" id="sum-commitment">—</span>
+    </div>
+  </div>
+
+  <button class="btn-primary" id="btn-open" onclick="finish()">Open My Mirror →</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-  const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
-  const API  = CTX.API;
-  const KEY  = CTX.KEY;
-  const H    = CTX.headers();
-  const USER = CTX.USER;
+/* ── Bootstrap ─────────────────────────────────────────────── */
+const CTX  = window.LifeOSBootstrap.getLifeOSContext({ promptForKey: true });
+const API  = CTX.API;
+const KEY  = CTX.KEY;
+const H    = { ...CTX.headers(), 'Content-Type': 'application/json' };
+const USER = CTX.USER;
+const NAME = localStorage.getItem('lifeos_name') || (USER.charAt(0).toUpperCase() + USER.slice(1));
 
-  let state = { be: '', do: '', have: '', commitment: '' };
-  let currentStep = 1;
+/* ── State ─────────────────────────────────────────────────── */
+const state = { be: '', do: '', have: '', commitment: '', threadId: null };
 
-  function goTo(n) {
-    document.getElementById(`step-${currentStep}`).classList.remove('active');
-    for (let i = 1; i <= 5; i++) {
-      const d = document.getElementById(`dot-${i}`);
-      d.classList.remove('active', 'done');
-      if (i < n) d.classList.add('done');
-      else if (i === n) d.classList.add('active');
+/* ── Conversation stage machine ────────────────────────────── */
+// Stages: intro → be → be_probe1 → be_probe2 → be_suggest → do → have → commitment → synthesize
+const stages = ['intro', 'be', 'be_probe1', 'be_probe2', 'be_suggest', 'do', 'have', 'commitment', 'synthesize'];
+let currentStage = 'intro';
+let awaitingReply = false;
+let voiceAutoSend = null;
+
+// Progress dot mapping
+const stageDots = { intro: 1, be: 1, be_probe1: 1, be_probe2: 1, be_suggest: 1, do: 2, have: 3, commitment: 4, synthesize: 5 };
+const stageLabels = { intro: 'Setting up your mirror', be: 'Who do you want to be?', be_probe1: 'Who do you want to be?', be_probe2: 'Who do you want to be?', be_suggest: 'Who do you want to be?', do: 'How does that show up?', have: 'What does life look like?', commitment: 'One first step', synthesize: 'Building your mirror…' };
+
+/* ── Screen switching ──────────────────────────────────────── */
+function showScreen(id) {
+  document.querySelectorAll('.screen, .convo-screen, .card-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ── Conversation UI helpers ───────────────────────────────── */
+function addBubble(role, html, scroll = true) {
+  const area = document.getElementById('messages-area');
+  const div  = document.createElement('div');
+  div.className = `bubble ${role}`;
+  div.innerHTML = html;
+  area.appendChild(div);
+  if (scroll) area.scrollTop = area.scrollHeight;
+  return div;
+}
+
+function addChips(options, onSelect) {
+  const area = document.getElementById('messages-area');
+  const row  = document.createElement('div');
+  row.className = 'chip-row';
+  row.id = 'chip-row-current';
+  options.forEach(opt => {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.textContent = opt;
+    chip.onclick = () => {
+      row.remove();
+      onSelect(opt);
+    };
+    row.appendChild(chip);
+  });
+  area.appendChild(row);
+  area.scrollTop = area.scrollHeight;
+}
+
+function removeChips() {
+  document.getElementById('chip-row-current')?.remove();
+}
+
+function showTyping() {
+  removeTyping();
+  return addBubble('typing', `<div class="typing-dots"><span></span><span></span><span></span></div>`);
+}
+
+function removeTyping() {
+  document.querySelector('.bubble.typing')?.remove();
+}
+
+function luminSays(text, delayMs = 600) {
+  return new Promise(resolve => {
+    const t = showTyping();
+    setTimeout(() => {
+      t.remove();
+      addBubble('lumin', escHtml(text).replace(/\n/g, '<br>'));
+      resolve();
+    }, delayMs);
+  });
+}
+
+function updateProgress(stage) {
+  const dot = stageDots[stage] || 1;
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById(`pd-${i}`);
+    if (!el) continue;
+    el.className = 'pdot ' + (i < dot ? 'done' : i === dot ? 'active' : '');
+  }
+  const labelEl = document.getElementById('convo-stage-label');
+  if (labelEl) labelEl.textContent = stageLabels[stage] || '';
+}
+
+/* ── Start ─────────────────────────────────────────────────── */
+function startConversation() {
+  showScreen('screen-convo');
+  runStage('intro');
+}
+
+/* ── Stage runner ──────────────────────────────────────────── */
+async function runStage(stage, userInput) {
+  currentStage = stage;
+  updateProgress(stage);
+  awaitingReply = true;
+
+  if (stage === 'intro') {
+    await luminSays(`Hey ${NAME} 👋 I'm Lumin.\n\nI'm going to ask you a few questions to set up your mirror. No right or wrong answers — just honest ones.\n\nWho are you? What do you want? What does your life look like when you're fully you?\n\nReady?`, 800);
+    addChips(["Let's go", "I'm ready"], (choice) => {
+      addBubble('user', escHtml(choice));
+      runStage('be');
+    });
+    return;
+  }
+
+  if (stage === 'be') {
+    await luminSays(`Good. First question:\n\nWho do you want to *be*? Not what you do — who you ARE.\n\nTry a sentence starting with "I am..." — like "I am a person who shows up fully" or "I am someone my kids can count on."\n\nWhat comes to mind?`);
+    awaitingReply = true;
+    return;
+  }
+
+  if (stage === 'be_probe1') {
+    // User gave a weak/IDK response
+    await luminSays(`That's honest. Let me try a different angle.\n\nThink of a moment when you felt like the best version of yourself. You were fully present, doing exactly what you were meant to do.\n\nWho were you being in that moment?`);
+    awaitingReply = true;
+    return;
+  }
+
+  if (stage === 'be_probe2') {
+    await luminSays(`Okay, let's get concrete. Imagine it's five years from now and someone who loves you describes who you became.\n\nWhat would you want them to say about you?`);
+    awaitingReply = true;
+    return;
+  }
+
+  if (stage === 'be_suggest') {
+    await luminSays(`Let me offer some starting points — stop me when something feels true:`);
+    addChips([
+      'A present parent who's fully there',
+      'A person of deep integrity',
+      'Someone with unshakeable health',
+      'A fearless creator',
+      'A calm and grounded leader',
+      'Write my own…',
+    ], async (choice) => {
+      if (choice === 'Write my own…') {
+        addBubble('lumin', 'What would you say?');
+        awaitingReply = true;
+        currentStage = 'be'; // Accept next input as BE answer
+        return;
+      }
+      addBubble('user', escHtml(choice));
+      state.be = choice;
+      runStage('do');
+    });
+    return;
+  }
+
+  if (stage === 'do') {
+    const beShort = state.be.replace(/^I am (a |an )?/i, '').slice(0, 40);
+    await luminSays(`I hear you — ${beShort || 'that'}.\n\nNow, what does that actually look like day to day?\n\nIf you were fully living that, what would you be doing differently?`);
+    awaitingReply = true;
+    return;
+  }
+
+  if (stage === 'have') {
+    await luminSays(`Good. And if you were living that fully — what would your life look like?\n\nWhat would you *have* — in your relationships, health, work, or how you feel?`);
+    awaitingReply = true;
+    return;
+  }
+
+  if (stage === 'commitment') {
+    await luminSays(`One last thing.\n\nWhat's one thing you've been meaning to do but keep putting off?\n\nNot a list — just the one that comes to mind first.`);
+    awaitingReply = true;
+    return;
+  }
+
+  if (stage === 'synthesize') {
+    await synthesize();
+    return;
+  }
+}
+
+/* ── User sends a message ──────────────────────────────────── */
+async function userSend() {
+  const input = document.getElementById('convo-input');
+  const text  = (input.value || '').trim();
+  if (!text || !awaitingReply) return;
+
+  awaitingReply = false;
+  removeChips();
+  addBubble('user', escHtml(text));
+  input.value = '';
+  autoResizeConvo(input);
+  clearTimeout(voiceAutoSend);
+
+  await routeUserInput(text);
+}
+
+async function routeUserInput(text) {
+  const lower = text.toLowerCase();
+  const isIDK = /\b(i don'?t know|idk|not sure|no idea|hmm|nothing|maybe|i guess)\b/.test(lower) || text.length < 6;
+
+  if (currentStage === 'be' || currentStage === 'be_probe1' || currentStage === 'be_probe2') {
+    if (isIDK && currentStage === 'be') {
+      runStage('be_probe1');
+    } else if (isIDK && currentStage === 'be_probe1') {
+      runStage('be_probe2');
+    } else if (isIDK && currentStage === 'be_probe2') {
+      runStage('be_suggest');
+    } else {
+      // Accept as BE
+      state.be = _formatBe(text);
+      await luminSays(`"${state.be}" — I've got that.`);
+      runStage('do');
     }
-    currentStep = n;
-    document.getElementById(`step-${n}`).classList.add('active');
+    return;
   }
 
-  function submitIdentity() {
-    const be   = document.getElementById('f-be').value.trim();
-    const doT  = document.getElementById('f-do').value.trim();
-    const have = document.getElementById('f-have').value.trim();
-    if (!be || !doT || !have) { toast('Please fill in all three fields'); return; }
-    state.be   = be;
-    state.do   = doT;
-    state.have = have;
-    goTo(3);
+  if (currentStage === 'do') {
+    if (isIDK) {
+      addBubble('lumin', 'Think about yesterday — one moment you showed up the way you want to. What were you doing?');
+      awaitingReply = true;
+      return;
+    }
+    state.do = text;
+    await luminSays(`Got it.`);
+    runStage('have');
+    return;
   }
 
-  function submitCommitment() {
-    const c = document.getElementById('f-commitment').value.trim();
-    if (!c) { toast('Please enter your commitment'); return; }
-    state.commitment = c;
-    goTo(4);
+  if (currentStage === 'have') {
+    if (isIDK) {
+      addBubble('lumin', 'What would make you look back and say "that was a life well lived"?');
+      awaitingReply = true;
+      return;
+    }
+    state.have = text;
+    await luminSays(`Good.`);
+    runStage('commitment');
+    return;
   }
 
-  function connectHealth() {
-    // Show instructions; for now just advance
-    toast('We\'ll guide you through Apple Health setup in Today.');
-    goTo(5);
-    populateSummary();
+  if (currentStage === 'commitment') {
+    state.commitment = text;
+    await luminSays(`"${text}" — written down. Now let's build your mirror.`);
+    runStage('synthesize');
+    return;
   }
+}
 
-  function skipHealth() {
-    goTo(5);
-    populateSummary();
+function _formatBe(text) {
+  // Normalize to first-person "I am..." if not already
+  const t = text.trim();
+  if (/^i am /i.test(t)) return t;
+  if (/^a /i.test(t) || /^an /i.test(t) || /^someone/i.test(t) || /^a person/i.test(t)) {
+    return 'I am ' + t.charAt(0).toLowerCase() + t.slice(1);
   }
+  return t;
+}
 
-  function populateSummary() {
-    document.getElementById('sum-be').textContent         = state.be;
-    document.getElementById('sum-do').textContent         = state.do;
-    document.getElementById('sum-have').textContent       = state.have;
-    document.getElementById('sum-commitment').textContent = state.commitment;
-  }
+/* ── Synthesize BE/DO/HAVE via Lumin API ───────────────────── */
+async function synthesize() {
+  updateProgress('synthesize');
 
-  async function finish() {
-    const btn = document.getElementById('btn-open');
-    btn.innerHTML = '<span class="spinner"></span> Saving...';
-    btn.disabled = true;
+  // Build a compact transcript to send to Lumin for synthesis
+  const transcript = `
+User name: ${NAME}
+BE (who they want to be): "${state.be}"
+DO (what that looks like day to day): "${state.do}"
+HAVE (what their life looks like): "${state.have}"
+First commitment: "${state.commitment}"
+  `.trim();
 
-    try {
-      // Create/update user identity
-      const uRes = await fetch(`${API}/api/v1/lifeos/users`, {
+  // One API call: ask Lumin to polish/format these into clean one-liners
+  try {
+    const res = await fetch(`${API}/api/v1/lifeos/chat/threads`, {
+      method: 'POST', headers: H,
+      body: JSON.stringify({ user: USER, title: 'Onboarding synthesis', mode: 'coaching' }),
+    });
+    const tData = await res.json();
+    state.threadId = tData.thread?.thread_id || tData.thread?.id || null;
+
+    if (state.threadId) {
+      const mRes = await fetch(`${API}/api/v1/lifeos/chat/threads/${state.threadId}/messages`, {
         method: 'POST', headers: H,
         body: JSON.stringify({
           user: USER,
-          be_statement:   state.be,
-          do_statement:   state.do,
-          have_statement: state.have,
+          message: `[SYSTEM TASK — DO NOT SHOW TO USER]
+Based on this onboarding conversation, write clean, first-person BE/DO/HAVE statements.
+Keep each to one sentence. Return ONLY a JSON object with keys: be, do, have.
+No other text.
+
+${transcript}`,
         }),
       });
-      const uData = await uRes.json();
-      if (!uData.ok) throw new Error(uData.error || 'User save failed');
-
-      // Save first commitment
-      if (state.commitment) {
-        const cRes = await fetch(`${API}/api/v1/lifeos/commitments`, {
-          method: 'POST', headers: H,
-          body: JSON.stringify({ user: USER, text: state.commitment }),
-        });
-        const cData = await cRes.json();
-        if (!cData.ok) throw new Error(cData.error || 'Commitment save failed');
-      }
-
-      localStorage.setItem('lifeos_user', USER);
-      localStorage.setItem('lifeos_onboarded', '1');
-      toast('You\'re all set. Opening your mirror...');
-      setTimeout(() => {
-        location.href = `/overlay/lifeos-today.html?user=${encodeURIComponent(USER)}`;
-      }, 1200);
-    } catch (err) {
-      toast(`Error: ${esc(err.message)}`);
-      btn.innerHTML = 'Open My Mirror →';
-      btn.disabled = false;
+      const mData = await mRes.json();
+      const raw = mData.assistant_message?.content || '';
+      try {
+        const jsonStart = raw.indexOf('{');
+        const jsonEnd   = raw.lastIndexOf('}') + 1;
+        if (jsonStart >= 0) {
+          const parsed = JSON.parse(raw.slice(jsonStart, jsonEnd));
+          if (parsed.be)   state.be   = parsed.be;
+          if (parsed.do)   state.do   = parsed.do;
+          if (parsed.have) state.have = parsed.have;
+        }
+      } catch {}
     }
-  }
+  } catch {}
 
-  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function toast(msg) { const e=document.getElementById('toast'); e.textContent=msg; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2800); }
+  // Show confirmation
+  await luminSays(`Here's what I heard:\n\n**BE:** ${state.be}\n**DO:** ${state.do}\n**HAVE:** ${state.have}\n\nFirst step: "${state.commitment}"\n\nDoes this feel right?`, 1000);
+  addChips(["Yes, that's me", 'Adjust something'], async (choice) => {
+    addBubble('user', escHtml(choice));
+    if (choice.startsWith('Adjust')) {
+      addBubble('lumin', 'You can update any of these anytime from your Mirror. For now, let\'s keep going.');
+    }
+    await luminSays(`Your mirror is set. Let's finish up.`);
+    showScreen('screen-health');
+  });
+}
 
-  if (!KEY) {
-    location.reload();
+/* ── Voice input ───────────────────────────────────────────── */
+function convoVoice() {
+  if (!window.LuminVoice) return;
+  const input  = document.getElementById('convo-input');
+  const micBtn = document.getElementById('convo-mic');
+  LuminVoice.startForInput(input, micBtn);
+}
+
+// Listen for voice interim
+document.addEventListener('lumin-voice-interim', (e) => {
+  const bar = document.getElementById('voice-bar');
+  const txt = document.getElementById('voice-interim-text');
+  if (e.detail) {
+    bar.classList.add('active');
+    txt.textContent = `"${e.detail}"`;
+  } else {
+    bar.classList.remove('active');
   }
+});
+
+// Listen for voice state change
+document.addEventListener('lumin-voice-state', (e) => {
+  const bar = document.getElementById('voice-bar');
+  if (!e.detail.active) bar.classList.remove('active');
+});
+
+function handleConvoKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); userSend(); }
+}
+
+function autoResizeConvo(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+/* ── Health + Finish ───────────────────────────────────────── */
+function connectHealth() {
+  toast("We'll guide you through Apple Health setup in Today.");
+  goToDone();
+}
+
+function skipHealth() {
+  goToDone();
+}
+
+function goToDone() {
+  document.getElementById('sum-be').textContent         = state.be   || '—';
+  document.getElementById('sum-do').textContent         = state.do   || '—';
+  document.getElementById('sum-have').textContent       = state.have || '—';
+  document.getElementById('sum-commitment').textContent = state.commitment || '—';
+  showScreen('screen-done');
+}
+
+async function finish() {
+  const btn = document.getElementById('btn-open');
+  btn.innerHTML = '<span class="spinner"></span> Saving...';
+  btn.disabled = true;
+
+  try {
+    const uRes = await fetch(`${API}/api/v1/lifeos/users`, {
+      method: 'POST', headers: H,
+      body: JSON.stringify({ user: USER, be_statement: state.be, do_statement: state.do, have_statement: state.have }),
+    });
+    const uData = await uRes.json();
+    if (!uData.ok) throw new Error(uData.error || 'User save failed');
+
+    if (state.commitment) {
+      const cRes = await fetch(`${API}/api/v1/lifeos/commitments`, {
+        method: 'POST', headers: H,
+        body: JSON.stringify({ user: USER, text: state.commitment }),
+      });
+      const cData = await cRes.json();
+      if (!cData.ok) throw new Error(cData.error || 'Commitment save failed');
+    }
+
+    localStorage.setItem('lifeos_user', USER);
+    localStorage.setItem('lifeos_onboarded', '1');
+    if (NAME !== USER) localStorage.setItem('lifeos_name', NAME);
+    toast("You're all set. Opening your mirror...");
+    setTimeout(() => {
+      location.href = `/overlay/lifeos-today.html?user=${encodeURIComponent(USER)}`;
+    }, 1200);
+  } catch (err) {
+    toast('Error: ' + escHtml(err.message));
+    btn.innerHTML = 'Open My Mirror →';
+    btn.disabled = false;
+  }
+}
+
+/* ── Utils ─────────────────────────────────────────────────── */
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toast(msg) {
+  const e = document.getElementById('toast');
+  e.textContent = msg;
+  e.classList.add('show');
+  setTimeout(() => e.classList.remove('show'), 3000);
+}
+
+if (!KEY) location.reload();
 </script>
 </body>
 </html>

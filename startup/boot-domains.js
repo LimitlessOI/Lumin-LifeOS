@@ -151,6 +151,38 @@ async function bootLifeOSScheduled(deps) {
  *   6. NEVER skip the guard. No exceptions.
  */
 // ── Twin Auto-Ingest (conversation → adam_decisions → adam_profile) ───────────
+// ── Lane intel (Horizon + Red-team) — Amendment 36 ────────────────────────────
+async function bootLaneIntel(deps) {
+  const { pool, logger, callCouncilMember } = deps;
+  // Budget / launch gate — no Horizon or Red-team ticks unless explicitly enabled (costs tokens + npm CPU).
+  if (process.env.LANE_INTEL_ENABLED !== '1') {
+    logger?.info?.('[BOOT] Lane intel execution OFF (set LANE_INTEL_ENABLED=1 after launch/budget approval)');
+    return;
+  }
+  if (process.env.LANE_INTEL_ENABLE_SCHEDULED !== '1') {
+    logger?.info?.('[BOOT] Lane intel schedulers off (set LANE_INTEL_ENABLE_SCHEDULED=1 to enable ticks)');
+    return;
+  }
+  try {
+    const { createLaneIntelScheduledTicks } = await import('../services/lane-intel-service.js');
+    const { horizonGuard, redteamGuard } = createLaneIntelScheduledTicks({
+      pool,
+      logger,
+      callCouncilMember,
+    });
+    const tickMs = Number(process.env.LANE_INTEL_TICK_MS) || 24 * 60 * 60 * 1000;
+    const tick = async () => {
+      await horizonGuard();
+      await redteamGuard();
+    };
+    await tick();
+    setInterval(tick, tickMs);
+    logger?.info?.(`[BOOT] Lane intel schedulers active (every ${tickMs}ms)`);
+  } catch (err) {
+    logger?.warn?.(`[BOOT] Lane intel schedulers failed to start: ${err.message}`);
+  }
+}
+
 async function bootTwinAutoIngest(deps) {
   const { pool, logger, callAI } = deps;
 
@@ -192,6 +224,7 @@ export async function bootAllDomains(deps) {
     bootEmailTriage(deps),
     bootTCDeadlineCron(deps),
     bootLifeOSScheduled(deps),
+    bootLaneIntel(deps),
     bootTwinAutoIngest(deps),
   ]);
 }

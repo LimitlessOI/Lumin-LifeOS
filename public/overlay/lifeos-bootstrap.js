@@ -1,3 +1,9 @@
+/**
+ * Shared overlay bootstrap — JWT/command key context, headers, and (when embedded)
+ * shell keyboard bridge so parent `lifeos-app.html` can open Lumin from iframe pages.
+ *
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ */
 (function initLifeOSBootstrap() {
   // ── Token management ─────────────────────────────────────────────────────────
   const ACCESS_KEY  = 'lifeos_access_token';
@@ -134,8 +140,18 @@
     );
     persistUser(user);
 
-    const tier = localStorage.getItem('lifeos_tier') || 'free';
-    const role = localStorage.getItem('lifeos_role') || 'member';
+    let tier = localStorage.getItem('lifeos_tier') || 'free';
+    let role = localStorage.getItem('lifeos_role') || 'member';
+    if (tokenPayload) {
+      if (tokenPayload.tier) {
+        tier = tokenPayload.tier;
+        localStorage.setItem('lifeos_tier', tier);
+      }
+      if (tokenPayload.role) {
+        role = tokenPayload.role;
+        localStorage.setItem('lifeos_role', role);
+      }
+    }
 
     function headers(extra = {}) {
       const h = { 'Content-Type': 'application/json', ...extra };
@@ -214,4 +230,35 @@
   }
 
   window.LifeOSBootstrap = { getLifeOSContext, storeTokens, clearTokens, attemptRefresh };
+
+  // ── Shell keyboard bridge (iframe → parent lifeos-app) ───────────────────────
+  // Cmd/Ctrl+L does not bubble from a child document to the parent. When an overlay
+  // loads inside `#content-frame`, forward the chord to the shell so Lumin opens.
+  // lifeos-chat.html keeps its own Cmd+L (focus chat input) — do not steal it here.
+  if (window.parent !== window) {
+    window.addEventListener(
+      'keydown',
+      (e) => {
+        try {
+          const path = (window.location.pathname || '').toLowerCase();
+          if (path.includes('lifeos-chat.html')) return;
+          const isMac = typeof navigator !== 'undefined'
+            && navigator.platform
+            && navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+          const mod = isMac ? e.metaKey : e.ctrlKey;
+          if (!mod || String(e.key).toLowerCase() !== 'l') return;
+          const t = e.target;
+          if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+          e.preventDefault();
+          window.parent.postMessage(
+            { type: 'lifeos-shell', action: 'open-lumin-drawer', source: 'lifeos-bootstrap' },
+            window.location.origin,
+          );
+        } catch {
+          /* ignore */
+        }
+      },
+      true,
+    );
+  }
 })();

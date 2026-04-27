@@ -11,8 +11,7 @@
 | **Lifecycle** | `experimental` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `needs-review` |
-| **Last Updated** | 2026-04-01 (`tc-routes`: async_send=true on forward-inspection-docs responds immediately with job_id, processes delivery in background — avoids Railway 60s proxy timeout) |
-| **Last Updated** | 2026-04-01 (`email-triage`: full inbox intelligence — spam detection + IMAP delete, urgency 1-10 scoring, brief + why_adam per email, negotiation intel alerts, TC auto-queue, FYI mark-read, block list. `tc-routes`: attention queue, spam management endpoints. Migration: email_triage_intelligence columns + spam_senders table) |
+| **Last Updated** | 2026-04-20 — TC lane continuity: `docs/CONTINUITY_LOG_TC.md` + **Agent Handoff Notes (TC lane)** + Owned Files block synced to manifest; no runtime code in this slice |
 | **Verification Command** | `node scripts/verify-project.mjs --project tc_service` |
 | **Manifest** | `docs/projects/AMENDMENT_17_TC_SERVICE.manifest.json` |
 
@@ -629,7 +628,7 @@ Per-transaction agents pay $349 only on closed deals — no charge if the deal d
 ---
 
 ## Owned Files
-*(Sources of truth: this amendment + `AMENDMENT_17_TC_SERVICE.manifest.json` — keep them in sync.)*
+*(Sources of truth: this amendment + `AMENDMENT_17_TC_SERVICE.manifest.json` — keep them in sync. Lane handoff doc: `docs/CONTINUITY_LOG_TC.md`.)*
 
 ```
 routes/tc-routes.js
@@ -653,17 +652,27 @@ services/tc-workflow-specs.js
 services/tc-workflow-service.js
 services/tc-offer-prep-service.js
 services/tc-interaction-service.js
+services/tc-assistant-service.js
 services/tc-access-service.js
 services/tc-intake-workspace-service.js
+services/tc-listing-skyslope-sync.js
 services/tc-inspection-service.js
 services/tc-review-package-service.js
 services/tc-email-document-service.js
+services/tc-inspection-forward-service.js
+services/tc-pdf-signature-stamp.js
+services/tc-td-party-sync.js
+services/tc-td-workflow-runner.js
+services/tc-td-form-knowledge-service.js
+services/tc-r4r-attachment-classify.js
 services/tc-email-monitor.js
 services/tc-imap-config.js
 services/credential-aliases.js
 services/email-triage.js
 services/glvar-monitor.js
 services/mls-deal-scanner.js
+scripts/tc-r4r-do-upload.mjs
+public/tc/tc-assistant.html
 public/tc/agent-portal.html
 public/tc/client-portal.html
 public/tc/tc-portal.js
@@ -681,6 +690,7 @@ db/migrations/20260326_tc_interactions.sql
 db/migrations/20260326_tc_review_packages.sql
 db/migrations/20260327_email_triage_enrichment.sql
 db/migrations/20260327_tc_inspections.sql
+db/migrations/20260408_tc_td_form_knowledge.sql
 Dockerfile
 ```
 
@@ -822,6 +832,16 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 **Read first:** `routes/tc-routes.js`, `services/tc-coordinator.js`, `services/glvar-monitor.js`
 
+---
+
+## Agent Handoff Notes (TC lane)
+
+- **Lane ownership:** The TC conductor owns **Amendment 17**, **`docs/CONTINUITY_LOG_TC.md`**, and TC-touched code under `routes/tc-*`, `routes/mls-*`, `services/tc-*`, `services/glvar-monitor.js`, `services/mls-deal-scanner.js`, `services/email-triage.js` (when the change is TC-scoped), `public/tc/*`, and TC migrations. The LifeOS conductor owns Amendment 21 and `lifeos-*` paths. **Do not** edit the same file in both lanes without a designated owner — **HALT / rebase** per North Star Article II §2.6 ¶9 and `docs/QUICK_LAUNCH.md`.
+- **Next execute (from manifest `next_task`):** Use the intake workspace transaction board to open the **6453 Mahogany Peak** file, confirm the real TC mailbox credentials in Railway/vault, then run the first real SRPD/photo package search and send from the portal.
+- **Current focus (from manifest `current_focus`):** TD upload hardened (iframes + shadow DOM + confirm dialogs + retries) — redeploy; R4R scan; check `/tmp/tc-screenshots` on failure.
+- **Verify:** `node scripts/verify-project.mjs --project tc_service` — set `PUBLIC_BASE_URL` (and auth as the script expects) to un-skip HTTP route probes.
+- **Doc cadence:** After each shipped TC slice — append **Change Receipts**, refresh **## Handoff (Fresh AI Context)** if blockers moved, update **`docs/CONTINUITY_LOG_TC.md`**, and bump manifest `last_verified_at` when verify was run.
+
 **Known traps:**
 - SkySlope Puppeteer requires Chromium on the **runtime** image — the repo root `Dockerfile` installs Chromium and sets `PUPPETEER_EXECUTABLE_PATH`; if Railway is not using that Dockerfile, browser automation may still fail until Chromium is available in the build
 - Rotate any Okta or mailbox credential that may have left the vault
@@ -861,6 +881,7 @@ grep "createTCRoutes" startup/register-runtime-routes.js
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-20 | **`docs/CONTINUITY_LOG_TC.md`** session template + next-step links; **## Agent Handoff Notes (TC lane)** (parallel-conductor rule, manifest `next_task` / `current_focus`, verify command); **Owned Files** block synced to `AMENDMENT_17_TC_SERVICE.manifest.json` (added TD/R4R/assistant/listing-sync paths + `20260408_tc_td_form_knowledge.sql`); consolidated duplicate **Last Updated** table rows | Adam assigned dedicated **TC lane** while another conductor runs LifeOS — lane log and amendment must be self-sufficient handoffs | ✅ | ✅ | `node scripts/verify-project.mjs --project tc_service` PASS (local; route HTTP checks skipped) |
 | 2026-04-02 | Shared operator-surface parity note: ClientCare now uses the same click-to-act, operator-first workflow pattern for VOB work that the TC portal already uses for approvals / alerts / file actions. No TC runtime behavior changed in this batch. | Keep the cross-product operator model aligned so “red means I act, yellow means system/watch, green means healthy” remains consistent across internal tools. | ✅ | ✅ | pending |
 | 2026-04-02 | **`tc-imap-config` mailbox fix:** the live IMAP resolver now goes through `credential-aliases.js`, prefers the Adam TC mailbox aliases already present in Railway, and no longer falls back to the LifeOS system mailbox when the transaction inbox is the real source. Vault lookup order now follows the resolved TC mailbox first. | Fix the root-cause drift between the access workspace and the runtime IMAP reader so live email intake pulls from the actual transaction inbox instead of the system mailbox. | ✅ | ✅ | pending |
 | 2026-03-30 | **`tc-browser-agent` `uploadDocument` (v2):** Documents tab search runs in **main + each iframe**; file upload tries **`uploadFile`** on every **`input[type=file]`** in every frame; **`_tdTriggerFileChooserFromFrames`** walks **open shadow roots** to click file inputs; **3 attempts** with re-open file; **`_tdConfirmUploadDialogs`** clicks save/done/apply across frames; **`_tdVerifyFilenameVisible`** scans all frames. **`openTransactionDeskFile`:** richer link selectors + **`goto`** path list (`TransactionDesk`, query `transactionId`, etc.) | ZipForm/Lone Wolf often embeds document UI in iframes/shadow DOM — single-frame selectors missed uploads | ✅ | ✅ | pending |

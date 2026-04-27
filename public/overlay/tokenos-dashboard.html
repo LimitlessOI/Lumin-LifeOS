@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TokenOS Dashboard</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a26;
+      --border: #2a2a40;
+      --accent: #7c3aed;
+      --accent2: #a855f7;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; font-size: 14px; }
+
+    /* ── Auth overlay ── */
+    #auth-screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+    .auth-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; width: 100%; max-width: 400px; text-align: center; }
+    .auth-card h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .auth-card p { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+    .auth-card input { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 0.7rem 1rem; border-radius: 8px; margin-bottom: 0.75rem; font-size: 0.9rem; font-family: monospace; outline: none; }
+    .auth-card input:focus { border-color: var(--accent); }
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.25rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #6d28d9; }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    #auth-error { color: var(--red); font-size: 0.82rem; margin-top: 0.5rem; display: none; }
+
+    /* ── Layout ── */
+    .layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.25rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .sidebar-logo { font-size: 1.2rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1.5rem; padding: 0 0.5rem; }
+    .sidebar-section { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding: 0.5rem; margin-top: 0.75rem; }
+    .nav-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.75rem; border-radius: 8px; color: var(--muted); cursor: pointer; transition: all 0.15s; font-size: 0.88rem; }
+    .nav-item:hover, .nav-item.active { background: rgba(124,58,237,0.15); color: var(--text); }
+    .nav-item.active { color: var(--accent2); }
+    .sidebar-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .customer-badge { background: var(--surface2); border-radius: 8px; padding: 0.6rem 0.75rem; font-size: 0.8rem; }
+    .customer-badge strong { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .customer-badge span { color: var(--muted); font-size: 0.75rem; }
+
+    /* ── Main ── */
+    main { padding: 2rem; overflow-y: auto; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .page-header { margin-bottom: 1.75rem; }
+    .page-header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .page-header p { color: var(--muted); font-size: 0.88rem; }
+
+    /* ── Cards ── */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+    .card-label { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+    .card-value { font-size: 1.8rem; font-weight: 700; }
+    .card-value.green { color: var(--green); }
+    .card-value.accent { color: var(--accent2); }
+    .card-sub { color: var(--muted); font-size: 0.78rem; margin-top: 0.25rem; }
+
+    /* ── Chart ── */
+    .chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+    .chart-header h3 { font-size: 1rem; font-weight: 600; }
+    .chart-bars { display: flex; align-items: flex-end; gap: 4px; height: 120px; }
+    .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--accent); opacity: 0.8; transition: opacity 0.2s; cursor: pointer; min-height: 4px; }
+    .bar:hover { opacity: 1; }
+    .bar-label { font-size: 0.65rem; color: var(--muted); transform: rotate(-40deg); margin-top: 4px; white-space: nowrap; }
+
+    /* ── Table ── */
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem; }
+    .table-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+    .table-header h3 { font-size: 0.95rem; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 0.75rem 1rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 1px solid var(--border); }
+    td { padding: 0.7rem 1rem; border-bottom: 1px solid rgba(42,42,64,0.5); font-size: 0.85rem; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(124,58,237,0.05); }
+
+    /* ── Badges ── */
+    .badge { display: inline-flex; padding: 0.2rem 0.6rem; border-radius: 100px; font-size: 0.72rem; font-weight: 600; }
+    .badge-green { background: rgba(34,197,94,0.15); color: var(--green); }
+    .badge-yellow { background: rgba(234,179,8,0.15); color: var(--yellow); }
+    .badge-red { background: rgba(239,68,68,0.15); color: var(--red); }
+    .badge-purple { background: rgba(124,58,237,0.15); color: var(--accent2); }
+
+    /* ── Invoice section ── */
+    .invoice-form { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .invoice-form select, .invoice-form input { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.85rem; }
+    .invoice-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; max-width: 560px; }
+    .invoice-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+    .invoice-row:last-child { border-bottom: none; font-weight: 700; font-size: 1rem; }
+    .invoice-row .lbl { color: var(--muted); }
+
+    /* ── Settings ── */
+    .settings-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; max-width: 520px; }
+    .settings-form label { display: block; margin-bottom: 0.3rem; font-size: 0.82rem; color: var(--muted); }
+    .settings-form input { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 0.9rem; border-radius: 8px; font-size: 0.88rem; margin-bottom: 1.25rem; outline: none; font-family: monospace; }
+    .settings-form input:focus { border-color: var(--accent); }
+    .rotate-result { margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(34,197,94,0.1); border: 1px solid var(--green); border-radius: 8px; color: var(--green); font-family: monospace; font-size: 0.85rem; display: none; }
+
+    /* ── Loading ── */
+    .loading { text-align: center; padding: 3rem; color: var(--muted); }
+    .spinner { display: inline-block; width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 0.75rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Period selector ── */
+    .period-tabs { display: flex; gap: 0.4rem; }
+    .period-tab { padding: 0.3rem 0.75rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; border: 1px solid var(--border); color: var(--muted); background: transparent; transition: all 0.15s; }
+    .period-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Auth screen -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div style="font-size:2rem; font-weight:800; background:linear-gradient(135deg,#7c3aed,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:1rem;">TokenOS</div>
+    <h2>Sign in to dashboard</h2>
+    <p>Enter your <code>tok_live_...</code> API key</p>
+    <input type="password" id="key-input" placeholder="tok_live_..." autocomplete="off" />
+    <button class="btn btn-primary" style="width:100%" onclick="authenticate()">Continue →</button>
+    <div id="auth-error">Invalid API key — check your key and try again.</div>
+    <div style="margin-top:1rem">
+      <a href="/token-os" style="color:var(--accent);font-size:0.85rem">Don't have a key? Register →</a>
+    </div>
+  </div>
+</div>
+
+<div class="layout" id="app" style="display:none">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">TokenOS</div>
+
+    <div class="sidebar-section">Overview</div>
+    <div class="nav-item active" onclick="showPage('overview', this)">📊 Dashboard</div>
+    <div class="nav-item" onclick="showPage('chart', this)">📈 Savings chart</div>
+
+    <div class="sidebar-section">Reports</div>
+    <div class="nav-item" onclick="showPage('report', this)">📋 Detailed report</div>
+    <div class="nav-item" onclick="showPage('invoice', this)">🧾 Invoice</div>
+    <div class="nav-item" onclick="showPage('models', this)">🤖 By model</div>
+
+    <div class="sidebar-section">Account</div>
+    <div class="nav-item" onclick="showPage('settings', this)">⚙️ Settings</div>
+    <div class="nav-item" onclick="showPage('docs', this)">📖 Quickstart</div>
+
+    <div class="sidebar-footer">
+      <div class="customer-badge">
+        <strong id="sidebar-name">Loading…</strong>
+        <span id="sidebar-plan">—</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main>
+
+    <!-- Overview page -->
+    <div class="page active" id="page-overview">
+      <div class="page-header">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h1>Dashboard</h1>
+            <p>Your token savings at a glance</p>
+          </div>
+          <div class="period-tabs">
+            <button class="period-tab active" onclick="setPeriod(7, this)">7d</button>
+            <button class="period-tab" onclick="setPeriod(30, this)">30d</button>
+            <button class="period-tab" onclick="setPeriod(90, this)">90d</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards" id="overview-cards">
+        <div class="loading"><div class="spinner"></div><br>Loading…</div>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-header">
+          <h3>Daily savings (USD)</h3>
+        </div>
+        <div class="chart-bars" id="daily-chart">
+          <div class="loading" style="width:100%">Loading chart…</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-header">
+          <h3>Savings by model</h3>
+        </div>
+        <div id="model-table-wrap">
+          <div class="loading">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Savings chart page -->
+    <div class="page" id="page-chart">
+      <div class="page-header"><h1>Savings chart</h1><p>Daily token savings over time</p></div>
+      <div class="chart-wrap" style="height:300px">
+        <div class="chart-bars" id="big-chart" style="height:220px">
+          <div class="loading" style="width:100%">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed report page -->
+    <div class="page" id="page-report">
+      <div class="page-header"><h1>Detailed report</h1><p>Full savings breakdown</p></div>
+      <div id="report-content"><div class="loading"><div class="spinner"></div><br>Loading…</div></div>
+    </div>
+
+    <!-- Invoice page -->
+    <div class="page" id="page-invoice">
+      <div class="page-header"><h1>Invoice</h1><p>Monthly billing — you pay 20% of verified savings</p></div>
+      <div class="invoice-form">
+        <select id="inv-year"></select>
+        <select id="inv-month">
+          <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+          <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+          <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+          <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+        </select>
+        <button class="btn btn-primary" onclick="loadInvoice()">Load invoice</button>
+      </div>
+      <div id="invoice-content"></div>
+    </div>
+
+    <!-- By model page -->
+    <div class="page" id="page-models">
+      <div class="page-header"><h1>Savings by model</h1><p>Which models you're saving the most on</p></div>
+      <div id="models-content"><div class="loading"><div class="spinner"></div><br>Loading…</div></div>
+    </div>
+
+    <!-- Settings page -->
+    <div class="page" id="page-settings">
+      <div class="page-header"><h1>Settings</h1><p>Manage your API key and account</p></div>
+      <div class="settings-form">
+        <label>Your current API key</label>
+        <input type="password" id="current-key-display" readonly />
+        <label>Rotate API key</label>
+        <p style="color:var(--muted);font-size:0.82rem;margin-bottom:1rem;">⚠️ This immediately invalidates your old key. Update your integration before rotating.</p>
+        <button class="btn btn-ghost" onclick="rotateKey()">Rotate API key</button>
+        <div class="rotate-result" id="rotate-result"></div>
+      </div>
+    </div>
+
+    <!-- Quickstart docs page -->
+    <div class="page" id="page-docs">
+      <div class="page-header"><h1>Quickstart</h1><p>Integrate TokenOS in under 5 minutes</p></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;max-width:680px">
+        <h3 style="margin-bottom:1rem">1. Replace your API base URL</h3>
+        <pre style="background:var(--surface2);padding:1rem;border-radius:8px;font-size:0.82rem;overflow-x:auto;margin-bottom:1.5rem;line-height:1.7">POST /api/v1/tokenos/proxy
+Authorization: Bearer &lt;your-tokenos-key&gt;
+Content-Type: application/json
+
+{
+  "provider": "openai",       // openai | anthropic | google
+  "model": "gpt-4",
+  "messages": [...],          // same as OpenAI format
+  "tco_mode": "optimized"     // optimized (default) | direct | ab_test
+}</pre>
+        <h3 style="margin-bottom:0.75rem">2. Read the response</h3>
+        <p style="color:var(--muted);font-size:0.88rem;margin-bottom:1rem">Same format as OpenAI responses, with an extra <code>tco_metrics</code> field:</p>
+        <pre style="background:var(--surface2);padding:1rem;border-radius:8px;font-size:0.82rem;overflow-x:auto;line-height:1.7">{
+  "choices": [{ "message": { "content": "..." } }],
+  "tco_metrics": {
+    "savings_usd": "0.004200",
+    "savings_pct": "73.2",
+    "quality_score": 91,
+    "compression_used": true,
+    "failed_over": false,
+    "latency_ms": 842
+  }
+}</pre>
+        <h3 style="margin-bottom:0.75rem;margin-top:1.5rem">3. Check your savings</h3>
+        <p style="color:var(--muted);font-size:0.88rem">Visit <strong>Dashboard</strong> or call <code>GET /api/v1/tokenos/dashboard</code> with your key.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  let API_KEY = null;
+  let CURRENT_DAYS = 7;
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
+  document.getElementById('key-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') authenticate();
+  });
+
+  async function authenticate() {
+    const key = document.getElementById('key-input').value.trim();
+    if (!key) return;
+
+    try {
+      const res = await fetch('/api/v1/tokenos/dashboard?days=1', {
+        headers: { Authorization: `Bearer ${key}` }
+      });
+      if (!res.ok) {
+        document.getElementById('auth-error').style.display = 'block';
+        return;
+      }
+      API_KEY = key;
+      sessionStorage.setItem('tokenos_key', key);
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'grid';
+      document.getElementById('current-key-display').value = key;
+      loadOverview();
+    } catch {
+      document.getElementById('auth-error').style.display = 'block';
+    }
+  }
+
+  // ── Navigation ────────────────────────────────────────────────────────────
+  function showPage(name, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    el.classList.add('active');
+
+    if (name === 'report') loadReport();
+    if (name === 'models') loadModels();
+    if (name === 'invoice') initInvoice();
+  }
+
+  function setPeriod(days, el) {
+    document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    CURRENT_DAYS = days;
+    loadOverview();
+  }
+
+  // ── API calls ─────────────────────────────────────────────────────────────
+  async function api(path) {
+    const res = await fetch(path, { headers: { Authorization: `Bearer ${API_KEY}` } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+
+  // ── Overview ──────────────────────────────────────────────────────────────
+  async function loadOverview() {
+    try {
+      const data = await api(`/api/v1/tokenos/dashboard?days=${CURRENT_DAYS}`);
+      const s = data.summary;
+
+      // Update sidebar
+      document.getElementById('sidebar-name').textContent = data.customerId ? `Customer #${data.customerId}` : 'Your account';
+
+      // Render cards
+      document.getElementById('overview-cards').innerHTML = `
+        <div class="card"><div class="card-label">Total saved</div><div class="card-value green">$${parseFloat(s.total_savings || 0).toFixed(4)}</div><div class="card-sub">${data.period?.days || CURRENT_DAYS} days</div></div>
+        <div class="card"><div class="card-label">Avg compression</div><div class="card-value accent">${parseFloat(s.avg_savings_pct || 0).toFixed(1)}%</div><div class="card-sub">tokens saved</div></div>
+        <div class="card"><div class="card-label">Total requests</div><div class="card-value">${parseInt(s.total_requests || 0).toLocaleString()}</div><div class="card-sub">optimized calls</div></div>
+        <div class="card"><div class="card-label">Avg quality</div><div class="card-value">${parseFloat(s.avg_quality_score || 0).toFixed(0)}/100</div><div class="card-sub">meaning preserved</div></div>
+        <div class="card"><div class="card-label">Our fee (20%)</div><div class="card-value">${s.our_revenue_usd ? '$' + parseFloat(s.our_revenue_usd).toFixed(4) : '$0.0000'}</div><div class="card-sub">you pay only on savings</div></div>
+        <div class="card"><div class="card-label">Cache hits</div><div class="card-value">${parseInt(s.cache_hits || 0).toLocaleString()}</div><div class="card-sub">zero-cost responses</div></div>
+      `;
+
+      // Render chart
+      renderChart('daily-chart', data.daily || []);
+
+      // Render model table
+      renderModelTable('model-table-wrap', data.byModel || []);
+    } catch (err) {
+      document.getElementById('overview-cards').innerHTML = `<div style="color:var(--red);padding:1rem">Error: ${err.message}</div>`;
+    }
+  }
+
+  function renderChart(containerId, daily) {
+    if (!daily.length) {
+      document.getElementById(containerId).innerHTML = '<div class="loading" style="width:100%">No data yet</div>';
+      return;
+    }
+    const maxVal = Math.max(...daily.map(d => parseFloat(d.savings || 0)), 0.0001);
+    const html = daily.slice(0, 30).reverse().map(d => {
+      const pct = (parseFloat(d.savings || 0) / maxVal) * 100;
+      const label = d.day ? d.day.slice(5) : '';
+      return `<div class="bar-group"><div class="bar" style="height:${Math.max(4, pct)}%" title="${label}: $${parseFloat(d.savings||0).toFixed(4)}"></div><div class="bar-label">${label}</div></div>`;
+    }).join('');
+    document.getElementById(containerId).innerHTML = html;
+  }
+
+  function renderModelTable(containerId, byModel) {
+    if (!byModel.length) {
+      document.getElementById(containerId).innerHTML = '<div class="loading">No model data yet</div>';
+      return;
+    }
+    const rows = byModel.map(m => `
+      <tr>
+        <td>${m.original_provider || '—'}</td>
+        <td>${m.original_model || '—'}</td>
+        <td>${parseInt(m.requests || 0).toLocaleString()}</td>
+        <td style="color:var(--green)">$${parseFloat(m.savings || 0).toFixed(4)}</td>
+        <td>${parseFloat(m.avg_pct || 0).toFixed(1)}%</td>
+      </tr>`).join('');
+    document.getElementById(containerId).innerHTML = `
+      <table>
+        <thead><tr><th>Provider</th><th>Model</th><th>Requests</th><th>Savings</th><th>Avg %</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  // ── Report ────────────────────────────────────────────────────────────────
+  async function loadReport() {
+    try {
+      const data = await api(`/api/v1/tokenos/report?days=${CURRENT_DAYS}`);
+      const s = data.summary;
+      document.getElementById('report-content').innerHTML = `
+        <div class="cards" style="margin-bottom:1.5rem">
+          <div class="card"><div class="card-label">Original tokens</div><div class="card-value">${parseInt(s.original_tokens||0).toLocaleString()}</div></div>
+          <div class="card"><div class="card-label">Actual tokens sent</div><div class="card-value">${parseInt(s.actual_tokens||0).toLocaleString()}</div></div>
+          <div class="card"><div class="card-label">Tokens saved</div><div class="card-value green">${(parseInt(s.original_tokens||0) - parseInt(s.actual_tokens||0)).toLocaleString()}</div></div>
+          <div class="card"><div class="card-label">Would have cost</div><div class="card-value">$${parseFloat(s.total_would_have_cost||0).toFixed(4)}</div></div>
+          <div class="card"><div class="card-label">Actual cost</div><div class="card-value">$${parseFloat(s.total_actual_cost||0).toFixed(4)}</div></div>
+          <div class="card"><div class="card-label">Net savings</div><div class="card-value green">$${parseFloat(s.total_savings||0).toFixed(4)}</div></div>
+        </div>
+        <div class="chart-wrap"><div class="chart-header"><h3>Daily breakdown</h3></div><div class="chart-bars" id="report-chart" style="height:120px"></div></div>
+      `;
+      renderChart('report-chart', data.daily || []);
+    } catch (err) {
+      document.getElementById('report-content').innerHTML = `<div style="color:var(--red)">Error: ${err.message}</div>`;
+    }
+  }
+
+  // ── Models ────────────────────────────────────────────────────────────────
+  async function loadModels() {
+    try {
+      const data = await api(`/api/v1/tokenos/report?days=${CURRENT_DAYS}`);
+      const wrap = document.getElementById('models-content');
+      if (!data.byModel?.length) {
+        wrap.innerHTML = '<div class="loading">No model data yet</div>';
+        return;
+      }
+      wrap.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Provider</th><th>Model</th><th>Requests</th><th>Savings (USD)</th><th>Avg %</th></tr></thead><tbody>${
+        data.byModel.map(m => `<tr><td>${m.original_provider}</td><td>${m.original_model}</td><td>${parseInt(m.requests||0).toLocaleString()}</td><td style="color:var(--green)">$${parseFloat(m.savings||0).toFixed(4)}</td><td>${parseFloat(m.avg_pct||0).toFixed(1)}%</td></tr>`).join('')
+      }</tbody></table></div>`;
+    } catch (err) {
+      document.getElementById('models-content').innerHTML = `<div style="color:var(--red)">Error: ${err.message}</div>`;
+    }
+  }
+
+  // ── Invoice ───────────────────────────────────────────────────────────────
+  function initInvoice() {
+    const yearSel = document.getElementById('inv-year');
+    if (!yearSel.options.length) {
+      const now = new Date();
+      for (let y = now.getFullYear(); y >= now.getFullYear() - 2; y--) {
+        yearSel.add(new Option(y, y));
+      }
+      document.getElementById('inv-month').value = now.getMonth() + 1;
+    }
+  }
+
+  async function loadInvoice() {
+    const y = document.getElementById('inv-year').value;
+    const m = document.getElementById('inv-month').value;
+    const wrap = document.getElementById('invoice-content');
+    wrap.innerHTML = '<div class="loading"><div class="spinner"></div><br>Loading invoice…</div>';
+    try {
+      const data = await api(`/api/v1/tokenos/invoice/${y}/${m}`);
+      const b = data.billing;
+      wrap.innerHTML = `
+        <div class="invoice-card">
+          <h3 style="margin-bottom:1.25rem">Invoice — ${new Date(y, m-1).toLocaleDateString('en-US',{month:'long',year:'numeric'})}</h3>
+          <div class="invoice-row"><span class="lbl">Total requests</span><span>${parseInt(data.metrics?.total_requests||0).toLocaleString()}</span></div>
+          <div class="invoice-row"><span class="lbl">Would have cost (direct API)</span><span>$${parseFloat(data.metrics?.total_would_have_cost||0).toFixed(4)}</span></div>
+          <div class="invoice-row"><span class="lbl">Actual cost after optimization</span><span>$${parseFloat(data.metrics?.total_actual_cost||0).toFixed(4)}</span></div>
+          <div class="invoice-row" style="color:var(--green)"><span class="lbl">Verified savings</span><span>$${b.totalSavings}</span></div>
+          <div class="invoice-row"><span class="lbl">Our fee (${b.revenueShare})</span><span>$${b.feeUsd}</span></div>
+          <div class="invoice-row"><span>Amount due</span><span style="color:var(--accent2)">$${b.amountDue}</span></div>
+          <p style="color:var(--muted);font-size:0.8rem;margin-top:1rem">${b.note}</p>
+        </div>`;
+    } catch (err) {
+      wrap.innerHTML = `<div style="color:var(--red)">Error: ${err.message}</div>`;
+    }
+  }
+
+  // ── Key rotation ──────────────────────────────────────────────────────────
+  async function rotateKey() {
+    if (!confirm('Rotate your API key? Your current key will stop working immediately.')) return;
+    try {
+      const res = await fetch('/api/v1/tokenos/rotate-key', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${API_KEY}` }
+      });
+      const data = await res.json();
+      if (data.newApiKey) {
+        API_KEY = data.newApiKey;
+        sessionStorage.setItem('tokenos_key', data.newApiKey);
+        document.getElementById('current-key-display').value = data.newApiKey;
+        const r = document.getElementById('rotate-result');
+        r.style.display = 'block';
+        r.textContent = `New key: ${data.newApiKey}`;
+      }
+    } catch (err) {
+      alert('Rotation failed: ' + err.message);
+    }
+  }
+
+  // ── Auto-login from session ───────────────────────────────────────────────
+  const savedKey = sessionStorage.getItem('tokenos_key');
+  if (savedKey) {
+    document.getElementById('key-input').value = savedKey;
+    authenticate();
+  }
+</script>
+</body>
+</html>

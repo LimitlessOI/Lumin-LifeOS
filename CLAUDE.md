@@ -42,6 +42,7 @@ The next agent reads stale docs, rebuilds what already exists, breaks what works
 4. If anything conflicts between what the SSOT says and what the code actually contains — fix the SSOT, don't assume the SSOT is right
 5. If you will **edit any SSOT document** this session, obey **`## SSOT READ-BEFORE-WRITE`** below **before** the first edit to that file
 6. **Railway evidence Adam already posted this thread** (screenshot, name list, “X is set”) → **never** ask him to re-prove or re-set those names; **never** claim they are absent from Railway because **Cursor/CI `process.env` is empty** — only diagnose shell export, `PUBLIC_BASE_URL`, `x-command-key`, deploy drift (404), or verifier skip (`docs/ENV_DIAGNOSIS_PROTOCOL.md` *Operator-supplied evidence*). Violation = **§2.6 misleading**.
+7. **Operator instruction (North Star §2.15):** If Adam’s ask in-thread is **clear** — **execute it** or **HALT** (named blocker). **No** silent substitute priority. If shipped work ≠ ask, end-of-slice **§2.11b** report must state **INTENT DRIFT** (asked vs delivered). `docs/SSOT_COMPANION.md` **§0.5I**.
 
 ### Session End Checklist (do this before stopping, even if cut off mid-task)
 
@@ -99,7 +100,9 @@ Only escalate to Adam when a **decision** is needed — approvals, credentials t
 
 ---
 
-## BUILDER-FIRST RULE — NON-NEGOTIABLE (§2.11 / §2.11a + §2.11b)
+## BUILDER-FIRST + SUPERVISOR — NON-NEGOTIABLE (§2.11 / §2.11a + §2.11b + **§2.11c**)
+
+**§2.11c — You are the supervisor, not the default product typist:** **Primary** work is **system**-authored: preflight → **`POST /api/v1/lifeos/builder/build`** → read the diff → **`/builder/review`**, gate-change, or `run-council` when the slice is serious → **§2.11b** to Adam: **grade + evidence**, **what the run optimized for**, **where it would fail**, **what platform GAP-FILL** you had to do (receipts). **Do not** replace that loop with “I code faster in Cursor” for **amendment deliverables** — that **wastes** operator tokens and **loses** scale. **Env:** `docs/ENV_REGISTRY.md` + `docs/ENV_DIAGNOSIS_PROTOCOL.md` **before** asking Adam to re-prove **SET** names; `PUBLIC_BASE_URL` in shell is your setup; **404** on `GET /api/v1/lifeos/builder/domains` = **deploy drift** until **receipted** 200.
 
 **The platform is TokenSaverOS (TSOS).** The **council builder** is the **meta-product** (North Star **Article II §2.11a**): it is what will build most other things. **Refine the builder and preflight** before burning months on unverified “features.” **Do not conflate** §2.11a (what we build first) with **Article II §2.11b** (how the Conductor **evaluates and reports** to the operator) — see Companion **§0.5G**. Adam is not a full-time code reviewer at scale — for directed build/review slices you **must** return a **plain-language report** (§2.11b): what we did, **quality score (e.g. 6→9) with evidence**, *why this design vs that*, and what is **not** proven yet. **Governed** self-build of the pipeline is a goal, never a silent shortcut (§2.6, §2.10, §2.12, receipts).
 

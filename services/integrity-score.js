@@ -99,7 +99,7 @@ export function createIntegrityScore(pool) {
         SELECT COUNT(*) AS checkin_count
         FROM health_checkins
         WHERE user_id = $1
-          AND checkin_date >= CURRENT_DATE - $2
+          AND checkin_date >= CURRENT_DATE - ($2 * INTERVAL '1 day')
       `, [userId, windowDays]);
 
       const done = parseInt(rows[0]?.checkin_count || 0);
@@ -116,7 +116,7 @@ export function createIntegrityScore(pool) {
         SELECT COUNT(DISTINCT work_date) AS days_with_work
         FROM inner_work_log
         WHERE user_id = $1
-          AND work_date >= CURRENT_DATE - $2
+          AND work_date >= CURRENT_DATE - ($2 * INTERVAL '1 day')
       `, [userId, windowDays]);
 
       const days = parseInt(rows[0]?.days_with_work || 0);
@@ -242,7 +242,7 @@ export function createIntegrityScore(pool) {
     const { rows } = await pool.query(`
       SELECT * FROM integrity_score_log
       WHERE user_id = $1
-        AND score_date >= CURRENT_DATE - $2
+        AND score_date >= CURRENT_DATE - ($2 * INTERVAL '1 day')
       ORDER BY score_date ASC
     `, [userId, days]);
     return rows;

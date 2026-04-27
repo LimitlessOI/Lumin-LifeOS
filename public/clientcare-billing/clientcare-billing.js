@@ -4,6 +4,10 @@
  * Operator overlay for ClientCare billing rescue.
  */
 (function () {
+  /**
+   * **LifeOS / Lumin** = product brand (not this billing wake word).
+   * ClientCare billing copilot → `getBillingInvokeLabel()` (default **Tiller** — uncommon speech, STT-friendly, not “Sherry” the human).
+   */
   let lastAccountReport = null;
   let selectedAccountIndex = 0;
   let lastInsurancePreview = null;
@@ -43,6 +47,13 @@
   let lastVobCardSummary = null;
   let lastVobCardError = '';
   let lastVobClientHref = '';
+  let lastVobTranscriptBody = '';
+  let lastVobTranscriptNote = '';
+  let lastVobTranscriptSynopsisHtml = '';
+  /** Default: LifeOS files the billing note and scrubs raw chaff — Sherry directs, minimal manual paste. */
+  let lastVobTranscriptOpts = { discardRaw: true, applyClientcare: true };
+  /** Bottom companion strip: expanded shows setup gaps + jump links (persists in localStorage). */
+  let luminStripExpanded = localStorage.getItem('clientcare_lumin_strip_expanded') === 'true';
   let lastClientcarePipelineState = 'idle';
   let lastClientcarePipelineResult = null;
   let lastClientcarePipelineError = '';
@@ -75,6 +86,11 @@
   let assistantPinned = localStorage.getItem('clientcare_assistant_pinned') !== 'false';
   let assistantOpen = localStorage.getItem('clientcare_assistant_open') !== 'false';
   let assistantVoiceController = null;
+  let vobVoiceController = null;
+  let vobTalkAutoMode = false;
+  let vobTalkBusy = false;
+  let assistantVoiceAutoExecute = localStorage.getItem('clientcare_assistant_voice_auto_execute') === 'true';
+  let assistantVoiceAutoBusy = false;
   let lastAssistantVoiceKey = '';
   let assistantVoiceReady = false;
 
@@ -796,6 +812,12 @@
     void ensureAssistantSession();
   }
 
+  function setLuminStripExpanded(value) {
+    luminStripExpanded = Boolean(value);
+    localStorage.setItem('clientcare_lumin_strip_expanded', String(luminStripExpanded));
+    rerender();
+  }
+
   function escapeHtml(value) {
     return String(value == null ? '' : value)
       .replace(/&/g, '&amp;')
@@ -803,6 +825,77 @@
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
+  }
+
+  /** Strip leading wake from typed chat (billing invoke + LifeOS only — never “Lumin” here). */
+  function stripMessageWakeWords(text) {
+    const prefixes = [...getBillingWakePrefixes(), 'LifeOS', 'Life OS'];
+    const t = String(text || '').trim();
+    if (!t) return t;
+    const lower = t.toLowerCase();
+    for (const raw of prefixes) {
+      const pl = String(raw || '').toLowerCase();
+      if (!pl) continue;
+      if (lower === pl) return '';
+      if (lower.startsWith(`${pl} `) || lower.startsWith(`${pl},`) || lower.startsWith(`${pl}.`)) {
+        return t.slice(String(raw).length).trim().replace(/^[,.\s]+/, '');
+      }
+    }
+    return t;
+  }
+
+  /** Default billing-only wake/display name (change via companion strip). */
+  const DEFAULT_BILLING_INVOKE_LABEL = 'Tiller';
+  const LS_BILLING_INVOKE_NAME = 'clientcare_billing_invoke_name';
+
+  /** Reserved: LifeOS brand, human first name, or major voice assistants (false triggers). */
+  function isBillingInvokeReserved(v) {
+    const low = String(v || '').trim().toLowerCase();
+    if (!low) return false;
+    const blocked = new Set([
+      'lumin', 'lumen', 'lifeos', 'sherry', 'sherri', 'siri', 'alexa', 'google', 'cortana', 'echo', 'computer',
+    ]);
+    return blocked.has(low);
+  }
+
+  function normalizeBillingInvokeInput(raw) {
+    return String(raw || '').trim().replace(/[^a-zA-Z0-9 '\-]/g, '').slice(0, 24).trim();
+  }
+
+  /** Billing copilot wake + UI label. **Not** the LifeOS “Lumin” brand — do not set this to Lumin. */
+  function getBillingInvokeLabel() {
+    const v = normalizeBillingInvokeInput(localStorage.getItem(LS_BILLING_INVOKE_NAME) || '');
+    return v || DEFAULT_BILLING_INVOKE_LABEL;
+  }
+
+  function setBillingInvokeLabel(raw) {
+    const v = normalizeBillingInvokeInput(raw);
+    if (v && isBillingInvokeReserved(v)) {
+      toast('That name is reserved (LifeOS/Lumin, human Sherry, or another assistant). Pick a billing-only name — default is Tiller.', 'warn');
+      return;
+    }
+    if (!v) {
+      localStorage.removeItem(LS_BILLING_INVOKE_NAME);
+      toast(`Assistant name reset to default (${DEFAULT_BILLING_INVOKE_LABEL}).`, 'info');
+    } else {
+      localStorage.setItem(LS_BILLING_INVOKE_NAME, v);
+      toast(`Assistant name saved as “${v}”.`, 'success');
+    }
+    rerender();
+  }
+
+  /** Prefixes stripped after voice dictation ends (plus attach uses the same list). */
+  function getBillingWakePrefixes() {
+    const label = getBillingInvokeLabel();
+    const out = new Set([label]);
+    const low = label.toLowerCase();
+    if (low === 'tiller') {
+      ['Tillers', 'Tiler', 'Taylor'].forEach((x) => out.add(x));
+    }
+    if (low === 'ledger') {
+      ['Ledgers', 'Leger'].forEach((x) => out.add(x));
+    }
+    return Array.from(out);
   }
 
   function badgeClass(value) {
@@ -1145,6 +1238,13 @@
     document.getElementById('verification-of-benefits')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  function getAccountAgeDays(item = {}) {
+    const raw = item?.oldestNoteDate || item?.date || item?.raw?.oldestNoteDate || '';
+    const d = raw ? new Date(raw) : null;
+    if (!d || Number.isNaN(d.getTime())) return null;
+    return Math.max(0, Math.floor((Date.now() - d.getTime()) / (24 * 60 * 60 * 1000)));
+  }
+
   function getFilteredItems() {
     const items = lastAccountReport?.items || [];
     const sorted = [...items].sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
@@ -1174,6 +1274,12 @@
       case 'oldest':
         filtered = sorted;
         break;
+      case 'under90':
+        filtered = sorted.filter((item) => {
+          const age = getAccountAgeDays(item);
+          return age != null && age <= 90;
+        });
+        break;
       default:
         filtered = sorted;
         break;
@@ -1202,6 +1308,7 @@
       ['insurance', 'Insurance Setup', 'Accounts with insurance configuration problems that are blocking billing entirely'],
       ['missing', 'Missing Insurance', 'Accounts with no insurance on file at all — cannot bill until insurance is added'],
       ['client_match', 'Client Match', 'Accounts where the patient name or DOB in ClientCare does not match the insurance record'],
+      ['under90', '<90 Days First', 'Unpaid accounts at or under 90 days old (first priority before 3-month risk).'],
       ['oldest', 'Oldest', 'All accounts sorted by oldest first — useful for finding claims approaching timely-filing deadlines'],
     ];
     return `
@@ -1421,6 +1528,61 @@
     `;
   }
 
+  async function runUnder90LaneNow() {
+    setAccountSearch('');
+    setAccountFilter('under90');
+    selectedAccountIndex = 0;
+    rerender();
+
+    const queue = [...getFilteredItems()].sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+    if (!queue.length) {
+      toast('No unpaid accounts under 90 days found right now.', 'info');
+      return;
+    }
+
+    const limit = Math.min(queue.length, 40);
+    let inspected = 0;
+    let inspectFailed = 0;
+
+    for (let i = 0; i < limit; i += 1) {
+      const item = queue[i];
+      if (!item?.raw?.billingHref) continue;
+      try {
+        const result = await api('/api/v1/clientcare-billing/browser/inspect-client-account', {
+          method: 'POST',
+          body: JSON.stringify({
+            client_href: item.raw.billingHref,
+            page_timeout_ms: 12000,
+          }),
+        });
+        item.insurancePreview = result.insurancePreview || item.insurancePreview || [];
+        item.accountSummary = result.accountSummary || item.accountSummary || {};
+        item.raw = {
+          ...item.raw,
+          billingFields: result.billingFields || item.raw?.billingFields || [],
+          insurancePreview: result.insurancePreview || item.raw?.insurancePreview || [],
+          accountSummary: result.accountSummary || item.raw?.accountSummary || {},
+        };
+        item._inspected = true;
+        inspected += 1;
+      } catch (_) {
+        item._inspected = true;
+        inspectFailed += 1;
+      }
+    }
+
+    rerender();
+    const first = queue[0];
+    if (first) {
+      const all = getFilteredItems();
+      const idx = all.findIndex((x) => getRepairKey(x) === getRepairKey(first));
+      if (idx >= 0) selectedAccountIndex = idx;
+      rerender();
+    }
+
+    toast(`Under-90 lane ready: ${queue.length} accounts (inspected ${inspected}/${limit}${inspectFailed ? `, failed ${inspectFailed}` : ''}).`, 'success');
+  }
+
   function renderManagedWorkQueue() {
     const items = [...getFilteredItems()];
     const queue = items
@@ -1464,9 +1626,12 @@
     }).join('');
 
     return `
-      <details class="card" open>
-        <summary data-tip="This is the operator starting point. Red means you need to act. Yellow means the system is monitoring or waiting. Green means no immediate action is needed.">Managed Work Queue</summary>
-        <p class="hint" style="margin:10px 0">Start here. The system manages the work and shows where you are needed.</p>
+      <details class="card cc-primary-panel" open>
+        <summary data-tip="This is the operator starting point. Red means you need to act. Yellow means the system is monitoring or waiting. Green means no immediate action is needed.">Your queue (from ClientCare)</summary>
+        <p class="hint" style="margin:10px 0">Start here after data is loaded. This list mirrors ClientCare billing work — it does not replace the ClientCare screen; use it to decide who to open next there.</p>
+        <div class="row-actions" style="margin-bottom:10px;">
+          <button id="run-under90-lane" class="ghost">Run <90 days lane now</button>
+        </div>
         <div class="grid four" style="margin-bottom:12px;">
           <div class="card stat"><span>Needs me</span><strong>${escapeHtml(counts.red || 0)}</strong></div>
           <div class="card stat"><span>System watching</span><strong>${escapeHtml(counts.yellow || 0)}</strong></div>
@@ -1485,13 +1650,13 @@
 
   function renderOperatorGuide() {
     return `
-      <details class="card" open>
-        <summary data-tip="This is the shortest path for a billing coordinator: start in the managed queue, open the red items first, let the system pull data from ClientCare, and only type information when it could not be found or requested automatically.">How to work this page</summary>
+      <details class="card cc-assistant-panel">
+        <summary data-tip="ClientCare is still where you chart and bill. This page is a sidecar: queue, notes, VOB help, and voice — use it while ClientCare stays open in another tab or window.">How this works with ClientCare</summary>
         <div class="grid four" style="margin-top:12px; margin-bottom:0;">
-          <div class="card stat"><span>1. Start here</span><strong>Managed queue</strong><div class="small muted" style="margin-top:6px;">Red = you act. Yellow = system watches. Green = healthy.</div></div>
-          <div class="card stat"><span>2. Open file</span><strong>Review next action</strong><div class="small muted" style="margin-top:6px;">Each account tells you what is wrong and what happens next.</div></div>
-          <div class="card stat"><span>3. Let system pull</span><strong>ClientCare first</strong><div class="small muted" style="margin-top:6px;">Use VOB search or refresh from ClientCare before typing anything.</div></div>
-          <div class="card stat"><span>4. Escalate gaps</span><strong>Request by text/email</strong><div class="small muted" style="margin-top:6px;">If data is missing, ask the system to request it from the client.</div></div>
+          <div class="card stat"><span>1. Queue here</span><strong>Managed queue</strong><div class="small muted" style="margin-top:6px;">Red = you act in ClientCare. Yellow = watching. Green = ok for now.</div></div>
+          <div class="card stat"><span>2. Work there</span><strong>ClientCare tab</strong><div class="small muted" style="margin-top:6px;">Open the client in ClientCare; use this assistant for notes, VOB, and quick status.</div></div>
+          <div class="card stat"><span>3. Pull data</span><strong>Tools → Full Queue</strong><div class="small muted" style="margin-top:6px;">Loads the live backlog from ClientCare into this board.</div></div>
+          <div class="card stat"><span>4. Voice / chat</span><strong>${escapeHtml(getBillingInvokeLabel())}</strong><div class="small muted" style="margin-top:6px;">Ask status, add a note, or run the under-90-day lane — see chat below.</div></div>
         </div>
       </details>
     `;
@@ -1505,7 +1670,7 @@
     const setupIssues = items.filter((item) => String(item.diagnosis?.status || '') === 'insurance_setup_issue').length;
     const clientMatch = items.filter((item) => String(item.diagnosis?.status || '') === 'client_match_issue').length;
     return `
-      <details class="card" open>
+      <details class="card cc-assistant-panel">
         <summary data-tip="This tells Sherry how the system is doing overall without making her read the raw ledger. It separates work she owns from work the system is already tracking.">System status</summary>
         <div class="grid four" style="margin-top:12px; margin-bottom:0;">
           <div class="card stat"><span>Needs operator</span><strong>${escapeHtml(red)}</strong></div>
@@ -2105,7 +2270,9 @@
                   </div>
                   <span class="badge ${badgeClass(entry.status === 'ready_to_convert' ? 'warn' : entry.matched_client_name ? 'ok' : 'review')}">${escapeHtml(String(entry.status || 'saved').replace(/_/g, ' '))}</span>
                 </div>
-                <div class="small muted" style="margin-top:8px;">Decision: ${escapeHtml(entry.preview_result?.decision || 'not run')} · Created ${escapeHtml(String(entry.created_at || '').slice(0, 10) || 'unknown')}</div>
+                <div class="small muted" style="margin-top:8px;">${entry.preview_result?.source === 'vob_call_transcript'
+    ? `Call synopsis: ${escapeHtml(String(entry.preview_result?.call_summary || 'saved').slice(0, 140))}${String(entry.preview_result?.call_summary || '').length > 140 ? '…' : ''}`
+    : `Decision: ${escapeHtml(entry.preview_result?.decision || 'not run')}`} · Created ${escapeHtml(String(entry.created_at || '').slice(0, 10) || 'unknown')}</div>
                 <div class="row-actions" style="margin-top:10px;">
                   <button type="button" class="ghost" data-vob-history-use="${index}">Use again</button>
                   <button type="button" data-vob-history-promote="${index}">Promote to client file</button>
@@ -2133,9 +2300,9 @@
     ].filter(Boolean);
 
     return `
-      <details class="card" id="verification-of-benefits" open>
-        <summary data-tip="This is the real ClientCare VOB workflow. Drop the card, let the system identify the client file, then run the live ClientCare eligibility action.">Verification of Benefits (VOB)</summary>
-        <p class="hint" style="margin:10px 0">This belongs in the main workflow. The system should pull from ClientCare first, match the right file, then run the real ClientCare VOB.</p>
+      <details class="card cc-primary-panel" id="verification-of-benefits" open>
+        <summary data-tip="Helps with payer calls and card intake while you still work in ClientCare — browser automation uses your practice login from Railway.">VOB &amp; insurance help</summary>
+        <p class="hint" style="margin:10px 0">Same ClientCare you always use — this section helps with <strong>calls, card photos, and notes</strong> going into the right client. Pick the client above, then run the live flow or paste call notes.</p>
 
         <div class="filter-bar" style="margin-bottom:12px;">
           <button id="vob-mode-existing" class="${vobMode === 'existing' ? '' : 'ghost'}" data-tip="Search ClientCare and auto-fill everything the system already knows.">Existing client</button>
@@ -2186,8 +2353,39 @@
           </div>
         </div>
 
+        <div class="card" id="vob-payer-call-transcript" style="margin-bottom:12px;background:#0f1528;">
+          <strong>VOB payer call — transcript to synopsis</strong>
+          <p class="small muted" style="margin:6px 0 10px;"><strong>Sherry’s job is direction</strong> — add what was said (speakerphone + notes today; listen-in when telephony ships). LifeOS builds the synopsis, timestamps it, scrubs raw chatter from the database when checked below, and <strong>files the ClientCare billing note by default</strong> for the selected client (Railway <code>CLIENTCARE_*</code> browser session). Uncheck posting only if you intentionally want local-only.</p>
+          <label class="stack"><span class="muted">Call notes / transcript</span>
+            <textarea id="vob-transcript-body" rows="8" style="width:100%;box-sizing:border-box;font-family:inherit;font-size:13px;line-height:1.45;" placeholder="Rep name, call reference #, eligibility, copay/deductible, auth, exclusions…">${escapeHtml(lastVobTranscriptBody)}</textarea>
+          </label>
+          <div class="stack" style="margin:10px 0;gap:6px;">
+            <label class="muted small" style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;">
+              <input type="checkbox" id="vob-transcript-discard-raw" ${lastVobTranscriptOpts.discardRaw ? 'checked' : ''} style="margin-top:3px;">
+              <span>After summary, drop raw transcript text from the saved row (keep structured synopsis only).</span>
+            </label>
+            <label class="muted small" style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;">
+              <input type="checkbox" id="vob-transcript-apply-cc" ${lastVobTranscriptOpts.applyClientcare ? 'checked' : ''} style="margin-top:3px;">
+              <span><strong>LifeOS posts</strong> synopsis to ClientCare <strong>billing note</strong> for the VOB-selected client (operator role).</span>
+            </label>
+            <label class="muted small" style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;">
+              <input type="checkbox" id="vob-transcript-apply-fields" checked style="margin-top:3px;">
+              <span><strong>LifeOS applies transcript-derived fields</strong> into empty ClientCare insurance fields for this client (repair engine + safety gates).</span>
+            </label>
+          </div>
+          <div id="vob-transcript-synopsis" style="margin-top:10px;font-size:13px;line-height:1.5;">${lastVobTranscriptSynopsisHtml || ''}</div>
+          <div class="row-actions" style="margin-top:10px;flex-wrap:wrap;gap:8px;">
+            <button type="button" id="vob-transcript-analyze">Summarize &amp; save (auto-file when checked)</button>
+            <button type="button" id="vob-talk-auto" class="ghost" type="button">Talk + auto-apply</button>
+            <button type="button" id="vob-transcript-copy-note" class="ghost" ${lastVobTranscriptNote ? '' : 'disabled'}>Copy note — backup only</button>
+          </div>
+          <div id="vob-talk-status" class="small muted" style="margin-top:6px;">Talk ready</div>
+          <div id="vob-transcript-status" class="small muted" style="margin-top:8px;"></div>
+        </div>
+
         <div style="background:#0a1020;border:1px solid #27304a;border-radius:12px;padding:14px;margin-bottom:12px;">
-          <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Real ClientCare VOB — card and client match</div>
+          <div style="font-size:11px;font-weight:700;color:#8aa4ff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Real ClientCare VOB — browser front door (Railway login)</div>
+          <p class="small muted" style="margin:0 0 10px;">This path drives the <strong>same ClientCare session</strong> staff would use manually: card OCR and clicks happen in the portal, not through a ClientCare REST API.</p>
           <div id="vob-inline-dropzone" data-tip="Drop front and back of the insurance card — all files are merged into one OCR pass. Fills payer, member ID &amp; group automatically."
             style="${getVobCardZoneStyle()}">
             <div style="font-size:13px;font-weight:600;color:#c5d4f0;margin-bottom:3px;" data-zone-label>${escapeHtml(getVobCardZoneLabel())}</div>
@@ -3377,26 +3575,43 @@
     renderAssistant(session);
   }
 
+  function buildAssistantBillingContext() {
+    const board = getSelectedAccountItem();
+    const vob = getSelectedVobAccountItem();
+    return {
+      board_client: board?.client || null,
+      board_billing_href: String(board?.raw?.billingHref || board?.billingHref || '').trim() || null,
+      vob_client: vob?.client || null,
+      vob_billing_href: getSelectedClientBillingHref() || null,
+      vob_mode: vobMode || null,
+      payer_from_form: String(lastInsuranceDraft?.payer_name || '').trim() || null,
+      member_from_form: String(lastInsuranceDraft?.member_id || '').trim() || null,
+    };
+  }
+
   function renderAssistant(session) {
     const historyNode = document.getElementById('assistant-history');
     const metaNode = document.getElementById('assistant-meta');
     if (!historyNode || !metaNode) return;
     metaNode.innerHTML = `
       <span class="badge ${badgeClass('ok')}">${escapeHtml(session.archived_count || 0)} archived</span>
-      <span class="muted small">${escapeHtml(session.archive_preview || 'Direct connection to the system assistant')}</span>
+      <span class="muted small">${escapeHtml(session.archive_preview || 'AI Council thread — not a generic chatbot')}</span>
     `;
     const messages = session.recent_messages || [];
     const latestAssistantMessage = [...messages].reverse().find((message) => message.role === 'assistant' && message.content);
-    historyNode.innerHTML = messages.length ? messages.map((message) => `
+    historyNode.innerHTML = messages.length ? messages.map((message) => {
+      const who = message.role === 'assistant' ? getBillingInvokeLabel() : 'Sherry';
+      return `
       <div class="card" style="padding:12px; background:${message.role === 'assistant' ? '#121a31' : '#0f1528'};">
         <div class="account-card-top">
-          <strong>${escapeHtml(String(message.role || '').toUpperCase())}</strong>
+          <strong>${escapeHtml(who)}</strong>
           <span class="muted small">${escapeHtml(message.timestamp || '')}</span>
         </div>
         <div style="margin-top:8px; white-space:pre-wrap;">${escapeHtml(message.content || '')}</div>
         ${message.metadata?.intent ? `<div class="muted small" style="margin-top:8px;">Intent: ${escapeHtml(message.metadata.intent)} · Scope: ${escapeHtml(message.metadata.scope || 'unclear')}</div>` : ''}
-      </div>
-    `).join('') : '<p class="muted">Start a conversation.</p>';
+        ${message.metadata?.data?.capability_request?.id ? `<div class="small" style="margin-top:8px;color:#7ef0b8;">Capability queue #${escapeHtml(String(message.metadata.data.capability_request.id))}${message.metadata.data.capability_request.status ? ` · ${escapeHtml(message.metadata.data.capability_request.status)}` : ''} — Sherry-directed; picked up when engineering can ship safely.</div>` : ''}
+      </div>`;
+    }).join('') : `<p class="muted">Start the thread — Sherry asks; ${escapeHtml(getBillingInvokeLabel())} answers using billing data and the ClientCare front-door rules.</p>`;
     const latestAssistantKey = latestAssistantMessage ? `${latestAssistantMessage.timestamp || ''}:${latestAssistantMessage.content || ''}` : '';
     if (latestAssistantKey) {
       if (!assistantVoiceReady) {
@@ -3420,59 +3635,323 @@
       statusId: 'assistant-voice-status',
       speakToggleId: 'assistant-speak-replies',
       storageKey: 'clientcare_assistant',
-      idleText: 'Voice ready for Operations Assistant',
+      idleText: `${getBillingInvokeLabel()} — tap Start voice; say "${getBillingInvokeLabel()}" then your question (always-on wake is not available in the browser yet)`,
+      wakePrefixes: [...getBillingWakePrefixes(), 'LifeOS', 'Life OS'],
+      onStop: async () => {
+        if (!assistantVoiceAutoExecute || assistantVoiceAutoBusy) return;
+        const input = document.getElementById('assistant-input');
+        if (!String(input?.value || '').trim()) return;
+        assistantVoiceAutoBusy = true;
+        try {
+          await sendAssistantMessage();
+        } finally {
+          assistantVoiceAutoBusy = false;
+        }
+      },
     });
   }
 
-  function renderAssistantShell() {
-    const collapseLabel = assistantOpen ? 'Collapse' : 'Open';
+  /** One-tap starters for Sherry — fill the chat box or jump to the VOB transcript card (saved rows use the app database on Railway). */
+  function getBillingChatQuickPrompts() {
+    return [
+      {
+        label: 'Payer call — what to ask',
+        action: 'fill',
+        text: 'For the selected account and payer in context, list the exact questions I should ask on a live payer VOB call: eligibility dates, network, deductible and OOP, coinsurance after deductible, auth or referral, exclusions, and the call reference number. Short bullets.',
+      },
+      {
+        label: 'After the call — what to save',
+        action: 'fill',
+        text: 'Call notes will go into the VOB transcript panel and LifeOS should file the ClientCare billing note automatically when a client file is selected. What must appear in the structured synopsis, and what should Sherry verify before trusting the post?',
+      },
+      {
+        label: 'Speakerphone + disclosure script',
+        action: 'fill',
+        text: 'Draft a 2-sentence script I can say at the start of a payer call: we are on speaker, LifeOS may transcribe and summarize for our billing records, and we follow payer identity rules. Keep it professional and brief.',
+      },
+      {
+        label: 'Denial — next steps',
+        action: 'fill',
+        text: 'Given the selected account and dashboard context, what are the highest-value next steps for working a commercial denial (evidence, timely filing, appeal vs corrected claim)? Plain English checklist.',
+      },
+      {
+        label: 'REQUEST: (capability)',
+        action: 'fill',
+        text: 'REQUEST: ',
+      },
+      {
+        label: 'Open VOB transcript panel',
+        action: 'scroll-vob-transcript',
+        text: '',
+      },
+    ];
+  }
+
+  function renderBillingChatQuickPrompts() {
     return `
-      <div class="card assistant-card">
-        <div class="account-card-top">
-          <div>
-            <h2 data-tip="This routes billing questions into the system AI Council after the built-in billing workflows check whether the request already has a direct answer. Ask in plain English: 'which accounts need auth before I can submit?', 'what should I work first today?', 'explain this denial reason'.">Operations Assistant / AI Council</h2>
-            <p class="muted">Ask questions about accounts, denials, next actions, or system changes in plain English.</p>
-          </div>
-          <div class="row-actions">
-            <button id="assistant-open-toggle" class="ghost">${escapeHtml(collapseLabel)}</button>
-          </div>
-        </div>
-        <div id="assistant-panel" style="${assistantOpen ? '' : 'display:none;'}">
-          <div id="assistant-meta" class="row-actions" style="margin:10px 0"></div>
-          <div id="assistant-history" class="stack assistant-history"></div>
-          <textarea id="assistant-input" placeholder="Type a question, command, or requested system change here"></textarea>
-          <div class="row-actions" style="margin-top:10px">
-            <button id="assistant-voice-toggle" class="ghost" type="button">Start voice</button>
-            <label class="muted small" style="display:inline-flex; gap:6px; align-items:center;"><input id="assistant-speak-replies" type="checkbox"> Speak replies</label>
-            <span id="assistant-voice-status" class="muted small">Voice ready</span>
-          </div>
-          <div style="margin-top:10px"><button id="assistant-send">Send</button></div>
+      <div class="billing-chat-quick-prompts" style="margin:12px 0;padding:10px 12px;background:#0f1528;border-radius:10px;border:1px solid #27304a;">
+        <div class="muted small" style="margin-bottom:8px;line-height:1.45;"><strong>Quick prompts</strong> — tap a chip to fill the box, then <strong>Send to ${escapeHtml(getBillingInvokeLabel())}</strong>, or jump to the VOB transcript card. Live calls: speakerphone until dial/listen-in ships; add notes after the call. Tell the payer LifeOS transcribes/summarizes for billing records.</div>
+        <div class="row-actions" style="flex-wrap:wrap;gap:6px;align-items:center;">
+          ${getBillingChatQuickPrompts().map((p, i) => `
+            <button type="button" class="ghost billing-quick-prompt-btn" data-billing-quick-prompt="${i}" style="font-size:12px;padding:6px 10px;">${escapeHtml(p.label)}</button>
+          `).join('')}
         </div>
       </div>
     `;
   }
 
+  function renderCompanionStrip(liveSummary, patientArSummary) {
+    const s = liveSummary || {};
+    const ta = s.totalAccounts != null ? s.totalAccounts : '—';
+    const tq = s.totalQueueItems != null ? s.totalQueueItems : '—';
+    const str = s.recoveryBandCounts
+      ? (Number(s.recoveryBandCounts.strong || 0) + Number(s.recoveryBandCounts.possible || 0))
+      : '—';
+    const insSetup = s.diagnosisCounts && s.diagnosisCounts.insurance_setup_issue != null
+      ? s.diagnosisCounts.insurance_setup_issue
+      : '—';
+    const par = Number(patientArSummary?.total_balance || 0);
+    const stepsUndone = getSetupSteps().filter((x) => !x.done);
+    const exp = luminStripExpanded;
+    const stepLines = stepsUndone.length
+      ? stepsUndone.map((st) => `<div class="muted small" style="line-height:1.45;">• ${escapeHtml(st.label)} — ${escapeHtml(st.action)}</div>`).join('')
+      : '<div class="muted small">Checklist complete — keep backlog fresh and work the queue.</div>';
+    return `
+      <div class="lifeos-companion-strip">
+        <div class="lifeos-companion-strip-inner">
+          <div class="lifeos-companion-row1">
+            <strong>${escapeHtml(getBillingInvokeLabel())}</strong>
+            <span class="muted small" style="max-width:min(280px,40vw);">LifeOS · Sherry directs; LifeOS files notes when automation succeeds.</span>
+            <div class="lifeos-companion-chips">
+              <span class="lifeos-companion-chip">Live accts<strong>${escapeHtml(String(ta))}</strong></span>
+              <span class="lifeos-companion-chip">Notes Q<strong>${escapeHtml(String(tq))}</strong></span>
+              <span class="lifeos-companion-chip">Recover<strong>${escapeHtml(String(str))}</strong></span>
+              <span class="lifeos-companion-chip">Ins. setup<strong>${escapeHtml(String(insSetup))}</strong></span>
+              <span class="lifeos-companion-chip">Pt AR<strong>${escapeHtml(money(par))}</strong></span>
+            </div>
+            <button type="button" id="lifeos-companion-toggle" class="ghost">${exp ? 'Collapse' : 'Expand'}</button>
+          </div>
+          ${exp ? `
+            <div class="lifeos-companion-expanded">
+              <div class="muted small" style="line-height:1.45;">This page is not drawn <em>inside</em> the ClientCare tab (browser security). Use a <strong>narrow side window</strong> beside ClientCare until a LifeOS extension can overlay it. Say <strong>${escapeHtml(getBillingInvokeLabel())}</strong> first when dictating; always-on wake listening is backlog — use <strong>Start voice</strong> today.</div>
+              ${stepLines}
+              <div class="row-actions" style="flex-wrap:wrap;gap:8px;align-items:flex-end;">
+                <label class="stack" style="min-width:200px;flex:1;max-width:320px;margin:0;">
+                  <span class="muted small">Billing assistant wake name (not Lumin/LifeOS; not “Sherry” — that’s the human)</span>
+                  <input id="billing-invoke-name" type="text" value="${escapeHtml(getBillingInvokeLabel())}" maxlength="24" autocomplete="off" placeholder="${escapeHtml(DEFAULT_BILLING_INVOKE_LABEL)}">
+                </label>
+                <button type="button" id="billing-invoke-save" class="ghost">Save name</button>
+                <button type="button" id="lifeos-companion-open-chat" class="ghost">Open ${escapeHtml(getBillingInvokeLabel())} chat</button>
+                <button type="button" id="lifeos-companion-open-vob" class="ghost">Open VOB transcript</button>
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  function mountCompanionStrip(liveSummary, patientArSummary) {
+    const host = document.getElementById('lifeos-companion-host');
+    if (!host) return;
+    host.innerHTML = renderCompanionStrip(liveSummary, patientArSummary);
+    document.getElementById('lifeos-companion-toggle')?.addEventListener('click', () => setLuminStripExpanded(!luminStripExpanded));
+    document.getElementById('lifeos-companion-open-chat')?.addEventListener('click', () => {
+      const det = document.getElementById('verification-of-benefits');
+      if (det && !det.open) det.open = true;
+      document.querySelector('.billing-council-chat-main')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('assistant-input')?.focus();
+    });
+    document.getElementById('lifeos-companion-open-vob')?.addEventListener('click', () => {
+      const det = document.getElementById('verification-of-benefits');
+      if (det && !det.open) det.open = true;
+      document.getElementById('vob-payer-call-transcript')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      document.getElementById('vob-transcript-body')?.focus();
+    });
+    document.getElementById('billing-invoke-save')?.addEventListener('click', () => {
+      const el = document.getElementById('billing-invoke-name');
+      setBillingInvokeLabel(el?.value || '');
+    });
+  }
+
+
+  function initVobTalkVoice() {
+    if (vobVoiceController && typeof vobVoiceController.destroy === 'function') {
+      vobVoiceController.destroy();
+    }
+    if (!window.LifeOSVoiceChat) return;
+    vobVoiceController = window.LifeOSVoiceChat.attach({
+      inputId: 'vob-transcript-body',
+      buttonId: 'vob-talk-auto',
+      statusId: 'vob-talk-status',
+      mode: 'append',
+      storageKey: 'clientcare_vob_talk',
+      idleText: `${getBillingInvokeLabel()} VOB talk ready`,
+      wakePrefixes: [...getBillingWakePrefixes(), 'LifeOS', 'Life OS'],
+      onStart: () => {
+        vobTalkAutoMode = true;
+      },
+      onStop: async () => {
+        if (!vobTalkAutoMode || vobTalkBusy) return;
+        vobTalkBusy = true;
+        try {
+          const status = document.getElementById('vob-transcript-status');
+          if (status) status.textContent = 'Voice stopped — running summarize + auto-apply...';
+          await analyzeVobTranscriptFromUi();
+        } finally {
+          vobTalkBusy = false;
+          vobTalkAutoMode = false;
+        }
+      },
+    });
+  }
+
+  function renderAssistantShell(options = {}) {
+    const variant = options.variant || 'sidebar';
+    const isMain = variant === 'main';
+    const collapseLabel = assistantOpen ? 'Collapse' : 'Open';
+    const panelVisible = isMain || assistantOpen;
+    return `
+      <div class="card assistant-card${isMain ? ' billing-council-chat-main' : ''}">
+        <div class="account-card-top">
+          <div>
+            <h2 data-tip="Assistant for billing while you work in ClientCare — not LifeOS / Lumin. Say ${escapeHtml(getBillingInvokeLabel())} when dictating so voice knows this lane.">Sherry &amp; ${escapeHtml(getBillingInvokeLabel())} — assistant</h2>
+            <p class="muted">${isMain ? `Type or use voice (<strong>${escapeHtml(getBillingInvokeLabel())}</strong>, then your question). Try quick prompts below. To change the product: <code>QUEUE:</code> / <code>REQUEST:</code> / <code>BUILD:</code>.` : 'Open for the same chat panel when docked in the utility rail.'}</p>
+          </div>
+          ${isMain ? '' : `<div class="row-actions">
+            <button id="assistant-open-toggle" class="ghost">${escapeHtml(collapseLabel)}</button>
+          </div>`}
+        </div>
+        <div id="assistant-panel" style="${panelVisible ? '' : 'display:none;'}">
+          <div id="assistant-meta" class="row-actions" style="margin:10px 0"></div>
+          <div id="assistant-history" class="stack assistant-history" style="max-height:min(420px,50vh);overflow-y:auto;"></div>
+          ${renderBillingChatQuickPrompts()}
+          <textarea id="assistant-input" rows="3" placeholder="Example: ${escapeHtml(getBillingInvokeLabel())}, what should I verify on this VOB?  Or: QUEUE: …"></textarea>
+          <div class="row-actions" style="margin-top:10px">
+            <button id="assistant-voice-toggle" class="ghost" type="button">Start voice</button>
+            <label class="muted small" style="display:inline-flex; gap:6px; align-items:center;"><input id="assistant-speak-replies" type="checkbox"> Speak replies</label>
+            <span id="assistant-voice-status" class="muted small">Voice ready</span>
+            <label class="muted small" style="display:inline-flex; gap:6px; align-items:center;"><input id="assistant-voice-auto-execute" type="checkbox" ${assistantVoiceAutoExecute ? "checked" : ""}> Auto-execute on voice stop</label>
+          </div>
+          <div style="margin-top:10px"><button id="assistant-send">Send to ${escapeHtml(getBillingInvokeLabel())}</button></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function resolveAssistantCommandTargetName(rawName = '') {
+    const needle = String(rawName || '').trim().toLowerCase();
+    if (!needle) return null;
+    const items = lastAccountReport?.items || [];
+    const hit = items.find((item) => String(item?.client || '').toLowerCase().includes(needle));
+    return hit || null;
+  }
+
+  async function executeAssistantCommand(message) {
+    const text = String(message || '').trim();
+    if (!text) return { handled: false };
+
+    const statusMatch = text.match(/^what'?s\s+the\s+status\s+of\s+(.+?)\s+billing\??$/i);
+    if (statusMatch) {
+      const name = statusMatch[1];
+      const target = resolveAssistantCommandTargetName(name);
+      if (!target) {
+        toast(`No billing client match for "${name}" yet.`, 'warn');
+        return { handled: true };
+      }
+      const visual = deriveAccountVisualState(target);
+      const insurer = target.accountSummary?.insurers?.[0] || 'payer unknown';
+      toast(`${target.client}: ${visual.headline || target.diagnosis?.status || 'review'} · ${insurer}`, 'info');
+      return { handled: true };
+    }
+
+
+    if (/^(focus|prioritize)\b[\s\S]*\b(under|less than|below)\s*90\b|\bnot\s+yet\s+past\s+3\s+months\b/i.test(text)) {
+      setAccountFilter('under90');
+      selectedAccountIndex = 0;
+      rerender();
+      toast('Focus set: unpaid accounts under 90 days first.', 'success');
+      return { handled: true };
+    }
+
+
+    if (/^(run|start)\b[\s\S]*\b(under|less than|below)\s*90\b[\s\S]*\blane\b|\brun\s+under\s*90\s+days\b/i.test(text)) {
+      await runUnder90LaneNow();
+      return { handled: true };
+    }
+
+    const addMatch = text.match(/^add\s+this\s*(?:to\s+(.+?)\s+chart)?\s*[:\-]?\s*([\s\S]+)$/i);
+    if (addMatch) {
+      const explicitName = addMatch[1] ? String(addMatch[1]).trim() : '';
+      const noteText = String(addMatch[2] || '').trim();
+      const target = explicitName ? resolveAssistantCommandTargetName(explicitName) : getSelectedVobAccountItem() || getSelectedAccountItem();
+      const href = String(target?.raw?.billingHref || target?.billingHref || getSelectedClientBillingHref() || '').trim();
+      if (!href) {
+        toast('Select the client first so I know where to write this.', 'warn');
+        return { handled: true };
+      }
+      if (!noteText) {
+        toast('Say the note after "add this".', 'warn');
+        return { handled: true };
+      }
+      const payload = {
+        transcript_text: noteText,
+        client_href: href,
+        client_name: String(target?.client || '').trim() || undefined,
+        requested_by: 'overlay',
+        discard_raw_transcript: true,
+        apply_to_clientcare: true,
+        apply_field_updates: true,
+        insurance_slot: getSelectedTranscriptInsuranceSlot(),
+      };
+      const statusEl = document.getElementById('vob-transcript-status');
+      if (statusEl) statusEl.textContent = 'Executing add-this command...';
+      const data = await api('/api/v1/clientcare-billing/insurance/vob-transcript', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        timeoutMs: 185000,
+      });
+      const okNote = Boolean(data?.clientcare_apply?.ok);
+      const okField = Boolean(data?.clientcare_field_apply?.ok);
+      if (statusEl) statusEl.textContent = okNote && okField
+        ? 'Add-this complete: note posted + field apply succeeded.'
+        : `Add-this partial: note=${okNote ? 'ok' : 'no'} fields=${okField ? 'ok' : 'no'}`;
+      toast(okNote && okField ? 'Command executed: chart note + field apply done.' : 'Command executed with partial apply; review status.', okNote && okField ? 'success' : 'warn');
+      return { handled: true };
+    }
+
+    return { handled: false };
+  }
+
   async function sendAssistantPrompt(message) {
     const content = String(message || '').trim();
-    if (!content) return;
+    if (!content) return null;
     if (!assistantSessionId) await ensureAssistantSession();
-    await api('/api/v1/clientcare-billing/assistant/message', {
+    const data = await api('/api/v1/clientcare-billing/assistant/message', {
       method: 'POST',
       body: JSON.stringify({
         session_id: assistantSessionId,
         message: content,
+        billing_context: buildAssistantBillingContext(),
       }),
     });
     await ensureAssistantSession();
+    return data;
   }
 
   async function sendAssistantMessage() {
     const input = document.getElementById('assistant-input');
-    const message = String(input?.value || '').trim();
+    const message = stripMessageWakeWords(String(input?.value || '').trim());
     if (!message) return;
     input.value = '';
     try {
-      await sendAssistantPrompt(message);
+      const cmd = await executeAssistantCommand(message);
+      if (cmd?.handled) return;
+      const data = await sendAssistantPrompt(message);
+      const cap = data?.assistant?.data?.capability_request;
+      if (cap?.id) {
+        toast(`Capability request #${cap.id} logged — Sherry’s direction is queued for the next safe build.`, 'success');
+      }
     } catch (error) {
       toast(error.message, "error");
     }
@@ -3728,6 +4207,134 @@
       }
       rerender();
     } catch (error) {
+      toast(error.message, 'error');
+    }
+  }
+
+  function formatVobTranscriptSynopsis(data) {
+    const ex = data?.extracted;
+    const pr = data?.preview_result || {};
+    if (!ex || typeof ex !== 'object') return '';
+    const parts = [];
+    if (pr.vob_completed_at) {
+      parts.push(`<p class="small muted" style="margin:0 0 8px;"><strong>VOB recorded (UTC)</strong> ${escapeHtml(String(pr.vob_completed_at).slice(0, 19).replace('T', ' '))}</p>`);
+    }
+    if (ex.call_summary) parts.push(`<p style="margin:0 0 8px;"><strong>Summary</strong> ${escapeHtml(ex.call_summary)}</p>`);
+    const iv = ex.insurance_verification_completed && typeof ex.insurance_verification_completed === 'object' ? ex.insurance_verification_completed : null;
+    if (iv && Object.keys(iv).some((k) => iv[k])) {
+      const bits = [iv.provider_name, iv.network_status, iv.reference_number].filter(Boolean);
+      if (bits.length) parts.push(`<p class="small muted" style="margin:0 0 8px;"><strong>Verification header</strong> ${escapeHtml(bits.join(' · '))}</p>`);
+    }
+    const row = [ex.payer_name, ex.plan_name, ex.coverage_effective].filter(Boolean);
+    if (row.length) parts.push(`<p class="small muted" style="margin:0 0 8px;">${escapeHtml(row.join(' · '))}</p>`);
+    const inc = Array.isArray(ex.incomplete_verifications) ? ex.incomplete_verifications.filter((r) => r && (r.subject || r.reason)) : [];
+    if (inc.length) {
+      parts.push(`<p style="margin:0 0 4px;"><strong>Incomplete</strong></p><ul style="margin:0 0 8px 18px;padding:0;">${inc.slice(0, 8).map((r) => `<li>${escapeHtml(`${r.subject || ''}: ${r.reason || ''}`.replace(/^:\s*/, ''))}</li>`).join('')}</ul>`);
+    }
+    const cd = pr.coverage_details && typeof pr.coverage_details === 'object' ? pr.coverage_details : null;
+    const ded = cd?.deductible && typeof cd.deductible === 'object' ? cd.deductible : null;
+    if (ded && (ded.oon_annual || ded.met_to_date || ded.remaining)) {
+      const dline = [ded.oon_annual && `OON annual: ${ded.oon_annual}`, ded.met_to_date && `Met: ${ded.met_to_date}`, ded.remaining && `Remaining: ${ded.remaining}`].filter(Boolean).join(' · ');
+      parts.push(`<p class="small muted" style="margin:0 0 8px;"><strong>Deductible</strong> ${escapeHtml(dline)}</p>`);
+    }
+    if (cd?.after_deductible_summary) {
+      parts.push(`<p class="small muted" style="margin:0 0 8px;"><strong>After deductible</strong> ${escapeHtml(cd.after_deductible_summary)}</p>`);
+    }
+    const auth = ex.authorization;
+    if (auth && typeof auth === 'object') {
+      const bits = [];
+      if (auth.required != null) bits.push(`Required: ${auth.required}`);
+      if (auth.reference_number) bits.push(`Ref: ${auth.reference_number}`);
+      if (auth.notes) bits.push(String(auth.notes));
+      if (bits.length) parts.push(`<p class="small muted" style="margin:0 0 8px;"><strong>Authorization</strong> ${escapeHtml(bits.join(' · '))}</p>`);
+    }
+    const hi = Array.isArray(ex.benefit_highlights) ? ex.benefit_highlights.filter(Boolean) : [];
+    if (hi.length) {
+      parts.push(`<p style="margin:0 0 4px;"><strong>Benefits</strong></p><ul style="margin:0 0 8px 18px;padding:0;">${hi.slice(0, 14).map((l) => `<li>${escapeHtml(l)}</li>`).join('')}</ul>`);
+    }
+    const rf = Array.isArray(ex.red_flags) ? ex.red_flags.filter(Boolean) : [];
+    if (rf.length) parts.push(`<p class="small muted" style="margin:0 0 8px;"><strong>Flags</strong> ${escapeHtml(rf.join('; '))}</p>`);
+    const fu = Array.isArray(ex.follow_ups) ? ex.follow_ups.filter(Boolean) : [];
+    if (fu.length) parts.push(`<p class="small muted" style="margin:0;"><strong>Follow-ups</strong> ${escapeHtml(fu.join('; '))}</p>`);
+    return parts.join('');
+  }
+
+
+  function getSelectedTranscriptInsuranceSlot() {
+    const reconcileSlot = Number(document.getElementById('reconcile-insurance-slot')?.value || NaN);
+    if (Number.isFinite(reconcileSlot) && reconcileSlot >= 0) return Math.floor(reconcileSlot);
+    const selected = getSelectedVobAccountItem();
+    return Math.max(0, Number(getSelectedRepairSlot(selected || {})) || 0);
+  }
+
+  async function analyzeVobTranscriptFromUi() {
+    const ta = document.getElementById('vob-transcript-body');
+    const transcript = String(ta?.value != null ? ta.value : lastVobTranscriptBody || '').trim();
+    const statusEl = document.getElementById('vob-transcript-status');
+    if (!transcript) {
+      toast('Add call notes or transcript text first.', 'warn');
+      return;
+    }
+    lastVobTranscriptBody = transcript;
+    if (statusEl) statusEl.textContent = 'Summarizing… (may take up to 3 minutes)';
+    try {
+      const draft = syncInsuranceDraftFromDom();
+      const selected = getSelectedVobAccountItem();
+      const clientName = vobMode === 'prospect'
+        ? (lastProspectDraft.full_name || '').trim()
+        : String(selected?.client || '').trim() || null;
+      const discardEl = document.getElementById('vob-transcript-discard-raw');
+      const applyEl = document.getElementById('vob-transcript-apply-cc');
+      const applyFieldsEl = document.getElementById('vob-transcript-apply-fields');
+      if (discardEl) lastVobTranscriptOpts.discardRaw = Boolean(discardEl.checked);
+      if (applyEl) lastVobTranscriptOpts.applyClientcare = Boolean(applyEl.checked);
+      let applyCc = lastVobTranscriptOpts.applyClientcare;
+      const billingHref = getSelectedClientBillingHref();
+      if (applyCc && !billingHref) {
+        applyCc = false;
+        toast('Select the client in VOB first — LifeOS will post the billing note for you next run.', 'warn');
+      }
+      const payload = {
+        transcript_text: transcript,
+        client_href: billingHref || undefined,
+        client_name: clientName || undefined,
+        payer_name: String(draft.payer_name || '').trim() || undefined,
+        member_id: String(draft.member_id || '').trim() || undefined,
+        group_number: String(draft.group_number || '').trim() || undefined,
+        requested_by: 'overlay',
+        discard_raw_transcript: lastVobTranscriptOpts.discardRaw,
+        apply_to_clientcare: applyCc,
+        apply_field_updates: Boolean(applyFieldsEl ? applyFieldsEl.checked : true),
+        insurance_slot: getSelectedTranscriptInsuranceSlot(),
+      };
+      const data = await api('/api/v1/clientcare-billing/insurance/vob-transcript', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        timeoutMs: 185000,
+      });
+      lastVobTranscriptNote = data.clientcare_note_suggestion || '';
+      lastVobTranscriptSynopsisHtml = formatVobTranscriptSynopsis(data);
+      if (data.saved) {
+        lastSavedVobProspects = [data.saved, ...lastSavedVobProspects.filter((e) => e.id !== data.saved.id)];
+      }
+      const apply = data.clientcare_apply;
+      const fieldApply = data.clientcare_field_apply;
+      if (statusEl) {
+        if (apply?.ok && fieldApply?.ok) statusEl.textContent = 'Done — LifeOS filed note and applied available insurance fields.';
+        else if (apply?.ok && fieldApply && !fieldApply.ok) statusEl.textContent = `Note filed. Field apply incomplete: ${fieldApply.reason || 'unknown'}.`;
+        else if (apply && !apply.ok) statusEl.textContent = `Synopsis saved. Auto-post did not run: ${apply.reason || 'unknown'}. Use backup copy if needed.`;
+        else if (applyCc === false && lastVobTranscriptOpts.applyClientcare && !billingHref) {
+          statusEl.textContent = 'Synopsis saved — pick the client file in VOB, then run again to auto-post.';
+        } else if (lastVobTranscriptOpts.discardRaw) statusEl.textContent = 'Saved — raw scrubbed from row; synopsis in history.';
+        else statusEl.textContent = 'Saved to VOB history.';
+      }
+      if (apply?.ok && fieldApply?.ok) toast('LifeOS filed note and applied ClientCare fields.', 'success');
+      else if (apply?.ok && fieldApply && !fieldApply.ok) toast(`Note filed; field apply incomplete: ${fieldApply.reason || 'unknown'}`, 'warn');
+      else if (apply && !apply.ok) toast(`Saved; auto-post failed: ${apply.reason}`, 'warn');
+      else toast(lastVobTranscriptNote ? 'Synopsis saved — enable posting + select client for LifeOS to file.' : 'Saved — review synopsis.', 'success');
+      rerender();
+    } catch (error) {
+      if (statusEl) statusEl.textContent = '';
       toast(error.message, 'error');
     }
   }
@@ -4088,6 +4695,8 @@
   }
 
   function render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, packagingValidation, packagingValidationHistory) {
+    document.body.classList.add('has-lifeos-companion');
+    document.body.classList.toggle('lumin-strip-expanded', luminStripExpanded);
     dashboard = dashboard || {};
     readiness = readiness || { ready: false, checks: [], missing: [] };
     templateFields = Array.isArray(templateFields) ? templateFields : [];
@@ -4114,6 +4723,8 @@
       { label: 'Patient AR', value: escapeHtml(money(patientArSummary.total_balance || 0)), tip: 'Total patient-responsibility balance owed across all accounts — money patients owe after insurance pays' },
       { label: '90+ patient AR', value: escapeHtml(money(patientArSummary.balance_90_plus || 0)), tip: 'Patient balances over 90 days old — highest risk of going uncollected, needs outreach or write-off decision now' },
     ];
+    const kpiEssential = [topCards[0], topCards[1], topCards[4], topCards[6]];
+    const kpiMore = [topCards[2], topCards[3], topCards[5], topCards[7]];
 
     const claimRows = claims.map((claim) => `
       <tr>
@@ -4146,9 +4757,9 @@
       ${renderSetupStrip()}
       <div class="hero">
         <div>
-          <div class="eyebrow">ClientCare West</div>
-          <h1>Collections Control Center</h1>
-          <p class="muted">Live billing backlog, collections forecasting, and operator controls.</p>
+          <div class="eyebrow">Sidecar for ClientCare West</div>
+          <h1>Billing assistant</h1>
+          <p class="muted" style="max-width:52ch;line-height:1.55;margin-top:6px;">Keep <strong style="color:#edf2f7">ClientCare</strong> open for real charting and billing. Use this page beside it for the live queue, VOB notes, ${escapeHtml(getBillingInvokeLabel())} (voice/chat), and quick actions — not a separate product, an assistant to what you already use.</p>
           ${getApiKey().trim() ? '' : '<div class="card" style="margin-top:14px;background:#4a1f28;border-color:#ef476f;"><strong style="color:#ffb4c1">Access needed</strong><p class="muted" style="margin-top:8px;color:#ffd5dd">Save the command key below to unlock live billing data. The overlay now opens safely without crashing when protected endpoints return 401.</p></div>'}
         </div>
         <div class="card" style="min-width:320px;">
@@ -4160,41 +4771,54 @@
         </div>
       </div>
 
-      <div class="grid four kpi-grid">
-        ${topCards.map((card) => `
+      <div class="cc-section-label">At a glance</div>
+      <div class="grid four kpi-grid cc-kpi-essential">
+        ${kpiEssential.map((card) => `
           <div class="card stat" ${card.tip ? `data-tip="${escapeHtml(card.tip)}"` : ''}><span>${escapeHtml(card.label)}</span><strong>${escapeHtml(card.value)}</strong></div>
         `).join('')}
       </div>
+      <details class="card cc-assistant-panel" style="margin-top:10px;">
+        <summary data-tip="Forecast windows, setup-issue counts, and aging AR — useful when you want the full picture.">More metrics ▸</summary>
+        <div class="grid four kpi-grid" style="margin-top:12px;">
+          ${kpiMore.map((card) => `
+            <div class="card stat" ${card.tip ? `data-tip="${escapeHtml(card.tip)}"` : ''}><span>${escapeHtml(card.label)}</span><strong>${escapeHtml(card.value)}</strong></div>
+          `).join('')}
+        </div>
+      </details>
 
       <div class="workspace with-utilities ${utilitySidebarDockedBottom ? 'utilities-bottom' : ''}">
         <div class="main-workspace">
+          <div class="cc-section-label">Find clients &amp; work the queue</div>
+          ${renderAccountSearchBar()}
+          ${renderManagedWorkQueue()}
+          <div class="cc-section-label">Help while you&apos;re in ClientCare</div>
+          ${renderAssistantShell({ variant: 'main' })}
+          ${renderVerificationOfBenefitsCard()}
           ${renderOperatorGuide()}
           ${renderSystemStatusSummary()}
-          ${renderAccountSearchBar()}
-          ${renderVerificationOfBenefitsCard()}
-          ${renderManagedWorkQueue()}
 
           <div class="grid two">
-            <details class="card" open>
-              <summary data-tip="Your highest-priority accounts right now — ranked by dollar value and urgency. Work top to bottom.">Today's Focus</summary>
+            <details class="card cc-assistant-panel">
+              <summary data-tip="Your highest-priority accounts right now — ranked by dollar value and urgency. Work top to bottom.">Today&apos;s Focus ▸</summary>
               <p class="hint" style="margin:10px 0">Start here. Highest-value accounts first.</p>
               ${renderTodaysFocus()}
             </details>
-            <details class="card" open>
-              <summary data-tip="Instead of opening accounts one by one, these workflows let you fix the same type of problem across many accounts at once — much faster.">Batch Workflows</summary>
+            <details class="card cc-assistant-panel">
+              <summary data-tip="Instead of opening accounts one by one, these workflows let you fix the same type of problem across many accounts at once — much faster.">Batch workflows ▸</summary>
               <p class="hint" style="margin:10px 0">Work the backlog by blocker instead of one account at a time.</p>
               <div id="workflow-playbooks">${renderWorkflowPlaybooks(lastAccountReport?.summary || {})}</div>
             </details>
           </div>
 
+          <div class="cc-section-label">ClientCare accounts on this board</div>
           <div class="grid two">
-            <details class="card" open>
-              <summary data-tip="All accounts with open billing issues pulled from ClientCare. Color ring = urgency (red = critical, yellow = needs attention, green = on track). Hover an account for a quick summary, click to open the full recovery detail.">Accounts Needing Action</summary>
+            <details class="card cc-primary-panel" open>
+              <summary data-tip="All accounts with open billing issues pulled from ClientCare. Color ring = urgency (red = critical, yellow = needs attention, green = on track). Hover an account for a quick summary, click to open the full recovery detail.">Accounts needing action</summary>
               <p class="hint" style="margin:10px 0">Hover for a summary. Click for full detail.</p>
               <div id="account-board" class="account-board"><p class="muted">Loading live billing accounts…</p></div>
             </details>
-            <details class="card" open>
-              <summary data-tip="Full breakdown for the account you clicked — what is blocking the claim, what the system recommends doing next, and any repair options.">Account Recovery Detail</summary>
+            <details class="card cc-primary-panel" open>
+              <summary data-tip="Full breakdown for the account you clicked — what is blocking the claim, what the system recommends doing next, and any repair options.">Selected account — what to do in ClientCare</summary>
               <div id="account-detail"><p class="muted">Click an account card to inspect the live billing status, blocker, and next actions.</p></div>
             </details>
           </div>
@@ -4358,8 +4982,8 @@
           <div class="card utility-sidebar-head">
             <div class="row-actions" style="justify-content:space-between;align-items:flex-start;">
               <div>
-                <div class="eyebrow">Utilities</div>
-                <strong>${utilitySidebarCollapsed ? 'Open utilities' : 'Assistant'}</strong>
+                <div class="eyebrow">Screen layout</div>
+                <strong>${utilitySidebarCollapsed ? 'Expand rail' : 'Dock &amp; collapse'}</strong>
               </div>
               <div class="row-actions" style="justify-content:flex-end;">
                 <button id="utility-sidebar-dock-toggle" class="ghost">${utilitySidebarDockedBottom ? 'Dock right' : 'Dock below'}</button>
@@ -4368,7 +4992,10 @@
             </div>
           </div>
           <div class="utility-sidebar-body" style="${utilitySidebarCollapsed ? 'display:none;' : ''}">
-            ${renderAssistantShell()}
+            <div class="card" style="padding:12px;background:#0f1528;">
+              <strong>More room for ClientCare</strong>
+              <p class="muted small" style="margin:8px 0 0;">The assistant chat and VOB tools are in the <strong>main column</strong>. Collapse this rail for a wider center, or dock it below if you like a stacked layout.</p>
+            </div>
           </div>
         </aside>
       </div>
@@ -4392,6 +5019,33 @@
     document.getElementById('browser-account-report').addEventListener('click', browserAccountReport);
     document.getElementById('browser-full-account-report').addEventListener('click', browserFullAccountReport);
     document.getElementById('assistant-send').addEventListener('click', sendAssistantMessage);
+    const assistantVoiceAutoExecuteEl = document.getElementById('assistant-voice-auto-execute');
+    if (assistantVoiceAutoExecuteEl) assistantVoiceAutoExecuteEl.addEventListener('change', () => {
+      assistantVoiceAutoExecute = Boolean(assistantVoiceAutoExecuteEl.checked);
+      localStorage.setItem('clientcare_assistant_voice_auto_execute', String(assistantVoiceAutoExecute));
+    });
+    root.querySelectorAll('[data-billing-quick-prompt]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.getAttribute('data-billing-quick-prompt'));
+        const p = getBillingChatQuickPrompts()[idx];
+        if (!p) return;
+        if (p.action === 'scroll-vob-transcript') {
+          const det = document.getElementById('verification-of-benefits');
+          if (det && !det.open) det.open = true;
+          document.getElementById('vob-payer-call-transcript')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          document.getElementById('vob-transcript-body')?.focus();
+          toast(`VOB transcript — add notes, then Summarize (${getBillingInvokeLabel()} files the note when posting is on and a client is selected).`, 'success');
+          return;
+        }
+        const input = document.getElementById('assistant-input');
+        if (input) {
+          input.value = p.text || '';
+          input.focus();
+          const len = input.value.length;
+          input.setSelectionRange(len, len);
+        }
+      });
+    });
     const accountSearch = document.getElementById('account-search');
     if (accountSearch) {
       accountSearch.addEventListener('input', (event) => {
@@ -4427,7 +5081,7 @@
       render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, lastPackagingValidation, lastPackagingValidationHistory);
       ensureAssistantSession();
     });
-    document.getElementById('assistant-open-toggle').addEventListener('click', () => {
+    document.getElementById('assistant-open-toggle')?.addEventListener('click', () => {
       setAssistantOpen(!assistantOpen);
       render(root, dashboard, readiness, templateFields, claims, actions, reconciliation, intelligence, payerPlaybooks, payerRules, eraInsights, patientArPolicy, patientArEscalation, opsOverview, underpayments, appeals, packagingOverview, lastPackagingValidation, lastPackagingValidationHistory);
       ensureAssistantSession();
@@ -4436,6 +5090,7 @@
       if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') sendAssistantMessage();
     });
     initAssistantVoice();
+    initVobTalkVoice();
     const useSelectedAccountVobButton = document.getElementById('use-selected-account-vob');
     if (useSelectedAccountVobButton) {
       useSelectedAccountVobButton.addEventListener('click', async () => {
@@ -4557,6 +5212,31 @@
         toast(error.message, 'error');
       }
     });
+    const vobTranscriptBody = document.getElementById('vob-transcript-body');
+    if (vobTranscriptBody) {
+      vobTranscriptBody.value = lastVobTranscriptBody;
+      vobTranscriptBody.addEventListener('input', (event) => {
+        lastVobTranscriptBody = event.target.value || '';
+      });
+    }
+    const vobTranscriptAnalyze = document.getElementById('vob-transcript-analyze');
+    if (vobTranscriptAnalyze) vobTranscriptAnalyze.addEventListener('click', () => analyzeVobTranscriptFromUi());
+    const vobDiscard = document.getElementById('vob-transcript-discard-raw');
+    const vobApply = document.getElementById('vob-transcript-apply-cc');
+    if (vobDiscard) vobDiscard.addEventListener('change', () => { lastVobTranscriptOpts.discardRaw = Boolean(vobDiscard.checked); });
+    if (vobApply) vobApply.addEventListener('change', () => { lastVobTranscriptOpts.applyClientcare = Boolean(vobApply.checked); });
+    const vobTranscriptCopy = document.getElementById('vob-transcript-copy-note');
+    if (vobTranscriptCopy) {
+      vobTranscriptCopy.addEventListener('click', async () => {
+        if (!lastVobTranscriptNote) return;
+        try {
+          await navigator.clipboard.writeText(lastVobTranscriptNote);
+          toast('Backup copy only — LifeOS should file the note automatically when posting succeeds.', 'success');
+        } catch (error) {
+          toast(error.message || 'Copy failed', 'error');
+        }
+      });
+    }
     const clientcarePipelineRun = document.getElementById('clientcare-pipeline-run');
     if (clientcarePipelineRun) clientcarePipelineRun.addEventListener('click', () => runFullClientcarePipeline());
     wireInsuranceCardDropzones(root);
@@ -4619,7 +5299,9 @@
     if (lastBrowserResult) setBrowserOutput(lastBrowserResult);
     const workflowNode = document.getElementById('workflow-playbooks');
     if (workflowNode) workflowNode.innerHTML = renderWorkflowPlaybooks(lastAccountReport?.summary || {});
+    mountCompanionStrip(liveSummary, patientArSummary);
     root.querySelectorAll('[data-run-workflow]').forEach((button) => button.addEventListener('click', () => runWorkflow(button.getAttribute('data-run-workflow'))));
+    document.getElementById('run-under90-lane')?.addEventListener('click', () => runUnder90LaneNow());
     wireVobCardZone();
 
     // Wire candidate account buttons shown after card OCR when no direct name match

@@ -9,6 +9,8 @@
  * - Good techniques to reinforce
  * - Coaching suggestions
  * - Bad habit patterns over time
+ *
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
 export class SalesTechniqueAnalyzer {
@@ -46,7 +48,7 @@ export class SalesTechniqueAnalyzer {
       negative_language: {
         name: 'Negative Language',
         severity: 'medium',
-        keywords: ['problem', 'issue', 'can't', 'won't', 'don't'],
+        keywords: ['problem', 'issue', "can't", "won't", "don't"],
       },
       no_questions: {
         name: 'Not Asking Questions',

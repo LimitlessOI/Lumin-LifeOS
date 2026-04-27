@@ -10,7 +10,8 @@
 import { readFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { getModelForTask } from '../config/task-model-routing.js';
+import { getModelForTask, getCandidateModelsForTask } from '../config/task-model-routing.js';
+import { createMemoryIntelligenceService } from './memory-intelligence-service.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -44,6 +45,7 @@ async function loadDomain(domain) {
  */
 export function createLifeOSLuminBuild({ pool, callCouncilMember, logger }) {
   const log = logger || console;
+  const memorySvc = pool?.query ? createMemoryIntelligenceService(pool, log) : null;
 
   async function patchJob(jobId, userId, fields) {
     const keys = Object.keys(fields).filter((k) => fields[k] !== undefined);
@@ -174,7 +176,24 @@ export function createLifeOSLuminBuild({ pool, callCouncilMember, logger }) {
 
     try {
       const domainContext = await loadDomain(domain);
-      const memberKey = getModelForTask('lifeos.lumin.program_plan') || 'gemini_flash';
+      const preferredModel = getModelForTask('lifeos.lumin.program_plan') || 'gemini_flash';
+      let routingRecommendation = { selectedModel: preferredModel };
+      if (memorySvc) {
+        try {
+          routingRecommendation = await memorySvc.getRoutingRecommendation({
+            taskType: 'lifeos.lumin.program_plan',
+            proposedModel: preferredModel,
+            candidateModels: getCandidateModelsForTask('lifeos.lumin.program_plan'),
+          });
+        } catch (memoryErr) {
+          log.warn({ err: memoryErr.message }, '[LUMIN-BUILD] Memory routing unavailable — using static plan model');
+          routingRecommendation = { selectedModel: preferredModel, reason: 'Memory routing unavailable; using static map' };
+        }
+      }
+      const memberKey = routingRecommendation.selectedModel;
+      if (!memberKey) {
+        throw Object.assign(new Error('No authorized model is currently allowed for lifeos.lumin.program_plan'), { status: 409 });
+      }
 
       const systemPrompt = [
         'You are a senior engineer on the LifeOS / Lumin-LifeOS monorepo.',
@@ -203,10 +222,27 @@ export function createLifeOSLuminBuild({ pool, callCouncilMember, logger }) {
          SET status = 'done', step_detail = 'Plan complete', result_text = $1, result_meta = $2::jsonb
          WHERE id = $3 AND user_id = $4
          RETURNING *`,
-        [output, JSON.stringify({ placement, model_used: memberKey }), job.id, userId]
+        [
+          output,
+          JSON.stringify({
+            placement,
+            model_used: memberKey,
+            routing_reason: routingRecommendation.reason || null,
+            blocked_candidates: routingRecommendation.blockedCandidates || [],
+          }),
+          job.id,
+          userId,
+        ]
       );
 
-      return { job: updated, plan: output, placement, model_used: memberKey };
+      return {
+        job: updated,
+        plan: output,
+        placement,
+        model_used: memberKey,
+        routing_reason: routingRecommendation.reason || null,
+        blocked_candidates: routingRecommendation.blockedCandidates || [],
+      };
     } catch (err) {
       log.error({ err: err.message, jobId: job.id }, '[LUMIN-BUILD] planGoal failed');
       await pool.query(
@@ -251,7 +287,24 @@ export function createLifeOSLuminBuild({ pool, callCouncilMember, logger }) {
 
     try {
       const domainContext = await loadDomain(domain);
-      const memberKey = getModelForTask('council.builder.task') || 'gemini_flash';
+      const preferredModel = getModelForTask('council.builder.task') || 'gemini_flash';
+      let routingRecommendation = { selectedModel: preferredModel };
+      if (memorySvc) {
+        try {
+          routingRecommendation = await memorySvc.getRoutingRecommendation({
+            taskType: 'council.builder.task',
+            proposedModel: preferredModel,
+            candidateModels: getCandidateModelsForTask('council.builder.task'),
+          });
+        } catch (memoryErr) {
+          log.warn({ err: memoryErr.message }, '[LUMIN-BUILD] Memory routing unavailable — using static draft model');
+          routingRecommendation = { selectedModel: preferredModel, reason: 'Memory routing unavailable; using static map' };
+        }
+      }
+      const memberKey = routingRecommendation.selectedModel;
+      if (!memberKey) {
+        throw Object.assign(new Error('No authorized model is currently allowed for council.builder.task'), { status: 409 });
+      }
 
       const modeInstructions =
         'Generate the best-effort implementation or patch sketch. Output the main body first.\n' +
@@ -286,10 +339,27 @@ export function createLifeOSLuminBuild({ pool, callCouncilMember, logger }) {
          SET status = 'done', step_detail = 'Draft complete', result_text = $1, result_meta = $2::jsonb
          WHERE id = $3 AND user_id = $4
          RETURNING *`,
-        [output, JSON.stringify({ placement, model_used: memberKey }), job.id, userId]
+        [
+          output,
+          JSON.stringify({
+            placement,
+            model_used: memberKey,
+            routing_reason: routingRecommendation.reason || null,
+            blocked_candidates: routingRecommendation.blockedCandidates || [],
+          }),
+          job.id,
+          userId,
+        ]
       );
 
-      return { job: updated, draft: output, placement, model_used: memberKey };
+      return {
+        job: updated,
+        draft: output,
+        placement,
+        model_used: memberKey,
+        routing_reason: routingRecommendation.reason || null,
+        blocked_candidates: routingRecommendation.blockedCandidates || [],
+      };
     } catch (err) {
       log.error({ err: err.message, jobId: job.id }, '[LUMIN-BUILD] draftGoal failed');
       await pool.query(

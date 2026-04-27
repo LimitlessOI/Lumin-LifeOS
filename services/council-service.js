@@ -1192,7 +1192,10 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
     }
 
     // ── max_tokens scoped to taskType — hard caps prevent runaway verbose output ──
-    const scopedMaxTokens = (() => {
+    // Callers may set options.maxOutputTokens (e.g. council builder full-file HTML) to override
+    // the task-type default; still clamped to MAX_OUTPUT_TOKENS_CAP for safety.
+    const MAX_OUTPUT_TOKENS_CAP = 128_000;
+    const baseScopedMaxTokens = (() => {
       if (taskType === 'routing' || taskType === 'classification') return 50;
       if (taskType === 'validation') return 100;
       if (taskType === 'health' || taskType === 'status') return 150;
@@ -1202,6 +1205,13 @@ Be concise.${knowledgeSection ? `\n\n${knowledgeSection}` : ''}`;
       if (taskType === 'planning') return 700;
       if (taskType === 'codegen' || taskType === 'code') return 1500;
       return Math.min(config.maxTokens || 800, 800); // default cap: 800 (was 1000)
+    })();
+    const scopedMaxTokens = (() => {
+      const n = options.maxOutputTokens;
+      if (typeof n === 'number' && Number.isFinite(n) && n > 0) {
+        return Math.min(Math.max(Math.floor(n), 1), MAX_OUTPUT_TOKENS_CAP);
+      }
+      return baseScopedMaxTokens;
     })();
 
     const startTime = Date.now();

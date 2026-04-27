@@ -515,6 +515,62 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
     }
   });
 
+  /** Payer-call notes → structured VOB synopsis (Norton-style sections), Neon row, optional raw discard, optional ClientCare billing-note via browser. */
+  router.post('/insurance/vob-transcript', async (req, res) => {
+    try {
+      const body = req.body || {};
+      const transcript = String(body.transcript_text || body.transcript || '').trim();
+      if (!transcript) {
+        return res.status(400).json({ ok: false, error: 'transcript_text required' });
+      }
+      const applyCc = body.apply_to_clientcare === true || String(body.apply_to_clientcare || '').toLowerCase() === 'true';
+      if (applyCc) {
+        await enforceOperatorAccess(req, ['operator', 'manager']);
+        const href = String(body.client_href || '').trim();
+        if (!href) {
+          return res.status(400).json({ ok: false, error: 'client_href required when apply_to_clientcare is true' });
+        }
+      }
+      const result = await withDeadline(
+        () => opsService.ingestVobCallTranscript({
+          transcriptText: transcript,
+          clientHref: String(body.client_href || '').trim() || null,
+          clientName: String(body.client_name || body.full_name || '').trim() || null,
+          payerName: String(body.payer_name || '').trim() || null,
+          memberId: String(body.member_id || '').trim() || null,
+          groupNumber: String(body.group_number || '').trim() || null,
+          requestedBy: String(body.requested_by || 'overlay'),
+          discardRawTranscript: body.discard_raw_transcript === true || String(body.discard_raw_transcript || '').toLowerCase() === 'true',
+          applyToClientcare: applyCc,
+          applyFieldUpdates: (body.apply_field_updates === true || String(body.apply_field_updates || '').toLowerCase() === 'true') || applyCc,
+          insuranceSlot: Math.max(0, Number(body.insurance_slot || 0) || 0),
+        }),
+        180000,
+        'VOB transcript ingest',
+      );
+      if (!result.ok) {
+        const status = result.error === 'council_unavailable' ? 503
+          : result.error === 'transcript_text_required' ? 400
+            : result.error === 'council_parse_failed' ? 502
+              : 500;
+        return res.status(status).json(result);
+      }
+      if (!result.saved) {
+        return res.status(503).json({
+          ok: false,
+          error: 'Could not save VOB transcript to history. Confirm migration db/migrations/20260403_clientcare_vob_prospects.sql is applied.',
+          extracted: result.extracted,
+          preview_result: result.preview_result,
+          clientcare_note_suggestion: result.clientcare_note_suggestion,
+        });
+      }
+      res.json(result);
+    } catch (error) {
+      logger.error?.({ err: error.message }, '[CLIENTCARE-BILLING] VOB transcript ingest failed');
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
   router.post('/insurance/card-intake', upload.array('card', 16), async (req, res) => {
     try {
       const uploadedFiles = Array.isArray(req.files) ? req.files : (req.file ? [req.file] : []);
@@ -1019,7 +1075,17 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
       const existing = await conversationStore.get(sessionId);
       if (!existing) return res.status(404).json({ ok: false, error: 'Session not found' });
       const priorMessages = Array.isArray(existing.messages) ? existing.messages : [];
-      const result = await opsService.ask(message, { requestedBy: 'sherry_console' });
+      const result = await opsService.ask(message, {
+        requestedBy: 'sherry_console',
+        billingContext: req.body?.billing_context || null,
+      });
+      const capReq = result.capability_request || result.data?.capability_request || null;
+      const mergedData =
+        result.data && typeof result.data === 'object'
+          ? { ...result.data, ...(capReq ? { capability_request: capReq } : {}) }
+          : capReq
+            ? { capability_request: capReq }
+            : null;
       const parsed = {
         reply: result.reply || result.error || 'No response generated.',
         intent: result.type || 'question',
@@ -1027,7 +1093,7 @@ export function createClientCareBillingRoutes({ pool, requireKey, logger = conso
         should_apply_systemwide: Boolean(result.should_apply_systemwide),
         suggested_actions: result.suggested_actions || [],
         notes: result.notes || [],
-        data: result.data || null,
+        data: mergedData,
       };
 
       const messages = [

@@ -20,6 +20,12 @@ Then: read this file (`docs/QUICK_LAUNCH.md`) for lane routing and execution, an
 
 **What the system can do (vs gaps):** `docs/SYSTEM_CAPABILITIES.md` — Railway redeploy (`npm run system:railway:redeploy`), env list, builder `/build`, verifiers; **update that doc + `ENV_REGISTRY.md` when you add ops**. Changelog lives at the bottom of the capabilities file.
 
+**Whole-repo file inventory (cleanup / drift):** `docs/REPO_CATALOG.md` — run `npm run repo:catalog` after large tree changes; human triage in `docs/REPO_TRIAGE_NOTES.md`. Pointers also in `docs/projects/INDEX.md` and `docs/CONTINUITY_INDEX.md`.
+
+**What actually runs vs barnacles:** `docs/REPO_DEEP_AUDIT.md` — composition spine (`server.js` → `startup/register-runtime-routes.js`), value tiers, cleanup waves.
+
+**Map of all indexes:** `docs/REPO_MASTER_INDEX.md` — inventory + SSOT + continuity + prompts in one hub.
+
 ## Required Read Order (do not skip)
 
 > **Token-efficient path (normal build sessions):**

@@ -12,6 +12,7 @@ import { createHealthKitBridge } from '../services/healthkit-bridge.js';
 import { createHealthPatternEngine } from '../services/health-pattern-engine.js';
 import { createEmergencyDetection } from '../services/emergency-detection.js';
 import { createMedicalContextGenerator } from '../services/medical-context-generator.js';
+import { createCouncilPromptAdapter } from '../services/council-prompt-adapter.js';
 import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 import { safeDays }               from '../services/lifeos-request-helpers.js';
 
@@ -20,17 +21,22 @@ import { safeDays }               from '../services/lifeos-request-helpers.js';
  *   pool: import('pg').Pool,
  *   requireKey: import('express').RequestHandler,
  *   callCouncilMember: Function,
+ *   callAI?: Function | null,
  *   sendSMS: Function,
  *   logger: import('pino').Logger
  * }} opts
  */
-export function createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, sendSMS, logger }) {
+export function createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, callAI = null, sendSMS, logger }) {
   const router = express.Router();
 
+  const chatAI =
+    callAI ||
+    (callCouncilMember ? createCouncilPromptAdapter(callCouncilMember) : null);
+
   const hkBridge = createHealthKitBridge({ pool, logger });
-  const patternEngine = createHealthPatternEngine({ pool, callAI: callCouncilMember, logger });
+  const patternEngine = createHealthPatternEngine({ pool, callAI: chatAI, logger });
   const emergencyDetection = createEmergencyDetection({ pool, sendSMS, logger });
-  const medicalGenerator = createMedicalContextGenerator({ pool, callAI: callCouncilMember });
+  const medicalGenerator = createMedicalContextGenerator({ pool, callAI: chatAI });
 
   /**
    * Resolve a user_id from a handle ('adam','sherry') or numeric string.

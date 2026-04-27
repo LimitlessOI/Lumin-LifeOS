@@ -28,10 +28,12 @@ The vault is Railway → Project → Variables. This file is the map.
 - **Secrets:** never commit secret **values**. If a secret value ever appeared in a screenshot or chat, **rotate** it in the provider + Railway; this file stays **names + SET/NEEDED** only for secrets.
 
 Legend:
-- ✅ **SET** — confirmed in Railway production
+- ✅ **SET** — confirmed in Railway production (operator screenshot, deploy inventory A→Z, or authenticated name list)
 - ⚠️ **NEEDED** — required for a feature to work, not yet set
-- 🔲 **OPTIONAL** — enhances behavior but not blocking
+- 🔲 **OPTIONAL** — **role**: not required for a **minimal** core path — **does not mean “absent.”** Optional keys can still be **✅ SET** when the vault/inventory shows them; use SET when you have evidence of presence.
 - ❌ **DEPRECATED** — no longer used, safe to remove
+
+**Two different questions:** (1) **Is the name in the vault?** → deploy inventory + category **Status**. (2) **Does the live Node process have it right now?** → e.g. `GET /api/v1/lifeos/builder/ready` → `github_token` (runtime). Those can disagree if you hit **local** Node, **wrong** `PUBLIC_BASE_URL`, or **pre-redeploy** — see **§ GitHub** and `ENV_DIAGNOSIS_PROTOCOL.md`.
 
 ---
 
@@ -57,15 +59,15 @@ Legend:
 | `GEMINI_API_KEY` | ✅ SET | Google Gemini — mediator empathy, council member | council-service.js, mediator-service.js |
 | `GROK_API_KEY` | ✅ SET | xAI Grok — reality check, council member | council-service.js, commitment-detector.js |
 | `DEEPSEEK_API_KEY` | ✅ SET | DeepSeek — pattern analysis, council member | council-service.js, integrity-engine.js |
-| `GROQ_API_KEY` | 🔲 OPTIONAL | Groq inference (fast, cheap) — fallback council member | council-service.js |
+| `GROQ_API_KEY` | ✅ SET | Groq inference (fast, cheap) — fallback council member; **optional for core** but **present** in deploy inventory (2026-04-25) | council-service.js |
 | `GROQ_MODEL` | 🔲 OPTIONAL | Groq model name (default: llama-3.1-70b-versatile) | council-service.js |
-| `MISTRAL_API_KEY` | 🔲 OPTIONAL | Mistral — additional council member | council-service.js |
+| `MISTRAL_API_KEY` | ✅ SET | Mistral — additional council member; **optional for core**; **present** in deploy inventory (2026-04-25) | council-service.js |
 | `MISTRAL_MODEL` | 🔲 OPTIONAL | Mistral model name | council-service.js |
 | `CEREBRAS_API_KEY` | ✅ SET | Cerebras — ultra-fast inference | council-service.js |
 | `CEREBRAS_MODEL` | 🔲 OPTIONAL | Cerebras model name | council-service.js |
-| `TOGETHER_API_KEY` | 🔲 OPTIONAL | Together AI — open model inference | council-service.js |
+| `TOGETHER_API_KEY` | ✅ SET | Together AI — open model inference; **optional for core**; **present** in deploy inventory (2026-04-25) | council-service.js |
 | `TOGETHER_MODEL` | 🔲 OPTIONAL | Together model name | council-service.js |
-| `OPENROUTER_API_KEY` | 🔲 OPTIONAL | OpenRouter — model routing/fallback | council-service.js |
+| `OPENROUTER_API_KEY` | ✅ SET | OpenRouter — model routing/fallback; **optional for core**; **present** in deploy inventory (2026-04-25) | council-service.js |
 | `OPENROUTER_MODEL` | 🔲 OPTIONAL | Default model via OpenRouter | council-service.js |
 | `PERPLEXITY_API_KEY` | 🔲 OPTIONAL | Perplexity — web-search-grounded answers | web-search-integration.js |
 | `BRAVE_SEARCH_API_KEY` | 🔲 OPTIONAL | Brave Search — web intelligence without Google | web-search-service.js |
@@ -186,6 +188,8 @@ Optional: `npm run verify:clientcare-billing:remote` (uses `PUBLIC_BASE_URL` fro
 | `GITHUB_TOKEN` | ✅ SET | Personal access token — auto-commits built files | deployment-service.js, auto-builder.js |
 | `GITHUB_REPO` | ✅ SET | Repo in `owner/name` format (e.g. adamhopkins/lifeos) | deployment-service.js |
 | `GITHUB_DEPLOY_BRANCH` | ✅ SET | Branch auto-builder commits to (e.g. main) | deployment-service.js |
+
+> **`GET /api/v1/lifeos/builder/ready` → `builder.github_token`:** This is **`Boolean(process.env.GITHUB_TOKEN)`** on the **Node process that answers that HTTP request** — runtime injection, not a read of the Railway UI. **✅ SET** here means the **name** is in the **vault** per operator mirror (screenshot / deploy inventory). If you **KNOW** the name is in Railway but `/ready` shows `github_token: false`, diagnose **local server** (no env), **wrong base URL**, **different service**, or **redeploy / scope** — do **not** treat that alone as “Adam must add `GITHUB_TOKEN`” (`ENV_DIAGNOSIS_PROTOCOL` → operator-supplied evidence; North Star **§2.3**).
 
 ---
 
@@ -388,6 +392,7 @@ Paste rows whenever a verifier or production flow **succeeds** under an explicit
 
 | Date | Change |
 |---|---|
+| 2026-04-25 | **Legend + `/ready` clarification:** OPTIONAL = role (not “absent”); **vault presence** vs **runtime** `process.env` (e.g. `github_token`). **AI APIs:** `GROQ_API_KEY`, `MISTRAL_API_KEY`, `TOGETHER_API_KEY`, `OPENROUTER_API_KEY` → **✅ SET** with note “optional for core” — aligned with deploy inventory A→Z + operator screenshots. |
 | 2026-04-25 | **“For every Conductor session”** block — read registry + deploy inventory before “missing env”; `PUBLIC_BASE_URL` export; system `POST /railway/env/bulk` for non-secrets; **404** on builder routes = **deploy drift** (not an operator re-proof loop). |
 | 2026-04-22 | **Pointer to `docs/SYSTEM_CAPABILITIES.md`** — matrix of self-serve routes/scripts + env per capability + gaps; maintain with this registry. |
 | 2026-04-22 | **Env certification playbook + `npm run env:certify`** — `scripts/env-certify.mjs` (healthz + `/railway/env` + `/lifeos/builder/domains`[/ready]); `data/env-certification-log.jsonl` (gitignored); **Env certification log** table columns: scope / success criterion / evidence / result; `ENV_DIAGNOSIS_PROTOCOL` §4 “present **and** working”. |

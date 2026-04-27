@@ -65,6 +65,39 @@ const FLOODING_SIGNALS = [
   'stop talking',
 ];
 
+const HORSEMAN_SIGNALS = {
+  contempt: [
+    'you always',
+    'you never',
+    "you're such a",
+    'pathetic',
+    'ridiculous',
+    'eye roll',
+    '🙄',
+  ],
+  criticism: [
+    'you never listen',
+    "you're selfish",
+    "you're impossible",
+    "you don't care",
+    'what is wrong with you',
+  ],
+  defensiveness: [
+    "that's not my fault",
+    'you started it',
+    "i did nothing wrong",
+    'why are you blaming me',
+  ],
+  stonewalling: [
+    'whatever',
+    'fine.',
+    "i'm done talking",
+    'leave me alone',
+    'i am done',
+    'i dont care',
+  ],
+};
+
 // ── Factory ────────────────────────────────────────────────────────────────
 
 export function createConflictIntelligence({ pool, callAI, logger }) {
@@ -356,6 +389,129 @@ export function createConflictIntelligence({ pool, callAI, logger }) {
     };
   }
 
+  function sensitivityThreshold(sensitivity) {
+    const s = String(sensitivity || 'medium').toLowerCase();
+    if (s === 'low') return 2;
+    if (s === 'high') return 1;
+    return 1;
+  }
+
+  function detectHorseman(text) {
+    const lower = String(text || '').toLowerCase();
+    let best = { horseman: null, hits: 0 };
+    for (const [horseman, phrases] of Object.entries(HORSEMAN_SIGNALS)) {
+      const hits = phrases.reduce((n, p) => n + (lower.includes(p) ? 1 : 0), 0);
+      if (hits > best.hits) best = { horseman, hits };
+    }
+    return best;
+  }
+
+  function buildSuggestion({ horseman, flooding }) {
+    if (flooding) {
+      return 'Lumin noticed high emotional flooding. Consider pausing 20 minutes before sending this.';
+    }
+    if (horseman === 'contempt') {
+      return 'Try rewriting this around the specific behavior and impact, not identity.';
+    }
+    if (horseman === 'criticism') {
+      return 'Try replacing global language ("always/never") with one concrete example and one request.';
+    }
+    if (horseman === 'defensiveness') {
+      return 'Try one ownership sentence first, then your perspective.';
+    }
+    if (horseman === 'stonewalling') {
+      return 'Try a boundary + return-time message instead of shutting down the conversation.';
+    }
+    return 'Lumin noticed tension in this message. Consider a calmer rewrite before sending.';
+  }
+
+  /**
+   * Two-stage escalation detection: rule-based first, optional AI confirm.
+   * @param {string} text
+   * @param {{ sensitivity?: 'low'|'medium'|'high' }} [opts]
+   */
+  async function detectEscalationInText(text, opts = {}) {
+    const base = detectEscalation({ text });
+    const { horseman, hits } = detectHorseman(text);
+    const threshold = sensitivityThreshold(opts.sensitivity);
+    let triggered = base.flooding || base.escalating || hits >= threshold;
+    let confidence = triggered ? 0.6 : 0.2;
+
+    // Stage 2: cheap AI confirmation for ambiguous cases.
+    if (callAI && text && !base.flooding && hits > 0 && hits <= 2) {
+      try {
+        const prompt = [
+          'Classify this message for relationship conflict escalation.',
+          'Return strict JSON only with keys: triggered (boolean), horseman (contempt|criticism|defensiveness|stonewalling|null), confidence (0-1).',
+          `Message: ${text}`,
+        ].join('\n');
+        const raw = await callAI('Conflict escalation classifier', prompt);
+        const m = String(raw || '').match(/\{[\s\S]*\}/);
+        if (m) {
+          const parsed = JSON.parse(m[0]);
+          if (typeof parsed.triggered === 'boolean') triggered = parsed.triggered;
+          if (typeof parsed.confidence === 'number') confidence = Math.max(0, Math.min(1, parsed.confidence));
+          if (typeof parsed.horseman === 'string') {
+            // keep detected horseman for known enum only
+            const h = parsed.horseman.toLowerCase();
+            if (HORSEMAN_SIGNALS[h]) {
+              return {
+                triggered,
+                horseman: h,
+                confidence,
+                flooding: base.flooding,
+                suggestion: buildSuggestion({ horseman: h, flooding: base.flooding }),
+              };
+            }
+          }
+        }
+      } catch {
+        // Keep deterministic rule-based result on parse/model failure.
+      }
+    }
+
+    return {
+      triggered,
+      horseman: horseman || null,
+      confidence,
+      flooding: base.flooding,
+      suggestion: buildSuggestion({ horseman, flooding: base.flooding }),
+    };
+  }
+
+  async function getInterruptSettings(userId) {
+    const { rows } = await pool.query(
+      `SELECT
+         COALESCE(conflict_interrupt_enabled, TRUE) AS enabled,
+         COALESCE(conflict_interrupt_sensitivity, 'medium') AS sensitivity
+       FROM lifeos_users
+       WHERE id = $1`,
+      [userId]
+    );
+    if (!rows.length) throw new Error('User not found');
+    return rows[0];
+  }
+
+  async function updateInterruptSettings(userId, settings = {}) {
+    const enabled =
+      typeof settings.enabled === 'boolean' ? settings.enabled : null;
+    const sensitivity = ['low', 'medium', 'high'].includes(settings.sensitivity)
+      ? settings.sensitivity
+      : null;
+    const { rows } = await pool.query(
+      `UPDATE lifeos_users
+          SET conflict_interrupt_enabled = COALESCE($2, conflict_interrupt_enabled),
+              conflict_interrupt_sensitivity = COALESCE($3, conflict_interrupt_sensitivity)
+        WHERE id = $1
+      RETURNING
+        COALESCE(conflict_interrupt_enabled, TRUE) AS enabled,
+        COALESCE(conflict_interrupt_sensitivity, 'medium') AS sensitivity`,
+      [userId, enabled, sensitivity]
+    );
+    if (!rows.length) throw new Error('User not found');
+    return rows[0];
+  }
+
   // ── Public API ─────────────────────────────────────────────────────────
 
   return {
@@ -373,5 +529,8 @@ export function createConflictIntelligence({ pool, callAI, logger }) {
     getRecordings,
     // Detection
     detectEscalation,
+    detectEscalationInText,
+    getInterruptSettings,
+    updateInterruptSettings,
   };
 }

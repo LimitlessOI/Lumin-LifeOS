@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Cycle Tracking — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 820px; margin: 0 auto; padding: 28px 20px 100px; }
+
+    /* ── Page header ── */
+    .page-header { margin-bottom: 28px; }
+    .page-header h1 { font-size: 20px; font-weight: 600; color: #e8e8f0; }
+    .page-header p  { font-size: 13px; color: #555; margin-top: 4px; line-height: 1.5; }
+
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid #1e1e2e; margin-bottom: 28px; overflow-x: auto; }
+    .tab  { padding: 9px 16px; font-size: 13px; color: #555; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all .15s; }
+    .tab.active { color: #e879a0; border-bottom-color: #e879a0; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Phase badge ── */
+    .phase-hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 32px 20px 28px; }
+    .phase-ring {
+      width: 140px; height: 140px; border-radius: 50%;
+      border: 4px solid var(--phase-color, #e879a0);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      margin-bottom: 20px; position: relative;
+      box-shadow: 0 0 40px var(--phase-glow, rgba(232,121,160,0.15));
+      transition: border-color .4s, box-shadow .4s;
+    }
+    .phase-ring .phase-name  { font-size: 16px; font-weight: 600; color: var(--phase-color, #e879a0); text-transform: capitalize; }
+    .phase-ring .phase-day   { font-size: 12px; color: #666; margin-top: 2px; }
+    .phase-ring .phase-emoji { font-size: 22px; margin-bottom: 4px; }
+
+    .phase-guidance { max-width: 440px; }
+    .phase-guidance h3 { font-size: 15px; font-weight: 600; color: #e8e8f0; margin-bottom: 6px; }
+    .phase-guidance p  { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 4px; }
+    .phase-guidance .energy-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+    .energy-chip {
+      padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;
+      border: 1px solid; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .energy-low     { color: #f87171; border-color: #7f1d1d; background: #1a0808; }
+    .energy-rising  { color: #34d399; border-color: #065f46; background: #0a2010; }
+    .energy-peak    { color: #22d3ee; border-color: #0e7490; background: #0a1f22; }
+    .energy-steady  { color: #60a5fa; border-color: #1e3a5f; background: #0a1422; }
+    .energy-dipping { color: #f59e0b; border-color: #78350f; background: #1c100a; }
+
+    .countdown-row { margin-top: 16px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+    .countdown-item { text-align: center; }
+    .countdown-item .num  { font-size: 22px; font-weight: 600; color: #e8e8f0; }
+    .countdown-item .lbl  { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    /* no tracking state */
+    .no-tracking { background: #111118; border: 1px solid #1e1e2e; border-radius: 12px; padding: 40px 24px; text-align: center; margin-bottom: 20px; }
+    .no-tracking p { font-size: 14px; color: #666; margin-bottom: 16px; line-height: 1.6; }
+
+    /* ── Quick log buttons ── */
+    .quick-log { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    .quick-btn {
+      padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 500;
+      cursor: pointer; border: 1px solid; transition: all .15s;
+    }
+    .quick-btn.period-start { border-color: #7f1d1d; color: #f87171; background: #1a0808; }
+    .quick-btn.period-start:hover { background: #2a0c0c; }
+    .quick-btn.period-end   { border-color: #1e3a5f; color: #60a5fa; background: #0a1422; }
+    .quick-btn.period-end:hover   { background: #0e1e38; }
+    .quick-btn.symptom      { border-color: #3b2070; color: #c084fc; background: #12091a; }
+    .quick-btn.symptom:hover      { background: #1a0c28; }
+    .quick-btn.spotting     { border-color: #78350f; color: #f59e0b; background: #1c100a; }
+    .quick-btn.spotting:hover     { background: #281508; }
+
+    /* ── Cards / forms ── */
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { padding: 14px 18px; border-bottom: 1px solid #191920; display: flex; align-items: center; justify-content: space-between; }
+    .card-header .title { font-size: 14px; font-weight: 500; color: #d8d8e8; }
+    .card-body { padding: 18px; }
+
+    .form-field { margin-bottom: 14px; }
+    .form-field label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 6px; }
+    .form-field select, .form-field input, .form-field textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 9px 12px; font-size: 13px;
+      outline: none; font-family: inherit;
+    }
+    .form-field select:focus, .form-field input:focus, .form-field textarea:focus { border-color: #e879a0; }
+    .form-field textarea { resize: vertical; min-height: 72px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* symptom tags */
+    .symptom-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .stag {
+      padding: 4px 10px; border-radius: 14px; font-size: 11px; cursor: pointer;
+      border: 1px solid #2a2a3a; color: #666; transition: all .15s; user-select: none;
+    }
+    .stag.selected { border-color: #e879a0; color: #e879a0; background: rgba(232,121,160,0.08); }
+    .stag:hover:not(.selected) { color: #aaa; border-color: #3a3a4a; }
+
+    /* flow level */
+    .flow-btns { display: flex; gap: 6px; margin-top: 8px; }
+    .flow-btn { padding: 5px 14px; border-radius: 14px; font-size: 11px; cursor: pointer; border: 1px solid #2a2a3a; color: #666; transition: all .15s; }
+    .flow-btn.selected { border-color: #f87171; color: #f87171; background: rgba(248,113,113,0.08); }
+
+    /* buttons */
+    .btn { padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all .15s; }
+    .btn-primary { background: #e879a0; color: #fff; }
+    .btn-primary:hover { background: #d96090; }
+    .btn-ghost { background: transparent; border: 1px solid #2a2a3a; color: #666; }
+    .btn-ghost:hover { color: #aaa; border-color: #3a3a4a; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── History ── */
+    .history-item { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
+    .history-item .hi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .history-item .cycle-start { font-size: 14px; font-weight: 600; color: #e8e8f0; }
+    .history-item .cycle-len   { font-size: 12px; color: #555; }
+    .history-item .entry-list  { display: flex; flex-wrap: wrap; gap: 6px; }
+    .entry-pill {
+      padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 500;
+    }
+    .entry-pill.period_start  { background: #2a0c0c; color: #f87171; }
+    .entry-pill.period_end    { background: #0a1422; color: #60a5fa; }
+    .entry-pill.symptom       { background: #12091a; color: #c084fc; }
+    .entry-pill.spotting      { background: #1c100a; color: #f59e0b; }
+    .avg-bar { display: flex; gap: 6px; align-items: center; font-size: 12px; color: #555; margin-top: 10px; }
+    .avg-bar strong { color: #e8e8f0; }
+
+    /* ── Settings ── */
+    .settings-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+    .settings-card h3 { font-size: 14px; font-weight: 500; color: #d8d8e8; margin-bottom: 16px; }
+    .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #191920; }
+    .setting-row:last-child { border-bottom: none; }
+    .setting-label { font-size: 13px; color: #d8d8e8; }
+    .setting-hint  { font-size: 11px; color: #555; margin-top: 2px; }
+    .setting-control input[type="number"] {
+      width: 72px; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 6px; color: #e8e8f0; padding: 6px 10px; font-size: 13px; text-align: center; outline: none;
+    }
+    .setting-control input[type="number"]:focus { border-color: #e879a0; }
+    .toggle { position: relative; width: 36px; height: 20px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute; inset: 0; border-radius: 10px; background: #2a2a3a;
+      cursor: pointer; transition: background .2s;
+    }
+    .toggle input:checked + .toggle-track { background: #e879a0; }
+    .toggle-track::after {
+      content: ''; position: absolute; left: 3px; top: 3px;
+      width: 14px; height: 14px; border-radius: 50%; background: #fff;
+      transition: transform .2s;
+    }
+    .toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+
+    /* ── Utility ── */
+    .empty { padding: 40px; text-align: center; color: #444; font-size: 14px; }
+    .toast { position:fixed; bottom:24px; right:24px; background:#1a0d1a; border:1px solid #e879a0; border-radius:8px; padding:12px 18px; font-size:13px; color:#e879a0; opacity:0; transform:translateY(10px); transition:all .25s; z-index:1000; pointer-events:none; }
+    .toast.show { opacity:1; transform:translateY(0); }
+    .spinner { width:16px; height:16px; border:2px solid #2a2a3a; border-top-color:#e879a0; border-radius:50%; animation:spin .8s linear infinite; display:inline-block; vertical-align:middle; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } .countdown-row { gap: 14px; } }
+  </style>
+</head>
+<body>
+<div class="root">
+
+  <div class="page-header">
+    <h1>Cycle Tracking</h1>
+    <p>Zero AI cost — pure math. Your cycle awareness feeds energy patterns, decision context, and the Mirror.</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="today">Today</div>
+    <div class="tab" data-tab="log">Log Entry</div>
+    <div class="tab" data-tab="history">History</div>
+    <div class="tab" data-tab="settings">Settings</div>
+  </div>
+
+  <!-- TODAY TAB -->
+  <div id="panel-today" class="panel active">
+    <div id="phase-loading" style="text-align:center;padding:40px;color:#555;">
+      <div class="spinner"></div>
+    </div>
+
+    <div id="phase-disabled" class="no-tracking" style="display:none;">
+      <p>Cycle tracking is currently disabled.<br>Enable it in Settings to begin tracking your cycle phases.</p>
+      <button class="btn btn-ghost" onclick="switchTab('settings')">Open Settings</button>
+    </div>
+
+    <div id="phase-no-data" class="no-tracking" style="display:none;">
+      <p>No period logged yet.<br>Log a period start to begin tracking your cycle phases and energy overlays.</p>
+      <button class="btn btn-primary" onclick="switchTab('log'); document.getElementById('entry-type').value='period_start'; updateFormForType();">Log Period Start</button>
+    </div>
+
+    <div id="phase-content" style="display:none;">
+      <div class="phase-hero">
+        <div class="phase-ring" id="phase-ring">
+          <div class="phase-emoji" id="phase-emoji">🌸</div>
+          <div class="phase-name" id="phase-name">—</div>
+          <div class="phase-day" id="phase-day">day —</div>
+        </div>
+
+        <div class="phase-guidance">
+          <h3 id="phase-title">Loading…</h3>
+          <p id="phase-description"></p>
+          <div class="energy-row">
+            <span class="energy-chip" id="chip-energy"></span>
+            <span class="energy-chip" id="chip-focus"></span>
+          </div>
+          <div class="countdown-row">
+            <div class="countdown-item">
+              <div class="num" id="cnt-period">—</div>
+              <div class="lbl">days to period</div>
+            </div>
+            <div class="countdown-item">
+              <div class="num" id="cnt-phase">—</div>
+              <div class="lbl">days in phase</div>
+            </div>
+            <div class="countdown-item">
+              <div class="num" id="cnt-day">—</div>
+              <div class="lbl">cycle day</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick log -->
+      <div class="quick-log">
+        <button class="quick-btn period-start" onclick="quickLog('period_start')">🔴 Period Start</button>
+        <button class="quick-btn period-end"   onclick="quickLog('period_end')">🔵 Period End</button>
+        <button class="quick-btn symptom"      onclick="switchTab('log'); document.getElementById('entry-type').value='symptom'; updateFormForType();">🔮 Log Symptom</button>
+        <button class="quick-btn spotting"     onclick="quickLog('spotting')">🟡 Spotting</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOG TAB -->
+  <div id="panel-log" class="panel">
+    <div class="card">
+      <div class="card-header"><span class="title">Log an Entry</span></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Entry Type</label>
+            <select id="entry-type" onchange="updateFormForType()">
+              <option value="period_start">Period Start</option>
+              <option value="period_end">Period End</option>
+              <option value="symptom">Symptom</option>
+              <option value="spotting">Spotting</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Date &amp; Time</label>
+            <input type="datetime-local" id="entry-date">
+          </div>
+        </div>
+
+        <div id="flow-section" class="form-field">
+          <label>Flow Level</label>
+          <div class="flow-btns">
+            <button class="flow-btn" data-flow="light"  onclick="selectFlow('light')">Light</button>
+            <button class="flow-btn" data-flow="medium" onclick="selectFlow('medium')">Medium</button>
+            <button class="flow-btn" data-flow="heavy"  onclick="selectFlow('heavy')">Heavy</button>
+          </div>
+        </div>
+
+        <div id="symptoms-section" class="form-field">
+          <label>Symptoms</label>
+          <div class="symptom-tags">
+            <span class="stag" data-s="cramps">cramps</span>
+            <span class="stag" data-s="headache">headache</span>
+            <span class="stag" data-s="fatigue">fatigue</span>
+            <span class="stag" data-s="bloating">bloating</span>
+            <span class="stag" data-s="mood_swings">mood swings</span>
+            <span class="stag" data-s="nausea">nausea</span>
+            <span class="stag" data-s="backache">backache</span>
+            <span class="stag" data-s="breast_tenderness">breast tenderness</span>
+            <span class="stag" data-s="insomnia">insomnia</span>
+            <span class="stag" data-s="anxiety">anxiety</span>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Notes <span style="color:#444">(optional)</span></label>
+          <textarea id="entry-notes" placeholder="Anything else to capture…" rows="3"></textarea>
+        </div>
+
+        <button class="btn btn-primary" id="log-btn" onclick="submitLog()">Save Entry</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div id="panel-history" class="panel">
+    <div id="history-loading" style="text-align:center;padding:40px;color:#555;">
+      <div class="spinner"></div>
+    </div>
+    <div id="history-content"></div>
+  </div>
+
+  <!-- SETTINGS TAB -->
+  <div id="panel-settings" class="panel">
+    <div class="settings-card">
+      <h3>Cycle Settings</h3>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Average cycle length</div>
+          <div class="setting-hint">Days between period starts (typical: 21–35)</div>
+        </div>
+        <div class="setting-control">
+          <input type="number" id="s-cycle-len" min="21" max="45" value="28">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Average period length</div>
+          <div class="setting-hint">Days of actual bleeding (typical: 3–7)</div>
+        </div>
+        <div class="setting-control">
+          <input type="number" id="s-period-len" min="2" max="10" value="5">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Tracking enabled</div>
+          <div class="setting-hint">Disable to stop cycle phase overlays</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="s-tracking" checked>
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Perimenopause mode</div>
+          <div class="setting-hint">Adjusts expectations for irregular cycles</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="s-perimenopause">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div>
+          <div class="setting-label">Phase-change notifications</div>
+          <div class="setting-hint">Get a heads-up when your phase shifts</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="s-notify">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+
+      <div style="margin-top:20px;">
+        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+// ── Bootstrap ──────────────────────────────────────────────────────────────────
+const CTX  = window.LifeOSBootstrap.getLifeOSContext({ defaultUser: 'adam' });
+const KEY  = CTX.KEY;
+const USER = CTX.USER;
+const API  = '/api/v1/lifeos/cycle';
+
+if (!KEY) { document.body.innerHTML = '<div style="padding:40px;color:#e05555;">Command key required. Add ?commandKey=... to the URL.</div>'; }
+
+const hdrs = (json = true) => {
+  const h = json ? { 'Content-Type': 'application/json' } : {};
+  h['x-command-key'] = KEY;
+  return h;
+};
+
+// The cycle routes expect user_id (numeric DB id). Resolve it once.
+let USER_ID = null;
+
+async function resolveUserId() {
+  try {
+    const r = await fetch(`/api/v1/lifeos/users/${USER}`, { headers: hdrs(false) });
+    const d = await r.json();
+    if (d.ok && d.user?.id) USER_ID = d.user.id;
+  } catch { /* fallback — will fail at API */ }
+}
+
+// ── Phase colours ──────────────────────────────────────────────────────────────
+const PHASE_META = {
+  menstrual:    { color: '#f87171', glow: 'rgba(248,113,113,0.15)', emoji: '🌑', title: 'Menstrual Phase', desc: 'Rest and restore. Your body is doing its natural work. Delay non-urgent decisions. Listen inward.' },
+  follicular:   { color: '#34d399', glow: 'rgba(52,211,153,0.15)',  emoji: '🌱', title: 'Follicular Phase', desc: 'Energy is rising. A great window for new starts, learning, and social connection.' },
+  ovulation:    { color: '#22d3ee', glow: 'rgba(34,211,238,0.15)',  emoji: '☀️', title: 'Ovulation',         desc: 'Peak clarity and confidence. Your best window for hard conversations and important decisions.' },
+  luteal_early: { color: '#60a5fa', glow: 'rgba(96,165,250,0.15)',  emoji: '🍂', title: 'Luteal (Early)',    desc: 'Steady focus. Strong capacity for detail work and follow-through. Build on what ovulation started.' },
+  luteal_late:  { color: '#f59e0b', glow: 'rgba(245,158,11,0.15)',  emoji: '🌒', title: 'Luteal (Late)',     desc: 'Energy tapering. Protect your capacity. Avoid overcommitting. Be extra honest about what you can carry.' },
+  unknown:      { color: '#666',    glow: 'rgba(100,100,100,0.1)',   emoji: '❓', title: 'Phase Unknown',     desc: 'Your period may be later than expected. Log a new period start or update your cycle settings.' },
+};
+
+const ENERGY_CLASS = { low:'energy-low', rising:'energy-rising', peak:'energy-peak', steady:'energy-steady', dipping:'energy-dipping' };
+
+// ── Tab switching ──────────────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === `panel-${id}`));
+  if (id === 'history') loadHistory();
+  if (id === 'settings') loadSettings();
+}
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg, ok = true) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderColor = ok ? '#e879a0' : '#e05555';
+  el.style.color = ok ? '#e879a0' : '#e05555';
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── Load today's phase ────────────────────────────────────────────────────────
+async function loadPhase() {
+  await resolveUserId();
+  const uid = USER_ID;
+  document.getElementById('phase-loading').style.display = '';
+  document.getElementById('phase-content').style.display = 'none';
+  document.getElementById('phase-disabled').style.display = 'none';
+  document.getElementById('phase-no-data').style.display = 'none';
+
+  try {
+    const url = uid ? `${API}/phase?user_id=${uid}` : `${API}/phase?user_id=${USER}`;
+    const r = await fetch(url, { headers: hdrs(false) });
+    const d = await r.json();
+    document.getElementById('phase-loading').style.display = 'none';
+
+    if (!d.ok) { toast(d.error || 'Failed to load phase', false); return; }
+
+    if (d.tracking_enabled === false) {
+      document.getElementById('phase-disabled').style.display = '';
+      return;
+    }
+    if (!d.phase) {
+      document.getElementById('phase-no-data').style.display = '';
+      return;
+    }
+
+    renderPhase(d);
+    document.getElementById('phase-content').style.display = '';
+  } catch (err) {
+    document.getElementById('phase-loading').style.display = 'none';
+    document.getElementById('phase-no-data').style.display = '';
+  }
+}
+
+function renderPhase(d) {
+  const meta = PHASE_META[d.phase] || PHASE_META.unknown;
+
+  // Ring colour
+  const ring = document.getElementById('phase-ring');
+  ring.style.setProperty('--phase-color', meta.color);
+  ring.style.setProperty('--phase-glow', meta.glow);
+  ring.style.borderColor = meta.color;
+  ring.style.boxShadow = `0 0 40px ${meta.glow}`;
+
+  document.getElementById('phase-emoji').textContent = meta.emoji;
+  document.getElementById('phase-name').textContent  = d.phase.replace('_', ' ');
+  document.getElementById('phase-name').style.color  = meta.color;
+  document.getElementById('phase-day').textContent   = `day ${d.dayOfCycle}`;
+  document.getElementById('phase-title').textContent = meta.title;
+  document.getElementById('phase-description').textContent = d.energyProfile?.decision_guidance || meta.desc;
+
+  // Energy chips
+  const eClass = ENERGY_CLASS[d.energyProfile?.energy] || '';
+  document.getElementById('chip-energy').textContent  = `⚡ ${d.energyProfile?.energy || '—'}`;
+  document.getElementById('chip-energy').className    = `energy-chip ${eClass}`;
+  document.getElementById('chip-focus').textContent   = `🎯 ${(d.energyProfile?.focus || '—').replace(/_/g, ' ')}`;
+  document.getElementById('chip-focus').className     = `energy-chip ${eClass}`;
+
+  // Countdowns
+  document.getElementById('cnt-period').textContent  = d.daysUntilNextPeriod ?? '—';
+  document.getElementById('cnt-phase').textContent   = d.daysUntilNextPhase   ?? '—';
+  document.getElementById('cnt-day').textContent     = d.dayOfCycle           ?? '—';
+}
+
+// ── Quick log ─────────────────────────────────────────────────────────────────
+async function quickLog(entryType) {
+  const uid = USER_ID || USER;
+  try {
+    const r = await fetch(`${API}/entry`, {
+      method: 'POST',
+      headers: hdrs(),
+      body: JSON.stringify({ user_id: uid, entry_type: entryType }),
+    });
+    const d = await r.json();
+    if (d.ok) {
+      toast(`${entryType.replace(/_/g, ' ')} logged`);
+      loadPhase();
+    } else {
+      toast(d.error || 'Failed to log', false);
+    }
+  } catch { toast('Network error', false); }
+}
+
+// ── Log form ──────────────────────────────────────────────────────────────────
+let selectedFlow = null;
+const selectedSymptoms = new Set();
+
+function updateFormForType() {
+  const type = document.getElementById('entry-type').value;
+  const showFlow = ['period_start', 'period_end'].includes(type);
+  document.getElementById('flow-section').style.display = showFlow ? '' : 'none';
+}
+
+function selectFlow(level) {
+  selectedFlow = level;
+  document.querySelectorAll('.flow-btn').forEach(b => b.classList.toggle('selected', b.dataset.flow === level));
+}
+
+document.querySelectorAll('.stag').forEach(tag => {
+  tag.addEventListener('click', () => {
+    const s = tag.dataset.s;
+    if (selectedSymptoms.has(s)) { selectedSymptoms.delete(s); tag.classList.remove('selected'); }
+    else { selectedSymptoms.add(s); tag.classList.add('selected'); }
+  });
+});
+
+// Pre-fill datetime to now
+(function () {
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('entry-date').value = now.toISOString().slice(0, 16);
+})();
+
+async function submitLog() {
+  const uid  = USER_ID || USER;
+  const type = document.getElementById('entry-type').value;
+  const date = document.getElementById('entry-date').value;
+  const notes = document.getElementById('entry-notes').value.trim() || null;
+
+  const payload = {
+    user_id: uid,
+    entry_type: type,
+    logged_at: date ? new Date(date).toISOString() : undefined,
+    notes,
+    flow_level: selectedFlow || null,
+    symptoms: selectedSymptoms.size ? Array.from(selectedSymptoms) : null,
+  };
+
+  const btn = document.getElementById('log-btn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+  try {
+    const r = await fetch(`${API}/entry`, { method: 'POST', headers: hdrs(), body: JSON.stringify(payload) });
+    const d = await r.json();
+    if (d.ok) {
+      toast('Entry saved');
+      // Reset form
+      document.getElementById('entry-notes').value = '';
+      selectedFlow = null;
+      selectedSymptoms.clear();
+      document.querySelectorAll('.flow-btn, .stag').forEach(el => el.classList.remove('selected'));
+      // Refresh today tab
+      if (document.getElementById('panel-today').classList.contains('active')) loadPhase();
+    } else {
+      toast(d.error || 'Failed to save', false);
+    }
+  } catch { toast('Network error', false); }
+  btn.disabled = false;
+  btn.textContent = 'Save Entry';
+}
+
+// ── History ───────────────────────────────────────────────────────────────────
+async function loadHistory() {
+  const uid = USER_ID || USER;
+  document.getElementById('history-loading').style.display = '';
+  document.getElementById('history-content').innerHTML = '';
+  try {
+    const r = await fetch(`${API}/history?user_id=${uid}&limit=8`, { headers: hdrs(false) });
+    const d = await r.json();
+    document.getElementById('history-loading').style.display = 'none';
+    if (!d.ok) { document.getElementById('history-content').innerHTML = `<div class="empty">${d.error || 'No history'}</div>`; return; }
+
+    const { cycles, recent_entries, computed_avg_length } = d;
+
+    if (!cycles.length) {
+      document.getElementById('history-content').innerHTML = '<div class="empty">No cycles logged yet. Log a period start to begin tracking.</div>';
+      return;
+    }
+
+    let html = '';
+    if (computed_avg_length) {
+      html += `<div class="avg-bar">Computed average cycle length: <strong>${computed_avg_length} days</strong></div>`;
+    }
+
+    // Group recent_entries by approximate cycle
+    const entryByCycle = {};
+    (recent_entries || []).forEach(e => {
+      const eDate = new Date(e.logged_at);
+      // Find which cycle this entry belongs to
+      let bestCycle = null;
+      cycles.forEach(c => {
+        const cStart = new Date(c.cycle_start_date);
+        const cEnd   = c.cycle_length ? new Date(cStart.getTime() + c.cycle_length * 86400000) : new Date(Date.now() + 86400000 * 45);
+        if (eDate >= cStart && eDate <= cEnd) bestCycle = c.cycle_start_date;
+      });
+      if (bestCycle) {
+        if (!entryByCycle[bestCycle]) entryByCycle[bestCycle] = [];
+        entryByCycle[bestCycle].push(e);
+      }
+    });
+
+    html += cycles.map(c => {
+      const entries = entryByCycle[c.cycle_start_date] || [];
+      const entryPills = entries.map(e =>
+        `<span class="entry-pill ${e.entry_type}">${e.entry_type.replace(/_/g,' ')}</span>`
+      ).join('');
+      const lenStr = c.cycle_length ? `${c.cycle_length} days` : 'in progress';
+      const startFmt = new Date(c.cycle_start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      return `
+        <div class="history-item">
+          <div class="hi-header">
+            <span class="cycle-start">Cycle starting ${startFmt}</span>
+            <span class="cycle-len">${lenStr}</span>
+          </div>
+          ${entryPills ? `<div class="entry-list">${entryPills}</div>` : '<div style="font-size:12px;color:#444">No entries for this cycle</div>'}
+        </div>`;
+    }).join('');
+
+    document.getElementById('history-content').innerHTML = html;
+  } catch {
+    document.getElementById('history-loading').style.display = 'none';
+    document.getElementById('history-content').innerHTML = '<div class="empty">Failed to load history.</div>';
+  }
+}
+
+// ── Settings ──────────────────────────────────────────────────────────────────
+async function loadSettings() {
+  const uid = USER_ID || USER;
+  try {
+    const r = await fetch(`${API}/settings?user_id=${uid}`, { headers: hdrs(false) });
+    const d = await r.json();
+    if (!d.ok) return;
+    const s = d.settings;
+    document.getElementById('s-cycle-len').value     = s.avg_cycle_length  || 28;
+    document.getElementById('s-period-len').value    = s.avg_period_length || 5;
+    document.getElementById('s-tracking').checked    = !!s.tracking_enabled;
+    document.getElementById('s-perimenopause').checked = !!s.perimenopause_mode;
+    document.getElementById('s-notify').checked       = !!s.notify_phase_change;
+  } catch { /* silent */ }
+}
+
+async function saveSettings() {
+  const uid = USER_ID || USER;
+  const payload = {
+    user_id: uid,
+    avg_cycle_length:   parseInt(document.getElementById('s-cycle-len').value, 10) || 28,
+    avg_period_length:  parseInt(document.getElementById('s-period-len').value, 10) || 5,
+    tracking_enabled:   document.getElementById('s-tracking').checked,
+    perimenopause_mode: document.getElementById('s-perimenopause').checked,
+    notify_phase_change: document.getElementById('s-notify').checked,
+  };
+  try {
+    const r = await fetch(`${API}/settings`, { method: 'PUT', headers: hdrs(), body: JSON.stringify(payload) });
+    const d = await r.json();
+    if (d.ok) { toast('Settings saved'); loadPhase(); }
+    else toast(d.error || 'Failed to save', false);
+  } catch { toast('Network error', false); }
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+updateFormForType(); // hide flow by default
+loadPhase();
+</script>
+</body>
+</html>

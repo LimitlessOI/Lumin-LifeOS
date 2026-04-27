@@ -1,0 +1,46 @@
+{
+  "project_id": "idea_vault",
+  "name": "Idea Vault — Captured Conversation Backlog (Amendment 38)",
+  "amendment_path": "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+  "lifecycle": "live",
+  "status": "active",
+  "priority": "medium",
+  "owner": "adam",
+  "phase": "documentation-ssot",
+  "next_task": "On each new export: operator-corpus:pipeline + heading-pass (rg) + append Stream or extend Stream I; optional run-memory-import + import-dumps-to-twin for Digital Twin; promote mature ideas to INDEX or owning amendment.",
+  "stability_class": "low-risk",
+  "current_focus": "Single registry: Seed catalog (§A–D), CONVERSATION_DUMP §6–§7 machine keyword index (expanded catalog-dump-keywords defaults), dual lane (vault + twin), streams A–I, Amendment 39, INDEX — refresh §7 counts after each export drop.",
+  "build_ready": false,
+  "revenue_immediate": false,
+  "owned_files": [
+    "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+    "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json",
+    "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
+    "docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md",
+    "scripts/catalog-dump-keywords.mjs",
+    "scripts/operator-corpus-pipeline.mjs"
+  ],
+  "protected_files": [
+    "docs/SSOT_NORTH_STAR.md",
+    "docs/projects/INDEX.md"
+  ],
+  "required_files": [
+    "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
+    "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json"
+  ],
+  "required_routes": [],
+  "required_tables": [],
+  "required_env": [],
+  "assertions": [
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.md" },
+    { "type": "file_exists", "path": "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json" }
+  ],
+  "completion_checks": [
+    "Canonical dump path documented (bullet+TAB Lumin-Memory)",
+    "projects/INDEX.md lists Amendment 38 and Amendment 39",
+    "CONVERSATION_DUMP_IDEAS_INDEX.md points at Amendment 38, 39, and MEMORY_FRAMEWORK_DESIGN_BRIEF"
+  ],
+  "anti_drift_notes": "Implementation specs stay in domain amendments; this vault is index + routing + honesty about audit depth.",
+  "last_verified_at": null,
+  "verification_passed": null
+}

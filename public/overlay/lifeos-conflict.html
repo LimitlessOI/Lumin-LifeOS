@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Conflict Intelligence — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 760px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #555; margin-bottom: 28px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 4px; margin-bottom: 24px; background: #0d0d1a; border-radius: 10px; padding: 4px; }
+    .tab-btn { flex: 1; padding: 8px 12px; border: none; background: transparent; color: #555; font-size: 13px; border-radius: 8px; cursor: pointer; transition: all .15s; }
+    .tab-btn.active { background: #191930; color: #e8e8f0; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Cards */
+    .card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .card-header .title { font-size: 14px; color: #d8d8e8; font-weight: 500; }
+    .card-header .meta  { font-size: 11px; color: #555; }
+    .card-body { padding: 16px 18px; font-size: 13px; color: #888; line-height: 1.6; }
+
+    /* Buttons */
+    .btn { padding: 7px 16px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #666; font-size: 13px; cursor: pointer; transition: all .15s; }
+    .btn:hover { background: #1a1a2a; color: #aaa; }
+    .btn.primary { border-color: #e05555; color: #f87171; background: rgba(224,85,85,.08); }
+    .btn.primary:hover { background: rgba(224,85,85,.15); }
+    .btn.secondary { border-color: #5b6af5; color: #a0aaff; }
+    .btn.secondary:hover { background: #1e2060; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Check panel */
+    .check-area { display: flex; flex-direction: column; gap: 14px; }
+    .check-area textarea {
+      width: 100%; min-height: 120px; background: #0d0d1a; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e8e8f0; padding: 12px; font-size: 13px; outline: none;
+      resize: vertical; font-family: inherit; line-height: 1.6;
+    }
+    .check-area textarea:focus { border-color: #e05555; }
+    .check-area .row { display: flex; gap: 10px; align-items: center; }
+
+    /* Result panel */
+    .result-panel { display: none; background: #0d0d1a; border: 1px solid #1e1e2e; border-radius: 10px; padding: 18px; margin-top: 4px; }
+    .result-panel.show { display: block; }
+    .result-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .result-sev { font-size: 22px; }
+    .result-label { font-size: 15px; font-weight: 600; }
+    .result-label.safe    { color: #34d399; }
+    .result-label.warning { color: #f59e0b; }
+    .result-label.danger  { color: #f87171; }
+    .result-label.flood   { color: #818cf8; }
+
+    .result-detail { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; font-size: 13px; margin-bottom: 14px; }
+    .result-key { color: #555; }
+    .result-val { color: #d8d8e8; }
+
+    .suggestion-box { background: #111125; border: 1px solid #2a2a50; border-radius: 8px; padding: 12px 14px; }
+    .suggestion-box .s-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #5b6af5; margin-bottom: 6px; }
+    .suggestion-box .s-text  { font-size: 13px; color: #b0b0d0; line-height: 1.6; }
+
+    /* Horseman badge */
+    .horseman-badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .horseman-badge.contempt     { background: #2a0a1a; color: #f87171; }
+    .horseman-badge.criticism    { background: #1a1a0a; color: #f59e0b; }
+    .horseman-badge.defensiveness{ background: #0a1a2a; color: #60a5fa; }
+    .horseman-badge.stonewalling { background: #1a1a30; color: #a78bfa; }
+    .horseman-badge.none         { background: #0a1a0a; color: #34d399; }
+
+    /* Settings */
+    .settings-block { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 22px; margin-bottom: 16px; }
+    .settings-block h2 { font-size: 14px; color: #d8d8e8; font-weight: 600; margin-bottom: 18px; }
+    .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #191920; }
+    .setting-row:last-child { border-bottom: none; }
+    .setting-info { flex: 1; }
+    .setting-info .s-title { font-size: 13px; color: #d8d8e8; margin-bottom: 3px; }
+    .setting-info .s-desc  { font-size: 11px; color: #555; }
+    .toggle { position: relative; width: 42px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute; inset: 0; background: #1e1e2e;
+      border-radius: 12px; cursor: pointer; transition: background .2s;
+    }
+    .toggle input:checked + .toggle-track { background: #e05555; }
+    .toggle-track:before {
+      content: ''; position: absolute; width: 18px; height: 18px;
+      border-radius: 50%; background: #888; left: 3px; top: 3px; transition: .2s;
+    }
+    .toggle input:checked + .toggle-track:before { background: #fff; transform: translateX(18px); }
+
+    .sensitivity-row { display: flex; gap: 8px; }
+    .sens-btn { padding: 5px 14px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #555; font-size: 12px; cursor: pointer; transition: all .15s; }
+    .sens-btn.active { border-color: #e05555; color: #f87171; background: rgba(224,85,85,.08); }
+
+    /* Sessions list */
+    .session-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 18px; border-bottom: 1px solid #191920; }
+    .session-item:last-child { border-bottom: none; }
+    .s-topic { font-size: 13px; color: #d8d8e8; margin-bottom: 4px; }
+    .s-type  { font-size: 11px; color: #555; }
+    .s-meta  { font-size: 11px; color: #444; text-align: right; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+    .badge.active   { background: #0a2018; color: #34d399; }
+    .badge.complete { background: #0a1a30; color: #60a5fa; }
+    .badge.paused   { background: #1a1a20; color: #888; }
+
+    /* Quick links */
+    .quick-links { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .quick-link { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 16px; cursor: pointer; transition: all .15s; text-align: left; }
+    .quick-link:hover { border-color: #2a2a4a; background: #131320; }
+    .ql-icon { font-size: 20px; margin-bottom: 8px; }
+    .ql-title { font-size: 13px; color: #d8d8e8; font-weight: 500; margin-bottom: 3px; }
+    .ql-desc  { font-size: 11px; color: #555; }
+
+    @media (max-width: 600px) { .quick-links { grid-template-columns: 1fr; } }
+
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.2); border-top-color: #f87171; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty { text-align: center; padding: 40px 20px; color: #444; font-size: 13px; }
+    .save-row { display: flex; justify-content: flex-end; margin-top: 18px; }
+  </style>
+</head>
+<body>
+<div class="root">
+  <h1>Conflict Intelligence</h1>
+  <p class="sub">Detect escalation before it lands. Understand patterns. Prepare for hard conversations.</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('check')">Check Message</button>
+    <button class="tab-btn" onclick="switchTab('sessions')">Sessions</button>
+    <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
+  </div>
+
+  <!-- ── Tab: Escalation Check ─────────────────────────────────────────── -->
+  <div id="tab-check" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="title">Message Escalation Check</span>
+        <span class="meta">No AI unless ambiguous — rule-based first</span>
+      </div>
+      <div class="card-body">
+        <div class="check-area">
+          <textarea id="check-text" placeholder="Paste or type a message you're about to send, or something that was said to you..."></textarea>
+          <div class="row">
+            <button class="btn primary" id="check-btn" onclick="runCheck()">Analyze message</button>
+            <button class="btn" onclick="clearCheck()">Clear</button>
+          </div>
+        </div>
+        <div id="result-panel" class="result-panel">
+          <div class="result-header">
+            <span class="result-sev" id="r-icon">—</span>
+            <span class="result-label" id="r-label">—</span>
+            <span id="r-horseman-badge" style="margin-left:auto"></span>
+          </div>
+          <div class="result-detail">
+            <span class="result-key">Confidence</span>
+            <span class="result-val" id="r-confidence">—</span>
+            <span class="result-key">Pattern</span>
+            <span class="result-val" id="r-horseman-text">—</span>
+            <span class="result-key" id="r-flood-key" style="display:none">Flooding</span>
+            <span class="result-val" id="r-flood-val" style="display:none">—</span>
+          </div>
+          <div class="suggestion-box">
+            <div class="s-label">Lumin suggests</div>
+            <div class="s-text" id="r-suggestion">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-links">
+      <button class="quick-link" onclick="goTo('lifeos-coach.html','Coach')">
+        <div class="ql-icon">💬</div>
+        <div class="ql-title">Communication Coach</div>
+        <div class="ql-desc">Work through a conflict in a private guided session</div>
+      </button>
+      <button class="quick-link" onclick="goTo('lifeos-mediation.html','Mediation')">
+        <div class="ql-icon">⚖️</div>
+        <div class="ql-title">Joint Mediation</div>
+        <div class="ql-desc">Both parties, one shared session with AI as neutral guide</div>
+      </button>
+      <button class="quick-link" onclick="startPrep()">
+        <div class="ql-icon">🗺️</div>
+        <div class="ql-title">Pre-Conversation Prep</div>
+        <div class="ql-desc">Clarify your core need, opening line, and what not to say</div>
+      </button>
+      <button class="quick-link" onclick="switchTab('sessions'); loadSessions()">
+        <div class="ql-icon">📋</div>
+        <div class="ql-title">Past Sessions</div>
+        <div class="ql-desc">Review resolved conflicts and what actually helped</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Tab: Sessions ─────────────────────────────────────────────────── -->
+  <div id="tab-sessions" class="tab-panel">
+    <div id="sessions-loading" class="empty">Loading sessions…</div>
+    <div id="sessions-empty"   class="empty" style="display:none">No coaching sessions yet. Start one below.</div>
+    <div id="sessions-list"    style="display:none">
+      <div class="card" id="sessions-cards"></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-header">
+        <span class="title">Start New Session</span>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div>
+            <label style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#555;display:block;margin-bottom:6px">Session Type</label>
+            <select id="new-type" style="width:100%;background:#0d0d1a;border:1px solid #2a2a3a;border-radius:8px;color:#e8e8f0;padding:9px 12px;font-size:13px;outline:none">
+              <option value="individual_clarity">Individual Clarity — just me</option>
+              <option value="debrief">Post-Conflict Debrief</option>
+              <option value="pattern_analysis">Communication Pattern Analysis</option>
+            </select>
+          </div>
+          <button class="btn secondary" onclick="startSession()">Start session</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Tab: Settings ─────────────────────────────────────────────────── -->
+  <div id="tab-settings" class="tab-panel">
+    <div class="settings-block">
+      <h2>Conflict Interrupt</h2>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="s-title">Enable conflict interrupt</div>
+          <div class="s-desc">Lumin checks messages for escalation signals in Lumin chat + journal entries. Opt-in, per-user.</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-enabled" onchange="settingChanged()">
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="s-title">Sensitivity</div>
+          <div class="s-desc">How easily Lumin flags a message. High = more sensitive (more flags). Low = only strong signals.</div>
+        </div>
+        <div class="sensitivity-row">
+          <button class="sens-btn" id="sens-low"    onclick="setSensitivity('low')">Low</button>
+          <button class="sens-btn active" id="sens-medium" onclick="setSensitivity('medium')">Medium</button>
+          <button class="sens-btn" id="sens-high"   onclick="setSensitivity('high')">High</button>
+        </div>
+      </div>
+    </div>
+    <div class="save-row">
+      <button class="btn secondary" id="save-btn" onclick="saveSettings()">Save settings</button>
+    </div>
+    <div id="save-status" style="text-align:right;font-size:12px;color:#555;margin-top:8px"></div>
+
+    <div class="settings-block" style="margin-top:8px">
+      <h2>How It Works</h2>
+      <div style="font-size:13px;color:#666;line-height:1.7">
+        <p style="margin-bottom:10px">When enabled, Lumin checks messages you write in the LifeOS chat for Gottman's Four Horsemen: <strong style="color:#d8d8e8">contempt, criticism, defensiveness, and stonewalling</strong>. Detection is rule-based first (no AI cost). AI is only called on ambiguous cases.</p>
+        <p style="margin-bottom:10px">When escalation is detected, Lumin offers a concrete rewrite suggestion — it never forces you to change what you wrote. Cancel window is always one action away.</p>
+        <p style="color:#444">Joint session monitoring requires separate consent from both parties under <strong style="color:#555">Settings → Conflict consent</strong>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CTX = window.LifeOSBootstrap.getLifeOSContext();
+  const KEY  = CTX.KEY;
+  const USER = CTX.USER || 'adam';
+  const H    = () => CTX.headers();
+
+  let currentSensitivity = 'medium';
+  let settingsDirty = false;
+
+  // ── Tabs ──────────────────────────────────────────────────────────────────
+  function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      const ids = ['check','sessions','settings'];
+      b.classList.toggle('active', ids[i] === id);
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.classList.toggle('active', p.id === `tab-${id}`);
+    });
+    if (id === 'sessions') loadSessions();
+    if (id === 'settings') loadSettings();
+  }
+
+  // ── Escalation check ──────────────────────────────────────────────────────
+  async function runCheck() {
+    const text = document.getElementById('check-text').value.trim();
+    if (!text) return;
+
+    const btn = document.getElementById('check-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Checking…';
+
+    try {
+      const r = await fetch('/api/v1/lifeos/conflict/interrupt/check', {
+        method: 'POST',
+        headers: { ...H(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: USER, text }),
+      });
+      const d = await r.json();
+
+      if (d.ok) {
+        if (d.disabled) {
+          showResult({ triggered: false, confidence: 1, suggestion: 'Conflict interrupt is disabled. Enable it in Settings.', horseman: null, flooding: false });
+        } else {
+          showResult(d);
+        }
+      } else {
+        alert('Check failed: ' + d.error);
+      }
+    } catch (e) {
+      alert('Could not reach LifeOS. Check your connection.');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Analyze message';
+  }
+
+  function showResult({ triggered, confidence, suggestion, horseman, flooding }) {
+    const panel = document.getElementById('result-panel');
+    panel.classList.add('show');
+
+    const icon  = document.getElementById('r-icon');
+    const label = document.getElementById('r-label');
+
+    if (flooding) {
+      icon.textContent = '🌊';
+      label.textContent = 'Flooding detected';
+      label.className = 'result-label flood';
+    } else if (triggered) {
+      icon.textContent = '⚠️';
+      label.textContent = 'Escalation detected';
+      label.className = 'result-label danger';
+    } else {
+      icon.textContent = '✓';
+      label.textContent = 'Looks okay';
+      label.className = 'result-label safe';
+    }
+
+    document.getElementById('r-confidence').textContent = confidence != null
+      ? Math.round(confidence * 100) + '%'
+      : '—';
+
+    const horseName = horseman
+      ? horseman.charAt(0).toUpperCase() + horseman.slice(1)
+      : 'None detected';
+    document.getElementById('r-horseman-text').textContent = horseName;
+
+    const badgeEl = document.getElementById('r-horseman-badge');
+    if (horseman) {
+      badgeEl.innerHTML = `<span class="horseman-badge ${horseman}">${horseName}</span>`;
+    } else {
+      badgeEl.innerHTML = '';
+    }
+
+    if (flooding) {
+      document.getElementById('r-flood-key').style.display = '';
+      document.getElementById('r-flood-val').style.display = '';
+      document.getElementById('r-flood-val').textContent = 'Yes — emotional flooding detected. Pause before sending.';
+    } else {
+      document.getElementById('r-flood-key').style.display = 'none';
+      document.getElementById('r-flood-val').style.display = 'none';
+    }
+
+    document.getElementById('r-suggestion').textContent = suggestion || 'No issues detected.';
+  }
+
+  function clearCheck() {
+    document.getElementById('check-text').value = '';
+    document.getElementById('result-panel').classList.remove('show');
+  }
+
+  // ── Sessions ──────────────────────────────────────────────────────────────
+  async function loadSessions() {
+    document.getElementById('sessions-loading').style.display = '';
+    document.getElementById('sessions-empty').style.display   = 'none';
+    document.getElementById('sessions-list').style.display    = 'none';
+
+    try {
+      const r = await fetch(`/api/v1/lifeos/conflict/coaching?user=${USER}`, { headers: H() });
+      const d = await r.json();
+      document.getElementById('sessions-loading').style.display = 'none';
+
+      if (!d.ok || !d.sessions?.length) {
+        document.getElementById('sessions-empty').style.display = '';
+        return;
+      }
+
+      renderSessions(d.sessions);
+    } catch {
+      document.getElementById('sessions-loading').textContent = 'Could not load sessions.';
+    }
+  }
+
+  function renderSessions(sessions) {
+    const list = document.getElementById('sessions-list');
+    const cards = document.getElementById('sessions-cards');
+    list.style.display = '';
+
+    cards.innerHTML = sessions.map(s => `
+      <div class="session-item">
+        <div>
+          <div class="s-topic">${escHtml(s.topic || s.session_type.replace(/_/g,' '))}</div>
+          <div class="s-type">${escHtml(s.session_type.replace(/_/g,' '))}</div>
+        </div>
+        <div class="s-meta">
+          <div style="margin-bottom:4px"><span class="badge ${s.status}">${s.status}</span></div>
+          <div>${fmtDate(s.created_at)}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function startSession() {
+    const type = document.getElementById('new-type').value;
+    const btn  = document.querySelector('#tab-sessions .btn.secondary');
+    btn.disabled = true;
+    btn.textContent = 'Starting…';
+
+    try {
+      let url, body;
+      if (type === 'individual_clarity') {
+        url  = '/api/v1/lifeos/conflict/coaching/clarity';
+        body = { user: USER, situation_description: '', self_report: '' };
+      } else {
+        url  = '/api/v1/lifeos/conflict/coaching';
+        body = { user: USER, session_type: type };
+      }
+
+      const r = await fetch(url, {
+        method: 'POST',
+        headers: { ...H(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        await loadSessions();
+      } else {
+        alert('Could not start session: ' + d.error);
+      }
+    } catch {
+      alert('Could not reach LifeOS.');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Start session';
+  }
+
+  async function startPrep() {
+    const situation = prompt('Briefly describe the situation you need to prepare for:');
+    if (!situation?.trim()) return;
+
+    try {
+      const r = await fetch('/api/v1/lifeos/conflict/coaching/clarity', {
+        method: 'POST',
+        headers: { ...H(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: USER, situation_description: situation }),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        alert('Clarity session started. Go to Sessions tab to continue.');
+        switchTab('sessions');
+      } else {
+        alert('Could not start prep: ' + d.error);
+      }
+    } catch {
+      alert('Could not reach LifeOS.');
+    }
+  }
+
+  // ── Settings ──────────────────────────────────────────────────────────────
+  async function loadSettings() {
+    try {
+      const r = await fetch(`/api/v1/lifeos/conflict/interrupt/settings?user=${USER}`, { headers: H() });
+      const d = await r.json();
+      if (d.ok) applySettings(d.settings);
+    } catch { /* silent */ }
+  }
+
+  function applySettings({ enabled, sensitivity }) {
+    document.getElementById('toggle-enabled').checked = !!enabled;
+    currentSensitivity = sensitivity || 'medium';
+    ['low','medium','high'].forEach(s => {
+      document.getElementById(`sens-${s}`).classList.toggle('active', s === currentSensitivity);
+    });
+    settingsDirty = false;
+    document.getElementById('save-status').textContent = '';
+  }
+
+  function settingChanged() { settingsDirty = true; }
+
+  function setSensitivity(s) {
+    currentSensitivity = s;
+    ['low','medium','high'].forEach(x => {
+      document.getElementById(`sens-${x}`).classList.toggle('active', x === s);
+    });
+    settingsDirty = true;
+  }
+
+  async function saveSettings() {
+    const btn = document.getElementById('save-btn');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+
+    try {
+      const r = await fetch('/api/v1/lifeos/conflict/interrupt/settings', {
+        method: 'PUT',
+        headers: { ...H(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user:        USER,
+          enabled:     document.getElementById('toggle-enabled').checked,
+          sensitivity: currentSensitivity,
+        }),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        applySettings(d.settings);
+        document.getElementById('save-status').textContent = 'Saved.';
+      } else {
+        alert('Save failed: ' + d.error);
+      }
+    } catch {
+      alert('Could not reach LifeOS.');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Save settings';
+  }
+
+  // ── Nav ───────────────────────────────────────────────────────────────────
+  function goTo(page, label) {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'NAVIGATE', page, label }, '*');
+    } else {
+      window.location.href = '/overlay/' + page;
+    }
+  }
+
+  // ── Utils ─────────────────────────────────────────────────────────────────
+  function escHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  loadSettings(); // preload settings in background
+</script>
+</body>
+</html>

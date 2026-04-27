@@ -1,7 +1,7 @@
 # AMENDMENT 18 — ClientCare Billing Recovery
 **Status:** BUILDING
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-07 (fixed the actual `phase is not defined` production error: `clickFirstMatchingButton()` returned `phase` from inside `page.evaluate()` without passing it into the browser context; the real ClientCare VOB path now passes `phaseLabel` explicitly so click bookkeeping stops throwing mid-run; asset URL bumped again to `20260407l`; subscriber matching now only auto-selects on deterministic exact matches (single exact backlog hit or single exact ClientCare directory hit) instead of softer fuzzy hits, so the real ClientCare flow stops guessing under pressure; previous ClientCare VOB fixes remain in place)
+**Last Updated:** 2026-04-21 — SSOT alignment: **Railway vault / overlay command key** is authoritative when Adam has confirmed variables in Railway; **automated remote HTTP probes** only see `process.env` (and optional `.env`) on the machine running `verify-project.mjs` — a **401 from the verifier is local key drift vs the deployed secret or wrong public host**, not evidence that Railway lacks secrets. Verifier fix: `required_routes` now carry HTTP **method** (POST was previously probed as GET). Prior: 2026-04-23 billing overlay UX + smoke skips without key.
 
 ---
 
@@ -36,6 +36,7 @@ This now expands into two linked lanes:
   - Support phone: `503-610-2745`
   - Support email: `support@clientcare.net`
 - Until proven otherwise, this amendment assumes **browser/export fallback is the real execution path**.
+- **Front door / coworker model:** ClientCare chart and billing work in production are expected to go through the **live web app** using **Railway-configured** `CLIENTCARE_*` credentials (Puppeteer). LifeOS does not rely on a ClientCare API for those surfaces; it behaves as an **operator coworker** (automation + drafts + queue), with humans completing or approving steps inside ClientCare when needed.
 
 ### Source Notes
 - ClientCare home: <https://clientcare.net/>
@@ -92,12 +93,13 @@ Every claim lands in one of these buckets:
 |------|---------|
 | `services/clientcare-billing-service.js` | Claim classification, rescue planning, dashboard summaries |
 | `services/clientcare-browser-service.js` | No-API browser-readiness contract, login automation, and page discovery |
-| `services/clientcare-ops-service.js` | Operations checklist, assistant execution layer, insurance-intake preview, patient AR summary |
+| `services/clientcare-ops-service.js` | Operations checklist, `ask()` (deterministic billing intents + AI Council fallback with optional `billingContext`), insurance-intake preview, patient AR summary, `ingestVobCallTranscript` (transcript → council JSON with `insurance_verification_completed` / `coverage_details` / `incomplete_verifications` / `norton_style_markdown`; `buildNortonStyleVobMarkdown` fallback; `preview_result.vob_completed_at`; optional DB clear of raw `extracted_text`; optional `browserService.addBillingNote` when `applyToClientcare` + `clientHref`) |
 | `services/clientcare-sync-service.js` | Snapshot parsing, fallback import, and reconciliation logic |
 | `services/clientcare-sellable-service.js` | Tenant boundaries, onboarding, operator access, and audit helpers |
 | `routes/clientcare-billing-routes.js` | Operational API for imports, classification, rescue queue, browser readiness |
-| `public/clientcare-billing/overlay.html` | Operator overlay page for claims rescue |
-| `public/clientcare-billing/clientcare-billing.js` | Overlay UI logic for import, queue review, claim planning, and voice-enabled assistant |
+| `public/clientcare-billing/overlay.html` | Operator overlay: ClientCare **assistant** UI; **`#lifeos-companion-host`** + companion CSS; section labels + primary/secondary panel styles; script `?v=20260423a` |
+| `public/clientcare-billing/clientcare-billing.js` | Overlay UI: **Sherry &** `getBillingInvokeLabel()` (default **Tiller**) ClientCare billing chat + voice; assistant supports **auto-execute on voice stop** (`clientcare_assistant_voice_auto_execute`) and direct command execution (`add this ...`, `what's the status of ... billing`) via existing APIs; `isBillingInvokeReserved()` blocks Lumin/Lumen/LifeOS/Sherry/Siri/Alexa/Google/Cortana/Echo/Computer; `getBillingChatQuickPrompts()`; companion strip rename; VOB Talk+Auto-Apply mode and transcript field apply |
+| `public/shared/lifeos-voice-chat.js` | Optional **`wakePrefixes`** on `attach()` — stripped from textarea when a listen session **ends** |
 | `public/shared/lifeos-voice-chat.js` | Shared browser voice input/output controls used by the operator assistant and other chat surfaces |
 | `db/migrations/20260326_clientcare_billing.sql` | Claims + action tables |
 | `db/migrations/20260326_clientcare_ops.sql` | Capability queue for requested billing/system improvements |
@@ -105,6 +107,16 @@ Every claim lands in one of these buckets:
 | `db/migrations/20260327_clientcare_sellable_controls.sql` | Tenant, onboarding, operator-access, and audit tables |
 | `db/migrations/20260327_clientcare_payer_rule_overrides.sql` | Operator-defined commercial payer rule overrides |
 | `db/migrations/20260327_clientcare_sellable_v1_hardening.sql` | Additional payer override depth for sellable-v1 hardening |
+| `scripts/verify-project.mjs` | SSOT manifest verifier: DB + optional HTTP route probes; **`--remote-base-url https://…`** probes the live deploy from a laptop; **`--strict-manifest-env`** requires manifest `required_env` (including `CLIENTCARE_*`) in local process env |
+
+### Machine verification (manifest + live HTTP)
+
+- **Manifest:** `docs/projects/AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json` (consumed by `scripts/verify-project.mjs`).
+- **Local / CI (DB + files + syntax):** `node scripts/verify-project.mjs --project clientcare_billing_recovery [--dry-run]`
+- **Live HTTP route probes from a developer machine:** `node scripts/verify-project.mjs --project clientcare_billing_recovery --remote-base-url "https://YOUR-RAILWAY-HOST" [--dry-run]`  
+  Same effect if the shell exports `PUBLIC_BASE_URL`, `REMOTE_VERIFY_BASE_URL`, or (on Railway) `RAILWAY_PUBLIC_DOMAIN` — precedence: CLI `--remote-base-url` → `REMOTE_VERIFY_BASE_URL` → `PUBLIC_BASE_URL` → `RAILWAY_PUBLIC_DOMAIN`.
+- **Secrets truth:** The verifier reads **only `process.env`** (optional repo `.env`). It does **not** read the Railway Variables UI. `CLIENTCARE_*` entries in `required_env` are **skipped** when absent locally unless you pass **`--strict-manifest-env`** (then missing keys fail the run). Canonical variable list: `docs/ENV_REGISTRY.md` (ClientCare + public URL sections).
+- **Production auth vs this laptop:** Remote HTTP probes send **`x-command-key`** using `COMMAND_CENTER_KEY` (else `API_KEY`, else `LIFEOS_KEY`). If the response is **401** and **`LIFEOS_KEY`** is set to a **different** string than the first key, the verifier **retries once** with `LIFEOS_KEY` (covers common `.env` drift where CC key and LifeOS key diverged). **KNOW (agent-run 2026-04-21):** `GET https://robust-magic-production.up.railway.app/api/v1/clientcare-billing/dashboard` returned **401** when using only the keys present in **this** workspace’s `.env` — so **this automated session did not** obtain 200s against production. **THINK:** the value in local `.env` does not match the deploying service’s configured secret, or the public host is not the billing service Adam uses. **KNOW:** that outcome does **not** contradict evidence that **Railway Variables** holds `COMMAND_CENTER_KEY` / `LIFEOS_KEY` and the overlay’s **Save access** stores the same class of secret for the browser — those are separate evidence channels. For a **green** remote manifest run from a developer machine, export a key that **byte-matches** Railway (see `scripts/tc-r4r-from-railway.mjs` / Railway CLI variables pull). Do not describe the lane as “impossible to test without Adam’s environment” when the precise failure mode is **key mismatch or missing key in the verifier shell**.
 
 ### Endpoints
 - `GET /api/v1/clientcare-billing/dashboard`
@@ -123,11 +135,15 @@ Every claim lands in one of these buckets:
 - `POST /api/v1/clientcare-billing/tenants/:tenantId/operators`
 - `GET /api/v1/clientcare-billing/audit-log`
 - `GET /api/v1/clientcare-billing/audit-log/export`
+- `POST /api/v1/clientcare-billing/assistant/session` — create overlay conversation session
+- `GET /api/v1/clientcare-billing/assistant/session/:sessionId` — recent messages + archive preview
+- `POST /api/v1/clientcare-billing/assistant/message` — body: `session_id`, `message`, optional `billing_context` (board + VOB selection, payer/member hints) → `opsService.ask` (deterministic billing intents first; **`QUEUE:`/`REQUEST:`/`BUILD:`** prefix → capability row; else **AI Council** JSON — may set `should_queue_capability_request`); response `assistant.data.capability_request` echoed into chat metadata when present
 - `GET /api/v1/clientcare-billing/ops/capability-requests`
 - `PATCH /api/v1/clientcare-billing/ops/capability-requests/:id`
 - `POST /api/v1/clientcare-billing/ops/run-workflow`
 - `POST /api/v1/clientcare-billing/ops/repair-account`
 - `POST /api/v1/clientcare-billing/insurance/verification-preview`
+- `POST /api/v1/clientcare-billing/insurance/vob-transcript` — JSON body: `transcript_text` (required), optional `client_href`, `client_name` or `full_name`, `payer_name`, `member_id`, `group_number`, `requested_by`, **`discard_raw_transcript`** (boolean — after save, replaces `extracted_text` with placeholder; synopsis lives in `preview_result`), **`apply_to_clientcare`** (boolean — when true: **`enforceOperatorAccess`** operator/manager + **`client_href` required**; posts Norton/chart markdown via `browserService.addBillingNote`), **`apply_field_updates`** (boolean; defaults true when `apply_to_clientcare` true — runs `reconcileInsuranceWithClientcare(... apply=true ...)` using transcript-derived notes to fill empty insurance fields); response includes `preview_result` (`vob_completed_at`, structured fields), `clientcare_note_suggestion`, `saved`, **`clientcare_apply`** + **`clientcare_field_apply`** status objects
 - `POST /api/v1/clientcare-billing/insurance/clientcare-pipeline` — multipart: optional `card`; fields `client_href`, `supplemental_notes` (optional), `insurance_slot`, `apply` — card OCR + empty-field fill + ClientCare VOB/eligibility button + sync parsed VOB into empty fields
 - `POST /api/v1/clientcare-billing/insurance/reconcile-clientcare` — multipart: optional `card` image; fields `client_href`, `supplemental_notes`, `insurance_slot`, `apply`
 - `GET /api/v1/clientcare-billing/patient-ar/summary`
@@ -180,6 +196,19 @@ Sellable packaging controls for practice boundaries, operator roles, onboarding 
 #### `clientcare_payer_rule_overrides`
 Operator-defined commercial payer filing, appeal, and follow-up rules used to tighten claim classification and payer playbooks.
 
+### LifeOS companion strip (billing overlay)
+- **`#lifeos-companion-host`** (in `overlay.html`): fixed bottom strip. **Collapsed:** at-a-glance chips — live account count, billing-notes queue size, strong+possible recovery count, insurance-setup-issue count, patient AR total (from live backlog summary + patient AR summary). **Expanded:** short explanation that LifeOS cannot paint inside the ClientCare browser tab without a **future browser extension**; lists **undone** items from the same setup checklist as the hero strip; **rename billing assistant** (`billing-invoke-name` + **`billing-invoke-save`** → `clientcare_billing_invoke_name`); buttons **Open {invoke} chat** and **Open VOB transcript** (smooth scroll + `details.open`).
+- **Persistence:** `localStorage` key `clientcare_lumin_strip_expanded` (`setLuminStripExpanded` → full `rerender`).
+- **Body classes:** `has-lifeos-companion`, `lumin-strip-expanded` adjust `.wrap` bottom padding so content is not hidden behind the strip.
+
+### Billing invoke name (voice + chat) — ClientCare lane only
+- **Lumin** = **LifeOS** conversational brand — **never** the billing-copilot wake word here.
+- **Default invoke:** **`Tiller`** — uncommon in everyday speech (fewer collisions than “Ledger” / random words), easy for STT, clearly **not** human **Sherry**.
+- **Reserved blocklist** (`isBillingInvokeReserved`): **Lumin**, **Lumen**, **LifeOS**, **Sherry**/**Sherri**, **Siri**, **Alexa**, **Google**, **Cortana**, **Echo**, **Computer** — cannot be saved as invoke (avoids “I said Sherry and Siri answered” class failures).
+- **Other name ideas:** **Quill**, **Sage**, **Maven**, **Relay**, **Scout**, **Coda**, **Harbor**, **North**, **Ledger** (operators may still choose Ledger manually if desired).
+- **Voice:** `wakePrefixes` = `getBillingWakePrefixes()` + **LifeOS** / **Life OS** only — **Lumin is intentionally omitted** from billing wake/strip so “Lumin” stays the LifeOS product channel.
+- **Siri / Alexa “always listening”:** on-device **keyword spotter** + OS integration; **browser page cannot** ship parity wake today — **LifeOS overlay extension** (below) is the intended carrier for optional always-on **billing** wake once consented + technically feasible.
+
 ---
 
 ## DEFAULT PAYER RULES (INITIAL)
@@ -217,6 +246,17 @@ These are initial operational rules, not a substitute for payer contracts.
 
 ---
 
+## Operator quick start (Sherry — first visit)
+
+1. **Open two things:** ClientCare (normal browser tab) **and** this billing assistant page (`/clientcare-billing` on your LifeOS deploy).
+2. **Save access:** Paste the **command key** and your **operator email** → **Save access** (top right). Without this, the page loads but stays empty.
+3. **Connect data:** Expand **Tools & Data Sources** → **Login Test** (once) → **Full Queue Report** (loads the live backlog from ClientCare into the board).
+4. **Daily loop:** Use **Your queue (from ClientCare)** → pick a name → **Accounts needing action** shows the list; click a card → **Selected account** tells you what to do **in ClientCare**. Use **Sherry & Tiller** (or your renamed assistant) for questions, **VOB & insurance help** for calls/cards/transcripts.
+5. **Under 90 days:** Filter **&lt;90 Days First** or click **Run &lt;90 days lane now** in the queue card, or tell the assistant: *run under 90 days lane*.
+6. **Voice:** **Start voice** in chat; optional **Auto-execute on voice stop** for hands-free commands after you stop speaking.
+
+---
+
 ## REQUIRED INPUTS / SECRETS
 Only needed for the browser path:
 - `CLIENTCARE_BASE_URL`
@@ -242,6 +282,39 @@ Operational inputs needed regardless of integration path:
 - Paid claims / ERA / remit history has not been imported, so payout/date forecasting is still low-confidence.
 - Browser selectors for read paths are working; writeback workflows still need controlled rollout and approval gates.
 - Controlled writeback now covers billing status, provider type, payment status, and visible insurer/member/subscriber/payor/priority fields, including slot-targeted edits when multiple visible coverages exist, but broader layout hardening is still needed before payer-order automation is considered universally safe.
+
+---
+
+## Approved product backlog (billing copilot — Sherry + Council)
+
+### Chosen path now (best billing option)
+- **Primary build decision:** ship a **LifeOS overlay extension + sidecar desktop shell** for billing first (not web-only wake). This gives the closest practical path to always-available help in ClientCare while preserving fail-closed chart writes.
+- **Listen-in lane for VOB (phased):**
+  1) **Now:** transcript ingest + auto-post billing note (already shipped),
+  2) **Next:** extension-assisted call-capture session (push-to-talk / tab-audio / upload-after-call),
+  3) **Then:** telephony bridge for true live call listen-in where consent + payer rules allow.
+- **Field write policy:** extracted VOB data must map to **structured field intents** (`client_href`, field targets, confidence, source evidence) and require approval gates until reliability is proven against live tenants.
+
+### Imperative operator UX (not optional)
+- **Talk button behavior:** when Sherry clicks **Talk**, the system can both **listen** and **speak back** in-session (hands-on copilot), with visible status and explicit start/stop controls.
+- **Billing-first automation:** system should capture relevant payer-call facts and place them into the **correct ClientCare fields** for the selected client, not just produce notes.
+- **Under-90-day focus:** unpaid accounts not yet past 3 months are a top operational priority lane and should be surfaced first by command/filter.
+- **Human-parity operation in ClientCare:** system must drive the app like a skilled operator (click buttons, fill fields, navigate sections) with receipts and safety gates.
+- **Siri-level always-on wake:** treated as **nice-to-have**; not the blocker for billing delivery.
+
+**Shipped / in progress:** main-workspace **Sherry + billing copilot (`Tiller` default)** chat (two-way thread, voice-capable); deterministic `ask()` branches first; unresolved natural language → council with dashboard + reconciliation + optional `billing_context` from the overlay. Sherry can **steer the product**: council JSON instructs `should_queue_capability_request` for real change asks; lines starting **`QUEUE:`**, **`REQUEST:`**, or **`BUILD:`** insert **`clientcare_capability_requests`** immediately (metadata includes billing context snapshot). Nothing auto-edits production code from chat — the queue is the contract.
+
+**⚠️ INCOMPLETE / future (do not imply shipped):**
+- **Omnipresent LifeOS overlay (downloadable extension or shell):** floats **above all apps** (not only `/clientcare-billing`); can **read screen context** (active window, URL, optional accessibility tree / vision assist where lawful); when **ClientCare** is detected → auto-open **billing chat + modality tools** (VOB, queue, payer scripts). Extension is part of the **overlay distribution** story — not only a side window.
+- **Human-parity interaction (priority):** beyond notes — **click, type, fill fields** on what is on screen, including **all VOB-derived fields** to the **correct client row**. This is a core billing requirement, not an optional enhancement.
+- **VOB HUD:** during payer calls, overlay surfaces a **checklist of questions** Sherry should ask in order; system **captures answers** and **routes data to the right chart slots** (field map + confidence + approval gates).
+- **Voice → chart:** e.g. “**Tiller**, add this to **[patient]**’s chart” → intent parse → structured task → controlled browser apply (must stay fail-closed until proven safe).
+- **In-tab overlay on clientcare.net (until extension):** same-origin still blocks pure web HUD **inside** the ClientCare tab; **extension** bridges that gap. Today: **side window** + companion strip.
+- **Live VOB call assist:** listen-in on operator ↔ payer calls, streaming STT, telephony bridge, consent model TBD.
+- **Overlay extension runtime (priority):** downloadable extension + desktop sidecar that can detect active app context (ClientCare vs other), open the right chat/tool stack, and pass approved click/type/fill actions through explicit safety gates.
+- **AI-first payer calls:** outbound/inbound automation when payer allows AI or staff bridge — regulatory and identity constraints TBD.
+- **Chart write intent:** “put this on the chart” → structured task queue + browser apply with explicit approval gates (no silent ClientCare API).
+- **Encounters → billing:** Sherry marks completed clinical work items; system proposes claim lifecycle tasks (auth, submit, ERA match, close) using best-practice templates — needs data model + UI wiring beyond chat.
 
 ---
 
@@ -323,6 +396,27 @@ Operational inputs needed regardless of integration path:
 
 | Date | What Changed | Est. | Actual | Variance | Amendment | Manifest | Verified |
 |---|---|---:|---:|---|---|---|---|
+| 2026-04-21 | **SSOT + verifier honesty — production auth:** `scripts/verify-project.mjs` now attaches **`method`** from each `required_routes` row (POST routes were incorrectly probed as GET). On **401**, verifier retries once with **`LIFEOS_KEY`** when it differs from the primary key. **AMENDMENT_18** `## Machine verification` adds explicit **KNOW** vs **THINK** language: Railway/overlay evidence ≠ laptop shell key; local 401 remote probes mean **mismatched or missing key in `process.env`**, not “secrets absent in prod.” **CONTINUITY_LOG** #43. | Remove misleading “cannot test live” drift; align SSOT with Adam’s Railway + overlay evidence path | 0.35h | 0.35h | none | ✅ | pending | Remote billing GET → **401** with this workspace `.env` only (see amendment); POST method probes now truthful |
+| 2026-04-23 | **Operator UX — assistant to ClientCare:** `overlay.html` title + `.cc-section-label` / panel emphasis CSS; `clientcare-billing.js` reorders main column (search → **Your queue** → Sherry & invoke chat → **VOB & insurance help** → collapsible orientation + status); hero copy positions sidecar vs ClientCare; 4 “At a glance” KPIs + **More metrics** `<details>`; Today’s Focus / Batch / guide / system status default collapsed; managed queue + accounts stay expanded; assistant + VOB titles softened to “assistant” language; utility rail = “Screen layout”. `tests/smoke.test.js` skips tools/auto-builder/website audit when response is 401/403 (no `LIFEOS_KEY`). | Sherry demo clarity: reduce “standalone product” feel; fewer competing open panels | 0.5h | 0.5h | none | ✅ | pending | `npm test` pass (smoke skips without server key); `node --check` on `clientcare-billing.js` |
+| 2026-04-22 | **Remote verify + env SSOT wiring:** `scripts/verify-project.mjs` adds `--remote-base-url` / `REMOTE_VERIFY_BASE_URL` probe base, `--strict-manifest-env`, and clearer skip text for `CLIENTCARE_*` (process-env vs Railway vault). `docs/ENV_REGISTRY.md` + `services/env-registry-map.js` now list `PUBLIC_BASE_URL`, `REMOTE_VERIFY_BASE_URL`, and full **ClientCare** set. `docs/SSOT_COMPANION.md` §0.4 points builders at registry + remote verify. `package.json` adds `verify:clientcare-billing:remote`. | 0.35h | 0.35h | none | ✅ | pending | pending |
+| 2026-04-22 | **Manifest schema alignment fix:** updated `AMENDMENT_18_CLIENTCARE_BILLING_RECOVERY.manifest.json` required DB assertions from stale `clientcare_claims.status`/`bucket` and `conversation_sessions` to live schema `clientcare_claims.claim_status`/`rescue_bucket` and `conversations` columns (`id`, `session_id`, `source`, `created_at`). This removes false verifier failures and points checks at the tables the runtime actually uses. | 0.2h | 0.2h | none | ✅ | ✅ | pending |
+| 2026-04-22 | **Bulk `<90 days` lane runner:** added one-click `Run <90 days lane now` control + assistant command (`run/start under 90 days lane`) in `clientcare-billing.js`. Runner auto-focuses the under-90 lane, inspects/hydrates up to 40 prioritized accounts from ClientCare in sequence, reselects the top account, and returns a completion toast with inspected/failure counts for fast morning billing triage. | 0.35h | 0.35h | none | ✅ | pending | pending |
+| 2026-04-22 | **Priority focus control shipped:** added account filter **`under90`** (“<90 Days First”) using account note age, plus direct command parser support for phrases like “focus/prioritize under 90 days” / “not yet past 3 months”. Overlay `?v=20260422f`. | 0.15h | 0.15h | none | ✅ | pending | pending |
+| 2026-04-22 | **General command execution (not VOB-only):** assistant adds auto-execute on voice stop and direct execution handlers for `add this ...` (writes note + field apply to selected/target client) and `what's the status of X billing` (instant board status). Overlay `?v=20260422e`. | 0.3h | 0.3h | none | ✅ | pending | pending |
+| 2026-04-22 | **Talk + Auto-Apply one-button mode:** VOB card adds `#vob-talk-auto` + `#vob-talk-status`; `initVobTalkVoice()` attaches shared voice helper to transcript textarea and auto-runs `analyzeVobTranscriptFromUi()` on stop (`onStop`). Shared voice helper now supports `onStart`/`onStop` callbacks. Overlay scripts bumped to `?v=20260422d`. | 0.25h | 0.25h | none | ✅ | pending | pending |
+| 2026-04-22 | **Transcript field-apply slot fix:** removed hardcoded `insuranceSlot: 0` for transcript repair path. `vob-transcript` now accepts `insurance_slot`; service forwards to reconcile apply; overlay derives slot from reconcile selector (fallback selected repair slot). | 0.15h | 0.15h | none | ✅ | pending | pending |
+| 2026-04-22 | **Emergency ship for tomorrow billing:** transcript action now supports field-level apply, not note-only. `ingestVobCallTranscript` adds `applyFieldUpdates` and returns `clientcare_field_apply`; route maps `apply_field_updates` (defaults on with `apply_to_clientcare`); overlay adds “apply transcript-derived fields” checkbox (default checked) and shows note + field apply result together. `overlay.html` `?v=20260422b`. | 0.5h | 0.5h | none | ✅ | pending | pending |
+| 2026-04-22 | **Requirement clarified by user:** Siri-like wake is optional; imperative is Talk-button live assist + listen-in + speak + correct-field ClientCare writeback + human-like app operation. Added explicit imperative UX section and promoted human-parity interaction priority. | 0.15h | 0.15h | none | ✅ | pending | pending |
+| 2026-04-22 | **Best billing path chosen in SSOT:** prioritize **overlay extension + sidecar shell** as the runtime (context-aware tools + controlled click/type/fill), with VOB listen-in phased as transcript/autopost → extension capture → telephony bridge. Added explicit policy that field writes stay approval-gated until live reliability proves out. | 0.2h | 0.2h | none | ✅ | pending | pending |
+| 2026-04-22 | **Default billing invoke → Tiller**; `isBillingInvokeReserved` (Sherry, Siri, Alexa, …); billing voice/text strip **drops Lumin/Lumen**; wakePrefixes = invoke + LifeOS only; h2 “ClientCare billing”; backlog: **omnipresent overlay extension**, screen-aware tools, VOB question HUD, field-level chart apply, “Tiller, add to X chart”. Overlay `?v=20260422a` | 0.35h | 0.35h | none | ✅ | pending | pending |
+| 2026-04-21 | **Billing invoke ≠ Lumin**: default **`Ledger`**; `getBillingInvokeLabel` / `setBillingInvokeLabel` / `clientcare_billing_invoke_name`; reject **Lumin**/**Lumen** as invoke; `getBillingWakePrefixes()`; companion strip **Save name**; disclosure prompt simplified. **Doc:** Siri/Alexa always-on = device KWS + OS — not shippable in plain browser | 0.2h | 0.2h | none | ✅ | pending | pending |
+| 2026-04-21 | **Lumin + direction-only billing UX**: `LIFEOS_INVOKE_LABEL`; chat **Send to Lumin**; history labels; VOB transcript defaults **post + discard raw**; copy note = **backup only**; analyze skips post without `client_href` + toast; **`renderCompanionStrip` / `mountCompanionStrip`** + `#lifeos-companion-host` + body padding CSS; utility sidebar copy. **`lifeos-voice-chat.js`**: `wakePrefixes`, strip on listen end. **Truth:** overlay cannot embed in ClientCare tab without extension — strip explains side window | 0.45h | 0.45h | none | ✅ | pending | pending |
+| 2026-04-21 | **Sherry Quick prompts** near billing chat: `BILLING_CHAT_QUICK_PROMPTS` (payer questions, after-call save checklist, speakerphone + AI disclosure script, denial next steps, `REQUEST:` starter, **Open VOB transcript panel** → opens `#verification-of-benefits` if needed, scrolls `#vob-payer-call-transcript`, focuses `#vob-transcript-body`). Card `id="vob-payer-call-transcript"`. Copy clarifies speakerphone until listen-in ships + disclose transcription. `overlay.html` `?v=20260421a` | 0.2h | 0.2h | none | ✅ | pending | pending |
+| 2026-04-21 | **VOB Norton-style + ClientCare billing note from transcript API**: `ingestVobCallTranscript` extended (Norton markdown build/merge, `vob_completed_at`, `discardRawTranscript` DB update, `applyToClientcare` → `addBillingNote`). Route passes flags; **`apply_to_clientcare`** gates **`enforceOperatorAccess`** + **`client_href`**. Overlay: checkboxes discard raw / post to ClientCare, payload fields, status for `clientcare_apply`, synopsis shows UTC VOB time + deductible lines from `preview_result`. `overlay.html` `?v=20260420e`. **⚠️ INCOMPLETE:** live listen-in / streaming STT not built; ClientCare post is **billing note** only (not arbitrary portal field map) | 0.35h | 0.35h | none | ✅ | pending | pending |
+| 2026-04-20 | **Sherry programs via capability queue**: `ask()` gains `QUEUE:`/`REQUEST:`/`BUILD:` prefix → `createCapabilityRequest` (`normalized_intent=sherry_directed_program_change`, metadata `billing_context_snapshot`). Council prompt tells model to set `should_queue_capability_request` for product/process changes. `POST /assistant/message` merges `result.capability_request` into saved message `metadata.data`; overlay shows queue id + toast. `overlay.html` `?v=20260420d` | 0.2h | 0.2h | none | ✅ | pending | pending |
+| 2026-04-20 | **Sherry & AI Council billing chat (main workspace)**: Moved assistant UI from utility rail into **main** (`renderAssistantShell({ variant: 'main' })` after account search); labels **Sherry** / **AI Council**; `Send to Council`; `buildAssistantBillingContext()` sent as `billing_context` on `POST /assistant/message`. `ask()` accepts `billingContext`, injects into council prompt, reminds model there is no ClientCare chart API; fixed `callCouncilMember('claude', prompt, {…})` (removed stray 4th arg). Sidebar utilities now pointer-only. `overlay.html` `?v=20260420c`. **Approved product backlog** section for call listen-in, AI payer calls, chart task queue, encounter→billing (all flagged incomplete) | 0.5h | 0.5h | none | ✅ | pending | pending |
+| 2026-04-20 | **Overlay copy — front door / coworker**: VOB card summary + transcript panel + real-ClientCare strip now state explicitly that ClientCare is reached via **Railway credentials → browser** (no ClientCare API), and transcript input is operator-provided with chart paste still manual. `overlay.html` `?v=20260420b`. **CURRENT FACTS** adds the same **front door / coworker** bullet | 0.1h | 0.1h | none | ✅ | pending | pending |
+| 2026-04-20 | **VOB payer-call transcript lane**: `ingestVobCallTranscript` in `clientcare-ops-service.js` (council JSON extract via `callCouncilWithFailover` or `callCouncilMember`, optional `getInsuranceVerificationPreview` merge, `findExistingClientMatch` when member ID + name support it, `saveVobProspect` with `source_type=vob_call_transcript`, `preview_result.source=vob_call_transcript`, `file_meta.client_href` + `clientcare_note_suggestion`). Route `POST /api/v1/clientcare-billing/insurance/vob-transcript` (180s deadline). Overlay: transcript textarea, Summarize & save, synopsis panel, Copy ClientCare note; history cards show call synopsis for transcript rows. `overlay.html` script `?v=20260420a`. **Known gap:** no automatic ClientCare DOM/file creation — operator must paste into correct client | 0.75h | 0.75h | none | ✅ | pending | pending |
 | 2026-04-07 | **Tightened auto-match confidence for card subscriber names**: the VOB flow now auto-selects only on deterministic exact matches. Soft fuzzy matches no longer silently select a client from the backlog, and live ClientCare directory search only auto-selects on a single exact hit. Ambiguous matches stay in picker/review state instead of driving the real ClientCare VOB automatically | 0.15h | 0.15h | none | ✅ | pending | pending |
 | 2026-04-07 | **Separated VOB-selected client from stale board context**: the VOB workflow no longer inherits the generic board selection by default. It now tracks a VOB-specific selected billing href, clears that state when search text changes or OCR does not produce a trustworthy match, and only shows a selected VOB account when the VOB flow itself has actually chosen one. This prevents old accounts like Karlee from lingering in the VOB header under a different patient card | 0.25h | 0.25h | none | ✅ | pending | pending |
 | 2026-04-07 | **Hard-stopped real ClientCare VOB on patient mismatch**: the live run can no longer continue when the selected account and card subscriber disagree. The run button is disabled with an explicit blocker message, `runFullClientcarePipeline()` refuses to proceed on mismatch or in-flight directory search, and exact existing-client search matches auto-select immediately so stale account context does not linger under a new card | 0.2h | 0.2h | none | ✅ | pending | pending |

@@ -1,5 +1,5 @@
 # PROJECT AMENDMENTS INDEX
-**Last Updated:** 2026-04-25 — **North Star §2.11c** (Conductor = supervisor; system `/build` at scale) + `SSOT_COMPANION` **§0.5D** *Supervisor mandate*. Prior: 2026-04-22 **§2.15** + **§0.5I**; **§2.14** + `docs/TSOS_SYSTEM_LANGUAGE.md`. Prior: **`docs/SYSTEM_CAPABILITIES.md`**. Prior: 2026-04-26 **Env law** §2.3. Prior: TSOS / **§2.11a** / **§2.11b**. Prior: Amendment 37.
+**Last Updated:** 2026-04-26 — **Amendment 39** registry row + HOW THIS WORKS pointers (**Memory Intelligence** + design brief). **Amendment 38** § **Seed catalog §D** squeeze. Prior: 2026-04-25 **Amendment 38** § **Seed catalog** + **Amendment 21** variation map + portfolio triage. Prior: **`AMENDMENT_38_IDEA_VAULT.md`** (vault SSOT). Prior: **`docs/CONVERSATION_DUMP_IDEAS_INDEX.md`** + **Candidate Concepts** rows. Prior: 2026-04-26 **`docs/REPO_MASTER_INDEX.md`** + **`docs/REPO_BUCKET_INDEX.md`**. Prior: **Repo inventory** `REPO_CATALOG.md` + `REPO_TRIAGE_NOTES` + `REPO_DEEP_AUDIT`. Prior: 2026-04-25 **`docs/SSOT_DUAL_CHANNEL.md`** + **`docs/SSOT_AMENDMENT_BUILD_READINESS_AUDIT.md`**. Prior: **North Star §2.11c** + Companion **§0.5D**. Prior: 2026-04-22 **§2.15** + **§0.5I**; **§2.14** + `docs/TSOS_SYSTEM_LANGUAGE.md`. Prior: **`docs/SYSTEM_CAPABILITIES.md`**. Prior: Amendment 37.
 **Parent:** SSOT North Star Constitution (`docs/SSOT_NORTH_STAR.md`)
 **Authority:** All amendments subordinate to the North Star Constitution
 
@@ -8,6 +8,11 @@
 ---
 
 ## HOW THIS WORKS
+
+**Lost in the docs tree?** Start at [`docs/REPO_MASTER_INDEX.md`](../REPO_MASTER_INDEX.md) — maps amendments (this file), continuity, env, capabilities, repo catalog, and prompts.
+
+**Forgotten build-time ideas?** [`AMENDMENT_38_IDEA_VAULT.md`](AMENDMENT_38_IDEA_VAULT.md) — **§ Seed catalog** (§A–D: ideas, nuances, actions, **Memory Intelligence squeeze**) + streams + **§ Portfolio triage queue**. **Evidence / confidence / debates / lessons:** [`AMENDMENT_39_MEMORY_INTELLIGENCE.md`](AMENDMENT_39_MEMORY_INTELLIGENCE.md) + [`docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md`](../MEMORY_FRAMEWORK_DESIGN_BRIEF.md). **LifeOS-native duplicates / variations** → [`AMENDMENT_21_LIFEOS_CORE.md`](AMENDMENT_21_LIFEOS_CORE.md) § **Idea Vault → LifeOS-native consolidation**. Companion [`docs/CONVERSATION_DUMP_IDEAS_INDEX.md`](../CONVERSATION_DUMP_IDEAS_INDEX.md).
+
 Each file in this directory is a **SSOT Amendment** for one distinct project inside the platform.
 Amendments define: what the project is, its revenue model, technical spec, current state, refactor plan, and non-negotiables.
 
@@ -20,6 +25,14 @@ They do NOT override the North Star — they add project-specific rules that ope
 **Operator instruction (North Star §2.15):** `docs/SSOT_COMPANION.md` **§0.5I** — clear session ask → comply or **HALT**; **INTENT DRIFT** in **§2.11b** if work ≠ ask. Does not cryptographically compel external LLMs; makes **violation visible** in receipts.
 
 **Conductor = supervisor (North Star §2.11c):** `docs/SSOT_COMPANION.md` **§0.5D** *Supervisor mandate* — **system** `POST /build` for product; Conductor **audits**, **council**-reviews, **reports**; IDE default **forbidden** when scale path is the builder; **`docs/ENV_REGISTRY.md`** before “missing env” noise.
+
+**Two “channels,” one law (avoid double edits):** `docs/SSOT_DUAL_CHANNEL.md` — **Channel A** = agents/Conductor (generated `AGENT_RULES.compact.md` + QUICK_LAUNCH + lane logs); **Channel B** = system whole picture (NSSOT + Companion + this INDEX + `SYSTEM_CAPABILITIES` + amendments). Policy changes live in **canonical** files; compact packet is **derived** via `npm run gen:rules`. **Build-readiness audit:** `docs/SSOT_AMENDMENT_BUILD_READINESS_AUDIT.md`.
+
+**Whole-repo file inventory (triage, not law):** `docs/REPO_CATALOG.md` — regenerated via `npm run repo:catalog`; lists tracked files with size, kind, and a one-line hint. Human **KEEP / GOLD / DELETE-CANDIDATE** judgments go in `docs/REPO_TRIAGE_NOTES.md`. Re-run the catalog after large tree changes or cleanup waves.
+
+**Why does this folder exist? (spine vs barnacles):** `docs/REPO_DEEP_AUDIT.md` — traces **`server.js` → `startup/register-runtime-routes.js`**, value tiers, and **Wave 0–4** cleanup order for multi-agent drift.
+
+**Master map of every index:** `docs/REPO_MASTER_INDEX.md` — links **REPO_CATALOG**, **REPO_BUCKET_INDEX**, triage, SSOT, continuity, prompts, FEATURE_INDEX, spine code.
 
 ---
 
@@ -64,6 +77,8 @@ They do NOT override the North Star — they add project-specific rules that ope
 | 35 | [Lumin University](AMENDMENT_35_LUMIN_UNIVERSITY.md) | candidate | HIGH — long-arc competency-based institution, builds on Kids OS foundation | Long-range (post Kids OS) |
 | 36 | [Zero-Drift Handoff Protocol](AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md) | LIVE | Infrastructure — cold-start packets, per-lane continuity, builder next-task, audit logs | High (every agent session) |
 | 37 | [Universal Overlay Platform](AMENDMENT_37_UNIVERSAL_OVERLAY.md) | active-build | Infrastructure — browser extension, iframe overlay, form fill, real-time updates | High |
+| 38 | [Idea Vault — Captured Conversation Backlog](AMENDMENT_38_IDEA_VAULT.md) | LIVE | **Documentation SSOT** — all mined multi-model ideas, provenance, amendment routing; relieves operator memory load | Medium (curation) |
+| 39 | [Memory Intelligence System](AMENDMENT_39_MEMORY_INTELLIGENCE.md) | LIVE (Phase 1) | **Evidence engine** — epistemic facts, debates, lessons, agent accuracy, intent drift; `/api/v1/memory`; design brief in `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` | High (adoption Phases 2–4) |
 
 ---
 
@@ -227,6 +242,8 @@ Server.js is thinner than the historical monolith but still a composition-root h
 ### Candidate Concepts (from conversation dump mining — not yet elevated to amendments)
 These ideas were found in GPT/Gemini/Grok/LifeOS conversation dumps. Not ready for full amendments — keep here until they have their own revenue path, technical surface, or non-negotiables.
 
+**Deep index (file locations + theme clusters):** [`docs/CONVERSATION_DUMP_IDEAS_INDEX.md`](../CONVERSATION_DUMP_IDEAS_INDEX.md)
+
 | Concept | Source | Nest Under / Notes |
 |---|---|---|
 | Billing-as-a-Service for Therapists & Rehab Clinics | LifeOS dump 002 | Distinct from Amendment 18 (ClientCare targets PT/behavioral); EMR billing automation for therapy/rehab clinics. Elevate when ClientCare is live. |
@@ -241,3 +258,12 @@ These ideas were found in GPT/Gemini/Grok/LifeOS conversation dumps. Not ready f
 | Zoom AI Receptionist (voice-only overlay variant) | LifeOS dump 002, GPT dump 01 | Fully captured in Amendment 29 |
 | Capsule Marketplace (idea sharing / reuse economy) | Grok dump 001 | Interesting long-term platform play; nest under Amendment 02 (Memory System) for now |
 | Programmatic SEO Engine | GPT dump 02 | Nest under Amendment 05 (Site Builder) — SEO page generation is a natural extension |
+| WellRoundedMomma vertical + 25 Lumin capability SKUs | `system-ideas.txt` | Midwifery/wellness site + automation marketplace; nest **05** + **28**; GTM items under **27** — detail in **CONVERSATION_DUMP_IDEAS_INDEX** §4A |
+| Shoppable media / visual-commerce overlay (click object → buy) | Mission & North Star | Overlay + affiliate + privacy; long-term consumer — **CONVERSATION_DUMP_IDEAS_INDEX** §4B |
+| KeepMyWordTracker + explicit “release from your word” UX | Mission & North Star | **21** + existing integrity thread; promise→task reconciliation — §4B |
+| AI homework helper + overlay tutoring | Mission & North Star | Education lane (**32** area); fun + video tie-in — §4B |
+| Off-market commercial property signal miner | Mission & North Star | **17** (TC/intel) or standalone CRE scout — §4B |
+| Employee onboarding / training overlay (“Apple Care” coach) | Mission & North Star | **11** + **12**; guided click-through training — §4B |
+| Habit tracker in BoldTrail CRM + salesman spinoff | Mission & North Star | **11** extension — §4B |
+| Lumea meta-directives (DAPIR, CDS/SIL/ETL, idea market) | Directives and ideas log.md | Conductor/platform backlog — **36** / **02** / **01**; not one product — §4C |
+| 35-day sprint offer ladder + Limitless Command Table | Miscellaneous | GTM playbook **27** + Zapier/Notion ops — §4D |

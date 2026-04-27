@@ -124,9 +124,9 @@ export function createLifeOSWeeklyReview({ pool, callAI, logger }) {
     // Integrity score
     try {
       const { rows } = await pool.query(
-        `SELECT AVG(overall_score)::numeric(4,1) as avg_score, COUNT(*) as count
-         FROM integrity_scores
-         WHERE user_id = $1 AND created_at::date BETWEEN $2 AND $3`,
+        `SELECT AVG(total_score)::numeric(4,1) as avg_score, COUNT(*) as count
+         FROM integrity_score_log
+         WHERE user_id = $1 AND score_date BETWEEN $2 AND $3`,
         [userId, weekStart, weekEnd]
       );
       snap.integrity = { avg: parseFloat(rows[0]?.avg_score) || null, count: parseInt(rows[0]?.count) || 0 };

@@ -135,7 +135,7 @@ export function createLifeOSDailyScorecard({ pool, callAI, logger }) {
         `SELECT
            COUNT(*) FILTER (WHERE status = 'completed' AND updated_at::date = $2) as done,
            COUNT(*) FILTER (WHERE status = 'missed'    AND updated_at::date = $2) as missed,
-           COUNT(*) FILTER (WHERE remind_at::date = $2 OR due_date::date = $2) as due_today
+           COUNT(*) FILTER (WHERE remind_at::date = $2 OR due_at::date = $2) as due_today
          FROM commitments WHERE user_id = $1`,
         [userId, date]
       );
@@ -154,7 +154,7 @@ export function createLifeOSDailyScorecard({ pool, callAI, logger }) {
     // Joy logged + score (20 pts max)
     try {
       const { rows: joyRows } = await pool.query(
-        `SELECT AVG(score)::numeric(4,1) as avg_score, COUNT(*) as count
+        `SELECT AVG(joy_score)::numeric(4,1) as avg_score, COUNT(*) as count
          FROM joy_checkins WHERE user_id = $1 AND created_at::date = $2`,
         [userId, date]
       );
@@ -180,8 +180,8 @@ export function createLifeOSDailyScorecard({ pool, callAI, logger }) {
     // Integrity signal today (15 pts max)
     try {
       const { rows: [integ] } = await pool.query(
-        `SELECT AVG(overall_score)::numeric(4,1) as avg FROM integrity_scores
-         WHERE user_id = $1 AND created_at::date = $2`,
+        `SELECT AVG(total_score)::numeric(4,1) as avg FROM integrity_score_log
+         WHERE user_id = $1 AND score_date = $2`,
         [userId, date]
       );
       const avgInteg  = parseFloat(integ?.avg) || 0;

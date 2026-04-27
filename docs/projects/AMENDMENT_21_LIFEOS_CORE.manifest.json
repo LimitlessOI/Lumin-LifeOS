@@ -114,9 +114,21 @@
     "db/migrations/20260418_lifeos_monetization.sql",
     "services/monetization-map.js",
     "db/migrations/20260418_lifeos_finance_share_scopes.sql",
+    "db/migrations/20260419_conflict_interrupt.sql",
+    "db/migrations/20260422_lifeos_habits.sql",
+    "services/lifeos-habits.js",
+    "routes/lifeos-habits-routes.js",
+    "prompts/lifeos-habits.md",
+    "db/migrations/20260422_lifeos_legacy_core.sql",
+    "services/lifeos-legacy-core.js",
+    "prompts/lifeos-legacy.md",
     "routes/lifeos-backtest-routes.js",
     "public/overlay/lifeos-backtest.html",
     "startup/register-runtime-routes.js",
+    "db/migrations/20260422_gate_change_proposals.sql",
+    "services/lifeos-gate-change-proposals.js",
+    "routes/lifeos-gate-change-routes.js",
+    "prompts/lifeos-gate-change-proposal.md",
     "routes/public-routes.js",
     "public/overlay/lifeos-health.html",
     "public/overlay/lifeos-healing.html",
@@ -136,7 +148,11 @@
     "services/lifeos-weekly-review.js",
     "routes/lifeos-weekly-review-routes.js",
     "public/overlay/lifeos-weekly-review.html",
-    "public/overlay/sw.js"
+    "public/overlay/sw.js",
+    "db/migrations/20260423_lifeos_ambient_snapshots.sql",
+    "services/lifeos-ambient-context.js",
+    "routes/lifeos-ambient-routes.js",
+    "public/overlay/lifeos-ambient-sense.js"
   ],
   "assertions": [
     {
@@ -146,6 +162,58 @@
     {
       "type": "file_exists",
       "path": "routes/lifeos-ethics-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260422_gate_change_proposals.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260419_conflict_interrupt.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260422_lifeos_habits.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-habits.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-habits-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260422_lifeos_legacy_core.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "db/migrations/20260423_lifeos_ambient_snapshots.sql"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-ambient-context.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-ambient-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/lifeos-ambient-sense.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-legacy-core.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/lifeos-gate-change-proposals.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/lifeos-gate-change-routes.js"
     },
     {
       "type": "file_exists",
@@ -732,5 +800,28 @@
         }
       ]
     }
-  ]
+  ],
+  "lane_id": "lifeos",
+  "handoff_protocol_amendment": "docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md",
+  "build_locked_until": null,
+  "lane_read_manifest": {
+    "required_reads_cold_start": [
+      "docs/AI_COLD_START.md",
+      "docs/CONTINUITY_INDEX.md",
+      "docs/CONTINUITY_LOG_LIFEOS.md",
+      "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json"
+    ],
+    "required_writes_on_ship": [
+      "docs/CONTINUITY_LOG_LIFEOS.md",
+      "docs/CONTINUITY_LOG.md",
+      "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+      "docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json"
+    ],
+    "deep_read_when_building": [
+      "prompts/00-LIFEOS-AGENT-CONTRACT.md",
+      "docs/projects/AMENDMENT_21_LIFEOS_CORE.md",
+      "prompts/lifeos-conflict.md",
+      "prompts/lifeos-lumin.md"
+    ]
+  }
 }

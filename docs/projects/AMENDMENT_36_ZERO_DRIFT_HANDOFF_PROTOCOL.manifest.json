@@ -7,7 +7,7 @@
   "priority": "high",
   "owner": "adam",
   "phase": "operational",
-  "next_task": "Diagnose github_token: false on /ready — confirm PUBLIC_BASE_URL points at prod, check deploy drift, env scope. Token IS in Railway vault.",
+  "next_task": "Repo catalog triage waves: use REPO_TRIAGE_NOTES + REPO_CATALOG; prune DELETE-CANDIDATE; re-run npm run repo:catalog. Parallel: github_token /ready vs vault — ENV_DIAGNOSIS_PROTOCOL.",
   "stability_class": "stable",
   "current_focus": "SSOT dual-channel (agent vs system); compact rules generation; cold-start packet; continuity lane logs",
   "owned_files": [
@@ -23,7 +23,14 @@
     "docs/CONTINUITY_LOG_SECURITY.md",
     "scripts/generate-agent-rules.mjs",
     "scripts/generate-cold-start.mjs",
+    "scripts/generate-repo-catalog.mjs",
     "scripts/handoff-self-test.mjs",
+    "docs/REPO_CATALOG.md",
+    "docs/REPO_CATALOG.json",
+    "docs/REPO_TRIAGE_NOTES.md",
+    "docs/REPO_DEEP_AUDIT.md",
+    "docs/REPO_MASTER_INDEX.md",
+    "docs/REPO_BUCKET_INDEX.md",
     "prompts/00-LIFEOS-AGENT-CONTRACT.md",
     "prompts/00-SSOT-READ-SEQUENCE.md",
     "prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md"
@@ -33,8 +40,9 @@
     "npm run handoff:self-test exits 0",
     "npm run cold-start:gen regenerates docs/AI_COLD_START.md",
     "npm run gen:rules regenerates AGENT_RULES.compact.md",
-    "AGENT_RULES.compact.md stays under .compact-rules-baseline token budget"
+    "AGENT_RULES.compact.md stays under .compact-rules-baseline token budget",
+    "npm run repo:catalog updates docs/REPO_CATALOG.md"
   ],
-  "last_verified_at": "2026-04-24",
+  "last_verified_at": "2026-04-26",
   "verification_passed": null
 }

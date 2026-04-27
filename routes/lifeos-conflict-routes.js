@@ -258,6 +258,83 @@ export function createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember
     }
   });
 
+  // POST /interrupt/check — contextual escalation check (authenticated)
+  router.post('/interrupt/check', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', text } = req.body || {};
+      if (!text || !String(text).trim()) {
+        return res.status(400).json({ ok: false, error: 'text is required' });
+      }
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const settings = await intel.getInterruptSettings(userId);
+      if (!settings.enabled) {
+        return res.json({
+          ok: true,
+          triggered: false,
+          disabled: true,
+          reason: 'conflict_interrupt_disabled',
+        });
+      }
+      const result = await intel.detectEscalationInText(String(text), {
+        sensitivity: settings.sensitivity,
+      });
+      res.json({ ok: true, ...result, settings });
+    } catch (err) {
+      logger?.error?.(`[CONFLICT] POST /interrupt/check: ${err.message}`);
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // GET /interrupt/settings?user=adam
+  router.get('/interrupt/settings', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const settings = await intel.getInterruptSettings(userId);
+      res.json({ ok: true, settings });
+    } catch (err) {
+      logger?.error?.(`[CONFLICT] GET /interrupt/settings: ${err.message}`);
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  // PUT /interrupt/settings
+  router.put('/interrupt/settings', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam', enabled, sensitivity } = req.body || {};
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      if (
+        enabled === undefined &&
+        sensitivity === undefined
+      ) {
+        return res.status(400).json({
+          ok: false,
+          error: 'Provide enabled and/or sensitivity',
+        });
+      }
+      if (
+        sensitivity !== undefined &&
+        !['low', 'medium', 'high'].includes(sensitivity)
+      ) {
+        return res.status(400).json({
+          ok: false,
+          error: 'sensitivity must be low, medium, or high',
+        });
+      }
+      const settings = await intel.updateInterruptSettings(userId, {
+        enabled,
+        sensitivity,
+      });
+      res.json({ ok: true, settings });
+    } catch (err) {
+      logger?.error?.(`[CONFLICT] PUT /interrupt/settings: ${err.message}`);
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
   // ═══════════════════════════════════════════════════════════════════════════
   // COACHING SESSIONS
   // NOTE: /coaching/patterns and /coaching/growth MUST come before /coaching/:id

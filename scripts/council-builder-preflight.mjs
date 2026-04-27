@@ -22,6 +22,10 @@
  */
 
 import 'dotenv/config';
+// Also load .env.local so Railway URL + key are available without manual export.
+// .env.local values override .env (it holds Railway-matching vars).
+import dotenv from 'dotenv';
+dotenv.config({ path: new URL('../.env.local', import.meta.url).pathname, override: true });
 import { mkdir, appendFile } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -172,11 +176,30 @@ async function main() {
     }
     if (b.github_token === false) {
       printBlock(
-        '❌ BLOCKER for POST /build (GitHub)',
-        'Server reports GITHUB_TOKEN is not set. Set it in Railway (Variables) so commitToGitHub can push.\n' +
-          'Until then, POST /build will fail at commit time even if the council generates code.',
+        '⚠️  RUNTIME github_token: false — diagnose before concluding absent from vault',
+        [
+          'Per ENV_DIAGNOSIS_PROTOCOL: "name in vault" and "runtime reports false" are DIFFERENT facts.',
+          '',
+          'Step 1 — is the name in the Railway vault?',
+          '  → If Railway env name-list below shows ✓ GITHUB_TOKEN: the name IS set. This is not a vault absence.',
+          '  → DO NOT tell Adam to re-add or re-set GITHUB_TOKEN if it shows ✓.',
+          '',
+          'Step 2 — if name IS in vault but runtime is false, diagnose:',
+          '  a) Deploy drift: the running instance predates the last variable update → trigger redeploy',
+          '  b) Env scope: the variable is set on a different Railway service than this one',
+          '  c) Wrong PUBLIC_BASE_URL: you are hitting a different deploy than the one with the token',
+          '  d) Verifier skip: the /ready route has a bug that reports false even when token is present',
+          '',
+          'Step 3 — only if name is ✗ ABSENT from vault AND all above are ruled out:',
+          '  → Then set GITHUB_TOKEN in Railway for this service (generate at github.com/settings/tokens)',
+          '',
+          'GAP-FILL wording when manually writing files: "GAP-FILL: /ready reports github_token:false;',
+          'vault presence: [✓ SET / ✗ ABSENT per name-list]; diagnose: [deploy drift / env scope / unknown]"',
+        ].join('\n'),
       );
-      await finish(1, 'no_github_token');
+      // Non-fatal: report the diagnosis path but do not exit(1) if vault may have the key.
+      // Let the build attempt proceed — it will fail with a clear GitHub error if truly absent.
+      console.warn('\n[preflight] Continuing — /build will surface the real error if GITHUB_TOKEN is truly missing.');
     }
     if (!b.callCouncilMember) {
       printBlock('❌ BLOCKER', 'callCouncilMember not wired — startup must pass it into the builder factory.');

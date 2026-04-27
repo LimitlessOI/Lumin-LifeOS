@@ -13,21 +13,26 @@
  *   GET  /api/v1/lifeos/builder/domains         list available domain prompt files
  *   GET  /api/v1/lifeos/builder/domain/:name    read a specific domain prompt file
  *   GET  /api/v1/lifeos/builder/next-task      cold-start packet excerpts + read order
- *   POST /api/v1/lifeos/builder/task            dispatch a task to the council (body `files[]` = repo-relative paths → **server reads and injects file contents** into prompt)
+ *   POST /api/v1/lifeos/builder/task            dispatch a task to the council (body `files[]` = repo-relative paths → **server reads and injects file contents** into prompt; optional `target_file` improves HTML full-file hints; code mode passes scaled `maxOutputTokens` to the council)
  *   POST /api/v1/lifeos/builder/review          ask the council to review code/diff
  *   GET  /api/v1/lifeos/builder/model-map       show task-to-model routing table
  *
  * Task body autonomy controls (optional):
  *   autonomy_mode: 'max' | 'normal' (default: 'max')
  *   internet_research: boolean (default: true)
+ *   execution_only: boolean (default: false) — when true with mode=code and no explicit `model`, routes to
+ *     `council.builder.code_execute` (fast literal codegen). Use only after a frozen spec (see prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md).
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
-import { readdir, readFile } from 'fs/promises';
-import { join, dirname, resolve, relative } from 'path';
+import { readdir, readFile, writeFile, unlink, mkdtemp } from 'fs/promises';
+import { join, dirname, resolve, relative, extname } from 'path';
 import { fileURLToPath } from 'url';
-import { getModelForTask, TASK_MODEL_MAP } from '../config/task-model-routing.js';
+import { execSync } from 'child_process';
+import { tmpdir } from 'os';
+import { getModelForTask, getCandidateModelsForTask, TASK_MODEL_MAP } from '../config/task-model-routing.js';
+import { createMemoryIntelligenceService } from '../services/memory-intelligence-service.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
@@ -38,6 +43,14 @@ const METADATA_SEP = '\n---METADATA---\n';
 /** Max chars injected per file / total into council prompt (large overlays like lifeos-chat.html). */
 const BUILDER_FILE_INJECT_MAX_PER = 120_000;
 const BUILDER_FILE_INJECT_MAX_TOTAL = 280_000;
+
+/** Grounding rules — paired with `prompts/00-SSOT-READ-SEQUENCE.md`. */
+const BUILDER_EPISTEMIC_LAWS = [
+  'EPISTEMIC LAWS (this call):',
+  '- Ground outputs in DOMAIN CONTEXT, SPECIFICATION, and injected REPO FILE CONTENTS only; do not invent features, routes, env vars, or DB tables not supported there.',
+  '- If the spec is incomplete or contradictory, state that in one line before ---METADATA--- and set a low confidence value in the JSON.',
+  '- When both apply, injected file bodies override vague task wording.',
+].join('\n');
 
 /**
  * Resolve `files` body paths to repo files and read contents for the council prompt.
@@ -91,8 +104,56 @@ async function loadRepoFilesForBuilder(files, log) {
   return { block: parts.join(''), summaries };
 }
 
+/**
+ * If the model wrapped the code section in a markdown fence, strip it (keep ---METADATA--- tail intact).
+ */
+function stripLeadingMarkdownFenceBeforeMetadata(text) {
+  const s = String(text || '');
+  const metaIdx = s.indexOf(METADATA_SEP);
+  const head = metaIdx === -1 ? s : s.slice(0, metaIdx);
+  const tail = metaIdx === -1 ? '' : s.slice(metaIdx);
+  let h = head.trimStart();
+  if (!h.startsWith('```')) return s;
+  const firstNl = h.indexOf('\n');
+  if (firstNl === -1) return s;
+  const closeIdx = h.lastIndexOf('\n```');
+  if (closeIdx <= firstNl) return s;
+  h = h.slice(firstNl + 1, closeIdx).trim();
+  return h + tail;
+}
+
+/** Builder codegen: estimate output token budget from injected repo files (full-file replacement). */
+function estimateBuilderMaxOutputTokens(summaries, filesContentBlock) {
+  let totalChars = 0;
+  if (Array.isArray(summaries)) {
+    for (const s of summaries) {
+      if (typeof s?.chars === 'number' && s.chars > 0) totalChars += s.chars;
+    }
+  }
+  if (totalChars === 0 && filesContentBlock) totalChars = filesContentBlock.length;
+  if (totalChars === 0) return 8192;
+  const estimated = Math.ceil(totalChars / 2.5) + 4096;
+  return Math.min(65536, Math.max(8192, estimated));
+}
+
+function builderTargetsHtml(files, targetFile) {
+  const paths = Array.isArray(files) ? files : [];
+  if (paths.some(p => String(p).toLowerCase().endsWith('.html'))) return true;
+  if (String(targetFile || '').toLowerCase().endsWith('.html')) return true;
+  return false;
+}
+
+function htmlFullFileCodegenHints() {
+  return [
+    'HTML FULL FILE (critical): Emit a complete document from <!DOCTYPE html> or opening <html through closing </html>.',
+    'Do not emit a fragment, stub, or a single-line doctype only.',
+    'Do not wrap the HTML in markdown fences.',
+    'The first character of your code output must be "<" (start of <!DOCTYPE or <html).',
+  ].join('\n');
+}
+
 function splitBuilderOutput(raw) {
-  const text = String(raw || '');
+  const text = stripLeadingMarkdownFenceBeforeMetadata(String(raw || ''));
   const i = text.lastIndexOf(METADATA_SEP);
   if (i === -1) return { output: text.trim(), placement: null };
   const main = text.slice(0, i).trim();
@@ -110,6 +171,7 @@ function validateGeneratedOutputForTarget(targetFile, output) {
   if (!text) return 'generated output is empty';
   if (target.endsWith('.html')) {
     if (text.length < 1000) return 'generated HTML is too short; refusing to commit likely truncated output';
+    if (!/^[\s]*</.test(text)) return 'generated HTML must start with <!DOCTYPE or <html (no preamble or markdown)';
     if (!/<html[\s>]/i.test(text) || !/<\/html>/i.test(text)) {
       return 'generated HTML is missing required <html> / </html> document markers';
     }
@@ -145,6 +207,7 @@ export function createLifeOSCouncilBuilderRoutes({
   const log = logger || console;
   const cacheGet = typeof getCachedResponse === 'function' ? getCachedResponse : null;
   const cacheSet = typeof cacheResponse === 'function' ? cacheResponse : null;
+  const memorySvc = pool?.query ? createMemoryIntelligenceService(pool, log) : null;
 
   // ── GET /ready — machine-readable "can the system build & commit?" (for preflight + operators)
 
@@ -231,6 +294,8 @@ export function createLifeOSCouncilBuilderRoutes({
       ['continuity_lifeos', join(REPO_ROOT, 'docs/CONTINUITY_LOG_LIFEOS.md')],
       ['continuity_council', join(REPO_ROOT, 'docs/CONTINUITY_LOG_COUNCIL.md')],
       ['ai_cold_start', join(REPO_ROOT, 'docs/AI_COLD_START.md')],
+      ['prompt_ssot_sequence', join(PROMPTS_DIR, '00-SSOT-READ-SEQUENCE.md')],
+      ['prompt_model_tiers', join(PROMPTS_DIR, '00-MODEL-TIERS-THINK-VS-EXECUTE.md')],
     ];
     const snippets = {};
     for (const [key, p] of paths) {
@@ -244,6 +309,9 @@ export function createLifeOSCouncilBuilderRoutes({
     res.json({
       ok: true,
       read_order: [
+        'prompts/00-LIFEOS-AGENT-CONTRACT.md',
+        'prompts/00-SSOT-READ-SEQUENCE.md',
+        'prompts/00-MODEL-TIERS-THINK-VS-EXECUTE.md',
         'docs/CONTINUITY_INDEX.md',
         'docs/AI_COLD_START.md',
         'docs/CONTINUITY_LOG*.md (lane)',
@@ -282,11 +350,13 @@ export function createLifeOSCouncilBuilderRoutes({
       task,
       spec,
       files,
+      target_file: bodyTargetFile,
       model,
       mode = 'code',
       useCache = true,
       autonomy_mode = 'max',
       internet_research = true,
+      execution_only = false,
     } = req.body || {};
 
     if (!task) {
@@ -311,8 +381,40 @@ export function createLifeOSCouncilBuilderRoutes({
       log.info({ count: filesInjectSummaries.length, paths: filesInjectSummaries.map(s => s.path) }, '[BUILDER] Injected repo file bodies for files[]');
     }
 
-    const taskType = `council.builder.${mode}`;
-    const memberKey = model || getModelForTask(taskType) || 'gemini_flash';
+    const executionOnly = execution_only === true;
+    const routingKey =
+      mode === 'code' && executionOnly && !model
+        ? 'council.builder.code_execute'
+        : `council.builder.${mode}`;
+    const preferredModel = model || getModelForTask(routingKey) || 'gemini_flash';
+    const candidateModels = model ? [model] : getCandidateModelsForTask(routingKey);
+    let routingRecommendation = {
+      selectedModel: preferredModel,
+      blockedCandidates: [],
+      reason: 'Using static routing map',
+    };
+    if (memorySvc) {
+      try {
+        routingRecommendation = await memorySvc.getRoutingRecommendation({
+          taskType: routingKey,
+          proposedModel: preferredModel,
+          candidateModels,
+        });
+      } catch (memoryErr) {
+        log.warn({ err: memoryErr.message, routingKey }, '[BUILDER] Memory routing unavailable — falling back to static map');
+        routingRecommendation.reason = 'Memory routing unavailable; using static routing map';
+      }
+    }
+    const memberKey = routingRecommendation.selectedModel;
+    if (!memberKey) {
+      return res.status(409).json({
+        ok: false,
+        error: 'No authorized model is currently allowed for this builder task',
+        routing_key: routingKey,
+        blocked_candidates: routingRecommendation.blockedCandidates || [],
+        detail: routingRecommendation.reason,
+      });
+    }
     const cacheMember = `council_builder:${memberKey}`;
 
     const modeInstructions = {
@@ -332,6 +434,7 @@ export function createLifeOSCouncilBuilderRoutes({
       'You are a senior engineer working on the LifeOS platform.',
       'You write clean, production-quality Node.js/ESM code that follows existing patterns.',
       'You never rebuild what already exists. You extend what is there.',
+      BUILDER_EPISTEMIC_LAWS,
       domainContext ? `\n--- DOMAIN CONTEXT (read this before writing anything) ---\n${domainContext}\n---` : '',
     ].filter(Boolean).join('\n');
 
@@ -340,6 +443,14 @@ export function createLifeOSCouncilBuilderRoutes({
       internetResearch: internet_research !== false,
     });
 
+    const htmlCodegenExtra =
+      mode === 'code' && builderTargetsHtml(files, bodyTargetFile) ? `\n${htmlFullFileCodegenHints()}` : '';
+
+    const executionModeBlock =
+      mode === 'code' && executionOnly
+        ? '\nEXECUTION MODE: The architecture is already decided. Implement the SPECIFICATION and file context literally; do not expand scope or redesign.'
+        : '';
+
     const userPrompt = [
       `TASK: ${task}`,
       spec ? `\nSPECIFICATION:\n${spec}` : '',
@@ -347,6 +458,8 @@ export function createLifeOSCouncilBuilderRoutes({
       filesContentBlock
         ? `\nREPO FILE CONTENTS — authoritative; produce a single full replacement for target_file when mode is code:\n${filesContentBlock}`
         : '',
+      htmlCodegenExtra,
+      executionModeBlock,
       `\nINSTRUCTION: ${modeInstructions}`,
       autonomyInstructions ? `\nAUTONOMY: ${autonomyInstructions}` : '',
     ].filter(Boolean).join('\n');
@@ -373,24 +486,31 @@ export function createLifeOSCouncilBuilderRoutes({
             output,
             placement,
             model_used: memberKey,
+            routing_key: routingKey,
+            routing_reason: routingRecommendation.reason,
+            blocked_candidates: routingRecommendation.blockedCandidates || [],
+            execution_only: executionOnly,
             domain_context_loaded: domainLoaded,
             domain,
             mode,
             cache_hit: true,
+            ...(filesInjectSummaries.length ? { files_injected: filesInjectSummaries } : {}),
           });
         }
       }
 
+      const maxOutputTokens = mode === 'code' ? estimateBuilderMaxOutputTokens(filesInjectSummaries, filesContentBlock) : undefined;
       const result = await callCouncilMember(memberKey, fullPrompt, {
         useCache: false,
         allowModelDowngrade: false,
         taskType: mode === 'code' ? 'codegen' : mode,
+        ...(maxOutputTokens ? { maxOutputTokens } : {}),
       });
       const raw = typeof result === 'string' ? result : result?.content || result?.text || '';
       const { output, placement } = splitBuilderOutput(raw);
 
       if (useCache !== false && cacheSet && raw) {
-        cacheSet(fullPrompt, cacheMember, raw, taskType);
+        cacheSet(fullPrompt, cacheMember, raw, routingKey);
       }
 
       await insertBuilderAudit({
@@ -409,10 +529,16 @@ export function createLifeOSCouncilBuilderRoutes({
         output,
         placement,
         model_used: memberKey,
+        routing_key: routingKey,
+        routing_reason: routingRecommendation.reason,
+        blocked_candidates: routingRecommendation.blockedCandidates || [],
+        execution_only: executionOnly,
         domain_context_loaded: domainLoaded,
         domain,
         mode,
         cache_hit: false,
+        ...(filesInjectSummaries.length ? { files_injected: filesInjectSummaries } : {}),
+        ...(mode === 'code' ? { max_output_tokens_requested: maxOutputTokens } : {}),
       });
     } catch (err) {
       log.error({ err: err.message, domain, mode }, '[BUILDER] Task dispatch failed');
@@ -502,7 +628,7 @@ export function createLifeOSCouncilBuilderRoutes({
     }
 
     // Step 1: Generate via council (reuse dispatchTask logic inline)
-    let generatedOutput, placement, model_used, domain_context_loaded, domain;
+    let generatedOutput, placement, model_used, domain_context_loaded, domain, routing_key;
     try {
       // Capture the response by calling dispatchTask via a mock response collector
       let captured = null;
@@ -513,12 +639,15 @@ export function createLifeOSCouncilBuilderRoutes({
       await dispatchTask({ body: { ...taskBody, mode: taskBody.mode || 'code' } }, mockRes);
 
       if (!captured || captured.code !== 200 || !captured.data?.ok) {
-        const detail = captured?.data?.error || 'Council call failed';
-        return res.status(500).json({ ok: false, error: detail });
+        const errMsg = captured?.data?.error || 'Council call failed';
+        const detail = captured?.data?.detail;
+        const httpStatus = typeof captured?.code === 'number' && captured.code >= 400 && captured.code < 600 ? captured.code : 500;
+        return res.status(httpStatus).json({ ok: false, error: errMsg, ...(detail ? { detail } : {}) });
       }
       generatedOutput = captured.data.output;
       placement = captured.data.placement;
       model_used = captured.data.model_used;
+      routing_key = captured.data.routing_key;
       domain_context_loaded = captured.data.domain_context_loaded;
       domain = captured.data.domain;
     } catch (err) {
@@ -544,6 +673,29 @@ export function createLifeOSCouncilBuilderRoutes({
     // Step 3: Commit
     const validationError = validateGeneratedOutputForTarget(resolvedTarget, generatedOutput);
     if (validationError) {
+      if (memorySvc && model_used) {
+        try {
+          await memorySvc.recordProtocolViolation({
+            agentId: model_used,
+            taskType: routing_key || 'council.builder.code',
+            violationType: 'unverifiable_output',
+            severity: 'medium',
+            details: validationError,
+            evidenceText: `Target file ${resolvedTarget} failed build validation before commit`,
+            detectedBy: 'builder_validation',
+            sourceRoute: '/api/v1/lifeos/builder/build',
+            autoAction: 'watch',
+          });
+          await memorySvc.recordAgentPerformance({
+            agentId: model_used,
+            taskType: routing_key || 'council.builder.code',
+            outcome: 'incorrect',
+            notes: validationError,
+          });
+        } catch (memoryErr) {
+          log.warn({ err: memoryErr.message, model_used }, '[BUILDER] could not persist protocol violation');
+        }
+      }
       return res.status(422).json({
         ok: false,
         error: validationError,
@@ -553,11 +705,99 @@ export function createLifeOSCouncilBuilderRoutes({
       });
     }
 
+    // ── Pre-commit syntax gate (JS/MJS only) ──────────────────────────────────
+    // Prevents the builder from committing syntactically broken code.
+    // A model is never trusted because it's smart — it must be checked.
+    const isJsFile = /\.(js|mjs|cjs)$/.test(resolvedTarget);
+    if (isJsFile) {
+      let tmpFile = null;
+      let syntaxOk = true;
+      let syntaxError = null;
+      try {
+        const tmpDir = await mkdtemp(join(tmpdir(), 'builder-check-'));
+        tmpFile = join(tmpDir, extname(resolvedTarget) || '.js');
+        await writeFile(tmpFile, generatedOutput, 'utf8');
+        execSync(`node --check "${tmpFile}"`, { stdio: 'pipe' });
+      } catch (checkErr) {
+        syntaxOk = false;
+        syntaxError = (checkErr.stderr?.toString() || checkErr.message || 'syntax error').slice(0, 400);
+      } finally {
+        if (tmpFile) await unlink(tmpFile).catch(() => {});
+      }
+
+      if (!syntaxOk) {
+        log.error({ resolvedTarget, model_used, syntaxError }, '[BUILDER] pre-commit syntax check FAILED — blocking commit');
+        if (memorySvc && model_used) {
+          try {
+            await memorySvc.recordProtocolViolation({
+              agentId: model_used,
+              taskType: routing_key || 'council.builder.code',
+              violationType: 'syntax_error',
+              severity: 'high',
+              details: `node --check failed on ${resolvedTarget}`,
+              evidenceText: syntaxError,
+              detectedBy: 'builder_pre_commit_gate',
+              sourceRoute: '/api/v1/lifeos/builder/build',
+              autoAction: 'watch',
+            });
+            await memorySvc.recordAgentPerformance({
+              agentId: model_used,
+              taskType: routing_key || 'council.builder.code',
+              outcome: 'incorrect',
+              notes: `Syntax error in generated ${resolvedTarget}: ${syntaxError.slice(0, 200)}`,
+            });
+          } catch (memErr) {
+            log.warn({ err: memErr.message }, '[BUILDER] could not record syntax violation');
+          }
+        }
+        return res.status(422).json({
+          ok: false,
+          error: `Pre-commit syntax check failed — commit blocked`,
+          syntax_error: syntaxError,
+          output: generatedOutput,
+          target_file: resolvedTarget,
+          committed: false,
+          fix: 'Review the generated output for syntax errors and re-run or fix manually',
+        });
+      }
+      log.info({ resolvedTarget }, '[BUILDER] pre-commit syntax check passed');
+    }
+
     const msg = commit_message || `[system-build] ${resolvedTarget}`;
     try {
       await commitToGitHub(resolvedTarget, generatedOutput, msg, branch || undefined);
       log.info({ resolvedTarget, msg, model_used }, '[BUILDER] /build committed generated file to GitHub');
       await insertBuilderAudit({ domain, task: taskBody.task, model_used, rawOutput: generatedOutput, cache_hit: false, placement: { target_file: resolvedTarget } });
+      if (memorySvc && model_used) {
+        try {
+          await memorySvc.recordAgentPerformance({
+            agentId: model_used,
+            taskType: routing_key || 'council.builder.code',
+            outcome: isJsFile ? 'correct' : 'partial', // JS passed syntax gate; others still need downstream verify
+            notes: isJsFile
+              ? `Builder output committed to ${resolvedTarget}; syntax verified pre-commit`
+              : `Builder output committed to ${resolvedTarget}; downstream verification still required`,
+          });
+          // Record ci_pass evidence for the syntax fact (JS files only — already passed the gate above)
+          if (isJsFile) {
+            const syntaxFact = await pool?.query(
+              `SELECT id FROM epistemic_facts WHERE text = $1`,
+              [`${resolvedTarget} passes node --check (valid JavaScript syntax)`],
+            ).catch(() => null);
+            if (syntaxFact?.rows?.[0]) {
+              await memorySvc.addEvidence(syntaxFact.rows[0].id, {
+                eventType: 'ci_pass',
+                result: 'confirmed',
+                evidenceText: `Pre-commit node --check passed on ${resolvedTarget} (model: ${model_used})`,
+                source: 'builder/pre-commit-gate',
+                sourceIsIndependent: false,
+              });
+            }
+          }
+        } catch (memoryErr) {
+          log.warn({ err: memoryErr.message, model_used }, '[BUILDER] could not persist agent performance');
+        }
+      }
       res.json({
         ok: true,
         output: generatedOutput,
@@ -581,6 +821,64 @@ export function createLifeOSCouncilBuilderRoutes({
     }
   }
 
+  // ── GET /history ─────────────────────────────────────────────────────────────
+  // Returns the conductor_builder_audit trail — what was built, by whom, success/fail.
+  // Query params: limit (default 50, max 200), domain (filter), since (ISO timestamp)
+
+  async function getBuilderHistory(req, res) {
+    if (!pool?.query) {
+      return res.status(503).json({ ok: false, error: 'No DB pool available' });
+    }
+    try {
+      const limit = Math.min(parseInt(req.query.limit, 10) || 50, 200);
+      const domain = req.query.domain || null;
+      const since = req.query.since || null;
+
+      const conditions = [];
+      const params = [];
+
+      if (domain) {
+        params.push(domain);
+        conditions.push(`domain = $${params.length}`);
+      }
+      if (since) {
+        params.push(since);
+        conditions.push(`created_at >= $${params.length}`);
+      }
+
+      params.push(limit);
+      const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+      const { rows } = await pool.query(
+        `SELECT id, created_at, domain, task_preview, model_used, output_chars, cache_hit, placement_json
+         FROM conductor_builder_audit
+         ${where}
+         ORDER BY created_at DESC
+         LIMIT $${params.length}`,
+        params,
+      );
+
+      res.json({
+        ok: true,
+        count: rows.length,
+        history: rows.map(r => ({
+          id: r.id,
+          created_at: r.created_at,
+          domain: r.domain,
+          task_preview: r.task_preview,
+          model_used: r.model_used,
+          output_chars: r.output_chars,
+          cache_hit: r.cache_hit,
+          target_file: r.placement_json?.target_file || null,
+          committed: r.placement_json?.committed ?? null,
+        })),
+      });
+    } catch (err) {
+      log.error({ err: err.message }, '[BUILDER] /history query failed');
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  }
+
   return function mount(app) {
     const base = '/api/v1/lifeos/builder';
     app.get(`${base}/ready`, requireKey, getBuilderReady);
@@ -591,9 +889,10 @@ export function createLifeOSCouncilBuilderRoutes({
     app.post(`${base}/review`, requireKey, reviewCode);
     app.get(`${base}/model-map`, requireKey, getModelMap);
     app.get(`${base}/lcl-stats`, requireKey, getLCLStats);
+    app.get(`${base}/history`, requireKey, getBuilderHistory);
     // §2.11 execution endpoints — the system writes and commits code
     app.post(`${base}/execute`, requireKey, executeOutput);
     app.post(`${base}/build`, requireKey, buildAndCommit);
-    log.info('✅ [LIFEOS-BUILDER] Council builder routes mounted at /api/v1/lifeos/builder (incl. /execute + /build)');
+    log.info('✅ [LIFEOS-BUILDER] Council builder routes mounted at /api/v1/lifeos/builder (incl. /execute + /build + /history)');
   };
 }

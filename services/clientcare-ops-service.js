@@ -1687,11 +1687,45 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     };
   }
 
-  async function ask(message, { requestedBy = 'sherry_console' } = {}) {
+  async function ask(message, { requestedBy = 'sherry_console', billingContext = null } = {}) {
+    const raw = String(message || '').trim();
     const text = normalizeIntent(message);
 
     if (!text) {
       return { ok: false, error: 'Message required' };
+    }
+
+    /** Sherry “programs” the product by queuing work — no silent code change from chat alone. */
+    const prefixed = raw.match(/^(QUEUE|REQUEST|BUILD):\s*(.*)$/is);
+    if (prefixed) {
+      const body = String(prefixed[2] || '').trim();
+      if (body) {
+        const snapshot =
+          billingContext && typeof billingContext === 'object'
+            ? Object.fromEntries(Object.entries(billingContext).filter(([, v]) => v != null && String(v).trim() !== ''))
+            : {};
+        const request = await createCapabilityRequest(body, {
+          requestedBy,
+          priority: /\b(urgent|asap|critical)\b/i.test(raw) ? 'high' : 'normal',
+          normalizedIntent: 'sherry_directed_program_change',
+          metadata: {
+            channel: 'billing_chat_prefix',
+            prefix: String(prefixed[1] || '').toUpperCase(),
+            billing_context_snapshot: snapshot,
+          },
+        });
+        return {
+          ok: true,
+          type: 'capability_request',
+          reply: request?.id
+            ? `Logged as **capability request #${request.id}** — Sherry-directed change. It stays in the queue until engineering (or the next build session) can ship it safely. You can confirm it under **Claims → Capability Queue** after refresh.`
+            : 'Could not persist to the capability queue (database unavailable). Try again or paste the same text to the Council without the prefix.',
+          data: { capability_request: request },
+          suggested_actions: request?.id
+            ? ['Refresh the overlay and open Capability Queue to verify the row.', 'Reply with more detail in a second QUEUE: message if you want a linked ticket.']
+            : [],
+        };
+      }
     }
 
     if (/what should i do first|highest priority|top priority|what do i do next/.test(text)) {
@@ -1934,26 +1968,38 @@ export function createClientCareOpsService({ pool, billingService, browserServic
         const dashboard = await billingService.getDashboard();
         const readiness = browserService.getReadiness();
         const reconciliation = await syncService.buildReconciliationSummary({ limit: 100 });
-        const prompt = [
+        const bc =
+          billingContext && typeof billingContext === 'object'
+            ? Object.fromEntries(Object.entries(billingContext).filter(([, v]) => v != null && String(v).trim() !== ''))
+            : {};
+        const promptLines = [
           'You are the ClientCare billing operations copilot speaking for the LifeOS AI Council.',
+          'ClientCare has no chart API in scope: credible answers explain the **browser/front-door** path (Railway credentials, operator approval) vs fantasy API writes.',
+          'Sherry may ask to **change how the program works** (UI, automation order, new checks, integrations). Those are not applied instantly from chat — they must be queued. If her message is a product/process change request (not a pure explanation), set **should_queue_capability_request: true** and put an implementation-ready summary in **recommended_action** (unless she used the QUEUE: prefix in a separate message, which already queues directly).',
           'Return strict JSON with keys: reply, recommended_action, confidence, should_queue_capability_request, priority, council_scope.',
           `User request: ${message}`,
+        ];
+        if (Object.keys(bc).length) {
+          promptLines.push(`Operator screen context (selected account / VOB strip; use for pronouns and "this chart"): ${JSON.stringify(bc)}`);
+        }
+        promptLines.push(
           `Dashboard summary: ${JSON.stringify(dashboard.summary || {})}`,
           `Readiness: ${JSON.stringify(readiness)}`,
           `Reconciliation summary: ${JSON.stringify(reconciliation.summary || {})}`,
-        ].join('\n');
+        );
+        const prompt = promptLines.join('\n');
         const response = callCouncilWithFailover
           ? await callCouncilWithFailover(prompt, 'chatgpt', false, {
             responseFormat: 'json',
-            maxTokens: 600,
+            maxTokens: 700,
             taskType: 'json',
             complexity: 'complex',
             requireConsensus: true,
             skipKnowledge: true,
           })
-          : await callCouncilMember('claude', prompt, '', {
+          : await callCouncilMember('claude', prompt, {
             responseFormat: 'json',
-            maxTokens: 500,
+            maxTokens: 650,
             taskType: 'json',
             skipKnowledge: true,
           });
@@ -1980,11 +2026,333 @@ export function createClientCareOpsService({ pool, billingService, browserServic
     };
   }
 
+  /** Chart-ready markdown for structured VOB letters (generic template; council may override with `norton_style_markdown`). */
+  function buildNortonStyleVobMarkdown(extracted, vobCompletedAtIso) {
+    const when = String(vobCompletedAtIso || new Date().toISOString());
+    const iv = extracted?.insurance_verification_completed && typeof extracted.insurance_verification_completed === 'object'
+      ? extracted.insurance_verification_completed
+      : {};
+    const cov = extracted?.coverage_details && typeof extracted.coverage_details === 'object'
+      ? extracted.coverage_details
+      : {};
+    const ded = cov.deductible && typeof cov.deductible === 'object' ? cov.deductible : {};
+    const lines = [];
+
+    lines.push(`**VOB recorded (system UTC):** ${when.slice(0, 19).replace('T', ' ')}`);
+    lines.push('');
+    lines.push('### Insurance Coverage Verification Completed');
+    lines.push('');
+    if (iv.provider_name) lines.push(`**Provider:** ${iv.provider_name}`);
+    if (iv.practice_address) lines.push(`- **Practice Address:** ${iv.practice_address}`);
+    if (iv.provider_id) lines.push(`- **Provider ID:** ${iv.provider_id}`);
+    if (iv.patient_account_summary) lines.push(`- **Patient Account:** ${iv.patient_account_summary}`);
+    if (iv.network_status) lines.push(`- **Network Status:** ${iv.network_status}`);
+    if (iv.reference_number) lines.push(`- **Reference Number:** ${iv.reference_number}`);
+    lines.push('');
+    lines.push('### Coverage Details');
+    lines.push('');
+    lines.push('**Deductible:**');
+    lines.push('');
+    if (ded.oon_annual) lines.push(`- Out-of-network deductible: ${ded.oon_annual}`);
+    if (ded.met_to_date) lines.push(`- Amount met as of call: ${ded.met_to_date}`);
+    if (ded.remaining) lines.push(`- Remaining deductible: ${ded.remaining}`);
+    lines.push('');
+    if (cov.after_deductible_summary) {
+      lines.push('**After deductible:**');
+      lines.push('');
+      lines.push(String(cov.after_deductible_summary));
+      lines.push('');
+    }
+    if (cov.reimbursement_basis) {
+      lines.push(String(cov.reimbursement_basis));
+      lines.push('');
+    }
+    const inc = Array.isArray(extracted?.incomplete_verifications) ? extracted.incomplete_verifications : [];
+    if (inc.length) {
+      lines.push('### Incomplete Verification');
+      lines.push('');
+      inc.forEach((row) => {
+        const s = row && typeof row === 'object' ? row : {};
+        const sub = String(s.subject || '').trim();
+        const rea = String(s.reason || '').trim();
+        if (sub || rea) lines.push(`- **${sub || 'Item'}:** ${rea || '(reason not stated)'}`.trim());
+      });
+      lines.push('');
+    }
+    if (extracted?.call_summary) {
+      lines.push('### Call summary');
+      lines.push('');
+      lines.push(String(extracted.call_summary));
+    }
+    return lines.filter((l) => String(l).trim()).join('\n');
+  }
+
+  function parseCouncilJsonObject(raw, contextLabel = 'council') {
+    if (raw == null) throw new Error(`${contextLabel}: empty response`);
+    if (typeof raw === 'object' && !Array.isArray(raw)) {
+      if (
+        'call_summary' in raw
+        || 'clientcare_note' in raw
+        || 'norton_style_markdown' in raw
+        || 'insurance_verification_completed' in raw
+      ) return raw;
+      if (typeof raw.content === 'string') return parseCouncilJsonObject(raw.content, contextLabel);
+      if (typeof raw.text === 'string') return parseCouncilJsonObject(raw.text, contextLabel);
+    }
+    const text = typeof raw === 'string' ? raw : String(raw);
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    const slice = jsonMatch ? jsonMatch[0] : text;
+    return JSON.parse(slice);
+  }
+
+  /**
+   * Ingest VOB/eligibility notes (pasted transcript today; future: streamed listen-in).
+   * Produces structured synopsis (Norton-style sections + optional full markdown), records
+   * `vob_completed_at`, can discard raw chaff from DB, and optionally posts the synopsis to
+   * ClientCare via **browser** `addBillingNote` when credentials + `clientHref` exist (no chart API).
+   */
+  async function ingestVobCallTranscript({
+    transcriptText,
+    clientHref = null,
+    clientName = null,
+    payerName = null,
+    memberId = null,
+    groupNumber = null,
+    requestedBy = 'overlay',
+    discardRawTranscript = false,
+    applyToClientcare = false,
+    applyFieldUpdates = false,
+    insuranceSlot = 0,
+  } = {}) {
+    const raw = String(transcriptText || '').trim();
+    if (!raw) {
+      return { ok: false, error: 'transcript_text_required' };
+    }
+    if (!callCouncilWithFailover && !callCouncilMember) {
+      return { ok: false, error: 'council_unavailable' };
+    }
+    const maxLen = 120_000;
+    const clipped = raw.length > maxLen ? raw.slice(0, maxLen) : raw;
+
+    const prompt = [
+      'You are a US behavioral-health billing assistant. Input may be a raw payer-call transcript, dictation, or scrubbed notes.',
+      'Strip small talk and repetition; keep only facts needed for billing and chart documentation.',
+      'Return ONE strict JSON object (use null for unknown; arrays may be empty). Keys:',
+      '{',
+      '  "call_summary": string (2-6 sentences, facts only),',
+      '  "payer_name": string|null, "member_id": string|null, "group_number": string|null,',
+      '  "coverage_effective": string|null, "plan_name": string|null,',
+      '  "insurance_verification_completed": {',
+      '     "provider_name": string|null, "practice_address": string|null, "provider_id": string|null,',
+      '     "patient_account_summary": string|null, "network_status": string|null, "reference_number": string|null',
+      '  },',
+      '  "coverage_details": {',
+      '     "deductible": { "oon_annual": string|null, "met_to_date": string|null, "remaining": string|null },',
+      '     "after_deductible_summary": string|null,',
+      '     "reimbursement_basis": string|null',
+      '  },',
+      '  "incomplete_verifications": [ { "subject": string, "reason": string } ],',
+      '  "benefit_highlights": string[],',
+      '  "authorization": { "required": boolean|null, "reference_number": string|null, "notes": string|null },',
+      '  "red_flags": string[], "follow_ups": string[],',
+      '  "norton_style_markdown": string|null (full chart-ready markdown with headings like "### Insurance Coverage Verification Completed", "### Coverage Details", "### Incomplete Verification" when applicable),',
+      '  "clientcare_note": string|null (very short executive summary if markdown is long)',
+      '}',
+      'Return ONLY valid JSON — no markdown fences.',
+      '',
+      '--- TRANSCRIPT OR NOTES ---',
+      clipped,
+    ].join('\n');
+
+    let extracted;
+    try {
+      let councilRaw;
+      if (callCouncilWithFailover) {
+        councilRaw = await callCouncilWithFailover(prompt, 'chatgpt', false, {
+          responseFormat: 'json',
+          maxTokens: 6144,
+          taskType: 'json',
+          complexity: 'complex',
+          requireConsensus: false,
+          skipKnowledge: true,
+        });
+      } else {
+        councilRaw = await callCouncilMember('claude', prompt, {
+          responseFormat: 'json',
+          maxTokens: 6144,
+          taskType: 'json',
+          skipKnowledge: true,
+        });
+      }
+      extracted = parseCouncilJsonObject(councilRaw, 'vob_transcript');
+    } catch (err) {
+      logger?.warn?.({ msg: 'ingestVobCallTranscript_council_parse_failed', err: String(err?.message || err) });
+      return { ok: false, error: 'council_parse_failed', detail: String(err?.message || err) };
+    }
+
+    const mergedPayer = payerName || extracted.payer_name || null;
+    const mergedMember = memberId || extracted.member_id || null;
+    const mergedGroup = groupNumber || extracted.group_number || null;
+    const mergedClientName = clientName || null;
+    const vobCompletedAt = new Date().toISOString();
+
+    let reimbursementPreview = null;
+    try {
+      reimbursementPreview = await getInsuranceVerificationPreview({
+        payer_name: mergedPayer || '',
+        member_id: mergedMember || '',
+        group_number: mergedGroup || '',
+      });
+    } catch {
+      reimbursementPreview = null;
+    }
+
+    const nortonFromModel = typeof extracted.norton_style_markdown === 'string' ? extracted.norton_style_markdown.trim() : '';
+    const builtMarkdown = buildNortonStyleVobMarkdown(extracted, vobCompletedAt);
+    const chartMarkdown = nortonFromModel || builtMarkdown || '';
+    const shortNote = typeof extracted.clientcare_note === 'string' && extracted.clientcare_note.trim()
+      ? extracted.clientcare_note.trim()
+      : '';
+    const clientcareNoteSuggestion = chartMarkdown || shortNote || [
+      'VOB synopsis (chart):',
+      extracted.call_summary || '(no summary)',
+      mergedPayer ? `Payer: ${mergedPayer}` : null,
+    ].filter(Boolean).join('\n');
+
+    const previewResult = {
+      source: 'vob_call_transcript',
+      vob_completed_at: vobCompletedAt,
+      call_summary: extracted.call_summary || null,
+      coverage_effective: extracted.coverage_effective || null,
+      plan_name: extracted.plan_name || null,
+      payer_name: mergedPayer,
+      member_id: mergedMember,
+      group_number: mergedGroup,
+      insurance_verification_completed: extracted.insurance_verification_completed && typeof extracted.insurance_verification_completed === 'object'
+        ? extracted.insurance_verification_completed
+        : null,
+      coverage_details: extracted.coverage_details && typeof extracted.coverage_details === 'object'
+        ? extracted.coverage_details
+        : null,
+      incomplete_verifications: Array.isArray(extracted.incomplete_verifications) ? extracted.incomplete_verifications : [],
+      norton_style_markdown: chartMarkdown || null,
+      benefit_highlights: Array.isArray(extracted.benefit_highlights) ? extracted.benefit_highlights : [],
+      authorization: extracted.authorization && typeof extracted.authorization === 'object' ? extracted.authorization : {},
+      red_flags: Array.isArray(extracted.red_flags) ? extracted.red_flags : [],
+      follow_ups: Array.isArray(extracted.follow_ups) ? extracted.follow_ups : [],
+      reimbursement_preview: reimbursementPreview,
+    };
+
+    let matchedClient = null;
+    try {
+      const hint = await findExistingClientMatch({
+        fullName: String(mergedClientName || '').trim(),
+        memberId: String(mergedMember || '').trim(),
+      });
+      if (hint?.confirmed) matchedClient = hint;
+    } catch {
+      matchedClient = null;
+    }
+
+    const saved = await saveVobProspect({
+      sourceType: 'vob_call_transcript',
+      fullName: String(mergedClientName || '').trim(),
+      payerName: mergedPayer || '',
+      memberId: mergedMember || '',
+      groupNumber: mergedGroup || '',
+      extractedText: clipped,
+      preview: previewResult,
+      matchedClient,
+      requestedBy: String(requestedBy || 'overlay'),
+      fileMeta: {
+        source: 'vob_call_transcript',
+        client_href: clientHref || null,
+        clientcare_note_suggestion: clientcareNoteSuggestion,
+        discard_raw_transcript: Boolean(discardRawTranscript),
+        apply_to_clientcare_requested: Boolean(applyToClientcare),
+        apply_field_updates_requested: Boolean(applyFieldUpdates),
+        insurance_slot_requested: Math.max(0, Number(insuranceSlot) || 0),
+      },
+    });
+
+    if (discardRawTranscript && saved?.id) {
+      try {
+        await pool.query(
+          `UPDATE clientcare_vob_prospects SET extracted_text = $1, updated_at = NOW() WHERE id = $2`,
+          ['[raw transcript discarded after structured synopsis — see preview_result]', saved.id],
+        );
+      } catch (err) {
+        logger?.warn?.({ msg: 'ingestVobCallTranscript_discard_raw_failed', err: String(err?.message || err) });
+      }
+    }
+
+    let clientcare_apply = null;
+    if (applyToClientcare) {
+      const href = String(clientHref || '').trim();
+      if (!href) {
+        clientcare_apply = { ok: false, reason: 'client_href required for ClientCare billing note' };
+      } else if (!browserService?.addBillingNote) {
+        clientcare_apply = { ok: false, reason: 'browserService.addBillingNote unavailable' };
+      } else if (!chartMarkdown && !clientcareNoteSuggestion) {
+        clientcare_apply = { ok: false, reason: 'no synopsis text to post' };
+      } else {
+        try {
+          const notePayload = chartMarkdown || clientcareNoteSuggestion;
+          clientcare_apply = await browserService.addBillingNote(href, notePayload);
+        } catch (err) {
+          clientcare_apply = { ok: false, reason: String(err?.message || err) };
+        }
+      }
+    }
+
+    let clientcare_field_apply = null;
+    if (applyFieldUpdates) {
+      const href = String(clientHref || '').trim();
+      if (!href) {
+        clientcare_field_apply = { ok: false, reason: 'client_href required for ClientCare field apply' };
+      } else {
+        try {
+          const fieldApply = await reconcileInsuranceWithClientcare({
+            clientHref: href,
+            fileBuffer: null,
+            fileName: 'vob-transcript-notes',
+            supplementalNotes: chartMarkdown || clientcareNoteSuggestion || clipped,
+            insuranceSlot: Math.max(0, Number(insuranceSlot) || 0),
+            apply: true,
+            requestedBy: String(requestedBy || 'overlay'),
+          });
+          clientcare_field_apply = {
+            ok: Boolean(fieldApply?.ok && fieldApply?.repair_applied?.ok),
+            reason: !fieldApply?.ok
+              ? (fieldApply?.error || 'reconcile failed')
+              : (!fieldApply?.repair_applied?.ok ? (fieldApply?.repair_applied?.error || 'no field updates applied') : null),
+            report: fieldApply,
+          };
+        } catch (err) {
+          clientcare_field_apply = { ok: false, reason: String(err?.message || err) };
+        }
+      }
+    }
+
+    return {
+      ok: true,
+      extracted,
+      preview_result: previewResult,
+      clientcare_note_suggestion: clientcareNoteSuggestion,
+      vob_completed_at: vobCompletedAt,
+      saved,
+      matched_client: matchedClient,
+      clientcare_apply,
+      clientcare_field_apply,
+    };
+  }
+
   return {
     ask,
     buildOperationsOverview,
     findExistingClientMatch,
     intakeInsuranceCard,
+    ingestVobCallTranscript,
     listSavedVobProspects,
     saveVobProspect,
     reconcileInsuranceWithClientcare,

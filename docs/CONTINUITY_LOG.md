@@ -32,6 +32,180 @@
 
 ---
 
+## [BUILD] Update 2026-04-26 #101 — **Anti-corner-cutting enforcement + durable compact rules**
+
+### Files changed
+- `services/memory-intelligence-service.js`, `routes/memory-intelligence-routes.js`, `db/migrations/20260426_memory_intelligence_hardening.sql`, `db/migrations/20260426_memory_protocol_enforcement.sql` — task authority, protocol violations, routing recommendation, future-lookback, source-count hardening.
+- `routes/lifeos-council-builder-routes.js`, `routes/lifeos-gate-change-routes.js`, `services/lifeos-lumin-build.js`, `services/lifeos-gate-change-council-run.js`, `config/task-model-routing.js`, `prompts/lifeos-gate-change-proposal.md` — runtime authority checks, fail-closed model selection, future-back consensus, builder violation logging.
+- `docs/SSOT_COMPANION.md`, `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — anti-corner-cutting and future-back promoted into operating law.
+- `scripts/generate-agent-rules.mjs`, `docs/AGENT_RULES.compact.md`, `docs/.compact-rules-baseline` — compact rules now include Memory Intelligence + anti-corner-cutting and still shrink under the token-budget law.
+- `docs/CONTINUITY_LOG_COUNCIL.md`, `docs/CONTINUITY_LOG_LIFEOS.md` — lane-specific receipts for the new routing/authority behavior.
+
+### State after this session
+- The system can now demote or block a model by task type, route around weak performers at runtime, and log protocol violations instead of treating “smart sounding” output as proof.
+- Council gate-change debate now requires future-back analysis and stores structured debate memory.
+- The compact cold-start packet now carries the new rules durably through the generator instead of relying on manual edits.
+
+### Next agent: start here
+1. Wire real verifier/CI/builder outcomes into `fact_evidence` and `agent_performance` automatically.
+2. Add focused tests for memory routing + protocol violation demotion behavior.
+3. Seed initial facts from SSOT receipts so routing and debate memory start with real operational weight.
+
+---
+
+## [BUILD] Update 2026-04-26 #101 — **Idea Vault — machine keyword index (pull + index)**
+
+### Files changed
+- `scripts/catalog-dump-keywords.mjs` — default keyword set expanded (media/creator + platform/ops + trust lane: LCTP, Twilio, Neon, Railway, pgvector, capsule, council, builder, BoldTrail, ClientCare, migration, receipt, token, digital twin, IFS, VoiceGuard, Kingsman).
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — new **§7** with snapshot tables (2026-04-26); **§6** snapshot refreshed; **§5** pointer.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — Stream I machine evidence, §C step **1b**, Last Updated, Change Receipt.
+
+### Next agent
+After new raw exports: run `npm run idea-vault:catalog-keywords`, paste updated counts into **§7** (or extend script to emit markdown). Add new high-value keywords to the script when themes stabilize.
+
+---
+
+## [BUILD] Update 2026-04-26 #100 — **Idea Vault + indexes — Memory Intelligence navigation squeeze**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Scope** lists §D + §A–D seed catalog + **39** in implementation-spec routing; **Change Receipt** row for cross-index wiring.
+- `docs/projects/INDEX.md` — already held registry **39** + HOW THIS WORKS; no further edit this slice.
+- `docs/REPO_MASTER_INDEX.md`, `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — confirm **39** + **`MEMORY_FRAMEWORK_DESIGN_BRIEF.md`** linked from master map and dump index.
+- `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` — **Indexed in SSOT** adds **`projects/INDEX`** row 39 + **`REPO_MASTER_INDEX`** §B.
+
+### State after this session
+- Cold agents can reach Memory Intelligence from **38 §D**, **INDEX**, **REPO_MASTER §B**, **CONVERSATION_DUMP** header, and the design brief’s index line.
+- Product backlog unchanged: **Amendment 39** Phase 2 (seed facts from receipts, CI → evidence) still next for the evidence engine.
+
+### Next agent: start here
+- Execute **39** Phase 2 per `AMENDMENT_39_MEMORY_INTELLIGENCE.md` handoff; on new brainstorm exports, append **38** § Seed §A/§B/§D and bump keyword catalog if needed.
+
+---
+
+## [BUILD] Update 2026-04-26 #99 — **Memory Intelligence System — Phase 1 (AMENDMENT_39)**
+
+### Context
+Extended brainstorm session (CC + Cursor + GPT-5.4) produced the Memory Framework Design Brief. Adam's directive: stop brainstorming, build it, build it right. This session implements Phase 1 of the evidence engine.
+
+### Key design decisions locked in this session
+- **Two ladders, never one:** Evidence Ladder (CLAIM→INVARIANT) is separate from Governance Ladder (NSSOT constitutional ratification). Level 6 is INVARIANT, not LAW. Mixing them would corrupt the constitutional vocabulary.
+- **Scope mandatory on every fact:** `context_required` + `false_when` on every fact. Most facts are conditionally true. Root cause of the GITHUB_TOKEN false claim incident.
+- **Residue risk:** Minority view in debates is stored, not discarded. `residue_risk` JSONB field.
+- **Governing design question:** "Not 'what do we know?' but 'what has earned the right to influence action, at what weight, in this context?'" — now in AGENT_RULES.compact.md.
+- **INVARIANT gate:** `adversarial_count >= 3` AND `exception_count === 0` — hard gate, cannot be bypassed.
+- **Devil's advocate quality scoring:** `adversarial_quality` 0–5; theater attacks (0) don't count toward the INVARIANT gate.
+
+### Files changed
+- `db/migrations/20260426_memory_intelligence.sql` — 7 tables (epistemic_facts, fact_evidence, fact_level_history, retrieval_events, debate_records, lessons_learned, agent_performance, intent_drift_events) + 2 views (lesson_retrieval_roi, stale_hypotheses)
+- `services/memory-intelligence-service.js` — full evidence engine: recordFact, getFact, queryFacts, addEvidence, promoteFact, demoteFact, recordRetrieval, recordDebate, getDebatesByProblemClass, recordLesson, getLessonsByDomain, recordAgentPerformance, getAgentAccuracy, recordIntentDrift, getStaleHypotheses, getLessonROI, getSystemSummary
+- `routes/memory-intelligence-routes.js` — 16 endpoints mounted at /api/v1/memory
+- `startup/register-runtime-routes.js` — import + mount added
+- `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — new amendment, full spec
+- `docs/AGENT_RULES.compact.md` — Memory Intelligence section added (design sentence, evidence ladder, INVARIANT gate, API pointers)
+- `docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md` — LAW → INVARIANT fix, two-ladder documentation, design sentence, residue risk + disproof recipe added, amendment number corrected
+
+### State after this session
+- Phase 1 built and syntax-verified (`node --check` PASS on both service and routes)
+- Migration auto-applies on next Railway deploy — tables will be empty on first boot
+- No data seeded yet — next session should seed initial facts from SSOT receipts
+- Builder was used for: none (GAP-FILL: builder preflight required GITHUB_TOKEN diagnosis; constitutional-level design work preceded build)
+
+### Next agent: start here
+1. Deploy to Railway (push commits → auto-deploy applies migration)
+2. `GET /api/v1/memory/health` — verify tables exist and return zeros
+3. Phase 2: seed initial facts — write a script to extract Change Receipts from amendments and insert as RECEIPT-level facts
+4. Wire `ci_pass` events from smoke-test runner → `POST /api/v1/memory/facts/:id/evidence`
+5. Begin using `POST /api/v1/memory/lessons` at session end for notable lessons
+
+### Open intent drift
+- Adam's original session ask: "run by other models, build into SSOT DNA." Delivered: cross-model review done (CC + Cursor + GPT-5.4), design brief updated, Phase 1 built. Full SSOT DNA embedding continues in Phase 2 (seeding from receipts).
+
+---
+
+## [BUILD] Update 2026-04-25 #98 — **Amendment 38 Seed catalog (ideas + nuances)**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — new **§ Seed catalog** (product clusters, chat-loss nuances, TSOS operator table, next actions); scope + receipts + handoff.
+- `docs/projects/INDEX.md`, `docs/CONVERSATION_DUMP_IDEAS_INDEX.md`, `AMENDMENT_38` manifest — pointers.
+
+### Next agent
+- On each major export or law change: extend **§ Seed catalog** §A/§B so cold agents don’t re-derive from dumps.
+
+---
+
+## [BUILD] Update 2026-04-25 #97 — **Operator corpus dual lane (vault + Digital Twin)**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **§ Operator corpus — dual lane**; `operator-corpus:pipeline`; Build Plan; receipts; scope bullet.
+- `scripts/operator-corpus-pipeline.mjs` + `package.json` — checklist runner (keyword map + Lane B commands).
+- `docs/projects/AMENDMENT_09_LIFE_COACHING.md` — **Historical multi‑MB exports → Digital Twin** + receipt row.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `owned_files` / `next_task`.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — owning SSOT pointer + §5 step 6.
+
+### Next agent
+- If Adam wants **hands-off** bulk scan: add a **guarded** scheduler path (Zero‑Waste) — do not ship silent always-on LLM loops.
+
+---
+
+## [BUILD] Update 2026-04-25 #96 — **Idea Vault Stream I + keyword catalog script**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream I** (video/story/creator/media) + **§ Portfolio triage queue** body (was referenced by INDEX/CONTINUITY but missing); §6 step **0**; Build Plan; Change Receipt.
+- `scripts/catalog-dump-keywords.mjs` + `package.json` — `npm run idea-vault:catalog-keywords` (`rg` keyword → dump files).
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `owned_files` + `next_task`.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§6** video/media + §5 bullet 5; ordered §5 before §6.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Idea Vault variation map rows for **07**/**22**/**23**/**37**/**28** media themes; Change Receipt + `Last Updated` footer.
+
+### Next agent
+- After new exports: run `idea-vault:catalog-keywords`; refresh Stream I snapshot lines if file list shifts.
+
+---
+
+## [BUILD] Update 2026-04-25 #95 — **LifeOS variation map + portfolio triage**
+
+### Files changed
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — new **`## Idea Vault → LifeOS-native consolidation`**: variation table (CoPilot/Lumea aliases → LifeOS surfaces), **`### Operator personal context`** (**Pewds** in hospital — not backlog), **ADD/DEFER/NOT_ADD**; `Last Updated` + Change Receipt.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — Stream A pointer to **21**; new **§ Portfolio triage queue**; receipt row.
+- `docs/projects/INDEX.md`, `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — cross-links.
+
+### Next agent
+- When Stream A or Mission dumps add wording, update **21** variation table first, then **38** triage **State** column if decision changes.
+
+---
+
+## [BUILD] Update 2026-04-25 #94 — **Amendment 38 Idea Vault**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md`, `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — consolidated **streams A–H** from multi‑MB exports + routing to owning amendments; **§6** review protocol (heading pass, split_dumps, optional council).
+- `docs/projects/INDEX.md` — amendment **38** registry row + “forgotten ideas” pointer.
+- `docs/REPO_MASTER_INDEX.md`, `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — cross-links / owning SSOT pointer.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — Change Receipt row only (manifest **38** owns vault + `CONVERSATION_DUMP_IDEAS_INDEX`).
+
+### State after this session
+- **Single SSOT** for “everything we said in the big chats” at the **theme + provenance** level; implementation truth stays in domain amendments.
+- **Not claimed:** byte‑for‑byte human read of every dump — amendment states **`HEADING-PASS / CHUNK`** path for completion.
+
+### Next agent: start here
+- Optional: `scripts/extract-dump-headings.mjs` or document one-liner `rg` in **38** Build Plan when adding new exports.
+
+---
+
+## [RESEARCH] Update 2026-04-25 #93 — **Conversation dump ideas index**
+
+### Files changed
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — new: canonical **`•`+TAB+`Lumin-Memory`** dump inventory, placeholder warning for `Lumin-Memory/` 404 files, theme clusters from Mission & North Star, Directives log, Miscellaneous, system-ideas, root immediate-features doc.
+- `docs/REPO_MASTER_INDEX.md`, `docs/projects/INDEX.md` — links + **9 new** candidate concept rows.
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` + `.manifest.json` — receipts / `owned_files`.
+
+### State after this session
+- Cold agents can find dump **paths** and **mined themes** without opening 10MB logs; **INDEX** candidate table extended.
+- Raw dumps unchanged; **folder normalization** (bullet+tab vs plain `Lumin-Memory`) still a manual cleanup item.
+
+### Next agent: start here
+- Optional: consolidate duplicate `Lumin-Memory` directory names; replace 404 stub files with real exports or delete stubs.
+
+---
+
 ## [FIX] Update 2026-04-25 #92 — **Law: non-human = TSOS compression**
 
 ### Files changed
@@ -1770,6 +1944,18 @@ Full spec in `AMENDMENT_21 → ## Approved Product Backlog → Conflict Intellig
 - `server.js` route composition has been reduced again: runtime route wiring now lives in `startup/register-runtime-routes.js`, and domain startup calls now go through `startup/boot-domains.js` instead of inline IIFEs.
 - Project governance is now a first-class amendment (`AMENDMENT_19_PROJECT_GOVERNANCE.md`) with tracked manifest, migration, verifier scripts, CI workflow, and a seed script for populating the governance tables from amendment build plans.
 - Project governance is now seeded in the real DB and the live governance endpoints (`/api/v1/projects`, `/api/v1/pending-adam`, `/api/v1/estimation/accuracy`) are verified against production; next work is wiring estimation accuracy and drill-downs into the Command Center.
+
+## Update 2026-04-26 #100 — Memory Intelligence Builder Integration + Audit Trail
+- **Memory Intelligence (AMENDMENT_39) Phase 1 extended:** Schema, service, and API surface were built in session #99. This session wired the system into the builder pipeline and added self-seeding infrastructure.
+- **Builder syntax gate:** `routes/lifeos-council-builder-routes.js` now runs `node --check` on a temp file before committing any `.js`/`.mjs` file. Returns 422 if broken, records a protocol violation against the model, and logs the failure. Non-JS files pass through with a `partial` performance record.
+- **Builder history endpoint:** `GET /api/v1/lifeos/builder/history` now exposes the `conductor_builder_audit` table. Supports `?limit`, `?domain`, `?since` filters. Operators can now see what was built, by which model, with which output size — the audit trail had no query surface before this.
+- **`scripts/seed-epistemic-facts.mjs`:** Seeds the epistemic_facts table from three existing truth sources: SSOT Amendment Change Receipts (RECEIPT/3), ENV_REGISTRY.md known-SET vars (VERIFIED/4), and hardcoded architectural invariants (TESTED/2 to FACT/5). Safe to re-run (deduped by text+domain). Run via `npm run memory:seed`.
+- **`scripts/record-ci-evidence.mjs`:** Records `node --check` results as `fact_evidence` rows in the memory system. Modes: `--pass`, `--fail`, auto-run. Promotes facts to TESTED after 3+ passes with 0 exceptions. Demotes immediately on failure. Non-fatal if DB unavailable. Run via `npm run memory:ci-evidence`.
+- **Preflight fix:** `scripts/council-builder-preflight.mjs` had a §2.6 false-claim: when `/ready` returned `github_token: false`, it printed "GITHUB_TOKEN is not set, set it in Railway" and exited 1 — treating vault absence and runtime unavailability as identical. Fixed: now non-fatal with full ENV_DIAGNOSIS_PROTOCOL guidance (vault vs runtime distinction, 4-step diagnosis path).
+- **Domain prompt files:** `prompts/lifeos-memory-intelligence.md` and `prompts/lifeos-platform.md` created. Builder can now generate code targeting these two domains with full context injection.
+- **`package.json`:** Added `memory:seed`, `memory:ci-evidence`, `verify:ci` scripts.
+- **State:** Tables are empty until `npm run memory:seed` is run against Railway. The smoke-test CI workflow does NOT yet call `memory:ci-evidence` automatically — that wiring is next.
+- **Next:** (1) Run `memory:seed` against Railway to populate initial facts. (2) Wire `memory:ci-evidence` into `.github/workflows/smoke-test.yml`. (3) Add auto-seed on boot (check if `epistemic_facts` is empty). (4) SQL validation gate for `.sql` builder commits. (5) HTML validation gate.
 
 ## Update 2026-01-30 #1
 - Hardware: MacBook Pro M2 Max, 32 GB RAM, 2 TB SSD running server-only mode; machine doubles as development host but being stripped down for LifeOS server.

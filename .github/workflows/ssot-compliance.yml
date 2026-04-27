@@ -125,3 +125,29 @@ jobs:
             });
           });
           " || echo "⚠️ ajv not available, skipping manifest validation"
+
+  # ── 7. Cold-start generator + structural handoff test ───────────────────────
+  handoff-cold-start:
+    name: Cold Start + Handoff Self-Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Regenerate AI_COLD_START.md and verify structure
+        run: |
+          npm run cold-start:gen
+          npm run handoff:self-test
+
+  # ── 8. Amendment readiness (warn-only) ─────────────────────────────────────
+  amendment-readiness:
+    name: Amendment Readiness (warn-only)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check build_ready manifests vs readiness gates
+        run: npm run readiness:check

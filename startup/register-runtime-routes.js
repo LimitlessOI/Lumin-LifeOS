@@ -55,6 +55,7 @@ import { getCachedResponse, cacheResponse } from "../services/response-cache.js"
 import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
+import { createMemoryIntelligenceRoutes } from "../routes/memory-intelligence-routes.js";
 
 export async function registerRuntimeRoutes(app, deps) {
   const {
@@ -310,6 +311,10 @@ export async function registerRuntimeRoutes(app, deps) {
     managedEnvService: railwayManagedEnvService,
   });
   createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
+
+  // Memory Intelligence — epistemic facts, debates, lessons, agent performance, intent drift (AMENDMENT_39)
+  app.use('/api/v1/memory', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
+  logger.info('✅ [MEMORY-INTELLIGENCE] Routes mounted at /api/v1/memory/{facts,debates,lessons,agents,authority,violations,routing,intent-drift,health}');
 
   return {
     tcCoordinator,

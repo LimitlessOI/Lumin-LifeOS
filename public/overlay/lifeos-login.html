@@ -150,6 +150,19 @@
     }
     .divider::before { left: 0; }
     .divider::after  { right: 0; }
+
+    .invite-banner {
+      display: none;
+      margin-bottom: 18px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: rgba(91, 106, 245, 0.12);
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--text);
+    }
+    .invite-banner.show { display: block; }
   </style>
 </head>
 <body>
@@ -181,12 +194,13 @@
 
   <!-- REGISTER -->
   <div class="form-section" id="register-section">
+    <div class="invite-banner" id="invite-banner">You're invited — your code is filled in below. Add handle, email, and password (name optional).</div>
     <div class="field">
       <label>Invite code</label>
       <input type="text" id="reg-invite" placeholder="LOS-XXXXXX or SHERRY-LIFEOS-2026" autocomplete="off" style="letter-spacing:.06em;">
     </div>
     <div class="field">
-      <label>Your name</label>
+      <label>Your name <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
       <input type="text" id="reg-name" placeholder="First name or nickname">
     </div>
     <div class="field">
@@ -203,7 +217,7 @@
     </div>
     <button class="btn" id="register-btn">Create account</button>
     <div class="notice" id="register-notice"></div>
-    <p class="hint">Need an invite? Ask Adam to generate one.</p>
+    <p class="hint">Need an invite? Ask your host for a link (<code style="font-size:11px;">?invite=CODE</code>) or a code.</p>
   </div>
 
   <!-- SET PASSWORD (first-time admin bootstrap) -->
@@ -308,7 +322,7 @@
     const email       = document.getElementById('reg-email').value.trim();
     const password    = document.getElementById('reg-password').value;
     if (!inviteCode || !handle || !email || !password) {
-      return showNotice('register-notice', 'All fields are required', 'error');
+      return showNotice('register-notice', 'Invite code, handle, email, and password are required', 'error');
     }
     setLoading(registerBtn, true);
     try {
@@ -354,11 +368,17 @@
     setLoading(spBtn, false);
   });
 
-  // ── Auto-populate invite from URL ────────────────────────────────────────────
-  const inviteParam = new URLSearchParams(location.search).get('invite');
+  // ── Auto-populate invite from URL (?invite= or ?code=) ───────────────────────
+  const qs = new URLSearchParams(location.search);
+  const inviteParam = qs.get('invite') || qs.get('code');
   if (inviteParam) {
-    document.getElementById('reg-invite').value = inviteParam;
-    // Switch to register tab
+    try {
+      document.getElementById('reg-invite').value = decodeURIComponent(inviteParam.trim());
+    } catch {
+      document.getElementById('reg-invite').value = inviteParam.trim();
+    }
+    const banner = document.getElementById('invite-banner');
+    if (banner) banner.classList.add('show');
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
     document.querySelector('[data-tab="register"]').classList.add('active');

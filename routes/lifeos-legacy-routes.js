@@ -42,6 +42,8 @@
 import { Router } from 'express';
 import { createHealthExtensions } from '../services/health-extensions.js';
 import { createCommunityGrowth } from '../services/community-growth.js';
+import { createLifeOSLegacyCore } from '../services/lifeos-legacy-core.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
 function resolveUser(req) {
   return req.query.user ?? req.body?.user ?? req.body?.userId ?? null;
@@ -49,12 +51,139 @@ function resolveUser(req) {
 
 export function createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const router = Router();
+  const resolveUserId = makeLifeOSUserResolver(pool);
 
   const callAI = (prompt, opts = {}) =>
     callCouncilMember(opts.model || 'claude', prompt, opts.systemPrompt || '', opts);
 
   const health    = createHealthExtensions({ pool, callAI, logger });
   const community = createCommunityGrowth({ pool, callAI, logger });
+  const legacyCore = createLifeOSLegacyCore({ pool });
+
+  // ── LEGACY CORE (trusted contacts / cadence / time capsules / digital will) ──
+
+  // GET /trusted-contacts?user=adam
+  router.get('/trusted-contacts', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const contacts = await legacyCore.listTrustedContacts(userId);
+      res.json({ contacts });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // POST /trusted-contacts
+  router.post('/trusted-contacts', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const contact = await legacyCore.addTrustedContact(userId, req.body || {});
+      res.status(201).json({ contact });
+    } catch (err) {
+      res.status(err.status || 500).json({ error: err.message });
+    }
+  });
+
+  // DELETE /trusted-contacts/:id
+  router.delete('/trusted-contacts/:id', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const contactId = Number.parseInt(req.params.id, 10);
+      if (!Number.isFinite(contactId)) return res.status(400).json({ error: 'invalid id' });
+      const contact = await legacyCore.deactivateTrustedContact(userId, contactId);
+      if (!contact) return res.status(404).json({ error: 'Contact not found' });
+      res.json({ contact });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // GET /check-in-cadence?user=adam
+  router.get('/check-in-cadence', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const cadence = await legacyCore.getCheckInCadence(userId);
+      res.json({ cadence });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // PUT /check-in-cadence
+  router.put('/check-in-cadence', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const cadence = await legacyCore.updateCheckInCadence(userId, req.body?.cadence_days);
+      res.json({ cadence });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // GET /time-capsule?user=adam
+  router.get('/time-capsule', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const messages = await legacyCore.listTimeCapsules(userId);
+      res.json({ messages });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // POST /time-capsule
+  router.post('/time-capsule', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const message = await legacyCore.createTimeCapsule(userId, req.body || {});
+      res.status(201).json({ message });
+    } catch (err) {
+      res.status(err.status || 500).json({ error: err.message });
+    }
+  });
+
+  // GET /digital-will?user=adam
+  router.get('/digital-will', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const will = await legacyCore.getDigitalWill(userId);
+      res.json({ will });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // PUT /digital-will
+  router.put('/digital-will', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const will = await legacyCore.upsertDigitalWill(userId, req.body || {});
+      res.json({ will });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // GET /completeness?user=adam
+  router.get('/completeness', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(resolveUser(req) || 'adam');
+      if (!userId) return res.status(404).json({ error: 'User not found' });
+      const completeness = await legacyCore.getLegacyCompleteness(userId);
+      res.json({ completeness });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
 
   // ── HEALTH EXTENSIONS ────────────────────────────────────────────────────
 

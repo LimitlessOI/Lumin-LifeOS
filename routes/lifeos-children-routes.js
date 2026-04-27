@@ -87,7 +87,7 @@ export function createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember
 
   router.get('/profiles', requireKey, async (req, res) => {
     try {
-      const parentId = await resolveParentId(req.query.parent_user);
+      const parentId = await resolveParentId(req.query.parent_user || req.query.user || 'adam');
       if (!parentId) return res.status(404).json({ ok: false, error: 'Parent user not found' });
       const { rows } = await pool.query(
         'SELECT * FROM child_profiles WHERE parent_user_id = $1 AND active = TRUE ORDER BY name',

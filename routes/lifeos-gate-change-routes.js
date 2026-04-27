@@ -30,6 +30,7 @@ import {
 import { GATE_CHANGE_PRESETS } from '../config/gate-change-presets.js';
 import { getModelForTask } from '../config/task-model-routing.js';
 import { verifyToken } from '../services/lifeos-auth.js';
+import { createMemoryIntelligenceService } from '../services/memory-intelligence-service.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPT_PATH = join(__dirname, '..', 'prompts', 'lifeos-gate-change-proposal.md');
@@ -75,6 +76,7 @@ function requireKeyOrLifeOSAdmin(req, res, next) {
 export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMember, logger }) {
   const log = logger || console;
   const router = express.Router();
+  const memorySvc = pool?.query ? createMemoryIntelligenceService(pool, log) : null;
 
   if (!pool?.query) {
     router.use((req, res) => {
@@ -109,15 +111,81 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
     const explicitModels = Array.isArray(reqBody?.models)
       ? reqBody.models.map((m) => String(m)).filter(Boolean)
       : [];
-    const memberKeys = resolveMemberKeys(
+    let memberKeys = resolveMemberKeys(
       explicitModels.length ? explicitModels : undefined,
       getModelForTask
     );
+    if (memorySvc) {
+      try {
+        const recommendation = await memorySvc.getAuthorizedModelsForTask({
+          taskType: 'council.gate_change.debate',
+          candidateModels: memberKeys,
+          preferredModel: getModelForTask('council.gate_change.debate'),
+        });
+        memberKeys = recommendation.orderedCandidates.slice(0, Math.max(1, memberKeys.length));
+        if (!memberKeys.length) {
+          throw new Error('No authorized council members are currently allowed for council.gate_change.debate');
+        }
+      } catch (memoryErr) {
+        log.warn({ err: memoryErr.message }, '[GATE-CHANGE] Memory authority unavailable — using static council members');
+      }
+    }
     return runGateChangeCouncilDebate({
       callCouncilMember,
       rubricText: rubric,
       row,
       memberKeys,
+    });
+  }
+
+  async function persistGateChangeDebate(row, debateRun) {
+    if (!memorySvc) return null;
+    const { round1, oppositeRound, consensus, rounds } = debateRun;
+    const unresolved = !consensus.unanimous && consensus.reached;
+    const residueRisk = unresolved
+      ? {
+          argument: 'Council reached a non-unanimous verdict after opposite-argument review',
+          confidence: 0.5,
+          conditions_that_would_reopen: 'equivalence metrics fail, new evidence emerges, or a verified exception appears',
+        }
+      : null;
+
+    return memorySvc.recordDebate({
+      subject: `Gate-change: ${row.title}`,
+      initialPositions: (round1 || []).map((entry) => ({
+        agent: entry.member,
+        position: entry.verdict,
+        confidence: null,
+        evidence_citations: [],
+        raw: entry.raw,
+      })),
+      arguments: [
+        ...(round1 || []).map((entry) => ({
+          agent: entry.member,
+          argument: entry.raw,
+          type: 'round1',
+          timestamp: new Date().toISOString(),
+        })),
+        ...(oppositeRound || []).map((entry) => ({
+          agent: entry.member,
+          argument: entry.raw,
+          type: 'opposite_argument',
+          timestamp: new Date().toISOString(),
+        })),
+      ],
+      whatMovedMinds: consensus.summary,
+      consensus: consensus.final_verdict,
+      consensusMethod: consensus.unanimous ? 'unanimous' : (consensus.reached ? 'majority' : 'timed_out'),
+      consensusReachedBy: 'lifeos_gate_change_council',
+      lessonsLearned: 'Use opposite-argument review plus future-back scan before changing gates.',
+      problemClass: 'gate_change',
+      residueRisk,
+      futureLookback: {
+        protocol: rounds?.protocol || 'consensus_v3_opposite_argument_future_back',
+        note: 'Future-back analysis is embedded in the raw round outputs and persisted in council_rounds_json on the proposal row.',
+      },
+      councilRunId: row.id,
+      durationMinutes: null,
     });
   }
 
@@ -134,10 +202,11 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
         });
       }
       const row = await svc.create({ ...p, steps_to_remove: p.steps_to_remove });
-      const { consensus, rounds, councilOutput, memberKeys } = await executeCouncilForRow(
+      const debateRun = await executeCouncilForRow(
         row,
         req.body || {}
       );
+      const { consensus, rounds, councilOutput, memberKeys } = debateRun;
       const updated = await svc.markDebated(row.id, {
         council_output: councilOutput,
         council_model: memberKeys.join(','),
@@ -148,6 +217,11 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
       });
       if (!updated) {
         return res.status(409).json({ ok: false, error: 'Proposal state changed concurrently' });
+      }
+      try {
+        await persistGateChangeDebate(updated, debateRun);
+      } catch (memoryErr) {
+        log.warn({ err: memoryErr.message, proposalId: updated.id }, '[GATE-CHANGE] debate persisted to proposal but not memory');
       }
       res.json({
         ok: true,
@@ -217,10 +291,11 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
         });
       }
 
-      const { consensus, rounds, councilOutput, memberKeys } = await executeCouncilForRow(
+      const debateRun = await executeCouncilForRow(
         row,
         req.body || {}
       );
+      const { consensus, rounds, councilOutput, memberKeys } = debateRun;
 
       const updated = await svc.markDebated(id, {
         council_output: councilOutput,
@@ -233,6 +308,11 @@ export function createLifeOSGateChangeRoutes({ pool, requireKey, callCouncilMemb
 
       if (!updated) {
         return res.status(409).json({ ok: false, error: 'Proposal state changed concurrently' });
+      }
+      try {
+        await persistGateChangeDebate(updated, debateRun);
+      } catch (memoryErr) {
+        log.warn({ err: memoryErr.message, proposalId: updated.id }, '[GATE-CHANGE] debate persisted to proposal but not memory');
       }
 
       res.json({

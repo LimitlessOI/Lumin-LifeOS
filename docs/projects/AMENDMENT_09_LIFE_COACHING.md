@@ -1,7 +1,7 @@
 # AMENDMENT 09 — Life Coaching / Personal OS + Digital Twin
 **Status:** LIVE (local use) | Digital Twin: OPERATIONAL
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-18 (twin-auto-ingest.js tracked into repo alongside lifeos follow-up session)
+**Last Updated:** 2026-04-25 (historical exports → Digital Twin path cross-linked from **Amendment 38** § Operator corpus). Prior: 2026-04-18 (twin-auto-ingest.js tracked into repo alongside lifeos follow-up session)
 
 ---
 
@@ -123,6 +123,7 @@ The personal operating system layer. Goal tracking, activity logging, calendar m
 ### Change Receipts (Digital Twin)
 | Date | Change |
 |---|---|
+| 2026-04-25 | **`### Historical multi‑MB chat exports → Digital Twin`** — documents `run-memory-import.mjs` → `memory_dump_chunks` → `import-dumps-to-twin.js` → `adam_decisions` / `adam_profile` → `POST /api/v1/twin/simulate`; cross-link **Amendment 38** dual lane; Zero‑Waste guard note for any future auto-scan. *Why:* Adam — system should study operator + organize conversations; twin path was implemented but not indexed next to Idea Vault. |
 | 2026-04-04 | Applied twin_ingest_control migration. Built scripts/import-dumps-to-twin.js — imports all 448 memory dump chunks + 377 conversation messages into adam_decisions (544 total). Wired twin-auto-ingest into bootAllDomains (runs at boot + every 30 min). Adam filter now has full historical record as source material for profile build. |
 
 ### Gate 1 — Implementation Detail

@@ -1,6 +1,7 @@
 # Domain: Council Builder (Coworker Architecture)
 
-> **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md) — Never lie. Never let Adam operate on a misunderstanding: **correct him the instant** you see it. He does not know what he does not know — **fill every gap**. Before editing `AMENDMENT_21`, read the **entire** file this session (`CLAUDE.md` → SSOT READ-BEFORE-WRITE).
+> **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md) — Never lie. Never let Adam operate on a misunderstanding: **correct him the instant** you see it. He does not know what he does not know — **fill every gap**. Before editing `AMENDMENT_21`, read the **entire** file this session (`CLAUDE.md` → SSOT READ-BEFORE-WRITE).  
+> **Then:** [`00-SSOT-READ-SEQUENCE.md`](00-SSOT-READ-SEQUENCE.md) (read order) + [`00-MODEL-TIERS-THINK-VS-EXECUTE.md`](00-MODEL-TIERS-THINK-VS-EXECUTE.md) (think vs execute tiers).
 
 **Last updated:** 2026-04-25 — **Conductor does not hand-edit implementation** (including this route file): use **`POST /api/v1/lifeos/builder/build`** with domain `lifeos-council-builder` (or appropriate) + `target_file`; **`GAP-FILL:`** only after logged failed `/build`. Architecture diagram updated (system commits). Prior: 2026-04-19
 **SSOT:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
@@ -55,6 +56,7 @@ Local: `npm run builder:preflight` → same checks as a cold start against `GET 
 `POST /task` autonomy toggles:
 - `autonomy_mode`: `"max"` (default) or `"normal"`
 - `internet_research`: `true` (default) or `false`
+- `execution_only`: `true` or `false` (default) — when `true` with `mode: "code"` and **no** body `model` override, routes to **`council.builder.code_execute`** (`groq_llama`): **literal** implementation of the given `spec` + `files[]`. Use **only** after a **plan** or Conductor-approved spec; do **not** use for huge HTML overlays until you’ve verified Groq passes validators.
 
 In `"max"` mode the council is instructed to make best-guess assumptions and continue without routine clarification loops, stopping only for hard blockers (credentials/external system absence/high-risk authorization).
 
@@ -84,17 +86,20 @@ POST /api/v1/lifeos/builder/task
 
 ## Model Routing (`config/task-model-routing.js`)
 
-All models are free. The routing map picks the cheapest model that can do the job:
+All mapped models are free. Policy: **think** (plan, review, ambiguous codegen) → stronger reasoning; **execute** (frozen spec) → fast literal emit.
 
-| Task type | Model | Why |
+| Task type | Model | When |
 |---|---|---|
-| `council.builder.code` | `gemini_flash` | Best free reasoning for code generation |
-| `council.builder.plan` | `gemini_flash` | Same |
-| `council.builder.review` | `gemini_flash` | Needs judgment, not just speed |
-| Classification/extraction | `groq_llama` | Fastest, cheapest, accurate for structured |
-| Complex on-demand reasoning | `ollama_deepseek_v3` | Local, best reasoning, no cost |
+| `council.builder.plan` | `gemini_flash` | Architecture / steps / file touch list |
+| `council.builder.review` | `gemini_flash` | Judgment, drift, bugs |
+| `council.builder.code` | `gemini_flash` | Default codegen (open scope or large outputs) |
+| `council.builder.code_execute` | `groq_llama` | `mode: code` + `execution_only: true` + no `model` override |
+| Classification / extraction (other tasks) | `groq_llama` | Structured, low ambiguity |
+| Complex on-demand | `ollama_deepseek_v3` | Local, heavy reasoning |
 
-Override with `"model": "groq_llama"` in the task body if needed.
+Override anytime with `"model": "<council_member_key>"` in the task body.
+
+**Two-call pattern:** `mode: plan` (think) → tighten `spec` → `mode: code` + `execution_only: true` (execute) when safe.
 
 ---
 

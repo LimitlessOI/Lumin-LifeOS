@@ -1,0 +1,29 @@
+{
+  "project_id": "memory_intelligence",
+  "name": "Memory Intelligence System",
+  "amendment_path": "docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md",
+  "lifecycle": "production",
+  "status": "active",
+  "priority": "high",
+  "owner": "adam",
+  "phase": "phase_1_complete",
+  "stability_class": "stable",
+  "last_updated": "2026-04-26",
+  "current_focus": "Phase 1 built + builder integration; awaiting memory:seed run against Railway",
+  "owned_files": [
+    "db/migrations/20260426_memory_intelligence.sql",
+    "db/migrations/20260426_memory_intelligence_hardening.sql",
+    "db/migrations/20260426_memory_protocol_enforcement.sql",
+    "services/memory-intelligence-service.js",
+    "routes/memory-intelligence-routes.js",
+    "scripts/seed-epistemic-facts.mjs",
+    "scripts/record-ci-evidence.mjs",
+    "prompts/lifeos-memory-intelligence.md"
+  ],
+  "required_env": [],
+  "required_routes": [
+    { "method": "GET", "path": "/api/v1/memory/health" },
+    { "method": "GET", "path": "/api/v1/memory/facts" },
+    { "method": "POST", "path": "/api/v1/memory/facts" }
+  ]
+}

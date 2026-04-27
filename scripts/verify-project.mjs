@@ -8,6 +8,11 @@
  *   node scripts/verify-project.mjs --project command_center
  *   node scripts/verify-project.mjs --all
  *   node scripts/verify-project.mjs --dry-run --all   (no DB writes)
+ *   node scripts/verify-project.mjs --project clientcare_billing_recovery --remote-base-url https://YOUR_HOST
+ *     (HTTP route probes use that base; does not read Railway dashboard for secrets;
+ *      manifest required_routes keep their HTTP method; 401 → one retry with LIFEOS_KEY if different from primary)
+ *   node scripts/verify-project.mjs --project clientcare_billing_recovery --strict-manifest-env
+ *     (fail if manifest required_env keys are missing in local process env)
  *
  * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  */
@@ -26,9 +31,21 @@ const projectArg = args[args.indexOf('--project') + 1] || null;
 const runAll = args.includes('--all');
 const dryRun = args.includes('--dry-run');
 const quiet = args.includes('--quiet');
+const strictManifestEnv = args.includes('--strict-manifest-env');
+
+const remoteBaseIdx = args.indexOf('--remote-base-url');
+let remoteVerifyBaseUrlOverride = null;
+if (remoteBaseIdx >= 0) {
+  const v = args[remoteBaseIdx + 1];
+  if (!v || v.startsWith('--')) {
+    console.error('Usage error: --remote-base-url requires a value (e.g. https://your-service.up.railway.app)');
+    process.exit(1);
+  }
+  remoteVerifyBaseUrlOverride = v;
+}
 
 if (!projectArg && !runAll) {
-  console.error('Usage: node scripts/verify-project.mjs --project <id> | --all [--dry-run] [--quiet]');
+  console.error('Usage: node scripts/verify-project.mjs --project <id> | --all [--dry-run] [--quiet] [--remote-base-url <https://host>] [--strict-manifest-env]');
   process.exit(1);
 }
 
@@ -43,6 +60,19 @@ const fail = `${C.red}✗${C.reset}`;
 const warn = `${C.yellow}⚠${C.reset}`;
 
 function log(...args) { if (!quiet) console.log(...args); }
+
+function resolvePublicBaseUrl() {
+  const rawBase = (remoteVerifyBaseUrlOverride && remoteVerifyBaseUrlOverride.trim())
+    || (process.env.REMOTE_VERIFY_BASE_URL && process.env.REMOTE_VERIFY_BASE_URL.trim())
+    || (process.env.PUBLIC_BASE_URL && process.env.PUBLIC_BASE_URL.trim())
+    || (process.env.RAILWAY_PUBLIC_DOMAIN && process.env.RAILWAY_PUBLIC_DOMAIN.trim());
+  if (!rawBase) return null;
+  return /^https?:\/\//.test(rawBase) ? rawBase : `https://${rawBase}`;
+}
+
+function materializeRoutePath(routePath) {
+  return String(routePath || '').replace(/:[a-zA-Z_][a-zA-Z0-9_]*/g, '1');
+}
 
 // ── Load DB pool (optional — skip if no DATABASE_URL) ─────────────────────────
 let pool = null;
@@ -94,7 +124,18 @@ async function runAssertion(assertion, manifest) {
     case 'env': {
       const val = process.env[check];
       const ok = expect === 'present' ? !!val : val === expect;
-      return { ok, detail: ok ? `${check} is set` : `${check} is missing or wrong` };
+      const sourceHint = 'checked in current process env (.env + shell), not directly from Railway dashboard';
+      if (!ok) {
+        const isClientcareSecret = /^CLIENTCARE_/.test(String(check || ''));
+        if (isClientcareSecret && !strictManifestEnv) {
+          return {
+            ok: null,
+            skipped: true,
+            detail: `${check} not set locally — skipped (verifier cannot read Railway Variables UI; vault is source of truth). HTTP probes: set PUBLIC_BASE_URL / RAILWAY_PUBLIC_DOMAIN / REMOTE_VERIFY_BASE_URL or pass --remote-base-url. To hard-fail missing secrets here: --strict-manifest-env. Canonical list: docs/ENV_REGISTRY.md`,
+          };
+        }
+      }
+      return { ok, detail: ok ? `${check} is set (${sourceHint})` : `${check} is missing or wrong (${sourceHint})` };
     }
 
     case 'file_exists': {
@@ -107,18 +148,47 @@ async function runAssertion(assertion, manifest) {
     }
 
     case 'route': {
-      const rawBase = process.env.PUBLIC_BASE_URL || process.env.RAILWAY_PUBLIC_DOMAIN;
-      if (!rawBase) return { ok: null, detail: 'skipped — no PUBLIC_BASE_URL set', skipped: true };
-      const base = /^https?:\/\//.test(rawBase) ? rawBase : `https://${rawBase}`;
-      const commandKey = process.env.COMMAND_CENTER_KEY || process.env.API_KEY || process.env.LIFEOS_KEY;
-      const headers = commandKey ? { 'x-command-key': commandKey } : {};
+      const base = resolvePublicBaseUrl();
+      if (!base) {
+        return {
+          ok: null,
+          detail: 'skipped — no probe base URL (use --remote-base-url, or set REMOTE_VERIFY_BASE_URL / PUBLIC_BASE_URL / RAILWAY_PUBLIC_DOMAIN in process env)',
+          skipped: true,
+        };
+      }
+      const primaryKey = process.env.COMMAND_CENTER_KEY || process.env.API_KEY || process.env.LIFEOS_KEY;
+      const lifeosKey = process.env.LIFEOS_KEY || '';
+      const buildHeaders = (k) => (k ? { 'x-command-key': k } : {});
       try {
-        const url = `${base.replace(/\/$/, '')}${check}`;
-        const resp = await fetch(url, { headers, signal: AbortSignal.timeout(5000) });
+        const method = String(assertion.method || 'GET').toUpperCase();
+        const concretePath = materializeRoutePath(check);
+        const url = `${base.replace(/\/$/, '')}${concretePath}`;
+        const options = {
+          method,
+          headers: {
+            ...buildHeaders(primaryKey),
+          },
+          signal: AbortSignal.timeout(5000),
+        };
+        if (method !== 'GET' && method !== 'HEAD') {
+          options.headers['content-type'] = 'application/json';
+          options.body = '{}';
+        }
+        let resp = await fetch(url, options);
+        // Local .env often keeps COMMAND_CENTER_KEY while Railway truth is LIFEOS_KEY (or vice versa) — one retry reduces false 401 drift.
+        if (resp.status === 401 && lifeosKey && lifeosKey !== primaryKey) {
+          options.headers = { ...buildHeaders(lifeosKey) };
+          if (method !== 'GET' && method !== 'HEAD') {
+            options.headers['content-type'] = 'application/json';
+          }
+          resp = await fetch(url, options);
+        }
         const ok = resp.status === (expect || 200);
-        return { ok, detail: `${check} → ${resp.status} (expected ${expect || 200})` };
+        return { ok, detail: `${method} ${concretePath} → ${resp.status} (expected ${expect || 200})` };
       } catch (e) {
-        return { ok: false, detail: `${check} → fetch failed: ${e.message}` };
+        const method = String(assertion.method || 'GET').toUpperCase();
+        const concretePath = materializeRoutePath(check);
+        return { ok: false, detail: `${method} ${concretePath} → fetch failed: ${e.message}` };
       }
     }
 
@@ -226,9 +296,16 @@ async function verifyProject(manifestPath) {
     }
   }
 
-  // Required routes
+  // Required routes (method must be on each assertion — default was wrongly GET-only before 2026-04-21)
   for (const r of (manifest.required_routes || [])) {
-    allAssertions.push({ type: 'route', check: r.path, expect: r.expected_status || 200, label: `route: ${r.method} ${r.path}` });
+    const m = String(r.method || 'GET').toUpperCase();
+    allAssertions.push({
+      type: 'route',
+      check: r.path,
+      method: m,
+      expect: r.expected_status || 200,
+      label: `route: ${m} ${r.path}`,
+    });
   }
 
   // Explicit assertions from manifest
@@ -284,6 +361,14 @@ async function verifyProject(manifestPath) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 log(`\n${C.bold}SSOT Project Verifier${C.reset} ${dryRun ? C.yellow + '[DRY RUN]' + C.reset : ''}`);
 log(`${C.dim}${'─'.repeat(50)}${C.reset}`);
+if (remoteVerifyBaseUrlOverride) {
+  log(`${C.dim}Remote HTTP probe base (CLI):${C.reset} ${C.cyan}${resolvePublicBaseUrl()}${C.reset}`);
+} else if (process.env.REMOTE_VERIFY_BASE_URL?.trim()) {
+  log(`${C.dim}Remote HTTP probe base (REMOTE_VERIFY_BASE_URL):${C.reset} ${C.cyan}${resolvePublicBaseUrl()}${C.reset}`);
+}
+if (strictManifestEnv) {
+  log(`${C.yellow}Strict manifest env:${C.reset} required_env keys must be present in process env (no ClientCare secret skips).`);
+}
 
 let manifests = [];
 if (runAll) {

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/overlay/lifeos-theme.js"></script>
+  <script src="/overlay/lifeos-bootstrap.js"></script>
+  <link rel="stylesheet" href="/overlay/lifeos-ds.css">
+  <title>Life Balance Wheel — LifeOS</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
+    .root { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #555; margin-bottom: 28px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 4px; margin-bottom: 24px; background: #0d0d1a; border-radius: 10px; padding: 4px; }
+    .tab-btn { flex: 1; padding: 8px 12px; border: none; background: transparent; color: #555; font-size: 13px; border-radius: 8px; cursor: pointer; transition: all .15s; }
+    .tab-btn.active { background: #191930; color: #e8e8f0; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Radar chart */
+    .chart-wrap { display: flex; justify-content: center; align-items: center; margin: 24px 0; }
+    svg.radar { overflow: visible; }
+
+    /* Sliders */
+    .areas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+    @media (max-width: 540px) { .areas-grid { grid-template-columns: 1fr; } }
+
+    .area-row { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; padding: 14px 16px; }
+    .area-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .area-name { font-size: 13px; color: #d8d8e8; font-weight: 500; }
+    .area-score { font-size: 18px; font-weight: 700; color: #a0aaff; min-width: 24px; text-align: right; }
+    input[type=range] {
+      width: 100%; -webkit-appearance: none; height: 4px;
+      background: #1e1e2e; border-radius: 2px; outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 16px; height: 16px;
+      border-radius: 50%; background: #5b6af5; cursor: pointer;
+    }
+
+    /* Buttons */
+    .btn { padding: 8px 18px; border-radius: 6px; border: 1px solid #2a2a3a; background: transparent; color: #666; font-size: 13px; cursor: pointer; transition: all .15s; }
+    .btn:hover { background: #1a1a2a; color: #aaa; }
+    .btn.primary { border-color: #5b6af5; color: #a0aaff; background: rgba(91,106,245,.08); }
+    .btn.primary:hover { background: rgba(91,106,245,.15); }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Notes */
+    .notes-row { margin-bottom: 20px; }
+    .notes-row label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #555; display: block; margin-bottom: 6px; }
+    .notes-row textarea {
+      width: 100%; background: #0d0d1a; border: 1px solid #2a2a3a; border-radius: 8px;
+      color: #e8e8f0; padding: 10px 12px; font-size: 13px; outline: none;
+      resize: vertical; min-height: 60px; font-family: inherit;
+    }
+    .notes-row textarea:focus { border-color: #5b6af5; }
+
+    .action-row { display: flex; gap: 10px; justify-content: flex-end; }
+
+    /* History */
+    .history-card { background: #111118; border: 1px solid #1e1e2e; border-radius: 10px; margin-bottom: 12px; padding: 16px 18px; }
+    .h-date { font-size: 12px; color: #555; margin-bottom: 10px; }
+    .h-bars { display: grid; grid-template-columns: 80px 1fr 24px; gap: 6px 10px; align-items: center; }
+    .h-area-name { font-size: 11px; color: #888; }
+    .h-bar-wrap { height: 6px; background: #1e1e2e; border-radius: 3px; overflow: hidden; }
+    .h-bar      { height: 100%; border-radius: 3px; transition: width .3s; }
+    .h-val      { font-size: 11px; color: #555; text-align: right; }
+
+    .avg-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #191920; }
+    .avg-label { font-size: 11px; color: #555; }
+    .avg-val   { font-size: 15px; font-weight: 700; color: #a0aaff; }
+
+    .empty { text-align: center; padding: 48px 20px; color: #444; font-size: 13px; }
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.2); border-top-color: #a0aaff; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .save-msg { font-size: 12px; color: #555; margin-left: 10px; }
+  </style>
+</head>
+<body>
+<div class="root">
+  <h1>Life Balance Wheel</h1>
+  <p class="sub">Rate 8 areas of your life 1–10. Honest, not aspirational. The wheel shows where you are, not where you want to be.</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('score')">Score Today</button>
+    <button class="tab-btn" onclick="switchTab('history')">History</button>
+  </div>
+
+  <!-- ── Score Tab ──────────────────────────────────────────────────────── -->
+  <div id="tab-score" class="tab-panel active">
+
+    <!-- Radar chart -->
+    <div class="chart-wrap">
+      <svg class="radar" id="radar-svg" width="280" height="280" viewBox="-140 -140 280 280"></svg>
+    </div>
+
+    <!-- Sliders -->
+    <div class="areas-grid" id="sliders-grid"></div>
+
+    <!-- Notes -->
+    <div class="notes-row">
+      <label>Notes (optional)</label>
+      <textarea id="notes-field" placeholder="Anything you want to remember about where you are today…"></textarea>
+    </div>
+
+    <div class="action-row">
+      <span class="save-msg" id="save-msg"></span>
+      <button class="btn primary" id="save-btn" onclick="saveScore()">Save wheel</button>
+    </div>
+  </div>
+
+  <!-- ── History Tab ────────────────────────────────────────────────────── -->
+  <div id="tab-history" class="tab-panel">
+    <div id="hist-loading" class="empty">Loading…</div>
+    <div id="hist-empty"   class="empty" style="display:none">No scores yet. Rate today to start your trend.</div>
+    <div id="hist-list"    style="display:none"></div>
+  </div>
+</div>
+
+<script>
+  const CTX  = window.LifeOSBootstrap.getLifeOSContext();
+  const USER = CTX.USER || 'adam';
+  const H    = () => CTX.headers();
+
+  const AREAS = [
+    { key: 'health',        label: 'Health',        color: '#10b981' },
+    { key: 'relationships', label: 'Relationships',  color: '#f43f5e' },
+    { key: 'finance',       label: 'Finance',        color: '#22d3ee' },
+    { key: 'work',          label: 'Work',           color: '#60a5fa' },
+    { key: 'growth',        label: 'Growth',         color: '#34d399' },
+    { key: 'spirituality',  label: 'Spirituality',   color: '#a78bfa' },
+    { key: 'fun',           label: 'Fun',            color: '#f59e0b' },
+    { key: 'environment',   label: 'Environment',    color: '#14b8a6' },
+  ];
+
+  // Default all scores to 5
+  const scores = Object.fromEntries(AREAS.map(a => [a.key, 5]));
+
+  // ── Tabs ──────────────────────────────────────────────────────────────────
+  function switchTab(id) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', ['score','history'][i] === id);
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.classList.toggle('active', p.id === `tab-${id}`);
+    });
+    if (id === 'history') loadHistory();
+  }
+
+  // ── Build slider grid ─────────────────────────────────────────────────────
+  function buildSliders() {
+    const grid = document.getElementById('sliders-grid');
+    grid.innerHTML = AREAS.map(a => `
+      <div class="area-row">
+        <div class="area-header">
+          <span class="area-name">${a.label}</span>
+          <span class="area-score" id="score-${a.key}">5</span>
+        </div>
+        <input type="range" min="1" max="10" value="5"
+          id="slider-${a.key}"
+          style="accent-color:${a.color}"
+          oninput="onSlide('${a.key}', this.value)">
+      </div>
+    `).join('');
+  }
+
+  function onSlide(key, val) {
+    scores[key] = parseInt(val, 10);
+    document.getElementById(`score-${key}`).textContent = val;
+    drawRadar();
+  }
+
+  // ── Radar chart ───────────────────────────────────────────────────────────
+  function drawRadar() {
+    const svg = document.getElementById('radar-svg');
+    const n   = AREAS.length;
+    const R   = 110; // outer radius
+    const cx  = 0, cy = 0;
+
+    const angle = (i) => (i / n) * 2 * Math.PI - Math.PI / 2;
+    const pt    = (i, r) => [
+      cx + r * Math.cos(angle(i)),
+      cy + r * Math.sin(angle(i)),
+    ];
+
+    let html = '';
+
+    // Grid rings (2, 4, 6, 8, 10 → 5 rings)
+    for (let ring = 2; ring <= 10; ring += 2) {
+      const rr = (ring / 10) * R;
+      const pts = AREAS.map((_, i) => pt(i, rr).join(',')).join(' ');
+      html += `<polygon points="${pts}" fill="none" stroke="#1e1e2e" stroke-width="1"/>`;
+    }
+
+    // Axis lines + labels
+    AREAS.forEach((a, i) => {
+      const [x1, y1] = pt(i, R);
+      html += `<line x1="${cx}" y1="${cy}" x2="${x1.toFixed(1)}" y2="${y1.toFixed(1)}" stroke="#1e1e2e" stroke-width="1"/>`;
+      // label
+      const [lx, ly] = pt(i, R + 20);
+      const anchor = Math.abs(lx) < 5 ? 'middle' : lx > 0 ? 'start' : 'end';
+      const dy = ly < -5 ? '-4' : '12';
+      html += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" dy="${dy}" text-anchor="${anchor}" font-size="10" fill="#555" font-family="sans-serif">${a.label}</text>`;
+    });
+
+    // Data polygon
+    const dataPts = AREAS.map((a, i) => {
+      const r = (scores[a.key] / 10) * R;
+      return pt(i, r).map(v => v.toFixed(1)).join(',');
+    }).join(' ');
+    html += `<polygon points="${dataPts}" fill="rgba(91,106,245,0.2)" stroke="#5b6af5" stroke-width="2"/>`;
+
+    // Dots
+    AREAS.forEach((a, i) => {
+      const r = (scores[a.key] / 10) * R;
+      const [dx, dy] = pt(i, r);
+      html += `<circle cx="${dx.toFixed(1)}" cy="${dy.toFixed(1)}" r="4" fill="${a.color}" stroke="#0a0a0f" stroke-width="2"/>`;
+    });
+
+    svg.innerHTML = html;
+  }
+
+  // ── Load existing score ───────────────────────────────────────────────────
+  async function loadTodayScore() {
+    try {
+      const r = await fetch(`/api/v1/lifeos/scorecard/balance-wheel?user=${USER}`, { headers: H() });
+      const d = await r.json();
+      if (d.ok && d.score) {
+        AREAS.forEach(a => {
+          if (d.score[a.key] != null) {
+            scores[a.key] = d.score[a.key];
+            const slider = document.getElementById(`slider-${a.key}`);
+            if (slider) slider.value = d.score[a.key];
+            const scoreEl = document.getElementById(`score-${a.key}`);
+            if (scoreEl) scoreEl.textContent = d.score[a.key];
+          }
+        });
+        if (d.score.notes) {
+          document.getElementById('notes-field').value = d.score.notes;
+        }
+        drawRadar();
+      }
+    } catch { /* silent on first visit */ }
+  }
+
+  // ── Save ──────────────────────────────────────────────────────────────────
+  async function saveScore() {
+    const btn = document.getElementById('save-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>';
+
+    const body = { user: USER, notes: document.getElementById('notes-field').value.trim(), ...scores };
+
+    try {
+      const r = await fetch('/api/v1/lifeos/scorecard/balance-wheel', {
+        method:  'POST',
+        headers: { ...H(), 'Content-Type': 'application/json' },
+        body:    JSON.stringify(body),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        document.getElementById('save-msg').textContent = 'Saved.';
+        setTimeout(() => { document.getElementById('save-msg').textContent = ''; }, 3000);
+      } else {
+        alert('Could not save: ' + d.error);
+      }
+    } catch {
+      alert('Could not reach LifeOS.');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Save wheel';
+  }
+
+  // ── History ───────────────────────────────────────────────────────────────
+  async function loadHistory() {
+    document.getElementById('hist-loading').style.display = '';
+    document.getElementById('hist-empty').style.display   = 'none';
+    document.getElementById('hist-list').style.display    = 'none';
+
+    try {
+      const r = await fetch(`/api/v1/lifeos/scorecard/balance-wheel/history?user=${USER}&limit=12`, { headers: H() });
+      const d = await r.json();
+      document.getElementById('hist-loading').style.display = 'none';
+
+      if (!d.ok || !d.history?.length) {
+        document.getElementById('hist-empty').style.display = '';
+        return;
+      }
+
+      renderHistory(d.history);
+    } catch {
+      document.getElementById('hist-loading').textContent = 'Could not load history.';
+    }
+  }
+
+  function renderHistory(history) {
+    const list = document.getElementById('hist-list');
+    list.style.display = '';
+
+    list.innerHTML = history.map(row => {
+      const areaRows = AREAS.map(a => {
+        const v = row[a.key] ?? 0;
+        const pct = (v / 10 * 100).toFixed(0);
+        return `
+          <span class="h-area-name">${a.label}</span>
+          <div class="h-bar-wrap"><div class="h-bar" style="width:${pct}%;background:${a.color}"></div></div>
+          <span class="h-val">${v || '—'}</span>
+        `;
+      }).join('');
+
+      const nonNull = AREAS.map(a => row[a.key]).filter(v => v != null);
+      const avg = nonNull.length
+        ? (nonNull.reduce((s, v) => s + v, 0) / nonNull.length).toFixed(1)
+        : '—';
+
+      return `
+        <div class="history-card">
+          <div class="h-date">${fmtDate(row.scored_on)}</div>
+          <div class="h-bars">${areaRows}</div>
+          <div class="avg-row">
+            <span class="avg-label">Overall average</span>
+            <span class="avg-val">${avg} / 10</span>
+          </div>
+          ${row.notes ? `<div style="font-size:12px;color:#555;margin-top:10px;padding-top:10px;border-top:1px solid #191920">${escHtml(row.notes)}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── Utilities ─────────────────────────────────────────────────────────────
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  }
+  function escHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  buildSliders();
+  drawRadar();
+  loadTodayScore();
+</script>
+</body>
+</html>

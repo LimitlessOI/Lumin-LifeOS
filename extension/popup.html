@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumin</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 300px; min-height: 200px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0f; color: #e8e8f0; padding: 20px;
+    }
+    .logo { font-size: 20px; font-weight: 700; color: #e8e8f0; margin-bottom: 4px; }
+    .logo span { color: #5b6af5; }
+    .tagline { font-size: 11px; color: #555; margin-bottom: 20px; }
+
+    .status-row { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-top: 1px solid #1e1e2e; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .status-dot.active   { background: #34d399; box-shadow: 0 0 6px rgba(52,211,153,0.5); }
+    .status-dot.inactive { background: #555; }
+    .status-text { font-size: 12px; color: #888; }
+
+    .user-row { background: #111118; border: 1px solid #1e1e2e; border-radius: 8px; padding: 10px 12px; margin: 12px 0; }
+    .user-handle { font-size: 13px; font-weight: 500; color: #e8e8f0; }
+    .user-server { font-size: 11px; color: #555; margin-top: 2px; }
+
+    .field { margin-bottom: 10px; }
+    .field label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #555; margin-bottom: 4px; }
+    .field input { width: 100%; background: #111118; border: 1px solid #1e1e2e; border-radius: 6px; color: #e8e8f0; padding: 7px 10px; font-size: 12px; outline: none; }
+    .field input:focus { border-color: #5b6af5; }
+
+    .btn { width: 100%; padding: 8px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; transition: all .15s; margin-top: 4px; }
+    .btn-primary { background: #5b6af5; color: #fff; }
+    .btn-primary:hover { background: #4a5adf; }
+    .btn-danger  { background: transparent; border: 1px solid #3a1a1a; color: #e05555; margin-top: 8px; }
+    .btn-danger:hover { background: #1a0808; }
+
+    .version { font-size: 10px; color: #333; text-align: center; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="logo">Lumin<span>.</span></div>
+  <div class="tagline">Universal AI overlay — works everywhere</div>
+
+  <div class="status-row">
+    <div class="status-dot" id="status-dot"></div>
+    <span class="status-text" id="status-text">Checking…</span>
+  </div>
+
+  <div id="logged-in" style="display:none;">
+    <div class="user-row">
+      <div class="user-handle" id="user-display">—</div>
+      <div class="user-server" id="server-display">—</div>
+    </div>
+    <button class="btn btn-danger" id="btn-logout">Sign out</button>
+  </div>
+
+  <div id="logged-out">
+    <div class="field">
+      <label>Command Key</label>
+      <input type="password" id="inp-key" placeholder="Your LifeOS command key">
+    </div>
+    <div class="field">
+      <label>User Handle</label>
+      <input type="text" id="inp-user" placeholder="adam">
+    </div>
+    <button class="btn btn-primary" id="btn-save">Connect</button>
+  </div>
+
+  <div class="version" id="version-line">v1.0.0</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

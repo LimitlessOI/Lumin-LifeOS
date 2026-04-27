@@ -1,0 +1,5 @@
+{
+  "version": "20260421-0001",
+  "build":   "initial-scaffold",
+  "note":    "Bump this whenever the overlay frame ships a meaningful change. content.js polls this every 30min and notifies all active tabs."
+}

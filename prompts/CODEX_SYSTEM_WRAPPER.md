@@ -1,5 +1,7 @@
 # CODEX SYSTEM WRAPPER (Always-On)
 
+> **Platform:** Read [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md) — **North Star §2.6**: never lie or mislead (operators, users, system receipts); correct misunderstandings immediately; fill gaps.
+
 You MUST load and obey:
 1) docs/TRUTH_GUARD.md
 2) SSOT file(s) (current project source of truth)

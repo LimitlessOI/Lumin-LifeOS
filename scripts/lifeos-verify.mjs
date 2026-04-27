@@ -79,6 +79,13 @@ const REQUIRED_MIGRATIONS = [
   '20260418_lifeos_character.sql',
   '20260418_lifeos_monetization.sql',
   '20260418_lifeos_finance_share_scopes.sql',
+  '20260419_conflict_interrupt.sql',
+  '20260421_lane_intel.sql',
+  '20260422_lifeos_habits.sql',
+  '20260422_lifeos_legacy_core.sql',
+  '20260422_gate_change_proposals.sql',
+  '20260423_lifeos_ambient_snapshots.sql',
+  '20260424_lumin_programming_jobs.sql',
 ];
 
 const REQUIRED_SERVICES = [
@@ -113,7 +120,16 @@ const REQUIRED_SERVICES = [
   'services/lifeos-notification-router.js',
   'services/lifeos-money-decision-bridge.js',
   'services/lifeos-request-helpers.js',
+  'services/lane-intel-service.js',
+  'services/lifeos-habits.js',
+  'services/lifeos-legacy-core.js',
+  'services/lifeos-gate-change-proposals.js',
+  'services/lifeos-gate-change-council-run.js',
+  'services/lifeos-ambient-context.js',
   'services/lifeos-scheduled-jobs.js',
+  'services/council-prompt-adapter.js',
+  'services/lifeos-lumin.js',
+  'services/lifeos-lumin-build.js',
   'services/lumin-memory-fetcher.js',
   'services/mastery-tracker.js',
   'services/medical-context-generator.js',
@@ -153,11 +169,17 @@ const REQUIRED_ROUTES = [
   'routes/lifeos-healing-routes.js',
   'routes/lifeos-legacy-routes.js',
   'routes/lifeos-finance-routes.js',
+  'routes/lane-intel-routes.js',
+  'routes/lifeos-habits-routes.js',
+  'routes/lifeos-gate-change-routes.js',
+  'routes/lifeos-ambient-routes.js',
+  'routes/lifeos-chat-routes.js',
 ];
 
 const SYNTAX_CHECKS = [
   ...REQUIRED_SERVICES,
   ...REQUIRED_ROUTES,
+  'config/gate-change-presets.js',
   'startup/register-runtime-routes.js',
   'startup/boot-domains.js',
 ];

@@ -1,0 +1,13 @@
+{
+  "project_id": "life_coaching",
+  "name": "Life Coaching / Personal OS + Digital Twin",
+  "amendment_path": "docs/projects/AMENDMENT_09_LIFE_COACHING.md",
+  "lifecycle": "production",
+  "status": "active",
+  "priority": "high",
+  "owner": "adam",
+  "phase": "production",
+  "stability_class": "stable",
+  "last_updated": "2026-04-26",
+  "current_focus": "Digital Twin operational; LifeOS personal OS layer live"
+}

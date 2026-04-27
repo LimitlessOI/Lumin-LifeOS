@@ -63,17 +63,22 @@ import { createLifeOSCalendarService }     from '../services/lifeos-calendar.js'
 import { createLifeOSEventStreamService }  from '../services/lifeos-event-stream.js';
 import { makeLifeOSUserResolver }          from '../services/lifeos-user-resolver.js';
 import { createLifeOSScoreboardService }   from '../services/lifeos-scoreboard.js';
+import { createLifeOSAdaptiveLayerService } from '../services/lifeos-adaptive-layer.js';
 import { safeDays, safeLimit, safeId }     from '../services/lifeos-request-helpers.js';
+import { createCouncilPromptAdapter }     from '../services/council-prompt-adapter.js';
 
 export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, logger, sendSMS, sendAlertCall = null, makePhoneCall = null }) {
   const router = express.Router();
   const log = logger || console;
 
   const callAI = callCouncilMember
-    ? async (prompt) => {
-        const r = await callCouncilMember('anthropic', prompt);
-        return typeof r === 'string' ? r : r?.content || r?.text || '';
-      }
+    ? createCouncilPromptAdapter(callCouncilMember, {
+        member:
+          process.env.LIFEOS_CHAT_COUNCIL_MEMBER ||
+          process.env.LUMIN_COUNCIL_MEMBER ||
+          'anthropic',
+        taskType: 'general',
+      })
     : null;
 
   const commitments  = createCommitmentTracker(pool, callAI);
@@ -102,6 +107,7 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
     logger: log,
   });
   const scoreboard   = createLifeOSScoreboardService({ pool, integrity, joy, focusPrivacy });
+  const adaptive     = createLifeOSAdaptiveLayerService({ pool, scoreboard });
 
   // Helper: resolve user_id from handle or id (shared + case-insensitive)
   const resolveUserId = makeLifeOSUserResolver(pool);
@@ -243,6 +249,34 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       );
       if (!rows[0]) return res.status(404).json({ ok: false, error: 'User not found' });
       res.json({ ok: true, user: rows[0] });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/users/:handle/adaptive-prefs', requireKey, async (req, res) => {
+    try {
+      const userId = await resolveUserId(req.params.handle);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const state = await adaptive.getUserAdaptiveState(userId);
+      res.json({ ok: true, adaptive: state?.profile?.adaptive_prefs || {}, profile: state?.profile || null });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.put('/users/:handle/adaptive-prefs', requireKey, async (req, res) => {
+    try {
+      const patch = req.body;
+      if (!patch || typeof patch !== 'object' || Array.isArray(patch)) {
+        return res.status(400).json({ ok: false, error: 'JSON object body required' });
+      }
+      const userId = await resolveUserId(req.params.handle);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const saved = await adaptive.saveAdaptivePrefs(userId, patch);
+      if (!saved) return res.status(404).json({ ok: false, error: 'User not found' });
+      const state = await adaptive.getUserAdaptiveState(userId);
+      res.json({ ok: true, user: saved, adaptive: state?.profile?.adaptive_prefs || {}, profile: state?.profile || null });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }
@@ -593,6 +627,18 @@ export function createLifeOSCoreRoutes({ pool, requireKey, callCouncilMember, lo
       if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
       const data = await scoreboard.getScoreboard(userId);
       res.json({ ok: true, ...data });
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  router.get('/dashboard/adaptive', requireKey, async (req, res) => {
+    try {
+      const { user = 'adam' } = req.query;
+      const userId = await resolveUserId(user);
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const data = await adaptive.getUserAdaptiveState(userId);
+      res.json({ ok: true, adaptive: data?.profile || null, scoreboard: data?.scoreboard || null });
     } catch (err) {
       res.status(500).json({ ok: false, error: err.message });
     }

@@ -1,5 +1,6 @@
 /**
- * Shared multi-model gate-change debate (round 1 + opposite-argument round 2).
+ * Shared multi-model gate-change debate (round 1 + opposite-argument round 2 +
+ * future-back review).
  * Used by routes/lifeos-gate-change-routes.js — runs on the **server** where
  * callCouncilMember and provider keys already exist (e.g. Railway).
  *
@@ -140,7 +141,14 @@ export async function runGateChangeCouncilDebate({ callCouncilMember, rubricText
   }
 
   const rounds = {
-    protocol: 'consensus_v2_opposite_argument',
+    protocol: 'consensus_v3_opposite_argument_future_back',
+    required_sections: [
+      'steel_man_risk',
+      'equivalence',
+      'blind_spots',
+      'future_back',
+      'recommendation',
+    ],
     models: memberKeys,
     round1,
     round2_opposite: oppositeRound,

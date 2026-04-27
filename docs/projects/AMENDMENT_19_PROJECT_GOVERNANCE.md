@@ -1,6 +1,6 @@
 # AMENDMENT 19 — Project Governance
 
-**Last Updated:** 2026-04-25 — wire `savingsLedger` into `registerRuntimeRoutes` so TSOS savings API resolves. Prior: `scripts/ssot-check.js#checkChangedFiles` skips **paths missing on disk**.
+**Last Updated:** 2026-04-26 — mount Memory Intelligence routes at /api/v1/memory. Prior: wire savingsLedger into registerRuntimeRoutes.
 
 | Field | Value |
 |---|---|
@@ -202,6 +202,7 @@ Required runtime truths:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-26 | `startup/register-runtime-routes.js`: import + mount `createMemoryIntelligenceRoutes` at `/api/v1/memory` | Wire AMENDMENT_39 Memory Intelligence API surface into the running app | ✅ node --check | pending | pending |
 | 2026-04-25 | `startup/register-runtime-routes.js`: pass `savingsLedger: deps.savingsLedger` into `createApiCostSavingsRoutes`; `server.js`: add `savingsLedger` to `registerRuntimeRoutes` call | `GET /api/v1/tsos/savings/report` was returning 503 "savingsLedger not initialised" — the service was created but never threaded into the route context | ✅ node --check | pending | pending |
 | 2026-04-22 | **`scripts/ssot-check.js` — `checkChangedFiles`:** after path filters, **`if (!existsSync(ROOT+file)) continue`** so deleted `routes/…` / `services/…` in `git diff` do not produce bogus “missing @ssot” warnings (read failed → null tag). | Honest `ssot:validate` / system-maturity when orphan routes are removed. | ✅ | pending | `node --check scripts/ssot-check.js` |
 | 2026-04-21 | **Lumin → `pending_adam` bridge (composition):** `startup/register-runtime-routes.js` passes `callCouncilMember` into `createLifeOSChatRoutes`; `routes/lifeos-chat-routes.js` adds `POST /api/v1/lifeos/chat/build/pending-adam` (+ plan/draft/job poll routes) implemented in `services/lifeos-lumin-build.js` — inserts `pending_adam` with JSON `context` including `source: "lumin_programming"`, optional `job_id` / `thread_id` / `user_id`. | Adam asked to close Lumin gaps for governed self-programming; `pending_adam` is the existing governance rail for human/builder pickup. | ✅ | pending | `node --check` on touched route/service files |

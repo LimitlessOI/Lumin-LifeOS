@@ -147,7 +147,7 @@ export function createJoyScore(pool) {
     const { rows } = await pool.query(`
       SELECT * FROM joy_checkins
       WHERE user_id = $1
-        AND checkin_date >= CURRENT_DATE - $2
+        AND checkin_date >= CURRENT_DATE - ($2 * INTERVAL '1 day')
       ORDER BY checkin_date DESC
     `, [userId, days]);
     return rows;
@@ -157,7 +157,7 @@ export function createJoyScore(pool) {
     const { rows } = await pool.query(`
       SELECT * FROM joy_score_log
       WHERE user_id = $1
-        AND score_date >= CURRENT_DATE - $2
+        AND score_date >= CURRENT_DATE - ($2 * INTERVAL '1 day')
       ORDER BY score_date ASC
     `, [userId, days]);
     return rows;
@@ -169,7 +169,7 @@ export function createJoyScore(pool) {
       SELECT joy_sources, joy_drains, joy_score, peace_score
       FROM joy_checkins
       WHERE user_id = $1
-        AND checkin_date >= CURRENT_DATE - $2
+        AND checkin_date >= CURRENT_DATE - ($2 * INTERVAL '1 day')
     `, [userId, days]);
 
     const sourceCounts = {};
