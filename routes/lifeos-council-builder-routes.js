@@ -176,8 +176,11 @@ function validateGeneratedOutputForTarget(targetFile, output) {
   if (target.endsWith('.html')) {
     if (text.length < 1000) return 'generated HTML is too short; refusing to commit likely truncated output';
     if (!/^[\s]*</.test(text)) return 'generated HTML must start with <!DOCTYPE or <html (no preamble or markdown)';
-    if (!/<html[\s>]/i.test(text) || !/<\/html>/i.test(text)) {
-      return 'generated HTML is missing required <html> / </html> document markers';
+    // Accept either: classic <html>...</html> wrapper OR HTML5 <!DOCTYPE html> + <head> + <body>
+    const hasHtmlWrapper = /<html[\s>]/i.test(text) && /<\/html>/i.test(text);
+    const hasHtml5Structure = /<!DOCTYPE\s+html/i.test(text) && /<head[\s>]/i.test(text) && /<body[\s>]/i.test(text);
+    if (!hasHtmlWrapper && !hasHtml5Structure) {
+      return 'generated HTML is missing required document structure (<html> wrapper OR <!DOCTYPE html> + <head> + <body>)';
     }
   }
   return null;
