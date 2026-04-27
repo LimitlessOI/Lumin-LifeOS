@@ -2,7 +2,11 @@
 
 This folder is for storing conversation history exports that provide context for the AI Counsel OS development.
 
-## What to Paste Here
+## Primary brainstorm paste target (verbatim)
+
+Use **[`OPERATOR_BRAINSTORM_INBOX.md`](OPERATOR_BRAINSTORM_INBOX.md)** for ongoing **ChatGPT / external** brainstorm sessions you want preserved **word-for-word** (idea exploration where the model has **limited project context** — that is OK; the repo catches it on ingest). See **Amendment 38** §6 step **5** for how this differs from coding-tutorial chatter.
+
+## What to Paste Here (dated files)
 
 If you have conversation history from ChatGPT or other AI assistants that contains:
 - Architecture decisions
@@ -11,7 +15,7 @@ If you have conversation history from ChatGPT or other AI assistants that contai
 - Implementation details
 - Product vision
 
-Please paste them here as markdown files.
+You can also paste them here as **dated** markdown files (below), or duplicate the inbox file to `YYYY-MM-DD-topic-brainstorm.md` for large archives.
 
 ## Format
 

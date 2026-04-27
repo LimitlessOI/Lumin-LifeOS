@@ -1,7 +1,7 @@
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`
-> Generated: 2026-04-26T21:30:37.610Z
+> Generated: 2026-04-27T17:53:14.754Z
 
 ## Read order (mandatory)
 
@@ -74,23 +74,37 @@ Example first line of an update:
 
 ---
 
-## [BUILD] Update 2026-04-26 #101 — **Anti-corner-cutting enforcement + durable compact rules**
+## [BUILD] Update 2026-05-01 #106 — **Idea Vault — categorization closed + §9 metric fix**
 
 ### Files changed
-- `services/memory-intelligence-service.js`, `routes/memory-intelligence-routes.js`, `db/migrations/20260426_memory_intelligence_hardening.sql`, `db/migrations/20260426_memory_protocol_enforcement.sql` — task authority, protocol violations, routing recommendation, future-lookback, source-count hardening.
-- `routes/lifeos-council-builder-routes.js`, `routes/lifeos-gate-change-routes.js`, `services/lifeos-lumin-build.js`, `services/lifeos-gate-change-council-run.js`, `config/task-model-routing.js`, `prompts/lifeos-gate-change-proposal.md` — runtime authority checks, fail-closed model selection, future-back consensus, builder violation logging.
-- `docs/SSOT_COMPANION.md`, `docs/projects/AMENDMENT_01_AI_COUNCIL.md`, `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md` — anti-corner-cutting and future-back promoted into operating law.
-- `scripts/generate-agent-rules.mjs`, `docs/AGENT_RULES.compact.md`, `docs/.compact-rules-baseline` — compact rules now include Memory Intelligence + anti-corner-cutting and still shrink under the token-budget law.
-- `docs/CONTINUITY_LOG_COUNCIL.md`, `docs/CONTINUITY_LOG_LIFEOS.md` — lane-specific receipts for the new routing/authority behavior.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§9** multi‑MB byte total corrected to **113,636,593** (sum of files **> 1 MB** in §9.1; replaces stale **112,804,796**); footer notes reconciliation.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus` aligned with **Streams A–S**, **100%** §9.1 file map, no “002 residue” wording.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Change Receipts** — **2026-05-01** row extended with §9 multi‑MB total.
 
 ### State after this session
-- The system can now demote or block a model by task type, route around weak performers at runtime, and log protocol violations instead of treating “smart sounding” output as proof.
-- Council gate-change debate now requires future-back analysis and stores structured debate memory.
-- The compact cold-start packet now carries the new rules durably through the generator instead of relying on manual edits.
+- Canonical **`•`+TAB+`Lumin-Memory/00_INBOX/raw/`** inventory: **19/19** files have exactly one bucket in **§9.1** (**Stream A–S**, **H**, or **—** for README).
 
 ### Next agent: start here
-1. Wire real verifier/CI/builder outcomes into `fact_evidence` and `agent_performance` automatically.
-2. Add focused tests for memory routing + protocol vio
+- New exports only → new **Stream** + **§9.1** row + re-sum bytes; optional one-paragraph **Gemini 001 vs F/O** dedupe in **02**/**19**; **Amendment 39** Phase 2 seeds.
+
+---
+
+## [BUILD] Update 2026-04-29 #104 — **Idea Vault — Streams O/Q (Gemini 003, DeepSeek 001, GPT 06)**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream O** (Gemini 003, dedupe **F**), **P** (DeepSeek 001, dedupe **C**), **Q** (GPT 06, Tier 0 / autonomous builder; duplicate AURO prefix noted); **§A** rows; **Last Updated**; **A–Q**; portfolio capsule note; Change Receipt.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§4H**, **§8** rows O–Q, **§7** snapshot date, next-queue refresh, footer.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+
+### Next agent
+Heading-pass **Gemini 004**; reconcile **Gemini 001** vs **F/O** in one capsule SSOT paragraph; optional deep TOC on **GPT dump 01**.
+
+---
+
+## [BUILD] Update 2026-04-30 #105 — **Idea Vault — Stream R + §9 corpus %**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream R** (`Gemini Dump 004`); **Stream A** + **`LifeOS
 
 ## Snippet — LifeOS lane
 

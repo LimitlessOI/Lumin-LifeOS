@@ -24,8 +24,13 @@ function main() {
 
   console.log('# Operator corpus pipeline\n');
 
+  const brainstormInbox = path.join(REPO, 'docs', 'conversation_dumps', 'OPERATOR_BRAINSTORM_INBOX.md');
+
   console.log('## Lane A — Product ideas (permanent SSOT)\n');
   console.log(`- Canonical raw inbox: \`${path.relative(REPO, RAW)}\` — ${fs.existsSync(RAW) ? '**found**' : '**missing** (add exports under bullet+TAB Lumin-Memory)'}`);
+  console.log(
+    `- Verbatim **brainstorm** paste (ChatGPT / external, limited context OK): \`${path.relative(REPO, brainstormInbox)}\` — ${fs.existsSync(brainstormInbox) ? '**found**' : '**missing**'}`,
+  );
   console.log('- Owning doc: `docs/projects/AMENDMENT_38_IDEA_VAULT.md`');
   console.log('- Companion: `docs/CONVERSATION_DUMP_IDEAS_INDEX.md`\n');
 

@@ -111,6 +111,8 @@ Full philosophical foundation: `docs/NORTH_STAR_EDUCATION_HEALING.md`
 
    **Parallel conductor rule:** Two or more conductors may run concurrently only if they are lane-scoped (for example, `lifeos` vs `tc`) with separate continuity logs and non-overlapping file ownership in that session; if overlap appears, one conductor HALTs and rebases on the other’s receipts first.
 
+10. **Remote-system truth is mandatory.** The canonical live system is **not** the local laptop. **GitHub** is source truth for committed code, **Railway** is runtime/env truth for the deployed service, and **Neon** is data truth for the live database. A local clone, shell, `.env`, or unstaged file is only a **workbench mirror** unless explicitly labeled local. Treating local emptiness, drift, or stale code as “the system state” is misleading under this section.
+
 ### 2.10 Observability, Grading, and Governed Self-Improvement (Platform Law)
 
 **Binding on the platform as a whole:** runtime, builders, schedulers, agents, and SSOT — this section is **not** aspirational tooling guidance. It is **law** alongside §2.6: you may not “skip observing,” “skip grading,” or “claim fixed” without the receipts §2.6 already requires.

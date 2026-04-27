@@ -7,7 +7,7 @@
   "priority": "high",
   "owner": "adam",
   "phase": "operational",
-  "next_task": "Repo catalog triage waves: use REPO_TRIAGE_NOTES + REPO_CATALOG; prune DELETE-CANDIDATE; re-run npm run repo:catalog. Parallel: github_token /ready vs vault — ENV_DIAGNOSIS_PROTOCOL.",
+  "next_task": "Repo catalog triage waves: use REPO_TRIAGE_NOTES + REPO_CATALOG; prune DELETE-CANDIDATE; re-run npm run repo:catalog. Parallel: github_token /ready vs vault \u2014 ENV_DIAGNOSIS_PROTOCOL.",
   "stability_class": "stable",
   "current_focus": "SSOT dual-channel (agent vs system); compact rules generation; cold-start packet; continuity lane logs",
   "owned_files": [
@@ -44,5 +44,6 @@
     "npm run repo:catalog updates docs/REPO_CATALOG.md"
   ],
   "last_verified_at": "2026-04-26",
-  "verification_passed": null
+  "verification_passed": null,
+  "last_updated": "2026-04-27"
 }

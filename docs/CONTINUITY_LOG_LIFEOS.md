@@ -6,6 +6,22 @@
 
 ---
 
+## [BUILD] Update 2026-04-27 #18 — Victory Vault root API contract now exists on the runtime spine
+
+**Shipped:**
+- `routes/lifeos-victory-vault-routes.js` — top-level LifeOS compatibility router for POST/GET `/api/v1/lifeos/victories` and POST/GET `/api/v1/lifeos/victories/reels`, backed by the existing `createVictoryVault()` service and `makeLifeOSUserResolver()`.
+- `startup/register-runtime-routes.js` — imports + mounts the new router at `/api/v1/lifeos` and logs the mount distinctly from `/api/v1/lifeos/growth`.
+- `scripts/lifeos-verify.mjs` — route inventory now fails if `routes/lifeos-victory-vault-routes.js` disappears.
+
+**State after this session:**
+- Live diagnosis before fix was concrete: `GET /api/v1/lifeos/victories?user=adam` returned `404`, while `GET /api/v1/lifeos/growth/victories?user=adam` returned `200`.
+- Lumin build bridge was used for reconnaissance first: `/api/v1/lifeos/chat/build/plan` correctly identified the Victory Vault mismatch as the highest-value LifeOS defect, but its plan text truncated and the draft suggested a weaker proxy pattern.
+- The council builder then produced the actual runtime fix. After Railway redeployed, both `GET /api/v1/lifeos/victories?user=adam` and `GET /api/v1/lifeos/victories/reels?user=adam` returned `200`.
+
+**Next:** Run the builder HTML smoke on a real LifeOS target, then do the household invite E2E flow. After those verification items, the next real product build is the first vertical slice of Commitment -> execution desk.
+
+---
+
 ## [BUILD] Update 2026-04-26 #17 — LifeOS build lanes now obey Memory Intelligence authority
 
 **Files changed:**

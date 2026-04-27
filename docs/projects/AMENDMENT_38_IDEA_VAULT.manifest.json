@@ -7,15 +7,17 @@
   "priority": "medium",
   "owner": "adam",
   "phase": "documentation-ssot",
-  "next_task": "On each new export: operator-corpus:pipeline + heading-pass (rg) + append Stream or extend Stream I; optional run-memory-import + import-dumps-to-twin for Digital Twin; promote mature ideas to INDEX or owning amendment.",
+  "next_task": "L4-004+: favor brainstorm/product/governance spans (verbatim); skip bulk coding-transcript unless durable integration truth → ENV_REGISTRY/amendment. Else: operator-corpus:pipeline + heading-pass; twin ingest for verbatim operator nuance.",
   "stability_class": "low-risk",
-  "current_focus": "Single registry: Seed catalog (§A–D), CONVERSATION_DUMP §6–§7 machine keyword index (expanded catalog-dump-keywords defaults), dual lane (vault + twin), streams A–I, Amendment 39, INDEX — refresh §7 counts after each export drop.",
+  "current_focus": "OPERATOR_BRAINSTORM_INBOX.md for ChatGPT dumps; stream M/N/O/P/Q/R have brainstorm-dense line hints. L4 3/12. Next: paste sessions + L4-004+ on brainstorm spans.",
   "build_ready": false,
   "revenue_immediate": false,
   "owned_files": [
     "docs/projects/AMENDMENT_38_IDEA_VAULT.md",
     "docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json",
     "docs/CONVERSATION_DUMP_IDEAS_INDEX.md",
+    "docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md",
+    "docs/conversation_dumps/README.md",
     "docs/MEMORY_FRAMEWORK_DESIGN_BRIEF.md",
     "scripts/catalog-dump-keywords.mjs",
     "scripts/operator-corpus-pipeline.mjs"
@@ -40,7 +42,7 @@
     "projects/INDEX.md lists Amendment 38 and Amendment 39",
     "CONVERSATION_DUMP_IDEAS_INDEX.md points at Amendment 38, 39, and MEMORY_FRAMEWORK_DESIGN_BRIEF"
   ],
-  "anti_drift_notes": "Implementation specs stay in domain amendments; this vault is index + routing + honesty about audit depth.",
+  "anti_drift_notes": "Brainstorming regions: verbatim preservation; iterative programming chat: historical unless still-true integration → registry. §11 L4 = §A.1 / 12; §6 step 5. ASH Ranch NOT_PURSUING. Implementation specs in domain amendments.",
   "last_verified_at": null,
   "verification_passed": null
 }

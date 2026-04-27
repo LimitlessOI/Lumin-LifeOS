@@ -32,6 +32,130 @@
 
 ---
 
+## [BUILD] Update 2026-04-25 #114 — **Idea Vault — `OPERATOR_BRAINSTORM_INBOX` + stream brainstorm line hints**
+
+### Files changed
+- `docs/conversation_dumps/OPERATOR_BRAINSTORM_INBOX.md` *(new)* — verbatim ChatGPT / external brainstorm paste target.
+- `docs/conversation_dumps/README.md` — points at inbox.
+- `scripts/catalog-dump-keywords.mjs` — keyword pass includes inbox as `_(inbox)_` hits.
+- `scripts/operator-corpus-pipeline.mjs` — prints inbox path.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — canonical path row; **Streams M/N/O/P/Q/R** brainstorm-dense regions; **§C** **1a**; receipts + handoff.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — §1 table row for inbox.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `owned_files`, `current_focus`.
+- `docs/projects/INDEX.md` — HOW THIS WORKS + **Last Updated** (inbox pointer).
+
+### Next agent
+- Adam pastes into **OPERATOR_BRAINSTORM_INBOX**; run **`npm run idea-vault:catalog-keywords`** to verify hits; promote mature slices to **§A.1** when ready.
+
+---
+
+## [BUILD] Update 2026-04-25 #113 — **Idea Vault — operator rule: brainstorm verbatim vs programming churn archival**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **§6** step **5**; **§A.1** rule + nuances; **§B** table row; **Last Updated** + **Change Receipts**.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§11** operator priority blurb; footer.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `next_task`, `current_focus`, `anti_drift_notes`.
+
+### State
+- **L4** counting unchanged (**3**/12). Policy: future **§A.1** rows **bias** to brainstorm/product/governance spans; coding transcripts stay **provenance** unless they encode durable integration facts.
+
+---
+
+## [BUILD] Update 2026-04-25 #112 — **Idea Vault — L4-003 (`GPT dump 03` smoke cookbook) + §11 → ~68%**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **§A.1** row **L4-003** (~L8330 anchor verified in raw export); **Last Updated** + **Change Receipts**.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§11** L4 **3**/12, composite **~68% / ~32%**; **§11.4** count.
+- `docs/projects/INDEX.md` — **Last Updated** (§11 % + **L4-003**).
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+
+### Report
+- **L4:** **3**/12 (**25%** of L4 layer); **composite ~68%** complete, **~32%** remaining.
+- **Next:** **L4-004+** — strong candidates **Stream K** (env canvas), **M/N** (AASHA), **Q** (Tier‑0), per vault handoff.
+
+---
+
+## [BUILD] Update 2026-04-25 #111 — **Idea Vault — L4 chunk receipts (§A.1) + §11 → ~65%**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **§ Seed catalog §A.1** (`L4-001`, `L4-002`); **Last Updated** + **Change Receipts**.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§11** L4 (**2**/12), composite **~65% / ~35%**; **§11.4** registry.
+- `docs/projects/INDEX.md` — **Last Updated** (§11 %).
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+
+### Report
+- **Composite:** **~65%** complete, **~35%** remaining.
+- **L4 deep track:** **~17%** done (**2**/12 receipted chunks).
+
+---
+
+## [BUILD] Update 2026-04-25 #110 — **Idea Vault — §11 % remaining + Stream heading-pass closure**
+
+### Files changed
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§11** (L1–L5 weights, composite **~62% / ~38%**, fast tracks).
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Streams A,B,D,E,F,G** `rg` heading-pass receipts; **Stream C** pointer to **P**; **Last Updated**, **Change Receipts**, **Agent Handoff**.
+- `docs/projects/INDEX.md` — HOW THIS WORKS + **Last Updated**.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+
+### Report (operator)
+- **Index + skim track (L1–L3):** **100%** done, **0%** left.
+- **Full weighted program:** **~62%** done, **~38%** left (mostly chunk promotion + twin).
+
+---
+
+## [BUILD] Update 2026-04-25 #109 — **Idea Vault — `CONVERSATION_DUMP` §10 full corpus skim**
+
+### Files changed
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — new **§10** (every §9.1 + §9.2 source × Stream × themes; stub-path + dedupe + key hygiene).
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Last Updated**, **Anti-Drift**, **Change Receipts**, **Agent Handoff** (§10 as cold-start map).
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+- `docs/projects/INDEX.md` — HOW THIS WORKS pointer to §10; **Last Updated**.
+
+### State
+- Machine **heading/code-region** pass over **~114MB** canonical inbox — **not** line-by-line human read.
+
+---
+
+## [BUILD] Update 2026-04-25 #108 — **Idea Vault — ASH Ranch out of scope**
+
+### Files changed
+- `docs/projects/INDEX.md` — removed *Candidate Concepts* row for ASH Ranch; **Last Updated**.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream O/S**, **§A**, **§B** nuance, **Change Receipts**; **Last Updated**.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `anti_drift_notes`.
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — §3 example list + footer.
+
+### State
+- **ASH Ranch** = **NOT_PURSUING**; raw exports unchanged (historical text only).
+
+---
+
+## [BUILD] Update 2026-04-25 #107 — **Condensed TSOS — Idea Vault + Lane A/B in `AGENT_RULES.compact`**
+
+### Files changed
+- `scripts/generate-agent-rules.mjs` — new **IDEA VAULT (Lane A/B)** section; tighter adjacent bullets (token budget law).
+- `docs/AGENT_RULES.compact.md`, `docs/.compact-rules-baseline` — regen via `npm run gen:rules` (smaller byte count than prior baseline).
+- `docs/projects/AMENDMENT_36_ZERO_DRIFT_HANDOFF_PROTOCOL.md` — **Last Updated** + **Change Receipts** row.
+
+### Next agent
+Cold agents reading **Channel A** now see: vault = map; nuance = source threads + `raw/`; promote via chunk + **38** §A or twin ingest; queue order **INDEX**.
+
+---
+
+## [BUILD] Update 2026-05-01 #106 — **Idea Vault — categorization closed + §9 metric fix**
+
+### Files changed
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§9** multi‑MB byte total corrected to **113,636,593** (sum of files **> 1 MB** in §9.1; replaces stale **112,804,796**); footer notes reconciliation.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus` aligned with **Streams A–S**, **100%** §9.1 file map, no “002 residue” wording.
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Change Receipts** — **2026-05-01** row extended with §9 multi‑MB total.
+
+### State after this session
+- Canonical **`•`+TAB+`Lumin-Memory/00_INBOX/raw/`** inventory: **19/19** files have exactly one bucket in **§9.1** (**Stream A–S**, **H**, or **—** for README).
+
+### Next agent: start here
+- New exports only → new **Stream** + **§9.1** row + re-sum bytes; optional one-paragraph **Gemini 001 vs F/O** dedupe in **02**/**19**; **Amendment 39** Phase 2 seeds.
+
+---
+
 ## [BUILD] Update 2026-04-29 #104 — **Idea Vault — Streams O/Q (Gemini 003, DeepSeek 001, GPT 06)**
 
 ### Files changed
@@ -41,6 +165,20 @@
 
 ### Next agent
 Heading-pass **Gemini 004**; reconcile **Gemini 001** vs **F/O** in one capsule SSOT paragraph; optional deep TOC on **GPT dump 01**.
+
+---
+
+## [BUILD] Update 2026-04-30 #105 — **Idea Vault — Stream R + §9 corpus %**
+
+### Files changed
+- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream R** (`Gemini Dump 004`); **Stream A** + **`LifeOS dump 002`** note; **§A** TheraVerse row; **Last Updated**; **A–R**; receipt (**~99.9%** bytes indexed).
+- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§9** coverage table (exact bytes + KNOW/THINK); **§8** row **R**; **§4I**; next-queue shrink.
+
+### Report (Adam)
+- **~99.9%** of canonical raw inbox bytes have a **Stream** or **H**; **~0.1%** left is **`LifeOS_LimitlessOS dump 002`** (~0.096%) + **`README.md`** (trivial). “Cataloged” = TOC/heading pass + routing, not full-text read.
+
+### Next agent
+New exports → new **Stream** + refresh **§9** sums; optional one-paragraph **F/O/001** capsule dedupe in **38** or **02**.
 
 ---
 

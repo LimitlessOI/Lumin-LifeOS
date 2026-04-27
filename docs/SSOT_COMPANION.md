@@ -34,6 +34,7 @@ If any required gate (Evidence / Honesty / Ethics / Secrets / Verification) cann
 - Server: Railway (Node.js/Express)
 - Database: Neon (PostgreSQL)
 - Repository: GitHub (LimitlessOI/Lumin-LifeOS)
+- **Remote-system truth:** GitHub = committed source of truth, Railway = deployed runtime/env truth, Neon = live data truth. Local repo/shell/.env are operator workbench mirrors only unless explicitly labeled local.
 
 **Live:**
 - AI Council routing (Groq, Gemini, Cerebras — free tier cascade)
@@ -193,7 +194,9 @@ POST /api/v1/lifeos/builder/build
 ```
 - `{ ok: true, committed: true }` → done; write SSOT receipt with `model_used`
 - `committed: false` (no `target_file` in placement) → call `POST /api/v1/lifeos/builder/execute` with the output + explicit `target_file`
-- Builder fails entirely → hand-code is allowed **only as GAP-FILL**; document `GAP-FILL: <exact reason>` in Change Receipt and fix the platform failure in the same session
+- Builder fails entirely → `GET /api/v1/lifeos/builder/gaps` and treat the returned gap as the next platform task; hand-code is allowed **only as GAP-FILL**; document `GAP-FILL: <exact reason>` in Change Receipt and fix the platform failure in the same session
+
+**Topology reminder (non-optional):** Diagnose the deployed system on its real surfaces — GitHub / Railway / Neon. A local shell failure or stale local file is evidence about the **workbench**, not automatically the live system.
 
 **Commit message enforcement (`.git/hooks/commit-msg`):** Hard-blocks any commit of product files unless message contains `[system-build]` or `GAP-FILL: <reason>`. This is a machine check, not a doc check. `--no-verify` is prohibited by `CLAUDE.md` unless Adam explicitly requests it.
 

@@ -194,10 +194,10 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/lifeos/identity", createLifeOSIdentityRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-IDENTITY] Routes mounted at /api/v1/lifeos/identity");
-
+  app.use("/api/v1/lifeos/identity/assessment", createAssessmentBatteryRoutes({ pool }));
+  logger.info("✅ [LIFEOS-ASSESSMENT] Routes mounted at /api/v1/lifeos/identity/assessment");
   app.use("/api/v1/lifeos", createLifeOSVictoryVaultRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-VICTORY-VAULT] Routes mounted at /api/v1/lifeos/victories");
-
   app.use("/api/v1/lifeos/growth", createLifeOSGrowthRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-GROWTH] Routes mounted at /api/v1/lifeos/growth");
 

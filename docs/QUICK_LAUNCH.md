@@ -18,6 +18,8 @@ Then: read this file (`docs/QUICK_LAUNCH.md`) for lane routing and execution, an
 
 **Builder env (names only, no secrets in git):** `docs/BUILDER_OPERATOR_ENV.md` — operator exports Railway-matching vars into the shell before `npm run builder:preflight` or `POST /api/v1/lifeos/builder/build`. **Before any “env is missing” claim:** `docs/ENV_DIAGNOSIS_PROTOCOL.md` + `docs/ENV_REGISTRY.md` deploy inventory (North Star **§2.3**).
 
+**Remote-system truth:** the live system is **GitHub + Railway + Neon**. Local repo/shell/.env are operator workbench mirrors only. Never describe a local condition as “the system state” unless you say it is local.
+
 **What the system can do (vs gaps):** `docs/SYSTEM_CAPABILITIES.md` — Railway redeploy (`npm run system:railway:redeploy`), env list, builder `/build`, verifiers; **update that doc + `ENV_REGISTRY.md` when you add ops**. Changelog lives at the bottom of the capabilities file.
 
 **Whole-repo file inventory (cleanup / drift):** `docs/REPO_CATALOG.md` — run `npm run repo:catalog` after large tree changes; human triage in `docs/REPO_TRIAGE_NOTES.md`. Pointers also in `docs/projects/INDEX.md` and `docs/CONTINUITY_INDEX.md`.
@@ -78,7 +80,7 @@ If task lane is unclear: read `docs/CONTINUITY_INDEX.md`, choose lane, then proc
    - Verify builder: `GET /api/v1/lifeos/builder/ready` + `GET /api/v1/lifeos/builder/domains` when the API is up
    - If the task is product code: `POST /api/v1/lifeos/builder/build` with domain + spec + `target_file` as appropriate; `[system-build]` in commit
    - **Lumin chat overlay (system build):** `npm run lifeos:builder:build-chat` (wraps `POST …/builder/build` for `public/overlay/lifeos-chat.html`). **`--dry-run`** prints the JSON body. If **`GET …/builder/domains` returns 404**, production is behind `main` — **redeploy Railway** until `/domains` returns 200, then re-run.
-   - On failure: **GAP-FILL:** exact reason; **do not** pretend the system built it. Fix platform in-session when possible
+   - On failure: `GET /api/v1/lifeos/builder/gaps`; the returned gap becomes the next platform fix. **GAP-FILL:** exact reason; **do not** pretend the system built it. Fix platform in-session when possible
    - See `CLAUDE.md → ## BUILDER-FIRST RULE`
    - **Machine channel (North Star §2.14):** For **receipt-grade** first lines to/from builder HTTP, preflight, redeploy, and `env:certify`, use **only** the tokens/templates in **`docs/TSOS_SYSTEM_LANGUAGE.md`** (`[TSOS-MACHINE]` / compact `TSOS|` lines). **Does not replace** step 4 — Adam still gets **§2.11b** plain language.
 4. **Conductor → Adam report (§2.11b / Companion §0.5G) — if this slice needs you to trust quality without reading every line** (required when the slice **touched the builder, builder output, or build pipeline**; also use for other high-stakes product slices you directed): plain-language **what we did**, **quality score (e.g. 6→9) with evidence**, **why this vs that** if there was a fork, **what’s still not proven**. **This step is *not* §2.11a (TSOS)** — it is the **reporting** layer.

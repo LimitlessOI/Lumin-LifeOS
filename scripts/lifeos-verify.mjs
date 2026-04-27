@@ -160,6 +160,7 @@ const REQUIRED_ROUTES = [
   'routes/lifeos-health-routes.js',
   'routes/lifeos-family-routes.js',
   'routes/lifeos-identity-routes.js',
+  'routes/lifeos-victory-vault-routes.js',
   'routes/lifeos-mediation-routes.js',
   'routes/lifeos-purpose-routes.js',
   'routes/lifeos-children-routes.js',

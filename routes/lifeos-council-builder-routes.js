@@ -198,6 +198,31 @@ function splitBuilderOutput(raw) {
   return { output: text.trim(), placement: null };
 }
 
+/**
+ * Strip any markdown analysis/preamble a model emits before the HTML document.
+ * Models (especially Claude) sometimes write analysis notes, then start the actual HTML.
+ * Finds the first <!DOCTYPE html> or <html, trims everything before it.
+ * Also strips trailing markdown after </html>.
+ * Returns original text unchanged if no HTML start marker is found.
+ */
+function extractHtmlFromOutput(text) {
+  const s = String(text || '');
+  // Find earliest HTML document start
+  const doctypeRe = /<!DOCTYPE\s+html/i;
+  const htmlTagRe = /<html[\s>]/i;
+  const dtMatch = doctypeRe.exec(s);
+  const htMatch = htmlTagRe.exec(s);
+  let startIdx = -1;
+  if (dtMatch) startIdx = dtMatch.index;
+  if (htMatch && (startIdx === -1 || htMatch.index < startIdx)) startIdx = htMatch.index;
+  if (startIdx === -1) return s; // No HTML found — return unchanged
+  const trimmed = s.slice(startIdx);
+  // Strip any trailing non-HTML content after the closing </html>
+  const closeIdx = trimmed.toLowerCase().lastIndexOf('</html>');
+  if (closeIdx !== -1) return trimmed.slice(0, closeIdx + 7); // 7 = '</html>'.length
+  return trimmed;
+}
+
 function validateGeneratedOutputForTarget(targetFile, output) {
   const target = String(targetFile || '').toLowerCase();
   const text = String(output || '').trim();
@@ -808,7 +833,16 @@ export function createLifeOSCouncilBuilderRoutes({
       });
     }
 
-    const validationError = validateGeneratedOutputForTarget(target_file, output);
+    // For HTML targets: strip any markdown preamble the model wrote before <!DOCTYPE / <html
+    let cleanedOutput = output;
+    if (/\.html$/i.test(target_file)) {
+      const extracted = extractHtmlFromOutput(output);
+      if (extracted !== output) {
+        log.info({ target_file, stripped: output.length - extracted.length }, '[BUILDER] /execute: Stripped markdown preamble from HTML output');
+        cleanedOutput = extracted;
+      }
+    }
+    const validationError = validateGeneratedOutputForTarget(target_file, cleanedOutput);
     if (validationError) {
       const gapRecommendation = await recordBuilderGap({
         domain: null,
@@ -827,13 +861,13 @@ export function createLifeOSCouncilBuilderRoutes({
 
     const msg = commit_message || `[system-build] ${target_file}`;
     try {
-      await commitToGitHub(target_file, output, msg, branch || undefined);
+      await commitToGitHub(target_file, cleanedOutput, msg, branch || undefined);
       log.info({ target_file, msg }, '[BUILDER] /execute committed file to GitHub');
       await insertBuilderAudit({
         domain: null,
         task: `execute: ${target_file}`,
         model_used: 'system',
-        rawOutput: output,
+        rawOutput: cleanedOutput,
         cache_hit: false,
         placement: { target_file },
         status: 'committed',
@@ -1038,6 +1072,14 @@ export function createLifeOSCouncilBuilderRoutes({
     }
 
     // Step 3: Commit
+    // For HTML targets: strip any markdown preamble the model wrote before <!DOCTYPE / <html
+    if (/\.html$/i.test(resolvedTarget)) {
+      const extracted = extractHtmlFromOutput(generatedOutput);
+      if (extracted !== generatedOutput) {
+        log.info({ resolvedTarget, stripped: generatedOutput.length - extracted.length }, '[BUILDER] Stripped markdown preamble from HTML output');
+        generatedOutput = extracted;
+      }
+    }
     const validationError = validateGeneratedOutputForTarget(resolvedTarget, generatedOutput);
     if (validationError) {
       const gapRecommendation = await recordBuilderGap({
