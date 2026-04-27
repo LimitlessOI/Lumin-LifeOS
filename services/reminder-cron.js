@@ -1,5 +1,6 @@
 /**
  * services/reminder-cron.js — Amendment 16 (Word Keeper)
+ * @ssot docs/projects/AMENDMENT_16_WORD_KEEPER.md
  *
  * Runs every 60 seconds. Checks commitment_reminders for anything due.
  * Sends SMS via Twilio. Marks sent. Handles audible reminders via ElevenLabs TTS.
@@ -55,8 +56,17 @@ export function startReminderCron(pool, twilioSendSMS, opts = {}) {
     try {
       // Fetch all pending reminders that are now due
       const { rows: due } = await pool.query(`
-        SELECT cr.*, c.to_person, c.normalized_text, c.raw_text, c.deadline,
-               c.remind_audible, c.user_id
+        SELECT cr.*,
+               COALESCE(c.to_person, c.committed_to) AS to_person,
+               COALESCE(
+                 NULLIF(trim(c.normalized_text), ''),
+                 NULLIF(trim(c.description), ''),
+                 c.title
+               ) AS normalized_text,
+               COALESCE(c.raw_text, c.title) AS raw_text,
+               COALESCE(c.deadline, c.due_at) AS deadline,
+               COALESCE(c.remind_audible, false) AS remind_audible,
+               c.user_id
         FROM commitment_reminders cr
         JOIN commitments c ON c.id = cr.commitment_id
         WHERE cr.status = 'pending'

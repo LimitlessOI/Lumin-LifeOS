@@ -1,7 +1,7 @@
 # AMENDMENT 16 — Word Keeper & Integrity Engine
 **Status:** IN_BUILD
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-21
+**Last Updated:** 2026-04-27 — `services/reminder-cron.js` SELECT aligned with LifeOS `commitments` columns via `COALESCE`; full bridge in `db/migrations/20260428_commitments_reminder_compat.sql`. Prior: 2026-03-21
 **Parent Amendment:** Amendment 09 (Life Coaching / Personal OS)
 **Overlay Layer:** Amendment 12 (Command Center & Overlay)
 
@@ -270,6 +270,7 @@ Weekly summary (every Monday morning, SMS):
 ---
 
 ## BUILD HISTORY
+- **2026-04-27:** **Reminder cron + DB bridge** — LifeOS-first `commitments` tables lacked `to_person` (Word Keeper shape), causing `processDueReminders` to throw. Migration `20260428_commitments_reminder_compat.sql` adds missing columns on either evolution and backfills; cron query uses `COALESCE` across aliases.
 - **2026-03-21:** Amendment created. Nevada one-party consent confirmed for in-person. Phone two-party confirmed. Core architecture designed. Build started.
 - **2026-03-21 (Session 2):** All 7 files built and wired:
   - `services/commitment-detector.js` — regex pre-filter + Claude classifier + Grok reality check

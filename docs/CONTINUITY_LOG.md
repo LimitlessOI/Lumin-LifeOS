@@ -32,6 +32,19 @@
 
 ---
 
+## [FIX] Update 2026-04-27 — **Railway startup: Source of Truth + reminder cron**
+
+### Files changed
+- `.dockerignore` — include `docs/SOURCE_OF_TRUTH.md` in image (`docs/*` + `!docs/SOURCE_OF_TRUTH.md`).
+- `db/migrations/20260428_commitments_reminder_compat.sql` — Word Keeper / LifeOS `commitments` column bridge + backfill.
+- `services/reminder-cron.js` — `COALESCE` across column names for `processDueReminders`.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`, `AMENDMENT_16_WORD_KEEPER.md` — receipts.
+
+### State
+- Fixes logs: **Could not load Source of Truth** (docs excluded from Docker) and **`column c.to_person does not exist`** (LifeOS `commitments` shape).
+
+---
+
 ## [BUILD] Update 2026-04-27 — **LifeOS shell nav — Dashboard, Chat, Weekly, Wins (builder blocked)**
 
 ### Files changed

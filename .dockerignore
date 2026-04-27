@@ -25,8 +25,9 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Large doc folders not needed at runtime
-docs/
+# Docs: slim image — exclude direct children of docs/ except SOURCE_OF_TRUTH (server.js memory bootstrap).
+docs/*
+!docs/SOURCE_OF_TRUTH.md
 • Lumin-Memory/
 
 # Tests
