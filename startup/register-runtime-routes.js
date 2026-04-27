@@ -38,6 +38,7 @@ import { createLifeOSLegacyRoutes } from "../routes/lifeos-legacy-routes.js";
 import { createLifeOSEmotionalRoutes } from "../routes/lifeos-emotional-routes.js";
 import { createLifeOSEthicsRoutes } from "../routes/lifeos-ethics-routes.js";
 import { createLifeOSConflictRoutes } from "../routes/lifeos-conflict-routes.js";
+import { createConflictInterruptRoutes } from "../routes/lifeos-conflict-interrupt-routes.js";
 import { createLifeOSFinanceRoutes } from "../routes/lifeos-finance-routes.js";
 import { createLifeOSBacktestRoutes } from "../routes/lifeos-backtest-routes.js";
 import { createLifeOSWeeklyReviewRoutes } from "../routes/lifeos-weekly-review-routes.js";
@@ -201,6 +202,8 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info("✅ [LIFEOS-ETHICS] Routes mounted at /api/v1/lifeos/ethics");
   app.use("/api/v1/lifeos/conflict", createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-CONFLICT] Routes mounted at /api/v1/lifeos/conflict");
+  app.use("/api/v1/lifeos/conflict/interrupt", createConflictInterruptRoutes({ pool }));
+  logger.info("✅ [LIFEOS-CONFLICT-INTERRUPT] Routes mounted at /api/v1/lifeos/conflict/interrupt");
   app.use("/api/v1/lifeos/finance", createLifeOSFinanceRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-FINANCE] Routes mounted at /api/v1/lifeos/finance");
   app.use("/api/v1/lifeos/backtest", createLifeOSBacktestRoutes({ requireKey }));
