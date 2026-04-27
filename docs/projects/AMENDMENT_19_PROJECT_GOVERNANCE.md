@@ -202,6 +202,7 @@ Required runtime truths:
 
 | Date | What Changed | Why | Amendment | Manifest | Verified |
 |---|---|---|---|---|---|
+| 2026-04-26 | `startup/boot-domains.js`: add `autoSeedEpistemicFacts(pool, logger)` — checks epistemic_facts count on boot, seeds if empty via execSync, logs count if already seeded, never crashes boot | Memory Intelligence tables are empty until seeded; manual seed step should not be required | ✅ node --check | pending | pending |
 | 2026-04-26 | `startup/register-runtime-routes.js`: import + mount `createMemoryIntelligenceRoutes` at `/api/v1/memory` | Wire AMENDMENT_39 Memory Intelligence API surface into the running app | ✅ node --check | pending | pending |
 | 2026-04-25 | `startup/register-runtime-routes.js`: pass `savingsLedger: deps.savingsLedger` into `createApiCostSavingsRoutes`; `server.js`: add `savingsLedger` to `registerRuntimeRoutes` call | `GET /api/v1/tsos/savings/report` was returning 503 "savingsLedger not initialised" — the service was created but never threaded into the route context | ✅ node --check | pending | pending |
 | 2026-04-22 | **`scripts/ssot-check.js` — `checkChangedFiles`:** after path filters, **`if (!existsSync(ROOT+file)) continue`** so deleted `routes/…` / `services/…` in `git diff` do not produce bogus “missing @ssot” warnings (read failed → null tag). | Honest `ssot:validate` / system-maturity when orphan routes are removed. | ✅ | pending | `node --check scripts/ssot-check.js` |

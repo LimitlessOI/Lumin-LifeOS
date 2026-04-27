@@ -12,6 +12,7 @@
  * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
  */
 
+import { execSync } from 'child_process';
 import { createUsefulWorkGuard, requireTableRows } from '../services/useful-work-guard.js';
 
 // ── GLVAR Monitor (dues + violations) ────────────────────────────────────────
@@ -218,7 +219,25 @@ async function bootTwinAutoIngest(deps) {
   setInterval(guardedIngest, 30 * 60 * 1000);
 }
 
+// ── Memory: auto-seed epistemic_facts on first boot ───────────────────────────
+async function autoSeedEpistemicFacts(pool, logger) {
+  try {
+    const { rows } = await pool.query('SELECT COUNT(*)::int AS n FROM epistemic_facts');
+    if (rows[0].n === 0) {
+      logger.info('[MEMORY] epistemic_facts empty — running auto-seed...');
+      execSync('node scripts/seed-epistemic-facts.mjs', { stdio: 'inherit', cwd: process.cwd() });
+      logger.info('[MEMORY] auto-seed complete');
+    } else {
+      logger.info({ n: rows[0].n }, '[MEMORY] epistemic_facts already seeded');
+    }
+  } catch (err) {
+    logger.warn({ err: err.message }, '[MEMORY] auto-seed skipped (table missing or seed error)');
+  }
+}
+
 export async function bootAllDomains(deps) {
+  const { pool, logger } = deps;
+  await autoSeedEpistemicFacts(pool, logger);
   await Promise.allSettled([
     bootGLVARMonitor(deps),
     bootEmailTriage(deps),

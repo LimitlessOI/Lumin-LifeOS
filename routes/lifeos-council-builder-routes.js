@@ -131,9 +131,13 @@ function estimateBuilderMaxOutputTokens(summaries, filesContentBlock) {
     }
   }
   if (totalChars === 0 && filesContentBlock) totalChars = filesContentBlock.length;
-  if (totalChars === 0) return 8192;
+  // Return null when no file context injected — let the provider use its own default.
+  // Sending a large maxOutputTokens without corresponding input context causes HTTP 413
+  // on providers that validate total request token budget (Gemini Flash, Groq).
+  if (totalChars === 0) return null;
   const estimated = Math.ceil(totalChars / 2.5) + 4096;
-  return Math.min(65536, Math.max(8192, estimated));
+  // Cap at 16384 — above this, providers reject or produce degraded output.
+  return Math.min(16384, Math.max(4096, estimated));
 }
 
 function builderTargetsHtml(files, targetFile) {
@@ -761,6 +765,41 @@ export function createLifeOSCouncilBuilderRoutes({
         });
       }
       log.info({ resolvedTarget }, '[BUILDER] pre-commit syntax check passed');
+    }
+
+    // ── SQL validation gate ───────────────────────────────────────────────────
+    const isSqlFile = /\.sql$/.test(resolvedTarget);
+    if (isSqlFile) {
+      const sqlContent = generatedOutput.trim();
+      const sqlKeywords = /\b(CREATE|ALTER|INSERT|UPDATE|DELETE|SELECT|DROP|GRANT|REVOKE|TRUNCATE|WITH)\b/i;
+      if (!sqlContent || !sqlKeywords.test(sqlContent)) {
+        log.error({ resolvedTarget }, '[BUILDER] SQL validation failed — no valid SQL keywords');
+        return res.status(422).json({
+          ok: false,
+          error: 'SQL validation failed — content does not contain recognizable SQL keywords',
+          output: generatedOutput,
+          target_file: resolvedTarget,
+          committed: false,
+        });
+      }
+      log.info({ resolvedTarget }, '[BUILDER] SQL validation passed');
+    }
+
+    // ── HTML validation gate ──────────────────────────────────────────────────
+    const isHtmlFile = /\.html$/.test(resolvedTarget);
+    if (isHtmlFile) {
+      const missingTags = ['<html', '<head', '<body'].filter(t => !generatedOutput.includes(t));
+      if (missingTags.length > 0) {
+        log.error({ resolvedTarget, missingTags }, '[BUILDER] HTML validation failed — missing required tags');
+        return res.status(422).json({
+          ok: false,
+          error: `HTML validation failed — missing required tags: ${missingTags.join(', ')}`,
+          output: generatedOutput,
+          target_file: resolvedTarget,
+          committed: false,
+        });
+      }
+      log.info({ resolvedTarget }, '[BUILDER] HTML validation passed');
     }
 
     const msg = commit_message || `[system-build] ${resolvedTarget}`;
