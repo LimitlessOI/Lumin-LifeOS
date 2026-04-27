@@ -1,6 +1,5 @@
 /**
  * @ssot docs/projects/AMENDMENT_19_PROJECT_GOVERNANCE.md
- *
  * Runtime route composition for the main Express app.
  * This keeps server.js as a composition root instead of a second implementation file.
  */
@@ -29,9 +28,8 @@ import { createLifeOSPurposeRoutes } from "../routes/lifeos-purpose-routes.js";
 import { createLifeOSChildrenRoutes } from "../routes/lifeos-children-routes.js";
 import { createLifeOSVisionRoutes } from "../routes/lifeos-vision-routes.js";
 import { createLifeOSDecisionsRoutes } from "../routes/lifeos-decisions-routes.js";
-import { createDecisionReviewRoutes } from "../routes/lifeos-decision-review-routes.js";
 import { createLifeOSIdentityRoutes } from "../routes/lifeos-identity-routes.js";
-import { createAssessmentBatteryRoutes } from "../routes/lifeos-assessment-battery-routes.js";
+import { createLifeOSVictoryVaultRoutes } from "../routes/lifeos-victory-vault-routes.js";
 import { createLifeOSGrowthRoutes } from "../routes/lifeos-growth-routes.js";
 import { createLifeOSMediationRoutes } from "../routes/lifeos-mediation-routes.js";
 import { createLifeOSHealingRoutes } from "../routes/lifeos-healing-routes.js";
@@ -39,7 +37,6 @@ import { createLifeOSLegacyRoutes } from "../routes/lifeos-legacy-routes.js";
 import { createLifeOSEmotionalRoutes } from "../routes/lifeos-emotional-routes.js";
 import { createLifeOSEthicsRoutes } from "../routes/lifeos-ethics-routes.js";
 import { createLifeOSConflictRoutes } from "../routes/lifeos-conflict-routes.js";
-import { createConflictInterruptRoutes } from "../routes/lifeos-conflict-interrupt-routes.js";
 import { createLifeOSFinanceRoutes } from "../routes/lifeos-finance-routes.js";
 import { createLifeOSBacktestRoutes } from "../routes/lifeos-backtest-routes.js";
 import { createLifeOSWeeklyReviewRoutes } from "../routes/lifeos-weekly-review-routes.js";
@@ -59,7 +56,6 @@ import { createTCCoordinator } from "../services/tc-coordinator.js";
 import { createIntegrityEngine as createWKIntegrityEngine } from "../services/integrity-engine.js";
 import { createCouncilPromptAdapter } from "../services/council-prompt-adapter.js";
 import { createMemoryIntelligenceRoutes } from "../routes/memory-intelligence-routes.js";
-import { mountSleepRoutes } from "../routes/lifeos-sleep-routes.js";
 
 export async function registerRuntimeRoutes(app, deps) {
   const {
@@ -126,6 +122,7 @@ export async function registerRuntimeRoutes(app, deps) {
     ask: (prompt, opts = {}) => callCouncilMember(opts.model || "claude", prompt, opts.systemPrompt || "", opts),
   };
   const wkIntegrityEngine = createWKIntegrityEngine(pool, wordKeeperCouncil);
+
   app.use("/api/v1/word-keeper", createWordKeeperRoutes({ pool, councilService: wordKeeperCouncil, twilioService: null }));
   logger.info("✅ [WORD-KEEPER] Routes mounted at /api/v1/word-keeper");
 
@@ -164,63 +161,82 @@ export async function registerRuntimeRoutes(app, deps) {
 
   // Core LifeOS routes are required for the product to function.
   const lifeosOpts = { pool, requireKey, callCouncilMember, logger, notificationService, sendSMS, sendAlertCall, makePhoneCall };
+
   app.use("/api/v1/lifeos", createLifeOSCoreRoutes(lifeosOpts));
   logger.info("✅ [LIFEOS-CORE] Routes mounted at /api/v1/lifeos");
+
   app.use("/api/v1/lifeos", createLifeOSGatewayRoutes({ pool, sendSMS, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-GATEWAY] Routes mounted at /api/v1/lifeos");
+
   app.use("/api/v1/lifeos/engine", createLifeOSEngineRoutes({ pool, requireKey, notificationService, sendSMS, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-ENGINE] Routes mounted at /api/v1/lifeos/engine");
+
   app.use(
     "/api/v1/lifeos/health",
     createLifeOSHealthRoutes({ pool, requireKey, callCouncilMember, callAI: councilChatAI, sendSMS, logger })
   );
   logger.info("✅ [LIFEOS-HEALTH] Routes mounted at /api/v1/lifeos/health");
+
   app.use("/api/v1/lifeos/family", createLifeOSFamilyRoutes({ pool, requireKey, callCouncilMember }));
   logger.info("✅ [LIFEOS-FAMILY] Routes mounted at /api/v1/lifeos/family");
+
   app.use("/api/v1/lifeos/purpose", createLifeOSPurposeRoutes({ pool, requireKey, callCouncilMember }));
   logger.info("✅ [LIFEOS-PURPOSE] Routes mounted at /api/v1/lifeos/purpose");
+
   app.use("/api/v1/lifeos/children", createLifeOSChildrenRoutes({ pool, requireKey, callCouncilMember }));
   logger.info("✅ [LIFEOS-CHILDREN] Routes mounted at /api/v1/lifeos/children");
+
   app.use("/api/v1/lifeos/vision", createLifeOSVisionRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-VISION] Routes mounted at /api/v1/lifeos/vision");
+
   app.use("/api/v1/lifeos/decisions", createLifeOSDecisionsRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-DECISIONS] Routes mounted at /api/v1/lifeos/decisions");
-  app.use("/api/v1/lifeos/decisions/review", createDecisionReviewRoutes({ pool }));
-  logger.info("✅ [LIFEOS-DECISION-REVIEW] Routes mounted at /api/v1/lifeos/decisions/review");
+
   app.use("/api/v1/lifeos/identity", createLifeOSIdentityRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-IDENTITY] Routes mounted at /api/v1/lifeos/identity");
-  app.use("/api/v1/lifeos/identity/assessment", createAssessmentBatteryRoutes({ pool }));
-  logger.info("✅ [LIFEOS-ASSESSMENT] Routes mounted at /api/v1/lifeos/identity/assessment");
+
+  app.use("/api/v1/lifeos", createLifeOSVictoryVaultRoutes({ pool, requireKey, callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-VICTORY-VAULT] Routes mounted at /api/v1/lifeos/victories");
+
   app.use("/api/v1/lifeos/growth", createLifeOSGrowthRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-GROWTH] Routes mounted at /api/v1/lifeos/growth");
+
   app.use("/api/v1/lifeos/mediation", createLifeOSMediationRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-MEDIATION] Routes mounted at /api/v1/lifeos/mediation");
+
   app.use("/api/v1/lifeos/healing", createLifeOSHealingRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-HEALING] Routes mounted at /api/v1/lifeos/healing");
+
   app.use("/api/v1/lifeos/legacy", createLifeOSLegacyRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-LEGACY] Routes mounted at /api/v1/lifeos/legacy");
+
   app.use("/api/v1/lifeos/emotional", createLifeOSEmotionalRoutes({ pool, requireKey, callCouncilMember }));
   logger.info("✅ [LIFEOS-EMOTIONAL] Routes mounted at /api/v1/lifeos/emotional");
+
   app.use("/api/v1/lifeos/ethics", createLifeOSEthicsRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-ETHICS] Routes mounted at /api/v1/lifeos/ethics");
+
   app.use("/api/v1/lifeos/conflict", createLifeOSConflictRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-CONFLICT] Routes mounted at /api/v1/lifeos/conflict");
-  app.use("/api/v1/lifeos/conflict/interrupt", createConflictInterruptRoutes({ pool }));
-  logger.info("✅ [LIFEOS-CONFLICT-INTERRUPT] Routes mounted at /api/v1/lifeos/conflict/interrupt");
+
   app.use("/api/v1/lifeos/finance", createLifeOSFinanceRoutes({ pool, requireKey, callCouncilMember, logger }));
   logger.info("✅ [LIFEOS-FINANCE] Routes mounted at /api/v1/lifeos/finance");
+
   app.use("/api/v1/lifeos/backtest", createLifeOSBacktestRoutes({ requireKey }));
   logger.info("✅ [LIFEOS-BACKTEST] Education-only routes mounted at /api/v1/lifeos/backtest");
+
   app.use(
     "/api/v1/lifeos/weekly-review",
     createLifeOSWeeklyReviewRoutes({ pool, requireKey, callAI: councilChatAI, logger })
   );
   logger.info("✅ [LIFEOS-WEEKLY-REVIEW] Routes mounted at /api/v1/lifeos/weekly-review");
+
   app.use(
     "/api/v1/lifeos/scorecard",
     createLifeOSScorecardRoutes({ pool, requireKey, callAI: councilChatAI, logger })
   );
   logger.info("✅ [LIFEOS-SCORECARD] Routes mounted at /api/v1/lifeos/scorecard");
+
   app.use(
     "/api/v1/lifeos/chat",
     createLifeOSChatRoutes({
@@ -232,12 +248,14 @@ export async function registerRuntimeRoutes(app, deps) {
     })
   );
   logger.info("✅ [LIFEOS-CHAT] Routes mounted at /api/v1/lifeos/chat");
+
   app.use("/api/v1/lifeos/ambient", createLifeOSAmbientRoutes({ pool, requireKey, logger }));
   logger.info("✅ [LIFEOS-AMBIENT] Routes mounted at /api/v1/lifeos/ambient");
+
   app.use("/api/v1/lifeos/habits", createLifeOSHabitsRoutes({ pool, requireKey, logger }));
   logger.info("✅ [LIFEOS-HABITS] Routes mounted at /api/v1/lifeos/habits");
-  createLifeOSCycleRoutes({ pool, requireKey, logger })(app);
 
+  createLifeOSCycleRoutes({ pool, requireKey, logger })(app);
 
   // Council builder — dispatches tasks to the system; council generates + commits code (§2.11)
   createLifeOSCouncilBuilderRoutes({
@@ -306,6 +324,7 @@ export async function registerRuntimeRoutes(app, deps) {
   logger.info(`✅ [LIFEOS-OPTIONAL] Mounted ${mountedOptionalCount}/${optionalRoutes.length} optional routes`);
 
   const tcCoordinator = createTCCoordinator({ pool, accountManager, notificationService, callCouncilMember, logger });
+
   createTCRoutes(app, {
     pool,
     requireKey,
@@ -320,11 +339,8 @@ export async function registerRuntimeRoutes(app, deps) {
     startAlertLoop: true,
     managedEnvService: railwayManagedEnvService,
   });
-  createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
 
-  // Sleep tracking (AMENDMENT_21 — health module)
-  mountSleepRoutes(app, { pool });
-  logger.info('✅ [LIFEOS-SLEEP] Routes mounted at /api/v1/lifeos/sleep');
+  createMLSRoutes(app, { pool, requireKey, callCouncilMember, logger, accountManager });
 
   // Memory Intelligence — epistemic facts, debates, lessons, agent performance, intent drift (AMENDMENT_39)
   app.use('/api/v1/memory', createMemoryIntelligenceRoutes({ pool, logger, requireKey }));
