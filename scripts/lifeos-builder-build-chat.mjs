@@ -1,21 +1,16 @@
 #!/usr/bin/env node
 /**
  * System-authored Lumin chat UI: POST /api/v1/lifeos/builder/build on the RUNNING app.
- *
- * Prerequisites (KNOW from preflight):
+ * - Prerequisites (KNOW from preflight):
  *   - Deploy must include council builder routes (`GET …/builder/domains` ≠ 404). If 404 → redeploy from `main`.
  *   - Shell: PUBLIC_BASE_URL (or BUILDER_BASE_URL) + COMMAND_CENTER_KEY (or LIFEOS_KEY / API_KEY) matching Railway.
  *   - Server: GITHUB_TOKEN + council keys for /build to succeed.
- *
- * Usage:
+ * - Usage:
  *   npm run lifeos:builder:build-chat
- *   npm run lifeos:builder:build-chat -- --dry-run    # print JSON body only
- *
- * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
- *
- * Loads repo-root `.env` when present (see `council-builder-preflight.mjs`) so `PUBLIC_BASE_URL` + key work from disk.
+ *   npm run lifeos:builder:build-chat -- --dry-run    print JSON body only
+ * - @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * - Loads repo-root `.env` when present (see `council-builder-preflight.mjs`) so `PUBLIC_BASE_URL` + key work from disk.
  */
-
 import 'dotenv/config';
 
 const base = (
@@ -42,8 +37,9 @@ const body = {
   internet_research: true,
   files: [TARGET],
   task:
+    `TSOS|VERB=BUILD|DOMAIN=${DOMAIN}|TARGET=${TARGET}|INTENT=system-build|EP=KNOW\n` +
     'Produce the complete, production-ready HTML for the Lumin chat overlay at target_file. ' +
-    'Preserve all existing JavaScript behavior that talks to LifeOS APIs (threads, modes, build panel, voice, conflict interrupt, auth). ' +
+    'Preserve all existing JS behavior that talks to LifeOS APIs (threads, modes, build panel, voice, conflict interrupt, auth). ' +
     'Improve: visual polish, mobile usability, keyboard/focus flow, and clarity of the build/status strip. ' +
     'Do not remove working endpoints or change URL paths unless required for a bug fix. ' +
     'Single file output only.',
@@ -71,6 +67,7 @@ async function main() {
   const probe = await fetch(domainsUrl, {
     headers: { 'x-command-key': key, accept: 'application/json' },
   });
+
   if (probe.status === 404) {
     console.error(
       '\n❌ GET /api/v1/lifeos/builder/domains → 404\n' +
@@ -89,6 +86,7 @@ async function main() {
   }
 
   const buildUrl = `${base}/api/v1/lifeos/builder/build`;
+
   if (dry) {
     console.log('Dry run — would POST:\n', buildUrl, '\n', JSON.stringify(body, null, 2));
     process.exit(0);
@@ -100,6 +98,7 @@ async function main() {
     headers: { 'content-type': 'application/json', 'x-command-key': key },
     body: JSON.stringify(body),
   });
+
   const text = await r.text();
   let json;
   try {
@@ -110,6 +109,7 @@ async function main() {
   }
 
   console.log(JSON.stringify(json, null, 2));
+
   if (!r.ok || !json.ok) {
     process.exit(1);
   }
@@ -117,6 +117,7 @@ async function main() {
     console.warn('\n⚠️ committed:false — check note / target_file / GitHub token on server.\n');
     process.exit(1);
   }
+
   console.log('\n✅ System build committed:', json.target_file, '\n');
   process.exit(0);
 }
