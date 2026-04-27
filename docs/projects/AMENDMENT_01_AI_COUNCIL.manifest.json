@@ -7,9 +7,9 @@
   "priority": "critical",
   "owner": "adam",
   "phase": "optimization",
-  "next_task": "Improve general task type compression from 4% to 15%+ savings",
-  "stability_class": "needs-review",
-  "current_focus": "Token savings optimization \u2014 general/codegen task types at 4% savings vs target 20%+",
+  "next_task": "Run T5-T15 LifeOS feature builds via builder council (now using claude_sonnet for code generation)",
+  "stability_class": "active",
+  "current_focus": "Claude Sonnet wired as builder code model — all council.builder.code tasks now route to anthropic/claude-sonnet-4-6 instead of Gemini Flash",
   "owned_files": [
     "services/council-service.js",
     "services/token-optimizer.js",
@@ -20,6 +20,7 @@
     "services/response-cache.js",
     "services/ai-guard.js",
     "config/council-members.js",
+    "config/task-model-routing.js",
     "config/runtime-env.js"
   ],
   "protected_files": [
@@ -126,13 +127,14 @@
   ],
   "completion_checks": [
     "All AI calls routed to free providers first (Groq \u2192 Gemini \u2192 Cerebras \u2192 Ollama)",
+    "council.builder.code routes to claude_sonnet (not gemini_flash)",
+    "Anthropic Messages API handler wired in council-service.js (x-api-key header, content[0].text)",
     "TOON compression enabled for all task types including codegen",
     "savings_pct written to DB on every call (not zero)",
     "general task type achieves 15%+ average savings",
     "Free tier governor tracking prevents provider exhaustion",
     "LIFEOS_DIRECTED_MODE=true prevents all autonomous AI loops",
-    "HAB daily limit enforced (100/day)",
-    "No paid Anthropic/OpenAI calls unless explicitly triggered"
+    "HAB daily limit enforced (100/day)"
   ],
   "anti_drift_notes": "TOON compression was previously disabled for codegen task type \u2014 it is now ENABLED. The whitespace stripper uses \\n{2,} not \\n{3,}. The persistToDB function in token-optimizer.js is intentionally a no-op \u2014 savings-ledger.js is the authoritative writer. configureAiGuard() must NOT call ensureExpectedRealityHash() \u2014 only lazy init on first request. Free tier governor buffer is 3% (not 10%) \u2014 this is intentional.",
   "decision_debt": [
