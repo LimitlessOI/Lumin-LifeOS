@@ -32,6 +32,26 @@
 
 ---
 
+## [BUILD+FIX] Update 2026-04-27 #3 — **LifeOS dashboard live + Railway boot fixed + builder pipeline deployed**
+
+### Files changed
+- `services/council-model-availability.js` — was untracked since creation; committed. Exports `filterAvailableCouncilMembers` / `getCouncilMemberAvailability`. This was the root cause of Railway crash-looping on every build since commit `bbe6159d`.
+- `routes/railway-managed-env-routes.js` — added `railwayGql()` helper, `internalRailwayBuildFromLatest()` using `serviceInstanceDeploy` mutation, `POST /build-from-latest`. Prior `serviceInstanceRedeploy` only restarts image; new endpoint forces fresh build from latest GitHub commit.
+- `routes/lifeos-council-builder-routes.js` — (via prior commits now deployed): `extractHtmlFromOutput()`, 6-point HTML output contract, METADATA fence-strip, `useCache:false` in `/build`, `autoWireRoute()`.
+- `public/overlay/lifeos-dashboard.html` — system-built via `/task`+`/execute` workaround. Dashboard home screen: MITs, calendar, goals+%, 4 score tiles, chat. Live at `/overlay/lifeos-dashboard.html`.
+
+### State
+- Railway deploying from latest commit. `/gaps` HTTP 200, `/build` returns `ok:true,committed:true` for JS targets. Dashboard HTTP 200. All 5 dashboard API routes return 200.
+- METADATA strip working (no `---METADATA---` in `/task` output). `extractHtmlFromOutput` deployed (HTML preamble stripped before commit).
+- Ollama gap logged in `/gaps` (expected — Ollama not on Railway).
+
+### Next agent: start here
+- Verify `GET /api/v1/lifeos/victories` returns 200 (Victory Vault compatibility routes deployed).
+- Verify dashboard is reachable via sidebar nav in `lifeos-app.html` (PAGE_META may already have it; check the nav link renders).
+- Next product build: "Hey Lumin" wake word (`lifeos-bootstrap.js` Web Speech API, opt-in) OR Commitment → execution desk.
+
+---
+
 ## [FIX] Update 2026-04-27 #2 — **SOT core mirror + reminder SQL without c.to_person**
 
 ### Files changed
