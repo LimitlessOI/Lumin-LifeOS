@@ -1,1 +1,1 @@
-The specification references `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`, but all four injected file paths returned ENOENT. Cannot produce a smoke receipt summarizing a brief that does not exist in the repository.
+The specification references `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` but all four injected file paths returned ENOENT. Cannot produce a smoke receipt summarizing a brief that does not exist in the repository.
