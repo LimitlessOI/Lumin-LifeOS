@@ -1,29 +1,33 @@
 # LifeOS Dashboard Builder Smoke Receipt
 
-**Source Document**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
+**Reference Document**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 
-## Understanding Confirmed
+## Shell Architecture Understanding
 
-### Shell Architecture
-- **Desktop**: Persistent left sidebar navigation with collapsible sections
-- **Mobile**: Bottom tab bar navigation (intentionally different from desktop)
-- Both layouts are **required** and differ by design, not by oversight
+### Desktop Layout
+- **Persistent left sidebar** for primary navigation
+- Sidebar contains category navigation and system controls
+- Main content area displays active dashboard view
 
-### Theme Support
-- **Light mode** and **dark mode** are both required
-- Theme switching must be supported across all dashboard views
+### Mobile Layout
+- **Bottom tab bar** for primary navigation (intentionally different from desktop)
+- Tab bar provides quick access to core categories
+- Full-screen content area maximizes vertical space
 
-### Dashboard Structure
-- **Category dashboards** must support horizontal swipe navigation
-- Each category presents a focused view of domain-specific data
-- Swipe gestures enable fluid movement between related categories
+### Category Dashboards
+- **Swipe-ready horizontal navigation** between related category views
+- Each category dashboard presents focused, domain-specific information
+- Smooth gesture-based transitions between categories
 
 ### AI Integration
-- **Persistent AI rail** remains accessible across all dashboard views
-- AI assistant context persists as user navigates between categories
-- Rail positioning adapts to desktop (side) vs mobile (overlay/drawer) layouts
+- **Persistent AI rail** accessible across all dashboard views
+- AI assistant remains contextually aware as user navigates
+- Rail adapts to layout constraints (desktop: side panel, mobile: overlay/drawer)
 
-### Key Constraints
-- No backend API assumptions made beyond existing LifeOS platform routes
-- No database schema changes implied
-- Implementation follows existing Platform Core patterns for route registration and service composition
+## Theme Requirements
+- **Light mode** and **dark mode** are both required
+- Theme preference must persist across sessions
+- All UI components must support both themes
+
+## Layout Philosophy
+Mobile and desktop layouts **differ intentionally** to optimize for their respective interaction patterns and screen constraints.
