@@ -39,6 +39,7 @@
     "lifeos:lumin-plan": "node scripts/lumin-invoke-plan.mjs",
     "lifeos:gate-change-run": "node scripts/council-gate-change-run.mjs",
     "lifeos:builder:build-chat": "node scripts/lifeos-builder-build-chat.mjs",
+    "lifeos:builder:supervise": "node scripts/lifeos-builder-supervisor.mjs",
     "lifeos:builder:orchestrate": "node scripts/council-builder-preflight.mjs && node scripts/lifeos-builder-build-chat.mjs",
     "zero-drift:check": "node scripts/zero-drift-check.mjs",
     "readiness:check": "node scripts/amendment-readiness-check.mjs",

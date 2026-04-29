@@ -556,7 +556,21 @@ export function createLifeOSCouncilBuilderRoutes({
         ? 'Using runtime-available routing map'
         : 'No runtime-available model is currently configured for this builder task',
     };
-    if (memorySvc) {
+    if (model) {
+      if (availability.availabilityByModel[model]?.available) {
+        routingRecommendation = {
+          selectedModel: model,
+          blockedCandidates: unavailableCandidates.map((row) => row.model),
+          reason: `Using explicit model override: ${model}`,
+        };
+      } else {
+        routingRecommendation = {
+          selectedModel: null,
+          blockedCandidates: unavailableCandidates.map((row) => row.model),
+          reason: `Explicit model override ${model} unavailable (${availability.availabilityByModel[model]?.reason || 'unknown_reason'})`,
+        };
+      }
+    } else if (memorySvc) {
       try {
         routingRecommendation = await memorySvc.getRoutingRecommendation({
           taskType: routingKey,

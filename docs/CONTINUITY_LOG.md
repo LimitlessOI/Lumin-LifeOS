@@ -32,6 +32,28 @@
 
 ---
 
+## [BUILD] Update 2026-04-28 #1 — **Builder supervision hardening for LifeOS dashboard overnight work**
+
+### Files changed
+- `services/council-model-availability.js` — Railway-aware Ollama availability gate. Ollama is now unavailable on Railway unless an explicit non-local endpoint is configured, which stops council routing from selecting dead local-only models in production.
+- `routes/lifeos-council-builder-routes.js` — explicit `model` on `/api/v1/lifeos/builder/build` is now authoritative; memory routing no longer overrides direct operator choice for supervised builder runs.
+- `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` — canonical dashboard build brief tying the builder to Amendment 21, brainstorm catalog, shell files, approved mockup boards, and required light/dark plus mobile/desktop behavior.
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — constrained task order for unattended dashboard work.
+- `scripts/lifeos-builder-supervisor.mjs` — supervisor runner that checks readiness and runs deterministic doc + JS smoke objectives before overnight queue work.
+- `package.json` — adds `npm run lifeos:builder:supervise`.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — receipts and handoff updated for builder supervision state.
+
+### State after this session
+- The main routing bug is patched locally: Railway should stop drifting onto Ollama when no valid remote endpoint exists.
+- The builder now has a canonical dashboard brief and overnight queue instead of free-form prompts.
+- Overnight work is not trusted yet; the live Railway deploy still needs the new code and the supervisor smoke objectives still need to pass against production.
+
+### Next agent: start here
+- Commit and push the builder-hardening patch set.
+- Confirm Railway deploys the new image.
+- Run `npm run lifeos:builder:supervise` against Railway.
+- If either smoke objective fails, inspect `/api/v1/lifeos/builder/gaps` and patch the builder again before any overnight queue runs.
+
 ## [BUILD+FIX] Update 2026-04-27 #3 — **LifeOS dashboard live + Railway boot fixed + builder pipeline deployed**
 
 ### Files changed

@@ -24,6 +24,26 @@ function hasAny(names, env = process.env) {
   return names.some((name) => envValue(name, env));
 }
 
+function isRailwayRuntime(env = process.env) {
+  return Boolean(
+    envValue('RAILWAY_ENVIRONMENT', env) ||
+    envValue('RAILWAY_PROJECT_ID', env) ||
+    envValue('RAILWAY_SERVICE_ID', env) ||
+    envValue('RAILWAY_ENVIRONMENT_ID', env) ||
+    envValue('RAILWAY_PUBLIC_DOMAIN', env)
+  );
+}
+
+function resolveOllamaEndpoint(env = process.env) {
+  return (
+    envValue('OLLAMA_ENDPOINT', env) ||
+    envValue('OLLAMA_BASE_URL', env) ||
+    envValue('OLLAMA_URL', env) ||
+    envValue('OLLAMA_API_BASE', env) ||
+    (envValue('OLLAMA_HOST', env) ? `http://${envValue('OLLAMA_HOST', env)}` : '')
+  ).trim();
+}
+
 export function getCouncilMemberAvailability(memberKey, env = process.env) {
   const members = loadCouncilMembers(env);
   const config = members?.[memberKey];
@@ -78,9 +98,15 @@ export function getCouncilMemberAvailability(memberKey, env = process.env) {
 
     case 'ollama': {
       const ollamaMode = envValue('COUNCIL_OLLAMA_MODE', env) || 'last_resort';
+      const endpoint = resolveOllamaEndpoint(env);
+      const railway = isRailwayRuntime(env);
       return ollamaMode === 'off'
         ? { available: false, reason: 'ollama_disabled' }
-        : { available: true, reason: `ollama_mode_${ollamaMode}` };
+        : railway && !endpoint
+          ? { available: false, reason: 'ollama_endpoint_missing_on_railway' }
+          : railway && /localhost|127\.0\.0\.1/i.test(endpoint)
+            ? { available: false, reason: 'ollama_endpoint_localhost_invalid_on_railway' }
+            : { available: true, reason: `ollama_mode_${ollamaMode}` };
     }
 
     default:
