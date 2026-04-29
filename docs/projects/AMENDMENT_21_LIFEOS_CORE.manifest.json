@@ -107,6 +107,8 @@
     "docs/projects/DASHBOARD_SHELL_GAP_AUDIT.md",
     "scripts/lifeos-builder-supervisor.mjs",
     "scripts/lifeos-builder-overnight.mjs",
+    "public/shared/lifeos-dashboard-tokens.css",
+    "routes/lifeos-council-builder-routes.js",
     "public/overlay/lifeos-feature.html",
     "public/overlay/lifeos-feature-data.js",
     "public/overlay/lifeos-bootstrap.js",
@@ -831,5 +833,5 @@
     ]
   },
   "last_updated": "2026-04-29",
-  "ssot_receipt_tail": "builder runtime FS mirror; tsos:doctor gaps; overnight sleep+redeploy"
+  "ssot_receipt_tail": "dashboard-theme-foundation CSS (lifeos-dashboard-tokens.css); autoWire register FS mirror; builder runtime FS mirror; tsos:doctor gaps; overnight sleep+redeploy"
 }
