@@ -9,17 +9,19 @@
  * @returns {number} Clamped integer
  */
 export function clampMobileWidgetCount(count) {
-  const n = Math.floor(Number(count) || 1);
-  return Math.max(1, Math.min(6, n));
+  const parsed = parseInt(count, 10);
+  if (isNaN(parsed)) return 1;
+  return Math.max(1, Math.min(6, parsed));
 }
 
 /**
  * Resolves theme mode to canonical value
- * @param {string} value - User preference string
+ * @param {string} value - User-provided theme preference
  * @returns {"light"|"dark"|"system"} Normalized theme mode
  */
 export function resolveThemeMode(value) {
-  const normalized = String(value || '').toLowerCase().trim();
+  if (typeof value !== 'string') return 'system';
+  const normalized = value.toLowerCase().trim();
   if (normalized === 'light') return 'light';
   if (normalized === 'dark') return 'dark';
   return 'system';
@@ -34,17 +36,20 @@ export function resolveThemeMode(value) {
  * @returns {"compact"|"balanced"|"airy"} Density mode
  */
 export function pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail }) {
-  const vw = Number(viewportWidth) || 0;
-  const wc = Number(widgetCount) || 0;
-  const pinned = Boolean(hasPinnedRail);
-
-  // Compact conditions
-  if (vw < 640 && wc >= 4) return 'compact';
-  if (pinned && wc >= 5) return 'compact';
-
-  // Airy condition
-  if (vw >= 1280 && wc <= 3 && !pinned) return 'airy';
-
-  // Default
+  // Compact: small viewport with many widgets
+  if (viewportWidth < 640 && widgetCount >= 4) {
+    return 'compact';
+  }
+  
+  // Compact: pinned rail with many widgets
+  if (hasPinnedRail === true && widgetCount >= 5) {
+    return 'compact';
+  }
+  
+  // Airy: large viewport, few widgets, no pinned rail
+  if (viewportWidth >= 1280 && widgetCount <= 3 && hasPinnedRail === false) {
+    return 'airy';
+  }
+  
   return 'balanced';
 }
