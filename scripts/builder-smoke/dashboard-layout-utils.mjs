@@ -1,6 +1,6 @@
 /**
  * @fileoverview Dashboard layout utilities (pure, deterministic, no deps)
- * @module utils/dashboard-layout-utils
+ * @module utils/dashboard-layout-helpers
  */
 
 /**
@@ -9,19 +9,17 @@
  * @returns {number} Clamped integer
  */
 export function clampMobileWidgetCount(count) {
-  const parsed = parseInt(count, 10);
-  if (isNaN(parsed)) return 1;
-  return Math.max(1, Math.min(6, parsed));
+  const n = Math.floor(Number(count) || 1);
+  return Math.max(1, Math.min(6, n));
 }
 
 /**
  * Resolves theme mode to canonical value
- * @param {string} value - User-provided theme preference
+ * @param {string} value - User preference string
  * @returns {"light"|"dark"|"system"} Normalized theme mode
  */
 export function resolveThemeMode(value) {
-  if (typeof value !== 'string') return 'system';
-  const normalized = value.toLowerCase().trim();
+  const normalized = String(value || '').toLowerCase().trim();
   if (normalized === 'light') return 'light';
   if (normalized === 'dark') return 'dark';
   return 'system';
@@ -36,20 +34,13 @@ export function resolveThemeMode(value) {
  * @returns {"compact"|"balanced"|"airy"} Density mode
  */
 export function pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail }) {
-  // Compact: small viewport with many widgets
-  if (viewportWidth < 640 && widgetCount >= 4) {
-    return 'compact';
-  }
+  // Compact: mobile with many widgets OR pinned rail with many widgets
+  if (viewportWidth < 640 && widgetCount >= 4) return 'compact';
+  if (hasPinnedRail && widgetCount >= 5) return 'compact';
   
-  // Compact: pinned rail with many widgets
-  if (hasPinnedRail === true && widgetCount >= 5) {
-    return 'compact';
-  }
+  // Airy: wide viewport with few widgets and no pinned rail
+  if (viewportWidth >= 1280 && widgetCount <= 3 && !hasPinnedRail) return 'airy';
   
-  // Airy: large viewport, few widgets, no pinned rail
-  if (viewportWidth >= 1280 && widgetCount <= 3 && hasPinnedRail === false) {
-    return 'airy';
-  }
-  
+  // Default: balanced
   return 'balanced';
 }
