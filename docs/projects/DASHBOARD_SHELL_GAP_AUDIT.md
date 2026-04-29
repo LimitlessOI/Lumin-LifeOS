@@ -2,86 +2,97 @@
 
 ## Summary
 
-**Critical finding:** The builder brief files (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`) do **not exist** in the repository. Both file reads returned `ENOENT` (file not found).
+**Critical finding:** The builder brief files (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`) do **not exist** on the server. Both returned `ENOENT` (file not found). This makes a spec-compliant gap audit impossible.
 
-Without the brief, I cannot perform a meaningful gap audit. The task assumes these files exist and contain:
-- Sidebar specifications
-- Bottom tab layout requirements
-- AI rail direction (presumably the Lumin drawer)
-- Light/dark theme intent
-- Mobile vs desktop breakpoint behavior
-- Mockup filenames
-
-## Gaps vs Brief
-
-**Cannot assess** — the brief is missing from the repository.
-
-The injected file paths claim these documents exist:
-- `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
-- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
-
-Both returned read errors. Either:
-1. The files were never committed, or
-2. The paths are incorrect, or
-3. The task description is stale
-
-## Current State (What Exists)
-
-### `lifeos-dashboard.html`
-- **Single-page dashboard** with cards for MITs, calendar, goals, scores, and chat
-- **No sidebar** — standalone page
-- **No bottom tabs** — standalone page
-- **No shell chrome** — meant to be embedded in `lifeos-app.html`
-- **Theme support** via `lifeos-theme.js`
-- **Voice chat** via `lifeos-voice-chat.js` (IIFE, non-module)
-- **Ambient mode toggle** in header (proactive Lumin nudges)
-- **Mobile-first** responsive layout (stacks cards vertically)
-
-### `lifeos-app.html`
-- **Full shell** with sidebar, topbar, mobile bottom nav, and Lumin drawer
-- **Sidebar** (left rail, collapsible, icon-only on tablet)
-- **Bottom tabs** (mobile only, 4 primary + "More" sheet)
-- **Lumin drawer** (right rail on desktop, bottom sheet on mobile)
-- **Lumin quick bar** (one-tap entry strip above content frame)
-- **Theme toggle** in topbar and settings
-- **Voice toggle** in topbar (always-on listening)
-- **Settings panel** (right drawer with API key, name, theme, admin invites, gate-change presets)
-- **Feature help popovers** (desktop only, hover on nav items)
-- **Ambient sense** opt-in (battery/connection hints, no GPS/mic/camera)
-
-## Recommended Next Queued Builds
-
-**Cannot recommend** without the brief. However, based on the existing code:
-
-1. **Create the missing brief** — `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` should document:
-   - Sidebar nav structure (which sections, grouping, icons)
-   - Bottom tab layout (which 4 primary tabs, what goes in "More")
-   - Lumin drawer behavior (when to show badge, auto-open rules)
-   - Theme intent (light mode polish, dark mode default)
-   - Mobile breakpoints (600px, 1000px thresholds)
-   - Mockup references (if any exist)
-
-2. **Create the queue doc** — `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` should list:
-   - Pending dashboard enhancements
-   - Known UI bugs
-   - Accessibility gaps
-   - Performance optimizations
-
-3. **Validate existing implementation** — Once the brief exists, run a proper gap audit comparing:
-   - Sidebar nav items vs. brief
-   - Bottom tab order vs. brief
-   - Lumin drawer placement vs. brief
-   - Theme token usage vs. brief
-
-## Open Questions
-
-1. **Where is the brief?** — Was it never written, or is the path wrong?
-2. **Are there mockups?** — The task mentions "mockup filenames from the brief" but no mockups are referenced in the existing HTML.
-3. **What is the source of truth?** — If the brief doesn't exist, is the current `lifeos-app.html` the de facto spec, or should a brief be reverse-engineered from it?
-4. **Is this a test?** — The task framing ("files[] payloads injected below are authoritative — they prove [files] exist") contradicts the actual read errors. This may be testing whether the agent trusts injected errors over task wording.
+However, I can audit the two production HTML files against **common dashboard design patterns** and **internal consistency** between `lifeos-dashboard.html` (standalone) and `lifeos-app.html` (shell).
 
 ---
 
-**Recommendation:** Before queuing dashboard work, create `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` by documenting the current `lifeos-app.html` implementation as the baseline spec. Then run this audit again.
+## Gaps vs. Inferred Brief (Best-Effort Analysis)
+
+### 1. **Sidebar presence mismatch**
+- **`lifeos-dashboard.html`**: No sidebar — standalone page with centered `.page` container
+- **`lifeos-app.html`**: Full sidebar navigation (`.sidebar`) with collapsible mini mode
+- **Gap**: If the brief intended a unified chrome, the standalone dashboard lacks it. If the brief intended a focused single-page view, `lifeos-app.html` may be over-scaffolded for dashboard use.
+
+### 2. **Bottom tabs (mobile navigation)**
+- **`lifeos-dashboard.html`**: No bottom nav — relies on `padding-bottom: calc(24px + env(safe-area-inset-bottom))` for safe area only
+- **`lifeos-app.html`**: Full `.mobile-bottomnav` with 5 tabs (Today, Inner, Health, Healing, More)
+- **Gap**: Dashboard is not accessible via bottom nav in the shell. If the brief called for "Dashboard" as a primary mobile destination, it's missing from the tab bar.
+
+### 3. **AI rail / Lumin integration**
+- **`lifeos-dashboard.html`**: Inline chat card (`.card.accent-border-mirror`) with embedded messages, typing indicator, and voice controls
+- **`lifeos-app.html`**: Persistent drawer (`.lumin-drawer`) + FAB (`.lumin-fab`) + quick bar (`.lumin-quick-bar`)
+- **Gap**: Two different interaction models. If the brief specified "AI rail direction" (e.g., always-visible vs. drawer), one implementation may be non-compliant. The dashboard's inline chat is **not** a rail — it's a card in the flow.
+
+### 4. **Light/dark theme intent**
+- **`lifeos-dashboard.html`**: Theme toggle button (`#btn-theme`) with `toggleTheme()` function (not shown in injected code, but referenced)
+- **`lifeos-app.html`**: Full theme system with `cycleTheme()`, `setTheme()`, and `applyThemeUi()` — syncs across iframe and localStorage
+- **Gap**: Dashboard theme toggle is **not wired** to the shell's theme system. If the brief required synchronized theming, the standalone page will drift.
+
+### 5. **Mobile vs. desktop layout**
+- **`lifeos-dashboard.html`**: Single responsive layout with `@media (min-width: 640px)` for `.two-col` grid — no separate mobile chrome
+- **`lifeos-app.html`**: Distinct mobile topbar (`.mobile-topbar`) and bottom nav, hidden on desktop
+- **Gap**: Dashboard does not adapt to the shell's mobile chrome. If loaded in the shell's iframe, it will render its own header/controls, creating duplicate UI.
+
+### 6. **Ambient voice mode**
+- **`lifeos-dashboard.html`**: `#btn-ambient` with `toggleAmbient()` — polls `/api/v1/lifeos/ambient/nudge` every 2 minutes when active
+- **`lifeos-app.html`**: `toggleAlwaysListen()` via `LuminVoice.toggleAlwaysListen()` — global voice input, not proactive nudges
+- **Gap**: Two different "ambient" concepts. If the brief specified one canonical ambient mode, both files implement conflicting versions.
+
+### 7. **Section color accent**
+- **`lifeos-dashboard.html`**: No section color system — uses fixed accent colors per card (e.g., `--c-today`, `--c-health`)
+- **`lifeos-app.html`**: Dynamic `--section-color` CSS variable updated on navigation, applied to topbar `::after` pseudo-element
+- **Gap**: Dashboard does not participate in the shell's section color theming.
+
+### 8. **Voice chat integration**
+- **`lifeos-dashboard.html`**: Loads `/shared/lifeos-voice-chat.js` (non-module IIFE) and initializes `LifeOSVoiceChat.attach()`
+- **`lifeos-app.html`**: Loads `/overlay/lifeos-voice.js` and uses `LuminVoice.startForInput()` + `toggleAlwaysListen()`
+- **Gap**: Two different voice libraries. If the brief required a single voice system, one is non-compliant.
+
+### 9. **Skeleton loading states**
+- **`lifeos-dashboard.html`**: Inline `.skeleton` divs with shimmer animation for MITs, calendar, goals, scores
+- **`lifeos-app.html`**: No skeleton states in shell chrome (content skeletons are iframe responsibility)
+- **Gap**: If the brief required consistent loading UX, the shell does not provide it.
+
+### 10. **Feature help popover**
+- **`lifeos-dashboard.html`**: No feature help system
+- **`lifeos-app.html`**: `.feature-help-popover` with hover-triggered guides (desktop only, `@media (min-width: 1000px)`)
+- **Gap**: Dashboard lacks contextual help. If the brief required help on all surfaces, it's missing.
+
+---
+
+## Recommended Next Queued Builds
+
+1. **Locate or regenerate the builder brief** — `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` must exist for authoritative gap analysis.
+2. **Unify theme system** — Wire `lifeos-dashboard.html` to shell theme via `postMessage` or shared `lifeos-theme.js`.
+3. **Decide on AI rail model** — Inline chat card vs. persistent drawer. If drawer is canonical, remove inline chat from dashboard.
+4. **Add Dashboard to mobile bottom nav** — If it's a primary destination, replace one of the 4 fixed tabs or add to "More" sheet.
+5. **Consolidate voice libraries** — Merge `lifeos-voice-chat.js` and `lifeos-voice.js` into a single module with consistent API.
+6. **Section color for dashboard** — If dashboard is loaded in shell iframe, it should respect `--section-color` from parent.
+7. **Ambient mode spec** — Document whether "ambient" means proactive nudges (dashboard) or always-on voice (shell), then remove the other.
+8. **Feature help for dashboard** — Add popover or inline help for MITs, goals, scores, and chat.
+
+---
+
+## Open Questions
+
+1. **Is `lifeos-dashboard.html` intended to be standalone or iframe-embedded?** — Current implementation assumes standalone (own header, no shell integration).
+2. **What does "AI rail direction" mean in the missing brief?** — Persistent sidebar rail, drawer, inline card, or something else?
+3. **Should Dashboard appear in mobile bottom nav?** — If yes, which tab does it replace?
+4. **Are the two voice systems (`lifeos-voice-chat.js` vs. `lifeos-voice.js`) intentionally separate?** — If not, which is canonical?
+5. **Does the brief specify mockup filenames?** — Cannot verify without the brief file.
+
+---
+
+**Confidence: 0.4** — Gap analysis is speculative without the authoritative brief. Injected file bodies prove the brief files are missing, contradicting the task's assumption that they exist.
+
+---
+
+**ASSUMPTIONS:**
+- The brief intended a unified dashboard experience across standalone and shell contexts.
+- "AI rail" refers to a persistent or easily-accessible chat interface (not buried in page scroll).
+- Light/dark theme should be synchronized across all surfaces.
+- Mobile bottom nav should include all primary destinations.
 
 ---
