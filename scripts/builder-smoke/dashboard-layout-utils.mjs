@@ -34,13 +34,12 @@ export function resolveThemeMode(value) {
  * @returns {"compact"|"balanced"|"airy"} Density mode
  */
 export function pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail }) {
-  // Compact: mobile with many widgets OR pinned rail with many widgets
-  if (viewportWidth < 640 && widgetCount >= 4) return 'compact';
-  if (hasPinnedRail && widgetCount >= 5) return 'compact';
-  
-  // Airy: wide viewport with few widgets and no pinned rail
-  if (viewportWidth >= 1280 && widgetCount <= 3 && !hasPinnedRail) return 'airy';
-  
-  // Default: balanced
+  const vw = Number(viewportWidth) || 0;
+  const wc = Number(widgetCount) || 0;
+  const pinned = Boolean(hasPinnedRail);
+
+  if (vw < 640 && wc >= 4) return 'compact';
+  if (pinned && wc >= 5) return 'compact';
+  if (vw >= 1280 && wc <= 3 && !pinned) return 'airy';
   return 'balanced';
 }
