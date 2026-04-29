@@ -32,6 +32,36 @@
 
 ---
 
+## [BUILD] Update 2026-04-29 #3 — **Dashboard theme tokens (`dashboard-theme-foundation`)**
+
+### Files changed
+- **`public/shared/lifeos-dashboard-tokens.css`** — system `POST /api/v1/lifeos/builder/build` overnight task **`dashboard-theme-foundation`** (`claude_via_openrouter`, **`committed:true`** on Railway). Semantic **`--dash-*`** for light/dark; header points to **`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**.
+
+### Verified
+- **`GET https://robust-magic-production.up.railway.app/shared/lifeos-dashboard-tokens.css`** → **200**, **2607** bytes (matches local `wc -c`).
+- **`npm run builder:preflight`** → OK before run; **`data/builder-overnight-log.jsonl`** event **`task_ok`**.
+- **Next queue task:** **`dashboard-import-tokens`** (wire `<link>` in **`lifeos-dashboard.html`**).
+
+### Next agent
+- Run **`npm run lifeos:builder:overnight -- --task dashboard-import-tokens`** (or **`--start 2`** after confirming tokens on disk).
+
+---
+
+## [FIX] Update 2026-04-25 #1 — **`autoWireRoute` mirrors register file (second-pass audit)**
+
+### Files changed
+- `routes/lifeos-council-builder-routes.js` — after `commitToGitHub` in `autoWireRoute()`, **`mirrorCommittedContentToRepoRoot(REGISTER_PATH, current)`** so `startup/register-runtime-routes.js` on disk matches the GitHub commit (same chained-FS issue as `/build`/`/execute`; previously only primary target mirrored).
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Change Receipt row, `Last Updated`, Agent Handoff, Known gaps (**`/execute` JS lacks `node --check`** documented as residual THINK-gap).
+
+### State after this session
+- **KNOW:** `node --check routes/lifeos-council-builder-routes.js` exits 0.
+- **Models:** Selecting a different Cursor model does not rerun server code — the fix is deterministic code review plus mirror alignment.
+
+### Next agent
+- Deploy/redeploy Railway so prod builder runs this path; optionally add optional `route_wiring_mirrored` JSON flag on `/build` responses for observability.
+
+---
+
 ## [FIX] Update 2026-04-29 #2 — **Builder chained-task FS mirror + gaps in doctor**
 
 ### Files changed
@@ -44,7 +74,7 @@
 ### KNOWN gaps still (whole LifeOS ≠ only builder)
 - Product domains (finance, placements, resale, etc.) largely **beyond** builder scaffolding — backlog in amendments.
 - `npm test` smoke tests assume local server listening (CI/offline fails without SKIP or mock).
-- **`autoWireRoute`** second commit still GitHub-path — acceptable.
+- Superseded 2026-04-25: **`autoWireRoute`** now mirrors `startup/register-runtime-routes.js`; see **`[FIX] Update 2026-04-25 #1`**.
 
 ### Next agent
 - Deploy `main` then re-run chained overnight tasks `--start 1` without manual GitHub pulls on server.

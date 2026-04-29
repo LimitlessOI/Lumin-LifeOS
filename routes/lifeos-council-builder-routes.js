@@ -1000,6 +1000,13 @@ export function createLifeOSCouncilBuilderRoutes({
       `[system-build] wire ${exportName} to register-runtime-routes.js`,
       branch
     );
+    const mirrorReg = await mirrorCommittedContentToRepoRoot(REGISTER_PATH, current);
+    if (!mirrorReg.ok) {
+      log.warn(
+        { path: REGISTER_PATH, reason: mirrorReg.reason },
+        '[BUILDER] Runtime repo mirror failed after autoWireRoute — chained files[] seeing register-runtime-routes.js may lag until redeploy',
+      );
+    }
     return { ok: true, exportName, mountPath, committed: true };
   }
 

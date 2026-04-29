@@ -6,6 +6,22 @@
 
 ---
 
+## [BUILD] Update 2026-04-29 #1 — **Overnight dashboard: `dashboard-theme-foundation` + receipts**
+
+### Shipped / verified (system path)
+- **`public/shared/lifeos-dashboard-tokens.css`** — **`POST /api/v1/lifeos/builder/build`** via **`npm run lifeos:builder:overnight -- --task dashboard-theme-foundation`** (`claude_via_openrouter`, **`committed:true`**). Prod **`GET /shared/lifeos-dashboard-tokens.css`** **200**, **2607** bytes (= local).
+
+### Related platform (local amendment of prior gap)
+- **`routes/lifeos-council-builder-routes.js`** — **`mirrorCommittedContentToRepoRoot`** after **`autoWireRoute`** register commit (**chained **`files[]`** FS parity).
+
+### Doc / SSOT
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — receipts + **`## Agent Handoff Notes`**: next **`dashboard-import-tokens`**. **`docs/CONTINUITY_LOG.md`** **`[BUILD]`** block.
+
+### Next
+- **`npm run lifeos:builder:overnight -- --task dashboard-import-tokens`** (minimal `<link>` in **`lifeos-dashboard.html`**).
+
+---
+
 ## [BUILD] Update 2026-04-27 #18 — Victory Vault root API contract now exists on the runtime spine
 
 **Shipped:**
