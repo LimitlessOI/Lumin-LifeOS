@@ -12,6 +12,7 @@
  *   npm run lifeos:builder:supervise
  *   npm run lifeos:builder:supervise -- --model claude_via_openrouter
  *   npm run lifeos:builder:supervise -- --skip-doc
+ *   npm run lifeos:builder:supervise -- --overnight --overnight-max 2   # after smoke passes, run overnight queue
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
@@ -169,6 +170,8 @@ async function main() {
   const model = argValue('--model', DEFAULT_MODEL);
   const skipDoc = hasFlag('--skip-doc');
   const skipJs = hasFlag('--skip-js');
+  const runOvernight = hasFlag('--overnight');
+  const overnightMax = argValue('--overnight-max', process.env.OVERNIGHT_MAX || '2');
 
   console.log(`Supervisor base: ${base}`);
   console.log(`Supervisor model: ${model}`);
@@ -228,6 +231,15 @@ async function main() {
 
   console.log('\nSupervisor result: builder path is healthy enough for constrained overnight dashboard work.');
   console.log('Next command: npm run lifeos:builder:supervise -- --model claude_via_openrouter');
+
+  if (runOvernight) {
+    console.log(`\nChaining overnight runner (max ${overnightMax})...`);
+    await execFileAsync(process.execPath, [
+      path.join(process.cwd(), 'scripts/lifeos-builder-overnight.mjs'),
+      '--max',
+      String(overnightMax),
+    ], { stdio: 'inherit', env: process.env, cwd: process.cwd() });
+  }
 }
 
 main().catch((err) => {

@@ -32,6 +32,28 @@
 
 ---
 
+## [BUILD] Update 2026-04-29 #1 — **Overnight builder queue + truthful shell gap audit**
+
+### Files changed
+- `scripts/lifeos-builder-overnight.mjs` — POST `/api/v1/lifeos/builder/build` runner over tasks in `LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`; logs to `data/builder-overnight-log.jsonl`.
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json` — five ordered tasks (audit, tokens CSS, wire tokens, density notes, AI rail contract doc); audit prompt hardened so council cannot claim missing SSOT when files are injected.
+- `scripts/lifeos-builder-supervisor.mjs` — optional `--overnight --overnight-max N` chains overnight after smoke objectives.
+- `package.json` — `lifeos:builder:overnight`.
+- `.gitignore` — `data/builder-overnight-log.jsonl`.
+- `docs/projects/DASHBOARD_SHELL_GAP_AUDIT.md` — **GAP-FILL**: replaced erroneous `[system-build]` audit that claimed brief files were missing; new content is truthful (standalone dashboard vs shell brief gap).
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — pointer to JSON + run commands.
+
+### State after this session
+- **KNOW**: `npm run lifeos:builder:overnight -- --task dashboard-shell-audit` succeeded on Railway (committed `claude_via_openrouter`) but narrative was wrong → corrected locally before push.
+- **Next**: Operator runs `npm run lifeos:builder:supervise -- --overnight --overnight-max 2` after deploy, then grades HTML/CSS tasks; widen `OVERNIGHT_MAX` only after theme + wire commits look good.
+
+### Next agent: start here
+- Commit/push these files if not yet on `main`.
+- Re-run `--task dashboard-theme-foundation` on Railway after deploying hardened JSON (or `--start 1` after pulling).
+- Expand builder `BUILDER_EPISTEMIC_LAWS` / task wrapper to echo first line of injected files count (optional platform hardening).
+
+---
+
 ## [BUILD] Update 2026-04-28 #1 — **Builder supervision hardening for LifeOS dashboard overnight work**
 
 ### Files changed

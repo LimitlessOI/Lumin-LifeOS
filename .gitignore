@@ -39,5 +39,6 @@ docs/THREAD_REALITY/outputs/**
 
 # Machine-generated builder preflight audit (may contain deploy hostname; never secrets)
 data/builder-preflight-log.jsonl
+data/builder-overnight-log.jsonl
 # Env certification probes (hostnames, pass/fail — never paste secret values into this file)
 data/env-certification-log.jsonl

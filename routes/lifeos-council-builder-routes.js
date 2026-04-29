@@ -54,6 +54,7 @@ const BUILDER_EPISTEMIC_LAWS = [
   '- Ground outputs in DOMAIN CONTEXT, SPECIFICATION, and injected REPO FILE CONTENTS only; do not invent features, routes, env vars, or DB tables not supported there.',
   '- If the spec is incomplete or contradictory, state that in one line before ---METADATA--- and set a low confidence value in the JSON.',
   '- When both apply, injected file bodies override vague task wording.',
+  '- If REPO FILE CONTENTS include a nonempty body for path P, NEVER claim that P is missing from the repository or return ENOENT for P.',
 ].join('\n');
 
 /**

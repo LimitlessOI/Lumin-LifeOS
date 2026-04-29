@@ -36,6 +36,23 @@ This queue is for supervised overnight builder runs. Each task must reference `d
 10. `dashboard-polish-pass`
    Goal: motion, spacing, accessibility, loading states, empty states, and theme parity.
 
+## Machine-readable tasks
+
+Canonical task definitions (files, specs, commit messages) live in:
+
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`
+
+Run (after a successful `npm run lifeos:builder:supervise` on the same `PUBLIC_BASE_URL`):
+
+```bash
+npm run lifeos:builder:overnight -- --dry-run
+OVERNIGHT_MAX=2 npm run lifeos:builder:overnight
+```
+
+Resume after a failure with `--start <0-based index>` or run a single step with `--task <id>`.
+
+Logs append to `data/builder-overnight-log.jsonl` (gitignored).
+
 ## Stop conditions
 
 Stop and report instead of guessing if:

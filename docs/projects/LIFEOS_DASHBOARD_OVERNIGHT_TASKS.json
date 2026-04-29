@@ -1,0 +1,82 @@
+{
+  "$comment": "Tasks for scripts/lifeos-builder-overnight.mjs — must stay aligned with LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md",
+  "brief": "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+  "tasks": [
+    {
+      "id": "dashboard-shell-audit",
+      "domain": "lifeos-platform",
+      "model": "claude_via_openrouter",
+      "target_file": "docs/projects/DASHBOARD_SHELL_GAP_AUDIT.md",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md",
+        "public/overlay/lifeos-dashboard.html",
+        "public/overlay/lifeos-app.html"
+      ],
+      "task": "Produce a gap audit only. The files[] payloads injected below are authoritative — they prove LIFEOS_DASHBOARD_BUILDER_BRIEF.md and LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md exist on the server. NEVER claim ENOENT/missing SSOT docs. Compare lifeos-dashboard.html and lifeos-app.html against the brief (sidebar, bottom tabs, AI rail direction, light/dark intent, mobile vs desktop). List concrete gaps. Do not rewrite production HTML.",
+      "spec": "Markdown only. Sections: Summary, Gaps vs brief, Recommended next queued builds, Open questions if any. If injected file contents contradict prior assumptions, trust injected bodies first. Reference mockup filenames from the brief. End with ---METADATA--- JSON block.",
+      "commit_message": "[system-build] Dashboard shell gap audit (supervised overnight queue)",
+      "notes": "Safe first task — documentation only."
+    },
+    {
+      "id": "dashboard-theme-foundation",
+      "domain": "lifeos-platform",
+      "model": "claude_via_openrouter",
+      "target_file": "public/shared/lifeos-dashboard-tokens.css",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "public/overlay/lifeos-dashboard.html",
+        "public/shared/lifeos-bootstrap.js"
+      ],
+      "task": "Create a new shared CSS token file for LifeOS dashboard shell: semantic color/spacing/radius variables for both light and dark. Use data-theme or .theme-light / .theme-dark on html or body matching patterns already used in lifeos-dashboard.html if present; if unclear, use [data-theme=\"light\"] and [data-theme=\"dark\"] on :root-compatible selectors. Do not break existing overlay pages — this file should be additive.",
+      "spec": "Pure CSS file. Include comment header pointing to LIFEOS_DASHBOARD_BUILDER_BRIEF.md. Minimum: --dash-bg, --dash-surface, --dash-text, --dash-muted, --dash-accent, --dash-border, --dash-radius-lg, --dash-space-unit for both themes. End file with newline. No external imports. ---METADATA--- JSON optional for .css — if METADATA required by builder, add HTML comment block at end.",
+      "commit_message": "[system-build] Dashboard light/dark CSS tokens (overnight queue)",
+      "notes": "New small file — easier to validate than rewriting 30k dashboard HTML."
+    },
+    {
+      "id": "dashboard-import-tokens",
+      "domain": "lifeos-platform",
+      "model": "claude_via_openrouter",
+      "target_file": "public/overlay/lifeos-dashboard.html",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "public/overlay/lifeos-dashboard.html",
+        "public/shared/lifeos-dashboard-tokens.css"
+      ],
+      "task": "Wire public/shared/lifeos-dashboard-tokens.css into lifeos-dashboard.html with a single link tag in head (correct relative path from /overlay/). Preserve all existing behavior. Apply theme class or data-attribute to html/body if needed for tokens — minimal diff. Ensure both light and dark paths remain reachable per existing dashboard JS/theme logic.",
+      "spec": "Minimal HTML edits only. Preserve structure. Full valid HTML document. Do not remove existing scripts. End with ---METADATA--- JSON per builder contract.",
+      "commit_message": "[system-build] Wire dashboard CSS tokens into lifeos-dashboard (overnight queue)",
+      "notes": "Runs after dashboard-theme-foundation so tokens file exists."
+    },
+    {
+      "id": "dashboard-density-commentary",
+      "domain": "lifeos-platform",
+      "model": "claude_via_openrouter",
+      "target_file": "docs/projects/DASHBOARD_DENSITY_INTEGRATION_NOTES.md",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "scripts/builder-smoke/dashboard-layout-utils.mjs",
+        "public/overlay/lifeos-dashboard.html"
+      ],
+      "task": "Document how scripts/builder-smoke/dashboard-layout-utils.mjs (clampMobileWidgetCount, resolveThemeMode, pickDashboardDensity) should integrate into the dashboard shell without implementing the full AI rail yet. Include concrete DOM hook suggestions and SSR/client boundaries if any.",
+      "spec": "Markdown. Short sections. Reference the mockup PNG for density study. ---METADATA--- JSON at end.",
+      "commit_message": "[system-build] Dashboard density utilities integration notes",
+      "notes": "Doc-only; safe parallel to risky UI."
+    },
+    {
+      "id": "dashboard-ai-rail-contract",
+      "domain": "lifeos-platform",
+      "model": "claude_via_openrouter",
+      "target_file": "docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "public/overlay/lifeos-chat.html",
+        "public/overlay/lifeos-app.html"
+      ],
+      "task": "Write a technical contract (not full implementation) for the persistent AI rail: dock top/bottom, collapsed one-line strip, expanded transcript, voice/text parity, read-aloud — and how it relates to existing Lumin/chat entry points. Explicitly say what must not break.",
+      "spec": "Markdown with Contract, Non-goals, Phases, and Open questions. ---METADATA--- JSON at end.",
+      "commit_message": "[system-build] AI rail technical contract draft",
+      "notes": "Spec before code — reduces overnight HTML thrash."
+    }
+  ]
+}

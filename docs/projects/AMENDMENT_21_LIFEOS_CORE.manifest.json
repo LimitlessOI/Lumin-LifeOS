@@ -101,6 +101,12 @@
     "services/lifeos-scoreboard.js",
     "scripts/lifeos-smoke.mjs",
     "public/overlay/lifeos-app.html",
+    "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+    "docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md",
+    "docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json",
+    "docs/projects/DASHBOARD_SHELL_GAP_AUDIT.md",
+    "scripts/lifeos-builder-supervisor.mjs",
+    "scripts/lifeos-builder-overnight.mjs",
     "public/overlay/lifeos-feature.html",
     "public/overlay/lifeos-feature-data.js",
     "public/overlay/lifeos-bootstrap.js",
@@ -824,6 +830,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-04-27",
-  "ssot_receipt_tail": "railway-boot: core/SOURCE_OF_TRUTH + server SOT fallback + reminder-cron LifeOS-only SQL"
+  "last_updated": "2026-04-29",
+  "ssot_receipt_tail": "Overnight builder queue + supervisor chain; truthful DASHBOARD_SHELL_GAP_AUDIT"
 }
