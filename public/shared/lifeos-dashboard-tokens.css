@@ -1,0 +1,97 @@
+/* LifeOS Dashboard Tokens
+ * Semantic color, spacing, and radius variables for light and dark themes.
+ * See: docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md
+ */
+
+:root,
+[data-theme="dark"] {
+  /* Background layers */
+  --dash-bg: #0a0a0f;
+  --dash-surface: #111118;
+  --dash-surface-raised: #17171f;
+  --dash-surface-overlay: #1e1e28;
+
+  /* Text hierarchy */
+  --dash-text: #e8e8f0;
+  --dash-text-secondary: #9999bb;
+  --dash-muted: #555566;
+
+  /* Accent & interaction */
+  --dash-accent: #5b6af5;
+  --dash-accent-hover: #7c8aff;
+
+  /* Borders */
+  --dash-border: rgba(255, 255, 255, 0.07);
+  --dash-border-focus: rgba(255, 255, 255, 0.18);
+
+  /* Semantic colors */
+  --dash-success: #10b981;
+  --dash-warning: #f59e0b;
+  --dash-error: #e05555;
+  --dash-info: #22d3ee;
+
+  /* Spacing scale */
+  --dash-space-unit: 8px;
+  --dash-space-xs: calc(var(--dash-space-unit) * 0.5);
+  --dash-space-sm: var(--dash-space-unit);
+  --dash-space-md: calc(var(--dash-space-unit) * 2);
+  --dash-space-lg: calc(var(--dash-space-unit) * 3);
+  --dash-space-xl: calc(var(--dash-space-unit) * 4);
+
+  /* Border radius */
+  --dash-radius-sm: 6px;
+  --dash-radius-md: 10px;
+  --dash-radius-lg: 14px;
+  --dash-radius-xl: 20px;
+
+  /* Shadows */
+  --dash-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --dash-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --dash-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] {
+  /* Background layers */
+  --dash-bg: #f6f7fb;
+  --dash-surface: #ffffff;
+  --dash-surface-raised: #ffffff;
+  --dash-surface-overlay: #ffffff;
+
+  /* Text hierarchy */
+  --dash-text: #111827;
+  --dash-text-secondary: #475569;
+  --dash-muted: #64748b;
+
+  /* Accent & interaction */
+  --dash-accent: #5b6af5;
+  --dash-accent-hover: #4a59d4;
+
+  /* Borders */
+  --dash-border: rgba(15, 23, 42, 0.12);
+  --dash-border-focus: rgba(91, 106, 245, 0.32);
+
+  /* Semantic colors */
+  --dash-success: #059669;
+  --dash-warning: #d97706;
+  --dash-error: #dc2626;
+  --dash-info: #0891b2;
+
+  /* Spacing scale (same as dark) */
+  --dash-space-unit: 8px;
+  --dash-space-xs: calc(var(--dash-space-unit) * 0.5);
+  --dash-space-sm: var(--dash-space-unit);
+  --dash-space-md: calc(var(--dash-space-unit) * 2);
+  --dash-space-lg: calc(var(--dash-space-unit) * 3);
+  --dash-space-xl: calc(var(--dash-space-unit) * 4);
+
+  /* Border radius (same as dark) */
+  --dash-radius-sm: 6px;
+  --dash-radius-md: 10px;
+  --dash-radius-lg: 14px;
+  --dash-radius-xl: 20px;
+
+  /* Shadows */
+  --dash-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --dash-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --dash-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+}
