@@ -2,86 +2,45 @@
 
 ## Summary
 
-**Critical finding:** The builder brief files (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`) do **not exist** in the repository. Both file reads returned `ENOENT` (file not found).
+**Critical finding:** The builder brief files (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`) do **not exist** on the server. Both returned `ENOENT` (file not found). This audit cannot proceed as specified because the authoritative design specification is missing.
 
-Without the brief, I cannot perform a meaningful gap audit. The task assumes these files exist and contain:
-- Sidebar specifications
-- Bottom tab layout requirements
-- AI rail direction (presumably the Lumin drawer)
-- Light/dark theme intent
-- Mobile vs desktop breakpoint behavior
-- Mockup filenames
+**What exists:**
+- `public/overlay/lifeos-dashboard.html` — 28,849 chars, production dashboard
+- `public/overlay/lifeos-app.html` — 91,838 chars, production shell
 
-## Gaps vs Brief
+**What is missing:**
+- `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` — **does not exist**
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — **does not exist**
 
-**Cannot assess** — the brief is missing from the repository.
-
-The injected file paths claim these documents exist:
-- `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
-- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
-
-Both returned read errors. Either:
-1. The files were never committed, or
-2. The paths are incorrect, or
-3. The task description is stale
-
-## Current State (What Exists)
-
-### `lifeos-dashboard.html`
-- **Single-page dashboard** with cards for MITs, calendar, goals, scores, and chat
-- **No sidebar** — standalone page
-- **No bottom tabs** — standalone page
-- **No shell chrome** — meant to be embedded in `lifeos-app.html`
-- **Theme support** via `lifeos-theme.js`
-- **Voice chat** via `lifeos-voice-chat.js` (IIFE, non-module)
-- **Ambient mode toggle** in header (proactive Lumin nudges)
-- **Mobile-first** responsive layout (stacks cards vertically)
-
-### `lifeos-app.html`
-- **Full shell** with sidebar, topbar, mobile bottom nav, and Lumin drawer
-- **Sidebar** (left rail, collapsible, icon-only on tablet)
-- **Bottom tabs** (mobile only, 4 primary + "More" sheet)
-- **Lumin drawer** (right rail on desktop, bottom sheet on mobile)
-- **Lumin quick bar** (one-tap entry strip above content frame)
-- **Theme toggle** in topbar and settings
-- **Voice toggle** in topbar (always-on listening)
-- **Settings panel** (right drawer with API key, name, theme, admin invites, gate-change presets)
-- **Feature help popovers** (desktop only, hover on nav items)
-- **Ambient sense** opt-in (battery/connection hints, no GPS/mic/camera)
-
-## Recommended Next Queued Builds
-
-**Cannot recommend** without the brief. However, based on the existing code:
-
-1. **Create the missing brief** — `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` should document:
-   - Sidebar nav structure (which sections, grouping, icons)
-   - Bottom tab layout (which 4 primary tabs, what goes in "More")
-   - Lumin drawer behavior (when to show badge, auto-open rules)
-   - Theme intent (light mode polish, dark mode default)
-   - Mobile breakpoints (600px, 1000px thresholds)
-   - Mockup references (if any exist)
-
-2. **Create the queue doc** — `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` should list:
-   - Pending dashboard enhancements
-   - Known UI bugs
-   - Accessibility gaps
-   - Performance optimizations
-
-3. **Validate existing implementation** — Once the brief exists, run a proper gap audit comparing:
-   - Sidebar nav items vs. brief
-   - Bottom tab order vs. brief
-   - Lumin drawer placement vs. brief
-   - Theme token usage vs. brief
-
-## Open Questions
-
-1. **Where is the brief?** — Was it never written, or is the path wrong?
-2. **Are there mockups?** — The task mentions "mockup filenames from the brief" but no mockups are referenced in the existing HTML.
-3. **What is the source of truth?** — If the brief doesn't exist, is the current `lifeos-app.html` the de facto spec, or should a brief be reverse-engineered from it?
-4. **Is this a test?** — The task framing ("files[] payloads injected below are authoritative — they prove [files] exist") contradicts the actual read errors. This may be testing whether the agent trusts injected errors over task wording.
+Without the brief, I cannot:
+- Compare sidebar structure to spec
+- Validate bottom tab configuration
+- Confirm AI rail direction intent
+- Verify light/dark theme requirements
+- Check mobile vs desktop layout against design mockups
 
 ---
 
-**Recommendation:** Before queuing dashboard work, create `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` by documenting the current `lifeos-app.html` implementation as the baseline spec. Then run this audit again.
+## Gaps vs Brief
+
+**Cannot be determined** — the brief file does not exist in the repository. The task assumes these files are present and authoritative, but both read operations returned `ENOENT`.
+
+---
+
+## Recommended Next Queued Builds
+
+1. **Create `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`** — document the intended dashboard design (sidebar sections, bottom tabs, Lumin rail behavior, theme intent, mobile/desktop breakpoints, mockup references)
+
+2. **Create `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`** — document any queued dashboard improvements or known gaps
+
+3. **Once brief exists:** Re-run this audit with the brief present to produce actionable gap list
+
+---
+
+## Open Questions
+
+1. **Where is the design brief stored?** — Is it in a different path, a different repo, or not yet written?
+2. **Should the brief be generated from the existing HTML?** — If the current dashboard *is* the spec, the brief should document what's already built.
+3. **Are there mockup files referenced in the (missing) brief?** — If so, where are they stored?
 
 ---
