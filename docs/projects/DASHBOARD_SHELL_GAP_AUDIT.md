@@ -2,121 +2,124 @@
 
 ## Summary
 
-**Critical finding:** The builder brief files (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`) do not exist in the repository. Both returned `ENOENT` (file not found) errors. Without the authoritative specification, this audit compares the two production HTML files against each other and infers likely design intent from their structure.
-
-**What exists:**
-- `lifeos-dashboard.html` — 28,849 chars, standalone dashboard page with MITs, calendar, goals, scores, and chat
-- `lifeos-app.html` — 91,838 chars, full shell with sidebar, topbar, mobile bottom nav, Lumin drawer, settings panel
-
-**Key structural differences:**
-- `lifeos-dashboard.html` is a **single-page view** (no shell chrome)
-- `lifeos-app.html` is the **application shell** that loads dashboard and other pages via iframe
+**Critical finding:** The builder brief files (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`) returned `ENOENT` — they do not exist in the repository at the documented paths. This audit compares the two production HTML files (`lifeos-dashboard.html` and `lifeos-app.html`) against each other and infers intent from their structure, but **cannot validate against the authoritative brief** because it is missing.
 
 ---
 
-## Gaps vs. Inferred Brief
+## Gaps vs. Brief (Inferred from File Structure)
 
 ### 1. **Sidebar presence**
-- **lifeos-app.html:** Full collapsible sidebar with nav groups, user pill, logo
-- **lifeos-dashboard.html:** No sidebar — standalone page
-- **Gap:** If the brief specifies a unified shell with persistent sidebar, `lifeos-dashboard.html` should be loaded *inside* `lifeos-app.html` iframe, not used standalone
+- **lifeos-app.html**: Full collapsible sidebar with nav groups, user pill, logo, collapse button
+- **lifeos-dashboard.html**: **No sidebar** — standalone page layout
+- **Gap**: If the brief specifies a unified shell with sidebar, `lifeos-dashboard.html` does not implement it.
 
-### 2. **Bottom tabs (mobile)**
-- **lifeos-app.html:** Mobile bottom nav with 5 tabs (Today, Inner, Health, Healing, More)
-- **lifeos-dashboard.html:** No bottom nav — relies on browser chrome
-- **Gap:** Dashboard page has no mobile navigation when accessed directly
+### 2. **Bottom tabs (mobile nav)**
+- **lifeos-app.html**: Mobile bottom nav with 5 tabs (Today, Inner, Health, Healing, More)
+- **lifeos-dashboard.html**: **No bottom nav** — no mobile chrome
+- **Gap**: If the brief requires mobile bottom tabs for dashboard, they are missing.
 
 ### 3. **AI rail / Lumin drawer**
-- **lifeos-app.html:** Persistent Lumin drawer (right rail on desktop, bottom sheet on mobile), FAB, quick-bar entry strip
-- **lifeos-dashboard.html:** Inline chat card only — no drawer, no FAB, no quick-bar
-- **Gap:** Dashboard lacks the persistent AI companion pattern present in the shell
+- **lifeos-app.html**: Persistent Lumin drawer (right rail on desktop, bottom sheet on mobile), FAB, quick-bar entry strip, voice integration
+- **lifeos-dashboard.html**: Inline chat card with voice controls, no drawer/rail
+- **Gap**: If the brief specifies a **persistent AI rail** (not inline), `lifeos-dashboard.html` does not match.
 
 ### 4. **Light/dark theme toggle**
-- **lifeos-app.html:** Theme toggle in topbar, mobile topbar, settings panel; uses `lifeos-theme.js` + `cycleTheme()` function
-- **lifeos-dashboard.html:** Theme toggle button exists (`#btn-theme`) but calls `toggleTheme()` which is not defined in the page — likely expects `lifeos-theme.js` to provide it
-- **Gap:** Dashboard theme toggle is non-functional without external script
+- **lifeos-app.html**: Theme toggle in topbar, mobile topbar, settings panel; uses `lifeos-theme.js`
+- **lifeos-dashboard.html**: Theme toggle button in header; uses `lifeos-theme.js`
+- **Status**: Both implement light/dark. No gap unless brief specifies unified placement.
 
-### 5. **Ambient voice toggle**
-- **lifeos-app.html:** Global always-on voice via `toggleAlwaysListen()` in topbar
-- **lifeos-dashboard.html:** Ambient toggle button (`#btn-ambient`) calls `toggleAmbient()` which implements a local proactive nudge loop
-- **Gap:** Two different ambient implementations — shell uses `LuminVoice.toggleAlwaysListen()`, dashboard uses custom interval-based nudge
+### 5. **Mobile vs. desktop layout**
+- **lifeos-app.html**: Responsive shell with mobile topbar, bottom nav, drawer transforms
+- **lifeos-dashboard.html**: Single-column page with no mobile chrome (relies on viewport scaling)
+- **Gap**: If the brief requires a **unified mobile shell**, `lifeos-dashboard.html` does not provide it.
 
-### 6. **Voice input integration**
-- **lifeos-app.html:** Uses `LuminVoice` global (from `lifeos-voice.js`) for drawer mic button
-- **lifeos-dashboard.html:** Uses `LifeOSVoiceChat.attach()` (from `lifeos-voice-chat.js`) for inline chat
-- **Gap:** Two separate voice modules — no shared state or handoff
+### 6. **Ambient voice mode**
+- **lifeos-app.html**: Global always-on voice toggle (`toggleAlwaysListen()`) in topbar
+- **lifeos-dashboard.html**: Ambient toggle button (`toggleAmbient()`) with proactive nudge polling
+- **Gap**: Two different implementations of ambient voice — unclear which matches brief intent.
 
-### 7. **Mobile vs. desktop layout**
-- **lifeos-app.html:** Responsive shell with breakpoints at 600px and 1000px; icon-only sidebar 600–999px, full mobile chrome <600px
-- **lifeos-dashboard.html:** Single-column responsive layout with `two-col` grid at 640px+; no shell chrome
-- **Gap:** Dashboard does not adapt to shell breakpoints
+### 7. **Settings panel**
+- **lifeos-app.html**: Full settings panel with API key, name, theme, admin invites, gate-change presets, ambient sense toggle
+- **lifeos-dashboard.html**: **No settings panel**
+- **Gap**: If the brief requires settings access from dashboard, it is missing.
 
-### 8. **Settings panel**
-- **lifeos-app.html:** Full settings drawer with API key, display name, theme, admin invites, gate-change presets, ambient sense toggle
-- **lifeos-dashboard.html:** No settings UI
-- **Gap:** Dashboard cannot configure user preferences
+### 8. **User pill / account UI**
+- **lifeos-app.html**: User pill in sidebar with dropdown (Settings, Sign Out)
+- **lifeos-dashboard.html**: **No user pill or account UI**
+- **Gap**: If the brief requires account controls on dashboard, they are missing.
 
-### 9. **User identity display**
-- **lifeos-app.html:** User pill in sidebar with avatar, name, handle, dropdown
-- **lifeos-dashboard.html:** Greeting only (`Good morning` + pulse dot) — no user identity chrome
-- **Gap:** Dashboard does not show who is signed in
+### 9. **Section color accent**
+- **lifeos-app.html**: Dynamic `--section-color` CSS variable updated per page, accent line on topbar
+- **lifeos-dashboard.html**: Static accent borders on cards (today, health, finance, mirror)
+- **Status**: Both use color accents; no gap unless brief specifies unified dynamic system.
 
-### 10. **Navigation between sections**
-- **lifeos-app.html:** Sidebar nav with 20+ sections, mobile bottom nav, "More" sheet
-- **lifeos-dashboard.html:** No navigation — single-purpose page
-- **Gap:** Dashboard cannot navigate to other LifeOS sections without external shell
+### 10. **Feature help popovers**
+- **lifeos-app.html**: Hover-triggered feature help popovers on nav items (desktop only)
+- **lifeos-dashboard.html**: **No feature help**
+- **Gap**: If the brief requires contextual help on dashboard, it is missing.
 
 ---
 
 ## Recommended Next Queued Builds
 
-### High priority (blocking unified UX)
-1. **Create `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`** — authoritative spec for dashboard layout, sidebar behavior, AI rail direction, mobile/desktop breakpoints
-2. **Unify voice modules** — merge `lifeos-voice.js` and `lifeos-voice-chat.js` into single `lifeos-voice.js` with shared state
-3. **Wire dashboard into shell** — ensure `lifeos-app.html` iframe loads `lifeos-dashboard.html` correctly; remove duplicate chrome from dashboard
-4. **Fix dashboard theme toggle** — ensure `lifeos-theme.js` is loaded before dashboard body renders
+1. **Restore builder brief files** — `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` are missing; cannot validate without them.
 
-### Medium priority (polish)
-5. **Standardize ambient voice** — choose one implementation (shell's `LuminVoice.toggleAlwaysListen()` or dashboard's interval nudge) and remove the other
-6. **Mobile bottom nav consistency** — if dashboard is a top-level section, add it to bottom nav; if not, clarify routing
-7. **Settings access from dashboard** — add settings button to dashboard header or rely on shell topbar
+2. **Unify shell chrome** — If the brief specifies a single shell, decide:
+   - Does `lifeos-dashboard.html` become a **page inside lifeos-app.html** (iframe)?
+   - Or does `lifeos-dashboard.html` **adopt the app shell** (sidebar, bottom nav, Lumin drawer)?
 
-### Low priority (nice-to-have)
-8. **Shared design tokens** — both files define CSS custom properties inline; extract to `lifeos-dashboard-tokens.css` (already referenced in dashboard `<head>`)
-9. **Skeleton loading states** — dashboard uses skeleton loaders; shell does not (iframe load is instant)
-10. **Feature help popovers** — shell has hover-based feature guides; dashboard does not
+3. **Standardize AI rail direction** — Two implementations exist:
+   - Inline chat card (dashboard)
+   - Persistent drawer (app shell)
+   - **Decision required**: Which is the canonical pattern?
+
+4. **Add mobile chrome to dashboard** — If dashboard is standalone, add:
+   - Mobile topbar with menu button
+   - Bottom nav or quick-access strip
+   - Responsive layout transforms
+
+5. **Add settings access to dashboard** — If dashboard is entry point, add:
+   - User pill or settings button
+   - Theme toggle
+   - Sign-out flow
+
+6. **Consolidate ambient voice** — Two different implementations:
+   - `toggleAmbient()` with proactive nudge polling (dashboard)
+   - `toggleAlwaysListen()` with global voice routing (app shell)
+   - **Decision required**: Merge or deprecate one.
+
+7. **Add feature help to dashboard** — If contextual help is required, wire `LIFEOS_FEATURE_GUIDES` and hover popovers.
 
 ---
 
 ## Open Questions
 
-1. **Is `lifeos-dashboard.html` intended to be standalone or iframe-only?**  
-   - If standalone: needs full shell chrome (sidebar, topbar, settings)  
-   - If iframe-only: should remove duplicate theme/voice/ambient logic
+1. **Is `lifeos-dashboard.html` intended to be standalone or embedded?**
+   - If standalone: needs full chrome (sidebar, bottom nav, settings)
+   - If embedded: should be loaded inside `lifeos-app.html` iframe
 
-2. **What is the authoritative AI rail direction?**  
-   - Shell uses right drawer (desktop) / bottom sheet (mobile)  
-   - Dashboard uses inline chat card  
-   - Should dashboard chat be replaced with Lumin drawer integration?
+2. **What is the authoritative AI rail pattern?**
+   - Inline chat card (current dashboard)
+   - Persistent drawer (current app shell)
+   - Hybrid (quick-bar + drawer)?
 
-3. **Which voice module is canonical?**  
-   - `lifeos-voice.js` (shell, drawer mic)  
-   - `lifeos-voice-chat.js` (dashboard inline chat)  
-   - Should one be deprecated?
+3. **Where are the builder brief files?**
+   - `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` — ENOENT
+   - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — ENOENT
+   - Were they moved, renamed, or never committed?
 
-4. **Where do the missing brief files live?**  
-   - `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` — ENOENT  
-   - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — ENOENT  
-   - Were they never created, or moved to a different path?
+4. **Should dashboard adopt the app shell's section color system?**
+   - Current: static accent borders per card
+   - App shell: dynamic `--section-color` CSS variable
+   - Unified system would simplify theming.
 
-5. **Is the dashboard "Today" section or a separate analytics view?**  
-   - Shell has `lifeos-today.html` as default page  
-   - Dashboard shows MITs, calendar, goals, scores — overlaps with "Today"  
-   - Should dashboard replace today page, or are they distinct?
+5. **Is the dashboard the primary entry point or a sub-page?**
+   - If primary: needs full navigation and account UI
+   - If sub-page: can rely on shell chrome
 
 ---
 
-**Next step:** Create `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` with authoritative answers to open questions, then queue concrete build tasks.
+**Next step:** Locate or regenerate the builder brief files to validate these inferred gaps against the authoritative specification.
 
 ---
 
@@ -125,12 +128,7 @@
 {
   "target_file": null,
   "insert_after_line": null,
-  "confidence": 0.85,
-  "assumptions": [
-    "Brief files were intended to exist but were never committed",
-    "lifeos-dashboard.html is meant to be loaded inside lifeos-app.html iframe",
-    "Lumin drawer in shell is the canonical AI rail (dashboard inline chat is legacy)",
-    "lifeos-voice.js is canonical (lifeos-voice-chat.js is older standalone version)"
-  ]
+  "confidence": 0.65,
+  "note": "Audit completed but builder brief files are missing (ENOENT). Gaps are inferred from structural comparison only. Confidence is moderate because authoritative spec is unavailable."
 }
 ```
