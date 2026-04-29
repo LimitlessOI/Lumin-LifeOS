@@ -9,7 +9,8 @@
  *   npm run lifeos:builder:overnight -- --dry-run
  *   npm run lifeos:builder:overnight -- --max 2
  *   OVERNIGHT_MAX=3 npm run lifeos:builder:overnight
- *   npm run lifeos:builder:overnight -- --task dashboard-shell-audit
+ *   npm run lifeos:builder:overnight -- --sleep-ms 3000
+ *   npm run lifeos:builder:overnight -- --redeploy-after-success
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
@@ -18,6 +19,10 @@ import 'dotenv/config';
 
 import { appendFile, readFile } from 'fs/promises';
 import { join } from 'path';
+import { promisify } from 'util';
+import { execFile } from 'child_process';
+
+const execFileAsync = promisify(execFile);
 
 const ROOT = process.cwd();
 const TASKS_PATH = join(ROOT, 'docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json');
@@ -105,6 +110,10 @@ async function runBuild(task) {
   return { res, json, ok: res.ok && json?.ok === true && json?.committed === true };
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function logLine(obj) {
   const line = `${JSON.stringify({ ts: new Date().toISOString(), ...obj })}\n`;
   await appendFile(LOG_PATH, line, 'utf8').catch(() => {});
@@ -116,6 +125,12 @@ async function main() {
   const max = parseInt(argValue('--max', process.env.OVERNIGHT_MAX || ''), 10) || 999;
   const singleId = argValue('--task', null);
   const startIdx = Math.max(0, parseInt(argValue('--start', '0'), 10) || 0);
+
+  const redeployAfter = hasFlag('--redeploy-after-success');
+  const sleepMs = Math.max(
+    0,
+    parseInt(argValue('--sleep-ms', process.env.OVERNIGHT_SLEEP_MS || '2500'), 10) || 0,
+  );
 
   const raw = await readFile(TASKS_PATH, 'utf8');
   const parsed = JSON.parse(raw);
@@ -130,7 +145,7 @@ async function main() {
   }
 
   console.log(`Overnight runner base: ${base}`);
-  console.log(`Tasks to run: ${selected.length} (dry-run=${dry})`);
+  console.log(`Tasks to run: ${selected.length} (dry-run=${dry}) sleep-ms=${sleepMs} redeploy-after=${redeployAfter}`);
 
   if (dry) {
     for (const t of selected) {
@@ -146,7 +161,8 @@ async function main() {
   await logLine({ event: 'overnight_start', base, count: selected.length });
 
   let failed = false;
-  for (const task of selected) {
+  for (let i = 0; i < selected.length; i++) {
+    const task = selected[i];
     const id = task.id;
     console.log(`\n▶ Running ${id} → ${task.target_file}`);
     await logLine({ event: 'task_start', id, target_file: task.target_file });
@@ -166,6 +182,9 @@ async function main() {
         committed: json?.committed,
       });
       console.log(`✅ ${id} committed model=${json?.model_used || '?'}`);
+      if (sleepMs > 0 && i < selected.length - 1) {
+        await sleep(sleepMs);
+      }
     } catch (err) {
       failed = true;
       await logLine({ event: 'task_error', id, error: err.message });
@@ -177,6 +196,19 @@ async function main() {
   if (!failed) {
     await logLine({ event: 'overnight_complete', ok: true });
     console.log('\n✅ Overnight queue batch finished OK. Pull origin/main and review commits + grade in the morning.');
+    if (redeployAfter && process.env.SKIP_AFTER_BUILD_REDEPLOY !== '1') {
+      console.log('\n📤 Running npm run system:railway:redeploy …');
+      try {
+        await execFileAsync('npm', ['run', 'system:railway:redeploy'], {
+          cwd: process.cwd(),
+          env: process.env,
+          shell: true,
+          stdio: 'inherit',
+        });
+      } catch (e) {
+        console.warn('⚠️ Redeploy script failed:', e.message);
+      }
+    }
   }
 }
 

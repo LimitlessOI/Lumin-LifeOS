@@ -28,7 +28,7 @@
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
-import { readdir, readFile, writeFile, unlink, mkdtemp } from 'fs/promises';
+import { readdir, readFile, writeFile, unlink, mkdtemp, mkdir } from 'fs/promises';
 import { join, dirname, resolve, relative, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
@@ -456,6 +456,25 @@ export function createLifeOSCouncilBuilderRoutes({
       .catch(() => {});
   }
 
+  /** GitHub commits do not update the Railway container FS — files[] injection reads disk. Mirror so chained /build steps see newest content without redeploy between tasks. */
+  async function mirrorCommittedContentToRepoRoot(relPath, content) {
+    if (!relPath || typeof content !== 'string') return { ok: false, reason: 'bad_args' };
+    const sanitized = String(relPath).replace(/^[/\\]+/, '');
+    if (sanitized.includes('..') || !/^[\w./\\-]+$/.test(sanitized)) {
+      return { ok: false, reason: 'invalid_path' };
+    }
+    const abs = resolve(REPO_ROOT, sanitized);
+    const relToRoot = relative(REPO_ROOT, abs);
+    if (relToRoot.startsWith('..') || relToRoot === '') return { ok: false, reason: 'outside_repo' };
+    try {
+      await mkdir(dirname(abs), { recursive: true });
+      await writeFile(abs, content, 'utf8');
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, reason: e?.message || String(e) };
+    }
+  }
+
   async function recordBuilderGap({
     domain,
     task,
@@ -881,6 +900,10 @@ export function createLifeOSCouncilBuilderRoutes({
     try {
       await commitToGitHub(target_file, cleanedOutput, msg, branch || undefined);
       log.info({ target_file, msg }, '[BUILDER] /execute committed file to GitHub');
+      const mirrorExec = await mirrorCommittedContentToRepoRoot(target_file, cleanedOutput);
+      if (!mirrorExec.ok) {
+        log.warn({ target_file, reason: mirrorExec.reason }, '[BUILDER] Runtime repo mirror failed after /execute — chained files[] may be stale until redeploy');
+      }
       await insertBuilderAudit({
         domain: null,
         task: `execute: ${target_file}`,
@@ -1289,6 +1312,10 @@ export function createLifeOSCouncilBuilderRoutes({
     try {
       await commitToGitHub(resolvedTarget, generatedOutput, msg, branch || undefined);
       log.info({ resolvedTarget, msg, model_used }, '[BUILDER] /build committed generated file to GitHub');
+      const mirrorBuild = await mirrorCommittedContentToRepoRoot(resolvedTarget, generatedOutput);
+      if (!mirrorBuild.ok) {
+        log.warn({ resolvedTarget, reason: mirrorBuild.reason }, '[BUILDER] Runtime repo mirror failed after /build — chained files[] may be stale until redeploy');
+      }
       await insertBuilderAudit({
         domain,
         task: taskBody.task,

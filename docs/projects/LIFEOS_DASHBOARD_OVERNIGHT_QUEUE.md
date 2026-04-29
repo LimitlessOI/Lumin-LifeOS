@@ -53,6 +53,8 @@ Resume after a failure with `--start <0-based index>` or run a single step with 
 
 Logs append to `data/builder-overnight-log.jsonl` (gitignored).
 
+**Platform note (2026-04-29):** After each successful GitHub commit, the server now **mirrors written content to its local repo path** so the next `files[]` injection sees new files without waiting for a Railway image rebuild. Overnight still benefits from `--sleep-ms` throttling and optional `--redeploy-after-success` for a final live image refresh.
+
 ## Stop conditions
 
 Stop and report instead of guessing if:

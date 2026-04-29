@@ -32,6 +32,25 @@
 
 ---
 
+## [FIX] Update 2026-04-29 #2 — **Builder chained-task FS mirror + gaps in doctor**
+
+### Files changed
+- `routes/lifeos-council-builder-routes.js` — `mirrorCommittedContentToRepoRoot()` after successful Git commits from `/build` + `/execute`.
+- `scripts/tsos-doctor.mjs` — probes `/api/v1/lifeos/builder/gaps`; scoring + weaknesses for recent failures.
+- `scripts/lifeos-builder-overnight.mjs` — `--sleep-ms`, `--redeploy-after-success`.
+- SSOT receipts in Amendment 01 + 21; fixed corrupted merged Change Receipt rows.
+- **`LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`** platform note on mirror.
+
+### KNOWN gaps still (whole LifeOS ≠ only builder)
+- Product domains (finance, placements, resale, etc.) largely **beyond** builder scaffolding — backlog in amendments.
+- `npm test` smoke tests assume local server listening (CI/offline fails without SKIP or mock).
+- **`autoWireRoute`** second commit still GitHub-path — acceptable.
+
+### Next agent
+- Deploy `main` then re-run chained overnight tasks `--start 1` without manual GitHub pulls on server.
+
+---
+
 ## [BUILD] Update 2026-04-29 #1 — **Overnight builder queue + truthful shell gap audit**
 
 ### Files changed

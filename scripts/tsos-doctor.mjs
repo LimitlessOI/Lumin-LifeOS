@@ -147,6 +147,7 @@ function grade(results) {
   if (results.builderReady?.json?.builder?.github_token === true) score += 10;
   if (results.builderReady?.json?.builder?.callCouncilMember === true) score += 5;
   if (results.builderModelMap?.ok) score += 5;
+  if (results.builderGaps?.ok) score += 3;
   if (results.councilHealth?.ok) score += 5;
   if (results.railwayCli?.linked) score += 5;
 
@@ -208,6 +209,20 @@ function weaknessList(results) {
     weaknesses.push('Builder model-map route is unavailable; task-to-model routing cannot be inspected on target.');
   }
 
+  if (results.builderGaps?.status === 404) {
+    weaknesses.push('Council builder gaps route is missing on target deploy.');
+  }
+
+  const gapCount =
+    typeof results.builderGaps?.json?.count === 'number'
+      ? results.builderGaps.json.count
+      : Array.isArray(results.builderGaps?.json?.gaps)
+        ? results.builderGaps.json.gaps.length
+        : null;
+  if (results.builderGaps?.ok && gapCount !== null && gapCount > 0) {
+    weaknesses.push(`Recent builder failures in audit log (${gapCount} row(s)) — investigate GET /api/v1/lifeos/builder/gaps.`);
+  }
+
   if (!results.councilHealth?.ok) {
     weaknesses.push('Council health route is unavailable; model/provider readiness cannot be inspected on target.');
   }
@@ -229,6 +244,7 @@ async function main() {
   results.health = await fetchMaybe('/healthz');
   results.builderReady = await fetchMaybe('/api/v1/lifeos/builder/ready');
   results.builderDomains = await fetchMaybe('/api/v1/lifeos/builder/domains');
+  results.builderGaps = await fetchMaybe('/api/v1/lifeos/builder/gaps?limit=10');
   results.builderModelMap = await fetchMaybe('/api/v1/lifeos/builder/model-map');
   results.gatePresets = await fetchMaybe('/api/v1/lifeos/gate-change/presets');
   results.councilHealth = await fetchMaybe('/api/v1/council/health');
@@ -239,6 +255,7 @@ async function main() {
   line('/lifeos/builder/ready', `${statusIcon(results.builderReady)} (${results.builderReady.status || results.builderReady.errorCode})`);
   line('/lifeos/builder/domains', `${statusIcon(results.builderDomains)} (${results.builderDomains.status || results.builderDomains.errorCode})`);
   line('/lifeos/builder/model-map', `${statusIcon(results.builderModelMap)} (${results.builderModelMap.status || results.builderModelMap.errorCode})`);
+  line('/lifeos/builder/gaps', `${statusIcon(results.builderGaps)} (${results.builderGaps.status || results.builderGaps.errorCode})`);
   line('/lifeos/gate-change/presets', `${statusIcon(results.gatePresets)} (${results.gatePresets.status || results.gatePresets.errorCode})`);
   line('/council/health', `${statusIcon(results.councilHealth)} (${results.councilHealth.status || results.councilHealth.errorCode})`);
   line('/railway/env', `${statusIcon(results.railwayEnv)} (${results.railwayEnv.status || results.railwayEnv.errorCode})`);
