@@ -1,26 +1,30 @@
-/* LifeOS Dashboard Tokens
- * Semantic color, spacing, and radius variables for light and dark themes.
- * See: docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md
- */
+/* ────────────────────────────────────────────────────────────────────────────
+   LifeOS Dashboard Design Tokens
+   
+   Semantic color, spacing, and radius variables for light and dark themes.
+   Used by lifeos-dashboard.html and future overlay pages.
+   
+   Reference: docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md
+   ──────────────────────────────────────────────────────────────────────────── */
 
 :root,
 [data-theme="dark"] {
-  /* Background layers */
+  /* ── Background layers ── */
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
   --dash-surface-raised: #17171f;
   --dash-surface-overlay: #1e1e28;
-
-  /* Text hierarchy */
+  
+  /* ── Text hierarchy ── */
   --dash-text: #e8e8f0;
   --dash-text-secondary: #9999bb;
   --dash-muted: #555566;
-
-  /* Borders */
+  
+  /* ── Borders ── */
   --dash-border: rgba(255, 255, 255, 0.07);
   --dash-border-focus: rgba(255, 255, 255, 0.18);
-
-  /* Accent colors */
+  
+  /* ── Accent colors ── */
   --dash-accent: #5b6af5;
   --dash-accent-health: #10b981;
   --dash-accent-growth: #34d399;
@@ -28,41 +32,34 @@
   --dash-accent-warning: #f59e0b;
   --dash-accent-mirror: #7c3aed;
   --dash-accent-conflict: #e05555;
-
-  /* Spacing */
-  --dash-space-unit: 8px;
-  --dash-space-xs: calc(var(--dash-space-unit) * 0.5);
-  --dash-space-sm: var(--dash-space-unit);
-  --dash-space-md: calc(var(--dash-space-unit) * 2);
-  --dash-space-lg: calc(var(--dash-space-unit) * 3);
-  --dash-space-xl: calc(var(--dash-space-unit) * 4);
-
-  /* Border radius */
+  
+  /* ── Border radius ── */
   --dash-radius-sm: 6px;
   --dash-radius-md: 10px;
   --dash-radius-lg: 14px;
   --dash-radius-xl: 20px;
+  
+  /* ── Spacing unit ── */
+  --dash-space-unit: 8px;
 }
 
 [data-theme="light"] {
-  color-scheme: light;
-
-  /* Background layers */
+  /* ── Background layers ── */
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
-  --dash-surface-raised: #ffffff;
-  --dash-surface-overlay: #ffffff;
-
-  /* Text hierarchy */
-  --dash-text: #111827;
-  --dash-text-secondary: #475569;
-  --dash-muted: #64748b;
-
-  /* Borders */
-  --dash-border: rgba(15, 23, 42, 0.12);
-  --dash-border-focus: rgba(91, 106, 245, 0.32);
-
-  /* Accent colors remain the same across themes */
+  --dash-surface-raised: #fafbff;
+  --dash-surface-overlay: #f0f2f8;
+  
+  /* ── Text hierarchy ── */
+  --dash-text: #1a1a2e;
+  --dash-text-secondary: #4a4a6a;
+  --dash-muted: #9999bb;
+  
+  /* ── Borders ── */
+  --dash-border: rgba(0, 0, 0, 0.08);
+  --dash-border-focus: rgba(0, 0, 0, 0.16);
+  
+  /* ── Accent colors (same as dark for consistency) ── */
   --dash-accent: #5b6af5;
   --dash-accent-health: #10b981;
   --dash-accent-growth: #34d399;
@@ -70,7 +67,13 @@
   --dash-accent-warning: #f59e0b;
   --dash-accent-mirror: #7c3aed;
   --dash-accent-conflict: #e05555;
-
-  /* Spacing (inherited from :root) */
-  /* Border radius (inherited from :root) */
+  
+  /* ── Border radius (same) ── */
+  --dash-radius-sm: 6px;
+  --dash-radius-md: 10px;
+  --dash-radius-lg: 14px;
+  --dash-radius-xl: 20px;
+  
+  /* ── Spacing unit (same) ── */
+  --dash-space-unit: 8px;
 }
