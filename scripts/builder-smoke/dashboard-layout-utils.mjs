@@ -38,13 +38,8 @@ export function pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail
   const wc = Number(widgetCount) || 0;
   const pinned = Boolean(hasPinnedRail);
 
-  // Compact conditions
   if (vw < 640 && wc >= 4) return 'compact';
   if (pinned && wc >= 5) return 'compact';
-
-  // Airy condition
   if (vw >= 1280 && wc <= 3 && !pinned) return 'airy';
-
-  // Default
   return 'balanced';
 }
