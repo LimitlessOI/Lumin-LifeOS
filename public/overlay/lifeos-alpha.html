@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0f" id="theme-color-meta">
+<title>LifeOS Alpha</title>
+<!-- Theme must load before anything renders to avoid flash -->
+<script src="/overlay/lifeos-theme.js"></script>
+<link rel="stylesheet" href="../shared/lifeos-dashboard-tokens.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="/overlay/lifeos-bootstrap.js"></script>
+<style>
+:root {
+--bg-base: var(--dash-bg, #0a0a0f);
+--bg-raised: var(--dash-surface-raised, #0d0d15);
+--bg-surface: var(--dash-surface, #111118);
+--bg-surface2: var(--dash-surface-raised, #17171f);
+--bg-overlay: var(--dash-surface-overlay, #1e1e28);
+--border: var(--dash-border, rgba(255,255,255,0.07));
+--border-focus: var(--dash-border-focus, rgba(255,255,255,0.18));
+--text-primary: var(--dash-text, #e8e8f0);
+--text-secondary: var(--dash-text-secondary, #9999bb);
+--text-muted: var(--dash-muted, #555566);
+--c-today: var(--dash-accent, #5b6af5);
+--c-health: var(--dash-accent-health, #10b981);
+--c-growth: var(--dash-accent-growth, #34d399);
+--c-finance: var(--dash-accent-finance, #22d3ee);
+--c-decisions: var(--dash-accent-warning, #f59e0b);
+--c-mirror: var(--dash-accent-mirror, #7c3aed);
+--c-conflict: var(--dash-accent-conflict, #e05555);
+--radius-sm: var(--dash-radius-sm, 6px);
+--radius-md: var(--dash-radius-md, 10px);
+--radius-lg: var(--dash-radius-lg, 14px);
+--radius-xl: var(--dash-radius-xl, 20px);
+}
+*, ::before, ::after {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+html {
+height: 100%;
+}
+body {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+background: var(--bg-base);
+color: var(--text-primary);
+min-height: 100%;
+-webkit-font-smoothing: antialiased;
+padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+.page {
+max-width: 860px;
+margin: 0 auto;
+padding: 24px 16px;
+}
+/* ── Cards ── */
+.card {
+background: var(--bg-surface);
+border: 1px solid var(--border);
+border-radius: var(--radius-lg);
+padding: 20px;
+transition: border-color 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+border-color: var(--border-focus);
+box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.card-label {
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(--text-muted);
+margin-bottom: 14px;
+}
+.accent-border-today {
+border-top: 2px solid var(--c-today);
+}
+.accent-border-health {
+border-top: 2px solid var(--c-health);
+}
+.accent-border-finance {
+border-top: 2px solid var(--c-finance);
+}
+.accent-border-mirror {
+border-top: 2px solid var(--c-mirror);
+}
+/* ── Header ── */
+.hdr-row {
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: 12px;
+}
+.hdr-controls {
+display: flex;
+gap: 8px;
+padding-top: 4px;
+flex-shrink: 0;
+}
+.hdr-btn {
+background: var(--bg-surface2);
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+color: var(--text-secondary);
+font-size: 17px;
+width: 36px;
+height: 36px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: border-color 0.2s, color 0.2s, background 0.2s;
+flex-shrink: 0;
+}
+.hdr-btn:hover {
+border-color: var(--border-focus);
+color: var(--text-primary);
+}
+.hdr-btn.active {
+color: var(--c-health);
+border-color: var(--c-health);
+}
+.hdr-btn.ambient-active {
+color: var(--c-health);
+border-color: var(--c-health);
+animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
+}
+.greeting {
+font-size: clamp(26px, 5vw, 38px);
+font-weight: 800;
+background: linear-gradient(135deg, var(--c-today) 0%, var(--c-mirror) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+line-height: 1.1;
+}
+.greeting-sub {
+font-size: 14px;
+color: var(--text-muted);
+margin-top: 6px;
+}
+.pulse-dot {
+display: inline-block;
+width: 8px;
+height: 8px;
+background: var(--c-health);
+border-radius: 50%;
+margin-left: 8px;
+vertical-align: middle;
+animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
+}
+/* ── Animations ── */
+@keyframes pulse-ring {
+0%, 100% {
+opacity: 1;
+transform: scale(1);
+}
+50% {
+opacity: 0.5;
+transform: scale(1.3);
+}
+}
+@keyframes fadeUp {
+from {
+opacity: 0;
+transform: translateY(16px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+@keyframes shimmer {
+0% {
+background-position: -400px 0;
+}
+100% {
+background-position: 400px 0;
+}
+}
+@keyframes bounce-dot {
+0%, 80%, 100% {
+transform: scale(0.6);
+opacity: 0.4;
+}
+40% {
+transform: scale(1);
+opacity: 1;
+}
+}
+@keyframes ring-fill {
+from {
+stroke-dashoffset: 220;
+}
+}
+@keyframes bar-grow {
+from {
+width: 0;
+}
+}
+@keyframes check-draw {
+from {
+stroke-dashoffset: 20;
+}
+to {
+stroke-dashoffset: 0;
+}
+}
+@keyframes mic-pulse {
+0%, 100% {
+box-shadow: 0 0 0 0 rgba(224,85,85,0.4);
+}
+50% {
+box-shadow: 0 0 0 8px rgba(224,85,85,0);
+}
+}
+.fade-up {
+animation: fadeUp 0.4s ease both;
+}
+.delay-1 {
+animation-delay: 0.05s;
+}
+.delay-2 {
+animation-delay: 0.10s;
+}
+.delay-3 {
+animation-delay: 0.15s;
+}
+.delay-4 {
+animation-delay: 0.20s;
+}
+.delay-5 {
+animation-delay: 0.25s;
+}
+/* ── Skeleton ── */
+.skeleton {
+background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
+background-size: 400px 100%;
+animation: shimmer 1.4s infinite;
+border-radius: var(--radius-sm);
+}
+.skel-line {
+height: 14px;
+margin-bottom: 10px;
+}
+.skel-line:last-child {
+width: 60%;
+}
+/* ── MIT ── */
+.mit-item {
+display: flex;
+align-items: flex-start;
+gap: 12px;
+padding: 10px 0;
+border-bottom: 1px solid var(--border);
+cursor: pointer;
+user-select: none;
+-webkit-user-select: none;
+}
+.mit-item:last-of-type {
+border-bottom: none;
+}
+.mit-check {
+flex-shrink: 0;
+width: 22px;
+height: 22px;
+border: 2px solid var(--border-focus);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: background 0.2s, border-color 0.2s;
+margin-top: 1px;
+}
+.mit-check.done {
+background: var(--c-today);
+border-color: var(--c-today);
+}
+.mit-check svg {
+display: none;
+}
+.mit-check.done svg {
+display: block;
+}
+.mit-check.done svg polyline {
+stroke-dasharray: 20;
+stroke-dashoffset: 0;
+animation: check-draw 0.25s ease forwards;
+}
+.mit-text {
+flex: 1;
+font-size: 15px;
+line-height: 1.4;
+color: var(--text-primary);
+transition: color 0.2s;
+}
+.mit-text.done {
+color: var(--text-muted);
+text-decoration: line-through;
+}
+/* ── Quick add ── */
+.quick-add {
+display: flex;
+gap: 8px;
+margin-top: 14px;
+padding-top: 14px;
+border-top: 1px solid var(--border);
+}
+.quick-add input {
+flex: 1;
+background: var(--bg-surface2);
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+color: var(--text-primary);
+font-size: 14px;
+padding: 8px 12px;
+outline: none;
+transition: border-color 0.2s;
+}
+.quick-add input:focus {
+border-color: var(--c-today);
+}
+.quick-add input::placeholder {
+color: var(--text-muted);
+}
+.btn-add {
+background: var(--c-today);
+color: #fff;
+border: none;
+border-radius: var(--radius-md);
+font-size: 14px;
+font-weight: 600;
+padding: 8px 16px;
+cursor: pointer;
+white-space: nowrap;
+transition: opacity 0.15s;
+}
+.btn-add:hover {
+opacity: 0.85;
+}
+/* ── Calendar ── */
+.event-row {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 9px 0;
+border-bottom: 1px solid var(--border);
+}
+.event-row:last-child {
+border-bottom: none;
+}
+.event-time {
+font-size: 12px;
+font-weight: 600;
+background: rgba(91,106,245,0.15);
+color: var(--c-today);
+border-radius: 6px;
+padding: 3px 8px;
+white-space: nowrap;
+letter-spacing: 0.02em;
+flex-shrink: 0;
+}
+.event-title {
+font-size: 14px;
+color: var(--text-primary);
+}
+/* ── Goals ── */
+.goal-row {
+margin-bottom: 16px;
+}
+.goal-row:last-child {
+margin-bottom: 0;
+}
+.goal-header {
+display: flex;
+justify-content: space-between;
+align-items: baseline;
+margin-bottom: 6px;
+}
+.goal-name {
+font-size: 14px;
+color: var(--text-primary);
+}
+.goal-pct {
+font-size: 13px;
+font-weight: 700;
+color: var(--c-finance);
+}
+.goal-track {
+height: 6px;
+background: var(--bg-surface2);
+border-radius: 3px;
+overflow: hidden;
+}
+.goal-fill {
+height: 100%;
+background: linear-gradient(90deg, var(--c-today) 0%, var(--c-finance) 100%);
+border-radius: 3px;
+animation: bar-grow 0.8s cubic-bezier(0.4,0,0.2,1) both;
+animation-delay: 0.3s;
+}
+.goal-sub {
+font-size: 11px;
+color: var(--text-muted);
+margin-top: 4px;
+}
+/* ── Scores ── */
+.scores-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 12px;
+}
+.score-tile {
+background: var(--bg-surface2);
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+padding: 16px;
+display: flex;
+flex-direction: column;
+align-items: center;
+cursor: default;
+transition: border-color 0.2s, transform 0.15s;
+position: relative;
+}
+.score-tile:hover {
+border-color: var(--border-focus);
+transform: translateY(-1px);
+}
+.score-ring {
+position: relative;
+width: 72px;
+height: 72px;
+margin-bottom: 8px;
+}
+.score-ring svg {
+transform: rotate(-90deg);
+overflow: visible;
+}
+.score-ring circle.track {
+stroke: var(--bg-overlay);
+}
+.score-ring circle.fill {
+stroke-linecap: round;
+stroke-dasharray: 207;
+animation: ring-fill 1s cubic-bezier(0.4,0,0.2,1) forwards;
+animation-delay: 0.4s;
+}
+.score-num {
+position: absolute;
+inset: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 20px;
+font-weight: 800;
+}
+.score-label {
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+color: var(--text-muted);
+}
+.score-tile-tip {
+display: none;
+position: absolute;
+bottom: calc(100% + 8px);
+left: 50%;
+transform: translateX(-50%);
+background: var(--bg-overlay);
+border: 1px solid var(--border-focus);
+border-radius: var(--radius-md);
+padding: 8px 12px;
+font-size: 12px;
+color: var(--text-secondary);
+white-space: nowrap;
+z-index: 100;
+pointer-events: none;
+box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+.score-tile.tip-open .score-tile-tip {
+display: block;
+}
+/* ── Chat ── */
+.chat-messages {
+height: 240px;
+overflow-y: auto;
+margin-bottom: 12px;
+display: flex;
+flex-direction: column;
+gap: 8px;
+scrollbar-width: thin;
+scrollbar-color: var(--bg-overlay) transparent;
+}
+.chat-messages::-webkit-scrollbar {
+width: 4px;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+background: var(--bg-overlay);
+border-radius: 2px;
+}
+.msg {
+max-width: 80%;
+padding: 10px 14px;
+border-radius: var(--radius-lg);
+font-size: 14px;
+line-height: 1.5;
+animation: fadeUp 0.2s ease;
+}
+.msg.user {
+align-self: flex-end;
+background: var(--c-today);
+color: #fff;
+border-bottom-right-radius: var(--radius-sm);
+}
+.msg.assistant {
+align-self: flex-start;
+background: var(--bg-surface2);
+color: var(--text-primary);
+border-bottom-left-radius: var(--radius-sm);
+border: 1px solid var(--border);
+}
+.msg.ambient {
+align-self: flex-start;
+background: transparent;
+color: var(--text-muted);
+font-style: italic;
+font-size: 13px;
+border: 1px dashed var(--border);
+border-bottom-left-radius: var(--radius-sm);
+}
+.typing {
+display: none;
+align-self: flex-start;
+background: var(--bg-surface2);
+border: 1px solid var(--border);
+border-radius: var(--radius-lg);
+border-bottom-left-radius: var(--radius-sm);
+padding: 12px 16px;
+gap: 5px;
+align-items: center;
+}
+.typing.show {
+display: flex;
+}
+.typing-dot {
+width: 7px;
+height: 7px;
+background: var(--text-muted);
+border-radius: 50%;
+}
+.typing-dot:nth-child(1) {
+animation: bounce-dot 1.2s 0.0s infinite;
+}
+.typing-dot:nth-child(2) {
+animation: bounce-dot 1.2s 0.2s infinite;
+}
+.typing-dot:nth-child(3) {
+animation: bounce-dot 1.2s 0.4s infinite;
+}
+/* ── Chat input row ── */
+.chat-row {
+display: flex;
+gap: 8px;
+}
+.chat-row input {
+flex: 1;
+background: var(--bg-surface2);
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+color: var(--text-primary);
+font-size: 14px;
+padding: 10px 14px;
+outline: none;
+transition: border-color 0.2s;
+}
+.chat-row input:focus {
+border-color: var(--c-today);
+}
+.chat-row input::placeholder {
+color: var(--text-muted);
+}
+.btn-mic {
+background: var(--bg-surface2);
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+color: var(--text-secondary);
+font-size: 18px;
+width: 44px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+transition: border-color 0.2s, color 0.2s;
+}
+.btn-mic:hover {
+border-color: var(--border-focus);
+}
+.btn-mic.listening {
+color: var(--c-conflict);
+border-color: var(--c-conflict);
+animation: mic-pulse 1s ease infinite;
+}
+.btn-send {
+background: var(--c-today);
+color: #fff;
+border: none;
+border-radius: var(--radius-md);
+font-size: 20px;
+width: 44px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+transition: opacity 0.15s;
+}
+.btn-send:hover {
+opacity: 0.85;
+}
+/* ── Voice footer ── */
+.voice-footer {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-top: 10px;
+padding-top: 10px;
+border-top: 1px solid var(--border);
+}
+.voice-footer label {
+display: flex;
+align-items: center;
+gap: 6px;
+font-size: 12px;
+color: var(--text-muted);
+cursor: pointer;
+user-select: none;
+-webkit-user-select: none;
+}
+.voice-footer label input[type=checkbox] {
+accent-color: var(--c-today);
+}
+#voice-status {
+flex: 1;
+font-size: 11px;
+color: var(--text-muted);
+text-align: right;
+font-style: italic;
+}
+.ptt-hint {
+font-size: 11px;
+color: var(--text-muted);
+opacity: 0.6;
+}
+/* ── Empty ── */
+.empty {
+text-align: center;
+padding: 20px 0;
+color: var(--text-muted);
+font-size: 14px;
+}
+.empty span {
+display: block;
+font-size: 28px;
+margin-bottom: 6px;
+}
+@media (min-width: 640px) {
+.two-col {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 16px;
+}
+}
+
+/* Alpha Page Specific Styles */
+.alpha-grid {
+display: grid;
+grid-template-columns: 1fr;
+gap: 16px;
+}
+@media (min-width: 640px) {
+.alpha-grid {
+grid-template-columns: 1fr 1fr;
+}
+}
+.moment-capture-card .countdown {
+font-size: 2.5em;
+font-weight: 800;
+color: var(--c-today);
+text-align: center;
+margin-bottom: 15px;
+}
+.moment-capture-card textarea {
+width: 100%;
+min-height: 80px;
+background: var(--bg-surface2);
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+color: var(--text-primary);
+font-size: 14px;
+padding: 10px 14px;
+outline: none;
+transition: border-color 0.2s;
+resize: vertical;
+}
+.moment-capture-card textarea:focus {
+border-color: var(--c-today);
+}
+.moment-capture-card textarea::placeholder {
+color: var(--text-muted);
+}
+.moment-capture-card .controls {
+display: flex;
+gap: 8px;
+margin-top: 15px;
+align-items: center;
+}
+.moment-capture-card .controls button {
+flex: 1;
+}
+.moment-capture-card .toggle-switch {
+position: relative;
+display: inline-block;
+width: 44px;
+height: 24px;
+}
+.moment-capture-card .toggle-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.moment-capture-card .slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: var(--bg-surface2);
+border: 1px solid var(--border);
+transition: .4s;
+border-radius: 34px;
+}
+.moment-capture-card .slider:before {
+position: absolute;
+content: "";
+height: 16px;
+width: 16px;
+left: 4px;
+bottom: 3px;
+background-color: var(--text-secondary);
+transition: .4s;
+border-radius: 50%;
+}
+.moment-capture-card input:checked + .slider {
+background-color: var(--c-health);
+border-color: var(--c-health);
+}
+.moment-capture-card input:checked + .slider:before {
+transform: translateX(20px);
+background-color: #fff;
+}
+.commitments-inbox .mit-item {
+border-bottom: 1px solid var(--border);
+padding: 10px 0;
+}
+.commitments-inbox .mit-item:last-of-type {
+border-bottom: none;
+}
+.overcommit-card .status-indicator {
+font-size: 1.2em;
+font-weight: 700;
+margin-bottom: 10px;
+}
+.overcommit-card .status-indicator.available { color: var(--c-health); }
+.overcommit-card .status-indicator.moderate { color: var(--c-growth); }
+.overcommit-card .status-indicator.high { color: var(--c-decisions); }
+.overcommit-card .status-indicator.overloaded { color: var(--c-conflict); }
+.overcommit-card .warning-text {
+font-size: 0.9em;
+color: var(--text-secondary);
+margin-bottom: 15px;
+}
+.overcommit-card form {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.overcommit-card form input {
+background: var(--bg-surface2);
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+color: var(--text-primary);
+font-size: 14px;
+padding: 8px 12px;
+outline: none;
+transition: border-color 0.2s;
+}
+.overcommit-card form input:focus {
+border-color: var(--c-today);
+}
+.overcommit-card form button {
+background: var(--c-today);
+color: #fff;
+border: none;
+border-radius: var(--radius-md);
+font-size: 14px;
+font-weight: 600;
+padding: 8px 16px;
+cursor: pointer;
+transition: opacity 0.15s;
+}
+.overcommit-card form button:hover {
+opacity: 0.85;
+}
+.chat-delegate-buttons {
+display: flex;
+gap: 8px;
+margin-top: 10px;
+}
+.chat-delegate-buttons button {
+flex: 1;
+padding: 8px 12px;
+border-radius: var(--radius-md);
+font-size: 13px;
+font-weight: 600;
+cursor: pointer;
+transition: background 0.2s, color 0.2s;
+}
+.chat-delegate-buttons .btn-yes {
+background: var(--c-health);
+color: #fff;
+border: 1px solid var(--c-health);
+}
+.chat-delegate-buttons .btn-yes:hover {
+background: var(--c-health);
+opacity: 0.9;
+}
+.chat-delegate-buttons .btn-no {
+background: var(--bg-surface2);
+color: var(--text-primary);
+border: 1px solid var(--border);
+}
+.chat-delegate-buttons .btn-no:hover {
+border-color: var(--border-focus);
+}
+</style>
+</head>
+<body>
+<div class="page">
+<!-- HEADER -->
+<header class="mb-6 fade-up">
+<div class="hdr-row">
+<div style="flex:1">
+<div class="greeting" id="greeting">Good morning<span class="pulse-dot"></span></div>
+<div class="greeting-sub" id="clock"></div>
+</div>
+<div class="hdr-controls">
+<button class="hdr-btn" id="btn-ambient" title="Ambient voice — Lumin speaks proactively when you have time" onclick="toggleAmbient()">🎙</button>
+<button class="hdr-btn" id="btn-theme" title="Toggle light/dark" onclick="toggleTheme()">☀︎</button>
+</div>
+</div>
+</header>
+
+<div class="alpha-grid mb-4">
+<!-- Hourly Moment Capture Card -->
+<div class="card accent-border-today fade-up delay-1 moment-capture-card">
+<div class="card-label">Hourly Moment Capture</div>
+<div class="flex items-center justify-between mb-4">
+<label class="flex items-center gap-2 text-sm text-secondary">
+<span class="toggle-switch">
+<input type="checkbox" id="hourly-capture-toggle">
+<span class="slider"></span>
+</span>
+<span>Capture ON</span>
+</label>
+<div class="countdown" id="hourly-countdown">60:00</div>
+</div>
+<textarea id="moment-text" placeholder="What's happening right now? What are you thinking/feeling?"></textarea>
+<div class="controls">
+<button class="btn-add" id="submit-moment">Capture Moment</button>
+</div>
+</div>
+
+<!-- Commitments Inbox Card -->
+<div class="card accent-border-mirror fade-up delay-2 commitments-inbox">
+<div class="card-label">Commitments Inbox (MITs)</div>
+<div id="commitments-inbox-list">
+<div class="skel-line skeleton w-full"></div>
+<div class="skel-line skeleton w-4/5"></div>
+<div class="skel-line skeleton w-3/5"></div>
+</div>
+</div>
+
+<!-- Overcommit Warning Card -->
+<div class="card accent-border-conflict fade-up delay-3 overcommit-card">
+<div class="card-label">Overcommit Warning</div>
+<div id="overcommit-status" class="status-indicator available">Loading...</div>
+<div id="overcommit-warning-text" class="warning-text"></div>
+
+<h3 class="text-sm font-bold text-muted mb-2">Simulate New Commitment:</h3>
+<form id="simulate-commitment-form">
+<input type="text" id="simulate-title" placeholder="Commitment title" required>
+<input type="number" id="simulate-minutes" placeholder="Est. minutes/day" min="1" required>
+<button type="submit">Simulate</button>
+</form>
+<div id="simulation-result" class="text-sm text-secondary mt-3"></div>
+</div>
+
+<!-- Chat Card with Delegate Suggestion -->
+<div class="card accent-border-mirror fade-up delay-4">
+<div class="card-label">Chat with Lumin</div>
+<div class="chat-messages" id="chat-messages">
+<div class="msg assistant">Hey Adam 👋 — what's on your mind today?</div>
+</div>
+<div class="typing" id="typing">
+<div class="typing-dot"></div>
+<div class="typing-dot"></div>
+<div class="typing-dot"></div>
+</div>
+<div class="chat-row">
+<input type="text" id="chat-input" placeholder="Ask Lumin anything… or tap 🎙 to talk">
+<button class="btn-mic" id="btn-mic" title="Push to talk (or hold Space)">🎙</button>
+<button class="btn-send" id="send-btn">↑</button>
+</div>
+<div id="delegate-suggestion-area" class="chat-delegate-buttons hidden">
+<button class="btn-yes" id="delegate-yes">Yes, help me do it</button>
+<button class="btn-no" id="delegate-no">No, keep as my task</button>
+</div>
+<div class="voice-footer">
+<label>
+<input type="checkbox" id="speak-toggle">
+<span>Speak replies</span>
+</label>
+<span class="ptt-hint">Hold Space to talk</span>
+<span id="voice-status"></span>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Voice module must be non-module (IIFE) -->
+<script src="/shared/lifeos-voice-chat.js"></script>
+<script type="module">
+const HDR = () => ({ 'x-lifeos-key': localStorage.getItem('lifeos_api_key') || '', 'Content-Type': 'application/json' });
+const API = (p, o={}) => fetch(p, { headers: HDR(), ...o });
+const $ = id => document.getElementById(id);
+
+// ── Clock ──
+function tick() {
+const now = new Date();
+const h = now.getHours();
+$('greeting').innerHTML = (h<12?'Good morning':h<18?'Good afternoon':'Good evening') + '<span class="pulse-dot"></span>';
+$('clock').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}) + ' · ' + now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+}
+tick();
+setInterval(tick, 30000);
+
+// ── Theme toggle ──
+function toggleTheme() {
+const curr = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+const next = curr === 'light' ? 'dark' : 'light';
+if (window.__lifeosTheme) window.__lifeosTheme.set(next);
+else document.documentElement.dataset.theme = next;
+const mc = document.getElementById('theme-color-meta');
+if (mc) mc.setAttribute('content', next === 'light' ? '#f6f7fb' : '#0a0a0f');
+$('btn-theme').textContent = next === 'light' ? '☾' : '☀︎';
+}
+
+// ── Long-press (from dashboard.html) ──
+let pressTimer;
+function bindLongPress(el, onHold, onRelease) {
+const start = e => { pressTimer = setTimeout(() => onHold(e), 500); };
+const end = () => { clearTimeout(pressTimer); onRelease && onRelease(); };
+el.addEventListener('mousedown', start);
+el.addEventListener('touchstart', start, { passive: true });
+el.addEventListener('mouseup', end);
+el.addEventListener('mouseleave', end);
+el.addEventListener('touchend', end);
+}
+
+// ── Hourly Moment Capture ──
+let hourlyCaptureInterval;
+let countdownTimer;
+const HOURLY_CAPTURE_KEY = 'lifeos_hourly_capture_enabled';
+const HOURLY_CAPTURE_LAST_TIME_KEY = 'lifeos_hourly_capture_last_time';
+
+function updateCountdown(minutes) {
+const countdownEl = $('hourly-countdown');
+const remainingSeconds = minutes * 60;
+let currentSeconds = remainingSeconds;
+
+clearInterval(countdownTimer);
+countdownTimer = setInterval(() => {
+currentSeconds--;
+if (currentSeconds < 0) {
+currentSeconds = remainingSeconds; // Reset for next hour
+// Optionally trigger a notification or auto-capture here
+}
+const displayMinutes = Math.floor(currentSeconds / 60);
+const displaySeconds = currentSeconds % 60;
+countdownEl.textContent = `${String(displayMinutes).padStart(2, '0')}:${String(displaySeconds).padStart(2, '0')}`;
+}, 1000);
+}
+
+async function submitMoment() {
+const momentText = $('moment-text').value.trim();
+if (!momentText) return;
+
+try {
+const now = new Date().toISOString();
+// 1. Post snapshot
+await API('/api/v1/lifeos/ambient/snapshot', {
+method: 'POST',
+body: JSON.stringify({
+signals: {
+momentText,
+captured_at: now,
+source: 'alpha_hourly_capture'
+}
+})
+});
+
+// 2. Extract commitments
+await API('/api/v1/lifeos/commitments/extract', {
+method: 'POST',
+body: JSON.stringify({
+text: momentText,
+auto_log: true,
+source_ref: 'alpha-hourly-capture'
+})
+});
+
+$('moment-text').value = '';
+alert('Moment captured and commitments extracted!');
+loadCommitmentsInbox(); // Refresh commitments after extraction
+} catch (error) {
+console.error('Error capturing moment:', error);
+alert('Failed to capture moment. Check console for details.');
+}
+}
+
+function startHourlyCapture() {
+$('hourly-capture-toggle').checked = true;
+localStorage.setItem(HOURLY_CAPTURE_KEY, 'true');
+$('submit-moment').disabled = false;
+$('moment-text').disabled = false;
+
+// Calculate time until next full hour
+const now = new Date();
+const minutesToNextHour = 60 - now.getMinutes();
+updateCountdown(minutesToNextHour);
+
+// Set interval to reset countdown every hour
+hourlyCaptureInterval = setInterval(() => {
+updateCountdown(60);
+}, 60 * 60 * 1000);
+}
+
+function stopHourlyCapture() {
+$('hourly-capture-toggle').checked = false;
+localStorage.setItem(HOURLY_CAPTURE_KEY, 'false');
+$('submit-moment').disabled = true;
+$('moment-text').disabled = true;
+clearInterval(hourlyCaptureInterval);
+clearInterval(countdownTimer);
+$('hourly-countdown').textContent = 'OFF';
+}
+
+$('hourly-capture-toggle').addEventListener('change', (e) => {
+if (e.target.checked) {
+startHourlyCapture();
+} else {
+stopHourlyCapture();
+}
+});
+$('submit-moment').addEventListener('click', submitMoment);
+
+// Initialize hourly capture state on load
+const isHourlyCaptureEnabled = localStorage.getItem(HOURLY_CAPTURE_KEY) === 'true';
+if (isHourlyCaptureEnabled) {
+startHourlyCapture();
+} else {
+stopHourlyCapture();
+}
+
+// ── Commitments Inbox ──
+async function loadCommitmentsInbox() {
+try {
+const r = await API('/api/v1/lifeos/commitments?limit=30');
+const d = await r.json();
+const commitments = (d.commitments || [])
+.filter(c => c.status === 'open')
+.sort((a, b) => {
+// Sort by urgency: overdue first, then by due_at, then by weight
+const aOverdue = a.due_at && new Date(a.due_at) < new Date();
+const bOverdue = b.due_at && new Date(b.due_at) < new Date();
+
+if (aOverdue && !bOverdue) return -1;
+if (!aOverdue && bOverdue) return 1;
+
+if (a.due_at && b.due_at) {
+const dateA = new Date(a.due_at);
+const dateB = new Date(b.due_at);
+if (dateA.getTime() !== dateB.getTime()) return dateA.getTime() - dateB.getTime();
+} else if (a.due_at) {
+return -1;
+} else if (b.due_at) {
+return 1;
+}
+
+return (b.weight || 1) - (a.weight || 1);
+})
+.slice(0, 3); // Show top 3 as MIT suggestions
+
+if (!commitments.length) {
+$('commitments-inbox-list').innerHTML = '<div class="empty"><span>✅</span>No open commitments. Great job!</div>';
+return;
+}
+
+$('commitments-inbox-list').innerHTML = commitments.map(c => `
+<div class="mit-item" data-id="${c.id}" data-desc="${(c.description || c.title || '').replace(/"/g, '&quot;')}">
+<div class="mit-check ${c.kept_at ? 'done' : ''}">
+<svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+<polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</div>
+<div class="mit-text ${c.kept_at ? 'done' : ''}">${c.title || 'Untitled'}</div>
+</div>`).join('');
+
+$('commitments-inbox-list').querySelectorAll('.mit-item').forEach(el => {
+el.addEventListener('click', () => toggleCommitmentKept(el));
+bindLongPress(el, e => {
+const tip = document.createElement('div');
+tip.style.cssText='position:fixed;background:var(--bg-overlay);border:1px solid var(--border-focus);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text-secondary);max-width:240px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.6);pointer-events:none;backdrop-filter:blur(8px)';
+tip.textContent = el.dataset.desc || 'No description added yet';
+const cx = e.touches?e.touches[0].clientX:e.clientX;
+const cy = e.touches?e.touches[0].clientY:e.clientY;
+tip.style.left = Math.min(cx, window.innerWidth-260)+'px';
+tip.style.top = Math.max(10, cy-70)+'px';
+tip.id='mit-tip';
+document.body.appendChild(tip);
+}, () => { const t=$('mit-tip'); t&&t.remove(); } );
+});
+} catch {
+$('commitments-inbox-list').innerHTML = '<div class="empty"><span>⚠️</span>Could not load commitments</div>';
+}
+}
+
+async function toggleCommitmentKept(el) {
+const chk = el.querySelector('.mit-check'), txt = el.querySelector('.mit-text');
+const done = chk.classList.contains('done');
+chk.classList.toggle('done', !done);
+txt.classList.toggle('done', !done);
+try {
+await API(`/api/v1/lifeos/commitments/${el.dataset.id}/keep`, { method: 'POST', body: JSON.stringify({ kept: !done }) });
+loadCommitmentsInbox(); // Refresh after marking kept
+} catch (error) {
+console.error('Error marking commitment:', error);
+}
+}
+
+// ── Overcommit Warning ──
+async function loadOvercommitStatus() {
+try {
+const r = await API('/api/v1/lifeos/commitments/load');
+const d = await r.json();
+const statusEl = $('overcommit-status');
+const warningTextEl = $('overcommit-warning-text');
+
+statusEl.className = `status-indicator ${d.status}`;
+statusEl.textContent = `Status: ${d.status.charAt(0).toUpperCase() + d.status.slice(1)}`;
+
+let warningMessage = '';
+switch (d.status) {
+case 'available':
+warningMessage = `You have ${d.capacityRemaining} minutes/day of free capacity.`;
+break;
+case 'moderate':
+warningMessage = `You have ${d.capacityRemaining} minutes/day of free capacity. Consider your priorities.`;
+break;
+case 'high':
+warningMessage = `Capacity is tight (${d.capacityRemaining} min/day remaining). Adding more will likely lead to overcommitment.`;
+break;
+case 'overloaded':
+warningMessage = `You are overloaded! You have negative capacity. Something needs to be dropped or delegated.`;
+break;
+}
+warningTextEl.textContent = warningMessage;
+
+// Update simulation result with current load
+$('simulation-result').textContent = `Current load: ${d.currentLoadMinutesPerDay} min/day. Capacity remaining: ${d.capacityRemaining} min/day.`;
+
+} catch (error) {
+console.error('Error loading overcommit status:', error);
+$('overcommit-status').textContent = 'Status: Error';
+$('overcommit-warning-text').textContent = 'Could not load overcommit status.';
+}
+}
+
+$('simulate-commitment-form').addEventListener('submit', async (e) => {
+e.preventDefault();
+const title = $('simulate-title').value.trim();
+const estimatedMinutesPerDay = parseInt($('simulate-minutes').value, 10);
+
+if (!title || isNaN(estimatedMinutesPerDay) || estimatedMinutesPerDay <= 0) {
+alert('Please enter a valid title and estimated minutes per day.');
+return;
+}
+
+try {
+const r = await API('/api/v1/lifeos/commitments/simulate', {
+method: 'POST',
+body: JSON.stringify({
+title,
+estimatedMinutesPerDay
+})
+});
+const d = await r.json();
+const resultEl = $('simulation-result');
+const sim = d.simulation;
+
+let collisionInfo = '';
+if (sim.collisionPoints && sim.collisionPoints.length > 0) {
+collisionInfo = `Collision risks with: ${sim.collisionPoints.map(c => c.title).join(', ')}.`;
+}
+
+resultEl.innerHTML = `
+<strong>Simulation Result:</strong><br>
+Feasibility Score: ${sim.feasibilityScore}/100<br>
+New commitment: ${sim.newCommitmentDailyAvg} min/day<br>
+Remaining capacity after adding: ${sim.remainingAfterAdding} min/day<br>
+AI Recommendation: ${sim.aiAnalysis.recommendation}<br>
+${collisionInfo}
+`;
+} catch (error) {
+console.error('Error simulating commitment:', error);
+$('simulation-result').textContent = 'Failed to run simulation.';
+}
+});
+
+// ── Chat with Delegate Suggestion ──
+let threadId = null;
+let lastUserMessage = '';
+const DELEGATE_KEYWORDS = ['schedule', 'email', 'book', 'call', 'follow up', 'research', 'plan'];
+
+async function initChat() {
+try {
+const r = await API('/api/v1/lifeos/chat/threads/default', { method: 'POST', body: JSON.stringify({}) });
+const d = await r.json();
+threadId = d.thread?.id || d.id;
+const mr = await API(`/api/v1/lifeos/chat/threads/${threadId}/messages?limit=10`);
+const md = await mr.json();
+const msgs = (md.messages || []).slice(-10);
+if (msgs.length) {
+$('chat-messages').innerHTML = msgs.map(m => `<div class="msg ${m.role === 'user' ? 'user' : 'assistant'}">${m.content}</div>`).join('');
+}
+$('chat-messages').scrollTop = 99999;
+} catch (error) {
+console.error('Error initializing chat:', error);
+}
+}
+
+async function sendChat() {
+const inp = $('chat-input'), text = inp.value.trim();
+if (!text || !threadId) return;
+inp.value = '';
+lastUserMessage = text; // Store for delegate suggestion
+
+const box = $('chat-messages');
+box.innerHTML += `<div class="msg user">${text}</div>`;
+box.scrollTop = 99999;
+$('typing').classList.add('show');
+$('delegate-suggestion-area').classList.add('hidden'); // Hide delegate buttons
+
+try {
+const r = await API(`/api/v1/lifeos/chat/threads/${threadId}/messages`, { method: 'POST', body: JSON.stringify({ message: text }) });
+const d = await r.json();
+$('typing').classList.remove('show');
+const reply = d.reply || d.content || '…';
+box.innerHTML += `<div class="msg assistant">${reply}</div>`;
+box.scrollTop = 99999;
+
+// Speak reply if enabled
+if (window.LifeOSVoiceChat && voiceCtrl) voiceCtrl.speak(reply);
+
+// Check for delegate keywords
+const lowerText = text.toLowerCase();
+const shouldSuggestDelegate = DELEGATE_KEYWORDS.some(keyword => lowerText.includes(keyword));
+
+if (shouldSuggestDelegate) {
+$('delegate-suggestion-area').classList.remove('hidden');
+}
+
+} catch (error) {
+console.error('Error sending chat message:', error);
+$('typing').classList.remove('show');
+box.innerHTML += `<div class="msg assistant" style="opacity:0.5">Something went wrong — try again.</div>`;
+}
+}
+
+$('send-btn').addEventListener('click', sendChat);
+$('chat-input').addEventListener('keypress', e => { if (e.key === 'Enter') sendChat(); });
+
+$('delegate-yes').addEventListener('click', () => {
+const delegateInstruction = `Draft a plan to delegate: "${lastUserMessage}". Suggest next steps for me to review.`;
+const box = $('chat-messages');
+box.innerHTML += `<div class="msg assistant">Okay, I'll help you draft a delegation plan for that.</div>`;
+box.scrollTop = 99999;
+$('delegate-suggestion-area').classList.add('hidden');
+// Prepend the instruction and send it as a new message
+$('chat-input').value = delegateInstruction;
+sendChat();
+});
+
+$('delegate-no').addEventListener('click', () => {
+const box = $('chat-messages');
+box.innerHTML += `<div class="msg assistant">Understood. I'll keep that as your task.</div>`;
+box.scrollTop = 99999;
+$('delegate-suggestion-area').classList.add('hidden');
+});
+
+// ── Voice (from dashboard.html) ──
+let voiceCtrl = null;
+function initVoice() {
+if (!window.LifeOSVoiceChat) return;
+voiceCtrl = window.LifeOSVoiceChat.attach({
+inputId: 'chat-input',
+buttonId: 'btn-mic',
+statusId: 'voice-status',
+speakToggleId: 'speak-toggle',
+storageKey: 'lifeos_dashboard',
+speakRepliesDefault: false,
+mode: 'replace',
+wakePrefixes: ['hey lumin', 'lumin', 'okay lumin'],
+onStop: ({ inputValue }) => {
+if (inputValue && inputValue.trim()) setTimeout(sendChat, 250);
+},
+});
+}
+
+// Space bar push-to-talk
+document.addEventListener('keydown', e => {
+if (e.code !== 'Space') return;
+if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+e.preventDefault();
+if (voiceCtrl) voiceCtrl.startMic();
+});
+document.addEventListener('keyup', e => {
+if (e.code !== 'Space') return;
+if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+if (voiceCtrl) voiceCtrl.stopMic();
+});
+
+// ── Ambient proactive mode (from dashboard.html) ──
+let ambientActive = false;
+let ambientInterval = null;
+window.toggleAmbient = function() {
+ambientActive = !ambientActive;
+const btn = $('btn-ambient');
+if (ambientActive) {
+btn.classList.add('ambient-active');
+btn.title = 'Ambient ON — Lumin will speak when you have something to know. Click to turn off.';
+checkProactiveNudge();
+ambientInterval = setInterval(checkProactiveNudge, 2 * 60 * 1000);
+} else {
+btn.classList.remove('ambient-active');
+btn.title = 'Ambient voice — Lumin speaks proactively when you have time';
+clearInterval(ambientInterval);
+if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+};
+async function checkProactiveNudge() {
+try {
+const r = await API('/api/v1/lifeos/ambient/nudge');
+const d = await r.json();
+if (!d.speak) return;
+// Show as ambient chat bubble
+const box = $('chat-messages');
+box.innerHTML += `<div class="msg ambient">🔔 Lumin: ${d.speak}</div>`;
+box.scrollTop = 99999;
+// Speak it
+if (window.LifeOSVoiceChat) {
+window.LifeOSVoiceChat.speakText(d.speak);
+} else if (window.speechSynthesis) {
+const u = new SpeechSynthesisUtterance(d.speak.slice(0, 2000));
+window.speechSynthesis.speak(u);
+}
+} catch (error) {
+console.error('Error checking proactive nudge:', error);
+}
+}
+
+// ── Theme init sync (from dashboard.html) ──
+window.toggleTheme = toggleTheme;
+
+// ── Init ──
+document.addEventListener('DOMContentLoaded', () => {
+initVoice();
+const th = document.documentElement.dataset.theme;
+$('btn-theme').textContent = th === 'light' ? '☾' : '☀︎';
+
+// Load all alpha page data
+Promise.all([
+loadCommitmentsInbox(),
+loadOvercommitStatus(),
+initChat()
+]);
+});
+</script>
+</body>
+</html>
