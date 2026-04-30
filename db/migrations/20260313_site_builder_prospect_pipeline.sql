@@ -2,7 +2,7 @@
 -- Run against Neon (PostgreSQL) to enable Amendment 05 revenue pipeline
 
 -- Prospect sites: tracks cold-outreach prospects and their mock preview sites
--- status values: sent | interested | converted | dead
+-- status values: built | sent | viewed | replied | converted | lost | expired
 -- pos_partner values: jane_app | mindbody | square
 CREATE TABLE IF NOT EXISTS prospect_sites (
   client_id         TEXT PRIMARY KEY,
@@ -20,6 +20,10 @@ CREATE TABLE IF NOT EXISTS prospect_sites (
   created_at        TIMESTAMPTZ DEFAULT NOW(),
   updated_at        TIMESTAMPTZ DEFAULT NOW()
 );
+
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS follow_up_count INTEGER DEFAULT 0;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS last_follow_up_at TIMESTAMPTZ;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS last_contacted_at TIMESTAMPTZ;
 
 CREATE INDEX IF NOT EXISTS idx_prospect_sites_status ON prospect_sites(status);
 CREATE INDEX IF NOT EXISTS idx_prospect_sites_contact ON prospect_sites(contact_email);

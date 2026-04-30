@@ -4,9 +4,9 @@
       "id": "task-followup-cron-001",
       "description": "Add an auto follow-up cron to services/prospect-pipeline.js that queries the prospect_sites table for prospects whose status is 'emailed' and whose last_contacted date is either 3 or 7 days ago, then calls POST /api/v1/sites/follow-up for each one. Expose it as a scheduled function that can be triggered by an external cron (e.g. node -e \"import('./services/prospect-pipeline.js').then(m => m.runFollowUpCron())\"). Log every send attempt to the outreach_log table.",
       "ssotRef": "AMENDMENT_05",
-      "status": "pending",
+      "status": "done",
       "addedAt": "2026-03-13T00:00:00Z",
-      "result": null
+      "result": "2026-04-29: Added runFollowUpCron() to services/prospect-pipeline.js, added scripts/site-builder-follow-up-cron.mjs, and patched prospect_sites follow-up tracking columns."
     },
     {
       "id": "task-prospect-scoring-002",

@@ -1,0 +1,136 @@
+{
+  "project_id": "site_builder",
+  "name": "Site Builder & Prospect Pipeline",
+  "amendment_path": "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+  "lifecycle": "production",
+  "status": "active",
+  "priority": "high",
+  "owner": "adam",
+  "phase": "launch-readiness",
+  "next_task": "Set live email/base-url envs, verify route health, and use the public landing page to begin controlled preview outreach.",
+  "stability_class": "needs-review",
+  "current_focus": "Turn the existing build/prospect pipeline into a sellable front-door offer: public landing page, route verification, and live outreach readiness.",
+  "owned_files": [
+    "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
+    "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
+    "services/site-builder.js",
+    "services/prospect-pipeline.js",
+    "scripts/site-builder-follow-up-cron.mjs",
+    "routes/site-builder-routes.js",
+    "db/migrations/20260313_site_builder_prospect_pipeline.sql",
+    "public/overlay/site-builder-landing.html"
+  ],
+  "required_routes": [
+    {
+      "method": "POST",
+      "path": "/api/v1/sites/build",
+      "expected_status": 200,
+      "description": "Build a preview site from a business URL"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/sites/prospect",
+      "expected_status": 200,
+      "description": "Build a preview and enqueue/send prospect outreach"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sites/dashboard",
+      "expected_status": 200,
+      "description": "Pipeline summary for sent/viewed/replied/converted prospects"
+    },
+    {
+      "method": "GET",
+      "path": "/overlay/site-builder-landing.html",
+      "expected_status": 200,
+      "description": "Public launch page for the Site Builder offer"
+    }
+  ],
+  "required_tables": [
+    {
+      "name": "prospect_sites",
+      "required_columns": [
+        "client_id",
+        "business_url",
+        "contact_email",
+        "business_name",
+        "preview_url",
+        "email_sent",
+        "status",
+        "deal_value",
+        "metadata",
+        "created_at"
+      ]
+    },
+    {
+      "name": "email_suppressions",
+      "required_columns": [
+        "email",
+        "reason",
+        "suppressed",
+        "suppressed_at"
+      ]
+    },
+    {
+      "name": "outreach_log",
+      "required_columns": [
+        "recipient",
+        "subject",
+        "status",
+        "sent_at"
+      ]
+    }
+  ],
+  "required_env": [
+    "SITE_BASE_URL",
+    "EMAIL_FROM"
+  ],
+  "assertions": [
+    {
+      "type": "file_exists",
+      "path": "services/site-builder.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/prospect-pipeline.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "scripts/site-builder-follow-up-cron.mjs"
+    },
+    {
+      "type": "file_exists",
+      "path": "routes/site-builder-routes.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "public/overlay/site-builder-landing.html"
+    },
+    {
+      "type": "node_check",
+      "check": "services/site-builder.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/prospect-pipeline.js"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/site-builder-follow-up-cron.mjs"
+    },
+    {
+      "type": "node_check",
+      "check": "routes/site-builder-routes.js"
+    }
+  ],
+  "completion_checks": [
+    "POST /api/v1/sites/build returns previewUrl and clientId",
+    "POST /api/v1/sites/prospect records a prospect_sites row and returns a preview link",
+    "node scripts/site-builder-follow-up-cron.mjs processes eligible day-3/day-7 follow-ups without incrementing counts on failed sends",
+    "GET /api/v1/sites/dashboard returns pipeline counts",
+    "Public landing page loads from /overlay/site-builder-landing.html"
+  ],
+  "last_verified_at": null,
+  "verification_passed": null,
+  "last_updated": "2026-04-29"
+}

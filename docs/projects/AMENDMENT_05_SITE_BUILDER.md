@@ -1,7 +1,7 @@
 # AMENDMENT 05 — Site Builder & Prospect Pipeline
 **Status:** INFRASTRUCTURE COMPLETE — awaiting Railway env vars to go live
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-03-13
+**Last Updated:** 2026-04-29 — Site Builder now has a manifest/verifier surface (`docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json`), a public launch/sales page at `public/overlay/site-builder-landing.html`, and an operator-runnable follow-up cron at `scripts/site-builder-follow-up-cron.mjs`. This closes the biggest operational gap in the lane: day-3/day-7 follow-ups now have an actual execution path instead of just being a note in the amendment. Prior: 2026-03-13.
 
 ---
 
@@ -38,6 +38,7 @@ POS affiliate URLs now read from env vars (`AFFILIATE_JANE_APP_URL`, `AFFILIATE_
 |------|---------|
 | `services/site-builder.js` | Core pipeline: scrape → AI generate → deploy |
 | `services/prospect-pipeline.js` | Mock site + cold email outreach |
+| `scripts/site-builder-follow-up-cron.mjs` | Operator/cron entry point for day-3/day-7 follow-up sends |
 | `routes/site-builder-routes.js` | All API endpoints (own module) |
 | `db/migrations/20260313_site_builder_prospect_pipeline.sql` | DB schema for all 3 tables |
 
@@ -111,6 +112,10 @@ The migration was run via Neon SQL Editor against the **production** branch. All
 - **NEED:** `POSTMARK_SERVER_TOKEN` set in Railway → enables cold email sending
 - **NEED:** `EMAIL_FROM` set in Railway → the From address prospects will see
 - **NEED:** `SITE_BASE_URL` set in Railway → so preview links in emails point to the right domain
+- **KNOW:** Manifest/verifier file now exists for this lane: `docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json` ✅
+- **KNOW:** Public sales/positioning page now exists at `/overlay/site-builder-landing.html` via `public/overlay/site-builder-landing.html` ✅
+- **KNOW:** Follow-up automation entry point now exists at `scripts/site-builder-follow-up-cron.mjs` and uses `runFollowUpCron()` from `services/prospect-pipeline.js` ✅
+- **KNOW:** Prospect records now persist `status`, `follow_up_count`, `last_follow_up_at`, and `last_contacted_at` coherently with the service code ✅
 - **NEED:** POS affiliate program signups → then set `AFFILIATE_*_URL` env vars in Railway
 - **THINK:** Puppeteer scraping may fail on JS-heavy sites (SPA) — AI-only fallback exists
 - **DON'T KNOW:** Whether Railway has been redeployed since these code changes were committed
@@ -151,19 +156,24 @@ curl -X POST https://your-app.railway.app/api/v1/sites/prospect \
   -d '{"businessUrl":"https://their-site.com","contactEmail":"owner@their-site.com","contactName":"Jane"}'
 ```
 
-### Step 5 — Set up auto follow-up cron (maximizes conversion rate)
-Add a daily cron job that calls `POST /api/v1/sites/follow-up` for prospects at day 3 and day 7.
-This is the next code task — not yet built.
+### Step 5 — Schedule the follow-up cron (maximizes conversion rate)
+Run `node scripts/site-builder-follow-up-cron.mjs` daily from Railway, PM2, or an external cron.
+It now looks for:
+- prospects with `email_sent = true`
+- day-3 follow-up when `follow_up_count = 0`
+- day-7 follow-up when `follow_up_count = 1`
+- statuses not in `converted`, `lost`, or `expired`
+
+Failed sends do **not** increment follow-up counters.
 
 ---
 
 ## REFACTOR PLAN (Future)
-1. Add auto follow-up cron — day 3 and day 7 follow-ups sent automatically (next build task)
-2. Add site customization UI — let client pick colors, services, photos from command center
-3. Add A/B testing for cold email subject lines
-4. Add prospect scoring — prioritize businesses with worst existing websites
-5. Add live edit mode — client can edit their preview before going live
-6. Add preview site expiry cron — clean up unsold previews after 30 days
+1. Add site customization UI — let client pick colors, services, photos from command center
+2. Add A/B testing for cold email subject lines
+3. Add prospect scoring — prioritize businesses with worst existing websites
+4. Add live edit mode — client can edit their preview before going live
+5. Add preview site expiry cron — clean up unsold previews after 30 days
 
 ---
 
@@ -174,6 +184,13 @@ This is the next code task — not yet built.
 - Site build must not include competitor brand names or misleading claims
 - All generated testimonials must be clearly labeled as illustrative examples until replaced with real ones
 - POS recommendations must disclose affiliate relationship in client-facing materials
+
+## Change Receipts
+
+| Date | What Changed | Why | Verified |
+|---|---|---|---|
+| 2026-04-29 | Fixed Site Builder follow-up accounting so failed sends no longer look successful; added `runFollowUpCron()` plus `scripts/site-builder-follow-up-cron.mjs`; patched the migration with `follow_up_count`, `last_follow_up_at`, and `last_contacted_at` columns. | The lane claimed day-3/day-7 follow-ups, but there was no runnable cron entry point and the schema omitted columns already used by the service. This made the pipeline drift-prone and unreliable for unattended execution. | `node --check services/prospect-pipeline.js`; `node --check scripts/site-builder-follow-up-cron.mjs` |
+| 2026-04-29 | Added `docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json` with required routes, tables, assertions, and completion checks; added `public/overlay/site-builder-landing.html` as the first public front-door sales page for the lane. | Site Builder had real backend code but weaker operational discipline than TokenOS/TC: no manifest/verifier surface and no actual public offer page. These two additions make the lane easier to verify and easier to sell. | `node --check services/site-builder.js`; `node --check services/prospect-pipeline.js`; `node --check routes/site-builder-routes.js` |
 
 ---
 
@@ -189,7 +206,7 @@ This is the next code task — not yet built.
 - [x] API surface fully defined — 9 endpoints with methods, paths, and purposes
 - [x] Generated site tech stack specified (Tailwind CDN, Alpine.js, Schema.org JSON-LD)
 - [x] POS affiliate env var names specified (`AFFILIATE_JANE_APP_URL`, etc.)
-- [ ] Auto follow-up cron (day 3, day 7) not yet built — documented in NEXT ACTIONS Step 5
+- [x] Auto follow-up cron now exists via `runFollowUpCron()` + `scripts/site-builder-follow-up-cron.mjs`
 
 ### Gate 2 — Competitor Landscape
 | Competitor | Strengths | Weaknesses | Our Edge |

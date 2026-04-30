@@ -37,6 +37,13 @@ const PRICING = {
   full: { name: 'Full Service', price: '$297/mo', description: 'Everything managed: site, SEO, blogs, social, POS setup + booking system' },
 };
 
+function createNoopEmailAdapter() {
+  return async (to, subject) => {
+    logger.info('[PROSPECT] Email (no sender configured)', { to, subject });
+    return { success: false, error: 'No email sender configured' };
+  };
+}
+
 export default class ProspectPipeline {
   constructor({ siteBuilder, pool, callCouncil, sendEmail, baseUrl = '' } = {}) {
     this.siteBuilder = siteBuilder;
@@ -88,9 +95,13 @@ export default class ProspectPipeline {
     let emailSent = false;
     if (contactEmail && !skipEmail) {
       try {
-        await this.sendEmail(contactEmail, emailContent.subject, emailContent.html);
-        emailSent = true;
-        logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl });
+        const delivery = await this.sendEmail(contactEmail, emailContent.subject, emailContent.html);
+        emailSent = delivery?.success !== false;
+        if (emailSent) {
+          logger.info('[PROSPECT] Outreach email sent', { contactEmail, previewUrl });
+        } else {
+          logger.warn('[PROSPECT] Outreach email not sent', { contactEmail, previewUrl, error: delivery?.error || 'unknown' });
+        }
       } catch (err) {
         logger.warn('[PROSPECT] Email send failed', { error: err.message });
       }
@@ -214,8 +225,8 @@ Return ONLY valid JSON:
     try {
       await this.pool.query(
         `INSERT INTO prospect_sites
-          (client_id, business_url, contact_email, contact_name, business_name, preview_url, email_sent, metadata, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
+          (client_id, business_url, contact_email, contact_name, business_name, preview_url, email_sent, status, metadata, created_at, last_contacted_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), CASE WHEN $7 THEN NOW() ELSE NULL END)
          ON CONFLICT (client_id) DO NOTHING`,
         [
           data.clientId,
@@ -225,6 +236,7 @@ Return ONLY valid JSON:
           data.businessName || null,
           data.previewUrl,
           data.emailSent || false,
+          data.emailSent ? 'sent' : 'built',
           JSON.stringify(data.metadata || {}),
         ]
       );
@@ -255,7 +267,7 @@ Return ONLY valid JSON:
    * Call this on day 3 and day 7 after initial outreach.
    */
   async sendFollowUp(prospectId, followUpNumber = 2) {
-    if (!this.pool || !this.sendEmail) return;
+    if (!this.pool || !this.sendEmail) return { success: false, error: 'pool and sendEmail are required' };
 
     let row;
     try {
@@ -264,9 +276,14 @@ Return ONLY valid JSON:
         [prospectId]
       );
       row = result.rows[0];
-    } catch { return; }
+    } catch {
+      return { success: false, error: 'prospect lookup failed' };
+    }
 
-    if (!row || !row.contact_email) return;
+    if (!row || !row.contact_email) return { success: false, error: 'prospect or contact email missing' };
+    if (['converted', 'lost', 'expired'].includes(String(row.status || '').toLowerCase())) {
+      return { success: false, error: `prospect status ${row.status} is not follow-up eligible` };
+    }
 
     const subjects = {
       2: `Quick question about ${row.business_name || 'your site preview'}`,
@@ -281,11 +298,94 @@ Return ONLY valid JSON:
     };
 
     if (subjects[followUpNumber]) {
-      await this.sendEmail(row.contact_email, subjects[followUpNumber], bodies[followUpNumber]);
+      const delivery = await this.sendEmail(row.contact_email, subjects[followUpNumber], bodies[followUpNumber]);
+      if (delivery?.success === false) {
+        logger.warn('[PROSPECT] Follow-up email not sent', {
+          prospectId,
+          followUpNumber,
+          recipient: row.contact_email,
+          error: delivery.error || 'unknown',
+        });
+        return { success: false, error: delivery.error || 'follow-up send failed' };
+      }
+
       await this.pool.query(
-        'UPDATE prospect_sites SET follow_up_count = COALESCE(follow_up_count, 0) + 1, last_follow_up_at = NOW() WHERE client_id = $1',
+        `UPDATE prospect_sites
+            SET follow_up_count = COALESCE(follow_up_count, 0) + 1,
+                last_follow_up_at = NOW(),
+                last_contacted_at = NOW(),
+                updated_at = NOW()
+          WHERE client_id = $1`,
         [prospectId]
       ).catch(() => {});
+
+      logger.info('[PROSPECT] Follow-up sent', { prospectId, followUpNumber, recipient: row.contact_email });
+      return { success: true, prospectId, followUpNumber, recipient: row.contact_email };
     }
+
+    return { success: false, error: `unsupported followUpNumber ${followUpNumber}` };
+  }
+}
+
+export async function runFollowUpCron({ pool, sendEmail } = {}) {
+  if (!pool) {
+    logger.warn('[PROSPECT] Follow-up cron disabled — no DB pool');
+    return { success: false, error: 'pool required', processed: 0, sent: 0 };
+  }
+
+  const pipeline = new ProspectPipeline({
+    pool,
+    sendEmail: sendEmail || createNoopEmailAdapter(),
+  });
+
+  logger.info('[PROSPECT] Running follow-up cron');
+
+  try {
+    const result = await pool.query(`
+      SELECT client_id,
+             business_name,
+             contact_email,
+             created_at,
+             follow_up_count,
+             last_follow_up_at,
+             status
+        FROM prospect_sites
+       WHERE email_sent = TRUE
+         AND contact_email IS NOT NULL
+         AND status NOT IN ('converted', 'lost', 'expired')
+         AND (
+           (COALESCE(follow_up_count, 0) = 0 AND created_at <= NOW() - INTERVAL '3 days')
+           OR
+           (COALESCE(follow_up_count, 0) = 1 AND created_at <= NOW() - INTERVAL '7 days')
+         )
+       ORDER BY created_at ASC
+    `);
+
+    let sent = 0;
+    const errors = [];
+
+    for (const row of result.rows) {
+      const followUpNumber = Number(row.follow_up_count || 0) === 0 ? 2 : 3;
+      const outcome = await pipeline.sendFollowUp(row.client_id, followUpNumber);
+      if (outcome?.success) sent += 1;
+      else if (outcome?.error) errors.push({ clientId: row.client_id, error: outcome.error });
+    }
+
+    logger.info('[PROSPECT] Follow-up cron complete', {
+      eligible: result.rows.length,
+      sent,
+      failed: errors.length,
+    });
+
+    return {
+      success: true,
+      processed: result.rows.length,
+      sent,
+      failed: errors.length,
+      errors,
+    };
+  } catch (err) {
+    logger.error('[PROSPECT] Follow-up cron failed', { error: err.message });
+    return { success: false, error: err.message, processed: 0, sent: 0 };
   }
 }
