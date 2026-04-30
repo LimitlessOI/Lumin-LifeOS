@@ -2,20 +2,18 @@
 
 **Source Document**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 
-## Understanding Confirmed
+## Shell Architecture Understanding Confirmed
 
-### Shell Architecture
+### Desktop Experience
+- **Persistent left sidebar** for primary navigation
+- Sidebar remains visible across all category dashboard views
 
-**Desktop Layout**
-- Persistent left sidebar for primary navigation
-- Sidebar remains visible across all views
-
-**Mobile Layout**
-- Bottom tab bar for primary navigation
+### Mobile Experience
+- **Bottom tab bar** for primary navigation
 - Mobile and desktop layouts **differ intentionally** — optimized for their respective form factors
 
 ### Category Dashboard System
-- Swipe-ready horizontal navigation between life category dashboards
+- **Swipe-ready horizontal navigation** between life category dashboards
 - Each category represents a distinct life domain
 - Touch gesture support for seamless category transitions
 
@@ -26,12 +24,12 @@
 
 ### Theme Requirements
 Both visual modes are **required**:
-- Light mode
-- Dark mode
+- **Light mode**
+- **Dark mode**
 
 Theme switching and persistence must be supported across all views.
 
-### Scope Acknowledgment
+## Scope Acknowledgment
 
 This receipt confirms understanding of the **UI shell architecture direction only**, as specified in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
 
