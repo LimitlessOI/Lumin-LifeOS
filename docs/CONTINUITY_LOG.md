@@ -49,6 +49,7 @@
 
 ### Follow-up (same day)
 - **KNOW:** first deploy after cap raise still requested **`max_output_tokens_requested` ~16k** — root cause was **estimator plateau** (`chars/2.5`), not **`BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP`** alone → **`estimateBuilderMaxOutputTokens`** HTML branch now boosts via **`chars/1.85` + floor** (second push to **`main`** + **`POST …/railway/managed-env/build-from-latest`** when needed).
+- **`max_output_tokens` / `maxOutputTokens`** optional body field on **`/builder/task`** + **`/build`** (code mode): **supervisor** can force completion budget (≤128k) when **Railway runtime** has not picked up estimator commits yet; see **`BUILDER_OPERATOR_ENV.md`** — evidence probe on prod stayed **`16002`** for extended window after **`build-from-latest`**, implying **image/build pipeline lag** unrelated to estimator math alone.
 
 ---
 
