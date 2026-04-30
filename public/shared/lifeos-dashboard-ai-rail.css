@@ -20,7 +20,7 @@
   /* Default to hidden until JS shows it */
   visibility: hidden;
   opacity: 0;
-  transform: translateY(100%);
+  transform: translateY(100%); /* Start off-screen for bottom dock */
 }
 
 .lifeos-ai-rail-container.show {
@@ -44,6 +44,11 @@
   border-bottom-right-radius: var(--dash-radius-lg, 14px);
   border-top: none; /* No top border when docked to top */
   padding-top: env(safe-area-inset-top); /* Safe area for mobile */
+  transform: translateY(-100%); /* Start off-screen for top dock */
+}
+
+.lifeos-ai-rail-dock-top.show {
+  transform: translateY(0);
 }
 
 /* Collapsed state */
