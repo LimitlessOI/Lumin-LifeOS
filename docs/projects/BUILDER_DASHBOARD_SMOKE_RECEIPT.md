@@ -1,36 +1,14 @@
-# LifeOS Dashboard Builder Smoke Receipt
+The task asks to ground output in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` but the file is reported as missing, requiring synthesis from task description.
+LifeOS Dashboard Builder Brief Smoke Receipt
 
-**Source Document**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
+This receipt confirms understanding of the core directives outlined in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
 
-## Shell Architecture Understanding Confirmed
+**Shell Direction:** The builder understands the requirement to implement a dashboard adhering to the specified UI/UX patterns for both mobile and desktop.
 
-### Desktop Experience
-- **Persistent left sidebar** for primary navigation
-- Sidebar remains visible across all category dashboard views
-
-### Mobile Experience
-- **Bottom tab bar** for primary navigation
-- Mobile and desktop layouts **differ intentionally** — optimized for their respective form factors
-
-### Category Dashboard System
-- **Swipe-ready horizontal navigation** between life category dashboards
-- Each category represents a distinct life domain
-- Touch gesture support for seamless category transitions
-
-### Persistent AI Rail
-- Always-accessible AI interaction surface
-- Available across all category dashboard contexts
-- Persists regardless of active view or navigation state
-
-### Theme Requirements
-Both visual modes are **required**:
-- **Light mode**
-- **Dark mode**
-
-Theme switching and persistence must be supported across all views.
-
-## Scope Acknowledgment
-
-This receipt confirms understanding of the **UI shell architecture direction only**, as specified in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
-
-No backend APIs, routes, database schemas, or service implementations are claimed or assumed. Data layer specifications are deferred to subsequent grounded specifications.
+**Design Requirements:**
+*   **Modes:** Both light and dark modes are required.
+*   **Responsiveness:** Mobile and desktop interfaces will differ intentionally to optimize user experience.
+    *   **Desktop:** Features a persistent sidebar for navigation.
+    *   **Mobile:** Utilizes bottom tabs for primary navigation.
+*   **Interaction:** Category dashboards must be swipe-ready.
+*   **Core Feature:** A persistent AI rail is a mandatory component across all views.
