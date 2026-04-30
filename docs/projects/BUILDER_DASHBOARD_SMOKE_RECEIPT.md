@@ -10,7 +10,7 @@
 
 ### Mobile Experience
 - **Bottom tab bar** for primary navigation
-- Mobile and desktop layouts **differ intentionally** — these are distinct UX patterns optimized for their respective form factors, not responsive variants
+- Mobile and desktop layouts **differ intentionally** — these are distinct UX patterns optimized for their respective form factors
 
 ### Category Dashboard System
 - **Swipe-ready horizontal navigation** between life category dashboards
