@@ -6,7 +6,7 @@
 - `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
 
-The task asserts these files "exist on the server" and are "authoritative," but the file system returned read errors. Without the brief, I cannot perform the requested comparison against specifications for sidebar, bottom tabs, AI rail direction, light/dark intent, or mobile vs desktop requirements.
+The task asserts these files "exist on the server" and are "authoritative," but the file system returned read errors. **Without the brief, I cannot perform the requested comparison** against specifications for sidebar, bottom tabs, AI rail direction, light/dark intent, or mobile vs desktop requirements.
 
 **What I can audit:** Observable architectural differences between `lifeos-dashboard.html` (standalone page) and `lifeos-app.html` (application shell).
 
