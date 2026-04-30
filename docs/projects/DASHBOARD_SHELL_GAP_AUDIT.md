@@ -6,7 +6,7 @@
 - `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
 
-The task states these files "exist on the server" and are "authoritative," but the file system returned read errors. Without the brief, this audit compares the two production HTML files (`lifeos-dashboard.html` and `lifeos-app.html`) and documents their architectural differences.
+The task states these files "exist on the server" and are "authoritative," but the file system returned read errors. Without the brief, this audit compares the two production HTML files and documents their architectural differences.
 
 **Key Finding:** These are two distinct artifacts serving different purposes:
 - `lifeos-dashboard.html` — standalone dashboard page with embedded content
@@ -200,17 +200,6 @@ The task states these files "exist on the server" and are "authoritative," but t
    - Dashboard: embedded chat card (simpler, always visible)
    - App: persistent drawer (overlay, multiple entry points)
    - If dashboard loads in iframe, which pattern wins?
-
----
-
-**ASSUMPTIONS:**
-1. The brief files were intended to exist but were never committed (or deleted)
-2. `lifeos-app.html` represents current authoritative shell architecture
-3. `lifeos-dashboard.html` is either iframe content OR standalone page
-4. "Mockup filenames" refers to design assets not in repository
-5. Task expects gap audit only (no code changes)
-6. Ambient voice in dashboard is intentional (not mistake)
-7. Lack of light mode in dashboard is gap (not intentional dark-only)
 
 ---
 
