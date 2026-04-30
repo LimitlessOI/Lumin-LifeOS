@@ -1,40 +1,42 @@
 # LifeOS Dashboard Builder Smoke Receipt
 
-**Reference Document**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
+**Source Brief**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 
-## Shell Architecture Understanding
+## Shell Architecture Confirmed
 
-### Desktop Layout
-- **Persistent left sidebar** for primary navigation
-- Sidebar contains category navigation and system controls
-- Layout optimized for horizontal screen real estate
+### Desktop Experience
+- **Persistent left sidebar navigation** — primary navigation chrome remains visible across all views
+- Sidebar houses category navigation and core system controls
 
-### Mobile Layout
-- **Bottom tab bar** for primary navigation (intentionally different from desktop)
-- Touch-optimized tap targets
-- Layout optimized for vertical screen real estate and thumb reach
+### Mobile Experience  
+- **Bottom tab bar navigation** — intentionally different from desktop to optimize for thumb reach and mobile ergonomics
+- Mobile and desktop layouts diverge by design, not accident
 
-### Category Dashboards
+### Category Dashboard System
 - **Swipe-ready horizontal navigation** between life category views
-- Each category dashboard is a distinct view with its own data and controls
-- Gesture support required for mobile category switching
+- Each category dashboard is a discrete view with gesture support for mobile transitions
+- Categories represent major life domains (exact taxonomy not specified in brief)
 
 ### Persistent AI Rail
-- Always-accessible AI interaction panel
-- Position and behavior may vary by viewport (desktop vs mobile)
-- Remains available across all category dashboard views
+- Always-accessible AI interaction surface
+- Remains available across all category dashboard contexts
+- Positioning strategy (fixed, floating, docked) not specified in brief
 
 ### Visual Modes
 - **Light mode**: Required
-- **Dark mode**: Required
-- Theme persistence and switching must be supported
+- **Dark mode**: Required  
+- Theme switching must be supported; persistence mechanism not specified in brief
 
-## What This Receipt Does NOT Claim
+## Scope Boundaries
 
-- No backend API endpoints specified
-- No database schema defined
-- No route handlers described
-- No service layer assumptions made
-- No authentication/authorization mechanisms invented
+This receipt confirms **UI shell architecture only**. The following are explicitly NOT claimed or invented:
 
-This receipt confirms UI/UX shell direction only. Implementation details for data fetching, state management, and backend integration are not specified in the referenced brief.
+- Backend API endpoints or routes
+- Database schema or tables
+- Authentication/authorization mechanisms  
+- State management implementation
+- Data fetching strategies
+- WebSocket or real-time requirements
+- Specific component libraries or frameworks
+
+Implementation of data layer, service integration, and runtime behavior are deferred to subsequent build phases with proper specification.
