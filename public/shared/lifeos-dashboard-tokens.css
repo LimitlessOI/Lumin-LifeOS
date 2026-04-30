@@ -1,7 +1,12 @@
-The task specifies a pure CSS file, but the output contract demands a complete HTML document.
-/* Refer to: docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md */
+The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file could not be read.
+```css
+/*
+ * CSS Tokens for LifeOS Dashboard
+ * Refer to LIFEOS_DASHBOARD_BUILDER_BRIEF.md for context.
+ */
 
-:root[data-theme="dark"] {
+/* Dark Theme (Default) */
+:root {
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
   --dash-text: #e8e8f0;
@@ -12,13 +17,15 @@ The task specifies a pure CSS file, but the output contract demands a complete H
   --dash-space-unit: 4px;
 }
 
-:root[data-theme="light"] {
+/* Light Theme */
+html[data-theme="light"] {
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
-  --dash-text: #1a1a22;
-  --dash-muted: #666677;
-  --dash-accent: #5b6af5; /* Keep accent consistent across themes */
-  --dash-border: rgba(0,0,0,0.07);
+  --dash-text: #1a1a20;
+  --dash-muted: #777788;
+  --dash-accent: #5b6af5;
+  --dash-border: rgba(0,0,0,0.1);
   --dash-radius-lg: 14px;
   --dash-space-unit: 4px;
 }
+```
