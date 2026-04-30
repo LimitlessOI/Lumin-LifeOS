@@ -1,53 +1,73 @@
-// routes/lifeos-commitment-routes.js
-import express from 'express';
-import createCommitmentTrackerService from '../services/lifeos-commitment-tracker.js';
-import makeLifeOSUserResolver from '../services/lifeos-user-resolver.js';
+/**
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * Commitment tracker API — add, complete, and list upcoming/overdue commitments.
+ * Mounted at /api/v1/lifeos/commitments
+ */
+import { Router } from 'express';
+import { createCommitmentTrackerService } from '../services/lifeos-commitment-tracker.js';
+import { makeLifeOSUserResolver } from '../services/lifeos-user-resolver.js';
 
-const createLifeOSCommitmentRoutes = ({ pool, *rk, logger }) => {
-  const router = express.Router();
+export function createLifeOSCommitmentRoutes({ pool, requireKey, logger }) {
+  const router = Router();
+  const svc = createCommitmentTrackerService(pool);
+  const resolveUserId = makeLifeOSUserResolver(pool);
+  const log = logger || console;
 
-  router.get('/', async (req, res) => {
+  // GET / — upcoming commitments (next 48h)
+  router.get('/', requireKey, async (req, res) => {
     try {
-      const userId = await makeLifeOSUserResolver({ *rk, logger }).resolve(req.query.user);
-      const commitments = await createCommitmentTrackerService({ pool, *rk, logger }).getUpcomingCommitments(userId, 48);
+      const userId = await resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const commitments = await svc.getUpcomingCommitments(userId, 48);
       res.json({ ok: true, commitments });
-    } catch (error) {
-      res.json({ ok: false, error });
+    } catch (err) {
+      log.error?.('[COMMITMENTS] GET /:', err.message);
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  router.post('/', async (req, res) => {
+  // POST / — add new commitment
+  router.post('/', requireKey, async (req, res) => {
     try {
-      const userId = await makeLifeOSUserResolver({ *rk, logger }).resolve(req.query.user);
-      const commitment = await createCommitmentTrackerService({ pool, *rk, logger }).addCommitment(userId, req.body);
-      res.json({ ok: true, commitment });
-    } catch (error) {
-      res.json({ ok: false, error });
+      const body = req.body || {};
+      const userId = await resolveUserId(body.user || req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      if (!body.text) return res.status(400).json({ ok: false, error: 'text is required' });
+      const commitment = await svc.addCommitment(userId, body);
+      res.status(201).json({ ok: true, commitment });
+    } catch (err) {
+      log.error?.('[COMMITMENTS] POST /:', err.message);
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  router.post('/:id/complete', async (req, res) => {
+  // POST /:id/complete — mark as done
+  router.post('/:id/complete', requireKey, async (req, res) => {
     try {
-      const userId = await makeLifeOSUserResolver({ *rk, logger }).resolve(req.query.user);
-      await createCommitmentTrackerService({ pool, *rk, logger }).markComplete(userId, req.params.id);
+      const userId = await resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const id = parseInt(req.params.id, 10);
+      if (!id) return res.status(400).json({ ok: false, error: 'Invalid id' });
+      await svc.markComplete(userId, id);
       res.json({ ok: true });
-    } catch (error) {
-      res.json({ ok: false, error });
+    } catch (err) {
+      log.error?.('[COMMITMENTS] POST /:id/complete:', err.message);
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
 
-  router.get('/overdue', async (req, res) => {
+  // GET /overdue — past-due commitments
+  router.get('/overdue', requireKey, async (req, res) => {
     try {
-      const userId = await makeLifeOSUserResolver({ *rk, logger }).resolve(req.query.user);
-      const commitments = await createCommitmentTrackerService({ pool, *rk, logger }).getOverdue(userId);
+      const userId = await resolveUserId(req.query.user || 'adam');
+      if (!userId) return res.status(404).json({ ok: false, error: 'User not found' });
+      const commitments = await svc.getOverdue(userId);
       res.json({ ok: true, commitments });
-    } catch (error) {
-      res.json({ ok: false, error });
+    } catch (err) {
+      log.error?.('[COMMITMENTS] GET /overdue:', err.message);
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
 
   return router;
-};
-
-export default createLifeOSCommitmentRoutes;
-```
+}
