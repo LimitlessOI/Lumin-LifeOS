@@ -2,37 +2,35 @@
 
 ## Summary
 
-**CRITICAL BLOCKER:** Both brief files returned `ENOENT`:
+**CRITICAL FINDING:** Both brief files returned `ENOENT` errors. The task asserts these files "exist on the server" and are "authoritative," but the file system could not locate them:
 - `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
 
-**The task asserts these files "exist on the server" and are "authoritative," but the file system returned read errors.** Without the brief, I cannot perform the requested comparison against specifications for sidebar, bottom tabs, AI rail direction, light/dark intent, or mobile vs desktop requirements.
-
-**What I can audit:** Observable architectural differences between `lifeos-dashboard.html` (standalone page) and `lifeos-app.html` (application shell).
+**Without the brief, I cannot perform the requested comparison.** However, I can document observable architectural differences between the two HTML files based on production code analysis.
 
 ---
 
-## Gaps vs. Brief (Inferred from Production Code Only)
+## Gaps vs. Brief (Inferred from Production Code)
 
-Since the brief files are missing, I document observable differences between the two HTML files:
+Since the brief files are missing, I document observable differences between `lifeos-dashboard.html` (standalone page) and `lifeos-app.html` (application shell):
 
 ### 1. **Sidebar**
 - **Dashboard:** ❌ No sidebar
-- **App:** ✅ Full sidebar (25+ nav items, collapsible, mobile drawer)
+- **App:** ✅ Full sidebar with 25+ nav items, collapsible, mobile drawer
 - **Gap:** Dashboard has no navigation chrome
 
 ### 2. **Bottom Tabs (Mobile)**
-- **Dashboard:** ❌ No mobile bottom nav
+- **Dashboard:** ❌ No mobile bottom navigation
 - **App:** ✅ 4 fixed tabs (Today, Inner, Health, Healing) + More sheet
-- **Gap:** Dashboard has no mobile navigation
+- **Gap:** Dashboard lacks mobile navigation
 
 ### 3. **AI Rail Direction**
-- **Dashboard:** Embedded chat card in page flow (always visible, single card)
-- **App:** Persistent drawer (right-side desktop, bottom sheet mobile) with FAB, quick-bar, topbar button, Cmd/Ctrl+L
+- **Dashboard:** Embedded chat card in page flow (always visible, single card at bottom)
+- **App:** Persistent drawer (right-side desktop, bottom sheet mobile) with FAB, quick-bar, topbar button, Cmd/Ctrl+L shortcut
 - **Gap:** Different interaction models — embedded vs. overlay
 
 ### 4. **Light/Dark Theme**
-- **Dashboard:** ❌ No `html[data-theme="light"]` CSS; `toggleTheme()` exists but does nothing
+- **Dashboard:** ❌ No `html[data-theme="light"]` CSS; `toggleTheme()` function exists but does nothing
 - **App:** ✅ Full light mode CSS with theme sync to iframe via postMessage
 - **Gap:** Dashboard theme toggle is non-functional
 
@@ -57,7 +55,7 @@ Since the brief files are missing, I document observable differences between the
 
 ### 1. **Create Missing Brief Files** (P0 — BLOCKING)
 
-**Files:**
+**Action:** Create or restore:
 - `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
 
@@ -76,7 +74,7 @@ Since the brief files are missing, I document observable differences between the
 
 **Changes:**
 - Add `html[data-theme="light"]` CSS block (copy from `lifeos-app.html` lines 126-137)
-- Fix `toggleTheme()` to set `data-theme` attribute on `<html>`
+- Fix `toggleTheme()` to actually set `data-theme` attribute on `<html>`
 - Test all cards, scores, chat in light mode
 
 ### 3. **Align Dashboard with App Shell** (if iframe content)
@@ -120,7 +118,7 @@ Since the brief files are missing, I document observable differences between the
 
 2. **Where are the mockup files?**
    - Task says "Reference mockup filenames from the brief"
-   - No mockups found
+   - No mockups found in repo
 
 3. **Why does dashboard have ambient mode but app doesn't?**
    - Should ambient voice be global or page-specific?
