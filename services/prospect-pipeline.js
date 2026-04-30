@@ -82,6 +82,8 @@ export default class ProspectPipeline {
     const previewUrl = buildResult.previewUrl;
     const name = contactName || buildResult.businessName || businessName || 'there';
     const biz = buildResult.businessName || businessName || 'your business';
+    const qualityReport = buildResult.qualityReport || buildResult.metadata?.qualityReport || null;
+    const qaHold = qualityReport ? qualityReport.readyToSend === false : false;
 
     // Step 2: Generate personalized email copy
     const emailContent = await this.generateOutreachEmail({
@@ -94,7 +96,7 @@ export default class ProspectPipeline {
 
     // Step 3: Send email (if contact email provided and not skipped)
     let emailSent = false;
-    if (contactEmail && !skipEmail) {
+    if (contactEmail && !skipEmail && !qaHold) {
       try {
         const delivery = await this.sendEmail(contactEmail, emailContent.subject, emailContent.html);
         emailSent = delivery?.success !== false;
@@ -107,6 +109,14 @@ export default class ProspectPipeline {
         logger.warn('[PROSPECT] Email send failed', { error: err.message });
       }
     }
+    if (qaHold) {
+      logger.warn('[PROSPECT] Prospect held by quality gate', {
+        businessUrl,
+        previewUrl,
+        qualityScore: qualityReport?.score,
+        issues: qualityReport?.summaryIssues,
+      });
+    }
 
     // Step 4: Record in DB
     await this.recordProspect({
@@ -117,7 +127,11 @@ export default class ProspectPipeline {
       clientId: buildResult.clientId,
       previewUrl,
       emailSent,
-      metadata: buildResult.metadata,
+      status: qaHold ? 'qa_hold' : (emailSent ? 'sent' : 'built'),
+      metadata: {
+        ...(buildResult.metadata || {}),
+        qualityReport,
+      },
     });
 
     return {
@@ -125,6 +139,8 @@ export default class ProspectPipeline {
       clientId: buildResult.clientId,
       previewUrl,
       emailSent,
+      qaHold,
+      qualityReport,
       emailSubject: emailContent.subject,
       businessName: biz,
       posPartner: buildResult.posPartner,
@@ -237,7 +253,7 @@ Return ONLY valid JSON:
           data.businessName || null,
           data.previewUrl,
           data.emailSent || false,
-          data.emailSent ? 'sent' : 'built',
+          data.status || (data.emailSent ? 'sent' : 'built'),
           JSON.stringify(data.metadata || {}),
         ]
       );

@@ -1,7 +1,7 @@
 /**
  * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * Pure-function HTML quality scorer — no DOM, no dependencies.
- * Evaluates generated site HTML for conversion readiness (0-100 score).
+ * Evaluates generated site HTML for conversion readiness with normalized percent scoring.
  */
 
 const CRITERIA = [
@@ -47,22 +47,23 @@ export function scoreGeneratedSite(html, businessInfo = {}, options = {}) {
   }
 
   const maxScore = CRITERIA.reduce((s, c) => s + c.pts, 0);
-  const pct = maxScore > 0 ? (score / maxScore) * 100 : 0;
-  const { grade } = GRADES.find(g => pct >= g.min) || GRADES[GRADES.length - 1];
+  const scorePct = maxScore > 0 ? Number(((score / maxScore) * 100).toFixed(1)) : 0;
+  const { grade } = GRADES.find(g => scorePct >= g.min) || GRADES[GRADES.length - 1];
   const summaryIssues = issues.slice(0, 6);
   const recommendedAction =
-    pct >= minExcellentScore ? 'ship' :
-    pct >= minReadyScore ? 'review_then_send' :
+    scorePct >= minExcellentScore ? 'ship' :
+    scorePct >= minReadyScore ? 'review_then_send' :
     'revise_before_send';
 
   return {
     score,
     maxScore,
+    scorePct,
     grade,
     criteria,
     issues,
     summaryIssues,
-    readyToSend: pct >= minReadyScore,
+    readyToSend: scorePct >= minReadyScore,
     recommendedAction,
     minReadyScore,
     minExcellentScore,
@@ -70,8 +71,8 @@ export function scoreGeneratedSite(html, businessInfo = {}, options = {}) {
 }
 
 export function scoreSummary(result) {
-  const { score, maxScore, grade, issues, readyToSend, recommendedAction } = result;
+  const { score, maxScore, scorePct, grade, issues, readyToSend, recommendedAction } = result;
   const issueNote = issues.length ? ` — ${issues.slice(0, 2).join(', ')}${issues.length > 2 ? ` (+${issues.length - 2} more)` : ''}.` : '.';
   const sendNote = readyToSend ? ' Ready to send.' : ' Not ready to send.';
-  return `Score: ${score}/${maxScore} (${grade}, ${recommendedAction})${issueNote}${sendNote}`;
+  return `Score: ${score}/${maxScore} (${scorePct}%, ${grade}, ${recommendedAction})${issueNote}${sendNote}`;
 }

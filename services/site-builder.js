@@ -26,10 +26,14 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import logger from './logger.js';
+import { scoreGeneratedSite, scoreSummary } from './site-builder-quality-scorer.js';
 
 const TAILWIND_CDN = 'https://cdn.tailwindcss.com';
 const ALPINE_CDN = 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js';
 const DESIGN_INTEL_PATH = path.join(process.cwd(), 'docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md');
+const MIN_SEND_SCORE = Number(process.env.SITE_BUILDER_MIN_SEND_SCORE || '72');
+const TARGET_QUALITY_SCORE = Number(process.env.SITE_BUILDER_TARGET_SCORE || '88');
+const MAX_REPAIR_PASSES = Math.max(0, Number(process.env.SITE_BUILDER_REPAIR_PASSES || '1'));
 
 // POS partner referral links — set AFFILIATE_*_URL env vars in Railway to activate commission tracking
 export const POS_PARTNERS = {
@@ -78,7 +82,24 @@ export default class SiteBuilder {
       const posPartner = this.selectPosPartner(businessInfo.industry || businessInfo.keywords || []);
 
       // Step 3: Generate main site HTML
-      const siteHtml = await this.generateSiteHtml(businessInfo, { clientId, posPartner, ...options });
+      let siteHtml = await this.generateSiteHtml(businessInfo, { clientId, posPartner, ...options });
+      let qualityReport = this.scoreSiteHtml(siteHtml, businessInfo);
+
+      // Step 3b: Repair weak output once before it ever gets surfaced.
+      if (this.callCouncil && qualityReport.scorePct < TARGET_QUALITY_SCORE && MAX_REPAIR_PASSES > 0) {
+        for (let pass = 1; pass <= MAX_REPAIR_PASSES; pass++) {
+          const repairedHtml = await this.improveSiteHtml(siteHtml, businessInfo, qualityReport, {
+            clientId,
+            posPartner,
+            pass,
+          });
+          const repairedScore = this.scoreSiteHtml(repairedHtml, businessInfo);
+          if (repairedScore.scorePct <= qualityReport.scorePct) break;
+          siteHtml = repairedHtml;
+          qualityReport = repairedScore;
+          if (qualityReport.scorePct >= TARGET_QUALITY_SCORE) break;
+        }
+      }
 
       // Step 4: Generate 3 SEO blog posts
       const blogPosts = await this.generateBlogPosts(businessInfo, 3);
@@ -119,12 +140,17 @@ export default class SiteBuilder {
         posPartner,
         blogPosts: blogPosts.map(p => ({ slug: p.slug, title: p.title })),
         videos: videos.length,
+        qualityReport,
         createdAt: new Date().toISOString(),
         previewUrl: `${this.baseUrl}/previews/${clientId}`,
       };
       await fs.writeFile(path.join(deployDir, 'meta.json'), JSON.stringify(metadata, null, 2));
 
-      logger.info('[SITE] Site deployed', { clientId, previewUrl: metadata.previewUrl });
+      logger.info('[SITE] Site deployed', {
+        clientId,
+        previewUrl: metadata.previewUrl,
+        quality: scoreSummary(qualityReport),
+      });
 
       return {
         success: true,
@@ -133,6 +159,7 @@ export default class SiteBuilder {
         businessName: businessInfo.businessName,
         blogPosts: blogPosts.length,
         posPartner: posPartner.name,
+        qualityReport,
         metadata,
       };
     } catch (err) {
@@ -374,6 +401,65 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
 
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid HTML');
+    }
+    return clean;
+  }
+
+  scoreSiteHtml(html, businessInfo = {}) {
+    return scoreGeneratedSite(html, businessInfo, {
+      minReadyScore: MIN_SEND_SCORE,
+      minExcellentScore: TARGET_QUALITY_SCORE,
+    });
+  }
+
+  async improveSiteHtml(existingHtml, info, qualityReport, options = {}) {
+    const { posPartner } = options;
+    const designIntel = await this.loadDesignIntel();
+    const prompt = `You are revising a generated local-business website that scored below target quality.
+
+BUSINESS PROFILE:
+- Name: ${info.businessName || 'The Practice'}
+- Industry: ${info.industry || 'wellness'}
+- Services: ${(info.services || []).join(', ') || 'wellness services'}
+- Target audience: ${info.targetAudience || 'local community'}
+- Location: ${info.location || ''}
+- Tone: ${info.tone || 'warm and professional'}
+- Booking URL: ${info.bookingUrl || '#book'}
+- Recommended scheduling/payments partner: ${posPartner?.name || 'Square'}
+
+CURRENT SCORE:
+- Score: ${qualityReport.score}/${qualityReport.maxScore}
+- Percent: ${qualityReport.scorePct}%
+- Grade: ${qualityReport.grade}
+- Recommended action: ${qualityReport.recommendedAction}
+- Top issues: ${(qualityReport.summaryIssues || qualityReport.issues || []).join('; ') || 'none'}
+
+DESIGN INTELLIGENCE:
+${designIntel}
+
+REVISION GOALS:
+- Keep the site truthful, specific, and conversion-oriented.
+- Fix the listed issues without bloating the page.
+- Make the mobile CTA flow clearer.
+- Strengthen trust and section hierarchy.
+- Preserve semantic HTML, Tailwind, Alpine, schema markup, and fast-loading structure.
+- If proof/testimonials are weak, replace fake-sounding claims with truthful proof framing.
+
+HARD REQUIREMENTS:
+1. Return ONE full HTML document only.
+2. Keep Tailwind + Alpine CDNs.
+3. Keep a single H1 and proper heading hierarchy.
+4. Keep visible focus states and strong CTAs.
+5. End with BUILD_COMPLETE after </html>.
+
+CURRENT HTML:
+${existingHtml}
+`;
+
+    const response = await this.callCouncil('chatgpt', prompt, { model: 'gpt-4o', maxTokens: 9000 });
+    const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
+    if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
+      throw new Error('AI did not return valid repaired HTML');
     }
     return clean;
   }

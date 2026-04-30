@@ -1,7 +1,7 @@
 # AMENDMENT 05 — Site Builder & Prospect Pipeline
-**Status:** INFRASTRUCTURE COMPLETE — awaiting Railway env vars to go live
+**Status:** QUALITY-GATED LAUNCH READY — awaiting Railway env vars + live preview verification
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-29 — Site Builder now has a manifest/verifier surface (`docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json`), a public launch/sales page at `public/overlay/site-builder-landing.html`, an operator-runnable follow-up cron at `scripts/site-builder-follow-up-cron.mjs`, and a design-intelligence source file at `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md` that is injected into generation prompts. This closes the biggest operational gaps in the lane: day-3/day-7 follow-ups now have an execution path, and design quality is governed by an explicit modern best-practices brief instead of loose prompt language. Prior: 2026-03-13.
+**Last Updated:** 2026-04-29 — Site Builder now has a manifest/verifier surface (`docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json`), a public launch/sales page at `public/overlay/site-builder-landing.html`, an operator-runnable follow-up cron at `scripts/site-builder-follow-up-cron.mjs`, a design-intelligence source file at `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md`, and a quality gate via `services/site-builder-quality-scorer.js` that scores/repairs weak output before it reaches prospects. This closes the biggest operational gaps in the lane: day-3/day-7 follow-ups now have an execution path, design quality is governed by an explicit modern best-practices brief, and weak previews can be held for revision instead of being emailed. Prior: 2026-03-13.
 
 ---
 
@@ -37,6 +37,7 @@ POS affiliate URLs now read from env vars (`AFFILIATE_JANE_APP_URL`, `AFFILIATE_
 | File | Purpose |
 |------|---------|
 | `services/site-builder.js` | Core pipeline: scrape → AI generate → deploy |
+| `services/site-builder-quality-scorer.js` | Conversion/accessibility QA scorer + send gate |
 | `services/prospect-pipeline.js` | Mock site + cold email outreach |
 | `scripts/site-builder-follow-up-cron.mjs` | Operator/cron entry point for day-3/day-7 follow-up sends |
 | `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md` | Monthly-refreshed design, SEO, accessibility, and conversion brief injected into generation prompts |
@@ -118,6 +119,7 @@ The migration was run via Neon SQL Editor against the **production** branch. All
 - **KNOW:** Follow-up automation entry point now exists at `scripts/site-builder-follow-up-cron.mjs` and uses `runFollowUpCron()` from `services/prospect-pipeline.js` ✅
 - **KNOW:** Prospect records now persist `status`, `follow_up_count`, `last_follow_up_at`, and `last_contacted_at` coherently with the service code ✅
 - **KNOW:** Site generation now loads a design-intelligence brief from `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md` so outputs follow current mobile, SEO, accessibility, performance, and conversion guidance ✅
+- **KNOW:** Generated previews are now scored before outreach; weak previews can trigger one repair pass and/or land in `qa_hold` instead of being emailed automatically ✅
 - **KNOW:** `/api/v1/sites/build` now accepts either `url` or `businessUrl`, matching the documented curl examples ✅
 - **NEED:** POS affiliate program signups → then set `AFFILIATE_*_URL` env vars in Railway
 - **THINK:** Puppeteer scraping may fail on JS-heavy sites (SPA) — AI-only fallback exists
@@ -155,7 +157,7 @@ curl -X POST https://your-app.railway.app/api/v1/sites/build \
   -H "Content-Type: application/json" \
   -d '{"businessUrl":"https://example-wellness.com","skipEmail":true}'
 ```
-Check the response for `previewUrl` — open it in browser to see the generated site.
+Check the response for `previewUrl` and `qualityReport` — open it in browser to see the generated site and confirm the score/hold logic matches what you see.
 
 ### Step 4 — Send first 5 real prospects (begins revenue pipeline)
 Find 5 local wellness businesses with bad websites (Google Maps search: "midwife [your city]", "massage therapist [your city]"), then:
@@ -165,6 +167,7 @@ curl -X POST https://your-app.railway.app/api/v1/sites/prospect \
   -H "Content-Type: application/json" \
   -d '{"businessUrl":"https://their-site.com","contactEmail":"owner@their-site.com","contactName":"Jane"}'
 ```
+If `qaHold: true` is returned, review the preview before any outreach. Do not manually bypass that gate unless a human has inspected the page.
 
 ### Step 5 — Schedule the follow-up cron (maximizes conversion rate)
 Run `node scripts/site-builder-follow-up-cron.mjs` daily from Railway, PM2, or an external cron.
@@ -196,18 +199,20 @@ Failed sends do **not** increment follow-up counters.
 - POS recommendations must disclose affiliate relationship in client-facing materials
 - Design prompt guidance must be refreshed monthly or when visible output quality drifts
 - Generated sites must optimize for mobile readability, clear CTA flow, accessibility, and Core Web Vitals rather than visual novelty alone
+- Prospect outreach must fail closed when `qualityReport.readyToSend === false`; weak previews go to `qa_hold`
 
 ## Change Receipts
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
 | 2026-04-29 | Added explicit design intelligence via `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md`; upgraded `services/site-builder.js` prompt to enforce stronger modern design, accessibility, trust, and conversion rules; improved generated blog styling consistency; patched `/api/v1/sites/build` to accept `businessUrl` as well as `url`; added missing `@ssot` tags to Site Builder source files. | “Modern” was underspecified, which risks generic output. The lane now has a real design brief, a refresh cadence, a less brittle API, and cleaner SSOT coupling for future supervised runs. | `node --check services/site-builder.js`; `node --check routes/site-builder-routes.js` |
+| 2026-04-29 | Added `services/site-builder-quality-scorer.js` to grade generated previews; `services/site-builder.js` now scores each build, attempts a bounded repair pass for weak output, and persists `qualityReport`; `services/prospect-pipeline.js` now blocks outreach into `qa_hold` when the preview is below threshold; `/api/v1/sites/dashboard` now counts `built` and `qa_hold`; added `tests/site-builder-quality-scorer.test.js`. | The lane needed a real quality gate so bad previews do not silently hit prospects. This closes the gap between “we can generate a site” and “we can trust it enough to send.” | `node --check services/site-builder-quality-scorer.js`; `node --check services/site-builder.js`; `node --check services/prospect-pipeline.js`; `node --check routes/site-builder-routes.js`; `node --test tests/site-builder-quality-scorer.test.js` |
 | 2026-04-29 | Fixed Site Builder follow-up accounting so failed sends no longer look successful; added `runFollowUpCron()` plus `scripts/site-builder-follow-up-cron.mjs`; patched the migration with `follow_up_count`, `last_follow_up_at`, and `last_contacted_at` columns; added the missing `@ssot` header tag to `services/prospect-pipeline.js`. | The lane claimed day-3/day-7 follow-ups, but there was no runnable cron entry point and the schema omitted columns already used by the service. This made the pipeline drift-prone and unreliable for unattended execution. The `@ssot` tag closes a coupling warning for future supervised runs. | `node --check services/prospect-pipeline.js`; `node --check scripts/site-builder-follow-up-cron.mjs` |
 | 2026-04-29 | **BUG FIX — markdown fences in preview HTML (hard blocker):** `services/site-builder.js` `generateSiteHtml()` — stripped `BUILD_COMPLETE` but not the leading ` ```html ` / ` ``` ` fence that AI models routinely wrap output in. Preview sites were saved with markdown fences as first bytes, causing browsers to render raw code instead of a website. Any prospect clicking a preview link before this fix would see ` ```html <!DOCTYPE html... ` as plain text. Fix: 2-line `replace()` strips leading and trailing fences after `BUILD_COMPLETE` strip. Verified live: prior test build `prev_1777510004403_536t` shows the bug; next build will be clean. Also documents: builder (council/claude_via_openrouter) hallucinated a 40-line CJS stub on its `[system-build]` commit `e1573aef` — this commit restores the correct 25KB ESM file. Platform fix needed: builder must inject real file content when `target_file` already exists on GitHub. | Live test caught the bug: preview served ` ```html ` to browser. Hard blocker for any prospect outreach. | `node --check services/site-builder.js`; live re-test |
 | 2026-04-29 | Added `docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json` with required routes, tables, assertions, and completion checks; added `public/overlay/site-builder-landing.html` as the first public front-door sales page for the lane. | Site Builder had real backend code but weaker operational discipline than TokenOS/TC: no manifest/verifier surface and no actual public offer page. These two additions make the lane easier to verify and easier to sell. | `node --check services/site-builder.js`; `node --check services/prospect-pipeline.js`; `node --check routes/site-builder-routes.js` |
 | 2026-04-30 | **CRITICAL RESTORE + FENCE FIX:** `services/site-builder.js` was overwritten with a 128-line CJS hallucination stub by the builder (`e1573aef`) — the `git checkout --ours` in the prior session's rebase incorrectly selected the wrong file. This commit restores the real 598-line ESM file from commit `f151e4ae` and applies the fence-stripping fix (`clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s*$/, '')`) to `generateSiteHtml()`. Railway was deployed with the broken stub; this commit restores full functionality. | Preview sites still showed `html\n<!DOCTYPE html` (fence not stripped). Root cause: stub never had the real generation logic; fence fix from 2026-04-29 was committed on top of the wrong file. | `node --check services/site-builder.js`; re-test preview URL |
-| 2026-04-30 | Improved `services/site-builder-quality-scorer.js` — stricter conversion-focused criteria: single H1, repeated CTAs (>=3), proof/trust section, offer clarity, FAQ/objection handling, sticky mobile CTA, focus styles. Configurable thresholds via `SITE_BUILDER_MIN_SEND_SCORE` / `SITE_BUILDER_TARGET_SCORE` env vars. `readyToSend` now based on configurable threshold (default 72), `recommendedAction` field: 'ship' / 'review_then_send' / 'revise_before_send'. | Scoring criteria were too forgiving — needed to match the design-intel brief's standards. |  `node --check services/site-builder-quality-scorer.js` |
-| 2026-04-30 | Added `services/site-builder-quality-scorer.js` — pure-function HTML quality scorer (no deps). `scoreGeneratedSite(html, businessInfo)` checks 13 criteria (doctype, viewport, headings, CTA, testimonials, pricing, contact, schema, images, length, tailwind, footer) and returns score/100, grade A-F, criteria map, issues list, and `readyToSend` flag. `scoreSummary(result)` returns a 1-sentence human readable summary. First attempt via groq_llama imported jsdom (not in package.json); GAP-FILL replaced with pure regex. | Needed to gate outreach quality — Adam should only send previews scoring ≥60. | `node --check services/site-builder-quality-scorer.js` |
+| 2026-04-30 | Improved `services/site-builder-quality-scorer.js` — stricter conversion-focused criteria: single H1, multiple H2s, repeated CTAs, proof/trust section, offer clarity, FAQ/objection handling, sticky mobile CTA, focus styles. Thresholds remain configurable via `SITE_BUILDER_MIN_SEND_SCORE` / `SITE_BUILDER_TARGET_SCORE`, but decisions now use normalized percentage scoring (`scorePct`) instead of mixing raw points with percent thresholds. | Scoring criteria were too forgiving and the first implementation mixed raw-point comparisons with percent thresholds. This keeps gating and repair decisions on the same scale. | `node --check services/site-builder-quality-scorer.js`; `node --test tests/site-builder-quality-scorer.test.js` |
+| 2026-04-30 | Added `services/site-builder-quality-scorer.js` — pure-function HTML quality scorer (no deps). `scoreGeneratedSite(html, businessInfo)` now checks 16 criteria and returns raw score, normalized percent (`scorePct`), grade A-F, criteria map, issues list, and `readyToSend` / `recommendedAction`. `scoreSummary(result)` returns a 1-sentence human readable summary. First attempt via groq_llama imported jsdom (not in package.json); GAP-FILL replaced with pure regex. | Needed to gate outreach quality so weak previews can be repaired or held instead of being sent automatically. | `node --check services/site-builder-quality-scorer.js` |
 
 ---
 

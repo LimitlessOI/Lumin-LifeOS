@@ -252,6 +252,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
     try {
       const rows = await pool.query(`
         SELECT
+          COUNT(*) FILTER (WHERE status = 'qa_hold') AS qa_hold,
+          COUNT(*) FILTER (WHERE status = 'built') AS built,
           COUNT(*) FILTER (WHERE status = 'sent') AS sent,
           COUNT(*) FILTER (WHERE status = 'viewed') AS viewed,
           COUNT(*) FILTER (WHERE status = 'replied') AS replied,
