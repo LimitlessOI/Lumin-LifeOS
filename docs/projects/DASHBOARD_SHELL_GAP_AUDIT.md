@@ -7,7 +7,7 @@
 Without the authoritative brief, this audit compares the two production HTML files against each other and documents their architectural differences. The files represent two distinct patterns:
 
 1. **lifeos-dashboard.html** (28,849 chars) — Standalone dashboard page with embedded content
-2. **lifeos-app.html** (91,838 chars) — Full application shell with sidebar, navigation, and iframe content loader
+2. **lifeos-app.html** (91,838 chars) — Full application shell with sidebar, navigation chrome, and iframe content loader
 
 ---
 
@@ -17,9 +17,9 @@ Without the authoritative brief, this audit compares the two production HTML fil
 
 | Feature | lifeos-dashboard.html | lifeos-app.html | Gap |
 |---------|----------------------|-----------------|-----|
-| **Sidebar** | ❌ None | ✅ Full sidebar with collapsible nav, 25+ sections | Dashboard has no navigation chrome |
+| **Sidebar** | ❌ None | ✅ Full sidebar with 25+ nav items across 5 groups | Dashboard has no navigation chrome |
 | **Bottom tabs (mobile)** | ❌ None | ✅ 4 fixed tabs (Today, Inner, Health, Healing) + More sheet | Dashboard has no mobile bottom nav |
-| **Topbar** | ❌ None (header with greeting) | ✅ Desktop topbar + mobile topbar with section title | Dashboard uses custom header |
+| **Topbar** | ❌ None (custom header with greeting) | ✅ Desktop topbar + mobile topbar with section title | Dashboard uses standalone header |
 | **User context** | ❌ None | ✅ User pill with avatar, dropdown (Settings, Sign Out) | Dashboard has no user UI |
 | **Settings panel** | ❌ None | ✅ Right-side drawer with account, API key, admin sections | Dashboard has no settings |
 
@@ -82,9 +82,7 @@ Without the authoritative brief, this audit compares the two production HTML fil
 
 ## Recommended Next Queued Builds
 
-### 1. **Create Missing Brief Files** (BLOCKING)
-
-**Priority:** P0 — Cannot proceed without authoritative spec
+### 1. **Create Missing Brief Files** (BLOCKING — P0)
 
 **File:** `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 
@@ -94,7 +92,7 @@ Without the authoritative brief, this audit compares the two production HTML fil
 - Mobile bottom nav tabs (which 4 sections are primary?)
 - AI rail direction (embedded card vs. persistent drawer — which is target?)
 - Light/dark theme requirements (dashboard currently dark-only)
-- Mockup references (if any exist — task mentions "Reference mockup filenames from the brief")
+- Mockup references (task mentions "Reference mockup filenames from the brief")
 
 **File:** `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
 
@@ -208,8 +206,7 @@ Without the authoritative brief, this audit compares the two production HTML fil
 
 ---
 
-## ASSUMPTIONS
-
+**ASSUMPTIONS:**
 1. The brief files were intended to exist but were never committed (or were deleted)
 2. `lifeos-app.html` represents the current authoritative shell architecture
 3. `lifeos-dashboard.html` is either:
