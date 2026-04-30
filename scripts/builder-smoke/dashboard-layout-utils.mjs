@@ -1,6 +1,6 @@
 /**
- * Dashboard layout utilities (pure, deterministic)
- * Zero dependencies, pure ESM
+ * Dashboard layout utilities
+ * Pure ESM, zero dependencies, deterministic
  */
 
 /**
