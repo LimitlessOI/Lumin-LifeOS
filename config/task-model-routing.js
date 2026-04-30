@@ -70,15 +70,16 @@ export const TASK_MODEL_MAP = {
   'lifeos.health.pattern_analysis':    'gemini_flash',
 
   // ── Council / Builder ────────────────────────────────────────────────────
-  // claude_via_openrouter = Claude Sonnet 4.5 via OpenRouter (OPENROUTER_API_KEY SET on Railway)
-  // Switch to claude_sonnet once ANTHROPIC_API_KEY is added directly to Railway vault
-  'council.builder.task':             'claude_via_openrouter', // legacy dispatch label
-  'council.builder.code':             'claude_via_openrouter', // POST /builder/task|build mode=code
-  'council.builder.code_execute':     'claude_via_openrouter', // mode=code + execution_only
-  'council.builder.plan':             'gemini_flash',          // planning is free-tier safe
-  'council.builder.review':           'claude_via_openrouter', // code review needs quality model
-  'council.builder.code_review':      'claude_via_openrouter',
-  'council.gate_change.debate':       'claude_via_openrouter', // §2.6 ¶8 — constitutional debate
+  // NOTE: claude_via_openrouter hitting HTTP 402 (OpenRouter credits exhausted) as of 2026-04-30.
+  // Temporarily routed to gemini_flash (free tier, SET on Railway) until OpenRouter is topped up.
+  // Restore to claude_via_openrouter once credits are added: https://openrouter.ai/credits
+  'council.builder.task':             'gemini_flash',    // was: claude_via_openrouter
+  'council.builder.code':             'gemini_flash',    // was: claude_via_openrouter
+  'council.builder.code_execute':     'groq_llama',      // frozen spec → groq is fast enough
+  'council.builder.plan':             'gemini_flash',    // planning is free-tier safe
+  'council.builder.review':           'gemini_flash',    // was: claude_via_openrouter
+  'council.builder.code_review':      'gemini_flash',    // was: claude_via_openrouter
+  'council.gate_change.debate':       'gemini_flash',    // was: claude_via_openrouter
 
   // ── Email / Outreach ─────────────────────────────────────────────────────
   'outreach.email.draft':             'groq_llama',
