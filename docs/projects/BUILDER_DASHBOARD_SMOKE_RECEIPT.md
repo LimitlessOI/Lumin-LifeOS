@@ -1,42 +1,43 @@
 # LifeOS Dashboard Builder Smoke Receipt
 
-**Source Document**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
+**Source**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 
-## Shell Architecture Understanding
+## Shell Architecture Confirmed
 
-### Desktop Layout
-- **Persistent left sidebar** for primary navigation
-- Sidebar remains visible across all views and category dashboards
+### Desktop Experience
+- **Persistent left sidebar navigation** — primary chrome for desktop users
+- Sidebar remains visible across all category dashboard views
 
-### Mobile Layout
-- **Bottom tab bar** for primary navigation
-- Mobile and desktop layouts **differ intentionally** — not responsive variants, but distinct UX patterns optimized for each form factor
+### Mobile Experience  
+- **Bottom tab bar navigation** — optimized for thumb-zone interaction
+- Mobile and desktop layouts **differ intentionally** (not responsive variants of the same pattern)
 
 ### Category Dashboard System
 - **Swipe-ready horizontal navigation** between life category dashboards
-- Each category dashboard is a discrete view
-- Touch gesture support required for mobile category transitions
+- Each category represents a major life domain with its own dashboard view
+- Touch gesture support required for mobile transitions
 
 ### Persistent AI Rail
 - Always-accessible AI interaction surface
-- Remains available across all category dashboard contexts
-- Must persist regardless of active category or navigation state
+- Remains available across all category contexts
+- Must persist regardless of active dashboard or navigation state
 
 ### Visual Modes
 Both themes are **required**:
 - **Light mode**
 - **Dark mode**
 
-Theme switching and persistence must be supported.
+Theme switching and persistence must be supported across all views.
 
 ## Scope Boundaries
 
-This receipt confirms **UI shell architecture only**. No claims are made about:
-- Backend API endpoints
-- Database schema
-- Authentication mechanisms
+This receipt confirms **UI shell architecture direction only**. No claims are made regarding:
+- Backend API endpoints or routes
+- Database schema or tables
+- Authentication/authorization mechanisms
 - State management implementation
 - Data fetching strategies
-- Specific frameworks or libraries
+- Specific component libraries or frameworks
+- WebSocket or real-time requirements
 
-Implementation details for data layer and service integration are deferred to subsequent specifications.
+Implementation of data layer, service integration, and runtime behavior are deferred to subsequent build phases with proper specification.
