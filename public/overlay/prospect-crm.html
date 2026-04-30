@@ -1,0 +1,229 @@
+<!-- @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md -->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prospect CRM — Site Builder</title>
+  <script src="/overlay/lifeos-theme.js"></script>
+  <style>
+    :root {
+      --bg: #0f1117; --surface: #1a1d27; --surface2: #1f2230;
+      --accent: #6C63FF; --text: #e0e0e0; --text2: #a0a0a0;
+      --border: #2e3045; --success: #22c55e; --warn: #f59e0b; --danger: #ef4444;
+      --row-alt: #181c29;
+    }
+    html[data-theme="light"] {
+      --bg: #f4f4f8; --surface: #fff; --surface2: #f0f0f6;
+      --text: #1a1d27; --text2: #555; --border: #dde; --row-alt: #f8f8fc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; font-size: 14px; min-height: 100vh; }
+    .page { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+    .subtitle { color: var(--text2); font-size: 0.85rem; margin-bottom: 20px; }
+    .stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+    .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 20px; flex: 1; min-width: 120px; }
+    .stat-num { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 0.8rem; color: var(--text2); }
+    .filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
+    .filters label { color: var(--text2); font-size: 0.85rem; }
+    select { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; }
+    .check-wrap { display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text2); font-size: 0.85rem; }
+    .check-wrap input { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+    .refresh-btn { margin-left: auto; background: transparent; border: 1px solid var(--border); color: var(--text2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: border-color 0.2s; }
+    .refresh-btn:hover { border-color: var(--accent); color: var(--text); }
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--surface2); text-align: left; padding: 10px 14px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text2); border-bottom: 1px solid var(--border); }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: var(--row-alt); }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .badge-pending { background: #f59e0b22; color: var(--warn); }
+    .badge-sent    { background: #22c55e22; color: var(--success); }
+    .badge-bounced { background: #ef444422; color: var(--danger); }
+    .badge-skipped { background: #6b728022; color: var(--text2); }
+    .score { font-weight: 700; }
+    .score-a { color: var(--success); }
+    .score-b { color: #86efac; }
+    .score-c { color: var(--warn); }
+    .score-d, .score-f { color: var(--danger); }
+    .actions { display: flex; gap: 6px; }
+    .btn { padding: 5px 12px; border-radius: 6px; font-size: 0.8rem; border: 1px solid var(--border); cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.15s; }
+    .btn-view  { background: transparent; color: var(--accent); border-color: var(--accent); }
+    .btn-view:hover { background: var(--accent); color: #fff; }
+    .btn-send  { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-send:hover { background: #5a52cc; }
+    .btn-send:disabled { opacity: 0.4; cursor: not-allowed; }
+    .empty { padding: 40px; text-align: center; color: var(--text2); }
+    .loading { padding: 40px; text-align: center; color: var(--text2); }
+    .error-msg { background: #ef444411; border: 1px solid #ef444433; color: var(--danger); padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.85rem; display: none; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Prospect CRM</h1>
+    <p class="subtitle">Site builder prospects — review and send outreach</p>
+
+    <div id="error-msg" class="error-msg"></div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total Prospects</div></div>
+      <div class="stat"><div class="stat-num" id="stat-sent">—</div><div class="stat-label">Emails Sent</div></div>
+      <div class="stat"><div class="stat-num" id="stat-pending">—</div><div class="stat-label">Pending</div></div>
+      <div class="stat"><div class="stat-num" id="stat-ready">—</div><div class="stat-label">Score ≥60 (Ready)</div></div>
+    </div>
+
+    <div class="filters">
+      <label>Status:</label>
+      <select id="filter-status" onchange="renderTable()">
+        <option value="all">All</option>
+        <option value="pending">Pending</option>
+        <option value="sent">Sent</option>
+        <option value="bounced">Bounced</option>
+      </select>
+      <label class="check-wrap">
+        <input type="checkbox" id="filter-ready" onchange="renderTable()"> Quality ≥60 only
+      </label>
+      <button class="refresh-btn" onclick="loadProspects()">↻ Refresh</button>
+    </div>
+
+    <div class="table-wrap">
+      <div id="table-loading" class="loading">Loading prospects…</div>
+      <table id="prospect-table" style="display:none">
+        <thead>
+          <tr>
+            <th>Business</th>
+            <th>Quality</th>
+            <th>Email Status</th>
+            <th>Preview</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+      <div id="table-empty" class="empty" style="display:none">No prospects match the current filters.</div>
+    </div>
+  </div>
+
+  <script>
+    const KEY = localStorage.getItem('lifeos_command_key') || '';
+    const API_BASE = '';
+    let allProspects = [];
+
+    function apiHeaders() {
+      return { 'Content-Type': 'application/json', 'x-command-key': KEY };
+    }
+
+    async function loadProspects() {
+      document.getElementById('table-loading').style.display = 'block';
+      document.getElementById('prospect-table').style.display = 'none';
+      document.getElementById('table-empty').style.display = 'none';
+      try {
+        const r = await fetch(`${API_BASE}/api/v1/sites/prospects`, { headers: apiHeaders() });
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const d = await r.json();
+        allProspects = d.prospects || d.data || [];
+        updateStats();
+        renderTable();
+      } catch (e) {
+        showError('Failed to load prospects: ' + e.message);
+      } finally {
+        document.getElementById('table-loading').style.display = 'none';
+      }
+    }
+
+    function updateStats() {
+      const total = allProspects.length;
+      const sent = allProspects.filter(p => p.email_status === 'sent').length;
+      const pending = allProspects.filter(p => !p.email_status || p.email_status === 'pending').length;
+      const ready = allProspects.filter(p => (p.quality_score || 0) >= 60).length;
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-sent').textContent = sent;
+      document.getElementById('stat-pending').textContent = pending;
+      document.getElementById('stat-ready').textContent = ready;
+    }
+
+    function renderTable() {
+      const statusFilter = document.getElementById('filter-status').value;
+      const readyOnly = document.getElementById('filter-ready').checked;
+      let rows = allProspects;
+      if (statusFilter !== 'all') rows = rows.filter(p => p.email_status === statusFilter);
+      if (readyOnly) rows = rows.filter(p => (p.quality_score || 0) >= 60);
+
+      const tbody = document.getElementById('table-body');
+      if (!rows.length) {
+        document.getElementById('prospect-table').style.display = 'none';
+        document.getElementById('table-empty').style.display = 'block';
+        return;
+      }
+      document.getElementById('table-empty').style.display = 'none';
+      document.getElementById('prospect-table').style.display = 'table';
+
+      tbody.innerHTML = rows.map(p => {
+        const score = p.quality_score || 0;
+        const grade = score >= 90 ? 'a' : score >= 75 ? 'b' : score >= 60 ? 'c' : score >= 45 ? 'd' : 'f';
+        const status = p.email_status || 'pending';
+        const date = p.created_at ? new Date(p.created_at).toLocaleDateString() : '—';
+        const sent = status === 'sent' || status === 'bounced';
+        return `<tr>
+          <td><strong>${esc(p.business_name || p.businessName || '—')}</strong><br><small style="color:var(--text2)">${esc(p.industry || '')}</small></td>
+          <td class="score score-${grade}">${score}/100 (${grade.toUpperCase()})</td>
+          <td><span class="badge badge-${status}">${status}</span></td>
+          <td>${p.preview_url ? `<a href="${esc(p.preview_url)}" target="_blank" style="color:var(--accent);font-size:0.8rem">View ↗</a>` : '—'}</td>
+          <td style="color:var(--text2)">${date}</td>
+          <td class="actions">
+            ${p.preview_url ? `<a class="btn btn-view" href="${esc(p.preview_url)}" target="_blank">Preview</a>` : ''}
+            <button class="btn btn-send" onclick="sendOutreach('${p.id}', this)" ${sent ? 'disabled title="Already sent"' : ''}>${sent ? 'Sent' : 'Send'}</button>
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function sendOutreach(id, btn) {
+      if (!confirm('Send outreach email to this prospect?')) return;
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const r = await fetch(`${API_BASE}/api/v1/sites/prospects/${id}/outreach`, {
+          method: 'POST', headers: apiHeaders(), body: JSON.stringify({})
+        });
+        const d = await r.json();
+        if (d.ok) {
+          btn.textContent = 'Sent ✓';
+          btn.style.background = '#22c55e';
+          const p = allProspects.find(x => String(x.id) === String(id));
+          if (p) p.email_status = 'sent';
+          updateStats();
+        } else {
+          throw new Error(d.error || 'Send failed');
+        }
+      } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'Send';
+        showError('Outreach failed: ' + e.message);
+      }
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => { el.style.display = 'none'; }, 8000);
+    }
+
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    if (!KEY) {
+      const k = prompt('Enter your x-command-key:');
+      if (k) { localStorage.setItem('lifeos_command_key', k); location.reload(); }
+    }
+
+    loadProspects();
+  </script>
+</body>
+</html>

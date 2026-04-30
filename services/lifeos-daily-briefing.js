@@ -1,72 +1,50 @@
-// services/lifeos-daily-briefing.js
-import { Pool } from 'pg';
-import { callCouncilMember } from './lifeos-ccm.js';
+/**
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ * Morning briefing assembler — queries calendar, MITs, and habits for today's context.
+ */
 
-export default function createDailyBriefingService(pool, *ccm) {
-  return {
-    async assembleBriefing(userId) {
-      const query = {
-        text: `
-          SELECT 
-            starts_at, 
-            title 
-          FROM 
-            lifeos_calendar_events 
-          WHERE 
-            date(starts_at) = CURRENT_DATE;
-        `,
-        rowMode: 'array',
-      };
+export function createDailyBriefingService(pool, callCouncilMember) {
+  async function assembleBriefing(userId) {
+    const today = new Date().toISOString().slice(0, 10);
 
-      const calendarEvents = await pool.query(query);
+    const [eventsRes, mitsRes, habitsRes] = await Promise.all([
+      pool.query(
+        `SELECT title, starts_at, ends_at, location FROM lifeos_calendar_events
+         WHERE user_id = $1 AND date(starts_at AT TIME ZONE 'UTC') = $2 ORDER BY starts_at`,
+        [userId, today]
+      ),
+      pool.query(
+        `SELECT text, completed FROM lifeos_mits
+         WHERE user_id = $1 AND date(created_at AT TIME ZONE 'UTC') = $2`,
+        [userId, today]
+      ),
+      pool.query(
+        `SELECT h.id, h.name,
+           COUNT(c.id) FILTER (WHERE c.completed_date >= CURRENT_DATE - 6) AS recent_completions
+         FROM lifeos_habits h
+         LEFT JOIN lifeos_habit_completions c ON c.habit_id = h.id AND c.user_id = h.user_id
+         WHERE h.user_id = $1 GROUP BY h.id, h.name ORDER BY h.name`,
+        [userId]
+      ),
+    ]);
 
-      query.text = `
-        SELECT 
-          text, 
-          completed 
-        FROM 
-          lifeos_mits 
-        WHERE 
-          date = CURRENT_DATE;
-      `;
+    return {
+      date: new Date().toISOString(),
+      calendarEvents: eventsRes.rows,
+      mits: mitsRes.rows,
+      habitStreaks: habitsRes.rows,
+      summary: `${eventsRes.rows.length} events, ${mitsRes.rows.filter(m => !m.completed).length} pending MITs, ${habitsRes.rows.length} tracked habits`,
+    };
+  }
 
-      const mits = await pool.query(query);
+  async function generateSpokenBriefing(userId) {
+    const data = await assembleBriefing(userId);
+    if (!callCouncilMember) return { text: data.summary, data };
 
-      query.text = `
-        SELECT 
-          name, 
-          id 
-        FROM 
-          lifeos_habits 
-        WHERE 
-          id IN (
-            SELECT 
-              habit_id 
-            FROM 
-              lifeos_habit_streaks 
-            WHERE 
-              streak_date = CURRENT_DATE
-          );
-      `;
+    const prompt = `You are a personal assistant. Write a concise 2-3 sentence spoken morning briefing for Adam based on this data: ${JSON.stringify(data)}. Be warm, specific, and actionable. No markdown.`;
+    const text = await callCouncilMember('gemini_flash', prompt, { taskType: 'general', maxOutputTokens: 200 });
+    return { text: typeof text === 'string' ? text : text?.content || data.summary, data };
+  }
 
-      const habitStreaks = await pool.query(query);
-
-      const summary = `Today's calendar events: ${calendarEvents.length}, MITs: ${mits.length}, Habit streaks: ${habitStreaks.length}`;
-
-      return {
-        date: new Date().toISOString(),
-        calendarEvents,
-        mits,
-        habitStreaks,
-        summary,
-      };
-    },
-
-    async generateSpokenBriefing(userId) {
-      const briefing = await this.assembleBriefing(userId);
-      const prompt = `Write a 3-sentence morning briefing for ${userId} based on the following data: ${JSON.stringify(briefing)}`;
-      const { text, data } = await callCouncilMember('gemini_flash', prompt);
-      return { text, data: briefing };
-    },
-  };
+  return { assembleBriefing, generateSpokenBriefing };
 }
