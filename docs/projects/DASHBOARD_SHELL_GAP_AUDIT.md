@@ -2,13 +2,11 @@
 
 ## Summary
 
-**CRITICAL BLOCKER:** Both brief files returned `ENOENT` errors:
+**CRITICAL BLOCKER:** Both brief files returned `ENOENT` errors despite task assertion that they "exist on the server":
 - `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
 
-The task asserts these files "exist on the server" and are "authoritative," but the file system could not locate them. **Without the brief, I cannot perform the requested comparison against specifications for sidebar, bottom tabs, AI rail direction, light/dark intent, or mobile vs desktop requirements.**
-
-However, I can document observable architectural differences between `lifeos-dashboard.html` (standalone page) and `lifeos-app.html` (application shell) based on production code analysis.
+**Without the brief, I cannot perform the requested comparison.** However, I can document observable architectural differences between `lifeos-dashboard.html` (standalone page) and `lifeos-app.html` (application shell) based on production code analysis.
 
 ---
 
