@@ -12,10 +12,10 @@
 *   **Collapsed State:** A minimal, one-line strip displaying Lumin's status (e.g., "Ready," "Listening," "Thinking") or a snippet of the last interaction.
 *   **Expanded State:** Reveals a scrollable transcript-like view of recent Lumin interactions, including a multi-line text input field.
 *   **Voice/Text Parity:** Ensures a consistent user experience regardless of whether input is provided via text or voice, and AI responses are delivered in both modalities (text display and optional read-aloud).
-*   **Read-Aloud:** AI responses within the rail can be audibly read using text-to-speech (TTS) capabilities.
-*   **Integration with Existing Lumin Chat:** The rail will leverage the existing `luminState` (for thread management and message sending) and `VM` (VoiceManager) from `lifeos-app.html` and `lifeos-chat.html` respectively.
+*   **Read-Aloud:** AI responses within the rail can be audibly read using text-to-speech (TTS) capabilities, leveraging the existing `VM.speak` functionality.
+*   **Integration with Existing Lumin Chat:** The rail will leverage the existing `luminState` (for thread management and message sending) and `VM` (VoiceManager) from `lifeos-app.html` and `lifeos-chat.html` respectively. It will use `luminSend`, `_appendLuminMsg`, `_appendLuminMsgRaw`, `luminBootThread`, `luminLoadMessages`, and `luminAutoResize`.
 *   **Global Voice Input:** Integrates with the `toggleAlwaysListen` functionality, allowing system-wide voice input to be routed to and processed by the rail.
-*   **Full Chat Launch:** Provides a clear and accessible entry point to transition from the rail to the full `lifeos-chat.html` experience.
+*   **Full Chat Launch:** Provides a clear and accessible entry point to transition from the rail to the full `lifeos-chat.html` experience via `openFullChat`.
 
 ## Non-goals
 
@@ -29,18 +29,18 @@
 
 **Phase 1: Core UI & Text Interaction (MVP)**
 
-1.  **UI Development:** Implement the HTML and CSS for the dockable rail, defaulting to a bottom-docked position.
+1.  **UI Development:** Implement the HTML and CSS for the dockable rail, defaulting to a bottom-docked position. This includes the collapsed one-line strip and the expanded transcript view with a text input.
 2.  **State Management:** Develop the JavaScript logic for transitioning between the collapsed (one-line strip) and expanded (transcript + input) UI states.
-3.  **Text Input/Output:** Wire the rail's text input field to the existing `luminSend` function and display AI responses using `_appendLuminMsg` and `_appendLuminMsgRaw`.
-4.  **Thread Initialization:** Ensure the rail correctly utilizes `luminBootThread` and `luminLoadMessages` to display relevant conversation history upon opening the expanded view.
-5.  **Full Chat Access:** Implement a clear UI element within the rail to launch the full `lifeos-chat.html` interface.
+3.  **Text Input/Output:** Wire the rail's text input field to the existing `luminSend` function and display AI responses using `_appendLuminMsg` and `_appendLuminMsgRaw`. Ensure `luminAutoResize` is applied to the rail's input.
+4.  **Thread Initialization:** Ensure the rail correctly utilizes `luminBootThread` and `luminLoadMessages` to display relevant conversation history upon opening the expanded view, using `luminState.threadId`.
+5.  **Full Chat Access:** Implement a clear UI element within the rail to launch the full `lifeos-chat.html` interface via `openFullChat`.
 
 **Phase 2: Voice Integration & Read-Aloud**
 
-1.  **Voice Input Integration:** Integrate the `VM` (VoiceManager) or a dedicated voice input mechanism into the rail, enabling users to provide input via speech.
+1.  **Voice Input Integration:** Integrate the `VM` (VoiceManager) or a dedicated voice input mechanism into the rail, enabling users to provide input via speech. This will involve adapting `VM.startListening` or a similar mechanism for the rail's input.
 2.  **Read-Aloud Functionality:** Enable text-to-speech for Lumin's responses within the rail, leveraging `VM.speak` for audible feedback.
-3.  **Global Voice Sync:** Connect the rail's voice input to the `toggleAlwaysListen` functionality, allowing voice commands from anywhere in LifeOS to be routed to the rail.
-4.  **Voice Status Display:** Implement UI elements within the rail to clearly indicate the current voice status (e.g., "Listening," "Speaking," "Ready").
+3.  **Global Voice Sync:** Connect the rail's voice input to the `toggleAlwaysListen` functionality, allowing voice commands from anywhere in LifeOS to be routed to the rail's input and processed by `luminSend`.
+4.  **Voice Status Display:** Implement UI elements within the rail to clearly indicate the current voice status (e.g., "Listening," "Speaking," "Ready") by adapting `VM.setStatus` or similar.
 
 **Phase 3: UI/UX Refinements & Docking Options**
 
