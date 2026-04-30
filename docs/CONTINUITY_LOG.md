@@ -32,6 +32,89 @@
 
 ---
 
+## [BUILD] Update 2026-04-30 #19 — Builder: HTML codegen output cap (fix truncation-before-body)
+
+### Files changed
+- `routes/lifeos-council-builder-routes.js` — **`estimateBuilderMaxOutputTokens`** takes **`target_file`**, uses **`BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP`** (default **65536**) / **`BUILDER_CODE_MAX_OUTPUT_TOKENS_CAP`** (default **16384**); HTML fallback floor when estimator is null matches HTML cap; **`validateGeneratedOutputForTarget`** distinguishes truncate-in-**`<head>`** vs generic structure failure.
+- `docs/SYSTEM_CAPABILITIES.md` — **B4** notes + changelog row.
+- `docs/BUILDER_OPERATOR_ENV.md` — optional server tuning table.
+- `docs/ENV_REGISTRY.md` — optional **`BUILDER_*_MAX_OUTPUT_TOKENS_CAP`** rows.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **Last Updated**, **Change Receipts**, **Agent Handoff** IN PROGRESS pointer (redeploy → retry **`dashboard-ai-rail`** **`/build`**).
+
+### State after this session
+- **KNOW (local/repo):** platform fix addresses **`/builder/gaps`** failures where HTML output had **`<!DOCTYPE`/`<html`/`<head>`** but provider stopped before **`<body>`**, tripping structure validation after **`gemini_flash`** hit the old **~16k** completion ceiling.
+
+### Next agent: start here
+- **Push → redeploy Railway** → rerun **`POST /api/v1/lifeos/builder/build`** for **`dashboard-ai-rail`** on **`public/overlay/lifeos-dashboard.html`**; then continue **`LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`** (customization-state, widget-density, …) or **`npm run lifeos:builder:daemon`**.
+
+---
+
+## [PLAN] Update 2026-04-30 #18 — Universal overlay distribution law (install-one/access-all, shared data fabric)
+
+### Files changed
+- `docs/projects/AMENDMENT_37_UNIVERSAL_OVERLAY.md` — elevated the explicit operating model Adam stated:
+  - one universal overlay container
+  - separate apps/modules with their own product SSOTs
+  - permissioned cross-app data sharing
+  - install-one/access-all ecosystem behavior
+  - added architecture subsection `### Program model (app-store style on one overlay)` and backlog note for entitlement matrix defaults.
+
+### State after this session
+- Universal overlay doc now matches current operator intent and no longer depends on implied interpretation from earlier wording.
+
+### Next agent: start here
+- Implement entitlement/visibility policy in extension status/bootstrap route so “install-one/access-all” has explicit defaults and a user-facing control surface.
+
+---
+
+## [PLAN] Update 2026-04-30 #17 — NSSOT: LifeOS mockup conformance + consumer/B2B split + defer Command Center omnibus
+
+### Files changed
+- `docs/SSOT_NORTH_STAR.md` — **Article II §2.11a** new **¶6** (distinct programs despite one stack), **¶7** (LifeOS conforms to **`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`** + **`docs/mockups/`** boards), **¶8** (Command Center omnibus deferred until supervised builder maturity / gap closure with receipts). **Version** line 2026-04-30.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **`### Constitutional LifeOS UX SSOT`** under **`## Scope`**; **`## Agent Handoff Notes`** Visual SSOT row; **Change Receipt**; **Last Updated** (table + footer).
+- `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` — **Constitutional anchor** row (§2.11a ¶7 pointer).
+- `products/api-service/index.html` — copy clarifies **separate programs** (NSSOT ¶6), not blended app.
+
+### State after this session
+- **Adam directive captured in constitution:** ship LifeOS consumer UI against mockups; do not collapse B2B into LifeOS story; omnibus Command & Control linkage later, after builder supervisor self-repair posture is receipted (**§2.11a ¶8**).
+
+### Next agent: start here
+- Builder specs for `lifeos-dashboard.html` / shell must cite this brief + named mockups; visual diff acceptance before declaring done.
+
+---
+
+## [FIX] Update 2026-04-30 #16 — Root `/` blank page + SSOT vs shipped dashboard (operator alignment)
+
+### Files changed
+- `products/api-service/index.html` — was **truncated** (~8 lines, incomplete `<script>`) from an `[auto-builder]` commit, causing **white screen** at production origin root. Replaced with a small static page: primary **LifeOS** → `/lifeos`, TokenOS → `/token-os`, note that dashboard pixels are gated by **`docs/mockups/*.png`** + **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`** (execution still divergent until builder slices close the gap).
+
+### KNOW / THINK
+- **KNOW:** `GET /` is wired in `routes/public-routes.js` to **`products/api-service/index.html`** (not `lifeos-app.html`). Seeing “AI API Cost Savings” tab at root is expected historically; blank content was broken file contents, not “LifeOS failing to load.”
+- **THINK:** Screenshots mixing **iframe Today** vs **Dashboard** vs partial widgets reflect **multiple surfaces** (`lifeos-today.html` vs `lifeos-dashboard.html` in shell) + overnight builder work that did not fully reconcile to mockup boards — an execution/process gap, not solved by the earlier `?layout=` shell param alone.
+
+### Next agent: start here
+- Treat **`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`** + mockup PNGs as **visual SSOT** for dashboard work; diff `public/overlay/lifeos-dashboard.html` against brief **§ Visual source boards** before new builder tasks.
+- Optional: redirect **`GET /`** to **`/lifeos`** if product decision demotes API landing (needs explicit Adam call — revenue lane vs LifeOS home).
+
+### SSOT
+- `docs/projects/AMENDMENT_10_API_COST_SAVINGS.md` — Change Receipt + handoff root note.
+
+---
+
+## [BUILD] Update 2026-04-30 #15 — LifeOS shell `?layout=` (auto / mobile / desktop)
+
+### Files changed
+- `public/overlay/lifeos-app.html` — `?layout=auto` default (responsive ≤599px mobile chrome unchanged); `?layout=mobile` and `?layout=desktop` force shell chrome via `html.lifeos-layout-*` (sidebar, mobile top/bottom nav, Lumin drawer geometry, FAB offset). `data-lifeos-layout` on `<html>`.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Change Receipt + handoff **`Shell layout (bookmarks)`** row + footer **Last Updated**.
+
+### State after this session
+- **KNOW:** No server change; overlays only. Existing users keep automatic layout from viewport width.
+
+### Next agent: start here
+- Product backlog unchanged (dashboard AI rail, etc.). Optional later: PWA **`lifeos.webmanifest`** shortcut URLs with embedded `layout` if Adam wants discrete home-screen icons.
+
+---
+
 ## [BUILD] Update 2026-04-30 #14 — **Supervised overnight build session — 15 new files + fence fix live**
 
 ### Files changed (all)

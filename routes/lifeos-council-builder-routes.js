@@ -132,8 +132,12 @@ function stripLeadingMarkdownFenceBeforeMetadata(text) {
   return h + tail;
 }
 
-/** Builder codegen: estimate output token budget from injected repo files (full-file replacement). */
-function estimateBuilderMaxOutputTokens(summaries, filesContentBlock) {
+/**
+ * Builder codegen: estimate output token budget from injected repo files (full-file replacement).
+ * @param {string} [targetFile] — When ending in `.html`, uses a higher output cap so large overlays
+ *   are not truncated mid-`<head>` (validated as "missing structure" though `<!DOCTYPE` was emitted).
+ */
+function estimateBuilderMaxOutputTokens(summaries, filesContentBlock, targetFile) {
   let totalChars = 0;
   if (Array.isArray(summaries)) {
     for (const s of summaries) {
@@ -146,8 +150,17 @@ function estimateBuilderMaxOutputTokens(summaries, filesContentBlock) {
   // on providers that validate total request token budget (Gemini Flash, Groq).
   if (totalChars === 0) return null;
   const estimated = Math.ceil(totalChars / 2.5) + 4096;
-  // Cap at 16384 — above this, providers reject or produce degraded output.
-  return Math.min(16384, Math.max(4096, estimated));
+  const isHtml = /\.html$/i.test(String(targetFile || ''));
+  const htmlCap = Math.min(
+    128_000,
+    Math.max(4096, parseInt(process.env.BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP || '65536', 10) || 65536),
+  );
+  const codeCap = Math.min(
+    32_768,
+    Math.max(4096, parseInt(process.env.BUILDER_CODE_MAX_OUTPUT_TOKENS_CAP || '16384', 10) || 16384),
+  );
+  const cap = isHtml ? htmlCap : codeCap;
+  return Math.min(cap, Math.max(4096, estimated));
 }
 
 function builderTargetsHtml(files, targetFile) {
@@ -238,6 +251,14 @@ function validateGeneratedOutputForTarget(targetFile, output) {
     const hasHtmlWrapper = /<html[\s>]/i.test(text) && /<\/html>/i.test(text);
     const hasHtml5Structure = /<!DOCTYPE\s+html/i.test(text) && /<head[\s>]/i.test(text) && /<body[\s>]/i.test(text);
     if (!hasHtmlWrapper && !hasHtml5Structure) {
+      const truncatedInHead =
+        /<!DOCTYPE\s+html/i.test(text) &&
+        /<html[\s>]/i.test(text) &&
+        /<head[\s>]/i.test(text) &&
+        !/<body[\s>]/i.test(text);
+      if (truncatedInHead) {
+        return 'generated HTML appears truncated before <body> (output token budget too small for full-file regeneration, or provider cut off). Retry with BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP or split CSS/markup into a smaller target file.';
+      }
       return 'generated HTML is missing required document structure (<html> wrapper OR <!DOCTYPE html> + <head> + <body>)';
     }
   }
@@ -733,12 +754,16 @@ export function createLifeOSCouncilBuilderRoutes({
       // Use estimateBuilderMaxOutputTokens for code mode (file-context aware); for chat
       // mode targeting a source file, floor at 4096 so the model can complete functions.
       const estimatedMax = mode === 'code'
-        ? estimateBuilderMaxOutputTokens(filesInjectSummaries, filesContentBlock)
+        ? estimateBuilderMaxOutputTokens(filesInjectSummaries, filesContentBlock, bodyTargetFile)
         : null;
-      // HTML overlays need 8192+ tokens; JS services/routes need 4096; plans/chat 2048.
+      // Fallback when estimator returns null (no file context): HTML overlays still need enough room for real pages.
       const isHtmlTarget = /\.html$/i.test(String(bodyTargetFile || ''));
-      const maxOutputTokens = estimatedMax ||
-        (isHtmlTarget ? 8192 : bodyTargetFile || filesContentBlock ? 4096 : 2048);
+      const htmlFloor = Math.min(
+        128_000,
+        Math.max(8192, parseInt(process.env.BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP || '65536', 10) || 65536),
+      );
+      const maxOutputTokens =
+        estimatedMax || (isHtmlTarget ? htmlFloor : bodyTargetFile || filesContentBlock ? 4096 : 2048);
       const result = await callCouncilMember(memberKey, fullPrompt, {
         useCache: false,
         allowModelDowngrade: false,

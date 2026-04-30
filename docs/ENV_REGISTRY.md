@@ -193,6 +193,17 @@ Optional: `npm run verify:clientcare-billing:remote` (uses `PUBLIC_BASE_URL` fro
 
 ---
 
+## 🧱 Council builder — optional output caps (Railway)
+
+Tuning only; defaults are wired in **`routes/lifeos-council-builder-routes.js`**. See **`docs/BUILDER_OPERATOR_ENV.md`** → *Large HTML overlays*.
+
+| Variable | Status | Purpose | Used By |
+|---|---|---|---|
+| `BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP` | 🔲 OPTIONAL | Raise/lower max **completion** tokens for **`.html`** `/builder/task` · `/builder/build` | `lifeos-council-builder-routes.js` |
+| `BUILDER_CODE_MAX_OUTPUT_TOKENS_CAP` | 🔲 OPTIONAL | Cap for estimated non-HTML codegen output | `lifeos-council-builder-routes.js` |
+
+---
+
 ## 📧 Email
 
 | Variable | Status | Purpose | Used By |

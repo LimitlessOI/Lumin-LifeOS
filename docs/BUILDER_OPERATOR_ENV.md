@@ -29,6 +29,17 @@ Implemented in `server.js` (Railway GraphQL via `RAILWAY_TOKEN` + project/servic
 | `DATABASE_URL` | Pool + builder audit / probes where applicable |
 | Provider keys (e.g. Groq/Gemini) | `callCouncilMember` on the **server** — laptop keys are not required if you only HTTP to Railway |
 
+### Large HTML overlays (`POST /builder/build` truncation)
+
+Optional **server** tuning (Railway) when **`/build`** returns validation errors like truncation before **`<body>`** on **`public/overlay/*.html`**:
+
+| Variable | Default | Role |
+|----------|---------|------|
+| `BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP` | `65536` (max `128000`) | Completion token ceiling passed to **`callCouncilMember`** when `target_file` / estimator targets **`.html`** |
+| `BUILDER_CODE_MAX_OUTPUT_TOKENS_CAP` | `16384` (max `32768`) | Ceiling for non-HTML codegen estimates |
+
+If the provider returns **413** or errors, **lower** these — the caps trade **completeness** vs **provider limits**.
+
 ## One composite check (session start)
 
 When you want **preflight + supervisor HTTP probe + TSOS doctor + token-efficiency scorecard + local daemon state** in one run (same env as above):
