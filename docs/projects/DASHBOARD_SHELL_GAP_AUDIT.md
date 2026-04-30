@@ -1,5 +1,5 @@
 Summary
-The `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file, which is essential for performing the requested gap audit, was reported as `ENOENT` (file not found) in the injected file contents. Consequently, a direct comparison of `lifeos-dashboard.html` and `lifeos-app.html` against the brief's specified design intent (sidebar, bottom tabs, AI rail direction, light/dark intent, mobile vs desktop) cannot be performed.
+The `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file, which is critical for performing the requested gap audit, was reported as `ENOENT` (file not found) in the authoritative injected file contents. Despite the task wording stating the file exists, the injected content overrides this, indicating the brief is unavailable. Consequently, a direct comparison of `lifeos-dashboard.html` and `lifeos-app.html` against the brief's specified design intent (sidebar, bottom tabs, AI rail direction, light/dark intent, mobile vs desktop) cannot be performed.
 
 Gaps vs brief
 Cannot assess specific gaps against the brief due to the unavailability of `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
