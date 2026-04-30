@@ -13,7 +13,7 @@
  *   GET  /api/v1/lifeos/builder/domains         list available domain prompt files
  *   GET  /api/v1/lifeos/builder/domain/:name    read a specific domain prompt file
  *   GET  /api/v1/lifeos/builder/next-task      cold-start packet excerpts + read order
- *   POST /api/v1/lifeos/builder/task            dispatch a task to the council (body `files[]` = repo-relative paths → **server reads and injects file contents** into prompt; optional `target_file` improves HTML full-file hints; code mode passes scaled `maxOutputTokens` to the council)
+ *   POST /api/v1/lifeos/builder/task            dispatch a task to the council (body `files[]` = repo-relative paths → **server reads and injects file contents** into prompt; optional `target_file` improves HTML full-file hints; code mode passes scaled `maxOutputTokens` to the council; optional **`max_output_tokens`** or **`maxOutputTokens`** clamps completion budget on code mode — **same auth as `/build`; use sparingly when estimator lags deploy**)
  *   POST /api/v1/lifeos/builder/review          ask the council to review code/diff
  *   GET  /api/v1/lifeos/builder/model-map       show task-to-model routing table
  *   GET  /api/v1/lifeos/builder/history         recent builder audit trail
@@ -768,8 +768,19 @@ export function createLifeOSCouncilBuilderRoutes({
         128_000,
         Math.max(8192, parseInt(process.env.BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP || '65536', 10) || 65536),
       );
-      const maxOutputTokens =
+      const computedTokens =
         estimatedMax || (isHtmlTarget ? htmlFloor : bodyTargetFile || filesContentBlock ? 4096 : 2048);
+
+      /** Supervisor knob: raises/lowers council completion budget without waiting for estimator deploy (same key auth as `/build`). */
+      const rawSupervisorCap = req.body?.max_output_tokens ?? req.body?.maxOutputTokens;
+      const supervisorCapParsed = typeof rawSupervisorCap === 'string' ? parseInt(rawSupervisorCap, 10) : Number(rawSupervisorCap);
+      const maxOutputTokens =
+        mode === 'code' &&
+        typeof supervisorCapParsed === 'number' &&
+        Number.isFinite(supervisorCapParsed) &&
+        supervisorCapParsed > 0
+          ? Math.min(128_000, Math.max(256, Math.floor(supervisorCapParsed)))
+          : computedTokens;
       const result = await callCouncilMember(memberKey, fullPrompt, {
         useCache: false,
         allowModelDowngrade: false,
@@ -813,7 +824,18 @@ export function createLifeOSCouncilBuilderRoutes({
         mode,
         cache_hit: false,
         ...(filesInjectSummaries.length ? { files_injected: filesInjectSummaries } : {}),
-        ...(mode === 'code' ? { max_output_tokens_requested: maxOutputTokens } : {}),
+        ...(mode === 'code'
+          ? {
+              max_output_tokens_requested: maxOutputTokens,
+              ...(mode === 'code' &&
+              typeof supervisorCapParsed === 'number' &&
+              Number.isFinite(supervisorCapParsed) &&
+              supervisorCapParsed > 0 &&
+              maxOutputTokens === Math.min(128_000, Math.max(256, Math.floor(supervisorCapParsed)))
+                ? { max_output_tokens_supervisor_override: true }
+                : {}),
+            }
+          : {}),
       });
     } catch (err) {
       log.error({ err: err.message, domain, mode }, '[BUILDER] Task dispatch failed');

@@ -40,6 +40,8 @@ Optional **server** tuning (Railway) when **`/build`** returns validation errors
 
 If the provider returns **413** or errors, **lower** these — the caps trade **completeness** vs **provider limits**.
 
+**Supervisor override (HTTP body, same key as `/build`):** Optional **`max_output_tokens`** (alias **`maxOutputTokens`**, positive integer, clamped ≤ **128000**) on **`POST /api/v1/lifeos/builder/task`** and **`POST /api/v1/lifeos/builder/build`** **`mode: code`** — sets council **completion** budget directly when the **auto-estimator on the running image** is behind **`main`** or a slice needs a one-off budget bump. Response may include **`max_output_tokens_supervisor_override: true`** when it applied.
+
 ## One composite check (session start)
 
 When you want **preflight + supervisor HTTP probe + TSOS doctor + token-efficiency scorecard + local daemon state** in one run (same env as above):
