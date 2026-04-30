@@ -6,7 +6,8 @@ node_modules
 
 # Generated knowledge index (can be regenerated with scripts/process-knowledge.js)
 knowledge/index/entries.jsonl
-.cursor/
+.cursor/*
+!.cursor/BUGBOT.md
 .next/
 *.log
 sandbox/
@@ -44,6 +45,7 @@ data/builder-daemon-log.jsonl
 data/builder-daemon-state.json
 data/builder-daemon.lock
 data/token-efficiency-log.jsonl
+data/cursor-pre-push-review*.json
 # Local sequential cursor for scripts/lifeos-builder-overnight.mjs (OVERNIGHT_USE_CURSOR).
 data/builder-overnight-cursor*.json
 # Env certification probes (hostnames, pass/fail — never paste secret values into this file)

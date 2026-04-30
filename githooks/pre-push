@@ -1,0 +1,22 @@
+#!/bin/sh
+# LifeOS pre-push hook
+# Only checks files in the commits being pushed (not the working tree).
+# Prevents false-positives from unrelated unstaged changes in long multi-session work.
+ROOT="$(git rev-parse --show-toplevel)"
+
+while read local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
+    # New branch — check against HEAD
+    range="${local_sha}"
+  else
+    range="${remote_sha}..${local_sha}"
+  fi
+  node "$ROOT/scripts/ssot-check.js" --push-range "$range"
+  if [ $? -ne 0 ]; then
+    exit 1
+  fi
+  node "$ROOT/scripts/cursor-pre-push-review.mjs" --range "$range"
+  if [ $? -ne 0 ]; then
+    exit 1
+  fi
+done
