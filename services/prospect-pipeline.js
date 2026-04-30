@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * Prospect Pipeline — Find a business → build their mock site → email it to them
  *
  * Flow:
