@@ -32,6 +32,200 @@
 
 ---
 
+## [BUILD] Update 2026-04-30 #14 — **Supervised overnight build session — 15 new files + fence fix live**
+
+### Files changed (all)
+- `services/site-builder.js` — CRITICAL RESTORE: real 598-line ESM file recovered from commit `f151e4ae`; prior session's rebase used `--ours` and kept builder's 128-line CJS hallucination stub. Fence fix applied to `generateSiteHtml()`. **Preview sites now serve `<!DOCTYPE html>` verified live.**
+- `config/task-model-routing.js` — rerouted `council.builder.*` from `claude_via_openrouter` (HTTP 402, OpenRouter credits exhausted) to `gemini_flash` / `groq_llama`.
+- `services/site-builder-quality-scorer.js` — pure-function HTML quality scorer (0-100, 16 criteria, configurable thresholds via `SITE_BUILDER_MIN_SEND_SCORE` / `SITE_BUILDER_TARGET_SCORE`).
+- `services/site-builder-email-templates.js` — 3 HTML email templates: initial outreach, 3-day follow-up, 7-day follow-up. No deps.
+- `services/lifeos-habits-streaks.js` — streak calculation (consecutive days, longest streak, milestone labels).
+- `services/lifeos-commitment-tracker.js` — add/complete/get upcoming/overdue commitments.
+- `services/lifeos-daily-briefing.js` — morning briefing assembler: calendar events, MITs, habit streaks; plus `generateSpokenBriefing()` using gemini_flash.
+- `services/lifeos-ambient-intelligence.js` — contextual proactive nudge engine using calendar + MITs + habits.
+- `routes/lifeos-habits-routes.js` — habits CRUD + streak API at `/api/v1/lifeos/habits`.
+- `routes/lifeos-briefing-routes.js` — `/api/v1/lifeos/briefing/today` + `/spoken`.
+- `routes/lifeos-commitment-routes.js` — commitment CRUD at `/api/v1/lifeos/commitments`.
+- `routes/lifeos-ambient-intelligence-routes.js` — `/api/v1/lifeos/ambient-intel/nudge` + `/status`.
+- `public/overlay/prospect-crm.html` — CRM overlay: table of prospects with quality scores, filter by status/score, send outreach buttons.
+- `scripts/council-health-check.mjs` — tests all 4 council members, reports latency/health.
+- `scripts/site-builder-quality-audit.mjs` — audits all existing preview sites, prints score table.
+- `db/migrations/20260430_lifeos_habit_completions.sql` — habit completion tracking table.
+- `db/migrations/20260430_lifeos_commitments.sql` — commitments table.
+
+### Builder findings (documented for next agent)
+- `groq_llama` is the working model for code gen (`gemini_flash` writes `---METADATA---` too early, truncating output).
+- `groq_llama` consistently generates `*rk`/`*ccm` in destructured params (invalid JS) — the builder's temp-file syntax check doesn't catch it because the temp file is named `.js` (just extension, no name), causing a different error. **Add "plain JavaScript only, no TypeScript" to specs targeting routes files.**
+- HTML overlays: neither model can generate full `</body></html>` before the token/`---METADATA---` cutoff — write these directly as GAP-FILL.
+- **Platform fix needed:** builder temp-file syntax check should be named `targetname.js` not `.js`, and the temp dir should include a `package.json` copy so ESM `export` is accepted.
+
+### State after this session
+- Site builder preview fence bug: **FIXED AND VERIFIED LIVE** (`<!DOCTYPE html>` confirmed in preview response).
+- 15 new files committed and pushed; Railway deployed latest.
+- New routes are committed but NOT yet mounted in `startup/register-runtime-routes.js` — next agent must wire them.
+- OpenRouter credits exhausted; builder uses gemini_flash/groq_llama until topped up.
+
+### Next agent: start here
+1. Mount the 4 new route files in `startup/register-runtime-routes.js`: `lifeos-habits-routes.js`, `lifeos-briefing-routes.js`, `lifeos-commitment-routes.js`, `lifeos-ambient-intelligence-routes.js`.
+2. Apply the `db/migrations/20260430_*.sql` migrations to Neon (or verify they auto-apply on boot).
+3. Test a real prospect outreach: `POST /api/v1/sites/build` with a real wellness business URL → check `previewUrl` renders cleanly → check quality score ≥60 → send outreach.
+4. Restore OpenRouter credits to re-enable Claude as the builder's code model.
+
+---
+
+## [BUILD] Update 2026-04-29 #13 — **Token-efficiency grade gate (daily supervision)**
+
+### Files changed
+- `scripts/tsos-token-efficiency.mjs` — adds daily efficiency **grade** (`A/B/C/D/F`) + score components (today savings %, free-tier remaining %, day-over-day trend), optional fail-closed gate (`TSOS_ENFORCE_TOKEN_GRADE=1`, `TSOS_MIN_TOKEN_GRADE`), and JSONL receipts at `data/token-efficiency-log.jsonl`.
+- `scripts/builder-operator-suite.mjs` — fixes step labels, runs `tsos:tokens` as step 4/5, includes token leg in composite exit line.
+- `package.json` — new `tsos:tokens` script.
+- `docs/SYSTEM_CAPABILITIES.md` — V7 notes expanded with gate env vars.
+- `docs/BUILDER_OPERATOR_ENV.md` — token gate command example for unattended runs.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — handoff + receipt update.
+
+### State after this session
+- Daily token efficiency is now machine-measured and can be fail-closed in unattended mode; builder suite now reports it every run.
+
+### Next agent: start here
+- Use `npm run tsos:builder` for all sessions; for overnight strict mode use `TSOS_ENFORCE_TOKEN_GRADE=1 TSOS_MIN_TOKEN_GRADE=D npm run tsos:tokens` (or export vars in daemon host shell) and fix regressions before expanding queue.
+
+---
+
+## [BUILD] Update 2026-04-29 #12 — **Builder operator suite (`npm run tsos:builder`, V6)**
+
+### Files changed
+- `scripts/builder-operator-suite.mjs` (new — composite: preflight → supervisor probe → `tsos:doctor` → optional daemon state)
+- `package.json` — script **`tsos:builder`**
+- `docs/SYSTEM_CAPABILITIES.md` — **V6** row + capability changelog
+- `docs/BUILDER_OPERATOR_ENV.md` — **One composite check** section
+- `docs/QUICK_LAUNCH.md` — execution step 3 **fast path**
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — Agent Handoff + Change Receipt
+
+### State after this session
+- Operators can run **`npm run tsos:builder`** instead of juggling three scripts; exit code = first failing leg; all legs still print.
+
+### Next agent: start here
+- If keys/shell allow: run **`npm run tsos:builder`** at session start; fix **preflight**/**probe**/**doctor** blockers before **`POST /build`** or **§2.12** council when load-bearing.
+
+---
+
+## [BUILD] Update 2026-04-29 #11 — **Truth ⇄ reliability bridge + memory stance (§2.6 + Am.39)**
+
+### Files changed
+- `docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`, `scripts/lifeos-builder-daemon.mjs` (`reliability_cues` JSONL), `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`, `docs/AUTONOMY_SUPERVISION_RUNBOOK.md`, `prompts/lifeos-council-builder.md`, `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md`, `docs/projects/AMENDMENT_02_MEMORY_SYSTEM.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`.
+
+### State after this session
+- Autonomous builder logs now carry **`reliability_cues`** tied to NSSOT §2.6 / Evidence Ladder; **Amendment 39** = institutional **`epistemic_facts`** plane; **Amendment 02** = conversational memory plane (explicit split).
+
+### Next agent
+- Optional Phase 2: ingest **`reliability_cues`** lineage into **`fact_evidence`** with Zero-Waste guard — only with explicit receipts (no silent FACT promotion).
+
+---
+
+## [BUILD] Update 2026-04-29 #10 — **Compound improvement loop between every slice**
+
+### Files changed
+- `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`, `docs/AUTONOMY_SUPERVISION_RUNBOOK.md`, `docs/BUILDER_24_7_ALPHA_CHECKLIST.md`, `prompts/lifeos-council-builder.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`.
+
+### State after this session
+- Habit encoded: finish each slice with **evaluation + fix + one lever improvement**, then **SSOT receipt** so the pipeline compounds.
+
+### Next agent: start here
+- After your next **`/build` or daemon slice**, add one receipt line naming **what improved for the next run** (per compound doc).
+
+---
+
+## [BUILD] Update 2026-04-29 #9 — **24/7 permanent builder + alpha checklist**
+
+### Files changed
+- `scripts/lifeos-builder-daemon.mjs` — stale **PID lock** recovery (PM2 restart-safe), **`BUILDER_QUEUE_MAX`** env alias, **`daemon_start.mode: 24_7`** log.
+- `ecosystem.config.js` — **`builder-daemon`** logs, **min_uptime** / **max_restarts**, **`BUILDER_QUEUE_MAX`**.
+- `package.json` — **`lifeos:builder:queue`**, **`pm2:logs:daemon`**, **`pm2:restart:daemon`**, **`pm2:restart:all`**.
+- `docs/BUILDER_24_7_ALPHA_CHECKLIST.md`, `docs/AUTONOMY_SUPERVISION_RUNBOOK.md`.
+
+### State after this session
+- Operator path for **alpha tomorrow**: follow **`docs/BUILDER_24_7_ALPHA_CHECKLIST.md`**; run **`npm run pm2:start`** on the host that has `.env` + `data/` for receipts.
+
+### Next agent: start here
+- Verify **`pm2 list`** shows **builder-daemon** **online** on the alpha machine; **`npm run builder:preflight`** exit 0 before inviting testers.
+
+---
+
+## [BUILD] Update 2026-04-29 #8 — **Builder 9-target: retries + probe supervise + overnight cursor**
+
+### Files changed
+- `scripts/lifeos-builder-supervisor.mjs`, `scripts/lifeos-builder-overnight.mjs`, `scripts/lifeos-builder-daemon.mjs`, `ecosystem.config.js`, `package.json`, `.gitignore`, `docs/AUTONOMY_SUPERVISION_RUNBOOK.md`.
+
+### Receipts (KNOW)
+- `npm run lifeos:builder:probe` (~HTTP only) OK on prod.
+- `OVERNIGHT_USE_CURSOR=1` with `nextStartIndex` past end of `tasks[]` → `overnight_idle` (no `/build` spend) exit 0.
+
+### Cold agent note
+Weekly run `BUILDER_DAEMON_SUPERVISE_MODE=full` on one cycle or CI when you want full doc+JS smoke regression.
+
+---
+
+## [BUILD] Update 2026-04-29 #7 — **No-bottleneck: density + AI-rail docs + overnight 502 retries**
+
+### Files changed
+- **`scripts/lifeos-builder-overnight.mjs`** — `runBuild()` retries transient **502/503/504** with backoff (**`OVERNIGHT_BUILD_RETRIES`**, default 4).
+
+### Verified
+- **`npm run builder:preflight`** OK.
+- **`dashboard-density-commentary`** → **`committed:true`** (`task_ok`).
+- **`dashboard-ai-rail-contract`** — first **`POST`** **502**, manual retry **`committed:true`**; script now retries automatically for next time.
+- **`git pull`** **dda28bf1** incl. **`DASHBOARD_DENSITY_INTEGRATION_NOTES.md`** + **`DASHBOARD_AI_RAIL_CONTRACT.md`**.
+- **`LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`**: all five **`tasks[]`** sliced by production builder (operator approval not gate).
+
+---
+
+## [BUILD] Update 2026-04-29 #6 — **Operational: `dashboard-import-tokens` + supervisor retry + daemon live**
+
+### Files changed
+- **`scripts/lifeos-builder-supervisor.mjs`** — `fetchCommittedFile()` retries after remote `/build` (fixes false doc smoke **missing … light**).
+
+### Verified (KNOW)
+- **`npm run builder:preflight`** → OK (`robust-magic-production.up.railway.app`).
+- **`npm run lifeos:builder:overnight -- --task dashboard-import-tokens`** → **`task_ok`**, **`committed:true`**, **`model_used`:** **`claude_via_openrouter`** (~2m).
+- **`npm run lifeos:builder:daemon -- --once`** → **`cycle_ok`** (supervise + overnight max 2 OK).
+- **`git pull`** fast-forward **`81f5d9df`** incl. **`public/overlay/lifeos-dashboard.html`**.
+- **`npm run lifeos:builder:daemon`** (continuous) started in workspace background; **`data/builder-daemon-state.json`** → **`healthy`**.
+
+### Next agent
+- **`npm run lifeos:builder:overnight -- --task dashboard-density-commentary`** (or `--start 3`) when ready; **`npm run system:railway:redeploy`** if prod must match latest `main`.
+
+---
+
+## [BUILD] Update 2026-04-29 #5 — **Inner supervisor (builder trains its own reviewer)**
+
+### Files changed
+- **`prompts/lifeos-builder-inner-supervisor.md`** — protocol: when to run review, output contract, METADATA, token discipline.
+- **`scripts/builder-inner-supervisor.mjs`** — `npm run lifeos:builder:inner-review -- <paths>` → `POST …/builder/task` `mode: review`, `useCache: false`, injects inner prompt + files.
+- **`prompts/lifeos-council-builder.md`** — section + last-updated.
+- **`package.json`**, **`docs/AUTONOMY_SUPERVISION_RUNBOOK.md`**, **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`**.
+
+### Next agent
+- After major `/build` commits, spot-check with **`npm run lifeos:builder:inner-review -- <touched files>`** (needs live `PUBLIC_BASE_URL` + key).
+
+---
+
+## [BUILD] Update 2026-04-29 #4 — **Builder daemon health API (`/api/v1/system/builder-health`)**
+
+### Files changed
+- **`routes/api-v1-core.js`** — authenticated `GET /api/v1/system/builder-health` reads `data/builder-daemon-state.json` and optionally last N lines of `data/builder-daemon-log.jsonl` (`log_lines` ≤ 80); honest empty/missing state. **`@ssot`** → Amendment 21.
+- **`docs/SYSTEM_CAPABILITIES.md`** — matrix row **B6** + capability changelog.
+- **`docs/AUTONOMY_SUPERVISION_RUNBOOK.md`** — HTTP polling section.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — Change Receipts + handoff + `Last Updated`.
+
+### Verified
+- `node --check routes/api-v1-core.js`
+- `node --test tests/insurance-card-parse.test.js` (offline). `npm test` smoke tests fail without a running server (`fetch failed`) — unchanged expectation.
+
+### Next agent
+- Deploy then `curl` builder-health on a machine running **`npm run lifeos:builder:daemon`** with writable `data/`, or continue **`dashboard-import-tokens`** overnight task per queue.
+
+---
+
 ## [BUILD] Update 2026-04-29 #3 — **Dashboard theme tokens (`dashboard-theme-foundation`)**
 
 ### Files changed
