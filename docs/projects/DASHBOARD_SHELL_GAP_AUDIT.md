@@ -12,7 +12,7 @@ However, I can document observable architectural differences between `lifeos-das
 
 ---
 
-## Gaps vs. Brief (Inferred from Production Code)
+## Gaps vs. Brief (Inferred from Production Code Only)
 
 Since the brief files are missing, I document observable differences between the two HTML files:
 
