@@ -308,6 +308,8 @@ async function main() {
           '1. clampMobileWidgetCount(count) => integer clamped to 1..6.',
           '2. resolveThemeMode(value) => "light", "dark", or "system". Unknown input returns "system". Case-insensitive string handling.',
           '3. pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail }) => "compact" | "balanced" | "airy".',
+          'Output must be plain JavaScript ESM only: no TypeScript, no markdown fences, no trailing metadata, and no unfinished comments.',
+          'The committed file will be checked with node --check, so syntax must be valid on first commit.',
           'Rules for pickDashboardDensity:',
           '- return "compact" when viewportWidth < 640 and widgetCount >= 4',
           '- return "compact" when hasPinnedRail is true and widgetCount >= 5',
