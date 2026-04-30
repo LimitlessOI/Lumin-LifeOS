@@ -45,6 +45,9 @@ import { createLifeOSScorecardRoutes } from "../routes/lifeos-scorecard-routes.j
 import { createLifeOSChatRoutes } from "../routes/lifeos-chat-routes.js";
 import { createLifeOSAmbientRoutes } from "../routes/lifeos-ambient-routes.js";
 import { createLifeOSHabitsRoutes } from "../routes/lifeos-habits-routes.js";
+import { createLifeOSBriefingRoutes } from "../routes/lifeos-briefing-routes.js";
+import { createLifeOSCommitmentRoutes } from "../routes/lifeos-commitment-routes.js";
+import { createLifeOSAmbientIntelligenceRoutes } from "../routes/lifeos-ambient-intelligence-routes.js";
 import { createLifeOSCycleRoutes } from "../routes/lifeos-cycle-routes.js";
 import { createLifeOSAuthRoutes } from "../routes/lifeos-auth-routes.js";
 import { createLifeOSCouncilBuilderRoutes } from "../routes/lifeos-council-builder-routes.js";
@@ -255,6 +258,15 @@ export async function registerRuntimeRoutes(app, deps) {
 
   app.use("/api/v1/lifeos/habits", createLifeOSHabitsRoutes({ pool, requireKey, logger }));
   logger.info("✅ [LIFEOS-HABITS] Routes mounted at /api/v1/lifeos/habits");
+
+  app.use("/api/v1/lifeos/briefing", createLifeOSBriefingRoutes({ pool, requireKey, callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-BRIEFING] Routes mounted at /api/v1/lifeos/briefing");
+
+  app.use("/api/v1/lifeos/commitments", createLifeOSCommitmentRoutes({ pool, requireKey, logger }));
+  logger.info("✅ [LIFEOS-COMMITMENTS] Routes mounted at /api/v1/lifeos/commitments");
+
+  app.use("/api/v1/lifeos/ambient-intel", createLifeOSAmbientIntelligenceRoutes({ pool, requireKey, callCouncilMember, logger }));
+  logger.info("✅ [LIFEOS-AMBIENT-INTEL] Routes mounted at /api/v1/lifeos/ambient-intel");
 
   createLifeOSCycleRoutes({ pool, requireKey, logger })(app);
 
