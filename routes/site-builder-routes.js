@@ -103,12 +103,13 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
    */
   router.post('/build', requireKey, buildLimiter, async (req, res) => {
     try {
-      const { url, businessInfo } = req.body;
-      if (!url) return res.status(400).json({ ok: false, error: 'url is required' });
+      const { url, businessUrl, businessInfo } = req.body;
+      const targetUrl = url || businessUrl;
+      if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
 
-      logger.info('[SITE] Build request', { url });
+      logger.info('[SITE] Build request', { url: targetUrl });
       const builder = getSiteBuilder({ callCouncilMember, baseUrl });
-      const result = await builder.buildFromUrl(url, { businessInfo });
+      const result = await builder.buildFromUrl(targetUrl, { businessInfo });
 
       res.json({ ok: result.success, ...result });
     } catch (err) {

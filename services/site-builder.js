@@ -1,4 +1,5 @@
 /**
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
  * Site Builder — Scrape existing site → AI-generates complete click-funnel website
  *
  * Pipeline:
@@ -28,6 +29,7 @@ import logger from './logger.js';
 
 const TAILWIND_CDN = 'https://cdn.tailwindcss.com';
 const ALPINE_CDN = 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js';
+const DESIGN_INTEL_PATH = path.join(process.cwd(), 'docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md');
 
 // POS partner referral links — set AFFILIATE_*_URL env vars in Railway to activate commission tracking
 export const POS_PARTNERS = {
@@ -281,6 +283,7 @@ Return ONLY valid JSON with this exact structure:
     const { clientId, posPartner } = options;
     const primary = info.primaryColor || '#7C3AED';
     const accent = info.accentColor || '#EC4899';
+    const designIntel = await this.loadDesignIntel();
 
     const prompt = `You are building a COMPLETE, PRODUCTION-READY website for a small wellness/health business.
 
@@ -313,6 +316,10 @@ HARD REQUIREMENTS:
 4. Zero external dependencies beyond those CDNs
 5. Mobile-first, fully responsive
 6. After </html> write: BUILD_COMPLETE
+7. Use semantic HTML, accessible buttons/links, and visible focus states
+8. Use CSS custom properties inside ONE small <style> block for theme tokens and any shaped background effects
+9. Do NOT use placeholder lorem ipsum, fake star ratings with no basis, or generic "AI agency" language
+10. If real testimonials are missing, use a clearly labeled section like "What clients often appreciate" instead of fabricated quotes
 
 CLICK FUNNEL STRUCTURE (in this exact order):
 1. NAVIGATION: Logo + nav links + "Book Free Call" CTA button (sticky)
@@ -321,32 +328,40 @@ CLICK FUNNEL STRUCTURE (in this exact order):
 4. PROBLEM SECTION: "Does this sound familiar?" — 3 pain points as cards with icons (use emoji)
 5. SOLUTION SECTION: "Here's how we help" — 3-step process with numbered steps
 6. SERVICES SECTION: Service cards with name, description, price range (if known), "Learn More" CTA
-7. TESTIMONIALS: 3 testimonials in a clean card grid (use real ones if provided, else compelling fictional ones that match their industry — label as "from our clients")
+7. TESTIMONIALS: 3 testimonials or proof cards in a clean grid. Use real ones if provided. If none are provided, use trust-building proof cards or a "what clients value" section and label it clearly.
 8. OFFER/PACKAGES: 2-3 clear pricing tiers with features list and "Get Started" CTA — make them buyable
 9. ABOUT SECTION: Brief about the practitioner, warm and personal
 10. FAQ SECTION: 5 Q&As using Alpine.js accordion (x-data, x-show, @click)
 11. BLOG PREVIEW: "Latest from the Blog" — 3 blog post cards with title/excerpt placeholders (links to /blog/)
-12. VIDEO SECTION: "Watch & Learn" — placeholder for YouTube videos with a note about their channel
+12. VIDEO SECTION: "Watch & Learn" — if videos are unavailable, show a useful educational content teaser instead of an empty embed grid
 13. BOOKING CTA SECTION: Full-width colored section "Ready to start your journey?" with big CTA button
-14. FOOTER: Logo, nav links, contact info, social links, copyright, "Site powered by Lumin AI"
+14. FOOTER: Logo, nav links, contact info, social links, copyright, concise trust note
+15. MOBILE STICKY CTA BAR: a bottom booking bar visible on small screens only
 
 SEO REQUIREMENTS:
 - <title> tag: [Business Name] | [City] [Industry] | [Tagline]
 - <meta name="description"> with natural keyword inclusion
 - Schema.org LocalBusiness JSON-LD in <head>
 - Open Graph tags (og:title, og:description, og:type=website)
+- Include only truthful schema properties that are supported by the provided business data
 - All H1/H2/H3 hierarchy correct (only ONE h1)
 - Alt text on any images (use gradient placeholders, no external images)
 - Internal links between sections
 
+DESIGN INTELLIGENCE:
+${designIntel}
+
 DESIGN REQUIREMENTS:
-- Use Tailwind utility classes only (no custom CSS except one <style> block for scroll behavior)
+- Use Tailwind utility classes for layout and components, plus one concise <style> block for theme tokens and a few intentional visual effects
 - Primary color: ${primary} — use in CTAs, borders, highlights
-- Accent color: ${accent} — use in gradients, hover states
-- Clean, modern, trustworthy design appropriate for healthcare/wellness
-- Hero should have a gradient background
-- CTA buttons: rounded-full, shadow-lg, transition-all hover:scale-105
+- Accent color: ${accent} — use in gradients, hover states, and editorial moments
+- Make the site feel custom to this business, not like a generic wellness template
+- Avoid default purple-on-white unless the extracted brand colors actually call for it
+- Use stronger hierarchy, editorial spacing, clear card groupings, and at least one visually distinctive section treatment
+- Use subtle motion only where it improves clarity; avoid heavy animations and anything that hurts performance
+- CTA buttons: large tap targets, high contrast, clear hover/focus states
 - Section padding: py-16 md:py-24
+- Keep the page fast and conversion-focused: concise copy, strong above-the-fold trust, repeated CTA placement, no dead sections
 
 Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.`;
 
@@ -402,6 +417,8 @@ Return ONLY valid JSON array:
    * Wrap blog post content in full HTML page.
    */
   wrapBlogPost(post, info) {
+    const primary = info.primaryColor || '#7C3AED';
+    const accent = info.accentColor || '#EC4899';
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -412,23 +429,32 @@ Return ONLY valid JSON array:
   <meta property="og:title" content="${post.title}">
   <meta property="og:type" content="article">
   <script src="${TAILWIND_CDN}"></script>
+  <style>
+    :root {
+      --brand-primary: ${primary};
+      --brand-accent: ${accent};
+      --brand-paper: #fffdfa;
+      --brand-ink: #171717;
+    }
+  </style>
 </head>
-<body class="bg-white text-gray-800">
-  <nav class="bg-white border-b px-6 py-4">
-    <a href="/" class="text-lg font-bold text-purple-700">${info.businessName || 'Home'}</a>
+<body class="bg-[var(--brand-paper)] text-[var(--brand-ink)]">
+  <nav class="border-b border-black/5 bg-white/90 px-6 py-4 backdrop-blur">
+    <a href="/" class="text-lg font-bold" style="color: var(--brand-primary)">${info.businessName || 'Home'}</a>
   </nav>
   <main class="max-w-3xl mx-auto px-6 py-12">
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">${post.title}</h1>
-    <p class="text-gray-500 mb-8">Published by ${info.businessName || 'the team'}</p>
+    <div class="mb-8 inline-flex rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-black/55">Article</div>
+    <h1 class="mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-5xl">${post.title}</h1>
+    <p class="mb-8 text-gray-500">Published by ${info.businessName || 'the team'}</p>
     <div class="prose prose-lg max-w-none">${post.content}</div>
-    <div class="mt-12 p-8 bg-purple-50 rounded-2xl text-center">
-      <h3 class="text-2xl font-bold text-purple-700 mb-3">Ready to take the next step?</h3>
+    <div class="mt-12 rounded-[28px] border border-black/5 bg-white p-8 text-center shadow-[0_24px_80px_rgba(0,0,0,0.06)]">
+      <h3 class="mb-3 text-2xl font-bold" style="color: var(--brand-primary)">Ready to take the next step?</h3>
       <p class="text-gray-600 mb-6">Book a free consultation with ${info.businessName || 'us'} today.</p>
-      <a href="${info.bookingUrl || '/#book'}" class="inline-block bg-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-purple-700 transition">Book Free Consultation</a>
+      <a href="${info.bookingUrl || '/#book'}" class="inline-block rounded-full px-8 py-3 font-semibold text-white shadow-lg transition hover:-translate-y-0.5" style="background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent))">Book Free Consultation</a>
     </div>
   </main>
-  <footer class="bg-gray-50 border-t px-6 py-8 text-center text-gray-500 text-sm">
-    <p>&copy; ${new Date().getFullYear()} ${info.businessName || ''}. Site powered by <a href="https://lumin.ai" class="text-purple-600">Lumin AI</a>.</p>
+  <footer class="border-t bg-white/80 px-6 py-8 text-center text-sm text-gray-500">
+    <p>&copy; ${new Date().getFullYear()} ${info.businessName || ''}. Site powered by <a href="https://lumin.ai" style="color: var(--brand-primary)">Lumin AI</a>.</p>
   </footer>
 </body>
 </html>`;
@@ -438,11 +464,12 @@ Return ONLY valid JSON array:
    * Generate blog index page.
    */
   generateBlogIndex(info, posts) {
+    const primary = info.primaryColor || '#7C3AED';
     const postCards = posts.map(p => `
-      <a href="/blog/${p.slug || p.slug}/" class="block bg-white rounded-2xl shadow-sm hover:shadow-md transition p-6 border border-gray-100">
+      <a href="/blog/${p.slug || p.slug}/" class="block rounded-[24px] border border-black/5 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
         <h2 class="text-xl font-bold text-gray-900 mb-2">${p.title}</h2>
         <p class="text-gray-600 text-sm mb-4">${p.excerpt || ''}</p>
-        <span class="text-purple-600 font-medium text-sm">Read more →</span>
+        <span class="text-sm font-medium" style="color: ${primary}">Read more →</span>
       </a>`).join('');
 
     return `<!DOCTYPE html>
@@ -454,17 +481,31 @@ Return ONLY valid JSON array:
   <meta name="description" content="Wellness tips, advice, and insights from ${info.businessName || 'our team'}.">
   <script src="${TAILWIND_CDN}"></script>
 </head>
-<body class="bg-gray-50">
-  <nav class="bg-white border-b px-6 py-4">
-    <a href="/" class="text-lg font-bold text-purple-700">${info.businessName || 'Home'}</a>
+<body class="bg-stone-50">
+  <nav class="border-b bg-white px-6 py-4">
+    <a href="/" class="text-lg font-bold" style="color: ${primary}">${info.businessName || 'Home'}</a>
   </nav>
   <main class="max-w-4xl mx-auto px-6 py-12">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">Latest from the Blog</h1>
+    <h1 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 md:text-5xl">Latest from the Blog</h1>
     <p class="text-gray-600 mb-10">Tips, guides, and insights for ${info.targetAudience || 'our community'}.</p>
     <div class="grid md:grid-cols-3 gap-6">${postCards}</div>
   </main>
 </body>
 </html>`;
+  }
+
+  async loadDesignIntel() {
+    try {
+      const raw = await fs.readFile(DESIGN_INTEL_PATH, 'utf8');
+      return raw.slice(0, 5000);
+    } catch {
+      return [
+        '- Prioritize mobile-first layouts, clear tap targets, and visible focus states.',
+        '- Prefer fast-loading pages with concise sections, strong trust cues, and repeated CTAs.',
+        '- Use truthful structured data, semantic headings, and a sitemap-friendly layout.',
+        '- Avoid generic AI-looking purple templates; make the visual direction feel specific to the business.',
+      ].join('\n');
+    }
   }
 
   /**

@@ -13,6 +13,7 @@
   "owned_files": [
     "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
     "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
+    "docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md",
     "services/site-builder.js",
     "services/prospect-pipeline.js",
     "scripts/site-builder-follow-up-cron.mjs",
@@ -88,6 +89,10 @@
   "assertions": [
     {
       "type": "file_exists",
+      "path": "docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md"
+    },
+    {
+      "type": "file_exists",
       "path": "services/site-builder.js"
     },
     {
@@ -112,15 +117,19 @@
     },
     {
       "type": "node_check",
+      "check": "services/site-builder.js"
+    },
+    {
+      "type": "node_check",
       "check": "services/prospect-pipeline.js"
     },
     {
       "type": "node_check",
-      "check": "scripts/site-builder-follow-up-cron.mjs"
+      "check": "routes/site-builder-routes.js"
     },
     {
       "type": "node_check",
-      "check": "routes/site-builder-routes.js"
+      "check": "scripts/site-builder-follow-up-cron.mjs"
     }
   ],
   "completion_checks": [

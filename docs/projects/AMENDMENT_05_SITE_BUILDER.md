@@ -1,7 +1,7 @@
 # AMENDMENT 05 — Site Builder & Prospect Pipeline
 **Status:** INFRASTRUCTURE COMPLETE — awaiting Railway env vars to go live
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-29 — Site Builder now has a manifest/verifier surface (`docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json`), a public launch/sales page at `public/overlay/site-builder-landing.html`, and an operator-runnable follow-up cron at `scripts/site-builder-follow-up-cron.mjs`. This closes the biggest operational gap in the lane: day-3/day-7 follow-ups now have an actual execution path instead of just being a note in the amendment. Prior: 2026-03-13.
+**Last Updated:** 2026-04-29 — Site Builder now has a manifest/verifier surface (`docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json`), a public launch/sales page at `public/overlay/site-builder-landing.html`, an operator-runnable follow-up cron at `scripts/site-builder-follow-up-cron.mjs`, and a design-intelligence source file at `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md` that is injected into generation prompts. This closes the biggest operational gaps in the lane: day-3/day-7 follow-ups now have an execution path, and design quality is governed by an explicit modern best-practices brief instead of loose prompt language. Prior: 2026-03-13.
 
 ---
 
@@ -39,6 +39,7 @@ POS affiliate URLs now read from env vars (`AFFILIATE_JANE_APP_URL`, `AFFILIATE_
 | `services/site-builder.js` | Core pipeline: scrape → AI generate → deploy |
 | `services/prospect-pipeline.js` | Mock site + cold email outreach |
 | `scripts/site-builder-follow-up-cron.mjs` | Operator/cron entry point for day-3/day-7 follow-up sends |
+| `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md` | Monthly-refreshed design, SEO, accessibility, and conversion brief injected into generation prompts |
 | `routes/site-builder-routes.js` | All API endpoints (own module) |
 | `db/migrations/20260313_site_builder_prospect_pipeline.sql` | DB schema for all 3 tables |
 
@@ -116,6 +117,8 @@ The migration was run via Neon SQL Editor against the **production** branch. All
 - **KNOW:** Public sales/positioning page now exists at `/overlay/site-builder-landing.html` via `public/overlay/site-builder-landing.html` ✅
 - **KNOW:** Follow-up automation entry point now exists at `scripts/site-builder-follow-up-cron.mjs` and uses `runFollowUpCron()` from `services/prospect-pipeline.js` ✅
 - **KNOW:** Prospect records now persist `status`, `follow_up_count`, `last_follow_up_at`, and `last_contacted_at` coherently with the service code ✅
+- **KNOW:** Site generation now loads a design-intelligence brief from `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md` so outputs follow current mobile, SEO, accessibility, performance, and conversion guidance ✅
+- **KNOW:** `/api/v1/sites/build` now accepts either `url` or `businessUrl`, matching the documented curl examples ✅
 - **NEED:** POS affiliate program signups → then set `AFFILIATE_*_URL` env vars in Railway
 - **THINK:** Puppeteer scraping may fail on JS-heavy sites (SPA) — AI-only fallback exists
 - **DON'T KNOW:** Whether Railway has been redeployed since these code changes were committed
@@ -123,6 +126,13 @@ The migration was run via Neon SQL Editor against the **production** branch. All
 ---
 
 ## NEXT ACTIONS (Do in this order)
+
+### Step 0 — Refresh design intelligence monthly
+Review and update `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md` monthly, or sooner if:
+- outputs start looking repetitive
+- conversion feedback is weak
+- official SEO / CWV / accessibility guidance changes
+- a stronger niche pattern emerges
 
 ### Step 1 — Set Railway env vars (15 min, enables live sends)
 Go to Railway → your project → Variables tab, add:
@@ -184,11 +194,14 @@ Failed sends do **not** increment follow-up counters.
 - Site build must not include competitor brand names or misleading claims
 - All generated testimonials must be clearly labeled as illustrative examples until replaced with real ones
 - POS recommendations must disclose affiliate relationship in client-facing materials
+- Design prompt guidance must be refreshed monthly or when visible output quality drifts
+- Generated sites must optimize for mobile readability, clear CTA flow, accessibility, and Core Web Vitals rather than visual novelty alone
 
 ## Change Receipts
 
 | Date | What Changed | Why | Verified |
 |---|---|---|---|
+| 2026-04-29 | Added explicit design intelligence via `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md`; upgraded `services/site-builder.js` prompt to enforce stronger modern design, accessibility, trust, and conversion rules; improved generated blog styling consistency; patched `/api/v1/sites/build` to accept `businessUrl` as well as `url`. | “Modern” was underspecified, which risks generic output. The lane now has a real design brief, a refresh cadence, and an API that matches the documented examples. | `node --check services/site-builder.js`; `node --check routes/site-builder-routes.js` |
 | 2026-04-29 | Fixed Site Builder follow-up accounting so failed sends no longer look successful; added `runFollowUpCron()` plus `scripts/site-builder-follow-up-cron.mjs`; patched the migration with `follow_up_count`, `last_follow_up_at`, and `last_contacted_at` columns; added the missing `@ssot` header tag to `services/prospect-pipeline.js`. | The lane claimed day-3/day-7 follow-ups, but there was no runnable cron entry point and the schema omitted columns already used by the service. This made the pipeline drift-prone and unreliable for unattended execution. The `@ssot` tag closes a coupling warning for future supervised runs. | `node --check services/prospect-pipeline.js`; `node --check scripts/site-builder-follow-up-cron.mjs` |
 | 2026-04-29 | Added `docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json` with required routes, tables, assertions, and completion checks; added `public/overlay/site-builder-landing.html` as the first public front-door sales page for the lane. | Site Builder had real backend code but weaker operational discipline than TokenOS/TC: no manifest/verifier surface and no actual public offer page. These two additions make the lane easier to verify and easier to sell. | `node --check services/site-builder.js`; `node --check services/prospect-pipeline.js`; `node --check routes/site-builder-routes.js` |
 
