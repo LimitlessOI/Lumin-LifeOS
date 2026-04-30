@@ -2,15 +2,15 @@
 
 **Source Document**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 
-## Shell Architecture Understanding Confirmed
+## Shell Architecture Confirmed
 
-### Desktop Layout
+### Desktop Experience
 - **Persistent left sidebar** for primary navigation
-- Sidebar remains visible across all category dashboard contexts
+- Sidebar remains visible across all category dashboard views
 
-### Mobile Layout
+### Mobile Experience
 - **Bottom tab bar** for primary navigation
-- Mobile and desktop layouts **differ intentionally** — these are distinct UX patterns optimized for their respective form factors, not responsive variants of the same design
+- Mobile and desktop layouts **differ intentionally** — distinct UX patterns optimized for their respective form factors
 
 ### Category Dashboard System
 - **Swipe-ready horizontal navigation** between life category dashboards
@@ -23,7 +23,7 @@
 - Must persist regardless of active dashboard or navigation state
 
 ### Visual Modes
-Both themes are **required** (not optional):
+Both themes are **required**:
 - **Light mode**
 - **Dark mode**
 
@@ -33,13 +33,4 @@ Theme switching and persistence must be supported across all views.
 
 This receipt confirms **UI shell architecture direction only**, as specified in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
 
-No claims are made regarding:
-- Backend API endpoints or routes
-- Database schema or tables
-- Authentication/authorization mechanisms
-- State management implementation details
-- Data fetching strategies
-- Specific component libraries or frameworks
-- WebSocket or real-time requirements
-
-Implementation of data layer, service integration, and runtime behavior are deferred to subsequent specifications with proper grounding.
+No backend APIs, routes, database tables, or service layer claims are made. Implementation of data layer and runtime behavior are deferred to subsequent specifications with proper grounding.
