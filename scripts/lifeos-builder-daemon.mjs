@@ -30,6 +30,18 @@ const DATA_DIR = path.join(ROOT, "data");
 const STATE_PATH = path.join(DATA_DIR, "builder-daemon-state.json");
 const LOG_PATH = path.join(DATA_DIR, "builder-daemon-log.jsonl");
 const LOCK_PATH = path.join(DATA_DIR, "builder-daemon.lock");
+const MEMORY_BASE = (
+  process.env.BUILDER_BASE_URL ||
+  process.env.PUBLIC_BASE_URL ||
+  process.env.LUMIN_SMOKE_BASE_URL ||
+  ""
+).replace(/\/$/, "");
+const MEMORY_KEY =
+  process.env.COMMAND_CENTER_KEY ||
+  process.env.COMMAND_KEY ||
+  process.env.LIFEOS_KEY ||
+  process.env.API_KEY ||
+  "";
 
 const ONCE = process.argv.includes("--once");
 const argIntervalIdx = process.argv.indexOf("--interval-min");
@@ -44,6 +56,8 @@ const overnightMax = Number(
     : process.env.BUILDER_QUEUE_MAX || process.env.OVERNIGHT_MAX || "2"
 );
 const failSleepMin = Number(process.env.BUILDER_DAEMON_FAIL_SLEEP_MIN || "5");
+const overnightPauseThreshold = Math.max(0, Number(process.env.BUILDER_DAEMON_QUEUE_PAUSE_THRESHOLD || "3"));
+const overnightPauseMin = Math.max(1, Number(process.env.BUILDER_DAEMON_QUEUE_PAUSE_MIN || "120"));
 const superviseModel = process.env.BUILDER_SUPERVISE_MODEL || "gemini_flash";
 /** full = doc+JS smoke (/build council); probe = GET /ready + /domains only (default — huge token saver). none = skip (only overnight). */
 const superviseMode = (process.env.BUILDER_DAEMON_SUPERVISE_MODE || "probe").toLowerCase();
@@ -62,6 +76,15 @@ function reliabilityCue(overrides = {}) {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function normalizeFailureSignature(phase, reason = "") {
+  const text = String(reason || "").replace(/\s+/g, " ").trim();
+  const http = text.match(/HTTP\s+(\d{3})/i);
+  if (http) return `${phase}:http_${http[1]}`;
+  if (/Council call failed/i.test(text)) return `${phase}:council_call_failed`;
+  if (/Missing COMMAND/i.test(text)) return `${phase}:missing_command_key`;
+  return `${phase}:${text.slice(0, 140) || "unknown"}`;
 }
 
 async function ensureDataDir() {
@@ -112,6 +135,77 @@ async function commandStdout(command, args) {
     shell: false,
   });
   return stdout || "";
+}
+
+async function postJson(url, body) {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-command-key": MEMORY_KEY,
+    },
+    body: JSON.stringify(body),
+  });
+  return { ok: res.ok, status: res.status, text: await res.text() };
+}
+
+async function sendCycleMemoryReceipt({
+  cycleNo,
+  ok,
+  phase = "cycle",
+  reason = "",
+  queuePaused = false,
+  pausedUntil = null,
+  failureSignature = null,
+}) {
+  if (!MEMORY_BASE || !MEMORY_KEY) {
+    return { skipped: true, reason: "missing_memory_base_or_key" };
+  }
+
+  const agentId = "lifeos-builder-daemon";
+  const taskType = "builder.daemon.cycle";
+  const outcome = ok ? (queuePaused ? "partial" : "correct") : "incorrect";
+  const notes = [
+    `cycle=${cycleNo}`,
+    `phase=${phase}`,
+    `ok=${ok}`,
+    queuePaused ? `queuePaused=true` : null,
+    pausedUntil ? `pausedUntil=${pausedUntil}` : null,
+    failureSignature ? `signature=${failureSignature}` : null,
+    reason ? `reason=${String(reason).replace(/\s+/g, " ").slice(0, 1200)}` : null,
+  ].filter(Boolean).join(" | ").slice(0, 1900);
+
+  const performance = await postJson(`${MEMORY_BASE}/api/v1/memory/agents/performance`, {
+    agentId,
+    taskType,
+    outcome,
+    notes,
+  });
+
+  let violation = null;
+  if (!ok || queuePaused) {
+    violation = await postJson(`${MEMORY_BASE}/api/v1/memory/agents/violations`, {
+      agentId,
+      taskType,
+      violationType: queuePaused ? "queue_circuit_breaker_opened" : "daemon_cycle_failed",
+      severity: queuePaused ? "high" : "medium",
+      details: notes,
+      evidenceText: `cycle=${cycleNo} phase=${phase} signature=${failureSignature || "n/a"}`.slice(0, 1900),
+      detectedBy: "builder_daemon",
+      sourceRoute: "scripts/lifeos-builder-daemon",
+      autoAction: "none",
+      asked: `run cycle ${cycleNo}`,
+      delivered: ok ? "queue paused after repeated failure" : `${phase} failed`,
+    });
+  }
+
+  return {
+    skipped: false,
+    performanceStatus: performance.status,
+    performanceOk: performance.ok,
+    violationStatus: violation?.status || null,
+    violationOk: violation?.ok || null,
+  };
 }
 
 async function runNodeScript(scriptPath, args = []) {
@@ -259,6 +353,29 @@ async function runCycle(cycleNo) {
     ...(effectiveSuperviseMode === "full" ? { lastFullSuperviseCycle: cycleNo } : {}),
   });
 
+  const pausedUntilMs = previousState.overnightPausedUntil ? Date.parse(previousState.overnightPausedUntil) : NaN;
+  const queuePaused = Number.isFinite(pausedUntilMs) && pausedUntilMs > Date.now();
+  if (queuePaused) {
+    await appendLog("overnight_paused", {
+      cycleNo,
+      pausedUntil: previousState.overnightPausedUntil,
+      pauseReason: previousState.overnightPauseReason || null,
+      failureSignature: previousState.lastFailureSignature || null,
+      failureStreak: Number(previousState.failureSignatureStreak || 0),
+      reliability_cues: reliabilityCue({
+        event: "overnight_paused",
+        KNOW: "queue_skipped_due_to_circuit_breaker_state",
+        not_KNOW: "queue_health_without_retry_after_pause",
+      }),
+    });
+    return {
+      ok: true,
+      queuePaused: true,
+      pausedUntil: previousState.overnightPausedUntil,
+      pauseReason: previousState.overnightPauseReason || null,
+    };
+  }
+
   const overnight = await runNodeScript(path.join(ROOT, "scripts", "lifeos-builder-overnight.mjs"), [
     "--max",
     String(overnightMax),
@@ -308,6 +425,8 @@ async function main() {
     once: ONCE,
     intervalMin,
     failSleepMin,
+    queuePauseThreshold: overnightPauseThreshold,
+    queuePauseMin: overnightPauseMin,
     queueMaxPerCycle: overnightMax,
     superviseMode,
     superviseFullEvery,
@@ -334,16 +453,28 @@ async function main() {
 
     if (result.ok) {
       await writeState({
-        status: "healthy",
+        status: result.queuePaused ? "queue_paused" : "healthy",
         cyclesTotal: (state.cyclesTotal || 0) + 1,
         cyclesOk: (state.cyclesOk || 0) + 1,
+        cyclesQueuePaused: result.queuePaused
+          ? Number(state.cyclesQueuePaused || 0) + 1
+          : Number(state.cyclesQueuePaused || 0),
         lastSuccessAt: new Date().toISOString(),
-        lastError: null,
+        lastError: result.queuePaused ? state.lastError || null : null,
         currentPhase: null,
+        ...(result.queuePaused ? {} : {
+          lastFailureSignature: null,
+          failureSignatureStreak: 0,
+          overnightPausedUntil: null,
+          overnightPauseReason: null,
+          queuePauseTriggeredAt: null,
+        }),
       });
       await appendLog("cycle_ok", {
         cycleNo,
         elapsedMs: Date.now() - startedAt,
+        queuePaused: Boolean(result.queuePaused),
+        pausedUntil: result.queuePaused ? result.pausedUntil : null,
         reliability_cues: reliabilityCue({
           event: "cycle_ok",
           superviseMode,
@@ -356,23 +487,73 @@ async function main() {
               : "deepest_run_full_smoke_documents_in_BRIDGE",
         }),
       });
+      const memoryReceipt = await sendCycleMemoryReceipt({
+        cycleNo,
+        ok: true,
+        phase: result.queuePaused ? "overnight_paused" : "cycle",
+        queuePaused: Boolean(result.queuePaused),
+        pausedUntil: result.queuePaused ? result.pausedUntil : null,
+        reason: result.queuePaused ? result.pauseReason || "" : "",
+      }).catch((error) => ({ skipped: false, error: error.message }));
+      await appendLog("cycle_memory_receipt", {
+        cycleNo,
+        ok: true,
+        memoryReceipt,
+      });
       if (ONCE) break;
       await sleep(Math.max(1, intervalMin) * 60 * 1000);
       continue;
     }
 
+    const failureSignature = normalizeFailureSignature(result.phase, result.reason);
+    const failureSignatureStreak =
+      state.lastFailureSignature === failureSignature
+        ? Number(state.failureSignatureStreak || 0) + 1
+        : 1;
+    const shouldPauseQueue =
+      result.phase === "overnight" &&
+      overnightPauseThreshold > 0 &&
+      failureSignatureStreak >= overnightPauseThreshold;
+    const pauseUntil = shouldPauseQueue
+      ? new Date(Date.now() + overnightPauseMin * 60 * 1000).toISOString()
+      : null;
+
     await writeState({
-      status: "degraded",
+      status: shouldPauseQueue ? "queue_paused" : "degraded",
       cyclesTotal: (state.cyclesTotal || 0) + 1,
       cyclesFailed: (state.cyclesFailed || 0) + 1,
       lastFailureAt: new Date().toISOString(),
       lastError: `${result.phase}: ${result.reason}`.slice(0, 2000),
       currentPhase: null,
+      lastFailureSignature: failureSignature,
+      failureSignatureStreak,
+      overnightPausedUntil: pauseUntil,
+      overnightPauseReason: shouldPauseQueue ? failureSignature : null,
+      queuePauseTriggeredAt: shouldPauseQueue ? new Date().toISOString() : null,
     });
+    if (shouldPauseQueue) {
+      await appendLog("queue_pause_opened", {
+        cycleNo,
+        phase: result.phase,
+        reason: result.reason,
+        failureSignature,
+        failureSignatureStreak,
+        pausedUntil: pauseUntil,
+        reliability_cues: reliabilityCue({
+          event: "queue_pause_opened",
+          KNOW: "daemon_circuit_breaker_opened_after_repeated_same_failure",
+          not_KNOW: "root_cause_resolved_without_operator_or_platform_change",
+        }),
+      });
+    }
     await appendLog("cycle_failed", {
       cycleNo,
       phase: result.phase,
       reason: result.reason,
+      failureSignature,
+      failureSignatureStreak,
+      queuePaused: shouldPauseQueue,
+      pausedUntil: pauseUntil,
       elapsedMs: Date.now() - startedAt,
       reliability_cues: reliabilityCue({
         event: "cycle_failed",
@@ -382,6 +563,20 @@ async function main() {
         memory_engine_link:
           "optional_future_POST_fact_evidence_exception_event_AMENDMENT_39_must_not_claim_green",
       }),
+    });
+    const memoryReceipt = await sendCycleMemoryReceipt({
+      cycleNo,
+      ok: false,
+      phase: result.phase,
+      reason: result.reason,
+      queuePaused: shouldPauseQueue,
+      pausedUntil: pauseUntil,
+      failureSignature,
+    }).catch((error) => ({ skipped: false, error: error.message }));
+    await appendLog("cycle_memory_receipt", {
+      cycleNo,
+      ok: false,
+      memoryReceipt,
     });
     if (ONCE) break;
     await sleep(Math.max(1, failSleepMin) * 60 * 1000);

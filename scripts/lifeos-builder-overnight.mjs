@@ -89,6 +89,9 @@ const key =
   '';
 
 const DEFAULT_MODEL = process.env.BUILDER_OVERNIGHT_MODEL || process.env.BUILDER_SUPERVISE_MODEL || 'gemini_flash';
+const LEGACY_TASK_MODELS = new Set([
+  'claude_via_openrouter',
+]);
 
 function argValue(flag, fallback = null) {
   const idx = process.argv.indexOf(flag);
@@ -147,7 +150,19 @@ async function assertReady() {
 }
 
 async function runBuild(task) {
-  const model = task.model || DEFAULT_MODEL;
+  const requestedModel = typeof task.model === 'string' ? task.model.trim() : '';
+  const useLegacyTaskModel = process.env.BUILDER_ALLOW_LEGACY_TASK_MODEL === '1';
+  const forceModel = task.force_model === true;
+  const model =
+    requestedModel && (forceModel || !LEGACY_TASK_MODELS.has(requestedModel) || useLegacyTaskModel)
+      ? requestedModel
+      : DEFAULT_MODEL;
+  const modelResolution =
+    requestedModel === ''
+      ? 'default'
+      : model === requestedModel
+        ? (forceModel ? 'task_forced' : 'task_requested')
+        : `task_override_blocked:${requestedModel}`;
   const body = {
     domain: task.domain || 'lifeos-platform',
     mode: 'code',
@@ -172,7 +187,7 @@ async function runBuild(task) {
     });
     last = { res, json };
     const ok = res.ok && json?.ok === true && json?.committed === true;
-    if (ok) return { res, json, ok: true };
+    if (ok) return { res, json, ok: true, requestedModel, effectiveModel: model, modelResolution };
     const retryable = res.status === 502 || res.status === 503 || res.status === 504;
     if (retryable && attempt < maxAttempts - 1) {
       const wait = 2000 + attempt * 3500;
@@ -186,9 +201,15 @@ async function runBuild(task) {
       await sleep(wait);
       continue;
     }
-    return { res, json, ok: false };
+    return { res, json, ok: false, requestedModel, effectiveModel: model, modelResolution };
   }
-  return { ...last, ok: false };
+  return {
+    ...last,
+    ok: false,
+    requestedModel,
+    effectiveModel: model,
+    modelResolution,
+  };
 }
 
 function sleep(ms) {
@@ -287,12 +308,27 @@ async function main() {
     const task = selected[i];
     const id = task.id;
     console.log(`\n▶ Running ${id} → ${task.target_file}`);
-    await logLine({ event: 'task_start', lane, id, target_file: task.target_file });
+    const requestedModel = typeof task.model === 'string' ? task.model.trim() : '';
+    const effectiveModel =
+      requestedModel && task.force_model === true
+        ? requestedModel
+        : requestedModel && LEGACY_TASK_MODELS.has(requestedModel) && process.env.BUILDER_ALLOW_LEGACY_TASK_MODEL !== '1'
+          ? DEFAULT_MODEL
+          : requestedModel || DEFAULT_MODEL;
+    await logLine({
+      event: 'task_start',
+      lane,
+      id,
+      target_file: task.target_file,
+      requested_model: requestedModel || null,
+      effective_model: effectiveModel,
+      task_force_model: task.force_model === true,
+    });
     try {
-      const { res, json, ok } = await runBuild(task);
+      const { res, json, ok, modelResolution } = await runBuild(task);
       if (!ok) {
         failed = true;
-        await logLine({ event: 'task_fail', lane, id, http: res.status, json });
+        await logLine({ event: 'task_fail', lane, id, http: res.status, model_resolution: modelResolution, json });
         console.error(JSON.stringify(json, null, 2));
         console.error(`\nStopped after failure: ${id}. Fix gaps, redeploy if needed, then resume with --start <index>.`);
         process.exit(1);
@@ -301,6 +337,7 @@ async function main() {
         event: 'task_ok',
         lane,
         id,
+        model_resolution: modelResolution,
         model_used: json?.model_used,
         committed: json?.committed,
       });

@@ -1,11 +1,10 @@
 {
-  "$comment": "Tasks for scripts/lifeos-builder-overnight.mjs — must stay aligned with LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md",
+  "$comment": "Tasks for scripts/lifeos-builder-overnight.mjs — must stay aligned with LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md. Inherit the queue default model unless a task explicitly requires force_model:true.",
   "brief": "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
   "tasks": [
     {
       "id": "dashboard-shell-audit",
       "domain": "lifeos-platform",
-      "model": "claude_via_openrouter",
       "target_file": "docs/projects/DASHBOARD_SHELL_GAP_AUDIT.md",
       "files": [
         "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
@@ -21,7 +20,6 @@
     {
       "id": "dashboard-theme-foundation",
       "domain": "lifeos-platform",
-      "model": "claude_via_openrouter",
       "target_file": "public/shared/lifeos-dashboard-tokens.css",
       "files": [
         "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
@@ -36,7 +34,6 @@
     {
       "id": "dashboard-import-tokens",
       "domain": "lifeos-platform",
-      "model": "claude_via_openrouter",
       "target_file": "public/overlay/lifeos-dashboard.html",
       "files": [
         "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
@@ -51,7 +48,6 @@
     {
       "id": "dashboard-density-commentary",
       "domain": "lifeos-platform",
-      "model": "claude_via_openrouter",
       "target_file": "docs/projects/DASHBOARD_DENSITY_INTEGRATION_NOTES.md",
       "files": [
         "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
@@ -66,7 +62,6 @@
     {
       "id": "dashboard-ai-rail-contract",
       "domain": "lifeos-platform",
-      "model": "claude_via_openrouter",
       "target_file": "docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md",
       "files": [
         "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
