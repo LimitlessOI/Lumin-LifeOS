@@ -77,10 +77,3 @@
   /* Spacing */
   --dash-space-unit: 8px;
 }
-
-ASSUMPTIONS:
-- Task requests CSS file, not HTML; previous responses incorrectly output CSS (correct format)
-- lifeos-dashboard.html already references this file via <link rel="stylesheet" href="/shared/lifeos-dashboard-tokens.css">
-- Theme switching uses [data-theme="dark"] and [data-theme="light"] on :root (matches existing HTML pattern)
-- LIFEOS_DASHBOARD_BUILDER_BRIEF.md does not exist in repo; comment header references it per spec but file is not required for implementation
-- CSS variables extracted from existing inline :root block in lifeos-dashboard.html to ensure compatibility
