@@ -1,109 +1,208 @@
-# Gap Audit: LifeOS Dashboard vs. Builder Brief
+# Gap Audit: LifeOS Dashboard Implementation vs. Brief
 
 ## Summary
 
-**Critical finding:** The builder brief files (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`) do **not exist** in the repository. Both file reads returned `ENOENT` (file not found).
+**Critical Issue:** Both brief files (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`) returned `ENOENT` — they do not exist in the repository at the specified paths.
 
-Without the authoritative brief, this audit compares the two production HTML files against each other and infers likely design intent from their structure.
+Without the authoritative brief, this audit compares the two production HTML files against each other and documents structural differences. The files represent two distinct architectural patterns:
+
+1. **lifeos-dashboard.html** — Standalone dashboard page (28,849 chars)
+2. **lifeos-app.html** — Full application shell with iframe content loader (91,838 chars)
 
 ---
 
-## Gaps vs. Inferred Brief
+## Gaps vs. Inferred Brief Intent
 
-### 1. **lifeos-dashboard.html** (standalone page)
-- **Structure:** Single-page dashboard with header, MITs, calendar, goals, scores, and chat
-- **Theme toggle:** Present (☀︎ button in header)
-- **Mobile layout:** Responsive via `@media` queries; no bottom nav (standalone page)
-- **AI rail:** Chat component embedded at bottom of page (not a persistent drawer)
-- **Ambient voice:** Toggle button present (`btn-ambient`) with proactive nudge logic
-- **Light/dark intent:** Theme toggle implemented; CSS variables defined for both modes
+### Architecture Pattern
 
-### 2. **lifeos-app.html** (shell/chrome)
-- **Structure:** Full app shell with sidebar, topbar, mobile bottom nav, iframe content area
-- **Sidebar:** Collapsible, mini mode, user dropdown, nav groups
-- **Bottom tabs (mobile):** 4 fixed tabs (Today, Inner, Health, Healing) + "More" sheet
-- **AI rail:** Persistent Lumin drawer (right-side panel on desktop, bottom sheet on mobile) + FAB + quick-bar entry
-- **Theme toggle:** Present in topbar, mobile topbar, and settings panel
-- **Light/dark intent:** Full theme system with `lifeos-theme.js` and CSS variable overrides
+| Aspect | lifeos-dashboard.html | lifeos-app.html | Gap |
+|--------|----------------------|-----------------|-----|
+| **Purpose** | Single-page dashboard view | Full app shell + navigation chrome | Dashboard is standalone; app is the container |
+| **Sidebar** | ❌ None | ✅ Full collapsible sidebar with nav groups | Dashboard has no navigation chrome |
+| **Bottom tabs (mobile)** | ❌ None | ✅ 4 fixed tabs + "More" sheet | Dashboard has no mobile bottom nav |
+| **AI rail direction** | Embedded chat card at bottom | Persistent drawer (right/bottom) + FAB + quick-bar | Different AI interaction patterns |
+| **Theme system** | Inline theme toggle | Full theme system with sync across iframe | Dashboard uses simpler theme implementation |
 
-### 3. **Concrete gaps** (inferred from typical dashboard brief patterns)
+### Light/Dark Intent
 
-| Gap | lifeos-dashboard.html | lifeos-app.html | Likely Brief Intent |
-|-----|----------------------|-----------------|---------------------|
-| **Sidebar navigation** | ❌ None (standalone) | ✅ Full sidebar with sections | Brief likely specifies sidebar for app shell |
-| **Bottom nav (mobile)** | ❌ None | ✅ 4 tabs + More | Brief likely specifies mobile bottom nav |
-| **AI rail direction** | Embedded chat (bottom of page) | Persistent drawer (right/bottom) | Brief likely specifies drawer pattern (app.html is correct) |
-| **Quick-bar entry** | ❌ None | ✅ One-tap Lumin strip above content | Brief likely specifies quick-bar for low-friction access |
-| **FAB (floating action button)** | ❌ None | ✅ Bottom-right ◎ button | Brief likely specifies FAB for mobile |
-| **Settings panel** | ❌ None | ✅ Right-side drawer with admin sections | Brief likely specifies settings in shell |
-| **User pill/dropdown** | ❌ None | ✅ Sidebar top with avatar | Brief likely specifies user context in shell |
-| **Section color accent** | ❌ None | ✅ Topbar bottom border changes per section | Brief likely specifies visual section identity |
-| **Feature help popovers** | ❌ None | ✅ Hover/long-press help on nav items | Brief likely specifies contextual help |
-| **Ambient sense opt-in** | ❌ None | ✅ Settings toggle + background hints | Brief likely specifies ambient sense as optional |
-| **Install banner (PWA)** | ❌ None | ✅ Conditional banner after 2 visits | Brief likely specifies PWA promotion |
-| **Voice status indicators** | Basic (mic button) | Full (topbar icon, drawer mic, interim preview) | Brief likely specifies rich voice UI |
+| Feature | lifeos-dashboard.html | lifeos-app.html | Gap |
+|---------|----------------------|-----------------|-----|
+| **Theme toggle UI** | ☀︎ button in header | Multiple toggles (topbar, mobile, settings) | Dashboard has single toggle point |
+| **Theme persistence** | Uses `lifeos-theme.js` | Uses `lifeos-theme.js` + `lifeos-theme-overrides.css` | Dashboard missing override stylesheet |
+| **Light mode CSS** | ❌ No light mode variables defined | ✅ Full `html[data-theme="light"]` ruleset | Dashboard dark-only |
+| **Theme sync** | Standalone page | Syncs to iframe content via postMessage | Dashboard doesn't need sync |
+
+### Mobile vs. Desktop
+
+| Feature | lifeos-dashboard.html | lifeos-app.html | Gap |
+|---------|----------------------|-----------------|-----|
+| **Responsive strategy** | Single breakpoint (640px) for 2-col grid | Three-tier: <600px mobile, 600-999px icon sidebar, 1000px+ full | Dashboard simpler responsive |
+| **Mobile chrome** | None (standalone page) | Mobile topbar + bottom nav + drawer sidebar | Dashboard has no mobile shell |
+| **Safe area insets** | Basic `env(safe-area-inset-bottom)` on body | Full safe area handling on all chrome elements | App has comprehensive notch support |
+| **Touch targets** | Standard button sizes | Minimum 44px touch targets throughout | Dashboard doesn't enforce 44px minimum |
+
+### AI Rail Direction
+
+| Feature | lifeos-dashboard.html | lifeos-app.html | Gap |
+|---------|----------------------|-----------------|-----|
+| **Chat UI pattern** | Embedded card in page flow | Persistent drawer overlay | Different interaction models |
+| **Entry points** | Single chat card | FAB + quick-bar + topbar button + Cmd/Ctrl+L | Dashboard has one entry point |
+| **Voice integration** | Push-to-talk (Space bar) + mic button | Always-on toggle + push-to-talk + drawer mic | App has richer voice options |
+| **Chat persistence** | Thread created on page load | Thread persists across navigation | Dashboard thread is page-scoped |
+| **Ambient mode** | ✅ Proactive nudge system | ❌ No ambient mode in shell | Dashboard has feature app lacks |
+
+### Component Inventory
+
+**Only in lifeos-dashboard.html:**
+- Greeting header with time-based message
+- MITs card with quick-add
+- Calendar events card
+- Goals progress card
+- Life scores grid (4 tiles with ring charts)
+- Embedded chat card
+- Ambient voice toggle
+- Long-press tooltips on MITs
+
+**Only in lifeos-app.html:**
+- Sidebar navigation (25+ sections)
+- User pill with dropdown
+- Settings panel (admin invites, gate-change presets, ambient sense toggle)
+- Feature help popovers
+- Mobile bottom nav (4 tabs + More sheet)
+- Lumin FAB (floating action button)
+- Lumin quick-bar (one-tap entry strip)
+- Lumin persistent drawer
+- Install banner (PWA prompt)
+- Section color accent system
+- Page metadata routing table
+- Theme sync to iframe
 
 ---
 
 ## Recommended Next Queued Builds
 
-1. **Restore or create `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**  
-   - If it existed, recover from git history  
-   - If not, generate from `lifeos-app.html` as the authoritative implementation  
-   - Include: sidebar structure, bottom nav tabs, AI rail direction, theme intent, mobile vs desktop breakpoints
+### 1. **Create Missing Brief Files** (BLOCKING)
 
-2. **Restore or create `LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`**  
-   - Document any pending dashboard tasks (e.g., score tile tooltips, goal progress animations, calendar sync)
+**File:** `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 
-3. **Align `lifeos-dashboard.html` with app shell pattern** (if brief confirms drawer intent)  
-   - Replace embedded chat with message to open full app  
-   - Or: keep as lightweight standalone for direct `/overlay/lifeos-dashboard.html` access
+**Content should specify:**
+- Is `lifeos-dashboard.html` intended as a standalone page or should it be loaded inside `lifeos-app.html`?
+- Canonical sidebar structure (nav groups, order, icons)
+- Mobile bottom nav tabs (which 4 sections are primary?)
+- AI rail direction (embedded vs. drawer — which is the target pattern?)
+- Light/dark theme requirements (dashboard currently dark-only)
+- Mockup references (if any exist)
 
-4. **Add missing mockup references to brief**  
-   - Task mentions "Reference mockup filenames from the brief" but brief is missing  
-   - If mockups exist (e.g., Figma exports, PNGs), document their paths in the brief
+**File:** `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
 
-5. **Validate mobile bottom nav tab order**  
-   - Current: Today, Inner, Health, Healing, More  
-   - Confirm this matches brief priority (or adjust based on usage data)
+**Content should specify:**
+- Pending dashboard tasks (e.g., score tile data sources, goal sync)
+- Integration tasks (e.g., wire dashboard into app shell iframe)
+- Missing features (e.g., light mode for dashboard, mobile nav)
 
-6. **Document section color mapping**  
-   - `lifeos-app.html` has full `PAGE_META` with color vars  
-   - `lifeos-dashboard.html` has partial accent colors (today, health, finance, mirror)  
-   - Brief should specify canonical color per section
+### 2. **Align Dashboard with App Shell** (if brief confirms integration intent)
+
+**Option A:** Dashboard as iframe content
+- Remove standalone chrome from `lifeos-dashboard.html` (header, theme toggle)
+- Rely on `lifeos-app.html` shell for navigation and theme
+- Add to `PAGE_META` in app.html: `'lifeos-dashboard.html': { title: 'Dashboard', icon: '📊', color: '--c-dashboard' }`
+
+**Option B:** Dashboard as standalone page
+- Add light mode CSS to `lifeos-dashboard.html`
+- Document use case (e.g., embeddable widget, direct link for quick view)
+- Add link to full app from dashboard
+
+### 3. **Add Light Mode to Dashboard** (if standalone)
+
+**File:** `public/overlay/lifeos-dashboard.html`
+
+**Changes:**
+- Add `html[data-theme="light"]` CSS variables (copy from app.html)
+- Update theme toggle to set `data-theme` attribute
+- Test all cards, scores, and chat in light mode
+
+### 4. **Document Section Color System**
+
+**File:** `docs/design/section-colors.md` (new)
+
+**Content:**
+- Canonical color mapping (Today: `--c-today`, Health: `--c-health`, etc.)
+- Usage in topbar accent line
+- Usage in nav item active state
+- Usage in card accent borders
+
+### 5. **Standardize Voice Integration**
+
+**Current state:**
+- Dashboard has ambient proactive mode (app lacks)
+- App has always-on toggle (dashboard lacks)
+- Both have push-to-talk
+
+**Recommendation:**
+- Move ambient mode to app shell (make it global)
+- Add always-on toggle to dashboard (if standalone)
+- Document voice feature matrix in brief
+
+### 6. **Mobile Bottom Nav Tab Order**
+
+**Current:** Today, Inner, Health, Healing, More
+
+**Questions for brief:**
+- Is this the priority order based on usage data?
+- Should Dashboard be in bottom nav instead of More sheet?
+- Should Chat/Lumin be a bottom tab (currently FAB + quick-bar)?
 
 ---
 
 ## Open Questions
 
-1. **Is `lifeos-dashboard.html` intended as a standalone page or a deprecated artifact?**  
-   - If standalone: document its use case (e.g., embeddable widget, quick-view URL)  
-   - If deprecated: mark for removal or redirect to `/overlay/lifeos-app.html?page=lifeos-dashboard.html`
+### 1. **What is the relationship between the two HTML files?**
 
-2. **What are the "mockup filenames" referenced in the task?**  
-   - No image assets found in injected file list  
-   - If mockups exist, where are they stored? (e.g., `docs/mockups/`, `public/assets/`)
+- Is `lifeos-dashboard.html` a legacy artifact or an active standalone page?
+- Should dashboard be loaded inside `lifeos-app.html` iframe?
+- If standalone, what is the use case? (embeddable widget, quick-view URL, etc.)
 
-3. **Should the brief specify desktop vs. mobile breakpoints explicitly?**  
-   - Current: `600px` (mobile), `600-999px` (icon-only sidebar), `1000px+` (full sidebar)  
-   - Confirm these match design intent
+### 2. **Where are the mockup files referenced in the task?**
 
-4. **Is the "overnight queue" a task backlog or a scheduled build queue?**  
-   - If backlog: should it live in `docs/projects/` or `docs/tasks/`?  
-   - If scheduled: should it integrate with `startup/register-schedulers.js`?
+- Task says "Reference mockup filenames from the brief"
+- No mockups found in injected file list
+- Do mockups exist? If so, where? (`docs/mockups/`, `public/assets/`, Figma?)
 
-5. **Should `lifeos-dashboard.html` import the same theme system as `lifeos-app.html`?**  
-   - Currently uses inline `lifeos-theme.js` but not `lifeos-theme-overrides.css`  
-   - Confirm if standalone pages should share theme overrides
+### 3. **Why does dashboard have ambient mode but app shell doesn't?**
+
+- Dashboard: `toggleAmbient()` with proactive nudge polling
+- App: Ambient sense (device hints) but no proactive voice
+- Should ambient voice be global (in shell) or page-specific?
+
+### 4. **Should dashboard scores be real-time or cached?**
+
+- Current: Fetches from `/api/v1/lifeos/dashboard/scoreboard`
+- No loading states or error boundaries
+- Should scores update on interval? On visibility change?
+
+### 5. **What is the target breakpoint strategy?**
+
+- Dashboard: Single breakpoint (640px)
+- App: Three-tier (600px, 1000px)
+- Should dashboard adopt app's breakpoints for consistency?
+
+### 6. **Is the "overnight queue" a task backlog or a scheduled build queue?**
+
+- If backlog: Should it live in `docs/projects/` or `docs/tasks/`?
+- If scheduled: Should it integrate with `startup/register-schedulers.js`?
 
 ---
 
-**Next step:** Locate or generate the missing brief files before making structural changes to either HTML file.
+## ASSUMPTIONS
+
+1. The brief files were intended to exist but were never committed (or were deleted)
+2. `lifeos-app.html` represents the current authoritative shell architecture
+3. `lifeos-dashboard.html` is either:
+   - A standalone page for direct access, OR
+   - Content intended to be loaded inside the app shell iframe
+4. "Mockup filenames" refers to design assets not present in the repository
+5. The task expects a gap audit only (no code changes)
 
 ---
 
-**ASSUMPTIONS:**
-- The brief files were intended to exist but were never committed (or were deleted)
-- `lifeos-app.html` represents the current authoritative design (full shell with drawer)
-- `lifeos-dashboard.html` is either a legacy artifact or a lightweight standalone variant
-- "Mockup filenames" refers to design assets not present in the injected file list
+**Next Step:** Create or restore the missing brief files before making structural changes to either HTML file. The brief must answer: "Is dashboard standalone or iframe content?" — this determines all subsequent work.
