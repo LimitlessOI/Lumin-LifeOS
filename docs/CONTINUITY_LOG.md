@@ -47,6 +47,9 @@
 ### Next agent: start here
 - **Push → redeploy Railway** → rerun **`POST /api/v1/lifeos/builder/build`** for **`dashboard-ai-rail`** on **`public/overlay/lifeos-dashboard.html`**; then continue **`LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`** (customization-state, widget-density, …) or **`npm run lifeos:builder:daemon`**.
 
+### Follow-up (same day)
+- **KNOW:** first deploy after cap raise still requested **`max_output_tokens_requested` ~16k** — root cause was **estimator plateau** (`chars/2.5`), not **`BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP`** alone → **`estimateBuilderMaxOutputTokens`** HTML branch now boosts via **`chars/1.85` + floor** (second push to **`main`** + **`POST …/railway/managed-env/build-from-latest`** when needed).
+
 ---
 
 ## [PLAN] Update 2026-04-30 #18 — Universal overlay distribution law (install-one/access-all, shared data fabric)

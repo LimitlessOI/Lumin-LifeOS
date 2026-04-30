@@ -149,8 +149,14 @@ function estimateBuilderMaxOutputTokens(summaries, filesContentBlock, targetFile
   // Sending a large maxOutputTokens without corresponding input context causes HTTP 413
   // on providers that validate total request token budget (Gemini Flash, Groq).
   if (totalChars === 0) return null;
-  const estimated = Math.ceil(totalChars / 2.5) + 4096;
+  // Base heuristic: correlate with injected context size (historically JS/SQL-sized files).
+  const linearEstimate = Math.ceil(totalChars / 2.5) + 4096;
   const isHtml = /\.html$/i.test(String(targetFile || ''));
+  /** Full `.html` replacement must emit the entire prior document plus edits — chars→tokens≠2.5; use tighter ratio + floor so we do not strand at ~16k when the overlay is tens of kb. */
+  const htmlHeuristic =
+    Math.ceil(totalChars / 1.85) +
+    Math.max(8192, Math.ceil(Math.min(totalChars, 180_000) / 420));
+  const estimated = isHtml ? Math.max(linearEstimate, htmlHeuristic) : linearEstimate;
   const htmlCap = Math.min(
     128_000,
     Math.max(4096, parseInt(process.env.BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP || '65536', 10) || 65536),

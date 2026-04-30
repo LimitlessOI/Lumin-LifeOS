@@ -56,6 +56,7 @@ Any session that **adds or changes** a self-serve HTTP route, operator script, o
 
 | Date | Change |
 |------|--------|
+| 2026-04-30 | **B4 builder tuning (follow-up):** HTML **`estimateBuilderMaxOutputTokens`** now uses **`max(linear, ceil(chars/1.85)+…)`** so full-overlay regen does not plateau at ~16k request tokens when **`BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP`** alone is insufficient. Same env vars — cap still applies. |
 | 2026-04-30 | **B4 builder tuning:** Raised HTML codegen **`maxOutputTokens`** cap in `routes/lifeos-council-builder-routes.js` (env **`BUILDER_HTML_MAX_OUTPUT_TOKENS_CAP`** / **`BUILDER_CODE_MAX_OUTPUT_TOKENS_CAP`**) + clearer validation when Gemini truncates before **`<body>`**; **`docs/BUILDER_OPERATOR_ENV.md`** + **`docs/ENV_REGISTRY.md`** document optional vars. |
 | 2026-04-30 | **Reality sync:** B1/B2 promoted to **SHIPPED** and V4 note updated after live operator run showed `/healthz`, `/ready`, `/domains`, `/model-map`, `/gaps`, `/council/health`, and `/railway/env` all returning **200**, with `npm run tsos:doctor` scoring **100/100 green**. |
 | 2026-04-29 | **V7 Token efficiency scorecard:** **`npm run tsos:tokens`** (`scripts/tsos-token-efficiency.mjs`) + **V6 composite now includes token-efficiency leg**. Tracks weighted free-tier request budget remaining %, token savings trend, writes `data/token-efficiency-log.jsonl`, and supports **A/B/C/D/F** grade gate via `TSOS_ENFORCE_TOKEN_GRADE` + `TSOS_MIN_TOKEN_GRADE`. |
