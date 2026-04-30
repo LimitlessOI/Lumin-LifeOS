@@ -4,9 +4,7 @@
  */
 
 /**
- * Clamps widget count to mobile-safe range
- * @param {number} count - Raw widget count
- * @returns {number} Integer between 1 and 6 inclusive
+ * Clamps widget count to mobile-safe range [1..6]
  */
 export function clampMobileWidgetCount(count) {
   const n = parseInt(count, 10);
@@ -16,8 +14,7 @@ export function clampMobileWidgetCount(count) {
 
 /**
  * Resolves theme mode to canonical value
- * @param {string} value - Theme preference input
- * @returns {"light"|"dark"|"system"} Normalized theme mode
+ * @returns {"light"|"dark"|"system"}
  */
 export function resolveThemeMode(value) {
   if (typeof value !== 'string') return 'system';
@@ -29,11 +26,7 @@ export function resolveThemeMode(value) {
 
 /**
  * Picks dashboard density based on viewport and widget state
- * @param {Object} opts
- * @param {number} opts.viewportWidth - Viewport width in pixels
- * @param {number} opts.widgetCount - Number of active widgets
- * @param {boolean} opts.hasPinnedRail - Whether sidebar rail is pinned
- * @returns {"compact"|"balanced"|"airy"} Density mode
+ * @returns {"compact"|"balanced"|"airy"}
  */
 export function pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail }) {
   // Compact: small viewport with many widgets
