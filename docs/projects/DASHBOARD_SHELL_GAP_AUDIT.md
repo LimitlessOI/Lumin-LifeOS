@@ -2,17 +2,19 @@
 
 ## Summary
 
-**CRITICAL FINDING:** Both brief files returned `ENOENT` errors. The task asserts these files "exist on the server" and are "authoritative," but the file system could not locate them:
+**CRITICAL BLOCKER:** Both brief files returned `ENOENT` errors:
 - `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
 
-**Without the brief, I cannot perform the requested comparison.** However, I can document observable architectural differences between the two HTML files based on production code analysis.
+The task asserts these files "exist on the server" and are "authoritative," but the file system could not locate them. **Without the brief, I cannot perform the requested comparison against specifications for sidebar, bottom tabs, AI rail direction, light/dark intent, or mobile vs desktop requirements.**
+
+However, I can document observable architectural differences between `lifeos-dashboard.html` (standalone page) and `lifeos-app.html` (application shell) based on production code analysis.
 
 ---
 
 ## Gaps vs. Brief (Inferred from Production Code)
 
-Since the brief files are missing, I document observable differences between `lifeos-dashboard.html` (standalone page) and `lifeos-app.html` (application shell):
+Since the brief files are missing, I document observable differences between the two HTML files:
 
 ### 1. **Sidebar**
 - **Dashboard:** ❌ No sidebar
