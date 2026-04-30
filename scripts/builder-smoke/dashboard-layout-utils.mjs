@@ -1,25 +1,27 @@
 /**
- * @fileoverview Dashboard layout utilities (pure, deterministic, no deps)
- * @module utils/dashboard-layout-helpers
+ * Dashboard layout utilities
+ * Pure ESM, zero dependencies, deterministic
  */
 
 /**
- * Clamps mobile widget count to valid range [1..6]
+ * Clamps widget count to mobile-safe range
  * @param {number} count - Raw widget count
- * @returns {number} Clamped integer
+ * @returns {number} Integer between 1 and 6 inclusive
  */
 export function clampMobileWidgetCount(count) {
-  const n = Math.floor(Number(count) || 1);
+  const n = parseInt(count, 10);
+  if (isNaN(n)) return 1;
   return Math.max(1, Math.min(6, n));
 }
 
 /**
  * Resolves theme mode to canonical value
- * @param {string} value - User preference string
+ * @param {string} value - Theme preference input
  * @returns {"light"|"dark"|"system"} Normalized theme mode
  */
 export function resolveThemeMode(value) {
-  const normalized = String(value || '').toLowerCase().trim();
+  if (typeof value !== 'string') return 'system';
+  const normalized = value.toLowerCase().trim();
   if (normalized === 'light') return 'light';
   if (normalized === 'dark') return 'dark';
   return 'system';
@@ -30,21 +32,25 @@ export function resolveThemeMode(value) {
  * @param {Object} opts
  * @param {number} opts.viewportWidth - Viewport width in pixels
  * @param {number} opts.widgetCount - Number of active widgets
- * @param {boolean} opts.hasPinnedRail - Whether sidebar is pinned
+ * @param {boolean} opts.hasPinnedRail - Whether sidebar rail is pinned
  * @returns {"compact"|"balanced"|"airy"} Density mode
  */
 export function pickDashboardDensity({ viewportWidth, widgetCount, hasPinnedRail }) {
-  const vw = Number(viewportWidth) || 0;
-  const wc = Number(widgetCount) || 0;
-  const pinned = Boolean(hasPinnedRail);
-
-  // Compact conditions
-  if (vw < 640 && wc >= 4) return 'compact';
-  if (pinned && wc >= 5) return 'compact';
-
-  // Airy condition
-  if (vw >= 1280 && wc <= 3 && !pinned) return 'airy';
-
+  // Compact: small viewport with many widgets
+  if (viewportWidth < 640 && widgetCount >= 4) {
+    return 'compact';
+  }
+  
+  // Compact: pinned rail with many widgets
+  if (hasPinnedRail === true && widgetCount >= 5) {
+    return 'compact';
+  }
+  
+  // Airy: large viewport, few widgets, no pinned rail
+  if (viewportWidth >= 1280 && widgetCount <= 3 && hasPinnedRail === false) {
+    return 'airy';
+  }
+  
   // Default
   return 'balanced';
 }
