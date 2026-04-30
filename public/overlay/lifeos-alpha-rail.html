@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeOS Alpha Rail</title>
+    <style>
+        /* Basic reset and body styling */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Main container for the app */
+        #app-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* AI Bar container */
+        #ai-bar-container {
+            position: fixed;
+            width: calc(100% - 20px); /* Account for padding */
+            left: 10px;
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 10px 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #ai-bar-container.dock-bottom {
+            bottom: 10px;
+            top: auto;
+        }
+
+        #ai-bar-container.dock-top {
+            top: 10px;
+            bottom: auto;
+        }
+
+        #ai-bar-container.collapsed {
+            height: 60px; /* One-line height */
+            overflow: hidden;
+        }
+
+        #ai-bar-container.expanded {
+            height: auto;
+            max-height: 80vh; /* Limit expanded height */
+        }
+
+        /* AI Bar header for collapse/dock */
+        #ai-bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+
+        #ai-bar-header h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        #ai-bar-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        #ai-bar-controls button {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #888;
+        }
+
+        #ai-bar-controls button:hover {
+            color: #333;
+        }
+
+        /* Chat transcript area */
+        #transcript-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            max-height: 300px; /* Fixed height for transcript */
+            display: flex;
+            flex-direction: column-reverse; /* New messages at bottom */
+        }
+
+        .message-bubble {
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .message-bubble.user {
+            background-color: #e0f7fa;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-bubble.ai {
+            background-color: #f0f0f0;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-bubble.ai.delegate {
+            background-color: #fff3e0;
+            border: 1px solid #ffcc80;
+        }
+
+        .delegate-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .delegate-actions button {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .delegate-actions button:hover {
+            background-color: #eee;
+        }
+
+        /* Input and voice controls */
+        #input-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        #chat-input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 1em;
+            outline: none;
+        }
+
+        #chat-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
+        #voice-mode-selector {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            font-size: 0.9em;
+            outline: none;
+        }
+
+        #send-button, #push-to-talk-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #send-button:hover, #push-to-talk-button:hover {
+            background-color: #0056b3;
+        }
+
+        #push-to-talk-button.active {
+            background-color: #dc3545;
+        }
+
+        #interim-transcript {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #666;
+            min-height: 1.2em; /* Reserve space */
+        }
+
+        /* Moment Capture Panel */
+        #moment-capture-panel {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 15px;
+            margin-bottom: 20px;
+            margin-top: 80px; /* Push down from top-docked AI bar */
+        }
+
+        #moment-capture-panel h4 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        #moment-capture-input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        #capture-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #capture-button:hover {
+            background-color: #218838;
+        }
+
+        /* Overcommit Summary Panel */
+        #overcommit-summary-panel {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        #overcommit-summary-panel h4 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        #overcommit-status {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        #overcommit-details {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        /* Utility classes */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        <div id="moment-capture-panel">
+            <h4>Capture a Moment</h4>
+            <textarea id="moment-capture-input" placeholder="What's happening right now? What's on your mind?"></textarea>
+            <button id="capture-button">Capture</button>
+        </div>
+
+        <div id="overcommit-summary-panel">
+            <h4>Commitment Load</h4>
+            <p id="overcommit-status">Loading...</p>
+            <div id="overcommit-details"></div>
+        </div>
+    </div>
+
+    <div id="ai-bar-container" class="dock-bottom collapsed">
+        <div id="ai-bar-header">
+            <h3>LifeOS AI Council</h3>
+            <div id="ai-bar-controls">
+                <button id="toggle-dock-button" title="Toggle dock position">⬆️</button>
+                <button id="toggle-collapse-button" title="Toggle expand/collapse">↔️</button>
+            </div>
+        </div>
+        <div id="transcript-area" class="hidden">
+            <!-- Chat messages will be appended here -->
+        </div>
+        <div id="interim-transcript"></div>
+        <div id="input-area">
+            <input type="text" id="chat-input" placeholder="Type or speak to LifeOS...">
+            <select id="voice-mode-selector">
+                <option value="dictation">Dictation</option>
+                <option value="two-way">Two-Way</option>
+                <option value="push-to-talk">Push-to-Talk</option>
+            </select>
+            <button id="send-button">➤</button>
+            <button id="push-to-talk-button" class="hidden">🎤</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/v1/lifeos';
+        const API_KEY = localStorage.getItem('lifeos_api_key') || 'adam'; // Default to 'adam' for testing
+
+        let currentThreadId = null;
+        let isCollapsed = true;
+        let isDockedBottom = true;
+        let recognition = null;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
+        let voiceMode = 'dictation'; // Default voice mode
+
+        const aiBarContainer = document.getElementById('ai-bar-container');
+        const toggleDockButton = document.getElementById('toggle-dock-button');
+        const toggleCollapseButton = document.getElementById('toggle-collapse-button');
+        const transcriptArea = document.getElementById('transcript-area');
+        const chatInput = document.getElementById('chat-input');
+        const voiceModeSelector = document.getElementById('voice-mode-selector');
+        const sendButton = document.getElementById('send-button');
+        const pushToTalkButton = document.getElementById('push-to-talk-button');
+        const interimTranscript = document.getElementById('interim-transcript');
+        const momentCaptureInput = document.getElementById('moment-capture-input');
+        const captureButton = document.getElementById('capture-button');
+        const overcommitStatus = document.getElementById('overcommit-status');
+        const overcommitDetails = document.getElementById('overcommit-details');
+
+        // --- UI State Management ---
+        function updateAiBarState() {
+            aiBarContainer.classList.toggle('collapsed', isCollapsed);
+            aiBarContainer.classList.toggle('expanded', !isCollapsed);
+            transcriptArea.classList.toggle('hidden', isCollapsed);
+
+            aiBarContainer.classList.toggle('dock-bottom', isDockedBottom);
+            aiBarContainer.classList.toggle('dock-top', !isDockedBottom);
+            toggleDockButton.textContent = isDockedBottom ? '⬆️' : '⬇️';
+            toggleCollapseButton.textContent = isCollapsed ? '↔️' : '⬇️';
+
+            // Adjust app-container padding based on AI bar position and state
+            const aiBarHeight = isCollapsed ? 60 : Math.min(aiBarContainer.scrollHeight, window.innerHeight * 0.8);
+            if (isDockedBottom) {
+                document.getElementById('app-container').style.paddingBottom = `${aiBarHeight + 20}px`;
+                document.getElementById('app-container').style.paddingTop = '10px';
+                document.getElementById('moment-capture-panel').style.marginTop = '0'; // Reset if docked bottom
+            } else {
+                document.getElementById('app-container').style.paddingTop = `${aiBarHeight + 20}px`;
+                document.getElementById('app-container').style.paddingBottom = '10px';
+                document.getElementById('moment-capture-panel').style.marginTop = `${aiBarHeight + 20}px`; // Push down
+            }
+        }
+
+        toggleCollapseButton.addEventListener('click', () => {
+            isCollapsed = !isCollapsed;
+            updateAiBarState();
+        });
+
+        toggleDockButton.addEventListener('click', () => {
+            isDockedBottom = !isDockedBottom;
+            updateAiBarState();
+        });
+
+        // Initial state update
+        updateAiBarState();
+
+        // --- API Helpers ---
+        async function apiFetch(path, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                'x-lifeos-key': API_KEY,
+                ...options.headers,
+            };
+            const response = await fetch(`${API_BASE}${path}`, {
+                ...options,
+                headers,
+            });
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: response.statusText }));
+                throw new Error(errorData.error || errorData.message || `API error: ${response.status}`);
+            }
+            return response.json();
+        }
+
+        // --- Chat Functionality ---
+        async function getOrCreateDefaultThread() {
+            try {
+                const data = await apiFetch('/chat/threads/default');
+                currentThreadId = data.thread.id;
+                await loadMessages(currentThreadId);
+            } catch (error) {
+                console.error('Error getting/creating default thread:', error);
+                appendMessage('AI', `Error initializing chat: ${error.message}`, 'error');
+            }
+        }
+
+        async function loadMessages(threadId) {
+            try {
+                const data = await apiFetch(`/chat/threads/${threadId}/messages`);
+                transcriptArea.innerHTML = ''; // Clear existing messages
+                data.messages.reverse().forEach(msg => { // Display oldest first, then reverse for scroll
+                    appendMessage(msg.role === 'user' ? 'User' : 'AI', msg.content);
+                });
+                transcriptArea.scrollTop = transcriptArea.scrollHeight;
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                appendMessage('AI', `Error loading messages: ${error.message}`, 'error');
+            }
+        }
+
+        function appendMessage(sender, content, type = 'text', delegateActions = null) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('message-bubble');
+            bubble.classList.add(sender === 'User' ? 'user' : 'ai');
+            if (type === 'error') {
+                bubble.style.backgroundColor = '#ffe0e0';
+                bubble.style.borderColor = '#ff8080';
+            }
+            if (type === 'delegate') {
+                bubble.classList.add('delegate');
+            }
+
+            const contentSpan = document.createElement('span');
+            contentSpan.textContent = content;
+            bubble.appendChild(contentSpan);
+
+            if (delegateActions) {
+                const actionsDiv = document.createElement('div');
+                actionsDiv.classList.add('delegate-actions');
+
+                const yesButton = document.createElement('button');
+                yesButton.textContent = 'Yes';
+                yesButton.onclick = () => sendChatMessage(`Yes, please draft that: "${content}"`);
+                actionsDiv.appendChild(yesButton);
+
+                const noButton = document.createElement('button');
+                noButton.textContent = 'No';
+                noButton.onclick = () => sendChatMessage(`No, do not proceed with: "${content}"`);
+                actionsDiv.appendChild(noButton);
+
+                bubble.appendChild(actionsDiv);
+            }
+
+            transcriptArea.prepend(bubble); // Add to top, then flex-direction-reverse will put it at bottom
+            transcriptArea.scrollTop = transcriptArea.scrollHeight;
+        }
+
+        async function sendChatMessage(message) {
+            if (!message.trim()) return;
+
+            appendMessage('User', message);
+            chatInput.value = '';
+            interimTranscript.textContent = ''; // Clear interim transcript
+
+            // Check for delegation keywords
+            const delegateKeywords = ['schedule', 'email', 'book', 'call', 'follow up', 'research', 'plan'];
+            const needsDelegation = delegateKeywords.some(keyword => message.toLowerCase().includes(keyword));
+
+            if (needsDelegation) {
+                appendMessage('AI', `It looks like you're asking me to perform an action. Would you like me to draft a plan for "${message}"?`, 'delegate', true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/chat/threads/${currentThreadId}/messages/stream`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-lifeos-key': API_KEY,
+                    },
+                    body: JSON.stringify({ message }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: response.statusText }));
+                    throw new Error(errorData.error || errorData.message || `API error: ${response.status}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let aiResponseContent = '';
+                let aiMessageBubble = null;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value);
+                    chunk.split('\n\n').filter(Boolean).forEach(event => {
+                        if (event.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(event.substring(6));
+                                if (data.token) {
+                                    if (!aiMessageBubble) {
+                                        aiMessageBubble = document.createElement('div');
+                                        aiMessageBubble.classList.add('message-bubble', 'ai');
+                                        transcriptArea.prepend(aiMessageBubble);
+                                    }
+                                    aiResponseContent += data.token;
+                                    aiMessageBubble.textContent = aiResponseContent;
+                                    transcriptArea.scrollTop = transcriptArea.scrollHeight;
+                                } else if (data.done) {
+                                    // Final message, no need to do anything specific here as tokens already built it
+                                } else if (data.error) {
+                                    appendMessage('AI', `Error: ${data.error}`, 'error');
+                                }
+                            } catch (e) {
+                                console.error('Error parsing SSE data:', e, event);
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                appendMessage('AI', `Error sending message: ${error.message}`, 'error');
+            }
+        }
+
+        sendButton.addEventListener('click', () => sendChatMessage(chatInput.value));
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendChatMessage(chatInput.value);
+            }
+        });
+
+        // --- Voice Input Functionality ---
+        function setupSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window)) {
+                console.warn('Speech Recognition not supported in this browser.');
+                return null;
+            }
+            const sr = new webkitSpeechRecognition();
+            sr.continuous = true;
+            sr.interimResults = true;
+            sr.lang = 'en-US';
+
+            sr.onstart = () => {
+                console.log('Speech recognition started');
+                interimTranscript.textContent = 'Listening...';
+                chatInput.placeholder = 'Speak now...';
+            };
+
+            sr.onresult = (event) => {
+                let interim = '';
+                let final = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        final += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+                interimTranscript.textContent = interim;
+                if (final) {
+                    chatInput.value = final;
+                    if (voiceMode === 'two-way') {
+                        sendChatMessage(final);
+                        chatInput.value = ''; // Clear after sending
+                    }
+                }
+            };
+
+            sr.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                interimTranscript.textContent = `Error: ${event.error}`;
+                chatInput.placeholder = 'Type or speak to LifeOS...';
+            };
+
+            sr.onend = () => {
+                console.log('Speech recognition ended');
+                if (voiceMode !== 'push-to-talk' || !isRecording) { // Only clear if not PTT or PTT stopped
+                    interimTranscript.textContent = '';
+                    chatInput.placeholder = 'Type or speak to LifeOS...';
+                }
+            };
+            return sr;
+        }
+
+        function startSpeechRecognition() {
+            if (!recognition) {
+                recognition = setupSpeechRecognition();
+                if (!recognition) return;
+            }
+            recognition.start();
+            isRecording = true;
+        }
+
+        function stopSpeechRecognition() {
+            if (recognition && isRecording) {
+                recognition.stop();
+                isRecording = false;
+            }
+        }
+
+        // --- Text-to-Speech (for two-way voice mode) ---
+        function speak(text) {
+            if ('speechSynthesis' in window && voiceMode === 'two-way') {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Override appendMessage to include speech for AI replies in two-way mode
+        const originalAppendMessage = appendMessage;
+        appendMessage = function(sender, content, type = 'text', delegateActions = null) {
+            originalAppendMessage(sender, content, type, delegateActions);
+            if (sender === 'AI' && voiceMode === 'two-way') {
+                speak(content);
+            }
+        };
+
+        // --- Voice Mode Selector Logic ---
+        voiceModeSelector.addEventListener('change', () => {
+            voiceMode = voiceModeSelector.value;
+            stopSpeechRecognition(); // Stop any active recognition
+
+            if (voiceMode === 'push-to-talk') {
+                sendButton.classList.add('hidden');
+                pushToTalkButton.classList.remove('hidden');
+            } else {
+                sendButton.classList.remove('hidden');
+                pushToTalkButton.classList.add('hidden');
+                if (voiceMode === 'dictation' || voiceMode === 'two-way') {
+                    startSpeechRecognition(); // Start continuous recognition
+                }
+            }
+        });
+
+        // Push-to-Talk logic
+        pushToTalkButton.addEventListener('mousedown', () => {
+            if (voiceMode === 'push-to-talk') {
+                pushToTalkButton.classList.add('active');
+                startSpeechRecognition();
+            }
+        });
+
+        pushToTalkButton.addEventListener('mouseup', () => {
+            if (voiceMode === 'push-to-talk') {
+                pushToTalkButton.classList.remove('active');
+                stopSpeechRecognition();
+                if (chatInput.value.trim()) {
+                    sendChatMessage(chatInput.value);
+                    chatInput.value = '';
+                }
+            }
+        });
+
+        // Global keydown/keyup for Spacebar as PTT
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && voiceMode === 'push-to-talk' && !isRecording && !chatInput.matches(':focus')) {
+                e.preventDefault(); // Prevent scrolling
+                pushToTalkButton.classList.add('active');
+                startSpeechRecognition();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.code === 'Space' && voiceMode === 'push-to-talk' && isRecording && !chatInput.matches(':focus')) {
+                e.preventDefault();
+                pushToTalkButton.classList.remove('active');
+                stopSpeechRecognition();
+                if (chatInput.value.trim()) {
+                    sendChatMessage(chatInput.value);
+                    chatInput.value = '';
+                }
+            }
+        });
+
+        // --- Moment Capture ---
+        captureButton.addEventListener('click', async () => {
+            const text = momentCaptureInput.value.trim();
+            if (!text) return;
+
+            try {
+                // Post to ambient snapshot
+                await apiFetch('/ambient/snapshot', {
+                    method: 'POST',
+                    body: JSON.stringify({ signals: { moment: text } }),
+                });
+
+                // Post to commitments extract with auto_log
+                await apiFetch('/commitments/extract', {
+                    method: 'POST',
+                    body: JSON.stringify({ text, auto_log: true, source_ref: 'moment-capture' }),
+                });
+
+                alert('Moment captured and commitments extracted!');
+                momentCaptureInput.value = '';
+            } catch (error) {
+                console.error('Error capturing moment:', error);
+                alert(`Failed to capture moment: ${error.message}`);
+            }
+        });
+
+        // --- Commitment Coaching Hooks (Overcommit Summary) ---
+        async function loadCommitmentLoadSummary() {
+            try {
+                const data = await apiFetch('/commitments/load');
+                const { total_estimated_minutes_per_day, available_minutes_per_day, status, breakdown } = data;
+
+                overcommitStatus.textContent = `Status: ${status}`;
+                overcommitDetails.innerHTML = `
+                    <p>Total Estimated: ${total_estimated_minutes_per_day} min/day</p>
+                    <p>Available: ${available_minutes_per_day} min/day</p>
+                    ${breakdown && breakdown.length > 0 ? `
+                        <p>Breakdown:</p>
+                        <ul>
+                            ${breakdown.map(item => `<li>${item.title}: ${item.estimated_minutes_per_day} min/day</li>`).join('')}
+                        </ul>
+                    ` : '<p>No detailed breakdown available.</p>'}
+                `;
+            } catch (error) {
+                console.error('Error loading commitment summary:', error);
+                overcommitStatus.textContent = `Error loading summary: ${error.message}`;
+                overcommitDetails.innerHTML = '';
+            }
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            getOrCreateDefaultThread();
+            loadCommitmentLoadSummary();
+            // Start dictation mode by default if supported
+            if (voiceMode === 'dictation' || voiceMode === 'two-way') {
+                startSpeechRecognition();
+            }
+        });
+    </script>
+</body>
+</html>
