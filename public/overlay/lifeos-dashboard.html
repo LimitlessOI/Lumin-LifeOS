@@ -677,6 +677,42 @@ grid-template-columns: 1fr 1fr;
 gap: 16px;
 }
 }
+/* Desktop-specific styles for wider screens */
+@media (min-width: 1000px) {
+    .page {
+        max-width: 1000px; /* Wider content area for desktop */
+        padding: 40px 32px; /* More generous padding */
+    }
+    .hdr-row {
+        padding-top: 12px; /* More space above header content */
+        margin-bottom: 24px; /* More space below header */
+    }
+    .greeting {
+        font-size: 48px; /* Larger greeting text */
+    }
+    .greeting-sub {
+        font-size: 18px; /* Larger sub-greeting text */
+    }
+    .two-col {
+        gap: 32px; /* Increased gap between columns */
+    }
+    .card {
+        padding: 28px; /* More internal padding for cards */
+    }
+    .card-label {
+        font-size: 11px; /* Slightly larger label */
+        margin-bottom: 18px; /* More space below label */
+    }
+    .chat-messages {
+        height: 360px; /* Taller chat window for more history */
+    }
+    .chat-row {
+        margin-top: 20px; /* More space above chat input */
+    }
+    .voice-footer {
+        margin-top: 16px; /* More space above voice footer */
+    }
+}
 </style>
 </head>
 <body>
@@ -782,9 +818,12 @@ setInterval(tick, 30000);
 // ── Theme toggle ──
 function toggleTheme() {
 const curr = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
-const next = curr === 'light' ? '☾' : '☀︎';
+const next = curr === 'light' ? 'dark' : 'light';
+document.documentElement.dataset.theme = next;
+localStorage.setItem('lifeos_theme', next);
 const mc = document.getElementById('theme-color-meta');
 if (mc) mc.setAttribute('content', next === 'light' ? '#f6f7fb' : '#0a0a0f');
+$('btn-theme').textContent = next === 'light' ? '☾' : '☀︎';
 }
 // ── Long-press ──
 let pressTimer;
