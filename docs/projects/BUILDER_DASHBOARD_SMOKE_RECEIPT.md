@@ -2,42 +2,41 @@
 
 **Source Document**: `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
 
-## Understanding Confirmed
+## Shell Architecture Understanding
 
-### Shell Architecture
-The LifeOS dashboard requires a **responsive shell with intentionally different layouts** for desktop and mobile:
+### Desktop Layout
+- **Persistent left sidebar** for primary navigation
+- Sidebar remains visible across all views and category dashboards
 
-- **Desktop**: Persistent left sidebar navigation
-- **Mobile**: Bottom tab bar navigation
-
-These are not responsive variants of the same pattern — they are distinct navigation paradigms optimized for their respective form factors.
+### Mobile Layout
+- **Bottom tab bar** for primary navigation
+- Mobile and desktop layouts **differ intentionally** — not responsive variants, but distinct UX patterns optimized for each form factor
 
 ### Category Dashboard System
 - **Swipe-ready horizontal navigation** between life category dashboards
-- Each category represents a major life domain with its own dashboard view
+- Each category dashboard is a discrete view
 - Touch gesture support required for mobile category transitions
 
 ### Persistent AI Rail
 - Always-accessible AI interaction surface
 - Remains available across all category dashboard contexts
-- Must persist regardless of which category dashboard is active
+- Must persist regardless of active category or navigation state
 
 ### Visual Modes
-Both themes are **required**, not optional:
+Both themes are **required**:
 - **Light mode**
 - **Dark mode**
 
-Theme switching and persistence must be supported across all views.
+Theme switching and persistence must be supported.
 
-## What This Receipt Does NOT Claim
+## Scope Boundaries
 
-Per epistemic constraints, this receipt makes **zero claims** about:
-- Backend API endpoints or routes
-- Database schema or table structure
-- Authentication/authorization mechanisms
-- State management implementation details
-- Specific component libraries or frameworks
+This receipt confirms **UI shell architecture only**. No claims are made about:
+- Backend API endpoints
+- Database schema
+- Authentication mechanisms
+- State management implementation
 - Data fetching strategies
-- WebSocket or real-time requirements
+- Specific frameworks or libraries
 
-This receipt confirms **UI shell architecture direction only**, as specified in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
+Implementation details for data layer and service integration are deferred to subsequent specifications.
