@@ -2,29 +2,33 @@
 
 ## Summary
 
-**BLOCKING ISSUE:** Both brief files returned `ENOENT` errors:
-- `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` — does not exist
-- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — does not exist
+**BLOCKING ISSUE:** Both brief files returned `ENOENT` (file not found):
+- `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`
 
-**The task states these files "exist on the server" and are "authoritative," but the file system returned read errors for both.** Without the brief, this audit compares the two HTML files against each other and documents architectural differences.
+The task states these files "exist on the server" and are "authoritative," but the file system returned read errors. Without the brief, this audit compares the two production HTML files (`lifeos-dashboard.html` and `lifeos-app.html`) and documents their architectural differences.
+
+**Key Finding:** These are two distinct artifacts serving different purposes:
+- `lifeos-dashboard.html` — standalone dashboard page with embedded content
+- `lifeos-app.html` — application shell with sidebar, navigation chrome, and iframe content loader
 
 ---
 
-## Gaps vs. Brief (Inferred from Production Files)
+## Gaps vs. Brief (Inferred from Production Code)
 
-### 1. **Sidebar**
+### 1. Sidebar
 
 | Aspect | lifeos-dashboard.html | lifeos-app.html | Gap |
 |--------|----------------------|-----------------|-----|
-| **Presence** | ❌ None | ✅ Full sidebar with 25+ nav items | Dashboard has no sidebar |
-| **Structure** | N/A | 5 groups: Daily, Life & Relationships, Support, Self, Legacy | Dashboard is standalone page |
-| **Collapse** | N/A | ✅ Desktop collapse button, mini mode | N/A |
+| **Presence** | ❌ None | ✅ Full sidebar (25+ nav items, 5 groups) | Dashboard has no sidebar |
+| **Collapse** | N/A | ✅ Desktop collapse, mini mode | N/A |
+| **Mobile drawer** | N/A | ✅ Slide-in drawer on mobile | N/A |
 
-**Inference:** If the brief specifies a sidebar, `lifeos-dashboard.html` is missing it entirely. If the brief specifies dashboard as iframe content within `lifeos-app.html`, the current standalone structure is incorrect.
+**Inference:** If the brief specifies a sidebar, `lifeos-dashboard.html` lacks it entirely. If the brief specifies dashboard as iframe content within the app shell, the current standalone structure contradicts that.
 
 ---
 
-### 2. **Bottom Tabs (Mobile)**
+### 2. Bottom Tabs (Mobile)
 
 | Aspect | lifeos-dashboard.html | lifeos-app.html | Gap |
 |--------|----------------------|-----------------|-----|
@@ -36,24 +40,24 @@
 
 ---
 
-### 3. **AI Rail Direction**
+### 3. AI Rail Direction
 
 | Aspect | lifeos-dashboard.html | lifeos-app.html | Gap |
 |--------|----------------------|-----------------|-----|
 | **Pattern** | Embedded chat card in page flow | Persistent drawer (right/bottom overlay) | Different interaction models |
 | **Entry points** | Single card | FAB + quick-bar + topbar button + Cmd/Ctrl+L | Dashboard has one entry |
 | **Persistence** | Thread created on page load | Thread persists across navigation | Dashboard thread is page-scoped |
-| **Ambient mode** | ✅ Proactive nudge system | ❌ No ambient in shell | Dashboard has feature app lacks |
+| **Ambient mode** | ✅ Proactive nudge system (`toggleAmbient()`) | ❌ No ambient in shell | Dashboard has feature app lacks |
 
 **Inference:** If the brief specifies a persistent AI rail (drawer pattern), `lifeos-dashboard.html` uses an embedded card instead. If the brief specifies ambient proactive voice, `lifeos-app.html` lacks it.
 
 ---
 
-### 4. **Light/Dark Intent**
+### 4. Light/Dark Intent
 
 | Aspect | lifeos-dashboard.html | lifeos-app.html | Gap |
 |--------|----------------------|-----------------|-----|
-| **Light mode CSS** | ❌ No `html[data-theme="light"]` | ✅ Full light mode variables | Dashboard is dark-only |
+| **Light mode CSS** | ❌ No `html[data-theme="light"]` ruleset | ✅ Full light mode variables | Dashboard is dark-only |
 | **Theme toggle** | ☀︎ button (broken — no light CSS) | Multiple toggles (topbar, mobile, settings) | Dashboard toggle non-functional |
 | **Theme sync** | Standalone (no sync) | Syncs to iframe via postMessage | App propagates theme |
 
@@ -61,7 +65,7 @@
 
 ---
 
-### 5. **Mobile vs. Desktop**
+### 5. Mobile vs. Desktop
 
 | Aspect | lifeos-dashboard.html | lifeos-app.html | Gap |
 |--------|----------------------|-----------------|-----|
