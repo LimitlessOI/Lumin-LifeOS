@@ -1,10 +1,18 @@
 /**
- * Core API v1 routes: tasks, ideas, snapshot, drones, comprehensive ideas, vapi.
+ * Core API v1 routes: tasks, ideas, snapshot, drones, comprehensive ideas, vapi, builder health.
  * Register with: registerApiV1CoreRoutes(app, getDeps)
  * getDeps() must return { pool, requireKey, executionQueue, ideaEngine, taskTracker, recallConversationMemory,
  *   createSystemSnapshot, rollbackToSnapshot, implementNextQueuedIdea, incomeDroneSystem, callCouncilMember }
  * and mutable refs for comprehensiveIdeaTracker, vapiIntegration (lazy init in handlers).
+ *
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
+import fs from "node:fs/promises";
+import path from "node:path";
+
+const BUILDER_DAEMON_STATE = path.join(process.cwd(), "data", "builder-daemon-state.json");
+const BUILDER_DAEMON_LOG = path.join(process.cwd(), "data", "builder-daemon-log.jsonl");
+
 export function registerApiV1CoreRoutes(app, getDeps) {
   const auth = (req, res, next) => {
     const d = getDeps();
@@ -194,6 +202,59 @@ export function registerApiV1CoreRoutes(app, getDeps) {
       const d = getDeps();
       const result = await d.implementNextQueuedIdea();
       res.json(result);
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * Local supervised-automation receipts: `scripts/lifeos-builder-daemon.mjs` writes
+   * `data/builder-daemon-state.json` (+ jsonl log). Railway runtime usually has no daemon
+   * unless the same process runs there — response includes `statePath` for transparency.
+   * Query: `log_lines` (0–80) = last N JSONL events parsed as objects.
+   */
+  app.get("/api/v1/system/builder-health", auth, async (req, res) => {
+    try {
+      let daemonState = null;
+      let stateReadError = null;
+      try {
+        const raw = await fs.readFile(BUILDER_DAEMON_STATE, "utf8");
+        daemonState = JSON.parse(raw);
+      } catch (e) {
+        stateReadError = e?.code === "ENOENT" ? "missing" : e.message;
+      }
+
+      let logTail = [];
+      const maxLines = Math.min(80, Math.max(0, parseInt(req.query.log_lines ?? "0", 10) || 0));
+      if (maxLines > 0) {
+        try {
+          const logRaw = await fs.readFile(BUILDER_DAEMON_LOG, "utf8");
+          const lines = logRaw.trim().split("\n").filter(Boolean);
+          const slice = lines.slice(-maxLines);
+          for (const line of slice) {
+            try {
+              logTail.push(JSON.parse(line));
+            } catch {
+              logTail.push({ parseError: true, raw: line.slice(0, 500) });
+            }
+          }
+        } catch (e) {
+          if (e?.code !== "ENOENT") throw e;
+        }
+      }
+
+      res.json({
+        ok: true,
+        statePath: BUILDER_DAEMON_STATE,
+        logPath: BUILDER_DAEMON_LOG,
+        daemonState,
+        stateReadError,
+        ...(maxLines ? { logTail, logTailRequested: maxLines } : {}),
+        hint:
+          daemonState || logTail.length
+            ? undefined
+            : "No daemon receipts on this filesystem yet. Run `npm run lifeos:builder:daemon` on a trusted runner with repo `data/` writable, or copy receipts into `data/` for inspection.",
+      });
     } catch (error) {
       res.status(500).json({ ok: false, error: error.message });
     }

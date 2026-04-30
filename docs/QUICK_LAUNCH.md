@@ -76,6 +76,7 @@ If task lane is unclear: read `docs/CONTINUITY_INDEX.md`, choose lane, then proc
 1. Read files in required order (North Star **§2.10** is part of “done”: no ship without observe/grade/verify/receipt path for the change class).
 2. Pick top queued task from handoff (`Agent Handoff Notes`).
 3. **BUILDER-FIRST + PREFLIGHT (§2.11 / §2.11a — non-optional):**
+   - **Fast path (recommended when shell has `PUBLIC_BASE_URL` + command key):** `npm run tsos:builder` — chains preflight, supervisor probe, TokenSaverOS doctor, and optional local daemon state (`docs/SYSTEM_CAPABILITIES.md` V6). **Or** run steps separately:
    - Run: `npm run builder:preflight` (fails with **actionable** errors if URL/keys/`GITHUB_TOKEN`/server down)
    - Verify builder: `GET /api/v1/lifeos/builder/ready` + `GET /api/v1/lifeos/builder/domains` when the API is up
    - If the task is product code: `POST /api/v1/lifeos/builder/build` with domain + spec + `target_file` as appropriate; `[system-build]` in commit

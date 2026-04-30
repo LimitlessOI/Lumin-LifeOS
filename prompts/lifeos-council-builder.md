@@ -3,7 +3,7 @@
 > **READ FIRST:** [`00-LIFEOS-AGENT-CONTRACT.md`](00-LIFEOS-AGENT-CONTRACT.md) — Never lie. Never let Adam operate on a misunderstanding: **correct him the instant** you see it. He does not know what he does not know — **fill every gap**. Before editing `AMENDMENT_21`, read the **entire** file this session (`CLAUDE.md` → SSOT READ-BEFORE-WRITE).  
 > **Then:** [`00-SSOT-READ-SEQUENCE.md`](00-SSOT-READ-SEQUENCE.md) (read order) + [`00-MODEL-TIERS-THINK-VS-EXECUTE.md`](00-MODEL-TIERS-THINK-VS-EXECUTE.md) (think vs execute tiers).
 
-**Last updated:** 2026-04-25 — **Conductor does not hand-edit implementation** (including this route file): use **`POST /api/v1/lifeos/builder/build`** with domain `lifeos-council-builder` (or appropriate) + `target_file`; **`GAP-FILL:`** only after logged failed `/build`. Architecture diagram updated (system commits). Prior: 2026-04-19
+**Last updated:** 2026-04-29 — **`docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`** — KNOW/THINK for probe vs full supervise + Am.39 evidence ladder cues in daemon JSONL **`reliability_cues`**. Prior: **`docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`** — between every slice: **evaluate → fix → improve** (receipt-required). Prior: **`prompts/lifeos-builder-inner-supervisor.md`** — inner supervisor protocol (cheap `mode: review` pass + `npm run lifeos:builder:inner-review`). Prior: **Conductor does not hand-edit implementation** (including routes): use **`POST /api/v1/lifeos/builder/build`**; **`GAP-FILL:`** only after logged failed `/build`. Prior: 2026-04-19
 **SSOT:** `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
 **Owning routes:** `routes/lifeos-council-builder-routes.js`
 **Mounted at:** `/api/v1/lifeos/builder`
@@ -33,6 +33,28 @@ AI Council (Railway) = implementation worker
   • Reads domain prompt + optional injected repo files (`files[]`)
   • Returns code / plan / review; `/build` path commits without Conductor pasting code in IDE
 ```
+
+---
+
+## Inner supervisor (train the reviewer inside the pipeline)
+
+Operational prompt: **`prompts/lifeos-builder-inner-supervisor.md`** — use after risky codegen to get a structured **FINDINGS / PASS / RECOMMENDATION** review (`mode: review`, `council.builder.review` → stronger model tier per routing map).
+
+**CLI (operator):** `npm run lifeos:builder:inner-review -- <repo-relative-paths...>` — POSTs `/task` with this prompt + listed files injected (requires `PUBLIC_BASE_URL` + command key).
+
+**Efficiency:** Use on **risky slices** (`routes/`, `services/`, large overlays), not every one-line tweak. Prefer **two-call** plan→execute, then inner-review the **committed-size** output.
+
+---
+
+## Compound improvement (between every slice)
+
+Do **not** treat **`committed: true`** as the finish line.
+
+1. **Evaluate** — output vs SSOT/spec; **§2.11b-style** residue risk + **KNOW**/THINK on claims.
+2. **Fix or receipt** — same-class failure twice = **platform** stop-the-line (`GAP-FILL:` with proof).
+3. **Improve once** — one of: tighter **spec**/queue row, retries, **`inner-review`**, **`tsos:doctor`** gap closure, verifier, logging.
+
+Canon: **`docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`**. Truth scope for reliability signals: **`docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`** (do not over-claim from **`probe`** cycles).
 
 ---
 

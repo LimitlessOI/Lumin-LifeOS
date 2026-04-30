@@ -10,7 +10,7 @@
  *
  * Usage:
  *   npm run lifeos:builder:supervise
- *   npm run lifeos:builder:supervise -- --model claude_via_openrouter
+ *   npm run lifeos:builder:supervise -- --model gemini_flash
  *   npm run lifeos:builder:supervise -- --skip-doc
  *   npm run lifeos:builder:supervise -- --overnight --overnight-max 2   # after smoke passes, run overnight queue
  *
@@ -28,6 +28,73 @@ import { promisify } from 'util';
 
 const execFileAsync = promisify(execFile);
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function quickDocReceiptCheck(source) {
+  const normalized = String(source || '').toLowerCase();
+  const mustContain = ['lifeos_dashboard_builder_brief.md', 'light', 'dark', 'mobile', 'desktop'];
+  for (const needle of mustContain) {
+    if (!normalized.includes(needle)) throw new Error(`doc receipt check: ${needle}`);
+  }
+}
+
+/** After POST /build the commit hits GitHub before `origin/main` is readable locally — try verified local file first, then retry git show with backoff. */
+async function fetchCommittedFile(repoPath) {
+  const absLocal = path.join(process.cwd(), repoPath);
+  let lastErr = '';
+  const attempts = Number(process.env.SUPERVISOR_FETCH_RETRIES || '16');
+  const baseSleep = Number(process.env.SUPERVISOR_FETCH_SLEEP_MS || '700');
+
+  if (repoPath.includes('BUILDER_DASHBOARD_SMOKE_RECEIPT.md')) {
+    try {
+      const local = await readFile(absLocal, 'utf8');
+      quickDocReceiptCheck(local);
+      return local;
+    } catch {
+      /* race: disk not pulled yet → fall through to remote */
+    }
+  }
+
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    await execFileAsync('git', ['fetch', 'origin', 'main'], { cwd: process.cwd() }).catch(() => {});
+
+    try {
+      const { stdout } = await execFileAsync(
+        'git',
+        ['show', `origin/main:${repoPath}`],
+        {
+          cwd: process.cwd(),
+          maxBuffer: 12 * 1024 * 1024,
+          shell: false,
+        },
+      );
+      const t = String(stdout || '');
+      if (t.trim().length > 15) return t;
+      lastErr = 'short_stdout';
+    } catch (e) {
+      lastErr = e?.message || String(e);
+    }
+
+    try {
+      const local = await readFile(absLocal, 'utf8');
+      if ((local || '').trim().length > 15 && attempt >= 3) {
+        if (repoPath.includes('BUILDER_DASHBOARD_SMOKE_RECEIPT.md')) quickDocReceiptCheck(local);
+        return local;
+      }
+    } catch {
+      /* no local file yet */
+    }
+
+    await sleep(baseSleep + attempt * 550);
+  }
+
+  throw new Error(
+    `Committed file ${repoPath} not visible via git show origin/main:${repoPath} after ${attempts} attempts (last=${lastErr}). Run git fetch/pull or increase SUPERVISOR_FETCH_RETRIES.`
+  );
+}
+
 const base = (
   process.env.BUILDER_BASE_URL ||
   process.env.PUBLIC_BASE_URL ||
@@ -42,7 +109,7 @@ const key =
   process.env.API_KEY ||
   '';
 
-const DEFAULT_MODEL = 'claude_via_openrouter';
+const DEFAULT_MODEL = process.env.BUILDER_SUPERVISE_MODEL || 'gemini_flash';
 const BRIEF = 'docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md';
 const QUEUE = 'docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md';
 const AMENDMENT = 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md';
@@ -82,17 +149,36 @@ async function fetchJson(url, options = {}) {
   return { res, json, text };
 }
 
+function retryableHttp(status) {
+  return status === 502 || status === 503 || status === 504 || status === 429;
+}
+
 async function assertReady() {
   const headers = key ? { 'x-command-key': key } : {};
-  const { res: readyRes, json: readyJson } = await fetchJson(`${base}/api/v1/lifeos/builder/ready`, { headers });
-  if (!readyRes.ok) {
-    throw new Error(`Builder /ready failed HTTP ${readyRes.status}: ${JSON.stringify(readyJson)}`);
+  const max = Math.max(1, parseInt(process.env.SUPERVISOR_READY_RETRIES || '10', 10) || 10);
+  let lastErr = '';
+  for (let attempt = 0; attempt < max; attempt++) {
+    const { res: readyRes, json: readyJson } = await fetchJson(`${base}/api/v1/lifeos/builder/ready`, { headers });
+    if (!readyRes.ok && retryableHttp(readyRes.status) && attempt < max - 1) {
+      lastErr = `ready ${readyRes.status}`;
+      await sleep(1500 + attempt * 1500);
+      continue;
+    }
+    if (!readyRes.ok) {
+      throw new Error(`Builder /ready failed HTTP ${readyRes.status}: ${JSON.stringify(readyJson)}`);
+    }
+    const { res: domainsRes, json: domainsJson } = await fetchJson(`${base}/api/v1/lifeos/builder/domains`, { headers });
+    if (!domainsRes.ok && retryableHttp(domainsRes.status) && attempt < max - 1) {
+      lastErr = `domains ${domainsRes.status}`;
+      await sleep(1500 + attempt * 1500);
+      continue;
+    }
+    if (!domainsRes.ok) {
+      throw new Error(`Builder /domains failed HTTP ${domainsRes.status}: ${JSON.stringify(domainsJson)}`);
+    }
+    return { readyJson, domainsJson };
   }
-  const { res: domainsRes, json: domainsJson } = await fetchJson(`${base}/api/v1/lifeos/builder/domains`, { headers });
-  if (!domainsRes.ok) {
-    throw new Error(`Builder /domains failed HTTP ${domainsRes.status}: ${JSON.stringify(domainsJson)}`);
-  }
-  return { readyJson, domainsJson };
+  throw new Error(`assertReady exhausted retries (${lastErr})`);
 }
 
 async function runBuild({ model, targetFile, files, task, spec, commitMessage }) {
@@ -108,25 +194,33 @@ async function runBuild({ model, targetFile, files, task, spec, commitMessage })
     target_file: targetFile,
     commit_message: commitMessage,
   };
-  const { res, json } = await fetchJson(`${base}/api/v1/lifeos/builder/build`, {
-    method: 'POST',
-    headers: requiredHeaders(),
-    body: JSON.stringify(body),
-  });
-  if (!res.ok || !json?.ok || !json?.committed) {
+  const url = `${base}/api/v1/lifeos/builder/build`;
+  const jsonBody = JSON.stringify(body);
+  const maxAttempts = Math.max(1, parseInt(process.env.SUPERVISOR_BUILD_RETRIES || '5', 10) || 5);
+  let last = null;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const { res, json } = await fetchJson(url, {
+      method: 'POST',
+      headers: requiredHeaders(),
+      body: jsonBody,
+    });
+    last = { res, json };
+    const ok = res.ok && json?.ok === true && json?.committed === true;
+    if (ok) return json;
+    const retryable = retryableHttp(res.status) || (json?.message && String(json.message).includes('failed to respond'));
+    if (retryable && attempt < maxAttempts - 1) {
+      const wait = 2200 + attempt * 4000;
+      console.warn(`[supervisor] /build retry ${attempt + 1}/${maxAttempts} after HTTP ${res.status} (wait ${wait}ms)`);
+      await sleep(wait);
+      continue;
+    }
     throw new Error(`Builder build failed for ${targetFile}: ${JSON.stringify(json)}`);
   }
-  return json;
-}
-
-async function fetchRemoteFile(repoPath) {
-  await execFileAsync('git', ['fetch', 'origin', 'main'], { cwd: process.cwd() });
-  const { stdout } = await execFileAsync('git', ['show', `origin/main:${repoPath}`], { cwd: process.cwd() });
-  return stdout;
+  throw new Error(`Builder build failed for ${targetFile}: ${JSON.stringify(last?.json)}`);
 }
 
 async function verifyJsSmoke(repoPath) {
-  const source = await fetchRemoteFile(repoPath);
+  const source = await fetchCommittedFile(repoPath);
   const dir = await mkdtemp(path.join(tmpdir(), 'lifeos-builder-supervisor-'));
   const tempFile = path.join(dir, path.basename(repoPath));
   try {
@@ -150,19 +244,8 @@ async function verifyJsSmoke(repoPath) {
 }
 
 async function verifyDocSmoke(repoPath) {
-  const source = await fetchRemoteFile(repoPath);
-  const mustContain = [
-    'LIFEOS_DASHBOARD_BUILDER_BRIEF.md',
-    'light',
-    'dark',
-    'mobile',
-    'desktop',
-  ];
-  for (const needle of mustContain) {
-    if (!source.includes(needle)) {
-      throw new Error(`Doc smoke receipt missing required token: ${needle}`);
-    }
-  }
+  const source = await fetchCommittedFile(repoPath);
+  quickDocReceiptCheck(source);
   return true;
 }
 
@@ -172,9 +255,19 @@ async function main() {
   const skipJs = hasFlag('--skip-js');
   const runOvernight = hasFlag('--overnight');
   const overnightMax = argValue('--overnight-max', process.env.OVERNIGHT_MAX || '2');
+  const probeOnly = hasFlag('--probe-only');
 
   console.log(`Supervisor base: ${base}`);
   console.log(`Supervisor model: ${model}`);
+
+  if (probeOnly) {
+    console.log('Probe-only: GET /ready + /domains (no council /build spend)');
+    const { readyJson } = await assertReady();
+    console.log(`Ready: commitToGitHub=${Boolean(readyJson?.builder?.commitToGitHub)} council=${Boolean(readyJson?.builder?.callCouncilMember)}`);
+    console.log('Supervisor probe OK.');
+    return;
+  }
+
   console.log('Checking builder readiness...');
   const { readyJson } = await assertReady();
   console.log(`Ready: commitToGitHub=${Boolean(readyJson?.builder?.commitToGitHub)} council=${Boolean(readyJson?.builder?.callCouncilMember)}`);
@@ -230,7 +323,7 @@ async function main() {
   }
 
   console.log('\nSupervisor result: builder path is healthy enough for constrained overnight dashboard work.');
-  console.log('Next command: npm run lifeos:builder:supervise -- --model claude_via_openrouter');
+  console.log(`Next command: npm run lifeos:builder:supervise -- --model ${model}`);
 
   if (runOvernight) {
     console.log(`\nChaining overnight runner (max ${overnightMax})...`);

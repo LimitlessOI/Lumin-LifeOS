@@ -40,5 +40,11 @@ docs/THREAD_REALITY/outputs/**
 # Machine-generated builder preflight audit (may contain deploy hostname; never secrets)
 data/builder-preflight-log.jsonl
 data/builder-overnight-log.jsonl
+data/builder-daemon-log.jsonl
+data/builder-daemon-state.json
+data/builder-daemon.lock
+data/token-efficiency-log.jsonl
+# Local sequential cursor for scripts/lifeos-builder-overnight.mjs (OVERNIGHT_USE_CURSOR).
+data/builder-overnight-cursor*.json
 # Env certification probes (hostnames, pass/fail — never paste secret values into this file)
 data/env-certification-log.jsonl

@@ -29,6 +29,32 @@ Implemented in `server.js` (Railway GraphQL via `RAILWAY_TOKEN` + project/servic
 | `DATABASE_URL` | Pool + builder audit / probes where applicable |
 | Provider keys (e.g. Groq/Gemini) | `callCouncilMember` on the **server** — laptop keys are not required if you only HTTP to Railway |
 
+## One composite check (session start)
+
+When you want **preflight + supervisor HTTP probe + TSOS doctor + token-efficiency scorecard + local daemon state** in one run (same env as above):
+
+```bash
+npm run tsos:builder
+```
+
+Script: `scripts/builder-operator-suite.mjs`. **Matrix:** `docs/SYSTEM_CAPABILITIES.md` **V6/V7**. Exit code follows the **first** failing leg (preflight **1** or **2** for key mismatch, probe, doctor, or token scorecard). Every leg still **prints** so you see the full picture before fixing.
+
+Standalone token-efficiency run:
+
+```bash
+npm run tsos:tokens
+```
+
+This reports weighted free-tier request budget **remaining %** + daily token-savings trend and appends a local receipt to `data/token-efficiency-log.jsonl`.
+
+Optional fail-closed grade gate (for unattended runs):
+
+```bash
+TSOS_ENFORCE_TOKEN_GRADE=1 TSOS_MIN_TOKEN_GRADE=D npm run tsos:tokens
+```
+
+Grades are `A/B/C/D/F` from a 100-point score (savings + remaining free-tier budget + day-over-day trend). If enforced and below minimum, script exits non-zero.
+
 ## Machine log (system notes readiness)
 
 Each `npm run builder:preflight` appends one JSON line to **`data/builder-preflight-log.jsonl`** (hostname + exit code + reason — **no** key material). Operator can `tail -1` that file after a run. File is **gitignored** so deploy hostnames are not forced into PRs; keep a copy in ops vault if you need audit in git.
