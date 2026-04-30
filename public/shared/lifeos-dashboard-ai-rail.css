@@ -10,7 +10,7 @@
   background: var(--dash-surface, #111118);
   border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
   color: var(--dash-text, #e8e8f0);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   transition: all 0.3s ease-in-out; /* Smooth transitions for expand/collapse/dock */
