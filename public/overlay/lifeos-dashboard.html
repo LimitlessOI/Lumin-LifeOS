@@ -9,7 +9,7 @@
 <title>Dashboard · LifeOS</title>
 <!-- Theme must load before anything renders to avoid flash -->
 <script src="/overlay/lifeos-theme.js"></script>
-<link rel="stylesheet" href="/shared/lifeos-dashboard-tokens.css">
+<link rel="stylesheet" href="../shared/lifeos-dashboard-tokens.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="/overlay/lifeos-bootstrap.js"></script>
 <style>
@@ -36,17 +36,14 @@
 --radius-lg: var(--dash-radius-lg, 14px);
 --radius-xl: var(--dash-radius-xl, 20px);
 }
-
-*, ::before, *::after {
+, ::before, ::after {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
 }
-
 html {
 height: 100%;
 }
-
 body {
 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 background: var(--bg-base);
@@ -55,14 +52,12 @@ min-height: 100%;
 -webkit-font-smoothing: antialiased;
 padding-bottom: calc(24px + env(safe-area-inset-bottom));
 }
-
 .page {
 max-width: 860px;
 margin: 0 auto;
 padding: 24px 16px;
 }
-
-/* ── Cards ── */
+/ ── Cards ── /
 .card {
 background: var(--bg-surface);
 border: 1px solid var(--border);
@@ -70,12 +65,10 @@ border-radius: var(--radius-lg);
 padding: 20px;
 transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 .card:hover {
 border-color: var(--border-focus);
 box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
-
 .card-label {
 font-size: 10px;
 font-weight: 700;
@@ -84,38 +77,31 @@ text-transform: uppercase;
 color: var(--text-muted);
 margin-bottom: 14px;
 }
-
 .accent-border-today {
 border-top: 2px solid var(--c-today);
 }
-
 .accent-border-health {
 border-top: 2px solid var(--c-health);
 }
-
 .accent-border-finance {
 border-top: 2px solid var(--c-finance);
 }
-
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-
-/* ── Header ── */
+/ ── Header ── /
 .hdr-row {
 display: flex;
 align-items: flex-start;
 justify-content: space-between;
 gap: 12px;
 }
-
 .hdr-controls {
 display: flex;
 gap: 8px;
 padding-top: 4px;
 flex-shrink: 0;
 }
-
 .hdr-btn {
 background: var(--bg-surface2);
 border: 1px solid var(--border);
@@ -131,23 +117,19 @@ cursor: pointer;
 transition: border-color 0.2s, color 0.2s, background 0.2s;
 flex-shrink: 0;
 }
-
 .hdr-btn:hover {
 border-color: var(--border-focus);
 color: var(--text-primary);
 }
-
 .hdr-btn.active {
 color: var(--c-health);
 border-color: var(--c-health);
 }
-
 .hdr-btn.ambient-active {
 color: var(--c-health);
 border-color: var(--c-health);
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-
 .greeting {
 font-size: clamp(26px, 5vw, 38px);
 font-weight: 800;
@@ -157,13 +139,11 @@ background: linear-gradient(135deg, var(--c-today) 0%, var(--c-mirror) 100%);
 background-clip: text;
 line-height: 1.1;
 }
-
 .greeting-sub {
 font-size: 14px;
 color: var(--text-muted);
 margin-top: 6px;
 }
-
 .pulse-dot {
 display: inline-block;
 width: 8px;
@@ -174,8 +154,7 @@ margin-left: 8px;
 vertical-align: middle;
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-
-/* ── Animations ── */
+/ ── Animations ── /
 @keyframes pulse-ring {
 0%, 100% {
 opacity: 1;
@@ -186,7 +165,6 @@ opacity: 0.5;
 transform: scale(1.3);
 }
 }
-
 @keyframes fadeUp {
 from {
 opacity: 0;
@@ -197,7 +175,6 @@ opacity: 1;
 transform: translateY(0);
 }
 }
-
 @keyframes shimmer {
 0% {
 background-position: -400px 0;
@@ -206,7 +183,6 @@ background-position: -400px 0;
 background-position: 400px 0;
 }
 }
-
 @keyframes bounce-dot {
 0%, 80%, 100% {
 transform: scale(0.6);
@@ -217,19 +193,16 @@ transform: scale(1);
 opacity: 1;
 }
 }
-
 @keyframes ring-fill {
 from {
 stroke-dashoffset: 220;
 }
 }
-
 @keyframes bar-grow {
 from {
 width: 0;
 }
 }
-
 @keyframes check-draw {
 from {
 stroke-dashoffset: 20;
@@ -238,7 +211,6 @@ to {
 stroke-dashoffset: 0;
 }
 }
-
 @keyframes mic-pulse {
 0%, 100% {
 box-shadow: 0 0 0 0 rgba(224,85,85,0.4);
@@ -247,49 +219,39 @@ box-shadow: 0 0 0 0 rgba(224,85,85,0.4);
 box-shadow: 0 0 0 8px rgba(224,85,85,0);
 }
 }
-
 .fade-up {
 animation: fadeUp 0.4s ease both;
 }
-
 .delay-1 {
 animation-delay: 0.05s;
 }
-
 .delay-2 {
 animation-delay: 0.10s;
 }
-
 .delay-3 {
 animation-delay: 0.15s;
 }
-
 .delay-4 {
 animation-delay: 0.20s;
 }
-
 .delay-5 {
 animation-delay: 0.25s;
 }
-
-/* ── Skeleton ── */
+/ ── Skeleton ── /
 .skeleton {
 background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
 background-size: 400px 100%;
 animation: shimmer 1.4s infinite;
 border-radius: var(--radius-sm);
 }
-
 .skel-line {
 height: 14px;
 margin-bottom: 10px;
 }
-
 .skel-line:last-child {
 width: 60%;
 }
-
-/* ── MIT ── */
+/ ── MIT ── /
 .mit-item {
 display: flex;
 align-items: flex-start;
@@ -300,11 +262,9 @@ cursor: pointer;
 user-select: none;
 -webkit-user-select: none;
 }
-
 .mit-item:last-of-type {
 border-bottom: none;
 }
-
 .mit-check {
 flex-shrink: 0;
 width: 22px;
@@ -317,26 +277,21 @@ justify-content: center;
 transition: background 0.2s, border-color 0.2s;
 margin-top: 1px;
 }
-
 .mit-check.done {
 background: var(--c-today);
 border-color: var(--c-today);
 }
-
 .mit-check svg {
 display: none;
 }
-
 .mit-check.done svg {
 display: block;
 }
-
 .mit-check.done svg polyline {
 stroke-dasharray: 20;
 stroke-dashoffset: 0;
 animation: check-draw 0.25s ease forwards;
 }
-
 .mit-text {
 flex: 1;
 font-size: 15px;
@@ -344,13 +299,11 @@ line-height: 1.4;
 color: var(--text-primary);
 transition: color 0.2s;
 }
-
 .mit-text.done {
 color: var(--text-muted);
 text-decoration: line-through;
 }
-
-/* ── Quick add ── */
+/ ── Quick add ── /
 .quick-add {
 display: flex;
 gap: 8px;
@@ -358,7 +311,6 @@ margin-top: 14px;
 padding-top: 14px;
 border-top: 1px solid var(--border);
 }
-
 .quick-add input {
 flex: 1;
 background: var(--bg-surface2);
@@ -370,15 +322,12 @@ padding: 8px 12px;
 outline: none;
 transition: border-color 0.2s;
 }
-
 .quick-add input:focus {
 border-color: var(--c-today);
 }
-
 .quick-add input::placeholder {
 color: var(--text-muted);
 }
-
 .btn-add {
 background: var(--c-today);
 color: #fff;
@@ -391,12 +340,10 @@ cursor: pointer;
 white-space: nowrap;
 transition: opacity 0.15s;
 }
-
 .btn-add:hover {
 opacity: 0.85;
 }
-
-/* ── Calendar ── */
+/ ── Calendar ── /
 .event-row {
 display: flex;
 align-items: center;
@@ -404,11 +351,9 @@ gap: 10px;
 padding: 9px 0;
 border-bottom: 1px solid var(--border);
 }
-
 .event-row:last-child {
 border-bottom: none;
 }
-
 .event-time {
 font-size: 12px;
 font-weight: 600;
@@ -420,46 +365,38 @@ white-space: nowrap;
 letter-spacing: 0.02em;
 flex-shrink: 0;
 }
-
 .event-title {
 font-size: 14px;
 color: var(--text-primary);
 }
-
-/* ── Goals ── */
+/ ── Goals ── /
 .goal-row {
 margin-bottom: 16px;
 }
-
 .goal-row:last-child {
 margin-bottom: 0;
 }
-
 .goal-header {
 display: flex;
 justify-content: space-between;
 align-items: baseline;
 margin-bottom: 6px;
 }
-
 .goal-name {
 font-size: 14px;
 color: var(--text-primary);
 }
-
 .goal-pct {
 font-size: 13px;
 font-weight: 700;
 color: var(--c-finance);
 }
-
 .goal-track {
 height: 6px;
 background: var(--bg-surface2);
 border-radius: 3px;
 overflow: hidden;
 }
-
 .goal-fill {
 height: 100%;
 background: linear-gradient(90deg, var(--c-today) 0%, var(--c-finance) 100%);
@@ -467,20 +404,17 @@ border-radius: 3px;
 animation: bar-grow 0.8s cubic-bezier(0.4,0,0.2,1) both;
 animation-delay: 0.3s;
 }
-
 .goal-sub {
 font-size: 11px;
 color: var(--text-muted);
 margin-top: 4px;
 }
-
-/* ── Scores ── */
+/ ── Scores ── /
 .scores-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
 gap: 12px;
 }
-
 .score-tile {
 background: var(--bg-surface2);
 border: 1px solid var(--border);
@@ -493,35 +427,29 @@ cursor: default;
 transition: border-color 0.2s, transform 0.15s;
 position: relative;
 }
-
 .score-tile:hover {
 border-color: var(--border-focus);
 transform: translateY(-1px);
 }
-
 .score-ring {
 position: relative;
 width: 72px;
 height: 72px;
 margin-bottom: 8px;
 }
-
 .score-ring svg {
 transform: rotate(-90deg);
 overflow: visible;
 }
-
 .score-ring circle.track {
 stroke: var(--bg-overlay);
 }
-
 .score-ring circle.fill {
 stroke-linecap: round;
 stroke-dasharray: 207;
 animation: ring-fill 1s cubic-bezier(0.4,0,0.2,1) forwards;
 animation-delay: 0.4s;
 }
-
 .score-num {
 position: absolute;
 inset: 0;
@@ -531,7 +459,6 @@ justify-content: center;
 font-size: 20px;
 font-weight: 800;
 }
-
 .score-label {
 font-size: 11px;
 font-weight: 700;
@@ -539,7 +466,6 @@ letter-spacing: 0.08em;
 text-transform: uppercase;
 color: var(--text-muted);
 }
-
 .score-tile-tip {
 display: none;
 position: absolute;
@@ -557,12 +483,10 @@ z-index: 100;
 pointer-events: none;
 box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 }
-
 .score-tile.tip-open .score-tile-tip {
 display: block;
 }
-
-/* ── Chat ── */
+/ ── Chat ── /
 .chat-messages {
 height: 240px;
 overflow-y: auto;
@@ -573,16 +497,13 @@ gap: 8px;
 scrollbar-width: thin;
 scrollbar-color: var(--bg-overlay) transparent;
 }
-
 .chat-messages::-webkit-scrollbar {
 width: 4px;
 }
-
 .chat-messages::-webkit-scrollbar-thumb {
 background: var(--bg-overlay);
 border-radius: 2px;
 }
-
 .msg {
 max-width: 80%;
 padding: 10px 14px;
@@ -591,14 +512,12 @@ font-size: 14px;
 line-height: 1.5;
 animation: fadeUp 0.2s ease;
 }
-
 .msg.user {
 align-self: flex-end;
 background: var(--c-today);
 color: #fff;
 border-bottom-right-radius: var(--radius-sm);
 }
-
 .msg.assistant {
 align-self: flex-start;
 background: var(--bg-surface2);
@@ -606,7 +525,6 @@ color: var(--text-primary);
 border-bottom-left-radius: var(--radius-sm);
 border: 1px solid var(--border);
 }
-
 .msg.ambient {
 align-self: flex-start;
 background: transparent;
@@ -616,7 +534,6 @@ font-size: 13px;
 border: 1px dashed var(--border);
 border-bottom-left-radius: var(--radius-sm);
 }
-
 .typing {
 display: none;
 align-self: flex-start;
@@ -628,36 +545,29 @@ padding: 12px 16px;
 gap: 5px;
 align-items: center;
 }
-
 .typing.show {
 display: flex;
 }
-
 .typing-dot {
 width: 7px;
 height: 7px;
 background: var(--text-muted);
 border-radius: 50%;
 }
-
 .typing-dot:nth-child(1) {
 animation: bounce-dot 1.2s 0.0s infinite;
 }
-
 .typing-dot:nth-child(2) {
 animation: bounce-dot 1.2s 0.2s infinite;
 }
-
 .typing-dot:nth-child(3) {
 animation: bounce-dot 1.2s 0.4s infinite;
 }
-
-/* ── Chat input row ── */
+/ ── Chat input row ── /
 .chat-row {
 display: flex;
 gap: 8px;
 }
-
 .chat-row input {
 flex: 1;
 background: var(--bg-surface2);
@@ -669,15 +579,12 @@ padding: 10px 14px;
 outline: none;
 transition: border-color 0.2s;
 }
-
 .chat-row input:focus {
 border-color: var(--c-today);
 }
-
 .chat-row input::placeholder {
 color: var(--text-muted);
 }
-
 .btn-mic {
 background: var(--bg-surface2);
 border: 1px solid var(--border);
@@ -692,17 +599,14 @@ justify-content: center;
 flex-shrink: 0;
 transition: border-color 0.2s, color 0.2s;
 }
-
 .btn-mic:hover {
 border-color: var(--border-focus);
 }
-
 .btn-mic.listening {
 color: var(--c-conflict);
 border-color: var(--c-conflict);
 animation: mic-pulse 1s ease infinite;
 }
-
 .btn-send {
 background: var(--c-today);
 color: #fff;
@@ -717,12 +621,10 @@ justify-content: center;
 flex-shrink: 0;
 transition: opacity 0.15s;
 }
-
 .btn-send:hover {
 opacity: 0.85;
 }
-
-/* ── Voice footer ── */
+/ ── Voice footer ── /
 .voice-footer {
 display: flex;
 align-items: center;
@@ -731,7 +633,6 @@ margin-top: 10px;
 padding-top: 10px;
 border-top: 1px solid var(--border);
 }
-
 .voice-footer label {
 display: flex;
 align-items: center;
@@ -742,11 +643,9 @@ cursor: pointer;
 user-select: none;
 -webkit-user-select: none;
 }
-
 .voice-footer label input[type=checkbox] {
 accent-color: var(--c-today);
 }
-
 #voice-status {
 flex: 1;
 font-size: 11px;
@@ -754,27 +653,23 @@ color: var(--text-muted);
 text-align: right;
 font-style: italic;
 }
-
 .ptt-hint {
 font-size: 11px;
 color: var(--text-muted);
 opacity: 0.6;
 }
-
-/* ── Empty ── */
+/ ── Empty ── /
 .empty {
 text-align: center;
 padding: 20px 0;
 color: var(--text-muted);
 font-size: 14px;
 }
-
 .empty span {
 display: block;
 font-size: 28px;
 margin-bottom: 6px;
 }
-
 @media (min-width: 640px) {
 .two-col {
 display: grid;
@@ -799,7 +694,6 @@ gap: 16px;
 </div>
 </div>
 </header>
-
 <!-- ROW 1: MITs + Calendar -->
 <div class="two-col mb-4">
 <div class="card accent-border-today fade-up delay-1">
@@ -814,7 +708,6 @@ gap: 16px;
 <button class="btn-add" onclick="addMIT()">Add</button>
 </div>
 </div>
-
 <div class="card accent-border-today fade-up delay-2">
 <div class="card-label">Today's Schedule</div>
 <div id="cal-list">
@@ -824,7 +717,6 @@ gap: 16px;
 </div>
 </div>
 </div>
-
 <!-- ROW 2: Goals + Scores -->
 <div class="two-col mb-4">
 <div class="card accent-border-finance fade-up delay-3">
@@ -836,7 +728,6 @@ gap: 16px;
 <div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;border-radius:3px"></div>
 </div>
 </div>
-
 <div class="card accent-border-health fade-up delay-4">
 <div class="card-label">Life Scores <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text-muted)">— hold to see what each means</span></div>
 <div class="scores-grid" id="scores-grid">
@@ -847,7 +738,6 @@ gap: 16px;
 </div>
 </div>
 </div>
-
 <!-- CHAT -->
 <div class="card accent-border-mirror fade-up delay-5">
 <div class="card-label">Chat with Lumin</div>
@@ -874,14 +764,12 @@ gap: 16px;
 </div>
 </div>
 </div>
-
 <!-- Voice module must be non-module (IIFE) -->
 <script src="/shared/lifeos-voice-chat.js"></script>
 <script type="module">
 const HDR = () => ({ 'x-lifeos-key': localStorage.getItem('lifeos_api_key') || '', 'Content-Type': 'application/json' });
 const API = (p, o={}) => fetch(p, { headers: HDR(), ...o });
 const $ = id => document.getElementById(id);
-
 // ── Clock ──
 function tick() {
 const now = new Date();
@@ -891,7 +779,6 @@ $('clock').textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'l
 }
 tick();
 setInterval(tick, 30000);
-
 // ── Theme toggle ──
 function toggleTheme() {
 const curr = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
@@ -902,7 +789,6 @@ $('btn-theme').textContent = next === 'light' ? '☾' : '☀︎';
 const mc = document.getElementById('theme-color-meta');
 if (mc) mc.setAttribute('content', next === 'light' ? '#f6f7fb' : '#0a0a0f');
 }
-
 // ── Long-press ──
 let pressTimer;
 function bindLongPress(el, onHold, onRelease) {
@@ -914,9 +800,8 @@ el.addEventListener('mouseup', end);
 el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
-
 // ── MITs ──
-async function loadMITs() {
+asyncFn loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -952,8 +837,7 @@ document.body.appendChild(tip);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Could not load tasks</div>';
 }
 }
-
-async function toggleMIT(el) {
+asyncFn toggleMIT(el) {
 const chk=el.querySelector('.mit-check'), txt=el.querySelector('.mit-text');
 const done=chk.classList.contains('done');
 chk.classList.toggle('done',!done);
@@ -962,8 +846,7 @@ try {
 await API(`/api/v1/lifeos/commitments/${el.dataset.id}/keep`,{method:'POST',body:JSON.stringify({kept:!done})});
 } catch {}
 }
-
-window.addMIT = async function() {
+window.addMIT = asyncFn() {
 const inp=$('mit-input'), text=inp.value.trim();
 if (!text) return;
 try {
@@ -972,11 +855,9 @@ inp.value='';
 loadMITs();
 } catch {}
 };
-
 $('mit-input').addEventListener('keypress', e=>{ if(e.key==='Enter') addMIT(); });
-
 // ── Calendar ──
-async function loadCal() {
+asyncFn loadCal() {
 try {
 const r=await API('/api/v1/lifeos/engine/calendar/events?days=1&limit=8');
 const d=await r.json();
@@ -993,9 +874,8 @@ return `<div class="event-row">${t?`<span class="event-time">${t}</span>`:''}<sp
 $('cal-list').innerHTML='<div class="empty"><span>📅</span>Could not load schedule</div>';
 }
 }
-
 // ── Goals ──
-async function loadGoals() {
+asyncFn loadGoals() {
 try {
 const r=await API('/api/v1/lifeos/finance/goals');
 const d=await r.json();
@@ -1017,7 +897,6 @@ ${amt?`<div class="goal-sub">${amt}</div>`:''}
 $('goals-list').innerHTML='<div class="empty"><span>🎯</span>Could not load goals</div>';
 }
 }
-
 // ── Scores ──
 const SCORE_KEYS = [
 { key:'integrity_score', label:'Integrity', tip:'Commitments kept vs. made' },
@@ -1025,11 +904,9 @@ const SCORE_KEYS = [
 { key:'focus_score', label:'Focus', tip:'MITs completed + deep work' },
 { key:'growth_score', label:'Growth', tip:'Habits, learning & momentum' },
 ];
-
 function ringColor(s) {
 return s>=80?'#10b981':s>=60?'#f59e0b':'#e05555';
 }
-
 function makeRing(score) {
 const r=33, circ=2*Math.PI*r, offset=circ*(1-score/100);
 const c=ringColor(score);
@@ -1039,8 +916,7 @@ return `<svg width="72" height="72" viewBox="0 0 72 72">
 stroke="${c}" style="stroke-dashoffset:${offset}"/>
 </svg>`;
 }
-
-async function loadScores() {
+asyncFn loadScores() {
 try {
 const r=await API('/api/v1/lifeos/dashboard/scoreboard');
 const d=await r.json();
@@ -1059,11 +935,9 @@ bindLongPress(tile, ()=>tile.classList.add('tip-open'), ()=>tile.classList.remov
 $('scores-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><span>📊</span>Could not load scores</div>';
 }
 }
-
 // ── Chat ──
 let threadId=null;
-
-async function initChat() {
+asyncFn initChat() {
 try {
 const r=await API('/api/v1/lifeos/chat/threads/default',{method:'POST',body:JSON.stringify({})});
 const d=await r.json();
@@ -1077,8 +951,7 @@ $('chat-messages').innerHTML=msgs.map(m=>`<div class="msg ${m.role==='user'?'use
 $('chat-messages').scrollTop=99999;
 } catch {}
 }
-
-async function sendChat() {
+asyncFn sendChat() {
 const inp=$('chat-input'), text=inp.value.trim();
 if (!text||!threadId) return;
 inp.value='';
@@ -1100,13 +973,10 @@ $('typing').classList.remove('show');
 box.innerHTML+=`<div class="msg assistant" style="opacity:0.5">Something went wrong — try again.</div>`;
 }
 }
-
 $('send-btn').addEventListener('click', sendChat);
 $('chat-input').addEventListener('keypress', e=>{ if(e.key==='Enter') sendChat(); });
-
 // ── Voice ──
 let voiceCtrl = null;
-
 function initVoice() {
 if (!window.LifeOSVoiceChat) return;
 voiceCtrl = window.LifeOSVoiceChat.attach({
@@ -1123,7 +993,6 @@ if (inputValue && inputValue.trim()) setTimeout(sendChat, 250);
 },
 });
 }
-
 // Space bar push-to-talk
 document.addEventListener('keydown', e => {
 if (e.code !== 'Space') return;
@@ -1131,17 +1000,14 @@ if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA'
 e.preventDefault();
 if (voiceCtrl) voiceCtrl.startMic();
 });
-
 document.addEventListener('keyup', e => {
 if (e.code !== 'Space') return;
 if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
 if (voiceCtrl) voiceCtrl.stopMic();
 });
-
 // ── Ambient proactive mode ──
 let ambientActive = false;
 let ambientInterval = null;
-
 window.toggleAmbient = function() {
 ambientActive = !ambientActive;
 const btn = $('btn-ambient');
@@ -1157,8 +1023,7 @@ clearInterval(ambientInterval);
 if (window.speechSynthesis) window.speechSynthesis.cancel();
 }
 };
-
-async function checkProactiveNudge() {
+asyncFn checkProactiveNudge() {
 try {
 const r = await API('/api/v1/lifeos/ambient/nudge');
 const d = await r.json();
@@ -1176,17 +1041,14 @@ window.speechSynthesis.speak(u);
 }
 } catch {}
 }
-
 // ── Theme init sync ──
 window.toggleTheme = toggleTheme;
-
 // ── Init ──
 document.addEventListener('DOMContentLoaded', () => {
 initVoice();
 const th = document.documentElement.dataset.theme;
 $('btn-theme').textContent = th === 'light' ? '☾' : '☀︎';
 });
-
 Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
 </script>
 </body>
