@@ -10,6 +10,7 @@
   "next_task": "Set live email/base-url envs, verify route health, run quality/expiry cron checks, and use the public landing page to begin controlled preview outreach.",
   "stability_class": "needs-review",
   "current_focus": "Turn the existing build/prospect pipeline into a sellable front-door offer with quality gating: public landing page, route verification, preview scoring/repair, and live outreach readiness.",
+  "anti_drift_notes": "The generic verifier cannot yet send project-specific JSON payloads for POST route success checks. Automated route verification for this lane only covers GET surfaces and syntax/file/db truth; POST /api/v1/sites/build and POST /api/v1/sites/prospect remain completion checks that require a real payload.",
   "owned_files": [
     "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
     "docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json",
@@ -19,23 +20,12 @@
     "services/prospect-pipeline.js",
     "scripts/site-builder-follow-up-cron.mjs",
     "scripts/site-builder-preview-expiry-cron.mjs",
+    "scripts/verify-site-builder-lane.mjs",
     "routes/site-builder-routes.js",
     "db/migrations/20260313_site_builder_prospect_pipeline.sql",
     "public/overlay/site-builder-landing.html"
   ],
   "required_routes": [
-    {
-      "method": "POST",
-      "path": "/api/v1/sites/build",
-      "expected_status": 200,
-      "description": "Build a preview site from a business URL"
-    },
-    {
-      "method": "POST",
-      "path": "/api/v1/sites/prospect",
-      "expected_status": 200,
-      "description": "Build a preview and enqueue/send prospect outreach"
-    },
     {
       "method": "GET",
       "path": "/api/v1/sites/dashboard",
@@ -115,6 +105,10 @@
     },
     {
       "type": "file_exists",
+      "path": "scripts/verify-site-builder-lane.mjs"
+    },
+    {
+      "type": "file_exists",
       "path": "routes/site-builder-routes.js"
     },
     {
@@ -144,6 +138,10 @@
     {
       "type": "node_check",
       "check": "scripts/site-builder-preview-expiry-cron.mjs"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/verify-site-builder-lane.mjs"
     }
   ],
   "completion_checks": [

@@ -64,6 +64,7 @@
     "ssot:compact:dryrun": "node scripts/ssot-compact-receipts-dryrun.mjs",
     "git:diff-summary": "node scripts/git-diff-summary.mjs",
     "verify:clientcare-billing:remote": "node scripts/verify-project.mjs --project clientcare_billing_recovery --remote-base-url \"$PUBLIC_BASE_URL\"",
+    "verify:site-builder": "node scripts/verify-site-builder-lane.mjs",
     "truth:preflight": "node scripts/truth-guard-preflight.js",
     "artifacts:preflight": "node scripts/programming-artifacts-preflight.js",
     "web:intake": "node scripts/web-intake.js",

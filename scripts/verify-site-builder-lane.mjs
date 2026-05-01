@@ -1,132 +1,24 @@
-// scripts/verify-site-builder-lane.mjs
-import { spawn } from 'child_process';
+#!/usr/bin/env node
+/**
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ */
+import { spawn } from 'node:child_process';
 
-const args = process.argv.slice(2); // Get extra CLI arguments
+const args = process.argv.slice(2);
 
 const child = spawn(
-  'node',
+  process.execPath,
   ['scripts/verify-project.mjs', '--project', 'site_builder', ...args],
   {
-    stdio: 'inherit', // Inherit stdin, stdout, stderr
-  }
+    stdio: 'inherit',
+  },
 );
 
 child.on('close', (code) => {
-  process.exit(code); // Exit with the child process's exit code
+  process.exit(code ?? 1);
 });
-```
---- REPO FILE: package.json
-```json
-{
-  "name": "ai-counsel-os",
-  "version": "1.0.0",
-  "type": "module",
-  "main": "server.js",
-  "bin": {
-    "counsel": "./apps/cli/index.js"
-  },
-  "scripts": {
-    "start": "node server.js",
-    "cli": "node apps/cli/index.js",
-    "test": "node --test tests/smoke.test.js tests/insurance-card-parse.test.js",
-    "test:insurance-card-ocr": "node scripts/test-insurance-card-ocr.mjs",
-    "clientcare:run-pipeline": "node scripts/run-clientcare-vob-pipeline.mjs",
-    "test:smoke": "node scripts/smoke-test-server.js",
-    "test:autoBld": "node --test tests/autoBld-scheduler.test.js",
-    "test:integration": "echo \"Integration tests not yet implemented\" && exit 0",
-    "benchmark": "echo \"Benchmarks not yet implemented\" && exit 0",
-    "check:overlay": "node scripts/check-overlay-syntax.js",
-    "ssot:validate": "node scripts/ssot-validate.mjs",
-    "verify:maturity": "node scripts/system-maturity-check.mjs",
-    "backtest:attention": "node scripts/attention-momentum-backtest.mjs",
-    "backtest:attention:100": "node scripts/attention-momentum-backtest.mjs --bots 100 --per-bot 5 --learn-scale 2 --min-trades-learn-compare 4",
-    "backtest:attention:4x-demo": "node scripts/attention-momentum-backtest.mjs --bots 4 --no-online-learn --sim-leverage 26",
-    "benchmark:strategies": "node scripts/strategy-benchmark-suite.mjs",
-    "benchmark:strategies:wf": "node scripts/strategy-benchmark-suite.mjs --wf-folds 4 --max-avg-dd 0.25",
-    "cold-start:gen": "node scripts/generate-cold-start.mjs && node scripts/generate-agent-rules.mjs",
-    "gen:rules": "node scripts/generate-agent-rules.mjs",
-    "builder:preflight": "node scripts/council-builder-preflight.mjs",
-    "builder:diagnose-prod": "node scripts/diagnose-builder-prod.mjs",
-    "tsos:doctor": "node scripts/tsos-doctor.mjs",
-    "system:doctor": "node scripts/tsos-doctor.mjs",
-    "env:certify": "node scripts/env-certify.mjs",
-    "system:railway:redeploy": "node scripts/system-railway-redeploy.mjs",
-    "system:rotate-command-key": "node scripts/system-rotate-command-key.mjs",
-    "system:sync-command-key": "node scripts/system-sync-command-key.mjs",
-    "lifeos:lumin-build-smoke": "node scripts/lumin-build-smoke.mjs",
-    "lifeos:build-ops": "node scripts/lifeos-build-ops.mjs",
-    "lifeos:lumin-plan": "node scripts/lumin-invoke-plan.mjs",
-    "lifeos:gate-change-run": "node scripts/council-gate-change-run.mjs",
-    "lifeos:builder:build-chat": "node scripts/lifeos-builder-build-chat.mjs",
-    "lifeos:builder:supervise": "node scripts/lifeos-builder-supervisor.mjs",
-    "lifeos:builder:overnight": "node scripts/lifeos-builder-overnight.mjs",
-    "lifeos:builder:orchestrate": "node scripts/council-builder-preflight.mjs && node scripts/lifeos-builder-build-chat.mjs",
-    "zero-drift:check": "node scripts/zero-drift-check.mjs",
-    "readiness:check": "node scripts/amendment-readiness-check.mjs",
-    "repo:catalog": "node scripts/generate-repo-catalog.mjs",
-    "idea-vault:catalog-keywords": "node scripts/catalog-dump-keywords.mjs",
-    "operator-corpus:pipeline": "node scripts/operator-corpus-pipeline.mjs",
-    "handoff:self-test": "node scripts/handoff-self-test.mjs",
-    "memory:seed": "node scripts/seed-epistemic-facts.mjs",
-    "memory:ci-evidence": "node scripts/record-ci-evidence.mjs --all-js",
-    "verify:ci": "node --check $(find . -name '.js' -not -path './node_modules/' -not -path './.git/*') && node scripts/record-ci-evidence.mjs --pass --all-js",
-    "evidence:check": "node scripts/evidence-required-check.mjs",
-    "ssot:compact:dryrun": "node scripts/ssot-compact-receipts-dryrun.mjs",
-    "git:diff-summary": "node scripts/git-diff-summary.mjs",
-    "verify:clientcare-billing:remote": "node scripts/verify-project.mjs --project clientcare_billing_recovery --remote-base-url \"$PUBLIC_BASE_URL\"",
-    "verify:site-builder": "node scripts/verify-site-builder-lane.mjs",
-    "truth:preflight": "node scripts/truth-guard-preflight.js",
-    "artifacts:preflight": "node scripts/programming-artifacts-preflight.js",
-    "web:intake": "node scripts/web-intake.js",
-    "tc:r4r-upload": "node scripts/tc-r4r-do-upload.mjs",
-    "tc:r4r-railway": "node scripts/tc-r4r-from-railway.mjs",
-    "pm2:start": "pm2 start ecosystem.config.js",
-    "pm2:restart": "pm2 restart lifeos",
-    "pm2:logs": "pm2 logs lifeos --lines 200",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:introspect": "drizzle-kit introspect",
-    "db:studio": "drizzle-kit studio"
-  },
-  "dependencies": {
-    "@anthropic-ai/claude-code": "^2.1.86",
-    "acorn": "^8.15.0",
-    "bullmq": "^5.71.0",
-    "commander": "^11.1.0",
-    "dayjs": "^1.11.0",
-    "dotenv": "^16.0.0",
-    "drizzle-orm": "^0.31.4",
-    "eslint": "^8.57.0",
-    "express": "^4.18.0",
-    "express-rate-limit": "^7.1.5",
-    "google-auth-library": "^10.6.2",
-    "googleapis": "^171.4.0",
-    "imapflow": "^1.0.169",
-    "ioredis": "^5.10.0",
-    "js-yaml": "^4.1.1",
-    "multer": "^2.1.1",
-    "nodemailer": "^8.0.3",
-    "pdf-lib": "^1.17.1",
-    "pdf-parse": "^1.1.4",
-    "pg": "^8.11.0",
-    "pino": "^9.14.0",
-    "pino-pretty": "^11.3.0",
-    "puppeteer": "^24.33.0",
-    "replicate": "^0.31.1",
-    "sharp": "^0.33.5",
-    "stripe": "^13.0.0",
-    "tesseract.js": "^4.1.1",
-    "twilio": "^4.0.0",
-    "ws": "^8.13.0",
-    "zod": "^3.25.76"
-  },
-  "devDependencies": {
-    "drizzle-kit": "^0.22.8",
-    "ioredis-mock": "^8.13.1",
-    "pm2": "^5.3.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
-}
+
+child.on('error', (error) => {
+  console.error(error);
+  process.exit(1);
+});
