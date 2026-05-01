@@ -182,6 +182,32 @@
       "spec": "Markdown + ---METADATA--- JSON.",
       "commit_message": "[system-build] Category stubs spec Health Family Purpose (overnight wave 2)",
       "notes": "Doc-only; aligns with overnight queue item 9."
+    },
+    {
+      "id": "dashboard-a11y-spec",
+      "domain": "lifeos-platform",
+      "target_file": "docs/projects/DASHBOARD_A11Y_SPEC.md",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "public/overlay/lifeos-dashboard.html"
+      ],
+      "task": "Specification only: dashboard shell accessibility (focus traps, landmarks, keyboard paths, contrast, prefers-reduced-motion). Reference WCAG-oriented language; no HTML rewrite.",
+      "spec": "Markdown sections + ---METADATA--- JSON at end.",
+      "commit_message": "[system-build] Dashboard accessibility spec (overnight wave 3)",
+      "notes": "Doc-only queue so cursor past 12 resumes."
+    },
+    {
+      "id": "dashboard-loading-empty-spec",
+      "domain": "lifeos-platform",
+      "target_file": "docs/projects/DASHBOARD_LOADING_EMPTY_SPEC.md",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "public/overlay/lifeos-dashboard.html"
+      ],
+      "task": "Specification for skeletons, shimmer rules, optimistic UI risks, empty states copy tone per brief. Implementation deferred.",
+      "spec": "Markdown + ---METADATA--- JSON.",
+      "commit_message": "[system-build] Loading and empty-state spec for dashboard (overnight wave 3)",
+      "notes": "Pairs with polish queue markdown item 10."
     }
   ]
 }

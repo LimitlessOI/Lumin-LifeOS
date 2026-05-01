@@ -231,6 +231,80 @@ function splitBuilderOutput(raw) {
  * Also strips trailing markdown after </html>.
  * Returns original text unchanged if no HTML start marker is found.
  */
+/**
+ * Models often paste a full HTML page, markdown fences, or a one-line "*.md" header into `.js` targets.
+ * Mirrors the HTML preamble strip path so `node --check` sees real JavaScript.
+ */
+function extractJavaScriptFromOutput(rawText) {
+  let s = String(rawText || '');
+  let preambleStripPasses = 0;
+  while (preambleStripPasses < 4) {
+    preambleStripPasses += 1;
+    s = stripLeadingMarkdownFenceBeforeMetadata(s).trim();
+    if (!s) break;
+
+    const wholeFence = /^```(?:js|javascript|mjs|cjs)?\s*\r?\n([\s\S]*?)\r?\n```\s*$/im;
+    const wf = s.match(wholeFence);
+    if (wf && wf[1].trim().length > 40) return wf[1].trim();
+
+    if (s.startsWith('```')) {
+      const firstNl = s.indexOf('\n');
+      if (firstNl !== -1) {
+        let inner = s.slice(firstNl + 1);
+        const closeIdx = inner.lastIndexOf('\n```');
+        if (closeIdx !== -1) inner = inner.slice(0, closeIdx);
+        inner = inner.trim();
+        if (inner.length > 40) return inner;
+      }
+    }
+
+    const nl = s.indexOf('\n');
+    if (nl > 0 && nl < 220) {
+      const head = s.slice(0, nl).trim();
+      if (/^[\w./\\-]+\.(md|txt)$/i.test(head)) {
+        s = s.slice(nl + 1).trim();
+        continue;
+      }
+    }
+    break;
+  }
+
+  const looksHtml = /<!DOCTYPE\s+html/i.test(s) || /<html[\s>]/i.test(s);
+  if (looksHtml) {
+    const blocks = [];
+    const re = /<script(?![^>]*\bsrc\s*=)[^>]*>([\s\S]*?)<\/script>/gi;
+    let sm;
+    while ((sm = re.exec(s)) !== null) {
+      const body = sm[1].trim();
+      if (body.length > 80) blocks.push(body);
+    }
+    if (blocks.length) {
+      blocks.sort((a, b) => b.length - a.length);
+      return blocks[0];
+    }
+  }
+
+  return s.trim();
+}
+
+async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
+  let tmpFile = null;
+  try {
+    const tmpDir = await mkdtemp(join(tmpdir(), 'builder-check-'));
+    tmpFile = join(tmpDir, extname(resolvedTarget) || '.js');
+    await writeFile(tmpFile, content, 'utf8');
+    execSync(`node --check "${tmpFile}"`, { stdio: 'pipe' });
+    return { ok: true };
+  } catch (checkErr) {
+    return {
+      ok: false,
+      error: (checkErr.stderr?.toString() || checkErr.message || 'syntax error').slice(0, 400),
+    };
+  } finally {
+    if (tmpFile) await unlink(tmpFile).catch(() => {});
+  }
+}
+
 function extractHtmlFromOutput(text) {
   const s = String(text || '');
   // Find earliest HTML document start
@@ -950,6 +1024,15 @@ export function createLifeOSCouncilBuilderRoutes({
         log.info({ target_file, stripped: output.length - extracted.length }, '[BUILDER] /execute: Stripped markdown preamble from HTML output');
         cleanedOutput = extracted;
       }
+    } else if (/\.(js|mjs|cjs)$/i.test(target_file)) {
+      const extracted = extractJavaScriptFromOutput(output);
+      if (extracted !== output) {
+        log.info(
+          { target_file, stripped: output.length - extracted.length },
+          '[BUILDER] /execute: Stripped HTML/markdown wrapper from JS output',
+        );
+        cleanedOutput = extracted;
+      }
     }
     const validationError = validateGeneratedOutputForTarget(target_file, cleanedOutput);
     if (validationError) {
@@ -966,6 +1049,33 @@ export function createLifeOSCouncilBuilderRoutes({
         mode: 'execute',
       });
       return res.status(422).json({ ok: false, error: validationError, committed: false, target_file, gap_recommendation: gapRecommendation });
+    }
+
+    if (/\.(js|mjs|cjs)$/i.test(target_file)) {
+      const chk = await verifyGeneratedJavaScriptWithNodeCheck(cleanedOutput, target_file);
+      if (!chk.ok) {
+        const syntaxError = chk.error || 'syntax error';
+        const gapRecommendation = await recordBuilderGap({
+          domain: null,
+          task: `execute: ${target_file}`,
+          modelUsed: 'system',
+          rawOutput: output,
+          status: 'failed',
+          stage: 'syntax',
+          reason: syntaxError,
+          targetFile: target_file,
+          routingKey: 'council.builder.execute',
+          mode: 'execute',
+        });
+        return res.status(422).json({
+          ok: false,
+          error: 'Pre-commit syntax check failed — commit blocked',
+          syntax_error: syntaxError,
+          committed: false,
+          target_file,
+          gap_recommendation: gapRecommendation,
+        });
+      }
     }
 
     const msg = commit_message || `[system-build] ${target_file}`;
@@ -1200,6 +1310,16 @@ export function createLifeOSCouncilBuilderRoutes({
         generatedOutput = extracted;
       }
     }
+    if (/\.(js|mjs|cjs)$/i.test(resolvedTarget)) {
+      const extractedJs = extractJavaScriptFromOutput(generatedOutput);
+      if (extractedJs !== generatedOutput) {
+        log.info(
+          { resolvedTarget, stripped: generatedOutput.length - extractedJs.length },
+          '[BUILDER] Stripped HTML/markdown wrapper from JS output before syntax gate',
+        );
+        generatedOutput = extractedJs;
+      }
+    }
     const validationError = validateGeneratedOutputForTarget(resolvedTarget, generatedOutput);
     if (validationError) {
       const gapRecommendation = await recordBuilderGap({
@@ -1254,20 +1374,9 @@ export function createLifeOSCouncilBuilderRoutes({
     // A model is never trusted because it's smart — it must be checked.
     const isJsFile = /\.(js|mjs|cjs)$/.test(resolvedTarget);
     if (isJsFile) {
-      let tmpFile = null;
-      let syntaxOk = true;
-      let syntaxError = null;
-      try {
-        const tmpDir = await mkdtemp(join(tmpdir(), 'builder-check-'));
-        tmpFile = join(tmpDir, extname(resolvedTarget) || '.js');
-        await writeFile(tmpFile, generatedOutput, 'utf8');
-        execSync(`node --check "${tmpFile}"`, { stdio: 'pipe' });
-      } catch (checkErr) {
-        syntaxOk = false;
-        syntaxError = (checkErr.stderr?.toString() || checkErr.message || 'syntax error').slice(0, 400);
-      } finally {
-        if (tmpFile) await unlink(tmpFile).catch(() => {});
-      }
+      const chk = await verifyGeneratedJavaScriptWithNodeCheck(generatedOutput, resolvedTarget);
+      const syntaxOk = chk.ok;
+      const syntaxError = chk.error || null;
 
       if (!syntaxOk) {
         log.error({ resolvedTarget, model_used, syntaxError }, '[BUILDER] pre-commit syntax check FAILED — blocking commit');

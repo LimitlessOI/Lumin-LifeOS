@@ -56,6 +56,7 @@ Any session that **adds or changes** a self-serve HTTP route, operator script, o
 
 | Date | Change |
 |------|--------|
+| 2026-05-01 | **B4 follow-up:** **`/build`** + **`/execute`** strip HTML/markdown-wrapped blobs for **`.js`** targets before **`node --check`** (`extractJavaScriptFromOutput`). |
 | 2026-05-01 | **B2:** **`/ready`** — **`Cache-Control: no-store`**, **`codegen.deploy_commit_sha`** when env carries a git SHA; **`builder.codegen_policy_revision`** mirror. |
 | 2026-04-30 | **B2 / V2:** **`GET …/builder/ready`** **`codegen`** block (**`policy_revision`**, **`supports_max_output_tokens_body`**, **`html_output_estimator`**); **`npm run builder:preflight`** prints it. **`scripts/lifeos-builder-overnight.mjs`** passes JSON task **`max_output_tokens`** into **`POST /builder/build`.** |
 | 2026-04-30 | **B3/B4:** Optional JSON **`max_output_tokens`** (alias **`maxOutputTokens`**) on **`/builder/task`** + **`/builder/build`** (code mode; clamped ≤128k) — supervisor completion override when live image estimator is stale. |
