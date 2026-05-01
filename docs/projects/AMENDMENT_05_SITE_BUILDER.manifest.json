@@ -27,7 +27,8 @@
     "scripts/verify-site-builder-lane.mjs",
     "routes/site-builder-routes.js",
     "db/migrations/20260313_site_builder_prospect_pipeline.sql",
-    "public/overlay/site-builder-landing.html"
+    "public/overlay/site-builder-landing.html",
+    "public/overlay/site-builder-command-center.html"
   ],
   "required_routes": [
     {
@@ -41,6 +42,12 @@
       "path": "/overlay/site-builder-landing.html",
       "expected_status": 200,
       "description": "Public launch page for the Site Builder offer"
+    },
+    {
+      "method": "GET",
+      "path": "/overlay/site-builder-command-center.html",
+      "expected_status": 200,
+      "description": "Operator command center — analyze prospects, build & send, view pipeline table"
     }
   ],
   "required_tables": [
@@ -175,5 +182,5 @@
   ],
   "last_verified_at": null,
   "verification_passed": null,
-  "last_updated": "2026-04-30"
+  "last_updated": "2026-05-01"
 }
