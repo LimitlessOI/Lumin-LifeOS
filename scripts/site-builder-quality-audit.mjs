@@ -1,101 +1,194 @@
-/*
-- @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md */
-import { scoreGeneratedSite } from '../services/site-builder-quality-scorer.js';
+#!/usr/bin/env node
+/**
+ * @ssot docs/projects/AMENDMENT_05_SITE_BUILDER.md
+ * Quality audit for generated preview sites.
+ *
+ * Usage:
+ *   node scripts/site-builder-quality-audit.mjs                  # all local previews
+ *   node scripts/site-builder-quality-audit.mjs --id=prev_xxx    # single local preview
+ *   node scripts/site-builder-quality-audit.mjs --live           # re-score via Railway
+ *   node scripts/site-builder-quality-audit.mjs --json           # JSON output to stdout
+ */
 
-const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL;
-const COMMAND_CENTER_KEY = process.env.COMMAND_CENTER_KEY;
+import 'dotenv/config';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { scoreGeneratedSite, scoreSummary } from '../services/site-builder-quality-scorer.js';
 
-if (!PUBLIC_BASE_URL || !COMMAND_CENTER_KEY) {
-  console.error('Error: PUBLIC_BASE_URL and COMMAND_CENTER_KEY envVars must be set.');
-  process.exit(1);
+const PREVIEWS_DIR = path.join(process.cwd(), 'public/previews');
+const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL || '';
+const KEY = process.env.COMMAND_CENTER_KEY || '';
+const HEADERS = { 'x-command-key': KEY, 'Content-Type': 'application/json' };
+
+const args = process.argv.slice(2);
+const wantJson = args.includes('--json');
+const wantLive = args.includes('--live');
+const idArg = args.find(a => a.startsWith('--id='));
+const targetId = idArg ? idArg.split('=')[1] : null;
+
+const C = {
+  reset: '\x1b[0m',
+  bold: '\x1b[1m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  cyan: '\x1b[36m',
+  gray: '\x1b[90m',
+  magenta: '\x1b[35m',
+};
+
+function gradeColor(grade) {
+  if (grade === 'A') return C.green + C.bold;
+  if (grade === 'B') return C.green;
+  if (grade === 'C') return C.yellow;
+  if (grade === 'D') return C.magenta;
+  return C.red;
 }
 
-async function runQualityAudit() { // Corrected asyncFn to async function
-  console.log('Starting siteBld quality audit...');
-  const auditResults = [];
-  let totalSites = 0;
-  let readyCount = 0;
-  let totalScorePct = 0; // Changed to totalScorePct to reflect percentage sum
+async function auditLocalPreview(clientId) {
+  const dir = path.join(PREVIEWS_DIR, clientId);
+  const htmlPath = path.join(dir, 'index.html');
+  const metaPath = path.join(dir, 'meta.json');
 
+  let html, meta;
   try {
-    // Step 1: GET /api/v1/sites/prospects
-    const prospectsResponse = await fetch(`${PUBLIC_BASE_URL}/api/v1/sites/prospects`, {
-      headers: {
-        'x-command-key': COMMAND_CENTER_KEY,
-        'Content-Type': 'application/json',
-      },
-    });
+    html = await fs.readFile(htmlPath, 'utf-8');
+  } catch {
+    return { clientId, error: 'index.html not found' };
+  }
+  try {
+    meta = JSON.parse(await fs.readFile(metaPath, 'utf-8'));
+  } catch {
+    meta = {};
+  }
 
-    if (!prospectsResponse.ok) {
-      throw new Error(`Failed to fetch prospects: ${prospectsResponse.status} ${prospectsResponse.statusText}`);
-    }
+  const report = scoreGeneratedSite(html, meta.businessInfo || {});
+  return {
+    clientId,
+    businessName: meta.businessInfo?.businessName || meta.businessName || clientId,
+    previewUrl: meta.previewUrl || '',
+    createdAt: meta.createdAt || '',
+    report,
+    storedReport: meta.qualityReport || null,
+  };
+}
 
-    const data = await prospectsResponse.json();
-    const prospects = data.prospects || []; // Access the 'prospects' array from the response object
-    totalSites = prospects.length;
+async function auditAllLocal() {
+  let entries;
+  try {
+    entries = await fs.readdir(PREVIEWS_DIR);
+  } catch {
+    process.stderr.write('No previews directory found — no builds yet.\n');
+    return [];
+  }
 
-    // Step 2 & 3: Fetch HTML and Score
-    for (const prospect of prospects) {
-      const businessName = prospect.business_name || 'N/A'; // Use snake_case business_name
-      let scorePct = 'N/A'; // Renamed to scorePct
-      let grade = 'N/A';
-      let ready = false;
-      let summaryIssues = ['No preview URL']; // Renamed to summaryIssues
+  const previews = entries.filter(e => e.startsWith('prev_'));
+  if (targetId) {
+    return previews.includes(targetId) ? [await auditLocalPreview(targetId)] : [];
+  }
+  const results = await Promise.all(previews.map(auditLocalPreview));
+  return results.filter(r => !r.error);
+}
 
-      if (prospect.preview_url) { // preview_url is already snake_case
-        try {
-          const htmlResponse = await fetch(prospect.preview_url);
-          if (!htmlResponse.ok) {
-            throw new Error(`Failed to fetch HTML: ${htmlResponse.status} ${htmlResponse.statusText}`);
-          }
-          const html = await htmlResponse.text();
-          const scoringResult = await scoreGeneratedSite(html); // Call the imported scorer
-
-          scorePct = (scoringResult.score / scoringResult.maxScore) * 100; // Calculate scorePct
-          grade = scoringResult.grade;
-          ready = scoringResult.readyToSend; // Use 'readyToSend' from the new contract
-          summaryIssues = scoringResult.summaryIssues; // Use 'summaryIssues' from the new contract
-
-          if (ready) {
-            readyCount++;
-          }
-          if (typeof scorePct === 'number') {
-            totalScorePct += scorePct; // Sum scorePct
-          }
-        } catch (htmlError) {
-          summaryIssues = [`Error fetching/scoring HTML: ${htmlError.message}`]; // Update summaryIssues
-        }
-      }
-
-      auditResults.push({
-        businessName,
-        scorePct: typeof scorePct === 'number' ? scorePct.toFixed(2) : scorePct, // Store formatted scorePct
-        grade,
-        ready,
-        summaryIssues: summaryIssues.join(', '), // Store joined summaryIssues
-      });
-    }
-
-    // Step 4: Print a table
-    console.log('\n--- Site Quality Audit Results ---');
-    console.log('Business'.padEnd(30) + '| ' + 'ScorePct'.padEnd(10) + '| ' + 'Grade'.padEnd(7) + '| ' + 'Ready'.padEnd(7) + '| ' + 'Issues');
-    console.log('-'.repeat(30) + '+' + '-'.repeat(12) + '+' + '-'.repeat(9) + '+' + '-'.repeat(9) + '+' + '-'.repeat(50));
-    for (const result of auditResults) {
-      console.log(
-        result.businessName.padEnd(30) + '| ' + String(result.scorePct).padEnd(10) + '| ' + String(result.grade).padEnd(7) + '| ' + String(result.ready).padEnd(7) + '| ' + result.summaryIssues
-      );
-    }
-
-    // Step 5: Print summary
-    const averageScorePct = totalSites > 0 ? (totalScorePct / totalSites).toFixed(2) : 'N/A'; // Average based on scorePct
-    console.log('\n--- Summary ---');
-    console.log(`Total Sites: ${totalSites}`);
-    console.log(`Ready Count: ${readyCount}`);
-    console.log(`Average Score: ${averageScorePct}`); // Display averageScorePct
-  } catch (error) {
-    console.error('An error occurred during the audit:', error.message);
+async function auditLive() {
+  if (!PUBLIC_BASE_URL || !KEY) {
+    process.stderr.write('PUBLIC_BASE_URL + COMMAND_CENTER_KEY required for --live\n');
     process.exit(1);
+  }
+  const res = await fetch(`${PUBLIC_BASE_URL}/api/v1/sites/prospects?limit=100`, { headers: HEADERS });
+  if (!res.ok) throw new Error(`Prospects API: ${res.status}`);
+  const data = await res.json();
+  const prospects = Array.isArray(data?.prospects) ? data.prospects : [];
+
+  const results = [];
+  for (const p of prospects) {
+    if (!p.preview_url) continue;
+    try {
+      const htmlRes = await fetch(p.preview_url);
+      if (!htmlRes.ok) { results.push({ clientId: p.client_id, error: `HTTP ${htmlRes.status}` }); continue; }
+      const html = await htmlRes.text();
+      const report = scoreGeneratedSite(html);
+      results.push({ clientId: p.client_id, businessName: p.business_name, previewUrl: p.preview_url, report });
+    } catch (e) {
+      results.push({ clientId: p.client_id, businessName: p.business_name, error: e.message });
+    }
+    await new Promise(r => setTimeout(r, 300)); // polite delay
+  }
+  return results;
+}
+
+function printResults(results) {
+  if (results.length === 0) {
+    process.stderr.write('No previews found to audit.\n');
+    return;
+  }
+
+  // Sort by score descending (errors last)
+  results.sort((a, b) => (b.report?.scorePct || 0) - (a.report?.scorePct || 0));
+
+  const col = (s, w) => String(s).slice(0, w).padEnd(w);
+  process.stderr.write(`\n${C.bold}Site Builder — Quality Audit${C.reset}\n`);
+  process.stderr.write(`${'─'.repeat(100)}\n`);
+  process.stderr.write(
+    `${C.gray}${col('ID', 20)} ${col('Business', 28)} ${col('Score', 8)} ${col('Gr', 4)} ${col('Ready', 6)} Issues${C.reset}\n`
+  );
+  process.stderr.write(`${'─'.repeat(100)}\n`);
+
+  let readyCount = 0;
+  let totalScore = 0;
+  let countScored = 0;
+
+  for (const r of results) {
+    if (r.error) {
+      process.stderr.write(`${col(r.clientId, 20)} ${col(r.businessName || '?', 28)} ${C.gray}ERROR: ${r.error}${C.reset}\n`);
+      continue;
+    }
+    const { scorePct, grade, readyToSend, summaryIssues } = r.report;
+    const gc = gradeColor(grade);
+    const readyStr = readyToSend ? `${C.green}✓${C.reset}` : `${C.red}✗${C.reset}`;
+    const issues = (summaryIssues || []).slice(0, 2).join('; ');
+    process.stderr.write(
+      `${col(r.clientId, 20)} ${col(r.businessName || '?', 28)} ${gc}${col(scorePct + '%', 8)}${C.reset} ${gc}${col(grade, 4)}${C.reset} ${readyStr}     ${C.gray}${issues}${C.reset}\n`
+    );
+    if (readyToSend) readyCount++;
+    totalScore += scorePct;
+    countScored++;
+  }
+
+  process.stderr.write(`${'─'.repeat(100)}\n`);
+  const avg = countScored > 0 ? (totalScore / countScored).toFixed(1) : 'N/A';
+  process.stderr.write(
+    `${C.bold}${countScored} sites scored  •  ${readyCount} ready to send  •  Avg quality: ${avg}%${C.reset}\n\n`
+  );
+
+  // Per-site detail for anything below threshold
+  const weak = results.filter(r => r.report && !r.report.readyToSend);
+  if (weak.length > 0) {
+    process.stderr.write(`${C.bold}${C.yellow}Weak previews (not ready to send):${C.reset}\n`);
+    for (const r of weak) {
+      process.stderr.write(`\n  ${C.cyan}${r.businessName || r.clientId}${C.reset} — ${r.report.scorePct}% ${r.report.grade}\n`);
+      for (const issue of (r.report.issues || [])) {
+        process.stderr.write(`    ${C.red}✗${C.reset} ${issue}\n`);
+      }
+      if (r.storedReport?.scorePct && r.storedReport.scorePct !== r.report.scorePct) {
+        process.stderr.write(`    ${C.gray}Note: stored score was ${r.storedReport.scorePct}% — rescored to ${r.report.scorePct}%${C.reset}\n`);
+      }
+    }
+    process.stderr.write('\n');
   }
 }
 
-runQualityAudit();
+(async () => {
+  try {
+    const results = wantLive ? await auditLive() : await auditAllLocal();
+
+    if (wantJson) {
+      process.stdout.write(JSON.stringify(results, null, 2) + '\n');
+    } else {
+      printResults(results);
+    }
+  } catch (err) {
+    process.stderr.write(`Error: ${err.message}\n`);
+    process.exit(1);
+  }
+})();

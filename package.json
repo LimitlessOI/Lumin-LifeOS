@@ -69,6 +69,7 @@
     "site-builder:discover": "node scripts/site-builder-prospect-discovery.mjs",
     "site-builder:rank": "node scripts/site-builder-batch-rank.mjs",
     "site-builder:report": "node scripts/site-builder-pipeline-report.mjs",
+    "site-builder:qa": "node scripts/site-builder-quality-audit.mjs",
     "truth:preflight": "node scripts/truth-guard-preflight.js",
     "artifacts:preflight": "node scripts/programming-artifacts-preflight.js",
     "web:intake": "node scripts/web-intake.js",

@@ -202,7 +202,8 @@ Return ONLY valid JSON:
 }`;
 
       try {
-        const response = await this.callCouncil('chatgpt', prompt, { model: 'gpt-4o-mini', maxTokens: 800 });
+        // groq_llama: fast JSON extraction — cold email body is ~300-500 tokens, well within groq's limit
+        const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 900, taskType: 'extraction' });
         const jsonMatch = response.match(/\{[\s\S]+\}/);
         if (jsonMatch) {
           const parsed = JSON.parse(jsonMatch[0]);
