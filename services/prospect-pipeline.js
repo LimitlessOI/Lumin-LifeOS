@@ -30,6 +30,7 @@
  */
 
 import logger from './logger.js';
+import { scoreProspectUrl } from './site-builder-opportunity-scorer.js';
 
 // Pricing tiers to include in outreach emails
 const PRICING = {
@@ -70,6 +71,20 @@ export default class ProspectPipeline {
 
     logger.info('[PROSPECT] Processing prospect', { businessUrl, contactEmail });
 
+    // Step 0: Score their existing site — pain points personalize the outreach email
+    let opportunityAnalysis = null;
+    try {
+      opportunityAnalysis = await scoreProspectUrl(businessUrl, { timeout: 6000 });
+      logger.info('[PROSPECT] Opportunity score', {
+        businessUrl,
+        score: opportunityAnalysis.opportunityScore,
+        grade: opportunityAnalysis.grade,
+        painPointCount: opportunityAnalysis.painPoints?.length,
+      });
+    } catch (err) {
+      logger.warn('[PROSPECT] Opportunity score failed (non-fatal)', { error: err.message });
+    }
+
     // Step 1: Build their mock site
     const buildResult = await this.siteBuilder.buildFromUrl(businessUrl, {
       businessInfo: options.businessInfo || null,
@@ -85,13 +100,14 @@ export default class ProspectPipeline {
     const qualityReport = buildResult.qualityReport || buildResult.metadata?.qualityReport || null;
     const qaHold = qualityReport ? qualityReport.readyToSend === false : false;
 
-    // Step 2: Generate personalized email copy
+    // Step 2: Generate personalized email copy (pain points from Step 0 make it specific)
     const emailContent = await this.generateOutreachEmail({
       contactName: name,
       businessName: biz,
       previewUrl,
       industry: buildResult.metadata?.businessInfo?.industry,
       posPartnerName: buildResult.posPartner,
+      painPoints: opportunityAnalysis?.painPoints?.slice(0, 3) || [],
     });
 
     // Step 3: Send email (if contact email provided and not skipped)
@@ -151,8 +167,12 @@ export default class ProspectPipeline {
    * Generate personalized cold outreach email copy.
    * Keeps it short — 3-4 sentences, leads with the value.
    */
-  async generateOutreachEmail({ contactName, businessName, previewUrl, industry, posPartnerName }) {
+  async generateOutreachEmail({ contactName, businessName, previewUrl, industry, posPartnerName, painPoints = [] }) {
     if (this.callCouncil) {
+      const painPointSection = painPoints.length
+        ? `\n- SPECIFIC ISSUES WE FOUND on their current site (mention 1-2 naturally in the email body):\n${painPoints.map(p => `  • ${p}`).join('\n')}`
+        : '';
+
       const prompt = `Write a cold outreach email for a web agency that built a FREE mock website upgrade for a prospect.
 
 CONTEXT:
@@ -160,17 +180,18 @@ CONTEXT:
 - Industry: ${industry || 'wellness/health'}
 - Contact name: ${contactName}
 - Preview URL: ${previewUrl}
-- We built them a free upgraded site with: SEO optimization, click funnel, blog posts, booking system, ${posPartnerName} integration
+- We built them a free upgraded site with: SEO optimization, click funnel, blog posts, booking system, ${posPartnerName} integration${painPointSection}
 
 EMAIL RULES:
 - Subject: Under 8 words, personalized with business name, no clickbait
 - Body: 3-4 short paragraphs maximum
-- Paragraph 1: Lead with the value — "I built a free upgrade of your website"
+- Paragraph 1: Lead with the specific value — mention 1 real issue we found on their site, then say we built them a free upgrade that fixes it
 - Paragraph 2: What's included (1-2 sentences, bullet points ok)
 - Paragraph 3: Single clear CTA — view the preview at [URL]
 - Paragraph 4: No-pressure close — "No obligation, just wanted to share"
-- Tone: warm, direct, professional — NOT salesy
+- Tone: warm, direct, professional — NOT salesy, NOT generic
 - NO: "I hope this email finds you well", "synergies", corporate jargon
+- If pain points provided: reference 1-2 specific ones (not all of them)
 - Include actual preview URL as a clickable link
 
 Return ONLY valid JSON:
@@ -196,20 +217,23 @@ Return ONLY valid JSON:
     // Fallback template email
     return {
       subject: `${businessName} — free website upgrade preview`,
-      html: this.fallbackEmailHtml(contactName, businessName, previewUrl),
+      html: this.fallbackEmailHtml(contactName, businessName, previewUrl, painPoints),
     };
   }
 
   /**
    * Fallback email template when AI is unavailable.
    */
-  fallbackEmailHtml(contactName, businessName, previewUrl) {
+  fallbackEmailHtml(contactName, businessName, previewUrl, painPoints = []) {
+    const leadingPainPoint = painPoints[0]
+      ? `I noticed ${painPoints[0].toLowerCase()} — so I built a free upgraded version to show you what's possible.`
+      : `I took a look at ${businessName || 'your website'} and built a free upgraded version to show you what's possible.`;
     return `<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333;">
   <p>Hi ${contactName || 'there'},</p>
-  <p>I took a look at ${businessName || 'your website'} and built a free upgraded version to show you what's possible — fully optimized for SEO, with a modern booking flow and automated blog content for your industry.</p>
+  <p>${leadingPainPoint} Fully optimized for SEO, with a modern booking flow and automated blog content for your industry.</p>
   <p>Here's what's included in the free preview:</p>
   <ul>
     <li>✅ Modern click-funnel design (built to convert visitors to bookings)</li>
