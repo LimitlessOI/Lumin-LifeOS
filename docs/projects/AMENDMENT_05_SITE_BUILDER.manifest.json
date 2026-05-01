@@ -21,6 +21,7 @@
     "services/prospect-pipeline.js",
     "prompts/lifeos-site-builder.md",
     "scripts/site-builder-prospect-discovery.mjs",
+    "scripts/site-builder-batch-rank.mjs",
     "scripts/site-builder-follow-up-cron.mjs",
     "scripts/site-builder-preview-expiry-cron.mjs",
     "scripts/site-builder-live-smoke.mjs",
@@ -169,6 +170,10 @@
     {
       "type": "node_check",
       "check": "scripts/verify-site-builder-lane.mjs"
+    },
+    {
+      "type": "node_check",
+      "check": "scripts/site-builder-batch-rank.mjs"
     }
   ],
   "completion_checks": [

@@ -67,6 +67,7 @@
     "verify:site-builder": "node scripts/verify-site-builder-lane.mjs",
     "verify:site-builder:live": "node scripts/site-builder-live-smoke.mjs",
     "site-builder:discover": "node scripts/site-builder-prospect-discovery.mjs",
+    "site-builder:rank": "node scripts/site-builder-batch-rank.mjs",
     "truth:preflight": "node scripts/truth-guard-preflight.js",
     "artifacts:preflight": "node scripts/programming-artifacts-preflight.js",
     "web:intake": "node scripts/web-intake.js",
