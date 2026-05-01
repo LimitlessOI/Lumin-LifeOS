@@ -12,7 +12,10 @@
  * Usage:
  *   import { getModelForTask } from './config/task-model-routing.js';
  *   const member = getModelForTask('lifeos.lumin.chat');  // → 'gemini_flash'
- *   const result = await callCouncilMember(member, prompt);
+ *   const result = await callCouncilMember(member, prompt, { maxOutputTokens: 500 });
+ *
+ * IMPORTANT: Use `maxOutputTokens` (NOT `maxTokens`) to override output length.
+ * council-service reads `options.maxOutputTokens`; `options.maxTokens` is silently ignored.
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
@@ -80,6 +83,15 @@ export const TASK_MODEL_MAP = {
   'council.builder.review':           'gemini_flash',    // was: claude_via_openrouter
   'council.builder.code_review':      'gemini_flash',    // was: claude_via_openrouter
   'council.gate_change.debate':       'gemini_flash',    // was: claude_via_openrouter
+
+  // ── Site Builder ─────────────────────────────────────────────────────────
+  // gemini_flash: free, 8192+ output tokens — necessary for full 15-section HTML
+  // groq_llama: fast JSON extraction — capped at 4096 tokens (fine for structured extraction)
+  'site_builder.generate_site':       'gemini_flash',   // full HTML generation (needs >4k tokens)
+  'site_builder.repair_site':         'gemini_flash',   // HTML repair pass (needs >4k tokens)
+  'site_builder.extract_business':    'groq_llama',     // structured JSON extraction (< 1k tokens)
+  'site_builder.generate_blogs':      'gemini_flash',   // 3x blog posts (> 4k tokens)
+  'site_builder.draft_cold_email':    'groq_llama',     // cold outreach email (< 500 tokens)
 
   // ── Email / Outreach ─────────────────────────────────────────────────────
   'outreach.email.draft':             'groq_llama',

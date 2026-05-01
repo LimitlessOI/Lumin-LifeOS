@@ -289,7 +289,8 @@ Return ONLY valid JSON with this exact structure:
   "uniqueValue": "what makes them different in 1-2 sentences"
 }`;
 
-    const response = await this.callCouncil('chatgpt', prompt, { model: 'gpt-4o-mini', maxTokens: 1000 });
+    // groq_llama is fine for structured JSON extraction — fast and cheap
+    const response = await this.callCouncil('groq_llama', prompt, { maxOutputTokens: 1000, taskType: 'extraction' });
     try {
       const jsonMatch = response.match(/\{[\s\S]+\}/);
       return jsonMatch ? JSON.parse(jsonMatch[0]) : {};
@@ -407,7 +408,9 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
 
     if (!this.callCouncil) throw new Error('callCouncil required for site generation');
 
-    const response = await this.callCouncil('chatgpt', prompt, { model: 'gpt-4o', maxTokens: GENERATION_MAX_TOKENS });
+    // gemini_flash: free, 8192+ output tokens — adequate for full 15-section HTML
+    // maxOutputTokens (not maxTokens) is what council-service reads for the override
+    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: GENERATION_MAX_TOKENS });
     let clean = response.replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     // Strip markdown fences AI models sometimes wrap HTML in (```html...``` or ```...```)
     clean = clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s*$/, '').trim();
@@ -556,7 +559,7 @@ CURRENT HTML:
 ${existingHtml}
 `;
 
-    const response = await this.callCouncil('chatgpt', prompt, { model: 'gpt-4o', maxTokens: REPAIR_MAX_TOKENS });
+    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: REPAIR_MAX_TOKENS });
     const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid repaired HTML');
@@ -587,7 +590,8 @@ Return ONLY valid JSON array:
   }
 ]`;
 
-    const response = await this.callCouncil('chatgpt', prompt, { model: 'gpt-4o-mini', maxTokens: 4000 });
+    // gemini_flash for blog content — 3 posts × 600-800 words each exceeds groq's 4096-token limit
+    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: 4000 });
     try {
       const jsonMatch = response.match(/\[[\s\S]+\]/);
       const posts = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
