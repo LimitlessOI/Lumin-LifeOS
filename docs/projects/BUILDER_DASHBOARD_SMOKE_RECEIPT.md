@@ -1,14 +1,11 @@
-The task asks to ground output in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` but the file is reported as missing, requiring synthesis from task description.
-LifeOS Dashboard Builder Brief Smoke Receipt
+LifeOS Dashboard Builder Smoke Receipt
 
-This receipt confirms understanding of the core directives outlined in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
+This receipt confirms the understanding of the LifeOS Dashboard brief, as outlined in `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
 
-**Shell Direction:** The builder understands the requirement to implement a dashboard adhering to the specified UI/UX patterns for both mobile and desktop.
+The builder is directed to generate the LifeOS Dashboard components, ensuring support for both light and dark modes. The design intentionally differentiates between mobile and desktop experiences.
 
-**Design Requirements:**
-*   **Modes:** Both light and dark modes are required.
-*   **Responsiveness:** Mobile and desktop interfaces will differ intentionally to optimize user experience.
-    *   **Desktop:** Features a persistent sidebar for navigation.
-    *   **Mobile:** Utilizes bottom tabs for primary navigation.
-*   **Interaction:** Category dashboards must be swipe-ready.
-*   **Core Feature:** A persistent AI rail is a mandatory component across all views.
+Key UI elements to be generated include:
+*   A persistent desktop sidebar.
+*   Mobile bottom tabs for navigation.
+*   Swipe-ready category dashboards.
+*   A persistent AI rail across all views.
