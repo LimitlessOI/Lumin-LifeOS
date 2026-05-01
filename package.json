@@ -49,6 +49,7 @@
     "lifeos:builder:queue": "node scripts/lifeos-builder-overnight.mjs",
     "lifeos:builder:daemon": "node scripts/lifeos-builder-daemon.mjs",
     "lifeos:builder:daemon:once": "node scripts/lifeos-builder-daemon.mjs --once",
+    "lifeos:builder:daemon:7h": "node scripts/lifeos-builder-daemon.mjs --run-for-min 420 --interval-min 18 --overnight-max 3",
     "lifeos:builder:orchestrate": "node scripts/council-builder-preflight.mjs && node scripts/lifeos-builder-build-chat.mjs",
     "cursor:pre-push-review": "node scripts/cursor-pre-push-review.mjs",
     "zero-drift:check": "node scripts/zero-drift-check.mjs",

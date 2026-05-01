@@ -13,6 +13,8 @@
  *   npm run lifeos:builder:supervise -- --model gemini_flash
  *   npm run lifeos:builder:supervise -- --skip-doc
  *   npm run lifeos:builder:supervise -- --probe-only --consequence-lens   # optional premortem Qs (no API spend)
+ *   BUILDER_SUPERVISOR_GAPS_LIMIT=100 BUILDER_SUPERVISOR_GAPS_DOMAIN=lifeos-platform npm run lifeos:builder:supervise -- --probe-only
+ *   # (--gaps-limit / --gaps-domain override env for GET /builder/gaps pattern summary)
  *   npm run lifeos:builder:supervise -- --overnight --overnight-max 2   # after smoke passes, run overnight queue
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
@@ -272,10 +274,24 @@ function printConsequenceLensReminder() {
   console.log('D Adam-as-lens: must ASK Adam (ambiguous/strategic/value/irreversible)? spare lower-level ONLY under SSOT+verifiers; fair options/tradeoffs; §2.11b receipts');
 }
 
+function resolveGapsQueryString() {
+  const rawLimit = argValue('--gaps-limit', process.env.BUILDER_SUPERVISOR_GAPS_LIMIT || '50');
+  let limit = parseInt(String(rawLimit), 10);
+  if (!Number.isFinite(limit)) limit = 50;
+  limit = Math.min(100, Math.max(1, limit));
+  const domain = String(
+    argValue('--gaps-domain', process.env.BUILDER_SUPERVISOR_GAPS_DOMAIN || '') || '',
+  ).trim();
+  const qs = new URLSearchParams({ limit: String(limit) });
+  if (domain) qs.set('domain', domain);
+  return { query: qs.toString(), limit, domain: domain || null };
+}
+
 async function analyzeBuilderGaps() {
   if (!key) return;
   try {
-    const { res, json } = await fetchJson(`${base}/api/v1/lifeos/builder/gaps?limit=50`, {
+    const { query, limit, domain } = resolveGapsQueryString();
+    const { res, json } = await fetchJson(`${base}/api/v1/lifeos/builder/gaps?${query}`, {
       headers: { 'x-command-key': key },
     });
     if (!res.ok || !Array.isArray(json?.gaps)) return;
@@ -305,7 +321,10 @@ async function analyzeBuilderGaps() {
     const total = gaps.length;
 
     // Truth level: RECEIPT — these are DB rows from real past failures, not live probes
-    console.log(`\n[supervisor] RECEIPT: ${total} builder gap records (past failures — not a live probe):`);
+    const scope = domain ? `domain=${domain} ` : '';
+    console.log(
+      `\n[supervisor] RECEIPT: ${total} builder gap records (${scope}limit=${limit} — past failures, not a live probe):`,
+    );
     for (const [pat, count] of sorted) {
       const pct = Math.round((count / total) * 100);
       const fixed = /asterisk-params|repo-file-marker|HTML emitted for JS/.test(pat) ? ' [sanitizer fix deployed]' : '';
@@ -408,6 +427,8 @@ async function main() {
     // KNOW: these specific deterministic smoke checks passed on committed file contents (this run only)
     console.log('KNOW: JS smoke passed — clampMobileWidgetCount / resolveThemeMode / pickDashboardDensity checks OK.');
   }
+
+  await analyzeBuilderGaps();
 
   console.log('\n--- §2.11b-style supervisor close (Adam) ---');
   console.log('KNOW (this session): Builder /ready + /domains returned 200; any doc/JS smoke you ran matched committed bytes + node --check.');

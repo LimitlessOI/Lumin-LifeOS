@@ -32,6 +32,41 @@
 
 ---
 
+## [BUILD] Update 2026-04-30 #11 — Daemon: consequence lens; supervisor: gaps lookback env/CLI
+
+### Files changed
+- `scripts/lifeos-builder-daemon.mjs` — **`BUILDER_DAEMON_CONSEQUENCE_LENS`** → **`--consequence-lens`** on supervise; **`cycle_start`** / **`daemon_start`** log fields.
+- `scripts/lifeos-builder-supervisor.mjs` — **`BUILDER_SUPERVISOR_GAPS_LIMIT`**, **`BUILDER_SUPERVISOR_GAPS_DOMAIN`**, **`--gaps-limit`**, **`--gaps-domain`**; **`analyzeBuilderGaps()`** after **full** smoke path.
+- `docs/BUILDER_OPERATOR_ENV.md` — operator table.
+- **`AMENDMENT_21`** receipt + Agent Handoff **Bounded autonomy** row + **`Last Updated`**; manifest tail.
+
+### Next agent / Adam
+Restart **`lifeos-builder-daemon`** (or **`npm run lifeos:builder:daemon:7h`**) to pick up daemon script changes — long-running PID does not reload disk.
+
+---
+
+## [BUILD] Update 2026-05-01 #10 — Agent Handoff: bounded autonomy runbook row
+
+### Files changed
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **`Bounded autonomy (~7h)`** in **Agent Handoff Notes** (+ Change Receipt).
+
+### State after this session
+- **Preflight OK** (`builder:preflight` exit 0) against prod; builder **`codegen.policy_revision`** **`2026-05-01a`**.
+- **Existing daemon PID 75444** already running `node scripts/lifeos-builder-daemon.mjs` (no `--run-for-min`) — duplicates blocked; this is continuous build, not the 7h **bounded** preset.
+
+### Next agent: start here
+- If Adam wants **clean exit after ~420 min**, stop the long-running daemon and start **`OVERNIGHT_USE_CURSOR=0 npm run lifeos:builder:daemon:7h`** (or **`BUILDER_DAEMON_RUN_FOR_MIN=420`**). Otherwise leave PID 75444 running and monitor **`data/builder-daemon-log.jsonl`**.
+
+## [BUILD] Update 2026-05-01 #9 — Bounded 7h builder daemon (`--run-for-min`)
+
+### Files changed
+- `scripts/lifeos-builder-daemon.mjs` — wall-clock **`--run-for-min`** / **`BUILDER_DAEMON_RUN_FOR_MIN`**, **`daemon_run_limit_reached`** log event.
+- `package.json` — **`npm run lifeos:builder:daemon:7h`** preset.
+- `docs/BUILDER_OPERATOR_ENV.md` — bounded-session operator block.
+
+### Next agent / Adam
+Requires **`PUBLIC_BASE_URL` + `COMMAND_CENTER_KEY`** ( **`npm run builder:preflight` exit 0** ). Watch **`data/builder-daemon-log.jsonl`**; failures → **`GET /api/v1/lifeos/builder/gaps`** for platform fixes. Queue docs: **`LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`**.
+
 ## [PLAN] Update 2026-05-01 #8 — Lens D: Adam as governing lens (in the lineage forever)
 
 ### Files changed

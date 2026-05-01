@@ -12,6 +12,8 @@
  *   npm run lifeos:builder:daemon
  *   npm run lifeos:builder:daemon -- --once
  *   npm run lifeos:builder:daemon -- --interval-min 20 --overnight-max 2
+ *   npm run lifeos:builder:daemon -- --run-for-min 420   # bounded ~7h session (exits cleanly; releases lock)
+ *   BUILDER_DAEMON_RUN_FOR_MIN=420 npm run lifeos:builder:daemon
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
@@ -55,6 +57,17 @@ const overnightMax = Number(
     ? process.argv[argOvernightIdx + 1]
     : process.env.BUILDER_QUEUE_MAX || process.env.OVERNIGHT_MAX || "2"
 );
+
+const argRunForIdx = process.argv.indexOf("--run-for-min");
+const runForMinParsed = Number(
+  argRunForIdx >= 0
+    ? process.argv[argRunForIdx + 1]
+    : process.env.BUILDER_DAEMON_RUN_FOR_MIN || "0",
+);
+/** Wall-clock session cap — 0 = infinite (legacy 24/7). */
+const runForMin =
+  Number.isFinite(runForMinParsed) && runForMinParsed > 0 ? Math.floor(runForMinParsed) : 0;
+const runDeadlineMs = runForMin > 0 ? Date.now() + runForMin * 60 * 1000 : null;
 const failSleepMin = Number(process.env.BUILDER_DAEMON_FAIL_SLEEP_MIN || "5");
 const overnightPauseThreshold = Math.max(0, Number(process.env.BUILDER_DAEMON_QUEUE_PAUSE_THRESHOLD || "3"));
 const overnightPauseMin = Math.max(1, Number(process.env.BUILDER_DAEMON_QUEUE_PAUSE_MIN || "120"));
@@ -63,6 +76,10 @@ const superviseModel = process.env.BUILDER_SUPERVISE_MODEL || "gemini_flash";
 const superviseMode = (process.env.BUILDER_DAEMON_SUPERVISE_MODE || "probe").toLowerCase();
 const superviseFullEvery = Math.max(0, Number(process.env.BUILDER_DAEMON_FULL_EVERY || "6"));
 const queueLane = process.env.BUILDER_TASK_LANE || "";
+/** When true, each supervise leg passes `--consequence-lens` (stdout premortem / unintended-consequences reminder — no extra council spend). */
+const consequenceLens = /^1|true|yes$/i.test(
+  String(process.env.BUILDER_DAEMON_CONSEQUENCE_LENS || "").trim(),
+);
 
 /** Narrated for operators in `docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md` (NSSOT §2.6 + Am.39 Evidence Ladder). */
 const TRUTH_BRIDGE = "docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md";
@@ -274,6 +291,20 @@ async function releaseLock() {
   await fsPromises.unlink(LOCK_PATH).catch(() => {});
 }
 
+async function deadlineExceeded(cycleNo) {
+  if (!runDeadlineMs || Date.now() < runDeadlineMs) return false;
+  await appendLog("daemon_run_limit_reached", {
+    runForMin,
+    cycleNo,
+    deadlineIso: new Date(runDeadlineMs).toISOString(),
+    reliability_cues: reliabilityCue({
+      event: "daemon_run_limit_reached",
+      KNOW: "operator_bounded_session_wall_clock_elapsed_clean_exit_scheduled",
+    }),
+  }).catch(() => {});
+  return true;
+}
+
 async function runCycle(cycleNo) {
   const previousState = await readState();
   const shouldForceFull =
@@ -293,6 +324,7 @@ async function runCycle(cycleNo) {
     superviseModel,
     superviseFullEvery,
     overnightMax,
+    consequenceLens,
     queueLane: queueLane || null,
     reliability_cues: reliabilityCue({
       event: "cycle_start",
@@ -309,6 +341,7 @@ async function runCycle(cycleNo) {
     currentPhase: "supervise",
   });
 
+  const superviseLensArgs = consequenceLens ? ["--consequence-lens"] : [];
   let supervise;
   if (effectiveSuperviseMode === "none") {
     supervise = { ok: true, exitCode: 0, elapsedMs: 0, stderr: "", stdout: "(supervise skipped)" };
@@ -316,9 +349,13 @@ async function runCycle(cycleNo) {
     supervise = await runNodeScript(path.join(ROOT, "scripts", "lifeos-builder-supervisor.mjs"), [
       "--model",
       superviseModel,
+      ...superviseLensArgs,
     ]);
   } else {
-    supervise = await runNodeScript(path.join(ROOT, "scripts", "lifeos-builder-supervisor.mjs"), ["--probe-only"]);
+    supervise = await runNodeScript(path.join(ROOT, "scripts", "lifeos-builder-supervisor.mjs"), [
+      "--probe-only",
+      ...superviseLensArgs,
+    ]);
   }
   await appendLog("supervise_result", {
     cycleNo,
@@ -432,6 +469,9 @@ async function main() {
     superviseFullEvery,
     queueLane: queueLane || null,
     overnightUseCursor: process.env.OVERNIGHT_USE_CURSOR,
+    BUILDER_DAEMON_CONSEQUENCE_LENS: consequenceLens,
+    runForMin: runForMin || null,
+    runDeadlineIso: runDeadlineMs ? new Date(runDeadlineMs).toISOString() : null,
     baseUrl:
       process.env.BUILDER_BASE_URL || process.env.PUBLIC_BASE_URL || process.env.LUMIN_SMOKE_BASE_URL || "http://127.0.0.1:3000",
     reliability_cues: reliabilityCue({
@@ -501,6 +541,7 @@ async function main() {
         memoryReceipt,
       });
       if (ONCE) break;
+      if (await deadlineExceeded(cycleNo)) break;
       await sleep(Math.max(1, intervalMin) * 60 * 1000);
       continue;
     }
@@ -579,6 +620,7 @@ async function main() {
       memoryReceipt,
     });
     if (ONCE) break;
+    if (await deadlineExceeded(cycleNo)) break;
     await sleep(Math.max(1, failSleepMin) * 60 * 1000);
   }
 

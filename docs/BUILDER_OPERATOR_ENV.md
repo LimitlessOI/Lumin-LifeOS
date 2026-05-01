@@ -66,6 +66,30 @@ Optional fail-closed grade gate (for unattended runs):
 TSOS_ENFORCE_TOKEN_GRADE=1 TSOS_MIN_TOKEN_GRADE=D npm run tsos:tokens
 ```
 
+## Bounded autonomous session (~7 hours of builder queue)
+
+Prefer **`probe`** supervise between cycles to save council tokens (**`BUILDER_DAEMON_SUPERVISE_MODE=probe`** — default). For a wall-clock slice that **ends cleanly** (releases daemon lock):
+
+| Mechanism | Example |
+|-----------|---------|
+| CLI | `--run-for-min 420` (~7h from process start; checks after each cycle before sleeping) |
+| Env | **`BUILDER_DAEMON_RUN_FOR_MIN=420`** |
+| NPM shortcut | **`npm run lifeos:builder:daemon:7h`** — preset **420 min**, **18** min interval, **3** tasks/cycle |
+
+Queue JSON: **`docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`** (dashboard lane). Inspect **`data/builder-daemon-log.jsonl`** and **`GET …/builder/gaps`** for failures → next platform fixes.
+
+Ensure **`PUBLIC_BASE_URL`** + **`COMMAND_CENTER_KEY`** are exported (`npm run builder:preflight` exit **0**) before leaving this unattended.
+
+**Supervise lens + gap lookback (optional — no extra `/build` cost for the lens line):**
+
+| Variable | Role |
+|----------|------|
+| **`BUILDER_DAEMON_CONSEQUENCE_LENS`** | `1`, `true`, or `yes` — daemon passes **`--consequence-lens`** on every supervise leg (prints unintended-consequences / future-back / prior-art reminders; see **`docs/SUPERVISOR_CONSEQUENCE_LENS.md`**) |
+| **`BUILDER_SUPERVISOR_GAPS_LIMIT`** | `1`–`100` (server caps at 100) — rows from **`GET /api/v1/lifeos/builder/gaps`** for the supervisor’s RECEIPT bucket summary (**default `50`**) |
+| **`BUILDER_SUPERVISOR_GAPS_DOMAIN`** | Optional — same as **`?domain=`** on **`/gaps`** (e.g. `lifeos-platform`) |
+
+CLI overrides when running **`lifeos-builder-supervisor.mjs`** directly: **`--gaps-limit`** · **`--gaps-domain`** · **`--consequence-lens`**.
+
 Grades are `A/B/C/D/F` from a 100-point score (savings + remaining free-tier budget + day-over-day trend). If enforced and below minimum, script exits non-zero.
 
 ## Machine log (system notes readiness)
