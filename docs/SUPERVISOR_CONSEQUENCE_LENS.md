@@ -22,13 +22,22 @@
 
 ## Lens A — Unintended consequences
 
+Two tracks — **human / trust** and **system / ops** — both scaled by load, abuse, and time.
+
 Answer briefly; label **KNOW / THINK / GUESS**.
 
-1. **Who could be harmed** if this works *exactly as designed* but context changes (abuse, scale, bad input)?
-2. **What second-order effect** might show up in logs, support, or reputation in 30–90 days?
-3. **What did we outsource** (vendor, model, key) — what breaks if they change pricing, ToS, or latency?
-4. **What incentive** does this create for **future-you** or **future agents** (corners easier to cut next time)?
-5. **Residue risk** — strongest reason this might still be wrong? (Keep in **§2.11b** report.)
+### A1 — Who gets hurt at scale?
+
+1. **Users or third parties** — if this behaves *as designed*, who could still be harmed under abuse, coercion, misunderstanding, biased data, or edge populations?
+2. **Trust / reputation** — what second-order effects hit support, churn, legal exposure, or “the product lied” narratives in **30–90 days**?
+3. **Incentives** — what does this make **easier tomorrow** for **future-you** or **future agents** (skip consent, bury errors, soften §2.6 labels)?
+
+### A2 — What breaks down?
+
+4. **Dependencies** — DB, queue, Railway, Neon, APIs, keys, models — what **single point** fails first under **traffic, retries, deploys, or regional lag**?
+5. **Operational limits** — quotas, timeouts, cron overlap, daemon races, migrations, rollback — **where does the architecture stop scaling** before anyone notices?
+6. **Observable failure** — if it breaks tonight, **do we detect it honestly** (alerts, health checks, receipts) — or silent degradation / false greens?
+7. **Residue risk** — strongest remaining reason something is wrong? (Keep in **§2.11b** report.)
 
 ---
 
