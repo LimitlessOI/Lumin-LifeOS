@@ -1,8 +1,7 @@
 /**
- * ╔══════════════════════════════════════════════════════════════════════════════════╗
- * ║                         TCO ENCRYPTION UTILITIES                                  ║
- * ║               Securely encrypt/decrypt customer API keys                         ║
- * ╚══════════════════════════════════════════════════════════════════════════════════╝
+ * @ssot docs/projects/AMENDMENT_10_API_COST_SAVINGS.md
+ * AES-256-GCM encryption/decryption for customer API keys stored in DB.
+ * Requires TCO_ENCRYPTION_KEY env var (hex, 32 bytes). Set DEBUG_ENCRYPTION=1 to log key-mismatch warnings.
  */
 
 import crypto from 'crypto';
@@ -77,8 +76,12 @@ export function decrypt(encryptedValue) {
     decrypted = Buffer.concat([decrypted, decipher.final()]);
 
     return decrypted.toString('utf8');
-  } catch (error) {
-    console.error('Decryption error:', error.message);
+  } catch {
+    // Auth tag mismatch = key rotation or data encrypted with a different TCO_ENCRYPTION_KEY.
+    // Callers handle null gracefully. Set DEBUG_ENCRYPTION=1 to surface these.
+    if (process.env.DEBUG_ENCRYPTION) {
+      console.warn('[DECRYPT] Key mismatch — data was encrypted with a different key. Re-save credential to fix.');
+    }
     return null;
   }
 }

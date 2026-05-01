@@ -408,9 +408,9 @@ Output the ENTIRE HTML file from <!DOCTYPE html> to </html> then BUILD_COMPLETE.
 
     if (!this.callCouncil) throw new Error('callCouncil required for site generation');
 
-    // gemini_flash: free, 8192+ output tokens — adequate for full 15-section HTML
-    // maxOutputTokens (not maxTokens) is what council-service reads for the override
-    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: GENERATION_MAX_TOKENS });
+    // gemini_flash: free, 8192+ output tokens — necessary for full 15-section HTML
+    // allowModelDowngrade:false prevents selectOptimalModel from overriding to groq_llama (4096 token limit)
+    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: GENERATION_MAX_TOKENS, allowModelDowngrade: false });
     let clean = response.replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     // Strip markdown fences AI models sometimes wrap HTML in (```html...``` or ```...```)
     clean = clean.replace(/^```(?:html)?\s*\n?/, '').replace(/\n?```\s*$/, '').trim();
@@ -559,7 +559,7 @@ CURRENT HTML:
 ${existingHtml}
 `;
 
-    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: REPAIR_MAX_TOKENS });
+    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: REPAIR_MAX_TOKENS, allowModelDowngrade: false });
     const clean = String(response || '').replace(/BUILD_COMPLETE[\s\S]*$/, '').trim();
     if (!clean.includes('<!DOCTYPE html') && !clean.includes('<html')) {
       throw new Error('AI did not return valid repaired HTML');
@@ -591,7 +591,7 @@ Return ONLY valid JSON array:
 ]`;
 
     // gemini_flash for blog content — 3 posts × 600-800 words each exceeds groq's 4096-token limit
-    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: 4000 });
+    const response = await this.callCouncil('gemini_flash', prompt, { maxOutputTokens: 4000, allowModelDowngrade: false });
     try {
       const jsonMatch = response.match(/\[[\s\S]+\]/);
       const posts = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
