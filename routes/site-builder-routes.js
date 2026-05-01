@@ -24,6 +24,25 @@ import logger from '../services/logger.js';
 let _siteBuilder = null;
 let _prospectPipeline = null;
 
+/**
+ * Fire a Slack warm-lead notification if SLACK_WEBHOOK_URL is configured.
+ * Non-blocking — errors are swallowed so they never affect the caller.
+ */
+async function notifySlack(event, businessName, detail = '') {
+  const url = process.env.SLACK_WEBHOOK_URL;
+  if (!url) return;
+  const emoji = event === 'replied' ? '💬' : '👀';
+  const label = event === 'replied' ? 'REPLIED to cold email' : 'VIEWED preview';
+  const text = `${emoji} *Warm lead alert — ${label}*\n*Business:* ${businessName}\n${detail}`;
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+  } catch { /* Slack notify is best-effort */ }
+}
+
 function getSiteBuilder({ callCouncilMember, baseUrl }) {
   if (!_siteBuilder) {
     _siteBuilder = new SiteBuilder({
@@ -273,15 +292,22 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
 
     if (!id || !pool) return;
     try {
-      await pool.query(
+      const result = await pool.query(
         `UPDATE prospect_sites
             SET status = 'viewed',
                 last_viewed_at = NOW(),
                 updated_at = NOW()
-          WHERE client_id = $1 AND status IN ('sent', 'built')`,
+          WHERE client_id = $1 AND status IN ('sent', 'built')
+          RETURNING business_name, preview_url, contact_email`,
         [id]
       );
-      logger.info('[SITE] Preview viewed', { clientId: id });
+      if (result.rowCount > 0) {
+        const p = result.rows[0];
+        logger.info('[SITE] Preview viewed — warm lead', { clientId: id, businessName: p.business_name });
+        notifySlack('viewed', p.business_name,
+          `*Preview:* ${p.preview_url}\n*Email:* ${p.contact_email}\n*Lead ID:* \`${id}\``
+        );
+      }
     } catch (err) {
       logger.warn('[SITE] Preview view DB update failed', { error: err.message });
     }
@@ -335,6 +361,8 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
         return;
       }
 
+      const snippet = strippedText.slice(0, 200).replace(/\n/g, ' ');
+
       // Only advance status if not already past 'replied'
       if (!['converted', 'lost', 'replied'].includes(prospect.status)) {
         await pool.query(
@@ -349,6 +377,9 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
           businessName: prospect.business_name,
           from: fromEmail,
         });
+        notifySlack('replied', prospect.business_name,
+          `*From:* ${fromEmail}\n*Subject:* ${subject}\n*Preview:* ${snippet}\n*Lead ID:* \`${prospect.client_id}\``
+        );
       }
 
       // Log the inbound reply regardless

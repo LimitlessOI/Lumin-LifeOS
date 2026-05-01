@@ -158,9 +158,21 @@ import 'dotenv/config';
 - DB migrations from prior sessions (only ADD new migration files, never modify existing ones)
 - `COMMAND_CENTER_KEY`, `GITHUB_TOKEN`, `DATABASE_URL` — never log or expose values
 
+## Env vars for this lane
+| Var | Required | Purpose |
+|---|---|---|
+| `SITE_BASE_URL` | **yes** | Base URL for preview links and tracking pixel |
+| `EMAIL_FROM` | **yes** | Sender email for cold outreach |
+| `POSTMARK_SERVER_TOKEN` | yes (email) | Postmark API key for cold email sending |
+| `POSTMARK_WEBHOOK_TOKEN` | optional | Secret token to verify Postmark inbound webhook |
+| `SLACK_WEBHOOK_URL` | optional | Slack incoming webhook — fires warm-lead alerts when prospect views/replies |
+| `AFFILIATE_JANE_APP_URL` | optional | Jane App referral link (commission tracking) |
+| `AFFILIATE_MINDBODY_URL` | optional | Mindbody referral link |
+| `AFFILIATE_SQUARE_URL` | optional | Square referral link |
+
 ## Next approved tasks (in priority order)
 1. Add A/B email subject line test tracking to `outreach_log` — store `variant` field + measure open/reply rate by variant
 2. Add `GET /api/v1/sites/prospects/:clientId` endpoint returning single prospect detail with full metadata + qualityReport
-3. Build a "warm lead notify" cron — when a prospect moves to `viewed` or `replied`, send Adam a Slack/SMS notification
+3. ~~Build a "warm lead notify" cron~~ — **DONE** (2026-04-30): `SLACK_WEBHOOK_URL` env var → instant Slack alert on `viewed` and `replied` events (wired in `routes/site-builder-routes.js`)
 4. Improve quality scorer: add check for visible phone number, check for Google Maps embed, check for SSL trust badge
 5. Add preview site video embed — if prospect has YouTube channel, embed their latest video on their preview (already coded in site-builder.js for youtubeChannelId, need to wire to discovery)
