@@ -1,18 +1,22 @@
 #!/usr/bin/env node
 /**
- * Self-healing builder daemon.
+ * Self-healing supervised builder daemon — continuous 24/7 autonomous improvement loop (default: no wall-clock stop).
  *
- * Runs forever by default (24/7 operator runner — not time-of-day “overnight”):
+ * Each cycle tightens supervision and advances the autonomous JSON **`/build`** queue; failures back off and retry.
+ * Operational language: **autonomous continuous queue** (`npm run lifeos:builder:queue`). Filename `lifeos-builder-overnight.mjs`
+ * is a legacy artifact only — behaviour is designed for non-stop supervised building, not “nights only.”
+ *
+ * On every cycle:
  *   1) supervised probe or full smoke
- *   2) autonomous JSON task queue (script name: lifeos-builder-overnight.mjs)
- *   3) heartbeat/status receipts
- *   4) sleep and repeat
+ *   2) autonomous JSON queue runner (same binary as **`lifeos:builder:queue`**)
+ *   3) heartbeat / memory receipts where configured
+ *   4) interval sleep and repeat forever (or bounded `--run-for-min` if set)
  *
  * Usage:
  *   npm run lifeos:builder:daemon
  *   npm run lifeos:builder:daemon -- --once
- *   npm run lifeos:builder:daemon -- --interval-min 20 --overnight-max 2
- *   npm run lifeos:builder:daemon -- --run-for-min 420   # bounded ~7h session (exits cleanly; releases lock)
+ *   npm run lifeos:builder:daemon -- --interval-min 20 --queue-max 2
+ *   npm run lifeos:builder:daemon -- --run-for-min 420   # bounded soak slice (releases lock)
  *   BUILDER_DAEMON_RUN_FOR_MIN=420 npm run lifeos:builder:daemon
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
@@ -48,15 +52,18 @@ const MEMORY_KEY =
 
 const ONCE = process.argv.includes("--once");
 const argIntervalIdx = process.argv.indexOf("--interval-min");
-const argOvernightIdx = process.argv.indexOf("--overnight-max");
+const argQueueMaxIdx = process.argv.indexOf("--queue-max");
+const argOvernightIdx = process.argv.indexOf("--overnight-max"); // legacy CLI alias (--queue-max preferred)
 const intervalMin = Number(
-  argIntervalIdx >= 0 ? process.argv[argIntervalIdx + 1] : process.env.BUILDER_DAEMON_INTERVAL_MIN || "30"
+  argIntervalIdx >= 0 ? process.argv[argIntervalIdx + 1] : process.env.BUILDER_DAEMON_INTERVAL_MIN || "30",
 );
-/** Tasks per cycle from JSON queue; alias `BUILDER_QUEUE_MAX` preferred for 24/7 docs. */
+/** Autonomous **`/build`** tasks per daemon cycle; env `BUILDER_QUEUE_MAX` (legacy `OVERNIGHT_MAX`). */
 const overnightMax = Number(
-  argOvernightIdx >= 0
-    ? process.argv[argOvernightIdx + 1]
-    : process.env.BUILDER_QUEUE_MAX || process.env.OVERNIGHT_MAX || "2"
+  argQueueMaxIdx >= 0
+    ? process.argv[argQueueMaxIdx + 1]
+    : argOvernightIdx >= 0
+      ? process.argv[argOvernightIdx + 1]
+      : process.env.BUILDER_QUEUE_MAX || process.env.OVERNIGHT_MAX || "2",
 );
 
 const argRunForIdx = process.argv.indexOf("--run-for-min");
@@ -65,7 +72,7 @@ const runForMinParsed = Number(
     ? process.argv[argRunForIdx + 1]
     : process.env.BUILDER_DAEMON_RUN_FOR_MIN || "0",
 );
-/** Wall-clock session cap — 0 = infinite (legacy 24/7). */
+/** Wall-clock session cap — 0 = infinite continuous 24/7 (production default intent). */
 const runForMin =
   Number.isFinite(runForMinParsed) && runForMinParsed > 0 ? Math.floor(runForMinParsed) : 0;
 const runDeadlineMs = runForMin > 0 ? Date.now() + runForMin * 60 * 1000 : null;
@@ -73,7 +80,7 @@ const failSleepMin = Number(process.env.BUILDER_DAEMON_FAIL_SLEEP_MIN || "5");
 const overnightPauseThreshold = Math.max(0, Number(process.env.BUILDER_DAEMON_QUEUE_PAUSE_THRESHOLD || "3"));
 const overnightPauseMin = Math.max(1, Number(process.env.BUILDER_DAEMON_QUEUE_PAUSE_MIN || "120"));
 const superviseModel = process.env.BUILDER_SUPERVISE_MODEL || "gemini_flash";
-/** full = doc+JS smoke (/build council); probe = GET /ready + /domains only (default — huge token saver). none = skip (only overnight). */
+/** full = doc+JS smoke (/build council); probe = GET /ready + /domains only (default — huge token saver). none = skip autonomous queue step only */
 const superviseMode = (process.env.BUILDER_DAEMON_SUPERVISE_MODE || "probe").toLowerCase();
 const superviseFullEvery = Math.max(0, Number(process.env.BUILDER_DAEMON_FULL_EVERY || "6"));
 const queueLane = process.env.BUILDER_TASK_LANE || "";
@@ -118,7 +125,7 @@ async function readOvernightLastRun() {
   }
 }
 
-/** Small receipt for `overnight_result` JSONL (full body in `data/builder-overnight-last-run.json`). */
+/** Small receipt for `overnight_result` JSONL (**stable analytics key**) — denotes autonomous continuous queue phase (`data/builder-overnight-last-run.json`). */
 function pickOvernightThroughputReceipt(row) {
   if (!row || typeof row !== "object") return null;
   return {
@@ -324,7 +331,8 @@ async function deadlineExceeded(cycleNo, sessionThroughput) {
     deadlineIso: new Date(runDeadlineMs).toISOString(),
     KNOW_session_wall_clock_min: wallMin,
     KNOW_session_build_commits_total: st?.buildCommitsTotal ?? null,
-    KNOW_session_overnight_idle_slices: st?.overnightIdleSlices ?? null,
+    KNOW_session_idle_queue_slices: st?.overnightIdleSlices ?? null,
+    KNOW_session_overnight_idle_slices_legacy_alias: st?.overnightIdleSlices ?? null,
     KNOW_session_build_wall_ms_total: st?.buildWallMsTotal ?? null,
     THINK_load_factor:
       wallMin != null && st?.buildWallMsTotal != null && wallMin > 0
@@ -461,17 +469,18 @@ async function runCycle(cycleNo, sessionThroughput) {
         cycleNo,
         runForMin,
         overnightMax,
-        KNOW: "overnight_last_run reports idle_slice queue_slice_empty or equivalent — no Railway /build this cycle",
+        KNOW: "builder-overnight-last-run.json reports idle_slice (no Railway /build spend this daemon cycle)",
         operator_remedy: [
-          "Add tasks to docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json",
-          "Or reset data/builder-overnight-cursor.*.json when you intend a full re-pass",
-          "Bounded runs default OVERNIGHT_CURSOR_WRAP=1 so the JSON queue recycles unless you export OVERNIGHT_CURSOR_WRAP=0",
+          "Extend docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json (SSOT backlog)",
+          "Or reset data/builder-overnight-cursor.*.json for a deliberate full re-pass",
+          "Bounded runs default BUILDER_QUEUE_CURSOR_WRAP=1 (legacy OVERNIGHT_CURSOR_WRAP); export =0 only if recycle is forbidden",
         ],
         reliability_cues: reliabilityCue({ event: "daemon_bounded_session_idle_slice" }),
       }).catch(() => {});
     }
   }
   await appendLog("overnight_result", {
+    continuous_model: "24x7_autonomous_queue_phase",
     cycleNo,
     ok: overnight.ok,
     exitCode: overnight.exitCode,
@@ -511,11 +520,19 @@ async function main() {
     process.exit(0);
   });
 
-  if (process.env.OVERNIGHT_USE_CURSOR === undefined) process.env.OVERNIGHT_USE_CURSOR = "1";
-  // Multi-hour wall-clock sessions: recycle the JSON queue when the cursor reaches the end —
-  // otherwise `overnight` exits in milliseconds for every later cycle (idle slice).
-  if (runForMin > 0 && process.env.OVERNIGHT_CURSOR_WRAP === undefined) {
-    process.env.OVERNIGHT_CURSOR_WRAP = "1";
+  if (
+    process.env.OVERNIGHT_USE_CURSOR === undefined &&
+    process.env.BUILDER_QUEUE_USE_CURSOR === undefined
+  ) {
+    process.env.OVERNIGHT_USE_CURSOR = "1";
+  }
+  // Bounded wall-clock sessions: recycle lane cursor when unspecified — avoids instant-idle slices.
+  if (
+    runForMin > 0 &&
+    process.env.BUILDER_QUEUE_CURSOR_WRAP === undefined &&
+    process.env.OVERNIGHT_CURSOR_WRAP === undefined
+  ) {
+    process.env.BUILDER_QUEUE_CURSOR_WRAP = "1";
   }
 
   const sessionThroughput =
@@ -529,6 +546,9 @@ async function main() {
       : null;
 
   await appendLog("daemon_start", {
+    continuous_model: "supervised_daemon_24x7_autonomous_queue",
+    nomenclature_note:
+      "Prefer operator language ‘continuous autonomous queue’ — JSONL keys may still contain legacy ‘overnight’ tokens for analytics continuity.",
     mode: "24_7",
     once: ONCE,
     intervalMin,
@@ -539,8 +559,10 @@ async function main() {
     superviseMode,
     superviseFullEvery,
     queueLane: queueLane || null,
-    overnightUseCursor: process.env.OVERNIGHT_USE_CURSOR,
-    OVERNIGHT_CURSOR_WRAP: process.env.OVERNIGHT_CURSOR_WRAP,
+    queueUseCursor: process.env.BUILDER_QUEUE_USE_CURSOR ?? process.env.OVERNIGHT_USE_CURSOR,
+    OVERNIGHT_USE_CURSOR_legacy: process.env.OVERNIGHT_USE_CURSOR,
+    queueCursorWrap: process.env.BUILDER_QUEUE_CURSOR_WRAP ?? process.env.OVERNIGHT_CURSOR_WRAP,
+    OVERNIGHT_CURSOR_WRAP_legacy: process.env.OVERNIGHT_CURSOR_WRAP,
     BUILDER_DAEMON_CONSEQUENCE_LENS: consequenceLens,
     runForMin: runForMin || null,
     runDeadlineIso: runDeadlineMs ? new Date(runDeadlineMs).toISOString() : null,

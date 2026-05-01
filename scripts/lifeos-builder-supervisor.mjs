@@ -6,7 +6,7 @@
  * - prove the Railway builder path is healthy
  * - force explicit model selection
  * - ground tasks in the dashboard build brief + mockup references
- * - run deterministic smoke objectives before any unattended queue
+ * - run deterministic smoke objectives before chaining the continuous autonomous **`/build`** queue
  *
  * Usage:
  *   npm run lifeos:builder:supervise
@@ -15,7 +15,7 @@
  *   npm run lifeos:builder:supervise -- --probe-only --consequence-lens   # optional premortem Qs (no API spend)
  *   BUILDER_SUPERVISOR_GAPS_LIMIT=100 BUILDER_SUPERVISOR_GAPS_DOMAIN=lifeos-platform npm run lifeos:builder:supervise -- --probe-only
  *   # (--gaps-limit / --gaps-domain override env for GET /builder/gaps pattern summary)
- *   npm run lifeos:builder:supervise -- --overnight --overnight-max 2   # after smoke passes, run overnight queue
+ *   npm run lifeos:builder:supervise -- --queue --queue-max 2   # chain autonomous continuous `/build` queue after smoke (legacy: --overnight / --overnight-max)
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
@@ -346,12 +346,25 @@ async function analyzeBuilderGaps() {
   }
 }
 
+function argvPrefer(firstFlag, secondFlag, envFallback) {
+  const i1 = process.argv.indexOf(firstFlag);
+  const i2 = process.argv.indexOf(secondFlag);
+  if (i1 >= 0) return process.argv[i1 + 1] || envFallback;
+  if (i2 >= 0) return process.argv[i2 + 1] || envFallback;
+  return envFallback;
+}
+
 async function main() {
   const model = argValue('--model', DEFAULT_MODEL);
   const skipDoc = hasFlag('--skip-doc');
   const skipJs = hasFlag('--skip-js');
-  const runOvernight = hasFlag('--overnight');
-  const overnightMax = argValue('--overnight-max', process.env.OVERNIGHT_MAX || '2');
+  const chainQueueRunner =
+    hasFlag('--overnight') || hasFlag('--queue') || hasFlag('--continuous-queue');
+  const queueMaxCli = argvPrefer(
+    '--queue-max',
+    '--overnight-max',
+    process.env.BUILDER_QUEUE_MAX || process.env.OVERNIGHT_MAX || '2',
+  );
   const probeOnly = hasFlag('--probe-only');
   const consequenceLens = hasFlag('--consequence-lens');
 
@@ -403,7 +416,7 @@ async function main() {
       files: [BRIEF, QUEUE],
       task:
         'Create a tiny deterministic utility module for the dashboard shell. ' +
-        'This is a supervised smoke test for overnight LifeOS dashboard work. ' +
+        'This is a supervised smoke test for LifeOS autonomous continuous-queue work. ' +
         'The file must be pure ESM, have no external dependencies, and export exactly three named functions.',
       spec:
         [
@@ -433,7 +446,7 @@ async function main() {
   console.log('\n--- §2.11b-style supervisor close (Adam) ---');
   console.log('KNOW (this session): Builder /ready + /domains returned 200; any doc/JS smoke you ran matched committed bytes + node --check.');
   console.log(
-    'THINK: Path may still be adequate for constrained overnight dashboard work — depends on Railway deploy parity + council output quality.',
+    'THINK: Path may still be adequate for constrained supervised dashboard backlog — depends on Railway deploy parity + council output quality.',
   );
   console.log(
     'NOT-PROVEN: End-to-end product quality under all models, unrelated routes, DB edge cases, or load — smoke is a narrow wedge.',
@@ -441,15 +454,19 @@ async function main() {
   console.log(
     `Residue risk: Re-run after deploy if /gaps showed old patterns (asterisk-params, markers) — confirm gap counts drop.`,
   );
-  console.log(`Next: npm run lifeos:builder:supervise -- --model ${model}  |  Overnight: same + --overnight`);
+  console.log(
+    `Next: npm run lifeos:builder:supervise -- --model ${model}  |  Chain continuous queue: same + --queue (legacy --overnight)`,
+  );
   if (consequenceLens) printConsequenceLensReminder();
 
-  if (runOvernight) {
-    console.log(`\nChaining overnight runner (max ${overnightMax})...`);
+  if (chainQueueRunner) {
+    console.log(
+      `\nChaining autonomous continuous queue runner — JSON backlog capped at ${queueMaxCli} POST /builder/build task(s) this chain …`,
+    );
     await execFileAsync(process.execPath, [
       path.join(process.cwd(), 'scripts/lifeos-builder-overnight.mjs'),
       '--max',
-      String(overnightMax),
+      String(queueMaxCli),
     ], { stdio: 'inherit', env: process.env, cwd: process.cwd() });
   }
 }

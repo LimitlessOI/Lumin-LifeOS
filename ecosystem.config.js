@@ -35,6 +35,8 @@ export default {
         /** Autonomous queue: max builder tasks per daemon cycle (alias of legacy OVERNIGHT_MAX). */
         BUILDER_QUEUE_MAX: "2",
         OVERNIGHT_MAX: "2",
+        /** Lane cursor advancing so backlog doesn’t re-fire every cycle (`OVERNIGHT_*` = legacy compat). */
+        BUILDER_QUEUE_USE_CURSOR: "1",
         OVERNIGHT_USE_CURSOR: "1",
         // probe = no council /build in supervise (default); full = doc+JS smoke.
         BUILDER_DAEMON_SUPERVISE_MODE: "probe",

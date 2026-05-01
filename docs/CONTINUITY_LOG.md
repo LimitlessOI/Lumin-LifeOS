@@ -32,6 +32,17 @@
 
 ---
 
+## [BUILD] Update 2026-04-30 #13 — Nomenclature: 24/7 supervised continuous builder (“queue” > “overnight”)
+
+### Files changed (high level)
+- `scripts/lifeos-builder-daemon.mjs`, `lifeos-builder-overnight.mjs`, `lifeos-builder-supervisor.mjs` — canonical **`--queue-max`**, **`BUILDER_QUEUE_*`** env precedence, **`continuous_model`** log fields.
+- **`docs/BUILDER_OPERATOR_ENV.md`**, **`docs/AUTONOMY_SUPERVISION_RUNBOOK.md`**, **`ecosystem.config.js`**, **`package.json`**, **`LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`** `$comment`, **`AMENDMENT_21`** + manifest.
+
+### State
+- Behaviour unchanged: filenames / JSONL keys may still contain **`overnight`** for tooling continuity — operator wording is **non-stop supervised autonomous improvement**.
+
+---
+
 ## [BUILD] Update 2026-04-30 #12 — Overnight throughput receipts + bounded session queue recycle
 
 ### Files changed

@@ -1,18 +1,20 @@
 #!/usr/bin/env node
 /**
- * Overnight builder queue — runs structured tasks from SSOT JSON against Railway.
+ * Autonomous continuous builder queue (24/7) — executes structured **`POST /builder/build`** tasks from SSOT JSON.
  *
- * Precondition: run `npm run lifeos:builder:supervise` successfully on the same
- * base URL so smoke objectives have proven the builder follows the dashboard brief.
+ * This is the same runner the supervised daemon invokes every cycle. **Not** tied to night hours; filenames and
+ * some env vars retain `OVERNIGHT_*` labels for backward compatibility (`BUILDER_QUEUE_*` preferred where listed).
+ *
+ * Precondition (first-time lane): **`npm run lifeos:builder:supervise`** on the same **`PUBLIC_BASE_URL`** so smoke
+ * objectives prove the dashboard brief ground truth.
  *
  * Usage:
- *   npm run lifeos:builder:overnight -- --dry-run
- *   npm run lifeos:builder:overnight -- --max 2
- *   OVERNIGHT_MAX=3 npm run lifeos:builder:overnight
- *   npm run lifeos:builder:overnight -- --sleep-ms 3000
- *   npm run lifeos:builder:overnight -- --redeploy-after-success
+ *   npm run lifeos:builder:queue -- --dry-run   # canonical npm name
+ *   npm run lifeos:builder:queue -- --max 2
+ *   BUILDER_QUEUE_MAX=3 npm run lifeos:builder:queue
+ *   npm run lifeos:builder:overnight …          # legacy alias (same binary)
  *
- * Throughput receipt (daemon / operators): `data/builder-overnight-last-run.json` —
+ * Throughput receipt: **`data/builder-overnight-last-run.json`** (legacy path) —
  * build_commits, build_wall_ms_sum, runner_wall_ms, idle_slice.
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
@@ -264,11 +266,24 @@ function baseLastRunSkeleton({
   };
 }
 
+function queueCursorWrapEnabled() {
+  const raw = process.env.BUILDER_QUEUE_CURSOR_WRAP ?? process.env.OVERNIGHT_CURSOR_WRAP ?? '';
+  return raw === '1' || /^true|yes$/i.test(String(raw).trim());
+}
+
+function queueCursorAdvanceEnabled() {
+  const raw = process.env.BUILDER_QUEUE_USE_CURSOR ?? process.env.OVERNIGHT_USE_CURSOR ?? '1';
+  return !/^0|false|no$/i.test(String(raw).trim()) && !hasFlag('--no-cursor');
+}
+
 async function main() {
   const dry = hasFlag('--dry-run');
-  const max = parseInt(argValue('--max', process.env.OVERNIGHT_MAX || ''), 10) || 999;
+  const max = parseInt(
+    argValue('--max', process.env.BUILDER_QUEUE_MAX || process.env.OVERNIGHT_MAX || ''),
+    10,
+  ) || 999;
   const singleId = argValue('--task', null);
-  const useCursor = process.env.OVERNIGHT_USE_CURSOR === '1' && !hasFlag('--no-cursor');
+  const useCursor = queueCursorAdvanceEnabled();
   const hasExplicitStart = process.argv.includes('--start');
   const tasksPath = resolveTasksPath(argValue('--tasks-file', process.env.BUILDER_TASKS_PATH || DEFAULT_TASKS_PATH));
   const lane = inferLaneName(tasksPath, argValue('--lane', process.env.BUILDER_TASK_LANE || ''));
@@ -276,7 +291,7 @@ async function main() {
 
   if (hasFlag('--reset-cursor')) {
     await persistCursor(cursorPath, 0);
-    console.log(`builder-overnight cursor reset to nextStartIndex=0 (${cursorPath.replace(`${ROOT}/`, '')})`);
+    console.log(`Autonomous queue lane cursor reset nextStartIndex=0 (${cursorPath.replace(`${ROOT}/`, '')})`);
   }
 
   const raw = await readFile(tasksPath, 'utf8');
@@ -293,7 +308,7 @@ async function main() {
     startIdx = Math.max(0, parseInt(argValue('--start', '0'), 10) || 0);
   }
 
-  const wrap = process.env.OVERNIGHT_CURSOR_WRAP === '1';
+  const wrap = queueCursorWrapEnabled();
   if (startIdx >= tasks.length && wrap && !singleId) {
     startIdx = 0;
     await persistCursor(cursorPath, 0);
@@ -313,7 +328,7 @@ async function main() {
     parseInt(argValue('--sleep-ms', process.env.OVERNIGHT_SLEEP_MS || '2500'), 10) || 0,
   );
 
-  console.log(`Overnight runner base: ${base}`);
+  console.log(`Continuous autonomous queue — base URL: ${base}`);
   console.log(
     `Lane=${lane} tasks=${tasksPath.replace(`${ROOT}/`, '')} selected=${selected.length} (dry-run=${dry}) startIdx=${startIdx} cursor=${useCursor} cursor-path=${cursorPath.replace(`${ROOT}/`, '')} sleep-ms=${sleepMs} redeploy-after=${redeployAfter}`,
   );
@@ -325,7 +340,7 @@ async function main() {
     return;
   }
 
-  if (!key) throw new Error('COMMAND_CENTER_KEY (or alias) required for overnight builds');
+  if (!key) throw new Error('COMMAND_CENTER_KEY (or alias) required for autonomous `/build` queue');
 
   const runnerT0 = Date.now();
   const skeleton = () =>
@@ -354,7 +369,7 @@ async function main() {
       build_wall_ms_sum: 0,
       runner_wall_ms: wallMs,
       throughput_note:
-        'Slice empty — daemon cycle can finish in milliseconds. For multi-hour sessions add JSON tasks, reset cursor, or enable OVERNIGHT_CURSOR_WRAP=1 (bounded daemon sets this by default).',
+        'Slice empty — supervised daemon cycles can idle in milliseconds. Add JSON queue tasks, reset lane cursor, or enable BUILDER_QUEUE_CURSOR_WRAP=1 / OVERNIGHT_CURSOR_WRAP=1 so bounded wraps recycle workload.',
     });
     await logLine({
       event: 'overnight_idle',
@@ -367,7 +382,7 @@ async function main() {
       last_run_path_relative: LAST_RUN_PATH.replace(`${ROOT}/`, ''),
       hint: `All tasks in JSON done for this cursor — add tasks or delete ${cursorPath.replace(`${ROOT}/`, '')} or set OVERNIGHT_CURSOR_WRAP=1`,
     });
-    console.log('\n📭 Overnight: slice empty (no /build spend). Exit 0.');
+    console.log('\n📭 Autonomous queue: slice empty (no /build spend this invocation). Exit 0.');
     return;
   }
 
@@ -481,7 +496,9 @@ async function main() {
       build_commits: buildCommits,
       runner_wall_ms: totalWall,
     });
-    console.log('\n✅ Overnight queue batch finished OK. Pull origin/main and review commits + grade in the morning.');
+    console.log(
+      '\n✅ Autonomous queue batch finished OK (`git pull` + review commits + compound-improve notes). Continuous daemon will pick up next cycle.',
+    );
     if (redeployAfter && process.env.SKIP_AFTER_BUILD_REDEPLOY !== '1') {
       console.log('\n📤 Running npm run system:railway:redeploy …');
       try {

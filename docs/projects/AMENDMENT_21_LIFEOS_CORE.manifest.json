@@ -833,5 +833,5 @@
     ]
   },
   "last_updated": "2026-05-01",
-  "ssot_receipt_tail": "overnight last-run throughput + bounded wrap-default; KNOW_session_* totals"
+  "ssot_receipt_tail": "24x7 autonomous queue naming; BUILDER_QUEUE_* env + --queue-max; continuous_model logs"
 }

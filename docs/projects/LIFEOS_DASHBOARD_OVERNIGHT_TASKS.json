@@ -1,5 +1,5 @@
 {
-  "$comment": "Tasks for scripts/lifeos-builder-overnight.mjs — must stay aligned with LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md. Inherit the queue default model unless a task explicitly requires force_model:true.",
+  "$comment": "Continuous 24×7 autonomous backlog (npm run lifeos:builder:queue → lifeos-builder-overnight.mjs). Naming is legacy — stay aligned with LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md. Inherit queue default model unless force_model:true.",
   "brief": "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
   "tasks": [
     {

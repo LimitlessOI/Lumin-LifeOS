@@ -2,6 +2,14 @@
 
 **Purpose:** So a Conductor session can run `npm run builder:preflight` and `POST /api/v1/lifeos/builder/build` without guessing. **Values** live in Railway (or your local shell only). **Do not** paste secrets into git, SSOT, or chat logs.
 
+## Continuous supervised builder (24/7) — wording
+
+Production intent for autonomous work is **non-stop supervised improvement**, not “overnight-only” babysitting:
+
+- Canonical npm runner: **`npm run lifeos:builder:queue`** (same binary as legacy **`lifeos:builder:overnight`**).
+- Supervised **`npm run lifeos:builder:daemon`** loops **forever** by default (**`BUILDER_DAEMON_RUN_FOR_MIN=0`**) probe → autonomous **`/build`** queue → backoff → repeat.
+- Some filenames / JSONL event keys (`overnight_*`, `builder-overnight-*`) are **historic** and kept so log analytics do not fracture; **`daemon_start.nomenclature_note`** explains this on each run.
+
 ## Shell (Conductor laptop / CI secret store)
 
 | Variable | Role |
@@ -74,16 +82,16 @@ Prefer **`probe`** supervise between cycles to save council tokens (**`BUILDER_D
 |-----------|---------|
 | CLI | `--run-for-min 420` (~7h from process start; checks after each cycle before sleeping) |
 | Env | **`BUILDER_DAEMON_RUN_FOR_MIN=420`** |
-| NPM shortcut | **`npm run lifeos:builder:daemon:7h`** — preset **420 min**, **15** min interval, **12** `/build`s max per daemon cycle (**`--overnight-max`**) |
+| NPM shortcut | **`npm run lifeos:builder:daemon:7h`** — **bounded soak slice** (**420 min**) on top of continuous design: **15** min cadence · **12** max **`POST /builder/build`** attempts per cycle (**`--queue-max`**, legacy **`--overnight-max`**) |
 
-Queue JSON: **`docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`** (dashboard lane). Inspect **`data/builder-daemon-log.jsonl`** and **`GET …/builder/gaps`** for failures → next platform fixes.
+Continuous queue JSON: **`docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`** (dashboard lane SSOT backlog). Daemon proof: **`data/builder-daemon-log.jsonl`**. **`GET …/builder/gaps`** captures platform residues.
 
-**Clock time ≠ Railway work.** When **`OVERNIGHT_USE_CURSOR`** advanced past the JSON tail (or **`selected.length===0`**), **`lifeos-builder-overnight`** returned **instantly** (~_ms) — hence a “**7 hour** runner” burning **almost no **`/build`**. Receipts:
+**Clock time ≠ Railway work.** When the lane **`BUILDER_QUEUE_USE_CURSOR`** / **`OVERNIGHT_USE_CURSOR`** advances past the JSON tail (**`selected.length===0`**), **`lifeos-builder-overnight.mjs`** can return **instantly** — supervised wall clock keeps spinning but **`/build`** may be idle. Receipts:
 
 - **`data/builder-overnight-last-run.json`** — **`build_commits`**, **`build_wall_ms_sum`**, **`runner_wall_ms`**, **`idle_slice`**, **`throughput_note`** when idle.
 - **`daemon_run_limit_reached`** JSONL lines include **`KNOW_session_*`** aggregates for bounded (`--run-for-min`) exits.
 
-For bounded **`--run-for-min`**, the daemon **defaults** **`OVERNIGHT_CURSOR_WRAP=1`** if unset so the cursor **loops the JSON lane** instead of permanently idling (**opt-out:** **`OVERNIGHT_CURSOR_WRAP=0`** — then you **must** add JSON tasks / reset **`data/builder-overnight-cursor.*.json`**).
+For bounded **`--run-for-min`**, the daemon **defaults** **`BUILDER_QUEUE_CURSOR_WRAP=1`** (legacy **`OVERNIGHT_CURSOR_WRAP`**) when both unset — cursor **loops the JSON backlog** vs permanent idle (**opt-out:** set either wrap var **`0`** and keep the lane fed or reset **`data/builder-overnight-cursor.*.json`**).
 
 Ensure **`PUBLIC_BASE_URL`** + **`COMMAND_CENTER_KEY`** are exported (`npm run builder:preflight` exit **0**) before leaving this unattended.
 
