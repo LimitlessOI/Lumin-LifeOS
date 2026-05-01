@@ -2,6 +2,13 @@
 
 **Purpose:** So a Conductor session can run `npm run builder:preflight` and `POST /api/v1/lifeos/builder/build` without guessing. **Values** live in Railway (or your local shell only). **Do not** paste secrets into git, SSOT, or chat logs.
 
+## Token stewardship + audit trail (every call counts)
+
+- **Scheduled / cron AI** — must use **`createUsefulWorkGuard()`** before any `callCouncilMember` / provider call (`services/useful-work-guard.js`). No “heartbeat” model burns.
+- **Continuous daemon** — **`BUILDER_DAEMON_SUPERVISE_MODE=probe`** by design: **`/ready` + `/domains`** only between queue cycles; switch to **`full`** when you accept doc+JS smoke **`/build`** cost. **`GET …/builder/gaps`** is the receipt ledger for platform defects — read patterns before blind retries.
+- **Throughput honesty** — **`data/builder-overnight-last-run.json`**, **`data/builder-daemon-log.jsonl`** prove wall-clock vs **`/build`** time; idle slices are **not** secret token savings if you expected work — they are **telemetry** to feed the queue or wrap policy.
+- **SSOT is append-only history** — amendment **`## Change Receipts`** and **`docs/CONTINUITY_LOG.md`** gain **new** rows; agents do **not** delete past rows to tidy. Correct mistakes with a **new** receipt that states the supersession. Git + those logs are the stewarded record.
+
 ## Continuous supervised builder (24/7) — wording
 
 Production intent for autonomous work is **non-stop supervised improvement**, not “overnight-only” babysitting:

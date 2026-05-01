@@ -612,6 +612,10 @@ async function main() {
         reliability_cues: reliabilityCue({
           event: "cycle_ok",
           superviseMode,
+          token_stewardship:
+            superviseMode === "probe"
+              ? "KNOW: supervise used HTTP probe only (no council doc/JS smokes this cycle) — conserves builder tokens"
+              : "THINK: full supervise burned council smokes — spend only when regression depth worth it; see Am.21 epistemic 9",
           KNOW: "both_supervise_and_queue_scripts_exit_0_this_cycle_verifiable_via_jsonl_and_exit_codes",
           THINK_extended_stability_only_with_history: true,
           not_KNOW_without_more: "production_user_ready_feature_correctness_deploy_drift_audience_alpha",

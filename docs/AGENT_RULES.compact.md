@@ -1,5 +1,5 @@
 # AGENT RULES — COMPACT ENFORCEMENT
-> Generated: 2026-05-01T20:14:37.789Z | Regenerate: `npm run gen:rules`
+> Generated: 2026-05-01T21:15:16.960Z | Regenerate: `npm run gen:rules`
 > Read this instead of full NSSOT for routine work. Full NSSOT only for constitutional edits/conflicts/onboarding.
 
 ## HIERARCHY
@@ -19,16 +19,16 @@ NSSOT `docs/SSOT_NORTH_STAR.md` > Companion `docs/SSOT_COMPANION.md` > `CLAUDE.m
 Hook: staged `routes/`/`services/`/`public/overlay/`/`db/migrations/` need `[system-build]` or `GAP-FILL:`. No `--no-verify` w/o Adam. Exceptions: `startup/`, `middleware/`, composition `core/`, SSOT.
 
 ## COUNCIL / TECHNICAL FORKS
-Load-bearing arch/security/data/API → `/api/v1/lifeos/gate-change/*` or `npm run lifeos:gate-change-run`. No fake panel-in-chat.
-Protocol: frame → pro/con → blind spots → future-back → vote → audits.
+Load-bearing arch/security/API → `gate-change/*` or `lifeos:gate-change-run`. No synthetic “council” in chat.
 
-## MEMORY + ANTI-CORNER-CUTTING
-Design Q: **what earned the right to influence action, at what weight, here?**
-- Ladder: CLAIM→…→INVARIANT. INVARIANT ≠ LAW. Scope: `context_required`+`false_when`. `residue_risk` keeps minority views.
-- Output=claim; code/receipts=proof. Violations → `/api/v1/memory/agents/violations`, drift → `/intent-drift`. Runtime may `watch`/`block` models by task.
+## TOKENS+HISTORY
+`useful-work-guard` sched AI. Builder:preflight,probe,`/gaps` b4 burn. SSOT receipts **append-only** (no deletes; add fix row). Plat break→**GAP-FILL**+receipt.
 
-## IDEA VAULT (Lane A/B)
-`AMENDMENT_38`+`CONVERSATION_DUMP*` = **map/routes only** — not substitute for **source threads** (e.g. ChatGPT) + `raw/` exports. **Promote nuance:** one theme/chunk → 38 §A **or** twin `import-dumps-to-twin`. **Tools:** `npm run operator-corpus:pipeline`, `idea-vault:catalog-keywords`. **Programs/backlog:** 38 § seed §A + portfolio; **queue:** `INDEX.md` North Star priorities.
+## MEMORY
+Earned weight? CLAIM→INVARIANT (≠law; `context_required`+`false_when`). Code/receipts=proof. Violations `/memory/agents/violations`; drift `/intent-drift`.
+
+## IDEA VAULT (A/B)
+`AMENDMENT_38`+`CONVERSATION_DUMP*`=map only; keep **source threads**+`raw/`. Tools:`operator-corpus:pipeline`,`idea-vault:catalog-keywords`.
 
 ## SESSION PROTOCOL
 - START: `builder:preflight`; QUICK_LAUNCH; correct continuity lane; amendment handoff + last receipts.

@@ -833,5 +833,5 @@
     ]
   },
   "last_updated": "2026-05-01",
-  "ssot_receipt_tail": "24x7 autonomous queue naming; BUILDER_QUEUE_* env + --queue-max; continuous_model logs"
+  "ssot_receipt_tail": "Am21 §9 tokens+append-only receipts; daemon token_stewardship cue; BUILDER_OPERATOR_ENV"
 }

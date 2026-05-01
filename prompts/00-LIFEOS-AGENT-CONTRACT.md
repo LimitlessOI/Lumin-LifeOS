@@ -40,6 +40,10 @@ System picture without duplicating law: [`docs/SSOT_DUAL_CHANNEL.md`](../docs/SS
 
 7. **LifeOS SSOT edits:** read the **entire** `AMENDMENT_21_LIFEOS_CORE.md` in this session before editing that file (`CLAUDE.md` → **SSOT READ-BEFORE-WRITE**).
 
+8. **Token stewardship — make every call earn its keep.** Background/scheduled AI routes through **`createUsefulWorkGuard()`** (`services/useful-work-guard.js`). Builder/supervisor loops: prefer **probe** supervise + **`/gaps`** receipts before blind rebuilds; **`full`** smoke when regression depth justifies council spend. Platform block → **`GAP-FILL`** the **system** with receipts, not silent IDE re-authorship.
+
+9. **Append-only SSOT / continuity history.** New **`## Change Receipts`** rows and continuity updates **add** truth; do **not** delete or rewrite prior rows to sanitize the past. Fix errors with a **new** row that names what was wrong. Git history + those tables are stewarded evidence.
+
 ---
 
 ## Law is mandatory — no corners, no laziness (North Star §2.6 ¶5–7)

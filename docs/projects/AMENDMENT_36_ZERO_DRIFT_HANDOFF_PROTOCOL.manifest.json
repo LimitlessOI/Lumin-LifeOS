@@ -45,5 +45,6 @@
   ],
   "last_verified_at": "2026-04-26",
   "verification_passed": null,
-  "last_updated": "2026-04-27"
+  "last_updated": "2026-04-30",
+  "ssot_receipt_tail": "gen:rules TOKENS+HISTORY; MEMORY/IDEAVAULT compress; baseline ↓3081B"
 }

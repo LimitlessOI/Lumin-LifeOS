@@ -32,6 +32,17 @@
 
 ---
 
+## [BUILD] Update 2026-04-30 #14 — Token stewardship, platform GAP-FILL, append-only SSOT history
+
+### Files changed
+- **`AMENDMENT_21`** — epistemic **§9** + **append-only** receipts rule in continuity notice; Change Receipt.
+- **`docs/BUILDER_OPERATOR_ENV.md`**, **`prompts/00-LIFEOS-AGENT-CONTRACT.md`**, **`scripts/lifeos-builder-daemon.mjs`**, **`scripts/generate-agent-rules.mjs`** + **`docs/AGENT_RULES.compact.md`**, **`docs/.compact-rules-baseline`**, **`AMENDMENT_36`** receipt row.
+
+### Principle
+Every model call must **earn** output; the **system** fixes platform breaks with **receipts**; SSOT rows are **additive** — past history stays legible.
+
+---
+
 ## [BUILD] Update 2026-04-30 #13 — Nomenclature: 24/7 supervised continuous builder (“queue” > “overnight”)
 
 ### Files changed (high level)
