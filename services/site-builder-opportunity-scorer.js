@@ -51,7 +51,23 @@ export function createOpportunityScorer(options = {}) {
       const slow = responseTimeMs > 3000;
       const noMobileViewport = !/<meta[^>]+name=["']viewport["'][^>]*>/i.test(html);
       const noSsl = !url.startsWith('https:');
-      const noBooking = !['calendly', 'acuity', 'jane.app', 'mindbody', 'booksy', 'schedulista', 'vagaro', 'squareup.com/appointments', 'setmore'].some(w => lowerHtml.includes(w));
+      // Booking detection: third-party SaaS + proprietary platform patterns + generic HTML signals
+      const bookingKeywords = [
+        // Third-party SaaS booking widgets
+        'calendly', 'acuity', 'jane.app', 'mindbody', 'booksy', 'schedulista', 'vagaro',
+        'squareup.com/appointments', 'setmore', 'fresha.com', 'boulevard.io', 'phorest.com',
+        'timely.app', 'zenoti.com', 'meevo', 'booker.com', 'cliniko.com', 'simplepractice.com',
+        'practicebetter.io', 'vcita.com', 'appointmentplus', 'bookingkoala', 'genbook',
+        // Generic booking patterns in links / buttons
+        'book-online', 'book-now', 'book-appointment', 'book_appointment', 'book_now',
+        'online-booking', 'online booking', 'reserve-now', 'reserve now', 'request-appointment',
+        'schedule-appointment', 'schedule appointment', 'make-appointment', 'make an appointment',
+        // WordPress / common CMS booking plugins
+        'wc-bookings', 'woocommerce-appointments', 'amelia-booking', 'wp-booking', 'simply-schedule',
+      ];
+      const noBooking = !bookingKeywords.some(w => lowerHtml.includes(w))
+        // Also catch: any link with /book, /booking, /appointments, /schedule in the href
+        && !/<a[^>]+href=["'][^"']*\/(?:book|booking|appointments?|schedule)[/"'?]/i.test(html);
       const noTitle = !/<title[^>]*>[^<]{3,}<\/title>/i.test(html);
       const noMetaDesc = !/<meta[^>]+name=["']description["'][^>]*content=["'][^"']{10,}/i.test(html);
       const noSocialProof = !/(testimonial|review|rated|rating|stars|five.star|5.star)/i.test(lowerHtml);
@@ -63,6 +79,9 @@ export function createOpportunityScorer(options = {}) {
       const noSchema = !lowerHtml.includes('application/ld+json');
       const oldHtml = /(font\s+color=|bgcolor=|cellpadding=|cellspacing=|<table\s+width=)/i.test(html);
       const thinContent = html.length < 2000;
+
+      // Chain/franchise signal — high score on a chain isn't a real opportunity
+      const isChain = /(find\s+a\s+location|locations?\s+near|find\s+a\s+studio|franchise|franchisee|corporate\s+office|\d+\+?\s+locations)/i.test(html);
 
       // Score: each check worth points when BAD (total possible ~100)
       const checks = [
@@ -81,8 +100,10 @@ export function createOpportunityScorer(options = {}) {
       ];
 
       const rawScore = checks.reduce((sum, c) => sum + (c.active ? c.points : 0), 0);
-      const maxScore = checks.reduce((sum, c) => sum + c.points, 0); // 110 currently
-      const opportunityScore = Math.min(100, Math.round((rawScore / maxScore) * 100));
+      const maxScore = checks.reduce((sum, c) => sum + c.points, 0);
+      // Chain/franchise businesses already have web agencies — cap their score at 30
+      const baseScore = Math.min(100, Math.round((rawScore / maxScore) * 100));
+      const opportunityScore = isChain ? Math.min(baseScore, 30) : baseScore;
 
       const grade = opportunityScore >= 80 ? 'F'
         : opportunityScore >= 60 ? 'D'
@@ -111,6 +132,7 @@ export function createOpportunityScorer(options = {}) {
         strengths,
         recommendation,
         responseTimeMs,
+        isChain,
         analyzed: true,
         error: null,
       };

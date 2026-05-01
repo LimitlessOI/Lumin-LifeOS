@@ -97,6 +97,7 @@ async function main() {
         website,
         opportunityScore: score.opportunityScore,
         grade: score.grade,
+        isChain: score.isChain || false,
         painPoints: score.painPoints || [],
         strengths: score.strengths || [],
         recommendation: score.recommendation || '',
@@ -138,7 +139,8 @@ async function main() {
     const rank = String(idx + 1).padEnd(5);
     const score = String(r.opportunityScore).padEnd(6);
     const grade = (gradeColor(r.grade) + r.grade + RESET).padEnd(5);
-    const name = r.name.substring(0, 30).padEnd(30);
+    const chainFlag = r.isChain ? '\x1b[33m [CHAIN]\x1b[0m' : '';
+    const name = (r.name.substring(0, 30) + chainFlag).padEnd(30);
     const pain = r.painPoints[0] ? r.painPoints[0].substring(0, 55) : (r.error ? `Error: ${r.error}` : 'No issues detected');
     console.error(`${rank} ${score} ${grade}  ${name}  ${pain}`);
   });
