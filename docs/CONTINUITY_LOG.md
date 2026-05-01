@@ -61,6 +61,23 @@ The live smoke test was scoring 35.6%/F. Three root causes found and fixed in on
 2. **Redeploy Railway** so the gemini_flash + patchSiteHtml changes take effect — then re-run `npm run verify:site-builder:live` to confirm smoke test passes
 3. Next scorecard gap: **LifeOS product completeness (5.5/10)** — one polished daily loop end-to-end
 
+## [FIX] Update 2026-05-01 #4 — Builder: asterisk-param sanitizer (`*rk`/`*ccm` groq hallucination)
+
+### Problem fixed
+Production `GET /api/v1/lifeos/builder/gaps` showed repeated failures with pattern: `syntax /tmp/builder-check-jrXuft/.js:4 — const *rk = requireKey;`. groq_llama hallucinates an asterisk prefix on param names (`*rk`, `*ccm`, `*pool`). Existing `extractJavaScriptFromOutput()` stripped markdown fences and prose but did NOT strip the invalid `*` prefix.
+
+### Files changed
+- `routes/lifeos-council-builder-routes.js` — added `fixAsteriskShorthandParams(s)` (preserves generator `function*`, strips `*` before plain identifiers); wired into both `POST /execute` JS branch and `POST /build` JS branch before `node --check`.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — new Change Receipts row; `⚠️ IN PROGRESS` updated.
+
+### State after this session
+Builder now strips asterisk-shorthand hallucinations before the syntax gate. Will need to be deployed to Railway for the fix to take effect on live builds. Once deployed, watch `builder/gaps` — this class of failure should stop accumulating.
+
+### Next agent: start here
+1. Confirm Railway is on the latest `main` (or trigger redeploy via `npm run system:railway:redeploy`)
+2. Watch `GET /api/v1/lifeos/builder/gaps` for whether the `*rk`/`*ccm` class of syntax failures drops off after deployment
+3. Continue scorecard improvements: self-improvement loop (6.5/10) and observability (6.5/10)
+
 ## [FIX] Update 2026-05-01 #3 — Builder JS strict-output contract
 
 ### Files changed

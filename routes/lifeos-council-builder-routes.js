@@ -331,6 +331,18 @@ function extractJavaScriptFromOutput(rawText) {
   return s.trim();
 }
 
+/**
+ * groq_llama hallucinates asterisk-prefixed shorthand like `const *rk = requireKey;`
+ * which is not valid JS. Strip the * prefix unless it follows `function` (generator syntax).
+ */
+function fixAsteriskShorthandParams(s) {
+  return s.replace(/\*([A-Za-z_$][\w$]*)/g, (match, name, offset) => {
+    const before = s.slice(Math.max(0, offset - 9), offset);
+    if (/function\s*$/.test(before)) return match;
+    return name;
+  });
+}
+
 async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
   let tmpFile = null;
   try {
@@ -1075,12 +1087,13 @@ export function createLifeOSCouncilBuilderRoutes({
       }
     } else if (/\.(js|mjs|cjs)$/i.test(target_file)) {
       const extracted = extractJavaScriptFromOutput(output);
-      if (extracted !== output) {
+      const fixed = fixAsteriskShorthandParams(extracted);
+      if (fixed !== output) {
         log.info(
-          { target_file, stripped: output.length - extracted.length },
-          '[BUILDER] /execute: Stripped HTML/markdown wrapper from JS output',
+          { target_file, stripped: output.length - fixed.length },
+          '[BUILDER] /execute: Stripped HTML/markdown wrapper and asterisk params from JS output',
         );
-        cleanedOutput = extracted;
+        cleanedOutput = fixed;
       }
     }
     const validationError = validateGeneratedOutputForTarget(target_file, cleanedOutput);
@@ -1360,11 +1373,11 @@ export function createLifeOSCouncilBuilderRoutes({
       }
     }
     if (/\.(js|mjs|cjs)$/i.test(resolvedTarget)) {
-      const extractedJs = extractJavaScriptFromOutput(generatedOutput);
+      const extractedJs = fixAsteriskShorthandParams(extractJavaScriptFromOutput(generatedOutput));
       if (extractedJs !== generatedOutput) {
         log.info(
           { resolvedTarget, stripped: generatedOutput.length - extractedJs.length },
-          '[BUILDER] Stripped HTML/markdown wrapper from JS output before syntax gate',
+          '[BUILDER] Stripped HTML/markdown wrapper and asterisk params from JS output before syntax gate',
         );
         generatedOutput = extractedJs;
       }
