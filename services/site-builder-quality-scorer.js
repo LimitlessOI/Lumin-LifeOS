@@ -19,7 +19,7 @@ const CRITERIA = [
   { key: 'hasStickyMobileCta', pts: 6, test: h => /sticky|fixed bottom|mobile sticky|bottom booking|small screens only/i.test(h), issue: 'Missing mobile sticky CTA treatment' },
   { key: 'hasTailwind',       pts:  5, test: h => /tailwind/i.test(h), issue: 'Missing Tailwind CSS' },
   { key: 'hasFooter',         pts:  4, test: h => /<footer[\s>]/i.test(h), issue: 'Missing footer element' },
-  { key: 'hasFocusStyles',    pts:  4, test: h => /focus:|focus-visible:/i.test(h), issue: 'Missing visible keyboard focus styles' },
+  { key: 'hasFocusStyles',    pts:  4, test: h => /focus:|focus-visible:|:focus\b|:focus-visible\b/i.test(h), issue: 'Missing visible keyboard focus styles' },
   { key: 'minLength',         pts:  6, test: h => h.length > 4500, issue: 'Content too short (under 4500 chars)' },
 ];
 
