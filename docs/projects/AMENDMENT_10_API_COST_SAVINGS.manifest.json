@@ -90,6 +90,6 @@
     "tsos_savings_report view includes savings_pct column",
     "tsos_savings_totals view includes overall_savings_pct column"
   ],
-  "last_verified_at": "2026-04-24",
+  "last_verified_at": "2026-04-30",
   "verification_passed": null
 }
