@@ -72,6 +72,20 @@
 - After **push**: **`origin/main`** carries wave-2 JSON + builder **`codegen`**; overnight cursor **9** targets **`dashboard-widget-density-spec`** when **`OVERNIGHT_USE_CURSOR=1`**.
 - **Next agent:** **`npm run builder:preflight`** → confirm **`codegen.policy_revision`**; optional **`npm run system:railway:redeploy`** if image lags.
 
+## [FIX] Update 2026-05-01 #2 — Builder JS wrapper-noise sanitization
+
+### Files changed
+- `routes/lifeos-council-builder-routes.js` — `extractJavaScriptFromOutput()` now strips leaked builder file markers like `--- REPO FILE ... ---` and trims leading commentary until the first line that looks like real JS/ESM code.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — `Last Updated`, `Change Receipts`, and `Agent Handoff Notes` updated so this platform hardening is visible to cold agents under the §2.11 supervisor path.
+
+### Why this was needed
+- `GET /api/v1/lifeos/builder/gaps` showed repeated wasted builder failures on JS targets where the syntax gate was correctly blocking commits, but the raw output was often recoverable if builder wrapper noise was stripped first.
+- This is a platform fix, not a product rewrite: reduce repeated cheap syntax failures so the builder spends cycles on real implementation errors instead of prose, file markers, or mode confusion.
+
+### State after this session
+- `node --check routes/lifeos-council-builder-routes.js` passes locally.
+- Next platform priorities remain: raise token-efficiency above `C`, strengthen local Railway fallback (`railway link` and/or local `RAILWAY_TOKEN`), and continue turning repeated `builder/gaps` classes into durable platform fixes instead of repeated GAP-FILLs.
+
 ---
 
 ## [BUILD] Update 2026-04-30 #20 — Builder: `/ready` codegen revision + overnight `max_output_tokens` + AI rail queue

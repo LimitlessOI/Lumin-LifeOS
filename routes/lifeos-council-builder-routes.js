@@ -269,6 +269,31 @@ function extractJavaScriptFromOutput(rawText) {
     break;
   }
 
+  // Models sometimes leak builder file markers or brief commentary before the actual code.
+  // Strip those lines, then start from the first line that looks like real JS/ESM code.
+  const rawLines = s
+    .split(/\r?\n/)
+    .filter((line) => !/^--- REPO FILE(?::| OMITTED:)/.test(line.trim()));
+  const codeStartIndex = rawLines.findIndex((line) => {
+    const t = line.trim();
+    if (!t) return false;
+    if (/^(import|export)\s/.test(t)) return true;
+    if (/^(const|let|var)\s+[$A-Z_a-z]/.test(t)) return true;
+    if (/^(async\s+)?function\s+[$A-Z_a-z]/.test(t)) return true;
+    if (/^(class)\s+[$A-Z_a-z]/.test(t)) return true;
+    if (/^(if|for|while|switch|try)\s*\(/.test(t)) return true;
+    if (/^(\/\/|\/\*|\*\/|\{|\(|\[)/.test(t)) return true;
+    if (/^[$A-Z_a-z][\w$]*\s*=/.test(t)) return true;
+    return false;
+  });
+  if (codeStartIndex > 0) {
+    s = rawLines.slice(codeStartIndex).join('\n').trim();
+  } else if (codeStartIndex === -1) {
+    s = rawLines.join('\n').trim();
+  } else {
+    s = rawLines.join('\n').trim();
+  }
+
   const looksHtml = /<!DOCTYPE\s+html/i.test(s) || /<html[\s>]/i.test(s);
   if (looksHtml) {
     const blocks = [];
