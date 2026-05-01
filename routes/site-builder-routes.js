@@ -288,6 +288,86 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   });
 
   /**
+   * POST /api/v1/sites/email-reply-webhook
+   * Postmark inbound webhook — called when a prospect replies to a cold outreach email.
+   * No command-key auth (Postmark calls this). Verified by X-Postmark-Signature or token header.
+   * Auto-marks prospect status as 'replied' and logs the reply to outreach_log.
+   *
+   * Setup in Postmark: Settings → Inbound → Webhook URL = {BASE_URL}/api/v1/sites/email-reply-webhook
+   * Set POSTMARK_WEBHOOK_TOKEN in Railway = any secret string → paste same in Postmark's "webhook token" field.
+   */
+  router.post('/email-reply-webhook', async (req, res) => {
+    const webhookToken = process.env.POSTMARK_WEBHOOK_TOKEN;
+    if (webhookToken) {
+      const provided = req.headers['x-postmark-signature'] || req.headers['x-webhook-token'] || req.query.token;
+      if (!provided || provided !== webhookToken) {
+        logger.warn('[SITE] Reply webhook — invalid token');
+        return res.status(403).json({ ok: false, error: 'invalid token' });
+      }
+    }
+
+    res.json({ ok: true }); // Respond quickly so Postmark doesn't retry
+
+    if (!pool) return;
+    try {
+      const body = req.body || {};
+      // Postmark inbound fields
+      const fromEmail = (body.From || body.from || '').toLowerCase().replace(/.*<|>/g, '').trim();
+      const subject = body.Subject || body.subject || '';
+      const strippedText = body.StrippedTextReply || body.TextBody || '';
+
+      if (!fromEmail) {
+        logger.warn('[SITE] Reply webhook — no From email in payload');
+        return;
+      }
+
+      // Find prospect by contact_email
+      const result = await pool.query(
+        `SELECT client_id, business_name, status FROM prospect_sites
+          WHERE LOWER(contact_email) = $1
+          ORDER BY created_at DESC LIMIT 1`,
+        [fromEmail]
+      );
+      const prospect = result.rows[0];
+
+      if (!prospect) {
+        logger.info('[SITE] Reply webhook — no matching prospect for', { fromEmail });
+        return;
+      }
+
+      // Only advance status if not already past 'replied'
+      if (!['converted', 'lost', 'replied'].includes(prospect.status)) {
+        await pool.query(
+          `UPDATE prospect_sites
+              SET status = 'replied',
+                  updated_at = NOW()
+            WHERE client_id = $1`,
+          [prospect.client_id]
+        );
+        logger.info('[SITE] Prospect marked replied via email webhook', {
+          clientId: prospect.client_id,
+          businessName: prospect.business_name,
+          from: fromEmail,
+        });
+      }
+
+      // Log the inbound reply regardless
+      await pool.query(
+        `INSERT INTO outreach_log (channel, recipient, subject, body, status, sent_at, metadata)
+          VALUES ('email_reply', $1, $2, $3, 'received', NOW(), $4)`,
+        [
+          fromEmail,
+          subject,
+          strippedText.substring(0, 2000),
+          JSON.stringify({ clientId: prospect.client_id, businessName: prospect.business_name }),
+        ]
+      ).catch(() => {}); // outreach_log is best-effort
+    } catch (err) {
+      logger.error('[SITE] Reply webhook processing error', { error: err.message });
+    }
+  });
+
+  /**
    * GET /api/v1/sites/pos-partners
    * List POS commission partners and their referral info.
    */
