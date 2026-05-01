@@ -20,6 +20,7 @@
     "services/prospect-pipeline.js",
     "scripts/site-builder-follow-up-cron.mjs",
     "scripts/site-builder-preview-expiry-cron.mjs",
+    "scripts/site-builder-live-smoke.mjs",
     "scripts/verify-site-builder-lane.mjs",
     "routes/site-builder-routes.js",
     "db/migrations/20260313_site_builder_prospect_pipeline.sql",
@@ -105,6 +106,10 @@
     },
     {
       "type": "file_exists",
+      "path": "scripts/site-builder-live-smoke.mjs"
+    },
+    {
+      "type": "file_exists",
       "path": "scripts/verify-site-builder-lane.mjs"
     },
     {
@@ -141,11 +146,16 @@
     },
     {
       "type": "node_check",
+      "check": "scripts/site-builder-live-smoke.mjs"
+    },
+    {
+      "type": "node_check",
       "check": "scripts/verify-site-builder-lane.mjs"
     }
   ],
   "completion_checks": [
     "POST /api/v1/sites/build returns previewUrl, clientId, and qualityReport",
+    "npm run verify:site-builder:live succeeds against Railway and proves qualityReport is present in the live build response",
     "POST /api/v1/sites/prospect records a prospect_sites row, returns a preview link, and holds weak previews in qa_hold instead of sending them",
     "node scripts/site-builder-follow-up-cron.mjs processes eligible day-3/day-7 follow-ups without incrementing counts on failed sends",
     "node scripts/site-builder-preview-expiry-cron.mjs expires previews older than 30 days without touching converted prospects",
