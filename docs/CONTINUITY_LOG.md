@@ -32,6 +32,22 @@
 
 ---
 
+## [FIX] Update 2026-05-01 #5 — Consensus protocol finder + truthful supervisor close
+
+### Files changed
+- `docs/QUICK_LAUNCH.md` — operator-facing *Consensus protocol* subsection (links to Amendment 01, Companion 5.5, North Star Article II, evidence ladder docs). Answers “where is my consensus protocol?” without duplicating constitutional text.
+- `scripts/lifeos-builder-supervisor.mjs` — end-of-run output is §2.11b-shaped: KNOW/THINK/NOT-PROVEN, residue risk, no unlabeled “healthy enough” verdict; JS smoke logs an explicit KNOW line when it passes.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` + manifest — Change Receipts + Platform handoff row + `Last Updated`.
+
+### State after this session
+- Recorded multi-model consensus was already shipped (`run-council`, Amendment 01); Adam now has a **single plain-language entry point** in QUICK_LAUNCH.
+- Supervisor aligns with **`docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`** (do not collapse layers into undocumented “all green”).
+
+### Next agent: start here
+1. **`git fetch` + reconcile `main`** if workstation shows ahead/behind origin (push or rebase after verifying).
+2. Keep watching **`GET /api/v1/lifeos/builder/gaps`** after Railway deploy for sanitizer/site-builder fixes.
+3. Optional: tighten **token grade** enforcement once smoke quality is stable on prod.
+
 ## [FIX] Update 2026-04-30 #22 — Site Builder quality overhaul (35.6%/F → 88.5%/B)
 
 ### Root cause diagnosed and fixed

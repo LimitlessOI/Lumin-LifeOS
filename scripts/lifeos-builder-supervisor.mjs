@@ -249,6 +249,74 @@ async function verifyDocSmoke(repoPath) {
   return true;
 }
 
+// §2.6 truth-level labels used in supervisor output:
+//   KNOW   = verified by evidence this session (HTTP 200 confirmed, commit landed, node --check passed)
+//   THINK  = inference from evidence (repeated success suggests stability, but not proven under all conditions)
+//   GUESS  = low confidence — flag explicitly
+//   NOT-PROVEN = claim was not verified this session; do not assume it
+//
+// Per the Epistemic Bridge (docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md):
+//   - `/ready` HTTP 200 = KNOW (reachability at that moment, scoped to URL+key)
+//   - committed:true = KNOW (git commit landed — NOT "output is good")
+//   - smoke pass = KNOW (these specific tests pass — NOT "platform is generally healthy")
+//   - "builder is healthy" without evidence = forbidden (§2.6 ¶3)
+//   - gap DB rows = RECEIPT-tier (facts from prior failures, not live probes)
+
+async function analyzeBuilderGaps() {
+  if (!key) return;
+  try {
+    const { res, json } = await fetchJson(`${base}/api/v1/lifeos/builder/gaps?limit=50`, {
+      headers: { 'x-command-key': key },
+    });
+    if (!res.ok || !Array.isArray(json?.gaps)) return;
+    const gaps = json.gaps;
+    // KNOW: gap count from DB (this is a RECEIPT — real past failures, not hypothetical)
+    if (!gaps.length) {
+      console.log('[supervisor] KNOW: 0 builder gaps in DB — no recorded failures to pattern-match.');
+      return;
+    }
+
+    const patterns = {};
+    for (const g of gaps) {
+      const reason = String(g.failure_reason || '');
+      let bucket;
+      if (/\*[A-Za-z_$]/.test(reason)) bucket = 'asterisk-params (*rk/*ccm)';
+      else if (/--- REPO FILE/i.test(reason)) bucket = 'repo-file-marker leaked into JS';
+      else if (/<!DOCTYPE|SyntaxError.*'<'/.test(reason)) bucket = 'HTML emitted for JS target';
+      else if (/generated HTML is missing|truncated before <body/i.test(reason)) bucket = 'HTML truncation';
+      else if (/generated HTML is too short/i.test(reason)) bucket = 'HTML too short';
+      else if (/empty/i.test(reason)) bucket = 'empty output';
+      else if (/syntax/i.test(g.failure_stage)) bucket = 'other syntax error';
+      else if (/validation/i.test(g.failure_stage)) bucket = 'other validation failure';
+      else bucket = 'other';
+      patterns[bucket] = (patterns[bucket] || 0) + 1;
+    }
+    const sorted = Object.entries(patterns).sort((a, b) => b[1] - a[1]);
+    const total = gaps.length;
+
+    // Truth level: RECEIPT — these are DB rows from real past failures, not live probes
+    console.log(`\n[supervisor] RECEIPT: ${total} builder gap records (past failures — not a live probe):`);
+    for (const [pat, count] of sorted) {
+      const pct = Math.round((count / total) * 100);
+      const fixed = /asterisk-params|repo-file-marker|HTML emitted for JS/.test(pat) ? ' [sanitizer fix deployed]' : '';
+      console.log(`  ${count}x (${pct}%) ${pat}${fixed}`);
+    }
+    const topPattern = sorted[0]?.[0];
+    const topCount = sorted[0]?.[1] || 0;
+    if (topCount >= 3) {
+      const isKnownFixed = /asterisk-params|repo-file-marker|HTML emitted for JS/.test(topPattern);
+      if (isKnownFixed) {
+        console.log(`[supervisor] THINK: "${topPattern}" was the top failure — sanitizer fix committed; watch gaps after next deploy to confirm.`);
+      } else {
+        console.log(`[supervisor] RECEIPT: Highest-yield unresolved pattern: "${topPattern}" (${topCount} hits). Step 3 lever — docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`);
+      }
+    }
+    console.log();
+  } catch {
+    // gap analysis is best-effort — never block the supervisor
+  }
+}
+
 async function main() {
   const model = argValue('--model', DEFAULT_MODEL);
   const skipDoc = hasFlag('--skip-doc');
@@ -263,14 +331,17 @@ async function main() {
   if (probeOnly) {
     console.log('Probe-only: GET /ready + /domains (no council /build spend)');
     const { readyJson } = await assertReady();
-    console.log(`Ready: commitToGitHub=${Boolean(readyJson?.builder?.commitToGitHub)} council=${Boolean(readyJson?.builder?.callCouncilMember)}`);
-    console.log('Supervisor probe OK.');
+    // KNOW: /ready returned 200 with these fields — scoped to this URL+key+moment
+    console.log(`KNOW: /ready HTTP 200 — commitToGitHub=${Boolean(readyJson?.builder?.commitToGitHub)} council=${Boolean(readyJson?.builder?.callCouncilMember)}`);
+    console.log('NOT-PROVEN: council output quality, output correctness, or platform stability under load — probe does not test these.');
+    await analyzeBuilderGaps();
     return;
   }
 
   console.log('Checking builder readiness...');
   const { readyJson } = await assertReady();
-  console.log(`Ready: commitToGitHub=${Boolean(readyJson?.builder?.commitToGitHub)} council=${Boolean(readyJson?.builder?.callCouncilMember)}`);
+  // KNOW: /ready returned 200 — scoped to this URL+key+moment
+  console.log(`KNOW: /ready HTTP 200 — commitToGitHub=${Boolean(readyJson?.builder?.commitToGitHub)} council=${Boolean(readyJson?.builder?.callCouncilMember)}`);
 
   if (!skipDoc) {
     console.log('Running doc smoke objective...');
@@ -289,7 +360,8 @@ async function main() {
       commitMessage: '[system-build] Builder smoke receipt for LifeOS dashboard supervision',
     });
     await verifyDocSmoke('docs/projects/BUILDER_DASHBOARD_SMOKE_RECEIPT.md');
-    console.log('Doc smoke objective passed.');
+    // KNOW: committed:true + content contains required doc markers — scoped to this run
+    console.log('KNOW: Doc smoke passed — brief markers confirmed in committed output.');
   }
 
   if (!skipJs) {
@@ -321,11 +393,22 @@ async function main() {
       commitMessage: '[system-build] Builder JS smoke objective for LifeOS dashboard supervision',
     });
     await verifyJsSmoke('scripts/builder-smoke/dashboard-layout-utils.mjs');
-    console.log('JS smoke objective passed.');
+    // KNOW: these specific deterministic smoke checks passed on committed file contents (this run only)
+    console.log('KNOW: JS smoke passed — clampMobileWidgetCount / resolveThemeMode / pickDashboardDensity checks OK.');
   }
 
-  console.log('\nSupervisor result: builder path is healthy enough for constrained overnight dashboard work.');
-  console.log(`Next command: npm run lifeos:builder:supervise -- --model ${model}`);
+  console.log('\n--- §2.11b-style supervisor close (Adam) ---');
+  console.log('KNOW (this session): Builder /ready + /domains returned 200; any doc/JS smoke you ran matched committed bytes + node --check.');
+  console.log(
+    'THINK: Path may still be adequate for constrained overnight dashboard work — depends on Railway deploy parity + council output quality.',
+  );
+  console.log(
+    'NOT-PROVEN: End-to-end product quality under all models, unrelated routes, DB edge cases, or load — smoke is a narrow wedge.',
+  );
+  console.log(
+    `Residue risk: Re-run after deploy if /gaps showed old patterns (asterisk-params, markers) — confirm gap counts drop.`,
+  );
+  console.log(`Next: npm run lifeos:builder:supervise -- --model ${model}  |  Overnight: same + --overnight`);
 
   if (runOvernight) {
     console.log(`\nChaining overnight runner (max ${overnightMax})...`);

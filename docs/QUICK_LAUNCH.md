@@ -110,6 +110,17 @@ npm run lifeos:gate-change-run -- --list-presets
 
 Then `GET` the proposal by id to read `council_rounds_json` and receipts. **Chat alone is not a substitute** for this when North Star / §2.12 requires council review.
 
+### Consensus protocol — operator cheatsheet (vision-holder, not a programmer)
+
+Your job is direction and judgment; **recorded consensus** is what turns “many opinions” into an **auditable** decision:
+
+1. **What “consensus” means here** — Several models debate on the **live server**, rounds are stored (`council_rounds_json`), and disagreement triggers an **opposite-argument** pass. **Supreme law:** `docs/SSOT_NORTH_STAR.md` (Article II: governed-efficiency changes and technical forks). **Operations:** `docs/SSOT_COMPANION.md` section 5.5. **Routes + receipts:** `docs/projects/AMENDMENT_01_AI_COUNCIL.md`.
+2. **When you use it** — Load-bearing forks (architecture, security, removing checks, irreversible integrations), “this feels inefficient” hypotheses that would remove gates, or anything SSOT marks as council-gated.
+3. **When you still need research** — Council output is structured debate, not guaranteed web search. Agents may label inference as THINK/GUESS and cite best-practice research before or during drafting; receipts stay honest (same North Star Article II fork rules).
+4. **What you receive** — A plain **session report**: what was verified, grade with evidence, what could still fail (Companion **§0.5G**). For **persisted institutional facts**, the numeric evidence ladder is `docs/projects/AMENDMENT_39_MEMORY_INTELLIGENCE.md`; for builder/daemon cues, `docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`.
+
+Compact agent reminder (same hierarchy): **`docs/AGENT_RULES.compact.md`** → section **Council / Technical forks**.
+
 **Before large merges / “we’re at 10” claims:** `npm run verify:maturity` (local; full `lifeos-verify` when `DATABASE_URL` + keys in shell). CI runs the same in **skip-lifeos** mode; operators still owe a **full** `lifeos-verify` with production-class env.
 
 ## When you send the Conductor to get the system building (for Adam)
