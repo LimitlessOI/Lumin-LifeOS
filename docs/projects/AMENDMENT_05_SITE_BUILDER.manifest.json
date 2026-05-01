@@ -20,6 +20,7 @@
     "services/site-builder-opportunity-scorer.js",
     "services/prospect-pipeline.js",
     "prompts/lifeos-site-builder.md",
+    "scripts/site-builder-prospect-discovery.mjs",
     "scripts/site-builder-follow-up-cron.mjs",
     "scripts/site-builder-preview-expiry-cron.mjs",
     "scripts/site-builder-live-smoke.mjs",
