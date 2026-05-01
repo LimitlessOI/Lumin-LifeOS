@@ -1,0 +1,1 @@
+The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file is missing, so the specification is incomplete as it cannot be fully grounded in the brief.
