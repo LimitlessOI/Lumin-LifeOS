@@ -1,5 +1,4 @@
-The task asks to ground output in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` but the file is reported as missing from `REPO FILE CONTENTS`. The summary below is based on the explicit details provided in the task description.
-
+The task asks to ground output in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` but the file is reported as missing, requiring synthesis from task description.
 LifeOS Dashboard Builder Brief Smoke Receipt
 
 This receipt confirms understanding of the core directives outlined in `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
