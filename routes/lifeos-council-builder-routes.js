@@ -41,6 +41,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROMPTS_DIR = join(__dirname, '..', 'prompts');
 const REPO_ROOT = join(__dirname, '..');
 
+/** Bumped when builder codegen/token policy semantics change; operators compare GET /builder/ready to git main. */
+const BUILDER_CODEGEN_POLICY_REVISION = '2026-04-30e';
+
 const METADATA_SEP = '\n---METADATA---\n';
 const REMOTE_SYSTEM_TRUTH = 'System truth is remote: GitHub=source, Railway=runtime, Neon=data. Local shell/repo are workbench mirrors only.';
 
@@ -309,6 +312,11 @@ export function createLifeOSCouncilBuilderRoutes({
     );
     res.json({
       ok: true,
+      codegen: {
+        policy_revision: BUILDER_CODEGEN_POLICY_REVISION,
+        supports_max_output_tokens_body: true,
+        html_output_estimator: 'v2_linear_chars_1_85',
+      },
       builder: {
         commitToGitHub: typeof commitToGitHub === 'function',
         /** Token present on the server; without it, commitToGitHub usually throws on use. */

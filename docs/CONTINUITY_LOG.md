@@ -32,6 +32,39 @@
 
 ---
 
+## [BUILD] Update 2026-05-01 #1 — Sync main (rail shipped) + overnight wave-2 queue + push codegen
+
+### Files changed
+- `git pull` **fast-forward** from **`origin/main`** — **`lifeos-dashboard.html`** wired to AI rail assets; **`public/shared/lifeos-dashboard-ai-rail.{css,js}`**; **`DASHBOARD_CUSTOMIZATION_STATE.md`**.
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json` — three **wave-2** doc-only tasks (**indices 9–11**) so **`nextStartIndex: 9`** resumes work.
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — wave-2 pointer.
+- Prior session’s **builder `codegen`**, **overnight `max_output_tokens`**, SSOT rows — **same commit** as this slice (push = next Railway image exposes **`codegen.policy_revision`**).
+
+### State after this session
+- After **push**: **`origin/main`** carries wave-2 JSON + builder **`codegen`**; overnight cursor **9** targets **`dashboard-widget-density-spec`** when **`OVERNIGHT_USE_CURSOR=1`**.
+- **Next agent:** **`npm run builder:preflight`** → confirm **`codegen.policy_revision`**; optional **`npm run system:railway:redeploy`** if image lags.
+
+---
+
+## [BUILD] Update 2026-04-30 #20 — Builder: `/ready` codegen revision + overnight `max_output_tokens` + AI rail queue
+
+### Files changed
+- `routes/lifeos-council-builder-routes.js` — **`BUILDER_CODEGEN_POLICY_REVISION`**; **`GET /api/v1/lifeos/builder/ready`** includes **`codegen`** (**`policy_revision`**, **`supports_max_output_tokens_body`**, **`html_output_estimator`**).
+- `scripts/lifeos-builder-overnight.mjs` — **`task.max_output_tokens`** / **`maxOutputTokens`** merged into **`POST /builder/build`** body (clamp 128k).
+- `scripts/council-builder-preflight.mjs` — readiness JSON includes **`codegen`**; **`[TSOS-MACHINE]`** line when **`policy_revision`** returned.
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json` — **`dashboard-ai-rail-css`**, **`dashboard-ai-rail-js`**, **`dashboard-ai-rail-wire`** (**45k** `max_output_tokens`), **`dashboard-customization-state-contract`**.
+- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md` — **2026-04-30** + split rail + **`policy_revision`** note.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **Change Receipt**, **Agent Handoff**, **Last Updated**.
+
+### State after this session
+- **Idle overnight cursor at index 5** now resumes on **`dashboard-ai-rail-css`** once daemon/overnight runs against extended JSON **and** Railway serves **`codegen.policy_revision`** **`2026-04-30e`** (otherwise redeploy **`main`**).
+- Operators can distinguish **code vs deploy drift** without burning council: **`npm run builder:preflight`** prints **`policy_revision`** when live.
+
+### Next agent: start here
+- **`POST …/railway/managed-env/build-from-latest`** (or **`npm run system:railway:redeploy`**) → confirm **`policy_revision`** match → **`OVERNIGHT_USE_CURSOR=1`** overnight or daemon picks **CSS** task → wire task carries **45k** supervisor budget.
+
+---
+
 ## [BUILD] Update 2026-04-30 #19 — Builder: HTML codegen output cap (fix truncation-before-body)
 
 ### Files changed

@@ -178,7 +178,14 @@ async function main() {
   if (!readyMissing && json?.builder) {
     const b = json.builder;
     const s = json.server;
-    printBlock('Builder readiness (server truth)', JSON.stringify({ builder: b, server: s, next_steps: json.next_steps }, null, 2));
+    printBlock(
+      'Builder readiness (server truth)',
+      JSON.stringify({ builder: b, server: s, codegen: json.codegen ?? null, next_steps: json.next_steps }, null, 2),
+    );
+    const pol = json?.codegen?.policy_revision;
+    if (pol) {
+      tsosMachine('KNOW', 'READY_OK', 'PROBE', `codegen.policy_revision=${pol}`, 'Compare to git BUILDER_CODEGEN_POLICY_REVISION — deploy parity');
+    }
 
     if (!b.commitToGitHub) {
       printBlock(

@@ -175,6 +175,10 @@ async function runBuild(task) {
     target_file: task.target_file,
     commit_message: task.commit_message,
   };
+  const supervisorMotRaw = Number(task.max_output_tokens ?? task.maxOutputTokens ?? NaN);
+  if (Number.isFinite(supervisorMotRaw) && supervisorMotRaw > 0) {
+    body.max_output_tokens = Math.min(128000, Math.floor(supervisorMotRaw));
+  }
   const url = `${base}/api/v1/lifeos/builder/build`;
   const jsonBody = JSON.stringify(body);
   const maxAttempts = Math.max(1, parseInt(process.env.OVERNIGHT_BUILD_RETRIES || '4', 10) || 4);

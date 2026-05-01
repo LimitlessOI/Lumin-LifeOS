@@ -1,6 +1,6 @@
 # LifeOS Dashboard Overnight Queue
 
-Updated: 2026-04-28
+Updated: 2026-04-30
 
 This queue is for supervised overnight builder runs. Each task must reference `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and must preserve existing shell behavior unless the task explicitly says otherwise.
 
@@ -41,6 +41,10 @@ This queue is for supervised overnight builder runs. Each task must reference `d
 Canonical task definitions (files, specs, commit messages) live in:
 
 - `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`
+
+Split **dashboard-ai-rail** (queue item **5**) is implemented there as **`dashboard-ai-rail-css`** → **`dashboard-ai-rail-js`** → **`dashboard-ai-rail-wire`** (wire step may set **`max_output_tokens`** in JSON for **`POST /builder/build`**). Probe deploy parity via **`GET /api/v1/lifeos/builder/ready`** → **`codegen.policy_revision`** (must match **`routes/lifeos-council-builder-routes.js`** `BUILDER_CODEGEN_POLICY_REVISION` on **`main`**).
+
+**Wave 2 (doc specs, items 7–9):** **`dashboard-widget-density-spec`**, **`dashboard-today-category-spec`**, **`dashboard-category-stubs-spec`** — keep the daemon/overnight runner advancing when the cursor passes the first nine tasks.
 
 Run (after a successful `npm run lifeos:builder:supervise` on the same `PUBLIC_BASE_URL`):
 

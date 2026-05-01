@@ -72,6 +72,116 @@
       "spec": "Markdown with Contract, Non-goals, Phases, and Open questions. ---METADATA--- JSON at end.",
       "commit_message": "[system-build] AI rail technical contract draft",
       "notes": "Spec before code — reduces overnight HTML thrash."
+    },
+    {
+      "id": "dashboard-ai-rail-css",
+      "domain": "lifeos-platform",
+      "target_file": "public/shared/lifeos-dashboard-ai-rail.css",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md",
+        "public/shared/lifeos-dashboard-tokens.css",
+        "public/overlay/lifeos-dashboard.html",
+        "public/overlay/lifeos-chat.html"
+      ],
+      "task": "Create CSS ONLY for the dashboard AI rail: collapsed one-line strip, expanded transcript panel, dock-top and dock-bottom variants, safe-area insets for notched/mobile, respects token variables from lifeos-dashboard-tokens.css and [data-theme] if present on html/body. No JavaScript.",
+      "spec": "Pure CSS file. Leading comment cites DASHBOARD_AI_RAIL_CONTRACT.md. Class names prefixed lifeos-ai-rail-*. No external @import except optional reference only (prefer none). End with newline.",
+      "commit_message": "[system-build] Dashboard AI rail shared CSS (overnight queue split)",
+      "notes": "Small target — runs before JS + HTML wire."
+    },
+    {
+      "id": "dashboard-ai-rail-js",
+      "domain": "lifeos-platform",
+      "target_file": "public/shared/lifeos-dashboard-ai-rail.js",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md",
+        "public/shared/lifeos-dashboard-ai-rail.css",
+        "public/overlay/lifeos-dashboard.html",
+        "public/shared/lifeos-bootstrap.js",
+        "public/overlay/lifeos-chat.html"
+      ],
+      "task": "IIFE ES module-compatible script that mounts AI rail UX into #lifeos-ai-rail-root (create if absent): collapsed/expanded toggle, dock position persisted in sessionStorage keys lifeos-ai-rail:*, listens for theme attribute changes if exposed, does not duplicate full chat logic — stubs open existing Lumin/chat entrypoints or focus chat input hook if present. Respect reduced-motion.",
+      "spec": "Plain browser JS. No npm imports. ESLint-neutral. export default none; attach window.LifeOSDashboardAiRail = { mount } if reasonable. Leading comment cites contract file.",
+      "commit_message": "[system-build] Dashboard AI rail client script (overnight queue split)",
+      "notes": "After CSS artifact exists server-side via prior task/commit mirror."
+    },
+    {
+      "id": "dashboard-ai-rail-wire",
+      "domain": "lifeos-platform",
+      "target_file": "public/overlay/lifeos-dashboard.html",
+      "max_output_tokens": 45000,
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md",
+        "public/shared/lifeos-dashboard-ai-rail.css",
+        "public/shared/lifeos-dashboard-ai-rail.js",
+        "public/shared/lifeos-dashboard-tokens.css",
+        "public/overlay/lifeos-dashboard.html"
+      ],
+      "task": "Wire lifeos-dashboard-ai-rail.css and lifeos-dashboard-ai-rail.js into lifeos-dashboard.html (correct relative URLs from /overlay/). Add shell element with id=\"lifeos-ai-rail-root\" where the persistent rail should live per contract. Preserve all behavior and scripts. Minimal semantic diff besides rail hookup.",
+      "spec": "Full valid HTML document. End with ---METADATA--- JSON per builder contract.",
+      "commit_message": "[system-build] Wire dashboard AI rail assets into lifeos-dashboard (overnight queue)",
+      "notes": "Uses supervisor max_output_tokens for large-overlay regen safety."
+    },
+    {
+      "id": "dashboard-customization-state-contract",
+      "domain": "lifeos-platform",
+      "target_file": "docs/projects/DASHBOARD_CUSTOMIZATION_STATE.md",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "docs/projects/DASHBOARD_DENSITY_INTEGRATION_NOTES.md",
+        "public/overlay/lifeos-dashboard.html"
+      ],
+      "task": "Write local/state contract only: widget visibility, order (array of ids), density mode, pinned widgets — storage keys (localStorage vs server later), versioning, migration on schema bump, SSR/client boundaries. Non-goals: full persistence API.",
+      "spec": "Markdown sections: Goals, Keys & shapes, Density enum, Risks. ---METADATA--- JSON tail.",
+      "commit_message": "[system-build] Dashboard customization state contract (overnight)",
+      "notes": "Doc-only queue item aligned with LIFEOS_DASHBOARD_OVERNIGHT_QUEUE customization-state."
+    },
+    {
+      "id": "dashboard-widget-density-spec",
+      "domain": "lifeos-platform",
+      "target_file": "docs/projects/DASHBOARD_WIDGET_DENSITY_SPEC.md",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "docs/projects/DASHBOARD_DENSITY_INTEGRATION_NOTES.md",
+        "docs/projects/DASHBOARD_CUSTOMIZATION_STATE.md",
+        "public/overlay/lifeos-dashboard.html",
+        "public/shared/lifeos-dashboard-tokens.css"
+      ],
+      "task": "Specification only: compact / balanced / expanded density for dashboard cards per brief, mapping to CSS variables and DOM data attributes, mobile constraints, and how it intersects with customization state doc. No HTML rewrite.",
+      "spec": "Markdown: modes, token mapping, rollout order. ---METADATA--- JSON at end.",
+      "commit_message": "[system-build] Dashboard widget density spec (overnight wave 2)",
+      "notes": "Keeps overnight runner advancing after wave-1 queue drained."
+    },
+    {
+      "id": "dashboard-today-category-spec",
+      "domain": "lifeos-platform",
+      "target_file": "docs/projects/DASHBOARD_TODAY_CATEGORY_SPEC.md",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "public/overlay/lifeos-dashboard.html",
+        "docs/projects/DASHBOARD_WIDGET_DENSITY_SPEC.md"
+      ],
+      "task": "Specification for Today category: MITs, schedule, alerts, quick add, Lumin entry — layout blocks and API assumptions only; reference existing dashboard sections by id/class if visible in injected HTML.",
+      "spec": "Markdown sections + ---METADATA--- JSON.",
+      "commit_message": "[system-build] Today category dashboard spec (overnight wave 2)",
+      "notes": "May run after density spec exists for cross-links; builder tolerates missing optional file in files[] if empty — prefer listing only existing files; DASHBOARD_WIDGET_DENSITY_SPEC may not exist on first run."
+
+    },
+    {
+      "id": "dashboard-category-stubs-spec",
+      "domain": "lifeos-platform",
+      "target_file": "docs/projects/DASHBOARD_CATEGORY_STUBS_SPEC.md",
+      "files": [
+        "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
+        "public/overlay/lifeos-dashboard.html",
+        "public/overlay/lifeos-app.html"
+      ],
+      "task": "Specification for Health / Family / Purpose category stubs: placeholder layout, navigation hooks, what stays shell vs domain-owned. No full domain implementation.",
+      "spec": "Markdown + ---METADATA--- JSON.",
+      "commit_message": "[system-build] Category stubs spec Health Family Purpose (overnight wave 2)",
+      "notes": "Doc-only; aligns with overnight queue item 9."
     }
   ]
 }
