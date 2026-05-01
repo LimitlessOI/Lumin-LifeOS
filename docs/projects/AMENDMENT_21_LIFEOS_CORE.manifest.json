@@ -833,5 +833,5 @@
     ]
   },
   "last_updated": "2026-05-01",
-  "ssot_receipt_tail": "ambient resolver modules + lifeos-ambient-intelligence boot fix; builder JS extract-before-syntax; overnight wave 3"
+  "ssot_receipt_tail": "ambient named export createAmbientIntelligenceService (ESM routes); resolver modules boot fix; overnight wave 3"
 }

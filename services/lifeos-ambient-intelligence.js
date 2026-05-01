@@ -76,4 +76,5 @@ function createAmbientIntelligenceService(pool, callCouncilMember) {
   };
 }
 
+export { createAmbientIntelligenceService };
 export default createAmbientIntelligenceService;
