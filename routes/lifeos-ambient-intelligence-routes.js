@@ -37,13 +37,14 @@ export function createLifeOSAmbientIntelligenceRoutes({ pool, requireKey, callCo
       const [eventsRes, mitsRes] = await Promise.all([
         pool.query(
           `SELECT COUNT(*) AS n FROM lifeos_calendar_events
-           WHERE user_id = $1 AND starts_at >= $2 AND starts_at <= $3`,
+           WHERE user_id = $1 AND status <> 'deleted'
+             AND starts_at >= $2 AND starts_at <= $3`,
           [userId, now.toISOString(), windowEnd]
         ),
         pool.query(
-          `SELECT COUNT(*) AS n FROM lifeos_mits
-           WHERE user_id = $1 AND completed = false AND due_date < $2`,
-          [userId, now.toISOString()]
+          `SELECT COUNT(*) AS n FROM daily_mits
+           WHERE user_id = $1 AND status = 'pending' AND mit_date < CURRENT_DATE`,
+          [userId]
         ),
       ]);
 
