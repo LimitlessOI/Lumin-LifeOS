@@ -237,6 +237,25 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   });
 
   /**
+   * POST /api/v1/sites/analyze
+   * Score a prospect's EXISTING website to determine outreach priority.
+   * Body: { businessUrl }
+   */
+  router.post('/analyze', requireKey, async (req, res) => {
+    try {
+      const { businessUrl, url } = req.body;
+      const targetUrl = businessUrl || url;
+      if (!targetUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
+      const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
+      const result = await scoreProspectUrl(targetUrl);
+      res.json({ ok: true, ...result });
+    } catch (err) {
+      logger.error('[SITE] Analyze error', { error: err.message });
+      res.status(500).json({ ok: false, error: err.message });
+    }
+  });
+
+  /**
    * GET /api/v1/sites/pos-partners
    * List POS commission partners and their referral info.
    */

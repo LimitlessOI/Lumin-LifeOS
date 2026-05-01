@@ -7,9 +7,9 @@
   "priority": "high",
   "owner": "adam",
   "phase": "launch-readiness",
-  "next_task": "Set live email/base-url envs, verify route health, run quality/expiry cron checks, and use the public landing page to begin controlled preview outreach.",
-  "stability_class": "needs-review",
-  "current_focus": "Turn the existing build/prospect pipeline into a sellable front-door offer with quality gating: public landing page, route verification, preview scoring/repair, and live outreach readiness.",
+  "next_task": "Set live email/base-url envs (POSTMARK_SERVER_TOKEN, EMAIL_FROM, SITE_BASE_URL) in Railway, then run POST /api/v1/sites/analyze on a real wellness business to confirm opportunity score, then run POST /api/v1/sites/prospect to send first cold outreach.",
+  "stability_class": "stable",
+  "current_focus": "Outreach readiness: opportunity scoring live, quality gate live, follow-up cron live. Remaining blockers are Railway env vars (email credentials) that only Adam can set.",
   "anti_drift_notes": "The generic verifier cannot yet send project-specific JSON payloads for POST route success checks. Automated route verification for this lane only covers GET surfaces and syntax/file/db truth; POST /api/v1/sites/build and POST /api/v1/sites/prospect remain completion checks that require a real payload.",
   "owned_files": [
     "docs/projects/AMENDMENT_05_SITE_BUILDER.md",
@@ -17,7 +17,9 @@
     "docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md",
     "services/site-builder.js",
     "services/site-builder-quality-scorer.js",
+    "services/site-builder-opportunity-scorer.js",
     "services/prospect-pipeline.js",
+    "prompts/lifeos-site-builder.md",
     "scripts/site-builder-follow-up-cron.mjs",
     "scripts/site-builder-preview-expiry-cron.mjs",
     "scripts/site-builder-live-smoke.mjs",
@@ -131,6 +133,14 @@
     {
       "type": "node_check",
       "check": "services/prospect-pipeline.js"
+    },
+    {
+      "type": "file_exists",
+      "path": "services/site-builder-opportunity-scorer.js"
+    },
+    {
+      "type": "node_check",
+      "check": "services/site-builder-opportunity-scorer.js"
     },
     {
       "type": "node_check",
