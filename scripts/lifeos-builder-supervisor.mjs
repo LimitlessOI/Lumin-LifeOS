@@ -264,11 +264,12 @@ async function verifyDocSmoke(repoPath) {
 //   - gap DB rows = RECEIPT-tier (facts from prior failures, not live probes)
 
 function printConsequenceLensReminder() {
-  console.log('\n--- Optional lens: consequences + future-back + prior art ---');
+  console.log('\n--- Optional lens: consequences + future-back + prior art + Adam ---');
   console.log('Docs: docs/SUPERVISOR_CONSEQUENCE_LENS.md (supervisor decides when — not every slice)');
   console.log('A Unintended: who gets hurt at scale? trust/support? → what breaks (deps/quotas/races/rollback)? observability honest? residue risk?');
   console.log('B 2-year-back: wish we did X today? cheap receipt skipped? SSOT/handoff line? run-council?');
   console.log('C Prior art: internal gaps/receipts/code + external published practice (THINK til cited); improve-dont-copy; cite URLs in §2.11b');
+  console.log('D Adam-as-lens: must ASK Adam (ambiguous/strategic/value/irreversible)? spare lower-level ONLY under SSOT+verifiers; fair options/tradeoffs; §2.11b receipts');
 }
 
 async function analyzeBuilderGaps() {

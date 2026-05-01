@@ -1,7 +1,7 @@
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`
-> Generated: 2026-04-27T17:53:14.754Z
+> Generated: 2026-05-01T20:14:33.347Z
 
 ## Read order (mandatory)
 
@@ -74,39 +74,69 @@ Example first line of an update:
 
 ---
 
-## [BUILD] Update 2026-05-01 #106 — **Idea Vault — categorization closed + §9 metric fix**
+## [BUILD] Update 2026-05-01 #7 — Supervisor Lens C (prior art + industry, improve-don’t-copy)
 
 ### Files changed
-- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§9** multi‑MB byte total corrected to **113,636,593** (sum of files **> 1 MB** in §9.1; replaces stale **112,804,796**); footer notes reconciliation.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus` aligned with **Streams A–S**, **100%** §9.1 file map, no “002 residue” wording.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Change Receipts** — **2026-05-01** row extended with §9 multi‑MB total.
-
-### State after this session
-- Canonical **`•`+TAB+`Lumin-Memory/00_INBOX/raw/`** inventory: **19/19** files have exactly one bucket in **§9.1** (**Stream A–S**, **H**, or **—** for README).
+- `docs/SUPERVISOR_CONSEQUENCE_LENS.md` — **Lens C**: internal prior art (**/builder/gaps**, SSOT receipts, code, council residue); external industry/regulatory/postmortem (**THINK** until cited); **C3** record improvement delta.
+- `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`, `docs/QUICK_LAUNCH.md`, `scripts/lifeos-builder-supervisor.mjs` — aligned wording + CLI reminder lines.
+- `AMENDMENT_21` receipt + manifest.
 
 ### Next agent: start here
-- New exports only → new **Stream** + **§9.1** row + re-sum bytes; optional one-paragraph **Gemini 001 vs F/O** dedupe in **02**/**19**; **Amendment 39** Phase 2 seeds.
+For Lens C2, put **URLs or document titles** in §2.11b closes so claims stay falsifiable.
 
----
-
-## [BUILD] Update 2026-04-29 #104 — **Idea Vault — Streams O/Q (Gemini 003, DeepSeek 001, GPT 06)**
+## [PLAN] Update 2026-05-01 #6 — Optional consequence + “two-year-back” supervisor lens
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream O** (Gemini 003, dedupe **F**), **P** (DeepSeek 001, dedupe **C**), **Q** (GPT 06, Tier 0 / autonomous builder; duplicate AURO prefix noted); **§A** rows; **Last Updated**; **A–Q**; portfolio capsule note; Change Receipt.
-- `docs/CONVERSATION_DUMP_IDEAS_INDEX.md` — **§4H**, **§8** rows O–Q, **§7** snapshot date, next-queue refresh, footer.
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.manifest.json` — `current_focus`.
+- `docs/SUPERVISOR_CONSEQUENCE_LENS.md` — discretionary when-to-use rubric; Lens A unintended consequences; Lens B premortem; outputs (§2.11b / council).
+- `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md` + `docs/QUICK_LAUNCH.md` — links + execution-protocol bullet.
+- `scripts/lifeos-builder-supervisor.mjs` — `--consequence-lens` prints short reminder (no API).
+- `AMENDMENT_21` receipts + Platform handoff; manifest tail.
 
-### Next agent
-Heading-pass **Gemini 004**; reconcile **Gemini 001** vs **F/O** in one capsule SSOT paragraph; optional deep TOC on **GPT dump 01**.
+### State after this session
+Adam gets **structured regret / second-order thinking** without making it mandatory on every trivial commit — aligns with §2.6 honest reporting and §2.11b residue risk.
 
----
+### Next agent: start here
+Use the lens after **large** autonomy, **schema/billing/auth** changes, or **relaxing verifiers**; skip for typos/docs-only/low-risk.
 
-## [BUILD] Update 2026-04-30 #105 — **Idea Vault — Stream R + §9 corpus %**
+## [FIX] Update 2026-05-01 #5 — Consensus protocol finder + truthful supervisor close
 
 ### Files changed
-- `docs/projects/AMENDMENT_38_IDEA_VAULT.md` — **Stream R** (`Gemini Dump 004`); **Stream A** + **`LifeOS
+- `docs/QUICK_LAUNCH.md` — operator-facing *Consensus protocol* subsection (links to Amendment 01, Companion 5.5, North Star Article II, evidence ladder docs). Answers “where is my consensus protocol?” without duplicating constitutional text.
+- `scripts/lifeos-builder-supervisor
 
 ## Snippet — LifeOS lane
+
+## [BUILD] Update 2026-04-29 #1 — **Overnight dashboard: `dashboard-theme-foundation` + receipts**
+
+### Shipped / verified (system path)
+- **`public/shared/lifeos-dashboard-tokens.css`** — **`POST /api/v1/lifeos/builder/build`** via **`npm run lifeos:builder:overnight -- --task dashboard-theme-foundation`** (`claude_via_openrouter`, **`committed:true`**). Prod **`GET /shared/lifeos-dashboard-tokens.css`** **200**, **2607** bytes (= local).
+
+### Related platform (local amendment of prior gap)
+- **`routes/lifeos-council-builder-routes.js`** — **`mirrorCommittedContentToRepoRoot`** after **`autoWireRoute`** register commit (**chained **`files[]`** FS parity).
+
+### Doc / SSOT
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — receipts + **`## Agent Handoff Notes`**: next **`dashboard-import-tokens`**. **`docs/CONTINUITY_LOG.md`** **`[BUILD]`** block.
+
+### Next
+- **`npm run lifeos:builder:overnight -- --task dashboard-import-tokens`** (minimal `<link>` in **`lifeos-dashboard.html`**).
+
+---
+
+## [BUILD] Update 2026-04-27 #18 — Victory Vault root API contract now exists on the runtime spine
+
+**Shipped:**
+- `routes/lifeos-victory-vault-routes.js` — top-level LifeOS compatibility router for POST/GET `/api/v1/lifeos/victories` and POST/GET `/api/v1/lifeos/victories/reels`, backed by the existing `createVictoryVault()` service and `makeLifeOSUserResolver()`.
+- `startup/register-runtime-routes.js` — imports + mounts the new router at `/api/v1/lifeos` and logs the mount distinctly from `/api/v1/lifeos/growth`.
+- `scripts/lifeos-verify.mjs` — route inventory now fails if `routes/lifeos-victory-vault-routes.js` disappears.
+
+**State after this session:**
+- Live diagnosis before fix was concrete: `GET /api/v1/lifeos/victories?user=adam` returned `404`, while `GET /api/v1/lifeos/growth/victories?user=adam` returned `200`.
+- Lumin build bridge was used for reconnaissance first: `/api/v1/lifeos/chat/build/plan` correctly identified the Victory Vault mismatch as the highest-value LifeOS defect, but its plan text truncated and the draft suggested a weaker proxy pattern.
+- The council builder then produced the actual runtime fix. After Railway redeployed, both `GET /api/v1/lifeos/victories?user=adam` and `GET /api/v1/lifeos/victories/reels?user=adam` returned `200`.
+
+**Next:** Run the builder HTML smoke on a real LifeOS target, then do the household invite E2E flow. After those verification items, the next real product build is the first vertical slice of Commitment -> execution desk.
+
+---
 
 ## [BUILD] Update 2026-04-26 #17 — LifeOS build lanes now obey Memory Intelligence authority
 
@@ -118,29 +148,7 @@ Heading-pass **Gemini 004**; reconcile **Gemini 001** vs **F/O** in one capsule 
 
 **State after this session:**
 - Lumin plan/draft and gate-change flows now use the same evidence/routing system instead of static model preference only.
-- Debate memory is structured enough to preserve consensus, residue risk, and future-back notes for later retrieval.
-- What is still missing: automatic CI/build receipts into Memory Intelligence and broader LifeOS route adoption beyond these load-bearing lanes.
-
-**Next:** Seed Memory Intelligence with real facts from SSOT receipts, then wire verifier outcomes from Lumin/build flows into `fact_evidence` so routing quality improves from actual outcomes.
-
----
-
-## [BUILD] Update 2026-04-20 #16 — Cycle tracking + Habits overlays
-
-**Shipped:**
-- `public/overlay/lifeos-cycle.html` — Today tab (phase ring badge, colour per phase, energy chips, countdowns), Log tab (entry type, datetime, flow level, symptom tags, notes), History tab (past cycles with entry pills, avg length), Settings tab (avg cycle/period length, tracking toggle, perimenopause mode, notify). Resolves numeric `user_id` via `GET /api/v1/lifeos/users/:handle` at boot.
-- `public/overlay/lifeos-habits.html` — Today tab (stats bar, identity-framed habit list, check-in buttons, streak badges, reflection prompts for struggling habits), Manage tab (create new habit with title + identity statement + frequency; full habit list).
-- `public/overlay/lifeos-app.html` — PAGE_META entries for both new overlays; sidebar nav items under "Self" group (after Growth); More bottom sheet entries.
-
-**Next:** Smoke test — log in, open Cycle, verify phase loads (needs `cycle_entries` row; quick-log period start). Open Habits, create a habit, check it in, confirm streak increments next day. E2E invite link + Sherry registration still pending from prior handoff.
-
----
-
-## [BUILD] Update 2026-04-21 #15 — Low-power ambient context + voice background suspend
-
-**Shipped:** Opt-in coarse device hints (`battery`, `network_type`, `visibility`, timezone, PWA standalone) stored in `lifeos_ambient_snapshots`; API `/api/v1/lifeos/ambient/snapshot` + `/recent` (no AI on ingest); client `lifeos-ambient-sense.js` with 10–20 min cadence while the shell is visible; Settings toggle persists `lifeos_ambient_sense=1`. Lumin `buildContextSnapshot` includes `ambient_hints`. Always-on voice in `lifeos-voice.js` now **releases the mic** when the tab is hidden and skips screen wake lock on touch-first devices by default (`LuminVoice.configure`).
-
-**Files:** `db/migrations/20260423_lifeos_ambient_snapshots.sql`, `services/lifeos-ambient-context.js`, `routes/lifeos-ambient-routes.js`, `startup/register-runtime-routes.js`, `public/overlay/lifeos-ambient-sense.js`, `public/overlay/li
+- Debate memory i
 
 ## Snippet — Council lane
 
@@ -191,7 +199,7 @@ Heading-pass **Gemini 004**; reconcile **Gemini 001** vs **F/O** in one capsule 
 | **Lifecycle** | `infrastructure` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `operational` |
-| **Last Updated** | 2026-04-25 — **`AMENDMENT_38_IDEA_VAULT.md`** + manifest (consolidated conversation-backlog SSOT); **`REPO_MASTER_INDEX`** row; **`CONVERSATION_DUMP_IDEAS_INDEX`** owns-pointer. Prior: **`CONVERSATION_DUMP_IDEAS_INDEX`** + **`INDEX.md`** candidates. Prior: 2026-04-26 **`REPO_MASTER_INDEX`** + **`REPO_BUCKET_INDEX`**. Prior: **`REPO_DEEP_AUDIT.md`**. Prior: **`npm run repo:catalog`**. Prior: 2026-04-25 **TSOS compression** in **`prompts/00`**. Prior: **`SSOT_DUAL_CHANNEL`**. Prior: **§2.11c**. Prior: 2026-04-22 **§2.15** + §2.14. |
+| **Last Updated** | 2026-04-30 — repo-backed Cursor review path promoted beyond one laptop: tracked **`githooks/pre-push`** template + **`scripts/install-git-hooks.mjs`** installer + `npm run hooks:install`; **`scripts/cursor-pre-push-review.mjs`** now optionally posts review receipts into AM39 memory when `PUBLIC_BASE_URL` + command key are present. Prior: 2026-04-30 — local pre-push AI bug review path: tracked **`scripts/cursor-pre-push-review.mjs`** + **`.cursor/BUGBOT.md`** review rules + `package.json` script + `.gitignore` allowlist for tracked Bugbot config / local review artifacts; local `.git/hooks/pre-push` may call the tracked script in `warn` or `strict` mode. Prior: 2026-04-25 — **`scripts/generate-agent-rules.mjs`** — new **IDEA VAULT (Lane A/B)** block in **`docs/AGENT_RULES.compact.md`**: vault = map/routes only; source threads + **`raw/`** = nuance; promote via chunk → **38** §A or **`import-dumps-to-twin`**; tools + **INDEX** queue order; MEMORY/COUNCIL/SSOT/PROHIBITED lines tightened (token budget law). Prior: **`AMENDMENT_38_IDEA_VAULT.md`** + manifest; **`REPO_MASTER_INDEX`**; **`CONVERSATION_DUMP_IDEAS_INDEX`**. Prior: **`CONVERSATION_DUMP`** + **`INDEX.md`** candidates. Prior: **`REPO_BUCKET_INDEX`**. Prior: **`REPO_DEEP_AUDIT`**. Prior: **`npm run repo:catalog`**. Prior: **TSOS** in **`prompts/00`**. Prior: **`SSOT_DUAL_CHANNEL`**. Prior: **§2.11c**. Prior: **§2.15** + §2.14. |
 | **Manifest** | _(none — this amendment is documentation + scripts; machine hooks live in `package.json` and `.github/workflows`)_ |
 | **Verification** | `npm run handoff:self-test` → exit 0; `npm run cold-start:gen` regenerates `docs/AI_COLD_START.md` |
 
@@ -207,14 +215,7 @@ Make every AI session **bounded**, **auditable**, and **non-hallucinatory** by f
 
 ## Autonomous build charter (blueprint → house)
 
-**Principle:** Once a feature or product is **fully specified** in SSOT (amendment + manifest + readiness gates + acceptance checks), execution proceeds **without standing approvals**. The human is the architect; agents are the crew. Interruptions are **exceptions only**.
-
-**Adam is pulled in only when all of the following have been tried and failed:**
-
-1. **Blueprint defect** — SSOT contradicts itself, omits a required interface, or fails its own readiness gates (then fix the blueprint first; do not improvise).
-2. **Capability gap** — No API, no credential, no legal path, or no safe automation exists yet (then either build the capability or record a scoped decision).
-3. **Consensus deadlock** — The council / multi-model consensus protocol returns **unresolved conflict** on a material question (then human chooses; log receipt).
-4. **External research exhausted** — For “how does the industry do X?” or “what broke?”, agents must run **documented web research** (sources, dates) and atta
+**Principle:** Once a feature or product is **fully specified** in SSOT (amendment + manifest + readiness gates + acceptance check
 
 ## Amendment 21 — Agent Handoff Notes region
 

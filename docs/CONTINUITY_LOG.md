@@ -32,6 +32,15 @@
 
 ---
 
+## [PLAN] Update 2026-05-01 #8 — Lens D: Adam as governing lens (in the lineage forever)
+
+### Files changed
+- `docs/SUPERVISOR_CONSEQUENCE_LENS.md` — **Lens D**: mandatory escalation zones, fair questioning, tactical delegation only under receipts; stewardship **THINK**, not millennium prophecy.
+- `prompts/00-LIFEOS-AGENT-CONTRACT.md`, `AMENDMENT_21` epistemic contract **¶8**, `QUICK_LAUNCH`, `BUILDER_COMPOUND_IMPROVEMENT_LOOP`, `lifeos-builder-supervisor`.
+
+### Next agent
+If a path **removes Adam from decisions**, require **Council + receipts** (§2.6 ¶8) — do not silently “protect his time.”
+
 ## [BUILD] Update 2026-05-01 #7 — Supervisor Lens C (prior art + industry, improve-don’t-copy)
 
 ### Files changed

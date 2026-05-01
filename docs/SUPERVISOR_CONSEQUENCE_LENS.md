@@ -1,4 +1,4 @@
-# Supervisor lens — consequences, future-back, prior art, and industry learning
+# Supervisor lens — consequences, future-back, prior art, industry learning, **and Adam (governing lens)**
 
 **Purpose:** Optional questions the **Conductor / supervisor** (human or agent) applies when a slice is **load-bearing**: architecture, new autonomy, money, data, trust, or anything hard to undo. **Not** a mandatory gate on every commit — **discretion** avoids token waste and ceremony fatigue.
 
@@ -84,9 +84,35 @@ After C1 + C2:
 
 ---
 
+## Lens D — Adam as governing lens (vision-holder, permanent in the loop)
+
+**Adam is part of the system by design**, not as decoration. Agents and automation must earn **his** alignment on choices that bear on **his direction**, **constraints**, or **meaning** — not outsource “what Adam would want” to vibes.
+
+**THINK:** No one gets **literal KNOW** about centuries or millennia ahead; we **can** architect for **durability**: receipts, SSOT amendments, council records, honest handoffs, and escalation paths so **future operators inheriting this lineage** retain **sovereignty and truth** (North Star §2.6 / user sovereignty framing).
+
+Answer briefly.
+
+### D1 — When must we **obtain correct input from Adam** (not infer)?
+
+1. **Strategic ambiguity** — the ask could mean more than one build; naming is incomplete; direction conflicts with backlog or NSSOT priorities → **STOP** and ask in plain language (**§2.15** clarity / **HALT** with blocker).
+2. **Value / boundary crossings** — consent, intimacy, coercion risk, minors, finances over threshold, autonomy that sends or spends on Adam’s behalf, anything that trades **truth** or **agency** → **explicit Adam lane** unless SSOT already **pre-ratified** the policy.
+3. **Irreversibility or law** — one-way migrations, deletes, contractual exposure, constitutional SSOT edits → **Adam-shaped decision** documented (receipt).
+
+### D2 — **Correct answers**: how to engage Adam fairly
+
+4. **No trick questions** — give **two or three labeled options**, **tradeoffs**, and **your KNOW / THINK / GUESS** so he can delegate without misunderstanding.
+5. **Default is not concealment** — if the cheap path skips his attention and **might** contradict his stated direction, surface it in **§2.11b** or a **focused ask** instead of burying under implementation detail (**§2.6** forbids omission that misleads).
+
+### D3 — What the stack does **instead** so Adam is spared **lower-level noise**
+
+6. **Tactical offload** — let **builder, verifiers, council on technical forks, and deterministic checks** absorb detail **when SSOT clearly covers** policy and risk is bounded; **tell Adam** “we automated X under rule Y.”
+7. **Guardrails** — if an agent proposes to **narrow** escalation to Adam (e.g. “don’t bother him”), treat that as **stop-the-line** unless **Council + receipts** justified it (**§2.6 ¶8**).
+
+---
+
 ## Outputs (keep lightweight)
 
-- **§2.11b / session close:** Add a short **“Consequence lens (optional)”** paragraph when you used the lens — include **prior art / industry** as **THINK** with links if you used Lens C2 — or one line **“Lens skipped: low-stakes slice.”**
+- **§2.11b / session close:** Add a short **“Consequence lens (optional)”** paragraph when you used the lens — include **prior art / industry** as **THINK** with links if you used Lens C2; if Lens D applies, note **whether Adam was asked** or **correctly spared** under which SSOT/rule — or one line **“Lens skipped: low-stakes slice.”**
 - **Heavy forks:** Prefer **recorded** debate (`AMENDMENT_01`, `run-council`) over a single model answering the questions alone.
 
 ## Tooling
