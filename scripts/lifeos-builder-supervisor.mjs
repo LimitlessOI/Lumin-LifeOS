@@ -12,6 +12,7 @@
  *   npm run lifeos:builder:supervise
  *   npm run lifeos:builder:supervise -- --model gemini_flash
  *   npm run lifeos:builder:supervise -- --skip-doc
+ *   npm run lifeos:builder:supervise -- --probe-only --consequence-lens   # optional premortem Qs (no API spend)
  *   npm run lifeos:builder:supervise -- --overnight --overnight-max 2   # after smoke passes, run overnight queue
  *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
@@ -262,6 +263,13 @@ async function verifyDocSmoke(repoPath) {
 //   - "builder is healthy" without evidence = forbidden (§2.6 ¶3)
 //   - gap DB rows = RECEIPT-tier (facts from prior failures, not live probes)
 
+function printConsequenceLensReminder() {
+  console.log('\n--- Optional lens: unintended consequences + 2-year-back ---');
+  console.log('Docs: docs/SUPERVISOR_CONSEQUENCE_LENS.md (supervisor decides when — not every slice)');
+  console.log('Unintended: harm at scale? 30–90d second-order effects? vendor/keys? incentives to cut corners? strongest residue risk?');
+  console.log('2-year-back: wish we had done X today? cheap receipt we skipped? institutional memory for cold agents? need run-council?');
+}
+
 async function analyzeBuilderGaps() {
   if (!key) return;
   try {
@@ -324,6 +332,7 @@ async function main() {
   const runOvernight = hasFlag('--overnight');
   const overnightMax = argValue('--overnight-max', process.env.OVERNIGHT_MAX || '2');
   const probeOnly = hasFlag('--probe-only');
+  const consequenceLens = hasFlag('--consequence-lens');
 
   console.log(`Supervisor base: ${base}`);
   console.log(`Supervisor model: ${model}`);
@@ -335,6 +344,7 @@ async function main() {
     console.log(`KNOW: /ready HTTP 200 — commitToGitHub=${Boolean(readyJson?.builder?.commitToGitHub)} council=${Boolean(readyJson?.builder?.callCouncilMember)}`);
     console.log('NOT-PROVEN: council output quality, output correctness, or platform stability under load — probe does not test these.');
     await analyzeBuilderGaps();
+    if (consequenceLens) printConsequenceLensReminder();
     return;
   }
 
@@ -409,6 +419,7 @@ async function main() {
     `Residue risk: Re-run after deploy if /gaps showed old patterns (asterisk-params, markers) — confirm gap counts drop.`,
   );
   console.log(`Next: npm run lifeos:builder:supervise -- --model ${model}  |  Overnight: same + --overnight`);
+  if (consequenceLens) printConsequenceLensReminder();
 
   if (runOvernight) {
     console.log(`\nChaining overnight runner (max ${overnightMax})...`);

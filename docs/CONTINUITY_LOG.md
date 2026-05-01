@@ -32,6 +32,20 @@
 
 ---
 
+## [PLAN] Update 2026-05-01 #6 — Optional consequence + “two-year-back” supervisor lens
+
+### Files changed
+- `docs/SUPERVISOR_CONSEQUENCE_LENS.md` — discretionary when-to-use rubric; Lens A unintended consequences; Lens B premortem; outputs (§2.11b / council).
+- `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md` + `docs/QUICK_LAUNCH.md` — links + execution-protocol bullet.
+- `scripts/lifeos-builder-supervisor.mjs` — `--consequence-lens` prints short reminder (no API).
+- `AMENDMENT_21` receipts + Platform handoff; manifest tail.
+
+### State after this session
+Adam gets **structured regret / second-order thinking** without making it mandatory on every trivial commit — aligns with §2.6 honest reporting and §2.11b residue risk.
+
+### Next agent: start here
+Use the lens after **large** autonomy, **schema/billing/auth** changes, or **relaxing verifiers**; skip for typos/docs-only/low-risk.
+
 ## [FIX] Update 2026-05-01 #5 — Consensus protocol finder + truthful supervisor close
 
 ### Files changed

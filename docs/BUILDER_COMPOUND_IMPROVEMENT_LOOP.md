@@ -43,6 +43,10 @@ Cold agents rely on these; omitting Step 3 is **drift**.
 
 Related: **`docs/AUTONOMY_SUPERVISION_RUNBOOK.md`**, **`docs/BUILDER_24_7_ALPHA_CHECKLIST.md`**, **`docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md`** (§2.6 + Am.39 evidence ladder + KNOW/THINK boundaries for daemon/probe), **`prompts/lifeos-council-builder.md`** (compound section).
 
+## Optional — consequence lens (supervisor discretion)
+
+For **load-bearing** slices only, the supervisor **may** apply **`docs/SUPERVISOR_CONSEQUENCE_LENS.md`**: unintended-consequence questions plus a **“two years forward, looking back”** premortem. **Optional** — avoids ceremony on trivia; **use judgment** when tradeoffs touch safety, money, irreversibility, or autonomy. **`npm run lifeos:builder:supervise -- --probe-only --consequence-lens`** prints a no-API-cost reminder.
+
 ## Truth / reliability (not optional)
 
 Every slice must **classify** what is **KNOW** vs **THINK** vs **not proven** for load-bearing statements (North Star **§2.6**). Autonomous logs now carry **`reliability_cues`** in `data/builder-daemon-log.jsonl` — narrative in the bridge doc above. **Platform “memory” of whether the system is trustworthy** belongs in **AmendMENT 39** (`epistemic_facts` + evidence), not vibes.
