@@ -41,6 +41,7 @@ docs/THREAD_REALITY/outputs/**
 # Machine-generated builder preflight audit (may contain deploy hostname; never secrets)
 data/builder-preflight-log.jsonl
 data/builder-overnight-log.jsonl
+data/builder-overnight-last-run.json
 data/builder-daemon-log.jsonl
 data/builder-daemon-state.json
 data/builder-daemon.lock

@@ -32,6 +32,7 @@ const DATA_DIR = path.join(ROOT, "data");
 const STATE_PATH = path.join(DATA_DIR, "builder-daemon-state.json");
 const LOG_PATH = path.join(DATA_DIR, "builder-daemon-log.jsonl");
 const LOCK_PATH = path.join(DATA_DIR, "builder-daemon.lock");
+const OVERNIGHT_LAST_RUN_PATH = path.join(DATA_DIR, "builder-overnight-last-run.json");
 const MEMORY_BASE = (
   process.env.BUILDER_BASE_URL ||
   process.env.PUBLIC_BASE_URL ||
@@ -106,6 +107,27 @@ function normalizeFailureSignature(phase, reason = "") {
 
 async function ensureDataDir() {
   await fsPromises.mkdir(DATA_DIR, { recursive: true });
+}
+
+async function readOvernightLastRun() {
+  try {
+    const raw = await fsPromises.readFile(OVERNIGHT_LAST_RUN_PATH, "utf8");
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+/** Small receipt for `overnight_result` JSONL (full body in `data/builder-overnight-last-run.json`). */
+function pickOvernightThroughputReceipt(row) {
+  if (!row || typeof row !== "object") return null;
+  return {
+    idle_slice: Boolean(row.idle_slice),
+    build_commits: Number(row.build_commits || 0),
+    build_attempts: Number(row.build_attempts || 0),
+    build_wall_ms_sum: Number(row.build_wall_ms_sum || 0),
+    runner_wall_ms: Number(row.runner_wall_ms || 0),
+  };
 }
 
 async function appendLog(event, payload = {}) {
@@ -291,12 +313,23 @@ async function releaseLock() {
   await fsPromises.unlink(LOCK_PATH).catch(() => {});
 }
 
-async function deadlineExceeded(cycleNo) {
+async function deadlineExceeded(cycleNo, sessionThroughput) {
   if (!runDeadlineMs || Date.now() < runDeadlineMs) return false;
+  const st = sessionThroughput;
+  const wallMin =
+    st?.wallStartedMs != null ? Math.round(((Date.now() - st.wallStartedMs) / 60000) * 100) / 100 : null;
   await appendLog("daemon_run_limit_reached", {
     runForMin,
     cycleNo,
     deadlineIso: new Date(runDeadlineMs).toISOString(),
+    KNOW_session_wall_clock_min: wallMin,
+    KNOW_session_build_commits_total: st?.buildCommitsTotal ?? null,
+    KNOW_session_overnight_idle_slices: st?.overnightIdleSlices ?? null,
+    KNOW_session_build_wall_ms_total: st?.buildWallMsTotal ?? null,
+    THINK_load_factor:
+      wallMin != null && st?.buildWallMsTotal != null && wallMin > 0
+        ? `approx ${Math.round((st.buildWallMsTotal / (wallMin * 60000)) * 100)}% of wall minutes spent inside /build HTTP waits (not supervise/sleep)`
+        : null,
     reliability_cues: reliabilityCue({
       event: "daemon_run_limit_reached",
       KNOW: "operator_bounded_session_wall_clock_elapsed_clean_exit_scheduled",
@@ -305,7 +338,7 @@ async function deadlineExceeded(cycleNo) {
   return true;
 }
 
-async function runCycle(cycleNo) {
+async function runCycle(cycleNo, sessionThroughput) {
   const previousState = await readState();
   const shouldForceFull =
     superviseMode === "probe" &&
@@ -417,12 +450,35 @@ async function runCycle(cycleNo) {
     "--max",
     String(overnightMax),
   ]);
+  const overnightLastRunFull = await readOvernightLastRun();
+  const throughputPick = pickOvernightThroughputReceipt(overnightLastRunFull);
+  if (sessionThroughput && throughputPick) {
+    sessionThroughput.buildCommitsTotal += throughputPick.build_commits;
+    sessionThroughput.buildWallMsTotal += throughputPick.build_wall_ms_sum;
+    if (throughputPick.idle_slice) {
+      sessionThroughput.overnightIdleSlices += 1;
+      await appendLog("daemon_bounded_session_idle_slice", {
+        cycleNo,
+        runForMin,
+        overnightMax,
+        KNOW: "overnight_last_run reports idle_slice queue_slice_empty or equivalent — no Railway /build this cycle",
+        operator_remedy: [
+          "Add tasks to docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json",
+          "Or reset data/builder-overnight-cursor.*.json when you intend a full re-pass",
+          "Bounded runs default OVERNIGHT_CURSOR_WRAP=1 so the JSON queue recycles unless you export OVERNIGHT_CURSOR_WRAP=0",
+        ],
+        reliability_cues: reliabilityCue({ event: "daemon_bounded_session_idle_slice" }),
+      }).catch(() => {});
+    }
+  }
   await appendLog("overnight_result", {
     cycleNo,
     ok: overnight.ok,
     exitCode: overnight.exitCode,
     elapsedMs: overnight.elapsedMs,
     stderr: overnight.stderr,
+    overnightThroughput: throughputPick,
+    overnightLastRunRelative: "data/builder-overnight-last-run.json",
     reliability_cues: reliabilityCue({
       event: "queue_result",
       KNOW_if_ok: "queue_runner_script_exit_zero_may_include_overnight_idle",
@@ -456,6 +512,21 @@ async function main() {
   });
 
   if (process.env.OVERNIGHT_USE_CURSOR === undefined) process.env.OVERNIGHT_USE_CURSOR = "1";
+  // Multi-hour wall-clock sessions: recycle the JSON queue when the cursor reaches the end —
+  // otherwise `overnight` exits in milliseconds for every later cycle (idle slice).
+  if (runForMin > 0 && process.env.OVERNIGHT_CURSOR_WRAP === undefined) {
+    process.env.OVERNIGHT_CURSOR_WRAP = "1";
+  }
+
+  const sessionThroughput =
+    runForMin > 0
+      ? {
+          wallStartedMs: Date.now(),
+          buildCommitsTotal: 0,
+          overnightIdleSlices: 0,
+          buildWallMsTotal: 0,
+        }
+      : null;
 
   await appendLog("daemon_start", {
     mode: "24_7",
@@ -469,6 +540,7 @@ async function main() {
     superviseFullEvery,
     queueLane: queueLane || null,
     overnightUseCursor: process.env.OVERNIGHT_USE_CURSOR,
+    OVERNIGHT_CURSOR_WRAP: process.env.OVERNIGHT_CURSOR_WRAP,
     BUILDER_DAEMON_CONSEQUENCE_LENS: consequenceLens,
     runForMin: runForMin || null,
     runDeadlineIso: runDeadlineMs ? new Date(runDeadlineMs).toISOString() : null,
@@ -488,7 +560,7 @@ async function main() {
   while (true) {
     cycleNo += 1;
     const startedAt = Date.now();
-    const result = await runCycle(cycleNo);
+    const result = await runCycle(cycleNo, sessionThroughput);
     const state = await readState();
 
     if (result.ok) {
@@ -541,7 +613,7 @@ async function main() {
         memoryReceipt,
       });
       if (ONCE) break;
-      if (await deadlineExceeded(cycleNo)) break;
+      if (await deadlineExceeded(cycleNo, sessionThroughput)) break;
       await sleep(Math.max(1, intervalMin) * 60 * 1000);
       continue;
     }
@@ -620,7 +692,7 @@ async function main() {
       memoryReceipt,
     });
     if (ONCE) break;
-    if (await deadlineExceeded(cycleNo)) break;
+    if (await deadlineExceeded(cycleNo, sessionThroughput)) break;
     await sleep(Math.max(1, failSleepMin) * 60 * 1000);
   }
 

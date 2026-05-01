@@ -12,6 +12,9 @@
  *   npm run lifeos:builder:overnight -- --sleep-ms 3000
  *   npm run lifeos:builder:overnight -- --redeploy-after-success
  *
+ * Throughput receipt (daemon / operators): `data/builder-overnight-last-run.json` —
+ * build_commits, build_wall_ms_sum, runner_wall_ms, idle_slice.
+ *
  * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
  */
 
@@ -27,6 +30,7 @@ const execFileAsync = promisify(execFile);
 const ROOT = process.cwd();
 const DEFAULT_TASKS_PATH = join(ROOT, 'docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json');
 const LOG_PATH = join(ROOT, 'data/builder-overnight-log.jsonl');
+const LAST_RUN_PATH = join(ROOT, 'data/builder-overnight-last-run.json');
 const LEGACY_CURSOR_PATH = join(ROOT, 'data', 'builder-overnight-cursor.json');
 
 function retryableReady(status) {
@@ -226,6 +230,40 @@ async function logLine(obj) {
   console.log(line.trimEnd());
 }
 
+/** Machine receipt for daemon / operators — wall clock vs `/build` time (answers “was 7h busy?”). */
+async function persistLastRun(payload) {
+  const body = {
+    schema_version: 'builder_overnight_last_run_v1',
+    finished_at: new Date().toISOString(),
+    ...payload,
+  };
+  await writeFile(LAST_RUN_PATH, `${JSON.stringify(body, null, 2)}\n`, 'utf8').catch(() => {});
+}
+
+function baseLastRunSkeleton({
+  lane,
+  tasksPath,
+  cursorPath,
+  wrap,
+  useCursor,
+  taskCount,
+  startIdx,
+  sliceMax,
+  selectedLength,
+}) {
+  return {
+    lane,
+    tasks_path_relative: tasksPath.replace(`${ROOT}/`, ''),
+    cursor_path_relative: cursorPath.replace(`${ROOT}/`, ''),
+    wrap_cursor: wrap,
+    use_cursor: useCursor,
+    task_json_count: taskCount,
+    slice_start_idx: startIdx,
+    slice_requested_max: sliceMax,
+    slice_selected_count: selectedLength,
+  };
+}
+
 async function main() {
   const dry = hasFlag('--dry-run');
   const max = parseInt(argValue('--max', process.env.OVERNIGHT_MAX || ''), 10) || 999;
@@ -289,7 +327,35 @@ async function main() {
 
   if (!key) throw new Error('COMMAND_CENTER_KEY (or alias) required for overnight builds');
 
+  const runnerT0 = Date.now();
+  const skeleton = () =>
+    baseLastRunSkeleton({
+      lane,
+      tasksPath,
+      cursorPath,
+      wrap,
+      useCursor,
+      taskCount: tasks.length,
+      startIdx,
+      sliceMax: max,
+      selectedLength: selected.length,
+    });
+
   if (selected.length === 0) {
+    const wallMs = Date.now() - runnerT0;
+    await persistLastRun({
+      ...skeleton(),
+      ok: true,
+      runner_exit_code: 0,
+      idle_slice: true,
+      idle_reason: 'queue_slice_empty',
+      build_attempts: 0,
+      build_commits: 0,
+      build_wall_ms_sum: 0,
+      runner_wall_ms: wallMs,
+      throughput_note:
+        'Slice empty — daemon cycle can finish in milliseconds. For multi-hour sessions add JSON tasks, reset cursor, or enable OVERNIGHT_CURSOR_WRAP=1 (bounded daemon sets this by default).',
+    });
     await logLine({
       event: 'overnight_idle',
       lane,
@@ -297,6 +363,8 @@ async function main() {
       reason: 'queue_slice_empty',
       startIdx,
       taskCount: tasks.length,
+      runner_wall_ms: wallMs,
+      last_run_path_relative: LAST_RUN_PATH.replace(`${ROOT}/`, ''),
       hint: `All tasks in JSON done for this cursor — add tasks or delete ${cursorPath.replace(`${ROOT}/`, '')} or set OVERNIGHT_CURSOR_WRAP=1`,
     });
     console.log('\n📭 Overnight: slice empty (no /build spend). Exit 0.');
@@ -308,6 +376,9 @@ async function main() {
   await logLine({ event: 'overnight_start', lane, tasks_path: tasksPath, base, count: selected.length, startIdx });
 
   let failed = false;
+  let buildAttempts = 0;
+  let buildCommits = 0;
+  let buildWallMsSum = 0;
   for (let i = 0; i < selected.length; i++) {
     const task = selected[i];
     const id = task.id;
@@ -329,14 +400,29 @@ async function main() {
       task_force_model: task.force_model === true,
     });
     try {
+      buildAttempts += 1;
+      const bw0 = Date.now();
       const { res, json, ok, modelResolution } = await runBuild(task);
+      buildWallMsSum += Date.now() - bw0;
       if (!ok) {
         failed = true;
         await logLine({ event: 'task_fail', lane, id, http: res.status, model_resolution: modelResolution, json });
         console.error(JSON.stringify(json, null, 2));
         console.error(`\nStopped after failure: ${id}. Fix gaps, redeploy if needed, then resume with --start <index>.`);
+        await persistLastRun({
+          ...skeleton(),
+          ok: false,
+          runner_exit_code: 1,
+          idle_slice: false,
+          failed_task_id: id,
+          build_attempts: buildAttempts,
+          build_commits: buildCommits,
+          build_wall_ms_sum: buildWallMsSum,
+          runner_wall_ms: Date.now() - runnerT0,
+        });
         process.exit(1);
       }
+      buildCommits += 1;
       await logLine({
         event: 'task_ok',
         lane,
@@ -353,6 +439,18 @@ async function main() {
       failed = true;
       await logLine({ event: 'task_error', lane, id, error: err.message });
       console.error(err);
+      await persistLastRun({
+        ...skeleton(),
+        ok: false,
+        runner_exit_code: 1,
+        idle_slice: false,
+        failed_task_id: id,
+        build_attempts: buildAttempts,
+        build_commits: buildCommits,
+        build_wall_ms_sum: buildWallMsSum,
+        runner_wall_ms: Date.now() - runnerT0,
+        error: err.message,
+      });
       process.exit(1);
     }
   }
@@ -363,7 +461,26 @@ async function main() {
       await persistCursor(cursorPath, next);
       await logLine({ event: 'cursor_advanced', lane, nextStartIndex: next, sliceStart: startIdx, ran: selected.length });
     }
-    await logLine({ event: 'overnight_complete', lane, ok: true });
+    await persistLastRun({
+      ...skeleton(),
+      ok: true,
+      runner_exit_code: 0,
+      idle_slice: false,
+      build_attempts: buildAttempts,
+      build_commits: buildCommits,
+      build_wall_ms_sum: buildWallMsSum,
+      runner_wall_ms: Date.now() - runnerT0,
+      build_ms_per_commit_avg:
+        buildCommits > 0 ? Math.round(buildWallMsSum / buildCommits) : null,
+    });
+    const totalWall = Date.now() - runnerT0;
+    await logLine({
+      event: 'overnight_complete',
+      lane,
+      ok: true,
+      build_commits: buildCommits,
+      runner_wall_ms: totalWall,
+    });
     console.log('\n✅ Overnight queue batch finished OK. Pull origin/main and review commits + grade in the morning.');
     if (redeployAfter && process.env.SKIP_AFTER_BUILD_REDEPLOY !== '1') {
       console.log('\n📤 Running npm run system:railway:redeploy …');

@@ -833,5 +833,5 @@
     ]
   },
   "last_updated": "2026-05-01",
-  "ssot_receipt_tail": "daemon consequence lens + SUPERVISOR_GAPS_* lookback; full-run gap analyze"
+  "ssot_receipt_tail": "overnight last-run throughput + bounded wrap-default; KNOW_session_* totals"
 }

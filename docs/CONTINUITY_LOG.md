@@ -32,6 +32,20 @@
 
 ---
 
+## [BUILD] Update 2026-04-30 #12 — Overnight throughput receipts + bounded session queue recycle
+
+### Files changed
+- `scripts/lifeos-builder-overnight.mjs` — **`data/builder-overnight-last-run.json`** (`idle_slice`, `build_commits`, wall ms).
+- `scripts/lifeos-builder-daemon.mjs` — merge into **`overnight_result`** · **`daemon_bounded_session_idle_slice`** · **`KNOW_session_*`** on **`daemon_run_limit_reached`**; **`OVERNIGHT_CURSOR_WRAP=1`** when **`--run-for-min`** and unset.
+- `package.json` — **`daemon:7h`** **15 min** · **`overnight-max 12`** · `.gitignore` last-run artifact · **`BUILDER_OPERATOR_ENV.md`**.
+
+### State / operator truth
+- **Root cause:** “7 hours” was **daemon sleep**, not **`/build` duration** — JSON queue exhausted → **milliseconds** overnight exits.
+### Next agent
+- After deploy: restart **`lifeos:builder:daemon:7h`**; skim **`daemon_run_limit_reached`** **`KNOW_session_build_commits_total`** vs **420 min**.
+
+---
+
 ## [BUILD] Update 2026-04-30 #11 — Daemon: consequence lens; supervisor: gaps lookback env/CLI
 
 ### Files changed

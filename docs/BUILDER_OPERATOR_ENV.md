@@ -74,9 +74,16 @@ Prefer **`probe`** supervise between cycles to save council tokens (**`BUILDER_D
 |-----------|---------|
 | CLI | `--run-for-min 420` (~7h from process start; checks after each cycle before sleeping) |
 | Env | **`BUILDER_DAEMON_RUN_FOR_MIN=420`** |
-| NPM shortcut | **`npm run lifeos:builder:daemon:7h`** — preset **420 min**, **18** min interval, **3** tasks/cycle |
+| NPM shortcut | **`npm run lifeos:builder:daemon:7h`** — preset **420 min**, **15** min interval, **12** `/build`s max per daemon cycle (**`--overnight-max`**) |
 
 Queue JSON: **`docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`** (dashboard lane). Inspect **`data/builder-daemon-log.jsonl`** and **`GET …/builder/gaps`** for failures → next platform fixes.
+
+**Clock time ≠ Railway work.** When **`OVERNIGHT_USE_CURSOR`** advanced past the JSON tail (or **`selected.length===0`**), **`lifeos-builder-overnight`** returned **instantly** (~_ms) — hence a “**7 hour** runner” burning **almost no **`/build`**. Receipts:
+
+- **`data/builder-overnight-last-run.json`** — **`build_commits`**, **`build_wall_ms_sum`**, **`runner_wall_ms`**, **`idle_slice`** (ignored if unset).
+- **`daemon_run_limit_reached`** JSONL lines include **`KNOW_session_*`** aggregates for bounded (`--run-for-min`) exits.
+
+For bounded **`--run-for-min`**, the daemon **defaults** **`OVERNIGHT_CURSOR_WRAP=1`** if unset so the cursor **loops the JSON lane** instead of permanently idling (**opt-out:** **`OVERNIGHT_CURSOR_WRAP=0`** — then you **must** add JSON tasks / reset **`data/builder-overnight-cursor.*.json`**).
 
 Ensure **`PUBLIC_BASE_URL`** + **`COMMAND_CENTER_KEY`** are exported (`npm run builder:preflight` exit **0**) before leaving this unattended.
 
