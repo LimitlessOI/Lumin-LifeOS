@@ -833,5 +833,5 @@
     ]
   },
   "last_updated": "2026-05-01",
-  "ssot_receipt_tail": "dashboard-theme-foundation CSS (lifeos-dashboard-tokens.css); autoWire register FS mirror; builder runtime FS mirror; tsos:doctor gaps; overnight sleep+redeploy"
+  "ssot_receipt_tail": "/ready no-store cache + codegen deploy_commit_sha + builder.codegen_policy_revision (2026-05-01a); prior dashboard-theme-foundation; autoWire mirror; overnight"
 }

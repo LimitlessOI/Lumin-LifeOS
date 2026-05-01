@@ -9,7 +9,7 @@
  * nothing is auto-committed.
  *
  * Routes:
- *   GET  /api/v1/lifeos/builder/ready           server-side builder readiness (commit + council + pool + auth mode)
+ *   GET  /api/v1/lifeos/builder/ready           server-side readiness (commit + council + pool + auth); **`Cache-Control: no-store`**; **`codegen`** (policy_revision, max_output_tokens body flag, optional deploy_commit_sha); **`builder.codegen_policy_revision`** mirrors policy for nested-only parsers
  *   GET  /api/v1/lifeos/builder/domains         list available domain prompt files
  *   GET  /api/v1/lifeos/builder/domain/:name    read a specific domain prompt file
  *   GET  /api/v1/lifeos/builder/next-task      cold-start packet excerpts + read order
@@ -42,7 +42,7 @@ const PROMPTS_DIR = join(__dirname, '..', 'prompts');
 const REPO_ROOT = join(__dirname, '..');
 
 /** Bumped when builder codegen/token policy semantics change; operators compare GET /builder/ready to git main. */
-const BUILDER_CODEGEN_POLICY_REVISION = '2026-04-30e';
+const BUILDER_CODEGEN_POLICY_REVISION = '2026-05-01a';
 
 const METADATA_SEP = '\n---METADATA---\n';
 const REMOTE_SYSTEM_TRUTH = 'System truth is remote: GitHub=source, Railway=runtime, Neon=data. Local shell/repo are workbench mirrors only.';
@@ -307,16 +307,25 @@ export function createLifeOSCouncilBuilderRoutes({
   // ── GET /ready — machine-readable "can the system build & commit?" (for preflight + operators)
 
   function getBuilderReady(req, res) {
+    res.setHeader('Cache-Control', 'private, no-store, max-age=0');
     const anyAuthKey = Boolean(
       process.env.API_KEY || process.env.LIFEOS_KEY || process.env.COMMAND_CENTER_KEY
     );
+    const deployCommitShaRaw =
+      process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || process.env.VERCEL_GIT_COMMIT_SHA || '';
+    const deployCommitSha =
+      typeof deployCommitShaRaw === 'string' && /^[a-fA-F0-9]{7,40}$/.test(deployCommitShaRaw.trim())
+        ? deployCommitShaRaw.trim().slice(0, 40)
+        : null;
+    const codegen = {
+      policy_revision: BUILDER_CODEGEN_POLICY_REVISION,
+      supports_max_output_tokens_body: true,
+      html_output_estimator: 'v2_linear_chars_1_85',
+      ...(deployCommitSha ? { deploy_commit_sha: deployCommitSha } : {}),
+    };
     res.json({
       ok: true,
-      codegen: {
-        policy_revision: BUILDER_CODEGEN_POLICY_REVISION,
-        supports_max_output_tokens_body: true,
-        html_output_estimator: 'v2_linear_chars_1_85',
-      },
+      codegen,
       builder: {
         commitToGitHub: typeof commitToGitHub === 'function',
         /** Token present on the server; without it, commitToGitHub usually throws on use. */
@@ -324,6 +333,8 @@ export function createLifeOSCouncilBuilderRoutes({
         callCouncilMember: typeof callCouncilMember === 'function',
         pool: Boolean(pool?.query),
         lclMonitor: Boolean(lclMonitor),
+        /** Same string as codegen.policy_revision — nested for clients that only read `builder`. */
+        codegen_policy_revision: BUILDER_CODEGEN_POLICY_REVISION,
       },
       server: {
         auth: anyAuthKey ? 'key_required' : 'open',
