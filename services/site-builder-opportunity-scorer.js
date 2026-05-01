@@ -83,6 +83,18 @@ export function createOpportunityScorer(options = {}) {
       // Chain/franchise signal — high score on a chain isn't a real opportunity
       const isChain = /(find\s+a\s+location|locations?\s+near|find\s+a\s+studio|franchise|franchisee|corporate\s+office|\d+\+?\s+locations)/i.test(html);
 
+      // SPA/unreachable detection — if the page served minimal content we can't meaningfully score it
+      // Signals: framework markers, OR very fast + thin (CDN block / bot detection / redirect shell)
+      const looksLikeSpaShell = html.length < 8000 && (
+        /<div\s+id=["'](root|app|main)["']/i.test(html)
+        || /<script\s+type=["']module["']/i.test(html)
+        || (html.match(/<script\s+src=/gi) || []).length >= 3
+        || (/next\.js|__next|gatsby|_nuxt|svelte|react-dom/i.test(html))
+      );
+      // Also flag: extremely fast response with thin content = CDN serving a shell or blocking bots
+      const looksBlocked = html.length < 3000 && responseTimeMs !== null && responseTimeMs < 200;
+      const isSpa = looksLikeSpaShell || looksBlocked;
+
       // Score: each check worth points when BAD (total possible ~100)
       const checks = [
         { active: slow,           points: 15, pain: `Site loads in ${responseTimeMs}ms — most visitors leave after 3s`, strength: null },
@@ -101,9 +113,12 @@ export function createOpportunityScorer(options = {}) {
 
       const rawScore = checks.reduce((sum, c) => sum + (c.active ? c.points : 0), 0);
       const maxScore = checks.reduce((sum, c) => sum + c.points, 0);
-      // Chain/franchise businesses already have web agencies — cap their score at 30
+      // SPA sites can't be scored accurately — cap at 20 and flag it
+      // Chain/franchise businesses already have web agencies — cap at 30
       const baseScore = Math.min(100, Math.round((rawScore / maxScore) * 100));
-      const opportunityScore = isChain ? Math.min(baseScore, 30) : baseScore;
+      const opportunityScore = isSpa ? Math.min(baseScore, 20)
+        : isChain ? Math.min(baseScore, 30)
+        : baseScore;
 
       const grade = opportunityScore >= 80 ? 'F'
         : opportunityScore >= 60 ? 'D'
@@ -111,8 +126,12 @@ export function createOpportunityScorer(options = {}) {
         : opportunityScore >= 20 ? 'B'
         : 'A';
 
-      const painPoints = checks.filter(c => c.active).map(c => c.pain);
+      let painPoints = checks.filter(c => c.active).map(c => c.pain);
       const strengths = checks.filter(c => !c.active && c.strength).map(c => c.strength);
+
+      if (isSpa) {
+        painPoints = ['Site uses JavaScript rendering — analysis is limited without browser execution (may be a large brand or SPA)'];
+      }
 
       const recommendation = opportunityScore >= 80
         ? 'This business urgently needs a modern website — their current site is likely hurting their revenue.'
@@ -133,6 +152,7 @@ export function createOpportunityScorer(options = {}) {
         recommendation,
         responseTimeMs,
         isChain,
+        isSpa,
         analyzed: true,
         error: null,
       };
