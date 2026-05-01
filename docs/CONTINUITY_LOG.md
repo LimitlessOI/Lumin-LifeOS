@@ -32,6 +32,16 @@
 
 ---
 
+## [BUILD] Update 2026-05-01 #7 — Supervisor Lens C (prior art + industry, improve-don’t-copy)
+
+### Files changed
+- `docs/SUPERVISOR_CONSEQUENCE_LENS.md` — **Lens C**: internal prior art (**/builder/gaps**, SSOT receipts, code, council residue); external industry/regulatory/postmortem (**THINK** until cited); **C3** record improvement delta.
+- `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`, `docs/QUICK_LAUNCH.md`, `scripts/lifeos-builder-supervisor.mjs` — aligned wording + CLI reminder lines.
+- `AMENDMENT_21` receipt + manifest.
+
+### Next agent: start here
+For Lens C2, put **URLs or document titles** in §2.11b closes so claims stay falsifiable.
+
 ## [PLAN] Update 2026-05-01 #6 — Optional consequence + “two-year-back” supervisor lens
 
 ### Files changed

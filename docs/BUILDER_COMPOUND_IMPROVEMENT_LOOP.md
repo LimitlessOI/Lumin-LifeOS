@@ -45,7 +45,7 @@ Related: **`docs/AUTONOMY_SUPERVISION_RUNBOOK.md`**, **`docs/BUILDER_24_7_ALPHA_
 
 ## Optional — consequence lens (supervisor discretion)
 
-For **load-bearing** slices only, the supervisor **may** apply **`docs/SUPERVISOR_CONSEQUENCE_LENS.md`**: unintended-consequence questions plus a **“two years forward, looking back”** premortem. **Optional** — avoids ceremony on trivia; **use judgment** when tradeoffs touch safety, money, irreversibility, or autonomy. **`npm run lifeos:builder:supervise -- --probe-only --consequence-lens`** prints a no-API-cost reminder.
+For **load-bearing** slices only, the supervisor **may** apply **`docs/SUPERVISOR_CONSEQUENCE_LENS.md`**: unintended consequences (A), **two-year-back** premortem (B), plus **prior art & industry learning** (C): internal receipts/gaps/code, external published practice (**THINK** until cited), and **improve-don’t-photocopy** deltas. **Optional** — avoids ceremony on trivia; **use judgment** when tradeoffs touch safety, money, irreversibility, or autonomy. **`npm run lifeos:builder:supervise -- --probe-only --consequence-lens`** prints a no-API-cost reminder.
 
 ## Truth / reliability (not optional)
 

@@ -1,4 +1,4 @@
-# Supervisor lens — unintended consequences and “two years back”
+# Supervisor lens — consequences, future-back, prior art, and industry learning
 
 **Purpose:** Optional questions the **Conductor / supervisor** (human or agent) applies when a slice is **load-bearing**: architecture, new autonomy, money, data, trust, or anything hard to undo. **Not** a mandatory gate on every commit — **discretion** avoids token waste and ceremony fatigue.
 
@@ -43,9 +43,41 @@ Imagine **today’s decision already shipped** and it’s **two years later**. A
 
 ---
 
+## Lens C — How was this solved before? (internal + external)
+
+Use this **with** Lenses A and B: same class of problem may already have a **pattern** somewhere — don’t reinvent without knowing the tradeoffs.
+
+### C1 — Inside this system (highest signal)
+
+Label each **KNOW** only with a **cited path, receipt, or API row**.
+
+1. **Repo / SSOT:** Search **Change Receipts** in the owning **`AMENDMENT_*`**, **`docs/CONTINUITY_LOG*.md`**, and **`prompts/lifeos-*`** for the same failure mode or feature class.
+2. **Builder history:** **`GET /api/v1/lifeos/builder/gaps`** — have we **already** failed here (syntax classes, truncation, wrong model)? What **platform fix** landed?
+3. **Patterns in code:** Ripgrep for the same integration (e.g. webhooks, encryption, council calls) before adding a second divergent implementation.
+4. **What we explicitly decided not to do** — check **gate-change / council** summaries for **minority / residue** arguments; they often predict the regret Lens B surfaces.
+
+### C2 — Outside: other teams and “AI companies” (THINK / GUESS until cited)
+
+Industry moves fast; **web search and single-model memory are not KNOW**. Treat as **THINK** with sources, or **GUESS** if uncited.
+
+1. **Published postmortems & safety reports** — outage writeups, alignment / incident blogs, transparency reports (what broke, what they changed).
+2. **Regulators and standards bodies** — GDPR, AI Act–class guidance, NIST AI RMF, OWASP LLM Top 10-style checklists: what **must** we not ignore for **our** jurisdiction and data classes?
+3. **Product patterns** — human-in-the-loop, rate limits, retrieval grounding, eval harnesses, red-teaming cadence: **what problem does each pattern solve**, and do we have that problem?
+4. **What *not* to copy** — undocumented “it works in their closed garden” behavior, dark patterns, or **synthetic consensus** in chat pretending to be governance.
+
+### C3 — Improve, don’t photocopy
+
+After C1 + C2:
+
+1. **Steal the mechanism, adapt the contract** — e.g. their **eval idea** + our **§2.6 receipts + run-council** for load-bearing forks.
+2. **Name the delta** — one line: *“We adopt X because [problem]; we intentionally differ on Y because [our sovereignty / builder / Neon / Adam’s constraints].”*
+3. **Record it** — so Lens B’s “cold agent repeats the mistake” doesn’t apply: **Change Receipts** or a short **research note** under **`docs/research/`** (no secret values; cite URLs when public).
+
+---
+
 ## Outputs (keep lightweight)
 
-- **§2.11b / session close:** Add a short **“Consequence lens (optional)”** paragraph when you used the lens — or one line **“Lens skipped: low-stakes slice.”**
+- **§2.11b / session close:** Add a short **“Consequence lens (optional)”** paragraph when you used the lens — include **prior art / industry** as **THINK** with links if you used Lens C2 — or one line **“Lens skipped: low-stakes slice.”**
 - **Heavy forks:** Prefer **recorded** debate (`AMENDMENT_01`, `run-council`) over a single model answering the questions alone.
 
 ## Tooling

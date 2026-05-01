@@ -264,10 +264,11 @@ async function verifyDocSmoke(repoPath) {
 //   - gap DB rows = RECEIPT-tier (facts from prior failures, not live probes)
 
 function printConsequenceLensReminder() {
-  console.log('\n--- Optional lens: unintended consequences + 2-year-back ---');
+  console.log('\n--- Optional lens: consequences + future-back + prior art ---');
   console.log('Docs: docs/SUPERVISOR_CONSEQUENCE_LENS.md (supervisor decides when — not every slice)');
-  console.log('Unintended: harm at scale? 30–90d second-order effects? vendor/keys? incentives to cut corners? strongest residue risk?');
-  console.log('2-year-back: wish we had done X today? cheap receipt we skipped? institutional memory for cold agents? need run-council?');
+  console.log('A Unintended: harm at scale? 30–90d effects? vendor/keys? corner incentives? residue risk?');
+  console.log('B 2-year-back: wish we did X today? cheap receipt skipped? SSOT/handoff line? run-council?');
+  console.log('C Prior art: internal gaps/receipts/code + external published practice (THINK til cited); improve-dont-copy; cite URLs in §2.11b');
 }
 
 async function analyzeBuilderGaps() {
