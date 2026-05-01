@@ -32,6 +32,34 @@
 
 ---
 
+## [BUILD] Update 2026-04-30 #21 — Site Builder: full automation loop wired
+
+### Files changed
+- `public/overlay/site-builder-command-center.html` — complete rewrite (builder committed truncated 136-line version with invalid Alpine.js); full Tailwind + Alpine.js 3 operator dashboard: auth modal, 8-card pipeline stats bar, analyze form with opportunity score display, build & send form, prospect table with status update dropdown
+- `services/site-builder-opportunity-scorer.js` — booking detection expanded from 9→30+ platforms; chain/franchise cap (large chains capped at score 30); `isChain` flag in return value
+- `routes/site-builder-routes.js` — added `GET /preview-view` tracking pixel route; added `POST /email-reply-webhook` for Postmark inbound reply auto-detection
+- `services/site-builder.js` — injects tracking pixel before `</body>` in every generated preview site
+- `db/migrations/20260313_site_builder_prospect_pipeline.sql` — added `last_viewed_at TIMESTAMPTZ` column
+- `scripts/site-builder-batch-rank.mjs` — new: batch-scores a JSON list of prospects, sorts by opportunity score DESC, prints color-coded table with chain flag; `npm run site-builder:rank`
+- `scripts/site-builder-pipeline-report.mjs` — new: fetches live dashboard + prospects, prints pipeline funnel with ASCII bars + conversion rates + warm leads list; `npm run site-builder:report`
+- `docs/projects/AMENDMENT_05_SITE_BUILDER.md` — updated header, added 7 change receipt rows
+- `docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json` — added new scripts to owned_files, assertions, required_routes
+
+### State after this session
+- **31/33 verifier checks pass** — only `SITE_BASE_URL` + `EMAIL_FROM` fail (env vars Adam must set in Railway)
+- **Full automation loop wired:** discover → rank → build → send (pending env) → view (auto) → reply (auto) → follow-up cron → report
+- **Pushed to origin/main** — Railway auto-deploy should pick up all commits
+- Builder pipeline report, batch ranker, command center all committed
+
+### Next agent: start here
+- **Adam's task:** Set `POSTMARK_SERVER_TOKEN`, `EMAIL_FROM`, `SITE_BASE_URL` in Railway → enables cold email sending
+- **Adam's task (optional):** Set `POSTMARK_WEBHOOK_TOKEN` + configure Postmark inbound webhook URL → enables auto reply detection
+- **Code task:** Update `prompts/lifeos-site-builder.md` to add the new booking keywords and chain detection so future builder calls generate better opportunity scorer code
+- **Code task:** Consider adding a "test send" UI in the command center that sends to Adam's own email first
+- **Verify:** Run `npm run verify:site-builder` — should be 31/33 pass (env var failures are expected until Railway is configured)
+
+---
+
 ## [BUILD] Update 2026-05-01 #1 — Sync main (rail shipped) + overnight wave-2 queue + push codegen
 
 ### Files changed

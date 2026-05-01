@@ -1,7 +1,7 @@
 # AMENDMENT 05 — Site Builder & Prospect Pipeline
 **Status:** QUALITY-GATED LAUNCH READY — awaiting Railway env vars + live preview verification
 **Authority:** Subordinate to SSOT North Star Constitution
-**Last Updated:** 2026-04-29 — Site Builder now has a manifest/verifier surface (`docs/projects/AMENDMENT_05_SITE_BUILDER.manifest.json`), a public launch/sales page at `public/overlay/site-builder-landing.html`, an operator-runnable follow-up cron at `scripts/site-builder-follow-up-cron.mjs`, a design-intelligence source file at `docs/research/SITE_BUILDER_DESIGN_INTEL_2026_04.md`, and a quality gate via `services/site-builder-quality-scorer.js` that scores/repairs weak output before it reaches prospects. This closes the biggest operational gaps in the lane: day-3/day-7 follow-ups now have an execution path, design quality is governed by an explicit modern best-practices brief, and weak previews can be held for revision instead of being emailed. Prior: 2026-03-13.
+**Last Updated:** 2026-04-30 — Full automation loop now wired: prospect discovery → batch ranking by opportunity score → mock site build → email outreach → view tracking (auto, via pixel) → reply detection (auto, via Postmark webhook) → follow-up cron → pipeline report. New in this session: command center overlay (operator UI), batch ranker script, pipeline analytics report, preview view tracking pixel, Postmark reply webhook, opportunity scorer accuracy upgrade (30+ booking platforms, chain/franchise cap). All 31/33 verifier checks pass; only 2 remaining failures are `SITE_BASE_URL` + `EMAIL_FROM` env vars (Adam sets in Railway to activate email sending).
 
 ---
 
