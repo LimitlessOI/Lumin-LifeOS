@@ -256,6 +256,38 @@ export function createSiteBuilderRoutes(app, { pool, requireKey, callCouncilMemb
   });
 
   /**
+   * GET /api/v1/sites/preview-view
+   * Tracking pixel — called by generated preview sites when a prospect opens them.
+   * No auth required (called from prospect's browser). Returns a 1x1 transparent PNG.
+   * Updates prospect status to 'viewed' if currently 'sent'.
+   */
+  router.get('/preview-view', async (req, res) => {
+    const { id } = req.query;
+    const transparentPng = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+      'base64'
+    );
+    res.set('Content-Type', 'image/png');
+    res.set('Cache-Control', 'no-store');
+    res.send(transparentPng);
+
+    if (!id || !pool) return;
+    try {
+      await pool.query(
+        `UPDATE prospect_sites
+            SET status = 'viewed',
+                last_viewed_at = NOW(),
+                updated_at = NOW()
+          WHERE client_id = $1 AND status IN ('sent', 'built')`,
+        [id]
+      );
+      logger.info('[SITE] Preview viewed', { clientId: id });
+    } catch (err) {
+      logger.warn('[SITE] Preview view DB update failed', { error: err.message });
+    }
+  });
+
+  /**
    * GET /api/v1/sites/pos-partners
    * List POS commission partners and their referral info.
    */

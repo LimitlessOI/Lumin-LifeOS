@@ -121,6 +121,11 @@ export default class SiteBuilder {
       await fs.mkdir(deployDir, { recursive: true });
       await fs.mkdir(path.join(deployDir, 'blog'), { recursive: true });
 
+      // Inject view tracking pixel — when prospect opens preview we auto-mark them as 'viewed'
+      if (this.baseUrl) {
+        const pixel = `<img src="${this.baseUrl}/api/v1/sites/preview-view?id=${clientId}" style="position:absolute;opacity:0;pointer-events:none" width="1" height="1" alt="">`;
+        siteHtml = siteHtml.includes('</body>') ? siteHtml.replace('</body>', `${pixel}\n</body>`) : siteHtml;
+      }
       await fs.writeFile(path.join(deployDir, 'index.html'), siteHtml);
       await fs.writeFile(path.join(deployDir, 'blog', 'index.html'), blogHtml);
       await fs.writeFile(path.join(deployDir, 'sitemap.xml'), sitemap);

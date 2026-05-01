@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS prospect_sites (
 ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS follow_up_count INTEGER DEFAULT 0;
 ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS last_follow_up_at TIMESTAMPTZ;
 ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS last_contacted_at TIMESTAMPTZ;
+ALTER TABLE prospect_sites ADD COLUMN IF NOT EXISTS last_viewed_at TIMESTAMPTZ;
 
 CREATE INDEX IF NOT EXISTS idx_prospect_sites_status ON prospect_sites(status);
 CREATE INDEX IF NOT EXISTS idx_prospect_sites_contact ON prospect_sites(contact_email);
