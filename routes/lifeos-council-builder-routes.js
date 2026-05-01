@@ -179,6 +179,13 @@ function builderTargetsHtml(files, targetFile) {
   return false;
 }
 
+function builderTargetsJavaScript(files, targetFile) {
+  const paths = Array.isArray(files) ? files : [];
+  if (paths.some(p => /\.(js|mjs|cjs)$/i.test(String(p)))) return true;
+  if (/\.(js|mjs|cjs)$/i.test(String(targetFile || ''))) return true;
+  return false;
+}
+
 function htmlFullFileCodegenHints() {
   return [
     'HTML FULL FILE — STRICT OUTPUT CONTRACT:',
@@ -188,6 +195,18 @@ function htmlFullFileCodegenHints() {
     '4. Do NOT wrap in markdown fences (no ```html).',
     '5. Do NOT write analysis, implementation notes, section headers, or prose of any kind.',
     '6. Violating this contract makes the output unusable — the build system will reject it.',
+  ].join('\n');
+}
+
+function jsFullFileCodegenHints() {
+  return [
+    'JAVASCRIPT FULL FILE — STRICT OUTPUT CONTRACT:',
+    '1. Your ENTIRE response must be only JavaScript/ESM source code for the target file.',
+    '2. Do NOT write analysis, commentary, implementation notes, apology text, or section headers.',
+    '3. Do NOT echo REPO FILE markers, diff markers, filenames, or markdown fences.',
+    '4. Do NOT output HTML, JSON, SQL, or mixed-language wrappers unless the target file itself is that format.',
+    '5. Start immediately with code or a valid JS comment, and end with valid JS syntax.',
+    '6. Violating this contract makes the output unusable — the build system will syntax-check and reject it.',
   ].join('\n');
 }
 
@@ -814,6 +833,10 @@ export function createLifeOSCouncilBuilderRoutes({
 
     const htmlCodegenExtra =
       mode === 'code' && builderTargetsHtml(files, bodyTargetFile) ? `\n${htmlFullFileCodegenHints()}` : '';
+    const jsCodegenExtra =
+      mode === 'code' && !builderTargetsHtml(files, bodyTargetFile) && builderTargetsJavaScript(files, bodyTargetFile)
+        ? `\n${jsFullFileCodegenHints()}`
+        : '';
 
     const executionModeBlock =
       mode === 'code' && executionOnly
@@ -828,6 +851,7 @@ export function createLifeOSCouncilBuilderRoutes({
         ? `\nREPO FILE CONTENTS — authoritative; produce a single full replacement for target_file when mode is code:\n${filesContentBlock}`
         : '',
       htmlCodegenExtra,
+      jsCodegenExtra,
       executionModeBlock,
       `\nINSTRUCTION: ${modeInstructions}`,
       autonomyInstructions ? `\nAUTONOMY: ${autonomyInstructions}` : '',

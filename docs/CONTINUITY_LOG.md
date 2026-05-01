@@ -32,6 +32,20 @@
 
 ---
 
+## [FIX] Update 2026-05-01 #3 — Builder JS strict-output contract
+
+### Files changed
+- `routes/lifeos-council-builder-routes.js` — added `builderTargetsJavaScript()` and `jsFullFileCodegenHints()` so JS targets get the same kind of explicit full-file contract HTML targets already had; the builder prompt now tells the model to return only valid JS/ESM source, no repo markers, no prose, no mixed-format wrappers.
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — updated `Last Updated`, `Change Receipts`, `Completed this session`, `Known gaps`, and `⚠️ IN PROGRESS` so cold agents can distinguish the shipped sanitizer fix from the new prompt-level prevention layer.
+
+### State after this session
+- The builder platform now attacks the same JS failure class in two layers: prompt-level prevention before generation and output sanitization before `node --check`.
+- This is still a platform hardening slice, not proof that the failure class is gone; next agent should judge impact by watching whether `builder/gaps` stops accumulating prose-wrapper JS failures over several daemon cycles.
+
+### Next agent: start here
+- Push/redeploy parity check: confirm Railway serves this stricter JS contract path, then watch `GET /api/v1/lifeos/builder/gaps` for whether JS syntax failures from commentary/repo markers materially drop.
+- Keep the next platform focus on token-efficiency enforcement and always-on runner hardening; those are now the highest remaining cross-lane weaknesses.
+
 ## [BUILD] Update 2026-04-30 #21 — Site Builder: full automation loop wired
 
 ### Files changed
