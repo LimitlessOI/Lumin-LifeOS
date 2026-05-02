@@ -1,16 +1,15 @@
-The output contract for this task is contradictory: the task asks for a CSS file, but the "STRICT OUTPUT CONTRACT" specifies an HTML document. I am proceeding by generating the CSS file as requested by the task, assuming the HTML contract is a boilerplate error.
-
-```css
 /*
  * LifeOS Dashboard Shell CSS Tokens
  *
- * This file defines semantic color, spacing, and radius variables for the
- * LifeOS dashboard shell, supporting both light and dark themes.
+ * This file defines semantic color, spacing, and radius variables for the LifeOS dashboard UI.
+ * It supports both light and dark themes via the `data-theme` attribute on the <html> element.
  *
- * Refer to: docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md
+ * Refer to LIFEOS_DASHBOARD_BUILDER_BRIEF.md for design specifications.
+ * (Note: LIFEOS_DASHBOARD_BUILDER_BRIEF.md was not found in the repository at the time of generation.)
  */
 
-:root { /* Default to dark theme if no data-theme is set */
+:root {
+  /* Dark Theme (Default) */
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
   --dash-text: #e8e8f0;
@@ -18,28 +17,18 @@ The output contract for this task is contradictory: the task asks for a CSS file
   --dash-accent: #5b6af5;
   --dash-border: rgba(255,255,255,0.07);
   --dash-radius-lg: 14px;
-  --dash-space-unit: 4px;
+  --dash-space-unit: 16px; /* Inferred from common spacing patterns */
 }
 
-html[data-theme="dark"] {
-  --dash-bg: #0a0a0f;
-  --dash-surface: #111118;
-  --dash-text: #e8e8f0;
-  --dash-muted: #555566;
-  --dash-accent: #5b6af5;
-  --dash-border: rgba(255,255,255,0.07);
-  --dash-radius-lg: 14px;
-  --dash-space-unit: 4px;
-}
-
-html[data-theme="light"] {
+[data-theme="light"] {
+  /* Light Theme Overrides */
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
-  --dash-text: #1a1a22;
-  --dash-muted: #6a6a7a;
-  --dash-accent: #5b6af5; /* Keep accent consistent across themes */
+  --dash-text: #1a1a1a;
+  --dash-muted: #666666;
+  --dash-accent: #5b6af5; /* Accent color remains consistent */
   --dash-border: rgba(0,0,0,0.1);
+  /* Radius and space unit typically remain consistent across themes */
   --dash-radius-lg: 14px;
-  --dash-space-unit: 4px;
+  --dash-space-unit: 16px;
 }
-```
