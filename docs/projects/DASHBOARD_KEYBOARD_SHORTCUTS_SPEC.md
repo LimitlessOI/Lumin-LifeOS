@@ -1,61 +1,77 @@
-# Global Shortcuts for LifeOS Dashboard & App Chrome
+# Global Shortcuts Specification
 
-**Date:** 2024-05-15
-**Status:** Specification / Feasibility Analysis
+## 1. Introduction
+This document outlines the specification for global keyboard shortcuts within the LifeOS Dashboard and the main LifeOS application chrome. The goal is to enhance user efficiency and accessibility through keyboard navigation and quick actions, while carefully considering potential conflicts with operating system and browser shortcuts.
 
-## Goal
+## 2. Focus Trap for AI Rail / Lumin Drawer
+### Requirement
+When the AI Rail (Dashboard) or Lumin Drawer (App Chrome) is open, keyboard focus must be programmatically trapped within the active overlay. This ensures that users navigating with a keyboard do not inadvertently interact with elements outside the overlay and can easily dismiss or interact with the overlay's content.
 
-To define a strategy for implementing global keyboard shortcuts within the LifeOS platform, specifically for the dashboard and overall application chrome, while considering user experience, accessibility, and potential conflicts. Implementation is deferred.
+### Technical Considerations
+*   **Implementation**: Use JavaScript to manage `tabindex` attributes or leverage WAI-ARIA dialog patterns.
+*   **Activation/Deactivation**: The focus trap should activate upon opening the rail/drawer and deactivate upon closing.
+*   **Initial Focus**: Upon opening, focus should be set to a logical interactive element within the overlay (e.g., the chat input field).
+*   **Last Focus Restoration**: Upon closing, focus should ideally return to the element that had focus before the overlay was opened.
 
-## Key Areas of Analysis
+## 3. Command Palette Feasibility (⌘K-style)
+### Concept
+A ⌘K-style command palette would provide a quick, searchable interface for executing common actions, navigating to sections, or accessing specific features across the LifeOS platform.
 
-### 1. ⌘K-style Command Palette Feasibility
+### Feasibility Assessment
+*   **Benefits**:
+    *   **Efficiency**: Rapid access to functions without mouse interaction.
+    *   **Discoverability**: Helps users find features without extensive menu navigation.
+    *   **Accessibility**: Provides an alternative input method for users who prefer keyboards.
+*   **Technical Feasibility**: High. Modern web applications frequently implement such palettes.
+    *   **UI/UX**: Requires a modal overlay, a search input, and a dynamic list of commands.
+    *   **Command Registration**: A centralized mechanism would be needed to register commands from different features/domains. Each command would need a title, an optional description, and an associated action (e.g., a function call, a navigation path).
+    *   **Search Logic**: Fuzzy searching or weighted search could improve user experience.
+*   **Integration Points**:
+    *   **App Chrome**: The palette would likely be a global component in `lifeos-app.html`.
+    *   **Dashboard**: Could also be integrated into `lifeos-dashboard.html` for dashboard-specific actions.
 
-*   **Concept:** A modal overlay activated by `⌘K` (Mac) or `Ctrl+K` (Windows/Linux) that allows users to quickly search for and execute commands, navigate to sections, or perform actions across the LifeOS application.
-*   **Feasibility:** Highly feasible and a widely adopted pattern in modern web applications for enhancing productivity for power users.
-*   **Technical Considerations:**
-    *   Requires a global `keydown` event listener on the `lifeos-app.html` shell.
-    *   The command palette UI must be a modal component, ensuring it captures focus and prevents interaction with underlying content.
-    *   Needs a robust search and filtering mechanism for available commands and navigation targets.
-    *   Accessibility: Must be fully keyboard navigable, support screen readers, and adhere to WCAG guidelines for modal dialogs.
-    *   Scope: Commands should ideally be context-aware but also offer global navigation and actions.
+### Implementation Deferred
+Actual implementation of the command palette is deferred, but the architectural considerations for its future integration should be kept in mind during any related UI/UX development.
 
-### 2. Focus Trap for AI Rail (Lumin Drawer)
+## 4. Collisions with OS/Browser Shortcuts
+### Overview
+Global keyboard shortcuts must be chosen carefully to avoid conflicts with critical operating system (OS) and browser-level shortcuts. Overriding these can lead to a frustrating user experience or loss of functionality.
 
-*   **Concept:** When the Lumin AI rail (or any other modal/drawer component) is open, keyboard focus must be programmatically constrained within that component. This prevents users from tabbing into elements in the background application content.
-*   **Necessity:** Essential for accessibility (WCAG 2.1, 2.4.3 Focus Order) to ensure a predictable and usable experience for keyboard-only users.
-*   **Technical Considerations:**
-    *   Identify all focusable elements within the Lumin drawer (inputs, buttons, links).
-    *   On drawer open: Programmatically move focus to the first interactive element inside the drawer.
-    *   On `Tab` or `Shift+Tab` key presses: Intercept the event and cycle focus only among the elements within the open drawer.
-    *   On drawer close: Return focus to the element that triggered the drawer's opening, or a logical fallback element in the main application.
-    *   This is a critical accessibility requirement that must be implemented for all modal-like components, including the Lumin drawer.
+### Common OS/Browser Conflicts
+The following are common shortcuts that should generally *not* be overridden by the application:
 
-### 3. Collisions with OS/Browser Shortcuts
+*   **Navigation/Tabs**:
+    *   `⌘T` / `Ctrl+T`: New tab
+    *   `⌘W` / `Ctrl+W`: Close tab
+    *   `⌘N` / `Ctrl+N`: New window
+    *   `⌘[` / `Ctrl+[` (or `⌘←` / `Ctrl+←`): Back in history
+    *   `⌘]` / `Ctrl+]` (or `⌘→` / `Ctrl+→`): Forward in history
+*   **Page Interaction**:
+    *   `⌘R` / `Ctrl+R` / `F5`: Refresh page
+    *   `⌘L` / `Ctrl+L`: Focus address bar
+    *   `⌘F` / `Ctrl+F`: Find on page
+    *   `⌘P` / `Ctrl+P`: Print page
+    *   `⌘S` / `Ctrl+S`: Save page
+    *   `⌘+` / `Ctrl++` (and `⌘-` / `Ctrl+-`): Zoom in/out
+    *   `⌘0` / `Ctrl+0`: Reset zoom
+*   **Text Editing**:
+    *   `⌘C` / `Ctrl+C`: Copy
+    *   `⌘X` / `Ctrl+X`: Cut
+    *   `⌘V` / `Ctrl+V`: Paste
+    *   `⌘A` / `Ctrl+A`: Select all
+    *   `⌘Z` / `Ctrl+Z`: Undo
+    *   `⌘Y` / `Ctrl+Y`: Redo
+*   **Developer Tools**:
+    *   `⌘⌥I` / `Ctrl+Shift+I` / `F12`: Open developer tools
 
-*   **General Principle:** Operating System and browser-level keyboard shortcuts take precedence and should generally not be overridden by web applications, as this can lead to a frustrating user experience.
-*   **Common Conflicts to Avoid:**
-    *   `⌘W` / `Ctrl+W`: Close current tab/window.
-    *   `⌘T` / `Ctrl+T`: Open new tab.
-    *   `⌘N` / `Ctrl+N`: Open new window.
-    *   `⌘R` / `Ctrl+R`: Refresh page.
-    *   `⌘L` / `Ctrl+L`: Focus address bar.
-    *   `⌘F` / `Ctrl+F`: Find on page.
-    *   `Spacebar`: Default browser behavior is page scrolling. LifeOS currently uses `Spacebar` for Push-to-Talk (PTT) when no input field is focused. This is a known collision point that requires careful handling (e.g., `e.preventDefault()` when PTT is active).
-*   **Strategy for `⌘K` / `Ctrl+K`:** This combination is generally considered safe as it is not a primary OS or browser shortcut and is a widely accepted pattern for command palettes in web applications.
-*   **Mitigation Strategies:**
-    *   Prioritize modifier keys (`Shift`, `Alt`/`Option`) in combination with letters for application-specific shortcuts, especially for less common actions.
-    *   Avoid remapping common `⌘`/`Ctrl` combinations that are deeply ingrained in OS/browser behavior.
-    *   Consider providing user-configurable shortcut settings to allow users to customize or disable shortcuts that conflict with their personal workflow or other installed browser extensions.
+### Strategy for Conflict Resolution
+1.  **Prioritize OS/Browser**: For critical functions (e.g., tab management, page refresh), OS/browser shortcuts should always take precedence.
+2.  **Context-Aware Shortcuts**: Implement shortcuts that are only active when specific UI elements are in focus (e.g., chat input, a specific card).
+3.  **Modifier Keys**: Utilize less common modifier key combinations (e.g., `Shift+Alt+Key`, `Ctrl+Shift+Key` on Mac, or `Alt+Shift+Key` on Windows/Linux) for application-specific global shortcuts, as these are less frequently used by OS/browser.
+4.  **User Customization (Future)**: Consider allowing users to customize or disable application shortcuts in future iterations.
+5.  **Documentation**: Clearly document all application shortcuts for users.
 
-## Proposed Initial Shortcuts (for discussion, implementation deferred)
-
-*   `⌘K` / `Ctrl+K`: Open Command Palette (app-wide).
-*   `Spacebar` (when no input focused): Push-to-Talk (existing functionality, to be managed within the global shortcut system).
-*   `Esc`: Close any open modal, drawer, or command palette.
-
-## Next Steps (Implementation Deferred)
-
-*   Detailed UI/UX design for the command palette.
-*   Development of a robust global shortcut manager to handle registration, conflict resolution, and user customization.
-*   Implementation of focus trap logic for all modal and drawer components (e.g., Lumin drawer, settings panel).
+### Proposed Global Shortcuts (Examples for future implementation)
+*   `⌘K` / `Ctrl+K`: Open Command Palette (standard practice, generally safe as browsers don't typically use this for critical functions).
+*   `Esc`: Close active modal/drawer (e.g., Lumin Drawer, Command Palette).
+*   `Tab` / `Shift+Tab`: Navigate focus within active modal/drawer (when focus trap is active).
