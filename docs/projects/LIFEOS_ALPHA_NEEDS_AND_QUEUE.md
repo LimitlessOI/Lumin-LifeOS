@@ -3,6 +3,18 @@
 **Updated:** 2026-05-05  
 **Authority:** `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`, `docs/LIFEOS_PROGRAM_MAP_SSOT.md`, operator directive (**LifeOS P1**)
 
+## Rough time framing (expectations only)
+
+There is **no single official “MVP done”** definition yet; “working for my life” means **you can drive the alpha** (shell + dashboard + Lumin path) plus whatever the queue has already landed.
+
+| Phrase | Plain meaning |
+|--------|----------------|
+| **~10 minutes (machine)** | Order-of-magnitude **builder queue clock** for the **scoped MVP corridor** if slices keep succeeding at recent pace—not “I never touch it again.” |
+| **~1 minute / slice** | Typical **successful** **`/build` wall time** recently (see **`npm run lifeos:builder:throughput-meter`**); heavier tasks or retries run longer. |
+| **+30 minutes (human)** | A realistic **budget** for **you trying the surfaces**, jotting likes/dislikes, and **recording them** into SSOT + optionally **`LIFEOS_DASHBOARD_BUILDER_QUEUE.json`**—not automatic full coverage of every backlog feature. |
+
+Your voice (**“don’t like this,” “do it this way,” “idea Z”**) belongs in SSOT receipts + handoff first, then the **machine queue** if it should ship as code/docs.
+
 ## Needs assessment (supervisor-authored, today)
 
 **Operator goal:** A **prototype Adam can drive today** — open the shell, land on dashboard, sign in when required, reach Lumin/chat without fighting broken chrome.

@@ -32,6 +32,21 @@
 
 ---
 
+## [BUILD] Update 2026-05-08 #1 — Operator expectations + feedback → SSOT → queue
+
+### Files changed
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — plain-language expectations (machine ~10 min corridor vs human test + ~30 min feedback budget; dislike/ideas → receipts + **`LIFEOS_DASHBOARD_BUILDER_QUEUE.json`**; council via **`lifeos:gate-change-run`**).
+- **`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md`**, **`docs/projects/LIFEOS_ALPHA_NEEDS_AND_QUEUE.md`** — matching short sections for Adam-facing reading.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.manifest.json`** — **`last_updated`**.
+
+### State
+- **`lifeos:builder:throughput-meter` KNOW:** rolling ~**0.57 min/slice**, ~**15** MVP-corridor slices left → ~**9 min** machine ETA if pace holds—not “all features perfected.” **`lifeos:supervise:static`** + **`check:overlay`** ✅ this session.
+
+### Next
+- After life testing: append receipts → optional new **`tasks[]`** rows → run queue slices; use gate-change when scope fights.
+
+---
+
 ## [FIX] Update 2026-05-07 #1 — Smoke tests skip when API offline
 
 ### Files changed

@@ -10,6 +10,16 @@ Each row must reference `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and pr
 
 **Dual-model consensus:** Load-bearing disagreement on backlog or alpha scope → **`npm run lifeos:gate-change-run -- --preset maturity`** on the **deployed** app (**`PUBLIC_BASE_URL`** + **`COMMAND_CENTER_KEY`**), plus supervisor SSOT edits — IDE-only consensus is insufficient.
 
+## Adam → SSOT → build queue (feedback loop)
+
+**Plain language.** When something in the product feels wrong or sparks a better idea:
+
+1. **Say it somewhere durable** — e.g. a short note in **`AMENDMENT_21_LIFEOS_CORE.md` → `## Change Receipts`**, **`## Agent Handoff Notes`**, and/or **`docs/CONTINUITY_LOG.md`** (whatever matches how big the decision is).
+2. **Turn buildable work into a queue row** — add or adjust an object in **`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json`** `tasks[]` (copy shape from sibling tasks). The continuous runner (**`npm run lifeos:builder:queue`** / daemon) consumes that list.
+3. **Talk to the real council when it’s load-bearing** — **`npm run lifeos:gate-change-run`** against your **Railway** app; IDE chat is not a substitute (see **`LIFEOS_ALPHA_NEEDS_AND_QUEUE.md`**).
+
+**Time expectations (~not promises):** “~10 minutes” in docs usually means **roughly ten minutes of successful automated builder slices** along the corridor the meter watches—not “every feature perfected.” **Half to ~1 minute per slice** has been typical recently (**`npm run lifeos:builder:throughput-meter`**). Budget extra for **your** testing, merges, redeploys, and fixes—often on the order of **tens of minutes** per meaningful feedback cycle.
+
 ## Priority (highest first)
 
 **Array order:** the runner advances **`tasks[0]` → `tasks[1]` → …**. Put **must-ship-first** definitions at the **top** of **`tasks[]`**. *(A numeric **`priority`** sort field can be added later without breaking cursor semantics — see **`BUILDER_AUTONOMY_TRUST_AND_REVIEW_MODEL.md`** gaps.)*
