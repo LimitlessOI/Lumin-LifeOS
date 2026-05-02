@@ -38,6 +38,12 @@ export default {
         /** Lane cursor advancing so backlog doesn’t re-fire every cycle (`OVERNIGHT_*` = legacy compat). */
         BUILDER_QUEUE_USE_CURSOR: "1",
         OVERNIGHT_USE_CURSOR: "1",
+        /**
+         * When cursor reaches end of `tasks[]`, reset to 0 so the same JSON backlog keeps building 24/7.
+         * Omit or set "0" to stop at end-of-queue (human appends new tasks or `--reset-cursor`).
+         */
+        BUILDER_QUEUE_CURSOR_WRAP: "1",
+        OVERNIGHT_CURSOR_WRAP: "1",
         // probe = no council /build in supervise (default); full = doc+JS smoke.
         BUILDER_DAEMON_SUPERVISE_MODE: "probe",
       },

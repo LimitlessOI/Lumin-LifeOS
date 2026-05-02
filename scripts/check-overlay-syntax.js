@@ -15,6 +15,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const FILES_TO_CHECK = [
+  'public/overlay/lifeos-app.html',
+  'public/overlay/lifeos-dashboard.html',
   'public/overlay/control.html',
   'public/overlay/extract-conversations.html',
   'public/overlay/index.html',

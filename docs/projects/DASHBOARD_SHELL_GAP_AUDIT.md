@@ -1,27 +1,38 @@
-Summary:
-A gap audit was requested for `lifeos-dashboard.html` and `lifeos-app.html` against `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`. However, the brief file (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`) was not found in the repository, preventing a direct comparison against the specified requirements. The audit therefore describes the current state of the HTML files regarding sidebar, bottom tabs, AI rail direction, light/dark intent, and mobile vs desktop responsiveness.
+# Dashboard shell gap audit (refreshed)
 
-Gaps vs brief:
-The `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file was not found (`READ ERROR: ENOENT`), making it impossible to identify concrete gaps against the brief's specifications for sidebar, bottom tabs, AI rail direction, light/dark intent, and mobile vs desktop design.
+**Updated:** 2026-05-03  
+**Authority:** `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`, `docs/LIFEOS_PROGRAM_MAP_SSOT.md`
 
-Based on the provided HTML files:
-- **`lifeos-dashboard.html`**:
-    - **Sidebar**: Not present. This file appears to be a standalone content page.
-    - **Bottom tabs**: Not present.
-    - **AI rail direction**: An AI rail root (`#lifeos-ai-rail-root`) is included, implying an AI rail, but its specific direction (e.g., left, right, top, bottom) is not defined within this HTML file's CSS or structure. It's likely controlled by `lifeos-dashboard-ai-rail.css` (not provided) and `lifeos-dashboard-ai-rail.js`.
-    - **Light/dark intent**: Supports light/dark theme toggling via `lifeos-theme.js` and a `toggleTheme()` function.
-    - **Mobile vs desktop**: Implements responsive design with media queries for `min-width: 640px` (two-column layout) and `min-width: 1000px` (wider content, larger text/padding).
+## Context (correcting the prior draft)
 
-- **`lifeos-app.html`**:
-    - **Sidebar**: Features a persistent sidebar (`<nav class="sidebar">`) with collapse functionality (`.sidebar.mini`).
-    - **Bottom tabs**: Includes a mobile-specific bottom navigation bar (`.mobile-bottomnav`) with tabs.
-    - **AI rail direction**: Implements a "Lumin Persistent Drawer" which functions as a right-side drawer on desktop and a bottom sheet on mobile. A "Lumin Quick Bar" is also present at the top of the main content area.
-    - **Light/dark intent**: Supports light/dark theme toggling via `lifeos-theme.js` and `cycleTheme()`/`setTheme()` functions.
-    - **Mobile vs desktop**: Implements comprehensive responsive design with media queries for `min-width: 600px` (icon-only sidebar), `max-width: 599px` (full mobile layout with hidden sidebar, mobile topbar, and bottomnav), and `min-width: 1000px` (full sidebar). The Lumin drawer also adapts its presentation for mobile.
+An earlier version of this file claimed `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` was missing; that was **stale / wrong**. The brief lives at **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**.
 
-Recommended next queued builds:
-1. Add SQL validation gate for `.sql` files before builder commits them
-2. Wire `npm run memory:ci-evidence` into `.github/workflows/smoke-test.yml`
+**Architecture:** `public/overlay/lifeos-app.html` is the **shell** (desktop sidebar, mobile bottom tabs, Lumin drawer). `public/overlay/lifeos-dashboard.html` is **iframe content** — it correctly does **not** duplicate the global sidebar; chrome comes from the parent shell.
 
-Open questions if any:
-- The `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file is missing, which is critical for a complete gap audit against the intended design.
+## Current wiring (verified paths)
+
+| Concern | Where it lives |
+|---------|----------------|
+| Desktop sidebar + mobile tabs | `lifeos-app.html` |
+| Dashboard page body + widgets | `lifeos-dashboard.html` |
+| Shared tokens | `public/shared/lifeos-dashboard-tokens.css` |
+| AI rail styles / script | `public/shared/lifeos-dashboard-ai-rail.css`, `public/shared/lifeos-dashboard-ai-rail.js` |
+| Theme | `lifeos-theme.js` (shell + iframe messaging) |
+
+## Fixes applied (2026-05-03)
+
+- **`lifeos-dashboard.html` — invalid CSS “comments”** using `/ … /` were replaced with proper `/* … */`. Trailing `/ comment /` after declarations in the `min-width: 1000px` block were removed or converted. This was breaking parse/fallback for following rules in some engines.
+- **`@keyframes ring-fill`** no longer animates `stroke-dashoffset` (conflicted with **inline** `stroke-dashoffset` from `makeRing()`). It now does a short **opacity** intro only.
+
+## Remaining gaps vs brief (human check)
+
+Use the mockup PNGs under `docs/mockups/` and the **Required dashboard shape** section of the brief for pixel/IA parity. Items still typically tracked in the builder queue (not all shipped):
+
+- Full **persistent AI rail** behavior vs contract (`docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md`).
+- **Category** model (Today / Health / Family / Purpose stubs) vs brief “expansion stack.”
+- **Density** modes (compact / balanced / expanded) across cards.
+
+## Recommended next steps
+
+1. Re-run a **queue** task that produces a gap table against the **current** brief + injected `lifeos-dashboard.html` + `lifeos-app.html` (avoid ENOENT assumptions).
+2. Add a **lint** step for overlay `<style>` blocks (reject lines matching `^/\s+[─\-]`) in CI or `scripts/` smoke.

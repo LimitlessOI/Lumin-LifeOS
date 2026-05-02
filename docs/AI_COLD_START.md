@@ -1,7 +1,7 @@
 # AI Cold Start Packet
 
 > **AUTO-GENERATED** — do not hand-edit. Regenerate: `npm run cold-start:gen`
-> Generated: 2026-05-01T20:14:33.347Z
+> Generated: 2026-05-02T00:44:33.555Z
 
 ## Read order (mandatory)
 
@@ -13,6 +13,12 @@
 6. The lane log for your task (`CONTINUITY_LOG_LIFEOS.md` / `CONTINUITY_LOG_COUNCIL.md` / main log).
 7. Owning manifest JSON (e.g. `AMENDMENT_21_LIFEOS_CORE.manifest.json`) for structured next steps.
 8. `prompts/<domain>.md` when using the builder.
+
+## Program priority — LifeOS (KNOW)
+
+**Operator directive (2026-05-03 — supersedes conflicting text below until Article VII amends this):** Adam declares **LifeOS shipped + stabilized + approved backlog features working** as **program priority one**. Agents shall **execute** the LifeOS build plan ( **`LIFEOS_DASHBOARD_BUILDER_QUEUE.json`**, overlay/API routes, verifiers, SSOT receipts) and **not** idle LifeOS solely because of the historical revenue-chain ordering in the next paragraph. Revenue lanes remain important; **this directive is explicit portfolio reordering** (North Star **§2.15** — clear operator instruction).
+
+**In practice:** execution is `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json`, LifeOS routes/overlays in **Amendment 21** scope, and honest **Change Receipts**. **No** scope outside the approved backlog without Adam or a load-bearing **§2.12** path (`run-council` / gate-change on the running app). Full legal text: `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` → **Approved Product Backlog** → **PRIORITY ALIGNMENT**.
 
 ## CONTINUITY_INDEX.md
 
@@ -53,7 +59,7 @@ Example first line of an update:
 2. Read `docs/AI_COLD_START.md` (run `npm run cold-start:gen` locally if missing or stale).
 3. Read the most recent `## Update` in the lane you own (here: general/cross-lane history — **most recent first**).
 4. Read `AMENDMENT_21_LIFEOS_CORE.md → ## Agent Handoff Notes` for LifeOS build state.
-5. Read `AMENDMENT_21_LIFEOS_CORE.md → ## Approved Product Backlog` for next priority when the task is LifeOS.
+5. Read `AMENDMENT_21_LIFEOS_CORE.md → ## Approved Product Backlog` (including **PRIORITY ALIGNMENT** / operator directive) for LifeOS program order — **not** stale “revenue-only” excerpts elsewhere without re-checking that block.
 
 **After every file you change:**
 - Add a new update entry at the **top** of the appropriate lane file **and** a one-line pointer here if the change is cross-cutting.
@@ -74,35 +80,37 @@ Example first line of an update:
 
 ---
 
-## [BUILD] Update 2026-05-01 #7 — Supervisor Lens C (prior art + industry, improve-don’t-copy)
+## [BUILD] Update 2026-04-30 #3 — LifeOS program map SSOT hub (`LIFEOS_PROGRAM_MAP_SSOT.md`)
 
 ### Files changed
-- `docs/SUPERVISOR_CONSEQUENCE_LENS.md` — **Lens C**: internal prior art (**/builder/gaps**, SSOT receipts, code, council residue); external industry/regulatory/postmortem (**THINK** until cited); **C3** record improvement delta.
-- `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`, `docs/QUICK_LAUNCH.md`, `scripts/lifeos-builder-supervisor.mjs` — aligned wording + CLI reminder lines.
-- `AMENDMENT_21` receipt + manifest.
+- **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** — single authority: mockup table, runtime URLs, authority stack, honest shipped-vs-mockup gap, **next queue slice** pointer, anti-drift rules.
+- **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**, **`AMENDMENT_21`** (Constitutional UX + handoff), **`docs/QUICK_LAUNCH.md`**, **`prompts/lifeos-council-builder.md`**, **`manifest`**.
 
-### Next agent: start here
-For Lens C2, put **URLs or document titles** in §2.11b closes so claims stay falsifiable.
+### Next agent
+- Any dashboard/nav/queue work: read **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** first.
 
-## [PLAN] Update 2026-05-01 #6 — Optional consequence + “two-year-back” supervisor lens
+---
 
-### Files changed
-- `docs/SUPERVISOR_CONSEQUENCE_LENS.md` — discretionary when-to-use rubric; Lens A unintended consequences; Lens B premortem; outputs (§2.11b / council).
-- `docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md` + `docs/QUICK_LAUNCH.md` — links + execution-protocol bullet.
-- `scripts/lifeos-builder-supervisor.mjs` — `--consequence-lens` prints short reminder (no API).
-- `AMENDMENT_21` receipts + Platform handoff; manifest tail.
-
-### State after this session
-Adam gets **structured regret / second-order thinking** without making it mandatory on every trivial commit — aligns with §2.6 honest reporting and §2.11b residue risk.
-
-### Next agent: start here
-Use the lens after **large** autonomy, **schema/billing/auth** changes, or **relaxing verifiers**; skip for typos/docs-only/low-risk.
-
-## [FIX] Update 2026-05-01 #5 — Consensus protocol finder + truthful supervisor close
+## [BUILD] Update 2026-04-30 #2 — Per-leg 10/10 mandate + `TSOS_ENFORCE_ALL_LEGS_10`
 
 ### Files changed
-- `docs/QUICK_LAUNCH.md` — operator-facing *Consensus protocol* subsection (links to Amendment 01, Companion 5.5, North Star Article II, evidence ladder docs). Answers “where is my consensus protocol?” without duplicating constitutional text.
-- `scripts/lifeos-builder-supervisor
+- **`scripts/builder-operator-suite.mjs`** — **`ALL SIX LEGS AT 10/10: YES/NO`**, lists legs below 10; receipt schema **`tsos_builder_suite_last_run_v2`**; optional **`TSOS_ENFORCE_ALL_LEGS_10=1`** → exit **3** when base green but any leg &lt; 10.
+- **`docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`** — *Per-leg excellence* (compound builds, no shortcuts).
+- **`docs/BUILDER_OPERATOR_ENV.md`** — operator notes for enforce gate.
+- **`AMENDMENT_21`** — handoff + receipts.
+
+### Next agent
+- CI wanting strict excellence: export **`TSOS_ENFORCE_ALL_LEGS_10=1`** with **`npm run tsos:builder`**.
+
+---
+
+## [BUILD] Update 2026-04-30 #1 — `tsos:builder` per-step 1–10 self-grade (machine receipts)
+
+### Files changed
+- **`scripts/tsos-suite-self-grade.mjs`** — maps 0–100 scores and exit codes to 1–10; reads token/doctor/operational receipts.
+- **`scripts/builder-operator-suite.mjs`** — prints self-grade after each of six legs + composite + lowest leg; writes **`data/tsos-builder-suite-last-run.json`**.
+- **`scripts/tsos-doctor.mjs`** — writes **`data/tsos-doctor-last-run.json`** for doctor-based grade.
+- **`.gi
 
 ## Snippet — LifeOS lane
 
@@ -199,7 +207,7 @@ Use the lens after **large** autonomy, **schema/billing/auth** changes, or **rel
 | **Lifecycle** | `infrastructure` |
 | **Reversibility** | `two-way-door` |
 | **Stability** | `operational` |
-| **Last Updated** | 2026-04-30 — repo-backed Cursor review path promoted beyond one laptop: tracked **`githooks/pre-push`** template + **`scripts/install-git-hooks.mjs`** installer + `npm run hooks:install`; **`scripts/cursor-pre-push-review.mjs`** now optionally posts review receipts into AM39 memory when `PUBLIC_BASE_URL` + command key are present. Prior: 2026-04-30 — local pre-push AI bug review path: tracked **`scripts/cursor-pre-push-review.mjs`** + **`.cursor/BUGBOT.md`** review rules + `package.json` script + `.gitignore` allowlist for tracked Bugbot config / local review artifacts; local `.git/hooks/pre-push` may call the tracked script in `warn` or `strict` mode. Prior: 2026-04-25 — **`scripts/generate-agent-rules.mjs`** — new **IDEA VAULT (Lane A/B)** block in **`docs/AGENT_RULES.compact.md`**: vault = map/routes only; source threads + **`raw/`** = nuance; promote via chunk → **38** §A or **`import-dumps-to-twin`**; tools + **INDEX** queue order; MEMORY/COUNCIL/SSOT/PROHIBITED lines tightened (token budget law). Prior: **`AMENDMENT_38_IDEA_VAULT.md`** + manifest; **`REPO_MASTER_INDEX`**; **`CONVERSATION_DUMP_IDEAS_INDEX`**. Prior: **`CONVERSATION_DUMP`** + **`INDEX.md`** candidates. Prior: **`REPO_BUCKET_INDEX`**. Prior: **`REPO_DEEP_AUDIT`**. Prior: **`npm run repo:catalog`**. Prior: **TSOS** in **`prompts/00`**. Prior: **`SSOT_DUAL_CHANNEL`**. Prior: **§2.11c**. Prior: **§2.15** + §2.14. |
+| **Last Updated** | 2026-04-30 — **`generate-agent-rules.mjs`**: tight **TOKENS+HISTORY** block (useful-work-guard, probe/`/gaps`, append-only receipts, GAP-FILL); MEMORY/IDEA-VAULT lines compressed to satisfy **token budget law** (`AGENT_RULES.compact.md` regen, baseline **↓**). Prior: repo-backed Cursor review path promoted beyond one laptop: tracked **`githooks/pre-push`** template + **`scripts/install-git-hooks.mjs`** installer + `npm run hooks:install`; **`scripts/cursor-pre-push-review.mjs`** now optionally posts review receipts into AM39 memory when `PUBLIC_BASE_URL` + command key are present. Prior: 2026-04-30 — local pre-push AI bug review path: tracked **`scripts/cursor-pre-push-review.mjs`** + **`.cursor/BUGBOT.md`** review rules + `package.json` script + `.gitignore` allowlist for tracked Bugbot config / local review artifacts; local `.git/hooks/pre-push` may call the tracked script in `warn` or `strict` mode. Prior: 2026-04-25 — **`scripts/generate-agent-rules.mjs`** — new **IDEA VAULT (Lane A/B)** block in **`docs/AGENT_RULES.compact.md`**: vault = map/routes only; source threads + **`raw/`** = nuance; promote via chunk → **38** §A or **`import-dumps-to-twin`**; tools + **INDEX** queue order; MEMORY/COUNCIL/SSOT/PROHIBITED lines tightened (token budget law). Prior: **`AMENDMENT_38_IDEA_VAULT.md`** + manifest; **`REPO_MASTER_INDEX`**; **`CONVERSATION_DUMP_IDEAS_INDEX`**. Prior: **`CONVERSATION_DUMP`** + **`INDEX.md`** candidates. Prior: **`REPO_BUCKET_INDEX`**. Prior: **`REPO_DEEP_AUDIT`**. Prior: **`npm run repo:catalog`**. Prior: **TSOS** in **`prompts/00`**. Prior: **`SSOT_DUAL_CHANNEL`**. Prior: **§2.11c**. Prior: **§2.15** + §2.14. |
 | **Manifest** | _(none — this amendment is documentation + scripts; machine hooks live in `package.json` and `.github/workflows`)_ |
 | **Verification** | `npm run handoff:self-test` → exit 0; `npm run cold-start:gen` regenerates `docs/AI_COLD_START.md` |
 
@@ -209,13 +217,7 @@ Use the lens after **large** autonomy, **schema/billing/auth** changes, or **rel
 
 ## Mission
 
-Make every AI session **bounded**, **auditable**, and **non-hallucinatory** by forcing reads and writes through explicit lane manifests, generated cold-start packets, and optional strict git gates — without compressing human-readable SSOT markdown into LCL (that remains forbidden for amendments; use manifests for machine pulls).
-
----
-
-## Autonomous build charter (blueprint → house)
-
-**Principle:** Once a feature or product is **fully specified** in SSOT (amendment + manifest + readiness gates + acceptance check
+Make every AI session **bounded**, **auditable**, and **non-hallucinatory** by forcing reads and writes through explicit lane manifests, generated cold-start packets, and optional strict git gates — without compressing human-readable SSOT markdown into LCL (tha
 
 ## Amendment 21 — Agent Handoff Notes region
 
@@ -229,6 +231,8 @@ Make every AI session **bounded**, **auditable**, and **non-hallucinatory** by f
 - Update `## Agent Handoff Notes` with the current state and next priority
 - Update `docs/CONTINUITY_LOG.md` with a one-paragraph summary
 
+**Append-only SSOT history (NON-NEGOTIABLE):** Do **not** delete, bulk-rewrite, or erase prior **`## Change Receipts`** table rows or continuity log entries to “clean history.” Corrections belong in a **new** receipt row or log update that cites what was wrong and what supersedes it. Git history remains the reversible audit trail; soften **meaning** of past law text only via North Star Amendment **Article VII** path — never pretend past commitments did not exist.
+
 **The standard is: painstakingly accurate, embarrassingly detailed, written for someone with zero memory of this project.**
 
 If you were cut off mid-task, find your last `## Change Receipts` entry and look for `⚠️ IN PROGRESS:` markers.
@@ -239,6 +243,4 @@ If you were cut off mid-task, find your last `## Change Receipts` entry and look
 
 **Supreme law:** This section **implements** `docs/SSOT_NORTH_STAR.md` → **Article II §2.6 System Epistemic Oath**, **Article II §2.10**, **Article II §2.11 (code the system / gaps; the system programs amendments & projects; `GAP-FILL` on the platform only)**, **Article II §2.11c (Conductor as supervisor — system codes at scale; audit, debate, report; not default IDE product authorship)**, **Article II §2.12 (technical decisions → AI Council + best-practice research; consensus / full debate if split; Conductor/Construction supervisor SSOT re-read and drift detection; non-derogable)**, **Article II §2.14 (TSOS machine-channel lexicon: `docs/TSOS_SYSTEM_LANGUAGE.md` — machinery only; not §2.11b)**, and **Article II §2.15 (operator instruction supremacy; anti-steering; honest limits of paper law on external LLMs)** for the LifeOS lane and Adam-facing agents. It may add detail; it may **not** weaken §2.6, §2.10, §2.11, **§2.11c**, **§2.12**, **§2.14**, or **§2.15**.
 
-**§2.6 is mandatory:** law cannot be skipped for speed; **cutting corners** and **laziness** (skipped reads, skipped verify, “good enough” truth) are **forbidden** — HALT or do the full gate; never ship noncompliance. **Exception path (¶8):** a **hypothesis** that specific gates are redundant or inefficient must be labeled **THINK/GUESS**, sent to **AI Council debate** (`AMENDMENT_01` + Companion §5.5), and only **then** implemented with receipts — never silent solo removal.
-
-**Adam required this in SSOT and in `prompts/*` so cold agents cannot “help” him into false confide
+**§2.6 is mandatory:** law cannot be skipped for speed; **cutting corners** and **laziness** (skipped reads, sk

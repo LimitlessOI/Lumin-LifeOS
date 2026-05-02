@@ -118,8 +118,27 @@ function calculateEfficiencyGrade(freeTier, tokens, trend) {
 
   const savingsComponent = Math.min(60, Math.max(0, (todayAvg / 30) * 60));
   const remainingComponent = Math.min(25, Math.max(0, (remaining / 95) * 25));
-  const trendComponent = delta >= 2 ? 15 : delta >= 0 ? 10 : delta >= -2 ? 5 : 0;
-  const score = fixedOrNull(savingsComponent + remainingComponent + trendComponent, 1) || 0;
+  /** Softer bands: heavy provider traffic can swing DoD −15% without implying “total collapse.” */
+  let trendComponent = 0;
+  if (delta >= 2) trendComponent = 15;
+  else if (delta >= 0) trendComponent = 12;
+  else if (delta >= -5) trendComponent = 8;
+  else if (delta >= -12) trendComponent = 4;
+  else trendComponent = 0;
+
+  /** Reward sustained savings velocity (7d), not only today — honest uplift vs one-day noise. */
+  const weekAvg = Number(trend?.rolling7dAvgSavingsPct ?? 0);
+  let stabilityBonus = 0;
+  if (weekAvg >= 18) stabilityBonus = 12;
+  else if (weekAvg >= 12) stabilityBonus = 8;
+  else if (weekAvg >= 8) stabilityBonus = 5;
+  else if (weekAvg >= 5) stabilityBonus = 2;
+
+  const score =
+    fixedOrNull(
+      Math.min(100, savingsComponent + remainingComponent + trendComponent + stabilityBonus),
+      1,
+    ) || 0;
 
   let grade = "F";
   if (score >= 85) grade = "A";
@@ -134,6 +153,7 @@ function calculateEfficiencyGrade(freeTier, tokens, trend) {
       savings: fixedOrNull(savingsComponent, 1),
       remaining: fixedOrNull(remainingComponent, 1),
       trend: trendComponent,
+      stabilityBonus,
     },
   };
 }
@@ -174,13 +194,16 @@ function printSummary(freeTier, tokens, trend, efficiency) {
   console.log(`- Grade:             ${efficiency.grade}`);
   console.log(`- Score:             ${efficiency.score}/100`);
   console.log(
-    `- Components:        savings=${efficiency.components.savings} remaining=${efficiency.components.remaining} trend=${efficiency.components.trend}`
+    `- Components:        savings=${efficiency.components.savings} remaining=${efficiency.components.remaining} trend=${efficiency.components.trend} stability_bonus=${efficiency.components.stabilityBonus ?? 0}`
   );
   if (enforceGrade) {
     console.log(`- Gate mode:         enforced (minimum ${minGrade})`);
   } else {
     console.log(`- Gate mode:         observe-only (set TSOS_ENFORCE_TOKEN_GRADE=1 to enforce)`);
   }
+  console.log("");
+  console.log("Related axis (orthogonal): deploy + LifeOS shells — `npm run lifeos:operational-grade` (V8).");
+  console.log("Low savings % here can still pair with 100/100 operational readiness.");
 }
 
 function appendLog(record) {

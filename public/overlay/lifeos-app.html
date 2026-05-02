@@ -950,6 +950,87 @@
       }
     }
 
+    /* layout=mobile — force brief-mapped mobile chrome (bottom tabs) at any viewport width */
+    html[data-shell-layout="mobile"] .sidebar { display: none !important; }
+    html[data-shell-layout="mobile"] .topbar { display: none !important; }
+    html[data-shell-layout="mobile"] .mobile-topbar { display: flex !important; }
+    html[data-shell-layout="mobile"] .mobile-bottomnav { display: block !important; }
+    html[data-shell-layout="mobile"] .sidebar.mobile-open {
+      display: flex !important;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-w) !important;
+      z-index: 500;
+      padding-top: var(--safe-top);
+    }
+    html[data-shell-layout="mobile"] .lumin-fab {
+      bottom: calc(var(--bottomnav-h) + var(--safe-bottom) + 16px);
+    }
+    html[data-shell-layout="mobile"] .toast {
+      bottom: calc(var(--bottomnav-h) + var(--safe-bottom) + 12px);
+    }
+    html[data-shell-layout="mobile"] .install-banner-slot,
+    html[data-shell-layout="mobile"] #install-banner {
+      bottom: calc(var(--bottomnav-h) + var(--safe-bottom) + 16px);
+    }
+    html[data-shell-layout="mobile"] .lumin-drawer {
+      top: auto;
+      right: 0;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      max-width: 100%;
+      height: 85svh;
+      border-left: none;
+      border-top: 1px solid var(--border-focus);
+      border-radius: 20px 20px 0 0;
+      transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    html[data-shell-layout="mobile"] .lumin-drawer.open { bottom: 0; right: 0; }
+
+    /* layout=desktop — force sidebar + desktop topbar per mockups (narrow screens may scroll) */
+    html[data-shell-layout="desktop"] .mobile-topbar { display: none !important; }
+    html[data-shell-layout="desktop"] .mobile-bottomnav { display: none !important; }
+    html[data-shell-layout="desktop"] .sidebar {
+      display: flex !important;
+      width: var(--sidebar-w) !important;
+      position: relative !important;
+      inset: auto !important;
+    }
+    html[data-shell-layout="desktop"] .sidebar .logo-text,
+    html[data-shell-layout="desktop"] .sidebar .user-info,
+    html[data-shell-layout="desktop"] .sidebar .chevron,
+    html[data-shell-layout="desktop"] .sidebar .nav-label,
+    html[data-shell-layout="desktop"] .sidebar .nav-group-label {
+      display: block !important;
+      opacity: 1 !important;
+    }
+    html[data-shell-layout="desktop"] .sidebar .collapse-btn { display: flex !important; }
+    html[data-shell-layout="desktop"] .sidebar .nav-item {
+      justify-content: flex-start !important;
+      height: auto !important;
+      padding: 8px 12px !important;
+    }
+    html[data-shell-layout="desktop"] .topbar { display: flex !important; }
+    html[data-shell-layout="desktop"] .lumin-drawer {
+      top: 0;
+      right: -420px;
+      bottom: 0;
+      left: auto;
+      width: 400px;
+      max-width: 100vw;
+      height: auto;
+      border-left: 1px solid var(--border-focus);
+      border-radius: 0;
+      border-top: none;
+      transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    html[data-shell-layout="desktop"] .lumin-drawer.open { right: 0; bottom: 0; }
+    html[data-shell-layout="desktop"] .lumin-fab { bottom: 24px; }
+    html[data-shell-layout="desktop"] .toast { bottom: 24px; }
+
     /* 1000px+: full sidebar always shown */
     @media (min-width: 1000px) {
       .sidebar { width: var(--sidebar-w); }
@@ -1284,13 +1365,13 @@
     <div class="nav-scroll">
 
       <div class="nav-group-label">Daily</div>
-      <a class="nav-item active" id="nav-today"     data-page="lifeos-today.html"     data-label="Today"      onclick="navigate(this)" href="#">
-        <span class="nav-icon">☀️</span>
-        <span class="nav-label">Today</span>
-      </a>
-      <a class="nav-item" id="nav-dashboard" data-page="lifeos-dashboard.html" data-label="Dashboard" onclick="navigate(this)" href="#">
+      <a class="nav-item active" id="nav-dashboard" data-page="lifeos-dashboard.html" data-label="Dashboard" onclick="navigate(this)" href="#">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Dashboard</span>
+      </a>
+      <a class="nav-item" id="nav-today"     data-page="lifeos-today.html"     data-label="Today"      onclick="navigate(this)" href="#">
+        <span class="nav-icon">☀️</span>
+        <span class="nav-label">Today</span>
       </a>
       <a class="nav-item" id="nav-chat" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="navigate(this)" href="#">
         <span class="nav-icon">💬</span>
@@ -1406,8 +1487,8 @@
 
     <!-- Desktop topbar -->
     <div class="topbar" id="topbar">
-      <span class="topbar-icon" id="topbar-icon">☀️</span>
-      <span class="topbar-title" id="topbar-title">Today</span>
+      <span class="topbar-icon" id="topbar-icon">📊</span>
+      <span class="topbar-title" id="topbar-title">Dashboard</span>
       <div class="topbar-actions">
         <button class="topbar-btn" id="voice-btn" onclick="toggleAlwaysListen()" title="Toggle always-on voice">🎙</button>
         <button class="topbar-btn" onclick="toggleLuminDrawer()" title="Talk to Lumin" style="font-size:18px;">◎</button>
@@ -1422,7 +1503,7 @@
       <button class="mobile-menu-btn" onclick="openMobileSidebar()">☰</button>
       <div class="mobile-logo">
         <div class="mobile-logo-icon">◎</div>
-        <span class="mobile-section-name" id="mobile-section-name">Today</span>
+        <span class="mobile-section-name" id="mobile-section-name">Dashboard</span>
       </div>
       <button class="topbar-btn" id="voice-btn-mob" onclick="toggleAlwaysListen()" title="Voice" style="min-width:44px;min-height:44px;">🎙</button>
       <button class="topbar-btn" onclick="toggleLuminDrawer()" title="Lumin" style="min-width:44px;min-height:44px;font-size:18px;">◎</button>
@@ -1442,7 +1523,7 @@
 
     <!-- Content iframe -->
     <iframe class="content-frame" id="content-frame"
-      src="/overlay/lifeos-today.html"
+      src="/overlay/lifeos-dashboard.html"
       title="LifeOS content"
       allow="clipboard-write">
     </iframe>
@@ -1450,11 +1531,11 @@
     <!-- Mobile bottom nav -->
     <div class="mobile-bottomnav" id="mobile-bottomnav">
       <div class="mob-tab-row">
-        <div class="mob-tab active" id="mob-today"
-          data-page="lifeos-today.html" data-title="Today" data-color="--c-today"
-          onclick="mobileNav(this)" style="--tab-c:var(--c-today)">
-          <span class="mob-icon">☀️</span>
-          <span class="mob-label">Today</span>
+        <div class="mob-tab active" id="mob-dashboard"
+          data-page="lifeos-dashboard.html" data-title="Dashboard" data-color="--c-dashboard"
+          onclick="mobileNav(this)" style="--tab-c:var(--c-dashboard)">
+          <span class="mob-icon">📊</span>
+          <span class="mob-label">Home</span>
         </div>
         <div class="mob-tab" id="mob-inner"
           data-page="lifeos-inner.html" data-title="Inner Work" data-color="--c-inner"
@@ -1493,6 +1574,10 @@
     <div class="more-item" data-page="lifeos-dashboard.html" data-label="Dashboard" onclick="mobileNavFromMore('lifeos-dashboard.html','Dashboard','--c-dashboard')">
       <span class="more-item-icon">📊</span>
       <span class="more-item-label">Dashboard</span>
+    </div>
+    <div class="more-item" data-page="lifeos-today.html" data-label="Today" onclick="mobileNavFromMore('lifeos-today.html','Today','--c-today')">
+      <span class="more-item-icon">☀️</span>
+      <span class="more-item-label">Today</span>
     </div>
     <div class="more-item" data-page="lifeos-chat.html" data-label="Lumin Chat" onclick="mobileNavFromMore('lifeos-chat.html','Lumin Chat','--c-coach')">
       <span class="more-item-icon">💬</span>
@@ -1714,8 +1799,8 @@ let KEY   = CTX.KEY;
 let USER  = CTX.USER;
 let NAME  = localStorage.getItem('lifeos_name') || (USER.charAt(0).toUpperCase() + USER.slice(1));
 let sidebarMini  = false;
-let currentPage  = 'lifeos-today.html';
-let currentTitle = 'Today';
+let currentPage  = 'lifeos-dashboard.html';
+let currentTitle = 'Dashboard';
 let THEME = (window.__lifeosTheme && window.__lifeosTheme.get()) || localStorage.getItem('lifeos_theme') || 'dark';
 function overlayUrl(page) { return `/overlay/${page}`; }
 
@@ -1757,8 +1842,21 @@ const PAGE_META = {
 const FEATURE_GUIDES = window.LIFEOS_FEATURE_GUIDES || {};
 let helpHideTimer = null;
 
+/** layout query: auto (default CSS breakpoints) | mobile | desktop — matches LIFEOS_PROGRAM_MAP_SSOT + Builder Brief shells */
+function applyShellLayoutFromQuery() {
+  const raw = new URLSearchParams(location.search).get('layout');
+  const v = String(raw || 'auto').toLowerCase().trim();
+  if (v === 'mobile' || v === 'desktop') {
+    document.documentElement.dataset.shellLayout = v;
+  } else {
+    delete document.documentElement.dataset.shellLayout;
+  }
+}
+
 /* ── Boot ────────────────────────────────────────────────────── */
 (function init() {
+  applyShellLayoutFromQuery();
+
   const initials = NAME.charAt(0).toUpperCase();
   document.getElementById('user-avatar').textContent        = initials;
   document.getElementById('sidebar-user-name').textContent  = NAME;
@@ -1768,7 +1866,7 @@ let helpHideTimer = null;
   document.getElementById('st-name').value                  = NAME;
   applyThemeUi(THEME);
 
-  // Restore last page
+  // Restore last page (unless URL overrides below)
   const last = sessionStorage.getItem('lifeos_page');
   if (last && PAGE_META[last]) {
     loadPage(last);
@@ -1779,9 +1877,23 @@ let helpHideTimer = null;
   // Sidebar collapse state
   if (localStorage.getItem('sidebar_mini') === '1') toggleSidebar(true);
 
-  // URL shortcut (manifest shortcuts)
+  // URL shortcut — canonical: ?page=lifeos-dashboard.html&layout=auto
   const launchPage = new URLSearchParams(location.search).get('page');
-  if (launchPage && PAGE_META[launchPage]) loadPage(launchPage);
+  if (launchPage && PAGE_META[launchPage]) {
+    loadPage(launchPage);
+    const nav = document.querySelector(`[data-page="${launchPage}"]`);
+    if (nav) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      nav.classList.add('active');
+    }
+  } else if (!last || !PAGE_META[last]) {
+    loadPage('lifeos-dashboard.html');
+    const nav = document.querySelector('[data-page="lifeos-dashboard.html"]');
+    if (nav) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      nav.classList.add('active');
+    }
+  }
   initFeatureHelp();
 
   if (window.LifeOSAmbientSense && localStorage.getItem('lifeos_ambient_sense') === '1') {
@@ -1857,6 +1969,12 @@ function loadPage(page) {
   if (navEl) {
     navEl.classList.add('active');
     navEl.style.borderLeftColor = `var(${meta.color})`;
+  }
+
+  const mobTab = document.querySelector(`.mob-tab[data-page="${page}"]`);
+  if (mobTab) {
+    document.querySelectorAll('.mob-tab').forEach(t => t.classList.remove('active'));
+    mobTab.classList.add('active');
   }
 
   sessionStorage.setItem('lifeos_page', page);

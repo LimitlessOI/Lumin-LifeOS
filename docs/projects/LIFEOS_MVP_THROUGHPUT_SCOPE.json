@@ -1,0 +1,5 @@
+{
+  "$comment": "Used by npm run lifeos:builder:throughput-meter — MVP ETA counts tasks from queue head through the task BEFORE mvp_exclusive_tail_task_id (matches alpha reorder: regen rail/tokens tail). Cursor path defaults from tasks filename (same slug as continuous-queue lane). Optional override lane_slug if custom --lane.",
+  "tasks_file": "docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json",
+  "mvp_exclusive_tail_task_id": "dashboard-shell-audit"
+}

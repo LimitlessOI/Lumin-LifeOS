@@ -2,6 +2,10 @@
 /**
  * TokenSaverOS build-system doctor.
  *
+ * Writes: `data/tsos-doctor-last-run.json` (gitignored) for `tsos:builder` per-step 1–10 self-grade.
+ *
+ * GET probes retry transient **502/503/504** (Railway edge / deploy jitter) so one flaky response does not false-negative the scorecard.
+ *
  * Read-only by default: grades whether the current target can run the system builder,
  * gate-change council, Railway env-name probe, and redeploy path.
  *
@@ -15,9 +19,15 @@
 
 import 'dotenv/config';
 import { execFile } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 import { promisify } from 'node:util';
+import { fileURLToPath } from 'node:url';
 
 const execFileAsync = promisify(execFile);
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(__dirname, '..');
 
 const DEFAULT_BASE = 'http://127.0.0.1:3000';
 
@@ -63,7 +73,11 @@ function statusIcon(result) {
   return `http-${result.status || 'error'}`;
 }
 
-async function fetchMaybe(path, options = {}) {
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchOnce(path, options = {}) {
   const url = `${base}${path}`;
   try {
     const response = await fetch(url, {
@@ -96,6 +110,21 @@ async function fetchMaybe(path, options = {}) {
       error: error?.message || String(error),
     };
   }
+}
+
+/** GET requests retry edge/transient 502/503/504 so doctor scores are not lies after one bad hop. */
+async function fetchMaybe(path, options = {}) {
+  const method = options.method || 'GET';
+  const maxAttempts = method === 'GET' ? 4 : 1;
+  let last = null;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    last = await fetchOnce(path, options);
+    const transient =
+      last.status === 502 || last.status === 503 || last.status === 504;
+    if (!transient || attempt === maxAttempts) return last;
+    await sleep(250 * attempt);
+  }
+  return last;
 }
 
 async function commandMaybe(command, args = []) {
@@ -157,6 +186,17 @@ function grade(results) {
   else if (score >= 35) rating = 'orange';
 
   return { score: Math.min(score, max), rating };
+}
+
+function writeDoctorLastRun(payload) {
+  const dir = path.join(ROOT, 'data');
+  const file = path.join(dir, 'tsos-doctor-last-run.json');
+  try {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(file, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+  } catch (e) {
+    console.warn('[tsos-doctor] could not write receipt:', e?.message || e);
+  }
 }
 
 function weaknessList(results) {
@@ -313,7 +353,18 @@ async function main() {
     console.log('Fix the top weakness above, then rerun: npm run tsos:doctor');
   }
 
-  process.exit(assessment.score >= 80 ? 0 : 1);
+  const exitCode = assessment.score >= 80 ? 0 : 1;
+  writeDoctorLastRun({
+    schema_version: 'tsos_doctor_last_run_v1',
+    finished_at: new Date().toISOString(),
+    base,
+    score: assessment.score,
+    rating: assessment.rating,
+    exit_code: exitCode,
+    weakness_count: weaknesses.length,
+  });
+
+  process.exit(exitCode);
 }
 
 main().catch((error) => {

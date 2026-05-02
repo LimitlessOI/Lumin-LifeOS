@@ -6,6 +6,15 @@
 
 Treat **no slice as complete at “committed”**. Complete means: **evaluate → fix or queue → improve something durable** so the **next slice starts from a strictly better platform**.
 
+### Per-leg excellence (not lazy averages)
+
+**Adam mandate:** each graded axis must be capable of **10/10 on its own** — preflight, probe, doctor, token efficiency, daemon observability, operational reachability. **Do not** pretend one mediocre composite number excuses a weak leg.
+
+- **`npm run tsos:builder`** prints **`ALL SIX LEGS AT 10/10: YES | NO`** and lists **every** leg below 10 until cleared.
+- Build **on top of each fix** — compound the stack (`evaluate → fix surfaced defects → improve one lever`) until each listed leg reads **10/10**.
+- Optional CI-style gate: **`TSOS_ENFORCE_ALL_LEGS_10=1`** → process exits **3** if any leg is below 10 while the base probes would have exited 0 (see `scripts/builder-operator-suite.mjs`).
+- Shortcuts and “good enough” on evidence (**§2.6**) are **out** — receipts + probes are **in**.
+
 This applies to builder runs, autonomy cycles, and any conductor-led slice routed through HTTP `/build`, the daemon queue, or GAP-FILL — same muscle.
 
 ## Before you start the next slice (minimum)

@@ -11,6 +11,7 @@
   "stability_class": "stable",
   "current_focus": "TSOS savings report fully monetization-ready \u2014 baseline/actual/savings% all exposed. Conductor session savings still 0 (need cold-start hook). B2B first customer not yet acquired.",
   "owned_files": [
+    "docs/projects/TCO_TSOS_75_PERCENT_SAVINGS_BRAINSTORM.md",
     "services/savings-ledger.js",
     "routes/api-cost-savings-routes.js",
     "services/tokenos-service.js",

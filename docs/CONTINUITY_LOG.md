@@ -11,7 +11,7 @@
 2. Read `docs/AI_COLD_START.md` (run `npm run cold-start:gen` locally if missing or stale).
 3. Read the most recent `## Update` in the lane you own (here: general/cross-lane history — **most recent first**).
 4. Read `AMENDMENT_21_LIFEOS_CORE.md → ## Agent Handoff Notes` for LifeOS build state.
-5. Read `AMENDMENT_21_LIFEOS_CORE.md → ## Approved Product Backlog` for next priority when the task is LifeOS.
+5. Read `AMENDMENT_21_LIFEOS_CORE.md → ## Approved Product Backlog` (including **PRIORITY ALIGNMENT** / operator directive) for LifeOS program order — **not** stale “revenue-only” excerpts elsewhere without re-checking that block.
 
 **After every file you change:**
 - Add a new update entry at the **top** of the appropriate lane file **and** a one-line pointer here if the change is cross-cutting.
@@ -29,6 +29,258 @@
 ### Next agent: start here
 - The very next task, specific enough to begin without asking
 ```
+
+---
+
+## [BUILD] Update 2026-05-06 #2 — `reset-cursor-only`, slice_profile, GAP-FILL polluted `*.md` specs
+
+### Files touched
+Queue script, throughput meter **`--profile`**, **`BUILDER_QUEUE_SLICE_POLICY.md`**, **`DASHBOARD_*_SPEC.md`** GAP-FILLs, **`LIFEOS_ALPHA_NEEDS_AND_QUEUE.md`**, **`AMENDMENT_21`** receipt.
+
+### Operator trap
+ **`npm run lifeos:builder:queue -- --reset-cursor`** continues into full backlog — use **`npm run lifeos:builder:queue:reset-cursor`** then **`BUILDER_QUEUE_MAX=small`**.
+
+---
+
+## [BUILD] Update 2026-05-06 #1 — Per-slice `build_wall_ms` + throughput meter (MVP ETA)
+
+### Files changed
+- `scripts/lifeos-builder-continuous-queue.mjs`, `scripts/builder-slice-throughput-meter.mjs`, `package.json`
+- `docs/BUILDER_TRUTH_AND_THROUGHPUT.md`, `docs/projects/LIFEOS_MVP_THROUGHPUT_SCOPE.json`, `SUPERVISION` + queue MD + **`AMENDMENT_21`** receipt.
+
+### Operator
+After queue runs accumulate **`build_wall_ms`**: **`npm run lifeos:builder:throughput-meter -- --write-receipt`** — baseline vs rolling, ETA to **`dashboard-shell-audit`** MVP boundary.
+
+---
+
+## [BUILD] Update 2026-05-05 #1 — Alpha queue reorder + dual-AI consensus protocol
+
+### Files changed
+- `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json` — **28** tasks, alpha head + foundation tail; `$comment` updated.
+- `docs/projects/LIFEOS_ALPHA_NEEDS_AND_QUEUE.md`, `docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md`, `docs/SUPERVISION_CODE_READ_CONTRACT.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`.
+
+### Operator
+- **`npm run lifeos:builder:queue -- --reset-cursor`** then run queue/daemon against Railway keys.
+- **`npm run lifeos:gate-change-run -- --preset maturity`** when backlog debates need deployed council quorum.
+
+---
+
+## [REVIEW] Update 2026-05-04 #1 — Supervision: anti-drift + anti-hallucination
+
+### Files changed
+- `docs/SUPERVISION_CODE_READ_CONTRACT.md` — new § **No drift / no hallucination** (table, minimum checks, epistemic receipts).
+- `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` — **`## Agent Handoff Notes`** supervision row + **`## Change Receipts`** row.
+
+### Next agent: start here
+- On any “supervise” slice, explicitly verify SSOT↔repo and summary↔artifact; record drift/hallucination finds in receipts.
+
+---
+
+## [REVIEW] Update 2026-04-30 #5 — Supervision contract + static overlay daemon gate
+
+### Files changed
+- `docs/SUPERVISION_CODE_READ_CONTRACT.md` — operator meaning of “supervise” vs **`probe`**; daemon limits; **`lifeos:supervise:static`**.
+- `scripts/supervise-code-static-pass.mjs`, `package.json` — **`npm run lifeos:supervise:static`**.
+- `scripts/check-overlay-syntax.js` — **`lifeos-app.html`**, **`lifeos-dashboard.html`** in **`FILES_TO_CHECK`**.
+- `scripts/lifeos-builder-daemon.mjs` — opt-in **`BUILDER_DAEMON_STATIC_CODE_PASS*`**, **`BUILDER_DAEMON_PULL_MAIN_BEFORE_STATIC`**; JSONL **`static_code_supervise_result`**.
+- `docs/BUILDER_OPERATOR_ENV.md`, `docs/projects/AMENDMENT_21_LIFEOS_CORE.md` (receipt + handoff).
+
+### State after this session
+- Deterministic overlay gate runs clean (**`npm run lifeos:supervise:static`** exit **0**). Still **does not** prove Brief/mockup compliance — **`full`** supervise + Conductor read remain required for that bar.
+
+### Next agent: start here
+- Operator can enable **`BUILDER_DAEMON_STATIC_CODE_PASS=1`** on unattended hosts that **`git pull`**; next product receipts should name **graded** supervisor read targets when Adam asks for supervision.
+
+---
+
+## [BUILD] Update 2026-04-30 #4 — TSOS daemon leg rolling grade + token stability bonus + uplift idea bank
+
+### Files changed
+- **`scripts/tsos-suite-self-grade.mjs`** — daemon observability grades recent **`cycle_ok`/`cycle_failed`** from **`data/builder-daemon-log.jsonl`** (**`TSOS_DAEMON_GRADE_WINDOW`**) when enough events.
+- **`scripts/builder-operator-suite.mjs`** — passes **`ROOT`** into daemon grade for log path resolution.
+- **`scripts/tsos-token-efficiency.mjs`** — DoD trend bands + **7d stability bonus** (no blended savings that masked weak weeks).
+- **`docs/TSOS_TEN_UPLIFT_IDEAS.md`** — **25** creative uplift directions + pointers to shipped fixes.
+- **`docs/BUILDER_OPERATOR_ENV.md`** — daemon rolling window note; **`AMENDMENT_21`** receipts + manifest **`owned_files`**.
+
+### State after this session
+- **`npm run tsos:builder`**: daemon leg **10/10** (example basis **`daemon_recent_40x_ok_95pct`**); token leg still **~5/10** until real savings rise — honest telemetry, not decoration.
+
+### Next agent: start here
+- If chasing **all six legs at 10/10**, prioritize **token routing / compaction / council efficiency** per **`docs/TSOS_TEN_UPLIFT_IDEAS.md`**; re-run **`npm run tsos:builder`** after platform changes.
+
+---
+
+## [BUILD] Update 2026-04-30 #3 — LifeOS program map SSOT hub (`LIFEOS_PROGRAM_MAP_SSOT.md`)
+
+### Files changed
+- **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** — single authority: mockup table, runtime URLs, authority stack, honest shipped-vs-mockup gap, **next queue slice** pointer, anti-drift rules.
+- **`docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`**, **`AMENDMENT_21`** (Constitutional UX + handoff), **`docs/QUICK_LAUNCH.md`**, **`prompts/lifeos-council-builder.md`**, **`manifest`**.
+
+### Next agent
+- Any dashboard/nav/queue work: read **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** first.
+
+---
+
+## [BUILD] Update 2026-04-30 #2 — Per-leg 10/10 mandate + `TSOS_ENFORCE_ALL_LEGS_10`
+
+### Files changed
+- **`scripts/builder-operator-suite.mjs`** — **`ALL SIX LEGS AT 10/10: YES/NO`**, lists legs below 10; receipt schema **`tsos_builder_suite_last_run_v2`**; optional **`TSOS_ENFORCE_ALL_LEGS_10=1`** → exit **3** when base green but any leg &lt; 10.
+- **`docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`** — *Per-leg excellence* (compound builds, no shortcuts).
+- **`docs/BUILDER_OPERATOR_ENV.md`** — operator notes for enforce gate.
+- **`AMENDMENT_21`** — handoff + receipts.
+
+### Next agent
+- CI wanting strict excellence: export **`TSOS_ENFORCE_ALL_LEGS_10=1`** with **`npm run tsos:builder`**.
+
+---
+
+## [BUILD] Update 2026-04-30 #1 — `tsos:builder` per-step 1–10 self-grade (machine receipts)
+
+### Files changed
+- **`scripts/tsos-suite-self-grade.mjs`** — maps 0–100 scores and exit codes to 1–10; reads token/doctor/operational receipts.
+- **`scripts/builder-operator-suite.mjs`** — prints self-grade after each of six legs + composite + lowest leg; writes **`data/tsos-builder-suite-last-run.json`**.
+- **`scripts/tsos-doctor.mjs`** — writes **`data/tsos-doctor-last-run.json`** for doctor-based grade.
+- **`.gitignore`** — new receipt paths.
+- **`AMENDMENT_21`** — Change Receipts + Agent Handoff row **Suite self-grade**.
+
+### State after this session
+- Operator can see **which leg** drags the composite (token savings vs deploy reachability are different axes).
+- True “LLM grades itself” between steps would cost tokens and duplicate deterministic probes — we use **receipts + exit codes** instead.
+
+### Next agent: start here
+- Run **`npm run tsos:builder`** in an operator shell with **`PUBLIC_BASE_URL`** + key; confirm **`data/tsos-builder-suite-last-run.json`** lists six steps and **`composite_grade10`**.
+
+---
+
+## [BUILD] Update 2026-05-02 #1 — V8 operational grade + shell acceptance (LifeOS readiness 0–100)
+
+### Files changed
+- **`scripts/lifeos-operational-grade.mjs`** — probes healthz, builder ready/policy parity vs repo, domains, gaps, builder-health, ambient nudge, public overlays; **`TSOS_MIN_OPERATIONAL_SCORE`** (default 90).
+- **`scripts/builder-operator-suite.mjs`** — 6th step runs operational grade.
+- **`package.json`** — **`lifeos:operational-grade`**.
+- **`docs/SYSTEM_CAPABILITIES.md`**, **`docs/BUILDER_OPERATOR_ENV.md`**, **`docs/LIFEOS_SHELL_ACCEPTANCE.md`**, **`scripts/tsos-token-efficiency.mjs`**, **`.gitignore`**, **`AMENDMENT_21`**, **`manifest`**.
+
+### Next agent
+- **`npm run tsos:builder`** is the full bar; **`npm run lifeos:operational-grade`** for surfaces-only.
+
+---
+
+## [BUILD] Update 2026-05-03 #4 — Cold-start: embed LifeOS P1 + continuity anti-drift
+
+### Files changed
+- **`scripts/generate-cold-start.mjs`** — **Program priority — LifeOS (KNOW)** section from Amendment 21 operator directive line + execution bullets.
+- **`docs/AI_COLD_START.md`** — regenerated (auto).
+- **`docs/AGENT_RULES.compact.md`** — regenerated (auto).
+- **`docs/CONTINUITY_LOG.md`** — session checklist step 5 **PRIORITY ALIGNMENT** pointer.
+- **`AMENDMENT_21`**, **`AMENDMENT_36`** — Change Receipts.
+
+### Next agent
+- After any **PRIORITY ALIGNMENT** edit in Amendment 21, run **`npm run cold-start:gen`**.
+
+---
+
+## [PLAN] Update 2026-05-03 #3 — Operator directive: LifeOS = P1
+
+### Files changed
+- **`AMENDMENT_21`** — **PRIORITY ALIGNMENT**: Adam directive **LifeOS + features working = program priority one**; supersedes old “revenue before LifeOS” default; handoff **Operator program priority** row; Change Receipts.
+
+### Next agent
+- Execute **`LIFEOS_DASHBOARD_BUILDER_QUEUE.json`** and **`## Approved Product Backlog`** under LifeOS-first; do not idle on superseded revenue-only gating.
+
+---
+
+## [BUILD] Update 2026-05-03 #2 — Non-stop queue: PM2 + cursor wrap for 24/7 builder
+
+### Files changed
+- **`ecosystem.config.js`** — **`builder-daemon`**: **`BUILDER_QUEUE_CURSOR_WRAP=1`** + legacy **`OVERNIGHT_CURSOR_WRAP`** so a fixed-length **`LIFEOS_DASHBOARD_BUILDER_QUEUE.json`** recycles instead of idling at end-of-cursor.
+- **`docs/BUILDER_24_7_ALPHA_CHECKLIST.md`** — operator note on wrap vs appending new tasks.
+
+### State
+- **Local PM2** was not on PATH in the dev shell; **continuous daemon** can still run via **`npm run lifeos:builder:daemon`** with the same env. Install PM2 on the 24/7 host if you want process supervision + reboot persistence.
+
+### Next agent
+- If repeated builds of the same tasks are unwanted, set **`BUILDER_QUEUE_CURSOR_WRAP=0`** and rely on new **`tasks[]`** rows.
+
+---
+
+## [BUILD] Update 2026-05-03 #1 — Idea filters doc + commit-branch policy telemetry (refine, don’t discard)
+
+### Files changed
+- **`docs/BUILDER_IDEA_FILTERS_REFINEMENT.md`** (new) — filters **refine** ideas; future lookback; unintended consequences as compound fuel; barriers as design prompts (aligned with North Star / compound loop).
+- **`scripts/lifeos-builder-continuous-queue.mjs`** — **`BUILDER_QUEUE_REQUIRE_COMMIT_BRANCH`** (fail-closed if implicit default); **`BUILDER_QUEUE_SILENCE_DEFAULT_BRANCH_WARNING`**; JSONL **`commit_branch_policy`**, **`task_start.implicit_default_branch`**, enriched **`task_ok`**; **`last-run.commit_branch_receipt`**.
+- **`docs/BUILDER_AUTONOMY_TRUST_AND_REVIEW_MODEL.md`**, **`docs/BUILDER_OPERATOR_ENV.md`**, **`AMENDMENT_21`**, **`AMENDMENT_21.manifest.json`**.
+
+### State after this session
+- Autonomous queue defaults remain **unchanged** for branch target (still often **`main`** when env unset) — **conscious warnings** + optional **strict** + better **receipts** for lookback.
+- **Next agent:** for production long runs off **`main`**, set **`BUILDER_QUEUE_COMMIT_BRANCH`** or **`BUILDER_QUEUE_REQUIRE_COMMIT_BRANCH=1`** on hosts where implicit default is forbidden; read **`docs/BUILDER_IDEA_FILTERS_REFINEMENT.md`** when a “filter” blocks a direction.
+
+### Next agent: start here
+- Optional: wire CI to **`BUILDER_QUEUE_REQUIRE_COMMIT_BRANCH=1`** for scheduled queue jobs only (not local ad-hoc) if desired.
+
+---
+
+## [BUILD] Update 2026-05-02 #5 — Operator vs system triage + escalation ladder (Adam vision / system build order)
+
+### Files changed
+- **`docs/BUILDER_AUTONOMY_TRUST_AND_REVIEW_MODEL.md`** — § **Operator vs system triage** (Adam **program** order; system **implementation** sequencing; **first‑N** when scope explodes); **escalation** table → **`gate-change` / `run-council`** when priorities struggle internally.
+- **`docs/BRAINSTORM_SESSIONS_PROTOCOL.md`** — Phase 5 pointer to same contract.
+- **`AMENDMENT_21`** handoff + **`Last Updated`** + receipt row.
+
+### Next agent
+- When Adam flags drift: run **brainstorm charter** or **gate-change** preset per **`QUICK_LAUNCH.md`** — do not substitute IDE consensus.
+
+---
+
+## [BUILD] Update 2026-05-02 #4 — Trust ramp doc + queue `branch` for review-before-main
+
+### Files changed
+- **`docs/BUILDER_AUTONOMY_TRUST_AND_REVIEW_MODEL.md`** — KNOW vs Adam target; tiers; **`tasks[]` order = priority**; ~**7 h** note; gaps (no daemon council refill).
+- **`scripts/lifeos-builder-continuous-queue.mjs`** — **`resolveQueueTaskCommitBranch`**, **`/build`** **`branch`**; JSONL **`commit_branch`**.
+- **`LIFEOS_DASHBOARD_BUILDER_QUEUE.{json,md}`**, **`BUILDER_OPERATOR_ENV.md`**, **`AMENDMENT_21`**, **`manifest`**.
+
+### Next agent: start here
+- If Adam wants **`main`** protected during autonomy slabs:** `export BUILDER_QUEUE_COMMIT_BRANCH=lifeos/autonomy-review` on daemon host; merge when reviewed.
+
+---
+
+## [BUILD] Update 2026-05-02 #3 — Brainstorm SESSIONS protocol (multi-model pipeline)
+
+### Files changed
+- **`docs/BRAINSTORM_SESSIONS_PROTOCOL.md`** — full workflow: 25×N → rank → meta-25 → rank → BUILD_NOW/NEXT/ICEBOX/DISCARD; cadence; per-program slugs; **§2.12** / **`CROSS_AGENT_CHANNEL`** honesty.
+- **`docs/projects/BRAINSTORM_SESSIONS/README.md`** — artifact folder convention.
+- **`docs/projects/BUILDER_AUTONOMY_BRAINSTORM_VAULT.md`** — points at protocol for how rows enter vault.
+- **`AMENDMENT_21`** handoff + receipt + **`Last Updated`**; **`manifest`**.
+
+### Next agent: start here
+- Optional: add **`prompts/brainstorm-session.md`** rubric templated from protocol Phase 1–4 for **`POST …/builder/task`** runners.
+
+---
+
+## [BUILD] Update 2026-05-02 #2 — Brainstorm vault + optional `/gaps` queue admission
+
+### Files changed
+- **`docs/projects/BUILDER_AUTONOMY_BRAINSTORM_VAULT.md`** — ranked **now / next / market** for the 25 autonomy ideas.
+- **`scripts/lifeos-builder-daemon.mjs`** — opt-in skip continuous queue when recent **`/builder/gaps`** syntax-like count ≥ **`BUILDER_DAEMON_GAPS_SYNTAX_MIN`**.
+- **`docs/BUILDER_OPERATOR_ENV.md`** — operator env table **`BUILDER_DAEMON_SKIP_QUEUE_ON_GAPS_SYNTAX`**.
+- **`AMENDMENT_21`** handoff row + receipt; **`AMENDMENT_21.manifest.json`**.
+
+### Next agent: start here
+- **`BUILDER_DAEMON_SKIP_QUEUE_ON_GAPS_SYNTAX=1`** on PM2 only after Adam accepts the trade-off (fewer wasted `/build`s vs delayed product queue).
+- **`BUILDER_AUTONOMY_BRAINSTORM_VAULT`** — next implement **risk field** on JSON tasks + **`builder-operator-digest`**.
+
+---
+
+## [BUILD] Update 2026-05-02 #1 — 24/7 queue SSOT rename (`BUILDER_QUEUE` not “overnight”)
+
+### Files changed
+- **`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.{json,md}`** — canonical machine + human backlog; **`LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`** removed (**`LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md`** = stub pointer).
+- **`scripts/lifeos-builder-continuous-queue.mjs`** — implementation; **`lifeos-builder-overnight.mjs`** — compat `import()` shim; **`lifeos-builder-daemon.mjs`** / **`lifeos-builder-supervisor.mjs`** / **`package.json`** wired to canonical script; telemetry **`builder-continuous-queue-*`**, JSONL **`queue_result`** (**`legacy_event_aliases`**).
+
+### State after this session
+- Default lane reads **`BUILDER_QUEUE.json`**; **`loadCursor`** still picks up **`builder-overnight-cursor.lifeos-dashboard-overnight-tasks.json`** so **`nextStartIndex: 14`** (end of **`tasks[]`**) survives until operator appends backlog, resets cursor, or enables wrap.
+
+### Next agent: start here
+- If daemon should recycle when JSON is drained: **`BUILDER_QUEUE_CURSOR_WRAP=1`** on long-lived PM2; or append **`tasks[]`** to **`LIFEOS_DASHBOARD_BUILDER_QUEUE.json`**.
 
 ---
 

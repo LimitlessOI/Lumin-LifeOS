@@ -1,70 +1,9 @@
-# LifeOS Dashboard Overnight Queue
+# Moved — Dashboard builder queue SSOT
 
-Updated: 2026-04-30
+The dashboard autonomous backlog specification now lives here:
 
-This queue is for supervised overnight builder runs. Each task must reference `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and must preserve existing shell behavior unless the task explicitly says otherwise.
+**[LIFEOS_DASHBOARD_BUILDER_QUEUE.md](./LIFEOS_DASHBOARD_BUILDER_QUEUE.md)**  
 
-## Execution order
+Machine-readable **`tasks[]`**: **`[LIFEOS_DASHBOARD_BUILDER_QUEUE.json](./LIFEOS_DASHBOARD_BUILDER_QUEUE.json)`**
 
-1. `dashboard-shell-audit`
-   Goal: audit current `lifeos-dashboard.html` and `lifeos-app.html` against the builder brief, report exact gaps, no rewrite.
-
-2. `dashboard-theme-foundation`
-   Goal: normalize light/dark theme tokens and shared dashboard card variables so both modes are intentional and consistent.
-
-3. `dashboard-mobile-shell`
-   Goal: build mobile-first category shell with bottom tabs preserved, vertical scroll per category, and swipe-ready category container.
-
-4. `dashboard-desktop-shell`
-   Goal: preserve left sidebar and implement cleaner desktop workspace grid that maps to the mobile category model.
-
-5. `dashboard-ai-rail`
-   Goal: add persistent dockable AI rail contract to the dashboard shell without breaking existing chat entry points.
-
-6. `dashboard-customization-state`
-   Goal: add local/state contract for widget visibility, order, density, and pinned widgets.
-
-7. `dashboard-widget-density`
-   Goal: support compact, balanced, and expanded card density without overwhelming mobile.
-
-8. `dashboard-today-category`
-   Goal: refine Today dashboard around MITs, schedule, alerts, quick add, and Lumin prompt.
-
-9. `dashboard-health-family-purpose-stubs`
-   Goal: add category stubs and real layout placeholders so future domains plug in cleanly.
-
-10. `dashboard-polish-pass`
-   Goal: motion, spacing, accessibility, loading states, empty states, and theme parity.
-
-## Machine-readable tasks
-
-Canonical task definitions (files, specs, commit messages) live in:
-
-- `docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`
-
-Split **dashboard-ai-rail** (queue item **5**) is implemented there as **`dashboard-ai-rail-css`** → **`dashboard-ai-rail-js`** → **`dashboard-ai-rail-wire`** (wire step may set **`max_output_tokens`** in JSON for **`POST /builder/build`**). Probe deploy parity via **`GET /api/v1/lifeos/builder/ready`** → **`codegen.policy_revision`** (must match **`routes/lifeos-council-builder-routes.js`** `BUILDER_CODEGEN_POLICY_REVISION` on **`main`**).
-
-**Wave 2 (doc specs, items 7–9):** **`dashboard-widget-density-spec`**, **`dashboard-today-category-spec`**, **`dashboard-category-stubs-spec`** — keep the daemon/overnight runner advancing when the cursor passes the first nine tasks.
-
-Run (after a successful `npm run lifeos:builder:supervise` on the same `PUBLIC_BASE_URL`):
-
-```bash
-npm run lifeos:builder:overnight -- --dry-run
-OVERNIGHT_MAX=2 npm run lifeos:builder:overnight
-```
-
-Resume after a failure with `--start <0-based index>` or run a single step with `--task <id>`.
-
-Logs append to `data/builder-overnight-log.jsonl` (gitignored).
-
-**Platform note (2026-04-29):** After each successful GitHub commit, the server now **mirrors written content to its local repo path** so the next `files[]` injection sees new files without waiting for a Railway image rebuild. Overnight still benefits from `--sleep-ms` throttling and optional `--redeploy-after-success` for a final live image refresh.
-
-## Stop conditions
-
-Stop and report instead of guessing if:
-
-- required APIs do not exist
-- file ownership is unclear
-- a task would replace working shell architecture without explicit approval
-- the result cannot satisfy both light and dark mode
-
+This file stays as a breadcrumb only (24/7 system — **not** “nights-only” tooling).

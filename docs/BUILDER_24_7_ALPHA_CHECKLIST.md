@@ -31,6 +31,7 @@ Run **one daemon per clone** (each project root has its own `data/builder-daemon
 - **`BUILDER_DAEMON_SUPERVISE_MODE=probe`** (default in `ecosystem.config.js`) — cheap HTTP checks; no council `/build` every cycle.
 - Raise to **`full`** only for periodic regression (more tokens).
 - Queue depth per cycle: **`BUILDER_QUEUE_MAX`** (alias **`OVERNIGHT_MAX`**).
+- **Non-stop backlog (same `tasks[]` recycles):** set **`BUILDER_QUEUE_CURSOR_WRAP=1`** ( **`OVERNIGHT_CURSOR_WRAP`** legacy) on **`builder-daemon`** — when the cursor passes the last row, it wraps to index **0** so automation doesn’t sit idle waiting for new JSON. Prefer **append new tasks** when you want forward-only progress without repeating work.
 
 ## Failure you should not see after deploy
 

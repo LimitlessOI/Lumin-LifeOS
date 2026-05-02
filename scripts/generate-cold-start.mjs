@@ -25,6 +25,18 @@ function firstUpdateBlock(md) {
   return m ? md.slice(m.index, Math.min(md.length, m.index + 3500)) : md.slice(0, 3500);
 }
 
+/** First line of `> **Operator directive …**` in Amendment 21 blockquote (LifeOS P1 + execution focus). */
+function extractOperatorDirectiveKnowLine(amd21) {
+  const lines = amd21.split('\n');
+  for (const line of lines) {
+    const t = line.trim();
+    if (t.startsWith('>') && t.includes('**Operator directive (')) {
+      return t.replace(/^>\s?/, '').trim();
+    }
+  }
+  return null;
+}
+
 async function main() {
   const index = await readSafe('docs/CONTINUITY_INDEX.md');
   const mainLog = await readSafe('docs/CONTINUITY_LOG.md');
@@ -36,6 +48,10 @@ async function main() {
   const handoff = amd21h.includes('## Agent Handoff Notes')
     ? amd21h.slice(amd21h.indexOf('## Agent Handoff Notes'), amd21h.indexOf('## Agent Handoff Notes') + 2500)
     : '_(Add ## Agent Handoff Notes to Amendment 21)_';
+
+  const directiveLine =
+    extractOperatorDirectiveKnowLine(amd21h) ||
+    '_(No **Operator directive** line found in `AMENDMENT_21_LIFEOS_CORE.md` — read **Approved Product Backlog → PRIORITY ALIGNMENT** manually.)_';
 
   const out = `# AI Cold Start Packet
 
@@ -52,6 +68,12 @@ async function main() {
 6. The lane log for your task (\`CONTINUITY_LOG_LIFEOS.md\` / \`CONTINUITY_LOG_COUNCIL.md\` / main log).
 7. Owning manifest JSON (e.g. \`AMENDMENT_21_LIFEOS_CORE.manifest.json\`) for structured next steps.
 8. \`prompts/<domain>.md\` when using the builder.
+
+## Program priority — LifeOS (KNOW)
+
+${directiveLine}
+
+**In practice:** execution is \`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json\`, LifeOS routes/overlays in **Amendment 21** scope, and honest **Change Receipts**. **No** scope outside the approved backlog without Adam or a load-bearing **§2.12** path (\`run-council\` / gate-change on the running app). Full legal text: \`docs/projects/AMENDMENT_21_LIFEOS_CORE.md\` → **Approved Product Backlog** → **PRIORITY ALIGNMENT**.
 
 ## CONTINUITY_INDEX.md
 

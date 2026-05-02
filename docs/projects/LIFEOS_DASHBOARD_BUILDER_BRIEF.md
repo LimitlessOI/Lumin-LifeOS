@@ -4,12 +4,14 @@
 |---|---|
 | Owner | LifeOS / AMENDMENT_21 |
 | Status | Active build brief |
-| Updated | 2026-04-28 |
-| Canonical for | Dashboard shell, builder prompts, overnight queue |
+| Updated | 2026-05-03 |
+| Canonical for | Dashboard shell, builder prompts, 24/7 supervised builder queue |
 
 ## Purpose
 
-This brief constrains the builder so dashboard work is grounded in the LifeOS SSOT, the current shell architecture, and the approved mockup boards. It exists to remove ambiguity before unattended overnight builds.
+This brief constrains the builder so dashboard work is grounded in the LifeOS SSOT, the current shell architecture, and the approved mockup boards. It exists to remove ambiguity before unattended autonomous **`/build`** queue runs (continuous, not nights-only).
+
+**Read first:** **`docs/LIFEOS_PROGRAM_MAP_SSOT.md`** — canonical program map, mockup list, runtime URLs, queue “next slice,” anti-drift rules.
 
 ## Remote truth
 
@@ -18,16 +20,21 @@ This brief constrains the builder so dashboard work is grounded in the LifeOS SS
 - Neon is data truth.
 - Local repo and shell are mirrors only.
 
+## Canonical operator link (shell)
+
+- **`/lifeos`** or **`/overlay/lifeos-app.html`** — default content is **Dashboard**; **`?layout=auto|mobile|desktop`** adjusts shell chrome to match desktop sidebar vs mobile bottom tabs (`LIFEOS_PROGRAM_MAP_SSOT.md` § Runtime map).
+
 ## Required source reads
 
 The builder must treat these as primary grounding inputs before modifying dashboard code:
 
-1. `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
-2. `docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md`
-3. `public/overlay/lifeos-app.html`
-4. `public/overlay/lifeos-dashboard.html`
-5. `routes/public-routes.js`
-6. `startup/register-runtime-routes.js`
+1. `docs/LIFEOS_PROGRAM_MAP_SSOT.md`
+2. `docs/projects/AMENDMENT_21_LIFEOS_CORE.md`
+3. `docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md`
+4. `public/overlay/lifeos-app.html`
+5. `public/overlay/lifeos-dashboard.html`
+6. `routes/public-routes.js`
+7. `startup/register-runtime-routes.js`
 
 ## Visual source boards
 
@@ -124,13 +131,13 @@ Use the system to build this incrementally:
 1. fix routing and supervision first
 2. lock dashboard shell constraints
 3. validate the builder on small deterministic objectives
-4. then run larger dashboard implementation tasks overnight
+4. then run larger dashboard implementation tasks via the supervised queue (**`npm run lifeos:builder:queue`**)
 
 Do not jump straight to a giant rewrite.
 
 ## Acceptance bar for unattended builds
 
-An overnight dashboard task is acceptable only if:
+An autonomous-queue dashboard task is acceptable only if:
 
 - target files are named explicitly
 - the spec references this brief

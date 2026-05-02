@@ -2,7 +2,7 @@
 
 This runbook ensures builder assignments execute reliably with supervision and proof receipts.
 
-**Permanent 24/7:** The supervised daemon **`npm run lifeos:builder:daemon`** is the **default continuous production posture** — probe/supervise → autonomous **`POST /builder/build`** backlog → backoff → repeat, without a “nights-only” carve-out. Canonical queue CLI: **`npm run lifeos:builder:queue`** (legacy **`lifeos:builder:overnight`** = same runner). Paths like **`builder-overnight-*.jsonl`** retain the old word **for analytic continuity**, not semantics. Alpha checklist: **`docs/BUILDER_24_7_ALPHA_CHECKLIST.md`**.
+**Permanent 24/7:** The supervised daemon **`npm run lifeos:builder:daemon`** is the **default continuous production posture** — probe/supervise → autonomous **`POST /builder/build`** backlog → backoff → repeat. Canonical queue: **`npm run lifeos:builder:queue`** → **`scripts/lifeos-builder-continuous-queue.mjs`** (**`lifeos:builder:overnight`** = compat wrapper). Telemetry files use **`builder-continuous-queue-*`** (legacy **`builder-overnight-*`** still migrated/read). Alpha checklist: **`docs/BUILDER_24_7_ALPHA_CHECKLIST.md`**.
 
 **Compound improvement:** Between every supervised slice — **evaluate, fix surfaced defects, improve one lever** (retry/spec/verifier/tooling/receipt). Required habit for sustained quality — see **`docs/BUILDER_COMPOUND_IMPROVEMENT_LOOP.md`**.
 
@@ -17,7 +17,7 @@ This runbook ensures builder assignments execute reliably with supervision and p
 
 The daemon performs on every cycle:
 1. **`lifeos-builder-supervisor.mjs`** — default **`BUILDER_DAEMON_SUPERVISE_MODE=probe`** (HTTP **`/ready`** + **`/domains` only**, **zero** council **`/build`** cost). Override **`full`** for doc + JS smoke (expensive; periodic regression).
-2. **`lifeos-builder-overnight.mjs`** (historical filename — behaviour = **continuous autonomous queue**) — **`BUILDER_QUEUE_USE_CURSOR` / `OVERNIGHT_USE_CURSOR`** (daemon seeds **`OVERNIGHT_*=1`** when both unset): lane cursor under **`data/builder-overnight-cursor.<lane>.json`** prevents rescheduling the same JSON rows every cycle (**`gitignore`** locally); legacy **`data/builder-overnight-cursor.json`** fallback. JSONL **`overnight_idle`** / **`Idle slice`** ⇒ **lane caught up** exit 0 with **zero** **`/build`** spend that invocation.
+2. **`lifeos-builder-continuous-queue.mjs`** — **`BUILDER_QUEUE_USE_CURSOR` / `OVERNIGHT_USE_CURSOR`** (daemon seeds **`OVERNIGHT_*=1`** when both unset): lane cursor **`data/builder-continuous-queue-cursor.<lane-slug>.json`**; **`loadCursor`** reads pre-rename **`builder-overnight-cursor.*`** once. Idle JSONL **`queue_idle`** (**legacy **`overnight_idle`**) ⇒ lane caught up, exit **0**, **zero** **`/build`** that invocation.
 
 ## Required environment
 
@@ -29,7 +29,7 @@ The daemon performs on every cycle:
 
 - Daemon state: `data/builder-daemon-state.json`
 - Daemon events: `data/builder-daemon-log.jsonl`
-- Autonomous queue telemetry (historic filename **`builder-overnight-log.jsonl`**)
+- Autonomous queue log: **`data/builder-continuous-queue-log.jsonl`** (legacy **`builder-overnight-log.jsonl`**)
 - Legacy autonomy proof: `scripts/autonomy/proof-report.md`
 
 ## PM2 managed mode (recommended for 24/7)
@@ -43,7 +43,7 @@ PM2 app **`builder-daemon`** runs `scripts/lifeos-builder-daemon.mjs` with autor
 
 ### Multi-lane queueing
 
-- Default queue file: **`docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json`**
+- Default queue file: **`docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json`**
 - Override queue file: **`BUILDER_TASKS_PATH=docs/projects/OTHER_QUEUE.json`**
 - Tag/partition the lane explicitly: **`BUILDER_TASK_LANE=site-builder`**
 - Cursor files are lane-specific, so different supervised queues do not trample each other.

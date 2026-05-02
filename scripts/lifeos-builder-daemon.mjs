@@ -3,14 +3,15 @@
  * Self-healing supervised builder daemon — continuous 24/7 autonomous improvement loop (default: no wall-clock stop).
  *
  * Each cycle tightens supervision and advances the autonomous JSON **`/build`** queue; failures back off and retry.
- * Operational language: **autonomous continuous queue** (`npm run lifeos:builder:queue`). Filename `lifeos-builder-overnight.mjs`
- * is a legacy artifact only — behaviour is designed for non-stop supervised building, not “nights only.”
+ * Operational language: **autonomous continuous queue** (`npm run lifeos:builder:queue` → **`lifeos-builder-continuous-queue.mjs`**).
+ * Deprecated wrapper **`lifeos-builder-overnight.mjs`** re-exports the same runner for old bookmarks.
  *
  * On every cycle:
  *   1) supervised probe or full smoke
  *   2) autonomous JSON queue runner (same binary as **`lifeos:builder:queue`**)
- *   3) heartbeat / memory receipts where configured
- *   4) interval sleep and repeat forever (or bounded `--run-for-min` if set)
+ *   3) optional deterministic overlay pass (**`BUILDER_DAEMON_STATIC_CODE_PASS`**) — not Brief/mockups; see **`docs/SUPERVISION_CODE_READ_CONTRACT.md`**
+ *   4) heartbeat / memory receipts where configured
+ *   5) interval sleep and repeat forever (or bounded `--run-for-min` if set)
  *
  * Usage:
  *   npm run lifeos:builder:daemon
@@ -36,7 +37,8 @@ const DATA_DIR = path.join(ROOT, "data");
 const STATE_PATH = path.join(DATA_DIR, "builder-daemon-state.json");
 const LOG_PATH = path.join(DATA_DIR, "builder-daemon-log.jsonl");
 const LOCK_PATH = path.join(DATA_DIR, "builder-daemon.lock");
-const OVERNIGHT_LAST_RUN_PATH = path.join(DATA_DIR, "builder-overnight-last-run.json");
+const QUEUE_LAST_RUN_PATH = path.join(DATA_DIR, "builder-continuous-queue-last-run.json");
+const LEGACY_QUEUE_LAST_RUN_PATH = path.join(DATA_DIR, "builder-overnight-last-run.json");
 const MEMORY_BASE = (
   process.env.BUILDER_BASE_URL ||
   process.env.PUBLIC_BASE_URL ||
@@ -89,6 +91,29 @@ const consequenceLens = /^1|true|yes$/i.test(
   String(process.env.BUILDER_DAEMON_CONSEQUENCE_LENS || "").trim(),
 );
 
+/** Opt-in: skip autonomous `POST /build` queue when `/builder/gaps` shows enough syntax-class failures (token stewardship). */
+const gapsAdmissionSkipQueue = /^1|true|yes$/i.test(
+  String(process.env.BUILDER_DAEMON_SKIP_QUEUE_ON_GAPS_SYNTAX || "").trim(),
+);
+const gapsSyntaxMin = Math.max(1, Number(process.env.BUILDER_DAEMON_GAPS_SYNTAX_MIN || "3"));
+const gapsAdmissionLimit = Math.min(
+  100,
+  Math.max(5, Number(process.env.BUILDER_DAEMON_GAPS_ADMISSION_LIMIT || "40")),
+);
+
+/** After successful queue runner: deterministic overlay **`npm run lifeos:supervise:static`** — machine layer only. */
+const staticCodePassEnabled = /^1|true|yes$/i.test(
+  String(process.env.BUILDER_DAEMON_STATIC_CODE_PASS || "").trim(),
+);
+/** When static pass exits non-zero, fail close the daemon cycle (else log-only). */
+const staticCodePassStrict = /^1|true|yes$/i.test(
+  String(process.env.BUILDER_DAEMON_STATIC_CODE_PASS_STRICT || "").trim(),
+);
+/** Best-effort **`git pull --ff-only origin main`** before static pass so checkout matches **`POST /build`** commits. */
+const pullMainBeforeStatic = /^1|true|yes$/i.test(
+  String(process.env.BUILDER_DAEMON_PULL_MAIN_BEFORE_STATIC || "").trim(),
+);
+
 /** Narrated for operators in `docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md` (NSSOT §2.6 + Am.39 Evidence Ladder). */
 const TRUTH_BRIDGE = "docs/BUILDER_RELIABILITY_EPISTEMIC_BRIDGE.md";
 
@@ -116,16 +141,19 @@ async function ensureDataDir() {
   await fsPromises.mkdir(DATA_DIR, { recursive: true });
 }
 
-async function readOvernightLastRun() {
-  try {
-    const raw = await fsPromises.readFile(OVERNIGHT_LAST_RUN_PATH, "utf8");
-    return JSON.parse(raw);
-  } catch {
-    return null;
+async function readQueueLastRunPayload() {
+  for (const p of [QUEUE_LAST_RUN_PATH, LEGACY_QUEUE_LAST_RUN_PATH]) {
+    try {
+      const raw = await fsPromises.readFile(p, "utf8");
+      return JSON.parse(raw);
+    } catch {
+      // try next
+    }
   }
+  return null;
 }
 
-/** Small receipt for `overnight_result` JSONL (**stable analytics key**) — denotes autonomous continuous queue phase (`data/builder-overnight-last-run.json`). */
+/** Normalized fields from `builder-continuous-queue-last-run.json` (or legacy `builder-overnight-last-run.json`). */
 function pickOvernightThroughputReceipt(row) {
   if (!row || typeof row !== "object") return null;
   return {
@@ -135,6 +163,40 @@ function pickOvernightThroughputReceipt(row) {
     build_wall_ms_sum: Number(row.build_wall_ms_sum || 0),
     runner_wall_ms: Number(row.runner_wall_ms || 0),
   };
+}
+
+async function fetchBuilderGapsForAdmission() {
+  if (!MEMORY_BASE || !MEMORY_KEY) return null;
+  const url = `${MEMORY_BASE}/api/v1/lifeos/builder/gaps?limit=${gapsAdmissionLimit}`;
+  try {
+    const res = await fetch(url, { headers: { "x-command-key": MEMORY_KEY } });
+    const text = await res.text();
+    let json = {};
+    try {
+      json = JSON.parse(text);
+    } catch {
+      return null;
+    }
+    if (!res.ok || json?.ok !== true || !Array.isArray(json?.gaps)) return null;
+    return json;
+  } catch {
+    return null;
+  }
+}
+
+/** Roughly matches supervisor gap buckets — catches syntax gate / node --check class failures in audit rows. */
+function countSyntaxLikeGaps(gaps) {
+  if (!Array.isArray(gaps)) return { syntaxLike: 0, total: 0 };
+  let syntaxLike = 0;
+  for (const g of gaps) {
+    const stage = String(g.failure_stage || "");
+    const reason = String(g.failure_reason || "");
+    const hay = `${stage} ${reason}`;
+    if (/syntax/i.test(stage) || /syntax/i.test(reason) || /node --check/i.test(hay)) {
+      syntaxLike += 1;
+    }
+  }
+  return { syntaxLike, total: gaps.length };
 }
 
 async function appendLog(event, payload = {}) {
@@ -331,8 +393,8 @@ async function deadlineExceeded(cycleNo, sessionThroughput) {
     deadlineIso: new Date(runDeadlineMs).toISOString(),
     KNOW_session_wall_clock_min: wallMin,
     KNOW_session_build_commits_total: st?.buildCommitsTotal ?? null,
-    KNOW_session_idle_queue_slices: st?.overnightIdleSlices ?? null,
-    KNOW_session_overnight_idle_slices_legacy_alias: st?.overnightIdleSlices ?? null,
+    KNOW_session_idle_queue_slices: st?.queueIdleSlices ?? null,
+    KNOW_session_overnight_idle_slices_legacy_alias: st?.queueIdleSlices ?? null,
     KNOW_session_build_wall_ms_total: st?.buildWallMsTotal ?? null,
     THINK_load_factor:
       wallMin != null && st?.buildWallMsTotal != null && wallMin > 0
@@ -426,7 +488,7 @@ async function runCycle(cycleNo, sessionThroughput) {
   await writeState({
     status: "running",
     currentCycle: cycleNo,
-    currentPhase: "overnight",
+    currentPhase: "queue",
     lastSuperviseMode: effectiveSuperviseMode,
     ...(effectiveSuperviseMode === "full" ? { lastFullSuperviseCycle: cycleNo } : {}),
   });
@@ -434,14 +496,15 @@ async function runCycle(cycleNo, sessionThroughput) {
   const pausedUntilMs = previousState.overnightPausedUntil ? Date.parse(previousState.overnightPausedUntil) : NaN;
   const queuePaused = Number.isFinite(pausedUntilMs) && pausedUntilMs > Date.now();
   if (queuePaused) {
-    await appendLog("overnight_paused", {
+    await appendLog("queue_paused", {
       cycleNo,
+      legacy_event_aliases: ["overnight_paused"],
       pausedUntil: previousState.overnightPausedUntil,
       pauseReason: previousState.overnightPauseReason || null,
       failureSignature: previousState.lastFailureSignature || null,
       failureStreak: Number(previousState.failureSignatureStreak || 0),
       reliability_cues: reliabilityCue({
-        event: "overnight_paused",
+        event: "queue_paused",
         KNOW: "queue_skipped_due_to_circuit_breaker_state",
         not_KNOW: "queue_health_without_retry_after_pause",
       }),
@@ -454,54 +517,126 @@ async function runCycle(cycleNo, sessionThroughput) {
     };
   }
 
-  const overnight = await runNodeScript(path.join(ROOT, "scripts", "lifeos-builder-overnight.mjs"), [
+  if (gapsAdmissionSkipQueue) {
+    const gapsJson = await fetchBuilderGapsForAdmission();
+    if (gapsJson?.gaps?.length) {
+      const { syntaxLike, total } = countSyntaxLikeGaps(gapsJson.gaps);
+      if (syntaxLike >= gapsSyntaxMin) {
+        await appendLog("queue_skipped_gaps_admission", {
+          cycleNo,
+          syntaxLikeCount: syntaxLike,
+          gapsSampled: total,
+          threshold: gapsSyntaxMin,
+          gapsLimit: gapsAdmissionLimit,
+          KNOW: "GET /builder/gaps shows syntax-class failures at or above threshold — skipping continuous queue /build this cycle",
+          operator_fix:
+            "Repair platform (verifiers, builder routes) until gap counts drop; or set BUILDER_DAEMON_SKIP_QUEUE_ON_GAPS_SYNTAX=0 to force queue",
+          reliability_cues: reliabilityCue({ event: "queue_skipped_gaps_admission" }),
+        });
+        return {
+          ok: true,
+          queueSkippedGapsAdmission: true,
+          gapsSyntaxLike: syntaxLike,
+          gapsSampled: total,
+        };
+      }
+    }
+  }
+
+  const queueRun = await runNodeScript(path.join(ROOT, "scripts", "lifeos-builder-continuous-queue.mjs"), [
     "--max",
     String(overnightMax),
   ]);
-  const overnightLastRunFull = await readOvernightLastRun();
-  const throughputPick = pickOvernightThroughputReceipt(overnightLastRunFull);
+  const queueLastRunFull = await readQueueLastRunPayload();
+  const throughputPick = pickOvernightThroughputReceipt(queueLastRunFull);
   if (sessionThroughput && throughputPick) {
     sessionThroughput.buildCommitsTotal += throughputPick.build_commits;
     sessionThroughput.buildWallMsTotal += throughputPick.build_wall_ms_sum;
     if (throughputPick.idle_slice) {
-      sessionThroughput.overnightIdleSlices += 1;
+      sessionThroughput.queueIdleSlices += 1;
       await appendLog("daemon_bounded_session_idle_slice", {
         cycleNo,
         runForMin,
         overnightMax,
-        KNOW: "builder-overnight-last-run.json reports idle_slice (no Railway /build spend this daemon cycle)",
+        KNOW: "builder-continuous-queue-last-run.json (or legacy builder-overnight-last-run.json) reports idle_slice (no Railway /build spend this daemon cycle)",
         operator_remedy: [
-          "Extend docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json (SSOT backlog)",
-          "Or reset data/builder-overnight-cursor.*.json for a deliberate full re-pass",
+          "Append tasks to docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json (SSOT backlog)",
+          "Or npm run lifeos:builder:queue -- --reset-cursor, or delete data/builder-continuous-queue-cursor.*.json for a full re-pass",
           "Bounded runs default BUILDER_QUEUE_CURSOR_WRAP=1 (legacy OVERNIGHT_CURSOR_WRAP); export =0 only if recycle is forbidden",
         ],
         reliability_cues: reliabilityCue({ event: "daemon_bounded_session_idle_slice" }),
       }).catch(() => {});
     }
   }
-  await appendLog("overnight_result", {
+  await appendLog("queue_result", {
     continuous_model: "24x7_autonomous_queue_phase",
+    legacy_event_aliases: ["overnight_result"],
     cycleNo,
-    ok: overnight.ok,
-    exitCode: overnight.exitCode,
-    elapsedMs: overnight.elapsedMs,
-    stderr: overnight.stderr,
-    overnightThroughput: throughputPick,
-    overnightLastRunRelative: "data/builder-overnight-last-run.json",
+    ok: queueRun.ok,
+    exitCode: queueRun.exitCode,
+    elapsedMs: queueRun.elapsedMs,
+    stderr: queueRun.stderr,
+    queueThroughput: throughputPick,
+    overnightThroughput_mirror: throughputPick,
+    queueLastRunRelative: "data/builder-continuous-queue-last-run.json",
+    legacy_queue_last_run_paths: ["data/builder-overnight-last-run.json"],
     reliability_cues: reliabilityCue({
       event: "queue_result",
-      KNOW_if_ok: "queue_runner_script_exit_zero_may_include_overnight_idle",
+      KNOW_if_ok: "queue_runner_script_exit_zero_may_include_queue_idle",
       idle_zero_build_spend: "still_KNOW_runner_exited_clean",
       not_KNOW: "committed_artifact_truth_without_git_or_builder_audit",
     }),
   });
 
-  if (!overnight.ok) {
+  if (!queueRun.ok) {
     return {
       ok: false,
-      phase: "overnight",
-      reason: overnight.stderr || "overnight failed",
+      phase: "queue",
+      reason: queueRun.stderr || "continuous queue runner failed",
     };
+  }
+
+  if (staticCodePassEnabled) {
+    if (pullMainBeforeStatic) {
+      try {
+        await execFileAsync(
+          "git",
+          ["pull", "--ff-only", "origin", "main"],
+          { cwd: ROOT, env: process.env, shell: false },
+        );
+        await appendLog("static_code_pull_ok", {
+          cycleNo,
+          KNOW: "git_pull_ff_only_origin_main_succeeded_before_static_pass",
+          reliability_cues: reliabilityCue({ event: "static_code_pull_ok" }),
+        }).catch(() => {});
+      } catch (pullErr) {
+        await appendLog("static_code_pull_failed", {
+          cycleNo,
+          stderr: (pullErr.stderr || pullErr.message || String(pullErr)).toString().slice(0, 2000),
+          KNOW: "git_pull_optional_before_static_pass_failed_continue_pass_on_checkout_anyway",
+          reliability_cues: reliabilityCue({ event: "static_code_pull_failed" }),
+        }).catch(() => {});
+      }
+    }
+    const staticRun = await runNodeScript(path.join(ROOT, "scripts", "supervise-code-static-pass.mjs"), []);
+    await appendLog("static_code_supervise_result", {
+      cycleNo,
+      ok: staticRun.ok,
+      exitCode: staticRun.exitCode,
+      elapsedMs: staticRun.elapsedMs,
+      stderr: staticRun.stderr,
+      KNOW: staticRun.ok ? "deterministic_overlay_pass_ok" : "overlay_syntax_or_footgun_scan_failed",
+      strictFailClosed: staticCodePassStrict,
+      doc: "docs/SUPERVISION_CODE_READ_CONTRACT.md",
+      reliability_cues: reliabilityCue({ event: "static_code_supervise_result" }),
+    });
+    if (!staticRun.ok && staticCodePassStrict) {
+      return {
+        ok: false,
+        phase: "static_code_supervise",
+        reason: staticRun.stderr || "lifeos:supervise:static failed",
+      };
+    }
   }
 
   return { ok: true };
@@ -540,7 +675,7 @@ async function main() {
       ? {
           wallStartedMs: Date.now(),
           buildCommitsTotal: 0,
-          overnightIdleSlices: 0,
+          queueIdleSlices: 0,
           buildWallMsTotal: 0,
         }
       : null;
@@ -548,7 +683,7 @@ async function main() {
   await appendLog("daemon_start", {
     continuous_model: "supervised_daemon_24x7_autonomous_queue",
     nomenclature_note:
-      "Prefer operator language ‘continuous autonomous queue’ — JSONL keys may still contain legacy ‘overnight’ tokens for analytics continuity.",
+      "Primary JSONL phase event is queue_result — legacy grep ‘overnight_result’ aliases listed on each emission.",
     mode: "24_7",
     once: ONCE,
     intervalMin,
@@ -564,6 +699,11 @@ async function main() {
     queueCursorWrap: process.env.BUILDER_QUEUE_CURSOR_WRAP ?? process.env.OVERNIGHT_CURSOR_WRAP,
     OVERNIGHT_CURSOR_WRAP_legacy: process.env.OVERNIGHT_CURSOR_WRAP,
     BUILDER_DAEMON_CONSEQUENCE_LENS: consequenceLens,
+    BUILDER_DAEMON_STATIC_CODE_PASS: staticCodePassEnabled,
+    BUILDER_DAEMON_STATIC_CODE_PASS_STRICT: staticCodePassStrict,
+    BUILDER_DAEMON_PULL_MAIN_BEFORE_STATIC: pullMainBeforeStatic,
+    gapsAdmissionSkipQueueSyntax: gapsAdmissionSkipQueue,
+    BUILDER_DAEMON_GAPS_SYNTAX_MIN: gapsAdmissionSkipQueue ? gapsSyntaxMin : null,
     runForMin: runForMin || null,
     runDeadlineIso: runDeadlineMs ? new Date(runDeadlineMs).toISOString() : null,
     baseUrl:
@@ -608,6 +748,8 @@ async function main() {
         cycleNo,
         elapsedMs: Date.now() - startedAt,
         queuePaused: Boolean(result.queuePaused),
+        queueSkippedGapsAdmission: Boolean(result.queueSkippedGapsAdmission),
+        gapsSyntaxLike: result.queueSkippedGapsAdmission ? result.gapsSyntaxLike ?? null : null,
         pausedUntil: result.queuePaused ? result.pausedUntil : null,
         reliability_cues: reliabilityCue({
           event: "cycle_ok",
@@ -628,10 +770,18 @@ async function main() {
       const memoryReceipt = await sendCycleMemoryReceipt({
         cycleNo,
         ok: true,
-        phase: result.queuePaused ? "overnight_paused" : "cycle",
+        phase: result.queueSkippedGapsAdmission
+          ? "queue_skipped_gaps_admission"
+          : result.queuePaused
+            ? "queue_paused"
+            : "cycle",
         queuePaused: Boolean(result.queuePaused),
         pausedUntil: result.queuePaused ? result.pausedUntil : null,
-        reason: result.queuePaused ? result.pauseReason || "" : "",
+        reason: result.queueSkippedGapsAdmission
+          ? `gaps_syntax_like=${result.gapsSyntaxLike ?? "?"} sampled=${result.gapsSampled ?? "?"} threshold=${gapsSyntaxMin}`
+          : result.queuePaused
+            ? result.pauseReason || ""
+            : "",
       }).catch((error) => ({ skipped: false, error: error.message }));
       await appendLog("cycle_memory_receipt", {
         cycleNo,
@@ -650,7 +800,7 @@ async function main() {
         ? Number(state.failureSignatureStreak || 0) + 1
         : 1;
     const shouldPauseQueue =
-      result.phase === "overnight" &&
+      result.phase === "queue" &&
       overnightPauseThreshold > 0 &&
       failureSignatureStreak >= overnightPauseThreshold;
     const pauseUntil = shouldPauseQueue
