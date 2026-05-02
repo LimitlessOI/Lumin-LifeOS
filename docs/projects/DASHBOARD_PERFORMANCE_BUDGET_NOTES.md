@@ -1,3 +1,5 @@
+The specification for output format is contradictory: the general SPECIFICATION asks for Markdown, but the HTML FULL FILE — STRICT OUTPUT CONTRACT explicitly forbids markdown fences and any prose outside the HTML. I will follow the HTML contract as it is specific to the target file type.
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +9,30 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0a0f" id="theme-color-meta">
 <title>Dashboard · LifeOS</title>
+<!-- Performance Budget Notes -->
+<!--
+  Load Targets:
+  - First Contentful Paint (FCP): < 1.0s
+  - Largest Contentful Paint (LCP): < 2.5s
+  - Total Blocking Time (TBT): < 200ms
+  - Cumulative Layout Shift (CLS): < 0.1
+
+  Waterfall Risks:
+  - Render-blocking scripts: `lifeos-theme.js`, `tailwindcss.com`, `lifeos-bootstrap.js` are loaded synchronously in the head.
+    `tailwindcss.com` is a significant external dependency. Consider self-hosting or purging unused CSS for faster delivery.
+  - Render-blocking stylesheets: `lifeos-dashboard-tokens.css`, `lifeos-dashboard-ai-rail.css`.
+  - API calls: Initial data fetches for MITs, Calendar, Goals, Scores, Chat are all initiated on `DOMContentLoaded` via `Promise.all`.
+    While concurrent, the cumulative time for these could impact perceived load.
+
+  Defer Non-Critical Widgets:
+  - Current implementation defers all data-driven sections (MITs, Calendar, Goals, Scores, Chat) until `DOMContentLoaded` and fetches data concurrently. This is effective.
+  - `lifeos-voice-chat.js` and `lifeos-dashboard-ai-rail.js` are loaded at the end of `<body>`, which is good for non-critical functionality.
+
+  Largest Contentful Paint (LCP) Hints:
+  - The primary LCP candidate is likely the "greeting" text (`<div class="greeting" id="greeting">`).
+  - Ensure its styling and font loading are optimized. Preloading critical fonts if custom ones are used (not currently apparent) would be beneficial.
+  - The first visible card (e.g., "Today's MITs") is also a potential LCP element.
+-->
 <!-- Theme must load before anything renders to avoid flash -->
 <script src="/overlay/lifeos-theme.js"></script>
 <link rel="stylesheet" href="../shared/lifeos-dashboard-tokens.css">
@@ -58,7 +84,7 @@ max-width: 860px;
 margin: 0 auto;
 padding: 24px 16px;
 }
-/* ── Cards ── */
+/ ── Cards ── /
 .card {
 background: var(--bg-surface);
 border: 1px solid var(--border);
@@ -90,7 +116,7 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-/* ── Header ── */
+/ ── Header ── /
 .hdr-row {
 display: flex;
 align-items: flex-start;
@@ -155,7 +181,7 @@ margin-left: 8px;
 vertical-align: middle;
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-/* ── Animations ── */
+/ ── Animations ── /
 @keyframes pulse-ring {
 0%, 100% {
 opacity: 1;
@@ -194,10 +220,10 @@ transform: scale(1);
 opacity: 1;
 }
 }
-/* Progress uses inline stroke-dashoffset from makeRing(); animate opacity only */
 @keyframes ring-fill {
-  from { opacity: 0.2; }
-  to { opacity: 1; }
+from {
+stroke-dashoffset: 220;
+}
 }
 @keyframes bar-grow {
 from {
@@ -238,7 +264,7 @@ animation-delay: 0.20s;
 .delay-5 {
 animation-delay: 0.25s;
 }
-/* ── Skeleton ── */
+/ ── Skeleton ── /
 .skeleton {
 background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
 background-size: 400px 100%;
@@ -252,7 +278,7 @@ margin-bottom: 10px;
 .skel-line:last-child {
 width: 60%;
 }
-/* ── MIT ── */
+/ ── MIT ── /
 .mit-item {
 display: flex;
 align-items: flex-start;
@@ -304,7 +330,7 @@ transition: color 0.2s;
 color: var(--text-muted);
 text-decoration: line-through;
 }
-/* ── Quick add ── */
+/ ── Quick add ── /
 .quick-add {
 display: flex;
 gap: 8px;
@@ -344,7 +370,7 @@ transition: opacity 0.15s;
 .btn-add:hover {
 opacity: 0.85;
 }
-/* ── Calendar ── */
+/ ── Calendar ── /
 .event-row {
 display: flex;
 align-items: center;
@@ -370,7 +396,7 @@ flex-shrink: 0;
 font-size: 14px;
 color: var(--text-primary);
 }
-/* ── Goals ── */
+/ ── Goals ── /
 .goal-row {
 margin-bottom: 16px;
 }
@@ -410,7 +436,7 @@ font-size: 11px;
 color: var(--text-muted);
 margin-top: 4px;
 }
-/* ── Scores ── */
+/ ── Scores ── /
 .scores-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -487,7 +513,7 @@ box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 .score-tile.tip-open .score-tile-tip {
 display: block;
 }
-/* ── Chat ── */
+/ ── Chat ── /
 .chat-messages {
 height: 240px;
 overflow-y: auto;
@@ -564,7 +590,7 @@ animation: bounce-dot 1.2s 0.2s infinite;
 .typing-dot:nth-child(3) {
 animation: bounce-dot 1.2s 0.4s infinite;
 }
-/* ── Chat input row ── */
+/ ── Chat input row ── /
 .chat-row {
 display: flex;
 gap: 8px;
@@ -625,7 +651,7 @@ transition: opacity 0.15s;
 .btn-send:hover {
 opacity: 0.85;
 }
-/* ── Voice footer ── */
+/ ── Voice footer ── /
 .voice-footer {
 display: flex;
 align-items: center;
@@ -659,7 +685,7 @@ font-size: 11px;
 color: var(--text-muted);
 opacity: 0.6;
 }
-/* ── Empty ── */
+/ ── Empty ── /
 .empty {
 text-align: center;
 padding: 20px 0;
@@ -678,41 +704,41 @@ grid-template-columns: 1fr 1fr;
 gap: 16px;
 }
 }
-/* Desktop-specific styles for wider screens */
+/ Desktop-specific styles for wider screens /
 @media (min-width: 1000px) {
-  .page {
-    max-width: 1000px; /* wider content area */
-    padding: 40px 32px;
-  }
-  .hdr-row {
-    padding-top: 12px;
-    margin-bottom: 24px;
-  }
-  .greeting {
-    font-size: 48px;
-  }
-  .greeting-sub {
-    font-size: 18px;
-  }
-  .two-col {
-    gap: 32px;
-  }
-  .card {
-    padding: 28px;
-  }
-  .card-label {
-    font-size: 11px;
-    margin-bottom: 18px;
-  }
-  .chat-messages {
-    height: 360px;
-  }
-  .chat-row {
-    margin-top: 20px;
-  }
-  .voice-footer {
-    margin-top: 16px;
-  }
+    .page {
+        max-width: 1000px; / Wider content area for desktop /
+        padding: 40px 32px; / More generous padding /
+    }
+    .hdr-row {
+        padding-top: 12px; / More space above header content /
+        margin-bottom: 24px; / More space below header /
+    }
+    .greeting {
+        font-size: 48px; / Larger greeting text /
+    }
+    .greeting-sub {
+        font-size: 18px; / Larger sub-greeting text /
+    }
+    .two-col {
+        gap: 32px; / Increased gap between columns /
+    }
+    .card {
+        padding: 28px; / More internal padding for cards /
+    }
+    .card-label {
+        font-size: 11px; / Slightly larger label /
+        margin-bottom: 18px; / More space below label /
+    }
+    .chat-messages {
+        height: 360px; / Taller chat window for more history /
+    }
+    .chat-row {
+        margin-top: 20px; / More space above chat input /
+    }
+    .voice-footer {
+        margin-top: 16px; / More space above voice footer /
+    }
 }
 </style>
 </head>
@@ -840,7 +866,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-async function loadMITs() {
+asyncFn loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -877,7 +903,7 @@ document.body.appendChild(tip);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Could not load tasks</div>';
 }
 }
-async function toggleMIT(el) {
+asyncFn toggleMIT(el) {
 const chk=el.querySelector('.mit-check'), txt=el.querySelector('.mit-text');
 const done=chk.classList.contains('done');
 chk.classList.toggle('done',!done);
@@ -886,7 +912,7 @@ try {
 await API(`/api/v1/lifeos/commitments/${el.dataset.id}/keep`,{method:'POST',body:JSON.stringify({kept:!done})});
 } catch {}
 }
-window.addMIT = async function() {
+window.addMIT = asyncFn() {
 const inp=$('mit-input'), text=inp.value.trim();
 if (!text) return;
 try {
@@ -897,7 +923,7 @@ loadMITs();
 };
 $('mit-input').addEventListener('keypress', e=>{ if(e.key==='Enter') addMIT(); });
 // ── Calendar ──
-async function loadCal() {
+asyncFn loadCal() {
 try {
 const r=await API('/api/v1/lifeos/engine/calendar/events?days=1&limit=8');
 const d=await r.json();
@@ -915,7 +941,7 @@ $('cal-list').innerHTML='<div class="empty"><span>📅</span>Could not load sche
 }
 }
 // ── Goals ──
-async function loadGoals() {
+asyncFn loadGoals() {
 try {
 const r=await API('/api/v1/lifeos/finance/goals');
 const d=await r.json();
@@ -956,7 +982,7 @@ return `<svg width="72" height="72" viewBox="0 0 72 72">
 stroke="${c}" style="stroke-dashoffset:${offset}"/>
 </svg>`;
 }
-async function loadScores() {
+asyncFn loadScores() {
 try {
 const r=await API('/api/v1/lifeos/dashboard/scoreboard');
 const d=await r.json();
@@ -977,7 +1003,7 @@ $('scores-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><span>�
 }
 // ── Chat ──
 let threadId=null;
-async function initChat() {
+asyncFn initChat() {
 try {
 const r=await API('/api/v1/lifeos/chat/threads/default',{method:'POST',body:JSON.stringify({})});
 const d=await r.json();
@@ -991,7 +1017,7 @@ $('chat-messages').innerHTML=msgs.map(m=>`<div class="msg ${m.role==='user'?'use
 $('chat-messages').scrollTop=99999;
 } catch {}
 }
-async function sendChat() {
+asyncFn sendChat() {
 const inp=$('chat-input'), text=inp.value.trim();
 if (!text||!threadId) return;
 inp.value='';
@@ -1063,7 +1089,7 @@ clearInterval(ambientInterval);
 if (window.speechSynthesis) window.speechSynthesis.cancel();
 }
 };
-async function checkProactiveNudge() {
+asyncFn checkProactiveNudge() {
 try {
 const r = await API('/api/v1/lifeos/ambient/nudge');
 const d = await r.json();

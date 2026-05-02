@@ -30,7 +30,7 @@ Use the mockup PNGs under `docs/mockups/` and the **Required dashboard shape** s
 
 - Full **persistent AI rail** behavior vs contract (`docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md`).
 - **Category** model (Today / Health / Family / Purpose stubs) vs brief “expansion stack.”
-- **Density** modes (compact / balanced / expanded) across cards.
+- **Density** modes vs `docs/projects/DASHBOARD_CUSTOMIZATION_STATE.md` and `docs/projects/DASHBOARD_WIDGET_DENSITY_SPEC.md`.
 
 ## Recommended next steps
 

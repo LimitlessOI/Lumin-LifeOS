@@ -1,6 +1,3 @@
-The task description "Document how scripts... should integrate" contradicts the "HTML FULL FILE — STRICT OUTPUT CONTRACT" which requires generating the complete implementation code. Prioritizing the strict output contract, the following is the complete HTML file with the integration implemented.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,4 +30,9 @@ The task description "Document how scripts... should integrate" contradicts the 
 --c-growth: var(--dash-accent-growth, #34d399);
 --c-finance: var(--dash-accent-finance, #22d3ee);
 --c-decisions: var(--dash-accent-warning, #f59e0b);
---c-mirror: var(--dash-accent-mirror, #7c3a
+--c-mirror: var(--dash-accent-mirror, #7c3aed);
+--c-conflict: var(--dash-accent-conflict, #e05555);
+--radius-sm: var(--dash-radius-sm, 6px);
+--radius-md: var(--dash-radius-md, 10px);
+--radius-lg: var(--dash-radius-lg, 14px);
+--radius-xl: var(--dash-radius-xl,
