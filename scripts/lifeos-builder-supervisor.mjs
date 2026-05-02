@@ -114,7 +114,7 @@ const key =
 
 const DEFAULT_MODEL = process.env.BUILDER_SUPERVISE_MODEL || 'gemini_flash';
 const BRIEF = 'docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md';
-const QUEUE = 'docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md';
+const QUEUE = 'docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md';
 const AMENDMENT = 'docs/projects/AMENDMENT_21_LIFEOS_CORE.md';
 const CATALOG = 'docs/BRAINSTORM_SESSIONS_IDEAS_CATALOG.md';
 const SHELL = 'public/overlay/lifeos-app.html';
@@ -464,7 +464,7 @@ async function main() {
       `\nChaining autonomous continuous queue runner — JSON backlog capped at ${queueMaxCli} POST /builder/build task(s) this chain …`,
     );
     await execFileAsync(process.execPath, [
-      path.join(process.cwd(), 'scripts/lifeos-builder-overnight.mjs'),
+      path.join(process.cwd(), 'scripts/lifeos-builder-continuous-queue.mjs'),
       '--max',
       String(queueMaxCli),
     ], { stdio: 'inherit', env: process.env, cwd: process.cwd() });

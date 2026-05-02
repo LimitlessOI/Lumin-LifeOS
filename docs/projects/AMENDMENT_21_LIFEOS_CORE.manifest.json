@@ -101,12 +101,25 @@
     "services/lifeos-scoreboard.js",
     "scripts/lifeos-smoke.mjs",
     "public/overlay/lifeos-app.html",
+    "docs/LIFEOS_PROGRAM_MAP_SSOT.md",
+    "docs/TSOS_TEN_UPLIFT_IDEAS.md",
     "docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md",
     "docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_QUEUE.md",
-    "docs/projects/LIFEOS_DASHBOARD_OVERNIGHT_TASKS.json",
+    "docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.md",
+    "docs/projects/LIFEOS_DASHBOARD_BUILDER_QUEUE.json",
+    "docs/projects/BUILDER_AUTONOMY_BRAINSTORM_VAULT.md",
+    "docs/BRAINSTORM_SESSIONS_PROTOCOL.md",
+    "docs/BUILDER_AUTONOMY_TRUST_AND_REVIEW_MODEL.md",
+    "docs/BUILDER_IDEA_FILTERS_REFINEMENT.md",
+    "docs/projects/BRAINSTORM_SESSIONS/README.md",
     "docs/projects/DASHBOARD_SHELL_GAP_AUDIT.md",
     "scripts/lifeos-builder-supervisor.mjs",
+    "scripts/lifeos-builder-continuous-queue.mjs",
     "scripts/lifeos-builder-overnight.mjs",
+    "scripts/lifeos-operational-grade.mjs",
+    "scripts/builder-operator-suite.mjs",
+    "scripts/tsos-suite-self-grade.mjs",
+    "docs/LIFEOS_SHELL_ACCEPTANCE.md",
     "public/shared/lifeos-dashboard-tokens.css",
     "routes/lifeos-council-builder-routes.js",
     "public/overlay/lifeos-feature.html",
@@ -832,6 +845,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-05-01",
-  "ssot_receipt_tail": "Am21 §9 tokens+append-only receipts; daemon token_stewardship cue; BUILDER_OPERATOR_ENV"
+  "last_updated": "2026-05-02",
+  "ssot_receipt_tail": "builder: extractCssFromOutput() strips markdown fences from CSS targets; daemon CSS commit fixed; supervisor §2.6 truth labels"
 }

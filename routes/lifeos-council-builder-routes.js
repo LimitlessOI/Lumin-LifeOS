@@ -361,6 +361,33 @@ async function verifyGeneratedJavaScriptWithNodeCheck(content, resolvedTarget) {
   }
 }
 
+function extractCssFromOutput(rawText) {
+  let s = String(rawText || '');
+  // Strip whole ```css ... ``` fence
+  const wholeFence = /^```(?:css|scss|sass|less)?\s*\r?\n([\s\S]*?)\r?\n```\s*$/im;
+  const wf = s.match(wholeFence);
+  if (wf && wf[1].trim().length > 10) return wf[1].trim();
+  // Strip opening fence if no closing fence (truncated)
+  if (s.startsWith('```')) {
+    const firstNl = s.indexOf('\n');
+    if (firstNl !== -1) {
+      let inner = s.slice(firstNl + 1);
+      const closeIdx = inner.lastIndexOf('\n```');
+      if (closeIdx !== -1) inner = inner.slice(0, closeIdx);
+      inner = inner.trim();
+      if (inner.length > 10) return inner;
+    }
+  }
+  // Strip prose preamble lines before the first CSS token (selector, comment, @rule, :root)
+  const lines = s.split(/\r?\n/);
+  const cssStart = lines.findIndex((l) => {
+    const t = l.trim();
+    return /^(\/\*|:root|html|body|\.|#|@)/.test(t) || /\{/.test(t);
+  });
+  if (cssStart > 0) return lines.slice(cssStart).join('\n').trim();
+  return s.trim();
+}
+
 function extractHtmlFromOutput(text) {
   const s = String(text || '');
   // Find earliest HTML document start
@@ -1095,6 +1122,13 @@ export function createLifeOSCouncilBuilderRoutes({
         );
         cleanedOutput = fixed;
       }
+    } else if (/\.(css|scss|sass|less)$/i.test(target_file)) {
+      // Strip markdown fences and prose preamble — models wrap CSS in ```css blocks
+      const stripped = extractCssFromOutput(output);
+      if (stripped !== output) {
+        log.info({ target_file, stripped: output.length - stripped.length }, '[BUILDER] /execute: Stripped markdown fence from CSS output');
+        cleanedOutput = stripped;
+      }
     }
     const validationError = validateGeneratedOutputForTarget(target_file, cleanedOutput);
     if (validationError) {
@@ -1380,6 +1414,13 @@ export function createLifeOSCouncilBuilderRoutes({
           '[BUILDER] Stripped HTML/markdown wrapper and asterisk params from JS output before syntax gate',
         );
         generatedOutput = extractedJs;
+      }
+    }
+    if (/\.(css|scss|sass|less)$/i.test(resolvedTarget)) {
+      const extractedCss = extractCssFromOutput(generatedOutput);
+      if (extractedCss !== generatedOutput) {
+        log.info({ resolvedTarget, stripped: generatedOutput.length - extractedCss.length }, '[BUILDER] Stripped markdown fence from CSS output before commit');
+        generatedOutput = extractedCss;
       }
     }
     const validationError = validateGeneratedOutputForTarget(resolvedTarget, generatedOutput);
