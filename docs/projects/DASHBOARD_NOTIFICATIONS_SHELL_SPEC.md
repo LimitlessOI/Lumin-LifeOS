@@ -1,65 +1,84 @@
-# LifeOS Dashboard Notification System Specification
+The task requests a Markdown specification, but the output contract specifies a complete HTML document and implementation code.
 
-This document outlines the specification for a dashboard-level notification (toast/snackbar) system within the LifeOS platform. The goal is to define patterns for displaying transient, actionable messages to the user, ensuring consistency, accessibility, and clear ownership between the dashboard shell and individual domains. This specification does not include production code; it defines the requirements and architectural approach.
+# LifeOS Dashboard Notifications Specification
+
+This document outlines the specification for dashboard-level notification, toast, and snackbar patterns within the LifeOS Dashboard. The goal is to establish a consistent, accessible, and extensible system for communicating transient and persistent information to the user, distinguishing between the dashboard shell's responsibility for UI management and feature domains' responsibility for triggering notifications.
 
 ## 1. Surfaces
 
-Notifications will appear as transient "toast" or "snackbar" messages.
+Notifications will appear in a dedicated, fixed position within the dashboard UI.
 
--   **Primary Surface:** Top-right corner of the main dashboard viewport, fixed position. This area avoids conflict with the chat interface and AI rail.
--   **Placement:** Notifications will appear from the top-right and stack downwards.
--   **Visibility:** Notifications should be visible above all other dashboard content, with an appropriate `z-index`.
+-   **Primary Surface:** A "toast" or "snackbar" area, fixed to the `top-right` corner of the viewport, with a slight offset from the edge (e.g., `right: 24px; top: 24px;`). This area will be responsible for displaying transient, time-sensitive messages.
+-   **Secondary Surface (Future Consideration):** A dedicated "Notification Center" accessible via a header icon (e.g., a bell icon) for persistent, historical, or less urgent notifications that require user review. This is out of scope for the initial implementation but should be considered in the design.
 
 ## 2. Stacking
 
-The system must gracefully handle multiple concurrent notifications.
+When multiple notifications are triggered, they will stack in the primary surface.
 
--   **Vertical Stacking:** New notifications will appear at the top of the notification area, pushing older notifications downwards.
--   **Maximum Count:** A configurable maximum number of visible notifications (e.g., 3-5) will be enforced. If the limit is reached, the oldest non-persistent notification will be automatically dismissed to make room for new ones.
--   **Order:** Notifications are displayed in reverse chronological order (newest on top).
+-   **Order:** Newest notifications will appear at the top of the stack, pushing older notifications downwards (LIFO - Last In, First Out).
+-   **Limit:** A maximum of `3` notifications will be visible at any given time. If more notifications are triggered, they will queue and appear as older ones are dismissed or expire.
+-   **Visuals:** Notifications will have a consistent visual style, with distinct indicators for severity (e.g., color-coded borders or icons).
 
 ## 3. Persistence and Dismissal
 
-Notifications will have varying persistence behaviors based on their severity and user interaction.
+Notifications will have defined lifecycles and dismissal mechanisms.
 
 -   **Severity Levels:**
-    -   **Info:** General information, non-critical. Auto-dismiss after a short duration (e.g., 5 seconds).
-    -   **Success:** Confirmation of a successful action. Auto-dismiss after a short duration (e.g., 5 seconds).
-    -   **Warning:** Important but non-blocking issues. Auto-dismiss after a moderate duration (e.g., 8-10 seconds) or manual dismissal.
-    -   **Error:** Critical issues requiring user attention. Manual dismissal required.
-    -   **Actionable:** Notifications with embedded actions (e.g., "Undo", "View Details"). Manual dismissal required, or dismissal upon action completion.
--   **Manual Dismissal:** All notifications, regardless of severity, must include a clear, clickable dismiss button (e.g., an "X" icon).
--   **Hover Pause:** Auto-dismissal timers should pause when the user hovers over a notification.
--   **"Do Not Disturb" Hook:**
-    -   A global setting, accessible via the header controls or a dedicated dashboard setting, will allow users to temporarily suppress non-critical (Info, Success) notifications.
-    -   Critical (Warning, Error, Actionable) notifications will bypass "Do Not Disturb" mode.
-    -   The "Do Not Disturb" state should be persisted in `localStorage`.
+    -   `Info`: General information, low urgency.
+    -   `Success`: Confirmation of a successful action.
+    -   `Warning`: Non-critical issues, potential problems.
+    -   `Error`: Critical issues, failed actions.
+    -   `Critical`: System-level failures, immediate attention required.
+-   **Auto-Dismissal:**
+    -   `Info` and `Success` severity notifications will automatically dismiss after `5` seconds.
+    -   `Warning` severity notifications will automatically dismiss after `8` seconds.
+    -   `Error` and `Critical` severity notifications will *not* auto-dismiss and will require explicit user action.
+-   **Manual Dismissal:** All notifications, regardless of severity, will include a visible "X" (close) button or similar affordance for manual dismissal.
+-   **User Interaction:** Hovering over a notification will pause its auto-dismissal timer. Clicking or interacting with a notification (if it contains an action) will also pause or dismiss it.
+-   **Session Persistence:** Notifications are transient and will not persist across page reloads or browser sessions.
 
 ## 4. Accessibility
 
-The notification system must be accessible to all users.
+The notification system will adhere to WCAG guidelines to ensure accessibility for all users.
 
--   **ARIA Roles:** Notifications will utilize appropriate ARIA roles, such as `role="status"` for non-critical updates and `role="alert"` for critical, time-sensitive information, to ensure screen readers announce them.
--   **Live Regions:** Notifications will be placed within an `aria-live` region to ensure dynamic content changes are announced.
--   **Keyboard Navigation:** Users must be able to navigate to and dismiss notifications using keyboard controls (e.g., Tab to focus, Enter/Space to dismiss).
--   **Contrast:** Text and background colors will adhere to WCAG 2.1 AA contrast guidelines.
--   **Focus Management:** When a critical notification appears, focus should not be automatically shifted, but the notification should be announced.
+-   **ARIA Live Regions:** The notification container will be an `aria-live` region.
+    -   `aria-live="polite"` will be used for `Info`, `Success`, and `Warning` notifications to announce them without interrupting ongoing tasks.
+    -   `aria-live="assertive"` will be used for `Error` and `Critical` notifications to ensure immediate announcement due to their urgency.
+-   **Keyboard Navigation:**
+    -   Notifications will be focusable via keyboard (e.g., Tab key).
+    -   The close button within each notification will be focusable and activatable via `Enter` or `Space` keys.
+-   **Color Contrast:** All text and interactive elements within notifications will meet WCAG AA contrast ratios against their background.
+-   **Semantic HTML:** Use appropriate HTML elements (e.g., `role="alert"`, `role="status"`) to convey meaning to assistive technologies.
 
 ## 5. Shell Ownership vs. Domain Pushes
 
-The dashboard shell (`public/overlay/lifeos-dashboard.html` and associated scripts) will own the notification UI and core logic.
+A clear separation of concerns will be maintained between the dashboard shell and feature domains.
 
--   **Shell Responsibility:**
-    -   Rendering of notification components (styling, positioning, stacking).
-    -   Managing auto-dismissal timers.
-    -   Handling "Do Not Disturb" logic.
-    -   Providing a public API for domains to push notifications.
-    -   Ensuring accessibility standards are met.
--   **Domain Responsibility:**
-    -   Domains will push notifications via a standardized API provided by the shell.
-    -   Domains will specify the notification content (text, optional actions), severity, and any domain-specific metadata.
-    -   Domains will *not* directly manipulate the DOM to display notifications.
+-   **Shell Ownership (Platform Core):**
+    -   The dashboard shell (Platform Core) will own the *rendering*, *positioning*, *stacking logic*, *dismissal mechanisms*, and *accessibility features* of the notification UI.
+    -   It will provide a central API or event bus for domains to push notifications.
+    -   It will manage the "Do Not Disturb" state and apply it to incoming notifications.
+-   **Domain Pushes (Feature Domains):**
+    -   Feature domains will be responsible for *triggering* notifications by providing structured data (message, severity, optional action, unique ID) to the shell's notification API.
+    -   Domains will *not* directly manipulate the notification DOM or manage their lifecycle.
 
-## 6. Deferred Implementation
+## 6. Do Not Disturb (DND) Hook
 
-This document serves as a specification. Implementation of the notification system will be a subsequent task, adhering to the patterns and requirements outlined herein. No production notification code is to be shipped as part of this specification.
+A "Do Not Disturb" mode will allow users to temporarily suppress non-critical notifications.
+
+-   **Toggle:** A dedicated toggle button will be added to the dashboard header (similar to the existing "Ambient voice" button) to activate/deactivate DND mode.
+-   **Behavior:**
+    -   When DND is active, `Info`, `Success`, and `Warning` notifications will be suppressed (not displayed).
+    -   `Error` and `Critical` notifications will *always* be displayed, regardless of DND status, due to their importance.
+    -   Suppressed notifications will *not* be queued or displayed later; they are simply discarded.
+-   **Persistence:** The DND state will be persisted in `localStorage` to maintain user preference across sessions.
+-   **Visual Feedback:** The DND toggle button will visually indicate its active state (e.g., a different icon or color).
+
+## 7. Deferred Implementation
+
+This document serves as a specification. No production notification code is to be shipped as part of this task. The implementation will involve:
+
+-   Creating a new JavaScript module (e.g., `public/shared/lifeos-notifications.js`) to manage the notification logic and DOM manipulation.
+-   Integrating this module into `public/overlay/lifeos-dashboard.html` and potentially `public/shared/lifeos-bootstrap.js` (if it were available and suitable for shared utilities).
+-   Defining a clear API for other dashboard modules to trigger notifications.
+-   Adding necessary CSS to `public/shared/lifeos-dashboard-tokens.css` or `public/overlay/lifeos-dashboard.html`'s style block for notification styling.
