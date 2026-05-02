@@ -1,48 +1,51 @@
-The task requests a specification document with no HTML rewrite, but the output contract demands a complete HTML document. Prioritizing the task's explicit content requirement for a specification.
+# LifeOS Dashboard Shell Accessibility Specification
 
-# LifeOS Dashboard Accessibility Specification
+## Introduction
+This document outlines the accessibility requirements for the LifeOS Dashboard shell, focusing on key areas to ensure an inclusive user experience. Adherence to these guidelines is critical for meeting WCAG 2.1 AA standards.
 
-This document outlines the accessibility requirements for the LifeOS Dashboard shell, focusing on key WCAG principles to ensure an inclusive user experience. This is a specification for future implementation and does not involve immediate HTML modifications.
+## 1. Semantic Structure and Landmarks (WCAG 2.1 SC 1.3.1 Info and Relationships)
+The dashboard shell must utilize appropriate HTML5 semantic elements and ARIA landmark roles to convey the structure and organization of content to assistive technologies.
 
-## 1. Focus Management and Keyboard Navigation (WCAG 2.1.1, 2.1.2, 2.4.3)
+### Requirements:
+*   The primary content area (`.page` div) should be contained within a `<main>` element or have `role="main"` to clearly identify the main content of the document.
+*   The header (`<header>`) should be clearly identifiable, implicitly providing `role="banner"`.
+*   Navigation elements, if introduced for switching between dashboard sections, must use `<nav>` or `role="navigation"`.
+*   The `lifeos-ai-rail-root` div, if it contains significant content, should be assigned an appropriate landmark role (e.g., `role="complementary"` or `role="region"`) with an accessible name (`aria-label`) to describe its purpose.
+*   All interactive sections (e.g., "Today's MITs", "Today's Schedule", "Goals", "Life Scores", "Chat with Lumin") must be clearly delineated with appropriate heading elements (`<h2>`, `<h3>`) to establish a logical content hierarchy.
 
-### 1.1 Keyboard Operability
-All interactive elements within the dashboard shell (e.g., buttons, input fields, clickable cards, MIT items) must be operable through a keyboard interface without requiring specific timings for individual keystrokes. This includes:
--   **Tab Order:** The logical tab order (`tabindex`) must follow the visual flow of the page, ensuring a predictable and intuitive navigation path.
--   **Focus Indicator:** A clear and visible focus indicator must be present for all interactive elements when they receive keyboard focus. The current `:focus` styles should be reviewed for sufficient contrast and prominence.
--   **Activation:** All interactive elements must be activatable using standard keyboard commands (e.g., `Enter` for buttons/links, `Space` for checkboxes/toggles).
+## 2. Keyboard Operability and Focus Management (WCAG 2.1 SC 2.1.1 Keyboard, 2.4.3 Focus Order, 2.4.7 Focus Visible)
+All interactive components within the dashboard shell must be fully operable via keyboard alone, with a logical tab order and clear visual focus indicators.
 
-### 1.2 Focus Traps
-Users must not be trapped within any specific interactive component or region of the dashboard. If a modal or custom widget is introduced, keyboard focus must be manageable within it and allow for easy escape (e.g., via `Escape` key) back to the previous focus point.
+### Requirements:
+*   **Keyboard Navigation:** All interactive elements, including buttons (`.hdr-btn`, `.btn-add`, `.btn-mic`, `.btn-send`), input fields (`#mit-input`, `#chat-input`, `#speak-toggle`), and interactive list items (`.mit-item`, `.score-tile`), must be reachable and actionable using standard keyboard commands (Tab, Shift+Tab, Enter, Space).
+*   **Focus Order:** The keyboard tab order must be logical and intuitive, following the visual flow of the page.
+*   **Focus Visible:** A clear and consistent visual indicator must be present for the currently focused element, meeting WCAG 2.4.7. The existing `:focus` styles should be reviewed for sufficient contrast and prominence.
+*   **No Keyboard Trap (WCAG 2.1 SC 2.1.2):** Users must be able to navigate away from any component using only the keyboard. This is particularly important for any future modal dialogs or complex widgets.
+*   **Long-Press Alternatives:** For elements with long-press functionality (e.g., `.mit-item` for description, `.score-tile` for tips), a keyboard-accessible alternative must be provided. This could be a tooltip that appears on focus, a dedicated "info" button, or an `aria-describedby` attribute linking to a descriptive element.
 
-## 2. Semantic Structure and Landmarks (WCAG 1.3.1)
+## 3. Color Contrast (WCAG 2.1 SC 1.4.3 Contrast (Minimum), 1.4.11 Non-text Contrast)
+The visual presentation of text and non-text content must have sufficient contrast against its background to be perceivable by users with low vision.
 
-### 2.1 HTML5 Semantic Elements
-The dashboard shell should leverage HTML5 semantic elements to define distinct regions of the page, aiding navigation for screen reader users and improving document outline.
--   The main content area (`.page` div) should be wrapped in a `<main>` element.
--   The header section (`.hdr-row`) is appropriately within a `<header>` element.
--   Consider if any sections (e.g., MITs, Calendar, Goals, Chat) could benefit from `<section>` or `<aside>` elements with appropriate `aria-label` attributes if their purpose isn't immediately clear from context.
--   Ensure proper heading structure (`<h1>` to `<h6>`) is used to convey content hierarchy. The current `greeting` element could be an `<h1>`.
+### Requirements:
+*   **Text Contrast:** All text content must meet a minimum contrast ratio of 4.5:1 against its background. This includes primary text (`--text-primary`), secondary text (`--text-secondary`), muted text (`--text-muted`), and text within buttons.
+*   **Non-text Contrast:** Graphical objects that are essential for understanding content (e.g., icons in buttons, the checkmark in `.mit-check`, the rings in `.score-ring`) must have a minimum contrast ratio of 3:1 against adjacent colors.
+*   **Focus Indicators:** The visual focus indicator must also meet a 3:1 contrast ratio against its adjacent colors to ensure it is clearly distinguishable.
 
-### 2.2 ARIA Landmarks
-For areas where semantic HTML5 elements are not sufficient or clear, ARIA landmark roles (e.g., `role="navigation"`, `role="complementary"`, `role="contentinfo"`) should be applied to provide additional structural information to assistive technologies.
+## 4. Motion and Animation (WCAG 2.1 SC 2.3.3 Animation from Interactions)
+Animations and motion effects should be designed to be non-disruptive and provide an option for users to reduce or disable them.
 
-## 3. Color Contrast (WCAG 1.4.3, 1.4.11)
+### Requirements:
+*   **`prefers-reduced-motion`:** The dashboard shell must respect the user's `prefers-reduced-motion` operating system setting.
+*   **Reduced Motion Implementation:**
+    *   For users who prefer reduced motion, animations such as `pulse-ring`, `fadeUp`, `shimmer`, `bounce-dot`, `ring-fill`, `bar-grow`, `check-draw`, and `mic-pulse` should be either disabled, significantly reduced in intensity, or replaced with static transitions.
+    *   CSS media queries (`@media (prefers-reduced-motion: reduce)`) must be used to apply alternative styles that minimize or remove motion.
+*   **Non-essential Animations:** All animations should be considered non-essential unless they convey critical information that cannot be conveyed by other means.
 
-### 3.1 Text Contrast
-All text content, including placeholder text in input fields, must have a contrast ratio of at least 4.5:1 against its background. This applies to:
--   Primary text (`--text-primary`)
--   Secondary text (`--text-secondary`)
--   Muted text (`--text-muted`)
--   Text within buttons and labels.
+## 5. Focus Traps (WCAG 2.1 SC 2.1.2 No Keyboard Trap)
+While the current HTML does not present obvious complex interactive components that would create focus traps, any future additions must adhere to this principle.
 
-### 3.2 Non-Text Contrast
-Graphical objects and user interface components (e.g., input borders, focus indicators, icons, score rings, checkboxes) must have a contrast ratio of at least 3:1 against adjacent colors. This ensures interactive elements and essential graphics are perceivable.
+### Requirements:
+*   If any modal dialogs, pop-ups, or complex interactive widgets are introduced, keyboard focus must be programmatically managed to remain within that component until it is dismissed.
+*   Upon dismissal, focus must return to the element that invoked the component.
 
-## 4. Motion and Animation (WCAG 2.3.3)
-
-### 4.1 Respect for `prefers-reduced-motion`
-The dashboard must respect the user's `prefers-reduced-motion` media query setting.
--   When `prefers-reduced-motion: reduce` is active, non-essential animations (e.g., `fadeUp`, `pulse-dot`, `shimmer`, `bounce-dot`, `ring-fill`, `bar-grow`, `check-draw`, `mic-pulse`) should be minimized or removed.
--   Essential animations that convey status or provide critical feedback may be retained but should be simplified (e.g., fades instead of complex movements).
--   The `pulse-dot` in the greeting and `mic-pulse` for the listening state are candidates for reduction or removal under this preference.
+This specification provides a framework for ensuring the LifeOS Dashboard shell is accessible. Future development and UI updates must be reviewed against these requirements.
