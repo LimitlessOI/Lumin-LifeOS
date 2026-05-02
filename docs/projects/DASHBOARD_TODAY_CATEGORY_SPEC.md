@@ -1,102 +1,61 @@
 ## Today Category Specification
 
-This document outlines the layout blocks and API assumptions for the "Today" category on the LifeOS Dashboard, referencing existing elements where applicable and proposing new structures for new features.
+This specification outlines the layout blocks and API assumptions for the "Today" category on the LifeOS dashboard, referencing existing elements in `public/overlay/lifeos-dashboard.html` and proposing structures for new components.
 
 ### 1. Today's MITs (Most Important Tasks)
 
 **Layout Block:**
-*   **Container:** `div.card.accent-border-today`
-*   **Label:** `div.card-label` with text "Today's MITs"
-*   **MITs List:** `div#mits-list`
-    *   Individual MITs: `div.mit-item`
-        *   Checkbox: `div.mit-check` (with `done` class for completion)
-        *   Text: `div.mit-text` (with `done` class for completion)
-*   **Quick Add (MIT-specific):** `div.quick-add`
-    *   Input: `input#mit-input`
-    *   Button: `button.btn-add`
+*   **Card Container:** The existing `<div class="card accent-border-today fade-up delay-1">`
+*   **Label:** The existing `<div class="card-label">Today's MITs</div>`
+*   **MITs List:** The existing `<div id="mits-list">` will render individual MIT items.
+*   **Quick Add Input:** The existing `<input type="text" id="mit-input" placeholder="Add a most important task…">`
+*   **Quick Add Button:** The existing `<button class="btn-add" onclick="addMIT()">Add</button>`
 
 **API Assumptions:**
 *   **Fetch MITs:** `GET /api/v1/lifeos/commitments?limit=30`
-    *   Expected response: `{ commitments: [{ id, text, is_mit, kept_at }] }`
-*   **Toggle MIT Completion:** `POST /api/v1/lifeos/commitments/{id}/keep`
-    *   Body: `{ kept: boolean }`
-*   **Add New MIT:** `POST /api/v1/lifeos/commitments`
-    *   Body: `{ text: string, is_mit: true }`
+    *   Expected response: `{"commitments": [{"id": "uuid", "text": "MIT description", "is_mit": true, "kept_at": "timestamp" | null}, ...]}`
+*   **Add MIT:** `POST /api/v1/lifeos/commitments`
+    *   Expected request body: `{"text": "New MIT description", "is_mit": true}`
+    *   Expected response: `{"commitment": {"id": "uuid", ...}}`
+*   **Toggle MIT Completion:** `POST /api/v1/lifeos/commitments/:id/keep`
+    *   Expected request body: `{"kept": true | false}`
+    *   Expected response: `{"commitment": {"id": "uuid", "kept_at": "timestamp" | null, ...}}`
 
 ### 2. Today's Schedule
 
 **Layout Block:**
-*   **Container:** `div.card.accent-border-today`
-*   **Label:** `div.card-label` with text "Today's Schedule"
-*   **Schedule List:** `div#cal-list`
-    *   Individual Events: `div.event-row`
-        *   Time: `span.event-time`
-        *   Title: `span.event-title`
+*   **Card Container:** The existing `<div class="card accent-border-today fade-up delay-2">`
+*   **Label:** The existing `<div class="card-label">Today's Schedule</div>`
+*   **Schedule List:** The existing `<div id="cal-list">` will render individual event items.
 
 **API Assumptions:**
 *   **Fetch Schedule:** `GET /api/v1/lifeos/engine/calendar/events?days=1&limit=8`
-    *   Expected response: `{ events: [{ id, title, starts_at }] }`
+    *   Expected response: `{"events": [{"title": "Event Name", "starts_at": "ISO timestamp"}, ...]}`
 
-### 3. Alerts
-
-**Layout Block:**
-*   **Container:** A new `div.card` element.
-    *   Proposed class: `accent-border-today` (or a new accent color if defined for alerts).
-    *   Proposed placement: Within the first `div.two-col` row, potentially replacing or alongside an existing card, or in a new row dedicated to "Today" items.
-*   **Label:** `div.card-label` with text "Alerts"
-*   **Alerts List:** A new `div` element, e.g., `div#alerts-list`.
-    *   Individual Alerts: A new `div` element, e.g., `div.alert-item`.
-        *   Icon/Indicator: `span.alert-icon`
-        *   Message: `span.alert-message`
-        *   Timestamp (optional): `span.alert-time`
-
-**API Assumptions:**
-*   **Fetch Alerts:** `GET /api/v1/lifeos/alerts`
-    *   Expected response: `{ alerts: [{ id, message, type, created_at }] }`
-*   **Dismiss Alert:** `POST /api/v1/lifeos/alerts/{id}/dismiss`
-
-### 4. General Quick Add
+### 3. Today's Alerts
 
 **Layout Block:**
-*   **Container:** A new `div.card` element.
-    *   Proposed class: `accent-border-today`.
-    *   Proposed placement: As a standalone card, or integrated into a "Today" focused section.
-*   **Label:** `div.card-label` with text "Quick Add"
-*   **Input Area:** A new `div` element, e.g., `div.general-quick-add-input`.
-    *   Input: `input#general-quick-add-input` with placeholder "Add anything..."
-    *   Button: `button#btn-general-add` with text "Add"
+*   **Card Container:** A new card, e.g., `<div class="card accent-border-today fade-up delay-X">` (where `delay-X` is an appropriate animation delay). This card would likely be placed in a new `two-col` row or integrated into an existing one.
+*   **Label:** `<div class="card-label">Today's Alerts</div>`
+*   **Alerts List:** A new container, e.g., `<div id="alerts-list">`, to display a list of active alerts. Each alert item would be a simple `div` or similar structure.
 
 **API Assumptions:**
-*   **Process General Input:** `POST /api/v1/lifeos/quick-add`
-    *   Body: `{ text: string }`
-    *   Expected behavior: Backend interprets the text (e.g., "add meeting tomorrow 3pm", "note to self: call mom") and routes it to the appropriate service (calendar, notes, etc.).
+*   **Fetch Alerts:** `GET /api/v1/lifeos/alerts/today`
+    *   Expected response: `{"alerts": [{"id": "uuid", "message": "Alert description", "severity": "info" | "warning" | "critical", "created_at": "ISO timestamp"}, ...]}`
+*   **Dismiss Alert:** `POST /api/v1/lifeos/alerts/:id/dismiss`
+    *   Expected request body: `{}` (or `{"dismissed": true}`)
+    *   Expected response: `{"status": "ok"}`
 
-### 5. Lumin Entry (Chat)
+### 4. Lumin Entry
 
 **Layout Block:**
-*   **Container:** `div.card.accent-border-mirror`
-*   **Label:** `div.card-label` with text "Chat with Lumin"
-*   **Chat Messages Display:** `div#chat-messages`
-    *   User Message: `div.msg.user`
-    *   Assistant Message: `div.msg.assistant`
-    *   Ambient Message: `div.msg.ambient`
-*   **Typing Indicator:** `div#typing`
-*   **Chat Input Row:** `div.chat-row`
-    *   Input: `input#chat-input`
-    *   Microphone Button: `button#btn-mic`
-    *   Send Button: `button#send-btn`
-*   **Voice Footer:** `div.voice-footer`
-    *   Speak Replies Toggle: `input#speak-toggle`
-    *   PTT Hint: `span.ptt-hint`
-    *   Voice Status: `span#voice-status`
+*   **Card Container:** A new card, e.g., `<div class="card accent-border-mirror fade-up delay-Y">` (where `delay-Y` is an appropriate animation delay). This card would likely be placed in a new `two-col` row, potentially alongside the "Today's Alerts" card.
+*   **Label:** `<div class="card-label">Lumin Entry</div>`
+*   **Entry Input:** A new input area, e.g., `<div class="lumin-quick-entry">`
+    *   Input: `<input type="text" id="lumin-entry-input" placeholder="Quick log a thought or observation…">`
+    *   Button: `<button class="btn-add" onclick="addLuminEntry()">Log</button>`
 
 **API Assumptions:**
-*   **Initialize Chat Thread:** `POST /api/v1/lifeos/chat/threads/default`
-    *   Expected response: `{ thread: { id } }`
-*   **Fetch Chat Messages:** `GET /api/v1/lifeos/chat/threads/{threadId}/messages?limit=10`
-    *   Expected response: `{ messages: [{ role, content }] }`
-*   **Send Chat Message:** `POST /api/v1/lifeos/chat/threads/{threadId}/messages`
-    *   Body: `{ message: string }`
-    *   Expected response: `{ reply: string }`
-*   **Ambient Nudge:** `GET /api/v1/lifeos/ambient/nudge`
-    *   Expected response: `{ speak: string | null }`
+*   **Create Lumin Entry:** `POST /api/v1/lifeos/lumin/entry`
+    *   Expected request body: `{"text": "User's thought or observation", "type": "observation" | "thought" | "reflection" | "question" | "general"}` (type could be optional or inferred).
+    *   Expected response: `{"entry": {"id": "uuid", "text": "...", "created_at": "ISO timestamp"}}`
