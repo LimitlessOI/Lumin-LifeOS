@@ -1,59 +1,43 @@
-# Client-Visible Error Envelopes Specification
+# Client-Visible API Error Envelopes Specification
 
-This document outlines the standard for presenting API failure information to the client, ensuring a consistent user experience, appropriate privacy, and effective debugging for platform administrators.
+## 1. Purpose
+This specification defines a consistent approach for handling and displaying API errors on the client-side, ensuring clarity for users, privacy of internal details, and effective debuggability for authorized personnel.
 
-## 1. API Failure Copy
+## 2. API Error Response Contract (Client Expectation)
+When an API request fails (e.g., network error, non-2xx HTTP status), the client expects a JSON response body structured as follows:
 
-### 1.1 User-Facing Messages
--   **Generic Error**: For most unhandled or unexpected API failures, display a concise, user-friendly message: "Something went wrong. Please try again."
--   **Specific Actionable Errors**: For known error conditions where the user can take a specific action (e.g., invalid input, missing required fields), provide clear, direct guidance. Examples:
-    -   "Please ensure all required fields are filled."
-    -   "The API key is invalid. Please check your settings."
-    -   "You do not have permission to perform this action."
--   **Network/Connectivity Issues**: "It looks like you're offline or experiencing network issues. Please check your connection."
--   **Rate Limiting**: "You've sent too many requests. Please wait a moment and try again."
--   **No Technical Jargon**: Avoid exposing internal error codes, stack traces, or backend system names directly to the end-user.
+```json
+{
+  "error": {
+    "message": "A concise, user-friendly explanation of what went wrong.",
+    "correlationId": "a-unique-request-identifier-uuid-v4",
+    "details": "Optional: More technical details for debugging, not for general users."
+  }
+}
+```
+- `error.message` (string, required): The primary message displayed to all users. It should be actionable or informative without exposing internal system specifics.
+- `error.correlationId` (string, required): A unique identifier for the failed request. This is crucial for tracing issues in backend logs.
+- `error.details` (string, optional): Additional technical context (e.g., specific validation failures, internal error codes) that is useful for debugging but should not be shown to general users.
 
-### 1.2 Error Display Location
--   Errors should be displayed in a non-intrusive but visible manner, typically near the UI element that triggered the action, or as a temporary toast/banner notification for global issues.
--   Critical errors that block functionality may warrant a modal dialog.
+## 3. Client-Side Error Display Logic
 
-## 2. Retry Mechanism
+### 3.1. Default User Display (Fail-Closed)
+-   **Message:** Always display `error.message` from the API response. If the API response is malformed or a network error occurs without a structured response, fall back to a generic message like "An unexpected error occurred. Please try again."
+-   **Privacy:** No internal system details (e.g., stack traces, specific database errors, raw HTTP status codes beyond a general "server error") are to be exposed to the general user. The system defaults to a fail-closed state regarding information disclosure.
+-   **Retry Prompt:** For transient errors (e.g., network issues, 5xx server errors), append a suggestion to retry, such as "Please try again later." or provide a "Retry" button if the UI context allows. For 4xx client errors, the message should guide the user to correct their input if possible, without a generic retry.
 
-### 2.1 Client-Initiated Retries
--   For transient errors (e.g., network issues, temporary service unavailability), a "Retry" button should be presented to the user.
--   This button should re-attempt the failed API call.
+### 3.2. Adam-Only Debug Display
+-   **Activation:** Debug information (correlation ID, details) is surfaced only when a client-side debug flag is active. This flag can be controlled via `localStorage.setItem('lifeos_debug_mode', 'true')`.
+-   **Content:** When `lifeos_debug_mode` is `true`:
+    -   Append the `correlationId` to the displayed error message.
+    -   If `error.details` is present, also append these details.
+-   **Formatting:** Debug information should be visually distinct from the main user message (e.g., smaller font, muted color, or within a collapsible/expandable section).
+-   **Example (Adam-only, debug mode active):**
+    "Could not load tasks. Please try again later. (ID: `[correlationId]`, Details: `[error.details]`)".
 
-### 2.2 Automatic Retries (Internal)
--   The client-side `fetch` wrapper (or similar) may implement a limited number of automatic retries (e.g., 1-3 attempts) with exponential backoff for specific HTTP status codes (e.g., 502, 503, 504, or network errors) before surfacing an error to the user.
--   This should be transparent to the user unless all retries fail.
+## 4. UI Integration
+-   Errors should primarily be displayed inline within the relevant UI component where the data or action was expected (e.g., replacing a list of items with an error message, or showing an error below a form field). This follows existing patterns in `public/overlay/lifeos-dashboard.html`.
+-   The error message should be clearly visible and use appropriate styling (e.g., `text-red-500` or similar for critical errors, `text-muted` for less severe or informational errors).
 
-## 3. Correlation ID Surfacing
-
-### 3.1 Adam-Only (Developer/Admin View)
--   A unique `x-request-id` (or similar correlation ID from the backend) must be available for debugging purposes.
--   This ID should be accessible via:
-    -   Browser developer console (e.g., logged with the error details).
-    -   A hidden debug overlay or "secret" key combination (e.g., `Ctrl+Alt+D`) that reveals extended error information, including the correlation ID.
--   This information is strictly for internal use by Adam (the platform engineer/admin) and should not be visible to general users by default.
-
-### 3.2 User Copy
--   **Never** expose the raw correlation ID directly to the end-user in standard error messages.
--   Instead, if an error persists and requires support, the user message should guide them to contact support without providing the ID. Example: "If the problem persists, please contact support."
-
-## 4. Privacy and Fail-Closed Principle
-
-### 4.1 Default to Generic Errors
--   When in doubt, default to a generic error message ("Something went wrong.") rather than revealing potentially sensitive system details.
--   Error messages should be designed to provide the minimum necessary information for the user to understand the problem or retry, without exposing implementation details.
-
-### 4.2 No Sensitive Data Exposure
--   Ensure that API error responses, when surfaced to the client, do not contain sensitive user data, internal system paths, database query details, or other information that could be exploited.
-
-### 4.3 Fail-Closed
--   In the event of an API failure during an operation that modifies data, the client should assume the operation failed and reflect that state to the user.
--   Avoid optimistic UI updates that might be incorrect if the backend operation failed.
--   For read operations, if data cannot be fetched, display an empty state or a "could not load" message, rather than stale or partial data, unless explicitly designed for offline caching.
-
-## 5. No Instrumentation Code in Spec
--   This specification defines the *behavior* and *content* of error envelopes. It does not include specific client-side instrumentation code (e.g., for logging errors to an analytics service). That is a separate concern for implementation.
+## 5. No Instrumentation Code
+This specification focuses solely on the client-visible aspects of error handling. It explicitly excludes any requirements for client-side logging, monitoring, or backend instrumentation code.
