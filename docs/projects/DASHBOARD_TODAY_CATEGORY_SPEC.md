@@ -1,71 +1,72 @@
-The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file could not be read. The output format specification is contradictory; prioritizing Markdown as per explicit 'SPECIFICATION' for this task.
+The specification is incomplete due to the missing `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file.
 
-### Today Category Specification
+# Today Category Specification
 
-This document outlines the layout blocks and API assumptions for the "Today" category on the LifeOS Dashboard, encompassing MITs, Schedule, Alerts, Quick Add, and Lumin Entry.
+This document outlines the layout blocks and API assumptions for the "Today" category on the LifeOS dashboard, based on the provided `public/overlay/lifeos-dashboard.html` and `docs/projects/DASHBOARD_WIDGET_DENSITY_SPEC.md`.
 
-#### 1. Today's MITs
+## 1. Today's MITs (Most Important Tasks)
 
-*   **Purpose**: Display and manage Most Important Tasks (MITs) for the current day.
-*   **Layout Block**:
-    *   **HTML Element**: Existing `div.card.accent-border-today` within the first `.two-col` row.
-    *   **IDs**:
-        *   `mits-list`: Container for individual MIT items.
-        *   `mit-input`: Input field for the quick add feature.
-*   **API Assumptions**:
-    *   `GET /api/v1/lifeos/commitments?limit=30`: Fetches a list of commitments, which are then filtered client-side for `is_mit: true`.
-        *   Expected Response: `{ commitments: [{ id: string, text: string, description: string, is_mit: boolean, kept_at: string | null }] }`
-    *   `POST /api/v1/lifeos/commitments/{id}/keep`: Toggles the completion status of an MIT.
-        *   Request Body: `{ kept: boolean }`
-    *   `POST /api/v1/lifeos/commitments`: Adds a new MIT.
-        *   Request Body: `{ text: string, is_mit: true }`
+**Layout Block:**
+- The "Today's MITs" section is contained within a `div` with classes `card accent-border-today fade-up delay-1`.
+- **MITs List:** `div#mits-list` holds individual MIT items.
+- **Quick Add:** `div.quick-add` contains the input field and button for adding new MITs.
+    - Input field: `input#mit-input`
+    - Add button: `button.btn-add`
 
-#### 2. Today's Schedule
+**API Assumptions:**
+- **Fetch MITs:** `GET /api/v1/lifeos/commitments?limit=30`
+    - Expected response: `{ commitments: [{ id: string, text: string, description: string, is_mit: boolean, kept_at: string|null }] }`
+- **Toggle MIT Completion:** `POST /api/v1/lifeos/commitments/{id}/keep`
+    - Request body: `{ kept: boolean }`
+- **Add New MIT:** `POST /api/v1/lifeos/commitments`
+    - Request body: `{ text: string, is_mit: true }`
 
-*   **Purpose**: Display calendar events and appointments scheduled for the current day.
-*   **Layout Block**:
-    *   **HTML Element**: Existing `div.card.accent-border-today` within the first `.two-col` row, adjacent to "Today's MITs".
-    *   **ID**: `cal-list`: Container for individual event items.
-*   **API Assumptions**:
-    *   `GET /api/v1/lifeos/engine/calendar/events?days=1&limit=8`: Fetches calendar events for today.
-        *   Expected Response: `{ events: [{ id: string, title: string, name: string, starts_at: string | null, start_time: string | null }] }`
+## 2. Today's Schedule
 
-#### 3. Today's Alerts (New Section)
+**Layout Block:**
+- The "Today's Schedule" section is contained within a `div` with classes `card accent-border-today fade-up delay-2`.
+- **Schedule List:** `div#cal-list` holds individual event rows.
+    - Event row: `div.event-row`
+    - Event time: `span.event-time`
+    - Event title: `span.event-title`
 
-*   **Purpose**: Display important, time-sensitive alerts or notifications relevant to the user's day.
-*   **Layout Block**:
-    *   **HTML Element**: A new `div.card.accent-border-today` element.
-    *   **Placement**: This card will be a full-width block, placed after the existing "Goals + Scores" `.two-col` row and before the "Chat with Lumin" card.
-    *   **ID**: `alerts-list`: Container for individual alert items.
-*   **API Assumptions**:
-    *   `GET /api/v1/lifeos/alerts/today`: Fetches a list of active alerts for the current day.
-        *   Expected Response: `{ alerts: [{ id: string, title: string, description: string, type: 'info'|'warning'|'critical', created_at: string }] }`
+**API Assumptions:**
+- **Fetch Schedule:** `GET /api/v1/lifeos/engine/calendar/events?days=1&limit=8`
+    - Expected response: `{ events: [{ title: string, name: string, starts_at: string, start_time: string }] }`
 
-#### 4. Quick Add (MITs)
+## 3. Lumin Entry (Chat with Lumin)
 
-*   **Purpose**: Provide a streamlined interface for adding new Most Important Tasks.
-*   **Layout Block**:
-    *   **HTML Element**: Existing `div.quick-add` nested within the "Today's MITs" card.
-    *   **ID**: `mit-input`: Text input field.
-*   **API Interactions**: (Refer to "Today's MITs" section for `POST /api/v1/lifeos/commitments`)
+**Layout Block:**
+- The "Chat with Lumin" section is contained within a `div` with classes `card accent-border-mirror fade-up delay-5`.
+- **Chat Messages:** `div#chat-messages` displays the conversation history.
+    - User message: `div.msg.user`
+    - Assistant message: `div.msg.assistant`
+    - Ambient message: `div.msg.ambient`
+- **Typing Indicator:** `div#typing` shows when Lumin is typing.
+- **Chat Input Row:** `div.chat-row` contains the input field and action buttons.
+    - Chat input: `input#chat-input`
+    - Microphone button: `button#btn-mic`
+    - Send button: `button#send-btn`
+- **Voice Footer:** `div.voice-footer` provides voice-related controls and status.
+    - Speak replies toggle: `input#speak-toggle`
+    - Voice status: `span#voice-status`
 
-#### 5. Lumin Entry (Chat with Lumin)
+**API Assumptions:**
+- **Initialize Chat Thread:** `POST /api/v1/lifeos/chat/threads/default`
+    - Request body: `{}`
+    - Expected response: `{ thread: { id: string } }` or `{ id: string }`
+- **Fetch Chat History:** `GET /api/v1/lifeos/chat/threads/{threadId}/messages?limit=10`
+    - Expected response: `{ messages: [{ role: 'user'|'assistant', content: string }] }`
+- **Send Message:** `POST /api/v1/lifeos/chat/threads/{threadId}/messages`
+    - Request body: `{ message: string }`
+    - Expected response: `{ reply: string }` or `{ content: string }`
+- **Fetch Ambient Nudge:** `GET /api/v1/lifeos/ambient/nudge`
+    - Expected response: `{ speak: string|null }`
 
-*   **Purpose**: Facilitate interaction with the Lumin AI assistant via text or voice.
-*   **Layout Block**:
-    *   **HTML Element**: Existing `div.card.accent-border-mirror` as a full-width block.
-    *   **IDs**:
-        *   `chat-messages`: Container for chat message history.
-        *   `chat-input`: Text input field for messages.
-        *   `btn-mic`: Button for voice input (Push-to-Talk).
-        *   `send-btn`: Button to send text messages.
-*   **API Assumptions**:
-    *   `POST /api/v1/lifeos/chat/threads/default`: Initializes or retrieves the default chat thread.
-        *   Expected Response: `{ thread: { id: string } | { id: string } }`
-    *   `GET /api/v1/lifeos/chat/threads/{threadId}/messages?limit=10`: Fetches recent messages for a given thread.
-        *   Expected Response: `{ messages: [{ role: 'user'|'assistant', content: string }] }`
-    *   `POST /api/v1/lifeos/chat/threads/{threadId}/messages`: Sends a new message to the AI assistant.
-        *   Request Body: `{ message: string }`
-        *   Expected Response: `{ reply: string | null, content: string | null }`
-    *   `GET /api/v1/lifeos/ambient/nudge`: Fetches proactive nudges from Lumin for ambient mode.
-        *   Expected Response: `{ speak: string | null }`
+## 4. Alerts
+
+No explicit "alerts" layout block or section is visible in the provided `public/overlay/lifeos-dashboard.html`. If alerts are to be implemented, they would require a new dedicated card or integration into existing card structures (e.g., as badges or inline messages within MITs or Schedule items).
+
+## 5. Widget Density Integration
+
+As per `docs/projects/DASHBOARD_WIDGET_DENSITY_SPEC.md`, the visual density of all dashboard cards, including those in the "Today" category, will be controlled by a `data-density` attribute on the `body` element. This will dynamically adjust CSS variables such as `--dash-card-padding-x`, `--dash-card-padding-y`, `--dash-card-margin-bottom`, `--dash-card-label-margin-bottom`, `--dash-font-size-card-label`, `--dash-font-size-card-content`, and `--dash-radius-lg`.
