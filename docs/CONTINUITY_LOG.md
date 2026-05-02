@@ -32,6 +32,21 @@
 
 ---
 
+## [FIX] Update 2026-05-07 #1 — Smoke tests skip when API offline
+
+### Files changed
+- **`tests/smoke.test.js`** — integration cases **`t.skip`** on **`fetch`** failure (server not running / wrong **`TEST_BASE_URL`**); unit **`parseInsuranceCardText`** unchanged.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — **`## Change Receipts`** row.
+
+### State after this session
+- **`npm test`** **KNOW:** exit **0** locally without **`node server.js`** (4 skipped, 2 passed).
+- **MVP ETA (machine corridor):** **`npm run lifeos:builder:throughput-meter`** still the source of truth for queue wall-time to **`dashboard-shell-audit`**; **not** the same as “operator-reviewed MVP.”
+
+### Next agent: start here
+- Run **`lifeos:builder:throughput-meter -- --write-receipt`** after queue slices to refresh ETA JSON; keep **`npm run lifeos:supervise:static`** on overlay slices.
+
+---
+
 ## [BUILD] Update 2026-05-06 #2 — `reset-cursor-only`, slice_profile, GAP-FILL polluted `*.md` specs
 
 ### Files touched

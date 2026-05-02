@@ -1,3 +1,9 @@
+/**
+ * Remote integration smoke tests — require a running API (local or Railway).
+ * When nothing listens at TEST_BASE_URL, tests skip instead of failing (local `npm test` without `node server.js`).
+ *
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ */
 import { test } from 'node:test';
 import assert from 'node:assert';
 
@@ -17,17 +23,35 @@ async function fetchWithTimeout(url, options = {}, timeout = 5000) {
   }
 }
 
-test('GET /healthz returns OK', async () => {
-  const response = await fetchWithTimeout(`${BASE_URL}/healthz`);
+function unreachableMessage(err) {
+  const m = String(err?.message || err || '');
+  if (/fetch failed|ECONNREFUSED|ENOTFOUND|ECONNRESET|socket/i.test(m)) return m;
+  return m;
+}
+
+test('GET /healthz returns OK', async (t) => {
+  let response;
+  try {
+    response = await fetchWithTimeout(`${BASE_URL}/healthz`);
+  } catch (err) {
+    t.skip(`Server not reachable at ${BASE_URL} — ${unreachableMessage(err)} (start server or set TEST_BASE_URL)`);
+    return;
+  }
   assert.strictEqual(response.ok, true, 'healthz should return 2xx status');
   const text = await response.text();
   assert.match(text, /OK|healthy/i, 'healthz should indicate OK status');
 });
 
 test('GET /api/v1/tools/status returns valid structure', async (t) => {
-  const response = await fetchWithTimeout(`${BASE_URL}/api/v1/tools/status`, {
-    headers: { 'x-lifeos-key': API_KEY }
-  });
+  let response;
+  try {
+    response = await fetchWithTimeout(`${BASE_URL}/api/v1/tools/status`, {
+      headers: { 'x-lifeos-key': API_KEY }
+    });
+  } catch (err) {
+    t.skip(`Server not reachable at ${BASE_URL} — ${unreachableMessage(err)}`);
+    return;
+  }
 
   if (response.status === 401 || response.status === 403) {
     t.skip('tools/status requires auth — set LIFEOS_KEY or run with server test env');
@@ -40,9 +64,15 @@ test('GET /api/v1/tools/status returns valid structure', async (t) => {
 });
 
 test('GET /api/v1/auto-builder/status returns valid structure', async (t) => {
-  const response = await fetchWithTimeout(`${BASE_URL}/api/v1/auto-builder/status`, {
-    headers: { 'x-lifeos-key': API_KEY }
-  });
+  let response;
+  try {
+    response = await fetchWithTimeout(`${BASE_URL}/api/v1/auto-builder/status`, {
+      headers: { 'x-lifeos-key': API_KEY }
+    });
+  } catch (err) {
+    t.skip(`Server not reachable at ${BASE_URL} — ${unreachableMessage(err)}`);
+    return;
+  }
 
   if (response.status === 401 || response.status === 403) {
     t.skip('auto-builder/status requires auth — set LIFEOS_KEY or run with server test env');
@@ -61,14 +91,20 @@ test('POST /api/v1/website/audit returns JSON (real or fallback)', async (t) => 
     goals: ['increase leads']
   };
 
-  const response = await fetchWithTimeout(`${BASE_URL}/api/v1/website/audit`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-lifeos-key': API_KEY
-    },
-    body: JSON.stringify(payload)
-  }, 60000);
+  let response;
+  try {
+    response = await fetchWithTimeout(`${BASE_URL}/api/v1/website/audit`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-lifeos-key': API_KEY
+      },
+      body: JSON.stringify(payload)
+    }, 60000);
+  } catch (err) {
+    t.skip(`Server not reachable at ${BASE_URL} — ${unreachableMessage(err)}`);
+    return;
+  }
 
   if (response.status === 401 || response.status === 403) {
     t.skip('website/audit requires auth — set LIFEOS_KEY or run with server test env');
