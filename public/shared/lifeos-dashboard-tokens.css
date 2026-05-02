@@ -1,6 +1,16 @@
-/* Refer to docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md */
+The output contract for this task is contradictory: the task asks for a CSS file, but the "STRICT OUTPUT CONTRACT" specifies an HTML document. I am proceeding by generating the CSS file as requested by the task, assuming the HTML contract is a boilerplate error.
 
-:root[data-theme="dark"] {
+```css
+/*
+ * LifeOS Dashboard Shell CSS Tokens
+ *
+ * This file defines semantic color, spacing, and radius variables for the
+ * LifeOS dashboard shell, supporting both light and dark themes.
+ *
+ * Refer to: docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md
+ */
+
+:root { /* Default to dark theme if no data-theme is set */
   --dash-bg: #0a0a0f;
   --dash-surface: #111118;
   --dash-text: #e8e8f0;
@@ -11,13 +21,25 @@
   --dash-space-unit: 4px;
 }
 
-:root[data-theme="light"] {
+html[data-theme="dark"] {
+  --dash-bg: #0a0a0f;
+  --dash-surface: #111118;
+  --dash-text: #e8e8f0;
+  --dash-muted: #555566;
+  --dash-accent: #5b6af5;
+  --dash-border: rgba(255,255,255,0.07);
+  --dash-radius-lg: 14px;
+  --dash-space-unit: 4px;
+}
+
+html[data-theme="light"] {
   --dash-bg: #f6f7fb;
   --dash-surface: #ffffff;
   --dash-text: #1a1a22;
-  --dash-muted: #666677;
-  --dash-accent: #5b6af5;
+  --dash-muted: #6a6a7a;
+  --dash-accent: #5b6af5; /* Keep accent consistent across themes */
   --dash-border: rgba(0,0,0,0.1);
   --dash-radius-lg: 14px;
   --dash-space-unit: 4px;
 }
+```
