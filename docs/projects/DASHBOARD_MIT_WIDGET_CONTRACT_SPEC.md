@@ -33,3 +33,6 @@
 --c-mirror: var(--dash-accent-mirror, #7c3aed);
 --c-conflict: var(--dash-accent-conflict, #e05555);
 --radius-sm: var(--dash-radius-sm, 6px);
+--radius-md: var(--dash-radius-md, 10px);
+--radius-lg: var(--dash-radius-lg, 14px);
+--radius-xl: var(--dash-radius-xl,
