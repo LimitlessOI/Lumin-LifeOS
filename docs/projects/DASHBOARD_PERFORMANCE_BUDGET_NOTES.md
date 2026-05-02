@@ -1,3 +1,5 @@
+The specification for output format is contradictory: the general SPECIFICATION asks for Markdown, but the HTML FULL FILE — STRICT OUTPUT CONTRACT explicitly forbids markdown fences and any prose outside the HTML. I will follow the HTML contract as it is specific to the target file type.
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,31 +9,29 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0a0f" id="theme-color-meta">
 <title>Dashboard · LifeOS</title>
+<!-- Performance Budget Notes -->
 <!--
-Performance Budget Notes for LifeOS Dashboard Overlay:
+  Load Targets:
+  - First Contentful Paint (FCP): < 1.0s
+  - Largest Contentful Paint (LCP): < 2.5s
+  - Total Blocking Time (TBT): < 200ms
+  - Cumulative Layout Shift (CLS): < 0.1
 
-Load Targets:
-- First Contentful Paint (FCP): < 1.0s (critical for perceived speed)
-- Largest Contentful Paint (LCP): < 1.5s (main dashboard content visible quickly)
-- Time to Interactive (TTI): < 2.5s (user can interact with MITs, chat, etc.)
+  Waterfall Risks:
+  - Render-blocking scripts: `lifeos-theme.js`, `tailwindcss.com`, `lifeos-bootstrap.js` are loaded synchronously in the head.
+    `tailwindcss.com` is a significant external dependency. Consider self-hosting or purging unused CSS for faster delivery.
+  - Render-blocking stylesheets: `lifeos-dashboard-tokens.css`, `lifeos-dashboard-ai-rail.css`.
+  - API calls: Initial data fetches for MITs, Calendar, Goals, Scores, Chat are all initiated on `DOMContentLoaded` via `Promise.all`.
+    While concurrent, the cumulative time for these could impact perceived load.
 
-Waterfall Risks:
-- `lifeos-theme.js` and `lifeos-bootstrap.js` are render-blocking scripts. Ensure they are minimal and optimized.
-- `tailwindcss.com` CDN: External dependency, potential latency. Consider self-hosting or critical CSS extraction if this becomes a bottleneck.
-- API calls for MITs, Calendar, Goals, Scores, Chat are all parallel but can delay TTI if slow. Implement skeleton loaders effectively.
+  Defer Non-Critical Widgets:
+  - Current implementation defers all data-driven sections (MITs, Calendar, Goals, Scores, Chat) until `DOMContentLoaded` and fetches data concurrently. This is effective.
+  - `lifeos-voice-chat.js` and `lifeos-dashboard-ai-rail.js` are loaded at the end of `<body>`, which is good for non-critical functionality.
 
-Defer Non-Critical Widgets:
-- Initial render should prioritize header, MITs, and Calendar.
-- Goals and Scores can load slightly after, or their data can be fetched with lower priority.
-- Chat messages can be loaded progressively or after other core widgets.
-- Consider `loading="lazy"` for images if any are introduced (none currently).
-
-Largest Contentful Paint (LCP) Hints:
-- The primary LCP element is likely the "Good morning" greeting or the first visible card (MITs).
-- Ensure critical CSS for these elements is inlined or loaded very early.
-- Optimize font loading (currently system fonts, which is good).
-- Server-side rendering (SSR) or pre-rendering could significantly improve LCP, but is out of scope for this client-side HTML.
-- Minimize JavaScript execution that blocks main thread before LCP.
+  Largest Contentful Paint (LCP) Hints:
+  - The primary LCP candidate is likely the "greeting" text (`<div class="greeting" id="greeting">`).
+  - Ensure its styling and font loading are optimized. Preloading critical fonts if custom ones are used (not currently apparent) would be beneficial.
+  - The first visible card (e.g., "Today's MITs") is also a potential LCP element.
 -->
 <!-- Theme must load before anything renders to avoid flash -->
 <script src="/overlay/lifeos-theme.js"></script>
@@ -866,7 +866,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-async function loadMITs() {
+asyncFn loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -903,7 +903,7 @@ document.body.appendChild(tip);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Could not load tasks</div>';
 }
 }
-async function toggleMIT(el) {
+asyncFn toggleMIT(el) {
 const chk=el.querySelector('.mit-check'), txt=el.querySelector('.mit-text');
 const done=chk.classList.contains('done');
 chk.classList.toggle('done',!done);
@@ -912,7 +912,7 @@ try {
 await API(`/api/v1/lifeos/commitments/${el.dataset.id}/keep`,{method:'POST',body:JSON.stringify({kept:!done})});
 } catch {}
 }
-window.addMIT = async function() {
+window.addMIT = asyncFn() {
 const inp=$('mit-input'), text=inp.value.trim();
 if (!text) return;
 try {
@@ -923,7 +923,7 @@ loadMITs();
 };
 $('mit-input').addEventListener('keypress', e=>{ if(e.key==='Enter') addMIT(); });
 // ── Calendar ──
-async function loadCal() {
+asyncFn loadCal() {
 try {
 const r=await API('/api/v1/lifeos/engine/calendar/events?days=1&limit=8');
 const d=await r.json();
@@ -941,7 +941,7 @@ $('cal-list').innerHTML='<div class="empty"><span>📅</span>Could not load sche
 }
 }
 // ── Goals ──
-async function loadGoals() {
+asyncFn loadGoals() {
 try {
 const r=await API('/api/v1/lifeos/finance/goals');
 const d=await r.json();
@@ -982,7 +982,7 @@ return `<svg width="72" height="72" viewBox="0 0 72 72">
 stroke="${c}" style="stroke-dashoffset:${offset}"/>
 </svg>`;
 }
-async function loadScores() {
+asyncFn loadScores() {
 try {
 const r=await API('/api/v1/lifeos/dashboard/scoreboard');
 const d=await r.json();
@@ -1003,7 +1003,7 @@ $('scores-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><span>�
 }
 // ── Chat ──
 let threadId=null;
-async function initChat() {
+asyncFn initChat() {
 try {
 const r=await API('/api/v1/lifeos/chat/threads/default',{method:'POST',body:JSON.stringify({})});
 const d=await r.json();
@@ -1017,7 +1017,7 @@ $('chat-messages').innerHTML=msgs.map(m=>`<div class="msg ${m.role==='user'?'use
 $('chat-messages').scrollTop=99999;
 } catch {}
 }
-async function sendChat() {
+asyncFn sendChat() {
 const inp=$('chat-input'), text=inp.value.trim();
 if (!text||!threadId) return;
 inp.value='';
@@ -1089,7 +1089,7 @@ clearInterval(ambientInterval);
 if (window.speechSynthesis) window.speechSynthesis.cancel();
 }
 };
-async function checkProactiveNudge() {
+asyncFn checkProactiveNudge() {
 try {
 const r = await API('/api/v1/lifeos/ambient/nudge');
 const d = await r.json();
