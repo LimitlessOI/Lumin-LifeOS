@@ -32,8 +32,6 @@
 --c-decisions: var(--dash-accent-warning, #f59e0b);
 --c-mirror: var(--dash-accent-mirror, #7c3aed);
 --c-conflict: var(--dash-accent-conflict, #e05555);
---c-family: #f43f5e; /* Added for Family category stub */
---c-purpose: #8b5cf6; /* Added for Purpose category stub */
 --radius-sm: var(--dash-radius-sm, 6px);
 --radius-md: var(--dash-radius-md, 10px);
 --radius-lg: var(--dash-radius-lg, 14px);
@@ -60,7 +58,7 @@ max-width: 860px;
 margin: 0 auto;
 padding: 24px 16px;
 }
-/ ── Cards ── /
+/* ── Cards ── */
 .card {
 background: var(--bg-surface);
 border: 1px solid var(--border);
@@ -92,14 +90,7 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-/* Added for Family and Purpose category stubs */
-.accent-border-family {
-border-top: 2px solid var(--c-family);
-}
-.accent-border-purpose {
-border-top: 2px solid var(--c-purpose);
-}
-/ ── Header ── /
+/* ── Header ── */
 .hdr-row {
 display: flex;
 align-items: flex-start;
@@ -164,7 +155,7 @@ margin-left: 8px;
 vertical-align: middle;
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-/ ── Animations ── /
+/* ── Animations ── */
 @keyframes pulse-ring {
 0%, 100% {
 opacity: 1;
@@ -247,16 +238,7 @@ animation-delay: 0.20s;
 .delay-5 {
 animation-delay: 0.25s;
 }
-.delay-6 {
-animation-delay: 0.30s;
-}
-.delay-7 {
-animation-delay: 0.35s;
-}
-.delay-8 {
-animation-delay: 0.40s;
-}
-/ ── Skeleton ── /
+/* ── Skeleton ── */
 .skeleton {
 background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
 background-size: 400px 100%;
@@ -270,7 +252,7 @@ margin-bottom: 10px;
 .skel-line:last-child {
 width: 60%;
 }
-/ ── MIT ── /
+/* ── MIT ── */
 .mit-item {
 display: flex;
 align-items: flex-start;
@@ -322,7 +304,7 @@ transition: color 0.2s;
 color: var(--text-muted);
 text-decoration: line-through;
 }
-/ ── Quick add ── /
+/* ── Quick add ── */
 .quick-add {
 display: flex;
 gap: 8px;
@@ -362,7 +344,7 @@ transition: opacity 0.15s;
 .btn-add:hover {
 opacity: 0.85;
 }
-/ ── Calendar ── /
+/* ── Calendar ── */
 .event-row {
 display: flex;
 align-items: center;
@@ -388,7 +370,7 @@ flex-shrink: 0;
 font-size: 14px;
 color: var(--text-primary);
 }
-/ ── Goals ── /
+/* ── Goals ── */
 .goal-row {
 margin-bottom: 16px;
 }
@@ -428,7 +410,7 @@ font-size: 11px;
 color: var(--text-muted);
 margin-top: 4px;
 }
-/ ── Scores ── /
+/* ── Scores ── */
 .scores-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -505,7 +487,7 @@ box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 .score-tile.tip-open .score-tile-tip {
 display: block;
 }
-/ ── Chat ── /
+/* ── Chat ── */
 .chat-messages {
 height: 240px;
 overflow-y: auto;
@@ -582,7 +564,7 @@ animation: bounce-dot 1.2s 0.2s infinite;
 .typing-dot:nth-child(3) {
 animation: bounce-dot 1.2s 0.4s infinite;
 }
-/ ── Chat input row ── /
+/* ── Chat input row ── */
 .chat-row {
 display: flex;
 gap: 8px;
@@ -643,7 +625,7 @@ transition: opacity 0.15s;
 .btn-send:hover {
 opacity: 0.85;
 }
-/ ── Voice footer ── /
+/* ── Voice footer ── */
 .voice-footer {
 display: flex;
 align-items: center;
@@ -677,7 +659,7 @@ font-size: 11px;
 color: var(--text-muted);
 opacity: 0.6;
 }
-/ ── Empty ── /
+/* ── Empty ── */
 .empty {
 text-align: center;
 padding: 20px 0;
@@ -696,8 +678,41 @@ grid-template-columns: 1fr 1fr;
 gap: 16px;
 }
 }
-/ Desktop-specific styles for wider screens /
-@media (min-width: 1000px) { .page { max-width: 1000px; / Wider content area for desktop / padding: 40px 32px; / More generous padding / } .hdr-row { padding-top: 12px; / More space above header content / margin-bottom: 24px; / More space below header / } .greeting { font-size: 48px; / Larger greeting text / } .greeting-sub { font-size: 18px; / Larger sub-greeting text / } .two-col { gap: 32px; / Increased gap between columns / } .card { padding: 28px; / More internal padding for cards / } .card-label { font-size: 11px; / Slightly larger label / margin-bottom: 18px; / More space below label / } .chat-messages { height: 360px; / Taller chat window for more history / } .chat-row { margin-top: 20px; / More space above chat input / } .voice-footer { margin-top: 16px; / More space above voice footer / }
+/* Desktop-specific styles for wider screens */
+@media (min-width: 1000px) {
+.page {
+max-width: 1000px; /* Wider content area for desktop */
+padding: 40px 32px; /* More generous padding */
+}
+.hdr-row {
+padding-top: 12px; /* More space above header content */
+margin-bottom: 24px; /* More space below header */
+}
+.greeting {
+font-size: 48px; /* Larger greeting text */
+}
+.greeting-sub {
+font-size: 18px; /* Larger sub-greeting text */
+}
+.two-col {
+gap: 32px; /* Increased gap between columns */
+}
+.card {
+padding: 28px; /* More internal padding for cards */
+}
+.card-label {
+font-size: 11px; /* Slightly larger label */
+margin-bottom: 18px; /* More space below label */
+}
+.chat-messages {
+height: 360px; /* Taller chat window for more history */
+}
+.chat-row {
+margin-top: 20px; /* More space above chat input */
+}
+.voice-footer {
+margin-top: 16px; /* More space above voice footer */
+}
 }
 </style>
 </head>
@@ -759,37 +774,6 @@ gap: 16px;
 <div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
 </div>
 </div>
-</div>
-<!-- ROW 3: Health + Family Stubs (Added for task) -->
-<div class="two-col mb-4">
-    <div class="card accent-border-health fade-up delay-5">
-        <div class="card-label">Health Overview</div>
-        <div class="skel-line skeleton w-full"></div>
-        <div class="skel-line skeleton w-4/5"></div>
-        <div class="skel-line skeleton w-3/5"></div>
-        <div class="empty" style="margin-top:16px;"><span>🌿</span>Health domain content goes here</div>
-    </div>
-    <div class="card accent-border-family fade-up delay-6">
-        <div class="card-label">Family Connections</div>
-        <div class="skel-line skeleton w-full"></div>
-        <div class="skel-line skeleton w-4/5"></div>
-        <div class="skel-line skeleton w-3/5"></div>
-        <div class="empty" style="margin-top:16px;"><span>🏡</span>Family domain content goes here</div>
-    </div>
-</div>
-<!-- ROW 4: Purpose Stub (Added for task) -->
-<div class="two-col mb-4">
-    <div class="card accent-border-purpose fade-up delay-7">
-        <div class="card-label">Purpose & Calling</div>
-        <div class="skel-line skeleton w-full"></div>
-        <div class="skel-line skeleton w-4/5"></div>
-        <div class="skel-line skeleton w-3/5"></div>
-        <div class="empty" style="margin-top:16px;"><span>🎯</span>Purpose domain content goes here</div>
-    </div>
-    <!-- Placeholder to maintain two-column layout -->
-    <div class="card fade-up delay-8" style="background:var(--bg-surface2);border:1px dashed var(--border-focus);display:flex;align-items:center;justify-content:center;min-height:180px;">
-        <div class="empty"><span>✨</span>More insights coming soon</div>
-    </div>
 </div>
 <!-- CHAT -->
 <div class="card accent-border-mirror fade-up delay-5">
@@ -1108,3 +1092,82 @@ Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
 </script>
 </body>
 </html>
+--- REPO FILE: public/overlay/lifeos-app.html (91838 chars) ---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script src="/overlay/lifeos-bootstrap.js"></script>
+<script src="/overlay/lifeos-theme.js"></script>
+<script src="/overlay/lifeos-feature-data.js"></script>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LifeOS">
+<meta name="theme-color" content="#0a0a0f">
+<link rel="manifest" href="/overlay/lifeos.webmanifest">
+<link rel="apple-touch-icon" href="/overlay/icons/icon-192.png">
+<title>LifeOS</title>
+<style>
+/* ── Design tokens (mirrors lifeos-ds.css — shell uses its own copy since it IS the chrome) ── */
+:root {
+--bg-base: #0a0a0f;
+--bg-raised: #0d0d15;
+--bg-surface: #111118;
+--bg-surface2: #17171f;
+--bg-overlay: #1e1e28;
+--border: rgba(255,255,255,0.07);
+--border-focus: rgba(255,255,255,0.15);
+--text-primary: #e8e8f0;
+--text-secondary:#9999bb;
+--text-muted: #555566;
+/* Section accent colors */
+--c-today: #5b6af5;
+--c-mirror: #7c3aed;
+--c-engine: #3b82f6;
+--c-health: #10b981;
+--c-inner: #f59e0b;
+--c-family: #f43f5e;
+--c-purpose: #8b5cf6;
+--c-children: #f5a623;
+--c-mediation: #14b8a6;
+--c-conflict: #e05555;
+--c-balance: #5b6af5;
+--c-coach: #5b6af5;
+--c-identity: #a78bfa;
+--c-decisions: #f59e0b;
+--c-growth: #34d399;
+--c-finance: #22d3ee;
+--c-vision: #38bdf8;
+--c-legacy: #fb923c;
+--c-healing: #c084fc;
+--c-dashboard: #6366f1;
+--c-victory: #fbbf24;
+/* Layout */
+--sidebar-w: 240px;
+--sidebar-w-mini: 60px;
+--topbar-h: 52px;
+--bottomnav-h: 56px;
+/* Safe areas */
+--safe-top: env(safe-area-inset-top, 0px);
+--safe-right: env(safe-area-inset-right, 0px);
+--safe-bottom: env(safe-area-inset-bottom, 0px);
+--safe-left: env(safe-area-inset-left, 0px);
+/* Current section (updated by JS) */
+--section-color: var(--c-today);
+--radius-sm: 6px;
+--radius-md: 10px;
+--radius-lg: 14px;
+--transition: 0.2s ease;
+}
+html[data-theme="light"] {
+color-scheme: light;
+--bg-base: #f6f7fb;
+--bg-raised: #ffffff;
+--bg-surface: #ffffff;
+--bg-surface2: #f3f5fb;
+--bg-overlay: #ffffff;
+--border: rgba(15,23,42,0.12);
+--border-focus: rgba(91,106,245,0.32);
+--text-primary: #1118
