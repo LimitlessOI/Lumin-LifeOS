@@ -7,18 +7,32 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0a0f" id="theme-color-meta">
 <title>Dashboard · LifeOS</title>
+
+<!-- Performance Budget Notes -->
 <!--
-Performance Budget Notes:
-- Overlay Load Target: Aim for <1s perceived load for initial render, <2s for full interactivity.
-- Waterfall Risks:
-    - External script `https://cdn.tailwindcss.com` is a significant render-blocking resource. Consider self-hosting or critical CSS extraction if LCP becomes an issue.
-    - Initial CSS (`lifeos-dashboard-tokens.css`, `lifeos-dashboard-ai-rail.css`, inline style) are render-blocking.
-- Defer Non-Critical Widgets: Data for MITs, Calendar, Goals, Scores, Chat are fetched asynchronously via `Promise.all` after initial render, which is effective.
-- Largest Contentful Paint (LCP) Hints:
-    - LCP is likely the header (`greeting`) or the first visible cards (MITs, Schedule).
-    - Skeleton loaders are used for perceived performance during data fetching.
-    - Ensure `lifeos-theme.js` and critical CSS load quickly to establish base styling.
+  Overlay Load Targets:
+  - Aim for Largest Contentful Paint (LCP) < 2.5s.
+  - First Input Delay (FID) < 100ms.
+  - Cumulative Layout Shift (CLS) < 0.1.
+  - Total page weight (HTML, CSS, JS, images) < 500KB for initial load.
+
+  Waterfall Risks:
+  - External script from cdn.tailwindcss.com is render-blocking. Consider self-hosting or purging unused CSS for production builds to reduce external dependency and size.
+  - lifeos-theme.js and lifeos-bootstrap.js are critical blocking scripts. Ensure they are highly optimized and minimal in size.
+  - All CSS is render-blocking. Keep CSS concise and consider critical CSS for initial render if FOUC becomes an issue on slower connections.
+
+  Defer Non-Critical Widgets:
+  - Current use of skeleton loaders and Promise.all for data fetching is an effective pattern for perceived performance.
+  - Consider lazy-loading the chat module's JavaScript or other less critical sections if their bundle size becomes significant, or if they are not immediately visible on initial viewport.
+  - The lifeos-voice-chat.js is correctly deferred to the end of the body, which is good for non-critical functionality.
+
+  Largest Contentful Paint (LCP) Hints:
+  - The "Good morning" greeting and the first visible card (Today's MITs) are likely LCP candidates.
+  - Minimize blocking resources (scripts, stylesheets) before these elements render.
+  - Ensure fast server response time for the initial HTML document.
+  - The fade-up animations add visual appeal but introduce slight delays; monitor their impact on LCP metrics.
 -->
+
 <!-- Theme must load before anything renders to avoid flash -->
 <script src="/overlay/lifeos-theme.js"></script>
 <link rel="stylesheet" href="../shared/lifeos-dashboard-tokens.css">
@@ -70,7 +84,7 @@ max-width: 860px;
 margin: 0 auto;
 padding: 24px 16px;
 }
-/ ── Cards ── /
+/* ── Cards ── */
 .card {
 background: var(--bg-surface);
 border: 1px solid var(--border);
@@ -102,7 +116,7 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-/ ── Header ── /
+/* ── Header ── */
 .hdr-row {
 display: flex;
 align-items: flex-start;
@@ -167,7 +181,7 @@ margin-left: 8px;
 vertical-align: middle;
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-/ ── Animations ── /
+/* ── Animations ── */
 @keyframes pulse-ring {
 0%, 100% {
 opacity: 1;
@@ -206,7 +220,7 @@ transform: scale(1);
 opacity: 1;
 }
 }
-/ Progress uses inline stroke-dashoffset from makeRing(); animate opacity only /
+/* Progress uses inline stroke-dashoffset from makeRing(); animate opacity only */
 @keyframes ring-fill {
   from { opacity: 0.2; }
   to { opacity: 1; }
@@ -250,7 +264,7 @@ animation-delay: 0.20s;
 .delay-5 {
 animation-delay: 0.25s;
 }
-/ ── Skeleton ── /
+/* ── Skeleton ── */
 .skeleton {
 background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
 background-size: 400px 100%;
@@ -264,7 +278,7 @@ margin-bottom: 10px;
 .skel-line:last-child {
 width: 60%;
 }
-/ ── MIT ── /
+/* ── MIT ── */
 .mit-item {
 display: flex;
 align-items: flex-start;
@@ -316,7 +330,7 @@ transition: color 0.2s;
 color: var(--text-muted);
 text-decoration: line-through;
 }
-/ ── Quick add ── /
+/* ── Quick add ── */
 .quick-add {
 display: flex;
 gap: 8px;
@@ -356,7 +370,7 @@ transition: opacity 0.15s;
 .btn-add:hover {
 opacity: 0.85;
 }
-/ ── Calendar ── /
+/* ── Calendar ── */
 .event-row {
 display: flex;
 align-items: center;
@@ -382,7 +396,7 @@ flex-shrink: 0;
 font-size: 14px;
 color: var(--text-primary);
 }
-/ ── Goals ── /
+/* ── Goals ── */
 .goal-row {
 margin-bottom: 16px;
 }
@@ -422,7 +436,7 @@ font-size: 11px;
 color: var(--text-muted);
 margin-top: 4px;
 }
-/ ── Scores ── /
+/* ── Scores ── */
 .scores-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -499,7 +513,7 @@ box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 .score-tile.tip-open .score-tile-tip {
 display: block;
 }
-/ ── Chat ── /
+/* ── Chat ── */
 .chat-messages {
 height: 240px;
 overflow-y: auto;
@@ -576,7 +590,7 @@ animation: bounce-dot 1.2s 0.2s infinite;
 .typing-dot:nth-child(3) {
 animation: bounce-dot 1.2s 0.4s infinite;
 }
-/ ── Chat input row ── /
+/* ── Chat input row ── */
 .chat-row {
 display: flex;
 gap: 8px;
@@ -637,7 +651,7 @@ transition: opacity 0.15s;
 .btn-send:hover {
 opacity: 0.85;
 }
-/ ── Voice footer ── /
+/* ── Voice footer ── */
 .voice-footer {
 display: flex;
 align-items: center;
@@ -671,7 +685,7 @@ font-size: 11px;
 color: var(--text-muted);
 opacity: 0.6;
 }
-/ ── Empty ── /
+/* ── Empty ── */
 .empty {
 text-align: center;
 padding: 20px 0;
@@ -690,10 +704,10 @@ grid-template-columns: 1fr 1fr;
 gap: 16px;
 }
 }
-/ Desktop-specific styles for wider screens /
+/* Desktop-specific styles for wider screens */
 @media (min-width: 1000px) {
   .page {
-    max-width: 1000px; / wider content area /
+    max-width: 1000px; /* wider content area */
     padding: 40px 32px;
   }
   .hdr-row {
