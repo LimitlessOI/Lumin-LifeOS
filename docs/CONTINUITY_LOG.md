@@ -32,6 +32,20 @@
 
 ---
 
+## [REVIEW] Update 2026-05-08 #2 — Live browser grade + brainstorm entry spine + **25** ideas
+
+### Files touched
+**Entry + protocol:** **`docs/projects/OPERATOR_BRAINSTORM_SESSION_ENTRY.md`**, **`docs/BRAINSTORM_SESSIONS_PROTOCOL.md`** § **0**, **`prompts/00-SSOT-READ-SEQUENCE.md`** A★ row, **`docs/projects/BRAINSTORM_SESSIONS/README.md`**, **`BUILDER_AUTONOMY_BRAINSTORM_VAULT.md`**.   
+**Evidence:** **`docs/projects/LIFEOS_BROWSER_AND_PLATFORM_GRADE_2026-05-08.md`** (~**7.5/10** composite; **Tailwind CDN prod WARN** flagged). Session **`docs/projects/BRAINSTORM_SESSIONS/lifeos/2026-05-08_operator-uplift/`** (`10_IDEAS_PHASE1_OPERATOR25.md` L01–L25 — triage phases **2–5** still open unless multi-model harness runs). **`AMENDMENT_21`** handoff + receipts + **`manifest last_updated`**.
+
+### Operator
+Say **“read brainstorming”** → next AI opens **`OPERATOR_BRAINSTORM_SESSION_ENTRY.md`** first; must **audit prior ideas** before new **25**.
+
+### Next slice toward **10**
+**L02-class** spike: remove **Tailwind CDN** from production overlays; rerun **`lifeos:operational-grade`** when keys exported.
+
+---
+
 ## [BUILD] Update 2026-05-08 #1 — Operator expectations + feedback → SSOT → queue
 
 ### Files changed

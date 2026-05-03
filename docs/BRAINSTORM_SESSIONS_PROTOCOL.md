@@ -4,7 +4,17 @@
 
 **Not law:** This doc is **operations**. Constitutional truth and load-bearing technical decisions still flow through **`AMENDMENT_01_AI_COUNCIL.md`**, gate-change, and **`POST /api/v1/lifeos/gate-change/run-preset`** or **`.../proposals/:id/run-council`** on the **running** app when §2.12 applies.
 
-**Last updated:** 2026-05-02
+**Last updated:** 2026-05-08
+
+---
+
+## 0 — “Read the brainstorming file” (Adam trigger)
+
+Whenever Adam invokes the **brainstorming section**, a **brainstorm session**, **25 ideas**, or **continue brainstorming** — agents **must** read **`docs/projects/OPERATOR_BRAINSTORM_SESSION_ENTRY.md` first**, then return here for **Phases 1–5**.
+
+That entry file folds **ChatGPT-parity habits** (**branch charters** • **wide → narrow scoring** • **continuation without duplicate instructions**) plus **prior-idea fate audit before any new `N01–N25` block**.
+
+Also see graded platform snapshot (**1–10**): **`docs/projects/LIFEOS_BROWSER_AND_PLATFORM_GRADE_2026-05-08.md`** (refresh date when re-grading prod).
 
 ---
 

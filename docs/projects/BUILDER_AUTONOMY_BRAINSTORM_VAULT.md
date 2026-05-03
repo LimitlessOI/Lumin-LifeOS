@@ -4,7 +4,17 @@
 
 **How ideas get here:** Multi-model **brainstorm sessions** follow **`docs/BRAINSTORM_SESSIONS_PROTOCOL.md`** (25 → rank → meta-25 → rank → **BUILD_NOW / NEXT / MARKET_ICEBOX / DISCARD**). This vault holds **NEXT** and **MARKET** rows that are not yet specced into a single builder task.
 
-**Last updated:** 2026-05-02
+**Last updated:** 2026-05-08
+
+---
+
+## Entry point (“read the brainstorming file”)
+
+**FIRST READ:** **`docs/projects/OPERATOR_BRAINSTORM_SESSION_ENTRY.md`** — standing Adam instructions without rehash each chat; **`N01–N25` audit-before-regenerate** rule; ChatGPT-parity branching + wide→narrow pattern pointers.
+
+**Live grade card (periodic refresh):** `docs/projects/LIFEOS_BROWSER_AND_PLATFORM_GRADE_2026-05-08.md`
+
+**Fresh burst (pending triage phases):** `docs/projects/BRAINSTORM_SESSIONS/lifeos/2026-05-08_operator-uplift/` — **`10_IDEAS_PHASE1_OPERATOR25.md`** (pull survivors here after **`50_TRIAGE.md`**).
 
 ---
 
