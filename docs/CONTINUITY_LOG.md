@@ -32,6 +32,16 @@
 
 ---
 
+## [FIX] Update 2026-05-11 #1 — **`lifeos:supervise:static`** green again
+
+### Files
+- **`public/overlay/lifeos-dashboard.html`** — **`/ section /`** pseudo-comments → **`/* … */`** in **`<style>`** (regression fix).
+
+### State
+- **`npm run lifeos:supervise:static`** **0** · **`builder:preflight`** OK · **`npm test`** OK (remote smoke skipped without server).
+
+---
+
 ## [BUILD] Update 2026-05-09 #2 — Brainstorm Phases **2–5** + **`lifeos:builder:digest`**
 
 ### Files
