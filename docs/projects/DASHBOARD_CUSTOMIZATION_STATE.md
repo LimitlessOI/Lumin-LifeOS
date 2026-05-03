@@ -1,74 +1,61 @@
-**Goals**
-This contract defines the client-side state management for the LifeOS Dashboard layout, enabling user customization and persistence across sessions. It aims to:
--   **Persist User Preferences**: Store user-defined widget visibility, order, and preferred density mode.
--   **Support Layout Customization**: Provide a clear structure for dynamic arrangement and display of dashboard widgets.
--   **Enable Future Features**: Lay the groundwork for advanced layout features such as widget pinning and server-side synchronization.
--   **Ensure Schema Evolution**: Incorporate versioning to facilitate future schema changes and data migrations without breaking existing user preferences.
--   **Define Client Boundaries**: Clearly delineate how layout state is managed on the client, acknowledging future server-side persistence.
+# Dashboard Local State Contract
 
-**Keys & shapes**
+This document defines the contract for client-side local storage of LifeOS Dashboard preferences, including widget visibility, order, density mode, and pinned widgets. This contract aims to standardize how these preferences are stored and retrieved, facilitating future server-side synchronization and schema evolution.
 
-The dashboard layout state will be stored as a single JSON object in `localStorage` under a versioned key.
+## Goals
 
--   **Primary Storage Key**: `lifeos_dashboard_layout_v1`
-    -   Rationale: Uses `v1` to indicate the schema version, allowing for future migrations.
--   **Shape**: A JSON object with the following structure:
+*   **Standardize Client-Side State Management**: Establish a clear, consistent contract for storing user-specific dashboard preferences locally using `localStorage`.
+*   **Support Dynamic Layouts**: Enable persistence for user-configured widget visibility, display order, and visual density mode to provide a personalized user experience across sessions.
+*   **Facilitate Future Server-Side Sync**: Design the local storage schema to be compatible with a future server-side persistence layer, minimizing migration effort when transitioning to a centralized state management system.
+*   **Ensure Data Integrity and Evolution**: Include a versioning mechanism to manage schema changes gracefully and provide a clear path for data migration, preventing data corruption or loss of user preferences.
+*   **Define Client/SSR Boundaries**: Clearly delineate which state is managed purely client-side and which might eventually be managed server-side, acknowledging the current client-rendered nature of the dashboard.
 
-```json
-{
-  "version": 1,
-  "density": "balanced",
-  "widgets": [
-    { "id": "mits", "visible": true, "pinned": false },
-    { "id": "calendar", "visible": true, "pinned": false },
-    { "id": "goals", "visible": true, "pinned": false },
-    { "id": "scores", "visible": true, "pinned": false },
-    { "id": "chat", "visible": true, "pinned": false },
-    { "id": "ai-rail", "visible": true, "pinned": false }
-  ]
-}
-```
+## Keys & shapes
 
--   **`version` (number)**:
-    -   Current schema version. Incremented on breaking changes to trigger migration logic.
-    -   Default: `1`
--   **`density` (string)**:
-    -   The user's preferred dashboard density. This value can override the automatically detected density.
-    -   Refer to "Density enum" section for allowed values.
-    -   Default: `balanced`
--   **`widgets` (array of objects)**:
-    -   An ordered array defining the presence, order, and state of each dashboard widget.
-    -   If a widget `id` is not present in this array, it is considered hidden by default.
-    -   **Widget Object Shape**:
-        -   `id` (string): Unique identifier for the widget.
-            -   Allowed values: `mits`, `calendar`, `goals`, `scores`, `chat`, `ai-rail`.
-        -   `visible` (boolean): `true` if the widget should be displayed, `false` otherwise.
-            -   Default: `true`
-        -   `pinned` (boolean): `true` if the widget is pinned (e.g., fixed position, always visible), `false` otherwise.
-            -   Default: `false`
--   **SSR/Client Boundaries**:
-    -   Currently, the dashboard is client-rendered. The initial state will be loaded from `localStorage` on `DOMContentLoaded`.
-    -   For future SSR integration, the server would ideally hydrate the initial state based on user preferences (potentially from a database) and embed it in the HTML, with client-side JavaScript then synchronizing with `localStorage` or updating it.
+All dashboard-related local state will be consolidated under a single `localStorage` key, `lifeos_dashboard_state`, to minimize `localStorage` overhead and simplify versioning and retrieval. The value stored will be a JSON string representing the following structure:
 
-**Density enum**
+*   **`localStorage` Key**: `lifeos_dashboard_state`
+*   **JSON Shape**:
+    ```json
+    {
+      "version": 1,
+      "widgetVisibility": {
+        "mit": true,
+        "calendar": true,
+        "goals": true,
+        "scores": true,
+        "chat": true
+        // Add other widget IDs as boolean visibility flags (e.g., "ai-rail": true)
+      },
+      "widgetOrder": [
+        "mit",
+        "calendar",
+        "goals",
+        "scores",
+        "chat"
+        // Ordered array of widget IDs, defining their display sequence
+      ],
+      "densityMode": "balanced", // See Density enum below
+      "pinnedWidgets": [
+        // "ai-rail" // Example: if the AI rail becomes a pinnable widget
+        // Array of widget IDs that are explicitly pinned by the user
+      ]
+    }
+    ```
 
-The `density` field in the layout state object accepts one of the following string values:
+## Density enum
 
--   `compact`: Maximizes information density, suitable for smaller screens or users preferring more content at a glance.
--   `balanced`: A moderate density, providing a good balance between content and whitespace. This is the default.
--   `airy`: Prioritizes whitespace and larger elements, suitable for larger displays or users preferring a less cluttered interface.
+The `densityMode` property within the `lifeos_dashboard_state` object will accept one of the following string values, corresponding to distinct visual density levels:
 
-These values align with the `pickDashboardDensity` utility described in `DASHBOARD_DENSITY_INTEGRATION_NOTES.md`.
+*   `"compact"`: Represents a layout with minimal spacing, optimized for higher information density.
+*   `"balanced"`: Represents the default layout with moderate spacing, offering a good balance between information and readability.
+*   `"airy"`: Represents a layout with increased spacing, providing more visual breathing room and larger elements.
 
-**Risks**
+## Risks
 
--   **Schema Mismatch & Migration**: Without robust migration logic, changes to the `lifeos_dashboard_layout_v1` schema (e.g., adding new fields, changing types) could lead to errors or loss of user preferences if an older version is loaded.
-    -   Mitigation: Implement explicit migration functions for each schema version bump.
--   **`localStorage` Limits**: While unlikely for layout preferences, `localStorage` has size limitations (typically 5-10MB). Storing excessively complex or large state objects could lead to storage failures.
-    -   Mitigation: Keep the layout state object lean and focused on core preferences.
--   **Client-Side Only Persistence**: Relying solely on `localStorage` means user preferences are tied to a specific browser and device. If a user switches devices or clears browser data, their preferences are lost.
-    -   Mitigation: Acknowledge this as a temporary solution, with a clear path to server-side persistence for cross-device synchronization.
--   **Default State Handling**: If `localStorage` is empty, corrupted, or inaccessible, the application must gracefully fall back to a sensible default layout to ensure a functional user experience.
-    -   Mitigation: Define a clear default state object that the application can use.
--   **Race Conditions**: If multiple tabs or windows are open, concurrent updates to `localStorage` could lead to inconsistent state.
-    -   Mitigation: Implement `storage` event listeners to synchronize state across tabs, or use a more robust state management solution if this becomes a significant issue.
+*   **Schema Migration**: Any changes to the `lifeos_dashboard_state` schema (e.g., adding new properties, changing data types, renaming keys) will necessitate a migration strategy. The `version` field is included to facilitate this, but explicit client-side migration logic (e.g., on `DOMContentLoaded`) will be required to handle older schema versions gracefully. Failure to implement robust migration could lead to corrupted or reset user preferences.
+*   **`localStorage` Size Limits**: While the defined state is relatively small, excessive data stored in `localStorage` can hit browser-imposed limits (typically 5-10MB). Keeping the state compact and avoiding large, unnecessary data is crucial.
+*   **Client-Side vs. Server-Side Conflict**: Upon the introduction of server-side persistence for dashboard state, a clear strategy for resolving conflicts between local and server state will be essential (e.g., "last write wins", explicit sync mechanism, server-authoritative). The initial implementation should treat client-side state as authoritative until server synchronization is fully established.
+*   **Performance on Load**: Reading and parsing the JSON string from `localStorage` on every page load introduces a minor overhead. For the current scope, this is expected to be negligible but warrants monitoring if the state grows significantly.
+*   **SSR Boundary**: This contract is designed for client-side state management. For Server-Side Rendering (SSR), initial dashboard state would need to be either injected into the HTML or fetched asynchronously after hydration. Without careful handling, this could lead to a "flash of unstyled content" or layout shifts. The current `lifeos-dashboard.html` is primarily client-rendered, making this a future consideration.
+*   **Data Integrity**: Malformed JSON in `localStorage` (e.g., due to manual user edits, browser extensions, or application bugs) could cause runtime errors during parsing. Robust parsing with `try...catch` blocks and sensible default fallbacks will be necessary to prevent application crashes.
