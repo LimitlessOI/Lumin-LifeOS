@@ -32,8 +32,8 @@
 --c-decisions: var(--dash-accent-warning, #f59e0b);
 --c-mirror: var(--dash-accent-mirror, #7c3aed);
 --c-conflict: var(--dash-accent-conflict, #e05555);
---c-family: var(--dash-accent-family, #f43f5e); /* Added for Family category */
---c-purpose: var(--dash-accent-purpose, #8b5cf6); /* Added for Purpose category */
+--c-family: var(--dash-accent-family, #f43f5e); /* New */
+--c-purpose: var(--dash-accent-purpose, #8b5cf6); /* New */
 --radius-sm: var(--dash-radius-sm, 6px);
 --radius-md: var(--dash-radius-md, 10px);
 --radius-lg: var(--dash-radius-lg, 14px);
@@ -60,7 +60,7 @@ max-width: 860px;
 margin: 0 auto;
 padding: 24px 16px;
 }
-/ ── Cards ── /
+/* ── Cards ── */
 .card {
 background: var(--bg-surface);
 border: 1px solid var(--border);
@@ -92,13 +92,13 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-.accent-border-family { /* Added for Family category */
+.accent-border-family { /* New */
 border-top: 2px solid var(--c-family);
 }
-.accent-border-purpose { /* Added for Purpose category */
+.accent-border-purpose { /* New */
 border-top: 2px solid var(--c-purpose);
 }
-/ ── Header ── /
+/* ── Header ── */
 .hdr-row {
 display: flex;
 align-items: flex-start;
@@ -163,7 +163,7 @@ margin-left: 8px;
 vertical-align: middle;
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-/ ── Animations ── /
+/* ── Animations ── */
 @keyframes pulse-ring {
 0%, 100% {
 opacity: 1;
@@ -202,7 +202,7 @@ transform: scale(1);
 opacity: 1;
 }
 }
-/ Progress uses inline stroke-dashoffset from makeRing(); animate opacity only /
+/* Progress uses inline stroke-dashoffset from makeRing(); animate opacity only */
 @keyframes ring-fill { from { opacity: 0.2; } to { opacity: 1; }
 }
 @keyframes bar-grow {
@@ -244,7 +244,16 @@ animation-delay: 0.20s;
 .delay-5 {
 animation-delay: 0.25s;
 }
-/ ── Skeleton ── /
+.delay-6 {
+animation-delay: 0.30s;
+}
+.delay-7 {
+animation-delay: 0.35s;
+}
+.delay-8 {
+animation-delay: 0.40s;
+}
+/* ── Skeleton ── */
 .skeleton {
 background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
 background-size: 400px 100%;
@@ -258,7 +267,7 @@ margin-bottom: 10px;
 .skel-line:last-child {
 width: 60%;
 }
-/ ── MIT ── /
+/* ── MIT ── */
 .mit-item {
 display: flex;
 align-items: flex-start;
@@ -310,7 +319,7 @@ transition: color 0.2s;
 color: var(--text-muted);
 text-decoration: line-through;
 }
-/ ── Quick add ── /
+/* ── Quick add ── */
 .quick-add {
 display: flex;
 gap: 8px;
@@ -350,7 +359,7 @@ transition: opacity 0.15s;
 .btn-add:hover {
 opacity: 0.85;
 }
-/ ── Calendar ── /
+/* ── Calendar ── */
 .event-row {
 display: flex;
 align-items: center;
@@ -376,7 +385,7 @@ flex-shrink: 0;
 font-size: 14px;
 color: var(--text-primary);
 }
-/ ── Goals ── /
+/* ── Goals ── */
 .goal-row {
 margin-bottom: 16px;
 }
@@ -416,7 +425,7 @@ font-size: 11px;
 color: var(--text-muted);
 margin-top: 4px;
 }
-/ ── Scores ── /
+/* ── Scores ── */
 .scores-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -493,7 +502,7 @@ box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 .score-tile.tip-open .score-tile-tip {
 display: block;
 }
-/ ── Chat ── /
+/* ── Chat ── */
 .chat-messages {
 height: 240px;
 overflow-y: auto;
@@ -570,7 +579,7 @@ animation: bounce-dot 1.2s 0.2s infinite;
 .typing-dot:nth-child(3) {
 animation: bounce-dot 1.2s 0.4s infinite;
 }
-/ ── Chat input row ── /
+/* ── Chat input row ── */
 .chat-row {
 display: flex;
 gap: 8px;
@@ -631,7 +640,7 @@ transition: opacity 0.15s;
 .btn-send:hover {
 opacity: 0.85;
 }
-/ ── Voice footer ── /
+/* ── Voice footer ── */
 .voice-footer {
 display: flex;
 align-items: center;
@@ -665,7 +674,7 @@ font-size: 11px;
 color: var(--text-muted);
 opacity: 0.6;
 }
-/ ── Empty ── /
+/* ── Empty ── */
 .empty {
 text-align: center;
 padding: 20px 0;
@@ -684,8 +693,8 @@ grid-template-columns: 1fr 1fr;
 gap: 16px;
 }
 }
-/ Desktop-specific styles for wider screens /
-@media (min-width: 1000px) { .page { max-width: 1000px; / wider content area / padding: 40px 32px; } .hdr-row { padding-top: 12px; margin-bottom: 24px; } .greeting { font-size: 48px; } .greeting-sub { font-size: 18px; } .two-col { gap: 32px; } .card { padding: 28px; } .card-label { font-size: 11px; margin-bottom: 18px; } .chat-messages { height: 360px; } .chat-row { margin-top: 20px; } .voice-footer { margin-top: 16px; }
+/* Desktop-specific styles for wider screens */
+@media (min-width: 1000px) { .page { max-width: 1000px; /* wider content area */ padding: 40px 32px; } .hdr-row { padding-top: 12px; margin-bottom: 24px; } .greeting { font-size: 48px; } .greeting-sub { font-size: 18px; } .two-col { gap: 32px; } .card { padding: 28px; } .card-label { font-size: 11px; margin-bottom: 18px; } .chat-messages { height: 360px; } .chat-row { margin-top: 20px; } .voice-footer { margin-top: 16px; }
 }
 </style>
 </head>
@@ -748,29 +757,38 @@ gap: 16px;
 </div>
 </div>
 </div>
-<!-- ROW 3: Health, Family, Purpose Stubs -->
+<!-- ROW 3: Health Summary + Family (New) -->
 <div class="two-col mb-4">
-<div class="card accent-border-health fade-up delay-5" onclick="window.parent.loadPage('lifeos-health.html')">
-<div class="card-label">Health</div>
-<div class="empty"><span>🌿</span>Your health overview. Tap to explore.</div>
+<div class="card accent-border-health fade-up delay-5">
+<div class="card-label">Health Summary</div>
+<div id="health-summary-list">
+<div class="skel-line skeleton w-full"></div>
+<div class="skel-line skeleton w-4/5"></div>
+<div class="skel-line skeleton w-3/5"></div>
 </div>
-<div class="card accent-border-family fade-up delay-5" style="animation-delay: 0.30s;" onclick="window.parent.loadPage('lifeos-family.html')">
+</div>
+<div class="card accent-border-family fade-up delay-6">
 <div class="card-label">Family</div>
-<div class="empty"><span>🏡</span>Family connections and activities. Tap to explore.</div>
+<div id="family-list">
+<div class="skel-line skeleton w-full"></div>
+<div class="skel-line skeleton w-4/5"></div>
+<div class="skel-line skeleton w-3/5"></div>
 </div>
 </div>
+</div>
+<!-- ROW 4: Purpose (New) -->
 <div class="two-col mb-4">
-<div class="card accent-border-purpose fade-up delay-5" style="animation-delay: 0.35s;" onclick="window.parent.loadPage('lifeos-purpose.html')">
+<div class="card accent-border-purpose fade-up delay-7" style="grid-column:1/-1;">
 <div class="card-label">Purpose</div>
-<div class="empty"><span>🎯</span>Your life's purpose and contributions. Tap to explore.</div>
+<div id="purpose-list">
+<div class="skel-line skeleton w-full"></div>
+<div class="skel-line skeleton w-4/5"></div>
+<div class="skel-line skeleton w-3/5"></div>
 </div>
-<div class="card fade-up delay-5" style="animation-delay: 0.40s; background: transparent; border: 1px dashed var(--border); cursor: default;">
-<div class="card-label">More</div>
-<div class="empty" style="font-size:12px;padding:10px 0;"><span>…</span>Explore other life domains via the sidebar.</div>
 </div>
 </div>
 <!-- CHAT -->
-<div class="card accent-border-mirror fade-up delay-5" style="animation-delay: 0.45s;">
+<div class="card accent-border-mirror fade-up delay-8">
 <div class="card-label">Chat with Lumin</div>
 <div class="chat-messages" id="chat-messages">
 <div class="msg assistant">Hey Adam 👋 — what's on your mind today?</div>
@@ -933,7 +951,7 @@ $('goals-list').innerHTML='<div class="empty"><span>🎯</span>Could not load go
 }
 // ── Scores ──
 const SCORE_KEYS = [
-{ key:'integrity_score', label:'Integrity', tip:'Commitments kept vs. made' },
+{ key:'integrity_score', label:'Integrity', tip:'Commitments kept vs. broken' },
 { key:'health_score', label:'Health', tip:'Sleep, movement & recovery' },
 { key:'focus_score', label:'Focus', tip:'MITs completed + deep work' },
 { key:'growth_score', label:'Growth', tip:'Habits, learning & momentum' },
@@ -1082,8 +1100,8 @@ document.addEventListener('DOMContentLoaded', () => {
 initVoice();
 const th = document.documentElement.dataset.theme;
 $('btn-theme').textContent = th === 'light' ? '☾' : '☀︎';
-Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
 });
+Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
 </script>
 </body>
 </html>
