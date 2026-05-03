@@ -32,7 +32,7 @@
 
 ---
 
-## [REVIEW] Update 2026-05-08 #2 — Live browser grade + brainstorm entry spine + **25** ideas
+## [REVIEW] Update 2026-05-09 #1 — Live browser grade + brainstorm entry spine + **25** ideas
 
 ### Files touched
 **Entry + protocol:** **`docs/projects/OPERATOR_BRAINSTORM_SESSION_ENTRY.md`**, **`docs/BRAINSTORM_SESSIONS_PROTOCOL.md`** § **0**, **`prompts/00-SSOT-READ-SEQUENCE.md`** A★ row, **`docs/projects/BRAINSTORM_SESSIONS/README.md`**, **`BUILDER_AUTONOMY_BRAINSTORM_VAULT.md`**.   

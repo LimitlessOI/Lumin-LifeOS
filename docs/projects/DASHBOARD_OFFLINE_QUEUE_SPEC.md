@@ -1,69 +1,92 @@
-# LifeOS Dashboard Offline Capabilities Specification
+The primary brief file `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` is missing, leading to an incomplete specification. This outline is based on the task title and common patterns for offline queuing.
 
-## Goal:
-Enable core user interactions on the LifeOS Dashboard to function reliably when offline, with queued actions synchronizing automatically upon network restoration.
+---
+## Specification: LifeOS Dashboard Offline Queued Actions
 
-## Scope:
-This specification outlines the strategy for client-side data persistence and synchronization for user-initiated actions and critical dashboard data.
+### 1. Goal
 
-### 1. Offline Data Storage Strategy (IndexedDB)
+Enable the LifeOS Dashboard to queue user-initiated API actions when offline, providing a seamless user experience and synchronizing these actions with the server once connectivity is restored.
 
-*   **Mechanism:** Utilize the browser's IndexedDB API for persistent, structured client-side data storage.
-*   **Object Stores:**
-    *   `offline_queue`: Stores user actions performed while offline, awaiting synchronization.
-        *   **Schema:**
-            *   `id`: Unique identifier (e.g., UUID or timestamp-based).
-            *   `action_type`: String representing the API endpoint/action (e.g., `POST /api/v1/lifeos/commitments`, `PUT /api/v1/lifeos/commitments/{id}/keep`).
-            *   `method`: HTTP method (e.g., `POST`, `PUT`, `DELETE`).
-            *   `payload`: JSON object of the request body.
-            *   `timestamp`: When the action was queued.
-            *   `status`: `pending`, `retrying`, `failed`.
-            *   `retries`: Number of retry attempts.
-    *   `cached_data`: Stores read-only dashboard data for offline viewing.
-        *   **Schema:**
-            *   `key`: Identifier for the data type (e.g., `mits`, `calendar_events`, `goals`, `scores`, `chat_messages`).
-            *   `data`: JSON blob of the latest fetched data.
-            *   `last_updated`: Timestamp of the last successful fetch.
+### 2. Core Technologies
 
-### 2. Synchronization Strategy
+*   **IndexedDB:** For persistent client-side storage of queued actions.
+*   **`navigator.onLine`:** For real-time online/offline detection.
+*   **`window.addEventListener('online')` / `('offline')`:** For reacting to connectivity changes.
+*   **(Optional, non-goal unless brief requires):** Background Sync API via Service Worker for more robust background synchronization.
 
-*   **Primary Mechanism (Background Sync API):**
-    *   A minimal Service Worker will be registered to handle the `sync` event.
-    *   When an action is queued offline, a `sync` tag (e.g., `lifeos-sync-actions`) will be registered.
-    *   Upon network restoration, the Service Worker will wake up, process the `offline_queue`, and attempt to send queued requests to the LifeOS API.
-*   **Fallback/Manual Retry:**
-    *   If Background Sync is unavailable or for immediate feedback, the dashboard's `API` helper will detect network status.
-    *   On network recovery (e.g., `online` event, or successful API call after previous failure), a manual sweep of `offline_queue` will be triggered.
-*   **Synchronization Process:**
-    1.  **Queueing:** When an API call fails due to network issues, the request details are stored in `offline_queue` with `status: 'pending'`. The UI is updated optimistically.
-    2.  **Execution:** The Service Worker (or manual retry logic) iterates through `offline_queue` items with `status: 'pending'` or `status: 'retrying'`.
-    3.  **API Call:** Each queued action is re-sent to the LifeOS API.
-    4.  **Resolution:**
-        *   **Success:** The action is removed from `offline_queue`.
-        *   **Network Failure:** `status` is set to `retrying`, `retries` incremented.
-        *   **Server Error (non-network):** `status` is set to `failed`. User notification may be triggered.
+### 3. Key Use Cases for Offline Queuing
 
-### 3. Conflict Resolution User Experience
+The following user actions, which currently trigger API calls, should be queued:
 
-*   **Optimistic UI:** User actions (e.g., marking an MIT complete, adding a chat message) will immediately reflect in the dashboard UI, even if offline.
-*   **Server-Side Authority:** The LifeOS API remains the source of truth. Conflicts are primarily resolved server-side.
-*   **Simple Conflict Handling (Initial):**
-    *   For most actions (e.g., MIT toggles, chat messages), a "last-write-wins" approach will be implicitly handled by the server's eventual consistency.
-    *   If a queued action results in a server-side conflict (e.g., trying to update an entity that was deleted on the server), the server will return an appropriate error.
-    *   **User Notification:** Failed sync actions will be indicated to the user (e.g., a small banner or icon indicating "Offline changes failed to sync"). Details of failed actions can be viewed in a dedicated "Sync Status" section (deferred for later implementation).
-*   **Deferred Complexities:** Advanced merge UIs or explicit user choices for conflict resolution are not part of this initial specification.
+*   **MITs:** Adding new MITs (`addMIT`), toggling MIT completion status (`toggleMIT`).
+*   **Chat:** Sending messages to Lumin (`sendChat`).
 
-### 4. Deferred Actions (Client-side queuing)
+Other dashboard features (e.g., theme toggle, ambient mode toggle, voice settings) primarily manage local state or trigger non-critical API calls and are not primary targets for offline queuing, though their state should persist locally.
 
-*   **API Interception:** The dashboard's `API` helper function will be enhanced to:
-    *   Check `navigator.onLine` status.
-    *   Attempt API calls.
-    *   If `navigator.onLine` is false, or a network-related fetch error occurs, queue the request in `offline_queue`.
-    *   For `GET` requests, if offline, attempt to retrieve data from `cached_data` before failing.
-*   **UI Feedback:** Provide clear visual cues when the dashboard is operating offline and when actions are queued for sync.
+### 4. Strategy Outline
 
-## Non-Goals:
+#### 4.1. Offline Detection & API Interception
 
-*   Full Service Worker implementation for caching all static assets (HTML, CSS, JS, images) to enable complete offline browsing of the entire application. The focus is specifically on data synchronization and user action queuing.
-*   Real-time, bidirectional conflict resolution beyond basic server-side handling.
-*   Complex user interfaces for reviewing and manually resolving individual data conflicts.
+1.  **`API` Function Modification:** The existing `API` helper function will be enhanced to:
+    *   Check `navigator.onLine` before attempting a `fetch` request for `POST`, `PUT`, or `DELETE` methods.
+    *   If `navigator.onLine` is `false`, intercept the request.
+    *   Store the request details in IndexedDB (see 4.2).
+    *   Immediately resolve the `Promise` to allow the UI to update as if the action succeeded, providing optimistic feedback.
+    *   If `navigator.onLine` is `true`, proceed with the original `fetch` request.
+
+#### 4.2. Queuing Mechanism (IndexedDB)
+
+1.  **Database Setup:**
+    *   Create an IndexedDB database named `lifeos_offline_queue`.
+    *   Create an object store named `actions` with `id` as the key path and `autoIncrement` set to `true` (or use UUIDs for `id`).
+    *   Create an index on `timestamp` for ordered retrieval.
+2.  **Queued Action Data Structure:** Each queued action will be an object stored in IndexedDB:
+    ```javascript
+    {
+        id: <unique_id>, // e.g., UUID or auto-incremented
+        timestamp: <ISO_string>, // When the action was initiated
+        url: <string>,           // Full API endpoint URL
+        method: <string>,        // HTTP method (POST, PUT, DELETE)
+        body: <object>,          // Request body payload
+        status: 'pending',       // 'pending', 'retrying', 'failed', 'completed'
+        retries: 0,              // Number of retry attempts
+        error: null              // Last error message if failed
+    }
+    ```
+3.  **Storing Actions:** When offline, the intercepted `API` call will construct and store this object in the `actions` store.
+
+#### 4.3. Synchronization Strategy
+
+1.  **Online Event Listener:** Attach an event listener to `window` for the `online` event.
+2.  **Synchronization Function:** When the `online` event fires, or on dashboard load if online, trigger a `syncOfflineActions()` function.
+3.  **Processing Queue:**
+    *   `syncOfflineActions()` will retrieve all `pending` or `retrying` actions from IndexedDB, ordered by `timestamp`.
+    *   It will iterate through these actions, attempting to `fetch` each one using its stored `url`, `method`, and `body`.
+    *   **Success:** If an action successfully completes:
+        *   Remove it from IndexedDB.
+        *   Trigger a UI refresh for the relevant section (e.g., `loadMITs()`, `initChat()`) to ensure server state is reflected.
+    *   **Failure:** If an action fails (e.g., network error, server error):
+        *   Increment `retries`.
+        *   Update its `status` to `retrying` or `failed` in IndexedDB.
+        *   Implement an exponential backoff strategy for retries if `status` is `retrying`.
+        *   Notify the user about the failure.
+
+#### 4.4. Conflict Resolution & User Experience (UX)
+
+1.  **Optimistic UI Updates:** For actions like adding MITs, the UI should update immediately (e.g., show the new MIT in the list). This provides a responsive feel even when offline.
+2.  **Server-Side Wins (Default):** In case of a conflict during synchronization (e.g., an MIT was deleted on the server while a local toggle was queued), the server's state is generally considered authoritative.
+3.  **User Notification:**
+    *   **Offline Indicator:** Display a subtle visual indicator (e.g., a small icon or banner) when the dashboard is offline and actions are being queued.
+    *   **Pending Actions Indicator:** A small badge or icon could indicate the number of pending offline actions.
+    *   **Sync Status:** Provide feedback on successful synchronization (e.g., "All actions synced!") or failures (e.g., "Some actions failed to sync. Tap here to review.").
+    *   **Conflict Feedback:** If a specific action fails due to a conflict (e.g., "MIT 'X' could not be updated, it no longer exists on the server."), provide specific feedback.
+4.  **Manual Retry/Clear:** Offer a mechanism (e.g., a button in a settings panel or a dedicated "Offline Actions" view) for users to manually retry failed actions or clear the queue.
+
+#### 4.5. Deferred Actions
+
+*   The IndexedDB queuing and synchronization mechanism inherently handles deferred actions. Actions are stored and processed only when connectivity allows, ensuring no data loss and eventual consistency.
+
+### 5. Non-Goals
+
+*   Full Service Worker rollout for caching or advanced background tasks, unless specifically required by a subsequent brief. The focus is on the queuing logic within the main application script.
+*   Complex, real-time conflict resolution strategies requiring user intervention for every conflict. A "server-side wins" approach is preferred for simplicity initially.
