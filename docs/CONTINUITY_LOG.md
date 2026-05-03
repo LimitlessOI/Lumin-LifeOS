@@ -32,6 +32,16 @@
 
 ---
 
+## [BUILD] Update 2026-05-09 #2 — Brainstorm Phases **2–5** + **`lifeos:builder:digest`**
+
+### Files
+Session **`lifeos/2026-05-08_operator-uplift/`:** **`20_RANKINGS_PHASE2.md`** … **`50_TRIAGE.md`**. **`scripts/builder-operator-digest.mjs`**, **`npm run lifeos:builder:digest`**, **`BUILDER_OPERATOR_ENV.md`**, **`BUILDER_TAILWIND_EXIT_SPIKE.md`**, **`package.json`**, **`AMENDMENT_21`** receipt, vault **#8** shipped row.
+
+### Operator
+Run **`npm run lifeos:builder:digest`** before §2.11b closes — paste stdout. Next **BUILD_NOW-class code:** Tailwind exit per **`BUILDER_TAILWIND_EXIT_SPIKE.md`** (queue task when approved).
+
+---
+
 ## [REVIEW] Update 2026-05-09 #1 — Live browser grade + brainstorm entry spine + **25** ideas
 
 ### Files touched

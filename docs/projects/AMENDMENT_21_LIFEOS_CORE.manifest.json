@@ -845,6 +845,6 @@
       "prompts/lifeos-lumin.md"
     ]
   },
-  "last_updated": "2026-05-09",
+  "last_updated": "2026-05-10",
   "ssot_receipt_tail": "builder: extractCssFromOutput() strips markdown fences from CSS targets; daemon CSS commit fixed; supervisor §2.6 truth labels"
 }

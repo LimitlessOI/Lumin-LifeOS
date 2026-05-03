@@ -26,7 +26,7 @@ These are the highest leverage **given** idle slices, token pressure, deploy dri
 |---|------|--------|
 | **20** | **Admission control from `/builder/gaps`** — optional env: skip **`POST /build`** when recent audit rows show enough **syntax-class** failures (same bucketing spirit as supervisor). | Stops burning council tokens when the **platform** is the bottleneck; aligns with Zero Waste and North Star truth (green when red is forbidden). **Shipped as opt-in:** `BUILDER_DAEMON_SKIP_QUEUE_ON_GAPS_SYNTAX` (see `BUILDER_OPERATOR_ENV.md`). |
 | **1** | **Risk-band per task** — extend `LIFEOS_DASHBOARD_BUILDER_QUEUE.json` with optional `risk: low|med|high` (doc + schema only first). | Unlocks tighter automation later without another naming migration; zero runtime change until verifiers read the field. **Next slice:** optional column in JSON + verifier table in amendment. |
-| **8** | **Operator digest** — one command or cron that turns `builder-daemon-log.jsonl` + `builder-continuous-queue-last-run.json` into a short human summary. | You asked to stay vision-side; shrinking log archaeology is operational kindness. **Next slice:** thin `scripts/builder-operator-digest.mjs`. |
+| **8** | **Operator digest** — **`npm run lifeos:builder:digest`** (`scripts/builder-operator-digest.mjs`) tails JSONL → Markdown (**`BUILDER_OPERATOR_ENV.md`**). Cron optional later. | **KNOW shipped 2026-05-09** — paste stdout into §2.11b / continuity. |
 
 Everything else below is **sequenced backlog / market** unless you reorder.
 

@@ -9,6 +9,16 @@
 - **Throughput honesty** — **`data/builder-continuous-queue-last-run.json`** (daemon also reads legacy **`builder-overnight-last-run.json`**), **`data/builder-daemon-log.jsonl`** — wall-clock vs **`/build`** time; idle slices are **telemetry** for backlog depth / wrap policy, not silent “busy.”
 - **SSOT is append-only history** — amendment **`## Change Receipts`** and **`docs/CONTINUITY_LOG.md`** gain **new** rows; agents do **not** delete past rows to tidy. Correct mistakes with a **new** receipt that states the supersession. Git + those logs are the stewarded record.
 
+## Operator digest (log tail → Markdown)
+
+**Command:** `npm run lifeos:builder:digest` — reads local **`data/builder-continuous-queue-log.jsonl`** (+ optional **`data/builder-daemon-log.jsonl`**) and prints **Markdown** to stdout for pasting into **§2.11b** / **`CONTINUITY_LOG`**. **No** AI calls.
+
+| Variable | Default | Role |
+|----------|---------|------|
+| **`BUILDER_DIGEST_LINES`** | `80` | Max non-empty JSONL lines **per file** (tail) |
+| **`BUILDER_DIGEST_QUEUE_LOG`** | `data/builder-continuous-queue-log.jsonl` | Continuous queue JSONL |
+| **`BUILDER_DIGEST_DAEMON_LOG`** | `data/builder-daemon-log.jsonl` | Daemon JSONL (optional) |
+
 ## Continuous supervised builder (24/7) — wording
 
 Production intent for autonomous work is **non-stop supervised improvement**, not “overnight-only” babysitting:

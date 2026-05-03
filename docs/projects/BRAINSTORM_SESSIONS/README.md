@@ -10,4 +10,4 @@ See **`docs/BRAINSTORM_SESSIONS_PROTOCOL.md`** for required files (`00_CHARTER.m
 
 **Programs:** use different slugs (e.g. `lifeos`, `site-builder`, `tsos-platform`) so sessions stay legible.
 
-**Latest operator burst (LifeOS · 2026-05-08):** **`lifeos/2026-05-08_operator-uplift/`** — charter + **`10_IDEAS_PHASE1_OPERATOR25.md`** (awaiting Phase 2+ if you run multi-model harness).
+**Latest operator burst (LifeOS · 2026-05-08):** **`lifeos/2026-05-08_operator-uplift/`** — Phases **1–5** complete (**`50_TRIAGE.md`**). Digest **`npm run lifeos:builder:digest`** shipped; Tailwind exit = **`docs/projects/BUILDER_TAILWIND_EXIT_SPIKE.md`** (implementation NEXT).

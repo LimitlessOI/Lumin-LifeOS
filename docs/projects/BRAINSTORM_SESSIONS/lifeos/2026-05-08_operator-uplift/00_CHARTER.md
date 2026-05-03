@@ -8,3 +8,4 @@
 | **Parent / branch** | None (root session — future forks set `parent_session: lifeos/2026-05-08_operator-uplift`) |
 | **Success** | Exactly **25** Phase-1 style ideas + triage hints; NEXT agent reads **`OPERATOR_BRAINSTORM_SESSION_ENTRY.md`** first |
 | **Out of scope** | Implement every idea — triage pulls into queue separately |
+| **Phases 2–5 (2026-05-09)** | **`20_RANKINGS_PHASE2.md`**, **`30_META_25_PHASE3.md`**, **`40_RANK_META_PHASE4.md`**, **`50_TRIAGE.md`** complete (single Conductor ranks — quorum optional). **BUILD_NOW shipped:** `npm run lifeos:builder:digest` + charter **`docs/projects/BUILDER_TAILWIND_EXIT_SPIKE.md`**. |

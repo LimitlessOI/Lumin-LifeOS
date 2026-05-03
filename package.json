@@ -19,6 +19,7 @@
     "check:overlay": "node scripts/check-overlay-syntax.js",
     "lifeos:supervise:static": "node scripts/supervise-code-static-pass.mjs",
     "lifeos:builder:throughput-meter": "node scripts/builder-slice-throughput-meter.mjs",
+    "lifeos:builder:digest": "node scripts/builder-operator-digest.mjs",
     "ssot:validate": "node scripts/ssot-validate.mjs",
     "verify:maturity": "node scripts/system-maturity-check.mjs",
     "backtest:attention": "node scripts/attention-momentum-backtest.mjs",
