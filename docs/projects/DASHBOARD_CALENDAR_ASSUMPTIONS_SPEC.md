@@ -1,54 +1,65 @@
-### Calendar Tile Data Specification
+## Calendar Tile Specification for LifeOS Dashboard
 
-This document outlines the expected data shape, timezone handling, all-day event representation, and a future hook for ICS integration for the calendar tile displayed on the LifeOS Dashboard (`public/overlay/lifeos-dashboard.html`).
+This document specifies the expected data shape, timezone handling, all-day event representation, and future integration points for the calendar tile displayed on the LifeOS dashboard. This specification is derived from the existing `public/overlay/lifeos-dashboard.html` implementation.
 
-#### Current Behavior Summary
+### 1. Purpose
 
-The dashboard's "Today's Schedule" tile fetches events from `/api/v1/lifeos/engine/calendar/events?days=1&limit=8`. It displays the event time (if available) and title. Times are formatted using the client's local timezone via `toLocaleTimeString()`.
+The calendar tile provides a quick overview of upcoming events for the current day, allowing users to see their schedule at a glance.
 
-#### Event Data Shape
+### 2. API Endpoint
 
-The API endpoint `/api/v1/lifeos/engine/calendar/events` is expected to return a JSON object with an `events` array. Each event object within this array should conform to the following structure:
+The dashboard currently fetches calendar events from the following API endpoint:
+
+`GET /api/v1/lifeos/engine/calendar/events?days=1&limit=8`
+
+*   `days`: Specifies the number of days to fetch events for (currently hardcoded to `1`).
+*   `limit`: Specifies the maximum number of events to return (currently hardcoded to `8`).
+
+### 3. Event Data Shape
+
+The API is expected to return a JSON object with an `events` array. Each event object within this array should conform to the following structure:
 
 ```json
 {
-  "id": "string",             // Unique identifier for the event.
-  "title": "string",          // The primary title or name of the event.
-  "description": "string",    // (Optional) A more detailed description of the event.
-  "starts_at": "string",      // ISO 8601 timestamp indicating the start of the event.
-                              // Examples: "2024-07-20T09:00:00Z" (UTC), "2024-07-20T14:00:00-05:00" (with offset).
-                              // For all-day events, this should be the start of the day in UTC (e.g., "2024-07-20T00:00:00Z").
-  "ends_at": "string",        // ISO 8601 timestamp indicating the end of the event.
-                              // For all-day events, this should be the start of the *next* day in UTC (e.g., "2024-07-21T00:00:00Z").
-  "is_all_day": "boolean",    // Flag indicating if the event is an all-day event.
-  "timezone": "string",       // (Optional) IANA timezone name (e.g., "America/New_York", "Europe/London")
-                              // representing the original timezone of the event. If omitted, UTC is assumed for `starts_at`/`ends_at`.
-  "location": "string",       // (Optional) Physical or virtual location of the event.
-  "url": "string"             // (Optional) A URL related to the event (e.g., video conference link, external calendar link).
+  "id": "string",           // Unique identifier for the event (e.g., UUID)
+  "title": "string",        // Primary title of the event (preferred)
+  "name": "string",         // Alternative title of the event (used if 'title' is absent)
+  "starts_at": "string",    // ISO 8601 timestamp for the event start (e.g., "2024-07-20T09:00:00Z")
+  "start_time": "string",   // Alternative ISO 8601 timestamp for event start (used if 'starts_at' is absent)
+  "ends_at": "string",      // ISO 8601 timestamp for the event end (optional)
+  "end_time": "string",     // Alternative ISO 8601 timestamp for event end (optional)
+  "is_all_day": "boolean",  // Explicit flag for all-day events (recommended for future robustness)
+  "description": "string",  // Detailed description of the event (optional, for future detail views)
+  "location": "string",     // Location of the event (optional)
+  "url": "string"           // URL to the original event source (optional)
 }
 ```
 
-#### Timezone Handling
+**Key fields for current display:**
 
-1.  **Backend:** Event `starts_at` and `ends_at` timestamps should ideally be provided in UTC (ending with `Z`) or with explicit timezone offsets. If a `timezone` field (IANA name) is provided, it indicates the original timezone of the event.
-2.  **Frontend (`lifeos-dashboard.html`):**
-    *   The current implementation uses `new Date(timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })`. This method automatically converts the provided timestamp to the *client's local timezone* for display.
-    *   For accurate display, especially for users traveling or with different local timezones than the event's original timezone, the backend should consistently provide UTC timestamps. The client's `Date` object will then correctly interpret and display them in the user's local time.
-    *   The `timezone` field in the data shape is for informational purposes or future enhancements where the user might want to see the event in its original timezone.
+*   `title` (or `name`): The text displayed for the event.
+*   `starts_at` (or `start_time`): Used to determine the displayed time.
 
-#### All-Day Event Handling
+### 4. Timezone Handling
 
-1.  **Backend:**
-    *   For all-day events, the `is_all_day` field should be set to `true`.
-    *   `starts_at` should represent the beginning of the day (e.g., `YYYY-MM-DDT00:00:00Z`) and `ends_at` the beginning of the *next* day (e.g., `YYYY-MM-(D+1)T00:00:00Z`) in UTC.
-2.  **Frontend (`lifeos-dashboard.html`):**
-    *   The current rendering logic checks if `ev.starts_at` or `ev.start_time` exists to display a time.
-    *   **Proposed Enhancement:** If `is_all_day` is `true`, the frontend should explicitly *not* display a specific time (`<span class="event-time">`). Instead, it could display "All Day" or omit the time entirely, as per current behavior if `starts_at` is missing. The current code would render an empty `event-time` span if `starts_at` is null/undefined, which is a partial solution. A more robust solution would be to check `is_all_day` directly.
+The frontend renders event times using `new Date(timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })`.
 
-#### ICS Integration (Future Hook)
+*   **Client-side:** This method automatically converts the provided timestamp to the user's local timezone for display.
+*   **Backend expectation:** The backend should provide `starts_at` and `start_time` values as ISO 8601 strings that either:
+    *   Explicitly include timezone information (e.g., `2024-07-20T09:00:00-05:00`).
+    *   Are in UTC and explicitly marked as such (e.g., `2024-07-20T14:00:00Z`).
+    This ensures `new Date()` can correctly interpret the time relative to the client's local timezone.
 
-To enable future integration with external calendar systems via ICS (iCalendar) files, the following considerations are noted:
+### 5. All-Day Event Handling
 
-1.  **Export:** An API endpoint (e.g., `GET /api/v1/lifeos/engine/calendar/events/export.ics?event_id=<id>`) could be implemented to generate and serve an `.ics` file for a specific event or a range of events. This would allow users to easily add LifeOS events to their external calendars.
-2.  **Import:** An API endpoint (e.g., `POST /api/v1/lifeos/engine/calendar/events/import`) could be developed to accept an `.ics` file or URL, parse its contents, and create corresponding events within LifeOS. This would facilitate syncing external calendars into LifeOS.
-3.  **Data Mapping:** Ensure the LifeOS event data shape can be mapped effectively to standard ICS properties (e.g., `SUMMARY` for `title`, `DTSTART`/`DTEND` for `starts_at`/`ends_at`, `DESCRIPTION` for `description`, `LOCATION` for `location`, `URL` for `url`). Special attention should be paid to `DTSTART`/`DTEND` for all-day events (which use `DATE` values in ICS) and timezone properties (`TZID`).
+*   **Current behavior:** If `starts_at` (or `start_time`) is `null` or an empty string, the event time (`<span class="event-time">`) is not rendered, effectively treating it as an all-day event.
+*   **Recommended future enhancement:** Introduce an explicit `is_all_day: boolean` field in the event data shape. This allows for clearer distinction and more robust rendering logic for all-day events, independent of the presence of a `starts_at` timestamp. For example, an all-day event might still have a `starts_at` for sorting purposes, but `is_all_day` would dictate its display.
+
+### 6. ICS Future Hook
+
+The current dashboard does not include functionality for importing or exporting calendar data via ICS (iCalendar) files.
+
+*   **Future integration point:** A future enhancement could involve:
+    *   **Import:** An API endpoint (`POST /api/v1/lifeos/engine/calendar/import-ics`) that accepts an ICS file or URL, parses it, and creates events in the LifeOS system.
+    *   **Export:** An API endpoint (`GET /api/v1/lifeos/engine/calendar/export-ics`) that generates an ICS file for a given date range or set of events, allowing users to subscribe to or download their LifeOS calendar.
+    *   **Client-side parsing:** Direct client-side parsing of ICS files could also be considered for immediate display, though backend integration is generally preferred for data persistence and consistency.
