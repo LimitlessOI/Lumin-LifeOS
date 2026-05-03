@@ -1,18 +1,30 @@
-### (1) NEEDS ASSESSMENT
+### LifeOS ALPHA Consensus Pack
 
-Adam needs the following core components to effectively use the LifeOS prototype today:
+This document outlines the immediate needs for the LifeOS Alpha prototype and the next five prioritized tasks for the builder queue.
 
-*   **Shell**: A stable, responsive application shell (`lifeos-app.html`) providing consistent navigation, user settings, and a persistent Lumin chat interface across all views. This includes robust theme management and PWA installation prompts for a native-like experience.
-*   **Dashboard**: A personalized, data-rich dashboard (`lifeos-dashboard.html`) that aggregates key daily information (MITs, schedule), tracks progress towards goals, and displays life scores. This serves as Adam's primary daily overview.
-*   **Authentication**: Secure and reliable user authentication, including the ability to manage the `Command Key` and `Display Name` via the settings panel. The system must correctly identify Adam (`USER` context) and handle session management (sign-in/out).
-*   **Chat/Lumin Paths**: Fully functional conversational AI interaction through the Lumin persistent drawer and embedded dashboard chat. This includes message sending, history loading, voice input capabilities (push-to-talk and ambient listening), and proactive nudges. The chat must be able to create and load threads, and display assistant replies.
+### 1. NEEDS ASSESSMENT
 
-### (5) NEXT FIVE queue task IDs
+To enable Adam to effectively use the LifeOS prototype today, the following core components and paths are essential and must be functional:
 
-The next five tasks to execute are:
+*   **Shell**: The foundational application shell, provided by `lifeos-app.html`, including the persistent sidebar navigation (collapsible), the desktop topbar, and the mobile bottom navigation. This provides the primary interface for interacting with all LifeOS features.
+*   **Dashboard**: The `lifeos-dashboard.html` serves as the central hub for daily overview. It must display Most Important Tasks (MITs), Today's Schedule, Goals, Life Scores, and the integrated "Chat with Lumin" section. This page is the default landing experience.
+*   **Authentication**: Secure access to the platform is paramount. Adam requires a functional authentication mechanism, primarily through the `COMMAND_CENTER_KEY` (or `lifeos_api_key`) for API interactions. The settings panel in `lifeos-app.html` provides the interface for managing this key and user display name.
+*   **Chat/Lumin Paths**: Direct and persistent access to Lumin, the AI assistant, is a core interaction model. This includes the Lumin persistent drawer (accessible via FAB and quick bar in `lifeos-app.html`), the dedicated "Lumin Chat" page (`lifeos-chat.html`), and the embedded chat on the Dashboard. Voice input (`lifeos-voice.js`) and ambient nudges (`lifeos-ambient-sense.js`) are key interaction modalities.
 
-1.  Add SQL validation gate for `.sql` files before builder commits them
-2.  Add HTML validation (basic structure check) for `.html` files
-3.  Wire `npm run memory:ci-evidence` into `.github/workflows/smoke-test.yml`
-4.  Add auto-seed on boot (check if epistemic_facts is empty, run seed)
-5.  Expand `GET /api/v1/lifeos/builder/history` to return full audit data
+### 5. NEXT FIVE Queue Task IDs
+
+Based on the approved tasks and known gaps, the next five prioritized tasks for the builder queue are:
+
+1.  `Add SQL validation gate for .sql files before builder commits them`
+2.  `Wire npm run memory:ci-evidence into .github/workflows/smoke-test.yml`
+3.  `Add HTML validation (basic structure check) for .html files`
+4.  `Add auto-seed on boot (check if epistemic_facts is empty, run seed)`
+5.  `Improve builder history endpoint to return full audit data`
+
+### CLI Example
+
+To trigger a build task for the platform domain:
+
+```bash
+curl -X POST -H "Content-Type: application/json" -H "x-command-key: $COMMAND_CENTER_KEY" "$PUBLIC_BASE_URL/api/v1/lifeos/builder/build" -d '{"domain": "platform", "task_description": "Generate the LifeOS ALPHA consensus pack."}'
+```
