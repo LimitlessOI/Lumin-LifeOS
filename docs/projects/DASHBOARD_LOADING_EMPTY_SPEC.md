@@ -1,78 +1,87 @@
-## UI State Specification for LifeOS Dashboard
+The brief `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` was not found. The specification below is inferred directly from the provided `public/overlay/lifeos-dashboard.html` file.
 
-This specification outlines patterns for skeletons, shimmer rules, optimistic UI risks, and empty states copy tone, primarily derived from the existing `public/overlay/lifeos-dashboard.html` given the absence of the `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`.
+## LifeOS Dashboard UI Specification
 
 ### 1. Skeletons
 
-**Purpose:** To provide visual feedback during data loading, indicating that content is expected and in progress, rather than missing.
+Skeletons are used to indicate loading states for various dashboard sections. They consist of `div` elements with the `skeleton` class, often combined with `skel-line` for text-like placeholders or custom dimensions for circular/rectangular shapes.
 
-**Existing Patterns:**
-- **CSS Classes:**
-    - `.skeleton`: Applies the shimmer animation and base gradient background.
-    - `.skel-line`: Defines a rectangular placeholder line with a default height of `14px` and `margin-bottom: 10px`.
-- **Usage:**
-    - Used for lists of items (MITs, Calendar, Goals) as multiple `.skel-line` elements with varying `width` (e.g., `w-full`, `w-4/5`, `w-3/5`) to simulate text lines.
-    - Used for circular elements (Scores) by applying `.skeleton` to a `div` with `width:72px;height:72px;border-radius:50%`.
-- **Styling:**
-    - `background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);`
-    - `background-size: 400px 100%;`
-    - `border-radius: var(--radius-sm);` (or `50%` for circular)
+**Core Classes:**
+*   `.skeleton`: Applies the shimmer animation and base background gradient.
+    *   `background`: `linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%)`
+    *   `background-size`: `400px 100%`
+    *   `animation`: `shimmer 1.4s infinite`
+    *   `border-radius`: `var(--radius-sm)`
+*   `.skel-line`: Defines height and margin for text line placeholders.
+    *   `height`: `14px`
+    *   `margin-bottom`: `10px`
+    *   `width`: Typically `w-full`, `w-4/5`, `w-3/5`, or `w-3/4` (Tailwind classes) to vary line lengths. The last line in a group often has `width: 60%`.
+
+**Usage Examples:**
+*   **Today's MITs (`#mits-list`)**: Three `skel-line` elements with varying widths (`w-full`, `w-4/5`, `w-3/5`).
+*   **Today's Schedule (`#cal-list`)**: Three `skel-line` elements with varying widths (`w-full`, `w-3/4`, `w-4/5`).
+*   **Goals (`#goals-list`)**: Two `skel-line` elements for goal names, interspersed with `skel-line` elements styled for progress bars (`height:6px`, `border-radius:3px`).
+*   **Life Scores (`#scores-grid`)**: Each score tile uses a circular `skel-line` (`width:72px`, `height:72px`, `border-radius:50%`) for the ring, and a smaller `skel-line` (`width:60px`, `height:10px`) for the label.
 
 ### 2. Shimmer Rules
 
-**Purpose:** To create a subtle animation effect on skeleton loaders, enhancing the perception of activity and reducing perceived wait times.
+The shimmer effect is applied via the `.skeleton` class using a CSS animation.
 
-**Existing Patterns:**
-- **CSS Animation:**
-    - `@keyframes shimmer`:
-        ```css
-        @keyframes shimmer {
-          0% { background-position: -400px 0; }
-          100% { background-position: 400px 0; }
-        }
-        ```
-- **Application:**
-    - Applied via the `.skeleton` class: `animation: shimmer 1.4s infinite;`
-    - The `background-size` of `400px 100%` combined with the `background-position` animation creates the left-to-right "shimmer" effect across the gradient.
+**Animation Definition:**
+```css
+@keyframes shimmer {
+    0% {
+        background-position: -400px 0;
+    }
+    100% {
+        background-position: 400px 0;
+    }
+}
+```
+This animation moves the `background-position` of the linear gradient, creating a "shimmering" light effect across the skeleton elements. The animation runs infinitely with a duration of `1.4s`.
 
 ### 3. Optimistic UI Risks
 
-**Context:** Without the `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`, specific optimistic UI requirements are unknown. The following are general risks based on interactive elements in `lifeos-dashboard.html`.
+The dashboard implements optimistic UI updates in several areas, where the UI is updated immediately before awaiting a server response. This improves perceived responsiveness but introduces risks if the server operation fails.
 
-**Identified Risks:**
-- **MITs (Add/Toggle):**
-    - **Risk:** A user adds a new MIT or toggles an existing one as "done". The UI updates immediately, but the API call to `/api/v1/lifeos/commitments` or `/api/v1/lifeos/commitments/{id}/keep` fails.
-    - **Outcome:** The user sees a successful state (MIT added/toggled) that is not persisted on the backend. This leads to data inconsistency and user frustration when the state reverts or is not reflected on refresh.
-- **Chat (Send Message):**
-    - **Risk:** A user sends a message to Lumin. The message is immediately appended to the chat history on the UI, but the API call to `/api/v1/lifeos/chat/threads/{threadId}/messages` fails.
-    - **Outcome:** The user believes their message was sent, but Lumin never received it. This breaks the conversation flow and can lead to lost input. The current implementation handles this by showing an "Something went wrong" message, but the user's message remains in the UI.
-- **General Data Modification:**
-    - **Risk:** Any future interactive elements that modify data (e.g., editing goals, updating scores directly) could face similar issues if optimistic updates are not carefully managed.
-    - **Mitigation (Current):** The existing dashboard primarily fetches data on load and does not appear to use optimistic updates for scores or goals, reducing risk in these areas. MITs and Chat are the primary areas where optimistic UI could be considered.
-
-**Recommendation:** For any optimistic UI implementation, ensure robust error handling and clear visual feedback for failures (e.g., temporary "sending..." states, clear error messages, or automatic rollback of optimistic changes).
+**Identified Optimistic UI Patterns and Risks:**
+*   **MIT Toggle (`toggleMIT`)**:
+    *   **Pattern**: The `mit-check` and `mit-text` classes are toggled (`done` class added/removed) *before* the API call to `/api/v1/lifeos/commitments/{id}/keep` is made.
+    *   **Risk**: If the API call fails (e.g., network error, server error), the UI will show the MIT as toggled (kept/unkept), but the backend state will not reflect this. There is no explicit UI rollback in the `catch` block.
+*   **Add MIT (`addMIT`)**:
+    *   **Pattern**: The input field (`#mit-input`) is cleared (`inp.value=''`) *before* the API call to `/api/v1/lifeos/commitments` is made. `loadMITs()` is called after the API request, which would re-fetch the correct state.
+    *   **Risk**: If the API call fails, the input is cleared, but the MIT is not added to the list. The user might perceive the task as added, only for it to disappear on a subsequent refresh or if `loadMITs` fails.
+*   **Send Chat Message (`sendChat`)**:
+    *   **Pattern**: The user's message is immediately appended to the chat messages (`#chat-messages`) with the `msg user` class *before* the API call to `/api/v1/lifeos/chat/threads/{id}/messages` is made.
+    *   **Risk**: If the API call fails, the user's message will appear in the chat, but no assistant reply will follow. The `catch` block adds a generic "Something went wrong" message, but the user's message remains, potentially creating a confusing or unacknowledged interaction.
 
 ### 4. Empty States Copy Tone
 
-**Purpose:** To inform the user when a section has no data, and often to guide them on how to populate it.
+Empty states provide feedback when a section has no data to display. The tone is generally informative, sometimes encouraging, and uses relevant emojis. Error states are distinct, using a warning emoji.
 
-**Existing Tone & Patterns:**
-- **General Tone:** Helpful, encouraging, slightly informal, and clear.
-- **Structure:** Typically includes an emoji, a concise message, and sometimes a call to action.
-- **Examples from `lifeos-dashboard.html`:**
-    - **MITs (No data):** `<span>✅</span>No MITs — add one below`
-    - **MITs (Error):** `<span>⚠️</span>Could not load tasks`
-    - **Calendar (No data):** `<span>📅</span>Nothing scheduled today`
-    - **Calendar (Error):** `<span>📅</span>Could not load schedule`
-    - **Goals (No data):** `<span>🎯</span>No goals set yet`
-    - **Goals (Error):** `<span>🎯</span>Could not load goals`
-    - **Scores (Error):** `<span>📊</span>Could not load scores`
-- **Key Characteristics:**
-    - **Emoji Use:** Consistent use of relevant emojis (✅, 📅, 🎯, 📊, ⚠️) to add visual interest and convey meaning quickly.
-    - **Direct Language:** Clear and unambiguous statements about the current state.
-    - **Action-Oriented (for no data):** When applicable, suggests how the user can change the empty state (e.g., "add one below", "set yet").
-    - **Empathetic (for errors):** Acknowledges the failure without assigning blame, e.g., "Could not load...".
-    - **Concise:** Messages are short and to the point.
-
-**Recommendation:** Maintain this established tone and pattern for any new empty states or error messages introduced in the dashboard.
-The specification is incomplete as the source brief `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` was not found.
+**Empty State Messages:**
+*   **Today's MITs (`#mits-list`)**:
+    *   **Empty**: `<span>✅</span>No MITs — add one below`
+        *   *Tone*: Encouraging, proactive.
+    *   **Error**: `<span>⚠️</span>Could not load tasks`
+        *   *Tone*: Informative, warning.
+*   **Today's Schedule (`#cal-list`)**:
+    *   **Empty**: `<span>📅</span>Nothing scheduled today`
+        *   *Tone*: Informative, neutral.
+    *   **Error**: `<span>📅</span>Could not load schedule`
+        *   *Tone*: Informative, neutral/warning.
+*   **Goals (`#goals-list`)**:
+    *   **Empty**: `<span>🎯</span>No goals set yet`
+        *   *Tone*: Encouraging, proactive.
+    *   **Error**: `<span>🎯</span>Could not load goals`
+        *   *Tone*: Informative, warning.
+*   **Life Scores (`#scores-grid`)**:
+    *   **Error**: `<span>📊</span>Could not load scores`
+        *   *Tone*: Informative, warning. (No explicit "empty" state, as scores default to 0).
+*   **Chat with Lumin (`#chat-messages`)**:
+    *   **Initial**: `Hey Adam 👋 — what's on your mind today?`
+        *   *Tone*: Friendly, welcoming.
+    *   **Error**: `Something went wrong — try again.` (Appended as an assistant message with `opacity:0.5`)
+        *   *Tone*: Apologetic, suggestive of retry.
+    *   **Ambient Nudge**: `🔔 Lumin: {message}`
+        *   *Tone*: Informative, proactive, uses bell emoji.
