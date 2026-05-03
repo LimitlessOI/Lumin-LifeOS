@@ -1,54 +1,59 @@
-The task asks for a Markdown specification, but the output contract demands HTML implementation code.
+# LifeOS Dashboard Notification System Specification
 
-# Dashboard Notification System Specification
+This document outlines the specification for a dashboard-level notification, toast, and snackbar system within the LifeOS platform. The goal is to provide a consistent, accessible, and manageable mechanism for communicating timely information to the user without disrupting their workflow.
 
-This document outlines the specification for a dashboard-level notification, toast, and snackbar system within the LifeOS platform. The goal is to provide a consistent, accessible, and non-intrusive mechanism for communicating important information to the user. This specification focuses on the patterns and behaviors, not on specific implementation code.
+## 1. Surfaces
 
-## Surfaces
+Notifications will appear as transient, non-modal UI elements, typically positioned in a fixed area of the dashboard.
 
-Notifications will primarily appear in a dedicated, fixed-position area on the dashboard.
+-   **Primary Surface:** A dedicated container, fixed to the top-right or bottom-center of the viewport, will host all dashboard-level notifications. This ensures visibility across different dashboard layouts and prevents overlap with core content.
+-   **Types:**
+    -   **Toast/Snackbar:** Short, non-critical messages that appear briefly and auto-dismiss. Ideal for confirmations or minor informational updates.
+    -   **Notification:** More persistent messages that may require user attention or action. Can include a title, message, and optional action buttons.
+    -   **Critical Alert (Future Consideration):** Highly persistent, potentially blocking messages for severe system issues, requiring explicit user acknowledgment. (Deferred for initial implementation).
 
--   **Primary Dashboard Toast Area**: A dedicated, fixed-position container, likely in the bottom-right of the viewport, for transient, non-modal alerts. These notifications should overlay existing content without causing layout shifts. This area will be managed by the Platform Core (Shell).
--   **AI Rail (Future Consideration)**: Notifications specific to AI interactions may eventually appear within the `lifeos-ai-rail-root`, but this is a separate pattern and out of scope for the initial dashboard-level implementation.
--   **In-Context Alerts**: For specific form validations or data updates, smaller, temporary messages may appear directly adjacent to the relevant UI element. This specification focuses on global toast/snackbar patterns.
+## 2. Stacking
 
-## Stacking
+When multiple notifications are active, they will stack in a predictable manner.
 
-Notifications will manage their display to prevent visual clutter and ensure readability.
+-   **Order:** New notifications will appear at the top of the stack (if positioned top-right) or bottom of the stack (if positioned bottom-center), pushing older notifications away from the edge of the screen.
+-   **Maximum Visible:** A configurable maximum number of notifications (e.g., 3-5) will be visible at any given time. Older notifications beyond this limit will be queued or automatically dismissed based on their severity and persistence settings.
+-   **Animation:** Notifications will animate into and out of view smoothly to avoid jarring transitions.
 
--   **Fixed Position, Bottom-Up Stacking**: Notifications will appear at a fixed position (e.g., bottom-right of the viewport) and stack upwards. The newest notification will appear at the bottom of the stack, pushing older notifications upwards.
--   **Maximum Visible Notifications**: A configurable limit (e.g., 3-5) for simultaneously visible notifications. When the limit is reached, the oldest non-persistent notification will be automatically dismissed to make room for new ones.
--   **Visual Hierarchy**: Higher severity notifications should visually stand out (e.g., distinct background color, prominent icon, border accent) to immediately convey urgency.
+## 3. Persistence
 
-## Persistence
+Notifications will have defined lifecycles and dismissal mechanisms.
 
-Notification visibility and dismissal will be determined by their severity and user interaction.
+-   **Auto-Dismissal:**
+    -   **Toast/Snackbar:** Automatically dismiss after a short, configurable duration (e.g., 5-8 seconds).
+    -   **Notification:** May auto-dismiss after a longer duration (e.g., 15-20 seconds) if not interacted with, or persist until manually dismissed, depending on severity.
+-   **Manual Dismissal:** All non-critical notifications will include a clear dismissal button (e.g., "X" icon) allowing the user to close them immediately.
+-   **"Do Not Disturb" Hook:** The system will integrate with a user-configurable "Do Not Disturb" setting. When active, only notifications marked as `critical` or `high-priority` will be displayed. Other notifications will be suppressed or queued for later display. This setting will be managed via `localStorage` or user preferences API.
 
--   **Severity-Based Auto-Dismissal**:
-    -   **Info/Success**: Auto-dismiss after a short duration (e.g., 4-6 seconds).
-    -   **Warning**: Auto-dismiss after a moderate duration (e.g., 8-10 seconds) or manual dismissal.
-    -   **Error/Critical**: Requires explicit manual dismissal. These notifications should persist until the user interacts with them (e.g., clicks a dismiss button or takes an action).
--   **Manual Dismissal**: All notifications, regardless of severity, should include a clear, accessible dismiss button (e.g., an 'X' icon) allowing users to close them at any time.
--   **Do Not Disturb (DND) Hook**:
-    -   A system-wide setting (e.g., accessible via a dashboard control or user preferences) will allow users to temporarily suppress non-critical (Info, Success, Warning) notifications.
-    -   Critical Error notifications must always bypass DND to ensure important system issues are communicated.
-    -   When DND is active, suppressed notifications should be queued and potentially summarized in a less intrusive manner (e.g., a small badge count) or logged for later review.
+## 4. Accessibility
 
-## Accessibility
+The notification system will adhere to WCAG guidelines to ensure usability for all users.
 
-The notification system must be designed to be accessible to all users, including those using assistive technologies.
+-   **ARIA Roles:** Notifications will utilize appropriate ARIA roles (e.g., `role="status"` for passive updates, `role="alert"` for urgent, time-sensitive information) and `aria-live` attributes (`polite` or `assertive`) to ensure screen readers announce content effectively.
+-   **Keyboard Navigation:** Users will be able to dismiss notifications using keyboard controls (e.g., `Escape` key, `Tab` to focus and `Enter`/`Space` to activate a dismiss button).
+-   **Contrast:** Text and background colors will meet minimum contrast ratios.
+-   **Motion:** Animations will respect the `prefers-reduced-motion` media query.
 
--   **ARIA Live Regions**: Notifications must be implemented using ARIA live regions (e.g., `role="status"` for passive updates, `role="alert"` for urgent and important updates) to ensure screen readers announce them without interrupting the user's current focus.
--   **Keyboard Navigation**: Users must be able to navigate to and dismiss notifications using keyboard controls (e.g., Tab key to focus, Enter/Space to activate dismiss button).
--   **Sufficient Contrast**: Text and background colors must meet WCAG AA contrast guidelines to ensure readability for users with visual impairments.
--   **Clear and Concise Language**: Notification messages should be brief, easy to understand, and provide actionable information where appropriate. Avoid jargon.
--   **Focus Management**: Notifications should generally not steal focus from the user's current task. If a notification requires immediate user interaction, a separate modal dialog pattern should be considered.
+## 5. Shell Ownership vs. Domain Pushes
 
-## Deferred Implementation
+The dashboard "shell" (`public/overlay/lifeos-dashboard.html` and its associated scripts) will own the notification rendering and lifecycle management. Individual domains will push notification requests to the shell.
 
-This document serves as a high-level specification for the notification system.
+-   **Shell Responsibility:**
+    -   Rendering the notification UI.
+    -   Managing the notification queue and stacking logic.
+    -   Handling auto-dismissal and manual dismissal events.
+    -   Implementing the "Do Not Disturb" logic.
+    -   Providing a public API for domains to interact with.
+-   **Domain Responsibility:**
+    -   Triggering notifications via a standardized API provided by the dashboard shell (e.g., `LifeOS.notify({ message: '...', severity: 'info', duration: 5000, action: { label: 'View', callback: () => {} } })`).
+    -   Specifying notification content, severity (e.g., `info`, `success`, `warning`, `error`), and optional actions.
+    -   Domains will *not* directly manipulate the DOM for notifications.
 
--   **Shell Ownership**: The Platform Core (Shell) will own the core notification component, its styling, and the API for displaying notifications. This ensures consistency and centralized control.
--   **Domain Pushes**: Feature domains will push notification requests to the Shell's API, providing content, severity, and optional actions. This decouples feature logic from the UI presentation of notifications.
--   **No Production Code**: This specification explicitly avoids shipping production code. The actual implementation details (e.g., specific HTML structure, CSS classes, JavaScript API) will be developed based on these principles in a subsequent task.
--   **Future Work**: Integration with a centralized logging/telemetry system for notification delivery and user interaction tracking.
+## 6. Deferred Implementation
+
+This document serves as a specification. The actual implementation of the notification system (HTML structure, CSS styling, and JavaScript logic) is a subsequent task. No production code for this feature is included in this specification.
