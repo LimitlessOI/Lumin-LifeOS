@@ -1,63 +1,69 @@
-# Global Shortcuts for Dashboard & App Chrome
+# LifeOS Dashboard & App Chrome Builder Brief
 
-## Overview
-This document specifies the requirements and considerations for implementing global keyboard shortcuts within the LifeOS dashboard and the overarching application chrome. The primary focus is on a "focus trap" mechanism for interactive rail components and the feasibility of a ⌘K-style command palette, while carefully evaluating potential collisions with existing operating system and browser shortcuts. Implementation details are deferred, with this document serving as a foundational specification.
+## Project: Global Shortcuts Specification
 
-## Key Considerations
+**Date:** 2026-04-26
+**Status:** Specification Only (Implementation Deferred)
+**Target:** Dashboard (`public/overlay/lifeos-dashboard.html`) and App Chrome (`public/overlay/lifeos-app.html`)
 
-### 1. Focus Trap for Interactive Rails
-When an interactive rail (e.g., the Lumin AI drawer, or any future sidebar/overlay panel requiring user input) is open, keyboard navigation must be confined within that component. This ensures an accessible and predictable user experience, preventing accidental navigation outside the active context.
+### Overview
 
-**Requirements:**
--   **Activation:** When a rail component opens, focus should automatically shift to the first interactive element within it.
--   **Confinement:** Pressing `Tab` or `Shift+Tab` should cycle focus only among elements *within* the open rail.
--   **Deactivation:** When the rail closes, focus should return to the element that triggered its opening, or a logical fallback.
--   **Scope:** Applies to the Lumin drawer in `public/overlay/lifeos-app.html` and any future interactive rail components in `public/overlay/lifeos-dashboard.html` or other content frames.
+This document outlines the specification for global keyboard shortcuts within the LifeOS Dashboard and the overarching App Chrome. The goal is to enhance user efficiency through quick access to common functions, while carefully considering usability, accessibility, and potential conflicts with existing system or browser shortcuts.
 
-### 2. ⌘K-style Command Palette Feasibility
-A global command palette, activated by ⌘K (or Ctrl+K on non-Mac systems), offers a powerful way for users to quickly navigate, search, and execute actions across the LifeOS platform. This section outlines the feasibility considerations.
+### Key Considerations
 
-**Purpose:**
--   Rapid navigation to any LifeOS page/feature.
--   Quick execution of common actions (e.g., "Add MIT", "Start new chat", "Open settings").
--   Search for content or data within LifeOS.
+#### 1. Focus Trap for AI Rail
 
-**Activation:**
--   `⌘K` (macOS) / `Ctrl+K` (Windows/Linux) should open the command palette from anywhere within the LifeOS app chrome or dashboard content.
--   The shortcut should *not* activate if the user is actively typing in an input field or textarea, unless explicitly designed to do so (e.g., a specific command mode within an editor).
+**Feasibility:**
+- The AI rail (Lumin drawer) is a critical interaction point. Implementing a focus trap when the rail is open is technically feasible using standard WAI-ARIA patterns and JavaScript. This ensures that keyboard navigation remains within the rail's boundaries, preventing users from tabbing out unintentionally.
+- The focus trap should activate upon opening the rail and deactivate upon closing it.
+- Initial focus should be placed on the primary input field within the rail.
 
-**Technical Feasibility & Design Challenges:**
--   **Global Event Listener:** A single, top-level event listener on `document` for `keydown` events, checking for `metaKey`/`ctrlKey` + `K`.
--   **UI/UX:** Design of the modal overlay, search input, and results list.
--   **Search Indexing:** How to efficiently index all navigable pages and executable actions for quick search. This might involve a client-side index or a lightweight API endpoint.
--   **Action Mapping:** A clear mechanism to map search results to JavaScript functions or URL navigation.
--   **Accessibility:** Ensure the palette is fully navigable and usable with a keyboard and screen readers.
--   **Performance:** The palette must open instantly and provide near real-time search results.
+**Collision/Interaction:**
+- A focus trap primarily affects `Tab` and `Shift+Tab` navigation. These are standard browser behaviors for moving focus. The trap would override the default behavior *within the application context* when the rail is active, but not conflict with OS/browser shortcuts themselves.
+- Ensure that closing the rail (`Escape` key, for example) correctly restores focus to the element that triggered the rail's opening, or a logical fallback.
 
-### 3. Collisions with OS/Browser Shortcuts
-Implementing global shortcuts requires careful consideration of existing OS and browser keybindings to avoid conflicts and unexpected behavior.
+#### 2. ⌘K-style Command Palette Feasibility
 
-**Known Potential Collisions:**
--   **`⌘K` (macOS/Windows/Linux):**
-    -   **Browser:** Often used for "Add Link" in rich text editors (e.g., Google Docs, Notion). Less commonly a global browser shortcut.
-    -   **Applications:** May be used by specific applications for various functions (e.g., "commit" in some IDEs).
--   **General Browser/OS Shortcuts:**
-    -   `⌘L` / `Ctrl+L`: Focus address bar.
-    -   `⌘T` / `Ctrl+T`: Open new tab.
-    -   `⌘W` / `Ctrl+W`: Close current tab.
-    -   `⌘R` / `Ctrl+R`: Refresh page.
-    -   `⌘F` / `Ctrl+F`: Find on page.
-    -   `⌘Q` / `Ctrl+Q`: Quit application (macOS/Linux).
-    -   `Spacebar`: Currently used for "Push-to-talk" in Lumin chat. This is an existing custom shortcut that needs to be respected.
+**Feasibility:**
+- A `⌘K` (or `Ctrl+K` on Windows/Linux) command palette is a common pattern for quick access to commands, navigation, and search. This is highly feasible to implement.
+- It would involve:
+    - A global keyboard listener for `⌘K` (or `Ctrl+K`).
+    - A modal overlay containing a search input and a list of actionable items (e.g., "Go to Dashboard", "Add MIT", "Chat with Lumin", "Open Settings").
+    - Fuzzy searching/filtering of commands as the user types.
+    - Keyboard navigation (up/down arrows, Enter) within the command list.
 
-**Mitigation Strategies:**
--   **Prioritization:** Browser/OS shortcuts should generally take precedence over LifeOS custom shortcuts, especially for fundamental browser functions (e.g., `⌘L`, `⌘T`, `⌘W`, `⌘R`, `⌘F`).
--   **Contextual Activation:** Custom shortcuts should ideally only activate when the LifeOS application is the active window/tab and the focus is not within a standard text input field (unless the shortcut is specifically for that input).
--   **User Customization (Future):** Consider allowing users to customize or disable specific LifeOS shortcuts if conflicts become a significant issue.
--   **Documentation:** Clearly document all custom shortcuts within the application's help or settings.
+**Collision/Interaction:**
+- `⌘K` (or `Ctrl+K`) is a common shortcut in many applications (e.g., Slack, GitHub, VS Code) for command palettes or search. This pattern is well-established and generally accepted by users.
+- **Browser Conflicts:**
+    - `⌘K` (macOS) in some browsers (e.g., Safari) can be "Search with Google" or "Add Bookmark". This is a potential collision.
+    - `Ctrl+K` (Windows/Linux) is often "Add Bookmark" in Chrome/Firefox. This is a significant collision.
+- **OS Conflicts:** Less common for `⌘K`/`Ctrl+K` to have OS-level conflicts, but should be noted.
+- **Mitigation Strategies (for implementation phase):**
+    - Consider alternative key combinations if `⌘K`/`Ctrl+K` proves too disruptive, though the user expectation for `⌘K` is strong.
+    - Provide a clear visual indicator or onboarding hint about the shortcut.
+    - Allow users to customize the shortcut in settings (deferred).
+    - Prioritize the application's command palette over browser defaults if possible and desirable, but this can lead to user frustration if not handled gracefully.
 
-## Next Steps (Deferred Implementation)
-1.  **Design Mockups:** Create UI/UX mockups for the command palette.
-2.  **Technical Spike:** Prototype the global event listener and basic palette rendering to assess performance and initial collision behavior.
-3.  **Action Inventory:** Compile a comprehensive list of all navigable pages and actionable commands within LifeOS that should be accessible via the palette.
-4.  **Accessibility Audit:** Ensure the proposed focus trap and command palette designs meet WCAG accessibility guidelines.
+#### 3. Collisions with OS/Browser Shortcuts (General)
+
+**General Principles:**
+- **Prioritize OS/Browser:** Generally, OS and browser shortcuts should take precedence to avoid breaking fundamental user expectations (e.g., `⌘T` for new tab, `⌘W` for close window, `F5` for refresh).
+- **Contextual Shortcuts:** Application-specific shortcuts should be contextual where possible (e.g., `Enter` in a chat input sends the message, but `Enter` elsewhere might submit a form or activate a button).
+- **Modifier Keys:** Utilize modifier keys (`Shift`, `Alt`/`Option`, `Ctrl`/`Command`) to create unique combinations that are less likely to conflict.
+- **Accessibility:** Ensure all functionality accessible via shortcuts is also accessible via standard keyboard navigation (Tab, Shift+Tab, Enter) and mouse/touch.
+
+**Specific Collision Examples:**
+- **Navigation:** `Alt+Left/Right` (browser back/forward), `Space` (page scroll).
+- **Text Editing:** Standard text editing shortcuts (`⌘C`, `⌘V`, `⌘X`, `⌘Z`, `⌘A`, `⌘S`). These should generally be passed through to the underlying input fields.
+- **Zoom/View:** `⌘+`, `⌘-`, `⌘0` (browser zoom).
+- **Developer Tools:** `F12`, `⌘⌥I` (browser dev tools).
+
+**Recommendation for Implementation:**
+- When implementing, use `event.preventDefault()` judiciously and only when the application *must* handle the shortcut and overriding the browser/OS behavior is the intended and beneficial outcome.
+- Document all implemented shortcuts clearly for users.
+- Consider a "help" shortcut (e.g., `?` or `Shift+/`) to display a list of available in-app shortcuts.
+
+### Conclusion
+
+The integration of global shortcuts, particularly a `⌘K`-style command palette and focus management for the AI rail, will significantly improve the power-user experience. Careful design and testing will be required during implementation to minimize conflicts and ensure a smooth, intuitive interaction.
