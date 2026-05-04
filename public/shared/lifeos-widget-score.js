@@ -1,477 +1,264 @@
 (function(){
-  let _container = null;
-  let _userHandle = null;
-  let _commandKey = null;
-  let _prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const API_BASE_URL = '/api/v1/lifeos/scorecard/today';
+    const RING_RADIUS = 40;
+    const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+    const VIEWBOX_SIZE = 100;
 
-  const API_ENDPOINT = '/api/v1/lifeos/scorecard/today';
-  const RING_RADIUS = 40;
-  const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const SCORE_METRICS = [
-    { key: 'joy_score', label: 'Joy', scale: 1, tip: 'Overall happiness and contentment' },
-    { key: 'integrity_score', label: 'Integrity', scale: 1, tip: 'Alignment of actions with values' },
-    { key: 'energy_level', label: 'Energy', scale: 2, tip: 'Physical and mental vitality' } // 0-5 scaled to 0-10
-  ];
-
-  function getScoreColor(score) {
-    if (score > 7) return 'var(--c-health, #10b981)'; // Green
-    if (score >= 4) return 'var(--c-decisions, #f59e0b)'; // Amber
-    return 'var(--c-conflict, #e05555)'; // Red
-  }
-
-  function getTodayDate() {
-    return new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-  }
-
-  function createRingSVG(score, color, animate = true) {
-    const scorePct = score * 10; // Convert 0-10 to 0-100 percentage
-    const offset = RING_CIRCUMFERENCE * (1 - scorePct / 100);
-    const animationStyle = animate && !_prefersReducedMotion ? `animation: ring-fill 1s cubic-bezier(0.4,0,0.2,1) forwards; animation-delay: 0.4s;` : '';
-
-    return `
-      <svg width="100" height="100" viewBox="0 0 100 100">
-        <circle class="track" cx="50" cy="50" r="${RING_RADIUS}" fill="none" stroke-width="8"/>
-        <circle class="fill" cx="50" cy="50" r="${RING_RADIUS}" fill="none" stroke-width="8"
-          stroke="${color}" style="stroke-dasharray:${RING_CIRCUMFERENCE}; stroke-dashoffset:${offset}; ${animationStyle}"/>
-      </svg>
-    `;
-  }
-
-  function renderSkeleton() {
-    if (!_container) return;
-    _container.innerHTML = `
-      <style>
-        .lifeos-score-widget {
-          background: var(--bg-surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 16px;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-          color: var(--text-primary);
+    // Helper to create SVG elements
+    function createSvgElement(tag, attributes = {}) {
+        const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+        for (const key in attributes) {
+            el.setAttribute(key, attributes[key]);
         }
-        .lifeos-score-widget-date {
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--text-muted);
-          margin-bottom: 8px;
-        }
-        .lifeos-score-widget-grid {
-          display: flex;
-          gap: 20px;
-          justify-content: center;
-          width: 100%;
-        }
-        .lifeos-score-widget .score-tile {
-          background: transparent; /* No background for individual tiles within the widget */
-          border: none;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          cursor: default;
-          position: relative;
-          flex: 1;
-          max-width: 100px; /* Limit width for individual rings */
-        }
-        .lifeos-score-widget .score-ring {
-          position: relative;
-          width: 100px;
-          height: 100px;
-          margin-bottom: 8px;
-        }
-        .lifeos-score-widget .score-ring svg {
-          transform: rotate(-90deg);
-          overflow: visible;
-        }
-        .lifeos-score-widget .score-ring circle.track {
-          stroke: var(--bg-overlay);
-          stroke-width: 8;
-        }
-        .lifeos-score-widget .score-ring circle.fill {
-          stroke-linecap: round;
-          stroke-width: 8;
-        }
-        .lifeos-score-widget .score-num {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          font-weight: 800;
-          color: var(--text-primary);
-        }
-        .lifeos-score-widget .score-label {
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: var(--text-muted);
-          text-align: center;
-        }
-        /* Reusing existing skeleton styles */
-        .lifeos-score-widget .skeleton {
-          background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
-          background-size: 400px 100%;
-          animation: shimmer 1.4s infinite;
-          border-radius: var(--radius-sm);
-        }
-        .lifeos-score-widget .skel-circle {
-          width: 100px;
-          height: 100px;
-          border-radius: 50%;
-          margin-bottom: 8px;
-        }
-        .lifeos-score-widget .skel-label {
-          width: 70px;
-          height: 14px;
-        }
-        @keyframes shimmer {
-          0% { background-position: -400px 0; }
-          100% { background-position: 400px 0; }
-        }
-        @keyframes ring-fill {
-          from { opacity: 0.2; }
-          to { opacity: 1; }
-        }
-        @media (max-width: 480px) {
-          .lifeos-score-widget-grid {
-            flex-direction: column;
-            align-items: center;
-          }
-        }
-      </style>
-      <div class="lifeos-score-widget">
-        <h3 class="lifeos-score-widget-date skeleton" style="width: 180px; height: 18px;"></h3>
-        <div class="lifeos-score-widget-grid">
-          ${SCORE_METRICS.map(() => `
-            <div class="score-tile">
-              <div class="skel-circle skeleton"></div>
-              <div class="skel-label skeleton"></div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-  }
-
-  async function fetchData() {
-    if (!_userHandle || !_commandKey) {
-      throw new Error('User handle or command key not set.');
-    }
-    const url = `${API_ENDPOINT}?user=${encodeURIComponent(_userHandle)}`;
-    const headers = { 'x-lifeos-key': _commandKey, 'Content-Type': 'application/json' };
-    const response = await fetch(url, { headers });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-  }
-
-  function renderScores(data) {
-    if (!_container) return;
-
-    const scoreTiles = SCORE_METRICS.map(metric => {
-      let score = data[metric.key];
-      if (score === undefined || score === null) {
-        return `
-          <div class="score-tile">
-            <div class="score-ring">
-              ${createRingSVG(0, 'var(--text-muted, #555566)', false)}
-              <div class="score-num" style="color:var(--text-muted, #555566)">—</div>
-            </div>
-            <div class="score-label">${metric.label}</div>
-          </div>
-        `;
-      }
-
-      // Apply scaling
-      score = score * metric.scale;
-      // Clamp score to 0-10 range
-      score = Math.max(0, Math.min(10, score));
-
-      const color = getScoreColor(score);
-      const displayScore = Math.round(score); // Display as integer
-
-      return `
-        <div class="score-tile">
-          <div class="score-ring">
-            ${createRingSVG(displayScore, color)}
-            <div class="score-num" style="color:${color}">${displayScore}</div>
-          </div>
-          <div class="score-label">${metric.label}</div>
-        </div>
-      `;
-    }).join('');
-
-    _container.innerHTML = `
-      <style>
-        .lifeos-score-widget {
-          background: var(--bg-surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 16px;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-          color: var(--text-primary);
-        }
-        .lifeos-score-widget-date {
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--text-muted);
-          margin-bottom: 8px;
-        }
-        .lifeos-score-widget-grid {
-          display: flex;
-          gap: 20px;
-          justify-content: center;
-          width: 100%;
-        }
-        .lifeos-score-widget .score-tile {
-          background: transparent; /* No background for individual tiles within the widget */
-          border: none;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          cursor: default;
-          position: relative;
-          flex: 1;
-          max-width: 100px; /* Limit width for individual rings */
-        }
-        .lifeos-score-widget .score-ring {
-          position: relative;
-          width: 100px;
-          height: 100px;
-          margin-bottom: 8px;
-        }
-        .lifeos-score-widget .score-ring svg {
-          transform: rotate(-90deg);
-          overflow: visible;
-        }
-        .lifeos-score-widget .score-ring circle.track {
-          stroke: var(--bg-overlay);
-          stroke-width: 8;
-        }
-        .lifeos-score-widget .score-ring circle.fill {
-          stroke-linecap: round;
-          stroke-width: 8;
-        }
-        .lifeos-score-widget .score-num {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          font-weight: 800;
-          color: var(--text-primary);
-        }
-        .lifeos-score-widget .score-label {
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: var(--text-muted);
-          text-align: center;
-        }
-        @keyframes ring-fill {
-          from { opacity: 0.2; }
-          to { opacity: 1; }
-        }
-        @media (max-width: 480px) {
-          .lifeos-score-widget-grid {
-            flex-direction: column;
-            align-items: center;
-          }
-        }
-      </style>
-      <div class="lifeos-score-widget">
-        <h3 class="lifeos-score-widget-date">${getTodayDate()}</h3>
-        <div class="lifeos-score-widget-grid">
-          ${scoreTiles}
-        </div>
-      </div>
-    `;
-  }
-
-  function renderError(message = 'Failed to load scores') {
-    if (!_container) return;
-    _container.innerHTML = `
-      <style>
-        .lifeos-score-widget {
-          background: var(--bg-surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 16px;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-          color: var(--text-primary);
-        }
-        .lifeos-score-widget-date {
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--text-muted);
-          margin-bottom: 8px;
-        }
-        .lifeos-score-widget-grid {
-          display: flex;
-          gap: 20px;
-          justify-content: center;
-          width: 100%;
-        }
-        .lifeos-score-widget .score-tile {
-          background: transparent; /* No background for individual tiles within the widget */
-          border: none;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          cursor: default;
-          position: relative;
-          flex: 1;
-          max-width: 100px; /* Limit width for individual rings */
-        }
-        .lifeos-score-widget .score-ring {
-          position: relative;
-          width: 100px;
-          height: 100px;
-          margin-bottom: 8px;
-        }
-        .lifeos-score-widget .score-ring svg {
-          transform: rotate(-90deg);
-          overflow: visible;
-        }
-        .lifeos-score-widget .score-ring circle.track {
-          stroke: var(--bg-overlay);
-          stroke-width: 8;
-        }
-        .lifeos-score-widget .score-ring circle.fill {
-          stroke-linecap: round;
-          stroke-width: 8;
-        }
-        .lifeos-score-widget .score-num {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          font-weight: 800;
-          color: var(--text-primary);
-        }
-        .lifeos-score-widget .score-label {
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: var(--text-muted);
-          text-align: center;
-        }
-        @keyframes ring-fill {
-          from { opacity: 0.2; }
-          to { opacity: 1; }
-        }
-        @media (max-width: 480px) {
-          .lifeos-score-widget-grid {
-            flex-direction: column;
-            align-items: center;
-          }
-        }
-      </style>
-      <div class="lifeos-score-widget">
-        <h3 class="lifeos-score-widget-date">${getTodayDate()}</h3>
-        <div class="lifeos-score-widget-grid">
-          ${SCORE_METRICS.map(metric => `
-            <div class="score-tile">
-              <div class="score-ring">
-                ${createRingSVG(0, 'var(--text-muted, #555566)', false)}
-                <div class="score-num" style="color:var(--text-muted, #555566)">—</div>
-              </div>
-              <div class="score-label">${metric.label}</div>
-            </div>
-          `).join('')}
-        </div>
-        <div style="color: var(--c-conflict, #e05555); font-size: 13px; text-align: center;">${message}</div>
-      </div>
-    `;
-  }
-
-  async function refresh() {
-    if (!_container) {
-      console.warn('LifeOSWidgetScore: Container not mounted. Call mount() first.');
-      return;
-    }
-    renderSkeleton();
-    try {
-      const data = await fetchData();
-      renderScores(data);
-    } catch (error) {
-      console.error('LifeOSWidgetScore fetch error:', error);
-      renderError(error.message);
-    }
-  }
-
-  function mount({ container, user, commandKey }) {
-    if (typeof container === 'string') {
-      _container = document.getElementById(container);
-      if (!_container) {
-        console.error(`LifeOSWidgetScore: Container element with ID "${container}" not found.`);
-        return;
-      }
-    } else if (container instanceof HTMLElement) {
-      _container = container;
-    } else {
-      console.error('LifeOSWidgetScore: Invalid container provided. Must be an ID string or HTMLElement.');
-      return;
+        return el;
     }
 
-    _userHandle = user;
-    _commandKey = commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
+    // Helper to create a single ring gauge
+    function createRingGauge(metricName, score, maxScore, isLoading, isError) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'lifeos-score-ring-wrapper';
 
-    if (!_userHandle) {
-      console.warn('LifeOSWidgetScore: User handle not provided. Widget may not function correctly.');
-    }
-    if (!_commandKey) {
-      console.warn('LifeOSWidgetScore: Command key not found. API requests may fail.');
-    }
-
-    refresh();
-  }
-
-  window.LifeOSWidgetScore = {
-    mount,
-    refresh
-  };
-
-  // Auto-mount if the target element exists and global keys are available
-  document.addEventListener('DOMContentLoaded', () => {
-    const defaultContainer = document.getElementById('lifeos-widget-score');
-    if (defaultContainer) {
-      const defaultUser = defaultContainer.dataset.user || 'default'; // Assuming user handle might be in data-user
-      const defaultCommandKey = window.lifeosCommandKey || localStorage.getItem('commandKey');
-      if (defaultUser && defaultCommandKey) {
-        window.LifeOSWidgetScore.mount({
-          container: defaultContainer,
-          user: defaultUser,
-          commandKey: defaultCommandKey
+        const svg = createSvgElement('svg', {
+            viewBox: `0 0 ${VIEWBOX_SIZE} ${VIEWBOX_SIZE}`,
+            class: 'lifeos-score-ring-svg'
         });
-      } else {
-        console.warn('LifeOSWidgetScore: Auto-mount skipped. Missing user handle or command key.');
-        renderError('Missing user handle or command key for auto-mount.', defaultContainer);
-      }
+
+        // Background track
+        svg.appendChild(createSvgElement('circle', {
+            cx: VIEWBOX_SIZE / 2,
+            cy: VIEWBOX_SIZE / 2,
+            r: RING_RADIUS,
+            fill: 'none',
+            stroke: 'var(--dash-border)',
+            'stroke-width': '8'
+        }));
+
+        let displayScore = isError ? '—' : (score !== null ? score.toFixed(0) : '');
+        let strokeColor = 'var(--dash-muted)'; // Default for loading/error
+
+        if (!isLoading && !isError && score !== null) {
+            if (score > 7) {
+                strokeColor = 'var(--lifeos-color-green, #4CAF50)'; // Green fallback
+            } else if (score >= 4) {
+                strokeColor = 'var(--lifeos-color-amber, #FFC107)'; // Amber fallback
+            } else {
+                strokeColor = 'var(--lifeos-color-red, #F44336)'; // Red fallback
+            }
+        } else if (isError) {
+            strokeColor = 'var(--dash-muted)'; // Grey for error
+        }
+
+        const progressCircle = createSvgElement('circle', {
+            cx: VIEWBOX_SIZE / 2,
+            cy: VIEWBOX_SIZE / 2,
+            r: RING_RADIUS,
+            fill: 'none',
+            stroke: strokeColor,
+            'stroke-width': '8',
+            'stroke-linecap': 'round',
+            transform: `rotate(-90 ${VIEWBOX_SIZE / 2} ${VIEWBOX_SIZE / 2})`
+        });
+
+        if (!isLoading && !isError && score !== null) {
+            const progress = Math.min(Math.max(score / maxScore, 0), 1);
+            const dashOffset = RING_CIRCUMFERENCE * (1 - progress);
+            progressCircle.setAttribute('stroke-dasharray', `${RING_CIRCUMFERENCE} ${RING_CIRCUMFERENCE}`);
+            progressCircle.setAttribute('stroke-dashoffset', dashOffset);
+            if (!prefersReducedMotion) {
+                progressCircle.style.transition = 'stroke-dashoffset 0.8s ease-out';
+            }
+        } else if (isLoading) {
+            progressCircle.setAttribute('stroke-dasharray', `${RING_CIRCUMFERENCE * 0.3} ${RING_CIRCUMFERENCE * 0.7}`);
+            progressCircle.setAttribute('stroke-dashoffset', 0); // Start at 0 for animation
+            if (!prefersReducedMotion) {
+                progressCircle.style.animation = `lifeos-shimmer 1.5s infinite linear`;
+            }
+        } else if (isError) {
+             progressCircle.setAttribute('stroke-dasharray', `${RING_CIRCUMFERENCE} ${RING_CIRCUMFERENCE}`);
+             progressCircle.setAttribute('stroke-dashoffset', 0); // Full grey circle
+        }
+
+        svg.appendChild(progressCircle);
+
+        // Value label
+        const valueText = createSvgElement('text', {
+            x: VIEWBOX_SIZE / 2,
+            y: VIEWBOX_SIZE / 2 + 5, // Adjust for vertical centering
+            'text-anchor': 'middle',
+            'dominant-baseline': 'middle',
+            fill: 'var(--dash-text)',
+            'font-size': '24px',
+            'font-weight': 'bold',
+            class: 'lifeos-score-value'
+        });
+        valueText.textContent = displayScore;
+        svg.appendChild(valueText);
+
+        wrapper.appendChild(svg);
+
+        // Metric name below
+        const nameLabel = document.createElement('div');
+        nameLabel.className = 'lifeos-score-metric-name';
+        nameLabel.textContent = metricName.replace('_score', '').replace('_level', '').replace(/_/g, ' ');
+        wrapper.appendChild(nameLabel);
+
+        return wrapper;
     }
-  });
+
+    // Main widget rendering function
+    function renderWidget(container, data, isLoading, isError) {
+        container.innerHTML = ''; // Clear previous content
+        container.classList.toggle('lifeos-widget-loading', isLoading);
+        container.classList.toggle('lifeos-widget-error', isError);
+
+        const widgetContent = document.createElement('div');
+        widgetContent.className = 'lifeos-score-widget-content';
+
+        // Date heading
+        const dateHeading = document.createElement('h3');
+        dateHeading.className = 'lifeos-score-date-heading';
+        dateHeading.textContent = isLoading ? 'Loading...' : new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        widgetContent.appendChild(dateHeading);
+
+        const ringsContainer = document.createElement('div');
+        ringsContainer.className = 'lifeos-score-rings-container';
+
+        const scores = [
+            { name: 'joy_score', value: data?.joy_score, max: 10 },
+            { name: 'integrity_score', value: data?.integrity_score, max: 10 },
+            { name: 'energy_level', value: data?.energy_level ? data.energy_level * 2 : null, max: 10 } // Scale 0-5 to 0-10
+        ];
+
+        scores.forEach(s => {
+            ringsContainer.appendChild(createRingGauge(s.name, s.value, s.max, isLoading, isError));
+        });
+
+        widgetContent.appendChild(ringsContainer);
+        container.appendChild(widgetContent);
+
+        // Inject basic styles if not already present (for shimmer and layout)
+        if (!document.getElementById('lifeos-score-widget-styles')) {
+            const style = document.createElement('style');
+            style.id = 'lifeos-score-widget-styles';
+            style.textContent = `
+                .lifeos-score-widget-content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: calc(2 * var(--dash-space-unit));
+                    padding: calc(4 * var(--dash-space-unit));
+                    background: var(--dash-surface);
+                    border: 1px solid var(--dash-border);
+                    border-radius: var(--dash-radius-lg);
+                    color: var(--dash-text);
+                    font-family: sans-serif;
+                }
+                .lifeos-score-date-heading {
+                    margin: 0;
+                    font-size: 1.2em;
+                    color: var(--dash-text);
+                }
+                .lifeos-score-rings-container {
+                    display: flex;
+                    gap: calc(4 * var(--dash-space-unit));
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+                .lifeos-score-ring-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 100px; /* Fixed width for each ring */
+                    text-align: center;
+                }
+                .lifeos-score-ring-svg {
+                    width: 100%;
+                    height: auto;
+                }
+                .lifeos-score-metric-name {
+                    margin-top: calc(1 * var(--dash-space-unit));
+                    font-size: 0.8em;
+                    color: var(--dash-muted);
+                    text-transform: capitalize;
+                }
+                /* Shimmer animation */
+                @keyframes lifeos-shimmer {
+                    0% { stroke-dashoffset: 0; }
+                    100% { stroke-dashoffset: ${RING_CIRCUMFERENCE}; }
+                }
+                .lifeos-widget-loading .lifeos-score-value {
+                    opacity: 0.5;
+                }
+                .lifeos-widget-loading .lifeos-score-metric-name {
+                    opacity: 0.5;
+                }
+                /* Custom colors for scores */
+                :root {
+                    --lifeos-color-green: #4CAF50;
+                    --lifeos-color-amber: #FFC107;
+                    --lifeos-color-red: #F44336;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    let _container = null;
+    let _user = null;
+    let _commandKey = null;
+
+    async function refresh() {
+        if (!_container || !_user) {
+            console.warn('LifeOSWidgetScore: Widget not mounted or user not provided.');
+            return;
+        }
+
+        renderWidget(_container, null, true, false); // Show loading state
+
+        try {
+            const finalCommandKey = _commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
+            if (!finalCommandKey) {
+                throw new Error('Command key not found. Cannot fetch scorecard.');
+            }
+
+            const response = await fetch(`${API_BASE_URL}?user=${_user}`, {
+                headers: {
+                    'Authorization': `Bearer ${finalCommandKey}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            renderWidget(_container, data, false, false); // Show data
+        } catch (error) {
+            console.error('LifeOSWidgetScore: Failed to fetch scorecard data:', error);
+            renderWidget(_container, null, false, true); // Show error state
+        }
+    }
+
+    function mount({ container, user, commandKey }) {
+        if (!container || !user) {
+            console.error('LifeOSWidgetScore: mount requires a container element and a user handle.');
+            return;
+        }
+        _container = container;
+        _user = user;
+        _commandKey = commandKey; // Prioritize explicit commandKey from mount options
+
+        refresh(); // Initial data fetch and render
+    }
+
+    // Expose to global scope
+    window.LifeOSWidgetScore = {
+        mount,
+        refresh
+    };
 
 })();
