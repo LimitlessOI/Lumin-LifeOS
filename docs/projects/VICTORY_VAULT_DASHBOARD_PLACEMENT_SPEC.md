@@ -1,1 +1,3 @@
-The specification is incomplete as the `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file, which was to provide API assumptions for Victory Vault endpoints, is missing. Therefore, no API integration for Victory Vault widgets can be implemented.
+The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file, which is required to determine where Victory Vault widgets/cards plug into Today vs Growth areas and to identify existing Victory Vault API endpoints, is missing from the repository. Without this brief, it is not possible to fulfill the request to describe the integration points or API assumptions.
+
+The specification is incomplete as the primary source document is missing.
