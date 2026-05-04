@@ -1,838 +1,103 @@
-The specification is contradictory: the task asks for a Markdown specification, but the instructions and file contract demand a full HTML file replacement. Given the "AUTONOMY MODE: MAX" and the explicit "HTML FULL FILE — STRICT OUTPUT CONTRACT", I will proceed with implementing the error envelope display within `public/overlay/lifeos-dashboard.html`.
+# LIFEOS Dashboard Builder Brief: Client-Visible Error Envelopes
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0a0a0f" id="theme-color-meta">
-<title>Dashboard · LifeOS</title>
-<!-- Theme must load before anything renders to avoid flash -->
-<script src="/overlay/lifeos-theme.js"></script>
-<link rel="stylesheet" href="../shared/lifeos-dashboard-tokens.css">
-<link rel="stylesheet" href="../shared/lifeos-dashboard-ai-rail.css">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="/overlay/lifeos-bootstrap.js"></script>
-<style>
-:root {
---bg-base: var(--dash-bg, #0a0a0f);
---bg-raised: var(--dash-surface-raised, #0d0d15);
---bg-surface: var(--dash-surface, #111118);
---bg-surface2: var(--dash-surface-raised, #17171f);
---bg-overlay: var(--dash-surface-overlay, #1e1e28);
---border: var(--dash-border, rgba(255,255,255,0.07));
---border-focus: var(--dash-border-focus, rgba(255,255,255,0.18));
---text-primary: var(--dash-text, #e8e8f0);
---text-secondary: var(--dash-text-secondary, #9999bb);
---text-muted: var(--dash-muted, #555566);
---c-today: var(--dash-accent, #5b6af5);
---c-health: var(--dash-accent-health, #10b981);
---c-growth: var(--dash-accent-growth, #34d399);
---c-finance: var(--dash-accent-finance, #22d3ee);
---c-decisions: var(--dash-accent-warning, #f59e0b);
---c-mirror: var(--dash-accent-mirror, #7c3aed);
---c-conflict: var(--dash-accent-conflict, #e05555);
---radius-sm: var(--dash-radius-sm, 6px);
---radius-md: var(--dash-radius-md, 10px);
---radius-lg: var(--dash-radius-lg, 14px);
---radius-xl: var(--dash-radius-xl, 20px);
-}
-*, ::before, ::after {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-}
-html {
-height: 100%;
-}
-body {
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-background: var(--bg-base);
-color: var(--text-primary);
-min-height: 100%;
--webkit-font-smoothing: antialiased;
-padding-bottom: calc(24px + env(safe-area-inset-bottom));
-}
-.page {
-max-width: 860px;
-margin: 0 auto;
-padding: 24px 16px;
-}
-/ ── Cards ── /
-.card {
-background: var(--bg-surface);
-border: 1px solid var(--border);
-border-radius: var(--radius-lg);
-padding: 20px;
-transition: border-color 0.2s, box-shadow 0.2s;
-}
-.card:hover {
-border-color: var(--border-focus);
-box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-}
-.card-label {
-font-size: 10px;
-font-weight: 700;
-letter-spacing: 0.12em;
-text-transform: uppercase;
-color: var(--text-muted);
-margin-bottom: 14px;
-}
-.accent-border-today {
-border-top: 2px solid var(--c-today);
-}
-.accent-border-health {
-border-top: 2px solid var(--c-health);
-}
-.accent-border-finance {
-border-top: 2px solid var(--c-finance);
-}
-.accent-border-mirror {
-border-top: 2px solid var(--c-mirror);
-}
-/ ── Header ── /
-.hdr-row {
-display: flex;
-align-items: flex-start;
-justify-content: space-between;
-gap: 12px;
-}
-.hdr-controls {
-display: flex;
-gap: 8px;
-padding-top: 4px;
-flex-shrink: 0;
-}
-.hdr-btn {
-background: var(--bg-surface2);
-border: 1px solid var(--border);
-border-radius: var(--radius-md);
-color: var(--text-secondary);
-font-size: 17px;
-width: 36px;
-height: 36px;
-display: flex;
-align-items: center;
-justify-content: center;
-cursor: pointer;
-transition: border-color 0.2s, color 0.2s, background 0.2s;
-flex-shrink: 0;
-}
-.hdr-btn:hover {
-border-color: var(--border-focus);
-color: var(--text-primary);
-}
-.hdr-btn.active {
-color: var(--c-health);
-border-color: var(--c-health);
-}
-.hdr-btn.ambient-active {
-color: var(--c-health);
-border-color: var(--c-health);
-animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
-}
-.greeting {
-font-size: clamp(26px, 5vw, 38px);
-font-weight: 800;
-background: linear-gradient(135deg, var(--c-today) 0%, var(--c-mirror) 100%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-line-height: 1.1;
-}
-.greeting-sub {
-font-size: 14px;
-color: var(--text-muted);
-margin-top: 6px;
-}
-.pulse-dot {
-display: inline-block;
-width: 8px;
-height: 8px;
-background: var(--c-health);
-border-radius: 50%;
-margin-left: 8px;
-vertical-align: middle;
-animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
-}
-/ ── Animations ── /
-@keyframes pulse-ring {
-0%, 100% {
-opacity: 1;
-transform: scale(1);
-}
-50% {
-opacity: 0.5;
-transform: scale(1.3);
-}
-}
-@keyframes fadeUp {
-from {
-opacity: 0;
-transform: translateY(16px);
-}
-to {
-opacity: 1;
-transform: translateY(0);
-}
-}
-@keyframes shimmer {
-0% {
-background-position: -400px 0;
-}
-100% {
-background-position: 400px 0;
-}
-}
-@keyframes bounce-dot {
-0%, 80%, 100% {
-transform: scale(0.6);
-opacity: 0.4;
-}
-40% {
-transform: scale(1);
-opacity: 1;
-}
-}
-/ Progress uses inline stroke-dashoffset from makeRing(); animate opacity only /
-@keyframes ring-fill {
-  from { opacity: 0.2; }
-  to { opacity: 1; }
-}
-@keyframes bar-grow {
-from {
-width: 0;
-}
-}
-@keyframes check-draw {
-from {
-stroke-dashoffset: 20;
-}
-to {
-stroke-dashoffset: 0;
-}
-}
-@keyframes mic-pulse {
-0%, 100% {
-box-shadow: 0 0 0 0 rgba(224,85,85,0.4);
-}
-50% {
-box-shadow: 0 0 0 8px rgba(224,85,85,0);
-}
-}
-.fade-up {
-animation: fadeUp 0.4s ease both;
-}
-.delay-1 {
-animation-delay: 0.05s;
-}
-.delay-2 {
-animation-delay: 0.10s;
-}
-.delay-3 {
-animation-delay: 0.15s;
-}
-.delay-4 {
-animation-delay: 0.20s;
-}
-.delay-5 {
-animation-delay: 0.25s;
-}
-/ ── Skeleton ── /
-.skeleton {
-background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
-background-size: 400px 100%;
-animation: shimmer 1.4s infinite;
-border-radius: var(--radius-sm);
-}
-.skel-line {
-height: 14px;
-margin-bottom: 10px;
-}
-.skel-line:last-child {
-width: 60%;
-}
-/ ── MIT ── /
-.mit-item {
-display: flex;
-align-items: flex-start;
-gap: 12px;
-padding: 10px 0;
-border-bottom: 1px solid var(--border);
-cursor: pointer;
-user-select: none;
--webkit-user-select: none;
-}
-.mit-item:last-of-type {
-border-bottom: none;
-}
-.mit-check {
-flex-shrink: 0;
-width: 22px;
-height: 22px;
-border: 2px solid var(--border-focus);
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-transition: background 0.2s, border-color 0.2s;
-margin-top: 1px;
-}
-.mit-check.done {
-background: var(--c-today);
-border-color: var(--c-today);
-}
-.mit-check svg {
-display: none;
-}
-.mit-check.done svg {
-display: block;
-}
-.mit-check.done svg polyline {
-stroke-dasharray: 20;
-stroke-dashoffset: 0;
-animation: check-draw 0.25s ease forwards;
-}
-.mit-text {
-flex: 1;
-font-size: 15px;
-line-height: 1.4;
-color: var(--text-primary);
-transition: color 0.2s;
-}
-.mit-text.done {
-color: var(--text-muted);
-text-decoration: line-through;
-}
-/ ── Quick add ── /
-.quick-add {
-display: flex;
-gap: 8px;
-margin-top: 14px;
-padding-top: 14px;
-border-top: 1px solid var(--border);
-}
-.quick-add input {
-flex: 1;
-background: var(--bg-surface2);
-border: 1px solid var(--border);
-border-radius: var(--radius-md);
-color: var(--text-primary);
-font-size: 14px;
-padding: 8px 12px;
-outline: none;
-transition: border-color 0.2s;
-}
-.quick-add input:focus {
-border-color: var(--c-today);
-}
-.quick-add input::placeholder {
-color: var(--text-muted);
-}
-.btn-add {
-background: var(--c-today);
-color: #fff;
-border: none;
-border-radius: var(--radius-md);
-font-size: 14px;
-font-weight: 600;
-padding: 8px 16px;
-cursor: pointer;
-white-space: nowrap;
-transition: opacity 0.15s;
-}
-.btn-add:hover {
-opacity: 0.85;
-}
-/ ── Calendar ── /
-.event-row {
-display: flex;
-align-items: center;
-gap: 10px;
-padding: 9px 0;
-border-bottom: 1px solid var(--border);
-}
-.event-row:last-child {
-border-bottom: none;
-}
-.event-time {
-font-size: 12px;
-font-weight: 600;
-background: rgba(91,106,245,0.15);
-color: var(--c-today);
-border-radius: 6px;
-padding: 3px 8px;
-white-space: nowrap;
-letter-spacing: 0.02em;
-flex-shrink: 0;
-}
-.event-title {
-font-size: 14px;
-color: var(--text-primary);
-}
-/ ── Goals ── /
-.goal-row {
-margin-bottom: 16px;
-}
-.goal-row:last-child {
-margin-bottom: 0;
-}
-.goal-header {
-display: flex;
-justify-content: space-between;
-align-items: baseline;
-margin-bottom: 6px;
-}
-.goal-name {
-font-size: 14px;
-color: var(--text-primary);
-}
-.goal-pct {
-font-size: 13px;
-font-weight: 700;
-color: var(--c-finance);
-}
-.goal-track {
-height: 6px;
-background: var(--bg-surface2);
-border-radius: 3px;
-overflow: hidden;
-}
-.goal-fill {
-height: 100%;
-background: linear-gradient(90deg, var(--c-today) 0%, var(--c-finance) 100%);
-border-radius: 3px;
-animation: bar-grow 0.8s cubic-bezier(0.4,0,0.2,1) both;
-animation-delay: 0.3s;
-}
-.goal-sub {
-font-size: 11px;
-color: var(--text-muted);
-margin-top: 4px;
-}
-/ ── Scores ── /
-.scores-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 12px;
-}
-.score-tile {
-background: var(--bg-surface2);
-border: 1px solid var(--border);
-border-radius: var(--radius-md);
-padding: 16px;
-display: flex;
-flex-direction: column;
-align-items: center;
-cursor: default;
-transition: border-color 0.2s, transform 0.15s;
-position: relative;
-}
-.score-tile:hover {
-border-color: var(--border-focus);
-transform: translateY(-1px);
-}
-.score-ring {
-position: relative;
-width: 72px;
-height: 72px;
-margin-bottom: 8px;
-}
-.score-ring svg {
-transform: rotate(-90deg);
-overflow: visible;
-}
-.score-ring circle.track {
-stroke: var(--bg-overlay);
-}
-.score-ring circle.fill {
-stroke-linecap: round;
-stroke-dasharray: 207;
-animation: ring-fill 1s cubic-bezier(0.4,0,0.2,1) forwards;
-animation-delay: 0.4s;
-}
-.score-num {
-position: absolute;
-inset: 0;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 20px;
-font-weight: 800;
-}
-.score-label {
-font-size: 11px;
-font-weight: 700;
-letter-spacing: 0.08em;
-text-transform: uppercase;
-color: var(--text-muted);
-}
-.score-tile-tip {
-display: none;
-position: absolute;
-bottom: calc(100% + 8px);
-left: 50%;
-transform: translateX(-50%);
-background: var(--bg-overlay);
-border: 1px solid var(--border-focus);
-border-radius: var(--radius-md);
-padding: 8px 12px;
-font-size: 12px;
-color: var(--text-secondary);
-white-space: nowrap;
-z-index: 100;
-pointer-events: none;
-box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-}
-.score-tile.tip-open .score-tile-tip {
-display: block;
-}
-/ ── Chat ── /
-.chat-messages {
-height: 240px;
-overflow-y: auto;
-margin-bottom: 12px;
-display: flex;
-flex-direction: column;
-gap: 8px;
-scrollbar-width: thin;
-scrollbar-color: var(--bg-overlay) transparent;
-}
-.chat-messages::-webkit-scrollbar {
-width: 4px;
-}
-.chat-messages::-webkit-scrollbar-thumb {
-background: var(--bg-overlay);
-border-radius: 2px;
-}
-.msg {
-max-width: 80%;
-padding: 10px 14px;
-border-radius: var(--radius-lg);
-font-size: 14px;
-line-height: 1.5;
-animation: fadeUp 0.2s ease;
-}
-.msg.user {
-align-self: flex-end;
-background: var(--c-today);
-color: #fff;
-border-bottom-right-radius: var(--radius-sm);
-}
-.msg.assistant {
-align-self: flex-start;
-background: var(--bg-surface2);
-color: var(--text-primary);
-border-bottom-left-radius: var(--radius-sm);
-border: 1px solid var(--border);
-}
-.msg.ambient {
-align-self: flex-start;
-background: transparent;
-color: var(--text-muted);
-font-style: italic;
-font-size: 13px;
-border: 1px dashed var(--border);
-border-bottom-left-radius: var(--radius-sm);
-}
-.typing {
-display: none;
-align-self: flex-start;
-background: var(--bg-surface2);
-border: 1px solid var(--border);
-border-radius: var(--radius-lg);
-border-bottom-left-radius: var(--radius-sm);
-padding: 12px 16px;
-gap: 5px;
-align-items: center;
-}
-.typing.show {
-display: flex;
-}
-.typing-dot {
-width: 7px;
-height: 7px;
-background: var(--text-muted);
-border-radius: 50%;
-}
-.typing-dot:nth-child(1) {
-animation: bounce-dot 1.2s 0.0s infinite;
-}
-.typing-dot:nth-child(2) {
-animation: bounce-dot 1.2s 0.2s infinite;
-}
-.typing-dot:nth-child(3) {
-animation: bounce-dot 1.2s 0.4s infinite;
-}
-/ ── Chat input row ── /
-.chat-row {
-display: flex;
-gap: 8px;
-}
-.chat-row input {
-flex: 1;
-background: var(--bg-surface2);
-border: 1px solid var(--border);
-border-radius: var(--radius-md);
-color: var(--text-primary);
-font-size: 14px;
-padding: 10px 14px;
-outline: none;
-transition: border-color 0.2s;
-}
-.chat-row input:focus {
-border-color: var(--c-today);
-}
-.chat-row input::placeholder {
-color: var(--text-muted);
-}
-.btn-mic {
-background: var(--bg-surface2);
-border: 1px solid var(--border);
-border-radius: var(--radius-md);
-color: var(--text-secondary);
-font-size: 18px;
-width: 44px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-shrink: 0;
-transition: border-color 0.2s, color 0.2s;
-}
-.btn-mic:hover {
-border-color: var(--border-focus);
-}
-.btn-mic.listening {
-color: var(--c-conflict);
-border-color: var(--c-conflict);
-animation: mic-pulse 1s ease infinite;
-}
-.btn-send {
-background: var(--c-today);
-color: #fff;
-border: none;
-border-radius: var(--radius-md);
-font-size: 20px;
-width: 44px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-shrink: 0;
-transition: opacity 0.15s;
-}
-.btn-send:hover {
-opacity: 0.85;
-}
-/ ── Voice footer ── /
-.voice-footer {
-display: flex;
-align-items: center;
-gap: 10px;
-margin-top: 10px;
-padding-top: 10px;
-border-top: 1px solid var(--border);
-}
-.voice-footer label {
-display: flex;
-align-items: center;
-gap: 6px;
-font-size: 12px;
-color: var(--text-muted);
-cursor: pointer;
-user-select: none;
--webkit-user-select: none;
-}
-.voice-footer label input[type=checkbox] {
-accent-color: var(--c-today);
-}
-#voice-status {
-flex: 1;
-font-size: 11px;
-color: var(--text-muted);
-text-align: right;
-font-style: italic;
-}
-.ptt-hint {
-font-size: 11px;
-color: var(--text-muted);
-opacity: 0.6;
-}
-/ ── Empty ── /
-.empty {
-text-align: center;
-padding: 20px 0;
-color: var(--text-muted);
-font-size: 14px;
-}
-.empty span {
-display: block;
-font-size: 28px;
-margin-bottom: 6px;
-}
+## 1. Purpose
 
-/* Error Banner Styles */
-.error-banner {
-  background: var(--c-conflict); /* Red for errors */
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: var(--radius-md);
-  margin-bottom: 24px; /* Space below header */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  animation: fadeUp 0.4s ease both;
-}
-.error-banner.hidden {
-  display: none;
-}
-.error-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  line-height: 1.4;
-}
-.error-correlation-id {
-  font-size: 11px;
-  opacity: 0.7;
-  margin-top: 4px;
-}
-.error-actions {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.btn-error-action {
-  background: rgba(255,255,255,0.2);
-  border: none;
-  border-radius: var(--radius-sm);
-  color: #fff;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.btn-error-action:hover {
-  background: rgba(255,255,255,0.3);
-}
+This document specifies the standard structure and content for client-visible error envelopes returned by the LifeOS API. The goal is to provide consistent, actionable, and secure error responses that differentiate between user-facing messages and internal debugging information, adhering to privacy and fail-closed principles.
 
+## 2. Core Principles
 
-@media (min-width: 640px) {
-.two-col {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 16px;
-}
-}
-/ Desktop-specific styles for wider screens /
-@media (min-width: 1000px) {
-  .page {
-    max-width: 1000px; / wider content area /
-    padding: 40px 32px;
-  }
-  .hdr-row {
-    padding-top: 12px;
-    margin-bottom: 24px;
-  }
-  .greeting {
-    font-size: 48px;
-  }
-  .greeting-sub {
-    font-size: 18px;
-  }
-  .two-col {
-    gap: 32px;
-  }
-  .card {
-    padding: 28px;
-  }
-  .card-label {
-    font-size: 11px;
-    margin-bottom: 18px;
-  }
-  .chat-messages {
-    height: 360px;
-  }
-  .chat-row {
-    margin-top: 20px;
-  }
-  .voice-footer {
-    margin-top: 16px;
+*   **Privacy/Fail-Closed**: Error messages exposed to end-users must be generic and avoid leaking sensitive internal details (e.g., stack traces, database errors, specific internal service names). The system should fail securely, providing minimal information to unauthorized parties.
+*   **Adam-Only Debugging**: Detailed error information, including correlation IDs, should be readily available to authorized administrators (Adam) for debugging purposes, but abstracted or omitted for general users.
+*   **No Instrumentation Code**: This specification defines the *structure* and *content* of error envelopes. It does not include implementation details for error handling or instrumentation.
+
+## 3. Error Envelope Structure
+
+All API error responses will return a JSON object with the following top-level keys:
+
+```json
+{
+  "error": {
+    "code": "string",
+    "message": "string",
+    "details": "object | array | null",
+    "correlationId": "string",
+    "retryable": "boolean"
   }
 }
-</style>
-</head>
-<body>
-<div class="page">
-<!-- HEADER -->
-<header class="mb-6 fade-up">
-<div class="hdr-row">
-<div style="flex:1">
-<div class="greeting" id="greeting">Good morning<span class="pulse-dot"></span></div>
-<div class="greeting-sub" id="clock"></div>
-</div>
-<div class="hdr-controls">
-<button class="hdr-btn" id="btn-ambient" title="Ambient voice — Lumin speaks proactively when you have time" onclick="toggleAmbient()">🎙</button>
-<button class="hdr-btn" id="btn-theme" title="Toggle light/dark" onclick="toggleTheme()">☀︎</button>
-</div>
-</div>
-</header>
+```
 
-<!-- Error Banner -->
-<div id="error-banner" class="error-banner hidden">
-  <div class="error-content">
-    <span id="error-message"></span>
-    <span id="error-correlation-id" class="error-correlation-id hidden"></span>
-  </div>
-  <div class="error-actions">
-    <button id="error-retry-btn" class="btn-error-action">Retry</button>
-    <button id="error-dismiss-btn" class="btn-error-action">Dismiss</button>
-  </div>
-</div>
+*   **`error.code` (string)**: A machine-readable, consistent error code (e.g., `INVALID_INPUT`, `UNAUTHORIZED`, `SERVICE_UNAVAILABLE`). This should be stable and documented.
+*   **`error.message` (string)**: A human-readable message describing the error.
+    *   **User-facing**: Generic, non-technical, and actionable if possible.
+    *   **Adam-facing**: For errors where `correlationId` is surfaced to Adam, this message can be more specific internally, but the user-facing message should still be generic.
+*   **`error.details` (object | array | null)**: Optional, structured details about the error. This could include validation errors (e.g., field-specific issues), or other context. This field should be carefully sanitized for user-facing errors.
+*   **`error.correlationId` (string)**: A unique identifier for the request, generated by `mw/request-tracer.js`. This ID allows tracing the request through logs.
+*   **`error.retryable` (boolean)**: Indicates whether the client can safely retry the request. `true` for transient errors (e.g., network issues, temporary service unavailability); `false` for permanent errors (e.g., invalid input, authorization failures).
 
-<!-- ROW 1: MITs + Calendar -->
-<div class="two-col mb-4">
-<div class="card accent-border-today fade-up delay-1">
-<div class="card-label">Today's MITs</div>
-<div id="mits-list">
-<div class="skel-line skeleton w-full"></div>
-<div class="skel-line skeleton w-4/5"></div>
-<div class="skel-line skeleton w-3/5"></div>
-</div>
-<div class="quick-add">
-<input type="text" id="mit-input" placeholder="Add a most important task…">
-<button class="btn-add" onclick="addMIT()">Add</button>
-</div>
-</div>
-<div class="card accent-border-today fade-up delay-2">
-<div class="card-label">Today's Schedule</div>
-<div id="cal-list">
-<div class="skel-line skeleton w-full"></div>
-<div class="skel-line skeleton w-3/4"></div>
-<div class="skel-line skeleton w-4/5"></div>
-</div>
-</div>
-</div>
-<!-- ROW 2: Goals + Scores -->
-<div class="two-col mb-4">
-<div class="card accent-border-finance fade-up delay-3">
-<div class="card-label">Goals</div>
-<div id="goals-list">
-<div class="skel-line skeleton w-full"></div>
-<div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;margin-bottom:14px;border-radius:3px"></div>
-<div class="skel-line skeleton w-4/5"></div>
-<div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;border-radius:3px"></div>
-</div>
-</div>
-<div class="card accent-border-health fade-up delay-4">
-<div class="card-label">Life Scores <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text-muted)">— hold to see what each means</span></div>
-<div class="scores-grid" id="scores-grid">
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
-<div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-
+## 4. API Failure Copy Guidelines
+
+### 4.1. User-Facing Copy
+
+*   **Generic and Vague**: Avoid technical jargon. "Something went wrong," "An unexpected error occurred," "Please try again later."
+*   **Actionable (if possible)**: If the user can do something, suggest it. "Please check your input and try again."
+*   **No Internal Details**: Never expose stack traces, database errors, internal service names, or specific file paths.
+*   **Correlation ID**: **NEVER** surface `correlationId` directly to general end-users.
+
+### 4.2. Adam-Only Copy (via `correlationId`)
+
+*   **Correlation ID**: The `correlationId` *must* be surfaced in the error envelope when the request originates from an authenticated Adam session or a builder context. This allows Adam to use the ID to query logs for detailed debugging.
+*   **Detailed Messages (in logs)**: While the `error.message` in the envelope remains user-friendly, internal logs associated with the `correlationId` can contain full technical details.
+*   **`error.details`**: For Adam-facing errors, `error.details` can contain more specific, structured information relevant for debugging.
+
+## 5. Retry Mechanisms
+
+*   **`retryable: true`**: Set this flag for errors that are likely transient and can be resolved by retrying the request (e.g., 500, 503, network timeouts).
+*   **`retryable: false`**: Set this flag for errors that indicate a permanent issue with the request itself (e.g., 400, 401, 403, 404, 422). Retrying these requests without modification will likely yield the same error.
+*   **Client Behavior**: Clients should implement exponential backoff with jitter for `retryable: true` errors. They should not retry `retryable: false` errors without user intervention or modifying the request.
+
+## 6. Examples
+
+### 6.1. User-Facing Error (Generic)
+
+```json
+{
+  "error": {
+    "code": "SERVICE_UNAVAILABLE",
+    "message": "We're experiencing technical difficulties. Please try again in a moment.",
+    "details": null,
+    "correlationId": "hidden-from-user",
+    "retryable": true
+  }
+}
+```
+
+### 6.2. Adam-Facing Error (with Correlation ID)
+
+```json
+{
+  "error": {
+    "code": "INVALID_INPUT",
+    "message": "The provided task definition is invalid. Please review the structure.",
+    "details": {
+      "field": "taskName",
+      "reason": "Task name cannot be empty."
+    },
+    "correlationId": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "retryable": false
+  }
+}
+```
+
+### 6.3. Authorization Error (User/Adam - `correlationId` depends on context)
+
+```json
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "You are not authorized to perform this action.",
+    "details": null,
+    "correlationId": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "retryable": false
+  }
+}
+```
