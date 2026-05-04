@@ -1,3 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"> <script src="/overlay/lifeos-bootstrap.js"></script> <script src="/overlay/lifeos-theme.js"></script> <script src="/overlay/lifeos-feature-data.js"></script> <meta name="mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <meta name="apple-mobile-web-app-title" content="LifeOS"> <meta name="theme-color" content="#0a0a0f"> <link rel="manifest" href="/overlay/lifeos.webmanifest"> <link rel="apple-touch-icon" href="/overlay/icons/icon-192.png"> <title>LifeOS</title> <style> / ── Design tokens (mirrors lifeos-ds.css — shell uses its own copy since it IS the chrome) ── / :root { --bg-base: #0a0a0f; --bg-raised: #0d0d15; --bg-surface: #111118; --bg-surface2: #17171f; --bg-overlay: #1e1e28; --border: rgba(255,255,255,0.07); --border-focus: rgba(255,255,255,0.15); --text-primary: #e8e8f0; --text-secondary:#9999bb; --text-muted: #555566; / Section accent colors / --c-today: #5b6af5; --c-mirror: #7c3aed; --c-engine: #3b82f6; --c-health: #10b981; --c-inner: #f59e0b; --c-family: #f43f5e; --c-purpose: #8b5cf6; --c-children: #f5a623; --c-mediation: #14b8a6; --c-conflict: #e05555; --c-balance: #5b6af5; --c-coach: #5b6af5; --c-identity: #a78bfa; --c-decisions: #f59e0b; --c-growth: #34d399; --c-finance: #22d3ee; --c-vision: #38bdf8; --c-legacy: #fb923c; --c-healing: #c084fc; --c-dashboard: #6366f1; --c-victory: #fbbf24; / Layout / --sidebar-w: 240px; --sidebar-w-mini: 60px; --topbar-h: 52px; --bottomnav-h: 56px; / Safe areas / --safe-top: env(safe-area-inset-top, 0px); --safe-right: env(safe-area-inset-right, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); --safe-left: env(safe-area-inset-left, 0px); / Current section (updated by JS) / --section-color: var(--c-today); --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --transition: 0.2s ease; } html[data-theme="light"] { color-scheme: light; --bg-base: #f6f7fb; --bg-raised: #ffffff; --bg-surface: #ffffff; --bg-surface2: #f3f5fb; --bg-overlay: #ffffff; --border: rgba(15,23,42,0.12); --border-focus: rgba(91,106,245,0.32); --text-primary: #111827; --text-secondary:#475569; --text-muted: #64748b; } , ::before, *::after { box-sizing: border-box; margin: 0; padding: 0; } html { font-size: 16px; -webkit-text-size-adjust: 100%; height: 100%; } body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg-base); color: var(--text-primary); height: 100%; overflow: hidden; -webkit-font-smoothing: antialiased; } / ── App shell ── / .app { display: flex; height: 100svh; / svh: respects mobile browser chrome / padding-top: var(--safe-top); } /* ═══════════════════════════════════════════════════════ SIDEBAR ═══════════════════════════════════════════════════════ */ .sidebar { width: var(--sidebar-w); background: var(--bg-raised); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden; transition: width var(--transition); position: relative; z-index: 50; } .sidebar.mini { width: var(--sidebar-w-mini); } / Sidebar top: logo row / .sidebar-header { height: var(--topbar-h); padding: 0 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 8px; } .logo { font-size: 15px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.4px; white-space: nowrap; display: flex; align-items: center; gap: 8px; } .logo-icon { width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(135deg, var(--c-today), var(--c-mirror)); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; } .logo-text { color: var(--text-primary); } .logo-text em { color: var(--c-today); font-style: normal; } .sidebar.mini .logo-text { display: none; } .collapse-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: var(--radius-sm); line-height: 1; font-size: 12px; flex-shrink: 0; transition: color var(--transition), background var(--transition); min-width: 28px; min-height: 28px; display: flex; align-items: center; justify-content: center; } .collapse-btn:hover { color: var(--text-primary); background: var(--bg-overlay); } / User pill / .user-pill { padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; cursor: pointer; transition: background var(--transition); position: relative; flex-shrink: 0; } .user-pill:hover { background: var(--bg-surface); } .avatar { width: 32px; height: 32px; min-width: 32px; border-radius: 50%; background: linear-gradient(135deg, #2a2060, #3
+# LifeOS Dashboard Category Stubs: Health, Family, Purpose
+
+## Overview
+This document specifies the placeholder layout, navigation hooks, and ownership boundaries for the Health, Family, and Purpose categories within the LifeOS Dashboard. The goal is to establish a foundational structure that allows future domain-specific implementations to integrate seamlessly without requiring changes to the core dashboard shell.
+
+## 1. Placeholder Layout
+
+### 1.1 Dashboard Home View (`/dashboard`)
+*   **Structure**: The main dashboard view will feature distinct, visually separated sections or "cards" for each core category: Health, Family, and Purpose.
+*   **Card Content (Placeholder)**:
+    *   Each card will display a prominent title (e.g., "Health", "Family", "Purpose").
+    *   A brief, generic placeholder message indicating the category's purpose and that domain-specific content will appear here upon activation (e.g., "Track your well-being and progress. Domain content coming soon.").
+    *   A primary call-to-action button/link: "Go to [Category] Dashboard".
+*   **Example Card Structure (Conceptual HTML/JSX):**
+    ```html
+    <div class="dashboard-card" id="card-health">
+        <h3>Health</h3>
+        <p>Track your well-being and progress. Domain content coming soon.</p>
+        <a href="/dashboard/health" class="btn btn-primary">Go to Health Dashboard</a>
+    </div>
+    ```
+
+### 1.2 Category-Specific Dashboard View (`/dashboard/[category]`)
+*   **Structure**: Upon navigating to a category-specific URL (e.g., `/dashboard/health`), a dedicated view will be presented.
+*   **Content (Placeholder)**:
+    *   A prominent header displaying the category name.
+    *   A large placeholder area (e.g., a `div` with a specific ID) where the respective domain's UI components will be injected.
+    *   A default message if no domain-specific content is yet registered or active (e.g., "The [Category] domain is active, but no specific content has been deployed yet. Check back soon!").
+*   **Example Page Structure (Conceptual HTML/JSX):**
+    ```html
+    <div class="category-dashboard-page" id="page-health">
+        <h1>Health Dashboard</h1>
+        <div id="health-domain-content-area">
+            <!-- Health domain's React/Vue app or server-rendered content will mount here -->
+            <p>The Health domain is active, but no specific content has been deployed yet. Check back soon!</p>
+        </div>
+    </div>
+    ```
+
+## 2. Navigation Hooks
+
+### 2.1 Primary Navigation (Shell-Owned)
+*   **Location**: The main application navigation (e.g., sidebar or top navigation bar) will include dedicated links for "Health", "Family", and "Purpose".
+*   **Routing**:
+    *   Clicking these links will navigate to the respective category-specific dashboard views:
+        *   `/dashboard/health`
+        *   `/dashboard/family`
+        *   `/dashboard/purpose`
+*   **Implementation**: These navigation links and their associated routes will be managed by the Platform Core.
+
+### 2.2 In-Category Navigation (Domain-Owned)
+*   **Responsibility**: Once a user is on a category-specific dashboard page (e.g., `/dashboard/health`), any further navigation *within that category* (e.g., to `/dashboard/health/metrics`, `/dashboard/health/goals`) becomes the responsibility of the respective domain.
+*   **Integration**: The Platform Core will provide a designated area (as described in 1.2) for the domain to render its own navigation and content.
+
+## 3. Ownership Boundaries: Shell vs. Domain-Owned
+
+### 3.1 Platform Core (Shell) Responsibilities
+*   **Global Layout**: Header, footer, main application navigation.
+*   **Top-Level Routing**: Registration and handling of `/dashboard`, `/dashboard/health`, `/dashboard/family`, `/dashboard/purpose`.
+*   **Placeholder UI**: Rendering the initial dashboard cards and the default category-specific pages when no domain content is active.
+*   **Domain Content Injection Points**: Providing clearly defined HTML elements (e.g., `div` with specific IDs) where domain-specific applications or components can mount.
+*   **Route Registration**: `startup/register-runtime-routes.js` will include entries for these top-level dashboard and category routes, pointing to generic handlers that render the shell and provide the injection points.
+
+### 3.2 Domain (e.g., Health Domain) Responsibilities
+*   **Feature-Specific UI/UX**: All components, views, and interactions *within* its designated content area (e.g., `div#health-domain-content-area`).
+*   **Sub-Routing**: Any routes nested under its top-level path (e.g., `/dashboard/health/metrics`, `/dashboard/health/goals`). These routes will be registered by the domain itself, typically within its own `routes/<domain>-routes.js` file, and mounted by `startup/register-runtime-routes.js` under the appropriate base path.
+*   **Data Management**: All data fetching, storage, and business logic related to the domain.
+*   **API Endpoints**: All API endpoints (e.g., `/api/v1/health/...`) will be owned and implemented by the respective domain.
+
+## 4. Implementation Notes
+*   The Platform Core will provide a generic Express route handler for `/dashboard/[category]` that renders a base HTML template. This template will include the necessary `div` elements for domain content injection.
+*   Domain-specific front-end applications (e.g., React apps) will be responsible for mounting themselves into these designated `div`s based on the current URL.
+*   The `startup/register-runtime-routes.js` file will be updated to include the new top-level dashboard routes.
