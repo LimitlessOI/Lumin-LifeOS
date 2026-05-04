@@ -1,41 +1,38 @@
-# LifeOS Dashboard Accessibility Specification
+# LIFEOS Dashboard Builder Brief: Accessibility Specification
 
-This document outlines the accessibility requirements for the LifeOS Dashboard shell, focusing on key WCAG principles to ensure an inclusive user experience.
+This document outlines the core accessibility requirements for the LIFEOS Dashboard shell, focusing on foundational elements to ensure a robust and inclusive user experience. These specifications are grounded in WCAG principles and aim to guide the implementation of the dashboard's structural and interactive components.
 
-## 1. Keyboard Operability and Focus Management
+## 1. Focus Traps
 
-### 1.1. Keyboard Access (WCAG 2.1.1 Keyboard)
-All interactive elements and functionality within the dashboard must be operable via a keyboard interface without requiring specific timings for individual keystrokes. This includes navigation, activation of controls, and input fields.
+**WCAG Reference:** Success Criterion 2.1.2 No Keyboard Trap (A), 2.4.3 Focus Order (A)
 
-### 1.2. Focus Order (WCAG 2.4.3 Focus Order)
-The sequential navigation order of focusable components must be logical and preserve meaning and operability. Focus should move predictably through the content, typically from left to right, top to bottom.
+**Specification:**
+The dashboard shell must prevent keyboard focus from becoming trapped within any specific component or region. When a modal dialog, dropdown menu, or other temporary interactive element is activated, focus must be programmatically managed to remain within that element until it is explicitly dismissed. Upon dismissal, focus must return to the element that triggered the temporary component. This ensures users navigating with a keyboard or assistive technology can always access all parts of the interface without being blocked.
 
-### 1.3. Focus Visible (WCAG 2.4.7 Focus Visible)
-A clear and visible keyboard focus indicator must be present for all user interface components that can receive keyboard focus. This indicator should have sufficient contrast against its background to be easily discernible.
+## 2. Landmarks
 
-### 1.4. No Keyboard Trap (WCAG 2.1.2 No Keyboard Trap)
-Users must be able to move keyboard focus away from any component or section of the page using only a keyboard interface. If a component creates a temporary "focus trap" (e.g., a modal dialog), clear instructions must be provided on how to exit it, and standard exit methods (like the Escape key) should be supported.
+**WCAG Reference:** Success Criterion 1.3.1 Info and Relationships (A)
 
-## 2. Semantic Structure and Landmarks
+**Specification:**
+The primary regions of the dashboard shell must be clearly identified using ARIA landmark roles. This includes, but is not limited to, `banner` (for headers), `navigation` (for primary navigation menus), `main` (for the main content area), `complementary` (for sidebars or auxiliary content), and `contentinfo` (for footers). Each landmark role should be used appropriately and uniquely identify its purpose within the document structure, providing a clear navigational outline for assistive technologies.
 
-### 2.1. Information and Relationships (WCAG 1.3.1 Info and Relationships)
-The structure and relationships of content must be programmatically determinable or available in text. This includes:
-*   Utilizing appropriate HTML5 semantic elements (e.g., `<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>`, `<section>`, `<article>`).
-*   Employing ARIA landmark roles (e.g., `role="banner"`, `role="navigation"`, `role="main"`, `role="complementary"`, `role="contentinfo"`) where HTML5 semantics are insufficient or for older browser compatibility.
-*   Ensuring headings (`<h1>` to `<h6>`) are used correctly to convey document structure and hierarchy.
+## 3. Keyboard Paths
 
-### 2.2. Bypass Blocks (WCAG 2.4.1 Bypass Blocks)
-A mechanism must be available to bypass blocks of content that are repeated on multiple pages or are extensive. Semantic landmarks (as described above) contribute to this by allowing screen reader users to navigate directly to main content areas.
+**WCAG Reference:** Success Criterion 2.1.1 Keyboard (A), 2.4.7 Focus Visible (AA)
 
-## 3. Visual Contrast
+**Specification:**
+All interactive elements within the dashboard shell must be fully operable via keyboard alone. This includes buttons, links, form controls, and any custom interactive components. The tab order must be logical and intuitive, following the visual flow of the page. A clear and persistent visual focus indicator must be present for all interactive elements when they receive keyboard focus, allowing users to easily discern their current position. No keyboard shortcuts should conflict with standard browser or operating system shortcuts.
 
-### 3.1. Contrast (Minimum) (WCAG 1.4.3 Contrast (Minimum))
-The visual presentation of text and images of text must have a contrast ratio of at least 4.5:1 against its background. For large-scale text (18pt or 14pt bold and larger), a contrast ratio of at least 3:1 is required.
+## 4. Contrast
 
-### 3.2. Non-text Contrast (WCAG 1.4.11 Non-text Contrast)
-The visual presentation of user interface components (e.g., buttons, input fields, checkboxes, radio buttons) and graphical objects (e.g., icons conveying information) must have a contrast ratio of at least 3:1 against adjacent colors. This applies to visual information required to identify components and their states (e.g., hover, focus, selected).
+**WCAG Reference:** Success Criterion 1.4.3 Contrast (Minimum) (AA), 1.4.11 Non-text Contrast (AA)
 
-## 4. Motion and Animation
+**Specification:**
+The visual presentation of text and images of text within the dashboard shell must have a contrast ratio of at least 4.5:1 against their background, with the exception of large text (18pt or 14pt bold), which requires a minimum contrast ratio of 3:1. Non-textual components, such as user interface controls (e.g., buttons, input fields) and meaningful graphical objects, must also have a contrast ratio of at least 3:1 against adjacent colors to ensure their visibility and operability.
 
-### 4.1. Animation from Interactions (WCAG 2.3.3 Animation from Interactions)
-Users must have the option to disable or reduce motion animation that is triggered by interaction, unless the animation is essential to the functionality or the information being conveyed. This should be implemented by respecting the `prefers-reduced-motion` media query in CSS. When `prefers-reduced-motion: reduce` is active, animations should be minimized or removed to prevent discomfort for users sensitive to motion.
+## 5. Prefers-Reduced-Motion
+
+**WCAG Reference:** Success Criterion 2.3.3 Animation from Interactions (AAA) (indirectly supported by `prefers-reduced-motion`)
+
+**Specification:**
+The dashboard shell must respect the user's `prefers-reduced-motion` media query setting. When this setting is active, non-essential animations, transitions, and parallax effects must be minimized or entirely removed. This includes, but is not limited to, loading spinners, page transitions, and dynamic content updates that involve significant motion. The user experience should prioritize static content or subtle fade transitions to prevent discomfort or disorientation for individuals sensitive to motion.
