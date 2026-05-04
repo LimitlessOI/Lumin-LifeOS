@@ -1,17 +1,18 @@
-# Summary
-The `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file is missing, preventing a comprehensive gap audit against the specified brief. Therefore, a direct comparison of `lifeos-dashboard.html` and `lifeos-app.html` against the brief's requirements for sidebar, bottom tabs, AI rail direction, light/dark intent, and mobile vs desktop is not possible.
+The specification is incomplete due to missing `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `lifeos-app.html` files, preventing the requested comparison.
 
-# Gaps vs brief
-Cannot assess concrete gaps without the authoritative brief (`LIFEOS_DASHBOARD_BUILDER_BRIEF.md`).
+---
+### Summary
+A gap audit was requested to compare `public/overlay/lifeos-dashboard.html` and `lifeos-app.html` against the `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` for specific UI elements (sidebar, bottom tabs, AI rail direction, light/dark intent, mobile vs desktop). However, both `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `lifeos-app.html` were not provided in the repository contents. Without these authoritative sources, a meaningful comparison and identification of concrete gaps against the brief is not possible.
 
-# Recommended next queued builds
-1. Add SQL validation gate for `.sql` files before builder commits them
-3. Wire `npm run memory:ci-evidence` into `.github/workflows/smoke-test.yml`
+### Gaps vs brief
+Cannot assess gaps against the brief as `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` was not found in the repository.
+Cannot assess gaps against `lifeos-app.html` as its content was not provided.
 
-# Open questions
-The primary open question is the content of `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md`. Without this document, it is impossible to determine if the current HTML implementations align with the intended design and functional specifications regarding:
-- Sidebar presence and behavior (e.g., always present, collapsible, mobile-only)
-- Bottom tabs design and functionality (e.g., specific tabs, mobile-only)
-- AI rail direction (e.g., always visible, drawer, specific content)
-- Light/dark intent (e.g., default theme, theme switching mechanism)
-- Mobile vs desktop specific layouts and responsiveness (e.g., breakpoints, adaptive elements)
+### Recommended next queued builds
+1. Provide `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` to enable comparison against the design specification.
+2. Provide `public/overlay/lifeos-app.html` to enable comparison between the two dashboard variants.
+
+### Open questions
+1. What are the authoritative contents of `LIFEOS_DASHBOARD_BUILDER_BRIEF.md`?
+2. What are the authoritative contents of `public/overlay/lifeos-app.html`?
+3. Should the audit proceed with only `lifeos-dashboard.html` and inferring intent from its structure, or is the brief strictly required?
