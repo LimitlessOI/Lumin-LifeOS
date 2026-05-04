@@ -972,7 +972,7 @@ function ringColor(s) {
 return s>=80?'#10b981':s>=60?'#f59e0b':'#e05555';
 }
 function makeRing(score) {
-const r=33, circ=2*Math.PI*r, offset=circ*(1-score/100);
+const r=33, circ=2Math.PIr, offset=circ*(1-score/100);
 const c=ringColor(score);
 return `<svg width="72" height="72" viewBox="0 0 72 72">
 <circle class="track" cx="36" cy="36" r="${r}" fill="none" stroke-width="6"/>
@@ -1079,7 +1079,7 @@ if (ambientActive) {
 btn.classList.add('ambient-active');
 btn.title = 'Ambient ON — Lumin will speak when you have something to know. Click to turn off.';
 checkProactiveNudge();
-ambientInterval = setInterval(checkProactiveNudge, 2 * 60 * 1000);
+ambientInterval = setInterval(checkProactiveNudge, 2  60  1000);
 } else {
 btn.classList.remove('ambient-active');
 btn.title = 'Ambient voice — Lumin speaks proactively when you have time';
@@ -1112,7 +1112,6 @@ document.addEventListener('DOMContentLoaded', () => {
 initVoice();
 const th = document.documentElement.dataset.theme;
 $('btn-theme').textContent = th === 'light' ? '☾' : '☀︎';
-
 // Mount new widgets
 const user = window.lifeosUser;
 const commandKey = window.lifeosCommandKey;
