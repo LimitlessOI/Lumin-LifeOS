@@ -13,6 +13,11 @@
 <link rel="stylesheet" href="../shared/lifeos-dashboard-ai-rail.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="/overlay/lifeos-bootstrap.js"></script>
+<!-- New widget scripts -->
+<script src="/shared/lifeos-widget-mit.js"></script>
+<script src="/shared/lifeos-widget-score.js"></script>
+<script src="/shared/lifeos-widget-lumin-quick.js"></script>
+<script src="/shared/lifeos-widget-category-stubs.js"></script>
 <style>
 :root {
 --bg-base: var(--dash-bg, #0a0a0f);
@@ -237,6 +242,18 @@ animation-delay: 0.20s;
 }
 .delay-5 {
 animation-delay: 0.25s;
+}
+.delay-6 {
+animation-delay: 0.30s;
+}
+.delay-7 {
+animation-delay: 0.35s;
+}
+.delay-8 {
+animation-delay: 0.40s;
+}
+.delay-9 {
+animation-delay: 0.45s;
 }
 / ── Skeleton ── /
 .skeleton {
@@ -754,9 +771,16 @@ gap: 16px;
 </div>
 </div>
 </div>
+<!-- NEW WIDGETS ROW -->
+<div class="two-col mb-4">
+<div id="lifeos-widget-mit" class="dashboard-widget card accent-border-today fade-up delay-3"></div>
+<div id="lifeos-widget-score" class="dashboard-widget card accent-border-health fade-up delay-4"></div>
+<div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5"></div>
+<div id="lifeos-widget-category-stubs" class="dashboard-widget card accent-border-finance fade-up delay-6"></div>
+</div>
 <!-- ROW 2: Goals + Scores -->
 <div class="two-col mb-4">
-<div class="card accent-border-finance fade-up delay-3">
+<div class="card accent-border-finance fade-up delay-7">
 <div class="card-label">Goals</div>
 <div id="goals-list">
 <div class="skel-line skeleton w-full"></div>
@@ -765,7 +789,7 @@ gap: 16px;
 <div class="skel-line skeleton w-full" style="height:6px;margin-top:4px;border-radius:3px"></div>
 </div>
 </div>
-<div class="card accent-border-health fade-up delay-4">
+<div class="card accent-border-health fade-up delay-8">
 <div class="card-label">Life Scores <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text-muted)">— hold to see what each means</span></div>
 <div class="scores-grid" id="scores-grid">
 <div class="score-tile"><div class="skel-line skeleton" style="width:72px;height:72px;border-radius:50%;margin-bottom:8px"></div><div class="skel-line skeleton" style="width:60px;height:10px"></div></div>
@@ -776,7 +800,7 @@ gap: 16px;
 </div>
 </div>
 <!-- CHAT -->
-<div class="card accent-border-mirror fade-up delay-5">
+<div class="card accent-border-mirror fade-up delay-9">
 <div class="card-label">Chat with Lumin</div>
 <div class="chat-messages" id="chat-messages">
 <div class="msg assistant">Hey Adam 👋 — what's on your mind today?</div>
@@ -840,7 +864,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-async function loadMITs() {
+asyncFn loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -877,7 +901,7 @@ document.body.appendChild(tip);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Could not load tasks</div>';
 }
 }
-async function toggleMIT(el) {
+asyncFn toggleMIT(el) {
 const chk=el.querySelector('.mit-check'), txt=el.querySelector('.mit-text');
 const done=chk.classList.contains('done');
 chk.classList.toggle('done',!done);
@@ -886,7 +910,7 @@ try {
 await API(`/api/v1/lifeos/commitments/${el.dataset.id}/keep`,{method:'POST',body:JSON.stringify({kept:!done})});
 } catch {}
 }
-window.addMIT = async function() {
+window.addMIT = asyncFn() {
 const inp=$('mit-input'), text=inp.value.trim();
 if (!text) return;
 try {
@@ -897,7 +921,7 @@ loadMITs();
 };
 $('mit-input').addEventListener('keypress', e=>{ if(e.key==='Enter') addMIT(); });
 // ── Calendar ──
-async function loadCal() {
+asyncFn loadCal() {
 try {
 const r=await API('/api/v1/lifeos/engine/calendar/events?days=1&limit=8');
 const d=await r.json();
@@ -915,7 +939,7 @@ $('cal-list').innerHTML='<div class="empty"><span>📅</span>Could not load sche
 }
 }
 // ── Goals ──
-async function loadGoals() {
+asyncFn loadGoals() {
 try {
 const r=await API('/api/v1/lifeos/finance/goals');
 const d=await r.json();
@@ -956,7 +980,7 @@ return `<svg width="72" height="72" viewBox="0 0 72 72">
 stroke="${c}" style="stroke-dashoffset:${offset}"/>
 </svg>`;
 }
-async function loadScores() {
+asyncFn loadScores() {
 try {
 const r=await API('/api/v1/lifeos/dashboard/scoreboard');
 const d=await r.json();
@@ -977,7 +1001,7 @@ $('scores-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><span>�
 }
 // ── Chat ──
 let threadId=null;
-async function initChat() {
+asyncFn initChat() {
 try {
 const r=await API('/api/v1/lifeos/chat/threads/default',{method:'POST',body:JSON.stringify({})});
 const d=await r.json();
@@ -991,7 +1015,7 @@ $('chat-messages').innerHTML=msgs.map(m=>`<div class="msg ${m.role==='user'?'use
 $('chat-messages').scrollTop=99999;
 } catch {}
 }
-async function sendChat() {
+asyncFn sendChat() {
 const inp=$('chat-input'), text=inp.value.trim();
 if (!text||!threadId) return;
 inp.value='';
@@ -1063,7 +1087,7 @@ clearInterval(ambientInterval);
 if (window.speechSynthesis) window.speechSynthesis.cancel();
 }
 };
-async function checkProactiveNudge() {
+asyncFn checkProactiveNudge() {
 try {
 const r = await API('/api/v1/lifeos/ambient/nudge');
 const d = await r.json();
@@ -1088,6 +1112,22 @@ document.addEventListener('DOMContentLoaded', () => {
 initVoice();
 const th = document.documentElement.dataset.theme;
 $('btn-theme').textContent = th === 'light' ? '☾' : '☀︎';
+
+// Mount new widgets
+const user = window.lifeosUser;
+const commandKey = window.lifeosCommandKey;
+if (window.LifeOSWidgetMIT) {
+  LifeOSWidgetMIT.mount({container: $('lifeos-widget-mit'), user, commandKey});
+}
+if (window.LifeOSWidgetScore) {
+  LifeOSWidgetScore.mount({container: $('lifeos-widget-score'), user, commandKey});
+}
+if (window.LifeOSWidgetLuminQuick) {
+  LifeOSWidgetLuminQuick.mount({container: $('lifeos-widget-lumin-quick'), user, commandKey});
+}
+if (window.LifeOSWidgetCategoryStubs) {
+  LifeOSWidgetCategoryStubs.mount({container: $('lifeos-widget-category-stubs'), user, commandKey});
+}
 });
 Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
 </script>
