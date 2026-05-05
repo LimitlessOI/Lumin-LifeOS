@@ -1,60 +1,109 @@
-# Project Brief: Cross-Surface Discovery for LifeOS Dashboard
+# Cross-Surface Discovery & Search Specification
 
-## 1. Jumping from Dashboard to Lumin with Context Hints
+This document outlines the specification for enhancing discovery and navigation across LifeOS surfaces, focusing on seamless transitions, quick actions, and comprehensive search capabilities.
 
-**Objective:** Enable seamless navigation from the LifeOS Dashboard to the Lumin interface, carrying relevant contextual information to enhance user experience and reduce friction.
+## 1. Dashboard to Lumin Contextual Handoff
 
-**Description:** When a user is viewing specific entities (e.g., an MIT, a Goal, an Event) on the LifeOS Dashboard, they should have the option to "jump" to the Lumin interface, where the corresponding entity or related information is pre-selected, highlighted, or filtered. This reduces the need for users to manually re-locate information across different surfaces.
+**Objective:** Enable users to transition from the LifeOS Dashboard to Lumin with relevant context automatically applied, reducing friction and improving workflow continuity.
 
-**Requirements:**
-*   **Contextual Links/Buttons:** Dashboard UI elements (e.g., MIT cards, Goal details) should include clear affordances (buttons, links) to navigate to Lumin.
-*   **Parameter Passing:** The navigation mechanism must support passing entity identifiers (e.g., `mitId`, `goalId`, `eventId`) and potentially other relevant filters (e.g., `dateRange`, `status`) as URL parameters or via a client-side routing mechanism.
-*   **Lumin Reception:** Lumin must be capable of parsing these incoming parameters and adjusting its view state accordingly (e.g., opening a specific detail panel, applying a search filter, highlighting an item).
-*   **Error Handling:** If the context passed is invalid or the entity does not exist in Lumin, appropriate feedback should be provided to the user.
+**Mechanism:**
+When a user initiates a jump from the Dashboard to Lumin (e.g., by clicking a specific MIT, Goal, or Project card), the following context should be captured and passed:
 
-**Considerations:**
-*   Define a clear URL parameter schema for Lumin to ensure consistent context passing.
-*   Evaluate the security implications of passing sensitive context via URLs.
-*   Determine the scope of entities that will support this cross-surface jump initially.
+*   **Entity Type:** (e.g., `MIT`, `Goal`, `Project`, `Event`)
+*   **Entity ID:** The unique identifier of the selected entity.
+*   **Current Dashboard View/Filter:** (e.g., "My Active MITs", "Upcoming Events")
+
+**Lumin Behavior:**
+Upon receiving the contextual data, Lumin should:
+
+*   **Pre-filter/Pre-select:** Automatically apply filters or navigate to a view relevant to the passed entity.
+    *   If an `MIT_ID` is passed, Lumin could open directly to the MIT's detail view or a filtered list showing related tasks.
+    *   If a `Goal_ID` is passed, Lumin could display all MITs contributing to that goal.
+*   **Highlight:** Visually highlight the specific entity if it's part of a larger list.
+*   **Deep Linking:** The mechanism should leverage URL parameters or a client-side state management system to ensure the context is persistent and shareable.
+
+**Example Flow:**
+1.  User views "Project X" on the Dashboard.
+2.  User clicks a "View in Lumin" button on the Project X card.
+3.  Lumin loads, automatically filtered to show all MITs and Goals associated with "Project X".
 
 ## 2. Command Palette Feasibility
 
-**Objective:** Assess the viability of implementing a global command palette within the LifeOS Dashboard to provide quick access to actions, navigation, and search functionalities.
+**Objective:** Explore the feasibility of a system-wide command palette to provide rapid access to actions, navigation, and search without requiring mouse interaction.
 
-**Description:** A command palette offers a keyboard-driven interface for users to execute commands, navigate to different sections, or initiate searches without needing to interact with traditional UI elements. This can significantly improve efficiency for power users.
+**Scope:** This section focuses on the *feasibility* and *design considerations*, deferring implementation.
 
-**Feasibility Assessment Points:**
-*   **Scope of Commands:** Identify a preliminary list of high-value commands (e.g., "Create New MIT," "Search Goals," "Open Builder," "View My Profile," "Toggle Dark Mode").
-*   **Technical Integration:**
-    *   How would the command palette integrate with the existing UI framework (e.g., React, Vue)?
-    *   What backend services would be required to support command execution (e.g., API endpoints for creation, search)?
-    *   How would it handle dynamic commands (e.g., context-sensitive actions)?
-*   **User Experience:**
-    *   What keyboard shortcut would activate it?
-    *   How would results be displayed and filtered?
-    *   Consider accessibility requirements.
-*   **Maintenance Overhead:** Evaluate the effort required to maintain and extend the list of commands over time.
+**Proposed Functionality:**
 
-**Recommendation (to be determined after assessment):** Based on the above, a recommendation will be made regarding the implementation of a command palette, including a phased rollout if deemed feasible.
+*   **Quick Actions:**
+    *   "Create New MIT"
+    *   "Log Daily Progress"
+    *   "Start Focus Session"
+    *   "Review Pending Items"
+*   **Navigation:**
+    *   "Go to Dashboard"
+    *   "Go to Lumin"
+    *   "Open Settings"
+    *   "View Profile"
+*   **Search:**
+    *   Integrated search for all searchable entities (see Section 3).
 
-## 3. Searchable Entities List (MITs/Goals/Events)
+**Technical Considerations (Feasibility):**
 
-**Objective:** Provide a unified and efficient search mechanism for core LifeOS entities: Most Important Tasks (MITs), Goals, and Events.
+*   **Client-Side Implementation:** A command palette would primarily be a client-side UI component, likely implemented using a framework like React or Vue.
+*   **Data Sourcing:** Actions and navigation targets would be static or dynamically loaded from a client-side manifest. Search functionality would require API integration.
+*   **Performance:** Must be highly responsive, with fuzzy matching and quick filtering of options.
+*   **Accessibility:** Keyboard-first design is paramount.
 
-**Description:** Users need a way to quickly find specific MITs, Goals, or Events across the platform. This feature would involve a dedicated search interface (potentially integrated into the command palette or a global search bar) that allows users to query and filter these entities.
+**Interaction Model:**
+*   Triggered by a global hotkey (e.g., `Cmd+K` or `Ctrl+K`).
+*   Type to filter actions/entities.
+*   `Enter` to execute/navigate.
 
-**Requirements:**
-*   **Unified Search Endpoint:** A single API endpoint capable of searching across MITs, Goals, and Events, or separate endpoints aggregated by a client-side service.
-*   **Search Criteria:** Support for searching by:
-    *   Keywords (e.g., title, description)
-    *   Status (e.g., "completed," "in progress")
-    *   Date ranges (for Goals and Events)
-    *   Associated users/teams
-*   **Result Display:** Search results should clearly indicate the entity type, relevant metadata (e.g., title, status, due date), and provide a direct link to the entity's detail view.
-*   **Performance:** Search operations must be performant, even with a large number of entities. Consider indexing strategies (e.g., Elasticsearch, database full-text search).
-*   **Filtering & Sorting:** Allow users to refine search results using filters (e.g., by type, status) and sorting options.
+## 3. Searchable Entities List
 
-**Considerations:**
-*   Define the data schema for each entity to ensure comprehensive search indexing.
-*   Evaluate existing search technologies within the platform or consider new ones if necessary.
-*   Prioritize which search criteria are most critical for initial implementation.
+**Objective:** Define the core entities and their attributes that should be globally searchable across the LifeOS platform.
+
+**Searchable Entities:**
+
+*   **MITs (Most Important Tasks):**
+    *   `title`
+    *   `description`
+    *   `status` (e.g., "active", "completed", "blocked")
+    *   `tags`
+    *   `associated_goal_title`
+    *   `associated_project_title`
+    *   `due_date` (range search)
+*   **Goals:**
+    *   `title`
+    *   `description`
+    *   `status` (e.g., "active", "achieved", "deferred")
+    *   `tags`
+    *   `associated_project_title`
+*   **Events:**
+    *   `title`
+    *   `description`
+    *   `location`
+    *   `attendees`
+    *   `start_time` / `end_time` (range search)
+*   **Projects:**
+    *   `title`
+    *   `description`
+    *   `status`
+    *   `tags`
+*   **People (Users/Collaborators):**
+    *   `name`
+    *   `email`
+    *   `role`
+
+**Search Interface:**
+
+*   **Global Search Bar:** A prominent search bar accessible from all major application surfaces.
+*   **Dedicated Search Page:** A more advanced search interface with filtering, sorting, and faceted search options.
+
+**Technical Considerations:**
+
+*   **Indexing:** A robust search index (e.g., Elasticsearch, PostgreSQL full-text search) will be required for efficient querying of large datasets.
+*   **API Endpoint:** A dedicated `/api/v1/search` endpoint that accepts query parameters and returns a paginated list of results, potentially grouped by entity type.
+*   **Relevance Ranking:** Implement a basic relevance ranking algorithm to prioritize results.
+*   **Permissions:** Search results must respect user permissions and data access policies.
