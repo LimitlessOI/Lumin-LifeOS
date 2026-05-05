@@ -1,48 +1,38 @@
 # LIFEOS Dashboard Builder Brief: Accessibility Specification
 
-This document outlines the accessibility requirements for the LIFEOS Dashboard shell, focusing on core interactive elements and user experience principles. Adherence to these guidelines ensures a robust and inclusive interface for all users, aligning with WCAG principles.
+This document outlines the core accessibility requirements for the LIFEOS Dashboard shell, focusing on foundational elements to ensure a robust and inclusive user experience. These specifications are grounded in WCAG principles and aim to guide the implementation of the dashboard's structural and interactive components.
 
-## 1. Focus Management and Traps
+## 1. Focus Traps
 
-The dashboard shell must implement robust focus management to ensure keyboard navigability and prevent focus loss.
+**WCAG Reference:** Success Criterion 2.1.2 No Keyboard Trap (A), 2.4.3 Focus Order (A)
 
--   **Focus Order:** Interactive elements must receive focus in a logical and predictable order, consistent with their visual presentation.
--   **Focus Indication:** A clear, visible focus indicator must be present on all interactive elements when they receive keyboard focus. This indicator must meet a minimum contrast ratio of 3:1 against adjacent colors.
--   **Focus Traps:** Modal dialogs, pop-ups, and other temporary UI components must implement focus traps. Focus must be constrained within these components when active, preventing users from tabbing outside until the component is dismissed. Upon dismissal, focus must return to the element that triggered the component.
--   **Keyboard Interaction:** All interactive elements (buttons, links, form controls, etc.) must be operable via keyboard alone, using standard keys like `Tab`, `Shift+Tab`, `Enter`, and `Space`.
+**Specification:**
+The dashboard shell must prevent keyboard focus from becoming trapped within any specific component or region. When a modal dialog, dropdown menu, or other temporary interactive element is activated, focus must be programmatically managed to remain within that element until it is explicitly dismissed. Upon dismissal, focus must return to the element that triggered the temporary component. This ensures users navigating with a keyboard or assistive technology can always access all parts of the interface without being blocked.
 
-## 2. Semantic Structure and ARIA Landmarks
+## 2. Landmarks
 
-The dashboard shell must utilize appropriate semantic HTML5 elements and ARIA landmarks to convey structure and facilitate navigation for assistive technologies.
+**WCAG Reference:** Success Criterion 1.3.1 Info and Relationships (A)
 
--   **Landmark Roles:** Key regions of the dashboard (e.g., `header`, `nav`, `main`, `aside`, `footer`) must be identified using HTML5 semantic elements or ARIA landmark roles (e.g., `role="banner"`, `role="navigation"`, `role="main"`, `role="complementary"`, `role="contentinfo"`).
--   **Unique Labels:** Each landmark region should have a unique, descriptive label (e.g., `aria-label="Primary Navigation"`) if multiple instances of the same landmark role exist.
--   **Heading Structure:** Content within the dashboard must follow a logical heading hierarchy (`<h1>` through `<h6>`) to outline the document structure.
+**Specification:**
+The primary regions of the dashboard shell must be clearly identified using ARIA landmark roles. This includes, but is not limited to, `banner` (for headers), `navigation` (for primary navigation menus), `main` (for the main content area), `complementary` (for sidebars or auxiliary content), and `contentinfo` (for footers). Each landmark role should be used appropriately and uniquely identify its purpose within the document structure, providing a clear navigational outline for assistive technologies.
 
-## 3. Keyboard Paths and Shortcuts
+## 3. Keyboard Paths
 
-Efficient keyboard navigation is critical for users who do not use a mouse.
+**WCAG Reference:** Success Criterion 2.1.1 Keyboard (A), 2.4.7 Focus Visible (AA)
 
--   **Standard Navigation:** Users must be able to navigate all interactive elements using `Tab` and `Shift+Tab`.
--   **Component-Specific Navigation:** Complex components (e.g., menus, tabs, data tables) must support appropriate keyboard interactions (e.g., arrow keys for navigation within a menu, `Enter` to select).
--   **Avoid Single-Key Shortcuts:** Single-key shortcuts (unless combined with `Ctrl`, `Alt`, `Shift`) should be avoided to prevent interference with assistive technologies or browser functionality. If used, they must be configurable or easily disabled.
+**Specification:**
+All interactive elements within the dashboard shell must be fully operable via keyboard alone. This includes buttons, links, form controls, and any custom interactive components. The tab order must be logical and intuitive, following the visual flow of the page. A clear and persistent visual focus indicator must be present for all interactive elements when they receive keyboard focus, allowing users to easily discern their current position. No keyboard shortcuts should conflict with standard browser or operating system shortcuts.
 
-## 4. Color Contrast
+## 4. Contrast
 
-Visual presentation of text and interactive elements must meet minimum contrast requirements to ensure readability for users with low vision or color blindness.
+**WCAG Reference:** Success Criterion 1.4.3 Contrast (Minimum) (AA), 1.4.11 Non-text Contrast (AA)
 
--   **Text Contrast:** Regular text and images of text must have a contrast ratio of at least 4.5:1 against their background.
--   **Large Text Contrast:** Large text (18pt or 14pt bold) must have a contrast ratio of at least 3:1 against its background.
--   **Non-Text Contrast:** Graphical objects and user interface components (e.g., buttons, icons, focus indicators) must have a contrast ratio of at least 3:1 against adjacent colors.
--   **Informative Use of Color:** Color should not be the sole means of conveying information. Redundant visual cues (e.g., text labels, icons, patterns) must be provided.
+**Specification:**
+The visual presentation of text and images of text within the dashboard shell must have a contrast ratio of at least 4.5:1 against their background, with the exception of large text (18pt or 14pt bold), which requires a minimum contrast ratio of 3:1. Non-textual components, such as user interface controls (e.g., buttons, input fields) and meaningful graphical objects, must also have a contrast ratio of at least 3:1 against adjacent colors to ensure their visibility and operability.
 
-## 5. Motion and Animation (`prefers-reduced-motion`)
+## 5. Prefers-Reduced-Motion
 
-Animations and motion effects must be designed with consideration for users who may experience discomfort or distraction from excessive movement.
+**WCAG Reference:** Success Criterion 2.3.3 Animation from Interactions (AAA) (indirectly supported by `prefers-reduced-motion`)
 
--   **Respect User Preference:** The dashboard shell must detect and respect the user's `prefers-reduced-motion` media query setting.
--   **Reduced Motion Mode:** When `prefers-reduced-motion` is active, animations should be minimized or removed. This includes:
-    -   Replacing complex transitions (e.g., slides, fades, zooms) with instant changes or simple dissolves.
-    -   Disabling parallax scrolling, auto-playing carousels, and other non-essential decorative animations.
-    -   Ensuring any remaining animations are subtle, short, and do not cause disorientation.
--   **Essential Motion:** If motion is essential to convey information or functionality, it must be kept minimal and controllable (e.g., pause/play options).
+**Specification:**
+The dashboard shell must respect the user's `prefers-reduced-motion` media query setting. When this setting is active, non-essential animations, transitions, and parallax effects must be minimized or entirely removed. This includes, but is not limited to, loading spinners, page transitions, and dynamic content updates that involve significant motion. The user experience should prioritize static content or subtle fade transitions to prevent discomfort or disorientation for individuals sensitive to motion.
