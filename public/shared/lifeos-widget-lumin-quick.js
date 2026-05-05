@@ -1,10 +1,10 @@
 (function(){
   const HISTORY_KEY = 'lifeos-lumin-quick-history';
+  const MAX_HISTORY = 3;
   const API_ENDPOINT = '/api/v1/lifeos/chat';
-  const MAX_HISTORY_ITEMS = 3;
 
-  let currentUser = 'anonymous';
-  let currentCommandKey = null;
+  let currentUser = 'anonymous'; // Default, will be overridden by mount
+  let currentCommandKey = null; // Default, will be overridden by mount
 
   function getHistory() {
     try {
@@ -24,167 +24,265 @@
     }
   }
 
-  function renderHistory(container, history) {
-    const historyContainer = container.querySelector('.lifeos-lumin-quick-history');
+  function renderHistory(containerEl) {
+    const historyContainer = containerEl.querySelector('.lumin-quick-history');
     if (!historyContainer) return;
 
-    historyContainer.innerHTML = '';
+    historyContainer.innerHTML = ''; // Clear existing history
+    const history = getHistory();
+
     history.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'lifeos-lumin-quick-response';
-      div.innerHTML = `<strong>You:</strong> ${escapeHTML(item.message)}<br><strong>Lumin:</strong> ${escapeHTML(item.response)}`;
-      historyContainer.appendChild(div);
+      const p = document.createElement('p');
+      p.textContent = item;
+      p.style.cssText = 'margin: 4px 0; padding: 4px 8px; background-color: #f0f0f0; border-radius: 4px; font-size: 0.9em; word-wrap: break-word;'; // Basic styling
+      historyContainer.appendChild(p);
     });
+    historyContainer.scrollTop = historyContainer.scrollHeight; // Scroll to bottom
   }
 
-  function escapeHTML(str) {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
+  function showLoading(containerEl) {
+    const loadingEl = containerEl.querySelector('.lumin-quick-loading');
+    if (loadingEl) {
+      loadingEl.style.display = 'inline';
+    }
+    const errorEl = containerEl.querySelector('.lumin-quick-error');
+    if (errorEl) {
+      errorEl.style.display = 'none';
+      errorEl.textContent = '';
+    }
   }
 
-  async function sendMessage(container, message) {
-    const input = container.querySelector('.lifeos-lumin-quick-input');
-    const sendButton = container.querySelector('.lifeos-lumin-quick-send-btn');
-    const statusArea = container.querySelector('.lifeos-lumin-quick-status');
+  function hideLoading(containerEl) {
+    const loadingEl = containerEl.querySelector('.lumin-quick-loading');
+    if (loadingEl) {
+      loadingEl.style.display = 'none';
+    }
+  }
 
-    if (!message.trim()) return;
+  function showError(containerEl, message) {
+    const errorEl = containerEl.querySelector('.lumin-quick-error');
+    if (errorEl) {
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+    }
+  }
 
-    input.value = ''; // Clear input immediately
-    statusArea.textContent = '...'; // Show loading state
-    statusArea.style.color = ''; // Reset color
-    sendButton.disabled = true; // Disable button during fetch
+  async function sendMessage(containerEl, inputEl) {
+    const message = inputEl.value.trim();
+    if (!message) return;
+
+    inputEl.value = ''; // Clear input immediately
+    showLoading(containerEl);
 
     try {
-      const body = { message, user: currentUser };
-      if (currentCommandKey) {
-        body.commandKey = currentCommandKey;
-      }
-
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          message: message,
+          user: currentUser,
+          commandKey: currentCommandKey
+        }),
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      const luminResponse = data.reply || data.message || data.response || 'No response from Lumin.';
+      const reply = data.reply || data.message || data.response;
 
-      let history = getHistory();
-      history.push({ message, response: luminResponse });
-      if (history.length > MAX_HISTORY_ITEMS) {
-        history = history.slice(history.length - MAX_HISTORY_ITEMS);
+      if (reply) {
+        let history = getHistory();
+        history.push(reply);
+        if (history.length > MAX_HISTORY) {
+          history = history.slice(history.length - MAX_HISTORY);
+        }
+        saveHistory(history);
+        renderHistory(containerEl);
+      } else {
+        showError(containerEl, 'No reply received from Lumin.');
       }
-      saveHistory(history);
-      renderHistory(container, history);
-      statusArea.textContent = ''; // Clear loading state
+
     } catch (error) {
-      console.error('Error sending message to Lumin:', error);
-      statusArea.textContent = `Error: ${error.message}`;
-      statusArea.style.color = 'red';
+      console.error('Lumin quick chat error:', error);
+      showError(containerEl, `Error: ${error.message || 'Failed to send message.'}`);
     } finally {
-      sendButton.disabled = false; // Re-enable button
+      hideLoading(containerEl);
     }
   }
 
-  function mount({ container, user, commandKey }) {
-    if (!container) {
-      console.error('Lumin Quick Widget: Container element not provided.');
+  function mount(options) {
+    const { container, user, commandKey } = options;
+    let containerEl;
+
+    if (typeof container === 'string') {
+      containerEl = document.getElementById(container);
+    } else if (container instanceof HTMLElement) {
+      containerEl = container;
+    }
+
+    if (!containerEl) {
+      console.error(`Lumin Quick Widget: Container element '${container}' not found.`);
       return;
     }
 
     currentUser = user || 'anonymous';
     currentCommandKey = commandKey || null;
 
-    const hasAiRailExpand = window.LifeOSDashboardAiRail && typeof window.LifeOSDashboardAiRail.expand === 'function';
-
-    container.innerHTML = `
-      <div style="
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        padding: 12px;
-        border: 1px solid var(--dash-border, #ccc);
-        border-radius: var(--dash-radius-lg, 8px);
-        background-color: var(--dash-surface, #fff);
-        color: var(--dash-text, #333);
-        font-family: sans-serif;
-        font-size: 14px;
-      ">
-        <div class="lifeos-lumin-quick-history" style="
+    // Inject styles and HTML
+    containerEl.innerHTML = `
+      <style>
+        .lumin-quick-widget {
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+          font-size: 14px;
+          color: #333;
+          background-color: #fff;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 10px;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          max-width: 300px;
+          margin: 10px;
           display: flex;
           flex-direction: column;
-          gap: 6px;
+        }
+        .lumin-quick-history {
+          min-height: 60px;
           max-height: 150px;
           overflow-y: auto;
-          padding-right: 4px;
-        "></div>
-        <div style="display: flex; gap: 8px;">
-          <input
-            type="text"
-            class="lifeos-lumin-quick-input"
-            placeholder="Ask Lumin anything..."
-            style="
-              flex-grow: 1;
-              padding: 8px;
-              border: 1px solid var(--dash-border, #ddd);
-              border-radius: 4px;
-              background-color: var(--dash-bg, #f9f9f9);
-              color: var(--dash-text, #333);
-            "
-          />
-          <button
-            class="lifeos-lumin-quick-send-btn"
-            style="
-              padding: 8px 12px;
-              border: none;
-              border-radius: 4px;
-              background-color: var(--dash-accent, #5b6af5);
-              color: white;
-              cursor: pointer;
-              font-weight: bold;
-            "
-          >Send</button>
+          border-bottom: 1px solid #eee;
+          padding-bottom: 8px;
+          margin-bottom: 8px;
+          flex-shrink: 0;
+        }
+        .lumin-quick-history p {
+          margin: 4px 0;
+          padding: 4px 8px;
+          background-color: #f0f0f0;
+          border-radius: 4px;
+          font-size: 0.9em;
+          word-wrap: break-word;
+        }
+        .lumin-quick-input-area {
+          display: flex;
+          gap: 8px;
+          margin-bottom: 8px;
+          flex-shrink: 0;
+        }
+        .lumin-quick-input {
+          flex-grow: 1;
+          padding: 8px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 1em;
+          box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+        .lumin-quick-send-btn {
+          padding: 8px 12px;
+          background-color: #5b6af5; /* Using accent color from tokens.css */
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 1em;
+          flex-shrink: 0;
+        }
+        .lumin-quick-send-btn:hover {
+          background-color: #4a59d0;
+        }
+        .lumin-quick-status {
+          min-height: 1.2em;
+          margin-bottom: 8px;
+          flex-shrink: 0;
+        }
+        .lumin-quick-error {
+          color: red;
+          font-size: 0.9em;
+        }
+        .lumin-quick-footer {
+          text-align: right;
+          font-size: 0.8em;
+          flex-shrink: 0;
+        }
+        .lumin-quick-footer a {
+          color: #5b6af5;
+          text-decoration: none;
+        }
+        .lumin-quick-footer a:hover {
+          text-decoration: underline;
+        }
+      </style>
+      <div class="lumin-quick-widget">
+        <div class="lumin-quick-history"></div>
+        <div class="lumin-quick-input-area">
+          <input type="text" class="lumin-quick-input" placeholder="Ask Lumin anything...">
+          <button class="lumin-quick-send-btn">Send</button>
         </div>
-        <div class="lifeos-lumin-quick-status" style="min-height: 1em; font-size: 0.9em;"></div>
-        ${hasAiRailExpand ? `
-          <a href="#" class="lifeos-lumin-quick-open-full-chat" style="
-            color: var(--dash-accent, #5b6af5);
-            text-decoration: none;
-            font-size: 0.9em;
-            text-align: right;
-          ">Open full chat</a>
-        ` : ''}
+        <div class="lumin-quick-status">
+          <span class="lumin-quick-loading" style="display: none;">...</span>
+          <span class="lumin-quick-error" style="display: none;"></span>
+        </div>
+        <div class="lumin-quick-footer"></div>
       </div>
     `;
 
-    const inputEl = container.querySelector('.lifeos-lumin-quick-input');
-    const sendBtn = container.querySelector('.lifeos-lumin-quick-send-btn');
-    const openFullChatLink = container.querySelector('.lifeos-lumin-quick-open-full-chat');
+    // Apply basic dark mode styles if data-theme="dark" is set on root
+    if (document.documentElement.dataset.theme === 'dark') {
+      const styleEl = containerEl.querySelector('style');
+      if (styleEl) {
+        styleEl.textContent += `
+          .lumin-quick-widget {
+            background-color: #111118; /* dash-surface */
+            color: #e8e8f0; /* dash-text */
+            border-color: rgba(255,255,255,0.07); /* dash-border */
+          }
+          .lumin-quick-history {
+            border-bottom-color: rgba(255,255,255,0.1);
+          }
+          .lumin-quick-history p {
+            background-color: #22222a;
+          }
+          .lumin-quick-input {
+            background-color: #0a0a0f; /* dash-bg */
+            color: #e8e8f0;
+            border-color: #555566; /* dash-muted */
+          }
+          .lumin-quick-send-btn {
+            background-color: #5b6af5; /* dash-accent */
+          }
+          .lumin-quick-send-btn:hover {
+            background-color: #4a59d0;
+          }
+          .lumin-quick-error {
+            color: #ff6b6b; /* A suitable red for dark mode */
+          }
+          .lumin-quick-footer a {
+            color: #5b6af5;
+          }
+        `;
+      }
+    }
 
-    sendBtn.addEventListener('click', () => sendMessage(container, inputEl.value));
-    inputEl.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage(container, inputEl.value);
+
+    const inputEl = containerEl.querySelector('.lumin-quick-input');
+    const sendBtn = containerEl.querySelector('.lumin-quick-send-btn');
+    // const footerEl = containerEl.querySelector('.lumin-quick-footer'); // Not used due to contradiction
+
+    sendBtn.addEventListener('click', () => sendMessage(containerEl, inputEl));
+    inputEl.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage(containerEl, inputEl);
       }
     });
 
-    if (openFullChatLink) {
-      openFullChatLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        window.LifeOSDashboardAiRail.expand();
-      });
-    }
+    renderHistory(containerEl);
 
-    renderHistory(container, getHistory());
+    // The "Open full chat" link feature is omitted due to the contradiction stated above.
   }
 
   window.LifeOSWidgetLuminQuick = { mount };
