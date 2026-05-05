@@ -1,39 +1,48 @@
-### Household/Context Switching UX at Shell Layer
+# LIFEOS Dashboard Builder Brief: Household/Context Switching UX
 
-This document specifies the user experience for switching between different household contexts within the LifeOS shell, focusing on visual affordances and data scoping. This specification does not include implementation details for authentication, authorization, or invitation flows.
+This document outlines the user experience for household and context switching at the shell layer of the LifeOS dashboard, focusing on visual affordances and data scoping without delving into authentication or invitation mechanisms.
 
-#### 1. Badges
+## 1. Context Switching Affordance (Picker)
 
-*   **Purpose:** To visually indicate the currently active household context at a glance.
-*   **Location:** Positioned in the top-right corner of the shell, adjacent to the user's avatar or profile menu.
-*   **Appearance:** A compact, pill-shaped badge displaying a short, recognizable identifier for the active household (e.g., the first letter, a custom icon, or a truncated name). On hover, the full household name should be displayed as a tooltip.
-*   **Interaction:** Clicking the active household badge should trigger the Household Picker affordance.
+A prominent, easily accessible picker will be located in the global header, likely near the user avatar or system status indicators.
 
-#### 2. Picker Affordance
+### 1.1. Visual Design
+- **Primary Display:** The current active household/context name will be displayed, e.g., "My Household", "Work Project Alpha", "Guest Mode".
+- **Clickable Element:** The displayed name will be a clickable element, potentially accompanied by a small dropdown arrow icon (e.g., `▼` or `⌄`) to indicate interactivity.
+- **Dropdown Menu:** Clicking the element will reveal a dropdown menu listing all available households/contexts the user can switch to.
+    - Each item in the list will display the household/context name.
+    - The currently active household/context will be visually distinguished (e.g., bolded, highlighted, or with a checkmark icon).
+    - A "Create New Context" or "Manage Contexts" option may be present, leading to a separate configuration area (out of scope for this brief).
 
-*   **Purpose:** To provide a clear mechanism for users to view all available households and switch between them.
-*   **Location:** A dropdown menu or modal accessible from the shell's top navigation. This can be invoked by clicking the active household badge or a dedicated "Switch Household" icon.
-*   **Appearance:**
-    *   A scrollable list of all households the user is a member of.
-    *   Each list item should display the household's full name and optionally a small, distinguishing icon or avatar.
-    *   The currently active household must be clearly highlighted (e.g., with a checkmark, distinct background, or bold text).
-    *   An option to "Create New Household" should be present, though its implementation is out of scope for this specification.
-*   **Interaction:** Selecting a household from the list will initiate a context switch. The shell will update to reflect the data and configurations of the newly selected household.
+### 1.2. Interaction
+- **Selection:** Clicking an item in the dropdown will immediately switch the user's active context.
+- **Feedback:** A brief visual confirmation (e.g., a toast notification "Switched to 'Work Project Alpha'") or a quick reload of relevant dashboard components will indicate the successful switch.
 
-#### 3. Tenant-Scoped vs. Shared Data/Settings
+## 2. Badges and Indicators
 
-**Tenant-Scoped (Household-Specific)**
-These elements are unique to each household and change when the user switches context.
-*   **Dashboard Layouts & Widgets:** Customizations, data visualizations, and configured widgets specific to a household.
-*   **Epistemic Facts & Memory:** Knowledge base entries, hypotheses, and memory items relevant to that household's domain.
-*   **Scheduled Tasks:** Cron jobs, reminders, and automated workflows configured for a specific household.
-*   **Domain-Specific Configurations:** Settings and preferences that apply only to the active household (e.g., specific integrations, data sources, agent rules).
-*   **Activity Logs:** History of actions and events within that household's context.
+Visual badges will provide quick context at a glance, especially for shared or special contexts.
 
-**Shared (User-Specific, Cross-Household)**
-These elements persist across household switches and are tied to the user's global profile.
-*   **User Profile & Preferences:** Avatar, display name, language settings, global notification preferences.
-*   **Global API Keys & Integrations:** API keys or integrations that are tied to the user's account rather than a specific household.
-*   **Billing Information:** User-level billing details and subscription management.
-*   **Application-Wide Settings:** Settings that affect the entire LifeOS platform experience for the user, regardless of the active household.
-*   **Global Notifications:** Notifications that are not tied to a specific household activity but to the user's overall account.
+### 2.1. Context-Specific Badges
+- **Shared Context Indicator:** For contexts that are explicitly shared with other users (e.g., a family household, a team project), a small icon or badge (e.g., a "👥" icon or "Shared" text badge) could appear next to the context name in the picker dropdown and potentially in the primary display when active.
+- **Special Mode Badges:** If specific contexts imply different operational modes (e.g., "Guest Mode", "Read-Only Archive"), a distinct badge could be displayed.
+
+### 2.2. Global Header Badges
+- **Active Context Name:** As described above, the active context name itself acts as a primary badge.
+- **Notifications:** Global notifications (e.g., system alerts, new messages) will remain visible regardless of the active context, but context-specific notifications will only appear when that context is active.
+
+## 3. Tenant-Scoped vs. Shared Data/UI Elements
+
+The system will clearly delineate what information and UI elements are specific to the active context (tenant-scoped) and what remains consistent across all contexts (shared).
+
+### 3.1. Tenant-Scoped Elements (Switch with Context)
+These elements change entirely or display data relevant only to the currently active household/context.
+- **Dashboard Widgets/Panels:** All data displayed within the main dashboard area (e.g., task lists, calendar events, sensor readings, financial summaries) will be specific to the active context.
+- **Navigation Menus (Contextual):** While the primary navigation structure might remain consistent, the content or available options within certain navigation sections (e.g., "Tasks", "Notes", "Devices") will filter to show only items relevant to the active context.
+- **Settings (Context-Specific):** Settings related to the specific household/context (e.g., context-specific preferences, member lists for that context, specific integrations) will change upon switching.
+
+### 3.2. Shared Elements (Persist Across Contexts)
+These elements remain consistent regardless of the active household/context.
+- **Global Header/Footer:** The primary navigation bar, user avatar, global search, and system-wide notifications will persist.
+- **User Profile Settings:** Personal user preferences, account security settings, and billing information (if applicable) are tied to the individual user, not a specific context.
+- **System-Wide Tools:** Tools or utilities that operate independently of specific household data (e.g., a global help system, feedback mechanisms, developer tools) will remain accessible.
+- **"All Contexts" View (Future Consideration):** A potential future feature could be a special "All Contexts" view that aggregates certain types of data across all contexts the user has access to, but this would be a distinct mode, not the default behavior of context switching.
