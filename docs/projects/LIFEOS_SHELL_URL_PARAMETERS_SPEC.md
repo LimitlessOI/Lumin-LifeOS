@@ -1,55 +1,45 @@
-The task specification for output format (Markdown + JSON) contradicts the general "JAVASCRIPT FULL FILE — STRICT OUTPUT CONTRACT". I am proceeding with the explicit Markdown + JSON format for this task.
+Contradiction: The task's SPECIFICATION requests Markdown + JSON, but a general "JAVASCRIPT FULL FILE — STRICT OUTPUT CONTRACT" instruction block is also present, which would imply JS output. I am prioritizing the task-specific SPECIFICATION for Markdown + JSON.
 
-# LifeOS Dashboard Query Parameters Specification
+### Query Parameters Specification
 
-This document specifies the canonical names, behavior, and characteristics of query parameters used for controlling the LifeOS Dashboard's presentation and navigation. These parameters are designed to support Server-Side Rendering (SSR), bookmarking, and shareable URLs.
+This document specifies the canonical names, behavior, and considerations for the `layout`, `page`, and `theme` query parameters. These parameters are designed to enable shareable URLs and influence both client-side rendering (CSR) and server-side rendering (SSR) of the LifeOS Dashboard.
 
-## Query Parameters
+#### `layout`
+- **Canonical Name:** `layout`
+- **Purpose:** Controls the overall structural arrangement of the dashboard.
+- **Expected Values:** String identifiers corresponding to predefined layout templates (e.g., `default`, `compact`, `full-width`).
+- **SSR Impact:** Directly influences which base HTML template or structural components are rendered on the server. Invalid or unrecognized values should fall back to a default layout.
+- **Bookmarks/Shareable URLs:** URLs containing `?layout=<value>` should load the dashboard with the specified layout.
+- **Limits:**
+    - Values must be alphanumeric, lowercase, and hyphen-separated.
+    - Max length: 32 characters.
+    - Must correspond to an existing, registered layout configuration.
 
-### `layout`
+#### `page`
+- **Canonical Name:** `page`
+- **Purpose:** Specifies the primary content view or sub-section to display within the chosen layout.
+- **Expected Values:** String identifiers corresponding to predefined dashboard pages or modules (e.g., `overview`, `tasks`, `settings`).
+- **SSR Impact:** Determines which primary content component is fetched and rendered server-side. Invalid or unrecognized values should fall back to a default page (e.g., `overview`).
+- **Bookmarks/Shareable URLs:** URLs containing `?page=<value>` should navigate directly to the specified page within the dashboard.
+- **Limits:**
+    - Values must be alphanumeric, lowercase, and hyphen-separated.
+    - Max length: 64 characters.
+    - Must correspond to an existing, registered page component or route.
 
-*   **Purpose**: Defines the overall structural arrangement or template of the dashboard interface. This parameter influences the primary container, navigation placement, and general page composition.
-*   **Canonical Name**: `layout`
-*   **Type**: String
-*   **Example Values**:
-    *   `default`: The standard, pre-configured layout.
-    *   `compact`: A more condensed layout, potentially reducing whitespace or element sizes.
-    *   `full-width`: A layout that utilizes the full available horizontal space, often without sidebars.
-    *   `sidebar-left`: A layout with a primary content area and a navigation/utility sidebar on the left.
-    *   `sidebar-right`: A layout with a primary content area and a navigation/utility sidebar on the right.
-    *   *(Note: Actual supported values are defined by the application's layout system.)*
-*   **SSR Impact**: The server renders the initial HTML structure using the specified layout template, ensuring the correct visual framework is delivered on first load.
-*   **Bookmarks/Shareable URLs**: Fully supported. URLs containing `?layout=compact` (e.g.) will load the dashboard with the specified layout.
+#### `theme`
+- **Canonical Name:** `theme`
+- **Purpose:** Applies a visual styling theme to the dashboard.
+- **Expected Values:** String identifiers corresponding to predefined visual themes (e.g., `light`, `dark`, `high-contrast`).
+- **SSR Impact:** Influences the initial CSS classes or inline styles applied to the `<body>` or root element during server rendering to prevent FOUC (Flash of Unstyled Content). Invalid or unrecognized values should fall back to a default theme (e.g., `light`).
+- **Bookmarks/Shareable URLs:** URLs containing `?theme=<value>` should load the dashboard with the specified visual theme.
+- **Limits:**
+    - Values must be alphanumeric, lowercase, and hyphen-separated.
+    - Max length: 16 characters.
+    - Must correspond to an existing, registered theme definition.
 
-### `page`
-
-*   **Purpose**: Identifies the specific content view or functional area to be displayed within the dashboard. This parameter dictates which primary component or data set is loaded into the main content area.
-*   **Canonical Name**: `page`
-*   **Type**: String
-*   **Example Values**:
-    *   `overview`: Displays a high-level summary or dashboard.
-    *   `metrics`: Shows detailed performance metrics and charts.
-    *   `settings`: Accesses user or system configuration options.
-    *   `reports`: Presents generated reports or data exports.
-    *   `builder`: Navigates to the agent builder interface.
-    *   *(Note: Actual supported values are defined by the application's routing and page registry.)*
-*   **SSR Impact**: The server renders the content corresponding to the specified page, populating the main content area with the relevant data and components.
-*   **Bookmarks/Shareable URLs**: Fully supported. URLs containing `?page=metrics` (e.g.) will load the dashboard directly to the metrics view.
-
-### `theme`
-
-*   **Purpose**: Controls the visual styling, color scheme, and aesthetic theme applied to the dashboard. This parameter allows users to switch between different visual presentations.
-*   **Canonical Name**: `theme`
-*   **Type**: String
-*   **Example Values**:
-    *   `light`: A theme with a light background and dark text.
-    *   `dark`: A theme with a dark background and light text.
-    *   `blue-steel`: A specific branded or custom theme.
-    *   `high-contrast`: A theme optimized for accessibility.
-    *   *(Note: Actual supported values are defined by the application's theme management system.)*
-*   **SSR Impact**: The server can embed theme-specific CSS classes, link to theme-specific stylesheets, or inject theme variables into the initial HTML, ensuring the correct theme is applied immediately.
-*   **Bookmarks/Shareable URLs**: Fully supported. URLs containing `?theme=dark` (e.g.) will load the dashboard with the specified visual theme.
-
-## Alignment with PROGRAM_MAP_SSOT URLs
-
-Due to the absence of `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and `public/shared/lifeos-bootstrap.js` from the repository, specific alignment with `PROGRAM_MAP_SSOT URLs` cannot be performed at this time. The parameters are defined generically, assuming standard web application query parameter conventions.
+#### General Considerations for SSR and Shareable URLs
+- **Prioritization:** Query parameters should take precedence over user preferences stored in local storage or cookies for initial page load, ensuring shareability.
+- **Validation:** Server-side validation of parameter values is crucial to prevent unexpected behavior or security vulnerabilities. Unrecognized values should be ignored or default to a safe fallback.
+- **Encoding:** All parameter values should be URL-encoded.
+- **Order:** The order of query parameters should not affect the outcome.
+- **Client-side Persistence:** Once loaded, the client-side application may persist these settings (e.g., in local storage) for subsequent visits, but the URL parameters should always override for the initial load.
