@@ -1,65 +1,40 @@
-# Project Brief: Global Shortcuts for LifeOS Dashboard
+# LIFEOS Dashboard Builder Brief: Global Shortcuts & Accessibility
 
-## Overview
+## Project Goal
 
-This brief outlines the feasibility and considerations for implementing global keyboard shortcuts within the LifeOS Dashboard, including a focus trap for primary navigation elements and a ⌘K-style command palette. The goal is to enhance user efficiency and accessibility, while carefully managing potential conflicts with existing OS and browser shortcuts.
+This brief outlines the feasibility and considerations for implementing global keyboard shortcuts within the LIFEOS Dashboard and shared application chrome. The primary objectives are to enhance user efficiency through quick access commands and ensure robust accessibility, particularly regarding keyboard navigation.
 
-## Key Areas of Investigation
+## Key Areas
 
 ### 1. Focus Trap for Navigation Rail
 
-**Objective:** Ensure keyboard users can efficiently navigate the primary "rail" (e.g., sidebar, main menu) without tabbing out into unrelated content, and then easily return to the main content area.
+**Objective:** Implement a robust focus trap mechanism for the primary navigation rail to ensure keyboard users can efficiently navigate within the rail without tabbing out unintentionally, and can easily return to the main content area.
 
 **Considerations:**
-*   **Accessibility Standard:** Adherence to WCAG guidelines for keyboard navigation and focus management (e.g., ARIA `role="dialog"` or similar patterns for modal-like focus trapping).
-*   **Implementation Strategy:**
-    *   Identify the specific DOM element(s) that constitute the "rail" for focus trapping.
-    *   Implement logic to capture and cycle focus within the rail when it is active.
-    *   Define clear exit conditions (e.g., `Escape` key, specific navigation actions) to release the focus trap.
-    *   Ensure visual focus indicators are robust and clear.
-*   **User Experience:** The trap should be intuitive and not feel restrictive. Users must understand when they are in a trapped state and how to exit it.
+*   **Accessibility Standard:** Adherence to WCAG 2.1 guidelines for keyboard accessibility.
+*   **User Experience:** Smooth and predictable navigation flow.
+*   **Implementation Strategy:** Explore existing UI component libraries or custom solutions for managing focus within a confined area.
 
-### 2. ⌘K-Style Command Palette Feasibility
+### 2. ⌘K-style Command Palette Feasibility
 
-**Objective:** Explore the implementation of a global command palette, activated by `⌘K` (or `Ctrl+K`), to provide quick access to dashboard features, navigation, and common actions.
+**Objective:** Evaluate the feasibility of integrating a global command palette (activated by `⌘K` or `Ctrl+K`) to provide quick access to common actions, navigation, and search functionalities across the LIFEOS platform.
 
 **Considerations:**
-*   **Activation Shortcut:** `⌘K` (macOS) / `Ctrl+K` (Windows/Linux) is a widely recognized pattern.
-*   **Scope of Commands:**
-    *   Navigation to different dashboard sections.
-    *   Quick actions (e.g., "Create New Task", "View Build History").
-    *   Search functionality across various data types (e.g., domains, tasks, logs).
-    *   Context-aware commands based on the current view.
-*   **Technical Implementation:**
-    *   **UI Framework Integration:** How will it integrate with the existing frontend framework (e.g., React, Vue, Svelte)?
-    *   **Search Indexing:** How will available commands and searchable items be indexed and retrieved efficiently?
-    *   **Dynamic Commands:** Ability to register commands dynamically from different dashboard modules.
-    *   **Performance:** Ensure fast search and rendering, even with a large number of commands.
-*   **User Interface:**
-    *   Clear input field and search results.
-    *   Keyboard navigation within results (up/down arrows, Enter to select).
-    *   Visual feedback for selected items.
+*   **Scope:** Define the initial set of commands and actions to be included.
+*   **Technical Feasibility:** Assess the effort required to index available actions and integrate a search/filter mechanism.
+*   **Performance:** Ensure the palette opens quickly and search results are near-instantaneous.
+*   **User Interface:** Design for clarity, discoverability, and ease of use.
 
-### 3. Collision Handling with OS and Browser Shortcuts
+### 3. Collisions with OS/Browser Shortcuts
 
-**Objective:** Mitigate conflicts with operating system and browser-level keyboard shortcuts to ensure a smooth user experience and prevent unintended actions.
+**Objective:** Identify and mitigate potential conflicts between proposed global shortcuts and existing operating system (OS) or browser-level keyboard shortcuts.
 
 **Considerations:**
-*   **Identify Common Conflicts:**
-    *   `⌘K` / `Ctrl+K`: Often used by browsers for "add bookmark" or "search".
-    *   `⌘S` / `Ctrl+S`: Save page.
-    *   `⌘F` / `Ctrl+F`: Find on page.
-    *   `Escape`: Close modals, stop loading.
-    *   Arrow keys, Tab, Enter: Fundamental navigation.
-*   **Prioritization Strategy:**
-    *   **Browser/OS First:** Generally, browser and OS shortcuts should take precedence unless there's a compelling reason for the application to override.
-    *   **Contextual Overrides:** Application-specific shortcuts should ideally only override browser/OS defaults when the application has active focus within a specific component (e.g., a text editor component might override `Ctrl+S`).
-*   **Implementation Techniques:**
-    *   **Event Listeners:** Use `addEventListener` with `capture: true` for global listeners, but be cautious with `event.preventDefault()` to avoid blocking browser defaults unnecessarily.
-    *   **Conditional Activation:** Only activate application shortcuts when the dashboard is the active window/tab and specific UI elements are in focus.
-    *   **User Customization (Future):** Potentially allow users to remap conflicting shortcuts, though this adds significant complexity.
-*   **Documentation:** Clearly document all implemented shortcuts and any known conflicts for developers and users.
+*   **Common Conflicts:** Research widely used OS (macOS, Windows, Linux) and browser (Chrome, Firefox, Safari, Edge) shortcuts.
+*   **Prioritization:** Establish a hierarchy for shortcut precedence (e.g., OS > Browser > Application).
+*   **User Customization:** Explore options for users to customize or rebind application shortcuts if conflicts arise.
+*   **Documentation:** Clearly document all application shortcuts and known conflicts.
 
-## Next Steps
+## Scope
 
-This brief serves as a foundation for further design and technical exploration. The next phase will involve detailed UI/UX design, technical prototyping, and a comprehensive audit of existing browser/OS shortcuts to inform final implementation decisions.
+This document focuses solely on the specification and feasibility analysis. **Implementation of these features is deferred** to a subsequent phase, pending approval and detailed design.
