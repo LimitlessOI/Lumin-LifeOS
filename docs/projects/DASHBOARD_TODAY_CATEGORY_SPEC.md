@@ -1,73 +1,64 @@
-The specification is incomplete due to the missing `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file, which would have provided specific context for the "Today" category.
+The specification is incomplete as the primary source file `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` was not found, preventing reference to existing dashboard sections by ID/class.
 
-### Specification for Today Category
+### Today Category Specification
 
-This document outlines the layout blocks and API assumptions for the "Today" category on the LifeOS dashboard. This category aggregates daily priorities, scheduled events, alerts, and quick entry points for common tasks.
+This specification outlines the proposed layout blocks and API assumptions for the "Today" category on the LifeOS dashboard. Due to the absence of `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and any injected HTML, specific existing dashboard section IDs/classes cannot be referenced, and layout details are based on general dashboard design principles.
 
-### 1. MITs (Most Important Tasks)
+### Layout Blocks
 
-**Layout Block:**
-A dedicated card or section displaying a prioritized list of tasks.
--   **Container:** `<div id="lifeos-today-mits" class="dashboard-card">`
--   **Title:** "Most Important Tasks"
--   **Content:** An ordered list of tasks. Each task item should include:
-    -   Checkbox for completion.
-    -   Task description.
-    -   Optional: Due time/date, priority indicator.
--   **Interaction:** Tapping a task might open a detail view; checking completes it.
+The "Today" category will comprise distinct visual blocks, each representing a key area of daily focus. These blocks are expected to be rendered as cards or widgets, potentially adhering to the density modes outlined in `DASHBOARD_WIDGET_DENSITY_SPEC.md`.
 
-**API Assumptions:**
--   **Endpoint:** `GET /api/v1/lifeos/today/mits`
-    -   **Purpose:** Retrieve the list of MITs for the current day.
-    -   **Response:** `[{ id: string, description: string, dueDate: string, priority: number, completed: boolean }]`
--   **Endpoint:** `POST /api/v1/lifeos/today/mits/{id}/complete`
-    -   **Purpose:** Mark an MIT as complete.
-    -   **Request:** `{ completed: boolean }`
-    -   **Response:** `{ success: boolean }`
+1.  **MITs (Most Important Tasks)**
+    *   **Purpose:** Display a prioritized list of the user's most critical tasks for the current day.
+    *   **Content:** Task title, due date/time (if applicable), status (e.g., complete, in progress), and a quick action (e.g., mark complete).
+    *   **Interaction:** Ability to mark tasks as complete, reorder, or quick-add a new MIT.
+    *   **Expected Block ID/Class (Hypothetical):** `#today-mits-widget`, `.dashboard-card.mits`
 
-### 2. Schedule
+2.  **Schedule**
+    *   **Purpose:** Show upcoming appointments, meetings, and scheduled events for the day.
+    *   **Content:** Event title, time, duration, location, and participants.
+    *   **Interaction:** View event details, join a meeting (if link available).
+    *   **Expected Block ID/Class (Hypothetical):** `#today-schedule-widget`, `.dashboard-card.schedule`
 
-**Layout Block:**
-A card or section displaying upcoming events and appointments for the day.
--   **Container:** `<div id="lifeos-today-schedule" class="dashboard-card">`
--   **Title:** "Schedule"
--   **Content:** A chronological list of events. Each event item should include:
-    -   Time range (e.g., "9:00 AM - 10:00 AM").
-    -   Event title.
-    -   Optional: Location, attendees.
--   **Interaction:** Tapping an event might open a calendar detail view.
+3.  **Alerts**
+    *   **Purpose:** Display time-sensitive notifications, reminders, or system alerts.
+    *   **Content:** Alert message, timestamp, severity (e.g., info, warning, critical), and a dismiss action.
+    *   **Interaction:** Dismiss individual alerts, view all alerts.
+    *   **Expected Block ID/Class (Hypothetical):** `#today-alerts-widget`, `.dashboard-card.alerts`
 
-**API Assumptions:**
--   **Endpoint:** `GET /api/v1/lifeos/today/schedule`
-    -   **Purpose:** Retrieve scheduled events for the current day.
-    -   **Response:** `[{ id: string, title: string, startTime: string, endTime: string, location: string }]`
+4.  **Quick Add**
+    *   **Purpose:** Provide a streamlined interface for rapidly adding new tasks, events, or notes.
+    *   **Content:** Input field (e.g., text area), category selector (e.g., Task, Event, Note, Lumin Entry), and a submit button.
+    *   **Interaction:** Type, select category, submit.
+    *   **Expected Block ID/Class (Hypothetical):** `#today-quick-add-widget`, `.dashboard-card.quick-add`
 
-### 3. Alerts
+5.  **Lumin Entry**
+    *   **Purpose:** Facilitate quick journaling or thought capture, potentially linked to the Lumin memory system.
+    *   **Content:** Text input field for a short entry, optional tags, and a submit button.
+    *   **Interaction:** Type entry, add tags, submit.
+    *   **Expected Block ID/Class (Hypothetical):** `#today-lumin-entry-widget`, `.dashboard-card.lumin-entry`
 
-**Layout Block:**
-A card or section displaying important notifications, reminders, or system alerts.
--   **Container:** `<div id="lifeos-today-alerts" class="dashboard-card">`
--   **Title:** "Alerts"
--   **Content:** A list of alert messages. Each alert item should include:
-    -   Severity indicator (e.g., icon, color).
-    -   Alert message.
-    -   Optional: Timestamp, action button (e.g., "Dismiss", "View Details").
--   **Interaction:** Tapping an alert might navigate to a relevant section; action buttons trigger specific behaviors.
+### API Assumptions
 
-**API Assumptions:**
--   **Endpoint:** `GET /api/v1/lifeos/today/alerts`
-    -   **Purpose:** Retrieve active alerts for the user.
-    -   **Response:** `[{ id: string, message: string, type: 'info' | 'warning' | 'error', timestamp: string, actionUrl?: string }]`
--   **Endpoint:** `POST /api/v1/lifeos/today/alerts/{id}/dismiss`
-    -   **Purpose:** Dismiss a specific alert.
-    -   **Response:** `{ success: boolean }`
+The following API endpoints are assumed to support the data requirements and interactions for the "Today" category. These are based on standard RESTful patterns and the existing `Platform Core` domain context, which handles routing.
 
-### 4. Quick Add
+1.  **MITs**
+    *   `GET /api/v1/today/mits`: Retrieve the list of MITs for the current day.
+    *   `POST /api/v1/today/mits`: Add a new MIT.
+    *   `PATCH /api/v1/today/mits/:id`: Update an existing MIT (e.g., mark complete, reorder).
+    *   `DELETE /api/v1/today/mits/:id`: Delete an MIT.
 
-**Layout Block:**
-A compact section allowing users to quickly add new tasks, notes, or events without navigating away from the dashboard.
--   **Container:** `<div id="lifeos-today-quick-add" class="dashboard-card">`
--   **Title:** "Quick Add" (or implied by input fields)
--   **Content:**
-    -   Input field for a new task (e.g., `<input type="text" placeholder="Add a new task...">`).
-    -   Input field for a quick note (e.g., `<textarea placeholder="Jot down a quick note...
+2.  **Schedule**
+    *   `GET /api/v1/today/schedule`: Retrieve scheduled events for the current day.
+    *   `POST /api/v1/today/schedule`: Add a new event to the schedule.
+    *   `PATCH /api/v1/today/schedule/:id`: Update an existing event.
+
+3.  **Alerts**
+    *   `GET /api/v1/today/alerts`: Retrieve active alerts for the user.
+    *   `PATCH /api/v1/today/alerts/:id/dismiss`: Dismiss a specific alert.
+
+4.  **Quick Add**
+    *   `POST /api/v1/today/add`: Generic endpoint for quick adding various item types. Request body would include `type` (e.g., 'task', 'event', 'note', 'lumin') and relevant data.
+
+5.  **Lumin Entry**
+    *   `POST /api/v1/today/lumin-entry`: Submit a new Lumin entry.
