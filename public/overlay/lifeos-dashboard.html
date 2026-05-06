@@ -1127,6 +1127,18 @@ if (window.LifeOSWidgetLuminQuick) {
 if (window.LifeOSWidgetCategoryStubs) {
   LifeOSWidgetCategoryStubs.mount({container: $('lifeos-widget-category-stubs'), user, commandKey});
 }
+// Mount the AI Rail
+if (window.LifeOSDashboardAiRail) {
+  LifeOSDashboardAiRail.mount({
+    focusChatInputCallback: () => {
+      const chatInput = $('chat-input');
+      if (chatInput) {
+        chatInput.focus();
+        chatInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  });
+}
 });
 Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
 </script>
