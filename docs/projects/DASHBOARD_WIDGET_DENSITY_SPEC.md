@@ -1,64 +1,33 @@
-The specification is based on the task description and general UI/UX principles, as the referenced `DASHBOARD_BUILDER_BRIEF.md`, `DASHBOARD_DENSITY_INTEGRATION_NOTES.md`, and `DASHBOARD_CUSTOMIZATION_STATE.md` files were not found in the repository.
+The instruction to generate 'implementation code' was interpreted as generating the Markdown specification as requested by the subsequent instruction 'Markdown: modes, token mapping, rollout order.'
 
-### Dashboard Card Density Specification
+# Dashboard Card Density Specification
 
-This document outlines the specification for implementing dashboard card density modes: `compact`, `balanced`, and `expanded`. It details the mapping to CSS variables, DOM data attributes, mobile constraints, and integration with the customization state.
+This document outlines the specification for implementing dashboard card density modes, including their mapping to CSS variables and DOM data attributes, mobile constraints, and integration with the dashboard customization state.
 
-#### 1. Density Modes
+## 1. Density Modes
 
-Three distinct density modes will be supported for dashboard cards:
+Three primary density modes are defined to cater to different user preferences and screen sizes:
 
-*   **`compact`**: Optimized for displaying more information in a smaller space. Reduces internal padding, margins, and potentially font sizes.
-*   **`balanced`**: The default, moderate density. Provides a good balance between information density and visual comfort.
-*   **`expanded`**: Prioritizes readability and visual spaciousness. Increases internal padding, margins, and potentially font sizes.
+-   **Compact:** Maximizes information density by reducing padding, margins, and font sizes. Ideal for users who want to see more data at a glance, especially on larger screens, or for mobile views where space is at a premium.
+-   **Balanced (Default):** Provides a comfortable reading experience with moderate spacing and font sizes. This is the standard mode and offers a good balance between information density and readability.
+-   **Expanded:** Prioritizes readability and visual separation with increased padding, margins, and potentially larger font sizes. Suitable for users who prefer a more spacious layout or have visual accessibility needs.
 
-#### 2. CSS Variable Mapping
+## 2. Token Mapping (CSS Variables)
 
-New CSS variables will be introduced to control spacing and typography based on the active density mode. These variables will be defined within a parent scope (e.g., `:root` or a specific dashboard container) and will override base values based on the `data-density` attribute.
+Density modes will be controlled by a set of CSS variables, building upon the existing `--dash-space-unit` defined in `public/shared/lifeos-dashboard-tokens.css`. These variables will be scoped to the dashboard container via a `data-density` attribute.
 
-**Base Variables (derived from `--dash-space-unit` from `public/shared/lifeos-dashboard-tokens.css`):**
-
-*   `--dash-card-padding-x-base`: `calc(var(--dash-space-unit) * 2)` (e.g., 16px)
-*   `--dash-card-padding-y-base`: `calc(var(--dash-space-unit) * 1.5)` (e.g., 12px)
-*   `--dash-card-gap-base`: `var(--dash-space-unit)` (e.g., 8px)
-*   `--dash-font-size-card-title-base`: `1.125rem` (e.g., 18px)
-*   `--dash-font-size-card-content-base`: `0.875rem` (e.g., 14px)
-
-**Density-Specific Overrides:**
-
-The following CSS variables will be used by dashboard components and will be dynamically set based on the `data-density` attribute.
+### Base Variables (to be defined in `public/shared/lifeos-dashboard-tokens.css` or a new density-specific CSS file):
 
 ```css
-/* Default / Balanced Density */
-:root[data-density="balanced"] {
-  --dash-card-padding-x: var(--dash-card-padding-x-base);
-  --dash-card-padding-y: var(--dash-card-padding-y-base);
-  --dash-card-gap: var(--dash-card-gap-base);
-  --dash-font-size-card-title: var(--dash-font-size-card-title-base);
-  --dash-font-size-card-content: var(--dash-font-size-card-content-base);
-}
+/* Example additions for density control */
+:root {
+  /* Base spacing unit from existing tokens */
+  --dash-space-unit: 8px;
 
-/* Compact Density */
-:root[data-density="compact"] {
-  --dash-card-padding-x: calc(var(--dash-space-unit) * 1.5); /* e.g., 12px */
-  --dash-card-padding-y: var(--dash-space-unit); /* e.g., 8px */
-  --dash-card-gap: calc(var(--dash-space-unit) * 0.75); /* e.g., 6px */
-  --dash-font-size-card-title: 1rem; /* e.g., 16px */
-  --dash-font-size-card-content: 0.8125rem; /* e.g., 13px */
-}
-
-/* Expanded Density */
-:root[data-density="expanded"] {
-  --dash-card-padding-x: calc(var(--dash-space-unit) * 2.5); /* e.g., 20px */
-  --dash-card-padding-y: calc(var(--dash-space-unit) * 2); /* e.g., 16px */
-  --dash-card-gap: calc(var(--dash-space-unit) * 1.25); /* e.g., 10px */
-  --dash-font-size-card-title: 1.25rem; /* e.g., 20px */
-  --dash-font-size-card-content: 0.9375rem; /* e.g., 15px */
-}
-```
-
-Dashboard components will consume these `--dash-card-*` variables for their internal layout and typography.
-
-#### 3. DOM Data Attributes
-
-The active density mode will be controlled by a `
+  /* Card-specific spacing and sizing */
+  --dash-card-padding-x: calc(var(--dash-space-unit) * 2); /* Default: 16px */
+  --dash-card-padding-y: calc(var(--dash-space-unit) * 2); /* Default: 16px */
+  --dash-card-gap: calc(var(--dash-space-unit) * 2); /* Default: 16px between elements */
+  --dash-card-font-size-base: 1rem; /* Default font size */
+  --dash-card-font-size-sm: 0.875rem; /* Smaller font size */
+  --dash-card-font-size-lg: 1.125rem; /* Larger font size */
