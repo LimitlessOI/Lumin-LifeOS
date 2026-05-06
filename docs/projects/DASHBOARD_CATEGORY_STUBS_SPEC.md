@@ -1,73 +1,115 @@
 # LifeOS Dashboard Category Stubs: Health, Family, Purpose
 
-## Overview
-This document specifies the placeholder layout, navigation hooks, and ownership boundaries for the Health, Family, and Purpose categories within the LifeOS Dashboard. The goal is to establish a foundational structure that allows future domain-specific implementations to integrate seamlessly without requiring changes to the core dashboard shell.
+## Purpose
+This document specifies the initial placeholder layout and navigation hooks for the Health, Family, and Purpose categories within the LifeOS Dashboard. The goal is to establish a minimal, functional shell for these domains, clearly delineating what remains within Platform Core's responsibility versus what will be owned by future dedicated domains. This is a stub specification; no full domain implementation is included.
 
-## 1. Placeholder Layout
+## Core Principles
+1.  **Minimalism:** Only essential UI elements and routing are defined.
+2.  **Clear Ownership:** Explicitly define boundaries between Platform Core (shell) and future domain implementations.
+3.  **Extensibility:** Design for seamless integration of full domain features later.
+4.  **Consistency:** Follow existing LifeOS dashboard UI/UX patterns for navigation and layout.
 
-### 1.1 Dashboard Home View (`/dashboard`)
-*   **Structure**: The main dashboard view will feature distinct, visually separated sections or "cards" for each core category: Health, Family, and Purpose.
-*   **Card Content (Placeholder)**:
-    *   Each card will display a prominent title (e.g., "Health", "Family", "Purpose").
-    *   A brief, generic placeholder message indicating the category's purpose and that domain-specific content will appear here upon activation (e.g., "Track your well-being and progress. Domain content coming soon.").
-    *   A primary call-to-action button/link: "Go to [Category] Dashboard".
-*   **Example Card Structure (Conceptual HTML/JSX):**
-    ```html
-    <div class="dashboard-card" id="card-health">
-        <h3>Health</h3>
-        <p>Track your well-being and progress. Domain content coming soon.</p>
-        <a href="/dashboard/health" class="btn btn-primary">Go to Health Dashboard</a>
-    </div>
-    ```
+## General Category Stub Structure
 
-### 1.2 Category-Specific Dashboard View (`/dashboard/[category]`)
-*   **Structure**: Upon navigating to a category-specific URL (e.g., `/dashboard/health`), a dedicated view will be presented.
-*   **Content (Placeholder)**:
+Each category (Health, Family, Purpose) will follow a consistent pattern for its initial stub implementation:
+
+### 1. Dashboard Integration (Platform Core Owned)
+*   **Layout:** A dedicated card or section on the main LifeOS Dashboard, clearly labeled with the category name (e.g., "Health," "Family," "Purpose"). This card will serve as a visual placeholder and a primary navigation entry point.
+*   **Content:** The card will contain a brief, static message indicating the domain is "Coming Soon" or "Under Development," along with a primary call-to-action (CTA) button or link to navigate to the category's dedicated stub page.
+*   **Navigation Hook:** The CTA on the dashboard card will link to a specific route for the category's stub page (e.g., `/dashboard/health`, `/dashboard/family`, `/dashboard/purpose`).
+
+### 2. Dedicated Category Stub Page (Platform Core Owned)
+*   **Layout:** A simple, full-width page accessible via the dashboard navigation hook. This page will utilize the standard LifeOS application shell (header, sidebar, footer).
+*   **Content:**
     *   A prominent header displaying the category name.
-    *   A large placeholder area (e.g., a `div` with a specific ID) where the respective domain's UI components will be injected.
-    *   A default message if no domain-specific content is yet registered or active (e.g., "The [Category] domain is active, but no specific content has been deployed yet. Check back soon!").
-*   **Example Page Structure (Conceptual HTML/JSX):**
-    ```html
-    <div class="category-dashboard-page" id="page-health">
-        <h1>Health Dashboard</h1>
-        <div id="health-domain-content-area">
-            <!-- Health domain's React/Vue app or server-rendered content will mount here -->
-            <p>The Health domain is active, but no specific content has been deployed yet. Check back soon!</p>
+    *   A central message (e.g., "Welcome to the [Category Name] domain. Full features are currently under development and will be available soon.").
+    *   Optionally, a placeholder for future sub-navigation or key metrics, clearly marked as "Future [Category Name] Features."
+*   **Navigation Hooks:**
+    *   The main application sidebar will include a top-level navigation item for each category, linking to its respective stub page.
+    *   Breadcrumbs (if implemented) will reflect the path: `Dashboard > [Category Name]`.
+
+### 3. Ownership Delineation
+
+*   **Platform Core (Shell) Responsibilities:**
+    *   Providing the main dashboard card/section for each category.
+    *   Defining and serving the top-level routes for the category stub pages (e.g., `/dashboard/health`).
+    *   Rendering the basic HTML structure and "Coming Soon" content for these stub pages.
+    *   Integrating these categories into the main application navigation (sidebar, quick links).
+    *   Ensuring consistent styling and layout within the overall LifeOS shell.
+*   **Future Domain Responsibilities (Health, Family, Purpose Domains):**
+    *   Taking over the content and functionality of the dedicated category pages.
+    *   Implementing specific features, data models, services, and UI components for their respective domains.
+    *   Extending or replacing the placeholder content on the stub pages with rich, interactive experiences.
+    *   Defining sub-routes and internal navigation within their domain.
+
+## Implementation Details (Builder Guidance)
+
+*   **Dashboard Card/Section:**
+    *   Modify an existing dashboard rendering component (e.g., `views/dashboard.ejs` or a React component if applicable) to include the new category cards.
+    *   Each card will link to its respective stub route.
+*   **Routing:**
+    *   New route files will be created for each category stub:
+        *   `routes/health-stub-routes.js`
+        *   `routes/family-stub-routes.js`
+        *   `routes/purpose-stub-routes.js`
+    *   These route files will define a simple `GET` endpoint (e.g., `/dashboard/health`) that renders a minimal EJS/HTML template.
+    *   These new route files must be imported and mounted in `startup/register-runtime-routes.js`.
+*   **Templates:**
+    *   New EJS/HTML template files for each stub page:
+        *   `views/health-stub.ejs`
+        *   `views/family-stub.ejs`
+        *   `views/purpose-stub.ejs`
+    *   These templates will include the basic "Coming Soon" message and adhere to the overall LifeOS UI structure.
+
+## Example Route (Health Stub)
+
+```javascript
+// routes/health-stub-routes.js
+import { Router } from 'express';
+
+const router = Router();
+
+router.get('/dashboard/health', (req, res) => {
+  res.render('health-stub', { title: 'Health Domain' });
+});
+
+export default router;
+```
+
+```javascript
+// startup/register-runtime-routes.js (excerpt)
+import healthStubRoutes from '../routes/health-stub-routes.js';
+// ... other imports
+
+export default function registerRuntimeRoutes(app) {
+  // ... existing routes
+  app.use('/', healthStubRoutes);
+  // ... other new stub routes
+}
+```
+
+```html
+<!-- views/health-stub.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - LifeOS</title>
+    <!-- Link to shared CSS -->
+</head>
+<body>
+    <%- include('partials/header') %>
+    <%- include('partials/sidebar') %>
+    <main>
+        <h1><%= title %></h1>
+        <p>Welcome to the Health domain. Full features are currently under development and will be available soon.</p>
+        <div class="placeholder-content">
+            <!-- Future Health Features will appear here -->
+            <p>Future Health Metrics & Tools</p>
         </div>
-    </div>
-    ```
-
-## 2. Navigation Hooks
-
-### 2.1 Primary Navigation (Shell-Owned)
-*   **Location**: The main application navigation (e.g., sidebar or top navigation bar) will include dedicated links for "Health", "Family", and "Purpose".
-*   **Routing**:
-    *   Clicking these links will navigate to the respective category-specific dashboard views:
-        *   `/dashboard/health`
-        *   `/dashboard/family`
-        *   `/dashboard/purpose`
-*   **Implementation**: These navigation links and their associated routes will be managed by the Platform Core.
-
-### 2.2 In-Category Navigation (Domain-Owned)
-*   **Responsibility**: Once a user is on a category-specific dashboard page (e.g., `/dashboard/health`), any further navigation *within that category* (e.g., to `/dashboard/health/metrics`, `/dashboard/health/goals`) becomes the responsibility of the respective domain.
-*   **Integration**: The Platform Core will provide a designated area (as described in 1.2) for the domain to render its own navigation and content.
-
-## 3. Ownership Boundaries: Shell vs. Domain-Owned
-
-### 3.1 Platform Core (Shell) Responsibilities
-*   **Global Layout**: Header, footer, main application navigation.
-*   **Top-Level Routing**: Registration and handling of `/dashboard`, `/dashboard/health`, `/dashboard/family`, `/dashboard/purpose`.
-*   **Placeholder UI**: Rendering the initial dashboard cards and the default category-specific pages when no domain content is active.
-*   **Domain Content Injection Points**: Providing clearly defined HTML elements (e.g., `div` with specific IDs) where domain-specific applications or components can mount.
-*   **Route Registration**: `startup/register-runtime-routes.js` will include entries for these top-level dashboard and category routes, pointing to generic handlers that render the shell and provide the injection points.
-
-### 3.2 Domain (e.g., Health Domain) Responsibilities
-*   **Feature-Specific UI/UX**: All components, views, and interactions *within* its designated content area (e.g., `div#health-domain-content-area`).
-*   **Sub-Routing**: Any routes nested under its top-level path (e.g., `/dashboard/health/metrics`, `/dashboard/health/goals`). These routes will be registered by the domain itself, typically within its own `routes/<domain>-routes.js` file, and mounted by `startup/register-runtime-routes.js` under the appropriate base path.
-*   **Data Management**: All data fetching, storage, and business logic related to the domain.
-*   **API Endpoints**: All API endpoints (e.g., `/api/v1/health/...`) will be owned and implemented by the respective domain.
-
-## 4. Implementation Notes
-*   The Platform Core will provide a generic Express route handler for `/dashboard/[category]` that renders a base HTML template. This template will include the necessary `div` elements for domain content injection.
-*   Domain-specific front-end applications (e.g., React apps) will be responsible for mounting themselves into these designated `div`s based on the current URL.
-*   The `startup/register-runtime-routes.js` file will be updated to include the new top-level dashboard routes.
+    </main>
+    <%- include('partials/footer') %>
+</body>
+</html>
+```
