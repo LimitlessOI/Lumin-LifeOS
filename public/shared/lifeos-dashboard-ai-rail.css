@@ -1,252 +1,106 @@
 /*
  * Technical Contract: Persistent AI Rail
- * This document outlines the technical contract for the "Persistent AI Rail," a new user interface component designed to provide continuous, context-aware AI interaction within the LifeOS dashboard. The rail will offer a consistent entry point for AI assistance, complementing existing Lumin and chat functionalities without replacing them.
- *
- * Core Functionality:
- * - Persistent UI Element: A dedicated UI component that remains visible and accessible across various dashboard views.
- * - Docking: The rail will be dockable to either the top or bottom of the primary dashboard viewport, allowing users to choose their preferred placement.
- * - Collapsed State: When not actively in use, the rail will collapse into a compact, one-line strip, minimizing screen real estate usage. This strip will provide a clear visual indicator of its presence and a quick way to expand it.
- * - Expanded State: Upon user interaction (e.g., click on the collapsed strip), the rail will expand to reveal a full transcript of the ongoing AI conversation, along with input controls.
- * - Voice/Text Parity: Users will be able to interact with the AI using both voice input and text input, with full functional parity between the two modes. The system will seamlessly convert voice to text for processing and text to voice for output.
- * - Read-Aloud Functionality: The AI's responses within the expanded transcript will include a "read-aloud" option, allowing users to listen to the AI's output.
- *
- * Relationship to Existing Lumin/Chat Entry Points:
- * The Persistent AI Rail is an additional interaction modality. It is designed to provide a persistent, always-on assistant experience. It will leverage the same underlying AI services and models as existing Lumin and chat entry points but will offer a distinct user experience focused on continuity and accessibility. It will not replace or deprecate any existing Lumin or chat features.
- *
- * What Must Not Break:
- * - Existing Lumin Functionality: All current Lumin features, including contextual suggestions, quick actions, and embedded AI interactions, must continue to function as designed.
- * - Existing Chat Entry Points: Any dedicated chat interfaces or modals must remain fully operational and accessible.
- * - Builder Endpoints: All existing `/api/v1/lifeos/builder/` and `/api/v1/builder/` endpoints and their associated functionality (build, execute, review, status, etc.) must remain unaffected and stable.
- * - Core Platform Stability: The introduction of the AI rail must not introduce performance regressions, memory leaks, or instability to the core LifeOS platform.
- * - Authentication and Authorization: Existing auth and authz mechanisms for AI interactions must be respected and enforced by the new rail.
- * - Configuration Integrity: No changes to core platform configuration files (`config/*.js`) should be made without explicit architectural review and approval.
- *
- * Non-goals
- * - Replacement of Existing Chat UIs: The Persistent AI Rail is not intended to replace or deprecate existing, dedicated chat interfaces within LifeOS. It is a complementary feature.
- * - Offline Functionality: Initial phases will not focus on offline AI interaction capabilities.
- * - Deep Integration with Every Dashboard Widget: While context-aware, the rail is not intended to have direct, embedded control over every individual dashboard widget's state in its initial release. Its primary focus is conversational AI.
- * - Custom AI Model Training: This project does not involve training new AI models; it focuses on the UI and interaction layer with existing models.
- *
- * Phases
- * Phase 1: UI Scaffolding and Basic Text Interaction
- * - Implement the persistent UI container for the rail.
- * - Develop collapsed and expanded states with basic styling.
- * - Integrate text input and display of AI text responses.
- * - Connect to existing AI service endpoints for text-based conversation.
- * - Implement docking mechanism (top/bottom).
- * Phase 2: Voice Input and Read-Aloud
- * - Integrate browser-based speech-to-text for voice input.
- * - Implement text-to-speech for AI response read-aloud functionality.
- * - Ensure voice/text parity in interaction flow.
- * Phase 3: Contextual Awareness and Refinements
- * - Implement basic contextual awareness (e.g., current dashboard view, active project).
- * - UI/UX refinements based on user feedback and testing.
- * - Performance optimizations.
- *
- * Open Questions
- * - Default Dock Position: Should the rail default to top or bottom for new users? Is this configurable?
- * - Initial State: Should the rail be collapsed or expanded by default on page load?
- * - Integration with Global State Management: How will the rail's state (collapsed/expanded, conversation history) integrate with the existing global state management system (if any) to ensure persistence across navigation?
- * - Accessibility Requirements: What are the specific accessibility (WCAG) requirements for voice interaction and read-aloud features?
- * - Error Handling and Feedback: How will network errors, AI service errors, or input validation errors be communicated to the user within the rail?
- * - Conversation History Persistence: How will conversation history be stored and retrieved across user sessions? (e.g., local storage, backend db).
+ * This CSS file implements the styling for the LifeOS Dashboard AI Rail.
+ * For more details, see docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md
  */
 
-.lifeos-ai-rail-root {
+.lifeos-ai-rail-container {
   position: fixed;
   left: 0;
   right: 0;
   z-index: 1000; /* Ensure it's above other content */
-  display: flex;
-  justify-content: center; /* Center the rail container */
-  pointer-events: none; /* Allow clicks to pass through the root, only interact with the rail itself */
+  display: flex; /* To center the panel horizontally on wider screens */
+  justify-content: flex-end; /* Default to right-aligned on wider screens */
+  pointer-events: none; /* Allow clicks to pass through when not interacting with the rail itself */
+  transition: all 0.3s ease-in-out; /* For position changes */
 }
 
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-bottom {
+/* Docking variants for the container */
+.lifeos-ai-rail-dock-bottom {
   bottom: 0;
-  padding-bottom: env(safe-area-inset-bottom); /* Respect safe area for notched devices */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-top {
+.lifeos-ai-rail-dock-top {
   top: 0;
-  padding-top: env(safe-area-inset-top); /* Respect safe area for notched devices */
+  padding-top: env(safe-area-inset-top);
 }
 
-.lifeos-ai-rail-container {
-  width: 100%;
-  max-width: 860px; /* Align with the main dashboard content width */
-  padding: 0 var(--dash-space-unit); /* Horizontal padding from screen edges */
-  pointer-events: auto; /* Re-enable pointer events for the rail itself */
-}
-
-.lifeos-ai-rail {
+/* The actual UI panel */
+.lifeos-ai-rail-panel {
+  pointer-events: auto; /* Re-enable pointer events for the panel */
+  width: 100%; /* Full width on mobile */
+  max-width: 100%; /* Default */
   background: var(--dash-surface);
   border: 1px solid var(--dash-border);
-  border-radius: var(--dash-radius-lg);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  margin-bottom: var(--dash-space-unit); /* Space from the bottom of the container */
-  transition: all 0.3s ease-in-out;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3); /* Default shadow for bottom dock */
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Hide overflowing content when collapsed */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  color: var(--dash-text);
+  transition: all 0.3s ease-in-out; /* Smooth transitions for height/radius */
+  overflow: hidden; /* Contain internal elements */
 }
 
-.lifeos-ai-rail-root.lifeos-ai-rail-dock-top .lifeos-ai-rail {
-  margin-top: var(--dash-space-unit); /* Space from the top of the container */
-  margin-bottom: 0; /* No bottom margin when docked top */
+/* Panel specific border-radius and shadow for dock-bottom */
+.lifeos-ai-rail-dock-bottom .lifeos-ai-rail-panel {
+  border-radius: var(--dash-radius-lg) var(--dash-radius-lg) 0 0;
+  border-bottom: none; /* No bottom border */
 }
 
-/* Collapsed State */
-.lifeos-ai-rail-collapsed {
+/* Panel specific border-radius and shadow for dock-top */
+.lifeos-ai-rail-dock-top .lifeos-ai-rail-panel {
+  border-radius: 0 0 var(--dash-radius-lg) var(--dash-radius-lg);
+  border-top: none; /* No top border */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3); /* Shadow for top dock */
+}
+
+/* Collapsed state */
+.lifeos-ai-rail-collapsed .lifeos-ai-rail-expanded-content {
+  display: none;
+}
+
+.lifeos-ai-rail-collapsed .lifeos-ai-rail-panel {
   height: calc(var(--dash-space-unit) * 6); /* e.g., 48px */
-  min-height: calc(var(--dash-space-unit) * 6);
-  cursor: pointer;
 }
 
-.lifeos-ai-rail-collapsed .lifeos-ai-rail-header {
+.lifeos-ai-rail-collapsed-strip {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--dash-space-unit) calc(var(--dash-space-unit) * 2);
-  height: 100%;
+  height: 100%; /* Fill panel height */
+  padding: 0 calc(var(--dash-space-unit) * 2); /* 16px */
+  cursor: pointer;
+  background: var(--dash-surface); /* Ensure background is consistent */
 }
 
-.lifeos-ai-rail-collapsed .lifeos-ai-rail-expanded-content {
-  display: none; /* Hide expanded content when collapsed */
-}
-
-/* Expanded State */
-.lifeos-ai-rail-expanded {
-  height: auto;
-  max-height: 50vh; /* Example max height, can be adjusted */
-  min-height: calc(var(--dash-space-unit) * 15); /* Minimum height for expanded state */
-  padding: calc(var(--dash-space-unit) * 2);
-}
-
-.lifeos-ai-rail-expanded .lifeos-ai-rail-header {
-  display: none; /* Hide collapsed header when expanded */
-}
-
-.lifeos-ai-rail-expanded .lifeos-ai-rail-expanded-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1; /* Take available space */
-  min-height: 0; /* Allow content to shrink */
-}
-
-.lifeos-ai-rail-header-content {
+.lifeos-ai-rail-indicator {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dash-text);
   display: flex;
   align-items: center;
-  gap: var(--dash-space-unit);
-  color: var(--dash-text);
-  flex: 1; /* Allow prompt to take space */
+  gap: calc(var(--dash-space-unit) / 2); /* 4px */
 }
 
-.lifeos-ai-rail-icon {
-  font-size: 1.2em;
+.lifeos-ai-rail-indicator::before {
+  content: '✦'; /* Simple AI indicator */
   color: var(--dash-accent);
-  flex-shrink: 0;
+  font-size: 18px;
+  line-height: 1;
 }
 
-.lifeos-ai-rail-prompt {
-  font-size: 0.9em;
-  color: var(--dash-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.lifeos-ai-rail-header-actions {
-  display: flex;
-  gap: calc(var(--dash-space-unit) / 2); /* Small gap between buttons */
-  flex-shrink: 0;
-}
-
-.lifeos-ai-rail-action-btn {
-  background: transparent;
-  border: none;
-  color: var(--dash-muted);
-  font-size: 1.1em;
-  cursor: pointer;
-  padding: calc(var(--dash-space-unit) / 2);
-  border-radius: var(--radius-sm); /* Use dashboard's small radius */
-  transition: background 0.15s, color 0.15s;
-}
-
-.lifeos-ai-rail-action-btn:hover {
-  background: var(--dash-border);
-  color: var(--dash-text);
-}
-
-.lifeos-ai-rail-transcript {
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: var(--dash-space-unit);
-  color: var(--text-primary); /* Use dashboard's primary text color */
-  font-size: 0.875em;
-  line-height: 1.5;
-  scrollbar-width: thin;
-  scrollbar-color: var(--dash-border) transparent; /* Firefox scrollbar */
-  display: flex; /* For message alignment */
-  flex-direction: column;
-  gap: var(--dash-space-unit);
-}
-
-.lifeos-ai-rail-transcript::-webkit-scrollbar {
-  width: 4px;
-}
-
-.lifeos-ai-rail-transcript::-webkit-scrollbar-thumb {
-  background: var(--dash-border);
-  border-radius: 2px;
-}
-
-/* Individual message styling within transcript, mirroring dashboard chat */
-.lifeos-ai-rail-transcript .lifeos-ai-rail-msg {
-  max-width: 80%;
-  padding: 10px 14px;
-  border-radius: var(--radius-lg); /* Use dashboard's large radius */
-  font-size: 14px;
-  line-height: 1.5;
-  animation: lifeos-ai-rail-fadeUp 0.2s ease; /* Re-use existing animation pattern */
-}
-
-.lifeos-ai-rail-transcript .lifeos-ai-rail-msg.user {
-  align-self: flex-end;
-  background: var(--c-today); /* Use dashboard's accent color for user */
+.lifeos-ai-rail-toggle-btn {
+  background: var(--dash-accent);
   color: #fff;
-  border-bottom-right-radius: var(--radius-sm); /* Use dashboard's small radius */
-  margin-left: auto; /* Push to right */
+  border: none;
+  border-radius: calc(var(--dash-radius-lg) / 2); /* 7px */
+  padding: calc(var(--dash-space-unit) / 2) var(--dash-space-unit); /* 4px 8px */
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
 }
 
-.lifeos-ai-rail-transcript .lifeos-ai-rail-msg.assistant {
-  align-self: flex-start;
-  background: var(--bg-surface2); /* Use dashboard's surface2 for assistant */
-  color: var(--text-primary); /* Use dashboard's primary text color */
-  border-bottom-left-radius: var(--radius-sm); /* Use dashboard's small radius */
-  border: 1px solid var(--border); /* Use dashboard's border */
-  margin-right: auto; /* Push to left */
-}
-
-/* Input Area, mirroring dashboard chat input */
-.lifeos-ai-rail-input-area {
-  display: flex;
-  gap: var(--dash-space-unit);
-  padding-top: var(--dash-space-unit);
-  border-top: 1px solid var(--dash-border);
-  margin-top: var(--dash-space-unit);
-}
-
-.lifeos-ai-rail-input {
-  flex: 1;
-  background: var(--bg-surface2); /* Use dashboard's surface2 for input */
-  border: 1px solid var(--dash-border);
-  border-radius: var(--radius-md); /* Use dashboard's medium radius */
-  color: var(--text-primary); /* Use dashboard's primary text color */
-  font-size: 14px;
-  padding: 10px 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  resize: none; /* Prevent manual resizing */
-  min-height: calc(var(--dash-space-unit) * 5); /* Minimum height for input */
-  max-height: calc(var(--dash-space-unit) * 15); /* Max height before scroll */
+.lifeos-ai-rail-toggle-btn:hover {
+  opacity: 0.85;
