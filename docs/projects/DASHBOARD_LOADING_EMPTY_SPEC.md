@@ -1,1 +1,2 @@
-The brief `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` is missing, so the specification cannot be generated.
+The `LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file is missing, which is required to generate the specification for skeletons, shimmer rules, optimistic UI risks, and empty states copy tone.
+The specification is incomplete due to the missing brief.
