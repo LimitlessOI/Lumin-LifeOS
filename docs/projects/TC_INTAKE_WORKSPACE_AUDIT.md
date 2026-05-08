@@ -1,38 +1,31 @@
 ### KNOW
-The `tc-intake-workspace-service.js` module provides the data for the agent intake workspace, which is the default loading surface for the agent portal as per Amendment 17.
-
-**Wired Components & Data Sources:**
-*   **`getWorkspace()` endpoint (`GET /api/v1/tc/intake/workspace`):** This is the primary API endpoint for the intake workspace, authenticated via `*rk` (COMMAND_CENTER_KEY).
-*   **Active Transactions:** `listActiveTransactions()` fetches `tc_transactions` with `status IN ('active', 'pending')`, ordered by `close_date` and `created_at`. It includes derived status (`stage`, `health_status`, `next_action`, `missing_doc_count`, `blocker_count`, `risk_flags`, `days_to_close`, `last_client_update_at`, `next_client_update_due_at`, `portal_sync_status`, `contingencies`) from `tc-status-engine.js`. It also aggregates `pending_approvals` from `tc_approval_items` and `open_operator_alerts` from `tc_alerts`.
-*   **Actionable Emails:** `listActionableEmails()` retrieves emails from `email_triage_log` where `action_required = true` and `category` is `tc_contract`, `tc_deadline`, or `client`.
-*   **Recent Intake Activity:** `listRecentIntakeActivity()` queries `tc_transaction_events` for `created`, `triage_email_linked`, `td_created`, `td_create_failed`, and `party_intro_sent` events.
-*   **Access Readiness:** `accessService.getAccessReadiness()` provides the status of critical system access (IMAP, GLVAR, SkySlope).
-*   **Email-Transaction Matching:** `scoreEmailToTransaction()` and `buildQueue()` attempt to automatically match actionable emails to active transactions based on address and party names, assigning a score and confidence level.
-*   **Next Actions:** The workspace generates a list of `next_actions` based on access readiness and unmatched contract emails.
-*   **Related Intake Routes:**
-    *   `POST /api/v1/tc/email/triage/:id/create-transaction`: Creates a new transaction from a triaged `tc_contract` email.
-    *   `POST /api/v1/tc/email/triage/:id/link-transaction`: Links a triaged email to an existing transaction.
-    *   `POST /api/v1/tc/intake/upload`: Handles manual document uploads, including validation and SkySlope integration.
-    *   `POST /api/v1/tc/intake/validate`: Validates a document without uploading.
-    *   `POST /api/v1/tc/intake/run`: Initiates a full automated intake process (email search, RPA finding, SkySlope upload).
-
-**Dependencies on Secrets or Remote Runtime:**
-*   **Database (`pool`):** All data persistence (`tc_transactions`, `tc_approval_items`, `tc_alerts`, `email_triage_log`, `tc_transaction_events`) relies on a PostgreSQL database (remote runtime).
-*   **IMAP:** `email-triage.js` (which populates `email_triage_log`) and `tc-email-document-service.js` depend on IMAP credentials (`TC_IMAP_APP_Adam_PASSWORD`, `WORK_EMAIL_APP_PASSWORD`) stored as secrets and the remote IMAP server.
-*   **GLVAR / TransactionDesk:** `accessService` checks GLVAR readiness, which requires `GLVAR_USERNAME` and `GLVAR_PASSWORD` secrets and interaction with the remote GLVAR website via browser automation.
-*   **eXp Okta / SkySlope:** `accessService` checks SkySlope readiness, which requires `EXP_OKTA_USERNAME` and `EXP_OKTA_PASSWORD` secrets and interaction with remote eXp Okta/SkySlope via browser automation.
-*   **Browser Automation (Puppeteer):** Services like `tc-browser-agent.js` (used by `tc-doc-intake.js`, `tc-listing-skyslope-sync.js`, etc.) require Chromium to be installed on the Railway runtime.
-*   **Coordinator Service:** Orchestrates various operations, some of which may involve external AI/NLP services (e.g., `processNewContract`).
+*   **Wired Components:**
+    *   The `/api/v1/tc/intake/workspace` endpoint is implemented and authenticated via `*rk` (COMMAND_CENTER_KEY).
+    *   It aggregates data from `tc_transactions`, `tc_approval_items`, `tc_alerts`, `tc_transaction_events`, and `email_triage_log`.
+    *   `tc-status-engine.js` is used to derive transaction state, health, next actions, and missing documents.
+    *   `tc-access-service.js` provides system readiness status (IMAP, GLVAR, SkySlope).
+    *   Email-to-transaction matching and scoring (`scoreEmailToTransaction`) are implemented using tokenization of email subject/body/sender and transaction address/parties.
+    *   The workspace presents a summary, a list of active transactions, an intake queue of actionable emails with suggested transaction matches, recent intake activity, and a list of suggested next actions.
+*   **Dependencies on Secrets/Remote Runtime:**
+    *   **IMAP Credentials:** `TC_IMAP_APP_Adam_PASSWORD` or `WORK_EMAIL_APP_PASSWORD` (resolved via `services/tc-imap-config.js`) are required for `email_triage_log` population and `imap_ready` status.
+    *   **GLVAR Credentials:** Username and password for GLVAR are needed for `glvar_ready` status, managed by `account-manager.js` and used by `tc-browser-agent.js`.
+    *   **eXp Okta Credentials:** Username and password for eXp Okta are needed for `skyslope_ready` status, managed by `account-manager.js` and used by `tc-browser-agent.js`.
+    *   **Database:** All data persistence and retrieval rely on the PostgreSQL database (`pool`).
+    *   **Browser Automation:** `tc-browser-agent.js` (used by `accessService` for readiness checks) requires Chromium, which must be installed in the Railway `Dockerfile`.
+    *   **Email Triage:** The `email_triage_log` is populated by `email-triage.js`, which depends on IMAP access and potentially external AI services for email classification.
 
 ### THINK
-The intake workspace provides a comprehensive overview for an agent, consolidating critical information and highlighting immediate actions. The email-to-transaction matching logic is a key automation feature, reducing manual effort. The `next_actions` list is a good starting point for guiding the operator.
+*   **Email Matching Accuracy:** The current `scoreEmailToTransaction` relies on simple token matching. While functional, it might have limitations in accurately identifying transactions for complex or ambiguous email content, potentially leading to more manual triage.
+*   **Operator Workflow Efficiency:** The workspace identifies actionable emails and suggests next steps, but the direct actions (e.g., "create transaction," "link transaction," "mark actioned") are not directly exposed within the workspace UI, requiring the operator to use other endpoints or tools.
+*   **Data Freshness Visibility:** The workspace indicates if IMAP access is ready, but it doesn't explicitly show when the `email_triage_log` was last updated. This could lead to operators working with stale data without realizing it.
+*   **Prioritization of Next Actions:** The `next_actions` list is currently a simple aggregation. A more sophisticated prioritization mechanism could guide the operator more effectively.
 
 ### Missing verifiers
-1.  **IMAP Credential Resolution:** A verifier to confirm that `services/tc-imap-config.js` correctly resolves IMAP credentials from environment variables, including aliases, and that no new IMAP resolution logic is introduced elsewhere.
-2.  **Browser Automation Dockerfile:** A verifier to confirm that the Railway deployment is using the Dockerfile that installs Chromium, as browser automation will fail otherwise.
-3.  **Email-Transaction Scoring Accuracy:** A verifier (e.g., a suite of integration tests) to ensure `scoreEmailToTransaction` consistently provides high-confidence matches for known transaction emails and low scores for irrelevant ones, especially for `tc_contract` emails.
+*   **`scoreEmailToTransaction` Accuracy:** A verifier (e.g., unit tests with a diverse dataset of emails and transactions) to measure the precision and recall of the email-to-transaction matching logic.
+*   **Email Triage Freshness:** A verifier to ensure the `email_triage_log` is regularly updated, perhaps by checking the timestamp of the latest entry against the last scan time.
+*   **`next_actions` Relevance:** A verifier to confirm that the generated `next_actions` accurately reflect the highest-priority tasks based on the current state of the system and transactions.
 
 ### Next three fixes
-1.  **Refine Email Search Parameters:** Standardize and robustly handle `null`/`undefined`/empty string values for `subject_contains`, `filename_contains`, and `from_contains` in `buildInspectionMailboxSearch` and `buildR4RMailboxSearch` to prevent unexpected search behavior or missed matches.
-2.  **Enhance `scoreEmailToTransaction`:** Incorporate attachment filenames (if available in `email_triage_log`) into the email scoring logic, as these often contain crucial transaction identifiers like addresses or MLS numbers.
-3.  **Actionable `next_actions`:** Modify the `next_actions` array in `getWorkspace` to include structured data (e.g., `type: 'link_email_to_transaction'`, `payload: { emailId: <id> }`) instead of just strings, enabling direct UI integration for these suggested actions.
+1.  **Integrate "Create Transaction" and "Link Transaction" actions into the intake queue:** For `tc_contract` emails in the `intake_queue`, add UI-ready actions (e.g., `create_transaction_endpoint`, `link_transaction_endpoint`) that map to `/api/v1/tc/email/triage/:id/create-transaction` and `/api/v1/tc/email/triage/:id/link-transaction` respectively, allowing operators to act directly from the workspace.
+2.  **Add "Mark Email Actioned" action to intake queue items:** For all actionable emails in the `intake_queue`, expose an action (e.g., `mark_actioned_endpoint`) that calls `/api/v1/tc/email/triage/:id/action` to allow operators to clear emails from their queue.
+3.  **Display "Last Email Scan" timestamp in workspace summary:** Fetch and include the timestamp of the last successful email inbox scan (e.g., from a system status table or `email_triage_log`'s latest `received_at`) in the `summary` object of the workspace response.
