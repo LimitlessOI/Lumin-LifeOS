@@ -39,7 +39,8 @@
 - **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — latest-session note, handoff row, and Change Receipt added for the repair.
 
 ### State after this session
-- Pre-fix **`npm run check:overlay`** failed on **`Unexpected identifier 'loadMITs'`** in **`lifeos-dashboard.html`**. Verification is being rerun after the patch in the same session.
+- Pre-fix **`npm run check:overlay`** failed on **`Unexpected identifier 'loadMITs'`** in **`lifeos-dashboard.html`**.
+- Post-fix verification: **`npm run check:overlay`** **0**; **`npm run lifeos:supervise:static`** **0**; **`npm test`** **0** (4 existing HTTP smoke tests skipped because local server was not running).
 
 ### Next agent: start here
 - If dashboard static checks regress again, harden **`lifeos:supervise:static`** / builder post-commit supervision to parse inline HTML module scripts before accepting **`committed:true`** dashboard output.
