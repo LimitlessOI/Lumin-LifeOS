@@ -42,7 +42,7 @@
 ### State after this session
 - Pre-fix **`npm run check:overlay`** failed on **`Unexpected identifier 'loadMITs'`** in **`lifeos-dashboard.html`**.
 - Post-fix verification: **`npm run check:overlay`** **0**; **`npm run lifeos:supervise:static`** **0**; **`npm test`** **0** (4 existing HTTP smoke tests skipped because local server was not running).
-- Pre-fix **`node --check routes/tsos-task-ledger-routes.js`** failed on **`Unexpected identifier 'createTsosTaskLedgerRoutes'`**; post-fix syntax verification is being rerun in the same session.
+- Pre-fix **`node --check routes/tsos-task-ledger-routes.js`** failed on **`Unexpected identifier 'createTsosTaskLedgerRoutes'`**. Post-fix **`node --check routes/tsos-task-ledger-routes.js`** **0**, and the CI-style route syntax loop **`for f in routes/*.js; do node --check "$f"; done`** **0**.
 
 ### Next agent: start here
 - If dashboard static checks regress again, harden **`lifeos:supervise:static`** / builder post-commit supervision to parse inline HTML module scripts before accepting **`committed:true`** dashboard output.
