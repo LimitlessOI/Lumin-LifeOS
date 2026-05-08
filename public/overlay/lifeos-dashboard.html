@@ -18,11 +18,6 @@
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
 <script src="/shared/lifeos-widget-category-stubs.js"></script>
-<!-- Added by task -->
-<script src="/shared/lifeos-widget-mit.js"></script>
-<script src="/shared/lifeos-widget-score.js"></script>
-<script src="/shared/lifeos-widget-lumin-quick.js"></script>
-<script src="/shared/lifeos-widget-category-stubs.js"></script>
 <style>
 :root {
 --bg-base: var(--dash-bg, #0a0a0f);
@@ -68,7 +63,7 @@ max-width: 860px;
 margin: 0 auto;
 padding: 24px 16px;
 }
-/ ── Cards ── /
+/* ── Cards ── */
 .card {
 background: var(--bg-surface);
 border: 1px solid var(--border);
@@ -100,7 +95,7 @@ border-top: 2px solid var(--c-finance);
 .accent-border-mirror {
 border-top: 2px solid var(--c-mirror);
 }
-/ ── Header ── /
+/* ── Header ── */
 .hdr-row {
 display: flex;
 align-items: flex-start;
@@ -165,7 +160,7 @@ margin-left: 8px;
 vertical-align: middle;
 animation: pulse-ring 2s cubic-bezier(0.4,0,0.6,1) infinite;
 }
-/ ── Animations ── /
+/* ── Animations ── */
 @keyframes pulse-ring {
 0%, 100% {
 opacity: 1;
@@ -204,7 +199,7 @@ transform: scale(1);
 opacity: 1;
 }
 }
-/ Progress uses inline stroke-dashoffset from makeRing(); animate opacity only /
+/* Progress uses inline stroke-dashoffset from makeRing(); animate opacity only */
 @keyframes ring-fill {
   from { opacity: 0.2; }
   to { opacity: 1; }
@@ -260,7 +255,7 @@ animation-delay: 0.40s;
 .delay-9 {
 animation-delay: 0.45s;
 }
-/ ── Skeleton ── /
+/* ── Skeleton ── */
 .skeleton {
 background: linear-gradient(90deg, var(--bg-surface2) 25%, var(--bg-overlay) 50%, var(--bg-surface2) 75%);
 background-size: 400px 100%;
@@ -274,7 +269,7 @@ margin-bottom: 10px;
 .skel-line:last-child {
 width: 60%;
 }
-/ ── MIT ── /
+/* ── MIT ── */
 .mit-item {
 display: flex;
 align-items: flex-start;
@@ -326,7 +321,7 @@ transition: color 0.2s;
 color: var(--text-muted);
 text-decoration: line-through;
 }
-/ ── Quick add ── /
+/* ── Quick add ── */
 .quick-add {
 display: flex;
 gap: 8px;
@@ -366,7 +361,7 @@ transition: opacity 0.15s;
 .btn-add:hover {
 opacity: 0.85;
 }
-/ ── Calendar ── /
+/* ── Calendar ── */
 .event-row {
 display: flex;
 align-items: center;
@@ -392,7 +387,7 @@ flex-shrink: 0;
 font-size: 14px;
 color: var(--text-primary);
 }
-/ ── Goals ── /
+/* ── Goals ── */
 .goal-row {
 margin-bottom: 16px;
 }
@@ -432,7 +427,7 @@ font-size: 11px;
 color: var(--text-muted);
 margin-top: 4px;
 }
-/ ── Scores ── /
+/* ── Scores ── */
 .scores-grid {
 display: grid;
 grid-template-columns: 1fr 1fr;
@@ -509,7 +504,7 @@ box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 .score-tile.tip-open .score-tile-tip {
 display: block;
 }
-/ ── Chat ── /
+/* ── Chat ── */
 .chat-messages {
 height: 240px;
 overflow-y: auto;
@@ -586,7 +581,7 @@ animation: bounce-dot 1.2s 0.2s infinite;
 .typing-dot:nth-child(3) {
 animation: bounce-dot 1.2s 0.4s infinite;
 }
-/ ── Chat input row ── /
+/* ── Chat input row ── */
 .chat-row {
 display: flex;
 gap: 8px;
@@ -647,7 +642,7 @@ transition: opacity 0.15s;
 .btn-send:hover {
 opacity: 0.85;
 }
-/ ── Voice footer ── /
+/* ── Voice footer ── */
 .voice-footer {
 display: flex;
 align-items: center;
@@ -681,7 +676,7 @@ font-size: 11px;
 color: var(--text-muted);
 opacity: 0.6;
 }
-/ ── Empty ── /
+/* ── Empty ── */
 .empty {
 text-align: center;
 padding: 20px 0;
@@ -700,10 +695,10 @@ grid-template-columns: 1fr 1fr;
 gap: 16px;
 }
 }
-/ Desktop-specific styles for wider screens /
+/* Desktop-specific styles for wider screens */
 @media (min-width: 1000px) {
   .page {
-    max-width: 1000px; / wider content area /
+    max-width: 1000px; /* wider content area */
     padding: 40px 32px;
   }
   .hdr-row {
@@ -783,13 +778,6 @@ gap: 16px;
 <div id="lifeos-widget-lumin-quick" class="dashboard-widget card accent-border-mirror fade-up delay-5"></div>
 <div id="lifeos-widget-category-stubs" class="dashboard-widget card accent-border-finance fade-up delay-6"></div>
 </div>
-<!-- Added by task -->
-<div class="two-col mb-4">
-<div id="lifeos-widget-mit" class="dashboard-widget"></div>
-<div id="lifeos-widget-score" class="dashboard-widget"></div>
-<div id="lifeos-widget-lumin-quick" class="dashboard-widget"></div>
-<div id="lifeos-widget-category-stubs" class="dashboard-widget"></div>
-</div>
 <!-- ROW 2: Goals + Scores -->
 <div class="two-col mb-4">
 <div class="card accent-border-finance fade-up delay-7">
@@ -842,9 +830,29 @@ gap: 16px;
 <script src="/shared/lifeos-voice-chat.js"></script>
 <script src="../shared/lifeos-dashboard-ai-rail.js"></script>
 <script type="module">
-const HDR = () => ({ 'x-lifeos-key': localStorage.getItem('lifeos_api_key') || '', 'Content-Type': 'application/json' });
+const CTX = window.LifeOSBootstrap?.getLifeOSContext?.({ promptForKey: false, defaultUser: 'adam' }) || null;
+const HDR = () => CTX ? CTX.headers() : ({ 'x-lifeos-key': localStorage.getItem('lifeos_api_key') || '', 'Content-Type': 'application/json' });
 const API = (p, o={}) => fetch(p, { headers: HDR(), ...o });
 const $ = id => document.getElementById(id);
+const currentUser = () => CTX?.USER || localStorage.getItem('lifeos_user') || localStorage.getItem('lifeosUser') || 'adam';
+const currentCommandKey = () => CTX?.KEY || localStorage.getItem('commandKey') || localStorage.getItem('command_key') || localStorage.getItem('lifeos_key') || localStorage.getItem('lifeos_api_key') || '';
+function escapeHtml(value) {
+return String(value ?? '').replace(/[&<>"']/g, ch => ({
+'&': '&amp;',
+'<': '&lt;',
+'>': '&gt;',
+'"': '&quot;',
+"'": '&#39;'
+}[ch]));
+}
+function appendMessage(role, text) {
+const box = $('chat-messages');
+const div = document.createElement('div');
+div.className = `msg ${role}`;
+div.textContent = text;
+box.appendChild(div);
+box.scrollTop = 99999;
+}
 // ── Clock ──
 function tick() {
 const now = new Date();
@@ -876,7 +884,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-asyncFn loadMITs() {
+async function loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -885,15 +893,19 @@ if (!mits.length) {
 $('mits-list').innerHTML='<div class="empty"><span>✅</span>No MITs — add one below</div>';
 return;
 }
-$('mits-list').innerHTML = mits.map(m=>`
-<div class="mit-item" data-id="${m.id}" data-desc="${(m.description||m.text||'').replace(/"/g,'&quot;')}">
+$('mits-list').innerHTML = mits.map(m=>{
+const desc = escapeHtml(m.description||m.text||'');
+const title = escapeHtml(m.text||m.title||'Untitled');
+return `
+<div class="mit-item" data-id="${m.id}" data-desc="${desc}">
 <div class="mit-check ${m.kept_at?'done':''}">
 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
 <polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 </div>
-<div class="mit-text ${m.kept_at?'done':''}">${m.text||m.title||'Untitled'}</div>
-</div>`).join('');
+<div class="mit-text ${m.kept_at?'done':''}">${title}</div>
+</div>`;
+}).join('');
 $('mits-list').querySelectorAll('.mit-item').forEach(el => {
 el.addEventListener('click', ()=>toggleMIT(el));
 bindLongPress(el, e => {
@@ -913,7 +925,7 @@ document.body.appendChild(tip);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Could not load tasks</div>';
 }
 }
-asyncFn toggleMIT(el) {
+async function toggleMIT(el) {
 const chk=el.querySelector('.mit-check'), txt=el.querySelector('.mit-text');
 const done=chk.classList.contains('done');
 chk.classList.toggle('done',!done);
@@ -922,7 +934,7 @@ try {
 await API(`/api/v1/lifeos/commitments/${el.dataset.id}/keep`,{method:'POST',body:JSON.stringify({kept:!done})});
 } catch {}
 }
-window.addMIT = asyncFn() {
+async function addMIT() {
 const inp=$('mit-input'), text=inp.value.trim();
 if (!text) return;
 try {
@@ -930,10 +942,11 @@ await API('/api/v1/lifeos/commitments',{method:'POST',body:JSON.stringify({text,
 inp.value='';
 loadMITs();
 } catch {}
-};
-$('mit-input').addEventListener('keypress', e=>{ if(e.key==='Enter') addMIT(); });
+}
+window.addMIT = addMIT;
+$('mit-input').addEventListener('keypress', e=>{ if(e.key==='Enter') window.addMIT(); });
 // ── Calendar ──
-asyncFn loadCal() {
+async function loadCal() {
 try {
 const r=await API('/api/v1/lifeos/engine/calendar/events?days=1&limit=8');
 const d=await r.json();
@@ -944,14 +957,14 @@ return;
 }
 $('cal-list').innerHTML=evs.map(ev=>{
 const t=ev.starts_at||ev.start_time?new Date(ev.starts_at||ev.start_time).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}):'';
-return `<div class="event-row">${t?`<span class="event-time">${t}</span>`:''}<span class="event-title">${ev.title||ev.name||'Event'}</span></div>`;
+return `<div class="event-row">${t?`<span class="event-time">${escapeHtml(t)}</span>`:''}<span class="event-title">${escapeHtml(ev.title||ev.name||'Event')}</span></div>`;
 }).join('');
 } catch {
 $('cal-list').innerHTML='<div class="empty"><span>📅</span>Could not load schedule</div>';
 }
 }
 // ── Goals ──
-asyncFn loadGoals() {
+async function loadGoals() {
 try {
 const r=await API('/api/v1/lifeos/finance/goals');
 const d=await r.json();
@@ -964,9 +977,9 @@ $('goals-list').innerHTML=goals.map(g=>{
 const pct=g.target_amount>0?Math.min(100,Math.round((g.current_amount/g.target_amount)*100)):0;
 const amt=g.current_amount?`${Number(g.current_amount).toLocaleString()} saved`:'';
 return `<div class="goal-row">
-<div class="goal-header"><span class="goal-name">${g.name}</span><span class="goal-pct">${pct}%</span></div>
+<div class="goal-header"><span class="goal-name">${escapeHtml(g.name)}</span><span class="goal-pct">${pct}%</span></div>
 <div class="goal-track"><div class="goal-fill" style="width:${pct}%"></div></div>
-${amt?`<div class="goal-sub">${amt}</div>`:''}
+${amt?`<div class="goal-sub">${escapeHtml(amt)}</div>`:''}
 </div>`;
 }).join('');
 } catch {
@@ -984,7 +997,7 @@ function ringColor(s) {
 return s>=80?'#10b981':s>=60?'#f59e0b':'#e05555';
 }
 function makeRing(score) {
-const r=33, circ=2Math.PIr, offset=circ*(1-score/100);
+const r=33, circ=2 * Math.PI * r, offset=circ*(1-score/100);
 const c=ringColor(score);
 return `<svg width="72" height="72" viewBox="0 0 72 72">
 <circle class="track" cx="36" cy="36" r="${r}" fill="none" stroke-width="6"/>
@@ -992,7 +1005,7 @@ return `<svg width="72" height="72" viewBox="0 0 72 72">
 stroke="${c}" style="stroke-dashoffset:${offset}"/>
 </svg>`;
 }
-asyncFn loadScores() {
+async function loadScores() {
 try {
 const r=await API('/api/v1/lifeos/dashboard/scoreboard');
 const d=await r.json();
@@ -1013,7 +1026,7 @@ $('scores-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><span>�
 }
 // ── Chat ──
 let threadId=null;
-asyncFn initChat() {
+async function initChat() {
 try {
 const r=await API('/api/v1/lifeos/chat/threads/default',{method:'POST',body:JSON.stringify({})});
 const d=await r.json();
@@ -1022,31 +1035,31 @@ const mr=await API(`/api/v1/lifeos/chat/threads/${threadId}/messages?limit=10`);
 const md=await mr.json();
 const msgs=(md.messages||[]).slice(-10);
 if (msgs.length) {
-$('chat-messages').innerHTML=msgs.map(m=>`<div class="msg ${m.role==='user'?'user':'assistant'}">${m.content}</div>`).join('');
+const box=$('chat-messages');
+box.innerHTML='';
+msgs.forEach(m=>appendMessage(m.role==='user'?'user':'assistant', m.content||''));
 }
 $('chat-messages').scrollTop=99999;
 } catch {}
 }
-asyncFn sendChat() {
+async function sendChat() {
 const inp=$('chat-input'), text=inp.value.trim();
 if (!text||!threadId) return;
 inp.value='';
 const box=$('chat-messages');
-box.innerHTML+=`<div class="msg user">${text}</div>`;
-box.scrollTop=99999;
+appendMessage('user', text);
 $('typing').classList.add('show');
 try {
 const r=await API(`/api/v1/lifeos/chat/threads/${threadId}/messages`,{method:'POST',body:JSON.stringify({message:text})});
 const d=await r.json();
 $('typing').classList.remove('show');
 const reply = d.reply||d.content||'…';
-box.innerHTML+=`<div class="msg assistant">${reply}</div>`;
-box.scrollTop=99999;
+appendMessage('assistant', reply);
 // Speak reply if enabled
 if (window.LifeOSVoiceChat && voiceCtrl) voiceCtrl.speak(reply);
 } catch {
 $('typing').classList.remove('show');
-box.innerHTML+=`<div class="msg assistant" style="opacity:0.5">Something went wrong — try again.</div>`;
+appendMessage('assistant', 'Something went wrong — try again.');
 }
 }
 $('send-btn').addEventListener('click', sendChat);
@@ -1091,7 +1104,7 @@ if (ambientActive) {
 btn.classList.add('ambient-active');
 btn.title = 'Ambient ON — Lumin will speak when you have something to know. Click to turn off.';
 checkProactiveNudge();
-ambientInterval = setInterval(checkProactiveNudge, 2  60  1000);
+ambientInterval = setInterval(checkProactiveNudge, 2 * 60 * 1000);
 } else {
 btn.classList.remove('ambient-active');
 btn.title = 'Ambient voice — Lumin speaks proactively when you have time';
@@ -1099,15 +1112,13 @@ clearInterval(ambientInterval);
 if (window.speechSynthesis) window.speechSynthesis.cancel();
 }
 };
-asyncFn checkProactiveNudge() {
+async function checkProactiveNudge() {
 try {
 const r = await API('/api/v1/lifeos/ambient/nudge');
 const d = await r.json();
 if (!d.speak) return;
 // Show as ambient chat bubble
-const box = $('chat-messages');
-box.innerHTML += `<div class="msg ambient">🔔 Lumin: ${d.speak}</div>`;
-box.scrollTop = 99999;
+appendMessage('ambient', `🔔 Lumin: ${d.speak}`);
 // Speak it
 if (window.LifeOSVoiceChat) {
 window.LifeOSVoiceChat.speakText(d.speak);
@@ -1125,19 +1136,19 @@ initVoice();
 const th = document.documentElement.dataset.theme;
 $('btn-theme').textContent = th === 'light' ? '☾' : '☀︎';
 // Mount new widgets
-const user = window.lifeosUser;
-const commandKey = window.lifeosCommandKey;
+const user = currentUser();
+const commandKey = currentCommandKey();
 if (window.LifeOSWidgetMIT) {
-  LifeOSWidgetMIT.mount({container: $('lifeos-widget-mit'), user, commandKey});
+  window.LifeOSWidgetMIT.mount({container: $('lifeos-widget-mit'), user, commandKey});
 }
 if (window.LifeOSWidgetScore) {
-  LifeOSWidgetScore.mount({container: $('lifeos-widget-score'), user, commandKey});
+  window.LifeOSWidgetScore.mount({container: $('lifeos-widget-score'), user, commandKey});
 }
 if (window.LifeOSWidgetLuminQuick) {
-  LifeOSWidgetLuminQuick.mount({container: $('lifeos-widget-lumin-quick'), user, commandKey});
+  window.LifeOSWidgetLuminQuick.mount({container: $('lifeos-widget-lumin-quick'), user, commandKey});
 }
 if (window.LifeOSWidgetCategoryStubs) {
-  LifeOSWidgetCategoryStubs.mount({container: $('lifeos-widget-category-stubs'), user, commandKey});
+  window.LifeOSWidgetCategoryStubs.mount({container: $('lifeos-widget-category-stubs'), user, commandKey});
 }
 // Mount the AI Rail
 if (window.LifeOSDashboardAiRail) {
@@ -1155,21 +1166,4 @@ if (window.LifeOSDashboardAiRail) {
 Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
 </script>
 </body>
-<!-- Added by task -->
-<script>
-  const user = window.lifeosUser;
-  const commandKey = window.lifeosCommandKey;
-  if (window.LifeOSWidgetMIT) {
-    LifeOSWidgetMIT.mount({container: document.getElementById('lifeos-widget-mit'), user, commandKey});
-  }
-  if (window.LifeOSWidgetScore) {
-    LifeOSWidgetScore.mount({container: document.getElementById('lifeos-widget-score'), user, commandKey});
-  }
-  if (window.LifeOSWidgetLuminQuick) {
-    LifeOSWidgetLuminQuick.mount({container: document.getElementById('lifeos-widget-lumin-quick'), user, commandKey});
-  }
-  if (window.LifeOSWidgetCategoryStubs) {
-    LifeOSWidgetCategoryStubs.mount({container: document.getElementById('lifeos-widget-category-stubs'), user, commandKey});
-  }
-</script>
 </html>

@@ -1,10 +1,22 @@
-import { Pool } from 'pg';
+/**
+ * TSOS builder task ledger write route.
+ *
+ * @ssot docs/projects/AMENDMENT_21_LIFEOS_CORE.md
+ */
+import express from 'express';
 
-exp createTsosTaskLedgerRoutes({ pool }) {
+export function createTsosTaskLedgerRoutes({ pool, requireKey } = {}) {
   const router = express.Router();
+  const requireLedgerKey = typeof requireKey === 'function'
+    ? requireKey
+    : (_req, res) => res.status(503).json({ ok: false, error: 'requireKey middleware is not configured' });
 
-  router.post('/task-ledger', async (req, res) => {
+  router.post('/task-ledger', requireLedgerKey, async (req, res) => {
     try {
+      if (!pool || typeof pool.query !== 'function') {
+        return res.status(503).json({ ok: false, error: 'database pool is not configured' });
+      }
+
       const { task_id, ...fields } = req.body;
       if (!task_id) {
         return res.status(400).json({ ok: false, error: 'task_id is required' });
