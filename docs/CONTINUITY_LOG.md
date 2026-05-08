@@ -32,6 +32,20 @@
 
 ---
 
+## [FIX] Update 2026-05-08 #1 — Dashboard inline module parse + chat XSS repair
+
+### Files changed
+- **`public/overlay/lifeos-dashboard.html`** — critical repair after bug inspection: invalid builder-generated JS tokens (**`asyncFn`**, **`2Math.PIr`**, **`2  60  1000`**) fixed so the dashboard module can parse; duplicate widget script/DOM mounts removed; widget user/key context now comes from **`LifeOSBootstrap`**; chat/ambient rendering now appends text nodes instead of raw **`innerHTML`**.
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — latest-session note, handoff row, and Change Receipt added for the repair.
+
+### State after this session
+- Pre-fix **`npm run check:overlay`** failed on **`Unexpected identifier 'loadMITs'`** in **`lifeos-dashboard.html`**. Verification is being rerun after the patch in the same session.
+
+### Next agent: start here
+- If dashboard static checks regress again, harden **`lifeos:supervise:static`** / builder post-commit supervision to parse inline HTML module scripts before accepting **`committed:true`** dashboard output.
+
+---
+
 ## [FIX] Update 2026-05-11 #1 — **`lifeos:supervise:static`** green again
 
 ### Files
