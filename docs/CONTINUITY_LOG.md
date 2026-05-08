@@ -36,14 +36,17 @@
 
 ### Files changed
 - **`public/overlay/lifeos-dashboard.html`** — critical repair after bug inspection: invalid builder-generated JS tokens (**`asyncFn`**, **`2Math.PIr`**, **`2  60  1000`**) fixed so the dashboard module can parse; duplicate widget script/DOM mounts removed; widget user/key context now comes from **`LifeOSBootstrap`**; chat/ambient rendering now appends text nodes instead of raw **`innerHTML`**.
+- **`routes/tsos-task-ledger-routes.js`** — critical CI/deploy syntax repair: invalid **`exp createTsosTaskLedgerRoutes`** fixed to a real ESM export, **`express`** imported, **`@ssot`** added, and missing **`requireKey`** / **`pool`** cases fail closed with **503**. ⚠️ Still not mounted; no **`builder_task_ledger`** migration in this slice.
 - **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — latest-session note, handoff row, and Change Receipt added for the repair.
 
 ### State after this session
 - Pre-fix **`npm run check:overlay`** failed on **`Unexpected identifier 'loadMITs'`** in **`lifeos-dashboard.html`**.
 - Post-fix verification: **`npm run check:overlay`** **0**; **`npm run lifeos:supervise:static`** **0**; **`npm test`** **0** (4 existing HTTP smoke tests skipped because local server was not running).
+- Pre-fix **`node --check routes/tsos-task-ledger-routes.js`** failed on **`Unexpected identifier 'createTsosTaskLedgerRoutes'`**; post-fix syntax verification is being rerun in the same session.
 
 ### Next agent: start here
 - If dashboard static checks regress again, harden **`lifeos:supervise:static`** / builder post-commit supervision to parse inline HTML module scripts before accepting **`committed:true`** dashboard output.
+- If TSOS task ledger becomes product scope, build the missing **`builder_task_ledger`** migration and runtime mount through the builder/system path; do not claim the endpoint is live from the syntax-only repair.
 
 ---
 
