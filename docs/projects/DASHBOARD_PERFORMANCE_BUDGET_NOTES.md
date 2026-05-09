@@ -1,8 +1,30 @@
 ### Performance Budget Notes for LIFEOS Dashboard Builder
 
-This section outlines key performance targets and considerations for the LIFEOS Dashboard Builder to ensure a responsive and efficient user experience.
+**Intent:** Establish clear performance targets and identify key optimization areas to ensure a responsive and efficient user experience for the Builder dashboard. Focus on perceived performance and critical rendering path.
 
-*   **Overlay Load Targets:** Interactive overlays (e.g., modals, dropdowns, tooltips) should achieve full interactivity within **100ms** of user action. This minimizes perceived latency for common UI interactions.
-*   **Waterfall Risks:** Proactively identify and mitigate critical rendering path bottlenecks. Prioritize essential CSS and JavaScript for initial render, and analyze network waterfalls to uncover and optimize serial resource dependencies.
-*   **Defer Non-Critical Widgets:** Implement lazy loading or deferred execution for any dashboard widgets or components that are not immediately visible or critical for the initial user interaction. This includes analytics scripts, less frequently accessed features, and off-screen elements.
-*   **Largest Contentful Paint (LCP) Hints:** Optimize for an LCP target of **under 2.5 seconds**. Focus on efficient image delivery (size, format, CDN), server response time for primary content, and ensuring above-the-fold content is rendered as quickly as possible.
+**Load Targets:**
+*   **First Contentful Paint (FCP):** < 1.5 seconds
+*   **Largest Contentful Paint (LCP):** < 2.5 seconds
+*   **Total Blocking Time (TBT):** < 200 ms
+*   **Interaction to Next Paint (INP):** < 200 ms
+*   **Cumulative Layout Shift (CLS):** < 0.1
+
+**Waterfall Risks:**
+*   **Large JavaScript Bundles:** Over-reliance on client-side rendering for initial load.
+*   **Unoptimized Image Assets:** High-resolution images not properly compressed or lazy-loaded.
+*   **Excessive API Calls on Initial Load:** Multiple blocking network requests for core data.
+*   **Render-Blocking Resources:** Synchronous CSS/JS in the `<head>`.
+*   **Third-Party Scripts:** Analytics or monitoring tools impacting critical path.
+
+**Defer Non-Critical Widgets:**
+*   **Audit Trail History:** Load history data asynchronously after initial dashboard render.
+*   **Complex Configuration Panels:** Lazy-load advanced builder settings or less frequently used configuration options.
+*   **Non-essential UI Animations:** Defer or remove animations that are not critical for user feedback.
+*   **Help/Tutorial Overlays:** Load on user interaction, not on initial page load.
+
+**Largest Contentful Paint (LCP) Hints:**
+*   **Prioritize Hero Elements:** Ensure the largest visible element (e.g., main builder canvas, primary status display) is loaded and rendered quickly.
+*   **Optimize Image Loading:** Use `srcset`, `sizes`, `webp` format, and `loading="lazy"` for images below the fold. Preload critical images.
+*   **Minimize Render-Blocking CSS/JS:** Inline critical CSS, defer non-critical CSS, and use `async`/`defer` for JavaScript.
+*   **Server-Side Rendering (SSR) or Static Site Generation (SSG):** Consider for initial page load to deliver pre-rendered HTML.
+*   **Reduce Server Response Time:** Optimize backend API performance for critical data.
