@@ -1,1 +1,0 @@
-Self-programming: what are you and the system working onb and a list of what you ahve done
