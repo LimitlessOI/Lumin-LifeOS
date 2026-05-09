@@ -10,7 +10,8 @@ const STRIPE_PRICE_ID_MONTHLY = 'price_1Pj123Monthly'; // Example Stripe Price I
 
 let stripe;
 let tcPricingService; // To hold the instance of createTCPricing
+let logger = console; // Default logger
 
 /**
- * Initializes the Stripe client. If STRIPE_SECRET_KEY is not set, logs a warning and returns null.
- * @param {object
+ * Initializes the Stripe client and TC Pricing service.
+ * If STRIPE_SECRET_
