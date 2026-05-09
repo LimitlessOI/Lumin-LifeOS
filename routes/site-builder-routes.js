@@ -59,7 +59,11 @@ async function notifySlack(event, businessName, detail = '') {
 }
 function getSiteBuilder({ ccm, baseUrl }) {
   if (!_siteBuilder) {
-    _siteBuilder = new SiteBuilder({ callCouncil: ccm, previewsDir: 'public/previews', baseUrl, });
+    _siteBuilder = new SiteBuilder({
+      callCouncil: ccm,
+      previewsDir: 'public/previews',
+      baseUrl,
+    });
   }
   return _siteBuilder;
 }
@@ -99,88 +103,4 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
   const router = Router();
   const buildLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 10, // max 10 site builds per IP per hour
-    message: { error: 'Too many site builds — try again in an hour' },
-    standardHeaders: true,
-    legacyHeaders: false,
-  });
-  const prospectLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000,
-    max: 50, // max 50 prospects per IP per hour
-    message: { error: 'Too many prospect requests — try again in an hour' },
-    standardHeaders: true,
-    legacyHeaders: false,
-  });
-  // Serve preview sites statically at /previews/*
-  app.use('/previews', async (req, res, next) => {
-    const { default: path } = await import('path');
-    const filePath = path.join(process.cwd(), 'public/previews', req.path === '/' ? '/index.html' : req.path);
-    res.sendFile(filePath, (err) => {
-      if (err) next();
-    });
-  });
-  /**
-   * POST /api/v1/sites/build
-   * Build a new site from a business URL.
-   * Body: { url, businessInfo? }
-   */
-  router.post('/build', rk, buildLimiter, async (req, res) => {
-    try {
-      const { url, businessUrl, businessInfo } = req.body;
-      const targetUrl = url || businessUrl;
-      if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
-      logger.info('[SITE] Build request', { url: targetUrl });
-      const builder = getSiteBuilder({ ccm, baseUrl });
-      const result = await builder.buildFromUrl(targetUrl, { businessInfo });
-      res.json({ ok: result.success, ...result });
-    } catch (err) {
-      logger.error('[SITE] Build error', { error: err.message });
-      res.status(500).json({ ok: false, error: err.message });
-    }
-  });
-  /**
-   * POST /api/v1/sites/prospect
-   * Build a mock site for a prospect + send cold outreach email.
-   * Body: { businessUrl, contactEmail?, contactName?, businessName?, skipEmail?, businessInfo?
-   */
-  router.post('/prospect', rk, prospectLimiter, async (req, res) => {
-    try {
-      const { businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo } = req.body;
-      if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
-      logger.info('[SITE] Prospect request', { businessUrl, contactEmail });
-      const pipeline = getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl });
-      const result = await pipeline.processProspect({
-        businessUrl,
-        contactEmail,
-        contactName,
-        businessName,
-        skipEmail,
-        businessInfo,
-      });
-      res.json({ ok: result.success, ...result });
-    } catch (err) {
-      logger.error('[SITE] Prospect pipeline error', { error: err.message });
-      res.status(500).json({ ok: false, error: err.message });
-    }
-  });
-  /**
-   * POST /api/v1/sites/bulk-prospect
-   * Process multiple prospects in batch.
-   * Body: { prospects: [{ businessUrl, contactEmail, contactName, businessName }] }
-   */
-  router.post('/bulk-prospect', rk, prospectLimiter, async (req, res) => {
-    try {
-      const { prospects = [] } = req.body;
-      if (!prospects.length) return res.status(400).json({ ok: false, error: 'prospects array required' });
-      if (prospects.length > 20) return res.status(400).json({ ok: false, error: 'Max 20 prospects per batch' });
-      logger.info('[SITE] Bulk prospect request', { count: prospects.length });
-      const pipeline = getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl });
-      const results = [];
-      for (const prospect of prospects) {
-        const result = await pipeline.processProspect(prospect);
-        results.push(result);
-      }
-      res.json({
-        total: prospects.length,
-        succeeded: results.filter(r => r.success).length,
-        failed: prospects.length - results.filter(r => r.success).
+    max: 10, //
