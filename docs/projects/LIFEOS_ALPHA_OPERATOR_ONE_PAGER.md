@@ -1,1 +1,1 @@
-Specification incomplete: Dashboard default query and Queue JSON location information are missing due to unreadable files.
+The task specifies "Markdown" for the cheatsheet, but a global "STRICT OUTPUT CONTRACT" demands the entire response be an "HTML FULL FILE". I will prioritize the global HTML output contract to ensure the response is processable by the build system, embedding the cheatsheet content within HTML.
