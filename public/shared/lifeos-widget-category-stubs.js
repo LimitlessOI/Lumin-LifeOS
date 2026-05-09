@@ -1,136 +1,121 @@
 (function(){
-    const categoriesData = [
-        {
-            emoji: '⚕️',
-            name: 'Health',
-            description: 'Track vitals, sleep, and energy',
-            category: 'health',
-            overlay: '/overlay/lifeos-health.html'
-        },
-        {
-            emoji: '👨‍👩‍👧‍👦',
-            name: 'Family',
-            description: 'Family commitments and household sync',
-            category: 'family',
-            overlay: '/overlay/lifeos-family.html'
-        },
-        {
-            emoji: '✨',
-            name: 'Purpose',
-            description: 'Purpose projects and growth milestones',
-            category: 'growth',
-            overlay: '/overlay/lifeos-growth.html'
-        }
-    ];
+  const styles = `
+    #lifeos-widget-category-stubs {
+      display: grid;
+      gap: var(--dash-space-unit, 8px);
+      grid-template-columns: 1fr; /* 1 column for mobile */
+      padding: var(--dash-space-unit, 8px);
+    }
+    @media (min-width: 768px) { /* Example breakpoint for desktop */
+      #lifeos-widget-category-stubs {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
+      }
+    }
+    .lifeos-stub-card {
+      background-color: var(--dash-surface, #111118);
+      border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+      border-radius: var(--dash-radius-lg, 14px);
+      padding: calc(var(--dash-space-unit, 8px) * 2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      color: var(--dash-text, #e8e8f0);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .stub-emoji {
+      font-size: 3em;
+      margin-bottom: var(--dash-space-unit, 8px);
+    }
+    .stub-name {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: calc(var(--dash-space-unit, 8px) / 2);
+    }
+    .stub-desc {
+      font-size: 0.9em;
+      color: var(--dash-muted, #555566);
+      margin-bottom: calc(var(--dash-space-unit, 8px) * 1.5);
+    }
+    .stub-coming-soon {
+      font-size: 0.8em;
+      font-weight: bold;
+      color: var(--dash-accent, #5b6af5);
+      padding: calc(var(--dash-space-unit, 8px) / 2) var(--dash-space-unit, 8px);
+      border-radius: var(--dash-radius-lg, 14px);
+      background-color: rgba(91, 106, 245, 0.1); /* RGB for #5b6af5 with opacity */
+    }
+  `;
 
-    function mount({ container }) {
-        if (!container) {
-            console.error('LifeOSWidgetCategoryStubs: Container element not provided.');
-            return;
-        }
+  const categories = [
+    {
+      emoji: '❤️',
+      name: 'Health',
+      description: 'Track vitals, sleep, and energy',
+      dataCategory: 'health'
+    },
+    {
+      emoji: '👨‍👩‍👧‍👦',
+      name: 'Family',
+      description: 'Family commitments and household sync',
+      dataCategory: 'family'
+    },
+    {
+      emoji: '🌱',
+      name: 'Growth',
+      description: 'Purpose projects and growth milestones',
+      dataCategory: 'growth'
+    }
+  ];
 
-        const styleId = 'lifeos-widget-category-stubs-style';
-        if (!document.getElementById(styleId)) {
-            const style = document.createElement('style');
-            style.id = styleId;
-            style.textContent = `
-                .lifeos-stub-cards-grid {
-                    display: grid;
-                    grid-template-columns: 1fr; /* 1 column for mobile */
-                    gap: calc(var(--dash-space-unit) * 4);
-                    padding: calc(var(--dash-space-unit) * 4);
-                }
+  function createCard(category) {
+    const card = document.createElement('div');
+    card.className = 'lifeos-stub-card';
+    card.setAttribute('data-category', category.dataCategory);
 
-                @media (min-width: 768px) {
-                    .lifeos-stub-cards-grid {
-                        grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
-                    }
-                }
+    const emoji = document.createElement('span');
+    emoji.className = 'stub-emoji';
+    emoji.textContent = category.emoji;
+    card.appendChild(emoji);
 
-                .lifeos-stub-card {
-                    background-color: var(--dash-surface);
-                    border: 1px solid var(--dash-border);
-                    border-radius: var(--dash-radius-lg);
-                    padding: calc(var(--dash-space-unit) * 4);
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-start;
-                    text-align: left;
-                    color: var(--dash-text);
-                    transition: transform 0.2s ease-in-out;
-                }
+    const name = document.createElement('span');
+    name.className = 'stub-name';
+    name.textContent = category.name;
+    card.appendChild(name);
 
-                .lifeos-stub-card:hover {
-                    transform: translateY(-2px);
-                }
+    const desc = document.createElement('span');
+    desc.className = 'stub-desc';
+    desc.textContent = category.description;
+    card.appendChild(desc);
 
-                .stub-emoji {
-                    font-size: 2.5em;
-                    margin-bottom: calc(var(--dash-space-unit) * 2);
-                }
+    const comingSoon = document.createElement('div');
+    comingSoon.className = 'stub-coming-soon';
+    comingSoon.textContent = 'Coming soon';
+    card.appendChild(comingSoon);
 
-                .stub-name {
-                    font-size: 1.2em;
-                    font-weight: bold;
-                    margin-bottom: calc(var(--dash-space-unit) * 1);
-                    color: var(--dash-text);
-                }
+    return card;
+  }
 
-                .stub-desc {
-                    font-size: 0.9em;
-                    color: var(--dash-muted);
-                    margin-bottom: calc(var(--dash-space-unit) * 4);
-                    flex-grow: 1;
-                }
-
-                .stub-coming-soon {
-                    font-size: 0.8em;
-                    font-weight: bold;
-                    color: var(--dash-accent);
-                    padding: calc(var(--dash-space-unit) * 1) calc(var(--dash-space-unit) * 2);
-                    background-color: rgba(91, 106, 245, 0.1); /* Using RGB for --dash-accent */
-                    border-radius: calc(var(--dash-radius-lg) / 2);
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        const gridContainer = document.createElement('div');
-        gridContainer.className = 'lifeos-stub-cards-grid';
-
-        categoriesData.forEach(data => {
-            const card = document.createElement('div');
-            card.className = 'lifeos-stub-card';
-            card.setAttribute('data-category', data.category);
-
-            const emoji = document.createElement('span');
-            emoji.className = 'stub-emoji';
-            emoji.textContent = data.emoji;
-
-            const name = document.createElement('span');
-            name.className = 'stub-name';
-            name.textContent = data.name;
-
-            const description = document.createElement('span');
-            description.className = 'stub-desc';
-            description.textContent = data.description;
-
-            const comingSoon = document.createElement('div');
-            comingSoon.className = 'stub-coming-soon';
-            comingSoon.textContent = 'Coming soon';
-
-            card.appendChild(emoji);
-            card.appendChild(name);
-            card.appendChild(description);
-            card.appendChild(comingSoon);
-
-            gridContainer.appendChild(card);
-        });
-
-        container.appendChild(gridContainer);
+  function mount({ container }) {
+    if (!container) {
+      console.error('LifeOSWidgetCategoryStubs: Container element not provided.');
+      return;
     }
 
-    window.LifeOSWidgetCategoryStubs = {
-        mount
-    };
+    if (!document.getElementById('lifeos-widget-category-stubs-styles')) {
+      const styleTag = document.createElement('style');
+      styleTag.id = 'lifeos-widget-category-stubs-styles';
+      styleTag.textContent = styles;
+      document.head.appendChild(styleTag);
+    }
+
+    container.innerHTML = '';
+    categories.forEach(cat => {
+      container.appendChild(createCard(cat));
+    });
+  }
+
+  window.LifeOSWidgetCategoryStubs = {
+    mount
+  };
 })();
