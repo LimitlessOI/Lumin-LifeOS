@@ -13,6 +13,11 @@
 <link rel="stylesheet" href="../shared/lifeos-dashboard-ai-rail.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="/overlay/lifeos-bootstrap.js"></script>
+<!-- New widget scripts for LifeOS Dashboard (added by task) -->
+<script src="/shared/lifeos-widget-mit.js"></script>
+<script src="/shared/lifeos-widget-score.js"></script>
+<script src="/shared/lifeos-widget-lumin-quick.js"></script>
+<script src="/shared/lifeos-widget-category-stubs.js"></script>
 <!-- Added by THIS task -->
 <script src="/shared/lifeos-widget-mit.js"></script>
 <script src="/shared/lifeos-widget-score.js"></script>
@@ -791,6 +796,13 @@ gap: 16px;
 </div>
 </div>
 </div>
+<!-- New widget containers for LifeOS Dashboard (added by task) -->
+<div class="two-col mb-4">
+<div id="lifeos-widget-mit" class="dashboard-widget"></div>
+<div id="lifeos-widget-score" class="dashboard-widget"></div>
+<div id="lifeos-widget-lumin-quick" class="dashboard-widget"></div>
+<div id="lifeos-widget-category-stubs" class="dashboard-widget"></div>
+</div>
 <!-- Added by THIS task -->
 <div class="two-col mb-4">
 <div id="lifeos-widget-mit" class="dashboard-widget"></div>
@@ -912,7 +924,7 @@ el.addEventListener('mouseleave', end);
 el.addEventListener('touchend', end);
 }
 // ── MITs ──
-asyncFn loadMITs() {
+async function loadMITs() {
 try {
 const r = await API('/api/v1/lifeos/commitments?limit=30');
 const d = await r.json();
@@ -949,7 +961,7 @@ document.body.appendChild(tip);
 $('mits-list').innerHTML='<div class="empty"><span>⚠️</span>Could not load tasks</div>';
 }
 }
-asyncFn toggleMIT(el) {
+async function toggleMIT(el) {
 const chk=el.querySelector('.mit-check'), txt=el.querySelector('.mit-text');
 const done=chk.classList.contains('done');
 chk.classList.toggle('done',!done);
@@ -958,7 +970,7 @@ try {
 await API(`/api/v1/lifeos/commitments/${el.dataset.id}/keep`,{method:'POST',body:JSON.stringify({kept:!done})});
 } catch {}
 }
-window.addMIT = asyncFn() {
+window.addMIT = async function() {
 const inp=$('mit-input'), text=inp.value.trim();
 if (!text) return;
 try {
@@ -969,7 +981,7 @@ loadMITs();
 };
 $('mit-input').addEventListener('keypress', e=>{ if(e.key==='Enter') addMIT(); });
 // ── Calendar ──
-asyncFn loadCal() {
+async function loadCal() {
 try {
 const r=await API('/api/v1/lifeos/engine/calendar/events?days=1&limit=8');
 const d=await r.json();
@@ -987,7 +999,7 @@ $('cal-list').innerHTML='<div class="empty"><span>📅</span>Could not load sche
 }
 }
 // ── Goals ──
-asyncFn loadGoals() {
+async function loadGoals() {
 try {
 const r=await API('/api/v1/lifeos/finance/goals');
 const d=await r.json();
@@ -1020,7 +1032,7 @@ function ringColor(s) {
 return s>=80?'#10b981':s>=60?'#f59e0b':'#e05555';
 }
 function makeRing(score) {
-const r=33, circ=2Math.PIr, offset=circ*(1-score/100);
+const r=33, circ=2*Math.PI*r, offset=circ*(1-score/100);
 const c=ringColor(score);
 return `<svg width="72" height="72" viewBox="0 0 72 72">
 <circle class="track" cx="36" cy="36" r="${r}" fill="none" stroke-width="6"/>
@@ -1028,7 +1040,7 @@ return `<svg width="72" height="72" viewBox="0 0 72 72">
 stroke="${c}" style="stroke-dashoffset:${offset}"/>
 </svg>`;
 }
-asyncFn loadScores() {
+async function loadScores() {
 try {
 const r=await API('/api/v1/lifeos/dashboard/scoreboard');
 const d=await r.json();
@@ -1049,7 +1061,7 @@ $('scores-grid').innerHTML='<div class="empty" style="grid-column:1/-1"><span>�
 }
 // ── Chat ──
 let threadId=null;
-asyncFn initChat() {
+async function initChat() {
 try {
 const r=await API('/api/v1/lifeos/chat/threads/default',{method:'POST',body:JSON.stringify({})});
 const d=await r.json();
@@ -1063,7 +1075,7 @@ $('chat-messages').innerHTML=msgs.map(m=>`<div class="msg ${m.role==='user'?'use
 $('chat-messages').scrollTop=99999;
 } catch {}
 }
-asyncFn sendChat() {
+async function sendChat() {
 const inp=$('chat-input'), text=inp.value.trim();
 if (!text||!threadId) return;
 inp.value='';
@@ -1127,7 +1139,7 @@ if (ambientActive) {
 btn.classList.add('ambient-active');
 btn.title = 'Ambient ON — Lumin will speak when you have something to know. Click to turn off.';
 checkProactiveNudge();
-ambientInterval = setInterval(checkProactiveNudge, 2  60  1000);
+ambientInterval = setInterval(checkProactiveNudge, 2 * 60 * 1000);
 } else {
 btn.classList.remove('ambient-active');
 btn.title = 'Ambient voice — Lumin speaks proactively when you have time';
@@ -1135,7 +1147,7 @@ clearInterval(ambientInterval);
 if (window.speechSynthesis) window.speechSynthesis.cancel();
 }
 };
-asyncFn checkProactiveNudge() {
+async function checkProactiveNudge() {
 try {
 const r = await API('/api/v1/lifeos/ambient/nudge');
 const d = await r.json();
@@ -1191,6 +1203,23 @@ if (window.LifeOSDashboardAiRail) {
 Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
 </script>
 </body>
+<!-- New widget mount script for LifeOS Dashboard (added by task) -->
+<script>
+  const user = window.lifeosUser;
+  const commandKey = window.lifeosCommandKey;
+  if (window.LifeOSWidgetMIT) {
+    LifeOSWidgetMIT.mount({container: document.getElementById('lifeos-widget-mit'), user, commandKey});
+  }
+  if (window.LifeOSWidgetScore) {
+    LifeOSWidgetScore.mount({container: document.getElementById('lifeos-widget-score'), user, commandKey});
+  }
+  if (window.LifeOSWidgetLuminQuick) {
+    LifeOSWidgetLuminQuick.mount({container: document.getElementById('lifeos-widget-lumin-quick'), user, commandKey});
+  }
+  if (window.LifeOSWidgetCategoryStubs) {
+    LifeOSWidgetCategoryStubs.mount({container: document.getElementById('lifeos-widget-category-stubs'), user, commandKey});
+  }
+</script>
 <!-- Added by current task -->
 <script>
   const user = window.lifeosUser;
