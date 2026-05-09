@@ -1,64 +1,125 @@
-The specification is incomplete as the primary source file `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` was not found, preventing reference to existing dashboard sections by ID/class.
+The `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` file is missing from the repository, leading to an incomplete specification for the overall dashboard context.
+---
+# Today Category Specification
 
-### Today Category Specification
+This document outlines the layout blocks and API assumptions for the "Today" category on the LifeOS dashboard. This category aggregates immediate, actionable items relevant to the current day.
 
-This specification outlines the proposed layout blocks and API assumptions for the "Today" category on the LifeOS dashboard. Due to the absence of `docs/projects/LIFEOS_DASHBOARD_BUILDER_BRIEF.md` and any injected HTML, specific existing dashboard section IDs/classes cannot be referenced, and layout details are based on general dashboard design principles.
+## 1. Layout Blocks
 
-### Layout Blocks
+The "Today" category will be rendered within a dedicated section of the main dashboard container, adapting to the global `data-density` attribute. Each functional area within "Today" will be represented as a distinct widget.
 
-The "Today" category will comprise distinct visual blocks, each representing a key area of daily focus. These blocks are expected to be rendered as cards or widgets, potentially adhering to the density modes outlined in `DASHBOARD_WIDGET_DENSITY_SPEC.md`.
+### 1.1. Main Container
+-   **DOM Element:** `<section id="today-category-section" class="dashboard-category-section">`
+-   **Purpose:** Houses all "Today" related widgets. This section will be a direct child of the main dashboard container (e.g., `<div id="dashboard-main" data-density="...">`).
 
-1.  **MITs (Most Important Tasks)**
-    *   **Purpose:** Display a prioritized list of the user's most critical tasks for the current day.
-    *   **Content:** Task title, due date/time (if applicable), status (e.g., complete, in progress), and a quick action (e.g., mark complete).
-    *   **Interaction:** Ability to mark tasks as complete, reorder, or quick-add a new MIT.
-    *   **Expected Block ID/Class (Hypothetical):** `#today-mits-widget`, `.dashboard-card.mits`
+### 1.2. MITs (Most Important Tasks) Widget
+-   **DOM Element:** `<div id="today-mits-widget" class="dashboard-widget" data-widget-type="mits">`
+-   **Purpose:** Displays a prioritized list of the user's Most Important Tasks for the current day.
+-   **Content:** Each MIT entry will typically include a title, status indicator (e.g., checkbox), and potentially a due time or priority level.
 
-2.  **Schedule**
-    *   **Purpose:** Show upcoming appointments, meetings, and scheduled events for the day.
-    *   **Content:** Event title, time, duration, location, and participants.
-    *   **Interaction:** View event details, join a meeting (if link available).
-    *   **Expected Block ID/Class (Hypothetical):** `#today-schedule-widget`, `.dashboard-card.schedule`
+### 1.3. Schedule Widget
+-   **DOM Element:** `<div id="today-schedule-widget" class="dashboard-widget" data-widget-type="schedule">`
+-   **Purpose:** Presents a chronological list of upcoming appointments or events for the current day.
+-   **Content:** Each schedule entry will include a time range, title, and optionally a location or participants.
 
-3.  **Alerts**
-    *   **Purpose:** Display time-sensitive notifications, reminders, or system alerts.
-    *   **Content:** Alert message, timestamp, severity (e.g., info, warning, critical), and a dismiss action.
-    *   **Interaction:** Dismiss individual alerts, view all alerts.
-    *   **Expected Block ID/Class (Hypothetical):** `#today-alerts-widget`, `.dashboard-card.alerts`
+### 1.4. Alerts Widget
+-   **DOM Element:** `<div id="today-alerts-widget" class="dashboard-widget" data-widget-type="alerts">`
+-   **Purpose:** Shows critical notifications, reminders, or system alerts requiring immediate attention.
+-   **Content:** Each alert will display a message, type (e.g., info, warning, critical), and a timestamp.
 
-4.  **Quick Add**
-    *   **Purpose:** Provide a streamlined interface for rapidly adding new tasks, events, or notes.
-    *   **Content:** Input field (e.g., text area), category selector (e.g., Task, Event, Note, Lumin Entry), and a submit button.
-    *   **Interaction:** Type, select category, submit.
-    *   **Expected Block ID/Class (Hypothetical):** `#today-quick-add-widget`, `.dashboard-card.quick-add`
+### 1.5. Quick Add Widget
+-   **DOM Element:** `<div id="today-quick-add-widget" class="dashboard-widget" data-widget-type="quick-add">`
+-   **Purpose:** Provides a streamlined interface for quickly adding new tasks, events, or notes directly from the dashboard.
+-   **Content:** An input field, a submission button, and potentially a selector for the type of item being added.
 
-5.  **Lumin Entry**
-    *   **Purpose:** Facilitate quick journaling or thought capture, potentially linked to the Lumin memory system.
-    *   **Content:** Text input field for a short entry, optional tags, and a submit button.
-    *   **Interaction:** Type entry, add tags, submit.
-    *   **Expected Block ID/Class (Hypothetical):** `#today-lumin-entry-widget`, `.dashboard-card.lumin-entry`
+### 1.6. Lumin Entry Widget
+-   **DOM Element:** `<div id="today-lumin-widget" class="dashboard-widget" data-widget-type="lumin">`
+-   **Purpose:** Offers a quick access point or a summary related to the "Lumin" feature, facilitating rapid interaction.
+-   **Content:** Could be a button to initiate a new Lumin entry, or a brief summary of recent Lumin activity.
 
-### API Assumptions
+## 2. API Assumptions
 
-The following API endpoints are assumed to support the data requirements and interactions for the "Today" category. These are based on standard RESTful patterns and the existing `Platform Core` domain context, which handles routing.
+The following API endpoints are assumed for populating the "Today" category widgets. All endpoints are expected to return JSON data.
 
-1.  **MITs**
-    *   `GET /api/v1/today/mits`: Retrieve the list of MITs for the current day.
-    *   `POST /api/v1/today/mits`: Add a new MIT.
-    *   `PATCH /api/v1/today/mits/:id`: Update an existing MIT (e.g., mark complete, reorder).
-    *   `DELETE /api/v1/today/mits/:id`: Delete an MIT.
+### 2.1. MITs API
+-   **Endpoint:** `GET /api/v1/today/mits`
+-   **Description:** Retrieves the list of Most Important Tasks for the current user for today.
+-   **Expected Response Structure:**
+    ```json
+    [
+      {
+        "id": "string",
+        "title": "string",
+        "status": "pending" | "completed",
+        "dueDate": "string (ISO 8601 date-time)",
+        "priority": "number"
+      }
+    ]
+    ```
 
-2.  **Schedule**
-    *   `GET /api/v1/today/schedule`: Retrieve scheduled events for the current day.
-    *   `POST /api/v1/today/schedule`: Add a new event to the schedule.
-    *   `PATCH /api/v1/today/schedule/:id`: Update an existing event.
+### 2.2. Schedule API
+-   **Endpoint:** `GET /api/v1/today/schedule`
+-   **Description:** Fetches the user's schedule entries for the current day.
+-   **Expected Response Structure:**
+    ```json
+    [
+      {
+        "id": "string",
+        "title": "string",
+        "startTime": "string (ISO 8601 date-time)",
+        "endTime": "string (ISO 8601 date-time)",
+        "location": "string | null"
+      }
+    ]
+    ```
 
-3.  **Alerts**
-    *   `GET /api/v1/today/alerts`: Retrieve active alerts for the user.
-    *   `PATCH /api/v1/today/alerts/:id/dismiss`: Dismiss a specific alert.
+### 2.3. Alerts API
+-   **Endpoint:** `GET /api/v1/today/alerts`
+-   **Description:** Retrieves active alerts and notifications for the user.
+-   **Expected Response Structure:**
+    ```json
+    [
+      {
+        "id": "string",
+        "type": "info" | "warning" | "critical",
+        "message": "string",
+        "timestamp": "string (ISO 8601 date-time)"
+      }
+    ]
+    ```
 
-4.  **Quick Add**
-    *   `POST /api/v1/today/add`: Generic endpoint for quick adding various item types. Request body would include `type` (e.g., 'task', 'event', 'note', 'lumin') and relevant data.
+### 2.4. Quick Add API
+-   **Endpoint:** `POST /api/v1/today/quick-add`
+-   **Description:** Allows for rapid creation of new items (tasks, events, notes).
+-   **Expected Request Body:**
+    ```json
+    {
+      "type": "task" | "event" | "note",
+      "content": "string",
+      "dueDate": "string (ISO 8601 date-time) | null",
+      "startTime": "string (ISO 8601 date-time) | null"
+    }
+    ```
+-   **Expected Response Structure:**
+    ```json
+    {
+      "success": "boolean",
+      "id": "string | null",
+      "message": "string"
+    }
+    ```
 
-5.  **Lumin Entry**
-    *   `POST /api/v1/today/lumin-entry`: Submit a new Lumin entry.
+### 2.5. Lumin Summary API
+-   **Endpoint:** `GET /api/v1/today/lumin-summary`
+-   **Description:** Provides a brief summary or status related to the Lumin feature.
+-   **Expected Response Structure:**
+    ```json
+    {
+      "latestEntry": {
+        "id": "string",
+        "title": "string",
+        "timestamp": "string (ISO 8601 date-time)"
+      } | null,
+      "unreadCount": "number"
+    }
+    ```
