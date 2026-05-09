@@ -6,10 +6,8 @@ import logger from '../services/logger.js';
 import { getRegistryHealth } from '../services/env-registry-map.js'; // Added import for env-registry-map
 let _siteBuilder = null;
 let _prospectPipeline = null;
-
 // --- Start of copied/adapted discovery logic from scripts/site-builder-prospect-discovery.mjs ---
 const SUPPORTED_TYPES = ['wellness', 'yoga', 'massage', 'midwife', 'chiropractor', 'acupuncture', 'naturopath', 'physical-therapy', 'pilates', 'reiki', 'nutrition', 'counseling'];
-
 async function searchGooglePlaces(city, type, apiKey, count) {
   const query = encodeURIComponent(`${type} business in ${city}`);
   const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${apiKey}`;
@@ -43,7 +41,6 @@ async function searchGooglePlaces(city, type, apiKey, count) {
   }
 }
 // --- End of copied/adapted discovery logic ---
-
 async function notifySlack(event, businessName, detail = '') {
   const url = process.env.SLACK_WEBHOOK_URL;
   if (!url) return;
@@ -60,18 +57,12 @@ async function notifySlack(event, businessName, detail = '') {
     // Slack notify is best-effort
   }
 }
-
 function getSiteBuilder({ ccm, baseUrl }) {
   if (!_siteBuilder) {
-    _siteBuilder = new SiteBuilder({
-      callCouncil: ccm,
-      previewsDir: 'public/previews',
-      baseUrl,
-    });
+    _siteBuilder = new SiteBuilder({ callCouncil: ccm, previewsDir: 'public/previews', baseUrl, });
   }
   return _siteBuilder;
 }
-
 function getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl }) {
   if (!_prospectPipeline) {
     const builder = getSiteBuilder({ ccm, baseUrl });
@@ -101,7 +92,6 @@ function getProspectPipeline({ ccm, pool, outreachAutomation, notificationServic
   }
   return _prospectPipeline;
 }
-
 /**
  * Register siteBld routes on the Express app. Also registers static file serving for /previews/.
  */
@@ -121,7 +111,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
     standardHeaders: true,
     legacyHeaders: false,
   });
-
   // Serve preview sites statically at /previews/*
   app.use('/previews', async (req, res, next) => {
     const { default: path } = await import('path');
@@ -130,7 +119,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       if (err) next();
     });
   });
-
   /**
    * POST /api/v1/sites/build
    * Build a new site from a business URL.
@@ -141,7 +129,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       const { url, businessUrl, businessInfo } = req.body;
       const targetUrl = url || businessUrl;
       if (!targetUrl) return res.status(400).json({ ok: false, error: 'url or businessUrl is required' });
-
       logger.info('[SITE] Build request', { url: targetUrl });
       const builder = getSiteBuilder({ ccm, baseUrl });
       const result = await builder.buildFromUrl(targetUrl, { businessInfo });
@@ -151,7 +138,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * POST /api/v1/sites/prospect
    * Build a mock site for a prospect + send cold outreach email.
@@ -161,7 +147,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
     try {
       const { businessUrl, contactEmail, contactName, businessName, skipEmail, businessInfo } = req.body;
       if (!businessUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
-
       logger.info('[SITE] Prospect request', { businessUrl, contactEmail });
       const pipeline = getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl });
       const result = await pipeline.processProspect({
@@ -178,7 +163,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       res.status(500).json({ ok: false, error: err.message });
     }
   });
-
   /**
    * POST /api/v1/sites/bulk-prospect
    * Process multiple prospects in batch.
@@ -189,7 +173,6 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
       const { prospects = [] } = req.body;
       if (!prospects.length) return res.status(400).json({ ok: false, error: 'prospects array required' });
       if (prospects.length > 20) return res.status(400).json({ ok: false, error: 'Max 20 prospects per batch' });
-
       logger.info('[SITE] Bulk prospect request', { count: prospects.length });
       const pipeline = getProspectPipeline({ ccm, pool, outreachAutomation, notificationService, baseUrl });
       const results = [];
@@ -197,87 +180,7 @@ export function createSiteBuilderRoutes(app, { pool, rk, ccm, baseUrl, outreachA
         const result = await pipeline.processProspect(prospect);
         results.push(result);
       }
-      res.json({ total: prospects.length, succeeded: results.filter(r => r.success).length, failed: prospects.length - results.filter(r => r.success).length, results });
-    } catch (err) {
-      logger.error('[SITE] Bulk prospect error', { error: err.message });
-      res.status(500).json({ ok: false, error: err.message });
-    }
-  });
-
-  /**
-   * POST /api/v1/sites/discover
-   * One-click discovery route for the cmdCtr to find new prospects.
-   * Body: { city?: string, niche?: string, count?: number }
-   * Response: { ok: true, discovered: number, prospects: object[], receipt: { source: string, city: string|null, niche: string|null } }
-   */
-  router.post('/discover', rk, async (req, res) => {
-    try {
-      const { city, niche, count } = req.body;
-      const targetCity = city || 'San Diego, CA';
-      const targetNiche = niche || 'wellness';
-      const targetCount = Math.min(20, Math.max(1, parseInt(count, 10) || 10));
-
-      if (!SUPPORTED_TYPES.includes(targetNiche)) {
-        return res.status(400).json({
-          ok: false,
-          error: `Unsupported niche: "${targetNiche}". Supported: ${SUPPORTED_TYPES.join(', ')}`,
-        });
-      }
-
-      const apiKey = process.env.GOOGLE_PLACES_KEY;
-      let discoveredProspects = [];
-      let source = 'manual_guidance';
-
-      if (apiKey) {
-        logger.info('[SITE] Discovering prospects via Google Places', { city: targetCity, niche: targetNiche, count: targetCount });
-        discoveredProspects = await searchGooglePlaces(targetCity, targetNiche, apiKey, targetCount);
-        source = 'google_places';
-      } else {
-        logger.warn('[SITE] Google Places API key not set. Returning manual guidance receipt.');
-      }
-
       res.json({
-        ok: true,
-        discovered: discoveredProspects.length,
-        prospects: discoveredProspects,
-        receipt: {
-          source: source,
-          city: targetCity,
-          niche: targetNiche,
-        },
-      });
-    } catch (err) {
-      logger.error('[SITE] Prospect discovery error', { error: err.message });
-      res.status(500).json({ ok: false, error: err.message });
-    }
-  });
-
-  /**
-   * POST /api/v1/sites/analyze
-   * Score a prospect's EXISTING website to determine outreach priority.
-   * Body: { businessUrl }
-   */
-  router.post('/analyze', rk, async (req, res) => {
-    try {
-      const { businessUrl, url } = req.body;
-      const targetUrl = businessUrl || url;
-      if (!targetUrl) return res.status(400).json({ ok: false, error: 'businessUrl is required' });
-
-      const { scoreProspectUrl } = await import('../services/site-builder-opportunity-scorer.js');
-      const result = await scoreProspectUrl(targetUrl);
-      res.json({ ...result });
-    } catch (err) {
-      logger.error('[SITE] Analyze error', { error: err.message });
-      res.status(500).json({ ok: false, error: err.message });
-    }
-  });
-
-  /**
-   * GET /api/v1/sites/previews
-   * List all built preview sites.
-   */
-  router.get('/previews', rk, async (req, res) => {
-    try {
-      const builder = getSiteBuilder({ ccm, baseUrl });
-      const previews = await builder.listPreviews();
-      res.json
+        total: prospects.length,
+        succeeded: results.filter(r => r.success).length,
+        failed: prospects.length - results.filter(r => r.success).
