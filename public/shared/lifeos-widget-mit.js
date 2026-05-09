@@ -1,242 +1,355 @@
 (function(){
-  const API_BASE = '/api/v1/lifeos/commitments';
   let _container = null;
   let _user = null;
   let _commandKey = null;
-  let _currentMITs = [];
-  let _isFetching = false;
+  let _abortController = null;
+  let _prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Respect prefers-reduced-motion for any future animations, currently minimal impact on static skeleton
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const API_BASE = '/api/v1/lifeos/commitments';
 
-  function getCommandKey(providedKey) {
-    return providedKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
+  function getCommandKey() {
+    return _commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
   }
 
-  function renderLoadingState() {
+  function createEl(tag, classes = [], attributes = {}, textContent = '') {
+    const el = document.createElement(tag);
+    if (classes.length) el.classList.add(...classes);
+    for (const key in attributes) {
+      el.setAttribute(key, attributes[key]);
+    }
+    if (textContent) el.textContent = textContent;
+    return el;
+  }
+
+  function renderSkeleton() {
     if (!_container) return;
-    _container.innerHTML = `
-      <div style="
-        background-color: var(--bg-surface, #111118);
-        color: var(--text-primary, #e8e8f0);
-        border: 1px solid var(--border-subtle, rgba(255,255,255,0.07));
-        border-radius: 14px;
-        padding: 16px;
-        font-family: sans-serif;
-        box-sizing: border-box;
-      ">
-        <h3 style="margin: 0 0 12px 0; font-size: 1.2em;">Today's MITs</h3>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="width: 60px; height: 20px; background-color: var(--border-subtle, rgba(255,255,255,0.07)); border-radius: 4px;"></div>
-          <div style="width: 40px; height: 20px; background-color: var(--border-subtle, rgba(255,255,255,0.07)); border-radius: 4px;"></div>
-        </div>
-        <ul style="list-style: none; padding: 0; margin: 0;">
-          ${Array(3).fill(0).map(() => `
-            <li style="display: flex; align-items: center; margin-bottom: 8px;">
-              <div style="width: 18px; height: 18px; background-color: var(--border-subtle, rgba(255,255,255,0.07)); border-radius: 4px; margin-right: 8px;"></div>
-              <div style="flex-grow: 1; height: 18px; background-color: var(--border-subtle, rgba(255,255,255,0.07)); border-radius: 4px;"></div>
-            </li>
-          `).join('')}
-        </ul>
-      </div>
+    _container.innerHTML = '';
+    _container.style.setProperty('background-color', 'var(--dash-surface)');
+    _container.style.setProperty('color', 'var(--dash-text)');
+    _container.style.setProperty('border', '1px solid var(--dash-border)');
+    _container.style.setProperty('border-radius', 'var(--dash-radius-lg)');
+    _container.style.setProperty('padding', 'calc(2 * var(--dash-space-unit))');
+    _container.style.setProperty('display', 'flex');
+    _container.style.setProperty('flex-direction', 'column');
+    _container.style.setProperty('gap', 'var(--dash-space-unit)');
+
+    const header = createEl('div', ['mit-widget-header']);
+    header.style.setProperty('display', 'flex');
+    header.style.setProperty('justify-content', 'space-between');
+    header.style.setProperty('align-items', 'center');
+    header.style.setProperty('margin-bottom', 'var(--dash-space-unit)');
+
+    const title = createEl('h3', [], {}, 'Today\'s MITs');
+    title.style.setProperty('margin', '0');
+    title.style.setProperty('font-size', '1.1em');
+    header.appendChild(title);
+
+    const countBadge = createEl('span', ['mit-count-badge']);
+    countBadge.style.setProperty('background-color', 'var(--dash-accent)');
+    countBadge.style.setProperty('color', 'var(--dash-text)');
+    countBadge.style.setProperty('padding', '2px 8px');
+    countBadge.style.setProperty('border-radius', '10px');
+    countBadge.style.setProperty('font-size', '0.8em');
+    countBadge.textContent = '.../...';
+    header.appendChild(countBadge);
+    _container.appendChild(header);
+
+    const list = createEl('ul', ['mit-list']);
+    list.style.setProperty('list-style', 'none');
+    list.style.setProperty('padding', '0');
+    list.style.setProperty('margin', '0');
+    _container.appendChild(list);
+
+    for (let i = 0; i < 3; i++) {
+      const listItem = createEl('li', ['mit-item', 'skeleton']);
+      listItem.style.setProperty('display', 'flex');
+      listItem.style.setProperty('align-items', 'center');
+      listItem.style.setProperty('gap', 'calc(1 * var(--dash-space-unit))');
+      listItem.style.setProperty('padding', 'calc(0.5 * var(--dash-space-unit)) 0');
+      listItem.style.setProperty('border-bottom', '1px solid var(--dash-border)');
+
+      const checkbox = createEl('div', ['skeleton-checkbox']);
+      checkbox.style.setProperty('width', '18px');
+      checkbox.style.setProperty('height', '18px');
+      checkbox.style.setProperty('border-radius', '4px');
+      checkbox.style.setProperty('background-color', 'var(--dash-muted)');
+      listItem.appendChild(checkbox);
+
+      const text = createEl('div', ['skeleton-text']);
+      text.style.setProperty('flex-grow', '1');
+      text.style.setProperty('height', '1em');
+      text.style.setProperty('background-color', 'var(--dash-muted)');
+      text.style.setProperty('border-radius', '4px');
+      text.style.setProperty('width', `${70 + Math.random() * 20}%`); // Vary width
+      listItem.appendChild(text);
+      list.appendChild(listItem);
+    }
+
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes pulse-skeleton {
+        0% { opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { opacity: 0.6; }
+      }
+      .mit-item.skeleton > div {
+        animation: pulse-skeleton 1.5s infinite ease-in-out;
+      }
+      .mit-item.skeleton:nth-child(2) > div { animation-delay: 0.1s; }
+      .mit-item.skeleton:nth-child(3) > div { animation-delay: 0.2s; }
     `;
+    _container.appendChild(style);
   }
 
-  function renderErrorState(message = 'Could not load tasks') {
-    if (!_container) return;
-    _container.innerHTML = `
-      <div style="
-        background-color: var(--bg-surface, #111118);
-        color: var(--text-primary, #e8e8f0);
-        border: 1px solid var(--border-subtle, rgba(255,255,255,0.07));
-        border-radius: 14px;
-        padding: 16px;
-        font-family: sans-serif;
-        text-align: center;
-        box-sizing: border-box;
-      ">
-        <p style="margin-bottom: 12px;">${message}</p>
-        <button id="lifeos-mit-retry-button" style="
-          background-color: var(--c-today, #5b6af5);
-          color: var(--text-primary, #e8e8f0);
-          border: none;
-          padding: 8px 16px;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 0.9em;
-          transition: background-color 0.2s ease;
-        ">Retry</button>
-      </div>
-    `;
-    document.getElementById('lifeos-mit-retry-button').addEventListener('click', refresh);
-  }
+  async function handleTaskCompletion(event) {
+    const checkbox = event.target;
+    const taskId = checkbox.dataset.taskId;
+    const isChecked = checkbox.checked;
 
-  async function fetchMITs() {
-    if (!_user || !_commandKey) {
-      renderErrorState('User handle or command key missing.');
+    // Optimistic UI update
+    const listItem = checkbox.closest('.mit-item');
+    if (listItem) {
+      listItem.classList.toggle('completed', isChecked);
+      const titleEl = listItem.querySelector('.mit-title');
+      if (titleEl) {
+        titleEl.style.textDecoration = isChecked ? 'line-through' : 'none';
+        titleEl.style.opacity = isChecked ? '0.6' : '1';
+      }
+    }
+
+    const currentCommandKey = getCommandKey();
+    if (!currentCommandKey) {
+      console.error('Command key is missing for task completion.');
+      checkbox.checked = !isChecked; // Revert UI
+      if (listItem) {
+        listItem.classList.toggle('completed', !isChecked);
+        const titleEl = listItem.querySelector('.mit-title');
+        if (titleEl) {
+          titleEl.style.textDecoration = !isChecked ? 'line-through' : 'none';
+          titleEl.style.opacity = !isChecked ? '0.6' : '1';
+        }
+      }
       return;
     }
-    _isFetching = true;
-    renderLoadingState();
+
+    try {
+      const response = await fetch(`${API_BASE}/${taskId}/complete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentCommandKey}`
+        },
+        body: JSON.stringify({ completed: isChecked })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Re-fetch to ensure count is accurate and list is up-to-date
+      // Or, more simply, just update the count badge if the API confirms success
+      refresh();
+
+    } catch (error) {
+      console.error('Failed to update task completion status:', error);
+      // Revert UI on error
+      checkbox.checked = !isChecked;
+      if (listItem) {
+        listItem.classList.toggle('completed', !isChecked);
+        const titleEl = listItem.querySelector('.mit-title');
+        if (titleEl) {
+          titleEl.style.textDecoration = !isChecked ? 'line-through' : 'none';
+          titleEl.style.opacity = !isChecked ? '0.6' : '1';
+        }
+      }
+      // Optionally show a temporary error message to the user
+    }
+  }
+
+  function renderErrorState() {
+    if (!_container) return;
+    _container.innerHTML = '';
+    _container.style.setProperty('background-color', 'var(--dash-surface)');
+    _container.style.setProperty('color', 'var(--dash-text)');
+    _container.style.setProperty('border', '1px solid var(--dash-border)');
+    _container.style.setProperty('border-radius', 'var(--dash-radius-lg)');
+    _container.style.setProperty('padding', 'calc(2 * var(--dash-space-unit))');
+    _container.style.setProperty('display', 'flex');
+    _container.style.setProperty('flex-direction', 'column');
+    _container.style.setProperty('align-items', 'center');
+    _container.style.setProperty('justify-content', 'center');
+    _container.style.setProperty('min-height', '120px');
+
+    const errorMessage = createEl('p', [], {}, 'Could not load tasks');
+    errorMessage.style.setProperty('margin-bottom', 'calc(1 * var(--dash-space-unit))');
+    _container.appendChild(errorMessage);
+
+    const retryButton = createEl('button', ['mit-retry-button'], {}, 'Retry');
+    retryButton.style.setProperty('background-color', 'var(--dash-accent)');
+    retryButton.style.setProperty('color', 'var(--dash-text)');
+    retryButton.style.setProperty('border', 'none');
+    retryButton.style.setProperty('padding', 'calc(1 * var(--dash-space-unit)) calc(2 * var(--dash-space-unit))');
+    retryButton.style.setProperty('border-radius', 'var(--dash-radius-lg)');
+    retryButton.style.setProperty('cursor', 'pointer');
+    retryButton.style.setProperty('font-size', '0.9em');
+    retryButton.addEventListener('click', refresh);
+    _container.appendChild(retryButton);
+  }
+
+  async function fetchAndRenderTasks() {
+    if (!_container || !_user) {
+      console.warn('MITs widget not mounted or user not set.');
+      return;
+    }
+
+    renderSkeleton(); // Show loading state
+
+    if (_abortController) {
+      _abortController.abort();
+    }
+    _abortController = new AbortController();
+    const { signal } = _abortController;
+
+    const currentCommandKey = getCommandKey();
+    if (!currentCommandKey) {
+      console.error('Command key is missing. Cannot fetch MITs.');
+      renderErrorState();
+      return;
+    }
+
     try {
       const url = `${API_BASE}?user=${encodeURIComponent(_user)}&status=active&limit=5`;
       const response = await fetch(url, {
         headers: {
-          'Authorization': `Bearer ${_commandKey}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      _currentMITs = data;
-      renderMITs();
-    } catch (error) {
-      console.error('LifeOS MIT Widget: Failed to fetch MITs:', error);
-      renderErrorState();
-    } finally {
-      _isFetching = false;
-    }
-  }
-
-  async function completeMIT(id, isCompleted) {
-    if (!_commandKey) {
-      console.error('LifeOS MIT Widget: Command key missing for completion.');
-      renderErrorState('Authentication error: Cannot complete task.');
-      return;
-    }
-    try {
-      const url = `${API_BASE}/${id}/complete`;
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${_commandKey}`,
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${currentCommandKey}`
         },
-        body: JSON.stringify({ completed: isCompleted })
+        signal
       });
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      // Optimistically update UI
-      const updatedMITs = _currentMITs.map(mit =>
-        mit.id === id ? { ...mit, status: isCompleted ? 'completed' : 'pending' } : mit
-      );
-      _currentMITs = updatedMITs;
-      renderMITs();
+
+      const tasks = await response.json();
+      renderTasks(tasks);
+
     } catch (error) {
-      console.error(`LifeOS MIT Widget: Failed to complete MIT ${id}:`, error);
-      renderErrorState('Failed to update task status. Please retry.');
-      // Re-fetch to ensure consistency if optimistic update failed
-      refresh();
+      if (error.name === 'AbortError') {
+        console.log('Fetch aborted for MITs widget.');
+        return;
+      }
+      console.error('Failed to fetch MITs:', error);
+      renderErrorState();
     }
   }
 
-  function renderMITs() {
+  function renderTasks(tasks) {
     if (!_container) return;
 
-    const completedCount = _currentMITs.filter(mit => mit.status === 'completed').length;
-    const totalCount = _currentMITs.length;
+    _container.innerHTML = ''; // Clear skeleton/previous content
 
-    let content;
-    if (totalCount === 0) {
-      content = `
-        <p style="text-align: center; margin-top: 20px; color: var(--text-primary, #e8e8f0);">
-          No MITs set — add one in Commitments
-        </p>
-      `;
-    } else {
-      content = `
-        <ul style="list-style: none; padding: 0; margin: 0;">
-          ${_currentMITs.map(mit => `
-            <li style="display: flex; align-items: center; margin-bottom: 8px;">
-              <input type="checkbox" id="mit-${mit.id}" data-mit-id="${mit.id}" ${mit.status === 'completed' ? 'checked' : ''}
-                style="
-                  margin-right: 8px;
-                  width: 18px;
-                  height: 18px;
-                  accent-color: var(--c-today, #5b6af5); /* Checkbox color */
-                  cursor: pointer;
-                "
-              >
-              <label for="mit-${mit.id}" style="
-                flex-grow: 1;
-                color: var(--text-primary, #e8e8f0);
-                text-decoration: ${mit.status === 'completed' ? 'line-through' : 'none'};
-                opacity: ${mit.status === 'completed' ? '0.7' : '1'};
-                cursor: pointer;
-              ">${mit.title}</label>
-            </li>
-          `).join('')}
-        </ul>
-      `;
+    const header = createEl('div', ['mit-widget-header']);
+    header.style.setProperty('display', 'flex');
+    header.style.setProperty('justify-content', 'space-between');
+    header.style.setProperty('align-items', 'center');
+    header.style.setProperty('margin-bottom', 'calc(1 * var(--dash-space-unit))');
+
+    const title = createEl('h3', [], {}, 'Today\'s MITs');
+    title.style.setProperty('margin', '0');
+    title.style.setProperty('font-size', '1.1em');
+    header.appendChild(title);
+
+    const completedTasks = tasks.filter(task => task.status === 'completed').length;
+    const totalTasks = tasks.length;
+    const countBadge = createEl('span', ['mit-count-badge']);
+    countBadge.style.setProperty('background-color', 'var(--dash-accent)');
+    countBadge.style.setProperty('color', 'var(--dash-text)');
+    countBadge.style.setProperty('padding', '2px 8px');
+    countBadge.style.setProperty('border-radius', '10px');
+    countBadge.style.setProperty('font-size', '0.8em');
+    countBadge.textContent = `${completedTasks}/${totalTasks}`;
+    header.appendChild(countBadge);
+    _container.appendChild(header);
+
+    if (tasks.length === 0) {
+      const emptyState = createEl('p', ['mit-empty-state'], {}, 'No MITs set — add one in Commitments');
+      emptyState.style.setProperty('color', 'var(--dash-muted)');
+      emptyState.style.setProperty('text-align', 'center');
+      emptyState.style.setProperty('padding', 'calc(2 * var(--dash-space-unit))');
+      _container.appendChild(emptyState);
+      return;
     }
 
-    _container.innerHTML = `
-      <div style="
-        background-color: var(--bg-surface, #111118);
-        color: var(--text-primary, #e8e8f0);
-        border: 1px solid var(--border-subtle, rgba(255,255,255,0.07));
-        border-radius: 14px;
-        padding: 16px;
-        font-family: sans-serif;
-        box-sizing: border-box;
-      ">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <h3 style="margin: 0; font-size: 1.2em;">Today's MITs</h3>
-          <span style="
-            background-color: var(--c-today, #5b6af5);
-            color: var(--text-primary, #e8e8f0);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: bold;
-          ">${completedCount}/${totalCount}</span>
-        </div>
-        ${content}
-      </div>
-    `;
+    const list = createEl('ul', ['mit-list']);
+    list.style.setProperty('list-style', 'none');
+    list.style.setProperty('padding', '0');
+    list.style.setProperty('margin', '0');
+    _container.appendChild(list);
 
-    _container.querySelectorAll('input[type="checkbox"][data-mit-id]').forEach(checkbox => {
-      checkbox.addEventListener('change', (event) => {
-        const mitId = event.target.dataset.mitId;
-        const isChecked = event.target.checked;
-        completeMIT(mitId, isChecked);
+    tasks.forEach(task => {
+      const listItem = createEl('li', ['mit-item']);
+      listItem.style.setProperty('display', 'flex');
+      listItem.style.setProperty('align-items', 'center');
+      listItem.style.setProperty('gap', 'calc(1 * var(--dash-space-unit))');
+      listItem.style.setProperty('padding', 'calc(0.5 * var(--dash-space-unit)) 0');
+      listItem.style.setProperty('border-bottom', '1px solid var(--dash-border)');
+      listItem.style.setProperty('transition', _prefersReducedMotion ? 'none' : 'opacity 0.3s ease');
+
+      const checkbox = createEl('input', ['mit-checkbox'], {
+        type: 'checkbox',
+        'data-task-id': task.id,
+        id: `mit-task-${task.id}`
       });
+      checkbox.checked = task.status === 'completed';
+      checkbox.style.setProperty('width', '18px');
+      checkbox.style.setProperty('height', '18px');
+      checkbox.style.setProperty('cursor', 'pointer');
+      checkbox.style.setProperty('accent-color', 'var(--dash-accent)'); // Use accent color for checkbox
+      checkbox.addEventListener('change', handleTaskCompletion);
+      listItem.appendChild(checkbox);
+
+      const titleLabel = createEl('label', ['mit-title'], { htmlFor: `mit-task-${task.id}` }, task.title);
+      titleLabel.style.setProperty('flex-grow', '1');
+      titleLabel.style.setProperty('font-size', '0.95em');
+      titleLabel.style.setProperty('cursor', 'pointer');
+      if (task.status === 'completed') {
+        titleLabel.style.setProperty('text-decoration', 'line-through');
+        titleLabel.style.setProperty('opacity', '0.6');
+      }
+      listItem.appendChild(titleLabel);
+      list.appendChild(listItem);
     });
   }
 
-  function mount({ container, user, commandKey }) {
-    if (!container) {
-      console.error('LifeOS MIT Widget: Container element not provided.');
+  const mount = ({ container, user, commandKey }) => {
+    if (!container || !(container instanceof HTMLElement)) {
+      console.error('Invalid container element provided for LifeOS MIT widget.');
       return;
     }
     _container = container;
     _user = user;
-    _commandKey = getCommandKey(commandKey);
+    _commandKey = commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
 
-    if (!_user) {
-      renderErrorState('User handle is required to load MITs.');
-      return;
-    }
-    if (!_commandKey) {
-      renderErrorState('Command key is required for authentication.');
-      return;
-    }
+    // Apply base styles to the container
+    _container.style.setProperty('background-color', 'var(--dash-surface)');
+    _container.style.setProperty('color', 'var(--dash-text)');
+    _container.style.setProperty('border', '1px solid var(--dash-border)');
+    _container.style.setProperty('border-radius', 'var(--dash-radius-lg)');
+    _container.style.setProperty('padding', 'calc(2 * var(--dash-space-unit))');
+    _container.style.setProperty('display', 'flex');
+    _container.style.setProperty('flex-direction', 'column');
+    _container.style.setProperty('gap', 'var(--dash-space-unit)');
+    _container.style.setProperty('box-sizing', 'border-box'); // Ensure padding is included in width/height
 
-    refresh();
-  }
+    fetchAndRenderTasks();
+  };
 
-  function refresh() {
-    if (_isFetching) return; // Prevent multiple simultaneous fetches
-    fetchMITs();
-  }
+  const refresh = () => {
+    fetchAndRenderTasks();
+  };
 
-  // Expose public API
   window.LifeOSWidgetMIT = {
     mount,
     refresh
   };
-
 })();
