@@ -1,99 +1,102 @@
-## Dashboard Local State Contract
+# Dashboard Local State Contract
 
-This document defines the client-side contract for managing dashboard UI state, including widget visibility, order, density, and pinned status. It outlines the structure for local storage keys, data shapes, and considerations for versioning and SSR/client boundaries.
+This document defines the contract for managing the local, client-side state of the LifeOS dashboard, covering widget visibility, order, density mode, and pinned widgets. This contract is designed to facilitate consistent user experience across sessions and to provide a clear path for future server-side persistence.
 
-### Goals
+## Goals
 
-- Establish a clear, versioned contract for client-side dashboard UI state.
-- Define storage keys and data shapes for widget visibility, order, density mode, and pinned widgets.
-- Outline a strategy for handling schema versioning and migration.
-- Clarify the responsibilities of SSR and client-side rendering regarding this state.
-- Avoid rebuilding existing persistence APIs; focus on the local contract.
+*   **Define State Schema:** Establish a clear, versioned schema for dashboard layout preferences stored client-side.
+*   **Enable Persistence:** Allow user preferences for dashboard layout to persist across browser sessions using `localStorage`.
+*   **Support Dynamic Layout:** Provide mechanisms for widgets to be dynamically shown/hidden, reordered, and for the overall dashboard density to adjust.
+*   **Prepare for Server Sync:** Design the local contract with an eye towards eventual synchronization with a server-side user profile or settings service.
+*   **Minimize FOUC:** Ensure a smooth transition between server-rendered defaults and client-side personalized states.
 
-### Keys & Shapes
+## Keys & Shapes
 
-All local storage keys will be prefixed with `lifeos_dashboard_` and include a version suffix (e.g., `_v1`).
+All `localStorage` keys will be prefixed with `lifeos-dashboard-` to prevent collisions. Data will be stored as JSON strings.
 
-#### Widget Visibility
+### `lifeos-dashboard-state-version`
 
--   **Purpose:** Controls which widgets are displayed to the user.
--   **Storage Key (localStorage):** `lifeos_dashboard_widget_visibility_v1`
--   **Shape:** An object mapping widget IDs to boolean visibility flags.
-    ```typescript
-    type WidgetVisibilityState = {
-      [widgetId: string]: boolean; // true if visible, false if hidden
-    };
+*   **Purpose:** Tracks the schema version of the stored dashboard state for migration purposes.
+*   **Shape:** `string` (e.g., "1.0.0")
+*   **Example:** `"1.0.0"`
+
+### `lifeos-dashboard-widget-visibility`
+
+*   **Purpose:** Stores the visibility status for each dashboard widget.
+*   **Shape:** `Record<string, boolean>` where keys are widget IDs and values indicate visibility (`true` for visible, `false` for hidden).
+*   **Example:**
+    ```json
+    {
+      "builder-status-widget": true,
+      "next-task-widget": false,
+      "build-history-widget": true
+    }
     ```
--   **Example:** `{"builder-status": true, "task-queue": false}`
 
-#### Widget Order
+### `lifeos-dashboard-widget-order`
 
--   **Purpose:** Defines the display order of visible widgets.
--   **Storage Key (localStorage):** `lifeos_dashboard_widget_order_v1`
--   **Shape:** An array of widget IDs, representing their ordered sequence.
-    ```typescript
-    type WidgetOrderState = string[];
+*   **Purpose:** Defines the display order of visible widgets.
+*   **Shape:** `string[]` (an ordered array of widget IDs). Only widgets present in this array and marked as `true` in `lifeos-dashboard-widget-visibility` should be rendered.
+*   **Example:**
+    ```json
+    [
+      "builder-status-widget",
+      "build-history-widget",
+      "council-review-widget"
+    ]
     ```
--   **Example:** `["builder-status", "council-activity", "task-queue"]`
 
-#### Density Mode
+### `lifeos-dashboard-density-mode`
 
--   **Purpose:** Controls the visual density of the dashboard layout.
--   **Storage Key (localStorage):** `lifeos_dashboard_density_v1`
--   **Shape:** A string representing one of the defined `DensityMode` enum values.
-    ```typescript
-    type DensityModeState = DensityMode; // See Density enum section below
+*   **Purpose:** Stores the user's preferred or last-resolved visual density for the dashboard.
+*   **Shape:** `DensityMode` enum value (see "Density Enum" section below).
+*   **Example:** `"balanced"`
+
+### `lifeos-dashboard-pinned-widgets`
+
+*   **Purpose:** Stores the IDs of widgets that are "pinned" to a specific area (e.g., a sidebar or top rail).
+*   **Shape:** `string[]` (an ordered array of widget IDs).
+*   **Example:**
+    ```json
+    [
+      "quick-actions-widget",
+      "notifications-widget"
+    ]
     ```
--   **Example:** `"balanced"`
 
-#### Pinned Widgets
+## Density Enum
 
--   **Purpose:** Identifies widgets that are "pinned" to a specific, persistent area of the dashboard (e.g., a sidebar or header).
--   **Storage Key (localStorage):** `lifeos_dashboard_pinned_widgets_v1`
--   **Shape:** An array of widget IDs that are currently pinned.
-    ```typescript
-    type PinnedWidgetsState = string[];
-    ```
--   **Example:** `["quick-actions", "notifications"]`
+Based on the `pickDashboardDensity` utility described in `DASHBOARD_DENSITY_INTEGRATION_NOTES.md`, the supported density modes are:
 
-### Density Enum
+*   `"compact"`: Minimal spacing, high information density.
+*   `"balanced"`: Default spacing, good balance of information and readability.
+*   `"airy"`: Generous spacing, relaxed visual feel.
 
-Based on the `pickDashboardDensity` utility, the supported density modes are:
+These values will be used for the `lifeos-dashboard-density-mode` key.
 
-```typescript
-enum DensityMode {
-  Compact = "compact",
-  Balanced = "balanced",
-  Airy = "airy",
-}
-```
+## Versioning and Migration
 
-### Versioning and Migration
+*   **Versioning:** A `lifeos-dashboard-state-version` key will store the current schema version. This allows for future schema changes without breaking existing user preferences.
+*   **Migration:** On application boot, the client-side state manager will read the `lifeos-dashboard-state-version`. If it's older than the current application's expected version, a migration function will be triggered. This function will transform the old state schema into the new one, update the version, and persist the migrated state. If no version is found, it implies a first-time user or an old, unversioned state, and default values will be applied.
 
--   **Versioning:** Each local storage key includes a `_v1` suffix. Future schema changes will increment this version (e.g., `_v2`).
--   **Migration Strategy:**
-    -   On application boot, check the version of each stored item.
-    -   If an older version is found, attempt a migration function.
-    -   If migration fails or no migration path exists, clear the old key and apply default state.
-    -   New keys should always be written with the current version.
+## SSR/Client Boundaries
 
-### SSR/Client Boundaries
+*   **Server-Side Rendering (SSR):**
+    *   Initial dashboard layout (default widget visibility, order, and density) can be rendered on the server. This prevents a Flash of Unstyled Content (FOUC) and provides a fast initial paint.
+    *   The server can inject default CSS classes (e.g., `density-balanced`) directly into the HTML.
+    *   No `localStorage` interaction occurs on the server.
+*   **Client-Side Hydration and Interaction:**
+    *   Upon hydration, client-side JavaScript will read the `localStorage` keys.
+    *   If `localStorage` contains user preferences, these will override the server-rendered defaults.
+    *   The client-side layout manager will then apply the appropriate CSS classes and render widgets based on the persisted state.
+    *   All dynamic updates (e.g., user reordering widgets, changing density, toggling visibility) will be handled client-side and persisted back to `localStorage`.
+    *   As noted in `DASHBOARD_DENSITY_INTEGRATION_NOTES.md`, client-side evaluation for density based on `viewportWidth` is crucial and will likely override any SSR-provided default quickly.
 
--   **Server-Side Rendering (SSR):**
-    -   The server can provide an initial, default state for the dashboard layout (e.g., based on a generic desktop view or a user's persisted profile if available).
-    -   This initial state should be injected into the HTML (e.g., via `data-` attributes on the root element or a script tag) to prevent layout shifts or "flash of unstyled content" (FOUC).
-    -   Server does not directly interact with `localStorage`.
--   **Client-Side Rendering:**
-    -   On hydration, the client reads the initial state provided by the server.
-    -   Immediately after, the client attempts to load user-specific preferences from `localStorage` for each defined key.
-    -   Local storage values override server-provided defaults where they exist.
-    -   The client is responsible for dynamically updating these states based on user interactions (e.g., reordering widgets, changing density) and persisting them back to `localStorage`.
-    -   Client-side logic (e.g., `pickDashboardDensity`) will react to viewport changes and update the density state.
+## Risks
 
-### Risks
-
--   **Schema Migration Complexity:** As the dashboard evolves, managing multiple migration paths for different versions can become complex.
--   **LocalStorage Limits:** While unlikely for UI state, storing excessively large data sets in `localStorage` can lead to performance issues or storage limits.
--   **Hydration Mismatch:** If the server-rendered state and client-hydrated state (from localStorage) differ significantly, it can cause visual glitches or re-renders.
--   **Concurrency Issues:** Multiple browser tabs/windows accessing and modifying the same `localStorage` keys can lead to race conditions or inconsistent state.
--   **Security:** `localStorage` is not secure for sensitive data. This contract is strictly for UI preferences.
+*   **`localStorage` Limits:** While dashboard state is generally small, excessive data or frequent writes could hit `localStorage` size limits or cause performance issues.
+*   **Schema Evolution:** Complex migrations can be error-prone. Keeping the schema simple and backward-compatible where possible is key.
+*   **Race Conditions:** If a user has multiple tabs open, concurrent modifications to `localStorage` could lead to unexpected state. A simple "last write wins" approach is usually sufficient for UI preferences, but more robust solutions (e.g., `StorageEvent` listeners) might be considered if conflicts become problematic.
+*   **Data Integrity:** Malformed JSON in `localStorage` could crash the client-side application. Robust parsing with error handling is required.
+*   **FOUC on State Mismatch:** If the server-rendered default state significantly differs from the client-side persisted state, a brief visual "jump" might occur during hydration. Careful design of default states and client-side application of preferences can mitigate this.
+*   **Future Server Sync Complexity:** Designing the local contract to be easily transferable to a server-side persistence model requires foresight. Changes to the local contract might necessitate changes to the server contract later.
