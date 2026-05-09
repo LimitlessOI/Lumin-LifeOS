@@ -2,6 +2,8 @@
  * @ssot docs/projects/AMENDMENT_04_AUTO_BUILDER.md
  */
 import express from "express";
+import { readFile, stat } from "node:fs/promises";
+import { join } from "node:path";
 import { getRegistryHealth } from "../services/env-registry-map.js";
 
 const RAILWAY_GQL = 'https://backboard.railway.app/graphql/v2';
@@ -401,6 +403,182 @@ export function createRailwayManagedEnvRoutes({ requireKey, managedEnvService })
     } catch (error) {
       console.error('[RAILWAY-BUILD-FROM-LATEST] Error:', error.message);
       res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  // ── Deployment log reading ──────────────────────────────────────────
+  // RAILWAY_SERVICE_ID + RAILWAY_ENVIRONMENT_ID + RAILWAY_TOKEN all confirmed SET
+
+  const getRailwayIds = () => ({
+    serviceId: process.env.RAILWAY_SERVICE_ID,
+    environmentId: process.env.RAILWAY_ENVIRONMENT_ID,
+  });
+
+  /**
+   * GET /deployments
+   * Lists the last N Railway deployments for this service.
+   * Query param: ?first=10 (default 10, max 50)
+   */
+  router.get("/deployments", requireKey, async (req, res) => {
+    try {
+      const first = Math.min(parseInt(req.query.first, 10) || 10, 50);
+      const { serviceId, environmentId } = getRailwayIds();
+      if (!serviceId || !environmentId) {
+        return res.status(500).json({ ok: false, error: "RAILWAY_SERVICE_ID or RAILWAY_ENVIRONMENT_ID not set" });
+      }
+      const data = await railwayGql(
+        `query Deployments($serviceId: String!, $environmentId: String!, $first: Int!) {
+          deployments(first: $first, input: { serviceId: $serviceId, environmentId: $environmentId }) {
+            edges {
+              node {
+                id
+                status
+                createdAt
+                meta { commitHash commitMessage commitAuthor branch }
+                url
+              }
+            }
+          }
+        }`,
+        { serviceId, environmentId, first }
+      );
+      const deployments = (data?.deployments?.edges || []).map((e) => e.node);
+      res.json({ ok: true, count: deployments.length, deployments });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * GET /deployments/latest
+   * Returns the most recent deployment with its pass/fail status.
+   * Quick probe after a git push — poll until status !== "DEPLOYING".
+   */
+  router.get("/deployments/latest", requireKey, async (req, res) => {
+    try {
+      const { serviceId, environmentId } = getRailwayIds();
+      if (!serviceId || !environmentId) {
+        return res.status(500).json({ ok: false, error: "RAILWAY_SERVICE_ID or RAILWAY_ENVIRONMENT_ID not set" });
+      }
+      const data = await railwayGql(
+        `query LatestDeployment($serviceId: String!, $environmentId: String!) {
+          deployments(first: 1, input: { serviceId: $serviceId, environmentId: $environmentId }) {
+            edges {
+              node {
+                id
+                status
+                createdAt
+                meta { commitHash commitMessage commitAuthor branch }
+                url
+              }
+            }
+          }
+        }`,
+        { serviceId, environmentId }
+      );
+      const node = data?.deployments?.edges?.[0]?.node ?? null;
+      if (!node) return res.json({ ok: true, deployment: null, message: "No deployments found" });
+      res.json({ ok: true, success: node.status === "SUCCESS", deployment: node });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  /**
+   * GET /deployments/:id/logs
+   * Returns build logs for a specific Railway deployment ID.
+   * Query param: ?limit=200 (default 200, max 1000)
+   */
+  router.get("/deployments/:id/logs", requireKey, async (req, res) => {
+    try {
+      const deploymentId = req.params.id;
+      const data = await railwayGql(
+        `query DeploymentLogs($deploymentId: String!) {
+          deploymentLogs(deploymentId: $deploymentId) {
+            timestamp
+            message
+            severity
+          }
+        }`,
+        { deploymentId }
+      );
+      const logs = data?.deploymentLogs ?? [];
+      const limit = Math.min(parseInt(req.query.limit, 10) || 200, 1000);
+      res.json({ ok: true, count: logs.length, logs: logs.slice(-limit) });
+    } catch (error) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  });
+
+  // ── Local log file serving ──────────────────────────────────────────
+  // Strict whitelist prevents arbitrary file reads.
+  const LOCAL_LOG_ALLOWLIST = {
+    "local-builder-daemon":   { path: "logs/local-builder-daemon.out",                      description: "Local builder daemon stdout" },
+    "local-server":           { path: "logs/local-server.out",                               description: "Local server stdout" },
+    "runtime-builder-lifeos": { path: "logs/tsos-runtime-builder-lifeos.log",                description: "LifeOS builder runtime log" },
+    "runtime-builder-tc":     { path: "logs/tsos-runtime-builder-tc.log",                    description: "TC builder runtime log" },
+    "runtime-builder-site":   { path: "logs/tsos-runtime-builder-site-builder.log",          description: "Site builder runtime log" },
+    "runtime-auditor":        { path: "logs/tsos-runtime-auditor.log",                       description: "Sentinel auditor runtime log" },
+    "runtime-guardian":       { path: "logs/tsos-runtime-guardian.log",                      description: "Runtime guardian log" },
+    "runtime-overseer":       { path: "logs/tsos-runtime-overseer.log",                      description: "Overseer daemon runtime log" },
+    "build-summaries":        { path: "data/builder-build-summaries.jsonl",                  description: "Structured build summaries (JSONL)" },
+    "queue-log":              { path: "data/builder-continuous-queue-log.jsonl",             description: "Queue run log (JSONL)" },
+    "daemon-log":             { path: "data/builder-daemon-log.jsonl",                       description: "Builder daemon log (JSONL)" },
+    "auditor-log":            { path: "data/tsos-auditor-log.jsonl",                         description: "Auditor cycle log (JSONL)" },
+    "overseer-log":           { path: "data/tsos-overseer-log.jsonl",                        description: "Overseer log (JSONL)" },
+    "preflight-log":          { path: "data/builder-preflight-log.jsonl",                    description: "Builder preflight log (JSONL)" },
+    "quarantined-tasks":      { path: "data/quarantined-tasks.json",                         description: "Quarantined task list (JSON)" },
+  };
+
+  /**
+   * GET /logs/local
+   * Lists all whitelisted local log files with size + last-modified.
+   */
+  router.get("/logs/local", requireKey, async (req, res) => {
+    const root = process.cwd();
+    const files = await Promise.all(
+      Object.entries(LOCAL_LOG_ALLOWLIST).map(async ([name, meta]) => {
+        const abs = join(root, meta.path);
+        try {
+          const s = await stat(abs);
+          return { name, path: meta.path, description: meta.description, size_bytes: s.size, modified: s.mtime };
+        } catch {
+          return { name, path: meta.path, description: meta.description, exists: false };
+        }
+      })
+    );
+    res.json({ ok: true, count: files.length, files });
+  });
+
+  /**
+   * GET /logs/local/:name
+   * Tails the last N lines of a whitelisted local log file.
+   * Query params:
+   *   ?lines=100   default 100, max 2000
+   *   ?raw=1       plain-text response instead of JSON
+   */
+  router.get("/logs/local/:name", requireKey, async (req, res) => {
+    const entry = LOCAL_LOG_ALLOWLIST[req.params.name];
+    if (!entry) {
+      return res.status(404).json({
+        ok: false,
+        error: `Unknown log name '${req.params.name}'. Valid names: ${Object.keys(LOCAL_LOG_ALLOWLIST).join(", ")}`,
+      });
+    }
+    const abs = join(process.cwd(), entry.path);
+    try {
+      const raw = await readFile(abs, "utf8");
+      const lines = raw.split("\n").filter(Boolean);
+      const limit = Math.min(parseInt(req.query.lines, 10) || 100, 2000);
+      const tail = lines.slice(-limit);
+      if (req.query.raw === "1") {
+        res.setHeader("Content-Type", "text/plain");
+        return res.send(tail.join("\n"));
+      }
+      res.json({ ok: true, name: req.params.name, path: entry.path, total_lines: lines.length, returned: tail.length, lines: tail });
+    } catch (err) {
+      if (err.code === "ENOENT") return res.status(404).json({ ok: false, error: `File not found: ${entry.path}` });
+      res.status(500).json({ ok: false, error: err.message });
     }
   });
 
