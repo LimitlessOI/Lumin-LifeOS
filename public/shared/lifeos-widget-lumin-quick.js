@@ -1,177 +1,76 @@
 (function(){
-  const SESSION_STORAGE_KEY = 'lifeos-lumin-quick-history';
+  const STORAGE_KEY_HISTORY = 'lifeos-lumin-quick-history';
   const API_ENDPOINT = '/api/v1/lifeos/chat';
-  const DEFAULT_CONTAINER_ID = 'lifeos-widget-lumin-quick';
 
   let _container = null;
-  let _user = 'anonymous';
+  let _user = null;
   let _commandKey = null;
-  let _history = []; // Stores up to 3 user messages and 3 assistant responses (6 total)
-  let _isLoading = false;
-  let _error = null;
+  let _history = [];
 
-  function getHistory() {
+  let _inputElement = null;
+  let _sendButton = null;
+  let _historyDisplay = null;
+  let _statusDisplay = null;
+  let _fullChatLink = null;
+
+  function loadHistory() {
     try {
-      const stored = sessionStorage.getItem(SESSION_STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
+      const stored = sessionStorage.getItem(STORAGE_KEY_HISTORY);
+      _history = stored ? JSON.parse(stored) : [];
+      // Ensure history is an array and max 3 items
+      if (!Array.isArray(_history)) {
+        _history = [];
+      }
+      _history = _history.slice(-3);
     } catch (e) {
-      console.error('LifeOSWidgetLuminQuick: Error parsing history from sessionStorage:', e);
-      return [];
+      console.error('Failed to load Lumin quick history from sessionStorage:', e);
+      _history = [];
     }
   }
 
-  function saveHistory(history) {
+  function saveHistory() {
     try {
-      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(history));
+      sessionStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(_history));
     } catch (e) {
-      console.error('LifeOSWidgetLuminQuick: Error saving history to sessionStorage:', e);
+      console.error('Failed to save Lumin quick history to sessionStorage:', e);
     }
   }
 
-  function render() {
-    if (!_container) return;
-
-    _container.innerHTML = ''; // Clear existing content
-
-    const widgetWrapper = document.createElement('div');
-    widgetWrapper.className = 'lifeos-lumin-quick-widget';
-    widgetWrapper.style.fontFamily = 'sans-serif';
-    widgetWrapper.style.fontSize = '14px';
-    widgetWrapper.style.color = 'var(--dash-text, #e8e8f0)';
-    widgetWrapper.style.backgroundColor = 'var(--dash-surface, #111118)';
-    widgetWrapper.style.padding = '10px';
-    widgetWrapper.style.borderRadius = 'var(--dash-radius-lg, 14px)';
-    widgetWrapper.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-    widgetWrapper.style.maxWidth = '300px';
-    widgetWrapper.style.display = 'flex';
-    widgetWrapper.style.flexDirection = 'column';
-    widgetWrapper.style.gap = '8px';
-
-    // History display
-    const historyEl = document.createElement('div');
-    historyEl.className = 'lifeos-lumin-quick-history';
-    historyEl.style.display = 'flex';
-    historyEl.style.flexDirection = 'column';
-    historyEl.style.gap = '4px';
-    historyEl.style.maxHeight = '150px'; // Limit height for quick view
-    historyEl.style.overflowY = 'auto';
-    historyEl.style.paddingRight = '5px'; // For scrollbar
+  function renderHistory() {
+    if (!_historyDisplay) return;
+    _historyDisplay.innerHTML = '';
     _history.forEach(item => {
-      const msgEl = document.createElement('div');
-      msgEl.className = `lifeos-lumin-quick-message ${item.role}`;
-      msgEl.style.padding = '6px 8px';
-      msgEl.style.borderRadius = '8px';
-      msgEl.style.wordBreak = 'break-word';
-      if (item.role === 'user') {
-        msgEl.style.backgroundColor = 'rgba(91, 106, 245, 0.2)'; // dash-accent with transparency
-        msgEl.style.alignSelf = 'flex-end';
-      } else {
-        msgEl.style.backgroundColor = 'rgba(255,255,255,0.05)';
-        msgEl.style.alignSelf = 'flex-start';
-      }
-      msgEl.textContent = item.text;
-      historyEl.appendChild(msgEl);
+      const p = document.createElement('p');
+      p.textContent = item;
+      p.style.margin = '4px 0';
+      p.style.fontSize = '0.9em';
+      p.style.color = 'var(--dash-text, #e8e8f0)'; // Use CSS variable if available
+      _historyDisplay.appendChild(p);
     });
-    widgetWrapper.appendChild(historyEl);
-
-    // Input area
-    const inputArea = document.createElement('div');
-    inputArea.style.display = 'flex';
-    inputArea.style.gap = '5px';
-
-    const inputEl = document.createElement('input');
-    inputEl.type = 'text';
-    inputEl.placeholder = 'Ask Lumin anything...';
-    inputEl.className = 'lifeos-lumin-quick-input';
-    inputEl.style.flexGrow = '1';
-    inputEl.style.padding = '8px';
-    inputEl.style.border = '1px solid var(--dash-border, rgba(255,255,255,0.07))';
-    inputEl.style.borderRadius = '8px';
-    inputEl.style.backgroundColor = 'var(--dash-bg, #0a0a0f)';
-    inputEl.style.color = 'var(--dash-text, #e8e8f0)';
-    inputEl.style.outline = 'none';
-
-    const sendBtn = document.createElement('button');
-    sendBtn.className = 'lifeos-lumin-quick-send-btn';
-    sendBtn.textContent = 'Send';
-    sendBtn.style.padding = '8px 12px';
-    sendBtn.style.border = 'none';
-    sendBtn.style.borderRadius = '8px';
-    sendBtn.style.backgroundColor = 'var(--dash-accent, #5b6af5)';
-    sendBtn.style.color = 'white';
-    sendBtn.style.cursor = 'pointer';
-    sendBtn.style.fontWeight = 'bold';
-    sendBtn.style.transition = 'background-color 0.2s ease';
-    sendBtn.onmouseover = () => sendBtn.style.backgroundColor = '#4a5be0';
-    sendBtn.onmouseout = () => sendBtn.style.backgroundColor = 'var(--dash-accent, #5b6af5)';
-    sendBtn.disabled = _isLoading;
-
-    inputArea.appendChild(inputEl);
-    inputArea.appendChild(sendBtn);
-    widgetWrapper.appendChild(inputArea);
-
-    // Loading/Error state
-    const statusEl = document.createElement('div');
-    statusEl.className = 'lifeos-lumin-quick-status';
-    statusEl.style.minHeight = '18px'; // Reserve space
-    if (_isLoading) {
-      statusEl.textContent = '...';
-      statusEl.style.color = 'var(--dash-muted, #555566)';
-    } else if (_error) {
-      statusEl.textContent = _error;
-      statusEl.style.color = 'red';
-    }
-    widgetWrapper.appendChild(statusEl);
-
-    // "Open full chat" link
-    if (window.LifeOSDashboardAiRail && typeof window.LifeOSDashboardAiRail.expand === 'function') {
-      const fullChatLink = document.createElement('a');
-      fullChatLink.href = '#';
-      fullChatLink.textContent = 'Open full chat';
-      fullChatLink.style.display = 'block';
-      fullChatLink.style.marginTop = '8px';
-      fullChatLink.style.textAlign = 'center';
-      fullChatLink.style.color = 'var(--dash-accent, #5b6af5)';
-      fullChatLink.style.textDecoration = 'none';
-      fullChatLink.onclick = (e) => {
-        e.preventDefault();
-        window.LifeOSDashboardAiRail.expand();
-      };
-      widgetWrapper.appendChild(fullChatLink);
-    }
-
-    _container.appendChild(widgetWrapper);
-
-    // Event listeners for the newly rendered elements
-    sendBtn.addEventListener('click', () => sendMessage(inputEl.value, inputEl));
-    inputEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage(inputEl.value, inputEl);
-      }
-    });
-    if (!_isLoading) {
-      inputEl.focus();
-    }
-    // Scroll history to bottom
-    historyEl.scrollTop = historyEl.scrollHeight;
+    _historyDisplay.scrollTop = _historyDisplay.scrollHeight; // Scroll to bottom
   }
 
-  async function sendMessage(message, inputEl) {
-    if (!message.trim() || _isLoading) return;
+  function showStatus(message, isError = false) {
+    if (!_statusDisplay) return;
+    _statusDisplay.textContent = message;
+    _statusDisplay.style.color = isError ? 'red' : 'var(--dash-muted, #555566)';
+    _statusDisplay.style.display = 'block';
+  }
 
-    _isLoading = true;
-    _error = null;
-    render(); // Show loading state
+  function hideStatus() {
+    if (!_statusDisplay) return;
+    _statusDisplay.style.display = 'none';
+    _statusDisplay.textContent = '';
+  }
 
-    const userMessage = { role: 'user', text: message };
-    _history.push(userMessage);
-    // Cap history at 3 user + 3 assistant messages = 6 total
-    if (_history.length > 6) {
-        _history = _history.slice(_history.length - 6);
-    }
-    saveHistory(_history);
-    inputEl.value = ''; // Clear input immediately
+  async function sendMessage() {
+    const message = _inputElement.value.trim();
+    if (!message) return;
+
+    _inputElement.value = '';
+    _inputElement.disabled = true;
+    _sendButton.disabled = true;
+    showStatus('...');
 
     try {
       const response = await fetch(API_ENDPOINT, {
@@ -179,11 +78,7 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          message: message,
-          user: _user,
-          commandKey: _commandKey
-        }),
+        body: JSON.stringify({ message, user: _user, commandKey: _commandKey }),
       });
 
       if (!response.ok) {
@@ -192,56 +87,125 @@
       }
 
       const data = await response.json();
-      const replyText = data.reply || data.message || data.response || 'No response received.';
-      _history.push({ role: 'assistant', text: replyText });
-      // Cap history again after assistant response
-      if (_history.length > 6) {
-          _history = _history.slice(_history.length - 6);
-      }
-      saveHistory(_history);
+      const reply = data.reply || data.message || data.response;
 
-    } catch (e) {
-      console.error('LifeOSWidgetLuminQuick: Chat error:', e);
-      _error = `Error: ${e.message}`;
-      // If the last message was a user message and no assistant reply, remove it
-      if (_history.length > 0 && _history[_history.length - 1].role === 'user') {
-        _history.pop();
-        saveHistory(_history);
+      if (reply) {
+        _history.push(`You: ${message}`);
+        _history.push(`Lumin: ${reply}`);
+        _history = _history.slice(-3); // Keep last 3 interactions (user + lumin = 2 items)
+        saveHistory();
+        renderHistory();
+      } else {
+        showStatus('Lumin did not provide a clear response.', true);
       }
+    } catch (error) {
+      console.error('Lumin chat error:', error);
+      showStatus(`Error: ${error.message}`, true);
     } finally {
-      _isLoading = false;
-      render(); // Update with new history or error
+      _inputElement.disabled = false;
+      _sendButton.disabled = false;
+      hideStatus();
+      _inputElement.focus();
     }
   }
 
-  /**
-   * Mounts the Lumin quick-entry widget into the DOM.
-   * @param {object} options - Configuration options.
-   * @param {HTMLElement|string} [options.container] - The DOM element or its ID to mount into. Defaults to 'lifeos-widget-lumin-quick'.
-   * @param {string} options.user - The user identifier for chat messages.
-   * @param {string} [options.commandKey] - Optional command key for the chat API.
-   */
-  function mount(options = {}) {
-    const { container, user, commandKey } = options;
-
-    if (typeof container === 'string') {
-      _container = document.getElementById(container);
-    } else if (container instanceof HTMLElement) {
-      _container = container;
-    } else {
-      _container = document.getElementById(DEFAULT_CONTAINER_ID); // Fallback to default ID
-    }
-
-    if (!_container) {
-      console.error(`LifeOSWidgetLuminQuick: Container element '${container || DEFAULT_CONTAINER_ID}' not found.`);
+  function mount({ container, user, commandKey }) {
+    if (!container) {
+      console.error('Lumin Quick Widget: Container element is required for mounting.');
       return;
     }
 
-    _user = user || _user;
-    _commandKey = commandKey || _commandKey;
+    _container = container;
+    _user = user || 'anonymous';
+    _commandKey = commandKey || 'quick-chat';
 
-    _history = getHistory();
-    render();
+    _container.innerHTML = `
+      <div style="
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+        border-radius: var(--dash-radius-lg, 14px);
+        background-color: var(--dash-surface, #111118);
+        color: var(--dash-text, #e8e8f0);
+        font-family: sans-serif;
+        max-width: 300px;
+      ">
+        <div class="lumin-quick-history" style="
+          min-height: 60px;
+          max-height: 120px;
+          overflow-y: auto;
+          padding-right: 5px;
+          font-size: 0.9em;
+          line-height: 1.4;
+          color: var(--dash-text, #e8e8f0);
+        "></div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" class="lumin-quick-input" placeholder="Ask Lumin anything..." style="
+            flex-grow: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--dash-border, rgba(255,255,255,0.07));
+            border-radius: 8px;
+            background-color: var(--dash-bg, #0a0a0f);
+            color: var(--dash-text, #e8e8f0);
+            font-size: 1em;
+          ">
+          <button class="lumin-quick-send-btn" style="
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--dash-accent, #5b6af5);
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+          ">Send</button>
+        </div>
+        <div class="lumin-quick-status" style="
+          font-size: 0.8em;
+          color: var(--dash-muted, #555566);
+          min-height: 1.2em;
+          display: none;
+        "></div>
+        <div class="lumin-quick-footer" style="text-align: center;">
+          <!-- Full chat link will be inserted here -->
+        </div>
+      </div>
+    `;
+
+    _inputElement = _container.querySelector('.lumin-quick-input');
+    _sendButton = _container.querySelector('.lumin-quick-send-btn');
+    _historyDisplay = _container.querySelector('.lumin-quick-history');
+    _statusDisplay = _container.querySelector('.lumin-quick-status');
+    const footer = _container.querySelector('.lumin-quick-footer');
+
+    _sendButton.addEventListener('click', sendMessage);
+    _inputElement.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    loadHistory();
+    renderHistory();
+
+    // Check for LifeOSDashboardAiRail and its expand method
+    if (window.LifeOSDashboardAiRail && typeof window.LifeOSDashboardAiRail.expand === 'function') {
+      _fullChatLink = document.createElement('a');
+      _fullChatLink.href = '#';
+      _fullChatLink.textContent = 'Open full chat';
+      _fullChatLink.style.fontSize = '0.8em';
+      _fullChatLink.style.color = 'var(--dash-accent, #5b6af5)';
+      _fullChatLink.style.textDecoration = 'none';
+      _fullChatLink.style.cursor = 'pointer';
+      _fullChatLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.LifeOSDashboardAiRail.expand();
+      });
+      footer.appendChild(_fullChatLink);
+    }
   }
 
   window.LifeOSWidgetLuminQuick = {
