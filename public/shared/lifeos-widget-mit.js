@@ -1,241 +1,272 @@
 (function(){
-  const API_BASE_URL = '/api/v1/lifeos/commitments';
-  const COMPLETE_API_BASE_URL = '/api/v1/lifeos/commitments';
+    const API_BASE = '/api/v1/lifeos/commitments';
+    let currentContainer = null;
+    let currentUser = null;
+    let currentCommandKey = null;
+    let isLoading = false;
+    let tasks = [];
+    let hasError = false;
 
-  let _container = null;
-  let _user = null;
-  let _commandKey = null;
-  let _prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function createAndAppend(tag, parent, classes = [], styles = {}, textContent = '') {
-    const el = document.createElement(tag);
-    if (classes.length) el.classList.add(...classes);
-    Object.assign(el.style, styles);
-    if (textContent) el.textContent = textContent;
-    parent.appendChild(el);
-    return el;
-  }
-
-  function renderLoadingState() {
-    _container.innerHTML = '';
-    const wrapper = createAndAppend('div', _container, [], {
-      padding: 'var(--dash-space-unit, 8px) * 2',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 'var(--dash-space-unit, 8px)',
-      transition: _prefersReducedMotion ? 'none' : 'opacity 0.3s ease-out',
-      opacity: '0.7'
-    });
-    createAndAppend('div', wrapper, [], {
-      height: '1.2em',
-      width: '70%',
-      background: 'var(--dash-border)',
-      borderRadius: '4px'
-    });
-    for (let i = 0; i < 3; i++) {
-      createAndAppend('div', wrapper, [], {
-        height: '1em',
-        width: `${70 - i * 10}%`,
-        background: 'var(--dash-border)',
-        borderRadius: '4px'
-      });
+    function prefersReducedMotion() {
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
-  }
 
-  function renderErrorState(message = 'Could not load tasks') {
-    _container.innerHTML = '';
-    const errorWrapper = createAndAppend('div', _container, [], {
-      padding: 'var(--dash-space-unit, 8px) * 2',
-      textAlign: 'center',
-      color: 'var(--dash-text)'
-    });
-    createAndAppend('p', errorWrapper, [], {}, message);
-    const retryButton = createAndAppend('button', errorWrapper, [], {
-      background: 'var(--dash-accent)',
-      color: 'var(--dash-surface)',
-      border: 'none',
-      padding: '0.5em 1em',
-      borderRadius: 'var(--dash-radius-lg, 14px)',
-      cursor: 'pointer',
-      fontSize: '0.9em'
-    }, 'Retry');
-    retryButton.addEventListener('click', refresh);
-  }
-
-  function renderEmptyState() {
-    _container.innerHTML = '';
-    createAndAppend('p', _container, [], {
-      padding: 'var(--dash-space-unit, 8px) * 2',
-      textAlign: 'center',
-      color: 'var(--dash-muted)'
-    }, 'No MITs set — add one in Commitments');
-  }
-
-  async function handleCheckboxChange(taskId, isChecked) {
-    if (!isChecked) return; // Only handle completion for now
-
-    const url = `${COMPLETE_API_BASE_URL}/${taskId}/complete`;
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Command-Key': _commandKey
+    function createEl(tag, classes = [], attributes = {}, textContent = '') {
+        const el = document.createElement(tag);
+        if (classes.length) el.classList.add(...classes);
+        for (const key in attributes) {
+            el.setAttribute(key, attributes[key]);
         }
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      // Refresh the list to reflect the change
-      refresh();
-    } catch (error) {
-      console.error('Failed to complete task:', error);
-      // Optionally, revert the checkbox state or show a temporary error
-      alert('Failed to complete task. Please try again.');
-      refresh(); // Re-fetch to ensure UI consistency
-    }
-  }
-
-  function renderTasks(tasks) {
-    _container.innerHTML = '';
-
-    const header = createAndAppend('div', _container, ['mit-header'], {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 'var(--dash-space-unit, 8px)',
-      padding: '0 var(--dash-space-unit, 8px)'
-    });
-    createAndAppend('h3', header, [], {
-      margin: '0',
-      fontSize: '1.2em',
-      color: 'var(--dash-text)'
-    }, "Today's MITs");
-
-    const completedTasks = tasks.filter(task => task.status === 'completed').length;
-    const totalTasks = tasks.length;
-    const badge = createAndAppend('span', header, ['mit-badge'], {
-      background: 'var(--dash-accent)',
-      color: 'var(--dash-surface)',
-      padding: '0.2em 0.6em',
-      borderRadius: '999px',
-      fontSize: '0.8em',
-      fontWeight: 'bold'
-    }, `${completedTasks}/${totalTasks}`);
-
-    const ul = createAndAppend('ul', _container, ['mit-list'], {
-      listStyle: 'none',
-      padding: '0',
-      margin: '0'
-    });
-
-    tasks.forEach(task => {
-      const li = createAndAppend('li', ul, [], {
-        display: 'flex',
-        alignItems: 'center',
-        padding: 'var(--dash-space-unit, 8px)',
-        borderBottom: '1px solid var(--dash-border)',
-        transition: _prefersReducedMotion ? 'none' : 'background-color 0.2s ease-in-out',
-        cursor: 'pointer'
-      });
-      li.addEventListener('mouseenter', () => li.style.backgroundColor = 'rgba(255,255,255,0.05)');
-      li.addEventListener('mouseleave', () => li.style.backgroundColor = 'transparent');
-
-      const checkbox = createAndAppend('input', li, [], {
-        marginRight: 'var(--dash-space-unit, 8px)',
-        accentColor: 'var(--dash-accent)'
-      });
-      checkbox.type = 'checkbox';
-      checkbox.id = `mit-task-${task.id}`;
-      checkbox.checked = task.status === 'completed';
-      checkbox.disabled = task.status === 'completed'; // Disable if already completed
-
-      const label = createAndAppend('label', li, [], {
-        flexGrow: '1',
-        color: 'var(--dash-text)',
-        textDecoration: task.status === 'completed' ? 'line-through' : 'none',
-        opacity: task.status === 'completed' ? '0.7' : '1'
-      }, task.title);
-      label.htmlFor = `mit-task-${task.id}`;
-
-      if (task.status !== 'completed') {
-        checkbox.addEventListener('change', (e) => handleCheckboxChange(task.id, e.target.checked));
-      }
-    });
-
-    if (tasks.length > 0) {
-      ul.lastElementChild.style.borderBottom = 'none'; // Remove border from last item
-    }
-  }
-
-  async function refresh() {
-    if (!_container || !_user || !_commandKey) {
-      console.error('LifeOSWidgetMIT: Widget not properly mounted or missing user/commandKey.');
-      renderErrorState('Widget configuration error.');
-      return;
+        if (textContent) el.textContent = textContent;
+        return el;
     }
 
-    renderLoadingState();
+    function render() {
+        if (!currentContainer) return;
 
-    try {
-      const url = `${API_BASE_URL}?user=${_user}&status=active&limit=5`;
-      const response = await fetch(url, {
-        headers: {
-          'X-Command-Key': _commandKey
+        currentContainer.innerHTML = ''; // Clear previous content
+
+        const widgetWrapper = createEl('div', ['lifeos-mit-widget']);
+        widgetWrapper.style.backgroundColor = 'var(--dash-surface)';
+        widgetWrapper.style.color = 'var(--dash-text)';
+        widgetWrapper.style.border = '1px solid var(--dash-border)';
+        widgetWrapper.style.borderRadius = 'var(--dash-radius-lg)';
+        widgetWrapper.style.padding = 'calc(2 * var(--dash-space-unit))';
+        widgetWrapper.style.display = 'flex';
+        widgetWrapper.style.flexDirection = 'column';
+        widgetWrapper.style.gap = 'var(--dash-space-unit)';
+        widgetWrapper.style.fontFamily = 'sans-serif'; // Basic font for consistency
+
+        if (prefersReducedMotion()) {
+            widgetWrapper.style.transition = 'none';
         }
-      });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+        const header = createEl('div', ['lifeos-mit-header']);
+        header.style.display = 'flex';
+        header.style.justifyContent = 'space-between';
+        header.style.alignItems = 'center';
+        header.style.marginBottom = 'var(--dash-space-unit)';
 
-      const data = await response.json();
-      const tasks = data.commitments || [];
+        const title = createEl('h3', [], {}, "Today's MITs");
+        title.style.margin = '0';
+        title.style.fontSize = '1.1em';
 
-      if (tasks.length === 0) {
-        renderEmptyState();
-      } else {
-        renderTasks(tasks);
-      }
+        header.appendChild(title);
 
-    } catch (error) {
-      console.error('LifeOSWidgetMIT: Fetch failed:', error);
-      renderErrorState();
+        if (!isLoading && !hasError && tasks.length > 0) {
+            const completedCount = tasks.filter(t => t.isComplete).length;
+            const totalCount = tasks.length;
+            const badge = createEl('span', ['lifeos-mit-badge'], {}, `${completedCount}/${totalCount}`);
+            badge.style.backgroundColor = 'var(--dash-accent)'; // Using --dash-accent for --c-today
+            badge.style.color = 'var(--dash-text)';
+            badge.style.padding = '2px 8px';
+            badge.style.borderRadius = '10px';
+            badge.style.fontSize = '0.8em';
+            header.appendChild(badge);
+        }
+        widgetWrapper.appendChild(header);
+
+        if (isLoading) {
+            const loadingState = createEl('div', ['lifeos-mit-loading']);
+            loadingState.style.display = 'flex';
+            loadingState.style.flexDirection = 'column';
+            loadingState.style.gap = 'var(--dash-space-unit)';
+            for (let i = 0; i < 3; i++) { // Skeleton rows
+                const skeleton = createEl('div', ['lifeos-mit-skeleton']);
+                skeleton.style.height = '1.2em';
+                skeleton.style.backgroundColor = 'var(--dash-muted)';
+                skeleton.style.borderRadius = '4px';
+                skeleton.style.opacity = '0.7';
+                skeleton.style.width = `${80 + Math.random() * 20}%`; // Vary width
+                skeleton.style.animation = prefersReducedMotion() ? 'none' : 'pulse 1.5s infinite ease-in-out';
+                loadingState.appendChild(skeleton);
+            }
+            // Add pulse animation if not reduced motion
+            if (!prefersReducedMotion()) {
+                const styleEl = document.createElement('style');
+                styleEl.textContent = `
+                    @keyframes pulse {
+                        0% { opacity: 0.7; }
+                        50% { opacity: 0.4; }
+                        100% { opacity: 0.7; }
+                    }
+                `;
+                document.head.appendChild(styleEl);
+            }
+            widgetWrapper.appendChild(loadingState);
+        } else if (hasError) {
+            const errorState = createEl('div', ['lifeos-mit-error']);
+            errorState.style.textAlign = 'center';
+            errorState.style.padding = 'var(--dash-space-unit)';
+            errorState.style.color = 'var(--dash-text)';
+
+            const errorMessage = createEl('p', [], {}, 'Could not load tasks');
+            errorMessage.style.margin = '0 0 var(--dash-space-unit) 0';
+            errorState.appendChild(errorMessage);
+
+            const retryButton = createEl('button', ['lifeos-mit-retry']);
+            retryButton.textContent = 'Retry';
+            retryButton.style.backgroundColor = 'var(--dash-accent)';
+            retryButton.style.color = 'var(--dash-text)';
+            retryButton.style.border = 'none';
+            retryButton.style.padding = '8px 16px';
+            retryButton.style.borderRadius = 'var(--dash-radius-lg)';
+            retryButton.style.cursor = 'pointer';
+            retryButton.style.fontSize = '0.9em';
+            retryButton.addEventListener('click', refresh);
+            errorState.appendChild(retryButton);
+            widgetWrapper.appendChild(errorState);
+        } else if (tasks.length === 0) {
+            const emptyState = createEl('div', ['lifeos-mit-empty']);
+            emptyState.style.textAlign = 'center';
+            emptyState.style.padding = 'var(--dash-space-unit)';
+            emptyState.style.color = 'var(--dash-muted)';
+            emptyState.textContent = 'No MITs set — add one in Commitments';
+            widgetWrapper.appendChild(emptyState);
+        } else {
+            const taskList = createEl('ul', ['lifeos-mit-list']);
+            taskList.style.listStyle = 'none';
+            taskList.style.padding = '0';
+            taskList.style.margin = '0';
+            taskList.style.display = 'flex';
+            taskList.style.flexDirection = 'column';
+            taskList.style.gap = 'var(--dash-space-unit)';
+
+            tasks.forEach(task => {
+                const listItem = createEl('li', ['lifeos-mit-item']);
+                listItem.style.display = 'flex';
+                listItem.style.alignItems = 'center';
+                listItem.style.gap = 'var(--dash-space-unit)';
+
+                const checkbox = createEl('input', ['lifeos-mit-checkbox'], { type: 'checkbox', id: `mit-task-${task.id}` });
+                checkbox.checked = task.isComplete;
+                checkbox.style.width = '18px';
+                checkbox.style.height = '18px';
+                checkbox.style.cursor = 'pointer';
+                checkbox.style.accentColor = 'var(--dash-accent)'; // Use accent color for checkbox
+
+                checkbox.addEventListener('change', async (e) => {
+                    const originalChecked = !e.target.checked;
+                    e.target.disabled = true;
+                    try {
+                        await completeTask(task.id, e.target.checked);
+                        task.isComplete = e.target.checked;
+                        render();
+                    } catch (err) {
+                        console.error('Failed to update task completion status:', err);
+                        e.target.checked = originalChecked;
+                        alert('Failed to update task. Please try again.');
+                    } finally {
+                        e.target.disabled = false;
+                    }
+                });
+
+                const label = createEl('label', ['lifeos-mit-label'], { htmlFor: `mit-task-${task.id}` }, task.title);
+                label.style.flexGrow = '1';
+                label.style.cursor = 'pointer';
+                if (task.isComplete) {
+                    label.style.textDecoration = 'line-through';
+                    label.style.color = 'var(--dash-muted)';
+                } else {
+                    label.style.textDecoration = 'none';
+                    label.style.color = 'var(--dash-text)';
+                }
+
+                listItem.appendChild(checkbox);
+                listItem.appendChild(label);
+                taskList.appendChild(listItem);
+            });
+            widgetWrapper.appendChild(taskList);
+        }
+
+        currentContainer.appendChild(widgetWrapper);
     }
-  }
 
-  function mount({ container, user, commandKey }) {
-    if (!container || !user) {
-      console.error('LifeOSWidgetMIT: mount requires a container element and user handle.');
-      return;
+    async function fetchTasks() {
+        if (!currentUser || !currentCommandKey) {
+            console.warn('User or commandKey not set for MIT widget. Cannot fetch tasks.');
+            hasError = true;
+            isLoading = false;
+            render();
+            return;
+        }
+
+        isLoading = true;
+        hasError = false;
+        render(); // Show loading state
+
+        try {
+            const url = `${API_BASE}?user=${encodeURIComponent(currentUser)}&status=active&limit=5`;
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${currentCommandKey}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            tasks = data.map(task => ({
+                id: task.id,
+                title: task.title,
+                isComplete: task.isComplete || false
+            }));
+            hasError = false;
+        } catch (error) {
+            console.error('Error fetching MITs:', error);
+            hasError = true;
+            tasks = [];
+        } finally {
+            isLoading = false;
+            render();
+        }
     }
 
-    _container = container;
-    _user = user;
-    _commandKey = commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
+    async function completeTask(taskId, isComplete) {
+        if (!currentUser || !currentCommandKey) {
+            throw new Error('User or commandKey not set for MIT widget. Cannot complete task.');
+        }
 
-    if (!_commandKey) {
-      console.error('LifeOSWidgetMIT: commandKey is missing. Widget may not function correctly.');
-      renderErrorState('Missing commandKey. Please configure.');
-      return;
+        const url = `${API_BASE}/${taskId}/complete`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${currentCommandKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ isComplete })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
     }
 
-    // Apply base styling to the container
-    Object.assign(_container.style, {
-      background: 'var(--dash-surface)',
-      color: 'var(--dash-text)',
-      border: '1px solid var(--dash-border)',
-      borderRadius: 'var(--dash-radius-lg, 14px)',
-      padding: 'var(--dash-space-unit, 8px) * 2',
-      fontFamily: 'sans-serif', // Basic fallback
-      fontSize: '14px'
-    });
+    function mount({ container, user, commandKey }) {
+        if (!container || !(container instanceof HTMLElement)) {
+            console.error('Invalid container element provided to LifeOSWidgetMIT.mount');
+            return;
+        }
+        currentContainer = container;
+        currentUser = user;
+        currentCommandKey = commandKey || window.lifeosCommandKey || localStorage.getItem('commandKey');
 
-    refresh();
-  }
+        if (!currentCommandKey) {
+            console.warn('commandKey not found. Widget may not function correctly without authentication.');
+        }
 
-  window.LifeOSWidgetMIT = {
-    mount,
-    refresh
-  };
+        refresh(); // Initial fetch and render
+    }
+
+    function refresh() {
+        fetchTasks();
+    }
+
+    window.LifeOSWidgetMIT = {
+        mount,
+        refresh
+    };
 })();
