@@ -32,6 +32,25 @@
 
 ---
 
+## [FIX] Update 2026-05-09 #9 — Codebase cleanup (231 orphaned files purged)
+
+### Files
+- **231 files deleted via `git rm`** — 15 root junk JS files (A.js, B.js, test1-3.js, cron*.js, deepseek-bridge.js, discoveryScanner.js, routes.js, etc.), routes/ahni.js, routes/api.js (empty/dead), services/tc-webhook-validator.js (truncated+not imported), entire `frontend/` (159 files) and `backend/` (45 files) directories (zero server references), 7 stale screenshot PNGs in `assets/`.
+- **`routes/tsos-task-ledger-routes.js`** — fixed builder-committed `exp` typo → `export function`; added missing `import express from 'express'`. Node syntax check now PASS.
+- **`package.json`** — removed dead `test:smoke` script (referenced non-existent `scripts/smoke-test-server.js`).
+- **`docs/projects/AMENDMENT_04_AUTO_BUILDER.md`** — receipt row added for cleanup (2026-05-09c).
+- **`docs/projects/AMENDMENT_21_LIFEOS_CORE.md`** — receipt row added for cleanup (2026-05-09).
+
+### State
+- All remaining JS files: `node --check` PASS. Builder daemon continues autonomous pushes to origin/main (managed via rebase loop).
+- `routes/tsos-task-ledger-routes.js` is fixed but still NOT imported in `startup/register-runtime-routes.js` — mount it when the `builder_task_ledger` DB table is confirmed live.
+
+### Next agent: start here
+- Check if `builder_task_ledger` table exists in Neon DB — if yes, mount `createTsosTaskLedgerRoutes` in `startup/register-runtime-routes.js`.
+- Run `npm run lifeos:builder:queue` or builder supervisor per program priority.
+
+---
+
 ## [FIX] Update 2026-05-11 #1 — **`lifeos:supervise:static`** green again
 
 ### Files
