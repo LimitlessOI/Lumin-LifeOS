@@ -1,166 +1,150 @@
 /**
- * Technical Contract: Persistent AI Rail
- * This script implements the client-side logic for the Persistent AI Rail component
- * as outlined in DASHBOARD_AI_RAIL_CONTRACT.md.
- * It handles UI state (collapsed/expanded, dock position), persistence via sessionStorage,
- * and integration with existing chat functionality.
+ * @file Manages the persistent AI Rail UI component.
+ * @see docs/projects/DASHBOARD_AI_RAIL_CONTRACT.md
  */
 (function() {
   const ROOT_ID = 'lifeos-ai-rail-root';
-  const STORAGE_PREFIX = 'lifeos-ai-rail:';
-  // CSS media queries handle 'prefers-reduced-motion' for transitions, no direct JS intervention needed for that.
+  const STORAGE_KEY_EXPANDED = 'lifeos-ai-rail:expanded';
+  const STORAGE_KEY_DOCK = 'lifeos-ai-rail:dock';
+  const DEFAULT_DOCK = 'bottom'; // As per contract open question, default to bottom
+  const DEFAULT_EXPANDED = false; // As per contract open question, default to collapsed
+
+  let _rootEl = null;
+  let _isExpanded = DEFAULT_EXPANDED;
+  let _dockPosition = DEFAULT_DOCK; // 'top' or 'bottom'
+  let _focusChatInputCallback = null;
+  let _prefersReducedMotion = false;
 
   /**
-   * Helper to get state from sessionStorage.
-   * @param {string} key - The key for the sessionStorage item.
-   * @param {*} defaultValue - The default value if the item is not found or parsing fails.
-   * @returns {*} The parsed value from sessionStorage or the default value.
-   */
-  function getState(key, defaultValue) {
-    try {
-      const stored = sessionStorage.getItem(STORAGE_PREFIX + key);
-      return stored !== null ? JSON.parse(stored) : defaultValue;
-    } catch (e) {
-      console.error('Error reading sessionStorage for AI rail:', e);
-      return defaultValue;
-    }
-  }
-
-  /**
-   * Helper to set state in sessionStorage.
-   * @param {string} key - The key for the sessionStorage item.
-   * @param {*} value - The value to store.
-   */
-  function setState(key, value) {
-    try {
-      sessionStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value));
-    } catch (e) {
-      console.error('Error writing sessionStorage for AI rail:', e);
-    }
-  }
-
-  /**
-   * Mounts the AI Rail UI component into the DOM.
-   * @param {object} [options] - Configuration options.
-   * @param {function} [options.focusChatInputCallback] - Callback to focus the main chat input.
+   * Initializes the AI Rail.
+   * @param {object} options
+   * @param {function} options.focusChatInputCallback - Callback to focus the main chat input.
    */
   function mountAiRail(options) {
-    const focusChatInputCallback = options && options.focusChatInputCallback;
+    _focusChatInputCallback = options.focusChatInputCallback;
 
-    let rootEl = document.getElementById(ROOT_ID);
-    if (!rootEl) {
-      // If root element is absent, create it and append to body.
-      rootEl = document.createElement('div');
-      rootEl.id = ROOT_ID;
-      document.body.appendChild(rootEl);
+    _rootEl = document.getElementById(ROOT_ID);
+    if (!_rootEl) {
+      _rootEl = document.createElement('div');
+      _rootEl.id = ROOT_ID;
+      document.body.appendChild(_rootEl);
     }
 
-    // Initial state from storage or defaults
-    let isExpanded = getState('expanded', false);
-    let dockPosition = getState('dock-position', 'bottom'); // 'top' or 'bottom'
-
-    // Apply initial classes to the root element
-    rootEl.className = 'lifeos-ai-rail-root'; // Reset classes to ensure a clean state
-    rootEl.classList.add(`lifeos-ai-rail-dock-${dockPosition}`);
-    rootEl.classList.add(isExpanded ? 'lifeos-ai-rail-expanded' : 'lifeos-ai-rail-collapsed');
-
-    // Inject the internal HTML structure for the AI rail
-    rootEl.innerHTML = `
-      <div class="lifeos-ai-rail-header">
-        <div class="lifeos-ai-rail-title">
-          <span class="lifeos-ai-rail-status-dot"></span>
-          Lumin AI
-        </div>
-        <div class="lifeos-ai-rail-controls">
-          <button class="lifeos-ai-rail-toggle-dock-btn" title="Toggle dock position">↕</button>
-          <button class="lifeos-ai-rail-toggle-btn" title="Expand/Collapse">
-            <span class="collapsed-icon" style="display:${isExpanded ? 'none' : 'inline-block'};">▲</span>
-            <span class="expanded-icon" style="display:${isExpanded ? 'inline-block' : 'none'};">▼</span>
-          </button>
-        </div>
-      </div>
-      <div class="lifeos-ai-rail-content">
-        <div class="lifeos-ai-rail-message assistant">Hello! How can I help you today?</div>
-      </div>
-      <div class="lifeos-ai-rail-input-area">
-        <input type="text" class="lifeos-ai-rail-input" placeholder="Ask Lumin anything...">
-        <button class="lifeos-ai-rail-send-btn">↑</button>
-        <button class="lifeos-ai-rail-open-chat-btn" title="Open full chat">💬</button>
-      </div>
-    `;
-
-    // Get references to interactive elements
-    const toggleBtn = rootEl.querySelector('.lifeos-ai-rail-toggle-btn');
-    const toggleDockBtn = rootEl.querySelector('.lifeos-ai-rail-toggle-dock-btn');
-    const openChatBtn = rootEl.querySelector('.lifeos-ai-rail-open-chat-btn');
-    const collapsedIcon = rootEl.querySelector('.collapsed-icon');
-    const expandedIcon = rootEl.querySelector('.expanded-icon');
-
-    /** Updates the visibility of the toggle icons based on the expanded state. */
-    function updateToggleIcons() {
-      if (isExpanded) {
-        collapsedIcon.style.display = 'none';
-        expandedIcon.style.display = 'inline-block';
-      } else {
-        collapsedIcon.style.display = 'inline-block';
-        expandedIcon.style.display = 'none';
-      }
+    // Load state from sessionStorage
+    const storedExpanded = sessionStorage.getItem(STORAGE_KEY_EXPANDED);
+    if (storedExpanded !== null) {
+      _isExpanded = storedExpanded === 'true';
+    }
+    const storedDock = sessionStorage.getItem(STORAGE_KEY_DOCK);
+    if (storedDock === 'top' || storedDock === 'bottom') {
+      _dockPosition = storedDock;
     }
 
-    // Event listener for expand/collapse toggle button
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', function() {
-        isExpanded = !isExpanded;
-        rootEl.classList.toggle('lifeos-ai-rail-expanded', isExpanded);
-        rootEl.classList.toggle('lifeos-ai-rail-collapsed', !isExpanded);
-        setState('expanded', isExpanded);
-        updateToggleIcons();
-      });
+    // Check for reduced motion preference
+    _prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (_prefersReducedMotion) {
+      _rootEl.classList.add('lifeos-ai-rail-no-transition');
     }
 
-    // Event listener for dock position toggle button
-    if (toggleDockBtn) {
-      toggleDockBtn.addEventListener('click', function() {
-        dockPosition = (dockPosition === 'bottom' ? 'top' : 'bottom');
-        rootEl.classList.toggle('lifeos-ai-rail-dock-bottom', dockPosition === 'bottom');
-        rootEl.classList.toggle('lifeos-ai-rail-dock-top', dockPosition === 'top');
-        setState('dock-position', dockPosition);
-      });
-    }
-
-    // Event listener for opening the full chat (stubs existing entrypoint)
-    if (openChatBtn && focusChatInputCallback) {
-      openChatBtn.addEventListener('click', function() {
-        focusChatInputCallback();
-        // Optionally collapse the rail when opening the full chat
-        if (isExpanded) {
-          isExpanded = false;
-          rootEl.classList.remove('lifeos-ai-rail-expanded');
-          rootEl.classList.add('lifeos-ai-rail-collapsed');
-          setState('expanded', isExpanded);
-          updateToggleIcons();
-        }
-      });
-    }
-
-    // Event listener to expand the rail when clicking on its collapsed state,
-    // but not when clicking on interactive elements within it.
-    rootEl.addEventListener('click', function(event) {
-      const isInteractiveElement = event.target.closest(
-        '.lifeos-ai-rail-controls button, .lifeos-ai-rail-input-area button, .lifeos-ai-rail-input-area input'
-      );
-      if (!isExpanded && !isInteractiveElement) {
-        isExpanded = true;
-        rootEl.classList.remove('lifeos-ai-rail-collapsed');
-        rootEl.classList.add('lifeos-ai-rail-expanded');
-        setState('expanded', isExpanded);
-        updateToggleIcons();
-      }
-    });
+    renderRail();
   }
 
-  // Attach the mount function to the window object for external access.
-  // This allows other scripts (e.g., the dashboard's module script) to initialize the rail.
+  /**
+   * Renders the AI Rail UI based on current state.
+   */
+  function renderRail() {
+    if (!_rootEl) return;
+
+    _rootEl.innerHTML = ''; // Clear existing content
+    _rootEl.classList.add('lifeos-ai-rail-root');
+    _rootEl.setAttribute('data-dock', _dockPosition);
+
+    if (_isExpanded) {
+      _rootEl.innerHTML = `
+        <div class="lifeos-ai-rail-expanded">
+          <div class="lifeos-ai-rail-expanded-header">
+            <span class="lifeos-ai-rail-expanded-title">Lumin AI</span>
+            <button class="lifeos-ai-rail-expanded-close-btn" aria-label="Collapse AI Rail">✕</button>
+          </div>
+          <div class="lifeos-ai-rail-transcript">
+            <div class="lifeos-ai-rail-message assistant">
+              Hi there! I'm Lumin, your personal AI. How can I help you today?
+            </div>
+          </div>
+          <div class="lifeos-ai-rail-input-area">
+            <button id="lifeos-ai-rail-open-chat-btn" class="btn-add" style="width:100%; padding: 10px;" aria-label="Open full chat with Lumin">Open Full Chat</button>
+            <button id="lifeos-ai-rail-dock-toggle-btn" class="btn-add" style="width:100%; margin-top: 8px; padding: 10px;" aria-label="Dock AI Rail to ${_dockPosition === 'bottom' ? 'top' : 'bottom'}">Dock to ${_dockPosition === 'bottom' ? 'Top' : 'Bottom'}</button>
+          </div>
+        </div>
+      `;
+      _rootEl.querySelector('.lifeos-ai-rail-expanded-close-btn').addEventListener('click', collapseRail);
+      _rootEl.querySelector('#lifeos-ai-rail-open-chat-btn').addEventListener('click', openFullChat);
+      _rootEl.querySelector('#lifeos-ai-rail-dock-toggle-btn').addEventListener('click', toggleDockPosition);
+    } else {
+      _rootEl.innerHTML = `
+        <div class="lifeos-ai-rail-collapsed" aria-label="Expand AI Rail">
+          <span class="lifeos-ai-rail-collapsed-text">Ask Lumin anything...</span>
+          <span class="lifeos-ai-rail-collapsed-icon">✦</span>
+        </div>
+      `;
+      _rootEl.querySelector('.lifeos-ai-rail-collapsed').addEventListener('click', expandRail);
+    }
+  }
+
+  /**
+   * Expands the AI Rail.
+   */
+  function expandRail() {
+    _isExpanded = true;
+    sessionStorage.setItem(STORAGE_KEY_EXPANDED, 'true');
+    renderRail();
+    // If expanding, and a chat input callback is available, focus it.
+    // This is a direct interpretation of "focus chat input hook if present"
+    // when the rail is expanded to encourage interaction.
+    if (_focusChatInputCallback) {
+      _focusChatInputCallback();
+    }
+  }
+
+  /**
+   * Collapses the AI Rail.
+   */
+  function collapseRail() {
+    _isExpanded = false;
+    sessionStorage.setItem(STORAGE_KEY_EXPANDED, 'false');
+    renderRail();
+  }
+
+  /**
+   * Toggles the dock position of the AI Rail.
+   */
+  function toggleDockPosition() {
+    _dockPosition = _dockPosition === 'bottom' ? 'top' : 'bottom';
+    sessionStorage.setItem(STORAGE_KEY_DOCK, _dockPosition);
+    renderRail();
+  }
+
+  /**
+   * Calls the provided callback to open/focus the main chat.
+   */
+  function openFullChat() {
+    if (_focusChatInputCallback) {
+      _focusChatInputCallback();
+      // Optionally collapse the rail after opening full chat, for better UX
+      collapseRail();
+    }
+  }
+
+  // Add a style for reduced motion, if not already in CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    .lifeos-ai-rail-no-transition {
+      transition: none !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Expose the mount function globally
   window.LifeOSDashboardAiRail = {
     mount: mountAiRail
   };
