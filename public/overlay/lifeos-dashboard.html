@@ -48,6 +48,11 @@
 <script src="/shared/lifeos-widget-score.js"></script>
 <script src="/shared/lifeos-widget-lumin-quick.js"></script>
 <script src="/shared/lifeos-widget-category-stubs.js"></script>
+<!-- (1) New script tags added by current task -->
+<script src="/shared/lifeos-widget-mit.js"></script>
+<script src="/shared/lifeos-widget-score.js"></script>
+<script src="/shared/lifeos-widget-lumin-quick.js"></script>
+<script src="/shared/lifeos-widget-category-stubs.js"></script>
 <style>
 :root {
 --bg-base: var(--dash-bg, #0a0a0f);
@@ -801,6 +806,13 @@ gap: 16px;
 </div>
 </div>
 </div>
+<!-- (2) New widget containers added by current task -->
+<div class="two-col mb-4">
+<div id="lifeos-widget-mit" class="dashboard-widget"></div>
+<div id="lifeos-widget-score" class="dashboard-widget"></div>
+<div id="lifeos-widget-lumin-quick" class="dashboard-widget"></div>
+<div id="lifeos-widget-category-stubs" class="dashboard-widget"></div>
+</div>
 <!-- Added by THIS task (new) -->
 <div class="two-col mb-4">
 <div id="lifeos-widget-mit" class="dashboard-widget"></div>
@@ -1044,7 +1056,7 @@ function ringColor(s) {
 return s>=80?'#10b981':s>=60?'#f59e0b':'#e05555';
 }
 function makeRing(score) {
-const r=33, circ=2*Math.PI*r, offset=circ*(1-score/100);
+const r=33, circ=2Math.PIr, offset=circ*(1-score/100);
 const c=ringColor(score);
 return `<svg width="72" height="72" viewBox="0 0 72 72">
 <circle class="track" cx="36" cy="36" r="${r}" fill="none" stroke-width="6"/>
@@ -1151,7 +1163,7 @@ if (ambientActive) {
 btn.classList.add('ambient-active');
 btn.title = 'Ambient ON — Lumin will speak when you have something to know. Click to turn off.';
 checkProactiveNudge();
-ambientInterval = setInterval(checkProactiveNudge, 2 * 60 * 1000);
+ambientInterval = setInterval(checkProactiveNudge, 2  60  1000);
 } else {
 btn.classList.remove('ambient-active');
 btn.title = 'Ambient voice — Lumin speaks proactively when you have time';
@@ -1307,6 +1319,23 @@ Promise.all([loadMITs(), loadCal(), loadGoals(), loadScores(), initChat()]);
   }
 </script>
 <!-- Added by THIS task -->
+<script>
+  const user = window.lifeosUser;
+  const commandKey = window.lifeosCommandKey;
+  if (window.LifeOSWidgetMIT) {
+    LifeOSWidgetMIT.mount({container: document.getElementById('lifeos-widget-mit'), user, commandKey});
+  }
+  if (window.LifeOSWidgetScore) {
+    LifeOSWidgetScore.mount({container: document.getElementById('lifeos-widget-score'), user, commandKey});
+  }
+  if (window.LifeOSWidgetLuminQuick) {
+    LifeOSWidgetLuminQuick.mount({container: document.getElementById('lifeos-widget-lumin-quick'), user, commandKey});
+  }
+  if (window.LifeOSWidgetCategoryStubs) {
+    LifeOSWidgetCategoryStubs.mount({container: document.getElementById('lifeos-widget-category-stubs'), user, commandKey});
+  }
+</script>
+<!-- (3) New mount script added by current task -->
 <script>
   const user = window.lifeosUser;
   const commandKey = window.lifeosCommandKey;
